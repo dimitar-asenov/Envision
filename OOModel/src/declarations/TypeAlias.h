@@ -30,6 +30,7 @@
 
 #include "Declaration.h"
 #include "../expressions/Expression.h"
+#include "../elements/FormalTypeArgument.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeAlias)
 
@@ -39,6 +40,7 @@ class OOMODEL_API TypeAlias : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeAlias)
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 
 	public:
 		TypeAlias(const QString& name, Expression* typeExpression = nullptr);
