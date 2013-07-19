@@ -36,6 +36,7 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeAlias)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeAlias)
 
 REGISTER_ATTRIBUTE(TypeAlias, typeExpression, Expression, false, false, true)
+REGISTER_ATTRIBUTE(TypeAlias, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 
 TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
 : Super(nullptr, TypeAlias::getMetaData())

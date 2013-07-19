@@ -29,24 +29,23 @@
 #include "../oomodel_api.h"
 
 #include "Declaration.h"
-#include "../expressions/Expression.h"
-#include "../elements/FormalTypeArgument.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeAlias)
+#include "../expressions/ReferenceExpression.h"
+
+#include "ModelBase/src/nodes/nodeMacros.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ExplicitTemplateInstantiation)
 
 namespace OOModel {
 
-class OOMODEL_API TypeAlias : public Super<Declaration>
+class OOMODEL_API ExplicitTemplateInstantiation : public Super<Declaration>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeAlias)
-	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
-	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ExplicitTemplateInstantiation)
+	ATTRIBUTE(ReferenceExpression, instantiatedClass, setInstantiatedClass)
 
 	public:
-		TypeAlias(const QString& name, Expression* typeExpression = nullptr);
+		ExplicitTemplateInstantiation(ReferenceExpression* instantiatedClass);
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-						bool exhaustAllScopes) override;
 };
 
 }
