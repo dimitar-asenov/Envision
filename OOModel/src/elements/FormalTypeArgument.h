@@ -45,6 +45,7 @@ class OOMODEL_API FormalTypeArgument : public Super<Model::CompositeNode>
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Expression, subTypeOfExpression, setSubTypeOfExpression)
 	ATTRIBUTE(Expression, superTypeOfExpression, setSuperTypeOfExpression)
+	ATTRIBUTE(Expression, specializationExpression, setSpecializationExpression)
 
 	public:
 		FormalTypeArgument(const QString& name, Expression* subtype = nullptr, Expression* supertype = nullptr);

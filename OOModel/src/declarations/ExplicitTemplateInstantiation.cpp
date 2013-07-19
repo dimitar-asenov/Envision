@@ -24,30 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ExplicitTemplateInstantiation.h"
 
-#include "../oomodel_api.h"
-
-#include "Declaration.h"
-#include "../expressions/Expression.h"
-#include "../elements/FormalTypeArgument.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeAlias)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::ExplicitTemplateInstantiation)
 
 namespace OOModel {
 
-class OOMODEL_API TypeAlias : public Super<Declaration>
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ExplicitTemplateInstantiation)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExplicitTemplateInstantiation)
+
+REGISTER_ATTRIBUTE(ExplicitTemplateInstantiation, instantiatedClass, ReferenceExpression, false, false, true)
+
+ExplicitTemplateInstantiation::ExplicitTemplateInstantiation(ReferenceExpression* instantiatedClass)
+: Super(nullptr, ExplicitTemplateInstantiation::getMetaData())
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeAlias)
-	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
-	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
-
-	public:
-		TypeAlias(const QString& name, Expression* typeExpression = nullptr);
-
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-						bool exhaustAllScopes) override;
-};
-
+	if(instantiatedClass)
+		setInstantiatedClass(instantiatedClass);
 }
 
+}
