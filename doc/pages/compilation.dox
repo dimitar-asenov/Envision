@@ -9,7 +9,12 @@ An additional dependency is lp_solve 5.5: http://lpsolve.sourceforge.net/
 \section eclipse Using Eclipse (recommended)
 
 	-# If you do not have the Qt development version installed, download and install it.
-	-# Download and install the lp_solve development library version 5.5.
+	-# Download and install the lp_solve development library version 5.5. On Ubuntu based distributions you'll need
+	to do the following (tested with version 13.04):
+		-# Install the packages \c lp-solve (for the shared library) and \c liblpsolve55-dev (for the header files):
+		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
+		-# Make the following symbolic link:
+		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
 	-# Download and install the Qt Integration plug-in for your version of eclipse (32/64 bit).
 	-# Inside Eclipse, configure Qt so that it knows where to find the development files.
 	-# Download Envision's sources. The project is structured in separate directories where each one is an Eclipse/Qt
