@@ -314,7 +314,13 @@ public class ASTConverter {
 	    	node = new Node(null, "ContinueStatement", name);
 	    } else if ( s instanceof DoStatement)
 	    {
-	    	//TODO:Implement this
+	    	node = new Node(null, "LoopStatement", name);
+	    	node.child("lpKind").setLongValue(1);
+	    	DoStatement fs = (DoStatement) s;
+	    	if (fs.getExpression() != null)
+	    		node.add(expression(fs.getExpression(),"condition"));
+	    	
+	    	visitStatementBody(fs.getBody(), node, "body");
 	    } else if ( s instanceof EmptyStatement)
 	    {
 	    	//TODO:Investigate if returning null here is OK?
