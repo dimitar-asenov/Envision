@@ -105,9 +105,10 @@ Inheritance diagram for OOModel::MethodCallExpression:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a057a840e2fedf19af3d7ecac6aa708d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MethodCallExpression.html#a057a840e2fedf19af3d7ecac6aa708d9">MethodCallExpression</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *prefix=nullptr)</td></tr>
-<tr class="separator:a057a840e2fedf19af3d7ecac6aa708d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b1231eb91d975c11396a45a4988395b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MethodCallExpression.html#a0b1231eb91d975c11396a45a4988395b">MethodCallExpression</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *referencePrefix=nullptr)</td></tr>
+<tr class="separator:a0b1231eb91d975c11396a45a4988395b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7487788b92020212a5ed9f34181b550"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Method.html">Method</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MethodCallExpression.html#ac7487788b92020212a5ed9f34181b550">methodDefinition</a> ()</td></tr>
+<tr class="memdesc:ac7487788b92020212a5ed9f34181b550"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the definition of the method that is being called by this method call if one exists.  <a href="#ac7487788b92020212a5ed9f34181b550">More...</a><br/></td></tr>
 <tr class="separator:ac7487788b92020212a5ed9f34181b550"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2ef76c3a50537ebeef670db6e4101db"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classOOModel_1_1Type.html">Type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MethodCallExpression.html#ad2ef76c3a50537ebeef670db6e4101db">type</a> ()</td></tr>
 <tr class="separator:ad2ef76c3a50537ebeef670db6e4101db"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,7 +120,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a057a840e2fedf19af3d7ecac6aa708d9"></a>
+<a class="anchor" id="a0b1231eb91d975c11396a45a4988395b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -133,7 +134,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td>
-          <td class="paramname"><em>prefix</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>referencePrefix</em> = <code>nullptr</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -158,6 +159,9 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Returns the definition of the method that is being called by this method call if one exists. </p>
+<p>If the callee is an expression of type <a class="el" href="classOOModel_1_1FunctionType.html">FunctionType</a> the return value is nullptr. </p>
 
 </div>
 </div>

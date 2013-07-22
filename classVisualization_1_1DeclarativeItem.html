@@ -182,7 +182,7 @@ ChildItemVisualizationType &gt; *&#160;</td><td class="memTemplItemRight" valign
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:a2ad128d118ff88f1db235a94dd82d4b8"><td class="memTemplParams" colspan="2">template&lt;class ElementType &gt; </td></tr>
 <tr class="memitem:a2ad128d118ff88f1db235a94dd82d4b8"><td class="memTemplItemLeft" align="right" valign="top">static ElementType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DeclarativeItem.html#a2ad128d118ff88f1db235a94dd82d4b8">addForm</a> (ElementType *element)</td></tr>
-<tr class="memdesc:a2ad128d118ff88f1db235a94dd82d4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an <em>element</em> to the list of forms.  <a href="#a2ad128d118ff88f1db235a94dd82d4b8">More...</a><br/></td></tr>
+<tr class="memdesc:a2ad128d118ff88f1db235a94dd82d4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add <em>element</em> to the list of forms.  <a href="#a2ad128d118ff88f1db235a94dd82d4b8">More...</a><br/></td></tr>
 <tr class="separator:a2ad128d118ff88f1db235a94dd82d4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d687d9ba6112e6aa973074325a4606c"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classVisualization_1_1FormElement.html">FormElement</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DeclarativeItem.html#a6d687d9ba6112e6aa973074325a4606c">formsStatic</a> ()</td></tr>
 <tr class="memdesc:a6d687d9ba6112e6aa973074325a4606c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classVisualization_1_1Static.html">Static</a> vertion of the method forms, returning the list of forms for this declarative item type.  <a href="#a6d687d9ba6112e6aa973074325a4606c">More...</a><br/></td></tr>
@@ -210,6 +210,10 @@ ChildItemVisualizationType &gt; *&#160;</td><td class="memTemplItemRight" valign
 &lt; <a class="el" href="classVisualization_1_1FormElement.html">FormElement</a> * &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DeclarativeItem.html#ad33931edaed62eb7790a8af192e879aa">shapeElementsStatic</a> ()</td></tr>
 <tr class="memdesc:ad33931edaed62eb7790a8af192e879aa"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classVisualization_1_1Static.html">Static</a> version of the method shapeElements, returning the list of shape element lists for each form.  <a href="#ad33931edaed62eb7790a8af192e879aa">More...</a><br/></td></tr>
 <tr class="separator:ad33931edaed62eb7790a8af192e879aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_static_methods_classVisualization_1_1DeclarativeItemBase"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classVisualization_1_1DeclarativeItemBase')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classVisualization_1_1DeclarativeItemBase.html">Visualization::DeclarativeItemBase</a></td></tr>
+<tr class="memitem:ad79c0cb80c2e0216dc7e05a2aa11a83b inherit pro_static_methods_classVisualization_1_1DeclarativeItemBase"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DeclarativeItemBase.html#ad79c0cb80c2e0216dc7e05a2aa11a83b">grid</a> (QList&lt; QList&lt; <a class="el" href="structVisualization_1_1DeclarativeItemBase_1_1Merge.html">Merge</a> &gt;&gt; elements)</td></tr>
+<tr class="memdesc:ad79c0cb80c2e0216dc7e05a2aa11a83b inherit pro_static_methods_classVisualization_1_1DeclarativeItemBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a grid layout.  <a href="#ad79c0cb80c2e0216dc7e05a2aa11a83b">More...</a><br/></td></tr>
+<tr class="separator:ad79c0cb80c2e0216dc7e05a2aa11a83b inherit pro_static_methods_classVisualization_1_1DeclarativeItemBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -333,8 +337,10 @@ template&lt;class ElementType &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Add an <em>element</em> to the list of forms. </p>
-<p>All the forms should be added via this method inside the static method initializeForms. Returns a pointer to the added element. </p>
+<p>Add <em>element</em> to the list of forms. </p>
+<p>All the forms should be added via this method inside the static method initializeForms.</p>
+<p>If <em>element</em> is already a form root element or has a parent, then it is cloned and its clone is added to the list.</p>
+<p>Returns a pointer to the added element. </p>
 
 </div>
 </div>
@@ -494,6 +500,36 @@ template&lt;class ChildItemVisualizationType &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a6632d3e625a5ecc1bf9462763b914971"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class VisualizationType &gt; </div>
+<div class="memtemplate">
+template&lt;class ChildItemVisualizationType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1VisualizationItemWrapperFormElement.html">VisualizationItemWrapperFormElement</a>&lt;VisualizationType, ChildItemVisualizationType&gt;* <a class="el" href="classVisualization_1_1DeclarativeItem.html">Visualization::DeclarativeItem</a>&lt; VisualizationType &gt;::item </td>
+          <td>(</td>
+          <td class="paramtype">ChildItemVisualizationType *VisualizationType::*&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::function&lt; const typename ChildItemVisualizationType::StyleType *(VisualizationType *v)&gt;&#160;</td>
+          <td class="paramname"><em>styleGetter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a325796a7b313046ec3b8ca0fae7ffba8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -538,36 +574,6 @@ template&lt;class ChildItemVisualizationType &gt; </div>
 
 <p>A factory method to get an item wrapper element with a node and a visualization, it takes a pointer to member, where the visualization <em>item</em> should be stored, a method to get the style (<em>styleGetter</em>), and a method to get the node (<em>nodeGetter</em>). </p>
 <p>The node then gets visualized using the given visualization and style. To call it, one has to supply the visualization type and the parent type (which is always 'I') as template arguments. </p>
-
-</div>
-</div>
-<a class="anchor" id="a6632d3e625a5ecc1bf9462763b914971"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class VisualizationType &gt; </div>
-<div class="memtemplate">
-template&lt;class ChildItemVisualizationType &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1VisualizationItemWrapperFormElement.html">VisualizationItemWrapperFormElement</a>&lt;VisualizationType, ChildItemVisualizationType&gt;* <a class="el" href="classVisualization_1_1DeclarativeItem.html">Visualization::DeclarativeItem</a>&lt; VisualizationType &gt;::item </td>
-          <td>(</td>
-          <td class="paramtype">ChildItemVisualizationType *VisualizationType::*&#160;</td>
-          <td class="paramname"><em>item</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::function&lt; const typename ChildItemVisualizationType::StyleType *(VisualizationType *v)&gt;&#160;</td>
-          <td class="paramname"><em>styleGetter</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>

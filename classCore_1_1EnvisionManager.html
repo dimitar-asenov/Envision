@@ -91,8 +91,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">Core::EnvisionManager Class Reference</div>  </div>
 </div><!--header-->
@@ -116,6 +118,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0899bd156908a1f66f38de65b1f0fea5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a0899bd156908a1f66f38de65b1f0fea5">addPreEventAction</a> (<a class="el" href="classCore_1_1EnvisionManager.html#a72b7fbc4566224a022c73a1d0590f7c3">EventPrePostAction</a> action)</td></tr>
 <tr class="memdesc:a0899bd156908a1f66f38de65b1f0fea5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds <em>action</em> to the list of actions that will be executed prior to dispatching an event.  <a href="#a0899bd156908a1f66f38de65b1f0fea5">More...</a><br/></td></tr>
 <tr class="separator:a0899bd156908a1f66f38de65b1f0fea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff734c653259e18106bdd933440c37be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#aff734c653259e18106bdd933440c37be">areSelfTestsPending</a> () const </td></tr>
+<tr class="memdesc:aff734c653259e18106bdd933440c37be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if there are any self tests that will be run after all plug-ins have been initialized.  <a href="#aff734c653259e18106bdd933440c37be">More...</a><br/></td></tr>
+<tr class="separator:aff734c653259e18106bdd933440c37be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23c2a83129f330cd0cec741bf68a9403"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a23c2a83129f330cd0cec741bf68a9403">exit</a> ()</td></tr>
 <tr class="separator:a23c2a83129f330cd0cec741bf68a9403"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a060df9e1620b41c62d2880256a887e99"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structCore_1_1PluginInfo.html">PluginInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a060df9e1620b41c62d2880256a887e99">getAllLoadedPluginsInfo</a> ()</td></tr>
@@ -124,10 +129,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a114998344f020942cb3df8cf62724122"><td class="memItemLeft" align="right" valign="top">QMainWindow *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a114998344f020942cb3df8cf62724122">getMainWindow</a> ()</td></tr>
 <tr class="memdesc:a114998344f020942cb3df8cf62724122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the main window of the application.  <a href="#a114998344f020942cb3df8cf62724122">More...</a><br/></td></tr>
 <tr class="separator:a114998344f020942cb3df8cf62724122"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26d2ecfbb286711e8894f69f347088ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a26d2ecfbb286711e8894f69f347088ba">setMainWindow</a> (QMainWindow *)</td></tr>
-<tr class="separator:a26d2ecfbb286711e8894f69f347088ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ecfdc589f44100cb3d311ec13b7181d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a3ecfdc589f44100cb3d311ec13b7181d">setPluginManager</a> (<a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *)</td></tr>
-<tr class="separator:a3ecfdc589f44100cb3d311ec13b7181d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -135,6 +136,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a0425c66a4aa3549366da7dcccb5283f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4223665e6ac80b62392a33ee4c6660b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#aa4223665e6ac80b62392a33ee4c6660b">processPreEventActions</a> (QObject *receiver, QEvent *event)</td></tr>
 <tr class="separator:aa4223665e6ac80b62392a33ee4c6660b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a26d2ecfbb286711e8894f69f347088ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a26d2ecfbb286711e8894f69f347088ba">setMainWindow</a> (QMainWindow *)</td></tr>
+<tr class="separator:a26d2ecfbb286711e8894f69f347088ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ecfdc589f44100cb3d311ec13b7181d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a3ecfdc589f44100cb3d311ec13b7181d">setPluginManager</a> (<a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *)</td></tr>
+<tr class="separator:a3ecfdc589f44100cb3d311ec13b7181d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0ab1b0bfc033dd269c43d2665a003d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#ad0ab1b0bfc033dd269c43d2665a003d8">setTestRunner</a> (<a class="el" href="classCore_1_1TestRunner.html">TestRunner</a> *)</td></tr>
+<tr class="separator:ad0ab1b0bfc033dd269c43d2665a003d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -147,12 +157,20 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a24d9497f37625441185f24ddc7997cd0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a24d9497f37625441185f24ddc7997cd0">exitSet</a> {}</td></tr>
-<tr class="separator:a24d9497f37625441185f24ddc7997cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae81072be96af48447eba0ae1ac214f7d"><td class="memItemLeft" align="right" valign="top">QMainWindow *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#ae81072be96af48447eba0ae1ac214f7d">mainWindow</a> {}</td></tr>
-<tr class="separator:ae81072be96af48447eba0ae1ac214f7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3815e675b45245bc1e3f6d6ae1e3b116"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a3815e675b45245bc1e3f6d6ae1e3b116">pm</a> {}</td></tr>
-<tr class="separator:a3815e675b45245bc1e3f6d6ae1e3b116"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd69ee774be15bd2374d03dceb91a181"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#abd69ee774be15bd2374d03dceb91a181">exitSet_</a> {}</td></tr>
+<tr class="separator:abd69ee774be15bd2374d03dceb91a181"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfa4dba35a7198408817363922342cc2"><td class="memItemLeft" align="right" valign="top">QMainWindow *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#abfa4dba35a7198408817363922342cc2">mainWindow_</a> {}</td></tr>
+<tr class="separator:abfa4dba35a7198408817363922342cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e03ab9952ed46c1414792d223b8e7ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a2e03ab9952ed46c1414792d223b8e7ea">pm_</a> {}</td></tr>
+<tr class="separator:a2e03ab9952ed46c1414792d223b8e7ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accfa150708fdde5d537454c748813288"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCore_1_1TestRunner.html">TestRunner</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#accfa150708fdde5d537454c748813288">testRunner_</a> {}</td></tr>
+<tr class="separator:accfa150708fdde5d537454c748813288"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:aa8e6e808b0c07fd184841d5b0ebe5c8b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#aa8e6e808b0c07fd184841d5b0ebe5c8b">coreMain</a> (int argc, char *argv[])</td></tr>
+<tr class="memdesc:aa8e6e808b0c07fd184841d5b0ebe5c8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function is executed when Envision is started.  <a href="#aa8e6e808b0c07fd184841d5b0ebe5c8b">More...</a><br/></td></tr>
+<tr class="separator:aa8e6e808b0c07fd184841d5b0ebe5c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classCore_1_1EnvisionManager.html" title="The EnvisionManager interface provides various information about the Envision system.">EnvisionManager</a> interface provides various information about the Envision system. </p>
@@ -222,6 +240,23 @@ Private Attributes</h2></td></tr>
 
 <p>Adds <em>action</em> to the list of actions that will be executed prior to dispatching an event. </p>
 <p>The provided action function will be called before any event for any object is dispatched. </p>
+
+</div>
+</div>
+<a class="anchor" id="aff734c653259e18106bdd933440c37be"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Core::EnvisionManager::areSelfTestsPending </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns true if there are any self tests that will be run after all plug-ins have been initialized. </p>
 
 </div>
 </div>
@@ -393,15 +428,23 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a26d2ecfbb286711e8894f69f347088ba"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Core::EnvisionManager::setMainWindow </td>
           <td>(</td>
           <td class="paramtype">QMainWindow *&#160;</td>
-          <td class="paramname"><em>mainWindow_</em></td><td>)</td>
+          <td class="paramname"><em>mainWindow</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -409,21 +452,91 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a3ecfdc589f44100cb3d311ec13b7181d"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Core::EnvisionManager::setPluginManager </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *&#160;</td>
-          <td class="paramname"><em>pm_</em></td><td>)</td>
+          <td class="paramname"><em>pm</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad0ab1b0bfc033dd269c43d2665a003d8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::EnvisionManager::setTestRunner </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCore_1_1TestRunner.html">TestRunner</a> *&#160;</td>
+          <td class="paramname"><em>tr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="aa8e6e808b0c07fd184841d5b0ebe5c8b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int coreMain </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>argv</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This function is executed when Envision is started. </p>
+<p>It shows the main window, loads all plug-ins and starts the event loop. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a24d9497f37625441185f24ddc7997cd0"></a>
+<a class="anchor" id="abd69ee774be15bd2374d03dceb91a181"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -431,7 +544,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Core::EnvisionManager::exitSet {}</td>
+          <td class="memname">bool Core::EnvisionManager::exitSet_ {}</td>
         </tr>
       </table>
   </td>
@@ -443,7 +556,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae81072be96af48447eba0ae1ac214f7d"></a>
+<a class="anchor" id="abfa4dba35a7198408817363922342cc2"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -451,7 +564,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QMainWindow* Core::EnvisionManager::mainWindow {}</td>
+          <td class="memname">QMainWindow* Core::EnvisionManager::mainWindow_ {}</td>
         </tr>
       </table>
   </td>
@@ -463,7 +576,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3815e675b45245bc1e3f6d6ae1e3b116"></a>
+<a class="anchor" id="a2e03ab9952ed46c1414792d223b8e7ea"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -471,7 +584,27 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a>* Core::EnvisionManager::pm {}</td>
+          <td class="memname"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a>* Core::EnvisionManager::pm_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="accfa150708fdde5d537454c748813288"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCore_1_1TestRunner.html">TestRunner</a>* Core::EnvisionManager::testRunner_ {}</td>
         </tr>
       </table>
   </td>

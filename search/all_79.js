@@ -8,5 +8,6 @@ var searchData=
   ['yoffset',['yOffset',['../classVisualization_1_1Icon.html#a0652c6e7214f25a30b7b37ed1bdd0f62',1,'Visualization::Icon::yOffset()'],['../classVisualization_1_1Layout.html#ac95e85e5051b5f02f88bdeff4985d7b4',1,'Visualization::Layout::yOffset()'],['../classVisualization_1_1Shape.html#a092e5f1bc8d2fcf51f3b5165d009bd2f',1,'Visualization::Shape::yOffset()']]],
   ['yoffset_5f',['yOffset_',['../classVisualization_1_1Shape.html#a116299364ba5dc6fbfeecc43593e6b3f',1,'Visualization::Shape']]],
   ['yshadowoffset',['yShadowOffset',['../classVisualization_1_1BoxStyle.html#a51bbb00ab0388d55eadf6115a74433df',1,'Visualization::BoxStyle::yShadowOffset()'],['../classVisualization_1_1DiamondStyle.html#a0c25305206e401c01fba329d148ba0ab',1,'Visualization::DiamondStyle::yShadowOffset()']]],
-  ['yshadowoffset_5f',['yShadowOffset_',['../classVisualization_1_1BoxStyle.html#aa1e9ade3b08e352089206b0101a4bf20',1,'Visualization::BoxStyle::yShadowOffset_()'],['../classVisualization_1_1DiamondStyle.html#a480009bbbc74ed3edcfd75f565e37386',1,'Visualization::DiamondStyle::yShadowOffset_()']]]
+  ['yshadowoffset_5f',['yShadowOffset_',['../classVisualization_1_1BoxStyle.html#aa1e9ade3b08e352089206b0101a4bf20',1,'Visualization::BoxStyle::yShadowOffset_()'],['../classVisualization_1_1DiamondStyle.html#a480009bbbc74ed3edcfd75f565e37386',1,'Visualization::DiamondStyle::yShadowOffset_()']]],
+  ['yspan',['ySpan',['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html#a09bd7c9e0b9371452b110849743265e1',1,'Visualization::DeclarativeItemBase::Merge']]]
 ];

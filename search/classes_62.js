@@ -7,6 +7,7 @@ var searchData=
   ['block',['Block',['../classOOModel_1_1Block.html',1,'OOModel']]],
   ['boolean',['Boolean',['../classModel_1_1Boolean.html',1,'Model']]],
   ['booleanliteral',['BooleanLiteral',['../classOOModel_1_1BooleanLiteral.html',1,'OOModel']]],
+  ['bottomitemnode',['BottomItemNode',['../classVisualization_1_1BottomItemNode.html',1,'Visualization']]],
   ['box',['Box',['../classVisualization_1_1Box.html',1,'Visualization']]],
   ['boxstyle',['BoxStyle',['../classVisualization_1_1BoxStyle.html',1,'Visualization']]],
   ['boxtest',['BoxTest',['../classVisualization_1_1BoxTest.html',1,'Visualization']]],

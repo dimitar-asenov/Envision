@@ -86,7 +86,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Using Eclipse (recommended)</h1>
 <ol type="1">
 <li>If you do not have the Qt development version installed, download and install it.</li>
-<li>Download and install the lp_solve development library version 5.5.</li>
+<li>Download and install the lp_solve development library version 5.5. On Ubuntu based distributions you'll need to do the following (tested with version 13.04):<ol type="a">
+<li>Install the packages <code>lp-solve</code> (for the shared library) and <code>liblpsolve55-dev</code> (for the header files): <pre class="fragment">sudo apt-get install lp-solve liblpsolve55-dev </pre></li>
+<li>Make the following symbolic link: <pre class="fragment">sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so </pre></li>
+</ol>
+</li>
 <li>Download and install the Qt Integration plug-in for your version of eclipse (32/64 bit).</li>
 <li>Inside Eclipse, configure Qt so that it knows where to find the development files.</li>
 <li>Download Envision's sources. The project is structured in separate directories where each one is an Eclipse/Qt project.</li>

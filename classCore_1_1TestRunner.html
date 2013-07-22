@@ -108,8 +108,10 @@ Inheritance diagram for Core::TestRunner:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5701b23605d608f00b760d8fd8286cff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html#a5701b23605d608f00b760d8fd8286cff">TestRunner</a> ()</td></tr>
 <tr class="separator:a5701b23605d608f00b760d8fd8286cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad50c0e8e3c24c809d0f98f5cd2d46bcf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html#ad50c0e8e3c24c809d0f98f5cd2d46bcf">enqueueSelfTests</a> (<a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> &amp;<a class="el" href="classCore_1_1TestRunner.html#a28af0013807c7e7ad6e6131a0eeef717">pm</a>)</td></tr>
+<tr class="memitem:ad50c0e8e3c24c809d0f98f5cd2d46bcf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html#ad50c0e8e3c24c809d0f98f5cd2d46bcf">enqueueSelfTests</a> (<a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> &amp;pm)</td></tr>
 <tr class="separator:ad50c0e8e3c24c809d0f98f5cd2d46bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca9fe55215dbbe86c1e38ea6f7465d05"><td class="memItemLeft" align="right" valign="top">const QList&lt; const <a class="el" href="classCore_1_1TestEvent.html">TestEvent</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html#aca9fe55215dbbe86c1e38ea6f7465d05">requestedTests</a> () const </td></tr>
+<tr class="separator:aca9fe55215dbbe86c1e38ea6f7465d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -118,8 +120,10 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a28af0013807c7e7ad6e6131a0eeef717"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html#a28af0013807c7e7ad6e6131a0eeef717">pm</a></td></tr>
-<tr class="separator:a28af0013807c7e7ad6e6131a0eeef717"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fa3969071b1b8f1229c236030008050"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html#a6fa3969071b1b8f1229c236030008050">pm_</a> {}</td></tr>
+<tr class="separator:a6fa3969071b1b8f1229c236030008050"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56431cde5377946e5d755bdd547641d6"><td class="memItemLeft" align="right" valign="top">QList&lt; const <a class="el" href="classCore_1_1TestEvent.html">TestEvent</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html#a56431cde5377946e5d755bdd547641d6">requestedTests_</a></td></tr>
+<tr class="separator:a56431cde5377946e5d755bdd547641d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a5701b23605d608f00b760d8fd8286cff"></a>
@@ -178,8 +182,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a28af0013807c7e7ad6e6131a0eeef717"></a>
+<a class="anchor" id="aca9fe55215dbbe86c1e38ea6f7465d05"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -187,7 +190,51 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a>* Core::TestRunner::pm</td>
+          <td class="memname">const QList&lt; const <a class="el" href="classCore_1_1TestEvent.html">TestEvent</a> * &gt; &amp; Core::TestRunner::requestedTests </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a6fa3969071b1b8f1229c236030008050"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCore_1_1PluginManager.html">PluginManager</a>* Core::TestRunner::pm_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a56431cde5377946e5d755bdd547641d6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt;const <a class="el" href="classCore_1_1TestEvent.html">TestEvent</a>*&gt; Core::TestRunner::requestedTests_</td>
         </tr>
       </table>
   </td>

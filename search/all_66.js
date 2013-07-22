@@ -37,6 +37,7 @@ var searchData=
   ['findbypostfixwithoutpreinfix',['findByPostfixWithoutPreInfix',['../classInteraction_1_1OperatorDescriptorList.html#afb7f986ce71b486663b63513d9e78562',1,'Interaction::OperatorDescriptorList']]],
   ['findbyprefix',['findByPrefix',['../classInteraction_1_1OperatorDescriptorList.html#aa00ca900ccd08302396ccd8f55f634cf',1,'Interaction::OperatorDescriptorList']]],
   ['findcell',['findCell',['../classOOInteraction_1_1GridBasedOffsetProvider.html#aafbc60658cf0d55d3dcc56feb91d581f',1,'OOInteraction::GridBasedOffsetProvider']]],
+  ['findchildmatch',['findChildMatch',['../classVisualization_1_1AnchorLayoutFormElement.html#aac63c439e9a89da3e34568c5334874a8',1,'Visualization::AnchorLayoutFormElement']]],
   ['findcontext',['findContext',['../classInteraction_1_1Empty.html#a643ea982bcdf1806115bfe2a5e21cd10',1,'Interaction::Empty::findContext()'],['../classInteraction_1_1Expression.html#ac3a414ece5d85073be0dffc477c35c17',1,'Interaction::Expression::findContext()'],['../classInteraction_1_1Operator.html#a555332d49db0f2a4db3523423531f563',1,'Interaction::Operator::findContext()'],['../classInteraction_1_1Value.html#a41685c1d26519ded84916849ee5beeda',1,'Interaction::Value::findContext()']]],
   ['findcutexpression',['findCutExpression',['../classInteraction_1_1Expression.html#ae70c1b944a6dffdab90e08b898bf3d3e',1,'Interaction::Expression::findCutExpression()'],['../classInteraction_1_1Operator.html#aeae5afe60b392ed13802ee0e1e3bad8a',1,'Interaction::Operator::findCutExpression()']]],
   ['findelementbyid',['findElementById',['../classFilePersistence_1_1FileStore.html#a26d7d912e4e6d6cad4d17f7528d3f231',1,'FilePersistence::FileStore']]],
@@ -57,6 +58,7 @@ var searchData=
   ['first_5f',['first_',['../classVisualization_1_1PanelLayout.html#adce5758cc559c2e5e19b42922ed30f72',1,'Visualization::PanelLayout']]],
   ['firstitem_5f',['firstItem_',['../classVisualization_1_1DeclarativeTest.html#a2763ce633dde345edd8e571e9ff333dd',1,'Visualization::DeclarativeTest']]],
   ['firstnode_5f',['firstNode_',['../classVisualization_1_1DeclarativeTest.html#a40bb536f03076b2d631b0a7db3dba83b',1,'Visualization::DeclarativeTest']]],
+  ['fitsinrect',['fitsInRect',['../classVisualization_1_1NameOverlay.html#ab504e35d1b66e7a498e5b199ac42399a',1,'Visualization::NameOverlay']]],
   ['fixcursorpositionforundoaftermodelchange',['fixCursorPositionForUndoAfterModelChange',['../classInteraction_1_1GenericHandler.html#a4ba13733d0fb90cd8e322abc3e02f32d',1,'Interaction::GenericHandler']]],
   ['fixedelement',['fixedElement',['../classVisualization_1_1AnchorLayoutAnchor.html#a4e8d70790137de6ddcc2d7cb15499292',1,'Visualization::AnchorLayoutAnchor']]],
   ['fixedelement_5f',['fixedElement_',['../classVisualization_1_1AnchorLayoutAnchor.html#a7c02a96cda5fbd62ddaefc95d34615e1',1,'Visualization::AnchorLayoutAnchor']]],
@@ -64,8 +66,8 @@ var searchData=
   ['fixprecedence',['fixPrecedence',['../classInteraction_1_1ExpressionTreeUtils.html#aaa521f55bc7de82da20e8dfd5aa54e55',1,'Interaction::ExpressionTreeUtils']]],
   ['fixtop',['fixTop',['../classInteraction_1_1ExpressionTreeUtils.html#a3d57651e190444bf5a693f3d165fba9f',1,'Interaction::ExpressionTreeUtils']]],
   ['fixwrongids',['fixWrongIds',['../classInteraction_1_1ExpressionTreeUtils.html#a972da37ab347af31b45effd8587cb99d',1,'Interaction::ExpressionTreeUtils']]],
-  ['float',['Float',['../classModel_1_1Float.html#aa573fa6a8b23476bfd49a377d423b9f3',1,'Model::Float::Float(::Model::Node *parent=nullptr)'],['../classModel_1_1Float.html#ae319465f3d65cb0916849e8df3e3933c',1,'Model::Float::Float(::Model::Node *parent,::Model::PersistentStore &amp;store, bool partialLoadHint)'],['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a10a2e54e8b85f728be2dcd4eb23ea790',1,'OOModel::PrimitiveType::FLOAT()']]],
   ['float',['Float',['../classModel_1_1Float.html',1,'Model']]],
+  ['float',['Float',['../classModel_1_1Float.html#aa573fa6a8b23476bfd49a377d423b9f3',1,'Model::Float::Float(::Model::Node *parent=nullptr)'],['../classModel_1_1Float.html#ae319465f3d65cb0916849e8df3e3933c',1,'Model::Float::Float(::Model::Node *parent,::Model::PersistentStore &amp;store, bool partialLoadHint)'],['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a10a2e54e8b85f728be2dcd4eb23ea790',1,'OOModel::PrimitiveType::FLOAT()']]],
   ['floatliteral',['FloatLiteral',['../classOOModel_1_1FloatLiteral.html',1,'OOModel']]],
   ['floatliteral',['FloatLiteral',['../classOOModel_1_1FloatLiteral.html#a7d5c72c48c623770bb430740d48ca2c7',1,'OOModel::FloatLiteral']]],
   ['focusedchild',['focusedChild',['../classVisualization_1_1Item.html#a6bd68277abf19e277c3de300c10119fe',1,'Visualization::Item']]],
@@ -84,6 +86,7 @@ var searchData=
   ['formalresult',['FormalResult',['../classOOModel_1_1FormalResult.html',1,'OOModel']]],
   ['formaltypeargument',['FormalTypeArgument',['../classOOModel_1_1FormalTypeArgument.html',1,'OOModel']]],
   ['formelement',['FormElement',['../classVisualization_1_1FormElement.html',1,'Visualization']]],
+  ['formelement',['FormElement',['../classVisualization_1_1FormElement.html#ad4530b4e6f76cb6a078fa2ce9fc076a6',1,'Visualization::FormElement::FormElement()=default'],['../classVisualization_1_1FormElement.html#a717d031449013e511496235e8841c8e6',1,'Visualization::FormElement::FormElement(const FormElement &amp;other)']]],
   ['forms',['forms',['../classVisualization_1_1DeclarativeItem.html#a92d35a5f5c5ad373235b0a342c0e2e4b',1,'Visualization::DeclarativeItem::forms()'],['../classVisualization_1_1DeclarativeItemBase.html#a1d807e635d9e2ddcfc9c7bddafe7feab',1,'Visualization::DeclarativeItemBase::forms()']]],
   ['formsstatic',['formsStatic',['../classVisualization_1_1DeclarativeItem.html#a6d687d9ba6112e6aa973074325a4606c',1,'Visualization::DeclarativeItem']]],
   ['forward_5f',['forward_',['../classVisualization_1_1SequentialLayoutFormElement.html#a87b8ae4bab667a8102b529b774b5384e',1,'Visualization::SequentialLayoutFormElement']]],
@@ -110,6 +113,6 @@ var searchData=
   ['functionalcast',['FunctionalCast',['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faafc3bf4faa55058c48e55376f16f073ba',1,'OOModel::CastExpression']]],
   ['functiontype',['FunctionType',['../classOOModel_1_1FunctionType.html#a4160b2d1271f3c41f0ff0a0810702074',1,'OOModel::FunctionType::FunctionType(bool isValueType, QList&lt; const Type * &gt; arguments, Type *result=nullptr)'],['../classOOModel_1_1FunctionType.html#aff2bb60ed423a27455d82e22a66178bb',1,'OOModel::FunctionType::FunctionType(bool isValueType, QList&lt; const Type * &gt; arguments, QList&lt; const Type * &gt; results)'],['../classOOModel_1_1FunctionType.html#a70be0dda5dc4099c9caa6be5a481a6e2',1,'OOModel::FunctionType::FunctionType(const FunctionType &amp;other)']]],
   ['functiontype',['FunctionType',['../classOOModel_1_1FunctionType.html',1,'OOModel']]],
-  ['functiontypeexpression',['FunctionTypeExpression',['../classOOModel_1_1FunctionTypeExpression.html',1,'OOModel']]],
-  ['functiontypeexpression',['FunctionTypeExpression',['../classOOModel_1_1FunctionTypeExpression.html#aeb5cb2dd7daa363a5c1dea0b10304052',1,'OOModel::FunctionTypeExpression']]]
+  ['functiontypeexpression',['FunctionTypeExpression',['../classOOModel_1_1FunctionTypeExpression.html#aeb5cb2dd7daa363a5c1dea0b10304052',1,'OOModel::FunctionTypeExpression']]],
+  ['functiontypeexpression',['FunctionTypeExpression',['../classOOModel_1_1FunctionTypeExpression.html',1,'OOModel']]]
 ];

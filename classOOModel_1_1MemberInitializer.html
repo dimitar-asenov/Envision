@@ -93,6 +93,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">OOModel::MemberInitializer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This class represent various forms of member initializers.  
+ <a href="classOOModel_1_1MemberInitializer.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for OOModel::MemberInitializer:</div>
 <div class="dyncontent">
@@ -105,8 +108,10 @@ Inheritance diagram for OOModel::MemberInitializer:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac4de0e44a49013378c0b7e29c70b7b82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MemberInitializer.html#ac4de0e44a49013378c0b7e29c70b7b82">MemberInitializer</a> (const QString &amp;memberName, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *initValue=nullptr)</td></tr>
-<tr class="separator:ac4de0e44a49013378c0b7e29c70b7b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add89a9dd834ba4ae364e290a23a503c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MemberInitializer.html#add89a9dd834ba4ae364e290a23a503c2">MemberInitializer</a> (<a class="el" href="classOOModel_1_1ReferenceExpression.html">ReferenceExpression</a> *memberRef, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *initValue)</td></tr>
+<tr class="separator:add89a9dd834ba4ae364e290a23a503c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93cbc8374a1d9a0731c931d66737cde9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MemberInitializer.html#a93cbc8374a1d9a0731c931d66737cde9">MemberInitializer</a> (<a class="el" href="classOOModel_1_1Expression.html">Expression</a> *initValue)</td></tr>
+<tr class="separator:a93cbc8374a1d9a0731c931d66737cde9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -114,27 +119,46 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ac4de0e44a49013378c0b7e29c70b7b82"></a>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class represent various forms of member initializers. </p>
+<p>It may be a call to a super constructor then <em>memberReference</em> will denote the callee of the super constructor and <em>initializedValue</em> will denote the arguments. In case of delegating constructors the <em>memberRef</em> will be empty, as the <em></em>  will contain a method call. For simple member field initializers the <em>memberReference</em> will contain a reference to the field and <em>initializedValue</em> the valued it should be initialized to </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="add89a9dd834ba4ae364e290a23a503c2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">OOModel::MemberInitializer::MemberInitializer </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>memberName</em>, </td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1ReferenceExpression.html">ReferenceExpression</a> *&#160;</td>
+          <td class="paramname"><em>memberRef</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td>
-          <td class="paramname"><em>initValue</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>initValue</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a93cbc8374a1d9a0731c931d66737cde9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">OOModel::MemberInitializer::MemberInitializer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td>
+          <td class="paramname"><em>initValue</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">

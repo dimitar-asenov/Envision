@@ -169,8 +169,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af23e6ae980ced3dabae06579f49a68c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f35e0cbeb31fab7f26596eda12d9d40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a7f35e0cbeb31fab7f26596eda12d9d40">showActionPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *actionRecevier, bool autoExecuteAction)</td></tr>
 <tr class="separator:a7f35e0cbeb31fab7f26596eda12d9d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa60aa551c205089e248fff5a8299efba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#aa60aa551c205089e248fff5a8299efba">showCommandPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *commandRecevier)</td></tr>
-<tr class="separator:aa60aa551c205089e248fff5a8299efba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb532516a72ad39b28cb71038484cf77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#abb532516a72ad39b28cb71038484cf77">showCommandPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *commandRecevier, QString initialCommandText=QString())</td></tr>
+<tr class="separator:abb532516a72ad39b28cb71038484cf77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classVisualization_1_1InteractionHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classVisualization_1_1InteractionHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a></td></tr>
 <tr class="memitem:a37dec03ef9f2068db0d0c2c74fa0985b inherit pub_methods_classVisualization_1_1InteractionHandler"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InteractionHandler.html#a37dec03ef9f2068db0d0c2c74fa0985b">~InteractionHandler</a> ()</td></tr>
 <tr class="separator:a37dec03ef9f2068db0d0c2c74fa0985b inherit pub_methods_classVisualization_1_1InteractionHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -797,7 +797,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1InteractionHandler.html#aa5df88418dbe90c5f26807f8a617dec5">Visualization::InteractionHandler</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classInteraction_1_1HPositionLayout.html#a6717f8b0e649456beb2280eff5d66ec3">Interaction::HPositionLayout</a>, and <a class="el" href="classInteraction_1_1HText.html#a23c05f58ff6d0a94dcb268a7e9f0093b">Interaction::HText</a>.</p>
+<p>Reimplemented in <a class="el" href="classInteraction_1_1HPositionLayout.html#a6717f8b0e649456beb2280eff5d66ec3">Interaction::HPositionLayout</a>, <a class="el" href="classInteraction_1_1HText.html#a23c05f58ff6d0a94dcb268a7e9f0093b">Interaction::HText</a>, and <a class="el" href="classInteraction_1_1HRootItem.html#af7c93d3a18fa5a8c57cee5e4fed729eb">Interaction::HRootItem</a>.</p>
 
 </div>
 </div>
@@ -835,7 +835,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1InteractionHandler.html#ab011ecaa4d17e044b37ebd35f6f710db">Visualization::InteractionHandler</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classInteraction_1_1HPositionLayout.html#aa90634c94330a67ba953bf7bd283b37f">Interaction::HPositionLayout</a>, and <a class="el" href="classInteraction_1_1HText.html#a9f9d414da9ef026f353e78ed68b99cce">Interaction::HText</a>.</p>
+<p>Reimplemented in <a class="el" href="classInteraction_1_1HPositionLayout.html#aa90634c94330a67ba953bf7bd283b37f">Interaction::HPositionLayout</a>, <a class="el" href="classInteraction_1_1HRootItem.html#aabf79c1314280b8477b9acaa809becd9">Interaction::HRootItem</a>, and <a class="el" href="classInteraction_1_1HText.html#a9f9d414da9ef026f353e78ed68b99cce">Interaction::HText</a>.</p>
 
 </div>
 </div>
@@ -1057,7 +1057,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa60aa551c205089e248fff5a8299efba"></a>
+<a class="anchor" id="abb532516a72ad39b28cb71038484cf77"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1065,8 +1065,18 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void Interaction::GenericHandler::showCommandPrompt </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>commandRecevier</em></td><td>)</td>
+          <td class="paramname"><em>commandRecevier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>initialCommandText</em> = <code>QString()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

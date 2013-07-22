@@ -90,6 +90,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classInteraction_1_1OperatorDescriptor-members.html">List of all members</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Interaction::OperatorDescriptor Class Reference</div>  </div>
@@ -128,6 +130,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a93171d84ff3db5dcfeea4e6f91a82de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63a4f42053febea92f0b06457fa0a8ba"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a63a4f42053febea92f0b06457fa0a8ba">delimiters</a> ()</td></tr>
 <tr class="separator:a63a4f42053febea92f0b06457fa0a8ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45d334f3ff230938df9c870c360c90bb"><td class="memItemLeft" align="right" valign="top">const QList&lt; <a class="el" href="structInteraction_1_1ExpectedToken.html">ExpectedToken</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a45d334f3ff230938df9c870c360c90bb">expectedTokens</a> () const </td></tr>
+<tr class="separator:a45d334f3ff230938df9c870c360c90bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad141057117d82e56c97b9ecde9811057"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#ad141057117d82e56c97b9ecde9811057">infix</a> (int at)</td></tr>
 <tr class="separator:ad141057117d82e56c97b9ecde9811057"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c36c3a9648950d47d2a379ed1d8afed"><td class="memItemLeft" align="right" valign="top">const QStringList &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a7c36c3a9648950d47d2a379ed1d8afed">infixes</a> ()</td></tr>
@@ -149,10 +153,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5a1a37443548a13d6c1e52cedf3c44dc"><td class="memItemLeft" align="right" valign="top">const QStringList &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a5a1a37443548a13d6c1e52cedf3c44dc">signature</a> ()</td></tr>
 <tr class="separator:a5a1a37443548a13d6c1e52cedf3c44dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3ee07bc25d651c83a2702c355ad9baa1"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a3ee07bc25d651c83a2702c355ad9baa1">isDelimiter</a> (const QString &amp;str)</td></tr>
+<tr class="separator:a3ee07bc25d651c83a2702c355ad9baa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a94fb2451b3d3ad7e5349ef6e4c76bcfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a94fb2451b3d3ad7e5349ef6e4c76bcfd">computeExpectedTokens</a> ()</td></tr>
+<tr class="separator:a94fb2451b3d3ad7e5349ef6e4c76bcfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a1a1dd2845e65ec1164b8aebef12eb9e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a15ad9bf3edba961b01241fe71808e181">Associativity</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a1a1dd2845e65ec1164b8aebef12eb9e6">associativity_</a> {}</td></tr>
 <tr class="separator:a1a1dd2845e65ec1164b8aebef12eb9e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa10cd14652456e99ea1e14b58d327889"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structInteraction_1_1ExpectedToken.html">ExpectedToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#aa10cd14652456e99ea1e14b58d327889">expectedTokens_</a></td></tr>
+<tr class="separator:aa10cd14652456e99ea1e14b58d327889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa030d831909d9a0fb6e73cddcba18dc1"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#aa030d831909d9a0fb6e73cddcba18dc1">infixes_</a></td></tr>
 <tr class="separator:aa030d831909d9a0fb6e73cddcba18dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a019af18f54497e8bae89fb6e412a7d40"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a019af18f54497e8bae89fb6e412a7d40">name_</a></td></tr>
@@ -292,6 +308,29 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a94fb2451b3d3ad7e5349ef6e4c76bcfd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::OperatorDescriptor::computeExpectedTokens </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a63a4f42053febea92f0b06457fa0a8ba"></a>
 <div class="memitem">
 <div class="memproto">
@@ -303,6 +342,29 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a45d334f3ff230938df9c870c360c90bb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QList&lt; <a class="el" href="structInteraction_1_1ExpectedToken.html">ExpectedToken</a> &gt; &amp; Interaction::OperatorDescriptor::expectedTokens </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -348,6 +410,30 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3ee07bc25d651c83a2702c355ad9baa1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Interaction::OperatorDescriptor::isDelimiter </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -549,6 +635,26 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classInteraction_1_1OperatorDescriptor.html#a15ad9bf3edba961b01241fe71808e181">Associativity</a> Interaction::OperatorDescriptor::associativity_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa10cd14652456e99ea1e14b58d327889"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt;<a class="el" href="structInteraction_1_1ExpectedToken.html">ExpectedToken</a>&gt; Interaction::OperatorDescriptor::expectedTokens_</td>
         </tr>
       </table>
   </td>

@@ -95,7 +95,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">Visualization::Scene Class Reference</div>  </div>
 </div><!--header-->
@@ -139,6 +140,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abbc0d09eda10b13aa034ce3f2dd8c3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace991cd6ccee83d1516916e17ad1a3c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ace991cd6ccee83d1516916e17ad1a3c1">addTopLevelItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
 <tr class="separator:ace991cd6ccee83d1516916e17ad1a3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2c7939eb639b67d49440a142e6f500c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1View.html">View</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ae2c7939eb639b67d49440a142e6f500c">currentPaintView</a> () const </td></tr>
+<tr class="separator:ae2c7939eb639b67d49440a142e6f500c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cb91c173ebc009b5e485f4f73aebcc7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a1cb91c173ebc009b5e485f4f73aebcc7">customEvent</a> (QEvent *<a class="el" href="classVisualization_1_1Scene.html#a71390cf32fbb6ea1366daa5e42af18c6">event</a>)</td></tr>
 <tr class="separator:a1cb91c173ebc009b5e485f4f73aebcc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bb50960f7a014fb6a9336c111f2f033"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a5bb50960f7a014fb6a9336c111f2f033">focusItem</a> () const </td></tr>
@@ -201,41 +204,54 @@ Private Types</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a504edce4b1b296ba7ca76499b57b3466"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a504edce4b1b296ba7ca76499b57b3466">computeSceneRect</a> ()</td></tr>
 <tr class="separator:a504edce4b1b296ba7ca76499b57b3466"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae91a48782633d49de7be639b6fa61bb5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ae91a48782633d49de7be639b6fa61bb5">setCurrentPaintView</a> (<a class="el" href="classVisualization_1_1View.html">View</a> *view)</td></tr>
+<tr class="separator:ae91a48782633d49de7be639b6fa61bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23909ab1dc6c3c1efaaa82a7c2ed30d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a23909ab1dc6c3c1efaaa82a7c2ed30d7">updateItems</a> ()</td></tr>
 <tr class="separator:a23909ab1dc6c3c1efaaa82a7c2ed30d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a57a159d11d40a238df9043e1817d1535"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1View.html">View</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a57a159d11d40a238df9043e1817d1535">currentPaintView_</a> {}</td></tr>
+<tr class="separator:a57a159d11d40a238df9043e1817d1535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cfcbccb2058c9d691923bf6ed865097"><td class="memItemLeft" align="right" valign="top">ItemCategories&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a6cfcbccb2058c9d691923bf6ed865097">hiddenItemCategories_</a></td></tr>
 <tr class="separator:a6cfcbccb2058c9d691923bf6ed865097"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f18d062b249f463dcd50122e97de3fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7f18d062b249f463dcd50122e97de3fe">inAnUpdate_</a></td></tr>
+<tr class="memitem:a7f18d062b249f463dcd50122e97de3fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7f18d062b249f463dcd50122e97de3fe">inAnUpdate_</a> {}</td></tr>
 <tr class="separator:a7f18d062b249f463dcd50122e97de3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafee0bd160f6bba0176a6b194dfb58ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aafee0bd160f6bba0176a6b194dfb58ef">inEventHandler_</a></td></tr>
+<tr class="memitem:aafee0bd160f6bba0176a6b194dfb58ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aafee0bd160f6bba0176a6b194dfb58ef">inEventHandler_</a> {}</td></tr>
 <tr class="separator:aafee0bd160f6bba0176a6b194dfb58ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e70433dee300e84c553512cd51b2376"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8e70433dee300e84c553512cd51b2376">initialized_</a> {}</td></tr>
+<tr class="separator:a8e70433dee300e84c553512cd51b2376"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17028bb8ab301731ae8f8e12ccb6e823"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a17028bb8ab301731ae8f8e12ccb6e823">isCurrentMousePressAClick_</a> {}</td></tr>
 <tr class="separator:a17028bb8ab301731ae8f8e12ccb6e823"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd8a613abb0646b1e2511288bfb57e69"><td class="memItemLeft" align="right" valign="top">QElapsedTimer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#abd8a613abb0646b1e2511288bfb57e69">lastMousePressTimer_</a> {}</td></tr>
 <tr class="separator:abd8a613abb0646b1e2511288bfb57e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbae5d627080435c95b5828e70a1b00f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f">mainCursor_</a></td></tr>
+<tr class="memitem:adbae5d627080435c95b5828e70a1b00f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f">mainCursor_</a> {}</td></tr>
 <tr class="separator:adbae5d627080435c95b5828e70a1b00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b028262f809335f6edd6a5fed551d9a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a">mainCursorsJustSet_</a></td></tr>
+<tr class="memitem:a8b028262f809335f6edd6a5fed551d9a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a">mainCursorsJustSet_</a> {}</td></tr>
 <tr class="separator:a8b028262f809335f6edd6a5fed551d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d17344617d24f6a3a55fa13807fc017"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a4d17344617d24f6a3a55fa13807fc017">MAX_MILLISECONDS_FOR_A_CLICK</a> = 500</td></tr>
 <tr class="separator:a4d17344617d24f6a3a55fa13807fc017"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7147ad01e16030fcf8b2b916eec63934"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7147ad01e16030fcf8b2b916eec63934">needsUpdate_</a></td></tr>
+<tr class="memitem:abb730ce7c98f045859fc0439f190207d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1NameOverlay.html">NameOverlay</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#abb730ce7c98f045859fc0439f190207d">nameOverlay_</a> {}</td></tr>
+<tr class="separator:abb730ce7c98f045859fc0439f190207d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7147ad01e16030fcf8b2b916eec63934"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7147ad01e16030fcf8b2b916eec63934">needsUpdate_</a> {}</td></tr>
 <tr class="separator:a7147ad01e16030fcf8b2b916eec63934"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c9a19694ff2b1327e24f532376ae0e9"><td class="memItemLeft" align="right" valign="top">QList&lt; QEvent * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a4c9a19694ff2b1327e24f532376ae0e9">postEventActions_</a></td></tr>
 <tr class="separator:a4c9a19694ff2b1327e24f532376ae0e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57d8f8af575c706b89e791ef6edf2801"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1Scene.html#a8cc0510c5379d57285ecf4223b06ef41">RefreshActionFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a57d8f8af575c706b89e791ef6edf2801">refreshActionFunctions_</a></td></tr>
 <tr class="separator:a57d8f8af575c706b89e791ef6edf2801"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73b3be20dd0d87f6c5c3d32796adcdf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a73b3be20dd0d87f6c5c3d32796adcdf9">renderer_</a></td></tr>
+<tr class="memitem:a73b3be20dd0d87f6c5c3d32796adcdf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a73b3be20dd0d87f6c5c3d32796adcdf9">renderer_</a> {}</td></tr>
 <tr class="separator:a73b3be20dd0d87f6c5c3d32796adcdf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba40f9f47957c0f0736a9075e41d0275"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aba40f9f47957c0f0736a9075e41d0275">sceneHandlerItem_</a></td></tr>
+<tr class="memitem:aba40f9f47957c0f0736a9075e41d0275"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aba40f9f47957c0f0736a9075e41d0275">sceneHandlerItem_</a> {}</td></tr>
 <tr class="separator:aba40f9f47957c0f0736a9075e41d0275"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad26186263fb08c47b215ebbcddc13130"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1SelectedItem.html">SelectedItem</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ad26186263fb08c47b215ebbcddc13130">selections_</a></td></tr>
 <tr class="separator:ad26186263fb08c47b215ebbcddc13130"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3230989f947a83357ffac551a2cd194c"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a3230989f947a83357ffac551a2cd194c">topLevelItems_</a></td></tr>
 <tr class="separator:a3230989f947a83357ffac551a2cd194c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a018ff8a950133459fda57a235706a80b"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a018ff8a950133459fda57a235706a80b">View</a></td></tr>
+<tr class="separator:a018ff8a950133459fda57a235706a80b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a41fbc535e56c11864b4eed4c54fac7eb"></a>
@@ -411,6 +427,29 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae2c7939eb639b67d49440a142e6f500c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1View.html">View</a> * Visualization::Scene::currentPaintView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -832,6 +871,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae91a48782633d49de7be639b6fa61bb5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::Scene::setCurrentPaintView </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1View.html">View</a> *&#160;</td>
+          <td class="paramname"><em>view</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a3c0788560e4a691044af2f7646ea4d8c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -942,7 +1005,48 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="a018ff8a950133459fda57a235706a80b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classVisualization_1_1View.html">View</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a57a159d11d40a238df9043e1817d1535"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1View.html">View</a>* Visualization::Scene::currentPaintView_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6cfcbccb2058c9d691923bf6ed865097"></a>
 <div class="memitem">
 <div class="memproto">
@@ -971,7 +1075,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Visualization::Scene::inAnUpdate_</td>
+          <td class="memname">bool Visualization::Scene::inAnUpdate_ {}</td>
         </tr>
       </table>
   </td>
@@ -991,7 +1095,27 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Visualization::Scene::inEventHandler_</td>
+          <td class="memname">bool Visualization::Scene::inEventHandler_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8e70433dee300e84c553512cd51b2376"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::Scene::initialized_ {}</td>
         </tr>
       </table>
   </td>
@@ -1051,7 +1175,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a>* Visualization::Scene::mainCursor_</td>
+          <td class="memname"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a>* Visualization::Scene::mainCursor_ {}</td>
         </tr>
       </table>
   </td>
@@ -1071,7 +1195,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Visualization::Scene::mainCursorsJustSet_</td>
+          <td class="memname">bool Visualization::Scene::mainCursorsJustSet_ {}</td>
         </tr>
       </table>
   </td>
@@ -1103,6 +1227,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abb730ce7c98f045859fc0439f190207d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1NameOverlay.html">NameOverlay</a>* Visualization::Scene::nameOverlay_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a7147ad01e16030fcf8b2b916eec63934"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1111,7 +1255,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Visualization::Scene::needsUpdate_</td>
+          <td class="memname">bool Visualization::Scene::needsUpdate_ {}</td>
         </tr>
       </table>
   </td>
@@ -1171,7 +1315,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a>* Visualization::Scene::renderer_</td>
+          <td class="memname"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a>* Visualization::Scene::renderer_ {}</td>
         </tr>
       </table>
   </td>
@@ -1191,7 +1335,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a>* Visualization::Scene::sceneHandlerItem_</td>
+          <td class="memname"><a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a>* Visualization::Scene::sceneHandlerItem_ {}</td>
         </tr>
       </table>
   </td>

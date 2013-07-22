@@ -8,5 +8,6 @@ var searchData=
   ['xml_5fdom_5ftype',['XML_DOM_TYPE',['../namespaceFilePersistence.html#af973e52ea392ad7c8ebfbfceaade8887',1,'FilePersistence::XML_DOM_TYPE()'],['../namespaceVisualization.html#ab5fe2ed2e1f07eb2a93217d4d7f20af6',1,'Visualization::XML_DOM_TYPE()']]],
   ['xml_5fnewunit_5fnode_5ftag',['XML_NEWUNIT_NODE_TAG',['../namespaceFilePersistence.html#aee14e6859e371eace785b276a1004e09',1,'FilePersistence']]],
   ['xoffset_5f',['xOffset_',['../classVisualization_1_1Shape.html#a341a2a8b57b87e153004eaab1d7a1c09',1,'Visualization::Shape']]],
-  ['xshadowoffset_5f',['xShadowOffset_',['../classVisualization_1_1BoxStyle.html#a1fa5023b78e5e6a266c7d3505bf691a5',1,'Visualization::BoxStyle::xShadowOffset_()'],['../classVisualization_1_1DiamondStyle.html#a10d7dade258a44171a589541f110165f',1,'Visualization::DiamondStyle::xShadowOffset_()']]]
+  ['xshadowoffset_5f',['xShadowOffset_',['../classVisualization_1_1BoxStyle.html#a1fa5023b78e5e6a266c7d3505bf691a5',1,'Visualization::BoxStyle::xShadowOffset_()'],['../classVisualization_1_1DiamondStyle.html#a10d7dade258a44171a589541f110165f',1,'Visualization::DiamondStyle::xShadowOffset_()']]],
+  ['xspan',['xSpan',['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html#a0288b0d30dcbb5bf47c2fbfe7ded11dd',1,'Visualization::DeclarativeItemBase::Merge']]]
 ];
