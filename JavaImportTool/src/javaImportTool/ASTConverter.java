@@ -52,7 +52,6 @@ public class ASTConverter {
 		
 		setModifiers(type);
 		//TODO: Handle JavaDoc
-		//TODO: Handle Annotations
 		
 		if (topLevel)
 		{
@@ -74,6 +73,49 @@ public class ASTConverter {
     	containers.pop();
 	}
 
+	public void processAnnotations(Node declaration, List<IExtendedModifier> modifiersAndAnnotations)
+			throws ConversionException
+	{
+		Node annotations = declaration.child("annotations");
+		
+		for (IExtendedModifier em : modifiersAndAnnotations)
+		{
+			if (!em.isAnnotation()) continue;
+			
+			Node ann = getAnnotation((Annotation) em);
+			ann.setName(annotations.numChildren());
+			annotations.add(ann);
+		}
+	}
+	
+	public Node getAnnotation(Annotation annotation) throws ConversionException
+	{
+		Node statement = new Node(null, "ExpressionStatement");
+		Node call = statement.setChild("expression", new Node(null, "MethodCallExpression"));
+		call.setChild("callee", expression(annotation.getTypeName(), "callee"));
+		
+		if (annotation instanceof SingleMemberAnnotation)
+		{
+			call.child("arguments").add(expression( ((SingleMemberAnnotation)annotation).getValue(),
+					Integer.toString(call.child("arguments").numChildren())));
+		}
+		else if (annotation instanceof NormalAnnotation)
+		{
+			NormalAnnotation normal = (NormalAnnotation) annotation;
+			
+			for(MemberValuePair mvp : (List<MemberValuePair>)normal.values())
+			{
+				Node assignment = new Node(null, "AssignmentExpression", call.child("arguments").numChildren());
+				assignment.setChild("left", expression(mvp.getName(), "left"));
+				assignment.setChild("right", expression(mvp.getValue(), "right"));
+						
+				call.child("arguments").add(assignment);
+			}
+		}
+		
+		return statement;
+	}
+	
 	public void visit(TypeDeclaration node) throws ConversionException
 	{
 		Node cl = containers.peek();
@@ -147,8 +189,7 @@ public class ASTConverter {
 		Node me = containers.peek().addSymbolNodeInList("methods", "Method", node.getName().getIdentifier());
 		containers.push(me);
 		
-		// TODO: Handle different types of methods
-		me.child("mthKind").setLongValue(0); // Make this a method
+		me.child("mthKind").setLongValue(node.isConstructor() ? 1 : 0);
 		
 		setModifiers(node);
 		processTypeParameters(node.typeParameters());

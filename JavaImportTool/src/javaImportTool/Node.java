@@ -39,6 +39,7 @@ public class Node {
 	public int numChildren() { return children_.size(); }
 	
 	public void setName(String name) { name_ = name; }
+	public void setName(int name) { name_ = Integer.toString(name); }
 	public void setDoubleValue(double val) { text_ = "D_" + Double.toString(val); }
 	public void setStringValue(String val) { text_ = "S_" + StringEscapeUtils.escapeXml(val); }
 	public void setLongValue(long val){ text_ = "I_" + Integer.toString((int)val); }
