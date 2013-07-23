@@ -54,7 +54,6 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		 */
 		OOModel::Expression* getLastExpression();
 
-		bool TraverseExpr(clang::Expr* e);
 		bool VisitExpr(clang::Expr* e);
 
 		// memberExpr
@@ -189,9 +188,6 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		 * Helper Function for all kind of casts.
 		 */
 		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
-
-		// saved for debugging
-		clang::Expr* currentExpr_{};
 
 		using Base = clang::RecursiveASTVisitor<ExpressionVisitor>;
 };

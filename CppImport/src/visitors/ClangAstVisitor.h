@@ -53,8 +53,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		Model::Node* popOOStack();
 
 		// method only for debugging
-		bool TraverseDecl(clang::Decl* decl);
-		// method only for debugging
 		bool VisitDecl(clang::Decl* decl);
 
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
@@ -163,9 +161,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool modelSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};
-
-		clang::Stmt* currentStmt_{};
-		clang::Decl* currenDecl_{};
 };
 
 // method

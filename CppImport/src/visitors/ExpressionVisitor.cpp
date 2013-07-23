@@ -46,25 +46,13 @@ OOModel::Expression* ExpressionVisitor::getLastExpression()
 	return utils_->createErrorExpression("Could not convert last expression");
 }
 
-bool ExpressionVisitor::TraverseExpr(clang::Expr* e)
-{
-	if(e && e == currentExpr_)
-	{
-		log_->writeError(className_, e, CppImportLogger::Reason::NOT_SUPPORTED);
-		return true;
-	}
-	currentExpr_ = e;
-	return Base::TraverseStmt(e);
-}
-
 bool ExpressionVisitor::VisitExpr(clang::Expr* e)
 {
-	if(e && e == currentExpr_)
+	if(e && !llvm::isa<clang::ImplicitCastExpr>(e))
 	{
 		log_->writeError(className_, e, CppImportLogger::Reason::NOT_SUPPORTED);
 		return true;
 	}
-	currentExpr_ = e;
 	return Base::VisitStmt(e);
 }
 

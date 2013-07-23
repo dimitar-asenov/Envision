@@ -71,23 +71,12 @@ Model::Node*ClangAstVisitor::popOOStack()
 	return ooStack_.pop();
 }
 
-bool ClangAstVisitor::TraverseDecl(clang::Decl* decl)
-{
-	if(decl && decl == currenDecl_)
-	{
-		log_->writeError(className_, decl, CppImportLogger::Reason::NOT_SUPPORTED);
-		return true;
-	}
-	currenDecl_ = decl;
-	return Base::TraverseDecl(decl);
-}
-
 bool ClangAstVisitor::VisitDecl(clang::Decl* decl)
 {
 	if(!shouldModel(decl->getLocation()))
 		return true;
 
-	if(decl && decl == currenDecl_ && !llvm::isa<clang::AccessSpecDecl>(decl))
+	if(decl && !llvm::isa<clang::AccessSpecDecl>(decl))
 	{
 		log_->writeError(className_, decl, CppImportLogger::Reason::NOT_SUPPORTED);
 		return true;
@@ -491,12 +480,6 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 
 bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 {
-	if(S && S == currentStmt_)
-	{
-		log_->writeError(className_, S, CppImportLogger::Reason::NOT_SUPPORTED);
-		return true;
-	}
-	currentStmt_ = S;
 	if(S && llvm::isa<clang::Expr>(S))
 	{
 		// always ignore implicit stuff
@@ -522,7 +505,7 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
-	if(S && S == currentStmt_ && !llvm::isa<clang::CompoundStmt>(S))
+	if(S && !llvm::isa<clang::CompoundStmt>(S) && !llvm::isa<clang::NullStmt>(S))
 	{
 		log_->writeError(className_, S, CppImportLogger::Reason::NOT_SUPPORTED);
 		return true;

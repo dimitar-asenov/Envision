@@ -13,17 +13,16 @@ OOModel::FormalTypeArgument*TemplateArgumentVisitor::getLastTranslated()
 	return typeArgStack_.pop();
 }
 
-bool TemplateArgumentVisitor::TraverseDecl(clang::Decl* decl)
+bool TemplateArgumentVisitor::VisitDecl(clang::Decl* decl)
 {
-	if(!llvm::isa<clang::TemplateTypeParmDecl>(decl) && !llvm::isa<clang::NonTypeTemplateParmDecl>(decl))
+	if(decl)
 	{
 		log_->writeError(className_, decl, CppImportLogger::Reason::OTHER,
 							  "Can not handle this decl with this visitor");
 		typeArgStack_.push(new OOModel::FormalTypeArgument("#ERROR"));
 		return true;
 	}
-	// dispatch to the correct function
-	return RecursiveASTVisitor<TemplateArgumentVisitor>::TraverseDecl(decl);
+	return RecursiveASTVisitor<TemplateArgumentVisitor>::VisitDecl(decl);
 }
 
 bool TemplateArgumentVisitor::TraverseTemplateTypeParmDecl(clang::TemplateTypeParmDecl* templateParm)
