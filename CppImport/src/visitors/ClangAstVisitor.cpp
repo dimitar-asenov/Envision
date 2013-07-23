@@ -142,11 +142,18 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 			// this class is already visited
 			return true;
 		TraverseClass(specializationDecl, ooClass);
+
+		auto originalParams = specializationDecl->getSpecializedTemplate()->getTemplateParameters();
 		// visit type arguments if any
 		for(unsigned i = 0; i < specializationDecl->getTemplateArgs().size(); i++)
-			ooClass->typeArguments()->append(new OOModel::FormalTypeArgument
-					("#spec", utils_->translateTemplateArgument(specializationDecl->getTemplateArgs().get(i),
-																			  specializationDecl->getLocStart())));
+		{
+			auto typeArg = new OOModel::FormalTypeArgument();
+			typeArg->setSpecializationExpression(utils_->translateTemplateArgument
+															 (specializationDecl->getTemplateArgs().get(i),
+																			  specializationDecl->getLocStart()));
+			typeArg->setName(QString::fromStdString(originalParams->getParam(i)->getNameAsString()));
+			ooClass->typeArguments()->append(typeArg);
+		}
 	}
 	return true;
 }
@@ -1055,12 +1062,18 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		}
 		if(auto specArgs = functionDecl->getTemplateSpecializationArgsAsWritten())
 		{
-		unsigned templateArgs = specArgs->NumTemplateArgs;
-		auto astTemplateArgsList = specArgs->getTemplateArgs();
-		for(unsigned i = 0; i < templateArgs; i++)
-			ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument("#spec", utils_->translateTemplateArgument
-																									  (astTemplateArgsList[i].getArgument(),
-																										astTemplateArgsList[i].getLocation())));
+			unsigned templateArgs = specArgs->NumTemplateArgs;
+			auto astTemplateArgsList = specArgs->getTemplateArgs();
+			auto templateParamList = functionDecl->getPrimaryTemplate()->getTemplateParameters();
+			for(unsigned i = 0; i < templateArgs; i++)
+			{
+				auto typeArg = new OOModel::FormalTypeArgument();
+				typeArg->setName(QString::fromStdString(templateParamList->getParam(i)->getNameAsString()));
+				typeArg->setSpecializationExpression(utils_->translateTemplateArgument
+																 (astTemplateArgsList[i].getArgument(),
+																  astTemplateArgsList[i].getLocation()));
+				ooFunction->typeArguments()->append(typeArg);
+			}
 		}
 	}
 	// modifiers
