@@ -105,6 +105,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias);
 		bool TraverseUsingDecl(clang::UsingDecl* usingDecl);
 		bool TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
+		bool TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingValueDecl* unresolvedUsing);
 
 		/**
 		 * A helper function called by RecursiveASTVisitor parent class.

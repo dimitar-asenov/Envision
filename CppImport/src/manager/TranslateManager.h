@@ -104,6 +104,12 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::NameImport* insertUsingDirective(clang::UsingDirectiveDecl* usingDirective);
 		/**
+		 * This function is to make sure that an unresolved using directive is used only once.
+		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
+		 * Else it returns a nullptr.
+		 */
+		OOModel::NameImport* insertUnresolvedUsing(clang::UnresolvedUsingValueDecl* unresolvedUsing);
+		/**
 		 * This function is to make sure that an using directive is used only once.
 		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
 		 * Else it returns a nullptr.

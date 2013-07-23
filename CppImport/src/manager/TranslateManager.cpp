@@ -213,6 +213,18 @@ OOModel::NameImport* TranslateManager::insertUsingDirective(clang::UsingDirectiv
 	return ooName;
 }
 
+OOModel::NameImport* TranslateManager::insertUnresolvedUsing(clang::UnresolvedUsingValueDecl* unresolvedUsing)
+{
+	OOModel::NameImport* ooName = nullptr;
+	const QString hash = nh_->hashUnresolvedUsingDecl(unresolvedUsing);
+	if(!usingDeclMap_.contains(hash))
+	{
+		ooName = new OOModel::NameImport();
+		usingDeclMap_.insert(hash, ooName);
+	}
+	return ooName;
+}
+
 OOModel::TypeAlias*TranslateManager::insertNamespaceAlias(clang::NamespaceAliasDecl* namespaceAlias)
 {
 	OOModel::TypeAlias* ooAlias = nullptr;

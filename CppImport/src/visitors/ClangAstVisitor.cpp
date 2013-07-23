@@ -900,6 +900,30 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 	return true;
 }
 
+bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingValueDecl* unresolvedUsing)
+{
+	if(!shouldModel(unresolvedUsing->getLocation()))
+		return true;
+	if(auto ooNameImport = trMngr_->insertUnresolvedUsing(unresolvedUsing))
+	{
+		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
+				(QString::fromStdString(unresolvedUsing->getNameInfo().getAsString()));
+		if(auto prefix = unresolvedUsing->getQualifier())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix, unresolvedUsing->getLocStart()));
+		ooNameImport->setImportedName(nameRef);
+		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+		else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+			declaration->subDeclarations()->append(ooNameImport);
+		else
+		{
+			SAFE_DELETE(ooNameImport);
+			log_->writeError(className_, unresolvedUsing, CppImportLogger::Reason::INSERT_PROBLEM);
+		}
+	}
+	return true;
+}
+
 bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 {
 	return false;
