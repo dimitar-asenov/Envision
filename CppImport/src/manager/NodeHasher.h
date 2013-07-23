@@ -67,6 +67,7 @@ class CPPIMPORT_API NodeHasher
 		const QString hashNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName);
 
 		const QString hashType(const clang::QualType& type);
+		const QString hashTypeSourceInfo(const clang::TypeSourceInfo* info);
 		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam);
 		const QString hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* nonTypeTemplParam);
 		const QString hashTemplateArg(const clang::TemplateArgument& templateArg);

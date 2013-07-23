@@ -209,7 +209,7 @@ const QString NodeHasher::hashTypeAlias(const clang::TypedefNameDecl* typeAlias)
 {
 	QString hash = QString::fromStdString(typeAlias->getNameAsString());
 	hash.prepend("_").prepend(hashUsingParent(typeAlias->getDeclContext()));
-	hash.append("_").append(hashType(typeAlias->getUnderlyingType()));
+	hash.append("_").append(hashTypeSourceInfo(typeAlias->getTypeSourceInfo()));
 	return hash;
 }
 
@@ -262,6 +262,13 @@ const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifi
 const QString NodeHasher::hashType(const clang::QualType& type)
 {
 	return QString::fromStdString(type.getCanonicalType().getAsString());
+}
+
+const QString NodeHasher::hashTypeSourceInfo(const clang::TypeSourceInfo* info)
+{
+	QString hash(srcMngr_->getCharacterData(info->getTypeLoc().getBeginLoc()));
+	hash.truncate(hash.indexOf(";"));
+	return hash;
 }
 
 const QString NodeHasher::hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam)
