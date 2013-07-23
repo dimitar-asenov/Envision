@@ -84,7 +84,8 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Decl* d
 void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Stmt* stmt, OUTTYPE outType,
 										 const Reason& r, const QString& reason)
 {
-	if(!stmt)
+	// make sure it is a stmt and has a valid location
+	if(!stmt || stmt->getLocStart().isInvalid())
 		return;
 	QTextStream* outStream;
 	switch(outType)
