@@ -91,6 +91,9 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::Field* insertStaticField(clang::VarDecl* varDecl, bool& wasDeclared);
 
+		OOModel::ExplicitTemplateInstantiation* insertExplicitTemplateInstantiation
+		(const clang::ClassTemplateSpecializationDecl* explicitTemplateInst);
+
 		/**
 		 * This function is to make sure that an using declaration is used only once.
 		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
@@ -137,6 +140,8 @@ class CPPIMPORT_API TranslateManager
 		QMap<QString, OOModel::Method*> methodMap_;
 		QMap<QString, OOModel::Method*> functionMap_;
 		QMap<QString, OOModel::Field*> staticFieldMap_;
+
+		QMap<QString, OOModel::ExplicitTemplateInstantiation*> explicitTemplateInstMap_{};
 
 		QMap<QString, OOModel::NameImport*> usingDeclMap_;
 		QMap<QString, OOModel::NameImport*> usingDirectiveMap_;

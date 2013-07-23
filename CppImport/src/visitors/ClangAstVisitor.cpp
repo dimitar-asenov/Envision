@@ -139,6 +139,11 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 	//	explicit instation declaration
 	if(!specializationDecl->isExplicitSpecialization() && specializationDecl->isExplicitInstantiationOrSpecialization())
 	{
+		auto ooExplicitTemplateInst = trMngr_->insertExplicitTemplateInstantiation(specializationDecl);
+		if(!ooExplicitTemplateInst)
+			// already inserted
+			return true;
+
 		auto ooRef = new OOModel::ReferenceExpression(QString::fromStdString(specializationDecl->getNameAsString()));
 		for(unsigned i = 0; i < specializationDecl->getTemplateArgs().size(); i++)
 		{
@@ -148,12 +153,12 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		}
 		if(auto p = llvm::dyn_cast<clang::NamedDecl>(specializationDecl->getSpecializedTemplate()->getDeclContext()))
 			ooRef->setPrefix(new OOModel::ReferenceExpression(QString::fromStdString(p->getNameAsString())));
-		auto explicitTemplateInst = new OOModel::ExplicitTemplateInstantiation(ooRef);
+		ooExplicitTemplateInst->setInstantiatedClass(ooRef);
 		// add to model
 		if(auto decl = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
-			decl->subDeclarations()->append(explicitTemplateInst);
+			decl->subDeclarations()->append(ooExplicitTemplateInst);
 		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-			itemList->append(new OOModel::DeclarationStatement(explicitTemplateInst));
+			itemList->append(new OOModel::DeclarationStatement(ooExplicitTemplateInst));
 		else
 			log_->writeError(className_, specializationDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		return true;

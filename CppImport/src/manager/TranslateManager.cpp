@@ -189,6 +189,19 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	return nullptr;
 }
 
+OOModel::ExplicitTemplateInstantiation* TranslateManager::insertExplicitTemplateInstantiation
+(const clang::ClassTemplateSpecializationDecl* explicitTemplateInst)
+{
+	OOModel::ExplicitTemplateInstantiation* ooExplicitTemplateInst = nullptr;
+	const QString hash = nh_->hashClassTemplateSpec(explicitTemplateInst);
+	if(!explicitTemplateInstMap_.contains(hash))
+	{
+		ooExplicitTemplateInst = new OOModel::ExplicitTemplateInstantiation();
+		explicitTemplateInstMap_.insert(hash, ooExplicitTemplateInst);
+	}
+	return ooExplicitTemplateInst;
+}
+
 OOModel::NameImport* TranslateManager::insertUsingDecl(clang::UsingDecl* usingDecl)
 {
 	OOModel::NameImport* ooName = nullptr;
