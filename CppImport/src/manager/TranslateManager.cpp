@@ -237,6 +237,18 @@ OOModel::TypeAlias*TranslateManager::insertTypeAlias(clang::TypedefNameDecl* typ
 	return ooAlias;
 }
 
+OOModel::TypeAlias* TranslateManager::insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate)
+{
+	OOModel::TypeAlias* ooAlias = nullptr;
+	const QString hash = nh_->hashTypeAliasTemplate(typeAliasTemplate);
+	if(!typeAliasMap_.contains(hash))
+	{
+		ooAlias = new OOModel::TypeAlias();
+		typeAliasMap_.insert(hash, ooAlias);
+	}
+	return ooAlias;
+}
+
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	const QString hash = nh_->hashMethod(mDecl);

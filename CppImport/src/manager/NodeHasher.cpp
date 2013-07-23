@@ -204,6 +204,23 @@ const QString NodeHasher::hashTypeAlias(const clang::TypedefNameDecl* typeAlias)
 	return hash;
 }
 
+const QString NodeHasher::hashTypeAliasTemplate(const clang::TypeAliasTemplateDecl* typeAliasTemplate)
+{
+	QString hash = hashTypeAlias(typeAliasTemplate->getTemplatedDecl());
+	auto templateParamList = typeAliasTemplate->getTemplateParameters();
+	for( auto templateParam = templateParamList->begin();
+		  templateParam != templateParamList->end(); ++templateParam)
+	{
+		hash.append("_");
+		// TODO: maybe just use character data from srcmanager
+		if(auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
+			hash.append(hashTemplateTypeParm(templateType));
+		else if(auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
+			hash.append(hashTemplateTypeParm(nonTemplateType));
+	}
+	return hash;
+}
+
 const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName)
 {
 	QString hash;

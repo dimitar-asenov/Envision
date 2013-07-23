@@ -798,6 +798,35 @@ bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefD
 	return true;
 }
 
+bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl* typeAliasTemplate)
+{
+	if(!shouldModel(typeAliasTemplate->getLocation()))
+		return true;
+	if(auto ooTypeAlias = trMngr_->insertTypeAliasTemplate(typeAliasTemplate))
+	{
+		auto typeAlias = typeAliasTemplate->getTemplatedDecl();
+		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typeAlias->getUnderlyingType(),
+																						  typeAlias->getLocStart()));
+		ooTypeAlias->setName(QString::fromStdString(typeAliasTemplate->getNameAsString()));
+		// type arguments
+		auto templateParamList = typeAliasTemplate->getTemplateParameters();
+		for( auto templateParam = templateParamList->begin();
+			  templateParam != templateParamList->end(); ++templateParam)
+		{
+			templArgVisitor_->TraverseDecl(*templateParam);
+			ooTypeAlias->typeArguments()->append(templArgVisitor_->getLastTranslated());
+		}
+		// insert in model
+		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+		else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+			declaration->subDeclarations()->append(ooTypeAlias);
+		else
+			log_->writeError(className_, typeAliasTemplate, CppImportLogger::Reason::INSERT_PROBLEM);
+	}
+	return true;
+}
+
 bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias)
 {
 	if(!shouldModel(namespaceAlias->getLocation()))

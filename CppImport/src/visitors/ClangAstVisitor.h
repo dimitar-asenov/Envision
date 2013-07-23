@@ -101,6 +101,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseContinueStmt(clang::ContinueStmt* continueStmt);
 
 		bool WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefDecl);
+		bool TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 		bool TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias);
 		bool TraverseUsingDecl(clang::UsingDecl* usingDecl);
 		bool TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);

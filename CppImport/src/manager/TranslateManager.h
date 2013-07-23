@@ -110,11 +110,17 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::TypeAlias* insertNamespaceAlias(clang::NamespaceAliasDecl* namespaceAlias);
 		/**
-		 * This function is to make sure that an using directive is used only once.
-		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
+		 * This function is to make sure that a TypeAlias (either using or typedef) is used only once.
+		 * The function returns a new allocated TypeAlias object if this type alias is not yet there in this context.
 		 * Else it returns a nullptr.
 		 */
 		OOModel::TypeAlias* insertTypeAlias(clang::TypedefNameDecl* typeAlias);
+		/**
+		 * This function is to make sure that a TypeAlias with template arguments is used only once.
+		 * The function returns a new allocated TypeAlias object if this type alias is not yet there in this context.
+		 * Else it returns a nullptr.
+		 */
+		OOModel::TypeAlias* insertTypeAliasTemplate(clang::TypeAliasTemplateDecl* typeAliasTemplate);
 
 	private:
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
