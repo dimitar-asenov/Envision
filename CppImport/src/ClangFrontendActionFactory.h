@@ -41,7 +41,7 @@ class CPPIMPORT_API ClangFrontendActionFactory : public clang::tooling::Frontend
 		 * the same instance over multiple translation units.
 		 * The \a project is the root node where everything will be added to.
 		 */
-		ClangFrontendActionFactory(OOModel::Project* project, TranslateManager* manager);
+		ClangFrontendActionFactory(OOModel::Project* project, TranslateManager* manager, CppImportLogger* log);
 
 		virtual ~ClangFrontendActionFactory() override;
 
@@ -49,12 +49,6 @@ class CPPIMPORT_API ClangFrontendActionFactory : public clang::tooling::Frontend
 		 * This creates a clang FrontendAction. The function is called for every translationunit
 		 */
 		virtual clang::FrontendAction* create() override;
-
-		/**
-		 * Calls the outputStatistics() method of the logger
-		 * This is to display some statistics in the end of the import.
-		 */
-		void outputStatistics();
 
 	private:
 		ClangAstVisitor* visitor_{};

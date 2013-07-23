@@ -51,8 +51,9 @@ class CPPIMPORT_API CppImportManager
 		/**
 		 * Creates a clang tool and translates the sourcecode to Envision's AST and returns the root
 		 * Be sure to have set the sourcePath before calling this method
+		 * Set \a statisticsPerProject if you want statistics output for each subproject
 		 */
-		Model::Model* createModel();
+		Model::Model* createModel(const bool statisticsPerProject = false);
 
 		/**
 		 * Imports code from a test.cpp file in a subdirectory of ENVISION_ROOT/CppImport/test

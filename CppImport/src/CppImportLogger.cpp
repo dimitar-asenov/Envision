@@ -232,6 +232,13 @@ void CppImportLogger::outputStatistics()
 	(*warnStream_) << endl;
 	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
 						<< "Statistics End" << reset << endl;
+
+	// empty all maps
+	countMap_.clear();
+	typeCountMap_.clear();
+	unaryOpMap_.clear();
+	overloadMap_.clear();
+	storageMap_.clear();
 }
 
 void CppImportLogger::printStatistic(const char* message, const QMap<QString, int>& map)

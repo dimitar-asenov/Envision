@@ -59,24 +59,31 @@ void CppImportManager::setImportPath(const QString& sourcePath, const bool subPr
 		initPath(sourcePath);
 }
 
-Model::Model*CppImportManager::createModel()
+Model::Model*CppImportManager::createModel(const bool statisticsPerProject)
 {
 
 	OOModel::Project* project = new OOModel::Project(projectName_);
 	TranslateManager* manager = new TranslateManager(project);
+	CppImportLogger* log = new CppImportLogger();
 
 	foreach(QString s, projects_)
 	{
 		qDebug() << "Start processing project :" << s;
 		auto tool = new clang::tooling::ClangTool(*compilationDbMap_.value(s), *sourcesMap_.value(s));
-		ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(project, manager);
+		ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(project, manager, log);
 		tool->run(frontendActionFactory);
-		frontendActionFactory->outputStatistics();
+		// statistics
+		if(statisticsPerProject)
+			log->outputStatistics();
 		//clean up
 		SAFE_DELETE(frontendActionFactory);
 		SAFE_DELETE(tool);
 	}
+	// statistics
+	if(!statisticsPerProject)
+		log->outputStatistics();
 	SAFE_DELETE(manager);
+	SAFE_DELETE(log);
 	// reset the path (because clang tool changes it)
 	QDir::setCurrent(qApp->applicationDirPath());
 	return new Model::Model("CppImport", project);
