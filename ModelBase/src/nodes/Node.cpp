@@ -156,6 +156,10 @@ QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbo
 		else if (parent_)
 			res << parent_->findSymbols(symbolExp, source, mode, exhaustAllScopes);
 	}
+	else if (mode == SEARCH_DOWN && definesSymbol() && symbolExp.exactMatch(symbolName()))
+	{
+		res << this;
+	}
 
 	return res;
 }
