@@ -37,6 +37,7 @@
 namespace Visualization {
 	class Static;
 	class VText;
+	class VList;
 }
 
 namespace OOVisualization {
@@ -55,6 +56,7 @@ class OOVISUALIZATION_API VTypeAlias
 	private:
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
+		Visualization::VList* typeArguments_{};
 		Visualization::Static* equivalenceSymbol_{};
 		Visualization::Item* originalType_{};
 };

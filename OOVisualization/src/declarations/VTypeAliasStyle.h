@@ -31,26 +31,20 @@
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VTypeAliasStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::TextStyle name_;
-		Visualization::StaticStyle icon_;
-		Visualization::StaticStyle equivalenceSymbol_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VTypeAliasStyle() override;
 
-		const Visualization::TextStyle& name() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::StaticStyle& equivalenceSymbol() const;
+		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::VListStyle> typeArguments{this, "typeArguments"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::StaticStyle> equivalenceSymbol{this, "equivalenceSymbol"};
 };
 
-inline const Visualization::TextStyle& VTypeAliasStyle::name() const { return name_; }
-inline const Visualization::StaticStyle& VTypeAliasStyle::icon() const { return icon_; }
-inline const Visualization::StaticStyle& VTypeAliasStyle::equivalenceSymbol() const { return equivalenceSymbol_; }
 
 } /* namespace OOVisualization */

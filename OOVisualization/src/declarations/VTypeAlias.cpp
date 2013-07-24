@@ -27,6 +27,7 @@
 #include "VTypeAlias.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
@@ -44,6 +45,8 @@ void VTypeAlias::initializeForms()
 	addForm(grid({{
 			item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}),
 			item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v){return &v->style()->name();}),
+			item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
+					[](I* v){return &v->style()->typeArguments();}),
 			item<Static>(&I::equivalenceSymbol_, [](I* v){return &v->style()->equivalenceSymbol();}),
 			item(&I::originalType_, [](I* v){return v->node()->typeExpression();} )
 		}})->setHorizontalSpacing(3)

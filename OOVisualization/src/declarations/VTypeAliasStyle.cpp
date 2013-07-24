@@ -28,13 +28,7 @@
 
 namespace OOVisualization {
 
-void VTypeAliasStyle::load(Visualization::StyleLoader& sl)
-{
-	DeclarativeItemBaseStyle::load(sl);
-	sl.load("name", name_);
-	sl.load("icon", icon_);
-	sl.load("equivalenceSymbol", equivalenceSymbol_);
-}
+VTypeAliasStyle::~VTypeAliasStyle() {}
 
 
 } /* namespace OOVisualization */

@@ -781,6 +781,16 @@ Method* addExtraMethod(Class* parent)
 
 	extra->items()->append(new DeclarationStatement(new TypeAlias("newTypeName",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))));
+
+	auto templateRefExpr = new ReferenceExpression("Template");
+	templateRefExpr->typeArguments()->append(new ReferenceExpression("S"));
+	auto templateAlias = new TypeAlias("newTypeName", templateRefExpr);
+	templateAlias->typeArguments()->append(new FormalTypeArgument("S"));
+	extra->items()->append(new DeclarationStatement(templateAlias));
+
+	extra->items()->append(new DeclarationStatement(new TypeAlias("newTypeName",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))));
+
 	extra->items()->append(new ExpressionStatement(
 					new ReferenceExpression("someGlobalVariable", new GlobalScopeExpression())));
 	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::SizeOf,
