@@ -784,12 +784,13 @@ Method* addExtraMethod(Class* parent)
 
 	auto templateRefExpr = new ReferenceExpression("Template");
 	templateRefExpr->typeArguments()->append(new ReferenceExpression("S"));
-	auto templateAlias = new TypeAlias("newTypeName", templateRefExpr);
+	auto templateAlias = new TypeAlias("templateAlias", templateRefExpr);
 	templateAlias->typeArguments()->append(new FormalTypeArgument("S"));
 	extra->items()->append(new DeclarationStatement(templateAlias));
 
-	extra->items()->append(new DeclarationStatement(new TypeAlias("newTypeName",
-			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))));
+	auto explicitRef = new ReferenceExpression("templateAlias");
+	explicitRef->typeArguments()->append(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::LONG));
+	extra->items()->append(new DeclarationStatement(new ExplicitTemplateInstantiation(explicitRef)));
 
 	extra->items()->append(new ExpressionStatement(
 					new ReferenceExpression("someGlobalVariable", new GlobalScopeExpression())));

@@ -7,7 +7,9 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/statements/VCaseStatement.h \
+HEADERS += src/declarations/VExplicitTemplateInstantiation.h \
+    src/declarations/VExplicitTemplateInstantiationStyle.h \
+    src/statements/VCaseStatement.h \
     src/statements/VCaseStatementStyle.h \
     src/declarations/VTypeAlias.h \
     src/declarations/VTypeAliasStyle.h \
@@ -99,7 +101,9 @@ HEADERS += src/statements/VCaseStatement.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
     src/oovisualization.h
-SOURCES += src/declarations/VMethodStyle.cpp \
+SOURCES += src/declarations/VExplicitTemplateInstantiation.cpp \
+    src/declarations/VExplicitTemplateInstantiationStyle.cpp \
+    src/declarations/VMethodStyle.cpp \
     src/statements/VCaseStatement.cpp \
     src/statements/VCaseStatementStyle.cpp \
     src/declarations/VTypeAlias.cpp \

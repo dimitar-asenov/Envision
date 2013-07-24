@@ -1,0 +1,8 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/instantiation.svg</filename>
+		<width>18</width>
+		<height>18</height>
+	</icon>
+</style>
