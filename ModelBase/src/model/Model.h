@@ -128,8 +128,10 @@ class MODELBASE_API Model: public QObject
 		 * about the changes.
 		 *
 		 * This method must be called before the any other thread can gain exclusive access to the tree model.
+		 *
+		 * If \a tryResolvingReferences is true, then an attempt will be made to resolve all unresolved references.
 		 */
-		void endModification();
+		void endModification(bool tryResolvingReferences = true);
 
 		bool isBeingModified() const;
 
@@ -329,6 +331,13 @@ class MODELBASE_API Model: public QObject
 		 * Call this method when a reference has been resolved.
 		 */
 		void removeUnresolvedReference(Reference* ref);
+
+		/**
+		 * Scans the root node for unresolved references and records them in unresolvedReferences_.
+		 *
+		 * The old contents of unresolvedReferences_ is lost when this method is called.
+		 */
+		void scanUnresolvedReferences();
 
 		/**
 		 * \brief Attempt to resolve all unresolved references.

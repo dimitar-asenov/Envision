@@ -74,11 +74,11 @@ void Model::changeModificationTarget(Node* modificationTarget)
 			modifiedTargets, modificationTarget));
 }
 
-void Model::endModification()
+void Model::endModification(bool resolveReferences)
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
-		if (!unresolvedReferences_.isEmpty()) tryResolvingReferences();
+		if (resolveReferences && !unresolvedReferences_.isEmpty()) tryResolvingReferences();
 
 		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock,
 				modifiedTargets, nullptr));
@@ -237,6 +237,25 @@ void Model::setRoot(Node* node)
 	endModification();
 
 	emit rootNodeSet(root_);
+}
+
+void Model::scanUnresolvedReferences()
+{
+	unresolvedReferences_.clear();
+
+	QList<Node*> stack;
+	if (root_) stack << root_;
+
+	while (!stack.isEmpty())
+	{
+		auto top = stack.takeLast();
+		if (auto ref = dynamic_cast<Reference*>(top) )
+		{
+			if (!ref->isResolved()) unresolvedReferences_ << ref;
+		}
+		else stack.append(top->children());
+
+	}
 }
 
 void Model::addUnresolvedReference(Reference* ref)

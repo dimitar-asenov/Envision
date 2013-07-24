@@ -286,7 +286,7 @@ void PositionLayout::updateGeometry(int, int)
 			positions[i]->setY(y);
 		}
 
-		for (auto m : models) m->endModification();
+		for (auto m : models) m->endModification(false);
 		allNodesLackPositionInfo = false;
 	}
 
