@@ -555,6 +555,12 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 	if(llvm::isa<clang::ParmVarDecl>(varDecl))
 		return true;
+
+	// check if this variable is only from a explicit template instantiation - if so we do not parse it.
+	if(clang::TSK_ExplicitInstantiationDeclaration == varDecl->getTemplateSpecializationKind() ||
+			clang::TSK_ExplicitInstantiationDefinition == varDecl->getTemplateSpecializationKind())
+		return true;
+
 	OOModel::VariableDeclaration* ooVarDecl = nullptr;
 	OOModel::VariableDeclarationExpression* ooVarDeclExpr = nullptr;
 	QString varName = QString::fromStdString(varDecl->getNameAsString());
