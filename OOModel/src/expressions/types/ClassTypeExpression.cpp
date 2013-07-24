@@ -26,6 +26,7 @@
 
 #include "ClassTypeExpression.h"
 #include "../../types/ClassType.h"
+#include "../../types/ErrorType.h"
 #include "../../declarations/Class.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
@@ -46,7 +47,9 @@ ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
 
 Type* ClassTypeExpression::type()
 {
-	return new ClassType( dynamic_cast<Class*> (typeExpression()->target()), false);
+	auto cl = dynamic_cast<Class*> (typeExpression()->target());
+	if (cl) return new ClassType(cl , false);
+	else return new ErrorType("Unresolved class reference in a class type expression");
 }
 
 }

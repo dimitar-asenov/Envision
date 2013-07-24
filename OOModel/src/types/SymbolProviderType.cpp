@@ -31,6 +31,7 @@ namespace OOModel {
 SymbolProviderType::SymbolProviderType(Model::Node* symbolProviderNode, bool isValueType)
 : Type(isValueType), symbolProvider_(symbolProviderNode)
 {
+	Q_ASSERT(symbolProviderNode);
 }
 
 bool SymbolProviderType::equals(const Type* other) const
