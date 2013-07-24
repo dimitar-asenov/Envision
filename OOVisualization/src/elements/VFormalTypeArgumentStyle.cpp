@@ -28,16 +28,6 @@
 
 namespace OOVisualization {
 
-void VFormalTypeArgumentStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("name", name_);
-	sl.load("subTypeSymbol", subTypeSymbol_);
-	sl.load("superTypeSymbol", superTypeSymbol_);
-	sl.load("subLayout", subLayout_);
-	sl.load("superLayout", superLayout_);
-}
+VFormalTypeArgumentStyle::~VFormalTypeArgumentStyle(){}
 
 } /* namespace OOVisualization */

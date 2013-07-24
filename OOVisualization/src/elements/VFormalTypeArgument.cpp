@@ -28,6 +28,7 @@
 
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -37,67 +38,40 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VFormalTypeArgument, "item")
 
 VFormalTypeArgument::VFormalTypeArgument(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	name_(),
-	subType_(),
-	superType_(),
-	subSymbol_(),
-	superSymbol_(),
-	subBackground_(),
-	superBackground_()
+	Super(parent, node, style)
+{}
+
+void VFormalTypeArgument::initializeForms()
 {
-}
-
-VFormalTypeArgument::~VFormalTypeArgument()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	name_ = nullptr;
-	subType_ = nullptr;
-	superType_ = nullptr;
-	subSymbol_ = nullptr;
-	superSymbol_ = nullptr;
-	subBackground_ = nullptr;
-	superBackground_ = nullptr;
-}
-
-void VFormalTypeArgument::determineChildren()
-{
-	layout()->synchronizeFirst(name_, node()->nameNode(), &style()->name());
-	layout()->synchronizeMid(subBackground_, node()->subTypeOfExpression(), &style()->subLayout(), 1);
-	layout()->synchronizeLast(superBackground_, node()->superTypeOfExpression(), &style()->superLayout());
-
-	if (!subBackground_)
-	{
-		subSymbol_ = nullptr;
-		subType_ = nullptr;
-	}
-
-	if (!superBackground_)
-	{
-		superBackground_ = nullptr;
-		superType_ = nullptr;
-	}
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout() );
-	name_->setStyle( &style()->name());
-	if (node()->subTypeOfExpression())
-	{
-		subBackground_->synchronizeFirst(subSymbol_, true, &style()->subTypeSymbol());
-		subBackground_->synchronizeLast(subType_, node()->subTypeOfExpression());
-		subBackground_->setStyle(&style()->subLayout());
-		subSymbol_->setStyle(&style()->subTypeSymbol());
-	}
-	if (node()->superTypeOfExpression())
-	{
-		superBackground_->synchronizeFirst(superSymbol_, true, &style()->superTypeSymbol());
-		superBackground_->synchronizeLast(superType_, node()->superTypeOfExpression());
-		superBackground_->setStyle(&style()->superLayout());
-		superSymbol_->setStyle(&style()->superTypeSymbol());
-	}
+	// Type with lower and/or upper bound
+	addForm(grid(
+		{
+			{
+				item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v){return &v->style()->name();})
+			},
+			{
+				grid({{
+					item<Static>(&I::subSymbol_, [](I* v){return &v->style()->subTypeSymbol();})
+							->setEnabled([](I* v){return v->node()->subTypeOfExpression() != nullptr;}),
+							item(&I::subType_, [](I* v){return v->node()->subTypeOfExpression();} )
+				}})
+			},
+			{
+				grid({{
+					item<Static>(&I::superSymbol_, [](I* v){return &v->style()->superTypeSymbol();})
+						->setEnabled([](I* v){return v->node()->superTypeOfExpression() != nullptr;}),
+					item(&I::superType_, [](I* v){return v->node()->superTypeOfExpression();} )
+				}})
+			},
+			{
+				grid({{
+					item<Static>(&I::specializeSymbol_, [](I* v){return &v->style()->specializeSymbol();})
+						->setEnabled([](I* v){return v->node()->specializationExpression() != nullptr;}),
+					item(&I::specializeType_, [](I* v){return v->node()->specializationExpression();} )
+				}})
+			}
+		})->setHorizontalAlignment(LayoutStyle::Alignment::Center)
+		);
 }
 
 } /* namespace OOVisualization */

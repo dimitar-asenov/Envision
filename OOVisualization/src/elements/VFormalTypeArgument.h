@@ -32,7 +32,7 @@
 #include "OOModel/src/elements/FormalTypeArgument.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class VText;
@@ -42,25 +42,23 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VFormalTypeArgument : public Super<Visualization::ItemWithNode<VFormalTypeArgument,
-	  Visualization::LayoutProvider<>, OOModel::FormalTypeArgument>>
+	Visualization::DeclarativeItem<VFormalTypeArgument>, OOModel::FormalTypeArgument>>
 {
 	ITEM_COMMON(VFormalTypeArgument)
 
 	public:
 		VFormalTypeArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VFormalTypeArgument();
 
-	protected:
-		void determineChildren();
+		static void initializeForms();
 
 	private:
-		Visualization::VText* name_;
-		Visualization::Item* subType_;
-		Visualization::Item* superType_;
-		Visualization::Static* subSymbol_;
-		Visualization::Static* superSymbol_;
-		Visualization::SequentialLayout* subBackground_;
-		Visualization::SequentialLayout* superBackground_;
+		Visualization::VText* name_{};
+		Visualization::Item* subType_{};
+		Visualization::Item* superType_{};
+		Visualization::Item* specializeType_{};
+		Visualization::Static* subSymbol_{};
+		Visualization::Static* superSymbol_{};
+		Visualization::Static* specializeSymbol_{};
 };
 
 } /* namespace OOVisualization */

@@ -30,37 +30,21 @@
 
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFormalTypeArgumentStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VFormalTypeArgumentStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::TextStyle name_;
-		Visualization::SequentialLayoutStyle subLayout_;
-		Visualization::SequentialLayoutStyle superLayout_;
-		Visualization::StaticStyle subTypeSymbol_;
-		Visualization::StaticStyle superTypeSymbol_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VFormalTypeArgumentStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::TextStyle& name() const;
-		const Visualization::SequentialLayoutStyle& subLayout() const;
-		const Visualization::SequentialLayoutStyle& superLayout() const;
-		const Visualization::StaticStyle& subTypeSymbol() const;
-		const Visualization::StaticStyle& superTypeSymbol() const;
+		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::StaticStyle> subTypeSymbol{this, "subTypeSymbol"};
+		Property<Visualization::StaticStyle> superTypeSymbol{this, "superTypeSymbol"};
+		Property<Visualization::StaticStyle> specializeSymbol{this, "specializeSymbol"};
 };
-
-inline const Visualization::SequentialLayoutStyle& VFormalTypeArgumentStyle::layout() const { return layout_; }
-inline const Visualization::TextStyle& VFormalTypeArgumentStyle::name() const { return name_; }
-inline const Visualization::SequentialLayoutStyle& VFormalTypeArgumentStyle::subLayout() const { return subLayout_; }
-inline const Visualization::SequentialLayoutStyle& VFormalTypeArgumentStyle::superLayout() const { return superLayout_;}
-inline const Visualization::StaticStyle& VFormalTypeArgumentStyle::subTypeSymbol() const { return subTypeSymbol_; }
-inline const Visualization::StaticStyle& VFormalTypeArgumentStyle::superTypeSymbol() const { return superTypeSymbol_; }
 
 
 } /* namespace OOVisualization */

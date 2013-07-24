@@ -110,6 +110,9 @@ Class* addGeneric(Project* parent)
 	gen->typeArguments()->append(new FormalTypeArgument("P"));
 	gen->typeArguments()->append(new FormalTypeArgument("Q", new ReferenceExpression("P")));
 	gen->typeArguments()->append(new FormalTypeArgument("R", nullptr, new ReferenceExpression("P")));
+	auto specialized = new FormalTypeArgument("Specialized");
+	specialized->setSpecializationExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	gen->typeArguments()->append(specialized);
 
 	// Add some fields
 	gen->fields()->append(new Field("index", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT),
