@@ -2,7 +2,18 @@
 <style prototypes="item/Item/default">
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default" />
-	<name prototypes="item/Text/default" />
+	<resolvedName prototypes="item/Text/default" />
+	<showUnresolved>true</showUnresolved>
+	<unresolvedName prototypes="item/Text/default">
+		<pen>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>0</green>
+				<blue>0</blue>
+			</color>
+		</pen>
+	</unresolvedName>
 	<nonPointerSeparator prototypes="item/Symbol/default" />
 	<pointerSeparator prototypes="item/Symbol/default">
 		<symbol>→</symbol>

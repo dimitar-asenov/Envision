@@ -37,29 +37,16 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VReferenceExpressionStyle : public Visualization::ItemStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::TextStyle name_;
-		Visualization::StaticStyle nonPointerSeparator_;
-		Visualization::StaticStyle pointerSeparator_;
-		Visualization::VListStyle typeArguments_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VReferenceExpressionStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::TextStyle& name() const;
-		const Visualization::StaticStyle& nonPointerSeparator() const;
-		const Visualization::StaticStyle& pointerSeparator() const;
-		const Visualization::VListStyle& typeArguments() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::TextStyle> resolvedName{this, "resolvedName"};
+		Property<Visualization::TextStyle> unresolvedName{this, "unresolvedName"};
+		Property<Visualization::StaticStyle> nonPointerSeparator{this, "nonPointerSeparator"};
+		Property<Visualization::StaticStyle> pointerSeparator{this, "pointerSeparator"};
+		Property<Visualization::VListStyle> typeArguments{this, "typeArguments"};
+		Property<bool> showUnresolved{this, "showUnresolved"};
 };
-
-inline const Visualization::SequentialLayoutStyle& VReferenceExpressionStyle::layout() const { return layout_; }
-inline const Visualization::TextStyle& VReferenceExpressionStyle::name() const { return name_; }
-inline const Visualization::StaticStyle& VReferenceExpressionStyle::nonPointerSeparator()
-	const { return nonPointerSeparator_; }
-inline const Visualization::StaticStyle& VReferenceExpressionStyle::pointerSeparator()
-	const { return pointerSeparator_; }
-inline const Visualization::VListStyle& VReferenceExpressionStyle::typeArguments() const { return typeArguments_; }
 
 }

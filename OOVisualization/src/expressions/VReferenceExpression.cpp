@@ -41,7 +41,7 @@ ITEM_COMMON_DEFINITIONS(VReferenceExpression, "item")
 
 VReferenceExpression::VReferenceExpression(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	name_(new Text(layout(), &style->name()) ),
+	name_(new Text(layout(), &style->unresolvedName()) ),
 	separator_(),
 	prefix_(),
 	typeArguments_()
@@ -82,7 +82,9 @@ void VReferenceExpression::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
-	name_->setStyle( &style()->name());
+
+	name_->setStyle( (!style()->showUnresolved() || node()->ref()->isResolved())
+			? &style()->resolvedName() : &style()->unresolvedName() );
 	if (prefix_) separator_->setStyle( separatorStyle );
 	if (typeArguments_)
 	{
