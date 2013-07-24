@@ -50,8 +50,12 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 	FilePersistence::FileStore store;
 	store.setBaseFolder(testDir);
 
+	//model->load(&store, "tetris");
 	model->load(&store, "large");
 	auto prj = dynamic_cast<OOModel::Project*> (model->root());
+	model->beginModification(prj,"Resolve references");
+	model->scanUnresolvedReferences(); // These will be automatically resolved when endModification() is called
+	model->endModification();
 
 	Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem( new Visualization::RootItem(prj));
 	Visualization::VisualizationManager::instance().mainScene()->listenToModel(model);
