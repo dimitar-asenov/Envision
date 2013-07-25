@@ -41,14 +41,15 @@ namespace OOModel {
 class OOMODEL_API FormalResult : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(FormalResult)
-	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE_OOP_NAME_NOSYMBOL
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
 		FormalResult(const QString& name, Expression* type = nullptr);
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		virtual bool definesSymbol() const override;
+		virtual const QString& symbolName() const override;
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

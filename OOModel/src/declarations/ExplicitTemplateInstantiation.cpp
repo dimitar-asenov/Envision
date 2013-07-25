@@ -43,4 +43,9 @@ ExplicitTemplateInstantiation::ExplicitTemplateInstantiation(ReferenceExpression
 		setInstantiatedClass(instantiatedClass);
 }
 
+ExplicitTemplateInstantiation::SymbolTypes ExplicitTemplateInstantiation::symbolType() const
+{
+	return CONTAINER;
+}
+
 }

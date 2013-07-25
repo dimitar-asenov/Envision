@@ -217,19 +217,19 @@ void List::paste(ClipboardStore& clipboard, int position)
 	}
 }
 
-Node* List::findFirstSymbolDefinition(const QString& symbol, int beforeIndex)
+Node* List::findFirstSymbolDefinition(const QString& symbol, SymbolTypes symbolTypes, int beforeIndex)
 {
 	if (beforeIndex < 0) beforeIndex = nodes_.size();
 	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
 
 	for(int i = 0; i<beforeIndex; ++i)
-		if (nodes_[i]->definesSymbol() && nodes_[i]->symbolName() == symbol)
+		if (nodes_[i]->symbolMatches(symbol, symbolTypes))
 			return nodes_[i];
 
 	return nullptr;
 }
 
-QList<Node*> List::findAllSymbolDefinitions(const QRegExp& symbolExp, int beforeIndex)
+QList<Node*> List::findAllSymbolDefinitions(const QRegExp& symbolExp, SymbolTypes symbolTypes, int beforeIndex)
 {
 	QList<Node*> result;
 
@@ -237,7 +237,7 @@ QList<Node*> List::findAllSymbolDefinitions(const QRegExp& symbolExp, int before
 	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
 
 	for(int i = 0; i<beforeIndex; ++i)
-		if (nodes_[i]->definesSymbol() && symbolExp.exactMatch(nodes_[i]->symbolName()))
+		if (nodes_[i]->symbolMatches(symbolExp, symbolTypes))
 			result.append( nodes_[i] );
 
 	return result;

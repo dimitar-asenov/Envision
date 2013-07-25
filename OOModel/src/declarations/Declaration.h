@@ -45,7 +45,7 @@ class OOMODEL_API Declaration : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Declaration)
 
-	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE_OOP_NAME_SYMBOL
 	ATTRIBUTE(Modifier, modifiers, setModifiers)
 	ATTRIBUTE_OOP_ANNOTATIONS
 	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
@@ -53,9 +53,6 @@ class OOMODEL_API Declaration : public Super<Model::CompositeNode>
 	public:
 		Declaration(const QString& name);
 		Declaration(const QString& name, Modifier::Modifiers modifiers);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
 };
 
 }

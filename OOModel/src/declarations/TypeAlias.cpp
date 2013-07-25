@@ -45,21 +45,36 @@ TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
 	if(typeExpression) setTypeExpression(typeExpression);
 }
 
-QList<Model::Node*> TypeAlias::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
+TypeAlias::SymbolTypes TypeAlias::symbolType() const
+{
+	SymbolTypes ret = UNSPECIFIED;
+	auto type = const_cast<TypeAlias*>(this)->typeExpression()->type();
+	if (auto sp = dynamic_cast<SymbolProviderType*>(type))
+	{
+		ret = sp->symbolProvider()->symbolType();
+	}
+
+	SAFE_DELETE(type);
+	return ret;
+}
+
+QList<Model::Node*> TypeAlias::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolDirection direction,
+		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
+
+	// TODO: Search type arguments
 
 	auto type = typeExpression()->type();
 	auto symbolProviderType = dynamic_cast<SymbolProviderType*>(type);
 	if (symbolProviderType)
 		symbols = symbolProviderType->symbolProvider()
-			->findSymbols(symbolExp, symbolProviderType->symbolProvider(), SEARCH_DOWN, exhaustAllScopes);
+			->findSymbols(symbolExp, symbolProviderType->symbolProvider(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
 
 	SAFE_DELETE(type);
 
 	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Super::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+		symbols << Super::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
 	return symbols;
 }
 

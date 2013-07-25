@@ -66,4 +66,9 @@ Field::Field(const QString& name, Expression* type, Modifier::Modifiers mod, Exp
 	if (initialValue) setInitialValue(initialValue);
 }
 
+Field::SymbolTypes Field::symbolType() const
+{
+	return VARIABLE;
+}
+
 }

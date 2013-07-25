@@ -54,7 +54,7 @@ bool OOReference::resolve()
 		{
 			if (sp->symbolProvider())
 			{
-				auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, false);
+				auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, ANY_SYMBOL, false);
 				if (symbolList.size() == 1) symbol = symbolList.first();
 			}
 		}
@@ -63,7 +63,7 @@ bool OOReference::resolve()
 	else
 	{
 		// Perform an upward search starting from the current node
-		auto symbolList = findSymbols(name(), this, SEARCH_UP, false);
+		auto symbolList = findSymbols(name(), this, SEARCH_UP,  ANY_SYMBOL, false);
 		if (symbolList.size() == 1) symbol = symbolList.first();
 	}
 

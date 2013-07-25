@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalArgument)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument)
 
-REGISTER_ATTRIBUTE(FormalArgument, name, Text, false, false, true)
+REGISTER_OONAME_SYMBOL_ATTRIBUTE(FormalArgument, VARIABLE)
 REGISTER_ATTRIBUTE(FormalArgument, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(FormalArgument, directionInt, Integer, false, false, true)
 
@@ -51,16 +51,6 @@ FormalArgument::FormalArgument(const QString& name, const Direction& direction)
 {
 	setName(name);
 	setDirection(direction);
-}
-
-bool FormalArgument::definesSymbol() const
-{
-	return true;
-}
-
-const QString& FormalArgument::symbolName() const
-{
-	return name();
 }
 
 }

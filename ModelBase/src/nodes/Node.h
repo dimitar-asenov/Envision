@@ -146,20 +146,38 @@ class MODELBASE_API Node
 		/**
 		 * Returns true if this node defines a symbol and false otherwise.
 		 *
-		 * The default implementaion returns false. Reimplement this method and symbolName() in derived classes that
-		 * define symbols.
+		 * The default implementaion returns false. Reimplement this method, symbolName(), and symbolType() in derived
+		 * classes that define symbols.
 		 */
 		virtual bool definesSymbol() const;
 
 		/**
 		 * Returns the name of the symbol defined by this node.
 		 *
-		 * The default implementaion returns a null QString value. Reimplement this method and definesSymbol() in derived
-		 * classes that define symbols.
+		 * The default implementaion returns a null QString value. Reimplement this method, definesSymbol(), and
+		 * symbolType() in derived classes that define symbols.
 		 */
 		virtual const QString& symbolName() const;
 
-		enum FindSymbolMode {
+		enum SymbolType {
+			UNSPECIFIED = 0x0, /**< The default type of a node. */
+			METHOD		= 0x1, /**< Used for nodes which define methods. */
+			CONTAINER	= 0x2, /**< Used for nodes which contain other symbol defining nodes, accessible by '.' . */
+			VARIABLE		= 0x4, /**< Used for global, local variables, arguments and fields. */
+
+			ANY_SYMBOL	= 0xffffffff
+		};
+		Q_DECLARE_FLAGS(SymbolTypes, SymbolType)
+
+		/**
+		 * Returns the type of the symbol defined by this node.
+		 *
+		 * The default implementaion returns UNSPECIFIED. Reimplement this method, symbolName(), and definesSymbol()
+		 * in derived classes that define symbols.
+		 */
+		virtual SymbolTypes symbolType() const;
+
+		enum FindSymbolDirection {
 			SEARCH_UP,	/**< Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
 									symbols in the current scope which come after the source will not be considered. This is the
 			 	 	 	 	 	 	case e.g. with searches for local variable declarations in a method: only variables before
@@ -173,7 +191,10 @@ class MODELBASE_API Node
 		 *
 		 * The \a source Node specifies what node should be used as a reference when determining what symbols are visible.
 		 *
-		 * The \a mode specifies what search to perform.
+		 * The \a direction specifies what search to perform.
+		 *
+		 * The \a symbolTypes specifies what symbol types should be returned. If a symbol matches any of the requested
+		 * types it will be returned.
 		 *
 		 * If \a exhaustAllScopes is false, the search will halt as soon as symbols are found within a scope. This is
 		 * useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope.
@@ -188,19 +209,34 @@ class MODELBASE_API Node
 		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
 		 * other than FindSymbolMode::SEARCH_UP
 		 */
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes);
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes);
 
 		/**
 		 * \overload
 		 *
 		 * This is equivalent to:
 		 * \code
-		 * findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, mode)
+		 * findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, direction, symbolTypes,
+		 * 	exhaustAllScopes)
 		 * \endcode
 		 */
-		QList<Node*> findSymbols(const QString& symbol, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes);
+		QList<Node*> findSymbols(const QString& symbol, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes);
+
+		/**
+		 * Returns true if this node defines a symbol that has a name matching \a symbolExp and types common with \a
+		 * symbolTypes.
+		 */
+		bool symbolMatches(const QRegExp& symbolExp, SymbolTypes symbolTypes);
+
+		/**
+		 * \overload
+		 *
+		 * Returns true if this node defines a symbol that has a name equal to \a symbolName and types common with \a
+		 * symbolTypes.
+		 */
+		bool symbolMatches(const QString& symbolName, SymbolTypes symbolTypes);
 
 		/**
 		 * Returns the revision of this node.
@@ -416,6 +452,8 @@ class MODELBASE_API Node
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
+
 /**
  * This is a convenience function that can be used when registering classes derived from Node using registerNodeType().
  */
@@ -432,9 +470,21 @@ template<class T> Node* createNodeFromPersistence(Node *parent, PersistentStore 
 	return new T(parent, store, partialLoadHint);
 }
 
-inline QList<Node*> Node::findSymbols(const QString& symbol, Node* source, FindSymbolMode mode, bool exhaustAllScopes)
+inline QList<Node*> Node::findSymbols(const QString& symbol, Node* source, FindSymbolDirection direction,
+		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	return findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, mode, exhaustAllScopes);
+	return findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, direction, symbolTypes,
+		exhaustAllScopes);
+}
+
+inline bool Node::symbolMatches(const QRegExp& symbolExp, SymbolTypes symbolTypes)
+{
+	return definesSymbol() && (symbolType() & symbolTypes) && symbolExp.exactMatch(symbolName());
+}
+
+inline bool Node::symbolMatches(const QString& symbolName, SymbolTypes symbolTypes)
+{
+	return symbolMatches(QRegExp(symbolName, Qt::CaseSensitive, QRegExp::FixedString), symbolTypes);
 }
 
 }

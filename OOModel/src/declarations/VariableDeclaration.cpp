@@ -62,4 +62,9 @@ VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, 
 	if (initialValue) setInitialValue(initialValue);
 }
 
+VariableDeclaration::SymbolTypes VariableDeclaration::symbolType() const
+{
+	return VARIABLE;
+}
+
 }

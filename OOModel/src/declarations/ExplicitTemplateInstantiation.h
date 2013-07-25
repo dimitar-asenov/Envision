@@ -46,6 +46,8 @@ class OOMODEL_API ExplicitTemplateInstantiation : public Super<Declaration>
 	public:
 		ExplicitTemplateInstantiation(ReferenceExpression* instantiatedClass);
 
+		virtual SymbolTypes symbolType() const override;
+
 };
 
 }

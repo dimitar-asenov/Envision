@@ -33,8 +33,38 @@
  * The name string is accessible via name()
  * A new value can be set via setName()
  */
-#define ATTRIBUTE_OOP_NAME																															\
+#define ATTRIBUTE_OOP_NAME_NOSYMBOL																											\
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, name, setName, QString, const QString&)
+
+/**
+ * Declares a 'name' attribute of type Model::Text and makes the composite node provide this name as a symbol.
+ *
+ * The attribute node can be accessed via nameNode()
+ * The name string is accessible via name()
+ * A new value can be set via setName()
+ */
+#define ATTRIBUTE_OOP_NAME_SYMBOL																												\
+		ATTRIBUTE_OOP_NAME_NOSYMBOL																												\
+	public:																																				\
+		virtual bool definesSymbol() const override;																							\
+		virtual const QString& symbolName() const override;																				\
+		virtual SymbolTypes symbolType() const override;																					\
+	private:																																				\
+
+/**
+ * Registers a mandatory OOName attribute which does not declare a symbol.
+ */
+#define REGISTER_OONAME_NOSYMBOL_ATTRIBUTE(ClassName)																						\
+REGISTER_ATTRIBUTE(ClassName, name, Text, false, false, true)
+
+/**
+ * Registers a mandatory OOName attribute which declares a symbol.
+ */
+#define REGISTER_OONAME_SYMBOL_ATTRIBUTE(ClassName, symbolTypes)																		\
+REGISTER_OONAME_NOSYMBOL_ATTRIBUTE(ClassName)																								\
+bool ClassName::definesSymbol() const { return true;}																						\
+const QString& ClassName::symbolName() const { return name(); }																		\
+ClassName::SymbolTypes ClassName::symbolType() const { return (symbolTypes);}
 
 /*********************************************************************************************************************/
 

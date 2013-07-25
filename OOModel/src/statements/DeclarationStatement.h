@@ -42,8 +42,9 @@ class OOMODEL_API DeclarationStatement : public Super<Statement>
 	public:
 		DeclarationStatement(Declaration* d);
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		virtual bool definesSymbol() const override;
+		virtual const QString& symbolName() const override;
+		virtual SymbolTypes symbolType() const override;
 };
 
 }/* namespace OOModel */

@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalResult)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalResult)
 
-REGISTER_ATTRIBUTE(FormalResult, name, Text, false, false, true)
+REGISTER_OONAME_NOSYMBOL_ATTRIBUTE(FormalResult)
 REGISTER_ATTRIBUTE(FormalResult, typeExpression, Expression, false, false, true)
 
 FormalResult::FormalResult(const QString& name, Expression* type)
@@ -52,6 +52,11 @@ bool FormalResult::definesSymbol() const
 const QString& FormalResult::symbolName() const
 {
 	return name();
+}
+
+FormalResult::SymbolTypes FormalResult::symbolType() const
+{
+	return VARIABLE;
 }
 
 }

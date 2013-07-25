@@ -43,11 +43,11 @@ class OOMODEL_API NameImport : public Super<Declaration>
 	public:
 		NameImport(ReferenceExpression* importedName);
 
-		virtual bool definesSymbol() const override;
 		virtual const QString& symbolName() const override;
+		virtual SymbolTypes symbolType() const override;
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-						bool exhaustAllScopes) override;
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 } /* namespace OOModel */

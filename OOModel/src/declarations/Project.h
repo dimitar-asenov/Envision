@@ -55,8 +55,10 @@ class OOMODEL_API Project : public Super<Declaration>
 	public:
 		Project(const QString& name);
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes) override;
+		virtual SymbolTypes symbolType() const override;
+
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 }

@@ -42,8 +42,9 @@ class OOMODEL_API ExpressionStatement : public Super<Statement>
 	public:
 		ExpressionStatement(Expression* e);
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		virtual bool definesSymbol() const override;
+		virtual const QString& symbolName() const override;
+		virtual SymbolTypes symbolType() const override;
 };
 
 } /* namespace OOModel */

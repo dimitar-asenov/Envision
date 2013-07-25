@@ -51,8 +51,8 @@ class OOMODEL_API CommaExpression: public Super<Expression>
 		QList<Expression*> allSubOperands(bool detachOperands);
 
 		virtual Type* type();
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes) override;
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 
 };
 

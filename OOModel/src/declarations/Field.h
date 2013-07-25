@@ -43,6 +43,8 @@ class OOMODEL_API Field : public Super<VariableDeclaration>
 		Field(const QString& name, Modifier::Modifiers mod);
 		Field(const QString& name, Expression* type, Expression* initialValue);
 		Field(const QString& name, Expression* type, Modifier::Modifiers mod, Expression* initialValue = nullptr);
+
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

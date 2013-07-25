@@ -46,8 +46,9 @@ class OOMODEL_API ForEachStatement: public Super<Statement>
 	ATTRIBUTE(StatementItemList, body, setBody)
 
 	public:
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		virtual bool definesSymbol() const override;
+		virtual const QString& symbolName() const override;
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

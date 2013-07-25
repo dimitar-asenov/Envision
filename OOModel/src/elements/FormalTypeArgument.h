@@ -42,15 +42,13 @@ namespace OOModel {
 class OOMODEL_API FormalTypeArgument : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(FormalTypeArgument)
-	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE_OOP_NAME_SYMBOL
 	ATTRIBUTE(Expression, subTypeOfExpression, setSubTypeOfExpression)
 	ATTRIBUTE(Expression, superTypeOfExpression, setSuperTypeOfExpression)
 	ATTRIBUTE(Expression, specializationExpression, setSpecializationExpression)
 
 	public:
 		FormalTypeArgument(const QString& name, Expression* subtype = nullptr, Expression* supertype = nullptr);
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
 };
 
 } /* namespace OOModel */

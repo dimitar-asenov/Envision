@@ -47,6 +47,8 @@ class OOMODEL_API VariableDeclaration : public Super<Declaration>
 		VariableDeclaration(const QString& name, Expression* type, Expression* initialValue);
 		VariableDeclaration(const QString& name, Expression* type,  Modifier::Modifiers mod,
 				Expression* initialValue = nullptr);
+
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

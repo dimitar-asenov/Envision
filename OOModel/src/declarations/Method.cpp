@@ -85,20 +85,25 @@ QString Method::fullyQualifiedName() const
 	return result;
 }
 
-QList<Model::Node*> Method::findSymbols(const QRegExp& symbolExp, Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
+Method::SymbolTypes Method::symbolType() const
 {
-	if (mode == SEARCH_UP && isAncestorOf(source))
+	return METHOD;
+}
+
+QList<Model::Node*> Method::findSymbols(const QRegExp& symbolExp, Model::Node* source, FindSymbolDirection direction,
+		SymbolTypes symbolTypes, bool exhaustAllScopes)
+{
+	if (direction == SEARCH_UP && isAncestorOf(source))
 	{
 		QList<Model::Node*> symbols;
 
-		symbols << arguments()->findAllSymbolDefinitions(symbolExp);
-		symbols << results()->findAllSymbolDefinitions(symbolExp);
-		symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp);
+		symbols << arguments()->findAllSymbolDefinitions(symbolExp, symbolTypes);
+		symbols << results()->findAllSymbolDefinitions(symbolExp, symbolTypes);
+		symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp, symbolTypes);
 		// Note that a StatementList also implements findSymbols and locally declared variables will be found there.
 
 		if (exhaustAllScopes || symbols.isEmpty())
-			symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+			symbols << Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
 
 		return symbols;
 	}

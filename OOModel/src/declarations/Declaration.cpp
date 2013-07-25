@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Declaration)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
 
-REGISTER_ATTRIBUTE(Declaration, name, Text, false, false, true)
+REGISTER_OONAME_SYMBOL_ATTRIBUTE(Declaration, UNSPECIFIED)
 REGISTER_ATTRIBUTE(Declaration, modifiers, Modifier, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, annotations, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, subDeclarations, TypedListOfDeclaration, false, false, true)
@@ -50,16 +50,6 @@ Declaration::Declaration(const QString& name, Modifier::Modifiers modifiers)
 {
 	setName(name);
 	if (modifiers) this->modifiers()->set(modifiers);
-}
-
-bool Declaration::definesSymbol() const
-{
-	return true;
-}
-
-const QString& Declaration::symbolName() const
-{
-	return name();
 }
 
 }

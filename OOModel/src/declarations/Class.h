@@ -67,12 +67,12 @@ class OOMODEL_API Class : public Super<Declaration>
 		ConstructKind constructKind() const;
 		void setConstructKind(const ConstructKind& kind);
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		virtual SymbolTypes symbolType() const override;
+
 		bool isGeneric();
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes) override;
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }

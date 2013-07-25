@@ -45,8 +45,10 @@ class OOMODEL_API TypeAlias : public Super<Declaration>
 	public:
 		TypeAlias(const QString& name, Expression* typeExpression = nullptr);
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-						bool exhaustAllScopes) override;
+		virtual SymbolTypes symbolType() const override;
+
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 }

@@ -58,4 +58,11 @@ const QString& ExpressionStatement::symbolName() const
 	return e ? e->symbolName() : nullString;
 }
 
+ExpressionStatement::SymbolTypes ExpressionStatement::symbolType() const
+{
+	//TODO What should the const usage be here?
+	auto e = (const_cast<ExpressionStatement*>(this))->expression();
+	return e ? e->symbolType() : UNSPECIFIED;
+}
+
 } /* namespace OOModel */

@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalTypeArgument)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalTypeArgument)
 
-REGISTER_ATTRIBUTE(FormalTypeArgument, name, Text, false, false, true)
+REGISTER_OONAME_SYMBOL_ATTRIBUTE(FormalTypeArgument, VARIABLE)
 REGISTER_ATTRIBUTE(FormalTypeArgument, subTypeOfExpression, Expression, false, true, true)
 REGISTER_ATTRIBUTE(FormalTypeArgument, superTypeOfExpression, Expression, false, true, true)
 REGISTER_ATTRIBUTE(FormalTypeArgument, specializationExpression, Expression, false, true, true)
@@ -45,16 +45,6 @@ FormalTypeArgument::FormalTypeArgument(const QString& name, Expression* subtype,
 	setName(name);
 	if (subtype) setSubTypeOfExpression(subtype);
 	if (supertype) setSuperTypeOfExpression(supertype);
-}
-
-bool FormalTypeArgument::definesSymbol() const
-{
-	return true;
-}
-
-const QString& FormalTypeArgument::symbolName() const
-{
-	return name();
 }
 
 } /* namespace OOModel */

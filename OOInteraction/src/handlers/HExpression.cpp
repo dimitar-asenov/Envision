@@ -484,7 +484,8 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	auto searchNode = scopePrefix ? scopePrefix->symbolProvider() : target->node();
 
 	for(auto n : searchNode->findSymbols(QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard),
-		target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), afterDot == false))
+		target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
+		afterDot == false))
 			entries.append(new AutoCompleteEntry(n->symbolName(), QString(), nullptr,
 				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
 

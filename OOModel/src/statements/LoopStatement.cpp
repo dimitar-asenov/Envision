@@ -46,17 +46,17 @@ LoopStatement::LoopStatement(LoopKind kind)
 	setLoopKind(kind);
 }
 
-QList<Model::Node*> LoopStatement::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
+QList<Model::Node*> LoopStatement::findSymbols(const QRegExp& symbolExp,Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
-	if (condition()) symbols << condition()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
-	if (initStep()) symbols << initStep()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
-	if (updateStep()) symbols << updateStep()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
+	if (condition()) symbols << condition()->findSymbols(symbolExp, source, SEARCH_DOWN, symbolTypes, false);
+	if (initStep()) symbols << initStep()->findSymbols(symbolExp, source, SEARCH_DOWN, symbolTypes, false);
+	if (updateStep()) symbols << updateStep()->findSymbols(symbolExp, source, SEARCH_DOWN, symbolTypes, false);
 
 	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+		symbols << Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
 
 	return symbols;
 }

@@ -42,11 +42,6 @@ NameImport::NameImport(ReferenceExpression *importedName)
 	if(importedName) setImportedName(importedName);
 }
 
-bool NameImport::definesSymbol() const
-{
-	return true;
-}
-
 const QString& NameImport::symbolName() const
 {
 	auto imported = const_cast<NameImport*>(this)->importedName();
@@ -54,15 +49,25 @@ const QString& NameImport::symbolName() const
 	return imported->name();
 }
 
-QList<Model::Node*> NameImport::findSymbols(const QRegExp& symbolExp, Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
+NameImport::SymbolTypes NameImport::symbolType() const
+{
+	auto imported = const_cast<NameImport*>(this)->importedName();
+	auto target = imported->ref()->target();
+	Q_ASSERT( target != this);
+
+	if (target) return target->symbolType();
+	else return UNSPECIFIED;
+}
+
+QList<Model::Node*> NameImport::findSymbols(const QRegExp& symbolExp, Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
-	if (mode == SEARCH_DOWN)
-		symbols = importedName()->findSymbols(symbolExp, importedName(), SEARCH_DOWN, exhaustAllScopes);
+	if (direction == SEARCH_DOWN)
+		symbols = importedName()->findSymbols(symbolExp, importedName(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
 
-	if ( mode == SEARCH_UP && parent() && (exhaustAllScopes || symbols.isEmpty()))
-		symbols << parent()->findSymbols(symbolExp, source, mode, exhaustAllScopes);
+	if ( direction == SEARCH_UP && parent() && (exhaustAllScopes || symbols.isEmpty()))
+		symbols << parent()->findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
 
 	// Filter out results that are the same as this node
 	symbols.removeAll(this);

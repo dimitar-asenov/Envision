@@ -44,19 +44,24 @@ Module::Module(const QString& name) : Super(nullptr, Module::getMetaData())
 	setName(name);
 }
 
-QList<Model::Node*> Module::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
+Module::SymbolTypes Module::symbolType() const
+{
+	return CONTAINER;
+}
+
+QList<Model::Node*> Module::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolDirection direction,
+		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
-	symbols << modules()->findAllSymbolDefinitions(symbolExp);
-	symbols << classes()->findAllSymbolDefinitions(symbolExp);
-	symbols << methods()->findAllSymbolDefinitions(symbolExp);
-	symbols << fields()->findAllSymbolDefinitions(symbolExp);
-	symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp);
+	symbols << modules()->findAllSymbolDefinitions(symbolExp, symbolTypes);
+	symbols << classes()->findAllSymbolDefinitions(symbolExp, symbolTypes);
+	symbols << methods()->findAllSymbolDefinitions(symbolExp, symbolTypes);
+	symbols << fields()->findAllSymbolDefinitions(symbolExp, symbolTypes);
+	symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp, symbolTypes);
 
 	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+		symbols << Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
 
 	return symbols;
 }

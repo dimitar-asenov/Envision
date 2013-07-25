@@ -49,4 +49,9 @@ const QString& ForEachStatement::symbolName() const
 	return varName();
 }
 
+ForEachStatement::SymbolTypes ForEachStatement::symbolType() const
+{
+	return VARIABLE;
+}
+
 }

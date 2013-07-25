@@ -70,6 +70,12 @@ const QString& VariableDeclarationExpression::symbolName() const
 	return decl ? decl->symbolName() : nullString;
 }
 
+VariableDeclarationExpression::SymbolTypes VariableDeclarationExpression::symbolType() const
+{
+	auto decl = (const_cast<VariableDeclarationExpression*>(this))->decl();
+	return decl ? decl->symbolType() : UNSPECIFIED;
+}
+
 Type* VariableDeclarationExpression::type()
 {
 	auto t = decl()->typeExpression()->type();

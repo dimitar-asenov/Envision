@@ -143,23 +143,24 @@ bool Node::replaceChild(Node*, Node*)
 	return false;
 }
 
-QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode, bool exhaustAllScopes)
+QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Node*> res;
 
+	bool thisMatches = symbolMatches(symbolExp, symbolTypes);
+
 	// If exhaustAllScopes is true and there is a parent item, we should let the parent find this symbol definition
 	// and add it to the result. This symbol should not report itself in that case.
-	if (mode == SEARCH_UP)
+	if (direction == SEARCH_UP)
 	{
-		if (definesSymbol() && symbolExp.exactMatch(symbolName()) && !(exhaustAllScopes && parent()))
+		if ( thisMatches && !(exhaustAllScopes && parent()))
 			res << this;
 		else if (parent_)
-			res << parent_->findSymbols(symbolExp, source, mode, exhaustAllScopes);
+			res << parent_->findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
 	}
-	else if (mode == SEARCH_DOWN && definesSymbol() && symbolExp.exactMatch(symbolName()))
-	{
+	else if (direction == SEARCH_DOWN && thisMatches)
 		res << this;
-	}
 
 	return res;
 }
@@ -239,6 +240,11 @@ const QString& Node::symbolName() const
 {
 	static QString nullString;
 	return nullString;
+}
+
+Node::SymbolTypes Node::symbolType() const
+{
+	return UNSPECIFIED;
 }
 
 bool Node::isNewPersistenceUnit() const

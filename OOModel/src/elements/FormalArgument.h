@@ -43,7 +43,7 @@ namespace OOModel {
 class OOMODEL_API FormalArgument : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(FormalArgument)
-	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE_OOP_NAME_SYMBOL
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, directionInt, setDirectionInt, int)
 
@@ -55,9 +55,6 @@ class OOMODEL_API FormalArgument : public Super<Model::CompositeNode>
 
 		Direction direction() const;
 		void setDirection(const Direction& direction);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
 };
 
 inline FormalArgument::Direction FormalArgument::direction() const { return static_cast<Direction> (directionInt()); }

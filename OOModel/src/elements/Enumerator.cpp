@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Enumerator)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Enumerator)
 
-REGISTER_ATTRIBUTE(Enumerator, name, Text, false, false, true)
+REGISTER_OONAME_SYMBOL_ATTRIBUTE(Enumerator, VARIABLE)
 REGISTER_ATTRIBUTE(Enumerator, value, Expression, false, true, true)
 
 Enumerator::Enumerator(const QString& name, Expression* value)
@@ -42,16 +42,6 @@ Enumerator::Enumerator(const QString& name, Expression* value)
 {
 	setName(name);
 	if (value) setValue(value);
-}
-
-bool Enumerator::definesSymbol() const
-{
-	return true;
-}
-
-const QString& Enumerator::symbolName() const
-{
-	return name();
 }
 
 }

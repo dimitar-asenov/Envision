@@ -56,4 +56,10 @@ const QString& DeclarationStatement::symbolName() const
 	return d ? d->symbolName() : nullString;
 }
 
+DeclarationStatement::SymbolTypes DeclarationStatement::symbolType() const
+{
+	auto decl = (const_cast<DeclarationStatement*>(this))->declaration();
+		return decl ? decl->symbolType() : UNSPECIFIED;
+}
+
 } /* namespace OOModel */

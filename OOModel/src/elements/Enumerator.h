@@ -43,15 +43,12 @@ class OOMODEL_API Enumerator : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Enumerator)
 
-	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE_OOP_NAME_SYMBOL
 	ATTRIBUTE(Expression, value, setValue)
 
 	public:
 
 		Enumerator(const QString& name, Expression* value = nullptr);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
 };
 
 }

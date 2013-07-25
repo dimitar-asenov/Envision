@@ -44,8 +44,8 @@ class OOMODEL_API IfStatement: public Super<Statement>
 	ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)
 
 	public:
-		virtual QList<Model::Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes) override;
+		virtual QList<Model::Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 }
