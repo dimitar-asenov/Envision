@@ -41,6 +41,9 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 
 	public:
 		virtual bool resolve();
+
+	private:
+		bool isReferenceToContainer();
 };
 
 } /* namespace OOModel */

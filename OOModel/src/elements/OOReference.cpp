@@ -27,6 +27,7 @@
 #include "OOReference.h"
 #include "../expressions/ReferenceExpression.h"
 #include "../declarations/Class.h"
+#include "../expressions/types/ClassTypeExpression.h"
 
 #include "../types/SymbolProviderType.h"
 
@@ -46,6 +47,9 @@ bool OOReference::resolve()
 
 	Model::Node* symbol = nullptr;
 
+	SymbolTypes searchForType = ANY_SYMBOL;
+	if ( isReferenceToContainer() ) searchForType &= ~METHOD;
+
 	if (parent->prefix())
 	{
 		// Perform a downward search starting from the target of the prefix
@@ -54,7 +58,7 @@ bool OOReference::resolve()
 		{
 			if (sp->symbolProvider())
 			{
-				auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, ANY_SYMBOL, false);
+				auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, searchForType, false);
 				if (symbolList.size() == 1) symbol = symbolList.first();
 			}
 		}
@@ -63,12 +67,37 @@ bool OOReference::resolve()
 	else
 	{
 		// Perform an upward search starting from the current node
-		auto symbolList = findSymbols(name(), this, SEARCH_UP,  ANY_SYMBOL, false);
+		auto symbolList = findSymbols(name(), this, SEARCH_UP,  searchForType, false);
 		if (symbolList.size() == 1) symbol = symbolList.first();
 	}
 
 	if (target() != symbol) setTarget(symbol);
 	return isResolved();
+}
+
+bool OOReference::isReferenceToContainer()
+{
+	auto parent = static_cast<ReferenceExpression*>(this->parent());
+
+	auto container = parent->parent();
+
+	if (auto refExpr = dynamic_cast<ReferenceExpression*>(container))
+	{
+		// If this reference appears before a '.' operator, it must be a container
+		if (parent == refExpr->prefix()) return true;
+	}
+	else if (auto vd = dynamic_cast<VariableDeclaration*>(container))
+	{
+		// This reference denotes a type.
+		if (parent == vd->typeExpression()) return true;
+	}
+	else if (auto cte = dynamic_cast<ClassTypeExpression*>(container))
+	{
+		// This reference denotes a type.
+		if (parent == cte->typeExpression()) return true;
+	}
+
+	return false;
 }
 
 } /* namespace OOModel */
