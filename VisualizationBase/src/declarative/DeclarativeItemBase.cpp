@@ -29,6 +29,7 @@
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 #include "GridLayoutFormElement.h"
+#include "../cursor/Cursor.h"
 
 namespace Visualization {
 
@@ -51,7 +52,14 @@ void DeclarativeItemBase::determineChildren()
 	Q_ASSERT(newFormIndex >=0 && newFormIndex < forms().size());
 	if (newFormIndex != currentFormIndex_)
 	{
-		if (currentFormIndex_ >= 0) currentForm()->destroyChildItems(this); // Do not destroy child items on the first run
+		if (currentFormIndex_ >= 0)
+		{
+			// Do not destroy child items on the first run
+			auto mc = scene()->mainCursor();
+			if (mc && isAncestorOf(mc->owner())) scene()->setMainCursor(nullptr);
+
+			currentForm()->destroyChildItems(this);
+		}
 		currentFormIndex_ = newFormIndex;
 	}
 	currentForm()->synchronizeWithItem(this);
