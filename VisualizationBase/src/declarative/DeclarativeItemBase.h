@@ -103,7 +103,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Super<Item>
 
 
 	private:
-		int currentFormIndex_{};
+		int currentFormIndex_{-1};
 };
 
 inline FormElement* DeclarativeItemBase::currentForm() const {return forms().at(currentFormIndex_);}

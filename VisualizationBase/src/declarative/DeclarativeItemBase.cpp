@@ -47,7 +47,13 @@ int DeclarativeItemBase::determineForm()
 
 void DeclarativeItemBase::determineChildren()
 {
-	currentFormIndex_ = determineForm();
+	auto newFormIndex = determineForm();
+	Q_ASSERT(newFormIndex >=0 && newFormIndex < forms().size());
+	if (newFormIndex != currentFormIndex_)
+	{
+		if (currentFormIndex_ >= 0) currentForm()->destroyChildItems(this); // Do not destroy child items on the first run
+		currentFormIndex_ = newFormIndex;
+	}
 	currentForm()->synchronizeWithItem(this);
 }
 
