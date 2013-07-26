@@ -27,7 +27,7 @@
 #pragma once
 
 #include "cppimport_api.h"
-#include "ClangAstConsumer.h"
+#include "visitors/ClangAstVisitor.h"
 
 namespace CppImport {
 
@@ -38,20 +38,20 @@ namespace CppImport {
 class CPPIMPORT_API ClangConsumerCreator : public clang::ASTFrontendAction
 {
 	public:
-		/**
-		 * \a consumer is the consumer which is returned by the CreateASTConsumer method
-		 */
-		ClangConsumerCreator(ClangAstConsumer* consumer);
+		ClangConsumerCreator(ClangAstVisitor* visitor, CppImportLogger* log);
 
 		/**
-		 * This method returns the consumer set by the constructor.
-		 *	It updates the compileinstance of the logger and astvisitor of the consumer_
+		 * This method creates a new ClangAstConsumer with the visitor_
+		 *	It updates the compile instance (i.e. the source manager) of the visitor_
 		 */
 		virtual clang::ASTConsumer* CreateASTConsumer
 			(clang::CompilerInstance& compilerInstance, llvm::StringRef) override;
 
 	private:
-		ClangAstConsumer* consumer_{};
+		ClangAstVisitor* visitor_{};
+		// This logger is at the moment useless but might later be useful
+		// for comment handling and preprocessor handling.
+		CppImportLogger* log_{};
 };
 
 }

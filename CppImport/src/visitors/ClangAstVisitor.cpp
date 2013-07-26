@@ -31,9 +31,10 @@
 
 namespace CppImport {
 
-ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger, TranslateManager* manager)
-	:  log_(logger), trMngr_(manager)
+ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
+	:  log_{logger}
 {
+	trMngr_ = new TranslateManager(project);
 	exprVisitor_ = new ExpressionVisitor(this, log_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_);
 	exprVisitor_->setUtilities(utils_);
@@ -46,6 +47,7 @@ ClangAstVisitor::~ClangAstVisitor()
 {
 	SAFE_DELETE(utils_);
 	SAFE_DELETE(exprVisitor_);
+	SAFE_DELETE(trMngr_);
 }
 
 void ClangAstVisitor::setSourceManager(const clang::SourceManager* sourceManager)

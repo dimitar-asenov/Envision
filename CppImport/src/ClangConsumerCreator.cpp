@@ -25,18 +25,21 @@
  **********************************************************************************************************************/
 
 #include "ClangConsumerCreator.h"
+#include "ClangAstConsumer.h"
 
 namespace CppImport {
 
-ClangConsumerCreator::ClangConsumerCreator(ClangAstConsumer* consumer)
-: consumer_(consumer)
+ClangConsumerCreator::ClangConsumerCreator(ClangAstVisitor* visitor, CppImportLogger* log)
+: visitor_{visitor}, log_{log}
 {}
 
 clang::ASTConsumer* ClangConsumerCreator::CreateASTConsumer(clang::CompilerInstance& compilerInstance, llvm::StringRef)
 {
+	ClangAstConsumer* consumer = new ClangAstConsumer(visitor_);
 	// set new compiler instance
-	consumer_ ->setCompilerInstance(&compilerInstance);
-	return consumer_;
+	log_->setSourceManager(&compilerInstance.getSourceManager());
+	consumer ->setCompilerInstance(&compilerInstance);
+	return consumer;
 }
 
 }

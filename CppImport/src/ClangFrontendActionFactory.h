@@ -27,9 +27,7 @@
 #pragma once
 
 #include "cppimport_api.h"
-
 #include "visitors/ClangAstVisitor.h"
-#include "CppImportLogger.h"
 
 namespace CppImport {
 
@@ -37,22 +35,19 @@ class CPPIMPORT_API ClangFrontendActionFactory : public clang::tooling::Frontend
 {
 	public:
 		/**
-		 * This instantiates the logger and the astvisitor to make sure to keep
-		 * the same instance over multiple translation units.
-		 * The \a project is the root node where everything will be added to.
+		 * Creates the factory and save the pointer to the \a visitor which is used for all translation units.
 		 */
-		ClangFrontendActionFactory(OOModel::Project* project, TranslateManager* manager, CppImportLogger* log);
-
-		virtual ~ClangFrontendActionFactory() override;
+		ClangFrontendActionFactory(ClangAstVisitor* visitor, CppImportLogger* log);
 
 		/**
-		 * This creates a clang FrontendAction. The function is called for every translationunit
+		 * This function is called for every translationunit
+		 * It creates a new ClangConsumerCreator with the provided visitor.
 		 */
 		virtual clang::FrontendAction* create() override;
 
 	private:
 		ClangAstVisitor* visitor_{};
-		CppImportLogger* logger_{};
+		CppImportLogger* log_{};
 };
 
 }

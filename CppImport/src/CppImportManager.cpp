@@ -63,14 +63,14 @@ Model::Model*CppImportManager::createModel(const bool statisticsPerProject)
 {
 
 	OOModel::Project* project = new OOModel::Project(projectName_);
-	TranslateManager* manager = new TranslateManager(project);
 	CppImportLogger* log = new CppImportLogger();
+	ClangAstVisitor* visitor = new ClangAstVisitor(project, log);
 
 	foreach(QString s, projects_)
 	{
 		qDebug() << "Start processing project :" << s;
 		auto tool = new clang::tooling::ClangTool(*compilationDbMap_.value(s), *sourcesMap_.value(s));
-		ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(project, manager, log);
+		ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(visitor, log);
 		tool->run(frontendActionFactory);
 		// statistics
 		if(statisticsPerProject)
@@ -82,7 +82,7 @@ Model::Model*CppImportManager::createModel(const bool statisticsPerProject)
 	// statistics
 	if(!statisticsPerProject)
 		log->outputStatistics();
-	SAFE_DELETE(manager);
+	SAFE_DELETE(visitor);
 	SAFE_DELETE(log);
 	// reset the path (because clang tool changes it)
 	QDir::setCurrent(qApp->applicationDirPath());

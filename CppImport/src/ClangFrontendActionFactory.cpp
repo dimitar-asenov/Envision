@@ -6,20 +6,13 @@
 
 namespace CppImport {
 
-ClangFrontendActionFactory::ClangFrontendActionFactory(OOModel::Project* project, TranslateManager* manager, CppImportLogger* log)
-	: logger_{log}
-{
-	visitor_ = new ClangAstVisitor(project, logger_, manager);
-}
-
-ClangFrontendActionFactory::~ClangFrontendActionFactory()
-{
-	SAFE_DELETE(visitor_);
-}
+ClangFrontendActionFactory::ClangFrontendActionFactory(ClangAstVisitor* visitor, CppImportLogger* log)
+: visitor_{visitor}, log_{log}
+{}
 
 clang::FrontendAction* ClangFrontendActionFactory::create()
 {
-	return new ClangConsumerCreator(new ClangAstConsumer(logger_, visitor_));
+	return new ClangConsumerCreator(visitor_, log_);
 }
 
 }

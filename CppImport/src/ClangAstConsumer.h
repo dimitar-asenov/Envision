@@ -28,14 +28,13 @@
 
 #include "cppimport_api.h"
 #include "visitors/ClangAstVisitor.h"
-#include "CppImportLogger.h"
 
 namespace CppImport {
 
 class CPPIMPORT_API ClangAstConsumer : public clang::ASTConsumer
 {
 	public:
-		ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor);
+		ClangAstConsumer(ClangAstVisitor* visitor);
 
 		/**
 		 * Starts the astVisitor_ on this translation unit
@@ -48,7 +47,6 @@ class CPPIMPORT_API ClangAstConsumer : public clang::ASTConsumer
 		void setCompilerInstance(const clang::CompilerInstance* compilerInstance);
 
 	private:
-		CppImportLogger* logger_{};
 		ClangAstVisitor* astVisitor_{};
 		clang::CompilerInstance* ci_{};
 };

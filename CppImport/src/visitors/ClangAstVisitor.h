@@ -44,7 +44,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:
-		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger, TranslateManager* manager);
+		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
 		~ClangAstVisitor();
 		void setSourceManager(const clang::SourceManager* sourceManager);
 

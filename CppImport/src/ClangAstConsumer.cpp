@@ -28,8 +28,8 @@
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor)
-: clang::ASTConsumer(), logger_(log), astVisitor_(visitor)
+ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
+: clang::ASTConsumer(), astVisitor_(visitor)
 {}
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
@@ -42,7 +42,6 @@ void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compil
 	Q_ASSERT(compilerInstance);
 	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
 	Q_ASSERT(mngr);
-	logger_->setSourceManager(mngr);
 	astVisitor_->setSourceManager(mngr);
 }
 
