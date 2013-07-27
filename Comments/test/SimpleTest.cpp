@@ -25,13 +25,86 @@
  **********************************************************************************************************************/
 
 #include "comments.h"
+#include "nodes/Comment.h"
 #include "SelfTest/src/SelfTestSuite.h"
+
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/items/VComposite.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/nodes/TestBoxNode.h"
+
+#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/List.h"
+#include "ModelBase/src/model/Model.h"
+
 
 namespace Comments {
 
+using namespace Visualization;
+
 TEST(Comments, SimpleTest)
 {
-	CHECK_INT_EQUAL(1,1);
+	auto list = new Model::List();
+	auto model = new Model::Model(list);
+
+	model->beginModification(list, "set");
+	auto first = new TestNodes::BinaryNode();
+	list->append(first);
+	auto second = new TestNodes::BinaryNode();
+	list->append(second);
+	auto third = new Model::Text();
+	list->append(third);
+
+	first->name()->set("First node");
+	auto left = new TestNodes::BinaryNode();
+	first->setLeft(left);
+	auto right = new TestNodes::BinaryNode();
+	first->setRight(right);
+	left->name()->set("left node");
+	right->name()->set("right node");
+
+	second->name()->set("Empty node");
+
+	third->set("Some other text");
+
+//	for(int i = 0; i < 10.0000; ++i) {
+//		if(!(i % 10000)) {
+//			qDebug() << "i" << i;
+//		}
+//		list->append(new RTFNode("<b>beautifully <span style='color:green'>colored <i>text</i></span></b>"));
+//	}
+
+	auto node = new CommentNode(
+		"# Header 1\n"
+		"Text *in bold* that spans more\n"
+		"than one line\n"
+		"===\n"
+		"\n"
+		"## Header 2\n"
+		"---\n"
+		"\n"
+		"...\n"
+		"### Header 3\n"
+		"#### Header 4\n"
+		"###### Header 6\n"
+		"And later on, some more text...");
+
+	list->append(node);
+
+	model->endModification();
+
+	auto top = new RootItem(list);
+	auto scene = VisualizationManager::instance().mainScene();
+	scene->addTopLevelItem(top);
+	QApplication::processEvents();
+
+	scene->scheduleUpdate();
+	scene->listenToModel(model);
+
+	CHECK_CONDITION(scene);
 }
 
 }

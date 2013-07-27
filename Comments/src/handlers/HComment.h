@@ -24,47 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#pragma once
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+#include "comments_api.h"
+
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
+class COMMENTS_API HComment : public Interaction::GenericHandler {
+	public:
+		static HComment* instance();
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-
-	return true;
-}
-
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
+	protected:
+		HComment();
+};
 
 }

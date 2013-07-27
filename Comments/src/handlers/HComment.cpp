@@ -24,47 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
 #include "handlers/HComment.h"
 #include "items/VComment.h"
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
-
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+HComment::HComment()
+{}
+
+HComment* HComment::instance()
 {
-	static Core::InitializationRegistry r;
-	return r;
+	static HComment h;
+	return &h;
 }
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
+void HComment::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	static Core::InitializationRegistry r;
-	return r;
+	auto vcomment = dynamic_cast<VComment*> ( target );
+	event->ignore();
+
+	if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
+	{
+		event->accept();
+		vcomment->toggleEditing();
+	}
+
+	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
 }
 
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-
-	return true;
-}
-
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

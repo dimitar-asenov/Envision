@@ -24,47 +24,41 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#include "MarkdownTextItem.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+using namespace Visualization;
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+ITEM_COMMON_DEFINITIONS(MarkdownTextItem, "item")
+
+MarkdownTextItem::MarkdownTextItem(Item* parent, const StyleType* style, QString str)
+	: Super(parent, style)
 {
-	static Core::InitializationRegistry r;
-	return r;
+	setFlag(QGraphicsItem::ItemHasNoContents, false);
+	text_ = QStaticText(str);
 }
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
+void MarkdownTextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	static Core::InitializationRegistry r;
-	return r;
+	painter->drawStaticText(0, 0, text_);
 }
 
-bool Comments::initialize(Core::EnvisionManager&)
+void MarkdownTextItem::updateGeometry(int availableWidth, int)
 {
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
+	int w = availableWidth == 0 ? 300 : availableWidth;
+	text_.setTextWidth(w);
+	setSize(text_.size());
+}
 
-	VComment::setDefaultClassHandler(HComment::instance());
+void MarkdownTextItem::determineChildren(){}
 
+bool MarkdownTextItem::sizeDependsOnParent() const
+{
 	return true;
 }
 
-void Comments::unload()
-{
-}
 
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

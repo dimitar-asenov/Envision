@@ -24,47 +24,43 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#include "MarkdownLineItem.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+using namespace Visualization;
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+ITEM_COMMON_DEFINITIONS(MarkdownLineItem, "item")
+
+MarkdownLineItem::MarkdownLineItem(Item* parent, const StyleType* style, int strength) : Super(parent, style)
 {
-	static Core::InitializationRegistry r;
-	return r;
+	setFlag(QGraphicsItem::ItemHasNoContents, false);
+	strength_ = std::min(1, std::max(3, strength));
 }
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
+void MarkdownLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	static Core::InitializationRegistry r;
-	return r;
+	if (width() > height())
+		painter->drawLine(QPointF(0, height()/2.0), QPointF(width(), height()/2.0));
+	else
+		painter->drawLine(QPointF(width()/2.0, 0), QPointF(width()/2.0, height()));
 }
 
-bool Comments::initialize(Core::EnvisionManager&)
+void MarkdownLineItem::updateGeometry(int availableWidth, int availableHeight)
 {
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
+	int w = availableWidth > 0 ? availableWidth : 300;
+	int h = std::max(availableHeight, height());
+	if(h == 0) h = 10;
+	setSize(w, h);
+}
 
-	VComment::setDefaultClassHandler(HComment::instance());
+void MarkdownLineItem::determineChildren(){}
 
+bool MarkdownLineItem::sizeDependsOnParent() const
+{
 	return true;
 }
 
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

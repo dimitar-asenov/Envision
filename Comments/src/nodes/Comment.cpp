@@ -24,47 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#include "Comment.h"
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(Comments::CommentNode)
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentNode)
+
+REGISTER_ATTRIBUTE(CommentNode, label, Text, false, false, true)
+
+CommentNode::CommentNode(const QString& label)
+: Super{nullptr, CommentNode::getMetaData()}
 {
-	static Core::InitializationRegistry r;
-	return r;
+	setLabel(label);
 }
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-
-	return true;
-}
-
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

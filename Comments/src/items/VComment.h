@@ -24,47 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#pragma once
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+#include "../comments_api.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+
+#include "../nodes/Comment.h"
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
+	Visualization::DeclarativeItem<VComment>, CommentNode> >
 {
-	static Core::InitializationRegistry r;
-	return r;
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
+	public:
+		VComment(Visualization::Item* parent, NodeType* node);
+		static void initializeForms();
+		virtual int determineForm() override;
+		void toggleEditing();
 
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
+	private:
+		QList<Visualization::Item*> parse();
 
-	VComment::setDefaultClassHandler(HComment::instance());
+		bool editing_{};
+		Visualization::Item* editLabel_{};
+};
 
-	return true;
-}
-
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

@@ -27,17 +27,19 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "comments_api.h"
 
 namespace Comments {
 
 /**
  * Implements the interface between the Comments plug-in and Envision.
  *
- * The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before
+ * The Envision core will use this interface to communicate with the
+ * plug-in. The plug-in will be initialized before
  * any other operations are performed.
  *
- * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
+ * The plug-in can use the supplied EnvisionManager object to find out
+ * more about the running environment.
  */
 class Comments : public QObject, public Core::EnvisionPlugin
 {
@@ -50,4 +52,6 @@ class Comments : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
+COMMENTS_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
+COMMENTS_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 }

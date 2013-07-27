@@ -24,47 +24,26 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#pragma once
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+#include "../comments_api.h"
+
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/Boolean.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+
+DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentNode)
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
+class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentNode)
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
 
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
+	public:
+		CommentNode(const QString& label);
+};
 
-	VComment::setDefaultClassHandler(HComment::instance());
-
-	return true;
-}
-
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

@@ -24,47 +24,31 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-#include "handlers/HComment.h"
-#include "items/VComment.h"
+#pragma once
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+#include "../comments_api.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+class MarkdownTextItem : public Super<Visualization::Item>
 {
-	static Core::InitializationRegistry r;
-	return r;
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(MarkdownTextItem, Visualization::ItemStyle)
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
+public:
+	MarkdownTextItem(Item* parent, const StyleType* style, QString str);
+	void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+	virtual void updateGeometry(int, int) override;
+	virtual bool sizeDependsOnParent() const;
 
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
+protected:
+	virtual void determineChildren() override;
 
-	VComment::setDefaultClassHandler(HComment::instance());
+private:
+	QStaticText text_{};
+};
 
-	return true;
-}
-
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */
