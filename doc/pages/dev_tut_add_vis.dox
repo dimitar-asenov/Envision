@@ -1,0 +1,295 @@
+/*! \page dev_tut_add_vis Adding a new visualization item
+
+In this tutorial we will see how to add a custom visualization for a node. We will create a visualization for if
+statement nodes. We showed how to crate this node type in \ref dev_tut_add_node . You should be familiar with that
+tutorial before reading on. In the present tutorial we will use OOVisualization::VIfStatement as example.
+
+\section intro Introduction
+
+Visual objects in Envision are called items. The name comes from the super type of all visualizations which is
+Visualization::Item (which in turn inherits from Qt's QGraphicsItem).
+
+To draw something on the scene (Envision's visual canvas), an item can do any combination of the following:
+	- Draw directly on the scene, by using Qt's QPainter drawing methods.
+	- Contain child items which themselves may draw something.
+
+Envision already provides many useful items that directly draw on the scene. Typically these are used as leaves in a
+more complicated rendering tree. Most newly created visualizations therefore are only concerned with defining
+what child items they contain and how they should be arranged on the screen. Our example, OOVisualization::VIfStatement,
+also does not draw anything itself. Instead it creates a number of child items and arranges them using a layout.
+
+The easiest way to arrange child items is to use the services of Visualization::DeclarativeItem. Items inheriting from
+it have at their disposal a powerful and fast layout manager inspired by GUI frameworks. For detailed information
+on this declarative framework please see
+<a href="http://www.pm.inf.ethz.ch/education/theses/student_docs/Andrea_Helfenstein/BA_report_Andrea_Helfenstein">
+Andrea Helfenstein's Bachelor Thesis Report</a>. Below we will only cover parts of it that are relevant for our
+example.
+
+\section vif_header VIfStatement.h
+
+Here is \c VIfStatement.h :
+\dontinclude OOVisualization/src/statements/VIfStatement.h
+\skip pragma
+\until } /* namespace OOVisualization
+\dontinclude OOVisualization/src/statements/VIfStatement.h
+
+Let's examine it starting from the top. The first interesting bit after the includes is:
+\skip OOVISUALIZATION_API VIfStatement
+\until {
+
+When creating visualizations a lot of functionality is configured by inheriting from appropriate template classes.
+
+Like for nodes, we use the \c Super template to specify the base class.
+
+In this case the 'real' base class is OOVisualization::VStatementItem. OOVisualization::VStatementItem is really just a
+very thin wrapper on top of the Visualization::ItemWithNode. The only reason we use OOVisualization::VStatementItem is
+so that we can later set a default handler for all visualizations of statements. This is not important for this
+tutorial, so we'll just use the fact that we inherit from Visualization::ItemWithNode. What is this template?
+
+An item either stands on its own or represents the contents of a node. Examples of the former are labels,
+decorative lines, and icons, while examples of the latter are visualizations of classes, methods, expressions, etc.
+Items, which do not represent a node, inherit directly from Visualization::Item, whereas items that visualize a
+particular node type inherit from Visualization::ItemWithNode (which ultimately also inherits from
+Visualization::Item). This class provides the necessary association between the visualization and an instance of
+a node that our visualization represents. We can gain access to this instance by using the \c node()
+method within our visualization. The Visualization::ItemWithNode template requires 3 parameters:
+	- The visualization that is currently being defined (in this case OOVisualization::VIfStatement)
+	- The base item type (in this case Visualization::DeclarativeItem since we want to use layouts)
+	- The type of the node that's being visualized (in this case OOModel::IfStatement)
+
+The first and last bit are straight forward, but let's look at the second argument. In essense
+Visualization::ItemWithNode will inherit from whatever class we provide here. This needs to be a sub type of
+Visualization::Item. By specifying Visualization::DeclarativeItem we make it one of the super types of
+OOVisualization::VIfStatement and can make use of its services which greatly simplify the layouting of child items.
+
+Here is the complete type hierarchy of the OOVisualization::VIfStatement visualization:
+
+OOVisualization::VIfStatement <--  Super  <--  OOVisualization::VStatementItem <-- Visualization::ItemWithNode <-- 
+Visualization::DeclarativeItem <-- Visualization::DeclarativeItemBase <-- Visualization::Item  <-- QGraphicsItem
+
+A note on the name of the visualization class: when you create a new 'stand-alone' item, you are free to call it
+anything. By convention, items that visualize nodes from the model should have the same name as the node type, with a
+'V' prefix (for visualization). In our example we are visualizing nodes of type OOModel::IfStatement so the
+corresponding item class is called OOVisualization::VIfStatement.
+
+
+Next comes this line:
+\skipline ITEM_COMMON
+All items must include this macro as the first line in their declaration. This is similar to what we saw when creating
+new nodes - we use this macro to save us writing a ton of boilerplate code manually (unfortunately, it's not possible
+to replace the macro with a template solution). Among other things, this macro defines the style for this item
+to be a class called just like the item class with an added "Style" suffix. In this case the style class for
+OOVisualization::VIfStatement is OOVisualization::VIfStatementStyle. Sometimes it is useful to manually specify what
+the style class for an item should be called (e.g. when you want to use the same style for multiple items). In that
+case you can use the macro \c ITEM_COMMON_CUSTOM_STYLENAME instead which also takes an additional style class name
+as an argument.
+
+For more info about styles see \ref styles at the end of this tutorial.
+
+Next we have the constructor:
+
+\skipline VIfStatement(Item*
+All items representing a node (inheriting from Visualization::ItemWithNode) must have a constructor of this form.
+If not provided, the style argument is initialized to the default style . Items that do not visualize nodes, must
+declare a similar constructor but omit the \c node parameter.
+
+After the constructor we have just a few getter methods for the correspondingly named fields:
+\skip condition()
+\until icon()
+
+Nothing special, let's go on to the first important method definition:
+\skipline initializeForms()
+This is a static method required by Visualization::DeclarativeItem. This method defines the layout for all children of
+the class. We will see how this is done when discussing the \c .cpp file.
+
+Next comes another related method:
+\skipline determineForm()
+This is another method used by Visualization::DeclarativeItem. A declarative item may declare multiple forms (layouts).
+If this is the case, then the \c determineForm() method should be overridden in order to tell the declarative framework
+which form to use. Many items only declare a single layout, in which case there is no need to redefine this method.
+
+We go on to another method:
+\skipline updateGeometry(
+To understand this method we will first explain Envision's visualization mechanism in more detail.
+
+To improve performance the visualization work flow is split into two major parts:
+	- Painting on the scene
+	- Updating the visualizations
+	
+\b Painting is mostly controlled by Qt. Various events trigger a repaint of the whole scene or parts of it. These are
+for example scrolling the view, zooming in and out, interacting with the view, etc. Parts of the scene are repainted
+often and Qt decides which items should be repainted. When an item needs to be repainted its \c paint() method is
+called directly by Qt. Leaf items should reimplement this method in order to draw something. More often however, items
+do not paint anything - they just include child items which do the drawing. In that case there is no need to redefine
+the method.
+
+The default implementation of \c paint() provided by Visualization::Item takes care of drawing a background shape if
+any has been specified in the style.
+
+\b Updating is part of the overall visualization mechanism defined by Envision. In order to make sure we do not always
+recompute the entire scene, we only update items that need to be updated. For instance, if you just rename a class, only
+that class and all its (visual) parents need to be updated - you don't need to recompute the layout for an unrelated
+class or package. Envision automatically detects some situations that require an update to an item, and you can
+manually request that a particular item be updated. Whenever an item is marked for updating, all of its parent items
+are also marked for updating and the update begins at the root item. The update procedure is recursive and is embodied
+by the Visualization::Item::updateSubtree() method. This is what happens when an item is being updated:
+	-# The update proceeds only if the item has been marked for update, otherwise nothing happens.
+	-# All child items are determined. Visualization::Item declares a pure virtual method \c determineChildren() whose
+	sole purpose is to make sure that any child items have been created and set as children. Derived items should
+	reimplement this method and maintain any child items in it. The method can also be empty if there are no child items.
+	-# All child items that need updating are updated. This is a recursive call to \c updateSubtree() .
+	-# The item's geometry is calculated. After all of the item's children have been fully updated and their sizes are
+	known, the item must calculate its own geometry. Visualization::Item declares another pure virtual method called
+	\c updateGeometry(). Derived classes must reimplement it and do at least the following two:
+		- Set the position of all child elements. This is the layouting step, where we determine how our child elements
+		should be positioned on screen. Keep in mind that all children should be drawn at non-negative \c x and \c y
+		positions.
+		- Set the item's own size by calling \c setSize(). It is important that the size we set completely engulfs all
+		child elements. Child items should never 'stick' out of their parent element.
+		.
+	Some items have a variable size depending on where they are put. For example, horizontal lines expand in order to
+	fill all the available space. To achieve this behavior an items must reimplement \c sizeDependsOnParent() to return
+	\c true. This causes \c updateGeometry() to be called twice for this item:
+		-# When it is first updated, the method is called with arguments 0, 0. These arguments indicate the
+		\c availableWidth and \c availableHeight. Whenever they are both zero, this means that the item can take as much
+		space as it needs and the parent item will make sure to accommodate it. All items always receive such a call to
+		\c updateGeometry().
+		-# After the parent has positioned all its children and set its size to engulf all child items, it should call
+		the \c updateGeometry() method again for any children that indicate their size depends on the parent's size. This
+		time at least one argument of \c updateGeometry() will be positive, indicating how much space the item can take in
+		total in that direction, without changing the layout of the parent. The item can stretch to fill all the available
+		space. If one of the arguments to \c updateGeometry() is 0, this means that the item should retain its current
+		size in that direction.
+		.
+	The way this works for the line item is that it sets up a default line that is let's say 20 pixels long on the first
+	call to \c updateGeometry(). Then during the second call the line will expand to take any extra space
+	(say 270 pixels). Notice that there is no drawing during these calls, we merely setup the parameters that will be
+	used for drawing later.
+
+Now, let's get back to the \c updateGeometry() method of OOVisualization::VIfStatement. This class inherits from
+Visualization::DeclarativeItem that provides an implementation for both \c detemineChildren() and \c updateGeometry().
+So why do we need to reimplement \c updateGeometry() here? Indeed in most cases, when inheriting from
+Visualization::DeclarativeItem there is no need to reimplement any of these methods. The reason for reimplementing in
+OOVisualization::VIfStatement is to get information. We know that the \c updateGeometry() method will be called after
+all children have been drawn. The reimplementation here just needs to know the size of these child items, that's all.
+It doesn't actually do anything and leaves all the heavy lifting to Visualization::DeclarativeItem. When discussing
+the .cpp file we'll see why we need to know the size of the child items.
+
+Finally we have:
+\skip horizontal_{}
+\until icon_{}
+There are some fields that will hold child items and another one called \c horizontal that will control which
+form will be used to arrange the children. Let's see how it all works in the .cpp file.
+
+\section vif_cpp VIfStatement.cpp
+
+Here is \c VIfStatement.cpp :
+\dontinclude OOVisualization/src/statements/VIfStatement.cpp
+\skip VIfStatement.h"
+\until } /* namespace OOVisualization
+\dontinclude OOVisualization/src/statements/VIfStatement.cpp
+
+The first thing to notice is this inlcude:
+\skipline DeclarativeItemDef.h"
+We need to include this additional definitions header pertaining to the Visualization::DeclarativeItem framework.
+
+Next is:
+\skipline ITEM_COMMON_DEFINITIONS
+which complements the \c ITEM_COMMON declaration in the header file. The second argument indicates which subdirectory
+of \c /styles we should look in for the \c /VIfStatement directory that contains all styles for this class.
+Possible choices here are \e "item", \e "icon" and \e "layout" for now.
+
+The constructor:
+\skipline VIfStatement::VIfStatement
+is typical for items deriving from Visualization::DeclarativeItem, we just forward the arguments.
+
+Here is the implementation of the \c updateGeometry() method:
+\skip VIfStatement::updateGeometry
+\until }
+\until }
+What's happening is this: If we put the \e then and the \e else branch next to each other and the total width is under
+a specified threshold defined in the style, then we'll keep this configuration. Otherwise, we will put the \e then
+branch on top of the \e else branch. We do this in order to improve the readability of if statements and also to
+demonstrate how to use multiple forms with the declarative framework.
+
+If we detect a switch from horizontal to vertical layout we need to perform an extra update so we request that the item
+is updated again. Note that this is a rather specific situation that arises in OOVisualization::VIfStatement and
+normally you wouldn't need to manually request an update in order to change forms.
+
+Finally we call the \c updateGeometry() method of the super class to let it arrange all child items.
+
+Given that we set \c horizontal_ in \c updateGeometry(), the \c determineForm() method is trivial:
+\skip VIfStatement::determineForm()
+\until }
+OOVisualization::VIfStatement is a bit special in that you need to work with several methods in order to arrive at a
+decision on which layout form to use. Normally, it is sufficient to perform some checks directly in the
+\c determineForm() method to decide which is the most appropriate form. In particular this is the case if the
+decision is based only on the node that is represented, and not on any visual information.
+
+Finally let's see the real work that we need to do in order to use Visualization::DeclarativeItem - defining the 
+\c initializeForms() method:
+\skip VIfStatement::initializeForms
+\until } /* namespace OOVisualization
+We won't go into detail here, please refer to
+<a href="http://www.pm.inf.ethz.ch/education/theses/student_docs/Andrea_Helfenstein/BA_report_Andrea_Helfenstein">
+Andrea Helfenstein's Bachelor Thesis Report</a> for the various ways to use Visualization::DeclarativeItem. In short:
+	- We create a \e header consisting of an \e icon an the \e condition. The \e condition is wrapped in a visual item
+	that draws a background.
+	- Both the \e then and the \e else branches are rendered using a statement list visualization.
+	- We use a \e shape \e element that serves as the background of the entire if statement.
+	- There are two forms:
+		- Form \e 0 puts the two branches next to each other
+		- Form \e 1 puts the \e true branch on top of the \e false branch.
+
+This is all there is to it - now we have a visualization for if statements that will be automatically used when needed.
+In simpler cases, all you need to do is define the \c initializeForms() method and you can create a visual item in no
+time. It is recommended to look at other examples when creating your own items. An example of a very short item is
+OOVisualization::VTypeAlias, and an example of a more complicated one is OOVisualization::VClass.
+
+\section styles Item styles
+Each item type has an associated style type. A style type is a class that contains properties used to determine how
+exactly the item should be rendered. For example an item rendering text may have a style that tells it what font
+family and size to use, what text the color should be, should there be a background, etc. The properties defined for
+a style can be other styles or any number of 'basic' values: numbers, booleans, lists, fonts, brushes, colors, etc. An
+important feature of styles is that they are dynamically loaded at run-time by reading them from an XML file. Thus
+all the properties that you specify in a style can be used to alter the appearance of an item, without the need
+of recompiling any code.
+
+Each item must have at least a default style that specifies all properties listed in the item's style type. Within
+your plug-in you must put the default style in the \c /styles/item/ItemName/ directory and it should be called \c
+default. For the OOVisualization::VIfStatement this file is \c /OOVisualization/styles/item/VIfStatement/default .
+
+Creating a style class is straight forward, all you really need to do is list the properties of the style. Here is the
+header of the style class for if statements \c (VIfStatementStyle.h):
+\dontinclude OOVisualization/src/statements/VIfStatementStyle.h
+\skip pragma
+\until } /* namespace OOVisualization
+
+There are three things to notice here:
+	- The style must ultimately inherit from Visualization::ItemStyle. If your item inherits from
+	Visualization::DeclarativeItem or another visual item that requires a more specific style, you must inherit
+	from that item's style.
+	- We always need to explicitly define the destructor. It must not be defined inline in the header file and should
+	be defined only in the corresponding \c .cpp file. Almost always the destructor will be empty and it will be the
+	only thing we put in the \c .cpp file. Nevertheless, this should still be done. The reason is that this is a hint
+	to gcc, where to generate the virtual table for the class and other related data structures. If we don't do this,
+	then this information will be generated in multiple plug-ins which will cause problems at run-time on Windows.
+	- There is a list of properties that we want out style to include. Each property is defined by providing the
+	type of information it should store. Additionally we need to provide \e this and a string to the property's
+	constructor. The string is name of the tag in the XML file that will be used to read this property. By convention
+	this should be the same as the name of the property.
+
+The corresponding \c .cpp file is trivial and the same for most styles:
+\dontinclude OOVisualization/src/statements/VIfStatementStyle.cpp
+\skip include
+\until } /* namespace OOVisualization
+
+And here is the corresponding default XML file \c (OOVisualization/styles/item/VIfStatement/default). Things here can
+get a bit clunky, but the important thing to see is that each top-level tag corresponds to a property of the style
+or to a property of a base class. Simple properties like \c contentWidthSwitchTreshold are represented by values.
+Properties which are themselves styles, follow an XML structure as dictated in their style class. To learn
+more about how styles work see the documentation of the Visualization namespace.
+
+\include OOVisualization/styles/item/VIfStatement/default
+
+*/

@@ -53,14 +53,12 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	auto vif = dynamic_cast<OOVisualization::VIfStatement*> ( target );
 	event->ignore();
 
-	bool createDown = event->modifiers() == Qt::NoModifier &&
+	bool enter = event->modifiers() == Qt::NoModifier &&
 			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
-	bool createRight = event->modifiers() == Qt::ShiftModifier &&
-			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
-	bool switchHorizontal = event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab;
+	bool tab = event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab;
 
-	if ( ( vif->condition()->itemOrChildHasFocus() && createDown)
-			|| (vif->elseBranch()->itemOrChildHasFocus() && switchHorizontal))
+	if ( ( vif->condition()->itemOrChildHasFocus() && enter)
+			|| (vif->elseBranch()->itemOrChildHasFocus() && tab))
 	{
 		event->accept();
 		if (vif->node()->thenBranch()->size() > 0)
@@ -81,7 +79,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}
-	else if (vif->thenBranch()->itemOrChildHasFocus() && (switchHorizontal || createRight))
+	else if (vif->thenBranch()->itemOrChildHasFocus() && tab )
 	{
 		event->accept();
 

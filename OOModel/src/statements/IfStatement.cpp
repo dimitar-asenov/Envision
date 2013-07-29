@@ -51,4 +51,4 @@ QList<Model::Node*> IfStatement::findSymbols(const QRegExp& symbolExp,Model::Nod
 	return symbols;
 }
 
-}
+} /* namespace OOModel */

@@ -1,0 +1,123 @@
+/*! \page dev_tut_add_handler Creating a handler for a visualization
+
+In this tutorial we will see how to enhance a visualization with a custom handler. More specifically we will enhance the
+visualization for if statements that we developed in the \ref dev_tut_add_vis tutorial. You should be familiar with that
+tutorial before reading on. In the present tutorial we will use OOInteraction::HIfStatement as example.
+
+\section intro Introduction
+
+All visual items in Envision process events through handlers. All mouse, keyboard and application events are passed to
+the currently selected item by Qt, and the item directly forwards these events to its handler for processing. If you
+do not do anything, a newly created item type will use the default handler which is Interaction::GenericHandler. That
+handler already implements a lot of functionality related to copy and paste, selection, and others. However, sometimes
+we want to customize the interaction of our visualizations. To do this we need to create a new handler class and
+associate it with all visualizations types that it should handle events for.
+
+In this tutorial we will look at the handler for the standard if statement visualization. This handler is
+OOInteraction::HIfStatement.
+
+\section associating Associating a handler class with an item class
+To set a handler to be the default handler to be used by an item class you need to call the item class'
+\c setDefaultClassHandler() method during the plug-in's \c initialize() method. Here is how this call looks in our
+example \c (OOInteraction/src/oointeraction.cpp):
+\dontinclude OOInteraction/src/oointeraction.cpp
+\skipline OOInteraction::initialize
+\skipline {
+\skipline HIfStatement
+
+Now let's see how to write the handler.
+
+\section hif_header HIfStatement.h
+First, we'll have a look at the header file. Here is \c HIfStatement.h :
+\dontinclude OOInteraction/src/handlers/HIfStatement.h
+\skip pragma
+\until } /* namespace OOInteraction
+
+Each handler must inherit from Visualization::InteractionHandler. In practice the only handler that directly inherits
+from it is Interaction::GenericHandler. This is where a lot of common functionality is implemented. Therefore it is
+recommended that all new handlers inherit from Interaction::GenericHandler. In our case the base handler is
+OOInteraction::HStatement which is the default handler for all statement items. It implements some functionality
+regarding creating new statements in statement lists and itself inherits from Interaction::GenericHandler.
+
+Each handler is a singleton and needs a public \c instance() method that returns a pointer to the only instance. The
+constructor is protected. This make it possible to create inherited handlers.
+
+In the custom handler for if statements, we'll only customize keyboard interaction. Thus the only method that is
+overriden is \c keyPressEvent(). For a list of all possible methods that can be overriden have a look at
+Visualization::InteractionHandler.
+
+Let's look at the \c .cpp file to see what this handler does exactly.
+
+\section hif_cpp HIfStatement.cpp
+
+Here is the complete contents of the \c HIfStatement.cpp :
+\dontinclude OOInteraction/src/handlers/HIfStatement.cpp
+\skip include
+\until } /* namespace OOInteraction
+\dontinclude OOInteraction/src/handlers/HIfStatement.cpp
+
+As the rest is trivial we'll jump directly to the \c keyPressEvent() method and examine it piece by piece:
+\skipline HIfStatement::keyPressEvent
+Each handler method receives two parameters:
+	- The \e target visualization. This is the visual item that received this event. It is safe to use \c static_cast
+	to cast this directly to the item class for which this handler was registered. If you are using a handler for
+	multiple visualizations then you should use \c dynamic_cast to distinguish between the different target types.
+	- The \e event as received by Qt's Graphics View system. This contains info regarding the event (e.g. what key was
+	pressed).
+
+Since we only use the handler with OOVisualization::VIfStatement it is safe to cast it:
+\skipline auto
+
+Next, we ignore the current event:
+\skipline ignore
+By default, whenever we reimplement a handler method, Qt assumes that the event is handled. We need to mark the event
+as ignored and then we can try to process it. Only if we do some processing, will we mark it as accepted (handled).
+
+Inside the event handler we can do pretty much anything we want. We can alter the model, change properties of the
+visualization, schedule updates, move the cursor, and much more. In this particular case we want to provide some
+shortcuts for navigating between the various parts of an if statement. We distinguish between the \e Enter and
+the \e TAB keys:
+\skip enter
+\until tab
+Generally speaking the \e Enter key moves us vertically down, while the \e TAB key moves us horizontally.
+
+In the next part of the handler we indicate that we want to move to the \e then branch. Either by going down from the
+\e condition or by moving vertically from the \e else branch:
+\skip condition()
+\until tab
+
+If the right key combination is pressed, we will handle this event. Mark it as accepted:
+\skipline accept
+
+Next we need to check whether the \e then branch already exists (has items) or not:
+\skipline size()
+If there are already some items, simply switch to the first one:
+\skip target
+\until thenBranch
+otherwise create a new empty expression and focus it:
+\skip empty
+\until SetCursorEvent
+Notice how we explicitly request an update on the current item since we made a change to the model.
+
+The code for switching to the \e else branch when the \e then branch is selected is almost identical:
+\skip thenBranch
+\until setUpdateNeeded
+\until }
+\until }
+
+Finally, the last action we react on is pressing \e Backspace or \e Delete when the icon is selected, or pressing
+\e Backspace when the condition is selected:
+\skip event
+\until removeFromList
+\until }
+In both of these cases we completely remove the if statement from its enclosing list. Note that if the user presses
+backspace when editing the expression in the condition, our handler will only get notified if the cursor is at position
+0 in the expression (right before the if statement's icon). In other cases the expression's own handler will handle this
+event by modifying the expression and we won't ever know about it.
+
+Finally if the event wasn't handled here, pass it to the parent handler:
+\skipline isAccepted
+
+This is a typical reimplementation of a handler method. Look at other handlers in OOInteraction to see more examples.
+
+*/

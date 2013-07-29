@@ -28,18 +28,6 @@
 
 namespace OOVisualization {
 
-void VIfStatementStyle::load(Visualization::StyleLoader& sl)
-{
-	DeclarativeItemBaseStyle::load(sl);
+VIfStatementStyle::~VIfStatementStyle(){}
 
-	sl.load("header", header_);
-	sl.load("icon", icon_);
-	sl.load("condition", condition_);
-	sl.load("contentVertical", contentVertical_);
-	sl.load("contentHorizontal", contentHorizontal_);
-	sl.load("contentWidthSwitchTreshold", contentWidthSwitchTreshold_);
-	sl.load("thenBranch", thenBranch_);
-	sl.load("elseBranch", elseBranch_);
-}
-
-}
+} /* namespace OOVisualization */

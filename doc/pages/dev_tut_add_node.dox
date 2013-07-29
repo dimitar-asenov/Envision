@@ -1,0 +1,126 @@
+/*! \page dev_tut_add_node Adding a new node type to Envision's model
+
+In this tutorial we will see how to add a new node type in Envision. For this we will use the OOModel::IfStatement
+node as an example.
+
+\section intro Basics
+
+Imagine you had an OO language that has if statements, and support for this feature was missing in Envision. You want
+to extend Envision's OO model with a new node type representing if statements. Luckily, this is very easy to do if you
+take advantage of some convenience classes provided by Envision.
+
+To create a new node all you need to do is create a new class that inherits from Model::Node. It is possible to inherit
+directly from it, but then you'll have more work to do. The recommended approach, that we'll demonstrate below, is to
+inherit from Model::CompositeNode (either directly or indirectly). Model::CompositeNode provides a whole infrastructure
+for declaring nodes that makes it really easy to define new node types.
+
+\section if_header IfStatement.h
+
+Here is \c IfStatement.h :
+\dontinclude OOModel/src/statements/IfStatement.h
+\skip pragma
+\until } /* namespace OOModel
+\dontinclude OOModel/src/statements/IfStatement.h
+
+Let's examine it starting from the top. The first noteworthy bit is:
+
+\skipline DECLARE_TYPED_LIST
+In order to be able to put a node into a list of nodes, it is necessary to explicitly instantiate the Model::TypedList
+template. Doing this properly in a cross-platform setting can be a bit involved and we use the
+\c DECLARE_TYPED_LIST macro to help with that. You need to provide:
+	- the API macro which will expand to import/export directives in Windows
+	- the namespace
+	- the class name.
+	.
+This macro should appear in the header and needs to be complemented with the \c DEFINE_TYPED_LIST macro in the \c
+.cpp file.
+
+Next comes the class declaration:
+\skipline class
+The node declaration should use the plug-in's API macro and should inherit directly or undirectly from Node. When
+specifying the base node type you must do so through the \c Super template. This is required by the underlying
+framework. The \c Super template does two things:
+	- Define a protected type called \c Super which represents the base class. This makes
+	it possible to simply use \c Super anywhere where you need to refer to the base class. This is especially helpful
+	when the base class is a long template instantiation. Inheritance via \c Super is used very often throughout
+	Envision.
+	- Import all constructors of the provided base type, so that your new node can call them.
+
+In this case we inherit from OOModel::Statement, which itself inherits from OOModel::StatementItem, which finally
+inherits from Model::CompositeNode. Both OOModel::Statement and OOModel::StatementItem are just marker classes that
+serve only as a common base, grouping other classes together. For the purposes of this tutorial they are not
+interesting. We really only care about the fact that OOModel::IfStatement ultimately inherits from Model::CompositeNode.
+
+Next we notice the first line of the class declaration:
+\skipline COMPOSITENODE_DECLARE
+This macro needs to appear as the very first line of the declaration of any node that inherits from
+Model::CompositeNode. There is a similar (also mandatory) macro for nodes which inherit directly from
+Node - \c NODE_DECLARE_STANDARD_METHODS. Each of these macros needs to be complemented with a couple of macros in the
+.cpp file:
+
+For \c COMPOSITENODE_DECLARE_STANDARD_METHODS:
+	- \c COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS
+	- \c COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS
+
+For \c NODE_DECLARE_STANDARD_METHODS:
+	- \c NODE_DEFINE_EMPTY_CONSTRUCTORS
+	- \c NODE_DEFINE_TYPE_REGISTRATION_METHODS
+
+Together these macros save us a ton of writing. They declare many methods for the new node type and setup
+required data structures. At some point there was an attempt to translate their functionality to templates
+but the result was more verbose and less flexible so we stuck with the macros.
+
+Next we get to the most interesting bit of the node declaration:
+\skip ATTRIBUTE
+\until setElse
+With the help of the various \c ATTRIBUTE macros you can easily define what nodes your new composite node will consist
+of. Here you see the simplest way of using the macro. You only need to specify the type of node, its name (which will
+also be the name of the getter function for this child), and the name of a setter function. Each of these macro
+declarations need to have complementing definitions in the \c .cpp file which we'll see later.
+
+Finally we see a method declaration:
+\skip findSymbols
+\until override
+This is an advanced function for the OOModel::IfStatement node. For simple nodes you do not need to define this
+function. The only reason we need it here, is because it is possible to declare a variable inside the condition of
+an if statement and we need a way to find this variable when resolving references. We won't go into details here as
+name resolution is a big topic on its own.
+
+This is it really. The essential thing for any Model::CompositeNode derivative is to declare what attribute nodes it
+consists of. The rest of the code is just boilerplate.
+
+\section if_cpp IfStatement.cpp
+
+Here is \c IfStatement.cpp :
+\dontinclude OOModel/src/statements/IfStatement.cpp
+\skip include
+\until } /* namespace OOModel
+\dontinclude OOModel/src/statements/IfStatement.cpp
+
+All of the things here are just the corresponding definition macros. The only interesting bit is:
+\skip REGISTER
+\until elseBranch
+When defining the registered nodes you need to provide the following information:
+	- The name of the class that you are defining
+	- The name of the attribute you are registering
+	- The name of the type of this attribute
+	- A boolean flag which indicates if this node should be partially loaded by default. This should practically always
+	be \c false as currently the partial loading implementation is not used.
+	- Another boolean flag which indicates whether this attribute is optional or not. If you set this to \c false, the
+	attribute is mandatory and calling the getter will always return a valid value. If you do not explicitly set the
+	attribute, a default constructed value will be used. If you set this flag to \c true, the attribute is optional and
+	calling the getter might return \c nullptr if the attribute has not been set.
+	- A final flag that indicates whether this attribute should be saved to disk or whether it is transient and should
+	only be used in memory. A value of \c true will make this attribute persistent. A value of \c false will make it
+	transient.
+
+\section allOONodes allOOModelNodes.h
+This last step is really just for convenience and is not directly related to creating a new node type.
+
+It is a good idea to provide an easy way for others to use all of the nodes you create. Typically this means creating
+a header file which simply includes all of the headers files of the nodes you create. In the case of the OOModel
+plug-in this file is called \c allOOModelNodes.h. If you are creating a new node within the OOModel plug-in
+please make sure to add its header to \c allOOModelNodes.h:
+\dontinclude OOModel/src/allOOModelNodes.h
+\skipline IfStatement
+*/

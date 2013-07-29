@@ -1,0 +1,11 @@
+/*! \page dev_tutorials Tutorials for Envision contributors
+
+In this series of tutorials we explain how to extend and customize Envision. These tutorials are meant to help
+contributors get started. Once you are more familiar with the system, we recommend looking at the code of existing
+classes for more advanced usage.
+
+- \subpage dev_tut_add_node
+- \subpage dev_tut_add_vis
+- \subpage dev_tut_add_handler
+
+*/

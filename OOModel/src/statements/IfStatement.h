@@ -48,4 +48,4 @@ class OOMODEL_API IfStatement: public Super<Statement>
 				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
-}
+} /* namespace OOModel */

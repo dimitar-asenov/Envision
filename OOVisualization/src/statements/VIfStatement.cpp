@@ -55,6 +55,11 @@ void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 	Super::updateGeometry(availableWidth, availableHeight);
 }
 
+int VIfStatement::determineForm()
+{
+	return horizontal_ ? 0 : 1;
+}
+
 void VIfStatement::initializeForms()
 {
 	auto header = (new GridLayoutFormElement())
@@ -99,10 +104,4 @@ void VIfStatement::initializeForms()
 			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
 }
 
-int VIfStatement::determineForm()
-{
-	if(horizontal_) return 0;
-	else return 1;
-}
-
-}
+} /* namespace OOVisualization */

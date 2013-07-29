@@ -22,14 +22,17 @@
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
+	
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>
+	
 	<icon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/if.svg</filename>
 		<width>22</width>
 		<height>22</height>
 	</icon>
+	
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -53,6 +56,7 @@
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 		<spaceBetweenElements>1</spaceBetweenElements>
 	</contentHorizontal>
+	
 	<contentVertical prototypes="layout/SequentialLayout/default">
 		<alignment>1</alignment>
 		<direction>2</direction>
@@ -60,6 +64,7 @@
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 		<spaceBetweenElements>1</spaceBetweenElements>
 	</contentVertical>
+	
 	<contentWidthSwitchTreshold>800</contentWidthSwitchTreshold>
 	
 	<thenBranch prototypes="item/VStatementItemList/default">
@@ -79,6 +84,7 @@
 			<cornerType>1</cornerType>
 		</shape>
 	</thenBranch>
+	
 	<elseBranch prototypes="item/VStatementItemList/default">
 		<shape prototypes="shape/Box/default">
 			Box

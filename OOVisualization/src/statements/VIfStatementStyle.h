@@ -37,44 +37,19 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VIfStatementStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle header_;
-		Visualization::StaticStyle icon_;
-		Visualization::SequentialLayoutStyle condition_;
-
-		Visualization::SequentialLayoutStyle contentVertical_;
-		Visualization::SequentialLayoutStyle contentHorizontal_;
-		int contentWidthSwitchTreshold_;
-
-		Visualization::VListStyle thenBranch_;
-		Visualization::VListStyle elseBranch_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VIfStatementStyle() override;
 
-		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::SequentialLayoutStyle& condition() const;
+		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::SequentialLayoutStyle> condition{this, "condition"};
 
-		const Visualization::SequentialLayoutStyle& contentVertical() const;
-		const Visualization::SequentialLayoutStyle& contentHorizontal() const;
-		int contentWidthSwitchTreshold() const;
+		Property<Visualization::SequentialLayoutStyle> contentVertical{this, "contentVertical"};
+		Property<Visualization::SequentialLayoutStyle> contentHorizontal{this, "contentHorizontal"};
+		Property<int> contentWidthSwitchTreshold{this, "contentWidthSwitchTreshold"};
 
-		const Visualization::VListStyle& thenBranch() const;
-		const Visualization::VListStyle& elseBranch() const;
+		Property<Visualization::VListStyle> thenBranch{this, "thenBranch"};
+		Property<Visualization::VListStyle> elseBranch{this, "elseBranch"};
 };
 
-inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::header() const { return header_; }
-inline const Visualization::StaticStyle& VIfStatementStyle::icon() const { return icon_; }
-inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::condition() const { return condition_; }
-
-inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::contentVertical() const
-		{ return contentVertical_; }
-inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::contentHorizontal() const
-		{ return contentHorizontal_; }
-inline int VIfStatementStyle::contentWidthSwitchTreshold() const { return contentWidthSwitchTreshold_; }
-
-inline const Visualization::VListStyle& VIfStatementStyle::thenBranch() const { return thenBranch_; }
-inline const Visualization::VListStyle& VIfStatementStyle::elseBranch() const { return elseBranch_; }
-
-}
+} /* namespace OOVisualization */

@@ -80,4 +80,4 @@ inline VStatementItemList* VIfStatement::thenBranch() const { return thenBranch_
 inline VStatementItemList* VIfStatement::elseBranch() const { return elseBranch_; }
 inline Visualization::Static* VIfStatement::icon() const {return icon_;}
 
-}
+} /* namespace OOVisualization */
