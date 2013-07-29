@@ -125,16 +125,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab3f2ec84e3de262489e0011bfa819ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a293c98945681b04b0b16fccde83ddbe1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1c">ConstructKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a293c98945681b04b0b16fccde83ddbe1">constructKind</a> () const </td></tr>
 <tr class="separator:a293c98945681b04b0b16fccde83ddbe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4094b0470110f96bb51ebd6aae14a851"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a4094b0470110f96bb51ebd6aae14a851">definesSymbol</a> () const </td></tr>
-<tr class="separator:a4094b0470110f96bb51ebd6aae14a851"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0fcf823b72d589d7d4ebab29389e7da"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#ac0fcf823b72d589d7d4ebab29389e7da">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override</td></tr>
-<tr class="separator:ac0fcf823b72d589d7d4ebab29389e7da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e3cabc913e5137315266efc91dedc70"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a2e3cabc913e5137315266efc91dedc70">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:a2e3cabc913e5137315266efc91dedc70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addfbe5e8ea24202bd3f2211c5e64ea7d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#addfbe5e8ea24202bd3f2211c5e64ea7d">isGeneric</a> ()</td></tr>
 <tr class="separator:addfbe5e8ea24202bd3f2211c5e64ea7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8f97f4f97864f5110d0dadda3b1d13b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#aa8f97f4f97864f5110d0dadda3b1d13b">setConstructKind</a> (const <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1c">ConstructKind</a> &amp;kind)</td></tr>
 <tr class="separator:aa8f97f4f97864f5110d0dadda3b1d13b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08abacf22e6a56c025cc4e1dc85241f1"><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a08abacf22e6a56c025cc4e1dc85241f1">symbolName</a> () const </td></tr>
-<tr class="separator:a08abacf22e6a56c025cc4e1dc85241f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a913ffc4bd0ad9bcc1e7c4066e4c52380"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a913ffc4bd0ad9bcc1e7c4066e4c52380">symbolType</a> () const override</td></tr>
+<tr class="separator:a913ffc4bd0ad9bcc1e7c4066e4c52380"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -268,30 +266,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4094b0470110f96bb51ebd6aae14a851"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool OOModel::Class::definesSymbol </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac0fcf823b72d589d7d4ebab29389e7da"></a>
+<a class="anchor" id="a2e3cabc913e5137315266efc91dedc70"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -313,8 +288,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FindSymbolMode&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype">FindSymbolDirection&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -376,7 +357,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a08abacf22e6a56c025cc4e1dc85241f1"></a>
+<a class="anchor" id="a913ffc4bd0ad9bcc1e7c4066e4c52380"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -384,7 +365,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QString &amp; OOModel::Class::symbolName </td>
+          <td class="memname">Class::SymbolTypes OOModel::Class::symbolType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -392,7 +373,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

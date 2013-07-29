@@ -105,8 +105,8 @@ Inheritance diagram for OOModel::IfStatement:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a930204df9b73ac90dd4937fc3bd60134"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1IfStatement.html#a930204df9b73ac90dd4937fc3bd60134">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override</td></tr>
-<tr class="separator:a930204df9b73ac90dd4937fc3bd60134"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5733617107af3fe82426a7b84b169aaa"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1IfStatement.html#a5733617107af3fe82426a7b84b169aaa">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:a5733617107af3fe82426a7b84b169aaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -115,7 +115,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a930204df9b73ac90dd4937fc3bd60134"></a>
+<a class="anchor" id="a5733617107af3fe82426a7b84b169aaa"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -137,8 +137,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FindSymbolMode&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype">FindSymbolDirection&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

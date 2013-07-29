@@ -123,8 +123,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a425f9976969d5ce25c93b0c9f2b1b7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c4266824c6f7ec5e65a56f8877ec6f7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a7c4266824c6f7ec5e65a56f8877ec6f7">Method</a> (const QString &amp;name, Modifier::Modifiers mod, <a class="el" href="classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033ee">MethodKind</a> kind)</td></tr>
 <tr class="separator:a7c4266824c6f7ec5e65a56f8877ec6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaec5dc54868b99126a563ae9d559f4c2"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#aaec5dc54868b99126a563ae9d559f4c2">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override</td></tr>
-<tr class="separator:aaec5dc54868b99126a563ae9d559f4c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f403ac4367ed47902a912a52128f241"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a7f403ac4367ed47902a912a52128f241">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:a7f403ac4367ed47902a912a52128f241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38b2951e191c44541988d47ce0d13f56"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a38b2951e191c44541988d47ce0d13f56">fullyQualifiedName</a> () const </td></tr>
 <tr class="separator:a38b2951e191c44541988d47ce0d13f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad53262e5057deab0cea8a8321758816b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#ad53262e5057deab0cea8a8321758816b">isGeneric</a> ()</td></tr>
@@ -133,6 +133,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3b115a6ba46355668391b168eac61f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36de45ad4d97d9cfbb9f31b1df3ad6f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a36de45ad4d97d9cfbb9f31b1df3ad6f9">setMethodKind</a> (const <a class="el" href="classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033ee">MethodKind</a> &amp;kind)</td></tr>
 <tr class="separator:a36de45ad4d97d9cfbb9f31b1df3ad6f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5486446126e136fce1ebfd49d45d79a"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#aa5486446126e136fce1ebfd49d45d79a">symbolType</a> () const override</td></tr>
+<tr class="separator:aa5486446126e136fce1ebfd49d45d79a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -265,7 +267,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aaec5dc54868b99126a563ae9d559f4c2"></a>
+<a class="anchor" id="a7f403ac4367ed47902a912a52128f241"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -287,8 +289,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FindSymbolMode&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype">FindSymbolDirection&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -382,6 +390,29 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa5486446126e136fce1ebfd49d45d79a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Method::SymbolTypes OOModel::Method::symbolType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

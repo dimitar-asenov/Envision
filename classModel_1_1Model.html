@@ -164,9 +164,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a92daf1b73d281f3a33967aa2e3d61add"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a92daf1b73d281f3a33967aa2e3d61add">endExclusiveRead</a> ()</td></tr>
 <tr class="memdesc:a92daf1b73d281f3a33967aa2e3d61add"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends an exclusive read.  <a href="#a92daf1b73d281f3a33967aa2e3d61add">More...</a><br/></td></tr>
 <tr class="separator:a92daf1b73d281f3a33967aa2e3d61add"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a995413407a52a23bea27ec69266e8074"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a995413407a52a23bea27ec69266e8074">endModification</a> ()</td></tr>
-<tr class="memdesc:a995413407a52a23bea27ec69266e8074"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends a modification session.  <a href="#a995413407a52a23bea27ec69266e8074">More...</a><br/></td></tr>
-<tr class="separator:a995413407a52a23bea27ec69266e8074"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5429b5a5a213ddb4436223bf7c7bf67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#aa5429b5a5a213ddb4436223bf7c7bf67">endModification</a> (bool <a class="el" href="classModel_1_1Model.html#ac073ff3d27e22425881e976425d6709d">tryResolvingReferences</a>=true)</td></tr>
+<tr class="memdesc:aa5429b5a5a213ddb4436223bf7c7bf67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends a modification session.  <a href="#aa5429b5a5a213ddb4436223bf7c7bf67">More...</a><br/></td></tr>
+<tr class="separator:aa5429b5a5a213ddb4436223bf7c7bf67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52415153241ce9e37c4e8e8952e7fe00"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a52415153241ce9e37c4e8e8952e7fe00">isBeingModified</a> () const </td></tr>
 <tr class="separator:a52415153241ce9e37c4e8e8952e7fe00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad904287736156584888539103b8d89de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#ad904287736156584888539103b8d89de">isOwnedByUndoStack</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> *node, const <a class="el" href="classModel_1_1NodeOwningCommand.html">NodeOwningCommand</a> *excludeCommand) const </td></tr>
@@ -200,6 +200,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad87743bd99055166e9873b1719bba50a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#ad87743bd99055166e9873b1719bba50a">save</a> (<a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a> *<a class="el" href="classModel_1_1Model.html#a3681a66d0ee5731c1f5e9f7135c2bfbb">store</a>=nullptr)</td></tr>
 <tr class="memdesc:ad87743bd99055166e9873b1719bba50a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the model tree in persistent store of the model.  <a href="#ad87743bd99055166e9873b1719bba50a">More...</a><br/></td></tr>
 <tr class="separator:ad87743bd99055166e9873b1719bba50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a428ead7007ba90315b7cd364f0c7aa20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a428ead7007ba90315b7cd364f0c7aa20">scanUnresolvedReferences</a> ()</td></tr>
+<tr class="memdesc:a428ead7007ba90315b7cd364f0c7aa20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scans the root node for unresolved references and records them in unresolvedReferences_.  <a href="#a428ead7007ba90315b7cd364f0c7aa20">More...</a><br/></td></tr>
+<tr class="separator:a428ead7007ba90315b7cd364f0c7aa20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e838cb13a9afc693fe69dfa409c336c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a7e838cb13a9afc693fe69dfa409c336c">setName</a> (const QString &amp;<a class="el" href="classModel_1_1Model.html#ac3a70dce69b4d62cd902158aa7be56d0">name</a>)</td></tr>
 <tr class="memdesc:a7e838cb13a9afc693fe69dfa409c336c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the name of the model.  <a href="#a7e838cb13a9afc693fe69dfa409c336c">More...</a><br/></td></tr>
 <tr class="separator:a7e838cb13a9afc693fe69dfa409c336c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -624,14 +627,15 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a995413407a52a23bea27ec69266e8074"></a>
+<a class="anchor" id="aa5429b5a5a213ddb4436223bf7c7bf67"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void Model::Model::endModification </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>tryResolvingReferences</em> = <code>true</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -639,7 +643,8 @@ Private Attributes</h2></td></tr>
 
 <p>Ends a modification session. </p>
 <p>This method must always be called after a call Model::beginModification(). It concludes the modification session by releasing all acquired locks and emits the Mode::nodesModified signal to notify listeners about the changes.</p>
-<p>This method must be called before the any other thread can gain exclusive access to the tree model. </p>
+<p>This method must be called before the any other thread can gain exclusive access to the tree model.</p>
+<p>If <em>tryResolvingReferences</em> is true, then an attempt will be made to resolve all unresolved references. </p>
 
 </div>
 </div>
@@ -1164,6 +1169,24 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a428ead7007ba90315b7cd364f0c7aa20"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::Model::scanUnresolvedReferences </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Scans the root node for unresolved references and records them in unresolvedReferences_. </p>
+<p>The old contents of unresolvedReferences_ is lost when this method is called. </p>
 
 </div>
 </div>

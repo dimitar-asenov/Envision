@@ -110,8 +110,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a25750d841f04583faffb41ec2bb652af"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classOOModel_1_1Expression.html">Expression</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a25750d841f04583faffb41ec2bb652af">allSubOperands</a> (bool detachOperands)</td></tr>
 <tr class="memdesc:a25750d841f04583faffb41ec2bb652af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns in a single list all expressions of this and nested <a class="el" href="classOOModel_1_1CommaExpression.html">CommaExpression</a> operators.  <a href="#a25750d841f04583faffb41ec2bb652af">More...</a><br/></td></tr>
 <tr class="separator:a25750d841f04583faffb41ec2bb652af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2bd78e9320340faa0003ba65ffc876f"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#ab2bd78e9320340faa0003ba65ffc876f">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override</td></tr>
-<tr class="separator:ab2bd78e9320340faa0003ba65ffc876f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a392d0c595bbf37116f3858def0f465cb"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a392d0c595bbf37116f3858def0f465cb">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:a392d0c595bbf37116f3858def0f465cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abba865c9d896fa246399d7e019a95ce1"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classOOModel_1_1Type.html">Type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#abba865c9d896fa246399d7e019a95ce1">type</a> ()</td></tr>
 <tr class="separator:abba865c9d896fa246399d7e019a95ce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -168,7 +168,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab2bd78e9320340faa0003ba65ffc876f"></a>
+<a class="anchor" id="a392d0c595bbf37116f3858def0f465cb"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -190,8 +190,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FindSymbolMode&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype">FindSymbolDirection&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

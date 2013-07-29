@@ -107,12 +107,12 @@ Inheritance diagram for OOModel::NameImport:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad38d3e06dd0a2d7475bcacba15a4f7cb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1NameImport.html#ad38d3e06dd0a2d7475bcacba15a4f7cb">NameImport</a> (<a class="el" href="classOOModel_1_1ReferenceExpression.html">ReferenceExpression</a> *importedName)</td></tr>
 <tr class="separator:ad38d3e06dd0a2d7475bcacba15a4f7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f9f5e69ff6f799d3e82d3568e2cdb3f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1NameImport.html#a6f9f5e69ff6f799d3e82d3568e2cdb3f">definesSymbol</a> () const override</td></tr>
-<tr class="separator:a6f9f5e69ff6f799d3e82d3568e2cdb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2b74d1ff957b18d94f0941638960503"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1NameImport.html#ab2b74d1ff957b18d94f0941638960503">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override</td></tr>
-<tr class="separator:ab2b74d1ff957b18d94f0941638960503"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f7ad20eaa14ca51df20ad17a4dc108b"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1NameImport.html#a8f7ad20eaa14ca51df20ad17a4dc108b">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:a8f7ad20eaa14ca51df20ad17a4dc108b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4e766fd0eb878e94be6a5c294a2c807"><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1NameImport.html#ae4e766fd0eb878e94be6a5c294a2c807">symbolName</a> () const override</td></tr>
 <tr class="separator:ae4e766fd0eb878e94be6a5c294a2c807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a903352fd4f827dafad407196590a4189"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1NameImport.html#a903352fd4f827dafad407196590a4189">symbolType</a> () const override</td></tr>
+<tr class="separator:a903352fd4f827dafad407196590a4189"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -138,30 +138,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6f9f5e69ff6f799d3e82d3568e2cdb3f"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool OOModel::NameImport::definesSymbol </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab2b74d1ff957b18d94f0941638960503"></a>
+<a class="anchor" id="a8f7ad20eaa14ca51df20ad17a4dc108b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -183,8 +160,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FindSymbolMode&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype">FindSymbolDirection&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -216,6 +199,29 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const QString &amp; OOModel::NameImport::symbolName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a903352fd4f827dafad407196590a4189"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">NameImport::SymbolTypes OOModel::NameImport::symbolType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>

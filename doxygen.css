@@ -260,8 +260,8 @@ body {
 
 div.contents {
 	margin-top: 10px;
-	margin-left: 12px;
-	margin-right: 8px;
+	margin: 0 auto;
+	width: 1045px; /* This is like the Qt doc. */
 }
 
 td.indexkey {
@@ -902,11 +902,12 @@ div.ingroups a
 
 div.header
 {
-        background-image:url('nav_h.png');
-        background-repeat:repeat-x;
+	background-image:url('nav_h.png');
+	background-repeat:repeat-x;
 	background-color: #F9FAFC;
-	margin:  0px;
+	margin:  0 auto;
 	border-bottom: 1px solid #C4CFE5;
+	text-align: center;
 }
 
 div.headertitle

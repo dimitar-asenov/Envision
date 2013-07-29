@@ -104,16 +104,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:af2ff52f8a834ec055dca6867ba794208"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> { <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208a442bce153404d787512d1392ba9000fa">SEARCH_UP</a>, 
-<a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208ad32cc9e783e89ba6ffb83011a55abe97">SEARCH_DOWN</a>
+<tr class="memitem:a0e2e9bad8ff0ccde3c945aa359f81a79"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> { <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79a442bce153404d787512d1392ba9000fa">SEARCH_UP</a>, 
+<a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97">SEARCH_DOWN</a>
  }</td></tr>
-<tr class="separator:af2ff52f8a834ec055dca6867ba794208"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a0e2e9bad8ff0ccde3c945aa359f81a79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eedfb121970934710f1f3c67c26f361"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classModel_1_1Node.html">Node</a> *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">NodeConstructor</a> )(<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>)</td></tr>
 <tr class="memdesc:a9eedfb121970934710f1f3c67c26f361"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function pointer type is used to register a constructor for nodes.  <a href="#a9eedfb121970934710f1f3c67c26f361">More...</a><br/></td></tr>
 <tr class="separator:a9eedfb121970934710f1f3c67c26f361"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36d456dafe5835b3f28142507f90cd89"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classModel_1_1Node.html">Node</a> *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a36d456dafe5835b3f28142507f90cd89">NodePersistenceConstructor</a> )(<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>, <a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a> &amp;store, bool partialLoadHint)</td></tr>
 <tr class="memdesc:a36d456dafe5835b3f28142507f90cd89"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function pointer type is used to register the constructor for nodes that are being loaded from a persistent store.  <a href="#a36d456dafe5835b3f28142507f90cd89">More...</a><br/></td></tr>
 <tr class="separator:a36d456dafe5835b3f28142507f90cd89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade9aeda176a34521dc812ecf7a3d4626"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626">SymbolType</a> { <a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a64654d684ce9e1b176602e431e8f4ede">UNSPECIFIED</a> = 0x0, 
+<a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a02e84a1c4f978e55c8b4bd8881046a3c">METHOD</a> = 0x1, 
+<a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a31efe4c19e97f4901216833fcfa1624a">CONTAINER</a> = 0x2, 
+<a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626acb4740282468669ce6845a9ef6fbb8e7">VARIABLE</a> = 0x4, 
+<a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a8ecd03bd1aae995d469430e3d033c5ba">ANY_SYMBOL</a> = 0xffffffff
+ }</td></tr>
+<tr class="separator:ade9aeda176a34521dc812ecf7a3d4626"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -143,12 +150,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9aad10e0ec7b9359f325db5a3c4fbf90">execute</a> (<a class="el" href="classModel_1_1UndoCommand.html">UndoCommand</a> *command)</td></tr>
 <tr class="memdesc:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the specified command and pushes it on the undo stack.  <a href="#a9aad10e0ec7b9359f325db5a3c4fbf90">More...</a><br/></td></tr>
 <tr class="separator:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79f332d52ca064cf24683b6efe319249"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a79f332d52ca064cf24683b6efe319249">findSymbols</a> (const QRegExp &amp;symbolExp, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes)</td></tr>
-<tr class="memdesc:a79f332d52ca064cf24683b6efe319249"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all nodes which define a symbol with a name matching <em>symbolExp</em> in the scope of this node.  <a href="#a79f332d52ca064cf24683b6efe319249">More...</a><br/></td></tr>
-<tr class="separator:a79f332d52ca064cf24683b6efe319249"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae14f15bda5e64f3f6e8fe62b6dde75bb"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ae14f15bda5e64f3f6e8fe62b6dde75bb">findSymbols</a> (const QString &amp;symbol, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes)</td></tr>
-<tr class="memdesc:ae14f15bda5e64f3f6e8fe62b6dde75bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. This is equivalent to:  <a href="#ae14f15bda5e64f3f6e8fe62b6dde75bb">More...</a><br/></td></tr>
-<tr class="separator:ae14f15bda5e64f3f6e8fe62b6dde75bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72684c52844d88ed3239c675877b4296"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a72684c52844d88ed3239c675877b4296">findSymbols</a> (const QRegExp &amp;symbolExp, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> direction, SymbolTypes symbolTypes, bool exhaustAllScopes)</td></tr>
+<tr class="memdesc:a72684c52844d88ed3239c675877b4296"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all nodes which define a symbol with a name matching <em>symbolExp</em> in the scope of this node.  <a href="#a72684c52844d88ed3239c675877b4296">More...</a><br/></td></tr>
+<tr class="separator:a72684c52844d88ed3239c675877b4296"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fc9e242e2585f272891d65cea23e60c"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a4fc9e242e2585f272891d65cea23e60c">findSymbols</a> (const QString &amp;symbol, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> direction, SymbolTypes symbolTypes, bool exhaustAllScopes)</td></tr>
+<tr class="memdesc:a4fc9e242e2585f272891d65cea23e60c"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. This is equivalent to:  <a href="#a4fc9e242e2585f272891d65cea23e60c">More...</a><br/></td></tr>
+<tr class="separator:a4fc9e242e2585f272891d65cea23e60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a410cafa4e196e8f572d6f24992bfc914"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a410cafa4e196e8f572d6f24992bfc914">incrementRevision</a> ()</td></tr>
 <tr class="memdesc:a410cafa4e196e8f572d6f24992bfc914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increments the revision of this node by 1.  <a href="#a410cafa4e196e8f572d6f24992bfc914">More...</a><br/></td></tr>
 <tr class="separator:a410cafa4e196e8f572d6f24992bfc914"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,9 +204,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0662a376982b4cce855e731a0d8134a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0662a376982b4cce855e731a0d8134a8">setParent</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>)</td></tr>
 <tr class="memdesc:a0662a376982b4cce855e731a0d8134a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>.  <a href="#a0662a376982b4cce855e731a0d8134a8">More...</a><br/></td></tr>
 <tr class="separator:a0662a376982b4cce855e731a0d8134a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0dbb7dac443ec6690bc302b4595e96e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ad0dbb7dac443ec6690bc302b4595e96e">symbolMatches</a> (const QRegExp &amp;symbolExp, SymbolTypes symbolTypes)</td></tr>
+<tr class="memdesc:ad0dbb7dac443ec6690bc302b4595e96e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol that has a name matching <em>symbolExp</em> and types common with <em>symbolTypes</em>.  <a href="#ad0dbb7dac443ec6690bc302b4595e96e">More...</a><br/></td></tr>
+<tr class="separator:ad0dbb7dac443ec6690bc302b4595e96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a601e21a7a3a85e56a35c8be4a521b756"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a601e21a7a3a85e56a35c8be4a521b756">symbolMatches</a> (const QString &amp;<a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36">symbolName</a>, SymbolTypes symbolTypes)</td></tr>
+<tr class="memdesc:a601e21a7a3a85e56a35c8be4a521b756"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Returns true if this node defines a symbol that has a name equal to <em>symbolName</em> and types common with <em>symbolTypes</em>.  <a href="#a601e21a7a3a85e56a35c8be4a521b756">More...</a><br/></td></tr>
+<tr class="separator:a601e21a7a3a85e56a35c8be4a521b756"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0238f80b3ad5960919e56e959fb8b36"><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36">symbolName</a> () const </td></tr>
 <tr class="memdesc:ac0238f80b3ad5960919e56e959fb8b36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the symbol defined by this node.  <a href="#ac0238f80b3ad5960919e56e959fb8b36">More...</a><br/></td></tr>
 <tr class="separator:ac0238f80b3ad5960919e56e959fb8b36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e7c22e6f01f3728581705da5298af16"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a8e7c22e6f01f3728581705da5298af16">symbolType</a> () const </td></tr>
+<tr class="memdesc:a8e7c22e6f01f3728581705da5298af16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type of the symbol defined by this node.  <a href="#a8e7c22e6f01f3728581705da5298af16">More...</a><br/></td></tr>
+<tr class="separator:a8e7c22e6f01f3728581705da5298af16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -301,23 +317,52 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
-<a class="anchor" id="af2ff52f8a834ec055dca6867ba794208"></a>
+<a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">Model::Node::FindSymbolMode</a></td>
+          <td class="memname">enum <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">Model::Node::FindSymbolDirection</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="af2ff52f8a834ec055dca6867ba794208a442bce153404d787512d1392ba9000fa"></a>SEARCH_UP</em>&nbsp;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79a442bce153404d787512d1392ba9000fa"></a>SEARCH_UP</em>&nbsp;</td><td class="fielddoc">
 <p>Looks for symbols within the specified scope and enclosing scopes. </p>
 <p>Depending on the source, symbols in the current scope which come after the source will not be considered. This is the case e.g. with searches for local variable declarations in a method: only variables before the source node should be considered. </p>
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="af2ff52f8a834ec055dca6867ba794208ad32cc9e783e89ba6ffb83011a55abe97"></a>SEARCH_DOWN</em>&nbsp;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97"></a>SEARCH_DOWN</em>&nbsp;</td><td class="fielddoc">
 <p>Looks for symbols inside the specified scope or subscopes. </p>
 <p>This is used for symbols that are requested in a specific context (typically after a '.') e.g. "list.sort()" </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="ade9aeda176a34521dc812ecf7a3d4626"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626">Model::Node::SymbolType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ade9aeda176a34521dc812ecf7a3d4626a64654d684ce9e1b176602e431e8f4ede"></a>UNSPECIFIED</em>&nbsp;</td><td class="fielddoc">
+<p>The default type of a node. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade9aeda176a34521dc812ecf7a3d4626a02e84a1c4f978e55c8b4bd8881046a3c"></a>METHOD</em>&nbsp;</td><td class="fielddoc">
+<p>Used for nodes which define methods. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade9aeda176a34521dc812ecf7a3d4626a31efe4c19e97f4901216833fcfa1624a"></a>CONTAINER</em>&nbsp;</td><td class="fielddoc">
+<p>Used for nodes which contain other symbol defining nodes, accessible by '. </p>
+<p>' . </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade9aeda176a34521dc812ecf7a3d4626acb4740282468669ce6845a9ef6fbb8e7"></a>VARIABLE</em>&nbsp;</td><td class="fielddoc">
+<p>Used for global, local variables, arguments and fields. </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ade9aeda176a34521dc812ecf7a3d4626a8ecd03bd1aae995d469430e3d033c5ba"></a>ANY_SYMBOL</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -586,7 +631,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true if this node defines a symbol and false otherwise. </p>
-<p>The default implementaion returns false. Reimplement this method and <a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36" title="Returns the name of the symbol defined by this node.">symbolName()</a> in derived classes that define symbols. </p>
+<p>The default implementaion returns false. Reimplement this method, <a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36" title="Returns the name of the symbol defined by this node.">symbolName()</a>, and <a class="el" href="classModel_1_1Node.html#a8e7c22e6f01f3728581705da5298af16" title="Returns the type of the symbol defined by this node.">symbolType()</a> in derived classes that define symbols. </p>
 
 </div>
 </div>
@@ -604,7 +649,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Ends a modification session. </p>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classModel_1_1Model.html#a995413407a52a23bea27ec69266e8074" title="Ends a modification session.">Model::endModification()</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classModel_1_1Model.html#aa5429b5a5a213ddb4436223bf7c7bf67" title="Ends a modification session.">Model::endModification()</a> </dd></dl>
 
 </div>
 </div>
@@ -628,7 +673,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a79f332d52ca064cf24683b6efe319249"></a>
+<a class="anchor" id="a72684c52844d88ed3239c675877b4296"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -650,8 +695,14 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a>&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -674,14 +725,15 @@ Static Private Attributes</h2></td></tr>
 
 <p>Returns a list of all nodes which define a symbol with a name matching <em>symbolExp</em> in the scope of this node. </p>
 <p>The <em>source</em> <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> specifies what node should be used as a reference when determining what symbols are visible.</p>
-<p>The <em>mode</em> specifies what search to perform.</p>
+<p>The <em>direction</em> specifies what search to perform.</p>
+<p>The <em>symbolTypes</em> specifies what symbol types should be returned. If a symbol matches any of the requested types it will be returned.</p>
 <p>If <em>exhaustAllScopes</em> is false, the search will halt as soon as symbols are found within a scope. This is useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope. If <em>exhaustAllScopes</em> is true, the search will explore all scopes in corresponding to the provided mode. This is useful when <em>symbolExp</em> can match multiple symbols with different names (for example during auto completion list build up).</p>
 <p>The default implementation returns a list with only the current node in it, in case the node defines the requested symbol. Otherwise if <em>mode</em> is FindSymbolMode::SEARCH_UP, the implementation of the parent node is called.</p>
 <p>Reimplement this method in derived classes to specify fine grained behavior and operation for search modes other than FindSymbolMode::SEARCH_UP </p>
 
 </div>
 </div>
-<a class="anchor" id="ae14f15bda5e64f3f6e8fe62b6dde75bb"></a>
+<a class="anchor" id="a4fc9e242e2585f272891d65cea23e60c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -703,8 +755,14 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a>&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -726,7 +784,8 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. This is equivalent to: </p>
-<div class="fragment"><div class="line"><a class="code" href="classModel_1_1Node.html#a79f332d52ca064cf24683b6efe319249" title="Returns a list of all nodes which define a symbol with a name matching symbolExp in the scope of this...">findSymbols</a>(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, mode)</div>
+<div class="fragment"><div class="line"><a class="code" href="classModel_1_1Node.html#a72684c52844d88ed3239c675877b4296" title="Returns a list of all nodes which define a symbol with a name matching symbolExp in the scope of this...">findSymbols</a>(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, direction, symbolTypes,</div>
+<div class="line">   exhaustAllScopes)</div>
 </div><!-- fragment --> 
 </div>
 </div>
@@ -1155,6 +1214,78 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad0dbb7dac443ec6690bc302b4595e96e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Model::Node::symbolMatches </td>
+          <td>(</td>
+          <td class="paramtype">const QRegExp &amp;&#160;</td>
+          <td class="paramname"><em>symbolExp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if this node defines a symbol that has a name matching <em>symbolExp</em> and types common with <em>symbolTypes</em>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a601e21a7a3a85e56a35c8be4a521b756"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Model::Node::symbolMatches </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>symbolName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Returns true if this node defines a symbol that has a name equal to <em>symbolName</em> and types common with <em>symbolTypes</em>. </p>
+
+</div>
+</div>
 <a class="anchor" id="ac0238f80b3ad5960919e56e959fb8b36"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1177,7 +1308,33 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns the name of the symbol defined by this node. </p>
-<p>The default implementaion returns a null QString value. Reimplement this method and <a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329" title="Returns true if this node defines a symbol and false otherwise.">definesSymbol()</a> in derived classes that define symbols. </p>
+<p>The default implementaion returns a null QString value. Reimplement this method, <a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329" title="Returns true if this node defines a symbol and false otherwise.">definesSymbol()</a>, and <a class="el" href="classModel_1_1Node.html#a8e7c22e6f01f3728581705da5298af16" title="Returns the type of the symbol defined by this node.">symbolType()</a> in derived classes that define symbols. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8e7c22e6f01f3728581705da5298af16"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Node::SymbolTypes Model::Node::symbolType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the type of the symbol defined by this node. </p>
+<p>The default implementaion returns UNSPECIFIED. Reimplement this method, <a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36" title="Returns the name of the symbol defined by this node.">symbolName()</a>, and <a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329" title="Returns true if this node defines a symbol and false otherwise.">definesSymbol()</a> in derived classes that define symbols. </p>
 
 </div>
 </div>

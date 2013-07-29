@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classOOModel_1_1FormalTypeArgument-members.html">List of all members</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -104,18 +105,24 @@ Inheritance diagram for OOModel::FormalTypeArgument:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a73fa7ad9bb5e7a9fef8a5edc0101c289"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1FormalTypeArgument.html#a73fa7ad9bb5e7a9fef8a5edc0101c289">FormalTypeArgument</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *subtype=nullptr, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *supertype=nullptr)</td></tr>
+<tr class="separator:a73fa7ad9bb5e7a9fef8a5edc0101c289"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:ac09cfe34b2fd012a3a52dbdc598e8f8c"><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1FormalTypeArgument.html#ac09cfe34b2fd012a3a52dbdc598e8f8c">symbolName</a> () const </td></tr>
-<tr class="separator:ac09cfe34b2fd012a3a52dbdc598e8f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610275abe052004b0c13cfbe17dd88b5"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1FormalTypeArgument.html#a610275abe052004b0c13cfbe17dd88b5">symbolType</a> () const override</td></tr>
+<tr class="separator:a610275abe052004b0c13cfbe17dd88b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:af3952aac81c86ddfbeb5ec7d0c3b6b0d"><td class="memItemLeft" align="right" valign="top">virtual <br class="typebreak"/>
+<tr class="memitem:ae62213f620b1a2ea4d080b7eb3f9e625"><td class="memItemLeft" align="right" valign="top">virtual <br class="typebreak"/>
 ATTRIBUTE_VALUE_CUSTOM_RETURN(::<a class="el" href="classModel_1_1Text.html">Model::Text</a>, <br class="typebreak"/>
 name, setName, QString, const <br class="typebreak"/>
-QString &amp;) public bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1FormalTypeArgument.html#af3952aac81c86ddfbeb5ec7d0c3b6b0d">definesSymbol</a> () const </td></tr>
-<tr class="separator:af3952aac81c86ddfbeb5ec7d0c3b6b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+QString &amp;) public const <br class="typebreak"/>
+QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1FormalTypeArgument.html#ae62213f620b1a2ea4d080b7eb3f9e625">symbolName</a> () const override</td></tr>
+<tr class="separator:ae62213f620b1a2ea4d080b7eb3f9e625"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -123,8 +130,41 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a73fa7ad9bb5e7a9fef8a5edc0101c289"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">OOModel::FormalTypeArgument::FormalTypeArgument </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td>
+          <td class="paramname"><em>subtype</em> = <code>nullptr</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td>
+          <td class="paramname"><em>supertype</em> = <code>nullptr</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ac09cfe34b2fd012a3a52dbdc598e8f8c"></a>
+<a class="anchor" id="a610275abe052004b0c13cfbe17dd88b5"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -132,7 +172,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QString &amp; OOModel::FormalTypeArgument::symbolName </td>
+          <td class="memname">FormalTypeArgument::SymbolTypes OOModel::FormalTypeArgument::symbolType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -140,7 +180,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -148,7 +188,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="af3952aac81c86ddfbeb5ec7d0c3b6b0d"></a>
+<a class="anchor" id="ae62213f620b1a2ea4d080b7eb3f9e625"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -156,12 +196,12 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool OOModel::FormalTypeArgument::definesSymbol</td>
+          <td class="memname">virtual ATTRIBUTE_VALUE_CUSTOM_RETURN (::<a class="el" href="classModel_1_1Text.html">Model::Text</a>, name, setName, QString, const QString&amp;) public const QString&amp; OOModel::FormalTypeArgument::symbolName() const override</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

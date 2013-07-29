@@ -107,8 +107,10 @@ Inheritance diagram for OOModel::TypeAlias:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acd4f8c203e8c07602192d6262caf4a8c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#acd4f8c203e8c07602192d6262caf4a8c">TypeAlias</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *typeExpression=nullptr)</td></tr>
 <tr class="separator:acd4f8c203e8c07602192d6262caf4a8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84eace32881a0263e5a16b000b364ee7"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a84eace32881a0263e5a16b000b364ee7">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override</td></tr>
-<tr class="separator:a84eace32881a0263e5a16b000b364ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0933070d6441df2c2c3f5e803dbe10e"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#ac0933070d6441df2c2c3f5e803dbe10e">findSymbols</a> (const QRegExp &amp;symbolExp, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:ac0933070d6441df2c2c3f5e803dbe10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f010f01228f45d38cd6d3350bd2ffc8"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a1f010f01228f45d38cd6d3350bd2ffc8">symbolType</a> () const override</td></tr>
+<tr class="separator:a1f010f01228f45d38cd6d3350bd2ffc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -144,7 +146,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a84eace32881a0263e5a16b000b364ee7"></a>
+<a class="anchor" id="ac0933070d6441df2c2c3f5e803dbe10e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -166,8 +168,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FindSymbolMode&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramtype">FindSymbolDirection&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -179,6 +187,29 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1f010f01228f45d38cd6d3350bd2ffc8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TypeAlias::SymbolTypes OOModel::TypeAlias::symbolType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>

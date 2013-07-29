@@ -43,6 +43,8 @@ var searchData=
   ['venumeratorstyle',['VEnumeratorStyle',['../classOOVisualization_1_1VEnumeratorStyle.html',1,'OOVisualization']]],
   ['verrorexpression',['VErrorExpression',['../classOOVisualization_1_1VErrorExpression.html',1,'OOVisualization']]],
   ['verrorexpressionstyle',['VErrorExpressionStyle',['../classOOVisualization_1_1VErrorExpressionStyle.html',1,'OOVisualization']]],
+  ['vexplicittemplateinstantiation',['VExplicitTemplateInstantiation',['../classOOVisualization_1_1VExplicitTemplateInstantiation.html',1,'OOVisualization']]],
+  ['vexplicittemplateinstantiationstyle',['VExplicitTemplateInstantiationStyle',['../classOOVisualization_1_1VExplicitTemplateInstantiationStyle.html',1,'OOVisualization']]],
   ['vexpression',['VExpression',['../classOOVisualization_1_1VExpression.html',1,'OOVisualization']]],
   ['vexpressionstatement',['VExpressionStatement',['../classOOVisualization_1_1VExpressionStatement.html',1,'OOVisualization']]],
   ['vexpressionstaticdata',['VExpressionStaticData',['../classOOVisualization_1_1VExpressionStaticData.html',1,'OOVisualization']]],

@@ -147,10 +147,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a06d1f70b58a6a2d4c271da51040d2727"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9320d1ead0312d0842aaab41fc2cc23d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1List.html#a456965703dfb1eec25f86427c5bf8778">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a9320d1ead0312d0842aaab41fc2cc23d">end</a> () const </td></tr>
 <tr class="separator:a9320d1ead0312d0842aaab41fc2cc23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12d9f2c26a13d7bdfddbd3c67586aca1"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a12d9f2c26a13d7bdfddbd3c67586aca1">findAllSymbolDefinitions</a> (const QRegExp &amp;symbolExp, int beforeIndex=-1)</td></tr>
-<tr class="separator:a12d9f2c26a13d7bdfddbd3c67586aca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc86682e6ad69a885c23bd3706719ded"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#acc86682e6ad69a885c23bd3706719ded">findFirstSymbolDefinition</a> (const QString &amp;symbol, int beforeIndex=-1)</td></tr>
-<tr class="separator:acc86682e6ad69a885c23bd3706719ded"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad540561f2437029aa06b2a0757695c5b"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#ad540561f2437029aa06b2a0757695c5b">findAllSymbolDefinitions</a> (const QRegExp &amp;symbolExp, SymbolTypes symbolTypes, int beforeIndex=-1)</td></tr>
+<tr class="separator:ad540561f2437029aa06b2a0757695c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a628ee945fbdcbeaafea29ba00a6e9cba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a628ee945fbdcbeaafea29ba00a6e9cba">findFirstSymbolDefinition</a> (const QString &amp;symbol, SymbolTypes symbolTypes, int beforeIndex=-1)</td></tr>
+<tr class="separator:a628ee945fbdcbeaafea29ba00a6e9cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af974f5f9bcffaaf0e8db7ce0ff506f74"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:af974f5f9bcffaaf0e8db7ce0ff506f74"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#af974f5f9bcffaaf0e8db7ce0ff506f74">first</a> ()</td></tr>
 <tr class="separator:af974f5f9bcffaaf0e8db7ce0ff506f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -598,7 +598,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a12d9f2c26a13d7bdfddbd3c67586aca1"></a>
+<a class="anchor" id="ad540561f2437029aa06b2a0757695c5b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -607,6 +607,12 @@ template&lt;class T &gt; </div>
           <td>(</td>
           <td class="paramtype">const QRegExp &amp;&#160;</td>
           <td class="paramname"><em>symbolExp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -624,7 +630,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="acc86682e6ad69a885c23bd3706719ded"></a>
+<a class="anchor" id="a628ee945fbdcbeaafea29ba00a6e9cba"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -633,6 +639,12 @@ template&lt;class T &gt; </div>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>symbol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
