@@ -126,7 +126,7 @@ IfStatement.h</h1>
 </ul>
 <p>This macro should appear in the header and needs to be complemented with the <code>DEFINE_TYPED_LIST</code> macro in the <code></code>.cpp file.</p>
 <p>Next comes the class declaration: <div class="fragment"><div class="line"><span class="keyword">class </span>OOMODEL_API IfStatement: <span class="keyword">public</span> <a class="code" href="classCore_1_1Reflect.html">Super</a>&lt;Statement&gt;</div>
-</div><!-- fragment --> The node declaration should use the plug-in's API macro and should inherit directly or undirectly from Node. When specifying the base node type you must do so through the <code>Super</code> template. This is required by the underlying framework. The <code>Super</code> template does two things:</p>
+</div><!-- fragment --> The node declaration should use the plug-in's API macro and should inherit directly or indirectly from Node. When specifying the base node type you must do so through the <code>Super</code> template. This is required by the underlying framework. The <code>Super</code> template does two things:</p>
 <ul>
 <li>Define a protected type called <code>Super</code> which represents the base class. This makes it possible to simply use <code>Super</code> anywhere where you need to refer to the base class. This is especially helpful when the base class is a long template instantiation. Inheritance via <code>Super</code> is used very often throughout Envision.</li>
 <li>Import all constructors of the provided base type, so that your new node can call them.</li>
