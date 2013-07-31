@@ -53,7 +53,7 @@ template <class VisualizationType>
 DeclarativeItem<VisualizationType>::~DeclarativeItem()
 {
 	for(FormElement* form : formsStatic())
-		form->destroyChildItems(this);
+		form->destroyChildItems(this, {});
 }
 
 template <class VisualizationType>

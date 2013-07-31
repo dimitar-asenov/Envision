@@ -58,7 +58,7 @@ void DeclarativeItemBase::determineChildren()
 			auto mc = scene()->mainCursor();
 			if (mc && isAncestorOf(mc->owner())) scene()->setMainCursor(nullptr);
 
-			currentForm()->destroyChildItems(this);
+			currentForm()->destroyChildItems(this, forms()[newFormIndex]->allHandledChildPointers());
 		}
 		currentFormIndex_ = newFormIndex;
 	}

@@ -198,9 +198,10 @@ bool SequentialLayoutFormElement::sizeDependsOnParent(const Item* item) const
 	return false;
 }
 
-void SequentialLayoutFormElement::destroyChildItems(Item* item)
+void SequentialLayoutFormElement::destroyChildItems(Item* item,
+		QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
-	LayoutFormElement::destroyChildItems(item);
+	LayoutFormElement::destroyChildItems(item, handledChildren);
 	if (itemListMap_.contains(item))
 	{
 		for (auto i : *itemListMap_.value(item))

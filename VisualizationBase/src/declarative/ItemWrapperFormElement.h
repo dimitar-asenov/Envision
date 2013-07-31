@@ -57,7 +57,10 @@ class ItemWrapperFormElement : public FormElement
 		bool isEmpty(const Item* item) const override;
 
 	public: // Recursive item destruction
-		virtual void destroyChildItems(Item* item) override;
+		virtual void destroyChildItems(Item* item,
+				QList<const Item* const DeclarativeItemBase::*> handledChildren) override;
+
+		virtual QList<const Item* const DeclarativeItemBase::*> allHandledChildPointers() override;
 
 	protected:
 		ChildItem item() const;
@@ -122,11 +125,24 @@ QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(Decl
 }
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperFormElement<ParentType,ChildItemType>::destroyChildItems(Item* item)
+void ItemWrapperFormElement<ParentType,ChildItemType>::destroyChildItems(Item* item,
+		QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
-	FormElement::destroyChildItems(item);
-	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	SAFE_DELETE_ITEM(childItem);
+	FormElement::destroyChildItems(item, handledChildren);
+
+	auto childPointer = reinterpret_cast<const Item* const DeclarativeItemBase::*> (this->item());
+	if(! handledChildren.contains(childPointer))
+	{
+		auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+		SAFE_DELETE_ITEM(childItem);
+	}
+}
+
+template <class ParentType, class ChildItemType>
+QList<const Item* const DeclarativeItemBase::*>
+ItemWrapperFormElement<ParentType,ChildItemType>::allHandledChildPointers()
+{
+	return {reinterpret_cast<const Item* const DeclarativeItemBase::*> (this->item())};
 }
 
 template <class ParentType, class ChildItemType>

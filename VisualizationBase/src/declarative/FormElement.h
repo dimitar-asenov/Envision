@@ -211,11 +211,25 @@ class VISUALIZATIONBASE_API FormElement
 		 * position on the y-axis + height.
 		 */
 		int yEnd(Item* item) const;
+
 		/**
 		 * This method is recursively called on all form elements to destroy all the information they might have about a
 		 * specific \a item.
+		 *
+		 * It is called in two cases:
+		 *		- When the item is being destroyed. In that case all information and child items should be destroyed. The
+		 * 	second argument is an empty list.
+		 * 	- When the current form is changing. In that case only information pertaining to child items which are
+		 * 	not definitely handled by the new form should be removed. The second argument is a list of all child item
+		 * 	pointer handled by the new form.
 		 */
-		virtual void destroyChildItems(Item* item);
+		virtual void destroyChildItems(Item* item, QList<const Item* const DeclarativeItemBase::*> handledChildren);
+
+		/**
+		 * Returns a list of all pointer to child items of this form. This list should only be used for comparison
+		 * as in destroyChildItems() and should not be used for writing.
+		 */
+		virtual QList<const Item* const DeclarativeItemBase::*> allHandledChildPointers();
 
 		FormElement* parent() const;
 		bool isFormRoot() const;

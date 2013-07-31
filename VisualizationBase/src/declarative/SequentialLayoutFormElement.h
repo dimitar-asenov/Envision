@@ -145,7 +145,8 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		template <class T> T* itemAt(const Item* item, int itemIndex) const;
 
 		// Recursive item destruction
-		virtual void destroyChildItems(Item* item) override;
+		virtual void destroyChildItems(Item* item,
+				QList<const Item* const DeclarativeItemBase::*> handledChildren) override;
 
 	private:
 

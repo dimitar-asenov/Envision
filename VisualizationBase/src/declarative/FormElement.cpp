@@ -92,10 +92,18 @@ void FormElement::synchronizeWithItem(Item* item)
 		if (element != nullptr) element->synchronizeWithItem(item);
 }
 
-void FormElement::destroyChildItems(Item* item)
+void FormElement::destroyChildItems(Item* item, QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
 	clearCache(item);
-	for (FormElement* element : children()) element->destroyChildItems(item);
+	for (FormElement* element : children()) element->destroyChildItems(item, handledChildren);
+}
+
+QList<const Item* const DeclarativeItemBase::*> FormElement::allHandledChildPointers()
+{
+	QList<const Item* const DeclarativeItemBase::*> ret;
+	for (FormElement* element : children()) ret << element->allHandledChildPointers();
+
+	return ret;
 }
 
 bool FormElement::isEmpty(const Item* item) const
