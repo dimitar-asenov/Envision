@@ -1,7 +1,7 @@
 /*! \page dev_tut_add_vis Adding a new visualization item
 
 In this tutorial we will see how to add a custom visualization for a node. We will create a visualization for if
-statement nodes. We showed how to crate this node type in \ref dev_tut_add_node . You should be familiar with that
+statement nodes. We showed how to create this node type in \ref dev_tut_add_node . You should be familiar with that
 tutorial before reading on. In the present tutorial we will use OOVisualization::VIfStatement as example.
 
 \section intro Introduction
@@ -57,7 +57,7 @@ method within our visualization. The Visualization::ItemWithNode template requir
 	- The base item type (in this case Visualization::DeclarativeItem since we want to use layouts)
 	- The type of the node that's being visualized (in this case OOModel::IfStatement)
 
-The first and last bit are straight forward, but let's look at the second argument. In essense
+The first and last bit are straight forward, but let's look at the second argument. In essence
 Visualization::ItemWithNode will inherit from whatever class we provide here. This needs to be a sub type of
 Visualization::Item. By specifying Visualization::DeclarativeItem we make it one of the super types of
 OOVisualization::VIfStatement and can make use of its services which greatly simplify the layouting of child items.
@@ -90,8 +90,12 @@ Next we have the constructor:
 
 \skipline VIfStatement(Item*
 All items representing a node (inheriting from Visualization::ItemWithNode) must have a constructor of this form.
-If not provided, the style argument is initialized to the default style . Items that do not visualize nodes, must
-declare a similar constructor but omit the \c node parameter.
+The \a style argument should always be initialized by default to \c itemStyles().get() - equivalent to
+\c itemStyles().get("default") - which returns the default style.
+\c itemStyles() is a static method introduced by the \c ITEM_COMMON macro. You can use \c itemStyles().get(styleName) to
+get the style defined by the file called \a styleName in the item's style directory.
+
+Items that do not visualize nodes, must declare a similar constructor but omit the \c node parameter.
 
 After the constructor we have just a few getter methods for the correspondingly named fields:
 \skip condition()
@@ -159,7 +163,9 @@ by the Visualization::Item::updateSubtree() method. This is what happens when an
 		time at least one argument of \c updateGeometry() will be positive, indicating how much space the item can take in
 		total in that direction, without changing the layout of the parent. The item can stretch to fill all the available
 		space. If one of the arguments to \c updateGeometry() is 0, this means that the item should retain its current
-		size in that direction.
+		size in that direction. Any positive arguments provided in this second call to \c updateGeometry() can only
+		indicate that at least as much space is available as the item originally requested, that is an item will never
+		have to shrink in this second call, only expand.
 		.
 	The way this works for the line item is that it sets up a default line that is let's say 20 pixels long on the first
 	call to \c updateGeometry(). Then during the second call the line will expand to take any extra space

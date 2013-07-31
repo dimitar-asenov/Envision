@@ -43,7 +43,7 @@ Each handler is a singleton and needs a public \c instance() method that returns
 constructor is protected. This make it possible to create inherited handlers.
 
 In the custom handler for if statements, we'll only customize keyboard interaction. Thus the only method that is
-overriden is \c keyPressEvent(). For a list of all possible methods that can be overriden have a look at
+overridden is \c keyPressEvent(). For a list of all possible methods that can be overridden have a look at
 Visualization::InteractionHandler.
 
 Let's look at the \c .cpp file to see what this handler does exactly.

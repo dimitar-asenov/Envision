@@ -21,10 +21,11 @@ This simple workflow is sufficient for the small team of people who are currentl
 
 
 
-\section environment Build environment
-See \ref compilation "the compilation instructions".
+\section environment Build environment and getting started
+For instructions on how to compile Envision see \ref compilation "here".
 
-
+Introductory tutorials that you should read to familiarize yourself with Envision's model-view-controller implementation
+can be found \ref dev_tutorials "here".
 
 \section style Code style
 \subsection names Naming

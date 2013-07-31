@@ -37,7 +37,7 @@ This macro should appear in the header and needs to be complemented with the \c 
 
 Next comes the class declaration:
 \skipline class
-The node declaration should use the plug-in's API macro and should inherit directly or undirectly from Node. When
+The node declaration should use the plug-in's API macro and should inherit directly or indirectly from Node. When
 specifying the base node type you must do so through the \c Super template. This is required by the underlying
 framework. The \c Super template does two things:
 	- Define a protected type called \c Super which represents the base class. This makes
