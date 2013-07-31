@@ -36,8 +36,15 @@ int CompositeNode::nextExtensionId_ = 0;
 
 void CompositeNode::initType()
 {
-	typeIdVariable() = Node::registerNodeType("CompositeNode", ::Model::createNewNode< CompositeNode >,
-			::Model::createNodeFromPersistence< CompositeNode >);
+	typeIdVariable() = Node::registerNodeType("CompositeNode",
+			[](Node* parent) -> Node* { return CompositeNode::createDefaultInstance(parent);} ,
+			[](Node *parent, PersistentStore &store, bool partialLoadHint) -> Node*
+			{ return new CompositeNode(parent, store, partialLoadHint);});
+}
+
+CompositeNode* CompositeNode::createDefaultInstance( Node* parent)
+{
+	return new CompositeNode(parent);
 }
 
 AttributeChain& CompositeNode::topLevelMeta()

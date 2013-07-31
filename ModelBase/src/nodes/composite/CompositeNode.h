@@ -75,6 +75,8 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		virtual ~CompositeNode();
 
+		static CompositeNode* createDefaultInstance( Node* parent);
+
 		Node* get(const CompositeIndex &attributeIndex) const;
 		Node* get(const QString &attributeName) const;
 		CompositeIndex indexOf(Node* node) const;

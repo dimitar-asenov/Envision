@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "expressions/Expression.h"
+#include "expressions/EmptyExpression.h"
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
@@ -33,7 +34,7 @@ DEFINE_TYPED_LIST(OOModel::Expression)
 namespace OOModel {
 
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Expression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Expression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(Expression, EmptyExpression)
 
 Type* Expression::type()
 {

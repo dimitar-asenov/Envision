@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "statements/Statement.h"
+#include "statements/ExpressionStatement.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Statement)
@@ -32,6 +33,6 @@ DEFINE_TYPED_LIST(OOModel::Statement)
 namespace OOModel {
 
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Statement)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Statement)
+		COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(Statement, ExpressionStatement)
 
 }

@@ -53,6 +53,7 @@
 	public:																																				\
 		className(::Model::Node* parent = nullptr);																							\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
+		static className* createDefaultInstance(Node* parent = nullptr);																\
 
 /*********************************************************************************************************************/
 
@@ -84,7 +85,7 @@
 		static ::Model::CompositeIndex registerNewAttribute(const QString &attributeName,										\
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);				\
 																																							\
-		static ::Model::CompositeIndex registerNewAttribute(const ::Model::Attribute& attribute);							\
+		static ::Model::CompositeIndex registerNewAttribute(const ::Model::Attribute& attribute);								\
 																																							\
 		template <class T> static void registerNewExtension()																				\
 		{																																					\
@@ -188,6 +189,23 @@ template class Model::TypedList<className>;																									\
 /*********************************************************************************************************************/
 
 /**
+ * This is just the common subpart of the two macros below. Do not use it directly.
+ */
+#define NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
+::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
+DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
+																																							\
+void className::initType()																															\
+{																																							\
+	typeIdVariable() = Node::registerNodeType(																								\
+		#className,																																		\
+		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
+		[](::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)-> ::Model::Node*					\
+			{ return new className(parent, store, partialLoadHint);}																		\
+	);																																						\
+}																																							\
+
+/**
  * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
  * that returns the name of this class.
  *
@@ -197,14 +215,8 @@ template class Model::TypedList<className>;																									\
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
-::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
-DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
-																																							\
-void className::initType()																															\
-{																																							\
-	typeIdVariable() = Node::registerNodeType(#className, ::Model::createNewNode< className >,								\
-			::Model::createNodeFromPersistence< className >);																				\
-}																																							\
+NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																					\
+className* className::createDefaultInstance( Node* parent) { return new className(parent); }									\
 
 /*********************************************************************************************************************/
 
@@ -213,18 +225,34 @@ void className::initType()																															\
  * that returns the name of this class.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from CompositeNode, directly or indirectly.
+ * 			The name of the class being defined. This class must inherit from from Node, directly or indirectly.
+ *
+ * @param proxyClassName
+ * 			The name of a class that should be created when a default instance of the current class is requested.
+ * 			Typically this is identical to className, but in special cases it can be different. E.g. when a default
+ * 			Expression is requested, what actually will be constructed is an EmptryExpression.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																	\
+#define NODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(className, proxyClassName)									\
+NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																					\
+className* className::createDefaultInstance( Node* parent) { return proxyClassName::createDefaultInstance(parent);}	\
+
+/**
+ * This is just the common subpart of the two macros below. Do not use it directly.
+ */
+#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)															\
 ::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
 DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
 																																							\
 void className::initType()																															\
 {																																							\
-	typeIdVariable() = Node::registerNodeType(#className, ::Model::createNewNode< className >,								\
-			::Model::createNodeFromPersistence< className >);																				\
+	typeIdVariable() = Node::registerNodeType(																								\
+		#className,																																		\
+		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
+		[](::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)	-> ::Model::Node* 				\
+			{ return new className(parent, store, partialLoadHint);}																		\
+	);																																						\
 																																							\
 	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
 		attributesToRegisterAtInitialization_().at(i).first =																				\
@@ -255,12 +283,12 @@ QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& className::attribu
 					canBePartiallyLoaded, isOptional, isPersistent );																		\
 }																																							\
 																																							\
-::Model::CompositeIndex className::registerNewAttribute(const ::Model::Attribute& attribute)								\
+::Model::CompositeIndex className::registerNewAttribute(const ::Model::Attribute& attribute)									\
 {																																							\
 	return CompositeNode::registerNewAttribute(getMetaData(), attribute);															\
 }																																							\
 																																							\
-::Model::CompositeIndex className::addAttributeToInitialRegistrationList_ (::Model::CompositeIndex& index,			\
+::Model::CompositeIndex className::addAttributeToInitialRegistrationList_ (::Model::CompositeIndex& index,				\
 	const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional,				\
 			 bool isPersistent)																														\
 {																																							\
@@ -268,6 +296,37 @@ QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& className::attribu
 			::Model::Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));			\
 	return ::Model::CompositeIndex();																											\
 }																																							\
+
+/**
+ * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
+ * that returns the name of this class.
+ *
+ * @param className
+ * 			The name of the class being defined. This class must inherit from CompositeNode, directly or indirectly.
+ *
+ * Use this macro in the .cpp file that defines the new Node type.
+ */
+#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																		\
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
+className* className::createDefaultInstance( Node* parent) { return new className(parent); }									\
+
+/**
+ * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
+ * that returns the name of this class.
+ *
+ * @param className
+ * 			The name of the class being defined. This class must inherit from CompositeNode, directly or indirectly.
+ *
+ * @param proxyClassName
+ * 			The name of a class that should be created when a default instance of the current class is requested.
+ * 			Typically this is identical to className, but in special cases it can be different. E.g. when a default
+ * 			Expression is requested, what actually will be constructed is an EmptryExpression.
+ *
+ * Use this macro in the .cpp file that defines the new Node type.
+ */
+#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_WITH_DEFAULT_PROXY(className, proxyClassName)						\
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
+className* className::createDefaultInstance( Node* parent) { return proxyClassName::createDefaultInstance(parent);}	\
 
 /*********************************************************************************************************************/
 
@@ -473,7 +532,7 @@ private:																																					\
 	static int addAttributeToRegister_( ::Model::Attribute attribute);																\
 																																							\
 public:																																					\
-	className( ::Model::CompositeNode* self, const QVector< ::Model::CompositeIndex>& extensionAttributes);			\
+	className( ::Model::CompositeNode* self, const QVector< ::Model::CompositeIndex>& extensionAttributes);				\
 																																							\
 	static void registerExtension();																												\
 	static int extensionId() { return extensionId_; }																						\

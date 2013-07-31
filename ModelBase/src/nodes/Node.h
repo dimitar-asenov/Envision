@@ -44,8 +44,7 @@ class NodeReadWriteLock;
  * structure. This class defines the minimal interface of each node and implements some service functions.
  *
  * Each class that derives from Node must have at least two constructors which need to be registered before that class
- * can be used. This is achieved using the static methods 'registerNodeType()', 'createNewNode()' and
- * 'createNodeFromPersistence()'.
+ * can be used. This is achieved using the static method 'registerNodeType()'.
  *
  * Derived classes must implement the 'save()' and 'load()' methods that specify how the node is stored in a persistent
  * store.
@@ -453,22 +452,6 @@ class MODELBASE_API Node
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
-
-/**
- * This is a convenience function that can be used when registering classes derived from Node using registerNodeType().
- */
-template<class T> Node* createNewNode(Node* parent)
-{
-	return new T(parent);
-}
-
-/**
- * This is a convenience function that can be used when registering classes derived from Node using registerNodeType().
- */
-template<class T> Node* createNodeFromPersistence(Node *parent, PersistentStore &store, bool partialLoadHint)
-{
-	return new T(parent, store, partialLoadHint);
-}
 
 inline QList<Node*> Node::findSymbols(const QString& symbol, Node* source, FindSymbolDirection direction,
 		SymbolTypes symbolTypes, bool exhaustAllScopes)

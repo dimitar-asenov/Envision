@@ -41,8 +41,16 @@ Core::InitializationRegistry& TypedList<T>::elementInitializationRegistry()
 template<class T>
 void TypedList<T>::initType()
 {
-	TypedList<T>::typeIdVariable() = Node::registerNodeType(typeNameStatic(), ::Model::createNewNode<TypedList<T> >,
-			::Model::createNodeFromPersistence<TypedList<T> >);
+	TypedList<T>::typeIdVariable() = Node::registerNodeType(typeNameStatic(),
+			[](Node* parent) -> Node* { return TypedList<T>::createDefaultInstance(parent);},
+			[](Node *parent, PersistentStore &store, bool partialLoadHint) -> Node*
+						{ return new TypedList<T>(parent, store, partialLoadHint);});
+}
+
+template<class T>
+TypedList<T>* TypedList<T>::createDefaultInstance(Node* parent)
+{
+	return new TypedList<T>(parent);
 }
 
 template<class T> typename TypedList<T>::CreateDefaultElement& TypedList<T>::creationFunction()
