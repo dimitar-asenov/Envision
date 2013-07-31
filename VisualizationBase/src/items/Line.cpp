@@ -38,6 +38,10 @@ void Line::determineChildren(){}
 
 void Line::updateGeometry(int availableWidth, int availableHeight)
 {
+	// If both height and width are specified, we'll get a fixed sized line along the longer of the two.
+	// If only one is specified, this will be the fixed side of the line and the other side will stretch to fill all
+	// available space.
+
 	int w = 1;
 	if (style()->width() ) w = style()->width();
 	else if (availableWidth > 0) w = availableWidth;

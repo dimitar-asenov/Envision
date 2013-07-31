@@ -4,8 +4,13 @@
 	<drawsOnlyShape>false</drawsOnlyShape>
 	<wholeItemCursor>true</wholeItemCursor>
 	<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
+	
+	<!-- Give a positive number for size of the fixed side of the line. Leave the other side 0 - it will stretch to
+	fill all available space. If you provide two positive sides, then you'll get a fixed sized line along the longer
+	side. -->
 	<width>0</width>
 	<height>1</height>
+	
 	<pen>
 		<width>1.0</width>
 		<style>1</style>
