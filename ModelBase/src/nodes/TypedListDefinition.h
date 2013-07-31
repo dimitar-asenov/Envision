@@ -53,17 +53,6 @@ TypedList<T>* TypedList<T>::createDefaultInstance(Node* parent)
 	return new TypedList<T>(parent);
 }
 
-template<class T> typename TypedList<T>::CreateDefaultElement& TypedList<T>::creationFunction()
-{
-	static CreateDefaultElement function;
-	return function;
-}
-
-template<class T> void TypedList<T>::setDefaultElementCreationFunction(CreateDefaultElement function)
-{
-		creationFunction() = function;
-}
-
 template<class T>
 TypedList<T>::TypedList(::Model::Node* parent) : Super(parent)
 {}
@@ -95,8 +84,7 @@ template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement
 
 template<class T> Node* TypedList<T>::createDefaultElement()
 {
-	if (creationFunction()) return creationFunction()();
-	else return nullptr;
+	return T::createDefaultInstance(nullptr);
 }
 
 template<class T> int TypedList<T>::lowerTypeBoundForElements() const { return T::typeIdStatic();}

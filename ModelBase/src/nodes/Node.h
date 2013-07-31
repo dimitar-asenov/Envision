@@ -113,6 +113,11 @@ class MODELBASE_API Node
 		virtual ~Node();
 
 		/**
+		 * As Node is an abstract class this method always returns nullptr.
+		 */
+		static Node* createDefaultInstance(Node* parent);
+
+		/**
 		 * Returns the model managing the tree of the current Node.
 		 *
 		 * Calling this method during the creation of the root Node will return a nullptr.

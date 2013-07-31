@@ -43,27 +43,6 @@ bool OOModel::initialize(Core::EnvisionManager&)
 {
 	nodeTypeInitializationRegistry().initializeAll();
 
-	// Register default element creation functions for some lists
-	Model::TypedList<StatementItem>::setDefaultElementCreationFunction([]() -> StatementItem* {
-		return new ExpressionStatement(new EmptyExpression()); } );
-	Model::TypedList<FormalArgument>::setDefaultElementCreationFunction([]() -> FormalArgument* {
-		auto arg = new FormalArgument();
-		arg->setTypeExpression(new EmptyExpression());
-		return arg;} );
-	Model::TypedList<FormalResult>::setDefaultElementCreationFunction([]() -> FormalResult* {
-		auto res = new FormalResult();
-		res->setTypeExpression(new EmptyExpression());
-		return res;} );
-	Model::TypedList<FormalTypeArgument>::setDefaultElementCreationFunction([]() -> FormalTypeArgument* {
-		return new FormalTypeArgument();} );
-	Model::TypedList<Field>::setDefaultElementCreationFunction([]() -> Field* {
-		auto field = new Field();
-		field->setTypeExpression(new EmptyExpression());
-		return field;} );
-	Model::TypedList<Enumerator>::setDefaultElementCreationFunction([]() -> Enumerator* { return new Enumerator();} );
-	Model::TypedList<Expression>::setDefaultElementCreationFunction([]() -> Expression* {
-		return new EmptyExpression();} );
-
 	return true;
 }
 

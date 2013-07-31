@@ -36,8 +36,6 @@ class TypedList: public Super<List>
 	NODE_DECLARE_STANDARD_METHODS(TypedList)
 
 	public:
-		typedef std::function<T* ()> CreateDefaultElement;
-
 		T* first();
 		T* last();
 		T* at(int i);
@@ -45,14 +43,10 @@ class TypedList: public Super<List>
 		virtual bool replaceChild(Node* child, Node* replacement);
 
 		virtual Node* createDefaultElement() override;
-		static void setDefaultElementCreationFunction(CreateDefaultElement function);
 
 		static ::Core::InitializationRegistry& elementInitializationRegistry();
 
 		virtual int lowerTypeBoundForElements() const override;
-
-	private:
-		static CreateDefaultElement& creationFunction();
 
 	// Iterator
 	public:
