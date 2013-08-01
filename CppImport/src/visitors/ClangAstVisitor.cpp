@@ -558,9 +558,10 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	if(llvm::isa<clang::ParmVarDecl>(varDecl))
 		return true;
 
-	// check if this variable is only from a explicit template instantiation - if so we do not parse it.
+	// check if this variable is only from a explicit/implicit template instantiation - if so we do not translate it.
 	if(clang::TSK_ExplicitInstantiationDeclaration == varDecl->getTemplateSpecializationKind() ||
-			clang::TSK_ExplicitInstantiationDefinition == varDecl->getTemplateSpecializationKind())
+			clang::TSK_ExplicitInstantiationDefinition == varDecl->getTemplateSpecializationKind() ||
+			clang::TSK_ImplicitInstantiation == varDecl->getTemplateSpecializationKind())
 		return true;
 
 	OOModel::VariableDeclaration* ooVarDecl = nullptr;
@@ -573,7 +574,6 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		if(!(ooVarDecl = trMngr_->insertStaticField(varDecl, wasDeclared)))
 		{
 			log_->writeError(className_, varDecl, CppImportLogger::Reason::NO_PARENT);
-			varDecl->dump();
 			return true;
 		}
 	}
