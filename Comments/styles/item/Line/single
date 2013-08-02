@@ -1,0 +1,10 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Line/default">
+	<height>1</height>
+	<pen>
+		<width>1.0</width>
+		<color>
+			<alpha>55</alpha>
+		</color>
+	</pen>
+</style>

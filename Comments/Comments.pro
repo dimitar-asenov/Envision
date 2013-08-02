@@ -11,7 +11,6 @@ win32:LIBS += -llogger \
 HEADERS += src/handlers/HComment.h \
     src/items/VComment.h \
     src/nodes/Comment.h \
-    src/items/MarkdownLineItem.h \
     src/items/MarkdownTextItem.h \
     src/precompiled.h \
     src/CommentsException.h \
@@ -20,7 +19,6 @@ HEADERS += src/handlers/HComment.h \
 SOURCES += src/handlers/HComment.cpp \
     src/items/VComment.cpp \
     src/nodes/Comment.cpp \
-    src/items/MarkdownLineItem.cpp \
     src/items/MarkdownTextItem.cpp \
     src/CommentsException.cpp \
     src/comments.cpp \

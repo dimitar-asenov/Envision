@@ -25,8 +25,8 @@
  **********************************************************************************************************************/
 
 #include "VComment.h"
-#include "MarkdownLineItem.h"
 #include "MarkdownTextItem.h"
+#include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
@@ -54,22 +54,22 @@ QList<Item*> VComment::parse()
 		{
 			// A line consists of one character that is repeated over and over
 			// This character defines the strength of the header, i.e. one of three levels
-			int strength = 0;
+			QString style;
 			switch((*line)[0].toAscii())
 			{
-				case '=': strength = 3; break;
-				case '-': strength = 2; break;
-				case '.': strength = 1; break;
+				case '=': style = "triple"; break;
+				case '-': style = "double"; break;
+				case '.': style = "single"; break;
 				default:
 					// TODO: catch impossible cases?
 					Q_ASSERT("Something went wrong");
 			}
 
 			if(lineBuffer.size() > 0) {
-				result.push_back(new MarkdownTextItem(this, itemStyles().get(), lineBuffer.join("\n")));
+				result.push_back(new MarkdownTextItem(this, MarkdownTextItem::itemStyles().get(), lineBuffer.join("\n")));
 				lineBuffer.clear();
 			}
-			result.push_back(new MarkdownLineItem(this, itemStyles().get(), strength));
+			result.push_back(new Line(this, Line::itemStyles().get(style)));
 			continue;
 		}
 
@@ -87,7 +87,7 @@ QList<Item*> VComment::parse()
 	}
 
 	if(lineBuffer.size() > 0) {
-		result.push_back(new MarkdownTextItem(this, itemStyles().get(), lineBuffer.join("\n")));
+		result.push_back(new MarkdownTextItem(this, MarkdownTextItem::itemStyles().get(), lineBuffer.join("\n")));
 	}
 
 	return result;
