@@ -39,7 +39,11 @@ class CPPIMPORT_API TemplateArgumentVisitor : public clang::RecursiveASTVisitor 
 {
 	public:
 		TemplateArgumentVisitor(ExpressionVisitor* vis, CppImportUtilities* util, CppImportLogger* log);
-		OOModel::FormalTypeArgument* getLastTranslated();
+		/**
+		 * Translates the template argument declaration \a d.
+		 * Returns the translated node.
+		 */
+		OOModel::FormalTypeArgument* translateTemplateArg(clang::Decl* d);
 		bool VisitDecl(clang::Decl* decl);
 		bool TraverseTemplateTypeParmDecl(clang::TemplateTypeParmDecl* templateParm);
 		bool TraverseNonTypeTemplateParmDecl(clang::NonTypeTemplateParmDecl* nonTypeTemplateParm);

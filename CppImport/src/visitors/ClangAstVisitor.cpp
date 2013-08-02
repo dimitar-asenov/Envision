@@ -124,10 +124,7 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 		auto templateParamList = classTemplate->getTemplateParameters();
 		for( auto templateParam = templateParamList->begin();
 			  templateParam != templateParamList->end(); ++templateParam)
-		{
-			templArgVisitor_->TraverseDecl(*templateParam);
-			ooClass->typeArguments()->append(templArgVisitor_->getLastTranslated());
-		}
+			ooClass->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
 	}
 	return true;
 }
@@ -205,10 +202,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 			auto templateParamList = describedTemplate->getTemplateParameters();
 			for( auto templateParam = templateParamList->begin();
 				  templateParam != templateParamList->end(); ++templateParam)
-			{
-				templArgVisitor_->TraverseDecl(*templateParam);
-				ooClass->typeArguments()->append(templArgVisitor_->getLastTranslated());
-			}
+				ooClass->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
 		}
 	}
 	else
@@ -520,21 +514,14 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 	if(S && llvm::isa<clang::Expr>(S))
 	{
 		// always ignore implicit stuff
-		auto casted = llvm::dyn_cast<clang::Expr>(S);
-		bool ret = exprVisitor_->TraverseStmt(casted->IgnoreImplicit());
-		if(auto expr = exprVisitor_->getLastExpression())
-		{
-			if(!inBody_)
-				ooExprStack_.push(expr);
-			else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-				itemList->append(new OOModel::ExpressionStatement(expr));
-		}
-		else
-		{
-			ooExprStack_.push(utils_->createErrorExpression("Could not convert expr"));
-			log_->writeError(className_, S, CppImportLogger::Reason::NOT_SUPPORTED);
-		}
-		return ret;
+		auto expr = exprVisitor_->translateExpression(S->IgnoreImplicit());
+
+		if(!inBody_)
+			ooExprStack_.push(expr);
+		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(new OOModel::ExpressionStatement(expr));
+
+		return true;
 	}
 
 	return Base::TraverseStmt(S);
@@ -855,10 +842,7 @@ bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl
 		auto templateParamList = typeAliasTemplate->getTemplateParameters();
 		for( auto templateParam = templateParamList->begin();
 			  templateParam != templateParamList->end(); ++templateParam)
-		{
-			templArgVisitor_->TraverseDecl(*templateParam);
-			ooTypeAlias->typeArguments()->append(templArgVisitor_->getLastTranslated());
-		}
+			ooTypeAlias->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
 		// insert in model
 		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
@@ -1091,10 +1075,7 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 			auto templateParamList = functionTemplate->getTemplateParameters();
 			for( auto templateParam = templateParamList->begin();
 				  templateParam != templateParamList->end(); ++templateParam)
-			{
-				templArgVisitor_->TraverseDecl(*templateParam);
-				ooFunction->typeArguments()->append(templArgVisitor_->getLastTranslated());
-			}
+				ooFunction->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
 		}
 		if(auto specArgs = functionDecl->getTemplateSpecializationArgsAsWritten())
 		{

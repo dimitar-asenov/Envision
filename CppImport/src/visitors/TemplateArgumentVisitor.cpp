@@ -7,8 +7,9 @@ TemplateArgumentVisitor::TemplateArgumentVisitor
 	: exprVisitor_{vis}, utils_{util}, log_{log}
 {}
 
-OOModel::FormalTypeArgument*TemplateArgumentVisitor::getLastTranslated()
+OOModel::FormalTypeArgument* TemplateArgumentVisitor::translateTemplateArg(clang::Decl* d)
 {
+	TraverseDecl(d);
 	Q_ASSERT(!typeArgStack_.empty());
 	return typeArgStack_.pop();
 }
@@ -43,10 +44,8 @@ bool TemplateArgumentVisitor::TraverseNonTypeTemplateParmDecl(clang::NonTypeTemp
 	ooArg->setSubTypeOfExpression(utils_->translateQualifiedType(nonTypeTemplateParm->getType(),
 																					 nonTypeTemplateParm->getLocStart()));
 	if(nonTypeTemplateParm->hasDefaultArgument())
-	{
-		exprVisitor_->TraverseStmt(nonTypeTemplateParm->getDefaultArgument());
-		ooArg->setSuperTypeOfExpression(exprVisitor_->getLastExpression());
-	}
+		ooArg->setSuperTypeOfExpression(exprVisitor_->translateExpression(nonTypeTemplateParm->getDefaultArgument()));
+
 	typeArgStack_.push(ooArg);
 	return true;
 }

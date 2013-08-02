@@ -226,8 +226,7 @@ OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::
 								  "Unsupported TemplateArgument EXPANSION");
 			return createErrorExpression("Unsupported TemplateArgument EXPANSION");
 		case clang::TemplateArgument::ArgKind::Expression:
-			exprVisitor_->TraverseStmt(templateArg.getAsExpr());
-			return exprVisitor_->getLastExpression();
+			return exprVisitor_->translateExpression(templateArg.getAsExpr());
 		case clang::TemplateArgument::ArgKind::Pack:
 			// TODO: add support
 			log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
@@ -364,11 +363,8 @@ CppImportUtilities::OverloadKind CppImportUtilities::getOverloadKind
 OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang::CXXCtorInitializer* initializer)
 {
 	OOModel::MemberInitializer* ooMemberInit = nullptr;
-	OOModel::Expression* initExpression = nullptr;
-	// get the init value
-	exprVisitor_->TraverseStmt(initializer->getInit());
-	if(!(initExpression = exprVisitor_->getLastExpression()))
-		initExpression = createErrorExpression("Could not translate init expression");
+	OOModel::Expression* initExpression = exprVisitor_->translateExpression(initializer->getInit());
+
 	if(initializer->isBaseInitializer())
 	{
 		if(auto memberRef = dynamic_cast<OOModel::ReferenceExpression*>

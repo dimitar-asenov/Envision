@@ -50,9 +50,11 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		void setUtilities(CppImportUtilities* utils);
 
 		/**
-		 * Return the last translated expression or an error expression if it could not translate it.
+		 * Translates the expression \a s.
+		 * Note that \a s should be an expression it is only declared as stmt for ease of use.
+		 * Returns the translated expression or an error expression if it could not translate it.
 		 */
-		OOModel::Expression* getLastExpression();
+		OOModel::Expression* translateExpression(clang::Stmt* s);
 
 		bool VisitExpr(clang::Expr* e);
 

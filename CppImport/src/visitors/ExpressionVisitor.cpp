@@ -40,8 +40,9 @@ void ExpressionVisitor::setUtilities(CppImportUtilities* utils)
 	utils_ = utils;
 }
 
-OOModel::Expression* ExpressionVisitor::getLastExpression()
+OOModel::Expression* ExpressionVisitor::translateExpression(clang::Stmt* s)
 {
+	TraverseStmt(s);
 	if(!ooExprStack_.empty()) return ooExprStack_.pop();
 	return utils_->createErrorExpression("Could not convert last expression");
 }
