@@ -27,6 +27,13 @@
 #include "Action.h"
 
 #include "../InteractionBaseException.h"
+#include "../events/SetCursorEvent.h"
+
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/List.h"
+
+using namespace Model;
+using namespace Visualization;
 
 namespace Interaction {
 
@@ -40,6 +47,17 @@ QList<Action*>& Action::actions(int nodeTypeId)
 		map.insert(nodeTypeId, new QList<Action*>{});
 		return *map.value(nodeTypeId);
 	}
+}
+
+QList<Action*>& Action::actions(Node* node)
+{
+	auto & l = actions(node->typeId());
+
+	if (l.isEmpty())
+		if (auto cn = dynamic_cast<CompositeNode*>(node))
+			createStandardActionsForCompositeNode(cn, l);
+
+	return l;
 }
 
 Action::Action(const QString& shortcut, const QString& name)
@@ -58,7 +76,7 @@ Action::~Action()
 {
 }
 
-void Action::execute(Model::Node* node)
+void Action::execute(Node* node)
 {
 	if (actionOnNode_) actionOnNode_(node);
 	else throw InteractionBaseException("Nothing to execute for action" + name_ + "(" + shortcut_ + ").");
@@ -69,6 +87,84 @@ void Action::execute(Visualization::Item* itemWithNode)
 	Q_ASSERT(itemWithNode->node());
 	if (actionOnItem_) actionOnItem_(itemWithNode);
 	else execute(itemWithNode->node());
+}
+
+void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Action*>& list)
+{
+	auto meta = node->meta();
+
+	QStringList shortcuts;
+
+	for (int level = meta.numLevels() - 1; level >= 0 ; --level)
+	{
+		AttributeChain* currentLevel = meta.level(level);
+
+		for (int i = 0; i < currentLevel->size(); ++i)
+		{
+			QString name = (*currentLevel)[i].name();
+
+			if ( (*currentLevel)[i].optional() )
+			{
+				// Add create optional
+				shortcuts << calculateSuitableShortcut(name, shortcuts);
+				list.append( new Action(shortcuts.last(),"Create " + name,
+						Action::ActionFunctionOnItem([name](Item* item){
+							auto cn = static_cast<CompositeNode*>(item->node());
+							if ( cn->get(name) == nullptr)
+							{
+								cn->beginModification("add " + name);
+								cn->setDefault(name);
+								cn->endModification();
+							}
+							item->setUpdateNeededForChildItem(Item::StandardUpdate, cn->get(name));
+							item->scene()->addPostEventAction(new SetCursorEvent(item, cn->get(name)));
+					})));
+			}
+			else if ((*currentLevel)[i].type().startsWith("TypedListOf"))
+			{
+				// Add create list entry
+				shortcuts << calculateSuitableShortcut(name, shortcuts);
+				list.append( new Action(shortcuts.last(), "Create " + name,
+						Action::ActionFunctionOnItem([name](Item* item){
+							auto cn = static_cast<CompositeNode*>(item->node());
+							auto listInNode = dynamic_cast<List*>(cn->get(name));
+							Q_ASSERT(listInNode);
+							if ( listInNode->size() == 0)
+							{
+								cn->beginModification("add " + name + " entry");
+								listInNode->append(listInNode->createDefaultElement());
+								cn->endModification();
+							}
+							item->setUpdateNeededForChildItem(Item::StandardUpdate, listInNode->first<Node>());
+							item->scene()->addPostEventAction(new SetCursorEvent(item, listInNode->first<Node>()));
+					})));
+			}
+		}
+	}
+
+}
+
+QString Action::calculateSuitableShortcut(const QString& name, const QStringList& list)
+{
+	// Try to find a shortcut with as few letters as possible
+	QString nameWithSpace = name + " ";
+	for(int i = 1; i <= nameWithSpace.length(); ++i)
+	{
+		QString prefix = nameWithSpace.left(i);
+		bool found = false;
+		for (auto s : list)
+			if (s.startsWith(prefix, Qt::CaseInsensitive))
+			{
+				found = true;
+				break;
+			}
+
+		if (!found) return prefix;
+	}
+
+	// We find something
+	Q_ASSERT(false);
+	return QString();
 }
 
 } /* namespace Interaction */

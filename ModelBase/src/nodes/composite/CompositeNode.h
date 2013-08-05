@@ -66,7 +66,6 @@ class MODELBASE_API CompositeNode: public Super<Node>
 	DECLARE_TYPE_ID
 
 	public:
-
 		CompositeNode(Node *parent, AttributeChain& metaData);
 		CompositeNode(Node *parent, PersistentStore &store, bool partialHint, AttributeChain& metaData);
 
@@ -80,13 +79,42 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		Node* get(const CompositeIndex &attributeIndex) const;
 		Node* get(const QString &attributeName) const;
 		CompositeIndex indexOf(Node* node) const;
+		CompositeIndex indexOf(const QString& nodeName) const;
 
 		virtual QList<Node*> children();
 		virtual bool replaceChild(Node* child, Node* replacement);
 
 		void set(const CompositeIndex &attributeIndex, Node* node);
 
-		void removeOptional(const CompositeIndex &attributeIndex);
+		/**
+		 * Removes an optional node or replaces a non-optional child node with a default constructed node.
+		 *
+		 * The node is specified by the \a attributeIndex.
+		 */
+		void remove(const CompositeIndex &attributeIndex);
+
+		/**
+		 * \overload
+		 *
+		 * Removes an optional node or replaces a non-optional child node with a default constructed node.
+		 *
+		 * The node removed is \a childNode. It must not be null.
+		 */
+		void remove(Node* childNode);
+
+		/**
+		 * \overload
+		 *
+		 * Removes an optional node or replaces a non-optional child node with a default constructed node.
+		 *
+		 *  The node removed has the name \a childNodeName. It must not be null.
+		 */
+		void remove(QString childNodeName);
+
+		/**
+		 * Sets a child node to a newly constructed default node of the child's type and returns the new node.
+		 */
+		Node* setDefault(QString nodeName);
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
@@ -101,6 +129,8 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		template <class T> T* extension();
 
+		const AttributeChain& meta();
+
 	protected:
 		static CompositeIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
@@ -110,8 +140,8 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		virtual AttributeChain& topLevelMeta();
 
 	private:
-		AttributeChain& meta;
-		QVector<QVector<Node*> > subnodes;
+		AttributeChain& meta_;
+		QVector<QVector<Node*> > subnodes_;
 
 		void removeAllNodes();
 		void verifyHasAllMandatoryAttributes();
@@ -121,7 +151,7 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 inline Node* CompositeNode::get(const CompositeIndex &attributeIndex) const
 {
-	return subnodes[attributeIndex.level()][attributeIndex.index()];
+	return subnodes_[attributeIndex.level()][attributeIndex.index()];
 }
 
 inline int CompositeNode::registerExtensionId() { return nextExtensionId_++; }
@@ -132,5 +162,7 @@ template <class T> T* CompositeNode::extension()
 	if (topMeta.hasExtensionInHierarchy(T::extensionId())) return new T(this, topMeta.extension(T::extensionId()));
 	else return nullptr;
 }
+
+inline const AttributeChain& CompositeNode::meta() { return meta_; }
 
 }

@@ -48,9 +48,6 @@ class OOInteraction : public QObject, public Core::EnvisionPlugin
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
-
-	private:
-		void initializeActions();
 };
 
 OOINTERACTION_API Core::InitializationRegistry& itemTypeInitializationRegistry();

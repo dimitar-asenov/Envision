@@ -30,6 +30,10 @@
 #include "ModelBase/src/nodes/Node.h"
 #include "VisualizationBase/src/items/Item.h"
 
+namespace Model {
+	class CompositeNode;
+}
+
 namespace Interaction {
 
 class INTERACTIONBASE_API Action
@@ -51,14 +55,17 @@ class INTERACTIONBASE_API Action
 		const QString& name() const;
 		bool isPrefix(const QString& str) const;
 
-		static QList<Action*>& actions(Model::Node* node);
 		static QList<Action*>& actions(int nodeTypeId);
+		static QList<Action*>& actions(Model::Node* node);
 
 		template<class T> static void add(Action* action);
 
 	private:
 		QString shortcut_;
 		QString name_;
+
+		static void createStandardActionsForCompositeNode(Model::CompositeNode* node, QList<Action*>& list);
+		static QString calculateSuitableShortcut(const QString& name, const QStringList& list);
 
 		ActionFunctionOnNode actionOnNode_;
 		ActionFunctionOnItem actionOnItem_;
@@ -68,7 +75,6 @@ inline const QString& Action::shortcut() const { return shortcut_; }
 inline const QString& Action::name() const { return name_; }
 inline bool Action::isPrefix(const QString& str) const { return shortcut_.startsWith(str); }
 
-inline QList<Action*>& Action::actions(Model::Node* node) { return actions(node->typeId()); }
 template<class T> inline void Action::add(Action* action) { actions(T::typeIdStatic()).append(action);}
 
 } /* namespace Interaction */

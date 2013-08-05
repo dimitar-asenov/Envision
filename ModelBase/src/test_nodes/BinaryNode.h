@@ -50,7 +50,7 @@ class MODELBASE_API BinaryNode: public Super<Model::CompositeNode>
 
 };
 
-inline void BinaryNode::removeLeftNode() { removeOptional(leftIndex); }
-inline void BinaryNode::removeRightNode() { removeOptional(rightIndex); }
+inline void BinaryNode::removeLeftNode() { remove(leftIndex); }
+inline void BinaryNode::removeRightNode() { remove(rightIndex); }
 
 }

@@ -61,12 +61,10 @@
 #include "OOModel/src/allOOModelNodes.h"
 
 
-#include "InteractionBase/src/actions/Action.h"
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/handlers/HText.h"
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
-#include "InteractionBase/src/events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/Symbol.h"
@@ -130,8 +128,6 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
 
-	initializeActions();
-
 	// Initialize customization support
 	auto customizationGroup = new Visualization::VisualizationGroup();
 	customizationGroup->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
@@ -158,35 +154,6 @@ void OOInteraction::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
-}
-
-void OOInteraction::initializeActions()
-{
-	Interaction::Action::add<OOModel::Method>(new Interaction::Action("r","Create result",
-		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
-			auto node = static_cast<OOModel::Method*>(item->node());
-			if ( node->results()->size() == 0)
-			{
-				node->beginModification("add result");
-				node->results()->append(new OOModel::FormalResult("", new OOModel::EmptyExpression()));
-				node->endModification();
-			}
-			item->setUpdateNeededForChildItem(Visualization::Item::StandardUpdate, node->results()->first());
-			item->scene()->addPostEventAction(new Interaction::SetCursorEvent(item, node->results()->first()));
-	})));
-
-	Interaction::Action::add<OOModel::Method>(new Interaction::Action("n","Create annotation",
-		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
-			auto node = static_cast<OOModel::Method*>(item->node());
-			if ( node->annotations()->size() == 0)
-			{
-				node->beginModification("add annotation");
-				node->annotations()->append(new OOModel::ExpressionStatement(new OOModel::EmptyExpression()));
-				node->endModification();
-			}
-			item->setUpdateNeededForChildItem(Visualization::Item::StandardUpdate, node->annotations()->first());
-			item->scene()->addPostEventAction(new Interaction::SetCursorEvent(item, node->annotations()->first()));
-	})));
 }
 
 }

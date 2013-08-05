@@ -49,50 +49,50 @@ CompositeNode* CompositeNode::createDefaultInstance( Node* parent)
 
 AttributeChain& CompositeNode::topLevelMeta()
 {
-	return meta;
+	return meta_;
 }
 
 CompositeNode::CompositeNode(Node *parent) :
-	Super(parent), meta(CompositeNode::getMetaData())
+	Super(parent), meta_(CompositeNode::getMetaData())
 {
 	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
 }
 
 CompositeNode::CompositeNode(Node *parent, PersistentStore &, bool) :
-	Super(parent), meta(CompositeNode::getMetaData())
+	Super(parent), meta_(CompositeNode::getMetaData())
 {
 	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
 }
 
 CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
-	Super(parent), meta(metaData), subnodes(meta.numLevels())
+	Super(parent), meta_(metaData), subnodes_(meta_.numLevels())
 {
-	for (int level = 0; level < meta.numLevels(); ++level)
+	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.level(level);
-		subnodes[level] = QVector<Node*> (currentLevel->size(), nullptr);
+		AttributeChain* currentLevel = meta_.level(level);
+		subnodes_[level] = QVector<Node*> (currentLevel->size(), nullptr);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( !(*currentLevel)[i].optional() )
-				subnodes[level][i] = Node::createNewNode((*currentLevel)[i].type(), this);
+				subnodes_[level][i] = Node::createNewNode((*currentLevel)[i].type(), this);
 	}
 }
 
 CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, AttributeChain& metaData) :
-	Super(parent), meta(metaData), subnodes(meta.numLevels())
+	Super(parent), meta_(metaData), subnodes_(meta_.numLevels())
 {
-	for (int level = 0; level < meta.numLevels(); ++level)
-		subnodes[level] = QVector<Node*> (meta.level(level)->size(), nullptr);
+	for (int level = 0; level < meta_.numLevels(); ++level)
+		subnodes_[level] = QVector<Node*> (meta_.level(level)->size(), nullptr);
 
 	QList<LoadedNode> children = store.loadAllSubNodes(this);
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
-		CompositeIndex index = meta.indexForAttribute(ln->name);
+		CompositeIndex index = meta_.indexForAttribute(ln->name);
 		if ( !index.isValid() ) throw ModelException("Node has attribute "
 				+ ln->name + " in persistent store, but this attribute is not registered");
 
-		subnodes[index.level()][index.index()] = ln->node;
+		subnodes_[index.level()][index.index()] = ln->node;
 		ln->node->setParent(this);
 	}
 
@@ -101,9 +101,9 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, Attribu
 
 CompositeNode::~CompositeNode()
 {
-	for (int level = 0; level < subnodes.size(); ++level)
-		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i] ) SAFE_DELETE( subnodes[level][i] );
+	for (int level = 0; level < subnodes_.size(); ++level)
+		for (int i = 0; i < subnodes_[level].size(); ++i)
+			if ( subnodes_[level][i] ) SAFE_DELETE( subnodes_[level][i] );
 }
 
 AttributeChain& CompositeNode::getMetaData()
@@ -132,16 +132,16 @@ CompositeIndex CompositeNode::registerNewAttribute(AttributeChain& metaData, con
 void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 {
 	Q_ASSERT( attributeIndex.isValid() );
-	Q_ASSERT( attributeIndex.level() < subnodes.size());
-	Q_ASSERT( attributeIndex.index() < subnodes[attributeIndex.level()].size());
-	Q_ASSERT( node || meta.attribute(attributeIndex).optional());
-	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes));
+	Q_ASSERT( attributeIndex.level() < subnodes_.size());
+	Q_ASSERT( attributeIndex.index() < subnodes_[attributeIndex.level()].size());
+	Q_ASSERT( node || meta_.attribute(attributeIndex).optional());
+	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes_));
 }
 
 Node* CompositeNode::get(const QString &attributeName) const
 {
-	CompositeIndex index = meta.indexForAttribute(attributeName);
-	if ( index.isValid() ) return subnodes[index.level()][index.index()];
+	CompositeIndex index = meta_.indexForAttribute(attributeName);
+	if ( index.isValid() ) return subnodes_[index.level()][index.index()];
 	return nullptr;
 }
 
@@ -149,13 +149,19 @@ CompositeIndex CompositeNode::indexOf(Node* node) const
 {
 	if (node)
 	{
-		for (int level = 0; level < subnodes.size(); ++level)
-			for (int i = 0; i < subnodes[level].size(); ++i)
-				if (subnodes[level][i] == node)
+		for (int level = 0; level < subnodes_.size(); ++level)
+			for (int i = 0; i < subnodes_[level].size(); ++i)
+				if (subnodes_[level][i] == node)
 					return CompositeIndex(level, i);
 	}
 
 	return CompositeIndex();
+}
+
+
+CompositeIndex CompositeNode::indexOf(const QString& nodeName) const
+{
+	return meta_.indexForAttribute(nodeName);
 }
 
 QList<Node*> CompositeNode::children()
@@ -175,49 +181,39 @@ bool CompositeNode::replaceChild(Node* child, Node* replacement)
 	if (!index.isValid()) return false;
 
 	if ( !index.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
-	execute(new CompositeNodeChangeChild(this, replacement, index, &subnodes));
+	execute(new CompositeNodeChangeChild(this, replacement, index, &subnodes_));
 	return true;
 }
 
 bool CompositeNode::hasAttribute(const QString& attributeName)
 {
-	return meta.hasAttribute(attributeName);
+	return meta_.hasAttribute(attributeName);
 }
 
 QList< QPair<QString, Node*> > CompositeNode::getAllAttributes(bool includeNullValues)
 {
 	QList< QPair<QString, Node*> > result;
 
-	for (int level = 0; level < meta.numLevels(); ++level)
+	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.level(level);
+		AttributeChain* currentLevel = meta_.level(level);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] || includeNullValues )
-				result.append(QPair<QString,Node*>((*currentLevel)[i].name(),subnodes[level][i]));
+			if ( subnodes_[level][i] || includeNullValues )
+				result.append(QPair<QString,Node*>((*currentLevel)[i].name(),subnodes_[level][i]));
 	}
 
 	return result;
 }
 
-void CompositeNode::removeOptional(const CompositeIndex &attributeIndex)
-{
-	if ( meta.attribute(attributeIndex).optional() )
-	{
-		execute(new CompositeNodeChangeChild(this, nullptr, attributeIndex, &subnodes));
-	}
-	else
-		throw ModelException("Trying to remove a non-optional attribute");
-}
-
 void CompositeNode::save(PersistentStore &store) const
 {
-	for (int level = 0; level < meta.numLevels(); ++level)
+	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.level(level);
+		AttributeChain* currentLevel = meta_.level(level);
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] != nullptr && currentLevel->at(i).persistent() )
-				store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
+			if ( subnodes_[level][i] != nullptr && currentLevel->at(i).persistent() )
+				store.saveNode(subnodes_[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
 	}
 }
 
@@ -233,12 +229,12 @@ void CompositeNode::load(PersistentStore &store)
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
-		CompositeIndex index = meta.indexForAttribute(ln->name);
+		CompositeIndex index = meta_.indexForAttribute(ln->name);
 		if ( !index.isValid() )
 			throw ModelException("Node has attribute "
 					+ ln->name + " in persistent store, but this attribute is not registered");
 
-		execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(),index.index()), &subnodes));
+		execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(),index.index()), &subnodes_));
 	}
 
 	verifyHasAllMandatoryAttributes();
@@ -246,24 +242,56 @@ void CompositeNode::load(PersistentStore &store)
 
 void CompositeNode::removeAllNodes()
 {
-	for (int level = 0; level < subnodes.size(); ++level)
-		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i] )
-				execute(new CompositeNodeChangeChild(this, nullptr, CompositeIndex(level,i), &subnodes));
+	for (int level = 0; level < subnodes_.size(); ++level)
+		for (int i = 0; i < subnodes_[level].size(); ++i)
+			if ( subnodes_[level][i] )
+				execute(new CompositeNodeChangeChild(this, nullptr, CompositeIndex(level,i), &subnodes_));
 }
 
 void CompositeNode::verifyHasAllMandatoryAttributes()
 {
-	for (int level = 0; level < meta.numLevels(); ++level)
+	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.level(level);
+		AttributeChain* currentLevel = meta_.level(level);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] == nullptr && (*currentLevel)[i].optional() == false )
-				throw ModelException("An CompositeNode of type '" + meta.typeName()
+			if ( subnodes_[level][i] == nullptr && (*currentLevel)[i].optional() == false )
+				throw ModelException("An CompositeNode of type '" + meta_.typeName()
 						+ "' has an uninitialized mandatory attribute '"
 						+ (*currentLevel)[i].name() +"'");
 	}
+}
+
+void CompositeNode::remove(const CompositeIndex &attributeIndex)
+{
+	Q_ASSERT(attributeIndex.isValid());
+
+	if ( meta_.attribute(attributeIndex).optional() )
+		execute(new CompositeNodeChangeChild(	this, nullptr, attributeIndex, &subnodes_));
+	else
+		execute(new CompositeNodeChangeChild(	this, Node::createNewNode(meta_.attribute(attributeIndex).type(), nullptr),
+				attributeIndex, &subnodes_));
+}
+
+void CompositeNode::remove(Node* childNode)
+{
+	Q_ASSERT(childNode);
+	remove(indexOf(childNode));
+}
+
+void CompositeNode::remove(QString childNodeName)
+{
+	remove(indexOf(childNodeName));
+}
+
+Node* CompositeNode::setDefault(QString nodeName)
+{
+	auto attributeIndex = indexOf(nodeName);
+
+	auto newNode = Node::createNewNode(meta_.attribute(attributeIndex).type());
+	set(attributeIndex, newNode);
+
+	return newNode;
 }
 
 }
