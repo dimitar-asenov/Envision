@@ -47,6 +47,7 @@ HText* HText::instance()
 void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
+	if (tr->isHtml()) return GenericHandler::keyPressEvent(target, event);
 
 	if (event->modifiers() == Qt::ControlModifier)
 	{
@@ -111,12 +112,18 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
+	if (tr->isHtml()) return GenericHandler::mousePressEvent(target, event);
+
 	doubleClick = false;
 	GenericHandler::mousePressEvent(target, event);
 }
 
 void HText::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
+	if (tr->isHtml()) return GenericHandler::mouseReleaseEvent(target, event);
+
 	if ( event->modifiers() == 0 && doubleClick ) doubleClick = false;
 	else GenericHandler::mouseReleaseEvent(target, event);
 }
@@ -124,6 +131,7 @@ void HText::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEv
 void HText::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
+	if (tr->isHtml()) return GenericHandler::mouseDoubleClickEvent(target, event);
 
 	doubleClick = true;
 	if ( event->modifiers() == 0 && event->button() == Qt::LeftButton )
@@ -137,6 +145,7 @@ void HText::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMou
 void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
+	if (tr->isHtml()) return GenericHandler::mouseMoveEvent(target, event);
 
 	if (event->modifiers() == 0)
 	{
@@ -157,8 +166,11 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 	else GenericHandler::mouseMoveEvent(target, event);
 }
 
-void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
+void HText::focusOutEvent(Visualization::Item *target, QFocusEvent* event)
 {
+	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
+	if (tr->isHtml()) return GenericHandler::focusOutEvent(target, event);
+
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 

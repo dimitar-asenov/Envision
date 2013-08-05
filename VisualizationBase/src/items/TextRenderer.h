@@ -70,6 +70,10 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 		qreal textXOffset();
 		qreal textYOffset();
 
+		void setTextFormat(Qt::TextFormat textFormat);
+
+		bool isHtml() const;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -106,5 +110,7 @@ inline void TextRenderer::setEditable(bool editable_) { editable = editable_; }
 
 inline qreal TextRenderer::textXOffset() { return textXOffset_; }
 inline qreal TextRenderer::textYOffset() { return textYOffset_; }
+
+inline bool TextRenderer::isHtml() const { return staticText_.textFormat() != Qt::PlainText; }
 
 }

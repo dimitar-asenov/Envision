@@ -52,7 +52,7 @@ bool TextRenderer::setText(const QString& newText)
 
 QString TextRenderer::selectedText()
 {
-	if (this->hasFocus())
+	if (this->hasFocus() && !isHtml())
 	{
 		TextCursor* cur = correspondingSceneCursor<TextCursor>();
 		int xstart = cur->selectionFirstIndex();
@@ -80,9 +80,14 @@ inline QRectF TextRenderer::bound(QFontMetrics& qfm)
 	if (staticText_.text().isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
 	else
 	{
-		bound = qfm.boundingRect(staticText_.text());
-		if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
-		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
+		if ( isHtml() )
+			bound = QRectF(QPointF(0,0), staticText_.size());
+		else
+		{
+			bound = qfm.boundingRect(staticText_.text());
+			if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
+			if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
+		}
 	}
 	return bound;
 }
@@ -113,7 +118,8 @@ void TextRenderer::updateGeometry(int, int)
 		textYOffset_ += 0.5;
 	}
 
-	if ( this->hasFocus() )	correspondingSceneCursor<TextCursor>()->update(qfm);
+	if ( this->hasFocus() && !isHtml())
+		correspondingSceneCursor<TextCursor>()->update(qfm);
 }
 
 void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -124,7 +130,10 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 	//int numSelected = this->scene()->selectedItems().size();
 
-	if ( !this->hasFocus() /*|| numSelected > 1  || (numSelected == 1 && !this->isSelected())*/)
+	TextCursor* cur = (this->hasFocus() && !isHtml() )
+			? correspondingSceneCursor<TextCursor>() : nullptr;
+
+	if ( !this->hasFocus()  || !cur->hasSelection())
 	{
 		// In this common case use static text.
 		painter->setPen(style()->pen());
@@ -135,46 +144,37 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	{
 		// In the selected case do not use static text.
 
-		TextCursor* cur = correspondingSceneCursor<TextCursor>();
-		if ( cur->hasSelection() )
-		{
-			// Some text is selected, draw it differently than non-selected text.
-			int start = cur->selectionFirstIndex();
-			int end = cur->selectionLastIndex();
+		// Some text is selected, draw it differently than non-selected text.
+		int start = cur->selectionFirstIndex();
+		int end = cur->selectionLastIndex();
 
-			QPointF offset(textXOffset_, textYOffset_);
-			offset -= bound().topLeft();
+		QPointF offset(textXOffset_, textYOffset_);
+		offset -= bound().topLeft();
 
-			// Draw selection background
-			painter->setPen(Qt::NoPen);
-			painter->setBrush(style()->selectionBackground());
-			painter->drawRect(textXOffset_ + cur->xBegin(), 0, cur->xEnd() - cur->xBegin(), this->height());
-			painter->setBrush(Qt::NoBrush);
+		// Draw selection background
+		painter->setPen(Qt::NoPen);
+		painter->setBrush(style()->selectionBackground());
+		painter->drawRect(textXOffset_ + cur->xBegin(), 0, cur->xEnd() - cur->xBegin(), this->height());
+		painter->setBrush(Qt::NoBrush);
 
-			// Draw selected text
-			painter->setPen(style()->selectionPen());
-			painter->setFont(style()->selectionFont());
-			painter->drawText(QPointF(offset.x() + cur->xBegin(), offset.y()),
-					staticText_.text().mid(start, end - start));
+		// Draw selected text
+		painter->setPen(style()->selectionPen());
+		painter->setFont(style()->selectionFont());
+		painter->drawText(QPointF(offset.x() + cur->xBegin(), offset.y()),
+				staticText_.text().mid(start, end - start));
 
-			// Draw non-selected text
-			painter->setPen(style()->pen());
-			painter->setFont(style()->font());
-			painter->drawText(offset, staticText_.text().left(start));
-			painter->drawText(QPointF(offset.x() + cur->xEnd(), offset.y()), staticText_.text().mid(end));
-		}
-		else
-		{
-			// No text is selected, draw all text at once using normal style
-			painter->setPen(style()->pen());
-			painter->setFont(style()->font());
-			painter->drawStaticText(QPointF(textXOffset_, textYOffset_), staticText_);
-		}
+		// Draw non-selected text
+		painter->setPen(style()->pen());
+		painter->setFont(style()->font());
+		painter->drawText(offset, staticText_.text().left(start));
+		painter->drawText(QPointF(offset.x() + cur->xEnd(), offset.y()), staticText_.text().mid(end));
 	}
 }
 
 bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
+	if ( isHtml() ) return Super::moveCursor(dir, reference);
+
 	if ( dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf )
 	{
 		PositionConstraints pc = satisfiedPositionConstraints(reference);
@@ -218,6 +218,13 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 	}
 
 	return false;
+}
+
+void TextRenderer::setTextFormat(Qt::TextFormat textFormat)
+{
+	Q_ASSERT(textFormat == Qt::PlainText || textFormat == Qt::RichText);
+	staticText_.setTextFormat(textFormat);
+	this->setUpdateNeeded(StandardUpdate);
 }
 
 }
