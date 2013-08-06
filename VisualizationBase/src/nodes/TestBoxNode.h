@@ -45,11 +45,12 @@ class VISUALIZATIONBASE_API TestBoxNode : public Super<Model::CompositeNode> {
 	ATTRIBUTE_VALUE(::Model::Integer, green, setGreen, int)
 	ATTRIBUTE_VALUE(::Model::Integer, blue, setBlue, int)
 	ATTRIBUTE_VALUE(::Model::Boolean, sizeDependsOnParent, setSizeDependsOnParent, bool)
+	ATTRIBUTE_VALUE(::Model::Boolean, isHtml, setIsHtml, bool)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
 
 	public:
-		TestBoxNode(const QString& label, QColor color, bool sizeDependsOnParent = false);
-		TestBoxNode(const QString& label, bool sizeDependsOnParent = false);
+		TestBoxNode(const QString& label, QColor color, bool sizeDependsOnParent, bool isHtml);
+		TestBoxNode(const QString& label, bool sizeDependsOnParent, bool isHtml);
 };
 
 } /* namespace Visualization */

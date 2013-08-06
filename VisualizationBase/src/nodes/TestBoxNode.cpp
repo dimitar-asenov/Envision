@@ -38,9 +38,10 @@ REGISTER_ATTRIBUTE(TestBoxNode, red, Integer, false, false, true)
 REGISTER_ATTRIBUTE(TestBoxNode, green, Integer, false, false, true)
 REGISTER_ATTRIBUTE(TestBoxNode, blue, Integer, false, false, true)
 REGISTER_ATTRIBUTE(TestBoxNode, sizeDependsOnParent, Boolean, false, false, true)
+REGISTER_ATTRIBUTE(TestBoxNode, isHtml, Boolean, false, false, true)
 REGISTER_ATTRIBUTE(TestBoxNode, label, Text, false, false, true)
 
-TestBoxNode::TestBoxNode(const QString& label, QColor color, bool sizeDependsOnParent)
+TestBoxNode::TestBoxNode(const QString& label, QColor color, bool sizeDependsOnParent, bool isHtml)
 : Super{nullptr, TestBoxNode::getMetaData()}
 {
 	setRed(color.red());
@@ -48,9 +49,10 @@ TestBoxNode::TestBoxNode(const QString& label, QColor color, bool sizeDependsOnP
 	setBlue(color.blue());
 	setLabel(label);
 	setSizeDependsOnParent(sizeDependsOnParent);
+	setIsHtml(isHtml);
 }
 
-TestBoxNode::TestBoxNode(const QString& label, bool sizeDependsOnParent)
+TestBoxNode::TestBoxNode(const QString& label, bool sizeDependsOnParent, bool isHtml)
 : Super{nullptr, TestBoxNode::getMetaData()}
 {
 	QColor color = Qt::yellow;
@@ -59,6 +61,7 @@ TestBoxNode::TestBoxNode(const QString& label, bool sizeDependsOnParent)
 	setBlue(color.blue());
 	setLabel(label);
 	setSizeDependsOnParent(sizeDependsOnParent);
+	setIsHtml(isHtml);
 }
 
 } /* namespace Visualization */

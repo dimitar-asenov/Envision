@@ -109,15 +109,17 @@ TEST(VisualizationBase, CompositeTest)
 
 	third->set("Some independent text");
 
-	list->append(new TestBoxNode("someText"));
-	list->append(new TestBoxNode("stretch", true));
+	list->append(new TestBoxNode("someText", false, false));
+	list->append(new TestBoxNode("stretch", true, false));
+	list->append(new TestBoxNode("An html node with <b>bold text</b><br/> next html line", false, true));
+	list->append(new TestBoxNode("An html node with no formatting", false, true));
 
 	model->endModification();
 
-	auto it = new DeclarativeTest(nullptr, first, new TestBoxNode("first", true),
-																new TestBoxNode("second", Qt::darkGreen, true),
-																new TestBoxNode("third", Qt::darkRed,true),
-																new TestBoxNode("fourth", Qt::white, true));
+	auto it = new DeclarativeTest(nullptr, first, list, //new TestBoxNode("first", true),
+																new TestBoxNode("second", Qt::darkGreen, true, false),
+																new TestBoxNode("third", Qt::darkRed,true, false),
+																new TestBoxNode("fourth", Qt::white, true, false));
 	auto scene = VisualizationManager::instance().mainScene();
 	scene->addTopLevelItem(it);
 	scene->scheduleUpdate();

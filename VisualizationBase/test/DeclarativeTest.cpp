@@ -162,11 +162,12 @@ void DeclarativeTest::initializeForms()
 	// Test 9: Test sequential layout
 	FormElement* horizontalSequential = (new SequentialLayoutFormElement())
 			->setSpaceBetweenElements(5)
-			->setListOfItems([](Item*){return QList<Item*>{new TestBox("a"), new TestBox("b"), new TestBox("cde")};});
+			->setListOfItems([](Item*){return QList<Item*>{new TestBox("a", false, false), new TestBox("b", false, false),
+				new TestBox("cde", false, false)};});
 	FormElement* verticalSequential = (new SequentialLayoutFormElement())
 			->setSpaceBetweenElements(5)
-			->setListOfNodes([](Item*){return QList<Model::Node*>{new TestBoxNode("dfsdfs", true),
-																					new TestBoxNode("sfsdfsdf")};})
+			->setListOfNodes([](Item*){return QList<Model::Node*>{new TestBoxNode("dfsdfs", true, false),
+																					new TestBoxNode("sfsdfsdf", false, false)};})
 			->setVertical();
 
 	addForm((new AnchorLayoutFormElement())

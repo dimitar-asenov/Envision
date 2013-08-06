@@ -37,12 +37,12 @@ TestBox::TestBox(Item* parent, NodeType* node): Super{parent, itemStyles().get()
 TestBox::TestBox(NodeType* node) : Super{nullptr, itemStyles().get(), node->label()}, node_{node}
 {}
 
-TestBox::TestBox(const QString& label, QColor color, bool sizeDependsOnParent)
-: Super{nullptr, itemStyles().get(), label}, color_(color), sizeDependsOnParent_(sizeDependsOnParent)
+TestBox::TestBox(const QString& label, QColor color, bool sizeDependsOnParent, bool isHtml)
+: Super{nullptr, itemStyles().get(), label}, color_{color}, sizeDependsOnParent_{sizeDependsOnParent}, isHtml_{isHtml}
 {}
 
-TestBox::TestBox(const QString& label, bool sizeDependsOnParent)
-: Super{nullptr, itemStyles().get(), label}, sizeDependsOnParent_(sizeDependsOnParent)
+TestBox::TestBox(const QString& label, bool sizeDependsOnParent, bool isHtml)
+: Super{nullptr, itemStyles().get(), label}, sizeDependsOnParent_{sizeDependsOnParent}, isHtml_{isHtml}
 {}
 
 bool TestBox::hasNode() const
@@ -102,6 +102,8 @@ void TestBox::determineChildren()
 void TestBox::updateGeometry(int availableWidth, int availableHeight)
 {
 	Q_ASSERT(!hasShape());
+
+	setTextFormat(((node_ && node_->isHtml()) || isHtml_ ) ? Qt::RichText : Qt::PlainText);
 
 	TextRenderer::updateGeometry(availableWidth, availableHeight);
 	if (sizeDependsOnParent() && (availableWidth > width() || availableHeight > height()))

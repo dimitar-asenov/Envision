@@ -96,6 +96,9 @@ void TextRenderer::updateGeometry(int, int)
 {
 	staticText_.setText(currentText());
 
+	// It's important to call this in order to give the static text the correct font. This is used when computing bound.
+	staticText_.prepare(QTransform(), style()->font());
+
 	QFontMetrics qfm(style()->font());
 	auto bound = this->bound(qfm);
 	if (this->hasShape())
@@ -222,8 +225,17 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 void TextRenderer::setTextFormat(Qt::TextFormat textFormat)
 {
 	Q_ASSERT(textFormat == Qt::PlainText || textFormat == Qt::RichText);
-	staticText_.setTextFormat(textFormat);
-	this->setUpdateNeeded(StandardUpdate);
+
+	if (textFormat != staticText_.textFormat())
+	{
+		staticText_.setTextFormat(textFormat);
+
+		auto to = staticText_.textOption();
+		to.setWrapMode(QTextOption::NoWrap);
+		staticText_.setTextOption(to);
+
+		this->setUpdateNeeded(StandardUpdate);
+	}
 }
 
 }
