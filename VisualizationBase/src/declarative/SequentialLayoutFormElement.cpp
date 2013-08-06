@@ -287,7 +287,7 @@ void SequentialLayoutFormElement::synchronizeWithItems(Item* item, const QList<I
 	}
 
 	// Remove excess items
-	while (itemList.size() > items.size()) removeFromItemList(item, itemList.size()-1, false);
+	while (itemList.size() > items.size()) removeFromItemList(item, itemList.size()-1, true);
 }
 
 void SequentialLayoutFormElement::removeFromItemList(Item* item, int index, bool deleteItem)
