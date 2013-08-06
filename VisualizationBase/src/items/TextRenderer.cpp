@@ -128,12 +128,10 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 	Item::paint(painter, option, widget);
 
-	//int numSelected = this->scene()->selectedItems().size();
+	TextCursor* selectionCursor = (this->hasFocus() && !isHtml()) ? correspondingSceneCursor<TextCursor>() : nullptr;
+	if (selectionCursor && !selectionCursor->hasSelection()) selectionCursor = nullptr;
 
-	TextCursor* cur = (this->hasFocus() && !isHtml() )
-			? correspondingSceneCursor<TextCursor>() : nullptr;
-
-	if ( !this->hasFocus()  || !cur->hasSelection())
+	if ( !selectionCursor )
 	{
 		// In this common case use static text.
 		painter->setPen(style()->pen());
@@ -145,8 +143,8 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		// In the selected case do not use static text.
 
 		// Some text is selected, draw it differently than non-selected text.
-		int start = cur->selectionFirstIndex();
-		int end = cur->selectionLastIndex();
+		int start = selectionCursor->selectionFirstIndex();
+		int end = selectionCursor->selectionLastIndex();
 
 		QPointF offset(textXOffset_, textYOffset_);
 		offset -= bound().topLeft();
@@ -154,20 +152,21 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		// Draw selection background
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(style()->selectionBackground());
-		painter->drawRect(textXOffset_ + cur->xBegin(), 0, cur->xEnd() - cur->xBegin(), this->height());
+		painter->drawRect(textXOffset_ + selectionCursor->xBegin(), 0,
+				selectionCursor->xEnd() - selectionCursor->xBegin(), this->height());
 		painter->setBrush(Qt::NoBrush);
 
 		// Draw selected text
 		painter->setPen(style()->selectionPen());
 		painter->setFont(style()->selectionFont());
-		painter->drawText(QPointF(offset.x() + cur->xBegin(), offset.y()),
+		painter->drawText(QPointF(offset.x() + selectionCursor->xBegin(), offset.y()),
 				staticText_.text().mid(start, end - start));
 
 		// Draw non-selected text
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
 		painter->drawText(offset, staticText_.text().left(start));
-		painter->drawText(QPointF(offset.x() + cur->xEnd(), offset.y()), staticText_.text().mid(end));
+		painter->drawText(QPointF(offset.x() + selectionCursor->xEnd(), offset.y()), staticText_.text().mid(end));
 	}
 }
 
