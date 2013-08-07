@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "items/ItemStyle.h"
+#include "ItemStyle.h"
 
 #include "Item.h"
 

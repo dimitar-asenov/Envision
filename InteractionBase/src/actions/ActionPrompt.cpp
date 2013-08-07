@@ -29,6 +29,7 @@
 #include "Action.h"
 
 #include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/items/SelectedItem.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 
 using namespace Visualization;
@@ -56,6 +57,7 @@ ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const 
 
 	computeCurrentActionReceiver();
 	originalActionReceiver_->scene()->addTopLevelItem(this);
+	setHighlight(true);
 
 	actionText_->setText("");
 	setPromptPosition();
@@ -70,6 +72,7 @@ ActionPrompt::~ActionPrompt()
 	currentActionReceiver_ = nullptr;
 	originalActionReceiver_ = nullptr;
 
+	setHighlight(false);
 	SAFE_DELETE_ITEM(layout_);
 
 	// These are deleted by layout's destructor
@@ -77,10 +80,28 @@ ActionPrompt::~ActionPrompt()
 	actionsContainer_ = nullptr;
 }
 
+void ActionPrompt::setHighlight(bool show)
+{
+	if (show && currentActionReceiver_)
+	{
+		if (highlight_) highlight_->setSelectedItem(currentActionReceiver_);
+		else
+		{
+			highlight_ = new Visualization::SelectedItem(currentActionReceiver_);
+			Q_ASSERT(scene());
+			scene()->addTopLevelItem(highlight_);
+		}
+	}
+	else SAFE_DELETE_ITEM(highlight_);
+
+
+}
+
 void ActionPrompt::showPrompt()
 {
 	parentActionsLevel_ = 0;
 	computeCurrentActionReceiver();
+	setHighlight(true);
 
 	actionText_->setText("");
 	setPromptPosition();
@@ -92,6 +113,7 @@ void ActionPrompt::showPrompt()
 void ActionPrompt::hidePrompt()
 {
 	hide();
+	setHighlight(false);
 	originalActionReceiver_->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition_);
 }
 
@@ -196,7 +218,8 @@ void ActionPrompt::computeCurrentActionReceiver()
 
 QList<Action*> ActionPrompt::actions()
 {
-	return Action::actions(currentActionReceiver_->node());
+	if (currentActionReceiver_) return Action::actions(currentActionReceiver_->node());
+	else return {};
 }
 
 void ActionPrompt::upParentActionsLevel()
@@ -210,8 +233,11 @@ void ActionPrompt::upParentActionsLevel()
 		--parentActionsLevel_;
 		computeCurrentActionReceiver();
 	}
-
-	else setUpdateNeeded(StandardUpdate);
+	else
+	{
+		setHighlight(true);
+		setUpdateNeeded(StandardUpdate);
+	}
 }
 
 void ActionPrompt::downParentActionsLevel()
@@ -225,7 +251,11 @@ void ActionPrompt::downParentActionsLevel()
 		++parentActionsLevel_;
 		computeCurrentActionReceiver();
 	}
-	else setUpdateNeeded(StandardUpdate);
+	else
+	{
+		setHighlight(true);
+		setUpdateNeeded(StandardUpdate);
+	}
 }
 
 } /* namespace Interaction */

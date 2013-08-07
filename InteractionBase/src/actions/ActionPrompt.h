@@ -65,12 +65,14 @@ class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Item>
 
 	private:
 
-		bool autoExecuteAction_;
-		Visualization::Item* originalActionReceiver_;
-		Visualization::Item* currentActionReceiver_;
-		Visualization::SequentialLayout* layout_;
-		Visualization::SequentialLayout* actionsContainer_;
-		Visualization::Text* actionText_;
+		bool autoExecuteAction_{};
+		Visualization::Item* originalActionReceiver_{};
+		Visualization::Item* currentActionReceiver_{};
+		Visualization::SequentialLayout* layout_{};
+		Visualization::SequentialLayout* actionsContainer_{};
+		Visualization::Text* actionText_{};
+
+		Visualization::SelectedItem* highlight_{};
 
 		QPoint receiverCursorPosition_;
 
@@ -93,6 +95,8 @@ class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Item>
 		void setPromptPosition();
 		void computeCurrentActionReceiver();
 		QList<Action*> actions();
+
+		void setHighlight(bool show);
 };
 
 inline Visualization::Item* ActionPrompt::originalActionReceiver() { return originalActionReceiver_; }
