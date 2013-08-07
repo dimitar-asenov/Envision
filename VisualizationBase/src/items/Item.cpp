@@ -444,28 +444,31 @@ QList<ItemRegion> Item::regions()
 {
 	QList<ItemRegion> regs;
 
-	bool hasChildren = false;
-
-	if (!style()->wholeItemCursor())
+	if (!style()->noItemRegions())
 	{
-		for(auto child : childItems())
+		bool hasChildren = false;
+
+		if (!style()->wholeItemCursor())
 		{
-			hasChildren = true;
-			QRect rect = child->boundingRect().toRect();
-			rect.translate(child->pos().toPoint());
-			regs.append(ItemRegion(rect));
-			regs.last().setItem(child);
+			for(auto child : childItems())
+			{
+				hasChildren = true;
+				QRect rect = child->boundingRect().toRect();
+				rect.translate(child->pos().toPoint());
+				regs.append(ItemRegion(rect));
+				regs.last().setItem(child);
+			}
 		}
-	}
 
-	if (!hasChildren)
-	{
-		regs.append(ItemRegion(boundingRect_.toRect()));
+		if (!hasChildren)
+		{
+			regs.append(ItemRegion(boundingRect_.toRect()));
 
-		Cursor* cur = new Cursor(this, Cursor::BoxCursor);
-		cur->setRegion( boundingRect_.toRect() );
-		cur->setPosition( boundingRect_.center().toPoint() );
-		regs.last().setCursor(cur);
+			Cursor* cur = new Cursor(this, Cursor::BoxCursor);
+			cur->setRegion( boundingRect_.toRect() );
+			cur->setPosition( boundingRect_.center().toPoint() );
+			regs.last().setCursor(cur);
+		}
 	}
 
 	return regs;

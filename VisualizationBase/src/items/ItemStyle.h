@@ -51,6 +51,7 @@ class VISUALIZATIONBASE_API ItemStyle : public Style
 		bool drawsOnlyShape() const;
 		bool drawShapeWhenEmpty() const;
 		bool wholeItemCursor() const;
+		bool noItemRegions() const;
 		bool allowEquivalentCursorsThroughBoundary() const;
 
 	private:
@@ -59,6 +60,7 @@ class VISUALIZATIONBASE_API ItemStyle : public Style
 		bool drawsOnlyShape_;
 		bool drawShapeWhenEmpty_;
 		bool wholeItemCursor_;
+		bool noItemRegions_;
 		bool allowEquivalentCursorsThroughBoundary_;
 };
 
@@ -66,6 +68,7 @@ inline bool ItemStyle::hasShape() const { return !shapeName_.isEmpty(); }
 inline bool ItemStyle::drawsOnlyShape() const { return drawsOnlyShape_; }
 inline bool ItemStyle::drawShapeWhenEmpty() const {return drawShapeWhenEmpty_; }
 inline bool ItemStyle::wholeItemCursor() const {return wholeItemCursor_; }
+inline bool ItemStyle::noItemRegions() const {return noItemRegions_; }
 inline bool ItemStyle::allowEquivalentCursorsThroughBoundary() const {return allowEquivalentCursorsThroughBoundary_;}
 
 }

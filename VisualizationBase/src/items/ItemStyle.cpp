@@ -53,6 +53,7 @@ void ItemStyle::load(StyleLoader& sl)
 
 	QString shape;
 	sl.load("wholeItemCursor", wholeItemCursor_);
+	sl.load("noItemRegions", noItemRegions_);
 	sl.load("drawsOnlyShape", drawsOnlyShape_);
 	sl.load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
 	sl.load("allowEquivalentCursorsThroughBoundary", allowEquivalentCursorsThroughBoundary_);

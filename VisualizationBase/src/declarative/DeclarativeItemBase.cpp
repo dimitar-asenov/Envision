@@ -129,7 +129,8 @@ bool DeclarativeItemBase::isEmpty() const
 
 QList<ItemRegion> DeclarativeItemBase::regions()
 {
-	return currentForm()->regions(this);
+	if (style()->wholeItemCursor() || style()->noItemRegions()) return Super::regions();
+	else return currentForm()->regions(this);
 }
 
 GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<Merge>> elements)
