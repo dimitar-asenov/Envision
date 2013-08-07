@@ -41,6 +41,7 @@ void TextStyle::load(StyleLoader& sl)
 	sl.load("font", font_);
 	sl.load("selectionPen", selectionPen_);
 	sl.load("selectionFont", selectionFont_);
+	sl.load("htmlFormat", htmlFormat_);
 
 	QColor col;
 	sl.load("selectionBackground", col);

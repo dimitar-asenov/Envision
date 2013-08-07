@@ -2,6 +2,7 @@
 <style prototypes="item/Item/default">
 	<shape/>
 	<drawsOnlyShape>false</drawsOnlyShape>
+	<htmlFormat>false</htmlFormat>
 	<pen>
 		<width>1.0</width>
 		<style>1</style>

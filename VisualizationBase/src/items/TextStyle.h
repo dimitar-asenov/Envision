@@ -40,6 +40,8 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 		QPen selectionPen_;
 		QFont selectionFont_;
 		QBrush selectionBackground_;
+		bool htmlFormat_{};
+
 
 	public:
 		TextStyle();
@@ -50,6 +52,7 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 		const QPen& selectionPen() const;
 		const QFont& selectionFont() const;
 		const QBrush& selectionBackground() const;
+		bool htmlFormat() const;
 };
 
 inline const QPen& TextStyle::pen() const { return pen_; }
@@ -57,5 +60,6 @@ inline const QFont& TextStyle::font() const { return font_; }
 inline const QPen& TextStyle::selectionPen() const { return selectionPen_; }
 inline const QFont& TextStyle::selectionFont() const { return selectionFont_; }
 inline const QBrush& TextStyle::selectionBackground() const { return selectionBackground_; }
+inline bool TextStyle::htmlFormat() const { return htmlFormat_; }
 
 }

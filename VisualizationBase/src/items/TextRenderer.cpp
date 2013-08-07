@@ -40,7 +40,7 @@ TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& 
 Super(parent, style), staticText_(text), editable(true)
 {
 	staticText_.setPerformanceHint(QStaticText::AggressiveCaching);
-	staticText_.setTextFormat(Qt::PlainText);
+	setTextFormat(style->htmlFormat() ? Qt::RichText : Qt::PlainText);
 }
 
 bool TextRenderer::setText(const QString& newText)
