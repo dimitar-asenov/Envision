@@ -49,15 +49,19 @@ QList<Action*>& Action::actions(int nodeTypeId)
 	}
 }
 
-QList<Action*>& Action::actions(Node* node)
+QList<Action*> Action::actions(Node* node)
 {
-	auto & l = actions(node->typeId());
+	auto & completeList = actions(node->typeId());
 
-	if (l.isEmpty())
+	if (completeList.isEmpty())
 		if (auto cn = dynamic_cast<CompositeNode*>(node))
-			createStandardActionsForCompositeNode(cn, l);
+			createStandardActionsForCompositeNode(cn, completeList);
 
-	return l;
+	QList<Action*> filteredList;
+	for (auto a : completeList)
+		if (a->canBeAppliedTo(node)) filteredList.append(a);
+
+	return filteredList;
 }
 
 Action::Action(const QString& shortcut, const QString& name)
@@ -68,8 +72,17 @@ Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnNod
 	: shortcut_{shortcut}, name_{name}, actionOnNode_{action}
 {}
 
+
+Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnNode action, FilterFunctionOnNode filter)
+: shortcut_{shortcut}, name_{name}, actionOnNode_{action}, filterOnNode_(filter)
+{}
+
 Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnItem action)
 : shortcut_{shortcut}, name_{name}, actionOnItem_{action}
+{}
+
+Action::Action(const QString& shortcut, const QString& name, ActionFunctionOnItem action, FilterFunctionOnNode filter)
+: shortcut_{shortcut}, name_{name}, actionOnItem_{action}, filterOnNode_(filter)
 {}
 
 Action::~Action()
@@ -89,6 +102,12 @@ void Action::execute(Visualization::Item* itemWithNode)
 	else execute(itemWithNode->node());
 }
 
+bool Action::canBeAppliedTo(Model::Node* node) const
+{
+	if (filterOnNode_) return filterOnNode_(node);
+	else return true;
+}
+
 void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Action*>& list)
 {
 	auto meta = node->meta();
@@ -102,42 +121,67 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 		for (int i = 0; i < currentLevel->size(); ++i)
 		{
 			QString name = (*currentLevel)[i].name();
+			if (name.startsWith("_")) continue; // Avoid "hidden" attributes which should only be modified indirectly
 
-			if ( (*currentLevel)[i].optional() )
+			bool isOptional = (*currentLevel)[i].optional();
+			bool isList = (*currentLevel)[i].type().startsWith("TypedListOf");
+
+			if ( isOptional )
 			{
-				// Add create optional
+				// Add create optional, if it is a list, also create an element
 				shortcuts << calculateSuitableShortcut(name, shortcuts);
-				list.append( new Action(shortcuts.last(),"Create " + name,
-						Action::ActionFunctionOnItem([name](Item* item){
+				list.append( new Action(shortcuts.last(),"+ " + name,
+						Action::ActionFunctionOnItem([name, isList](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
-							if ( cn->get(name) == nullptr)
+							Q_ASSERT( cn->get(name) == nullptr);
+
+							cn->beginModification("add " + name);
+							cn->setDefault(name);
+							Node* nodeToSelect = cn->get(name);
+							if (isList)
 							{
-								cn->beginModification("add " + name);
-								cn->setDefault(name);
-								cn->endModification();
+								auto newList = dynamic_cast<List*>(cn->get(name));
+								nodeToSelect = newList->createDefaultElement();
+								newList->append(nodeToSelect);
+
 							}
-							item->setUpdateNeededForChildItem(Item::StandardUpdate, cn->get(name));
-							item->scene()->addPostEventAction(new SetCursorEvent(item, cn->get(name)));
-					})));
+							cn->endModification();
+
+							item->setUpdateNeededForChildItem(Item::StandardUpdate, nodeToSelect);
+							item->scene()->addPostEventAction(new SetCursorEvent(item, nodeToSelect));
+						}),
+						[name](Node* node){
+							auto cn = dynamic_cast<CompositeNode*>(node);
+							return cn && cn->get(name) == nullptr;
+						}
+					)
+				);
 			}
-			else if ((*currentLevel)[i].type().startsWith("TypedListOf"))
+			else if ( isList )
 			{
 				// Add create list entry
 				shortcuts << calculateSuitableShortcut(name, shortcuts);
-				list.append( new Action(shortcuts.last(), "Create " + name,
+				list.append( new Action(shortcuts.last(), "+ " + name,
 						Action::ActionFunctionOnItem([name](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
 							auto listInNode = dynamic_cast<List*>(cn->get(name));
 							Q_ASSERT(listInNode);
-							if ( listInNode->size() == 0)
-							{
-								cn->beginModification("add " + name + " entry");
-								listInNode->append(listInNode->createDefaultElement());
-								cn->endModification();
-							}
-							item->setUpdateNeededForChildItem(Item::StandardUpdate, listInNode->first<Node>());
-							item->scene()->addPostEventAction(new SetCursorEvent(item, listInNode->first<Node>()));
-					})));
+							Node* nodeToSelect = nullptr;
+
+							cn->beginModification("add " + name + " entry");
+							nodeToSelect = listInNode->createDefaultElement();
+							listInNode->append(nodeToSelect);
+							cn->endModification();
+
+							item->setUpdateNeededForChildItem(Item::StandardUpdate, nodeToSelect);
+							item->scene()->addPostEventAction(new SetCursorEvent(item, nodeToSelect));
+						}),
+						[name](Node* node){
+							auto cn = dynamic_cast<CompositeNode*>(node);
+							return cn && cn->get(name) != nullptr;
+						}
+					)
+				);
 			}
 		}
 	}

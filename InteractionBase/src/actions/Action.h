@@ -40,11 +40,14 @@ class INTERACTIONBASE_API Action
 {
 	public:
 		using ActionFunctionOnNode = std::function<void (Model::Node* node)>;
+		using FilterFunctionOnNode = std::function<bool (Model::Node* node)>;
 		using ActionFunctionOnItem = std::function<void (Visualization::Item* item)>;
 
 		Action(const QString& shortcut, const QString& name);
 		Action(const QString& shortcut, const QString& name, ActionFunctionOnNode action);
+		Action(const QString& shortcut, const QString& name, ActionFunctionOnNode action, FilterFunctionOnNode filter);
 		Action(const QString& shortcut, const QString& name, ActionFunctionOnItem action);
+		Action(const QString& shortcut, const QString& name, ActionFunctionOnItem action, FilterFunctionOnNode filter);
 
 		virtual ~Action();
 
@@ -54,9 +57,10 @@ class INTERACTIONBASE_API Action
 		const QString& shortcut() const;
 		const QString& name() const;
 		bool isPrefix(const QString& str) const;
+		virtual bool canBeAppliedTo(Model::Node* node) const;
 
 		static QList<Action*>& actions(int nodeTypeId);
-		static QList<Action*>& actions(Model::Node* node);
+		static QList<Action*> actions(Model::Node* node);
 
 		template<class T> static void add(Action* action);
 
@@ -69,6 +73,7 @@ class INTERACTIONBASE_API Action
 
 		ActionFunctionOnNode actionOnNode_;
 		ActionFunctionOnItem actionOnItem_;
+		FilterFunctionOnNode filterOnNode_;
 };
 
 inline const QString& Action::shortcut() const { return shortcut_; }
