@@ -28,13 +28,6 @@
 
 namespace Interaction {
 
-void ActionPromptStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("layout", layout_);
-	sl.load("actionsContainer", actionsContainer_);
-	sl.load("shortcutText", shortcutText_);
-	sl.load("actionStyle", actionStyle_);
-}
+ActionPromptStyle::~ActionPromptStyle(){} // Put the VTable here
 
 } /* namespace Interaction */

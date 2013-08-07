@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
+<style prototypes="item/DeclarativeItemBase/default">
 	<shape prototypes="shape/Box/default">
 		Box
 		<backgroundBrush>
@@ -18,17 +18,11 @@
 			</gradient>
 		</backgroundBrush>
 	</shape>
-	<layout prototypes="layout/SequentialLayout/default">
-		<spaceBetweenElements>40</spaceBetweenElements>
-		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
-	</layout>
-	<actionsContainer prototypes="layout/SequentialLayout/default">
-		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
-		<spaceBetweenElements>20</spaceBetweenElements>
-	</actionsContainer>
+	<noItemRegions>true</noItemRegions>
 	<shortcutText prototypes="item/Text/default" />
+	<nodeTypeName prototypes="item/Text/default">
+		<htmlFormat>true</htmlFormat>
+	</nodeTypeName>
 	<actionStyle prototypes="item/TextAndDescription/default">
 		<shape />
 		<layout prototypes="layout/SequentialLayout/default">
@@ -36,5 +30,6 @@
 			<alignment>0</alignment>
 			<spaceBetweenElements>5</spaceBetweenElements>
 		</layout>
+		<text><font><weight>99</weight></font></text>
 	</actionStyle>
 </style>

@@ -29,30 +29,18 @@
 #include "interactionbase_api.h"
 
 #include "../vis/TextAndDescriptionStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API ActionPromptStyle : public Visualization::ItemStyle
+class INTERACTIONBASE_API ActionPromptStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::SequentialLayoutStyle actionsContainer_;
-		Visualization::TextStyle shortcutText_;
-		TextAndDescriptionStyle actionStyle_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~ActionPromptStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::SequentialLayoutStyle& actionsContainer() const;
-		const Visualization::TextStyle&  shortcutText() const;
-		const TextAndDescriptionStyle&  actionStyle() const;
+		Property<Visualization::TextStyle> shortcutText{this, "shortcutText"};
+		Property<Visualization::TextStyle> nodeTypeName{this, "nodeTypeName"};
+		Property<TextAndDescriptionStyle> actionStyle{this, "actionStyle"};
 };
-
-inline const Visualization::SequentialLayoutStyle& ActionPromptStyle::layout() const {return layout_; }
-inline const Visualization::SequentialLayoutStyle& ActionPromptStyle::actionsContainer() const
-	{return actionsContainer_;}
-inline const Visualization::TextStyle& ActionPromptStyle::shortcutText() const {return shortcutText_; }
-inline const TextAndDescriptionStyle& ActionPromptStyle::actionStyle() const {return actionStyle_; }
 
 } /* namespace Interaction */

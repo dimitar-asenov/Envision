@@ -31,12 +31,12 @@
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Interaction {
 class Action;
 
-class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Item>
+class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::DeclarativeItem<ActionPrompt>>
 {
 	ITEM_COMMON(ActionPrompt)
 
@@ -44,6 +44,8 @@ class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Item>
 		ActionPrompt(Visualization::Item* actionReceiver, bool autoExecuteAction,
 				const StyleType* style = itemStyles().get());
 		virtual ~ActionPrompt();
+
+		static void initializeForms();
 
 		Visualization::Item* originalActionReceiver();
 		Visualization::Item* currentActionReceiver();
@@ -59,17 +61,12 @@ class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Item>
 		void upParentActionsLevel();
 		void downParentActionsLevel();
 
-	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
 	private:
 
 		bool autoExecuteAction_{};
 		Visualization::Item* originalActionReceiver_{};
 		Visualization::Item* currentActionReceiver_{};
-		Visualization::SequentialLayout* layout_{};
-		Visualization::SequentialLayout* actionsContainer_{};
+		Visualization::Text* nodeTypeName_{};
 		Visualization::Text* actionText_{};
 
 		Visualization::SelectedItem* highlight_{};
@@ -91,18 +88,21 @@ class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Item>
 		 */
 		int parentActionsLevel_{0};
 
+		int numActions_{};
+
 		void acquireCursor();
 		void setPromptPosition();
 		void computeCurrentActionReceiver();
 		QList<Action*> actions();
 
 		void setHighlight(bool show);
+		void setReceiverName();
 };
 
 inline Visualization::Item* ActionPrompt::originalActionReceiver() { return originalActionReceiver_; }
 inline Visualization::Item* ActionPrompt::currentActionReceiver() { return currentActionReceiver_; }
 inline Visualization::Text* ActionPrompt::text() {return actionText_;}
-inline int ActionPrompt::numActions() { return actionsContainer_->length(); }
+inline int ActionPrompt::numActions() { return numActions_; }
 inline bool ActionPrompt::autoExecuteAction() const { return autoExecuteAction_; }
 
 } /* namespace Interaction */

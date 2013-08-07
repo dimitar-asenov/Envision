@@ -31,6 +31,8 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SelectedItem.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/CustomSceneEvent.h"
 
 using namespace Visualization;
 
@@ -42,26 +44,22 @@ ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const 
 	Super(nullptr, style),
 	autoExecuteAction_(autoExecuteAction),
 	originalActionReceiver_(actionReceiver),
-	currentActionReceiver_(actionReceiver),
-	layout_(new SequentialLayout(this, &style->layout())),
-	actionsContainer_(new SequentialLayout(layout_, &style->actionsContainer())),
-	actionText_( new Text(layout_, &style->shortcutText()))
+	currentActionReceiver_(actionReceiver)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
 	setZValue(LAYER_COMMAND);
 	setItemCategory(Scene::MenuItemCategory);
 
-	layout_->append(actionText_);
-	layout_->append(actionsContainer_);
-
 	computeCurrentActionReceiver();
 	originalActionReceiver_->scene()->addTopLevelItem(this);
 	setHighlight(true);
 
-	actionText_->setText("");
 	setPromptPosition();
-	acquireCursor();
+	scene()->addPostEventAction(new CustomSceneEvent( [this](){
+		this->acquireCursor();
+		this->setReceiverName();
+	}));
 }
 
 ActionPrompt::~ActionPrompt()
@@ -73,11 +71,36 @@ ActionPrompt::~ActionPrompt()
 	originalActionReceiver_ = nullptr;
 
 	setHighlight(false);
-	SAFE_DELETE_ITEM(layout_);
+}
 
-	// These are deleted by layout's destructor
-	actionText_ = nullptr;
-	actionsContainer_ = nullptr;
+void ActionPrompt::initializeForms()
+{
+	addForm(grid({{
+		item<Text>(&I::nodeTypeName_, [](I* v) {return &v->style()->nodeTypeName();})->setRightMargin(10),
+		item<Text>(&I::actionText_, [](I* v) {return &v->style()->shortcutText();})
+	},
+	{
+		Merge(
+		(new SequentialLayoutFormElement())->setListOfItems([](Item* item) -> QList<Item*> {
+			QList<Item*> ret;
+			auto self = static_cast<ActionPrompt*>(item);
+
+			if (self->isVisible())
+				for(auto a : self->actions())
+				{
+					if (a->shortcut().startsWith(self->actionText_->text()))
+						ret.append(new TextAndDescription(a->shortcut(), a->name(), &self->style()->actionStyle()));
+				}
+
+			self->numActions_ = ret.size();
+			return ret;
+		})->setSpaceBetweenElements(20), 2, 1)
+
+	}})
+		->setNoInnerCursors([](Item*){return true;})
+		->setColumnStretchFactor(1, 1.0)
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
 }
 
 void ActionPrompt::setHighlight(bool show)
@@ -97,6 +120,18 @@ void ActionPrompt::setHighlight(bool show)
 
 }
 
+void ActionPrompt::setReceiverName()
+{
+	if (currentActionReceiver_)
+	{
+		auto name = currentActionReceiver_->node()->definesSymbol() ? currentActionReceiver_->node()->symbolName() : "";
+		if (!name.isEmpty()) name = " - <b>" + name + "</b>";
+		nodeTypeName_->setText(currentActionReceiver_->node()->typeName() + name + ":" );
+	}
+	else nodeTypeName_->setText("None");
+
+}
+
 void ActionPrompt::showPrompt()
 {
 	parentActionsLevel_ = 0;
@@ -104,6 +139,7 @@ void ActionPrompt::showPrompt()
 	setHighlight(true);
 
 	actionText_->setText("");
+	setReceiverName();
 	setPromptPosition();
 	show();
 	acquireCursor();
@@ -117,24 +153,10 @@ void ActionPrompt::hidePrompt()
 	originalActionReceiver_->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition_);
 }
 
-void ActionPrompt::determineChildren()
-{
-	actionsContainer_->clear();
-
-	for(auto a : actions())
-	{
-		if (a->shortcut().startsWith(actionText_->text()))
-			actionsContainer_->append(new TextAndDescription(a->shortcut(), a->name(), &style()->actionStyle()));
-	}
-}
-
-void ActionPrompt::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(layout_, availableWidth, availableHeight);
-}
-
 void ActionPrompt::acquireCursor()
 {
+	Q_ASSERT(actionText_);
+
 	// Save the current cursor
 	receiverCursorPosition_ = QPoint(0,0);
 	if (originalActionReceiver_->scene()->mainCursor()->owner() == originalActionReceiver_)
@@ -149,7 +171,7 @@ void ActionPrompt::setPromptPosition()
 	{
 		if (v->isActiveWindow())
 		{
-			setPos(v->mapToScene(210, v->viewport()->height() - 40)); // Put it after the mini map on the bottom
+			setPos(v->mapToScene(210, v->viewport()->height() - 60)); // Put it after the mini map on the bottom
 			break;
 		}
 	}
@@ -236,6 +258,7 @@ void ActionPrompt::upParentActionsLevel()
 	else
 	{
 		setHighlight(true);
+		setReceiverName();
 		setUpdateNeeded(StandardUpdate);
 	}
 }
@@ -254,6 +277,7 @@ void ActionPrompt::downParentActionsLevel()
 	else
 	{
 		setHighlight(true);
+		setReceiverName();
 		setUpdateNeeded(StandardUpdate);
 	}
 }
