@@ -1,5 +1,6 @@
 package javaImportTool;
 
+import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -611,10 +612,12 @@ public class ASTConverter {
 		{
 			// TODO: Implement this
 			//  ? [ ( extends | super) Type ]
+			t = new Node(null, "EmptyExpression", name);
 		} else if (type.isUnionType())
 		{
 			// TODO: Implement this
 			//  Type | Type { | Type }
+			t = new Node(null, "EmptyExpression", name);
 		}
 		else
 		{
@@ -641,8 +644,10 @@ public class ASTConverter {
 		for(int i = 2; i<list.size(); ++i)
 		{
 			Node innerComma = new Node(null, "CommaExpression", "right");
-			innerComma.setChild("left", previousComma.child("right"));
+			
+			Node middle = previousComma.child("right");
 			previousComma.setChild("right", innerComma);
+			innerComma.setChild("left", middle);
 			innerComma.setChild("right", expression(list.get(i),"right"));
 			previousComma = innerComma;
 		}
@@ -870,11 +875,11 @@ public class ASTConverter {
 			String num = ((NumberLiteral) e).getToken();
 			
 			//TODO: Verify that the correct node type is always created
-			if (!num.contains("x")
+			if (!num.contains("x") && !num.contains("X")
 					&& ((num.contains(".") || num.contains("e") || num.contains("E"))
-						|| num.endsWith("f") || num.endsWith("d") ))
+						|| num.endsWith("f") || num.endsWith("F") || num.endsWith("d") ))
 			{
-				if (num.endsWith("f") || num.endsWith("d") ) num = num.substring(0,num.length()-1);
+				if (num.endsWith("f") || num.endsWith("F") || num.endsWith("d") ) num = num.substring(0,num.length()-1);
 				node = new Node(null, "FloatLiteral", name);
 				node.child("value").setDoubleValue(Double.parseDouble(num));
 			}
@@ -884,8 +889,10 @@ public class ASTConverter {
 				if (num.equals("0x8000000000000000L")) decoded = 0x8000000000000000L;
 				else
 				{
-					if (num.endsWith("L")) num = num.substring(0,num.length()-1);
-					decoded = Long.decode(num);
+					if (num.endsWith("L") || num.endsWith("l")) num = num.substring(0,num.length()-1);
+					if (num.startsWith("0x") || num.startsWith("0X")) num = num.substring(2,num.length());
+					
+					decoded = new BigInteger(num, 16).longValue();//Long.decode(num);
 				}
 				node = new Node(null, "IntegerLiteral", name);
 				node.child("value").setLongValue(decoded);
