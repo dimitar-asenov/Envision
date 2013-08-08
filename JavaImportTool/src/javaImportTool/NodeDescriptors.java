@@ -20,6 +20,12 @@ public class NodeDescriptors {
 			assert initializeAsType.startsWith("TypedListOf");
 		}
 	}
+	
+	public static boolean isPersistenceUnit(Node node)
+	{
+		NodeInitializer ni = initializerMap.get(node.tag());
+		return ni != null ? ni.isPersistenceUnit() : false;
+	}
 
 	private static Map<String, NodeInitializer> initializerMap = new HashMap<String, NodeInitializer> ();
 	
@@ -42,12 +48,12 @@ public class NodeDescriptors {
 				{"TypedListOfMethod","methods"},
 				{"TypedListOfField","fields"},
 		}));
-		add( new NodeInitializer("Project", "-class-level-container", new String[][]{
+		add( new NodeInitializer("Project", true, "-class-level-container", new String[][]{
 				{"TypedListOfProject","projects"},
 				{"TypedListOfModule","modules"}
 		}));
 		
-		add( new NodeInitializer("Module", "-class-level-container", new String[][]{
+		add( new NodeInitializer("Module", true, "-class-level-container", new String[][]{
 				{"TypedListOfModule","modules"}
 		}));
 		add( new NodeInitializer("Class", "-class-level-container", new String[][]{

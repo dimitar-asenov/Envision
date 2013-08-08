@@ -8,6 +8,13 @@ public class NodeInitializer {
 		children_ = children;
 	}
 	
+	public NodeInitializer(String nodeType, boolean isPersistenceUnit, String[][] children)
+	{
+		nodeType_ = nodeType;
+		children_ = children;
+		isPersistenceUnit_ = isPersistenceUnit;
+	}
+	
 	public NodeInitializer(String nodeType, long initialValue)
 	{
 		nodeType_ = nodeType;
@@ -33,6 +40,14 @@ public class NodeInitializer {
 		children_ = children;
 	}
 	
+	public NodeInitializer(String nodeType, boolean isPersistenceUnit, String baseNodeType, String[][] children)
+	{
+		nodeType_ = nodeType;
+		baseNodeType_ = baseNodeType;
+		children_ = children;
+		isPersistenceUnit_ = isPersistenceUnit;
+	}
+	
 	public void initialize(Node node)
 	{
 		if (baseNodeType_ != null) NodeDescriptors.initialize(node, baseNodeType_);
@@ -54,5 +69,8 @@ public class NodeInitializer {
 	private Long initialLongValue_;
 	private String initialStringValue_;
 	
+	private boolean isPersistenceUnit_ = false;
+	
 	public String nodeType() { return nodeType_; }
+	public boolean isPersistenceUnit() { return isPersistenceUnit_; }
 }

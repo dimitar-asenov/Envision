@@ -64,11 +64,10 @@ public class Main {
 				System.out.println("Done");
 			}
 			
-			String outputFileName = outputDirectory + projectName + File.separator + projectName;
-			System.out.print("Writing the result to " + outputFileName + "...");
+			String outputDir = outputDirectory + projectName + File.separator;
+			System.out.print("Writing the result to " + outputDir + "...");
 				
-			PrintStream out = new PrintStream(new File(outputFileName), "UTF-8");
-			root.renderTree(out, false);
+			root.renderRootTree(outputDir, projectName, false);
 
 			System.out.println("Done\n\nFinished");
 			

@@ -1,9 +1,13 @@
 package javaImportTool;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Stack;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -27,7 +31,8 @@ public class Node {
 	private static long nextId_ = 0;
 	
 	// These are used when writing the nodes to a stream
-	private static PrintStream out_ = null;
+	private static String outputDir_ = null;
+	private static Stack<PrintStream> out_ = new Stack<PrintStream>();
 	private static boolean generateClipboardFormat_ = false;
 	
 	private List<Node> children_ = new LinkedList<Node>();
@@ -44,6 +49,11 @@ public class Node {
 	public void setStringValue(String val) { text_ = "S_" + StringEscapeUtils.escapeXml(val); }
 	public void setLongValue(long val){ text_ = "I_" + Integer.toString((int)val); }
 	//TODO: In Envision, implement long integers
+	
+	public boolean isPersistenceUnit()
+	{
+		return NodeDescriptors.isPersistenceUnit(this);
+	}
 	
 	public void setSymbol(String symbol) throws ConversionException
 	{
@@ -148,41 +158,60 @@ public class Node {
 	}
 	
 	// Save as XML to a stream in either file or clipboard format
-	public void renderTree(PrintStream out, boolean generateClipboardFormat) throws ConversionException
+	public void renderRootTree(String dir, String projectName, boolean generateClipboardFormat)
+		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
 	{
+		outputDir_ = dir;
 		generateClipboardFormat_ = generateClipboardFormat;
-		out_ = out;
 		
-		out_.println("<!DOCTYPE EnvisionFilePersistence>");
-		if (generateClipboardFormat_) out_.println("<clipboard>");
+		out_.push( new PrintStream(new File(outputDir_ + projectName), "UTF-8") );
+		
+		out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
+		if (generateClipboardFormat_) out_.peek().println("<clipboard>");
 		else
 		{
 			setName(symbol_);
-			out_.println("<model nextid=\"" + nextId_ + "\">");
+			out_.peek().println("<model nextid=\"" + nextId_ + "\">");
 		}
-		renderTree("\t");
-		if (generateClipboardFormat_) out_.println("</clipboard>");
-		else  out_.println("</model>");
+		renderTree("\t", false);
+		if (generateClipboardFormat_) out_.peek().println("</clipboard>");
+		else  out_.peek().println("</model>");
 	}
 	
-	private void renderTree(String indentation) throws ConversionException
+	
+	private void renderTree(String indentation, boolean considerPersistenceUnits)
+		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
 	{	
-		// The print below omits the closing angular brace since it might not be needed.
-		out_.print(indentation + "<" + tag_);
-		if (!generateClipboardFormat_) out_.print(" id=\"" + id_ + "\"");
-		out_.print(" name=\"" + name_ + "\" partial=\"0\"");
-		
-		if (!children_.isEmpty() && text_ != null)
-			throw new ConversionException("Invalid node condent. Node has both children and textual content.");
-		
-		if (text_ != null) out_.println(">" + text_ + "</" + tag_ + ">");
-		else if (children_.isEmpty()) out_.println(" />");
+		if (considerPersistenceUnits && isPersistenceUnit() && !generateClipboardFormat_)
+		{
+			// Create a new file for this persistence unit
+			out_.peek().println(indentation + "<persistencenewunit name=\""
+					+ name_ + "\">S_" + id_ + "</persistencenewunit>");
+			
+			out_.push( new PrintStream(new File(outputDir_ + id_), "UTF-8") );
+			out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
+			renderTree("", false);
+			out_.pop().close();
+		}
 		else
 		{
-			out_.println(">");
-			for(Node child : children_)
-				child.renderTree(indentation + "\t");
-			out_.println(indentation + "</" + tag_ + ">");
+			// This file is not a persistence unit
+			out_.peek().print(indentation + "<" + tag_);
+			if (!generateClipboardFormat_) out_.peek().print(" id=\"" + id_ + "\"");
+			out_.peek().print(" name=\"" + name_ + "\" partial=\"0\"");
+			
+			if (!children_.isEmpty() && text_ != null)
+				throw new ConversionException("Invalid node condent. Node has both children and textual content.");
+			
+			if (text_ != null) out_.peek().println(">" + text_ + "</" + tag_ + ">");
+			else if (children_.isEmpty()) out_.peek().println(" />");
+			else
+			{
+				out_.peek().println(">");
+				for(Node child : children_)
+					child.renderTree(indentation + "\t", true);
+				out_.peek().println(indentation + "</" + tag_ + ">");
+			}
 		}
 	}
 }
