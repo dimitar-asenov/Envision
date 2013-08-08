@@ -10,4 +10,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="javaImportTool.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="large ${project_loc}/test/large_project/ ${project_loc}/../DebugBuild/projects/"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="JavaImportTool"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx4G"/>
 </launchConfiguration>
