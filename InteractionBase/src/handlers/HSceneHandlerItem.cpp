@@ -28,6 +28,7 @@
 
 #include "commands/CSceneHandlerItemExit.h"
 #include "commands/CFind.h"
+#include "commands/CSceneHandlerLoad.h"
 
 namespace Interaction {
 
@@ -36,6 +37,7 @@ HSceneHandlerItem::HSceneHandlerItem()
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
 	addCommand(new CSceneHandlerItemExit());
 	addCommand(new CFind());
+	addCommand(new CSceneHandlerLoad());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()
