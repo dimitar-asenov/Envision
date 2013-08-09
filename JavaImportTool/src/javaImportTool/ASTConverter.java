@@ -601,7 +601,7 @@ public class ASTConverter {
 			t.child("typeExpression").setChild("ref", expression(((QualifiedType)type).getName(), "ref"));
 		} else if (type.isParameterizedType())
 		{
-			t = typeExpression(((ParameterizedType)type).getType(), "prefix");
+			t = typeExpression(((ParameterizedType)type).getType(), name);
 			if (!t.tag().equals("ClassTypeExpression"))
 				throw new ConversionException("Invaid parametric base type" + t.tag());
 			
