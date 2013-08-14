@@ -59,7 +59,15 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	else if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 	{
 		tryExecutingAction(prompt, true);
-	} else if (event->key() == Qt::Key_Backspace)
+	}
+	else if (event->key() == Qt::Key_Delete)
+	{
+		prompt->text()->setText("remove");
+		auto executed = tryExecutingAction(prompt, true);
+		if (!executed)
+			prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
+	}
+	else if (event->key() == Qt::Key_Backspace)
 	{
 		if (!prompt->text()->text().isEmpty())
 		{

@@ -69,6 +69,7 @@ class INTERACTIONBASE_API Action
 		QString name_;
 
 		static void createStandardActionsForCompositeNode(Model::CompositeNode* node, QList<Action*>& list);
+		static void createStandardRemoveAction(QList<Action*>& list);
 		static QString calculateSuitableShortcut(const QString& name, const QStringList& list);
 
 		ActionFunctionOnNode actionOnNode_;

@@ -54,8 +54,12 @@ QList<Action*> Action::actions(Node* node)
 	auto & completeList = actions(node->typeId());
 
 	if (completeList.isEmpty())
+	{
 		if (auto cn = dynamic_cast<CompositeNode*>(node))
 			createStandardActionsForCompositeNode(cn, completeList);
+
+		createStandardRemoveAction(completeList);
+	}
 
 	QList<Action*> filteredList;
 	for (auto a : completeList)
@@ -185,7 +189,38 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 			}
 		}
 	}
+}
 
+void Action::createStandardRemoveAction(QList<Action*>& list)
+{
+	// Remove optional element or remove an element from a list or reset a mandatory element to its default value.
+	list.append( new Action("remove", "",
+		Action::ActionFunctionOnItem([](Item* item){
+
+			item->setUpdateNeeded(Item::StandardUpdate); // Request an update before deleting any nodes.
+
+			auto node = item->node();
+			auto parent = node->parent();
+			auto scene = item->scene();
+			if (auto listParent = dynamic_cast<List*>(parent))
+			{
+				listParent->beginModification("remove node");
+				listParent->remove(node);
+				listParent->endModification();
+			}
+			else if (auto cnParent = dynamic_cast<CompositeNode*>(parent))
+			{
+				cnParent->beginModification("remove node");
+				cnParent->remove(node);
+				cnParent->endModification();
+			}
+
+			scene->addPostEventAction(new SetCursorEvent(scene, parent));
+		}),
+		[](Node* node){
+			return dynamic_cast<CompositeNode*>(node->parent()) || dynamic_cast<List*>(node->parent()) ;
+		})
+	);
 }
 
 QString Action::calculateSuitableShortcut(const QString& name, const QStringList& list)
