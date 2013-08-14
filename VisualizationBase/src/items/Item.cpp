@@ -345,7 +345,7 @@ void Item::removeFromScene()
 	{
 		// Remove cursor if it is in the hierarchy
 		auto mc = scene()->mainCursor();
-		if (mc && isAncestorOf(mc->owner()))
+		if (mc && (mc->owner() == this || isAncestorOf(mc->owner())))
 			scene()->setMainCursor(nullptr);
 
 		if (parent()) scene()->removeItem(this);
