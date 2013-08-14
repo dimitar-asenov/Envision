@@ -362,7 +362,7 @@ Method* createMinMax()
 
 Method* createFactorial()
 {
-	auto *fact = new Method("factorial", Modifier::Public | Modifier::Static);
+	auto *fact = new Method("factorial", Modifier::Public);
 	fact->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
@@ -440,7 +440,8 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	auto prj = new Project("CustomizationDemo");
 	auto client = createClientModule();
 	prj->modules()->append( client );
-	prj->modules()->append( createContractsLibrary());
+	auto contracts = createContractsLibrary();
+	prj->modules()->append( contracts );
 
 	auto model = new Model::Model(prj);
 
@@ -448,6 +449,8 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 //	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client));
 //	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client->classes()->at(0)));
 //	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client->methods()->at(0)));
+//	VisualizationManager::instance().mainScene()->addTopLevelItem(
+//			new RootItem(contracts->classes()->at(0)->methods()->at(0)));
 
 	VisualizationManager::instance().mainScene()->listenToModel(model);
 
