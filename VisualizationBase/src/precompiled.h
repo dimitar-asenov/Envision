@@ -46,6 +46,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QStaticText>
 #include <QtGui/QPainter>
+#include <QtGui/QPaintEngine>
 #include <QtGui/QFont>
 #include <QtGui/QPen>
 

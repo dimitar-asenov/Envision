@@ -44,17 +44,27 @@ void SVGIconStyle::load(StyleLoader& sl)
 
 void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 {
-	//OLD, one-line version that is not optimized
-	//renderer_.render(painter, QRectF(x, y, width_, height_));
+	// TODO: Check whether this work with Qt5. In theory uncommenting all lines below will make sure that we render a
+	// vector version of the icon when generating PDFs or SVGs. However, there seems to be a problem when rendering
+	// gradients - there is an additional black outline rendered in that case - seems to be a Qt issue.
 
-	if(!mipmap_.paint(painter,x,y))
-	{
-		if (drawScaledPixmapInMipmap(painter->worldTransform().m11()))
+//	auto paintEngineType = painter->device()->paintEngine()->type();
+//	if (paintEngineType == QPaintEngine::SVG || paintEngineType == QPaintEngine::Pdf)
+//	{
+//		//Un-optimized version
+//		renderer_.render(painter, QRectF(x, y, width_, height_));
+//	}
+//	else
+//	{
+		if(!mipmap_.paint(painter,x,y))
 		{
-			auto painted = mipmap_.paint(painter,x,y);
-			Q_ASSERT(painted);
+			if (drawScaledPixmapInMipmap(painter->worldTransform().m11()))
+			{
+				auto painted = mipmap_.paint(painter,x,y);
+				Q_ASSERT(painted);
+			}
 		}
-	}
+//	}
 }
 
 bool SVGIconStyle::drawScaledPixmapInMipmap(qreal scaleFactor) const
