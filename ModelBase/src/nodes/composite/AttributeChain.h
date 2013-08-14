@@ -56,9 +56,9 @@ class MODELBASE_API AttributeChain: public QVector<Attribute>
 		int recursiveSize() const;
 		int numLevels() const;
 
-		AttributeChain* level(int level);
+		AttributeChain* level(int level) const;
 		CompositeIndex indexForAttribute(const QString &name) const;
-		const Attribute& attribute(const CompositeIndex &index);
+		const Attribute& attribute(const CompositeIndex &index) const;
 		bool hasAttribute(const QString &name) const;
 		bool hasExtensionInHierarchy(int extensionId) const;
 		QVector<CompositeIndex>& addExtension(int extensionId);

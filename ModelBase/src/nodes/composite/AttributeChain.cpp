@@ -84,11 +84,11 @@ int AttributeChain::numLevels() const
 	return numLevels_;
 }
 
-AttributeChain* AttributeChain::level(int level)
+AttributeChain* AttributeChain::level(int level) const
 {
 	int goBack = numLevels_ - 1 - level;
 
-	AttributeChain* ac = this;
+	AttributeChain* ac = const_cast<AttributeChain*>(this);
 	while ( goBack > 0 )
 	{
 		ac = ac->parent_;
@@ -114,7 +114,7 @@ CompositeIndex AttributeChain::indexForAttribute(const QString &name) const
 	return CompositeIndex();
 }
 
-const Attribute& AttributeChain::attribute(const CompositeIndex &index)
+const Attribute& AttributeChain::attribute(const CompositeIndex &index) const
 {
 	return level(index.level())->at(index.index());
 }
