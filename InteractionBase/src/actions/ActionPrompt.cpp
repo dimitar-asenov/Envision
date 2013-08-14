@@ -34,6 +34,8 @@
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
 
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+
 using namespace Visualization;
 
 namespace Interaction {
@@ -124,7 +126,13 @@ void ActionPrompt::setReceiverName()
 {
 	if (currentActionReceiver_)
 	{
-		auto name = currentActionReceiver_->node()->definesSymbol() ? currentActionReceiver_->node()->symbolName() : "";
+		// Try to get a name for this node
+		QString name;
+		if (currentActionReceiver_->node()->definesSymbol())
+			name = currentActionReceiver_->node()->symbolName();
+		else if (auto cnParent = dynamic_cast<Model::CompositeNode*>(currentActionReceiver_->node()->parent()))
+			name = cnParent->meta().attribute(cnParent->indexOf(currentActionReceiver_->node())).name();
+
 		if (!name.isEmpty()) name = " - <b>" + name + "</b>";
 		nodeTypeName_->setText(currentActionReceiver_->node()->typeName() + name + ":" );
 	}
