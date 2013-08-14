@@ -45,7 +45,7 @@ class INTERACTIONBASE_API HActionPrompt: public GenericHandler
 		HActionPrompt();
 
 	private:
-		bool tryExecutingAction(ActionPrompt *prompt);
+		bool tryExecutingAction(ActionPrompt *prompt, bool requirePreciseMatch);
 };
 
 } /* namespace Interaction */

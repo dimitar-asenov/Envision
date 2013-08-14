@@ -58,11 +58,14 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 	else if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 	{
-		tryExecutingAction(prompt);
-	} else if (event->key() == Qt::Key_Backspace && !prompt->text()->text().isEmpty())
+		tryExecutingAction(prompt, true);
+	} else if (event->key() == Qt::Key_Backspace)
 	{
-		prompt->text()->setText(prompt->text()->text().left(prompt->text()->text().length() - 1));
-		prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
+		if (!prompt->text()->text().isEmpty())
+		{
+			prompt->text()->setText(prompt->text()->text().left(prompt->text()->text().length() - 1));
+			prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
+		}
 	}
 	else if (!event->text().isEmpty())
 	{
@@ -72,7 +75,7 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		// Try executing
 		bool executed = false;
 		if (prompt->autoExecuteAction())
-			executed = tryExecutingAction(prompt);
+			executed = tryExecutingAction(prompt, false);
 
 		// If execution failed and the prompt is still visible, focus the end of the text.
 		if (!executed)
@@ -88,16 +91,21 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	else GenericHandler::keyPressEvent(target, event);
 }
 
-bool HActionPrompt::tryExecutingAction(ActionPrompt *prompt)
+bool HActionPrompt::tryExecutingAction(ActionPrompt *prompt, bool requirePreciseMatch)
 {
 	Action* found{};
+
 	for(auto a : Action::actions(prompt->currentActionReceiver()->node()) )
 	{
-		if( a->shortcut().startsWith(prompt->text()->text()))
+		auto match = requirePreciseMatch ?
+				a->shortcut() == prompt->text()->text() :
+				a->shortcut().startsWith(prompt->text()->text());
+
+		if ( match )
 		{
 			if (found)
 			{
-				// If there are more than two commands with the same prefix then do to not execute
+				// If there is more than one matching command with the same prefix then do to not execute any
 				found = nullptr;
 				break;
 			}
