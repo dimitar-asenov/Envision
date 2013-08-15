@@ -37,13 +37,14 @@ class SetModificationTarget: public UndoCommand
 	private:
 		Node* &field;
 		NodeReadWriteLock* &lock;
-		QList<Node*>& modifiedTargets;
+		QSet<Node*>& modifiedTargets;
 
 		Node* oldTarget;
 		Node* newTarget;
 
 	public:
-		SetModificationTarget(Node* &field, NodeReadWriteLock* &lock, QList<Node*>& modifiedTargets, Node* newTarget);
+		// In the constrcutor below field and lock are references to the corresponding fields in Model::Model.
+		SetModificationTarget(Node* &field, NodeReadWriteLock* &lock, QSet<Node*>& modifiedTargets, Node* newTarget);
 		virtual void redo();
 		virtual void undo();
 };

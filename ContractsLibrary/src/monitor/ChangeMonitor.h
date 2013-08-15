@@ -57,7 +57,7 @@ class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
 		static void expressionModified(OOModel::Expression*& exp, int& cursorIndex);
 
 	public slots:
-		void nodesModified(QList<Node*> nodes);
+		void nodesModified(QSet<Node*> nodes);
 };
 
 } /* namespace ContractsLibrary */

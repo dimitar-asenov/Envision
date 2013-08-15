@@ -53,7 +53,7 @@ TEST(ModelBase, ModificationNotificationTests)
 	model.endModification();
 
 	CHECK_INT_EQUAL(1, nl.modifiedNodes.size());
-	CHECK_CONDITION(nl.modifiedNodes[0] == root);
+	CHECK_CONDITION(nl.modifiedNodes.contains( root) );
 
 	model.beginModification(left, "modify");
 	left->name()->set("Left text");
@@ -62,10 +62,10 @@ TEST(ModelBase, ModificationNotificationTests)
 	model.endModification();
 
 	CHECK_INT_EQUAL(4, nl.modifiedNodes.size());
-	CHECK_CONDITION(nl.modifiedNodes[0] == left);
-	CHECK_CONDITION(nl.modifiedNodes[1] == left->name());
-	CHECK_CONDITION(nl.modifiedNodes[2] == right);
-	CHECK_CONDITION(nl.modifiedNodes[3] == right->name());
+	CHECK_CONDITION(nl.modifiedNodes.contains( left ));
+	CHECK_CONDITION(nl.modifiedNodes.contains( left->name()));
+	CHECK_CONDITION(nl.modifiedNodes.contains( right));
+	CHECK_CONDITION(nl.modifiedNodes.contains( right->name()));
 
 	nl.modifiedNodes.clear();
 	model.beginModification(nullptr);
@@ -74,11 +74,11 @@ TEST(ModelBase, ModificationNotificationTests)
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, nl.modifiedNodes.size());
-	CHECK_CONDITION(nl.modifiedNodes[0] == right);
-	CHECK_CONDITION(nl.modifiedNodes[1] == right->name());
-	CHECK_CONDITION(nl.modifiedNodes[2] == left);
-	CHECK_CONDITION(nl.modifiedNodes[3] == left->name());
-	CHECK_CONDITION(nl.modifiedNodes[4] == root);
+	CHECK_CONDITION(nl.modifiedNodes.contains( right));
+	CHECK_CONDITION(nl.modifiedNodes.contains( right->name()));
+	CHECK_CONDITION(nl.modifiedNodes.contains( left));
+	CHECK_CONDITION(nl.modifiedNodes.contains( left->name()));
+	CHECK_CONDITION(nl.modifiedNodes.contains( root));
 }
 
 }

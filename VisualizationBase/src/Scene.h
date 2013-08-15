@@ -122,7 +122,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		View* currentPaintView() const;
 
 	public slots:
-		void nodesUpdated(QList<Node*> nodes);
+		void nodesUpdated(QSet<Node*> nodes);
 
 	protected:
 		virtual bool event(QEvent* event) override;

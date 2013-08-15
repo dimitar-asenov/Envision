@@ -29,22 +29,20 @@
 
 namespace Model {
 
-AddModifiedNode::AddModifiedNode(QList<Node*>& modifiedTargets_, Node* target_) :
+AddModifiedNode::AddModifiedNode(QSet<Node*>& modifiedTargets_, Node* target_) :
 	UndoCommand(nullptr, "Add a modification target"), modifiedTargets(modifiedTargets_), target(target_)
 {
 }
 
 void AddModifiedNode::redo()
 {
-	if ( target && !modifiedTargets.contains(target) ) modifiedTargets.append(target);
+	if ( target ) modifiedTargets.insert(target);
 	UndoCommand::redo();
 }
 
 void AddModifiedNode::undo()
 {
-	if ( target && !modifiedTargets.contains(target) ) modifiedTargets.append(target);
-
-
+	if ( target ) modifiedTargets.insert(target);
 	UndoCommand::undo();
 }
 

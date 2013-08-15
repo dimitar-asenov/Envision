@@ -41,10 +41,10 @@ ChangeMonitor::~ChangeMonitor()
 
 void ChangeMonitor::listenToModel(Model::Model* model)
 {
-	connect(model, SIGNAL(nodesModified(QList<Node*>)), this,  SLOT(nodesModified(QList<Node*>)), Qt::QueuedConnection);
+	connect(model, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesModified(QSet<Node*>)), Qt::QueuedConnection);
 }
 
-void ChangeMonitor::nodesModified(QList<Node*> nodes)
+void ChangeMonitor::nodesModified(QSet<Node*> nodes)
 {
 	ValueAtReturnVisitor v;
 	for(auto n : nodes) v.visit(n);

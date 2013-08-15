@@ -36,13 +36,13 @@ class NotificationListener : public QObject
 	Q_OBJECT
 
 	public:
-		QList<Node*> modifiedNodes;
+		QSet<Node*> modifiedNodes;
 		Node* root;
 
 		NotificationListener(Model& model);
 
 	public slots:
-		void setModifiedNodes( QList<Node*> nodes);
+		void setModifiedNodes( QSet<Node*> nodes);
 		void rootNodeSet(Node* root);
 };
 

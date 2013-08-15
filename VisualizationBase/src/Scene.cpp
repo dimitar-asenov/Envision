@@ -180,10 +180,10 @@ void Scene::updateItems()
 
 void Scene::listenToModel(Model::Model* model)
 {
-	connect(model, SIGNAL(nodesModified(QList<Node*>)), this,  SLOT(nodesUpdated(QList<Node*>)), Qt::QueuedConnection);
+	connect(model, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
 }
 
-void Scene::nodesUpdated(QList<Node*> nodes)
+void Scene::nodesUpdated(QSet<Node*> nodes)
 {
 	for(auto node : nodes)
 	{

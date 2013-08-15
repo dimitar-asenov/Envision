@@ -45,7 +45,7 @@
 
 namespace Interaction {
 
-void GenericHandlerModelListener::nodesUpdated(QList<Node*>)
+void GenericHandlerModelListener::nodesUpdated(QSet<Node*>)
 {
 	GenericHandler::fixCursorPositionForUndoAfterModelChange();
 }
@@ -71,8 +71,8 @@ void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
 	if (!models_.contains(model))
 	{
 		models_.append(model);
-		connect(model, SIGNAL(nodesModified(QList<Node*>)), this,
-				SLOT(nodesUpdated(QList<Node*>)), Qt::QueuedConnection);
+		connect(model, SIGNAL(nodesModified(QSet<Node*>)), this,
+				SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
 	}
 }
 
@@ -84,7 +84,7 @@ void GenericHandlerModelListener::stopListeningToModelOf(Visualization::Item* it
 	if (models_.contains(model))
 	{
 		models_.removeAll(model);
-		disconnect(model, SIGNAL(nodesModified(QList<Node*>)), this, SLOT(nodesUpdated(QList<Node*>)));
+		disconnect(model, SIGNAL(nodesModified(QSet<Node*>)), this, SLOT(nodesUpdated(QSet<Node*>)));
 	}
 }
 

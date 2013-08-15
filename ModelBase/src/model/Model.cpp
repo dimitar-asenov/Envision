@@ -88,7 +88,7 @@ void Model::endModification(bool resolveReferences)
 
 	performedUndoRedo = false;
 
-	QList<Node*> mt = modifiedTargets;
+	QSet<Node*> mt = modifiedTargets;
 	modifiedTargets.clear();
 
 	modificationInProgress = false;
@@ -260,13 +260,12 @@ void Model::scanUnresolvedReferences()
 
 void Model::addUnresolvedReference(Reference* ref)
 {
-	if ( !unresolvedReferences_.contains(ref) )
-		unresolvedReferences_.append(ref);
+	unresolvedReferences_.insert(ref);
 }
 
 void Model::removeUnresolvedReference(Reference* ref)
 {
-	unresolvedReferences_.removeOne(ref);
+	unresolvedReferences_.remove(ref);
 }
 
 void Model::tryResolvingReferences()
@@ -284,7 +283,7 @@ void Model::tryResolvingReferences()
 		{
 			if (!r->isResolved())
 			{
-				changeModificationTarget(r);
+				if (currentModificationLock != r->accessLock()) changeModificationTarget(r);
 				changed = r->resolve() || changed;
 			}
 		}

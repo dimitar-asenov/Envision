@@ -31,7 +31,7 @@ namespace Model {
 
 void ModelManager::init()
 {
-	qRegisterMetaType< QList<Node*> >("QList<Node*>");
+	qRegisterMetaType< QSet<Node*> >("QSet<Node*>");
 }
 
 ModelManager& ModelManager::instance()

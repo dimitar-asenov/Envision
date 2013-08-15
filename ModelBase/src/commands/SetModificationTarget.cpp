@@ -30,18 +30,28 @@
 
 namespace Model {
 
-SetModificationTarget::SetModificationTarget(Node* &field_, NodeReadWriteLock* &lock_, QList<Node*>& modifiedTargets_, Node* newTarget_) :
+SetModificationTarget::SetModificationTarget(Node* &field_, NodeReadWriteLock* &lock_, QSet<Node*>& modifiedTargets_, Node* newTarget_) :
 	UndoCommand(nullptr, "Change modification target"), field(field_), lock(lock_), modifiedTargets(modifiedTargets_), oldTarget(field_), newTarget(newTarget_)
 {
 }
 
 void SetModificationTarget::redo()
 {
-	if (oldTarget) oldTarget->accessLock()->unlock();
-	if (newTarget) newTarget->accessLock()->lockForWrite(newTarget);
+	NodeReadWriteLock* oldLock = nullptr;
+	NodeReadWriteLock* newLock = nullptr;
+
+	if (oldTarget) oldLock = oldTarget->accessLock();
+	if (newTarget) newLock = newTarget->accessLock();
+
+	// Improve performance by only locking/unlocking if the locks are different
+	if (oldLock != newLock)
+	{
+		if (oldLock) oldLock->unlock();
+		if (newLock) newLock->lockForWrite(newTarget);
+	}
 
 	field = newTarget;
-	if ( newTarget && !modifiedTargets.contains(newTarget) ) modifiedTargets.append(newTarget);
+	if ( newTarget) modifiedTargets.insert(newTarget);
 
 	if (field) lock = field->accessLock();
 	else lock = nullptr;
@@ -51,11 +61,21 @@ void SetModificationTarget::redo()
 
 void SetModificationTarget::undo()
 {
-	if (newTarget) newTarget->accessLock()->unlock();
-	if (oldTarget) oldTarget->accessLock()->lockForWrite(oldTarget);
+	NodeReadWriteLock* newLock = nullptr;
+	NodeReadWriteLock* oldLock = nullptr;
+
+	if (newTarget) newLock = newTarget->accessLock();
+	if (oldTarget) oldLock = oldTarget->accessLock();
+
+	// Improve performance by only locking/unlocking if the locks are different
+	if (newLock != oldLock)
+	{
+		if (newLock) newLock->unlock();
+		if (oldLock) oldLock->lockForWrite(oldTarget);
+	}
 
 	field = oldTarget;
-	if ( oldTarget && !modifiedTargets.contains(oldTarget) ) modifiedTargets.append(oldTarget);
+	if ( oldTarget ) modifiedTargets.insert(oldTarget);
 
 	if (field) lock = field->accessLock();
 	else lock = nullptr;

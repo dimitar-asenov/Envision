@@ -53,7 +53,7 @@ class INTERACTIONBASE_API GenericHandlerModelListener : public QObject
 		void stopListeningToModelOf(Visualization::Item* item);
 
 	public slots:
-		void nodesUpdated(QList<Node*> nodes);
+		void nodesUpdated(QSet<Node*> nodes);
 
 	private:
 		Model::Model* modelOf(Visualization::Item* item);

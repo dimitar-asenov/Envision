@@ -318,7 +318,7 @@ class MODELBASE_API Model: public QObject
 		 *
 		 * Unresolved references which are persisted but not loaded are will not be in the returned list.
 		 */
-		const QList<Reference*>& unresolvedReferences() const;
+		const QSet<Reference*>& unresolvedReferences() const;
 
 		/**
 		 * \brief Adds the specified reference to the unresolved references list.
@@ -361,9 +361,9 @@ class MODELBASE_API Model: public QObject
 		 * Emitted at the end of a modification block.
 		 *
 		 * @param nodes
-		 * 				A list of all nodes modified within this block.
+		 * 				A set of all nodes modified within this block.
 		 */
-		void nodesModified(QList<Node*> nodes);
+		void nodesModified(QSet<Node*> nodes);
 
 		/**
 		 * Emitted when the name of a node has changed
@@ -448,10 +448,10 @@ class MODELBASE_API Model: public QObject
 		NodeReadWriteLock* currentModificationLock{};
 
 		/**
-		 * A list of all top-level nodes which were modified as part of the last modification operation. This is only used
+		 * A set of all top-level nodes which were modified as part of the last modification operation. This is only used
 		 * to signal to anyone who is interested in monitoring changes.
 		 */
-		QList<Node*> modifiedTargets;
+		QSet<Node*> modifiedTargets;
 
 		/**
 		 * Indicates if the last modification operation pushed commands on stack.
@@ -492,7 +492,7 @@ class MODELBASE_API Model: public QObject
 		/**
 		 * A list of all unresolved references which are currently loaded nodes.
 		 */
-		QList<Reference*> unresolvedReferences_;
+		QSet<Reference*> unresolvedReferences_;
 };
 
 inline bool Model::isBeingModified() const { return modificationInProgress; }
@@ -508,7 +508,7 @@ inline void Model::emitNameModified(Node* node, const QString &oldName) { emit n
 inline void Model::emitNodeFullyLoaded(Node* node) { emit nodeFullyLoaded(node); }
 inline void Model::emitNodePartiallyLoaded(Node* node) { emit nodePartiallyLoaded(node); }
 
-inline const QList<Reference*>& Model::unresolvedReferences() const { return unresolvedReferences_; }
+inline const QSet<Reference*>& Model::unresolvedReferences() const { return unresolvedReferences_; }
 
 inline ModelManager& Model::manager() const { return ModelManager::instance(); }
 

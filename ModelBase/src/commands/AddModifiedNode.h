@@ -33,11 +33,11 @@ namespace Model {
 class AddModifiedNode: public UndoCommand
 {
 	private:
-		QList<Node*>& modifiedTargets;
+		QSet<Node*>& modifiedTargets;
 		Node* target;
 
 	public:
-		AddModifiedNode(QList<Node*>& modifiedTargets, Node* target);
+		AddModifiedNode(QSet<Node*>& modifiedTargets, Node* target);
 		virtual void redo();
 		virtual void undo();
 };
