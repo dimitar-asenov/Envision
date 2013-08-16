@@ -111,7 +111,7 @@ IfStatement.h</h1>
 <div class="line">   ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)</div>
 <div class="line"></div>
 <div class="line">   public:</div>
-<div class="line">      virtual QList&lt;Model::Node*&gt; findSymbols(const QRegExp&amp; symbolExp, Node* source, FindSymbolDirection direction,</div>
+<div class="line">      virtual QList&lt;Model::Node*&gt; findSymbols(const Model::SymbolMatcher&amp; matcher, Node* source, FindSymbolDirection direction,</div>
 <div class="line">            SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) override;</div>
 <div class="line">};</div>
 <div class="line"></div>
@@ -149,7 +149,7 @@ IfStatement.h</h1>
 <div class="line">   ATTRIBUTE(StatementItemList, thenBranch, setThenBranch)</div>
 <div class="line">   ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)</div>
 </div><!-- fragment --> With the help of the various <code>ATTRIBUTE</code> macros you can easily define what nodes your new composite node will consist of. Here you see the simplest way of using the macro. You only need to specify the type of node, its name (which will also be the name of the getter function for this child), and the name of a setter function. Each of these macro declarations need to have complementing definitions in the <code></code>.cpp file which we'll see later.</p>
-<p>Finally we see a method declaration: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> QList&lt;Model::Node*&gt; findSymbols(<span class="keyword">const</span> QRegExp&amp; symbolExp, Node* source, FindSymbolDirection direction,</div>
+<p>Finally we see a method declaration: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> QList&lt;Model::Node*&gt; findSymbols(<span class="keyword">const</span> <a class="code" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a>&amp; matcher, Node* source, FindSymbolDirection direction,</div>
 <div class="line">            SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) <span class="keyword">override</span>;</div>
 </div><!-- fragment --> This is an advanced function for the <a class="el" href="classOOModel_1_1IfStatement.html">OOModel::IfStatement</a> node. For simple nodes you do not need to define this function. The only reason we need it here, is because it is possible to declare a variable inside the condition of an if statement and we need a way to find this variable when resolving references. We won't go into details here as name resolution is a big topic on its own.</p>
 <p>This is it really. The essential thing for any <a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> derivative is to declare what attribute nodes it consists of. The rest of the code is just boilerplate.</p>
@@ -169,15 +169,15 @@ IfStatement.cpp</h1>
 <div class="line">REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)</div>
 <div class="line">REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)</div>
 <div class="line"></div>
-<div class="line">QList&lt;Model::Node*&gt; IfStatement::findSymbols(const QRegExp&amp; symbolExp,Model::Node* source,</div>
+<div class="line">QList&lt;Model::Node*&gt; IfStatement::findSymbols(const Model::SymbolMatcher&amp; matcher, Model::Node* source,</div>
 <div class="line">      FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes)</div>
 <div class="line">{</div>
 <div class="line">   QList&lt;Model::Node*&gt; symbols;</div>
 <div class="line"></div>
-<div class="line">   symbols &lt;&lt; condition()-&gt;findSymbols(symbolExp, source, SEARCH_DOWN, symbolTypes, <span class="keyword">false</span>);</div>
+<div class="line">   symbols &lt;&lt; condition()-&gt;findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, <span class="keyword">false</span>);</div>
 <div class="line"></div>
 <div class="line">   <span class="keywordflow">if</span> (exhaustAllScopes || symbols.empty())</div>
-<div class="line">      symbols &lt;&lt; Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);</div>
+<div class="line">      symbols &lt;&lt; Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);</div>
 <div class="line"></div>
 <div class="line">   <span class="keywordflow">return</span> symbols;</div>
 <div class="line">}</div>

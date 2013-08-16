@@ -119,9 +119,9 @@ Signals</h2></td></tr>
 <tr class="memitem:aba60aa7bdc3ce8fbaa06354cdb093512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#aba60aa7bdc3ce8fbaa06354cdb093512">nodePartiallyLoaded</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *node)</td></tr>
 <tr class="memdesc:aba60aa7bdc3ce8fbaa06354cdb093512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when a fully loaded node becomes partially loaded.  <a href="#aba60aa7bdc3ce8fbaa06354cdb093512">More...</a><br/></td></tr>
 <tr class="separator:aba60aa7bdc3ce8fbaa06354cdb093512"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60b4ca9e2d91278c42df4fecca3bb6c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a60b4ca9e2d91278c42df4fecca3bb6c3">nodesModified</a> (QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; nodes)</td></tr>
-<tr class="memdesc:a60b4ca9e2d91278c42df4fecca3bb6c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted at the end of a modification block.  <a href="#a60b4ca9e2d91278c42df4fecca3bb6c3">More...</a><br/></td></tr>
-<tr class="separator:a60b4ca9e2d91278c42df4fecca3bb6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdc28366910a2fcadb741a3e0b941cfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#afdc28366910a2fcadb741a3e0b941cfe">nodesModified</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; nodes)</td></tr>
+<tr class="memdesc:afdc28366910a2fcadb741a3e0b941cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted at the end of a modification block.  <a href="#afdc28366910a2fcadb741a3e0b941cfe">More...</a><br/></td></tr>
+<tr class="separator:afdc28366910a2fcadb741a3e0b941cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0247247374ae7d04ddfd5aba38ea14fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a0247247374ae7d04ddfd5aba38ea14fd">rootNodeSet</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Model.html#a0662c68a4b6d31308adf744e713b18ba">root</a>)</td></tr>
 <tr class="memdesc:a0247247374ae7d04ddfd5aba38ea14fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when a new root node was set.  <a href="#a0247247374ae7d04ddfd5aba38ea14fd">More...</a><br/></td></tr>
 <tr class="separator:a0247247374ae7d04ddfd5aba38ea14fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,9 +218,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af858da7a498955c10641f3e81014635b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#af858da7a498955c10641f3e81014635b">undo</a> ()</td></tr>
 <tr class="memdesc:af858da7a498955c10641f3e81014635b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Undoes the commands executed in the previous modification block.  <a href="#af858da7a498955c10641f3e81014635b">More...</a><br/></td></tr>
 <tr class="separator:af858da7a498955c10641f3e81014635b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40fce2a00530aeed64cfe9251d218230"><td class="memItemLeft" align="right" valign="top">const QList&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a40fce2a00530aeed64cfe9251d218230">unresolvedReferences</a> () const </td></tr>
-<tr class="memdesc:a40fce2a00530aeed64cfe9251d218230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all loaded unresolved references in the model.  <a href="#a40fce2a00530aeed64cfe9251d218230">More...</a><br/></td></tr>
-<tr class="separator:a40fce2a00530aeed64cfe9251d218230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab73b9062d488c8a5e5fef2780babcd78"><td class="memItemLeft" align="right" valign="top">const QSet&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#ab73b9062d488c8a5e5fef2780babcd78">unresolvedReferences</a> () const </td></tr>
+<tr class="memdesc:ab73b9062d488c8a5e5fef2780babcd78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all loaded unresolved references in the model.  <a href="#ab73b9062d488c8a5e5fef2780babcd78">More...</a><br/></td></tr>
+<tr class="separator:ab73b9062d488c8a5e5fef2780babcd78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -248,9 +248,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a8398579927ddedec02ed9a251a1f8442"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a8398579927ddedec02ed9a251a1f8442">modificationText</a></td></tr>
 <tr class="memdesc:a8398579927ddedec02ed9a251a1f8442"><td class="mdescLeft">&#160;</td><td class="mdescRight">The test message associated with the current modification operation.  <a href="#a8398579927ddedec02ed9a251a1f8442">More...</a><br/></td></tr>
 <tr class="separator:a8398579927ddedec02ed9a251a1f8442"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc84d45ce8176dc9e614c5ad779bd00b"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#acc84d45ce8176dc9e614c5ad779bd00b">modifiedTargets</a></td></tr>
-<tr class="memdesc:acc84d45ce8176dc9e614c5ad779bd00b"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of all top-level nodes which were modified as part of the last modification operation.  <a href="#acc84d45ce8176dc9e614c5ad779bd00b">More...</a><br/></td></tr>
-<tr class="separator:acc84d45ce8176dc9e614c5ad779bd00b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee2f7308b881140826ce11c040056281"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#aee2f7308b881140826ce11c040056281">modifiedTargets</a></td></tr>
+<tr class="memdesc:aee2f7308b881140826ce11c040056281"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of all top-level nodes which were modified as part of the last modification operation.  <a href="#aee2f7308b881140826ce11c040056281">More...</a><br/></td></tr>
+<tr class="separator:aee2f7308b881140826ce11c040056281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8280fc98d4e4a7153f462f5e5dbbbd50"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a8280fc98d4e4a7153f462f5e5dbbbd50">name_</a></td></tr>
 <tr class="memdesc:a8280fc98d4e4a7153f462f5e5dbbbd50"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of this model.  <a href="#a8280fc98d4e4a7153f462f5e5dbbbd50">More...</a><br/></td></tr>
 <tr class="separator:a8280fc98d4e4a7153f462f5e5dbbbd50"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,9 +269,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a605602e34387bc4f504ac89403d34b29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a605602e34387bc4f504ac89403d34b29">store_</a> {}</td></tr>
 <tr class="memdesc:a605602e34387bc4f504ac89403d34b29"><td class="mdescLeft">&#160;</td><td class="mdescRight">The persistent store where the model is currently stored.  <a href="#a605602e34387bc4f504ac89403d34b29">More...</a><br/></td></tr>
 <tr class="separator:a605602e34387bc4f504ac89403d34b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af75f55ea27f7887f4683da678a425d65"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#af75f55ea27f7887f4683da678a425d65">unresolvedReferences_</a></td></tr>
-<tr class="memdesc:af75f55ea27f7887f4683da678a425d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of all unresolved references which are currently loaded nodes.  <a href="#af75f55ea27f7887f4683da678a425d65">More...</a><br/></td></tr>
-<tr class="separator:af75f55ea27f7887f4683da678a425d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45012e8e6e18fda71637d5b39ccbf9c9"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a45012e8e6e18fda71637d5b39ccbf9c9">unresolvedReferences_</a></td></tr>
+<tr class="memdesc:a45012e8e6e18fda71637d5b39ccbf9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of all unresolved references which are currently loaded nodes.  <a href="#a45012e8e6e18fda71637d5b39ccbf9c9">More...</a><br/></td></tr>
+<tr class="separator:a45012e8e6e18fda71637d5b39ccbf9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a> class is a management and access entity for a program tree. </p>
@@ -960,7 +960,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a60b4ca9e2d91278c42df4fecca3bb6c3"></a>
+<a class="anchor" id="afdc28366910a2fcadb741a3e0b941cfe"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -970,7 +970,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void Model::Model::nodesModified </td>
           <td>(</td>
-          <td class="paramtype">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td>
+          <td class="paramtype">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td>
           <td class="paramname"><em>nodes</em></td><td>)</td>
           <td></td>
         </tr>
@@ -985,7 +985,7 @@ Private Attributes</h2></td></tr>
 <p>Emitted at the end of a modification block. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">nodes</td><td>A list of all nodes modified within this block. </td></tr>
+    <tr><td class="paramname">nodes</td><td>A set of all nodes modified within this block. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1303,7 +1303,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a40fce2a00530aeed64cfe9251d218230"></a>
+<a class="anchor" id="ab73b9062d488c8a5e5fef2780babcd78"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1311,7 +1311,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QList&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt; &amp; Model::Model::unresolvedReferences </td>
+          <td class="memname">const QSet&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt; &amp; Model::Model::unresolvedReferences </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1468,7 +1468,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acc84d45ce8176dc9e614c5ad779bd00b"></a>
+<a class="anchor" id="aee2f7308b881140826ce11c040056281"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1476,7 +1476,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classModel_1_1Node.html">Node</a>*&gt; Model::Model::modifiedTargets</td>
+          <td class="memname">QSet&lt;<a class="el" href="classModel_1_1Node.html">Node</a>*&gt; Model::Model::modifiedTargets</td>
         </tr>
       </table>
   </td>
@@ -1486,7 +1486,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A list of all top-level nodes which were modified as part of the last modification operation. </p>
+<p>A set of all top-level nodes which were modified as part of the last modification operation. </p>
 <p>This is only used to signal to anyone who is interested in monitoring changes. </p>
 
 </div>
@@ -1638,7 +1638,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af75f55ea27f7887f4683da678a425d65"></a>
+<a class="anchor" id="a45012e8e6e18fda71637d5b39ccbf9c9"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1646,7 +1646,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classModel_1_1Reference.html">Reference</a>*&gt; Model::Model::unresolvedReferences_</td>
+          <td class="memname">QSet&lt;<a class="el" href="classModel_1_1Reference.html">Reference</a>*&gt; Model::Model::unresolvedReferences_</td>
         </tr>
       </table>
   </td>

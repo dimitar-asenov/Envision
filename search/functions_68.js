@@ -45,5 +45,6 @@ var searchData=
   ['hrootitem',['HRootItem',['../classInteraction_1_1HRootItem.html#ace5ffaf13c0583f5b3dade7dad75564a',1,'Interaction::HRootItem']]],
   ['hscenehandleritem',['HSceneHandlerItem',['../classInteraction_1_1HSceneHandlerItem.html#ac2f061e28856ace0a21984e67d4a5a0c',1,'Interaction::HSceneHandlerItem']]],
   ['hstatement',['HStatement',['../classOOInteraction_1_1HStatement.html#ac6da4fc19e77bd6a0eb44e69f1160377',1,'OOInteraction::HStatement']]],
-  ['htext',['HText',['../classInteraction_1_1HText.html#afb4b444ee9a25123c820ea8cb583a42c',1,'Interaction::HText']]]
+  ['htext',['HText',['../classInteraction_1_1HText.html#afb4b444ee9a25123c820ea8cb583a42c',1,'Interaction::HText']]],
+  ['htmlformat',['htmlFormat',['../classVisualization_1_1TextStyle.html#a8301ef633c51828f8076bc76f4643ae0',1,'Visualization::TextStyle']]]
 ];

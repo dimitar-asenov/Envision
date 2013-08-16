@@ -82,6 +82,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><p>Envision is written in C++ and uses features from the C++11 standard.</p>
 <p>Make sure your C++ compiler is up-to-date. GCC version 4.8 or newer should be sufficient.</p>
 <p>Envision currently uses the Qt 4.8 libraries but a migration to Qt 5 is planned. An additional dependency is lp_solve 5.5: <a href="http://lpsolve.sourceforge.net/">http://lpsolve.sourceforge.net/</a></p>
+<p>On Linux the Google perftools (libprofile) are used for profiling.</p>
 <h1><a class="anchor" id="eclipse"></a>
 Using Eclipse (recommended)</h1>
 <ol type="1">
@@ -91,6 +92,7 @@ Using Eclipse (recommended)</h1>
 <li>Make the following symbolic link: <pre class="fragment">sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so </pre></li>
 </ol>
 </li>
+<li>On Linux you'll also need to install the Google perftools. On Ubuntu based distributions you'll need to do the following (tested with version 13.04): <pre class="fragment">sudo apt-get install google-perftools libgoogle-perftools-dev </pre></li>
 <li>Download and install the Qt Integration plug-in for your version of eclipse (32/64 bit).</li>
 <li>Inside Eclipse, configure Qt so that it knows where to find the development files.</li>
 <li>Download Envision's sources. The project is structured in separate directories where each one is an Eclipse/Qt project.</li>

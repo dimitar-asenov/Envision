@@ -127,6 +127,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a717d031449013e511496235e8841c8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c02ec69308101156ca93d06fbb09286"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#a7c02ec69308101156ca93d06fbb09286">~FormElement</a> ()</td></tr>
 <tr class="separator:a7c02ec69308101156ca93d06fbb09286"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7a1b9376ad9ef253645afaffacb73d0"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> <br class="typebreak"/>
+*const DeclarativeItemBase::* &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#aa7a1b9376ad9ef253645afaffacb73d0">allHandledChildPointers</a> ()</td></tr>
+<tr class="memdesc:aa7a1b9376ad9ef253645afaffacb73d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all pointer to child items of this form.  <a href="#aa7a1b9376ad9ef253645afaffacb73d0">More...</a><br/></td></tr>
+<tr class="separator:aa7a1b9376ad9ef253645afaffacb73d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fc4ace75d024bfec4621ca373d68db0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1FormElement.html">FormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#a3fc4ace75d024bfec4621ca373d68db0">clone</a> () const =0</td></tr>
 <tr class="memdesc:a3fc4ace75d024bfec4621ca373d68db0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy this element and all its children into a new element tree.  <a href="#a3fc4ace75d024bfec4621ca373d68db0">More...</a><br/></td></tr>
 <tr class="separator:a3fc4ace75d024bfec4621ca373d68db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,9 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a08d97de42ef6ebe7bb803419ac265a03"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#a08d97de42ef6ebe7bb803419ac265a03">computeSize</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int availableWidth, int availableHeight)=0</td></tr>
 <tr class="memdesc:a08d97de42ef6ebe7bb803419ac265a03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> updateGeometry method to compute it's size and position it's child elements.  <a href="#a08d97de42ef6ebe7bb803419ac265a03">More...</a><br/></td></tr>
 <tr class="separator:a08d97de42ef6ebe7bb803419ac265a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3169fa99f93ad8a3b9d08ba583c83d60"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#a3169fa99f93ad8a3b9d08ba583c83d60">destroyChildItems</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
-<tr class="memdesc:a3169fa99f93ad8a3b9d08ba583c83d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is recursively called on all form elements to destroy all the information they might have about a specific <em>item</em>.  <a href="#a3169fa99f93ad8a3b9d08ba583c83d60">More...</a><br/></td></tr>
-<tr class="separator:a3169fa99f93ad8a3b9d08ba583c83d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a04ea53a1b2d34da0ba450a800e2dc1"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#a5a04ea53a1b2d34da0ba450a800e2dc1">destroyChildItems</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *const DeclarativeItemBase::* &gt; handledChildren)</td></tr>
+<tr class="memdesc:a5a04ea53a1b2d34da0ba450a800e2dc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is recursively called on all form elements to destroy all the information they might have about a specific <em>item</em>.  <a href="#a5a04ea53a1b2d34da0ba450a800e2dc1">More...</a><br/></td></tr>
+<tr class="separator:a5a04ea53a1b2d34da0ba450a800e2dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a440ce7259c93b00f621656615bf875ee"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1FormElement.html#a440ce7259c93b00f621656615bf875ee">elementOrChildHasFocus</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
 <tr class="memdesc:a440ce7259c93b00f621656615bf875ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> elementOrChildHasFocus and by some layout form elements.  <a href="#a440ce7259c93b00f621656615bf875ee">More...</a><br/></td></tr>
 <tr class="separator:a440ce7259c93b00f621656615bf875ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -363,6 +367,34 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa7a1b9376ad9ef253645afaffacb73d0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *const DeclarativeItemBase::* &gt; Visualization::FormElement::allHandledChildPointers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a list of all pointer to child items of this form. </p>
+<p>This list should only be used for comparison as in <a class="el" href="classVisualization_1_1FormElement.html#a5a04ea53a1b2d34da0ba450a800e2dc1" title="This method is recursively called on all form elements to destroy all the information they might have...">destroyChildItems()</a> and should not be used for writing. </p>
+
+<p>Reimplemented in <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a3065c33467472593875ae905bf3019d6">Visualization::ItemWrapperFormElement&lt; ParentType, ChildItemType &gt;</a>, <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a3065c33467472593875ae905bf3019d6">Visualization::ItemWrapperFormElement&lt; ParentType, VisualizationType &gt;</a>, and <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a3065c33467472593875ae905bf3019d6">Visualization::ItemWrapperFormElement&lt; ParentType &gt;</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ab2f07af6985ee65c753453a5e6b0c99c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -526,7 +558,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3169fa99f93ad8a3b9d08ba583c83d60"></a>
+<a class="anchor" id="a5a04ea53a1b2d34da0ba450a800e2dc1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -537,8 +569,18 @@ Private Attributes</h2></td></tr>
           <td class="memname">void Visualization::FormElement::destroyChildItems </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>item</em></td><td>)</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *const DeclarativeItemBase::* &gt;&#160;</td>
+          <td class="paramname"><em>handledChildren</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -549,8 +591,13 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This method is recursively called on all form elements to destroy all the information they might have about a specific <em>item</em>. </p>
+<p>It is called in two cases:</p>
+<ul>
+<li>When the item is being destroyed. In that case all information and child items should be destroyed. The second argument is an empty list.</li>
+<li>When the current form is changing. In that case only information pertaining to child items which are not definitely handled by the new form should be removed. The second argument is a list of all child item pointer handled by the new form. </li>
+</ul>
 
-<p>Reimplemented in <a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a38ee6cc00fe5aef4d3751eff1d3871e6">Visualization::SequentialLayoutFormElement</a>, <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a1e67711dee59aaa39bfe9740b958bf55">Visualization::ItemWrapperFormElement&lt; ParentType, ChildItemType &gt;</a>, <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a1e67711dee59aaa39bfe9740b958bf55">Visualization::ItemWrapperFormElement&lt; ParentType, VisualizationType &gt;</a>, and <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a1e67711dee59aaa39bfe9740b958bf55">Visualization::ItemWrapperFormElement&lt; ParentType &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#ae2726580f93446d081c3ee329fe26a4a">Visualization::SequentialLayoutFormElement</a>, <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#ae5a2d287f8efa0bf4b8ed1fa679f4cd8">Visualization::ItemWrapperFormElement&lt; ParentType, ChildItemType &gt;</a>, <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#ae5a2d287f8efa0bf4b8ed1fa679f4cd8">Visualization::ItemWrapperFormElement&lt; ParentType, VisualizationType &gt;</a>, and <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#ae5a2d287f8efa0bf4b8ed1fa679f4cd8">Visualization::ItemWrapperFormElement&lt; ParentType &gt;</a>.</p>
 
 </div>
 </div>

@@ -91,6 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Interaction::Action Class Reference</div>  </div>
@@ -103,6 +104,8 @@ Public Types</h2></td></tr>
 <tr class="separator:aaae609def8f03d3c16274d327b8aaaef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1476a8c2da1aaa9a8e96eac94f5ff3c1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a1476a8c2da1aaa9a8e96eac94f5ff3c1">ActionFunctionOnNode</a> = std::function&lt; void(<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)&gt;</td></tr>
 <tr class="separator:a1476a8c2da1aaa9a8e96eac94f5ff3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ab6559df56ed82530064061bc3bcb1a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">FilterFunctionOnNode</a> = std::function&lt; bool(<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)&gt;</td></tr>
+<tr class="separator:a5ab6559df56ed82530064061bc3bcb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -110,13 +113,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae4ec228a1762916ab69507a2731c30fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9070cb2d2d4ad3bbc1eeac41665b11e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#aa9070cb2d2d4ad3bbc1eeac41665b11e">Action</a> (const QString &amp;<a class="el" href="classInteraction_1_1Action.html#a4314fef8d4a0794cc1b835ed2948685e">shortcut</a>, const QString &amp;<a class="el" href="classInteraction_1_1Action.html#af8c34950b4aab87e761641a1b6677812">name</a>, <a class="el" href="classInteraction_1_1Action.html#a1476a8c2da1aaa9a8e96eac94f5ff3c1">ActionFunctionOnNode</a> action)</td></tr>
 <tr class="separator:aa9070cb2d2d4ad3bbc1eeac41665b11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab17d4b63ca53377ae56b93577331573f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#ab17d4b63ca53377ae56b93577331573f">Action</a> (const QString &amp;<a class="el" href="classInteraction_1_1Action.html#a4314fef8d4a0794cc1b835ed2948685e">shortcut</a>, const QString &amp;<a class="el" href="classInteraction_1_1Action.html#af8c34950b4aab87e761641a1b6677812">name</a>, <a class="el" href="classInteraction_1_1Action.html#a1476a8c2da1aaa9a8e96eac94f5ff3c1">ActionFunctionOnNode</a> action, <a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">FilterFunctionOnNode</a> filter)</td></tr>
+<tr class="separator:ab17d4b63ca53377ae56b93577331573f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e14b82344ef6692670bc4b3cfcb6f73"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a9e14b82344ef6692670bc4b3cfcb6f73">Action</a> (const QString &amp;<a class="el" href="classInteraction_1_1Action.html#a4314fef8d4a0794cc1b835ed2948685e">shortcut</a>, const QString &amp;<a class="el" href="classInteraction_1_1Action.html#af8c34950b4aab87e761641a1b6677812">name</a>, <a class="el" href="classInteraction_1_1Action.html#aaae609def8f03d3c16274d327b8aaaef">ActionFunctionOnItem</a> action)</td></tr>
 <tr class="separator:a9e14b82344ef6692670bc4b3cfcb6f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95a7107fb30559df23f2afd49d179fb7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a95a7107fb30559df23f2afd49d179fb7">Action</a> (const QString &amp;<a class="el" href="classInteraction_1_1Action.html#a4314fef8d4a0794cc1b835ed2948685e">shortcut</a>, const QString &amp;<a class="el" href="classInteraction_1_1Action.html#af8c34950b4aab87e761641a1b6677812">name</a>, <a class="el" href="classInteraction_1_1Action.html#aaae609def8f03d3c16274d327b8aaaef">ActionFunctionOnItem</a> action, <a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">FilterFunctionOnNode</a> filter)</td></tr>
+<tr class="separator:a95a7107fb30559df23f2afd49d179fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1acffd90ee17caab8cbf37b40062e1f1"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a1acffd90ee17caab8cbf37b40062e1f1">~Action</a> ()</td></tr>
 <tr class="separator:a1acffd90ee17caab8cbf37b40062e1f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fbe970efbbd5de85dff8b33fc7f32a5"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a9fbe970efbbd5de85dff8b33fc7f32a5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a9fbe970efbbd5de85dff8b33fc7f32a5">add</a> (<a class="el" href="classInteraction_1_1Action.html">Action</a> *action)</td></tr>
 <tr class="separator:a9fbe970efbbd5de85dff8b33fc7f32a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90e48333fd41ae077eb11c1ec9959797"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a90e48333fd41ae077eb11c1ec9959797">canBeAppliedTo</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node) const </td></tr>
+<tr class="separator:a90e48333fd41ae077eb11c1ec9959797"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1f9b8f40fea31370b27086d093d8603"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#ab1f9b8f40fea31370b27086d093d8603">execute</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:ab1f9b8f40fea31370b27086d093d8603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacd05868084689e0a513254d656f7880"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#aacd05868084689e0a513254d656f7880">execute</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *itemWithNode)</td></tr>
@@ -130,13 +139,22 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a951a7467592d67478dfc0dbf2cea5321"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a951a7467592d67478dfc0dbf2cea5321">actions</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
-<tr class="separator:a951a7467592d67478dfc0dbf2cea5321"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3bcc6e20d25c3e541e8053720ddc417"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#af3bcc6e20d25c3e541e8053720ddc417">actions</a> (int nodeTypeId)</td></tr>
 <tr class="separator:af3bcc6e20d25c3e541e8053720ddc417"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40770f35b45c218f4989fbfbd0cf5e17"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a40770f35b45c218f4989fbfbd0cf5e17">actions</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
+<tr class="separator:a40770f35b45c218f4989fbfbd0cf5e17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3adcb53ec68f52af1beec5e4c172a3c1"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a3adcb53ec68f52af1beec5e4c172a3c1"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a3adcb53ec68f52af1beec5e4c172a3c1">add</a> (<a class="el" href="classInteraction_1_1Action.html">Action</a> *action)</td></tr>
 <tr class="separator:a3adcb53ec68f52af1beec5e4c172a3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a9e574db904eaa36cd5c417e3ea2b791a"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a9e574db904eaa36cd5c417e3ea2b791a">calculateSuitableShortcut</a> (const QString &amp;<a class="el" href="classInteraction_1_1Action.html#af8c34950b4aab87e761641a1b6677812">name</a>, const QStringList &amp;list)</td></tr>
+<tr class="separator:a9e574db904eaa36cd5c417e3ea2b791a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab90282e7c1f446366652a759ffc59537"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#ab90282e7c1f446366652a759ffc59537">createStandardActionsForCompositeNode</a> (<a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> *node, QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; &amp;list)</td></tr>
+<tr class="separator:ab90282e7c1f446366652a759ffc59537"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43e8108e42815cc504199dea247b2be9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a43e8108e42815cc504199dea247b2be9">createStandardRemoveAction</a> (QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; &amp;list)</td></tr>
+<tr class="separator:a43e8108e42815cc504199dea247b2be9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -144,6 +162,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:abcfee8b9c13c46831345327a68f1674c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef1feb1c4582d3ea90deaab3589bc5a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1Action.html#a1476a8c2da1aaa9a8e96eac94f5ff3c1">ActionFunctionOnNode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#aef1feb1c4582d3ea90deaab3589bc5a5">actionOnNode_</a></td></tr>
 <tr class="separator:aef1feb1c4582d3ea90deaab3589bc5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a395e01e3f1b5f25d4d365c8c70735d6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">FilterFunctionOnNode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a395e01e3f1b5f25d4d365c8c70735d6e">filterOnNode_</a></td></tr>
+<tr class="separator:a395e01e3f1b5f25d4d365c8c70735d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a573656198973b8c25a758d98859a4753"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#a573656198973b8c25a758d98859a4753">name_</a></td></tr>
 <tr class="separator:a573656198973b8c25a758d98859a4753"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc68da2716090e2234093d8857e451e7"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Action.html#adc68da2716090e2234093d8857e451e7">shortcut_</a></td></tr>
@@ -168,6 +188,18 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classInteraction_1_1Action.html#a1476a8c2da1aaa9a8e96eac94f5ff3c1">Interaction::Action::ActionFunctionOnNode</a> =  std::function&lt;void (<a class="el" href="classModel_1_1Node.html">Model::Node</a>* node)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5ab6559df56ed82530064061bc3bcb1a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">Interaction::Action::FilterFunctionOnNode</a> =  std::function&lt;bool (<a class="el" href="classModel_1_1Node.html">Model::Node</a>* node)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -233,6 +265,44 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab17d4b63ca53377ae56b93577331573f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Interaction::Action::Action </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>shortcut</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1Action.html#a1476a8c2da1aaa9a8e96eac94f5ff3c1">ActionFunctionOnNode</a>&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">FilterFunctionOnNode</a>&#160;</td>
+          <td class="paramname"><em>filter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a9e14b82344ef6692670bc4b3cfcb6f73"></a>
 <div class="memitem">
 <div class="memproto">
@@ -254,6 +324,44 @@ Private Attributes</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="classInteraction_1_1Action.html#aaae609def8f03d3c16274d327b8aaaef">ActionFunctionOnItem</a>&#160;</td>
           <td class="paramname"><em>action</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a95a7107fb30559df23f2afd49d179fb7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Interaction::Action::Action </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>shortcut</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1Action.html#aaae609def8f03d3c16274d327b8aaaef">ActionFunctionOnItem</a>&#160;</td>
+          <td class="paramname"><em>action</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">FilterFunctionOnNode</a>&#160;</td>
+          <td class="paramname"><em>filter</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -289,30 +397,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a951a7467592d67478dfc0dbf2cea5321"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; &amp; Interaction::Action::actions </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="af3bcc6e20d25c3e541e8053720ddc417"></a>
 <div class="memitem">
 <div class="memproto">
@@ -325,6 +409,30 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>nodeTypeId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a40770f35b45c218f4989fbfbd0cf5e17"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; Interaction::Action::actions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -383,6 +491,122 @@ template&lt;class T &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9e574db904eaa36cd5c417e3ea2b791a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Interaction::Action::calculateSuitableShortcut </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a90e48333fd41ae077eb11c1ec9959797"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Interaction::Action::canBeAppliedTo </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab90282e7c1f446366652a759ffc59537"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::Action::createStandardActionsForCompositeNode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>list</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a43e8108e42815cc504199dea247b2be9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::Action::createStandardRemoveAction </td>
+          <td>(</td>
+          <td class="paramtype">QList&lt; <a class="el" href="classInteraction_1_1Action.html">Action</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>list</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -537,6 +761,26 @@ template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classInteraction_1_1Action.html#a1476a8c2da1aaa9a8e96eac94f5ff3c1">ActionFunctionOnNode</a> Interaction::Action::actionOnNode_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a395e01e3f1b5f25d4d365c8c70735d6e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInteraction_1_1Action.html#a5ab6559df56ed82530064061bc3bcb1a">FilterFunctionOnNode</a> Interaction::Action::filterOnNode_</td>
         </tr>
       </table>
   </td>

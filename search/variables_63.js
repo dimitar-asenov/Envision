@@ -56,6 +56,8 @@ var searchData=
   ['correctlogentries',['correctLogEntries',['../classLogger_1_1LogTester.html#a0cc9d42ba59440794e13712e736679cc',1,'Logger::LogTester']]],
   ['createfunction_5f',['createFunction_',['../classOOInteraction_1_1OOOperatorDescriptor.html#a45fea52dca369edfb79eefc59aaaf93e',1,'OOInteraction::OOOperatorDescriptor']]],
   ['createifnonode_5f',['createIfNoNode_',['../classVisualization_1_1NodeItemWrapperFormElement.html#a53e854e5d49b81128907d6b7d13cb37a',1,'Visualization::NodeItemWrapperFormElement::createIfNoNode_()'],['../classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html#a4e9958bd8ebe6ef61534d9af06187ee7',1,'Visualization::NodeWithVisualizationItemWrapperFormElement::createIfNoNode_()']]],
+  ['createjavavm',['CreateJavaVM',['../structInvocationFunctions.html#ab922da5b1da212dbe384d11d1e57ad64',1,'InvocationFunctions']]],
+  ['csize',['csize',['../structzentry.html#a6a5a09c974151642baba82cc19598fc1',1,'zentry']]],
   ['currentactionreceiver_5f',['currentActionReceiver_',['../classInteraction_1_1ActionPrompt.html#a7ca67d35bf5925794b2e3a3fb00ee7ed',1,'Interaction::ActionPrompt']]],
   ['currentformindex_5f',['currentFormIndex_',['../classVisualization_1_1DeclarativeItemBase.html#a2f9f5af22eca1b52d7aa6f89ee19fae3',1,'Visualization::DeclarativeItemBase']]],
   ['currentitem',['currentItem',['../classInteraction_1_1HPositionLayout.html#aaeac6f44146fa01036d56a1ce751ec46',1,'Interaction::HPositionLayout']]],

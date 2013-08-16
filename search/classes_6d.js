@@ -1,6 +1,7 @@
 var searchData=
 [
   ['mainview',['MainView',['../classVisualization_1_1MainView.html',1,'Visualization']]],
+  ['manifest_5finfo',['manifest_info',['../structmanifest__info.html',1,'']]],
   ['memberinitializer',['MemberInitializer',['../classOOModel_1_1MemberInitializer.html',1,'OOModel']]],
   ['merge',['Merge',['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html',1,'Visualization::DeclarativeItemBase']]],
   ['method',['Method',['../classOOModel_1_1Method.html',1,'OOModel']]],

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['welcome_20to_20envision',['Welcome to Envision',['../index.html',1,'']]],
+  ['what',['what',['../structJavaMainArgs.html#aaeaaad24b4d7e6e9bef74a57f3c89176',1,'JavaMainArgs']]],
   ['wheelevent',['wheelEvent',['../classVisualization_1_1InteractionHandler.html#a8ce0337d84959e157a2104185fb40c21',1,'Visualization::InteractionHandler::wheelEvent()'],['../classVisualization_1_1Item.html#a8faf25bb94389681bd201fd127c67c7a',1,'Visualization::Item::wheelEvent()'],['../classVisualization_1_1MainView.html#abcab8711f6cd2c042a3c6fdf9b3e927b',1,'Visualization::MainView::wheelEvent()']]],
   ['wholeitemcursor',['wholeItemCursor',['../classVisualization_1_1ItemStyle.html#a3052dc81840bd472fb4541971e85844d',1,'Visualization::ItemStyle']]],
   ['wholeitemcursor_5f',['wholeItemCursor_',['../classVisualization_1_1ItemStyle.html#adb0fb3f5190df42833cfe0d6da03e895',1,'Visualization::ItemStyle']]],

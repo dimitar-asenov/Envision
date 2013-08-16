@@ -124,12 +124,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a755ab54f5d170a0cb2e146b9167f6ef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7735ca082b562e0ad8e30f603a524b8"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#ad7735ca082b562e0ad8e30f603a524b8">~ItemWrapperFormElement</a> ()</td></tr>
 <tr class="separator:ad7735ca082b562e0ad8e30f603a524b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3065c33467472593875ae905bf3019d6"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> <br class="typebreak"/>
+*const DeclarativeItemBase::* &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a3065c33467472593875ae905bf3019d6">allHandledChildPointers</a> () override</td></tr>
+<tr class="memdesc:a3065c33467472593875ae905bf3019d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all pointer to child items of this form.  <a href="#a3065c33467472593875ae905bf3019d6">More...</a><br/></td></tr>
+<tr class="separator:a3065c33467472593875ae905bf3019d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3773e0bbd913fac6bf8cd2da6ed5065"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#af3773e0bbd913fac6bf8cd2da6ed5065">computeSize</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#acacc980a2210d85970e30f83599c1e1b">item</a>, int availableWidth, int availableHeight) override</td></tr>
 <tr class="memdesc:af3773e0bbd913fac6bf8cd2da6ed5065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> updateGeometry method to compute it's size and position it's child elements.  <a href="#af3773e0bbd913fac6bf8cd2da6ed5065">More...</a><br/></td></tr>
 <tr class="separator:af3773e0bbd913fac6bf8cd2da6ed5065"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e67711dee59aaa39bfe9740b958bf55"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a1e67711dee59aaa39bfe9740b958bf55">destroyChildItems</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#acacc980a2210d85970e30f83599c1e1b">item</a>) override</td></tr>
-<tr class="memdesc:a1e67711dee59aaa39bfe9740b958bf55"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is recursively called on all form elements to destroy all the information they might have about a specific <em>item</em>.  <a href="#a1e67711dee59aaa39bfe9740b958bf55">More...</a><br/></td></tr>
-<tr class="separator:a1e67711dee59aaa39bfe9740b958bf55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5a2d287f8efa0bf4b8ed1fa679f4cd8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#ae5a2d287f8efa0bf4b8ed1fa679f4cd8">destroyChildItems</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#acacc980a2210d85970e30f83599c1e1b">item</a>, QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *const DeclarativeItemBase::* &gt; handledChildren) override</td></tr>
+<tr class="memdesc:ae5a2d287f8efa0bf4b8ed1fa679f4cd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is recursively called on all form elements to destroy all the information they might have about a specific <em>item</em>.  <a href="#ae5a2d287f8efa0bf4b8ed1fa679f4cd8">More...</a><br/></td></tr>
+<tr class="separator:ae5a2d287f8efa0bf4b8ed1fa679f4cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62d61e74d5f23570d34786ad5d930621"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#a62d61e74d5f23570d34786ad5d930621">elementOrChildHasFocus</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#acacc980a2210d85970e30f83599c1e1b">item</a>) const override</td></tr>
 <tr class="memdesc:a62d61e74d5f23570d34786ad5d930621"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> elementOrChildHasFocus and by some layout form elements.  <a href="#a62d61e74d5f23570d34786ad5d930621">More...</a><br/></td></tr>
 <tr class="separator:a62d61e74d5f23570d34786ad5d930621"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -372,6 +376,36 @@ template&lt;class ParentType, class ChildItemType = Item&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a3065c33467472593875ae905bf3019d6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ParentType , class ChildItemType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *const DeclarativeItemBase::* &gt; <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html">Visualization::ItemWrapperFormElement</a>&lt; ParentType, ChildItemType &gt;::allHandledChildPointers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a list of all pointer to child items of this form. </p>
+<p>This list should only be used for comparison as in <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html#ae5a2d287f8efa0bf4b8ed1fa679f4cd8" title="This method is recursively called on all form elements to destroy all the information they might have...">destroyChildItems()</a> and should not be used for writing. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1FormElement.html#aa7a1b9376ad9ef253645afaffacb73d0">Visualization::FormElement</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af3773e0bbd913fac6bf8cd2da6ed5065"></a>
 <div class="memitem">
 <div class="memproto">
@@ -419,7 +453,7 @@ template&lt;class ParentType , class ChildItemType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a1e67711dee59aaa39bfe9740b958bf55"></a>
+<a class="anchor" id="ae5a2d287f8efa0bf4b8ed1fa679f4cd8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -432,8 +466,18 @@ template&lt;class ParentType , class ChildItemType &gt; </div>
           <td class="memname">void <a class="el" href="classVisualization_1_1ItemWrapperFormElement.html">Visualization::ItemWrapperFormElement</a>&lt; ParentType, ChildItemType &gt;::destroyChildItems </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>item</em></td><td>)</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">QList&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *const DeclarativeItemBase::* &gt;&#160;</td>
+          <td class="paramname"><em>handledChildren</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -444,8 +488,13 @@ template&lt;class ParentType , class ChildItemType &gt; </div>
 </div><div class="memdoc">
 
 <p>This method is recursively called on all form elements to destroy all the information they might have about a specific <em>item</em>. </p>
+<p>It is called in two cases:</p>
+<ul>
+<li>When the item is being destroyed. In that case all information and child items should be destroyed. The second argument is an empty list.</li>
+<li>When the current form is changing. In that case only information pertaining to child items which are not definitely handled by the new form should be removed. The second argument is a list of all child item pointer handled by the new form. </li>
+</ul>
 
-<p>Reimplemented from <a class="el" href="classVisualization_1_1FormElement.html#a3169fa99f93ad8a3b9d08ba583c83d60">Visualization::FormElement</a>.</p>
+<p>Reimplemented from <a class="el" href="classVisualization_1_1FormElement.html#a5a04ea53a1b2d34da0ba450a800e2dc1">Visualization::FormElement</a>.</p>
 
 </div>
 </div>
