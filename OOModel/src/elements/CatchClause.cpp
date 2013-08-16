@@ -37,16 +37,16 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause)
 REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
 REGISTER_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
 
-QList<Model::Node*> CatchClause::findSymbols(const QRegExp& symbolExp,Model::Node* source,
+QList<Model::Node*> CatchClause::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
 	if (exceptionToCatch())
-		symbols << exceptionToCatch()->findSymbols(symbolExp, source, SEARCH_DOWN, symbolTypes, false);
+		symbols << exceptionToCatch()->findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, false);
 
 	if (exhaustAllScopes || symbols.empty())
-		symbols << Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
+		symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 
 	return symbols;
 }

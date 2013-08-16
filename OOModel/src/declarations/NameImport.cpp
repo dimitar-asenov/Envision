@@ -59,15 +59,15 @@ NameImport::SymbolTypes NameImport::symbolType() const
 	else return UNSPECIFIED;
 }
 
-QList<Model::Node*> NameImport::findSymbols(const QRegExp& symbolExp, Model::Node* source,
+QList<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 	if (direction == SEARCH_DOWN)
-		symbols = importedName()->findSymbols(symbolExp, importedName(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
+		symbols = importedName()->findSymbols(matcher, importedName(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
 
 	if ( direction == SEARCH_UP && parent() && (exhaustAllScopes || symbols.isEmpty()))
-		symbols << parent()->findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
+		symbols << parent()->findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 
 	// Filter out results that are the same as this node
 	symbols.removeAll(this);

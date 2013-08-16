@@ -58,8 +58,8 @@ TypeAlias::SymbolTypes TypeAlias::symbolType() const
 	return ret;
 }
 
-QList<Model::Node*> TypeAlias::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolDirection direction,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
+QList<Model::Node*> TypeAlias::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
@@ -69,12 +69,12 @@ QList<Model::Node*> TypeAlias::findSymbols(const QRegExp& symbolExp,Model::Node*
 	auto symbolProviderType = dynamic_cast<SymbolProviderType*>(type);
 	if (symbolProviderType)
 		symbols = symbolProviderType->symbolProvider()
-			->findSymbols(symbolExp, symbolProviderType->symbolProvider(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
+			->findSymbols(matcher, symbolProviderType->symbolProvider(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
 
 	SAFE_DELETE(type);
 
 	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Super::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
+		symbols << Super::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 	return symbols;
 }
 

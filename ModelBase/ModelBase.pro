@@ -3,7 +3,8 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/commands/CompositeNodeChangeChild.h \
+HEADERS += src/SymbolMatcher.h \
+    src/commands/CompositeNodeChangeChild.h \
     src/nodes/composite/CompositeNode.h \
     src/nodes/composite/CompositeIndex.h \
     src/nodes/composite/Attribute.h \
@@ -51,7 +52,8 @@ HEADERS += src/commands/CompositeNodeChangeChild.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/commands/CompositeNodeChangeChild.cpp \
+SOURCES += src/SymbolMatcher.cpp \
+    src/commands/CompositeNodeChangeChild.cpp \
     src/nodes/composite/CompositeNode.cpp \
     src/nodes/composite/CompositeIndex.cpp \
     src/nodes/composite/Attribute.cpp \

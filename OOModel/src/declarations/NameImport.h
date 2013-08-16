@@ -46,7 +46,7 @@ class OOMODEL_API NameImport : public Super<Declaration>
 		virtual const QString& symbolName() const override;
 		virtual SymbolTypes symbolType() const override;
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+		virtual QList<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 

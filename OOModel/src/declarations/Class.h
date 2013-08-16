@@ -71,7 +71,7 @@ class OOMODEL_API Class : public Super<Declaration>
 
 		bool isGeneric();
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+		virtual QList<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 

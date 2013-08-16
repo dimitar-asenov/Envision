@@ -24,36 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "SymbolMatcher.h"
 
-#include "Expression.h"
+namespace Model {
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CommaExpression)
-
-namespace OOModel {
-
-class OOMODEL_API CommaExpression: public Super<Expression>
-{
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommaExpression)
-
-	ATTRIBUTE(Expression, left, setLeft)
-	ATTRIBUTE(Expression, right, setRight)
-
-	public:
-		CommaExpression(Expression* left, Expression* right);
-
-		/**
-		 * \brief Returns in a single list all expressions of this and nested CommaExpression operators.
-		 *
-		 * If \a detachOperands is set all returned expressions will have no parents and the CommaExpression can be
-		 * deleted.
-		 */
-		QList<Expression*> allSubOperands(bool detachOperands);
-
-		virtual Type* type();
-		virtual QList<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
-
-};
-
-} /* namespace OOModel */
+} /* namespace Model */

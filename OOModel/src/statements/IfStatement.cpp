@@ -38,15 +38,15 @@ REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
 
-QList<Model::Node*> IfStatement::findSymbols(const QRegExp& symbolExp,Model::Node* source,
+QList<Model::Node*> IfStatement::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
-	symbols << condition()->findSymbols(symbolExp, source, SEARCH_DOWN, symbolTypes, false);
+	symbols << condition()->findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, false);
 
 	if (exhaustAllScopes || symbols.empty())
-		symbols << Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
+		symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 
 	return symbols;
 }

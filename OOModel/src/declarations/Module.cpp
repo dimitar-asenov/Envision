@@ -49,19 +49,19 @@ Module::SymbolTypes Module::symbolType() const
 	return CONTAINER;
 }
 
-QList<Model::Node*> Module::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolDirection direction,
+QList<Model::Node*> Module::findSymbols(const Model::SymbolMatcher& matcher,Model::Node* source, FindSymbolDirection direction,
 		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
-	symbols << modules()->findAllSymbolDefinitions(symbolExp, symbolTypes);
-	symbols << classes()->findAllSymbolDefinitions(symbolExp, symbolTypes);
-	symbols << methods()->findAllSymbolDefinitions(symbolExp, symbolTypes);
-	symbols << fields()->findAllSymbolDefinitions(symbolExp, symbolTypes);
-	symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp, symbolTypes);
+	symbols << modules()->findAllSymbolDefinitions(matcher, symbolTypes);
+	symbols << classes()->findAllSymbolDefinitions(matcher, symbolTypes);
+	symbols << methods()->findAllSymbolDefinitions(matcher, symbolTypes);
+	symbols << fields()->findAllSymbolDefinitions(matcher, symbolTypes);
+	symbols << subDeclarations()->findAllSymbolDefinitions(matcher, symbolTypes);
 
 	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
+		symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 
 	return symbols;
 }

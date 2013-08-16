@@ -149,12 +149,12 @@ bool Node::replaceChild(Node*, Node*)
 	return false;
 }
 
-QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+QList<Node*> Node::findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	QList<Node*> res;
 
-	bool thisMatches = symbolMatches(symbolExp, symbolTypes);
+	bool thisMatches = symbolMatches(matcher, symbolTypes);
 
 	// If exhaustAllScopes is true and there is a parent item, we should let the parent find this symbol definition
 	// and add it to the result. This symbol should not report itself in that case.
@@ -163,7 +163,7 @@ QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbo
 		if ( thisMatches && !(exhaustAllScopes && parent()))
 			res << this;
 		else if (parent_)
-			res << parent_->findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
+			res << parent_->findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 	}
 	else if (direction == SEARCH_DOWN && thisMatches)
 		res << this;

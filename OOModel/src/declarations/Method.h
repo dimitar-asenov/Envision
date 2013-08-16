@@ -74,7 +74,7 @@ class OOMODEL_API Method : public Super<Declaration>
 
 		virtual SymbolTypes symbolType() const override;
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+		virtual QList<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 

@@ -28,6 +28,8 @@
 
 #include "../modelbase_api.h"
 #include "../persistence/PersistentStore.h"
+#include "../SymbolMatcher.h"
+
 #include "Core/src/InitializationRegistry.h"
 #include "Core/src/reflect/Reflect.h"
 #include "Core/src/reflect/typeIdMacros.h"
@@ -191,7 +193,7 @@ class MODELBASE_API Node
 		};
 
 		/**
-		 * Returns a list of all nodes which define a symbol with a name matching \a symbolExp in the scope of this node.
+		 * Returns a list of all nodes which define a symbol with a name matching \a matcher in the scope of this node.
 		 *
 		 * The \a source Node specifies what node should be used as a reference when determining what symbols are visible.
 		 *
@@ -213,34 +215,14 @@ class MODELBASE_API Node
 		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
 		 * other than FindSymbolMode::SEARCH_UP
 		 */
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolDirection direction,
+		virtual QList<Node*> findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 				SymbolTypes symbolTypes, bool exhaustAllScopes);
 
 		/**
-		 * \overload
-		 *
-		 * This is equivalent to:
-		 * \code
-		 * findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, direction, symbolTypes,
-		 * 	exhaustAllScopes)
-		 * \endcode
-		 */
-		QList<Node*> findSymbols(const QString& symbol, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes);
-
-		/**
-		 * Returns true if this node defines a symbol that has a name matching \a symbolExp and types common with \a
+		 * Returns true if this node defines a symbol that has a name matching \a matcher and types common with \a
 		 * symbolTypes.
 		 */
-		bool symbolMatches(const QRegExp& symbolExp, SymbolTypes symbolTypes);
-
-		/**
-		 * \overload
-		 *
-		 * Returns true if this node defines a symbol that has a name equal to \a symbolName and types common with \a
-		 * symbolTypes.
-		 */
-		bool symbolMatches(const QString& symbolName, SymbolTypes symbolTypes);
+		bool symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes);
 
 		/**
 		 * Returns the revision of this node.
@@ -458,21 +440,9 @@ class MODELBASE_API Node
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
 
-inline QList<Node*> Node::findSymbols(const QString& symbol, Node* source, FindSymbolDirection direction,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
+inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes)
 {
-	return findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, direction, symbolTypes,
-		exhaustAllScopes);
-}
-
-inline bool Node::symbolMatches(const QRegExp& symbolExp, SymbolTypes symbolTypes)
-{
-	return definesSymbol() && (symbolType() & symbolTypes) && symbolExp.exactMatch(symbolName());
-}
-
-inline bool Node::symbolMatches(const QString& symbolName, SymbolTypes symbolTypes)
-{
-	return symbolMatches(QRegExp(symbolName, Qt::CaseSensitive, QRegExp::FixedString), symbolTypes);
+	return definesSymbol() && (symbolType() & symbolTypes) && matcher.matches(symbolName());
 }
 
 }

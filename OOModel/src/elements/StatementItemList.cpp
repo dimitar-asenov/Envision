@@ -34,13 +34,13 @@ namespace OOModel {
 NODE_DEFINE_EMPTY_CONSTRUCTORS(StatementItemList)
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(StatementItemList)
 
-QList<Model::Node*> StatementItemList::findSymbols(const QRegExp& symbolExp, Model::Node* source,
+QList<Model::Node*> StatementItemList::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	QList<Model::Node*> symbols = findAllSymbolDefinitions(symbolExp, symbolTypes, indexOfSubitem(source));
+	QList<Model::Node*> symbols = findAllSymbolDefinitions(matcher, symbolTypes, indexOfSubitem(source));
 
 	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Node::findSymbols(symbolExp, source, direction, symbolTypes, exhaustAllScopes);
+		symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 	return symbols;
 }
 

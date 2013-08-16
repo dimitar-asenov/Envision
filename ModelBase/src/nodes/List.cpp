@@ -229,7 +229,7 @@ Node* List::findFirstSymbolDefinition(const QString& symbol, SymbolTypes symbolT
 	return nullptr;
 }
 
-QList<Node*> List::findAllSymbolDefinitions(const QRegExp& symbolExp, SymbolTypes symbolTypes, int beforeIndex)
+QList<Node*> List::findAllSymbolDefinitions(const SymbolMatcher& matcher, SymbolTypes symbolTypes, int beforeIndex)
 {
 	QList<Node*> result;
 
@@ -237,7 +237,7 @@ QList<Node*> List::findAllSymbolDefinitions(const QRegExp& symbolExp, SymbolType
 	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
 
 	for(int i = 0; i<beforeIndex; ++i)
-		if (nodes_[i]->symbolMatches(symbolExp, symbolTypes))
+		if (nodes_[i]->symbolMatches(matcher, symbolTypes))
 			result.append( nodes_[i] );
 
 	return result;
