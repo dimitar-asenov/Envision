@@ -12,6 +12,8 @@ QMAKE_LFLAGS += '-Wl,-rpath,\'\$$ORIGIN/../qt\''    # Used so that plugins can l
 
 win32:QMAKE_LFLAGS += '-Wl,--export-all-symbols' #Export all symbols in Windows to save a hassle
 
+unix:LIBS += -lprofiler
+
 INCLUDEPATH += ./src ./test $${ENVISION_ROOT_DIR}
 CONFIG += qt warn_on thread precompile_header debug_and_release depend_includepath
 QT = core gui

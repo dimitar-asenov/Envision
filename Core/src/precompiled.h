@@ -56,6 +56,10 @@
 #include <functional>
 #include <typeinfo>
 
+#ifdef Q_OS_LINUX
+	#include <google/profiler.h>
+#endif
+
 #if defined(CORE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.

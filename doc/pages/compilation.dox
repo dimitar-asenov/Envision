@@ -6,6 +6,8 @@ GCC version 4.8 or newer should be sufficient.
 Envision currently uses the Qt 4.8 libraries but a migration to Qt 5 is planned.
 An additional dependency is lp_solve 5.5: http://lpsolve.sourceforge.net/
 
+On Linux the Google perftools (libprofile) are used for profiling.
+
 \section eclipse Using Eclipse (recommended)
 
 	-# If you do not have the Qt development version installed, download and install it.
@@ -15,6 +17,9 @@ An additional dependency is lp_solve 5.5: http://lpsolve.sourceforge.net/
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
 		-# Make the following symbolic link:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
+	-# On Linux you'll also need to install the Google perftools. On Ubuntu based distributions you'll need
+	to do the following (tested with version 13.04):
+		\verbatim sudo apt-get install google-perftools libgoogle-perftools-dev \endverbatim
 	-# Download and install the Qt Integration plug-in for your version of eclipse (32/64 bit).
 	-# Inside Eclipse, configure Qt so that it knows where to find the development files.
 	-# Download Envision's sources. The project is structured in separate directories where each one is an Eclipse/Qt

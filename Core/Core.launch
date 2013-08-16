@@ -16,6 +16,7 @@
 <listEntry value="4"/>
 </listAttribute>
 <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="CPUPROFILE_FREQUENCY" value="1000"/>
 <mapEntry key="LD_LIBRARY_PATH" value="plugins"/>
 <mapEntry key="PATH" value="/usr/bin/:${env_var:PATH}:${env_var:PATH}"/>
 </mapAttribute>
