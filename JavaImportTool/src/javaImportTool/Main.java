@@ -41,6 +41,12 @@ public class Main {
 		{
 			Node root = new Node(null, "Project", "0");
 			root.setSymbol(projectName);
+			
+			// Add the default java.lang import
+			Node nameImport = root.child("subDeclarations").add(new Node(null, "NameImport", "0"));
+			nameImport.child("importedName").child("ref").setStringValue("____NULL____:lang");
+			Node prefix = nameImport.child("importedName").add(new Node(null, "ReferenceExpression", "prefix"));
+			prefix.child("ref").setStringValue("____NULL____:java");
 
 			File dir = new File(inputDirectory);
 			ClassFileBytesDisassembler dis = ToolFactory.createDefaultClassFileBytesDisassembler();

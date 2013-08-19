@@ -201,7 +201,7 @@ public class Node {
 			out_.peek().print(" name=\"" + name_ + "\" partial=\"0\"");
 			
 			if (!children_.isEmpty() && text_ != null)
-				throw new ConversionException("Invalid node condent. Node has both children and textual content.");
+				throw new ConversionException("Invalid node content. Node has both children and textual content.");
 			
 			if (text_ != null) out_.peek().println(">" + text_ + "</" + tag_ + ">");
 			else if (children_.isEmpty()) out_.peek().println(" />");
