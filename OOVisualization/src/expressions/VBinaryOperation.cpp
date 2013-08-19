@@ -108,9 +108,9 @@ int VBinaryOperation::getExpressionDepth(OOModel::Expression* e, int* op) const
 	int a = getExpressionDepth(binary->left(), &op_ida);
 	int b = getExpressionDepth(binary->right(), &op_idb);
 
-	if (op_ida == op_idb && op_ida == op_id) return a;
-	if (op_idb < 0 && op_ida == op_id) return a;
-	if (op_ida < 0 && op_idb == op_id) return b;
+	if (op_ida == op_idb && op_ida == op_id) return a>b?a:b;
+	if (op_ida == op_id) return a;
+	if (op_idb == op_id) return b;
 
 	return a>b ? a+1 : b+1;
 }
