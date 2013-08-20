@@ -24,35 +24,41 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "CommentDiagramConnector.h"
 
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-
-#include "../nodes/Comment.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(Comments::CommentDiagramConnector)
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
+
+REGISTER_ATTRIBUTE(CommentDiagramConnector, label, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, x, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, y, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, width, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, height, Integer, false, false, true)
+
+// references for primitive types?
+CommentDiagramConnector::CommentDiagramConnector(const QString& label, const int& x, const int& y, const int& width, const int& height)
+: Super{nullptr, CommentDiagramConnector::getMetaData()}
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+	setLabel(label);
+	setX(x);
+	setY(y);
+	setWidth(width);
+	setHeight(height);
+}
 
-	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
+QSize CommentDiagramConnector::size()
+{
+	return QSize(width(), height());
+}
 
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
-
-		bool editing_{};
-		Visualization::Item* editLabel_{};
-};
+QSize CommentDiagramConnector::pos()
+{
+	return QSize(x(), y());
+}
 
 } /* namespace Comments */

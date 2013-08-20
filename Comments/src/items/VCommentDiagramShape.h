@@ -28,31 +28,25 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 
-#include "../nodes/Comment.h"
+#include "../nodes/CommentDiagramShape.h"
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
+class COMMENTS_API VCommentDiagramShape : public Super<Visualization::ItemWithNode<VCommentDiagramShape, Visualization::Item, CommentDiagramShape> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagramShape, Visualization::ItemStyle)
 
 	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
+		VCommentDiagramShape(Visualization::Item* parent, NodeType* node);
 
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
-
-		bool editing_{};
-		Visualization::Item* editLabel_{};
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 } /* namespace Comments */

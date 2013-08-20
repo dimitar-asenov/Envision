@@ -24,35 +24,23 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "CommentBrowser.h"
 
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-
-#include "../nodes/Comment.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(Comments::CommentBrowser)
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentBrowser)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentBrowser)
+
+REGISTER_ATTRIBUTE(CommentBrowser, url, Text, false, false, true)
+
+// references for primitive types?
+CommentBrowser::CommentBrowser(const QString& url)
+: Super{nullptr, CommentBrowser::getMetaData()}
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
-
-	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
-
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
-
-		bool editing_{};
-		Visualization::Item* editLabel_{};
-};
+	setUrl(url);
+}
 
 } /* namespace Comments */

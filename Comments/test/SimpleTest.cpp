@@ -26,6 +26,7 @@
 
 #include "comments.h"
 #include "nodes/Comment.h"
+#include "nodes/CommentDiagram.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
@@ -70,27 +71,24 @@ TEST(Comments, SimpleTest)
 
 	third->set("Some other text");
 
-//	for(int i = 0; i < 10.0000; ++i) {
-//		if(!(i % 10000)) {
-//			qDebug() << "i" << i;
-//		}
-//		list->append(new RTFNode("<b>beautifully <span style='color:green'>colored <i>text</i></span></b>"));
-//	}
+//	auto node2 = new CommentNode(
+//		"# Header 1\n"
+//		"Text *in bold* that spans more\n"
+//		"than one line\n"
+//		"===\n"
+//		"\n"
+//		"## Header 2\n"
+//		"---\n"
+//		"\n"
+//		"...\n"
+//		"### Header 3\n"
+//		"#### Header 4\n"
+//		"###### Header 6\n"
+//		"And later on, some more text...");
 
-	auto node = new CommentNode(
-		"# Header 1\n"
-		"Text *in bold* that spans more\n"
-		"than one line\n"
-		"===\n"
-		"\n"
-		"## Header 2\n"
-		"---\n"
-		"\n"
-		"...\n"
-		"### Header 3\n"
-		"#### Header 4\n"
-		"###### Header 6\n"
-		"And later on, some more text...");
+	auto node = new CommentDiagram();
+	node->shapes()->append(new CommentDiagramShape("First shape", 50, 50, 300, 50));
+	node->shapes()->append(new CommentDiagramShape("Another shape", 150, 150, 100, 150));
 
 	list->append(node);
 

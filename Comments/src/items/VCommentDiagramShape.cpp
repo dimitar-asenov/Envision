@@ -24,35 +24,31 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VCommentDiagramShape.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
 
-#include "../nodes/Comment.h"
+using namespace Visualization;
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
+ITEM_COMMON_DEFINITIONS(VCommentDiagramShape, "item")
+
+VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+}
 
-	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
+void VCommentDiagramShape::determineChildren(){}
 
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
+void VCommentDiagramShape::updateGeometry(int, int)
+{
+	setSize(node()->width(), node()->height());
+}
 
-		bool editing_{};
-		Visualization::Item* editLabel_{};
-};
+void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
+{
+	painter->drawRect(0, 0, width(), height());
+	if(!node()->label().isEmpty())
+		painter->drawText(0, 0, width(), height(), Qt::AlignCenter, node()->label());
+}
 
 } /* namespace Comments */

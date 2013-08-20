@@ -28,31 +28,23 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/Boolean.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "CommentDiagramShape.h"
+#include "CommentDiagramConnector.h"
 
-#include "../nodes/Comment.h"
+DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagram)
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+class COMMENTS_API CommentDiagram : public Super<Model::CompositeNode> {
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagram)
 
-	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
-
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
-
-		bool editing_{};
-		Visualization::Item* editLabel_{};
+	ATTRIBUTE(Model::TypedList<CommentDiagramShape>, shapes, setShapes)
+	ATTRIBUTE(Model::TypedList<CommentDiagramConnector>, connectors, setConnectors)
 };
 
 } /* namespace Comments */

@@ -1,0 +1,4 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Line/default">
+	<drawsOnlyShape>false</drawsOnlyShape>
+</style>

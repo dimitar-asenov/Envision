@@ -24,35 +24,47 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VCommentBrowser.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-
-#include "../nodes/Comment.h"
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
+ITEM_COMMON_DEFINITIONS(VCommentBrowser, "item")
+
+VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const StyleType* style, const QString& text) : Super(parent, style)
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+	item_ = new QGraphicsWebView(this);
+	item_->setUrl(QUrl(text));
+//	pageLoadedFilter_ = new DetectPageLoaded;
+//	item_->installEventFilter(pageLoadedFilter_);
+//	item_->connect(item_, SIGNAL(loadProgress(int)), pageLoadedFilter_, SLOT(loadProgress(int)));
+}
 
-	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
+VCommentBrowser::~VCommentBrowser()
+{
+//	item_->removeEventFilter(pageLoadedFilter_);
+	SAFE_DELETE(item_);
+}
 
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
+void VCommentBrowser::determineChildren()
+{
+}
 
-		bool editing_{};
-		Visualization::Item* editLabel_{};
-};
+void VCommentBrowser::updateGeometry(int, int)
+{
+	item_->setPos(0,0);
+	setSize(item_->boundingRect().size().toSize());
+}
+
+QList<Visualization::Item*> VCommentBrowser::childItems() const
+{
+	return {};
+}
+
+//void DetectPageLoaded::loadProgress(int progress)
+//{
+//	qDebug() << "load progress" << progress;
+//}
 
 } /* namespace Comments */
+

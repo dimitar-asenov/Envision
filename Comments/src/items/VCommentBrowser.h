@@ -28,31 +28,28 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 
 #include "../nodes/Comment.h"
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
+class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
 
 	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
+		VCommentBrowser(Visualization::Item* parent, const StyleType* style = itemStyles().get(), const QString& text = QString());
+		virtual ~VCommentBrowser();
+		virtual QList<Visualization::Item*> childItems() const override;
+
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
-
-		bool editing_{};
-		Visualization::Item* editLabel_{};
+		QGraphicsWebView* item_{};
 };
 
 } /* namespace Comments */

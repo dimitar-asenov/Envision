@@ -25,9 +25,9 @@
  **********************************************************************************************************************/
 
 #include "VComment.h"
-#include "MarkdownTextItem.h"
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
@@ -40,7 +40,8 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 {
 }
 
-QList<Item*> VComment::parse()
+// split up user-provided text into single elements
+QList<Item*> VComment::split()
 {
 	QStringList lines = node()->label().split(QRegExp("\\r?\\n"));
 	QStringList lineBuffer;
@@ -60,16 +61,16 @@ QList<Item*> VComment::parse()
 				case '=': style = "triple"; break;
 				case '-': style = "double"; break;
 				case '.': style = "single"; break;
-				default:
-					// TODO: catch impossible cases?
-					Q_ASSERT("Something went wrong");
+				default: Q_ASSERT(false);
 			}
 
 			if(lineBuffer.size() > 0) {
-				result.push_back(new MarkdownTextItem(this, MarkdownTextItem::itemStyles().get(), lineBuffer.join("\n")));
+				auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer.join("\n")));
+				text->setTextFormat(Qt::RichText);
+				result.push_back(text);
 				lineBuffer.clear();
 			}
-			result.push_back(new Line(this, Line::itemStyles().get(style)));
+			result.push_back(new Line(nullptr, Line::itemStyles().get(style)));
 			continue;
 		}
 
@@ -87,10 +88,23 @@ QList<Item*> VComment::parse()
 	}
 
 	if(lineBuffer.size() > 0) {
-		result.push_back(new MarkdownTextItem(this, MarkdownTextItem::itemStyles().get(), lineBuffer.join("\n")));
+		auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer.join("\n")));
+		text->setTextFormat(Qt::RichText);
+		result.push_back(text);
 	}
 
 	return result;
+}
+
+QString VComment::replaceMarkdown(QString str)
+{
+	QRegExp rx("\\*\\*([^\\*]+)\\*\\*");
+	str.replace(rx, "<i>\\1</i>");
+
+	rx.setPattern("\\*([^\\*]+)\\*");
+	str.replace(rx, "<b>\\1</b>");
+
+	return str;
 }
 
 void VComment::toggleEditing()
@@ -103,7 +117,7 @@ void VComment::initializeForms()
 {
 	addForm((new SequentialLayoutFormElement())
 				->setVertical()
-				->setListOfItems([](Item* i) { return static_cast<VComment*>(i)->parse(); }
+				->setListOfItems([](Item* i) { return static_cast<VComment*>(i)->split(); }
 	));
 
 	addForm(item(&I::editLabel_, [](I* v){return v->node()->labelNode();}));

@@ -28,31 +28,31 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "CommentDiagramShape.h"
 
-#include "../nodes/Comment.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramShape)
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramShape)
+
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
+	ATTRIBUTE_VALUE(::Model::Integer, x, setX, int)
+	ATTRIBUTE_VALUE(::Model::Integer, y, setY, int)
+	ATTRIBUTE_VALUE(::Model::Integer, width, setWidth, int)
+	ATTRIBUTE_VALUE(::Model::Integer, height, setHeight, int)
 
 	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
-
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
-
-		bool editing_{};
-		Visualization::Item* editLabel_{};
+		CommentDiagramShape(const QString& label, const int& x, const int& y, const int& width, const int& height);
+		QSize size();
+		QSize pos();
 };
 
 } /* namespace Comments */

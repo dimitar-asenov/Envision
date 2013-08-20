@@ -28,31 +28,39 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/renderer/ModelRenderer.h"
 
+#include "../nodes/CommentDiagram.h"
 #include "../nodes/Comment.h"
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
+class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VCommentDiagram,
+						Visualization::Item, CommentDiagram> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, Visualization::ItemStyle)
 
 	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
+		VCommentDiagram(Visualization::Item* parent, NodeType* node);
+		~VCommentDiagram();
+
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
+		void synchronizeWithNodes(const QList<Model::Node*>& nodes, Visualization::ModelRenderer* renderer);
+		void append(Item* item);
+		void prepend(Item* item);
+		void insert(Item* item, int position);
+		void swap(int i, int j);
+		void remove(int index, bool deleteItem_ = true);
 
-		bool editing_{};
-		Visualization::Item* editLabel_{};
+		void clearChildren();
+		QVector<Visualization::Item*> items_;
 };
 
 } /* namespace Comments */

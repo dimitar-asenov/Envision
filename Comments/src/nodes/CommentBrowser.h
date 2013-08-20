@@ -28,31 +28,25 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "CommentBrowser.h"
 
-#include "../nodes/Comment.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentBrowser)
 
 namespace Comments {
 
-class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
-	Visualization::DeclarativeItem<VComment>, CommentNode> >
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+class COMMENTS_API CommentBrowser : public Super<Model::CompositeNode> {
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentBrowser)
+
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, url, setUrl, QString, const QString&)
 
 	public:
-		VComment(Visualization::Item* parent, NodeType* node);
-		static void initializeForms();
-		virtual int determineForm() override;
-		void toggleEditing();
-
-	private:
-		QList<Visualization::Item*> split();
-		QString replaceMarkdown(QString str);
-
-		bool editing_{};
-		Visualization::Item* editLabel_{};
+		CommentBrowser(const QString& url);
 };
 
 } /* namespace Comments */
