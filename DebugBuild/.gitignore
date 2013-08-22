@@ -8,3 +8,5 @@
 /test
 /projects
 /screenshot-*
+/*.pdf
+/*.perf
