@@ -80,7 +80,7 @@ void XMLModel::saveIntValue(int value)
 
 void XMLModel::saveDoubleValue(double value)
 {
-	QDomText text = doc.createTextNode(PREFIX_INTEGER + QString::number(value, 'f', MAX_DOUBLE_PRECISION));
+	QDomText text = doc.createTextNode(PREFIX_DOUBLE + QString::number(value, 'f', MAX_DOUBLE_PRECISION));
 	elem.appendChild(text);
 }
 
