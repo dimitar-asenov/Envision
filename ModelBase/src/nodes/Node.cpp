@@ -210,23 +210,26 @@ void Node::setParent(Node* parent)
 	auto mOld = model();
 	auto mNew = parent ? parent->model() : nullptr;
 
-	QList<Node*> queue;
-	queue.append(this);
-
-	// Transfer unresolved references from the old model to the new one
-	while (!queue.isEmpty())
+	if (mOld || mNew)
 	{
-		if (auto r = dynamic_cast<Reference*>(queue.first()))
-		{
-			if (!r->isResolved() )
-			{
-				if (mOld) mOld->removeUnresolvedReference(r);
-				if (mNew) mNew->addUnresolvedReference(r);
-			}
-		}
+		QList<Node*> queue;
+		queue.append(this);
 
-		queue.append(queue.first()->children());
-		queue.removeFirst();
+		// Transfer unresolved references from the old model to the new one
+		while (!queue.isEmpty())
+		{
+			if (auto r = dynamic_cast<Reference*>(queue.first()))
+			{
+				if (!r->isResolved() )
+				{
+					if (mOld) mOld->removeUnresolvedReference(r);
+					if (mNew) mNew->addUnresolvedReference(r);
+				}
+			}
+
+			queue.append(queue.first()->children());
+			queue.removeFirst();
+		}
 	}
 
 	parent_ = parent;
