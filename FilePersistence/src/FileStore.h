@@ -98,12 +98,6 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		 */
 		QString getPersistenceUnitName(const Model::Node *node);
 
-		/**
-		 * When started with -1 it searches through the entire tree. Otherwise expects to find before or at the specified
-		 * depth. Depth = 0 checks just the root element.
-		 */
-		QDomElement findElementById(QDomElement root, const QString& id, int depthLimit);
-
 		void checkIsWorking() const;
 
 		XMLModel* xml;
