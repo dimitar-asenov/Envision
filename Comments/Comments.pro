@@ -8,8 +8,7 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -lfilepersistence
-HEADERS += src/nodes/CommentBrowser.h \
-    src/items/VCommentDiagramConnector.h \
+HEADERS += src/items/VCommentDiagramConnector.h \
     src/nodes/CommentDiagramConnector.h \
     src/nodes/CommentDiagramShape.h \
     src/items/VCommentBrowser.h \
@@ -23,8 +22,7 @@ HEADERS += src/nodes/CommentBrowser.h \
     src/CommentsException.h \
     src/comments_api.h \
     src/comments.h
-SOURCES += src/nodes/CommentBrowser.cpp \
-    src/items/VCommentDiagramConnector.cpp \
+SOURCES += src/items/VCommentDiagramConnector.cpp \
     src/nodes/CommentDiagramConnector.cpp \
     src/nodes/CommentDiagramShape.cpp \
     src/items/VCommentBrowser.cpp \
