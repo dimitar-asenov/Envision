@@ -36,7 +36,7 @@ NodeIdMap::NodeIdMap()
 
 NodeIdMap::NodeIdType NodeIdMap::getId(const Model::Node* node)
 {
-	QMap<const Model::Node*, NodeIdType>::const_iterator iter = map.find(node);
+	QHash<const Model::Node*, NodeIdType>::const_iterator iter = map.find(node);
 	if ( iter != map.end() ) return *iter;
 
 	int id = nextId_++;
@@ -46,7 +46,7 @@ NodeIdMap::NodeIdType NodeIdMap::getId(const Model::Node* node)
 
 void NodeIdMap::setId(const Model::Node* node, NodeIdType id)
 {
-	QMap<const Model::Node*, NodeIdType>::const_iterator iter = map.find(node);
+	QHash<const Model::Node*, NodeIdType>::const_iterator iter = map.find(node);
 	if (iter != map.end())
 	{
 		if (*iter == id) return;

@@ -47,7 +47,7 @@ class NodeIdMap {
 
 	private:
 		NodeIdType nextId_;
-		QMap<const Model::Node*, NodeIdType> map;
+		QHash<const Model::Node*, NodeIdType> map;
 };
 
 inline NodeIdMap::NodeIdType NodeIdMap::getNextId() { return nextId_; }
