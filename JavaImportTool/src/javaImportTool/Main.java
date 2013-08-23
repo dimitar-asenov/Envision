@@ -3,6 +3,7 @@ package javaImportTool;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import javaImportTool.Node.OutputFormat;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
@@ -73,7 +74,7 @@ public class Main {
 			String outputDir = outputDirectory + projectName + File.separator;
 			System.out.print("Writing the result to " + outputDir + "...");
 				
-			root.renderRootTree(outputDir, projectName, false);
+			root.renderRootTree(outputDir, projectName, OutputFormat.SIMPLE);
 
 			System.out.println("Done\n\nFinished");
 			

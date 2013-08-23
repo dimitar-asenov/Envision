@@ -33,7 +33,7 @@ public class Node {
 	// These are used when writing the nodes to a stream
 	private static String outputDir_ = null;
 	private static Stack<PrintStream> out_ = new Stack<PrintStream>();
-	private static boolean generateClipboardFormat_ = false;
+	private static OutputFormat format_ = OutputFormat.XML;
 	
 	private List<Node> children_ = new LinkedList<Node>();
 	
@@ -46,7 +46,7 @@ public class Node {
 	public void setName(String name) { name_ = name; }
 	public void setName(int name) { name_ = Integer.toString(name); }
 	public void setDoubleValue(double val) { text_ = "D_" + Double.toString(val); }
-	public void setStringValue(String val) { text_ = "S_" + StringEscapeUtils.escapeXml(val); }
+	public void setStringValue(String val) { text_ = "S_" + val; }
 	public void setLongValue(long val){ text_ = "I_" + Integer.toString((int)val); }
 	//TODO: In Envision, implement long integers
 	
@@ -157,61 +157,91 @@ public class Node {
 		throw new ConversionException("Symbol list '" + listName + "' is unknown in node of type '" + tag + "'");
 	}
 	
+	public enum OutputFormat {XML, CLIPBOARD, SIMPLE};
+	
 	// Save as XML to a stream in either file or clipboard format
-	public void renderRootTree(String dir, String projectName, boolean generateClipboardFormat)
+	public void renderRootTree(String dir, String projectName, OutputFormat format)
 		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
 	{
 		outputDir_ = dir;
-		generateClipboardFormat_ = generateClipboardFormat;
+		format_ = format;
 		
 		out_.push( new PrintStream(new File(outputDir_ + projectName), "UTF-8") );
 		
-		out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
-		if (generateClipboardFormat_) out_.peek().println("<clipboard>");
+		if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
+			out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
+		
+		if (format_ == OutputFormat.CLIPBOARD) out_.peek().println("<clipboard>");
 		else
 		{
 			setName(symbol_);
-			out_.peek().println("<model nextid=\"" + nextId_ + "\">");
+			if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
+				out_.peek().println("<model nextid=\"" + nextId_ + "\">");
+			else if (format_ == OutputFormat.SIMPLE)
+				out_.peek().println("model model " + nextId_);
 		}
 		renderTree("\t", false);
-		if (generateClipboardFormat_) out_.peek().println("</clipboard>");
-		else  out_.peek().println("</model>");
+		if (format_ == OutputFormat.XML) out_.peek().println("</model>");
+		else if (format_ == OutputFormat.CLIPBOARD) out_.peek().println("</clipboard>");
 	}
 	
 	
 	private void renderTree(String indentation, boolean considerPersistenceUnits)
 		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
 	{	
-		if (considerPersistenceUnits && isPersistenceUnit() && !generateClipboardFormat_)
+		if (considerPersistenceUnits && isPersistenceUnit() && format_ != OutputFormat.CLIPBOARD)
 		{
 			// Create a new file for this persistence unit
-			out_.peek().println(indentation + "<persistencenewunit name=\""
-					+ name_ + "\">S_" + id_ + "</persistencenewunit>");
+			if (format_ == OutputFormat.XML)
+			{
+				out_.peek().println(indentation + "<persistencenewunit name=\""
+						+ name_ + "\">S_" + id_ + "</persistencenewunit>");
+			}
+			else if (format_ == OutputFormat.SIMPLE)
+				out_.peek().println(indentation + name_ + " persistencenewunit " + id_ );
 			
 			out_.push( new PrintStream(new File(outputDir_ + id_), "UTF-8") );
-			out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
+			if (format_ == OutputFormat.XML) out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
 			renderTree("", false);
 			out_.pop().close();
 		}
 		else
 		{
-			// This file is not a persistence unit
-			out_.peek().print(indentation + "<" + tag_);
-			if (!generateClipboardFormat_) out_.peek().print(" id=\"" + id_ + "\"");
-			out_.peek().print(" name=\"" + name_ + "\" partial=\"0\"");
-			
 			if (!children_.isEmpty() && text_ != null)
 				throw new ConversionException("Invalid node content. Node has both children and textual content.");
 			
-			if (text_ != null) out_.peek().println(">" + text_ + "</" + tag_ + ">");
-			else if (children_.isEmpty()) out_.peek().println(" />");
-			else
+			// This file is not a persistence unit
+			if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
 			{
-				out_.peek().println(">");
-				for(Node child : children_)
-					child.renderTree(indentation + "\t", true);
-				out_.peek().println(indentation + "</" + tag_ + ">");
+				out_.peek().print(indentation + "<" + tag_);
+				if (format_ == OutputFormat.XML) out_.peek().print(" id=\"" + id_ + "\"");
+				out_.peek().print(" name=\"" + name_ + "\" partial=\"0\"");
+				
+				if (text_ != null) out_.peek().println(">" + StringEscapeUtils.escapeXml(text_) + "</" + tag_ + ">");
+				else if (children_.isEmpty()) out_.peek().println(" />");
+				else
+				{
+					out_.peek().println(">");
+					for(Node child : children_)
+						child.renderTree(indentation + "\t", true);
+					out_.peek().println(indentation + "</" + tag_ + ">");
+				}
+			}
+			else if (format_ == OutputFormat.SIMPLE)
+			{
+				out_.peek().print(indentation + name_ + " " + tag_ + " " + id_);
+				if (text_ != null) out_.peek().print(". " + escape(text_));
+				out_.peek().println();
+				for(Node child : children_) child.renderTree(indentation + "\t", true);
 			}
 		}
+	}
+	
+	String escape(String s)
+	{
+		s = s.replace("\\", "\\\\");
+		s = s.replace("\r", "\\r");
+		s = s.replace("\n", "\\n");
+		return s;
 	}
 }
