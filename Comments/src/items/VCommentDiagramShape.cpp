@@ -46,9 +46,32 @@ void VCommentDiagramShape::updateGeometry(int, int)
 
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
-	painter->drawRect(0, 0, width(), height());
+	// rectangle to draw the shape in
+	QRect rect(0, 0, width(), height());
+
+	switch(node()->shapeType())
+	{
+		default:
+		case Rectangle:
+			painter->drawRect(rect);
+			break;
+
+		case Circle:
+			painter->drawEllipse(rect);
+			break;
+
+		case Diamond:
+			QVector<QLine> lines;
+			lines.push_back(QLine(width()/2, 0,          width(),   height()/2));
+			lines.push_back(QLine(width(),   height()/2, width()/2, height()));
+			lines.push_back(QLine(width()/2, height(),   0,         height()/2));
+			lines.push_back(QLine(0,         height()/2, width()/2, 0));
+			painter->drawLines(lines);
+			break;
+	}
+
 	if(!node()->label().isEmpty())
-		painter->drawText(0, 0, width(), height(), Qt::AlignCenter, node()->label());
+		painter->drawText(rect, Qt::AlignCenter, node()->label());
 }
 
 } /* namespace Comments */

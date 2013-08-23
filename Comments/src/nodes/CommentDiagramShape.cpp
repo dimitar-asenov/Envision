@@ -39,9 +39,11 @@ REGISTER_ATTRIBUTE(CommentDiagramShape, x, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, y, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, width, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, height, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramShape, shapeType, Integer, false, false, true)
 
 // references for primitive types?
-CommentDiagramShape::CommentDiagramShape(const QString& label, const int& x, const int& y, const int& width, const int& height)
+CommentDiagramShape::CommentDiagramShape(const QString& label, const int& x, const int& y, const int& width,
+		const int& height, enum CommentDiagramShapeType shapeType)
 : Super{nullptr, CommentDiagramShape::getMetaData()}
 {
 	setLabel(label);
@@ -49,6 +51,7 @@ CommentDiagramShape::CommentDiagramShape(const QString& label, const int& x, con
 	setY(y);
 	setWidth(width);
 	setHeight(height);
+	setShapeType(shapeType);
 }
 
 QSize CommentDiagramShape::size()

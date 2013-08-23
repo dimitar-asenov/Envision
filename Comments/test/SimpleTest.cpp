@@ -86,11 +86,16 @@ TEST(Comments, SimpleTest)
 //		"###### Header 6\n"
 //		"And later on, some more text...");
 
-	auto node = new CommentDiagram();
-	node->shapes()->append(new CommentDiagramShape("First shape", 50, 50, 300, 50));
-	node->shapes()->append(new CommentDiagramShape("Another shape", 150, 150, 100, 150));
+	auto diagramNode = new CommentDiagram();
+	diagramNode->shapes()->append(new CommentDiagramShape("First shape",     0,  50, 200,  50, Rectangle));
+	diagramNode->shapes()->append(new CommentDiagramShape("Another shape", 100, 150, 200,  50, Circle));
+	diagramNode->shapes()->append(new CommentDiagramShape("Diamond",         0, 150, 100, 150, Diamond));
+	list->append(diagramNode);
 
-	list->append(node);
+//	auto node = new Comment("This is a node with some [diagram#1] [image#image.png]");
+//	node->addDiagram(diagramNode);
+//
+//	list->append(node);
 
 	model->endModification();
 
