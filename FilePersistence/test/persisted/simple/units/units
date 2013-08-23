@@ -1,0 +1,6 @@
+model model 8
+	units BinaryNode 0
+		name Text 1. S_Root
+		left persistencenewunit 2
+		right BinaryNode 6
+			name Text 7. S_Right child

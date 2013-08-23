@@ -26,6 +26,7 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
+#include "SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "ModelBase/src/persistence/PersistedNode.h"
@@ -37,88 +38,104 @@ namespace FilePersistence {
 
 TEST(FilePersistence, LoadDataMultipleUnits)
 {
-	QString testDir = ":/FilePersistence/test/persisted";
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
 
-	typedef PersistedValue< QString >* String;
-	typedef PersistedValue< QList<PersistedNode*> >* Composite;
+		if (i==0)
+		{
+			auto s = new FileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted");
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
+			store = s;
+		}
 
-	// Root Node
-	Composite root = dynamic_cast<Composite> (store.loadCompleteNodeSubtree("units", nullptr));
-	CHECK_CONDITION(root);
-	CHECK_STR_EQUAL("BinaryNode", root->type() );
-	CHECK_STR_EQUAL("units", root->name());
-	CHECK_INT_EQUAL(0, root->id());
-	CHECK_CONDITION(!root->partialHint());
-	CHECK_CONDITION(!root->isNewPersistenceUnit());
-	CHECK_INT_EQUAL(3, root->value().size());
+		typedef PersistedValue< QString >* String;
+		typedef PersistedValue< QList<PersistedNode*> >* Composite;
 
-	// Root Node children
-	String rootName = dynamic_cast<String> (root->value().at(0));
-	CHECK_CONDITION(rootName);
-	CHECK_STR_EQUAL("Text", rootName->type() );
-	CHECK_STR_EQUAL("name", rootName->name());
-	CHECK_INT_EQUAL(1, rootName->id());
-	CHECK_CONDITION(!rootName->partialHint());
-	CHECK_CONDITION(!rootName->isNewPersistenceUnit());
-	CHECK_STR_EQUAL("Root", rootName->value());
+		// Root Node
+		Composite root = dynamic_cast<Composite> (store->loadCompleteNodeSubtree("units", nullptr));
+		CHECK_CONDITION(root);
+		CHECK_STR_EQUAL("BinaryNode", root->type() );
+		CHECK_STR_EQUAL("units", root->name());
+		CHECK_INT_EQUAL(0, root->id());
+		CHECK_CONDITION(!root->partialHint());
+		CHECK_CONDITION(!root->isNewPersistenceUnit());
+		CHECK_INT_EQUAL(3, root->value().size());
 
-	Composite left = dynamic_cast<Composite> (root->value().at(1));
-	CHECK_CONDITION(left);
-	CHECK_STR_EQUAL("BinaryNodePersistenceUnit", left->type() );
-	CHECK_STR_EQUAL("left", left->name());
-	CHECK_INT_EQUAL(2, left->id());
-	CHECK_CONDITION(!left->partialHint());
-	CHECK_CONDITION(left->isNewPersistenceUnit());
-	CHECK_INT_EQUAL(2, left->value().size());
+		// Root Node children
+		String rootName = dynamic_cast<String> (root->value().at(0));
+		CHECK_CONDITION(rootName);
+		CHECK_STR_EQUAL("Text", rootName->type() );
+		CHECK_STR_EQUAL("name", rootName->name());
+		CHECK_INT_EQUAL(1, rootName->id());
+		CHECK_CONDITION(!rootName->partialHint());
+		CHECK_CONDITION(!rootName->isNewPersistenceUnit());
+		CHECK_STR_EQUAL("Root", rootName->value());
 
-	Composite right = dynamic_cast<Composite> (root->value().at(2));
-	CHECK_CONDITION(right);
-	CHECK_STR_EQUAL("BinaryNode", right->type() );
-	CHECK_STR_EQUAL("right", right->name());
-	CHECK_INT_EQUAL(6, right->id());
-	CHECK_CONDITION(!right->partialHint());
-	CHECK_CONDITION(!right->isNewPersistenceUnit());
-	CHECK_INT_EQUAL(1, right->value().size());
+		Composite left = dynamic_cast<Composite> (root->value().at(1));
+		CHECK_CONDITION(left);
+		CHECK_STR_EQUAL("BinaryNodePersistenceUnit", left->type() );
+		CHECK_STR_EQUAL("left", left->name());
+		CHECK_INT_EQUAL(2, left->id());
+		CHECK_CONDITION(!left->partialHint());
+		CHECK_CONDITION(left->isNewPersistenceUnit());
+		CHECK_INT_EQUAL(2, left->value().size());
 
-	// Left Node children
-	String leftName = dynamic_cast<String> (left->value().at(0));
-	CHECK_CONDITION(leftName);
-	CHECK_STR_EQUAL("Text", leftName->type() );
-	CHECK_STR_EQUAL("name", leftName->name());
-	CHECK_INT_EQUAL(3, leftName->id());
-	CHECK_CONDITION(!leftName->partialHint());
-	CHECK_CONDITION(!leftName->isNewPersistenceUnit());
-	CHECK_STR_EQUAL("Left child", leftName->value());
+		Composite right = dynamic_cast<Composite> (root->value().at(2));
+		CHECK_CONDITION(right);
+		CHECK_STR_EQUAL("BinaryNode", right->type() );
+		CHECK_STR_EQUAL("right", right->name());
+		CHECK_INT_EQUAL(6, right->id());
+		CHECK_CONDITION(!right->partialHint());
+		CHECK_CONDITION(!right->isNewPersistenceUnit());
+		CHECK_INT_EQUAL(1, right->value().size());
 
-	Composite leftleft = dynamic_cast<Composite> (left->value().at(1));
-	CHECK_CONDITION(leftleft);
-	CHECK_STR_EQUAL("BinaryNode", leftleft->type() );
-	CHECK_STR_EQUAL("left", leftleft->name());
-	CHECK_INT_EQUAL(4, leftleft->id());
-	CHECK_CONDITION(!leftleft->partialHint());
-	CHECK_CONDITION(!leftleft->isNewPersistenceUnit());
-	CHECK_INT_EQUAL(1, leftleft->value().size());
+		// Left Node children
+		String leftName = dynamic_cast<String> (left->value().at(0));
+		CHECK_CONDITION(leftName);
+		CHECK_STR_EQUAL("Text", leftName->type() );
+		CHECK_STR_EQUAL("name", leftName->name());
+		CHECK_INT_EQUAL(3, leftName->id());
+		CHECK_CONDITION(!leftName->partialHint());
+		CHECK_CONDITION(!leftName->isNewPersistenceUnit());
+		CHECK_STR_EQUAL("Left child", leftName->value());
 
-	String leftleftName = dynamic_cast<String> (leftleft->value().at(0));
-	CHECK_CONDITION(leftleftName);
-	CHECK_STR_EQUAL("Text", leftleftName->type() );
-	CHECK_STR_EQUAL("name", leftleftName->name());
-	CHECK_INT_EQUAL(5, leftleftName->id());
-	CHECK_CONDITION(!leftleftName->partialHint());
-	CHECK_CONDITION(!leftleftName->isNewPersistenceUnit());
-	CHECK_STR_EQUAL("in a new unit", leftleftName->value());
+		Composite leftleft = dynamic_cast<Composite> (left->value().at(1));
+		CHECK_CONDITION(leftleft);
+		CHECK_STR_EQUAL("BinaryNode", leftleft->type() );
+		CHECK_STR_EQUAL("left", leftleft->name());
+		CHECK_INT_EQUAL(4, leftleft->id());
+		CHECK_CONDITION(!leftleft->partialHint());
+		CHECK_CONDITION(!leftleft->isNewPersistenceUnit());
+		CHECK_INT_EQUAL(1, leftleft->value().size());
 
-	// Right Node children
-	String rightName = dynamic_cast<String> (right->value().at(0));
-	CHECK_CONDITION(rightName);
-	CHECK_STR_EQUAL("Text", rightName->type() );
-	CHECK_STR_EQUAL("name", rightName->name());
-	CHECK_INT_EQUAL(7, rightName->id());
-	CHECK_CONDITION(!rightName->partialHint());
-	CHECK_CONDITION(!rightName->isNewPersistenceUnit());
-	CHECK_STR_EQUAL("Right child", rightName->value());
+		String leftleftName = dynamic_cast<String> (leftleft->value().at(0));
+		CHECK_CONDITION(leftleftName);
+		CHECK_STR_EQUAL("Text", leftleftName->type() );
+		CHECK_STR_EQUAL("name", leftleftName->name());
+		CHECK_INT_EQUAL(5, leftleftName->id());
+		CHECK_CONDITION(!leftleftName->partialHint());
+		CHECK_CONDITION(!leftleftName->isNewPersistenceUnit());
+		CHECK_STR_EQUAL("in a new unit", leftleftName->value());
+
+		// Right Node children
+		String rightName = dynamic_cast<String> (right->value().at(0));
+		CHECK_CONDITION(rightName);
+		CHECK_STR_EQUAL("Text", rightName->type() );
+		CHECK_STR_EQUAL("name", rightName->name());
+		CHECK_INT_EQUAL(7, rightName->id());
+		CHECK_CONDITION(!rightName->partialHint());
+		CHECK_CONDITION(!rightName->isNewPersistenceUnit());
+		CHECK_STR_EQUAL("Right child", rightName->value());
+
+		SAFE_DELETE(store);
+	}
 }
 
 }

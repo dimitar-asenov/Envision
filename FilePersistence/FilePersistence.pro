@@ -5,8 +5,9 @@ win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
 QT += xml
-
-HEADERS += src/FilePersistenceException.h \
+HEADERS += src/SimpleTextFileStore.h \
+    src/GenericNode.h \
+    src/FilePersistenceException.h \
     src/FileStore.h \
     src/NodeIdMap.h \
     src/SystemClipboard.h \
@@ -14,7 +15,9 @@ HEADERS += src/FilePersistenceException.h \
     src/filepersistence_api.h \
     src/precompiled.h \
     src/filepersistence.h
-SOURCES += src/NodeIdMap.cpp \
+SOURCES += src/SimpleTextFileStore.cpp \
+    src/GenericNode.cpp \
+    src/NodeIdMap.cpp \
     test/TypedListTests.cpp \
     test/ClipboardTests.cpp \
     src/XMLModel.cpp \

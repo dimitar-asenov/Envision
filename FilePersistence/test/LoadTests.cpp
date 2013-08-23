@@ -26,81 +26,133 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
+#include "SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/Text.h"
 
+using namespace Model;
+
 namespace FilePersistence {
 
 TEST(FilePersistence, LoadRootOnly)
 {
-	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
 
-	model.load(&store, "rootOnly");
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+		if (i==0)
+		{
+			auto s = new FileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted");
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
+			store = s;
+		}
 
-	CHECK_CONDITION(root);
-	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
-	CHECK_STR_EQUAL("Title", root->name()->get() );
-	CHECK_CONDITION(root->left() == nullptr);
-	CHECK_CONDITION(root->right() == nullptr);
+		Model::Model model;
+		model.load(store, "rootOnly");
+		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+
+		CHECK_CONDITION(root);
+		CHECK_STR_EQUAL("BinaryNode", root->typeName() );
+		CHECK_STR_EQUAL("Title", root->name()->get() );
+		CHECK_CONDITION(root->left() == nullptr);
+		CHECK_CONDITION(root->right() == nullptr);
+
+		SAFE_DELETE(store);
+	}
 }
 
 TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 {
-	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
 
-	model.load(&store, "2Children");
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+		if (i==0)
+		{
+			auto s = new FileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted");
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
+			store = s;
+		}
 
-	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
-	CHECK_STR_EQUAL("Root", root->name()->get() );
-	CHECK_CONDITION(root->left() != nullptr);
-	CHECK_CONDITION(root->right() != nullptr);
-	CHECK_STR_EQUAL("BinaryNode", root->left()->typeName() );
-	CHECK_STR_EQUAL("Left child", root->left()->name()->get() );
-	CHECK_CONDITION(root->left()->left() == nullptr);
-	CHECK_CONDITION(root->left()->right() == nullptr);
-	CHECK_STR_EQUAL("BinaryNode", root->right()->typeName() );
-	CHECK_STR_EQUAL("Right child", root->right()->name()->get() );
-	CHECK_CONDITION(root->right()->left() == nullptr);
-	CHECK_CONDITION(root->right()->right() == nullptr);
+		Model::Model model;
+		model.load(store, "2Children");
+		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+
+		CHECK_STR_EQUAL("BinaryNode", root->typeName() );
+		CHECK_STR_EQUAL("Root", root->name()->get() );
+		CHECK_CONDITION(root->left() != nullptr);
+		CHECK_CONDITION(root->right() != nullptr);
+		CHECK_STR_EQUAL("BinaryNode", root->left()->typeName() );
+		CHECK_STR_EQUAL("Left child", root->left()->name()->get() );
+		CHECK_CONDITION(root->left()->left() == nullptr);
+		CHECK_CONDITION(root->left()->right() == nullptr);
+		CHECK_STR_EQUAL("BinaryNode", root->right()->typeName() );
+		CHECK_STR_EQUAL("Right child", root->right()->name()->get() );
+		CHECK_CONDITION(root->right()->left() == nullptr);
+		CHECK_CONDITION(root->right()->right() == nullptr);
+
+		SAFE_DELETE(store);
+	}
 }
 
 TEST(FilePersistence, LoadMultipleUnits)
 {
-	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
 
-	model.load(&store, "units");
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+		if (i==0)
+		{
+			auto s = new FileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted");
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
+			store = s;
+		}
 
-	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
-	CHECK_STR_EQUAL("Root", root->name()->get() );
-	CHECK_CONDITION(root->left() != nullptr);
-	CHECK_CONDITION(root->right() != nullptr);
-	CHECK_STR_EQUAL("BinaryNodePersistenceUnit", root->left()->typeName() );
-	CHECK_STR_EQUAL("Left child", root->left()->name()->get() );
-	CHECK_CONDITION(root->left()->left() != nullptr);
-	CHECK_CONDITION(root->left()->right() == nullptr);
-	CHECK_STR_EQUAL("BinaryNode", root->left()->left()->typeName() );
-	CHECK_STR_EQUAL("in a new unit", root->left()->left()->name()->get() );
-	CHECK_CONDITION(root->left()->left()->left() == nullptr);
-	CHECK_CONDITION(root->left()->left()->right() == nullptr);
-	CHECK_STR_EQUAL("BinaryNode", root->right()->typeName() );
-	CHECK_STR_EQUAL("Right child", root->right()->name()->get() );
-	CHECK_CONDITION(root->right()->left() == nullptr);
-	CHECK_CONDITION(root->right()->right() == nullptr);
+		Model::Model model;
+
+		model.load(store, "units");
+		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+
+		CHECK_STR_EQUAL("BinaryNode", root->typeName() );
+		CHECK_STR_EQUAL("Root", root->name()->get() );
+		CHECK_CONDITION(root->left() != nullptr);
+		CHECK_CONDITION(root->right() != nullptr);
+		CHECK_STR_EQUAL("BinaryNodePersistenceUnit", root->left()->typeName() );
+		CHECK_STR_EQUAL("Left child", root->left()->name()->get() );
+		CHECK_CONDITION(root->left()->left() != nullptr);
+		CHECK_CONDITION(root->left()->right() == nullptr);
+		CHECK_STR_EQUAL("BinaryNode", root->left()->left()->typeName() );
+		CHECK_STR_EQUAL("in a new unit", root->left()->left()->name()->get() );
+		CHECK_CONDITION(root->left()->left()->left() == nullptr);
+		CHECK_CONDITION(root->left()->left()->right() == nullptr);
+		CHECK_STR_EQUAL("BinaryNode", root->right()->typeName() );
+		CHECK_STR_EQUAL("Right child", root->right()->name()->get() );
+		CHECK_CONDITION(root->right()->left() == nullptr);
+		CHECK_CONDITION(root->right()->right() == nullptr);
+
+		SAFE_DELETE(store);
+	}
 }
 
 }

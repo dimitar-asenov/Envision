@@ -26,82 +26,128 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
+#include "SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 
+using namespace Model;
+
 namespace FilePersistence {
 
 TEST(FilePersistence, LoadingList)
 {
-	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
 
-	model.load(&store, "partial");
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
-	CHECK_CONDITION(root != nullptr);
+		if (i==0)
+		{
+			auto s = new FileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted");
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
+			store = s;
+		}
 
-	Model::List* list = root->list();
 
-	CHECK_CONDITION(list != nullptr);
-	CHECK_STR_EQUAL("List", list->typeName() );
-	CHECK_CONDITION(list->isFullyLoaded() == false);
+		Model::Model model;
+		model.load(store, "partial");
+		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
+		CHECK_CONDITION(root != nullptr);
 
-	list->loadFully(store);
+		List* list = root->list();
 
-	CHECK_CONDITION(list->isFullyLoaded());
-	CHECK_INT_EQUAL(4, list->size());
+		CHECK_CONDITION(list != nullptr);
+		CHECK_STR_EQUAL("List", list->typeName() );
+		CHECK_CONDITION(list->isFullyLoaded() == false);
 
-	Model::Text* one = list->at<Model::Text>(0);
-	Model::Text* two = list->at<Model::Text>(1);
-	Model::Text* three = list->at<Model::Text>(2);
-	Model::Text* four = list->at<Model::Text>(3);
+		list->loadFully(*store);
 
-	CHECK_CONDITION(one != nullptr);
-	CHECK_STR_EQUAL("one", one->get());
+		CHECK_CONDITION(list->isFullyLoaded());
+		CHECK_INT_EQUAL(4, list->size());
 
-	CHECK_CONDITION(two != nullptr);
-	CHECK_STR_EQUAL("two", two->get());
+		Text* one = list->at<Text>(0);
+		Text* two = list->at<Text>(1);
+		Text* three = list->at<Text>(2);
+		Text* four = list->at<Text>(3);
 
-	CHECK_CONDITION(three != nullptr);
-	CHECK_STR_EQUAL("three", three->get());
+		CHECK_CONDITION(one != nullptr);
+		CHECK_STR_EQUAL("one", one->get());
 
-	CHECK_CONDITION(four != nullptr);
-	CHECK_STR_EQUAL("four", four->get());
+		CHECK_CONDITION(two != nullptr);
+		CHECK_STR_EQUAL("two", two->get());
+
+		CHECK_CONDITION(three != nullptr);
+		CHECK_STR_EQUAL("three", three->get());
+
+		CHECK_CONDITION(four != nullptr);
+		CHECK_STR_EQUAL("four", four->get());
+
+		SAFE_DELETE(store);
+	}
 }
 
 TEST(FilePersistence, SaveList)
 {
-	QString testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
+		QString testDir;
 
-	auto root = new TestNodes::PartialList;
-	Model::Model model(root);
+		if (i==0)
+		{
+			auto s = new FileStore();
+			testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
+			s->setBaseFolder(testDir);
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			testDir = QDir::tempPath() + "/Envision/FilePersistence/tests/simple";
+			s->setBaseFolder(testDir);
+			store = s;
+		}
 
-	model.beginModification(root, "create ");
-	Model::Text* one = new Model::Text();
-	one->set("one");
-	root->list()->append(one);
-	Model::Text* two = new Model::Text();
-	two->set("two");
-	root->list()->append(two);
-	Model::Text* three = new Model::Text();
-	three->set("three");
-	root->list()->append(three);
-	Model::Text* four = new Model::Text();
-	four->set("four");
-	root->list()->append(four);
-	model.endModification();
+		auto root = new TestNodes::PartialList;
+		Model::Model model(root);
 
-	model.setName("partial");
-	model.save(&store);
+		model.beginModification(root, "create ");
+		auto one = new Text();
+		one->set("one");
+		root->list()->append(one);
+		auto two = new Text();
+		two->set("two");
+		root->list()->append(two);
+		auto three = new Text();
+		three->set("three");
+		root->list()->append(three);
+		auto four = new Text();
+		four->set("four");
+		root->list()->append(four);
+		model.endModification();
 
-	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/partial/partial", testDir + "/partial/partial");
+		model.setName("partial");
+		model.save(store);
+
+		if (i==0)
+		{
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/partial/partial", testDir + "/partial/partial");
+		}
+		else if ( i==1 )
+		{
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/partial/partial", testDir +"/partial/partial");
+		}
+
+		SAFE_DELETE(store);
+	}
 }
 
 TEST(FilePersistence, ReSaveList)

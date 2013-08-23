@@ -7,5 +7,11 @@
         <file>test/persisted/partial/partial</file>
         <file>test/persisted/partialResave/partialResave</file>
         <file>test/persisted/typedList/typedList</file>
+        <file>test/persisted/simple/2Children/2Children</file>
+        <file>test/persisted/simple/rootOnly/rootOnly</file>
+        <file>test/persisted/simple/units/2</file>
+        <file>test/persisted/simple/units/units</file>
+        <file>test/persisted/simple/partial/partial</file>
+        <file>test/persisted/simple/typedList/typedList</file>
     </qresource>
 </RCC>

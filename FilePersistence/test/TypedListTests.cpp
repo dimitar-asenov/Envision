@@ -26,60 +26,107 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
+#include "SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 
+using namespace Model;
+
 namespace FilePersistence {
 
 TEST(FilePersistence, LoadingTypedList)
 {
-	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
 
-	model.load(&store, "typedList");
-	Model::TypedList<Model::Text>* list = dynamic_cast<Model::TypedList<Model::Text>*> (model.root());
-	CHECK_CONDITION(list != nullptr);
+		if (i==0)
+		{
+			auto s = new FileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted");
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
+			store = s;
+		}
 
-	CHECK_STR_EQUAL("TypedListOfText", list->typeName() );
-	CHECK_INT_EQUAL(2, list->size());
 
-	Model::Text* one = list->at(0);
-	Model::Text* two = list->at(1);
+		Model::Model model;
+		model.load(store, "typedList");
 
-	CHECK_CONDITION(one != nullptr);
-	CHECK_STR_EQUAL("one", one->get());
+		auto list = dynamic_cast<TypedList<Text>*> (model.root());
+		CHECK_CONDITION(list != nullptr);
 
-	CHECK_CONDITION(two != nullptr);
-	CHECK_STR_EQUAL("two", two->get());
+		CHECK_STR_EQUAL("TypedListOfText", list->typeName() );
+		CHECK_INT_EQUAL(2, list->size());
+
+		Text* one = list->at(0);
+		Text* two = list->at(1);
+
+		CHECK_CONDITION(one != nullptr);
+		CHECK_STR_EQUAL("one", one->get());
+
+		CHECK_CONDITION(two != nullptr);
+		CHECK_STR_EQUAL("two", two->get());
+
+		SAFE_DELETE(store);
+	}
 }
 
 TEST(FilePersistence, SavingTypedList)
 {
-	QString testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
-	FileStore store;
-	store.setBaseFolder(testDir);
+	for(int i = 0; i<2; ++i)
+	{
+		PersistentStore* store{};
+		QString testDir;
 
-	auto list = new Model::TypedList<Model::Text>;
-	Model::Model model(list);
+		if (i==0)
+		{
+			auto s = new FileStore();
+			testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
+			s->setBaseFolder(testDir);
+			store = s;
+		}
+		else if (i==1)
+		{
+			auto s = new SimpleTextFileStore();
+			testDir = QDir::tempPath() + "/Envision/FilePersistence/tests/simple";
+			s->setBaseFolder(testDir);
+			store = s;
+		}
 
-	model.beginModification(list, "create");
-	Model::Text* one = new Model::Text();
-	one->set("one");
-	list->append(one);
-	Model::Text* two = new Model::Text();
-	two->set("two");
-	list->append(two);
-	model.endModification();
+		auto list = new TypedList<Text>;
+		Model::Model model(list);
 
-	model.setName("typedList");
-	model.save(&store);
+		model.beginModification(list, "create");
+		auto one = new Text();
+		one->set("one");
+		list->append(one);
+		auto two = new Text();
+		two->set("two");
+		list->append(two);
+		model.endModification();
 
-	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/typedList/typedList", testDir + "/typedList/typedList");
+		model.setName("typedList");
+		model.save(store);
+
+		if (i==0)
+		{
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/typedList/typedList", testDir + "/typedList/typedList");
+		}
+		else if ( i==1 )
+		{
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/typedList/typedList", testDir +"/typedList/typedList");
+		}
+
+		SAFE_DELETE(store);
+	}
 }
 
 }

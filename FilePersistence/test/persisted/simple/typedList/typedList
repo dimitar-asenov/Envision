@@ -1,0 +1,4 @@
+model model 3
+	typedList TypedListOfText 0
+		0 Text 1. S_one
+		1 Text 2. S_two

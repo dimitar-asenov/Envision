@@ -1,0 +1,7 @@
+model model 6
+	2Children BinaryNode 0
+		name Text 1. S_Root
+		left BinaryNode 2
+			name Text 3. S_Left child
+		right BinaryNode 4
+			name Text 5. S_Right child

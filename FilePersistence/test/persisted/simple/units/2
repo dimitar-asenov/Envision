@@ -1,0 +1,4 @@
+left BinaryNodePersistenceUnit 2
+	name Text 3. S_Left child
+	left BinaryNode 4
+		name Text 5. S_in a new unit
