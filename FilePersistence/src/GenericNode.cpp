@@ -225,27 +225,37 @@ GenericNode* GenericNode::load(QTextStream& stream)
 		// The top of the stack should now contain the element that we must add now
 
 		int dotIndex = line.indexOf('.'); // There may or may not be a dot, depending on whether there is a value.
-		QStringList header = line.left(dotIndex).simplified().split(' ');
 
-		nodeStack.last()->setName( header[0] );
-		nodeStack.last()->setType( header[1] );
+		QString header = line.left(dotIndex).simplified();
 
-		int nextIndex = 2;
-		while (header.size() > nextIndex)
+		int headerStartIndex = 0;
+		int headerEndIndex = header.indexOf(' ', headerStartIndex);
+		nodeStack.last()->setName( header.mid(headerStartIndex, headerEndIndex-headerStartIndex) );
+
+		headerStartIndex = headerEndIndex + 1;
+		headerEndIndex = header.indexOf(' ', headerStartIndex);
+		nodeStack.last()->setType( header.mid(headerStartIndex,
+				headerEndIndex >= 0 ? headerEndIndex-headerStartIndex : -1) );
+
+		while (headerEndIndex >= 0)
 		{
+			headerStartIndex = headerEndIndex + 1;
+			headerEndIndex = header.indexOf(' ', headerStartIndex);
+
+			QString headerPart = header.mid(headerStartIndex,
+					headerEndIndex >= 0 ? headerEndIndex-headerStartIndex : -1);
+
 			// Try to process this as an Id
 			bool isId = true;
-			NodeIdMap::NodeIdType id = header[nextIndex].toInt(&isId);
+			NodeIdMap::NodeIdType id = headerPart.toInt(&isId);
 
 			if ( isId ) nodeStack.last()->setId( id );
 			else
 			{
 				// Try to process this as a partial indicator
-				if (header[nextIndex] == "partial") nodeStack.last()->setPartial(true);
+				if (headerPart == "partial") nodeStack.last()->setPartial(true);
 				else throw FilePersistenceException("Unknown node header element " + line);
 			}
-
-			++nextIndex;
 		}
 
 		if (dotIndex < 0 || line.length() == dotIndex) continue; // No value
