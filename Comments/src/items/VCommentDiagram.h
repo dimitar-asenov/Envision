@@ -53,11 +53,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 	private:
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, Visualization::ModelRenderer* renderer);
-		void append(Item* item);
-		void prepend(Item* item);
-		void insert(Item* item, int position);
 		void swap(int i, int j);
-		void remove(int index, bool deleteItem_ = true);
 
 		void clearChildren();
 		QVector<Visualization::Item*> items_;

@@ -80,7 +80,7 @@ void VCommentDiagram::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mod
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
-		if (i >= items_.size() ) append( renderer->render(this, nodes[i]));	// This node is new
+		if (i >= items_.size() ) items_.append( renderer->render(this, nodes[i]));	// This node is new
 		else if ( items_[i]->node() == nodes[i] )	continue;	// This node is already there
 		else
 		{
@@ -98,42 +98,23 @@ void VCommentDiagram::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mod
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) insert( renderer->render(this, nodes[i]), i);
+			if (!found ) items_.insert(i, renderer->render(this, nodes[i]));
 		}
 	}
 
 	// Remove excess items
-	while (items_.size() > nodes.size()) remove(items_.size()-1);
+	while (items_.size() > nodes.size())
+	{
+		SAFE_DELETE_ITEM(items_.last());
+		items_.pop_back();
+	}
 }
 
-void VCommentDiagram::append(Item* item)
+inline void VCommentDiagram::swap(int i, int j)
 {
-	item->setParentItem(this);
-	items_.append(item);
-	setUpdateNeeded(StandardUpdate);
+	Item* t = items_[i];
+	items_[i] = items_[j];
+	items_[j] = t;
 }
-
-void VCommentDiagram::prepend(Item* item)
-{
-	item->setParentItem(this);
-	items_.prepend(item);
-	setUpdateNeeded(StandardUpdate);
-}
-
-void VCommentDiagram::insert(Item* item, int position)
-{
-	item->setParentItem(this);
-	items_.insert(position, item);
-	setUpdateNeeded(StandardUpdate);
-}
-
-void VCommentDiagram::remove(int index, bool deleteItem_)
-{
-	if (deleteItem_) SAFE_DELETE_ITEM( items_[index]);
-	else items_[index]->setParentItem(nullptr);
-	items_.remove(index);
-	setUpdateNeeded(StandardUpdate);
-}
-
 
 } /* namespace Comments */
