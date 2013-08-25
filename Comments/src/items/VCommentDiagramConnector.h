@@ -33,6 +33,7 @@
 #include "VisualizationBase/src/items/ItemWithNode.h"
 
 #include "../nodes/CommentDiagramConnector.h"
+#include "VCommentDiagram.h"
 
 namespace Comments {
 
@@ -47,6 +48,10 @@ class COMMENTS_API VCommentDiagramConnector : public Super<Visualization::ItemWi
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
+	private:
+		VCommentDiagram* parent_;
+		QPoint point1_, point2_;
 };
 
 } /* namespace Comments */

@@ -40,7 +40,7 @@ DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramShape)
 
 namespace Comments {
 
-enum CommentDiagramShapeType { Rectangle, Circle, Diamond };
+enum CommentDiagramShapeType { Rectangle, Ellipse, Diamond };
 
 class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramShape)
@@ -56,7 +56,8 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 		CommentDiagramShape(const QString& label, const int& x, const int& y, const int& width, const int& height,
 				enum CommentDiagramShapeType shapeType);
 		QSize size();
-		QSize pos();
+		QPoint pos();
+		QPoint getConnectorCoordinates(const int& index);
 };
 
 } /* namespace Comments */

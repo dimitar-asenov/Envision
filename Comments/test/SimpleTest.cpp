@@ -88,8 +88,12 @@ TEST(Comments, SimpleTest)
 
 	auto diagramNode = new CommentDiagram();
 	diagramNode->shapes()->append(new CommentDiagramShape("First shape",     0,  50, 200,  50, Rectangle));
-	diagramNode->shapes()->append(new CommentDiagramShape("Another shape", 100, 150, 200,  50, Circle));
+	diagramNode->shapes()->append(new CommentDiagramShape("Another shape", 100, 150, 200,  50, Ellipse));
 	diagramNode->shapes()->append(new CommentDiagramShape("Diamond",         0, 150, 100, 150, Diamond));
+
+	diagramNode->connectors()->append(new CommentDiagramConnector(0, 10, 1, 10));
+	diagramNode->connectors()->append(new CommentDiagramConnector(1, 4, 2, 15));
+
 	list->append(diagramNode);
 
 //	auto node = new Comment("This is a node with some [diagram#1] [image#image.png]");

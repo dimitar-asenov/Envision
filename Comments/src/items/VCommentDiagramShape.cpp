@@ -56,7 +56,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			painter->drawRect(rect);
 			break;
 
-		case Circle:
+		case Ellipse:
 			painter->drawEllipse(rect);
 			break;
 

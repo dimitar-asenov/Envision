@@ -59,9 +59,57 @@ QSize CommentDiagramShape::size()
 	return QSize(width(), height());
 }
 
-QSize CommentDiagramShape::pos()
+QPoint CommentDiagramShape::pos()
 {
-	return QSize(x(), y());
+	return QPoint(x(), y());
+}
+
+QPoint CommentDiagramShape::getConnectorCoordinates(const int& index)
+{
+	Q_ASSERT(index >= 0 && index < 16);
+//	qDebug() << "x,y" << x() << y() << "width,height" << width() << height() << "index" << index;
+//	qDebug() << (height()-y());
+	switch(shapeType())
+	{
+	default:
+	case Rectangle:
+		if     (index >=  0 && index <  4) return QPoint(x() + index/4.*width(), y());
+		else if(index >=  4 && index <  8) return QPoint(x() + width(), y() + (index-4)/4.*height());
+		else if(index >=  8 && index < 12) return QPoint(x() + (12-index)/4.*width(), y()+height());
+		else if(index >= 12 && index < 16) return QPoint(x(), y()+(16-index)/4.*height());
+		break;
+
+	case Ellipse: {
+		// based on mathematical derivation on
+		// http://math.stackexchange.com/questions/22064/calculating-a-point-that-lies-on-an-ellipse-given-an-angle
+		QPointF center(x()+width()/2., y()+height()/2.);
+		double a = width()/2, b = height()/2;
+		double angle = index*2*M_PI/16;
+		double t = tan(angle);
+		double x = a*b/(sqrt(b*b+a*a*t*t));
+		// invert sign of result for angles between pi/2 and 3pi/2
+		if(index > 4 && index < 12) {
+			x = -x;
+		}
+		double y = t*x;
+
+		// special cases where angle is pi/2 or 3pi/2
+		if(index == 4)  y =  b;
+		if(index == 12) y = -b;
+
+		return QPoint(center.x()+x, center.y()+y);
+	}
+
+	case Diamond:
+		if(index >=  0 && index <  4) return QPoint(x()+(index+4)/8.*width(), y()+index/8.*height());
+		if(index >=  4 && index <  8) return QPoint(x()+(8-(index-4))/8.*width(), y()+(index/8.*height()));
+		if(index >=  8 && index < 12) return QPoint(x()+(4-(index-8))/8.*width(), y()+(8-(index-8))/8.*height());
+		if(index >= 12 && index < 16) return QPoint(x()+(index-12)/8.*width(), y()+(4-(index-12))/8.*height());
+		break;
+	}
+
+	Q_ASSERT(!"Impossible");
+	return QPoint();
 }
 
 } /* namespace Comments */

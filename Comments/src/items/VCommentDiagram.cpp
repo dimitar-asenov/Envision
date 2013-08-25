@@ -65,12 +65,16 @@ void VCommentDiagram::updateGeometry(int, int)
 	for(int i = 0; i < items_.size(); ++i)
 	{
 		auto child = items_.at(i);
+		// only count shapes, connectors will stay within these bounds
 		auto shape = dynamic_cast<CommentDiagramShape*>(child->node());
-		child->setPos(shape->x(), shape->y());
+		if(shape != nullptr)
+		{
+			child->setPos(shape->x(), shape->y());
 
-		QSize itemsize(shape->pos() + shape->size());
-		maxsize.setHeight(std::max(maxsize.height(), itemsize.height()));
-		maxsize.setWidth(std::max(maxsize.width(), itemsize.width()));
+			QSize itemsize(shape->pos().x() + shape->size().width(), shape->pos().y() + shape->size().height());
+			maxsize.setHeight(std::max(maxsize.height(), itemsize.height()));
+			maxsize.setWidth(std::max(maxsize.width(), itemsize.width()));
+		}
 	}
 	setSize(maxsize);
 }

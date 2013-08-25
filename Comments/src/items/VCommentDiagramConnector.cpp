@@ -35,20 +35,28 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
 
 VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
+	parent_ = dynamic_cast<VCommentDiagram*>(parent);
+	Q_ASSERT(parent_ != nullptr);
 }
 
 void VCommentDiagramConnector::determineChildren(){}
 
 void VCommentDiagramConnector::updateGeometry(int, int)
 {
-	setSize(node()->width(), node()->height());
+	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
+	// it here again.
+	auto shape1 = parent_->node()->shapes()->at(node()->shape1());
+	auto shape2 = parent_->node()->shapes()->at(node()->shape2());
+
+	point1_ = shape1->getConnectorCoordinates(node()->point1());
+	point2_ = shape2->getConnectorCoordinates(node()->point2());
+	// TODO: std::max() alternative?
+	setSize(std::max(point1_.x(), point2_.x()), std::max(point1_.y(), point2_.y()));
 }
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
-	painter->drawRect(0, 0, width(), height());
-	if(!node()->label().isEmpty())
-		painter->drawText(0, 0, width(), height(), Qt::AlignCenter, node()->label());
+	painter->drawLine(point1_, point2_);
 }
 
 } /* namespace Comments */

@@ -34,31 +34,20 @@ namespace Comments {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, label, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, x, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, y, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, width, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, height, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, shape1, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, point1, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, shape2, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, point2, Integer, false, false, true)
 
 // references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(const QString& label, const int& x, const int& y, const int& width, const int& height)
+CommentDiagramConnector::CommentDiagramConnector(const int& shape1, const int& point1, const int& shape2,
+		const int& point2)
 : Super{nullptr, CommentDiagramConnector::getMetaData()}
 {
-	setLabel(label);
-	setX(x);
-	setY(y);
-	setWidth(width);
-	setHeight(height);
-}
-
-QSize CommentDiagramConnector::size()
-{
-	return QSize(width(), height());
-}
-
-QSize CommentDiagramConnector::pos()
-{
-	return QSize(x(), y());
+	setShape1(shape1);
+	setPoint1(point1);
+	setShape2(shape2);
+	setPoint2(point2);
 }
 
 } /* namespace Comments */

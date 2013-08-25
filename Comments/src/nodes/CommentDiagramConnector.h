@@ -44,15 +44,13 @@ class COMMENTS_API CommentDiagramConnector : public Super<Model::CompositeNode> 
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramConnector)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
-	ATTRIBUTE_VALUE(::Model::Integer, x, setX, int)
-	ATTRIBUTE_VALUE(::Model::Integer, y, setY, int)
-	ATTRIBUTE_VALUE(::Model::Integer, width, setWidth, int)
-	ATTRIBUTE_VALUE(::Model::Integer, height, setHeight, int)
+	ATTRIBUTE_VALUE(::Model::Integer, shape1, setShape1, int)
+	ATTRIBUTE_VALUE(::Model::Integer, point1, setPoint1, int)
+	ATTRIBUTE_VALUE(::Model::Integer, shape2, setShape2, int)
+	ATTRIBUTE_VALUE(::Model::Integer, point2, setPoint2, int)
 
 	public:
-		CommentDiagramConnector(const QString& label, const int& x, const int& y, const int& width, const int& height);
-		QSize size();
-		QSize pos();
+		CommentDiagramConnector(const int& shape1, const int& point1, const int& shape2, const int& point2);
 };
 
 } /* namespace Comments */
