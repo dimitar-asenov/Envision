@@ -34,14 +34,29 @@ namespace OOModel {
 NODE_DEFINE_EMPTY_CONSTRUCTORS(StatementItemList)
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(StatementItemList)
 
-QList<Model::Node*> StatementItemList::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+QSet<Model::Node*> StatementItemList::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	QList<Model::Node*> symbols = findAllSymbolDefinitions(matcher, symbolTypes, indexOfSubitem(source));
+	Q_ASSERT(direction != SEARCH_DOWN);
 
-	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
-	return symbols;
+	if (direction == SEARCH_UP)
+	{
+		QSet<Node*> res;
+
+		auto sourceIndex = indexOfSubitem(source); // Only search in items above the current one
+		if (sourceIndex < 0 || sourceIndex > size()) sourceIndex = size();
+
+		for(int i = 0; i<sourceIndex; ++i)
+			if (!at(i)->isAncestorOf(source))
+				// Optimize the search by skipping the scope of the source, since we've already searched there
+				res.unite(at(i)->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+
+		if ((exhaustAllScopes || res.isEmpty()) && parent())
+			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+
+		return res;
+	}
+	else return Super::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
 }
 
 }

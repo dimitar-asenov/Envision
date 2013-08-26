@@ -46,19 +46,34 @@ LoopStatement::LoopStatement(LoopKind kind)
 	setLoopKind(kind);
 }
 
-QList<Model::Node*> LoopStatement::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+QSet<Model::Node*> LoopStatement::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
 {
-	QList<Model::Node*> symbols;
+	if (direction == SEARCH_UP)
+	{
+		Q_ASSERT(isAncestorOf(source));
 
-	if (condition()) symbols << condition()->findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, false);
-	if (initStep()) symbols << initStep()->findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, false);
-	if (updateStep()) symbols << updateStep()->findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, false);
+		QSet<Model::Node*> res;
 
-	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
+		// Don't search in scopes we've already searched in
+		if (condition())
+			if (!condition()->isAncestorOf(source))
+				res.unite(condition()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (initStep())
+			if (!initStep()->isAncestorOf(source))
+				res.unite(initStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (updateStep())
+			if (!updateStep()->isAncestorOf(source))
+				res.unite(updateStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
+		// found there.
 
-	return symbols;
+		if ((exhaustAllScopes || res.isEmpty()) && parent())
+			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+
+		return res;
+	}
+	else return {};
 }
 
 }

@@ -45,37 +45,51 @@ TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
 	if(typeExpression) setTypeExpression(typeExpression);
 }
 
-TypeAlias::SymbolTypes TypeAlias::symbolType() const
+Model::Node* TypeAlias::target() const
 {
-	SymbolTypes ret = UNSPECIFIED;
+	Model::Node* ret{};
+
 	auto type = const_cast<TypeAlias*>(this)->typeExpression()->type();
 	if (auto sp = dynamic_cast<SymbolProviderType*>(type))
-	{
-		ret = sp->symbolProvider()->symbolType();
-	}
+		ret = sp->symbolProvider();
 
 	SAFE_DELETE(type);
+
 	return ret;
 }
 
-QList<Model::Node*> TypeAlias::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+TypeAlias::SymbolTypes TypeAlias::symbolType() const
+{
+	if (auto t = target()) return t->symbolType();
+	else return UNSPECIFIED;
+}
+
+QSet<Model::Node*> TypeAlias::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	QList<Model::Node*> symbols;
-
 	// TODO: Search type arguments
 
-	auto type = typeExpression()->type();
-	auto symbolProviderType = dynamic_cast<SymbolProviderType*>(type);
-	if (symbolProviderType)
-		symbols = symbolProviderType->symbolProvider()
-			->findSymbols(matcher, symbolProviderType->symbolProvider(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
+	if (direction == SEARCH_HERE)
+	{
+		if (symbolMatches(matcher, symbolTypes))
+		{
+			QSet<Model::Node*> res;
+			res.insert(this);
+			return res;
+		}
+	}
+	else if (direction == SEARCH_DOWN)
+	{
+		if (auto t = target())
+			return t->findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, false);
+	}
+	else if (direction == SEARCH_UP)
+	{
+		if (parent())
+			return parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
+	}
 
-	SAFE_DELETE(type);
-
-	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Super::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
-	return symbols;
+	return {};
 }
 
 }

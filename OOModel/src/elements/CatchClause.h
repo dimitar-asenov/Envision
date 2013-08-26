@@ -41,8 +41,8 @@ class OOMODEL_API CatchClause : public Super<Model::CompositeNode>
 	ATTRIBUTE(StatementItemList, body, setBody)
 
 	public:
-		virtual QList<Model::Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+		virtual QSet<Model::Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 } /* namespace OOModel */

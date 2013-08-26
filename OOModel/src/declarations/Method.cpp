@@ -90,24 +90,38 @@ Method::SymbolTypes Method::symbolType() const
 	return METHOD;
 }
 
-QList<Model::Node*> Method::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source, FindSymbolDirection direction,
+QSet<Model::Node*> Method::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source, FindSymbolDirection direction,
 		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	if (direction == SEARCH_UP && isAncestorOf(source))
+	QSet<Model::Node*> res;
+
+	if (direction == SEARCH_DOWN); // Do nothing
+	else if (direction == SEARCH_HERE)
 	{
-		QList<Model::Node*> symbols;
-
-		symbols << arguments()->findAllSymbolDefinitions(matcher, symbolTypes);
-		symbols << results()->findAllSymbolDefinitions(matcher, symbolTypes);
-		symbols << subDeclarations()->findAllSymbolDefinitions(matcher, symbolTypes);
-		// Note that a StatementList also implements findSymbols and locally declared variables will be found there.
-
-		if (exhaustAllScopes || symbols.isEmpty())
-			symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
-
-		return symbols;
+		if (symbolMatches(matcher, symbolTypes)) res.insert(this);
 	}
-	else return QList<Model::Node*> ();
+	else if (direction == SEARCH_UP)
+	{
+		Q_ASSERT(isAncestorOf(source));
+
+		// Don't search in scopes we've already searched in
+		if (!arguments()->isAncestorOf(source))
+			res.unite(arguments()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (!results()->isAncestorOf(source))
+			res.unite(results()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (!subDeclarations()->isAncestorOf(source))
+			res.unite(subDeclarations()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
+		// found there.
+
+		if ((exhaustAllScopes || res.isEmpty()) && symbolMatches(matcher, symbolTypes))
+			res.insert(this);
+
+		if ((exhaustAllScopes || res.isEmpty()) && parent())
+			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+	}
+
+	return res;
 }
 
 bool Method::isGeneric()

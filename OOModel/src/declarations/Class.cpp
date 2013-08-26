@@ -70,22 +70,6 @@ Class::SymbolTypes Class::symbolType() const
 	return CONTAINER;
 }
 
-QList<Model::Node*> Class::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source, FindSymbolDirection direction,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
-{
-	QList<Model::Node*> symbols;
-
-	symbols << classes()->findAllSymbolDefinitions(matcher, symbolTypes);
-	symbols << methods()->findAllSymbolDefinitions(matcher, symbolTypes);
-	symbols << fields()->findAllSymbolDefinitions(matcher, symbolTypes);
-	symbols << enumerators()->findAllSymbolDefinitions(matcher, symbolTypes);
-	symbols << subDeclarations()->findAllSymbolDefinitions(matcher, symbolTypes);
-
-	if (exhaustAllScopes || symbols.isEmpty())
-		symbols << Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
-	return symbols;
-}
-
 bool Class::isGeneric()
 {
 	return typeArguments()->size() > 0;

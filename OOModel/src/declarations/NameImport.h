@@ -29,7 +29,7 @@
 #include "../oomodel_api.h"
 
 #include "Declaration.h"
-#include "../expressions/ReferenceExpression.h"
+#include "../expressions/Expression.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, NameImport)
 
@@ -38,16 +38,18 @@ namespace OOModel {
 class OOMODEL_API NameImport : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(NameImport)
-	ATTRIBUTE(ReferenceExpression, importedName, setImportedName)
+	ATTRIBUTE(Expression, importedName, setImportedName)
 
 	public:
-		NameImport(ReferenceExpression* importedName);
+		NameImport(Expression* importedName);
 
-		virtual const QString& symbolName() const override;
-		virtual SymbolTypes symbolType() const override;
+		virtual bool definesSymbol() const override;
 
-		virtual QList<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
+		virtual QSet<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+
+	private:
+		Node* target() const;
 };
 
 } /* namespace OOModel */

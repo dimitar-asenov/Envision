@@ -149,26 +149,39 @@ bool Node::replaceChild(Node*, Node*)
 	return false;
 }
 
-QList<Node*> Node::findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
+QSet<Node*> Node::findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	QList<Node*> res;
+	QSet<Node*> res;
 
-	bool thisMatches = symbolMatches(matcher, symbolTypes);
-
-	// If exhaustAllScopes is true and there is a parent item, we should let the parent find this symbol definition
-	// and add it to the result. This symbol should not report itself in that case.
-	if (direction == SEARCH_UP)
+	if (direction == SEARCH_HERE)
 	{
-		if ( thisMatches && !(exhaustAllScopes && parent()))
-			res << this;
-		else if (parent_)
-			res << parent_->findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
+		if (symbolMatches(matcher, symbolTypes))  res.insert(this);
 	}
-	else if (direction == SEARCH_DOWN && thisMatches)
-		res << this;
+	else if (direction == SEARCH_DOWN)
+	{
+		for (auto c : childrenInScope())
+			res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+	}
+	else if (direction == SEARCH_UP)
+	{
+		for (auto c : childrenInScope())
+			if (!c->isAncestorOf(source)) // Optimize the search by skipping this scope, since we've already searched there
+				res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+
+		if ((exhaustAllScopes || res.isEmpty()) && symbolMatches(matcher, symbolTypes))
+			res.insert(this);
+
+		if ((exhaustAllScopes || res.isEmpty()) && parent_)
+			res.unite(parent_->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+	}
 
 	return res;
+}
+
+QList<Node*> Node::childrenInScope()
+{
+	return children();
 }
 
 void Node::beginModification(const QString &text)

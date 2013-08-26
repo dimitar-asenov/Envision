@@ -70,9 +70,6 @@ class OOMODEL_API Class : public Super<Declaration>
 		virtual SymbolTypes symbolType() const override;
 
 		bool isGeneric();
-
-		virtual QList<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }

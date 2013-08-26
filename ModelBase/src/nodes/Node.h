@@ -184,16 +184,20 @@ class MODELBASE_API Node
 		virtual SymbolTypes symbolType() const;
 
 		enum FindSymbolDirection {
-			SEARCH_UP,	/**< Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
+			SEARCH_UP,		/**< Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
 									symbols in the current scope which come after the source will not be considered. This is the
 			 	 	 	 	 	 	case e.g. with searches for local variable declarations in a method: only variables before
 			 	 	 	 	 	 	the source node should be considered. */
-			SEARCH_DOWN /**< Looks for symbols inside the specified scope or subscopes. This is used for symbols that are
-			 	 	 	 	 	 	requested in a specific context (typically after a '.') e.g. "list.sort()"*/
+			SEARCH_DOWN,	/**< Looks for symbols inside the specified scope or subscopes. This is used for symbols that
+									are requested in a specific context (typically after a '.') e.g. "list.sort()"*/
+			SEARCH_HERE		/**< Looks for symbols defined by the current node. This happens when findSymbols has been
+			 	 	 	 	 	 	 called on the parent with SEARCH_DOWN and the parent must therefore find a precise match
+			 	 	 	 	 	 	 in its scope. findSymbols() will be called for each potential match from the parents
+			 	 	 	 	 	 	 children with the SEACH_HERE flag */
 		};
 
 		/**
-		 * Returns a list of all nodes which define a symbol with a name matching \a matcher in the scope of this node.
+		 * Returns a set of all nodes which define a symbol with a name matching \a matcher in the scope of this node.
 		 *
 		 * The \a source Node specifies what node should be used as a reference when determining what symbols are visible.
 		 *
@@ -208,15 +212,25 @@ class MODELBASE_API Node
 		 * is useful when \a symbolExp can match multiple symbols with different names (for example during auto completion
 		 * list build up).
 		 *
-		 * The default implementation returns a list with only the current node in it, in case the node defines the
+		 * The default implementation returns a set with only the current node in it, in case the node defines the
 		 * requested symbol. Otherwise if \a mode is FindSymbolMode::SEARCH_UP, the implementation of the parent node is
 		 * called.
 		 *
 		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
 		 * other than FindSymbolMode::SEARCH_UP
 		 */
-		virtual QList<Node*> findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
+		virtual QSet<Node*> findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 				SymbolTypes symbolTypes, bool exhaustAllScopes);
+
+
+		/**
+		 * Returns all child nodes that may define symbols that form the scope of this node.
+		 *
+		 * The default implementation returns all direct children of this node.
+		 *
+		 * Reimplement this method to customize while nodes form the scope of this node.
+		 */
+		virtual QList<Node*> childrenInScope();
 
 		/**
 		 * Returns true if this node defines a symbol that has a name matching \a matcher and types common with \a

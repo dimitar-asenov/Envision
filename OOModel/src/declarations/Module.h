@@ -54,9 +54,6 @@ class OOMODEL_API Module : public Super<Declaration>
 		Module(const QString& name);
 
 		virtual SymbolTypes symbolType() const override;
-
-		virtual QList<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 }

@@ -89,8 +89,8 @@ class MODELBASE_API List: public Super<Node>
 
 		const QVector<Node*>& nodes();
 
-		Node* findFirstSymbolDefinition(const QString& symbol, SymbolTypes symbolTypes, int beforeIndex = -1);
-		QList<Node*> findAllSymbolDefinitions(const SymbolMatcher& matcher, SymbolTypes symbolTypes, int beforeIndex=-1);
+		virtual QSet<Node*> findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
+				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 
 		virtual bool replaceChild(Node* child, Node* replacement);
 

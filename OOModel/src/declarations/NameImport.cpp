@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "NameImport.h"
+#include "../types/SymbolProviderType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::NameImport)
@@ -34,45 +35,49 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NameImport)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NameImport)
 
-REGISTER_ATTRIBUTE(NameImport, importedName, ReferenceExpression, false, false, true)
+REGISTER_ATTRIBUTE(NameImport, importedName, Expression, false, false, true)
 
-NameImport::NameImport(ReferenceExpression *importedName)
+NameImport::NameImport(Expression *importedName)
 : Super(nullptr, NameImport::getMetaData())
 {
 	if(importedName) setImportedName(importedName);
 }
 
-const QString& NameImport::symbolName() const
+bool NameImport::definesSymbol() const
 {
-	auto imported = const_cast<NameImport*>(this)->importedName();
-	Q_ASSERT(imported->ref()->target() != this);
-	return imported->name();
+	return false;
 }
 
-NameImport::SymbolTypes NameImport::symbolType() const
+Model::Node* NameImport::target() const
 {
-	auto imported = const_cast<NameImport*>(this)->importedName();
-	auto target = imported->ref()->target();
-	Q_ASSERT( target != this);
+	Model::Node* ret{};
 
-	if (target) return target->symbolType();
-	else return UNSPECIFIED;
+	auto type = const_cast<NameImport*>(this)->importedName()->type();
+	if (auto sp = dynamic_cast<SymbolProviderType*>(type))
+		ret = sp->symbolProvider();
+
+	SAFE_DELETE(type);
+
+	return ret;
 }
 
-QList<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+QSet<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
 {
-	QList<Model::Node*> symbols;
-	if (direction == SEARCH_DOWN)
-		symbols = importedName()->findSymbols(matcher, importedName(), SEARCH_DOWN, symbolTypes, exhaustAllScopes);
+	Q_ASSERT(direction != SEARCH_DOWN);
 
-	if ( direction == SEARCH_UP && parent() && (exhaustAllScopes || symbols.isEmpty()))
-		symbols << parent()->findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
+	if (direction == SEARCH_HERE)
+	{
+		if (auto t = target())
+			return t->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false);
+	}
+	else if (direction == SEARCH_UP)
+	{
+		if (parent())
+			return parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
+	}
 
-	// Filter out results that are the same as this node
-	symbols.removeAll(this);
-
-	return symbols;
+	return {};
 }
 
 }

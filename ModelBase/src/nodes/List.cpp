@@ -210,37 +210,38 @@ void List::paste(ClipboardStore& clipboard, int position)
 
 	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{
-		Node* newNode = clipboard.create(model(), nullptr); // We provide a null parent as this will be set in the instruction below.
+		// We provide a null parent as this will be set in the instruction below.
+		Node* newNode = clipboard.create(model(), nullptr);
+
 		execute(new ListInsert(this, nodes_, newNode, position+i));
 
 		if (clipboard.hasNext() ) clipboard.next();
 	}
 }
 
-Node* List::findFirstSymbolDefinition(const QString& symbol, SymbolTypes symbolTypes, int beforeIndex)
+QSet<Node*> List::findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
+		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	if (beforeIndex < 0) beforeIndex = nodes_.size();
-	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
+	Q_ASSERT(direction != SEARCH_DOWN);
 
-	for(int i = 0; i<beforeIndex; ++i)
-		if (nodes_[i]->symbolMatches(symbol, symbolTypes))
-			return nodes_[i];
+	QSet<Node*> res;
 
-	return nullptr;
-}
+	if (direction == SEARCH_HERE)
+	{
+		for (auto c : nodes_)
+			res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+	}
+	else if (direction == SEARCH_UP)
+	{
+		for (auto c : nodes_)
+			if (!c->isAncestorOf(source)) // Optimize the search by skipping this scope, since we've already searched there
+				res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 
-QList<Node*> List::findAllSymbolDefinitions(const SymbolMatcher& matcher, SymbolTypes symbolTypes, int beforeIndex)
-{
-	QList<Node*> result;
+		if ((exhaustAllScopes || res.isEmpty()) && parent())
+			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+	}
 
-	if (beforeIndex < 0) beforeIndex = nodes_.size();
-	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
-
-	for(int i = 0; i<beforeIndex; ++i)
-		if (nodes_[i]->symbolMatches(matcher, symbolTypes))
-			result.append( nodes_[i] );
-
-	return result;
+	return res;
 }
 
 Node* List::createDefaultElement()
