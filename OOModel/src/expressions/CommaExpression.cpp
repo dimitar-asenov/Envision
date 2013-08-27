@@ -73,14 +73,25 @@ QSet<Model::Node*> CommaExpression::findSymbols(const Model::SymbolMatcher& matc
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
 
+	QSet<Node*> res;
+
 	if (direction == SEARCH_HERE)
 	{
-		QSet<Node*> res;
 		res.unite(left()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 		res.unite(right()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
-		return res;
 	}
-	else return Super::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);
+	else if (direction == SEARCH_UP)
+	{
+		if (!left()->isAncestorOf(source))
+			res.unite(left()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (!right()->isAncestorOf(source))
+			res.unite(right()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+
+		if ((exhaustAllScopes || res.isEmpty()) && parent())
+			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+	}
+
+	return res;
 }
 
 Type* CommaExpression::type()
