@@ -43,8 +43,8 @@ DEFINE_TYPE_ID_BASE(Node, nodeTypeInitializationRegistry, "Node",)
  * STATIC MEMBERS
  **********************************************************************************************************************/
 int Node::numRegisteredTypes_ = 0;
-QMap<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
-QMap<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
+QHash<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
+QHash<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
@@ -333,9 +333,10 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 
 Node* Node::createNewNode(const QString &type, Node* parent)
 {
-	if ( isTypeRegistered(type) )
+	auto iter = nodeConstructorRegister.find(type);
+	if ( iter != nodeConstructorRegister.end() )
 	{
-		return nodeConstructorRegister.value(type)(parent);
+		return iter.value()(parent);
 	}
 	else
 	{
@@ -347,9 +348,10 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 
 Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &store, bool partialLoadHint)
 {
-	if ( isTypeRegistered(type) )
+	auto iter = nodePersistenceConstructorRegister.find(type);
+	if ( iter != nodePersistenceConstructorRegister.end() )
 	{
-		return nodePersistenceConstructorRegister.value(type)(parent, store, partialLoadHint);
+		return iter.value()(parent, store, partialLoadHint);
 	}
 	else
 	{

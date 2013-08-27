@@ -448,8 +448,8 @@ class MODELBASE_API Node
 		int revision_;
 
 		static int numRegisteredTypes_;
-		static QMap<QString, NodeConstructor> nodeConstructorRegister;
-		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
+		static QHash<QString, NodeConstructor> nodeConstructorRegister;
+		static QHash<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
