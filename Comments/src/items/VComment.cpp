@@ -44,10 +44,9 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 QList<Item*> VComment::split()
 {
 	QStringList lines = node()->label().split(QRegExp("\\r?\\n"));
-	QStringList lineBuffer;
-	QList<Item*> result;
 
-	for(int i = 0; i < lines.size(); ++i) {
+	for(int i = 0; i < lines.size(); ++i)
+	{
 		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
 		QString *line = &lines[i];
 
@@ -64,36 +63,26 @@ QList<Item*> VComment::split()
 				default: Q_ASSERT(false);
 			}
 
-			if(lineBuffer.size() > 0) {
-				auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer.join("\n")));
-				text->setTextFormat(Qt::RichText);
-				result.push_back(text);
-				lineBuffer.clear();
-			}
-			result.push_back(new Line(nullptr, Line::itemStyles().get(style)));
+			addChildItem(new Line(nullptr, Line::itemStyles().get(style)));
 			continue;
 		}
 
 		// is this a header? replace it right away with the appropriate tag
 		rx.setPattern("^(#+)([^#].*)");
 		// allow headers h1 to h6
-		if(rx.exactMatch(*line) && rx.cap(1).length() <= 6) {
+		if(rx.exactMatch(*line) && rx.cap(1).length() <= 6)
+		{
 			QString len = QString::number(rx.cap(1).length());
-			lineBuffer.push_back("<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">");
+			pushTextLine("<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">");
 		}
 		else
 		{
-			lineBuffer.push_back((*line).simplified());
+			pushTextLine((*line).simplified());
 		}
 	}
 
-	if(lineBuffer.size() > 0) {
-		auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer.join("\n")));
-		text->setTextFormat(Qt::RichText);
-		result.push_back(text);
-	}
-
-	return result;
+	popLineBuffer();
+	return children_;
 }
 
 QString VComment::replaceMarkdown(QString str)
@@ -105,6 +94,28 @@ QString VComment::replaceMarkdown(QString str)
 	str.replace(rx, "<b>\\1</b>");
 
 	return str;
+}
+
+void VComment::pushTextLine(QString text)
+{
+	lineBuffer_.push_back(text);
+}
+
+void VComment::popLineBuffer()
+{
+	if(lineBuffer_.size() > 0)
+	{
+		auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer_.join("\n")));
+		text->setTextFormat(Qt::RichText);
+		children_.push_back(text);
+		lineBuffer_.clear();
+	}
+}
+
+void VComment::addChildItem(Visualization::Item* item)
+{
+	popLineBuffer();
+	children_.push_back(item);
 }
 
 void VComment::toggleEditing()

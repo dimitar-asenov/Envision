@@ -71,33 +71,34 @@ TEST(Comments, SimpleTest)
 
 	third->set("Some other text");
 
-//	auto node2 = new CommentNode(
-//		"# Header 1\n"
-//		"Text *in bold* that spans more\n"
-//		"than one line\n"
-//		"===\n"
-//		"\n"
-//		"## Header 2\n"
-//		"---\n"
-//		"\n"
-//		"...\n"
-//		"### Header 3\n"
-//		"#### Header 4\n"
-//		"###### Header 6\n"
-//		"And later on, some more text...");
+#if 1
+	auto node = new CommentNode(
+		"# Header 1\n"
+		"Text *in bold* that spans more\n"
+		"than one line\n"
+		"===\n"
+		"\n"
+		"## Header 2\n"
+		"---\n"
+		"\n"
+		"...\n"
+		"### Header 3\n"
+		"#### Header 4\n"
+		"###### Header 6\n"
+		"And later on, some more text...");
+#else
+	auto node = new CommentDiagram();
+	node->shapes()->append(new CommentDiagramShape("First shape",     0,  50, 200,  50, Rectangle));
+	node->shapes()->append(new CommentDiagramShape("Another shape", 100, 150, 200,  50, Ellipse));
+	node->shapes()->append(new CommentDiagramShape("Diamond",         0, 150, 100, 150, Diamond));
 
-	auto diagramNode = new CommentDiagram();
-	diagramNode->shapes()->append(new CommentDiagramShape("First shape",     0,  50, 200,  50, Rectangle));
-	diagramNode->shapes()->append(new CommentDiagramShape("Another shape", 100, 150, 200,  50, Ellipse));
-	diagramNode->shapes()->append(new CommentDiagramShape("Diamond",         0, 150, 100, 150, Diamond));
-
-	diagramNode->connectors()->append(new CommentDiagramConnector(0, 10, 1, 10));
-	diagramNode->connectors()->append(new CommentDiagramConnector(1, 4, 2, 4));
-
-	list->append(diagramNode);
+	node->connectors()->append(new CommentDiagramConnector(0, 10, 1, 10));
+	node->connectors()->append(new CommentDiagramConnector(1, 4, 2, 4));
+#endif
+	list->append(node);
 
 //	auto node = new Comment("This is a node with some [diagram#1] [image#image.png]");
-//	node->addDiagram(diagramNode);
+//	node->addDiagram(node);
 //
 //	list->append(node);
 

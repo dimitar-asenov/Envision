@@ -50,9 +50,14 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 	private:
 		QList<Visualization::Item*> split();
 		QString replaceMarkdown(QString str);
+		void pushTextLine(QString text);
+		void popLineBuffer();
+		void addChildItem(Visualization::Item* item);
 
+		QStringList lineBuffer_{};
 		bool editing_{};
 		Visualization::Item* editLabel_{};
+		QList<Visualization::Item*> children_;
 };
 
 } /* namespace Comments */
