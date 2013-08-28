@@ -85,7 +85,8 @@ TEST(Comments, SimpleTest)
 		"### Header 3\n"
 		"#### Header 4\n"
 		"###### Header 6\n"
-		"And later on, some more text...");
+		"And later on, some more text...\n"
+		"[[http://www.google.com]]");
 #else
 	auto node = new CommentDiagram();
 	node->shapes()->append(new CommentDiagramShape("First shape",     0,  50, 200,  50, Rectangle));
@@ -95,12 +96,11 @@ TEST(Comments, SimpleTest)
 	node->connectors()->append(new CommentDiagramConnector(0, 10, 1, 10));
 	node->connectors()->append(new CommentDiagramConnector(1, 4, 2, 4));
 #endif
-	list->append(node);
 
 //	auto node = new Comment("This is a node with some [diagram#1] [image#image.png]");
 //	node->addDiagram(node);
-//
-//	list->append(node);
+
+	list->append(node);
 
 	model->endModification();
 

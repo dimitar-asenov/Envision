@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "VComment.h"
+#include "VCommentBrowser.h"
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
@@ -74,6 +75,11 @@ QList<Item*> VComment::split()
 		{
 			QString len = QString::number(rx.cap(1).length());
 			pushTextLine("<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">");
+		}
+		else if(line->left(2) == "[[" && line->right(2) == "]]" && line->size() > 2+2)
+		{
+			QString url = line->mid(2, line->size()-2-2);
+			addChildItem(new VCommentBrowser(this, url));
 		}
 		else
 		{

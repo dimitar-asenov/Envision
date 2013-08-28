@@ -31,7 +31,8 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentBrowser, "item")
 
-VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const StyleType* style, const QString& text) : Super(parent, style)
+VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& text, const StyleType* style)
+	: Super(parent, style)
 {
 	item_ = new QGraphicsWebView(this);
 	item_->setUrl(QUrl(text));
@@ -52,13 +53,20 @@ void VCommentBrowser::determineChildren()
 
 void VCommentBrowser::updateGeometry(int, int)
 {
-	item_->setPos(0,0);
-	setSize(item_->boundingRect().size().toSize());
+	// TODO: make maximal use of space!
+	QSize size(400, 300);
+	setSize(size);
+	item_->setMaximumSize(size);
 }
 
 QList<Visualization::Item*> VCommentBrowser::childItems() const
 {
 	return {};
+}
+
+void VCommentBrowser::paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget)
+{
+	item_->paint(painter, style, widget);
 }
 
 //void DetectPageLoaded::loadProgress(int progress)
