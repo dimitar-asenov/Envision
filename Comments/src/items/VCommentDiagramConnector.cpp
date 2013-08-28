@@ -43,15 +43,21 @@ void VCommentDiagramConnector::determineChildren(){}
 
 void VCommentDiagramConnector::updateGeometry(int, int)
 {
+	// TODO: handle case where either argument is non-zero?
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
 	// it here again.
 	auto shape1 = parent_->node()->shapes()->at(node()->shape1());
 	auto shape2 = parent_->node()->shapes()->at(node()->shape2());
 
-	point1_ = shape1->getConnectorCoordinates(node()->point1());
-	point2_ = shape2->getConnectorCoordinates(node()->point2());
-	// TODO: std::max() alternative?
-	setSize(std::max(point1_.x(), point2_.x()), std::max(point1_.y(), point2_.y()));
+	point1_ = shape1->pos()+shape1->getConnectorCoordinates(node()->point1());
+	point2_ = shape2->pos()+shape2->getConnectorCoordinates(node()->point2());
+	// TODO: std::min
+	auto origin = QPoint(std::min(point1_.x(), point2_.x()), std::min(point1_.y(), point2_.y()));
+	point1_ -= origin;
+	point2_ -= origin;
+
+	// TODO: std::abs()
+	setSize(std::abs(point1_.x()-point2_.x()), std::abs(point1_.y()-point2_.y()));
 }
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)

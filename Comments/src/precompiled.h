@@ -27,7 +27,7 @@
 #ifndef PRECOMPILED_COMMENTS_H_
 #define PRECOMPILED_COMMENTS_H_
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in. Only the "public" part of
+// Include here the precompiled headers of other plug-ins that use this plug-in. Only the "public" part of
 // those headers will be included here
 #include "VisualizationBase/src/precompiled.h"
 #include "InteractionBase/src/precompiled.h"

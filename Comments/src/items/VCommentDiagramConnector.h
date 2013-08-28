@@ -51,7 +51,7 @@ class COMMENTS_API VCommentDiagramConnector : public Super<Visualization::ItemWi
 
 	private:
 		VCommentDiagram* parent_;
-		QPoint point1_, point2_;
+		QPointF point1_, point2_;
 };
 
 } /* namespace Comments */

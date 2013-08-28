@@ -92,7 +92,7 @@ TEST(Comments, SimpleTest)
 	diagramNode->shapes()->append(new CommentDiagramShape("Diamond",         0, 150, 100, 150, Diamond));
 
 	diagramNode->connectors()->append(new CommentDiagramConnector(0, 10, 1, 10));
-	diagramNode->connectors()->append(new CommentDiagramConnector(1, 4, 2, 15));
+	diagramNode->connectors()->append(new CommentDiagramConnector(1, 4, 2, 4));
 
 	list->append(diagramNode);
 
