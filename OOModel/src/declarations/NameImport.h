@@ -45,8 +45,8 @@ class OOMODEL_API NameImport : public Super<Declaration>
 
 		virtual bool definesSymbol() const override;
 
-		virtual QSet<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 
 	private:
 		Node* target() const;

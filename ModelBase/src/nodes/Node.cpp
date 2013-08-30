@@ -164,35 +164,42 @@ bool Node::replaceChild(Node*, Node*)
 	return false;
 }
 
-QSet<Node*> Node::findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
+bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
 		SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	QSet<Node*> res;
+	bool found{};
 
 	if (direction == SEARCH_HERE)
 	{
-		if (symbolMatches(matcher, symbolTypes))  res.insert(this);
+		if (symbolMatches(matcher, symbolTypes))
+		{
+			found = true;
+			result.insert(this);
+		}
 	}
 	else if (direction == SEARCH_DOWN)
 	{
 		for (auto c : childrenInScope())
-			res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 	}
 	else if (direction == SEARCH_UP)
 	{
 		auto ignore = childToSubnode(source);
 		for (auto c : childrenInScope())
 			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
-				res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 
-		if ((exhaustAllScopes || res.isEmpty()) && symbolMatches(matcher, symbolTypes))
-			res.insert(this);
+		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
+		{
+			found = true;
+			result.insert(this);
+		}
 
-		if ((exhaustAllScopes || res.isEmpty()) && parent_)
-			res.unite(parent_->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+		if ((exhaustAllScopes || !found) && parent_)
+			found = parent_->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
 	}
 
-	return res;
+	return found;
 }
 
 QList<Node*> Node::childrenInScope()

@@ -74,8 +74,8 @@ class OOMODEL_API Method : public Super<Declaration>
 
 		virtual SymbolTypes symbolType() const override;
 
-		virtual QSet<Node*> findSymbols(const Model::SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
 };
 
 inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }

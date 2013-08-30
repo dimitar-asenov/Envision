@@ -37,7 +37,7 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause)
 REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
 REGISTER_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
 
-QSet<Model::Node*> CatchClause::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+bool CatchClause::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	if (direction == SEARCH_UP)
@@ -45,19 +45,19 @@ QSet<Model::Node*> CatchClause::findSymbols(const Model::SymbolMatcher& matcher,
 		auto ignore = childToSubnode(source);
 		Q_ASSERT(ignore);
 
-		QSet<Model::Node*> res;
+		bool found{};
 
 		if (exceptionToCatch() && exceptionToCatch() != ignore)
-			res.unite(exceptionToCatch()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = exceptionToCatch()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
 		// found there.
 
-		if ((exhaustAllScopes || res.isEmpty()) && parent())
-			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
 
-		return res;
+		return found;
 	}
-	else return {};
+	else return false;
 }
 
 } /* namespace OOModel */

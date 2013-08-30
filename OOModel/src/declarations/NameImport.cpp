@@ -62,7 +62,7 @@ Model::Node* NameImport::target() const
 	return ret;
 }
 
-QSet<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
@@ -70,7 +70,7 @@ QSet<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, 
 	// Name imports only provide shortcuts for objects that are within the entity declaring the import
 	auto p = parent(); // This should be a list of Declarations
 	if (p) p = p->parent(); // This should be the parent entity
-	if (!p || !p->isAncestorOf(source)) return {};
+	if (!p || !p->isAncestorOf(source)) return false;
 	// Note above that it is important that we only consider descendants of p and not p itself. This is because when
 	// a NameImport (or the initial part of one) within p, resolves to p itself (e.g. import java.something inside the
 	// java package) we will do a symbol start with p as a source. In that case import should not be further used as
@@ -89,25 +89,25 @@ QSet<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, 
 				{
 					int thisIndex = listParent->indexOf(this);
 					if (thisIndex > sourceIndex)
-						return {};
+						return false;
 				}
 		}
 
 		// If this node defines a shortcut to a single name which is not the one being looked for, then do not resolve
 		// the target
 		if (auto ref = dynamic_cast<ReferenceExpression*>(importedName()))
-			if (!matcher.matches(ref->name())) return {};
+			if (!matcher.matches(ref->name())) return false;
 
 		if (auto t = target())
-			return t->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false);
+			return t->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false);
 	}
 	else if (direction == SEARCH_UP)
 	{
 		if (parent())
-			return parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
+			return parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
 	}
 
-	return {};
+	return false;
 }
 
 }

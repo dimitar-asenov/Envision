@@ -64,7 +64,7 @@ TypeAlias::SymbolTypes TypeAlias::symbolType() const
 	else return UNSPECIFIED;
 }
 
-QSet<Model::Node*> TypeAlias::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	// TODO: Search type arguments
@@ -73,23 +73,22 @@ QSet<Model::Node*> TypeAlias::findSymbols(const Model::SymbolMatcher& matcher, M
 	{
 		if (symbolMatches(matcher, symbolTypes))
 		{
-			QSet<Model::Node*> res;
-			res.insert(this);
-			return res;
+			result.insert(this);
+			return true;
 		}
 	}
 	else if (direction == SEARCH_DOWN)
 	{
 		if (auto t = target())
-			return t->findSymbols(matcher, t, SEARCH_DOWN, symbolTypes, false);
+			return t->findSymbols(result, matcher, t, SEARCH_DOWN, symbolTypes, false);
 	}
 	else if (direction == SEARCH_UP)
 	{
 		if (parent())
-			return parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
+			return parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes);
 	}
 
-	return {};
+	return false;
 }
 
 }

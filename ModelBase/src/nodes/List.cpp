@@ -217,30 +217,30 @@ void List::paste(ClipboardStore& clipboard, int position)
 	}
 }
 
-QSet<Node*> List::findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
 
-	QSet<Node*> res;
+	bool found{};
 
 	if (direction == SEARCH_HERE)
 	{
 		for (auto c : nodes_)
-			res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 	}
 	else if (direction == SEARCH_UP)
 	{
 		auto ignore = childToSubnode(source);
 		for (auto c : nodes_)
 			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
-				res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 
-		if ((exhaustAllScopes || res.isEmpty()) && parent())
-			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
 	}
 
-	return res;
+	return found;
 }
 
 Node* List::createDefaultElement()

@@ -90,15 +90,19 @@ Method::SymbolTypes Method::symbolType() const
 	return METHOD;
 }
 
-QSet<Model::Node*> Method::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source, FindSymbolDirection direction,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
-	QSet<Model::Node*> res;
+	bool found{};
 
 	if (direction == SEARCH_DOWN); // Do nothing
 	else if (direction == SEARCH_HERE)
 	{
-		if (symbolMatches(matcher, symbolTypes)) res.insert(this);
+		if (symbolMatches(matcher, symbolTypes))
+		{
+			found = true;
+			result.insert(this);
+		}
 	}
 	else if (direction == SEARCH_UP)
 	{
@@ -108,22 +112,25 @@ QSet<Model::Node*> Method::findSymbols(const Model::SymbolMatcher& matcher, Mode
 
 		// Don't search in scopes we've already searched in
 		if (arguments() != ignore)
-			res.unite(arguments()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = arguments()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		if (results() != ignore)
-			res.unite(results()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = results()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		if (subDeclarations() != ignore)
-			res.unite(subDeclarations()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = subDeclarations()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
 		// found there.
 
-		if ((exhaustAllScopes || res.isEmpty()) && symbolMatches(matcher, symbolTypes))
-			res.insert(this);
+		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
+		{
+			found = true;
+			result.insert(this);
+		}
 
-		if ((exhaustAllScopes || res.isEmpty()) && parent())
-			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
 	}
 
-	return res;
+	return found;
 }
 
 bool Method::isGeneric()

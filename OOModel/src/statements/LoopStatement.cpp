@@ -46,7 +46,7 @@ LoopStatement::LoopStatement(LoopKind kind)
 	setLoopKind(kind);
 }
 
-QSet<Model::Node*> LoopStatement::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+bool LoopStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
 {
 	if (direction == SEARCH_UP)
@@ -54,24 +54,24 @@ QSet<Model::Node*> LoopStatement::findSymbols(const Model::SymbolMatcher& matche
 		auto ignore = childToSubnode(source);
 		Q_ASSERT(ignore);
 
-		QSet<Model::Node*> res;
+		bool found{};
 
 		// Don't search in scopes we've already searched in
 		if (condition() && condition() != ignore)
-			res.unite(condition()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = condition()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		if (initStep() && initStep() != ignore)
-			res.unite(initStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = initStep()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		if (updateStep() && updateStep() != ignore)
-			res.unite(updateStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = updateStep()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
 		// found there.
 
-		if ((exhaustAllScopes || res.isEmpty()) && parent())
-			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
 
-		return res;
+		return found;
 	}
-	else return {};
+	else return false;
 }
 
 }

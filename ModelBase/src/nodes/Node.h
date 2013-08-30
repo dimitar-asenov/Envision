@@ -198,7 +198,10 @@ class MODELBASE_API Node
 		};
 
 		/**
-		 * Returns a set of all nodes which define a symbol with a name matching \a matcher in the scope of this node.
+		 * Returns in \a result a set of all nodes which define a symbol with a name matching \a matcher in the scope of
+		 * this node.
+		 *
+		 * The return value is true if a symbol was found and false otherwise.
 		 *
 		 * The \a source Node specifies what node should be used as a reference when determining what symbols are visible.
 		 *
@@ -220,8 +223,8 @@ class MODELBASE_API Node
 		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
 		 * other than FindSymbolMode::SEARCH_UP
 		 */
-		virtual QSet<Node*> findSymbols(const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-				SymbolTypes symbolTypes, bool exhaustAllScopes);
+		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes);
 
 
 		/**

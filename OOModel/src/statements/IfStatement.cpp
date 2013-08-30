@@ -38,7 +38,7 @@ REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
 
-QSet<Model::Node*> IfStatement::findSymbols(const Model::SymbolMatcher& matcher, Model::Node* source,
+bool IfStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	if (direction == SEARCH_UP)
@@ -46,20 +46,20 @@ QSet<Model::Node*> IfStatement::findSymbols(const Model::SymbolMatcher& matcher,
 		auto ignore = childToSubnode(source);
 		Q_ASSERT(ignore);
 
-		QSet<Model::Node*> res;
+		bool found{};
 
 		if (condition() != ignore)
 			// Optimize the search by skipping the scope of the source, since we've already searched there
-			res.unite(condition()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = condition()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		// Note that a StatementList (the branches) also implements findSymbols and locally declared variables will be
 		// found there.
 
-		if ((exhaustAllScopes || res.isEmpty()) && parent())
-			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
 
-		return res;
+		return found;
 	}
-	else return {};
+	else return false;
 }
 
 } /* namespace OOModel */

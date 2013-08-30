@@ -68,32 +68,32 @@ QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)
 	return operands;
 }
 
-QSet<Model::Node*> CommaExpression::findSymbols(const Model::SymbolMatcher& matcher, Node* source,
+bool CommaExpression::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
 		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
 
-	QSet<Node*> res;
+	bool found{};
 
 	if (direction == SEARCH_HERE)
 	{
-		res.unite(left()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
-		res.unite(right()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		found = left()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+		found = right()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 	}
 	else if (direction == SEARCH_UP)
 	{
 		auto ignore = childToSubnode(source);
 
 		if (left() != ignore)
-			res.unite(left()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = left()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 		if (right() != ignore)
-			res.unite(right()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+			found = right()->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
 
-		if ((exhaustAllScopes || res.isEmpty()) && parent())
-			res.unite(parent()->findSymbols(matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes));
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
 	}
 
-	return res;
+	return found;
 }
 
 Type* CommaExpression::type()
