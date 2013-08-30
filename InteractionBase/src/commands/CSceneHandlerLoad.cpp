@@ -28,7 +28,7 @@
 
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/FileStore.h"
+#include "FilePersistence/src/SimpleTextFileStore.h"
 #include "ModelBase/src/model/Model.h"
 
 using namespace Visualization;
@@ -50,7 +50,7 @@ CommandResult* CSceneHandlerLoad::execute(Item*, Item*, const QStringList& comma
 	Q_ASSERT(matching.size() == 1);
 
 	QString projectDir = "projects/";
-	auto store = new FilePersistence::FileStore();
+	auto store = new FilePersistence::SimpleTextFileStore();
 	store->setBaseFolder(projectDir);
 
 	Model::Model* model = new Model::Model();

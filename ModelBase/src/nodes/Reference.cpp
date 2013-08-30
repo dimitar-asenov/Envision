@@ -58,6 +58,8 @@ void Reference::setName(const QString &name, bool tryResolvingImmediately)
 
 void Reference::setTarget(Node* target)
 {
+	if (target == target_) return;
+
 	if (target) execute(new FieldSet<QString> (this, name_, QString()));
 	else execute(new FieldSet<QString> (this, name_, name()));
 
@@ -93,6 +95,12 @@ void Reference::manageUnresolvedReferencesListInModel()
 		if (isResolved()) model()->removeUnresolvedReference(this);
 		else model()->addUnresolvedReference(this);
 	}
+}
+
+Node* Reference::target()
+{
+	if (!target_) resolve();
+	return target_;
 }
 
 }

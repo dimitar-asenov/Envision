@@ -40,10 +40,12 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 	NODE_DECLARE_STANDARD_METHODS( OOReference )
 
 	public:
-		virtual bool resolve();
+		virtual bool resolve() override;
 
 	private:
 		bool isReferenceToContainer();
+
+		bool resolving_{};
 };
 
 } /* namespace OOModel */

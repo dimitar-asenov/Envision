@@ -271,21 +271,15 @@ void Model::removeUnresolvedReference(Reference* ref)
 void Model::tryResolvingReferences()
 {
 	auto modificationTarget = currentModificationTarget;
-	bool changed = true;
-	while (changed)
-	{
-		// We iterate until we find a fixpoint. This is needed since the resolution of some references might enable the
-		// resolution of others.
-		changed = false;
 
-		auto unresolved = unresolvedReferences_;
-		for (auto r : unresolved)
+	auto unresolved = unresolvedReferences_;
+	for (auto r : unresolved)
+	{
+		if (!r->isResolved())
 		{
-			if (!r->isResolved())
-			{
-				if (currentModificationLock != r->accessLock()) changeModificationTarget(r);
-				changed = r->resolve() || changed;
-			}
+			if (currentModificationLock != r->accessLock())
+				changeModificationTarget(r);
+			r->resolve();
 		}
 	}
 

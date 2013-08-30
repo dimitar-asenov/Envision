@@ -43,6 +43,9 @@ bool OOReference::resolve()
 {
 	// TODO Handle the case where the symbol is defined multiple times in a better way
 
+	if (resolving_) return false;
+	resolving_ = true;
+
 	auto parent = static_cast<ReferenceExpression*>(this->parent());
 
 	Model::Node* symbol = nullptr;
@@ -58,8 +61,11 @@ bool OOReference::resolve()
 		{
 			if (sp->symbolProvider())
 			{
-				auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, searchForType, false);
-				if (symbolList.size() == 1) symbol = symbolList.first();
+				// It's important below that we change the source to sp->symbolProvider() in the call to findSymbols.
+				// See NameImport.cpp for more info.
+				auto symbolList =
+						sp->symbolProvider()->findSymbols( name(), sp->symbolProvider(), SEARCH_DOWN, searchForType, false);
+				if (symbolList.size() == 1) symbol = *symbolList.begin();
 			}
 		}
 		SAFE_DELETE(t);
@@ -68,10 +74,12 @@ bool OOReference::resolve()
 	{
 		// Perform an upward search starting from the current node
 		auto symbolList = findSymbols(name(), this, SEARCH_UP,  searchForType, false);
-		if (symbolList.size() == 1) symbol = symbolList.first();
+		if (symbolList.size() == 1) symbol = *symbolList.begin();
 	}
 
-	if (target() != symbol) setTarget(symbol);
+	setTarget(symbol);
+
+	resolving_ = false;
 	return isResolved();
 }
 

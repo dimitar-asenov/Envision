@@ -26,6 +26,7 @@
 
 #include "NameImport.h"
 #include "../types/SymbolProviderType.h"
+#include "../expressions/ReferenceExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::NameImport)
@@ -66,8 +67,37 @@ QSet<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, 
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
 
+	// Name imports only provide shortcuts for objects that are within the entity declaring the import
+	auto p = parent(); // This should be a list of Declarations
+	if (p) p = p->parent(); // This should be the parent entity
+	if (!p || !p->isAncestorOf(source)) return {};
+	// Note above that it is important that we only consider descendants of p and not p itself. This is because when
+	// a NameImport (or the initial part of one) within p, resolves to p itself (e.g. import java.something inside the
+	// java package) we will do a symbol start with p as a source. In that case import should not be further used as
+	// shortcuts.
+
+
 	if (direction == SEARCH_HERE)
 	{
+		// If this node is part of a list and the source is a name import from the same list, impose an order
+		auto listParent = dynamic_cast<Model::List*>(parent());
+		if (listParent)
+		{
+			int sourceIndex = listParent->indexOfSubitem(source);
+			if (sourceIndex >=0)
+				if (dynamic_cast<NameImport*> (listParent->at<Model::Node>(sourceIndex)))
+				{
+					int thisIndex = listParent->indexOf(this);
+					if (thisIndex > sourceIndex)
+						return {};
+				}
+		}
+
+		// If this node defines a shortcut to a single name which is not the one being looked for, then do not resolve
+		// the target
+		if (auto ref = dynamic_cast<ReferenceExpression*>(importedName()))
+			if (!matcher.matches(ref->name())) return {};
+
 		if (auto t = target())
 			return t->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false);
 	}

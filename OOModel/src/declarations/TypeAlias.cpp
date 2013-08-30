@@ -81,7 +81,7 @@ QSet<Model::Node*> TypeAlias::findSymbols(const Model::SymbolMatcher& matcher, M
 	else if (direction == SEARCH_DOWN)
 	{
 		if (auto t = target())
-			return t->findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, false);
+			return t->findSymbols(matcher, t, SEARCH_DOWN, symbolTypes, false);
 	}
 	else if (direction == SEARCH_UP)
 	{
