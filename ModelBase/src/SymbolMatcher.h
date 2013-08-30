@@ -38,6 +38,11 @@ class MODELBASE_API SymbolMatcher {
 
 		bool matches(const QString& name) const;
 
+		bool isFixedString() const;
+		bool isRegExp() const;
+
+		QString matchPattern() const;
+
 	private:
 		QString stringMatch_;
 		QSharedPointer<QRegExp> regExpMatch_;
@@ -51,5 +56,20 @@ inline SymbolMatcher::SymbolMatcher(QRegExp* regExpMatch)
 
 inline bool SymbolMatcher::matches(const QString& name) const
 { return regExpMatch_ ? regExpMatch_->exactMatch(name) : name == stringMatch_;}
+
+inline bool SymbolMatcher::isFixedString() const
+{
+	return !regExpMatch_;
+}
+
+inline bool SymbolMatcher::isRegExp() const
+{
+	return regExpMatch_;
+}
+
+inline QString SymbolMatcher::matchPattern() const
+{
+	return regExpMatch_ ? regExpMatch_->pattern() : stringMatch_;
+}
 
 } /* namespace Model */
