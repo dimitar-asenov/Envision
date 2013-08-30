@@ -41,3 +41,13 @@ class Reflect : public Base
 
 // This alias is deliberitely outside of the namespace to make using this template less verbose
 template <class Base> using Super = Core::Reflect<Base>;
+
+template <class Derived, class Base>
+inline Derived* DCast(Base* b)
+{
+	if (b && b->isSubtypeOf(Derived::typeIdStatic()))
+		return static_cast<Derived*>(b);
+	else
+		return nullptr;
+}
+

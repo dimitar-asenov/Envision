@@ -48,6 +48,7 @@
 		/*  Returns an ordered list of all ids in the type hierarchy of this class. */											\
 		/* The most derived id appears at the front of the list. */																		\
 		virtual QList<int> hierarchyTypeIds() const;																							\
+		virtual bool isSubtypeOf(int type) const;																								\
 																																							\
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic();																													\
@@ -160,6 +161,10 @@ templatePrefix QList<int> className::hierarchyTypeIds() const																			
 {																																							\
 	return QList<int>() << typeIdStatic();																										\
 }																																							\
+templatePrefix bool className::isSubtypeOf(int type) const																				\
+{																																							\
+	return typeIdStatic() == type;																												\
+}																																							\
 
 /**********************************************************************************************************************/
 
@@ -181,6 +186,10 @@ templatePrefix QList<int> className::hierarchyTypeIds() const																			
 	auto l = Super::hierarchyTypeIds();																											\
 	l.prepend( typeIdStatic() );																													\
 	return l;																																			\
+}																																							\
+templatePrefix bool className::isSubtypeOf(int type) const																				\
+{																																							\
+	return typeIdStatic() == type || Super::isSubtypeOf(type);																			\
 }																																							\
 
 /**********************************************************************************************************************/
