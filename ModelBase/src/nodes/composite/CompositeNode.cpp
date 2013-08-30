@@ -167,8 +167,10 @@ CompositeIndex CompositeNode::indexOf(const QString& nodeName) const
 QList<Node*> CompositeNode::children()
 {
 	QList<Node*> result;
-	for( auto p : getAllAttributes(false) )
-		if (p.second != nullptr) result.append(p.second);
+
+	for (int level = 0; level < subnodes_.size(); ++level)
+		for (int i = 0; i < subnodes_[level].size(); ++i)
+			if (subnodes_[level][i]) result << subnodes_[level][i];
 
 	return result;
 }
