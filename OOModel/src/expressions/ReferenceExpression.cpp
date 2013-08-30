@@ -62,33 +62,33 @@ Type* ReferenceExpression::type()
 	if (!ref()->target())
 		return new ErrorType("Unresolved Reference");
 
-	if ( auto project = dynamic_cast<Project*>( ref()->target() ) )
+	if ( auto project = DCast<Project>( ref()->target() ) )
 		return new SymbolProviderType(project, false);
-	else if ( auto module = dynamic_cast<Module*>( ref()->target() ) )
+	else if ( auto module = DCast<Module>( ref()->target() ) )
 		return new SymbolProviderType(module, false);
-	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
+	else if ( auto cl = DCast<Class>( ref()->target() ) )
 		return new ClassType(cl, false);
-	else if ( auto method = dynamic_cast<Method*>( ref()->target() ) )
+	else if ( auto method = DCast<Method>( ref()->target() ) )
 		return new SymbolProviderType(method, false);
-	else if ( auto alias = dynamic_cast<TypeAlias*>( ref()->target() ) )
+	else if ( auto alias = DCast<TypeAlias>( ref()->target() ) )
 		return new SymbolProviderType(alias, false);
-	else if ( auto nameImport = dynamic_cast<NameImport*>( ref()->target() ) )
+	else if ( auto nameImport = DCast<NameImport>( ref()->target() ) )
 		return nameImport->importedName()->type();
-	else if ( auto vdecl = dynamic_cast<VariableDeclarationExpression*>( ref()->target() ) )
+	else if ( auto vdecl = DCast<VariableDeclarationExpression>( ref()->target() ) )
 	{
 		auto t = vdecl->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto vdecl = dynamic_cast<VariableDeclaration*>( ref()->target() ) )
+	else if ( auto vdecl = DCast<VariableDeclaration>( ref()->target() ) )
 	{
 		auto t = vdecl->typeExpression()->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto expSt = dynamic_cast<ExpressionStatement*>( ref()->target() ))
+	else if ( auto expSt = DCast<ExpressionStatement>( ref()->target() ))
 	{
-		if ( auto vdecl = dynamic_cast<VariableDeclarationExpression*>( expSt->expression() ) )
+		if ( auto vdecl = DCast<VariableDeclarationExpression>( expSt->expression() ) )
 		{
 			auto t = vdecl->type();
 			t->setValueType(true);
@@ -96,19 +96,19 @@ Type* ReferenceExpression::type()
 		}
 		else return new ErrorType("Unknown type for target of reference");
 	}
-	else if ( auto field = dynamic_cast<Field*>( ref()->target() ) )
+	else if ( auto field = DCast<Field>( ref()->target() ) )
 	{
 		auto t = field->typeExpression()->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto arg = dynamic_cast<FormalArgument*>( ref()->target() ) )
+	else if ( auto arg = DCast<FormalArgument>( ref()->target() ) )
 	{
 		auto t = arg->typeExpression()->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto res = dynamic_cast<FormalResult*>( ref()->target() ) )
+	else if ( auto res = DCast<FormalResult>( ref()->target() ) )
 	{
 		auto t = res->typeExpression()->type();
 		t->setValueType(true);

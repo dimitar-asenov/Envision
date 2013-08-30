@@ -80,12 +80,12 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 	if (direction == SEARCH_HERE)
 	{
 		// If this node is part of a list and the source is a name import from the same list, impose an order
-		auto listParent = dynamic_cast<Model::List*>(parent());
+		auto listParent = DCast<Model::List>(parent());
 		if (listParent)
 		{
 			int sourceIndex = listParent->indexToSubnode(source);
 			if (sourceIndex >=0)
-				if (dynamic_cast<NameImport*> (listParent->at<Model::Node>(sourceIndex)))
+				if (DCast<NameImport> (listParent->at<Model::Node>(sourceIndex)))
 				{
 					int thisIndex = listParent->indexOf(this);
 					if (thisIndex > sourceIndex)
@@ -95,7 +95,7 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 
 		// If this node defines a shortcut to a single name which is not the one being looked for, then do not resolve
 		// the target
-		if (auto ref = dynamic_cast<ReferenceExpression*>(importedName()))
+		if (auto ref = DCast<ReferenceExpression>(importedName()))
 			if (!matcher.matches(ref->name())) return false;
 
 		if (auto t = target())

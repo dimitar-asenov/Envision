@@ -249,7 +249,7 @@ void Model::scanUnresolvedReferences()
 	while (!stack.isEmpty())
 	{
 		auto top = stack.takeLast();
-		if (auto ref = dynamic_cast<Reference*>(top) )
+		if (auto ref = DCast<Reference>(top) )
 		{
 			if (!ref->isResolved()) unresolvedReferences_ << ref;
 		}

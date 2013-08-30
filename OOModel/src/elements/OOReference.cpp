@@ -92,17 +92,17 @@ bool OOReference::isReferenceToContainer()
 
 	auto container = parent->parent();
 
-	if (auto refExpr = dynamic_cast<ReferenceExpression*>(container))
+	if (auto refExpr = DCast<ReferenceExpression>(container))
 	{
 		// If this reference appears before a '.' operator, it must be a container
 		if (parent == refExpr->prefix()) return true;
 	}
-	else if (auto vd = dynamic_cast<VariableDeclaration*>(container))
+	else if (auto vd = DCast<VariableDeclaration>(container))
 	{
 		// This reference denotes a type.
 		if (parent == vd->typeExpression()) return true;
 	}
-	else if (auto cte = dynamic_cast<ClassTypeExpression*>(container))
+	else if (auto cte = DCast<ClassTypeExpression>(container))
 	{
 		// This reference denotes a type.
 		if (parent == cte->typeExpression()) return true;
