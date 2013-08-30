@@ -138,12 +138,10 @@ int List::indexOf(const Node* item) const
 	return nodes_.indexOf(i);
 }
 
-int List::indexOfSubitem(const Node* item) const
+int List::indexToSubnode(const Node* node) const
 {
-	for(int i = 0; i< nodes_.size(); ++i)
-		if (nodes_.at(i) == item || nodes_.at(i)->isAncestorOf(item))
-			return i;
-
+	auto directChild = childToSubnode(node);
+	if (directChild) return nodes_.indexOf(directChild);
 	return -1;
 }
 
@@ -233,8 +231,9 @@ QSet<Node*> List::findSymbols(const SymbolMatcher& matcher, Node* source, FindSy
 	}
 	else if (direction == SEARCH_UP)
 	{
+		auto ignore = childToSubnode(source);
 		for (auto c : nodes_)
-			if (!c->isAncestorOf(source)) // Optimize the search by skipping this scope, since we've already searched there
+			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
 				res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 
 		if ((exhaustAllScopes || res.isEmpty()) && parent())

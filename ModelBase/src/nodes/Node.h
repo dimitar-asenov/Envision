@@ -284,6 +284,13 @@ class MODELBASE_API Node
 		bool isAncestorOf(const Node* other) const;
 
 		/**
+		 * Returns the direct child node that is equal to \a other or is an ancestor of \a other.
+		 *
+		 * Returns null if this node is not an ancestor of \a other.
+		 */
+		Node* childToSubnode(const Node* other) const;
+
+		/**
 		 * Executes the specified command and pushes it on the undo stack.
 		 *
 		 * This method will fail with an exception if the current thread does not hold the lock for this node's access

@@ -82,9 +82,11 @@ QSet<Model::Node*> CommaExpression::findSymbols(const Model::SymbolMatcher& matc
 	}
 	else if (direction == SEARCH_UP)
 	{
-		if (!left()->isAncestorOf(source))
+		auto ignore = childToSubnode(source);
+
+		if (left() != ignore)
 			res.unite(left()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
-		if (!right()->isAncestorOf(source))
+		if (right() != ignore)
 			res.unite(right()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 
 		if ((exhaustAllScopes || res.isEmpty()) && parent())

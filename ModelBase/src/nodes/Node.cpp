@@ -136,6 +136,22 @@ bool Node::isAncestorOf(const Node* other) const
 	return p == this;
 }
 
+Node* Node::childToSubnode(const Node* other) const
+{
+	if (other == nullptr) return nullptr;
+
+	const Node* child = other;
+	const Node* parent = child->parent();
+
+	while (parent && parent != this)
+	{
+		child = parent;
+		parent = child->parent();
+	}
+
+	return parent == this ? const_cast<Node*>(child) : nullptr;
+}
+
 bool Node::isModifyable() const
 {
 	Model* m = model();
@@ -164,8 +180,9 @@ QSet<Node*> Node::findSymbols(const SymbolMatcher& matcher, Node* source, FindSy
 	}
 	else if (direction == SEARCH_UP)
 	{
+		auto ignore = childToSubnode(source);
 		for (auto c : childrenInScope())
-			if (!c->isAncestorOf(source)) // Optimize the search by skipping this scope, since we've already searched there
+			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
 				res.unite(c->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 
 		if ((exhaustAllScopes || res.isEmpty()) && symbolMatches(matcher, symbolTypes))

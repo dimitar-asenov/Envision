@@ -51,20 +51,18 @@ QSet<Model::Node*> LoopStatement::findSymbols(const Model::SymbolMatcher& matche
 {
 	if (direction == SEARCH_UP)
 	{
-		Q_ASSERT(isAncestorOf(source));
+		auto ignore = childToSubnode(source);
+		Q_ASSERT(ignore);
 
 		QSet<Model::Node*> res;
 
 		// Don't search in scopes we've already searched in
-		if (condition())
-			if (!condition()->isAncestorOf(source))
-				res.unite(condition()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
-		if (initStep())
-			if (!initStep()->isAncestorOf(source))
-				res.unite(initStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
-		if (updateStep())
-			if (!updateStep()->isAncestorOf(source))
-				res.unite(updateStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (condition() && condition() != ignore)
+			res.unite(condition()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (initStep() && initStep() != ignore)
+			res.unite(initStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
+		if (updateStep() && updateStep() != ignore)
+			res.unite(updateStep()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 		// Note that a StatementList (the body) also implements findSymbols and locally declared variables will be
 		// found there.
 

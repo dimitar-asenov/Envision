@@ -43,11 +43,12 @@ QSet<Model::Node*> StatementItemList::findSymbols(const Model::SymbolMatcher& ma
 	{
 		QSet<Node*> res;
 
-		auto sourceIndex = indexOfSubitem(source); // Only search in items above the current one
+		auto sourceIndex = indexToSubnode(source); // Only search in items above the current one
 		if (sourceIndex < 0 || sourceIndex > size()) sourceIndex = size();
 
+		auto ignore = childToSubnode(source);
 		for(int i = 0; i<sourceIndex; ++i)
-			if (!at(i)->isAncestorOf(source))
+			if (at(i) != ignore)
 				// Optimize the search by skipping the scope of the source, since we've already searched there
 				res.unite(at(i)->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 

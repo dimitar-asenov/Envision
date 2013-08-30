@@ -43,11 +43,12 @@ QSet<Model::Node*> IfStatement::findSymbols(const Model::SymbolMatcher& matcher,
 {
 	if (direction == SEARCH_UP)
 	{
-		Q_ASSERT(isAncestorOf(source));
+		auto ignore = childToSubnode(source);
+		Q_ASSERT(ignore);
 
 		QSet<Model::Node*> res;
 
-		if (!condition()->isAncestorOf(source))
+		if (condition() != ignore)
 			// Optimize the search by skipping the scope of the source, since we've already searched there
 			res.unite(condition()->findSymbols(matcher, source, SEARCH_HERE, symbolTypes, false));
 		// Note that a StatementList (the branches) also implements findSymbols and locally declared variables will be

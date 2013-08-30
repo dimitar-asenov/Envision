@@ -83,7 +83,7 @@ QSet<Model::Node*> NameImport::findSymbols(const Model::SymbolMatcher& matcher, 
 		auto listParent = dynamic_cast<Model::List*>(parent());
 		if (listParent)
 		{
-			int sourceIndex = listParent->indexOfSubitem(source);
+			int sourceIndex = listParent->indexToSubnode(source);
 			if (sourceIndex >=0)
 				if (dynamic_cast<NameImport*> (listParent->at<Model::Node>(sourceIndex)))
 				{

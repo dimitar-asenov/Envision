@@ -58,7 +58,7 @@ class MODELBASE_API List: public Super<Node>
 		template <class T> T* at(int i);
 
 		int indexOf(const Node* item) const;
-		int indexOfSubitem(const Node* item) const;
+		int indexToSubnode(const Node* node) const;
 		bool contains(const Node* node) const;
 
 		void append(Node* node);
