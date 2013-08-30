@@ -27,7 +27,6 @@
 #include "Node.h"
 #include "../modelbase.h"
 #include "../model/Model.h"
-#include "../model/ModelManager.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include "Reference.h"
@@ -198,23 +197,6 @@ void Node::endModification()
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
-Model* Node::model() const
-{
-	return ModelManager::instance().find(root());
-}
-
-Node* Node::root() const
-{
-	const Node* root = this;
-	while (root->parent()) root = root->parent();
-	return const_cast<Node*> (root);
-}
-
-Node* Node::parent() const
-{
-	return parent_;
-}
-
 void Node::setParent(Node* parent)
 {
 	//TODO: is this operation efficient and even possible when performed on top level objects such as namespaces and

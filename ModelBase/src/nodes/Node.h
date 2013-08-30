@@ -29,6 +29,7 @@
 #include "../modelbase_api.h"
 #include "../persistence/PersistentStore.h"
 #include "../SymbolMatcher.h"
+#include "../model/ModelManager.h"
 
 #include "Core/src/InitializationRegistry.h"
 #include "Core/src/reflect/Reflect.h"
@@ -453,6 +454,17 @@ class MODELBASE_API Node
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
+
+inline Model* Node::model() const { return ModelManager::instance().find(root()); }
+
+inline Node* Node::root() const
+{
+	const Node* root = this;
+	while (root->parent()) root = root->parent();
+	return const_cast<Node*> (root);
+}
+
+inline Node* Node::parent() const { return parent_; }
 
 inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes)
 {
