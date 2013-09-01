@@ -64,7 +64,7 @@ QPoint CommentDiagramShape::pos()
 	return QPoint(x(), y());
 }
 
-QPoint CommentDiagramShape::getConnectorCoordinates(const int& index)
+QPoint CommentDiagramShape::getConnectorCoordinates(int index)
 {
 	Q_ASSERT(index >= 0 && index < 16);
 //	qDebug() << "x,y" << x() << y() << "width,height" << width() << height() << "index" << index;
@@ -73,6 +73,9 @@ QPoint CommentDiagramShape::getConnectorCoordinates(const int& index)
 	{
 	default:
 	case Rectangle:
+		// index 0 is upper left corner, normalize to compass directions (0 = top center = north)
+		index = (index + 2) % 16;
+
 		if     (index >=  0 && index <  4) return QPoint(index/4.*width(), 0);
 		else if(index >=  4 && index <  8) return QPoint(width(), (index-4)/4.*height());
 		else if(index >=  8 && index < 12) return QPoint((12-index)/4.*width(), height());
@@ -80,12 +83,15 @@ QPoint CommentDiagramShape::getConnectorCoordinates(const int& index)
 		break;
 
 	case Ellipse: {
+		// index 0 is at the right center, normalize to compass directions
+		index = (index + 12) % 16;
+
 		// based on mathematical derivation on
 		// http://math.stackexchange.com/questions/22064/calculating-a-point-that-lies-on-an-ellipse-given-an-angle
 		double a = width()/2., b = height()/2.;
 		QPointF center(a, b);
 		// distribute connector points equally over angles (0, pi/8, , ..., 15pi/8)
-		// => not equidistant! TODO?
+		// TODO: Make these equidistant?
 		double angle = index*2*M_PI/16;
 		double t = tan(angle);
 		double x = a*b/(sqrt(b*b+a*a*t*t));
@@ -103,6 +109,8 @@ QPoint CommentDiagramShape::getConnectorCoordinates(const int& index)
 	}
 
 	case Diamond:
+		// index 0 is already in the top center (north, no compass normalization needed!
+
 		if(index >=  0 && index <  4) return QPoint((index+4)/8.*width(), index/8.*height());
 		if(index >=  4 && index <  8) return QPoint((8-(index-4))/8.*width(), (index/8.*height()));
 		if(index >=  8 && index < 12) return QPoint((4-(index-8))/8.*width(), (8-(index-8))/8.*height());

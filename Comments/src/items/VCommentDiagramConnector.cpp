@@ -57,7 +57,10 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 	point2_ -= origin;
 
 	// TODO: std::abs()
-	setSize(std::abs(point1_.x()-point2_.x()), std::abs(point1_.y()-point2_.y()));
+	int dx = std::abs(point1_.x() - point2_.x());
+	int dy = std::abs(point1_.y() - point2_.y());
+	// make sure we get at least one pixel to draw inside!
+	setSize(std::max(1, dx), std::max(1, dy));
 }
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)

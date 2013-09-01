@@ -71,7 +71,7 @@ TEST(Comments, SimpleTest)
 
 	third->set("Some other text");
 
-#if 1
+#if 0
 	auto node = new CommentNode(
 		"# Header 1\n"
 		"Text *in bold* that spans more\n"
@@ -80,21 +80,23 @@ TEST(Comments, SimpleTest)
 		"\n"
 		"## Header 2\n"
 		"---\n"
-		"\n"
-		"...\n"
-		"### Header 3\n"
-		"#### Header 4\n"
-		"###### Header 6\n"
 		"And later on, some more text...\n"
-		"[[http://www.google.com]]");
+		"And what about a nice diagram like...\n"
+		"[diagram#0]\n"
+		"with, of course, some text afterwards!\n"
+		"[[http://www.google.com]]\n"
+		"And to round it up, a beautiful image...\n"
+		"[image#image.png]"
+		);
 #else
 	auto node = new CommentDiagram();
 	node->shapes()->append(new CommentDiagramShape("First shape",     0,  50, 200,  50, Rectangle));
 	node->shapes()->append(new CommentDiagramShape("Another shape", 100, 150, 200,  50, Ellipse));
 	node->shapes()->append(new CommentDiagramShape("Diamond",         0, 150, 100, 150, Diamond));
 
-	node->connectors()->append(new CommentDiagramConnector(0, 10, 1, 10));
-	node->connectors()->append(new CommentDiagramConnector(1, 4, 2, 4));
+	node->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
+	node->connectors()->append(new CommentDiagramConnector(1, N, 2, N));
+	node->connectors()->append(new CommentDiagramConnector(2, N, 0, SW));
 #endif
 
 //	auto node = new Comment("This is a node with some [diagram#1] [image#image.png]");

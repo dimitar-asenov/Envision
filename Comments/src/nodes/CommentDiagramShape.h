@@ -40,6 +40,11 @@ DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramShape)
 
 namespace Comments {
 
+enum ConnectorDirection { N, NNE, NE, ENE,
+								  E, ESE, SE, SSE,
+								  S, SSW, SW, WSW,
+								  W, WNW, NW, NNW };
+
 enum CommentDiagramShapeType { Rectangle, Ellipse, Diamond };
 
 class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
@@ -57,7 +62,7 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 				enum CommentDiagramShapeType shapeType);
 		QSize size();
 		QPoint pos();
-		QPoint getConnectorCoordinates(const int& index);
+		QPoint getConnectorCoordinates(int index);
 };
 
 } /* namespace Comments */
