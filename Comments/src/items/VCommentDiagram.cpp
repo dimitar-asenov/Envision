@@ -135,4 +135,10 @@ inline void VCommentDiagram::swap(int i, int j)
 	items_[j] = t;
 }
 
+void VCommentDiagram::toggleEditing()
+{
+	editing_ = !editing_;
+	setUpdateNeeded(StandardUpdate);
+}
+
 } /* namespace Comments */

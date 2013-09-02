@@ -28,7 +28,9 @@
 #include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "handlers/HComment.h"
+#include "handlers/HCommentDiagram.h"
 #include "items/VComment.h"
+#include "items/VCommentDiagram.h"
 
 Q_EXPORT_PLUGIN2(comments, Comments::Comments)
 
@@ -52,6 +54,7 @@ bool Comments::initialize(Core::EnvisionManager&)
 	itemTypeInitializationRegistry().initializeAll();
 
 	VComment::setDefaultClassHandler(HComment::instance());
+	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
 
 	return true;
 }

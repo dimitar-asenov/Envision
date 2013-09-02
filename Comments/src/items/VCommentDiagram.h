@@ -46,6 +46,8 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 	public:
 		VCommentDiagram(Visualization::Item* parent, NodeType* node);
 		~VCommentDiagram();
+		void toggleEditing();
+		bool editing() { return editing_; }
 
 	protected:
 		virtual void determineChildren() override;
@@ -57,6 +59,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 		void clearChildren();
 		QVector<Visualization::Item*> items_;
+		bool editing_{};
 };
 
 } /* namespace Comments */

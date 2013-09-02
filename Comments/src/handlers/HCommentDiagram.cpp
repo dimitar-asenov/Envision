@@ -24,33 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VCommentDiagram.h"
-#include "../nodes/CommentDiagramShape.h"
+#include "handlers/HCommentDiagram.h"
+#include "items/VCommentDiagram.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentDiagramShape
-: public Super<Visualization::ItemWithNode<VCommentDiagramShape, Visualization::Item, CommentDiagramShape> >
+HCommentDiagram::HCommentDiagram()
+{}
+
+HCommentDiagram* HCommentDiagram::instance()
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagramShape, Visualization::ItemStyle)
+	static HCommentDiagram h;
+	return &h;
+}
 
-	public:
-		VCommentDiagramShape(Visualization::Item* parent, NodeType* node);
+void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	event->ignore();
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+	if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
+	{
+		event->accept();
+		diagram->toggleEditing();
+	}
 
-	private:
-		VCommentDiagram* parent_;
-};
+	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
+}
 
 } /* namespace Comments */

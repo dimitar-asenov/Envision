@@ -24,6 +24,7 @@
  **
  **********************************************************************************************************************/
 
+#include "VCommentDiagram.h"
 #include "VCommentDiagramShape.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 
@@ -35,6 +36,8 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagramShape, "item")
 
 VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
+	parent_ = dynamic_cast<VCommentDiagram*>(parent);
+	Q_ASSERT(parent_ != nullptr);
 }
 
 void VCommentDiagramShape::determineChildren(){}
@@ -72,6 +75,24 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	if(!node()->label().isEmpty())
 		painter->drawText(rect, Qt::AlignCenter, node()->label());
+
+	if(parent_->editing())
+	{
+		// Temporarily assume a thicker painter with a different color for drawing the connector points
+		QPen oldPen = painter->pen();
+		QPen pen = oldPen;
+		pen.setWidth(10);
+		pen.setColor(QColor("red"));
+		painter->setPen(pen);
+
+		for(int i = 0; i < 16; ++i)
+		{
+			QPoint point = node()->getConnectorCoordinates(i);
+			painter->drawPoint(point);
+		}
+
+		painter->setPen(oldPen);
+	}
 }
 
 } /* namespace Comments */

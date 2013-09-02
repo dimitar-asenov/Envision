@@ -26,31 +26,20 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "comments_api.h"
 
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VCommentDiagram.h"
-#include "../nodes/CommentDiagramShape.h"
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentDiagramShape
-: public Super<Visualization::ItemWithNode<VCommentDiagramShape, Visualization::Item, CommentDiagramShape> >
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagramShape, Visualization::ItemStyle)
-
+class COMMENTS_API HCommentDiagram : public Interaction::GenericHandler {
 	public:
-		VCommentDiagramShape(Visualization::Item* parent, NodeType* node);
+		static HCommentDiagram* instance();
+
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
 	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-	private:
-		VCommentDiagram* parent_;
+		HCommentDiagram();
 };
 
-} /* namespace Comments */
+}
