@@ -34,7 +34,8 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentDiagramShape, "item")
 
-VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
+VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const StyleType* style)
+: Super(parent, node, style)
 {
 	parent_ = dynamic_cast<VCommentDiagram*>(parent);
 	Q_ASSERT(parent_ != nullptr);
@@ -44,13 +45,14 @@ void VCommentDiagramShape::determineChildren(){}
 
 void VCommentDiagramShape::updateGeometry(int, int)
 {
-	setSize(node()->width(), node()->height());
+	setSize(node()->size());
 }
 
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	// rectangle to draw the shape in
 	QRect rect(0, 0, width(), height());
+	painter->setPen(style()->getColor(node()->shapeColor()));
 
 	switch(node()->shapeType())
 	{
@@ -74,24 +76,22 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	}
 
 	if(!node()->label().isEmpty())
+	{
+		painter->setPen(QPen(style()->getColor(node()->textColor())));
 		painter->drawText(rect, Qt::AlignCenter, node()->label());
+	}
 
 	if(parent_->editing())
 	{
 		// Temporarily assume a thicker painter with a different color for drawing the connector points
-		QPen oldPen = painter->pen();
-		QPen pen = oldPen;
-		pen.setWidth(10);
-		pen.setColor(QColor("red"));
-		painter->setPen(pen);
+		QBrush brush(QColor("red"));
+		painter->setPen(QPen(brush, 10));
 
 		for(int i = 0; i < 16; ++i)
 		{
 			QPoint point = node()->getConnectorCoordinates(i);
 			painter->drawPoint(point);
 		}
-
-		painter->setPen(oldPen);
 	}
 }
 

@@ -51,6 +51,8 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramShape)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, shapeColor, setShapeColor, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, textColor, setTextColor, QString, const QString&)
 	ATTRIBUTE_VALUE(::Model::Integer, x, setX, int)
 	ATTRIBUTE_VALUE(::Model::Integer, y, setY, int)
 	ATTRIBUTE_VALUE(::Model::Integer, width, setWidth, int)
@@ -58,7 +60,7 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 	ATTRIBUTE_VALUE(::Model::Integer, shapeType, setShapeType, int)
 
 	public:
-		CommentDiagramShape(const QString& label, const int& x, const int& y, const int& width, const int& height,
+		CommentDiagramShape(const int& x, const int& y, const int& width, const int& height,
 				enum CommentDiagramShapeType shapeType);
 		QSize size();
 		QPoint pos();

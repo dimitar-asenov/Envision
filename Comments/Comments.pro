@@ -8,32 +8,34 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -lfilepersistence
-HEADERS += src/handlers/HCommentDiagram.h \
-    src/items/VCommentDiagramConnector.h \
+HEADERS += src/handlers/HComment.h \
+    src/handlers/HCommentDiagram.h \
+    src/nodes/Comment.h \
+    src/nodes/CommentDiagram.h \
     src/nodes/CommentDiagramConnector.h \
     src/nodes/CommentDiagramShape.h \
-    src/items/VCommentBrowser.h \
-    src/items/VCommentDiagramShape.h \
-    src/items/VCommentDiagram.h \
-    src/nodes/CommentDiagram.h \
-    src/handlers/HComment.h \
     src/items/VComment.h \
-    src/nodes/Comment.h \
+    src/items/VCommentBrowser.h \
+    src/items/VCommentDiagram.h \
+    src/items/VCommentDiagramConnector.h \
+    src/items/VCommentDiagramShape.h \
+    src/items/VCommentDiagramShapeStyle.h \
     src/precompiled.h \
     src/CommentsException.h \
     src/comments_api.h \
     src/comments.h
-SOURCES += src/handlers/HCommentDiagram.cpp \
-    src/items/VCommentDiagramConnector.cpp \
+SOURCES += src/handlers/HComment.cpp \
+    src/handlers/HCommentDiagram.cpp \
+    src/nodes/Comment.cpp \
+    src/nodes/CommentDiagram.cpp \
     src/nodes/CommentDiagramConnector.cpp \
     src/nodes/CommentDiagramShape.cpp \
-    src/items/VCommentBrowser.cpp \
-    src/items/VCommentDiagramShape.cpp \
-    src/items/VCommentDiagram.cpp \
-    src/nodes/CommentDiagram.cpp \
-    src/handlers/HComment.cpp \
     src/items/VComment.cpp \
-    src/nodes/Comment.cpp \
+    src/items/VCommentBrowser.cpp \
+    src/items/VCommentDiagram.cpp \
+    src/items/VCommentDiagramConnector.cpp \
+    src/items/VCommentDiagramShape.cpp \
+    src/items/VCommentDiagramShapeStyle.cpp \
     src/CommentsException.cpp \
     src/comments.cpp \
     test/SimpleTest.cpp

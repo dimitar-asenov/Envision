@@ -52,51 +52,46 @@ TEST(Comments, SimpleTest)
 	auto model = new Model::Model(list);
 
 	model->beginModification(list, "set");
-	auto first = new TestNodes::BinaryNode();
-	list->append(first);
-	auto second = new TestNodes::BinaryNode();
-	list->append(second);
-	auto third = new Model::Text();
-	list->append(third);
-
-	first->name()->set("First node");
-	auto left = new TestNodes::BinaryNode();
-	first->setLeft(left);
-	auto right = new TestNodes::BinaryNode();
-	first->setRight(right);
-	left->name()->set("left node");
-	right->name()->set("right node");
-
-	second->name()->set("Empty node");
-
-	third->set("Some other text");
 
 #if 0
 	auto node = new CommentNode(
-		"# Header 1\n"
-		"Text *in bold* that spans more\n"
-		"than one line\n"
-		"===\n"
-		"\n"
-		"## Header 2\n"
-		"---\n"
-		"And later on, some more text...\n"
-		"And what about a nice diagram like...\n"
+//		"# Header 1\n"
+//		"Text *in bold* that spans more\n"
+//		"than one line\n"
+//		"===\n"
+//		"\n"
+//		"## Header 2\n"
+//		"---\n"
+//		"And later on, some more text...\n"
+//		"And what about a nice diagram like...\n"
 		"[diagram#0]\n"
-		"with, of course, some text afterwards!\n"
-		"[[http://www.google.com]]\n"
-		"And to round it up, a beautiful image...\n"
-		"[image#image.png]"
+//		"with, of course, some text afterwards!\n"
+//		"[[http://www.yahoo.com]]\n"
+//		"And to round it up, a beautiful image...\n"
+//		"[image#image.png]"
 		);
 #else
 	auto node = new CommentDiagram();
-	node->shapes()->append(new CommentDiagramShape("First shape",     0,  50, 200,  50, Rectangle));
-	node->shapes()->append(new CommentDiagramShape("Another shape", 100, 150, 200,  50, Ellipse));
-	node->shapes()->append(new CommentDiagramShape("Diamond",         0, 150, 100, 150, Diamond));
+
+	auto shape1 = new CommentDiagramShape(0, 50, 200, 50, Rectangle);
+	shape1->setLabel("First shape");
+	shape1->setShapeColor("blue");
+	shape1->setTextColor("red");
+	node->shapes()->append(shape1);
+
+	auto shape2 = new CommentDiagramShape(100, 150, 200,  50, Ellipse);
+	shape2->setLabel("Another shape");
+	shape2->setShapeColor("magenta");
+	shape2->setTextColor("yellow");
+	node->shapes()->append(shape2);
+
+	auto shape3 = new CommentDiagramShape(0, 150, 100, 150, Diamond);
+	shape3->setLabel("Diamond");
+	node->shapes()->append(shape3);
 
 	node->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
-	node->connectors()->append(new CommentDiagramConnector(1, N, 2, N));
-	node->connectors()->append(new CommentDiagramConnector(2, N, 0, SW));
+	node->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
+	node->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
 #endif
 
 //	auto node = new Comment("This is a node with some [diagram#1] [image#image.png]");

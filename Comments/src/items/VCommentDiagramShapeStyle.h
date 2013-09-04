@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2012 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,49 +24,31 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentDiagramConnector.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
+#pragma once
 
-using namespace Visualization;
+#include "../comments_api.h"
+
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
+class COMMENTS_API VCommentDiagramShapeStyle : public Visualization::ItemStyle {
+	public:
+		virtual ~VCommentDiagramShapeStyle() override;
 
-VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
+		Property<QString> name{this, "name"};
+		Property<QColor> color{this, "color"};
+};
+
+class COMMENTS_API VCommentDiagramShapeSequenceStyle : public Visualization::ItemStyle
 {
-	parent_ = dynamic_cast<VCommentDiagram*>(parent);
-	Q_ASSERT(parent_ != nullptr);
-}
+	public:
+		virtual ~VCommentDiagramShapeSequenceStyle() override;
+		const QColor getColor(const QString& colorName) const;
 
-void VCommentDiagramConnector::determineChildren(){}
-
-void VCommentDiagramConnector::updateGeometry(int, int)
-{
-	// TODO: handle case where either argument is non-zero?
-	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
-	// it here again.
-	auto shape1 = parent_->node()->shapes()->at(node()->shape1());
-	auto shape2 = parent_->node()->shapes()->at(node()->shape2());
-
-	point1_ = shape1->pos()+shape1->getConnectorCoordinates(node()->point1());
-	point2_ = shape2->pos()+shape2->getConnectorCoordinates(node()->point2());
-	// TODO: std::min
-	auto origin = QPoint(std::min(point1_.x(), point2_.x()), std::min(point1_.y(), point2_.y()));
-	point1_ -= origin;
-	point2_ -= origin;
-
-	// TODO: std::abs()
-	int dx = std::max(1., std::abs(point1_.x() - point2_.x()));
-	int dy = std::max(1., std::abs(point1_.y() - point2_.y()));
-	// make sure we get at least one pixel to draw inside!
-	setSize(dx, dy);
-}
-
-void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
-{
-	painter->setPen(QPen(Qt::black, 1.0));
-	painter->drawLine(point1_, point2_);
-}
+		Property<QVector<VCommentDiagramShapeStyle> > colors{this, "colors"};
+};
 
 } /* namespace Comments */

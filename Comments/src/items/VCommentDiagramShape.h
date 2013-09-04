@@ -32,17 +32,20 @@
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VCommentDiagram.h"
+#include "VCommentDiagramShapeStyle.h"
 #include "../nodes/CommentDiagramShape.h"
+#include "VCommentDiagramShapeStyle.h"
+#include "VCommentDiagram.h"
 
 namespace Comments {
 
 class COMMENTS_API VCommentDiagramShape
 : public Super<Visualization::ItemWithNode<VCommentDiagramShape, Visualization::Item, CommentDiagramShape> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagramShape, Visualization::ItemStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagramShape, VCommentDiagramShapeSequenceStyle)
 
 	public:
-		VCommentDiagramShape(Visualization::Item* parent, NodeType* node);
+		VCommentDiagramShape(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 	protected:
 		virtual void determineChildren() override;

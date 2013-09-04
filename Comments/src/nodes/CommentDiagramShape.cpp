@@ -40,18 +40,21 @@ REGISTER_ATTRIBUTE(CommentDiagramShape, y, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, width, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, height, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, shapeType, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramShape, shapeColor, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramShape, textColor, Text, false, false, true)
 
 // references for primitive types?
-CommentDiagramShape::CommentDiagramShape(const QString& label, const int& x, const int& y, const int& width,
+CommentDiagramShape::CommentDiagramShape(const int& x, const int& y, const int& width,
 		const int& height, enum CommentDiagramShapeType shapeType)
 : Super{nullptr, CommentDiagramShape::getMetaData()}
 {
-	setLabel(label);
 	setX(x);
 	setY(y);
 	setWidth(width);
 	setHeight(height);
 	setShapeType(shapeType);
+	setShapeColor("black");
+	setTextColor("black");
 }
 
 QSize CommentDiagramShape::size()
@@ -67,8 +70,7 @@ QPoint CommentDiagramShape::pos()
 QPoint CommentDiagramShape::getConnectorCoordinates(int index)
 {
 	Q_ASSERT(index >= 0 && index < 16);
-//	qDebug() << "x,y" << x() << y() << "width,height" << width() << height() << "index" << index;
-//	qDebug() << (height()-y());
+
 	switch(shapeType())
 	{
 	default:

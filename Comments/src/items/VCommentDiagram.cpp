@@ -69,11 +69,10 @@ void VCommentDiagram::updateGeometry(int, int)
 		auto shape = dynamic_cast<CommentDiagramShape*>(child->node());
 		if(shape != nullptr)
 		{
-			child->setPos(shape->x(), shape->y());
+			child->setPos(shape->pos());
 
-			QSize itemsize(shape->pos().x()+shape->size().width(), shape->pos().y()+shape->size().height());
-			maxsize.setHeight(std::max(maxsize.height(), itemsize.height()));
-			maxsize.setWidth(std::max(maxsize.width(), itemsize.width()));
+			maxsize.setHeight(std::max(maxsize.height(), shape->pos().x()+shape->size().width()));
+			maxsize.setWidth(std::max(maxsize.width(),   shape->pos().y()+shape->size().height()));
 		}
 		// but position the connectors too
 		else

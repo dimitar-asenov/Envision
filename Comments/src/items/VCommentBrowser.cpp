@@ -36,14 +36,10 @@ VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& tex
 {
 	item_ = new QGraphicsWebView(this);
 	item_->setUrl(QUrl(text));
-//	pageLoadedFilter_ = new DetectPageLoaded;
-//	item_->installEventFilter(pageLoadedFilter_);
-//	item_->connect(item_, SIGNAL(loadProgress(int)), pageLoadedFilter_, SLOT(loadProgress(int)));
 }
 
 VCommentBrowser::~VCommentBrowser()
 {
-//	item_->removeEventFilter(pageLoadedFilter_);
 	SAFE_DELETE(item_);
 }
 
@@ -53,7 +49,7 @@ void VCommentBrowser::determineChildren()
 
 void VCommentBrowser::updateGeometry(int, int)
 {
-	// TODO: make maximal use of space!
+	// TODO: make maximal use of width!
 	QSize size(400, 300);
 	setSize(size);
 	item_->setMaximumSize(size);
@@ -68,11 +64,6 @@ void VCommentBrowser::paint(QPainter* painter, const QStyleOptionGraphicsItem* s
 {
 	item_->paint(painter, style, widget);
 }
-
-//void DetectPageLoaded::loadProgress(int progress)
-//{
-//	qDebug() << "load progress" << progress;
-//}
 
 } /* namespace Comments */
 
