@@ -58,10 +58,10 @@ QList<Item*> VComment::split()
 			QString style;
 			switch((*line)[0].toAscii())
 			{
-				case '=': style = "triple"; break;
-				case '-': style = "double"; break;
+				default:
 				case '.': style = "single"; break;
-				default: Q_ASSERT(false);
+				case '-': style = "double"; break;
+				case '=': style = "triple"; break;
 			}
 
 			addChildItem(new Line(nullptr, Line::itemStyles().get(style)));
