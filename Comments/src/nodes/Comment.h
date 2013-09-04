@@ -40,7 +40,7 @@ namespace Comments {
 class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentNode)
 
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
+	ATTRIBUTE(::Model::TypedList<Model::Text>, lines, setLines)
 
 	public:
 		CommentNode(const QString& label);

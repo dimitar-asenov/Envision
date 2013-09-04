@@ -44,19 +44,17 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 // split up user-provided text into single elements
 QList<Item*> VComment::split()
 {
-	QStringList lines = node()->label().split(QRegExp("\\r?\\n"));
-
-	for(int i = 0; i < lines.size(); ++i)
+	for(int i = 0; i < node()->lines()->size(); ++i)
 	{
 		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
-		QString *line = &lines[i];
+		QString line = node()->lines()->at(i)->get();
 
-		if(rx.exactMatch(*line))
+		if(rx.exactMatch(line))
 		{
 			// A line consists of one character that is repeated over and over
 			// This character defines the strength of the header, i.e. one of three levels
 			QString style;
-			switch((*line)[0].toAscii())
+			switch(line[0].toAscii())
 			{
 				default:
 				case '.': style = "single"; break;
@@ -71,19 +69,19 @@ QList<Item*> VComment::split()
 		// is this a header? replace it right away with the appropriate tag
 		rx.setPattern("^(#+)([^#].*)");
 		// allow headers h1 to h6
-		if(rx.exactMatch(*line) && rx.cap(1).length() <= 6)
+		if(rx.exactMatch(line) && rx.cap(1).length() <= 6)
 		{
 			QString len = QString::number(rx.cap(1).length());
 			pushTextLine("<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">");
 		}
-		else if(line->left(2) == "[[" && line->right(2) == "]]" && line->size() > 2+2)
+		else if(line.left(2) == "[[" && line.right(2) == "]]" && line.size() > 2+2)
 		{
-			QString url = line->mid(2, line->size()-2-2);
+			QString url = line.mid(2, line.size()-2-2);
 			addChildItem(new VCommentBrowser(this, url));
 		}
 		else
 		{
-			pushTextLine((*line).simplified());
+			pushTextLine(line.simplified());
 		}
 	}
 
@@ -111,7 +109,7 @@ void VComment::popLineBuffer()
 {
 	if(lineBuffer_.size() > 0)
 	{
-		auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer_.join("\n")));
+		auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer_.join("<br>")));
 		text->setTextFormat(Qt::RichText);
 		children_.push_back(text);
 		lineBuffer_.clear();
@@ -137,7 +135,7 @@ void VComment::initializeForms()
 				->setListOfItems([](Item* i) { return static_cast<VComment*>(i)->split(); }
 	));
 
-	addForm(item(&I::editLabel_, [](I* v){return v->node()->labelNode();}));
+	addForm(item(&I::editLabel_, [](I* v){return v->node()->lines();}));
 }
 
 int VComment::determineForm()

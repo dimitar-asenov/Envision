@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "Comment.h"
+#include <QStringList>
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Comments::CommentNode)
@@ -34,12 +35,16 @@ namespace Comments {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentNode)
 
-REGISTER_ATTRIBUTE(CommentNode, label, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentNode, lines, TypedListOfText, false, false, true)
 
 CommentNode::CommentNode(const QString& label)
 : Super{nullptr, CommentNode::getMetaData()}
 {
-	setLabel(label);
+	QStringList linesList = label.split(QRegExp("\\r?\\n"));
+	for(int i = 0; i < linesList.size(); ++i)
+	{
+		lines()->append(new Model::Text(linesList[i]));
+	}
 }
 
 } /* namespace Comments */

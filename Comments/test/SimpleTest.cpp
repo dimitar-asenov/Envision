@@ -53,22 +53,22 @@ TEST(Comments, SimpleTest)
 
 	model->beginModification(list, "set");
 
-#if 0
+#if 1
 	auto node = new CommentNode(
-//		"# Header 1\n"
-//		"Text *in bold* that spans more\n"
-//		"than one line\n"
-//		"===\n"
-//		"\n"
-//		"## Header 2\n"
-//		"---\n"
-//		"And later on, some more text...\n"
-//		"And what about a nice diagram like...\n"
+		"# Header 1\n"
+		"Text *in bold* that spans more\n"
+		"than one line\n"
+		"===\n"
+		"\n"
+		"## Header 2\n"
+		"---\n"
+		"And later on, some more text...\n"
+		"And what about a nice diagram like...\n"
 		"[diagram#0]\n"
-//		"with, of course, some text afterwards!\n"
-//		"[[http://www.yahoo.com]]\n"
-//		"And to round it up, a beautiful image...\n"
-//		"[image#image.png]"
+		"with, of course, some text afterwards!\n"
+		"[[http://www.yahoo.com]]\n"
+		"And to round it up, a beautiful image...\n"
+		"[image#image.png]"
 		);
 #else
 	auto node = new CommentDiagram();
@@ -93,9 +93,6 @@ TEST(Comments, SimpleTest)
 	node->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
 	node->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
 #endif
-
-//	auto node = new Comment("This is a node with some [diagram#1] [image#image.png]");
-//	node->addDiagram(node);
 
 	list->append(node);
 
