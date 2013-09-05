@@ -61,7 +61,7 @@ HEADERS += src/precompiled.h \
     src/visitors/TemplateArgumentVisitor.h \
     src/manager/NodeHasher.h \
     src/manager/TranslateManager.h \
-    src/ClangConsumerCreator.h
+    src/TranslateFrontendAction.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
@@ -75,4 +75,4 @@ SOURCES += src/CppImportException.cpp \
     src/visitors/TemplateArgumentVisitor.cpp \
     src/manager/NodeHasher.cpp \
     src/manager/TranslateManager.cpp \
-    src/ClangConsumerCreator.cpp
+    src/TranslateFrontendAction.cpp

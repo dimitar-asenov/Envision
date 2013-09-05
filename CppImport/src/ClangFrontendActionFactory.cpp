@@ -1,6 +1,6 @@
 #include "ClangFrontendActionFactory.h"
 
-#include "ClangConsumerCreator.h"
+#include "TranslateFrontendAction.h"
 
 #include "manager/TranslateManager.h"
 
@@ -12,7 +12,7 @@ ClangFrontendActionFactory::ClangFrontendActionFactory(ClangAstVisitor* visitor,
 
 clang::FrontendAction* ClangFrontendActionFactory::create()
 {
-	return new ClangConsumerCreator(visitor_, log_);
+	return new TranslateFrontendAction(visitor_, log_);
 }
 
 }

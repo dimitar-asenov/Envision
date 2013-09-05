@@ -24,35 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "cppimport_api.h"
-#include "visitors/ClangAstVisitor.h"
+#include "TranslateFrontendAction.h"
+#include "ClangAstConsumer.h"
 
 namespace CppImport {
 
-/**
- * This class is used for clang tools. The CreateASTConsumer method is automatically called
- * by the create method of the FrontendAction factory
- */
-class CPPIMPORT_API ClangConsumerCreator : public clang::ASTFrontendAction
+TranslateFrontendAction::TranslateFrontendAction(ClangAstVisitor* visitor, CppImportLogger* log)
+: visitor_{visitor}, log_{log}
+{}
+
+clang::ASTConsumer* TranslateFrontendAction::CreateASTConsumer(clang::CompilerInstance& compilerInstance, llvm::StringRef)
 {
-	public:
-		ClangConsumerCreator(ClangAstVisitor* visitor, CppImportLogger* log);
-
-		/**
-		 * This method creates a new ClangAstConsumer with the visitor_
-		 *	It updates the compile instance (i.e. the source manager) of the visitor_
-		 */
-		virtual clang::ASTConsumer* CreateASTConsumer
-			(clang::CompilerInstance& compilerInstance, llvm::StringRef) override;
-
-	private:
-		ClangAstVisitor* visitor_{};
-		// This logger is at the moment useless but might later be useful
-		// for comment handling and preprocessor handling.
-		CppImportLogger* log_{};
-};
-
+	ClangAstConsumer* consumer = new ClangAstConsumer(visitor_);
+	// set new compiler instance
+	log_->setSourceManager(&compilerInstance.getSourceManager());
+	consumer ->setCompilerInstance(&compilerInstance);
+	return consumer;
 }
 
+}
