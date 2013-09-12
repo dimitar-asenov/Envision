@@ -20,6 +20,7 @@ HEADERS += src/handlers/HComment.h \
     src/items/VCommentDiagramConnector.h \
     src/items/VCommentDiagramShape.h \
     src/items/VCommentDiagramShapeStyle.h \
+    src/items/VCommentImage.h \
     src/precompiled.h \
     src/CommentsException.h \
     src/comments_api.h \
@@ -36,6 +37,7 @@ SOURCES += src/handlers/HComment.cpp \
     src/items/VCommentDiagramConnector.cpp \
     src/items/VCommentDiagramShape.cpp \
     src/items/VCommentDiagramShapeStyle.cpp \
+    src/items/VCommentImage.cpp \
     src/CommentsException.cpp \
     src/comments.cpp \
     test/SimpleTest.cpp

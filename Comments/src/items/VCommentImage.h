@@ -30,17 +30,15 @@
 
 #include "VisualizationBase/src/items/Item.h"
 
-#include "../nodes/Comment.h"
-
 namespace Comments {
 
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
+class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentImage, Visualization::ItemStyle)
 
 	public:
-		VCommentBrowser(Visualization::Item* parent, const QString& text, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
+		VCommentImage(Visualization::Item* parent, const QString& text, const StyleType* style = itemStyles().get());
+		virtual ~VCommentImage();
 		virtual QList<Visualization::Item*> childItems() const override;
 
 	protected:
@@ -49,7 +47,7 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
 
 	private:
-		QGraphicsWebView* item_{};
+		QImage* image_{};
 };
 
 } /* namespace Comments */

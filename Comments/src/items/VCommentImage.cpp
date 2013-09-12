@@ -24,32 +24,48 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/items/Item.h"
-
-#include "../nodes/Comment.h"
+#include "VCommentImage.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
+ITEM_COMMON_DEFINITIONS(VCommentImage, "item")
+
+VCommentImage::VCommentImage(Visualization::Item* parent, const QString& path, const StyleType* style)
+	: Super(parent, style)
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
+	image_ = new QImage(path);
+	// TODO: How to handle this gracefully?
+	if(image_->isNull())
+	{
+		qDebug() << "image isNull()!";
+	}
+}
 
-	public:
-		VCommentBrowser(Visualization::Item* parent, const QString& text, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
-		virtual QList<Visualization::Item*> childItems() const override;
+VCommentImage::~VCommentImage()
+{
+	SAFE_DELETE(image_);
+}
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
+void VCommentImage::determineChildren()
+{
+}
 
-	private:
-		QGraphicsWebView* item_{};
-};
+void VCommentImage::updateGeometry(int, int)
+{
+	// TODO: scale?
+	setSize(QSize(image_->width(), image_->height()));
+}
+
+QList<Visualization::Item*> VCommentImage::childItems() const
+{
+	return {};
+}
+
+void VCommentImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+{
+	painter->drawImage(0, 0, *image_);
+}
 
 } /* namespace Comments */
+

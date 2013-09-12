@@ -26,6 +26,7 @@
 
 #include "VComment.h"
 #include "VCommentBrowser.h"
+#include "VCommentImage.h"
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
@@ -74,10 +75,17 @@ QList<Item*> VComment::split()
 			QString len = QString::number(rx.cap(1).length());
 			pushTextLine("<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">");
 		}
+		// urls are specified as [[http://www.google.com]]
 		else if(line.left(2) == "[[" && line.right(2) == "]]" && line.size() > 2+2)
 		{
 			QString url = line.mid(2, line.size()-2-2);
 			addChildItem(new VCommentBrowser(this, url));
+		}
+		// images are specified as [image#/home/user/image.png]
+		else if(line.left(7) == "[image#" && line.right(1) == "]" && line.size() > 7+1)
+		{
+			QString path = line.mid(7, line.size()-7-1);
+			addChildItem(new VCommentImage(this, path));
 		}
 		else
 		{

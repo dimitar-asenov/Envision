@@ -68,7 +68,7 @@ TEST(Comments, SimpleTest)
 		"with, of course, some text afterwards!\n"
 		"[[http://www.yahoo.com]]\n"
 		"And to round it up, a beautiful image...\n"
-		"[image#image.png]"
+		"[image#panel_border_layout.png]"
 		);
 #else
 	auto node = new CommentDiagram();
