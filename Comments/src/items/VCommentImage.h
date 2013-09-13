@@ -37,7 +37,9 @@ class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 	ITEM_COMMON_CUSTOM_STYLENAME(VCommentImage, Visualization::ItemStyle)
 
 	public:
-		VCommentImage(Visualization::Item* parent, const QString& text, const StyleType* style = itemStyles().get());
+		VCommentImage(Visualization::Item* parent, const QString& path, const StyleType* style = itemStyles().get());
+		VCommentImage(Visualization::Item* parent, const QString& path, QSize size,
+				const StyleType* style = itemStyles().get());
 		virtual ~VCommentImage();
 		virtual QList<Visualization::Item*> childItems() const override;
 
@@ -45,9 +47,11 @@ class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
+		void updateSize(QSize size);
 
 	private:
 		QImage* image_{};
+		QSize size_;
 };
 
 } /* namespace Comments */

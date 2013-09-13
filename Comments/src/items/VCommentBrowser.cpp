@@ -31,11 +31,20 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentBrowser, "item")
 
+QSize VCommentBrowser::defaultSize = QSize(400, 300);
+
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& text, const StyleType* style)
 	: Super(parent, style)
 {
 	item_ = new QGraphicsWebView(this);
 	item_->setUrl(QUrl(text));
+	size_ = defaultSize;
+}
+
+VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& text, QSize size, const StyleType* style)
+	: VCommentBrowser(parent, text, style)
+{
+	updateSize(size);
 }
 
 VCommentBrowser::~VCommentBrowser()
@@ -49,10 +58,8 @@ void VCommentBrowser::determineChildren()
 
 void VCommentBrowser::updateGeometry(int, int)
 {
-	// TODO: make maximal use of width!
-	QSize size(400, 300);
-	setSize(size);
-	item_->setMaximumSize(size);
+	setSize(size_);
+	item_->setMaximumSize(size_);
 }
 
 QList<Visualization::Item*> VCommentBrowser::childItems() const
@@ -63,6 +70,18 @@ QList<Visualization::Item*> VCommentBrowser::childItems() const
 void VCommentBrowser::paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget)
 {
 	item_->paint(painter, style, widget);
+}
+
+void VCommentBrowser::updateSize(QSize size)
+{
+	if(size.width() == 0 || size.height() == 0)
+	{
+		qDebug() << "Notice: Invalid browser size" << size << "specified for url" << item_->url().toString();
+		qDebug() << "Notice: Falling back to default size" << defaultSize;
+		size_ = defaultSize;
+	}
+	else
+		size_ = size;
 }
 
 } /* namespace Comments */

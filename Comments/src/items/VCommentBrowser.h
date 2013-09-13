@@ -40,8 +40,11 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 
 	public:
 		VCommentBrowser(Visualization::Item* parent, const QString& text, const StyleType* style = itemStyles().get());
+		VCommentBrowser(Visualization::Item* parent, const QString& text, QSize size,
+				const StyleType* style = itemStyles().get());
 		virtual ~VCommentBrowser();
 		virtual QList<Visualization::Item*> childItems() const override;
+		void updateSize(QSize size);
 
 	protected:
 		virtual void determineChildren() override;
@@ -49,7 +52,10 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
 
 	private:
+
+		static QSize defaultSize;
 		QGraphicsWebView* item_{};
+		QSize size_;
 };
 
 } /* namespace Comments */

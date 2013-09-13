@@ -55,21 +55,20 @@ TEST(Comments, SimpleTest)
 
 #if 1
 	auto node = new CommentNode(
-		"# Header 1\n"
-		"Text *in bold* that spans more\n"
-		"than one line\n"
-		"===\n"
-		"\n"
-		"## Header 2\n"
-		"---\n"
-		"And later on, some more text...\n"
-		"And what about a nice diagram like...\n"
-		"[diagram#0]\n"
-		"with, of course, some text afterwards!\n"
-		"[[http://www.yahoo.com]]\n"
-		"And to round it up, a beautiful image...\n"
-		"[image#panel_border_layout.png]"
-		);
+		"Comments support *quite* some stuff by now. **Here's what!**\n"
+		"...\n"
+
+		"# Images\n"
+		"[image#panel_border_layout.png|400x]\n"
+		"...\n"
+
+		"# Browsers\n"
+		"[[http://dimitar-asenov.github.io/Envision/|400x300]]\n"
+		"...\n"
+
+//		"# Diagrams\n"
+//		"[diagram#0]\n"
+	);
 #else
 	auto node = new CommentDiagram();
 

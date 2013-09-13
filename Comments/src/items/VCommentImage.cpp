@@ -35,11 +35,20 @@ VCommentImage::VCommentImage(Visualization::Item* parent, const QString& path, c
 	: Super(parent, style)
 {
 	image_ = new QImage(path);
+
 	// TODO: How to handle this gracefully?
 	if(image_->isNull())
 	{
-		qDebug() << "image isNull()!";
+		qDebug() << "Could not load image from path:" << path;
+		return;
 	}
+	size_ = image_->size();
+}
+
+VCommentImage::VCommentImage(Visualization::Item* parent, const QString& text, QSize size, const StyleType* style)
+	: VCommentImage(parent, text, style)
+{
+	updateSize(size);
 }
 
 VCommentImage::~VCommentImage()
@@ -53,8 +62,7 @@ void VCommentImage::determineChildren()
 
 void VCommentImage::updateGeometry(int, int)
 {
-	// TODO: scale?
-	setSize(QSize(image_->width(), image_->height()));
+	setSize(size_);
 }
 
 QList<Visualization::Item*> VCommentImage::childItems() const
@@ -64,7 +72,22 @@ QList<Visualization::Item*> VCommentImage::childItems() const
 
 void VCommentImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-	painter->drawImage(0, 0, *image_);
+	QRect rect(QPoint(0,0), size_);
+	painter->drawImage(rect, *image_);
+}
+
+void VCommentImage::updateSize(QSize size)
+{
+	QSize imageSize = image_->size();
+
+	if(size.width() == 0 && size.height() == 0)
+		size = imageSize;
+	else if(size.width() == 0)
+		size.setWidth(imageSize.width() * ((double)size.height() / imageSize.height()));
+	else if(size.height() == 0)
+		size.setHeight(imageSize.height() * ((double)size.width() / imageSize.width()));
+
+	size_ = size;
 }
 
 } /* namespace Comments */

@@ -63,7 +63,7 @@ QList<Item*> VComment::split()
 				case '=': style = "triple"; break;
 			}
 
-			addChildItem(new Line(nullptr, Line::itemStyles().get(style)));
+			addChildItem(new Line(this, Line::itemStyles().get(style)));
 			continue;
 		}
 
@@ -78,14 +78,36 @@ QList<Item*> VComment::split()
 		// urls are specified as [[http://www.google.com]]
 		else if(line.left(2) == "[[" && line.right(2) == "]]" && line.size() > 2+2)
 		{
-			QString url = line.mid(2, line.size()-2-2);
-			addChildItem(new VCommentBrowser(this, url));
+			QString mid = line.mid(2, line.size()-2-2);
+			// read width and height, if specified
+			auto items = parseMarkdownArguments(mid);
+			QString url = items->at(0).second;
+			auto browser = new VCommentBrowser(this, url);
+
+			if(items->size() > 1)
+			{
+				QSize size = parseSize(items->at(1).second);
+				browser->updateSize(size);
+			}
+
+			addChildItem(browser);
+			delete items;
 		}
-		// images are specified as [image#/home/user/image.png]
+		// images are specified as
+		//   [image#/home/user/image.png]
+		//   [image#image.png|300x300] to specify a size
 		else if(line.left(7) == "[image#" && line.right(1) == "]" && line.size() > 7+1)
 		{
-			QString path = line.mid(7, line.size()-7-1);
-			addChildItem(new VCommentImage(this, path));
+			QString mid = line.mid(7, line.size()-7-1);
+			// read width and height, if specified
+			auto items = parseMarkdownArguments(mid);
+			QString path = items->at(0).second;
+			QSize size(0,0);
+			if(items->size() > 1)
+				size = parseSize(items->at(1).second);
+
+			addChildItem(new VCommentImage(this, items->at(0).second, size));
+			delete items;
 		}
 		else
 		{
@@ -95,6 +117,42 @@ QList<Item*> VComment::split()
 
 	popLineBuffer();
 	return children_;
+}
+
+QSize VComment::parseSize(const QString& str)
+{
+	int index = str.indexOf('x');
+	bool ok{};
+	int width = str.left(index).toInt(&ok);
+	if(index > 0 && !ok)
+		qDebug() << "Invalid width specified in size string:" << str;
+
+	int height = str.mid(index+1).toInt(&ok);
+	if(index+1 == str.size()-1 && !ok)
+		qDebug() << "Invalid height specified in size string:" << str;
+
+	return QSize(width, height);
+}
+
+QVector<QPair<QString,QString>>* VComment::parseMarkdownArguments(const QString& argString)
+{
+	// split string on all pipes
+	auto lines = argString.split('|');
+	// TODO: get rid of escaped pipes \| e.g. in case an url contains one
+
+	auto pairs = new QVector<QPair<QString,QString>>();
+	// read key/value pairs
+	QRegExp rx("^[a-zA-Z]{,15}=");
+	for(auto line : lines)
+	{
+		int index = rx.indexIn(line);
+		if(index == -1)
+			pairs->push_back(qMakePair(QString(), line));
+		else
+			pairs->push_back(qMakePair(line.left(index), line.mid(index+1)));
+	}
+
+	return pairs;
 }
 
 QString VComment::replaceMarkdown(QString str)
@@ -117,7 +175,7 @@ void VComment::popLineBuffer()
 {
 	if(lineBuffer_.size() > 0)
 	{
-		auto text = new Text(nullptr, Text::itemStyles().get(), replaceMarkdown(lineBuffer_.join("<br>")));
+		auto text = new Text(this, Text::itemStyles().get(), replaceMarkdown(lineBuffer_.join("<br>")));
 		text->setTextFormat(Qt::RichText);
 		children_.push_back(text);
 		lineBuffer_.clear();
