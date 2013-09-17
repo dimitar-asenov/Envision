@@ -43,9 +43,11 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 
 	public:
 		VComment(Visualization::Item* parent, NodeType* node);
+		~VComment();
 		static void initializeForms();
 		virtual int determineForm() override;
 		void toggleEditing();
+		void clearChildren();
 
 	private:
 		QList<Visualization::Item*> split();
@@ -61,5 +63,7 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		Visualization::Item* editLabel_{};
 		QList<Visualization::Item*> children_;
 };
+
+inline void VComment::clearChildren() { children_.clear(); }
 
 } /* namespace Comments */

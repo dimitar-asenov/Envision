@@ -55,19 +55,23 @@ TEST(Comments, SimpleTest)
 
 #if 1
 	auto node = new CommentNode(
-		"Comments support *quite* some stuff by now. **Here's what!**\n"
-		"...\n"
+//		"Comments support *quite* some stuff by now. **Here's what!**\n"
+//		"...\n"
+		"Also, lists work...\n"
+		" * A first item\n"
+		" * A second item\n"
+		" * And so on, of course...\n"
 
 		"# Images\n"
 		"[image#panel_border_layout.png|400x]\n"
 		"...\n"
 
 		"# Browsers\n"
-		"[[http://dimitar-asenov.github.io/Envision/|400x300]]\n"
+		"[[http://dimitar-asenov.github.io/Envision/|400x100]]\n"
 		"...\n"
 
 //		"# Diagrams\n"
-//		"[diagram#0]\n"
+//		"[diagram#main]\n"
 	);
 #else
 	auto node = new CommentDiagram();

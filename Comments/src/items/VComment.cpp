@@ -42,13 +42,49 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 {
 }
 
+VComment::~VComment()
+{
+}
+
 // split up user-provided text into single elements
 QList<Item*> VComment::split()
 {
+	clearChildren();
+	int listCount = -1;
+
 	for(int i = 0; i < node()->lines()->size(); ++i)
 	{
 		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
 		QString line = node()->lines()->at(i)->get();
+
+		// is this a new enumeration item?
+		if(line.left(3) == " * ")
+		{
+			listCount++;
+			// does this create a new list?
+			if(listCount == 0)
+			{
+				pushTextLine("<ul><li>");
+				line = line.mid(3);
+			}
+			// otherwise, just add another list item
+			else
+			{
+				pushTextLine("</li><li>");
+				line = line.mid(3);
+			}
+		}
+		// or is this extending an existing list?
+		else if(line.left(3) == "   " && listCount > -1)
+		{
+			line = line.mid(3);
+		}
+		// if this is not an enumeration item, reset listCount
+		else if(listCount > -1 && line.left(3) != " * " && line.left(3) != "   ")
+		{
+			pushTextLine("</li></ul>");
+			listCount = -1;
+		}
 
 		if(rx.exactMatch(line))
 		{
@@ -111,7 +147,7 @@ QList<Item*> VComment::split()
 		}
 		else
 		{
-			pushTextLine(line.simplified());
+			pushTextLine(line);
 		}
 	}
 
@@ -123,12 +159,13 @@ QSize VComment::parseSize(const QString& str)
 {
 	int index = str.indexOf('x');
 	bool ok{};
+
 	int width = str.left(index).toInt(&ok);
 	if(index > 0 && !ok)
 		qDebug() << "Invalid width specified in size string:" << str;
 
 	int height = str.mid(index+1).toInt(&ok);
-	if(index+1 == str.size()-1 && !ok)
+	if(index+1 < str.size()-1 && !ok)
 		qDebug() << "Invalid height specified in size string:" << str;
 
 	return QSize(width, height);
@@ -157,7 +194,9 @@ QVector<QPair<QString,QString>>* VComment::parseMarkdownArguments(const QString&
 
 QString VComment::replaceMarkdown(QString str)
 {
-	QRegExp rx("\\*\\*([^\\*]+)\\*\\*");
+	QRegExp rx;
+
+	rx.setPattern("\\*\\*([^\\*]+)\\*\\*");
 	str.replace(rx, "<i>\\1</i>");
 
 	rx.setPattern("\\*([^\\*]+)\\*");
@@ -175,7 +214,8 @@ void VComment::popLineBuffer()
 {
 	if(lineBuffer_.size() > 0)
 	{
-		auto text = new Text(this, Text::itemStyles().get(), replaceMarkdown(lineBuffer_.join("<br>")));
+		auto joined = lineBuffer_.join("\n");
+		auto text = new Text(this, Text::itemStyles().get(), replaceMarkdown(joined));
 		text->setTextFormat(Qt::RichText);
 		children_.push_back(text);
 		lineBuffer_.clear();
@@ -198,10 +238,17 @@ void VComment::initializeForms()
 {
 	addForm((new SequentialLayoutFormElement())
 				->setVertical()
-				->setListOfItems([](Item* i) { return static_cast<VComment*>(i)->split(); }
+				->setListOfItems([](Item* i)
+		{
+			return static_cast<VComment*>(i)->split();
+		}
 	));
 
-	addForm(item(&I::editLabel_, [](I* v){return v->node()->lines();}));
+	addForm(item(&I::editLabel_, [](I* v)
+		{
+			return v->node()->lines();
+		}
+	));
 }
 
 int VComment::determineForm()
