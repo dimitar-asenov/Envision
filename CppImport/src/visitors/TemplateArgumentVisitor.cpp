@@ -3,15 +3,17 @@
 namespace CppImport {
 
 TemplateArgumentVisitor::TemplateArgumentVisitor
-(ExpressionVisitor *vis, CppImportUtilities *util, CppImportLogger *log)
-	: exprVisitor_{vis}, utils_{util}, log_{log}
+(ExpressionVisitor* vis, CppImportUtilities* util, CppImportLogger* log)
+: exprVisitor_{vis}, utils_{util}, log_{log}
 {}
 
 OOModel::FormalTypeArgument* TemplateArgumentVisitor::translateTemplateArg(clang::Decl* d)
 {
+	// remove reference lastTranslatedArg
+	lastTranslatedTypeArg_ = nullptr;
 	TraverseDecl(d);
-	Q_ASSERT(!typeArgStack_.empty());
-	return typeArgStack_.pop();
+	Q_ASSERT(lastTranslatedTypeArg_);
+	return lastTranslatedTypeArg_;
 }
 
 bool TemplateArgumentVisitor::VisitDecl(clang::Decl* decl)
@@ -20,7 +22,7 @@ bool TemplateArgumentVisitor::VisitDecl(clang::Decl* decl)
 	{
 		log_->writeError(className_, decl, CppImportLogger::Reason::OTHER,
 							  "Can not handle this decl with this visitor");
-		typeArgStack_.push(new OOModel::FormalTypeArgument("#ERROR"));
+		lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument("#ERROR");
 		return true;
 	}
 	return RecursiveASTVisitor<TemplateArgumentVisitor>::VisitDecl(decl);
@@ -28,25 +30,22 @@ bool TemplateArgumentVisitor::VisitDecl(clang::Decl* decl)
 
 bool TemplateArgumentVisitor::TraverseTemplateTypeParmDecl(clang::TemplateTypeParmDecl* templateParm)
 {
-	OOModel::FormalTypeArgument* ooArg = new OOModel::FormalTypeArgument
-			(QString::fromStdString(templateParm->getNameAsString()));
+	lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument(QString::fromStdString(templateParm->getNameAsString()));
 	if(templateParm->hasDefaultArgument())
-		ooArg->setSubTypeOfExpression(utils_->translateQualifiedType(templateParm->getDefaultArgument(),
+		lastTranslatedTypeArg_->setSubTypeOfExpression(utils_->translateQualifiedType(templateParm->getDefaultArgument(),
 																						 templateParm->getLocStart()));
-	typeArgStack_.push(ooArg);
 	return true;
 }
 
 bool TemplateArgumentVisitor::TraverseNonTypeTemplateParmDecl(clang::NonTypeTemplateParmDecl* nonTypeTemplateParm)
 {
-	OOModel::FormalTypeArgument* ooArg = new OOModel::FormalTypeArgument
-			(QString::fromStdString(nonTypeTemplateParm->getNameAsString()));
-	ooArg->setSubTypeOfExpression(utils_->translateQualifiedType(nonTypeTemplateParm->getType(),
+	lastTranslatedTypeArg_ = new OOModel::FormalTypeArgument
+(QString::fromStdString(nonTypeTemplateParm->getNameAsString()));
+	lastTranslatedTypeArg_->setSubTypeOfExpression(utils_->translateQualifiedType(nonTypeTemplateParm->getType(),
 																					 nonTypeTemplateParm->getLocStart()));
 	if(nonTypeTemplateParm->hasDefaultArgument())
-		ooArg->setSuperTypeOfExpression(exprVisitor_->translateExpression(nonTypeTemplateParm->getDefaultArgument()));
-
-	typeArgStack_.push(ooArg);
+		lastTranslatedTypeArg_->setSuperTypeOfExpression(exprVisitor_->translateExpression
+																		 (nonTypeTemplateParm->getDefaultArgument()));
 	return true;
 }
 

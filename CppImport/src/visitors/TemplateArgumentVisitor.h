@@ -51,7 +51,7 @@ class CPPIMPORT_API TemplateArgumentVisitor : public clang::RecursiveASTVisitor 
 		ExpressionVisitor* exprVisitor_{};
 		CppImportUtilities* utils_{};
 		CppImportLogger* log_{};
-		QStack<OOModel::FormalTypeArgument*> typeArgStack_;
+		OOModel::FormalTypeArgument* lastTranslatedTypeArg_{};
 		const QString className_{"TemplateArgumentVisitor"};
 };
 
