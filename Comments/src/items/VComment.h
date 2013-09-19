@@ -32,6 +32,7 @@
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 
+#include "VCommentDiagram.h"
 #include "../nodes/Comment.h"
 
 namespace Comments {
@@ -43,14 +44,18 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 
 	public:
 		VComment(Visualization::Item* parent, NodeType* node);
-		~VComment();
 		static void initializeForms();
 		virtual int determineForm() override;
-		void toggleEditing();
 		void clearChildren();
+		QList<Item*> children() const;
+		QMap<QString, CommentDiagram*> diagrams() const;
+
+		void toggleEditing();
+		bool editing() const;
 
 	private:
-		QList<Visualization::Item*> split();
+		void parseLines();
+		void synchroniseDiagrams(QSet<QString> itemDiagramNames);
 		QString replaceMarkdown(QString str);
 		void pushTextLine(QString text);
 		void popLineBuffer();
@@ -61,7 +66,8 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		QStringList lineBuffer_{};
 		bool editing_{};
 		Visualization::Item* editLabel_{};
-		QList<Visualization::Item*> children_;
+		QMap<QString, CommentDiagram*> diagrams_{};
+		QList<Visualization::Item*> children_{};
 };
 
 inline void VComment::clearChildren() { children_.clear(); }

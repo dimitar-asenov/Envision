@@ -32,6 +32,7 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Boolean.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
+#include "CommentDiagram.h"
 
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentNode)
 
@@ -41,9 +42,11 @@ class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentNode)
 
 	ATTRIBUTE(::Model::TypedList<Model::Text>, lines, setLines)
+	ATTRIBUTE(Model::TypedList<CommentDiagram>, diagrams, setDiagrams)
 
 	public:
 		CommentNode(const QString& label);
+		CommentDiagram* getDiagramByName(QString& name);
 };
 
 } /* namespace Comments */

@@ -36,6 +36,7 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentNode)
 
 REGISTER_ATTRIBUTE(CommentNode, lines, TypedListOfText, false, false, true)
+REGISTER_ATTRIBUTE(CommentNode, diagrams, TypedListOfCommentDiagram, false, false, true)
 
 CommentNode::CommentNode(const QString& label)
 : Super{nullptr, CommentNode::getMetaData()}
@@ -45,6 +46,17 @@ CommentNode::CommentNode(const QString& label)
 	{
 		lines()->append(new Model::Text(linesList[i]));
 	}
+}
+
+CommentDiagram* CommentNode::getDiagramByName(QString& name)
+{
+	for(int i = 0; i < lines()->size(); ++i)
+	{
+		auto diagram = diagrams()->at(i);
+		if(diagram->name() == name)
+			return diagram;
+	}
+	return nullptr;
 }
 
 } /* namespace Comments */

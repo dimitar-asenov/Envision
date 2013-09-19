@@ -42,7 +42,6 @@ VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node) : Super(parent, n
 
 VCommentDiagram::~VCommentDiagram()
 {
-	clearChildren();
 }
 
 void VCommentDiagram::determineChildren()
@@ -50,13 +49,13 @@ void VCommentDiagram::determineChildren()
 	QList<Model::Node*> nodes;
 	nodes << node()->shapes()->nodes().toList();
 	nodes << node()->connectors()->nodes().toList();
+	if(nodes.size() == 0)
+	{
+		auto shape = new CommentDiagramShape(0, 0, 250, 40, Rectangle);
+		shape->setLabel("This is a quasi empty default diagram.");
+		nodes.append(shape);
+	}
 	synchronizeWithNodes(nodes, renderer());
-}
-
-void VCommentDiagram::clearChildren()
-{
-	for(int i = 0; i < items_.size(); ++i)
-		delete items_.at(i);
 }
 
 void VCommentDiagram::updateGeometry(int, int)
@@ -71,8 +70,8 @@ void VCommentDiagram::updateGeometry(int, int)
 		{
 			child->setPos(shape->pos());
 
-			maxsize.setHeight(std::max(maxsize.height(), shape->pos().x()+shape->size().width()));
-			maxsize.setWidth(std::max(maxsize.width(),   shape->pos().y()+shape->size().height()));
+			maxsize.setHeight(std::max(maxsize.height(), shape->pos().x()+shape->size().height()));
+			maxsize.setWidth(std::max(maxsize.width(),   shape->pos().y()+shape->size().width()));
 		}
 		// but position the connectors too
 		else

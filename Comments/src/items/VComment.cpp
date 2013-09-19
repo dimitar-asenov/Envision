@@ -40,16 +40,15 @@ ITEM_COMMON_DEFINITIONS(VComment, "item")
 
 VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
-}
-
-VComment::~VComment()
-{
+	parseLines();
 }
 
 // split up user-provided text into single elements
-QList<Item*> VComment::split()
+void VComment::parseLines()
 {
 	clearChildren();
+
+	QSet<QString> diagramNames{};
 	int listCount = -1;
 
 	for(int i = 0; i < node()->lines()->size(); ++i)
@@ -88,8 +87,8 @@ QList<Item*> VComment::split()
 
 		if(rx.exactMatch(line))
 		{
-			// A line consists of one character that is repeated over and over
-			// This character defines the strength of the header, i.e. one of three levels
+			// A line consists of one of . - = that is repeated three times or more
+			// The used character defines the strength of the header, i.e. one of three levels
 			QString style;
 			switch(line[0].toAscii())
 			{
@@ -110,6 +109,23 @@ QList<Item*> VComment::split()
 		{
 			QString len = QString::number(rx.cap(1).length());
 			pushTextLine("<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">");
+		}
+		// is this a diagram? format: [diagram#diagramName]
+		else if(line.left(9) == "[diagram#" && line.right(1) == "]" && line.size() > 9+1)
+		{
+			QString diagramName = line.mid(9,line.size()-9-1);
+			diagramNames << diagramName;
+
+			CommentDiagram* diagram = diagrams_.value(diagramName, nullptr);
+
+			if(diagram == nullptr)
+			{
+				diagram = new CommentDiagram(diagramName);
+				diagrams_[diagramName] = diagram;
+			}
+
+			auto item = renderer()->render(this, diagram);
+			addChildItem(item);
 		}
 		// urls are specified as [[http://www.google.com]]
 		else if(line.left(2) == "[[" && line.right(2) == "]]" && line.size() > 2+2)
@@ -152,7 +168,61 @@ QList<Item*> VComment::split()
 	}
 
 	popLineBuffer();
-	return children_;
+	synchroniseDiagrams(diagramNames);
+}
+
+void VComment::synchroniseDiagrams(QSet<QString> itemDiagramNames)
+{
+	// get all diagrams from the node
+	auto nodeDiagrams = node()->diagrams();
+	// gather all names from the node diagrams for easier comparison
+	QSet<QString> nodeDiagramNames{};
+	// TODO: add iterators to typed lists?
+	for(int i = 0; i < nodeDiagrams->size(); ++i)
+	{
+		auto diagram = nodeDiagrams->at(i);
+		nodeDiagramNames << diagram->name();
+	}
+	// get intersection of two sets
+	QSet<QString> intersection(itemDiagramNames);
+	intersection.intersect(nodeDiagramNames);
+
+	// new diagrams were already constructed inside of parseLines(),
+	// they also need to be added to the model now
+	auto newDiagramNames = itemDiagramNames - intersection;
+
+	if(newDiagramNames.size() > 0)
+	{
+		node()->model()->beginModification(node(), "Adding new diagrams");
+		for(auto diagramName : newDiagramNames)
+		{
+			auto diagram = diagrams_.value(diagramName);
+			node()->diagrams()->append(diagram);
+		}
+		node()->model()->endModification();
+	}
+
+	// diagrams that are no longer referenced need to be removed from the model
+	auto oldDiagramNames = nodeDiagramNames - intersection;
+
+	if(oldDiagramNames.size() > 0)
+	{
+		node()->model()->beginModification(node(), "Removing unreferenced diagrams");
+		for(auto diagramName : oldDiagramNames)
+		{
+			auto diagram = diagrams_.value(diagramName);
+			node()->diagrams()->remove(diagram);
+			diagrams_.remove(diagramName);
+			// TODO: is this the right way to free a node member?
+			delete diagram;
+		}
+		node()->model()->endModification();
+	}
+}
+
+QMap<QString, CommentDiagram*> VComment::diagrams() const
+{
+	return diagrams_;
 }
 
 QSize VComment::parseSize(const QString& str)
@@ -228,27 +298,39 @@ void VComment::addChildItem(Visualization::Item* item)
 	children_.push_back(item);
 }
 
+QList<Item*> VComment::children() const
+{
+	return children_;
+}
+
 void VComment::toggleEditing()
 {
 	editing_ = !editing_;
+
+	if(!editing_)
+		parseLines();
+
 	setUpdateNeeded(StandardUpdate);
+}
+
+bool VComment::editing() const
+{
+	return editing_;
 }
 
 void VComment::initializeForms()
 {
 	addForm((new SequentialLayoutFormElement())
 				->setVertical()
-				->setListOfItems([](Item* i)
-		{
-			return static_cast<VComment*>(i)->split();
-		}
+				->setListOfItems([](Item* i) {
+					auto vc = static_cast<VComment*>(i);
+					return vc->children();
+				}
 	));
 
-	addForm(item(&I::editLabel_, [](I* v)
-		{
-			return v->node()->lines();
-		}
-	));
+	addForm(item(&I::editLabel_, [](I* v){
+		return v->node()->lines();
+	}));
 }
 
 int VComment::determineForm()
