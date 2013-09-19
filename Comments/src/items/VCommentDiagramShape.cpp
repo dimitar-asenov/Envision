@@ -46,13 +46,15 @@ void VCommentDiagramShape::determineChildren(){}
 void VCommentDiagramShape::updateGeometry(int, int)
 {
 	setSize(node()->size());
+	shapeColor_ = style()->getColor(node()->shapeColor());
+	textColor_ = style()->getColor(node()->textColor());
 }
 
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	// rectangle to draw the shape in
 	QRect rect(0, 0, width(), height());
-	painter->setPen(style()->getColor(node()->shapeColor()));
+	painter->setPen(shapeColor_);
 
 	switch(node()->shapeType())
 	{
@@ -77,7 +79,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	if(!node()->label().isEmpty())
 	{
-		painter->setPen(QPen(style()->getColor(node()->textColor())));
+		painter->setPen(QPen(textColor_));
 		painter->drawText(rect, Qt::AlignCenter, node()->label());
 	}
 

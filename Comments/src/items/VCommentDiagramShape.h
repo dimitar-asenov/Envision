@@ -54,6 +54,7 @@ class COMMENTS_API VCommentDiagramShape
 
 	private:
 		VCommentDiagram* parent_;
+		QColor shapeColor_, textColor_;
 };
 
 } /* namespace Comments */
