@@ -43,8 +43,12 @@ namespace Comments {
 class COMMENTS_API CommentDiagram : public Super<Model::CompositeNode> {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagram)
 
+	ATTRIBUTE_VALUE(Model::Text, name, setName, QString)
 	ATTRIBUTE(Model::TypedList<CommentDiagramShape>, shapes, setShapes)
 	ATTRIBUTE(Model::TypedList<CommentDiagramConnector>, connectors, setConnectors)
+
+	public:
+		CommentDiagram(QString& name);
 };
 
 } /* namespace Comments */
