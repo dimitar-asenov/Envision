@@ -50,8 +50,12 @@ class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 		void updateSize(QSize size);
 
 	private:
+		QRect textDimensions(QFont font, const QString& text);
+
 		QImage* image_{};
-		QSize size_;
+		QString path_{};
+		QSize size_{};
+		QString text_{};
 };
 
 } /* namespace Comments */
