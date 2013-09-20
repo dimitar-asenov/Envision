@@ -213,8 +213,6 @@ void VComment::synchroniseDiagrams(QSet<QString> itemDiagramNames)
 			auto diagram = diagrams_.value(diagramName);
 			node()->diagrams()->remove(diagram);
 			diagrams_.remove(diagramName);
-			// TODO: is this the right way to free a node member?
-			delete diagram;
 		}
 		node()->model()->endModification();
 	}
@@ -298,11 +296,6 @@ void VComment::addChildItem(Visualization::Item* item)
 	children_.push_back(item);
 }
 
-QList<Item*> VComment::children() const
-{
-	return children_;
-}
-
 void VComment::toggleEditing()
 {
 	editing_ = !editing_;
@@ -324,7 +317,7 @@ void VComment::initializeForms()
 				->setVertical()
 				->setListOfItems([](Item* i) {
 					auto vc = static_cast<VComment*>(i);
-					return vc->children();
+					return vc->children_;
 				}
 	));
 

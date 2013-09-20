@@ -36,11 +36,8 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentDiagram, "item")
 
-VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
-{
-}
-
-VCommentDiagram::~VCommentDiagram()
+VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
+	: Super(parent, node, itemStyles().get())
 {
 }
 
@@ -60,7 +57,7 @@ void VCommentDiagram::determineChildren()
 
 void VCommentDiagram::updateGeometry(int, int)
 {
-	QSize maxsize(0,0);
+	QSize minsize(50, 50);
 	for(int i = 0; i < items_.size(); ++i)
 	{
 		auto child = items_.at(i);
@@ -70,8 +67,13 @@ void VCommentDiagram::updateGeometry(int, int)
 		{
 			child->setPos(shape->pos());
 
-			maxsize.setHeight(std::max(maxsize.height(), shape->pos().x()+shape->size().height()));
-			maxsize.setWidth(std::max(maxsize.width(),   shape->pos().y()+shape->size().width()));
+			int shapeHeight = shape->pos().y()+shape->size().height();
+			if(shapeHeight > minsize.height())
+				minsize.setHeight(shapeHeight);
+
+			int shapeWidth = shape->pos().x()+shape->size().width();
+			if(shapeWidth > minsize.width())
+				minsize.setWidth(shapeWidth);
 		}
 		// but position the connectors too
 		else
@@ -83,12 +85,14 @@ void VCommentDiagram::updateGeometry(int, int)
 				auto shape2 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape2()]);
 				auto point1 = shape1->pos()+shape1->getConnectorCoordinates(connector->point1());
 				auto point2 = shape2->pos()+shape2->getConnectorCoordinates(connector->point2());
-				// TODO: std::min
 				child->setPos(std::min(point1.x(), point2.x()), std::min(point1.y(), point2.y()));
 			}
 		}
 	}
-	setSize(maxsize);
+
+	size_.setWidth(std::max(size_.width(), minsize.width()));
+	size_.setHeight(std::max(size_.height(), minsize.height()));
+	setSize(size_);
 }
 
 void VCommentDiagram::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)

@@ -47,7 +47,6 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		static void initializeForms();
 		virtual int determineForm() override;
 		void clearChildren();
-		QList<Item*> children() const;
 		QMap<QString, CommentDiagram*> diagrams() const;
 
 		void toggleEditing();

@@ -53,19 +53,19 @@ TEST(Comments, SimpleTest)
 
 	model->beginModification(list, "set");
 
-#if 1
+#if 0
 	auto node = new CommentNode(
 		"Comments support *quite* some stuff by now. For example...\n"
-		"# Diagrams!\n"
-		"[diagram#main]\n"
+//		"# Diagrams!\n"
+//		"[diagram#main]\n"
 
 //		"Also, lists work...\n"
 //		" * A first item\n"
 //		" * A second item\n"
 //		" * And so on, of course...\n"
 
-//		"# Images\n"
-//		"[image#panel_border_layout.png|400x]\n"
+		"# Images\n"
+		"[image#panel_border_layout.png|400x]\n"
 //		"...\n"
 
 //		"# Browsers\n"

@@ -51,12 +51,10 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 
 	point1_ = shape1->pos()+shape1->getConnectorCoordinates(node()->point1());
 	point2_ = shape2->pos()+shape2->getConnectorCoordinates(node()->point2());
-	// TODO: std::min
 	auto origin = QPoint(std::min(point1_.x(), point2_.x()), std::min(point1_.y(), point2_.y()));
 	point1_ -= origin;
 	point2_ -= origin;
 
-	// TODO: std::abs()
 	int dx = std::max(1., std::abs(point1_.x() - point2_.x()));
 	int dy = std::max(1., std::abs(point1_.y() - point2_.y()));
 	// make sure we get at least one pixel to draw inside!
