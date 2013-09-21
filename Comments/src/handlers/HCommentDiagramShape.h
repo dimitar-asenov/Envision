@@ -43,6 +43,9 @@ class COMMENTS_API HCommentDiagramShape : public Interaction::GenericHandler {
 
 	protected:
 		HCommentDiagramShape();
+
+	private:
+		QPoint originalPos_;
 };
 
 }

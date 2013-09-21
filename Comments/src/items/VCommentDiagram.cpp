@@ -46,19 +46,19 @@ void VCommentDiagram::determineChildren()
 	QList<Model::Node*> nodes;
 	nodes << node()->shapes()->nodes().toList();
 	nodes << node()->connectors()->nodes().toList();
-	if(nodes.size() == 0)
-	{
-		auto shape = new CommentDiagramShape(0, 0, 250, 40, Rectangle);
-		shape->setLabel("This is a quasi empty default diagram.");
-		nodes.append(shape);
-	}
 	synchronizeWithNodes(nodes, renderer());
 }
 
 void VCommentDiagram::updateGeometry(int, int)
 {
 	// TODO: does this really need to be recomputed every time?
-	QSize minsize(50, 50);
+
+	// use a sensible default size to display usage information
+	QSize minSize;
+	// this is not needed if there are any items, so really compute the minimal size otherwise
+	if(items_.size() == 0)
+		minSize = QSize(200, 50);
+
 	for(int i = 0; i < items_.size(); ++i)
 	{
 		auto child = items_.at(i);
@@ -68,13 +68,9 @@ void VCommentDiagram::updateGeometry(int, int)
 		{
 			child->setPos(shape->pos());
 
-			int shapeHeight = shape->pos().y()+shape->size().height();
-			if(shapeHeight > minsize.height())
-				minsize.setHeight(shapeHeight);
-
-			int shapeWidth = shape->pos().x()+shape->size().width();
-			if(shapeWidth > minsize.width())
-				minsize.setWidth(shapeWidth);
+			int shapeWidth = shape->x()+shape->width();
+			int shapeHeight = shape->y()+shape->height();
+			minSize = minSize.expandedTo(QSize(shapeWidth, shapeHeight));
 		}
 		// but connectors still need to be positioned
 		else
@@ -90,14 +86,13 @@ void VCommentDiagram::updateGeometry(int, int)
 			}
 		}
 	}
-	minSize_.setWidth(std::max(minSize_.width(), minsize.width()));
-	minSize_.setHeight(std::max(minSize_.height(), minsize.height()));
+	minSize_ = minSize;
+	// override with user set size if provided
+	QSize expanded = minSize_.expandedTo(QSize(node()->width(), node()->height()));
+	setSize(expanded);
 
-	// does the diagram provide a size? i.e. did the user set it explicitely (via resizing)?
-	if(node()->width() != 0 && node()->height() != 0)
-		setSize(node()->width(), node()->height());
-	else
-		setSize(minSize_);
+	if(minSize.width() > node()->width() || minSize.height() > node()->height())
+		resize(expanded);
 }
 
 void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -106,7 +101,23 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	Item::paint(painter, option, widget);
 
 	QRect rect(QPoint(0,0), size().toSize());
-	painter->drawRect(rect);
+	if(editing_)
+	{
+		QPen pen = painter->pen(), oldPen = painter->pen();
+		pen.setWidth(10);
+		pen.setColor(Qt::red);
+		painter->setPen(pen);
+		painter->drawRect(rect);
+		painter->setPen(oldPen);
+	}
+	else
+		painter->drawRect(rect);
+
+	if(items_.size() == 0)
+	{
+		painter->setPen(QPen(QColor(100, 100, 100)));
+		painter->drawText(rect, Qt::AlignCenter | Qt::TextWordWrap, "This diagram does not contain any shapes yet.");
+	}
 }
 
 void VCommentDiagram::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
@@ -159,8 +170,7 @@ void VCommentDiagram::toggleEditing()
 
 void VCommentDiagram::resize(QSize size)
 {
-	if(minSize_.width() > size.width()) size.setWidth(minSize_.width());
-	if(minSize_.height() > size.height()) size.setHeight(minSize_.height());
+	size = size.expandedTo(minSize_);
 
 	node()->model()->beginModification(node(), "Resizing diagram");
 	node()->setSize(size);

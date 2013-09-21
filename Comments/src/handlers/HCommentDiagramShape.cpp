@@ -39,24 +39,35 @@ HCommentDiagramShape* HCommentDiagramShape::instance()
 	return &h;
 }
 
-void HCommentDiagramShape::mousePressEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event)
 {
 	event->ignore();
+	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	if(shape->parent()->editing())
+	{
+		if(event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		{
+			event->accept();
+			originalPos_ = shape->pos().toPoint();
+		}
+	}
 }
 
-void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
 {
-	event->ignore();
 }
 
-void HCommentDiagramShape::mouseMoveEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	event->ignore();
+	if(event->buttons() & Qt::LeftButton)
+	{
+		auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+		shape->moveTo(originalPos_ + (event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)).toPoint());
+	}
 }
 
-void HCommentDiagramShape::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+void HCommentDiagramShape::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
 {
-	event->ignore();
 }
 
 } /* namespace Comments */

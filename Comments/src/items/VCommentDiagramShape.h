@@ -46,6 +46,8 @@ class COMMENTS_API VCommentDiagramShape
 
 	public:
 		VCommentDiagramShape(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		void moveTo(QPoint pos);
+		VCommentDiagram* parent();
 
 	protected:
 		virtual void determineChildren() override;
@@ -53,7 +55,6 @@ class COMMENTS_API VCommentDiagramShape
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 	private:
-		VCommentDiagram* parent_;
 		QColor shapeColor_, textColor_;
 };
 

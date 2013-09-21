@@ -47,6 +47,7 @@ class COMMENTS_API HCommentDiagram : public Interaction::GenericHandler {
 
 	private:
 		QSizeF originalSize_;
+		bool resizing_{};
 };
 
 }

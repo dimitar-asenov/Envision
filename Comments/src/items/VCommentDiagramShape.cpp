@@ -37,8 +37,11 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagramShape, "item")
 VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const StyleType* style)
 : Super(parent, node, style)
 {
-	parent_ = dynamic_cast<VCommentDiagram*>(parent);
-	Q_ASSERT(parent_ != nullptr);
+}
+
+VCommentDiagram* VCommentDiagramShape::parent()
+{
+	return dynamic_cast<VCommentDiagram*>(Item::parent());
 }
 
 void VCommentDiagramShape::determineChildren(){}
@@ -83,7 +86,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->drawText(rect, Qt::AlignCenter, node()->label());
 	}
 
-	if(parent_->editing())
+	if(parent()->editing())
 	{
 		// Temporarily assume a thicker painter with a different color for drawing the connector points
 		QBrush brush(QColor("red"));
@@ -95,6 +98,18 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			painter->drawPoint(point);
 		}
 	}
+}
+
+void VCommentDiagramShape::moveTo(QPoint pos)
+{
+	if(pos.x() < 0) pos.setX(0);
+	if(pos.y() < 0) pos.setY(0);
+
+	node()->model()->beginModification(node(), "Moving shape");
+	node()->setX(pos.x());
+	node()->setY(pos.y());
+	node()->model()->endModification();
+	setUpdateNeeded(StandardUpdate);
 }
 
 } /* namespace Comments */

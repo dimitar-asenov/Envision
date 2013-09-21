@@ -60,28 +60,48 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 	if(diagram->editing())
 	{
+		event->accept();
+
 		if(event->button() == Qt::RightButton && (event->modifiers() & Qt::ShiftModifier))
 		{
-			event->accept();
 			originalSize_ = diagram->size();
+			resizing_ = true;
 		}
+		else
+			GenericHandler::mousePressEvent(target, event);
 	}
 }
 
 void HCommentDiagram::mouseReleaseEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
 {
+	resizing_ = false;
 }
 
 void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	auto diagram = dynamic_cast<VCommentDiagram*>(target);
-	QPointF diff = event->pos() - event->buttonDownPos(Qt::RightButton);
-	QSize newSize(originalSize_.width() + diff.x(), originalSize_.height() + diff.y());
-	diagram->resize(newSize);
+	if(resizing_)
+	{
+		auto diagram = dynamic_cast<VCommentDiagram*>(target);
+		QPointF diff = event->pos() - event->buttonDownPos(Qt::RightButton);
+		QSize newSize(originalSize_.width() + diff.x(), originalSize_.height() + diff.y());
+		diagram->resize(newSize);
+	}
 }
 
-void HCommentDiagram::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
+void HCommentDiagram::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	if(event->button() == Qt::RightButton)
+	{
+		// create some shape for testing shape interaction
+		QPointF pos = event->buttonDownPos(Qt::RightButton);
+		auto shape = new CommentDiagramShape(pos.x()-25, pos.y()-25, 50, 50, Ellipse);
+
+		auto diagram = dynamic_cast<VCommentDiagram*>(target);
+		diagram->node()->model()->beginModification(diagram->node(), "Creating a test shape");
+		diagram->node()->shapes()->append(shape);
+		diagram->node()->model()->endModification();
+		diagram->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	}
 }
 
 } /* namespace Comments */

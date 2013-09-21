@@ -57,17 +57,17 @@ CommentDiagramShape::CommentDiagramShape(const int& x, const int& y, const int& 
 	setTextColor("black");
 }
 
-QSize CommentDiagramShape::size()
+QSize CommentDiagramShape::size() const
 {
 	return QSize(width(), height());
 }
 
-QPoint CommentDiagramShape::pos()
+QPoint CommentDiagramShape::pos() const
 {
 	return QPoint(x(), y());
 }
 
-QPoint CommentDiagramShape::getConnectorCoordinates(int index)
+QPoint CommentDiagramShape::getConnectorCoordinates(int index) const
 {
 	Q_ASSERT(index >= 0 && index < 16);
 

@@ -62,9 +62,9 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 	public:
 		CommentDiagramShape(const int& x, const int& y, const int& width, const int& height,
 				enum CommentDiagramShapeType shapeType);
-		QSize size();
-		QPoint pos();
-		QPoint getConnectorCoordinates(int index);
+		QSize size() const;
+		QPoint pos() const;
+		QPoint getConnectorCoordinates(int index) const;
 };
 
 } /* namespace Comments */
