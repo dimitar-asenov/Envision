@@ -63,12 +63,15 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 		{
 			event->accept();
 			originalPos_ = shape->pos().toPoint();
+			shape->setCursor(Qt::ClosedHandCursor);
 		}
 	}
 }
 
-void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
+void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *)
 {
+	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	shape->setCursor(Qt::OpenHandCursor);
 }
 
 void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -82,6 +85,19 @@ void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphics
 
 void HCommentDiagramShape::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
 {
+}
+
+void HCommentDiagramShape::hoverEnterEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
+{
+	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	if(shape->parent()->editing())
+		shape->setCursor(Qt::OpenHandCursor);
+}
+
+void HCommentDiagramShape::hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
+{
+	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	shape->setCursor(Qt::ArrowCursor);
 }
 
 } /* namespace Comments */

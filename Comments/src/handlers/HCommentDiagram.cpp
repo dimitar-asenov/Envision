@@ -66,14 +66,17 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 		{
 			originalSize_ = diagram->size();
 			resizing_ = true;
+			diagram->setCursor(Qt::SizeAllCursor);
 		}
 		else
 			GenericHandler::mousePressEvent(target, event);
 	}
 }
 
-void HCommentDiagram::mouseReleaseEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
+void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *)
 {
+	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	diagram->setCursor(Qt::ArrowCursor);
 	resizing_ = false;
 }
 
