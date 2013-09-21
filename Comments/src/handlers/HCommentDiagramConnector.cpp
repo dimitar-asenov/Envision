@@ -24,35 +24,38 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/Boolean.h"
-#include "ModelBase/src/nodes/Float.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "CommentDiagramShape.h"
-#include "CommentDiagramConnector.h"
-
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagram)
+#include "handlers/HCommentDiagramConnector.h"
+#include "items/VCommentDiagram.h"
 
 namespace Comments {
 
-class COMMENTS_API CommentDiagram : public Super<Model::CompositeNode> {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagram)
+HCommentDiagramConnector::HCommentDiagramConnector()
+{}
 
-	ATTRIBUTE_VALUE(Model::Text, name, setName, QString)
-	ATTRIBUTE_VALUE(Model::Float, width, setWidth, qreal)
-	ATTRIBUTE_VALUE(Model::Float, height, setHeight, qreal)
-	ATTRIBUTE(Model::TypedList<CommentDiagramShape>, shapes, setShapes)
-	ATTRIBUTE(Model::TypedList<CommentDiagramConnector>, connectors, setConnectors)
+HCommentDiagramConnector* HCommentDiagramConnector::instance()
+{
+	static HCommentDiagramConnector h;
+	return &h;
+}
 
-	public:
-		CommentDiagram(QString name);
-		void setSize(QSizeF size);
-};
+void HCommentDiagramConnector::mousePressEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
+}
+
+void HCommentDiagramConnector::mouseReleaseEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
+}
+
+void HCommentDiagramConnector::mouseMoveEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
+}
+
+void HCommentDiagramConnector::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
+}
 
 } /* namespace Comments */

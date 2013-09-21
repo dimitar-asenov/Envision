@@ -31,17 +31,27 @@ DEFINE_TYPED_LIST(Comments::CommentDiagram)
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagram)
+//COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagram)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagram)
 
 REGISTER_ATTRIBUTE(CommentDiagram, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagram, width, Float, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagram, height, Float, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagram, shapes, TypedListOfCommentDiagramShape, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagram, connectors, TypedListOfCommentDiagramConnector, false, false, true)
 
-CommentDiagram::CommentDiagram(QString& name)
+CommentDiagram::CommentDiagram(QString name)
 : Super(nullptr, CommentDiagram::getMetaData())
 {
 	setName(name);
+	setWidth(0);
+	setHeight(0);
+}
+
+void CommentDiagram::setSize(QSizeF size)
+{
+	setWidth(size.width());
+	setHeight(size.height());
 }
 
 } /* namespace Comments */

@@ -29,8 +29,12 @@
 #include "SelfTest/src/SelfTestSuite.h"
 #include "handlers/HComment.h"
 #include "handlers/HCommentDiagram.h"
+#include "handlers/HCommentDiagramShape.h"
+#include "handlers/HCommentDiagramConnector.h"
 #include "items/VComment.h"
 #include "items/VCommentDiagram.h"
+#include "items/VCommentDiagramShape.h"
+#include "items/VCommentDiagramConnector.h"
 
 Q_EXPORT_PLUGIN2(comments, Comments::Comments)
 
@@ -55,6 +59,8 @@ bool Comments::initialize(Core::EnvisionManager&)
 
 	VComment::setDefaultClassHandler(HComment::instance());
 	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
+	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
+	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
 
 	return true;
 }

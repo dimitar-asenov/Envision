@@ -57,6 +57,7 @@ void VCommentDiagram::determineChildren()
 
 void VCommentDiagram::updateGeometry(int, int)
 {
+	// TODO: does this really need to be recomputed every time?
 	QSize minsize(50, 50);
 	for(int i = 0; i < items_.size(); ++i)
 	{
@@ -75,7 +76,7 @@ void VCommentDiagram::updateGeometry(int, int)
 			if(shapeWidth > minsize.width())
 				minsize.setWidth(shapeWidth);
 		}
-		// but position the connectors too
+		// but connectors still need to be positioned
 		else
 		{
 			auto connector = dynamic_cast<CommentDiagramConnector*>(child->node());
@@ -89,10 +90,23 @@ void VCommentDiagram::updateGeometry(int, int)
 			}
 		}
 	}
+	minSize_.setWidth(std::max(minSize_.width(), minsize.width()));
+	minSize_.setHeight(std::max(minSize_.height(), minsize.height()));
 
-	size_.setWidth(std::max(size_.width(), minsize.width()));
-	size_.setHeight(std::max(size_.height(), minsize.height()));
-	setSize(size_);
+	// does the diagram provide a size? i.e. did the user set it explicitely (via resizing)?
+	if(node()->width() != 0 && node()->height() != 0)
+		setSize(node()->width(), node()->height());
+	else
+		setSize(minSize_);
+}
+
+void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	// TODO: necessary call? gets drawn anyway
+	Item::paint(painter, option, widget);
+
+	QRect rect(QPoint(0,0), size().toSize());
+	painter->drawRect(rect);
 }
 
 void VCommentDiagram::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
@@ -141,6 +155,17 @@ void VCommentDiagram::toggleEditing()
 {
 	editing_ = !editing_;
 	setUpdateNeeded(StandardUpdate);
+}
+
+void VCommentDiagram::resize(QSize size)
+{
+	if(minSize_.width() > size.width()) size.setWidth(minSize_.width());
+	if(minSize_.height() > size.height()) size.setHeight(minSize_.height());
+
+	node()->model()->beginModification(node(), "Resizing diagram");
+	node()->setSize(size);
+	node()->model()->endModification();
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 } /* namespace Comments */

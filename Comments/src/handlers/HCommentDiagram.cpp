@@ -24,6 +24,7 @@
  **
  **********************************************************************************************************************/
 
+#include "VisualizationBase/src/items/Item.h"
 #include "handlers/HCommentDiagram.h"
 #include "items/VCommentDiagram.h"
 
@@ -50,6 +51,37 @@ void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 	}
 
 	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
+}
+
+void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	event->ignore();
+
+	if(diagram->editing())
+	{
+		if(event->button() == Qt::RightButton && (event->modifiers() & Qt::ShiftModifier))
+		{
+			event->accept();
+			originalSize_ = diagram->size();
+		}
+	}
+}
+
+void HCommentDiagram::mouseReleaseEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
+{
+}
+
+void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	QPointF diff = event->pos() - event->buttonDownPos(Qt::RightButton);
+	QSize newSize(originalSize_.width() + diff.x(), originalSize_.height() + diff.y());
+	diagram->resize(newSize);
+}
+
+void HCommentDiagram::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
+{
 }
 
 } /* namespace Comments */

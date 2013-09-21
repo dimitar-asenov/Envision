@@ -36,10 +36,17 @@ class COMMENTS_API HCommentDiagram : public Interaction::GenericHandler {
 	public:
 		static HCommentDiagram* instance();
 
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
 	protected:
 		HCommentDiagram();
+
+	private:
+		QSizeF originalSize_;
 };
 
 }

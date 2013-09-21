@@ -47,10 +47,12 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		VCommentDiagram(Visualization::Item* parent, NodeType* node);
 		void toggleEditing();
 		bool editing() { return editing_; }
+		void resize(QSize size);
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	private:
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, Visualization::ModelRenderer* renderer);
@@ -59,7 +61,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		void clearChildren();
 		QVector<Visualization::Item*> items_;
 		bool editing_{};
-		QSize size_;
+		QSize minSize_;
 };
 
 } /* namespace Comments */
