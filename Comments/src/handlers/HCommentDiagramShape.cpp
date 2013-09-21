@@ -39,6 +39,20 @@ HCommentDiagramShape* HCommentDiagramShape::instance()
 	return &h;
 }
 
+void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	event->ignore();
+
+	if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
+	{
+		event->accept();
+		shape->parent()->node()->removeShape(shape->node());
+	}
+
+	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
+}
+
 void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event)
 {
 	event->ignore();

@@ -53,6 +53,7 @@ class COMMENTS_API CommentDiagram : public Super<Model::CompositeNode> {
 	public:
 		CommentDiagram(QString name);
 		void setSize(QSizeF size);
+		void removeShape(CommentDiagramShape *shape);
 };
 
 } /* namespace Comments */

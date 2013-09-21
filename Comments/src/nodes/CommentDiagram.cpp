@@ -54,4 +54,11 @@ void CommentDiagram::setSize(QSizeF size)
 	setHeight(size.height());
 }
 
+void CommentDiagram::removeShape(CommentDiagramShape *shape)
+{
+	model()->beginModification(this, "removing shape from diagram");
+	shapes()->remove(shape);
+	model()->endModification();
+}
+
 } /* namespace Comments */
