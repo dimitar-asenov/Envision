@@ -8,7 +8,9 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -lfilepersistence
-HEADERS += src/handlers/HComment.h \
+HEADERS += src/commands/CCreateShape.h \
+    src/handlers/HCommentDiagramShape.h \
+    src/handlers/HComment.h \
     src/handlers/HCommentDiagram.h \
     src/nodes/Comment.h \
     src/nodes/CommentDiagram.h \
@@ -25,7 +27,9 @@ HEADERS += src/handlers/HComment.h \
     src/CommentsException.h \
     src/comments_api.h \
     src/comments.h
-SOURCES += src/handlers/HComment.cpp \
+SOURCES += src/commands/CCreateShape.cpp \
+    src/handlers/HCommentDiagramShape.cpp \
+    src/handlers/HComment.cpp \
     src/handlers/HCommentDiagram.cpp \
     src/nodes/Comment.cpp \
     src/nodes/CommentDiagram.cpp \

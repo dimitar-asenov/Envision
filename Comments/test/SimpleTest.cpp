@@ -53,7 +53,7 @@ TEST(Comments, SimpleTest)
 
 	model->beginModification(list, "set");
 
-#if 1
+#if 0
 	auto node = new CommentNode(
 		"Comments support *quite* some stuff by now. For example...\n"
 		"# Diagrams!\n"

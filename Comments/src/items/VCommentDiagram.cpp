@@ -51,8 +51,6 @@ void VCommentDiagram::determineChildren()
 
 void VCommentDiagram::updateGeometry(int, int)
 {
-	// TODO: does this really need to be recomputed every time?
-
 	// use a sensible default size to display usage information
 	QSize minSize;
 	// this is not needed if there are any items, so really compute the minimal size otherwise
@@ -97,7 +95,6 @@ void VCommentDiagram::updateGeometry(int, int)
 
 void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	// TODO: necessary call? gets drawn anyway
 	Item::paint(painter, option, widget);
 
 	QRect rect(QPoint(0,0), size().toSize());

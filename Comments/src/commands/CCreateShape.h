@@ -24,56 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
+#pragma once
 
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "../comments.h"
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+class COMMENTS_API CCreateShape : public Interaction::CreateNamedObjectWithAttributes
 {
-	static Core::InitializationRegistry r;
-	return r;
-}
+	public:
+		CCreateShape();
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
+	protected:
+		virtual Interaction::CommandResult* create(Visualization::Item* source, Visualization::Item* target,
+			const QString& name, const QStringList& attributes) override;
+};
 
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-
-	return true;
-}
-
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

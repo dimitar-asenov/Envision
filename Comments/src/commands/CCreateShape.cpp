@@ -24,56 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
+#include "commands/CCreateShape.h"
+#include "nodes/CommentDiagram.h"
+#include "nodes/CommentDiagramShape.h"
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
-bool Comments::initialize(Core::EnvisionManager&)
-{
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-
-	return true;
-}
-
-void Comments::unload()
+CCreateShape::CCreateShape() : Interaction::CreateNamedObjectWithAttributes("shape",
+		{{"ellipse", "diamond", "rectangle"}})
 {
 }
 
-void Comments::selfTest(QString testid)
+Interaction::CommandResult* CCreateShape::create(Visualization::Item*, Visualization::Item* target,
+	const QString&, const QStringList& attributes)
 {
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
+	auto diagram = dynamic_cast<CommentDiagram*> (target->node());
+	auto shape = new CommentDiagramShape(0, 0, 100, 100, Rectangle);
+	// what kind of shape?
+	if(attributes.first() == "ellipse") shape->setShapeType(Ellipse);
+	else if(attributes.first() == "diamond") shape->setShapeType(Diamond);
+
+	diagram->model()->beginModification(diagram, "create shape");
+	diagram->shapes()->append(shape);
+	diagram->model()->endModification();
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+
+	return new Interaction::CommandResult();
 }
 
-}
+} /* namespace OOInteraction */
