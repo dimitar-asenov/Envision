@@ -40,6 +40,13 @@ ITEM_COMMON_DEFINITIONS(VComment, "item")
 
 VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
+	// import existing diagrams
+	for(int i = 0; i < node->diagrams()->size(); ++i)
+	{
+		auto diagram = node->diagrams()->at(i);
+		diagrams_[diagram->name()] = diagram;
+	}
+
 	parseLines();
 }
 
@@ -120,7 +127,7 @@ void VComment::parseLines()
 
 			if(diagram == nullptr)
 			{
-				diagram = new CommentDiagram(diagramName);
+				diagram = new CommentDiagram(nullptr, diagramName);
 				diagrams_[diagramName] = diagram;
 			}
 

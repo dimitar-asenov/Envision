@@ -53,7 +53,6 @@ TEST(Comments, SimpleTest)
 
 	model->beginModification(list, "set");
 
-#if 0
 	auto node = new CommentNode(
 		"Comments support *quite* some stuff by now. For example...\n"
 		"# Diagrams!\n"
@@ -72,29 +71,30 @@ TEST(Comments, SimpleTest)
 //		"[[http://dimitar-asenov.github.io/Envision/|400x100]]\n"
 //		"...\n"
 	);
-#else
-	auto node = new CommentDiagram("main");
+
+	auto diagram = new CommentDiagram(nullptr, "main");
 
 	auto shape1 = new CommentDiagramShape(0, 50, 200, 50, Rectangle);
 	shape1->setLabel("First shape");
 	shape1->setShapeColor("blue");
 	shape1->setTextColor("red");
-	node->shapes()->append(shape1);
+	diagram->shapes()->append(shape1);
 
 	auto shape2 = new CommentDiagramShape(100, 150, 200,  50, Ellipse);
 	shape2->setLabel("Another shape");
 	shape2->setShapeColor("magenta");
 	shape2->setTextColor("yellow");
-	node->shapes()->append(shape2);
+	diagram->shapes()->append(shape2);
 
 	auto shape3 = new CommentDiagramShape(0, 150, 100, 150, Diamond);
 	shape3->setLabel("Diamond");
-	node->shapes()->append(shape3);
+	diagram->shapes()->append(shape3);
 
-//	node->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
-//	node->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
-//	node->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
-#endif
+//	diagram->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
+//	diagram->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
+//	diagram->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
+
+	node->diagrams()->append(diagram);
 
 	list->append(node);
 

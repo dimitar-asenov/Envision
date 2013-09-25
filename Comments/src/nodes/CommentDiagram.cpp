@@ -40,8 +40,8 @@ REGISTER_ATTRIBUTE(CommentDiagram, height, Float, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagram, shapes, TypedListOfCommentDiagramShape, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagram, connectors, TypedListOfCommentDiagramConnector, false, false, true)
 
-CommentDiagram::CommentDiagram(QString name)
-: Super(nullptr, CommentDiagram::getMetaData())
+CommentDiagram::CommentDiagram(Node *parent, QString name)
+: Super(parent, CommentDiagram::getMetaData())
 {
 	setName(name);
 	setWidth(0);
