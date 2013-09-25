@@ -91,9 +91,9 @@ TEST(Comments, SimpleTest)
 	shape3->setLabel("Diamond");
 	node->shapes()->append(shape3);
 
-	node->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
-	node->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
-	node->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
+//	node->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
+//	node->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
+//	node->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
 #endif
 
 	list->append(node);
