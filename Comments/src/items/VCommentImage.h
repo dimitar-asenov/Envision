@@ -56,6 +56,8 @@ class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 		QString path_{};
 		QSize size_{};
 		QString text_{};
+
+		static unsigned int errorTextPadding;
 };
 
 } /* namespace Comments */

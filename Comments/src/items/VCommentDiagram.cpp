@@ -43,6 +43,7 @@ VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 
 void VCommentDiagram::determineChildren()
 {
+	qDebug() << "determining diagram children";
 	QList<Model::Node*> nodes;
 	nodes << node()->shapes()->nodes().toList();
 	nodes << node()->connectors()->nodes().toList();
@@ -168,6 +169,7 @@ void VCommentDiagram::toggleEditing()
 void VCommentDiagram::resize(QSize size)
 {
 	size = size.expandedTo(minSize_);
+	Q_ASSERT(node()->model() != nullptr);
 
 	node()->model()->beginModification(node(), "Resizing diagram");
 	node()->setSize(size);

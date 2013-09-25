@@ -32,8 +32,7 @@ namespace Comments {
 /*
  * Padding of text error
  */
-// TODO: acceptable style? :)
-static unsigned int padding = 0;
+unsigned int VCommentImage::errorTextPadding = 10;
 
 ITEM_COMMON_DEFINITIONS(VCommentImage, "item")
 
@@ -67,7 +66,7 @@ void VCommentImage::updateGeometry(int, int)
 	{
 		text_ = "This image could not be loaded: "+path_;
 		QRect rect = textDimensions(scene()->font(), text_);
-		size_ = rect.size()+QSize(2*padding, 2*padding);
+		size_ = rect.size()+QSize(2*errorTextPadding, 2*errorTextPadding);
 	}
 	setSize(size_);
 }
@@ -119,7 +118,7 @@ void VCommentImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
 		painter->drawImage(rect, *image_);
 	else
 	{
-		QRectF padded(QPointF(padding, padding), size()-QSize(2*padding, 2*padding));
+		QRectF padded(QPointF(errorTextPadding, errorTextPadding), size()-QSize(2*errorTextPadding, 2*errorTextPadding));
 		// draw text with some padding
 		painter->fillRect(rect, QBrush(QColor(255, 200, 200)));
 		painter->drawText(padded, Qt::AlignCenter | Qt::TextWordWrap, text_);
