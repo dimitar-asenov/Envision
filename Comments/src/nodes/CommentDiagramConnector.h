@@ -51,6 +51,8 @@ class COMMENTS_API CommentDiagramConnector : public Super<Model::CompositeNode> 
 
 	public:
 		CommentDiagramConnector(const int& shape1, const int& point1, const int& shape2, const int& point2);
+
+	friend QDebug operator<<(QDebug dbg, const CommentDiagramConnector *c);
 };
 
 } /* namespace Comments */

@@ -50,4 +50,12 @@ CommentDiagramConnector::CommentDiagramConnector(const int& shape1, const int& p
 	setPoint2(point2);
 }
 
+QDebug operator<<(QDebug dbg, const CommentDiagramConnector *c)
+{
+	dbg.nospace() << "(CommentDiagramConnector: connects "
+			        << "(" << c->shape1() << "," << c->point1() << ") and "
+			        << "(" << c->shape2() << "," << c->point2() << ")";
+	return dbg.space();
+}
+
 } /* namespace Comments */

@@ -124,4 +124,20 @@ QPoint CommentDiagramShape::getConnectorCoordinates(int index) const
 	return QPoint();
 }
 
+QDebug operator<<(QDebug dbg, const CommentDiagramShape *c)
+{
+	QString shapeType;
+
+	if(c->shapeType() == Ellipse) shapeType = "Ellipse";
+	else if(c->shapeType() == Diamond) shapeType = "Diamond";
+	else shapeType = "Rectangle";
+
+   dbg.nospace() << "(CommentDiagramShape: " << shapeType << " at (" << c->x() << "," << c->y()
+   		         << ") size " << c->width() << "x" << c->height()
+   		         << ", shapeColor " << c->shapeColor()
+   		         << ", textColor " << c->textColor()
+   		         << ", label " << c->label() << ")";
+   return dbg.space();
+}
+
 } /* namespace Comments */

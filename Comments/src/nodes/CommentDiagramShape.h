@@ -65,6 +65,8 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 		QSize size() const;
 		QPoint pos() const;
 		QPoint getConnectorCoordinates(int index) const;
+
+	friend QDebug operator<<(QDebug dbg, const CommentDiagramShape *c);
 };
 
 } /* namespace Comments */
