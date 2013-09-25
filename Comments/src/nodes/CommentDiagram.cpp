@@ -56,7 +56,28 @@ void CommentDiagram::setSize(QSizeF size)
 
 void CommentDiagram::removeShape(CommentDiagramShape *shape)
 {
+	// what's the index of this shape?
+	int shapeIndex = shapes()->indexOf(shape);
+	Q_ASSERT(shapeIndex != -1);
+
 	model()->beginModification(this, "removing shape from diagram");
+
+	int connectorsSize = connectors()->size();
+	// find all connectors that reference this shape
+	for(int i = 0; i < connectorsSize; ++i)
+	{
+		// iterate in reverse to avoid ordering issues
+		int index = connectorsSize - i - 1;
+		auto c = connectors()->at(index);
+		if(c->shape1() == shapeIndex || c->shape2() == shapeIndex)
+			connectors()->remove(index);
+		// else decrease all shape indexes bigger than the removed one by one
+		else if(c->shape1() > shapeIndex)
+			c->setShape1(c->shape1() - 1);
+		else if(c->shape2() > shapeIndex)
+			c->setShape2(c->shape2() - 1);
+	}
+
 	shapes()->remove(shape);
 	model()->endModification();
 }
