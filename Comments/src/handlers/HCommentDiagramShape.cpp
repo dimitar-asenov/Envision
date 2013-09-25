@@ -44,12 +44,12 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
 	event->ignore();
 
-	if(shape->parent()->editing())
+	if(shape->diagram()->editing())
 	{
 		if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
 		{
 			event->accept();
-			shape->parent()->node()->removeShape(shape->node());
+			shape->diagram()->node()->removeShape(shape->node());
 			// since the shape was selected, we need to clear it
 			auto scene = target->scene();
 			scene->clearFocus();
@@ -66,7 +66,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 {
 	event->ignore();
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
-	if(shape->parent()->editing())
+	if(shape->diagram()->editing())
 	{
 		if(event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
 		{
@@ -99,7 +99,7 @@ void HCommentDiagramShape::mouseDoubleClickEvent(Visualization::Item*, QGraphics
 void HCommentDiagramShape::hoverEnterEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
-	if(shape->parent()->editing())
+	if(shape->diagram()->editing())
 		shape->setCursor(Qt::OpenHandCursor);
 }
 

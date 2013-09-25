@@ -47,7 +47,7 @@ class COMMENTS_API VCommentDiagramShape
 	public:
 		VCommentDiagramShape(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		void moveTo(QPoint pos);
-		VCommentDiagram* parent();
+		VCommentDiagram* diagram();
 
 	protected:
 		virtual void determineChildren() override;

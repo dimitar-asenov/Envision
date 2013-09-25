@@ -40,7 +40,7 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 	setAcceptHoverEvents(true);
 }
 
-VCommentDiagram* VCommentDiagramShape::parent()
+VCommentDiagram* VCommentDiagramShape::diagram()
 {
 	return dynamic_cast<VCommentDiagram*>(Item::parent());
 }
@@ -87,7 +87,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->drawText(rect, Qt::AlignCenter, node()->label());
 	}
 
-	if(parent()->editing())
+	if(diagram()->editing())
 	{
 		// Temporarily assume a thicker painter with a different color for drawing the connector points
 		QBrush brush(QColor("red"));

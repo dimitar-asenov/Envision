@@ -43,7 +43,6 @@ void VCommentDiagramConnector::determineChildren(){}
 
 void VCommentDiagramConnector::updateGeometry(int, int)
 {
-	// TODO: handle case where either argument is non-zero?
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
 	// it here again.
 	auto shape1 = parent_->node()->shapes()->at(node()->shape1());
