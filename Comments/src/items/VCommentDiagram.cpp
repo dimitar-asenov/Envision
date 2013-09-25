@@ -76,6 +76,9 @@ void VCommentDiagram::updateGeometry(int, int)
 			auto connector = dynamic_cast<CommentDiagramConnector*>(child->node());
 			if(connector != nullptr)
 			{
+				// update the connectors in case some of the shapes changed
+				setUpdateNeededForChildItem(StandardUpdate, connector);
+
 				auto shape1 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape1()]);
 				auto shape2 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape2()]);
 				auto point1 = shape1->pos()+shape1->getConnectorCoordinates(connector->point1());
