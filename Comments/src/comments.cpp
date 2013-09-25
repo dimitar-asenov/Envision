@@ -61,6 +61,7 @@ bool Comments::initialize(Core::EnvisionManager&)
 	VComment::setDefaultClassHandler(HComment::instance());
 	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
 	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
+	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
 
 	return true;
 }
