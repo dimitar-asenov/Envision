@@ -32,7 +32,7 @@ VCommentDiagramShapeStyle::~VCommentDiagramShapeStyle(){} // Put the VTable here
 
 VCommentDiagramShapeSequenceStyle::~VCommentDiagramShapeSequenceStyle(){} // Put the VTable here
 
-const QColor VCommentDiagramShapeSequenceStyle::getColor(const QString& colorName) const
+const QColor VCommentDiagramShapeSequenceStyle::colorFromName(const QString& colorName) const
 {
 	for(int i = 0; i < colors().size(); ++i)
 	{

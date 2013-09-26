@@ -46,7 +46,7 @@ class COMMENTS_API VCommentDiagramShapeSequenceStyle : public Visualization::Ite
 {
 	public:
 		virtual ~VCommentDiagramShapeSequenceStyle() override;
-		const QColor getColor(const QString& colorName) const;
+		const QColor colorFromName(const QString& colorName) const;
 
 		Property<QVector<VCommentDiagramShapeStyle> > colors{this, "colors"};
 };

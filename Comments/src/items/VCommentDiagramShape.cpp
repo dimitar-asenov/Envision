@@ -54,8 +54,8 @@ void VCommentDiagramShape::determineChildren()
 void VCommentDiagramShape::updateGeometry(int, int)
 {
 	setSize(node()->size());
-	shapeColor_ = style()->getColor(node()->shapeColor());
-	textColor_ = style()->getColor(node()->textColor());
+	shapeColor_ = style()->colorFromName(node()->shapeColor());
+	textColor_ = style()->colorFromName(node()->textColor());
 	text_->setEditable(diagram()->editing());
 }
 
