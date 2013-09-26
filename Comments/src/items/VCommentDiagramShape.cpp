@@ -38,6 +38,8 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 : Super(parent, node, style)
 {
 	setAcceptHoverEvents(true);
+	text_ = new VText(this, node->label());
+	text_->setEditable(false);
 }
 
 VCommentDiagram* VCommentDiagramShape::diagram()
@@ -45,13 +47,16 @@ VCommentDiagram* VCommentDiagramShape::diagram()
 	return dynamic_cast<VCommentDiagram*>(Item::parent());
 }
 
-void VCommentDiagramShape::determineChildren(){}
+void VCommentDiagramShape::determineChildren()
+{
+}
 
 void VCommentDiagramShape::updateGeometry(int, int)
 {
 	setSize(node()->size());
 	shapeColor_ = style()->getColor(node()->shapeColor());
 	textColor_ = style()->getColor(node()->textColor());
+	text_->setEditable(diagram()->editing());
 }
 
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
@@ -79,12 +84,6 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			lines.push_back(QLine(0,         height()/2, width()/2, 0));
 			painter->drawLines(lines);
 			break;
-	}
-
-	if(!node()->label().isEmpty())
-	{
-		painter->setPen(QPen(textColor_));
-		painter->drawText(rect, Qt::AlignCenter, node()->label());
 	}
 
 	if(diagram()->editing())

@@ -124,7 +124,7 @@ QPoint CommentDiagramShape::getConnectorCoordinates(int index) const
 	return QPoint();
 }
 
-QDebug operator<<(QDebug dbg, const CommentDiagramShape *c)
+QDebug operator<<(QDebug dbg, CommentDiagramShape *c)
 {
 	QString shapeType;
 

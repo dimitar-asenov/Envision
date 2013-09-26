@@ -60,9 +60,14 @@ void VCommentDiagram::updateGeometry(int, int)
 	for(int i = 0; i < items_.size(); ++i)
 	{
 		auto child = items_.at(i);
+
+		// update all children
+		// -> connectors use new shapes' positions
+		// -> shapes text is no longer editable
+		setUpdateNeededForChildItem(StandardUpdate, child->node());
+
 		// only count shapes, connectors will stay within these bounds
-		auto shape = dynamic_cast<CommentDiagramShape*>(child->node());
-		if(shape != nullptr)
+		if(auto shape = dynamic_cast<CommentDiagramShape*>(child->node()))
 		{
 			child->setPos(shape->pos());
 
@@ -71,20 +76,13 @@ void VCommentDiagram::updateGeometry(int, int)
 			minSize = minSize.expandedTo(QSize(shapeWidth, shapeHeight));
 		}
 		// but connectors still need to be positioned
-		else
+		else if(auto connector = dynamic_cast<CommentDiagramConnector*>(child->node()))
 		{
-			auto connector = dynamic_cast<CommentDiagramConnector*>(child->node());
-			if(connector != nullptr)
-			{
-				// update the connectors in case some of the shapes changed
-				setUpdateNeededForChildItem(StandardUpdate, connector);
-
-				auto shape1 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape1()]);
-				auto shape2 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape2()]);
-				auto point1 = shape1->pos()+shape1->getConnectorCoordinates(connector->point1());
-				auto point2 = shape2->pos()+shape2->getConnectorCoordinates(connector->point2());
-				child->setPos(std::min(point1.x(), point2.x()), std::min(point1.y(), point2.y()));
-			}
+			auto shape1 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape1()]);
+			auto shape2 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape2()]);
+			auto point1 = shape1->pos()+shape1->getConnectorCoordinates(connector->point1());
+			auto point2 = shape2->pos()+shape2->getConnectorCoordinates(connector->point2());
+			child->setPos(std::min(point1.x(), point2.x()), std::min(point1.y(), point2.y()));
 		}
 	}
 	minSize_ = minSize;

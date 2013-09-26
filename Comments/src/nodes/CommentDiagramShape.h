@@ -50,7 +50,7 @@ enum CommentDiagramShapeType { Rectangle, Ellipse, Diamond };
 class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramShape)
 
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
+	ATTRIBUTE(::Model::Text, label, setLabel)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, shapeColor, setShapeColor, QString, const QString&)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, textColor, setTextColor, QString, const QString&)
 	ATTRIBUTE_VALUE(::Model::Integer, x, setX, int)

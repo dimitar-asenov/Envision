@@ -31,6 +31,7 @@
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VText.h"
 #include "VCommentDiagram.h"
 #include "VCommentDiagramShapeStyle.h"
 #include "../nodes/CommentDiagramShape.h"
@@ -56,6 +57,7 @@ class COMMENTS_API VCommentDiagramShape
 
 	private:
 		QColor shapeColor_, textColor_;
+		Visualization::VText *text_;
 };
 
 } /* namespace Comments */

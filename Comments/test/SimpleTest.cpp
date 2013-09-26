@@ -75,24 +75,24 @@ TEST(Comments, SimpleTest)
 	auto diagram = new CommentDiagram(nullptr, "main");
 
 	auto shape1 = new CommentDiagramShape(0, 50, 200, 50, Rectangle);
-	shape1->setLabel("First shape");
+	shape1->setLabel(new Model::Text("First shape"));
 	shape1->setShapeColor("blue");
 	shape1->setTextColor("red");
 	diagram->shapes()->append(shape1);
 
 	auto shape2 = new CommentDiagramShape(100, 150, 200,  50, Ellipse);
-	shape2->setLabel("Another shape");
+	shape2->setLabel(new Model::Text("Another shape"));
 	shape2->setShapeColor("magenta");
 	shape2->setTextColor("yellow");
 	diagram->shapes()->append(shape2);
 
 	auto shape3 = new CommentDiagramShape(0, 150, 100, 150, Diamond);
-	shape3->setLabel("Diamond");
+	shape3->setLabel(new Model::Text("Diamond"));
 	diagram->shapes()->append(shape3);
 
-//	diagram->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
-//	diagram->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
-//	diagram->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
+	diagram->connectors()->append(new CommentDiagramConnector(0, SE, 1, N));
+	diagram->connectors()->append(new CommentDiagramConnector(1, N,  2, N));
+	diagram->connectors()->append(new CommentDiagramConnector(2, N,  0, SW));
 
 	node->diagrams()->append(diagram);
 
