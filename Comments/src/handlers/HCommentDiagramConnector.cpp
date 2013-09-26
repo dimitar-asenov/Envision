@@ -26,6 +26,7 @@
 
 #include "handlers/HCommentDiagramConnector.h"
 #include "items/VCommentDiagram.h"
+#include "items/VCommentDiagramConnector.h"
 
 namespace Comments {
 
@@ -36,6 +37,29 @@ HCommentDiagramConnector* HCommentDiagramConnector::instance()
 {
 	static HCommentDiagramConnector h;
 	return &h;
+}
+
+void HCommentDiagramConnector::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	auto connector = dynamic_cast<VCommentDiagramConnector*>(target);
+	event->ignore();
+
+	if(connector->diagram()->editing())
+	{
+		if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
+		{
+			event->accept();
+			connector->diagram()->node()->removeConnector(connector->node());
+			// since the connector was selected, we need to clear the selection
+			auto scene = target->scene();
+			scene->clearFocus();
+			scene->clearSelection();
+			scene->setMainCursor(nullptr);
+		}
+	}
+
+	if (!event->isAccepted())
+		GenericHandler::keyPressEvent(target, event);
 }
 
 void HCommentDiagramConnector::mousePressEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)

@@ -35,8 +35,11 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
 
 VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
-	parent_ = dynamic_cast<VCommentDiagram*>(parent);
-	Q_ASSERT(parent_ != nullptr);
+}
+
+VCommentDiagram* VCommentDiagramConnector::diagram()
+{
+	return dynamic_cast<VCommentDiagram*>(parent());
 }
 
 void VCommentDiagramConnector::determineChildren(){}
@@ -45,8 +48,8 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 {
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
 	// it here again.
-	auto shape1 = parent_->node()->shapes()->at(node()->shape1());
-	auto shape2 = parent_->node()->shapes()->at(node()->shape2());
+	auto shape1 = diagram()->node()->shapes()->at(node()->shape1());
+	auto shape2 = diagram()->node()->shapes()->at(node()->shape2());
 
 	point1_ = shape1->pos()+shape1->getConnectorCoordinates(node()->point1());
 	point2_ = shape2->pos()+shape2->getConnectorCoordinates(node()->point2());

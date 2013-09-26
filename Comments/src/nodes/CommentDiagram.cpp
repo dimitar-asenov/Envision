@@ -54,6 +54,13 @@ void CommentDiagram::setSize(QSizeF size)
 	setHeight(size.height());
 }
 
+void CommentDiagram::removeConnector(CommentDiagramConnector *connector)
+{
+	model()->beginModification(this, "removing connector from diagram");
+	connectors()->remove(connector);
+	model()->endModification();
+}
+
 void CommentDiagram::removeShape(CommentDiagramShape *shape)
 {
 	// what's the index of this shape?
@@ -78,7 +85,7 @@ void CommentDiagram::removeShape(CommentDiagramShape *shape)
 			c->setShape2(c->shape2() - 1);
 	}
 
-	shapes()->remove(shape);
+	shapes()->remove(shapeIndex);
 	model()->endModification();
 }
 

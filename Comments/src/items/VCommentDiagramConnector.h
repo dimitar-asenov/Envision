@@ -43,6 +43,7 @@ class COMMENTS_API VCommentDiagramConnector : public Super<Visualization::ItemWi
 
 	public:
 		VCommentDiagramConnector(Visualization::Item* parent, NodeType* node);
+		VCommentDiagram *diagram();
 
 	protected:
 		virtual void determineChildren() override;
@@ -50,7 +51,6 @@ class COMMENTS_API VCommentDiagramConnector : public Super<Visualization::ItemWi
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	private:
-		VCommentDiagram* parent_;
 		QPointF point1_, point2_;
 };
 

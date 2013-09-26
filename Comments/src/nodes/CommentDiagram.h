@@ -53,6 +53,7 @@ class COMMENTS_API CommentDiagram : public Super<Model::CompositeNode> {
 	public:
 		CommentDiagram(Node *parent, QString name);
 		void setSize(QSizeF size);
+		void removeConnector(CommentDiagramConnector *connector);
 		void removeShape(CommentDiagramShape *shape);
 };
 
