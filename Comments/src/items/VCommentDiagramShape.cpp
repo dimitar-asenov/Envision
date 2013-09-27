@@ -57,6 +57,12 @@ void VCommentDiagramShape::updateGeometry(int, int)
 	shapeColor_ = style()->colorFromName(node()->shapeColor());
 	textColor_ = style()->colorFromName(node()->textColor());
 	text_->setEditable(diagram()->editing());
+	// TODO: consider shape as well?
+	auto bound = text_->boundingRect();
+	// align it both horizontally and veritcally
+	int x = node()->width() / 2 - bound.width() / 2;
+	int y = node()->height() / 2 - bound.height() / 2;
+	text_->setPos(x, y);
 }
 
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
