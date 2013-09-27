@@ -69,6 +69,7 @@ void CommentDiagram::removeShape(CommentDiagramShape *shape)
 
 	model()->beginModification(this, "removing shape from diagram");
 
+	// the size may change inside the loop, cache its original value
 	int connectorsSize = connectors()->size();
 	// find all connectors that reference this shape
 	for(int i = 0; i < connectorsSize; ++i)
@@ -79,10 +80,13 @@ void CommentDiagram::removeShape(CommentDiagramShape *shape)
 		if(c->shape1() == shapeIndex || c->shape2() == shapeIndex)
 			connectors()->remove(index);
 		// else decrease all shape indexes bigger than the removed one by one
-		else if(c->shape1() > shapeIndex)
-			c->setShape1(c->shape1() - 1);
-		else if(c->shape2() > shapeIndex)
-			c->setShape2(c->shape2() - 1);
+		else
+		{
+			if(c->shape1() > shapeIndex)
+				c->setShape1(c->shape1() - 1);
+			if(c->shape2() > shapeIndex)
+				c->setShape2(c->shape2() - 1);
+		}
 	}
 
 	shapes()->remove(shapeIndex);
