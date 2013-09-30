@@ -27,11 +27,14 @@
 #include "handlers/HCommentDiagramShape.h"
 #include "items/VCommentDiagram.h"
 #include "items/VCommentDiagramShape.h"
+#include "commands/CShapeSetProperty.h"
 
 namespace Comments {
 
 HCommentDiagramShape::HCommentDiagramShape()
-{}
+{
+	addCommand(new CShapeSetProperty());
+}
 
 HCommentDiagramShape* HCommentDiagramShape::instance()
 {
@@ -74,7 +77,15 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 			originalPos_ = shape->pos().toPoint();
 			shape->setCursor(Qt::ClosedHandCursor);
 		}
+		else if(event->button() == Qt::RightButton)
+		{
+			event->accept();
+			showCommandPrompt(target);
+		}
 	}
+
+	if (!event->isAccepted())
+		GenericHandler::mousePressEvent(target, event);
 }
 
 void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *)
