@@ -56,7 +56,7 @@ void VCommentDiagramShape::updateGeometry(int, int)
 	setSize(node()->size());
 	shapeColor_ = style()->colorFromName(node()->shapeColor());
 	textColor_ = style()->colorFromName(node()->textColor());
-	text_->setEditable(diagram()->editing());
+
 	// TODO: consider shape as well?
 	auto bound = text_->boundingRect();
 	// align it both horizontally and veritcally
@@ -116,6 +116,17 @@ void VCommentDiagramShape::moveTo(QPoint pos)
 	node()->setY(pos.y());
 	node()->model()->endModification();
 	setUpdateNeeded(StandardUpdate);
+
+	// update all children
+	// -> connectors use new shapes' positions
+	// -> shapes text is no longer editable
+	for(auto child : parent()->childItems())
+		child->setUpdateNeeded(StandardUpdate);
+}
+
+void VCommentDiagramShape::setTextEditable(bool editable)
+{
+	text_->setEditable(editable);
 }
 
 } /* namespace Comments */

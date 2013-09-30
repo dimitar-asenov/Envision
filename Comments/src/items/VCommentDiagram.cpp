@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "VCommentDiagram.h"
+#include "VCommentDiagramShape.h"
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
@@ -60,11 +61,6 @@ void VCommentDiagram::updateGeometry(int, int)
 	for(int i = 0; i < items_.size(); ++i)
 	{
 		auto child = items_.at(i);
-
-		// update all children
-		// -> connectors use new shapes' positions
-		// -> shapes text is no longer editable
-		setUpdateNeededForChildItem(StandardUpdate, child->node());
 
 		// only count shapes, connectors will stay within these bounds
 		if(auto shape = dynamic_cast<CommentDiagramShape*>(child->node()))
@@ -163,6 +159,14 @@ inline void VCommentDiagram::swap(int i, int j)
 void VCommentDiagram::toggleEditing()
 {
 	editing_ = !editing_;
+
+	for(auto child : items_)
+	{
+		auto shape = dynamic_cast<VCommentDiagramShape*>(child);
+		if(shape != nullptr)
+			shape->setTextEditable(editing_);
+	}
+
 	setUpdateNeeded(StandardUpdate);
 }
 

@@ -49,6 +49,7 @@ class COMMENTS_API VCommentDiagramShape
 		VCommentDiagramShape(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		void moveTo(QPoint pos);
 		VCommentDiagram* diagram();
+		void setTextEditable(bool editable);
 
 	protected:
 		virtual void determineChildren() override;
