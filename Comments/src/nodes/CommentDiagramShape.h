@@ -53,6 +53,7 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 	ATTRIBUTE(::Model::Text, label, setLabel)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, shapeColor, setShapeColor, QString, const QString&)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, textColor, setTextColor, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, backgroundColor, setBackgroundColor, QString, const QString&)
 	ATTRIBUTE_VALUE(::Model::Integer, x, setX, int)
 	ATTRIBUTE_VALUE(::Model::Integer, y, setY, int)
 	ATTRIBUTE_VALUE(::Model::Integer, width, setWidth, int)

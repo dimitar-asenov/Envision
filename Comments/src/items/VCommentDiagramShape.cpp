@@ -56,6 +56,7 @@ void VCommentDiagramShape::updateGeometry(int, int)
 	setSize(node()->size());
 	shapeColor_ = style()->colorFromName(node()->shapeColor());
 	textColor_ = style()->colorFromName(node()->textColor());
+	backgroundColor_ = style()->colorFromName(node()->backgroundColor());
 
 	// TODO: consider shape as well?
 	auto bound = text_->boundingRect();
@@ -70,6 +71,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	// rectangle to draw the shape in
 	QRect rect(0, 0, width(), height());
 	painter->setPen(shapeColor_);
+	painter->setBrush(QBrush(backgroundColor_));
 
 	switch(node()->shapeType())
 	{

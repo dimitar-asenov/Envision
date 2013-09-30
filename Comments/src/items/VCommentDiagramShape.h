@@ -57,7 +57,7 @@ class COMMENTS_API VCommentDiagramShape
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 	private:
-		QColor shapeColor_, textColor_;
+		QColor shapeColor_, textColor_, backgroundColor_;
 		Visualization::VText *text_;
 };
 

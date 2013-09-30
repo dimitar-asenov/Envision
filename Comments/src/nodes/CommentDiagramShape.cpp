@@ -42,6 +42,7 @@ REGISTER_ATTRIBUTE(CommentDiagramShape, height, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, shapeType, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, shapeColor, Text, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, textColor, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramShape, backgroundColor, Text, false, false, true)
 
 // references for primitive types?
 CommentDiagramShape::CommentDiagramShape(const int& x, const int& y, const int& width,
@@ -55,6 +56,7 @@ CommentDiagramShape::CommentDiagramShape(const int& x, const int& y, const int& 
 	setShapeType(shapeType);
 	setShapeColor("black");
 	setTextColor("black");
+	setBackgroundColor("white");
 }
 
 QSize CommentDiagramShape::size() const
@@ -136,6 +138,7 @@ QDebug operator<<(QDebug dbg, CommentDiagramShape *c)
    		         << ") size " << c->width() << "x" << c->height()
    		         << ", shapeColor " << c->shapeColor()
    		         << ", textColor " << c->textColor()
+   		         << ", backgroundColor " << c->backgroundColor()
    		         << ", label " << c->label() << ")";
    return dbg.space();
 }
