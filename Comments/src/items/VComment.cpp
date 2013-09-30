@@ -47,6 +47,7 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 		diagrams_[diagram->name()] = diagram;
 	}
 
+	editing_ = node->lines()->size() == 0;
 	parseLines();
 }
 
@@ -305,7 +306,10 @@ void VComment::addChildItem(Visualization::Item* item)
 
 void VComment::toggleEditing()
 {
-	editing_ = !editing_;
+	if(node()->lines()->size() == 0)
+		editing_ = true;
+	else
+		editing_ = !editing_;
 
 	if(!editing_)
 		parseLines();
