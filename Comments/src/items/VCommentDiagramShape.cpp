@@ -39,7 +39,7 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 {
 	setAcceptHoverEvents(true);
 	text_ = new VText(this, node->label());
-	text_->setEditable(false);
+	setTextEditable(false);
 }
 
 VCommentDiagram* VCommentDiagramShape::diagram()
@@ -60,7 +60,7 @@ void VCommentDiagramShape::updateGeometry(int, int)
 
 	// TODO: consider shape as well?
 	auto bound = text_->boundingRect();
-	// align it both horizontally and veritcally
+	// align it both horizontally and vertically
 	int x = node()->width() / 2 - bound.width() / 2;
 	int y = node()->height() / 2 - bound.height() / 2;
 	text_->setPos(x, y);
@@ -85,12 +85,13 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			break;
 
 		case Diamond:
-			QVector<QLine> lines;
-			lines.push_back(QLine(width()/2, 0,          width(),   height()/2));
-			lines.push_back(QLine(width(),   height()/2, width()/2, height()));
-			lines.push_back(QLine(width()/2, height(),   0,         height()/2));
-			lines.push_back(QLine(0,         height()/2, width()/2, 0));
-			painter->drawLines(lines);
+			QPoint points[4] = {
+				QPoint(width()/2, 0),
+				QPoint(width(),   height()/2),
+				QPoint(width()/2, height()),
+				QPoint(0,         height()/2)
+			};
+			painter->drawConvexPolygon(points, 4);
 			break;
 	}
 

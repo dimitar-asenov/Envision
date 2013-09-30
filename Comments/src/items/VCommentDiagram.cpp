@@ -95,6 +95,7 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	Item::paint(painter, option, widget);
 
 	QRect rect(QPoint(0,0), size().toSize());
+	painter->setBrush(QBrush(Qt::white));
 	if(editing_)
 	{
 		QPen pen = painter->pen(), oldPen = painter->pen();
