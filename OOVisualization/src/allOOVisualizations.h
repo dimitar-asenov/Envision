@@ -39,6 +39,7 @@
 #include "elements/VFormalTypeArgument.h"
 #include "elements/VStatementItemList.h"
 #include "elements/VCatchClause.h"
+#include "elements/VCommentStatementItem.h"
 
 #include "expressions/allOOExpressionVisualizations.h"
 

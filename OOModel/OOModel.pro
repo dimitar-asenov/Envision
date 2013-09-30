@@ -3,8 +3,10 @@ include(../Core/common_plugin.pri)
 DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
-    -lmodelbase
-HEADERS += src/statements/CaseStatement.h \
+    -lmodelbase \
+    -lcomments
+HEADERS += src/elements/CommentStatementItem.h \
+    src/statements/CaseStatement.h \
     src/elements/Modifier.h \
     src/declarations/NameImport.h \
     src/expressions/types/FunctionTypeExpression.h \
@@ -92,7 +94,8 @@ HEADERS += src/statements/CaseStatement.h \
     src/expressions/TypeNameOperator.h \
     src/expressions/GlobalScopeExpression.h \
     src/declarations/ExplicitTemplateInstantiation.h
-SOURCES += src/statements/CaseStatement.cpp \
+SOURCES += src/elements/CommentStatementItem.cpp \
+    src/statements/CaseStatement.cpp \
     src/elements/Modifier.cpp \
     src/declarations/NameImport.cpp \
     src/expressions/types/FunctionTypeExpression.cpp \

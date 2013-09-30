@@ -3,6 +3,7 @@
 	<name>OOModel</name>
 	<comment></comment>
 	<projects>
+		<project>Comments</project>
 		<project>Core</project>
 		<project>Logger</project>
 		<project>ModelBase</project>

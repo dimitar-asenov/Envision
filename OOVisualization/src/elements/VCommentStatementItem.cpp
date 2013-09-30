@@ -24,49 +24,35 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentDiagramConnector.h"
+#include "VCommentStatementItem.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 
 using namespace Visualization;
+using namespace OOModel;
 
-namespace Comments {
+namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
+ITEM_COMMON_DEFINITIONS(VCommentStatementItem, "item")
 
-VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
+VCommentStatementItem::VCommentStatementItem(Item* parent, NodeType* node, const StyleType* style) :
+	Super(parent, node, style),
+	comment_( nullptr )
 {
 }
 
-VCommentDiagram* VCommentDiagramConnector::diagram()
+VCommentStatementItem::~VCommentStatementItem()
 {
-	return dynamic_cast<VCommentDiagram*>(parent());
+	SAFE_DELETE_ITEM(comment_);
 }
 
-void VCommentDiagramConnector::determineChildren(){}
-
-void VCommentDiagramConnector::updateGeometry(int, int)
+void VCommentStatementItem::determineChildren()
 {
-	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
-	// it here again.
-	auto shape1 = diagram()->node()->shapes()->at(node()->shape1());
-	auto shape2 = diagram()->node()->shapes()->at(node()->shape2());
-
-	point1_ = shape1->pos()+shape1->getConnectorCoordinates(node()->point1());
-	point2_ = shape2->pos()+shape2->getConnectorCoordinates(node()->point2());
-	auto origin = QPoint(std::min(point1_.x(), point2_.x()), std::min(point1_.y(), point2_.y()));
-	point1_ -= origin;
-	point2_ -= origin;
-
-	// make sure we get at least one pixel to draw inside!
-	int dx = std::max(1., std::abs(point1_.x() - point2_.x()));
-	int dy = std::max(1., std::abs(point1_.y() - point2_.y()));
-	setSize(dx, dy);
+	synchronizeItem(comment_, node()->comment());
 }
 
-void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
+void VCommentStatementItem::updateGeometry(int availableWidth, int availableHeight)
 {
-	painter->setPen(QPen(Qt::black, 1.0));
-	painter->drawLine(point1_, point2_);
+	Item::updateGeometry(comment_, availableWidth, availableHeight);
 }
 
-} /* namespace Comments */
+} /* namespace OOVisualization */

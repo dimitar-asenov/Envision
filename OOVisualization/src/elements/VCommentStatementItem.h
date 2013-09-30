@@ -24,49 +24,31 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentDiagramConnector.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
+#pragma once
 
-using namespace Visualization;
+#include "../oovisualization_api.h"
+#include "../statements/VStatementItem.h"
 
-namespace Comments {
+#include "OOModel/src/elements/CommentStatementItem.h"
+#include "VisualizationBase/src/items/Item.h"
 
-ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
+namespace OOVisualization {
 
-VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
+class OOVISUALIZATION_API VCommentStatementItem
+	: public Super<VStatementItem<VCommentStatementItem, Visualization::Item, OOModel::CommentStatementItem>>
 {
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentStatementItem, Visualization::ItemStyle)
 
-VCommentDiagram* VCommentDiagramConnector::diagram()
-{
-	return dynamic_cast<VCommentDiagram*>(parent());
-}
+	public:
+		VCommentStatementItem(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VCommentStatementItem();
 
-void VCommentDiagramConnector::determineChildren(){}
+	protected:
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 
-void VCommentDiagramConnector::updateGeometry(int, int)
-{
-	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
-	// it here again.
-	auto shape1 = diagram()->node()->shapes()->at(node()->shape1());
-	auto shape2 = diagram()->node()->shapes()->at(node()->shape2());
+	private:
+		Visualization::Item* comment_;
+};
 
-	point1_ = shape1->pos()+shape1->getConnectorCoordinates(node()->point1());
-	point2_ = shape2->pos()+shape2->getConnectorCoordinates(node()->point2());
-	auto origin = QPoint(std::min(point1_.x(), point2_.x()), std::min(point1_.y(), point2_.y()));
-	point1_ -= origin;
-	point2_ -= origin;
-
-	// make sure we get at least one pixel to draw inside!
-	int dx = std::max(1., std::abs(point1_.x() - point2_.x()));
-	int dy = std::max(1., std::abs(point1_.y() - point2_.y()));
-	setSize(dx, dy);
-}
-
-void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
-{
-	painter->setPen(QPen(Qt::black, 1.0));
-	painter->drawLine(point1_, point2_);
-}
-
-} /* namespace Comments */
+} /* namespace OOVisualization */

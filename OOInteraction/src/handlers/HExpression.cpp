@@ -204,7 +204,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 		if ( (enterPressed || spacePressed)
 				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if" || trimmedText == "class"
 						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return" ||
-						trimmedText == "do"))
+						trimmedText == "do" || trimmedText == "//"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
@@ -267,6 +267,12 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 
 				toFocus = empty;
 				st = loop;
+			}
+			else if(trimmedText == "//")
+			{
+				auto comment = new CommentStatementItem();
+				toFocus = comment->comment();
+				st = comment;
 			}
 
 			Model::Node* containerNode = replaceStatement->parent();
