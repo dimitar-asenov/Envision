@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "Comment.h"
-#include <QStringList>
+#include "CommentNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Comments::CommentNode)

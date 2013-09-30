@@ -13,7 +13,7 @@ HEADERS += src/commands/CCreateShape.h \
     src/handlers/HCommentDiagramShape.h \
     src/handlers/HComment.h \
     src/handlers/HCommentDiagram.h \
-    src/nodes/Comment.h \
+    src/nodes/CommentNode.h \
     src/nodes/CommentDiagram.h \
     src/nodes/CommentDiagramConnector.h \
     src/nodes/CommentDiagramShape.h \
@@ -33,7 +33,7 @@ SOURCES += src/commands/CCreateShape.cpp \
     src/handlers/HCommentDiagramShape.cpp \
     src/handlers/HComment.cpp \
     src/handlers/HCommentDiagram.cpp \
-    src/nodes/Comment.cpp \
+    src/nodes/CommentNode.cpp \
     src/nodes/CommentDiagram.cpp \
     src/nodes/CommentDiagramConnector.cpp \
     src/nodes/CommentDiagramShape.cpp \

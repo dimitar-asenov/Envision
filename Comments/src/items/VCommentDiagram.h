@@ -34,7 +34,7 @@
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 
 #include "../nodes/CommentDiagram.h"
-#include "../nodes/Comment.h"
+#include "../nodes/CommentNode.h"
 
 namespace Comments {
 

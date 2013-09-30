@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "comments.h"
-#include "nodes/Comment.h"
+#include "nodes/CommentNode.h"
 #include "nodes/CommentDiagram.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
