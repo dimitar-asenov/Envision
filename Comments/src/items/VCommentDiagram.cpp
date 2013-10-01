@@ -30,6 +30,7 @@
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/shapes/Shape.h"
 
 using namespace Visualization;
 
@@ -54,6 +55,9 @@ void VCommentDiagram::updateGeometry(int, int)
 {
 	// use a sensible default size to display usage information
 	QSize minSize;
+	QPoint shapeOffset(0,0);
+	if(hasShape())
+		shapeOffset = QPoint(getShape()->contentLeft(), getShape()->contentTop());
 	// this is not needed if there are any items, so really compute the minimal size otherwise
 	if(items_.size() == 0)
 		minSize = QSize(200, 50);
@@ -65,7 +69,7 @@ void VCommentDiagram::updateGeometry(int, int)
 		// only count shapes, connectors will stay within these bounds
 		if(auto shape = dynamic_cast<CommentDiagramShape*>(child->node()))
 		{
-			child->setPos(shape->pos());
+			child->setPos(shape->pos() + shapeOffset);
 
 			int shapeWidth = shape->x()+shape->width();
 			int shapeHeight = shape->y()+shape->height();
@@ -78,13 +82,19 @@ void VCommentDiagram::updateGeometry(int, int)
 			auto shape2 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape2()]);
 			auto point1 = shape1->pos()+shape1->getConnectorCoordinates(connector->point1());
 			auto point2 = shape2->pos()+shape2->getConnectorCoordinates(connector->point2());
-			child->setPos(std::min(point1.x(), point2.x()), std::min(point1.y(), point2.y()));
+			QPoint pos(std::min(point1.x(), point2.x()), std::min(point1.y(), point2.y()));
+			pos += shapeOffset;
+			child->setPos(pos);
 		}
 	}
 	minSize_ = minSize;
 	// override with user set size if provided
 	QSize expanded = minSize_.expandedTo(QSize(node()->width(), node()->height()));
-	setSize(expanded);
+
+	if(hasShape())
+		getShape()->setInnerSize(expanded.width(), expanded.height());
+	else
+		setSize(expanded);
 
 	if(minSize.width() > node()->width() || minSize.height() > node()->height())
 		resize(expanded);
@@ -95,7 +105,11 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	Item::paint(painter, option, widget);
 
 	QRect rect(QPoint(0,0), size().toSize());
-	painter->setBrush(QBrush(Qt::white));
+
+	// assume a default white background
+	if(!hasShape())
+		painter->setBrush(QBrush(Qt::white));
+
 	if(editing_)
 	{
 		QPen pen = painter->pen(), oldPen = painter->pen();
@@ -105,7 +119,7 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		painter->drawRect(rect);
 		painter->setPen(oldPen);
 	}
-	else
+	else if(!hasShape())
 		painter->drawRect(rect);
 
 	if(items_.size() == 0)
