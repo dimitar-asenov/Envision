@@ -41,20 +41,18 @@ CommentNode::CommentNode(const QString& label)
 : Super{nullptr, CommentNode::getMetaData()}
 {
 	QStringList linesList = label.split(QRegExp("\\r?\\n"));
-	for(int i = 0; i < linesList.size(); ++i)
-	{
-		lines()->append(new Model::Text(linesList[i]));
-	}
+	for(auto line : linesList)
+		lines()->append(new Model::Text(line));
 }
 
 CommentDiagram* CommentNode::getDiagramByName(QString& name)
 {
-	for(int i = 0; i < lines()->size(); ++i)
+	for(auto diagram : *diagrams())
 	{
-		auto diagram = diagrams()->at(i);
 		if(diagram->name() == name)
 			return diagram;
 	}
+
 	return nullptr;
 }
 

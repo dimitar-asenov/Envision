@@ -53,19 +53,18 @@ void VCommentDiagram::determineChildren()
 
 void VCommentDiagram::updateGeometry(int, int)
 {
-	// use a sensible default size to display usage information
-	QSize minSize;
 	QPoint shapeOffset(0,0);
 	if(hasShape())
 		shapeOffset = QPoint(getShape()->contentLeft(), getShape()->contentTop());
+
+	// use a sensible default size to display usage information
+	QSize minSize;
 	// this is not needed if there are any items, so really compute the minimal size otherwise
 	if(items_.size() == 0)
 		minSize = QSize(200, 50);
 
-	for(int i = 0; i < items_.size(); ++i)
+	for(auto child : items_)
 	{
-		auto child = items_.at(i);
-
 		// only count shapes, connectors will stay within these bounds
 		if(auto shape = dynamic_cast<CommentDiagramShape*>(child->node()))
 		{

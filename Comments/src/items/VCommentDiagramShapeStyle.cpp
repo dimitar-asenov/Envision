@@ -34,10 +34,10 @@ VCommentDiagramShapeSequenceStyle::~VCommentDiagramShapeSequenceStyle(){} // Put
 
 const QColor VCommentDiagramShapeSequenceStyle::colorFromName(const QString& colorName) const
 {
-	for(int i = 0; i < colors().size(); ++i)
+	for(auto color : colors())
 	{
-		if(colors()[i].name() == colorName)
-			return colors()[i].color();
+		if(color.name() == colorName)
+			return color.color();
 	}
 	return QColor(colorName);
 }

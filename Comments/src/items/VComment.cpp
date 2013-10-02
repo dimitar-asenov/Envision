@@ -41,9 +41,8 @@ ITEM_COMMON_DEFINITIONS(VComment, "item")
 VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
 	// import existing diagrams
-	for(int i = 0; i < node->diagrams()->size(); ++i)
+	for(auto diagram : *node->diagrams())
 	{
-		auto diagram = node->diagrams()->at(i);
 		diagrams_[diagram->name()] = diagram;
 	}
 
@@ -59,10 +58,10 @@ void VComment::parseLines()
 	QSet<QString> diagramNames{};
 	int listCount = -1;
 
-	for(int i = 0; i < node()->lines()->size(); ++i)
+	for(auto nodeLine : *node()->lines())
 	{
 		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
-		QString line = node()->lines()->at(i)->get();
+		QString line = nodeLine->get();
 
 		// is this a new enumeration item?
 		if(line.left(3) == " * ")
@@ -185,12 +184,9 @@ void VComment::synchroniseDiagrams(QSet<QString> itemDiagramNames)
 	auto nodeDiagrams = node()->diagrams();
 	// gather all names from the node diagrams for easier comparison
 	QSet<QString> nodeDiagramNames{};
-	// TODO: add iterators to typed lists?
-	for(int i = 0; i < nodeDiagrams->size(); ++i)
-	{
-		auto diagram = nodeDiagrams->at(i);
+	for(auto diagram : *nodeDiagrams)
 		nodeDiagramNames << diagram->name();
-	}
+
 	// get intersection of two sets
 	QSet<QString> intersection(itemDiagramNames);
 	intersection.intersect(nodeDiagramNames);
