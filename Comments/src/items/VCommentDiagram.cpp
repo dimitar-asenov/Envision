@@ -79,8 +79,8 @@ void VCommentDiagram::updateGeometry(int, int)
 		{
 			auto shape1 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape1()]);
 			auto shape2 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape2()]);
-			auto point1 = shape1->pos()+shape1->getConnectorCoordinates(connector->point1());
-			auto point2 = shape2->pos()+shape2->getConnectorCoordinates(connector->point2());
+			auto point1 = shape1->pos()+shape1->connectorPoint(connector->point1());
+			auto point2 = shape2->pos()+shape2->connectorPoint(connector->point2());
 			QPoint pos(std::min(point1.x(), point2.x()), std::min(point1.y(), point2.y()));
 			pos += shapeOffset;
 			child->setPos(pos);

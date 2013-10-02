@@ -47,11 +47,17 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		VCommentDiagram(Visualization::Item* parent, NodeType* node);
 		void resize(QSize size);
 
+		QPoint lastRightClick() const;
+		void setLastRightClick(QPoint pos);
+
 		bool editing() const;
 		void toggleEditing();
 
 		bool showConnectorPoints() const;
 		void setShowConnectorPoints(bool show);
+
+		QPair<int,int> lastConnector() const;
+		void setLastConnector(int shape, int point);
 
 	protected:
 		virtual void determineChildren() override;
@@ -66,10 +72,16 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		QVector<Visualization::Item*> items_;
 		bool editing_{}, showConnectorPoints_{};
 		QSize minSize_;
+		QPair<int,int> lastConnector_{-1, -1};
+		QPoint lastRightClick_;
 };
 
+inline QPoint VCommentDiagram::lastRightClick() const { return lastRightClick_; }
+inline void VCommentDiagram::setLastRightClick(QPoint pos) { lastRightClick_ = pos; }
 inline bool VCommentDiagram::editing() const { return editing_; }
 inline bool VCommentDiagram::showConnectorPoints() const { return editing() && showConnectorPoints_; }
 inline void VCommentDiagram::setShowConnectorPoints(bool show) { showConnectorPoints_ = show; }
+inline QPair<int,int> VCommentDiagram::lastConnector() const { return lastConnector_; }
+inline void VCommentDiagram::setLastConnector(int shape, int point) { lastConnector_ = qMakePair(shape, point); }
 
 } /* namespace Comments */

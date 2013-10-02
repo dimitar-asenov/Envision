@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "commands/CCreateShape.h"
+#include "items/VCommentDiagram.h"
 #include "nodes/CommentDiagram.h"
 #include "nodes/CommentDiagramShape.h"
 
@@ -38,8 +39,12 @@ CCreateShape::CCreateShape() : Interaction::CreateNamedObjectWithAttributes("sha
 Interaction::CommandResult* CCreateShape::create(Visualization::Item*, Visualization::Item* target,
 	const QString&, const QStringList& attributes)
 {
+	auto vdiagram = dynamic_cast<VCommentDiagram*>(target);
+	auto last = vdiagram->lastRightClick();
+	int x = std::max(0, last.x()-50), y = std::max(0, last.y()-50);
+
 	auto diagram = dynamic_cast<CommentDiagram*> (target->node());
-	auto shape = new CommentDiagramShape(0, 0, 100, 100, Rectangle);
+	auto shape = new CommentDiagramShape(x, y, 100, 100, Rectangle);
 	// what kind of shape?
 	if(attributes.first() == "ellipse") shape->setShapeType(Ellipse);
 	else if(attributes.first() == "diamond") shape->setShapeType(Diamond);

@@ -50,13 +50,16 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 	}
 
 	setAcceptHoverEvents(true);
-	setTextEditable(false);
 	setZValue(1);
+	node->updateConnectorPoints();
+	setTextEditable(diagram()->editing());
 }
 
 VCommentDiagram* VCommentDiagramShape::diagram()
 {
-	return dynamic_cast<VCommentDiagram*>(Item::parent());
+	auto diagram = dynamic_cast<VCommentDiagram*>(Item::parent());
+	Q_ASSERT(diagram != nullptr);
+	return diagram;
 }
 
 void VCommentDiagramShape::determineChildren()
@@ -69,6 +72,7 @@ void VCommentDiagramShape::updateGeometry(int, int)
 	shapeColor_ = style()->colorFromName(node()->shapeColor());
 	textColor_ = style()->colorFromName(node()->textColor());
 	backgroundColor_ = style()->colorFromName(node()->backgroundColor());
+//	text_->setStyle(style()->);
 
 	// TODO: consider shape as well?
 	auto bound = text_->boundingRect();
@@ -77,6 +81,7 @@ void VCommentDiagramShape::updateGeometry(int, int)
 	int y = node()->height() / 2 - bound.height() / 2;
 	text_->setPos(x, y);
 
+	node()->updateConnectorPoints();
 	updateResizeRects();
 }
 
@@ -117,10 +122,10 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			QBrush brush(QColor("red"));
 			painter->setPen(QPen(brush, 10));
 
+			const QPoint* points = node()->connectorPoints();
 			for(int i = 0; i < 16; ++i)
 			{
-				QPoint point = node()->getConnectorCoordinates(i);
-				painter->drawPoint(point);
+				painter->drawPoint(points[i]);
 			}
 		}
 		else
@@ -149,7 +154,6 @@ void VCommentDiagramShape::moveBy(QPoint pos)
 	node()->setX(dest.x());
 	node()->setY(dest.y());
 	node()->model()->endModification();
-	setUpdateNeeded(StandardUpdate);
 
 	// update all children
 	// -> connectors use new shapes' positions
@@ -168,11 +172,7 @@ void VCommentDiagramShape::resizeBy(QSize size)
 	node()->setWidth(dest.width());
 	node()->setHeight(dest.height());
 	node()->model()->endModification();
-	setUpdateNeeded(StandardUpdate);
 
-	// update all children
-	// -> connectors use new shapes' positions
-	// -> shapes text is no longer editable
 	for(auto child : parent()->childItems())
 		child->setUpdateNeeded(StandardUpdate);
 }
@@ -212,6 +212,7 @@ void VCommentDiagramShape::handleResize(enum VCommentDiagramResizeRect rect, QPo
 	case RECT_BOTTOM_LEFT:
 		moveBy(QPoint(diff.x(), 0));
 		resizeBy(QSize(-diff.x(), diff.y()));
+		return;
 	}
 }
 

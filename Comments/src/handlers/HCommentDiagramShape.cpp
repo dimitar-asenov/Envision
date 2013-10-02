@@ -58,11 +58,6 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 			scene->clearSelection();
 			scene->setMainCursor(nullptr);
 		}
-		else if(event->key() == Qt::Key_Shift)
-		{
-			event->accept();
-			shape->diagram()->setShowConnectorPoints(true);
-		}
 	}
 
 	if (!event->isAccepted())
@@ -75,11 +70,11 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
 	if(shape->diagram()->editing())
 	{
+		QPoint clickPos(event->pos().toPoint());
+
 		if(event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
 		{
 			event->accept();
-
-			QPoint clickPos(event->pos().toPoint());
 			clickedRect_ = shape->hitsResizeRects(clickPos);
 
 			if(clickedRect_ != RECT_NONE)
@@ -90,8 +85,28 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 		else if(event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier)
 		{
 			event->accept();
+			int connectorIndex = shape->node()->hitsConnectorPoint(clickPos);
+			if(connectorIndex != -1)
+			{
+				int shapeIndex = shape->node()->index();
+				auto last = shape->diagram()->lastConnector();
+
+				if(last.first == shapeIndex && last.second == connectorIndex)
+				{
+					// unselect connector if selected a second time
+					shapeIndex = connectorIndex = -1;
+				}
+				// make sure connectors are between two *different* shapes
+				else if(last.first != -1 && last.second != -1 && last.first != shapeIndex)
+				{
+					shape->diagram()->node()->addConnector(last.first, last.second, shapeIndex, connectorIndex);
+					shapeIndex = connectorIndex = -1;
+				}
+
+				shape->diagram()->setLastConnector(shapeIndex, connectorIndex);
+			}
 		}
-		else if(event->button() == Qt::RightButton)
+		else if(event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier)
 		{
 			event->accept();
 			showCommandPrompt(target);

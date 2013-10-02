@@ -53,8 +53,8 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 	auto shape1 = diagram()->node()->shapes()->at(node()->shape1());
 	auto shape2 = diagram()->node()->shapes()->at(node()->shape2());
 
-	point1_ = shape1->pos()+shape1->getConnectorCoordinates(node()->point1());
-	point2_ = shape2->pos()+shape2->getConnectorCoordinates(node()->point2());
+	point1_ = shape1->pos()+shape1->connectorPoint(node()->point1());
+	point2_ = shape2->pos()+shape2->connectorPoint(node()->point2());
 	auto origin = QPoint(std::min(point1_.x(), point2_.x()), std::min(point1_.y(), point2_.y()));
 	point1_ -= origin;
 	point2_ -= origin;

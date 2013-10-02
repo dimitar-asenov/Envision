@@ -52,15 +52,25 @@ void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 		event->accept();
 		diagram->toggleEditing();
 	}
+	else if(event->key() == Qt::Key_Shift || event->modifiers() & Qt::Key_Shift)
+	{
+		event->accept();
+		diagram->setShowConnectorPoints(true);
+	}
 
-	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
+	if (!event->isAccepted())
+		GenericHandler::keyPressEvent(target, event);
 }
 
 void HCommentDiagram::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	auto diagram = dynamic_cast<VCommentDiagram*>(target);
-	if(event->key() == Qt::Key_Shift)
+
+	if(diagram->showConnectorPoints() && !(event->modifiers() & Qt::Key_Shift))
+	{
+		event->accept();
 		diagram->setShowConnectorPoints(false);
+	}
 }
 
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -81,7 +91,10 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 				diagram->setCursor(Qt::SizeAllCursor);
 			}
 			else
+			{
+				diagram->setLastRightClick(event->pos().toPoint());
 				showCommandPrompt(target);
+			}
 		}
 	}
 }

@@ -28,8 +28,6 @@
 
 #include "../comments_api.h"
 
-#include "CommentDiagramShape.h"
-
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Integer.h"
@@ -65,9 +63,19 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
 				enum CommentDiagramShapeType shapeType);
 		QSize size() const;
 		QPoint pos() const;
-		QPoint getConnectorCoordinates(int index) const;
+		QPoint connectorPoint(int index) const;
+		const QPoint* connectorPoints() const;
+		void updateConnectorPoints();
+		int hitsConnectorPoint(QPoint pos) const;
+		int index() const;
+
+	private:
+		QPoint connectorPoints_[16];
 
 	friend QDebug operator<<(QDebug dbg, const CommentDiagramShape *c);
 };
+
+inline const QPoint* CommentDiagramShape::connectorPoints() const { return connectorPoints_; }
+inline QPoint CommentDiagramShape::connectorPoint(int index) const { return connectorPoints_[index]; }
 
 } /* namespace Comments */

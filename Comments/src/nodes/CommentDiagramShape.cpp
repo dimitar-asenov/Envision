@@ -24,9 +24,11 @@
  **
  **********************************************************************************************************************/
 
+#include "CommentDiagram.h"
 #include "CommentDiagramShape.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "VisualizationBase/src/items/Item.h"
 DEFINE_TYPED_LIST(Comments::CommentDiagramShape)
 
 namespace Comments {
@@ -69,61 +71,93 @@ QPoint CommentDiagramShape::pos() const
 	return QPoint(x(), y());
 }
 
-QPoint CommentDiagramShape::getConnectorCoordinates(int index) const
+int CommentDiagramShape::hitsConnectorPoint(QPoint pos) const
 {
-	Q_ASSERT(index >= 0 && index < 16);
+	int index = -1;
+	// max manhattan distance + 1 (area around the point to accept as a hit)
+	int manhattan = 10;
 
+	for(int i = 0; i < 16; ++i)
+	{
+		auto point = connectorPoints_[i];
+		QPoint diff = point - pos;
+		int m = diff.manhattanLength();
+		if(m < manhattan)
+		{
+			manhattan = m;
+			index = i;
+		}
+	}
+
+	return index;
+}
+
+void CommentDiagramShape::updateConnectorPoints()
+{
 	switch(shapeType())
 	{
 	default:
 	case Rectangle:
-		// index 0 is upper left corner, normalize to compass directions (0 = top center = north)
-		index = (index + 2) % 16;
+		for(int i = 0; i < 16; ++i)
+		{
+			// index 0 is upper left corner, normalize to compass directions (0 = top center = north)
+			int index = (i + 2) % 16;
 
-		if     (index >=  0 && index <  4) return QPoint(index/4.*width(), 0);
-		else if(index >=  4 && index <  8) return QPoint(width(), (index-4)/4.*height());
-		else if(index >=  8 && index < 12) return QPoint((12-index)/4.*width(), height());
-		else if(index >= 12 && index < 16) return QPoint(0, (16-index)/4.*height());
-		break;
+			if     (index >=  0 && index <  4) connectorPoints_[i] = QPoint(index/4.*width(), 0);
+			else if(index >=  4 && index <  8) connectorPoints_[i] = QPoint(width(), (index-4)/4.*height());
+			else if(index >=  8 && index < 12) connectorPoints_[i] = QPoint((12-index)/4.*width(), height());
+			else if(index >= 12 && index < 16) connectorPoints_[i] = QPoint(0, (16-index)/4.*height());
+		}
+		return;
 
-	case Ellipse: {
-		// index 0 is at the right center, normalize to compass directions
-		index = (index + 12) % 16;
+	case Ellipse:
+		for(int i = 0; i < 16; ++i)
+		{
+			// index 0 is at the right center, normalize to compass directions
+			int index = (i + 12) % 16;
 
-		// based on mathematical derivation on
-		// http://math.stackexchange.com/questions/22064/calculating-a-point-that-lies-on-an-ellipse-given-an-angle
-		double a = width()/2., b = height()/2.;
-		QPointF center(a, b);
-		// distribute connector points equally over angles (0, pi/8, , ..., 15pi/8)
-		// TODO: Make these equidistant?
-		double angle = index*2*M_PI/16;
-		double t = tan(angle);
-		double x = a*b/(sqrt(b*b+a*a*t*t));
-		// invert sign of result for angles between pi/2 and 3pi/2
-		if(index > 4 && index < 12)
-			x = -x;
+			// based on mathematical derivation on
+			// http://math.stackexchange.com/questions/22064/calculating-a-point-that-lies-on-an-ellipse-given-an-angle
+			double a = width()/2., b = height()/2.;
+			QPointF center(a, b);
+			// distribute connector points equally over angles (0, pi/8, , ..., 15pi/8)
+			// TODO: Make these equidistant?
+			double angle = index*2*M_PI/16;
+			double t = tan(angle);
+			double x = a*b/(sqrt(b*b+a*a*t*t));
+			// invert sign of result for angles between pi/2 and 3pi/2
+			if(index > 4 && index < 12)
+				x = -x;
 
-		double y = t*x;
+			double y = t*x;
 
-		// special cases where angle is pi/2 or 3pi/2
-		if(index == 4)  y =  b;
-		if(index == 12) y = -b;
+			// special cases where angle is pi/2 or 3pi/2
+			if(index == 4)  y =  b;
+			if(index == 12) y = -b;
 
-		return QPoint(center.x()+x, center.y()+y);
-	}
+			connectorPoints_[i] = QPoint(center.x()+x, center.y()+y);
+		}
+		return;
 
 	case Diamond:
-		// index 0 is already in the top center (north, no compass normalization needed!
-
-		if(index >=  0 && index <  4) return QPoint((index+4)/8.*width(), index/8.*height());
-		if(index >=  4 && index <  8) return QPoint((8-(index-4))/8.*width(), (index/8.*height()));
-		if(index >=  8 && index < 12) return QPoint((4-(index-8))/8.*width(), (8-(index-8))/8.*height());
-		if(index >= 12 && index < 16) return QPoint((index-12)/8.*width(), (4-(index-12))/8.*height());
-		break;
+		for(int i = 0; i < 16; ++i)
+		{
+			// index 0 is already in the top center (north)
+			//  => no compass normalization needed!
+			if(i >=  0 && i <  4) connectorPoints_[i] = QPoint((i+4)/8.*width(), i/8.*height());
+			if(i >=  4 && i <  8) connectorPoints_[i] = QPoint((8-(i-4))/8.*width(), (i/8.*height()));
+			if(i >=  8 && i < 12) connectorPoints_[i] = QPoint((4-(i-8))/8.*width(), (8-(i-8))/8.*height());
+			if(i >= 12 && i < 16) connectorPoints_[i] = QPoint((i-12)/8.*width(), (4-(i-12))/8.*height());
+		}
+		return;
 	}
+}
 
-	Q_ASSERT(!"Impossible");
-	return QPoint();
+int CommentDiagramShape::index() const
+{
+	auto diagram = dynamic_cast<CommentDiagram*>(parent()->parent());
+	Q_ASSERT(diagram != nullptr);
+	return diagram->shapes()->indexOf(this);
 }
 
 QDebug operator<<(QDebug dbg, CommentDiagramShape *c)

@@ -31,7 +31,7 @@ DEFINE_TYPED_LIST(Comments::CommentDiagram)
 
 namespace Comments {
 
-//COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagram)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagram)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagram)
 
 REGISTER_ATTRIBUTE(CommentDiagram, name, Text, false, false, true)
@@ -52,6 +52,13 @@ void CommentDiagram::setSize(QSizeF size)
 {
 	setWidth(size.width());
 	setHeight(size.height());
+}
+
+void CommentDiagram::addConnector(int shape1, int point1, int shape2, int point2)
+{
+	model()->beginModification(this, "Adding connector");
+	connectors()->append(new CommentDiagramConnector(shape1, point1, shape2, point2));
+	model()->endModification();
 }
 
 void CommentDiagram::removeConnector(CommentDiagramConnector *connector)
