@@ -40,6 +40,7 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 	setAcceptHoverEvents(true);
 	text_ = new VText(this, node->label());
 	setTextEditable(false);
+	setZValue(1);
 }
 
 VCommentDiagram* VCommentDiagramShape::diagram()

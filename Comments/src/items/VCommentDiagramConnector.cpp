@@ -35,6 +35,8 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
 
 VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
+	// draw connectors below shapes
+	setZValue(0);
 }
 
 VCommentDiagram* VCommentDiagramConnector::diagram()
