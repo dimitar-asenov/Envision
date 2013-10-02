@@ -135,19 +135,19 @@ class CPPIMPORT_API TranslateManager
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
 
-		QMap<QString, OOModel::Module*> nameSpaceMap_;
-		QMap<QString, OOModel::Class*> classMap_;
-		QMap<QString, OOModel::Method*> methodMap_;
-		QMap<QString, OOModel::Method*> functionMap_;
-		QMap<QString, OOModel::Field*> staticFieldMap_;
+		QHash<QString, OOModel::Module*> nameSpaceMap_;
+		QHash<QString, OOModel::Class*> classMap_;
+		QHash<QString, OOModel::Method*> methodMap_;
+		QHash<QString, OOModel::Method*> functionMap_;
+		QHash<QString, OOModel::Field*> staticFieldMap_;
 
-		QMap<QString, OOModel::ExplicitTemplateInstantiation*> explicitTemplateInstMap_{};
+		QHash<QString, OOModel::ExplicitTemplateInstantiation*> explicitTemplateInstMap_{};
 
-		QMap<QString, OOModel::NameImport*> usingDeclMap_;
-		QMap<QString, OOModel::NameImport*> usingDirectiveMap_;
+		QHash<QString, OOModel::NameImport*> usingDeclMap_;
+		QHash<QString, OOModel::NameImport*> usingDirectiveMap_;
 
-		QMap<QString, OOModel::TypeAlias*> namespacAliasMap_;
-		QMap<QString, OOModel::TypeAlias*> typeAliasMap_;
+		QHash<QString, OOModel::TypeAlias*> namespacAliasMap_;
+		QHash<QString, OOModel::TypeAlias*> typeAliasMap_;
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};
