@@ -34,11 +34,22 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentDiagramShape, "item")
 
+int VCommentDiagramShape::resizePointWidth = 5;
+
 VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const StyleType* style)
 : Super(parent, node, style)
 {
-	setAcceptHoverEvents(true);
 	text_ = new VText(this, node->label());
+
+	// set width and height for all resize rects, these don't change
+	int penWidth = 5;
+	for(int i = 0; i < 4; ++i)
+	{
+		resizeRects_[i].setWidth(penWidth);
+		resizeRects_[i].setHeight(penWidth);
+	}
+
+	setAcceptHoverEvents(true);
 	setTextEditable(false);
 	setZValue(1);
 }
@@ -65,6 +76,8 @@ void VCommentDiagramShape::updateGeometry(int, int)
 	int x = node()->width() / 2 - bound.width() / 2;
 	int y = node()->height() / 2 - bound.height() / 2;
 	text_->setPos(x, y);
+
+	updateResizeRects();
 }
 
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
@@ -98,26 +111,62 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	if(diagram()->editing())
 	{
-		// Temporarily assume a thicker painter with a different color for drawing the connector points
-		QBrush brush(QColor("red"));
-		painter->setPen(QPen(brush, 10));
-
-		for(int i = 0; i < 16; ++i)
+		if(diagram()->showConnectorPoints())
 		{
-			QPoint point = node()->getConnectorCoordinates(i);
-			painter->drawPoint(point);
+			// Temporarily assume a thicker painter with a different color for drawing the connector points
+			QBrush brush(QColor("red"));
+			painter->setPen(QPen(brush, 10));
+
+			for(int i = 0; i < 16; ++i)
+			{
+				QPoint point = node()->getConnectorCoordinates(i);
+				painter->drawPoint(point);
+			}
+		}
+		else
+		{
+			for(int i = 0; i < 4; ++i)
+				painter->fillRect(resizeRects_[i], Qt::black);
 		}
 	}
 }
 
-void VCommentDiagramShape::moveTo(QPoint pos)
+void VCommentDiagramShape::updateResizeRects()
 {
-	if(pos.x() < 0) pos.setX(0);
-	if(pos.y() < 0) pos.setY(0);
+	resizeRects_[0].setRect(0,                          0,                           resizePointWidth, resizePointWidth);
+	resizeRects_[1].setRect(width() - resizePointWidth, 0,                           resizePointWidth, resizePointWidth);
+	resizeRects_[2].setRect(width() - resizePointWidth, height() - resizePointWidth, resizePointWidth, resizePointWidth);
+	resizeRects_[3].setRect(0,                          height() - resizePointWidth, resizePointWidth, resizePointWidth);
+}
+
+void VCommentDiagramShape::moveBy(QPoint pos)
+{
+	QPoint dest(node()->pos() + pos);
+	if(dest.x() < 0) dest.setX(0);
+	if(dest.y() < 0) dest.setY(0);
 
 	node()->model()->beginModification(node(), "Moving shape");
-	node()->setX(pos.x());
-	node()->setY(pos.y());
+	node()->setX(dest.x());
+	node()->setY(dest.y());
+	node()->model()->endModification();
+	setUpdateNeeded(StandardUpdate);
+
+	// update all children
+	// -> connectors use new shapes' positions
+	// -> shapes text is no longer editable
+	for(auto child : parent()->childItems())
+		child->setUpdateNeeded(StandardUpdate);
+}
+
+void VCommentDiagramShape::resizeBy(QSize size)
+{
+	QSize dest(node()->size() + size);
+	if(dest.width() < 0) dest.setWidth(0);
+	if(dest.height() < 0) dest.setHeight(0);
+
+	node()->model()->beginModification(node(), "Resizing shape");
+	node()->setWidth(dest.width());
+	node()->setHeight(dest.height());
 	node()->model()->endModification();
 	setUpdateNeeded(StandardUpdate);
 
@@ -131,6 +180,39 @@ void VCommentDiagramShape::moveTo(QPoint pos)
 void VCommentDiagramShape::setTextEditable(bool editable)
 {
 	text_->setEditable(editable);
+}
+
+VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) const
+{
+	if(resizeRects_[0].contains(pos)) return RECT_TOP_LEFT;
+	if(resizeRects_[1].contains(pos)) return RECT_TOP_RIGHT;
+	if(resizeRects_[2].contains(pos)) return RECT_BOTTOM_RIGHT;
+	if(resizeRects_[3].contains(pos)) return RECT_BOTTOM_LEFT;
+
+	return RECT_NONE;
+}
+
+void VCommentDiagramShape::handleResize(enum VCommentDiagramResizeRect rect, QPoint diff)
+{
+	switch(rect)
+	{
+	case RECT_NONE:
+		return;
+	case RECT_TOP_LEFT:
+		moveBy(diff);
+		resizeBy(QSize(-diff.x(), -diff.y()));
+		return;
+	case RECT_TOP_RIGHT:
+		moveBy(QPoint(0, diff.y()));
+		resizeBy(QSize(diff.x(), -diff.y()));
+		return;
+	case RECT_BOTTOM_RIGHT:
+		resizeBy(QSize(diff.x(), diff.y()));
+		return;
+	case RECT_BOTTOM_LEFT:
+		moveBy(QPoint(diff.x(), 0));
+		resizeBy(QSize(-diff.x(), diff.y()));
+	}
 }
 
 } /* namespace Comments */

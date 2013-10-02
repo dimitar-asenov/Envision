@@ -56,6 +56,13 @@ void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);
 }
 
+void HCommentDiagram::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	if(event->key() == Qt::Key_Shift)
+		diagram->setShowConnectorPoints(false);
+}
+
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto diagram = dynamic_cast<VCommentDiagram*>(target);

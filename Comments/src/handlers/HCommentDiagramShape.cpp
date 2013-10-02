@@ -26,7 +26,6 @@
 
 #include "handlers/HCommentDiagramShape.h"
 #include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
 #include "commands/CShapeSetProperty.h"
 
 namespace Comments {
@@ -59,6 +58,11 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 			scene->clearSelection();
 			scene->setMainCursor(nullptr);
 		}
+		else if(event->key() == Qt::Key_Shift)
+		{
+			event->accept();
+			shape->diagram()->setShowConnectorPoints(true);
+		}
 	}
 
 	if (!event->isAccepted())
@@ -74,8 +78,18 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 		if(event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
 		{
 			event->accept();
-			originalPos_ = shape->pos().toPoint();
-			shape->setCursor(Qt::ClosedHandCursor);
+
+			QPoint clickPos(event->pos().toPoint());
+			clickedRect_ = shape->hitsResizeRects(clickPos);
+
+			if(clickedRect_ != RECT_NONE)
+				shape->setCursor(Qt::SizeAllCursor);
+			else
+				shape->setCursor(Qt::ClosedHandCursor);
+		}
+		else if(event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier)
+		{
+			event->accept();
 		}
 		else if(event->button() == Qt::RightButton)
 		{
@@ -92,14 +106,21 @@ void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item *target, QGraph
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
 	shape->setCursor(Qt::OpenHandCursor);
+	clickedRect_ = RECT_NONE;
 }
 
 void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+
 	if(event->buttons() & Qt::LeftButton)
 	{
-		auto shape = dynamic_cast<VCommentDiagramShape*>(target);
-		shape->moveTo(originalPos_ + (event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)).toPoint());
+		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
+
+		if(clickedRect_ == RECT_NONE)
+			shape->moveBy(diff);
+		else
+			shape->handleResize(clickedRect_, diff);
 	}
 }
 
@@ -107,7 +128,7 @@ void HCommentDiagramShape::mouseDoubleClickEvent(Visualization::Item*, QGraphics
 {
 }
 
-void HCommentDiagramShape::hoverEnterEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
+void HCommentDiagramShape::hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
 	if(shape->diagram()->editing())

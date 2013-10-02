@@ -29,6 +29,7 @@
 #include "comments_api.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
+#include "items/VCommentDiagramShape.h"
 
 namespace Comments {
 
@@ -41,14 +42,14 @@ class COMMENTS_API HCommentDiagramShape : public Interaction::GenericHandler {
 		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void hoverEnterEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event);
+		virtual void hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event);
 		virtual void hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event);
 
 	protected:
 		HCommentDiagramShape();
 
 	private:
-		QPoint originalPos_;
+		enum VCommentDiagramResizeRect clickedRect_;
 };
 
 }

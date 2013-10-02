@@ -40,6 +40,8 @@
 
 namespace Comments {
 
+enum VCommentDiagramResizeRect { RECT_NONE, RECT_TOP_LEFT, RECT_TOP_RIGHT, RECT_BOTTOM_RIGHT, RECT_BOTTOM_LEFT };
+
 class COMMENTS_API VCommentDiagramShape
 : public Super<Visualization::ItemWithNode<VCommentDiagramShape, Visualization::Item, CommentDiagramShape> >
 {
@@ -47,9 +49,13 @@ class COMMENTS_API VCommentDiagramShape
 
 	public:
 		VCommentDiagramShape(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		void moveTo(QPoint pos);
+		void moveBy(QPoint pos);
+		void resizeBy(QSize pos);
 		VCommentDiagram* diagram();
 		void setTextEditable(bool editable);
+
+		VCommentDiagramResizeRect hitsResizeRects(QPoint pos) const;
+		void handleResize(enum VCommentDiagramResizeRect rect, QPoint diff);
 
 	protected:
 		virtual void determineChildren() override;
@@ -57,8 +63,12 @@ class COMMENTS_API VCommentDiagramShape
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 	private:
+		void updateResizeRects();
+
 		QColor shapeColor_, textColor_, backgroundColor_;
 		Visualization::VText *text_;
+		QRect resizeRects_[4];
+		static int resizePointWidth;
 };
 
 } /* namespace Comments */

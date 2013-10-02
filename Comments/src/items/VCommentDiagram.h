@@ -45,9 +45,13 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 	public:
 		VCommentDiagram(Visualization::Item* parent, NodeType* node);
-		void toggleEditing();
-		bool editing() { return editing_; }
 		void resize(QSize size);
+
+		bool editing() const;
+		void toggleEditing();
+
+		bool showConnectorPoints() const;
+		void setShowConnectorPoints(bool show);
 
 	protected:
 		virtual void determineChildren() override;
@@ -60,8 +64,12 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 		void clearChildren();
 		QVector<Visualization::Item*> items_;
-		bool editing_{};
+		bool editing_{}, showConnectorPoints_{};
 		QSize minSize_;
 };
+
+inline bool VCommentDiagram::editing() const { return editing_; }
+inline bool VCommentDiagram::showConnectorPoints() const { return editing() && showConnectorPoints_; }
+inline void VCommentDiagram::setShowConnectorPoints(bool show) { showConnectorPoints_ = show; }
 
 } /* namespace Comments */

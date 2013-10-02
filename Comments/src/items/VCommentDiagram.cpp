@@ -181,6 +181,9 @@ void VCommentDiagram::toggleEditing()
 			shape->setTextEditable(editing_);
 	}
 
+	if(!editing_)
+		showConnectorPoints_ = false;
+
 	setUpdateNeeded(StandardUpdate);
 }
 
