@@ -75,7 +75,7 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		// Literals
 		bool TraverseIntegerLiteral(clang::IntegerLiteral* intLit);
 		bool TraverseCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
-		bool TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr* nullPtrLitExpr);
+		bool TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr*);
 		bool TraverseFloatingLiteral(clang::FloatingLiteral* floatLiteral);
 		bool TraverseCharacterLiteral(clang::CharacterLiteral* charLiteral);
 		bool TraverseStringLiteral(clang::StringLiteral* stringLiteral);
@@ -104,13 +104,7 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 
 		bool TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeTraitExpr* typeTrait);
 
-		// casts
-		bool TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr);
-		bool TraverseCXXConstCastExpr(clang::CXXConstCastExpr* castExpr);
-		bool TraverseCXXDynamicCastExpr(clang::CXXDynamicCastExpr* castExpr);
-		bool TraverseCXXReinterpretCastExpr(clang::CXXReinterpretCastExpr* castExpr);
-		bool TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr* castExpr);
-		bool TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr);
+		// inlined methods:
 		// binary ops
 		bool TraverseBinMul(clang::BinaryOperator* binOp);
 		bool TraverseBinDiv(clang::BinaryOperator* binOp);
@@ -157,8 +151,17 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		bool TraverseUnaryReal(clang::UnaryOperator* uOp);
 		bool TraverseUnaryImag(clang::UnaryOperator* uOp);
 		bool TraverseUnaryExtension(clang::UnaryOperator* uOp);
+		// casts
+		bool TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr);
+		bool TraverseCXXConstCastExpr(clang::CXXConstCastExpr* castExpr);
+		bool TraverseCXXDynamicCastExpr(clang::CXXDynamicCastExpr* castExpr);
+		bool TraverseCXXReinterpretCastExpr(clang::CXXReinterpretCastExpr* castExpr);
+		bool TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr* castExpr);
+		bool TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr);
 
 	private:
+		using Base = clang::RecursiveASTVisitor<ExpressionVisitor>;
+
 		QStack<OOModel::Expression*> ooExprStack_;
 		ClangAstVisitor* baseVisitor_{};
 		CppImportLogger* log_{};
@@ -190,10 +193,7 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		 * Helper Function for all kind of casts.
 		 */
 		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
-
-		using Base = clang::RecursiveASTVisitor<ExpressionVisitor>;
 };
-
 
 // binary ops
 inline bool ExpressionVisitor::TraverseBinMul(clang::BinaryOperator* binOp)

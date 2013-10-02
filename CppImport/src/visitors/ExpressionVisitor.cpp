@@ -187,9 +187,6 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			ooUnary->setOp(utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if(!ooExprStack_.empty())
 				ooUnary->setOperand(ooExprStack_.pop());
-			// TODO: is this needed? remove callee
-//			if(!ooExprStack_.empty())
-//				ooExprStack_.pop();
 			ooExprStack_.push(ooUnary);
 			break;
 		}
@@ -238,7 +235,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		case CppImportUtilities::OverloadKind::ReferenceExpr:
 		{
 			if(!ooExprStack_.empty())
-				if(dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.top()))
+				if(DCast<OOModel::ReferenceExpression>(ooExprStack_.top()))
 					break;
 			ooExprStack_.push(utils_->createErrorExpression("Could not resolve Reference/Arrow"));
 			break;
@@ -341,7 +338,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 		ooExprStack_.push(ooMethodCall);
 		return true;
 	}
-	// clang models lambda construct expressions weird the name of the lambda is in the first argument
+	// clang models lambda construct expressions weird, the name of the lambda is in the first argument
 	if(constructExpr->getNumArgs() != 1)
 		log_->writeError(className_, constructExpr, CppImportLogger::Reason::OTHER, "ContructExpr need inspectation");
 	for(auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
@@ -448,6 +445,7 @@ bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr
 
 bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
+	// TODO: handle captions
 	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
 	// visit body
 	baseVisitor_->pushOOStack(ooLambda->body());

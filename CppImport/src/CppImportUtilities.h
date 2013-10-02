@@ -34,13 +34,18 @@ namespace CppImport {
 class ExpressionVisitor;
 
 /**
- * This is a helper class for translation of types operators type arguments and similar stuff.
+ * This is a helper class for translation of types operators type arguments and similar simple constructs.
  */
 class CPPIMPORT_API CppImportUtilities
 {
 	public:
 		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor);
 
+		/**
+		 * Translates a qualified type to the corresponding Envision type expression.
+		 * The \a location is used for warnings whenever translation fails,
+		 * to report the file and line of the \a location.
+		 */
 		OOModel::Expression* translateQualifiedType(const clang::QualType qualType,
 																  const clang::SourceLocation& location);
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOp(const clang::BinaryOperatorKind& binaryOpKind);
@@ -85,8 +90,8 @@ class CPPIMPORT_API CppImportUtilities
 		/**
 		 * Translates \a type to the nearest primitive OOModel type.
 		 */
-		OOModel::Expression* convertBuiltInClangType(const clang::BuiltinType* type);
-		OOModel::Expression* convertTypePtr(const clang::Type* type, const clang::SourceLocation& location);
+		OOModel::Expression* translateBuiltInClangType(const clang::BuiltinType* type);
+		OOModel::Expression* translateTypePtr(const clang::Type* type, const clang::SourceLocation& location);
 		const QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};

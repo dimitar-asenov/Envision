@@ -29,8 +29,6 @@
 #include "ClangFrontendActionFactory.h"
 #include "CppImportException.h"
 
-#include "QtCore/QStringList"
-
 namespace CppImport {
 
 CppImportManager::~CppImportManager()

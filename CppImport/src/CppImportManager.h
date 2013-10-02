@@ -97,8 +97,8 @@ class CPPIMPORT_API CppImportManager
 		QString projectName_;
 		// projects we have to import. For single project this list will only contain one entry
 		QStringList projects_;
-		QMap<QString, std::vector<std::string>* > sourcesMap_;
-		QMap<QString, clang::tooling::CompilationDatabase*> compilationDbMap_;
+		QHash<QString, std::vector<std::string>* > sourcesMap_;
+		QHash<QString, clang::tooling::CompilationDatabase*> compilationDbMap_;
 
 };
 

@@ -32,13 +32,13 @@ namespace CppImport {
 
 
 CppImportUtilities::CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor)
-	: log_{logger}, exprVisitor_{visitor}
+: log_{logger}, exprVisitor_{visitor}
 {}
 
 OOModel::Expression* CppImportUtilities::translateQualifiedType(const clang::QualType qualType,
 																					 const clang::SourceLocation& location)
 {
-	OOModel::Expression* translatedType = convertTypePtr(qualType.getTypePtr(), location);
+	OOModel::Expression* translatedType = translateTypePtr(qualType.getTypePtr(), location);
 
 	if(qualType.isConstQualified() && qualType.isVolatileQualified())
 		return new OOModel::TypeQualifierExpression(OOModel::Type::CONST, new OOModel::TypeQualifierExpression
@@ -164,9 +164,9 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 					(QString::fromStdString(nestedName->getAsNamespaceAlias()->getNameAsString()));
 			break;
 		case clang::NestedNameSpecifier::TypeSpec:
-			// TODO handle the case where this cast is not a reference
-			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>
-					(convertTypePtr(nestedName->getAsType(), location)))
+			// TODO: handle the case where this cast is not a reference
+			if(auto typeRef = DCast<OOModel::ReferenceExpression>
+					(translateTypePtr(nestedName->getAsType(), location)))
 				currentRef = typeRef;
 			else
 			{
@@ -176,9 +176,9 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 			}
 			break;
 		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
-			// TODO handle the case where this cast is not a reference
-			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>
-					(convertTypePtr(nestedName->getAsType(), location)))
+			// TODO: handle the case where this cast is not a reference
+			if(auto typeRef = DCast<OOModel::ReferenceExpression>
+					(translateTypePtr(nestedName->getAsType(), location)))
 				currentRef = typeRef;
 			else
 			{
@@ -298,7 +298,7 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::translateUnaryOverloa
 		case clang::OO_Tilde: return OOModel::UnaryOperation::COMPLEMENT;
 		case clang::OO_Exclaim: return OOModel::UnaryOperation::NOT;
 		case clang::OO_PlusPlus: if(1 == numArgs) return OOModel::UnaryOperation::PREINCREMENT;
-				return OOModel::UnaryOperation::POSTINCREMENT;
+			return OOModel::UnaryOperation::POSTINCREMENT;
 		case clang::OO_MinusMinus: if(1 == numArgs) return OOModel::UnaryOperation::PREDECREMENT;
 			return OOModel::UnaryOperation::POSTDECREMENT;
 		default: throw( new CppImportException("Invalid unary overload operator"));
@@ -310,10 +310,11 @@ CppImportUtilities::OverloadKind CppImportUtilities::getOverloadKind
 {
 	switch(overloadOpKind)
 	{
-		//		case clang::OO_New: return OverloadKind::;
-		//		case clang::OO_Delete: return OverloadKind::;
-		//		case clang::OO_Array_New: return OverloadKind::;
-		//		case clang::OO_Array_Delete: return OverloadKind::;
+		// The first four cases are not supported therefore they fallthrough
+		case clang::OO_New:
+		case clang::OO_Delete:
+		case clang::OO_Array_New:
+		case clang::OO_Array_Delete: return OverloadKind::Unsupported;
 		case clang::OO_Plus: if(1 == numArgs) return OverloadKind::Unary;
 			return OverloadKind::Binary;
 		case clang::OO_Minus: if(1 == numArgs) return OverloadKind::Unary;
@@ -367,8 +368,8 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 
 	if(initializer->isBaseInitializer())
 	{
-		if(auto memberRef = dynamic_cast<OOModel::ReferenceExpression*>
-				(convertTypePtr(initializer->getBaseClass(), initializer->getSourceLocation())))
+		if(auto memberRef = DCast<OOModel::ReferenceExpression>
+				(translateTypePtr(initializer->getBaseClass(), initializer->getSourceLocation())))
 			ooMemberInit = new OOModel::MemberInitializer(memberRef, initExpression);
 		else
 			log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);
@@ -386,14 +387,22 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 	return ooMemberInit;
 }
 
-OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::BuiltinType* type)
+OOModel::Expression* CppImportUtilities::createErrorExpression(const QString& reason)
+{
+	OOModel::ErrorExpression* ooError = new OOModel::ErrorExpression();
+	ooError->setPrefix("#");
+	ooError->setArg(new OOModel::StringLiteral(reason));
+	return ooError;
+}
+
+OOModel::Expression* CppImportUtilities::translateBuiltInClangType(const clang::BuiltinType* type)
 {
 	const clang::BuiltinType* builtinType = type->getAs<clang::BuiltinType>();
 	switch(builtinType->getKind())
 	{
 		case clang::BuiltinType::Void:
 			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID);
-		// unsigned types
+			// unsigned types
 		case clang::BuiltinType::Bool:
 			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN);
 		case clang::BuiltinType::Char_U:
@@ -434,7 +443,7 @@ OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Bui
 			log_->primitiveTypeNotSupported("__uint128_t");
 			return new OOModel::PrimitiveTypeExpression(
 						OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
-		// signed types
+			// signed types
 		case clang::BuiltinType::Char_S:
 			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 		case clang::BuiltinType::SChar:
@@ -461,7 +470,7 @@ OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Bui
 			log_->primitiveTypeNotSupported("__int128_t");
 			return new OOModel::PrimitiveTypeExpression(
 						OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
-		// float types
+			// float types
 		case clang::BuiltinType::Half:
 			log_->primitiveTypeNotSupported("half");
 			return new OOModel::PrimitiveTypeExpression(
@@ -474,7 +483,7 @@ OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Bui
 			log_->primitiveTypeNotSupported("long double");
 			return new OOModel::PrimitiveTypeExpression(
 						OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
-		// c++ specific
+			// c++ specific
 		case clang::BuiltinType::NullPtr:
 			log_->primitiveTypeNotSupported("nullptr");
 			return createErrorExpression("Unsupported type");
@@ -484,8 +493,11 @@ OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Bui
 	}
 }
 
-OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, const clang::SourceLocation& location)
+OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* type, const clang::SourceLocation& location)
 {
+	// Note that llvm::dyn_cast is for clang types in fact as fast as static_cast
+	// We had a version of this function which was using switch case and static_cast
+	// the runtime was the same than this version
 	OOModel::Expression* translatedType = nullptr;
 	Q_ASSERT(type);
 	if(llvm::isa<clang::AutoType>(type))
@@ -540,8 +552,7 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, 
 	}
 	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type))
 	{
-		// TODO: this might not always be a nice solution
-		// to just return the inner type of a parenthesized type
+		// TODO: this might not always be a nice solution, to just return the inner type of a parenthesized type.
 		translatedType = translateQualifiedType(parenType->getInnerType(), location);
 	}
 	else if(auto typeDefType = llvm::dyn_cast<clang::TypedefType>(type))
@@ -552,7 +563,7 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, 
 	else if(auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type))
 	{
 		translatedType = new OOModel::ReferenceExpression(
-						QString::fromStdString(templateParmType->getDecl()->getNameAsString()));
+					QString::fromStdString(templateParmType->getDecl()->getNameAsString()));
 	}
 	else if(auto functionProtoType = llvm::dyn_cast<clang::FunctionProtoType>(type))
 	{
@@ -570,7 +581,7 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, 
 		// TODO: this might also have a keyword in front (like e.g. class, typename)
 		translatedType = translateQualifiedType(elaboratedType->getNamedType(), location);
 		if(auto qualifier = elaboratedType->getQualifier())
-			if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(translatedType))
+			if(auto ooRef = DCast<OOModel::ReferenceExpression>(translatedType))
 				ooRef->setPrefix(translateNestedNameSpecifier(qualifier, location));
 	}
 	else if(auto templateSpecialization = llvm::dyn_cast<clang::TemplateSpecializationType>(type))
@@ -598,7 +609,7 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, 
 	}
 	else if(auto injectedClass = llvm::dyn_cast<clang::InjectedClassNameType>(type))
 	{
-		translatedType = convertTypePtr(injectedClass->getInjectedTST(), location);
+		translatedType = translateTypePtr(injectedClass->getInjectedTST(), location);
 	}
 	else if(auto substTemplateParm = llvm::dyn_cast<clang::SubstTemplateTypeParmType>(type))
 	{
@@ -606,7 +617,7 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, 
 	}
 	else if(auto builtIn = llvm::dyn_cast<clang::BuiltinType>(type))
 	{
-		translatedType = convertBuiltInClangType(builtIn);
+		translatedType = translateBuiltInClangType(builtIn);
 	}
 	else
 	{
@@ -614,14 +625,6 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, 
 		translatedType = createErrorExpression("Unsupported Type");
 	}
 	return translatedType;
-}
-
-OOModel::Expression* CppImportUtilities::createErrorExpression(const QString& reason)
-{
-	OOModel::ErrorExpression* ooError = new OOModel::ErrorExpression();
-	ooError->setPrefix("#");
-	ooError->setArg(new OOModel::StringLiteral(reason));
-	return ooError;
 }
 
 } /* namespace CppImport */

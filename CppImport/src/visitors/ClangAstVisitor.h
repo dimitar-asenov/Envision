@@ -42,12 +42,12 @@ class TemplateArgumentVisitor;
  */
 class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
-	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:
 		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
 		~ClangAstVisitor();
 		void setSourceManager(const clang::SourceManager* sourceManager);
 
+		// helper functions to interact with the stack from other classes
 		Model::Node* ooStackTop();
 		void pushOOStack(Model::Node* node);
 		Model::Node* popOOStack();
@@ -60,8 +60,31 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseClassTemplateSpecializationDecl(clang::ClassTemplateSpecializationDecl* specializationDecl);
 		bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl);
 
+		// methods
+		bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
+		bool TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl);
+		bool TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl);
+		bool TraverseCXXConversionDecl(clang::CXXConversionDecl* conversionDecl);
 		bool TraverseFunctionDecl(clang::FunctionDecl* functionDecl);
 		bool TraverseFunctionTemplateDecl(clang::FunctionTemplateDecl* functionDecl);
+
+		bool TraverseVarDecl(clang::VarDecl* varDecl);
+		bool TraverseFieldDecl(clang::FieldDecl* fieldDecl);
+		bool TraverseEnumDecl(clang::EnumDecl* enumDecl);
+
+		bool WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefDecl);
+		bool TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl* typeAliasTemplate);
+		bool TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias);
+		bool TraverseUsingDecl(clang::UsingDecl* usingDecl);
+		bool TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
+		bool TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingValueDecl* unresolvedUsing);
+
+		/**
+		 * Traverses the stmt \a S and if it is an expression dispatches to the expression visitor
+		 */
+		bool TraverseStmt(clang::Stmt* S);
+		// method only for debugging
+		bool VisitStmt(clang::Stmt* S);
 
 		bool TraverseIfStmt(clang::IfStmt* ifStmt);
 		bool TraverseWhileStmt(clang::WhileStmt* whileStmt);
@@ -74,39 +97,12 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt);
 		bool TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt);
 
-		/**
-		 * Traverses the stmt \a S and if it is an expression dispatches to the expression visitor
-		 */
-		bool TraverseStmt(clang::Stmt* S);
-		// method only for debugging
-		bool VisitStmt(clang::Stmt* S);
-
-		bool TraverseVarDecl(clang::VarDecl* varDecl);
-
-		bool TraverseEnumDecl(clang::EnumDecl* enumDecl);
-
-		// methods
-		bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
-		bool TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl);
-		bool TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl);
-		bool TraverseCXXConversionDecl(clang::CXXConversionDecl* conversionDecl);
-
-		bool TraverseFieldDecl(clang::FieldDecl* fieldDecl);
-
 		bool TraverseSwitchStmt(clang::SwitchStmt* switchStmt);
 		bool TraverseCaseStmt(clang::CaseStmt* caseStmt);
 		bool TraverseDefaultStmt(clang::DefaultStmt* defaultStmt);
 
 		bool TraverseBreakStmt(clang::BreakStmt* breakStmt);
 		bool TraverseContinueStmt(clang::ContinueStmt* continueStmt);
-
-		bool WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefDecl);
-		bool TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl* typeAliasTemplate);
-		bool TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias);
-		bool TraverseUsingDecl(clang::UsingDecl* usingDecl);
-		bool TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
-		bool TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingValueDecl* unresolvedUsing);
-
 		/**
 		 * A helper function called by RecursiveASTVisitor parent class.
 		 * In our case this function should return false because we use a custom traversal strategy.
@@ -114,6 +110,20 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool shouldUseDataRecursionFor(clang::Stmt* S);
 
 	private:
+		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;
+
+		QStack<Model::Node*> ooStack_;
+		QStack<OOModel::Expression*> ooExprStack_;
+
+		CppImportLogger* log_{};
+		TranslateManager* trMngr_{};
+		CppImportUtilities* utils_{};
+		ExpressionVisitor* exprVisitor_{};
+		TemplateArgumentVisitor* templArgVisitor_{};
+		const clang::SourceManager* sourceManager_{};
+		bool modelSysHeader_{false};
+		bool inBody_{true};
+		const QString className_{"ClangAstVisitor"};
 		/**
 		 * Abstract function to handle normal member functions, constructors, destructors and conversion functions.
 		 * This method will translate the complete method if \a methodDecl is a definition
@@ -139,8 +149,13 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 */
 		OOModel::Class* createClass(clang::CXXRecordDecl* recordDecl);
 
-
+		/**
+		 * Inserts a friend class with the \a typeInfo in \a ooClass.
+		 */
 		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);
+		/**
+		 * Inserts the friend function \a friendFunction in \a ooClass.
+		 */
 		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
 
 		/**
@@ -148,19 +163,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 * The decision is based on wheter the \a location is valid and on the value of \a modelSysHeader_
 		 */
 		bool shouldModel(const clang::SourceLocation& location);
-
-		QStack<Model::Node*> ooStack_;
-		QStack<OOModel::Expression*> ooExprStack_;
-
-		CppImportLogger* log_{};
-		TranslateManager* trMngr_{};
-		CppImportUtilities* utils_{};
-		ExpressionVisitor* exprVisitor_{};
-		TemplateArgumentVisitor* templArgVisitor_{};
-		const clang::SourceManager* sourceManager_{};
-		bool modelSysHeader_{false};
-		bool inBody_{true};
-		const QString className_{"ClangAstVisitor"};
 };
 
 // method

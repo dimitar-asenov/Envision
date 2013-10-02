@@ -33,7 +33,8 @@ TranslateFrontendAction::TranslateFrontendAction(ClangAstVisitor* visitor, CppIm
 : visitor_{visitor}, log_{log}
 {}
 
-clang::ASTConsumer* TranslateFrontendAction::CreateASTConsumer(clang::CompilerInstance& compilerInstance, llvm::StringRef)
+clang::ASTConsumer* TranslateFrontendAction::CreateASTConsumer
+(clang::CompilerInstance& compilerInstance, llvm::StringRef)
 {
 	ClangAstConsumer* consumer = new ClangAstConsumer(visitor_);
 	// set new compiler instance

@@ -91,7 +91,6 @@ const QString NodeHasher::hashRecord(const clang::RecordDecl* recordDecl)
 				  templateParam != templateParamList->end(); ++templateParam)
 			{
 				hash.append("_");
-				// TODO: maybe just use character data from srcmanager
 				if(auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
 					hash.append(hashTemplateTypeParm(templateType));
 				else if(auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
@@ -112,7 +111,6 @@ const QString NodeHasher::hashClassTemplate(const clang::ClassTemplateDecl* clas
 		  templateParam != templateParamList->end(); ++templateParam)
 	{
 		hash.append("_");
-		// TODO: maybe just use character data from srcmanager
 		if(auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
 			hash.append(hashTemplateTypeParm(templateType));
 		else if(auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
@@ -221,7 +219,6 @@ const QString NodeHasher::hashTypeAliasTemplate(const clang::TypeAliasTemplateDe
 		  templateParam != templateParamList->end(); ++templateParam)
 	{
 		hash.append("_");
-		// TODO: maybe just use character data from srcmanager
 		if(auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
 			hash.append(hashTemplateTypeParm(templateType));
 		else if(auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
