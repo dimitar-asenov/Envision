@@ -56,7 +56,7 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Decl* d
 		default: return;
 	}
 
-	QString clangType = QString(decl->getDeclKindName());
+	QString clangType = QString(decl->getDeclKindName()).append("Decl");
 	clangType.append(reasons_[static_cast<int>(r)]);
 	int newCount = countMap_.value(clangType) + 1;
 	countMap_.insert(clangType, newCount);
