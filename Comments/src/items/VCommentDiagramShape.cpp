@@ -70,9 +70,8 @@ void VCommentDiagramShape::updateGeometry(int, int)
 {
 	setSize(node()->size());
 	shapeColor_ = style()->colorFromName(node()->shapeColor());
-	textColor_ = style()->colorFromName(node()->textColor());
 	backgroundColor_ = style()->colorFromName(node()->backgroundColor());
-//	text_->setStyle(style()->);
+	text_->setStyle(VText::itemStyles().get(node()->textColor()));
 
 	// TODO: consider shape as well?
 	auto bound = text_->boundingRect();

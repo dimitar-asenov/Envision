@@ -29,7 +29,6 @@
 #include "../comments_api.h"
 
 #include "VisualizationBase/src/items/StaticStyle.h"
-#include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace Comments {
@@ -49,7 +48,6 @@ class COMMENTS_API VCommentDiagramShapeSequenceStyle : public Visualization::Ite
 		const QColor colorFromName(const QString& colorName) const;
 
 		Property<QVector<VCommentDiagramShapeStyle>> colors{this, "colors"};
-//		Property<QVector<VText>> textColors{this, "textColors"};
 };
 
 } /* namespace Comments */

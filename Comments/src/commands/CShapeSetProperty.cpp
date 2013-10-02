@@ -59,12 +59,12 @@ Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Vis
 QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
 {
 	QList<Interaction::CommandSuggestion*> s;
-	if(QString("fgcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	if(QString("textcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion("textcolor", "Set shape's foreground color"));
 	if(QString("bgcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion("bgcolor", "Set shape's background color"));
 	if(QString("bordercolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
-			s.append(new Interaction::CommandSuggestion("bordercolor", "Set shape's border color"));
+		s.append(new Interaction::CommandSuggestion("bordercolor", "Set shape's border color"));
 	return s;
 }
 
