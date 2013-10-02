@@ -29,7 +29,7 @@
 namespace CppImport {
 
 TranslateManager::TranslateManager(OOModel::Project* root)
-	: rootProject_(root)
+: rootProject_{root}
 {}
 
 TranslateManager::~TranslateManager()
@@ -116,10 +116,11 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 		else
 		{
 			method = methodMap_.value(hash);
-			if(method->items()->size())
+			// If the method in the map is just a declaration and the method we currently have is a definition
+			// there might be some argument names in the definition which are not yet considered.
+			// Therefore we look at them now.
+			if(method->items()->size() || !mDecl->isThisDeclarationADefinition())
 				return method;
-			// the method which is in the map is just a declaration
-			// therefore it might miss some arguments name which we collect here
 			for(int i = 0; i< method->arguments()->size(); i++)
 			{
 				OOModel::FormalArgument* ooArg = method->arguments()->at(i);
