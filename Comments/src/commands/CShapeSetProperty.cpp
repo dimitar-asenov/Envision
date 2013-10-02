@@ -34,7 +34,7 @@ namespace Comments {
 bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens)
 {
 	return commandTokens.size() == 2 &&
-			(commandTokens.first() == "fgcolor"
+			(commandTokens.first() == "textcolor"
 					|| commandTokens.first() == "bgcolor"
 					|| commandTokens.first() == "bordercolor");
 }
@@ -44,7 +44,7 @@ Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Vis
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
 	shape->node()->model()->beginModification(shape->node(), "Setting color");
 
-	if(commandTokens.first() == "fgcolor")
+	if(commandTokens.first() == "textcolor")
 		shape->node()->setTextColor(commandTokens.last());
 	else if(commandTokens.first() == "bgcolor")
 		shape->node()->setBackgroundColor(commandTokens.last());
@@ -60,7 +60,7 @@ QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization:
 {
 	QList<Interaction::CommandSuggestion*> s;
 	if(QString("fgcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
-		s.append(new Interaction::CommandSuggestion("fgcolor", "Set shape's foreground color"));
+		s.append(new Interaction::CommandSuggestion("textcolor", "Set shape's foreground color"));
 	if(QString("bgcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion("bgcolor", "Set shape's background color"));
 	if(QString("bordercolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
@@ -68,11 +68,9 @@ QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization:
 	return s;
 }
 
-QStringList CShapeSetProperty::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
+QStringList CShapeSetProperty::commandForms(Visualization::Item*, Visualization::Item*, const QString&)
 {
 	QStringList forms;
-	if (textSoFar.isEmpty() || QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("exit");
 	return forms;
 }
 
