@@ -75,7 +75,7 @@ int CommentDiagramShape::hitsConnectorPoint(QPoint pos) const
 {
 	int index = -1;
 	// max manhattan distance + 1 (area around the point to accept as a hit)
-	int manhattan = 10;
+	int manhattan = 15;
 
 	for(int i = 0; i < 16; ++i)
 	{
