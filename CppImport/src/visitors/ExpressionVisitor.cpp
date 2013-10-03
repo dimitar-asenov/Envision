@@ -413,7 +413,8 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 	OOModel::TypeTraitExpression* ooTypeTrait = new OOModel::TypeTraitExpression
 			(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
 	if(typeIdExpr->isTypeOperand())
-		ooTypeTrait->setOperand(utils_->translateQualifiedType(typeIdExpr->getTypeOperand(), typeIdExpr->getLocStart()));
+		ooTypeTrait->setOperand(utils_->translateQualifiedType(
+				typeIdExpr->getTypeOperandSourceInfo()->getType(), typeIdExpr->getLocStart()));
 	else
 	{
 		TraverseStmt(typeIdExpr->getExprOperand());
