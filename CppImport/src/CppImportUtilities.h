@@ -28,6 +28,7 @@
 
 #include "cppimport_api.h"
 #include "CppImportLogger.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace CppImport {
 

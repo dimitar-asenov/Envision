@@ -29,6 +29,8 @@
 #include "ClangFrontendActionFactory.h"
 #include "CppImportException.h"
 
+#include "ModelBase/src/model/Model.h"
+
 namespace CppImport {
 
 CppImportManager::~CppImportManager()

@@ -28,6 +28,10 @@
 
 #include "cppimport_api.h"
 
+namespace Model {
+	class Model;
+}
+
 namespace CppImport {
 
 /**

@@ -61,8 +61,6 @@
 #include <QtCore/QDirIterator>
 #include <QtCore/QStack>
 
-#include "OOModel/src/allOOModelNodes.h"
-
 #include <clang/AST/ASTConsumer.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/RecursiveASTVisitor.h>
