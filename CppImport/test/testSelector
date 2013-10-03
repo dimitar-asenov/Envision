@@ -1,0 +1,16 @@
+# SET A DIRECTORY CONTAINING A test.cpp file
+# The test will pick the first line without leading '#'
+#General
+#Loops
+spath:/home/luke/BachelorThesis/TestEnvision/Envision
+#path:/home/luke/BachelorThesis/TestEnvision/Envision/VisualizationBase
+path:/home/luke/BachelorThesis/TestEnvision/Envision/OOModel
+#DeclStmt
+SwitchCase
+#GlobalFunctions
+TemplateClassSpec
+#TemplateMethodSpec
+#
+#
+#
+#
