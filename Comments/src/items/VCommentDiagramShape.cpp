@@ -195,10 +195,26 @@ void VCommentDiagramShape::setTextEditable(bool editable)
 
 VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) const
 {
-	if(resizeRects_[0].contains(pos)) return RECT_TOP_LEFT;
-	if(resizeRects_[1].contains(pos)) return RECT_TOP_RIGHT;
-	if(resizeRects_[2].contains(pos)) return RECT_BOTTOM_RIGHT;
-	if(resizeRects_[3].contains(pos)) return RECT_BOTTOM_LEFT;
+	int rect = -1;
+	int manhattan = 25;
+
+	for(int i = 0; i < 4; ++i)
+	{
+		auto m = (pos - resizeRects_[i].center()).manhattanLength();
+		if(m < manhattan)
+		{
+			rect = i;
+			manhattan = m;
+		}
+	}
+
+	switch(rect)
+	{
+		case 0: return RECT_TOP_LEFT;
+		case 1: return RECT_TOP_RIGHT;
+		case 2: return RECT_BOTTOM_RIGHT;
+		case 3: return RECT_BOTTOM_LEFT;
+	}
 
 	return RECT_NONE;
 }
