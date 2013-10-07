@@ -105,7 +105,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a0e2e9bad8ff0ccde3c945aa359f81a79"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> { <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79a442bce153404d787512d1392ba9000fa">SEARCH_UP</a>, 
-<a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97">SEARCH_DOWN</a>
+<a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97">SEARCH_DOWN</a>, 
+<a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ac0232fa9373d329c1b413b8058db0209">SEARCH_HERE</a>
  }</td></tr>
 <tr class="separator:a0e2e9bad8ff0ccde3c945aa359f81a79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eedfb121970934710f1f3c67c26f361"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classModel_1_1Node.html">Node</a> *(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">NodeConstructor</a> )(<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>)</td></tr>
@@ -141,6 +142,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a94bae646017c4e4cb3214d0ecc26c539"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a94bae646017c4e4cb3214d0ecc26c539">children</a> ()</td></tr>
 <tr class="memdesc:a94bae646017c4e4cb3214d0ecc26c539"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all child nodes.  <a href="#a94bae646017c4e4cb3214d0ecc26c539">More...</a><br/></td></tr>
 <tr class="separator:a94bae646017c4e4cb3214d0ecc26c539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34dd86d4c8474dfebb367ad762bb2e27"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a34dd86d4c8474dfebb367ad762bb2e27">childrenInScope</a> ()</td></tr>
+<tr class="memdesc:a34dd86d4c8474dfebb367ad762bb2e27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all child nodes that may define symbols that form the scope of this node.  <a href="#a34dd86d4c8474dfebb367ad762bb2e27">More...</a><br/></td></tr>
+<tr class="separator:a34dd86d4c8474dfebb367ad762bb2e27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c86ab8359212f69dcbafd1f40bd8aea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a6c86ab8359212f69dcbafd1f40bd8aea">childToSubnode</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> *other) const </td></tr>
+<tr class="memdesc:a6c86ab8359212f69dcbafd1f40bd8aea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the direct child node that is equal to <em>other</em> or is an ancestor of <em>other</em>.  <a href="#a6c86ab8359212f69dcbafd1f40bd8aea">More...</a><br/></td></tr>
+<tr class="separator:a6c86ab8359212f69dcbafd1f40bd8aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc19699b25363ba3474acf0000da4329"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329">definesSymbol</a> () const </td></tr>
 <tr class="memdesc:acc19699b25363ba3474acf0000da4329"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol and false otherwise.  <a href="#acc19699b25363ba3474acf0000da4329">More...</a><br/></td></tr>
 <tr class="separator:acc19699b25363ba3474acf0000da4329"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,9 +157,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9aad10e0ec7b9359f325db5a3c4fbf90">execute</a> (<a class="el" href="classModel_1_1UndoCommand.html">UndoCommand</a> *command)</td></tr>
 <tr class="memdesc:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the specified command and pushes it on the undo stack.  <a href="#a9aad10e0ec7b9359f325db5a3c4fbf90">More...</a><br/></td></tr>
 <tr class="separator:a9aad10e0ec7b9359f325db5a3c4fbf90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e4d6c896a88be5aa338c56655768ee4"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9e4d6c896a88be5aa338c56655768ee4">findSymbols</a> (const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;matcher, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> direction, SymbolTypes symbolTypes, bool exhaustAllScopes)</td></tr>
-<tr class="memdesc:a9e4d6c896a88be5aa338c56655768ee4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all nodes which define a symbol with a name matching <em>matcher</em> in the scope of this node.  <a href="#a9e4d6c896a88be5aa338c56655768ee4">More...</a><br/></td></tr>
-<tr class="separator:a9e4d6c896a88be5aa338c56655768ee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0835bfe1be53ffaee8e5048bc3b5625f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0835bfe1be53ffaee8e5048bc3b5625f">findSymbols</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;matcher, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79">FindSymbolDirection</a> direction, SymbolTypes symbolTypes, bool exhaustAllScopes)</td></tr>
+<tr class="memdesc:a0835bfe1be53ffaee8e5048bc3b5625f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns in <em>result</em> a set of all nodes which define a symbol with a name matching <em>matcher</em> in the scope of this node.  <a href="#a0835bfe1be53ffaee8e5048bc3b5625f">More...</a><br/></td></tr>
+<tr class="separator:a0835bfe1be53ffaee8e5048bc3b5625f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a410cafa4e196e8f572d6f24992bfc914"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a410cafa4e196e8f572d6f24992bfc914">incrementRevision</a> ()</td></tr>
 <tr class="memdesc:a410cafa4e196e8f572d6f24992bfc914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increments the revision of this node by 1.  <a href="#a410cafa4e196e8f572d6f24992bfc914">More...</a><br/></td></tr>
 <tr class="separator:a410cafa4e196e8f572d6f24992bfc914"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -244,12 +251,12 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a3e997f8eda29ad3b42d8ac9773afb194"><td class="memItemLeft" align="right" valign="top">static QMap&lt; QString, <br class="typebreak"/>
-<a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">NodeConstructor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a3e997f8eda29ad3b42d8ac9773afb194">nodeConstructorRegister</a></td></tr>
-<tr class="separator:a3e997f8eda29ad3b42d8ac9773afb194"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc6b7cb926ca500a5ac3102409407f3f"><td class="memItemLeft" align="right" valign="top">static QMap&lt; QString, <br class="typebreak"/>
-<a class="el" href="classModel_1_1Node.html#a36d456dafe5835b3f28142507f90cd89">NodePersistenceConstructor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#abc6b7cb926ca500a5ac3102409407f3f">nodePersistenceConstructorRegister</a></td></tr>
-<tr class="separator:abc6b7cb926ca500a5ac3102409407f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa9eb8e52cbbb0369643a683ac9d5ce0"><td class="memItemLeft" align="right" valign="top">static QHash&lt; QString, <br class="typebreak"/>
+<a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">NodeConstructor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aaa9eb8e52cbbb0369643a683ac9d5ce0">nodeConstructorRegister</a></td></tr>
+<tr class="separator:aaa9eb8e52cbbb0369643a683ac9d5ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ccb5dd46db0cc4e08f1aea6b982b6d2"><td class="memItemLeft" align="right" valign="top">static QHash&lt; QString, <br class="typebreak"/>
+<a class="el" href="classModel_1_1Node.html#a36d456dafe5835b3f28142507f90cd89">NodePersistenceConstructor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a1ccb5dd46db0cc4e08f1aea6b982b6d2">nodePersistenceConstructorRegister</a></td></tr>
+<tr class="separator:a1ccb5dd46db0cc4e08f1aea6b982b6d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f14aa5c17f8e32232e690c542b9dfa9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a3f14aa5c17f8e32232e690c542b9dfa9">numRegisteredTypes_</a> = 0</td></tr>
 <tr class="separator:a3f14aa5c17f8e32232e690c542b9dfa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -258,9 +265,9 @@ Static Private Attributes</h2></td></tr>
 <p>An application in Envision is a collection of objects of type <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> (and derived) that are managed by a single <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a> object. Nodes are combined together in a tree structure. This class defines the minimal interface of each node and implements some service functions.</p>
 <p>Each class that derives from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> must have at least two constructors which need to be registered before that class can be used. This is achieved using the static method '<a class="el" href="classModel_1_1Node.html#a96dd7615292eeba03fe903f623fb1305" title="Registers the constructors of a class derived from Node.">registerNodeType()</a>'.</p>
 <p>Derived classes must implement the '<a class="el" href="classModel_1_1Node.html#a30d34fac51548633d6748b09f47a3d92" title="Saves the current node to a persistent store.">save()</a>' and '<a class="el" href="classModel_1_1Node.html#a20246c48b754e0fceeb7c921f2f1f57b" title="Reloads this node from a persistent store.">load()</a>' methods that specify how the node is stored in a persistent store.</p>
-<p>A new class that derives from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> must define many standard methods and constructors. Many macros have been defined that greatly simplify this task. See 'nodeMacros.h' for more details.</p>
-<p>A node in the tree has a revision number. Each time a node is created or loaded from a persistent store this number is reset to 0. Any modification to the node causes the revision to be incremented. This can be then used by visualizations or other plug-ins to track the evolution of node and update it necessary. A node's revision number will also increase when any of its descendants is modified, added or removed.</p>
-<p>A node that supports partial loading, should reimplement the '<a class="el" href="classModel_1_1Node.html#ab33abbe1a349349d108142e07bb19db5" title="Fully loads a partially loaded node from the specified persistent store.">loadFully()</a>' method to enable this functionality.</p>
+<p><a class="el" href="classA.html">A</a> new class that derives from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> must define many standard methods and constructors. Many macros have been defined that greatly simplify this task. See 'nodeMacros.h' for more details.</p>
+<p><a class="el" href="classA.html">A</a> node in the tree has a revision number. Each time a node is created or loaded from a persistent store this number is reset to 0. Any modification to the node causes the revision to be incremented. This can be then used by visualizations or other plug-ins to track the evolution of node and update it necessary. <a class="el" href="classA.html">A</a> node's revision number will also increase when any of its descendants is modified, added or removed.</p>
+<p><a class="el" href="classA.html">A</a> node that supports partial loading, should reimplement the '<a class="el" href="classModel_1_1Node.html#ab33abbe1a349349d108142e07bb19db5" title="Fully loads a partially loaded node from the specified persistent store.">loadFully()</a>' method to enable this functionality.</p>
 <p>The functionality offered by the <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> class includes:</p>
 <ul>
 <li>Navigation routines between parents and children.</li>
@@ -306,7 +313,7 @@ Static Private Attributes</h2></td></tr>
     <tr><td class="paramname">parent</td><td>The parent node of the newly created node. This can be NULL to indicate that this node is the root node for the model. Otherwise it should be non-NULL. </td></tr>
     <tr><td class="paramname">id</td><td>The id of the node from the persistent store. </td></tr>
     <tr><td class="paramname">store</td><td>The store that is contains this node and its subtree. This will be used to load the children of the node. </td></tr>
-    <tr><td class="paramname">partialLoadHint</td><td>A flag that hints whether this node should be fully or partially loaded. The constructor of the node is allowed to ignore this flag. </td></tr>
+    <tr><td class="paramname">partialLoadHint</td><td><a class="el" href="classA.html">A</a> flag that hints whether this node should be fully or partially loaded. The constructor of the node is allowed to ignore this flag. </td></tr>
   </table>
   </dd>
 </dl>
@@ -331,6 +338,10 @@ Static Private Attributes</h2></td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97"></a>SEARCH_DOWN</em>&nbsp;</td><td class="fielddoc">
 <p>Looks for symbols inside the specified scope or subscopes. </p>
 <p>This is used for symbols that are requested in a specific context (typically after a '.') e.g. "list.sort()" </p>
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a0e2e9bad8ff0ccde3c945aa359f81a79ac0232fa9373d329c1b413b8058db0209"></a>SEARCH_HERE</em>&nbsp;</td><td class="fielddoc">
+<p>Looks for symbols defined by the current node. </p>
+<p>This happens when findSymbols has been called on the parent with SEARCH_DOWN and the parent must therefore find a precise match in its scope. <a class="el" href="classModel_1_1Node.html#a0835bfe1be53ffaee8e5048bc3b5625f" title="Returns in result a set of all nodes which define a symbol with a name matching matcher in the scope ...">findSymbols()</a> will be called for each potential match from the parents children with the SEACH_HERE flag </p>
 </td></tr>
 </table>
 
@@ -503,6 +514,52 @@ Static Private Attributes</h2></td></tr>
 
 <p>Returns a list of all child nodes. </p>
 <p>Reimplement this method in derived classes that have children. The default implementation returns an empty list. </p>
+
+</div>
+</div>
+<a class="anchor" id="a34dd86d4c8474dfebb367ad762bb2e27"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; Model::Node::childrenInScope </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns all child nodes that may define symbols that form the scope of this node. </p>
+<p>The default implementation returns all direct children of this node.</p>
+<p>Reimplement this method to customize while nodes form the scope of this node. </p>
+
+</div>
+</div>
+<a class="anchor" id="a6c86ab8359212f69dcbafd1f40bd8aea"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * Model::Node::childToSubnode </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the direct child node that is equal to <em>other</em> or is an ancestor of <em>other</em>. </p>
+<p>Returns null if this node is not an ancestor of <em>other</em>. </p>
 
 </div>
 </div>
@@ -696,7 +753,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9e4d6c896a88be5aa338c56655768ee4"></a>
+<a class="anchor" id="a0835bfe1be53ffaee8e5048bc3b5625f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -704,8 +761,14 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; Model::Node::findSymbols </td>
+          <td class="memname">bool Model::Node::findSymbols </td>
           <td>(</td>
+          <td class="paramtype">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;&#160;</td>
           <td class="paramname"><em>matcher</em>, </td>
         </tr>
@@ -746,12 +809,13 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns a list of all nodes which define a symbol with a name matching <em>matcher</em> in the scope of this node. </p>
+<p>Returns in <em>result</em> a set of all nodes which define a symbol with a name matching <em>matcher</em> in the scope of this node. </p>
+<p>The return value is true if a symbol was found and false otherwise.</p>
 <p>The <em>source</em> <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> specifies what node should be used as a reference when determining what symbols are visible.</p>
 <p>The <em>direction</em> specifies what search to perform.</p>
 <p>The <em>symbolTypes</em> specifies what symbol types should be returned. If a symbol matches any of the requested types it will be returned.</p>
 <p>If <em>exhaustAllScopes</em> is false, the search will halt as soon as symbols are found within a scope. This is useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope. If <em>exhaustAllScopes</em> is true, the search will explore all scopes in corresponding to the provided mode. This is useful when <em>symbolExp</em> can match multiple symbols with different names (for example during auto completion list build up).</p>
-<p>The default implementation returns a list with only the current node in it, in case the node defines the requested symbol. Otherwise if <em>mode</em> is FindSymbolMode::SEARCH_UP, the implementation of the parent node is called.</p>
+<p>The default implementation returns a set with only the current node in it, in case the node defines the requested symbol. Otherwise if <em>mode</em> is FindSymbolMode::SEARCH_UP, the implementation of the parent node is called.</p>
 <p>Reimplement this method in derived classes to specify fine grained behavior and operation for search modes other than FindSymbolMode::SEARCH_UP </p>
 
 </div>
@@ -824,7 +888,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true is the this node can be modified or false otherwise. </p>
-<p>A node is modifiable if it is part of an access unit which is currently acquired by a writer thread. This is managed by the '<a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a>' associated with the node.</p>
+<p><a class="el" href="classA.html">A</a> node is modifiable if it is part of an access unit which is currently acquired by a writer thread. This is managed by the '<a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a>' associated with the node.</p>
 <p>If a node does not have an associated model it is always modifiable. </p>
 
 </div>
@@ -959,6 +1023,9 @@ Static Private Attributes</h2></td></tr>
 <a class="anchor" id="a8eb7d7162522ca5e4000ce4e2c77ab35"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classModel_1_1Model.html">Model</a> * Model::Node::model </td>
@@ -967,6 +1034,11 @@ Static Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Returns the model managing the tree of the current <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>. </p>
@@ -977,6 +1049,9 @@ Static Private Attributes</h2></td></tr>
 <a class="anchor" id="a0027c2328323a4733b3e594958b6998a"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * Model::Node::parent </td>
@@ -985,6 +1060,11 @@ Static Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Returns the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> or NULL if this is the root. </p>
@@ -1051,8 +1131,8 @@ Static Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">type</td><td>The string name of the class. </td></tr>
-    <tr><td class="paramname">constructor</td><td>A function that can construct a new instance of the class at run-time. </td></tr>
-    <tr><td class="paramname">persistenceconstructor</td><td>A function that can construct a new instance of the class from a persistent store. </td></tr>
+    <tr><td class="paramname">constructor</td><td><a class="el" href="classA.html">A</a> function that can construct a new instance of the class at run-time. </td></tr>
+    <tr><td class="paramname">persistenceconstructor</td><td><a class="el" href="classA.html">A</a> function that can construct a new instance of the class from a persistent store. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1116,6 +1196,9 @@ Static Private Attributes</h2></td></tr>
 <a class="anchor" id="a78ce4ee82d2c0ed0b211fa29aec22923"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * Model::Node::root </td>
@@ -1124,6 +1207,11 @@ Static Private Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Returns the root node of tree where of this node. </p>
@@ -1293,7 +1381,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3e997f8eda29ad3b42d8ac9773afb194"></a>
+<a class="anchor" id="aaa9eb8e52cbbb0369643a683ac9d5ce0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1301,7 +1389,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QMap&lt; QString, <a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">Node::NodeConstructor</a> &gt; Model::Node::nodeConstructorRegister</td>
+          <td class="memname">QHash&lt; QString, <a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">Node::NodeConstructor</a> &gt; Model::Node::nodeConstructorRegister</td>
         </tr>
       </table>
   </td>
@@ -1313,7 +1401,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abc6b7cb926ca500a5ac3102409407f3f"></a>
+<a class="anchor" id="a1ccb5dd46db0cc4e08f1aea6b982b6d2"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1321,7 +1409,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QMap&lt; QString, <a class="el" href="classModel_1_1Node.html#a36d456dafe5835b3f28142507f90cd89">Node::NodePersistenceConstructor</a> &gt; Model::Node::nodePersistenceConstructorRegister</td>
+          <td class="memname">QHash&lt; QString, <a class="el" href="classModel_1_1Node.html#a36d456dafe5835b3f28142507f90cd89">Node::NodePersistenceConstructor</a> &gt; Model::Node::nodePersistenceConstructorRegister</td>
         </tr>
       </table>
   </td>

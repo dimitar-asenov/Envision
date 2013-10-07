@@ -15,6 +15,7 @@ var searchData=
   ['shapestyle',['ShapeStyle',['../classVisualization_1_1ShapeStyle.html',1,'Visualization']]],
   ['showcommandpromptevent',['ShowCommandPromptEvent',['../classInteraction_1_1ShowCommandPromptEvent.html',1,'Interaction']]],
   ['signaturecontractsvmethodaddon',['SignatureContractsVMethodAddOn',['../classContractsLibrary_1_1SignatureContractsVMethodAddOn.html',1,'ContractsLibrary']]],
+  ['simpletextfilestore',['SimpleTextFileStore',['../classFilePersistence_1_1SimpleTextFileStore.html',1,'FilePersistence']]],
   ['skipoperatordelimiter',['SkipOperatorDelimiter',['../classInteraction_1_1SkipOperatorDelimiter.html',1,'Interaction']]],
   ['statement',['Statement',['../classOOModel_1_1Statement.html',1,'OOModel']]],
   ['statementitem',['StatementItem',['../classOOModel_1_1StatementItem.html',1,'OOModel']]],

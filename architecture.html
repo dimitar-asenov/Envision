@@ -88,7 +88,7 @@ Overview</h1>
 <img src="High-level architecture.png" alt="High-level architecture.png"/>
 <div class="caption">
 High-level architecture of Engision</div></div>
-<p> The design consists of layers, where each layer depends on the ones below it. A layer is just a logical entity and has no representation in the source code. Each layer consists of plug-ins which are implemented as shared libraries and loaded at run time. A plug-in may depend on other plug-ins from the same layer or on plug-ins from lower layers. Circular dependencies are not allowed.</p>
+<p> The design consists of layers, where each layer depends on the ones below it. <a class="el" href="classA.html">A</a> layer is just a logical entity and has no representation in the source code. Each layer consists of plug-ins which are implemented as shared libraries and loaded at run time. <a class="el" href="classA.html">A</a> plug-in may depend on other plug-ins from the same layer or on plug-ins from lower layers. Circular dependencies are not allowed.</p>
 <p>Each plug-in is implemented in a separate namespace. If you want to know more about a particular plug-in, see <a href="namespaces.html">the Namespaces tab</a> and check out the documentation of the corresponding namespace.</p>
 <h2><a class="anchor" id="executable-layer"></a>
 Executable</h2>
@@ -135,7 +135,7 @@ The Qt framework and Envision</h1>
 </ul>
 <h1><a class="anchor" id="plug-in-extension"></a>
 Plug-in extensions</h1>
-<p>Except for a few service tasks all of the functionality of Envision is provided by plug-ins. A plug-in may use the services of other plug-ins and provide services that others can use. The architecture does not enforce any particular mechanism to achieve this and is very flexible in this respect. The plug-in developer can choose how to offer services to others. Here are two suggestions which are currently used in Envision: </p>
+<p>Except for a few service tasks all of the functionality of Envision is provided by plug-ins. <a class="el" href="classA.html">A</a> plug-in may use the services of other plug-ins and provide services that others can use. The architecture does not enforce any particular mechanism to achieve this and is very flexible in this respect. The plug-in developer can choose how to offer services to others. Here are two suggestions which are currently used in Envision: </p>
 <ul>
 <li>Using interfaces - a plug-in might offer interface classes (abstract classes with pure virtual methods) to others which request its services. The actual implementation of the functionality is done in derived classes which are private to the plug-in. This approach is flexible: as long as the interface is fixed the implementation can change in any way and client code will not need to be recompiled or adjusted. The drawback is that code cannot be reused, since clients are only aware of the interfaces. </li>
 <li>Using classes - as an alternative a plug-in can instead export a complete class together with all other classes from its inheritance hierarchy. Clients can then further extend this hierarchy and reuse functionality from base classes. The drawback of this approach is that changes to base classes might more easily invalidate client code and require recompilation.</li>

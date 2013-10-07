@@ -1,6 +1,7 @@
 var searchData=
 [
   ['below',['Below',['../classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4aa2bf5cc04534bb9e7ed8773fe2ab1fb9',1,'Visualization::Item::Below()'],['../classVisualization_1_1ItemRegion.html#a4c5ce94b208c205300fadb4271b9165ba00369f2d8ebf552a1a38ced93acdb623',1,'Visualization::ItemRegion::Below()']]],
+  ['binary',['Binary',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a6ce976e8f061b2b5cfe4d0c50c3405dd',1,'CppImport::CppImportUtilities']]],
   ['bit_5fand_5fassign',['BIT_AND_ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a9c70b2e767eed00d2c9ac099dd61aaab',1,'OOModel::AssignmentExpression']]],
   ['bit_5for_5fassign',['BIT_OR_ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a96e9beb9125b8906cae918690bbdb37c',1,'OOModel::AssignmentExpression']]],
   ['bit_5fxor_5fassign',['BIT_XOR_ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a84b181f99af2db1e72c5cc1a2ba5906b',1,'OOModel::AssignmentExpression']]],

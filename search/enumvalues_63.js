@@ -5,6 +5,7 @@ var searchData=
   ['char',['CHAR',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05ad9a7edc1312d22f5276d8a33a2e97af3',1,'OOModel::PrimitiveType']]],
   ['class',['Class',['../classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1ca9bd81329febf6efe22788e03ddeaf0af',1,'OOModel::Class']]],
   ['codeitemcategory',['CodeItemCategory',['../classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdda4466d302ed2feaefdc4d9abd425c1946',1,'Visualization::Scene']]],
+  ['comma',['Comma',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a58be47db9455679e6a44df2eff9c9fa6',1,'CppImport::CppImportUtilities']]],
   ['complement',['COMPLEMENT',['../classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1a19f28e4ae1c14d4f48d353fc3216bc75',1,'OOModel::UnaryOperation']]],
   ['conditional_5fand',['CONDITIONAL_AND',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a40b5f70825f5c1716d6b94f9cbd1340d',1,'OOModel::BinaryOperation']]],
   ['conditional_5for',['CONDITIONAL_OR',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2ad06b66d0b9841d5812c08ae0d6bfbff4',1,'OOModel::BinaryOperation']]],

@@ -111,8 +111,8 @@ IfStatement.h</h1>
 <div class="line">   ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)</div>
 <div class="line"></div>
 <div class="line">   public:</div>
-<div class="line">      virtual QList&lt;Model::Node*&gt; findSymbols(const Model::SymbolMatcher&amp; matcher, Node* source, FindSymbolDirection direction,</div>
-<div class="line">            SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) override;</div>
+<div class="line">      virtual <span class="keywordtype">bool</span> findSymbols(QSet&lt;Node*&gt;&amp; result, const Model::SymbolMatcher&amp; matcher, Node* source,</div>
+<div class="line">            FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) override;</div>
 <div class="line">};</div>
 <div class="line"></div>
 <div class="line">} <span class="comment">/* namespace OOModel */</span></div>
@@ -149,8 +149,8 @@ IfStatement.h</h1>
 <div class="line">   ATTRIBUTE(StatementItemList, thenBranch, setThenBranch)</div>
 <div class="line">   ATTRIBUTE(StatementItemList, elseBranch, setElseBranch)</div>
 </div><!-- fragment --> With the help of the various <code>ATTRIBUTE</code> macros you can easily define what nodes your new composite node will consist of. Here you see the simplest way of using the macro. You only need to specify the type of node, its name (which will also be the name of the getter function for this child), and the name of a setter function. Each of these macro declarations need to have complementing definitions in the <code></code>.cpp file which we'll see later.</p>
-<p>Finally we see a method declaration: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> QList&lt;Model::Node*&gt; findSymbols(<span class="keyword">const</span> <a class="code" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a>&amp; matcher, Node* source, FindSymbolDirection direction,</div>
-<div class="line">            SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) <span class="keyword">override</span>;</div>
+<p>Finally we see a method declaration: <div class="fragment"><div class="line">      <span class="keyword">virtual</span> <span class="keywordtype">bool</span> findSymbols(QSet&lt;Node*&gt;&amp; result, <span class="keyword">const</span> <a class="code" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a>&amp; matcher, Node* source,</div>
+<div class="line">            FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes) <span class="keyword">override</span>;</div>
 </div><!-- fragment --> This is an advanced function for the <a class="el" href="classOOModel_1_1IfStatement.html">OOModel::IfStatement</a> node. For simple nodes you do not need to define this function. The only reason we need it here, is because it is possible to declare a variable inside the condition of an if statement and we need a way to find this variable when resolving references. We won't go into details here as name resolution is a big topic on its own.</p>
 <p>This is it really. The essential thing for any <a class="el" href="classModel_1_1CompositeNode.html">Model::CompositeNode</a> derivative is to declare what attribute nodes it consists of. The rest of the code is just boilerplate.</p>
 <h1><a class="anchor" id="if_cpp"></a>
@@ -169,17 +169,28 @@ IfStatement.cpp</h1>
 <div class="line">REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)</div>
 <div class="line">REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)</div>
 <div class="line"></div>
-<div class="line">QList&lt;Model::Node*&gt; IfStatement::findSymbols(const Model::SymbolMatcher&amp; matcher, Model::Node* source,</div>
+<div class="line"><span class="keywordtype">bool</span> IfStatement::findSymbols(QSet&lt;Node*&gt;&amp; result, const Model::SymbolMatcher&amp; matcher, Model::Node* source,</div>
 <div class="line">      FindSymbolDirection direction, SymbolTypes symbolTypes, <span class="keywordtype">bool</span> exhaustAllScopes)</div>
 <div class="line">{</div>
-<div class="line">   QList&lt;Model::Node*&gt; symbols;</div>
+<div class="line">   <span class="keywordflow">if</span> (direction == SEARCH_UP)</div>
+<div class="line">   {</div>
+<div class="line">      <span class="keyword">auto</span> ignore = childToSubnode(source);</div>
+<div class="line">      Q_ASSERT(ignore);</div>
 <div class="line"></div>
-<div class="line">   symbols &lt;&lt; condition()-&gt;findSymbols(matcher, source, SEARCH_DOWN, symbolTypes, <span class="keyword">false</span>);</div>
+<div class="line">      <span class="keywordtype">bool</span> found{};</div>
 <div class="line"></div>
-<div class="line">   <span class="keywordflow">if</span> (exhaustAllScopes || symbols.empty())</div>
-<div class="line">      symbols &lt;&lt; Node::findSymbols(matcher, source, direction, symbolTypes, exhaustAllScopes);</div>
+<div class="line">      <span class="keywordflow">if</span> (condition() != ignore)</div>
+<div class="line">         <span class="comment">// Optimize the search by skipping the scope of the source, since we&#39;ve already searched there</span></div>
+<div class="line">         found = condition()-&gt;findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, <span class="keyword">false</span>) || found;</div>
+<div class="line">      <span class="comment">// Note that a StatementList (the branches) also implements findSymbols and locally declared variables will be</span></div>
+<div class="line">      <span class="comment">// found there.</span></div>
 <div class="line"></div>
-<div class="line">   <span class="keywordflow">return</span> symbols;</div>
+<div class="line">      <span class="keywordflow">if</span> ((exhaustAllScopes || !found) &amp;&amp; parent())</div>
+<div class="line">         found = parent()-&gt;findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;</div>
+<div class="line"></div>
+<div class="line">      <span class="keywordflow">return</span> found;</div>
+<div class="line">   }</div>
+<div class="line">   <span class="keywordflow">else</span> <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line">} <span class="comment">/* namespace OOModel */</span></div>
@@ -191,9 +202,9 @@ IfStatement.cpp</h1>
 <li>The name of the class that you are defining</li>
 <li>The name of the attribute you are registering</li>
 <li>The name of the type of this attribute</li>
-<li>A boolean flag which indicates if this node should be partially loaded by default. This should practically always be <code>false</code> as currently the partial loading implementation is not used.</li>
+<li><a class="el" href="classA.html">A</a> boolean flag which indicates if this node should be partially loaded by default. This should practically always be <code>false</code> as currently the partial loading implementation is not used.</li>
 <li>Another boolean flag which indicates whether this attribute is optional or not. If you set this to <code>false</code>, the attribute is mandatory and calling the getter will always return a valid value. If you do not explicitly set the attribute, a default constructed value will be used. If you set this flag to <code>true</code>, the attribute is optional and calling the getter might return <code>nullptr</code> if the attribute has not been set.</li>
-<li>A final flag that indicates whether this attribute should be saved to disk or whether it is transient and should only be used in memory. A value of <code>true</code> will make this attribute persistent. A value of <code>false</code> will make it transient.</li>
+<li><a class="el" href="classA.html">A</a> final flag that indicates whether this attribute should be saved to disk or whether it is transient and should only be used in memory. <a class="el" href="classA.html">A</a> value of <code>true</code> will make this attribute persistent. <a class="el" href="classA.html">A</a> value of <code>false</code> will make it transient.</li>
 </ul>
 <h1><a class="anchor" id="allOONodes"></a>
 allOOModelNodes.h</h1>

@@ -89,7 +89,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classOOModel_1_1OOReference-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a>  </div>
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">OOModel::OOReference Class Reference</div>  </div>
 </div><!--header-->
@@ -100,23 +101,30 @@ Inheritance diagram for OOModel::OOReference:</div>
  <div class="center">
   <img src="classOOModel_1_1OOReference.png" usemap="#OOModel::OOReference_map" alt=""/>
   <map id="OOModel::OOReference_map" name="OOModel::OOReference_map">
-<area href="classCore_1_1Reflect.html" alt="Core::Reflect&lt; Base &gt;" shape="rect" coords="0,56,209,80"/>
+<area href="classCore_1_1Reflect.html" alt="Core::Reflect&lt; Base &gt;" shape="rect" coords="109,56,318,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8e4173baf4b253d7f9d6cf925095e6ff"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#a8e4173baf4b253d7f9d6cf925095e6ff">resolve</a> ()</td></tr>
-<tr class="separator:a8e4173baf4b253d7f9d6cf925095e6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4118515efc26aa0f06c68af952156ea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#ac4118515efc26aa0f06c68af952156ea">resolve</a> () override</td></tr>
+<tr class="separator:ac4118515efc26aa0f06c68af952156ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a48d91042ba44d66aefb70bc0e85fad09"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#a48d91042ba44d66aefb70bc0e85fad09">isReferenceToContainer</a> ()</td></tr>
 <tr class="separator:a48d91042ba44d66aefb70bc0e85fad09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a23715f563a9f5a8e80a410730b888ea4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#a23715f563a9f5a8e80a410730b888ea4">resolving_</a> {}</td></tr>
+<tr class="separator:a23715f563a9f5a8e80a410730b888ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_types_classCore_1_1Reflect"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classCore_1_1Reflect')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classCore_1_1Reflect.html">Core::Reflect&lt; Base &gt;</a></td></tr>
+<tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
+<tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -144,7 +152,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8e4173baf4b253d7f9d6cf925095e6ff"></a>
+<a class="anchor" id="ac4118515efc26aa0f06c68af952156ea"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -160,7 +168,28 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a23715f563a9f5a8e80a410730b888ea4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool OOModel::OOReference::resolving_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -88,7 +88,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classOOModel_1_1TypeAlias-members.html">List of all members</a> &#124;
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">OOModel::TypeAlias Class Reference</div>  </div>
 </div><!--header-->
@@ -99,7 +100,7 @@ Inheritance diagram for OOModel::TypeAlias:</div>
  <div class="center">
   <img src="classOOModel_1_1TypeAlias.png" usemap="#OOModel::TypeAlias_map" alt=""/>
   <map id="OOModel::TypeAlias_map" name="OOModel::TypeAlias_map">
-<area href="classCore_1_1Reflect.html" alt="Core::Reflect&lt; Base &gt;" shape="rect" coords="0,56,174,80"/>
+<area href="classCore_1_1Reflect.html" alt="Core::Reflect&lt; Base &gt;" shape="rect" coords="92,56,266,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -107,14 +108,21 @@ Inheritance diagram for OOModel::TypeAlias:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acd4f8c203e8c07602192d6262caf4a8c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#acd4f8c203e8c07602192d6262caf4a8c">TypeAlias</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *typeExpression=nullptr)</td></tr>
 <tr class="separator:acd4f8c203e8c07602192d6262caf4a8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25bf1d71d14fbcf8a7ecd4c5e0dfc14b"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; Node * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a25bf1d71d14fbcf8a7ecd4c5e0dfc14b">findSymbols</a> (const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
-<tr class="separator:a25bf1d71d14fbcf8a7ecd4c5e0dfc14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d88d41dd49ba8c397a80e3145a51786"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a7d88d41dd49ba8c397a80e3145a51786">findSymbols</a> (QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:a7d88d41dd49ba8c397a80e3145a51786"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f010f01228f45d38cd6d3350bd2ffc8"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#a1f010f01228f45d38cd6d3350bd2ffc8">symbolType</a> () const override</td></tr>
 <tr class="separator:a1f010f01228f45d38cd6d3350bd2ffc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ae1bfc14bd97b26b291db5947328d6837"><td class="memItemLeft" align="right" valign="top">Node *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1TypeAlias.html#ae1bfc14bd97b26b291db5947328d6837">target</a> () const </td></tr>
+<tr class="separator:ae1bfc14bd97b26b291db5947328d6837"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_types_classCore_1_1Reflect"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classCore_1_1Reflect')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classCore_1_1Reflect.html">Core::Reflect&lt; Base &gt;</a></td></tr>
+<tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
+<tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -146,7 +154,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a25bf1d71d14fbcf8a7ecd4c5e0dfc14b"></a>
+<a class="anchor" id="a7d88d41dd49ba8c397a80e3145a51786"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -154,8 +162,14 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; OOModel::TypeAlias::findSymbols </td>
+          <td class="memname">bool OOModel::TypeAlias::findSymbols </td>
           <td>(</td>
+          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
           <td class="paramname"><em>matcher</em>, </td>
         </tr>
@@ -215,6 +229,29 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae1bfc14bd97b26b291db5947328d6837"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Model::Node</a> * OOModel::TypeAlias::target </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

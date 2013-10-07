@@ -162,9 +162,6 @@ Protected Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ae29f8cb5fcb1fd48af7bcfba061f848f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FileStore.html#ae29f8cb5fcb1fd48af7bcfba061f848f">checkIsWorking</a> () const </td></tr>
 <tr class="separator:ae29f8cb5fcb1fd48af7bcfba061f848f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26d7d912e4e6d6cad4d17f7528d3f231"><td class="memItemLeft" align="right" valign="top">QDomElement&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FileStore.html#a26d7d912e4e6d6cad4d17f7528d3f231">findElementById</a> (QDomElement root, const QString &amp;id, int depthLimit)</td></tr>
-<tr class="memdesc:a26d7d912e4e6d6cad4d17f7528d3f231"><td class="mdescLeft">&#160;</td><td class="mdescRight">When started with -1 it searches through the entire tree.  <a href="#a26d7d912e4e6d6cad4d17f7528d3f231">More...</a><br/></td></tr>
-<tr class="separator:a26d7d912e4e6d6cad4d17f7528d3f231"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaca33491ba7403df7af2041a6aec9ccf"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FileStore.html#aaca33491ba7403df7af2041a6aec9ccf">getPersistenceUnitName</a> (const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="memdesc:aaca33491ba7403df7af2041a6aec9ccf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the persistent unit that corresponds to the specified node.  <a href="#aaca33491ba7403df7af2041a6aec9ccf">More...</a><br/></td></tr>
 <tr class="separator:aaca33491ba7403df7af2041a6aec9ccf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,14 +189,14 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:aba0b330095d445eb5a5402368f51a6b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the folder where the current model is being saved to or loaded from.  <a href="#aba0b330095d445eb5a5402368f51a6b7">More...</a><br/></td></tr>
 <tr class="separator:aba0b330095d445eb5a5402368f51a6b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a508f2359e004125084503a7c736a1fcb"><td class="memItemLeft" align="right" valign="top">QMutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FileStore.html#a508f2359e004125084503a7c736a1fcb">storeAccess</a></td></tr>
-<tr class="memdesc:a508f2359e004125084503a7c736a1fcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">A mutex that assures exclusive model saving and loading operations.  <a href="#a508f2359e004125084503a7c736a1fcb">More...</a><br/></td></tr>
+<tr class="memdesc:a508f2359e004125084503a7c736a1fcb"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classA.html">A</a> mutex that assures exclusive model saving and loading operations.  <a href="#a508f2359e004125084503a7c736a1fcb">More...</a><br/></td></tr>
 <tr class="separator:a508f2359e004125084503a7c736a1fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e36e3dfb2160166b61f3c79ddd6b7bc"><td class="memItemLeft" align="right" valign="top">QList&lt; QPair&lt; <a class="el" href="classModel_1_1Reference.html">Model::Reference</a> <br class="typebreak"/>
 *, QString &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FileStore.html#a7e36e3dfb2160166b61f3c79ddd6b7bc">uninitializedReferences</a></td></tr>
 <tr class="memdesc:a7e36e3dfb2160166b61f3c79ddd6b7bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a list of all references which have been constructed and which have a target that is not yet set.  <a href="#a7e36e3dfb2160166b61f3c79ddd6b7bc">More...</a><br/></td></tr>
 <tr class="separator:a7e36e3dfb2160166b61f3c79ddd6b7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8980ffb8c846f5e7726e8b8d4f67af19"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FileStore.html#a8980ffb8c846f5e7726e8b8d4f67af19">working</a></td></tr>
-<tr class="memdesc:a8980ffb8c846f5e7726e8b8d4f67af19"><td class="mdescLeft">&#160;</td><td class="mdescRight">A flag that indicates if the store is currently in the middle of saving or loading a model.  <a href="#a8980ffb8c846f5e7726e8b8d4f67af19">More...</a><br/></td></tr>
+<tr class="memdesc:a8980ffb8c846f5e7726e8b8d4f67af19"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classA.html">A</a> flag that indicates if the store is currently in the middle of saving or loading a model.  <a href="#a8980ffb8c846f5e7726e8b8d4f67af19">More...</a><br/></td></tr>
 <tr class="separator:a8980ffb8c846f5e7726e8b8d4f67af19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01e02ea651fe3efa4485a5bd55b7b6fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1XMLModel.html">XMLModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1FileStore.html#a01e02ea651fe3efa4485a5bd55b7b6fc">xml</a></td></tr>
 <tr class="separator:a01e02ea651fe3efa4485a5bd55b7b6fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -294,49 +291,6 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a067c4f307cc6a31a42ce075370beb097">Model::PersistentStore</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a26d7d912e4e6d6cad4d17f7528d3f231"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QDomElement FilePersistence::FileStore::findElementById </td>
-          <td>(</td>
-          <td class="paramtype">QDomElement&#160;</td>
-          <td class="paramname"><em>root</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>depthLimit</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>When started with -1 it searches through the entire tree. </p>
-<p>Otherwise expects to find before or at the specified depth. Depth = 0 checks just the root element. </p>
 
 </div>
 </div>
@@ -1127,7 +1081,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A mutex that assures exclusive model saving and loading operations. </p>
+<p><a class="el" href="classA.html">A</a> mutex that assures exclusive model saving and loading operations. </p>
 
 </div>
 </div>
@@ -1172,7 +1126,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A flag that indicates if the store is currently in the middle of saving or loading a model. </p>
+<p><a class="el" href="classA.html">A</a> flag that indicates if the store is currently in the middle of saving or loading a model. </p>
 
 </div>
 </div>

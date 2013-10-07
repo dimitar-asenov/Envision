@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['pair',['Pair',['../classPair.html',1,'']]],
   ['panelborderlayout',['PanelBorderLayout',['../classVisualization_1_1PanelBorderLayout.html',1,'Visualization']]],
   ['panelborderlayoutstyle',['PanelBorderLayoutStyle',['../classVisualization_1_1PanelBorderLayoutStyle.html',1,'Visualization']]],
   ['panellayout',['PanelLayout',['../classVisualization_1_1PanelLayout.html',1,'Visualization']]],

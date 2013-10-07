@@ -2,6 +2,7 @@ var searchData=
 [
   ['generichandler',['GenericHandler',['../classInteraction_1_1GenericHandler.html',1,'Interaction']]],
   ['generichandlermodellistener',['GenericHandlerModelListener',['../classInteraction_1_1GenericHandlerModelListener.html',1,'Interaction']]],
+  ['genericnode',['GenericNode',['../classFilePersistence_1_1GenericNode.html',1,'FilePersistence']]],
   ['globalscopeexpression',['GlobalScopeExpression',['../classOOModel_1_1GlobalScopeExpression.html',1,'OOModel']]],
   ['gridbasedoffsetprovider',['GridBasedOffsetProvider',['../classOOInteraction_1_1GridBasedOffsetProvider.html',1,'OOInteraction']]],
   ['gridconstructors',['GridConstructors',['../classOOInteraction_1_1GridConstructors.html',1,'OOInteraction']]],
