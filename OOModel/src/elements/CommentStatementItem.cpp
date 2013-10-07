@@ -24,29 +24,16 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "CommentStatementItem.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 
-#include "../interactionbase_api.h"
+DEFINE_TYPED_LIST(OOModel::CommentStatementItem)
 
-#include "CommandResult.h"
-#include "CommandSuggestion.h"
-#include "CommandHelp.h"
+namespace OOModel {
 
-#include "VisualizationBase/src/items/Item.h"
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentStatementItem)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentStatementItem)
 
-namespace Interaction {
-
-class INTERACTIONBASE_API Command
-{
-	public:
-		virtual ~Command();
-
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens) = 0;
-
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar) = 0;
-		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target, const QString& commandForm = QString());
-};
+REGISTER_ATTRIBUTE(CommentStatementItem, comment, CommentNode, false, false, true)
 
 }
