@@ -32,6 +32,8 @@
 
 #include "../nodes/CommentNode.h"
 
+class QGraphicsWebView;
+
 namespace Comments {
 
 class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
