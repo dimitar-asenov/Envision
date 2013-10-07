@@ -100,3 +100,4 @@
 #include "elements/CatchClause.h"
 #include "elements/MemberInitializer.h"
 #include "elements/Modifier.h"
+#include "elements/CommentStatementItem.h"

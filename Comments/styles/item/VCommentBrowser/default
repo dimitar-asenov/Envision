@@ -1,0 +1,4 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../DeclarativeItemBase/default">
+	<drawsOnlyShape>false</drawsOnlyShape>
+</style>

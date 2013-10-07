@@ -1,0 +1,38 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<drawsOnlyShape>false</drawsOnlyShape>
+	<colors>
+		<e0 prototypes="color">
+			<name>red</name>
+			<color>
+				<red>255</red>
+			</color>
+		</e0>
+		<e1 prototypes="color">
+			<name>green</name>
+			<color>
+				<green>255</green>
+			</color>
+		</e1>
+		<e2 prototypes="color">
+			<name>blue</name>
+			<color>
+				<blue>255</blue>
+			</color>
+		</e2>
+		<e3 prototypes="color">
+			<name>yellow</name>
+			<color>
+				<red>255</red>
+				<green>255</green>
+			</color>
+		</e3>
+		<e4 prototypes="color">
+			<name>teal</name>
+			<color>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
+		</e4>
+	</colors>
+</style>

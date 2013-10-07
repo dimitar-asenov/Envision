@@ -26,27 +26,20 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
+#include "../comments_api.h"
 
-#include "CommandResult.h"
-#include "CommandSuggestion.h"
-#include "CommandHelp.h"
+#include "InteractionBase/src/commands/Command.h"
 
-#include "VisualizationBase/src/items/Item.h"
+namespace Comments {
 
-namespace Interaction {
-
-class INTERACTIONBASE_API Command
+class COMMENTS_API CShapeSetProperty : public Interaction::Command
 {
 	public:
-		virtual ~Command();
-
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens) = 0;
+		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
 
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar) = 0;
-		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target, const QString& commandForm = QString());
+		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
+		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
 };
 
 }

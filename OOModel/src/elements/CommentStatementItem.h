@@ -26,27 +26,19 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
+#include "../oomodel_api.h"
+#include "../elements/StatementItem.h"
+#include "Comments/src/nodes/CommentNode.h"
 
-#include "CommandResult.h"
-#include "CommandSuggestion.h"
-#include "CommandHelp.h"
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CommentStatementItem)
 
-#include "VisualizationBase/src/items/Item.h"
+namespace OOModel {
 
-namespace Interaction {
-
-class INTERACTIONBASE_API Command
+class OOMODEL_API CommentStatementItem : public Super<StatementItem>
 {
-	public:
-		virtual ~Command();
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentStatementItem)
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens) = 0;
-
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar) = 0;
-		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target, const QString& commandForm = QString());
+	ATTRIBUTE(Comments::CommentNode, comment, setComment)
 };
 
 }
