@@ -14,7 +14,8 @@ SUBDIRS= Core \
 	OOModel \
 	OOVisualization \
 	SelfTest \
-        VisualizationBase \
-        CppImport
+	VisualizationBase \
+	CppImport \
+	Comments
 CONFIG+=debug_and_release
 CONFIG+=ordered
