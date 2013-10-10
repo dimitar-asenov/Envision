@@ -29,6 +29,11 @@
 #include "oointeraction_api.h"
 #include "Core/src/EnvisionPlugin.h"
 
+namespace Model {
+	class NodeToDebugStringAdapter;
+	class Node;
+}
+
 namespace OOInteraction {
 
 /**
@@ -48,6 +53,9 @@ class OOInteraction : public QObject, public Core::EnvisionPlugin
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
+
+	private:
+		static Model::NodeToDebugStringAdapter* nodeToDebugString(Model::Node* node);
 };
 
 OOINTERACTION_API Core::InitializationRegistry& itemTypeInitializationRegistry();

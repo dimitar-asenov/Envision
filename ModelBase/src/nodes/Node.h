@@ -444,6 +444,13 @@ class MODELBASE_API Node
 		 */
 		void endModification();
 
+		/**
+		 * Converts this node to a string for use in debug purposes only.
+		 *
+		 * This method uses the adapter framework and tries to convert this node to a QString.
+		 */
+		QString toDebugString();
+
 	protected:
 
 		/**
@@ -480,5 +487,14 @@ inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbol
 {
 	return definesSymbol() && (symbolType() & symbolTypes) && matcher.matches(symbolName());
 }
+
+/**
+ * This class is only used for debugging purposes, to convert a Node to a string
+ */
+class NodeToDebugStringAdapter {
+	public:
+		using BaseAdapteeType = Node;
+		QString str;
+};
 
 }

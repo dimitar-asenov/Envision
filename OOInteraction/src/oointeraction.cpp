@@ -60,7 +60,6 @@
 
 #include "OOModel/src/allOOModelNodes.h"
 
-
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/handlers/HText.h"
@@ -103,6 +102,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 
 	// Register string components that convert an expression to a string list representing its components
 	StringComponents::initConversions();
+	// For debugging purposes, also register a method that converts any node to a string
+	Core::AdapterManager::registerDefaultAdapter<Model::NodeToDebugStringAdapter>(nodeToDebugString);
 
 	// Register default string offset providers
 	GridConstructors::initializeAll();
@@ -154,6 +155,19 @@ void OOInteraction::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
+}
+
+Model::NodeToDebugStringAdapter* OOInteraction::nodeToDebugString(Model::Node* node)
+{
+	Q_ASSERT(node);
+
+	auto ntds = new ::Model::NodeToDebugStringAdapter();
+	if (DCast<OOModel::Expression>(node))
+		ntds->str = StringComponents::stringForNode(node);
+	else
+		ntds->str = "Can't convert node type to QString: " + node->typeName();
+
+	return ntds;
 }
 
 }

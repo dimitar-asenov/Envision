@@ -30,6 +30,7 @@
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include "Reference.h"
+#include "Core/src/AdapterManager.h"
 
 using namespace Logger;
 
@@ -218,6 +219,14 @@ void Node::endModification()
 	if (auto m = model()) m->endModification();
 }
 
+QString Node::toDebugString()
+{
+	auto ntdsa = Core::AdapterManager::adapt<NodeToDebugStringAdapter>(this);
+
+	QString ret = ntdsa ? ntdsa->str : "no debug string for node";
+	SAFE_DELETE(ntdsa);
+	return ret;
+}
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
