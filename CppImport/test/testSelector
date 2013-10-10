@@ -2,15 +2,14 @@
 # The test will pick the first line without leading '#'
 #General
 #Loops
-spath:/home/luke/BachelorThesis/TestEnvision/Envision
-#path:/home/luke/BachelorThesis/TestEnvision/Envision/VisualizationBase
-path:/home/luke/BachelorThesis/TestEnvision/Envision/OOModel
 #DeclStmt
-SwitchCase
+#SwitchCase
 #GlobalFunctions
-TemplateClassSpec
+#TemplateClassSpec
 #TemplateMethodSpec
-#
-#
-#
-#
+#TypeTraits
+
+#The paths below are relative to the DebugBuild/test directory
+#spath:/Envision
+#path:/Envision/VisualizationBase
+path:/Envision/Core

@@ -11,14 +11,8 @@ win32:LIBS += -llogger \
     -loovisualization \
     -loointeraction
 
-
-#QMAKE_CXXFLAGS -= -Werror
-
-
-## LLVM SPECIFIC
-LLVMCOMPONENTS = cppbackend
-
-INCLUDEPATH += /usr/include/
+QMAKE_CXXFLAGS += -isystem /usr/lib/llvm-3.4/include # Use this instead of the line below to suppress warnings
+#INCLUDEPATH +=  /usr/lib/llvm-3.4/include
 
 DEFINES += _GNU_SOURCE __STDC_CONSTANT_MACROS __STDC_FORMAT_MACROS __STDC_LIMIT_MACROS
 

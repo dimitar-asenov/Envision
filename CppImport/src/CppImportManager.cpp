@@ -105,15 +105,17 @@ void CppImportManager::setupTest()
 	while(!inStream.atEnd())
 	{
 		testDir = inStream.readLine();
-		if(testDir.startsWith("path:"))
+		if (testDir.trimmed().isEmpty())
+			continue;
+		else if(testDir.startsWith("path:"))
 		{
 			testDir.replace(0,5,"");
-			return setImportPath(testDir);
+			return setImportPath(QCoreApplication::applicationDirPath() + "/test" + testDir);
 		}
 		else if(testDir.startsWith("spath:"))
 		{
 			testDir.replace(0,6,"");
-			return setImportPath(testDir, true);
+			return setImportPath(QCoreApplication::applicationDirPath() + "/test" + testDir, true);
 		}
 		else if(!testDir.startsWith("#"))
 		{
@@ -178,7 +180,7 @@ void CppImportManager::createCompilationDbForTest(const QString& testPath)
 		out << "{" << "\"directory\":" << "\"" << testPath << "\"," << endl;
 		// TODO: this is platform dependent
 		out << "\"command\":" << "\"/usr/bin/clang++ -std=c++0x -Irelative " <<
-				 "-I/usr/lib/clang/3.3/include/ -c -o test.o test.cpp\"," << endl;
+				"-I/usr/lib/llvm-3.4/include/clang/ -c -o test.o test.cpp\"," << endl;
 		out << "\"file\":" << "\"test.cpp\"" << endl;
 		out << "}" << endl << "]" << endl;
 		db.close();
