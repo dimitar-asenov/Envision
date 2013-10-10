@@ -31,6 +31,8 @@
 #include "Declaration.h"
 #include "../expressions/Expression.h"
 
+#include "ModelBase/src/nodes/Boolean.h"
+
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, NameImport)
 
 namespace OOModel {
@@ -39,9 +41,10 @@ class OOMODEL_API NameImport : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(NameImport)
 	ATTRIBUTE(Expression, importedName, setImportedName)
+	ATTRIBUTE_VALUE(Model::Boolean, importAll, setImportAll, bool)
 
 	public:
-		NameImport(Expression* importedName);
+		NameImport(Expression* importedName, bool importAllChildrenInScope = false);
 
 		virtual bool definesSymbol() const override;
 

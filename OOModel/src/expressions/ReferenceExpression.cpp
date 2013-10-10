@@ -72,8 +72,6 @@ Type* ReferenceExpression::type()
 		return new SymbolProviderType(method, false);
 	else if ( auto alias = DCast<TypeAlias>( ref()->target() ) )
 		return new SymbolProviderType(alias, false);
-	else if ( auto nameImport = DCast<NameImport>( ref()->target() ) )
-		return nameImport->importedName()->type();
 	else if ( auto vdecl = DCast<VariableDeclarationExpression>( ref()->target() ) )
 	{
 		auto t = vdecl->type();

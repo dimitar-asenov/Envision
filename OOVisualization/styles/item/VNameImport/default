@@ -1,8 +1,13 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<icon prototypes="icon/SVGIcon/default">
+	<importOneIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/import.svg</filename>
 		<width>24</width>
 		<height>24</height>
-	</icon>
+	</importOneIcon>
+	<importAllIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/import_all.svg</filename>
+		<width>24</width>
+		<height>24</height>
+	</importAllIcon>
 </style>

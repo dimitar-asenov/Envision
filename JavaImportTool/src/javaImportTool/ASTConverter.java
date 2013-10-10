@@ -62,6 +62,7 @@ public class ASTConverter {
 				//TODO: Handle static and on demand imports
 				Node importNode = new Node(null, "NameImport", cl.child("subDeclarations").numChildren());
 				importNode.setChild("importedName", expression(id.getName(), "importedName"));
+				if (id.isOnDemand()) importNode.child("importAll").setLongValue(1);
 				cl.child("subDeclarations").add(importNode);
 			}
 		}

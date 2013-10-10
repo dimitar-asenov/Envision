@@ -76,7 +76,8 @@ public class NodeDescriptors {
 		}));
 		add( new NodeInitializer("Field", "VariableDeclaration", null));
 		add( new NodeInitializer("NameImport", "Declaration", new String[][]{
-				{"ReferenceExpression","importedName"}
+				{"ReferenceExpression","importedName"},
+				{"Boolean","importAll"}
 		}));
 		
 		// Elements

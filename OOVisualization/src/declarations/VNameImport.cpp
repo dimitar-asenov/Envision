@@ -42,7 +42,8 @@ VNameImport::VNameImport(Item* parent, NodeType* node, const StyleType* style) :
 void VNameImport::initializeForms()
 {
 	addForm((new GridLayoutFormElement())->setHorizontalSpacing(3)
-		->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+		->put(0, 0, item<Static>(&I::icon_, [](I* v)
+				{return (v->node()->importAll() ) ? &v->style()->importAllIcon() : &v->style()->importOneIcon();}))
 		->put(1, 0, item(&I::imported_, [](I* v){return v->node()->importedName();} ))
 	);
 }

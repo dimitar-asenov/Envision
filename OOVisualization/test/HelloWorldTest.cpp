@@ -830,6 +830,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 			new ReferenceExpression("Code", new ReferenceExpression("SomeLibrary"))));
 	prj->subDeclarations()->append(new NameImport(
 			new ReferenceExpression("AnotherLibrary")));
+	prj->subDeclarations()->append(new NameImport(
+				new ReferenceExpression("All", new ReferenceExpression("Import")), true));
 	prj->fields()->append(new Field("global",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 	prj->fields()->append(new Field("global2",

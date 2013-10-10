@@ -46,6 +46,7 @@ public class Main {
 			// Add the default java.lang import
 			Node nameImport = root.child("subDeclarations").add(new Node(null, "NameImport", "0"));
 			nameImport.child("importedName").child("ref").setStringValue("____NULL____:lang");
+			nameImport.child("importAll").setLongValue(1);
 			Node prefix = nameImport.child("importedName").add(new Node(null, "ReferenceExpression", "prefix"));
 			prefix.child("ref").setStringValue("____NULL____:java");
 

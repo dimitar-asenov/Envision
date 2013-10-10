@@ -28,10 +28,6 @@
 
 namespace OOVisualization {
 
-void VNameImportStyle::load(Visualization::StyleLoader& sl)
-{
-	DeclarativeItemBaseStyle::load(sl);
-	sl.load("icon", icon_);
-}
+VNameImportStyle::~VNameImportStyle() {}
 
 } /* namespace OOVisualization */

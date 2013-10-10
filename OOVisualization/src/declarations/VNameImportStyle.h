@@ -35,15 +35,11 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VNameImportStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::StaticStyle icon_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VNameImportStyle() override;
 
-		const Visualization::StaticStyle& icon() const;
+		Property<Visualization::StaticStyle> importOneIcon{this, "importOneIcon"};
+		Property<Visualization::StaticStyle> importAllIcon{this, "importAllIcon"};
 };
-
-inline const Visualization::StaticStyle& VNameImportStyle::icon() const { return icon_; }
 
 } /* namespace OOVisualization */

@@ -37,11 +37,13 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NameImport)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NameImport)
 
 REGISTER_ATTRIBUTE(NameImport, importedName, Expression, false, false, true)
+REGISTER_ATTRIBUTE(NameImport, importAll, Boolean, false, false, true)
 
-NameImport::NameImport(Expression *importedName)
+NameImport::NameImport(Expression *importedName, bool importAllChildrenInScope)
 : Super(nullptr, NameImport::getMetaData())
 {
 	if(importedName) setImportedName(importedName);
+	if(importAllChildrenInScope) setImportAll(true);
 }
 
 bool NameImport::definesSymbol() const
@@ -95,11 +97,12 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 
 		// If this node defines a shortcut to a single name which is not the one being looked for, then do not resolve
 		// the target
-		if (auto ref = DCast<ReferenceExpression>(importedName()))
-			if (!matcher.matches(ref->name())) return false;
+		if (!importAll())
+			if (auto ref = DCast<ReferenceExpression>(importedName()))
+				if (!matcher.matches(ref->name())) return false;
 
 		if (auto t = target())
-			return t->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false);
+			return t->findSymbols(result, matcher, source, (importAll() ? SEARCH_DOWN : SEARCH_HERE), symbolTypes, false);
 	}
 	else if (direction == SEARCH_UP)
 	{
