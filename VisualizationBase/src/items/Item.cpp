@@ -300,12 +300,6 @@ void Item::execute(const QString& command)
 	handler()->command(this, command);
 }
 
-
-Scene* Item::scene() const
-{
-	return static_cast<Visualization::Scene*> (QGraphicsItem::scene());
-}
-
 bool Item::hasNode() const
 {
 	return false;

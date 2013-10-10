@@ -52,7 +52,7 @@ bool TextRenderer::setText(const QString& newText)
 
 QString TextRenderer::selectedText()
 {
-	if (this->hasFocus() && !isHtml())
+	if (hasSceneCursor() && !isHtml())
 	{
 		TextCursor* cur = correspondingSceneCursor<TextCursor>();
 		int xstart = cur->selectionFirstIndex();
@@ -121,7 +121,7 @@ void TextRenderer::updateGeometry(int, int)
 		textYOffset_ += 0.5;
 	}
 
-	if ( this->hasFocus() && !isHtml())
+	if ( hasSceneCursor() && !isHtml())
 		correspondingSceneCursor<TextCursor>()->update(qfm);
 }
 
@@ -131,7 +131,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 	Item::paint(painter, option, widget);
 
-	TextCursor* selectionCursor = (this->hasFocus() && !isHtml()) ? correspondingSceneCursor<TextCursor>() : nullptr;
+	TextCursor* selectionCursor = (hasSceneCursor() && !isHtml()) ? correspondingSceneCursor<TextCursor>() : nullptr;
 	if (selectionCursor && !selectionCursor->hasSelection()) selectionCursor = nullptr;
 
 	if ( !selectionCursor )

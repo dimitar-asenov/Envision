@@ -31,6 +31,7 @@
 #include "ItemRegion.h"
 #include "../InteractionHandler.h"
 #include "../Scene.h"
+#include "../cursor/Cursor.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -68,6 +69,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void setRevision(int newRevision);
 
 		bool itemOrChildHasFocus() const;
+		bool hasSceneCursor() const;
 
 		/**
 		 * \brief Returns the child item which is focused or which contains a child that is focused or nullptr if no child
@@ -420,6 +422,9 @@ inline Shape* Item::getShape() const {	return shape_; }
 inline qreal Item::xEnd() const { return x() + width() - 1; }
 inline qreal Item::yEnd() const { return y() + height() - 1; }
 inline void Item::setDefaultMoveCursorProxy(Item* proxy) {defaultMoveCursorProxy_ = proxy;}
+
+inline Scene* Item::scene() const { return static_cast<Visualization::Scene*> (QGraphicsItem::scene()); }
+inline bool Item::hasSceneCursor() const { auto mc = scene()->mainCursor(); return mc && mc->owner() == this;}
 
 template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
 {
