@@ -45,6 +45,14 @@ class OOMODEL_API Expression : public Super<Model::CompositeNode>
 
 	public:
 		virtual Type* type();
+
+		/**
+		 * Returns the expression node which is the top-most expression ancestor of this expression.
+		 *
+		 * This might not be the expression node closest to the root in case where 'this' is inside a lambda for example.
+		 * This method just walks up the hirarchy while encountering other expression or single list nodes.
+		 */
+		Expression* topMostExpressionParent() const;
 };
 
 }

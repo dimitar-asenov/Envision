@@ -41,4 +41,32 @@ Type* Expression::type()
 	return new ErrorType("Uninitialized expression type");
 }
 
+Expression* Expression::topMostExpressionParent() const
+{
+	auto e = this;
+	while(true)
+	{
+		auto p = e->parent();
+		if (auto pe = DCast<Expression>(p))
+		{
+			e = pe;
+			continue;
+		}
+
+		if (auto pl = DCast<Model::List>(p))
+		{
+			auto pp = pl->parent();
+			if (auto ppe = DCast<Expression>(pp))
+			{
+				e = ppe;
+				continue;
+			}
+		}
+
+		break;
+	}
+
+	return const_cast<Expression*>(e);
+}
+
 }
