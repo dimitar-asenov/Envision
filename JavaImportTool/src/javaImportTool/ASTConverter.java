@@ -891,9 +891,15 @@ public class ASTConverter {
 				else
 				{
 					if (num.endsWith("L") || num.endsWith("l")) num = num.substring(0,num.length()-1);
-					if (num.startsWith("0x") || num.startsWith("0X")) num = num.substring(2,num.length());
 					
-					decoded = new BigInteger(num, 16).longValue();//Long.decode(num);
+					boolean hex = false;
+					if (num.startsWith("0x") || num.startsWith("0X"))
+					{
+						hex = true;
+						num = num.substring(2,num.length());
+					}
+					
+					decoded = new BigInteger(num, hex ? 16 : 10).longValue();
 				}
 				node = new Node(null, "IntegerLiteral", name);
 				node.child("value").setLongValue(decoded);
