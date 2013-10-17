@@ -59,32 +59,33 @@ ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix
 
 Type* ReferenceExpression::type()
 {
-	if (!ref()->target())
-		return new ErrorType("Unresolved Reference");
+	auto resolvedTarget = ref()->target();
 
-	if ( auto project = DCast<Project>( ref()->target() ) )
+	if (!resolvedTarget) return new ErrorType("Unresolved Reference");
+
+	if ( auto project = DCast<Project>( resolvedTarget ) )
 		return new SymbolProviderType(project, false);
-	else if ( auto module = DCast<Module>( ref()->target() ) )
+	else if ( auto module = DCast<Module>( resolvedTarget ) )
 		return new SymbolProviderType(module, false);
-	else if ( auto cl = DCast<Class>( ref()->target() ) )
+	else if ( auto cl = DCast<Class>( resolvedTarget ) )
 		return new ClassType(cl, false);
-	else if ( auto method = DCast<Method>( ref()->target() ) )
+	else if ( auto method = DCast<Method>( resolvedTarget ) )
 		return new SymbolProviderType(method, false);
-	else if ( auto alias = DCast<TypeAlias>( ref()->target() ) )
+	else if ( auto alias = DCast<TypeAlias>( resolvedTarget ) )
 		return new SymbolProviderType(alias, false);
-	else if ( auto vdecl = DCast<VariableDeclarationExpression>( ref()->target() ) )
+	else if ( auto vdecl = DCast<VariableDeclarationExpression>( resolvedTarget ) )
 	{
 		auto t = vdecl->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto vdecl = DCast<VariableDeclaration>( ref()->target() ) )
+	else if ( auto vdecl = DCast<VariableDeclaration>( resolvedTarget ) )
 	{
 		auto t = vdecl->typeExpression()->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto expSt = DCast<ExpressionStatement>( ref()->target() ))
+	else if ( auto expSt = DCast<ExpressionStatement>( resolvedTarget ))
 	{
 		if ( auto vdecl = DCast<VariableDeclarationExpression>( expSt->expression() ) )
 		{
@@ -94,19 +95,19 @@ Type* ReferenceExpression::type()
 		}
 		else return new ErrorType("Unknown type for target of reference");
 	}
-	else if ( auto field = DCast<Field>( ref()->target() ) )
+	else if ( auto field = DCast<Field>( resolvedTarget ) )
 	{
 		auto t = field->typeExpression()->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto arg = DCast<FormalArgument>( ref()->target() ) )
+	else if ( auto arg = DCast<FormalArgument>( resolvedTarget ) )
 	{
 		auto t = arg->typeExpression()->type();
 		t->setValueType(true);
 		return t;
 	}
-	else if ( auto res = DCast<FormalResult>( ref()->target() ) )
+	else if ( auto res = DCast<FormalResult>( resolvedTarget ) )
 	{
 		auto t = res->typeExpression()->type();
 		t->setValueType(true);

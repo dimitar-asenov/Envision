@@ -50,12 +50,12 @@ MethodCallExpression::MethodCallExpression(const QString& name, Expression* refe
 	setCallee(new ReferenceExpression(name, referencePrefix));
 }
 
-Method* MethodCallExpression::methodDefinition()
+Method* MethodCallExpression::methodDefinition(Type*& calleeType)
 {
 	Method* ret = nullptr;
 
 	// TODO: handle other cases as well (e.g. FunctionType)
-	auto calleeType = callee()->type();
+	calleeType = callee()->type();
 	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType))
 	{
 		if (auto m = dynamic_cast<Method*>(spt->symbolProvider()))
@@ -64,19 +64,26 @@ Method* MethodCallExpression::methodDefinition()
 			{/* TODO: Find the method that implements the () overload and return that*/}
 	}
 
+	return ret;
+}
 
+Method* MethodCallExpression::methodDefinition()
+{
+	Type* calleeType = nullptr;
+	auto ret = methodDefinition(calleeType);
 	SAFE_DELETE(calleeType);
-
 	return ret;
 }
 
 Type* MethodCallExpression::type()
 {
-	auto mdef = methodDefinition();
+	Type* calleeType = nullptr;
+	auto mdef = methodDefinition(calleeType);
+	SAFE_DELETE(calleeType);
+
 	if (!mdef)
 	{
 		// This type does not point to a method. See if it points to a FunctionalType object
-		auto calleeType = callee()->type();
 		Type* ret = nullptr;
 		if (auto ft = dynamic_cast<FunctionType*>(calleeType))
 		{
