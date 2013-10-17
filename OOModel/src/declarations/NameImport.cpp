@@ -102,7 +102,8 @@ bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& ma
 				if (!matcher.matches(ref->name())) return false;
 
 		if (auto t = target())
-			return t->findSymbols(result, matcher, source, (importAll() ? SEARCH_DOWN : SEARCH_HERE), symbolTypes, false);
+			return t->findSymbols(result, matcher, (importAll() ? t : source),
+					(importAll() ? SEARCH_DOWN : SEARCH_HERE), symbolTypes, false);
 	}
 	else if (direction == SEARCH_UP)
 	{
