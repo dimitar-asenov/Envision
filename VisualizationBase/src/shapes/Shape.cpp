@@ -34,14 +34,9 @@ DEFINE_TYPE_ID_BASE(Shape, shapeTypeInitializationRegistry, "Shape",)
 QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;
 QMap<QString, Shape::ShapeStyleConstructor> Shape::shapeStyleConstructors;
 
-Shape::Shape(Item* parent_, ShapeStyle *style) :
-	parent(parent_), style_(style), width_(0), height_(0), xOffset_(0), yOffset_(0)
-{
-}
+Shape::Shape(Item* parent_, ShapeStyle *style) : parent(parent_), style_(style) {}
 
-Shape::~Shape()
-{
-}
+Shape::~Shape() {}
 
 void Shape::setStyle(const Visualization::ShapeStyle* newStyle)
 {

@@ -83,14 +83,14 @@ class VISUALIZATIONBASE_API Shape
 		virtual void update() = 0;
 
 	private:
-		Item* parent;
-		const ShapeStyle* style_;
+		Item* parent{};
+		const ShapeStyle* style_{};
 
-		SizeType sizeToUse;
-		int width_;
-		int height_;
-		int xOffset_;
-		int yOffset_;
+		SizeType sizeToUse{};
+		int width_{};
+		int height_{};
+		int xOffset_{};
+		int yOffset_{};
 
 		typedef Shape* (*ShapeConstructor)(Item* parent);
 		typedef ShapeStyle* (*ShapeStyleConstructor)();

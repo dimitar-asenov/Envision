@@ -37,10 +37,6 @@ class VISUALIZATIONBASE_API Box: public Super<Shape>
 {
 	SHAPE_COMMON(Box)
 
-	protected:
-		int contentBoxWidth;
-		int contentBoxHeight;
-
 	public:
 		Box(Item *parent, StyleType *style = itemStyles().get());
 
@@ -52,6 +48,10 @@ class VISUALIZATIONBASE_API Box: public Super<Shape>
 		virtual QSize outterSize(QSize innerSize) const;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+	protected:
+		int contentBoxWidth{};
+		int contentBoxHeight{};
 };
 
 }
