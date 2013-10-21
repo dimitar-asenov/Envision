@@ -271,7 +271,9 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			else if(trimmedText == "//")
 			{
 				auto comment = new CommentStatementItem();
-				toFocus = comment->comment();
+				auto line = comment->comment()->lines()->createDefaultElement();
+				comment->comment()->lines()->append(line);
+				toFocus = line;
 				st = comment;
 			}
 
