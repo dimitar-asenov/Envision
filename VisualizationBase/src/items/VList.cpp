@@ -76,7 +76,8 @@ void VList::initializeForms()
 			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
 			->setNoBoundaryCursors(noBoundaryCursorsGetter)
 			->setNoInnerCursors(noInnerCursorsGetter)
-			->setListOfNodes(listOfNodesGetter));
+			->setListOfNodes(listOfNodesGetter)
+			->setMinWidth(3)->setMinHeight(10));
 	// Form 1: vertical orientation
 	addForm((new SequentialLayoutFormElement())
 			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
@@ -84,7 +85,8 @@ void VList::initializeForms()
 			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
 			->setNoBoundaryCursors(noBoundaryCursorsGetter)
 			->setNoInnerCursors(noInnerCursorsGetter)
-			->setListOfNodes(listOfNodesGetter));
+			->setListOfNodes(listOfNodesGetter)
+			->setMinWidth(10)->setMinHeight(3));
 }
 
 int VList::determineForm()
