@@ -36,8 +36,8 @@ LIBS += -lclangTooling\
 				-lclangAST\
 				-lclangLex\
 				-lclangBasic\
-				""$(shell llvm-config --libs)"" \
-				$$system(llvm-config --ldflags --libs cppbackend)
+				""$(shell llvm-config-3.4 --libs)"" \
+				$$system(llvm-config-3.4 --ldflags --libs cppbackend)
 
 ## END LLVM SPECIFIC
 
