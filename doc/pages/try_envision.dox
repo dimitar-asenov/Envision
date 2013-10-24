@@ -3,14 +3,14 @@
 Once you have successfully compiled Envision and are able to run it you can try launching one of the projects and
 experience Envision for yourself.
 
-If you are using Eclipse simply choose a project you would like to test and launch it. The default launch configuration
-will run Envision and will initiate the built-in tests for the selected project. If you are not using Eclipse you can
-do the same on the command line in the following way:
-
-\verbatim Envision -graphicssystem raster --test project_name \endverbatim
-
-where <em>project_name</em> is the lowercase name of one of the projects (e.g.
-\c controlflowvisualization). Make sure to run Envision from within the \c DebugBuild directory.
+	- Using Qt Creator: Choose a run configuration from the development kit and start it.
+	- Using Eclipse: Select a project you would like to test and launch it. The default launch configuration for each
+	project will run Envision and will initiate the built-in tests for it.
+	- Command line: To test a particular plug-in on the command line, you need to run Envision and supply a plug-in
+	to test via the \c --test argument:
+	\verbatim Envision -graphicssystem raster --test project_name \endverbatim
+	where <em>project_name</em> is the lowercase name of one of the projects (e.g.
+	\c controlflowvisualization). Make sure to run Envision from within the \c DebugBuild directory.
 
 
 Projects such as <em>OOVisualization</em>, <em>OOInteraction</em>, <em>ControlFlowVisualization</em>, and
@@ -26,5 +26,8 @@ control flow alternative.
 Launching the <em>CustomMethodCall</em> project shows a very simple class that defines a few methods. On the right the
 methods are called and one can see that each method call is visualized in a non-standard way that is dependent on the
 called method.
+
+Launching the <em>ContractsLibrary</em> project shows how libraries can introduce specialized visualizations to code
+fragments.
 
 */

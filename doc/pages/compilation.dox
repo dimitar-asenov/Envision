@@ -1,42 +1,73 @@
 /*! \page compilation Compiling Envision from source
 
 Envision is written in C++ and uses features from the C++11 standard. Make sure your C++ compiler is up-to-date.
-GCC version 4.8 or newer should be sufficient.
+GCC version 4.8 or newer should be sufficient. Other dependencies are:
+	- <b>Qt 4.8</b>: http://qt-project.org/ <br/> This is the underlying framework that we use to build Envision's
+	visualizations and cross-platform support. A migration to Qt 5 is planned in the near future.
+	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
+	complex visualization layouts.
+	- <b>Clang 3.4</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
+	importing C++ is preliminary and incomplete.
+	- <b>On Linux: Google Performance Tools</b>: http://code.google.com/p/gperftools/ <br /> Used for profiling.
 
-Envision currently uses the Qt 4.8 libraries but a migration to Qt 5 is planned.
-An additional dependency is lp_solve 5.5: http://lpsolve.sourceforge.net/
-
-On Linux the Google perftools (libprofile) are used for profiling.
-
-\section eclipse Using Eclipse (recommended)
-
-	-# If you do not have the Qt development version installed, download and install it.
-	-# Download and install the lp_solve development library version 5.5. On Ubuntu based distributions you'll need
-	to do the following (tested with version 13.04):
+To install the dependencies on Ubuntu 13.10, do the following:
+	-# Install the Qt SDK:
+		\verbatim sudo apt-get install qt-sdk \endverbatim
+	-# Install the lp_solve development library version 5.5:
 		-# Install the packages \c lp-solve (for the shared library) and \c liblpsolve55-dev (for the header files):
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
 		-# Make the following symbolic link:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
-	-# On Linux you'll also need to install the Google perftools. On Ubuntu based distributions you'll need
-	to do the following (tested with version 13.04):
+	-# Install Clang 3.4:
+		\verbatim sudo apt-get install libclang-3.4-dev clang-3.4 llvm-3.4 \endverbatim
+	-# Install the Google Performance Tools:
 		\verbatim sudo apt-get install google-perftools libgoogle-perftools-dev \endverbatim
-	-# Download and install the Qt Integration plug-in for your version of eclipse (32/64 bit).
-	-# Inside Eclipse, configure Qt so that it knows where to find the development files.
-	-# Download Envision's sources. The project is structured in separate directories where each one is an Eclipse/Qt
-	project.
-	-# Load all projects into Eclipse. Eclipse/Qt might try to change some project files. Reject all requested changes.
-	-# Build all projects.
 
-\section no_eclipse Using the command line or Qt Creator
+Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want
+to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.
 
-	-# If you do not have the Qt SDK installed, download and install it.
-	-# Download and install the lp_solve development library version 5.5.
-	-# Download Envision's sources. The main project is a Qt folders project which contains all the plug-ins. If you
-		want to use Qt Creator you should open the \c envision.pro file in the main directory.
-		Support for Qt Creator is minimal, but will be improved in the future.
-	-# In the top-level project directory run
-		\verbatim qmake -recursive
-sh maker.sh\endverbatim
+\section qtcreator Qt Creator (recommended for C++; does not work with Java)
+	-# Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process
+	Qt Creator will create additional directories alongside the repository clone.
+	-# Start Qt Creator and configure the version of Qt that you want to use. You can leave the default settings or you
+	can point to a custom Qt version. See below.
+	-# Open the \c envision.pro file with Qt Creator.
+	-# Configure the license template (Tools > Options > C++ > File Naming) to point to the LICENSE file inside the main
+	repository directory.
+
+\section eclipse Eclipse (recommended for Java; works for C++, but could require a lot of tweaking)
+	-# Install the latest version of Eclipse.
+	-# Download and install the Qt Integration plug-in for Eclipse. This plug-in is,
+	unfortunately, no longer supported and the latest version is quite outdated. Look for the file:
+	\c qt-eclipse-integration-linux.x86_64-1.6.1.tar.gz
+	-# Start Eclipse and configure the version of Qt that you want to use. You can use the version provided by your
+	system or you can point to a custom Qt version. See below.
+	-# Clone Envision's GitHub repository to a directory on your computer. The project is structured in separate
+	directories where each one is an Eclipse project.
+	-# Import all projects into your Eclipse workspace as Git projects. Eclipse/Qt might try to change some project
+	files. Reject all requested changes.
+	-# Configure Eclipse's C++ file templates to use the text from the LICENSE file from the main directory in the
+	repository.
+
+\section customqt Using a custom build of Qt
+
+In order to make Envision's visualizations scale to very large projects we modified the rendering process in the
+Graphics View framework to avoid rendering objects which are too small. This customized Qt version can be found here:
+\c https://qt.gitorious.org/qt/qt-envision-enhancements
+
+If you want to use Envision with a large amount of visual objects displayed at once we recommend you build and use the
+above version of Qt. Here is how:
+	-# Clone the above repository into a new directory called \c qt-envision-enhancements inside the \c qt directory
+	of the main Envision repository. The \c qt directory is ignored so you don't have to worry about polluting the main
+	repository.
+	-# Refer to the Qt's compilation guidelines to make sure that you have installed all dependencies.
+	-# Run the \c configure-envision script to confire the compilation of all components necessary for Envision.
+	-# Run \c make and then \c make \c install .
+	-# You should have a directory called \c qt-build alongside the \c qt-envision-enhancements directory.
+	-# Make a symbolic link from \c DebugBuild/qt to \c qt/qt-build/lib .
+	-# Configure Qt Creator or Eclipse to use the Qt found in \c qt-build .
+
+\section try Running Envision
 
 After you have compiled Envision give it a try! See \ref try_envision "this page" for some interesting examples.
 */

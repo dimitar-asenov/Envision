@@ -8,21 +8,27 @@
 	<a href="http://qt-project.org/">Qt</a> framework and is cross-platform. Envision is mainly being developed in the
 	context of <a href="http://www.pm.inf.ethz.ch/people/dasenov">Dimitar Asenov's PhD studies at ETH Zurich</a>.
 
-	To read about the motivation for building Envision and find out what are some of the key ideas for the IDE, please see \ref motivation "the motivation page".
+	To read about the motivation for building Envision and find out what are some of the key ideas for the IDE, please
+	see \ref motivation "the motivation page".
 
 	\subsection videos Videos
 
 	\htmlonly 
-	<iframe width="640" height="360" src="http://www.youtube.com/embed/9X9stH2T-7w" frameborder="0" allowfullscreen></iframe><br/>
+	<iframe width="640" height="360" src="http://www.youtube.com/embed/9X9stH2T-7w" frameborder="0" allowfullscreen>
+	</iframe>
+	<br/>
 	\endhtmlonly
 	A short introduction that highlights some of the main concepts in Envision.
 
 	<br/>
 
 	\htmlonly 
-	<iframe width="640" height="360" src="http://www.youtube.com/embed/GD0W5HEteu8" frameborder="0" allowfullscreen></iframe><br/>
+	<iframe width="640" height="360" src="http://www.youtube.com/embed/GD0W5HEteu8" frameborder="0" allowfullscreen>
+	</iframe>
+	<br/>
 	\endhtmlonly
-	A demonstration of how the visualizations and interactions in Envision can be customized for embedded domain-specific languages.
+	A demonstration of how the visualizations and interactions in Envision can be customized for embedded
+	domain-specific languages.
 
 \section status Development status
 
@@ -54,7 +60,8 @@
 	For an introduction to the project's design and organization for contributors, please check out
 	\ref architecture "the architecture of Envision".
 	
-	Contributions to the project are welcome. Please visit \ref contribution "the contribution guidelines" for more details.
+	Contributions to the project are welcome. Please visit \ref contribution "the contribution guidelines" for more
+	details.
 
 \section compile How to compile and run Envision?
 For building Envision from source see \ref compilation "the compilation instructions".
