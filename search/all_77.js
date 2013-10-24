@@ -6,7 +6,6 @@ var searchData=
   ['walkupfromtypedefnamedecl',['WalkUpFromTypedefNameDecl',['../classCppImport_1_1ClangAstVisitor.html#afcb948ba8853b86ecbdce0e678ce639d',1,'CppImport::ClangAstVisitor']]],
   ['warning',['WARNING',['../classCppImport_1_1CppImportLogger.html#a81830989ea3ecb79819d98cb96700883a99ad897019db380e86e38959b82f3ac1',1,'CppImport::CppImportLogger']]],
   ['warnstream_5f',['warnStream_',['../classCppImport_1_1CppImportLogger.html#a8f949ea1b4051bc325d05053479cc644',1,'CppImport::CppImportLogger']]],
-  ['what',['what',['../structJavaMainArgs.html#aaeaaad24b4d7e6e9bef74a57f3c89176',1,'JavaMainArgs']]],
   ['wheelevent',['wheelEvent',['../classVisualization_1_1InteractionHandler.html#a8ce0337d84959e157a2104185fb40c21',1,'Visualization::InteractionHandler::wheelEvent()'],['../classVisualization_1_1Item.html#a8faf25bb94389681bd201fd127c67c7a',1,'Visualization::Item::wheelEvent()'],['../classVisualization_1_1MainView.html#abcab8711f6cd2c042a3c6fdf9b3e927b',1,'Visualization::MainView::wheelEvent()']]],
   ['wholeitemcursor',['wholeItemCursor',['../classVisualization_1_1ItemStyle.html#a3052dc81840bd472fb4541971e85844d',1,'Visualization::ItemStyle']]],
   ['wholeitemcursor_5f',['wholeItemCursor_',['../classVisualization_1_1ItemStyle.html#adb0fb3f5190df42833cfe0d6da03e895',1,'Visualization::ItemStyle']]],

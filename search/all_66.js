@@ -65,7 +65,7 @@ var searchData=
   ['fixprecedence',['fixPrecedence',['../classInteraction_1_1ExpressionTreeUtils.html#aaa521f55bc7de82da20e8dfd5aa54e55',1,'Interaction::ExpressionTreeUtils']]],
   ['fixtop',['fixTop',['../classInteraction_1_1ExpressionTreeUtils.html#a3d57651e190444bf5a693f3d165fba9f',1,'Interaction::ExpressionTreeUtils']]],
   ['fixwrongids',['fixWrongIds',['../classInteraction_1_1ExpressionTreeUtils.html#a972da37ab347af31b45effd8587cb99d',1,'Interaction::ExpressionTreeUtils']]],
-  ['float',['Float',['../classModel_1_1Float.html#aa573fa6a8b23476bfd49a377d423b9f3',1,'Model::Float::Float(::Model::Node *parent=nullptr)'],['../classModel_1_1Float.html#ae319465f3d65cb0916849e8df3e3933c',1,'Model::Float::Float(::Model::Node *parent,::Model::PersistentStore &amp;store, bool partialLoadHint)'],['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a10a2e54e8b85f728be2dcd4eb23ea790',1,'OOModel::PrimitiveType::FLOAT()']]],
+  ['float',['FLOAT',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a10a2e54e8b85f728be2dcd4eb23ea790',1,'OOModel::PrimitiveType::FLOAT()'],['../classModel_1_1Float.html#aa573fa6a8b23476bfd49a377d423b9f3',1,'Model::Float::Float(::Model::Node *parent=nullptr)'],['../classModel_1_1Float.html#ae319465f3d65cb0916849e8df3e3933c',1,'Model::Float::Float(::Model::Node *parent,::Model::PersistentStore &amp;store, bool partialLoadHint)']]],
   ['float',['Float',['../classModel_1_1Float.html',1,'Model']]],
   ['floatliteral',['FloatLiteral',['../classOOModel_1_1FloatLiteral.html#a7d5c72c48c623770bb430740d48ca2c7',1,'OOModel::FloatLiteral']]],
   ['floatliteral',['FloatLiteral',['../classOOModel_1_1FloatLiteral.html',1,'OOModel']]],

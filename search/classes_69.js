@@ -15,7 +15,6 @@ var searchData=
   ['interactionhandler',['InteractionHandler',['../classVisualization_1_1InteractionHandler.html',1,'Visualization']]],
   ['interfacecontractsvmethodaddon',['InterfaceContractsVMethodAddOn',['../classContractsLibrary_1_1InterfaceContractsVMethodAddOn.html',1,'ContractsLibrary']]],
   ['interruptiblethread',['InterruptibleThread',['../classModel_1_1InterruptibleThread.html',1,'Model']]],
-  ['invocationfunctions',['InvocationFunctions',['../structInvocationFunctions.html',1,'']]],
   ['item',['Item',['../classVisualization_1_1Item.html',1,'Visualization']]],
   ['itemregion',['ItemRegion',['../classVisualization_1_1ItemRegion.html',1,'Visualization']]],
   ['itemstyle',['ItemStyle',['../classVisualization_1_1ItemStyle.html',1,'Visualization']]],

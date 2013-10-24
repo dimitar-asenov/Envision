@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['offset',['offset',['../classInteraction_1_1HRootItem.html#a4cdf7238307acad81409ba3616e05ea4',1,'Interaction::HRootItem::offset()'],['../structzentry.html#a8a7c9be9b7cd4080c8a0dea5ec2e669c',1,'zentry::offset()']]],
+  ['offset',['offset',['../classInteraction_1_1HRootItem.html#a4cdf7238307acad81409ba3616e05ea4',1,'Interaction::HRootItem']]],
   ['offset_5f',['offset_',['../classOOInteraction_1_1SetExpressionCursorEvent.html#a55f9ca8db5ee056aa93410500222336f',1,'OOInteraction::SetExpressionCursorEvent::offset_()'],['../classVisualization_1_1AnchorLayoutAnchor.html#a0133dc272cbdca56a047569d8063f6be',1,'Visualization::AnchorLayoutAnchor::offset_()']]],
   ['oldname',['oldName',['../classModel_1_1NameChange.html#a40d32ca1436a42e26baf837fc1d4d641',1,'Model::NameChange']]],
   ['oldsize',['oldSize',['../classModel_1_1ListPut.html#a7dfff061d0118b4cc40d04a9d5f9820c',1,'Model::ListPut']]],

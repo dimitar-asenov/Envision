@@ -161,6 +161,7 @@ var searchData=
   ['_7evmethodcf',['~VMethodCF',['../classControlFlowVisualization_1_1VMethodCF.html#a09b97bc2e5183d50f7c739b8a7f0f044',1,'ControlFlowVisualization::VMethodCF']]],
   ['_7evmethodstyle',['~VMethodStyle',['../classOOVisualization_1_1VMethodStyle.html#af4bf0f9f0d3a040c266aebfa856d02db',1,'OOVisualization::VMethodStyle']]],
   ['_7evmodule',['~VModule',['../classOOVisualization_1_1VModule.html#a5ee0aa4e4108d19954d4f84e9ee88427',1,'OOVisualization::VModule']]],
+  ['_7evnameimportstyle',['~VNameImportStyle',['../classOOVisualization_1_1VNameImportStyle.html#a84ff74b6e621ceeadff1271aca42f877',1,'OOVisualization::VNameImportStyle']]],
   ['_7evnullliteral',['~VNullLiteral',['../classOOVisualization_1_1VNullLiteral.html#aeb5f6b0a4f2294e58747aa200cacd7c3',1,'OOVisualization::VNullLiteral']]],
   ['_7evprimitivetype',['~VPrimitiveType',['../classOOVisualization_1_1VPrimitiveType.html#afc71f0193b641778be0997f357794858',1,'OOVisualization::VPrimitiveType']]],
   ['_7evproject',['~VProject',['../classOOVisualization_1_1VProject.html#aada2c69adff881f7ec33b7c382d6e6ec',1,'OOVisualization::VProject']]],

@@ -1,13 +1,11 @@
 var searchData=
 [
-  ['main_5fclass',['main_class',['../structmanifest__info.html#a9db78fd4ffbb98908673774386580426',1,'manifest_info']]],
   ['maincursor_5f',['mainCursor_',['../classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f',1,'Visualization::Scene']]],
   ['maincursorsjustset_5f',['mainCursorsJustSet_',['../classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a',1,'Visualization::Scene']]],
   ['mainscene_5f',['mainScene_',['../classVisualization_1_1VisualizationManager.html#acb08c827f69ea40d043e4385c81e5a61',1,'Visualization::VisualizationManager']]],
   ['mainview_5f',['mainView_',['../classVisualization_1_1VisualizationManager.html#a310427d131983be85c1b6c749e7fff1c',1,'Visualization::VisualizationManager']]],
   ['mainwindow_5f',['mainWindow_',['../classCore_1_1EnvisionManager.html#abfa4dba35a7198408817363922342cc2',1,'Core::EnvisionManager']]],
   ['majorversion',['majorVersion',['../structCore_1_1PluginDependency.html#a0acedce37f195c86fb7b838c86402d2e',1,'Core::PluginDependency']]],
-  ['manifest_5fversion',['manifest_version',['../structmanifest__info.html#a983dd35eaf90a8c816e097de5f716000',1,'manifest_info']]],
   ['map',['map',['../classFilePersistence_1_1NodeIdMap.html#a3bc7871132ca6a3534c40b481b4b7fe1',1,'FilePersistence::NodeIdMap']]],
   ['margin',['margin',['../classVisualization_1_1MiniMap.html#a107b71190fa70e0bc5d56d738651d463',1,'Visualization::MiniMap']]],
   ['marginbottom_5f',['marginBottom_',['../classVisualization_1_1FormElement.html#a83bdd64434e7172839f19b4ef0924515',1,'Visualization::FormElement']]],
@@ -37,7 +35,6 @@ var searchData=
   ['mipmap_5f',['mipmap_',['../classVisualization_1_1SVGIconStyle.html#afb2b4b8920937f2a4fded8c805d94e75',1,'Visualization::SVGIconStyle']]],
   ['missinginnertokens',['missingInnerTokens',['../classInteraction_1_1ParseResult.html#a799257fcacbf14c71bdb178c1c182e27',1,'Interaction::ParseResult']]],
   ['missingtrailingtokens',['missingTrailingTokens',['../classInteraction_1_1ParseResult.html#acd76cf0d2745d8d97c76b183ab5b6ba4',1,'Interaction::ParseResult']]],
-  ['mode',['mode',['../structJavaMainArgs.html#ae176aa3fa99f57a49da6b1888522aa89',1,'JavaMainArgs']]],
   ['modeldir',['modelDir',['../classFilePersistence_1_1FileStore.html#aba0b330095d445eb5a5402368f51a6b7',1,'FilePersistence::FileStore']]],
   ['modeldir_5f',['modelDir_',['../classFilePersistence_1_1SimpleTextFileStore.html#a62359769fc6d65679a6a0a0e853ea300',1,'FilePersistence::SimpleTextFileStore']]],
   ['models_5f',['models_',['../classInteraction_1_1GenericHandlerModelListener.html#aa392f505c9c0ebc2b3dfd5ca4e44ae43',1,'Interaction::GenericHandlerModelListener']]],

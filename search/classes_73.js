@@ -24,7 +24,6 @@ var searchData=
   ['staticsequencestyle',['StaticSequenceStyle',['../classVisualization_1_1StaticSequenceStyle.html',1,'Visualization']]],
   ['staticstringoffsetprovider',['StaticStringOffsetProvider',['../classOOInteraction_1_1StaticStringOffsetProvider.html',1,'OOInteraction']]],
   ['staticstyle',['StaticStyle',['../classVisualization_1_1StaticStyle.html',1,'Visualization']]],
-  ['stdarg',['StdArg',['../structStdArg.html',1,'']]],
   ['stringcomponents',['StringComponents',['../classOOInteraction_1_1StringComponents.html',1,'OOInteraction']]],
   ['stringliteral',['StringLiteral',['../classOOModel_1_1StringLiteral.html',1,'OOModel']]],
   ['stringoffsetprovider',['StringOffsetProvider',['../classOOInteraction_1_1StringOffsetProvider.html',1,'OOInteraction']]],

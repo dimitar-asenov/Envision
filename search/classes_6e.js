@@ -10,6 +10,7 @@ var searchData=
   ['nodeitemwrapperformelement',['NodeItemWrapperFormElement',['../classVisualization_1_1NodeItemWrapperFormElement.html',1,'Visualization']]],
   ['nodeowningcommand',['NodeOwningCommand',['../classModel_1_1NodeOwningCommand.html',1,'Model']]],
   ['nodereadwritelock',['NodeReadWriteLock',['../classModel_1_1NodeReadWriteLock.html',1,'Model']]],
+  ['nodetodebugstringadapter',['NodeToDebugStringAdapter',['../classModel_1_1NodeToDebugStringAdapter.html',1,'Model']]],
   ['nodewithvisualizationitemwrapperformelement',['NodeWithVisualizationItemWrapperFormElement',['../classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html',1,'Visualization']]],
   ['nodewrapper',['NodeWrapper',['../classVisualization_1_1NodeWrapper.html',1,'Visualization']]],
   ['notificationlistener',['NotificationListener',['../classModel_1_1NotificationListener.html',1,'Model']]],
