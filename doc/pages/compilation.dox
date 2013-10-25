@@ -60,7 +60,9 @@ above version of Qt. Here is how:
 	-# Clone the above repository into a new directory called \c qt-envision-enhancements inside the \c qt directory
 	of the main Envision repository. The \c qt directory is ignored so you don't have to worry about polluting the main
 	repository.
-	-# Refer to the Qt's compilation guidelines to make sure that you have installed all dependencies.
+	-# Refer to the Qt's compilation guidelines to make sure that you have installed all dependencies. Here is a useful
+	list for Ubuntu: <a href="http://qt-project.org/wiki/Compile_Qt_4.7_on_Ubuntu_10.10">Compile Qt 4.7 on Ubuntu
+		10.10</a>
 	-# Run the \c configure-envision script to confire the compilation of all components necessary for Envision.
 	-# Run \c make and then \c make \c install .
 	-# You should have a directory called \c qt-build alongside the \c qt-envision-enhancements directory.
