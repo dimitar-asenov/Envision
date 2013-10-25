@@ -26,6 +26,8 @@
 
 #include "Class.h"
 
+#include "../types/SymbolProviderType.h"
+
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Class)
 
@@ -73,6 +75,75 @@ Class::SymbolTypes Class::symbolType() const
 bool Class::isGeneric()
 {
 	return typeArguments()->size() > 0;
+}
+
+bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
+{
+	bool found{};
+
+	if (direction == SEARCH_HERE)
+	{
+		if (symbolMatches(matcher, symbolTypes))
+		{
+			found = true;
+			result.insert(this);
+		}
+	}
+	else if (direction == SEARCH_DOWN)
+	{
+		for (auto c : childrenInScope())
+			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+
+		// Look in base classes
+		if (exhaustAllScopes || !found)
+			for(auto bc : *baseClasses())
+			{
+				auto t = bc->type();
+				if (auto sp = dynamic_cast<SymbolProviderType*>(t))
+				{
+					if (sp->symbolProvider())
+						found = sp->symbolProvider()->findSymbols(result, matcher, sp->symbolProvider(), SEARCH_DOWN,
+							symbolTypes, false) || found;
+
+				}
+				SAFE_DELETE(t);
+			}
+	}
+	else if (direction == SEARCH_UP)
+	{
+		auto ignore = childToSubnode(source);
+		for (auto c : childrenInScope())
+			if (c != ignore) // Optimize the search by skipping this scope, since we've already searched there
+				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+
+		// Look in base classes, but only if we are not trying to resolve a base class name
+		ignore = baseClasses()->childToSubnode(source);
+		if (!ignore && (exhaustAllScopes || !found))
+			for(auto bc : *baseClasses())
+			{
+				auto t = bc->type();
+				if (auto sp = dynamic_cast<SymbolProviderType*>(t))
+				{
+					if (sp->symbolProvider())
+						found = sp->symbolProvider()->findSymbols(result, matcher, sp->symbolProvider(), SEARCH_DOWN,
+							symbolTypes, false) || found;
+
+				}
+				SAFE_DELETE(t);
+			};
+
+		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
+		{
+			found = true;
+			result.insert(this);
+		}
+
+		if ((exhaustAllScopes || !found) && parent())
+			found = parent()->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+	}
+
+	return found;
 }
 
 }

@@ -67,6 +67,9 @@ class OOMODEL_API Class : public Super<Declaration>
 		ConstructKind constructKind() const;
 		void setConstructKind(const ConstructKind& kind);
 
+		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+
 		virtual SymbolTypes symbolType() const override;
 
 		bool isGeneric();
