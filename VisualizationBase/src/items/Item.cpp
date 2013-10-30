@@ -80,17 +80,23 @@ Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
 	itemCategory_(Scene::NoItemCategory)
 {
-	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
+	// By default no flags in a QGraphicsItem are enabled.
+	GraphicsItemFlags flags;
 
-	setFlag(QGraphicsItem::ItemIsFocusable);
-	setFlag(QGraphicsItem::ItemIsSelectable);
-	setFlag(QGraphicsItem::ItemClipsToShape);
-	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
+	if ( !style || style->drawsOnlyShape() ) flags |= ItemHasNoContents;
+
+	flags	|=	ItemIsFocusable
+			| ItemIsSelectable
+			| ItemClipsToShape
+			| ItemClipsChildrenToShape;
 
 #ifdef QT_GRAPHICSVIEW_ENVISION_EXTENSIONS
-	setFlag(QGraphicsItem::ItemDoesNotEnforceClip);
-	setFlag(QGraphicsItem::ItemSkipsPaintingIfTooSmall);
+	flags |= ItemDoesNotEnforceClip
+			| ItemSkipsPaintingIfTooSmall;
 #endif
+
+	// This is an expensive operation, so only do it once.
+	setFlags(flags);
 
 	setStyle(style);
 	setZValue(LAYER_DEFAULT_Z);
