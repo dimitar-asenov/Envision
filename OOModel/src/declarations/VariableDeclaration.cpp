@@ -35,7 +35,7 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclaration)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration)
 
 REGISTER_ATTRIBUTE(VariableDeclaration, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
+REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, true, true, true)
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type)
 : Super(nullptr, VariableDeclaration::getMetaData())

@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Method)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Method)
 
-REGISTER_ATTRIBUTE(Method, items, StatementItemList, false, false, true)
+REGISTER_ATTRIBUTE(Method, items, StatementItemList, true, false, true)
 REGISTER_ATTRIBUTE(Method, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
