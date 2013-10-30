@@ -49,7 +49,7 @@ class MODELBASE_API PersistentStore
 
 	protected:
 		virtual void saveModel(Model* model, const QString &name) = 0;
-		virtual Node* loadModel(Model* model, const QString &name) = 0;
+		virtual Node* loadModel(Model* model, const QString &name, bool loadPartially) = 0;
 
 		void setReferenceTargetr(Reference* r, Node* target);
 
@@ -58,17 +58,18 @@ class MODELBASE_API PersistentStore
 		virtual void saveIntValue(int value) = 0;
 		virtual void saveDoubleValue(double value) = 0;
 		virtual void saveReferenceValue(const QString &name, const Node* target) = 0;
-		virtual void saveNode(const Node *node, const QString &name, bool partialLoadHint) = 0;
+		virtual void saveNode(const Node *node, const QString &name) = 0;
 
-		virtual QList<LoadedNode> loadAllSubNodes(Node* parent) = 0;
-		virtual Node* loadSubNode(Node* parent, const QString& name) = 0;
+		virtual QList<LoadedNode> loadAllSubNodes(Node* parent, const QSet<QString>& loadPartially) = 0;
+		virtual Node* loadSubNode(Node* parent, const QString& name, bool loadPartially) = 0;
 		virtual QString currentNodeType() const = 0;
-		virtual QList<LoadedNode> loadPartialNode(Node* partialNode) = 0;
 		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Node* node) = 0;
 
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;
 		virtual double loadDoubleValue() = 0;
+
+		virtual bool isLoadingPartially() const = 0;
 
 		/**
 		 * \brief Returns a null string if the reference is resolved and a symbolic name if the reference is unresolved.

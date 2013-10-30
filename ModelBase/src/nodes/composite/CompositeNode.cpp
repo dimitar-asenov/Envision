@@ -81,10 +81,17 @@ CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
 CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, AttributeChain& metaData) :
 	Super(parent), meta_(metaData), subnodes_(meta_.numLevels())
 {
+	QSet<QString> partial;
 	for (int level = 0; level < meta_.numLevels(); ++level)
+	{
 		subnodes_[level] = QVector<Node*> (meta_.level(level)->size(), nullptr);
 
-	QList<LoadedNode> children = store.loadAllSubNodes(this);
+		AttributeChain* currentLevel = meta_.level(level);
+		for (int i = 0; i < currentLevel->size(); ++i)
+			if ( (*currentLevel)[i].partial() ) partial.insert( (*currentLevel)[i].name() );
+	}
+
+	QList<LoadedNode> children = store.loadAllSubNodes(this, partial);
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
@@ -92,8 +99,12 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, Attribu
 		if ( !index.isValid() ) throw ModelException("Node has attribute "
 				+ ln->name + " in persistent store, but this attribute is not registered");
 
-		subnodes_[index.level()][index.index()] = ln->node;
-		ln->node->setParent(this);
+		// Skip loading partial optional children.
+		if (!store.isLoadingPartially() || !meta_.attribute(index).optional() || !meta_.attribute(index).partial())
+		{
+			subnodes_[index.level()][index.index()] = ln->node;
+			ln->node->setParent(this);
+		}
 	}
 
 	verifyHasAllMandatoryAttributes();
@@ -164,7 +175,7 @@ CompositeIndex CompositeNode::indexOf(const QString& nodeName) const
 	return meta_.indexForAttribute(nodeName);
 }
 
-QList<Node*> CompositeNode::children()
+QList<Node*> CompositeNode::children() const
 {
 	QList<Node*> result;
 
@@ -215,7 +226,7 @@ void CompositeNode::save(PersistentStore &store) const
 		AttributeChain* currentLevel = meta_.level(level);
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes_[level][i] != nullptr && currentLevel->at(i).persistent() )
-				store.saveNode(subnodes_[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
+				store.saveNode(subnodes_[level][i], currentLevel->at(i).name());
 	}
 }
 
@@ -227,7 +238,16 @@ void CompositeNode::load(PersistentStore &store)
 
 	removeAllNodes();
 
-	QList<LoadedNode> children = store.loadAllSubNodes(this);
+	QSet<QString> partial;
+	for (int level = 0; level < meta_.numLevels(); ++level)
+	{
+		AttributeChain* currentLevel = meta_.level(level);
+		for (int i = 0; i < currentLevel->size(); ++i)
+			if ( currentLevel->at(i).partial() )
+				partial.insert(currentLevel->at(i).name());
+	}
+
+	QList<LoadedNode> children = store.loadAllSubNodes(this, partial);
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
@@ -236,7 +256,9 @@ void CompositeNode::load(PersistentStore &store)
 			throw ModelException("Node has attribute "
 					+ ln->name + " in persistent store, but this attribute is not registered");
 
-		execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(),index.index()), &subnodes_));
+		// Skip loading partial optional children.
+		if (!store.isLoadingPartially() || !meta_.attribute(index).optional() || !meta_.attribute(index).partial())
+			execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(),index.index()), &subnodes_));
 	}
 
 	verifyHasAllMandatoryAttributes();

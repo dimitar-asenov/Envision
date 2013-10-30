@@ -54,7 +54,7 @@ CommandResult* CSceneHandlerLoad::execute(Item*, Item*, const QStringList& comma
 	store->setBaseFolder(projectDir);
 
 	Model::Model* model = new Model::Model();
-	model->load(store, matching.first());
+	model->load(store, matching.first(), false);
 
 	auto rootNode = model->root();
 	model->beginModification(rootNode, "Resolve references");

@@ -1,7 +1,7 @@
 <!DOCTYPE EnvisionFilePersistence>
 <model nextid="3">
- <TypedListOfText id="0" name="typedList" partial="0">
-  <Text id="1" name="0" partial="0">S_one</Text>
-  <Text id="2" name="1" partial="0">S_two</Text>
+ <TypedListOfText id="0" name="typedList">
+  <Text id="1" name="0">S_one</Text>
+  <Text id="2" name="1">S_two</Text>
  </TypedListOfText>
 </model>

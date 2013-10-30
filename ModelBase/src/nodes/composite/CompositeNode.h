@@ -81,7 +81,7 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		CompositeIndex indexOf(Node* node) const;
 		CompositeIndex indexOf(const QString& nodeName) const;
 
-		virtual QList<Node*> children();
+		virtual QList<Node*> children() const override;
 		virtual bool replaceChild(Node* child, Node* replacement);
 
 		void set(const CompositeIndex &attributeIndex, Node* node);

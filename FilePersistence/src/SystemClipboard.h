@@ -45,36 +45,37 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual ~SystemClipboard();
 
 		// Methods from Persistent Store
-		virtual void saveStringValue(const QString &value);
-		virtual void saveIntValue(int value);
-		virtual void saveDoubleValue(double value);
-		virtual void saveReferenceValue(const QString &name, const Model::Node* target);
-		virtual void saveNode(const Model::Node *node, const QString &name, bool partialLoadHint);
+		virtual void saveStringValue(const QString &value) override;
+		virtual void saveIntValue(int value) override;
+		virtual void saveDoubleValue(double value) override;
+		virtual void saveReferenceValue(const QString &name, const Model::Node* target) override;
+		virtual void saveNode(const Model::Node *node, const QString &name) override;
 
-		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
-		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
-		virtual QString currentNodeType() const;
-		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node);
+		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)override;
+		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name, bool loadPartially) override;
+		virtual QString currentNodeType() const override;
+		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node) override;
 
-		virtual int loadIntValue();
-		virtual QString loadStringValue();
-		virtual double loadDoubleValue();
-		virtual QString loadReferenceValue(Model::Reference* r);
+		virtual int loadIntValue() override;
+		virtual QString loadStringValue() override;
+		virtual double loadDoubleValue() override;
+		virtual QString loadReferenceValue(Model::Reference* r) override;
+
+		virtual bool isLoadingPartially() const override;
 
 		// Methods from ClipboardStore
-		virtual void putNode(const Model::Node* node);
-		virtual void putNodes(const QList<const Model::Node*>& nodes);
+		virtual void putNode(const Model::Node* node) override;
+		virtual void putNodes(const QList<const Model::Node*>& nodes) override;
 
-		virtual bool readClipboard();
-		virtual int numNodes() const;
-		virtual bool hasNext() const;
-		virtual void next();
-		virtual Model::Node* create(Model::Model* model, Model::Node* parent);
+		virtual bool readClipboard() override;
+		virtual int numNodes() const override;
+		virtual bool hasNext() const override;
+		virtual void next() override;
+		virtual Model::Node* create(Model::Model* model, Model::Node* parent) override;
 
 	protected:
-		virtual void saveModel(Model::Model* model, const QString &name);
-		virtual Model::Node* loadModel(Model::Model* model, const QString &name);
+		virtual void saveModel(Model::Model* model, const QString &name) override;
+		virtual Model::Node* loadModel(Model::Model* model, const QString &name, bool loadPartially) override;
 
 	private:
 		XMLModel* xml;

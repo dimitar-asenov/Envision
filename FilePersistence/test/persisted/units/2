@@ -1,7 +1,7 @@
 <!DOCTYPE EnvisionFilePersistence>
-<BinaryNodePersistenceUnit id="2" name="left" partial="0">
- <Text id="3" name="name" partial="0">S_Left child</Text>
- <BinaryNode id="4" name="left" partial="0">
-  <Text id="5" name="name" partial="0">S_in a new unit</Text>
+<BinaryNodePersistenceUnit id="2" name="left">
+ <Text id="3" name="name">S_Left child</Text>
+ <BinaryNode id="4" name="left">
+  <Text id="5" name="name">S_in a new unit</Text>
  </BinaryNode>
 </BinaryNodePersistenceUnit>

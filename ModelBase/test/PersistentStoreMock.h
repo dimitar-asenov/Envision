@@ -40,31 +40,31 @@ class PersistentStoreMock: public PersistentStore
 		~PersistentStoreMock();
 
 
-		virtual void saveStringValue(const QString &value);
-		virtual void saveIntValue(int value);
-		virtual void saveDoubleValue(double value);
-		virtual void saveNode(const Node *node, const QString &name, bool partialLoadHint);
+		virtual void saveStringValue(const QString &value) override;
+		virtual void saveIntValue(int value) override;
+		virtual void saveDoubleValue(double value) override;
+		virtual void saveNode(const Node *node, const QString &name) override;
 
+		virtual QList<LoadedNode> loadAllSubNodes(Node* parent, const QSet<QString>& loadPartially) override;
+		virtual Node* loadSubNode(Node* parent, const QString& name, bool loadPartially) override;
+		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Node* node) override;
+		virtual QString currentNodeType() const override;
 
-		virtual QList<LoadedNode> loadAllSubNodes(Node* parent);
-		virtual Node* loadSubNode(Node* parent, const QString& name);
-		virtual QList<LoadedNode> loadPartialNode(Node* partialNode);
-		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Node* node);
-		virtual QString currentNodeType() const;
-
-		virtual int loadIntValue();
-		virtual QString loadStringValue();
-		virtual double loadDoubleValue();
+		virtual int loadIntValue() override;
+		virtual QString loadStringValue() override;
+		virtual double loadDoubleValue() override;
 
 		const QString& getSaved() const;
 		void clear();
 
-		virtual QString loadReferenceValue(Reference* r);
-		virtual void saveReferenceValue(const QString &name, const Node* target);
+		virtual QString loadReferenceValue(Reference* r) override;
+		virtual void saveReferenceValue(const QString &name, const Node* target) override;
+
+		virtual bool isLoadingPartially() const override;
 
 	protected:
-		virtual void saveModel(Model* model, const QString &name);
-		virtual Node* loadModel(Model* model, const QString &name);
+		virtual void saveModel(Model* model, const QString &name) override;
+		virtual Node* loadModel(Model* model, const QString &name, bool loadPartially) override;
 
 };
 

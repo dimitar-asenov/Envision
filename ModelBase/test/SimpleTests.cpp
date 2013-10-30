@@ -64,12 +64,12 @@ TEST(ModelBase, CompositeMetaData)
 	CHECK_CONDITION(metaExt[2].optional() == true);
 	CHECK_CONDITION(metaExt[3].optional() == false);
 	CHECK_CONDITION(metaExt[4].optional() == false);
-
-	CHECK_CONDITION(metaExt[0].partialHint() == false);
-	CHECK_CONDITION(metaExt[1].partialHint() == false);
-	CHECK_CONDITION(metaExt[2].partialHint() == false);
-	CHECK_CONDITION(metaExt[3].partialHint() == false);
-	CHECK_CONDITION(metaExt[4].partialHint() == false);
+	
+	CHECK_CONDITION(metaExt[0].partial() == false);
+	CHECK_CONDITION(metaExt[1].partial() == false);
+	CHECK_CONDITION(metaExt[2].partial() == false);
+	CHECK_CONDITION(metaExt[3].partial() == false);
+	CHECK_CONDITION(metaExt[4].partial() == false);
 }
 
 TEST(ModelBase, SimpleModelCreation)

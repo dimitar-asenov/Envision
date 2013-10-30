@@ -59,7 +59,7 @@ void SystemClipboard::saveModel(::Model::Model* model, const QString &name)
 		xml = new XMLModel();
 
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
-		saveNode(model->root(), name, false);
+		saveNode(model->root(), name);
 		xml->endSaveChildNode();
 
 		QApplication::clipboard()->setText(xml->documentText());
@@ -90,37 +90,12 @@ void SystemClipboard::saveReferenceValue(const QString &name, const Node* target
 	xml->saveStringValue(nameString);
 }
 
-void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
+void SystemClipboard::saveNode(const Node *node, const QString &name)
 {
+	// Do not require a fully loaded node.
 	xml->beginSaveChildNode(node->typeName());
 	xml->setName(name);
-	xml->setPartialHint(false);
-
 	node->save(*this);
-
-	if ( !node->isFullyLoaded() )
-	{
-		// Persist sub nodes which have not been loaded. Each subnode has a unique name. If a node was previously
-		// persisted and was not saved so far, we will read it back from the persistent store and store it again.
-
-		// Get a list of sub nodes which have already been persisted.
-		QStringList persistedChildren = xml->getChildrenNames();
-
-		PersistedNode* persisted = node->model()->store()->loadCompleteNodeSubtree(node->model()->name(), node);
-
-		if (!persisted) throw FilePersistenceException("Could not load node subtree from old persistent store.");
-		auto composite = dynamic_cast<PersistedValue< QList<PersistedNode*> >* > (persisted);
-		if (!composite)
-			throw FilePersistenceException("Partial loading of Value-type nodes (string, int, double) is not supported.");
-
-		for(int i = 0; i<composite->value().size(); ++i)
-		{
-			if (!persistedChildren.contains(composite->value()[i]->name())) saveNodeFromOldStore(composite->value()[i]);
-		}
-
-		SAFE_DELETE(persisted);
-	}
-
 	xml->endSaveChildNode();
 }
 
@@ -128,7 +103,6 @@ void SystemClipboard::saveNodeFromOldStore(PersistedNode* node)
 {
 	xml->beginSaveChildNode( node->type() );
 	xml->setName(node->name());
-	xml->setPartialHint( false );
 
 	PersistedValue< QString >* string =  dynamic_cast< PersistedValue< QString >* > (node);
 	if (string) xml->saveStringValue(string->value());
@@ -155,12 +129,12 @@ void SystemClipboard::saveNodeFromOldStore(PersistedNode* node)
 	xml->endSaveChildNode();
 }
 
-Node* SystemClipboard::loadModel(::Model::Model*, const QString &)
+Node* SystemClipboard::loadModel(::Model::Model*, const QString &, bool)
 {
 	throw FilePersistenceException("The clipboard does not support the loadModel() method.");
 }
 
-QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node*)
+QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node*, const QSet<QString>&)
 {
 	QList<LoadedNode> result;
 
@@ -180,7 +154,7 @@ QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node*)
 	return result;
 }
 
-Node* SystemClipboard::loadSubNode(Node* parent, const QString& name)
+Node* SystemClipboard::loadSubNode(Node* parent, const QString& name, bool)
 {
 	if (!xml->hasChild(name)) return nullptr;
 
@@ -203,12 +177,6 @@ LoadedNode SystemClipboard::loadNode(Node* parent)
 QString SystemClipboard::currentNodeType() const
 {
 	return xml->getType();
-}
-
-QList<LoadedNode> SystemClipboard::loadPartialNode(Node*)
-{
-	throw FilePersistenceException("The loadPartialNode(...) method is not supported in the SystemClipboard store."
-			" This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
 }
 
 PersistedNode* SystemClipboard::loadCompleteNodeSubtree(const QString&, const Node*)
@@ -261,7 +229,6 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 		{
 			xml->beginSaveChildNode(nodes[i]->typeName());
 			xml->setName(QString::number(i));
-			xml->setPartialHint(false);
 
 			nodes[i]->save(*this);
 
@@ -326,6 +293,11 @@ Node* SystemClipboard::create(::Model::Model*, Node* parent)
 {
 	Node* node = Node::createNewNode(xml->getType(), parent, *this, false);
 	return node;
+}
+
+bool SystemClipboard::isLoadingPartially() const
+{
+	return false;
 }
 
 }

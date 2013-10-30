@@ -41,7 +41,7 @@ PersistentStoreMock::~PersistentStoreMock()
 
 void PersistentStoreMock::saveModel(Model* model, const QString &name)
 {
-	saveNode(model->root(), name, false);
+	saveNode(model->root(), name);
 }
 
 void PersistentStoreMock::saveStringValue(const QString &value)
@@ -59,9 +59,9 @@ void PersistentStoreMock::saveDoubleValue(double value)
 	savedData.append(QString::number(value) + ",");
 }
 
-void PersistentStoreMock::saveNode(const Node *node, const QString &name, bool partialLoadHint)
+void PersistentStoreMock::saveNode(const Node *node, const QString &name)
 {
-	savedData.append(node->typeName() + "," + name + "," + (partialLoadHint ? "partial," : "full,"));
+	savedData.append(node->typeName() + "," + name + ",");
 	node->save(*this);
 }
 
@@ -75,24 +75,19 @@ void PersistentStoreMock::saveReferenceValue(const QString &, const Node*)
 	throw ModelException("The Persistent store mock does not support references");
 }
 
-Node* PersistentStoreMock::loadModel(Model*, const QString &)
+Node* PersistentStoreMock::loadModel(Model*, const QString &, bool)
 {
 	return nullptr;
 }
 
-QList<LoadedNode> PersistentStoreMock::loadAllSubNodes(Node* )
+QList<LoadedNode> PersistentStoreMock::loadAllSubNodes(Node*, const QSet<QString>&)
 {
 	return QList<LoadedNode> ();
 }
 
-Node* PersistentStoreMock::loadSubNode(Node*, const QString&)
+Node* PersistentStoreMock::loadSubNode(Node*, const QString&, bool)
 {
 	return nullptr;
-}
-
-QList<LoadedNode> PersistentStoreMock::loadPartialNode(Node*)
-{
-	return QList<LoadedNode>();
 }
 
 QString PersistentStoreMock::currentNodeType() const
@@ -129,5 +124,7 @@ void PersistentStoreMock::clear()
 {
 	savedData.clear();
 }
+
+bool PersistentStoreMock::isLoadingPartially() const { return false; }
 
 }

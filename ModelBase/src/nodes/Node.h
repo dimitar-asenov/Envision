@@ -148,7 +148,7 @@ class MODELBASE_API Node
 		 * Reimplement this method in derived classes that have children. The default implementation returns an empty
 		 * list.
 		 */
-		virtual QList<Node*> children();
+		virtual QList<Node*> children() const;
 
 		/**
 		 * Returns true if this node defines a symbol and false otherwise.
@@ -234,7 +234,7 @@ class MODELBASE_API Node
 		 *
 		 * Reimplement this method to customize while nodes form the scope of this node.
 		 */
-		virtual QList<Node*> childrenInScope();
+		virtual QList<Node*> childrenInScope() const;
 
 		/**
 		 * Returns true if this node defines a symbol that has a name matching \a matcher and types common with \a
@@ -258,12 +258,17 @@ class MODELBASE_API Node
 		void addToRevision(int valueToAdd);
 
 		/**
-		 * Returns true if this node is fully loaded and false if it is only partially loaded. The default implementation
-		 * always returns true.
+		 * Returns true if this node is only partially loaded.
 		 *
-		 * Reimplement this method and loadFully() in derived classes that support partial loading.
+		 * In order for this method to work as expected, the constructors of nodes which are only partially loaded should
+		 * call the setPartiallyLoaded() method.
 		 */
-		bool isFullyLoaded() const;
+		bool isPartiallyLoaded() const;
+
+		/**
+		 * Returns true if this node is partially loaded or has partially loaded children.
+		 */
+		bool hasPartiallyLoadedChildren() const;
 
 		/**
 		 * Returns the lock used to control access to this node.
@@ -324,13 +329,6 @@ class MODELBASE_API Node
 		 */
 		virtual void load(PersistentStore &store) = 0;
 
-		/**
-		 * Fully loads a partially loaded node from the specified persistent store.
-		 *
-		 * The default implementation does nothing. Reimplement this method and isFullyLoaded() in derived classes to
-		 * enable support for partial loading.
-		 */
-		virtual void loadFully(PersistentStore &store);
 
 		//TODO In the comment below the part that explains things about the revision is incorrect. The persistence store
 		//does not care about this currently. Either change the comment or fix this.
@@ -452,27 +450,25 @@ class MODELBASE_API Node
 		QString toDebugString();
 
 	protected:
-
-		/**
-		 * This flag indicates if the current node is fullyLoaded.
-		 *
-		 * Derived classes which support this functionality should take care to properly initialize and modify this value
-		 * whener the state of the object changes.
-		 */
-		bool fullyLoaded;
+		void setPartiallyLoaded();
 
 	private:
-		Node* parent_;
-		int revision_;
+		Node* parent_{};
+		int revision_{};
 
 		static int numRegisteredTypes_;
 		static QHash<QString, NodeConstructor> nodeConstructorRegister;
 		static QHash<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
+
+		static QSet<const Node*>& partiallyLoadedNodes();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
 
 inline Model* Node::model() const { return ModelManager::instance().find(root()); }
+
+inline void Node::setPartiallyLoaded() { partiallyLoadedNodes().insert(this); }
+inline bool Node::isPartiallyLoaded() const {return partiallyLoadedNodes().contains(this);}
 
 inline Node* Node::root() const
 {

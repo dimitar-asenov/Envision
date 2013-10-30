@@ -48,9 +48,8 @@ class MODELBASE_API List: public Super<Node>
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
-		virtual void loadFully(PersistentStore &store);
 
-		virtual QList<Node*> children();
+		virtual QList<Node*> children() const override;
 
 		int size();
 		template <class T> T* first();
@@ -114,42 +113,29 @@ class MODELBASE_API List: public Super<Node>
 		QVector<Node*> nodes_;
 
 		void loadSubNodes(QList<LoadedNode>& nodeList);
-
-		void ensureFullyLoaded() const;
 };
 
-inline List::iterator List::begin() {ensureFullyLoaded(); return nodes_.begin();}
-inline List::const_iterator List::begin() const {ensureFullyLoaded(); return nodes_.begin();}
-inline List::const_iterator List::cbegin() const {ensureFullyLoaded(); return nodes_.constBegin();}
-inline List::iterator List::end() {ensureFullyLoaded(); return nodes_.end();}
-inline List::const_iterator List::end() const {ensureFullyLoaded(); return nodes_.end();}
-inline List::const_iterator List::cend() const {ensureFullyLoaded(); return nodes_.constEnd();}
-
-inline void List::ensureFullyLoaded() const
-{
-	if (!fullyLoaded) const_cast<List*>(this)->loadFully(* (model()->store()));
-}
+inline List::iterator List::begin() {return nodes_.begin();}
+inline List::const_iterator List::begin() const {return nodes_.begin();}
+inline List::const_iterator List::cbegin() const {return nodes_.constBegin();}
+inline List::iterator List::end() {return nodes_.end();}
+inline List::const_iterator List::end() const {return nodes_.end();}
+inline List::const_iterator List::cend() const {return nodes_.constEnd();}
 
 template <class T> T* List::first()
 {
-	ensureFullyLoaded();
-
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return static_cast<T*> (nodes_.first());
 }
 
 template <class T> T* List::last()
 {
-	ensureFullyLoaded();
-
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return static_cast<T*> (nodes_.last());
 }
 
 template <class T> T* List::at(int i)
 {
-	ensureFullyLoaded();
-
 	return static_cast<T*> (nodes_[i]);
 }
 

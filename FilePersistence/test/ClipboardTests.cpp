@@ -44,7 +44,7 @@ TEST(FilePersistence, CopyToClipboard)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "2Children");
+	model.load(&store, "2Children", false);
 	SystemClipboard sc;
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
@@ -52,7 +52,10 @@ TEST(FilePersistence, CopyToClipboard)
 	sc.putNode(root);
 
 	QString clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <BinaryNode name=\"0\" partial=\"0\"> <Text name=\"name\" partial=\"0\">S_Root</Text> <BinaryNode name=\"left\" partial=\"0\"> <Text name=\"name\" partial=\"0\">S_Left child</Text> </BinaryNode> <BinaryNode name=\"right\" partial=\"0\"> <Text name=\"name\" partial=\"0\">S_Right child</Text> </BinaryNode> </BinaryNode> </clipboard>",clipboardText);
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <BinaryNode name=\"0\"> <Text name=\"name\">"
+			"S_Root</Text> <BinaryNode name=\"left\"> <Text name=\"name\">S_Left child</Text> </BinaryNode> "
+			"<BinaryNode name=\"right\"> <Text name=\"name\">S_Right child</Text> </BinaryNode> </BinaryNode> </clipboard>"
+			,clipboardText);
 
 	QList<const Model::Node*> nodes;
 	nodes.append(root->name());
@@ -60,7 +63,8 @@ TEST(FilePersistence, CopyToClipboard)
 	sc.putNodes(nodes);
 
 	clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <Text name=\"0\" partial=\"0\">S_Root</Text> <BinaryNode name=\"1\" partial=\"0\"> <Text name=\"name\" partial=\"0\">S_Right child</Text> </BinaryNode> </clipboard>",clipboardText);
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <Text name=\"0\">S_Root</Text> "
+			"<BinaryNode name=\"1\"> <Text name=\"name\">S_Right child</Text> </BinaryNode> </clipboard>",clipboardText);
 }
 
 TEST(FilePersistence, CopyPartialToClipboard)
@@ -70,7 +74,7 @@ TEST(FilePersistence, CopyPartialToClipboard)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "partial");
+	model.load(&store, "partial", false);
 	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
 	CHECK_CONDITION(root != nullptr);
 
@@ -78,7 +82,9 @@ TEST(FilePersistence, CopyPartialToClipboard)
 	sc.putNode(root);
 
 	QString clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <PartialList name=\"0\" partial=\"0\"> <List name=\"list\" partial=\"0\"> <Text name=\"0\" partial=\"0\">S_one</Text> <Text name=\"1\" partial=\"0\">S_two</Text> <Text name=\"2\" partial=\"0\">S_three</Text> <Text name=\"3\" partial=\"0\">S_four</Text> </List> </PartialList> </clipboard>",clipboardText);
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <PartialList name=\"0\"> <List name=\"list\"> "
+			"<Text name=\"0\">S_one</Text> <Text name=\"1\">S_two</Text> <Text name=\"2\">S_three</Text> "
+			"<Text name=\"3\">S_four</Text> </List> </PartialList> </clipboard>",clipboardText);
 }
 
 TEST(FilePersistence, PasteTextFromClipboard)
@@ -88,7 +94,7 @@ TEST(FilePersistence, PasteTextFromClipboard)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "2Children");
+	model.load(&store, "2Children", false);
 	SystemClipboard sc;
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
@@ -112,7 +118,7 @@ TEST(FilePersistence, PasteBinaryFromClipboard)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "2Children");
+	model.load(&store, "2Children", false);
 	SystemClipboard sc;
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());

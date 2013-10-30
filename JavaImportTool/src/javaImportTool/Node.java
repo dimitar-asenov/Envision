@@ -215,7 +215,7 @@ public class Node {
 			{
 				out_.peek().print(indentation + "<" + tag_);
 				if (format_ == OutputFormat.XML) out_.peek().print(" id=\"" + id_ + "\"");
-				out_.peek().print(" name=\"" + name_ + "\" partial=\"0\"");
+				out_.peek().print(" name=\"" + name_ + "\"");
 				
 				if (text_ != null) out_.peek().println(">" + StringEscapeUtils.escapeXml(text_) + "</" + tag_ + ">");
 				else if (children_.isEmpty()) out_.peek().println(" />");

@@ -276,8 +276,13 @@ class MODELBASE_API Model: public QObject
 		 *
 		 * @param name
 		 * 				The model name in the persistent store which contains the model tree.
+		 *
+		 * @param loadPartially
+		 * 				Whether the model should only be partially loaded. The intention is that a partially loaded model
+		 * 				is read only and should only contain the publicly visible part of a model. Typically this means
+		 * 				excluding method bodies from loading.
 		 */
-		void load(PersistentStore* store, const QString& name);
+		void load(PersistentStore* store, const QString& name, bool loadPartially);
 
 		/**
 		 * Returns the current store for this model.
@@ -377,22 +382,6 @@ class MODELBASE_API Model: public QObject
 		 * 				The old name of the node
 		 */
 		void nameModified(Node* node, const QString &oldName);
-
-		/**
-		 * Emitted when a partially loaded node becomes fully loaded.
-		 *
-		 * @param node
-		 * 				The node which is now fully loaded.
-		 */
-		void nodeFullyLoaded(Node* node);
-
-		/**
-		 * Emitted when a fully loaded node becomes partially loaded.
-		 *
-		 * @param node
-		 * 				The node which is now partially loaded.
-		 */
-		void nodePartiallyLoaded(Node* node);
 
 	private:
 
@@ -505,8 +494,6 @@ inline void Model::setName(const QString& name) { name_ = name; }
 
 inline PersistentStore* Model::store() { return store_; }
 inline void Model::emitNameModified(Node* node, const QString &oldName) { emit nameModified(node, oldName); }
-inline void Model::emitNodeFullyLoaded(Node* node) { emit nodeFullyLoaded(node); }
-inline void Model::emitNodePartiallyLoaded(Node* node) { emit nodePartiallyLoaded(node); }
 
 inline const QSet<Reference*>& Model::unresolvedReferences() const { return unresolvedReferences_; }
 

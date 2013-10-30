@@ -41,7 +41,8 @@ TEST(ModelBase, PersistenceSave)
 	PersistentStoreMock store;
 	model.save(&store);
 
-	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,", store.getSaved());
+	CHECK_STR_EQUAL("BinaryNode,root,Text,name,,Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
+			store.getSaved());
 
 	model.beginModification(root, "make tree");
 	root->setLeft(new TestNodes::BinaryNode());
@@ -54,7 +55,10 @@ TEST(ModelBase, PersistenceSave)
 	store.clear();
 	model.save();
 
-	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,Troot,BinaryNode,left,full,Text,name,full,Tleft,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,BinaryNode,right,full,Text,name,full,Tright,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,", store.getSaved());
+	CHECK_STR_EQUAL("BinaryNode,root,Text,name,Troot,BinaryNode,left,Text,name,Tleft,Integer,_ext_PositionExtension_x,"
+			"0,Integer,_ext_PositionExtension_y,0,BinaryNode,right,Text,name,Tright,Integer,_ext_PositionExtension_x,0,"
+			"Integer,_ext_PositionExtension_y,0,Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
+			store.getSaved());
 }
 
 }

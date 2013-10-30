@@ -43,7 +43,6 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
-		void setPartial(bool partial);
 
 		void setId(NodeIdMap::NodeIdType id);
 
@@ -54,7 +53,6 @@ class FILEPERSISTENCE_API GenericNode {
 
 		const QString& name() const;
 		const QString& type() const;
-		bool partial() const;
 
 		bool hasValue() const;
 		const QString& valueAsString() const;
@@ -80,7 +78,6 @@ class FILEPERSISTENCE_API GenericNode {
 		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 		ValueType valueType_{};
 
-		bool partial_{};
 		NodeIdMap::NodeIdType id_{-1};
 		QList<GenericNode*> children_;
 
@@ -94,12 +91,10 @@ class FILEPERSISTENCE_API GenericNode {
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(NodeIdMap::NodeIdType id) { id_ = id; }
-inline void GenericNode::setPartial(bool partial) { partial_ = partial; }
 
 inline const QString& GenericNode::name() const { return name_; }
 inline const QString& GenericNode::type() const { return type_; }
 inline bool GenericNode::hasValue() const { return valueType_ != NO_VALUE; }
-inline bool GenericNode::partial() const { return partial_; }
 inline NodeIdMap::NodeIdType GenericNode::id() const { return id_; }
 inline bool GenericNode::hasChildren() const { return !children_.isEmpty(); }
 inline const QList<GenericNode*>& GenericNode::children() const { return children_; }

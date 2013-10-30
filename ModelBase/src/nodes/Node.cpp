@@ -46,11 +46,16 @@ int Node::numRegisteredTypes_ = 0;
 QHash<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
 QHash<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
+QSet<const Node*>& Node::partiallyLoadedNodes()
+{
+	static QSet<const Node*> set;
+	return set;
+}
+
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
-Node::Node(Node* parent) :
-	fullyLoaded(true), parent_(parent), revision_(0)
+Node::Node(Node* parent) : parent_{parent}
 {
 	if (parent && !parent->isModifyable())
 		throw ModelException("Trying to create a node with an non-modifiable parent.");
@@ -59,6 +64,7 @@ Node::Node(Node* parent) :
 
 Node::~Node()
 {
+	partiallyLoadedNodes().remove(this);
 }
 
 Node* Node::createDefaultInstance(Node*)
@@ -70,10 +76,6 @@ Node* Node::createDefaultInstance(Node*)
 /***********************************************************************************************************************
  * MAIN METHODS
  **********************************************************************************************************************/
-void Node::loadFully(PersistentStore&)
-{
-}
-
 void Node::execute(UndoCommand *command)
 {
 	if ( this != command->target() ) throw ModelException("Command target differs from current node when executing commands");
@@ -203,7 +205,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* 
 	return found;
 }
 
-QList<Node*> Node::childrenInScope()
+QList<Node*> Node::childrenInScope() const
 {
 	return children();
 }
@@ -226,6 +228,13 @@ QString Node::toDebugString()
 	QString ret = ntdsa ? ntdsa->str : "no debug string for node";
 	SAFE_DELETE(ntdsa);
 	return ret;
+}
+
+bool Node::hasPartiallyLoadedChildren() const
+{
+	if (isPartiallyLoaded()) return true;
+
+	return false;
 }
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
@@ -263,7 +272,7 @@ void Node::setParent(Node* parent)
 	parent_ = parent;
 }
 
-QList<Node*> Node::children()
+QList<Node*> Node::children() const
 {
 	return QList<Node*>();
 }
@@ -317,11 +326,6 @@ void Node::incrementRevision()
 void Node::addToRevision(int valueToAdd)
 {
 	revision_ += valueToAdd;
-}
-
-bool Node::isFullyLoaded() const
-{
-	return fullyLoaded;
 }
 
 NodeReadWriteLock* Node::accessLock() const

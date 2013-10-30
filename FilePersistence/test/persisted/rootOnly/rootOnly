@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionFilePersistence>
 <model nextid="2">
- <BinaryNode id="0" name="rootOnly" partial="0">
-  <Text id="1" name="name" partial="0">S_Title</Text>
+ <BinaryNode id="0" name="rootOnly">
+  <Text id="1" name="name">S_Title</Text>
  </BinaryNode>
 </model>

@@ -47,26 +47,27 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		void setBaseFolder(const QString& baseFolder);
 
 		// Methods from Persistent Store
-		virtual void saveStringValue(const QString &value);
-		virtual void saveIntValue(int value);
-		virtual void saveDoubleValue(double value);
-		virtual void saveReferenceValue(const QString &name, const Model::Node* target);
-		virtual void saveNode(const Model::Node *node, const QString &name, bool partialLoadHint);
+		virtual void saveStringValue(const QString &value) override;
+		virtual void saveIntValue(int value) override;
+		virtual void saveDoubleValue(double value) override;
+		virtual void saveReferenceValue(const QString &name, const Model::Node* target) override;
+		virtual void saveNode(const Model::Node *node, const QString &name) override;
 
-		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
-		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
-		virtual QString currentNodeType() const;
-		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node);
+		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)override;
+		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name, bool loadPartially) override;
+		virtual QString currentNodeType() const override;
+		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node) override;
 
-		virtual int loadIntValue();
-		virtual QString loadStringValue();
-		virtual double loadDoubleValue();
-		virtual QString loadReferenceValue(Model::Reference* r);
+		virtual int loadIntValue() override;
+		virtual QString loadStringValue() override;
+		virtual double loadDoubleValue() override;
+		virtual QString loadReferenceValue(Model::Reference* r) override;
+
+		virtual bool isLoadingPartially() const override;
 
 	protected:
-		virtual void saveModel(Model::Model* model, const QString &name);
-		virtual Model::Node* loadModel(Model::Model* model, const QString &name);
+		virtual void saveModel(Model::Model* model, const QString &name) override;
+		virtual Model::Node* loadModel(Model::Model* model, const QString &name, bool loadPartially) override;
 
 	private:
 
@@ -79,16 +80,18 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		/** A flag that indicates if the store is currently in the middle of saving or loading a model. */
 		bool working;
 
+		bool partiallyLoadingAModel_{};
+
 		/**
 		 * This is the folder where the current model is being saved to or loaded from. This is only valid if working is
 		 * true.
 		 */
 		QDir modelDir;
 
-		void saveNewPersistenceUnit(const Model::Node *node, const QString &name, bool partialLoadHint);
-		Model::LoadedNode loadNewPersistenceUnit(const QString& name, Model::Node* parent);
-		Model::LoadedNode loadNode(Model::Node* parent);
-		void saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint);
+		void saveNewPersistenceUnit(const Model::Node *node, const QString &name);
+		Model::LoadedNode loadNewPersistenceUnit(const QString& name, Model::Node* parent, bool loadPartially);
+		Model::LoadedNode loadNode(Model::Node* parent, bool loadPartially);
+		void saveNodeDirectly(const Model::Node *node, const QString &name);
 
 		Model::PersistedNode* loadNodeData();
 		Model::PersistedNode* loadPersistentUnitData();

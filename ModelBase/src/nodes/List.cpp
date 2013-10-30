@@ -40,13 +40,13 @@ List::List(Node *parent) : Super(parent)
 {
 }
 
-List::List(Node *parent, PersistentStore &store, bool partialHint) : Super(parent)
+List::List(Node *parent, PersistentStore &store, bool loadPartially) : Super(parent)
 {
-	fullyLoaded = !partialHint;
-
-	if ( fullyLoaded )
+	if ( loadPartially )
+		setPartiallyLoaded();
+	else
 	{
-		QList<LoadedNode> children = store.loadAllSubNodes(this);
+		QList<LoadedNode> children = store.loadAllSubNodes(this, {});
 		loadSubNodes(children);
 	}
 
@@ -77,9 +77,10 @@ void List::loadSubNodes(QList<LoadedNode>& nodeList)
 
 void List::save(PersistentStore &store) const
 {
-	if ( fullyLoaded )
-		for (int i = 0; i < nodes_.size(); ++i)
-			store.saveNode(nodes_[i], QString::number(i), false);
+	Q_ASSERT(!isPartiallyLoaded());
+
+	for (int i = 0; i < nodes_.size(); ++i)
+		store.saveNode(nodes_[i], QString::number(i));
 
 	// TODO Document this somewhere useful. Like in the Persistent store interface.
 	// If the node is partially loaded the Store will automatically fill in the missing fields by taking the old version
@@ -92,11 +93,9 @@ void List::load(PersistentStore &store)
 	if (store.currentNodeType() != typeName())
 		throw ModelException("Trying to load a List node from an incompatible node type " + store.currentNodeType());
 
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
 	clear();
 
-	QList<LoadedNode> children = store.loadAllSubNodes(this);
+	QList<LoadedNode> children = store.loadAllSubNodes(this, {});
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
 		Q_ASSERT(ln->node->hierarchyTypeIds().contains(lowerTypeBoundForElements()));
@@ -108,26 +107,13 @@ void List::load(PersistentStore &store)
 	}
 }
 
-void List::loadFully(PersistentStore &store)
-{
-	if ( !fullyLoaded )
-	{
-		QList<LoadedNode> subnodes = store.loadPartialNode(this);
-		loadSubNodes(subnodes);
-		fullyLoaded = true;
-		model()->emitNodeFullyLoaded(this);
-	}
-}
-
-QList<Node*> List::children()
+QList<Node*> List::children() const
 {
 	return nodes_.toList();
 }
 
 int List::size()
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
 	return nodes_.size();
 }
 
@@ -159,7 +145,6 @@ void List::insert(int position, Node* node)
 		}
 	Q_ASSERT(typeToInsertRespectsLowerBound);
 
-	if (!fullyLoaded) loadFully(* (model()->store()));
 	execute(new ListInsert(this, nodes_, node, position));
 }
 
@@ -170,23 +155,17 @@ int List::lowerTypeBoundForElements() const
 
 void List::remove(int index)
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
 	execute(new ListRemove(this, nodes_, index));
 }
 
 void List::remove(Node* instance )
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
 	int index = nodes_.indexOf(instance);
 	if ( index >= 0 ) remove(index);
 }
 
 void List::clear()
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
 	while (!nodes_.isEmpty()) remove(0);
 }
 
@@ -204,8 +183,6 @@ bool List::replaceChild(Node* child, Node* replacement)
 
 void List::paste(ClipboardStore& clipboard, int position)
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
 	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{
 		// We provide a null parent as this will be set in the instruction below.

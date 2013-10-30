@@ -161,7 +161,6 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 	for(int i = 0; i<tabLevel; ++i) stream << '\t';
 	stream << name_ << ' ' << type_;
 	if (id_ >= 0) stream << ' ' << id_;
-	if (partial_) stream << ' ' << "partial";
 	if (hasValue())
 	{
 		if (valueType_ == STRING_VALUE) stream << ". " << PREFIX_STRING << escape(value_);
@@ -251,11 +250,7 @@ GenericNode* GenericNode::load(QTextStream& stream)
 
 			if ( isId ) nodeStack.last()->setId( id );
 			else
-			{
-				// Try to process this as a partial indicator
-				if (headerPart == "partial") nodeStack.last()->setPartial(true);
-				else throw FilePersistenceException("Unknown node header element " + line);
-			}
+				throw FilePersistenceException("Unknown node header element " + line);
 		}
 
 		if (dotIndex < 0 || line.length() == dotIndex) continue; // No value

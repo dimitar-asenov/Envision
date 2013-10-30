@@ -198,7 +198,7 @@ void Model::save(PersistentStore* store)
 	if (store && !store_) store_ = store;
 }
 
-void Model::load(PersistentStore* store, const QString& name)
+void Model::load(PersistentStore* store, const QString& name, bool loadPartially)
 {
 	if (name.isEmpty()) throw ModelException("Loading a model without specifying a name");
 	if (!store) throw ModelException("Loading model '" + name + "' without specifying a persistent store");
@@ -208,7 +208,7 @@ void Model::load(PersistentStore* store, const QString& name)
 	{
 		store_ = store;
 		commands.clear();
-		root_ = store_->loadModel(this, name_);
+		root_ = store_->loadModel(this, name_, loadPartially);
 		emit rootNodeSet(root_);
 	}
 }

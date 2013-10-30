@@ -58,7 +58,7 @@ TEST(FilePersistence, LoadingTypedList)
 
 
 		Model::Model model;
-		model.load(store, "typedList");
+		model.load(store, "typedList", false);
 
 		auto list = dynamic_cast<TypedList<Text>*> (model.root());
 		CHECK_CONDITION(list != nullptr);

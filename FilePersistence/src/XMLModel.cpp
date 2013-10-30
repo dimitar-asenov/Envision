@@ -131,11 +131,6 @@ void XMLModel::setName(const QString& name)
 	elem.setAttribute("name", name);
 }
 
-void XMLModel::setPartialHint(bool partialHint)
-{
-	elem.setAttribute("partial", partialHint ? ATTRIBUTE_TRUE : ATTRIBUTE_FALSE);
-}
-
 int XMLModel::loadIntValue() const
 {
 	bool ok = true;
@@ -324,19 +319,6 @@ QString XMLModel::getName() const
 {
 	if ( elem.hasAttribute("name") ) return elem.attribute("name");
 	else throw FilePersistenceException("Name not found for node of type: " + elem.tagName());
-}
-
-bool XMLModel::getPartialHint() const
-{
-	if ( elem.hasAttribute("partial") )
-	{
-		bool ok = true;
-		int partial = elem.attribute("partial", "error").toInt(&ok);
-		if (!ok || (partial != ATTRIBUTE_TRUE && partial != ATTRIBUTE_FALSE ) )
-			throw FilePersistenceException("Incorrect partial hint '" + elem.attribute("partial") + "' for node of type: " + elem.tagName());
-		else return partial == ATTRIBUTE_TRUE;
-	}
-	else throw FilePersistenceException("Partial hint not found for node of type: " + elem.tagName());
 }
 
 QDomElement XMLModel::getCurrentElement() const

@@ -43,8 +43,8 @@ void TypedList<T>::initType()
 {
 	TypedList<T>::typeIdVariable() = Node::registerNodeType(typeNameStatic(),
 			[](Node* parent) -> Node* { return TypedList<T>::createDefaultInstance(parent);},
-			[](Node *parent, PersistentStore &store, bool partialLoadHint) -> Node*
-						{ return new TypedList<T>(parent, store, partialLoadHint);});
+			[](Node *parent, PersistentStore &store, bool loadPartially) -> Node*
+						{ return new TypedList<T>(parent, store, loadPartially);});
 }
 
 template<class T>
@@ -58,8 +58,8 @@ TypedList<T>::TypedList(::Model::Node* parent) : Super(parent)
 {}
 
 template<class T>
-TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint) :
-Super(parent, store, partialLoadHint)
+TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially) :
+Super(parent, store, loadPartially)
 {
 }
 

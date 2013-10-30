@@ -84,7 +84,7 @@ void SimpleTextFileStore::saveModel(Model::Model* model, const QString &name)
 
 		if ( !modelDir_.exists() ) throw FilePersistenceException("Error opening model folder " + modelDir_.path());
 
-		saveNewPersistenceUnit(model->root(), name, false);
+		saveNewPersistenceUnit(model->root(), name);
 	}
 	catch (Model::ModelException& e)
 	{
@@ -124,7 +124,7 @@ void SimpleTextFileStore::saveReferenceValue(const QString &name, const Model::N
 	persisted_->setValue(targetString + ":" + nameString);
 }
 
-void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &name, bool partialLoadHint)
+void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &name)
 {
 	checkIsWorking();
 
@@ -147,11 +147,11 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 		persisted_->setName("model");
 		auto parent = persisted_;
 		persisted_ = persisted_->addChild(new GenericNode());
-		saveNodeDirectly(node, name, partialLoadHint);
+		saveNodeDirectly(node, name);
 		persisted_ = parent;
 		persisted_->setId(ids_.getNextId());
 	}
-	else saveNodeDirectly(node, name, partialLoadHint);
+	else saveNodeDirectly(node, name);
 
 	QString filename;
 	if ( oldPersisted == nullptr ) filename = name; // This is the root of the model, save the file name
@@ -171,41 +171,35 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	persisted_ = oldPersisted;
 }
 
-void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name, bool partialLoadHint)
+void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name)
 {
 	checkIsWorking();
 
-	if ( node->isNewPersistenceUnit() ) saveNewPersistenceUnit(node, name, partialLoadHint);
+	if ( node->isNewPersistenceUnit() ) saveNewPersistenceUnit(node, name);
 	else
 	{
 		auto parent = persisted_;
 		persisted_ = persisted_->addChild(new GenericNode());
-		saveNodeDirectly(node, name, partialLoadHint);
+		saveNodeDirectly(node, name);
 		persisted_ = parent;
 	}
 }
 
-void SimpleTextFileStore::saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint)
+void SimpleTextFileStore::saveNodeDirectly(const Model::Node *node, const QString &name)
 {
+	Q_ASSERT(!node->isPartiallyLoaded());
 	persisted_->setName(name);
 	persisted_->setType(node->typeName());
 	persisted_->setId(ids_.getId(node));
-	if (partialLoadHint) persisted_->setPartial(true);
 
 	node->save(*this);
-
-	// TODO this should rely on the loadCompleteNodeSubtree method of the previous store of node instead.
-	if ( !node->isFullyLoaded() )
-	{
-		// Do not allow the modification of models which are not fully loaded
-		Q_ASSERT(false);
-	}
 }
 
-Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name)
+Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name, bool loadPartially)
 {
 	storeAccess_.lock();
 	working_ = true;
+	partiallyLoadingAModel_ = loadPartially;
 	Model::LoadedNode ln;
 
 	try
@@ -229,7 +223,7 @@ Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name)
 
 		auto parent = persisted_;
 		persisted_ = persisted_->children().first();
-		ln =  loadNode(nullptr);
+		ln =  loadNode(nullptr, loadPartially);
 		persisted_ = parent;
 
 		// Initialize all references
@@ -262,7 +256,8 @@ Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name)
 	return ln.node;
 }
 
-Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& name, Model::Node* parent)
+Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& name, Model::Node* parent,
+		bool loadPartially)
 {
 	GenericNode* oldPersisted = persisted_;
 
@@ -274,7 +269,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 	ts.setCodec("UTF-8");
 	persisted_ = GenericNode::load(ts);
 
-	Model::LoadedNode ln =  loadNode(parent);
+	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
 	SAFE_DELETE(persisted_);
 	persisted_ = oldPersisted;
@@ -282,7 +277,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 	return ln;
 }
 
-QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* parent)
+QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)
 {
 	checkIsWorking();
 
@@ -295,8 +290,9 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 
 		Model::LoadedNode ln;
 		if ( persisted_->type() == PERSISTENT_UNIT_NODE_TYPE )
-			ln = loadNewPersistenceUnit(QString::number(persisted_->id()), parent);
-		else ln = loadNode(parent);
+			ln = loadNewPersistenceUnit(
+					QString::number(persisted_->id()), parent, loadPartially.contains(persisted_->name()));
+		else ln = loadNode(parent, loadPartially.contains(persisted_->name()));
 
 		result.append(ln);
 	}
@@ -305,16 +301,16 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 	return result;
 }
 
-Model::LoadedNode SimpleTextFileStore::loadNode(Model::Node* parent)
+Model::LoadedNode SimpleTextFileStore::loadNode(Model::Node* parent, bool loadPartially)
 {
 	Model::LoadedNode node;
 	node.name = persisted_->name();
-	node.node = Model::Node::createNewNode(persisted_->type(), parent, *this, persisted_->partial());
+	node.node = Model::Node::createNewNode(persisted_->type(), parent, *this, partiallyLoadingAModel_ && loadPartially);
 	ids_.setId( node.node, persisted_->id() ); // Record id
 	return node;
 }
 
-Model::Node* SimpleTextFileStore::loadSubNode(Model::Node* parent, const QString& name)
+Model::Node* SimpleTextFileStore::loadSubNode(Model::Node* parent, const QString& name, bool loadPartially)
 {
 	checkIsWorking();
 
@@ -326,62 +322,11 @@ Model::Node* SimpleTextFileStore::loadSubNode(Model::Node* parent, const QString
 
 	Model::LoadedNode ln;
 	if ( child->type() == PERSISTENT_UNIT_NODE_TYPE )
-		ln = loadNewPersistenceUnit(QString::number(persisted_->id()), parent);
-	else ln = loadNode(parent);
+		ln = loadNewPersistenceUnit(QString::number(persisted_->id()), parent, loadPartially);
+	else ln = loadNode(parent, loadPartially);
 
 	persisted_ = previousPersisted;
 	return ln.node;
-}
-
-QList<Model::LoadedNode> SimpleTextFileStore::loadPartialNode(Model::Node* partialNode)
-{
-	storeAccess_.lock();
-	working_ = true;
-	Model::LoadedNode ln;
-
-	QList < Model::LoadedNode > result;
-
-	try
-	{
-		modelDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + partialNode->model()->name());
-		if ( !modelDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir_.path());
-
-		QString filename = getPersistenceUnitName(partialNode);
-
-		QFile file(modelDir_.absoluteFilePath(filename));
-		if ( !file.open(QIODevice::ReadOnly) )
-			throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
-
-		QTextStream ts(&file);
-		ts.setCodec("UTF-8");
-		persisted_ = GenericNode::load(ts);
-		auto top = persisted_;
-
-		// Search through the content in order to find the requested node id.
-		persisted_ = persisted_->find(ids_.getId(partialNode));
-
-		if (!persisted_)
-			throw FilePersistenceException("Could not find the persisted data for partial node with id "
-					+ QString::number( ids_.getId(partialNode)));
-
-		// Load all subnodes and return them.
-		// Pass a null parent as we do not want these nodes to be immediately assigned as children to the parent node.
-		result = loadAllSubNodes(nullptr);
-
-		SAFE_DELETE(top);
-		persisted_ = nullptr;
-	}
-	catch (Model::ModelException& e)
-	{
-		working_ = false;
-		storeAccess_.unlock();
-		throw;
-	}
-
-	working_ = false;
-	storeAccess_.unlock();
-
-	return result;
 }
 
 QString SimpleTextFileStore::currentNodeType() const
@@ -500,7 +445,6 @@ Model::PersistedNode* SimpleTextFileStore::loadNodeData()
 	if (persisted_->id() >=0) result->setId(persisted_->id());
 	result->setType(persisted_->type());
 	result->setName(persisted_->name());
-	result->setPartialHint(persisted_->partial());
 	result->setNewPersistenceUnit(false);
 
 	return result;
@@ -562,6 +506,11 @@ QString SimpleTextFileStore::loadReferenceValue(Model::Reference* r)
 void SimpleTextFileStore::checkIsWorking() const
 {
 	if ( !working_ ) throw FilePersistenceException("Performing an illegal file persistence operation.");
+}
+
+bool SimpleTextFileStore::isLoadingPartially() const
+{
+	return partiallyLoadingAModel_;
 }
 
 } /* namespace FilePersistence */

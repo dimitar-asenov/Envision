@@ -64,7 +64,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("BinaryNode", root->type() );
 		CHECK_STR_EQUAL("units", root->name());
 		CHECK_INT_EQUAL(0, root->id());
-		CHECK_CONDITION(!root->partialHint());
 		CHECK_CONDITION(!root->isNewPersistenceUnit());
 		CHECK_INT_EQUAL(3, root->value().size());
 
@@ -74,7 +73,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("Text", rootName->type() );
 		CHECK_STR_EQUAL("name", rootName->name());
 		CHECK_INT_EQUAL(1, rootName->id());
-		CHECK_CONDITION(!rootName->partialHint());
 		CHECK_CONDITION(!rootName->isNewPersistenceUnit());
 		CHECK_STR_EQUAL("Root", rootName->value());
 
@@ -83,7 +81,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("BinaryNodePersistenceUnit", left->type() );
 		CHECK_STR_EQUAL("left", left->name());
 		CHECK_INT_EQUAL(2, left->id());
-		CHECK_CONDITION(!left->partialHint());
 		CHECK_CONDITION(left->isNewPersistenceUnit());
 		CHECK_INT_EQUAL(2, left->value().size());
 
@@ -92,7 +89,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("BinaryNode", right->type() );
 		CHECK_STR_EQUAL("right", right->name());
 		CHECK_INT_EQUAL(6, right->id());
-		CHECK_CONDITION(!right->partialHint());
 		CHECK_CONDITION(!right->isNewPersistenceUnit());
 		CHECK_INT_EQUAL(1, right->value().size());
 
@@ -102,7 +98,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("Text", leftName->type() );
 		CHECK_STR_EQUAL("name", leftName->name());
 		CHECK_INT_EQUAL(3, leftName->id());
-		CHECK_CONDITION(!leftName->partialHint());
 		CHECK_CONDITION(!leftName->isNewPersistenceUnit());
 		CHECK_STR_EQUAL("Left child", leftName->value());
 
@@ -111,7 +106,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("BinaryNode", leftleft->type() );
 		CHECK_STR_EQUAL("left", leftleft->name());
 		CHECK_INT_EQUAL(4, leftleft->id());
-		CHECK_CONDITION(!leftleft->partialHint());
 		CHECK_CONDITION(!leftleft->isNewPersistenceUnit());
 		CHECK_INT_EQUAL(1, leftleft->value().size());
 
@@ -120,7 +114,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("Text", leftleftName->type() );
 		CHECK_STR_EQUAL("name", leftleftName->name());
 		CHECK_INT_EQUAL(5, leftleftName->id());
-		CHECK_CONDITION(!leftleftName->partialHint());
 		CHECK_CONDITION(!leftleftName->isNewPersistenceUnit());
 		CHECK_STR_EQUAL("in a new unit", leftleftName->value());
 
@@ -130,7 +123,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		CHECK_STR_EQUAL("Text", rightName->type() );
 		CHECK_STR_EQUAL("name", rightName->name());
 		CHECK_INT_EQUAL(7, rightName->id());
-		CHECK_CONDITION(!rightName->partialHint());
 		CHECK_CONDITION(!rightName->isNewPersistenceUnit());
 		CHECK_STR_EQUAL("Right child", rightName->value());
 

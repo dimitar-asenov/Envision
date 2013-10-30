@@ -1,6 +1,6 @@
 model model 6
 	partial PartialList 0
-		list List 1 partial
+		list List 1
 			0 Text 2. S_one
 			1 Text 3. S_two
 			2 Text 4. S_three

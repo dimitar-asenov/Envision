@@ -52,7 +52,7 @@
 	DECLARE_TYPE_ID																																	\
 	public:																																				\
 		className(::Model::Node* parent = nullptr);																							\
-		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
+		className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially);									\
 		static className* createDefaultInstance(Node* parent = nullptr);																\
 
 /*********************************************************************************************************************/
@@ -78,7 +78,7 @@
 	NODE_DECLARE_STANDARD_METHODS(className)																									\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::AttributeChain& metaData);															\
-		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint,								\
+		className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially,									\
 			::Model::AttributeChain& metaData); 																								\
 																																							\
 		static ::Model::AttributeChain& getMetaData();																						\
@@ -160,8 +160,8 @@ template class Model::TypedList<className>;																									\
 #define NODE_DEFINE_EMPTY_CONSTRUCTORS(className)																							\
 	className::className(::Model::Node* parent) : Super(parent) {}																		\
 																																							\
-	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
-		: Super (parent, store, partialLoadHint) {}
+	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
+		: Super (parent, store, loadPartially) {}
 /*********************************************************************************************************************/
 
 /**
@@ -177,15 +177,15 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node* parent)																								\
 		: Super (parent, className::getMetaData()) {}																						\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
-	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
-		: Super (parent, store, partialLoadHint, className::getMetaData()) {}														\
+	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
+		: Super (parent, store, loadPartially, className::getMetaData()) {}															\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
 		: Super (parent, metaData) {}																												\
 																																							\
-	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint,						\
+	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially,						\
 			::Model::AttributeChain& metaData)																									\
-		: Super (parent, store, partialLoadHint, metaData) {}
+		: Super (parent, store, loadPartially, metaData) {}
 /*********************************************************************************************************************/
 
 /**
@@ -200,8 +200,8 @@ void className::initType()																															\
 	typeIdVariable() = Node::registerNodeType(																								\
 		#className,																																		\
 		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
-		[](::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)-> ::Model::Node*					\
-			{ return new className(parent, store, partialLoadHint);}																		\
+		[](::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)-> ::Model::Node*						\
+			{ return new className(parent, store, loadPartially);}																		\
 	);																																						\
 }																																							\
 
@@ -250,8 +250,8 @@ void className::initType()																															\
 	typeIdVariable() = Node::registerNodeType(																								\
 		#className,																																		\
 		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
-		[](::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)	-> ::Model::Node* 				\
-			{ return new className(parent, store, partialLoadHint);}																		\
+		[](::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)	-> ::Model::Node* 				\
+			{ return new className(parent, store, loadPartially);}																		\
 	);																																						\
 																																							\
 	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
