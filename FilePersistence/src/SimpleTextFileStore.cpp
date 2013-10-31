@@ -206,14 +206,7 @@ Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name, 
 	{
 		modelDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
 		if ( !modelDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir_.path());
-
-		QFile file(modelDir_.absoluteFilePath(name));
-		if ( !file.open(QIODevice::ReadOnly) )
-			throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
-
-		QTextStream ts(&file);
-		ts.setCodec("UTF-8");
-		persisted_ = GenericNode::load(ts);
+		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name));
 
 		Q_ASSERT(persisted_->name() == "model");
 		Q_ASSERT(persisted_->type() == "model");
@@ -261,13 +254,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 {
 	GenericNode* oldPersisted = persisted_;
 
-	QFile file(modelDir_.absoluteFilePath(name));
-	if ( !file.open(QIODevice::ReadOnly) )
-		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
-
-	QTextStream ts(&file);
-	ts.setCodec("UTF-8");
-	persisted_ = GenericNode::load(ts);
+	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name));
 
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
@@ -360,13 +347,7 @@ Model::PersistedNode* SimpleTextFileStore::loadCompleteNodeSubtree(const QString
 		if (persistenceUnitId > 0) filename = QString::number(persistenceUnitId);
 		else filename = modelName;
 
-		QFile file(modelDir_.absoluteFilePath(filename));
-		if ( !file.open(QIODevice::ReadOnly) )
-			throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
-
-		QTextStream ts(&file);
-		ts.setCodec("UTF-8");
-		persisted_ = GenericNode::load(ts);
+		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(filename));
 		auto top = persisted_;
 
 		// Search through the content in order to find the requested node id.
@@ -455,14 +436,7 @@ Model::PersistedNode* SimpleTextFileStore::loadPersistentUnitData( )
 	checkIsWorking();
 
 	GenericNode* previousPersisted = persisted_;
-
-	QFile file(modelDir_.absoluteFilePath(QString::number(persisted_->id())));
-	if ( !file.open(QIODevice::ReadOnly) )
-		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
-
-	QTextStream ts(&file);
-	ts.setCodec("UTF-8");
-	persisted_ = GenericNode::load(ts);
+	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(QString::number(persisted_->id())));
 
 	Model::PersistedNode* result = loadNodeData();
 	result->setNewPersistenceUnit(true);

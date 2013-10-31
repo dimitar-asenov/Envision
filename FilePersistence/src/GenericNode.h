@@ -40,6 +40,9 @@ class FILEPERSISTENCE_API GenericNode {
 		void setName(const QString& name);
 		void setType(const QString& type);
 
+		void setName(const QStringRef& name);
+		void setType(const QStringRef& type);
+
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
@@ -68,7 +71,7 @@ class FILEPERSISTENCE_API GenericNode {
 		NodeIdMap::NodeIdType id() const;
 
 		void save(QTextStream& stream, int tabLevel = 0);
-		static GenericNode* load(QTextStream& stream);
+		static GenericNode* load(const QString& filename);
 
 	private:
 		QString name_;
@@ -82,14 +85,21 @@ class FILEPERSISTENCE_API GenericNode {
 		QList<GenericNode*> children_;
 
 		void setValue(ValueType type, const QString& value);
+		void setValue(ValueType type, const QStringRef& value);
 
-		static int trimFront(QString& line);
-		static QString unEscape(const QString& line);
+		static int countTabs(const QString& line);
+		static QString unEscape(const QString& line, int startAt);
 		static QString escape(const QString& line);
+
+		static int findNextNonWhiteSpace(const QString& line, int startPos, int before);
+		static int findNextWhiteSpace(const QString& line, int startPos, int before);
+		static int refToId(const QStringRef& ref, bool& ok);
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
+inline void GenericNode::setName(const QStringRef& name) { Q_ASSERT(name_.isEmpty()); name_.append(name); }
+inline void GenericNode::setType(const QStringRef& type) { Q_ASSERT(type_.isEmpty()); type_.append(type); }
 inline void GenericNode::setId(NodeIdMap::NodeIdType id) { id_ = id; }
 
 inline const QString& GenericNode::name() const { return name_; }
@@ -102,5 +112,26 @@ inline const QList<GenericNode*>& GenericNode::children() const { return childre
 inline bool GenericNode::hasStringValue() const { return valueType_ == STRING_VALUE; }
 inline bool GenericNode::hasIntValue() const { return valueType_ == INT_VALUE; }
 inline bool GenericNode::hasDoubleValue() const { return valueType_ == DOUBLE_VALUE; }
+
+inline void GenericNode::setValue(ValueType type, const QString& value)
+{
+	Q_ASSERT(children_.isEmpty());
+	Q_ASSERT(valueType_ == NO_VALUE);
+	Q_ASSERT(type != NO_VALUE);
+
+	valueType_ = type;
+	value_ = value;
+}
+
+inline void GenericNode::setValue(ValueType type, const QStringRef& value)
+{
+	Q_ASSERT(children_.isEmpty());
+	Q_ASSERT(valueType_ == NO_VALUE);
+	Q_ASSERT(type != NO_VALUE);
+
+	valueType_ = type;
+	Q_ASSERT(value_.isEmpty());
+	value_.append(value);
+}
 
 } /* namespace FilePersistence */

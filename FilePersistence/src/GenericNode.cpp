@@ -111,16 +111,6 @@ void GenericNode::setValue(double value)
 	value_ = QString::number(value, 'f', MAX_DOUBLE_PRECISION);
 }
 
-void GenericNode::setValue(ValueType type, const QString& value)
-{
-	Q_ASSERT(children_.isEmpty());
-	Q_ASSERT(valueType_ == NO_VALUE);
-	Q_ASSERT(type != NO_VALUE);
-
-	valueType_ = type;
-	value_ = value;
-}
-
 GenericNode* GenericNode::addChild(GenericNode* child)
 {
 	Q_ASSERT(value_.isEmpty());
@@ -141,7 +131,7 @@ GenericNode* GenericNode::find(NodeIdMap::NodeIdType id)
 	return nullptr;
 }
 
-inline int GenericNode::trimFront(QString& line)
+inline int GenericNode::countTabs(const QString& line)
 {
 	int numTabs = 0;
 
@@ -150,8 +140,6 @@ inline int GenericNode::trimFront(QString& line)
 		if (c == '\t') ++numTabs;
 		else break;
 	}
-
-	line.remove(0,numTabs);
 
 	return numTabs;
 }
@@ -174,8 +162,15 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 		c->save(stream, tabLevel+1);
 }
 
-GenericNode* GenericNode::load(QTextStream& stream)
+GenericNode* GenericNode::load(const QString& filename)
 {
+	QFile file(filename);
+	if ( !file.open(QIODevice::ReadOnly) )
+		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
+
+	QTextStream stream(&file);
+	stream.setCodec("UTF-8");
+
 	Q_ASSERT(!stream.atEnd());
 
 	QList<GenericNode*> nodeStack;
@@ -187,7 +182,7 @@ GenericNode* GenericNode::load(QTextStream& stream)
 		QString line = stream.readLine();
 		if (line.isEmpty()) continue;
 
-		auto tabLevel = trimFront(line);
+		auto tabLevel = countTabs(line);
 
 		if (top == nullptr)
 		{
@@ -223,59 +218,86 @@ GenericNode* GenericNode::load(QTextStream& stream)
 
 		// The top of the stack should now contain the element that we must add now
 
-		int dotIndex = line.indexOf('.'); // There may or may not be a dot, depending on whether there is a value.
+		int dotIndex = line.indexOf('.', tabLevel); // There may not be a dot, in case there is no value.
+		if (dotIndex < 0) dotIndex = line.length();
 
-		QString header = line.left(dotIndex).simplified();
+		int startIndex = findNextNonWhiteSpace(line, tabLevel, dotIndex);
+		Q_ASSERT(startIndex >= 0);
+		int endIndex = findNextWhiteSpace(line, startIndex + 1, dotIndex);
+		Q_ASSERT(endIndex > 0);
+		nodeStack.last()->setName( line.midRef(startIndex, endIndex-startIndex) );
 
-		int headerStartIndex = 0;
-		int headerEndIndex = header.indexOf(' ', headerStartIndex);
-		nodeStack.last()->setName( header.mid(headerStartIndex, headerEndIndex-headerStartIndex) );
+		startIndex = findNextNonWhiteSpace(line, endIndex + 1, dotIndex);
+		Q_ASSERT(startIndex > 0);
+		endIndex = findNextWhiteSpace(line, startIndex + 1, dotIndex);
+		nodeStack.last()->setType( line.midRef(startIndex,
+				endIndex >= 0 ? endIndex-startIndex :
+						(dotIndex < 0 ? -1 : dotIndex-startIndex)) );
 
-		headerStartIndex = headerEndIndex + 1;
-		headerEndIndex = header.indexOf(' ', headerStartIndex);
-		nodeStack.last()->setType( header.mid(headerStartIndex,
-				headerEndIndex >= 0 ? headerEndIndex-headerStartIndex : -1) );
-
-		while (headerEndIndex >= 0)
+		startIndex = findNextNonWhiteSpace(line, endIndex + 1, dotIndex);
+		while (startIndex > 0)
 		{
-			headerStartIndex = headerEndIndex + 1;
-			headerEndIndex = header.indexOf(' ', headerStartIndex);
-
-			QString headerPart = header.mid(headerStartIndex,
-					headerEndIndex >= 0 ? headerEndIndex-headerStartIndex : -1);
+			endIndex = findNextWhiteSpace(line, startIndex + 1, dotIndex);
+			auto headerPart = line.midRef(startIndex,
+					endIndex >= 0 ? endIndex-startIndex :
+							(dotIndex < 0 ? -1 : dotIndex-startIndex));
 
 			// Try to process this as an Id
 			bool isId = true;
-			NodeIdMap::NodeIdType id = headerPart.toInt(&isId);
+			NodeIdMap::NodeIdType id = refToId(headerPart, isId);
 
 			if ( isId ) nodeStack.last()->setId( id );
 			else
 				throw FilePersistenceException("Unknown node header element " + line);
+
+			if (endIndex < 0) break;
+			startIndex = findNextNonWhiteSpace(line, endIndex + 1, dotIndex);
 		}
 
 		if (dotIndex < 0 || line.length() == dotIndex) continue; // No value
 
-		line.remove(0, dotIndex + 1);
-		for (int i = 0; i<line.length(); ++i)
-		{
-			if (!line.at(i).isSpace())
-			{
-				if (i>0) line.remove(0, i);
-				break;
-			}
-		}
+		startIndex = findNextNonWhiteSpace(line, dotIndex+1, line.length());
+		if (startIndex == -1) continue;
+		QStringRef rest = line.midRef(startIndex);
 
-		if (line.isEmpty()) continue; // No value
-		if (line.startsWith(PREFIX_STRING))
-			nodeStack.last()->setValue(STRING_VALUE, unEscape(line.mid(PREFIX_STRING.size())));
-		else if (line.startsWith(PREFIX_INTEGER))
-			nodeStack.last()->setValue(INT_VALUE, line.mid(PREFIX_INTEGER.size()));
-		else if (line.startsWith(PREFIX_DOUBLE))
-			nodeStack.last()->setValue(DOUBLE_VALUE, line.mid(PREFIX_DOUBLE.size()));
+		if (rest.startsWith(PREFIX_STRING))
+			nodeStack.last()->setValue(STRING_VALUE, unEscape(line, startIndex + PREFIX_STRING.size()));
+		else if (rest.startsWith(PREFIX_INTEGER))
+			nodeStack.last()->setValue(INT_VALUE, line.midRef( startIndex + PREFIX_INTEGER.size()));
+		else if (rest.startsWith(PREFIX_DOUBLE))
+			nodeStack.last()->setValue(DOUBLE_VALUE, line.midRef( startIndex + PREFIX_DOUBLE.size()));
 		else throw FilePersistenceException("Unknown value prefix" + line);
 	}
 
 	return top;
+}
+
+int GenericNode::findNextNonWhiteSpace(const QString& line, int startPos, int before)
+{
+	// We assume that all, characters in line up to 'before' are ASCII
+	for(int i = startPos; i < line.length(); ++i)
+		if (i>= before) return -1;
+		else
+		{
+			auto c = line[i].cell();
+			if (c != ' ' && c != '\t') return i;
+		}
+
+	return -1;
+}
+
+int GenericNode::findNextWhiteSpace(const QString& line, int startPos, int before)
+{
+	// We assume that all, characters in line up to 'before' are ASCII
+	for(int i = startPos; i < line.length(); ++i)
+		if (i >= before) return -1;
+		else
+		{
+			auto c = line[i].cell();
+			if (c == ' ' || c == '\t') return i;
+		}
+
+	return -1;
 }
 
 QString GenericNode::escape(const QString& line)
@@ -288,12 +310,15 @@ QString GenericNode::escape(const QString& line)
 	return res;
 }
 
-QString GenericNode::unEscape(const QString& line)
+QString GenericNode::unEscape(const QString& line, int startAt)
 {
 	QString res;
+	res.reserve(line.length()-startAt);
+
 	bool escaped = false;
-	for(auto c : line)
+	for(int i = startAt; i<line.length(); ++i)
 	{
+		const QChar& c = line[i];
 		if (!escaped && c == '\\')
 		{
 			escaped = true;
@@ -327,5 +352,25 @@ QString GenericNode::unEscape(const QString& line)
 	return res;
 }
 
+int GenericNode::refToId(const QStringRef& ref, bool& ok)
+{
+	int id = 0;
+
+	int end = ref.position() + ref.size();
+	auto s = ref.string();
+	for(int i = ref.position(); i<end; ++i)
+	{
+		auto c = (*s)[i].cell();
+		if (c >= '0' && c<= '9') id = id*10 + (c - '0');
+		else
+		{
+			ok = false;
+			return 0;
+		}
+	}
+
+	ok = true;
+	return id;
+}
 
 } /* namespace FilePersistence */
