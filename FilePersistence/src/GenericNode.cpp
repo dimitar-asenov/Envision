@@ -131,13 +131,13 @@ GenericNode* GenericNode::find(NodeIdMap::NodeIdType id)
 	return nullptr;
 }
 
-inline int GenericNode::countTabs(const QString& line)
+inline int GenericNode::countTabs(char* data, int lineStart, int lineEnd)
 {
 	int numTabs = 0;
 
-	for(QChar c : line)
+	for(int i = lineStart; i<=lineEnd; ++i)
 	{
-		if (c == '\t') ++numTabs;
+		if (data[i] == '\t') ++numTabs;
 		else break;
 	}
 
@@ -168,21 +168,22 @@ GenericNode* GenericNode::load(const QString& filename)
 	if ( !file.open(QIODevice::ReadOnly) )
 		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
 
-	QTextStream stream(&file);
-	stream.setCodec("UTF-8");
+	Q_ASSERT(file.size() < std::numeric_limits<int>::max());
+	int totalFileSize = static_cast<int>(file.size());
 
-	Q_ASSERT(!stream.atEnd());
+	auto data = reinterpret_cast<char*>(file.map(0, totalFileSize));
+	Q_ASSERT(data);
 
 	QList<GenericNode*> nodeStack;
 	GenericNode* top = nullptr;
 	int previousTabLevel = std::numeric_limits<int>::max();
 
-	while ( !stream.atEnd() )
-	{
-		QString line = stream.readLine();
-		if (line.isEmpty()) continue;
+	int start = 0;
+	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
 
-		auto tabLevel = countTabs(line);
+	while ( nextNonEmptyLine(data, totalFileSize, start, lineEnd) )
+	{
+		auto tabLevel = countTabs(data, start, lineEnd);
 
 		if (top == nullptr)
 		{
@@ -218,86 +219,82 @@ GenericNode* GenericNode::load(const QString& filename)
 
 		// The top of the stack should now contain the element that we must add now
 
-		int dotIndex = line.indexOf('.', tabLevel); // There may not be a dot, in case there is no value.
-		if (dotIndex < 0) dotIndex = line.length();
 
-		int startIndex = findNextNonWhiteSpace(line, tabLevel, dotIndex);
-		Q_ASSERT(startIndex >= 0);
-		int endIndex = findNextWhiteSpace(line, startIndex + 1, dotIndex);
-		Q_ASSERT(endIndex > 0);
-		nodeStack.last()->setName( line.midRef(startIndex, endIndex-startIndex) );
+		// Handle Headers
+		start+=tabLevel;
+		int headerPartEnd = -1;
 
-		startIndex = findNextNonWhiteSpace(line, endIndex + 1, dotIndex);
-		Q_ASSERT(startIndex > 0);
-		endIndex = findNextWhiteSpace(line, startIndex + 1, dotIndex);
-		nodeStack.last()->setType( line.midRef(startIndex,
-				endIndex >= 0 ? endIndex-startIndex :
-						(dotIndex < 0 ? -1 : dotIndex-startIndex)) );
+		// Name
+		auto moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+		Q_ASSERT(moreHeaderParts);
+		nodeStack.last()->setName( QString::fromLatin1(data + start, headerPartEnd-start+1) );
 
-		startIndex = findNextNonWhiteSpace(line, endIndex + 1, dotIndex);
-		while (startIndex > 0)
+		// Type
+		start = headerPartEnd+1;
+		moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+		Q_ASSERT(moreHeaderParts);
+		nodeStack.last()->setType( QString::fromLatin1(data + start, headerPartEnd-start+1) );
+
+		// Id (optional)
+		start = headerPartEnd+1;
+		moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+		if(moreHeaderParts)
 		{
-			endIndex = findNextWhiteSpace(line, startIndex + 1, dotIndex);
-			auto headerPart = line.midRef(startIndex,
-					endIndex >= 0 ? endIndex-startIndex :
-							(dotIndex < 0 ? -1 : dotIndex-startIndex));
-
-			// Try to process this as an Id
 			bool isId = true;
-			NodeIdMap::NodeIdType id = refToId(headerPart, isId);
+			NodeIdMap::NodeIdType id = toId(data, start, headerPartEnd, isId);
 
 			if ( isId ) nodeStack.last()->setId( id );
-			else
-				throw FilePersistenceException("Unknown node header element " + line);
-
-			if (endIndex < 0) break;
-			startIndex = findNextNonWhiteSpace(line, endIndex + 1, dotIndex);
+			else throw FilePersistenceException("Unknown node header element "
+					+ QString::fromAscii(data+start,headerPartEnd-start+1));
 		}
 
-		if (dotIndex < 0 || line.length() == dotIndex) continue; // No value
+		if (moreHeaderParts)
+		{
+			start = headerPartEnd+1;
+			moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+		}
 
-		startIndex = findNextNonWhiteSpace(line, dotIndex+1, line.length());
-		if (startIndex == -1) continue;
-		QStringRef rest = line.midRef(startIndex);
+		Q_ASSERT(!moreHeaderParts);
 
-		if (rest.startsWith(PREFIX_STRING))
-			nodeStack.last()->setValue(STRING_VALUE, unEscape(line, startIndex + PREFIX_STRING.size()));
-		else if (rest.startsWith(PREFIX_INTEGER))
-			nodeStack.last()->setValue(INT_VALUE, line.midRef( startIndex + PREFIX_INTEGER.size()));
-		else if (rest.startsWith(PREFIX_DOUBLE))
-			nodeStack.last()->setValue(DOUBLE_VALUE, line.midRef( startIndex + PREFIX_DOUBLE.size()));
-		else throw FilePersistenceException("Unknown value prefix" + line);
+
+		// Handle Value
+		if (start > lineEnd) continue;
+		Q_ASSERT(data[start] == '.');
+
+		// Ignore white spaces
+		++start;
+		while (start <= lineEnd && (data[start] == ' ' || data[start] == '\t')) ++start;
+		if (start > lineEnd) continue; // no value
+
+		if (PREFIX_STRING == QString::fromLatin1(data + start, PREFIX_STRING.length()))
+		{
+			start += PREFIX_STRING.length();
+			auto s = rawStringToQString(data, start, lineEnd);
+
+			if (s.isEmpty() && start <= lineEnd)
+			{
+				// There were some characters, but the string is empty.
+				// See if this was the UTF-8 BOM, which Qt ignores in strings, but it might be relevant for characters
+				if(lineEnd-start == 2 && data[start] == (char)0xEF
+						&& data[start+1] == (char)0xBB && data[start+2] == (char)0xBF)
+				s = QChar{QChar::ByteOrderMark};
+				else
+					throw FilePersistenceException("Invalid string sequence when reading node id " + nodeStack.last()->id());
+			}
+
+			nodeStack.last()->setValue(STRING_VALUE, s);
+		}
+		else if (PREFIX_INTEGER == QString::fromLatin1(data + start, PREFIX_INTEGER.length()))
+			nodeStack.last()->setValue(INT_VALUE, QString::fromLatin1(data+start+PREFIX_INTEGER.length(),
+					lineEnd - start - PREFIX_INTEGER.length() + 1 ));
+		else if (PREFIX_DOUBLE == QString::fromLatin1(data + start, PREFIX_DOUBLE.length()))
+			nodeStack.last()->setValue(DOUBLE_VALUE, QString::fromLatin1(data+start+PREFIX_DOUBLE.length(),
+					lineEnd - start - PREFIX_DOUBLE.length() + 1 ));
+		else throw FilePersistenceException("Unknown value prefix" +
+				QString::fromUtf8(data+start,lineEnd-start+1));
 	}
 
 	return top;
-}
-
-int GenericNode::findNextNonWhiteSpace(const QString& line, int startPos, int before)
-{
-	// We assume that all, characters in line up to 'before' are ASCII
-	for(int i = startPos; i < line.length(); ++i)
-		if (i>= before) return -1;
-		else
-		{
-			auto c = line[i].cell();
-			if (c != ' ' && c != '\t') return i;
-		}
-
-	return -1;
-}
-
-int GenericNode::findNextWhiteSpace(const QString& line, int startPos, int before)
-{
-	// We assume that all, characters in line up to 'before' are ASCII
-	for(int i = startPos; i < line.length(); ++i)
-		if (i >= before) return -1;
-		else
-		{
-			auto c = line[i].cell();
-			if (c == ' ' || c == '\t') return i;
-		}
-
-	return -1;
 }
 
 QString GenericNode::escape(const QString& line)
@@ -310,15 +307,17 @@ QString GenericNode::escape(const QString& line)
 	return res;
 }
 
-QString GenericNode::unEscape(const QString& line, int startAt)
+QString GenericNode::rawStringToQString(char* data, int start, int endInclusive)
 {
+	// First get the escaped string
+	QString utf8Escaped = QString::fromUtf8(data + start, endInclusive - start + 1);
 	QString res;
-	res.reserve(line.length()-startAt);
+	res.reserve(utf8Escaped.length());
 
+	// The unescape it
 	bool escaped = false;
-	for(int i = startAt; i<line.length(); ++i)
+	for(auto c : utf8Escaped)
 	{
-		const QChar& c = line[i];
 		if (!escaped && c == '\\')
 		{
 			escaped = true;
@@ -352,15 +351,13 @@ QString GenericNode::unEscape(const QString& line, int startAt)
 	return res;
 }
 
-int GenericNode::refToId(const QStringRef& ref, bool& ok)
+int GenericNode::toId(char* data, int start, int endInclusive, bool& ok)
 {
 	int id = 0;
 
-	int end = ref.position() + ref.size();
-	auto s = ref.string();
-	for(int i = ref.position(); i<end; ++i)
+	for(int i = start; i<=endInclusive; ++i)
 	{
-		auto c = (*s)[i].cell();
+		auto c = data[i];
 		if (c >= '0' && c<= '9') id = id*10 + (c - '0');
 		else
 		{
@@ -371,6 +368,83 @@ int GenericNode::refToId(const QStringRef& ref, bool& ok)
 
 	ok = true;
 	return id;
+}
+
+bool GenericNode::nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd)
+{
+	lineStart = lineEnd + 1;
+
+	while (lineStart < dataSize)
+	{
+		auto c = data[lineStart];
+		Q_ASSERT((c & (char)0x80) == 0); // Make sure that this character is an ASCII one and not some UTF-8 codepoint
+		Q_ASSERT(c != 0);
+		if (c =='\n' || c== '\r') ++lineStart;
+		else break;
+	}
+
+	if (lineStart >= dataSize) return false;
+
+	// LineEnd is the last character that belongs to the line. It does not point to the end of line character.
+	lineEnd = lineStart + 1;
+
+	bool onlyWhiteSpace = true;
+
+	while (lineEnd < dataSize)
+	{
+		auto c = data[lineEnd];
+
+		int utf8Bytes = 1;
+		if ((c & 0x80) == 0) utf8Bytes = 1;
+		else if ((c & 0xE0) == 0xC0) utf8Bytes = 2;
+		else if ((c & 0xF0) == 0xE0) utf8Bytes = 3;
+		else if ((c & 0xF8) == 0xF0) utf8Bytes = 4;
+		else Q_ASSERT(false);
+
+		if (utf8Bytes > 1)
+		{
+			lineEnd += utf8Bytes;
+			onlyWhiteSpace = false;
+		}
+		else
+		{
+			if (c == '\n' || c == '\r') break;
+			else
+			{
+				++lineEnd;
+				if (c != ' ' && c != '\t') onlyWhiteSpace = false;
+			}
+		}
+	}
+
+	--lineEnd;
+	if (lineEnd >= dataSize) lineEnd = dataSize - 1; // To compensate for possible unicode issues
+
+	if (lineEnd >= lineStart)
+	{
+		if (onlyWhiteSpace) return nextNonEmptyLine(data, dataSize, lineStart, lineEnd);
+		return true;
+	}
+	else return false;
+}
+
+int GenericNode::indexOf(const char c, char* data, int start, int endInclusive)
+{
+	for(int i = start; i<=endInclusive; ++i) if(data[i]==c) return i;
+	return -1;
+}
+
+bool GenericNode::nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd)
+{
+	while (start <= lineEnd && (data[start] == ' ' || data[start] == '\t')) ++start;
+	if (start > lineEnd || data[start] == '.') return false;
+
+	endInclusive = start + 1;
+	while (endInclusive <= lineEnd && data[endInclusive] != ' ' && data[endInclusive] != '\t'
+			&& data[endInclusive] != '.') ++endInclusive;
+
+	--endInclusive;
+	return true;
 }
 
 } /* namespace FilePersistence */

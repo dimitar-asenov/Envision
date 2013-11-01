@@ -40,9 +40,6 @@ class FILEPERSISTENCE_API GenericNode {
 		void setName(const QString& name);
 		void setType(const QString& type);
 
-		void setName(const QStringRef& name);
-		void setType(const QStringRef& type);
-
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
@@ -85,21 +82,20 @@ class FILEPERSISTENCE_API GenericNode {
 		QList<GenericNode*> children_;
 
 		void setValue(ValueType type, const QString& value);
-		void setValue(ValueType type, const QStringRef& value);
 
-		static int countTabs(const QString& line);
-		static QString unEscape(const QString& line, int startAt);
+		static int countTabs(char* data, int lineStart, int lineEnd);
+		static QString rawStringToQString(char* data, int startAt, int endInclusive);
 		static QString escape(const QString& line);
 
-		static int findNextNonWhiteSpace(const QString& line, int startPos, int before);
-		static int findNextWhiteSpace(const QString& line, int startPos, int before);
-		static int refToId(const QStringRef& ref, bool& ok);
+		static int toId(char* data, int start, int endInclusive, bool& ok);
+
+		static bool nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd);
+		static int indexOf(const char c, char* data, int start, int endInclusive);
+		static bool nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd);
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
-inline void GenericNode::setName(const QStringRef& name) { Q_ASSERT(name_.isEmpty()); name_.append(name); }
-inline void GenericNode::setType(const QStringRef& type) { Q_ASSERT(type_.isEmpty()); type_.append(type); }
 inline void GenericNode::setId(NodeIdMap::NodeIdType id) { id_ = id; }
 
 inline const QString& GenericNode::name() const { return name_; }
@@ -121,17 +117,6 @@ inline void GenericNode::setValue(ValueType type, const QString& value)
 
 	valueType_ = type;
 	value_ = value;
-}
-
-inline void GenericNode::setValue(ValueType type, const QStringRef& value)
-{
-	Q_ASSERT(children_.isEmpty());
-	Q_ASSERT(valueType_ == NO_VALUE);
-	Q_ASSERT(type != NO_VALUE);
-
-	valueType_ = type;
-	Q_ASSERT(value_.isEmpty());
-	value_.append(value);
 }
 
 } /* namespace FilePersistence */
