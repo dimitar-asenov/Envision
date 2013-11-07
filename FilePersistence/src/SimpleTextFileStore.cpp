@@ -26,6 +26,7 @@
 
 #include "SimpleTextFileStore.h"
 #include "FilePersistenceException.h"
+#include "GenericNodeAllocator.h"
 
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Node.h"
@@ -45,7 +46,7 @@ SimpleTextFileStore::SimpleTextFileStore() :
 
 SimpleTextFileStore::~SimpleTextFileStore()
 {
-	SAFE_DELETE(persisted_);
+	Q_ASSERT(persisted_ == nullptr);
 }
 
 void SimpleTextFileStore::setBaseFolder(const QString& path)
@@ -206,7 +207,8 @@ Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name, 
 	{
 		modelDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
 		if ( !modelDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir_.path());
-		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name), true);
+		allocator_ = new GenericNodeAllocator();
+		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name), true, allocator_);
 
 		Q_ASSERT(persisted_->name() == "model");
 		Q_ASSERT(persisted_->type() == "model");
@@ -233,11 +235,15 @@ Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name, 
 			setReferenceTargetr(p.first, target);
 		}
 
-		SAFE_DELETE(persisted_);
+		allocator_->endThisLoad();
+		persisted_ = nullptr;
+		SAFE_DELETE(allocator_);
 	}
 	catch (Model::ModelException& e)
 	{
-		SAFE_DELETE(persisted_);
+		allocator_->endThisLoad();
+		persisted_ = nullptr;
+		SAFE_DELETE(allocator_);
 		working_ = false;
 		storeAccess_.unlock();
 		throw;
@@ -254,11 +260,11 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 {
 	GenericNode* oldPersisted = persisted_;
 
-	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name), true);
+	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name), true, allocator_);
 
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
-	SAFE_DELETE(persisted_);
+	allocator_->endThisLoad();
 	persisted_ = oldPersisted;
 
 	return ln;
@@ -347,8 +353,8 @@ Model::PersistedNode* SimpleTextFileStore::loadCompleteNodeSubtree(const QString
 		if (persistenceUnitId > 0) filename = QString::number(persistenceUnitId);
 		else filename = modelName;
 
-		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(filename), true);
-		auto top = persisted_;
+		allocator_= new GenericNodeAllocator();
+		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(filename), true, allocator_);
 
 		// Search through the content in order to find the requested node id.
 		persisted_ = persisted_->find(nodeId);
@@ -360,11 +366,15 @@ Model::PersistedNode* SimpleTextFileStore::loadCompleteNodeSubtree(const QString
 		// Load the node and return it.
 		result = loadNodeData();
 
-		SAFE_DELETE(top);
+		allocator_->endThisLoad();
 		persisted_ = nullptr;
+		SAFE_DELETE(allocator_);
 	}
 	catch (Model::ModelException& e)
 	{
+		allocator_->endThisLoad();
+		persisted_ = nullptr;
+		SAFE_DELETE(allocator_);
 		working_ = false;
 		storeAccess_.unlock();
 		throw;
@@ -436,12 +446,12 @@ Model::PersistedNode* SimpleTextFileStore::loadPersistentUnitData( )
 	checkIsWorking();
 
 	GenericNode* previousPersisted = persisted_;
-	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(QString::number(persisted_->id())), true);
+	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(QString::number(persisted_->id())), true, allocator_);
 
 	Model::PersistedNode* result = loadNodeData();
 	result->setNewPersistenceUnit(true);
 
-	SAFE_DELETE(persisted_);
+	allocator_->endThisLoad();
 	persisted_ = previousPersisted;
 
 	return result;

@@ -32,9 +32,12 @@
 
 namespace FilePersistence {
 
-class FILEPERSISTENCE_API GenericNode {
-	public:
+class GenericNodeAllocator;
 
+class FILEPERSISTENCE_API GenericNode {
+	friend class GenericNodeAllocator;
+
+	public:
 		GenericNode();
 		~GenericNode();
 
@@ -68,9 +71,14 @@ class FILEPERSISTENCE_API GenericNode {
 		NodeIdMap::NodeIdType id() const;
 
 		void save(QTextStream& stream, int tabLevel = 0);
-		static GenericNode* load(const QString& filename, bool lazy);
+		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
 
 	private:
+		// //////////////////////////////////////////////////////////////////////////////////////////
+		// !!!
+		// Make sure to reset all the members in the resetForLoading() method
+		// !!!
+
 		QString name_;
 		QString type_;
 		QString value_;
@@ -84,10 +92,9 @@ class FILEPERSISTENCE_API GenericNode {
 		char* data_{};
 		int lineStartInData_{};
 		int lineEndInData_{};
-		GenericNode* allNodes_{};
+		// //////////////////////////////////////////////////////////////////////////////////////////
 
-		void setLoadLine(char* data, int lineStart, int lineEndInclusive);
-		void makeRoot(GenericNode* allNodes);
+		void resetForLoading(char* data, int lineStart, int lineEndInclusive);
 		void setValue(ValueType type, const QString& value);
 		void ensureDataRead() const;
 
@@ -102,7 +109,6 @@ class FILEPERSISTENCE_API GenericNode {
 		static bool nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd);
 		static int indexOf(const char c, char* data, int start, int endInclusive);
 		static bool nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd);
-		static int approximateNodesUpperBound(char* data, int totalSize);
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
@@ -121,11 +127,10 @@ inline bool GenericNode::hasDoubleValue() const { ensureDataRead(); return value
 
 inline void GenericNode::ensureDataRead() const
 {
-	if (data_ && !allNodes_) // Don't do anything if this is the root node
+	if (data_)
 	{
 		parseData(const_cast<GenericNode*>(this), data_, lineStartInData_, lineEndInData_);
-
-		// Don't delete this, just mark it unused. The root will delete it
+		// Don't delete this, just mark it unused. The allocator will delete it.
 		const_cast<GenericNode*>(this)->data_ = nullptr;
 	}
 }

@@ -98,6 +98,7 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		void checkIsWorking() const;
 
+		GenericNodeAllocator* allocator_{};
 		GenericNode* persisted_{};
 		NodeIdMap ids_;
 

@@ -5,7 +5,8 @@ win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
 QT += xml
-HEADERS += src/SimpleTextFileStore.h \
+HEADERS += src/GenericNodeAllocator.h \
+    src/SimpleTextFileStore.h \
     src/GenericNode.h \
     src/FilePersistenceException.h \
     src/FileStore.h \
@@ -15,7 +16,8 @@ HEADERS += src/SimpleTextFileStore.h \
     src/filepersistence_api.h \
     src/precompiled.h \
     src/filepersistence.h
-SOURCES += src/SimpleTextFileStore.cpp \
+SOURCES += src/GenericNodeAllocator.cpp \
+    src/SimpleTextFileStore.cpp \
     src/GenericNode.cpp \
     src/NodeIdMap.cpp \
     test/TypedListTests.cpp \

@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "GenericNode.h"
+#include "GenericNodeAllocator.h"
 
 namespace FilePersistence {
 
@@ -38,20 +39,10 @@ static const QString PREFIX_INTEGER = QString("I_");
 static const QString PREFIX_DOUBLE = QString("D_");
 
 GenericNode::GenericNode(){}
-
 GenericNode::~GenericNode()
 {
-	//for(auto c : children_) SAFE_DELETE(c);
-
-	if (allNodes_) // This is the root node
-	{
-		Q_ASSERT(data_);
-		delete [] data_;
-		data_ = nullptr;
-
-		delete [] allNodes_; // deletes all children
-		allNodes_ = nullptr;
-	}
+	if (lineStartInData_ == 0 && lineEndInData_ == 0)
+		for(auto c : children_) SAFE_DELETE(c);
 }
 
 const QString& GenericNode::valueAsString() const
@@ -183,7 +174,7 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 		c->save(stream, tabLevel+1);
 }
 
-GenericNode* GenericNode::load(const QString& filename, bool lazy)
+GenericNode* GenericNode::load(const QString& filename, bool lazy, GenericNodeAllocator* allocator)
 {
 	QFile file(filename);
 	if ( !file.open(QIODevice::ReadOnly) )
@@ -203,12 +194,6 @@ GenericNode* GenericNode::load(const QString& filename, bool lazy)
 	GenericNode* top = nullptr;
 	int previousTabLevel = std::numeric_limits<int>::max();
 
-	// Pre allocate all nodes to improve make memory allocation times
-	int upperBoundNodes = approximateNodesUpperBound(data, totalFileSize);
-	Q_ASSERT(upperBoundNodes >= 0);
-	auto allNodes = new GenericNode[upperBoundNodes];
-	int nextNodeToAllocate = 0;
-
 	int start = 0;
 	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
 
@@ -219,10 +204,7 @@ GenericNode* GenericNode::load(const QString& filename, bool lazy)
 		if (top == nullptr)
 		{
 			// Top can't be in the allNodes array since it must delete that array in its own destructor.
-			top = new GenericNode();
-			top->setLoadLine(data, start, lineEnd);
-			top->makeRoot(allNodes);
-
+			top = allocator->newRoot(data, start, lineEnd);
 			nodeStack.append(top);
 			previousTabLevel = tabLevel;
 		}
@@ -230,9 +212,7 @@ GenericNode* GenericNode::load(const QString& filename, bool lazy)
 		{
 			Q_ASSERT(tabLevel <= previousTabLevel + 1);
 
-			Q_ASSERT(nextNodeToAllocate < upperBoundNodes);
-			GenericNode* child = &allNodes[nextNodeToAllocate++];
-			child->setLoadLine(data, start, lineEnd);
+			GenericNode* child = allocator->newChild(start, lineEnd);
 
 			if (tabLevel == previousTabLevel + 1)
 			{
@@ -259,12 +239,6 @@ GenericNode* GenericNode::load(const QString& filename, bool lazy)
 	}
 
 	return top;
-}
-
-void GenericNode::makeRoot(GenericNode* allNodes)
-{
-	allNodes_ = allNodes;
-	parseData(this, data_, lineStartInData_, lineEndInData_);
 }
 
 void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEnd)
@@ -495,36 +469,7 @@ bool GenericNode::nextHeaderPart(char* data, int& start, int&endInclusive, int l
 	return true;
 }
 
-int GenericNode::approximateNodesUpperBound(char* data, int totalSize)
-{
-	int upperBound = 0;
-	bool inNewLineCharSequence = true;
-
-	for (int i = 0; i < totalSize; ++i)
-	{
-		auto c = data[i];
-
-		if (inNewLineCharSequence)
-		{
-			if  (c != '\n' && c != '\r')
-			{
-				// We found a node
-				++upperBound;
-				inNewLineCharSequence = false;
-			}
-		}
-		else
-		{
-			if (c =='\n' || c== '\r')
-				// A new line just started
-				inNewLineCharSequence = true;
-		}
-	}
-
-	return upperBound;
-}
-
-void GenericNode::setLoadLine(char* data, int lineStart, int lineEndInclusive)
+void GenericNode::resetForLoading(char* data, int lineStart, int lineEndInclusive)
 {
 	Q_ASSERT(lineStart >= 0);
 	Q_ASSERT(lineEndInclusive >= lineStart);
@@ -532,6 +477,13 @@ void GenericNode::setLoadLine(char* data, int lineStart, int lineEndInclusive)
 	data_ = data;
 	lineStartInData_ = lineStart;
 	lineEndInData_ = lineEndInclusive;
+
+	name_.clear();
+	type_.clear();
+	value_.clear();
+	valueType_ = NO_VALUE;
+	id_ = -1;
+	children_.clear(); // No need to delete these
 }
 
 } /* namespace FilePersistence */
