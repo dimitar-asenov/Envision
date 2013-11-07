@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "filepersistence_api.h"
-#include "FilePersistenceException.h"
-#include "NodeIdMap.h"
+#include "../filepersistence_api.h"
+#include "../FilePersistenceException.h"
+#include "../NodeIdMap.h"
 
 namespace FilePersistence {
 

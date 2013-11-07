@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "filepersistence_api.h"
+#include "../filepersistence_api.h"
 #include "GenericNode.h"
-#include "NodeIdMap.h"
+#include "../NodeIdMap.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 

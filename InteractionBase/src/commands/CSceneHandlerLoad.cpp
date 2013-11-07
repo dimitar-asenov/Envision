@@ -28,7 +28,7 @@
 
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/SimpleTextFileStore.h"
+#include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "ModelBase/src/model/Model.h"
 
 using namespace Visualization;

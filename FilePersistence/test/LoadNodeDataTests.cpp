@@ -26,7 +26,7 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
-#include "SimpleTextFileStore.h"
+#include "simple/SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "ModelBase/src/persistence/PersistedNode.h"

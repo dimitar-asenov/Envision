@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "SimpleTextFileStore.h"
-#include "FilePersistenceException.h"
+#include "../FilePersistenceException.h"
 #include "GenericNodeAllocator.h"
 
 #include "ModelBase/src/model/Model.h"
