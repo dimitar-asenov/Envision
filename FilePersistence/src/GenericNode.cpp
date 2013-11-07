@@ -37,25 +37,33 @@ static const QString PREFIX_STRING = QString("S_");
 static const QString PREFIX_INTEGER = QString("I_");
 static const QString PREFIX_DOUBLE = QString("D_");
 
-GenericNode::GenericNode()
-{
-	// TODO Auto-generated constructor stub
-
-}
+GenericNode::GenericNode(){}
 
 GenericNode::~GenericNode()
 {
-	for(auto c : children_) SAFE_DELETE(c);
+	//for(auto c : children_) SAFE_DELETE(c);
+
+	if (allNodes_) // This is the root node
+	{
+		Q_ASSERT(data_);
+		delete [] data_;
+		data_ = nullptr;
+
+		delete [] allNodes_; // deletes all children
+		allNodes_ = nullptr;
+	}
 }
 
 const QString& GenericNode::valueAsString() const
 {
+	ensureDataRead();
 	Q_ASSERT(valueType_ == STRING_VALUE);
 	return value_;
 }
 
 long GenericNode::valueAsLong() const
 {
+	ensureDataRead();
 	Q_ASSERT(valueType_ == INT_VALUE);
 	bool ok = true;
 
@@ -67,6 +75,7 @@ long GenericNode::valueAsLong() const
 
 double GenericNode::valueAsDouble() const
 {
+	ensureDataRead();
 	Q_ASSERT(valueType_ == DOUBLE_VALUE);
 	bool ok = true;
 
@@ -78,6 +87,7 @@ double GenericNode::valueAsDouble() const
 
 GenericNode* GenericNode::child(const QString& name)
 {
+	ensureDataRead();
 	for(auto c : children_)
 		if (c->name() == name) return c;
 
@@ -111,6 +121,16 @@ void GenericNode::setValue(double value)
 	value_ = QString::number(value, 'f', MAX_DOUBLE_PRECISION);
 }
 
+void GenericNode::setValue(ValueType type, const QString& value)
+{
+	Q_ASSERT(children_.isEmpty());
+	Q_ASSERT(valueType_ == NO_VALUE);
+	Q_ASSERT(type != NO_VALUE);
+
+	valueType_ = type;
+	value_ = value;
+}
+
 GenericNode* GenericNode::addChild(GenericNode* child)
 {
 	Q_ASSERT(value_.isEmpty());
@@ -124,6 +144,7 @@ GenericNode* GenericNode::addChild(GenericNode* child)
 
 GenericNode* GenericNode::find(NodeIdMap::NodeIdType id)
 {
+	ensureDataRead();
 	if (id_ == id) return this;
 	for(auto c : children_)
 		if (auto found = c->find(id)) return found;
@@ -162,7 +183,7 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 		c->save(stream, tabLevel+1);
 }
 
-GenericNode* GenericNode::load(const QString& filename)
+GenericNode* GenericNode::load(const QString& filename, bool lazy)
 {
 	QFile file(filename);
 	if ( !file.open(QIODevice::ReadOnly) )
@@ -171,12 +192,22 @@ GenericNode* GenericNode::load(const QString& filename)
 	Q_ASSERT(file.size() < std::numeric_limits<int>::max());
 	int totalFileSize = static_cast<int>(file.size());
 
-	auto data = reinterpret_cast<char*>(file.map(0, totalFileSize));
-	Q_ASSERT(data);
+	auto mapped = reinterpret_cast<char*>(file.map(0, totalFileSize));
+	Q_ASSERT(mapped);
+
+	// We need to make a copy since the memory will be unmapped after the file object gets out of scope.
+	auto data = new char[totalFileSize];
+	memcpy(data,mapped, totalFileSize);
 
 	QList<GenericNode*> nodeStack;
 	GenericNode* top = nullptr;
 	int previousTabLevel = std::numeric_limits<int>::max();
+
+	// Pre allocate all nodes to improve make memory allocation times
+	int upperBoundNodes = approximateNodesUpperBound(data, totalFileSize);
+	Q_ASSERT(upperBoundNodes >= 0);
+	auto allNodes = new GenericNode[upperBoundNodes];
+	int nextNodeToAllocate = 0;
 
 	int start = 0;
 	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
@@ -187,16 +218,24 @@ GenericNode* GenericNode::load(const QString& filename)
 
 		if (top == nullptr)
 		{
+			// Top can't be in the allNodes array since it must delete that array in its own destructor.
 			top = new GenericNode();
+			top->setLoadLine(data, start, lineEnd);
+			top->makeRoot(allNodes);
+
 			nodeStack.append(top);
 			previousTabLevel = tabLevel;
 		}
 		else
 		{
 			Q_ASSERT(tabLevel <= previousTabLevel + 1);
+
+			Q_ASSERT(nextNodeToAllocate < upperBoundNodes);
+			GenericNode* child = &allNodes[nextNodeToAllocate++];
+			child->setLoadLine(data, start, lineEnd);
+
 			if (tabLevel == previousTabLevel + 1)
 			{
-				auto child = new GenericNode();
 				nodeStack.last()->addChild(child);
 				nodeStack.append(child);
 				previousTabLevel = tabLevel;
@@ -210,91 +249,100 @@ GenericNode* GenericNode::load(const QString& filename)
 					--previousTabLevel;
 					nodeStack.removeLast();
 				}
-
-				auto child = new GenericNode();
 				nodeStack.last()->addChild(child);
 				nodeStack.append(child);
 			}
 		}
 
 		// The top of the stack should now contain the element that we must add now
-
-
-		// Handle Headers
-		start+=tabLevel;
-		int headerPartEnd = -1;
-
-		// Name
-		auto moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
-		Q_ASSERT(moreHeaderParts);
-		nodeStack.last()->setName( QString::fromLatin1(data + start, headerPartEnd-start+1) );
-
-		// Type
-		start = headerPartEnd+1;
-		moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
-		Q_ASSERT(moreHeaderParts);
-		nodeStack.last()->setType( QString::fromLatin1(data + start, headerPartEnd-start+1) );
-
-		// Id (optional)
-		start = headerPartEnd+1;
-		moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
-		if(moreHeaderParts)
-		{
-			bool isId = true;
-			NodeIdMap::NodeIdType id = toId(data, start, headerPartEnd, isId);
-
-			if ( isId ) nodeStack.last()->setId( id );
-			else throw FilePersistenceException("Unknown node header element "
-					+ QString::fromAscii(data+start,headerPartEnd-start+1));
-		}
-
-		if (moreHeaderParts)
-		{
-			start = headerPartEnd+1;
-			moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
-		}
-
-		Q_ASSERT(!moreHeaderParts);
-
-
-		// Handle Value
-		if (start > lineEnd) continue;
-		Q_ASSERT(data[start] == '.');
-
-		// Ignore white spaces
-		++start;
-		while (start <= lineEnd && (data[start] == ' ' || data[start] == '\t')) ++start;
-		if (start > lineEnd) continue; // no value
-
-		if (PREFIX_STRING == QString::fromLatin1(data + start, PREFIX_STRING.length()))
-		{
-			start += PREFIX_STRING.length();
-			auto s = rawStringToQString(data, start, lineEnd);
-
-			if (s.isEmpty() && start <= lineEnd)
-			{
-				// There were some characters, but the string is empty.
-				// See if this was the UTF-8 BOM, which Qt ignores in strings, but it might be relevant for characters
-				if(lineEnd-start == 2 && data[start] == (char)0xEF
-						&& data[start+1] == (char)0xBB && data[start+2] == (char)0xBF)
-				s = QChar{QChar::ByteOrderMark};
-				else
-					throw FilePersistenceException("Invalid string sequence when reading node id " + nodeStack.last()->id());
-			}
-
-			nodeStack.last()->setValue(STRING_VALUE, s);
-		}
-		else if (PREFIX_INTEGER == QString::fromLatin1(data + start, PREFIX_INTEGER.length()))
-			nodeStack.last()->setValue(INT_VALUE, QString::fromLatin1(data+start+PREFIX_INTEGER.length(),
-					lineEnd - start - PREFIX_INTEGER.length() + 1 ));
-		else if (PREFIX_DOUBLE == QString::fromLatin1(data + start, PREFIX_DOUBLE.length()))
-			nodeStack.last()->setValue(DOUBLE_VALUE, QString::fromLatin1(data+start+PREFIX_DOUBLE.length(),
-					lineEnd - start - PREFIX_DOUBLE.length() + 1 ));
-		else throw FilePersistenceException("Unknown value prefix" +
-				QString::fromUtf8(data+start,lineEnd-start+1));
+		if (!lazy) nodeStack.last()->ensureDataRead();
 	}
 
 	return top;
+}
+
+void GenericNode::makeRoot(GenericNode* allNodes)
+{
+	allNodes_ = allNodes;
+	parseData(this, data_, lineStartInData_, lineEndInData_);
+}
+
+void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEnd)
+{
+	auto tabLevel = countTabs(data, start, lineEnd);
+
+	// Handle Headers
+	start+=tabLevel;
+	int headerPartEnd = -1;
+
+	// Name
+	auto moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+	Q_ASSERT(moreHeaderParts);
+	node->setName( QString::fromLatin1(data + start, headerPartEnd-start+1) );
+
+	// Type
+	start = headerPartEnd+1;
+	moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+	Q_ASSERT(moreHeaderParts);
+	node->setType( QString::fromLatin1(data + start, headerPartEnd-start+1) );
+
+	// Id (optional)
+	start = headerPartEnd+1;
+	moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+	if(moreHeaderParts)
+	{
+		bool isId = true;
+		NodeIdMap::NodeIdType id = toId(data, start, headerPartEnd, isId);
+
+		if ( isId ) node->setId( id );
+		else throw FilePersistenceException("Unknown node header element "
+				+ QString::fromAscii(data+start,headerPartEnd-start+1));
+	}
+
+	if (moreHeaderParts)
+	{
+		start = headerPartEnd+1;
+		moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+	}
+
+	Q_ASSERT(!moreHeaderParts);
+
+
+	// Handle Value
+	if (start > lineEnd) return;
+	Q_ASSERT(data[start] == '.');
+
+	// Ignore white spaces
+	++start;
+	while (start <= lineEnd && (data[start] == ' ' || data[start] == '\t')) ++start;
+	if (start > lineEnd) return; // no value
+
+	if (PREFIX_STRING == QString::fromLatin1(data + start, PREFIX_STRING.length()))
+	{
+		start += PREFIX_STRING.length();
+		auto s = rawStringToQString(data, start, lineEnd);
+
+		if (s.isEmpty() && start <= lineEnd)
+		{
+			// There were some characters, but the string is empty.
+			// See if this was the UTF-8 BOM, which Qt ignores in strings, but it might be relevant for characters
+			if(lineEnd-start == 2 && data[start] == (char)0xEF
+					&& data[start+1] == (char)0xBB && data[start+2] == (char)0xBF)
+			s = QChar{QChar::ByteOrderMark};
+			else
+				throw FilePersistenceException("Invalid string sequence when reading node id " + node->id());
+		}
+
+		node->setValue(STRING_VALUE, s);
+	}
+	else if (PREFIX_INTEGER == QString::fromLatin1(data + start, PREFIX_INTEGER.length()))
+		node->setValue(INT_VALUE, QString::fromLatin1(data+start+PREFIX_INTEGER.length(),
+				lineEnd - start - PREFIX_INTEGER.length() + 1 ));
+	else if (PREFIX_DOUBLE == QString::fromLatin1(data + start, PREFIX_DOUBLE.length()))
+		node->setValue(DOUBLE_VALUE, QString::fromLatin1(data+start+PREFIX_DOUBLE.length(),
+				lineEnd - start - PREFIX_DOUBLE.length() + 1 ));
+	else throw FilePersistenceException("Unknown value prefix" +
+			QString::fromUtf8(data+start,lineEnd-start+1));
 }
 
 QString GenericNode::escape(const QString& line)
@@ -445,6 +493,45 @@ bool GenericNode::nextHeaderPart(char* data, int& start, int&endInclusive, int l
 
 	--endInclusive;
 	return true;
+}
+
+int GenericNode::approximateNodesUpperBound(char* data, int totalSize)
+{
+	int upperBound = 0;
+	bool inNewLineCharSequence = true;
+
+	for (int i = 0; i < totalSize; ++i)
+	{
+		auto c = data[i];
+
+		if (inNewLineCharSequence)
+		{
+			if  (c != '\n' && c != '\r')
+			{
+				// We found a node
+				++upperBound;
+				inNewLineCharSequence = false;
+			}
+		}
+		else
+		{
+			if (c =='\n' || c== '\r')
+				// A new line just started
+				inNewLineCharSequence = true;
+		}
+	}
+
+	return upperBound;
+}
+
+void GenericNode::setLoadLine(char* data, int lineStart, int lineEndInclusive)
+{
+	Q_ASSERT(lineStart >= 0);
+	Q_ASSERT(lineEndInclusive >= lineStart);
+
+	data_ = data;
+	lineStartInData_ = lineStart;
+	lineEndInData_ = lineEndInclusive;
 }
 
 } /* namespace FilePersistence */

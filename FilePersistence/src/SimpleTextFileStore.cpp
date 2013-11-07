@@ -206,7 +206,7 @@ Model::Node* SimpleTextFileStore::loadModel(Model::Model*, const QString &name, 
 	{
 		modelDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
 		if ( !modelDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir_.path());
-		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name));
+		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name), true);
 
 		Q_ASSERT(persisted_->name() == "model");
 		Q_ASSERT(persisted_->type() == "model");
@@ -254,7 +254,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 {
 	GenericNode* oldPersisted = persisted_;
 
-	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name));
+	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(name), true);
 
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
@@ -347,7 +347,7 @@ Model::PersistedNode* SimpleTextFileStore::loadCompleteNodeSubtree(const QString
 		if (persistenceUnitId > 0) filename = QString::number(persistenceUnitId);
 		else filename = modelName;
 
-		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(filename));
+		persisted_ = GenericNode::load(modelDir_.absoluteFilePath(filename), true);
 		auto top = persisted_;
 
 		// Search through the content in order to find the requested node id.
@@ -436,7 +436,7 @@ Model::PersistedNode* SimpleTextFileStore::loadPersistentUnitData( )
 	checkIsWorking();
 
 	GenericNode* previousPersisted = persisted_;
-	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(QString::number(persisted_->id())));
+	persisted_ = GenericNode::load(modelDir_.absoluteFilePath(QString::number(persisted_->id())), true);
 
 	Model::PersistedNode* result = loadNodeData();
 	result->setNewPersistenceUnit(true);

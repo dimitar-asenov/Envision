@@ -34,6 +34,7 @@ namespace FilePersistence {
 
 class FILEPERSISTENCE_API GenericNode {
 	public:
+
 		GenericNode();
 		~GenericNode();
 
@@ -47,7 +48,6 @@ class FILEPERSISTENCE_API GenericNode {
 		void setId(NodeIdMap::NodeIdType id);
 
 		GenericNode* addChild(GenericNode* child);
-		bool hasChildren() const;
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
 
@@ -68,7 +68,7 @@ class FILEPERSISTENCE_API GenericNode {
 		NodeIdMap::NodeIdType id() const;
 
 		void save(QTextStream& stream, int tabLevel = 0);
-		static GenericNode* load(const QString& filename);
+		static GenericNode* load(const QString& filename, bool lazy);
 
 	private:
 		QString name_;
@@ -81,7 +81,17 @@ class FILEPERSISTENCE_API GenericNode {
 		NodeIdMap::NodeIdType id_{-1};
 		QList<GenericNode*> children_;
 
+		char* data_{};
+		int lineStartInData_{};
+		int lineEndInData_{};
+		GenericNode* allNodes_{};
+
+		void setLoadLine(char* data, int lineStart, int lineEndInclusive);
+		void makeRoot(GenericNode* allNodes);
 		void setValue(ValueType type, const QString& value);
+		void ensureDataRead() const;
+
+		static void parseData(GenericNode* node, char* data, int start, int lineEnd);
 
 		static int countTabs(char* data, int lineStart, int lineEnd);
 		static QString rawStringToQString(char* data, int startAt, int endInclusive);
@@ -92,31 +102,32 @@ class FILEPERSISTENCE_API GenericNode {
 		static bool nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd);
 		static int indexOf(const char c, char* data, int start, int endInclusive);
 		static bool nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd);
+		static int approximateNodesUpperBound(char* data, int totalSize);
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(NodeIdMap::NodeIdType id) { id_ = id; }
 
-inline const QString& GenericNode::name() const { return name_; }
-inline const QString& GenericNode::type() const { return type_; }
-inline bool GenericNode::hasValue() const { return valueType_ != NO_VALUE; }
-inline NodeIdMap::NodeIdType GenericNode::id() const { return id_; }
-inline bool GenericNode::hasChildren() const { return !children_.isEmpty(); }
-inline const QList<GenericNode*>& GenericNode::children() const { return children_; }
+inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
+inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
+inline bool GenericNode::hasValue() const { ensureDataRead(); return valueType_ != NO_VALUE; }
+inline NodeIdMap::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
+inline const QList<GenericNode*>& GenericNode::children() const { ensureDataRead(); return children_; }
 
-inline bool GenericNode::hasStringValue() const { return valueType_ == STRING_VALUE; }
-inline bool GenericNode::hasIntValue() const { return valueType_ == INT_VALUE; }
-inline bool GenericNode::hasDoubleValue() const { return valueType_ == DOUBLE_VALUE; }
+inline bool GenericNode::hasStringValue() const { ensureDataRead(); return valueType_ == STRING_VALUE; }
+inline bool GenericNode::hasIntValue() const { ensureDataRead(); return valueType_ == INT_VALUE; }
+inline bool GenericNode::hasDoubleValue() const { ensureDataRead(); return valueType_ == DOUBLE_VALUE; }
 
-inline void GenericNode::setValue(ValueType type, const QString& value)
+inline void GenericNode::ensureDataRead() const
 {
-	Q_ASSERT(children_.isEmpty());
-	Q_ASSERT(valueType_ == NO_VALUE);
-	Q_ASSERT(type != NO_VALUE);
+	if (data_ && !allNodes_) // Don't do anything if this is the root node
+	{
+		parseData(const_cast<GenericNode*>(this), data_, lineStartInData_, lineEndInData_);
 
-	valueType_ = type;
-	value_ = value;
+		// Don't delete this, just mark it unused. The root will delete it
+		const_cast<GenericNode*>(this)->data_ = nullptr;
+	}
 }
 
 } /* namespace FilePersistence */
