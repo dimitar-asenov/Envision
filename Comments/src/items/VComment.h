@@ -58,7 +58,7 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		void synchroniseDiagrams(QSet<QString> itemDiagramNames);
 		QString replaceMarkdown(QString str);
 		void pushTextLine(QString text);
-		void popLineBuffer();
+		void popLineBuffer(bool asHtml = false);
 		void addChildItem(Visualization::Item* item);
 		QVector<QPair<QString,QString>>* parseMarkdownArguments(const QString& argString);
 		QSize parseSize(const QString& str);

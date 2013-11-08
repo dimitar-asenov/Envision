@@ -33,18 +33,29 @@ ITEM_COMMON_DEFINITIONS(VCommentBrowser, "item")
 
 QSize VCommentBrowser::defaultSize = QSize(400, 300);
 
-VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& text, const StyleType* style)
+VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style)
 	: Super(parent, style)
 {
 	item_ = new QGraphicsWebView(this);
-	item_->setUrl(QUrl(text));
+	item_->setUrl(url);
 	size_ = defaultSize;
 }
 
-VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& text, QSize size, const StyleType* style)
-	: VCommentBrowser(parent, text, style)
+VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size, const StyleType* style)
+	: VCommentBrowser(parent, url, style)
 {
 	updateSize(size);
+}
+
+VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style)
+	: Super(parent, style)
+{
+	item_ = new QGraphicsWebView(this);
+	item_->setResizesToContents(true);
+	item_->setHtml(content);
+	item_->setMaximumSize(defaultSize);
+	item_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	size_ = defaultSize;
 }
 
 VCommentBrowser::~VCommentBrowser()
@@ -58,8 +69,16 @@ void VCommentBrowser::determineChildren()
 
 void VCommentBrowser::updateGeometry(int, int)
 {
-	setSize(size_);
-	item_->setMaximumSize(size_);
+	if(size_.isValid())
+	{
+		setSize(size_);
+		item_->setMaximumSize(size_);
+	}
+	else
+	{
+		qDebug() << item_->size();
+		setSize(size_);
+	}
 }
 
 QList<Visualization::Item*> VCommentBrowser::childItems() const
@@ -69,6 +88,7 @@ QList<Visualization::Item*> VCommentBrowser::childItems() const
 
 void VCommentBrowser::paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget)
 {
+	item_->setFont(painter->font());
 	item_->paint(painter, style, widget);
 }
 

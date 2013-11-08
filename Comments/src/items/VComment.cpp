@@ -54,6 +54,7 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 void VComment::parseLines()
 {
 	clearChildren();
+	bool isHTML = false;
 
 	QSet<QString> diagramNames{};
 	int listCount = -1;
@@ -90,6 +91,28 @@ void VComment::parseLines()
 		{
 			pushTextLine("</li></ol>");
 			listCount = -1;
+		}
+
+		// is this HTML?
+		if(line == "<html>")
+		{
+			popLineBuffer();
+			isHTML = true;
+			continue;
+		}
+		else if(isHTML)
+		{
+			if(line == "</html>")
+			{
+				isHTML = false;
+				popLineBuffer(true);
+			}
+			else
+			{
+				pushTextLine(line);
+			}
+			// don't process further
+			continue;
 		}
 
 		if(rx.exactMatch(line))
@@ -282,14 +305,24 @@ void VComment::pushTextLine(QString text)
 	lineBuffer_.push_back(text);
 }
 
-void VComment::popLineBuffer()
+void VComment::popLineBuffer(bool asHtml)
 {
 	if(lineBuffer_.size() > 0)
 	{
 		auto joined = lineBuffer_.join("\n");
-		auto text = new Text(this, Text::itemStyles().get(), replaceMarkdown(joined));
-		text->setTextFormat(Qt::RichText);
-		children_.push_back(text);
+
+		if(asHtml)
+		{
+			auto browser = new VCommentBrowser(this, joined);
+			children_.push_back(browser);
+		}
+		else
+		{
+			auto text = new Text(this, Text::itemStyles().get("comment"), replaceMarkdown(joined));
+			text->setTextFormat(Qt::RichText);
+			children_.push_back(text);
+		}
+
 		lineBuffer_.clear();
 	}
 }

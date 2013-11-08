@@ -41,9 +41,10 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
 
 	public:
-		VCommentBrowser(Visualization::Item* parent, const QString& text, const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QString& text, QSize size,
+		VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
+		VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size,
 				const StyleType* style = itemStyles().get());
+		VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style = itemStyles().get());
 		virtual ~VCommentBrowser();
 		virtual QList<Visualization::Item*> childItems() const override;
 		void updateSize(QSize size);
