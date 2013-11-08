@@ -71,13 +71,13 @@ void VComment::parseLines()
 			// does this create a new list?
 			if(listCount == 0)
 			{
-				pushTextLine("<ol><li>");
+				pushTextLine("<ul><li>&bull; ");
 				line = line.mid(3);
 			}
 			// otherwise, just add another list item
 			else
 			{
-				pushTextLine("</li><li>");
+				pushTextLine("</li><li>&bull; ");
 				line = line.mid(3);
 			}
 		}
@@ -89,7 +89,7 @@ void VComment::parseLines()
 		// if this is not an enumeration item, reset listCount
 		else if(listCount > -1 && line.left(3) != " * " && line.left(3) != "   ")
 		{
-			pushTextLine("</li></ol>");
+			pushTextLine("</li></ul>");
 			listCount = -1;
 		}
 
