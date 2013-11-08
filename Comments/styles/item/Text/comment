@@ -1,0 +1,11 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<pen>
+		<color>
+			<alpha>255</alpha>
+			<red>100</red>
+			<green>100</green>
+			<blue>100</blue>
+		</color>
+	</pen>
+</style>
