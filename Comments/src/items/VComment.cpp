@@ -157,14 +157,14 @@ void VComment::parseLines()
 			auto item = renderer()->render(this, diagram);
 			addChildItem(item);
 		}
-		// urls are specified as [[http://www.google.com]]
-		else if(line.left(2) == "[[" && line.right(2) == "]]" && line.size() > 2+2)
+		// urls are specified as [browser#http://www.google.com]
+		else if(line.left(9) == "[browser#" && line.right(1) == "]" && line.size() > 9+1)
 		{
-			QString mid = line.mid(2, line.size()-2-2);
+			QString mid = line.mid(9, line.size()-9-1);
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
 			QString url = items->at(0).second;
-			auto browser = new VCommentBrowser(this, url);
+			auto browser = new VCommentBrowser(this, QUrl(url));
 
 			if(items->size() > 1)
 			{
