@@ -46,7 +46,7 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 		diagrams_[diagram->name()] = diagram;
 	}
 
-	editing_ = node->lines()->size() == 0;
+	editing_ = node->lines()->size() == 0 || (node->lines()->size() == 1 && node->lines()->at(0)->get().isEmpty());
 	parseLines();
 }
 
