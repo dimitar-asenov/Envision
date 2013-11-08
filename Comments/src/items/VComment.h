@@ -65,7 +65,7 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 
 		QStringList lineBuffer_{};
 		bool editing_{};
-		Visualization::Item* editLabel_{};
+		Visualization::VList* editLabel_{};
 		QMap<QString, CommentDiagram*> diagrams_{};
 		QList<Visualization::Item*> children_{};
 };

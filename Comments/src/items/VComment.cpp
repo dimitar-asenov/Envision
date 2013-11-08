@@ -361,9 +361,8 @@ void VComment::initializeForms()
 				}
 	));
 
-	addForm(item(&I::editLabel_, [](I* v){
-		return v->node()->lines();
-	}));
+	addForm(item<Visualization::VList>(&I::editLabel_, [](I* v){ return v->node()->lines(); },
+			[](I* v){return &v->style()->editList();}));
 }
 
 int VComment::determineForm()
