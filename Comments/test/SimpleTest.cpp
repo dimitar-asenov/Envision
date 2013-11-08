@@ -41,7 +41,6 @@
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/model/Model.h"
 
-
 namespace Comments {
 
 using namespace Visualization;
@@ -57,22 +56,22 @@ TEST(Comments, SimpleTest)
 		"Comments support *quite* some stuff by now. For example...\n"
 		"# Diagrams!\n"
 		"[diagram#main]\n"
-
-//		"Also, lists work...\n"
+//
+		"Also, lists work...\n"
 //		" * A first item\n"
 //		" * A second item\n"
 //		" * And so on, of course...\n"
-
+//
 //		"# Images\n"
 //		"[image#panel_border_layout.png|400x]\n"
 //		"...\n"
-
+//
 //		"# Browsers\n"
-//		"[[http://dimitar-asenov.github.io/Envision/|400x100]]\n"
+//		"[browser#http://dimitar-asenov.github.io/Envision/|400x100]\n"
 //		"...\n"
 	);
 
-	auto diagram = new CommentDiagram(nullptr, "main");
+	auto diagram = new CommentDiagram(nullptr, "main=pre");
 
 	auto shape1 = new CommentDiagramShape(0, 50, 200, 50, Rectangle);
 	shape1->setLabel(new Model::Text("First shape"));

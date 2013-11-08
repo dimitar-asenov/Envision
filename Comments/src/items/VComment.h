@@ -28,19 +28,20 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-
 #include "VCommentDiagram.h"
+#include "VCommentStyle.h"
 #include "../nodes/CommentNode.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VList.h"
 
 namespace Comments {
 
 class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 	Visualization::DeclarativeItem<VComment>, CommentNode> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON(VComment)
 
 	public:
 		VComment(Visualization::Item* parent, NodeType* node);
