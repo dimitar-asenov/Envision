@@ -26,44 +26,27 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "comments_api.h"
 
-#include "VComment.h"
-#include "VisualizationBase/src/items/Item.h"
+#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "items/VCommentImage.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentImage : public Super<Visualization::Item>
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentImage, Visualization::ItemStyle)
-
+class COMMENTS_API HCommentImage : public Interaction::GenericHandler {
 	public:
-		VCommentImage(Visualization::Item* parent, const QString& path, const StyleType* style = itemStyles().get());
-		VCommentImage(Visualization::Item* parent, const QString& path, QSize size,
-				const StyleType* style = itemStyles().get());
-		virtual ~VCommentImage();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void resizeBy(QPoint diff);
-		void setLineNumber(int lineNumber);
+		static HCommentImage* instance();
+
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
 	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
-		void updateSize(QSize size);
+		HCommentImage();
 
 	private:
-		QRect textDimensions(QFont font, const QString& text);
-
-		QImage* image_{};
-		QString path_{};
-		QSize size_{};
-		QString text_{};
-		int lineNumber_{-1};
-
-		static unsigned int errorTextPadding;
+		bool resizing_{};
 };
 
-inline void VCommentImage::setLineNumber(int lineNumber) { lineNumber_ = lineNumber; }
-
-} /* namespace Comments */
+}

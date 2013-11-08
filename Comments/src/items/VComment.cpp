@@ -58,11 +58,13 @@ void VComment::parseLines()
 
 	QSet<QString> diagramNames{};
 	int listCount = -1;
+	int lineNumber = -1;
 
 	for(auto nodeLine : *node()->lines())
 	{
 		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
 		QString line = nodeLine->get();
+		lineNumber++;
 
 		// is this a new enumeration item?
 		if(line.left(3) == " * ")
@@ -188,7 +190,9 @@ void VComment::parseLines()
 			if(items->size() > 1)
 				size = parseSize(items->at(1).second);
 
-			addChildItem(new VCommentImage(this, items->at(0).second, size));
+			auto image = new VCommentImage(this, items->at(0).second, size);
+			image->setLineNumber(lineNumber);
+			addChildItem(image);
 			delete items;
 		}
 		else

@@ -142,5 +142,33 @@ void VCommentImage::updateSize(QSize size)
 	}
 }
 
+void VCommentImage::resizeBy(QPoint diff)
+{
+	if(image_->isNull())
+		return;
+
+	size_ = QSize(size_.width() + diff.x(), size_.height() + diff.y());
+
+	if(lineNumber_ > -1)
+	{
+		auto node = dynamic_cast<VComment*>(parent())->node();
+		auto child = node->lines()->at(lineNumber_);
+		auto line = child->get();
+		// does the line contain a pipe?
+		auto pipe = line.lastIndexOf('|');
+		if(pipe == -1)
+			pipe = line.size() - 1;
+
+		auto updated = line.left(pipe) +
+				"|" + QString::number(size_.width()) + "x" + QString::number(size_.height()) + "]";
+
+		node->beginModification("Updating image dimensions");
+		node->lines()->replaceChild(child, new Model::Text(updated));
+		node->endModification();
+	}
+
+	setUpdateNeeded(StandardUpdate);
+}
+
 } /* namespace Comments */
 

@@ -24,46 +24,56 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "VComment.h"
-#include "VisualizationBase/src/items/Item.h"
+#include "handlers/HCommentImage.h"
+#include "items/VCommentDiagram.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentImage : public Super<Visualization::Item>
+HCommentImage::HCommentImage()
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentImage, Visualization::ItemStyle)
+}
 
-	public:
-		VCommentImage(Visualization::Item* parent, const QString& path, const StyleType* style = itemStyles().get());
-		VCommentImage(Visualization::Item* parent, const QString& path, QSize size,
-				const StyleType* style = itemStyles().get());
-		virtual ~VCommentImage();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void resizeBy(QPoint diff);
-		void setLineNumber(int lineNumber);
+HCommentImage* HCommentImage::instance()
+{
+	static HCommentImage h;
+	return &h;
+}
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
-		void updateSize(QSize size);
+void HCommentImage::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
 
-	private:
-		QRect textDimensions(QFont font, const QString& text);
+	if(event->button() == Qt::RightButton && event->modifiers() == Qt::ShiftModifier)
+	{
+		event->accept();
+		resizing_ = true;
+	}
 
-		QImage* image_{};
-		QString path_{};
-		QSize size_{};
-		QString text_{};
-		int lineNumber_{-1};
+	if (!event->isAccepted())
+		GenericHandler::mousePressEvent(target, event);
+}
 
-		static unsigned int errorTextPadding;
-};
+void HCommentImage::mouseReleaseEvent(Visualization::Item * /* target */, QGraphicsSceneMouseEvent *)
+{
+	if(resizing_)
+	{
+		resizing_ = false;
+	}
+}
 
-inline void VCommentImage::setLineNumber(int lineNumber) { lineNumber_ = lineNumber; }
+void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	auto image = dynamic_cast<VCommentImage*>(target);
+
+	if(resizing_ && event->buttons() & Qt::RightButton)
+	{
+		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
+		image->resizeBy(diff);
+	}
+}
+
+void HCommentImage::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
+{
+}
 
 } /* namespace Comments */

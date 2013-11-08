@@ -49,6 +49,7 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		virtual int determineForm() override;
 		void clearChildren();
 		QMap<QString, CommentDiagram*> diagrams() const;
+		QVector<QPair<QString,QString>>* parseMarkdownArguments(const QString& argString);
 
 		void toggleEditing();
 		bool editing() const;
@@ -60,7 +61,6 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		void pushTextLine(QString text);
 		void popLineBuffer(bool asHtml = false);
 		void addChildItem(Visualization::Item* item);
-		QVector<QPair<QString,QString>>* parseMarkdownArguments(const QString& argString);
 		QSize parseSize(const QString& str);
 
 		QStringList lineBuffer_{};
