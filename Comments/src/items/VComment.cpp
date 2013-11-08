@@ -292,10 +292,10 @@ QString VComment::replaceMarkdown(QString str)
 	QRegExp rx;
 
 	rx.setPattern("\\*\\*([^\\*]+)\\*\\*");
-	str.replace(rx, "<i>\\1</i>");
+	str.replace(rx, "<b>\\1</b>");
 
 	rx.setPattern("\\*([^\\*]+)\\*");
-	str.replace(rx, "<b>\\1</b>");
+	str.replace(rx, "<i>\\1</i>");
 
 	return str;
 }
