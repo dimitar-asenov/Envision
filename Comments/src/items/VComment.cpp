@@ -59,6 +59,7 @@ void VComment::parseLines()
 	QSet<QString> diagramNames{};
 	int listCount = -1;
 	int lineNumber = -1;
+	QSize htmlSize;
 
 	for(auto nodeLine : *node()->lines())
 	{
@@ -96,10 +97,22 @@ void VComment::parseLines()
 		}
 
 		// is this HTML?
-		if(line == "<html>")
+		if(line.left(5) == "<html" && line.right(1) == ">" && (line.mid(5,1) == " " || line.mid(5,1) == ">"))
 		{
 			popLineBuffer();
 			isHTML = true;
+
+			// invalidate htmlSize
+			htmlSize.setWidth(-1);
+
+			auto mid = line.mid(5+1,line.size()-5-1-1);
+			if(line.mid(5,1) == " " && mid.size() > 3)
+			{
+				auto size = parseSize(mid);
+				if(size.isValid())
+					htmlSize = size;
+			}
+
 			continue;
 		}
 		else if(isHTML)
@@ -107,7 +120,10 @@ void VComment::parseLines()
 			if(line == "</html>")
 			{
 				isHTML = false;
-				popLineBuffer(true);
+				auto browser = dynamic_cast<VCommentBrowser*>(popLineBuffer(true));
+
+				if(browser != nullptr && htmlSize.isValid())
+					browser->updateSize(htmlSize);
 			}
 			else
 			{
@@ -309,8 +325,10 @@ void VComment::pushTextLine(QString text)
 	lineBuffer_.push_back(text);
 }
 
-void VComment::popLineBuffer(bool asHtml)
+Item* VComment::popLineBuffer(bool asHtml)
 {
+	Item* item = nullptr;
+
 	if(lineBuffer_.size() > 0)
 	{
 		auto joined = lineBuffer_.join("\n");
@@ -319,16 +337,20 @@ void VComment::popLineBuffer(bool asHtml)
 		{
 			auto browser = new VCommentBrowser(this, joined);
 			children_.push_back(browser);
+			item = browser;
 		}
 		else
 		{
 			auto text = new Text(this, Text::itemStyles().get("comment"), replaceMarkdown(joined));
 			text->setTextFormat(Qt::RichText);
 			children_.push_back(text);
+			item = text;
 		}
 
 		lineBuffer_.clear();
 	}
+
+	return item;
 }
 
 void VComment::addChildItem(Visualization::Item* item)
