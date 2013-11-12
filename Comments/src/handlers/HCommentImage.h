@@ -26,39 +26,27 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "comments_api.h"
 
-#include "VisualizationBase/src/items/Item.h"
-
-#include "../nodes/CommentNode.h"
-
-class QGraphicsWebView;
+#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "items/VCommentImage.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
-
+class COMMENTS_API HCommentImage : public Interaction::GenericHandler {
 	public:
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size,
-				const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void updateSize(QSize size);
+		static HCommentImage* instance();
+
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
 	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
+		HCommentImage();
 
 	private:
-
-		static QSize defaultSize;
-		QGraphicsWebView* item_{};
-		QSize size_;
+		bool resizing_{};
 };
 
-} /* namespace Comments */
+}

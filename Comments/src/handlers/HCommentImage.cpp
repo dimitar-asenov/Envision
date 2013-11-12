@@ -24,41 +24,56 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/items/Item.h"
-
-#include "../nodes/CommentNode.h"
-
-class QGraphicsWebView;
+#include "handlers/HCommentImage.h"
+#include "items/VCommentDiagram.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
+HCommentImage::HCommentImage()
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
+}
 
-	public:
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size,
-				const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void updateSize(QSize size);
+HCommentImage* HCommentImage::instance()
+{
+	static HCommentImage h;
+	return &h;
+}
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
+void HCommentImage::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
 
-	private:
+	if(event->button() == Qt::RightButton && event->modifiers() == Qt::ShiftModifier)
+	{
+		event->accept();
+		resizing_ = true;
+	}
 
-		static QSize defaultSize;
-		QGraphicsWebView* item_{};
-		QSize size_;
-};
+	if (!event->isAccepted())
+		GenericHandler::mousePressEvent(target, event);
+}
+
+void HCommentImage::mouseReleaseEvent(Visualization::Item * /* target */, QGraphicsSceneMouseEvent *)
+{
+	if(resizing_)
+	{
+		resizing_ = false;
+	}
+}
+
+void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	auto image = dynamic_cast<VCommentImage*>(target);
+
+	if(resizing_ && event->buttons() & Qt::RightButton)
+	{
+		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
+		image->resizeBy(diff);
+	}
+}
+
+void HCommentImage::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
+{
+}
 
 } /* namespace Comments */

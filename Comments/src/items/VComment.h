@@ -28,19 +28,20 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-
 #include "VCommentDiagram.h"
+#include "VCommentStyle.h"
 #include "../nodes/CommentNode.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VList.h"
 
 namespace Comments {
 
 class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 	Visualization::DeclarativeItem<VComment>, CommentNode> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VComment, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON(VComment)
 
 	public:
 		VComment(Visualization::Item* parent, NodeType* node);
@@ -48,6 +49,7 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		virtual int determineForm() override;
 		void clearChildren();
 		QMap<QString, CommentDiagram*> diagrams() const;
+		QVector<QPair<QString,QString>>* parseMarkdownArguments(const QString& argString);
 
 		void toggleEditing();
 		bool editing() const;
@@ -57,14 +59,13 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		void synchroniseDiagrams(QSet<QString> itemDiagramNames);
 		QString replaceMarkdown(QString str);
 		void pushTextLine(QString text);
-		void popLineBuffer();
+		Item* popLineBuffer(bool asHtml = false);
 		void addChildItem(Visualization::Item* item);
-		QVector<QPair<QString,QString>>* parseMarkdownArguments(const QString& argString);
 		QSize parseSize(const QString& str);
 
 		QStringList lineBuffer_{};
 		bool editing_{};
-		Visualization::Item* editLabel_{};
+		Visualization::VList* editLabel_{};
 		QMap<QString, CommentDiagram*> diagrams_{};
 		QList<Visualization::Item*> children_{};
 };

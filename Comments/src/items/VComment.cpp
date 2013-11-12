@@ -46,7 +46,7 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 		diagrams_[diagram->name()] = diagram;
 	}
 
-	editing_ = node->lines()->size() == 0;
+	editing_ = node->lines()->size() == 0 || (node->lines()->size() == 1 && node->lines()->at(0)->get().isEmpty());
 	parseLines();
 }
 
@@ -54,14 +54,18 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 void VComment::parseLines()
 {
 	clearChildren();
+	bool isHTML = false;
 
 	QSet<QString> diagramNames{};
 	int listCount = -1;
+	int lineNumber = -1;
+	QSize htmlSize;
 
 	for(auto nodeLine : *node()->lines())
 	{
 		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
 		QString line = nodeLine->get();
+		lineNumber++;
 
 		// is this a new enumeration item?
 		if(line.left(3) == " * ")
@@ -70,13 +74,13 @@ void VComment::parseLines()
 			// does this create a new list?
 			if(listCount == 0)
 			{
-				pushTextLine("<ul><li>");
+				pushTextLine("<ul><li>&bull; ");
 				line = line.mid(3);
 			}
 			// otherwise, just add another list item
 			else
 			{
-				pushTextLine("</li><li>");
+				pushTextLine("</li><li>&bull; ");
 				line = line.mid(3);
 			}
 		}
@@ -90,6 +94,43 @@ void VComment::parseLines()
 		{
 			pushTextLine("</li></ul>");
 			listCount = -1;
+		}
+
+		// is this HTML?
+		if(line.left(5) == "<html" && line.right(1) == ">" && (line.mid(5,1) == " " || line.mid(5,1) == ">"))
+		{
+			popLineBuffer();
+			isHTML = true;
+
+			// invalidate htmlSize
+			htmlSize.setWidth(-1);
+
+			auto mid = line.mid(5+1,line.size()-5-1-1);
+			if(line.mid(5,1) == " " && mid.size() > 3)
+			{
+				auto size = parseSize(mid);
+				if(size.isValid())
+					htmlSize = size;
+			}
+
+			continue;
+		}
+		else if(isHTML)
+		{
+			if(line == "</html>")
+			{
+				isHTML = false;
+				auto browser = dynamic_cast<VCommentBrowser*>(popLineBuffer(true));
+
+				if(browser != nullptr && htmlSize.isValid())
+					browser->updateSize(htmlSize);
+			}
+			else
+			{
+				pushTextLine(line);
+			}
+			// don't process further
+			continue;
 		}
 
 		if(rx.exactMatch(line))
@@ -134,14 +175,14 @@ void VComment::parseLines()
 			auto item = renderer()->render(this, diagram);
 			addChildItem(item);
 		}
-		// urls are specified as [[http://www.google.com]]
-		else if(line.left(2) == "[[" && line.right(2) == "]]" && line.size() > 2+2)
+		// urls are specified as [browser#http://www.google.com]
+		else if(line.left(9) == "[browser#" && line.right(1) == "]" && line.size() > 9+1)
 		{
-			QString mid = line.mid(2, line.size()-2-2);
+			QString mid = line.mid(9, line.size()-9-1);
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
 			QString url = items->at(0).second;
-			auto browser = new VCommentBrowser(this, url);
+			auto browser = new VCommentBrowser(this, QUrl(url));
 
 			if(items->size() > 1)
 			{
@@ -165,7 +206,9 @@ void VComment::parseLines()
 			if(items->size() > 1)
 				size = parseSize(items->at(1).second);
 
-			addChildItem(new VCommentImage(this, items->at(0).second, size));
+			auto image = new VCommentImage(this, items->at(0).second, size);
+			image->setLineNumber(lineNumber);
+			addChildItem(image);
 			delete items;
 		}
 		else
@@ -269,10 +312,10 @@ QString VComment::replaceMarkdown(QString str)
 	QRegExp rx;
 
 	rx.setPattern("\\*\\*([^\\*]+)\\*\\*");
-	str.replace(rx, "<i>\\1</i>");
+	str.replace(rx, "<b>\\1</b>");
 
 	rx.setPattern("\\*([^\\*]+)\\*");
-	str.replace(rx, "<b>\\1</b>");
+	str.replace(rx, "<i>\\1</i>");
 
 	return str;
 }
@@ -282,16 +325,32 @@ void VComment::pushTextLine(QString text)
 	lineBuffer_.push_back(text);
 }
 
-void VComment::popLineBuffer()
+Item* VComment::popLineBuffer(bool asHtml)
 {
+	Item* item = nullptr;
+
 	if(lineBuffer_.size() > 0)
 	{
 		auto joined = lineBuffer_.join("\n");
-		auto text = new Text(this, Text::itemStyles().get(), replaceMarkdown(joined));
-		text->setTextFormat(Qt::RichText);
-		children_.push_back(text);
+
+		if(asHtml)
+		{
+			auto browser = new VCommentBrowser(this, joined);
+			children_.push_back(browser);
+			item = browser;
+		}
+		else
+		{
+			auto text = new Text(this, Text::itemStyles().get("comment"), replaceMarkdown(joined));
+			text->setTextFormat(Qt::RichText);
+			children_.push_back(text);
+			item = text;
+		}
+
 		lineBuffer_.clear();
 	}
+
+	return item;
 }
 
 void VComment::addChildItem(Visualization::Item* item)
@@ -328,9 +387,8 @@ void VComment::initializeForms()
 				}
 	));
 
-	addForm(item(&I::editLabel_, [](I* v){
-		return v->node()->lines();
-	}));
+	addForm(item<Visualization::VList>(&I::editLabel_, [](I* v){ return v->node()->lines(); },
+			[](I* v){return &v->style()->editList();}));
 }
 
 int VComment::determineForm()

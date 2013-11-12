@@ -28,6 +28,7 @@
 
 #include "../comments_api.h"
 
+#include "VComment.h"
 #include "VisualizationBase/src/items/Item.h"
 
 namespace Comments {
@@ -42,6 +43,8 @@ class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 				const StyleType* style = itemStyles().get());
 		virtual ~VCommentImage();
 		virtual QList<Visualization::Item*> childItems() const override;
+		void resizeBy(QPoint diff);
+		void setLineNumber(int lineNumber);
 
 	protected:
 		virtual void determineChildren() override;
@@ -56,8 +59,11 @@ class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 		QString path_{};
 		QSize size_{};
 		QString text_{};
+		int lineNumber_{-1};
 
 		static unsigned int errorTextPadding;
 };
+
+inline void VCommentImage::setLineNumber(int lineNumber) { lineNumber_ = lineNumber; }
 
 } /* namespace Comments */
