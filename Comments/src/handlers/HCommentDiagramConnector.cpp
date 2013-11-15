@@ -41,45 +41,25 @@ HCommentDiagramConnector* HCommentDiagramConnector::instance()
 
 void HCommentDiagramConnector::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto connector = dynamic_cast<VCommentDiagramConnector*>(target);
+	auto vConnector = DCast<VCommentDiagramConnector>(target);
+	auto diagram = vConnector->diagram()->node();
 	event->ignore();
 
-	if(connector->diagram()->editing())
+	if(vConnector->diagram()->editing())
 	{
 		if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
 		{
 			event->accept();
-			connector->diagram()->node()->removeConnector(connector->node());
-			// since the connector was selected, we need to clear the selection
-			auto scene = target->scene();
-			scene->clearFocus();
-			scene->clearSelection();
-			scene->setMainCursor(nullptr);
+			target->scene()->setMainCursor(nullptr);
+
+			diagram->beginModification("delete connector");
+			diagram->connectors()->remove(vConnector->node());
+			diagram->endModification();
 		}
 	}
 
 	if (!event->isAccepted())
 		GenericHandler::keyPressEvent(target, event);
-}
-
-void HCommentDiagramConnector::mousePressEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
-{
-	event->ignore();
-}
-
-void HCommentDiagramConnector::mouseReleaseEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
-{
-	event->ignore();
-}
-
-void HCommentDiagramConnector::mouseMoveEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
-{
-	event->ignore();
-}
-
-void HCommentDiagramConnector::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *event)
-{
-	event->ignore();
 }
 
 } /* namespace Comments */

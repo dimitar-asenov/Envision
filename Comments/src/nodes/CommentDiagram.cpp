@@ -48,24 +48,10 @@ CommentDiagram::CommentDiagram(Node *parent, QString name)
 	setHeight(0);
 }
 
-void CommentDiagram::setSize(QSizeF size)
+void CommentDiagram::setSize(QSize size)
 {
 	setWidth(size.width());
 	setHeight(size.height());
-}
-
-void CommentDiagram::addConnector(int shape1, int point1, int shape2, int point2)
-{
-	model()->beginModification(this, "Adding connector");
-	connectors()->append(new CommentDiagramConnector(shape1, point1, shape2, point2));
-	model()->endModification();
-}
-
-void CommentDiagram::removeConnector(CommentDiagramConnector *connector)
-{
-	model()->beginModification(this, "removing connector from diagram");
-	connectors()->remove(connector);
-	model()->endModification();
 }
 
 void CommentDiagram::removeShape(CommentDiagramShape *shape)
@@ -73,8 +59,6 @@ void CommentDiagram::removeShape(CommentDiagramShape *shape)
 	// what's the index of this shape?
 	int shapeIndex = shapes()->indexOf(shape);
 	Q_ASSERT(shapeIndex != -1);
-
-	model()->beginModification(this, "removing shape from diagram");
 
 	// the size may change inside the loop, cache its original value
 	int connectorsSize = connectors()->size();
@@ -84,20 +68,17 @@ void CommentDiagram::removeShape(CommentDiagramShape *shape)
 		// iterate in reverse to avoid ordering issues
 		int index = connectorsSize - i - 1;
 		auto c = connectors()->at(index);
-		if(c->shape1() == shapeIndex || c->shape2() == shapeIndex)
+		if(c->startShape() == shapeIndex || c->endShape() == shapeIndex)
 			connectors()->remove(index);
 		// else decrease all shape indexes bigger than the removed one by one
 		else
 		{
-			if(c->shape1() > shapeIndex)
-				c->setShape1(c->shape1() - 1);
-			if(c->shape2() > shapeIndex)
-				c->setShape2(c->shape2() - 1);
+			if(c->startShape() > shapeIndex) c->setStartShape(c->startShape() - 1);
+			if(c->endShape() > shapeIndex) c->setEndShape(c->endShape() - 1);
 		}
 	}
 
 	shapes()->remove(shapeIndex);
-	model()->endModification();
 }
 
 } /* namespace Comments */

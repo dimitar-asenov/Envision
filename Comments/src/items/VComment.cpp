@@ -27,6 +27,7 @@
 #include "VComment.h"
 #include "VCommentBrowser.h"
 #include "VCommentImage.h"
+#include "VCommentDiagram.h"
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
@@ -40,12 +41,6 @@ ITEM_COMMON_DEFINITIONS(VComment, "item")
 
 VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
-	// import existing diagrams
-	for(auto diagram : *node->diagrams())
-	{
-		diagrams_[diagram->name()] = diagram;
-	}
-
 	editing_ = node->lines()->size() == 0 || (node->lines()->size() == 1 && node->lines()->at(0)->get().isEmpty());
 	parseLines();
 }
@@ -53,9 +48,10 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 // split up user-provided text into single elements
 void VComment::parseLines()
 {
-	clearChildren();
+	commentElements_.clear();
 	bool isHTML = false;
 
+	QStringList linesOfCurrentElement;
 	QSet<QString> diagramNames{};
 	int listCount = -1;
 	int lineNumber = -1;
@@ -63,43 +59,45 @@ void VComment::parseLines()
 
 	for(auto nodeLine : *node()->lines())
 	{
-		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
 		QString line = nodeLine->get();
-		lineNumber++;
+		++lineNumber;
 
+		//************************************************************************
+		// Bullet lists
+		//************************************************************************
 		// is this a new enumeration item?
-		if(line.left(3) == " * ")
+		if(line.startsWith(" * "))
 		{
 			listCount++;
 			// does this create a new list?
-			if(listCount == 0)
-			{
-				pushTextLine("<ul><li>&bull; ");
-				line = line.mid(3);
-			}
+			if(listCount == 0) linesOfCurrentElement << "<ul><li>&bull; " << line.mid(3);
 			// otherwise, just add another list item
-			else
-			{
-				pushTextLine("</li><li>&bull; ");
-				line = line.mid(3);
-			}
+			else linesOfCurrentElement << "</li><li>&bull; " << line.mid(3);
+
+			continue;
 		}
+
 		// or is this extending an existing list?
-		else if(line.left(3) == "   " && listCount > -1)
+		if(line.startsWith("   ") && listCount > -1)
 		{
-			line = line.mid(3);
+			linesOfCurrentElement << line.mid(3);
+			continue;
 		}
+
 		// if this is not an enumeration item, reset listCount
-		else if(listCount > -1 && line.left(3) != " * " && line.left(3) != "   ")
+		if(listCount > -1)
 		{
-			pushTextLine("</li></ul>");
+			linesOfCurrentElement << "</li></ul>";
 			listCount = -1;
 		}
 
+		//************************************************************************
+		// Embedded HTML
+		//************************************************************************
 		// is this HTML?
-		if(line.left(5) == "<html" && line.right(1) == ">" && (line.mid(5,1) == " " || line.mid(5,1) == ">"))
+		if(line.startsWith("<html") && line.right(1) == ">" && (line.mid(5,1) == " " || line.mid(5,1) == ">"))
 		{
-			popLineBuffer();
+			createTextualCommentElement(linesOfCurrentElement); // Flush any existing content
 			isHTML = true;
 
 			// invalidate htmlSize
@@ -107,167 +105,137 @@ void VComment::parseLines()
 
 			auto mid = line.mid(5+1,line.size()-5-1-1);
 			if(line.mid(5,1) == " " && mid.size() > 3)
-			{
-				auto size = parseSize(mid);
-				if(size.isValid())
-					htmlSize = size;
-			}
+				htmlSize = parseSize(mid);
 
 			continue;
 		}
-		else if(isHTML)
+
+		if(isHTML)
 		{
 			if(line == "</html>")
 			{
 				isHTML = false;
-				auto browser = dynamic_cast<VCommentBrowser*>(popLineBuffer(true));
+				auto browser = DCast<VCommentBrowser>(createTextualCommentElement(linesOfCurrentElement, true));
 
 				if(browser != nullptr && htmlSize.isValid())
 					browser->updateSize(htmlSize);
 			}
-			else
-			{
-				pushTextLine(line);
-			}
-			// don't process further
+			else linesOfCurrentElement << line;
+
 			continue;
 		}
 
+		//************************************************************************
+		// Lines
+		//************************************************************************
+		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
+
 		if(rx.exactMatch(line))
 		{
+			createTextualCommentElement(linesOfCurrentElement); // Flush current text
+
 			// A line consists of one of . - = that is repeated three times or more
 			// The used character defines the strength of the header, i.e. one of three levels
 			QString style;
 			switch(line[0].toAscii())
 			{
-				default:
 				case '.': style = "single"; break;
 				case '-': style = "double"; break;
 				case '=': style = "triple"; break;
+				default: Q_ASSERT_X(false,"","Unknown line character");
 			}
 
-			addChildItem(new Line(this, Line::itemStyles().get(style)));
+			commentElements_.append(new Line(this, Line::itemStyles().get(style)));
 			continue;
 		}
 
-		// is this a header? replace it right away with the appropriate tag
+		//************************************************************************
+		// Headers
+		//************************************************************************
 		rx.setPattern("^(#+)([^#].*)");
 		// allow headers h1 to h6
 		if(rx.exactMatch(line) && rx.cap(1).length() <= 6)
 		{
 			QString len = QString::number(rx.cap(1).length());
-			pushTextLine("<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">");
+			linesOfCurrentElement << "<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">";
+
+			continue;
 		}
+
+		//************************************************************************
+		// Diagrams
+		//************************************************************************
 		// is this a diagram? format: [diagram#diagramName]
-		else if(line.left(9) == "[diagram#" && line.right(1) == "]" && line.size() > 9+1)
+		if(line.startsWith("[diagram#") && line.right(1) == "]" && line.size() > 9+1)
 		{
-			QString diagramName = line.mid(9,line.size()-9-1);
-			diagramNames << diagramName;
+			createTextualCommentElement(linesOfCurrentElement); // Flush current text
 
-			CommentDiagram* diagram = diagrams_.value(diagramName, nullptr);
+			QString name = line.mid(9, line.size()-9-1);
+			diagramNames << name;
 
-			if(diagram == nullptr)
-			{
-				diagram = new CommentDiagram(nullptr, diagramName);
-				diagrams_[diagramName] = diagram;
-			}
+			auto diagram = node()->diagram(name);
+			Q_ASSERT(diagram);
 
-			auto item = renderer()->render(this, diagram);
-			addChildItem(item);
+			commentElements_.append( new VCommentDiagram(nullptr, diagram) );
+			continue;
 		}
-		// urls are specified as [browser#http://www.google.com]
-		else if(line.left(9) == "[browser#" && line.right(1) == "]" && line.size() > 9+1)
+
+		//************************************************************************
+		// Browsers
+		//************************************************************************
+		// urls are specified as [browser#http://www.example.com]
+		if(line.startsWith("[browser#") && line.right(1) == "]" && line.size() > 9+1)
 		{
+			createTextualCommentElement(linesOfCurrentElement); // Flush current text
+
 			QString mid = line.mid(9, line.size()-9-1);
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
-			QString url = items->at(0).second;
-			auto browser = new VCommentBrowser(this, QUrl(url));
+			QString url = items.at(0).second;
+			auto browser = new VCommentBrowser(nullptr, QUrl(url));
 
-			if(items->size() > 1)
+			if(items.size() > 1)
 			{
-				QSize size = parseSize(items->at(1).second);
+				QSize size = parseSize(items.at(1).second);
 				browser->updateSize(size);
 			}
 
-			addChildItem(browser);
-			delete items;
+			commentElements_.append( browser );
+			continue;
 		}
+
+		//************************************************************************
+		// Images
+		//************************************************************************
 		// images are specified as
 		//   [image#/home/user/image.png]
 		//   [image#image.png|300x300] to specify a size
-		else if(line.left(7) == "[image#" && line.right(1) == "]" && line.size() > 7+1)
+		if(line.startsWith("[image#") && line.right(1) == "]" && line.size() > 7+1)
 		{
+			createTextualCommentElement(linesOfCurrentElement); // Flush current text
+
 			QString mid = line.mid(7, line.size()-7-1);
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
-			QString path = items->at(0).second;
+
 			QSize size(0,0);
-			if(items->size() > 1)
-				size = parseSize(items->at(1).second);
+			if(items.size() > 1)
+				size = parseSize(items.at(1).second);
 
-			auto image = new VCommentImage(this, items->at(0).second, size);
+			auto image = new VCommentImage(nullptr, items.at(0).second, size);
 			image->setLineNumber(lineNumber);
-			addChildItem(image);
-			delete items;
+			commentElements_.append( image );
+
+			continue;
 		}
-		else
-		{
-			pushTextLine(line);
-		}
+
+		//************************************************************************
+		// Plain lines
+		//************************************************************************
+		linesOfCurrentElement << line;
 	}
 
-	popLineBuffer();
-	synchroniseDiagrams(diagramNames);
-}
-
-void VComment::synchroniseDiagrams(QSet<QString> itemDiagramNames)
-{
-	// get all diagrams from the node
-	auto nodeDiagrams = node()->diagrams();
-	// gather all names from the node diagrams for easier comparison
-	QSet<QString> nodeDiagramNames{};
-	for(auto diagram : *nodeDiagrams)
-		nodeDiagramNames << diagram->name();
-
-	// get intersection of two sets
-	QSet<QString> intersection(itemDiagramNames);
-	intersection.intersect(nodeDiagramNames);
-
-	// new diagrams were already constructed inside of parseLines(),
-	// they also need to be added to the model now
-	auto newDiagramNames = itemDiagramNames - intersection;
-
-	if(newDiagramNames.size() > 0)
-	{
-		node()->model()->beginModification(node(), "Adding new diagrams");
-		for(auto diagramName : newDiagramNames)
-		{
-			auto diagram = diagrams_.value(diagramName);
-			node()->diagrams()->append(diagram);
-		}
-		node()->model()->endModification();
-	}
-
-	// diagrams that are no longer referenced need to be removed from the model
-	auto oldDiagramNames = nodeDiagramNames - intersection;
-
-	if(oldDiagramNames.size() > 0)
-	{
-		node()->model()->beginModification(node(), "Removing unreferenced diagrams");
-		for(auto diagramName : oldDiagramNames)
-		{
-			auto diagram = diagrams_.value(diagramName);
-			node()->diagrams()->remove(diagram);
-			diagrams_.remove(diagramName);
-		}
-		node()->model()->endModification();
-	}
-}
-
-QMap<QString, CommentDiagram*> VComment::diagrams() const
-{
-	return diagrams_;
+	createTextualCommentElement(linesOfCurrentElement);
 }
 
 QSize VComment::parseSize(const QString& str)
@@ -276,32 +244,28 @@ QSize VComment::parseSize(const QString& str)
 	bool ok{};
 
 	int width = str.left(index).toInt(&ok);
-	if(index > 0 && !ok)
-		qDebug() << "Invalid width specified in size string:" << str;
+	if(index > 0 && !ok) return QSize{}; // Invalid size
 
 	int height = str.mid(index+1).toInt(&ok);
-	if(index+1 < str.size()-1 && !ok)
-		qDebug() << "Invalid height specified in size string:" << str;
+	if(index+1 < str.size()-1 && !ok) return QSize{}; // Invalid size
 
 	return QSize(width, height);
 }
 
-QVector<QPair<QString,QString>>* VComment::parseMarkdownArguments(const QString& argString)
+QList<QPair<QString, QString> > VComment::parseMarkdownArguments(const QString& argString)
 {
 	// split string on all pipes
 	auto lines = argString.split('|');
 	// TODO: get rid of escaped pipes \| e.g. in case an url contains one
 
-	auto pairs = new QVector<QPair<QString,QString>>();
+	auto pairs = QList<QPair<QString,QString>>();
 	// read key/value pairs
 	QRegExp rx("^[a-zA-Z]{,15}=");
 	for(auto line : lines)
 	{
 		int index = rx.indexIn(line);
-		if(index == -1)
-			pairs->push_back(qMakePair(QString(), line));
-		else
-			pairs->push_back(qMakePair(line.left(index), line.mid(index+1)));
+		if(index == -1) pairs.append(qMakePair(QString(), line));
+		else pairs.append(qMakePair(line.left(index), line.mid(index+1)));
 	}
 
 	return pairs;
@@ -320,61 +284,46 @@ QString VComment::replaceMarkdown(QString str)
 	return str;
 }
 
-void VComment::pushTextLine(QString text)
-{
-	lineBuffer_.push_back(text);
-}
-
-Item* VComment::popLineBuffer(bool asHtml)
+Item* VComment::createTextualCommentElement(QStringList& contents, bool asHtml)
 {
 	Item* item = nullptr;
 
-	if(lineBuffer_.size() > 0)
+	if(contents.size() > 0)
 	{
-		auto joined = lineBuffer_.join("\n");
+		auto joined = contents.join("\n");
 
 		if(asHtml)
 		{
 			auto browser = new VCommentBrowser(this, joined);
-			children_.push_back(browser);
+			commentElements_.append(browser);
 			item = browser;
 		}
 		else
 		{
 			auto text = new Text(this, Text::itemStyles().get("comment"), replaceMarkdown(joined));
 			text->setTextFormat(Qt::RichText);
-			children_.push_back(text);
+			commentElements_.append(text);
 			item = text;
 		}
 
-		lineBuffer_.clear();
+		contents.clear();
 	}
 
 	return item;
 }
 
-void VComment::addChildItem(Visualization::Item* item)
-{
-	popLineBuffer();
-	children_.push_back(item);
-}
-
 void VComment::toggleEditing()
 {
-	if(node()->lines()->size() == 0)
-		editing_ = true;
-	else
-		editing_ = !editing_;
+	if(node()->lines()->size() == 0) editing_ = true;
+	else editing_ = !editing_;
 
 	if(!editing_)
+	{
+		node()->synchronizeDiagramsToText();
 		parseLines();
+	}
 
 	setUpdateNeeded(StandardUpdate);
-}
-
-bool VComment::editing() const
-{
-	return editing_;
 }
 
 void VComment::initializeForms()
@@ -382,12 +331,12 @@ void VComment::initializeForms()
 	addForm((new SequentialLayoutFormElement())
 				->setVertical()
 				->setListOfItems([](Item* i) {
-					auto vc = static_cast<VComment*>(i);
-					return vc->children_;
+				  auto vc = static_cast<VComment*>(i);
+				  return vc->commentElements_;
 				}
 	));
 
-	addForm(item<Visualization::VList>(&I::editLabel_, [](I* v){ return v->node()->lines(); },
+	addForm(item<Visualization::VList>(&I::editText_, [](I* v){ return v->node()->lines(); },
 			[](I* v){return &v->style()->editList();}));
 }
 

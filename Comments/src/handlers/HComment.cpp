@@ -46,7 +46,10 @@ void HComment::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
 	{
 		event->accept();
+
+		vcomment->node()->beginModification("edit node");
 		vcomment->toggleEditing();
+		vcomment->node()->endModification();
 	}
 
 	if (!event->isAccepted()) GenericHandler::keyPressEvent(target, event);

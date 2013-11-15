@@ -40,7 +40,6 @@ class COMMENTS_API HCommentImage : public Interaction::GenericHandler {
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
 	protected:
 		HCommentImage();

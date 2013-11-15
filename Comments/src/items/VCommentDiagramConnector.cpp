@@ -25,6 +25,9 @@
  **********************************************************************************************************************/
 
 #include "VCommentDiagramConnector.h"
+#include "VCommentDiagramShape.h"
+#include "VCommentDiagram.h"
+
 #include "VisualizationBase/src/items/ItemStyle.h"
 
 using namespace Visualization;
@@ -33,7 +36,8 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentDiagramConnector, "item")
 
-VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
+VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node)
+	: Super(parent, node, itemStyles().get())
 {
 	// draw connectors below shapes
 	setZValue(0);
@@ -41,7 +45,7 @@ VCommentDiagramConnector::VCommentDiagramConnector(Item* parent, NodeType* node)
 
 VCommentDiagram* VCommentDiagramConnector::diagram()
 {
-	return dynamic_cast<VCommentDiagram*>(parent());
+	return DCast<VCommentDiagram>(parent());
 }
 
 void VCommentDiagramConnector::determineChildren(){}
@@ -50,25 +54,25 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 {
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
 	// it here again.
-	auto shape1 = diagram()->node()->shapes()->at(node()->shape1());
-	auto shape2 = diagram()->node()->shapes()->at(node()->shape2());
+	auto startShape = diagram()->diagramShape(node()->startShape());
+	auto endShape = diagram()->diagramShape(node()->endShape());
 
-	point1_ = shape1->pos()+shape1->connectorPoint(node()->point1());
-	point2_ = shape2->pos()+shape2->connectorPoint(node()->point2());
-	auto origin = QPoint(std::min(point1_.x(), point2_.x()), std::min(point1_.y(), point2_.y()));
-	point1_ -= origin;
-	point2_ -= origin;
+	startPoint_ = startShape->node()->pos() + startShape->node()->connectorPoint(node()->startPoint());
+	endPoint_ = endShape->node()->pos() + endShape->node()->connectorPoint(node()->endPoint());
+	auto origin = QPoint(std::min(startPoint_.x(), endPoint_.x()), std::min(startPoint_.y(), endPoint_.y()));
+	startPoint_ -= origin;
+	endPoint_ -= origin;
 
 	// make sure we get at least one pixel to draw inside!
-	int dx = std::max(1., std::abs(point1_.x() - point2_.x()));
-	int dy = std::max(1., std::abs(point1_.y() - point2_.y()));
+	int dx = std::max(1, std::abs(startPoint_.x() - endPoint_.x()));
+	int dy = std::max(1, std::abs(startPoint_.y() - endPoint_.y()));
 	setSize(dx, dy);
 }
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	painter->setPen(QPen(Qt::black, 1.0));
-	painter->drawLine(point1_, point2_);
+	painter->drawLine(startPoint_, endPoint_);
 }
 
 } /* namespace Comments */

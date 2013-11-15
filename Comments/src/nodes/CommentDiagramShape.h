@@ -31,51 +31,66 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Integer.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramShape)
 
 namespace Comments {
 
-enum ConnectorDirection { N, NNE, NE, ENE,
-								  E, ESE, SE, SSE,
-								  S, SSW, SW, WSW,
-								  W, WNW, NW, NNW };
-
-enum CommentDiagramShapeType { Rectangle, Ellipse, Diamond };
-
-class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode> {
+class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode>
+{
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramShape)
 
-	ATTRIBUTE(::Model::Text, label, setLabel)
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, shapeColor, setShapeColor, QString, const QString&)
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, textColor, setTextColor, QString, const QString&)
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, backgroundColor, setBackgroundColor, QString, const QString&)
-	ATTRIBUTE_VALUE(::Model::Integer, x, setX, int)
-	ATTRIBUTE_VALUE(::Model::Integer, y, setY, int)
-	ATTRIBUTE_VALUE(::Model::Integer, width, setWidth, int)
-	ATTRIBUTE_VALUE(::Model::Integer, height, setHeight, int)
-	ATTRIBUTE_VALUE(::Model::Integer, shapeType, setShapeType, int)
+	ATTRIBUTE(Model::Text, label, setLabel)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, shapeColor, setShapeColor, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, textColor, setTextColor, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, backgroundColor, setBackgroundColor, QString, const QString&)
+	ATTRIBUTE_VALUE(Model::Integer, x, setX, int)
+	ATTRIBUTE_VALUE(Model::Integer, y, setY, int)
+	ATTRIBUTE_VALUE(Model::Integer, width, setWidth, int)
+	ATTRIBUTE_VALUE(Model::Integer, height, setHeight, int)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, shapeTypePrivate, setShapeTypePrivate, int)
 
 	public:
-		CommentDiagramShape(const int& x, const int& y, const int& width, const int& height,
-				enum CommentDiagramShapeType shapeType);
+		enum class ShapeType : int { Rectangle, Ellipse, Diamond };
+
+		CommentDiagramShape(int x, int y, int width, int height, ShapeType shapeType);
+
+		ShapeType shapeType() const;
+		void setShapeType(const ShapeType& type);
 		QSize size() const;
 		QPoint pos() const;
-		QPoint connectorPoint(int index) const;
-		const QPoint* connectorPoints() const;
-		void updateConnectorPoints();
-		int hitsConnectorPoint(QPoint pos) const;
+
 		int index() const;
 
-	private:
-		QPoint connectorPoints_[16];
+		QPoint connectorPoint(int index) const;
+		int connectorPointNear(QPoint pos) const;
 
-	friend QDebug operator<<(QDebug dbg, const CommentDiagramShape *c);
+	private:
+		mutable int lastRevisionForConnectors_ = {revision() -1};
+		mutable QVector<QPoint> connectorPoints_;
+
+		void reCalculateConnectorPoints() const;
+		void assureConnectorPointsUpToDate() const;
 };
 
-inline const QPoint* CommentDiagramShape::connectorPoints() const { return connectorPoints_; }
-inline QPoint CommentDiagramShape::connectorPoint(int index) const { return connectorPoints_[index]; }
+inline CommentDiagramShape::ShapeType CommentDiagramShape::shapeType() const
+{ return static_cast<ShapeType> (shapeTypePrivate()); }
+inline void CommentDiagramShape::setShapeType(const ShapeType &type)
+{ setShapeTypePrivate(static_cast<int> (type)); }
+
+inline QSize CommentDiagramShape::size() const { return QSize(width(), height()); }
+inline QPoint CommentDiagramShape::pos() const { return QPoint(x(), y()); }
+inline void CommentDiagramShape::assureConnectorPointsUpToDate() const
+{
+	if (lastRevisionForConnectors_ != revision())
+	{
+		reCalculateConnectorPoints();
+		lastRevisionForConnectors_ = revision();
+	}
+}
+
+inline QPoint CommentDiagramShape::connectorPoint(int index) const
+{ assureConnectorPointsUpToDate(); return connectorPoints_.at(index); }
 
 } /* namespace Comments */

@@ -34,28 +34,19 @@ namespace Comments {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, shape1, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, point1, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, shape2, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, point2, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
 
 // references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(const int& shape1, const int& point1, const int& shape2,
-		const int& point2)
+CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)
 : Super{nullptr, CommentDiagramConnector::getMetaData()}
 {
-	setShape1(shape1);
-	setPoint1(point1);
-	setShape2(shape2);
-	setPoint2(point2);
-}
-
-QDebug operator<<(QDebug dbg, const CommentDiagramConnector *c)
-{
-	dbg.nospace() << "(CommentDiagramConnector: connects "
-			        << "(" << c->shape1() << "," << c->point1() << ") and "
-			        << "(" << c->shape2() << "," << c->point2() << ")";
-	return dbg.space();
+	setStartShape(startShape);
+	setStartPoint(startPoint);
+	setEndShape(endShape);
+	setEndPoint(endPoint);
 }
 
 } /* namespace Comments */

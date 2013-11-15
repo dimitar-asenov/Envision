@@ -37,23 +37,45 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentNode)
 REGISTER_ATTRIBUTE(CommentNode, lines, TypedListOfText, false, false, true)
 REGISTER_ATTRIBUTE(CommentNode, diagrams, TypedListOfCommentDiagram, false, false, true)
 
-CommentNode::CommentNode(const QString& label)
+CommentNode::CommentNode(const QString& text)
 : Super{nullptr, CommentNode::getMetaData()}
 {
-	QStringList linesList = label.split(QRegExp("\\r?\\n"));
+	QStringList linesList = text.split(QRegExp("\\r?\\n"));
 	for(auto line : linesList)
 		lines()->append(new Model::Text(line));
 }
 
-CommentDiagram* CommentNode::getDiagramByName(QString& name)
+CommentDiagram* CommentNode::diagram(const QString& name)
 {
 	for(auto diagram : *diagrams())
-	{
-		if(diagram->name() == name)
-			return diagram;
-	}
+		if(diagram->name() == name) return diagram;
 
 	return nullptr;
+}
+
+void CommentNode::synchronizeDiagramsToText()
+{
+	QStringList diagramNamesFromText;
+	for(auto lineNode : *lines())
+	{
+		auto line = lineNode->get();
+		if (line.startsWith("[diagram#") && line.right(1) == "]" && line.size() > 9+1)
+			diagramNamesFromText << line.mid(9, line.size()-9-1);
+	}
+
+	diagramNamesFromText.removeDuplicates();
+
+	// Remove old diagrams
+	for(int i = diagrams()->size() - 1; i>=0; --i)
+	{
+		if (diagramNamesFromText.contains(diagrams()->at(i)->name()))
+			diagramNamesFromText.removeOne(diagrams()->at(i)->name()); // There should be only one, we removed duplicates
+		else diagrams()->remove(i);
+	}
+
+	// Add new diagrams
+	for(auto newDiagram : diagramNamesFromText)
+		diagrams()->append(new CommentDiagram(nullptr, newDiagram));
 }
 
 } /* namespace Comments */

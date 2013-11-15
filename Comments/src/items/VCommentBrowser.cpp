@@ -26,58 +26,62 @@
 
 #include "VCommentBrowser.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/shapes/Shape.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 
 namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentBrowser, "item")
 
-QSize VCommentBrowser::defaultSize = QSize(400, 300);
+const QSize VCommentBrowser::defaultSize = QSize(400, 300);
 
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style)
-	: Super(parent, style)
-{
-	item_ = new QGraphicsWebView(this);
-	item_->setUrl(url);
-	size_ = defaultSize;
-}
+	: VCommentBrowser{parent, url, defaultSize, style}
+{}
 
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size, const StyleType* style)
-	: VCommentBrowser(parent, url, style)
+	: Super(parent, style), browser_{new QGraphicsWebView(this)}, size_{size}
 {
-	updateSize(size);
+	browser_->setUrl(url);
 }
 
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style)
-	: Super(parent, style)
+	: Super(parent, style), browser_{new QGraphicsWebView(this)}, size_{defaultSize}
 {
-	item_ = new QGraphicsWebView(this);
-	item_->setResizesToContents(true);
-	item_->setHtml(content);
-	item_->setMaximumSize(defaultSize);
-	item_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	size_ = defaultSize;
+	browser_->setResizesToContents(true);
+	browser_->setHtml(content);
+	browser_->setMaximumSize(defaultSize);
+	browser_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 VCommentBrowser::~VCommentBrowser()
 {
-	SAFE_DELETE(item_);
+	//TODO: Remove this dirty hack. This looks like a bug in QGraphicsWebView, but more investigation is needed.
+	// This item is originally removed from the scene when SAFE_DELETE_ITEM is called. It should not be necessary to
+	// add this item to the scene before destroying the browser_. However, the destructor of browser seems to
+	// eventually call QGraphicsScene::removeItem(). But where does it get a scene from?! If we don't add 'this' to
+	// the scene browser_->scene() returns nullptr. This resutls in a Segmentation Fault.
+	// More debugging is required, preferrably with symbols for the source code that happens when the destructor of
+	// QGraphicsWebView is called.
+	Visualization::VisualizationManager::instance().mainScene()->addItem(this);
+	SAFE_DELETE(browser_);
 }
 
-void VCommentBrowser::determineChildren()
-{
-}
+void VCommentBrowser::determineChildren() {}
 
 void VCommentBrowser::updateGeometry(int, int)
 {
-	if(size_.isValid())
+	browser_->setMaximumSize(size_);
+
+	if (hasShape())
 	{
-		setSize(size_);
-		item_->setMaximumSize(size_);
+		getShape()->setInnerSize(size_.width(), size_.height());
+		browser_->setPos(getShape()->contentLeft(), getShape()->contentTop());
 	}
 	else
 	{
-		qDebug() << item_->size();
 		setSize(size_);
+		browser_->setPos(0,0);
 	}
 }
 
@@ -86,21 +90,9 @@ QList<Visualization::Item*> VCommentBrowser::childItems() const
 	return {};
 }
 
-void VCommentBrowser::paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget)
-{
-	item_->setFont(painter->font());
-	item_->paint(painter, style, widget);
-}
-
 void VCommentBrowser::updateSize(QSize size)
 {
-	if(size.width() == 0 || size.height() == 0)
-	{
-		qDebug() << "Notice: Invalid browser size" << size << "specified for url" << item_->url().toString();
-		qDebug() << "Notice: Falling back to default size" << defaultSize;
-		size_ = defaultSize;
-	}
-	else
+	if(size.width() > 0 && size.height() > 0)
 		size_ = size;
 }
 

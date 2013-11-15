@@ -43,7 +43,7 @@ HCommentDiagramShape* HCommentDiagramShape::instance()
 
 void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	auto shape = DCast<VCommentDiagramShape>(target);
 	event->ignore();
 
 	if(shape->diagram()->editing())
@@ -51,12 +51,9 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 		if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
 		{
 			event->accept();
+			shape->diagram()->node()->beginModification("Remove shape");
 			shape->diagram()->node()->removeShape(shape->node());
-			// since the shape was selected, we need to clear it
-			auto scene = target->scene();
-			scene->clearFocus();
-			scene->clearSelection();
-			scene->setMainCursor(nullptr);
+			shape->diagram()->node()->endModification();
 		}
 	}
 
@@ -67,43 +64,50 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event)
 {
 	event->ignore();
-	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
-	if(shape->diagram()->editing())
+	auto vShape = DCast<VCommentDiagramShape>(target);
+	auto vDiagram = vShape->diagram();
+
+	if(vDiagram->editing())
 	{
+		vDiagram->node()->beginModification("shape");
+
 		QPoint clickPos(event->pos().toPoint());
 
 		if(event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
 		{
 			event->accept();
-			clickedRect_ = shape->hitsResizeRects(clickPos);
+			clickedRect_ = vShape->hitsResizeRects(clickPos);
 
 			if(clickedRect_ != RECT_NONE)
-				shape->setCursor(Qt::SizeAllCursor);
+				vShape->setCursor(Qt::SizeAllCursor);
 			else
-				shape->setCursor(Qt::ClosedHandCursor);
+				vShape->setCursor(Qt::ClosedHandCursor);
 		}
 		else if(event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier)
 		{
 			event->accept();
-			int connectorIndex = shape->node()->hitsConnectorPoint(clickPos);
+			int connectorIndex = vShape->node()->connectorPointNear(clickPos);
 			if(connectorIndex != -1)
 			{
-				int shapeIndex = shape->node()->index();
-				auto last = shape->diagram()->lastConnector();
+				int shapeIndex = vShape->node()->index();
+				auto last = vDiagram->lastConnector();
 
 				if(last.first == shapeIndex && last.second == connectorIndex)
 				{
 					// unselect connector if selected a second time
-					shapeIndex = connectorIndex = -1;
+					shapeIndex = -1;
+					connectorIndex = -1;
 				}
 				// make sure connectors are between two *different* shapes
 				else if(last.first != -1 && last.second != -1 && last.first != shapeIndex)
 				{
-					shape->diagram()->node()->addConnector(last.first, last.second, shapeIndex, connectorIndex);
-					shapeIndex = connectorIndex = -1;
+					vDiagram->node()->connectors()->append(
+								new CommentDiagramConnector(last.first, last.second, shapeIndex, connectorIndex));
+					shapeIndex = -1;
+					connectorIndex = -1;
 				}
 
-				shape->diagram()->setLastConnector(shapeIndex, connectorIndex);
+				vDiagram->setLastConnector(shapeIndex, connectorIndex);
 			}
 		}
 		else if(event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier)
@@ -111,6 +115,8 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 			event->accept();
 			showCommandPrompt(target);
 		}
+
+		vDiagram->node()->endModification();
 	}
 
 	if (!event->isAccepted())
@@ -119,41 +125,80 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 
 void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *)
 {
-	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	auto shape = DCast<VCommentDiagramShape>(target);
 	shape->setCursor(Qt::OpenHandCursor);
 	clickedRect_ = RECT_NONE;
 }
 
 void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	auto shape = DCast<VCommentDiagramShape>(target);
 
 	if(event->buttons() & Qt::LeftButton)
 	{
 		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
 
-		if(clickedRect_ == RECT_NONE)
-			shape->moveBy(diff);
-		else
-			shape->handleResize(clickedRect_, diff);
-	}
-}
+		switch(clickedRect_)
+		{
+			case RECT_NONE:
+				moveBy(shape, diff);
+				break;
+			case RECT_TOP_LEFT:
+				moveBy(shape, diff);
+				resizeBy(shape, QSize(-diff.x(), -diff.y()));
+				break;
+			case RECT_TOP_RIGHT:
+				moveBy(shape, QPoint(0, diff.y()));
+				resizeBy(shape, QSize(diff.x(), -diff.y()));
+				break;
+			case RECT_BOTTOM_RIGHT:
+				resizeBy(shape, QSize(diff.x(), diff.y()));
+				break;
+			case RECT_BOTTOM_LEFT:
+				moveBy(shape, QPoint(diff.x(), 0));
+				resizeBy(shape, QSize(-diff.x(), diff.y()));
+				break;
+		}
 
-void HCommentDiagramShape::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
-{
+		shape->setUpdateNeeded(VCommentDiagramShape::StandardUpdate);
+	}
 }
 
 void HCommentDiagramShape::hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
 {
-	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	auto shape = DCast<VCommentDiagramShape>(target);
 	if(shape->diagram()->editing())
 		shape->setCursor(Qt::OpenHandCursor);
 }
 
 void HCommentDiagramShape::hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
 {
-	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
+	auto shape = DCast<VCommentDiagramShape>(target);
 	shape->setCursor(Qt::ArrowCursor);
+}
+
+void HCommentDiagramShape::moveBy(VCommentDiagramShape* shape, QPoint pos)
+{
+	QPoint dest(shape->node()->pos() + pos);
+	if(dest.x() < 0) dest.setX(0);
+	if(dest.y() < 0) dest.setY(0);
+
+	shape->node()->beginModification("Moving shape");
+	shape->node()->setX(dest.x());
+	shape->node()->setY(dest.y());
+	shape->node()->endModification();
+}
+
+void HCommentDiagramShape::resizeBy(VCommentDiagramShape* shape, QSize size)
+{
+	QSize dest(shape->node()->size() + size);
+	if(dest.width() < 0) dest.setWidth(0);
+	if(dest.height() < 0) dest.setHeight(0);
+
+	shape->node()->beginModification("Resizing shape");
+	shape->node()->setWidth(dest.width());
+	shape->node()->setHeight(dest.height());
+	shape->node()->endModification();
 }
 
 } /* namespace Comments */

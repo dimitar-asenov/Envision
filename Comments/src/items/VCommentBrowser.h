@@ -52,12 +52,11 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
 
 	private:
 
-		static QSize defaultSize;
-		QGraphicsWebView* item_{};
+		static const QSize defaultSize;
+		QGraphicsWebView* browser_{};
 		QSize size_;
 };
 

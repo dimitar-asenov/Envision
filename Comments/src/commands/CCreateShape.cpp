@@ -44,10 +44,10 @@ Interaction::CommandResult* CCreateShape::create(Visualization::Item*, Visualiza
 	int x = std::max(0, last.x()-50), y = std::max(0, last.y()-50);
 
 	auto diagram = dynamic_cast<CommentDiagram*> (target->node());
-	auto shape = new CommentDiagramShape(x, y, 100, 100, Rectangle);
+	auto shape = new CommentDiagramShape(x, y, 100, 100, CommentDiagramShape::ShapeType::Rectangle);
 	// what kind of shape?
-	if(attributes.first() == "ellipse") shape->setShapeType(Ellipse);
-	else if(attributes.first() == "diamond") shape->setShapeType(Diamond);
+	if(attributes.first() == "ellipse") shape->setShapeType(CommentDiagramShape::ShapeType::Ellipse);
+	else if(attributes.first() == "diamond") shape->setShapeType(CommentDiagramShape::ShapeType::Diamond);
 
 	diagram->model()->beginModification(diagram, "create shape");
 	diagram->shapes()->append(shape);

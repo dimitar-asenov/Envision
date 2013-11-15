@@ -26,6 +26,8 @@
 
 #include "VCommentDiagram.h"
 #include "VCommentDiagramShape.h"
+#include "VCommentDiagramConnector.h"
+
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
@@ -45,156 +47,154 @@ VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 
 void VCommentDiagram::determineChildren()
 {
-	QList<Model::Node*> nodes;
-	nodes << node()->shapes()->nodes().toList();
-	nodes << node()->connectors()->nodes().toList();
-	synchronizeWithNodes(nodes, renderer());
+	synchronizeWithNodes(node()->shapes()->nodes(), shapes_);
+	synchronizeWithNodes(node()->connectors()->nodes(), connectors_);
+
+	int static i = 0;
+	if (!editing_) qDebug() << "Updating all" << ++i << (void*) this;
+	// Always update children
+	for (auto s : shapes_) s->setUpdateNeeded(StandardUpdate);
+	for (auto c : connectors_) c->setUpdateNeeded(StandardUpdate);
 }
 
 void VCommentDiagram::updateGeometry(int, int)
 {
-	QPoint shapeOffset(0,0);
-	if(hasShape())
-		shapeOffset = QPoint(getShape()->contentLeft(), getShape()->contentTop());
-
-	// use a sensible default size to display usage information
 	QSize minSize;
-	// this is not needed if there are any items, so really compute the minimal size otherwise
-	if(items_.size() == 0)
-		minSize = QSize(200, 50);
 
-	for(auto child : items_)
+	if(shapes_.isEmpty()) minSize = QSize(200, 50); // If there are no shapes yet, make space for a text message
+	else
 	{
-		// only count shapes, connectors will stay within these bounds
-		if(auto shape = dynamic_cast<CommentDiagramShape*>(child->node()))
+		// Compute minimum required size
+		minSize = QSize{0,0};
+		for (auto vShape : shapes_)
 		{
-			child->setPos(shape->pos() + shapeOffset);
+			auto nShape = vShape->node();
 
-			int shapeWidth = shape->x()+shape->width();
-			int shapeHeight = shape->y()+shape->height();
+			int shapeWidth = nShape->x() + nShape->width();
+			int shapeHeight = nShape->y() + nShape->height();
 			minSize = minSize.expandedTo(QSize(shapeWidth, shapeHeight));
 		}
-		// but connectors still need to be positioned
-		else if(auto connector = dynamic_cast<CommentDiagramConnector*>(child->node()))
-		{
-			auto shape1 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape1()]);
-			auto shape2 = dynamic_cast<CommentDiagramShape*>(node()->shapes()->nodes()[connector->shape2()]);
-			auto point1 = shape1->pos()+shape1->connectorPoint(connector->point1());
-			auto point2 = shape2->pos()+shape2->connectorPoint(connector->point2());
-			QPoint pos(std::min(point1.x(), point2.x()), std::min(point1.y(), point2.y()));
-			pos += shapeOffset;
-			child->setPos(pos);
-		}
 	}
-	minSize_ = minSize;
+
 	// override with user set size if provided
-	QSize expanded = minSize_.expandedTo(QSize(node()->width(), node()->height()));
+	QSize expanded = minSize.expandedTo(QSize(node()->width(), node()->height()));
+	if(editing_) expanded += QSize(2*EDIT_OUTLINE_SIZE, 2*EDIT_OUTLINE_SIZE);
 
 	if(hasShape())
-		getShape()->setInnerSize(expanded.width(), expanded.height());
-	else
-		setSize(expanded);
+	{
+		if (editing_) getShape()->setOutterSize(expanded.width(), expanded.height());
+		else getShape()->setInnerSize(expanded.width(), expanded.height());
+	}
+	else setSize(expanded);
 
-	if(minSize.width() > node()->width() || minSize.height() > node()->height())
-		resize(expanded);
+	QPoint offset{0,0};
+	if( editing_) offset+= QPoint(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE);
+	if( hasShape() )
+	{
+		if (getShape()->contentLeft() > offset.x()) offset.setX( getShape()->contentLeft());
+		if (getShape()->contentTop() > offset.y()) offset.setY( getShape()->contentTop());
+	}
+
+
+	// Position shapes
+	for (auto vShape : shapes_)
+	{
+		auto nShape = vShape->node();
+		vShape->setPos(nShape->pos() + offset);
+	}
+
+	// Position connectors
+	for (auto vConnector : connectors_)
+	{
+		auto nConnector = vConnector->node();
+
+		auto startShape = shapes_.at(nConnector->startShape());
+		auto endShape = shapes_.at(nConnector->endShape());
+		auto startPoint = startShape->pos() + startShape->node()->connectorPoint(nConnector->startPoint());
+		auto endPoint = endShape->pos() + endShape->node()->connectorPoint(nConnector->endPoint());
+
+		QPoint pos(std::min(startPoint.x(), endPoint.x()), std::min(startPoint.y(), endPoint.y()));
+		vConnector->setPos(pos);
+	}
 }
 
 void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Item::paint(painter, option, widget);
 
-	QRect rect(QPoint(0,0), size().toSize());
-
 	// assume a default white background
-	if(!hasShape())
-		painter->setBrush(QBrush(Qt::white));
+	if(!hasShape()) painter->setBrush(Qt::white);
+	else painter->setBrush(Qt::NoBrush);
 
 	if(editing_)
 	{
-		QPen pen = painter->pen(), oldPen = painter->pen();
-		pen.setWidth(10);
-		pen.setColor(Qt::red);
-		painter->setPen(pen);
-		painter->drawRect(rect);
-		painter->setPen(oldPen);
+		painter->setPen(QPen(Qt::red, EDIT_OUTLINE_SIZE));
+		painter->drawRect( QRect{QPoint(EDIT_OUTLINE_SIZE/2, EDIT_OUTLINE_SIZE/2),
+										 size().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
 	}
 	else if(!hasShape())
-		painter->drawRect(rect);
+		painter->drawRect(QRect{QPoint(0,0), size().toSize()});
 
-	if(items_.size() == 0)
+	if(shapes_.isEmpty())
 	{
 		painter->setPen(QPen(QColor(100, 100, 100)));
-		painter->drawText(rect, Qt::AlignCenter | Qt::TextWordWrap, "This diagram does not contain any shapes yet.");
+		painter->drawText(QRect{QPoint(0,0), size().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
+								"This diagram does not contain any shapes yet.");
 	}
 }
 
-void VCommentDiagram::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
+template <class T>
+void VCommentDiagram::synchronizeWithNodes(const QVector<Model::Node*>& nodes, QVector<T*>& destination)
 {
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
-		if (i >= items_.size() ) items_.append( renderer->render(this, nodes[i]));	// This node is new
-		else if ( items_[i]->node() == nodes[i] )	continue;	// This node is already there
+		if (i >= destination.size() )
+			destination.append( new T(this, static_cast<typename T::NodeType*>(nodes[i])));	// This node is new
+		else if ( destination[i]->node() == nodes[i] )	continue;	// This node is already there
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it
 			bool found = false;
-			for (int k = i + 1; k < items_.size(); ++k)
+			for (int k = i + 1; k < destination.size(); ++k)
 			{
-				if ( items_[k]->node() == nodes[i] )
+				if ( destination[k]->node() == nodes[i] )
 				{
 					// We found this node, swap the visualizations
-					swap(i, k);
+					T* t = destination[i];
+					destination[i] = destination[k];
+					destination[k] = t;
+
 					found = true;
 					break;
 				}
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) items_.insert(i, renderer->render(this, nodes[i]));
+			if (!found ) destination.insert(i, new T(this, static_cast<typename T::NodeType*>(nodes[i])));
 		}
 	}
 
 	// Remove excess items
-	while (items_.size() > nodes.size())
+	while (destination.size() > nodes.size())
 	{
-		SAFE_DELETE_ITEM(items_.last());
-		items_.pop_back();
+		SAFE_DELETE_ITEM(destination.last());
+		destination.pop_back();
 	}
-}
-
-inline void VCommentDiagram::swap(int i, int j)
-{
-	Item* t = items_[i];
-	items_[i] = items_[j];
-	items_[j] = t;
 }
 
 void VCommentDiagram::toggleEditing()
 {
 	editing_ = !editing_;
-
-	for(auto child : items_)
-	{
-		auto shape = dynamic_cast<VCommentDiagramShape*>(child);
-		if(shape != nullptr)
-			shape->setTextEditable(editing_);
-	}
-
-	if(!editing_)
-		showConnectorPoints_ = false;
+	if(!editing_) showConnectorPoints_ = false;
 
 	setUpdateNeeded(StandardUpdate);
 }
 
-void VCommentDiagram::resize(QSize size)
+void VCommentDiagram::setShowConnectorPoints(bool show)
 {
-	size = size.expandedTo(minSize_);
-
-	node()->model()->beginModification(node(), "Resizing diagram");
-	node()->setSize(size);
-	node()->model()->endModification();
-	setUpdateNeeded(Visualization::Item::StandardUpdate);
+	showConnectorPoints_ = show;
+	setUpdateNeeded(VCommentDiagram::StandardUpdate);
 }
 
 } /* namespace Comments */

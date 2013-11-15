@@ -27,8 +27,6 @@
 #pragma once
 
 #include "../comments_api.h"
-
-#include "VCommentDiagram.h"
 #include "VCommentStyle.h"
 #include "../nodes/CommentNode.h"
 
@@ -38,6 +36,8 @@
 
 namespace Comments {
 
+class VCommentDiagram;
+
 class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 	Visualization::DeclarativeItem<VComment>, CommentNode> >
 {
@@ -45,31 +45,25 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 
 	public:
 		VComment(Visualization::Item* parent, NodeType* node);
+
 		static void initializeForms();
 		virtual int determineForm() override;
-		void clearChildren();
-		QMap<QString, CommentDiagram*> diagrams() const;
-		QVector<QPair<QString,QString>>* parseMarkdownArguments(const QString& argString);
+
+		QList<QPair<QString,QString>> parseMarkdownArguments(const QString& argString);
 
 		void toggleEditing();
 		bool editing() const;
 
 	private:
-		void parseLines();
-		void synchroniseDiagrams(QSet<QString> itemDiagramNames);
-		QString replaceMarkdown(QString str);
-		void pushTextLine(QString text);
-		Item* popLineBuffer(bool asHtml = false);
-		void addChildItem(Visualization::Item* item);
-		QSize parseSize(const QString& str);
-
-		QStringList lineBuffer_{};
 		bool editing_{};
-		Visualization::VList* editLabel_{};
-		QMap<QString, CommentDiagram*> diagrams_{};
-		QList<Visualization::Item*> children_{};
+		Visualization::VList* editText_{};
+		QList<Visualization::Item*> commentElements_{};
+
+		void parseLines();
+		QString replaceMarkdown(QString str);
+		Item* createTextualCommentElement(QStringList& contents, bool asHtml = false);
+		QSize parseSize(const QString& str);
 };
 
-inline void VComment::clearChildren() { children_.clear(); }
-
+inline bool VComment::editing() const { return editing_; }
 } /* namespace Comments */

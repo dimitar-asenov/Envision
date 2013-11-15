@@ -41,15 +41,17 @@ class COMMENTS_API HCommentDiagramShape : public Interaction::GenericHandler {
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event);
-		virtual void hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event);
+		virtual void hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
+		virtual void hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
 
 	protected:
 		HCommentDiagramShape();
 
 	private:
 		enum VCommentDiagramResizeRect clickedRect_;
+
+		void moveBy(VCommentDiagramShape* shape, QPoint pos);
+		void resizeBy(VCommentDiagramShape* shape, QSize pos);
 };
 
 }

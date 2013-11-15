@@ -41,29 +41,30 @@ class COMMENTS_API VCommentImage : public Super<Visualization::Item>
 		VCommentImage(Visualization::Item* parent, const QString& path, const StyleType* style = itemStyles().get());
 		VCommentImage(Visualization::Item* parent, const QString& path, QSize size,
 				const StyleType* style = itemStyles().get());
-		virtual ~VCommentImage();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void resizeBy(QPoint diff);
+
+		QSize imageSize() const;
+		bool updateSize(QSize size); // Returns true if the size was successfully updated
+
+		int lineNumber() const;
 		void setLineNumber(int lineNumber);
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		void paint(QPainter* painter, const QStyleOptionGraphicsItem* style, QWidget* widget) override;
-		void updateSize(QSize size);
 
 	private:
-		QRect textDimensions(QFont font, const QString& text);
 
-		QImage* image_{};
-		QString path_{};
-		QSize size_{};
-		QString text_{};
+		QString path_;
+		QImage image_;
+		QSize size_;
 		int lineNumber_{-1};
 
-		static unsigned int errorTextPadding;
+		static const QSize errorSize_;
 };
 
-inline void VCommentImage::setLineNumber(int lineNumber) { lineNumber_ = lineNumber; }
+inline void VCommentImage::setLineNumber(int lineNumber) { Q_ASSERT(lineNumber>=0); lineNumber_ = lineNumber; }
+inline QSize VCommentImage::imageSize() const { return size_; }
+inline int VCommentImage::lineNumber() const {return lineNumber_;}
 
 } /* namespace Comments */

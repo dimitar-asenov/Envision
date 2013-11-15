@@ -28,12 +28,9 @@
 
 #include "../comments_api.h"
 
-#include "CommentDiagramConnector.h"
-
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Integer.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramConnector)
@@ -44,15 +41,13 @@ class COMMENTS_API CommentDiagramConnector : public Super<Model::CompositeNode> 
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramConnector)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, label, setLabel, QString, const QString&)
-	ATTRIBUTE_VALUE(::Model::Integer, shape1, setShape1, int)
-	ATTRIBUTE_VALUE(::Model::Integer, point1, setPoint1, int)
-	ATTRIBUTE_VALUE(::Model::Integer, shape2, setShape2, int)
-	ATTRIBUTE_VALUE(::Model::Integer, point2, setPoint2, int)
+	ATTRIBUTE_VALUE(::Model::Integer, startShape, setStartShape, int)
+	ATTRIBUTE_VALUE(::Model::Integer, startPoint, setStartPoint, int)
+	ATTRIBUTE_VALUE(::Model::Integer, endShape, setEndShape, int)
+	ATTRIBUTE_VALUE(::Model::Integer, endPoint, setEndPoint, int)
 
 	public:
-		CommentDiagramConnector(const int& shape1, const int& point1, const int& shape2, const int& point2);
-
-	friend QDebug operator<<(QDebug dbg, const CommentDiagramConnector *c);
+		CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint);
 };
 
 } /* namespace Comments */

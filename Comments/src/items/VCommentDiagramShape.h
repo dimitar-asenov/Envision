@@ -28,15 +28,13 @@
 
 #include "../comments_api.h"
 
+#include "../nodes/CommentDiagramShape.h"
+#include "VCommentDiagram.h"
+#include "VCommentDiagramShapeStyle.h"
+
 #include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/VText.h"
-#include "VCommentDiagram.h"
-#include "VCommentDiagramShapeStyle.h"
-#include "../nodes/CommentDiagramShape.h"
-#include "VCommentDiagramShapeStyle.h"
-#include "VCommentDiagram.h"
 
 namespace Comments {
 
@@ -49,13 +47,9 @@ class COMMENTS_API VCommentDiagramShape
 
 	public:
 		VCommentDiagramShape(Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		void moveBy(QPoint pos);
-		void resizeBy(QSize pos);
-		VCommentDiagram* diagram();
-		void setTextEditable(bool editable);
 
+		VCommentDiagram* diagram();
 		VCommentDiagramResizeRect hitsResizeRects(QPoint pos) const;
-		void handleResize(enum VCommentDiagramResizeRect rect, QPoint diff);
 
 	protected:
 		virtual void determineChildren() override;
@@ -63,12 +57,13 @@ class COMMENTS_API VCommentDiagramShape
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 	private:
-		void updateResizeRects();
 
 		QColor shapeColor_, textColor_, backgroundColor_;
-		Visualization::VText *text_;
-		QRect resizeRects_[4];
-		static int resizePointWidth;
+		Visualization::VText *text_{};
+
+		inline const std::array<const QRect,4> resizeRects() const;
 };
+
+
 
 } /* namespace Comments */

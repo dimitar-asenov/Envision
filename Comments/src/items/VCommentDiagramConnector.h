@@ -33,17 +33,18 @@
 #include "VisualizationBase/src/items/ItemWithNode.h"
 
 #include "../nodes/CommentDiagramConnector.h"
-#include "VCommentDiagram.h"
 
 namespace Comments {
+class VCommentDiagram;
 
-class COMMENTS_API VCommentDiagramConnector : public Super<Visualization::ItemWithNode<VCommentDiagramConnector, Visualization::Item, CommentDiagramConnector> >
+class COMMENTS_API VCommentDiagramConnector: public Super<Visualization::ItemWithNode<VCommentDiagramConnector,
+		Visualization::Item, CommentDiagramConnector> >
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagramConnector, Visualization::ItemStyle)
 
 	public:
 		VCommentDiagramConnector(Visualization::Item* parent, NodeType* node);
-		VCommentDiagram *diagram();
+		VCommentDiagram* diagram();
 
 	protected:
 		virtual void determineChildren() override;
@@ -51,7 +52,7 @@ class COMMENTS_API VCommentDiagramConnector : public Super<Visualization::ItemWi
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	private:
-		QPointF point1_, point2_;
+		QPoint startPoint_, endPoint_;
 };
 
 } /* namespace Comments */

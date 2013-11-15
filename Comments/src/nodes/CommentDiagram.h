@@ -32,7 +32,6 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Boolean.h"
 #include "ModelBase/src/nodes/Float.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "CommentDiagramShape.h"
 #include "CommentDiagramConnector.h"
@@ -45,17 +44,15 @@ class COMMENTS_API CommentDiagram : public Super<Model::CompositeNode> {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagram)
 
 	ATTRIBUTE_VALUE(Model::Text, name, setName, QString)
-	ATTRIBUTE_VALUE(Model::Float, width, setWidth, qreal)
-	ATTRIBUTE_VALUE(Model::Float, height, setHeight, qreal)
+	ATTRIBUTE_VALUE(Model::Integer, width, setWidth, int)
+	ATTRIBUTE_VALUE(Model::Integer, height, setHeight, int)
 	ATTRIBUTE(Model::TypedList<CommentDiagramShape>, shapes, setShapes)
 	ATTRIBUTE(Model::TypedList<CommentDiagramConnector>, connectors, setConnectors)
 
 	public:
 		CommentDiagram(Node *parent, QString name);
-		void setSize(QSizeF size);
-		void addConnector(int shape1, int point1, int shape2, int point2);
-		void removeConnector(CommentDiagramConnector *connector);
-		void removeShape(CommentDiagramShape *shape);
+		void setSize(QSize size);
+		void removeShape(CommentDiagramShape* shape);
 };
 
 } /* namespace Comments */

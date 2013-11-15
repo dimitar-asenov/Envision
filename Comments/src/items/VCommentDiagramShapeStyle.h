@@ -28,7 +28,6 @@
 
 #include "../comments_api.h"
 
-#include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace Comments {

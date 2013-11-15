@@ -55,25 +55,39 @@ void HCommentImage::mousePressEvent(Visualization::Item* target, QGraphicsSceneM
 
 void HCommentImage::mouseReleaseEvent(Visualization::Item * /* target */, QGraphicsSceneMouseEvent *)
 {
-	if(resizing_)
-	{
-		resizing_ = false;
-	}
+	if(resizing_) resizing_ = false;
 }
 
 void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	auto image = dynamic_cast<VCommentImage*>(target);
+	auto image = DCast<VCommentImage>(target);
 
 	if(resizing_ && event->buttons() & Qt::RightButton)
 	{
 		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
-		image->resizeBy(diff);
-	}
-}
+		auto newSize = image->imageSize() + QSize(diff.x(), diff.y());
+		if (image->updateSize(newSize))
+		{
+			auto node = DCast<VComment>(image->parent())->node();
+			Q_ASSERT(node);
 
-void HCommentImage::mouseDoubleClickEvent(Visualization::Item*, QGraphicsSceneMouseEvent *)
-{
+			auto child = node->lines()->at(image->lineNumber());
+			auto line = child->get();
+
+			auto pipe = line.lastIndexOf('|');
+			if(pipe == -1)
+				pipe = line.size() - 1;
+
+			auto updated = line.left(pipe) +
+					"|" + QString::number(newSize.width()) + "x" + QString::number(newSize.height()) + "]";
+
+			node->beginModification("Updating image dimensions");
+			node->lines()->replaceChild(child, new Model::Text(updated));
+			node->endModification();
+
+			image->setUpdateNeeded(VCommentImage::StandardUpdate);
+		}
+	}
 }
 
 } /* namespace Comments */

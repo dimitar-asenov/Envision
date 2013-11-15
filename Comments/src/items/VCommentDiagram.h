@@ -38,6 +38,9 @@
 
 namespace Comments {
 
+class VCommentDiagramShape;
+class VCommentDiagramConnector;
+
 class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VCommentDiagram,
 						Visualization::Item, CommentDiagram> >
 {
@@ -58,6 +61,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 		QPair<int,int> lastConnector() const;
 		void setLastConnector(int shape, int point);
+		VCommentDiagramShape* diagramShape(int index);
 
 	protected:
 		virtual void determineChildren() override;
@@ -65,23 +69,29 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	private:
-		void synchronizeWithNodes(const QList<Model::Node*>& nodes, Visualization::ModelRenderer* renderer);
-		void swap(int i, int j);
 
-		void clearChildren();
-		QVector<Visualization::Item*> items_;
-		bool editing_{}, showConnectorPoints_{};
-		QSize minSize_;
+		const static int EDIT_OUTLINE_SIZE = 10;
+
+		QVector<VCommentDiagramShape*> shapes_;
+		QVector<VCommentDiagramConnector*> connectors_;
+
+		bool editing_{};
+		bool showConnectorPoints_{};
 		QPair<int,int> lastConnector_{-1, -1};
 		QPoint lastRightClick_;
+
+		template <class T>
+		void synchronizeWithNodes(const QVector<Model::Node*>& nodes, QVector<T*>& destination);
+
+		void clearChildren();
 };
 
 inline QPoint VCommentDiagram::lastRightClick() const { return lastRightClick_; }
 inline void VCommentDiagram::setLastRightClick(QPoint pos) { lastRightClick_ = pos; }
 inline bool VCommentDiagram::editing() const { return editing_; }
 inline bool VCommentDiagram::showConnectorPoints() const { return editing() && showConnectorPoints_; }
-inline void VCommentDiagram::setShowConnectorPoints(bool show) { showConnectorPoints_ = show; }
 inline QPair<int,int> VCommentDiagram::lastConnector() const { return lastConnector_; }
 inline void VCommentDiagram::setLastConnector(int shape, int point) { lastConnector_ = qMakePair(shape, point); }
+inline VCommentDiagramShape* VCommentDiagram::diagramShape(int index) { return shapes_.at(index);}
 
 } /* namespace Comments */

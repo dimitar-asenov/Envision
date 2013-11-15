@@ -44,7 +44,7 @@ HCommentDiagram* HCommentDiagram::instance()
 
 void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	auto diagram = DCast<VCommentDiagram>(target);
 	event->ignore();
 
 	if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
@@ -64,7 +64,7 @@ void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 
 void HCommentDiagram::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	auto diagram = DCast<VCommentDiagram>(target);
 
 	if(diagram->showConnectorPoints() && !(event->modifiers() & Qt::Key_Shift))
 	{
@@ -75,33 +75,30 @@ void HCommentDiagram::keyReleaseEvent(Visualization::Item *target, QKeyEvent *ev
 
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	auto diagram = DCast<VCommentDiagram>(target);
 	event->ignore();
 
-	if(diagram->editing())
+	if(diagram->editing() && event->button() == Qt::RightButton)
 	{
-		if(event->button() == Qt::RightButton)
-		{
-			event->accept();
+		event->accept();
 
-			if(event->modifiers() & Qt::ShiftModifier)
-			{
-				originalSize_ = diagram->size();
-				resizing_ = true;
-				diagram->setCursor(Qt::SizeAllCursor);
-			}
-			else
-			{
-				diagram->setLastRightClick(event->pos().toPoint());
-				showCommandPrompt(target);
-			}
+		if(event->modifiers() & Qt::ShiftModifier)
+		{
+			originalSize_ = diagram->size();
+			resizing_ = true;
+			diagram->setCursor(Qt::SizeAllCursor);
+		}
+		else
+		{
+			diagram->setLastRightClick(event->pos().toPoint());
+			showCommandPrompt(target);
 		}
 	}
 }
 
 void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *)
 {
-	auto diagram = dynamic_cast<VCommentDiagram*>(target);
+	auto diagram = DCast<VCommentDiagram>(target);
 	diagram->setCursor(Qt::ArrowCursor);
 	resizing_ = false;
 }
@@ -110,10 +107,14 @@ void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 {
 	if(resizing_)
 	{
-		auto diagram = dynamic_cast<VCommentDiagram*>(target);
+		auto diagram = DCast<VCommentDiagram>(target);
 		QPointF diff = event->pos() - event->buttonDownPos(Qt::RightButton);
 		QSize newSize(originalSize_.width() + diff.x(), originalSize_.height() + diff.y());
-		diagram->resize(newSize);
+
+		diagram->node()->beginModification("resize diagram");
+		diagram->node()->setSize(newSize);
+		diagram->node()->endModification();
+		diagram->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	}
 }
 

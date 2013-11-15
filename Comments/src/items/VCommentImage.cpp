@@ -26,34 +26,23 @@
 
 #include "VCommentImage.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/shapes/Shape.h"
 
 namespace Comments {
 
-/*
- * Padding of text error
- */
-unsigned int VCommentImage::errorTextPadding = 10;
-
 ITEM_COMMON_DEFINITIONS(VCommentImage, "item")
 
+const QSize VCommentImage::errorSize_{400, 400};
+
 VCommentImage::VCommentImage(Visualization::Item* parent, const QString& path, const StyleType* style)
-	: Super(parent, style)
-{
-	path_ = path;
-	image_ = new QImage(path);
-	if(!image_->isNull())
-		size_ = image_->size();
-}
+	: Super(parent, style), path_{path}, image_{path}, size_{image_.isNull() ? errorSize_ : image_.size()}
+{}
 
-VCommentImage::VCommentImage(Visualization::Item* parent, const QString& text, QSize size, const StyleType* style)
-	: VCommentImage(parent, text, style)
+VCommentImage::VCommentImage(Visualization::Item* parent, const QString& path, QSize size, const StyleType* style)
+	: VCommentImage(parent, path, style)
 {
+	Q_ASSERT(size.isValid());
 	updateSize(size);
-}
-
-VCommentImage::~VCommentImage()
-{
-	SAFE_DELETE(image_);
 }
 
 void VCommentImage::determineChildren()
@@ -62,74 +51,39 @@ void VCommentImage::determineChildren()
 
 void VCommentImage::updateGeometry(int, int)
 {
-	if(image_->isNull())
-	{
-		text_ = "This image could not be loaded: "+path_;
-		QRect rect = textDimensions(scene()->font(), text_);
-		size_ = rect.size()+QSize(2*errorTextPadding, 2*errorTextPadding);
-	}
-	setSize(size_);
-}
+	QSize minSize = image_.isNull() ? errorSize_ : size_;
 
-QList<Visualization::Item*> VCommentImage::childItems() const
-{
-	return {};
-}
-
-QRect VCommentImage::textDimensions(QFont font, const QString& text)
-{
-	float minRatio = 1.5, maxRatio = 4.0;
-
-	QFontMetrics qfm(font);
-	// compute reasonable text dimensions
-   int width = 0;
-   QRect rect = qfm.boundingRect(0, 0, width, 0, Qt::AlignCenter | Qt::TextWordWrap, text);
-   float ratio = float(rect.width()) / float(rect.height());
-   // if the ratio is initially already above the max ratio, there is nothing we can do,
-   // as this means it contains one huge word that requires at least this much width...
-   // i.e. we can not reduce the width to improve the ratio
-   int i = 0;
-   if(ratio < maxRatio)
-   {
-   	// let's make this defensive... I don't think this can possibly
-   	// get stuck in an infinite loop, but I don't trust my gut.
-   	// => limit it to 100 iterations
-		while(i < 100 && (ratio < minRatio || ratio > maxRatio))
-		{
-			i++;
-			if (ratio < 1.5)
-				width += 30;
-			else
-				width -= 30;
-
-			rect = qfm.boundingRect(0, 0, width, 0, Qt::AlignCenter | Qt::TextWordWrap, text);
-			ratio = float(rect.width())/float(rect.height());
-		}
-   }
-   // move rect to (0,0) as boundingRect may return negative coordinates for the top left point
-   rect.translate(-rect.topLeft());
-   return rect;
+	if(hasShape()) getShape()->setInnerSize(minSize.width(), minSize.height());
+	else setSize(minSize);
 }
 
 void VCommentImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-	QRectF rect(QPointF(0,0), size());
-	if(!image_->isNull())
-		painter->drawImage(rect, *image_);
-	else
+	int xOffset = 0;
+	int yOffset = 0;
+	if (hasShape())
 	{
-		QRectF padded(QPointF(errorTextPadding, errorTextPadding), size()-QSize(2*errorTextPadding, 2*errorTextPadding));
-		// draw text with some padding
-		painter->fillRect(rect, QBrush(QColor(255, 200, 200)));
-		painter->drawText(padded, Qt::AlignCenter | Qt::TextWordWrap, text_);
+		xOffset = getShape()->contentLeft();
+		yOffset = getShape()->contentTop();
 	}
+
+	if (image_.isNull())
+	{
+		painter->setPen(QPen(QColor(100, 100, 100)));
+		painter->drawText(QRect{QPoint(xOffset,yOffset), errorSize_}, Qt::AlignCenter | Qt::TextWordWrap,
+								"This image could not be loaded: " + path_);
+	}
+	else
+		painter->drawImage(QRect{QPoint(xOffset,yOffset), size_}, image_);
 }
 
-void VCommentImage::updateSize(QSize size)
+bool VCommentImage::updateSize(QSize size)
 {
-	if(!image_->isNull())
+	Q_ASSERT(size.isValid());
+
+	if(!image_.isNull())
 	{
-		QSize imageSize = image_->size();
+		QSize imageSize = image_.size();
 
 		if(size.width() == 0 && size.height() == 0)
 			size = imageSize;
@@ -139,35 +93,15 @@ void VCommentImage::updateSize(QSize size)
 			size.setHeight(imageSize.height() * ((double)size.width() / imageSize.width()));
 
 		size_ = size;
+		setUpdateNeeded(StandardUpdate);
+		return true;
 	}
-}
-
-void VCommentImage::resizeBy(QPoint diff)
-{
-	if(image_->isNull())
-		return;
-
-	size_ = QSize(size_.width() + diff.x(), size_.height() + diff.y());
-
-	if(lineNumber_ > -1)
+	else
 	{
-		auto node = dynamic_cast<VComment*>(parent())->node();
-		auto child = node->lines()->at(lineNumber_);
-		auto line = child->get();
-		// does the line contain a pipe?
-		auto pipe = line.lastIndexOf('|');
-		if(pipe == -1)
-			pipe = line.size() - 1;
-
-		auto updated = line.left(pipe) +
-				"|" + QString::number(size_.width()) + "x" + QString::number(size_.height()) + "]";
-
-		node->beginModification("Updating image dimensions");
-		node->lines()->replaceChild(child, new Model::Text(updated));
-		node->endModification();
+		size_ = errorSize_;
+		setUpdateNeeded(StandardUpdate);
+		return false;
 	}
-
-	setUpdateNeeded(StandardUpdate);
 }
 
 } /* namespace Comments */
