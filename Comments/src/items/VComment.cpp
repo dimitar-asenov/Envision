@@ -70,9 +70,9 @@ void VComment::parseLines()
 		{
 			listCount++;
 			// does this create a new list?
-			if(listCount == 0) linesOfCurrentElement << "<ul><li>&bull; " << line.mid(3);
+			if(listCount == 0) linesOfCurrentElement << "<ul><li>&bull;\t" << line.mid(3);
 			// otherwise, just add another list item
-			else linesOfCurrentElement << "</li><li>&bull; " << line.mid(3);
+			else linesOfCurrentElement << "</li><li>&bull;\t" << line.mid(3);
 
 			continue;
 		}
@@ -80,7 +80,7 @@ void VComment::parseLines()
 		// or is this extending an existing list?
 		if(line.startsWith("   ") && listCount > -1)
 		{
-			linesOfCurrentElement << line.mid(3);
+			linesOfCurrentElement << "<br/>&nbsp;&nbsp;" << line.mid(3);
 			continue;
 		}
 

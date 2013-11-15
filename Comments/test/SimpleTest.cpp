@@ -63,6 +63,7 @@ TEST(Comments, SimpleTest)
 		"Also, lists work...\n"
 		" * A first item\n"
 		" * A second item\n"
+		"   This one spans two lines\n"
 		" * And so on, of course...\n"
 
 		"# Images\n"
