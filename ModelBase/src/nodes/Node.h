@@ -40,6 +40,7 @@ namespace Model {
 class Model;
 class UndoCommand;
 class NodeReadWriteLock;
+class UsedLibrary;
 
 /**
  * The Node class is the foundation element in the model tree in Envision. An application in Envision is a collection of
@@ -441,6 +442,17 @@ class MODELBASE_API Node
 		 * \sa Model::endModification()
 		 */
 		void endModification();
+
+		/**
+		 * Returns a list of all libraries that are used by this node and its subnodes.
+		 *
+		 * This method should be called on root nodes, as once a node specifies a used library, its children no longer
+		 * need to specify it.
+		 *
+		 * The default implementation simply recursively calls the same method for all children and returns a combined
+		 * list.
+		 */
+		virtual QList<UsedLibrary*> usedLibraries();
 
 		/**
 		 * Converts this node to a string for use in debug purposes only.

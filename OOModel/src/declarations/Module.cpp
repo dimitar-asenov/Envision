@@ -38,6 +38,7 @@ REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
+REGISTER_ATTRIBUTE(Module, libraries, TypedListOfUsedLibrary, false, false, true)
 
 Module::Module(const QString& name) : Super(nullptr, Module::getMetaData())
 {
@@ -47,6 +48,14 @@ Module::Module(const QString& name) : Super(nullptr, Module::getMetaData())
 Module::SymbolTypes Module::symbolType() const
 {
 	return CONTAINER;
+}
+
+QList<Model::UsedLibrary*> Module::usedLibraries()
+{
+	QList<Model::UsedLibrary*> all;
+	for(auto l : *libraries()) all.append(l);
+	for(auto m : *modules()) all << m->usedLibraries();
+	return all;
 }
 
 }

@@ -39,6 +39,7 @@ REGISTER_ATTRIBUTE(Project, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Project, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
+REGISTER_ATTRIBUTE(Project, libraries, TypedListOfUsedLibrary, false, false, true)
 
 Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 {
@@ -48,6 +49,16 @@ Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 Project::SymbolTypes Project::symbolType() const
 {
 	return CONTAINER;
+}
+
+
+QList<Model::UsedLibrary*> Project::usedLibraries()
+{
+	QList<Model::UsedLibrary*> all;
+	for(auto l : *libraries()) all.append(l);
+	for(auto p : *projects()) all << p->usedLibraries();
+	for(auto m : *modules()) all << m->usedLibraries();
+	return all;
 }
 
 }

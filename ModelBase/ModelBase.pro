@@ -3,7 +3,8 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/SymbolMatcher.h \
+HEADERS += src/nodes/UsedLibrary.h \
+    src/SymbolMatcher.h \
     src/commands/CompositeNodeChangeChild.h \
     src/nodes/composite/CompositeNode.h \
     src/nodes/composite/CompositeIndex.h \
@@ -52,7 +53,8 @@ HEADERS += src/SymbolMatcher.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/SymbolMatcher.cpp \
+SOURCES += src/nodes/UsedLibrary.cpp \
+    src/SymbolMatcher.cpp \
     src/commands/CompositeNodeChangeChild.cpp \
     src/nodes/composite/CompositeNode.cpp \
     src/nodes/composite/CompositeIndex.cpp \

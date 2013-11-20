@@ -34,6 +34,7 @@
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/UsedLibrary.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -49,11 +50,13 @@ class OOMODEL_API Module : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
+	ATTRIBUTE(Model::TypedList<Model::UsedLibrary>, libraries, setLibraries)
 
 	public:
 		Module(const QString& name);
 
 		virtual SymbolTypes symbolType() const override;
+		virtual QList<Model::UsedLibrary*> usedLibraries() override;
 };
 
 }

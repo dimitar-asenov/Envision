@@ -78,7 +78,8 @@ Node* Node::createDefaultInstance(Node*)
  **********************************************************************************************************************/
 void Node::execute(UndoCommand *command)
 {
-	if ( this != command->target() ) throw ModelException("Command target differs from current node when executing commands");
+	if ( this != command->target() )
+		throw ModelException("Command target differs from current node when executing commands");
 
 	Model* m = model();
 
@@ -334,12 +335,23 @@ NodeReadWriteLock* Node::accessLock() const
 	else
 		return model()->rootLock();
 }
+
+QList<UsedLibrary*> Node::usedLibraries()
+{
+	QList<UsedLibrary*> all;
+	for(auto c : children())
+		all << c->usedLibraries();
+	return all;
+}
+
 /***********************************************************************************************************************
  * STATIC METHODS
  **********************************************************************************************************************/
-int Node::registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor)
+int Node::registerNodeType(const QString &type, const NodeConstructor constructor,
+		const NodePersistenceConstructor persistenceconstructor)
 {
-	if ( isTypeRegistered(type) ) throw ModelException("Trying to register a node type that has already been registered: " + type);
+	if ( isTypeRegistered(type) )
+		throw ModelException("Trying to register a node type that has already been registered: " + type);
 
 	nodeConstructorRegister.insert(type, constructor);
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
