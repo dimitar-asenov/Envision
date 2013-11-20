@@ -41,4 +41,10 @@ UsedLibrary::UsedLibrary(const QString& name) : Super(nullptr, UsedLibrary::getM
 	setName(name);
 }
 
+
+QList<UsedLibrary*> UsedLibrary::usedLibraries()
+{
+	return {this};
+}
+
 } /* namespace Model */

@@ -450,7 +450,8 @@ class MODELBASE_API Node
 		 * need to specify it.
 		 *
 		 * The default implementation simply recursively calls the same method for all children and returns a combined
-		 * list.
+		 * list. This implementation is sufficient for correct operation, but derived classes can nevertheless override
+		 * this method in order to prune the search tree.
 		 */
 		virtual QList<UsedLibrary*> usedLibraries();
 

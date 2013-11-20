@@ -43,6 +43,7 @@ class MODELBASE_API UsedLibrary : public Super<CompositeNode>
 
 	public:
 		UsedLibrary(const QString& name);
+		virtual QList<UsedLibrary*> usedLibraries() override;
 };
 
 } /* namespace Model */
