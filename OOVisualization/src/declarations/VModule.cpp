@@ -66,6 +66,7 @@ VModule::~VModule()
 	content_ = nullptr;
 	fields_ = nullptr;
 	declarations_ = nullptr;
+	libraries_ = nullptr;
 }
 
 void VModule::determineChildren()
@@ -88,9 +89,10 @@ void VModule::determineChildren()
 	bodyItems << node()->methods()->nodes().toList();
 	body_->synchronizeWithNodes(bodyItems, renderer());
 
-	auto fieldsIndex = node()->subDeclarations()->size() > 0 ? 1 : 0;
-	content_->synchronizeFirst(declarations_, fieldsIndex > 0 ? node()->subDeclarations() :nullptr,
-			&style()->declarations());
+	content_->synchronizeFirst(libraries_, node()->libraries(), &style()->libraries());
+	auto fieldsIndex = node()->subDeclarations()->size() > 0 ? 2 : 1;
+	content_->synchronizeMid(declarations_, fieldsIndex > 1 ? node()->subDeclarations() :nullptr,
+		&style()->declarations(), 1);
 	content_->synchronizeMid(fields_, node()->fields()->size() > 0 ? node()->fields() : nullptr, &style()->fields(),
 			fieldsIndex);
 }

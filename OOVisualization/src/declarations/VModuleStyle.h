@@ -48,6 +48,7 @@ class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle content_;
 		Visualization::VListStyle fields_;
 		Visualization::VListStyle declarations_;
+		Visualization::VListStyle libraries_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
@@ -60,6 +61,7 @@ class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& content() const;
 		const Visualization::VListStyle& fields() const;
 		const Visualization::VListStyle& declarations() const;
+		const Visualization::VListStyle& libraries() const;
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VModuleStyle::layout() const {return layout_; }
@@ -70,5 +72,6 @@ inline const Visualization::PositionLayoutStyle& VModuleStyle::body() const { re
 inline const Visualization::SequentialLayoutStyle& VModuleStyle::content() const { return content_; }
 inline const Visualization::VListStyle& VModuleStyle::fields() const { return fields_; }
 inline const Visualization::VListStyle& VModuleStyle::declarations() const { return declarations_; }
+inline const Visualization::VListStyle& VModuleStyle::libraries() const { return libraries_; }
 
 }

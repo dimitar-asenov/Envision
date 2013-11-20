@@ -40,6 +40,7 @@ void VModuleStyle::load(Visualization::StyleLoader& sl)
 	sl.load("content", content_);
 	sl.load("fields", fields_);
 	sl.load("declarations", declarations_);
+	sl.load("libraries", libraries_);
 }
 
 }

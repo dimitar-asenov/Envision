@@ -88,6 +88,14 @@
 			<spaceBetweenElements>2</spaceBetweenElements>
 		</itemsStyle>
 	</declarations>
+	<libraries prototypes="item/VList/default">
+		<shape/>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<alignment>1</alignment>
+			<direction>2</direction>
+			<spaceBetweenElements>2</spaceBetweenElements>
+		</itemsStyle>
+	</libraries>
 	<fields prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box

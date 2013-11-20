@@ -1,0 +1,9 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/AJ_Books.svg</filename>
+		<width>24</width>
+		<height>24</height>
+	</icon>
+	<name prototypes="item/Text/default" />
+</style>

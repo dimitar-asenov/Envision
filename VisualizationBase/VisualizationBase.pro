@@ -8,7 +8,9 @@ win32:LIBS += -llogger \
 LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/styles/StyleProperty.h \
+HEADERS += src/items/VUsedLibraryStyle.h \
+    src/items/VUsedLibrary.h \
+    src/styles/StyleProperty.h \
     src/items/NameOverlay.h \
     test/DeclarativeTestStyle.h \
     src/declarative/DeclarativeItemBaseStyle.h \
@@ -114,7 +116,9 @@ HEADERS += src/styles/StyleProperty.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/items/NameOverlay.cpp \
+SOURCES += src/items/VUsedLibraryStyle.cpp \
+    src/items/VUsedLibrary.cpp \
+    src/items/NameOverlay.cpp \
     test/DeclarativeTestStyle.cpp \
     src/declarative/DeclarativeItemBaseStyle.cpp \
     src/items/VCompositeStyle.cpp \

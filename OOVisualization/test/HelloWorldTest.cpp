@@ -44,6 +44,7 @@
 #include "VisualizationBase/src/items/RootItem.h"
 
 #include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/nodes/UsedLibrary.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -333,6 +334,8 @@ Project* addJavaLibrary(Project* parent)
 	Module* io = new Module();
 	java->modules()->append(io);
 	io->setName("io");
+	io->libraries()->append(new Model::UsedLibrary("JavaSubLib1"));
+	io->libraries()->append(new Model::UsedLibrary("JavaSubLib2"));
 
 	Class* printstream = new Class("PrintStream", Modifier::Public);
 	io->classes()->append(printstream);
@@ -826,6 +829,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
 	// Create project
 	auto prj = new Project("HelloWorld");
+	prj->libraries()->append(new Model::UsedLibrary("java"));
+
 	prj->subDeclarations()->append(new NameImport(
 			new ReferenceExpression("Code", new ReferenceExpression("SomeLibrary"))));
 	prj->subDeclarations()->append(new NameImport(
