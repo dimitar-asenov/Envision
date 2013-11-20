@@ -54,6 +54,9 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		void toggleEditing();
 		bool editing() const;
 
+	protected:
+		virtual void determineChildren() override;
+
 	private:
 		bool editing_{};
 		Visualization::VList* editText_{};
