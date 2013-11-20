@@ -8,7 +8,21 @@
 <listEntry value="1"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="javaImportTool.Main"/>
+
+<!--
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="large ${project_loc}/test/large_project/ ${project_loc}/../DebugBuild/projects/"/>
+ -->
+
+<!--
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="sun ${project_loc}/test/java-sun/ ${project_loc}/../DebugBuild/projects/"/>
+ -->
+
+<!--
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="java ${project_loc}/test/java-light/ ${project_loc}/../DebugBuild/projects/"/>
+ -->
+ 
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="tetris ${project_loc}/test/JavaTetris/ ${project_loc}/../DebugBuild/projects/ --libs:java"/>
+
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="JavaImportTool"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx4G"/>
 </launchConfiguration>

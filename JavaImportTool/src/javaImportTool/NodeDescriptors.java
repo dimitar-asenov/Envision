@@ -50,11 +50,13 @@ public class NodeDescriptors {
 		}));
 		add( new NodeInitializer("Project", true, "-class-level-container", new String[][]{
 				{"TypedListOfProject","projects"},
-				{"TypedListOfModule","modules"}
+				{"TypedListOfModule","modules"},
+				{"TypedListOfUsedLibrary","libraries"}
 		}));
 		
 		add( new NodeInitializer("Module", true, "-class-level-container", new String[][]{
-				{"TypedListOfModule","modules"}
+				{"TypedListOfModule","modules"},
+				{"TypedListOfUsedLibrary","libraries"}
 		}));
 		add( new NodeInitializer("Class", "-class-level-container", new String[][]{
 				{"TypedListOfExpression","baseClasses"},
@@ -222,5 +224,10 @@ public class NodeDescriptors {
 		add( new NodeInitializer("Integer", 0));
 		add( new NodeInitializer("Float", 0.0));
 		add( new NodeInitializer("Text", ""));
+		
+		// Misc
+		add( new NodeInitializer("UsedLibrary", new String[][]{
+				{"Text","name"}
+		}));
 	}
 }

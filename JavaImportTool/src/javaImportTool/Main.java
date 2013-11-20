@@ -2,7 +2,7 @@ package javaImportTool;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
+
 import javaImportTool.Node.OutputFormat;
 
 import org.apache.commons.io.FileUtils;
@@ -19,29 +19,62 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		if (args == null
-			|| (args.length < 3 || args.length > 4)
-			|| (args.length == 4 && !args[0].equals("--classFiles")))
+		if (args == null || (args.length < 3 || args.length > 5))
 		{
+			System.out.println("Invalid number of arguments: " + args.length);
 			System.out.println(usageInfo);
 			return;
 		}
 		
-		boolean classFiles = args.length == 4 ;
-		int argIndex = classFiles ? 1 : 0;
+		// Project Name argument
+		String projectName = args[0];
 		
-		String projectName = args[argIndex + 0];
-		
-		String inputDirectory = args[argIndex + 1];
+		// Input directory
+		String inputDirectory = args[1];
 		if (!inputDirectory.endsWith(File.separator)) inputDirectory += File.separator;
 		
-		String outputDirectory = args[argIndex + 2];
+		// Output directory
+		String outputDirectory = args[2];
 		if (!outputDirectory.endsWith(File.separator)) outputDirectory += File.separator;
+		
+		// Remaining arguments
+		boolean classFiles = false;
+		String[] extraLibraries = null;
+		for (int i = 3; i < args.length; ++i)
+		{
+			if (args[i].equals("--classFiles")) classFiles = true;
+			else if (args[i].startsWith("--libs:"))
+			{
+				extraLibraries = args[i].substring("--libs:".length()).split(",");
+			}
+			else
+			{
+				System.out.println("Argument " + (i + 1) + " is invalid: " + args[i]);
+				System.out.println(usageInfo);
+			}
+		}
 		
 		try
 		{
 			Node root = new Node(null, "Project", "0");
 			root.setSymbol(projectName);
+			
+			// Add libraries requested on the command line
+			if (extraLibraries != null)
+			{
+				int nextLibraryId = 0;
+				for(String s : extraLibraries)
+				{
+					if (s.length() > 0)
+					{
+						Node lib = new Node(null, "UsedLibrary", nextLibraryId);
+						lib.child("name").setStringValue(s);
+						root.child("libraries").add(lib);
+						++nextLibraryId;
+					}
+					
+				}
+			}
 			
 			// Add the default java.lang import
 			Node nameImport = root.child("subDeclarations").add(new Node(null, "NameImport", "0"));
@@ -89,11 +122,8 @@ public class Main {
 	}
 	
 	private static String usageInfo =
-			  "Usage: JavaImportTool project-name input-directory output-directory\n"
+			  "Usage: JavaImportTool project-name input-directory output-directory [--classFiles] [--libs:...]\n"
 		  	+ "\n"
-			+ "   [--classFiles]\n"
-			+ "      Parse .class fiels instead of .java files.\n"
-			+ "\n"
 			+ "   project-name\n"
 			+ "      This is the name of the project being converted. This will be used as a directory and file names\n"
 			+ "      that are create inside output-directory.\n"
@@ -106,5 +136,12 @@ public class Main {
 			+ "   output-directory\n"
 			+ "      This is the directory that will contain the converted result. In this directory a sub-directory\n"
 			+ "      specified by the project-name is crated. It will contain the generated XML file to be imported\n"
-			+ "      in Envision.\n";
+			+ "      in Envision.\n"
+			+ "\n"
+			+ "   --classFiles\n"
+			+ "      Parse .class fiels instead of .java files.\n"
+			+ "\n"
+			+ "   --libs:...\n"
+			+ "      Include the specified comma separeted list of library dependencies in the output project.\n"
+			+ "      E.g. --libs:java or --libs:java,fancyMath,OpenGl\n";
 }
