@@ -41,6 +41,8 @@ class MODELBASE_API ModelManager {
 
 	public:
 		~ModelManager();
+		ModelManager(const ModelManager&) = delete;
+		ModelManager& operator=(const ModelManager&) = delete;
 
 		/**
 		 * Registers types with the meta object system of Qt to allow signals and slots to work with lists.
