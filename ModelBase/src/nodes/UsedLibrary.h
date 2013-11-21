@@ -44,6 +44,12 @@ class MODELBASE_API UsedLibrary : public Super<CompositeNode>
 	public:
 		UsedLibrary(const QString& name);
 		virtual QList<UsedLibrary*> usedLibraries() override;
+
+		Node* libraryRoot() const;
+		Model* libraryModel() const;
+		void loadLibraryModel(PersistentStore* store) const;
 };
+
+inline Node* UsedLibrary::libraryRoot() const { if (auto m = libraryModel()) return m->root(); else return nullptr;}
 
 } /* namespace Model */

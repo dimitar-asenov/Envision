@@ -30,6 +30,7 @@
 #include "../commands/SetModificationTarget.h"
 #include "../commands/AddModifiedNode.h"
 #include "../nodes/Reference.h"
+#include "../nodes/UsedLibrary.h"
 
 namespace Model {
 
@@ -200,17 +201,19 @@ void Model::save(PersistentStore* store)
 
 void Model::load(PersistentStore* store, const QString& name, bool loadPartially)
 {
+	Q_ASSERT(!root_);
+
 	if (name.isEmpty()) throw ModelException("Loading a model without specifying a name");
 	if (!store) throw ModelException("Loading model '" + name + "' without specifying a persistent store");
 
 	name_ = name;
-	if ( root_ == nullptr )
-	{
-		store_ = store;
-		commands.clear();
-		root_ = store_->loadModel(this, name_, loadPartially);
-		emit rootNodeSet(root_);
-	}
+	store_ = store;
+
+	auto root = store->loadModel(this, name, loadPartially);
+	for(auto lib : root->usedLibraries())
+		lib->loadLibraryModel(store->clone());
+
+	setRoot(root);
 }
 
 void Model::setRoot(Node* node)
@@ -221,16 +224,7 @@ void Model::setRoot(Node* node)
 	commands.clear();
 	root_ = node;
 
-	QList<Node*> nodeStack{ {node} };
-	while (!nodeStack.isEmpty())
-	{
-		auto node = nodeStack.takeLast(); //Depth first
-		if (auto ref = dynamic_cast<Reference*>(node))
-			if (!ref->isResolved()) addUnresolvedReference(ref);
-
-		for (auto children : node->children())
-			nodeStack.append(children);
-	}
+	scanUnresolvedReferences();
 
 	beginModification(root_, "Resolve children");
 	tryResolvingReferences();

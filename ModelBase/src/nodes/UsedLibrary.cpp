@@ -26,6 +26,9 @@
 
 #include "UsedLibrary.h"
 
+#include "../model/Model.h"
+#include "../model/ModelManager.h"
+
 #include "TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::UsedLibrary)
 
@@ -45,6 +48,21 @@ UsedLibrary::UsedLibrary(const QString& name) : Super(nullptr, UsedLibrary::getM
 QList<UsedLibrary*> UsedLibrary::usedLibraries()
 {
 	return {this};
+}
+
+void UsedLibrary::loadLibraryModel(PersistentStore* store) const
+{
+	if (libraryModel() == nullptr)
+		(new Model())->load(store, name(), true); // Automatically ends up in the ModelManager
+}
+
+
+Model* UsedLibrary::libraryModel() const
+{
+	for(auto m : ModelManager::instance().loadedModels())
+		if (m->name() == name()) return m;
+
+	return nullptr;
 }
 
 } /* namespace Model */
