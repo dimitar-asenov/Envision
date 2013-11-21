@@ -49,19 +49,10 @@ CommandResult* CSceneHandlerLoad::execute(Item*, Item*, const QStringList& comma
 	auto matching = matchingProjects(commandTokens.last());
 	Q_ASSERT(matching.size() == 1);
 
-	QString projectDir = "projects/";
-	auto store = new FilePersistence::SimpleTextFileStore();
-	store->setBaseFolder(projectDir);
+	auto model = new Model::Model();
+	model->load(new FilePersistence::SimpleTextFileStore("projects/"), matching.first(), false);
 
-	Model::Model* model = new Model::Model();
-	model->load(store, matching.first(), false);
-
-	auto rootNode = model->root();
-	model->beginModification(rootNode, "Resolve references");
-	model->scanUnresolvedReferences(); // These will be automatically resolved when endModification() is called
-	model->endModification();
-
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(rootNode));
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(model->root()));
 	VisualizationManager::instance().mainScene()->listenToModel(model);
 
 	return new CommandResult();
