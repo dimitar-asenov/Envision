@@ -37,8 +37,10 @@ namespace FilePersistence {
 class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 {
 	public:
-		SimpleTextFileStore();
+		SimpleTextFileStore(const QString& baseDir = QString::null);
 		virtual ~SimpleTextFileStore();
+
+		virtual SimpleTextFileStore* clone() const override;
 
 		void setBaseFolder(const QString& baseFolder);
 

@@ -47,6 +47,13 @@ FileStore::~FileStore()
 {
 }
 
+FileStore* FileStore::clone() const
+{
+	auto fs = new FileStore();
+	fs->baseFolder = baseFolder;
+	return fs;
+}
+
 void FileStore::setBaseFolder(const QString& path)
 {
 	baseFolder = path;

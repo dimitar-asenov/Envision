@@ -45,6 +45,8 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual ~SystemClipboard();
 
 		// Methods from Persistent Store
+		virtual SystemClipboard* clone() const override;
+
 		virtual void saveStringValue(const QString &value) override;
 		virtual void saveIntValue(int value) override;
 		virtual void saveDoubleValue(double value) override;

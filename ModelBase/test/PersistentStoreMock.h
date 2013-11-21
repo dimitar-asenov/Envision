@@ -39,6 +39,7 @@ class PersistentStoreMock: public PersistentStore
 		PersistentStoreMock();
 		~PersistentStoreMock();
 
+		virtual PersistentStore* clone() const override;
 
 		virtual void saveStringValue(const QString &value) override;
 		virtual void saveIntValue(int value) override;

@@ -50,6 +50,11 @@ SystemClipboard::~SystemClipboard()
 	SAFE_DELETE(xml);
 }
 
+SystemClipboard* SystemClipboard::clone() const
+{
+	return new SystemClipboard();
+}
+
 // Methods from Persistent Store
 void SystemClipboard::saveModel(::Model::Model* model, const QString &name)
 {

@@ -44,6 +44,8 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		FileStore();
 		virtual ~FileStore();
 
+		virtual FileStore* clone() const override;
+
 		void setBaseFolder(const QString& baseFolder);
 
 		// Methods from Persistent Store

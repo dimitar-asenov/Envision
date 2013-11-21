@@ -39,6 +39,8 @@ PersistentStoreMock::~PersistentStoreMock()
 {
 }
 
+PersistentStore* PersistentStoreMock::clone() const {return nullptr;}
+
 void PersistentStoreMock::saveModel(Model* model, const QString &name)
 {
 	saveNode(model->root(), name);

@@ -40,13 +40,20 @@ const char* PERSISTENT_UNIT_NODE_TYPE = "persistencenewunit";
 const QString SimpleTextFileStore::NULL_STRING = "____NULL____";
 
 // TODO the Envision folder should be taken from the environment not hardcoded.
-SimpleTextFileStore::SimpleTextFileStore() :
-		baseFolder_(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects"))
+SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
+		baseFolder_{baseDir.isNull() ? QDir::home().path() + QDir::toNativeSeparators("/Envision/projects") : baseDir}
 {}
 
 SimpleTextFileStore::~SimpleTextFileStore()
 {
 	Q_ASSERT(persisted_ == nullptr);
+}
+
+SimpleTextFileStore* SimpleTextFileStore::clone() const
+{
+	auto ss = new SimpleTextFileStore();
+	ss->baseFolder_ = baseFolder_;
+	return ss;
 }
 
 void SimpleTextFileStore::setBaseFolder(const QString& path)
