@@ -50,8 +50,6 @@ void VCommentDiagram::determineChildren()
 	synchronizeWithNodes(node()->shapes()->nodes(), shapes_);
 	synchronizeWithNodes(node()->connectors()->nodes(), connectors_);
 
-	int static i = 0;
-	if (!editing_) qDebug() << "Updating all" << ++i << (void*) this;
 	// Always update children
 	for (auto s : shapes_) s->setUpdateNeeded(StandardUpdate);
 	for (auto c : connectors_) c->setUpdateNeeded(StandardUpdate);
