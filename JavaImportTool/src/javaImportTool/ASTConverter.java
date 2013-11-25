@@ -586,8 +586,7 @@ public class ASTConverter {
 		}
 		else if (type.isSimpleType())
 		{
-			t = new Node(null, "ClassTypeExpression", name);
-			t.setChild("typeExpression", expression(((SimpleType)type).getName(), "typeExpression"));
+			t = expression( ((SimpleType)type).getName(), name);
 		}
 		else if (type.isArrayType())
 		{
@@ -595,20 +594,20 @@ public class ASTConverter {
 			t.setChild("typeExpression", typeExpression(((ArrayType)type).getComponentType(), "typeExpression"));
 		} else if (type.isQualifiedType())
 		{
-			t = new Node(null, "ClassTypeExpression", name);
+			t = new Node(null, "ReferenceExpression", name);
 			Node prefix = typeExpression(((QualifiedType)type).getQualifier(), "prefix");
 			
-			t.child("typeExpression").add(prefix);
-			t.child("typeExpression").setChild("ref", expression(((QualifiedType)type).getName(), "ref"));
+			t.add(prefix);
+			t.setChild("ref", expression(((QualifiedType)type).getName(), "ref"));
 		} else if (type.isParameterizedType())
 		{
 			t = typeExpression(((ParameterizedType)type).getType(), name);
-			if (!t.tag().equals("ClassTypeExpression"))
+			if (!t.tag().equals("ReferenceExpression"))
 				throw new ConversionException("Invaid parametric base type" + t.tag());
 			
 			int i = 0;
 			for(Type arg : (List<Type>)((ParameterizedType)type).typeArguments())
-				t.child("typeExpression").child("typeArguments").add(typeExpression(arg, Integer.toString(i++)));
+				t.child("typeArguments").add(typeExpression(arg, Integer.toString(i++)));
 		} else if (type.isWildcardType())
 		{
 			// TODO: Implement this
@@ -776,7 +775,13 @@ public class ASTConverter {
 			//TODO: support anonymous class creation
 			
 			//TODO: support constructor arguments
-			node.setChild("newType", typeExpression(cic.getType(), "newType"));
+			Node constructorCall = node.setChild("newType", new Node(null, "MethodCallExpression", "newType"));
+			constructorCall.setChild("callee", typeExpression(cic.getType(), "callee"));
+				
+			for (Expression arg : (List<Expression>) cic.arguments())
+				constructorCall.child("arguments").add(
+						expression(arg, Integer.toString(constructorCall.child("arguments").numChildren())));
+			
 		} else if (e instanceof ConditionalExpression)
 		{
 			ConditionalExpression ce = (ConditionalExpression) e;
