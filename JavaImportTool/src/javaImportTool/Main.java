@@ -27,16 +27,19 @@ package javaImportTool;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import javaImportTool.Node.OutputFormat;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Message;
 import org.eclipse.jdt.core.util.ClassFileBytesDisassembler;
 import org.eclipse.jdt.core.util.ClassFormatException;
 
@@ -124,7 +127,20 @@ public class Main {
 					source = FileUtils.readFileToString(file);
 				
 				parser.setSource(source.toCharArray());
+				
+				// Ensure compliance with the latest java
+				 Map options = JavaCore.getOptions();
+				 JavaCore.setComplianceOptions(JavaCore.VERSION_1_7, options);
+				 parser.setCompilerOptions(options);
+				 
 				CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+				
+				if ( unit.getMessages().length > 0)
+				{
+					System.err.println("Errors encountered while parsing.");
+					for(Message m : unit.getMessages()) System.err.println(m.getMessage());
+				}
+				
 				ASTConverter tl = new ASTConverter(root, source);
 				tl.visit(unit);
 				System.out.println("Done");
