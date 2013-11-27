@@ -904,35 +904,23 @@ public class ASTConverter {
 		} else if (e instanceof NumberLiteral)
 		{
 			String num = ((NumberLiteral) e).getToken();
+			boolean isHex = num.startsWith("0x") || num.startsWith("0X");
+			boolean hasExponent = (!isHex && (num.contains("e") || num.contains("E"))) || num.contains("p");
+			boolean isReal = hasExponent || num.contains(".")
+					|| (!isHex && (num.endsWith("f") || num.endsWith("F") || num.endsWith("d")) );
 			
-			//TODO: Verify that the correct node type is always created
-			if (!num.contains("x") && !num.contains("X")
-					&& ((num.contains(".") || num.contains("e") || num.contains("E"))
-						|| num.endsWith("f") || num.endsWith("F") || num.endsWith("d") ))
+			if (isReal)
 			{
-				if (num.endsWith("f") || num.endsWith("F") || num.endsWith("d") ) num = num.substring(0,num.length()-1);
 				node = new Node(null, "FloatLiteral", name);
 				node.child("value").setDoubleValue(Double.parseDouble(num));
 			}
 			else
 			{
-				long decoded = 0;
-				if (num.equals("0x8000000000000000L")) decoded = 0x8000000000000000L;
-				else
-				{
-					if (num.endsWith("L") || num.endsWith("l")) num = num.substring(0,num.length()-1);
-					
-					boolean hex = false;
-					if (num.startsWith("0x") || num.startsWith("0X"))
-					{
-						hex = true;
-						num = num.substring(2,num.length());
-					}
-					
-					decoded = new BigInteger(num, hex ? 16 : 10).longValue();
-				}
+				if (num.endsWith("L") || num.endsWith("l")) num = num.substring(0,num.length()-1);
+				if (isHex) num = num.substring(2,num.length());
+
 				node = new Node(null, "IntegerLiteral", name);
-				node.child("value").setLongValue(decoded);
+				node.child("value").setLongValue( new BigInteger(num, isHex ? 16 : 10).longValue() );
 			}
 		} else if (e instanceof ParenthesizedExpression)
 		{
