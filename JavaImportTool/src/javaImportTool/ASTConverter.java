@@ -182,6 +182,13 @@ public class ASTConverter {
 		for (Type t : (List<Type>)node.superInterfaceTypes())
 			cl.child("baseClasses").add(typeExpression(t, Integer.toString(i++)));
 		
+		// Process enum constants
+		for (EnumConstantDeclaration ec : (List<EnumConstantDeclaration>)node.enumConstants())
+		{
+			// TODO: Handle special enumeration types
+			cl.addSymbolNodeInList("enumerators", "Enumerator", ec.getName().getIdentifier());
+		}
+		
 		// Body declarations
 		visitClassBody(node.bodyDeclarations());
 	}
@@ -199,12 +206,7 @@ public class ASTConverter {
 			else if (b instanceof FieldDeclaration) visit((FieldDeclaration)b, fields++);
 			else if (b instanceof AbstractTypeDeclaration) visit((AbstractTypeDeclaration)b, false);
 			else if (b instanceof Initializer); // TODO: Handle this
-			else if (b instanceof EnumConstantDeclaration)
-			{
-				// TODO: Handle special enumeration types
-				containers.peek().addSymbolNodeInList("enumerators", "Enumerator",
-						((EnumConstantDeclaration)b).getName().getIdentifier());
-			}
+			else if (b instanceof EnumConstantDeclaration) assert(false);
 			else if (b instanceof AnnotationTypeMemberDeclaration)
 				visit((AnnotationTypeMemberDeclaration)b, annotations++);
 			else throw new UnknownFeatureException("Unknown body declaration: " + b.getClass().getSimpleName());
