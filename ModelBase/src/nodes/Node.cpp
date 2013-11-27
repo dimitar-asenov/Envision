@@ -31,6 +31,7 @@
 #include "ModelException.h"
 #include "Reference.h"
 #include "Core/src/AdapterManager.h"
+#include "UsedLibrary.h"
 
 using namespace Logger;
 
@@ -201,6 +202,15 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* 
 
 		if ((exhaustAllScopes || !found) && parent_)
 			found = parent_->findSymbols(result, matcher, source, SEARCH_UP, symbolTypes, exhaustAllScopes) || found;
+
+		// Search in libraries. This is only valid for root nodes
+		if ((exhaustAllScopes || !found) && !parent_)
+			for(auto l : usedLibraries())
+			{
+				auto libRoot = l->libraryRoot();
+				Q_ASSERT(libRoot);
+				found = libRoot->findSymbols(result, matcher, libRoot, SEARCH_DOWN, symbolTypes, exhaustAllScopes) || found;
+			}
 	}
 
 	return found;
