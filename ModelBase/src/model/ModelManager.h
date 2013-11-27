@@ -49,6 +49,11 @@ class MODELBASE_API ModelManager {
 		 */
 		static void init();
 
+		/**
+		 * Closes all loaded models.
+		 */
+		static void cleanup();
+
 		static ModelManager& instance();
 
 		/**

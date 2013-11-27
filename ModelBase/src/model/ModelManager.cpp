@@ -34,6 +34,15 @@ void ModelManager::init()
 	qRegisterMetaType< QSet<Node*> >("QSet<Node*>");
 }
 
+void ModelManager::cleanup()
+{
+	// We make a copy of loadedModel_ since Models will call remove() when being destroyed.
+	auto copy = instance().loadedModels_;
+	instance().loadedModels_.clear();
+
+	for (auto m : copy) SAFE_DELETE(m);
+}
+
 ModelManager& ModelManager::instance()
 {
 	static ModelManager man;
@@ -45,11 +54,7 @@ ModelManager::ModelManager()
 
 ModelManager::~ModelManager()
 {
-	// We make a copy of loadedModel_ since Models will call remove() when being destroyed.
-	auto copy = loadedModels_;
-	loadedModels_.clear();
-
-	for (auto m : copy) SAFE_DELETE(m);
+	Q_ASSERT(loadedModels_.isEmpty());
 }
 
 Model* ModelManager::find(Node* root) const

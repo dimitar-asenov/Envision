@@ -71,6 +71,7 @@ bool ModelBase::initialize(Core::EnvisionManager&)
 
 void ModelBase::unload()
 {
+	ModelManager::cleanup();
 }
 
 void ModelBase::selfTest(QString)
