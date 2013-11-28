@@ -208,8 +208,9 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* 
 			for(auto l : usedLibraries())
 			{
 				auto libRoot = l->libraryRoot();
-				Q_ASSERT(libRoot);
-				found = libRoot->findSymbols(result, matcher, libRoot, SEARCH_DOWN, symbolTypes, exhaustAllScopes) || found;
+				if (libRoot)
+					found = libRoot->findSymbols(result, matcher, libRoot, SEARCH_DOWN, symbolTypes, exhaustAllScopes)
+							|| found;
 			}
 	}
 
