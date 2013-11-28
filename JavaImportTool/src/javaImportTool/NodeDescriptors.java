@@ -190,7 +190,8 @@ public class NodeDescriptors {
 				{"Integer","opr"}
 		}));
 		add( new NodeInitializer("NewExpression", new String[][]{
-				{"Expression","newType"}
+				{"Expression","newType"},
+				{"TypedListOfExpression","dimensions"}
 		}));
 		add( new NodeInitializer("ArrayInitializer", new String[][]{
 				{"TypedListOfExpression","values"}

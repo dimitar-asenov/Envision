@@ -92,6 +92,10 @@ Method* addDivBySix(Class* parent)
 	exprtest4->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
 	exprtest4->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("new value[5]") );
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("new int[5,3,2]")));
+	divbysix->items()->append(new ExpressionStatement(
+										  OOExpressionBuilder::getOOExpression("new int[2,2]{{a,b},{c,d}}")));
+
 	VariableDeclarationExpression* exprtest5 = new VariableDeclarationExpression("exprtest5");
 	divbysix->items()->append(new ExpressionStatement(exprtest5));
 	exprtest5->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));

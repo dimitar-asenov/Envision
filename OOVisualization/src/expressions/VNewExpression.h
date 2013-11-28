@@ -26,30 +26,44 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
+#include "../oovisualization_api.h"
+#include "VNewExpressionStyle.h"
 
-#include "InteractionBase/src/expression_editor/OperatorDescriptorList.h"
+#include "VExpression.h"
 
-namespace OOModel {
-	class Expression;
+#include "OOModel/src/expressions/NewExpression.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
+
+namespace Visualization {
+	class VList;
+	class Static;
 }
 
-namespace OOInteraction {
+namespace OOVisualization {
 
-class OOINTERACTION_API OOOperatorDescriptorList : public Interaction::OperatorDescriptorList {
+class OOVISUALIZATION_API VNewExpression :  public Super<VExpression<VNewExpression,
+Visualization::LayoutProvider<>,	OOModel::NewExpression>>
+{
+	ITEM_COMMON(VNewExpression)
+
 	public:
-		static OOOperatorDescriptorList* instance();
-		static void initializeWithDefaultOperators();
+		VNewExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VNewExpression();
+
+
+		Visualization::VList* dimensions() const;
+
+	protected:
+		void determineChildren();
 
 	private:
-		static void add(Interaction::OperatorDescriptor* descriptor);
 
-		template<class T>
-		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty);
+		Visualization::Static* prefix_{};
+		Item* type_{};
+		Visualization::VList* dimensions_{};
+		Item* initializer_{};
 };
 
-inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)
-{ instance()->addDescriptor(descriptor); }
+inline Visualization::VList* VNewExpression::dimensions() const { return dimensions_; }
 
-
-} /* namespace OOInteraction */
+} /* namespace OOVisualization */

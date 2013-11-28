@@ -97,13 +97,20 @@ void GridConstructors::initializeAll()
 	GridBasedOffsetProvider::addGridConstructor<VNewExpression>(
 	[](GridBasedOffsetProvider* grid, VNewExpression* vis){
 		grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
-		grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
-		if (vis->layout()->length() > 2)
+
+		auto hasDimensions = vis->node()->dimensions()->size() > 0;
+		auto showType = hasDimensions || !vis->node()->initializer();
+
+		if (showType && hasDimensions)
 		{
-			grid->add(new Cell(3, vis->layout()->at<Visualization::Item>(2), 3));
-			grid->add(new Cell(4, vis->layout()->at<Visualization::Item>(3), 4));
-			grid->add(new Cell(5, vis->layout()->at<Visualization::Item>(4), 5));
+			grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
+			grid->add(new ListCell(3, vis->dimensions(), 3, "[", ",", "]"));
+			if (vis->node()->initializer()) grid->add(new Cell(4, vis->layout()->at<Visualization::Item>(3), 4));
 		}
+		else if (showType && !hasDimensions)
+			grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
+		else if (!showType)
+			grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VReferenceExpression>(

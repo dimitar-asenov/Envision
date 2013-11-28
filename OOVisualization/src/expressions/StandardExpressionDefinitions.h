@@ -27,15 +27,6 @@
 // NO header guard or '#pragma once' since this file is included multiple times with different definitions.
 // This is a variation of the 'X-macros' technique.
 
-
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION(OOVISUALIZATION_API, VNewExpression, OOModel::NewExpression)
-	PREFIX(true)
-	OPERAND(newType)
-	INFIX(node()->amount())
-	OPERAND(amount)
-	POSTFIX(node()->amount())
-END_STANDARD_EXPRESSION_VISUALIZATION
-
 BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(OOVISUALIZATION_API, VDeleteExpression,
 		OOModel::DeleteExpression, isArray)
 	PREFIX(true)

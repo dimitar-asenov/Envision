@@ -36,20 +36,25 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NewExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NewExpression)
 
 REGISTER_ATTRIBUTE(NewExpression, newType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(NewExpression, amount, Expression, false, true, true)
+REGISTER_ATTRIBUTE(NewExpression, dimensions, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(NewExpression, initializer, Expression, false, true, true)
 
-NewExpression::NewExpression(Expression* type, Expression* amount)
+NewExpression::NewExpression(Expression* type, Expression* firstDimension)
 : Super{nullptr, NewExpression::getMetaData()}
 {
 	setNewType(type);
-	if (amount) setAmount(amount);
+	if (firstDimension) dimensions()->append(firstDimension);
 }
 
 Type* NewExpression::type()
 {
 	auto t = newType()->type();
 	t->setValueType(true);
-	return amount() ? new ArrayType(t, true): t;
+
+	for(int i = 0; i< dimensions()->size(); ++i)
+		t = new ArrayType(t, true);
+
+	return t;
 }
 
 }

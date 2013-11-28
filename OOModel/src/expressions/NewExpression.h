@@ -37,11 +37,12 @@ class OOMODEL_API NewExpression: public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(NewExpression)
 
 	ATTRIBUTE(Expression, newType, setNewType)
-	ATTRIBUTE(Expression, amount, setAmount)
+	ATTRIBUTE(Model::TypedList<Expression>, dimensions, setDimensions)
+	ATTRIBUTE(Expression, initializer, setInitializer)
 
 	public:
 
-		NewExpression(Expression* type, Expression* amount = nullptr);
+		NewExpression(Expression* type, Expression* firstDimension = nullptr);
 
 		virtual Type* type();
 };

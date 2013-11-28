@@ -261,7 +261,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 	{
 		TraverseStmt(newExpr->getArraySize());
 		if(!ooExprStack_.empty())
-			ooNewExpr->setAmount(ooExprStack_.pop());
+			ooNewExpr->dimensions()->append(ooExprStack_.pop());
 	}
 
 	ooExprStack_.push(ooNewExpr);

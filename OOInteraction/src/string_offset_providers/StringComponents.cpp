@@ -229,8 +229,6 @@ void StringComponents::initConversions()
 	add<GlobalScopeExpression>([](GlobalScopeExpression* ){ return c( "::" ); });
 	add<ThrowExpression>([](ThrowExpression* e ){ return c( "throw", " ", e->expr() ); });
 	add<TypeNameOperator>([](TypeNameOperator* e ){ return c( "typename", " ", e->typeExpression() ); });
-	add<NewExpression>([](NewExpression* e ){ return c( "new", " ", e->newType(),
-		Optional("[", e->amount()), Optional(e->amount(), AUTO), Optional("]", e->amount()) ); });
 	add<DeleteExpression>([](DeleteExpression* e ){ return c( e->isArray() ? "delete[]":"delete", " ", e->expr() ); });
 	add<VariableDeclarationExpression>([](VariableDeclarationExpression* e ){ return c( e->decl()->typeExpression(), " ",
 			e->decl()->name(), Optional("=",e->decl()->initialValue()), Optional(e->decl()->initialValue())); });
@@ -241,6 +239,10 @@ void StringComponents::initConversions()
 
 	add<MethodCallExpression>([](MethodCallExpression* e){ return c(
 		e->callee(), list(e->arguments(),"(",",",")", false, true) ); });
+
+	add<NewExpression>([](NewExpression* e){ return c( "new", " ",
+			Optional( (e->dimensions()->size() > 0 || !e->initializer()) ? e->newType() : nullptr, AUTO),
+			list(e->dimensions(),"[",",","]", true, true), Optional(e->initializer(), AUTO) ); });
 
 	add<ReferenceExpression>([](ReferenceExpression* e){ return c(
 		Optional(e->prefix(), AUTO), Optional(".", e->prefix()), e->name(),

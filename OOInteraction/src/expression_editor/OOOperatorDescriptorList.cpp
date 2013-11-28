@@ -42,6 +42,21 @@ OOOperatorDescriptorList* OOOperatorDescriptorList::instance()
 	return &theInstance;
 }
 
+template <class T>
+void OOOperatorDescriptorList::extractCommaInto (Expression* expression, T* destination, bool ignoreEmpty)
+{
+	if (auto comma = DCast<CommaExpression>(expression))
+	{
+		for(auto arg : comma->allSubOperands(true)) destination->append(arg);
+		SAFE_DELETE(comma);
+	}
+	else
+	{
+		if (!ignoreEmpty || !DCast<EmptyExpression>(expression) )
+			destination->append(expression);
+	}
+}
+
 void OOOperatorDescriptorList::initializeWithDefaultOperators()
 {
 	using OD = OOOperatorDescriptor;
@@ -147,15 +162,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		Q_ASSERT(operands.size() == 1);
 		auto fte = new FunctionTypeExpression();
 
-		if (auto comma = dynamic_cast<CommaExpression*>(operands.first()))
-		{
-			for(auto ee : comma->allSubOperands(true))
-				fte->arguments()->append(ee);
-
-			SAFE_DELETE(comma);
-		}
-		else
-			fte->arguments()->append(operands.first());
+		extractCommaInto(operands.first(), fte->arguments(), false);
 
 		return fte;
 	}));
@@ -164,25 +171,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		Q_ASSERT(operands.size() == 2);
 		auto fte = new FunctionTypeExpression();
 
-		if (auto comma = dynamic_cast<CommaExpression*>(operands.first()))
-		{
-			for(auto ee : comma->allSubOperands(true))
-				fte->arguments()->append(ee);
-
-			SAFE_DELETE(comma);
-		}
-		else
-			fte->arguments()->append(operands.first());
-
-		if (auto comma = dynamic_cast<CommaExpression*>(operands.last()))
-		{
-			for(auto ee : comma->allSubOperands(true))
-				fte->results()->append(ee);
-
-			SAFE_DELETE(comma);
-		}
-		else
-			fte->results()->append(operands.last());
+		extractCommaInto(operands.first(), fte->arguments(), false);
+		extractCommaInto(operands.last(), fte->results(), false);
 
 		return fte;
 	}));
@@ -223,18 +213,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new ArrayInitializer();
 
-		for(auto e: operands)
-		{
-			if (auto comma = dynamic_cast<CommaExpression*>(e))
-			{
-				for(auto ee : comma->allSubOperands(true))
-					opr->values()->append(ee);
-
-				SAFE_DELETE(comma);
-			}
-			else
-				opr->values()->append(e);
-		}
+		for(auto e: operands) extractCommaInto(e, opr->values(), false);
 
 		return opr;
 	}));
@@ -242,6 +221,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD( "new object", "new SPACE expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression();
+		//TODO: not quite right, we need to set the operand as the initializer expression and the new type as the
+		// first part of the expression. For primitive types, the current implementation is fine.
 		opr->setNewType( operands.first());
 		return opr;
 	}));
@@ -250,7 +231,16 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression();
 		opr->setNewType( operands.first());
-		opr->setAmount(operands.last());
+		extractCommaInto( operands.last(), opr->dimensions(), false);
+		return opr;
+	}));
+
+	add(new OD( "new array with init", "new SPACE expr [ expr ] expr", 2, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new NewExpression();
+		opr->setNewType( operands.first());
+		extractCommaInto( operands.at(1), opr->dimensions(), false);
+		opr->setInitializer(operands.last());
 		return opr;
 	}));
 
@@ -289,16 +279,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		auto r = new ReferenceExpression( ref->name(), operands.first() );
 		SAFE_DELETE(ref);
 
-		if (auto comma = dynamic_cast<CommaExpression*>(operands.last()))
-		{
-			for(auto arg : comma->allSubOperands(true))
-				r->typeArguments()->append(arg);
-
-			SAFE_DELETE(comma);
-		}
-		else
-			if (!dynamic_cast<EmptyExpression*>(operands.last()) )
-				r->typeArguments()->append(operands.last());
+		extractCommaInto(operands.last(), r->typeArguments(), true);
 
 		return r;
 	}));
@@ -310,16 +291,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		auto opr = new MethodCallExpression();
 		opr->setCallee(operands.first());
 
-		if (auto comma = dynamic_cast<CommaExpression*>(operands.last()))
-		{
-			for(auto arg : comma->allSubOperands(true))
-				opr->arguments()->append(arg);
-
-			SAFE_DELETE(comma);
-		}
-		else
-			if (!dynamic_cast<EmptyExpression*>(operands.last()) )
-					opr->arguments()->append(operands.last());
+		extractCommaInto(operands.last(), opr->arguments(), true);
 
 		return opr;
 	}));
@@ -330,16 +302,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		auto ref = dynamic_cast<ReferenceExpression*>( operands.first());
 		Q_ASSERT(ref);
 
-		if (auto comma = dynamic_cast<CommaExpression*>(operands.last()))
-		{
-			for(auto arg : comma->allSubOperands(true))
-				ref->typeArguments()->append(arg);
-
-			SAFE_DELETE(comma);
-		}
-		else
-			if (!dynamic_cast<EmptyExpression*>(operands.last()) )
-					ref->typeArguments()->append(operands.last());
+		extractCommaInto(operands.last(), ref->typeArguments(), true);
 
 		return ref;
 	}));

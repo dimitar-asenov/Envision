@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/OperatorStyle/default">
+<style prototypes="item/Item/default">
 	<layout prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -22,7 +22,22 @@
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
-	<preSymbol prototypes="item/Symbol/keyword"><symbol>new</symbol></preSymbol>
-	<inSymbol prototypes="item/Symbol/default"><symbol>[</symbol></inSymbol>
-	<postSymbol prototypes="item/Symbol/default"><symbol>]</symbol></postSymbol>
+	<prefix prototypes="item/Symbol/keyword"><symbol>new</symbol></prefix>
+	<dimensions prototypes="item/VList/default">
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>[</leftBrace>
+			<rightBrace>]</rightBrace>
+		</shape>
+		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>	
+		<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>15</spaceBetweenElements>
+			<noInnerCursors>true</noInnerCursors>
+			<minHeight>15</minHeight>
+			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
+			<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+		</itemsStyle>
+	</dimensions>
 </style>

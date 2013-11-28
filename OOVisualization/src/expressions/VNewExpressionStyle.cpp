@@ -23,33 +23,10 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "VNewExpressionStyle.h"
 
-#pragma once
+namespace OOVisualization {
 
-#include "../oointeraction_api.h"
+VNewExpressionStyle::~VNewExpressionStyle() {}
 
-#include "InteractionBase/src/expression_editor/OperatorDescriptorList.h"
-
-namespace OOModel {
-	class Expression;
-}
-
-namespace OOInteraction {
-
-class OOINTERACTION_API OOOperatorDescriptorList : public Interaction::OperatorDescriptorList {
-	public:
-		static OOOperatorDescriptorList* instance();
-		static void initializeWithDefaultOperators();
-
-	private:
-		static void add(Interaction::OperatorDescriptor* descriptor);
-
-		template<class T>
-		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty);
-};
-
-inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)
-{ instance()->addDescriptor(descriptor); }
-
-
-} /* namespace OOInteraction */
+} /* namespace OOVisualization */

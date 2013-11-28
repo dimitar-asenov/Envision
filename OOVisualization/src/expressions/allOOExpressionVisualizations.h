@@ -29,6 +29,7 @@
 #include "VExpression.h"
 #include "StandardExpressionVisualizations.h"
 
+#include "VNewExpression.h"
 #include "VMethodCallExpression.h"
 #include "VReferenceExpression.h"
 #include "VThisExpression.h"

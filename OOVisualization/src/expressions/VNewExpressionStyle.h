@@ -25,31 +25,21 @@
  **********************************************************************************************************************/
 
 #pragma once
+#include "../oovisualization_api.h"
 
-#include "../oointeraction_api.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
-#include "InteractionBase/src/expression_editor/OperatorDescriptorList.h"
+namespace OOVisualization {
 
-namespace OOModel {
-	class Expression;
-}
-
-namespace OOInteraction {
-
-class OOINTERACTION_API OOOperatorDescriptorList : public Interaction::OperatorDescriptorList {
+class OOVISUALIZATION_API VNewExpressionStyle : public Visualization::ItemStyle {
 	public:
-		static OOOperatorDescriptorList* instance();
-		static void initializeWithDefaultOperators();
+		virtual ~VNewExpressionStyle();
 
-	private:
-		static void add(Interaction::OperatorDescriptor* descriptor);
-
-		template<class T>
-		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty);
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::StaticStyle> prefix{this, "prefix"};
+		Property<Visualization::VListStyle> dimensions{this, "dimensions"};
 };
 
-inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)
-{ instance()->addDescriptor(descriptor); }
-
-
-} /* namespace OOInteraction */
+} /* namespace OOVisualization */

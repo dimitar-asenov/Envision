@@ -724,18 +724,40 @@ public class ASTConverter {
 			node.setChild("right", expression(aa.getIndex(), "right"));
 		} else if (e instanceof ArrayCreation)
 		{
-			//TODO: implement multi-dimensional arrays. The array type is supported already but creation is not.
 			ArrayCreation ac = (ArrayCreation) e;
 			node = new Node(null, "NewExpression", name);
 			
-			node.setChild("newType", typeExpression(ac.getType().getComponentType(),"newType"));
+			// Count how many dimensions are found in the the type itself
+			int typeDimensions = 1;
+			Type innerType = ac.getType().getComponentType();
+			while(innerType instanceof ArrayType)
+			{
+				++typeDimensions;
+				innerType = ((ArrayType) innerType).getComponentType();
+			}
 			
-			//TODO: Make sure that an array with an unspecified dimension is properly interpreted by Envision
-			if (ac.dimensions().isEmpty() || ac.dimensions().get(0) == null)
-				node.add(new Node(null, "EmptyExpression", "amount"));
-			else node.add(expression((Expression)ac.dimensions().get(0),"amount"));
+			// Set the innerType of the new expression
+			node.setChild("newType", typeExpression(innerType,"newType"));
 			
-			//TODO: Handle the initializer
+			// Now add the dimension expressions
+			Node dimensions = node.child("dimensions");
+			for(Expression dim : (List<Expression>) ac.dimensions())
+			{
+				if (dim == null) dimensions.add(new Node(null, "EmptyExpression", dimensions.numChildren()));
+				else dimensions.add(expression(dim, Integer.toString(dimensions.numChildren())));
+				--typeDimensions;
+			}
+			
+			// Fill in with empty expressions at the end if needed
+			while(typeDimensions > 0)
+			{
+				dimensions.add(new Node(null, "EmptyExpression", dimensions.numChildren()));
+				--typeDimensions;
+			}
+			
+			assert(typeDimensions == 0);
+			
+			if (ac.getInitializer() != null) node.add(expression(ac.getInitializer(), "initializer"));
 		} else if (e instanceof ArrayInitializer)
 		{
 			ArrayInitializer ai = (ArrayInitializer) e;

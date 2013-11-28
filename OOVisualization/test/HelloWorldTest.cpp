@@ -465,7 +465,7 @@ Method* addLongMethod(Class* parent)
 	var12->decl()->setTypeExpression(var12Type);
 	NewExpression* var12Value = new NewExpression();
 	var12Value->setNewType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	var12Value->setAmount(new IntegerLiteral(5));
+	var12Value->dimensions()->append(new IntegerLiteral(5));
 	var12->decl()->setInitialValue(var12Value);
 
 	VariableDeclarationExpression* var13 = new VariableDeclarationExpression("var13");
@@ -608,6 +608,30 @@ Method* addLongMethod(Class* parent)
 						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
 		longMethod->items()->append(new ExpressionStatement(var24));
 
+	auto var25 = new VariableDeclarationExpression("var25", new AutoTypeExpression());
+	longMethod->items()->append(new ExpressionStatement(var25));
+	auto ne = new NewExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT) );
+	var25->decl()->setInitialValue( ne );
+	ne->dimensions()->append(new IntegerLiteral(42));
+	ne->dimensions()->append(new IntegerLiteral(3));
+	ne->dimensions()->append(new IntegerLiteral(6));
+
+	auto var26 = new VariableDeclarationExpression("var26", new AutoTypeExpression());
+	longMethod->items()->append(new ExpressionStatement(var26));
+	ne = new NewExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT) );
+	var26->decl()->setInitialValue( ne );
+	ne->dimensions()->append(new IntegerLiteral(2));
+	ne->dimensions()->append(new IntegerLiteral(2));
+	matrixArrayInit = new ArrayInitializer();
+	ne->setInitializer(matrixArrayInit);
+	col1Init = new ArrayInitializer();
+	matrixArrayInit->values()->append(col1Init);
+	col2Init = new ArrayInitializer();
+	matrixArrayInit->values()->append(col2Init);
+	col1Init->values()->append(new IntegerLiteral(1));
+	col1Init->values()->append(new IntegerLiteral(2));
+	col2Init->values()->append(new IntegerLiteral(3));
+	col2Init->values()->append(new IntegerLiteral(4));
 
 	IfStatement* ifs = new IfStatement();
 	longMethod->items()->append(ifs);

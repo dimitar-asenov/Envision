@@ -23,33 +23,52 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "VNewExpression.h"
 
-#pragma once
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
 
-#include "../oointeraction_api.h"
+using namespace Visualization;
+using namespace OOModel;
 
-#include "InteractionBase/src/expression_editor/OperatorDescriptorList.h"
+namespace OOVisualization {
 
-namespace OOModel {
-	class Expression;
+ITEM_COMMON_DEFINITIONS(VNewExpression, "item")
+
+VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style) {}
+
+VNewExpression::~VNewExpression()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	prefix_ = nullptr;
+	type_ = nullptr;
+	dimensions_ = nullptr;
+	initializer_ = nullptr;
 }
 
-namespace OOInteraction {
+void VNewExpression::determineChildren()
+{
+	auto hasDimensions = node()->dimensions()->size() > 0;
+	auto showType = hasDimensions || !node()->initializer();
 
-class OOINTERACTION_API OOOperatorDescriptorList : public Interaction::OperatorDescriptorList {
-	public:
-		static OOOperatorDescriptorList* instance();
-		static void initializeWithDefaultOperators();
-
-	private:
-		static void add(Interaction::OperatorDescriptor* descriptor);
-
-		template<class T>
-		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty);
-};
-
-inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)
-{ instance()->addDescriptor(descriptor); }
+	layout()->synchronizeFirst(prefix_ , true, &style()->prefix());
+	layout()->synchronizeMid(type_, showType ? node()->newType() : nullptr , 1);
+	layout()->synchronizeMid(dimensions_, (hasDimensions ? node()->dimensions() : nullptr), &style()->dimensions(), 2);
+	layout()->synchronizeLast(initializer_, node()->initializer());
 
 
-} /* namespace OOInteraction */
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	prefix_->setStyle( &style()->prefix());
+	if (dimensions_)
+	{
+		dimensions_->setStyle( &style()->dimensions() );
+		dimensions_->setSuppressDefaultRemovalHandler(true); // Let the expression handler deal with events
+	}
+}
+
+} /* namespace OOVisualization */
