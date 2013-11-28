@@ -73,6 +73,11 @@ class OOMODEL_API Class : public Super<Declaration>
 		virtual SymbolTypes symbolType() const override;
 
 		bool isGeneric();
+
+	private:
+		Expression* defaultImplicitBaseFromProject() const;
+		bool findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
+				SymbolTypes symbolTypes, bool exhaustAllScopes);
 };
 
 inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }

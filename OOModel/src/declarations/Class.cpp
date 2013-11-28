@@ -27,6 +27,7 @@
 #include "Class.h"
 
 #include "../types/SymbolProviderType.h"
+#include "Project.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Class)
@@ -77,6 +78,22 @@ bool Class::isGeneric()
 	return typeArguments()->size() > 0;
 }
 
+inline bool Class::findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
+		SymbolTypes symbolTypes, bool exhaustAllScopes)
+{
+	bool found = false;
+	auto t = target->type();
+	if (auto sp = dynamic_cast<SymbolProviderType*>(t))
+	{
+
+		if (sp->symbolProvider() && sp->symbolProvider() != this)
+			found = sp->symbolProvider()->findSymbols(result, matcher, sp->symbolProvider(), SEARCH_DOWN,
+				symbolTypes, exhaustAllScopes);
+	}
+	SAFE_DELETE(t);
+	return found;
+}
+
 bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
 				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
 {
@@ -97,18 +114,16 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 
 		// Look in base classes
 		if (exhaustAllScopes || !found)
-			for(auto bc : *baseClasses())
+		{
+			if (baseClasses()->size() == 0)
 			{
-				auto t = bc->type();
-				if (auto sp = dynamic_cast<SymbolProviderType*>(t))
-				{
-					if (sp->symbolProvider())
-						found = sp->symbolProvider()->findSymbols(result, matcher, sp->symbolProvider(), SEARCH_DOWN,
-							symbolTypes, false) || found;
-
-				}
-				SAFE_DELETE(t);
+				if (auto implicit = defaultImplicitBaseFromProject())
+					found = findInTarget(implicit, result, matcher, symbolTypes, false) || found;
 			}
+			else
+				for(auto bc : *baseClasses())
+					found = findInTarget(bc, result, matcher, symbolTypes, false) || found;
+		}
 	}
 	else if (direction == SEARCH_UP)
 	{
@@ -120,18 +135,16 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 		// Look in base classes, but only if we are not trying to resolve a base class name
 		ignore = baseClasses()->childToSubnode(source);
 		if (!ignore && (exhaustAllScopes || !found))
-			for(auto bc : *baseClasses())
+		{
+			if (baseClasses()->size() == 0)
 			{
-				auto t = bc->type();
-				if (auto sp = dynamic_cast<SymbolProviderType*>(t))
-				{
-					if (sp->symbolProvider())
-						found = sp->symbolProvider()->findSymbols(result, matcher, sp->symbolProvider(), SEARCH_DOWN,
-							symbolTypes, false) || found;
-
-				}
-				SAFE_DELETE(t);
-			};
+				if (auto implicit = defaultImplicitBaseFromProject())
+					found = findInTarget(implicit, result, matcher, symbolTypes, false) || found;
+			}
+			else
+				for(auto bc : *baseClasses())
+					found = findInTarget(bc, result, matcher, symbolTypes, false) || found;
+		}
 
 		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
 		{
@@ -144,6 +157,21 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 	}
 
 	return found;
+}
+
+Expression* Class::defaultImplicitBaseFromProject() const
+{
+	auto p = parent();
+	while(p)
+	{
+		if (auto proj = DCast<Project>(p))
+		{
+			if (constructKind() != ConstructKind::Enum && proj->implicitBaseType()) return proj->implicitBaseType();
+			if (constructKind() == ConstructKind::Enum && proj->implicitEnumType()) return proj->implicitEnumType();
+		}
+		p = p->parent();
+	}
+	return nullptr;
 }
 
 }

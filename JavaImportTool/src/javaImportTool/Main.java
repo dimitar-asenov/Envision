@@ -110,6 +110,12 @@ public class Main {
 			nameImport.child("importAll").setLongValue(1);
 			Node prefix = nameImport.child("importedName").add(new Node(null, "ReferenceExpression", "prefix"));
 			prefix.child("ref").setStringValue("____NULL____:java");
+			
+			// Add implicit objects
+			root.add(new Node(null , "ReferenceExpression", "implicitBaseType")).child("ref")
+				.setStringValue("____NULL____:Object");
+			root.add(new Node(null , "ReferenceExpression", "implicitEnumType")).child("ref")
+				.setStringValue("____NULL____:Enum");
 
 			File dir = new File(inputDirectory);
 			ClassFileBytesDisassembler dis = ToolFactory.createDefaultClassFileBytesDisassembler();

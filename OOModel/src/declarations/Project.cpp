@@ -40,6 +40,9 @@ REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Project, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Project, libraries, TypedListOfUsedLibrary, false, false, true)
+REGISTER_ATTRIBUTE(Project, implicitBaseType, Expression, false, true, true)
+REGISTER_ATTRIBUTE(Project, implicitEnumType, Expression, false, true, true)
+REGISTER_ATTRIBUTE(Project, implicitArrayType, Expression, false, true, true)
 
 Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 {

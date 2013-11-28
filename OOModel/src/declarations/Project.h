@@ -32,6 +32,7 @@
 #include "Class.h"
 #include "Method.h"
 #include "Field.h"
+#include "../expressions/Expression.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -52,7 +53,11 @@ class OOMODEL_API Project : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
+
 	ATTRIBUTE(Model::TypedList<Model::UsedLibrary>, libraries, setLibraries)
+	ATTRIBUTE(Expression, implicitBaseType, setImplicitBaseType)
+	ATTRIBUTE(Expression, implicitEnumType, setImplicitEnumType)
+	ATTRIBUTE(Expression, implicitArrayType, setImplicitArrayType)
 
 	public:
 		Project(const QString& name);
