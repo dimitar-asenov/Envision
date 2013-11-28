@@ -268,14 +268,7 @@ void Model::tryResolvingReferences()
 
 	auto unresolved = unresolvedReferences_;
 	for (auto r : unresolved)
-	{
-		if (!r->isResolved())
-		{
-			if (currentModificationLock != r->accessLock())
-				changeModificationTarget(r);
-			r->resolve();
-		}
-	}
+		if (!r->isResolved()) r->resolve();
 
 	changeModificationTarget(modificationTarget);
 }

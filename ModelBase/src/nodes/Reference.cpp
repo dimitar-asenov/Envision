@@ -60,6 +60,7 @@ void Reference::setTarget(Node* target)
 {
 	if (target == target_) return;
 
+	if (auto m = model()) m->changeModificationTarget(this);
 	if (target) execute(new FieldSet<QString> (this, name_, QString()));
 	else execute(new FieldSet<QString> (this, name_, name()));
 
