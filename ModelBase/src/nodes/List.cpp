@@ -112,11 +112,6 @@ QList<Node*> List::children() const
 	return nodes_.toList();
 }
 
-int List::size()
-{
-	return nodes_.size();
-}
-
 int List::indexOf(const Node* item) const
 {
 	// TODO: is this a QT bug, this is fishy

@@ -51,10 +51,11 @@ class MODELBASE_API List: public Super<Node>
 
 		virtual QList<Node*> children() const override;
 
-		int size();
-		template <class T> T* first();
-		template <class T> T* last();
-		template <class T> T* at(int i);
+		int size() const;
+		bool isEmpty() const;
+		template <class T = Node> T* first();
+		template <class T = Node> T* last();
+		template <class T = Node> T* at(int i);
 
 		int indexOf(const Node* item) const;
 		int indexToSubnode(const Node* node) const;
@@ -143,5 +144,7 @@ inline const QVector<Node*>& List::nodes() { return nodes_; }
 inline void List::append(Node* node) { insert(nodes_.size(), node); }
 inline void List::prepend(Node* node) { insert(0, node); }
 inline bool List::contains(const Node* node) const {return nodes_.contains(const_cast<Node*>(node));}
+inline int List::size() const { return nodes_.size(); }
+inline bool List::isEmpty() const { return nodes_.isEmpty(); }
 
 }
