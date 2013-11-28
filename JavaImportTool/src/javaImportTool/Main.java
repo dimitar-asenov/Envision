@@ -154,7 +154,10 @@ public class Main {
 			
 			String outputDir = outputDirectory + projectName + File.separator;
 			System.out.print("Writing the result to " + outputDir + "...");
-				
+			
+			// Create directory if it doesn't already exist
+			(new File(outputDir)).mkdirs();
+			  
 			root.renderRootTree(outputDir, projectName, OutputFormat.SIMPLE);
 
 			System.out.println("Done\n\nFinished");
