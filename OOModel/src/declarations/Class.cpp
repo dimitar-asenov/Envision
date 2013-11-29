@@ -110,7 +110,10 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 	else if (direction == SEARCH_DOWN)
 	{
 		for (auto c : childrenInScope())
-			found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+		{
+			if (c != typeArguments() && c != friends())
+				found = c->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;
+		}
 
 		// Look in base classes
 		if (exhaustAllScopes || !found)
