@@ -8,6 +8,7 @@ var searchData=
   ['hcommentdiagram',['HCommentDiagram',['../classComments_1_1HCommentDiagram.html',1,'Comments']]],
   ['hcommentdiagramconnector',['HCommentDiagramConnector',['../classComments_1_1HCommentDiagramConnector.html',1,'Comments']]],
   ['hcommentdiagramshape',['HCommentDiagramShape',['../classComments_1_1HCommentDiagramShape.html',1,'Comments']]],
+  ['hcommentimage',['HCommentImage',['../classComments_1_1HCommentImage.html',1,'Comments']]],
   ['hcomposite',['HComposite',['../classInteraction_1_1HComposite.html',1,'Interaction']]],
   ['header',['Header',['../classHeader.html',1,'']]],
   ['headerchild',['HeaderChild',['../classHeaderChild.html',1,'']]],

@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classComments_1_1VComment-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -110,14 +111,12 @@ Inheritance diagram for Comments::VComment:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac9f53287d663540493b6a9e7f7e85f7d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#ac9f53287d663540493b6a9e7f7e85f7d">VComment</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *parent, NodeType *node)</td></tr>
 <tr class="separator:ac9f53287d663540493b6a9e7f7e85f7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68dc95cd1ee81f84c659bb2c97372bf9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a68dc95cd1ee81f84c659bb2c97372bf9">clearChildren</a> ()</td></tr>
-<tr class="separator:a68dc95cd1ee81f84c659bb2c97372bf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a91622f3d2fd777eedb560abc1672f4"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a0a91622f3d2fd777eedb560abc1672f4">determineForm</a> () override</td></tr>
 <tr class="separator:a0a91622f3d2fd777eedb560abc1672f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad412a0ee3107b36c29fd65f15138189c"><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, <a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#ad412a0ee3107b36c29fd65f15138189c">diagrams</a> () const </td></tr>
-<tr class="separator:ad412a0ee3107b36c29fd65f15138189c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d2c102158751fbcd92f791f7d38cc99"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a3d2c102158751fbcd92f791f7d38cc99">editing</a> () const </td></tr>
 <tr class="separator:a3d2c102158751fbcd92f791f7d38cc99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0debdbc4b428f75f189e129a395bcbc2"><td class="memItemLeft" align="right" valign="top">QList&lt; QPair&lt; QString, QString &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a0debdbc4b428f75f189e129a395bcbc2">parseMarkdownArguments</a> (const QString &amp;argString)</td></tr>
+<tr class="separator:a0debdbc4b428f75f189e129a395bcbc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57690c4fba061576cc9010549c56e536"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a57690c4fba061576cc9010549c56e536">toggleEditing</a> ()</td></tr>
 <tr class="separator:a57690c4fba061576cc9010549c56e536"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -126,38 +125,30 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1fb582439b2bf9f4ae92c6fef44a3b17"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a1fb582439b2bf9f4ae92c6fef44a3b17">initializeForms</a> ()</td></tr>
 <tr class="separator:a1fb582439b2bf9f4ae92c6fef44a3b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ad19097624a669054288f680bc2c7ca6b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#ad19097624a669054288f680bc2c7ca6b">determineChildren</a> () override</td></tr>
+<tr class="separator:ad19097624a669054288f680bc2c7ca6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:acbf79f4ed616c7c6822e5cfa3ce13705"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#acbf79f4ed616c7c6822e5cfa3ce13705">addChildItem</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *item)</td></tr>
-<tr class="separator:acbf79f4ed616c7c6822e5cfa3ce13705"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2f94dcdb579952208a1b86e590a5fad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#ac2f94dcdb579952208a1b86e590a5fad">createTextualCommentElement</a> (QStringList &amp;contents, bool asHtml=false)</td></tr>
+<tr class="separator:ac2f94dcdb579952208a1b86e590a5fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f17be61e0076102d5e2401a425c209f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a6f17be61e0076102d5e2401a425c209f">parseLines</a> ()</td></tr>
 <tr class="separator:a6f17be61e0076102d5e2401a425c209f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa69caaaab939a7ec998b3468111916ef"><td class="memItemLeft" align="right" valign="top">QVector&lt; QPair&lt; QString, <br class="typebreak"/>
-QString &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#aa69caaaab939a7ec998b3468111916ef">parseMarkdownArguments</a> (const QString &amp;argString)</td></tr>
-<tr class="separator:aa69caaaab939a7ec998b3468111916ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35c661a335a6653f8961532b0d986e71"><td class="memItemLeft" align="right" valign="top">QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a35c661a335a6653f8961532b0d986e71">parseSize</a> (const QString &amp;str)</td></tr>
 <tr class="separator:a35c661a335a6653f8961532b0d986e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af269fed92c1ec82d2069f4be96c92cc7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#af269fed92c1ec82d2069f4be96c92cc7">popLineBuffer</a> ()</td></tr>
-<tr class="separator:af269fed92c1ec82d2069f4be96c92cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae38638db547ea8a5336aca4e5aa33f1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#ae38638db547ea8a5336aca4e5aa33f1a">pushTextLine</a> (QString text)</td></tr>
-<tr class="separator:ae38638db547ea8a5336aca4e5aa33f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6ae831e97fd34def9d961bd65f576f0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#ab6ae831e97fd34def9d961bd65f576f0">replaceMarkdown</a> (QString str)</td></tr>
 <tr class="separator:ab6ae831e97fd34def9d961bd65f576f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22d383b39e473e9c19439d5a4e43f86d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a22d383b39e473e9c19439d5a4e43f86d">synchroniseDiagrams</a> (QSet&lt; QString &gt; itemDiagramNames)</td></tr>
-<tr class="separator:a22d383b39e473e9c19439d5a4e43f86d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a55ac21c12d6e9d0aec78b822bd971651"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a55ac21c12d6e9d0aec78b822bd971651">children_</a> {}</td></tr>
-<tr class="separator:a55ac21c12d6e9d0aec78b822bd971651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae2d249862d4321ba5f06fc860f9ffcd"><td class="memItemLeft" align="right" valign="top">QMap&lt; QString, <a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#aae2d249862d4321ba5f06fc860f9ffcd">diagrams_</a> {}</td></tr>
-<tr class="separator:aae2d249862d4321ba5f06fc860f9ffcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add53e53576d631fc8617ad9e6dbca8df"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#add53e53576d631fc8617ad9e6dbca8df">commentElements_</a> {}</td></tr>
+<tr class="separator:add53e53576d631fc8617ad9e6dbca8df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5580169b68aa9259d5a9a4449f114409"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a5580169b68aa9259d5a9a4449f114409">editing_</a> {}</td></tr>
 <tr class="separator:a5580169b68aa9259d5a9a4449f114409"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0d1ce4851ff543bb5a96a0de9cbf20f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#af0d1ce4851ff543bb5a96a0de9cbf20f">editLabel_</a> {}</td></tr>
-<tr class="separator:af0d1ce4851ff543bb5a96a0de9cbf20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc58fdea5c30ec12231e299a358ece33"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#abc58fdea5c30ec12231e299a358ece33">lineBuffer_</a> {}</td></tr>
-<tr class="separator:abc58fdea5c30ec12231e299a358ece33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a5ffda1a7dd6f6ba92110e72d0ea679"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VComment.html#a2a5ffda1a7dd6f6ba92110e72d0ea679">editText_</a> {}</td></tr>
+<tr class="separator:a2a5ffda1a7dd6f6ba92110e72d0ea679"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -195,7 +186,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="acbf79f4ed616c7c6822e5cfa3ce13705"></a>
+<a class="anchor" id="ac2f94dcdb579952208a1b86e590a5fad"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -203,11 +194,21 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Comments::VComment::addChildItem </td>
+          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Item</a> * Comments::VComment::createTextualCommentElement </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>item</em>)</td><td></td>
+          <td class="paramtype">QStringList &amp;&#160;</td>
+          <td class="paramname"><em>contents</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>asHtml</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -219,7 +220,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a68dc95cd1ee81f84c659bb2c97372bf9"></a>
+<a class="anchor" id="ad19097624a669054288f680bc2c7ca6b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -227,7 +228,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Comments::VComment::clearChildren </td>
+          <td class="memname">void Comments::VComment::determineChildren </td>
           <td>(</td>
           <td class="paramname">)</td><td></td>
           <td></td>
@@ -235,7 +236,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -265,24 +266,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad412a0ee3107b36c29fd65f15138189c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">QMap&lt; QString, <a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> * &gt; Comments::VComment::diagrams </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a3d2c102158751fbcd92f791f7d38cc99"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool Comments::VComment::editing </td>
@@ -291,6 +280,11 @@ Additional Inherited Members</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -341,26 +335,18 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa69caaaab939a7ec998b3468111916ef"></a>
+<a class="anchor" id="a0debdbc4b428f75f189e129a395bcbc2"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QVector&lt; QPair&lt; QString, QString &gt; &gt; * Comments::VComment::parseMarkdownArguments </td>
+          <td class="memname">QList&lt; QPair&lt; QString, QString &gt; &gt; Comments::VComment::parseMarkdownArguments </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>argString</em>)</td><td></td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -377,53 +363,6 @@ Additional Inherited Members</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>str</em>)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="af269fed92c1ec82d2069f4be96c92cc7"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Comments::VComment::popLineBuffer </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae38638db547ea8a5336aca4e5aa33f1a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Comments::VComment::pushTextLine </td>
-          <td>(</td>
-          <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>text</em>)</td><td></td>
           <td></td>
         </tr>
       </table>
@@ -460,30 +399,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a22d383b39e473e9c19439d5a4e43f86d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Comments::VComment::synchroniseDiagrams </td>
-          <td>(</td>
-          <td class="paramtype">QSet&lt; QString &gt;&#160;</td>
-          <td class="paramname"><em>itemDiagramNames</em>)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a57690c4fba061576cc9010549c56e536"></a>
 <div class="memitem">
 <div class="memproto">
@@ -500,7 +415,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a55ac21c12d6e9d0aec78b822bd971651"></a>
+<a class="anchor" id="add53e53576d631fc8617ad9e6dbca8df"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -508,27 +423,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a>*&gt; Comments::VComment::children_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aae2d249862d4321ba5f06fc860f9ffcd"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QMap&lt;QString, <a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a>*&gt; Comments::VComment::diagrams_ {}</td>
+          <td class="memname">QList&lt;<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a>*&gt; Comments::VComment::commentElements_ {}</td>
         </tr>
       </table>
   </td>
@@ -560,7 +455,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af0d1ce4851ff543bb5a96a0de9cbf20f"></a>
+<a class="anchor" id="a2a5ffda1a7dd6f6ba92110e72d0ea679"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -568,27 +463,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a>* Comments::VComment::editLabel_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="abc58fdea5c30ec12231e299a358ece33"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QStringList Comments::VComment::lineBuffer_ {}</td>
+          <td class="memname"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a>* Comments::VComment::editText_ {}</td>
         </tr>
       </table>
   </td>

@@ -30,7 +30,6 @@ var searchData=
   ['minimap',['miniMap',['../classVisualization_1_1MainView.html#a7f8903a6faa729b1f601bf0cbc1795b4',1,'Visualization::MainView']]],
   ['minimap_5fdefault_5fheight',['MINIMAP_DEFAULT_HEIGHT',['../classVisualization_1_1MainView.html#ac46fce7a463d0b60e82557602164f662',1,'Visualization::MainView']]],
   ['minimap_5fdefault_5fwidth',['MINIMAP_DEFAULT_WIDTH',['../classVisualization_1_1MainView.html#a04def8c592c21578b3ffd234d2f561ba',1,'Visualization::MainView']]],
-  ['minsize_5f',['minSize_',['../classComments_1_1VCommentDiagram.html#a06d829f42ef04a301150719e3b950194',1,'Comments::VCommentDiagram']]],
   ['minwidth_5f',['minWidth_',['../classVisualization_1_1SequentialLayoutFormElement.html#a222c59248ebd4826a55fcdd5d23b7165',1,'Visualization::SequentialLayoutFormElement::minWidth_()'],['../classVisualization_1_1SequentialLayoutStyle.html#ae571ef5ac6eebb2c97b9a9f1fa694bff',1,'Visualization::SequentialLayoutStyle::minWidth_()']]],
   ['mipmap_5f',['mipmap_',['../classVisualization_1_1SVGIconStyle.html#afb2b4b8920937f2a4fded8c805d94e75',1,'Visualization::SVGIconStyle']]],
   ['missinginnertokens',['missingInnerTokens',['../classInteraction_1_1ParseResult.html#a799257fcacbf14c71bdb178c1c182e27',1,'Interaction::ParseResult']]],

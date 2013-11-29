@@ -38,6 +38,7 @@ var searchData=
   ['vcommentdiagramshapestyle',['VCommentDiagramShapeStyle',['../classComments_1_1VCommentDiagramShapeStyle.html',1,'Comments']]],
   ['vcommentimage',['VCommentImage',['../classComments_1_1VCommentImage.html',1,'Comments']]],
   ['vcommentstatementitem',['VCommentStatementItem',['../classOOVisualization_1_1VCommentStatementItem.html',1,'OOVisualization']]],
+  ['vcommentstyle',['VCommentStyle',['../classComments_1_1VCommentStyle.html',1,'Comments']]],
   ['vcomposite',['VComposite',['../classVisualization_1_1VComposite.html',1,'Visualization']]],
   ['vcompositestyle',['VCompositeStyle',['../classVisualization_1_1VCompositeStyle.html',1,'Visualization']]],
   ['vconditionalexpression',['VConditionalExpression',['../classOOVisualization_1_1VConditionalExpression.html',1,'OOVisualization']]],
@@ -119,6 +120,7 @@ var searchData=
   ['vnameimport',['VNameImport',['../classOOVisualization_1_1VNameImport.html',1,'OOVisualization']]],
   ['vnameimportstyle',['VNameImportStyle',['../classOOVisualization_1_1VNameImportStyle.html',1,'OOVisualization']]],
   ['vnewexpression',['VNewExpression',['../classOOVisualization_1_1VNewExpression.html',1,'OOVisualization']]],
+  ['vnewexpressionstyle',['VNewExpressionStyle',['../classOOVisualization_1_1VNewExpressionStyle.html',1,'OOVisualization']]],
   ['vnullliteral',['VNullLiteral',['../classOOVisualization_1_1VNullLiteral.html',1,'OOVisualization']]],
   ['vpointertype',['VPointerType',['../classOOVisualization_1_1VPointerType.html',1,'OOVisualization']]],
   ['vprimitivetype',['VPrimitiveType',['../classOOVisualization_1_1VPrimitiveType.html',1,'OOVisualization']]],
@@ -151,6 +153,8 @@ var searchData=
   ['vunaryoperation',['VUnaryOperation',['../classOOVisualization_1_1VUnaryOperation.html',1,'OOVisualization']]],
   ['vunfinishedoperator',['VUnfinishedOperator',['../classOOVisualization_1_1VUnfinishedOperator.html',1,'OOVisualization']]],
   ['vunfinishedoperatorstyle',['VUnfinishedOperatorStyle',['../classOOVisualization_1_1VUnfinishedOperatorStyle.html',1,'OOVisualization']]],
+  ['vusedlibrary',['VUsedLibrary',['../classVisualization_1_1VUsedLibrary.html',1,'Visualization']]],
+  ['vusedlibrarystyle',['VUsedLibraryStyle',['../classVisualization_1_1VUsedLibraryStyle.html',1,'Visualization']]],
   ['vvariabledeclarationexpression',['VVariableDeclarationExpression',['../classOOVisualization_1_1VVariableDeclarationExpression.html',1,'OOVisualization']]],
   ['vvariabledeclarationexpressionstyle',['VVariableDeclarationExpressionStyle',['../classOOVisualization_1_1VVariableDeclarationExpressionStyle.html',1,'OOVisualization']]]
 ];

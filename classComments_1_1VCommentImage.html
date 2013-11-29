@@ -90,7 +90,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classComments_1_1VCommentImage-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
@@ -113,11 +112,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a25e5ef8176293aad2ce239ac36304293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef5806807ace3d9896cd077d1962eeb2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#aef5806807ace3d9896cd077d1962eeb2">VCommentImage</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *parent, const QString &amp;path, QSize size, const StyleType *style=itemStyles().get())</td></tr>
 <tr class="separator:aef5806807ace3d9896cd077d1962eeb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c9d57cec6d847f92b0440ce26d27ec2"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a3c9d57cec6d847f92b0440ce26d27ec2">~VCommentImage</a> ()</td></tr>
-<tr class="separator:a3c9d57cec6d847f92b0440ce26d27ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7eabd84a89a259a18e72914e980d02c3"><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
-&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a7eabd84a89a259a18e72914e980d02c3">childItems</a> () const override</td></tr>
-<tr class="separator:a7eabd84a89a259a18e72914e980d02c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90ce837203a4af9b6fdcf50eeee512f9"><td class="memItemLeft" align="right" valign="top">QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a90ce837203a4af9b6fdcf50eeee512f9">imageSize</a> () const </td></tr>
+<tr class="separator:a90ce837203a4af9b6fdcf50eeee512f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5dbcf62fdca7ec892d1c835cddcfd9a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#ab5dbcf62fdca7ec892d1c835cddcfd9a">lineNumber</a> () const </td></tr>
+<tr class="separator:ab5dbcf62fdca7ec892d1c835cddcfd9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa937dad3f6bc634cfc5144f81156cf93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#aa937dad3f6bc634cfc5144f81156cf93">setLineNumber</a> (int <a class="el" href="classComments_1_1VCommentImage.html#ab5dbcf62fdca7ec892d1c835cddcfd9a">lineNumber</a>)</td></tr>
+<tr class="separator:aa937dad3f6bc634cfc5144f81156cf93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39fa52eafefbef4bb3a8bba99ca0db5d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a39fa52eafefbef4bb3a8bba99ca0db5d">updateSize</a> (QSize size)</td></tr>
+<tr class="separator:a39fa52eafefbef4bb3a8bba99ca0db5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -127,29 +129,22 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a934a5cccdfd1fd41a5db4f3f31dcef78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85e45a3bae7f7e2350f20ad08710c9a3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a85e45a3bae7f7e2350f20ad08710c9a3">updateGeometry</a> (int availableWidth, int availableHeight) override</td></tr>
 <tr class="separator:a85e45a3bae7f7e2350f20ad08710c9a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaabd0f4cce9f0fe04976e669323528e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#aaabd0f4cce9f0fe04976e669323528e1">updateSize</a> (QSize size)</td></tr>
-<tr class="separator:aaabd0f4cce9f0fe04976e669323528e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a5e13fe2626d1378fd2508c85316b29ed"><td class="memItemLeft" align="right" valign="top">QRect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a5e13fe2626d1378fd2508c85316b29ed">textDimensions</a> (QFont font, const QString &amp;text)</td></tr>
-<tr class="separator:a5e13fe2626d1378fd2508c85316b29ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a192976e925e23b9e4d1ea5155120fb5e"><td class="memItemLeft" align="right" valign="top">QImage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a192976e925e23b9e4d1ea5155120fb5e">image_</a> {}</td></tr>
-<tr class="separator:a192976e925e23b9e4d1ea5155120fb5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accbbbe6c3ecd6e364e335844147569da"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#accbbbe6c3ecd6e364e335844147569da">path_</a> {}</td></tr>
+<tr class="memitem:a792fa961bebea5de30532d066138598e"><td class="memItemLeft" align="right" valign="top">QImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a792fa961bebea5de30532d066138598e">image_</a></td></tr>
+<tr class="separator:a792fa961bebea5de30532d066138598e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4cbbdf56ae6a393c6df925a83f55623"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#ae4cbbdf56ae6a393c6df925a83f55623">lineNumber_</a> {-1}</td></tr>
+<tr class="separator:ae4cbbdf56ae6a393c6df925a83f55623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accbbbe6c3ecd6e364e335844147569da"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#accbbbe6c3ecd6e364e335844147569da">path_</a></td></tr>
 <tr class="separator:accbbbe6c3ecd6e364e335844147569da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a509276c00eaa18d5e68945691736efb6"><td class="memItemLeft" align="right" valign="top">QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a509276c00eaa18d5e68945691736efb6">size_</a> {}</td></tr>
+<tr class="memitem:a509276c00eaa18d5e68945691736efb6"><td class="memItemLeft" align="right" valign="top">QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a509276c00eaa18d5e68945691736efb6">size_</a></td></tr>
 <tr class="separator:a509276c00eaa18d5e68945691736efb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a217151248ebbc26d96053dfe8648edc9"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a217151248ebbc26d96053dfe8648edc9">text_</a> {}</td></tr>
-<tr class="separator:a217151248ebbc26d96053dfe8648edc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:af7311f287cbf2a68bbfd72768a6deb64"><td class="memItemLeft" align="right" valign="top">static unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#af7311f287cbf2a68bbfd72768a6deb64">errorTextPadding</a> = 10</td></tr>
-<tr class="separator:af7311f287cbf2a68bbfd72768a6deb64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78dfae0563252e7e6777abd7987bff22"><td class="memItemLeft" align="right" valign="top">static const QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1VCommentImage.html#a78dfae0563252e7e6777abd7987bff22">errorSize_</a> {400, 400}</td></tr>
+<tr class="separator:a78dfae0563252e7e6777abd7987bff22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -230,53 +225,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3c9d57cec6d847f92b0440ce26d27ec2"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Comments::VCommentImage::~VCommentImage </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a7eabd84a89a259a18e72914e980d02c3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> * &gt; Comments::VCommentImage::childItems </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="ab4f5e0ec8e7040445e81834bfc34a19a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -294,6 +243,52 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a90ce837203a4af9b6fdcf50eeee512f9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSize Comments::VCommentImage::imageSize </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab5dbcf62fdca7ec892d1c835cddcfd9a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Comments::VCommentImage::lineNumber </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -340,7 +335,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5e13fe2626d1378fd2508c85316b29ed"></a>
+<a class="anchor" id="aa937dad3f6bc634cfc5144f81156cf93"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -348,26 +343,16 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QRect Comments::VCommentImage::textDimensions </td>
+          <td class="memname">void Comments::VCommentImage::setLineNumber </td>
           <td>(</td>
-          <td class="paramtype">QFont&#160;</td>
-          <td class="paramname"><em>font</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>lineNumber</em>)</td><td></td>
           <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>text</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -408,32 +393,24 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aaabd0f4cce9f0fe04976e669323528e1"></a>
+<a class="anchor" id="a39fa52eafefbef4bb3a8bba99ca0db5d"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Comments::VCommentImage::updateSize </td>
+          <td class="memname">bool Comments::VCommentImage::updateSize </td>
           <td>(</td>
           <td class="paramtype">QSize&#160;</td>
           <td class="paramname"><em>size</em>)</td><td></td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="af7311f287cbf2a68bbfd72768a6deb64"></a>
+<a class="anchor" id="a78dfae0563252e7e6777abd7987bff22"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -441,7 +418,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned int Comments::VCommentImage::errorTextPadding = 10</td>
+          <td class="memname">const QSize Comments::VCommentImage::errorSize_ {400, 400}</td>
         </tr>
       </table>
   </td>
@@ -453,7 +430,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a192976e925e23b9e4d1ea5155120fb5e"></a>
+<a class="anchor" id="a792fa961bebea5de30532d066138598e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -461,7 +438,27 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QImage* Comments::VCommentImage::image_ {}</td>
+          <td class="memname">QImage Comments::VCommentImage::image_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae4cbbdf56ae6a393c6df925a83f55623"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Comments::VCommentImage::lineNumber_ {-1}</td>
         </tr>
       </table>
   </td>
@@ -481,7 +478,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QString Comments::VCommentImage::path_ {}</td>
+          <td class="memname">QString Comments::VCommentImage::path_</td>
         </tr>
       </table>
   </td>
@@ -501,27 +498,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QSize Comments::VCommentImage::size_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a217151248ebbc26d96053dfe8648edc9"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QString Comments::VCommentImage::text_ {}</td>
+          <td class="memname">QSize Comments::VCommentImage::size_</td>
         </tr>
       </table>
   </td>

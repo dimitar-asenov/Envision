@@ -113,12 +113,6 @@ Signals</h2></td></tr>
 <tr class="memitem:a5329fab71cdf6e29cddd86e1b7aea92c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a5329fab71cdf6e29cddd86e1b7aea92c">nameModified</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *node, const QString &amp;oldName)</td></tr>
 <tr class="memdesc:a5329fab71cdf6e29cddd86e1b7aea92c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when the name of a node has changed.  <a href="#a5329fab71cdf6e29cddd86e1b7aea92c">More...</a><br/></td></tr>
 <tr class="separator:a5329fab71cdf6e29cddd86e1b7aea92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afda34299075a74dcd682c58fdfa102b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#afda34299075a74dcd682c58fdfa102b7">nodeFullyLoaded</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *node)</td></tr>
-<tr class="memdesc:afda34299075a74dcd682c58fdfa102b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when a partially loaded node becomes fully loaded.  <a href="#afda34299075a74dcd682c58fdfa102b7">More...</a><br/></td></tr>
-<tr class="separator:afda34299075a74dcd682c58fdfa102b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba60aa7bdc3ce8fbaa06354cdb093512"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#aba60aa7bdc3ce8fbaa06354cdb093512">nodePartiallyLoaded</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *node)</td></tr>
-<tr class="memdesc:aba60aa7bdc3ce8fbaa06354cdb093512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when a fully loaded node becomes partially loaded.  <a href="#aba60aa7bdc3ce8fbaa06354cdb093512">More...</a><br/></td></tr>
-<tr class="separator:aba60aa7bdc3ce8fbaa06354cdb093512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdc28366910a2fcadb741a3e0b941cfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#afdc28366910a2fcadb741a3e0b941cfe">nodesModified</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; nodes)</td></tr>
 <tr class="memdesc:afdc28366910a2fcadb741a3e0b941cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted at the end of a modification block.  <a href="#afdc28366910a2fcadb741a3e0b941cfe">More...</a><br/></td></tr>
 <tr class="separator:afdc28366910a2fcadb741a3e0b941cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,9 +166,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad904287736156584888539103b8d89de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#ad904287736156584888539103b8d89de">isOwnedByUndoStack</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> *node, const <a class="el" href="classModel_1_1NodeOwningCommand.html">NodeOwningCommand</a> *excludeCommand) const </td></tr>
 <tr class="memdesc:ad904287736156584888539103b8d89de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether <em>node</em> is owned by a command in the undo stack.  <a href="#ad904287736156584888539103b8d89de">More...</a><br/></td></tr>
 <tr class="separator:ad904287736156584888539103b8d89de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22bdbda92fbca40d55e3bfba4dfc64d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a22bdbda92fbca40d55e3bfba4dfc64d7">load</a> (<a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a> *<a class="el" href="classModel_1_1Model.html#a3681a66d0ee5731c1f5e9f7135c2bfbb">store</a>, const QString &amp;<a class="el" href="classModel_1_1Model.html#ac3a70dce69b4d62cd902158aa7be56d0">name</a>)</td></tr>
-<tr class="memdesc:a22bdbda92fbca40d55e3bfba4dfc64d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the current model tree from the specified persistent store.  <a href="#a22bdbda92fbca40d55e3bfba4dfc64d7">More...</a><br/></td></tr>
-<tr class="separator:a22bdbda92fbca40d55e3bfba4dfc64d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa32ae760b9d7a224ee40b203e9e50e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#afa32ae760b9d7a224ee40b203e9e50e8">load</a> (<a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a> *<a class="el" href="classModel_1_1Model.html#a3681a66d0ee5731c1f5e9f7135c2bfbb">store</a>, const QString &amp;<a class="el" href="classModel_1_1Model.html#ac3a70dce69b4d62cd902158aa7be56d0">name</a>, bool loadPartially)</td></tr>
+<tr class="memdesc:afa32ae760b9d7a224ee40b203e9e50e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the current model tree from the specified persistent store.  <a href="#afa32ae760b9d7a224ee40b203e9e50e8">More...</a><br/></td></tr>
+<tr class="separator:afa32ae760b9d7a224ee40b203e9e50e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc04869ab84d5924623c87618809657d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1ModelManager.html">ModelManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#acc04869ab84d5924623c87618809657d">manager</a> () const </td></tr>
 <tr class="separator:acc04869ab84d5924623c87618809657d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5de2d8419f73daac676a9bf8a3c8c429"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a5de2d8419f73daac676a9bf8a3c8c429">modificationTarget</a> () const </td></tr>
@@ -548,9 +542,6 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="ae7fb509f5d8cde2727f321d4dbb5351d"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Model::Model::emitNodeFullyLoaded </td>
@@ -560,11 +551,6 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Causes a nodeFullyLoaded signal to be emitted. </p>
@@ -580,9 +566,6 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a151d9bc1d145661d78cdc9d721b27a93"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void Model::Model::emitNodePartiallyLoaded </td>
@@ -592,11 +575,6 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Causes a nodePartiallyLoaded signal to be emitted. </p>
@@ -743,7 +721,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a22bdbda92fbca40d55e3bfba4dfc64d7"></a>
+<a class="anchor" id="afa32ae760b9d7a224ee40b203e9e50e8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -757,7 +735,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>loadPartially</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -773,7 +757,8 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">store</td><td>The persistent store where the model should be loaded from.</td></tr>
-    <tr><td class="paramname">name</td><td>The model name in the persistent store which contains the model tree. </td></tr>
+    <tr><td class="paramname">name</td><td>The model name in the persistent store which contains the model tree.</td></tr>
+    <tr><td class="paramname">loadPartially</td><td>Whether the model should only be partially loaded. The intention is that a partially loaded model is read only and should only contain the publicly visible part of a model. Typically this means excluding method bodies from loading. </td></tr>
   </table>
   </dd>
 </dl>
@@ -890,70 +875,6 @@ Private Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">node</td><td>The node that has a new name </td></tr>
     <tr><td class="paramname">oldName</td><td>The old name of the node </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="afda34299075a74dcd682c58fdfa102b7"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Model::Model::nodeFullyLoaded </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Emitted when a partially loaded node becomes fully loaded. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>The node which is now fully loaded. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="aba60aa7bdc3ce8fbaa06354cdb093512"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Model::Model::nodePartiallyLoaded </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">signal</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Emitted when a fully loaded node becomes partially loaded. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">node</td><td>The node which is now partially loaded. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1634,7 +1555,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The persistent store where the model is currently stored. </p>
-<p>This is used in calls to <a class="el" href="classModel_1_1Node.html#ab33abbe1a349349d108142e07bb19db5" title="Fully loads a partially loaded node from the specified persistent store. ">Node::loadFully</a> when a partially loaded node needs to load its entire contents. It can also be used by other stores when the model needs to be saved to a different location. </p>
+<p>This is used in calls to Node::loadFully when a partially loaded node needs to load its entire contents. It can also be used by other stores when the model needs to be saved to a different location. </p>
 
 </div>
 </div>

@@ -88,9 +88,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classComments_1_1CommentDiagramShape-members.html">List of all members</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#friends">Friends</a>  </div>
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Comments::CommentDiagramShape Class Reference</div>  </div>
 </div><!--header-->
@@ -105,34 +106,46 @@ Inheritance diagram for Comments::CommentDiagramShape:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ad178ebbe5751e604dafff42aff078d64"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">ShapeType</a> : int { <a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64ace9291906a4c3b042650b70d7f3b152e">ShapeType::Rectangle</a>, 
+<a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64a119518c2134c46108179369f0ce81fa2">ShapeType::Ellipse</a>, 
+<a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64a8f7671185d590914ac21c7511767b699">ShapeType::Diamond</a>
+ }</td></tr>
+<tr class="separator:ad178ebbe5751e604dafff42aff078d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aaaf3f62ae8984e1c19f41e6e0171aab6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#aaaf3f62ae8984e1c19f41e6e0171aab6">CommentDiagramShape</a> (const int &amp;x, const int &amp;y, const int &amp;width, const int &amp;height, enum <a class="el" href="namespaceComments.html#adceae761fa72eae61b7bcc088afb1385">CommentDiagramShapeType</a> shapeType)</td></tr>
-<tr class="separator:aaaf3f62ae8984e1c19f41e6e0171aab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88025a6afc0fe4a2f96ef77964eeb23a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a88025a6afc0fe4a2f96ef77964eeb23a">CommentDiagramShape</a> (int x, int y, int width, int height, <a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">ShapeType</a> <a class="el" href="classComments_1_1CommentDiagramShape.html#af9aef08fe5510b9b202fa56961dc7e5e">shapeType</a>)</td></tr>
+<tr class="separator:a88025a6afc0fe4a2f96ef77964eeb23a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3baad9a2942b723a4be5163bdbae59b"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#ad3baad9a2942b723a4be5163bdbae59b">connectorPoint</a> (int <a class="el" href="classComments_1_1CommentDiagramShape.html#a89e6d125601a01ec6a287d0469f2c264">index</a>) const </td></tr>
 <tr class="separator:ad3baad9a2942b723a4be5163bdbae59b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05fd58ebe169afd43acae07226a91b53"><td class="memItemLeft" align="right" valign="top">const QPoint *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a05fd58ebe169afd43acae07226a91b53">connectorPoints</a> () const </td></tr>
-<tr class="separator:a05fd58ebe169afd43acae07226a91b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d97f37fb185d8096995483f607f378e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a0d97f37fb185d8096995483f607f378e">hitsConnectorPoint</a> (QPoint <a class="el" href="classComments_1_1CommentDiagramShape.html#a1c8724820a1273b28c89ff16d278b2bd">pos</a>) const </td></tr>
-<tr class="separator:a0d97f37fb185d8096995483f607f378e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59c6b64deec2612eb38ba530d3d84052"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a59c6b64deec2612eb38ba530d3d84052">connectorPointNear</a> (QPoint <a class="el" href="classComments_1_1CommentDiagramShape.html#a1c8724820a1273b28c89ff16d278b2bd">pos</a>) const </td></tr>
+<tr class="separator:a59c6b64deec2612eb38ba530d3d84052"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89e6d125601a01ec6a287d0469f2c264"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a89e6d125601a01ec6a287d0469f2c264">index</a> () const </td></tr>
 <tr class="separator:a89e6d125601a01ec6a287d0469f2c264"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c8724820a1273b28c89ff16d278b2bd"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a1c8724820a1273b28c89ff16d278b2bd">pos</a> () const </td></tr>
 <tr class="separator:a1c8724820a1273b28c89ff16d278b2bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c75b38c8d47aef3408f0e8b78dce84c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a7c75b38c8d47aef3408f0e8b78dce84c">setShapeType</a> (const <a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">ShapeType</a> &amp;type)</td></tr>
+<tr class="separator:a7c75b38c8d47aef3408f0e8b78dce84c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9aef08fe5510b9b202fa56961dc7e5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">ShapeType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#af9aef08fe5510b9b202fa56961dc7e5e">shapeType</a> () const </td></tr>
+<tr class="separator:af9aef08fe5510b9b202fa56961dc7e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c37d3a0a85969f819f047b23fc53c2c"><td class="memItemLeft" align="right" valign="top">QSize&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a5c37d3a0a85969f819f047b23fc53c2c">size</a> () const </td></tr>
 <tr class="separator:a5c37d3a0a85969f819f047b23fc53c2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b6f258ec41bfab29c46f6dbc1730b4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a3b6f258ec41bfab29c46f6dbc1730b4f">updateConnectorPoints</a> ()</td></tr>
-<tr class="separator:a3b6f258ec41bfab29c46f6dbc1730b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ab90a4e9a763f8c9abc51c38dbff78aff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#ab90a4e9a763f8c9abc51c38dbff78aff">assureConnectorPointsUpToDate</a> () const </td></tr>
+<tr class="separator:ab90a4e9a763f8c9abc51c38dbff78aff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63765b70ce4ea77f53dce81114454d79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a63765b70ce4ea77f53dce81114454d79">reCalculateConnectorPoints</a> () const </td></tr>
+<tr class="separator:a63765b70ce4ea77f53dce81114454d79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a670e6a8330e70b1b2a1e5bbac09b2152"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a670e6a8330e70b1b2a1e5bbac09b2152">connectorPoints_</a> [16]</td></tr>
-<tr class="separator:a670e6a8330e70b1b2a1e5bbac09b2152"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:aa722872f8258eae776adeea9fc5a1608"><td class="memItemLeft" align="right" valign="top">QDebug&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#aa722872f8258eae776adeea9fc5a1608">operator&lt;&lt;</a> (QDebug dbg, const <a class="el" href="classComments_1_1CommentDiagramShape.html">CommentDiagramShape</a> *c)</td></tr>
-<tr class="separator:aa722872f8258eae776adeea9fc5a1608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe0551b8504b24ebdd162ff95520a2e1"><td class="memItemLeft" align="right" valign="top">QVector&lt; QPoint &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#afe0551b8504b24ebdd162ff95520a2e1">connectorPoints_</a></td></tr>
+<tr class="separator:afe0551b8504b24ebdd162ff95520a2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51fb12174f4dda34ddbbcfac9a6d71cf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentDiagramShape.html#a51fb12174f4dda34ddbbcfac9a6d71cf">lastRevisionForConnectors_</a> = {revision() -1}</td></tr>
+<tr class="separator:a51fb12174f4dda34ddbbcfac9a6d71cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -142,39 +155,68 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="ad178ebbe5751e604dafff42aff078d64"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">Comments::CommentDiagramShape::ShapeType</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ad178ebbe5751e604dafff42aff078d64ace9291906a4c3b042650b70d7f3b152e"></a>Rectangle</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ad178ebbe5751e604dafff42aff078d64a119518c2134c46108179369f0ce81fa2"></a>Ellipse</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ad178ebbe5751e604dafff42aff078d64a8f7671185d590914ac21c7511767b699"></a>Diamond</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aaaf3f62ae8984e1c19f41e6e0171aab6"></a>
+<a class="anchor" id="a88025a6afc0fe4a2f96ef77964eeb23a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">Comments::CommentDiagramShape::CommentDiagramShape </td>
           <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>height</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">enum <a class="el" href="namespaceComments.html#adceae761fa72eae61b7bcc088afb1385">CommentDiagramShapeType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">ShapeType</a>&#160;</td>
           <td class="paramname"><em>shapeType</em>&#160;</td>
         </tr>
         <tr>
@@ -188,6 +230,29 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ab90a4e9a763f8c9abc51c38dbff78aff"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Comments::CommentDiagramShape::assureConnectorPointsUpToDate </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ad3baad9a2942b723a4be5163bdbae59b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -212,35 +277,12 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a05fd58ebe169afd43acae07226a91b53"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const QPoint * Comments::CommentDiagramShape::connectorPoints </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0d97f37fb185d8096995483f607f378e"></a>
+<a class="anchor" id="a59c6b64deec2612eb38ba530d3d84052"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Comments::CommentDiagramShape::hitsConnectorPoint </td>
+          <td class="memname">int Comments::CommentDiagramShape::connectorPointNear </td>
           <td>(</td>
           <td class="paramtype">QPoint&#160;</td>
           <td class="paramname"><em>pos</em>)</td><td></td>
@@ -269,6 +311,9 @@ Additional Inherited Members</h2></td></tr>
 <a class="anchor" id="a1c8724820a1273b28c89ff16d278b2bd"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QPoint Comments::CommentDiagramShape::pos </td>
@@ -277,6 +322,81 @@ Additional Inherited Members</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a63765b70ce4ea77f53dce81114454d79"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Comments::CommentDiagramShape::reCalculateConnectorPoints </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7c75b38c8d47aef3408f0e8b78dce84c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Comments::CommentDiagramShape::setShapeType </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">ShapeType</a> &amp;&#160;</td>
+          <td class="paramname"><em>type</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af9aef08fe5510b9b202fa56961dc7e5e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64">CommentDiagramShape::ShapeType</a> Comments::CommentDiagramShape::shapeType </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -284,6 +404,9 @@ Additional Inherited Members</h2></td></tr>
 <a class="anchor" id="a5c37d3a0a85969f819f047b23fc53c2c"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QSize Comments::CommentDiagramShape::size </td>
@@ -292,54 +415,9 @@ Additional Inherited Members</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a3b6f258ec41bfab29c46f6dbc1730b4f"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Comments::CommentDiagramShape::updateConnectorPoints </td>
-          <td>(</td>
-          <td class="paramname">)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a class="anchor" id="aa722872f8258eae776adeea9fc5a1608"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QDebug operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">QDebug&#160;</td>
-          <td class="paramname"><em>dbg</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classComments_1_1CommentDiagramShape.html">CommentDiagramShape</a> *&#160;</td>
-          <td class="paramname"><em>c</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -347,7 +425,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a670e6a8330e70b1b2a1e5bbac09b2152"></a>
+<a class="anchor" id="afe0551b8504b24ebdd162ff95520a2e1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -355,12 +433,32 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QPoint Comments::CommentDiagramShape::connectorPoints_[16]</td>
+          <td class="memname">QVector&lt;QPoint&gt; Comments::CommentDiagramShape::connectorPoints_</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a51fb12174f4dda34ddbbcfac9a6d71cf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Comments::CommentDiagramShape::lastRevisionForConnectors_ = {revision() -1}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

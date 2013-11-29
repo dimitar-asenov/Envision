@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classOOModel_1_1OOReference-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -110,10 +111,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac4118515efc26aa0f06c68af952156ea"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#ac4118515efc26aa0f06c68af952156ea">resolve</a> () override</td></tr>
 <tr class="separator:ac4118515efc26aa0f06c68af952156ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a7d07cba66859fb195f744715214cd6b7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7">ReferenceTargetKind</a> { <a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a88183b946cc5f0e8c96b2e66e1c74a7e">ReferenceTargetKind::Unknown</a>, 
+<a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a0e7278cda02a9c0446dcc75a4df34eb2">ReferenceTargetKind::Container</a>, 
+<a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a79ace5b2a7206c5d0aa286a5b33385f8">ReferenceTargetKind::Callable</a>, 
+<a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a33cbb55c64380923c16b03ffc272d661">ReferenceTargetKind::Assignable</a>, 
+<a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a47c14840d8e15331fa420b9b2f757cd9">ReferenceTargetKind::Variable</a>
+ }</td></tr>
+<tr class="separator:a7d07cba66859fb195f744715214cd6b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a48d91042ba44d66aefb70bc0e85fad09"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#a48d91042ba44d66aefb70bc0e85fad09">isReferenceToContainer</a> ()</td></tr>
-<tr class="separator:a48d91042ba44d66aefb70bc0e85fad09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ae24a9370978ffd13da74baee9fcddf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7">ReferenceTargetKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#a5ae24a9370978ffd13da74baee9fcddf">referenceTargetKind</a> ()</td></tr>
+<tr class="separator:a5ae24a9370978ffd13da74baee9fcddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd59dc89b2159c7f51c944a78d77c7f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1OOReference.html#acd59dc89b2159c7f51c944a78d77c7f7">resolveAmbiguity</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;candidates)</td></tr>
+<tr class="separator:acd59dc89b2159c7f51c944a78d77c7f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -128,8 +141,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1Reflect.html#abff3eda077b9de692708b32995294591">Super</a> = <a class="el" href="classCore_1_1Reflect.html">Reflect</a>&lt; Base &gt;</td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a48d91042ba44d66aefb70bc0e85fad09"></a>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a7d07cba66859fb195f744715214cd6b7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -137,7 +150,40 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool OOModel::OOReference::isReferenceToContainer </td>
+          <td class="memname">enum <a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7">OOModel::OOReference::ReferenceTargetKind</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a7d07cba66859fb195f744715214cd6b7a88183b946cc5f0e8c96b2e66e1c74a7e"></a>Unknown</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a7d07cba66859fb195f744715214cd6b7a0e7278cda02a9c0446dcc75a4df34eb2"></a>Container</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a7d07cba66859fb195f744715214cd6b7a79ace5b2a7206c5d0aa286a5b33385f8"></a>Callable</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a7d07cba66859fb195f744715214cd6b7a33cbb55c64380923c16b03ffc272d661"></a>Assignable</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a7d07cba66859fb195f744715214cd6b7a47c14840d8e15331fa420b9b2f757cd9"></a>Variable</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a5ae24a9370978ffd13da74baee9fcddf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7">OOReference::ReferenceTargetKind</a> OOModel::OOReference::referenceTargetKind </td>
           <td>(</td>
           <td class="paramname">)</td><td></td>
           <td></td>
@@ -169,6 +215,30 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acd59dc89b2159c7f51c944a78d77c7f7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Model::Node</a> * OOModel::OOReference::resolveAmbiguity </td>
+          <td>(</td>
+          <td class="paramtype">QSet&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>candidates</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

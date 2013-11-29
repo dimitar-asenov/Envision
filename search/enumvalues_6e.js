@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['n',['N',['../namespaceComments.html#a36789e2711f0cfe9ae11a0b29eeb826ba4a4a3d003d568fd37e38970ab14b5cd5',1,'Comments']]],
-  ['ne',['NE',['../namespaceComments.html#a36789e2711f0cfe9ae11a0b29eeb826ba8f550e2bc37169aa0e8b31198d46bdcc',1,'Comments']]],
-  ['nne',['NNE',['../namespaceComments.html#a36789e2711f0cfe9ae11a0b29eeb826ba2f0cd75d121bd21e07424a180e820a15',1,'Comments']]],
-  ['nnw',['NNW',['../namespaceComments.html#a36789e2711f0cfe9ae11a0b29eeb826ba8637e3e52b899b6080d267d1631eedc8',1,'Comments']]],
   ['no_5fparent',['NO_PARENT',['../classCppImport_1_1CppImportLogger.html#a0a0d5e2dcef9bc6a9431a9690ee37bc7ad528e999bf11721171e8e1b6c3cd47a4',1,'CppImport::CppImportLogger']]],
   ['no_5fvalue',['NO_VALUE',['../classFilePersistence_1_1GenericNode.html#abc7da14fae84133c449f8dd12f11f344a4d5c6d2808dbd3d4730d2976d5b7af43',1,'FilePersistence::GenericNode']]],
   ['noconstraints',['NoConstraints',['../classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946',1,'Visualization::Item::NoConstraints()'],['../classVisualization_1_1ItemRegion.html#a4c5ce94b208c205300fadb4271b9165ba91d36656ebd4e5550d06982782a585a4',1,'Visualization::ItemRegion::NoConstraints()']]],
@@ -14,6 +10,5 @@ var searchData=
   ['not_5fequals',['NOT_EQUALS',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a57eefc1116325643adf0c9d7f058d99e',1,'OOModel::BinaryOperation']]],
   ['not_5fsupported',['NOT_SUPPORTED',['../classCppImport_1_1CppImportLogger.html#a0a0d5e2dcef9bc6a9431a9690ee37bc7a5343bcd21aad65124478a61831f6949e',1,'CppImport::CppImportLogger']]],
   ['notassociative',['NotAssociative',['../classInteraction_1_1OperatorDescriptor.html#a15ad9bf3edba961b01241fe71808e181a571bca8626e3a4d4b30b922d9c06d9ba',1,'Interaction::OperatorDescriptor']]],
-  ['noupdate',['NoUpdate',['../classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890a053bacc33f41216bc606b7686cb5c42c',1,'Visualization::Item']]],
-  ['nw',['NW',['../namespaceComments.html#a36789e2711f0cfe9ae11a0b29eeb826ba9cec584512f478dd4e756c4a6e075b70',1,'Comments']]]
+  ['noupdate',['NoUpdate',['../classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890a053bacc33f41216bc606b7686cb5c42c',1,'Visualization::Item']]]
 ];

@@ -89,7 +89,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classOOModel_1_1Class-members.html">List of all members</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">OOModel::Class Class Reference</div>  </div>
 </div><!--header-->
@@ -125,12 +126,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab3f2ec84e3de262489e0011bfa819ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a293c98945681b04b0b16fccde83ddbe1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1c">ConstructKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a293c98945681b04b0b16fccde83ddbe1">constructKind</a> () const </td></tr>
 <tr class="separator:a293c98945681b04b0b16fccde83ddbe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3befd0f7d33f0e421b6b4b8b02ac90e3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a3befd0f7d33f0e421b6b4b8b02ac90e3">findSymbols</a> (QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, Node *source, FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override</td></tr>
+<tr class="separator:a3befd0f7d33f0e421b6b4b8b02ac90e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addfbe5e8ea24202bd3f2211c5e64ea7d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#addfbe5e8ea24202bd3f2211c5e64ea7d">isGeneric</a> ()</td></tr>
 <tr class="separator:addfbe5e8ea24202bd3f2211c5e64ea7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8f97f4f97864f5110d0dadda3b1d13b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#aa8f97f4f97864f5110d0dadda3b1d13b">setConstructKind</a> (const <a class="el" href="classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1c">ConstructKind</a> &amp;kind)</td></tr>
 <tr class="separator:aa8f97f4f97864f5110d0dadda3b1d13b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a913ffc4bd0ad9bcc1e7c4066e4c52380"><td class="memItemLeft" align="right" valign="top">virtual SymbolTypes&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a913ffc4bd0ad9bcc1e7c4066e4c52380">symbolType</a> () const override</td></tr>
 <tr class="separator:a913ffc4bd0ad9bcc1e7c4066e4c52380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ac6dbff55cf4eab7bb14ffae87f932d39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#ac6dbff55cf4eab7bb14ffae87f932d39">defaultImplicitBaseFromProject</a> () const </td></tr>
+<tr class="separator:ac6dbff55cf4eab7bb14ffae87f932d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c2072beb22abc1e73c304f84f948baf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Class.html#a7c2072beb22abc1e73c304f84f948baf">findInTarget</a> (<a class="el" href="classOOModel_1_1Expression.html">Expression</a> *target, QSet&lt; Node * &gt; &amp;result, const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;matcher, SymbolTypes symbolTypes, bool exhaustAllScopes)</td></tr>
+<tr class="separator:a7c2072beb22abc1e73c304f84f948baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -268,6 +278,139 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac6dbff55cf4eab7bb14ffae87f932d39"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> * OOModel::Class::defaultImplicitBaseFromProject </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7c2072beb22abc1e73c304f84f948baf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool OOModel::Class::findInTarget </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1Expression.html">Expression</a> *&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
+          <td class="paramname"><em>matcher</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3befd0f7d33f0e421b6b4b8b02ac90e3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool OOModel::Class::findSymbols </td>
+          <td>(</td>
+          <td class="paramtype">QSet&lt; Node * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classModel_1_1SymbolMatcher.html">Model::SymbolMatcher</a> &amp;&#160;</td>
+          <td class="paramname"><em>matcher</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Node *&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FindSymbolDirection&#160;</td>
+          <td class="paramname"><em>direction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SymbolTypes&#160;</td>
+          <td class="paramname"><em>symbolTypes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

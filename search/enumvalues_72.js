@@ -5,7 +5,7 @@ var searchData=
   ['rect_5fnone',['RECT_NONE',['../namespaceComments.html#ad438aaa3f4c2e370672679af227970caad8f1b361d09fd55166ce641712d6db7d',1,'Comments']]],
   ['rect_5ftop_5fleft',['RECT_TOP_LEFT',['../namespaceComments.html#ad438aaa3f4c2e370672679af227970caa8985e090b94712488aad8798c6018e5d',1,'Comments']]],
   ['rect_5ftop_5fright',['RECT_TOP_RIGHT',['../namespaceComments.html#ad438aaa3f4c2e370672679af227970caae9e50722cde7bec2f2da9870c3c51e7e',1,'Comments']]],
-  ['rectangle',['Rectangle',['../namespaceComments.html#adceae761fa72eae61b7bcc088afb1385a7baaeba7b01806dbfa2dd47ebd37d570',1,'Comments']]],
+  ['rectangle',['Rectangle',['../classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64ace9291906a4c3b042650b70d7f3b152e',1,'Comments::CommentDiagramShape']]],
   ['referenceexpr',['ReferenceExpr',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a0bbd874f7f6d03edb6c2ff049f1cf842',1,'CppImport::CppImportUtilities']]],
   ['reinterpretcast',['ReinterpretCast',['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faad276ea87e9a916c9b030117c3431d39a',1,'OOModel::CastExpression']]],
   ['remainder',['REMAINDER',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a109e6d2c110ef3d0c5d04ebde8b81079',1,'OOModel::BinaryOperation']]],

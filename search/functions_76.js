@@ -27,7 +27,7 @@ var searchData=
   ['vclass',['VClass',['../classOOVisualization_1_1VClass.html#af521bfac13d338e72a079ce176b68b1a',1,'OOVisualization::VClass']]],
   ['vclasstype',['VClassType',['../classOOVisualization_1_1VClassType.html#ae9bcde9b3e44a0d70a4c3f3330e193c9',1,'OOVisualization::VClassType']]],
   ['vcomment',['VComment',['../classComments_1_1VComment.html#ac9f53287d663540493b6a9e7f7e85f7d',1,'Comments::VComment']]],
-  ['vcommentbrowser',['VCommentBrowser',['../classComments_1_1VCommentBrowser.html#a333579ac006aadfe64dafeca3e56bfd1',1,'Comments::VCommentBrowser::VCommentBrowser(Visualization::Item *parent, const QString &amp;text, const StyleType *style=itemStyles().get())'],['../classComments_1_1VCommentBrowser.html#ab1d74d4263aa89dd5624d1d4782ffb29',1,'Comments::VCommentBrowser::VCommentBrowser(Visualization::Item *parent, const QString &amp;text, QSize size, const StyleType *style=itemStyles().get())']]],
+  ['vcommentbrowser',['VCommentBrowser',['../classComments_1_1VCommentBrowser.html#ad2130ecb8068ebd257d2ce4c1059875c',1,'Comments::VCommentBrowser::VCommentBrowser(Visualization::Item *parent, const QUrl &amp;url, const StyleType *style=itemStyles().get())'],['../classComments_1_1VCommentBrowser.html#af8c7c0cfa0179d9d836f74185c9e9057',1,'Comments::VCommentBrowser::VCommentBrowser(Visualization::Item *parent, const QUrl &amp;url, QSize size, const StyleType *style=itemStyles().get())'],['../classComments_1_1VCommentBrowser.html#aa605fe04cd712b0b043469a646ce375e',1,'Comments::VCommentBrowser::VCommentBrowser(Visualization::Item *parent, const QString &amp;content, const StyleType *style=itemStyles().get())']]],
   ['vcommentdiagram',['VCommentDiagram',['../classComments_1_1VCommentDiagram.html#a0956d0ae535d3c7d72fec8e260929220',1,'Comments::VCommentDiagram']]],
   ['vcommentdiagramconnector',['VCommentDiagramConnector',['../classComments_1_1VCommentDiagramConnector.html#a3e21b0411c086d258f1f02ed63d16a59',1,'Comments::VCommentDiagramConnector']]],
   ['vcommentdiagramshape',['VCommentDiagramShape',['../classComments_1_1VCommentDiagramShape.html#af8c5db636d3367eaf622b1d8f5efdd08',1,'Comments::VCommentDiagramShape']]],
@@ -95,6 +95,7 @@ var searchData=
   ['vmodifier',['VModifier',['../classOOVisualization_1_1VModifier.html#a8bf3023219246654e39719f677686b57',1,'OOVisualization::VModifier']]],
   ['vmodule',['VModule',['../classOOVisualization_1_1VModule.html#a79752090040103f12f35b1078e53e529',1,'OOVisualization::VModule']]],
   ['vnameimport',['VNameImport',['../classOOVisualization_1_1VNameImport.html#a643f607a14b420202d52ebfaaa026b30',1,'OOVisualization::VNameImport']]],
+  ['vnewexpression',['VNewExpression',['../classOOVisualization_1_1VNewExpression.html#a61e493623751604f9f76cdd21d7a659f',1,'OOVisualization::VNewExpression']]],
   ['vnullliteral',['VNullLiteral',['../classOOVisualization_1_1VNullLiteral.html#a6b7edee3f6e598e329f9633991575eb0',1,'OOVisualization::VNullLiteral']]],
   ['vprimitivetype',['VPrimitiveType',['../classOOVisualization_1_1VPrimitiveType.html#aad9c2c20ddfd8a9021e7f19a033fa143',1,'OOVisualization::VPrimitiveType']]],
   ['vproject',['VProject',['../classOOVisualization_1_1VProject.html#a311b121194b3b305b1c393a6fcce0f92',1,'OOVisualization::VProject']]],
@@ -111,5 +112,6 @@ var searchData=
   ['vtrycatchfinally',['VTryCatchFinally',['../classOOVisualization_1_1VTryCatchFinally.html#a5ed4d5d90d25ae1ffc2fd0d0b5171e5b',1,'OOVisualization::VTryCatchFinally']]],
   ['vtypealias',['VTypeAlias',['../classOOVisualization_1_1VTypeAlias.html#a6a9122bdf6b4afe3a9e84094b49993b3',1,'OOVisualization::VTypeAlias']]],
   ['vunfinishedoperator',['VUnfinishedOperator',['../classOOVisualization_1_1VUnfinishedOperator.html#a1efd8b98c2dc24d44f1bae99103c7f9e',1,'OOVisualization::VUnfinishedOperator']]],
+  ['vusedlibrary',['VUsedLibrary',['../classVisualization_1_1VUsedLibrary.html#afad809834a4f4dd84306bf5ad2b5e6ad',1,'Visualization::VUsedLibrary']]],
   ['vvariabledeclarationexpression',['VVariableDeclarationExpression',['../classOOVisualization_1_1VVariableDeclarationExpression.html#a79994821ca7a4de54020e75cfa02cc82',1,'OOVisualization::VVariableDeclarationExpression']]]
 ];

@@ -105,10 +105,12 @@ Inheritance diagram for Comments::CommentNode:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0389024a893bf80ba463de5c5e713333"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a0389024a893bf80ba463de5c5e713333">CommentNode</a> (const QString &amp;label)</td></tr>
-<tr class="separator:a0389024a893bf80ba463de5c5e713333"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a4522573d0604393fd7587aabc7ca1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a6a4522573d0604393fd7587aabc7ca1f">getDiagramByName</a> (QString &amp;name)</td></tr>
-<tr class="separator:a6a4522573d0604393fd7587aabc7ca1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea6ff72e5f9cb9a17bd41ebf52b21f76"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#aea6ff72e5f9cb9a17bd41ebf52b21f76">CommentNode</a> (const QString &amp;text)</td></tr>
+<tr class="separator:aea6ff72e5f9cb9a17bd41ebf52b21f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c720ad056aa187bb42802244744cd84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a4c720ad056aa187bb42802244744cd84">diagram</a> (const QString &amp;name)</td></tr>
+<tr class="separator:a4c720ad056aa187bb42802244744cd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8532a2dea4c5c720c8fe9b275dd1ab8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a8532a2dea4c5c720c8fe9b275dd1ab8a">synchronizeDiagramsToText</a> ()</td></tr>
+<tr class="separator:a8532a2dea4c5c720c8fe9b275dd1ab8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -119,7 +121,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a0389024a893bf80ba463de5c5e713333"></a>
+<a class="anchor" id="aea6ff72e5f9cb9a17bd41ebf52b21f76"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -127,7 +129,7 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">Comments::CommentNode::CommentNode </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>label</em>)</td><td></td>
+          <td class="paramname"><em>text</em>)</td><td></td>
           <td></td>
         </tr>
       </table>
@@ -136,15 +138,30 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6a4522573d0604393fd7587aabc7ca1f"></a>
+<a class="anchor" id="a4c720ad056aa187bb42802244744cd84"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> * Comments::CommentNode::getDiagramByName </td>
+          <td class="memname"><a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> * Comments::CommentNode::diagram </td>
           <td>(</td>
-          <td class="paramtype">QString &amp;&#160;</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>name</em>)</td><td></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8532a2dea4c5c720c8fe9b275dd1ab8a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Comments::CommentNode::synchronizeDiagramsToText </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
           <td></td>
         </tr>
       </table>

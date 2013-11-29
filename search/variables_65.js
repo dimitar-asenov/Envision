@@ -1,8 +1,10 @@
 var searchData=
 [
+  ['edit_5foutline_5fsize',['EDIT_OUTLINE_SIZE',['../classComments_1_1VCommentDiagram.html#a82825a0181526b5fb49cd156c8d3546b',1,'Comments::VCommentDiagram']]],
   ['editable',['editable',['../classVisualization_1_1TextRenderer.html#aea4653d333bda3109b5e59908abc340e',1,'Visualization::TextRenderer']]],
   ['editing_5f',['editing_',['../classComments_1_1VComment.html#a5580169b68aa9259d5a9a4449f114409',1,'Comments::VComment::editing_()'],['../classComments_1_1VCommentDiagram.html#ac8232abab5b7c69737a512b2c737656c',1,'Comments::VCommentDiagram::editing_()']]],
-  ['editlabel_5f',['editLabel_',['../classComments_1_1VComment.html#af0d1ce4851ff543bb5a96a0de9cbf20f',1,'Comments::VComment']]],
+  ['editlist',['editList',['../classComments_1_1VCommentStyle.html#afa13da194497049dc86f9369e4d7ce8a',1,'Comments::VCommentStyle']]],
+  ['edittext_5f',['editText_',['../classComments_1_1VComment.html#a2a5ffda1a7dd6f6ba92110e72d0ea679',1,'Comments::VComment']]],
   ['elem',['elem',['../classFilePersistence_1_1XMLModel.html#ad25eed404db4b2335fdaed3a889da7fa',1,'FilePersistence::XMLModel::elem()'],['../classVisualization_1_1StyleNode.html#a7fe00452befb17160b6fd434d9777118',1,'Visualization::StyleNode::elem()']]],
   ['element',['element',['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html#ad56cd636f33539a606c5168b4a6b661f',1,'Visualization::DeclarativeItemBase::Merge']]],
   ['elementcache_5f',['elementCache_',['../classVisualization_1_1FormElement.html#a09404e7f09f870a173c7d350928185ce',1,'Visualization::FormElement']]],
@@ -15,6 +17,7 @@ var searchData=
   ['emptyline_5f',['emptyLine_',['../classOOVisualization_1_1VEmptyExpressionStyle.html#a24384a54c921a3fc7067a376ac42d209',1,'OOVisualization::VEmptyExpressionStyle']]],
   ['enabled_5f',['enabled_',['../classVisualization_1_1VisualizationItemWrapperFormElement.html#ae458d7943acd2687cd41d095e9b11a20',1,'Visualization::VisualizationItemWrapperFormElement']]],
   ['end_5ftokens_5f',['end_tokens_',['../classInteraction_1_1Parser.html#abf629e2c3e75a957ead81b56a84c7c50',1,'Interaction::Parser']]],
+  ['endpoint_5f',['endPoint_',['../classComments_1_1VCommentDiagramConnector.html#a93ffaee97574969dc075fa74eeba6e2a',1,'Comments::VCommentDiagramConnector']]],
   ['ensuresmethod_5f',['ensuresMethod_',['../classContractsLibrary_1_1ValueAtReturnVisitor.html#a15a5683b6bf4a9953c69d41cce0bbf6c',1,'ContractsLibrary::ValueAtReturnVisitor']]],
   ['entrance_5f',['entrance_',['../classControlFlowVisualization_1_1ControlFlowItem.html#ac252a281be8130f29ca9a7cbc07cb27f',1,'ControlFlowVisualization::ControlFlowItem']]],
   ['entries_5f',['entries_',['../classInteraction_1_1AutoCompleteVis.html#a39973d7df4215d1a3b0c4199c79d659b',1,'Interaction::AutoCompleteVis']]],
@@ -28,7 +31,7 @@ var searchData=
   ['errorprefix_5f',['errorPrefix_',['../classInteraction_1_1ErrorDescriptor.html#a7b5573863bcf7aa380f62e8ff735f19f',1,'Interaction::ErrorDescriptor']]],
   ['errors',['errors',['../classInteraction_1_1ParseResult.html#a7ffa6fc6297e226f23da1b671e106f54',1,'Interaction::ParseResult']]],
   ['errors_5f',['errors_',['../classInteraction_1_1CommandResult.html#ac782eb3ada1c1157a68c65cdee99df0e',1,'Interaction::CommandResult']]],
-  ['errortextpadding',['errorTextPadding',['../classComments_1_1VCommentImage.html#af7311f287cbf2a68bbfd72768a6deb64',1,'Comments::VCommentImage']]],
+  ['errorsize_5f',['errorSize_',['../classComments_1_1VCommentImage.html#a78dfae0563252e7e6777abd7987bff22',1,'Comments::VCommentImage']]],
   ['errstream_5f',['errStream_',['../classCppImport_1_1CppImportLogger.html#ae7ad59ca1c42f4f533df73d4190f237b',1,'CppImport::CppImportLogger']]],
   ['escape_5fsymbols',['ESCAPE_SYMBOLS',['../namespaceInteraction.html#ae230261326d354d7c05612669b343098',1,'Interaction']]],
   ['eventtype',['EventType',['../classCore_1_1TestEvent.html#af10a923bc83b7053e9fb697ad50e3231',1,'Core::TestEvent::EventType()'],['../classInteraction_1_1SetCursorEvent.html#ad9047ffcb94d28752f0885996db748c7',1,'Interaction::SetCursorEvent::EventType()'],['../classInteraction_1_1ShowCommandPromptEvent.html#a11432d27ff1ffad457e7526ed9166bc5',1,'Interaction::ShowCommandPromptEvent::EventType()'],['../classOOInteraction_1_1SetExpressionCursorEvent.html#aed4155d3d09dbe77c8187a82572133a0',1,'OOInteraction::SetExpressionCursorEvent::EventType()'],['../classVisualization_1_1CustomSceneEvent.html#adf86c8d4c8580c88b5bf387ce006f0a1',1,'Visualization::CustomSceneEvent::EventType()'],['../classVisualization_1_1UpdateSceneEvent.html#aa4b20594e1c12ff766c2208d23d79050',1,'Visualization::UpdateSceneEvent::EventType()']]],

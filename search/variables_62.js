@@ -20,5 +20,6 @@ var searchData=
   ['bottomrightcorner_5f',['bottomRightCorner_',['../classVisualization_1_1BoxStyle.html#a2f0e454ffd838207df4cebc341ca9304',1,'Visualization::BoxStyle']]],
   ['bottomstyle_5f',['bottomStyle_',['../classVisualization_1_1PanelBorderLayoutStyle.html#ad8001954af6dc0f96d12439386e9756d',1,'Visualization::PanelBorderLayoutStyle']]],
   ['boundingrect_5f',['boundingRect_',['../classVisualization_1_1Item.html#a99084bee37da6439935b68d4d1c7655c',1,'Visualization::Item']]],
-  ['breaks_5f',['breaks_',['../classControlFlowVisualization_1_1ControlFlowItem.html#a97a7b05d50101b46c2881f2ef263822e',1,'ControlFlowVisualization::ControlFlowItem']]]
+  ['breaks_5f',['breaks_',['../classControlFlowVisualization_1_1ControlFlowItem.html#a97a7b05d50101b46c2881f2ef263822e',1,'ControlFlowVisualization::ControlFlowItem']]],
+  ['browser_5f',['browser_',['../classComments_1_1VCommentBrowser.html#a36391bb5cd52da249aa070e2abacdce7',1,'Comments::VCommentBrowser']]]
 ];

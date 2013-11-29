@@ -2,6 +2,7 @@ var searchData=
 [
   ['unary',['Unary',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a19c6e8d6e2caeaff0ac8881e05c25010',1,'CppImport::CppImportUtilities']]],
   ['union',['Union',['../classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1caaef12e903e606a4895a16b393bfdec8c',1,'OOModel::Class']]],
+  ['unknown',['Unknown',['../classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a88183b946cc5f0e8c96b2e66e1c74a7e',1,'OOModel::OOReference']]],
   ['unsigned_5fint',['UNSIGNED_INT',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a2ca3cd8f2bc5e8f8387ea31760a21077',1,'OOModel::PrimitiveType']]],
   ['unsigned_5flong',['UNSIGNED_LONG',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05aef606e463bc7db95ab8a65dfedba3b71',1,'OOModel::PrimitiveType']]],
   ['unspecified',['UNSPECIFIED',['../classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a64654d684ce9e1b176602e431e8f4ede',1,'Model::Node']]],

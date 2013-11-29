@@ -113,31 +113,33 @@ Inheritance diagram for Model::PersistentStore:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a26812550db192656c6570a12c84bf73b"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a26812550db192656c6570a12c84bf73b">~PersistentStore</a> ()</td></tr>
 <tr class="separator:a26812550db192656c6570a12c84bf73b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a816ca20cc32a0235b894834ea2005815"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a816ca20cc32a0235b894834ea2005815">clone</a> () const =0</td></tr>
+<tr class="separator:a816ca20cc32a0235b894834ea2005815"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a067c4f307cc6a31a42ce075370beb097"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a067c4f307cc6a31a42ce075370beb097">currentNodeType</a> () const =0</td></tr>
 <tr class="separator:a067c4f307cc6a31a42ce075370beb097"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a564a82b2ff75b3165d16d66d7853356f"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structModel_1_1LoadedNode.html">LoadedNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a564a82b2ff75b3165d16d66d7853356f">loadAllSubNodes</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *parent)=0</td></tr>
-<tr class="separator:a564a82b2ff75b3165d16d66d7853356f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28efa5526018c204b5b9f0ccd580e44f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a28efa5526018c204b5b9f0ccd580e44f">isLoadingPartially</a> () const =0</td></tr>
+<tr class="separator:a28efa5526018c204b5b9f0ccd580e44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad631eb84c0d1190034aad4f07d05a655"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structModel_1_1LoadedNode.html">LoadedNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#ad631eb84c0d1190034aad4f07d05a655">loadAllSubNodes</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *parent, const QSet&lt; QString &gt; &amp;loadPartially)=0</td></tr>
+<tr class="separator:ad631eb84c0d1190034aad4f07d05a655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f171be77e7fe553327c6de15ce3f792"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1PersistedNode.html">PersistedNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a8f171be77e7fe553327c6de15ce3f792">loadCompleteNodeSubtree</a> (const QString &amp;modelName, const <a class="el" href="classModel_1_1Node.html">Node</a> *node)=0</td></tr>
 <tr class="separator:a8f171be77e7fe553327c6de15ce3f792"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbbfd0d9ac497928707f74d60e90eda3"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#acbbfd0d9ac497928707f74d60e90eda3">loadDoubleValue</a> ()=0</td></tr>
 <tr class="separator:acbbfd0d9ac497928707f74d60e90eda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c8ecaebd65a986086b32d1c07b8d7a4"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a0c8ecaebd65a986086b32d1c07b8d7a4">loadIntValue</a> ()=0</td></tr>
 <tr class="separator:a0c8ecaebd65a986086b32d1c07b8d7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d977792ee84b87fb9d78c49fce50c9b"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structModel_1_1LoadedNode.html">LoadedNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a5d977792ee84b87fb9d78c49fce50c9b">loadPartialNode</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *partialNode)=0</td></tr>
-<tr class="separator:a5d977792ee84b87fb9d78c49fce50c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeeebd0a02efde7976bc5185c6d156bac"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#aeeebd0a02efde7976bc5185c6d156bac">loadReferenceValue</a> (<a class="el" href="classModel_1_1Reference.html">Reference</a> *r)=0</td></tr>
 <tr class="memdesc:aeeebd0a02efde7976bc5185c6d156bac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a null string if the reference is resolved and a symbolic name if the reference is unresolved.  <a href="#aeeebd0a02efde7976bc5185c6d156bac">More...</a><br/></td></tr>
 <tr class="separator:aeeebd0a02efde7976bc5185c6d156bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1490d72fd1e5ea9b97421d8d0e98a0e5"><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a1490d72fd1e5ea9b97421d8d0e98a0e5">loadStringValue</a> ()=0</td></tr>
 <tr class="separator:a1490d72fd1e5ea9b97421d8d0e98a0e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21d6a5753fc4faa315bb1b760318a8fa"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a21d6a5753fc4faa315bb1b760318a8fa">loadSubNode</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *parent, const QString &amp;name)=0</td></tr>
-<tr class="separator:a21d6a5753fc4faa315bb1b760318a8fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b70cd7b9f26de05a7b62d7117bd6584"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a6b70cd7b9f26de05a7b62d7117bd6584">loadSubNode</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *parent, const QString &amp;name, bool loadPartially)=0</td></tr>
+<tr class="separator:a6b70cd7b9f26de05a7b62d7117bd6584"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a8eb63caa5f9975b05b5e080d07a037"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a5a8eb63caa5f9975b05b5e080d07a037">saveDoubleValue</a> (double value)=0</td></tr>
 <tr class="separator:a5a8eb63caa5f9975b05b5e080d07a037"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0353cb41dd7053b44afdbfbdaf296128"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a0353cb41dd7053b44afdbfbdaf296128">saveIntValue</a> (int value)=0</td></tr>
 <tr class="separator:a0353cb41dd7053b44afdbfbdaf296128"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47c19995d5172ae72b95a76008aaecea"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a47c19995d5172ae72b95a76008aaecea">saveNode</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> *node, const QString &amp;name, bool partialLoadHint)=0</td></tr>
-<tr class="separator:a47c19995d5172ae72b95a76008aaecea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebf3d85694c34028829060cff2dcd728"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#aebf3d85694c34028829060cff2dcd728">saveNode</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> *node, const QString &amp;name)=0</td></tr>
+<tr class="separator:aebf3d85694c34028829060cff2dcd728"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02895c49edfdee00202c85a0adf7665a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a02895c49edfdee00202c85a0adf7665a">saveReferenceValue</a> (const QString &amp;name, const <a class="el" href="classModel_1_1Node.html">Node</a> *target)=0</td></tr>
 <tr class="separator:a02895c49edfdee00202c85a0adf7665a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8773b79c6c41b09cf659f75843a74320"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a8773b79c6c41b09cf659f75843a74320">saveStringValue</a> (const QString &amp;value)=0</td></tr>
@@ -145,8 +147,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a50aba75fb9bf2286ab09701d96995bbb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a50aba75fb9bf2286ab09701d96995bbb">loadModel</a> (<a class="el" href="classModel_1_1Model.html">Model</a> *model, const QString &amp;name)=0</td></tr>
-<tr class="separator:a50aba75fb9bf2286ab09701d96995bbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af12f12aa9c7aa78cbeb1026daffc493f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#af12f12aa9c7aa78cbeb1026daffc493f">loadModel</a> (<a class="el" href="classModel_1_1Model.html">Model</a> *model, const QString &amp;name, bool loadPartially)=0</td></tr>
+<tr class="separator:af12f12aa9c7aa78cbeb1026daffc493f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa89103167ea12fe88f1a06cd047d6a1e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#aa89103167ea12fe88f1a06cd047d6a1e">saveModel</a> (<a class="el" href="classModel_1_1Model.html">Model</a> *model, const QString &amp;name)=0</td></tr>
 <tr class="separator:aa89103167ea12fe88f1a06cd047d6a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4cea64fab5a34453daf2aef3cd6007d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#aa4cea64fab5a34453daf2aef3cd6007d">setReferenceTargetr</a> (<a class="el" href="classModel_1_1Reference.html">Reference</a> *r, <a class="el" href="classModel_1_1Node.html">Node</a> *target)</td></tr>
@@ -182,6 +184,31 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a816ca20cc32a0235b894834ea2005815"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a>* Model::PersistentStore::clone </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a880e1ffb699983e8ff335df0dfed35b1">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1FileStore.html#a97edfd28bc1be222dd1e53d238de0cfe">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a64533f3007787bae95498b7c30c1cd81">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a6c40de0ca597d99fd61d2c8371bca410">Model::PersistentStoreMock</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a067c4f307cc6a31a42ce075370beb097"></a>
 <div class="memitem">
 <div class="memproto">
@@ -203,11 +230,36 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a3898ffad7862539964fc7ed9bf725c3a">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a6f6c12ae8edc957b83fcf77944588d70">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a762a3a9668ccf0db05dfd7b147fb0fc8">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#ad5500af5b16447bc287d469e6c70d478">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a64cbdef9a3d6458b87ed84f8fdfd835c">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#aaaba4321c32899fc9775f8a41ff99f69">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aa5ef30f5a44b45a0320652dcb3510fc1">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a2d7e90a520dfef39e3331cc91a226b90">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a564a82b2ff75b3165d16d66d7853356f"></a>
+<a class="anchor" id="a28efa5526018c204b5b9f0ccd580e44f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Model::PersistentStore::isLoadingPartially </td>
+          <td>(</td>
+          <td class="paramname">)</td><td></td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a7188adf0368b0c0238d738832d60caa4">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#ac65827257fb17dfc558519683f53e599">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aacc3acb5307a7995d6fa442c54d98292">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a39c0af782f77f9ab398909c8d69e8005">Model::PersistentStoreMock</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad631eb84c0d1190034aad4f07d05a655"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -218,8 +270,18 @@ Friends</h2></td></tr>
           <td class="memname">virtual QList&lt;<a class="el" href="structModel_1_1LoadedNode.html">LoadedNode</a>&gt; Model::PersistentStore::loadAllSubNodes </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>parent</em>)</td><td></td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const QSet&lt; QString &gt; &amp;&#160;</td>
+          <td class="paramname"><em>loadPartially</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -229,7 +291,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a132b7d6837f63116f619020faef53667">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#aa44a466091dc86affabac8589a26a6da">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a359cf51365cf02c50ecebbb348770f83">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a0b74893b21470dc4ce1a9001ac83621a">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#aae71cad1ac156f5286085d0da26f9f82">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#ae594a70b9991c32397c792776b081f2e">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aa02518459a1b54d6458fe8b01a8e4598">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a9d4df13b019dca0a2c1a365c0fb2494b">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -265,7 +327,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#adbdb2d778307fcda8bbe7c8b0b622e39">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a10987e4c47daf770409fa0b8a52a2e80">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#adf0cc5d2dcd4ad280e09ce7b0cf9c157">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#aa248ba636637fd57263660bdf7e6f3c6">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#ade5b44de64b96cdb07aa847eee1894d7">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a0d8861ff0a2ae3b8446ca809d6663952">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a219b3959f495a249f19c124d949d113e">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a4f137553ffa560d841b8ff7592d2f71c">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -290,7 +352,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a7bdc8cb698eaffb26217b261a7578e35">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a95a69c03a7eadde87fc10dcc74acf58e">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab18bcc3e3dc7885057398f2b889729d0">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a050a0d97df379d0842fd1ebfc32cdc5b">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a38e94283a0724a6a2d1834b6649e6ca1">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#acf8499e2133fe7d8f0bedb10eea1fc88">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#abab3b46ba7928475446761b313825c16">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#ac3d5a5028a519b018218760c37fc5cfc">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -315,11 +377,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a1b7e7710c2a9eec0cb93f6c1fbb7403d">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#ade7e8698fcdb520f9e3f722e95ce9e54">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a837fdc4d9107fafcd44878d38380cdf8">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#ad1f4899e0ec18bcfd0550458f610a613">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#aff138653106f5e68876aa9a8dfb315ef">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a0fbe4d3a7c1231dd16350d5e6996690e">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a6028501a7d80a71f9c9220e080e6da68">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a4e3646badba3c61eb28c323affdf45fa">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a50aba75fb9bf2286ab09701d96995bbb"></a>
+<a class="anchor" id="af12f12aa9c7aa78cbeb1026daffc493f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -336,7 +398,13 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>loadPartially</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -351,33 +419,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1SystemClipboard.html#aca685a57c3a92c8de40c5ba7f6302882">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1FileStore.html#a1de287d7a898a9c69aea0ded371cc171">FilePersistence::FileStore</a>, <a class="el" href="classModel_1_1PersistentStoreMock.html#a6c6b62fca6f5de0e205db7faad7af25a">Model::PersistentStoreMock</a>, and <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a1b1c575bc584db5daf8cf7f65474999b">FilePersistence::SimpleTextFileStore</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5d977792ee84b87fb9d78c49fce50c9b"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual QList&lt;<a class="el" href="structModel_1_1LoadedNode.html">LoadedNode</a>&gt; Model::PersistentStore::loadPartialNode </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>partialNode</em>)</td><td></td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#afd2e1b02abac8318a7236894c9b016c2">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a6977053d21341d6c873eb414135c6188">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a0dcbafbb0507a4a27e962e125690b8a3">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#ac326067b23ca7648ce724d8301d3307f">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a6635316f85be5f7a1f21ace427164939">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1FileStore.html#afb879a4b7752fdb187a3aa767b8670fa">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ac41ec973535fdab370ff2d884f4b287d">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#ae5e5ffa5eebc848daae08514f9d8be38">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -406,7 +448,7 @@ Friends</h2></td></tr>
 <p>Returns a null string if the reference is resolved and a symbolic name if the reference is unresolved. </p>
 <p>After the target of the reference exists in memory, the reference will be updated to point to the correct target. </p>
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a7fd85b1e265acfc80c2a3cd7f06c4140">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#ab623fbb9baff0fe8d427cfe100d364f1">FilePersistence::SystemClipboard</a>, <a class="el" href="classModel_1_1PersistentStoreMock.html#a9bfbda7a5a8bcf9f29e409da593bff9e">Model::PersistentStoreMock</a>, and <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#afbac82e00a189c178dd0fe3d455a1358">FilePersistence::SimpleTextFileStore</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a681194b193aae81aad79d1e91bb25292">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a6656756bce8225095d3aece4e3abb128">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#abc5a92549c52fe802374c5db86047ea4">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#aee3d9bccbf7124253f3e514cf1abd4f6">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -431,11 +473,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#adb567495ab47fdea248f98ce419cdaf7">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#aaccc4d36f545d375e536ca6857683ecc">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ae16a6e8602d3fb8001ee877774f85ed6">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a9e8df7eddc88aff76a564e9fe3709f46">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#aa2ec54ad7eb177a75282074366873965">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a45456c3257ec0c5e3cf87a501de91d18">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ae8c0c15b3b159104af5f95ee0015774e">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#ab96238a5ffd7a44e88c769a2f0fa8e69">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a21d6a5753fc4faa315bb1b760318a8fa"></a>
+<a class="anchor" id="a6b70cd7b9f26de05a7b62d7117bd6584"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -452,7 +494,13 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>loadPartially</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -467,7 +515,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a1b4d9801c11edd8b3ef2605eb3e2ba02">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a7e0713806c386e5c2a05c36568d0ea4d">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a29159c0d4140bc8ca3b3143b54cddb2e">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#aab3020a42c64baad7ebbe568edc539b0">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a07980c8d3aeb81065b9b49306efe3888">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a8c33c378692a7d441dbd61340c6d37d4">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a6f992ed245c7099c030b75197721f9a4">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a0bf613c90b205b1ac1e6b5733fceeb81">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -493,7 +541,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a2b92089d9b8f5221df553eb3649db655">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a6aa49d2b77d3f8e0fc3ea80f2e4d6160">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a23a4537318ed61a04f67c33eaab48bc4">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a5d76ecb11d85d07d3941cc5da795cc6c">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a8289a8350d85c8639c29103ce26b0d99">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#aded0781b6bca800cead16db0ff3c867b">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aadac350506437cb4194f6742382638c5">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a6792d57ec9c82e06eaa3ba045cbb0bf3">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -519,7 +567,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a4df4f994d988852a1a54aba93eee0c80">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#ad7b3d73112b92bd640c84de5c3a344b2">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a63ce11ff900a620ffc4815f00738a108">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a97a143eeb59ee42e02d6e7e35c5eee43">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a3c49db93bd7e6e42446bb44e0ce20526">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a11ffc9f8cd1b27a65a903d8a01543cc1">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a372a9d8a7e33ddb9ba298beeb5762770">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a81a23660d91737008a827b92f006306a">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -555,11 +603,11 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a58f89b8316011d9a5820d0b9aa305435">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1FileStore.html#acf181a8282a8a85f362520147f1d6593">FilePersistence::FileStore</a>, <a class="el" href="classModel_1_1PersistentStoreMock.html#aa418f176f6630d5bb1d01ddab42c8571">Model::PersistentStoreMock</a>, and <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a290ce9a4de9954de20e4bb842bb08bb6">FilePersistence::SimpleTextFileStore</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a156789d6a144f7c0471fc452f90fd385">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1FileStore.html#a7796577f13b9a2c827c330c14f128f58">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a0dcd303dde43c1f7c6e8b44229f28090">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#ac2298510fb7dd018d96cc7c2d583fcb3">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a47c19995d5172ae72b95a76008aaecea"></a>
+<a class="anchor" id="aebf3d85694c34028829060cff2dcd728"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -576,13 +624,7 @@ Friends</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>partialLoadHint</em>&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -597,7 +639,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#ae9f927e4cc4f9defeb22a72fd3f4b9f0">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a0bd27a466d8cfe4242329ae10dfd4004">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a4078f938ba28b860a002e3791982aa79">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#aab8b37373e7ac072ecd9cf188ca3c6c5">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a3ce75374e6ef3c1450037b7bb0903f94">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a2153666748f8efb658491ddaa1ad7dc8">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aee8fcfa30fb3b9bdcf89b0e688a9d2fe">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#aa53fdb5d16f29956d3c0e14a520148cd">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
@@ -633,7 +675,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classModel_1_1PersistentStoreMock.html#a0c45014aa3bfeabd42612c000ba57e27">Model::PersistentStoreMock</a>, <a class="el" href="classFilePersistence_1_1FileStore.html#a3d7fb84ae32839e387ae7198f7cd3c41">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a7dbb1fc1f224eb5f73b3f5bfb29c2b41">FilePersistence::SystemClipboard</a>, and <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a0dc75119ab04e0d3e0f0e8a1544d123a">FilePersistence::SimpleTextFileStore</a>.</p>
+<p>Implemented in <a class="el" href="classModel_1_1PersistentStoreMock.html#abe3bf8221fc7bfaf484670ea292c4083">Model::PersistentStoreMock</a>, <a class="el" href="classFilePersistence_1_1FileStore.html#afc06d9d963f076d83248e973a4c0a325">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a15ff70db90148b8e505146e9ed69eb91">FilePersistence::SystemClipboard</a>, and <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aa94d72bedbd6bec47e4033ce3a11196d">FilePersistence::SimpleTextFileStore</a>.</p>
 
 </div>
 </div>
@@ -659,7 +701,7 @@ Friends</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a86f4c7e64971e5cd0f3efb34e952cd8f">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a834d8e401c3562a7d77f4c6e7a3b6138">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a694010514b09eaf23ba4501c7e5d1e5f">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#a96c1cd482c46b8de0201cadea29e5e9f">Model::PersistentStoreMock</a>.</p>
+<p>Implemented in <a class="el" href="classFilePersistence_1_1FileStore.html#a3ad27904c3fb1fd82bbb8117c158785b">FilePersistence::FileStore</a>, <a class="el" href="classFilePersistence_1_1SystemClipboard.html#aa4467d8078d7960296bed42401c33367">FilePersistence::SystemClipboard</a>, <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a1af73777762f0a549150e424a545e3bc">FilePersistence::SimpleTextFileStore</a>, and <a class="el" href="classModel_1_1PersistentStoreMock.html#afcde2d1d53b05b9a45c14c98e139e995">Model::PersistentStoreMock</a>.</p>
 
 </div>
 </div>
