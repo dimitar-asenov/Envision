@@ -28,6 +28,10 @@
 #include "../expressions/ReferenceExpression.h"
 #include "../declarations/Class.h"
 #include "../expressions/types/ClassTypeExpression.h"
+#include "../expressions/types/ArrayTypeExpression.h"
+#include "../expressions/MethodCallExpression.h"
+#include "../expressions/AssignmentExpression.h"
+#include "../expressions/CastExpression.h"
 
 #include "../types/SymbolProviderType.h"
 
@@ -49,11 +53,10 @@ bool OOReference::resolve()
 
 	auto parent = static_cast<ReferenceExpression*>(this->parent());
 
-	Model::Node* symbol = nullptr;
-
 	SymbolTypes searchForType = ANY_SYMBOL;
-	if ( isReferenceToContainer() ) searchForType &= ~METHOD;
+	if ( referenceTargetKind() == ReferenceTargetKind::Container ) searchForType &= ~METHOD;
 
+	QSet<Node*> candidateTargets;
 	if (parent->prefix())
 	{
 		// Perform a downward search starting from the target of the prefix
@@ -64,10 +67,9 @@ bool OOReference::resolve()
 			{
 				// It's important below that we change the source to sp->symbolProvider() in the call to findSymbols.
 				// See NameImport.cpp for more info.
-				QSet<Node*> symbolList;
-				sp->symbolProvider()->findSymbols(symbolList, name(), sp->symbolProvider(), SEARCH_DOWN, searchForType,
-						false);
-				if (symbolList.size() == 1) symbol = *symbolList.begin();
+
+				sp->symbolProvider()->findSymbols(candidateTargets, name(), sp->symbolProvider(), SEARCH_DOWN,
+						searchForType, false);
 			}
 		}
 		SAFE_DELETE(t);
@@ -75,40 +77,79 @@ bool OOReference::resolve()
 	else
 	{
 		// Perform an upward search starting from the current node
-		QSet<Node*> symbolList;
-		findSymbols(symbolList, name(), this, SEARCH_UP,  searchForType, false);
-		if (symbolList.size() == 1) symbol = *symbolList.begin();
+		findSymbols(candidateTargets, name(), this, SEARCH_UP,  searchForType, false);
 	}
 
-	setTarget(symbol);
+	setTarget( resolveAmbiguity(candidateTargets) );
 
 	resolving_ = false;
 	return isResolved();
 }
 
-bool OOReference::isReferenceToContainer()
+OOReference::ReferenceTargetKind OOReference::referenceTargetKind()
 {
-	auto parent = static_cast<ReferenceExpression*>(this->parent());
+	auto parentRefExpr = static_cast<ReferenceExpression*>(this->parent());
+	auto construct = parentRefExpr->parent();
 
-	auto container = parent->parent();
-
-	if (auto refExpr = DCast<ReferenceExpression>(container))
+	if (auto refExpr = DCast<ReferenceExpression>(construct))
 	{
 		// If this reference appears before a '.' operator, it must be a container
-		if (parent == refExpr->prefix()) return true;
+		if (parentRefExpr == refExpr->prefix()) return ReferenceTargetKind::Container;
 	}
-	else if (auto vd = DCast<VariableDeclaration>(container))
+	else if (auto vd = DCast<VariableDeclaration>(construct))
 	{
-		// This reference denotes a type.
-		if (parent == vd->typeExpression()) return true;
+		if (parentRefExpr == vd->typeExpression()) return ReferenceTargetKind::Container;
 	}
-	else if (auto cte = DCast<ClassTypeExpression>(container))
+	else if (auto fr = DCast<FormalResult>(construct))
 	{
-		// This reference denotes a type.
-		if (parent == cte->typeExpression()) return true;
+		if (parentRefExpr == fr->typeExpression()) return ReferenceTargetKind::Container;
+	}
+	else if (auto fa = DCast<FormalArgument>(construct))
+	{
+		if (parentRefExpr == fa->typeExpression()) return ReferenceTargetKind::Container;
+	}
+	else if (auto ate = DCast<ArrayTypeExpression>(construct))
+	{
+		if (parentRefExpr == ate->typeExpression()) return ReferenceTargetKind::Container;
+	}
+	else if (auto ce = DCast<CastExpression>(construct))
+	{
+		if (parentRefExpr == ce->castType()) return ReferenceTargetKind::Container;
+	}
+	else if (auto cte = DCast<ClassTypeExpression>(construct))
+	{
+		if (parentRefExpr == cte->typeExpression()) return ReferenceTargetKind::Container;
+	}
+	else if (auto mce = DCast<MethodCallExpression>(construct))
+	{
+		if (parentRefExpr == mce->callee()) return ReferenceTargetKind::Callable;
+	}
+	else if (auto ae = DCast<AssignmentExpression>(construct))
+	{
+		if (parentRefExpr == ae->left()) return ReferenceTargetKind::Assignable;
+	}
+	else if (auto el = DCast<Model::TypedList<Expression>>(construct))
+	{
+		if (auto cl = DCast<Class>(el->parent()))
+		{
+			if (el == cl->baseClasses()) return ReferenceTargetKind::Container;
+		}
+		else if (auto refExpr = DCast<ReferenceExpression>(el->parent()))
+		{
+			if (el == refExpr->typeArguments()) return ReferenceTargetKind::Container;
+		}
 	}
 
-	return false;
+	return ReferenceTargetKind::Unknown;
+}
+
+Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates)
+{
+	if ( candidates.isEmpty() ) return nullptr;
+	if ( candidates.size() == 1) return *candidates.begin(); // TODO: possibly check this for compliance?
+
+	//TODO: Resolve ambiguity
+	return nullptr;
 }
 
 } /* namespace OOModel */

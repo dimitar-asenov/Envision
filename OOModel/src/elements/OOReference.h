@@ -43,9 +43,13 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 		virtual bool resolve() override;
 
 	private:
-		bool isReferenceToContainer();
+
+		enum class ReferenceTargetKind {Unknown, Container, Callable, Assignable, Variable};
+		ReferenceTargetKind referenceTargetKind();
 
 		bool resolving_{};
+
+		Model::Node* resolveAmbiguity(QSet<Model::Node*>& candidates);
 };
 
 } /* namespace OOModel */
