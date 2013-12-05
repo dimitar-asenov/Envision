@@ -34,6 +34,8 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, OOReference)
 
 namespace OOModel {
 
+class MethodCallExpression;
+
 class OOMODEL_API OOReference : public Super<Model::Reference>
 {
 
@@ -50,6 +52,7 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 		bool resolving_{};
 
 		Model::Node* resolveAmbiguity(QSet<Model::Node*>& candidates);
+		Model::Node* resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates, MethodCallExpression* callExpression);
 };
 
 } /* namespace OOModel */
