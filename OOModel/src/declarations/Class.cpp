@@ -27,6 +27,7 @@
 #include "Class.h"
 
 #include "../types/SymbolProviderType.h"
+#include "../types/ClassType.h"
 #include "Project.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
@@ -121,11 +122,11 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 			if (baseClasses()->size() == 0)
 			{
 				if (auto implicit = defaultImplicitBaseFromProject())
-					found = findInTarget(implicit, result, matcher, symbolTypes, false) || found;
+					found = findInTarget(implicit, result, matcher, symbolTypes, exhaustAllScopes) || found;
 			}
 			else
 				for(auto bc : *baseClasses())
-					found = findInTarget(bc, result, matcher, symbolTypes, false) || found;
+					found = findInTarget(bc, result, matcher, symbolTypes, exhaustAllScopes) || found;
 		}
 	}
 	else if (direction == SEARCH_UP)
@@ -142,11 +143,11 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 			if (baseClasses()->size() == 0)
 			{
 				if (auto implicit = defaultImplicitBaseFromProject())
-					found = findInTarget(implicit, result, matcher, symbolTypes, false) || found;
+					found = findInTarget(implicit, result, matcher, symbolTypes, exhaustAllScopes) || found;
 			}
 			else
 				for(auto bc : *baseClasses())
-					found = findInTarget(bc, result, matcher, symbolTypes, false) || found;
+					found = findInTarget(bc, result, matcher, symbolTypes, exhaustAllScopes) || found;
 		}
 
 		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
@@ -175,6 +176,41 @@ Expression* Class::defaultImplicitBaseFromProject() const
 		p = p->parent();
 	}
 	return nullptr;
+}
+
+QSet<Class*> Class::allBaseClasses()
+{
+	QSet<Class*> bases;
+
+	for(auto base : *baseClasses())
+	{
+		auto type = base->type();
+		auto ct = dynamic_cast<ClassType*>(type);
+		if (ct)
+		{
+			bases.insert(ct->classDefinition());
+			bases.unite(ct->classDefinition()->allBaseClasses());
+		}
+
+		SAFE_DELETE(type);
+	}
+
+	if (baseClasses()->isEmpty())
+	{
+		if (auto implicitBase = defaultImplicitBaseFromProject())
+		{
+			auto type = implicitBase->type();
+			auto ct = dynamic_cast<ClassType*>(type);
+			if (ct && this != ct->classDefinition())
+			{
+				bases.insert(ct->classDefinition());
+				bases.unite(ct->classDefinition()->allBaseClasses());
+			}
+			SAFE_DELETE(type);
+		}
+	}
+
+	return bases;
 }
 
 }

@@ -74,6 +74,12 @@ class OOMODEL_API Class : public Super<Declaration>
 
 		bool isGeneric();
 
+		/**
+		 * Returns a set of all direct and transitive base classes of this class. This includes interfaces and implicit
+		 * base classes.
+		 */
+		QSet<Class*> allBaseClasses();
+
 	private:
 		Expression* defaultImplicitBaseFromProject() const;
 		bool findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
