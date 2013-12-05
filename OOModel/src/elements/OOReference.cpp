@@ -173,38 +173,62 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 
 	QSet<Method*> filtered;
 
-
-	// Exclude all non-methods
+	// Get all methods and forget about the rest.
 	for(auto target : candidates)
-		if (auto method = DCast<Method>(target)) filtered.insert(method);
+		if (auto method = DCast<Method>(target))
+			filtered.insert(method);
 	if (filtered.size() == 1) return *filtered.begin();
 	if (filtered.isEmpty()) return nullptr;
 
+	removeMethodsWithDifferentNumberOfArguments(filtered, callExpression);
+	if (filtered.size() == 1) return *filtered.begin();
+	if (filtered.isEmpty()) return nullptr;
+
+	removeMethodsWithIncompatibleTypeOfArguments(filtered, callExpression);
+	if (filtered.size() == 1) return *filtered.begin();
+	if (filtered.isEmpty()) return nullptr;
+
+	removeOverridenMethods(filtered);
+	if (filtered.size() == 1) return *filtered.begin();
+	if (filtered.isEmpty()) return nullptr;
+
+	removeLessSpecificMethods(filtered);
+	if (filtered.size() == 1) return *filtered.begin();
+
+	candidates.clear();
+	for(auto m : filtered) candidates.insert(m);
+	//TODO: check for correct access of public/private
+
+	return nullptr;
+}
+
+void OOReference::removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods,
+		MethodCallExpression* callExpression)
+{
 	auto callee = static_cast<ReferenceExpression*>(callExpression->callee());
 
 	// Exclude methods with less type arguments or unequal number of formal arguments
 	// TODO: Consider default method arguments and variable method arity.
-	auto it = filtered.begin();
-	while(it != filtered.end())
+	auto it = methods.begin();
+	while(it != methods.end())
 	{
 		if ((*it)->typeArguments()->size() < callee->typeArguments()->size()
 				|| callExpression->arguments()->size() != (*it)->arguments()->size())
-			it = filtered.erase(it);
+			it = methods.erase(it);
 		else ++ it;
 	}
-	if (filtered.size() == 1) return *filtered.begin();
-	if (filtered.isEmpty()) return nullptr;
+}
 
-
-
-	// Filter non-matching arguments
+void OOReference::removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods,
+		MethodCallExpression* callExpression)
+{
 	int argId = 0;
 	for(auto arg: *callExpression->arguments())
 	{
 		auto actualArgType = arg->type();
 
-		auto it = filtered.begin();
-		while(it != filtered.end())
+		auto it = methods.begin();
+		while(it != methods.end())
 		{
 			auto formalArgType = (*it)->arguments()->at(argId)->typeExpression()->type();
 
@@ -212,7 +236,7 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 			if ( typeRelation.testFlag(TypeSystem::Equal) || typeRelation.testFlag(TypeSystem::IsSubtype)
 					|| typeRelation.testFlag(TypeSystem::IsConvertibleTo))
 				++it;
-			else it = filtered.erase(it);
+			else it = methods.erase(it);
 
 			SAFE_DELETE(formalArgType);
 		}
@@ -220,20 +244,19 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 		SAFE_DELETE(actualArgType);
 		++argId;
 	}
-	if (filtered.size() == 1) return *filtered.begin();
-	if (filtered.isEmpty()) return nullptr;
+}
 
-
-	// Remove methods which are overriden by another candidate
+void OOReference::removeOverridenMethods(QSet<Method*>& methods)
+{
 	QSet<Method*> nonOverriden;
-	while (!filtered.isEmpty())
+	while (!methods.isEmpty())
 	{
-		auto m = *filtered.begin();
-		filtered.remove(m);
+		auto m = *methods.begin();
+		methods.remove(m);
 
 		bool overriden = false;
-		auto it = filtered.begin();
-		while (it != filtered.end())
+		auto it = methods.begin();
+		while (it != methods.end())
 		{
 			if ((*it)->overrides(m))
 			{
@@ -241,25 +264,24 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 				break;
 			}
 
-			if (m->overrides((*it))) it = filtered.erase(it);
+			if (m->overrides((*it))) it = methods.erase(it);
 			else ++it;
 		}
 
 		if (!overriden) nonOverriden.insert(m);
 	}
-	filtered = nonOverriden;
-	if (filtered.size() == 1) return *filtered.begin();
-	if (filtered.isEmpty()) return nullptr;
+	methods = nonOverriden;
+}
 
-
-	// Choose a most specific method
+void OOReference::removeLessSpecificMethods(QSet<Method*>& methods)
+{
 	QSet<Method*> mostSpecific;
-	while(!filtered.isEmpty())
+	while(!methods.isEmpty())
 	{
 		enum Specificity {UNDETERMINED, MORE, LESS, SAME};
 		Specificity overallSpecificity = UNDETERMINED;
-		auto m = *filtered.begin();
-		filtered.remove(m);
+		auto m = *methods.begin();
+		methods.remove(m);
 
 		QList<Type*> filteredTypes;
 		for (auto te : *m->arguments()) filteredTypes.append(te->typeExpression()->type());
@@ -313,14 +335,8 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 		Q_ASSERT(mostSpecific.isEmpty() || overallSpecificity != UNDETERMINED);
 		if (overallSpecificity != LESS) mostSpecific.insert(m);
 	}
-	Q_ASSERT(!mostSpecific.isEmpty());
-	if (mostSpecific.size() == 1) return *mostSpecific.begin();
-
-	candidates.clear();
-	for(auto m : mostSpecific) candidates.insert(m);
-	//TODO: check for correct access of public/private
-
-	return nullptr;
+	methods = mostSpecific;
+	Q_ASSERT(!methods.isEmpty());
 }
 
 } /* namespace OOModel */

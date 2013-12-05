@@ -35,6 +35,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, OOReference)
 namespace OOModel {
 
 class MethodCallExpression;
+class Method;
 
 class OOMODEL_API OOReference : public Super<Model::Reference>
 {
@@ -52,7 +53,13 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 		bool resolving_{};
 
 		Model::Node* resolveAmbiguity(QSet<Model::Node*>& candidates);
+
 		Model::Node* resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates, MethodCallExpression* callExpression);
+		// The method above consists of the following steps:
+		void removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression);
+		void removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression);
+		void removeOverridenMethods(QSet<Method*>& methods);
+		void removeLessSpecificMethods(QSet<Method*>& methods);
 };
 
 } /* namespace OOModel */
