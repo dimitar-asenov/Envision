@@ -25,8 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "Method.h"
+#include "Class.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "../types/Type.h"
 DEFINE_TYPED_LIST(OOModel::Method)
 
 namespace OOModel {
@@ -136,6 +138,50 @@ bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matche
 bool Method::isGeneric()
 {
 	return typeArguments()->size() > 0;
+}
+
+bool Method::overrides(Method* other)
+{
+	Q_ASSERT(other != this);
+	Q_ASSERT(other);
+
+	// First check whether the types of arguments match
+
+	if (name() != other->name()) return false;
+	if (isGeneric() || other->isGeneric()) return false;
+	if (arguments()->size() != other->arguments()->size()) return false;
+
+	// Arguments must be identical
+	for (int i = 0; i< arguments()->size(); ++i)
+	{
+		auto t1 = arguments()->at(i)->typeExpression()->type();
+		auto t2 = other->arguments()->at(i)->typeExpression()->type();
+
+		bool equal = t1->relationTo(t2).testFlag(TypeSystem::Equal);
+
+		SAFE_DELETE(t1);
+		SAFE_DELETE(t2);
+
+		if (!equal) return false;
+	}
+
+	// Second check whether the class hierarchy matches
+	auto p = parent();
+	while(p)
+	{
+		if (auto cl = DCast<Class>(p))
+		{
+			for(auto baseClass : cl->allBaseClasses())
+				if (baseClass->methods()->contains(other))
+					return true;
+
+			return false;
+		}
+
+		p = p->parent();
+	}
+
+	return false;
 }
 
 }

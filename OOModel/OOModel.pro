@@ -5,7 +5,9 @@ win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
     -lcomments
-HEADERS += src/elements/CommentStatementItem.h \
+HEADERS += src/typesystem/JavaTypeSystem.h \
+    src/typesystem/TypeSystem.h \
+    src/elements/CommentStatementItem.h \
     src/statements/CaseStatement.h \
     src/elements/Modifier.h \
     src/declarations/NameImport.h \
@@ -94,7 +96,9 @@ HEADERS += src/elements/CommentStatementItem.h \
     src/expressions/TypeNameOperator.h \
     src/expressions/GlobalScopeExpression.h \
     src/declarations/ExplicitTemplateInstantiation.h
-SOURCES += src/elements/CommentStatementItem.cpp \
+SOURCES += src/typesystem/JavaTypeSystem.cpp \
+    src/typesystem/TypeSystem.cpp \
+    src/elements/CommentStatementItem.cpp \
     src/statements/CaseStatement.cpp \
     src/elements/Modifier.cpp \
     src/declarations/NameImport.cpp \

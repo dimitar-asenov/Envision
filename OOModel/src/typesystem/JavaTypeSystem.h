@@ -26,60 +26,38 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
-#include "../typesystem/TypeSystem.h"
+#include "TypeSystem.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace OOModel {
 
-class OOMODEL_API Type {
+class PrimitiveType;
+class ArrayType;
+class ClassType;
+class SymbolProviderType;
+class StringType;
+class NullType;
+
+
+class OOMODEL_API JavaTypeSystem : public TypeSystem {
 	public:
 
-		enum Qualifier {
-			CONST = 0x1,
-			VOLATILE = 0x2
-		};
-		Q_DECLARE_FLAGS(Qualifiers, Qualifier)
-
-		Type(bool isValueType);
-		Type(const Type& other);
-		virtual ~Type();
-
-		/**
-		 * \brief Returns true if this is an error type.
-		 *
-		 * The default implementation returns false.
-		 */
-		virtual bool isError() const;
-
-		/**
-		 * \brief Returns true if the this type belongs to an expression representing a value.
-		 *
-		 * Expressions can represent values e.g. '5', 'a+b' or types e.g. 'int[]'. If this type object represents a value
-		 * expression this method returns true, otherwise it returns false.
-		 */
-		bool isValueType() const;
-		void setValueType(bool isValueType);
-
-		virtual bool equals(const Type* other) const = 0;
-		virtual Type* clone() const = 0;
-
-		Qualifiers qualifiers() const;
-		void setQualifiers(Qualifiers q, bool enable = true);
-
-		TypeSystem::TypeRelations relationTo(const Type* other) const;
+		virtual TypeRelations relationFirstToSecond(const Type* first, const Type* other) override;
 
 	private:
-		bool isValueType_;
-		Qualifiers qualifiers_{0};
+		bool isStandardJavaLangClass(const QString& className, Model::Node* target);
+
+		TypeRelations relationPrimitiveToOther(const PrimitiveType* primitive, const Type* other);
+		int primitiveTypeToSubtypingOrder(const PrimitiveType* primitive);
+
+		TypeRelations relationArrayToOther(const ArrayType* array, const Type* other);
+		TypeRelations relationClassToOther(const ClassType* classType, const Type* other);
+		TypeRelations relationSymbolProviderToOther(const SymbolProviderType* symbolProvider, const Type* other);
+		TypeRelations relationStringToOther(const StringType* stringType, const Type* other);
+		TypeRelations relationNullToOther(const NullType* nullType, const Type* other);
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Type::Qualifiers)
-
-inline bool Type::isValueType() const { return isValueType_; }
-inline void Type::setValueType(bool isValueType) { isValueType_ = isValueType; }
-
-inline Type::Qualifiers Type::qualifiers() const { return qualifiers_;}
-inline void Type::setQualifiers(Qualifiers q, bool enable) {if (enable) qualifiers_ |= q; else qualifiers_ &= (~q);}
-
 
 } /* namespace OOModel */

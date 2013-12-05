@@ -44,4 +44,9 @@ bool Type::isError() const
 	return false;
 }
 
+TypeSystem::TypeRelations Type::relationTo(const Type* other) const
+{
+	return TypeSystem::instance()->relationFirstToSecond(this, other);
+}
+
 } /* namespace OOModel */

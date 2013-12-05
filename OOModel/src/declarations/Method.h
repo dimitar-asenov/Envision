@@ -76,9 +76,13 @@ class OOMODEL_API Method : public Super<Declaration>
 
 		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
 				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+
+		bool overrides(Method* other);
+		bool isOverridenBy(Method* other);
 };
 
 inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }
 inline void Method::setMethodKind(const MethodKind &kind) { setMthKind(static_cast<int> (kind)); }
+inline bool Method::isOverridenBy(Method* other) {return other->overrides(this);}
 
 }

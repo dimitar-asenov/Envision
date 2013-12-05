@@ -27,59 +27,31 @@
 #pragma once
 
 #include "../oomodel_api.h"
-#include "../typesystem/TypeSystem.h"
 
 namespace OOModel {
 
-class OOMODEL_API Type {
+class Type;
+
+class OOMODEL_API TypeSystem {
 	public:
+		virtual ~TypeSystem();
 
-		enum Qualifier {
-			CONST = 0x1,
-			VOLATILE = 0x2
+		enum TypeRelation {
+			None					= 0x0,
+			Equal					= 0x1,
+			IsSubtype			= 0x2,
+			IsSupertype 		= 0x4,
+			IsConvertibleTo	= 0x8,
+			IsConvertibleFrom	= 0x10
 		};
-		Q_DECLARE_FLAGS(Qualifiers, Qualifier)
+		Q_DECLARE_FLAGS(TypeRelations, TypeRelation)
+		constexpr static auto EQUALTYPES = Equal | IsSubtype | IsSupertype | IsConvertibleTo | IsConvertibleFrom;
 
-		Type(bool isValueType);
-		Type(const Type& other);
-		virtual ~Type();
+		virtual TypeRelations relationFirstToSecond(const Type* first, const Type* second) = 0;
 
-		/**
-		 * \brief Returns true if this is an error type.
-		 *
-		 * The default implementation returns false.
-		 */
-		virtual bool isError() const;
-
-		/**
-		 * \brief Returns true if the this type belongs to an expression representing a value.
-		 *
-		 * Expressions can represent values e.g. '5', 'a+b' or types e.g. 'int[]'. If this type object represents a value
-		 * expression this method returns true, otherwise it returns false.
-		 */
-		bool isValueType() const;
-		void setValueType(bool isValueType);
-
-		virtual bool equals(const Type* other) const = 0;
-		virtual Type* clone() const = 0;
-
-		Qualifiers qualifiers() const;
-		void setQualifiers(Qualifiers q, bool enable = true);
-
-		TypeSystem::TypeRelations relationTo(const Type* other) const;
-
-	private:
-		bool isValueType_;
-		Qualifiers qualifiers_{0};
+		static TypeSystem* instance();
+		static TypeRelations invert(TypeRelations relation);
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Type::Qualifiers)
-
-inline bool Type::isValueType() const { return isValueType_; }
-inline void Type::setValueType(bool isValueType) { isValueType_ = isValueType; }
-
-inline Type::Qualifiers Type::qualifiers() const { return qualifiers_;}
-inline void Type::setQualifiers(Qualifiers q, bool enable) {if (enable) qualifiers_ |= q; else qualifiers_ &= (~q);}
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(TypeSystem::TypeRelations)
 
 } /* namespace OOModel */
