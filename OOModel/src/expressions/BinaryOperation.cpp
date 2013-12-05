@@ -26,6 +26,8 @@
 
 #include "expressions/BinaryOperation.h"
 #include "../types/PrimitiveType.h"
+#include "../types/StringType.h"
+#include "../types/ArrayType.h"
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
@@ -50,20 +52,46 @@ BinaryOperation::BinaryOperation(OperatorTypes op, Expression* left, Expression*
 
 Type* BinaryOperation::type()
 {
+	auto op = this->op();
+
+	if (op == EQUALS || op == NOT_EQUALS || op == CONDITIONAL_AND || op == CONDITIONAL_OR)
+		return new PrimitiveType(PrimitiveType::BOOLEAN, true);
+
+	if (op == ARRAY_INDEX)
+	{
+		Type* res = nullptr;
+
+		auto lt = left()->type();
+		if ( auto lat = dynamic_cast<ArrayType*>(lt) )
+			res = lat->elementType()->clone();
+		else
+			res = new ErrorType("Indexing a non array expression");
+
+		SAFE_DELETE(lt);
+		return res;
+	}
+
 	auto lt = left()->type();
 	auto rt = right()->type();
 
+	auto lts = dynamic_cast<StringType*>(lt);
+	auto rts = dynamic_cast<StringType*>(rt);
 	auto ltp = dynamic_cast<PrimitiveType*>(lt);
 	auto rtp = dynamic_cast<PrimitiveType*>(rt);
 
 	Type* res = nullptr;
-	if (ltp && rtp)
+	if (((ltp && rtp) || (lts && rts))   &&   (op == GREATER || op == LESS || op == GREATER_EQUALS || op == LESS_EQUALS))
+		res = new PrimitiveType(PrimitiveType::BOOLEAN, true);
+	else if (ltp && rtp)
 	{
 		PrimitiveType::PrimitiveTypes primitive = PrimitiveType::resultFromBinaryOperation(ltp->type(), rtp->type());
 		if (primitive != PrimitiveType::VOID)
 		res = new PrimitiveType(primitive, ltp->isValueType());
 	}
+	else if (op == PLUS && ((lts && rts) || (lts && rtp) || (ltp && rts)))
+		res = new StringType();
 
+	//TODO: handle operator overloading.
 	if (!res) res = new ErrorType("Incompatible types for binary operation");
 
 	SAFE_DELETE(lt);
