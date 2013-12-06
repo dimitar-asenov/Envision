@@ -103,27 +103,27 @@ OOReference::ReferenceTargetKind OOReference::referenceTargetKind()
 	}
 	else if (auto vd = DCast<VariableDeclaration>(construct))
 	{
-		if (parentRefExpr == vd->typeExpression()) return ReferenceTargetKind::Container;
+		if (parentRefExpr == vd->typeExpression()) return ReferenceTargetKind::Type;
 	}
 	else if (auto fr = DCast<FormalResult>(construct))
 	{
-		if (parentRefExpr == fr->typeExpression()) return ReferenceTargetKind::Container;
+		if (parentRefExpr == fr->typeExpression()) return ReferenceTargetKind::Type;
 	}
 	else if (auto fa = DCast<FormalArgument>(construct))
 	{
-		if (parentRefExpr == fa->typeExpression()) return ReferenceTargetKind::Container;
+		if (parentRefExpr == fa->typeExpression()) return ReferenceTargetKind::Type;
 	}
 	else if (auto ate = DCast<ArrayTypeExpression>(construct))
 	{
-		if (parentRefExpr == ate->typeExpression()) return ReferenceTargetKind::Container;
+		if (parentRefExpr == ate->typeExpression()) return ReferenceTargetKind::Type;
 	}
 	else if (auto ce = DCast<CastExpression>(construct))
 	{
-		if (parentRefExpr == ce->castType()) return ReferenceTargetKind::Container;
+		if (parentRefExpr == ce->castType()) return ReferenceTargetKind::Type;
 	}
 	else if (auto cte = DCast<ClassTypeExpression>(construct))
 	{
-		if (parentRefExpr == cte->typeExpression()) return ReferenceTargetKind::Container;
+		if (parentRefExpr == cte->typeExpression()) return ReferenceTargetKind::Type;
 	}
 	else if (auto mce = DCast<MethodCallExpression>(construct))
 	{
@@ -155,11 +155,39 @@ Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates)
 
 	auto parentRefExpr = static_cast<ReferenceExpression*>(this->parent());
 	auto construct = parentRefExpr->parent();
+
+	// Looking for Methods
 	if (auto mce = DCast<MethodCallExpression>(construct))
 	{
 		auto methodToCall = resolveAmbiguousMethodCall(candidates, mce);
 		if (methodToCall) return methodToCall;
 	}
+
+	// Looking for Types, remove variables, fields, etc
+	if (referenceTargetKind() == ReferenceTargetKind::Type)
+	{
+		auto it = candidates.begin();
+		while (it != candidates.end())
+		{
+			if ( DCast<VariableDeclaration>(*it) || DCast<FormalArgument>(*it) || DCast<FormalArgument>(*it))
+				it = candidates.erase(it);
+			else ++it;
+		}
+	}
+	if (candidates.size() == 1) return *candidates.begin();
+
+	// Looking for Assignables, remove methods, classes, etc
+	if (referenceTargetKind() == ReferenceTargetKind::Assignable)
+	{
+		auto it = candidates.begin();
+		while (it != candidates.end())
+		{
+			if ( DCast<VariableDeclaration>(*it) || DCast<FormalArgument>(*it) || DCast<FormalArgument>(*it))
+				++it = candidates.erase(it);
+			else it = candidates.erase(it);
+		}
+	}
+	if (candidates.size() == 1) return *candidates.begin();
 
 	//TODO: Resolve additional ambiguities
 	return nullptr;

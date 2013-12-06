@@ -47,7 +47,7 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 
 	private:
 
-		enum class ReferenceTargetKind {Unknown, Container, Callable, Assignable, Variable};
+		enum class ReferenceTargetKind {Unknown, Container, Type, Callable, Assignable, Variable};
 		ReferenceTargetKind referenceTargetKind();
 
 		bool resolving_{};
