@@ -51,6 +51,8 @@ class VISUALIZATIONBASE_API Diamond: public Super<Shape>
 		virtual void update();
 		virtual int contentLeft();
 		virtual int contentTop();
+		virtual QRect contentRect() override;
+
 		virtual QSize innerSize(QSize outterSize) const;
 		virtual QSize outterSize(QSize innerSize) const;
 

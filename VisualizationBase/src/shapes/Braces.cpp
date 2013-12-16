@@ -111,6 +111,12 @@ int Braces::contentTop()
 	return yOffset() + contentTop_;
 }
 
+QRect Braces::contentRect()
+{
+	return QRect(xOffset() + contentLeft_, yOffset() + contentTop_,
+					 rightBraceLeft_ + rightBraceOffset_.x() - contentLeft_, height() );
+}
+
 QSize Braces::innerSize(QSize outterSize) const
 {
 	int size = outterSize.height();

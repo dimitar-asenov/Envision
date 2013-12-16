@@ -79,6 +79,16 @@ int Box::contentTop()
 	return yOffset() + style()->cornerRadius() + (outlineWidth + 1) / 2;
 }
 
+QRect Box::contentRect()
+{
+	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
+	int radiusAdjustment = style()->cornerRadius() + (outlineWidth + 1) / 2;
+
+	return QRect{xOffset() + radiusAdjustment, yOffset() + radiusAdjustment,
+				contentBoxWidth - 2 * style()->cornerRadius() - outlineWidth ,
+				contentBoxHeight - 2 * style()->cornerRadius() - outlineWidth};
+}
+
 QSize Box::innerSize(QSize outterSize) const
 {
 	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;

@@ -56,14 +56,26 @@ void SvgShape::update()
 
 int SvgShape::contentLeft()
 {
-	int outterWidth = sizeSpecified() == OutterSize ? width() : Super::outterSize(width(), height()).width();
-	return xOffset() + std::ceil(outterWidth*style()->leftContentMarginFraction());
+	int outerWidth = sizeSpecified() == OutterSize ? width() : Super::outterSize(width(), height()).width();
+	return xOffset() + std::ceil(outerWidth*style()->leftContentMarginFraction());
 }
 
 int SvgShape::contentTop()
 {
-	int outterHeight = sizeSpecified() == OutterSize ? height() : Super::outterSize(width(), height()).height();
-	return yOffset() + std::ceil(outterHeight*style()->topContentMarginFraction());
+	int outerHeight = sizeSpecified() == OutterSize ? height() : Super::outterSize(width(), height()).height();
+	return yOffset() + std::ceil(outerHeight*style()->topContentMarginFraction());
+}
+
+QRect SvgShape::contentRect()
+{
+	int outerWidth = sizeSpecified() == OutterSize ? width() : Super::outterSize(width(), height()).width();
+	int outerHeight = sizeSpecified() == OutterSize ? height() : Super::outterSize(width(), height()).height();
+	int innerWidth = (1.0 - style()->leftContentMarginFraction() - style()->rightContentMarginFraction()) * width();
+	int innerHeight = (1.0 - style()->topContentMarginFraction() - style()->bottomContentMarginFraction()) * height();
+	return QRect( xOffset() + std::ceil(outerWidth*style()->leftContentMarginFraction()),
+					  yOffset() + std::ceil(outerHeight*style()->topContentMarginFraction()),
+					  innerWidth,
+					  innerHeight);
 }
 
 QSize SvgShape::innerSize(QSize outterSize) const
