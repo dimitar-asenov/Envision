@@ -176,6 +176,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 {
 	if (event->matches(QKeySequence::Copy))
 	{
+		event->accept();
+
 		QList<const Model::Node*> nodesToCopy;
 		auto selected = target->scene()->selectedItems();
 
@@ -213,6 +215,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	}
 	else if (event->matches(QKeySequence::Paste))
 	{
+		event->accept();
+
 		FilePersistence::SystemClipboard clipboard;
 		if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
 		{
@@ -228,9 +232,10 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		else InteractionHandler::keyPressEvent(target, event);
 	}
 	else if (event->matches(QKeySequence::Undo))
-	{
+	{		
 		if (target->hasNode())
 		{
+			event->accept();
 			auto scene = target->scene();
 			modelListener().stopListeningToModelOf(target);
 
@@ -264,6 +269,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	{
 		if (target->hasNode())
 		{
+			event->accept();
 			auto scene = target->scene();
 			modelListener().stopListeningToModelOf(target);
 
@@ -295,6 +301,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	}
 	else if (event->modifiers() == 0 && event->key() == Qt::Key_F3)
 	{
+		event->accept();
 		auto n = target;
 		while (n && ! n->node()) n = n->parent();
 
@@ -325,6 +332,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			InteractionHandler::keyPressEvent(target, event);
 		else
 		{
+			event->accept();
 			bool oldNotLocationEquivalent;
 			Visualization::Cursor::CursorType oldType;
 			bool oldBoundary;
@@ -349,6 +357,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	}
 	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible() && !commandPrompt_)
 	{
+		event->accept();
 		AutoComplete::hide();
 	}
 	else if ( ((event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape) // Regular command prompt
@@ -356,6 +365,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			&& !(actionPrompt_ && actionPrompt_->isVisible())
 			&& !(commandPrompt_ && (commandPrompt_ == target || commandPrompt_->isAncestorOf(target))) )
 	{
+		event->accept();
+
 		// Only show the command prompt if this event was not received within it.
 		if (event->modifiers() == Qt::NoModifier) showCommandPrompt(target);
 		else showCommandPrompt(target, "find ");
@@ -363,6 +374,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
 			&& !(commandPrompt_ && commandPrompt_->isVisible()))
 	{
+		event->accept();
+
 		// Only show the action prompt if none of the other "menu items" are visible
 		showActionPrompt(target, true);
 	}
