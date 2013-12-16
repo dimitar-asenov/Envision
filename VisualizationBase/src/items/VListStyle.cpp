@@ -28,14 +28,6 @@
 
 namespace Visualization {
 
-VListStyle::VListStyle()
-{
-}
-
-void VListStyle::load(StyleLoader& sl)
-{
-	DeclarativeItemBaseStyle::load(sl);
-	sl.load("itemsStyle", itemsStyle_);
-}
+VListStyle::~VListStyle() {}
 
 }

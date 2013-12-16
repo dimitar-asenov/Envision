@@ -58,6 +58,8 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		static void initializeForms();
 		virtual int determineForm();
 
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
 	protected:
 		/**
 		 * Called during determineChildren() in order to determine which nodes should be shown.

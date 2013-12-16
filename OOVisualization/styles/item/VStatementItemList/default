@@ -8,4 +8,7 @@
 		<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		<hasCursorWhenEmpty>false</hasCursorWhenEmpty>
 	</itemsStyle>
+	
+	<drawsOnlyShape>true</drawsOnlyShape>
+	<useBackgroundColors>false</useBackgroundColors>
 </style>

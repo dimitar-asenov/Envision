@@ -35,16 +35,12 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API VListStyle : public DeclarativeItemBaseStyle
 {
-	private:
-		SequentialLayoutStyle itemsStyle_;
-
 	public:
-		VListStyle();
-		virtual void load(StyleLoader& sl);
+		~VListStyle();
 
-		const SequentialLayoutStyle&  itemsStyle() const;
+		Property<SequentialLayoutStyle> itemsStyle{this, "itemsStyle"};
+		Property<bool> useBackgroundColors{this, "useBackgroundColors"};
+		Property<QVector<QColor>> backgroundColors{this, "backgroundColors"};
 };
-
-inline const SequentialLayoutStyle& VListStyle::itemsStyle() const {return itemsStyle_; }
 
 }

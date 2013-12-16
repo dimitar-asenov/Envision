@@ -24,4 +24,21 @@
 		<direction>2</direction>
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</itemsStyle>
+	
+	<drawsOnlyShape>false</drawsOnlyShape>
+	<useBackgroundColors>true</useBackgroundColors>
+	<backgroundColors>
+		<e0>
+			<alpha>30</alpha>
+			<red>130</red>
+			<green>130</green>
+			<blue>130</blue>
+		</e0>
+		<e1>
+			<alpha>30</alpha>
+			<red>0</red>
+			<green>0</green>
+			<blue>0</blue>
+		</e1>
+	</backgroundColors>
 </style>

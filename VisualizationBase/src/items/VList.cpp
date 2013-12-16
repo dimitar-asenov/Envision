@@ -26,7 +26,8 @@
 
 #include "items/VList.h"
 #include "items/Text.h"
-#include "../src/declarative/DeclarativeItemDef.h"
+#include "../declarative/DeclarativeItemDef.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 
@@ -94,6 +95,57 @@ int VList::determineForm()
 	determineRange();
 	if (style()->itemsStyle().isHorizontal()) return 0;
 	else return 1;
+}
+
+void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	Super::paint(painter, option, widget);
+
+	if (!style()->useBackgroundColors() || style()->backgroundColors().isEmpty()) return;
+
+	auto children = childItems();
+	if (children.isEmpty()) return;
+
+	QPoint topLeft{0,0};
+	auto w = width();
+	auto h = height();
+	QPoint endPoint{w, h};
+
+	if (auto shape = getShape())
+	{
+		topLeft.setX(shape->contentLeft());
+		topLeft.setY(shape->contentTop());
+		auto innerSize = shape->innerSize(size().toSize());
+		w = innerSize.width();
+		h = innerSize.height();
+
+		endPoint.setX(topLeft.x() + w);
+		endPoint.setY(topLeft.y() + h);
+	}
+
+	auto horizontal = style()->itemsStyle().isHorizontal();
+	for(int i = 0; i<children.size(); ++i)
+	{
+		if (i+1 < children.size())
+		{
+			if (horizontal)
+				w = (children.at(i)->pos().x() + children.at(i)->width() + children.at(i+1)->pos().x())/2 - topLeft.x();
+			else
+				h = (children.at(i)->pos().y() + children.at(i)->height() + children.at(i+1)->pos().y())/2 - topLeft.y();
+		}
+		else
+		{
+			if (horizontal) w = endPoint.x() - topLeft.x();
+			else h = endPoint.y() - topLeft.y();
+		}
+
+		painter->fillRect(topLeft.x(), topLeft.y(), w, h,
+				style()->backgroundColors()[i % style()->backgroundColors().size()]);
+
+		if (horizontal) topLeft.rx() += w;
+		else topLeft.ry() += h;
+	}
+
 }
 
 }
