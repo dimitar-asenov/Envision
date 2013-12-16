@@ -271,9 +271,9 @@ bool Scene::event(QEvent *event)
 			for (auto view : views())
 				if (view->isActiveWindow())
 				{
+					mainCursorsJustSet_ = false;
 					auto vis = mainCursor_->visualization();
 					view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
-					mainCursorsJustSet_ = false;
 				}
 		}
 	}
