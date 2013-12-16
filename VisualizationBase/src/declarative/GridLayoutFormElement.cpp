@@ -372,17 +372,31 @@ QList<ItemRegion> GridLayoutFormElement::regions(DeclarativeItemBase* item, int 
 			ItemRegion cursorRegion;
 			if (horizontal)
 			{
-				auto child = elementGrid_[i][0];
-				cursorRegion.setRegion(QRect(last, elementsArea.top(), thisElementPos + child->x(item) - last,
-														elementsArea.height()));
-				last = thisElementPos + child->xEnd(item) + offset;
+				if (auto child = elementGrid_[i][0])
+				{
+					cursorRegion.setRegion(QRect(last, elementsArea.top(), thisElementPos + child->x(item) - last,
+															elementsArea.height()));
+					last = thisElementPos + child->xEnd(item) + offset;
+				}
+				else
+				{
+					cursorRegion.setRegion(QRect(last, elementsArea.top(), 2, elementsArea.height()));
+					last += offset;
+				}
 			}
 			else
 			{
-				auto child = elementGrid_[0][i];
-				cursorRegion.setRegion(QRect(elementsArea.left(), last,  elementsArea.width(),
-														thisElementPos + child->y(item) - last));
-				last = thisElementPos + child->yEnd(item) + offset;
+				if (auto child = elementGrid_[0][i])
+				{
+					cursorRegion.setRegion(QRect(elementsArea.left(), last,  elementsArea.width(),
+															thisElementPos + child->y(item) - last));
+					last = thisElementPos + child->yEnd(item) + offset;
+				}
+				else
+				{
+					cursorRegion.setRegion(QRect(elementsArea.left(), last,  elementsArea.width(), 2));
+					last += offset;
+				}
 			}
 
 			adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, i==0, false);
