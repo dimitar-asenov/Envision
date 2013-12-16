@@ -113,11 +113,10 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 
 	if (auto shape = getShape())
 	{
-		topLeft.setX(shape->contentLeft());
-		topLeft.setY(shape->contentTop());
-		auto innerSize = shape->innerSize(size().toSize());
-		w = innerSize.width();
-		h = innerSize.height();
+		auto contentRect = shape->contentRect();
+		topLeft = contentRect.topLeft();
+		w = contentRect.width();
+		h = contentRect.height();
 
 		endPoint.setX(topLeft.x() + w);
 		endPoint.setY(topLeft.y() + h);
