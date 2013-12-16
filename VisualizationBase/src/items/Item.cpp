@@ -38,6 +38,8 @@
 
 namespace Visualization {
 
+static constexpr int MAX_CURSOR_JUMP_DISTANCE = 300;
+
 ::Core::InitializationRegistry& itemTypeInitializationRegistry();
 DEFINE_TYPE_ID_BASE(Item, itemTypeInitializationRegistry, "Item",)
 
@@ -560,8 +562,21 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 	bool canFocus = false;
 	Cursor* focusedCursor = nullptr;
 
+	bool limitCursorJumpDistance = false;
+	auto currentCursor = scene()->mainCursor();
+	QPointF currentCursorPos;
+
+	if (currentCursor && currentCursor->owner() != this && !currentCursor->owner()->isAncestorOf(this))
+	{
+		limitCursorJumpDistance = true;
+		currentCursorPos = currentCursor->owner()->mapToItem(this, currentCursor->region().center());
+	}
+
 	for(auto r : matching.values())
 	{
+		// Ignore cursors which are very far away from the current cursor
+		if (limitCursorJumpDistance && r->distanceTo(currentCursorPos) > MAX_CURSOR_JUMP_DISTANCE) continue;
+
 		// Try to focus
 		if (r->cursor())
 		{
