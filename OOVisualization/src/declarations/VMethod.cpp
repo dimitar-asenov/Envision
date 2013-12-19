@@ -48,6 +48,7 @@ void VMethod::initializeForms()
 {
 	auto headerElement = (new GridLayoutFormElement())
 		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
+		->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 		->put(0, 0, item<Static>(&I::icon_, [](I* v)
 				{
 					switch (v->node()->methodKind())
@@ -103,6 +104,7 @@ void VMethod::initializeForms()
 
 	auto contentElement = (new GridLayoutFormElement())
 			->setVerticalSpacing(3)->setColumnStretchFactors(1)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->put(0, 0, addonsElement)
 			->put(0, 1, annotationsElement)
 			->put(0, 2, signatureLineElement)

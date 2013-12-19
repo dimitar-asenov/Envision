@@ -89,6 +89,9 @@
 			<direction>2</direction>
 			<spaceBetweenElements>0</spaceBetweenElements>
 		</itemsStyle>
+		<selectedTip>
+			<symbol>add annotation</symbol>
+		</selectedTip>
 	</annotations>
 	<typeArguments prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
@@ -119,6 +122,9 @@
 			<spaceBetweenElements>10</spaceBetweenElements>
 			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		</itemsStyle>
+		<selectedTip>
+			<symbol>add type argument</symbol>
+		</selectedTip>
 	</typeArguments>
 	<arguments prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
@@ -140,6 +146,9 @@
 			<spaceBetweenElements>10</spaceBetweenElements>
 			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		</itemsStyle>
+		<selectedTip>
+			<symbol>add argument</symbol>
+		</selectedTip>
 	</arguments>
 	<results prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
@@ -161,6 +170,9 @@
 			<alignment>1</alignment>
 			<spaceBetweenElements>5</spaceBetweenElements>
 		</itemsStyle>
+		<selectedTip>
+			<symbol>add result</symbol>
+		</selectedTip>
 	</results>
 	<memberInitializers prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
@@ -185,5 +197,8 @@
 			<spaceBetweenElements>10</spaceBetweenElements>
 			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		</itemsStyle>
+		<selectedTip>
+			<symbol>add initializer</symbol>
+		</selectedTip>
 	</memberInitializers>
 </style>

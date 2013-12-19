@@ -9,6 +9,9 @@
 		<hasCursorWhenEmpty>false</hasCursorWhenEmpty>
 	</itemsStyle>
 	
-	<drawsOnlyShape>true</drawsOnlyShape>
 	<useBackgroundColors>false</useBackgroundColors>
+	
+	<selectedTip>
+		<symbol>add statement</symbol>
+	</selectedTip>
 </style>
