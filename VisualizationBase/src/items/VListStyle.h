@@ -28,6 +28,7 @@
 
 #include "../visualizationbase_api.h"
 
+#include "StaticStyle.h"
 #include "../declarative/DeclarativeItemBaseStyle.h"
 #include "../layouts/SequentialLayoutStyle.h"
 
@@ -41,6 +42,9 @@ class VISUALIZATIONBASE_API VListStyle : public DeclarativeItemBaseStyle
 		Property<SequentialLayoutStyle> itemsStyle{this, "itemsStyle"};
 		Property<bool> useBackgroundColors{this, "useBackgroundColors"};
 		Property<QVector<QColor>> backgroundColors{this, "backgroundColors"};
+
+		Property<bool> showTipWhenSelectedAndEmpty{this, "showTipWhenSelectedAndEmpty"};
+		Property<Visualization::StaticStyle> selectedTip{this, "selectedTip"};
 };
 
 }

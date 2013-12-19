@@ -45,6 +45,7 @@ class INTERACTIONBASE_API HList : public GenericHandler
 {
 	public:
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+		virtual void focusOutEvent(Visualization::Item *target, QFocusEvent *event) override;
 
 
 		virtual void scheduleSetCursor(Visualization::VList* list, Model::Node* listNodeToSelect,

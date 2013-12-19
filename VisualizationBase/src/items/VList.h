@@ -36,6 +36,8 @@
 
 namespace Visualization {
 
+class Static;
+
 class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeItem<VList>, Model::List>>
 {
 	ITEM_COMMON(VList)
@@ -59,6 +61,8 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		virtual int determineForm();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
+		virtual QList<ItemRegion> regions() override;
 
 	protected:
 		/**
@@ -77,10 +81,13 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		 */
 		void setRange(int begin, int end);
 
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
 	private:
 		bool suppressDefaultRemovalHandler_{};
 		int rangeBegin_{};
 		int rangeEnd_{};
+		Visualization::Static* emptyTip_{};
 };
 
 inline int VList::length() const { return static_cast<SequentialLayoutFormElement*>(currentForm())->length(this); }

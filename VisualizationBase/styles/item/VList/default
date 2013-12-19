@@ -41,4 +41,20 @@
 			<blue>0</blue>
 		</e1>
 	</backgroundColors>
+	
+	<showTipWhenSelectedAndEmpty>true</showTipWhenSelectedAndEmpty>
+	<selectedTip prototypes="item/Symbol/default">
+		<symbol>add element</symbol>
+			<font>
+				<size>11</size>
+			</font>
+		<pen>
+			<color>
+				<alpha>255</alpha>
+				<red>128</red>
+				<green>128</green>
+				<blue>128</blue>
+			</color>
+		</pen>
+	</selectedTip>
 </style>

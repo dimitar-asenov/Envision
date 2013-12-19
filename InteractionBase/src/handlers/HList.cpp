@@ -46,6 +46,14 @@ HList* HList::instance()
 	return &h;
 }
 
+void HList::focusOutEvent(Visualization::Item *target, QFocusEvent *event)
+{
+	Visualization::VList* list = static_cast<Visualization::VList*> (target);
+	if(list->node()->isEmpty() && list->style()->showTipWhenSelectedAndEmpty())
+		list->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	GenericHandler::focusOutEvent(target, event);
+}
+
 void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	Visualization::VList* list = static_cast<Visualization::VList*> (target);
@@ -116,7 +124,8 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				processed = true;
 
 				int index = -1;
-				if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list)
+				if (list->node()->isEmpty()) index = 0;
+				else if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list)
 					index = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 				else
 				{

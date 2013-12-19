@@ -24,8 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VList.h"
-#include "items/Text.h"
+#include "VList.h"
+#include "Static.h"
+#include "Text.h"
 #include "../declarative/DeclarativeItemDef.h"
 #include "../shapes/Shape.h"
 
@@ -88,20 +89,68 @@ void VList::initializeForms()
 			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter)
 			->setMinWidth(10)->setMinHeight(3));
+	// Form 2: EmptyList with a tip
+	addForm(item<Static>(&I::emptyTip_, [](I* v){ return &v->style()->selectedTip(); }));
 }
 
 int VList::determineForm()
 {
 	determineRange();
+
+	if (itemOrChildHasFocus() && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty()) return 2;
+
 	if (style()->itemsStyle().isHorizontal()) return 0;
 	else return 1;
+}
+
+bool VList::moveCursor(CursorMoveDirection dir, QPoint reference)
+{
+	bool startsFocused = hasFocus();
+
+	// If we're already focused and the user pressed a keyboard key, do not stay within the item
+	if (startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && dir != MoveOnPosition)
+		return false;
+
+	bool res = Super::moveCursor(dir, reference);
+
+	if (res && !startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty())
+		setUpdateNeeded(StandardUpdate);
+
+	return res;
+}
+
+void VList::updateGeometry(int availableWidth, int availableHeight)
+{
+	Super::updateGeometry(availableWidth, availableHeight);
+
+	if (node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && (height() == 0 || width() == 0))
+	{
+		if (height() == 0) setHeight(1);
+		if (width() == 0) setWidth(1);
+	}
+}
+
+QList<ItemRegion> VList::regions()
+{
+	if (!node()->isEmpty() || !style()->showTipWhenSelectedAndEmpty())
+		return Super::regions();
+
+	//Otherwise returna whole item region
+	auto ir = ItemRegion(boundingRect().toRect());
+
+	Cursor* cur = new Cursor(this, Cursor::BoxCursor);
+	cur->setRegion( ir.region() );
+	cur->setPosition( ir.region().center() );
+	ir.setCursor(cur);
+
+	return {ir};
 }
 
 void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Super::paint(painter, option, widget);
 
-	if (!style()->useBackgroundColors() || style()->backgroundColors().isEmpty()) return;
+	if (node()->isEmpty() || !style()->useBackgroundColors() || style()->backgroundColors().isEmpty()) return;
 
 	auto children = childItems();
 	if (children.isEmpty()) return;
