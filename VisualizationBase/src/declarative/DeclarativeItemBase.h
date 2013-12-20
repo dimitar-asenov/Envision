@@ -72,6 +72,14 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Super<Item>
 		 * Returns the form at the index from the cached result of determineForm.
 		 */
 		FormElement* currentForm() const;
+
+		/**
+		 * Returns the index of the current form.
+		 *
+		 * This is the index that was return by the last call to determineForm().
+		 */
+		int currentFormIndex() const;
+
 		/**
 		 * Returns the a list of shape elements per form for this declarative item type. Those lists are determined from
 		 * the list of forms.
@@ -106,6 +114,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Super<Item>
 		int currentFormIndex_{-1};
 };
 
+inline int DeclarativeItemBase::currentFormIndex() const {return currentFormIndex_;}
 inline FormElement* DeclarativeItemBase::currentForm() const {return forms().at(currentFormIndex_);}
 inline QList<FormElement*> DeclarativeItemBase::currentShapeElements() const {return shapeElements().at(currentFormIndex_);}
 
