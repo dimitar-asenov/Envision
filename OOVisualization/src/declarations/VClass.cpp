@@ -71,6 +71,7 @@ void VClass::initializeForms()
 	auto headerElement = (new GridLayoutFormElement())
 				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
+				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 				->put(0, 0, item<Static>(&I::icon_, [](I* v) -> const Visualization::StaticStyle* {
 						switch (v->node()->constructKind())
 						{
@@ -99,6 +100,7 @@ void VClass::initializeForms()
 
 	auto contentElement = (new GridLayoutFormElement())
 				->setSpacing(3)->setColumnStretchFactor(1, 1)
+				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 				->put(1, 0, item<VStatementItemList>(&I::annotations_, [](I* v)
 											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
 								[](I* v){return &v->style()->annotations();}))
