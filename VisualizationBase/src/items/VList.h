@@ -57,6 +57,8 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		bool suppressDefaultRemovalHandler() const;
 		void setSuppressDefaultRemovalHandler(bool suppress);
 
+		bool isShowingEmptyTip();
+
 		static void initializeForms();
 		virtual int determineForm();
 
@@ -113,5 +115,6 @@ inline void VList::setSuppressDefaultRemovalHandler(bool suppress) { suppressDef
 inline int VList::rangeBegin() const { return rangeBegin_; }
 inline int VList::rangeEnd() const { return rangeEnd_; }
 inline bool VList::showsPartialRange() const { return rangeBegin_ != 0 || rangeEnd_ != node()->size();}
+inline bool VList::isShowingEmptyTip() { return currentFormIndex() == 2;}
 
 }

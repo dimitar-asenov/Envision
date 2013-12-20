@@ -115,7 +115,8 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		bool createDown = event->modifiers() == Qt::NoModifier;
 		bool createRight = event->modifiers() == Qt::ShiftModifier;
 
-		if ((createDown && !list->style()->itemsStyle().isHorizontal())
+		if (list->isShowingEmptyTip()
+				|| (createDown && !list->style()->itemsStyle().isHorizontal())
 				|| ( createRight && list->style()->itemsStyle().isHorizontal()) )
 		{
 			auto newElem = list->node()->createDefaultElement();
@@ -124,7 +125,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				processed = true;
 
 				int index = -1;
-				if (list->node()->isEmpty()) index = 0;
+				if (list->isShowingEmptyTip()) index = 0;
 				else if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list)
 					index = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 				else
