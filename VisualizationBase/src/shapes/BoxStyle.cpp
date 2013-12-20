@@ -37,9 +37,6 @@ void BoxStyle::load(StyleLoader& sl)
 	sl.load("cornerType", enumVal);
 	corner_ = (CornerType) enumVal;
 	sl.load("cornerRadius", cornerRadius_);
-	sl.load("shadowBrush", shadow_);
-	sl.load("shadowXOffset", xShadowOffset_);
-	sl.load("shadowYOffset", yShadowOffset_);
 }
 
 QPainterPath BoxStyle::getRectanglePath(qreal x, qreal y, int width, int height) const
@@ -79,8 +76,7 @@ QPainterPath BoxStyle::getRectanglePath(qreal x, qreal y, int width, int height)
 
 void BoxStyle::paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const
 {
-//	if (shadow() == Qt::NoBrush
-//			&& (background_.style() == Qt::NoBrush || background_.style() == Qt::SolidPattern)
+//	if ( (background_.style() == Qt::NoBrush || background_.style() == Qt::SolidPattern)
 //			&& (outline_.style() == Qt::NoPen || outline_.style() == Qt::SolidLine))
 //		optimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
 //	else
@@ -101,15 +97,6 @@ void BoxStyle::unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int
 			x = xOffset + outlineWidth/2.0;
 			y = yOffset + outlineWidth/2.0;
 		}
-
-	// Draw shadow
-	if ( shadow() != Qt::NoBrush )
-	{
-		painter->setPen(Qt::NoPen);
-		painter->setBrush(shadow());
-		painter->drawPath(getRectanglePath(xOffset + xShadowOffset(), yOffset + yShadowOffset(),
-				contentBoxWidth, contentBoxHeight));
-	}
 
 	// Draw box.
 	painter->setPen(outline());

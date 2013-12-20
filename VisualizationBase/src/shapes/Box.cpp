@@ -31,97 +31,63 @@ namespace Visualization {
 
 SHAPE_COMMON_DEFINITIONS(Box, "shape")
 
-Box::Box(Item *parent, StyleType *style) :
-	Super(parent, style)
+Box::Box(Item *parent, StyleType *style) : Super(parent, style){}
+
+int Box::contentToEdgeDistance() const
 {
+	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
+	int ceilHalfRadius = (style()->cornerRadius() + 1) / 2;
+	return std::max(outlineWidth, ceilHalfRadius);
 }
 
 void Box::update()
 {
 	if ( sizeSpecified() == InnerSize )
 	{
-		int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
-		contentBoxWidth = width() + 2 * style()->cornerRadius() + outlineWidth;
-		contentBoxHeight = height() + 2 * style()->cornerRadius() + outlineWidth;
+		auto cte = contentToEdgeDistance();
+		outerWidth_ = width() + 2*cte;
+		outerHeight_ = height() + 2*cte;
 	}
 	else
 	{
-		contentBoxWidth = width();
-		contentBoxHeight = height();
-
-		if ( style()->shadow() != Qt::NoBrush )
-		{
-			contentBoxWidth -= style()->xShadowOffset();
-			contentBoxHeight -= style()->yShadowOffset();
-		}
+		outerWidth_ = width();
+		outerHeight_ = height();
 	}
 
-	if ( style()->shadow() == Qt::NoBrush )
-	{
-		setItemSize(xOffset() + contentBoxWidth, yOffset() + contentBoxHeight);
-	}
-	else
-	{
-		setItemSize(xOffset() + contentBoxWidth + style()->xShadowOffset(),
-				yOffset() + contentBoxHeight + style()->yShadowOffset());
-	}
+	setItemSize(xOffset() + outerWidth_, yOffset() + outerHeight_);
 }
 
 int Box::contentLeft()
 {
-	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
-	return xOffset() + style()->cornerRadius() + (outlineWidth + 1) / 2;
+	return xOffset() + contentToEdgeDistance();
 }
 
 int Box::contentTop()
 {
-	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
-	return yOffset() + style()->cornerRadius() + (outlineWidth + 1) / 2;
+	return yOffset() + contentToEdgeDistance();
 }
 
 QRect Box::contentRect()
 {
-	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
-	int radiusAdjustment = style()->cornerRadius() + (outlineWidth + 1) / 2;
-
-	return QRect{xOffset() + radiusAdjustment, yOffset() + radiusAdjustment,
-				contentBoxWidth - 2 * style()->cornerRadius() - outlineWidth ,
-				contentBoxHeight - 2 * style()->cornerRadius() - outlineWidth};
+	auto cte = contentToEdgeDistance();
+	return QRect{xOffset() + cte, yOffset() + cte, outerWidth_ - 2*cte , outerHeight_ - 2*cte};
 }
 
 QSize Box::innerSize(QSize outterSize) const
 {
-	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
-	int innerWidth = outterSize.width() - 2 * style()->cornerRadius() - outlineWidth;
-	int innerHeight = outterSize.height() - 2 * style()->cornerRadius() - outlineWidth;
-
-	if ( style()->shadow() != Qt::NoBrush )
-	{
-		innerWidth -= style()->xShadowOffset();
-		innerHeight -= style()->yShadowOffset();
-	}
-
-	return QSize(innerWidth, innerHeight);
+	auto cte = contentToEdgeDistance();
+	return QSize(outterSize.width() - 2*cte, outterSize.height() - 2*cte);
 }
 
 QSize Box::outterSize(QSize innerSize) const
 {
-	int outlineWidth = style()->outline().style() != Qt::NoPen ? style()->outline().width() : 0;
-	int outterWidth = innerSize.width() + 2 * style()->cornerRadius() + outlineWidth;
-	int outterHeight = innerSize.height() + 2 * style()->cornerRadius() + outlineWidth;
-
-	if ( style()->shadow() != Qt::NoBrush )
-	{
-		outterWidth += style()->xShadowOffset();
-		outterHeight += style()->yShadowOffset();
-	}
-
-	return QSize(outterWidth, outterHeight);
+	auto cte = contentToEdgeDistance();
+	return QSize(innerSize.width() + 2*cte, innerSize.height() + 2*cte);
 }
 
 void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	style()->paint(painter, xOffset(), yOffset(), contentBoxWidth, contentBoxHeight);
+	style()->paint(painter, xOffset(), yOffset(), outerWidth_, outerHeight_);
 }
 
 }

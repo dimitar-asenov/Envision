@@ -45,10 +45,6 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		CornerType corner() const;
 		int cornerRadius() const;
 
-		const QBrush& shadow() const;
-		int xShadowOffset() const;
-		int yShadowOffset() const;
-
 		void paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const;
 
 	protected:
@@ -56,10 +52,6 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 
 		CornerType corner_;
 		int cornerRadius_;
-
-		QBrush shadow_;
-		int xShadowOffset_;
-		int yShadowOffset_;
 
 		mutable Mipmap topLeftCorner_;
 		mutable Mipmap topRightCorner_;
@@ -78,8 +70,5 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 inline const QBrush& BoxStyle::background() const { return background_; }
 inline BoxStyle::CornerType BoxStyle::corner() const { return corner_; }
 inline int BoxStyle::cornerRadius() const { return cornerRadius_; }
-inline const QBrush& BoxStyle::shadow() const { return shadow_; }
-inline int BoxStyle::xShadowOffset() const { return xShadowOffset_; }
-inline int BoxStyle::yShadowOffset() const { return yShadowOffset_; }
 
 }

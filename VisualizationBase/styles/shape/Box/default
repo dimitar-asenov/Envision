@@ -31,15 +31,4 @@
 	</backgroundBrush>
 	<cornerType>1</cornerType>
 	<cornerRadius>5</cornerRadius>
-	<shadowBrush>
-		<style>0</style>
-		<color>
-			<alpha>255</alpha>
-			<red>128</red>
-			<green>128</green>
-			<blue>128</blue>
-		</color>
-	</shadowBrush>
-	<shadowXOffset>1</shadowXOffset>
-	<shadowYOffset>1</shadowYOffset>
 </style>

@@ -51,8 +51,11 @@ class VISUALIZATIONBASE_API Box: public Super<Shape>
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 	protected:
-		int contentBoxWidth{};
-		int contentBoxHeight{};
+		int outerWidth_{};
+		int outerHeight_{};
+
+	private:
+		int contentToEdgeDistance() const;
 };
 
 }
