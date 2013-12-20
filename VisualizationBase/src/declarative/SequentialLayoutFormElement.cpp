@@ -396,8 +396,16 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		lc->setOwnerElement(this);
 		cursorRegion.setCursor(lc);
 		lc->setIndex(i);
-		lc->setVisualizationPosition(cursorRegion.region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, elementBoundary.height()) : QSize(elementBoundary.width(), 2));
+		if (horizontal)
+		{
+			lc->setVisualizationPosition(QPoint(cursorRegion.region().center().x(), cursorRegion.region().top()));
+			lc->setVisualizationSize(QSize(2, elementBoundary.height()));
+		}
+		else
+		{
+			lc->setVisualizationPosition(QPoint(cursorRegion.region().left(), cursorRegion.region().center().y()));
+			lc->setVisualizationSize(QSize(elementBoundary.width(), 2));
+		}
 		lc->setOwnerElement(this);
 		if (i==0 && !extraCursors) lc->setIsAtBoundary(true);
 
