@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/commands/CSceneHandlerLoad.h \
+HEADERS += src/commands/CSceneHandlerSave.h \
+    src/commands/CSceneHandlerLoad.h \
     src/commands/CFind.h \
     src/handlers/HComposite.h \
     src/handlers/HActionPrompt.h \
@@ -68,7 +69,8 @@ HEADERS += src/commands/CSceneHandlerLoad.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/commands/CSceneHandlerLoad.cpp \
+SOURCES += src/commands/CSceneHandlerSave.cpp \
+    src/commands/CSceneHandlerLoad.cpp \
     src/commands/CFind.cpp \
     src/handlers/HComposite.cpp \
     src/handlers/HActionPrompt.cpp \

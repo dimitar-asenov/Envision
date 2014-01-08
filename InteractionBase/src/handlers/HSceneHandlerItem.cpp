@@ -29,6 +29,7 @@
 #include "commands/CSceneHandlerItemExit.h"
 #include "commands/CFind.h"
 #include "commands/CSceneHandlerLoad.h"
+#include "commands/CSceneHandlerSave.h"
 
 namespace Interaction {
 
@@ -38,6 +39,7 @@ HSceneHandlerItem::HSceneHandlerItem()
 	addCommand(new CSceneHandlerItemExit());
 	addCommand(new CFind());
 	addCommand(new CSceneHandlerLoad());
+	addCommand(new CSceneHandlerSave());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()
