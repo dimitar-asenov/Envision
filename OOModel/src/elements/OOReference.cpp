@@ -183,7 +183,7 @@ Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates)
 		while (it != candidates.end())
 		{
 			if ( DCast<VariableDeclaration>(*it) || DCast<FormalArgument>(*it) || DCast<FormalArgument>(*it))
-				++it = candidates.erase(it);
+				++it;
 			else it = candidates.erase(it);
 		}
 	}
