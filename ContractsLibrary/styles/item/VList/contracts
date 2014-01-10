@@ -6,4 +6,5 @@
 		<direction>2</direction>
 		<spaceBetweenElements>0</spaceBetweenElements>
 	</itemsStyle>
+	<useBackgroundColors>false</useBackgroundColors>
 </style>
