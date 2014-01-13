@@ -49,16 +49,16 @@ ModelRenderer::~ModelRenderer()
 
 Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose)
 {
-	switch (RENDER_STRATEGY)
+	switch (VISUALIZATION_CHOICE_STRATEGY)
 	{
-	case RENDER_STRATEGY_TYPE_OVER_PURPOSE:
-		return renderStrategyTypeOverPurpose(parent, node, purpose);
+	case VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE:
+		return visualizationChoiceStrategyTypeOverPurpose(parent, node, purpose);
 	default:
-		throw VisualizationException("Trying to use an undefined render strategy: " + RENDER_STRATEGY);
+		throw VisualizationException("Trying to use an undefined visualization choice strategy: " + VISUALIZATION_CHOICE_STRATEGY);
 	}
 }
 
-Item* ModelRenderer::renderStrategyTypeOverPurpose(Item* parent, Model::Node* node, int purpose)
+Item* ModelRenderer::visualizationChoiceStrategyTypeOverPurpose(Item* parent, Model::Node* node, int purpose)
 {
 	QList<int> typeIds = node->hierarchyTypeIds();
 

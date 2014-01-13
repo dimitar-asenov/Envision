@@ -62,13 +62,13 @@ class VISUALIZATIONBASE_API ModelRenderer
 		QString purposeName(int purpose);
 
 	private:
-		const static int RENDER_STRATEGY = 1;
-		const static int RENDER_STRATEGY_TYPE_OVER_PURPOSE = 1;
+		const static int VISUALIZATION_CHOICE_STRATEGY = 1;
+		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE = 1;
 
 		QVector<QVector<VisualizationGroup*>> groups_;
 		QVector<QString > purposes_;
 
-		Item* renderStrategyTypeOverPurpose(Item* parent, Model::Node* node, int purpose);
+		Item* visualizationChoiceStrategyTypeOverPurpose(Item* parent, Model::Node* node, int purpose);
 };
 
 inline void ModelRenderer::registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization)
