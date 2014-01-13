@@ -49,6 +49,17 @@ ModelRenderer::~ModelRenderer()
 
 Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose)
 {
+	switch (RENDER_STRATEGY)
+	{
+	case RENDER_STRATEGY_TYPE_OVER_PURPOSE:
+		return renderStrategyTypeOverPurpose(parent, node, purpose);
+	default:
+		throw VisualizationException("Trying to use an undefined render strategy: " + RENDER_STRATEGY);
+	}
+}
+
+Item* ModelRenderer::renderStrategyTypeOverPurpose(Item* parent, Model::Node* node, int purpose)
+{
 	QList<int> typeIds = node->hierarchyTypeIds();
 
 	int finalPurpose = purpose >= 0 ? purpose : (parent ? parent->childNodePurpose(node) : 0);
