@@ -54,7 +54,7 @@ Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose)
 	case VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE:
 		return visualizationChoiceStrategyTypeOverPurpose(parent, node, purpose);
 	default:
-		throw VisualizationException("Trying to use an undefined visualization choice strategy: " + VISUALIZATION_CHOICE_STRATEGY);
+		Q_ASSERT(false);
 	}
 }
 
