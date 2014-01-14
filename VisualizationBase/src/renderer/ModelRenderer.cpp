@@ -49,12 +49,13 @@ ModelRenderer::~ModelRenderer()
 
 Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose)
 {
-	switch (VISUALIZATION_CHOICE_STRATEGY)
+	switch (visualizationChoiceStrategy_)
 	{
 	case VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE:
 		return visualizationChoiceStrategyTypeOverPurpose(parent, node, purpose);
 	default:
 		Q_ASSERT(false);
+		return nullptr;
 	}
 }
 
