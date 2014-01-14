@@ -81,7 +81,7 @@ QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
 
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
-	itemCategory_(Scene::NoItemCategory)
+	semanticZoomLevel_(-1), itemCategory_(Scene::NoItemCategory)
 {
 	// By default no flags in a QGraphicsItem are enabled.
 	GraphicsItemFlags flags;
@@ -156,6 +156,18 @@ void Item::setPurpose(int purpose)
 void Item::clearPurpose()
 {
 	purpose_ = -1;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::setSemanticZoomLevel(int semanticZoomLevel)
+{
+	semanticZoomLevel_ = semanticZoomLevel;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearSemanticZoomLevel()
+{
+	semanticZoomLevel_ = -1;
 	setUpdateNeeded(FullUpdate);
 }
 
@@ -726,6 +738,41 @@ void Item::clearChildNodePurpose(const Model::Node* node)
 bool Item::definesChildNodePurpose(const Model::Node* node) const
 {
 	return childNodePurpose_.find(node) != childNodePurpose_.end();
+}
+
+int Item::semanticZoomLevel() const
+{
+	if (semanticZoomLevel_ >= 0) return semanticZoomLevel_;
+	if (!parent()) return -1;
+
+	if ( node() ) return parent()->childNodeSemanticZoomLevel( node() );
+	else return parent()->semanticZoomLevel();
+}
+
+
+int Item::childNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	auto c = childNodeSemanticZoomLevel_.find(node);
+	if (c != childNodeSemanticZoomLevel_.end()) return *c;
+
+	return semanticZoomLevel();
+}
+
+void Item::setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel)
+{
+	childNodeSemanticZoomLevel_.insert(node, semanticZoomLevel);
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearChildNodeSemanticZoomLevel(const Model::Node* node)
+{
+	childNodeSemanticZoomLevel_.remove(node);
+	setUpdateNeeded(FullUpdate);
+}
+
+bool Item::definesChildNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	return childNodeSemanticZoomLevel_.find(node) != childNodeSemanticZoomLevel_.end();
 }
 
 QList<VisualizationAddOn*> Item::addOns()
