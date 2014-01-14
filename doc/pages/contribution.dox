@@ -33,13 +33,22 @@ All names in envision plug-in should use CamelCase:
 	- The names of type definitions (classes, structs, typedefs, using, enums, etc.) should start with a capital case letter.
 	- Function, method, variable, and field names should start with a small case letter.
 	- Private members should end with a trailing underscore (e.g. \c data_, instead of \c data)
-	- Names should be descriptive, especially names of function arguments. Avoid abbreviations and shortend words. The exception
+	- Names should be descriptive, especially names of function arguments. Avoid abbreviations and shortened words. The exception
 		is the name of local variables, which can be short provided there is no ambiguity.
 
 \subsection features Language features
 	- Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.
-	- Use exceptions and RTTI where appropriate.
-	- Avoid C casts and use C++ casts instead: (\c static_cast, \c dynamic_cast, \c const_cast, \c reinterpret_cast) 
+	- Use exceptions Qt's assertions \c Q_ASSERT. Exceptions should be thrown in situation where a problem is caused
+		due the user's input or the user's actions, and this problem can not be prevented in code. For all other
+		situations you should use assertions. In particular use assertions to introduce checks at various places in the
+		code where you expect the assertion to hold. The presumption should be that if an assertion fails, this indicates
+		a buggy and incomplete code, and it is possible to fix this once and for all in the code.
+	- Use RTTI where appropriate. Avoid C casts and use C++ casts instead: (\c static_cast, \c dynamic_cast,
+		\c const_cast, \c reinterpret_cast). Better still, is to use the Envision provided \c DCast, instead of C++'s
+		\c dynamic_cast, whenever possibly. \c DCast is faster but you can only use it if the class hierarchy you're
+		trying to cast within supports it. These are currently all \c Node subclasses and all \c Item subclasses. Any
+		other type can be made to support \c DCast by using the \c Super template to inherit from a base class and using
+		the appropriate type id macros from \c Core/src/reflect/typeIdMacros.h
 	- Make use of <a href="http://www.stroustrup.com/C++11FAQ.html">C++11 features</a>.
 	- All class members should have a default initializer using the new C++11 syntax with curly braces in the class
 		declaration:
