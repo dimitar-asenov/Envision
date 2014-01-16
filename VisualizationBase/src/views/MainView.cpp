@@ -141,6 +141,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			&& event->key() == Qt::Key_Print)
 	{
 		event->accept();
+		scene()->setHiddenItemCategories(0);
 
 		QPrinter printer;
 		printer.setOutputFormat(QPrinter::PdfFormat);
@@ -149,8 +150,6 @@ void MainView::keyPressEvent(QKeyEvent *event)
 
 		QSvgGenerator svggen;
 		svggen.setResolution(90);
-
-
 
 		if (event->modifiers() & Qt::ShiftModifier)
 		{
