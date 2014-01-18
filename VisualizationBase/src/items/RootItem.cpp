@@ -31,26 +31,29 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(RootItem, "item")
 
-RootItem::RootItem(Item* parent, NodeType* node, int purpose)
+RootItem::RootItem(Item* parent, NodeType* node, int purpose, int semanticZoomLevel)
 	: Super(nullptr, node, itemStyles().get()), item_(nullptr)
 {
 	Q_ASSERT(parent == nullptr);
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setItemCategory(Scene::CodeItemCategory);
 	setPurpose(purpose);
+	setSemanticZoomLevel(semanticZoomLevel);
 }
 
-RootItem::RootItem(NodeType *node, int purpose) : Super(nullptr, node, itemStyles().get()), item_(nullptr)
+RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel) : Super(nullptr, node, itemStyles().get()), item_(nullptr)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setItemCategory(Scene::CodeItemCategory);
 	setPurpose(purpose);
+	setSemanticZoomLevel(semanticZoomLevel);
 }
 
-RootItem::RootItem(Item* item, int purpose) : Super(nullptr, nullptr, itemStyles().get()), item_(item)
+RootItem::RootItem(Item* item, int purpose, int semanticZoomLevel) : Super(nullptr, nullptr, itemStyles().get()), item_(item)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setPurpose(purpose);
+	setSemanticZoomLevel(semanticZoomLevel);
 	if (item_) item_->setParentItem(this);
 }
 
