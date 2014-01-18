@@ -45,7 +45,7 @@ class VISUALIZATIONBASE_API ModelRenderer
 		 * If \a purpose is specified (\a purpose >= 0) it is used as the target purpose when determining an appropriate
 		 * visualization. Otherwise the purpose of \a parent is used. If \a parent is nullptr the default purpose is used.
 		 */
-		virtual Item* render(Item* parent, Model::Node* node, int purpose = -1);
+		virtual Item* render(Item* parent, Model::Node* node, int purpose = -1, int semanticZoomLevel = -1);
 
 		/**
 		 * Returns whether a specific visualization has been registered for nodes of type \a nodeTypeId  and the provided
@@ -67,15 +67,18 @@ class VISUALIZATIONBASE_API ModelRenderer
 		QString semanticZoomLevelName(int semanticZoomLevel);
 
 	private:
-		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE = 1;
+		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL = 1;
 
 		QVector<QVector<QVector<VisualizationGroup*>>> groups_;
 		QVector<QString > purposes_;
 		QVector<QString > semanticZoomLevels_;
 
-		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE};
+		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL};
 
-		Item* visualizationChoiceStrategyTypeOverPurpose(Item* parent, Model::Node* node, int purpose);
+		Item* visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
+																									 int purpose, int semanticZoomLevel);
+
+		VisualizationGroup* getVisualizationGroupForSemanticZoomLevel(int typeId, int semanticZoomLevel);
 };
 
 inline void ModelRenderer::registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization)
