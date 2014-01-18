@@ -51,10 +51,11 @@ class VISUALIZATIONBASE_API ModelRenderer
 		 * Returns whether a specific visualization has been registered for nodes of type \a nodeTypeId  and the provided
 		 * \a purpose.
 		 */
-		bool hasVisualization(int nodeTypeId, int purpose = 0);
+		bool hasVisualization(int nodeTypeId, int purpose = 0, int semanticZoomLevel = 0);
+		void registerVisualization(int nodeTypeId, int purpose, int semanticZoomLevel, VisualizationGroup::ItemConstructor visualization);
 		void registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization);
 		void registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization);
-		void registerGroup(int nodeTypeId, int purpose, VisualizationGroup* group);
+		void registerGroup(int nodeTypeId, int purpose, int semanticZoomLevel, VisualizationGroup* group);
 		void registerGroup(int nodeTypeId, VisualizationGroup* group);
 
 		int registerVisualizationPurpose(const QString& name);
@@ -68,7 +69,7 @@ class VISUALIZATIONBASE_API ModelRenderer
 	private:
 		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE = 1;
 
-		QVector<QVector<VisualizationGroup*>> groups_;
+		QVector<QVector<QVector<VisualizationGroup*>>> groups_;
 		QVector<QString > purposes_;
 		QVector<QString > semanticZoomLevels_;
 
@@ -77,14 +78,19 @@ class VISUALIZATIONBASE_API ModelRenderer
 		Item* visualizationChoiceStrategyTypeOverPurpose(Item* parent, Model::Node* node, int purpose);
 };
 
+inline void ModelRenderer::registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization)
+{
+	registerVisualization(nodeTypeId, purpose, 0, visualization);
+}
+
 inline void ModelRenderer::registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization)
 {
-	registerVisualization(nodeTypeId, 0, visualization);
+	registerVisualization(nodeTypeId, 0, 0, visualization);
 }
 
 inline void ModelRenderer::registerGroup(int nodeTypeId, VisualizationGroup* group)
 {
-	registerGroup(nodeTypeId, 0, group);
+	registerGroup(nodeTypeId, 0, 0, group);
 }
 
 template<class VIS, class NODE>
