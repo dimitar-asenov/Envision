@@ -35,6 +35,7 @@ namespace Visualization {
 ModelRenderer::ModelRenderer()
 {
 	registerVisualizationPurpose("Default");
+	registerSemanticZoomLevel("Default");
 }
 
 ModelRenderer::~ModelRenderer()
@@ -101,6 +102,16 @@ int ModelRenderer::registerVisualizationPurpose(const QString& name)
 
 	purposes_.append(name);
 	return purposes_.size()-1;
+}
+
+int ModelRenderer::registerSemanticZoomLevel(const QString& name)
+{
+	if (semanticZoomLevels_.contains(name))
+		throw VisualizationException("Trying to register a semantic zoom level with a name that's already registered:"
+						+ name);
+
+	semanticZoomLevels_.append(name);
+	return semanticZoomLevels_.size()-1;
 }
 
 void ModelRenderer::registerVisualization(int nodeTypeId, int purpose,

@@ -61,11 +61,16 @@ class VISUALIZATIONBASE_API ModelRenderer
 		int numRegisteredPurposes() const;
 		QString purposeName(int purpose);
 
+		int registerSemanticZoomLevel(const QString& name);
+		int numRegisteredSemanticZoomLevels() const;
+		QString semanticZoomLevelName(int semanticZoomLevel);
+
 	private:
 		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE = 1;
 
 		QVector<QVector<VisualizationGroup*>> groups_;
 		QVector<QString > purposes_;
+		QVector<QString > semanticZoomLevels_;
 
 		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE};
 
@@ -91,5 +96,7 @@ Item* createVisualization(Item* parent, Model::Node* node)
 inline int ModelRenderer::numRegisteredPurposes() const { return purposes_.size(); }
 inline QString ModelRenderer::purposeName(int purpose) { return purposes_[purpose]; }
 
+inline int ModelRenderer::numRegisteredSemanticZoomLevels() const { return semanticZoomLevels_.size(); }
+inline QString ModelRenderer::semanticZoomLevelName(int semanticZoomLevel) { return semanticZoomLevels_[semanticZoomLevel]; }
 
 }
