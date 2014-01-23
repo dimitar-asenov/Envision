@@ -54,6 +54,16 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 
 	initializeConstraintSolver(elements.size() * 2);
 
+	// add objective function
+	// minimize the sum of the sizes of all the elements
+	QVector<float> objectiveRow;
+	for (int i=0; i<elements.size(); ++i)
+	{
+		objectiveRow.append(-1.0); // start variable of i-th element
+		objectiveRow.append(1.0); // end variable of i-th element
+	}
+	setMinimizeObjective(objectiveRow);
+
 	// add size constraints for each element
 	// if element's size depends on parent's size
 	// 	element.end - element.start >= element.size
@@ -92,16 +102,6 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 			};
 		addConstraint(EQ, constraintRow, (float) a->offset());
 	}
-
-	// add objective function
-	// minimize the sum of the sizes of all the elements
-	QVector<float> objectiveRow;
-	for (int i=0; i<elements.size(); ++i)
-	{
-		objectiveRow.append(-1.0); // start variable of i-th element
-		objectiveRow.append(1.0); // end variable of i-th element
-	}
-	setMinimizeObjective(objectiveRow);
 
 	try
 	{
@@ -151,7 +151,6 @@ void AnchorLayoutConstraintSolver::addConstraint(int type, QVector<QPair<int, fl
 
 void AnchorLayoutConstraintSolver::setMinimizeObjective(QVector<float> objectiveRow)
 {
-	set_add_rowmode(lp_, false);
 	for (int i=0; i<numVariables_; ++i)
 	{
 		columnIndices_[i] = i+1;
@@ -159,11 +158,12 @@ void AnchorLayoutConstraintSolver::setMinimizeObjective(QVector<float> objective
 	}
 	bool success = set_obj_fnex(lp_, numVariables_, rowValues_, columnIndices_);
 	Q_ASSERT(success);
-	set_minim(lp_);
 }
 
 QVector<float> AnchorLayoutConstraintSolver::solveConstraints()
 {
+	set_add_rowmode(lp_, false);
+
 	set_verbose(lp_, CRITICAL);
 	int success = solve(lp_);
 	if (success != OPTIMAL) throw VisualizationException("Failed to solve anchor constraints.");
@@ -176,6 +176,7 @@ QVector<float> AnchorLayoutConstraintSolver::solveConstraints()
 
 void AnchorLayoutConstraintSolver::initializeConstraintSolver(int numVariables)
 {
+	Q_ASSERT(numVariables_ == 0 || numVariables_ == numVariables);
 	lp_ = make_lp(0, numVariables);
 	Q_ASSERT(lp_ != nullptr);
 	rowValues_ = new double[numVariables];
@@ -202,7 +203,6 @@ void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 		delete[] columnIndices_;
 		columnIndices_ = nullptr;
 	}
-	numVariables_ = 0;
 }
 
 } /* namespace Visualization */
