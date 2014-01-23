@@ -53,7 +53,8 @@ class VISUALIZATIONBASE_API AnchorLayoutFormElement : public LayoutFormElement {
 		 * \a fixedElement.
 		 * Returns a pointer to this AnchorLayoutElement.
 		 */
-		AnchorLayoutFormElement* put(PlaceEdge placeEdge, FormElement* placeElement, AtEdge atEdge, FormElement* fixedElement);
+		AnchorLayoutFormElement* put(PlaceEdge placeEdge, FormElement* placeElement, AtEdge atEdge,
+											FormElement* fixedElement);
 		/**
 		 * Add an anchor to the layout, placing the \a placeEdge of the \a placeElement \a offset units from the
 		 * \a fromEdge of the \a fixedElement.
@@ -139,10 +140,13 @@ class VISUALIZATIONBASE_API AnchorLayoutFormElement : public LayoutFormElement {
 		// Do not forget to update the copy constructor if adding new members.
 		QList<AnchorLayoutAnchor*> horizontalConstraints_{};
 		QList<AnchorLayoutAnchor*> verticalConstraints_{};
-		bool horizontalNeedsConstraintSolver_{};
-		bool verticalNeedsConstraintSolver_{};
+		bool needsHorizontalSolver_{};
+		bool needsVerticalSolver_{};
 
-		AnchorLayoutConstraintSolver* solver_{};
+		// We use two separate solvers, because each one can cache previous data and speed up the process.
+		AnchorLayoutConstraintSolver* horizontalSolver_{};
+		AnchorLayoutConstraintSolver* verticalSolver_{};
+
 		QMap<FormElement*, FormElement*> externalMatches_{};
 
 		/**
