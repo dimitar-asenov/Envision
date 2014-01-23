@@ -68,9 +68,9 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
 			size = (float) e->size(item).height();
 		if (e->sizeDependsOnParent(item))
-			addGreaterEqualConstraint(constraintRow, size);
+			addConstraint(GE,constraintRow, size);
 		else
-			addEqualConstraint(constraintRow, size);
+			addConstraint(EQ, constraintRow, size);
 	}
 
 	// add constraints for each anchor
@@ -88,7 +88,7 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 					QPair<int, float>(startVariable(fixedElementIndex), -(1 - a->relativeFixedEdgePosition())),
 					QPair<int, float>(endVariable(fixedElementIndex),-a->relativeFixedEdgePosition())
 			};
-		addEqualConstraint(constraintRow, (float) a->offset());
+		addConstraint(EQ, constraintRow, (float) a->offset());
 	}
 
 	// add objective function
@@ -135,25 +135,15 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 	}
 }
 
-void AnchorLayoutConstraintSolver::addGreaterEqualConstraint(QVector<QPair<int, float>> constraintRow, float result)
+void AnchorLayoutConstraintSolver::addConstraint(int type, QVector<QPair<int, float>> constraintRow,
+																				 float result)
 {
 	for (int i=0; i<constraintRow.size(); ++i)
 	{
 		columnIndices_[i] = constraintRow[i].first + 1;
 		rowValues_[i] = (double) constraintRow[i].second;
 	}
-	bool success = add_constraintex(lp_, constraintRow.size(), rowValues_, columnIndices_, GE, result);
-	Q_ASSERT(success);
-}
-
-void AnchorLayoutConstraintSolver::addEqualConstraint(QVector<QPair<int, float>> constraintRow, float result)
-{
-	for (int i=0; i<constraintRow.size(); ++i)
-	{
-		columnIndices_[i] = constraintRow[i].first + 1;
-		rowValues_[i] = (double) constraintRow[i].second;
-	}
-	bool success = add_constraintex(lp_, constraintRow.size(), rowValues_, columnIndices_, EQ, result);
+	bool success = add_constraintex(lp_, constraintRow.size(), rowValues_, columnIndices_, type, result);
 	Q_ASSERT(success);
 }
 

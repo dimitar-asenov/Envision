@@ -55,8 +55,7 @@ class VISUALIZATIONBASE_API AnchorLayoutConstraintSolver {
 				AnchorLayoutAnchor::Orientation orientation, Item* item);
 	private:
 		void initializeConstraintSolver(int numVariables);
-		void addGreaterEqualConstraint(QVector<QPair<int, float>> constraintRow, float result);
-		void addEqualConstraint(QVector<QPair<int, float>> constraintRow, float result);
+		void addConstraint(int type, QVector<QPair<int, float>> constraintRow, float result);
 		void setMinimizeObjective(QVector<float> objectiveRow);
 		QVector<float> solveConstraints();
 		void cleanUpConstraintSolver();
