@@ -67,27 +67,24 @@ void TextRenderer::determineChildren()
 {
 }
 
-inline QRectF TextRenderer::bound()
+inline QSize TextRenderer::staticTextSize(QFontMetrics& qfm)
 {
-	QFontMetrics qfm(style()->font());
-	return bound(qfm);
+	if (staticText_.text().isEmpty()) return QSize{MIN_TEXT_WIDTH, qfm.height()};
+	else return staticText_.size().toSize();
 }
 
-inline QRectF TextRenderer::bound(QFontMetrics& qfm)
+inline QRectF TextRenderer::nonStaticTextBound()
 {
-	QRectF bound;
+	Q_ASSERT(!isHtml());
 
+	QRectF bound;
+	QFontMetrics qfm(style()->font());
 	if (staticText_.text().isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
 	else
 	{
-		if ( isHtml() )
-			bound = QRectF(QPointF(0,0), staticText_.size());
-		else
-		{
-			bound = qfm.boundingRect(staticText_.text());
-			if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
-			if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
-		}
+		bound = qfm.boundingRect(staticText_.text());
+		if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
+		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
 	}
 	return bound;
 }
@@ -100,10 +97,10 @@ void TextRenderer::updateGeometry(int, int)
 	staticText_.prepare(QTransform(), style()->font());
 
 	QFontMetrics qfm(style()->font());
-	auto bound = this->bound(qfm);
+	auto textSize = this->staticTextSize(qfm);
 	if (this->hasShape())
 	{
-		this->getShape()->setInnerSize(bound.width(), bound.height());
+		this->getShape()->setInnerSize(textSize.width(), textSize.height());
 		textXOffset_ = this->getShape()->contentLeft();
 		textYOffset_ = this->getShape()->contentTop();
 	}
@@ -111,7 +108,7 @@ void TextRenderer::updateGeometry(int, int)
 	{
 		textXOffset_ = 0;
 		textYOffset_ = 0;
-		this->setSize(bound.size());
+		this->setSize(textSize);
 	}
 
 	// Correct underline, otherwise it is drawn in the middle of two pixels and appears fat and transparent.
@@ -150,7 +147,10 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		int end = selectionCursor->selectionLastIndex();
 
 		QPointF offset(textXOffset_, textYOffset_);
-		offset -= bound().topLeft();
+
+		// Might be a bit slow but that's OK, since we have very little selected text
+		// Here topLeft is the absolute corner of the text if it is drawn at 0,0.
+		offset -= nonStaticTextBound().topLeft();
 
 		// Draw selection background
 		painter->setPen(Qt::NoPen);

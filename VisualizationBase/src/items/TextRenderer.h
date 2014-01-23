@@ -100,8 +100,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 
 		const static int MIN_TEXT_WIDTH = 10;
 
-		QRectF bound();
-		QRectF bound(QFontMetrics &qfm);
+		QSize staticTextSize(QFontMetrics& qfm);
+		QRectF nonStaticTextBound();
 };
 
 inline QString TextRenderer::text() { return staticText_.text(); }
