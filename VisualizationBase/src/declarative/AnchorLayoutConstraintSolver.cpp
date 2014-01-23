@@ -44,9 +44,11 @@ AnchorLayoutConstraintSolver::~AnchorLayoutConstraintSolver()
 	cleanUpConstraintSolver();
 }
 
+inline int AnchorLayoutConstraintSolver::startVariable(int elementIndex) {	return 2 * elementIndex;}
+inline int AnchorLayoutConstraintSolver::endVariable(int elementIndex) { return 2 * elementIndex + 1; }
 
-void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& elements, QList<AnchorLayoutAnchor*>& anchors,
-		AnchorLayoutAnchor::Orientation orientation, Item* item)
+void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& elements,
+		QList<AnchorLayoutAnchor*>& anchors, AnchorLayoutAnchor::Orientation orientation, Item* item)
 {
 	// elements already have a minimum size
 

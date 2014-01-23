@@ -70,12 +70,4 @@ class VISUALIZATIONBASE_API AnchorLayoutConstraintSolver {
 
 };
 
-inline int AnchorLayoutConstraintSolver::startVariable(int elementIndex)
-{
-	return 2 * elementIndex;
-}
-inline int AnchorLayoutConstraintSolver::endVariable(int elementIndex)
-{
-	return 2 * elementIndex + 1;
-}
 } /* namespace Visualization */
