@@ -50,7 +50,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VClassSzPublic
-: public Super<Visualization::ItemWithNode<VClassSzPublic, Visualization::DeclarativeItem<VClassSzPublic>, OOModel::Class, false>>
+: public Super<Visualization::ItemWithNode<VClassSzPublic, Visualization::DeclarativeItem<VClassSzPublic>,
+		OOModel::Class, false>>
 {
 	ITEM_COMMON(VClassSzPublic)
 

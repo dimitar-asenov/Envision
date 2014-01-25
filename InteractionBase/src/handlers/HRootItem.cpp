@@ -63,7 +63,8 @@ void HRootItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		event->accept();
 		auto ri = static_cast<Visualization::RootItem*> (target);
 
-		ri->setSemanticZoomLevel( (ri->semanticZoomLevel() + 1) % target->scene()->renderer()->numRegisteredSemanticZoomLevels() );
+		ri->setSemanticZoomLevel(
+					(ri->semanticZoomLevel() + 1) % target->scene()->renderer()->numRegisteredSemanticZoomLevels() );
 
 		target->scene()->addPostEventAction(
 			new SetCursorEvent(target, ri->node()));

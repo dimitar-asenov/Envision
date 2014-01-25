@@ -122,10 +122,15 @@ inline const Visualization::VListStyle& VClassSzPublicStyle::friends() const { r
 inline const Visualization::VListStyle& VClassSzPublicStyle::declarations() const { return declarations_; }
 inline const Visualization::PositionLayoutStyle& VClassSzPublicStyle::body() const { return body_; }
 inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::content() const { return content_; }
-inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::fieldContainer() const { return fieldContainer_; }
-inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::publicFieldArea() const { return publicFieldArea_; }
-inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::privateFieldArea() const { return privateFieldArea_; }
-inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::protectedFieldArea() const { return protectedFieldArea_; }
-inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::defaultFieldArea() const { return defaultFieldArea_; }
+inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::fieldContainer()
+	const { return fieldContainer_; }
+inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::publicFieldArea()
+	const { return publicFieldArea_; }
+inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::privateFieldArea()
+	const { return privateFieldArea_; }
+inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::protectedFieldArea()
+	const { return protectedFieldArea_; }
+inline const Visualization::SequentialLayoutStyle& VClassSzPublicStyle::defaultFieldArea()
+	const { return defaultFieldArea_; }
 
 }

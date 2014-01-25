@@ -168,7 +168,8 @@ void ModelRenderer::registerVisualization(int nodeTypeId, int purpose, int seman
 	Q_ASSERT(nodeTypeId > 0);
 	if (nodeTypeId >= groups_.size()) groups_.resize(nodeTypeId + 1);
 	if (purpose >= groups_[nodeTypeId].size()) groups_[nodeTypeId].resize(purpose+1);
-	if (semanticZoomLevel >= groups_[nodeTypeId][purpose].size()) groups_[nodeTypeId][purpose].resize(semanticZoomLevel+1);
+	if (semanticZoomLevel >= groups_[nodeTypeId][purpose].size())
+		groups_[nodeTypeId][purpose].resize(semanticZoomLevel+1);
 
 	if (!groups_[nodeTypeId][purpose][semanticZoomLevel])
 	{
@@ -182,7 +183,8 @@ void ModelRenderer::registerGroup(int nodeTypeId, int purpose, int semanticZoomL
 {
 	if (nodeTypeId >= groups_.size()) groups_.resize(nodeTypeId + 1);
 	if (purpose >= groups_[nodeTypeId].size()) groups_[nodeTypeId].resize(purpose+1);
-	if (semanticZoomLevel >= groups_[nodeTypeId][purpose].size()) groups_[nodeTypeId][purpose].resize(semanticZoomLevel+1);
+	if (semanticZoomLevel >= groups_[nodeTypeId][purpose].size())
+		groups_[nodeTypeId][purpose].resize(semanticZoomLevel+1);
 
 	if (!groups_[nodeTypeId][purpose][semanticZoomLevel])
 	{
