@@ -28,6 +28,7 @@
 
 #include "../visualizationbase_api.h"
 #include "VisualizationGroup.h"
+#include "VisualizationGroupsManager.h"
 
 namespace Visualization {
 
@@ -70,16 +71,15 @@ class VISUALIZATIONBASE_API ModelRenderer
 	private:
 		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL = 1;
 
-		QVector<QVector<QVector<VisualizationGroup*>>> groups_;
 		QVector<QString > purposes_;
 		QVector<QString > semanticZoomLevels_;
+
+		VisualizationGroupsManager visualizationGroupsManager_;
 
 		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL};
 
 		Item* visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
 																									 int purpose, int semanticZoomLevel);
-
-		VisualizationGroup* getVisualizationGroupForSemanticZoomLevel(int typeId, int semanticZoomLevel);
 };
 
 inline void ModelRenderer::registerVisualization(int nodeTypeId, int purpose,
