@@ -115,4 +115,10 @@ bool Token::tokenExistsInOperators(QString token, const OperatorDescriptorList* 
 	return false;
 }
 
+QVector<Token> Token::createSubExpressions(const QVector<Token>& tokens)
+{
+	//TODO: Generate sub expressions
+	return tokens;
+}
+
 } /* namespace InteractionBase */

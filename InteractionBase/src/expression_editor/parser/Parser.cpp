@@ -47,8 +47,13 @@ Parser::Parser(const OperatorDescriptorList* ops) : ops_(ops)
 
 QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens)
 {
+	ParseResult best;
+	return parse(tokens, best);
+}
 
-	end_tokens_ = tokens.constEnd();
+QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens, ParseResult& parseResult)
+{
+	end_tokens_ = tokens.end();
 
 	QList<ExpectedToken> expected;
 	expected << ExpectedToken();
@@ -57,17 +62,17 @@ QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens)
 
 	if (tokens.isEmpty())
 	{
-		instructions.append( new AddEmptyValue());
+		instructions.append( new AddEmptyValue() );
 		return instructions;
 	}
 	else
 	{
-		ParseResult best = parse(tokens.constBegin(), ParseResult(), expected, false, instructions);
-		return best.instructions;
+		parseResult = parse(tokens.begin(), ParseResult(), expected, false, instructions);
+		return parseResult.instructions;
 	}
 }
 
-ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult result, QList<ExpectedToken>& expected,
+ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QList<ExpectedToken>& expected,
 		bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	// Finish any completed operators
@@ -125,14 +130,20 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 			error = true;
 			break;
 		}
+		case Token::SubExpression:
+		{
+			processSubExpression(expected, token, hasLeft, result, instructions);
+			break;
+		}
 		default:
 			Q_ASSERT(false); // Unknown token type
 	}
 
-	// We do not get here if this is an OperatorDelimiter which has been processed. In that case the function returns
-	// early.
+	// We do not get here if this is a SubExpression or an OperatorDelimiter which has been processed. In the latter
+	// case the function returns early.
 	if (error)
 	{
+		Q_ASSERT(token->type() != Token::SubExpression);
 		++result.errors;
 		instructions.append( new AddErrorOperator(token->text()) );
 		if (!hasLeft) expected.insert(1, ExpectedToken(ExpectedToken::END));
@@ -143,7 +154,7 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 }
 
 void Parser::processIdentifiersAndLiterals(bool& error, QList<ExpectedToken>& expected,
-		QVector<Token>::const_iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
+		QVector<Token>::iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	if ( !expected.isEmpty() &&
 			(	expected.first().type == ExpectedToken::VALUE
@@ -161,7 +172,7 @@ void Parser::processIdentifiersAndLiterals(bool& error, QList<ExpectedToken>& ex
 }
 
 ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<ExpectedToken>& expected,
-		QVector<Token>::const_iterator& token, ParseResult& result,
+		QVector<Token>::iterator& token, ParseResult& result,
 		QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	// We should only fill using empty expressions the first unfinished operator. Any operator afterwards should be left
@@ -236,7 +247,7 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 }
 
 void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<ExpectedToken>& expected,
-		QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
+		QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
 		QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	if (!expected.isEmpty() && expected.first().type == ExpectedToken::ID)
@@ -302,6 +313,38 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<Ex
 		// Simply return the best result
 		result = best_pr;
 	}
+}
+
+void Parser::processSubExpression(QList<ExpectedToken>& expected, QVector<Token>::iterator& token, bool& hasLeft,
+		ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions)
+{
+	Q_ASSERT(!hasLeft);
+	Q_ASSERT( !expected.isEmpty() );
+	Q_ASSERT(	expected.first().type == ExpectedToken::VALUE
+				|| expected.first().type == ExpectedToken::ANY
+				|| expected.first().type == ExpectedToken::TYPE);
+
+	if (!token->subExpressionResult_.instructions.isEmpty())
+	{
+		// If this is the first time this token was encountered, parse the sub expression
+		if (token->subExpressionTokens_.isEmpty())
+			token->subExpressionResult_.instructions.append( new AddEmptyValue() );
+		else
+			parse(token->subExpressionTokens_, token->subExpressionResult_);
+	}
+
+	// The sub expression is already parsed, use its result
+
+	for(auto i : token->subExpressionResult_.instructions ) instructions.append( i);
+	result.errors += token->subExpressionResult_.errors;
+	result.emptyExpressions += token->subExpressionResult_.emptyExpressions;
+	result.missingInnerTokens += token->subExpressionResult_.missingInnerTokens;
+	result.numOperators += token->subExpressionResult_.numOperators;
+	// Note that we ignore missingTrailingTokens on purpose.
+
+	hasLeft = true;
+	expected.removeFirst();
+
 }
 
 } /* namespace InteractionBase */

@@ -27,14 +27,24 @@
 #pragma once
 
 #include "../../interactionbase_api.h"
+#include "ParseResult.h"
 
 namespace Interaction {
 
 class OperatorDescriptorList;
+class ExpressionTreeBuildInstruction;
+class Parser;
 
 class INTERACTIONBASE_API Token {
 	public:
-		enum Type {Identifier, Literal, OperatorDelimiter, PartialLiteral};
+		enum Type {
+			Identifier, /**< This token is an identifier. It is not identical to a keyword */
+			Literal, /**< This token is a string or a number literal. */
+			OperatorDelimiter,	/**< This token is an operator delimiter - a keyword or an operator,
+										including parenthesis */
+			PartialLiteral, /**< This token is a partial literal, such an incomplete string. */
+			SubExpression 	/**< This token is a sub expression. This is used with expressions surrounded by braces or
+			 	 	 	 		parenthesis to speed up the parsing process. */};
 
 		Token();
 		Token(QString text, Type type);
@@ -43,10 +53,16 @@ class INTERACTIONBASE_API Token {
 		Type type() const;
 
 		static QVector<Token> tokenize(QString input, const OperatorDescriptorList* ops);
+		static QVector<Token> createSubExpressions(const QVector<Token>& tokens);
 
 	private:
 		QString text_;
 		Type type_;
+
+		//The members below are only used with SubExpression type literals
+		friend class Parser;
+		QVector<Token> subExpressionTokens_{};
+		ParseResult subExpressionResult_{};
 
 		static bool tokenExistsInOperators(QString token, const OperatorDescriptorList* ops);
 		static QStringList specialSignatureWords_;

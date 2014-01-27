@@ -38,7 +38,8 @@ Expression* ExpressionEditor::parse(const QString& expression_text)
 	if (!expression_text.isNull()) setText(expression_text);
 	else setText("");
 
-	Expression* top = ExpressionTreeBuilder().build( Parser(ops_).parse( Token::tokenize(text_, ops_)) );
+	auto tokens = Token::createSubExpressions( Token::tokenize(text_, ops_));
+	Expression* top = ExpressionTreeBuilder().build( Parser(ops_).parse( tokens ) );
 	ExpressionTreeUtils::fixTop(top);
 	return top;
 }
