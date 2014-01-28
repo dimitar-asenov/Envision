@@ -133,27 +133,21 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 		}
 		case Token::SubExpression:
 		{
-			processSubExpression(expected, token, hasLeft, result, instructions);
+			processSubExpression(error, expected, token, hasLeft, result, instructions);
 			break;
 		}
 		default:
 			Q_ASSERT(false); // Unknown token type
 	}
 
-	// We do not get here if this is a SubExpression or an OperatorDelimiter which has been processed. In the latter
-	// case the function returns early.
+	// We do not get here if this is an OperatorDelimiter which has been processed.
+	// That case returns early.
 	if (error)
 	{
-		// Terminate the search if the next token is a SubExpression. SubExpressions can't be preceeded by an
-		// error token
-		if ((token+1) != endTokens_ && (token+1)->type() == Token::SubExpression)
-		{
-			result.errors = INT_MAX;
-			return result;
-		}
-
-		Q_ASSERT(token->type() != Token::SubExpression);
-		++result.errors;
+		if (token->type() == Token::SubExpression)
+			result.errors += token->subExpressionTokens_.size();
+		else
+			++result.errors;
 		instructions.append( new AddErrorOperator(token->text()) );
 		if (!hasLeft) expected.insert(1, ExpectedToken(ExpectedToken::END));
 	}
@@ -324,39 +318,40 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<Ex
 	}
 }
 
-void Parser::processSubExpression(QList<ExpectedToken>& expected, QVector<Token>::iterator& token, bool& hasLeft,
-		ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions)
+void Parser::processSubExpression(bool& error, QList<ExpectedToken>& expected, QVector<Token>::iterator& token,
+	bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
-	Q_ASSERT(!hasLeft);
-	Q_ASSERT( !expected.isEmpty() );
-	Q_ASSERT(	expected.first().type == ExpectedToken::VALUE
+	if ( !hasLeft && !expected.isEmpty() &&
+		  (	expected.first().type == ExpectedToken::VALUE
 				|| expected.first().type == ExpectedToken::ANY
-				|| expected.first().type == ExpectedToken::TYPE);
-
-	if (token->subExpressionResult_.instructions.isEmpty())
+				|| expected.first().type == ExpectedToken::TYPE)
+		  )
 	{
-		// If this is the first time this token was encountered, parse the sub expression
-		if (token->subExpressionTokens_.isEmpty())
-			token->subExpressionResult_.instructions.append( new AddEmptyValue() );
-		else
+		if (token->subExpressionResult_.instructions.isEmpty())
 		{
-			//A new parser must be created since we need a new endTokens_ field.
-			Parser(ops_).parse(token->subExpressionTokens_, token->subExpressionResult_);
+			// If this is the first time this token was encountered, parse the sub expression
+			if (token->subExpressionTokens_.isEmpty())
+				token->subExpressionResult_.instructions.append( new AddEmptyValue() );
+			else
+			{
+				//A new parser must be created since we need a new endTokens_ field.
+				Parser(ops_).parse(token->subExpressionTokens_, token->subExpressionResult_);
+			}
 		}
+
+		// The sub expression is already parsed, use its result
+
+		instructions.append( new AddSubExpression(token->subExpressionResult_.instructions));
+		result.errors += token->subExpressionResult_.errors;
+		result.emptyExpressions += token->subExpressionResult_.emptyExpressions;
+		result.missingInnerTokens += token->subExpressionResult_.missingInnerTokens;
+		result.numOperators += token->subExpressionResult_.numOperators;
+		// Note that we ignore missingTrailingTokens on purpose.
+
+		hasLeft = true;
+		expected.removeFirst();
 	}
-
-	// The sub expression is already parsed, use its result
-
-	instructions.append( new AddSubExpression(token->subExpressionResult_.instructions));
-	result.errors += token->subExpressionResult_.errors;
-	result.emptyExpressions += token->subExpressionResult_.emptyExpressions;
-	result.missingInnerTokens += token->subExpressionResult_.missingInnerTokens;
-	result.numOperators += token->subExpressionResult_.numOperators;
-	// Note that we ignore missingTrailingTokens on purpose.
-
-	hasLeft = true;
-	expected.removeFirst();
-
+	else error = true;
 }
 
 } /* namespace InteractionBase */

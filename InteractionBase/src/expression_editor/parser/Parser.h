@@ -68,7 +68,7 @@ class INTERACTIONBASE_API Parser {
 		void processNewOperatorDelimiters(bool& processed, bool& error, QList<ExpectedToken>& expected,
 				QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processSubExpression(QList<ExpectedToken>& expected,
+		void processSubExpression(bool& error, QList<ExpectedToken>& expected,
 				QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
 

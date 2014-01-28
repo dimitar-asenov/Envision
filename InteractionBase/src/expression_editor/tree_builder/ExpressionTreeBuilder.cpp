@@ -39,6 +39,8 @@ ExpressionTreeBuilder::ExpressionTreeBuilder() : top_(nullptr), left_(nullptr)
 
 Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*> instructions)
 {
+	Q_ASSERT(!instructions.isEmpty());
+
 	// Concatenate errors in a single node
 	for (int i = instructions.size() - 1; i > 0; --i)
 	{
