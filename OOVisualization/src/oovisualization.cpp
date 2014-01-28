@@ -35,6 +35,7 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 
 #include <semantic_zoom/VClassSzPublic.h>
+#include <semantic_zoom/VMethodSzPublic.h>
 
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
@@ -65,6 +66,8 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface");
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), 0, 1,
 			createVisualization<VClassSzPublic, Class>);
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), 0, 1,
+			createVisualization<VMethodSzPublic, Method>);
 
 	return true;
 }
