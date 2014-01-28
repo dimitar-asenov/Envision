@@ -38,7 +38,6 @@ namespace Visualization {
 	class VText;
 	class VList;
 	class Static;
-	class PositionLayout;
 	class NodeWrapper;
 }
 
@@ -77,9 +76,6 @@ class OOVISUALIZATION_API VClassSzPublic
 		QList<Model::Node*> bodyItems_{};
 		Visualization::NodeWrapper* fieldBackground_{};
 		QList<Model::Node*> publicFields_{};
-		QList<Model::Node*> privateFields_{};
-		QList<Model::Node*> protectedFields_{};
-		QList<Model::Node*> defaultFields_{};
 };
 
 }

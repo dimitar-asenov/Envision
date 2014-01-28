@@ -120,7 +120,7 @@ void VClassSzPublic::initializeForms()
 				->put(1, 3, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
-				->put(1, 4, (new SequentialLayoutFormElement())->setVertical()->setSpaceBetweenElements(5)
+				->put(1, 4, (new SequentialLayoutFormElement())->setVertical()->setSpaceBetweenElements(10)
 						->setListOfNodes([](Item* i){return (static_cast<VClassSzPublic*>(i))->bodyItems_;}));
 
 	auto fieldContainerElement = (new GridLayoutFormElement())
@@ -172,19 +172,10 @@ int VClassSzPublic::determineForm()
 {
 	// Update Field Nodes
 	publicFields_.clear();
-	privateFields_.clear();
-	protectedFields_.clear();
-	defaultFields_.clear();
-
 	for (int i = 0; i< node()->fields()->size(); ++i)
 	{
 		if (node()->fields()->at(i)->modifiers()->isSet(Modifier::Public))
 			publicFields_.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->modifiers()->isSet(Modifier::Private))
-			privateFields_.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->modifiers()->isSet(Modifier::Protected))
-			protectedFields_.append(node()->fields()->at(i));
-		else defaultFields_.append(node()->fields()->at(i));
 	}
 
 	if (node()->fields()->size() > 0) return 0;
