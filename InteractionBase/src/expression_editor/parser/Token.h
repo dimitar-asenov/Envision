@@ -66,9 +66,26 @@ class INTERACTIONBASE_API Token {
 
 		static bool tokenExistsInOperators(QString token, const OperatorDescriptorList* ops);
 		static QStringList specialSignatureWords_;
+
+		//These are used when creating sub expressions
+		static int countUnmatched(QVector<Token>::const_iterator start, QVector<Token>::const_iterator end,
+				QChar openParen, QChar closeParen);
+
+		static bool findSplit(QVector<Token>::const_iterator& splitStart, QVector<Token>::const_iterator& splitEnd,
+				QChar openParen, QChar closeParen);
+
+		static QVector<Token> createSubExpressions(QVector<Token>::const_iterator start,
+				QVector<Token>::const_iterator end, QChar openParen, QChar closeParen);
 };
 
 inline const QString& Token::text() const { return text_; }
 inline Token::Type Token::type() const { return type_; }
+
+struct TokenSplitData {
+	QVector<Token>::const_iterator end;
+	int unmatchedBeforeEnd;
+	int unmatchedAfterEnd;
+};
+bool operator< (const TokenSplitData& left, const TokenSplitData& right);
 
 } /* namespace InteractionBase */

@@ -72,7 +72,7 @@ class INTERACTIONBASE_API Parser {
 				QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
 
-		QVector<Token>::iterator end_tokens_;
+		QVector<Token>::iterator endTokens_;
 		const OperatorDescriptorList* ops_;
 };
 

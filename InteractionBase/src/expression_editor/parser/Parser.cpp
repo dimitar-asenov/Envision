@@ -33,6 +33,7 @@
 #include "expression_editor/tree_builder/FinishOperator.h"
 #include "expression_editor/tree_builder/LeaveUnfinished.h"
 #include "expression_editor/tree_builder/SkipOperatorDelimiter.h"
+#include "expression_editor/tree_builder/AddSubExpression.h"
 
 #include "expression_editor/OperatorDescriptorList.h"
 #include "expression_editor/OperatorDescriptor.h"
@@ -53,7 +54,7 @@ QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens)
 
 QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens, ParseResult& parseResult)
 {
-	end_tokens_ = tokens.end();
+	endTokens_ = tokens.end();
 
 	QList<ExpectedToken> expected;
 	expected << ExpectedToken();
@@ -85,7 +86,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	}
 
 	// Finish parsing if the end is reached
-	if (token == end_tokens_)
+	if (token == endTokens_)
 	{
 		result.missingTrailingTokens = expected.size();
 		result.instructions = instructions;
@@ -143,6 +144,14 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	// case the function returns early.
 	if (error)
 	{
+		// Terminate the search if the next token is a SubExpression. SubExpressions can't be preceeded by an
+		// error token
+		if ((token+1) != endTokens_ && (token+1)->type() == Token::SubExpression)
+		{
+			result.errors = INT_MAX;
+			return result;
+		}
+
 		Q_ASSERT(token->type() != Token::SubExpression);
 		++result.errors;
 		instructions.append( new AddErrorOperator(token->text()) );
@@ -324,18 +333,21 @@ void Parser::processSubExpression(QList<ExpectedToken>& expected, QVector<Token>
 				|| expected.first().type == ExpectedToken::ANY
 				|| expected.first().type == ExpectedToken::TYPE);
 
-	if (!token->subExpressionResult_.instructions.isEmpty())
+	if (token->subExpressionResult_.instructions.isEmpty())
 	{
 		// If this is the first time this token was encountered, parse the sub expression
 		if (token->subExpressionTokens_.isEmpty())
 			token->subExpressionResult_.instructions.append( new AddEmptyValue() );
 		else
-			parse(token->subExpressionTokens_, token->subExpressionResult_);
+		{
+			//A new parser must be created since we need a new endTokens_ field.
+			Parser(ops_).parse(token->subExpressionTokens_, token->subExpressionResult_);
+		}
 	}
 
 	// The sub expression is already parsed, use its result
 
-	for(auto i : token->subExpressionResult_.instructions ) instructions.append( i);
+	instructions.append( new AddSubExpression(token->subExpressionResult_.instructions));
 	result.errors += token->subExpressionResult_.errors;
 	result.emptyExpressions += token->subExpressionResult_.emptyExpressions;
 	result.missingInnerTokens += token->subExpressionResult_.missingInnerTokens;

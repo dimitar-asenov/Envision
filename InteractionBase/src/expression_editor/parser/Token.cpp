@@ -117,8 +117,161 @@ bool Token::tokenExistsInOperators(QString token, const OperatorDescriptorList* 
 
 QVector<Token> Token::createSubExpressions(const QVector<Token>& tokens)
 {
-	//TODO: Generate sub expressions
-	return tokens;
+	QVector<QChar> parens = {'(',')','{','}','[',']'};
+
+	QMultiMap<int, QPair<QChar,QChar>> parensSorted;
+	for (int i = 0; i<parens.size(); i+=2)
+		parensSorted.insert(
+				countUnmatched(tokens.begin(), tokens.end(), parens[i], parens[i+1]), qMakePair(parens[i], parens[i+1]));
+
+	QVector<Token> result = tokens;
+	for(auto parens : parensSorted.values())
+		result = createSubExpressions(result.begin(), result.end(), parens.first, parens.second);
+
+	return result;
+}
+
+QVector<Token> Token::createSubExpressions(QVector<Token>::const_iterator start, QVector<Token>::const_iterator end,
+		QChar openParen, QChar closeParen)
+{
+	auto splitStart = start;
+	auto splitEnd = end;
+
+	bool foundSplit = findSplit(splitStart, splitEnd, openParen, closeParen);
+
+	if (!foundSplit) splitStart = end;
+	QVector<Token> result;
+
+	//Add all initial tokens
+	auto it = start;
+	while (it != splitStart)
+	{
+		result.append(*it);
+		if ( result.last().type_ == SubExpression )
+			// Look into already created sub expressions from other types of parenthesis
+			result.last().subExpressionTokens_ = createSubExpressions(result.last().subExpressionTokens_.begin(),
+					result.last().subExpressionTokens_.end(), openParen, closeParen);
+		++it;
+	}
+
+	if (foundSplit)
+	{
+		// Create sub expression
+		result.append(Token(QString(),SubExpression));
+		Token& sub = result.last();
+		sub.subExpressionTokens_ = createSubExpressions(splitStart, splitEnd, openParen, closeParen);
+		for(auto t : sub.subExpressionTokens_) sub.text_ += t.text_;
+
+		// Add trailing tokens
+		for(auto t : createSubExpressions(splitEnd, end, openParen, closeParen))
+		result.append(t);
+	}
+
+	return result;
+}
+
+int Token::countUnmatched(QVector<Token>::const_iterator start, QVector<Token>::const_iterator end,
+		QChar openParen, QChar closeParen)
+{
+	int current = 0;
+	int unmatched = 0;
+	while(start != end)
+	{
+		if (start->type_ == OperatorDelimiter)
+		{
+			if (start->text_ == openParen) ++current;
+			else if (start->text_ == closeParen) --current;
+		}
+
+		if (current < 0)
+		{
+			++unmatched;
+			current = 0;
+		}
+
+		++start;
+	}
+
+	return unmatched + current;
+}
+
+/**
+ * Adjusts the \a splitStart and \a splitEnd arguments to indicate the best split of the given range and returns true
+ * if a split was found.
+ *
+ * If the return value is false the input sequence of tokens should remain as it is.
+ *
+ * The range is given by the initial values of \a splitStart and \a splitEnd. The returned values are such that:
+ * tokens before \a splitStart should remain as they are (there is no open paren); \a splitStart points just after the
+ * first open paren; \a splitEnd points at the closing paren that matches the one from \a splitStart.
+ *
+ * The best possible split is determined by trying to minimize the sum of the unmatched count of the tokens:
+ * between \a splitStart and \a splitEnd; after \a splitEnd
+ */
+bool Token::findSplit(QVector<Token>::const_iterator& splitStart, QVector<Token>::const_iterator& splitEnd,
+				QChar openParen, QChar closeParen)
+{
+	// Find open paren
+	while (splitStart != splitEnd && (splitStart->type_ != OperatorDelimiter || splitStart->text_.at(0) != openParen))
+		++splitStart;
+
+	if (splitStart == splitEnd) return false;
+	++splitStart; // Advance to just after the first open paren
+	if (splitStart == splitEnd) return false;
+
+	auto splitMid = splitStart;
+	TokenSplitData bestSplit;
+
+	int leftBalance = 0;
+	int leftUnmatched = 0;
+	bool foundSplit = false;
+	do
+	{
+		if (splitMid->type_ == OperatorDelimiter)
+		{
+			if (splitMid->text_.at(0) == openParen)
+			{
+				++leftBalance;
+			}
+			else if (splitMid->text_.at(0) == closeParen)
+			{
+				//Try using this as a closing paren for splitStart
+
+
+				--leftBalance;
+				if (leftBalance < 0)
+				{
+					leftBalance = 0;
+					++leftUnmatched;
+				}
+
+				TokenSplitData candidateSplit{splitMid, leftBalance + leftUnmatched,
+					countUnmatched(splitMid, splitEnd, openParen, closeParen)};
+
+				if (!foundSplit || candidateSplit < bestSplit) bestSplit = candidateSplit;
+
+				foundSplit = true;
+			}
+		}
+
+		++splitMid;
+	} while( splitMid != splitEnd);
+
+	if (foundSplit) splitEnd = bestSplit.end;
+	return foundSplit;
+}
+
+bool operator< (const TokenSplitData& left, const TokenSplitData& right)
+{
+	auto leftTotal = left.unmatchedBeforeEnd + left.unmatchedAfterEnd;
+	auto rightTotal = right.unmatchedBeforeEnd + right.unmatchedAfterEnd;
+
+	if (leftTotal < rightTotal) return true;
+	if (leftTotal > rightTotal) return false;
+
+	// Here it's possible to explore alternatives that will result in a different split
+	// For example: return left.unmatchedBeforeEnd < right.unmatchedAfterEnd;
+	return left.unmatchedAfterEnd < right.unmatchedAfterEnd;
 }
 
 } /* namespace InteractionBase */
