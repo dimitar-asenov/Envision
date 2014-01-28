@@ -60,6 +60,7 @@ Method* addTestMethod()
 	testMethod->items()->append(es);
 
 	//Errors
+	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("{{b}{}")));
 	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a[,,]")));
 	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("++{{c,d}")));
 	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("++{{a,b},{c,d}")));
