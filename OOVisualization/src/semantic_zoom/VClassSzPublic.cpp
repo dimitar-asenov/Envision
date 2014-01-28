@@ -62,10 +62,7 @@ void VClassSzPublic::determineChildren()
 	{
 		auto method = *i;
 
-		if (method->modifiers()->isSet(Modifier::Public))
-		{
-			bodyItems.append(method);
-		}
+		if (method->modifiers()->isSet(Modifier::Public)) bodyItems.append(method);
 	}
 
 	body_->synchronizeWithNodes( bodyItems, renderer());;
