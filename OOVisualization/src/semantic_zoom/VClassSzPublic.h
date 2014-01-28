@@ -74,7 +74,7 @@ class OOVISUALIZATION_API VClassSzPublic
 		Visualization::Static* friendsSymbol_{};
 		Visualization::VList* friends_{};
 		Visualization::VList* declarations_{};
-		Visualization::PositionLayout* body_{};
+		QList<Model::Node*> bodyItems_{};
 		Visualization::NodeWrapper* fieldBackground_{};
 		QList<Model::Node*> publicFields_{};
 		QList<Model::Node*> privateFields_{};
