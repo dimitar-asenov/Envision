@@ -76,6 +76,7 @@ class VISUALIZATIONBASE_API MainView: public View
 		QPoint panStartPos_{};
 
 		void updateInfoLabels();
+		bool setCursorAndOwnerIgnoreScaleForScreenShot(bool ignore, bool modifyOwner);
 };
 
 }

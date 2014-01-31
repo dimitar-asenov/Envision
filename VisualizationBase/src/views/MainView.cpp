@@ -27,6 +27,8 @@
 #include "views/MainView.h"
 #include "Scene.h"
 #include "Logger/src/Timer.h"
+#include "cursor/Cursor.h"
+#include "items/Item.h"
 
 namespace Visualization {
 
@@ -151,6 +153,8 @@ void MainView::keyPressEvent(QKeyEvent *event)
 		QSvgGenerator svggen;
 		svggen.setResolution(90);
 
+		bool ownerIgnoresScale = setCursorAndOwnerIgnoreScaleForScreenShot(false, false);
+
 		if (event->modifiers() & Qt::ShiftModifier)
 		{
 			// Print scene
@@ -196,6 +200,8 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			render(&pmapPainter);
 			image.save("screenshot-view.png");
 		}
+
+		setCursorAndOwnerIgnoreScaleForScreenShot(true, ownerIgnoresScale);
 	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F11)
 	{
@@ -315,6 +321,30 @@ void MainView::mouseReleaseEvent(QMouseEvent *event)
 	event->accept();
 	setCursor(Qt::ArrowCursor);
 	isPanning_ = false;
+}
+
+bool MainView::setCursorAndOwnerIgnoreScaleForScreenShot(bool ignore, bool modifyOwner)
+{
+	bool ownerIgnoresScale = false;
+
+	auto cursor = scene()->mainCursor();
+	if (cursor)
+	{
+		if ( auto vis = cursor->visualization() ) vis->setFlag(Item::ItemIgnoresTransformations, ignore);
+		auto owner = cursor->owner();
+		if (owner)
+		{
+			while (owner->parent()) owner = owner->parent();
+			if (!ignore)
+			{
+				ownerIgnoresScale = owner->flags() & Item::ItemIgnoresTransformations;
+				if (ownerIgnoresScale) owner->setFlag(Item::ItemIgnoresTransformations, false);
+			}
+			else if (modifyOwner) owner->setFlag(Item::ItemIgnoresTransformations, true);
+		}
+	}
+
+	return ownerIgnoresScale;
 }
 
 }
