@@ -155,6 +155,15 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 	auto children = childItems();
 	if (children.isEmpty()) return;
 
+	auto horizontal = style()->itemsStyle().isHorizontal();
+	// Sort the children so that they appear in the right order
+	if (horizontal)
+		qSort(children.begin(), children.end(), [](const Item* left, const Item* right)
+		{return left->pos().x() < right->pos().x();});
+	else
+		qSort(children.begin(), children.end(), [=](const Item* left, const Item* right)
+		{return left->pos().y() < right->pos().y();});
+
 	QPoint topLeft{0,0};
 	auto w = width();
 	auto h = height();
@@ -171,7 +180,7 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 		endPoint.setY(topLeft.y() + h);
 	}
 
-	auto horizontal = style()->itemsStyle().isHorizontal();
+
 	for(int i = 0; i<children.size(); ++i)
 	{
 		if (i+1 < children.size())
