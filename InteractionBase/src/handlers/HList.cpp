@@ -150,7 +150,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 					// If this was not an enter key and not a tab, then it must have been a letter.
 					// Add a keyboard event for this letter
-					if (!enter && !event->key() != Qt::Key_Tab )
+					if (!enter && event->key() != Qt::Key_Tab )
 					{
 						qApp->postEvent(target->scene(),  new QKeyEvent(QEvent::KeyPress, event->key(),
 							event->modifiers(), event->text(), event->isAutoRepeat(), event->count()));
