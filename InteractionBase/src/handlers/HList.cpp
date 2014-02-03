@@ -110,12 +110,13 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			removeNodeAndSetCursor(list, index + list->rangeBegin());
 	}
 
-	if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+	if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return || event->key() == Qt::Key_Tab)
 	{
 		bool createDown = event->modifiers() == Qt::NoModifier;
 		bool createRight = event->modifiers() == Qt::ShiftModifier;
 
 		if (list->isShowingEmptyTip()
+				|| (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab)
 				|| (createDown && !list->style()->itemsStyle().isHorizontal())
 				|| ( createRight && list->style()->itemsStyle().isHorizontal()) )
 		{
@@ -143,7 +144,8 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 					list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 					target->scene()->addPostEventAction( new SetCursorEvent(list, newElem,
-						createDown ? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
+							list->style()->itemsStyle().isHorizontal()
+							? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
 				}
 			}
 		}
