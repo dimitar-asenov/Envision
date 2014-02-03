@@ -361,9 +361,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		AutoComplete::hide();
 	}
 	else if ( ((event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape) // Regular command prompt
-				  || (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F) // Find command
-					|| (	(event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)
-						&& !event->text().isEmpty() && event->text().at(0).isLetterOrNumber())) // Initial letter prompt
+				  || (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F)) // Find command
+
 			&& !(actionPrompt_ && actionPrompt_->isVisible())
 			&& !(commandPrompt_ && (commandPrompt_ == target || commandPrompt_->isAncestorOf(target))) )
 	{
@@ -372,7 +371,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		// Only show the command prompt if this event was not received within it.
 		if (event->key() == Qt::Key_Escape) showCommandPrompt(target);
 		else if (event->modifiers() == Qt::ControlModifier) showCommandPrompt(target, "find ");
-		else showCommandPrompt(target, event->text());
+		else Q_ASSERT(false);
 	}
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
 			&& !(commandPrompt_ && commandPrompt_->isVisible()))
