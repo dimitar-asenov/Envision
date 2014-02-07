@@ -50,6 +50,7 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 		if (instr && prev)
 		{
 			prev->setText(prev->text() + instr->text() );
+			SAFE_DELETE(instructions[i]);
 			instructions.remove(i);
 
 			// The corresponding FinishOperator also needs to be removed
@@ -60,6 +61,7 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 				{
 					if (num_intermediate_ops == 0)
 					{
+						SAFE_DELETE(instructions[x]);
 						instructions.remove(x);
 						break;
 					}
@@ -74,7 +76,10 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 
 	// Build the tree
 	for (ExpressionTreeBuildInstruction* i : instructions)
+	{
 		i->perform(*this);
+		SAFE_DELETE(i);
+	}
 
 	return top_;
 }
