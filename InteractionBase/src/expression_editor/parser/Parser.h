@@ -57,17 +57,18 @@ class INTERACTIONBASE_API Parser {
 		QVector<ExpressionTreeBuildInstruction*> parse(QVector<Token> tokens, ParseResult& parseResult);
 
 		ParseResult parse(QVector<Token>::iterator token, ParseResult result, QList<ExpectedToken>& expected,
-				bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions);
+				bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions,
+								ParseResult& bestParseSoFar);
 
 		ParseResult processExpectedOperatorDelimiters(bool& processed, QList<ExpectedToken>& expected,
 				QVector<Token>::iterator& token, ParseResult& result,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
+				QVector<ExpressionTreeBuildInstruction*>& instructions, ParseResult& bestParseSoFar);
 		void processIdentifiersAndLiterals(bool& error, QList<ExpectedToken>& expected,
 				QVector<Token>::iterator& token, bool& hasLeft,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
 		void processNewOperatorDelimiters(bool& processed, bool& error, QList<ExpectedToken>& expected,
 				QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
+				QVector<ExpressionTreeBuildInstruction*>& instructions, ParseResult& bestParseSoFar);
 		void processSubExpression(bool& error, QList<ExpectedToken>& expected,
 				QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
