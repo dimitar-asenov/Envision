@@ -45,7 +45,8 @@ class OOINTERACTION_API OOOperatorDescriptorList : public Interaction::OperatorD
 		static void add(Interaction::OperatorDescriptor* descriptor);
 
 		template<class T>
-		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty);
+		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty,
+											  bool convertTrailingCommaErrorsIntoEmptyExpressions);
 };
 
 inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)

@@ -43,17 +43,85 @@ OOOperatorDescriptorList* OOOperatorDescriptorList::instance()
 }
 
 template <class T>
-void OOOperatorDescriptorList::extractCommaInto (Expression* expression, T* destination, bool ignoreEmpty)
+void OOOperatorDescriptorList::extractCommaInto (Expression* expression, T* destination, bool ignoreEmpty,
+																 bool convertTrailingCommaErrorsIntoEmptyExpressions)
 {
-	if (auto comma = DCast<CommaExpression>(expression))
+	auto expressionToExpand = expression;
+	auto expressionToCheckForError = expression;
+
+	// If this is an unfinished operator, still try to process the commas
+	if (convertTrailingCommaErrorsIntoEmptyExpressions)
+		if (auto unf = DCast<UnfinishedOperator>(expression))
+		{
+			if (unf->delimiters()->size() >= 2 && unf->delimiters()->at(1)->get() == "," && unf->operands()->size() > 0 )
+			{
+				expressionToExpand = unf->operands()->first();
+				unf->operands()->replaceChild(expressionToExpand, new EmptyExpression());
+
+				if (unf->operands()->size() > 1)
+				{
+					Q_ASSERT(unf->operands()->size() == 2);
+					expressionToCheckForError = unf->operands()->at(1);
+					unf->operands()->replaceChild(expressionToCheckForError, new EmptyExpression());
+				}
+				else expressionToCheckForError = nullptr;
+
+				SAFE_DELETE(unf);
+			}
+		}
+
+	// Collect some infor about the error
+	auto errorExpression = DCast<ErrorExpression>(expressionToCheckForError);
+	bool errorIsTrailingCommas = errorExpression;
+	int errorCommaCount = 0;
+	if (errorExpression)
+	{
+		errorIsTrailingCommas = errorIsTrailingCommas && DCast<EmptyExpression>(errorExpression->arg());
+		errorIsTrailingCommas = errorIsTrailingCommas
+				&& (errorExpression->prefix().count(',') == errorExpression->prefix().size());
+		errorIsTrailingCommas = errorIsTrailingCommas
+				&& (errorExpression->postfix().count(',') == errorExpression->postfix().size());
+
+		errorCommaCount = errorExpression->prefix().size() + errorExpression->postfix().size();
+	}
+
+	// Expand all the commas
+	if (auto comma = DCast<CommaExpression>(expressionToExpand))
 	{
 		for(auto arg : comma->allSubOperands(true)) destination->append(arg);
 		SAFE_DELETE(comma);
 	}
 	else
 	{
-		if (!ignoreEmpty || !DCast<EmptyExpression>(expression) )
-			destination->append(expression);
+		if (!ignoreEmpty || !DCast<EmptyExpression>(expressionToExpand) )
+			destination->append(expressionToExpand);
+	}
+
+	// Add any trailing commas as empty expressions
+	if (convertTrailingCommaErrorsIntoEmptyExpressions)
+	{
+		auto emptyToAdd = 0;
+		if (expressionToCheckForError == nullptr) emptyToAdd = 1;
+		else
+		{
+			if (expressionToCheckForError == expression)
+			{
+				if (errorIsTrailingCommas)
+				{
+					Q_ASSERT(destination->size() == 1);
+					destination->remove(errorExpression);
+					emptyToAdd += 1 + errorCommaCount;
+				}
+			}
+			else
+			{
+				Q_ASSERT(errorExpression);
+				if (errorIsTrailingCommas) emptyToAdd += 1 + errorCommaCount;
+				else destination->append(errorExpression);
+			}
+		}
+
+		for(int i = 0; i < emptyToAdd; ++i) destination->append( new EmptyExpression());
 	}
 }
 
@@ -162,7 +230,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		Q_ASSERT(operands.size() == 1);
 		auto fte = new FunctionTypeExpression();
 
-		extractCommaInto(operands.first(), fte->arguments(), false);
+		extractCommaInto(operands.first(), fte->arguments(), false, false);
 
 		return fte;
 	}));
@@ -171,8 +239,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		Q_ASSERT(operands.size() == 2);
 		auto fte = new FunctionTypeExpression();
 
-		extractCommaInto(operands.first(), fte->arguments(), false);
-		extractCommaInto(operands.last(), fte->results(), false);
+		extractCommaInto(operands.first(), fte->arguments(), false, false);
+		extractCommaInto(operands.last(), fte->results(), false, false);
 
 		return fte;
 	}));
@@ -213,7 +281,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new ArrayInitializer();
 
-		for(auto e: operands) extractCommaInto(e, opr->values(), false);
+		for(auto e: operands) extractCommaInto(e, opr->values(), false, false);
 
 		return opr;
 	}));
@@ -231,7 +299,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression();
 		opr->setNewType( operands.first());
-		extractCommaInto( operands.last(), opr->dimensions(), false);
+		extractCommaInto( operands.last(), opr->dimensions(), false, true);
 		return opr;
 	}));
 
@@ -239,7 +307,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression();
 		opr->setNewType( operands.first());
-		extractCommaInto( operands.at(1), opr->dimensions(), false);
+		extractCommaInto( operands.at(1), opr->dimensions(), false, true);
 		opr->setInitializer(operands.last());
 		return opr;
 	}));
@@ -279,7 +347,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		auto r = new ReferenceExpression( ref->name(), operands.first() );
 		SAFE_DELETE(ref);
 
-		extractCommaInto(operands.last(), r->typeArguments(), true);
+		extractCommaInto(operands.last(), r->typeArguments(), true, false);
 
 		return r;
 	}));
@@ -291,7 +359,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		auto opr = new MethodCallExpression();
 		opr->setCallee(operands.first());
 
-		extractCommaInto(operands.last(), opr->arguments(), true);
+		extractCommaInto(operands.last(), opr->arguments(), true, false);
 
 		return opr;
 	}));
@@ -302,7 +370,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		auto ref = dynamic_cast<ReferenceExpression*>( operands.first());
 		Q_ASSERT(ref);
 
-		extractCommaInto(operands.last(), ref->typeArguments(), true);
+		extractCommaInto(operands.last(), ref->typeArguments(), true, false);
 
 		return ref;
 	}));
