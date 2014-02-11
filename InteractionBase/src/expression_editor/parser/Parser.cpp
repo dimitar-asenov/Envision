@@ -103,6 +103,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	// Finish parsing if the end is reached
 	if (token == endTokens_)
 	{
+		Q_ASSERT( result.missingTrailingTokens <= expected.size() );
 		result.missingTrailingTokens = expected.size();
 		result.instructions = instructions;
 		if (! (bestParseSoFar < result)) bestParseSoFar = result;
