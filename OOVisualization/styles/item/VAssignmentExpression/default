@@ -11,7 +11,11 @@
 			<inSymbol prototypes="item/Symbol/default"><symbol>-←</symbol></inSymbol>
 		</e2>
 		<e3 prototypes="default.operand">
-			<inSymbol prototypes="item/Symbol/default"><symbol>*←</symbol></inSymbol>
+			<inSymbol prototypes="icon/SVGIcon/default">
+				<filename>styles/icon/assign_multiply.svg</filename>
+				<width>15</width>
+				<height>12</height>
+			</inSymbol>
 		</e3>
 		<e4 prototypes="default.operand">
 			<inSymbol prototypes="item/Symbol/default"><symbol>/←</symbol></inSymbol>
