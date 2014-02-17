@@ -1,5 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/VMethod/default">
+	<shape/>
 	<contentCF prototypes="item/VListCF/default" />
 	<layout prototypes="layout/PanelBorderLayout/default">
 		<shape prototypes="shape/Box/default">
