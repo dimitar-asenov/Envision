@@ -77,7 +77,7 @@ class VISUALIZATIONBASE_API ModelRenderer
 
 		VisualizationGroupsManager visualizationGroupsManager_;
 
-		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL};
+		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE};
 
 		Item* visualizationChoiceStrategyTypeOverSemanticZoomLevelOverPurpose(Item* parent, Model::Node* node,
 																									 int purpose, int semanticZoomLevel);
