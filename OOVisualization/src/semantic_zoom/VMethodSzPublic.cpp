@@ -78,7 +78,9 @@ void VMethodSzPublic::initializeForms()
 
 	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
-			->put(TheTopOf, shapeElement, AtCenterOf, headerElement));
+			->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
+			->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement)
+			->put(TheBottomOf, shapeElement, 10, FromBottomOf, headerElement));
 }
 
 }

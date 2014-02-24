@@ -1,10 +1,11 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Text/default">
+	<shape prototypes="default.nameShape">Box</shape>
 	<pen>
 		<color>
 			<alpha>255</alpha>
 			<red>0</red>
-			<green>0</green>
+			<green>100</green>
 			<blue>0</blue>
 		</color>
 	</pen>
