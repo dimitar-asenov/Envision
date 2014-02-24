@@ -69,7 +69,8 @@ class VISUALIZATIONBASE_API ModelRenderer
 		QString semanticZoomLevelName(int semanticZoomLevel);
 
 	private:
-		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL = 1;
+		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE = 1;
+		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL = 2;
 
 		QVector<QString > purposes_;
 		QVector<QString > semanticZoomLevels_;
@@ -78,6 +79,8 @@ class VISUALIZATIONBASE_API ModelRenderer
 
 		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL};
 
+		Item* visualizationChoiceStrategyTypeOverSemanticZoomLevelOverPurpose(Item* parent, Model::Node* node,
+																									 int purpose, int semanticZoomLevel);
 		Item* visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
 																									 int purpose, int semanticZoomLevel);
 };
