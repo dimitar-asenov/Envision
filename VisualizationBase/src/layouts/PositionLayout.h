@@ -75,6 +75,8 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		int focusedElementIndex() const;
 
 	private:
+		bool Collides(Item* item);
+
 		QVector<Item*> items;
 		QVector<Position*> positions;
 		bool allNodesLackPositionInfo{};

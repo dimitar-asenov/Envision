@@ -194,7 +194,7 @@ bool PositionLayout::isEmpty() const
 	return true;
 }
 
-void PositionLayout::updateGeometry(int, int)
+void PositionLayout::updateGeometry(int availableWidth, int availableHeight)
 {
 	// Arrange items if they were all missing positions.
 	if (allNodesLackPositionInfo && !items.isEmpty())
@@ -319,6 +319,118 @@ void PositionLayout::updateGeometry(int, int)
 		items[i]->setPos( xOffset() + style()->leftInnerMargin() + x - topLeft.x(),
 								yOffset() + style()->topInnerMargin() + y - topLeft.y());
 	}
+
+	// ---------------------------------------
+
+	QVector<QSize> availableSize(items.size());
+	QVector<bool> doneExpanding(items.size());
+	bool movedBeforeColliding = false;
+	const int EXPANDING_STEP = 10;
+
+	int expanded = items.size();
+
+	for (int i =0; i<items.size(); ++i)
+	{
+		doneExpanding[i] = Collides(items[i]) || !items[i]->sizeDependsOnParent();
+		availableSize[i] = QSize(items[i]->width(), items[i]->height());
+	}
+
+	while (expanded > 0) // while there is still something to do
+	{
+		expanded = 0;
+
+		for (int i =0; i<items.size(); ++i)
+		{
+			if (doneExpanding[i]) continue; // item does not have to be arranged further
+
+			auto item = items[i];
+
+			auto newX = item->x() - EXPANDING_STEP / 2;
+			auto newY = item->y() - EXPANDING_STEP / 2;
+			if (newX >= style()->leftInnerMargin() && newY >= style()->topInnerMargin())
+			{
+				item->setPos(newX, newY);
+				movedBeforeColliding = true;
+			}
+			else
+			{
+				movedBeforeColliding = false;
+			}
+
+			availableSize[i] = QSize(availableSize[i].width() + EXPANDING_STEP,
+											 availableSize[i].height() + EXPANDING_STEP);
+
+			auto newEndX = item->x() + availableSize[i].width();
+			auto newEndY = item->y() + availableSize[i].height();
+			if ((availableWidth == 0 || newEndX <= availableWidth) &&
+				 (availableHeight == 0 || newEndY <= availableHeight))
+			{
+				auto oldWidth = item->width();
+				auto oldHeight = item->height();
+				auto oldScale = item->scale();
+
+				item->changeGeometry(availableSize[i].width(), availableSize[i].height());
+
+				if (oldWidth == item->width() &&
+					 oldHeight == item->height() &&
+					 oldScale == item->scale())
+					doneExpanding[i] = true;
+			}
+
+			if (Collides(item))
+			{
+				doneExpanding[i] = true;
+
+				if (movedBeforeColliding)
+				{
+					item->setPos(item->x() + EXPANDING_STEP / 2, item->y() + EXPANDING_STEP / 2);
+				}
+
+				availableSize[i] = QSize(availableSize[i].width() - EXPANDING_STEP,
+												 availableSize[i].height() - EXPANDING_STEP);
+
+				item->changeGeometry(availableSize[i].width(), availableSize[i].height());
+			}
+			else
+			{
+				expanded++;
+			}
+		}
+	}
+
+	for(int i = 0; i<items.size(); ++i)
+	{
+		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
+		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
+
+		if (i==0 || topLeft.x() > x )
+			topLeft.setX( x );
+		if (i==0 || topLeft.y() > y )
+			topLeft.setY( y );
+		if (i==0 || bottomRight.x() < x + items[i]->width() * items[i]->scale()   )
+			bottomRight.setX( x + items[i]->width() * items[i]->scale());
+		if (i==0 || bottomRight.y() < y + items[i]->height() * items[i]->scale() )
+			bottomRight.setY( y + items[i]->height() * items[i]->scale());
+	}
+
+	sizeWidth = bottomRight.x() - topLeft.x() + style()->leftInnerMargin() + style()->rightInnerMargin();
+	sizeHeight = bottomRight.y() - topLeft.y() + style()->topInnerMargin() + style()->bottomInnerMargin();
+	setInnerSize(sizeWidth, sizeHeight);
+}
+
+bool PositionLayout::Collides(Item* item)
+{
+	for (int i =0; i<items.size(); ++i)
+	{
+		if (item == items[i]) continue;
+
+		if (item->collidesWithItem(items[i]))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 int PositionLayout::focusedElementIndex() const
