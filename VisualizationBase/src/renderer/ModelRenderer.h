@@ -53,10 +53,13 @@ class VISUALIZATIONBASE_API ModelRenderer
 		 * \a purpose.
 		 */
 		bool hasVisualization(int nodeTypeId, int purpose = 0, int semanticZoomLevel = 0);
+		void registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization);
 		void registerVisualization(int nodeTypeId, int purpose, int semanticZoomLevel,
 											VisualizationGroup::ItemConstructor visualization);
 		void registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization);
-		void registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization);
+		void registerVisualization(int nodeTypeId, QString purpose, QString semanticZoomLevel,
+											VisualizationGroup::ItemConstructor visualization);
+		void registerVisualization(int nodeTypeId, QString purpose, VisualizationGroup::ItemConstructor visualization);
 		void registerGroup(int nodeTypeId, int purpose, int semanticZoomLevel, VisualizationGroup* group);
 		void registerGroup(int nodeTypeId, VisualizationGroup* group);
 
@@ -96,6 +99,18 @@ inline void ModelRenderer::registerVisualization(int nodeTypeId, int purpose,
 inline void ModelRenderer::registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization)
 {
 	registerVisualization(nodeTypeId, 0, 0, visualization);
+}
+
+inline void ModelRenderer::registerVisualization(int nodeTypeId, QString purpose,
+																 VisualizationGroup::ItemConstructor visualization)
+{
+	registerVisualization(nodeTypeId, purposeId(purpose), 0, visualization);
+}
+
+inline void ModelRenderer::registerVisualization(int nodeTypeId, QString purpose, QString semanticZoomLevel,
+																 VisualizationGroup::ItemConstructor visualization)
+{
+	registerVisualization(nodeTypeId, purposeId(purpose), semanticZoomLevelId(semanticZoomLevel), visualization);
 }
 
 inline void ModelRenderer::registerGroup(int nodeTypeId, VisualizationGroup* group)
