@@ -49,6 +49,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	DECLARE_TYPE_ID
 
 	public:
+		qreal getTotalScale() { return parent() ? parent()->getTotalScale() * scale() : scale(); }
+
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
 		const static int LAYER_NAME_OVERLAY_Z = 10;
