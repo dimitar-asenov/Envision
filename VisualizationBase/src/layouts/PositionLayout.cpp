@@ -324,14 +324,18 @@ void PositionLayout::updateGeometry(int availableWidth, int availableHeight)
 
 	QVector<QSize> availableSize(items.size());
 	QVector<bool> doneExpanding(items.size());
+
 	bool movedBeforeColliding = false;
+
 	const int EXPANDING_STEP = 10;
 
 	int expanded = items.size();
 
+
 	for (int i =0; i<items.size(); ++i)
 	{
 		doneExpanding[i] = Collides(items[i]) || !items[i]->sizeDependsOnParent();
+
 		availableSize[i] = QSize(items[i]->width(), items[i]->height());
 	}
 
@@ -347,21 +351,21 @@ void PositionLayout::updateGeometry(int availableWidth, int availableHeight)
 
 			auto newX = item->x() - EXPANDING_STEP / 2;
 			auto newY = item->y() - EXPANDING_STEP / 2;
+
 			if (newX >= style()->leftInnerMargin() && newY >= style()->topInnerMargin())
 			{
 				item->setPos(newX, newY);
+
 				movedBeforeColliding = true;
 			}
-			else
-			{
-				movedBeforeColliding = false;
-			}
+			else movedBeforeColliding = false;
 
 			availableSize[i] = QSize(availableSize[i].width() + EXPANDING_STEP,
 											 availableSize[i].height() + EXPANDING_STEP);
 
 			auto newEndX = item->x() + availableSize[i].width();
 			auto newEndY = item->y() + availableSize[i].height();
+
 			if ((availableWidth == 0 || newEndX <= availableWidth) &&
 				 (availableHeight == 0 || newEndY <= availableHeight))
 			{
@@ -381,20 +385,14 @@ void PositionLayout::updateGeometry(int availableWidth, int availableHeight)
 			{
 				doneExpanding[i] = true;
 
-				if (movedBeforeColliding)
-				{
-					item->setPos(item->x() + EXPANDING_STEP / 2, item->y() + EXPANDING_STEP / 2);
-				}
+				if (movedBeforeColliding) item->setPos(item->x() + EXPANDING_STEP / 2, item->y() + EXPANDING_STEP / 2);
 
 				availableSize[i] = QSize(availableSize[i].width() - EXPANDING_STEP,
 												 availableSize[i].height() - EXPANDING_STEP);
 
 				item->changeGeometry(availableSize[i].width(), availableSize[i].height());
 			}
-			else
-			{
-				expanded++;
-			}
+			else expanded++;
 		}
 	}
 

@@ -62,9 +62,7 @@ bool VClassSzPublic::sizeDependsOnParent() const
 void VClassSzPublic::updateGeometry(int availableWidth, int availableHeight)
 {
 	if (width() == 0 && height() == 0)
-	{
 		Super::updateGeometry(availableWidth, availableHeight);
-	}
 	else
 	{
 		qreal geometricZoomScale = 1;
@@ -72,13 +70,8 @@ void VClassSzPublic::updateGeometry(int availableWidth, int availableHeight)
 		for (auto v : scene()->views())
 		{
 			auto mv = dynamic_cast<MainView*>(v);
-			if (mv)
-			{
-				if (mv->scaleFactor() != 1.0)
-				{
-					geometricZoomScale = mv->scaleFactor();
-				}
-			}
+
+			if (mv && mv->scaleFactor() != 1.0)	geometricZoomScale = mv->scaleFactor();
 		}
 
 		qreal pScale = getTotalScale() / scale();
