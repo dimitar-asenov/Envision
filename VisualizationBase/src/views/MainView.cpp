@@ -30,6 +30,8 @@
 #include "cursor/Cursor.h"
 #include "items/Item.h"
 
+#include <items/RootItem.h>
+
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :
