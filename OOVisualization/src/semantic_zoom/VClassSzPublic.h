@@ -62,8 +62,11 @@ class OOVISUALIZATION_API VClassSzPublic
 		static void initializeForms();
 		int determineForm() override;
 
+		bool sizeDependsOnParent() const;
+
 	protected:
 		void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Static* icon_{};
