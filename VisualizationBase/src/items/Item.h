@@ -49,8 +49,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	DECLARE_TYPE_ID
 
 	public:
-		qreal getTotalScale() { return parent() ? parent()->getTotalScale() * scale() : scale(); }
-
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
 		const static int LAYER_NAME_OVERLAY_Z = 10;
@@ -102,6 +100,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		qreal totalScale() const;
 
 		virtual bool sizeDependsOnParent() const;
+
+		qreal getTotalScale() { return parent() ? parent()->getTotalScale() * scale() : scale(); }
 
 		enum UpdateType {
 			NoUpdate, /**< The item should not be updated. */
