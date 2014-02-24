@@ -48,20 +48,25 @@ ITEM_COMMON_DEFINITIONS(VClassSzPublic, "item")
 VClassSzPublic::VClassSzPublic(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
 	setDefaultMoveCursorProxy(name_);
+
+	body_ = new PositionLayout(this, &style->body());
 }
 
 void VClassSzPublic::determineChildren()
 {
 	// manually update the body item
-	bodyItems_ = node()->classes()->nodes().toList();
+	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
+	QList<Model::Node*> bodyItems = node()->classes()->nodes().toList();
 
 	// only keep methods which are public
 	for (auto i = node()->methods()->begin(); i != node()->methods()->end(); ++i)
 	{
 		auto method = *i;
 
-		if (method->modifiers()->isSet(Modifier::Public)) bodyItems_.append(method);
+		if (method->modifiers()->isSet(Modifier::Public)) bodyItems.append(method);
 	}
+
+	body_->synchronizeWithNodes( bodyItems, renderer());;
 
 	// call determineChildren of super class
 	Super::determineChildren();
@@ -122,6 +127,7 @@ void VClassSzPublic::initializeForms()
 						[](I* v){return &v->style()->declarations();}))
 				->put(1, 4, (new SequentialLayoutFormElement())->setVertical()->setSpaceBetweenElements(10)
 						->setListOfNodes([](Item* i){return (static_cast<VClassSzPublic*>(i))->bodyItems_;}));
+				->put(1, 4, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));;
 
 	auto fieldContainerElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)

@@ -34,6 +34,8 @@
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
+#include <VisualizationBase/src/layouts/PositionLayout.h>
+
 namespace Visualization {
 	class VText;
 	class VList;
@@ -73,7 +75,7 @@ class OOVISUALIZATION_API VClassSzPublic
 		Visualization::Static* friendsSymbol_{};
 		Visualization::VList* friends_{};
 		Visualization::VList* declarations_{};
-		QList<Model::Node*> bodyItems_{};
+		Visualization::PositionLayout* body_{};
 		Visualization::NodeWrapper* fieldBackground_{};
 		QList<Model::Node*> publicFields_{};
 };
