@@ -37,6 +37,7 @@
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/icons/Icon.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
 #include "ModelBase/src/model/Model.h"
@@ -380,6 +381,26 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		// Only show the action prompt if none of the other "menu items" are visible
 		showActionPrompt(target, true);
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete
+			&& DCast<Visualization::Icon>(target))
+	{
+		event->accept();
+
+		auto p = target;
+		while(!p->node() && p->parent()) p = p->parent();
+
+		if (auto node = p->node())
+		{
+			// Check if the parent of the node is a list and if so, delete this node
+			if (auto list = DCast<Model::List>(node->parent()))
+			{
+				list->beginModification("removeChild");
+				list->remove(node);
+				list->endModification();
+				p->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			}
+		}
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
