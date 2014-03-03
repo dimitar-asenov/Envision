@@ -51,12 +51,8 @@ class InteractionBase : public QObject, public Core::EnvisionPlugin
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 
-		static Logger::Log* log();
-
-	private:
-		static Logger::Log* logger;
+		static Logger::Log& log();
 };
-
 
 INTERACTIONBASE_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 

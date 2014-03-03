@@ -134,7 +134,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	{
 		lastCommandResult_ = QSharedPointer<CommandResult>(
 				new CommandResult(new CommandError("Unknown command '" + command + "' ")));
-		InteractionBase::log()->add(Logger::Log::LOGWARNING, "Unknown command: " + command);
+		log.warning("Unknown command: " + command);
 	}
 }
 

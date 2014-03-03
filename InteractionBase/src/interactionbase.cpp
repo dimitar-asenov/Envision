@@ -74,7 +74,13 @@ Q_EXPORT_PLUGIN2( interactionbase, Interaction::InteractionBase )
 
 namespace Interaction {
 
-Log* InteractionBase::logger = nullptr;
+Logger::Log& log = InteractionBase::log();
+
+Log& InteractionBase::log()
+{
+	static auto l = Logger::Log::getLogger("interactionbase");
+	return *l;
+}
 
 Core::InitializationRegistry& itemTypeInitializationRegistry()
 {
@@ -84,7 +90,6 @@ Core::InitializationRegistry& itemTypeInitializationRegistry()
 
 bool InteractionBase::initialize(Core::EnvisionManager& envisionManager)
 {
-	logger = Logger::Log::getLogger("interactionbase");
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
 	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());
 	Visualization::SceneHandlerItem::setDefaultClassHandler(HSceneHandlerItem::instance());
@@ -115,11 +120,6 @@ void InteractionBase::selfTest(QString testid)
 
 	if (testid.isEmpty()) SelfTest::TestManager<InteractionBase>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<InteractionBase>::runTest(testid).printResultStatistics();
-}
-
-Log* InteractionBase::log()
-{
-	return logger;
 }
 
 }

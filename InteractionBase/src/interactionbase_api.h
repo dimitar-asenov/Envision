@@ -27,10 +27,12 @@
 #pragma once
 
 #include "precompiled.h"
+#include "Logger/src/Log.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(INTERACTIONBASE_LIBRARY)
 	#define INTERACTIONBASE_API Q_DECL_EXPORT
+	namespace Interaction { extern Logger::Log& log; }
 #else
 	#define INTERACTIONBASE_API Q_DECL_IMPORT
 #endif
