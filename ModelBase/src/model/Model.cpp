@@ -32,6 +32,8 @@
 #include "../nodes/Reference.h"
 #include "../nodes/UsedLibrary.h"
 
+#include "Core/src/Profiler.h"
+
 namespace Model {
 
 Model::Model(Node* root)
@@ -209,11 +211,15 @@ void Model::load(PersistentStore* store, const QString& name, bool loadPartially
 	name_ = name;
 	store_ = store;
 
+	Core::Profiler::startOnce(name == "java", "Loading the Java library", "load.prof");
 	auto root = store->loadModel(this, name, loadPartially);
 	for(auto lib : root->usedLibraries())
 		lib->loadLibraryModel(store->clone());
+	Core::Profiler::stop("Loading the Java library");
 
+	Core::Profiler::startOnce(name == "java", "Resolving references", "resolve.prof");
 	setRoot(root);
+	Core::Profiler::stop("Resolving references");
 }
 
 void Model::setRoot(Node* node)

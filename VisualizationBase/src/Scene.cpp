@@ -39,6 +39,7 @@
 #include "ModelBase/src/model/Model.h"
 
 #include "Logger/src/Timer.h"
+#include "Core/src/Profiler.h"
 
 namespace Visualization {
 
@@ -110,9 +111,22 @@ void Scene::updateItems()
 	inAnUpdate_ = true;
 	auto updateTimer = Logger::Timer::start("Scene update");
 
+	// Profiler code
+	static bool alreadyProfiled = false;
+	if (!alreadyProfiled)
+		for (auto item : topLevelItems_)
+			if(item->typeName() == "RootItem")
+			{
+				alreadyProfiled = true;
+				Core::Profiler::startOnce(true, "Initial item update", "updateItems.prof");
+				break;
+			}
+
 	// Update Top level items
-	for (int i = 0; i<topLevelItems_.size(); ++i)
-		topLevelItems_.at(i)->updateSubtree();
+	for (auto item : topLevelItems_)
+		item->updateSubtree();
+
+	Core::Profiler::stop("Initial item update");
 
 	// Update Selections
 	auto selected = selectedItems();
