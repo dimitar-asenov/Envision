@@ -367,7 +367,7 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 	nodeConstructorRegister.insert(type, constructor);
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
 
-	ModelBase::log()->add(Log::LOGINFO, "Registered new node type " + type);
+	log.info("Registered new node type " + type);
 
 	++numRegisteredTypes_;
 	return numRegisteredTypes_; // Id 0 is reserved for Node
@@ -382,7 +382,7 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type '"
+		log.error("Could not create new node. Requested node type '"
 				+ type +"' has not been registered.");
 		return nullptr;
 	}
@@ -397,7 +397,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &st
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type '"
+		log.error("Could not create new node from persistence. Requested node type '"
 				+ type + "' has not been registered.");
 		return nullptr;
 	}

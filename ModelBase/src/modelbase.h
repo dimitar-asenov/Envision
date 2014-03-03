@@ -29,8 +29,6 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "modelbase_api.h"
 
-#include "Logger/src/Log.h"
-
 namespace Model {
 
 class ModelBase : public QObject, public Core::EnvisionPlugin
@@ -43,10 +41,7 @@ class ModelBase : public QObject, public Core::EnvisionPlugin
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 
-		static Logger::Log* log();
-
-	private:
-		static Logger::Log* logger;
+		static Logger::Log& log();
 };
 
 MODELBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();

@@ -27,10 +27,12 @@
 #pragma once
 
 #include "precompiled.h"
+#include "Logger/src/Log.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(MODELBASE_LIBRARY)
 	#define MODELBASE_API Q_DECL_EXPORT
+	namespace Model { extern Logger::Log& log; }
 #else
 	#define MODELBASE_API Q_DECL_IMPORT
 #endif
