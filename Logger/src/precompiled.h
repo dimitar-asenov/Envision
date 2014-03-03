@@ -37,8 +37,6 @@
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
-#include <QtCore/QElapsedTimer>
-
 
 #if defined(LOGGER_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of

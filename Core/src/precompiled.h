@@ -59,6 +59,7 @@
 #ifdef Q_OS_LINUX
 	#include <google/profiler.h>
 #endif
+#include <QtCore/QElapsedTimer>
 
 #if defined(CORE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
