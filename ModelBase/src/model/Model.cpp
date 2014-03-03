@@ -266,10 +266,19 @@ void Model::tryResolvingReferences()
 {
 	auto modificationTarget = currentModificationTarget;
 
+	log.debug("Total unresolved references: " + QString::number(unresolvedReferences().size()));
+
+	int i = 0;
 	auto unresolved = unresolvedReferences_;
 	for (auto r : unresolved)
+	{
 		if (!r->isResolved()) r->resolve();
+		if (++i % 1000 == 0)
+			log.debug("Processed: " + QString::number(i) + ". Still unresolved: " +
+						 QString::number(unresolvedReferences().size()));
+	}
 
+	log.debug("Total unresolved at end: " + QString::number(unresolvedReferences().size()));
 	changeModificationTarget(modificationTarget);
 }
 
