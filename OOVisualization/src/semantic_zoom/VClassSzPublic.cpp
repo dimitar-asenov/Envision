@@ -54,45 +54,6 @@ VClassSzPublic::VClassSzPublic(Item* parent, NodeType* node, const StyleType* st
 	body_ = new PositionLayout(this, &style->body());
 }
 
-bool VClassSzPublic::sizeDependsOnParent() const
-{
-	return true;
-}
-
-void VClassSzPublic::updateGeometry(int availableWidth, int availableHeight)
-{
-	if (width() == 0 && height() == 0)
-		Super::updateGeometry(availableWidth, availableHeight);
-	else
-	{
-		qreal geometricZoomScale = 1;
-
-		for (auto v : scene()->views())
-		{
-			auto mv = dynamic_cast<MainView*>(v);
-
-			if (mv && mv->scaleFactor() != 1.0)	geometricZoomScale = mv->scaleFactor();
-		}
-
-		qreal pScale = getTotalScale() / scale();
-
-		qreal scaleX = availableWidth > 0 ? ((qreal)availableWidth / width()) : 1;
-		qreal scaleY = availableHeight > 0 ? ((qreal)availableHeight / height()) : 1;
-
-		qreal scale = scaleX < scaleY ? scaleX : scaleY;
-
-		qreal totalScale = geometricZoomScale * scale * pScale;
-
-		qreal maxScale = geometricZoomScale < 1 ? 1 : geometricZoomScale;
-
-		if (totalScale > maxScale) scale = maxScale / geometricZoomScale / pScale;
-
-		setScale(scale);
-
-		Super::updateGeometry(availableWidth, availableHeight);
-	}
-}
-
 void VClassSzPublic::determineChildren()
 {
 	// manually update the body item

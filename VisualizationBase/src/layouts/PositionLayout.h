@@ -75,7 +75,8 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		int focusedElementIndex() const;
 
 	private:
-		bool Collides(Item* item);
+		bool scaleItem(Item* item, QRect* area, qreal geometricZoomScale);
+		bool areaCollides(QRect* area, QVector<QRect>& areas);
 
 		QVector<Item*> items;
 		QVector<Position*> positions;
