@@ -34,8 +34,8 @@ namespace Visualization {
 
 ModelRenderer::ModelRenderer()
 {
-	registerVisualizationPurpose("Default");
-	registerSemanticZoomLevel("Default");
+	registerVisualizationPurpose("default_purpose");
+	registerSemanticZoomLevel("default_zoom_level");
 }
 
 ModelRenderer::~ModelRenderer()
