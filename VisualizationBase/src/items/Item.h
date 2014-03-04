@@ -295,6 +295,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual QList<Item*> childItems() const;
 
+		/**
+		 * Returns the scaling factor applied by the main view associated of this item's scene
+		 */
+		qreal mainViewScalingFactor() const;
+
 	protected:
 
 		void setWidth(int width);

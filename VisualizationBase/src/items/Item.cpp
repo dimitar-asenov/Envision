@@ -32,6 +32,7 @@
 #include "../VisualizationException.h"
 #include "../Scene.h"
 #include "../renderer/ModelRenderer.h"
+#include "../views/MainView.h"
 #include "VisualizationAddOn.h"
 
 #include "../cursor/Cursor.h"
@@ -750,6 +751,16 @@ QList<Item*> Item::childItems() const
 	auto && children = QGraphicsItem::childItems();
 	auto && ch = reinterpret_cast<QList<Item*>*>(&children);
 	return *ch;
+}
+
+qreal Item::mainViewScalingFactor() const
+{
+	if (auto s = scene())
+		for (auto v : s->views())
+			if (auto mv = dynamic_cast<MainView*>(v))
+				return mv->scaleFactor();
+
+	return 1;
 }
 
 /***********************************************************************************************************************
