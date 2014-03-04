@@ -36,24 +36,40 @@ AutoCompleteVis* AutoComplete::vis_ = nullptr;
 bool AutoComplete::hideRequested_ = false;
 
 
-void AutoComplete::show(const QList<AutoCompleteEntry*>& entries, bool explicitSelection )
+void AutoComplete::show(const QList<AutoCompleteEntry*> entries, bool explicitSelection )
 {
 	hideRequested_ = false;
-	if (vis_ && vis_->scene() == Visualization::VisualizationManager::instance().mainScene())
-	{
-		vis_->setExplicitSelection(explicitSelection);
-		vis_->setEntries(entries);
-	}
-	else
-	{
-		if (vis_) hide();
-		vis_ = new AutoCompleteVis(entries);
-		vis_->setExplicitSelection(explicitSelection);
-		Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem(vis_);
-	}
+	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
+		new Visualization::CustomSceneEvent( [=](){ showNow(entries, explicitSelection);	} ) );
 }
 
 void AutoComplete::hide()
+{
+	hideRequested_ = true;
+	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
+			new Visualization::CustomSceneEvent( [&](){ if (hideRequested_) hideNow();	} ) );
+}
+
+void AutoComplete::showNow(const QList<AutoCompleteEntry*>& entries, bool explicitSelection)
+{
+	if (!hideRequested_)
+	{
+		if (vis_ && vis_->scene() == Visualization::VisualizationManager::instance().mainScene())
+		{
+			vis_->setExplicitSelection(explicitSelection);
+			vis_->setEntries(entries);
+		}
+		else
+		{
+			if (vis_) hideNow();
+			vis_ = new AutoCompleteVis(entries);
+			vis_->setExplicitSelection(explicitSelection);
+			Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem(vis_);
+		}
+	}
+}
+
+void AutoComplete::hideNow()
 {
 	hideRequested_ = false;
 	if (vis_) Visualization::VisualizationManager::instance().mainScene()->removeTopLevelItem(vis_);
@@ -68,13 +84,6 @@ bool AutoComplete::isVisible()
 AutoCompleteVis* AutoComplete::visualization()
 {
 	return vis_;
-}
-
-void AutoComplete::delayedHide()
-{
-	hideRequested_ = true;
-	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-			new Visualization::CustomSceneEvent( [&](){ if (hideRequested_) hide();	} ) );
 }
 
 } /* namespace Interaction */

@@ -85,6 +85,7 @@ ModelRenderer* Scene::defaultRenderer()
 
 void Scene::addTopLevelItem(Item* item)
 {
+	Q_ASSERT(!inAnUpdate_);
 	topLevelItems_.append(item);
 	addItem(item);
 	scheduleUpdate();
@@ -92,7 +93,9 @@ void Scene::addTopLevelItem(Item* item)
 
 void Scene::removeTopLevelItem(Item* item)
 {
-	topLevelItems_.removeAll(item);
+	auto removed = topLevelItems_.removeAll(item);
+	Q_ASSERT(!inAnUpdate_ || removed == 0);
+
 	removeItem(item);
 	scheduleUpdate();
 }
