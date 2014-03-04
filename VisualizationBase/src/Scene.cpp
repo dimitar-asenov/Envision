@@ -130,6 +130,14 @@ void Scene::updateItems()
 	for (auto item : topLevelItems_)
 		item->updateSubtree();
 
+	// Update items on zoom
+	if (mainViewScalingFactorChanged_)
+	{
+		mainViewScalingFactorChanged_ = false;
+		for (auto item : itemsToUpdateGeometryWhenZoomChanges_)
+				item->changeGeometry();
+	}
+
 	Core::Profiler::stop("Initial item update");
 
 	// Update Selections
@@ -405,6 +413,24 @@ void Scene::computeSceneRect()
 	setSceneRect(sceneRect);
 	for(auto v: views()) v->setSceneRect(viewRect);
 }
+
+void Scene::setUpdateItemGeometryWhenZoomChanges(Item* item, bool update = true)
+{
+	Q_ASSERT(item);
+	if (update) itemsToUpdateGeometryWhenZoomChanges_.insert(item);
+	else itemsToUpdateGeometryWhenZoomChanges_.remove(item);
+}
+
+void Scene::setMainViewScalingFactor(qreal factor)
+{
+	if (factor != mainViewScalingFactor_)
+	{
+		mainViewScalingFactor_ = factor;
+		mainViewScalingFactorChanged_ = true;
+		scheduleUpdate();
+	}
+}
+
 
 // Reimplemented in order to detect mouse clicks
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)

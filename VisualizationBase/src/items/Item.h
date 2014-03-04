@@ -300,6 +300,13 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		qreal mainViewScalingFactor() const;
 
+		/**
+		 * This method returns true if the item's geometry should be updated when the main view's zoom level changes.
+		 *
+		 * It is assumed that this method will always return the same value for the entire lifetime of a single item.
+		 */
+		virtual bool itemGeometryChangesWithZoom() const;
+
 	protected:
 
 		void setWidth(int width);

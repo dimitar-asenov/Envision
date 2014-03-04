@@ -113,6 +113,8 @@ void MainView::wheelEvent(QWheelEvent *event)
 		setTransform(QTransform::fromScale(factor, factor));
 
 		if ( miniMap ) miniMap->visibleRectChanged();
+
+		scene()->setMainViewScalingFactor(factor);
 	}
 	// Scroll
 	else if (event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)

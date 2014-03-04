@@ -107,6 +107,12 @@ Item::Item(Item* parent, const StyleType* style) :
 
 Item::~Item()
 {
+	// Mark this item as not needing updates
+	if (auto s = scene())
+		if (itemGeometryChangesWithZoom())	// We assume this always returns the same value for the entire lifetime of
+														// this object. If this is not true, simply drop this condition.
+			s->setUpdateItemGeometryWhenZoomChanges(this, false);
+
 	SAFE_DELETE(shape_);
 }
 
@@ -216,6 +222,14 @@ void Item::updateSubtree()
 			if (hasNode()) setRevision( node()->revision() );
 		}
 	}
+
+	if (itemGeometryChangesWithZoom())
+		scene()->setUpdateItemGeometryWhenZoomChanges(this, true);
+}
+
+bool Item::itemGeometryChangesWithZoom() const
+{
+	return false;
 }
 
 void Item::changeGeometry(int availableWidth, int availableHeight)
@@ -350,6 +364,11 @@ void Item::removeFromScene()
 		auto mc = scene()->mainCursor();
 		if (mc && (mc->owner() == this || isAncestorOf(mc->owner())))
 			scene()->setMainCursor(nullptr);
+
+		// Mark this item as not needing updates
+		if (itemGeometryChangesWithZoom())	// We assume this always returns the same value for the entire lifetime of
+														// this object. If this is not true, simply drop this condition.
+			scene()->setUpdateItemGeometryWhenZoomChanges(this, false);
 
 		if (parent()) scene()->removeItem(this);
 		else scene()->removeTopLevelItem(this);
@@ -755,12 +774,8 @@ QList<Item*> Item::childItems() const
 
 qreal Item::mainViewScalingFactor() const
 {
-	if (auto s = scene())
-		for (auto v : s->views())
-			if (auto mv = dynamic_cast<MainView*>(v))
-				return mv->scaleFactor();
-
-	return 1;
+	if (auto s = scene()) return s->mainViewScalingFactor();
+	else return 1;
 }
 
 /***********************************************************************************************************************

@@ -121,6 +121,14 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		View* currentPaintView() const;
 
+		void setUpdateItemGeometryWhenZoomChanges(Item* item, bool update);
+
+		/**
+		 * Returns the scaling factor applied by the main view associated of this item's scene
+		 */
+		qreal mainViewScalingFactor() const;
+		void setMainViewScalingFactor(qreal factor);
+
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
 
@@ -151,6 +159,9 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool inEventHandler_{};
 		bool inAnUpdate_{};
 
+		qreal mainViewScalingFactor_{1.0};
+		bool mainViewScalingFactorChanged_{false};
+
 		ItemCategories hiddenItemCategories_;
 
 		bool isCurrentMousePressAClick_{};
@@ -158,6 +169,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		const int MAX_MILLISECONDS_FOR_A_CLICK = 500;
 
 		QList<RefreshActionFunction> refreshActionFunctions_;
+
+		QSet<Item*> itemsToUpdateGeometryWhenZoomChanges_;
 
 		View* currentPaintView_{};
 		friend class View;
@@ -180,6 +193,8 @@ inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refresh
 
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }
 inline View* Scene::currentPaintView() const { return currentPaintView_; }
+
+inline qreal Scene::mainViewScalingFactor() const { return mainViewScalingFactor_; }
 
 
 }
