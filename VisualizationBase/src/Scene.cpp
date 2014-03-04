@@ -67,10 +67,11 @@ Scene::~Scene()
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
-	for (Item* i : topLevelItems_) SAFE_DELETE_ITEM(i);
-	topLevelItems_.clear();
-	for (SelectedItem* si : selections_) SAFE_DELETE_ITEM(si);
-	selections_.clear();
+	while(!topLevelItems_.isEmpty())
+		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
+	while(!selections_.isEmpty())
+		SAFE_DELETE_ITEM(selections_.takeLast());
+
 	SAFE_DELETE_ITEM(nameOverlay_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
