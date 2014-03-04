@@ -324,15 +324,7 @@ void PositionLayout::updateGeometry(int, int)
 
 	// ---------------------------------------
 
-	qreal geometricZoomScale = 1;
-
-	// retrieves the current geometric zoom level
-	for (auto v : scene()->views())
-	{
-		auto mv = dynamic_cast<MainView*>(v);
-
-		if (mv && mv->scaleFactor() != 1.0)	geometricZoomScale = mv->scaleFactor();
-	}
+	qreal geometricZoomScale = mainViewScalingFactor();
 
 	QVector<QRect> areas(items.size()); // stores the computed areas for each item
 	QVector<bool> doneExpanding(items.size()); // stores a flag whether the algorithm should still try to expand an item
