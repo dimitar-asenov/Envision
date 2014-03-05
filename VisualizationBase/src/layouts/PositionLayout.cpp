@@ -341,7 +341,7 @@ void PositionLayout::updateGeometry(int, int)
 		areas[i] = QRect(items[i]->x(), items[i]->y(), items[i]->width(), items[i]->height());
 	}
 
-	while (expanded > 1) // while there is still something to do
+	while (expanded > 0) // while there is still something to do
 	{
 		expanded = 0; // reset the number of expanded items in this iteration step
 
@@ -507,6 +507,11 @@ int PositionLayout::focusedElementIndex() const
 		if ( items[i]->itemOrChildHasFocus()) return i;
 
 	return -1;
+}
+
+bool PositionLayout::itemGeometryChangesWithZoom() const
+{
+	return true;
 }
 
 }
