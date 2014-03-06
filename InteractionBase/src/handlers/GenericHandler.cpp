@@ -479,7 +479,7 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 				} break;
 				case Qt::Key_Down:
 				{
-					int border = current->scenePos().y() + current->height()-1;
+					int border = current->scenePos().y() + current->heightInScene()-1;
 					reference = QPoint(cursorOriginMidPoint_.x(), border);
 				} break;
 				case Qt::Key_Left:
@@ -489,7 +489,7 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 				} break;
 				case Qt::Key_Right:
 				{
-					int border = current->scenePos().x() + current->width()-1;
+					int border = current->scenePos().x() + current->widthInScene()-1;
 					reference = QPoint(border, cursorOriginMidPoint_.y());
 				} break;
 			}

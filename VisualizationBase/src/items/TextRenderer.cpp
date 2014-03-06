@@ -156,7 +156,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(style()->selectionBackground());
 		painter->drawRect(textXOffset_ + selectionCursor->xBegin(), 0,
-				selectionCursor->xEnd() - selectionCursor->xBegin(), this->height());
+				selectionCursor->xEnd() - selectionCursor->xBegin(), this->heightInLocal());
 		painter->setBrush(Qt::NoBrush);
 
 		// Draw selected text

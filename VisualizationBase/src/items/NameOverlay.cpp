@@ -110,8 +110,8 @@ void NameOverlay::determineChildren()
 
 			const double OVERLAY_MIN_WIDTH = 200;
 			const double OVERLAY_MIN_HEIGHT = 200;
-				if (item->boundingRect().width() < OVERLAY_MIN_WIDTH
-						|| item->boundingRect().height() < OVERLAY_MIN_HEIGHT)
+				if (item->widthInParent() < OVERLAY_MIN_WIDTH
+						|| item->heightInParent() < OVERLAY_MIN_HEIGHT)
 					continue;
 
 			auto definesSymbol = item->node() && item->node()->definesSymbol();
@@ -173,7 +173,7 @@ void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 			auto item = node->item;
 			if (!item) continue;
 
-			auto rect = item->mapToScene(item->boundingRect()).boundingRect().toRect();
+			auto rect = item->sceneBoundingRect().toRect();
 
 			// Only render texts that are inside the view
 			auto inView = true;

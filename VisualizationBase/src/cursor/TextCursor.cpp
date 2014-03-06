@@ -52,7 +52,8 @@ void TextCursor::update(const QFontMetrics& qfm)
 	int xend = qfm.width(owner()->text().left(selectionLastIndex()));
 	setX(xstart, xend);
 
-	QSize cursorSize = QSize(2, owner()->height() - 2);
+	//TODO: Transform the cursor appropriately if the item is transformed
+	QSize cursorSize = QSize(2, owner()->heightInScene() - 2);
 	setVisualizationSize(cursorSize);
 	setRegion(QRect(position(), cursorSize));
 }

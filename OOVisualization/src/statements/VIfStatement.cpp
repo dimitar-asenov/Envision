@@ -44,8 +44,8 @@ VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style)
 void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 {
 	int contentWidth = 0;
-	if (thenBranch_) contentWidth += thenBranch_->width();
-	if (elseBranch_) contentWidth += elseBranch_->width();
+	if (thenBranch_) contentWidth += thenBranch_->widthInParent();
+	if (elseBranch_) contentWidth += elseBranch_->widthInParent();
 	if( horizontal_ != (contentWidth <= style()->contentWidthSwitchTreshold()))
 	{
 		horizontal_ = !horizontal_;

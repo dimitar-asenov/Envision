@@ -261,8 +261,8 @@ bool Scene::event(QEvent *event)
 			tInputEvent = Logger::Timer::start("Input event");
 
 		// Always move the scene handler item to the location of the last mouse click.
-		// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
-		// be selected.
+		// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler
+		// item will be selected.
 		if (event->type() == QEvent::GraphicsSceneMousePress)
 		{
 			auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
@@ -299,7 +299,7 @@ bool Scene::event(QEvent *event)
 				{
 					mainCursorsJustSet_ = false;
 					auto vis = mainCursor_->visualization();
-					view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+					view->ensureVisible( vis->sceneBoundingRect(), 5, 5);
 				}
 		}
 	}
@@ -364,7 +364,7 @@ void Scene::computeSceneRect()
 	QRectF viewRect;
 	for (auto i: topLevelItems_)
 	{
-		QRectF br = i->boundingRect().translated(i->pos());
+		QRectF br = i->sceneBoundingRect();
 		sceneRect = sceneRect.united(br);
 		if (i->itemCategory() != MenuItemCategory && i->itemCategory() != CursorItemCategory)
 			viewRect = viewRect.united(br);

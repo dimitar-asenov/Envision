@@ -234,7 +234,7 @@ bool Item::itemGeometryChangesWithZoom() const
 
 void Item::changeGeometry(int availableWidth, int availableHeight)
 {
-	updateGeometry(availableWidth, availableHeight);
+	updateGeometry(fromParent(availableWidth), fromParent(availableHeight));
 	update();
 }
 
@@ -285,11 +285,11 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 			if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
 				content->changeGeometry(inner.width(), inner.height());
 
-			if (content->width() > inner.width() ) inner.setWidth( content->width() );
-			if (content->height() > inner.height() ) inner.setHeight( content->height() );
+			if (content->widthInParent() > inner.width() ) inner.setWidth( content->widthInParent() );
+			if (content->heightInParent() > inner.height() ) inner.setHeight( content->heightInParent() );
 			getShape()->setInnerSize(inner.width(), inner.height());
 		}
-		else getShape()->setInnerSize(content->width(), content->height());
+		else getShape()->setInnerSize(content->widthInParent(), content->heightInParent());
 
 		content->setPos(getShape()->contentLeft(), getShape()->contentTop());
 	}
@@ -298,7 +298,7 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 		if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
 			content->changeGeometry(availableWidth, availableHeight);
 		content->setPos(0,0);
-		setSize(content->size());
+		setSize(content->sizeInParent());
 	}
 }
 
@@ -403,22 +403,25 @@ int Item::distanceTo(const QPoint& p) const
 	{
 		// Above
 		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
-		else if (p.x() > width()) return  std::sqrt(p.y()*p.y() + (p.x()-width())*(p.x()-width())); // To the right
+		else if (p.x() > widthInLocal())
+			return  std::sqrt(p.y()*p.y() + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
 		else return -p.y(); // Directly above
 	}
-	else if (p.y() > height())
+	else if (p.y() > heightInLocal())
 	{
 		// Below
-		if (p.x() < 0) return std::sqrt((p.y()-height())*(p.y()-height()) + p.x()*p.x()); // To the left
-		else if (p.x() > width())
-			return std::sqrt((p.y()-height())*(p.y()-height()) + (p.x()-width())*(p.x()-width())); // To the right
-		else return p.y()-height(); // Directly below
+		if (p.x() < 0)
+			return std::sqrt((p.y()-heightInLocal())*(p.y()-heightInLocal()) + p.x()*p.x()); // To the left
+		else if (p.x() > widthInLocal())
+			return std::sqrt((p.y()-heightInLocal())*(p.y()-heightInLocal())
+								  + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
+		else return p.y()-heightInLocal(); // Directly below
 	}
 	else
 	{
 		// Within the same height
 		if (p.x() < 0) return -p.x(); // To the left
-		else if (p.x() > width()) return  p.x()-width(); // To the right
+		else if (p.x() > widthInLocal()) return  p.x()-widthInLocal(); // To the right
 		else return 0; // Inside
 	}
 }
@@ -450,13 +453,13 @@ Item::PositionConstraints Item::satisfiedPositionConstraints(const QPoint& p) co
 {
 	PositionConstraints constraints = NoConstraints;
 
-	if ( p.y() < height() - 1) constraints |= Below;
+	if ( p.y() < heightInLocal() - 1) constraints |= Below;
 	if ( p.y() > 0) constraints |= Above;
 
-	if ( p.x() < width() - 1) constraints |= RightOf;
+	if ( p.x() < widthInLocal() - 1) constraints |= RightOf;
 	if ( p.x() > 0) constraints |= LeftOf;
 
-	if ( p.y() >= 0 && p.y() < height() &&  p.x() >= 0 && p.x() < width())
+	if ( p.y() >= 0 && p.y() < heightInLocal() &&  p.x() >= 0 && p.x() < widthInLocal())
 		constraints |= Overlap;
 
 	return constraints;
@@ -475,7 +478,7 @@ QList<ItemRegion> Item::regions()
 			for(auto child : childItems())
 			{
 				hasChildren = true;
-				QRect rect = child->boundingRect().toRect();
+				QRect rect = QRect(QPoint(0,0), child->sizeInParent().toSize());
 				rect.translate(child->pos().toPoint());
 				regs.append(ItemRegion(rect));
 				regs.last().setItem(child);
@@ -733,7 +736,7 @@ Scene::ItemCategory Item::itemCategory()
 
 void Item::setWidth(int width)
 {
-	if (width != this->width())
+	if (width != this->widthInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setWidth(width);
@@ -741,7 +744,7 @@ void Item::setWidth(int width)
 }
 void Item::setHeight(int height)
 {
-	if (height != this->height())
+	if (height != this->heightInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setHeight(height);
@@ -749,7 +752,7 @@ void Item::setHeight(int height)
 }
 void Item::setSize(int width, int height)
 {
-	if (width != this->width() || height != this->height())
+	if (width != this->widthInLocal() || height != this->heightInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setSize(QSizeF(width, height));
@@ -757,7 +760,7 @@ void Item::setSize(int width, int height)
 }
 void Item::setSize(const QSizeF& size)
 {
-	if (size != this->size())
+	if (size != this->sizeInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setSize(size);
@@ -776,6 +779,19 @@ qreal Item::mainViewScalingFactor() const
 {
 	if (auto s = scene()) return s->mainViewScalingFactor();
 	else return 1;
+}
+
+qreal Item::totalScale() const
+{
+	auto s = scale();
+	auto p = parent();
+	while (p)
+	{
+		s *= p->scale();
+		p = p->parent();
+	}
+
+	return s;
 }
 
 /***********************************************************************************************************************

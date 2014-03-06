@@ -62,7 +62,7 @@ void BoxTest::determineChildren()
 
 void BoxTest::updateGeometry(int, int)
 {
-	getShape()->setInnerSize(items.width(), items.height());
+	getShape()->setInnerSize(items.widthInParent(), items.heightInParent());
 	items.setPos(getShape()->contentLeft(), getShape()->contentTop());
 }
 

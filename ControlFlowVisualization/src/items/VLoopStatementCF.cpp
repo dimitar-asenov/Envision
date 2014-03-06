@@ -142,11 +142,11 @@ void VLoopStatementCF::updateGeometry(int, int)
 	// Determine the relative position of elements
 	if (initStep)
 	{
-		left = - initStepBackground->width()/2;
+		left = - initStepBackground->widthInParent()/2;
 		initPos = QPoint(left, y);
-		right = initPos.x() + initStepBackground->width();
+		right = initPos.x() + initStepBackground->widthInParent();
 
-		y += initStepBackground->height();
+		y += initStepBackground->heightInParent();
 	}
 
 	y += style()->pinLength();
@@ -155,32 +155,32 @@ void VLoopStatementCF::updateGeometry(int, int)
 	{
 		updatePos = QPoint( 2*style()->pinLength(), y);
 
-		if (right < updatePos.x() + updateStepBackground->width())
-			right = updatePos.x() + updateStepBackground->width();
+		if (right < updatePos.x() + updateStepBackground->widthInParent())
+			right = updatePos.x() + updateStepBackground->widthInParent();
 
-		y += updateStepBackground->height();
+		y += updateStepBackground->heightInParent();
 	}
 
 	y += style()->pinLength();
 
 	if (condition)
 	{
-		condPos = QPoint(- conditionBackground->width()/2, y);
+		condPos = QPoint(- conditionBackground->widthInParent()/2, y);
 
 		if (left > condPos.x()) left = condPos.x();
-		if (right < condPos.x() + conditionBackground->width())
-					right = condPos.x() + conditionBackground->width();
+		if (right < condPos.x() + conditionBackground->widthInParent())
+					right = condPos.x() + conditionBackground->widthInParent();
 
-		y += conditionBackground->height();
+		y += conditionBackground->heightInParent();
 	}
 
 	if (body)
 	{
 		bodyPos = QPoint( 2*style()->pinLength(), y);
-		if (right < bodyPos.x() + body->width() + 2*style()->pinLength() + style()->pin().width())
-					right = bodyPos.x() + body->width() + 2*style()->pinLength() + style()->pin().width();
+		if (right < bodyPos.x() + body->widthInParent() + 2*style()->pinLength() + style()->pin().width())
+					right = bodyPos.x() + body->widthInParent() + 2*style()->pinLength() + style()->pin().width();
 
-		y += body->height() + style()->pinLength() + style()->pin().width();
+		y += body->heightInParent() + style()->pinLength() + style()->pin().width();
 	}
 
 	// Set the size
@@ -202,7 +202,7 @@ void VLoopStatementCF::updateGeometry(int, int)
 	if (initStep)
 	{
 		addConnector(entrance_, entrance_ + QPoint(0, y), true);
-		y += initStepBackground->height();
+		y += initStepBackground->heightInParent();
 	}
 
 	addConnector(entrance_ + QPoint(0,y), entrance_ + QPoint(0, y+style()->pinLength()), false);
@@ -212,15 +212,15 @@ void VLoopStatementCF::updateGeometry(int, int)
 
 	if (updateStep)
 	{
-		updateConnect.ry() += updateStepBackground->height()/2;
+		updateConnect.ry() += updateStepBackground->heightInParent()/2;
 		addConnector(updateConnect + QPoint(style()->pinLength(), 0),
 				updateConnect - QPoint(style()->pinLength(), 0), true);
 
-		updateConnect.rx() += updateStepBackground->width() + 2*style()->pinLength();
+		updateConnect.rx() += updateStepBackground->widthInParent() + 2*style()->pinLength();
 
-		addConnector(entrance_.x(), y, entrance_.x(), y + updateStepBackground->height(), false);
+		addConnector(entrance_.x(), y, entrance_.x(), y + updateStepBackground->heightInParent(), false);
 
-		y += updateStepBackground->height();
+		y += updateStepBackground->heightInParent();
 	}
 
 	addConnector(updateConnect, updateConnect - QPoint(style()->pinLength(), 0), true);
@@ -233,12 +233,12 @@ void VLoopStatementCF::updateGeometry(int, int)
 		addConnector(entrance_.x(), y, entrance_.x(), y + style()->pinLength(), true);
 		y += style()->pinLength();
 
-		condTrueConnect.setY(y + conditionBackground->height()/2);
-		condTrueConnect.setX(condPos.x() - left + conditionBackground->width() + style()->pinLength());
+		condTrueConnect.setY(y + conditionBackground->heightInParent()/2);
+		condTrueConnect.setX(condPos.x() - left + conditionBackground->widthInParent() + style()->pinLength());
 
 		addConnector(condTrueConnect, condTrueConnect - QPoint(style()->pinLength(),0), false);
 
-		y += conditionBackground->height();
+		y += conditionBackground->heightInParent();
 
 		addConnector(entrance_.x(), y, entrance_.x(), y + style()->pinLength(), false);
 		y += style()->pinLength();
@@ -265,7 +265,8 @@ void VLoopStatementCF::updateGeometry(int, int)
 		for (int i = 0; i < body->continues().size(); ++i)
 		{
 			QPoint cont = body->continues().at(i);
-			if (cont.x() > 0) addConnector(bPos.x() + body->width(), bPos.y() + cont.y() , r, bPos.y() + cont.y(), true );
+			if (cont.x() > 0)
+				addConnector(bPos.x() + body->widthInParent(), bPos.y() + cont.y() , r, bPos.y() + cont.y(), true );
 			if (cont.y() + body->pos().y() > lowestContinue) lowestContinue = cont.y() + body->pos().y();
 		}
 

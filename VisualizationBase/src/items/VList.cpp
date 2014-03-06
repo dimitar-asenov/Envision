@@ -123,10 +123,10 @@ void VList::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
 
-	if (node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && (height() == 0 || width() == 0))
+	if (node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && (heightInLocal() == 0 || widthInLocal() == 0))
 	{
-		if (height() == 0) setHeight(1);
-		if (width() == 0) setWidth(1);
+		if (heightInLocal() == 0) setHeight(1);
+		if (widthInLocal() == 0) setWidth(1);
 	}
 }
 
@@ -135,7 +135,7 @@ QList<ItemRegion> VList::regions()
 	if (!node()->isEmpty() || !style()->showTipWhenSelectedAndEmpty())
 		return Super::regions();
 
-	//Otherwise returna whole item region
+	//Otherwise return a whole item region
 	auto ir = ItemRegion(boundingRect().toRect());
 
 	Cursor* cur = new Cursor(this, Cursor::BoxCursor);
@@ -165,8 +165,8 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 		{return left->pos().y() < right->pos().y();});
 
 	QPoint topLeft{0,0};
-	auto w = width();
-	auto h = height();
+	auto w = widthInLocal();
+	auto h = heightInLocal();
 	QPoint endPoint{w, h};
 
 	if (auto shape = getShape())
@@ -186,9 +186,11 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 		if (i+1 < children.size())
 		{
 			if (horizontal)
-				w = (children.at(i)->pos().x() + children.at(i)->width() + children.at(i+1)->pos().x())/2 - topLeft.x();
+				w = (children.at(i)->pos().x() + children.at(i)->widthInParent() + children.at(i+1)->pos().x())/2
+						- topLeft.x();
 			else
-				h = (children.at(i)->pos().y() + children.at(i)->height() + children.at(i+1)->pos().y())/2 - topLeft.y();
+				h = (children.at(i)->pos().y() + children.at(i)->heightInParent() + children.at(i+1)->pos().y())/2
+						- topLeft.y();
 		}
 		else
 		{

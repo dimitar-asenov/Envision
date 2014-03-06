@@ -122,7 +122,7 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 
 		// The cursor does not belong to a command prompt
 		setPos(itemToUseForPosition->scenePos().toPoint() +
-			QPoint(0, itemToUseForPosition->height() + style()->distanceToCursor()));
+			QPoint(0, itemToUseForPosition->heightInScene() + style()->distanceToCursor()));
 	}
 
 	// Set size
@@ -130,7 +130,7 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 	{
 		getShape()->setOffset(0, 0);
 
-		QSize s = layout()->size().toSize();
+		QSize s = layout()->sizeInParent().toSize();
 		if (s.height() > style()->heightLimit()) s.setHeight(style()->heightLimit());
 		getShape()->setInnerSize(s.width(), s.height());
 		layout()->setPos(getShape()->contentLeft(), getShape()->contentTop());
@@ -138,7 +138,7 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 	else
 	{
 		layout()->setPos(0,0);
-		QSize s = layout()->size().toSize();
+		QSize s = layout()->sizeInParent().toSize();
 		if (s.height() > style()->heightLimit()) s.setHeight(style()->heightLimit());
 		setSize(s);
 	}

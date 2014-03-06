@@ -287,12 +287,13 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	{
 		if (newOffset == 0)
 		{
-			item()->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,item()->height()/2));
+			item()->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,item()->heightInLocal()/2));
 			return;
 		}
 		else if (index+1 == components.size() && offset == components[index].size())
 		{
-			item()->moveCursor( Visualization::Item::MoveOnPosition, QPoint(item()->xEnd(), item()->height()/2));
+			item()->moveCursor( Visualization::Item::MoveOnPosition,
+									  QPoint(item()->widthInLocal()-1, item()->heightInLocal()/2));
 			return;
 		}
 		else throw OOInteractionException("Could not find adjacent cells when setting GridBased offset.");

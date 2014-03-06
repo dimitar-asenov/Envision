@@ -145,7 +145,8 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 
 			// If the offset is in a node after any visualized node go to the end of the list.
 			if (i >= list->rangeEnd() )
-				return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()-1, list->height()-1));
+				return list->moveCursor( Visualization::Item::MoveOnPosition,
+												 QPoint(list->widthInLocal()-1, list->heightInLocal()-1));
 
 			if ( setOffsetInItem(offset, list->itemAt<Visualization::Item>(i - list->rangeBegin())) )
 				return true;
@@ -155,9 +156,11 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 	}
 
 	if (offset == 0) // This most likely means that the components are empty
-		return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()/2, list->height()/2));
+		return list->moveCursor( Visualization::Item::MoveOnPosition,
+										 QPoint(list->widthInLocal()/2, list->heightInLocal()/2));
 	else // This means we've reached the end
-		return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()-1, list->height()-1));
+		return list->moveCursor( Visualization::Item::MoveOnPosition,
+										 QPoint(list->widthInLocal()-1, list->heightInLocal()-1));
 }
 
 int StringOffsetProvider::listItemOffset(Visualization::VList* list,

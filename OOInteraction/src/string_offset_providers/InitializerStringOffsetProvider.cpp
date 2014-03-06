@@ -126,7 +126,7 @@ void InitializerStringOffsetProvider::setOffset(int offset)
 
 	if (offset == components.last().size())
 	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
+		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->widthInLocal()-1,0));
 	}
 	else
 		Q_ASSERT(false);

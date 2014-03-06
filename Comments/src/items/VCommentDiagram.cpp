@@ -128,15 +128,15 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	{
 		painter->setPen(QPen(Qt::red, EDIT_OUTLINE_SIZE));
 		painter->drawRect( QRect{QPoint(EDIT_OUTLINE_SIZE/2, EDIT_OUTLINE_SIZE/2),
-										 size().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
+										 sizeInLocal().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
 	}
 	else if(!hasShape())
-		painter->drawRect(QRect{QPoint(0,0), size().toSize()});
+		painter->drawRect(QRect{QPoint(0,0), sizeInLocal().toSize()});
 
 	if(shapes_.isEmpty())
 	{
 		painter->setPen(QPen(QColor(100, 100, 100)));
-		painter->drawText(QRect{QPoint(0,0), size().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
+		painter->drawText(QRect{QPoint(0,0), sizeInLocal().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
 								"This diagram does not contain any shapes yet.");
 	}
 }

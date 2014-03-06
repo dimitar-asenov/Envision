@@ -66,9 +66,9 @@ bool PanelLayout::isEmpty() const
 void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 {
 	QRect first, middle, last;
-	if (first_) first.setSize( QSize(first_->width(), first_->height()) );
-	if (middle_) middle.setSize( QSize(middle_->width(), middle_->height()) );
-	if (last_) last.setSize( QSize(last_->width(), last_->height()) );
+	if (first_) first.setSize( QSize(first_->widthInParent(), first_->heightInParent()) );
+	if (middle_) middle.setSize( QSize(middle_->widthInParent(), middle_->heightInParent()) );
+	if (last_) last.setSize( QSize(last_->widthInParent(), last_->heightInParent()) );
 
 
 	if ( style()->orientation() == PanelLayoutStyle::Orientation::Horizontal )

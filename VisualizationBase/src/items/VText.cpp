@@ -54,7 +54,7 @@ bool VText::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
 	if (dir == MoveDefault)
 	{
-		return Super::moveCursor(MoveLeftOf, QPoint(xEnd()+1,0));
+		return Super::moveCursor(MoveLeftOf, QPoint(widthInLocal(),0));
 	}
 	else return Super::moveCursor(dir, reference);
 }

@@ -205,8 +205,8 @@ void SequentialLayout::updateGeometry(int availableWidth, int availableHeight)
 		QSize innerSize{availableWidth, availableHeight};
 		if (hasShape())
 		{
-			innerSize = getShape()->innerSize(horizontal ? width() : availableWidth,
-				horizontal ? availableHeight: height() );
+			innerSize = getShape()->innerSize(horizontal ? widthInLocal() : availableWidth,
+				horizontal ? availableHeight: heightInLocal() );
 		}
 
 		if (horizontal) maxChildHeight = innerSize.height() - style()->topMargin() - style()->bottomMargin();
@@ -218,11 +218,11 @@ void SequentialLayout::updateGeometry(int availableWidth, int availableHeight)
 	int sizeHeight = 0;
 	for (int i = 0; i != items.size(); ++i)
 	{
-		if ( maxChildWidth < items[i]->width() ) maxChildWidth = items[i]->width();
-		if ( maxChildHeight < items[i]->height() ) maxChildHeight = items[i]->height();
+		if ( maxChildWidth < items[i]->widthInParent() ) maxChildWidth = items[i]->widthInParent();
+		if ( maxChildHeight < items[i]->heightInParent() ) maxChildHeight = items[i]->heightInParent();
 
-		sizeWidth += items[i]->width() + (i > 0 ? spaceBetweenElements() : 0);
-		sizeHeight += items[i]->height() + (i > 0 ? spaceBetweenElements() : 0);
+		sizeWidth += items[i]->widthInParent() + (i > 0 ? spaceBetweenElements() : 0);
+		sizeHeight += items[i]->heightInParent() + (i > 0 ? spaceBetweenElements() : 0);
 	}
 
 	// minWidth and minHeight always apply to the dimension opposite of the direction.
@@ -281,25 +281,25 @@ void SequentialLayout::updateGeometry(int availableWidth, int availableHeight)
 		{
 			int y = h;
 			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Bottom )
-				y += maxChildHeight - items[i]->height();
+				y += maxChildHeight - items[i]->heightInParent();
 			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Center )
-				y += (maxChildHeight - items[i]->height()) / 2;
+				y += (maxChildHeight - items[i]->heightInParent()) / 2;
 
 			if ( i != begin ) w += spaceBetweenElements();
 			items[i]->setPos(w + xOffset(), y + yOffset());
-			w += items[i]->width();
+			w += items[i]->widthInParent();
 		}
 		else
 		{
 			int x = w;
 			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Right )
-				x += maxChildWidth - items[i]->width();
+				x += maxChildWidth - items[i]->widthInParent();
 			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Center )
-				x += (maxChildWidth - items[i]->width()) / 2;
+				x += (maxChildWidth - items[i]->widthInParent()) / 2;
 
 			if ( i != begin ) h += spaceBetweenElements();
 			items[i]->setPos(x + xOffset(), h + yOffset());
-			h += items[i]->height();
+			h += items[i]->heightInParent();
 		}
 	}
 }
@@ -326,11 +326,11 @@ QList<ItemRegion> SequentialLayout::regions()
 	if (extraCursors)
 	{
 		itemsArea = QRect(QPoint(getShape()->contentLeft(), getShape()->contentTop()),
-				getShape()->innerSize(size().toSize()));
+				getShape()->innerSize(sizeInLocal().toSize()));
 		itemsArea.adjust(style()->leftMargin(), style()->topMargin(), -style()->rightMargin(), -style()->bottomMargin());
 	}
 	else
-		itemsArea = QRect( QPoint(0,0), size().toSize());
+		itemsArea = QRect( QPoint(0,0), sizeInLocal().toSize());
 
 	bool horizontal = isHorizontal();
 	bool forward = isForward();
@@ -338,7 +338,7 @@ QList<ItemRegion> SequentialLayout::regions()
 	// This is the rectangle half-way between the bounding box of the layout and itemsArea.
 	// When extraCursors is true, this indicates the boundary between the extra cursors and the inner cursors
 	QRect midArea = QRect(QPoint(itemsArea.left()/2, itemsArea.top()/2),
-			QPoint((itemsArea.right() + width()) / 2, (itemsArea.bottom() + height())/2));
+			QPoint((itemsArea.right() + widthInLocal()) / 2, (itemsArea.bottom() + heightInLocal())/2));
 
 	int last = forward ?
 			( horizontal ? midArea.left() : midArea.top()) :
@@ -350,26 +350,26 @@ QList<ItemRegion> SequentialLayout::regions()
 		ItemRegion itemRegion;
 		if (horizontal && forward)
 		{
-			cursorRegion.setRegion(QRect(last, 0, items[i]->x() - last, height()));
-			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
-			last = items[i]->xEnd() + 1;
+			cursorRegion.setRegion(QRect(last, 0, items[i]->x() - last, heightInLocal()));
+			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->widthInParent(), heightInLocal()));
+			last = items[i]->xEndInParent() + 1;
 		}
 		else if (horizontal && !forward)
 		{
-			cursorRegion.setRegion(QRect(items[i]->xEnd()+1, 0, last, height()));
-			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
+			cursorRegion.setRegion(QRect(items[i]->xEndInParent()+1, 0, last, heightInLocal()));
+			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->widthInParent(), heightInLocal()));
 			last = items[i]->x() - 1;
 		}
 		else if (!horizontal && forward)
 		{
-			cursorRegion.setRegion(QRect(0, last,  width(), items[i]->y() - last));
-			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
-			last = items[i]->yEnd() + 1;
+			cursorRegion.setRegion(QRect(0, last,  widthInLocal(), items[i]->y() - last));
+			itemRegion.setRegion(QRect(0, items[i]->y(), widthInLocal(), items[i]->heightInParent()));
+			last = items[i]->yEndInParent() + 1;
 		}
 		else
 		{
-			cursorRegion.setRegion(QRect(0, items[i]->yEnd()+1,  width(), last));
-			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
+			cursorRegion.setRegion(QRect(0, items[i]->yEndInParent()+1,  widthInLocal(), last));
+			itemRegion.setRegion(QRect(0, items[i]->y(), widthInLocal(), items[i]->heightInParent()));
 			last = items[i]->y() - 1;
 		}
 
@@ -381,7 +381,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		cursorRegion.setCursor(lc);
 		lc->setIndex(i);
 		lc->setVisualizationPosition(cursorRegion.region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, heightInLocal()) : QSize(widthInLocal(), 2));
 		if (i==0 && !extraCursors) lc->setIsAtBoundary(true);
 
 		cursorRegion.cursor()->setRegion(cursorRegion.region());
@@ -397,10 +397,10 @@ QList<ItemRegion> SequentialLayout::regions()
 	if (!style()->noBoundaryCursorsInsideShape())
 	{
 		QRect trailing;
-		if (horizontal && forward) trailing.setRect(last, 0, midArea.right() + 1 - last, height());
-		else if (horizontal && !forward) trailing.setRect(midArea.left(), 0, last - midArea.left(), height());
-		else if (!horizontal && forward) trailing.setRect(0, last,  width(), midArea.bottom() + 1 - last);
-		else trailing.setRect(0, midArea.top(),  width(), last - midArea.top());
+		if (horizontal && forward) trailing.setRect(last, 0, midArea.right() + 1 - last, heightInLocal());
+		else if (horizontal && !forward) trailing.setRect(midArea.left(), 0, last - midArea.left(), heightInLocal());
+		else if (!horizontal && forward) trailing.setRect(0, last,  widthInLocal(), midArea.bottom() + 1 - last);
+		else trailing.setRect(0, midArea.top(),  widthInLocal(), last - midArea.top());
 
 		adjustCursorRegionToAvoidZeroSize(trailing, horizontal, forward, false, !extraCursors);
 
@@ -410,7 +410,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		regs.last().setCursor(lc);
 		lc->setIndex(items.size());
 		lc->setVisualizationPosition(regs.last().region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, heightInLocal()) : QSize(widthInLocal(), 2));
 		lc->setRegion(trailing);
 		if (!extraCursors) lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
@@ -422,10 +422,11 @@ QList<ItemRegion> SequentialLayout::regions()
 		QRect extra;
 
 		// Front
-		if (horizontal && forward) extra.setRect(0, 0, midArea.left(), height());
-		else if (horizontal && !forward) extra.setRect(midArea.right() + 1, 0, width() - midArea.right() - 1, height());
-		else if (!horizontal && forward) extra.setRect(0, 0,  width(), midArea.top());
-		else extra.setRect(0, midArea.bottom() + 1, width(), height() - midArea.bottom() - 1);
+		if (horizontal && forward) extra.setRect(0, 0, midArea.left(), heightInLocal());
+		else if (horizontal && !forward)
+			extra.setRect(midArea.right() + 1, 0, widthInLocal() - midArea.right() - 1, heightInLocal());
+		else if (!horizontal && forward) extra.setRect(0, 0,  widthInLocal(), midArea.top());
+		else extra.setRect(0, midArea.bottom() + 1, widthInLocal(), heightInLocal() - midArea.bottom() - 1);
 
 		adjustCursorRegionToAvoidZeroSize(extra, horizontal, forward, true, false);
 
@@ -435,16 +436,18 @@ QList<ItemRegion> SequentialLayout::regions()
 		regs.last().setCursor(lc);
 		lc->setIndex(-1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, heightInLocal()) : QSize(widthInLocal(), 2));
 		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 
 		// Back
-		if (horizontal && forward) extra.setRect(midArea.right() + 1, 0, width() - midArea.right() - 1, height());
-		else if (horizontal && !forward) extra.setRect(0, 0, midArea.left(), height());
-		else if (!horizontal && forward) extra.setRect(0, midArea.bottom() + 1, width(), height() - midArea.bottom() - 1);
-		else extra.setRect(0, 0,  width(), midArea.top());
+		if (horizontal && forward)
+			extra.setRect(midArea.right() + 1, 0, widthInLocal() - midArea.right() - 1, heightInLocal());
+		else if (horizontal && !forward) extra.setRect(0, 0, midArea.left(), heightInLocal());
+		else if (!horizontal && forward)
+			extra.setRect(0, midArea.bottom() + 1, widthInLocal(), heightInLocal() - midArea.bottom() - 1);
+		else extra.setRect(0, 0,  widthInLocal(), midArea.top());
 
 		adjustCursorRegionToAvoidZeroSize(extra, horizontal, forward, false, true);
 
@@ -454,7 +457,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		regs.last().setCursor(lc);
 		lc->setIndex(items.size()+1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, heightInLocal()) : QSize(widthInLocal(), 2));
 		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);

@@ -44,10 +44,10 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 inline const std::array<const QRect,4> VCommentDiagramShape::resizeRects() const
 {
 	const int size = 5;
-	return { QRect{0,						0,						size, size},
-				QRect{width() - size,	0,						size, size},
-				QRect{width() - size,	height() - size,	size, size},
-				QRect{0,						height() - size,	size, size}};
+	return { QRect{0,								0,								size, size},
+				QRect{widthInLocal() - size,	0,								size, size},
+				QRect{widthInLocal() - size,	heightInLocal() - size,	size, size},
+				QRect{0,								heightInLocal() - size,	size, size}};
 }
 
 VCommentDiagram* VCommentDiagramShape::diagram()
@@ -69,7 +69,7 @@ void VCommentDiagramShape::updateGeometry(int, int)
 {
 	setSize(node()->size());
 
-	auto bound = text_->boundingRect();
+	auto bound = text_->sizeInParent();
 	// align it both horizontally and vertically
 	int x = node()->width() / 2 - bound.width() / 2;
 	int y = node()->height() / 2 - bound.height() / 2;
@@ -79,7 +79,7 @@ void VCommentDiagramShape::updateGeometry(int, int)
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	// rectangle to draw the shape in
-	QRect rect(0, 0, width(), height());
+	QRect rect(0, 0, widthInLocal(), heightInLocal());
 	painter->setPen(shapeColor_);
 	painter->setBrush(QBrush(backgroundColor_));
 
@@ -96,10 +96,10 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 		case CommentDiagramShape::ShapeType::Diamond:
 			QPoint points[4] = {
-				QPoint(width()/2, 0),
-				QPoint(width(),   height()/2),
-				QPoint(width()/2, height()),
-				QPoint(0,         height()/2)
+				QPoint(widthInLocal()/2,	0),
+				QPoint(widthInLocal(),	   heightInLocal()/2),
+				QPoint(widthInLocal()/2,	heightInLocal()),
+				QPoint(0,						heightInLocal()/2)
 			};
 			painter->drawConvexPolygon(points, 4);
 			break;

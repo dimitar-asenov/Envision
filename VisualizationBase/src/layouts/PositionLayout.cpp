@@ -204,8 +204,8 @@ void PositionLayout::updateGeometry(int, int)
 		double averageHeight = 0;
 		for(auto i : items)
 		{
-			averageWidth += i->width();
-			averageHeight += i->height();
+			averageWidth += i->widthInParent();
+			averageHeight += i->heightInParent();
 		}
 		averageWidth /= items.size();
 		averageHeight /= items.size();
@@ -250,22 +250,22 @@ void PositionLayout::updateGeometry(int, int)
 			int x = lastRight;
 			int y = lastBottom;
 
-			if (lastBottom == 0 || (lastBottom + items[i]->height() <= heightLimit))
+			if (lastBottom == 0 || (lastBottom + items[i]->heightInParent() <= heightLimit))
 			{
-				lastBottom += 10 + items[i]->height();
+				lastBottom += 10 + items[i]->heightInParent();
 				lastBottom = toGrid(lastBottom);
 
-				if (items[i]->width() > colWidth) colWidth =  items[i]->width();
+				if (items[i]->widthInParent() > colWidth) colWidth =  items[i]->widthInParent();
 			}
 			else
 			{
 				y = 0;
-				lastBottom = 10 + items[i]->height();
+				lastBottom = 10 + items[i]->heightInParent();
 
 				lastRight += 10 + colWidth;
 				lastRight = toGrid(lastRight);
 				x = lastRight;
-				colWidth = items[i]->width();
+				colWidth = items[i]->widthInParent();
 			}
 
 			auto newModel = items[i]->node()->model();
@@ -302,10 +302,10 @@ void PositionLayout::updateGeometry(int, int)
 			topLeft.setX( x );
 		if (i==0 || topLeft.y() > y )
 			topLeft.setY( y );
-		if (i==0 || bottomRight.x() < x + items[i]->width()  )
-			bottomRight.setX( x + items[i]->width() );
-		if (i==0 || bottomRight.y() < y + items[i]->height() )
-			bottomRight.setY( y + items[i]->height() );
+		if (i==0 || bottomRight.x() < x + items[i]->widthInParent()  )
+			bottomRight.setX( x + items[i]->widthInParent() );
+		if (i==0 || bottomRight.y() < y + items[i]->heightInParent() )
+			bottomRight.setY( y + items[i]->heightInParent() );
 	}
 
 	int sizeWidth = bottomRight.x() - topLeft.x() + style()->leftInnerMargin() + style()->rightInnerMargin();

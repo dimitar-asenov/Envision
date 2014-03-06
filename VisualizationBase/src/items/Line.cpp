@@ -57,8 +57,9 @@ void Line::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
 	painter->setPen(style()->pen());
 	// Note that we use the bounding box here an not the style on purpose. See updateGeometry().
-	if (width() > height()) painter->drawLine(QPointF(0, height()/2.0), QPointF(width(), height()/2.0));
-	else painter->drawLine(QPointF(width()/2.0, 0), QPointF(width()/2.0, height()));
+	if (widthInLocal() > heightInLocal())
+		painter->drawLine(QPointF(0, heightInLocal()/2.0), QPointF(widthInLocal(), heightInLocal()/2.0));
+	else painter->drawLine(QPointF(widthInLocal()/2.0, 0), QPointF(widthInLocal()/2.0, heightInLocal()));
 }
 
 bool Line::sizeDependsOnParent() const

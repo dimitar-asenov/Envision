@@ -117,7 +117,7 @@ void VListCF::updateGeometry(int, int)
 		if (cfi)
 		{
 			pos[i] = QPoint( location.x() - cfi->entrance().x(), location.y());
-			location.ry() += items_[i]->height();
+			location.ry() += items_[i]->heightInParent();
 
 			if (cfi->exit().isNull()) exit_ = QPoint(0,0);
 			else
@@ -146,16 +146,16 @@ void VListCF::updateGeometry(int, int)
 		else
 		{
 			location.ry() += style()->pinLength(); // There is a pin on top.
-			pos[i] = QPoint( location.x() - items_[i]->width()/2, location.y());
-			location.ry() += items_[i]->height();
+			pos[i] = QPoint( location.x() - items_[i]->widthInParent()/2, location.y());
+			location.ry() += items_[i]->heightInParent();
 			location.ry() += style()->pinLength(); // There is a pin on the bottom.
 			exit_ = location;
 		}
 
 		int pinSpace = cfi ? 0 : style()->pinLength();
 		if ( pos[i].x() - pinSpace < topLeft.x()) topLeft.setX( pos[i].x() - pinSpace );
-		if ( pos[i].x() + items_[i]->width() + pinSpace > bottomRight.x())
-			bottomRight.setX(pos[i].x() + items_[i]->width() + pinSpace);
+		if ( pos[i].x() + items_[i]->widthInParent() + pinSpace > bottomRight.x())
+			bottomRight.setX(pos[i].x() + items_[i]->widthInParent() + pinSpace);
 	}
 
 	bottomRight.setY(location.y());
@@ -185,8 +185,8 @@ void VListCF::updateGeometry(int, int)
 				if ( cfi->breaks().at(k).x() == 0) addConnector(br, QPoint(0, br.y()), false);
 				else
 				{
-					br.setX(pos[i].x() + items_[i]->width());
-					addConnector(br, QPoint(width(), br.y()), false);
+					br.setX(pos[i].x() + items_[i]->widthInParent());
+					addConnector(br, QPoint(widthInLocal(), br.y()), false);
 				}
 			}
 			for (int k = 0; k < cfi->continues().size(); ++k)
@@ -195,17 +195,17 @@ void VListCF::updateGeometry(int, int)
 				if ( cfi->continues().at(k).x() == 0) addConnector(cont, QPoint(0, cont.y()), false);
 				else
 				{
-					cont.setX(pos[i].x() + items_[i]->width());
-					addConnector(cont, QPoint(width(), cont.y()), false);
+					cont.setX(pos[i].x() + items_[i]->widthInParent());
+					addConnector(cont, QPoint(widthInLocal(), cont.y()), false);
 				}
 			}
 		}
 		else
 		{
-			int midPoint = pos[i].x() + items_[i]->width()/2;
+			int midPoint = pos[i].x() + items_[i]->widthInParent()/2;
 			addConnector(midPoint, pos[i].y() - style()->pinLength(), midPoint, pos[i].y(), true);
-			addConnector(midPoint, pos[i].y() + items_[i]->height(), midPoint,
-					pos[i].y() + items_[i]->height() + style()->pinLength(), false);
+			addConnector(midPoint, pos[i].y() + items_[i]->heightInParent(), midPoint,
+					pos[i].y() + items_[i]->heightInParent() + style()->pinLength(), false);
 		}
 	}
 }

@@ -46,7 +46,7 @@ void CompoundObjectStringOffsetProvider::setOffset(int offset)
 	if (offset == 0)
 		vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(0,0));
 	else
-		vis_->moveCursor( Visualization::Item::MoveLeftOf, QPoint(vis_->width(),vis_->height()));
+		vis_->moveCursor( Visualization::Item::MoveLeftOf, QPoint(vis_->widthInLocal(),vis_->heightInLocal()));
 }
 
 } /* namespace OOInteraction */

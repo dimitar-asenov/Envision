@@ -84,7 +84,7 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 		if(event->modifiers() & Qt::ShiftModifier)
 		{
-			originalSize_ = diagram->size();
+			originalSize_ = diagram->sizeInLocal();
 			resizing_ = true;
 			diagram->setCursor(Qt::SizeAllCursor);
 		}
