@@ -91,8 +91,7 @@ QString TestBox::currentText()
 
 bool TestBox::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
-	if (dir == MoveDefault)
-		return TextRenderer::moveCursor(MoveLeftOf, QPoint(widthInLocal(),0));
+	if (dir == MoveDefault) return TextRenderer::moveCursor(MoveOnRight);
 	else return TextRenderer::moveCursor(dir, reference);
 }
 

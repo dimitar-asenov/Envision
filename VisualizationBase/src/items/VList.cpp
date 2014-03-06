@@ -108,7 +108,9 @@ bool VList::moveCursor(CursorMoveDirection dir, QPoint reference)
 	bool startsFocused = hasFocus();
 
 	// If we're already focused and the user pressed a keyboard key, do not stay within the item
-	if (startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && dir != MoveOnPosition)
+	if (startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && dir != MoveOnPosition
+			&& dir != MoveOnTop && dir != MoveOnLeft && dir != MoveOnBottom && dir != MoveOnRight
+			&& dir != MoveOnTopLeft && dir != MoveOnBottomRight && dir != MoveOnCenter)
 		return false;
 
 	bool res = Super::moveCursor(dir, reference);

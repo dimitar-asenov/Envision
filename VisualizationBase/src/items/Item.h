@@ -158,7 +158,16 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			MoveDown, /**< Move the cursor down from its current position within the item. */
 			MoveLeft, /**< Move the cursor left from its current position within the item. */
 			MoveRight, /**< Move the cursor right from its current position within the item. */
+
 			MoveOnPosition, /**< Move the cursor as close as possible to the specified reference point within the item. */
+			MoveOnTop, /**< Move the cursor to the top of the item*/
+			MoveOnLeft, /**< Move the cursor to the left of the item*/
+			MoveOnBottom, /**< Move the cursor to the bottom of the item*/
+			MoveOnRight, /**< Move the cursor to the right of the item*/
+			MoveOnTopLeft, /**< Move the cursor to the top-left corner of the item*/
+			MoveOnBottomRight, /**< Move the cursor to the bottom-right corner of the item*/
+			MoveOnCenter, /**< Move the cursor to the center of the item*/
+
 			MoveUpOf, /**< Move the cursor as close as possible above the specified reference point. */
 			MoveDownOf, /**< Move the cursor as close as possible below the specified reference point. */
 			MoveLeftOf, /**< Move the cursor as close as possible to left of the specified reference point. */

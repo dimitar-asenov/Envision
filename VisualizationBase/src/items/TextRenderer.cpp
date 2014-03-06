@@ -193,13 +193,27 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 		}
 		else return false;
 	}
-	else if (dir == MoveOnPosition || dir == MoveDefault)
+	else if (dir == MoveOnPosition || dir == MoveDefault || dir == MoveOnTop || dir == MoveOnLeft || dir == MoveOnBottom
+			|| dir == MoveOnRight || dir == MoveOnTopLeft || dir == MoveOnBottomRight || dir == MoveOnCenter)
 	{
 		setFocus();
 		TextCursor* tc = new TextCursor(this);
 
-		if (dir == MoveDefault) tc->setCaretPosition(0);
-		else tc->setSelectedByDrag(reference.x(), reference.x());
+		auto xEnd = widthInLocal() - 1;
+		auto xMid = widthInLocal()/2;
+		switch(dir)
+		{
+			case MoveDefault: tc->setCaretPosition(0); break;
+			case MoveOnPosition: tc->setSelectedByDrag(reference.x(), reference.x()); break;
+			case MoveOnTop: tc->setSelectedByDrag(xMid, xMid); break;
+			case MoveOnLeft: tc->setSelectedByDrag(0, 0);  break;
+			case MoveOnBottom: tc->setSelectedByDrag(xMid, xMid); break;
+			case MoveOnRight: tc->setSelectedByDrag(xEnd, xEnd); break;
+			case MoveOnTopLeft: tc->setSelectedByDrag(0, 0); break;
+			case MoveOnBottomRight: tc->setSelectedByDrag(xEnd, xEnd); break;
+			case MoveOnCenter: tc->setSelectedByDrag(xMid, xMid); break;
+			default: Q_ASSERT(false); break;
+		}
 
 		scene()->setMainCursor(tc);
 		return true;

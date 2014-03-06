@@ -537,7 +537,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 					case MoveDown: reference = QPoint(reference.x(), r.region().y() + r.region().height()); break;
 					case MoveLeft: reference = QPoint(r.region().x(), reference.y()); break;
 					case MoveRight: reference = QPoint(r.region().x() + r.region().width(), reference.y()); break;
-					default: /* Will never be the case because of the top-level if statement */ break;
+					default: Q_ASSERT(false); /* Will never be the case because of the top-level if statement */ break;
 				}
 				break;
 			}
@@ -545,14 +545,28 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 	}
 
 	// Find all regions that match the constraints
+	// Also adjust the reference where necessary
 	ItemRegion::PositionConstraint constraints = ItemRegion::NoConstraints;
+	auto xEnd = widthInLocal() - 1;
+	auto yEnd = heightInLocal() - 1;
+	auto xMid = widthInLocal()/2;
+	auto yMid = heightInLocal()/2;
 	switch(dir)
 	{
 		case MoveUp: constraints = ItemRegion::Above; break;
 		case MoveDown: constraints = ItemRegion::Below; break;
 		case MoveLeft: constraints = ItemRegion::LeftOf; break;
 		case MoveRight: constraints = ItemRegion::RightOf; break;
+
 		case MoveOnPosition: constraints = ItemRegion::NoConstraints; break;
+		case MoveOnTop: constraints = ItemRegion::NoConstraints; reference = {xMid, 0}; break;
+		case MoveOnLeft: constraints = ItemRegion::NoConstraints; reference = {0, yMid}; break;
+		case MoveOnBottom: constraints = ItemRegion::NoConstraints; reference = {xMid, yEnd}; break;
+		case MoveOnRight: constraints = ItemRegion::NoConstraints; reference = {xEnd, yMid}; break;
+		case MoveOnTopLeft: constraints = ItemRegion::NoConstraints; reference = {0, 0}; break;
+		case MoveOnBottomRight: constraints = ItemRegion::NoConstraints; reference = {xEnd, yEnd}; break;
+		case MoveOnCenter: constraints = ItemRegion::NoConstraints; reference = {xMid, yMid}; break;
+
 		case MoveUpOf: constraints = ItemRegion::Above; break;
 		case MoveDownOf: constraints = ItemRegion::Below; break;
 		case MoveLeftOf: constraints = ItemRegion::LeftOf; break;
@@ -621,7 +635,16 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 				case MoveDown: childDirection = MoveDownOf; break;
 				case MoveLeft: childDirection = MoveLeftOf; break;
 				case MoveRight: childDirection = MoveRightOf; break;
+
 				case MoveOnPosition: childDirection = MoveOnPosition; break;
+				case MoveOnTop: childDirection = MoveOnTop; break;
+				case MoveOnLeft: childDirection = MoveOnLeft; break;
+				case MoveOnBottom: childDirection = MoveOnBottom; break;
+				case MoveOnRight: childDirection = MoveOnRight; break;
+				case MoveOnTopLeft: childDirection = MoveOnTopLeft; break;
+				case MoveOnBottomRight: childDirection = MoveOnBottomRight; break;
+				case MoveOnCenter: childDirection = MoveOnCenter; break;
+
 				case MoveUpOf: childDirection = MoveUpOf; break;
 				case MoveDownOf: childDirection = MoveDownOf; break;
 				case MoveLeftOf: childDirection = MoveLeftOf; break;

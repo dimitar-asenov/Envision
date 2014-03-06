@@ -54,9 +54,9 @@ QString TextRendererStringOffsetProvider::string()
 void TextRendererStringOffsetProvider::setOffset(int offset)
 {
 	if (!vis_) return;
-	vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(0,0)); // Just set the caret to the first position.
+	vis_->moveCursor(Visualization::Item::MoveOnLeft); // Set the caret to the first position...
 
-	// And then use the current cursor to set it to the correct position.
+	// ..and then use the current cursor to set it to the correct position.
 	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
 	tc->setCaretPosition(offset);
 }

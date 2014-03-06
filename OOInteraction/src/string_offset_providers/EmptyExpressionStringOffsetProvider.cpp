@@ -42,7 +42,7 @@ int EmptyExpressionStringOffsetProvider::offset(Qt::Key /*key*/)
 
 void EmptyExpressionStringOffsetProvider::setOffset(int)
 {
-	vis_->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+	vis_->moveCursor(Visualization::Item::MoveOnLeft);
 }
 
 } /* namespace OOInteraction */

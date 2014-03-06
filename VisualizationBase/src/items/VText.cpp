@@ -52,10 +52,7 @@ QString VText::currentText()
 
 bool VText::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
-	if (dir == MoveDefault)
-	{
-		return Super::moveCursor(MoveLeftOf, QPoint(widthInLocal(),0));
-	}
+	if (dir == MoveDefault) return Super::moveCursor(MoveOnRight);
 	else return Super::moveCursor(dir, reference);
 }
 
