@@ -88,6 +88,10 @@ class VISUALIZATIONBASE_API ModelRenderer
 																									 int purpose, int semanticZoomLevel);
 		Item* visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
 																									 int purpose, int semanticZoomLevel);
+		Item *basicStrategy(Item *parent, Model::Node *node, int purpose, int semanticZoomLevel,
+								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option1,
+								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option2,
+								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option3);
 };
 
 inline void ModelRenderer::registerVisualization(int nodeTypeId, int purpose,

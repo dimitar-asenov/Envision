@@ -62,80 +62,32 @@ Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose, int se
 Item* ModelRenderer::visualizationChoiceStrategyTypeOverSemanticZoomLevelOverPurpose(Item* parent, Model::Node* node,
 																												 int purpose, int semanticZoomLevel)
 {
-	QList<int> typeIds = node->hierarchyTypeIds();
-
-	int finalPurpose = purpose >= 0 ? purpose : (parent ? parent->childNodePurpose(node) : 0);
-
-	if (finalPurpose >= purposes_.size())
-		throw VisualizationException("Trying to render a node with an unregistered purpose id: " + finalPurpose);
-
-	int finalSemanticZoomLevel = semanticZoomLevel >= 0 ? semanticZoomLevel :
-																			(parent ? parent->childNodeSemanticZoomLevel(node) : 0);
-
-	if (finalSemanticZoomLevel >= semanticZoomLevels_.size())
-		throw VisualizationException("Trying to render a node with an unregistered semantic zoom level id: " +
-											  finalSemanticZoomLevel);
-
-	for(int id : typeIds)
-	{
-		QList<QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor> > list;
-
-		// Try to find a match for the specific purpose and semantic zoom level
-		VisualizationGroup* group = visualizationGroupsManager_.getExactMatch(id, finalPurpose, finalSemanticZoomLevel);
-		if (group)
-			list << group->visualizationsForContext(parent, node);
-
-		// If there is no match for the specific purpose try to find a match for the specific semantic zoom level
-		if (list.isEmpty())
-		{
-			QVector<VisualizationGroup*> groups = visualizationGroupsManager_.
-																getByTypeIdAndSemanticZoomLevel(id, finalSemanticZoomLevel);
-
-			if (!groups.isEmpty())
-			{
-				list << groups.first()->visualizationsForContext(parent, node);
-			}
-		}
-
-		// If there is no match for the specific purpose and semantic zoom level try to find a match considering
-		// only the purpose
-		if (list.isEmpty())
-		{
-			QVector<VisualizationGroup*> groups = visualizationGroupsManager_.getByTypeIdAndPurpose(id, finalPurpose);
-
-			if (!groups.isEmpty())
-			{
-				list << groups.first()->visualizationsForContext(parent, node);
-			}
-		}
-
-		// If there is no match for the specific purpose try to find a match only depending on the type
-		if (list.isEmpty())
-		{
-			QVector<VisualizationGroup*> groups = visualizationGroupsManager_.getByTypeId(id);
-
-			if (!groups.isEmpty())
-			{
-				list << groups.first()->visualizationsForContext(parent, node);
-			}
-		}
-
-		if (list.size() > 0)
-		{
-			qSort(list);
-			Item* item = list.last().second(parent, node);
-			if (!parent && item->purpose() < 0) item->setPurpose(finalPurpose);
-			return item;
-		}
-	}
-
-	throw VisualizationException("Trying to render a node type that has no registered appropriate visualization. "
-			 "The Node type is: " + node->typeName() + " The desired purpose is: " + purposes_[finalPurpose] +
-			 "The desired semantic zoom level is: " + semanticZoomLevels_[finalSemanticZoomLevel]);
+	return basicStrategy(parent, node, purpose, semanticZoomLevel,
+				[this] (int id, int, int semanticZoomLevel)
+				 {return this->visualizationGroupsManager_.getByTypeIdAndSemanticZoomLevel(id, semanticZoomLevel); },
+				[this] (int id, int purpose, int)
+				 {return this->visualizationGroupsManager_.getByTypeIdAndPurpose(id, purpose); },
+				[this] (int id, int, int)
+				 {return this->visualizationGroupsManager_.getByTypeId(id); });
 }
 
 Item* ModelRenderer::visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
 																												 int purpose, int semanticZoomLevel)
+{
+	return basicStrategy(parent, node, purpose, semanticZoomLevel,
+				[this] (int id, int purpose, int)
+				 {return this->visualizationGroupsManager_.getByTypeIdAndPurpose(id, purpose); },
+				[this] (int id, int, int semanticZoomLevel)
+				 {return this->visualizationGroupsManager_.getByTypeIdAndSemanticZoomLevel(id, semanticZoomLevel); },
+				[this] (int id, int, int)
+				 {return this->visualizationGroupsManager_.getByTypeId(id); });
+}
+
+Item* ModelRenderer::basicStrategy(Item* parent, Model::Node* node,
+							int purpose, int semanticZoomLevel,
+							std::function<QVector<VisualizationGroup*> ((int id, int purpose, int semanticZoomLevel))> option1,
+							std::function<QVector<VisualizationGroup*> ((int id, int purpose, int semanticZoomLevel))> option2,
+							std::function<QVector<VisualizationGroup*> ((int id, int purpose, int semanticZoomLevel))> option3)
 {
 	QList<int> typeIds = node->hierarchyTypeIds();
 
@@ -160,11 +112,10 @@ Item* ModelRenderer::visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomL
 		if (group)
 			list << group->visualizationsForContext(parent, node);
 
-		// If there is no match for the specific purpose and semantic zoom level try to find a match considering
-		// only the purpose
+		// If there is no exact match try the first option1
 		if (list.isEmpty())
 		{
-			QVector<VisualizationGroup*> groups = visualizationGroupsManager_.getByTypeIdAndPurpose(id, finalPurpose);
+			QVector<VisualizationGroup*> groups = option1(id, finalPurpose, finalSemanticZoomLevel);
 
 			if (!groups.isEmpty())
 			{
@@ -172,11 +123,10 @@ Item* ModelRenderer::visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomL
 			}
 		}
 
-		// If there is no match for the specific purpose try to find a match for the specific semantic zoom level
+		// Option1 did not work so we try option2
 		if (list.isEmpty())
 		{
-			QVector<VisualizationGroup*> groups = visualizationGroupsManager_.
-																getByTypeIdAndSemanticZoomLevel(id, finalSemanticZoomLevel);
+			QVector<VisualizationGroup*> groups = option2(id, finalPurpose, finalSemanticZoomLevel);
 
 			if (!groups.isEmpty())
 			{
@@ -184,10 +134,10 @@ Item* ModelRenderer::visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomL
 			}
 		}
 
-		// If there is no match for the specific purpose try to find a match only depending on the type
+		// Option2 did not work so we try option3
 		if (list.isEmpty())
 		{
-			QVector<VisualizationGroup*> groups = visualizationGroupsManager_.getByTypeId(id);
+			QVector<VisualizationGroup*> groups = option3(id, finalPurpose, finalSemanticZoomLevel);
 
 			if (!groups.isEmpty())
 			{
