@@ -171,11 +171,6 @@ void Item::clearSemanticZoomLevel()
 	setUpdateNeeded(FullUpdate);
 }
 
-qreal Item::totalScale() const
-{
-	return parent() ? parent()->totalScale() * scale() : scale();
-}
-
 void Item::setStyle(const ItemStyle* style)
 {
 	if (style == style_) return;

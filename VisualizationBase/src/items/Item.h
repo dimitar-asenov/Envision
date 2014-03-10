@@ -101,8 +101,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		virtual bool sizeDependsOnParent() const;
 
-		qreal totalScale() const;
-
 		enum UpdateType {
 			NoUpdate, /**< The item should not be updated. */
 			StandardUpdate, /**< Update the geometry of the item and properties depending on child items. This update
