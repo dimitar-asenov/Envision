@@ -66,8 +66,6 @@
 
 using namespace Logger;
 
-Q_EXPORT_PLUGIN2( interactionbase, Interaction::InteractionBase )
-
 namespace Interaction {
 
 Logger::Log& log = InteractionBase::log();

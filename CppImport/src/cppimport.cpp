@@ -27,8 +27,6 @@
 #include "cppimport.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( cppimport, CppImport::CppImport )
-
 namespace CppImport {
 
 bool CppImport::initialize(Core::EnvisionManager&)

@@ -56,7 +56,7 @@
 #if defined(COMMENTS_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
-#include <QtWebKit/QGraphicsWebView>
+#include <QtWebKitWidgets/QGraphicsWebView>
 #endif
 
 #endif

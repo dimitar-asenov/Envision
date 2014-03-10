@@ -27,8 +27,6 @@
 #include "apideptest.h"
 #include "HelloWorld/src/HelloWorldPrinter.h"
 
-Q_EXPORT_PLUGIN2( apideptest, APIDepTest::APIDep )
-
 namespace APIDepTest {
 
 bool APIDep::initialize(Core::EnvisionManager& em)

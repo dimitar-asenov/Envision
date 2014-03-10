@@ -35,8 +35,6 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/node_extensions/FullDetailSize.h"
 
-Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
-
 using namespace OOModel;
 using namespace Visualization;
 

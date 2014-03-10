@@ -28,8 +28,6 @@
 
 #include "SelfTest/src/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( filepersistence, FilePersistence::FilePersistence )
-
 inline void initFilePersistenceResources() { Q_INIT_RESOURCE(FilePersistence); }
 
 namespace FilePersistence {

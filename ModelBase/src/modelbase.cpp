@@ -44,8 +44,6 @@
 
 using namespace Logger;
 
-Q_EXPORT_PLUGIN2( modelbase, Model::ModelBase )
-
 namespace Model {
 
 Logger::Log& log = ModelBase::log();

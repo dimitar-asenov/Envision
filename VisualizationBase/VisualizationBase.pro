@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
     -lmodelbase
 LIBS += -llpsolve55
 QT += xml \
-    svg
+    svg \
+    printsupport
 HEADERS += src/items/EmptyItem.h \
     src/items/VUsedLibraryStyle.h \
     src/items/VUsedLibrary.h \

@@ -42,6 +42,7 @@ namespace ControlFlowVisualization {
 class ControlFlowVisualization : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:

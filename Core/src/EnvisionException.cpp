@@ -45,7 +45,7 @@ EnvisionException::EnvisionException()
 
 EnvisionException::EnvisionException(const QString& message) : msg_{message}
 {
-	if (assertOnThrow()) Q_ASSERT_X(false, "Exception thrown", message.toAscii());
+	if (assertOnThrow()) Q_ASSERT_X(false, "Exception thrown", message.toLatin1());
 }
 
 EnvisionException::~EnvisionException() {}

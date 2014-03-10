@@ -43,21 +43,21 @@
 
 #include <QtXml/QDomDocument>
 
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QGraphicsSceneDragDropEvent>
+#include <QtWidgets/QGraphicsSceneContextMenuEvent>
+#include <QtWidgets/QGraphicsSceneHoverEvent>
+#include <QtWidgets/QGraphicsSceneMouseEvent>
+#include <QtWidgets/QGraphicsSceneWheelEvent>
+#include <QtWidgets/QGraphicsItem>
+#include <QtWidgets/QGraphicsView>
+#include <QtWidgets/QGraphicsScene>
+
 #include <QtGui/QStaticText>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEngine>
 #include <QtGui/QFont>
 #include <QtGui/QPen>
-
-#include <QtGui/QGraphicsSceneDragDropEvent>
-#include <QtGui/QGraphicsSceneContextMenuEvent>
-#include <QtGui/QGraphicsSceneHoverEvent>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QGraphicsSceneWheelEvent>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsScene>
 #include <QtGui/QWheelEvent>
 #include <QtGui/QFocusEvent>
 #include <QtGui/QKeyEvent>
@@ -77,13 +77,14 @@
 // plug-ins which depend on this one will not include these headers.
 #include <QtSvg/QSvgGenerator>
 
-#include <QtGui/QPrinter>
-#include <QtGui/QDesktopWidget>
+#include <QtPrintSupport/QPrinter>
+#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollBar>
+
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 #include <QtGui/QFontMetrics>
-#include <QtGui/QPushButton>
-#include <QtGui/QScrollBar>
 #include <QtGui/QPainter>
 #include <QtGui/QColor>
 

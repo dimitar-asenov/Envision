@@ -34,8 +34,8 @@
 // and will be included in their precompiled headers
 #include "global.h"
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QApplication>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QApplication>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QtGlobal>

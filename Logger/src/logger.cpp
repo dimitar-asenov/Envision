@@ -29,8 +29,6 @@
 #include "Timer.h"
 #include "LogTester.h"
 
-Q_EXPORT_PLUGIN2( logger, Logger::LoggerPlugin )
-
 namespace Logger {
 
 bool LoggerPlugin::initialize(Core::EnvisionManager& m)

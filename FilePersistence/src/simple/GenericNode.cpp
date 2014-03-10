@@ -270,7 +270,7 @@ void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEn
 
 		if ( isId ) node->setId( id );
 		else throw FilePersistenceException("Unknown node header element "
-				+ QString::fromAscii(data+start, headerPartEnd-start+1));
+				+ QString::fromLatin1(data+start,headerPartEnd-start+1));
 	}
 
 	if (moreHeaderParts)
