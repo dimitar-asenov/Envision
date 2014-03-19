@@ -79,13 +79,10 @@ Item::Item(Item* parent, const StyleType* style) :
 	if ( !style || style->drawsOnlyShape() ) flags |= ItemHasNoContents;
 
 	flags	|=	ItemIsFocusable
-			| ItemIsSelectable
-			| ItemClipsToShape
-			| ItemClipsChildrenToShape;
+			| ItemIsSelectable;
 
-#ifdef QT_GRAPHICSVIEW_ENVISION_EXTENSIONS
-	flags |= ItemDoesNotEnforceClip
-			| ItemSkipsPaintingIfTooSmall;
+#if QT_VERSION >= 0x050400
+	flags |= ItemContainsChildrenInShape;
 #endif
 
 	// This is an expensive operation, so only do it once.

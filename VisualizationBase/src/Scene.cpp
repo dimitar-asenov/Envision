@@ -65,6 +65,10 @@ Scene::Scene()
 {
 	setItemIndexMethod(NoIndex);
 
+#if QT_VERSION >= 0x050400
+	setMinimumRenderSize(1.0);
+#endif
+
 	initialized_ = true;
 	allScenes().append(this);
 }
