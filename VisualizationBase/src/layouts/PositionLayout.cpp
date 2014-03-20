@@ -304,10 +304,10 @@ void PositionLayout::updateGeometry(int, int)
 			topLeft.setX( x );
 		if (i==0 || topLeft.y() > y )
 			topLeft.setY( y );
-		if (i==0 || bottomRight.x() < x + items[i]->widthInParent()  )
-			bottomRight.setX( x + items[i]->widthInParent() );
-		if (i==0 || bottomRight.y() < y + items[i]->heightInParent() )
-			bottomRight.setY( y + items[i]->heightInParent() );
+		if (i==0 || bottomRight.x() < x + items[i]->widthInLocal()  )
+			bottomRight.setX( x + items[i]->widthInLocal() );
+		if (i==0 || bottomRight.y() < y + items[i]->heightInLocal() )
+			bottomRight.setY( y + items[i]->heightInLocal() );
 	}
 
 	int sizeWidth = bottomRight.x() - topLeft.x() + style()->leftInnerMargin() + style()->rightInnerMargin();
@@ -323,7 +323,6 @@ void PositionLayout::updateGeometry(int, int)
 	}
 
 	// ---------------------------------------
-
 	qreal geometricZoomScale = mainViewScalingFactor();
 
 	QVector<QRect> areas(items.size()); // stores the computed areas for each item
@@ -331,19 +330,19 @@ void PositionLayout::updateGeometry(int, int)
 
 	const int EXPANDING_STEP = 10; // this constant controls by how many units an item gets expanded per iteration step
 
-	int expanded = items.size();
+	int expanding = items.size();
 
 	// initialize the variables
 	for (int i =0; i<items.size(); ++i)
 	{
 		doneExpanding[i] = false;
 
-		areas[i] = QRect(items[i]->x(), items[i]->y(), items[i]->width(), items[i]->height());
+		areas[i] = QRect(items[i]->x(), items[i]->y(), items[i]->widthInLocal(), items[i]->heightInLocal());
 	}
 
-	while (expanded > 0) // while there is still something to do
+	while (expanding > 0) // while there is still something to do
 	{
-		expanded = 0; // reset the number of expanded items in this iteration step
+		expanding = 0; // reset the number of expanded items in this iteration step
 
 		// try expanding all items by one step
 		for (int i =0; i<items.size(); ++i)
@@ -354,73 +353,51 @@ void PositionLayout::updateGeometry(int, int)
 			auto item = items[i];
 			auto area = &areas[i];
 
+			bool left = (area->left() - EXPANDING_STEP > style()->leftInnerMargin());
+			bool top = (area->top() - EXPANDING_STEP > style()->topInnerMargin());
+			bool right = (area->right() + EXPANDING_STEP < sizeWidth - style()->rightInnerMargin() - style()->leftInnerMargin());
+			bool bottom = (area->bottom() + EXPANDING_STEP < sizeHeight - style()->bottomInnerMargin() - style()->topInnerMargin());
 
-			// possibly adjust the x-coordinate of the current item
-			auto newX = area->x() - EXPANDING_STEP / 2;
-			auto movedBeforeCollidingX = false;
-
-			if (newX >= style()->leftInnerMargin())
+			if ((left || right) && (top || bottom))
 			{
-				area->setX(newX);
+				// if there is a chance to expand
 
-				movedBeforeCollidingX = true;
+				int l = left ? (right ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
+				int t = top ? (bottom ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
+				int r = right ? (left ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
+				int b = bottom ? (top ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
+
+				area->setLeft(area->left() - l);
+				area->setTop(area->top() - t);
+				area->setRight(area->right() + r);
+				area->setBottom(area->bottom() + b);
+
+				if (areaCollides(area, areas))
+				{
+					doneExpanding[i] = true;
+
+					area->setLeft(area->left() + l);
+					area->setTop(area->top() + t);
+					area->setRight(area->right() - r);
+					area->setBottom(area->bottom() - b);
+				}
+				else
+				{
+					bool fullScale = scaleItem(item, area, geometricZoomScale);
+
+					area->setWidth(item->widthInParent());
+					area->setHeight(item->heightInParent());
+
+					if (fullScale)
+						doneExpanding[i] = true;
+					else
+						expanding++;
+				}
 			}
-
-			// possibly adjust the y-coordinate of the current item
-			auto newY = area->y() - EXPANDING_STEP / 2;
-			auto movedBeforeCollidingY = false;
-
-			if (newY >= style()->topInnerMargin())
+			else
 			{
-				area->setY(newY);
-
-				movedBeforeCollidingY = true;
-			}
-
-
-			// try expanding the size
-			area->setWidth(area->width() + EXPANDING_STEP);
-			area->setHeight(area->height() + EXPANDING_STEP);
-
-			// scale the item according to the computed area
-			if (scaleItem(item, area, geometricZoomScale)) doneExpanding[i] = true;
-
-			// adjust the actual area used by the item after scaling to make sure the area is only representing the
-			// actual area used by the item without the additional parts it does not use
-			area->setWidth(item->width() * item->scale());
-			area->setHeight(item->height() * item->scale());
-
-			// test whether the current area collides with any other areas
-			if (areaCollides(area, areas))
-			{
-				// if there was a collision this item cannot be expanded further
 				doneExpanding[i] = true;
-
-				// reset the x-coordinate if it was moved
-				if (movedBeforeCollidingX)
-				{
-					area->setX(area->x() + EXPANDING_STEP / 2);
-				}
-
-				// reset the y-coordinate if it was moved
-				if (movedBeforeCollidingY)
-				{
-					area->setY(area->y() + EXPANDING_STEP / 2);
-				}
-
-				// reset the size of the area
-				area->setWidth(area->width() - EXPANDING_STEP);
-				area->setHeight(area->height() - EXPANDING_STEP);
-
-				// scale the item according to the computed area
-				scaleItem(item, area, geometricZoomScale);
-
-				// adjust the actual area used by the item after scaling to make sure the area is only representing the
-				// actual area used by the item without the additional parts it does not use
-				area->setWidth(item->width() * item->scale());
-				area->setHeight(item->height() * item->scale());
 			}
-			else expanded++; // there was no collision so the number of expanded items in this iteration step is increased
 		}
 	}
 
@@ -429,26 +406,6 @@ void PositionLayout::updateGeometry(int, int)
 	{
 		items[i]->setPos(areas[i].x(), areas[i].y());
 	}
-
-	// calculate the new size of the container
-	for(int i = 0; i<items.size(); ++i)
-	{
-		int x = positions[i]->xNode() ? (areas[i].x()) : 0;
-		int y = positions[i]->yNode() ? (areas[i].y()) : 0;
-
-		if (i==0 || topLeft.x() > x )
-			topLeft.setX( x );
-		if (i==0 || topLeft.y() > y )
-			topLeft.setY( y );
-		if (i==0 || bottomRight.x() < x + areas[i].width()   )
-			bottomRight.setX( x + areas[i].width());
-		if (i==0 || bottomRight.y() < y + areas[i].height() )
-			bottomRight.setY( y + areas[i].height());
-	}
-
-	sizeWidth = bottomRight.x() - topLeft.x() + style()->leftInnerMargin() + style()->rightInnerMargin();
-	sizeHeight = bottomRight.y() - topLeft.y() + style()->topInnerMargin() + style()->bottomInnerMargin();
-	setInnerSize(sizeWidth, sizeHeight);
 }
 
 bool PositionLayout::scaleItem(Item* item, QRect* area, qreal geometricZoomScale)
@@ -459,8 +416,8 @@ bool PositionLayout::scaleItem(Item* item, QRect* area, qreal geometricZoomScale
 	qreal pScale = item->totalScale() / item->scale();
 
 	// compute the ratios between the available space and the minimal used space
-	qreal scaleX = (qreal)area->width() / item->width();
-	qreal scaleY = (qreal)area->height() / item->height();
+	qreal scaleX = (qreal)area->width() / item->widthInLocal();
+	qreal scaleY = (qreal)area->height() / item->heightInLocal();
 
 	// take the smaller ratio to guarantee that the item is not using more space than what area permits
 	qreal scale = scaleX < scaleY ? scaleX : scaleY;
@@ -481,7 +438,7 @@ bool PositionLayout::scaleItem(Item* item, QRect* area, qreal geometricZoomScale
 	}
 
 	// set the items scale
-	item->setScale(scale);
+	item->setItemScale(scale);
 
 	return fullScale;
 }
