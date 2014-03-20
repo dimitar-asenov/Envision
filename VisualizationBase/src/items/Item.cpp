@@ -171,6 +171,36 @@ void Item::clearSemanticZoomLevel()
 	setUpdateNeeded(FullUpdate);
 }
 
+void Item::setItemScale(qreal scaleX)
+{
+	setScale(scaleX);
+
+	// the parent's scale of the children of this item is the scale of the current item
+	qreal pScale = this->totalScale();
+
+	qreal geometricZoomScale = this->mainViewScalingFactor();
+
+	for (Item* child : this->childItems())
+	{
+		qreal scale = child->scale();
+
+		// calculate the total perceived scale for the chosen new scale
+		qreal totalScale = geometricZoomScale * scale * pScale;
+
+		// calculate the maximum scale (used to hardcap the scale of an item)
+		qreal maxScale = geometricZoomScale < 1 ? 1 : geometricZoomScale;
+
+		if (totalScale >= maxScale)
+		{
+			// if the item's scale would be larger than the maximum scale set it to the maximum value it could be
+			scale = maxScale / geometricZoomScale / pScale;
+
+			// set the items scale
+			child->setItemScale(scale);
+		}
+	}
+}
+
 void Item::setStyle(const ItemStyle* style)
 {
 	if (style == style_) return;
