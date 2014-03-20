@@ -44,8 +44,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VModuleSz
-: public Super<Visualization::ItemWithNode<VModuleSz, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  OOModel::Module>>
+: public Super<Visualization::ItemWithNode<VModuleSz, Visualization::Item, OOModel::Module, false>>
 {
 	ITEM_COMMON(VModuleSz)
 
@@ -54,16 +53,12 @@ class OOVISUALIZATION_API VModuleSz
 		virtual ~VModuleSz();
 
 	protected:
-		void determineChildren();
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		Visualization::SequentialLayout* header{};
+
 		Visualization::VText* name{};
-		Visualization::PositionLayout* body_{};
-		Visualization::SequentialLayout* content_{};
-		Visualization::VList* libraries_{};
-		Visualization::VList* declarations_{};
-		Visualization::VList* fields_{};
 };
 
 }

@@ -29,49 +29,20 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
-#include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
-#include "VisualizationBase/src/layouts/PositionLayoutStyle.h"
-#include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VModuleSzStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::PanelBorderLayoutStyle layout_;
-		Visualization::SequentialLayoutStyle header_;
 		Visualization::TextStyle name_;
-		Visualization::StaticStyle icon_;
-		Visualization::PositionLayoutStyle body_;
-		Visualization::SequentialLayoutStyle content_;
-		Visualization::VListStyle fields_;
-		Visualization::VListStyle declarations_;
-		Visualization::VListStyle libraries_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
 
-		const Visualization::PanelBorderLayoutStyle& layout() const;
-		const Visualization::SequentialLayoutStyle&  header() const;
 		const Visualization::TextStyle&  name() const;
-		const Visualization::StaticStyle&  icon() const;
-		const Visualization::PositionLayoutStyle& body() const;
-		const Visualization::SequentialLayoutStyle& content() const;
-		const Visualization::VListStyle& fields() const;
-		const Visualization::VListStyle& declarations() const;
-		const Visualization::VListStyle& libraries() const;
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VModuleSzStyle::layout() const {return layout_; }
-inline const Visualization::SequentialLayoutStyle& VModuleSzStyle::header() const {return header_; }
 inline const Visualization::TextStyle& VModuleSzStyle::name() const {return name_; }
-inline const Visualization::StaticStyle& VModuleSzStyle::icon() const {return icon_; }
-inline const Visualization::PositionLayoutStyle& VModuleSzStyle::body() const { return body_; }
-inline const Visualization::SequentialLayoutStyle& VModuleSzStyle::content() const { return content_; }
-inline const Visualization::VListStyle& VModuleSzStyle::fields() const { return fields_; }
-inline const Visualization::VListStyle& VModuleSzStyle::declarations() const { return declarations_; }
-inline const Visualization::VListStyle& VModuleSzStyle::libraries() const { return libraries_; }
 
 }
