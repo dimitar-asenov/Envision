@@ -314,14 +314,6 @@ void PositionLayout::updateGeometry(int, int)
 	int sizeHeight = bottomRight.y() - topLeft.y() + style()->topInnerMargin() + style()->bottomInnerMargin();
 	setInnerSize(sizeWidth, sizeHeight);
 
-	for (int i =0; i<items.size(); ++i)
-	{
-		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
-		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
-		items[i]->setPos( xOffset() + style()->leftInnerMargin() + x - topLeft.x(),
-								yOffset() + style()->topInnerMargin() + y - topLeft.y());
-	}
-
 	// ---------------------------------------
 	qreal geometricZoomScale = mainViewScalingFactor();
 
@@ -337,7 +329,12 @@ void PositionLayout::updateGeometry(int, int)
 	{
 		doneExpanding[i] = false;
 
-		areas[i] = QRect(items[i]->x(), items[i]->y(), items[i]->widthInLocal(), items[i]->heightInLocal());
+		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
+		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
+		areas[i] = QRect(xOffset() + style()->leftInnerMargin() + x - topLeft.x(),
+							  yOffset() + style()->topInnerMargin() + y - topLeft.y(),
+							  items[i]->widthInLocal(),
+							  items[i]->heightInLocal());
 	}
 
 	while (expanding > 0) // while there is still something to do
