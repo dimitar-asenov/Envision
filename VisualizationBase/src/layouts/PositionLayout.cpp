@@ -297,6 +297,8 @@ void PositionLayout::updateGeometry(int, int)
 
 	for(int i = 0; i<items.size(); ++i)
 	{
+		items[i]->setScale(1);
+
 		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
 		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
 
@@ -317,17 +319,30 @@ void PositionLayout::updateGeometry(int, int)
 	// ---------------------------------------
 	qreal geometricZoomScale = mainViewScalingFactor();
 
-	QVector<QRect> areas(items.size()); // stores the computed areas for each item
-	QVector<bool> doneExpanding(items.size()); // stores a flag whether the algorithm should still try to expand an item
+	QVector<QRectF> areas(items.size()); // stores the computed area for each item
+
+	// stores a priority list of directions in which an item should grow next
+	QVector<QList<int>> expandingDirections(items.size());
+
+	QVector<qreal> widthHeightRatio(items.size()); // stores the ratio between width and height of each item
+
+	// the possible directions in expandingDirections
+	const int DIR_LU = 1;
+	const int DIR_RU = 2;
+	const int DIR_RB = 3;
+	const int DIR_LB = 4;
 
 	const int EXPANDING_STEP = 10; // this constant controls by how many units an item gets expanded per iteration step
 
 	int expanding = items.size();
 
 	// initialize the variables
-	for (int i =0; i<items.size(); ++i)
+	for (int i = 0; i<items.size(); ++i)
 	{
-		doneExpanding[i] = false;
+		expandingDirections[i].append(DIR_LU);
+		expandingDirections[i].append(DIR_RU);
+		expandingDirections[i].append(DIR_RB);
+		expandingDirections[i].append(DIR_LB);
 
 		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
 		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
@@ -335,6 +350,8 @@ void PositionLayout::updateGeometry(int, int)
 							  yOffset() + style()->topInnerMargin() + y - topLeft.y(),
 							  items[i]->widthInLocal(),
 							  items[i]->heightInLocal());
+
+		widthHeightRatio[i] = (qreal)items[i]->widthInLocal() / (qreal)items[i]->heightInLocal();
 	}
 
 	while (expanding > 0) // while there is still something to do
@@ -343,59 +360,106 @@ void PositionLayout::updateGeometry(int, int)
 
 		// try expanding all items by one step
 		for (int i =0; i<items.size(); ++i)
-		{
-			if (doneExpanding[i]) continue; // item does not have to be arranged further
+			while (expandingDirections[i].size() > 0) { // item can possibly be expanded further
+				auto item = items[i];
+				auto area = &areas[i];
 
-			// using an alias is supposed to make the code more readable
-			auto item = items[i];
-			auto area = &areas[i];
+				// get the next priority expanding direction
+				auto expandingDirection = expandingDirections[i].takeFirst();
+				int compositeDirection = DIR_LU; // this is just a dummy assignment (variable set in subsequent switch)
 
-			bool left = (area->left() - EXPANDING_STEP > style()->leftInnerMargin());
-			bool top = (area->top() - EXPANDING_STEP > style()->topInnerMargin());
-			bool right = (area->right() + EXPANDING_STEP < sizeWidth - style()->rightInnerMargin() - style()->leftInnerMargin());
-			bool bottom = (area->bottom() + EXPANDING_STEP < sizeHeight - style()->bottomInnerMargin() - style()->topInnerMargin());
+				// these variables store the amount the item is going to be expanded in each direction in this step
+				qreal expansionLeft, expansionUp, expansionRight, expansionDown;
+				expansionLeft = expansionUp = expansionRight = expansionDown = 0;
 
-			if ((left || right) && (top || bottom))
-			{
-				// if there is a chance to expand
-
-				int l = left ? (right ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
-				int t = top ? (bottom ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
-				int r = right ? (left ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
-				int b = bottom ? (top ? EXPANDING_STEP / 2 : EXPANDING_STEP) : 0;
-
-				area->setLeft(area->left() - l);
-				area->setTop(area->top() - t);
-				area->setRight(area->right() + r);
-				area->setBottom(area->bottom() + b);
-
-				if (areaCollides(area, areas))
+				switch (expandingDirection)
 				{
-					doneExpanding[i] = true;
+				case DIR_LU:
+					expansionLeft = expansionUp = EXPANDING_STEP;
+					compositeDirection = DIR_RB;
+					break;
+				case DIR_RU:
+					expansionRight = expansionUp = EXPANDING_STEP;
+					compositeDirection = DIR_LB;
+					break;
+				case DIR_RB:
+					expansionRight = expansionDown = EXPANDING_STEP;
+					compositeDirection = DIR_LU;
+					break;
+				case DIR_LB:
+					expansionLeft = expansionDown = EXPANDING_STEP;
+					compositeDirection = DIR_RU;
+					break;
+				default:
+					Q_ASSERT(false); // this should be unreachable
+				}
 
-					area->setLeft(area->left() + l);
-					area->setTop(area->top() + t);
-					area->setRight(area->right() - r);
-					area->setBottom(area->bottom() - b);
+				// constrain the expansion such that the resulting area would have the same side ratio
+				if (widthHeightRatio[i] > 1)
+				{
+					expansionUp /= widthHeightRatio[i];
+					expansionDown /= widthHeightRatio[i];
 				}
 				else
 				{
+					expansionRight *= widthHeightRatio[i];
+					expansionLeft *= widthHeightRatio[i];
+				}
+
+				// try expanding the area
+				area->setLeft(area->left() - expansionLeft);
+				area->setTop(area->top() - expansionUp);
+				area->setRight(area->right() + expansionRight);
+				area->setBottom(area->bottom() + expansionDown);
+
+				// calculate possible collisions with borders
+				bool doesNotCollideWithLeftBorder = (area->left() > style()->leftInnerMargin()) || expansionLeft == 0;
+				bool doesNotCollideWithTopBorder = (area->top() > style()->topInnerMargin()) || expansionUp == 0;
+				bool doesNotCollideWithRightBorder = (area->right() < sizeWidth - style()->rightInnerMargin() -
+																  style()->leftInnerMargin()) || expansionRight == 0;
+				bool doesNotCollideWithBottomBorder = (area->bottom() < sizeHeight - style()->bottomInnerMargin() -
+																	style()->topInnerMargin()) || expansionDown == 0;
+
+				if (!areaCollides(area, areas) && doesNotCollideWithLeftBorder && doesNotCollideWithRightBorder &&
+					 doesNotCollideWithTopBorder && doesNotCollideWithBottomBorder)
+				{
+					// the expanded item does not collide with any item or border
+
 					bool fullScale = scaleItem(item, area, geometricZoomScale);
 
-					area->setWidth(item->widthInParent());
-					area->setHeight(item->heightInParent());
-
 					if (fullScale)
-						doneExpanding[i] = true;
+						expandingDirections[i].clear(); // if the item is fully scaled it does not need to be expanded further
 					else
-						expanding++;
+					{
+						expanding++; // this item is continuously interested in getting larger
+
+						// to assure a more centralized growing around the original place we try to expand in the opposing
+						// direction next if this direction is still available to be explored
+						auto compositeElementIndex = expandingDirections[i].indexOf(compositeDirection);
+						if (compositeElementIndex > 0)
+						{
+							auto compositeElement = expandingDirections[i].takeAt(compositeElementIndex);
+							expandingDirections[i].prepend(compositeElement);
+						}
+
+						// append the last growing direction to the end of the priority list such that the item will use
+						// this direction again only after trying to grow in a different available direction first
+						expandingDirections[i].append(expandingDirection);
+					}
+
+					break; // after either successful growing skip this item's grow step and go to the next item
+				}
+				else
+				{
+					// the area collided in the attempted direction
+
+					// revert all changes to the area
+					area->setLeft(area->left() + expansionLeft);
+					area->setTop(area->top() + expansionUp);
+					area->setRight(area->right() - expansionRight);
+					area->setBottom(area->bottom() - expansionDown);
 				}
 			}
-			else
-			{
-				doneExpanding[i] = true;
-			}
-		}
 	}
 
 	// set the calculated new item positions
@@ -405,7 +469,7 @@ void PositionLayout::updateGeometry(int, int)
 	}
 }
 
-bool PositionLayout::scaleItem(Item* item, QRect* area, qreal geometricZoomScale)
+bool PositionLayout::scaleItem(Item* item, QRectF* area, qreal geometricZoomScale)
 {
 	bool fullScale = false; // stores whether the area can get as big as it is allowed to with the provided area
 
@@ -440,7 +504,7 @@ bool PositionLayout::scaleItem(Item* item, QRect* area, qreal geometricZoomScale
 	return fullScale;
 }
 
-bool PositionLayout::areaCollides(QRect* area, QVector<QRect>& areas)
+bool PositionLayout::areaCollides(QRectF* area, QVector<QRectF>& areas)
 {
 	for (int i =0; i<areas.size(); ++i)
 	{

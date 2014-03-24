@@ -77,8 +77,8 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		virtual bool itemGeometryChangesWithZoom() const override;
 
 	private:
-		bool scaleItem(Item* item, QRect* area, qreal geometricZoomScale);
-		bool areaCollides(QRect* area, QVector<QRect>& areas);
+		bool scaleItem(Item* item, QRectF* area, qreal geometricZoomScale);
+		bool areaCollides(QRectF* area, QVector<QRectF>& areas);
 
 		QVector<Item*> items;
 		QVector<Position*> positions;
