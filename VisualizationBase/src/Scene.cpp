@@ -414,11 +414,22 @@ void Scene::computeSceneRect()
 	for(auto v: views()) v->setSceneRect(viewRect);
 }
 
-void Scene::setUpdateItemGeometryWhenZoomChanges(Item* item, bool update = true)
+void Scene::setUpdateItemGeometryWhenZoomChanges(Item* item, bool update)
 {
 	Q_ASSERT(item);
 	if (update) itemsToUpdateGeometryWhenZoomChanges_.insert(item);
-	else itemsToUpdateGeometryWhenZoomChanges_.remove(item);
+	else
+	{
+		itemsToUpdateGeometryWhenZoomChanges_.remove(item);
+
+		auto it = itemsToUpdateGeometryWhenZoomChanges_.begin();
+		while (it != itemsToUpdateGeometryWhenZoomChanges_.end())
+		{
+			if (item->isAncestorOf(*it))
+				it = itemsToUpdateGeometryWhenZoomChanges_.erase(it);
+			else ++it;
+		}
+	}
 }
 
 void Scene::setMainViewScalingFactor(qreal factor)

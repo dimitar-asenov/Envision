@@ -109,9 +109,7 @@ Item::~Item()
 {
 	// Mark this item as not needing updates
 	if (auto s = scene())
-		if (itemGeometryChangesWithZoom())	// We assume this always returns the same value for the entire lifetime of
-														// this object. If this is not true, simply drop this condition.
-			s->setUpdateItemGeometryWhenZoomChanges(this, false);
+		s->setUpdateItemGeometryWhenZoomChanges(this, false);
 
 	SAFE_DELETE(shape_);
 }
@@ -366,9 +364,7 @@ void Item::removeFromScene()
 			scene()->setMainCursor(nullptr);
 
 		// Mark this item as not needing updates
-		if (itemGeometryChangesWithZoom())	// We assume this always returns the same value for the entire lifetime of
-														// this object. If this is not true, simply drop this condition.
-			scene()->setUpdateItemGeometryWhenZoomChanges(this, false);
+		scene()->setUpdateItemGeometryWhenZoomChanges(this, false);
 
 		if (parent()) scene()->removeItem(this);
 		else scene()->removeTopLevelItem(this);
