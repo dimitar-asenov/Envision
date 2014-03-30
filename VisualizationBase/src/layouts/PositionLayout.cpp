@@ -201,95 +201,7 @@ void PositionLayout::updateGeometry(int, int)
 	// Arrange items if they were all missing positions.
 	if (allNodesLackPositionInfo && !items.isEmpty())
 	{
-		// Get averages
-		double averageWidth = 0;
-		double averageHeight = 0;
-		for(auto i : items)
-		{
-			averageWidth += i->widthInParent();
-			averageHeight += i->heightInParent();
-		}
-		averageWidth /= items.size();
-		averageHeight /= items.size();
-
-		// Get 'optimal' number of rows to achieve a square
-		double prevRatio = 0;
-		int rows = 1;
-		for (rows = 1; rows<items.size(); ++rows)
-		{
-			int cols = (items.size()/rows) + ((items.size()%rows)?1:0);
-			double ratio = (averageWidth*cols) / (averageHeight*rows);
-
-			if (ratio > 1) ratio = 1/ratio;
-
-			if (ratio > prevRatio)
-			{
-				prevRatio = ratio;
-			}
-			else
-			{
-				if (rows > 1) --rows;
-				break;
-			}
-		}
-
-		int heightLimit = rows*averageHeight;
-
-		//Compute the columns and set the positions
-		int lastBottom = 0;
-		int lastRight = 0;
-		int colWidth = 0;
-
-
-		auto model = items[0]->node()->model();
-		QList<Model::Model*> models{ {model} };
-
-		model->beginModification(items[0]->node(), "Automatically set position");
-		// It is important to batch the modifications, since model::endModification() send a notification signal.
-
-		for(int i = 0; i<items.size(); ++i)
-		{
-			int x = lastRight;
-			int y = lastBottom;
-
-			if (lastBottom == 0 || (lastBottom + items[i]->heightInParent() <= heightLimit))
-			{
-				lastBottom += 10 + items[i]->heightInParent();
-				lastBottom = toGrid(lastBottom);
-
-				if (items[i]->widthInParent() > colWidth) colWidth =  items[i]->widthInParent();
-			}
-			else
-			{
-				y = 0;
-				lastBottom = 10 + items[i]->heightInParent();
-
-				lastRight += 10 + colWidth;
-				lastRight = toGrid(lastRight);
-				x = lastRight;
-				colWidth = items[i]->widthInParent();
-			}
-
-			auto newModel = items[i]->node()->model();
-
-			if (newModel != model)
-			{
-				if (!models.contains(newModel))
-				{
-					models << newModel;
-					newModel->beginModification(items[i]->node(), "Automatically set position");
-				}
-
-				model = newModel;
-			}
-
-			model->changeModificationTarget(items[i]->node());
-			positions[i]->setX(x);
-			positions[i]->setY(y);
-		}
-
-		for (auto m : models) m->endModification(false);
-		allNodesLackPositionInfo = false;
+		calculateNodesPositionInfo();
 	}
 
 	QPoint topLeft;
@@ -297,8 +209,6 @@ void PositionLayout::updateGeometry(int, int)
 
 	for(int i = 0; i<items.size(); ++i)
 	{
-		items[i]->setScale(1);
-
 		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
 		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
 
@@ -316,7 +226,12 @@ void PositionLayout::updateGeometry(int, int)
 	int sizeHeight = bottomRight.y() - topLeft.y() + style()->topInnerMargin() + style()->bottomInnerMargin();
 	setInnerSize(sizeWidth, sizeHeight);
 
-	// ---------------------------------------
+
+	scaleAndPositionItems(topLeft, sizeWidth, sizeHeight);
+}
+
+void PositionLayout::scaleAndPositionItems(QPoint topLeft, int sizeWidth, int sizeHeight)
+{
 	qreal geometricZoomScale = mainViewScalingFactor();
 
 	QVector<QRectF> areas(items.size()); // stores the computed area for each item
@@ -339,6 +254,8 @@ void PositionLayout::updateGeometry(int, int)
 	// initialize the variables
 	for (int i = 0; i<items.size(); ++i)
 	{
+		items[i]->setScale(1);
+
 		expandingDirections[i].append(DIR_LU);
 		expandingDirections[i].append(DIR_RU);
 		expandingDirections[i].append(DIR_RB);
@@ -506,7 +423,7 @@ bool PositionLayout::scaleItem(Item* item, QRectF* area, qreal geometricZoomScal
 
 bool PositionLayout::areaCollides(QRectF* area, QVector<QRectF>& areas)
 {
-	for (int i =0; i<areas.size(); ++i)
+	for (int i = 0; i<areas.size(); ++i)
 	{
 		if (area == &areas[i]) continue;
 
@@ -517,6 +434,99 @@ bool PositionLayout::areaCollides(QRectF* area, QVector<QRectF>& areas)
 	}
 
 	return false;
+}
+
+void PositionLayout::calculateNodesPositionInfo()
+{
+	// Get averages
+	double averageWidth = 0;
+	double averageHeight = 0;
+	for(auto i : items)
+	{
+		averageWidth += i->widthInParent();
+		averageHeight += i->heightInParent();
+	}
+	averageWidth /= items.size();
+	averageHeight /= items.size();
+
+	// Get 'optimal' number of rows to achieve a square
+	double prevRatio = 0;
+	int rows = 1;
+	for (rows = 1; rows<items.size(); ++rows)
+	{
+		int cols = (items.size()/rows) + ((items.size()%rows)?1:0);
+		double ratio = (averageWidth*cols) / (averageHeight*rows);
+
+		if (ratio > 1) ratio = 1/ratio;
+
+		if (ratio > prevRatio)
+		{
+			prevRatio = ratio;
+		}
+		else
+		{
+			if (rows > 1) --rows;
+			break;
+		}
+	}
+
+	int heightLimit = rows*averageHeight;
+
+	//Compute the columns and set the positions
+	int lastBottom = 0;
+	int lastRight = 0;
+	int colWidth = 0;
+
+
+	auto model = items[0]->node()->model();
+	QList<Model::Model*> models{ {model} };
+
+	model->beginModification(items[0]->node(), "Automatically set position");
+	// It is important to batch the modifications, since model::endModification() send a notification signal.
+
+	for(int i = 0; i<items.size(); ++i)
+	{
+		int x = lastRight;
+		int y = lastBottom;
+
+		if (lastBottom == 0 || (lastBottom + items[i]->heightInParent() <= heightLimit))
+		{
+			lastBottom += 10 + items[i]->heightInParent();
+			lastBottom = toGrid(lastBottom);
+
+			if (items[i]->widthInParent() > colWidth) colWidth =  items[i]->widthInParent();
+		}
+		else
+		{
+			y = 0;
+			lastBottom = 10 + items[i]->heightInParent();
+
+			lastRight += 10 + colWidth;
+			lastRight = toGrid(lastRight);
+			x = lastRight;
+			colWidth = items[i]->widthInParent();
+		}
+
+		auto newModel = items[i]->node()->model();
+
+		if (newModel != model)
+		{
+			if (!models.contains(newModel))
+			{
+				models << newModel;
+				newModel->beginModification(items[i]->node(), "Automatically set position");
+			}
+
+			model = newModel;
+		}
+
+		model->changeModificationTarget(items[i]->node());
+		positions[i]->setX(x);
+		positions[i]->setY(y);
+	}
+
+	for (auto m : models) m->endModification(false);
+	allNodesLackPositionInfo = false;
 }
 
 int PositionLayout::focusedElementIndex() const
