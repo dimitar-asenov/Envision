@@ -78,7 +78,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 
 	private:
 		void scaleAndPositionItems(QPoint topLeft, int sizeWidth, int sizeHeight);
-		bool scaleItem(Item* item, QRectF* area, qreal geometricZoomScale);
+		bool scaleItem(Item* item, QRectF* area, qreal& scale, qreal geometricZoomScale);
 		bool areaCollides(QRectF* area, QVector<QRectF>& areas);
 
 		void calculateNodesPositionInfo();

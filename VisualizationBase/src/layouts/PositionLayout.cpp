@@ -236,6 +236,8 @@ void PositionLayout::scaleAndPositionItems(QPoint topLeft, int sizeWidth, int si
 
 	QVector<QRectF> areas(items.size()); // stores the computed area for each item
 
+	QVector<qreal> scales(items.size()); // stores the computed scale for each item
+
 	// stores a priority list of directions in which an item should grow next
 	QVector<QList<int>> expandingDirections(items.size());
 
@@ -255,6 +257,7 @@ void PositionLayout::scaleAndPositionItems(QPoint topLeft, int sizeWidth, int si
 	for (int i = 0; i<items.size(); ++i)
 	{
 		items[i]->setScale(1);
+		scales[i] = 1;
 
 		expandingDirections[i].append(DIR_LU);
 		expandingDirections[i].append(DIR_RU);
@@ -342,7 +345,7 @@ void PositionLayout::scaleAndPositionItems(QPoint topLeft, int sizeWidth, int si
 				{
 					// the expanded item does not collide with any item or border
 
-					bool fullScale = scaleItem(item, area, geometricZoomScale);
+					bool fullScale = scaleItem(item, area, scales[i], geometricZoomScale);
 
 					if (fullScale)
 						expandingDirections[i].clear(); // if the item is fully scaled it does not need to be expanded further
@@ -383,10 +386,12 @@ void PositionLayout::scaleAndPositionItems(QPoint topLeft, int sizeWidth, int si
 	for(int i = 0; i<items.size(); ++i)
 	{
 		items[i]->setPos(areas[i].x(), areas[i].y());
+
+		items[i]->setItemScale(scales[i]);
 	}
 }
 
-bool PositionLayout::scaleItem(Item* item, QRectF* area, qreal geometricZoomScale)
+bool PositionLayout::scaleItem(Item* item, QRectF* area, qreal& scale, qreal geometricZoomScale)
 {
 	bool fullScale = false; // stores whether the area can get as big as it is allowed to with the provided area
 
@@ -398,7 +403,7 @@ bool PositionLayout::scaleItem(Item* item, QRectF* area, qreal geometricZoomScal
 	qreal scaleY = (qreal)area->height() / item->heightInLocal();
 
 	// take the smaller ratio to guarantee that the item is not using more space than what area permits
-	qreal scale = scaleX < scaleY ? scaleX : scaleY;
+	scale = scaleX < scaleY ? scaleX : scaleY;
 
 	// calculate the total perceived scale for the chosen new scale
 	qreal totalScale = geometricZoomScale * scale * pScale;
@@ -414,9 +419,6 @@ bool PositionLayout::scaleItem(Item* item, QRectF* area, qreal geometricZoomScal
 		//  the item is as big as it can get
 		fullScale = true;
 	}
-
-	// set the items scale
-	item->setItemScale(scale);
 
 	return fullScale;
 }
