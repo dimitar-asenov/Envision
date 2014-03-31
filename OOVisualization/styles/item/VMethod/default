@@ -59,7 +59,6 @@
 	<signatureLine prototypes="item/Line/default">
 		<pen><style>2</style></pen>
 	</signatureLine>
-	<body prototypes="item/VStatementItemList/default"/>
 	<annotations prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box

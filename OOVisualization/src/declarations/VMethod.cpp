@@ -99,8 +99,7 @@ void VMethod::initializeForms()
 
 	auto signatureLineElement = item<Line>(&I::signatureLine_, [](I* v){return &v->style()->signatureLine();});
 
-	auto bodyElement = item<VStatementItemList>(&I::body_, [](I* v){return v->node()->items();},
-											[](I* v){return &v->style()->body();});
+	auto bodyElement = item(&I::body_, [](I* v){return v->node()->items();});
 
 	auto contentElement = (new GridLayoutFormElement())
 			->setVerticalSpacing(3)->setColumnStretchFactors(1)

@@ -56,7 +56,6 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBa
 		Property<Visualization::StaticStyle> conversionIcon{this, "conversionIcon"};
 		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
 		Property<Visualization::LineStyle> signatureLine{this, "signatureLine"};
-		Property<Visualization::VListStyle> body{this, "body"};
 		Property<Visualization::VListStyle> annotations{this, "annotations"};
 		Property<Visualization::SequentialLayoutStyle> addons{this, "addons"};
 		Property<Visualization::SequentialLayoutStyle> content{this, "content"};
