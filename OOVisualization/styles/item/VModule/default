@@ -1,32 +1,27 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
-	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline>
-				<width>2</width>
-				<color>
-					<alpha>255</alpha>
-					<red>0</red>
-					<green>0</green>
-					<blue>100</blue>
-				</color>
-			</outline>
-			<backgroundBrush>
-				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>200</red>
-					<green>200</green>
-					<blue>255</blue>
-				</color>
-			</backgroundBrush>
-			<cornerRadius>10</cornerRadius>
-		</shape>
-	</layout>
-	<header prototypes="layout/SequentialLayout/default">
-		<spaceBetweenElements>10</spaceBetweenElements>
-	</header>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>2</width>
+			<color>
+				<alpha>255</alpha>
+				<red>0</red>
+				<green>0</green>
+				<blue>100</blue>
+			</color>
+		</outline>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>200</red>
+				<green>200</green>
+				<blue>255</blue>
+			</color>
+		</backgroundBrush>
+		<cornerRadius>10</cornerRadius>
+	</shape>
 	<icon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/module.svg</filename>
 		<width>40</width>
@@ -74,11 +69,6 @@
 			<sizeIsInPixels>true</sizeIsInPixels>
 		</selectionFont>
 	</name>
-	<content prototypes="layout/SequentialLayout/default">
-		<direction>2</direction>
-		<alignment>1</alignment>
-		<spaceBetweenElements>5</spaceBetweenElements>
-	</content>
 	<body prototypes="layout/PositionLayout/default" />
 	<declarations prototypes="item/VList/default">
 		<shape/>

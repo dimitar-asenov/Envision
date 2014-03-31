@@ -1,30 +1,27 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
-	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline>
-				<width>4</width>
-				<color>
-					<alpha>255</alpha>
-					<red>60</red>
-					<green>60</green>
-					<blue>60</blue>
-				</color>
-			</outline>
-			<backgroundBrush>
-				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>200</red>
-					<green>200</green>
-					<blue>200</blue>
-				</color>
-			</backgroundBrush>
-			<cornerRadius>10</cornerRadius>
-		</shape>
-	</layout>
-	<header prototypes="layout/SequentialLayout/default" />
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>4</width>
+			<color>
+				<alpha>255</alpha>
+				<red>60</red>
+				<green>60</green>
+				<blue>60</blue>
+			</color>
+		</outline>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>200</red>
+				<green>200</green>
+				<blue>200</blue>
+			</color>
+		</backgroundBrush>
+		<cornerRadius>10</cornerRadius>
+	</shape>
 	<name prototypes="item/Text/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -72,11 +69,6 @@
 		<width>60</width>
 		<height>60</height>
 	</icon>
-	<content prototypes="layout/SequentialLayout/default">
-		<direction>2</direction>
-		<alignment>1</alignment>
-		<spaceBetweenElements>5</spaceBetweenElements>
-	</content>
 	<body prototypes="layout/PositionLayout/default" />
 	<declarations prototypes="item/VList/default">
 		<shape/>

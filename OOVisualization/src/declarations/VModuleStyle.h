@@ -31,47 +31,21 @@
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/src/layouts/PositionLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VModuleStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::PanelBorderLayoutStyle layout_;
-		Visualization::SequentialLayoutStyle header_;
-		Visualization::TextStyle name_;
-		Visualization::StaticStyle icon_;
-		Visualization::PositionLayoutStyle body_;
-		Visualization::SequentialLayoutStyle content_;
-		Visualization::VListStyle fields_;
-		Visualization::VListStyle declarations_;
-		Visualization::VListStyle libraries_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
-
-		const Visualization::PanelBorderLayoutStyle& layout() const;
-		const Visualization::SequentialLayoutStyle&  header() const;
-		const Visualization::TextStyle&  name() const;
-		const Visualization::StaticStyle&  icon() const;
-		const Visualization::PositionLayoutStyle& body() const;
-		const Visualization::SequentialLayoutStyle& content() const;
-		const Visualization::VListStyle& fields() const;
-		const Visualization::VListStyle& declarations() const;
-		const Visualization::VListStyle& libraries() const;
+		virtual ~VModuleStyle() override;
+		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::PositionLayoutStyle> body{this, "body"};
+		Property<Visualization::VListStyle> fields{this, "fields"};
+		Property<Visualization::VListStyle> declarations{this, "declarations"};
+		Property<Visualization::VListStyle> libraries{this, "libraries"};
 };
-
-inline const Visualization::PanelBorderLayoutStyle& VModuleStyle::layout() const {return layout_; }
-inline const Visualization::SequentialLayoutStyle& VModuleStyle::header() const {return header_; }
-inline const Visualization::TextStyle& VModuleStyle::name() const {return name_; }
-inline const Visualization::StaticStyle& VModuleStyle::icon() const {return icon_; }
-inline const Visualization::PositionLayoutStyle& VModuleStyle::body() const { return body_; }
-inline const Visualization::SequentialLayoutStyle& VModuleStyle::content() const { return content_; }
-inline const Visualization::VListStyle& VModuleStyle::fields() const { return fields_; }
-inline const Visualization::VListStyle& VModuleStyle::declarations() const { return declarations_; }
-inline const Visualization::VListStyle& VModuleStyle::libraries() const { return libraries_; }
 
 }
