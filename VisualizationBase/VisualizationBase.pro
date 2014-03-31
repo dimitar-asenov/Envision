@@ -113,7 +113,8 @@ HEADERS += src/items/EmptyItem.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h \
-    src/renderer/VisualizationGroupsManager.h
+    src/renderer/VisualizationGroupsManager.h \
+    src/renderer/SzLevelOrderingManager.h
 SOURCES += src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
@@ -204,4 +205,5 @@ SOURCES += src/items/EmptyItem.cpp \
     src/visualizationbase.cpp \
     src/VisualizationException.cpp \
     src/Scene.cpp \
-    src/renderer/VisualizationGroupsManager.cpp
+    src/renderer/VisualizationGroupsManager.cpp \
+    src/renderer/SzLevelOrderingManager.cpp
