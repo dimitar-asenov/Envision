@@ -28,7 +28,6 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"

@@ -36,7 +36,6 @@
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
-	class PanelBorderLayout;
 	class PositionLayout;
 	class SequentialLayout;
 	class Static;

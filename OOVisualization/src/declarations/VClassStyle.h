@@ -31,7 +31,6 @@
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/src/layouts/PositionLayoutStyle.h"
 

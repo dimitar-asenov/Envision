@@ -59,8 +59,6 @@
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/icons/SVGIcon.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/layouts/PanelLayout.h"
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
