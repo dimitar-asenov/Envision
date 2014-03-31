@@ -66,7 +66,7 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VStatementItemList, StatementItemList>);
 
 
-	Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface_zoom_level");
+	Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface_zoom_level", 1);
 
 	// Register semantic zoom: public interface visualizations
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose", "public_interface_zoom_level",
@@ -75,20 +75,20 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VMethodSzPublic, Method>);
 
 
-	Scene::defaultRenderer()->registerSemanticZoomLevel("high_level_zoom_level");
+	Scene::defaultRenderer()->registerSemanticZoomLevel("high_level_zoom_level", 2);
 
 	// Register semantic zoom: high level visualizations
 	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), "default_purpose", "high_level_zoom_level",
 			createVisualization<VModuleSz, Module>);
 
 
-	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test1");
+	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test1", 3);
 
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "declaration_test1",
 			createVisualization<VDeclarationSz, Method>);
 
 
-	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test2");
+	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test2", 4);
 
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "declaration_test2",
 			createVisualization<VDeclarationSz, Method>);
@@ -96,7 +96,7 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VDeclarationSz, Class>);
 
 
-	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test3");
+	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test3", 5);
 
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "declaration_test3",
 			createVisualization<VDeclarationSz, Method>);
@@ -106,7 +106,7 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VDeclarationSz, Module>);
 
 
-	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test4");
+	Scene::defaultRenderer()->registerSemanticZoomLevel("declaration_test4", 6);
 
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "declaration_test4",
 			createVisualization<VDeclarationSz, Method>);

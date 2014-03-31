@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
+#include "SzLevelOrderingManager.h"
 #include "VisualizationGroup.h"
 #include "VisualizationGroupsManager.h"
 
@@ -68,10 +69,13 @@ class VISUALIZATIONBASE_API ModelRenderer
 		QString purposeName(int purpose);
 		int purposeId(QString name);
 
-		int registerSemanticZoomLevel(const QString& name);
+		int registerSemanticZoomLevel(const QString& name, int orderingNumber);
 		int numRegisteredSemanticZoomLevels() const;
 		QString semanticZoomLevelName(int semanticZoomLevel);
 		int semanticZoomLevelId(QString name);
+
+		int getCoarserSemanticZoomLevel(int currentSemanticZoomLevel);
+		int getFinerSemanticZoomLevel(int currentSemanticZoomLevel);
 
 	private:
 		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE = 1;
@@ -79,6 +83,8 @@ class VISUALIZATIONBASE_API ModelRenderer
 
 		QVector<QString > purposes_;
 		QVector<QString > semanticZoomLevels_;
+
+		SzLevelOrderingManager szLevelOrderingManager_;
 
 		VisualizationGroupsManager visualizationGroupsManager_;
 

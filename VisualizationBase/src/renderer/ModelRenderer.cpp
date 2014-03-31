@@ -35,11 +35,12 @@ namespace Visualization {
 ModelRenderer::ModelRenderer()
 {
 	registerVisualizationPurpose("default_purpose");
-	registerSemanticZoomLevel("default_zoom_level");
+	registerSemanticZoomLevel("default_zoom_level", 0);
 }
 
 ModelRenderer::~ModelRenderer()
 {
+	szLevelOrderingManager_.clear();
 	visualizationGroupsManager_.clear();
 	purposes_.clear();
 	semanticZoomLevels_.clear();
@@ -169,13 +170,20 @@ int ModelRenderer::registerVisualizationPurpose(const QString& name)
 	return purposes_.size()-1;
 }
 
-int ModelRenderer::registerSemanticZoomLevel(const QString& name)
+int ModelRenderer::registerSemanticZoomLevel(const QString& name, int orderingNumber)
 {
 	if (semanticZoomLevels_.contains(name))
 		throw VisualizationException("Trying to register a semantic zoom level with a name that's already registered:"
 						+ name);
 
+	if (szLevelOrderingManager_.hasOrderingNumber(orderingNumber))
+		throw VisualizationException("Ordering number already in use: " + orderingNumber);
+
+
 	semanticZoomLevels_.append(name);
+
+	szLevelOrderingManager_.registerOrdering(semanticZoomLevelId(name), orderingNumber);
+
 	return semanticZoomLevels_.size()-1;
 }
 
@@ -193,6 +201,16 @@ void ModelRenderer::registerGroup(int nodeTypeId, int purpose, int semanticZoomL
 bool ModelRenderer::hasVisualization(int nodeTypeId, int purpose, int semanticZoomLevel)
 {
 	return visualizationGroupsManager_.hasVisualization(nodeTypeId, purpose, semanticZoomLevel);
+}
+
+int ModelRenderer::getCoarserSemanticZoomLevel(int currentSemanticZoomLevel)
+{
+	return szLevelOrderingManager_.getCoarserSemanticZoomLevel(currentSemanticZoomLevel);
+}
+
+int ModelRenderer::getFinerSemanticZoomLevel(int currentSemanticZoomLevel)
+{
+	return szLevelOrderingManager_.getFinerSemanticZoomLevel(currentSemanticZoomLevel);
 }
 
 }
