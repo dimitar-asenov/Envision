@@ -59,8 +59,8 @@ bool ControlFlowVisualization::initialize(Core::EnvisionManager&)
 
 	// Register visualizations
 	itemTypeInitializationRegistry().initializeAll();
-	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VMethodCF, Method>);
+	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VListCF, StatementItemList>);
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), visualizationPurpose(),
 			createVisualization<VBlockCF, Block>);
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), visualizationPurpose(),

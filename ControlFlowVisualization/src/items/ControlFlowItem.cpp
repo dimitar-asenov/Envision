@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "items/ControlFlowItem.h"
-#include "items/VMethodCF.h"
+#include "VisualizationBase/src/shapes/Shape.h"
 
 namespace ControlFlowVisualization {
 

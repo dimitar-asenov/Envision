@@ -27,7 +27,6 @@
 #pragma once
 
 #include "items/ControlFlowItem.h"
-#include "items/VMethodCF.h"
 #include "items/VListCF.h"
 #include "items/VBreakStatementCF.h"
 #include "items/VContinueStatementCF.h"

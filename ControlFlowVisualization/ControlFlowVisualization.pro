@@ -24,8 +24,6 @@ HEADERS += src/ControlFlowVisualizationException.h \
     src/items/VListCFStyle.h \
     src/items/VLoopStatementCF.h \
     src/items/VLoopStatementCFStyle.h \
-    src/items/VMethodCF.h \
-    src/items/VMethodCFStyle.h \
     src/items/VReturnStatementCF.h \
     src/precompiled.h \
     src/controlflowvisualization.h
@@ -40,8 +38,6 @@ SOURCES += src/items/VBlockCF.cpp \
     src/items/VContinueStatementCF.cpp \
     src/items/VListCF.cpp \
     src/items/VListCFStyle.cpp \
-    src/items/VMethodCF.cpp \
-    src/items/VMethodCFStyle.cpp \
     src/items/ControlFlowItem.cpp \
     src/items/ControlFlowItemStyle.cpp \
     src/ControlFlowVisualizationException.cpp \
