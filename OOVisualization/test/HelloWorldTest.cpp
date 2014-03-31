@@ -721,6 +721,19 @@ Method* addLongMethod(Class* parent)
 	assignEach->setOp(AssignmentExpression::DIVIDE_ASSIGN);
 	assignEach->setRight(new ReferenceExpression("elem"));
 
+	auto trycatch = new TryCatchFinallyStatement();
+	trycatch->tryBody()->append(new ExpressionStatement(new ReferenceExpression("var1")));
+	auto catch1 = new CatchClause();
+	trycatch->catchClauses()->append(catch1);
+	catch1->setExceptionToCatch(new ReferenceExpression("someExpDecl"));
+	catch1->body()->append(new ExpressionStatement(new ReferenceExpression("var2")));
+	auto catch2 = new CatchClause();
+	trycatch->catchClauses()->append(catch2);
+	catch2->setExceptionToCatch(new ReferenceExpression("someOtherExpDecl"));
+	catch2->body()->append(new ExpressionStatement(new ReferenceExpression("var3")));
+	trycatch->finallyBody()->append(new ExpressionStatement(new ReferenceExpression("var4")));
+	longMethod->items()->append(trycatch);
+
 	ReturnStatement* longMethodReturn = new ReturnStatement();
 	longMethod->items()->append(longMethodReturn);
 	longMethodReturn->values()->append(new IntegerLiteral(42));

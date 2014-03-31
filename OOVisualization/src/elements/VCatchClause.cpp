@@ -27,9 +27,9 @@
 #include "VCatchClause.h"
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -38,43 +38,31 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VCatchClause, "item")
 
-VCatchClause::VCatchClause(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style)
+VCatchClause::VCatchClause(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style) {}
+
+void VCatchClause::initializeForms()
 {
-	layout()->setTop(true);
-	header_ = new SequentialLayout(layout()->top(), &style->header());
-	layout()->top()->setFirst(header_);
-	icon_ = new Static(header_, &style->icon());
-	header_->append(icon_);
+	auto header = (new GridLayoutFormElement())
+			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
+			->setHorizontalSpacing(5)
+			->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+			->put(1, 0, item<NodeWrapper>(&I::expressionToCatch_, [](I* v){return v->node()->exceptionToCatch();},
+																[](I* v){return &v->style()->expressionToCatch();}));
 
-	expressionBackground_ =new SequentialLayout(header_, &style->expressionBackground());
-	header_->append(expressionBackground_);
-}
+	auto body = (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)
+					->put(0, 0, item(&I::body_, [](I* v){return v->node()->body();}));
 
-VCatchClause::~VCatchClause()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	header_ = nullptr;
-	icon_ = nullptr;
-	expressionToCatch_ = nullptr;
-	expressionBackground_ = nullptr;
-	body_ = nullptr;
-}
 
-void VCatchClause::determineChildren()
-{
-	expressionBackground_->synchronizeFirst(expressionToCatch_, node()->exceptionToCatch());
-	layout()->synchronizeContent(body_,node()->body(), &style()->body());
+	auto shapeElement = new ShapeFormElement();
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle(&style()->layout());
-	header_->setStyle(&style()->header());
-	icon_->setStyle(&style()->icon());
-	expressionBackground_->setStyle(&style()->expressionBackground());
-	body_->setStyle(&style()->body());
+	addForm((new AnchorLayoutFormElement())
+			->put(TheLeftOf, header, AtLeftOf, body)
+			->put(TheLeftOf, shapeElement, 2, FromLeftOf, body)
+			->put(TheRightOf, header, AtRightOf, body)
+			->put(TheRightOf, shapeElement, 2, FromRightOf, body)
+			->put(TheBottomOf, header, 3, FromTopOf, body)
+			->put(TheTopOf, shapeElement, AtCenterOf, header)
+			->put(TheBottomOf, shapeElement, 2, FromBottomOf, body));
 }
 
 } /* namespace OOVisualization */

@@ -28,37 +28,20 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCatchClauseStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VCatchClauseStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::PanelBorderLayoutStyle layout_;
-		Visualization::SequentialLayoutStyle header_;
-		Visualization::StaticStyle icon_;
-		Visualization::SequentialLayoutStyle expressionBackground_;
-		Visualization::VListStyle body_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VCatchClauseStyle() override;
 
-		const Visualization::PanelBorderLayoutStyle& layout() const;
-		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::SequentialLayoutStyle& expressionBackground() const;
-		const Visualization::VListStyle& body() const;
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::ItemStyle> expressionToCatch{this, "expressionToCatch"};
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VCatchClauseStyle::layout() const { return layout_; }
-inline const Visualization::SequentialLayoutStyle& VCatchClauseStyle::header() const { return header_; }
-inline const Visualization::StaticStyle& VCatchClauseStyle::icon() const { return icon_; }
-inline const Visualization::SequentialLayoutStyle& VCatchClauseStyle::expressionBackground() const
-	{ return expressionBackground_; }
-inline const Visualization::VListStyle& VCatchClauseStyle::body() const { return body_; }
 
 } /* namespace OOVisualization */
