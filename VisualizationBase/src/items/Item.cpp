@@ -708,7 +708,7 @@ int Item::childNodePurpose(const Model::Node* node) const
 	auto c = childNodePurpose_.find(node);
 	if (c != childNodePurpose_.end()) return *c;
 
-	return purpose();
+	return std::max(0, purpose());
 }
 
 void Item::setChildNodePurpose(const Model::Node* node, int purpose)
