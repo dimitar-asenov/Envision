@@ -88,10 +88,6 @@ HEADERS += src/items/EmptyItem.h \
     src/layouts/GridLayoutStyle.h \
     src/layouts/Layout.h \
     src/layouts/LayoutStyle.h \
-    src/layouts/PanelBorderLayout.h \
-    src/layouts/PanelBorderLayoutStyle.h \
-    src/layouts/PanelLayout.h \
-    src/layouts/PanelLayoutStyle.h \
     src/layouts/PositionLayout.h \
     src/layouts/PositionLayoutStyle.h \
     src/layouts/SequentialLayout.h \
@@ -191,10 +187,6 @@ SOURCES += src/items/EmptyItem.cpp \
     src/items/Item.cpp \
     src/items/ItemStyle.cpp \
     src/layouts/LayoutStyle.cpp \
-    src/layouts/PanelBorderLayoutStyle.cpp \
-    src/layouts/PanelBorderLayout.cpp \
-    src/layouts/PanelLayoutStyle.cpp \
-    src/layouts/PanelLayout.cpp \
     src/items/VText.cpp \
     src/items/TextStyle.cpp \
     src/items/Text.cpp \
