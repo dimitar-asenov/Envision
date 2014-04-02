@@ -24,141 +24,121 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VComposite.h"
-#include "items/Text.h"
+#include "VComposite.h"
+#include "Text.h"
+#include "EmptyItem.h"
 #include "../renderer/ModelRenderer.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VComposite, "item")
 
-VComposite::VComposite(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style),
-	header( new SequentialLayout(this, &style->smallHeaderStyle())),
-	layout(),
-	attributes(),
-	expanded_(style->expanded())
+VComposite::VComposite(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style), expanded_(style->expanded())
 {
-	header->append(new Text(header, node->typeName()));
-	if (!expanded_) removeShape();
+	typeName_ = new Text(this, node->typeName());
 }
 
-VComposite::~VComposite()
+void VComposite::initializeForms()
 {
-	if ( expanded_ )
-	{
-		SAFE_DELETE_ITEM(layout);
+	auto headerContent = (new GridLayoutFormElement())
+		->setHorizontalSpacing(3)
+		->setColumnStretchFactor(3, 1)
+		->setVerticalAlignment(LayoutStyle::Alignment::Center)
+		->setNoBoundaryCursors([](Item*){return true;})
+		->setNoInnerCursors([](Item*){return true;})
+		->put(0, 0, item(&I::name_, [](I* v){return v->nameNode();}))
+		->put(1, 0, item<Text>(&I::typeName_, [](I* v){return &v->style()->typeName();}));
 
-		// These were automatically deleted by layout's destructor
-		header = nullptr;
-		attributes = nullptr;
-	}
-	else SAFE_DELETE_ITEM(header);
+	auto headerBackground = item<EmptyItem>(&I::headerBackground_, [](I* v){ return &v->style()->headerBackground();});
+
+	auto completeHeader = grid({{(new AnchorLayoutFormElement())
+			->put(TheLeftOf, headerBackground, 2, FromLeftOf, headerContent)
+			->put(TheTopOf, headerBackground, 2, FromTopOf, headerContent)
+			->put(TheBottomOf, headerBackground, 2, FromBottomOf, headerContent)
+			->put(TheRightOf, headerBackground, 2, FromRightOf, headerContent)}});
+
+	addForm(completeHeader);
+
+	auto shapeElement = new ShapeFormElement();
+	auto attr = grid({{(new SequentialLayoutFormElement())->setVertical()
+			->setListOfItems([](Item* i){return (static_cast<VComposite*>(i))->attributes();})}})
+		->setColumnStretchFactor(1, 1);
+
+	auto completeHeader2 = completeHeader->clone();
+	completeHeader2->setColumnStretchFactor(1, 1);
+
+	addForm((new AnchorLayoutFormElement())
+		// place the top left corner of the content element
+		->put(TheLeftOf, completeHeader2, 10, FromLeftOf, attr)
+		->put(TheTopOf, attr, AtBottomOf, completeHeader2)
+		// align content and header on their right side
+		->put(TheRightOf, attr, AtRightOf, completeHeader2)
+		// put the shape element at the right place
+		->put(TheTopOf, shapeElement, AtCenterOf, completeHeader2)
+		->put(TheLeftOf, shapeElement, AtLeftOf, completeHeader2)
+		->put(TheBottomOf, shapeElement, 10, FromBottomOf, attr)
+		->put(TheRightOf, shapeElement, 10, FromRightOf, completeHeader2));
 }
 
-void VComposite::determineChildren()
+int VComposite::determineForm()
 {
-	// Set the name if any
+	int formId = expanded() ? 1 : 0;
+
+	if (formId == 0) attributes_.clear();
+	return formId;
+}
+
+Model::Node* VComposite::nameNode()
+{
 	if ( node()->hasAttribute("name") )
-	{
-		Model::Node* name = node()->get("name");
-		if ( header->length() == 1 ) header->prepend(renderer()->render(header, name));
-		if ( header->length() == 2 && header->at<Item>(0)->node() != name )
-		{
-			header->remove(0);
-			header->prepend(renderer()->render(header, name));
-		}
-	}
-	else
-	{
-		if ( header->length() > 1 ) header->remove(0);
-	}
-
-	// Clean up when switching styles
-	if ( expandedSwtiched() )
-	{
-		if ( expanded_ )
-		{
-			useShape();
-			layout = new PanelBorderLayout(this, &style()->borderStyle());
-
-			layout->setTop(true);
-			layout->top()->setMiddle(header);
-
-			attributes = new SequentialLayout(layout, &style()->attributesStyle());
-			layout->setContent(attributes);
-		}
-		else
-		{
-			removeShape();
-			// This is the header. We do not want this to be removed by layout's destructor
-			layout->top()->setMiddle(nullptr, false);
-			header->setParentItem(this);
-
-			SAFE_DELETE_ITEM(layout);
-
-			attributes = nullptr; // This was automatically deleted by layout's destructor
-		}
-	}
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	if (expanded_)
-	{
-		header->setStyle(&style()->headerStyle());
-		layout->setStyle(&style()->borderStyle());
-		attributes->setStyle(&style()->attributesStyle());
-	}
-	else header->setStyle(&style()->smallHeaderStyle());
-
-	if ( expanded_ )
-	{
-		// Set the attributes
-		// NOTE: This procedure assumes that the order of the named attributes will never change. Attributes might be
-		// deleted or added but their ordering should be kept constant.
-		// TODO: document this somewhere more visible.
-		QList<QPair<QString, Model::Node*> > attr = node()->getAllAttributes();
-
-		// Remove elements from attributes which are outdated
-		for(int i = attributes->length() - 1; i>=0; --i)
-		{
-			bool found = false;
-			for (int k = 0; k<attr.size(); ++k)
-			{
-				if (attr[k].second == attributes->at<SequentialLayout>(i)->at<Item>(1)->node())
-				{
-					found = true;
-					break;
-				}
-			}
-
-			if (!found) attributes->remove(i);
-		}
-
-		int attributeIndex = 0;
-		for (int i = 0; i < attr.size(); ++i)
-		{
-			if ( attr[i].first == "name" ) continue;
-
-			if (attributes->length() <= attributeIndex || attributes->at<SequentialLayout>(attributeIndex)->at<Item>(1)->node() != attr[i].second)
-			{
-				SequentialLayout* s = new SequentialLayout(attributes);
-				s->append(new Text(s, attr[i].first));
-				s->append(renderer()->render(s, attr[i].second));
-				attributes->insert(s, attributeIndex);
-			}
-
-			++attributeIndex;
-		}
-	}
-
+		return node()->get("name");
+	else return nullptr;
 }
 
-void VComposite::updateGeometry(int availableWidth, int availableHeight)
+QList<Item*> VComposite::attributes()
 {
-	if ( expanded_ ) Item::updateGeometry(layout, availableWidth, availableHeight);
-	else Item::updateGeometry(header, availableWidth, availableHeight);
+	// Set the attributes
+	// NOTE: This procedure assumes that the order of the named attributes will never change. Attributes might be
+	// deleted or added but their ordering should be kept constant.
+	auto attr = node()->getAllAttributes();
+
+	// Remove elements from attributes which are outdated
+	for(int i = attributes_.size() - 1; i>=0; --i)
+	{
+		bool found = false;
+		for (int k = 0; k<attr.size(); ++k)
+		{
+			if (attr[k].second == static_cast<SequentialLayout*>(attributes_[i])->at<Item>(1)->node())
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) attributes_.removeAt(i);
+	}
+
+	int attributeIndex = 0;
+	for (int i = 0; i < attr.size(); ++i)
+	{
+		if ( attr[i].first == "name" ) continue;
+
+		if (	attributes_.size() <= attributeIndex
+				|| static_cast<SequentialLayout*>(attributes_[attributeIndex])->at<Item>(1)->node() != attr[i].second)
+		{
+			auto s = new SequentialLayout(nullptr);
+			s->append(new Text(s, attr[i].first));
+			s->append(renderer()->render(s, attr[i].second));
+			attributes_.insert(attributeIndex, s);
+		}
+
+		++attributeIndex;
+	}
+
+	return attributes_;
 }
 
 void VComposite::setExpanded(bool expanded)
@@ -168,11 +148,6 @@ void VComposite::setExpanded(bool expanded)
 		expanded_ = expanded;
 		setUpdateNeeded(FullUpdate);
 	}
-}
-
-inline bool VComposite::expandedSwtiched() const
-{
-	return (layout && attributes) != expanded_;
 }
 
 }

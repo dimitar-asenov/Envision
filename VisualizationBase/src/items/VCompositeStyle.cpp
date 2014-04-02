@@ -28,18 +28,6 @@
 
 namespace Visualization {
 
-VCompositeStyle::VCompositeStyle() : expanded_(true)
-{
-}
-
-void VCompositeStyle::load(StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("expanded", expanded_);
-	sl.load("borderStyle", borderStyle_);
-	sl.load("headerStyle", headerStyle_);
-	sl.load("smallHeaderStyle", smallHeaderStyle_);
-	sl.load("attributesStyle", attributesStyle_);
-}
+VCompositeStyle::~VCompositeStyle(){}
 
 }
