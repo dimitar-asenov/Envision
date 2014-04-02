@@ -28,18 +28,6 @@
 
 namespace OOVisualization {
 
-void VTryCatchFinallyStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("tryIcon", tryIcon_);
-	sl.load("contents", contents_);
-	sl.load("tryBody", tryBody_);
-	sl.load("catchClauses", catchClauses_);
-	sl.load("finallyOutline", finallyOutline_);
-	sl.load("finallyIcon", finallyIcon_);
-	sl.load("finallyBody", finallyBody_);
-}
+VTryCatchFinallyStyle::~VTryCatchFinallyStyle() {}
 
 } /* namespace OOVisualization */

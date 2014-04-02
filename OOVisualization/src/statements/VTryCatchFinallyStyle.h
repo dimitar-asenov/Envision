@@ -28,52 +28,22 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
-#include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
-#include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VTryCatchFinallyStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VTryCatchFinallyStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::PanelBorderLayoutStyle layout_;
-		Visualization::StaticStyle tryIcon_;
-		Visualization::SequentialLayoutStyle contents_;
-		Visualization::VListStyle tryBody_;
-
-		Visualization::VListStyle catchClauses_;
-
-		Visualization::PanelBorderLayoutStyle finallyOutline_;
-		Visualization::StaticStyle finallyIcon_;
-		Visualization::VListStyle finallyBody_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VTryCatchFinallyStyle() override;
 
-		const Visualization::PanelBorderLayoutStyle& layout() const;
-		const Visualization::StaticStyle& tryIcon() const;
-		const Visualization::SequentialLayoutStyle& contents() const;
-		const Visualization::VListStyle& tryBody() const;
+		Property<Visualization::StaticStyle> tryIcon{this, "tryIcon"};
+		Property<Visualization::VListStyle> catchClauses{this, "catchClauses"};
+		Property<Visualization::ItemStyle> finallyOutline{this, "finallyOutline"};
+		Property<Visualization::StaticStyle> finallyIcon{this, "finallyIcon"};
 
-		const Visualization::VListStyle& catchClauses() const;
-
-		const Visualization::PanelBorderLayoutStyle& finallyOutline() const;
-		const Visualization::StaticStyle& finallyIcon() const;
-		const Visualization::VListStyle& finallyBody() const;
 };
-
-inline const Visualization::PanelBorderLayoutStyle& VTryCatchFinallyStyle::layout() const { return layout_; }
-inline const Visualization::StaticStyle& VTryCatchFinallyStyle::tryIcon() const { return tryIcon_; }
-inline const Visualization::SequentialLayoutStyle& VTryCatchFinallyStyle::contents() const { return contents_; }
-inline const Visualization::VListStyle& VTryCatchFinallyStyle::tryBody() const { return tryBody_; }
-
-inline const Visualization::VListStyle& VTryCatchFinallyStyle::catchClauses() const { return catchClauses_; }
-
-inline const Visualization::PanelBorderLayoutStyle& VTryCatchFinallyStyle::finallyOutline() const
-	{ return finallyOutline_; }
-inline const Visualization::StaticStyle& VTryCatchFinallyStyle::finallyIcon() const { return finallyIcon_; }
-inline const Visualization::VListStyle& VTryCatchFinallyStyle::finallyBody() const { return finallyBody_; }
 
 } /* namespace OOVisualization */

@@ -31,12 +31,12 @@
 #include "VStatementItem.h"
 
 #include "OOModel/src/statements/TryCatchFinallyStatement.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/EmptyItem.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class Static;
-	class SequentialLayout;
-	class PanelBorderLayout;
 	class VList;
 }
 
@@ -45,48 +45,25 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VTryCatchFinally
-	: public Super<VStatementItem<VTryCatchFinally,
-	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::TryCatchFinallyStatement>>
+	: public Super<VStatementItem<VTryCatchFinally, Visualization::DeclarativeItem<VTryCatchFinally>,
+	  OOModel::TryCatchFinallyStatement>>
 {
 	ITEM_COMMON(VTryCatchFinally)
 
 	public:
 		VTryCatchFinally(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VTryCatchFinally();
 
-		Visualization::Static* tryIcon() const;
-		Visualization::SequentialLayout* contents() const;
-		VStatementItemList* tryBody() const;
-
-		Visualization::VList* catchClauses() const;
-
-		Visualization::PanelBorderLayout* finallyOutline() const;
-		Visualization::Static* finallyIcon() const;
-		VStatementItemList* finallyBody() const;
-
-	protected:
-		void determineChildren();
+		static void initializeForms();
 
 	private:
 		Visualization::Static* tryIcon_{};
-		Visualization::SequentialLayout* contents_{};
-		VStatementItemList* tryBody_{};
+		Item* tryBody_{};
 
 		Visualization::VList* catchClauses_{};
 
-		Visualization::PanelBorderLayout* finallyOutline_{};
+		Visualization::EmptyItem* finallyOutline_{};
 		Visualization::Static* finallyIcon_{};
-		VStatementItemList* finallyBody_{};
+		Item* finallyBody_{};
 };
-
-inline Visualization::Static* VTryCatchFinally::tryIcon() const { return tryIcon_; }
-inline Visualization::SequentialLayout* VTryCatchFinally::contents() const {return contents_; }
-inline VStatementItemList* VTryCatchFinally::tryBody() const {return tryBody_; }
-
-inline Visualization::VList* VTryCatchFinally::catchClauses() const {return catchClauses_; }
-
-inline Visualization::PanelBorderLayout* VTryCatchFinally::finallyOutline() const {return finallyOutline_; }
-inline Visualization::Static* VTryCatchFinally::finallyIcon() const {return finallyIcon_; }
-inline VStatementItemList* VTryCatchFinally::finallyBody() const {return finallyBody_; }
 
 } /* namespace OOVisualization */
