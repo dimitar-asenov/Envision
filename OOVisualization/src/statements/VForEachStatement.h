@@ -32,58 +32,47 @@
 
 #include "OOModel/src/statements/ForEachStatement.h"
 
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
+	class Static;
 	class VText;
-	class SequentialLayout;
-	class PanelBorderLayout;
+	class NodeWrapper;
 }
 
 namespace OOVisualization {
 
-class VStatementItemList;
-
 class OOVISUALIZATION_API VForEachStatement
-	: public Super<VStatementItem<VForEachStatement,
-	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::ForEachStatement>>
+	: public Super<VStatementItem<VForEachStatement, Visualization::DeclarativeItem<VForEachStatement>,
+	  OOModel::ForEachStatement>>
 {
 	ITEM_COMMON(VForEachStatement)
 
 	public:
 		VForEachStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VForEachStatement();
-
-		Visualization::SequentialLayout* header() const;
 
 		Visualization::VText* varName() const;
-		Visualization::Item* collection() const;
-		Visualization::Item* varType() const;
-		VStatementItemList* body() const;
-		Visualization::Item* icon() const;
+		Visualization::NodeWrapper* collection() const;
+		Visualization::NodeWrapper* varType() const;
+		Visualization::Item* body() const;
+		Visualization::Static* icon() const;
 
-	protected:
-		void determineChildren();
+		static void initializeForms();
 
 	private:
-		Visualization::SequentialLayout* header_;
 
-		Visualization::SequentialLayout* varContainer_;
-		Visualization::SequentialLayout* collectionBackground_;
-
-		Visualization::VText* varName_;
-		Visualization::Item* collection_;
-		Visualization::Item* varType_;
-		VStatementItemList* body_;
+		Visualization::Static* icon_{};
+		Visualization::VText* varName_{};
+		Visualization::NodeWrapper* collection_{};
+		Visualization::NodeWrapper* varType_{};
+		Visualization::Item* body_{};
 };
 
-	inline Visualization::SequentialLayout* VForEachStatement::header() const { return header_; }
-
 inline Visualization::VText* VForEachStatement::varName() const { return varName_; }
-inline Visualization::Item* VForEachStatement::collection() const { return collection_; }
-inline Visualization::Item* VForEachStatement::varType() const { return varType_; }
-inline VStatementItemList* VForEachStatement::body() const { return body_; }
-
-inline Visualization::Item* VForEachStatement::icon() const {return header_->at<Visualization::Item>(0);}
+inline Visualization::NodeWrapper* VForEachStatement::collection() const { return collection_; }
+inline Visualization::NodeWrapper* VForEachStatement::varType() const { return varType_; }
+inline Visualization::Item* VForEachStatement::body() const { return body_; }
+inline Visualization::Static* VForEachStatement::icon() const {return icon_;}
 
 }

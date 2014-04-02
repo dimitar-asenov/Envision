@@ -24,12 +24,16 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/VForEachStatement.h"
+#include "VForEachStatement.h"
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -38,56 +42,36 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VForEachStatement, "item")
 
-VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	header_(), varContainer_(), collectionBackground_(), varName_(), collection_(),	varType_(), body_()
+VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleType* style)
+: Super(parent, node, style) {}
+
+void VForEachStatement::initializeForms()
 {
-	layout()->setTop(true);
-	header_ = new SequentialLayout(layout()->top(), &style->header());
-	layout()->top()->setFirst(header_);
+	auto header = (new GridLayoutFormElement())
+					->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
+					->setVerticalAlignment(LayoutStyle::Alignment::Center)
+					->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+					->put(1, 0, item<NodeWrapper>(&I::varType_, [](I* v){return v->node()->varType();},
+																					[](I* v){return &v->style()->varType();}))
+					->put(2, 0, item<VText>(&I::varName_, [](I* v){return v->node()->varNameNode();},
+																					[](I* v){return &v->style()->varName();}))
+					->put(3, 0, item<NodeWrapper>(&I::collection_, [](I* v){return v->node()->collection();},
+																					[](I* v){return &v->style()->collection();}));
 
-	header_->append(new Static(header_, &style->icon()));
-	varContainer_ = new SequentialLayout(header_, &style->varContainer());
-	header_->append(varContainer_);
+	auto body = (new GridLayoutFormElement())
+			->setColumnStretchFactor(0, 1)
+			->put(0, 0, item(&I::body_, [](I* v){return v->node()->body();}));
 
-	varName_ = new VText(varContainer_, node->varNameNode(), &style->varName());
-	varContainer_->append(varName_);
+	auto shapeElement = new ShapeFormElement();
 
-	collectionBackground_ = new SequentialLayout(header_, &style->collection());
-	header_->append(collectionBackground_);
-}
-
-VForEachStatement::~VForEachStatement()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	header_ = nullptr;
-	varContainer_ = nullptr;
-	collectionBackground_ = nullptr;
-	varName_ = nullptr;
-	collection_ = nullptr;
-	varType_ = nullptr;
-	body_ = nullptr;
-}
-
-void VForEachStatement::determineChildren()
-{
-	layout()->synchronizeContent(body_, node()->body(), &style()->body());
-
-	collectionBackground_->synchronizeFirst(collection_, node()->collection());
-	varContainer_->synchronizeFirst(varType_, node()->varType());
-	varContainer_->synchronizeLast(varName_, node()->varNameNode(), &style()->varName());
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle(&style()->layout());
-	header_->setStyle(&style()->header());
-	header_->at<Static>(0)->setStyle(&style()->icon());
-	varContainer_->setStyle( &style()->varContainer() );
-	collectionBackground_->setStyle( &style()->collection() );
-	varName_->setStyle( &style()->varName() );
-	body_->setStyle(&style()->body());
+	addForm((new AnchorLayoutFormElement())
+		->put(TheTopOf, body, 10, FromBottomOf, header)
+		->put(TheTopOf, shapeElement, AtCenterOf, header)
+		->put(TheLeftOf, shapeElement, AtLeftOf, header)
+		->put(TheLeftOf, shapeElement, 10, FromLeftOf, body)
+		->put(TheRightOf, header, AtRightOf, body)
+		->put(TheRightOf, shapeElement, 10, FromRightOf, header)
+		->put(TheBottomOf, shapeElement, 10, FromBottomOf, body));
 }
 
 }

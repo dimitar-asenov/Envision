@@ -33,6 +33,8 @@
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
 namespace OOInteraction {
 
@@ -74,7 +76,7 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			vfor->node()->setCollection(empty);
 			vfor->node()->model()->endModification();
 
-			vfor->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			vfor->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}
@@ -90,7 +92,7 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			vfor->node()->setVarType(empty);
 			vfor->node()->model()->endModification();
 
-			vfor->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			vfor->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 
