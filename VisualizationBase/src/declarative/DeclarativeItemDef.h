@@ -103,22 +103,53 @@ template <class VisualizationType>
 template <class VisualizationType>
 template <class ChildItemVisualizationType>
 	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
-	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* item,
+	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 										std::function<const
 											typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter)
 {
-	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>(item, styleGetter);
+	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>(itemStorage, styleGetter);
+}
+
+template <class VisualizationType>
+template <class ChildItemVisualizationType, class ParentStyleType>
+	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
+			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
+{
+	return item<ChildItemVisualizationType>(itemStorage, [=](I* v) { return &((v->style()->*stylePointer)()); });
 }
 
 template <class VisualizationType>
 template <class ChildItemVisualizationType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
-	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* item,
+	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 			std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter)
 {
 	return new NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>
-		(item, nodeGetter, styleGetter);
+		(itemStorage, nodeGetter, styleGetter);
+}
+
+template <class VisualizationType>
+template <class ChildItemVisualizationType, class ParentStyleType>
+	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
+			std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
+			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
+{
+	return new NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>
+	(itemStorage, nodeGetter, [=](I* v) { return &((v->style()->*stylePointer)()); });
+}
+
+template <class VisualizationType>
+template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType>
+	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
+			typename ChildItemVisualizationType::NodeType* (ParentNodeType::*nodePointer)(),
+			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
+{
+	return new NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>
+	(itemStorage, [=](I* v){return (v->node()->*nodePointer)();}, [=](I* v) { return &((v->style()->*stylePointer)()); });
 }
 
 }
