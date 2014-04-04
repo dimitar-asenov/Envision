@@ -41,7 +41,6 @@ ITEM_COMMON_DEFINITIONS(VProject, "item")
 
 VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :Super(parent, node, style)
 {
-	setDefaultMoveCursorProxy(name_);
 	body_ = new PositionLayout(this, &style->body());
 }
 
@@ -57,6 +56,7 @@ void VProject::determineChildren()
 
 	// call determineChildren of super class
 	Super::determineChildren();
+	setDefaultMoveCursorProxy(name_);
 }
 
 void VProject::initializeForms()

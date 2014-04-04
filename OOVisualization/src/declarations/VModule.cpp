@@ -41,7 +41,6 @@ ITEM_COMMON_DEFINITIONS(VModule, "item")
 
 VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
-	setDefaultMoveCursorProxy(name_);
 	body_ = new PositionLayout(this, &style->body());
 }
 
@@ -56,6 +55,7 @@ void VModule::determineChildren()
 
 	// call determineChildren of super class
 	Super::determineChildren();
+	setDefaultMoveCursorProxy(name_);
 }
 
 void VModule::initializeForms()

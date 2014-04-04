@@ -47,7 +47,6 @@ ITEM_COMMON_DEFINITIONS(VClass, "item")
 
 VClass::VClass(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
-	setDefaultMoveCursorProxy(name_);
 	body_ = new PositionLayout(this, &style->body());
 }
 
@@ -61,6 +60,7 @@ void VClass::determineChildren()
 
 	// call determineChildren of super class
 	Super::determineChildren();
+	setDefaultMoveCursorProxy(name_);
 
 	// make field background behave as a special background element
 	if (fieldBackground_) fieldBackground_->setStretchable(true);
