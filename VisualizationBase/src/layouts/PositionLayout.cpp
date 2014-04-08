@@ -256,7 +256,6 @@ void PositionLayout::scaleAndPositionItems(QPoint topLeft, int sizeWidth, int si
 	// initialize the variables
 	for (int i = 0; i<items.size(); ++i)
 	{
-		items[i]->setScale(1);
 		scales[i] = 1;
 
 		expandingDirections[i].append(DIR_LU);
