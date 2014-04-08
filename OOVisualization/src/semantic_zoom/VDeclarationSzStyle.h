@@ -42,10 +42,7 @@ class OOVISUALIZATION_API VDeclarationSzStyle : public Visualization::Declarativ
 
 		Property<Visualization::TextStyle> name{this, "name"};
 
-		Property<Visualization::StaticStyle> methodIcon{this, "methodIcon"};
-		Property<Visualization::StaticStyle> classIcon{this, "classIcon"};
-		Property<Visualization::StaticStyle> moduleIcon{this, "moduleIcon"};
-		Property<Visualization::StaticStyle> projectIcon{this, "projectIcon"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
 };
 
 }

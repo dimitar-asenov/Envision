@@ -45,33 +45,38 @@ ITEM_COMMON_DEFINITIONS(VDeclarationSz, "item")
 
 VDeclarationSz::VDeclarationSz(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
+	if (DCast<Method>(node))
+		setStyle(itemStyles().get("method"));
+	else if (DCast<Class>(node))
+		setStyle(itemStyles().get("class"));
+	else if (DCast<Module>(node))
+		setStyle(itemStyles().get("module"));
+	else if (DCast<Project>(node))
+		setStyle(itemStyles().get("project"));
+
 	setDefaultMoveCursorProxy(name_);
 }
 
 void VDeclarationSz::initializeForms()
 {
 	auto content = (new GridLayoutFormElement())
-				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
+				->setHorizontalSpacing(5)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 				->put(0, 0, item<Static>(&I::icon_, [](I* v) -> const Visualization::StaticStyle* {
-						if (DCast<Method>(v->node()))
-							return &v->style()->methodIcon();
-						else if (DCast<Class>(v->node()))
-							return &v->style()->classIcon();
-						else if (DCast<Module>(v->node()))
-							return &v->style()->moduleIcon();
-						else if (DCast<Project>(v->node()))
-							return &v->style()->projectIcon();
-						else
-							Q_ASSERT(false);
-							return nullptr;
+						return &v->style()->icon();
 					}))
 				->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v) {
 						return &v->style()->name();
 					}));
 
-	addForm(content);
+	auto shapeElement = new ShapeFormElement();
+
+	addForm((new AnchorLayoutFormElement())
+				->put(TheTopOf, content, 10, FromTopOf, shapeElement)
+				->put(TheLeftOf, shapeElement, 10, FromLeftOf, content)
+				->put(TheBottomOf, content, 10, FromBottomOf, shapeElement)
+				->put(TheRightOf, shapeElement, 0, FromRightOf, content));
 }
 
 }
