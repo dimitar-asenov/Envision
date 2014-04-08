@@ -67,9 +67,8 @@ void VProject::initializeForms()
 				->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(1, 0, item<Static>(&I::icon_, [](I* v) { return &v->style()->icon(); }))
-				->put(2, 0, item<VText>(&I::name_,	[](I* v){return v->node()->nameNode();},
-																[](I* v) { return &v->style()->name();	}));
+				->put(1, 0, item<Static>(&I::icon_, &StyleType::icon))
+				->put(2, 0, item<VText>(&I::name_, &NodeType::nameNode, &StyleType::name));
 
 	auto contentElement = (new GridLayoutFormElement())
 				->setSpacing(5)
@@ -78,14 +77,14 @@ void VProject::initializeForms()
 				->setNoInnerCursors([](Item*){return true;})
 				->put(0, 0, item<VList>(&I::libraries_,
 						[](I* v) {return v->node()->libraries()->size() > 0 ? v->node()->libraries() : nullptr;},
-						[](I* v){return &v->style()->libraries();}))
+						&StyleType::libraries))
 				->put(0, 1, item<VList>(&I::fields_,
 						[](I* v) {return v->node()->fields()->size() > 0 ? v->node()->fields() : nullptr;},
-						[](I* v){return &v->style()->fields();}))
+						&StyleType::fields))
 				->put(0, 2, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
-						[](I* v){return &v->style()->declarations();}))
-				->put(0, 3, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
+						&StyleType::declarations))
+				->put(0, 3, item<PositionLayout>(&I::body_, &StyleType::body));
 
 	auto shapeElement = new ShapeFormElement();
 
