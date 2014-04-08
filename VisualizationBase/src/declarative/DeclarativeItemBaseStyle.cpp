@@ -28,10 +28,6 @@
 
 namespace Visualization {
 
-void DeclarativeItemBaseStyle::load(StyleLoader& sl)
-{
-	Super::load(sl);
-	sl.load("extraCursorsOutsideShape", extraCursorsOutsideShape_);
-}
+DeclarativeItemBaseStyle::~DeclarativeItemBaseStyle(){}
 
 } /* namespace Visualization */

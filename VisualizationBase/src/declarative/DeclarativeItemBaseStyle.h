@@ -33,15 +33,10 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public Super<ItemStyle>
 {
-	private:
-		bool extraCursorsOutsideShape_{};
-
 	public:
-		virtual void load(StyleLoader& sl);
+		virtual ~DeclarativeItemBaseStyle() override;
 
-		bool extraCursorsOutsideShape() const;
+		Property<bool> extraCursorsOutsideShape{this,"extraCursorsOutsideShape"};
 };
-
-inline bool DeclarativeItemBaseStyle::extraCursorsOutsideShape() const {return extraCursorsOutsideShape_;}
 
 } /* namespace Visualization */

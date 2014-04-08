@@ -28,10 +28,6 @@
 
 namespace Visualization {
 
-void DeclarativeTestStyle::load(StyleLoader& sl)
-{
-	Super::load(sl);
-	sl.load("symbol", symbol_);
-}
+DeclarativeTestStyle::~DeclarativeTestStyle(){}
 
 } /* namespace Visualization */

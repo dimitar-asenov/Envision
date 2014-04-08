@@ -33,14 +33,9 @@ namespace Visualization {
 
 class DeclarativeTestStyle : public Super<DeclarativeItemBaseStyle>
 {
-		SymbolStyle symbol_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
-
-		const SymbolStyle& symbol() const;
+		virtual ~DeclarativeTestStyle() override;
+		Property<SymbolStyle> symbol{this,"symbol"};
 };
-
-inline const SymbolStyle& DeclarativeTestStyle::symbol() const { return symbol_; }
 
 } /* namespace Visualization */
