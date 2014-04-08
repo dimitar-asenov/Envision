@@ -173,15 +173,15 @@ void Item::clearSemanticZoomLevel()
 	setUpdateNeeded(FullUpdate);
 }
 
-void Item::setItemScale(qreal scaleX)
+void Item::setItemScale(qreal newScale)
 {
 	const double SCALE_CHANGE_THRESHOLD = 0.01;
 
-	if (fabs(scaleX - scale()) < SCALE_CHANGE_THRESHOLD) return;
+	if (fabs(newScale - scale()) < SCALE_CHANGE_THRESHOLD) return;
 
 	if (DCast<PositionLayout>(this->parent()))
 	{
-		setScale(scaleX);
+		setScale(newScale);
 	}
 
 	// the parent's scale of the children of this item is the scale of the current item

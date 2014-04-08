@@ -363,7 +363,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual bool itemGeometryChangesWithZoom() const;
 
-		void setItemScale(qreal scale);
+		void setItemScale(qreal newScale);
 	protected:
 
 		void setWidth(int width);
