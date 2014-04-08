@@ -34,16 +34,11 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API SymbolStyle : public TextStyle
 {
-	private:
-		QString symbol_;
-
 	public:
-		void load(StyleLoader& sl);
+		virtual ~SymbolStyle() override;
 
-		const QString& symbol() const;
+		Property<QString> symbol{this,"symbol"};
 };
-
-inline const QString& SymbolStyle::symbol() const { return symbol_; }
 
 
 }

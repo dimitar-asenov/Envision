@@ -28,12 +28,6 @@
 
 namespace Interaction {
 
-void TextAndDescriptionStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("layout", layout_);
-	sl.load("text", text_);
-	sl.load("description", description_);
-}
+TextAndDescriptionStyle::~TextAndDescriptionStyle(){}
 
 }

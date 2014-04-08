@@ -28,10 +28,6 @@
 
 namespace Visualization {
 
-void IconStyle::load(StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("outline", outline_);
-}
+IconStyle::~IconStyle(){}
 
 }

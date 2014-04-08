@@ -36,15 +36,11 @@ namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public ControlFlowItemStyle
 {
-	private:
-		VListCFStyle statements_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VBlockCFStyle() override;
 
-		const VListCFStyle& statements() const;
+		Property<VListCFStyle> statements{this,"statements"};
 };
 
-inline const VListCFStyle& VBlockCFStyle::statements() const { return statements_; }
 
 }

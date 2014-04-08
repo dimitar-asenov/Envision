@@ -28,24 +28,6 @@
 
 namespace Visualization {
 
-ShapeStyle::ShapeStyle() :
-	outline_(Qt::SolidPattern, 1)
-{
-}
-
-ShapeStyle::~ShapeStyle()
-{
-}
-
-void ShapeStyle::setOutline(const QPen& outline)
-{
-	outline_ = outline;
-}
-
-void ShapeStyle::load(StyleLoader& sl)
-{
-	Style::load(sl);
-	sl.load("outline", outline_);
-}
+ShapeStyle::~ShapeStyle(){}
 
 }

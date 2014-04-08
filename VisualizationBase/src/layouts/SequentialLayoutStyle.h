@@ -34,55 +34,27 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 {
-	private:
-		Direction direction_;
-		Alignment alignment_;
-		int spaceBetweenElements_;
-		bool notLocationEquivalentCursors_;
-		bool noInnerCursors_;
-		bool noBoundaryCursorsInsideShape_;
-		bool extraCursorsOutsideShape_;
-		bool hasCursorWhenEmpty_;
-		int minWidth_;
-		int minHeight_;
-
 	public:
-		SequentialLayoutStyle();
-		virtual void load(StyleLoader& sl);
-
-		Direction direction() const;
-		Alignment alignment() const;
-		int spaceBetweenElements() const;
-		bool notLocationEquivalentCursors() const;
-		bool noInnerCursors() const;
-		bool noBoundaryCursorsInsideShape() const;
-		bool extraCursorsOutsideShape() const;
-		bool hasCursorWhenEmpty() const;
-		int minWidth() const;
-		int minHeight() const;
-
-		void setDirection(Direction direction);
-		void setAlignment(Alignment alignment);
-		void setSpaceBetweenElements(int space);
+		virtual ~SequentialLayoutStyle() override;
 
 		bool isHorizontal() const;
 		bool isForward() const;
+
+		Property<Direction> direction{this,"direction"};
+		Property<Alignment> alignment{this,"alignment"};
+		Property<int> spaceBetweenElements{this,"spaceBetweenElements"};
+		Property<bool> notLocationEquivalentCursors{this,"notLocationEquivalentCursors"};
+		Property<bool> noInnerCursors{this,"noInnerCursors"};
+		Property<bool> noBoundaryCursorsInsideShape{this,"noBoundaryCursorsInsideShape"};
+		Property<bool> extraCursorsOutsideShape{this,"extraCursorsOutsideShape"};
+		Property<bool> hasCursorWhenEmpty{this,"hasCursorWhenEmpty"};
+		Property<int> minWidth{this,"minWidth"};
+		Property<int> minHeight{this,"minHeight"};
 };
 
-inline LayoutStyle::Direction SequentialLayoutStyle::direction() const { return direction_; }
-inline LayoutStyle::Alignment SequentialLayoutStyle::alignment() const {	return alignment_; }
-inline int SequentialLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
-inline bool SequentialLayoutStyle::notLocationEquivalentCursors() const {return notLocationEquivalentCursors_;}
-inline bool SequentialLayoutStyle::noInnerCursors() const {return noInnerCursors_;}
-inline bool SequentialLayoutStyle::noBoundaryCursorsInsideShape() const {return noBoundaryCursorsInsideShape_;}
-inline bool SequentialLayoutStyle::extraCursorsOutsideShape() const {return extraCursorsOutsideShape_;}
-inline bool SequentialLayoutStyle::hasCursorWhenEmpty() const { return hasCursorWhenEmpty_; }
-inline int SequentialLayoutStyle::minWidth() const {return minWidth_;}
-inline int SequentialLayoutStyle::minHeight() const {return minHeight_;}
-
 inline bool SequentialLayoutStyle::isHorizontal() const
-	{ return direction_ == Direction::LeftToRight || direction_ == Direction::RightToLeft;}
+	{ return direction() == Direction::LeftToRight || direction() == Direction::RightToLeft;}
 inline bool SequentialLayoutStyle::isForward() const
-	{ return direction_ == Direction::LeftToRight || direction_ == Direction::TopToBottom;}
+	{ return direction() == Direction::LeftToRight || direction() == Direction::TopToBottom;}
 
 }

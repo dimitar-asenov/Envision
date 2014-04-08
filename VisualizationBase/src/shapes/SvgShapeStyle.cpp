@@ -29,17 +29,14 @@
 
 namespace Visualization {
 
+SvgShapeStyle::~SvgShapeStyle(){}
+
 void SvgShapeStyle::load(StyleLoader& sl)
 {
 	ShapeStyle::load(sl);
-	sl.load("filename", filename_);
-	sl.load("topContentMarginFraction", topContentMarginFraction_);
-	sl.load("bottomContentMarginFraction", bottomContentMarginFraction_);
-	sl.load("leftContentMarginFraction", leftContentMarginFraction_);
-	sl.load("rightContentMarginFraction", rightContentMarginFraction_);
 
-	if (filename_.isEmpty()) return;
-	if (!renderer_.load(filename_)) throw VisualizationException("Could not read SVG shape: " + filename_);
+	if (filename().isEmpty()) return;
+	if (!renderer_.load(filename())) throw VisualizationException("Could not read SVG shape: " + filename());
 }
 
 void SvgShapeStyle::paint(QPainter* painter, int x, int y, int width, int height) const

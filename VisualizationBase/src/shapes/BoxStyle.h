@@ -38,21 +38,15 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 	public:
 		enum class CornerType : int {RightAngle, Round, Cut} ;
 
-		virtual void load(StyleLoader& sl);
-
-		const QBrush& background() const;
-
-		CornerType corner() const;
-		int cornerRadius() const;
+		virtual ~BoxStyle() override;
 
 		void paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const;
 
+		Property<QBrush> background{this,"backgroundBrush"};
+		Property<CornerType> corner{this,"cornerType"};
+		Property<int> cornerRadius{this,"cornerRadius"};
+
 	protected:
-		QBrush background_;
-
-		CornerType corner_;
-		int cornerRadius_;
-
 		mutable Mipmap topLeftCorner_;
 		mutable Mipmap topRightCorner_;
 		mutable Mipmap bottomLeftCorner_;
@@ -66,9 +60,5 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 								int contentBoxHeight) const;
 		void generatePixmaps(qreal scaleFactor, const QPainter* painterSpecifyingRenderHints) const;
 };
-
-inline const QBrush& BoxStyle::background() const { return background_; }
-inline BoxStyle::CornerType BoxStyle::corner() const { return corner_; }
-inline int BoxStyle::cornerRadius() const { return cornerRadius_; }
 
 }

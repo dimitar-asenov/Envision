@@ -33,15 +33,10 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API IconStyle : public ItemStyle
 {
-	private:
-		QPen outline_;
-
 	public:
-		virtual void load(StyleLoader& sl);
+		virtual ~IconStyle() override;
+		Property<QPen> outline{this,"outline"};
 
-		const QPen& outline() const;
 };
-
-inline const QPen& IconStyle::outline() const { return outline_; }
 
 }

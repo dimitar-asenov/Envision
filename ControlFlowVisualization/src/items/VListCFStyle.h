@@ -36,15 +36,10 @@ namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VListCFStyle : public ControlFlowItemStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle sequence_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VListCFStyle() override;
 
-		const Visualization::SequentialLayoutStyle& sequence() const;
+		Property<Visualization::SequentialLayoutStyle> sequence{this,"sequence"};
 };
-
-inline const Visualization::SequentialLayoutStyle& VListCFStyle::sequence() const { return sequence_; }
 
 }

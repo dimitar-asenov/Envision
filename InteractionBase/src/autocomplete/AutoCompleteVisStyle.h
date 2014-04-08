@@ -34,24 +34,13 @@ namespace Interaction {
 
 class INTERACTIONBASE_API AutoCompleteVisStyle : public Visualization::ItemStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::StaticStyle noProposals_;
-		int heightLimit_;
-		int distanceToCursor_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~AutoCompleteVisStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::StaticStyle&  noProposals() const;
-		int heightLimit() const;
-		int distanceToCursor() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
+		Property<Visualization::StaticStyle> noProposals{this,"noProposals"};
+		Property<int> heightLimit{this,"heightLimit"};
+		Property<int> distanceToCursor{this,"distanceToCursor"};
 };
-
-inline const Visualization::SequentialLayoutStyle& AutoCompleteVisStyle::layout() const {return layout_; }
-inline const Visualization::StaticStyle& AutoCompleteVisStyle::noProposals() const {return noProposals_; }
-inline int AutoCompleteVisStyle::heightLimit() const {return heightLimit_; }
-inline int AutoCompleteVisStyle::distanceToCursor() const {return distanceToCursor_; }
 
 } /* namespace Interaction */

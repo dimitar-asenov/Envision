@@ -29,14 +29,8 @@
 
 namespace Visualization {
 
-ItemStyle::ItemStyle() :
-	shapeStyle_(nullptr)
-{
-}
-
-ItemStyle::~ItemStyle()
-{
-}
+ItemStyle::ItemStyle() : shapeStyle_(nullptr) {}
+ItemStyle::~ItemStyle(){}
 
 Shape* ItemStyle::createShape(Item* parent) const
 {
@@ -51,12 +45,6 @@ void ItemStyle::load(StyleLoader& sl)
 {
 	Style::load(sl);
 
-	QString shape;
-	sl.load("wholeItemCursor", wholeItemCursor_);
-	sl.load("noItemRegions", noItemRegions_);
-	sl.load("drawsOnlyShape", drawsOnlyShape_);
-	sl.load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
-	sl.load("allowEquivalentCursorsThroughBoundary", allowEquivalentCursorsThroughBoundary_);
 	sl.load("shape", shapeName_);
 	shapeName_ = shapeName_.trimmed();
 

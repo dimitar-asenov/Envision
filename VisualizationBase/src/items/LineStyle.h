@@ -34,21 +34,12 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API LineStyle : public ItemStyle
 {
-	private:
-		int width_;
-		int height_;
-		QPen pen_;
-
 	public:
-		virtual void load(StyleLoader& sl);
+		virtual ~LineStyle() override;
 
-		int width() const;
-		int height() const;
-		const QPen& pen() const;
+		Property<int> width{this,"width"};
+		Property<int> height{this,"height"};
+		Property<QPen> pen{this,"pen"};
 };
-
-inline int LineStyle::width() const { return width_; }
-inline int LineStyle::height() const { return height_; }
-inline const QPen& LineStyle::pen() const { return pen_;}
 
 } /* namespace Visualization */

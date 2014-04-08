@@ -34,25 +34,13 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API DiamondStyle : public ShapeStyle
 {
-	protected:
-		QBrush background_;
-
-		QBrush shadow_;
-		int xShadowOffset_;
-		int yShadowOffset_;
-
 	public:
-		virtual void load(StyleLoader& sl);
+		virtual ~DiamondStyle() override;
 
-		const QBrush& background() const;
-		const QBrush& shadow() const;
-		int xShadowOffset() const;
-		int yShadowOffset() const;
+		Property<QBrush> background{this,"backgroundBrush"};
+		Property<QBrush> shadow{this,"shadowBrush"};
+		Property<int> xShadowOffset{this,"shadowXOffset"};
+		Property<int> yShadowOffset{this,"shadowYOffset"};
 };
-
-inline const QBrush& DiamondStyle::background() const { return background_; }
-inline const QBrush& DiamondStyle::shadow() const { return shadow_; }
-inline int DiamondStyle::xShadowOffset() const { return xShadowOffset_; }
-inline int DiamondStyle::yShadowOffset() const { return yShadowOffset_; }
 
 }

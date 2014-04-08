@@ -28,13 +28,6 @@
 
 namespace Visualization {
 
-void DiamondStyle::load(StyleLoader& sl)
-{
-	ShapeStyle::load(sl);
-	sl.load("backgroundBrush", background_);
-	sl.load("shadowBrush", shadow_);
-	sl.load("shadowXOffset", xShadowOffset_);
-	sl.load("shadowYOffset", yShadowOffset_);
-}
+DiamondStyle::~DiamondStyle(){}
 
 }

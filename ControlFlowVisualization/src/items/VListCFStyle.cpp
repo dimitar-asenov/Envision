@@ -28,10 +28,6 @@
 
 namespace ControlFlowVisualization {
 
-void VListCFStyle::load(Visualization::StyleLoader& sl)
-{
-	ControlFlowItemStyle::load(sl);
-	sl.load("sequence", sequence_);
-}
+VListCFStyle::~VListCFStyle(){}
 
 }

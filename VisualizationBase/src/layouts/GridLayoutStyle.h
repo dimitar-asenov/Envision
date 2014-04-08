@@ -34,24 +34,13 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API GridLayoutStyle : public LayoutStyle
 {
-	private:
-		Alignment horizontalAlignment_;
-		Alignment verticalAlignment_;
-		int horizontalSpace_;
-		int verticalSpace_;
-
 	public:
-		virtual void load(StyleLoader& sl);
+		virtual ~GridLayoutStyle() override;
 
-		Alignment horizontalAlignment() const;
-		Alignment verticalAlignment() const;
-		int horizontalSpace() const;
-		int verticalSpace() const;
+		Property<Alignment> horizontalAlignment{this,"horizontalAlignment"};
+		Property<Alignment> verticalAlignment{this,"verticalAlignment"};
+		Property<int> horizontalSpace{this,"horizontalSpace"};
+		Property<int> verticalSpace{this,"verticalSpace"};
 };
-
-inline LayoutStyle::Alignment GridLayoutStyle::horizontalAlignment() const { return horizontalAlignment_; }
-inline LayoutStyle::Alignment GridLayoutStyle::verticalAlignment() const { return verticalAlignment_; }
-inline int GridLayoutStyle::horizontalSpace() const { return horizontalSpace_; }
-inline int GridLayoutStyle::verticalSpace() const { return verticalSpace_; }
 
 }

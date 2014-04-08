@@ -28,13 +28,6 @@
 
 namespace CustomMethodCall {
 
-void EmptyMethodVisStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("icon", icon_);
-	sl.load("separator", separator_);
-}
+EmptyMethodVisStyle::~EmptyMethodVisStyle(){}
 
 }

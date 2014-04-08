@@ -34,29 +34,15 @@ namespace Interaction {
 
 class INTERACTIONBASE_API CommandPromptStyle : public Visualization::ItemStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::SequentialLayoutStyle suggestionContainer_;
-		Visualization::SequentialLayoutStyle errorContainer_;
-		Visualization::TextStyle commandText_;
-		TextAndDescriptionStyle defaultSuggestion_;
-		TextAndDescriptionStyle defaultError_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~CommandPromptStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::SequentialLayoutStyle& suggestionContainer() const;
-		const Visualization::SequentialLayoutStyle& errorContainer() const;
-		const Visualization::TextStyle&  commandText() const;
-		const TextAndDescriptionStyle&  defaultSuggestion() const;
-		const TextAndDescriptionStyle&  defaultError() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
+		Property<Visualization::SequentialLayoutStyle> suggestionContainer{this,"suggestionContainer"};
+		Property<Visualization::SequentialLayoutStyle> errorContainer{this,"errorContainer"};
+		Property<Visualization::TextStyle> commandText{this,"commandText"};
+		Property<TextAndDescriptionStyle> defaultSuggestion{this,"defaultSuggestion"};
+		Property<TextAndDescriptionStyle> defaultError{this,"defaultError"};
 };
 
-inline const Visualization::SequentialLayoutStyle& CommandPromptStyle::layout() const {return layout_; }
-inline const Visualization::SequentialLayoutStyle& CommandPromptStyle::suggestionContainer() const {return suggestionContainer_; }
-inline const Visualization::SequentialLayoutStyle& CommandPromptStyle::errorContainer() const {return errorContainer_; }
-inline const Visualization::TextStyle& CommandPromptStyle::commandText() const {return commandText_; }
-inline const TextAndDescriptionStyle& CommandPromptStyle::defaultSuggestion() const {return defaultSuggestion_; }
-inline const TextAndDescriptionStyle& CommandPromptStyle::defaultError() const {return defaultError_; }
 }

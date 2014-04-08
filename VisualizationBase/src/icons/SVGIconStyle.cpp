@@ -29,13 +29,12 @@
 
 namespace Visualization {
 
+SVGIconStyle::~SVGIconStyle(){}
+
 void SVGIconStyle::load(StyleLoader& sl)
 {
 	IconStyle::load(sl);
-	sl.load("filename", filename_);
-	sl.load("width", width_);
-	sl.load("height", height_);
-	if (!renderer_.load(filename_)) throw VisualizationException("Could not read SVG icon: " + filename_);
+	if (!renderer_.load(filename())) throw VisualizationException("Could not read SVG icon: " + filename());
 
 	// Pre-compute the normal and minimal icon sizes
 	drawScaledPixmapInMipmap(1.0);
@@ -69,7 +68,7 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 
 bool SVGIconStyle::drawScaledPixmapInMipmap(qreal scaleFactor) const
 {
-	auto size = (QSizeF(width_,height_) * scaleFactor).toSize();
+	auto size = (QSizeF(width(),height()) * scaleFactor).toSize();
 	if (size.width() > 0 && size.height() > 0)
 	{
 		QImage img = QImage(size, QImage::Format_ARGB32);

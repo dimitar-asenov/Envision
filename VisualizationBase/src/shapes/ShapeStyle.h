@@ -34,18 +34,10 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API ShapeStyle : public Style
 {
-	protected:
-		QPen outline_;
-
 	public:
-		ShapeStyle();
-		virtual void load(StyleLoader& sl);
+		virtual ~ShapeStyle() override;
 
-		void setOutline(const QPen& outline);
-		const QPen& outline() const;
-
-		virtual ~ShapeStyle();
+		Property<QPen> outline{this,"outline"};
 };
 
-inline const QPen& ShapeStyle::outline() const { return outline_; }
 }

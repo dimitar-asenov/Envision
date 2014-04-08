@@ -28,11 +28,7 @@
 
 namespace ControlFlowVisualization {
 
-void ControlFlowItemStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("pinLength", pinLength_);
-	sl.load("pin", pin_);
-}
+ControlFlowItemStyle::~ControlFlowItemStyle(){}
+
 
 }

@@ -28,11 +28,6 @@
 
 namespace Visualization {
 
-void SymbolStyle::load(StyleLoader& sl)
-{
-	TextStyle::load(sl);
-
-	sl.load("symbol", symbol_);
-}
+SymbolStyle::~SymbolStyle(){}
 
 }

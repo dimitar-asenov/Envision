@@ -28,12 +28,6 @@
 
 namespace ControlFlowVisualization {
 
-
-void VBlockCFStyle::load(Visualization::StyleLoader& sl)
-{
-	ControlFlowItemStyle::load(sl);
-
-	sl.load("statements", statements_);
-}
+VBlockCFStyle::~VBlockCFStyle(){}
 
 }

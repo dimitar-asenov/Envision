@@ -28,17 +28,6 @@
 
 namespace Visualization {
 
-void GridLayoutStyle::load(StyleLoader& sl)
-{
-	LayoutStyle::load(sl);
-	// Indirect reading of enums in order to avoid compiler errors
-	int enumVal{};
-	sl.load("horizontalAlignment", enumVal);
-	horizontalAlignment_ = (Alignment) enumVal;
-	sl.load("verticalAlignment", enumVal);
-	verticalAlignment_ = (Alignment) enumVal;
-	sl.load("horizontalSpace", horizontalSpace_);
-	sl.load("verticalSpace", verticalSpace_);
-}
+GridLayoutStyle::~GridLayoutStyle(){}
 
 }

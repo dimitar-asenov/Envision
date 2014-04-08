@@ -36,21 +36,12 @@ namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VIfStatementCFStyle : public ControlFlowItemStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle condition_;
-		VListCFStyle thenBranch_;
-		VListCFStyle elseBranch_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VIfStatementCFStyle() override;
 
-		const Visualization::SequentialLayoutStyle& condition() const;
-		const VListCFStyle& thenBranch() const;
-		const VListCFStyle& elseBranch() const;
+		Property<Visualization::SequentialLayoutStyle> condition{this,"condition"};
+		Property<VListCFStyle> thenBranch{this,"thenBranch"};
+		Property<VListCFStyle> elseBranch{this,"elseBranch"};
 };
-
-inline const Visualization::SequentialLayoutStyle& VIfStatementCFStyle::condition() const { return condition_; }
-inline const VListCFStyle& VIfStatementCFStyle::thenBranch() const { return thenBranch_; }
-inline const VListCFStyle& VIfStatementCFStyle::elseBranch() const { return elseBranch_; }
 
 }

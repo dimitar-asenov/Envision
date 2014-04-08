@@ -41,34 +41,24 @@ class VISUALIZATIONBASE_API ItemStyle : public Style
 {
 	public:
 		ItemStyle();
-		virtual ~ItemStyle();
+		virtual ~ItemStyle() override;
 
 		Shape* createShape(Item* parent) const;
 		bool hasShape() const;
 
 		virtual void load(StyleLoader& sl);
 
-		bool drawsOnlyShape() const;
-		bool drawShapeWhenEmpty() const;
-		bool wholeItemCursor() const;
-		bool noItemRegions() const;
-		bool allowEquivalentCursorsThroughBoundary() const;
+		Property<bool> drawsOnlyShape{this,"drawsOnlyShape"};
+		Property<bool> drawShapeWhenEmpty{this,"drawShapeWhenEmpty"};
+		Property<bool> wholeItemCursor{this,"wholeItemCursor"};
+		Property<bool> noItemRegions{this,"noItemRegions"};
+		Property<bool> allowEquivalentCursorsThroughBoundary{this,"allowEquivalentCursorsThroughBoundary"};
 
 	private:
-		QSharedPointer<ShapeStyle> shapeStyle_;
 		QString shapeName_;
-		bool drawsOnlyShape_;
-		bool drawShapeWhenEmpty_;
-		bool wholeItemCursor_;
-		bool noItemRegions_;
-		bool allowEquivalentCursorsThroughBoundary_;
+		QSharedPointer<ShapeStyle> shapeStyle_;
 };
 
 inline bool ItemStyle::hasShape() const { return !shapeName_.isEmpty(); }
-inline bool ItemStyle::drawsOnlyShape() const { return drawsOnlyShape_; }
-inline bool ItemStyle::drawShapeWhenEmpty() const {return drawShapeWhenEmpty_; }
-inline bool ItemStyle::wholeItemCursor() const {return wholeItemCursor_; }
-inline bool ItemStyle::noItemRegions() const {return noItemRegions_; }
-inline bool ItemStyle::allowEquivalentCursorsThroughBoundary() const {return allowEquivalentCursorsThroughBoundary_;}
 
 }

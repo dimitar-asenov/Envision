@@ -34,18 +34,12 @@ namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API ControlFlowItemStyle : public Visualization::ItemStyle
 {
-	private:
-		int pinLength_;
-		QPen pin_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~ControlFlowItemStyle() override;
 
-		int pinLength() const;
-		const QPen& pin() const;
+		Property<int> pinLength{this,"pinLength"};
+		Property<QPen> pin{this,"pin"};
 };
 
-inline int ControlFlowItemStyle::pinLength() const {	return pinLength_; }
-inline const QPen& ControlFlowItemStyle::pin() const {	return pin_; }
 
 }

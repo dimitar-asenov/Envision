@@ -37,24 +37,13 @@ namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VLoopStatementCFStyle : public ControlFlowItemStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle initStep_;
-		Visualization::SequentialLayoutStyle condition_;
-		Visualization::SequentialLayoutStyle updateStep_;
-		VListCFStyle body_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VLoopStatementCFStyle() override;
 
-		const Visualization::SequentialLayoutStyle& initStep() const;
-		const Visualization::SequentialLayoutStyle& condition() const;
-		const Visualization::SequentialLayoutStyle& updateStep() const;
-		const VListCFStyle& body() const;
+		Property<Visualization::SequentialLayoutStyle> initStep{this,"initStep"};
+		Property<Visualization::SequentialLayoutStyle> condition{this,"condition"};
+		Property<Visualization::SequentialLayoutStyle> updateStep{this,"updateStep"};
+		Property<VListCFStyle> body{this,"body"};
 };
-
-inline const Visualization::SequentialLayoutStyle& VLoopStatementCFStyle::initStep() const { return initStep_; }
-inline const Visualization::SequentialLayoutStyle& VLoopStatementCFStyle::condition() const { return condition_; }
-inline const Visualization::SequentialLayoutStyle& VLoopStatementCFStyle::updateStep() const { return updateStep_; }
-inline const VListCFStyle& VLoopStatementCFStyle::body() const { return body_; }
 
 }

@@ -35,21 +35,12 @@ namespace CustomMethodCall {
 
 class CUSTOMMETHODCALL_API EmptyMethodVisStyle : public Visualization::ItemStyle
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::StaticStyle icon_;
-		Visualization::StaticStyle separator_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~EmptyMethodVisStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::StaticStyle& separator() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
+		Property<Visualization::StaticStyle> icon{this,"icon"};
+		Property<Visualization::StaticStyle> separator{this,"separator"};
 };
-
-inline const Visualization::SequentialLayoutStyle& EmptyMethodVisStyle::layout() const { return layout_; }
-inline const Visualization::StaticStyle& EmptyMethodVisStyle::icon() const { return icon_; }
-inline const Visualization::StaticStyle& EmptyMethodVisStyle::separator() const { return separator_; }
 
 }
