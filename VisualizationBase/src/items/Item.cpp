@@ -37,6 +37,8 @@
 
 #include "../cursor/Cursor.h"
 
+#include <layouts/PositionLayout.h>
+
 namespace Visualization {
 
 static constexpr int MAX_CURSOR_JUMP_DISTANCE = 300;
@@ -173,7 +175,10 @@ void Item::clearSemanticZoomLevel()
 
 void Item::setItemScale(qreal scaleX)
 {
-	setScale(scaleX);
+	if (DCast<PositionLayout>(this->parent()))
+	{
+		setScale(scaleX);
+	}
 
 	// the parent's scale of the children of this item is the scale of the current item
 	qreal pScale = this->totalScale();
