@@ -175,6 +175,10 @@ void Item::clearSemanticZoomLevel()
 
 void Item::setItemScale(qreal scaleX)
 {
+	const double SCALE_CHANGE_THRESHOLD = 0.01;
+
+	if (fabs(scaleX - scale()) < SCALE_CHANGE_THRESHOLD) return;
+
 	if (DCast<PositionLayout>(this->parent()))
 	{
 		setScale(scaleX);
