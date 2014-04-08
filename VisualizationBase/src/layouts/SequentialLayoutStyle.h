@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
+class VISUALIZATIONBASE_API SequentialLayoutStyle : public Super<LayoutStyle>
 {
 	public:
 		virtual ~SequentialLayoutStyle() override;

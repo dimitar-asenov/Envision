@@ -33,7 +33,7 @@ SVGIconStyle::~SVGIconStyle(){}
 
 void SVGIconStyle::load(StyleLoader& sl)
 {
-	IconStyle::load(sl);
+	Super::load(sl);
 	if (!renderer_.load(filename())) throw VisualizationException("Could not read SVG icon: " + filename());
 
 	// Pre-compute the normal and minimal icon sizes

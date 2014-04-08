@@ -33,7 +33,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VUnfinishedOperatorStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VUnfinishedOperatorStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;

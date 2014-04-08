@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void OperatorStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("layout", layout_);
 	sl.load("preSymbol", preSymbol_);
@@ -45,7 +45,7 @@ void OperatorStyle::load(Visualization::StyleLoader& sl)
 
 void OperatorSequenceStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("operators", seq_);
 }

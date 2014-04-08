@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
+class VISUALIZATIONBASE_API BoxStyle : public Super<ShapeStyle>
 {
 	public:
 		enum class CornerType : int {RightAngle, Round, Cut} ;

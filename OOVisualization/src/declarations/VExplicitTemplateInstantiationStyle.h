@@ -33,7 +33,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VExplicitTemplateInstantiationStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VExplicitTemplateInstantiationStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VExplicitTemplateInstantiationStyle() override;

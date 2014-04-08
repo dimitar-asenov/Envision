@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFunctionTypeStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VFunctionTypeStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;

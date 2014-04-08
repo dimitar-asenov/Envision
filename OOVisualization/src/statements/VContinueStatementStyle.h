@@ -33,7 +33,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VContinueStatementStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VContinueStatementStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	private:
 		Visualization::StaticStyle icon_;

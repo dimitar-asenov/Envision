@@ -32,7 +32,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEmptyExpressionStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VEmptyExpressionStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::StaticStyle normal_;

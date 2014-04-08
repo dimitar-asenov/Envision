@@ -33,7 +33,7 @@
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API SumMethodVisStyle : public Visualization::ItemStyle
+class CUSTOMMETHODCALL_API SumMethodVisStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~SumMethodVisStyle() override;

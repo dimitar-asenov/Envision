@@ -30,7 +30,7 @@ namespace Visualization {
 
 void DeclarativeItemBaseStyle::load(StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 	sl.load("extraCursorsOutsideShape", extraCursorsOutsideShape_);
 }
 

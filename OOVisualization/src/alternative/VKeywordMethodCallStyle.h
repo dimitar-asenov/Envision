@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VKeywordMethodCallStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VKeywordMethodCallStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		void load(Visualization::StyleLoader& sl);

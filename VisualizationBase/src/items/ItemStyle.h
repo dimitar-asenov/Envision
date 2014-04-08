@@ -37,7 +37,7 @@ class Shape;
 class Item;
 
 // TODO: Document somewhere that Styles should be copiable
-class VISUALIZATIONBASE_API ItemStyle : public Style
+class VISUALIZATIONBASE_API ItemStyle : public Super<Style>
 {
 	public:
 		ItemStyle();

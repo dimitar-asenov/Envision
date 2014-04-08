@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VReturnStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	DeclarativeItemBaseStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("symbol", symbol_);
 	sl.load("values", values_);

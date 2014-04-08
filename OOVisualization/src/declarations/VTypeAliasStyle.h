@@ -35,7 +35,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VTypeAliasStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VTypeAliasStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VTypeAliasStyle() override;

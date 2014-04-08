@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API AutoCompleteVisStyle : public Visualization::ItemStyle
+class INTERACTIONBASE_API AutoCompleteVisStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~AutoCompleteVisStyle() override;

@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VLoopStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	DeclarativeItemBaseStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("header", header_);
 	sl.load("icon", icon_);

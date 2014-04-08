@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API GridLayoutStyle : public LayoutStyle
+class VISUALIZATIONBASE_API GridLayoutStyle : public Super<LayoutStyle>
 {
 	public:
 		virtual ~GridLayoutStyle() override;

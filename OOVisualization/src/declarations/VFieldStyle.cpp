@@ -34,7 +34,7 @@ VFieldStyle::VFieldStyle()
 
 void VFieldStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("layout", layout_);
 	sl.load("nameDefault", nameDefault_);

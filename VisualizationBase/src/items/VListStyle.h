@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VListStyle : public DeclarativeItemBaseStyle
+class VISUALIZATIONBASE_API VListStyle : public Super<DeclarativeItemBaseStyle>
 {
 	public:
 		~VListStyle();

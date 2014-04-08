@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VIfStatementStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VIfStatementStyle() override;

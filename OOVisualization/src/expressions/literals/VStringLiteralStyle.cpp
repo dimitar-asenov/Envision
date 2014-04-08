@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VStringLiteralStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("layout", layout_);
 	sl.load("string", string_);

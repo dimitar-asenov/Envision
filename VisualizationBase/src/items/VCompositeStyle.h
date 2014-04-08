@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VCompositeStyle : public DeclarativeItemBaseStyle
+class VISUALIZATIONBASE_API VCompositeStyle : public Super<DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VCompositeStyle() override;

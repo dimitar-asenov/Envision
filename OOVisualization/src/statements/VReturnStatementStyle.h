@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReturnStatementStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VReturnStatementStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	private:
 		Visualization::StaticStyle symbol_;

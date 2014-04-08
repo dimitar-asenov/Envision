@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API LayoutStyle : public ItemStyle
+class VISUALIZATIONBASE_API LayoutStyle : public Super<ItemStyle>
 {
 	public:
 		enum class Orientation : int { Horizontal, Vertical};

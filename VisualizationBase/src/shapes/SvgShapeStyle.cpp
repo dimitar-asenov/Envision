@@ -33,7 +33,7 @@ SvgShapeStyle::~SvgShapeStyle(){}
 
 void SvgShapeStyle::load(StyleLoader& sl)
 {
-	ShapeStyle::load(sl);
+	Super::load(sl);
 
 	if (filename().isEmpty()) return;
 	if (!renderer_.load(filename())) throw VisualizationException("Could not read SVG shape: " + filename());

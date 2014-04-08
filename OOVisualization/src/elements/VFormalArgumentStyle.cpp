@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VFormalArgumentStyle::load(Visualization::StyleLoader& sl)
 {
-	DeclarativeItemBaseStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("layout", layout_);
 	sl.load("lambdaLayout", lambdaLayout_);

@@ -33,7 +33,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API ActionPromptStyle : public Visualization::DeclarativeItemBaseStyle
+class INTERACTIONBASE_API ActionPromptStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~ActionPromptStyle() override;

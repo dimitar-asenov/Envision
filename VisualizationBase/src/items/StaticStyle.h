@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
+class VISUALIZATIONBASE_API StaticStyle : public Super<ItemStyle>
 {
 	private:
 		QString itemClass_;
@@ -50,7 +50,7 @@ class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
 		bool isEmpty() const;
 };
 
-class VISUALIZATIONBASE_API StaticSequenceStyle : public Visualization::ItemStyle
+class VISUALIZATIONBASE_API StaticSequenceStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		QVector<StaticStyle> seq_;

@@ -32,7 +32,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBlockStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VBlockStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::VListStyle items_;

@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VTryCatchFinallyStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VTryCatchFinallyStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VTryCatchFinallyStyle() override;

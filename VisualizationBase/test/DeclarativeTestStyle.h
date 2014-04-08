@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class DeclarativeTestStyle : public DeclarativeItemBaseStyle
+class DeclarativeTestStyle : public Super<DeclarativeItemBaseStyle>
 {
 		SymbolStyle symbol_;
 

@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API PositionLayoutStyle : public LayoutStyle
+class VISUALIZATIONBASE_API PositionLayoutStyle : public Super<LayoutStyle>
 {
 	public:
 		virtual ~PositionLayoutStyle() override;

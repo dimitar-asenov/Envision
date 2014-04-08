@@ -28,6 +28,7 @@
 
 #include "../visualizationbase_api.h"
 #include "StyleLoader.h"
+#include "Core/src/reflect/Reflect.h"
 
 namespace Visualization {
 

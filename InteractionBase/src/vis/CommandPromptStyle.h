@@ -32,7 +32,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommandPromptStyle : public Visualization::ItemStyle
+class INTERACTIONBASE_API CommandPromptStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~CommandPromptStyle() override;

@@ -34,7 +34,7 @@
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Visualization::ItemStyle
+class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~InsertMethodVisStyle() override;

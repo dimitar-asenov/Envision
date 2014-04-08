@@ -35,7 +35,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReferenceExpressionStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VReferenceExpressionStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~VReferenceExpressionStyle() override;

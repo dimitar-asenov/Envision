@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API DiamondStyle : public ShapeStyle
+class VISUALIZATIONBASE_API DiamondStyle : public Super<ShapeStyle>
 {
 	public:
 		virtual ~DiamondStyle() override;

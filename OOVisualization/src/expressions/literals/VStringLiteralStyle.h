@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStringLiteralStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VStringLiteralStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;

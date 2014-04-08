@@ -35,7 +35,7 @@
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API FindMethodVisStyle : public Visualization::ItemStyle
+class CUSTOMMETHODCALL_API FindMethodVisStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~FindMethodVisStyle() override;

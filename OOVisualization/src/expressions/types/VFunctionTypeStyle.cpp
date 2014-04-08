@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VFunctionTypeStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("layout", layout_);
 	sl.load("icon", icon_);

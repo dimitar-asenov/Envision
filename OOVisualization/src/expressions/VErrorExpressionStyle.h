@@ -33,7 +33,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VErrorExpressionStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VErrorExpressionStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;

@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VBlockStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("items", items_);
 }

@@ -33,7 +33,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNameImportStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VNameImportStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VNameImportStyle() override;

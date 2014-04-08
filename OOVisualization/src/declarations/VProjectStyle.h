@@ -36,7 +36,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VProjectStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VProjectStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VProjectStyle() override;

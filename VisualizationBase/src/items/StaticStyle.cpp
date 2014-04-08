@@ -41,7 +41,7 @@ StaticStyle::~StaticStyle()
 
 void StaticStyle::load(StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("itemClass", itemClass_);
 
@@ -54,7 +54,7 @@ void StaticStyle::load(StyleLoader& sl)
 
 void StaticSequenceStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("statics", seq_);
 }

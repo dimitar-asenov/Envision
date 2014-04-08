@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VLoopStatementStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	private:
 		Visualization::SequentialLayoutStyle header_;

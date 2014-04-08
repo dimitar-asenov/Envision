@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API IconStyle : public ItemStyle
+class VISUALIZATIONBASE_API IconStyle : public Super<ItemStyle>
 {
 	public:
 		virtual ~IconStyle() override;

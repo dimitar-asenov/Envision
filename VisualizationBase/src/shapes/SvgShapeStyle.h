@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SvgShapeStyle : public ShapeStyle
+class VISUALIZATIONBASE_API SvgShapeStyle : public Super<ShapeStyle>
 {
 	public:
 		virtual ~SvgShapeStyle() override;

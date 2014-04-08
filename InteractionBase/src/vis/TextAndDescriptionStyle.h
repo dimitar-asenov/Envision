@@ -34,7 +34,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API TextAndDescriptionStyle : public Visualization::ItemStyle
+class INTERACTIONBASE_API TextAndDescriptionStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~TextAndDescriptionStyle() override;

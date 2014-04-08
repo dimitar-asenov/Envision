@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TextStyle : public ItemStyle
+class VISUALIZATIONBASE_API TextStyle : public Super<ItemStyle>
 {
 	public:
 		virtual ~TextStyle() override;

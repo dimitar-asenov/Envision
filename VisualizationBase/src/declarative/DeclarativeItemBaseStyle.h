@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public ItemStyle
+class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public Super<ItemStyle>
 {
 	private:
 		bool extraCursorsOutsideShape_{};

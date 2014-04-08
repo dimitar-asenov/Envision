@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VSwitchStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	DeclarativeItemBaseStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("icon", icon_);
 	sl.load("condition", condition_);

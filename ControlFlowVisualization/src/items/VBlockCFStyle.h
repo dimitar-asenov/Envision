@@ -34,7 +34,7 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public ControlFlowItemStyle
+class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public Super<ControlFlowItemStyle>
 {
 	public:
 		virtual ~VBlockCFStyle() override;

@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API BracesStyle : public ShapeStyle
+class VISUALIZATIONBASE_API BracesStyle : public Super<ShapeStyle>
 {
 	public:
 		virtual ~BracesStyle() override;

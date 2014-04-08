@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCatchClauseStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VCatchClauseStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VCatchClauseStyle() override;

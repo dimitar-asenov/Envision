@@ -33,7 +33,7 @@
 
 namespace Comments {
 
-class COMMENTS_API VCommentStyle : public Visualization::DeclarativeItemBaseStyle {
+class COMMENTS_API VCommentStyle : public Super<Visualization::DeclarativeItemBaseStyle> {
 	public:
 		virtual ~VCommentStyle() override;
 

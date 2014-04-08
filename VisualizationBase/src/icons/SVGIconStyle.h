@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SVGIconStyle : public IconStyle
+class VISUALIZATIONBASE_API SVGIconStyle : public Super<IconStyle>
 {
 	public:
 		virtual ~SVGIconStyle() override;

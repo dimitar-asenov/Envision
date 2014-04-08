@@ -33,7 +33,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNewExpressionStyle : public Visualization::ItemStyle {
+class OOVISUALIZATION_API VNewExpressionStyle : public Super<Visualization::ItemStyle> {
 	public:
 		virtual ~VNewExpressionStyle();
 

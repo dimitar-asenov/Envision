@@ -33,7 +33,7 @@
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API EmptyMethodVisStyle : public Visualization::ItemStyle
+class CUSTOMMETHODCALL_API EmptyMethodVisStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~EmptyMethodVisStyle() override;

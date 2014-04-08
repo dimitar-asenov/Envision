@@ -32,7 +32,7 @@ TextStyle::~TextStyle(){}
 
 void TextStyle::load(StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	QColor col;
 	sl.load("selectionBackground", col);

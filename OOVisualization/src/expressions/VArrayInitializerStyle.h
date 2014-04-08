@@ -33,7 +33,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VArrayInitializerStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VArrayInitializerStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::GridLayoutStyle layout_;

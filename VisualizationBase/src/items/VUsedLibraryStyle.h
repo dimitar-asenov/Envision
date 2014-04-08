@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VUsedLibraryStyle : public DeclarativeItemBaseStyle
+class VISUALIZATIONBASE_API VUsedLibraryStyle : public Super<DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VUsedLibraryStyle() override;

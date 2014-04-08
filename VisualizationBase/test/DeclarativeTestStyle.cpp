@@ -30,7 +30,7 @@ namespace Visualization {
 
 void DeclarativeTestStyle::load(StyleLoader& sl)
 {
-	DeclarativeItemBaseStyle::load(sl);
+	Super::load(sl);
 	sl.load("symbol", symbol_);
 }
 

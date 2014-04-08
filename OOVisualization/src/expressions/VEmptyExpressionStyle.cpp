@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VEmptyExpressionStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("normal", normal_);
 	sl.load("emptyLine", emptyLine_);

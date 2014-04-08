@@ -43,7 +43,7 @@ Shape* ItemStyle::createShape(Item* parent) const
 
 void ItemStyle::load(StyleLoader& sl)
 {
-	Style::load(sl);
+	Super::load(sl);
 
 	sl.load("shape", shapeName_);
 	shapeName_ = shapeName_.trimmed();

@@ -32,7 +32,7 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API ControlFlowItemStyle : public Visualization::ItemStyle
+class CONTROLFLOWVISUALIZATION_API ControlFlowItemStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~ControlFlowItemStyle() override;
