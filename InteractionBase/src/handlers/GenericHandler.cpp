@@ -335,7 +335,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			if (p->definesChildNodeSemanticZoomLevel(n->node()))
 			{
 				semanticZoomLevel = n->semanticZoomLevel() + 1;
-				if ( semanticZoomLevel == target->scene()->renderer()->numRegisteredPurposes())
+				if ( semanticZoomLevel == target->scene()->renderer()->numRegisteredSemanticZoomLevels())
 					semanticZoomLevel = -1; // Undefine
 
 			}
