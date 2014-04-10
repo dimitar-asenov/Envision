@@ -24,7 +24,6 @@ HEADERS += src/nodes/UsedLibrary.h \
     src/commands/ListPut.h \
     src/commands/ListRemove.h \
     src/commands/NameChange.h \
-    src/commands/PointerFieldSet.h \
     src/commands/UndoCommand.h \
     src/modelbase_api.h \
     src/nodes/Boolean.h \
