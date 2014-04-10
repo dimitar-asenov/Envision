@@ -49,15 +49,15 @@ class MODELBASE_API Reference: public Super<Node>
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
 
-		virtual bool resolve();
+		bool resolve();
 		bool isResolved() const;
 
-	protected:
-		void setTarget(Node* target);
+		virtual Node* computeTarget() const;
 
 	private:
-		Node* target_;
+		Node* target_{};
 		QString name_;
+		bool resolving_{};
 
 		/**
 		 * \brief Inserts this reference in the unresolved references lists of the corresponding model if the reference is
@@ -68,7 +68,7 @@ class MODELBASE_API Reference: public Super<Node>
 		void manageUnresolvedReferencesListInModel();
 };
 
-inline const QString& Reference::name() const { return target_ ? target_->symbolName() : name_; }
+inline const QString& Reference::name() const { return name_; }
 inline bool Reference::isResolved() const { return target_; }
 
 }

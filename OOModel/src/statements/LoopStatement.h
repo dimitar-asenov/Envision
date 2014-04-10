@@ -54,8 +54,8 @@ class OOMODEL_API LoopStatement: public Super<Statement>
 		LoopKind loopKind() const;
 		void setLoopKind(LoopKind kind);
 
-		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 };
 
 

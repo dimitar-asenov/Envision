@@ -169,8 +169,8 @@ bool Node::replaceChild(Node*, Node*)
 	return false;
 }
 
-bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	bool found{};
 
@@ -179,7 +179,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* 
 		if (symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Node*>(this));
 		}
 	}
 	else if (direction == SEARCH_DOWN)
@@ -197,7 +197,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* 
 		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Node*>(this));
 		}
 
 		if ((exhaustAllScopes || !found) && parent_)
@@ -347,9 +347,9 @@ NodeReadWriteLock* Node::accessLock() const
 		return model()->rootLock();
 }
 
-QList<UsedLibrary*> Node::usedLibraries()
+QList<const UsedLibrary*> Node::usedLibraries() const
 {
-	QList<UsedLibrary*> all;
+	QList<const UsedLibrary*> all;
 	for(auto c : children())
 		all << c->usedLibraries();
 	return all;

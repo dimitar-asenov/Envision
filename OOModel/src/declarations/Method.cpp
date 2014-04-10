@@ -92,8 +92,8 @@ Method::SymbolTypes Method::symbolType() const
 	return METHOD;
 }
 
-bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	bool found{};
 
@@ -103,7 +103,7 @@ bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matche
 		if (symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Method*>(this));
 		}
 	}
 	else if (direction == SEARCH_UP)
@@ -125,7 +125,7 @@ bool Method::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matche
 		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Method*>(this));
 		}
 
 		if ((exhaustAllScopes || !found) && parent())

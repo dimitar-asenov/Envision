@@ -43,23 +43,24 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 	NODE_DECLARE_STANDARD_METHODS( OOReference )
 
 	public:
-		virtual bool resolve() override;
+		virtual Node* computeTarget() const override;
 
 	private:
 
 		enum class ReferenceTargetKind {Unknown, Container, Type, Callable, Assignable, Variable};
-		ReferenceTargetKind referenceTargetKind();
+		ReferenceTargetKind referenceTargetKind() const;
 
-		bool resolving_{};
+		Model::Node* resolveAmbiguity(QSet<Model::Node*>& candidates) const;
 
-		Model::Node* resolveAmbiguity(QSet<Model::Node*>& candidates);
-
-		Model::Node* resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates, MethodCallExpression* callExpression);
+		Model::Node* resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates, MethodCallExpression* callExpression)
+			const;
 		// The method above consists of the following steps:
-		void removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression);
-		void removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression);
-		void removeOverridenMethods(QSet<Method*>& methods);
-		void removeLessSpecificMethods(QSet<Method*>& methods);
+		void removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression)
+			const;
+		void removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods, MethodCallExpression* callExpression)
+			const;
+		void removeOverridenMethods(QSet<Method*>& methods) const;
+		void removeLessSpecificMethods(QSet<Method*>& methods) const;
 };
 
 } /* namespace OOModel */

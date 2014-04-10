@@ -64,8 +64,8 @@ Model::Node* NameImport::target() const
 	return ret;
 }
 
-bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
+bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes) const
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
 

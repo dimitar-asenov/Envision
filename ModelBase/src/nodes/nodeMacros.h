@@ -345,7 +345,7 @@ className* className::createDefaultInstance( Node* parent) { return proxyClassNa
 private:																																					\
 		static ::Model::CompositeIndex name##Index;																							\
 public:																																					\
-		type* name() { return static_cast< type* > (get(name##Index)); }																\
+		type* name() const { return static_cast< type* > (get(name##Index)); }														\
 		void setMethodName(type* node) { set(name##Index, node); }																		\
 private:																																					\
 

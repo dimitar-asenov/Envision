@@ -38,8 +38,8 @@ class OOMODEL_API StatementItemList : public Super<Model::TypedList<StatementIte
 	NODE_DECLARE_STANDARD_METHODS(StatementItemList)
 
 	public:
-		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 };
 
 }

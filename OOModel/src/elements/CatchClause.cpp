@@ -37,8 +37,8 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause)
 REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
 REGISTER_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
 
-bool CatchClause::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool CatchClause::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	if (direction == SEARCH_UP)
 	{

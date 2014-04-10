@@ -56,7 +56,7 @@ class OOMODEL_API Module : public Super<Declaration>
 		Module(const QString& name);
 
 		virtual SymbolTypes symbolType() const override;
-		virtual QList<Model::UsedLibrary*> usedLibraries() override;
+		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
 };
 
 }

@@ -50,9 +50,9 @@ Module::SymbolTypes Module::symbolType() const
 	return CONTAINER;
 }
 
-QList<Model::UsedLibrary*> Module::usedLibraries()
+QList<const Model::UsedLibrary*> Module::usedLibraries() const
 {
-	QList<Model::UsedLibrary*> all;
+	QList<const Model::UsedLibrary*> all;
 	for(auto l : *libraries()) all.append(l);
 	for(auto m : *modules()) all << m->usedLibraries();
 	return all;

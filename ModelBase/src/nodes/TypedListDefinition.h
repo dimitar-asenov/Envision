@@ -63,15 +63,15 @@ Super(parent, store, loadPartially)
 {
 }
 
-template<class T> T* TypedList<T>::first()
+template<class T> T* TypedList<T>::first() const
 {
 	return List::first<T>();
 }
-template<class T> T* TypedList<T>::last()
+template<class T> T* TypedList<T>::last() const
 {
 	return List::last<T>();
 }
-template<class T> T* TypedList<T>::at(int i)
+template<class T> T* TypedList<T>::at(int i) const
 {
 	return List::at<T>(i);
 }

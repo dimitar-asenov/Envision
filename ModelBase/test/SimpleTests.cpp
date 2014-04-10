@@ -152,14 +152,6 @@ TEST(ModelBase, ProperRegistration)
 	CHECK_CONDITION(i->typeId() >= 0);
 	CHECK_CONDITION(i->typeId() != root->typeId());
 	CHECK_CONDITION(i->typeId() != t->typeId());
-
-	Model model4;
-	auto r = new Reference();
-	model4.setRoot(r);
-	CHECK_CONDITION(r->typeId() >= 0);
-	CHECK_CONDITION(r->typeId() != root->typeId());
-	CHECK_CONDITION(r->typeId() != t->typeId());
-	CHECK_CONDITION(r->typeId() != i->typeId());
 }
 
 }

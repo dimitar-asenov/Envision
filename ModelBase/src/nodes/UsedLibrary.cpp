@@ -45,7 +45,7 @@ UsedLibrary::UsedLibrary(const QString& name) : Super(nullptr, UsedLibrary::getM
 }
 
 
-QList<UsedLibrary*> UsedLibrary::usedLibraries()
+QList<const UsedLibrary*> UsedLibrary::usedLibraries() const
 {
 	return {this};
 }

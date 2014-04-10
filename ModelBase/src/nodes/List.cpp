@@ -27,7 +27,6 @@
 #include "nodes/List.h"
 #include "ModelException.h"
 #include "nodes/Text.h"
-#include "commands/PointerFieldSet.h"
 #include "commands/ListRemove.h"
 #include "commands/ListPut.h"
 #include "nodes/nodeMacros.h"
@@ -189,8 +188,8 @@ void List::paste(ClipboardStore& clipboard, int position)
 	}
 }
 
-bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool List::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
 

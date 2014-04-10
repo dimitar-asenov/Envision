@@ -38,8 +38,8 @@ REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
 
-bool IfStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool IfStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	if (direction == SEARCH_UP)
 	{

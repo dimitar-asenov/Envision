@@ -36,12 +36,12 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
-Reference::Reference(Node *parent) : Super(parent), target_()
+Reference::Reference(Node *parent) : Super(parent)
 {
 	manageUnresolvedReferencesListInModel();
 }
 
-Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent), target_()
+Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 {
 	name_ = store.loadReferenceValue(this);
 	manageUnresolvedReferencesListInModel();
@@ -49,28 +49,40 @@ Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 
 void Reference::setName(const QString &name, bool tryResolvingImmediately)
 {
-	execute(new FieldSet<QString> (this, name_, name));
-	execute(new FieldSet<Node*> (this, target_, nullptr));
+	if (name != name_)
+	{
+		execute(new FieldSet<QString> (this, name_, name));
+		target_ = nullptr;
 
-	if (tryResolvingImmediately) resolve();
-	manageUnresolvedReferencesListInModel();
+		if (tryResolvingImmediately) resolve();
+		manageUnresolvedReferencesListInModel();
+	}
 }
 
-void Reference::setTarget(Node* target)
+Node* Reference::computeTarget() const
 {
-	if (target == target_) return;
-
-	if (auto m = model()) m->changeModificationTarget(this);
-	if (target) execute(new FieldSet<QString> (this, name_, QString()));
-	else execute(new FieldSet<QString> (this, name_, name()));
-
-	execute(new FieldSet<Node*> (this, target_, target));
-	manageUnresolvedReferencesListInModel();
+	Q_ASSERT(false && "Should not call Reference::computeTarget()");
+	return nullptr;
 }
 
 bool Reference::resolve()
 {
-	return false;
+	// TODO this is not multithread friendly.
+	if (resolving_) return false;
+	resolving_ = true;
+
+	auto newTarget = computeTarget();
+
+	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
+
+	if (newTarget != target_)
+	{
+		target_ = newTarget;
+		manageUnresolvedReferencesListInModel();
+	}
+
+	resolving_ = false;
+	return isResolved();
 }
 
 void Reference::save(PersistentStore &store) const

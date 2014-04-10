@@ -63,7 +63,7 @@ class OOMODEL_API Project : public Super<Declaration>
 		Project(const QString& name);
 
 		virtual SymbolTypes symbolType() const override;
-		virtual QList<Model::UsedLibrary*> usedLibraries() override;
+		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
 };
 
 }

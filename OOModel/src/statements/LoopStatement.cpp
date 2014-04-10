@@ -46,8 +46,8 @@ LoopStatement::LoopStatement(LoopKind kind)
 	setLoopKind(kind);
 }
 
-bool LoopStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes)
+bool LoopStatement::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes) const
 {
 	if (direction == SEARCH_UP)
 	{
