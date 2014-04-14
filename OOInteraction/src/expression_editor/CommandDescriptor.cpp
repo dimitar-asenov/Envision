@@ -46,6 +46,7 @@ bool CommandDescriptor::registerCommand(CommandExpression* command)
 void CommandDescriptor::unregisterCommand(CommandExpression* command)
 {
 	if (command) commands.remove(command->name());
+	SAFE_DELETE(command);
 }
 
 CommandDescriptor::CommandDescriptor(const QString& name, const QString& signature,
@@ -55,8 +56,8 @@ CommandDescriptor::CommandDescriptor(const QString& name, const QString& signatu
 
 CommandDescriptor::~CommandDescriptor()
 {
-	for(auto c : commands.values())
-		SAFE_DELETE(c);
+	qDeleteAll(commands);
+	commands.clear();
 }
 
 OOModel::Expression* CommandDescriptor::create(const QList<OOModel::Expression*>& operands)
