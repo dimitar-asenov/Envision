@@ -39,11 +39,7 @@ VisualizationGroup::VisualizationGroup(ConditionFunction condition, int scorePoi
 
 VisualizationGroup::~VisualizationGroup()
 {
-	for(auto g : subGroups_)
-		SAFE_DELETE(g);
-
-	subGroups_.clear();
-	visualizations_.clear();
+	clear();
 }
 
 bool VisualizationGroup::matchesContext(Item* item, Model::Node* node)
