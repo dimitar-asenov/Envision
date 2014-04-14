@@ -255,31 +255,7 @@ void Node::setParent(Node* parent)
 {
 	//TODO: is this operation efficient and even possible when performed on top level objects such as namespaces and
 	// packages?
-
-	auto mOld = model();
-	auto mNew = parent ? parent->model() : nullptr;
-
-	if (mOld || mNew)
-	{
-		QList<Node*> queue;
-		queue.append(this);
-
-		// Transfer unresolved references from the old model to the new one
-		while (!queue.isEmpty())
-		{
-			if (auto r = dynamic_cast<Reference*>(queue.first()))
-			{
-				if (!r->isResolved() )
-				{
-					if (mOld) mOld->removeUnresolvedReference(r);
-					if (mNew) mNew->addUnresolvedReference(r);
-				}
-			}
-
-			queue.append(queue.first()->children());
-			queue.removeFirst();
-		}
-	}
+	Reference::unresolveAll(this, parent && parent->model());
 
 	parent_ = parent;
 }

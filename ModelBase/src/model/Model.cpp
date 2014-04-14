@@ -81,7 +81,7 @@ void Model::endModification(bool resolveReferences)
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
-		if (resolveReferences && !unresolvedReferences_.isEmpty()) tryResolvingReferences();
+		if (resolveReferences) Reference::resolvePending();
 
 		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock,
 				modifiedTargets, nullptr));
@@ -226,63 +226,15 @@ void Model::setRoot(Node* node)
 {
 	Q_ASSERT(!root_);
 	Q_ASSERT(node);
+	Q_ASSERT(!node->parent());
 
 	commands.clear();
 	root_ = node;
 
-	scanUnresolvedReferences();
-
-	beginModification(root_, "Resolve children");
-	tryResolvingReferences();
-	endModification();
+	Reference::unresolveAll(root_, true);
+	Reference::resolvePending();
 
 	emit rootNodeSet(root_);
-}
-
-void Model::scanUnresolvedReferences()
-{
-	unresolvedReferences_.clear();
-
-	QList<Node*> stack;
-	if (root_) stack << root_;
-
-	while (!stack.isEmpty())
-	{
-		auto top = stack.takeLast();
-		if (auto ref = DCast<Reference>(top) )
-		{
-			if (!ref->isResolved()) unresolvedReferences_ << ref;
-		}
-		else stack.append(top->children());
-
-	}
-}
-
-void Model::addUnresolvedReference(Reference* ref)
-{
-	unresolvedReferences_.insert(ref);
-}
-
-void Model::removeUnresolvedReference(Reference* ref)
-{
-	unresolvedReferences_.remove(ref);
-}
-
-void Model::tryResolvingReferences()
-{
-	log.debug("Total unresolved references: " + QString::number(unresolvedReferences().size()));
-
-	int i = 0;
-	auto unresolved = unresolvedReferences_;
-	for (auto r : unresolved)
-	{
-		if (!r->isResolved()) r->resolve();
-		if (++i % 1000 == 0)
-			log.debug("Processed: " + QString::number(i) + ". Still unresolved: " +
-						 QString::number(unresolvedReferences().size()));
-	}
-
-	log.debug("Total unresolved at end: " + QString::number(unresolvedReferences().size()));
 }
 
 }

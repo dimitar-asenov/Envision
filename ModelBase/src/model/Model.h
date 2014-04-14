@@ -33,7 +33,6 @@
 
 namespace Model {
 
-class Reference;
 class UndoCommand;
 class NodeOwningCommand;
 
@@ -318,39 +317,6 @@ class MODELBASE_API Model: public QObject
 		 */
 		void emitNodePartiallyLoaded(Node* node);
 
-		/**
-		 * \brief Returns a list of all loaded unresolved references in the model.
-		 *
-		 * Unresolved references which are persisted but not loaded are will not be in the returned list.
-		 */
-		const QSet<Reference*>& unresolvedReferences() const;
-
-		/**
-		 * \brief Adds the specified reference to the unresolved references list.
-		 */
-		void addUnresolvedReference(Reference* ref);
-
-		/**
-		 * \brief Removes the specified reference to the unresolved references list.
-		 *
-		 * Call this method when a reference has been resolved.
-		 */
-		void removeUnresolvedReference(Reference* ref);
-
-		/**
-		 * Scans the root node for unresolved references and records them in unresolvedReferences_.
-		 *
-		 * The old contents of unresolvedReferences_ is lost when this method is called.
-		 */
-		void scanUnresolvedReferences();
-
-		/**
-		 * \brief Attempt to resolve all unresolved references.
-		 *
-		 * This method must be called within a modification session.
-		 */
-		void tryResolvingReferences();
-
 		ModelManager& manager() const;
 
 	signals:
@@ -477,11 +443,6 @@ class MODELBASE_API Model: public QObject
 		 * It can also be used by other stores when the model needs to be saved to a different location.
 		 */
 		PersistentStore* store_{};
-
-		/**
-		 * A list of all unresolved references which are currently loaded nodes.
-		 */
-		QSet<Reference*> unresolvedReferences_;
 };
 
 inline bool Model::isBeingModified() const { return modificationInProgress; }
@@ -494,8 +455,6 @@ inline void Model::setName(const QString& name) { name_ = name; }
 
 inline PersistentStore* Model::store() { return store_; }
 inline void Model::emitNameModified(Node* node, const QString &oldName) { emit nameModified(node, oldName); }
-
-inline const QSet<Reference*>& Model::unresolvedReferences() const { return unresolvedReferences_; }
 
 inline ModelManager& Model::manager() const { return ModelManager::instance(); }
 

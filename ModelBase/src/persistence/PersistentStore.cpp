@@ -34,6 +34,7 @@ PersistentStore::~PersistentStore() {}
 void PersistentStore::setReferenceTargetr(Reference* r, Node* target)
 {
 	r->target_ = target;
+	r->state_ = Reference::ReferenceEstablished;
 }
 
 }

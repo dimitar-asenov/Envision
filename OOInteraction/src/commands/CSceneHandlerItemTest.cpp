@@ -32,6 +32,7 @@
 #include "OOModel/src/declarations/Project.h"
 #include "FilePersistence/src/FileStore.h"
 #include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/nodes/Reference.h"
 
 namespace OOInteraction {
 
@@ -53,9 +54,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 	//model->load(&store, "tetris");
 	model->load(&store, "large", false);
 	auto prj = dynamic_cast<OOModel::Project*> (model->root());
-	model->beginModification(prj,"Resolve references");
-	model->scanUnresolvedReferences(); // These will be automatically resolved when endModification() is called
-	model->endModification();
+	Model::Reference::resolvePending();
 
 	Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem( new Visualization::RootItem(prj));
 	Visualization::VisualizationManager::instance().mainScene()->listenToModel(model);

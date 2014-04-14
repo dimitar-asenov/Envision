@@ -40,9 +40,10 @@ class MODELBASE_API Reference: public Super<Node>
 	NODE_DECLARE_STANDARD_METHODS( Reference )
 
 	public:
+		virtual ~Reference() override;
 
 		const QString& name() const;
-		void setName(const QString &name, bool tryResolvingImmediately = true);
+		void setName(const QString &name);
 
 		Node* target();
 
@@ -54,21 +55,41 @@ class MODELBASE_API Reference: public Super<Node>
 
 		virtual Node* computeTarget() const;
 
+		/**
+		 * Invalidates the target of this reference and enters a state where resolution is needed.
+		 */
+		void setResolutionNeeded();
+
+		/**
+		 * Marks all the references in the provided \a subTree as unresolved.
+		 *
+		 * If \a markForResolution is true, the references will be resolved next time a resolution is invoked, otherwise
+		 * they won't be resolved, until they are marked for resolution. If \a subTree is about to become part of a mdoel
+		 * then \a markForResolution should be set to true, otherwise it should be false.
+		 */
+		static void unresolveAll(Node* subTree, bool markForResolution);
+
+		static void resolvePending();
+
 	private:
 		Node* target_{};
 		QString name_;
-		bool resolving_{};
 
 		/**
-		 * \brief Inserts this reference in the unresolved references lists of the corresponding model if the reference is
-		 * unresolved or removes it from that list otherwise.
-		 *
-		 * Calling this method might only have an effect if this reference is associated to a model.
+		 * A set of all unresolved references which are pending resolution. Note that there can be unresolved references
+		 * which are not pending resolution, e.g. references in deleted branches of a tree, which are now owned by the
+		 * undo stack.
 		 */
-		void manageUnresolvedReferencesListInModel();
+		static QSet<Reference*> pendingResolution_;
+
+		enum State {ReferenceEstablished, ReferenceNeedsToBeResolved, ReferenceIsBeingResolved};
+		State state_{ReferenceNeedsToBeResolved};
+
+		bool resolveHelper(bool indirect);
 };
 
 inline const QString& Reference::name() const { return name_; }
-inline bool Reference::isResolved() const { return target_; }
+inline bool Reference::isResolved() const { return (state_ == ReferenceEstablished) && target_; }
+inline bool Reference::resolve() { return resolveHelper(false); }
 
 }

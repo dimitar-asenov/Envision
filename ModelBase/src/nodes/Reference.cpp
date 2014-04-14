@@ -36,26 +36,32 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
+QSet<Reference*> Reference::pendingResolution_;
+
 Reference::Reference(Node *parent) : Super(parent)
 {
-	manageUnresolvedReferencesListInModel();
+	if (parent && parent->model()) pendingResolution_.insert(this);
 }
 
 Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 {
 	name_ = store.loadReferenceValue(this);
-	manageUnresolvedReferencesListInModel();
+	if (state_ == ReferenceNeedsToBeResolved && parent && parent->model())
+		pendingResolution_.insert(this);
 }
 
-void Reference::setName(const QString &name, bool tryResolvingImmediately)
+Reference::~Reference()
+{
+	pendingResolution_.remove(this);
+}
+
+void Reference::setName(const QString &name)
 {
 	if (name != name_)
 	{
 		execute(new FieldSet<QString> (this, name_, name));
 		target_ = nullptr;
-
-		if (tryResolvingImmediately) resolve();
-		manageUnresolvedReferencesListInModel();
+		setResolutionNeeded();
 	}
 }
 
@@ -65,23 +71,30 @@ Node* Reference::computeTarget() const
 	return nullptr;
 }
 
-bool Reference::resolve()
+bool Reference::resolveHelper(bool indirect)
 {
 	// TODO this is not multithread friendly.
-	if (resolving_) return false;
-	resolving_ = true;
+	if (state_ != ReferenceNeedsToBeResolved) return isResolved();
+	state_ = ReferenceIsBeingResolved;
 
 	auto newTarget = computeTarget();
 
 	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
 
-	if (newTarget != target_)
-	{
-		target_ = newTarget;
-		manageUnresolvedReferencesListInModel();
-	}
+	target_ = newTarget;
 
-	resolving_ = false;
+	if (target_ || !indirect)
+	{
+		// This is needed because of the following situation.
+		// We are resolving a reference A, and during the process we explore reference B, needed for the resolution of A,
+		// and reference C, which is not needed for the resolution of A. All references but A will be explored indirectly.
+		// It could happen that to resolve C properly we need to resolve A first. Therefore when failing to resolve a
+		// reference that is explored indirectly, we shouldn't assume that resolution will fail.
+		pendingResolution_.remove(this);
+		state_ = ReferenceEstablished;
+	}
+	else state_ = ReferenceNeedsToBeResolved;
+
 	return isResolved();
 }
 
@@ -101,19 +114,65 @@ void Reference::load(PersistentStore &store)
 	setName( store.loadReferenceValue(this) );
 }
 
-void Reference::manageUnresolvedReferencesListInModel()
+Node* Reference::target()
 {
-	if (model())
+	if (state_ == ReferenceNeedsToBeResolved) resolveHelper(true);
+	return state_ == ReferenceEstablished ? target_ : nullptr;
+}
+
+void Reference::setResolutionNeeded()
+{
+	state_ = ReferenceNeedsToBeResolved;
+	pendingResolution_.insert(this);
+}
+
+void Reference::unresolveAll(Node* subTree, bool markForResolution)
+{
+	if (subTree)
 	{
-		if (isResolved()) model()->removeUnresolvedReference(this);
-		else model()->addUnresolvedReference(this);
+		QList<Node*> stack;
+		stack << subTree;
+		while (!stack.isEmpty())
+		{
+			auto top = stack.takeLast();
+			if (auto ref = DCast<Reference>(top) )
+			{
+				if (markForResolution) ref->setResolutionNeeded();
+				else ref->state_ = ReferenceNeedsToBeResolved;
+			}
+			else stack.append(top->children());
+		}
 	}
 }
 
-Node* Reference::target()
+void Reference::resolvePending()
 {
-	if (!target_) resolve();
-	return target_;
+	log.debug("Resolving references");
+
+	int i = 0;
+	int round = 0;
+	int resolved = 0;
+	auto pending = pendingResolution_;
+
+	while(!pending.isEmpty())
+	{
+		log.debug("resolution round " + QString::number(round) + ", "
+					 + QString::number(pendingResolution_.size()) + " references pending.");
+		++round;
+
+		for (auto r : pending)
+		{
+			if ( r->resolve() ) ++resolved;
+			if (++i % 10000 == 0)	log.debug("Processed " + QString::number(i) + " references.");
+		}
+
+		// As a result of resolution of some references, some other references could have become invalid.
+		Q_ASSERT(pending.intersect(pendingResolution_).isEmpty());
+		pending = pendingResolution_;
+	}
+
+	log.debug("Resolved a total of " + QString::number(resolved) + " references in "
+				 + QString::number(round) + (round > 1 ? " rounds." : " round."));
 }
 
 }
