@@ -72,7 +72,7 @@ void VProject::initializeForms()
 
 	auto contentElement = (new GridLayoutFormElement())
 				->setSpacing(5)
-				->setColumnStretchFactor(1, 0)
+				->setColumnStretchFactor(1, 1)
 				->setNoBoundaryCursors([](Item*){return true;})
 				->setNoInnerCursors([](Item*){return true;})
 				->put(0, 0, item<VList>(&I::libraries_,
