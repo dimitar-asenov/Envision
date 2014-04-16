@@ -26,7 +26,6 @@
 
 #include "nodes/List.h"
 #include "ModelException.h"
-#include "nodes/Text.h"
 #include "commands/ListRemove.h"
 #include "commands/ListPut.h"
 #include "nodes/nodeMacros.h"

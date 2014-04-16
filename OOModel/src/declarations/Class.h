@@ -31,11 +31,6 @@
 #include "Method.h"
 #include "Field.h"
 #include "../elements/Enumerator.h"
-#include "../elements/FormalTypeArgument.h"
-#include "../elements/StatementItemList.h"
-
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Class)
 

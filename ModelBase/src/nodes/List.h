@@ -37,8 +37,6 @@
 
 namespace Model {
 
-class Text;
-
 class MODELBASE_API List: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(List)

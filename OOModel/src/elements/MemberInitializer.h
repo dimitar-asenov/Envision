@@ -31,8 +31,6 @@
 #include "../expressions/Expression.h"
 #include "../expressions/ReferenceExpression.h"
 
-#include "ModelBase/src/nodes/Text.h"
-
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MemberInitializer)
 
 namespace OOModel {

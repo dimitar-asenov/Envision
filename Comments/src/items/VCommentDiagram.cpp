@@ -30,7 +30,6 @@
 
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/shapes/Shape.h"
 

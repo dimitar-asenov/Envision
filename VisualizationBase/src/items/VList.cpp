@@ -26,7 +26,6 @@
 
 #include "VList.h"
 #include "Static.h"
-#include "Text.h"
 #include "../declarative/DeclarativeItemDef.h"
 #include "../shapes/Shape.h"
 

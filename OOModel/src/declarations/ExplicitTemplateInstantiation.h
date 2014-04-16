@@ -32,8 +32,6 @@
 
 #include "../expressions/ReferenceExpression.h"
 
-#include "ModelBase/src/nodes/nodeMacros.h"
-
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ExplicitTemplateInstantiation)
 
 namespace OOModel {

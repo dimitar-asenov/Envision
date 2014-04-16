@@ -29,16 +29,6 @@
 #include "../oomodel_api.h"
 
 #include "Module.h"
-#include "Class.h"
-#include "Method.h"
-#include "Field.h"
-#include "../expressions/Expression.h"
-
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/UsedLibrary.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Project)
 

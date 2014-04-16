@@ -29,7 +29,6 @@
 
 #include "model/ModelManager.h"
 
-#include "nodes/Text.h"
 #include "nodes/Integer.h"
 #include "nodes/Float.h"
 #include "nodes/Boolean.h"

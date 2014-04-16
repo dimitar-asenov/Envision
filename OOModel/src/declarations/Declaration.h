@@ -28,7 +28,6 @@
 
 #include "../oomodel_api.h"
 
-
 #include "../elements/StatementItemList.h"
 #include "../attributeMacros.h"
 #include "../elements/Modifier.h"

@@ -38,7 +38,6 @@
 #include "../elements/MemberInitializer.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
