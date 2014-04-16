@@ -26,30 +26,22 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "Text.h"
 
-#include "../attributeMacros.h"
-#include "../expressions/Expression.h"
+DECLARE_TYPED_LIST(MODELBASE_API, Model, NameText)
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/NameText.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+namespace Model {
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
-
-namespace OOModel {
-
-class OOMODEL_API Enumerator : public Super<Model::CompositeNode>
+class MODELBASE_API NameText: public Super<Text>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(Enumerator)
-
-	ATTRIBUTE_OOP_NAME_SYMBOL
-	ATTRIBUTE(Expression, value, setValue)
+	NODE_DECLARE_STANDARD_METHODS(NameText)
 
 	public:
+		NameText(const QString& text);
 
-		Enumerator(const QString& name, Expression* value = nullptr);
+	private:
+
+		virtual FieldSet<QString>* getSetCommand(QString& textField, const QString& newText) override;
 };
 
-}
-
+} /* namespace Model */

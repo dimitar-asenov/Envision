@@ -34,7 +34,7 @@ namespace TestNodes {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
 
-REGISTER_ATTRIBUTE(BinaryNode, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(BinaryNode, name, NameText, false, false, true)
 REGISTER_ATTRIBUTE(BinaryNode, left, BinaryNode, false, true, true)
 REGISTER_ATTRIBUTE(BinaryNode, right, BinaryNode, false, true, true)
 

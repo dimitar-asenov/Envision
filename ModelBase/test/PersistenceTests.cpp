@@ -29,7 +29,7 @@
 #include "test_nodes/BinaryNode.h"
 #include "model/Model.h"
 #include "nodes/Integer.h"
-#include "nodes/Text.h"
+#include "nodes/NameText.h"
 #include "PersistentStoreMock.h"
 
 namespace Model {
@@ -41,7 +41,7 @@ TEST(ModelBase, PersistenceSave)
 	PersistentStoreMock store;
 	model.save(&store);
 
-	CHECK_STR_EQUAL("BinaryNode,root,Text,name,,Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
+	CHECK_STR_EQUAL("BinaryNode,root,NameText,name,,Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
 			store.getSaved());
 
 	model.beginModification(root, "make tree");
@@ -55,8 +55,8 @@ TEST(ModelBase, PersistenceSave)
 	store.clear();
 	model.save();
 
-	CHECK_STR_EQUAL("BinaryNode,root,Text,name,Troot,BinaryNode,left,Text,name,Tleft,Integer,_ext_PositionExtension_x,"
-			"0,Integer,_ext_PositionExtension_y,0,BinaryNode,right,Text,name,Tright,Integer,_ext_PositionExtension_x,0,"
+	CHECK_STR_EQUAL("BinaryNode,root,NameText,name,Troot,BinaryNode,left,NameText,name,Tleft,Integer,_ext_PositionExtension_x,"
+			"0,Integer,_ext_PositionExtension_y,0,BinaryNode,right,NameText,name,Tright,Integer,_ext_PositionExtension_x,0,"
 			"Integer,_ext_PositionExtension_y,0,Integer,_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,",
 			store.getSaved());
 }

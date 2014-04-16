@@ -24,32 +24,25 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "NameText.h"
+#include "commands/NameChange.h"
+#include "ModelException.h"
 
-#include "../oomodel_api.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(Model::NameText)
 
-#include "../attributeMacros.h"
-#include "../expressions/Expression.h"
+namespace Model {
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/NameText.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(NameText)
+NODE_DEFINE_EMPTY_CONSTRUCTORS(NameText)
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
+// The parent constructor will call the virtual getSetCommand, but that's ok, since we don't care which version will
+// run at this point.
+NameText::NameText(const QString& text) : Super(text){}
 
-namespace OOModel {
-
-class OOMODEL_API Enumerator : public Super<Model::CompositeNode>
+FieldSet<QString>* NameText::getSetCommand(QString& textField, const QString& newText)
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(Enumerator)
-
-	ATTRIBUTE_OOP_NAME_SYMBOL
-	ATTRIBUTE(Expression, value, setValue)
-
-	public:
-
-		Enumerator(const QString& name, Expression* value = nullptr);
-};
-
+	return new NameChange(this, textField, newText);
 }
 
+} /* namespace Model */

@@ -31,7 +31,7 @@
 #include "../attributeMacros.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalResult)

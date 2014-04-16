@@ -70,7 +70,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		// Root Node children
 		String rootName = dynamic_cast<String> (root->value().at(0));
 		CHECK_CONDITION(rootName);
-		CHECK_STR_EQUAL("Text", rootName->type() );
+		CHECK_STR_EQUAL("NameText", rootName->type() );
 		CHECK_STR_EQUAL("name", rootName->name());
 		CHECK_INT_EQUAL(1, rootName->id());
 		CHECK_CONDITION(!rootName->isNewPersistenceUnit());
@@ -95,7 +95,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		// Left Node children
 		String leftName = dynamic_cast<String> (left->value().at(0));
 		CHECK_CONDITION(leftName);
-		CHECK_STR_EQUAL("Text", leftName->type() );
+		CHECK_STR_EQUAL("NameText", leftName->type() );
 		CHECK_STR_EQUAL("name", leftName->name());
 		CHECK_INT_EQUAL(3, leftName->id());
 		CHECK_CONDITION(!leftName->isNewPersistenceUnit());
@@ -111,7 +111,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 
 		String leftleftName = dynamic_cast<String> (leftleft->value().at(0));
 		CHECK_CONDITION(leftleftName);
-		CHECK_STR_EQUAL("Text", leftleftName->type() );
+		CHECK_STR_EQUAL("NameText", leftleftName->type() );
 		CHECK_STR_EQUAL("name", leftleftName->name());
 		CHECK_INT_EQUAL(5, leftleftName->id());
 		CHECK_CONDITION(!leftleftName->isNewPersistenceUnit());
@@ -120,7 +120,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 		// Right Node children
 		String rightName = dynamic_cast<String> (right->value().at(0));
 		CHECK_CONDITION(rightName);
-		CHECK_STR_EQUAL("Text", rightName->type() );
+		CHECK_STR_EQUAL("NameText", rightName->type() );
 		CHECK_STR_EQUAL("name", rightName->name());
 		CHECK_INT_EQUAL(7, rightName->id());
 		CHECK_CONDITION(!rightName->isNewPersistenceUnit());

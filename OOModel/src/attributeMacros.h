@@ -27,17 +27,17 @@
 #pragma once
 
 /**
- * Declares a 'name' attribute of type Model::Text.
+ * Declares a 'name' attribute of type Model::NameText.
  *
  * The attribute node can be accessed via nameNode()
  * The name string is accessible via name()
  * A new value can be set via setName()
  */
 #define ATTRIBUTE_OOP_NAME_NOSYMBOL																											\
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, name, setName, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::NameText, name, setName, QString, const QString&)
 
 /**
- * Declares a 'name' attribute of type Model::Text and makes the composite node provide this name as a symbol.
+ * Declares a 'name' attribute of type Model::NameText and makes the composite node provide this name as a symbol.
  *
  * The attribute node can be accessed via nameNode()
  * The name string is accessible via name()
@@ -55,7 +55,7 @@
  * Registers a mandatory OOName attribute which does not declare a symbol.
  */
 #define REGISTER_OONAME_NOSYMBOL_ATTRIBUTE(ClassName)																						\
-REGISTER_ATTRIBUTE(ClassName, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(ClassName, name, NameText, false, false, true)
 
 /**
  * Registers a mandatory OOName attribute which declares a symbol.

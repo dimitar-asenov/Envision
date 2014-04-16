@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ForEachStatement)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ForEachStatement)
 
-REGISTER_ATTRIBUTE(ForEachStatement, varName, Text, false, false, true)
+REGISTER_ATTRIBUTE(ForEachStatement, varName, NameText, false, false, true)
 REGISTER_ATTRIBUTE(ForEachStatement, varType, Expression, false, true, true)
 REGISTER_ATTRIBUTE(ForEachStatement, collection, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ForEachStatement, body, StatementItemList, false, false, true)

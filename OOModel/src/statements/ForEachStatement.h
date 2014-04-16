@@ -40,7 +40,7 @@ class OOMODEL_API ForEachStatement: public Super<Statement>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(ForEachStatement)
 
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, varName, setVarName, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::NameText, varName, setVarName, QString, const QString&)
 	ATTRIBUTE(Expression, varType, setVarType)
 	ATTRIBUTE(Expression, collection, setCollection)
 	ATTRIBUTE(StatementItemList, body, setBody)
