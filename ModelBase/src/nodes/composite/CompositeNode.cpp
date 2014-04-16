@@ -99,8 +99,11 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, Attribu
 		if ( !index.isValid() ) throw ModelException("Node has attribute "
 				+ ln->name + " in persistent store, but this attribute is not registered");
 
+		auto attribute = meta_.attribute(index);
+		Q_ASSERT(ln->node->isSubtypeOf(attribute.type()));
+
 		// Skip loading partial optional children.
-		if (!store.isLoadingPartially() || !meta_.attribute(index).optional() || !meta_.attribute(index).partial())
+		if (!store.isLoadingPartially() || !attribute.optional() || !attribute.partial())
 		{
 			subnodes_[index.level()][index.index()] = ln->node;
 			ln->node->setParent(this);
@@ -145,7 +148,9 @@ void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 	Q_ASSERT( attributeIndex.isValid() );
 	Q_ASSERT( attributeIndex.level() < subnodes_.size());
 	Q_ASSERT( attributeIndex.index() < subnodes_[attributeIndex.level()].size());
-	Q_ASSERT( node || meta_.attribute(attributeIndex).optional());
+	auto attribute = meta_.attribute(attributeIndex);
+	Q_ASSERT( node || attribute.optional());
+	Q_ASSERT( !node || node->isSubtypeOf(attribute.type()));
 	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes_));
 }
 
@@ -191,9 +196,8 @@ bool CompositeNode::replaceChild(Node* child, Node* replacement)
 	if (!child || !replacement) return false;
 
 	CompositeIndex index = indexOf(child);
-	if (!index.isValid()) return false;
-
-	if ( !index.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
+	Q_ASSERT(index.isValid());
+	Q_ASSERT( !replacement || replacement->isSubtypeOf(meta_.attribute(index).type()));
 	execute(new CompositeNodeChangeChild(this, replacement, index, &subnodes_));
 	return true;
 }
@@ -256,8 +260,11 @@ void CompositeNode::load(PersistentStore &store)
 			throw ModelException("Node has attribute "
 					+ ln->name + " in persistent store, but this attribute is not registered");
 
+		auto attribute = meta_.attribute(index);
+		Q_ASSERT(ln->node->isSubtypeOf(attribute.type()));
+
 		// Skip loading partial optional children.
-		if (!store.isLoadingPartially() || !meta_.attribute(index).optional() || !meta_.attribute(index).partial())
+		if (!store.isLoadingPartially() || !attribute.optional() || !attribute.partial())
 			execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(),index.index()), &subnodes_));
 	}
 
