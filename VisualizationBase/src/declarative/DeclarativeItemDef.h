@@ -142,14 +142,14 @@ template <class ChildItemVisualizationType, class ParentStyleType>
 }
 
 template <class VisualizationType>
-template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType>
+template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
 	NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
-			typename ChildItemVisualizationType::NodeType* (ParentNodeType::*nodePointer)(),
+			ParentNodeSubType* (ParentNodeType::*nodePointer)(),
 			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
 {
 	return new NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>
-	(itemStorage, [=](I* v){return (v->node()->*nodePointer)();}, [=](I* v) { return &((v->style()->*stylePointer)()); });
+	(itemStorage, [=](I* v){return (v->node()->*nodePointer)();},[=](I* v) { return &((v->style()->*stylePointer)()); });
 }
 
 }

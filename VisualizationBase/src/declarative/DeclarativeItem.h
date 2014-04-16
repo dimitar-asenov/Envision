@@ -117,10 +117,10 @@ class DeclarativeItem : public DeclarativeItemBase
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
-		template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType>
+		template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
 			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
-					typename ChildItemVisualizationType::NodeType* (ParentNodeType::*nodePointer)(),
+					ParentNodeSubType* (ParentNodeType::*nodePointer)(),
 					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
 };
 
