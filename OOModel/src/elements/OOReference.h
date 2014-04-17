@@ -47,6 +47,8 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 
 	private:
 
+		virtual void targetChanged(Node* oldTarget);
+
 		enum class ReferenceTargetKind {Unknown, Container, Type, Callable, Assignable, Variable};
 		ReferenceTargetKind referenceTargetKind() const;
 
@@ -61,6 +63,7 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 			const;
 		void removeOverridenMethods(QSet<Method*>& methods) const;
 		void removeLessSpecificMethods(QSet<Method*>& methods) const;
+
 };
 
 } /* namespace OOModel */

@@ -28,6 +28,7 @@
 #include "commands/FieldSet.h"
 #include "model/Model.h"
 #include "ModelException.h"
+#include "NameText.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::Reference)
@@ -81,6 +82,7 @@ bool Reference::resolveHelper(bool indirect)
 
 	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
 
+	auto oldTarget = target_;
 	target_ = newTarget;
 
 	if (target_ || !indirect)
@@ -95,8 +97,12 @@ bool Reference::resolveHelper(bool indirect)
 	}
 	else state_ = ReferenceNeedsToBeResolved;
 
+	if (oldTarget != target_) targetChanged(oldTarget);
+
 	return isResolved();
 }
+
+void Reference::targetChanged(Node*){}
 
 void Reference::save(PersistentStore &store) const
 {
@@ -126,7 +132,8 @@ void Reference::setResolutionNeeded()
 	pendingResolution_.insert(this);
 }
 
-void Reference::unresolveAll(Node* subTree, bool markForResolution)
+template<class NodeType>
+void Reference::forAll(Node* subTree, Node* avoid, std::function<void (NodeType*)> function)
 {
 	if (subTree)
 	{
@@ -135,14 +142,44 @@ void Reference::unresolveAll(Node* subTree, bool markForResolution)
 		while (!stack.isEmpty())
 		{
 			auto top = stack.takeLast();
-			if (auto ref = DCast<Reference>(top) )
-			{
-				if (markForResolution) ref->setResolutionNeeded();
-				else ref->state_ = ReferenceNeedsToBeResolved;
-			}
+			if (top == avoid) continue;
+
+			if (auto node = DCast<NodeType>(top) ) function(node);
 			else stack.append(top->children());
 		}
 	}
+}
+
+void Reference::unresolveAll(Node* subTree, bool markForResolution)
+{
+	if (markForResolution)
+		forAll<Reference>(subTree, nullptr, [](Reference* ref) { ref->setResolutionNeeded();});
+	else
+		forAll<Reference>(subTree, nullptr, [](Reference* ref) { ref->state_ = ReferenceNeedsToBeResolved; });
+}
+
+void Reference::unresolveNames(Node* subTree, bool markForResolution, const QSet<QString>& names)
+{
+	if (markForResolution)
+		forAll<Reference>(subTree, nullptr, [=](Reference* ref)
+				{ if (names.contains(ref->name())) ref->setResolutionNeeded();});
+	else
+		forAll<Reference>(subTree, nullptr, [=](Reference* ref)
+				{ if (names.contains(ref->name())) ref->state_ = ReferenceNeedsToBeResolved; });
+}
+
+void Reference::unresolveIfNameIntroduced(Node* subTreeToUnresolve, bool markForResolution,
+		Node* subTreeToLookForNewNames)
+{
+	QSet<QString> names;
+	forAll<NameText>(subTreeToLookForNewNames, nullptr, [&names](NameText* name){ names.insert(name->get());});
+
+	if (markForResolution)
+		forAll<Reference>(subTreeToUnresolve, subTreeToLookForNewNames, [=](Reference* ref)
+				{ if (names.contains(ref->name())) ref->setResolutionNeeded();});
+	else
+		forAll<Reference>(subTreeToUnresolve, subTreeToLookForNewNames, [=](Reference* ref)
+				{ if (names.contains(ref->name())) ref->state_ = ReferenceNeedsToBeResolved; });
 }
 
 void Reference::resolvePending()
@@ -167,7 +204,6 @@ void Reference::resolvePending()
 		}
 
 		// As a result of resolution of some references, some other references could have become invalid.
-		Q_ASSERT(pending.intersect(pendingResolution_).isEmpty());
 		pending = pendingResolution_;
 	}
 

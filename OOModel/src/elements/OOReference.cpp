@@ -46,6 +46,30 @@ namespace OOModel {
 NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference)
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference)
 
+void OOReference::targetChanged(Node*)
+{
+	Node* child = this;
+	Node* p = parent();
+	while (p)
+	{
+		if (auto refExpr = DCast<ReferenceExpression>(p))
+		{
+			if (refExpr->ref() == child)
+			{
+				if (auto m = p->model()) m->notifyNodeChange(p);
+			}
+			else {
+				refExpr->ref()->setResolutionNeeded();
+				break;
+			}
+		}
+		else if (!DCast<Model::List>(p) && !DCast<Expression>(p)) break;
+
+		child = p;
+		p = p->parent();
+	}
+}
+
 Model::Node* OOReference::computeTarget() const
 {
 	// TODO Handle the case where the symbol is defined multiple times in a better way

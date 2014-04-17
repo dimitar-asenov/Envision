@@ -35,6 +35,7 @@ namespace Model {
 
 class UndoCommand;
 class NodeOwningCommand;
+class NameText;
 
 /**
  * The Model class is a management and access entity for a program tree.
@@ -292,14 +293,26 @@ class MODELBASE_API Model: public QObject
 		PersistentStore* store();
 
 		/**
+		 * Adds \a node to the list of modified nodes during an edit operation or immediately emits a nodesModified
+		 * signal with the specified node if no modification to the model is ongoing.
+		 *
+		 * For usual edit operations that alter the model, you do not need to explicitly call this method. It is useful
+		 * for cases where only a caching property of a node has changed which might lead to changes in its visualization.
+		 *
+		 * For example this method can be used when resolving references to notify visualizations of changes to the
+		 * reference targets.
+		 */
+		void notifyNodeChange(Node* node);
+
+		/**
 		 * Causes a nameModified signal to be emitted.
 		 *
 		 * @param node
-		 * 				Which node's name has changed
+		 * 				The node that represents the name that has changed
 		 * @param oldNmae
 		 * 				What was the old name of the node
 		 */
-		void emitNameModified(Node* node, const QString &oldName);
+		void emitNameModified(NameText* node, const QString &oldName);
 
 		/**
 		 * Causes a nodeFullyLoaded signal to be emitted.
@@ -454,7 +467,6 @@ inline QString Model::name() { return name_; }
 inline void Model::setName(const QString& name) { name_ = name; }
 
 inline PersistentStore* Model::store() { return store_; }
-inline void Model::emitNameModified(Node* node, const QString &oldName) { emit nameModified(node, oldName); }
 
 inline ModelManager& Model::manager() const { return ModelManager::instance(); }
 

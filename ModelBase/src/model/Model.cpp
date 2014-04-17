@@ -31,6 +31,7 @@
 #include "../commands/AddModifiedNode.h"
 #include "../nodes/Reference.h"
 #include "../nodes/UsedLibrary.h"
+#include "../nodes/NameText.h"
 
 #include "Core/src/Profiler.h"
 
@@ -235,6 +236,21 @@ void Model::setRoot(Node* node)
 	Reference::resolvePending();
 
 	emit rootNodeSet(root_);
+}
+
+void Model::notifyNodeChange(Node* node)
+{
+	if (modificationInProgress) modifiedTargets.insert(node);
+	else emit nodesModified(QSet<Node*>() << node);
+}
+
+void Model::emitNameModified(NameText* node, const QString &oldName)
+{
+	QSet<QString> names;
+	names << node->get() << oldName;
+	Reference::unresolveNames(root_, true, names);
+
+	emit nameModified(node, oldName);
 }
 
 }

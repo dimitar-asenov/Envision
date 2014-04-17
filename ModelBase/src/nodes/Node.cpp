@@ -255,7 +255,12 @@ void Node::setParent(Node* parent)
 {
 	//TODO: is this operation efficient and even possible when performed on top level objects such as namespaces and
 	// packages?
-	Reference::unresolveAll(this, parent && parent->model());
+	if (parent && parent->model())
+	{
+		Reference::unresolveAll(this, true);
+		Reference::unresolveIfNameIntroduced(root(), true, this);
+	}
+
 
 	parent_ = parent;
 }

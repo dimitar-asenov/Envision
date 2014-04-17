@@ -68,6 +68,9 @@ class MODELBASE_API Reference: public Super<Node>
 		 * then \a markForResolution should be set to true, otherwise it should be false.
 		 */
 		static void unresolveAll(Node* subTree, bool markForResolution);
+		static void unresolveNames(Node* subTree, bool markForResolution, const QSet<QString>& names);
+		static void unresolveIfNameIntroduced(Node* subTreeToUnresolve, bool markForResolution,
+				Node* subTreeToLookForNewNames);
 
 		static void resolvePending();
 
@@ -86,6 +89,11 @@ class MODELBASE_API Reference: public Super<Node>
 		State state_{ReferenceNeedsToBeResolved};
 
 		bool resolveHelper(bool indirect);
+
+		template<class NodeType>
+		static void forAll(Node* subTree, Node* avoid, std::function<void (NodeType* node)> function);
+
+		virtual void targetChanged(Node* oldTarget);
 };
 
 inline const QString& Reference::name() const { return name_; }
