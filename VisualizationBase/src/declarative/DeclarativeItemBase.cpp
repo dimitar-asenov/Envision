@@ -71,10 +71,10 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 
 	if (hasShape())
 	{
-		getShape()->setOffset(0, 0);
-
 		if (currentShapeElements().isEmpty())
 		{
+			getShape()->setOffset(0, 0);
+
 			if ( sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0) )
 			{
 				QSize inner = getShape()->innerSize(availableWidth, availableHeight);
