@@ -37,15 +37,18 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
+QList<Reference*> Reference::allReferences_;
 QSet<Reference*> Reference::pendingResolution_;
 
 Reference::Reference(Node *parent) : Super(parent)
 {
+	allReferences_.append(this);
 	if (parent && parent->model()) pendingResolution_.insert(this);
 }
 
 Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 {
+	allReferences_.append(this);
 	name_ = store.loadReferenceValue(this);
 	if (state_ == ReferenceNeedsToBeResolved && parent && parent->model())
 		pendingResolution_.insert(this);
@@ -54,6 +57,7 @@ Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 Reference::~Reference()
 {
 	pendingResolution_.remove(this);
+	allReferences_.removeAll(this);
 }
 
 void Reference::setName(const QString &name)
@@ -133,7 +137,7 @@ void Reference::setResolutionNeeded()
 }
 
 template<class NodeType>
-void Reference::forAll(Node* subTree, Node* avoid, std::function<void (NodeType*)> function)
+void Reference::forAll(Node* subTree, std::function<void (NodeType*)> function)
 {
 	if (subTree)
 	{
@@ -142,7 +146,6 @@ void Reference::forAll(Node* subTree, Node* avoid, std::function<void (NodeType*
 		while (!stack.isEmpty())
 		{
 			auto top = stack.takeLast();
-			if (top == avoid) continue;
 
 			if (auto node = DCast<NodeType>(top) ) function(node);
 			else stack.append(top->children());
@@ -150,37 +153,92 @@ void Reference::forAll(Node* subTree, Node* avoid, std::function<void (NodeType*
 	}
 }
 
-void Reference::unresolveAll(Node* subTree, bool markForResolution)
+void Reference::unresolveReferencesHelper(Node* subTree, bool all,
+	const QSet<QString>& names)
 {
-	if (markForResolution)
-		forAll<Reference>(subTree, nullptr, [](Reference* ref) { ref->setResolutionNeeded();});
+	if (!subTree || (!all && names.isEmpty())) return;
+
+	auto targetModel = subTree->model();
+	bool isRoot = !subTree->parent();
+
+	std::function<void (Reference*)> f;
+	if (all)
+	{
+		f = [](Reference* ref) { ref->setResolutionNeeded();};
+	}
 	else
-		forAll<Reference>(subTree, nullptr, [](Reference* ref) { ref->state_ = ReferenceNeedsToBeResolved; });
+	{
+		if (names.size() == 2)
+		{
+			//This case occurs when changing a name. This happens when the user is typing and therefore it is very
+			//performance sensitive. Thus we optimize it specially.
+
+			QString first = *names.begin();
+			QString second = *++names.begin();
+
+			// Removing this if, and just leaving the statement at the of this method to handle the updates using the
+			// defined f function is slow. In one test an additional 4-5ms were needed on top of the 10-13ms processing
+			// time on a 3.4GHz CPU. Therefore there is a significant cost associated with calling the f function, and
+			// it's betterto just process this case here directly.
+			// If needed this optimization could also be used in the other cases.
+			if (isRoot)
+			{
+				for(auto ref : allReferences_)
+					if (targetModel == ref->model())
+					{
+						auto& refName = ref->name();
+						if (refName == first || refName == second)
+							ref->setResolutionNeeded();
+					}
+				return;
+			}
+
+			f = [=](Reference* ref)
+				{ auto& refName = ref->name(); if (refName == first || refName == second) ref->setResolutionNeeded();};
+		}
+		else if (names.size() < 20) // Optimize in the case of just a few names, by avoiding hasing.
+		{
+			// TODO: Find out what's a good value for the magick number 20 above.
+			QMap<QString, int> mapNames;
+			for (auto n : names) mapNames.insert(n,0); // TODO: isn't there a way to put void here?
+
+			f = [=](Reference* ref) { if (mapNames.contains(ref->name())) ref->setResolutionNeeded();};
+		}
+		else
+		{
+			f = [=](Reference* ref) { if (names.contains(ref->name())) ref->setResolutionNeeded();};
+		}
+	}
+
+	if (isRoot)
+	{
+		for(auto ref : allReferences_) if (targetModel == ref->model()) f(ref);
+	}
+	else
+	{
+		// If this is not the root, then explore the references only in the specified subTree, which is faster
+		forAll<Reference>(subTree, f);
+	}
+
+
 }
 
-void Reference::unresolveNames(Node* subTree, bool markForResolution, const QSet<QString>& names)
+void Reference::unresolveAll(Node* subTree)
 {
-	if (markForResolution)
-		forAll<Reference>(subTree, nullptr, [=](Reference* ref)
-				{ if (names.contains(ref->name())) ref->setResolutionNeeded();});
-	else
-		forAll<Reference>(subTree, nullptr, [=](Reference* ref)
-				{ if (names.contains(ref->name())) ref->state_ = ReferenceNeedsToBeResolved; });
+	unresolveReferencesHelper(subTree, true, {});
 }
 
-void Reference::unresolveIfNameIntroduced(Node* subTreeToUnresolve, bool markForResolution,
+void Reference::unresolveNames(Node* subTree, const QSet<QString>& names)
+{
+	unresolveReferencesHelper(subTree, false, names);
+}
+
+void Reference::unresolveIfNameIntroduced(Node* subTreeToUnresolve,
 		Node* subTreeToLookForNewNames)
 {
 	QSet<QString> names;
-	forAll<NameText>(subTreeToLookForNewNames, nullptr, [&names](NameText* name){ names.insert(name->get());});
-	if (names.isEmpty()) return;
-
-	if (markForResolution)
-		forAll<Reference>(subTreeToUnresolve, subTreeToLookForNewNames, [=](Reference* ref)
-				{ if (names.contains(ref->name())) ref->setResolutionNeeded();});
-	else
-		forAll<Reference>(subTreeToUnresolve, subTreeToLookForNewNames, [=](Reference* ref)
-				{ if (names.contains(ref->name())) ref->state_ = ReferenceNeedsToBeResolved; });
+	forAll<NameText>(subTreeToLookForNewNames, [&names](NameText* name){ names.insert(name->get());});
+	unresolveReferencesHelper(subTreeToUnresolve, false, names);
 }
 
 void Reference::resolvePending()

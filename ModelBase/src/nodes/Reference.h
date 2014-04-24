@@ -62,15 +62,19 @@ class MODELBASE_API Reference: public Super<Node>
 
 		/**
 		 * Marks all the references in the provided \a subTree as unresolved.
-		 *
-		 * If \a markForResolution is true, the references will be resolved next time a resolution is invoked, otherwise
-		 * they won't be resolved, until they are marked for resolution. If \a subTree is about to become part of a mdoel
-		 * then \a markForResolution should be set to true, otherwise it should be false.
 		 */
-		static void unresolveAll(Node* subTree, bool markForResolution);
-		static void unresolveNames(Node* subTree, bool markForResolution, const QSet<QString>& names);
-		static void unresolveIfNameIntroduced(Node* subTreeToUnresolve, bool markForResolution,
-				Node* subTreeToLookForNewNames);
+		static void unresolveAll(Node* subTree);
+
+		/**
+		 * Marks references whose name is in \a names in the provided \a subTree as unresolved.
+		 */
+		static void unresolveNames(Node* subTree, const QSet<QString>& names);
+
+		/**
+		 * Marks as unresolved references in \a subTreeToUnresolve, whose name is identical to any NameText node in
+		 * \a subTreeToLookForNewNames.
+		 */
+		static void unresolveIfNameIntroduced(Node* subTreeToUnresolve, Node* subTreeToLookForNewNames);
 
 		static void resolvePending();
 
@@ -85,13 +89,20 @@ class MODELBASE_API Reference: public Super<Node>
 		 */
 		static QSet<Reference*> pendingResolution_;
 
+		/**
+		 * A set of all existing reference objects.
+		 */
+		static QList<Reference*> allReferences_;
+
 		enum State {ReferenceEstablished, ReferenceNeedsToBeResolved, ReferenceIsBeingResolved};
 		State state_{ReferenceNeedsToBeResolved};
 
 		bool resolveHelper(bool indirect);
 
+		static void unresolveReferencesHelper(Node* subTree, bool all, const QSet<QString>& names);
+
 		template<class NodeType>
-		static void forAll(Node* subTree, Node* avoid, std::function<void (NodeType* node)> function);
+		static void forAll(Node* subTree, std::function<void (NodeType* node)> function);
 
 		virtual void targetChanged(Node* oldTarget);
 };

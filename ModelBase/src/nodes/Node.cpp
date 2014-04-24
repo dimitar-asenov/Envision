@@ -258,12 +258,10 @@ void Node::setParent(Node* parent)
 	model_ = parent ? parent->model_ : nullptr;
 	if (oldModel != model_)	propagateModelToChildren();
 
-	//TODO: is this operation efficient and even possible when performed on top level objects such as namespaces and
-	// packages?
 	if (model_)
 	{
-		Reference::unresolveAll(this, true);
-		Reference::unresolveIfNameIntroduced(root(), true, this);
+		Reference::unresolveAll(this);
+		Reference::unresolveIfNameIntroduced(root(), this);
 	}
 }
 

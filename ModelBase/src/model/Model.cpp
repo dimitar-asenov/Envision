@@ -233,7 +233,7 @@ void Model::setRoot(Node* node)
 	root_ = node;
 
 	root_->setRootModel(this);
-	Reference::unresolveAll(root_, true);
+	Reference::unresolveAll(root_);
 	Reference::resolvePending();
 
 	emit rootNodeSet(root_);
@@ -249,7 +249,7 @@ void Model::emitNameModified(NameText* node, const QString &oldName)
 {
 	QSet<QString> names;
 	names << node->get() << oldName;
-	Reference::unresolveNames(root_, true, names);
+	Reference::unresolveNames(root_, names);
 
 	emit nameModified(node, oldName);
 }
