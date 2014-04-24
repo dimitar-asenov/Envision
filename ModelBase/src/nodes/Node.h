@@ -144,6 +144,11 @@ class MODELBASE_API Node
 		void setParent(Node* parent);
 
 		/**
+		 * Sets the model of this root node to \a model. This node must not have a parent.
+		 */
+		void setRootModel(Model* model);
+
+		/**
 		 * Returns a list of all child nodes.
 		 *
 		 * Reimplement this method in derived classes that have children. The default implementation returns an empty
@@ -468,6 +473,9 @@ class MODELBASE_API Node
 	private:
 		Node* parent_{};
 		int revision_{};
+		Model* model_{};
+
+		void propagateModelToChildren();
 
 		static int numRegisteredTypes_;
 		static QHash<QString, NodeConstructor> nodeConstructorRegister;
@@ -478,7 +486,7 @@ class MODELBASE_API Node
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
 
-inline Model* Node::model() const { return ModelManager::instance().find(root()); }
+inline Model* Node::model() const { return model_; }
 
 inline void Node::setPartiallyLoaded() { partiallyLoadedNodes().insert(this); }
 inline bool Node::isPartiallyLoaded() const {return partiallyLoadedNodes().contains(this);}

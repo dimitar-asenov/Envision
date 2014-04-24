@@ -56,10 +56,10 @@ QSet<const Node*>& Node::partiallyLoadedNodes()
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
-Node::Node(Node* parent) : parent_{parent}
+Node::Node(Node* parent) : parent_{parent}, model_{parent ? parent->model_ : nullptr}
 {
 	if (parent && !parent->isModifyable())
-		throw ModelException("Trying to create a node with an non-modifiable parent.");
+		throw ModelException("Trying to create a node with a non-modifiable parent.");
 }
 
 
@@ -253,16 +253,38 @@ bool Node::hasPartiallyLoadedChildren() const
  **********************************************************************************************************************/
 void Node::setParent(Node* parent)
 {
+	parent_ = parent;
+	auto oldModel = model_;
+	model_ = parent ? parent->model_ : nullptr;
+	if (oldModel != model_)	propagateModelToChildren();
+
 	//TODO: is this operation efficient and even possible when performed on top level objects such as namespaces and
 	// packages?
-	if (parent && parent->model())
+	if (model_)
 	{
 		Reference::unresolveAll(this, true);
 		Reference::unresolveIfNameIntroduced(root(), true, this);
 	}
+}
 
+void Node::propagateModelToChildren()
+{
+	QList<Node*> stack;
+	stack.append(children());
+	while (!stack.isEmpty())
+	{
+		auto top = stack.takeLast();
+		top->model_ = model_;
+		stack.append(top->children());
+	}
+}
 
-	parent_ = parent;
+void Node::setRootModel(Model* model)
+{
+	Q_ASSERT(!parent_);
+	Q_ASSERT(model);
+	model_ = model;
+	propagateModelToChildren();
 }
 
 QList<Node*> Node::children() const

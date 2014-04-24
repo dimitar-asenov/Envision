@@ -232,6 +232,7 @@ void Model::setRoot(Node* node)
 	commands.clear();
 	root_ = node;
 
+	root_->setRootModel(this);
 	Reference::unresolveAll(root_, true);
 	Reference::resolvePending();
 
