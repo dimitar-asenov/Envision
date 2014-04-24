@@ -173,6 +173,7 @@ void Reference::unresolveIfNameIntroduced(Node* subTreeToUnresolve, bool markFor
 {
 	QSet<QString> names;
 	forAll<NameText>(subTreeToLookForNewNames, nullptr, [&names](NameText* name){ names.insert(name->get());});
+	if (names.isEmpty()) return;
 
 	if (markForResolution)
 		forAll<Reference>(subTreeToUnresolve, subTreeToLookForNewNames, [=](Reference* ref)
