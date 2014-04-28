@@ -39,6 +39,7 @@ NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
 QList<Reference*> Reference::allReferences_;
 QSet<Reference*> Reference::pendingResolution_;
+QList<std::function<void (Node* subTree)>> Reference::unresolutionSteps_;
 
 Reference::Reference(Node *parent) : Super(parent)
 {
@@ -239,6 +240,18 @@ void Reference::unresolveIfNameIntroduced(Node* subTreeToUnresolve,
 	QSet<QString> names;
 	forAll<NameText>(subTreeToLookForNewNames, [&names](NameText* name){ names.insert(name->get());});
 	unresolveReferencesHelper(subTreeToUnresolve, false, names);
+}
+
+void Reference::unresolveAfterNewSubTree(Node* subTree)
+{
+	Reference::unresolveAll(subTree);
+	Reference::unresolveIfNameIntroduced(subTree->root(), subTree);
+	for (auto step : unresolutionSteps_) step(subTree);
+}
+
+void Reference::addUnresolutionSteps(std::function<void (Node* subTree)> step)
+{
+	unresolutionSteps_.append(step);
 }
 
 void Reference::resolvePending()

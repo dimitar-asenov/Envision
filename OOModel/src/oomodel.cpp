@@ -43,6 +43,8 @@ bool OOModel::initialize(Core::EnvisionManager&)
 {
 	nodeTypeInitializationRegistry().initializeAll();
 
+	Model::Reference::addUnresolutionSteps(OOReference::unresolveOOReferencesAfterSubTree);
+
 	return true;
 }
 

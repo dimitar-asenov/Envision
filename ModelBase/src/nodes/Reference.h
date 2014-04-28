@@ -71,6 +71,16 @@ class MODELBASE_API Reference: public Super<Node>
 		static void unresolveNames(Node* subTree, const QSet<QString>& names);
 
 		/**
+		 * Performs all necessary operations to unresolve refrences after a new tree has been introduced.
+		 */
+		static void unresolveAfterNewSubTree(Node* subTree);
+
+		/**
+		 * Adds the \a step function to be called when references are being unresolved after a sub tree is added.
+		 */
+		static void addUnresolutionSteps(std::function<void (Node* subTree)> step);
+
+		/**
 		 * Marks as unresolved references in \a subTreeToUnresolve, whose name is identical to any NameText node in
 		 * \a subTreeToLookForNewNames.
 		 */
@@ -93,6 +103,8 @@ class MODELBASE_API Reference: public Super<Node>
 		 * A set of all existing reference objects.
 		 */
 		static QList<Reference*> allReferences_;
+
+		static QList<std::function<void (Node* subTree)>> unresolutionSteps_;
 
 		enum State {ReferenceEstablished, ReferenceNeedsToBeResolved, ReferenceIsBeingResolved};
 		State state_{ReferenceNeedsToBeResolved};

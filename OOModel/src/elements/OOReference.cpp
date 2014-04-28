@@ -28,6 +28,7 @@
 #include "../expressions/ReferenceExpression.h"
 #include "../declarations/Class.h"
 #include "../declarations/Method.h"
+#include "../declarations/NameImport.h"
 #include "../expressions/types/ClassTypeExpression.h"
 #include "../expressions/types/ArrayTypeExpression.h"
 #include "../expressions/MethodCallExpression.h"
@@ -63,10 +64,41 @@ void OOReference::targetChanged(Node*)
 				break;
 			}
 		}
+		else if (DCast<NameImport>(p))
+		{
+			auto list = p->parent();
+			Q_ASSERT(DCast<Model::List>(list));
+			auto mainDeclaration = list->parent();
+			Q_ASSERT(mainDeclaration);
+			unresolveAll(mainDeclaration);
+
+			break;
+		}
 		else if (!DCast<Model::List>(p) && !DCast<Expression>(p)) break;
 
 		child = p;
 		p = p->parent();
+	}
+}
+
+void OOReference::unresolveOOReferencesAfterSubTree(Model::Node* subTree)
+{
+	auto node = subTree;
+	while (node)
+	{
+		if (DCast<NameImport>(node))
+		{
+			auto list = node->parent();
+			Q_ASSERT(DCast<Model::List>(list));
+			auto mainDeclaration = list->parent();
+			Q_ASSERT(mainDeclaration);
+			unresolveAll(mainDeclaration);
+			break;
+		}
+
+		if (!DCast<Model::List>(node) && !DCast<Expression>(node) && !DCast<Reference>(node)) break;
+
+		node = node->parent();
 	}
 }
 

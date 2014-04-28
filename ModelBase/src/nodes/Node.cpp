@@ -258,11 +258,7 @@ void Node::setParent(Node* parent)
 	model_ = parent ? parent->model_ : nullptr;
 	if (oldModel != model_)	propagateModelToChildren();
 
-	if (model_)
-	{
-		Reference::unresolveAll(this);
-		Reference::unresolveIfNameIntroduced(root(), this);
-	}
+	if (model_) Reference::unresolveAfterNewSubTree(this);
 }
 
 void Node::propagateModelToChildren()

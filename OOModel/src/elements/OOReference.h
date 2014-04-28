@@ -45,6 +45,8 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 	public:
 		virtual Node* computeTarget() const override;
 
+		static void unresolveOOReferencesAfterSubTree(Model::Node* subTree);
+
 	private:
 
 		virtual void targetChanged(Node* oldTarget);
