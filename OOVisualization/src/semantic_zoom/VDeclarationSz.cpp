@@ -36,6 +36,8 @@
 #include <OOModel/src/declarations/Module.h>
 #include <OOModel/src/declarations/Project.h>
 
+#include <VisualizationBase/src/items/RootItem.h>
+
 using namespace Visualization;
 using namespace OOModel;
 
@@ -77,6 +79,23 @@ void VDeclarationSz::initializeForms()
 				->put(TheLeftOf, shapeElement, 10, FromLeftOf, content)
 				->put(TheBottomOf, content, 10, FromBottomOf, shapeElement)
 				->put(TheRightOf, shapeElement, 0, FromRightOf, content));
+}
+
+void VDeclarationSz::updateGeometry(int availableWidth, int availableHeight)
+{
+	Super::updateGeometry(availableWidth, availableHeight);
+
+	if (!DCast<RootItem>(parent())) return;
+
+	qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
+
+	if (scale() != invGeometricZoomScale) setScale(invGeometricZoomScale);
+}
+
+bool VDeclarationSz::itemGeometryChangesWithZoom() const
+{
+	//static bool changesWithZoom = DCast<RootItem>(parent());
+	return true;
 }
 
 }

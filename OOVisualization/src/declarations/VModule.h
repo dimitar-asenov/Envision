@@ -53,6 +53,10 @@ class OOVISUALIZATION_API VModule
 
 		static void initializeForms();
 
+		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+		virtual bool itemGeometryChangesWithZoom() const override;
+
 	protected:
 		void determineChildren() override;
 
