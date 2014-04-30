@@ -26,7 +26,6 @@
 
 #include "VModuleSz.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
