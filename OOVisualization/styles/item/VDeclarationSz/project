@@ -47,7 +47,7 @@
 		
 	<icon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/gurica_tree.svg</filename>
-		<width>32</width>
-		<height>32</height>
+		<width>60</width>
+		<height>60</height>
 	</icon>
 </style>
