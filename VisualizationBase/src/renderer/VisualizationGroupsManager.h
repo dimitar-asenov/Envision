@@ -83,7 +83,10 @@ class VISUALIZATIONBASE_API VisualizationGroupsManager
 		bool hasVisualization(int nodeTypeId, int purpose, int semanticZoomLevel);
 
 	private:
-		QVector<QVector<QVector<VisualizationGroup*>>> groups_;
+		QVector<QVector<QVector<VisualizationGroup*>>> groupsTypePurposeSz_;
+		QVector<QVector<QVector<VisualizationGroup*>>> groupsTypeSzPurpose_;
+
+		void prepareAddingVisualizationGroupOrVisualization(int nodeTypeId, int purpose, int semanticZoomLevel);
 };
 
 } /* namespace Visualization */

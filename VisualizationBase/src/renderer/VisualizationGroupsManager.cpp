@@ -34,20 +34,21 @@ VisualizationGroupsManager::VisualizationGroupsManager()
 
 void VisualizationGroupsManager::clear()
 {
-	for(auto groupsNodeType : groups_)
+	for(auto groupsNodeType : groupsTypePurposeSz_)
 		for(auto groupsPurpose : groupsNodeType)
 			for(auto g : groupsPurpose)
 			SAFE_DELETE(g);
 
-	groups_.clear();
+	groupsTypePurposeSz_.clear();
+	groupsTypeSzPurpose_.clear();
 }
 
 VisualizationGroup *VisualizationGroupsManager::getExactMatch(int typeId, int purpose, int semanticZoomLevel)
 {
-	if (typeId < groups_.size() && purpose < groups_[typeId].size() &&
-		 semanticZoomLevel < groups_[typeId][purpose].size() &&
-		 groups_[typeId][purpose][semanticZoomLevel])
-		return groups_[typeId][purpose][semanticZoomLevel];
+	if (typeId < groupsTypePurposeSz_.size() && purpose < groupsTypePurposeSz_[typeId].size() &&
+		 semanticZoomLevel < groupsTypePurposeSz_[typeId][purpose].size() &&
+		 groupsTypePurposeSz_[typeId][purpose][semanticZoomLevel])
+		return groupsTypePurposeSz_[typeId][purpose][semanticZoomLevel];
 	else return nullptr;
 }
 
@@ -55,8 +56,8 @@ QVector<VisualizationGroup *> VisualizationGroupsManager::getByTypeId(int typeId
 {
 	QVector<VisualizationGroup*> result = QVector<VisualizationGroup*>();
 
-	if (typeId < groups_.size())
-		for (QVector<VisualizationGroup*> groups : groups_[typeId])
+	if (typeId < groupsTypePurposeSz_.size())
+		for (QVector<VisualizationGroup*> groups : groupsTypePurposeSz_[typeId])
 			for (VisualizationGroup* group : groups)
 				if (group) result.append(group);
 
@@ -67,8 +68,8 @@ QVector<VisualizationGroup*> VisualizationGroupsManager::getByTypeIdAndPurpose(i
 {
 	QVector<VisualizationGroup*> result = QVector<VisualizationGroup*>();
 
-	if (typeId < groups_.size() && purpose < groups_[typeId].size())
-		for (VisualizationGroup* group : groups_[typeId][purpose])
+	if (typeId < groupsTypePurposeSz_.size() && purpose < groupsTypePurposeSz_[typeId].size())
+		for (VisualizationGroup* group : groupsTypePurposeSz_[typeId][purpose])
 			if (group) result.append(group);
 
 	return result;
@@ -79,11 +80,9 @@ QVector<VisualizationGroup *> VisualizationGroupsManager::getByTypeIdAndSemantic
 {
 	QVector<VisualizationGroup*> result = QVector<VisualizationGroup*>();
 
-	if (typeId < groups_.size())
-		for (QVector<VisualizationGroup*> visualizationGroupsForThisPurpose : groups_[typeId])
-			if (semanticZoomLevel < visualizationGroupsForThisPurpose.size() &&
-				 visualizationGroupsForThisPurpose[semanticZoomLevel])
-				result.append(visualizationGroupsForThisPurpose[semanticZoomLevel]);
+	if (typeId < groupsTypeSzPurpose_.size() && semanticZoomLevel < groupsTypeSzPurpose_[typeId].size())
+		for (VisualizationGroup* group : groupsTypeSzPurpose_[typeId][semanticZoomLevel])
+			if (group) result.append(group);
 
 	return result;
 }
@@ -92,37 +91,48 @@ void VisualizationGroupsManager::addVisualization(int nodeTypeId, int purpose, i
 																  VisualizationGroup::ItemConstructor visualization)
 {
 	Q_ASSERT(nodeTypeId > 0);
-	if (nodeTypeId >= groups_.size()) groups_.resize(nodeTypeId + 1);
-	if (purpose >= groups_[nodeTypeId].size()) groups_[nodeTypeId].resize(purpose+1);
-	if (semanticZoomLevel >= groups_[nodeTypeId][purpose].size())
-		groups_[nodeTypeId][purpose].resize(semanticZoomLevel+1);
+	prepareAddingVisualizationGroupOrVisualization(nodeTypeId, purpose, semanticZoomLevel);
 
-	if (!groups_[nodeTypeId][purpose][semanticZoomLevel])
-		groups_[nodeTypeId][purpose][semanticZoomLevel] = new VisualizationGroup();
-
-	groups_[nodeTypeId][purpose][semanticZoomLevel]->addVisualization(visualization);
+	groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel]->addVisualization(visualization);
 }
 
 void VisualizationGroupsManager::addGroup(int nodeTypeId, int purpose, int semanticZoomLevel, VisualizationGroup *group)
 {
-	if (nodeTypeId >= groups_.size()) groups_.resize(nodeTypeId + 1);
-	if (purpose >= groups_[nodeTypeId].size()) groups_[nodeTypeId].resize(purpose+1);
-	if (semanticZoomLevel >= groups_[nodeTypeId][purpose].size())
-		groups_[nodeTypeId][purpose].resize(semanticZoomLevel+1);
+	prepareAddingVisualizationGroupOrVisualization(nodeTypeId, purpose, semanticZoomLevel);
 
-	if (!groups_[nodeTypeId][purpose][semanticZoomLevel])
-		groups_[nodeTypeId][purpose][semanticZoomLevel] = new VisualizationGroup();
+	groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel]->addSubGroup(group);
+}
 
-	groups_[nodeTypeId][purpose][semanticZoomLevel]->addSubGroup(group);
+void VisualizationGroupsManager::prepareAddingVisualizationGroupOrVisualization(int nodeTypeId, int purpose,
+																											int semanticZoomLevel)
+{
+	if (nodeTypeId >= groupsTypePurposeSz_.size()) groupsTypePurposeSz_.resize(nodeTypeId + 1);
+	if (purpose >= groupsTypePurposeSz_[nodeTypeId].size()) groupsTypePurposeSz_[nodeTypeId].resize(purpose+1);
+	if (semanticZoomLevel >= groupsTypePurposeSz_[nodeTypeId][purpose].size())
+		groupsTypePurposeSz_[nodeTypeId][purpose].resize(semanticZoomLevel+1);
+
+	if (nodeTypeId >= groupsTypeSzPurpose_.size()) groupsTypeSzPurpose_.resize(nodeTypeId + 1);
+	if (semanticZoomLevel >= groupsTypeSzPurpose_[nodeTypeId].size())
+		groupsTypeSzPurpose_[nodeTypeId].resize(semanticZoomLevel+1);
+	if (purpose >= groupsTypeSzPurpose_[nodeTypeId][semanticZoomLevel].size())
+		groupsTypeSzPurpose_[nodeTypeId][semanticZoomLevel].resize(purpose+1);
+
+	if (!groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel])
+	{
+		auto newVisualizationGroup = new VisualizationGroup();
+
+		groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel] = newVisualizationGroup;
+		groupsTypeSzPurpose_[nodeTypeId][semanticZoomLevel][purpose] = newVisualizationGroup;
+	}
 }
 
 bool VisualizationGroupsManager::hasVisualization(int nodeTypeId, int purpose, int semanticZoomLevel)
 {
 	Q_ASSERT(nodeTypeId > 0);
-	if (nodeTypeId >= groups_.size()) return false;
-	if (purpose >= groups_[nodeTypeId].size()) return false;
-	if (semanticZoomLevel >= groups_[nodeTypeId][purpose].size()) return false;
-	if (!groups_[nodeTypeId][purpose][semanticZoomLevel]) return false;
+	if (nodeTypeId >= groupsTypePurposeSz_.size()) return false;
+	if (purpose >= groupsTypePurposeSz_[nodeTypeId].size()) return false;
+	if (semanticZoomLevel >= groupsTypePurposeSz_[nodeTypeId][purpose].size()) return false;
+	if (!groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel]) return false;
 	return true;
 	//TODO: One could also check whether there are any registered visualizations/subgroups.
 }
