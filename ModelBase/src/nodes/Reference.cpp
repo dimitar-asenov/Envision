@@ -279,8 +279,12 @@ void Reference::resolvePending()
 		pending = pendingResolution_;
 	}
 
-	log.debug("Resolved a total of " + QString::number(resolved) + " references in "
+	log.debug(QString::number(resolved) + " resolution" + (resolved == 1 ? "" : "s") + " in "
 				 + QString::number(round) + (round > 1 ? " rounds." : " round."));
+
+	int totalResolvedReferences = 0;
+	for (auto r : allReferences_) if (r->isResolved()) ++totalResolvedReferences;
+	log.debug("Total number of resolved references: " + QString::number(totalResolvedReferences));
 }
 
 }
