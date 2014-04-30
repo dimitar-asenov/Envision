@@ -322,28 +322,6 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			else p->clearChildNodePurpose(n->node());
 		}
 	}
-	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F4)
-	{
-		event->accept();
-		auto n = target;
-		while (n && ! n->node()) n = n->parent();
-
-		auto p = n->parent();
-		if ( p )
-		{
-			int semanticZoomLevel = 0;
-			if (p->definesChildNodeSemanticZoomLevel(n->node()))
-			{
-				semanticZoomLevel = n->semanticZoomLevel() + 1;
-				if ( semanticZoomLevel == target->scene()->renderer()->numRegisteredSemanticZoomLevels())
-					semanticZoomLevel = -1; // Undefine
-
-			}
-
-			if (semanticZoomLevel >= 0) p->setChildNodeSemanticZoomLevel(n->node(), semanticZoomLevel);
-			else p->clearChildNodeSemanticZoomLevel(n->node());
-		}
-	}
 	else if (event->modifiers() == 0
 			&& (	event->key() == Qt::Key_Up
 					|| event->key() == Qt::Key_Down
