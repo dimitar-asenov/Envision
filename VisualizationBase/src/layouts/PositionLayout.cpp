@@ -397,12 +397,42 @@ void PositionLayout::scaleAndPositionItems(QPoint topLeft, int sizeWidth, int si
 			}
 	}
 
+	bool zoomedOut = mainViewScalingFactor() < previousMainViewScalingFactor();
+	bool zoomedIn = mainViewScalingFactor() > previousMainViewScalingFactor();
+
 	// set the calculated new item positions
 	for(int i = 0; i<items.size(); ++i)
 	{
 		items[i]->setPos(areas[i].x(), areas[i].y());
 
 		items[i]->setItemScale(scales[i]);
+
+
+		if (!zoomedIn && !zoomedOut) continue;
+
+			if (geometricZoomScale < 1)
+			{
+				if (scales[i] * scale() * geometricZoomScale < 0.8 && zoomedOut)
+					setChildNodeSemanticZoomLevel(items[i]->node(), 4);
+				else if (zoomedIn)
+				{
+					qreal oldWidth = areas[i].width();
+					qreal oldHeight = areas[i].height();
+
+					areas[i].setWidth(400);
+					areas[i].setHeight(400);
+
+					if (!areaCollides(&areas[i], areas))
+						clearChildNodeSemanticZoomLevel(items[i]->node());
+					else
+					{
+						areas[i].setWidth(oldWidth);
+						areas[i].setHeight(oldHeight);
+					}
+				}
+			}
+			else
+				clearChildNodeSemanticZoomLevel(items[i]->node());
 	}
 }
 
