@@ -315,7 +315,7 @@ void MainView::mousePressEvent(QMouseEvent *event)
 	event->accept();
 	isPanning_ = true;
 	panStartPos_ = event->pos();
-   setCursor(Qt::ClosedHandCursor);
+	setCursor(Qt::ClosedHandCursor);
 }
 
 void MainView::mouseReleaseEvent(QMouseEvent *event)
