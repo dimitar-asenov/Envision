@@ -357,6 +357,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		qreal mainViewScalingFactor() const;
 
 		/**
+		 * Returns the scaling factor used before the active one
+		 */
+		qreal previousMainViewScalingFactor() const;
+
+		/**
 		 * This method returns true if the item's geometry should be updated when the main view's zoom level changes.
 		 *
 		 * It is assumed that this method will always return the same value for the entire lifetime of a single item.

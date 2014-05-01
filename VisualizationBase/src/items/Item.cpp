@@ -886,6 +886,12 @@ qreal Item::mainViewScalingFactor() const
 	else return 1;
 }
 
+qreal Item::previousMainViewScalingFactor() const
+{
+	if (auto s = scene()) return s->previousMainViewScalingFactor();
+	else return 1;
+}
+
 qreal Item::totalScale() const
 {
 	auto s = scale();
