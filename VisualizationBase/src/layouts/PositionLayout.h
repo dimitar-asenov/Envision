@@ -76,6 +76,9 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 
 		virtual bool itemGeometryChangesWithZoom() const override;
 
+	protected:
+		void determineChildren() override;
+
 	private:
 		void scaleAndPositionItems(QPoint topLeft, int sizeWidth, int sizeHeight);
 		bool scaleItem(Item* item, QRectF* area, qreal& scale, qreal geometricZoomScale);

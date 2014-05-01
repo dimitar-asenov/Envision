@@ -132,6 +132,22 @@ void PositionLayout::swap(int i, int j)
 	positions[j] = p;
 }
 
+void PositionLayout::determineChildren()
+{
+	if (needsUpdate() != FullUpdate) return;
+
+	QList<Model::Node*> nodes;
+	for (int i = 0; i<items.size(); i++)
+	{
+		nodes.append(items[i]->node());
+		SAFE_DELETE_ITEM(items[i]);
+	}
+
+	synchronizeWithNodes(nodes, renderer());
+
+	Super::determineChildren();
+}
+
 void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
 {
 	allNodesLackPositionInfo = items.isEmpty();
