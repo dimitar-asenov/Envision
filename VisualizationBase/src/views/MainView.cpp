@@ -126,6 +126,8 @@ void MainView::wheelEvent(QWheelEvent *event)
 
 		bar->setValue( bar->value() - event->delta() );
 	}
+
+	View::wheelEvent(event);
 }
 
 qreal MainView::scaleFactor() const
