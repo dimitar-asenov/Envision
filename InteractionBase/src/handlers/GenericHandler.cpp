@@ -589,6 +589,8 @@ void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheel
 							target->scene()->renderer()->getFinerSemanticZoomLevel(ri->semanticZoomLevel());
 
 				ri->setSemanticZoomLevel(newSemanticZoomLevel);
+
+				qApp->postEvent(target->scene(), new SetCursorEvent(ri, ri->node()));
 			}
 		}
 	}
