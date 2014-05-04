@@ -541,20 +541,19 @@ void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsScene
 
 void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheelEvent *event)
 {
-	// Semantic Zoom
-	if (event->modifiers() == Qt::AltModifier)
+	if (event->modifiers() == Qt::AltModifier) // modify the semantic zoom level
 	{
 		if (target->scene()->selectedItems().size() > 0)
 		{
-			qDebug() << "individual zoom";
+			// individual semantic zoom level change
 
 			Model::Node* node = nullptr;
 			Visualization::Item* parent = nullptr;
 
 			for (auto n : target->scene()->selectedItems())
 			{
+				// get the nearest parent item that has a node which is not of type Model::Text
 				while (n && (!n->node() || n->node()->isSubtypeOf(Model::Text::typeIdStatic()))) n = n->parent();
-
 				if (!n) return;
 
 				auto p = n->parent();
@@ -583,7 +582,7 @@ void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheel
 		}
 		else
 		{
-			qDebug() << "global zoom";
+			// global semantic zoom level change
 
 			for (auto ri : target->scene()->topLevelItems())
 			{
