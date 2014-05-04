@@ -576,8 +576,6 @@ void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheel
 				}
 			}
 
-			target->scene()->scheduleUpdate();
-
 			if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent(parent, node));
 		}
 		else
@@ -592,8 +590,6 @@ void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheel
 
 				ri->setSemanticZoomLevel(newSemanticZoomLevel);
 			}
-
-			target->scene()->scheduleUpdate();
 		}
 	}
 }
