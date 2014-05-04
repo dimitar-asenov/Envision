@@ -150,6 +150,11 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		 */
 		QSizeF estimatedItemSizeInFullDetail(Item* item);
 
+		/**
+		 * Stores the geometric zoom scale on which an item was abstracted by the automatic semantic zoom level change.
+		 */
+		QMap<Item*,qreal> automaticSemanticZoomLevelChangeGeometricZoomLevel_;
+
 		void calculateNodesPositionInfo();
 
 		QVector<Item*> items;

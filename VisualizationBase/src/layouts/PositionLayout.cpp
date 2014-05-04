@@ -409,24 +409,40 @@ inline void PositionLayout::automaticSemanticZoomLevelChange(ArrangementAlgorith
 
 		if (geometricZoomScale < 1)
 		{
-			if (item.scale * scale() * geometricZoomScale < ABSTRACTION_THRESHOLD && zoomedOut)
+			if (item.scale * scale() * geometricZoomScale < ABSTRACTION_THRESHOLD && zoomedOut &&
+					 item.item->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
+			{
 				// if the user zoomed out and the item's perceived scale fell below the threshold then abstract it
 				setChildNodeSemanticZoomLevel(item.item->node(), FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
-			else if (zoomedIn)
+
+				automaticSemanticZoomLevelChangeGeometricZoomLevel_.insert(item.item, geometricZoomScale);
+			}
+			else if (zoomedIn && item.item->semanticZoomLevel() == FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
 			{
 				// if the user zoomed in
 
-				QSizeF oldSize = item.area.size(); // save the current item area size
-
-				// estimate the size the item would have if shown in full detail
-				item.area.setSize(estimatedItemSizeInFullDetail(item.item));
-
-				// see if it was possible to show it in full detail under the assumption
-				if (!item.collidesWithAny(allItems))
+				QMap<Item*, qreal>::const_iterator iter = automaticSemanticZoomLevelChangeGeometricZoomLevel_.find(
+																																				item.item);
+				if (iter != automaticSemanticZoomLevelChangeGeometricZoomLevel_.end() &&
+						geometricZoomScale >= iter.value())
+				{
 					clearChildNodeSemanticZoomLevel(item.item->node());
+					automaticSemanticZoomLevelChangeGeometricZoomLevel_.remove(item.item);
+				}
 				else
-					// revert the changes to the item area
-					item.area.setSize(oldSize);
+				{
+					QSizeF oldSize = item.area.size(); // save the current item area size
+
+					// estimate the size the item would have if shown in full detail
+					item.area.setSize(estimatedItemSizeInFullDetail(item.item));
+
+					// see if it was possible to show it in full detail under the assumption
+					if (!item.collidesWithAny(allItems))
+						clearChildNodeSemanticZoomLevel(item.item->node());
+					else
+						// revert the changes to the item area
+						item.area.setSize(oldSize);
+				}
 			}
 		}
 		else
