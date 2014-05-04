@@ -401,7 +401,9 @@ inline void PositionLayout::automaticSemanticZoomLevelChange(ArrangementAlgorith
 	const qreal ABSTRACTION_THRESHOLD = 0.8;
 
 	// defines the semantic zoom level to be used when abstracting an item
-	const int FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL = 4;
+	// for performance reasons this is a constant but in the interest of general consistency it's value should be
+	// scene()->defaultRenderer()->semanticZoomLevelId("project_module_class_method_abstraction");
+	const int FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL = 5;
 
 	if (zoomedIn || zoomedOut)
 	{
