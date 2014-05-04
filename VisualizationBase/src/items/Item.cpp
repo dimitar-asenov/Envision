@@ -173,40 +173,32 @@ void Item::clearSemanticZoomLevel()
 	setUpdateNeeded(FullUpdate);
 }
 
-void Item::setItemScale(qreal newScale)
+void Item::setItemScale(qreal newScale, qreal parentScale)
 {
-	const double SCALE_CHANGE_THRESHOLD = 0.01;
-
-	if (fabs(newScale - scale()) < SCALE_CHANGE_THRESHOLD) return;
-
-	if (DCast<PositionLayout>(this->parent()))
+	if (DCast<PositionLayout>(parent()))
 	{
-		setScale(newScale);
-	}
+		qreal geometricZoomScale = mainViewScalingFactor();
 
-	// the parent's scale of the children of this item is the scale of the current item
-	qreal pScale = this->totalScale();
-
-	qreal geometricZoomScale = this->mainViewScalingFactor();
-
-	for (Item* child : this->childItems())
-	{
-		qreal scale = child->scale();
-
-		// calculate the total perceived scale for the chosen new scale
-		qreal totalScale = geometricZoomScale * scale * pScale;
+		qreal totalScale = geometricZoomScale * newScale * parentScale;
 
 		// calculate the maximum scale (used to hardcap the scale of an item)
 		qreal maxScale = geometricZoomScale < 1 ? 1 : geometricZoomScale;
 
 		if (totalScale >= maxScale)
 		{
-			// if the item's scale would be larger than the maximum scale set it to the maximum value it could be
-			scale = maxScale / geometricZoomScale / pScale;
-
-			// set the items scale
-			child->setItemScale(scale);
+			newScale = maxScale / geometricZoomScale / parentScale;
 		}
+
+		setScale(newScale);
+	}
+	else
+	{
+		newScale = 1;
+	}
+
+	for (Item* child : childItems())
+	{
+		child->setItemScale(child->scale(), newScale*parentScale);
 	}
 }
 

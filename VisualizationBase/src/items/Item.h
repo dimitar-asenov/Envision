@@ -368,7 +368,26 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual bool itemGeometryChangesWithZoom() const;
 
-		void setItemScale(qreal newScale);
+		/**
+		 * @brief
+		 *				sets the item's scale if it is a direct child of a PositionLayout. Then propagates the information
+		 *				down to the child items recursively.
+		 *
+		 * @param newScale
+		 *				the new scale the item should have.
+		 *
+		 * @param parentScale
+		 *				the scale of the parent of the item.
+		 *
+		 * This method is used to ensure that changes to parent item's always reach child items in order to prevent them
+		 * from overscaling (geometric zoom scale * totalScale() > 1).
+		 * \a parentScale is a parameter for optimization purposes only.
+		 *
+		 * This method could become possibly obsolete once PositionLayouts get updated in the right order (top-down the
+		 * program structure) after a geometric scale change.
+		 */
+		void setItemScale(qreal newScale, qreal parentScale);
+
 	protected:
 
 		void setWidth(int width);
