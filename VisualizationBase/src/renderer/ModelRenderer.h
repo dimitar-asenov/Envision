@@ -54,6 +54,7 @@ class VISUALIZATIONBASE_API ModelRenderer
 		 * \a purpose.
 		 */
 		bool hasVisualization(int nodeTypeId, int purpose = 0, int semanticZoomLevel = 0);
+
 		void registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization);
 		void registerVisualization(int nodeTypeId, int purpose, int semanticZoomLevel,
 											VisualizationGroup::ItemConstructor visualization);
@@ -94,6 +95,13 @@ class VISUALIZATIONBASE_API ModelRenderer
 																									 int purpose, int semanticZoomLevel);
 		Item* visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
 																									 int purpose, int semanticZoomLevel);
+
+		/**
+		 * Returns a visualization that is most suitable for the given parameter values.
+		 *
+		 * It uses a priority based approach that first searches for a match according to a function provided as \a
+		 * option1. If no match was found it proceeds with \a option2 then with \a option3.
+		 */
 		Item *basicStrategy(Item *parent, Model::Node *node, int purpose, int semanticZoomLevel,
 								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option1,
 								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option2,
