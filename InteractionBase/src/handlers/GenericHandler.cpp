@@ -566,8 +566,8 @@ void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheel
 					if (p->definesChildNodeSemanticZoomLevel(n->node()))
 					{
 						newSemanticZoomLevel = event->delta() < 0 ?
-									target->scene()->renderer()->getCoarserSemanticZoomLevel(n->semanticZoomLevel()) :
-									target->scene()->renderer()->getFinerSemanticZoomLevel(n->semanticZoomLevel());
+							target->scene()->renderer()->getCoarserSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node())):
+							target->scene()->renderer()->getFinerSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node()));
 
 					}
 
