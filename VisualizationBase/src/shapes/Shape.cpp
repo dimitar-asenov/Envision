@@ -28,8 +28,7 @@
 
 namespace Visualization {
 
-::Core::InitializationRegistry& shapeTypeInitializationRegistry();
-DEFINE_TYPE_ID_BASE(Shape, shapeTypeInitializationRegistry, "Shape",)
+DEFINE_TYPE_ID_BASE(Shape, "Shape",)
 
 QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;
 QMap<QString, Shape::ShapeStyleConstructor> Shape::shapeStyleConstructors;

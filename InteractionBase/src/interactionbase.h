@@ -54,6 +54,4 @@ class InteractionBase : public QObject, public Core::EnvisionPlugin
 		static Logger::Log& log();
 };
 
-INTERACTIONBASE_API Core::InitializationRegistry& itemTypeInitializationRegistry();
-
 }

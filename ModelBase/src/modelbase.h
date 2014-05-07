@@ -44,6 +44,4 @@ class ModelBase : public QObject, public Core::EnvisionPlugin
 		static Logger::Log& log();
 };
 
-MODELBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
-
 }

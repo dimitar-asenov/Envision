@@ -23,14 +23,29 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "TypeRegistry.h"
 
-#pragma once
+namespace Core {
 
-#include "../modelbase_api.h"
-#include "Core/src/InitializationRegistry.h"
+QList<TypeRegistry::InitializationFunction> TypeRegistry::initializationFunctions_;
+int TypeRegistry::initialized_{0};
 
-namespace TestNodes {
+void TypeRegistry::initializeNewTypes()
+{
+	for(;initialized_ < initializationFunctions_.size(); ++initialized_)
+		initializationFunctions_[initialized_]();
+}
 
-MODELBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
+int TypeRegistry::add(InitializationFunction func)
+{
+	static QMutex mutex;
+	QMutexLocker locker(&mutex);
 
-} /* namespace TestNodes */
+	Q_ASSERT(!initializationFunctions_.contains(func));
+	initializationFunctions_.append(func);
+
+	return initializationFunctions_.size();
+}
+
+
+} /* namespace Core */

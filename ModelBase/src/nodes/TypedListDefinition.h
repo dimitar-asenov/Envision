@@ -29,19 +29,12 @@
 
 namespace Model {
 
-DEFINE_TYPE_ID_DERIVED(TypedList<T>, TypedList<T>::elementInitializationRegistry,
-		QString("TypedListOf") + T::typeNameStatic(), template<class T>)
-
-template<class T>
-Core::InitializationRegistry& TypedList<T>::elementInitializationRegistry()
-{
-	return T::initializationRegistry();
-}
+DEFINE_TYPE_ID_DERIVED(TypedList<T>, QString("TypedListOf") + T::typeNameStatic(), template<class T>)
 
 template<class T>
 void TypedList<T>::initType()
 {
-	TypedList<T>::typeIdVariable() = Node::registerNodeType(typeNameStatic(),
+	Node::registerNodeType(typeNameStatic(),
 			[](Node* parent) -> Node* { return TypedList<T>::createDefaultInstance(parent);},
 			[](Node *parent, PersistentStore &store, bool loadPartially) -> Node*
 						{ return new TypedList<T>(parent, store, loadPartially);});

@@ -50,6 +50,4 @@ class OOModel : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-OOMODEL_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
-
 }

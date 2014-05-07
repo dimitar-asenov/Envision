@@ -31,7 +31,6 @@
 #include "../SymbolMatcher.h"
 #include "../model/ModelManager.h"
 
-#include "Core/src/InitializationRegistry.h"
 #include "Core/src/reflect/Reflect.h"
 #include "Core/src/reflect/typeIdMacros.h"
 
@@ -373,7 +372,7 @@ class MODELBASE_API Node
 		 * @param persistenceconstructor
 		 * 				A function that can construct a new instance of the class from a persistent store.
 		 */
-		static int registerNodeType(const QString &type, const NodeConstructor constructor,
+		static void registerNodeType(const QString &type, const NodeConstructor constructor,
 				const NodePersistenceConstructor persistenceconstructor);
 
 		/**
@@ -477,7 +476,6 @@ class MODELBASE_API Node
 
 		void propagateModelToChildren();
 
-		static int numRegisteredTypes_;
 		static QHash<QString, NodeConstructor> nodeConstructorRegister;
 		static QHash<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 

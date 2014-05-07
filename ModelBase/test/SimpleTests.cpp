@@ -137,19 +137,19 @@ TEST(ModelBase, ProperRegistration)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model(root);
-	CHECK_CONDITION(root->typeId() >= 0);
+	CHECK_CONDITION(root->typeId() > 0);
 
 	Model model2;
 	auto t = new Text();
 	model2.setRoot(t);
 
-	CHECK_CONDITION(t->typeId() >= 0);
+	CHECK_CONDITION(t->typeId() > 0);
 	CHECK_CONDITION(t->typeId() != root->typeId());
 
 	Model model3;
 	auto i = new Integer();
 	model3.setRoot(i);
-	CHECK_CONDITION(i->typeId() >= 0);
+	CHECK_CONDITION(i->typeId() > 0);
 	CHECK_CONDITION(i->typeId() != root->typeId());
 	CHECK_CONDITION(i->typeId() != t->typeId());
 }

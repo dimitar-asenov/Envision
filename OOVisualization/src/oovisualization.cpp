@@ -41,12 +41,6 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
 bool OOVisualization::initialize(Core::EnvisionManager&)
 {
 	// Register extensions
@@ -56,7 +50,7 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	Method::registerNewExtension<Position>();
 
 	// Register visualizations
-	itemTypeInitializationRegistry().initializeAll();
+	Core::TypeRegistry::initializeNewTypes();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
 			createVisualization<VStatementItemList, StatementItemList>);
 

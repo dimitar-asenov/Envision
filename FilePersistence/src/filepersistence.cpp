@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "filepersistence.h"
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
 
@@ -47,7 +46,6 @@ void FilePersistence::unload()
 
 void FilePersistence::selfTest(QString)
 {
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 	SelfTest::TestManager<FilePersistence>::runAllTests().printResultStatistics();
 }
 

@@ -58,6 +58,4 @@ class OOInteraction : public QObject, public Core::EnvisionPlugin
 		static Model::NodeToDebugStringAdapter* nodeToDebugString(Model::Node* node);
 };
 
-OOINTERACTION_API Core::InitializationRegistry& itemTypeInitializationRegistry();
-
 }

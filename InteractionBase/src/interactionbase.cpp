@@ -62,8 +62,6 @@
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
-
 #include "SelfTest/src/SelfTestSuite.h"
 
 using namespace Logger;
@@ -78,12 +76,6 @@ Log& InteractionBase::log()
 {
 	static auto l = Logger::Log::getLogger("interactionbase");
 	return *l;
-}
-
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
 }
 
 bool InteractionBase::initialize(Core::EnvisionManager& envisionManager)
@@ -114,8 +106,6 @@ void InteractionBase::unload()
 
 void InteractionBase::selfTest(QString testid)
 {
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-
 	if (testid.isEmpty()) SelfTest::TestManager<InteractionBase>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<InteractionBase>::runTest(testid).printResultStatistics();
 }

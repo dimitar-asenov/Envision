@@ -41,19 +41,9 @@ namespace Visualization {
 
 static constexpr int MAX_CURSOR_JUMP_DISTANCE = 300;
 
-::Core::InitializationRegistry& itemTypeInitializationRegistry();
-DEFINE_TYPE_ID_BASE(Item, itemTypeInitializationRegistry, "Item",)
+DEFINE_TYPE_ID_BASE(Item, "Item",)
 
 InteractionHandler* Item::defaultClassHandler_ = InteractionHandler::instance();
-
-int Item::registerVisualization()
-{
-	static QMutex mutex;
-	static int i = 0;
-
-	QMutexLocker locker(&mutex);
-	return ++i;
-}
 
 QList<VisualizationAddOn*>& Item::staticAddOns()
 {

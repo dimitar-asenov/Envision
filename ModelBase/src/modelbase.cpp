@@ -41,7 +41,6 @@
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
 #include "test_nodes/PositionExtension.h"
-#include "test_nodes/TestNodesInitializer.h"
 
 using namespace Logger;
 
@@ -57,17 +56,11 @@ Log& ModelBase::log()
 	return *l;
 }
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
 bool ModelBase::initialize(Core::EnvisionManager&)
 {
 	ModelManager::init();
 
-	nodeTypeInitializationRegistry().initializeAll();
+	Core::TypeRegistry::initializeNewTypes();
 
 	return true;
 }
@@ -79,8 +72,6 @@ void ModelBase::unload()
 
 void ModelBase::selfTest(QString)
 {
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
-
 	TestNodes::PositionExtension::registerExtension();
 	TestNodes::BinaryNode::registerNewExtension<TestNodes::PositionExtension>();
 

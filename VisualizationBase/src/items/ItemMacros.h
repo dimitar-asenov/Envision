@@ -77,15 +77,9 @@ private:																																					\
  * 			look for this item's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
 #define ITEM_COMMON_DEFINITIONS( ItemClass, classType )																					\
-::Core::InitializationRegistry& itemTypeInitializationRegistry();																		\
-DEFINE_TYPE_ID_DERIVED(ItemClass, itemTypeInitializationRegistry, #ItemClass,)													\
+DEFINE_TYPE_ID_DERIVED(ItemClass, #ItemClass,)																								\
 																																							\
-void ItemClass::initType()																															\
-{																																							\
-	if (ItemClass::typeIdVariable() < 0)																										\
-		ItemClass::typeIdVariable() = ::Visualization::Item::registerVisualization();												\
-	Super::initType();																																\
-}																																							\
+void ItemClass::initType() { Super::initType(); }																							\
 																																							\
 Visualization::InteractionHandler* ItemClass::defaultClassHandler_ =	 nullptr;													\
 																																							\
