@@ -125,7 +125,8 @@ DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)																
 templatePrefix void className::initType() {}																									\
 templatePrefix QList<int> className::hierarchyTypeIds() const																			\
 {																																							\
-	return QList<int>() << typeIdStatic();																										\
+	static QList<int> h = {typeIdStatic()};																									\
+	return h;																																			\
 }																																							\
 templatePrefix bool className::isSubtypeOf(int type) const																				\
 {																																							\
@@ -153,13 +154,12 @@ DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)																
 																																							\
 templatePrefix QList<int> className::hierarchyTypeIds() const																			\
 {																																							\
-	auto l = Super::hierarchyTypeIds();																											\
-	l.prepend( typeIdStatic() );																													\
-	return l;																																			\
+	static QList<int> h = QList<int>{} << typeIdStatic() << Super::hierarchyTypeIds();											\
+	return h;																																			\
 }																																							\
 templatePrefix bool className::isSubtypeOf(int type) const																				\
 {																																							\
-	return typeIdStatic() == type || Super::isSubtypeOf(type);																			\
+	return typeIdStatic() == type || Super::hierarchyTypeIds().contains(type);														\
 }																																							\
 templatePrefix bool className::isSubtypeOf(const QString& type) const																\
 {																																							\
