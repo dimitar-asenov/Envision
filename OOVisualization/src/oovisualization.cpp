@@ -37,7 +37,6 @@
 #include <semantic_zoom/VClassSzPublic.h>
 #include <semantic_zoom/VDeclarationSz.h>
 #include <semantic_zoom/VMethodSzPublic.h>
-#include <semantic_zoom/VModuleSz.h>
 
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
