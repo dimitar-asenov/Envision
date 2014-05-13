@@ -395,6 +395,25 @@ void PositionLayout::arrangeItems(int sizeWidth, int sizeHeight)
 	}
 }
 
+inline bool PositionLayout::allChildrenAbstracted(ArrangementAlgorithmItem& item)
+{
+	const int FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL = 5;
+
+	for (auto child : item.item->childItems())
+	{
+		auto positionLayout = DCast<PositionLayout>(child);
+
+		if (!positionLayout) continue;
+
+		for (auto plChild : positionLayout->childItems())
+		{
+			if (plChild->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL) return false;
+		}
+	}
+
+	return true;
+}
+
 inline void PositionLayout::automaticSemanticZoomLevelChange(ArrangementAlgorithmItem& item,
 	QVector<ArrangementAlgorithmItem>& allItems, bool zoomedIn, bool zoomedOut, qreal geometricZoomScale)
 {
@@ -415,10 +434,13 @@ inline void PositionLayout::automaticSemanticZoomLevelChange(ArrangementAlgorith
 			if (item.scale * scale() * geometricZoomScale < ABSTRACTION_THRESHOLD && zoomedOut &&
 					 item.item->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
 			{
-				// if the user zoomed out and the item's perceived scale fell below the threshold then abstract it
-				setChildNodeSemanticZoomLevel(item.item->node(), FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
+				if (allChildrenAbstracted(item))
+				{
+					// if the user zoomed out and the item's perceived scale fell below the threshold then abstract it
+					setChildNodeSemanticZoomLevel(item.item->node(), FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
 
-				automaticSemanticZoomLevelChangeGeometricZoomLevel_.insert(item.item, geometricZoomScale);
+					automaticSemanticZoomLevelChangeGeometricZoomLevel_.insert(item.item, geometricZoomScale);
+				}
 			}
 			else if (zoomedIn && item.item->semanticZoomLevel() == FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
 			{

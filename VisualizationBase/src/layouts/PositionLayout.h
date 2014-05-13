@@ -162,6 +162,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		bool allNodesLackPositionInfo{};
 
 		void swap(int i, int j);
+		bool allChildrenAbstracted(ArrangementAlgorithmItem &item);
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }
