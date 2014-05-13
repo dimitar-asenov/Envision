@@ -142,6 +142,7 @@ void PositionLayout::determineChildren()
 		nodes.append(items[i]->node());
 		SAFE_DELETE_ITEM(items[i]);
 	}
+	items.clear();
 
 	synchronizeWithNodes(nodes, renderer());
 
