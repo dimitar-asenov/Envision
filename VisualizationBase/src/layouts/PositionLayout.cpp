@@ -73,9 +73,16 @@ void PositionLayout::insert(Item* item)
 	if (!pos)
 		throw VisualizationException("Adding a Item whose node does not have a Position extension to a PositionLayout");
 
+	FullDetailSize* fds = extNode->extension<FullDetailSize>();
+
+	if (!fds)
+		throw VisualizationException(
+						"Adding a Item whose node does not have a FullDetailSize extension to a PositionLayout");
+
 	item->setParentItem(this);
 	items.append(item);
 	positions.append(pos);
+	fullDetailSize.append(fds);
 	setUpdateNeeded(StandardUpdate);
 }
 
@@ -261,6 +268,31 @@ void PositionLayout::updateGeometry(int, int)
 
 		items[i]->setPos(xOffset() + style()->leftInnerMargin() + x - topLeft.x(),
 							  yOffset() + style()->topInnerMargin() + y - topLeft.y());
+
+		if (items[i]->semanticZoomLevel() == 0)
+		{
+			if (fullDetailSize[i]->xNode() && fullDetailSize[i]->yNode())
+			{
+				if (fullDetailSize[i]->x() != items[i]->widthInLocal() || fullDetailSize[i]->y() != items[i]->heightInLocal())
+				{
+					qDebug() << "storing " << items[i]->widthInLocal() << "," << items[i]->heightInLocal();
+
+					items[i]->node()->beginModification("some purpose...");
+					fullDetailSize[i]->setX(items[i]->widthInLocal());
+					fullDetailSize[i]->setY(items[i]->heightInLocal());
+					items[i]->node()->endModification();
+				}
+			}
+			else
+			{
+				qDebug() << "new storing " << items[i]->widthInLocal() << "," << items[i]->heightInLocal();
+
+				items[i]->node()->beginModification("some purpose...");
+				fullDetailSize[i]->setX(items[i]->widthInLocal());
+				fullDetailSize[i]->setY(items[i]->heightInLocal());
+				items[i]->node()->endModification();
+			}
+		}
 	}
 
 	arrangeItems(sizeWidth, sizeHeight); // execute the arrangement algorithm
@@ -524,6 +556,8 @@ bool PositionLayout::scaleItem(ArrangementAlgorithmItem* item, qreal geometricZo
 
 void PositionLayout::calculateNodesPositionInfo()
 {
+	qDebug() << "myparent is " << parent()->node()->symbolName();
+
 	// Get averages
 	double averageWidth = 0;
 	double averageHeight = 0;

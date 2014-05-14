@@ -109,7 +109,9 @@ HEADERS += src/expressions/VNewExpressionStyle.h \
     src/semantic_zoom/VMethodSzPublic.h \
     src/semantic_zoom/VMethodSzPublicStyle.h \
     src/semantic_zoom/VDeclarationSz.h \
-    src/semantic_zoom/VDeclarationSzStyle.h
+    src/semantic_zoom/VDeclarationSzStyle.h \
+    src/semantic_zoom/VDeclarationConstantSzStyle.h \
+    src/semantic_zoom/VDeclarationConstantSz.h
 SOURCES += src/expressions/VNewExpressionStyle.cpp \
     src/expressions/VNewExpression.cpp \
     src/elements/VCommentStatementItem.cpp \
@@ -208,4 +210,6 @@ SOURCES += src/expressions/VNewExpressionStyle.cpp \
     src/semantic_zoom/VMethodSzPublic.cpp \
     src/semantic_zoom/VMethodSzPublicStyle.cpp \
     src/semantic_zoom/VDeclarationSz.cpp \
-    src/semantic_zoom/VDeclarationSzStyle.cpp
+    src/semantic_zoom/VDeclarationSzStyle.cpp \
+    src/semantic_zoom/VDeclarationConstantSzStyle.cpp \
+    src/semantic_zoom/VDeclarationConstantSz.cpp

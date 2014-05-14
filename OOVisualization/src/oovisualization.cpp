@@ -33,8 +33,10 @@
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
+#include "VisualizationBase/src/node_extensions/FullDetailSize.h"
 
 #include <semantic_zoom/VClassSzPublic.h>
+#include <semantic_zoom/VDeclarationConstantSz.h>
 #include <semantic_zoom/VDeclarationSz.h>
 #include <semantic_zoom/VMethodSzPublic.h>
 
@@ -59,18 +61,23 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	Class::registerNewExtension<Position>();
 	Method::registerNewExtension<Position>();
 
+	Project::registerNewExtension<FullDetailSize>();
+	Module::registerNewExtension<FullDetailSize>();
+	Class::registerNewExtension<FullDetailSize>();
+	Method::registerNewExtension<FullDetailSize>();
+
 	// Register visualizations
 	itemTypeInitializationRegistry().initializeAll();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
 			createVisualization<VStatementItemList, StatementItemList>);
 
 
-	Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface", 1);
+	/*Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface", 1);
 
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose", "public_interface",
 			createVisualization<VClassSzPublic, Class>);
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "public_interface",
-			createVisualization<VMethodSzPublic, Method>);
+			createVisualization<VMethodSzPublic, Method>);*/
 
 
 	Scene::defaultRenderer()->registerSemanticZoomLevel("method_abstraction", 2);
@@ -108,6 +115,17 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), "default_purpose",
 			"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Project>);
 
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("test", 1);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+			"test", createVisualization<VDeclarationConstantSz, Method>);
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+			"test", createVisualization<VDeclarationConstantSz, Class>);
+	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), "default_purpose",
+			"test", createVisualization<VDeclarationConstantSz, Module>);
+	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), "default_purpose",
+			"test", createVisualization<VDeclarationConstantSz, Project>);
 
 	return true;
 }

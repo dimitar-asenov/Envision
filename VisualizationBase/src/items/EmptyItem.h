@@ -47,11 +47,17 @@ class VISUALIZATIONBASE_API EmptyItem : public Super<Item>
 	public:
 		EmptyItem(Item* parent, const StyleType* style = itemStyles().get());
 
+		void setCustomSize(int width, int height);
+
 		virtual bool sizeDependsOnParent() const override;
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
+	private:
+		bool hasCustomSize_;
+
 };
 
 } /* namespace Interaction */

@@ -28,6 +28,7 @@
 
 #include "../visualizationbase_api.h"
 #include "../node_extensions/Position.h"
+#include "../node_extensions/FullDetailSize.h"
 
 #include "../items/ItemWithNode.h"
 #include "ArrangementAlgorithmItem.h"
@@ -120,6 +121,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 
 		QVector<Item*> items;
 		QVector<Position*> positions;
+		QVector<FullDetailSize*> fullDetailSize;
 		bool allNodesLackPositionInfo{};
 
 		void swap(int i, int j);
