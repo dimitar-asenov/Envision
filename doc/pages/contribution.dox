@@ -28,13 +28,79 @@ Introductory tutorials that you should read to familiarize yourself with Envisio
 can be found \ref dev_tutorials "here".
 
 \section style Code style
+All contributions to Envision must adhere to the following coding guidelines.
+
+\subsection editors Setting up Eclipse and Qt Creator
+	- License template - Please set the license template to the Envision BSD license file. You can find the LICENSE file
+		in the main directory of the repository.
+		- *Qt Creator*: Tools > Options > C++ > File Naming > License Template.
+		- *Eclipse*: Window > Preferences > C/C++ > Code Style > Code Templates >  Comments > Files.
+	- Code style - Use the following code style configurations:
+		- *Qt Creator*: <a href="EnvisionCodeStyleQtCreator.xml">style file</a>.
+			Set up here: Tools > Options > C++ > Code Style > Import.
+		- *Eclipse*: <a href="EnvisionCodeStyleEclipse.xml">style file</a>.
+			Set up here: Window > Preferences > C/C++ > Code Style > Formatter >  Import.
+
+\subsection formatting Formatting and white space
+	- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
+	- Lines should be at most 120 characters. A TAB counts as 3 characters.
+	- If the body of an \c if, \c while, or \c for is a single statement, do not use curly braces around it. If the
+		condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a
+		newline:
+\code
+// Wrong:
+if (foo)
+{
+	bar();
+}
+
+if (aMoreComplicatedOrMultilineCondition) anExtremelyLongAndComplicatedStatement();
+
+// Correct:
+if (foo) bar();
+
+if (aMoreComplicatedOrMultilineCondition)
+	anExtremelyLongAndComplicatedStatement();
+\endcode
+	- Curly braces should appear in a line on their own, except when using lambdas:
+\code
+// Wrong:
+if (foo) {
+}
+
+// Correct:
+if (foo)
+{
+}
+\endcode
+	- Leave a single space after a \c // comment delimiter.
+	- For pointers or references, do not leave any space between the type and '*' or '&', but write a single space
+		between the '*' or '&' and the variable name:
+\code
+QString& string;
+Item* item;
+const QString& message;
+\endcode
+
+Of course you can always have a look at the existing code in case you are not sure about something. If you feel like
+some additional clarifications should be added here, let us know.
+
 \subsection names Naming
 All names in envision plug-in should use CamelCase:
 	- The names of type definitions (classes, structs, typedefs, using, enums, etc.) should start with a capital case letter.
 	- Function, method, variable, and field names should start with a small case letter.
-	- Private members should end with a trailing underscore (e.g. \c data_, instead of \c data)
-	- Names should be descriptive, especially names of function arguments. Avoid abbreviations and shortened words. The exception
-		is the name of local variables, which can be short provided there is no ambiguity.
+	- Field names should end with a trailing underscore (e.g. \c data_, instead of \c data):
+\code
+private:
+	int length_;
+	Item* myFirstItem_;
+\endcode
+	- Names should be descriptive, especially names of function arguments. Avoid abbreviations and shortened words. The
+		exception is the name of local variables, which can be short provided there is no ambiguity.
+	- When declaring a class, list the members in the following order starting from the top: \c public, \c protected,
+		\c private.
+	- In the \c .cpp file defining a class, define all members in the following order starting from the top: \c static,
+		\c constructors, \c destructors, <tt>the rest</tt>
 
 \subsection features Language features
 	- Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.
@@ -105,62 +171,13 @@ inline int Cell::value() const { return value_;}
 	- Wherever possible prefer to use classes provided by Qt over STL or other libraries.
 	- If you are defining new templates make sure those work across platforms and shared object boundaries.
 
-\subsection formatting Formatting and white space
-	- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
-	- Lines should be at most 120 characters. A TAB counts as 3 characters.
-	- If the body of an \c if, \c while, or \c for is a single statement, do not use curly braces around it. If the
-		condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a
-		newline:
-\code
-// Wrong:
-if (foo)
-{
-	bar();
-}
+\subsection misc Miscellaneous
+	- If you want to introduce dependencies to new libraries, discuss this with a maintainer first.
+	- Generally, do not copy code from other sources to Envision. Small snippets from stack overflow are ok, but large
+		pieces of code or entire files are forbidden. An exception may be made for BSD/MIT licensed files, but you must
+		discuss this with a maintainer first. GPL/LGPL code is not allowed.
 
-if (aMoreComplicatedOrMultilineCondition) anExtremelyLongAndComplicatedStatement();
-
-// Correct:
-if (foo) bar();
-
-if (aMoreComplicatedOrMultilineCondition)
-	anExtremelyLongAndComplicatedStatement();
-\endcode
-	- Curly braces should appear in a line on their own, except when using lambdas:
-\code
-// Wrong:
-if (foo) {
-}
-
-// Correct:
-if (foo)
-{
-}
-\endcode
-	- Leave a single space after a \c // comment delimiter.
-	- For pointers or references, do not leave any space between the type and '*' or '&', but write a single space
-		between the '*' or '&' and the variable name:
-\code
-QString& string;
-Item* item;
-const QString& message;
-\endcode
-	- Field names should follow the Qt naming conventions and additionally should end with an underscore:
-\code
-private:
-	int length_;
-	Item* myFirstItem_;
-\endcode
-	- Private and protected methods do not end with an underscore.
-	- When declaring a class, list the members in the following order starting from the top: \c public, \c protected,
-		\c private.
-	- In the \c .cpp file defining a class, define all members in the following order starting from the top: \c static,
-		\c constructors, \c destructors, <tt>the rest</tt>
-
-Of course you can always have a look at the existing code in case you are not sure about something. If you feel like
-some additional clarifications should be added here, let Dimitar know.
-
-\subsection further Further info
+\subsection further Further reading
 Qt is an excellent framework and is used throughout the Envision project. Many Qt conventions have been adopted by
 Envision. You may want to have a look at:
 	- <a href="http://qt-project.org/wiki/Qt_Coding_Style">The Qt Coding Style</a>.

@@ -32,8 +32,6 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	-# Start Qt Creator and configure the version of Qt that you want to use. You can leave the default settings or you
 	can point to a custom Qt version. See below.
 	-# Open the \c envision.pro file with Qt Creator.
-	-# Configure the license template (Tools > Options > C++ > File Naming) to point to the LICENSE file inside the main
-	repository directory.
 	-# In the Projects view, change the arguments of make to specify parallel compilation and the *install* target:
 		\verbatim-j8 install\endverbatim
 		The *install* target is needed in order to copy all necessary files to the DebugBuild directory.
@@ -66,8 +64,6 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	directories where each one is an Eclipse project.
 	-# Import all projects into your Eclipse workspace as Git projects. Eclipse/Qt might try to change some project
 	files. Reject all requested changes.
-	-# Configure Eclipse's C++ file templates to use the text from the LICENSE file from the main directory in the
-	repository.
 
 \section customqt Using a custom build of Qt
 
