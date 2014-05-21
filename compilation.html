@@ -109,7 +109,6 @@ Qt Creator (recommended for C++; does not work with Java)</h1>
 <li>Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process Qt Creator will create additional directories alongside the repository clone.</li>
 <li>Start Qt Creator and configure the version of Qt that you want to use. You can leave the default settings or you can point to a custom Qt version. See below.</li>
 <li>Open the <code>envision.pro</code> file with Qt Creator.</li>
-<li>Configure the license template (Tools &gt; Options &gt; C++ &gt; File Naming) to point to the LICENSE file inside the main repository directory.</li>
 <li>In the Projects view, change the arguments of make to specify parallel compilation and the <em>install</em> target: <pre class="fragment">-j8 install</pre> The <em>install</em> target is needed in order to copy all necessary files to the DebugBuild directory. Substitute 8 for the number of threads your hardware supports.</li>
 <li>Add run configurations<ul>
 <li>The executable of all run configurations must be Envision: <pre class="fragment">%{sourceDir}/DebugBuild/Envision</pre></li>
@@ -128,7 +127,6 @@ Eclipse (recommended for Java; works for C++, but could require a lot of tweakin
 <li>Start Eclipse and configure the version of Qt that you want to use. You can use the version provided by your system or you can point to a custom Qt version. See below.</li>
 <li>Clone Envision's GitHub repository to a directory on your computer. The project is structured in separate directories where each one is an Eclipse project.</li>
 <li>Import all projects into your Eclipse workspace as Git projects. Eclipse/Qt might try to change some project files. Reject all requested changes.</li>
-<li>Configure Eclipse's C++ file templates to use the text from the LICENSE file from the main directory in the repository.</li>
 </ol>
 <h1><a class="anchor" id="customqt"></a>
 Using a custom build of Qt</h1>

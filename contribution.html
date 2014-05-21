@@ -96,14 +96,69 @@ Build environment and getting started</h1>
 <p>Introductory tutorials that you should read to familiarize yourself with Envision's model-view-controller implementation can be found <a class="el" href="dev_tutorials.html">here</a>.</p>
 <h1><a class="anchor" id="style"></a>
 Code style</h1>
+<p>All contributions to Envision must adhere to the following coding guidelines.</p>
+<h2><a class="anchor" id="editors"></a>
+Setting up Eclipse and Qt Creator</h2>
+<ul>
+<li>License template - Please set the license template to the Envision BSD license file. You can find the LICENSE file in the main directory of the repository.<ul>
+<li><em>Qt Creator</em>: Tools &gt; Options &gt; C++ &gt; File Naming &gt; License Template.</li>
+<li><em>Eclipse</em>: Window &gt; Preferences &gt; C/C++ &gt; Code Style &gt; Code Templates &gt; <a class="el" href="namespaceComments.html">Comments</a> &gt; Files.</li>
+</ul>
+</li>
+<li>Code style - Use the following code style configurations:<ul>
+<li><em>Qt Creator</em>: <a href="EnvisionCodeStyleQtCreator.xml">style file</a>. Set up here: Tools &gt; Options &gt; C++ &gt; Code Style &gt; Import.</li>
+<li><em>Eclipse</em>: <a href="EnvisionCodeStyleEclipse.xml">style file</a>. Set up here: Window &gt; Preferences &gt; C/C++ &gt; Code Style &gt; Formatter &gt; Import.</li>
+</ul>
+</li>
+</ul>
+<h2><a class="anchor" id="formatting"></a>
+Formatting and white space</h2>
+<ul>
+<li>Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.</li>
+<li>Lines should be at most 120 characters. <a class="el" href="classA.html">A</a> TAB counts as 3 characters.</li>
+<li>If the body of an <code>if</code>, <code>while</code>, or <code>for</code> is a single statement, do not use curly braces around it. If the condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a newline: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo)</div>
+<div class="line">{</div>
+<div class="line">   bar();</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="keywordflow">if</span> (aMoreComplicatedOrMultilineCondition) anExtremelyLongAndComplicatedStatement();</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Correct:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo) bar();</div>
+<div class="line"></div>
+<div class="line"><span class="keywordflow">if</span> (aMoreComplicatedOrMultilineCondition)</div>
+<div class="line">   anExtremelyLongAndComplicatedStatement();</div>
+</div><!-- fragment --></li>
+<li>Curly braces should appear in a line on their own, except when using lambdas: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo) {</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Correct:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo)</div>
+<div class="line">{</div>
+<div class="line">}</div>
+</div><!-- fragment --></li>
+<li>Leave a single space after a <code>//</code> comment delimiter.</li>
+<li>For pointers or references, do not leave any space between the type and '*' or '&amp;', but write a single space between the '*' or '&amp;' and the variable name: <div class="fragment"><div class="line">QString&amp; string;</div>
+<div class="line">Item* item;</div>
+<div class="line"><span class="keyword">const</span> QString&amp; message;</div>
+</div><!-- fragment --></li>
+</ul>
+<p>Of course you can always have a look at the existing code in case you are not sure about something. If you feel like some additional clarifications should be added here, let us know.</p>
 <h2><a class="anchor" id="names"></a>
 Naming</h2>
 <p>All names in envision plug-in should use CamelCase:</p>
 <ul>
 <li>The names of type definitions (classes, structs, typedefs, using, enums, etc.) should start with a capital case letter.</li>
 <li>Function, method, variable, and field names should start with a small case letter.</li>
-<li>Private members should end with a trailing underscore (e.g. <code>data_</code>, instead of <code>data</code>)</li>
+<li>Field names should end with a trailing underscore (e.g. <code>data_</code>, instead of <code>data</code>): <div class="fragment"><div class="line"><span class="keyword">private</span>:</div>
+<div class="line">   <span class="keywordtype">int</span> length_;</div>
+<div class="line">   Item* myFirstItem_;</div>
+</div><!-- fragment --></li>
 <li>Names should be descriptive, especially names of function arguments. Avoid abbreviations and shortened words. The exception is the name of local variables, which can be short provided there is no ambiguity.</li>
+<li>When declaring a class, list the members in the following order starting from the top: <code>public</code>, <code>protected</code>, <code>private</code>.</li>
+<li>In the <code></code>.cpp file defining a class, define all members in the following order starting from the top: <code>static</code>, <code>constructors</code>, <code>destructors</code>, <code>the rest</code></li>
 </ul>
 <h2><a class="anchor" id="features"></a>
 Language features</h2>
@@ -161,50 +216,14 @@ Language features</h2>
 <li>Wherever possible prefer to use classes provided by Qt over STL or other libraries.</li>
 <li>If you are defining new templates make sure those work across platforms and shared object boundaries.</li>
 </ul>
-<h2><a class="anchor" id="formatting"></a>
-Formatting and white space</h2>
+<h2><a class="anchor" id="misc"></a>
+Miscellaneous</h2>
 <ul>
-<li>Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.</li>
-<li>Lines should be at most 120 characters. <a class="el" href="classA.html">A</a> TAB counts as 3 characters.</li>
-<li>If the body of an <code>if</code>, <code>while</code>, or <code>for</code> is a single statement, do not use curly braces around it. If the condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a newline: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
-<div class="line"><span class="keywordflow">if</span> (foo)</div>
-<div class="line">{</div>
-<div class="line">   bar();</div>
-<div class="line">}</div>
-<div class="line"></div>
-<div class="line"><span class="keywordflow">if</span> (aMoreComplicatedOrMultilineCondition) anExtremelyLongAndComplicatedStatement();</div>
-<div class="line"></div>
-<div class="line"><span class="comment">// Correct:</span></div>
-<div class="line"><span class="keywordflow">if</span> (foo) bar();</div>
-<div class="line"></div>
-<div class="line"><span class="keywordflow">if</span> (aMoreComplicatedOrMultilineCondition)</div>
-<div class="line">   anExtremelyLongAndComplicatedStatement();</div>
-</div><!-- fragment --></li>
-<li>Curly braces should appear in a line on their own, except when using lambdas: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
-<div class="line"><span class="keywordflow">if</span> (foo) {</div>
-<div class="line">}</div>
-<div class="line"></div>
-<div class="line"><span class="comment">// Correct:</span></div>
-<div class="line"><span class="keywordflow">if</span> (foo)</div>
-<div class="line">{</div>
-<div class="line">}</div>
-</div><!-- fragment --></li>
-<li>Leave a single space after a <code>//</code> comment delimiter.</li>
-<li>For pointers or references, do not leave any space between the type and '*' or '&amp;', but write a single space between the '*' or '&amp;' and the variable name: <div class="fragment"><div class="line">QString&amp; string;</div>
-<div class="line">Item* item;</div>
-<div class="line"><span class="keyword">const</span> QString&amp; message;</div>
-</div><!-- fragment --></li>
-<li>Field names should follow the Qt naming conventions and additionally should end with an underscore: <div class="fragment"><div class="line"><span class="keyword">private</span>:</div>
-<div class="line">   <span class="keywordtype">int</span> length_;</div>
-<div class="line">   Item* myFirstItem_;</div>
-</div><!-- fragment --></li>
-<li>Private and protected methods do not end with an underscore.</li>
-<li>When declaring a class, list the members in the following order starting from the top: <code>public</code>, <code>protected</code>, <code>private</code>.</li>
-<li>In the <code></code>.cpp file defining a class, define all members in the following order starting from the top: <code>static</code>, <code>constructors</code>, <code>destructors</code>, <code>the rest</code></li>
+<li>If you want to introduce dependencies to new libraries, discuss this with a maintainer first.</li>
+<li>Generally, do not copy code from other sources to Envision. Small snippets from stack overflow are ok, but large pieces of code or entire files are forbidden. An exception may be made for BSD/MIT licensed files, but you must discuss this with a maintainer first. GPL/LGPL code is not allowed.</li>
 </ul>
-<p>Of course you can always have a look at the existing code in case you are not sure about something. If you feel like some additional clarifications should be added here, let Dimitar know.</p>
 <h2><a class="anchor" id="further"></a>
-Further info</h2>
+Further reading</h2>
 <p>Qt is an excellent framework and is used throughout the Envision project. Many Qt conventions have been adopted by Envision. You may want to have a look at:</p>
 <ul>
 <li><a href="http://qt-project.org/wiki/Qt_Coding_Style">The Qt Coding Style</a>.</li>
