@@ -69,6 +69,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 
 	if(vDiagram->editing())
 	{
+		vDiagram->toolbar_->setCurrentShape(target);
 		vDiagram->node()->beginModification("shape");
 
 		QPoint clickPos(event->pos().toPoint());

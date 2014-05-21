@@ -24,62 +24,28 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_CORE_H_
-#define PRECOMPILED_CORE_H_
+#ifndef COLORCHOOSER_H
+#pragma once
 
-#if defined __cplusplus
-// Add C++ includes here
+class ColorChooser : public QWidget
+{
+		Q_OBJECT
+	public:
+		explicit ColorChooser(QWidget *parent = 0);
+		void setQtStandardColors();
+		void setEnvisionTextColors();
+		QString currentColor();
+		void setColor(QString Color);
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
-#include "global.h"
+	private:
+		QComboBox* colorBox_{};
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QApplication>
+	signals:
+		void colorChanged(QString color);
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QtGlobal>
-#include <QtCore/QtPlugin>
-#include <QtCore/QObject>
+	public slots:
+		void handleIndexChanged(int a);
 
-#include <QtCore/QTextStream>
-#include <QtCore/QStringList>
-#include <QtCore/QPair>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtCore/QList>
-#include <QtGui/QToolBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QWidget>
-#include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
+};
 
-#include <QtCore/QDebug>
-
-#include <functional>
-#include <typeinfo>
-
-#ifdef Q_OS_LINUX
-	#include <google/profiler.h>
-#endif
-#include <QtCore/QElapsedTimer>
-
-#if defined(CORE_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-
-#include <QtCore/QPluginLoader>
-
-#include <QtCore/QDir>
-#include <QtCore/QEvent>
-
-#endif
-#endif
-
-#endif /* PRECOMPILED_CORE_H_ */
+#endif // COLORCHOOSER_H

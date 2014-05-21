@@ -51,6 +51,7 @@ void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 	{
 		event->accept();
 		diagram->toggleEditing();
+		diagram->toolbar_->setDiagram(DCast<VCommentDiagram> (target));
 	}
 	else if(event->key() == Qt::Key_Shift || event->modifiers() & Qt::Key_Shift)
 	{
@@ -92,6 +93,18 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 		{
 			diagram->setLastRightClick(event->pos().toPoint());
 			showCommandPrompt(target);
+		}
+	}
+	if(diagram->editing() && event->button() == Qt::LeftButton)
+	{
+		if(!diagram->toolbar_->getSelectionMode())
+		{
+			auto diagram2 = DCast<CommentDiagram>(target->node());
+			auto shape = new CommentDiagramShape(event->pos().x()-10, event->pos().y()-10, 100, 100, diagram->toolbar_->nextShapeToAdd_);
+			diagram2->model()->beginModification(diagram2, "create shape");
+			diagram2->shapes()->append(shape);
+			diagram2->model()->endModification();
+			diagram->toolbar_->setSelectionMode(true);
 		}
 	}
 }

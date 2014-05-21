@@ -24,62 +24,61 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_CORE_H_
-#define PRECOMPILED_CORE_H_
+#ifndef COMMENTDIAGRAMTOOLBAR_H
+#pragma once
 
-#if defined __cplusplus
-// Add C++ includes here
+#include "Colorchooser.h"
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
-#include "global.h"
+#include "nodes/CommentDiagram.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "items/VComment.h"
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QApplication>
+namespace Comments {
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QtGlobal>
-#include <QtCore/QtPlugin>
-#include <QtCore/QObject>
+class COMMENTS_API CommentDiagramToolbar : public QToolBar
+{
+		Q_OBJECT
+	public:
+		explicit CommentDiagramToolbar(QWidget *parent = 0);
 
-#include <QtCore/QTextStream>
-#include <QtCore/QStringList>
-#include <QtCore/QPair>
-#include <QtCore/QMap>
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QVector>
-#include <QtCore/QList>
-#include <QtGui/QToolBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QWidget>
-#include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
+		void setDiagram(VCommentDiagram* diagram);
+		void setCurrentShape(Visualization::Item *currentShape);
+		void setSelectionMode(bool sel);
+		bool getSelectionMode();
+		bool getConnectionMode();
 
-#include <QtCore/QDebug>
+		CommentDiagramShape::ShapeType nextShapeToAdd_{};
 
-#include <functional>
-#include <typeinfo>
+	private:
+		QToolButton* bSelection_{};
+		QToolButton* bRectangle_{};
+		QToolButton* bEllipse_{};
+		QToolButton* bDiamond_{};
+		QToolButton* bConnections_{};
 
-#ifdef Q_OS_LINUX
-	#include <google/profiler.h>
-#endif
-#include <QtCore/QElapsedTimer>
+		ColorChooser* colorChooserBackground_{};
+		ColorChooser* colorChooserBorder_{};
+		ColorChooser* colorChooserText_{};
 
-#if defined(CORE_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
+		QButtonGroup* group_{};
 
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
+		bool selection_{};
+		bool connection_{};
 
-#include <QtCore/QPluginLoader>
+		VCommentDiagram* diagram_{};
+		Visualization::Item* currentShape_{};
 
-#include <QtCore/QDir>
-#include <QtCore/QEvent>
+	public slots:
+		void setSelection();
+		void createRectangle();
+		void createEllipse();
+		void createDiamond();
+		void applyBackgroundColor(QString color);
+		void applyBorderColor(QString color);
+		void applyTextColor(QString color);
+		void showConnectionPoints(bool show);
+};
 
-#endif
-#endif
+} /* namespace Comments */
 
-#endif /* PRECOMPILED_CORE_H_ */
+#endif // COMMENTDIAGRAMTOOLBAR_H
