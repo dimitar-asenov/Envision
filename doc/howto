@@ -1,0 +1,5 @@
+How to document:
+1. Make changes to source file comments or .dox files.
+2. Run doxygen inside the doc direcotry to generate the new web site.
+3. Check locally that your changes look as expected, fix and regenerate the html if necessary.
+3. Run the commit_generated.sh script to commit the new changes. The script requires one argument - the commit message.
