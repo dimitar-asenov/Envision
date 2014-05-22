@@ -28,6 +28,8 @@
 
 #include "../comments_api.h"
 
+#include "VCommentDiagramStyle.h"
+
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
@@ -46,7 +48,8 @@ class VCommentDiagramConnector;
 class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VCommentDiagram,
 						Visualization::Item, CommentDiagram> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, Visualization::ItemStyle)
+	//ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, Visualization::ItemStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, VCommentDiagramSequenceStyle)
 
 	public:
 		VCommentDiagram(Visualization::Item* parent, NodeType* node);

@@ -24,61 +24,54 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMENTDIAGRAMTOOLBAR_H
-#pragma once
-
 #include "ColorPicker.h"
 
-#include "nodes/CommentDiagram.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
+ColorPicker::ColorPicker(QWidget *parent) : QToolButton(parent)
+{}
 
-namespace Comments {
-
-class COMMENTS_API CommentDiagramToolbar : public QToolBar
+void ColorPicker::setColors(QVector<QColor> colors)
 {
-		Q_OBJECT
-	public:
-		explicit CommentDiagramToolbar(QWidget *parent = 0);
+	QMenu* menu = new QMenu;
+	QWidgetAction* wiAction = new QWidgetAction(this);
 
-		void setDiagram(VCommentDiagram* diagram);
-		void setCurrentShape(Visualization::Item *currentShape);
-		void setSelectionMode(bool sel);
-		bool getSelectionMode();
-		bool getConnectionMode();
+	QSignalMapper* signalMapper = new QSignalMapper(this);
+	connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(handleColorPicked(QString)));
 
-		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+	QPixmap pixmap(100,100);
+	QWidget* aWidget = new QWidget(this);
+	QGridLayout* aLayout = new QGridLayout;
+	aLayout->setSpacing(0);
+	aWidget->setLayout(aLayout);
+	wiAction->setDefaultWidget(aWidget);
 
-	private:
-		QToolButton* bSelection_{};
-		QToolButton* bRectangle_{};
-		QToolButton* bEllipse_{};
-		QToolButton* bDiamond_{};
-		QToolButton* bConnections_{};
+	QToolButton* aButton;
+	for(int i = 0; i < colors.size(); i++)
+	{
+			aButton = new QToolButton;
+			aButton->setStyleSheet("border: none;");
+			pixmap.fill(colors.at(i));
+			aButton->setIcon(QIcon(pixmap));
+			aLayout->addWidget(aButton,i/10,i%10);
+			signalMapper->setMapping(aButton,colors.at(i).name());
+			connect(aButton,SIGNAL(clicked()),signalMapper,SLOT(map()));
+	}
+	menu->addAction(wiAction);
+	this->setMenu(menu);
+	this->setPopupMode(QToolButton::InstantPopup);
+}
 
-		ColorPicker* colorPickerBackground_{};
-		ColorPicker* colorPickerBorder_{};
-		ColorPicker* colorPickerText_{};
+void ColorPicker::handleColorPicked(QString aColor)
+{
+	QPixmap pixmap(100,100);
+	pixmap.fill(QColor(aColor));
+	this->setIcon(QIcon(pixmap));
+	this->menu()->close();
+	emit colorChanged(aColor);
+}
 
-		QButtonGroup* group_{};
-
-		bool selection_{};
-		bool connection_{};
-
-		VCommentDiagram* diagram_{};
-		Visualization::Item* currentShape_{};
-
-	public slots:
-		void setSelection();
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void showConnectionPoints(bool show);
-};
-
-} /* namespace Comments */
-
-#endif // COMMENTDIAGRAMTOOLBAR_H
+void ColorPicker::setselectedColor(QString aColor)
+{
+	QPixmap pixmap(100,100);
+	pixmap.fill(QColor(aColor));
+	this->setIcon(QIcon(pixmap));
+}

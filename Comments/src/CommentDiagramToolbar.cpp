@@ -64,15 +64,12 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	this->addSeparator();
 
-	colorChooserBackground_ = new ColorChooser;
-	colorChooserBackground_->setQtStandardColors();
-	this->addWidget(colorChooserBackground_);
-	colorChooserBorder_ = new ColorChooser;
-	colorChooserBorder_->setQtStandardColors();
-	this->addWidget(colorChooserBorder_);
-	colorChooserText_ = new ColorChooser;
-	colorChooserText_->setEnvisionTextColors();
-	this->addWidget(colorChooserText_);
+	colorPickerBackground_ = new ColorPicker;
+	this->addWidget(colorPickerBackground_);
+	colorPickerBorder_ = new ColorPicker;
+	this->addWidget(colorPickerBorder_);
+	colorPickerText_ = new ColorPicker;
+	this->addWidget(colorPickerText_);
 
 	this->addSeparator();
 
@@ -87,15 +84,19 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	connect(bRectangle_, SIGNAL(toggled(bool)), this, SLOT(createRectangle()));
 	connect(bEllipse_, SIGNAL(toggled(bool)), this, SLOT(createEllipse()));
 	connect(bDiamond_, SIGNAL(toggled(bool)), this, SLOT(createDiamond()));
-	connect(colorChooserBackground_, SIGNAL(colorChanged(QString)), this, SLOT(applyBackgroundColor(QString)));
-	connect(colorChooserBorder_, SIGNAL(colorChanged(QString)), this, SLOT(applyBorderColor(QString)));
-	connect(colorChooserText_, SIGNAL(colorChanged(QString)), this, SLOT(applyTextColor(QString)));
+	connect(colorPickerBackground_, SIGNAL(colorChanged(QString)), this, SLOT(applyBackgroundColor(QString)));
+	connect(colorPickerBorder_, SIGNAL(colorChanged(QString)), this, SLOT(applyBorderColor(QString)));
+	connect(colorPickerText_, SIGNAL(colorChanged(QString)), this, SLOT(applyTextColor(QString)));
 	connect(bConnections_, SIGNAL(toggled(bool)), this, SLOT(showConnectionPoints(bool)));
 }
 
 void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
 {
 	diagram_ = diagram;
+	colorPickerBackground_->setColors(diagram->style()->getColors());
+	colorPickerBorder_->setColors(diagram->style()->getColors());
+	colorPickerText_->setColors(diagram->style()->getColors());
+
 }
 
 
@@ -104,9 +105,9 @@ void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 	currentShape_ = currentShape;
 	auto shape = DCast<VCommentDiagramShape>(currentShape_);
 
-	colorChooserBackground_->setColor(shape->node()->backgroundColor());
-	colorChooserBorder_->setColor(shape->node()->shapeColor());
-	colorChooserText_->setColor(shape->node()->textColor());
+	colorPickerBackground_->setselectedColor(shape->node()->backgroundColor());
+	colorPickerBorder_->setselectedColor(shape->node()->shapeColor());
+	colorPickerText_->setselectedColor(shape->node()->textColor());
 }
 
 void CommentDiagramToolbar::setSelection()

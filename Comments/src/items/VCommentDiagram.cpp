@@ -43,6 +43,7 @@ VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 	: Super(parent, node, itemStyles().get())
 {
 	toolbar_ = new CommentDiagramToolbar();
+	toolbar_->setDiagram(this);
 }
 
 void VCommentDiagram::determineChildren()
@@ -192,6 +193,7 @@ void VCommentDiagram::toggleEditing()
 	else toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);
+
 }
 
 void VCommentDiagram::setShowConnectorPoints(bool show)

@@ -24,28 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COLORCHOOSER_H
+#ifndef COLORPICKER_H
 #pragma once
 
-class ColorChooser : public QWidget
+class ColorPicker : public QToolButton
 {
 		Q_OBJECT
 	public:
-		explicit ColorChooser(QWidget *parent = 0);
-		void setQtStandardColors();
-		void setEnvisionTextColors();
-		QString currentColor();
-		void setColor(QString Color);
-
-	private:
-		QComboBox* colorBox_{};
+		explicit ColorPicker(QWidget *parent = 0);
+		void setColors(QVector<QColor> colors);
+		void setselectedColor(QString aColor);
 
 	signals:
 		void colorChanged(QString color);
 
 	public slots:
-		void handleIndexChanged(int a);
+		void handleColorPicked(QString aColor);
 
 };
 
-#endif // COLORCHOOSER_H
+#endif // COLORPICKER_H

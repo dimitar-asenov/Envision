@@ -51,7 +51,6 @@ void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 	{
 		event->accept();
 		diagram->toggleEditing();
-		diagram->toolbar_->setDiagram(DCast<VCommentDiagram> (target));
 	}
 	else if(event->key() == Qt::Key_Shift || event->modifiers() & Qt::Key_Shift)
 	{

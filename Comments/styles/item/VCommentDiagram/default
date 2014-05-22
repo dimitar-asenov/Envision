@@ -13,4 +13,646 @@
 		<cornerType>1</cornerType>
 		<cornerRadius>3</cornerRadius>
 	</shape>
+	<colors>
+		<e0 prototypes="color">
+			<color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+				<alpha>255</alpha>
+			</color>
+		</e0>
+		<e1 prototypes="color">
+			<color>
+				<red>67</red>
+				<green>67</green>
+				<blue>67</blue>
+				<alpha>255</alpha>
+			</color>
+		</e1>
+		<e2 prototypes="color">
+			<color>
+				<red>101</red>
+				<green>101</green>
+				<blue>101</blue>
+				<alpha>255</alpha>
+			</color>
+		</e2>
+		<e3 prototypes="color">
+			<color>
+				<red>153</red>
+				<green>153</green>
+				<blue>153</blue>
+				<alpha>255</alpha>
+			</color>
+		</e3>
+		<e4 prototypes="color">
+			<color>
+				<red>182</red>
+				<green>182</green>
+				<blue>182</blue>
+				<alpha>255</alpha>
+			</color>
+		</e4>
+		<e5 prototypes="color">
+			<color>
+				<red>203</red>
+				<green>203</green>
+				<blue>203</blue>
+				<alpha>255</alpha>
+			</color>
+		</e5>
+		<e6 prototypes="color">
+			<color>
+				<red>219</red>
+				<green>219</green>
+				<blue>219</blue>
+				<alpha>255</alpha>
+			</color>
+		</e6>
+		<e7 prototypes="color">
+			<color>
+				<red>237</red>
+				<green>237</green>
+				<blue>237</blue>
+				<alpha>255</alpha>
+			</color>
+		</e7>
+		<e8 prototypes="color">
+			<color>
+				<red>244</red>
+				<green>244</green>
+				<blue>244</blue>
+				<alpha>255</alpha>
+			</color>
+		</e8>
+		<e9 prototypes="color">
+			<color>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+				<alpha>255</alpha>
+			</color>
+		</e9>
+		<e10 prototypes="color">
+			<color>
+				<red>199</red>
+				<green>57</green>
+				<blue>32</blue>
+				<alpha>255</alpha>
+			</color>
+		</e10>
+		<e11 prototypes="color">
+			<color>
+				<red>245</red>
+				<green>75</green>
+				<blue>46</blue>
+				<alpha>255</alpha>
+			</color>
+		</e11>
+		<e12 prototypes="color">
+			<color>
+				<red>251</red>
+				<green>173</green>
+				<blue>67</blue>
+				<alpha>255</alpha>
+			</color>
+		</e12>
+		<e13 prototypes="color">
+			<color>
+				<red>248</red>
+				<green>209</green>
+				<blue>98</blue>
+				<alpha>255</alpha>
+			</color>
+		</e13>
+		<e14 prototypes="color">
+			<color>
+				<red>47</red>
+				<green>167</green>
+				<blue>100</blue>
+				<alpha>255</alpha>
+			</color>
+		</e14>
+		<e15 prototypes="color">
+			<color>
+				<red>84</red>
+				<green>214</green>
+				<blue>145</blue>
+				<alpha>255</alpha>
+			</color>
+		</e15>
+		<e16 prototypes="color">
+			<color>
+				<red>166</red>
+				<green>194</green>
+				<blue>244</blue>
+				<alpha>255</alpha>
+			</color>
+		</e16>
+		<e17 prototypes="color">
+			<color>
+				<red>78</red>
+				<green>134</green>
+				<blue>232</blue>
+				<alpha>255</alpha>
+			</color>
+		</e17>
+		<e18 prototypes="color">
+			<color>
+				<red>162</red>
+				<green>122</green>
+				<blue>227</blue>
+				<alpha>255</alpha>
+			</color>
+		</e18>
+		<e19 prototypes="color">
+			<color>
+				<red>242</red>
+				<green>145</green>
+				<blue>178</blue>
+				<alpha>255</alpha>
+			</color>
+		</e19>
+		<e20 prototypes="color">
+			<color>
+				<red>228</red>
+				<green>184</green>
+				<blue>175</blue>
+				<alpha>255</alpha>
+			</color>
+		</e20>
+		<e21 prototypes="color">
+			<color>
+				<red>224</red>
+				<green>197</green>
+				<blue>190</blue>
+				<alpha>255</alpha>
+			</color>
+		</e21>
+		<e22 prototypes="color">
+			<color>
+				<red>254</red>
+				<green>230</green>
+				<blue>199</blue>
+				<alpha>255</alpha>
+			</color>
+		</e22>
+		<e23 prototypes="color">
+			<color>
+				<red>253</red>
+				<green>241</green>
+				<blue>209</blue>
+				<alpha>255</alpha>
+			</color>
+		</e23>
+		<e24 prototypes="color">
+			<color>
+				<red>188</red>
+				<green>228</green>
+				<blue>208</blue>
+				<alpha>255</alpha>
+			</color>
+		</e24>
+		<e25 prototypes="color">
+			<color>
+				<red>201</red>
+				<green>243</green>
+				<blue>222</blue>
+				<alpha>255</alpha>
+			</color>
+		</e25>
+		<e26 prototypes="color">
+			<color>
+				<red>221</red>
+				<green>229</green>
+				<blue>243</blue>
+				<alpha>255</alpha>
+			</color>
+		</e26>
+		<e27 prototypes="color">
+			<color>
+				<red>202</red>
+				<green>218</green>
+				<blue>248</blue>
+				<alpha>255</alpha>
+			</color>
+		</e27>
+		<e28 prototypes="color">
+			<color>
+				<red>227</red>
+				<green>215</green>
+				<blue>245</blue>
+				<alpha>255</alpha>
+			</color>
+		</e28>
+		<e29 prototypes="color">
+			<color>
+				<red>250</red>
+				<green>222</green>
+				<blue>232</blue>
+				<alpha>255</alpha>
+			</color>
+		</e29>
+		<e30 prototypes="color">
+			<color>
+				<red>217</red>
+				<green>126</green>
+				<blue>107</blue>
+				<alpha>255</alpha>
+			</color>
+		</e30>
+		<e31 prototypes="color">
+			<color>
+				<red>235</red>
+				<green>160</green>
+				<blue>147</blue>
+				<alpha>255</alpha>
+			</color>
+		</e31>
+		<e32 prototypes="color">
+			<color>
+				<red>253</red>
+				<green>214</green>
+				<blue>161</blue>
+				<alpha>255</alpha>
+			</color>
+		</e32>
+		<e33 prototypes="color">
+			<color>
+				<red>251</red>
+				<green>232</green>
+				<blue>178</blue>
+				<alpha>255</alpha>
+			</color>
+		</e33>
+		<e34 prototypes="color">
+			<color>
+				<red>142</red>
+				<green>211</green>
+				<blue>177</blue>
+				<alpha>255</alpha>
+			</color>
+		</e34>
+		<e35 prototypes="color">
+			<color>
+				<red>165</red>
+				<green>234</green>
+				<blue>200</blue>
+				<alpha>255</alpha>
+			</color>
+		</e35>
+		<e36 prototypes="color">
+			<color>
+				<red>197</red>
+				<green>214</green>
+				<blue>245</blue>
+				<alpha>255</alpha>
+			</color>
+		</e36>
+		<e37 prototypes="color">
+			<color>
+				<red>166</red>
+				<green>194</green>
+				<blue>244</blue>
+				<alpha>255</alpha>
+			</color>
+		</e37>
+		<e38 prototypes="color">
+			<color>
+				<red>207</red>
+				<green>188</green>
+				<blue>242</blue>
+				<alpha>255</alpha>
+			</color>
+		</e38>
+		<e39 prototypes="color">
+			<color>
+				<red>249</red>
+				<green>200</green>
+				<blue>217</blue>
+				<alpha>255</alpha>
+			</color>
+		</e39>
+		<e40 prototypes="color">
+			<color>
+				<red>199</red>
+				<green>64</green>
+				<blue>36</blue>
+				<alpha>255</alpha>
+			</color>
+		</e40>
+		<e41 prototypes="color">
+			<color>
+				<red>225</red>
+				<green>100</green>
+				<blue>80</blue>
+				<alpha>255</alpha>
+			</color>
+		</e41>
+		<e42 prototypes="color">
+			<color>
+				<red>252</red>
+				<green>188</green>
+				<blue>105</blue>
+				<alpha>255</alpha>
+			</color>
+		</e42>
+		<e43 prototypes="color">
+			<color>
+				<red>250</red>
+				<green>218</green>
+				<blue>129</blue>
+				<alpha>255</alpha>
+			</color>
+		</e43>
+		<e44 prototypes="color">
+			<color>
+				<red>80</red>
+				<green>185</green>
+				<blue>131</blue>
+				<alpha>255</alpha>
+			</color>
+		</e44>
+		<e45 prototypes="color">
+			<color>
+				<red>115</red>
+				<green>223</green>
+				<blue>168</blue>
+				<alpha>255</alpha>
+			</color>
+		</e45>
+		<e46 prototypes="color">
+			<color>
+				<red>155</red>
+				<green>191</green>
+				<blue>255</blue>
+				<alpha>255</alpha>
+			</color>
+		</e46>
+		<e47 prototypes="color">
+			<color>
+				<red>112</red>
+				<green>158</green>
+				<blue>236</blue>
+				<alpha>255</alpha>
+			</color>
+		</e47>
+		<e48 prototypes="color">
+			<color>
+				<red>180</red>
+				<green>148</green>
+				<blue>233</blue>
+				<alpha>255</alpha>
+			</color>
+		</e48>
+		<e49 prototypes="color">
+			<color>
+				<red>243</red>
+				<green>167</green>
+				<blue>192</blue>
+				<alpha>255</alpha>
+			</color>
+		</e49>
+		<e50 prototypes="color">
+			<color>
+				<red>162</red>
+				<green>26</green>
+				<blue>0</blue>
+				<alpha>255</alpha>
+			</color>
+		</e50>
+		<e51 prototypes="color">
+			<color>
+				<red>199</red>
+				<green>57</green>
+				<blue>32</blue>
+				<alpha>255</alpha>
+			</color>
+		</e51>
+		<e52 prototypes="color">
+			<color>
+				<red>231</red>
+				<green>160</green>
+				<blue>62</blue>
+				<alpha>255</alpha>
+			</color>
+		</e52>
+		<e53 prototypes="color">
+			<color>
+				<red>240</red>
+				<green>201</green>
+				<blue>93</blue>
+				<alpha>255</alpha>
+			</color>
+		</e53>
+		<e54 prototypes="color">
+			<color>
+				<red>44</red>
+				<green>158</green>
+				<blue>95</blue>
+				<alpha>255</alpha>
+			</color>
+		</e54>
+		<e55 prototypes="color">
+			<color>
+				<red>78</red>
+				<green>199</green>
+				<blue>136</blue>
+				<alpha>255</alpha>
+			</color>
+		</e55>
+		<e56 prototypes="color">
+			<color>
+				<red>96</red>
+				<green>142</green>
+				<blue>231</blue>
+				<alpha>255</alpha>
+			</color>
+		</e56>
+		<e57 prototypes="color">
+			<color>
+				<red>65</red>
+				<green>120</green>
+				<blue>217</blue>
+				<alpha>255</alpha>
+			</color>
+		</e57>
+		<e58 prototypes="color">
+			<color>
+				<red>140</red>
+				<green>99</green>
+				<blue>207</blue>
+				<alpha>255</alpha>
+			</color>
+		</e58>
+		<e59 prototypes="color">
+			<color>
+				<red>220</red>
+				<green>119</green>
+				<blue>152</blue>
+				<alpha>255</alpha>
+			</color>
+		</e59>
+		<e60 prototypes="color">
+			<color>
+				<red>130</red>
+				<green>31</green>
+				<blue>11</blue>
+				<alpha>255</alpha>
+			</color>
+		</e60>
+		<e61 prototypes="color">
+			<color>
+				<red>168</red>
+				<green>42</green>
+				<blue>21</blue>
+				<alpha>255</alpha>
+			</color>
+		</e61>
+		<e62 prototypes="color">
+			<color>
+				<red>204</red>
+				<green>137</green>
+				<blue>48</blue>
+				<alpha>255</alpha>
+			</color>
+		</e62>
+		<e63 prototypes="color">
+			<color>
+				<red>211</red>
+				<green>174</green>
+				<blue>70</blue>
+				<alpha>255</alpha>
+			</color>
+		</e63>
+		<e64 prototypes="color">
+			<color>
+				<red>33</red>
+				<green>128</green>
+				<blue>74</blue>
+				<alpha>255</alpha>
+			</color>
+		</e64>
+		<e65 prototypes="color">
+			<color>
+				<red>56</red>
+				<green>156</green>
+				<blue>103</blue>
+				<alpha>255</alpha>
+			</color>
+		</e65>
+		<e66 prototypes="color">
+			<color>
+				<red>80</red>
+				<green>119</green>
+				<blue>192</blue>
+				<alpha>255</alpha>
+			</color>
+		</e66>
+		<e67 prototypes="color">
+			<color>
+				<red>45</red>
+				<green>91</green>
+				<blue>173</blue>
+				<alpha>255</alpha>
+			</color>
+		</e67>
+		<e68 prototypes="color">
+			<color>
+				<red>99</red>
+				<green>62</green>
+				<blue>156</blue>
+				<alpha>255</alpha>
+			</color>
+		</e68>
+		<e69 prototypes="color">
+			<color>
+				<red>178</red>
+				<green>87</green>
+				<blue>117</blue>
+				<alpha>255</alpha>
+			</color>
+		</e69>
+		<e70 prototypes="color">
+			<color>
+				<red>89</red>
+				<green>14</green>
+				<blue>0</blue>
+				<alpha>255</alpha>
+			</color>
+		</e70>
+		<e71 prototypes="color">
+			<color>
+				<red>127</red>
+				<green>32</green>
+				<blue>16</blue>
+				<alpha>255</alpha>
+			</color>
+		</e71>
+		<e72 prototypes="color">
+			<color>
+				<red>161</red>
+				<green>106</green>
+				<blue>31</blue>
+				<alpha>255</alpha>
+			</color>
+		</e72>
+		<e73 prototypes="color">
+			<color>
+				<red>168</red>
+				<green>136</green>
+				<blue>46</blue>
+				<alpha>255</alpha>
+			</color>
+		</e73>
+		<e74 prototypes="color">
+			<color>
+				<red>23</red>
+				<green>98</green>
+				<blue>56</blue>
+				<alpha>255</alpha>
+			</color>
+		</e74>
+		<e75 prototypes="color">
+			<color>
+				<red>38</red>
+				<green>118</green>
+				<blue>76</blue>
+				<alpha>255</alpha>
+			</color>
+		</e75>
+		<e76 prototypes="color">
+			<color>
+				<red>55</red>
+				<green>87</green>
+				<blue>149</blue>
+				<alpha>255</alpha>
+			</color>
+		</e76>
+		<e77 prototypes="color">
+			<color>
+				<red>32</red>
+				<green>69</green>
+				<blue>136</blue>
+				<alpha>255</alpha>
+			</color>
+		</e77>
+		<e78 prototypes="color">
+			<color>
+				<red>64</red>
+				<green>35</green>
+				<blue>110</blue>
+				<alpha>255</alpha>
+			</color>
+		</e78>
+		<e79 prototypes="color">
+			<color>
+				<red>128</red>
+				<green>76</green>
+				<blue>110</blue>
+				<alpha>255</alpha>
+			</color>
+		</e79>
+	</colors>
 </style>

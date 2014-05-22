@@ -50,12 +50,15 @@
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtCore/QList>
+#include <QtCore/QSignalMapper>
 #include <QtGui/QToolBar>
 #include <QtGui/QToolButton>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QWidget>
 #include <QtGui/QComboBox>
 #include <QtGui/QGridLayout>
+#include <QtGui/QMenu>
+#include <QtGui/QWidgetAction>
 
 #include <QtCore/QDebug>
 
