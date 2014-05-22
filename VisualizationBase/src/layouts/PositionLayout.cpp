@@ -271,24 +271,11 @@ void PositionLayout::updateGeometry(int, int)
 
 		if (items[i]->semanticZoomLevel() == 0)
 		{
-			if (fullDetailSize[i]->widthNode() && fullDetailSize[i]->heightNode())
+			if (!(fullDetailSize[i]->widthNode() && fullDetailSize[i]->heightNode()) ||
+					(fullDetailSize[i]->width() != items[i]->widthInLocal() ||
+					 fullDetailSize[i]->height() != items[i]->heightInLocal()))
 			{
-				if (fullDetailSize[i]->width() != items[i]->widthInLocal() ||
-					 fullDetailSize[i]->height() != items[i]->heightInLocal())
-				{
-					qDebug() << "storing " << items[i]->widthInLocal() << "," << items[i]->heightInLocal();
-
-					items[i]->node()->beginModification("some purpose...");
-					fullDetailSize[i]->setWidth(items[i]->widthInLocal());
-					fullDetailSize[i]->setHeight(items[i]->heightInLocal());
-					items[i]->node()->endModification();
-				}
-			}
-			else
-			{
-				qDebug() << "new storing " << items[i]->widthInLocal() << "," << items[i]->heightInLocal();
-
-				items[i]->node()->beginModification("some purpose...");
+				items[i]->node()->beginModification("store full detail item size");
 				fullDetailSize[i]->setWidth(items[i]->widthInLocal());
 				fullDetailSize[i]->setHeight(items[i]->heightInLocal());
 				items[i]->node()->endModification();
@@ -557,8 +544,6 @@ bool PositionLayout::scaleItem(ArrangementAlgorithmItem* item, qreal geometricZo
 
 void PositionLayout::calculateNodesPositionInfo()
 {
-	qDebug() << "myparent is " << parent()->node()->symbolName();
-
 	// Get averages
 	double averageWidth = 0;
 	double averageHeight = 0;
