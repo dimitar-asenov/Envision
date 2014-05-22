@@ -52,10 +52,7 @@ bool ArrangementAlgorithmItem::collidesWithAny(QVector<ArrangementAlgorithmItem>
 	{
 		if (this == &others[i]) continue;
 
-		if (area.intersects(others[i].area))
-		{
-			return true;
-		}
+		if (area.intersects(others[i].area)) return true;
 	}
 
 	return false;

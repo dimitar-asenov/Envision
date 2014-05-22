@@ -286,8 +286,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * Returns what semantic zoom level should the children of this item be chosen for when deciding what
 		 * visualizations to use.
 		 *
-		 * If the item's own semantic zoom level has been set, it's value will be returned. Otherwise the value of the item's parent
-		 * will be returned. If the item has no parent the return value is an unspecified semantic zoom level (-1).
+		 * If the item's own semantic zoom level has been set, it's value will be returned. Otherwise the value of the
+		 * item's parent will be returned. If the item has no parent the return value is an unspecified semantic zoom
+		 * level (-1).
 		 */
 		int semanticZoomLevel() const;
 
@@ -369,15 +370,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual bool itemGeometryChangesWithZoom() const;
 
 		/**
-		 * @brief
-		 *				sets the item's scale if it is a direct child of a PositionLayout. Then propagates the information
-		 *				down to the child items recursively.
-		 *
-		 * @param newScale
-		 *				the new scale the item should have.
-		 *
-		 * @param parentScale
-		 *				the scale of the parent of the item.
+		 * Sets the item's scale if it is a direct child of a PositionLayout. Then propagates the information
+		 *	down to the child items recursively.
 		 *
 		 * This method is used to ensure that changes to parent item's always reach child items in order to prevent them
 		 * from overscaling (geometric zoom scale * totalScale() > 1).

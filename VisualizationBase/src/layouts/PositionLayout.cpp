@@ -162,10 +162,8 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 		{
 			Position* pos = extNode->extension<Position>();
 			if (pos)
-			{
 				if (pos->xNode() || pos->yNode())
 					allNodesLackPositionInfo = false;
-			}
 		}
 
 		if (i >= items.size() ) insert( renderer->render(this, nodes[i]));	// This node is new
@@ -406,9 +404,7 @@ inline bool PositionLayout::allChildrenAbstracted(ArrangementAlgorithmItem& item
 		if (!positionLayout) continue;
 
 		for (auto plChild : positionLayout->childItems())
-		{
 			if (plChild->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL) return false;
-		}
 	}
 
 	return true;

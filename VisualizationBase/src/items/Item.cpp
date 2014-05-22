@@ -185,9 +185,7 @@ void Item::setItemScale(qreal newScale, qreal parentScale)
 		qreal maxScale = geometricZoomScale < 1 ? 1 : geometricZoomScale;
 
 		if (totalScale >= maxScale)
-		{
 			newScale = maxScale / geometricZoomScale / parentScale;
-		}
 
 		setScale(newScale);
 	}
@@ -197,9 +195,7 @@ void Item::setItemScale(qreal newScale, qreal parentScale)
 	}
 
 	for (Item* child : childItems())
-	{
 		child->setItemScale(child->scale(), newScale*parentScale);
-	}
 }
 
 void Item::setStyle(const ItemStyle* style)

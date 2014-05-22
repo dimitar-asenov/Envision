@@ -34,8 +34,7 @@
 namespace Visualization {
 
 /**
- * @brief
- * 				The possible directions in which an item can expand the area it uses.
+ * The possible directions in which an item can expand the area it uses.
  *
  * This is used in the arrangement algorithm and only used in the QList
  * ArrangementAlgorithmItem::expandingDirections.
@@ -45,8 +44,7 @@ enum ExpandingDirection {LeftUp, RightUp, RightDown, LeftDown};
 class Item;
 
 /**
- * @brief
- * 				This struct groups all information used by the arrangement algorithm associated with an item.
+ * This struct groups all information used by the arrangement algorithm associated with an item.
  *
  * It is supposed to be used only by the arrangement algorithm inside PositionLayout.
  */
@@ -59,43 +57,34 @@ struct ArrangementAlgorithmItem
 	ArrangementAlgorithmItem();
 
 	/**
-	 * @brief
-	 * 				a pointer to the item associated with this ArrangmentAlgorithmItem.
+	 * A pointer to the item associated with this ArrangmentAlgorithmItem.
 	 */
 	Item* item;
 
 	/**
-	 * @brief
-	 * 				the calculated scale of the item.
+	 * The calculated scale of the item.
 	 */
 	qreal scale;
 
 	/**
-	 * @brief
-	 * 				the calculated area of the item.
+	 * The calculated area of the item.
 	 */
 	QRectF area;
 
 	/**
-	 * @brief
-	 * 				a queue of the directions the item can still try to expand to.
+	 * A queue of the directions the item can still try to expand to.
 	 */
 	QList<ExpandingDirection> expandingDirections;
 
 	/**
-	 * @brief
-	 * 				stores the width-height-ratio of the original item area.
+	 * Stores the width-height-ratio of the original item area.
 	 *
 	 * This field is used for optimization only.
 	 */
 	qreal widthHeightRatio;
 
 	/**
-	 * @brief
-	 * 				associates an Item to this ArrangementAlgorithmItem object.
-	 *
-	 * @param item
-	 * 				the Item to be associated with this ArrangementAlgorithmItem.
+	 * Associates an Item to this ArrangementAlgorithmItem object.
 	 *
 	 * This class is only used by the arrangement algorithm inside PositionLayout. There it is used as a type parameter
 	 * of a QVector and therefore we require it to have a parameterless constructor. To prevent reinitialization this
@@ -105,51 +94,18 @@ struct ArrangementAlgorithmItem
 	void setItem(Item* item);
 
 	/**
-	 * @brief
-	 * 				expands the area associated to this ArrangementAlgorithmItem.
-	 *
-	 * @param left
-	 * 				the amount the area should expand to the left.
-	 *
-	 * @param up the
-	 * 				amount the area should expand upwards.
-	 *
-	 * @param right
-	 * 				the amount the area should expand to the right.
-	 *
-	 * @param down
-	 * 				the amount the area should expand downwards.
+	 * Expands the area associated to this ArrangementAlgorithmItem.
 	 */
 	void expandArea(qreal left, qreal up, qreal right, qreal down);
 
 	/**
-	 * @brief
-	 * 				shrinks the area associated to this ArrangementAlgorithmItem.
-	 *
-	 * @param left
-	 * 				the amount the area should shrink to the left.
-	 *
-	 * @param up
-	 * 				the amount the area should shrink top-down.
-	 *
-	 * @param right
-	 * 				the amount the area should shrink to the right.
-	 *
-	 * @param down
-	 * 				the amount the area should shrink bottom-up.
+	 * Shrinks the area associated to this ArrangementAlgorithmItem.
 	 */
 	void shrinkArea(qreal left, qreal up, qreal right, qreal down);
 
 	/**
-	 * @brief
-	 * 				checks whether the receiver ArrangementAlgorithmItem collides with any of the others.
-	 *
-	 * @param others
-	 * 				all possible other ArrangementAlgorithmItem to be checked against.
-	 *
-	 * @return
-	 * 				whether the receiver ArrangementAlgorithmItem collides with any of the others.
-	 *
+	 * Returns whether the receiver ArrangementAlgorithmItem collides with any of the others.
+
 	 * If the receiver object is contained in others it will be ignored during the calculation.
 	 */
 	bool collidesWithAny(QVector<ArrangementAlgorithmItem>& others);

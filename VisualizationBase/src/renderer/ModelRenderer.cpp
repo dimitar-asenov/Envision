@@ -119,9 +119,7 @@ Item* ModelRenderer::basicStrategy(Item* parent, Model::Node* node,
 			QVector<VisualizationGroup*> groups = option1(id, finalPurpose, finalSemanticZoomLevel);
 
 			if (!groups.isEmpty())
-			{
 				list << groups.first()->visualizationsForContext(parent, node);
-			}
 		}
 
 		// Option1 did not work so we try option2
@@ -130,9 +128,7 @@ Item* ModelRenderer::basicStrategy(Item* parent, Model::Node* node,
 			QVector<VisualizationGroup*> groups = option2(id, finalPurpose, finalSemanticZoomLevel);
 
 			if (!groups.isEmpty())
-			{
 				list << groups.first()->visualizationsForContext(parent, node);
-			}
 		}
 
 		// Option2 did not work so we try option3
@@ -141,9 +137,7 @@ Item* ModelRenderer::basicStrategy(Item* parent, Model::Node* node,
 			QVector<VisualizationGroup*> groups = option3(id, finalPurpose, finalSemanticZoomLevel);
 
 			if (!groups.isEmpty())
-			{
 				list << groups.first()->visualizationsForContext(parent, node);
-			}
 		}
 
 		if (list.size() > 0)
