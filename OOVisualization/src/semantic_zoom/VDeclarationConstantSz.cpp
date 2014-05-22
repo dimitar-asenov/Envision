@@ -47,7 +47,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VDeclarationConstantSz, "item")
 
-VDeclarationConstantSz::VDeclarationConstantSz(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VDeclarationConstantSz::VDeclarationConstantSz(Item* parent, NodeType* node, const StyleType* style)
+: Super(parent, node, style)
 {
 	if (DCast<Method>(node))
 		setStyle(itemStyles().get("method"));
@@ -92,10 +93,10 @@ void VDeclarationConstantSz::initializeForms()
 void VDeclarationConstantSz::updateGeometry(int availableWidth, int availableHeight)
 {
 	FullDetailSize* fds = node_->extension<FullDetailSize>();
-	if (fds && fds->xNode() && fds->yNode())
+	if (fds && fds->widthNode() && fds->heightNode())
 	{
-		qreal totalWidth = fds->x();
-		qreal totalHeight = fds->y();
+		qreal totalWidth = fds->width();
+		qreal totalHeight = fds->height();
 
 		stretchItem_->setCustomSize(totalWidth, totalHeight);
 
@@ -129,7 +130,6 @@ void VDeclarationConstantSz::updateGeometry(int availableWidth, int availableHei
 
 bool VDeclarationConstantSz::itemGeometryChangesWithZoom() const
 {
-	//static bool changesWithZoom = DCast<RootItem>(parent());
 	return true;
 }
 

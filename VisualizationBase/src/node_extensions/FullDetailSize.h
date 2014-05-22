@@ -38,11 +38,11 @@ class VISUALIZATIONBASE_API FullDetailSize
 {
 	DECLARE_EXTENSION(FullDetailSize)
 
-	EXTENSION_ATTRIBUTE_VALUE(Model::Float, x, setX, qreal)
-	EXTENSION_ATTRIBUTE_VALUE(Model::Float, y, setY, qreal)
+	EXTENSION_ATTRIBUTE_VALUE(Model::Float, width, setWidth, qreal)
+	EXTENSION_ATTRIBUTE_VALUE(Model::Float, height, setHeight, qreal)
 
 	public:
-		void set(qreal x, qreal y);
+		void set(qreal width, qreal height);
 };
 
 }

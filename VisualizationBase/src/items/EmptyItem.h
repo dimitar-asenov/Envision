@@ -47,6 +47,9 @@ class VISUALIZATIONBASE_API EmptyItem : public Super<Item>
 	public:
 		EmptyItem(Item* parent, const StyleType* style = itemStyles().get());
 
+		/**
+		 * Sets a custom size for this empty item.
+		 */
 		void setCustomSize(int width, int height);
 
 		virtual bool sizeDependsOnParent() const override;

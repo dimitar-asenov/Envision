@@ -29,13 +29,13 @@
 namespace Visualization {
 
 DEFINE_EXTENSION(FullDetailSize)
-REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, x, Float, false, true, false)
-REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, y, Float, false, true, false)
+REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, width, Float, false, true, false)
+REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, height, Float, false, true, false)
 
-void FullDetailSize::set(qreal x, qreal y)
+void FullDetailSize::set(qreal width, qreal height)
 {
-	setX(x);
-	setY(y);
+	setWidth(width);
+	setHeight(height);
 }
 
 }

@@ -271,15 +271,16 @@ void PositionLayout::updateGeometry(int, int)
 
 		if (items[i]->semanticZoomLevel() == 0)
 		{
-			if (fullDetailSize[i]->xNode() && fullDetailSize[i]->yNode())
+			if (fullDetailSize[i]->widthNode() && fullDetailSize[i]->heightNode())
 			{
-				if (fullDetailSize[i]->x() != items[i]->widthInLocal() || fullDetailSize[i]->y() != items[i]->heightInLocal())
+				if (fullDetailSize[i]->width() != items[i]->widthInLocal() ||
+					 fullDetailSize[i]->height() != items[i]->heightInLocal())
 				{
 					qDebug() << "storing " << items[i]->widthInLocal() << "," << items[i]->heightInLocal();
 
 					items[i]->node()->beginModification("some purpose...");
-					fullDetailSize[i]->setX(items[i]->widthInLocal());
-					fullDetailSize[i]->setY(items[i]->heightInLocal());
+					fullDetailSize[i]->setWidth(items[i]->widthInLocal());
+					fullDetailSize[i]->setHeight(items[i]->heightInLocal());
 					items[i]->node()->endModification();
 				}
 			}
@@ -288,8 +289,8 @@ void PositionLayout::updateGeometry(int, int)
 				qDebug() << "new storing " << items[i]->widthInLocal() << "," << items[i]->heightInLocal();
 
 				items[i]->node()->beginModification("some purpose...");
-				fullDetailSize[i]->setX(items[i]->widthInLocal());
-				fullDetailSize[i]->setY(items[i]->heightInLocal());
+				fullDetailSize[i]->setWidth(items[i]->widthInLocal());
+				fullDetailSize[i]->setHeight(items[i]->heightInLocal());
 				items[i]->node()->endModification();
 			}
 		}
