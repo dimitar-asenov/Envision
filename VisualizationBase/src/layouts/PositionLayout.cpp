@@ -134,17 +134,30 @@ void PositionLayout::swap(int i, int j)
 
 void PositionLayout::determineChildren()
 {
-	if (needsUpdate() != FullUpdate) return;
-
+	auto oldItems = items;
 	QList<Model::Node*> nodes;
 	for (int i = 0; i<items.size(); i++)
 	{
 		nodes.append(items[i]->node());
-		SAFE_DELETE_ITEM(items[i]);
 	}
 	items.clear();
 
 	synchronizeWithNodes(nodes, renderer());
+
+	Q_ASSERT(items.size() == oldItems.size());
+	for(int i = 0; i<items.size(); ++i)
+	{
+		Item* toDelete = nullptr;
+		if (items[i]->typeId() == oldItems[i]->typeId())
+		{
+			toDelete = items[i];
+			items[i] = oldItems[i];
+		}
+		else
+			toDelete = oldItems[i];
+
+		SAFE_DELETE_ITEM(toDelete);
+	}
 
 	Super::determineChildren();
 }
