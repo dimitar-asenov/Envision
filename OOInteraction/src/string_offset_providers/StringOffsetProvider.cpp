@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -128,7 +128,7 @@ int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringCompon
 bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList* list,
 		const QString& prefix, const QString& separator, const QString& /*postfix*/)
 {
-	if (offset == 0) return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
+	if (offset == 0) return list->moveCursor( Visualization::Item::MoveOnTopLeft);
 
 	offset -= prefix.size();
 	QStringList components = StringOffsetProvider::components(list->node());
@@ -141,11 +141,11 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 		{
 			// If the offset is in a node before any visualized node go to the beginning of the list.
 			if (i < list->rangeBegin() )
-				return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
+				return list->moveCursor( Visualization::Item::MoveOnTopLeft);
 
 			// If the offset is in a node after any visualized node go to the end of the list.
 			if (i >= list->rangeEnd() )
-				return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()-1, list->height()-1));
+				return list->moveCursor( Visualization::Item::MoveOnBottomRight);
 
 			if ( setOffsetInItem(offset, list->itemAt<Visualization::Item>(i - list->rangeBegin())) )
 				return true;
@@ -155,9 +155,9 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 	}
 
 	if (offset == 0) // This most likely means that the components are empty
-		return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()/2, list->height()/2));
+		return list->moveCursor( Visualization::Item::MoveOnCenter);
 	else // This means we've reached the end
-		return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()-1, list->height()-1));
+		return list->moveCursor( Visualization::Item::MoveOnBottomRight);
 }
 
 int StringOffsetProvider::listItemOffset(Visualization::VList* list,

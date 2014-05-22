@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -84,7 +84,7 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 		if(event->modifiers() & Qt::ShiftModifier)
 		{
-			originalSize_ = diagram->size();
+			originalSize_ = diagram->sizeInLocal();
 			resizing_ = true;
 			diagram->setCursor(Qt::SizeAllCursor);
 		}

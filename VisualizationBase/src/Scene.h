@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -121,6 +121,19 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		View* currentPaintView() const;
 
+		void setUpdateItemGeometryWhenZoomChanges(Item* item, bool update);
+
+		/**
+		 * Returns the scaling factor applied by the main view associated of this item's scene
+		 */
+		qreal mainViewScalingFactor() const;
+		void setMainViewScalingFactor(qreal factor);
+
+		/**
+		 * Returns the scaling factor used before the active one
+		 */
+		qreal previousMainViewScalingFactor() const;
+
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
 
@@ -151,6 +164,10 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool inEventHandler_{};
 		bool inAnUpdate_{};
 
+		qreal mainViewScalingFactor_{1.0};
+		qreal previousMainViewScalingFactor_{mainViewScalingFactor_};
+		bool mainViewScalingFactorChanged_{false};
+
 		ItemCategories hiddenItemCategories_;
 
 		bool isCurrentMousePressAClick_{};
@@ -158,6 +175,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		const int MAX_MILLISECONDS_FOR_A_CLICK = 500;
 
 		QList<RefreshActionFunction> refreshActionFunctions_;
+
+		QSet<Item*> itemsToUpdateGeometryWhenZoomChanges_;
 
 		View* currentPaintView_{};
 		friend class View;
@@ -181,5 +200,7 @@ inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refresh
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }
 inline View* Scene::currentPaintView() const { return currentPaintView_; }
 
+inline qreal Scene::mainViewScalingFactor() const { return mainViewScalingFactor_; }
+inline qreal Scene::previousMainViewScalingFactor() const { return previousMainViewScalingFactor_; }
 
 }

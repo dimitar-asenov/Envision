@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -30,8 +30,6 @@
 
 #include "../expressions/Expression.h"
 #include "../expressions/ReferenceExpression.h"
-
-#include "ModelBase/src/nodes/Text.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MemberInitializer)
 

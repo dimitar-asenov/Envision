@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -43,10 +43,8 @@ int CompoundObjectStringOffsetProvider::offset(Qt::Key /*key*/)
 void CompoundObjectStringOffsetProvider::setOffset(int offset)
 {
 	if (!vis_) return;
-	if (offset == 0)
-		vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(0,0));
-	else
-		vis_->moveCursor( Visualization::Item::MoveLeftOf, QPoint(vis_->width(),vis_->height()));
+	if (offset == 0) vis_->moveCursor( Visualization::Item::MoveOnTopLeft);
+	else vis_->moveCursor( Visualization::Item::MoveOnBottomRight );
 }
 
 } /* namespace OOInteraction */

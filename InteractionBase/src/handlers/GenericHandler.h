@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -95,6 +95,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void wheelEvent(Visualization::Item *target, QGraphicsSceneWheelEvent *event) override;
 
 		// Focus events
 		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event) override;

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -80,7 +80,7 @@ bool Class::isGeneric()
 }
 
 inline bool Class::findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
+		SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	bool found = false;
 	auto t = target->type();
@@ -95,8 +95,8 @@ inline bool Class::findInTarget(Expression* target, QSet<Node*>& result, const M
 	return found;
 }
 
-bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	bool found{};
 
@@ -105,7 +105,7 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 		if (symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Class*>(this));
 		}
 	}
 	else if (direction == SEARCH_DOWN)
@@ -153,7 +153,7 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Class*>(this));
 		}
 
 		if ((exhaustAllScopes || !found) && parent())

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,6 +31,9 @@
 #include "../commands/AddModifiedNode.h"
 #include "../nodes/Reference.h"
 #include "../nodes/UsedLibrary.h"
+#include "../nodes/NameText.h"
+
+#include "Core/src/Profiler.h"
 
 namespace Model {
 
@@ -79,7 +82,7 @@ void Model::endModification(bool resolveReferences)
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
-		if (resolveReferences && !unresolvedReferences_.isEmpty()) tryResolvingReferences();
+		if (resolveReferences) Reference::resolvePending();
 
 		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock,
 				modifiedTargets, nullptr));
@@ -209,68 +212,46 @@ void Model::load(PersistentStore* store, const QString& name, bool loadPartially
 	name_ = name;
 	store_ = store;
 
+	Core::Profiler::startOnce(name == "java", "Loading the Java library", "load.prof");
 	auto root = store->loadModel(this, name, loadPartially);
 	for(auto lib : root->usedLibraries())
 		lib->loadLibraryModel(store->clone());
+	Core::Profiler::stop("Loading the Java library");
 
+	Core::Profiler::startOnce(name == "java", "Resolving references", "resolve.prof");
 	setRoot(root);
+	Core::Profiler::stop("Resolving references");
 }
 
 void Model::setRoot(Node* node)
 {
 	Q_ASSERT(!root_);
 	Q_ASSERT(node);
+	Q_ASSERT(!node->parent());
 
 	commands.clear();
 	root_ = node;
 
-	scanUnresolvedReferences();
-
-	beginModification(root_, "Resolve children");
-	tryResolvingReferences();
-	endModification();
+	root_->setRootModel(this);
+	Reference::unresolveAll(root_);
+	Reference::resolvePending();
 
 	emit rootNodeSet(root_);
 }
 
-void Model::scanUnresolvedReferences()
+void Model::notifyNodeChange(Node* node)
 {
-	unresolvedReferences_.clear();
-
-	QList<Node*> stack;
-	if (root_) stack << root_;
-
-	while (!stack.isEmpty())
-	{
-		auto top = stack.takeLast();
-		if (auto ref = DCast<Reference>(top) )
-		{
-			if (!ref->isResolved()) unresolvedReferences_ << ref;
-		}
-		else stack.append(top->children());
-
-	}
+	if (modificationInProgress) modifiedTargets.insert(node);
+	else emit nodesModified(QSet<Node*>() << node);
 }
 
-void Model::addUnresolvedReference(Reference* ref)
+void Model::emitNameModified(NameText* node, const QString &oldName)
 {
-	unresolvedReferences_.insert(ref);
-}
+	QSet<QString> names;
+	names << node->get() << oldName;
+	Reference::unresolveNames(root_, names);
 
-void Model::removeUnresolvedReference(Reference* ref)
-{
-	unresolvedReferences_.remove(ref);
-}
-
-void Model::tryResolvingReferences()
-{
-	auto modificationTarget = currentModificationTarget;
-
-	auto unresolved = unresolvedReferences_;
-	for (auto r : unresolved)
-		if (!r->isResolved()) r->resolve();
-
-	changeModificationTarget(modificationTarget);
+	emit nameModified(node, oldName);
 }
 
 }

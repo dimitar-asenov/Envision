@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -39,6 +39,7 @@
 #include "handlers/HIfStatement.h"
 #include "handlers/HReturnStatement.h"
 #include "handlers/HKeywordStatement.h"
+#include "handlers/HArrayInitializer.h"
 
 #include "commands/CCreateProject.h"
 #include "commands/CCreateClass.h"
@@ -99,6 +100,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VBreakStatement::setDefaultClassHandler(HKeywordStatement::instance());
 	OOVisualization::VContinueStatement::setDefaultClassHandler(HKeywordStatement::instance());
 	OOVisualization::VReturnStatement::setDefaultClassHandler(HReturnStatement::instance());
+	OOVisualization::VArrayInitializer::setDefaultClassHandler(HArrayInitializer::instance());
 
 	// Register string components that convert an expression to a string list representing its components
 	StringComponents::initConversions();

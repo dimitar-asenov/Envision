@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,6 +28,7 @@
 #include "../expressions/ReferenceExpression.h"
 #include "../declarations/Class.h"
 #include "../declarations/Method.h"
+#include "../declarations/NameImport.h"
 #include "../expressions/types/ClassTypeExpression.h"
 #include "../expressions/types/ArrayTypeExpression.h"
 #include "../expressions/MethodCallExpression.h"
@@ -46,13 +47,64 @@ namespace OOModel {
 NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference)
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference)
 
-bool OOReference::resolve()
+void OOReference::targetChanged(Node*)
+{
+	Node* child = this;
+	Node* p = parent();
+	while (p)
+	{
+		if (auto refExpr = DCast<ReferenceExpression>(p))
+		{
+			if (refExpr->ref() == child)
+			{
+				if (auto m = p->model()) m->notifyNodeChange(p);
+			}
+			else {
+				refExpr->ref()->setResolutionNeeded();
+				break;
+			}
+		}
+		else if (DCast<NameImport>(p))
+		{
+			auto list = p->parent();
+			Q_ASSERT(DCast<Model::List>(list));
+			auto mainDeclaration = list->parent();
+			Q_ASSERT(mainDeclaration);
+			unresolveAll(mainDeclaration);
+
+			break;
+		}
+		else if (!DCast<Model::List>(p) && !DCast<Expression>(p)) break;
+
+		child = p;
+		p = p->parent();
+	}
+}
+
+void OOReference::unresolveOOReferencesAfterSubTree(Model::Node* subTree)
+{
+	auto node = subTree;
+	while (node)
+	{
+		if (DCast<NameImport>(node))
+		{
+			auto list = node->parent();
+			Q_ASSERT(DCast<Model::List>(list));
+			auto mainDeclaration = list->parent();
+			Q_ASSERT(mainDeclaration);
+			unresolveAll(mainDeclaration);
+			break;
+		}
+
+		if (!DCast<Model::List>(node) && !DCast<Expression>(node) && !DCast<Reference>(node)) break;
+
+		node = node->parent();
+	}
+}
+
+Model::Node* OOReference::computeTarget() const
 {
 	// TODO Handle the case where the symbol is defined multiple times in a better way
-
-	// TODO this is not multithread friendly.
-	if (resolving_) return false;
-	resolving_ = true;
 
 	auto parent = static_cast<ReferenceExpression*>(this->parent());
 
@@ -85,13 +137,10 @@ bool OOReference::resolve()
 		findSymbols(candidateTargets, name(), this, SEARCH_UP,  searchForType, searchForType.testFlag(METHOD));
 	}
 
-	setTarget( resolveAmbiguity(candidateTargets) );
-
-	resolving_ = false;
-	return isResolved();
+	return resolveAmbiguity(candidateTargets);
 }
 
-OOReference::ReferenceTargetKind OOReference::referenceTargetKind()
+OOReference::ReferenceTargetKind OOReference::referenceTargetKind() const
 {
 	auto parentRefExpr = static_cast<ReferenceExpression*>(this->parent());
 	auto construct = parentRefExpr->parent();
@@ -148,7 +197,7 @@ OOReference::ReferenceTargetKind OOReference::referenceTargetKind()
 	return ReferenceTargetKind::Unknown;
 }
 
-Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates)
+Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates) const
 {
 	if ( candidates.isEmpty() ) return nullptr;
 	if ( candidates.size() == 1) return *candidates.begin(); // TODO: possibly check this for compliance?
@@ -194,7 +243,7 @@ Model::Node* OOReference::resolveAmbiguity(QSet<Model::Node*>& candidates)
 }
 
 Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candidates,
-		MethodCallExpression* callExpression)
+		MethodCallExpression* callExpression) const
 {
 	// TODO: So far this implements only the simpler cases of Java. Complex cases or other languages need to be
 	// considered.
@@ -231,7 +280,7 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 }
 
 void OOReference::removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& methods,
-		MethodCallExpression* callExpression)
+		MethodCallExpression* callExpression) const
 {
 	auto callee = static_cast<ReferenceExpression*>(callExpression->callee());
 
@@ -248,7 +297,7 @@ void OOReference::removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& met
 }
 
 void OOReference::removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& methods,
-		MethodCallExpression* callExpression)
+		MethodCallExpression* callExpression) const
 {
 	int argId = 0;
 	for(auto arg: *callExpression->arguments())
@@ -274,7 +323,7 @@ void OOReference::removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& me
 	}
 }
 
-void OOReference::removeOverridenMethods(QSet<Method*>& methods)
+void OOReference::removeOverridenMethods(QSet<Method*>& methods) const
 {
 	QSet<Method*> nonOverriden;
 	while (!methods.isEmpty())
@@ -301,7 +350,7 @@ void OOReference::removeOverridenMethods(QSet<Method*>& methods)
 	methods = nonOverriden;
 }
 
-void OOReference::removeLessSpecificMethods(QSet<Method*>& methods)
+void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 {
 	QSet<Method*> mostSpecific;
 	while(!methods.isEmpty())

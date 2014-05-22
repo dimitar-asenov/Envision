@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,11 +31,6 @@
 #include "Method.h"
 #include "Field.h"
 #include "../elements/Enumerator.h"
-#include "../elements/FormalTypeArgument.h"
-#include "../elements/StatementItemList.h"
-
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Class)
 
@@ -67,8 +62,8 @@ class OOMODEL_API Class : public Super<Declaration>
 		ConstructKind constructKind() const;
 		void setConstructKind(const ConstructKind& kind);
 
-		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 
 		virtual SymbolTypes symbolType() const override;
 
@@ -83,7 +78,7 @@ class OOMODEL_API Class : public Super<Declaration>
 	private:
 		Expression* defaultImplicitBaseFromProject() const;
 		bool findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
-				SymbolTypes symbolTypes, bool exhaustAllScopes);
+				SymbolTypes symbolTypes, bool exhaustAllScopes) const;
 };
 
 inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }

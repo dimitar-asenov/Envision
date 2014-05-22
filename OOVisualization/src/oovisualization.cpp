@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,6 +34,10 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
 
+#include <semantic_zoom/VClassSzPublic.h>
+#include <semantic_zoom/VDeclarationSz.h>
+#include <semantic_zoom/VMethodSzPublic.h>
+
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
 using namespace OOModel;
@@ -59,6 +63,51 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	itemTypeInitializationRegistry().initializeAll();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
 			createVisualization<VStatementItemList, StatementItemList>);
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface", 1);
+
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose", "public_interface",
+			createVisualization<VClassSzPublic, Class>);
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "public_interface",
+			createVisualization<VMethodSzPublic, Method>);
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("method_abstraction", 2);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "method_abstraction",
+			createVisualization<VDeclarationSz, Method>);
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("class_method_abstraction", 3);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+			"class_method_abstraction", createVisualization<VDeclarationSz, Method>);
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+			"class_method_abstraction", createVisualization<VDeclarationSz, Class>);
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("module_class_method_abstraction", 4);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+			"module_class_method_abstraction", createVisualization<VDeclarationSz, Method>);
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+			"module_class_method_abstraction", createVisualization<VDeclarationSz, Class>);
+	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), "default_purpose",
+			"module_class_method_abstraction", createVisualization<VDeclarationSz, Module>);
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("project_module_class_method_abstraction", 5);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+			"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Method>);
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+			"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Class>);
+	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), "default_purpose",
+			"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Module>);
+	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), "default_purpose",
+			"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Project>);
+
 
 	return true;
 }

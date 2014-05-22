@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -49,6 +49,7 @@
 		/* The most derived id appears at the front of the list. */																		\
 		virtual QList<int> hierarchyTypeIds() const;																							\
 		virtual bool isSubtypeOf(int type) const;																								\
+		virtual bool isSubtypeOf(const QString& type) const;																				\
 																																							\
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic();																													\
@@ -165,6 +166,10 @@ templatePrefix bool className::isSubtypeOf(int type) const																				\
 {																																							\
 	return typeIdStatic() == type;																												\
 }																																							\
+templatePrefix bool className::isSubtypeOf(const QString& type) const																\
+{																																							\
+	return typeNameStatic() == type;																												\
+}																																							\
 
 /**********************************************************************************************************************/
 
@@ -190,6 +195,10 @@ templatePrefix QList<int> className::hierarchyTypeIds() const																			
 templatePrefix bool className::isSubtypeOf(int type) const																				\
 {																																							\
 	return typeIdStatic() == type || Super::isSubtypeOf(type);																			\
+}																																							\
+templatePrefix bool className::isSubtypeOf(const QString& type) const																\
+{																																							\
+	return typeNameStatic() == type || Super::isSubtypeOf(type);																		\
 }																																							\
 
 /**********************************************************************************************************************/

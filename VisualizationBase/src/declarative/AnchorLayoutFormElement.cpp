@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,13 +32,13 @@
 namespace Visualization {
 
 AnchorLayoutFormElement::AnchorLayoutFormElement()
-: solver_{new AnchorLayoutConstraintSolver()} // TODO: Does each AnchorLayoutElement really need its own solver?
+	: horizontalSolver_{new AnchorLayoutConstraintSolver()}, verticalSolver_{new AnchorLayoutConstraintSolver()}
 {}
 
 AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& other) : LayoutFormElement{other},
-	horizontalNeedsConstraintSolver_{other.horizontalNeedsConstraintSolver_},
-	verticalNeedsConstraintSolver_{other.verticalNeedsConstraintSolver_},
-	solver_{new AnchorLayoutConstraintSolver()}, // TODO: Does each AnchorLayoutElement really need its own solver?
+	needsHorizontalSolver_{other.needsHorizontalSolver_},
+	needsVerticalSolver_{other.needsVerticalSolver_},
+	horizontalSolver_{new AnchorLayoutConstraintSolver()}, verticalSolver_{new AnchorLayoutConstraintSolver()},
 	externalMatches_{} // Will be adjusted later
 {
 	QMap<FormElement*, FormElement*> matching;
@@ -90,7 +90,8 @@ void AnchorLayoutFormElement::cloneConstraints(QList<AnchorLayoutAnchor*>& thisC
 AnchorLayoutFormElement::~AnchorLayoutFormElement()
 {
 	// elements were deleted by Element
-	SAFE_DELETE(solver_);
+	SAFE_DELETE(horizontalSolver_);
+	SAFE_DELETE(verticalSolver_);
 }
 
 AnchorLayoutFormElement* AnchorLayoutFormElement::clone() const
@@ -250,14 +251,12 @@ int AnchorLayoutFormElement::placeElements(QList<AnchorLayoutAnchor*>& constrain
 		AnchorLayoutAnchor::Orientation orientation, Item* item)
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
-	bool axisNeedsConstraintSolver = (orientation == AnchorLayoutAnchor::Orientation::Horizontal
-														&& horizontalNeedsConstraintSolver_)
-												|| (orientation == AnchorLayoutAnchor::Orientation::Vertical
-														&& verticalNeedsConstraintSolver_);
 
 	int minPos = 0;
-	if (axisNeedsConstraintSolver)
-		solver_->placeElements(children(), constraints, orientation, item);
+	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal && needsHorizontalSolver_)
+		horizontalSolver_->placeElements(children(), constraints, orientation, item);
+	else if (orientation == AnchorLayoutAnchor::Orientation::Vertical && needsVerticalSolver_)
+		verticalSolver_->placeElements(children(), constraints, orientation, item);
 	else
 		for (auto c : constraints)
 		{
@@ -273,9 +272,9 @@ void AnchorLayoutFormElement::sortConstraints(QList<AnchorLayoutAnchor*>& constr
 {
 	// check if this orientation does not already have circular dependencies (if so, don't sort)
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
-	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal && horizontalNeedsConstraintSolver_)
+	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal && needsHorizontalSolver_)
 		return;
-	else if (orientation == AnchorLayoutAnchor::Orientation::Vertical && verticalNeedsConstraintSolver_)
+	else if (orientation == AnchorLayoutAnchor::Orientation::Vertical && needsVerticalSolver_)
 		return;
 
 	QList<AnchorLayoutAnchor*> sortedConstraints;
@@ -301,9 +300,9 @@ void AnchorLayoutFormElement::sortConstraints(QList<AnchorLayoutAnchor*>& constr
 	if (elementQueue.empty() && !constraints.empty())
 	{
 		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-			horizontalNeedsConstraintSolver_ = true;
+			needsHorizontalSolver_ = true;
 		else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-			verticalNeedsConstraintSolver_ = true;
+			needsVerticalSolver_ = true;
 		return;
 	}
 
@@ -319,9 +318,9 @@ void AnchorLayoutFormElement::sortConstraints(QList<AnchorLayoutAnchor*>& constr
 					if (elementQueue.indexOf(c->placeElement()) <= elementIndex)
 					{
 						if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-							horizontalNeedsConstraintSolver_ = true;
+							needsHorizontalSolver_ = true;
 						else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-							verticalNeedsConstraintSolver_ = true;
+							needsVerticalSolver_ = true;
 						return;
 					}
 				}
@@ -348,9 +347,9 @@ void AnchorLayoutFormElement::sortConstraints(QList<AnchorLayoutAnchor*>& constr
 	if (needsConstraintSolver)
 	{
 		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-			horizontalNeedsConstraintSolver_ = true;
+			needsHorizontalSolver_ = true;
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
-			verticalNeedsConstraintSolver_ = true;
+			needsVerticalSolver_ = true;
 	}
 }
 

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,32 +33,26 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SVGIconStyle : public IconStyle
+class VISUALIZATIONBASE_API SVGIconStyle : public Super<IconStyle>
 {
 	public:
+		virtual ~SVGIconStyle() override;
 		virtual void load(StyleLoader& sl);
-
-		const QString& filename() const;
-		int width() const;
-		int height() const;
 
 		void paint(QPainter* painter, int x, int y) const;
 
+		Property<QString> filename{this,"filename"};
+		Property<int> width{this,"width"};
+		Property<int> height{this,"height"};
+
 	private:
-		QString filename_;
 		mutable QSvgRenderer renderer_;
 		mutable Mipmap mipmap_;
-		int width_;
-		int height_;
 
 		/**
 		 * Returns true if the pixmap was created or false if it was too small and not added.
 		 */
 		bool drawScaledPixmapInMipmap(qreal scaleFactor) const;
 };
-
-inline const QString& SVGIconStyle::filename() const { return filename_; }
-inline int SVGIconStyle::width() const { return width_; }
-inline int SVGIconStyle::height() const { return height_; }
 
 }

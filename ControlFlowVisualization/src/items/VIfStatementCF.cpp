@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -97,27 +97,28 @@ void VIfStatementCF::updateGeometry(int, int)
 	continues_.clear();
 
 	// First compute the size
-	int halfCondition = conditionBackground->width()/2 + style()->pinLength();
+	int halfCondition = conditionBackground->widthInParent()/2 + style()->pinLength();
 	int leftHalf = halfCondition + thenBranch->entrance().x();
-	int rightHalf = halfCondition + elseBranch->width() - elseBranch->entrance().x();
+	int rightHalf = halfCondition + elseBranch->widthInParent() - elseBranch->entrance().x();
 
-	int extraLeft = leftHalf - thenBranch->width() - style()->pinLength();
+	int extraLeft = leftHalf - thenBranch->widthInParent() - style()->pinLength();
 	if (extraLeft < 0)
 	{
 		leftHalf += -extraLeft;
 		extraLeft = 0;
 	}
 
-	int extraRight = rightHalf - elseBranch->width() - style()->pinLength();
+	int extraRight = rightHalf - elseBranch->widthInParent() - style()->pinLength();
 	if (extraRight < 0)
 	{
 		rightHalf += -extraRight;
 		extraRight = 0;
 	}
 
-	int height = conditionBackground->height() + style()->pinLength();
+	int height = conditionBackground->heightInParent() + style()->pinLength();
 	int branchesTop = height;
-	height += ( thenBranch->height() > elseBranch->height() ) ? thenBranch->height() : elseBranch->height() ;
+	height += ( thenBranch->heightInParent() > elseBranch->heightInParent() )
+			? thenBranch->heightInParent() : elseBranch->heightInParent() ;
 	height += 3*style()->pinLength();
 
 	// Set the size
@@ -125,7 +126,7 @@ void VIfStatementCF::updateGeometry(int, int)
 	else setSize(leftHalf + rightHalf, height);
 
 	// Set the positions
-	conditionBackground->setPos(leftHalf - conditionBackground->width()/2,style()->pinLength());
+	conditionBackground->setPos(leftHalf - conditionBackground->widthInParent()/2,style()->pinLength());
 	thenBranch->setPos(0, branchesTop);
 	elseBranch->setPos(leftHalf + extraRight + style()->pinLength(), branchesTop);
 	entrance_ = QPoint(leftHalf, 0);
@@ -134,15 +135,15 @@ void VIfStatementCF::updateGeometry(int, int)
 	addConnector(leftHalf, 0, leftHalf, style()->pinLength(), true);
 
 	// Then
-	addConnector(conditionBackground->pos().x(), style()->pinLength() + conditionBackground->height()/2,
-			thenBranch->entrance().x(), style()->pinLength() + conditionBackground->height()/2, false);
+	addConnector(conditionBackground->pos().x(), style()->pinLength() + conditionBackground->heightInParent()/2,
+			thenBranch->entrance().x(), style()->pinLength() + conditionBackground->heightInParent()/2, false);
 	addToLastConnector(thenBranch->pos().toPoint() + thenBranch->entrance());
 
 	// Else
-	addConnector(conditionBackground->pos().x() + conditionBackground->width(),
-			style()->pinLength() + conditionBackground->height()/2,
+	addConnector(conditionBackground->pos().x() + conditionBackground->widthInParent(),
+			style()->pinLength() + conditionBackground->heightInParent()/2,
 			elseBranch->pos().toPoint().x() + elseBranch->entrance().x(),
-			style()->pinLength() + conditionBackground->height()/2, false);
+			style()->pinLength() + conditionBackground->heightInParent()/2, false);
 	addToLastConnector(elseBranch->pos().toPoint() + elseBranch->entrance());
 
 	// Process Connectors on the then branch
@@ -182,9 +183,9 @@ void VIfStatementCF::updateGeometry(int, int)
 	// If there are any break or continue statements on the inside put the corresponding connectors
 	if (thenBranchInnerBegin < height)
 	{
-		addConnector(thenBranch->width(), thenBranchInnerBegin, thenBranch->width() ,
+		addConnector(thenBranch->widthInParent(), thenBranchInnerBegin, thenBranch->widthInParent() ,
 				height - 3*style()->pinLength(), false);
-		addToLastConnector(width(), height - 3*style()->pinLength());
+		addToLastConnector(widthInParent(), height - 3*style()->pinLength());
 
 		QPoint c = QPoint(1, height - 3*style()->pinLength());
 		if (preferredBreakExit_ == ControlFlowItem::EXIT_RIGHT) breaks_.append(c);

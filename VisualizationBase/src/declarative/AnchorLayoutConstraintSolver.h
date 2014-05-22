@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -55,8 +55,10 @@ class VISUALIZATIONBASE_API AnchorLayoutConstraintSolver {
 				AnchorLayoutAnchor::Orientation orientation, Item* item);
 	private:
 		void initializeConstraintSolver(int numVariables);
-		void addGreaterEqualConstraint(QVector<QPair<int, float>> constraintRow, float result);
-		void addEqualConstraint(QVector<QPair<int, float>> constraintRow, float result);
+		void prepareLP(const QVector<FormElement*>& elements, QList<AnchorLayoutAnchor*>& anchors,
+							AnchorLayoutAnchor::Orientation orientation, Item* item);
+		void updateLP(const QVector<FormElement*>& elements, AnchorLayoutAnchor::Orientation orientation, Item* item);
+		void addConstraint(int type, QVector<QPair<int, float>> constraintRow, float result);
 		void setMinimizeObjective(QVector<float> objectiveRow);
 		QVector<float> solveConstraints();
 		void cleanUpConstraintSolver();
@@ -71,12 +73,4 @@ class VISUALIZATIONBASE_API AnchorLayoutConstraintSolver {
 
 };
 
-inline int AnchorLayoutConstraintSolver::startVariable(int elementIndex)
-{
-	return 2 * elementIndex;
-}
-inline int AnchorLayoutConstraintSolver::endVariable(int elementIndex)
-{
-	return 2 * elementIndex + 1;
-}
 } /* namespace Visualization */

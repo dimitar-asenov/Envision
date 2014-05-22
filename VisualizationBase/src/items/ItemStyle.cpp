@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -29,14 +29,8 @@
 
 namespace Visualization {
 
-ItemStyle::ItemStyle() :
-	shapeStyle_(nullptr)
-{
-}
-
-ItemStyle::~ItemStyle()
-{
-}
+ItemStyle::ItemStyle() : shapeStyle_(nullptr) {}
+ItemStyle::~ItemStyle(){}
 
 Shape* ItemStyle::createShape(Item* parent) const
 {
@@ -49,14 +43,8 @@ Shape* ItemStyle::createShape(Item* parent) const
 
 void ItemStyle::load(StyleLoader& sl)
 {
-	Style::load(sl);
+	Super::load(sl);
 
-	QString shape;
-	sl.load("wholeItemCursor", wholeItemCursor_);
-	sl.load("noItemRegions", noItemRegions_);
-	sl.load("drawsOnlyShape", drawsOnlyShape_);
-	sl.load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
-	sl.load("allowEquivalentCursorsThroughBoundary", allowEquivalentCursorsThroughBoundary_);
 	sl.load("shape", shapeName_);
 	shapeName_ = shapeName_.trimmed();
 

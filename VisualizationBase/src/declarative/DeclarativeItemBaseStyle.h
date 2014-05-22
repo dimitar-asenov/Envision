@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,17 +31,12 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public ItemStyle
+class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public Super<ItemStyle>
 {
-	private:
-		bool extraCursorsOutsideShape_{};
-
 	public:
-		virtual void load(StyleLoader& sl);
+		virtual ~DeclarativeItemBaseStyle() override;
 
-		bool extraCursorsOutsideShape() const;
+		Property<bool> extraCursorsOutsideShape{this,"extraCursorsOutsideShape"};
 };
-
-inline bool DeclarativeItemBaseStyle::extraCursorsOutsideShape() const {return extraCursorsOutsideShape_;}
 
 } /* namespace Visualization */

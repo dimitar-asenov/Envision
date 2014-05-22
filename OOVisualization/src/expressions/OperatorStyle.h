@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API OperatorStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
@@ -71,7 +71,7 @@ inline const Visualization::NodeWrapper::StyleType& OperatorStyle::operand0Wrapp
 inline const Visualization::NodeWrapper::StyleType& OperatorStyle::operand1Wrapper() const { return operand1Wrapper_; }
 inline const Visualization::NodeWrapper::StyleType& OperatorStyle::operand2Wrapper() const { return operand2Wrapper_; }
 
-class OOVISUALIZATION_API OperatorSequenceStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API OperatorSequenceStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		QVector<OperatorStyle> seq_;

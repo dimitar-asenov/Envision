@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -27,36 +27,20 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-
-#include "../layouts/PanelBorderLayoutStyle.h"
+#include "../declarative/DeclarativeItemBaseStyle.h"
 #include "../layouts/SequentialLayout.h"
+#include "../items/TextStyle.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VCompositeStyle : public ItemStyle
+class VISUALIZATIONBASE_API VCompositeStyle : public Super<DeclarativeItemBaseStyle>
 {
-	private:
-		PanelBorderLayoutStyle borderStyle_;
-		SequentialLayoutStyle headerStyle_;
-		SequentialLayoutStyle smallHeaderStyle_;
-		SequentialLayoutStyle attributesStyle_;
-		bool expanded_;
-
 	public:
-		VCompositeStyle();
-		void load(StyleLoader& sl);
+		virtual ~VCompositeStyle() override;
 
-		const PanelBorderLayoutStyle& borderStyle() const;
-		const SequentialLayoutStyle&  headerStyle() const;
-		const SequentialLayoutStyle&  smallHeaderStyle() const;
-		const SequentialLayoutStyle&  attributesStyle() const;
-		bool expanded() const;
+		Property<SequentialLayoutStyle> headerBackground{this,"headerBackground"};
+		Property<TextStyle> typeName{this,"typeName"};
+		Property<bool> expanded{this, "expanded"};
 };
-
-inline const PanelBorderLayoutStyle& VCompositeStyle::borderStyle() const {return borderStyle_; }
-inline const SequentialLayoutStyle& VCompositeStyle::headerStyle() const {return headerStyle_; }
-inline const SequentialLayoutStyle& VCompositeStyle::smallHeaderStyle() const {return smallHeaderStyle_; }
-inline const SequentialLayoutStyle& VCompositeStyle::attributesStyle() const {return attributesStyle_; }
-inline bool VCompositeStyle::expanded() const { return expanded_; }
 
 }

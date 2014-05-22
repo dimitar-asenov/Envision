@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,20 +28,6 @@
 
 namespace Visualization {
 
-PositionLayoutStyle::PositionLayoutStyle() :
-	spaceBetweenElements_(10), gridSize_(20)
-{
-}
-
-void PositionLayoutStyle::load(StyleLoader& sl)
-{
-	LayoutStyle::load(sl);
-	sl.load("leftInnerMargin", leftInnerMargin_);
-	sl.load("rightInnerMargin", rightInnerMargin_);
-	sl.load("topInnerMargin", topInnerMargin_);
-	sl.load("bottomInnerMargin", bottomInnerMargin_);
-	sl.load("spaceBetweenElements", spaceBetweenElements_);
-	sl.load("gridSize", gridSize_);
-}
+PositionLayoutStyle::~PositionLayoutStyle(){}
 
 }

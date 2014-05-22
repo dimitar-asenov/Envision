@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -40,35 +40,87 @@ class MODELBASE_API Reference: public Super<Node>
 	NODE_DECLARE_STANDARD_METHODS( Reference )
 
 	public:
+		virtual ~Reference() override;
 
 		const QString& name() const;
-		void setName(const QString &name, bool tryResolvingImmediately = true);
+		void setName(const QString &name);
 
 		Node* target();
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
 
-		virtual bool resolve();
+		bool resolve();
 		bool isResolved() const;
 
-	protected:
-		void setTarget(Node* target);
+		virtual Node* computeTarget() const;
+
+		/**
+		 * Invalidates the target of this reference and enters a state where resolution is needed.
+		 */
+		void setResolutionNeeded();
+
+		/**
+		 * Marks all the references in the provided \a subTree as unresolved.
+		 */
+		static void unresolveAll(Node* subTree);
+
+		/**
+		 * Marks references whose name is in \a names in the provided \a subTree as unresolved.
+		 */
+		static void unresolveNames(Node* subTree, const QSet<QString>& names);
+
+		/**
+		 * Performs all necessary operations to unresolve refrences after a new tree has been introduced.
+		 */
+		static void unresolveAfterNewSubTree(Node* subTree);
+
+		/**
+		 * Adds the \a step function to be called when references are being unresolved after a sub tree is added.
+		 */
+		static void addUnresolutionSteps(std::function<void (Node* subTree)> step);
+
+		/**
+		 * Marks as unresolved references in \a subTreeToUnresolve, whose name is identical to any NameText node in
+		 * \a subTreeToLookForNewNames.
+		 */
+		static void unresolveIfNameIntroduced(Node* subTreeToUnresolve, Node* subTreeToLookForNewNames);
+
+		static void resolvePending();
 
 	private:
-		Node* target_;
+		Node* target_{};
 		QString name_;
 
 		/**
-		 * \brief Inserts this reference in the unresolved references lists of the corresponding model if the reference is
-		 * unresolved or removes it from that list otherwise.
-		 *
-		 * Calling this method might only have an effect if this reference is associated to a model.
+		 * A set of all unresolved references which are pending resolution. Note that there can be unresolved references
+		 * which are not pending resolution, e.g. references in deleted branches of a tree, which are now owned by the
+		 * undo stack.
 		 */
-		void manageUnresolvedReferencesListInModel();
+		static QSet<Reference*> pendingResolution_;
+
+		/**
+		 * A set of all existing reference objects.
+		 */
+		static QList<Reference*> allReferences_;
+
+		static QList<std::function<void (Node* subTree)>> unresolutionSteps_;
+
+		enum State {ReferenceEstablished, ReferenceNeedsToBeResolved, ReferenceIsBeingResolved};
+		State state_{ReferenceNeedsToBeResolved};
+
+		bool resolveHelper(bool indirect);
+
+		static void unresolveReferencesHelper(Node* subTree, bool all, const QSet<QString>& names);
+
+		template<class NodeType>
+		static void forAll(Node* subTree, std::function<void (NodeType* node)> function);
+
+		virtual void targetChanged(Node* oldTarget);
 };
 
-inline const QString& Reference::name() const { return target_ ? target_->symbolName() : name_; }
-inline bool Reference::isResolved() const { return target_; }
+inline const QString& Reference::name() const { return name_; }
+inline bool Reference::isResolved() const { return (state_ == ReferenceEstablished) && target_; }
+inline bool Reference::resolve() { return resolveHelper(false); }
 
 }

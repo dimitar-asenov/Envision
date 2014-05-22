@@ -1,0 +1,12 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="default.shape">Box</shape>
+	
+	<name prototypes="item/Text/default" />
+	
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/gears.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</icon>
+</style>

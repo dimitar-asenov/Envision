@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -110,14 +110,16 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			removeNodeAndSetCursor(list, index + list->rangeBegin());
 	}
 
-	if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+	if (	event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return
+			|| (event->key() == Qt::Key_Tab  && event->modifiers() == Qt::NoModifier)
+			|| (	(event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)
+					&& !event->text().isEmpty() && event->text().at(0).isLetterOrNumber()))
 	{
-		bool createDown = event->modifiers() == Qt::NoModifier;
-		bool createRight = event->modifiers() == Qt::ShiftModifier;
+		bool enter = event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return;
+		bool createDown = enter && event->modifiers() == Qt::NoModifier && !list->style()->itemsStyle().isHorizontal();
+		bool createRight = enter && event->modifiers() == Qt::ShiftModifier && list->style()->itemsStyle().isHorizontal();
 
-		if (list->isShowingEmptyTip()
-				|| (createDown && !list->style()->itemsStyle().isHorizontal())
-				|| ( createRight && list->style()->itemsStyle().isHorizontal()) )
+		if ( !enter || (enter && list->isShowingEmptyTip()) || createDown || createRight )
 		{
 			auto newElem = list->node()->createDefaultElement();
 			if (newElem)
@@ -143,7 +145,16 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 					list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 					target->scene()->addPostEventAction( new SetCursorEvent(list, newElem,
-						createDown ? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
+							list->style()->itemsStyle().isHorizontal()
+							? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
+
+					// If this was not an enter key and not a tab, then it must have been a letter.
+					// Add a keyboard event for this letter
+					if (!enter && event->key() != Qt::Key_Tab )
+					{
+						qApp->postEvent(target->scene(),  new QKeyEvent(QEvent::KeyPress, event->key(),
+							event->modifiers(), event->text(), event->isAutoRepeat(), event->count()));
+					}
 				}
 			}
 		}

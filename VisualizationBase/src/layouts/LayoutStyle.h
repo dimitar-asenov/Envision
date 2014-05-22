@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,35 +32,20 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API LayoutStyle : public ItemStyle
+class VISUALIZATIONBASE_API LayoutStyle : public Super<ItemStyle>
 {
 	public:
 		enum class Orientation : int { Horizontal, Vertical};
 		enum class Alignment : int { Center, Left, Right, Top, Bottom};
 		enum class Direction : int { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
 
-	private:
-		int leftMargin_;
-		int rightMargin_;
-		int topMargin_;
-		int bottomMargin_;
+		virtual ~LayoutStyle() override;
 
-	public:
-		LayoutStyle(int leftMargin = 0, int rightMargin = 0, int topMargin = 0, int bottomMargin = 0);
-		virtual void load(StyleLoader& sl);
+		Property<int> leftMargin{this,"leftMargin"};
+		Property<int> rightMargin{this,"rightMargin"};
+		Property<int> topMargin{this,"topMargin"};
+		Property<int> bottomMargin{this,"bottomMargin"};
 
-		int leftMargin() const;
-		int rightMargin() const;
-		int topMargin() const;
-		int bottomMargin() const;
-
-		void setMargins(int marginSize);
-		void setMargins(int left, int right, int top, int bottom);
 };
-
-inline int LayoutStyle::leftMargin() const { return leftMargin_; }
-inline int LayoutStyle::rightMargin() const { return rightMargin_; }
-inline int LayoutStyle::topMargin() const { return topMargin_; }
-inline int LayoutStyle::bottomMargin() const {return bottomMargin_; }
 
 }

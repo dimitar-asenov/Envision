@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -39,6 +39,8 @@ ExpressionTreeBuilder::ExpressionTreeBuilder() : top_(nullptr), left_(nullptr)
 
 Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*> instructions)
 {
+	Q_ASSERT(!instructions.isEmpty());
+
 	// Concatenate errors in a single node
 	for (int i = instructions.size() - 1; i > 0; --i)
 	{
@@ -48,6 +50,7 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 		if (instr && prev)
 		{
 			prev->setText(prev->text() + instr->text() );
+			SAFE_DELETE(instructions[i]);
 			instructions.remove(i);
 
 			// The corresponding FinishOperator also needs to be removed
@@ -58,6 +61,7 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 				{
 					if (num_intermediate_ops == 0)
 					{
+						SAFE_DELETE(instructions[x]);
 						instructions.remove(x);
 						break;
 					}
@@ -72,7 +76,10 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 
 	// Build the tree
 	for (ExpressionTreeBuildInstruction* i : instructions)
+	{
 		i->perform(*this);
+		SAFE_DELETE(i);
+	}
 
 	return top_;
 }

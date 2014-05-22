@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -39,6 +39,7 @@
 #include "ModelBase/src/model/Model.h"
 
 #include "Logger/src/Timer.h"
+#include "Core/src/Profiler.h"
 
 namespace Visualization {
 
@@ -66,10 +67,11 @@ Scene::~Scene()
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
-	for (Item* i : topLevelItems_) SAFE_DELETE_ITEM(i);
-	topLevelItems_.clear();
-	for (SelectedItem* si : selections_) SAFE_DELETE_ITEM(si);
-	selections_.clear();
+	while(!topLevelItems_.isEmpty())
+		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
+	while(!selections_.isEmpty())
+		SAFE_DELETE_ITEM(selections_.takeLast());
+
 	SAFE_DELETE_ITEM(nameOverlay_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
@@ -84,6 +86,7 @@ ModelRenderer* Scene::defaultRenderer()
 
 void Scene::addTopLevelItem(Item* item)
 {
+	Q_ASSERT(!inAnUpdate_);
 	topLevelItems_.append(item);
 	addItem(item);
 	scheduleUpdate();
@@ -91,7 +94,9 @@ void Scene::addTopLevelItem(Item* item)
 
 void Scene::removeTopLevelItem(Item* item)
 {
-	topLevelItems_.removeAll(item);
+	auto removed = topLevelItems_.removeAll(item);
+	Q_ASSERT(!inAnUpdate_ || removed == 0);
+
 	removeItem(item);
 	scheduleUpdate();
 }
@@ -110,9 +115,30 @@ void Scene::updateItems()
 	inAnUpdate_ = true;
 	auto updateTimer = Logger::Timer::start("Scene update");
 
+	// Profiler code
+	static bool alreadyProfiled = false;
+	if (!alreadyProfiled)
+		for (auto item : topLevelItems_)
+			if(item->typeName() == "RootItem")
+			{
+				alreadyProfiled = true;
+				Core::Profiler::startOnce(true, "Initial item update", "updateItems.prof");
+				break;
+			}
+
 	// Update Top level items
-	for (int i = 0; i<topLevelItems_.size(); ++i)
-		topLevelItems_.at(i)->updateSubtree();
+	for (auto item : topLevelItems_)
+		item->updateSubtree();
+
+	// Update items on zoom
+	if (mainViewScalingFactorChanged_)
+	{
+		mainViewScalingFactorChanged_ = false;
+		for (auto item : itemsToUpdateGeometryWhenZoomChanges_)
+				item->changeGeometry();
+	}
+
+	Core::Profiler::stop("Initial item update");
 
 	// Update Selections
 	auto selected = selectedItems();
@@ -235,8 +261,8 @@ bool Scene::event(QEvent *event)
 			tInputEvent = Logger::Timer::start("Input event");
 
 		// Always move the scene handler item to the location of the last mouse click.
-		// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
-		// be selected.
+		// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler
+		// item will be selected.
 		if (event->type() == QEvent::GraphicsSceneMousePress)
 		{
 			auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
@@ -273,7 +299,7 @@ bool Scene::event(QEvent *event)
 				{
 					mainCursorsJustSet_ = false;
 					auto vis = mainCursor_->visualization();
-					view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+					view->ensureVisible( vis->sceneBoundingRect(), 5, 5);
 				}
 		}
 	}
@@ -338,7 +364,7 @@ void Scene::computeSceneRect()
 	QRectF viewRect;
 	for (auto i: topLevelItems_)
 	{
-		QRectF br = i->boundingRect().translated(i->pos());
+		QRectF br = i->sceneBoundingRect();
 		sceneRect = sceneRect.united(br);
 		if (i->itemCategory() != MenuItemCategory && i->itemCategory() != CursorItemCategory)
 			viewRect = viewRect.united(br);
@@ -387,6 +413,36 @@ void Scene::computeSceneRect()
 	setSceneRect(sceneRect);
 	for(auto v: views()) v->setSceneRect(viewRect);
 }
+
+void Scene::setUpdateItemGeometryWhenZoomChanges(Item* item, bool update)
+{
+	Q_ASSERT(item);
+	if (update) itemsToUpdateGeometryWhenZoomChanges_.insert(item);
+	else
+	{
+		itemsToUpdateGeometryWhenZoomChanges_.remove(item);
+
+		auto it = itemsToUpdateGeometryWhenZoomChanges_.begin();
+		while (it != itemsToUpdateGeometryWhenZoomChanges_.end())
+		{
+			if (item->isAncestorOf(*it))
+				it = itemsToUpdateGeometryWhenZoomChanges_.erase(it);
+			else ++it;
+		}
+	}
+}
+
+void Scene::setMainViewScalingFactor(qreal factor)
+{
+	if (factor != mainViewScalingFactor_)
+	{
+		previousMainViewScalingFactor_ = mainViewScalingFactor_;
+		mainViewScalingFactor_ = factor;
+		mainViewScalingFactorChanged_ = true;
+		scheduleUpdate();
+	}
+}
+
 
 // Reimplemented in order to detect mouse clicks
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)

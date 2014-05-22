@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -63,7 +63,7 @@ public class NodeDescriptors {
 		
 		// Declarations
 		add( new NodeInitializer("Declaration", new String[][] {
-				{"Text","name"},
+				{"NameText","name"},
 				{"Modifier","modifiers"},
 				{"StatementItemList","annotations"},
 				{"TypedListOfDeclaration","subDeclarations"}
@@ -109,20 +109,20 @@ public class NodeDescriptors {
 		
 		// Elements
 		add( new NodeInitializer("FormalTypeArgument", new String[][]{
-				{"Text","name"}
+				{"NameText","name"}
 		}));
 		add( new NodeInitializer("FormalArgument", new String[][]{
-				{"Text","name"},
+				{"NameText","name"},
 				{"Expression","typeExpression"},
 				{"Integer","directionInt"}
 		}));
 		add( new NodeInitializer("FormalResult", new String[][]{
-				{"Text","name"},
+				{"NameText","name"},
 				{"Expression","typeExpression"}
 		}));
 		add( new NodeInitializer("Modifier", "Integer", null));
 		add( new NodeInitializer("Enumerator", new String[][]{
-				{"Text","name"}
+				{"NameText","name"}
 		}));
 		
 		// Statements
@@ -137,7 +137,7 @@ public class NodeDescriptors {
 				{"Integer","lpKind"}
 		}));
 		add( new NodeInitializer("ForEachStatement", new String[][]{
-				{"Text","varName"},
+				{"NameText","varName"},
 				{"Expression","collection"},
 				{"StatementItemList","body"}
 		}));
@@ -250,6 +250,7 @@ public class NodeDescriptors {
 		add( new NodeInitializer("Integer", 0));
 		add( new NodeInitializer("Float", 0.0));
 		add( new NodeInitializer("Text", ""));
+		add( new NodeInitializer("NameText", ""));
 		
 		// Misc
 		add( new NodeInitializer("UsedLibrary", new String[][]{

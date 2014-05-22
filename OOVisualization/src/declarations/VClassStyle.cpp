@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,37 +28,6 @@
 
 namespace OOVisualization {
 
-void VClassStyle::load(Visualization::StyleLoader& sl)
-{
-	DeclarativeItemBaseStyle::load(sl);
-
-	sl.load("nameDefault", nameDefault_);
-	sl.load("namePublic", namePublic_);
-	sl.load("namePrivate", namePrivate_);
-	sl.load("nameProtected", nameProtected_);
-
-	sl.load("classIcon", classIcon_);
-	sl.load("interfaceIcon", interfaceIcon_);
-	sl.load("structIcon", structIcon_);
-	sl.load("unionIcon", unionIcon_);
-	sl.load("enumIcon", enumIcon_);
-	sl.load("annotationIcon", annotationIcon_);
-
-	sl.load("header", header_);
-	sl.load("typeArguments", typeArguments_);
-	sl.load("baseClasses", baseClasses_);
-	sl.load("annotations", annotations_);
-	sl.load("enumerators", enumerators_);
-	sl.load("friendsSymbol", friendsSymbol_);
-	sl.load("friends", friends_);
-	sl.load("declarations", declarations_);
-	sl.load("body", body_);
-	sl.load("content", content_);
-	sl.load("fieldContainer", fieldContainer_);
-	sl.load("publicFieldArea", publicFieldArea_);
-	sl.load("privateFieldArea", privateFieldArea_);
-	sl.load("protectedFieldArea", protectedFieldArea_);
-	sl.load("defaultFieldArea", defaultFieldArea_);
-}
+VClassStyle::~VClassStyle(){}
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -55,9 +55,9 @@ Project::SymbolTypes Project::symbolType() const
 }
 
 
-QList<Model::UsedLibrary*> Project::usedLibraries()
+QList<const Model::UsedLibrary*> Project::usedLibraries() const
 {
-	QList<Model::UsedLibrary*> all;
+	QList<const Model::UsedLibrary*> all;
 	for(auto l : *libraries()) all.append(l);
 	for(auto p : *projects()) all << p->usedLibraries();
 	for(auto m : *modules()) all << m->usedLibraries();

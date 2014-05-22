@@ -8,7 +8,8 @@ win32:LIBS += -llogger \
 LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/items/VUsedLibraryStyle.h \
+HEADERS += src/items/EmptyItem.h \
+    src/items/VUsedLibraryStyle.h \
     src/items/VUsedLibrary.h \
     src/styles/StyleProperty.h \
     src/items/NameOverlay.h \
@@ -87,10 +88,6 @@ HEADERS += src/items/VUsedLibraryStyle.h \
     src/layouts/GridLayoutStyle.h \
     src/layouts/Layout.h \
     src/layouts/LayoutStyle.h \
-    src/layouts/PanelBorderLayout.h \
-    src/layouts/PanelBorderLayoutStyle.h \
-    src/layouts/PanelLayout.h \
-    src/layouts/PanelLayoutStyle.h \
     src/layouts/PositionLayout.h \
     src/layouts/PositionLayoutStyle.h \
     src/layouts/SequentialLayout.h \
@@ -115,8 +112,12 @@ HEADERS += src/items/VUsedLibraryStyle.h \
     src/views/View.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
-    src/visualizationbase.h
-SOURCES += src/items/VUsedLibraryStyle.cpp \
+    src/visualizationbase.h \
+    src/renderer/VisualizationGroupsManager.h \
+    src/renderer/SzLevelOrderingManager.h \
+    src/layouts/ArrangementAlgorithmItem.h
+SOURCES += src/items/EmptyItem.cpp \
+    src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
     src/items/NameOverlay.cpp \
     test/DeclarativeTestStyle.cpp \
@@ -189,10 +190,6 @@ SOURCES += src/items/VUsedLibraryStyle.cpp \
     src/items/Item.cpp \
     src/items/ItemStyle.cpp \
     src/layouts/LayoutStyle.cpp \
-    src/layouts/PanelBorderLayoutStyle.cpp \
-    src/layouts/PanelBorderLayout.cpp \
-    src/layouts/PanelLayoutStyle.cpp \
-    src/layouts/PanelLayout.cpp \
     src/items/VText.cpp \
     src/items/TextStyle.cpp \
     src/items/Text.cpp \
@@ -208,4 +205,7 @@ SOURCES += src/items/VUsedLibraryStyle.cpp \
     src/VisualizationManager.cpp \
     src/visualizationbase.cpp \
     src/VisualizationException.cpp \
-    src/Scene.cpp
+    src/Scene.cpp \
+    src/renderer/VisualizationGroupsManager.cpp \
+    src/renderer/SzLevelOrderingManager.cpp \
+    src/layouts/ArrangementAlgorithmItem.cpp

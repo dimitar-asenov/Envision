@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -91,8 +91,7 @@ QString TestBox::currentText()
 
 bool TestBox::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
-	if (dir == MoveDefault)
-		return TextRenderer::moveCursor(MoveLeftOf, QPoint(xEnd()+1,0));
+	if (dir == MoveDefault) return TextRenderer::moveCursor(MoveOnRight);
 	else return TextRenderer::moveCursor(dir, reference);
 }
 
@@ -106,10 +105,11 @@ void TestBox::updateGeometry(int availableWidth, int availableHeight)
 	setTextFormat(((node_ && node_->isHtml()) || isHtml_ ) ? Qt::RichText : Qt::PlainText);
 
 	TextRenderer::updateGeometry(availableWidth, availableHeight);
-	if (sizeDependsOnParent() && (availableWidth > width() || availableHeight > height()))
+
+	if (sizeDependsOnParent() && (availableWidth > widthInLocal() || availableHeight > heightInLocal()))
 	{
-		int w = availableWidth > width() ? availableWidth : width();
-		int h = availableHeight > height() ? availableHeight : height();
+		int w = availableWidth > widthInLocal() ? availableWidth : widthInLocal();
+		int h = availableHeight > heightInLocal() ? availableHeight : heightInLocal();
 		setSize(w,h);
 	}
 
@@ -119,7 +119,7 @@ void TestBox::updateGeometry(int availableWidth, int availableHeight)
 
 void TestBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	painter->fillRect(0,0,width(), height(), color_);
+	painter->fillRect(0, 0, widthInLocal(), heightInLocal(), color_);
 	TextRenderer::paint(painter, option, widget);
 }
 

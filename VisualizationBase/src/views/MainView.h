@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -76,6 +76,7 @@ class VISUALIZATIONBASE_API MainView: public View
 		QPoint panStartPos_{};
 
 		void updateInfoLabels();
+		bool setCursorAndOwnerIgnoreScaleForScreenShot(bool ignore, bool modifyOwner);
 };
 
 }

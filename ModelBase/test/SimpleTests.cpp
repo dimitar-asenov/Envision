@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -29,7 +29,7 @@
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
 #include "model/Model.h"
-#include "nodes/Text.h"
+#include "nodes/NameText.h"
 #include "nodes/Integer.h"
 #include "nodes/Reference.h"
 
@@ -53,7 +53,7 @@ TEST(ModelBase, CompositeMetaData)
 	CHECK_STR_EQUAL("_ext_PositionExtension_x", metaExt[3].name());
 	CHECK_STR_EQUAL("_ext_PositionExtension_y", metaExt[4].name());
 
-	CHECK_STR_EQUAL("Text", metaExt[0].type());
+	CHECK_STR_EQUAL("NameText", metaExt[0].type());
 	CHECK_STR_EQUAL("BinaryNode", metaExt[1].type());
 	CHECK_STR_EQUAL("BinaryNode", metaExt[2].type());
 	CHECK_STR_EQUAL("Integer", metaExt[3].type());
@@ -152,14 +152,6 @@ TEST(ModelBase, ProperRegistration)
 	CHECK_CONDITION(i->typeId() >= 0);
 	CHECK_CONDITION(i->typeId() != root->typeId());
 	CHECK_CONDITION(i->typeId() != t->typeId());
-
-	Model model4;
-	auto r = new Reference();
-	model4.setRoot(r);
-	CHECK_CONDITION(r->typeId() >= 0);
-	CHECK_CONDITION(r->typeId() != root->typeId());
-	CHECK_CONDITION(r->typeId() != t->typeId());
-	CHECK_CONDITION(r->typeId() != i->typeId());
 }
 
 }

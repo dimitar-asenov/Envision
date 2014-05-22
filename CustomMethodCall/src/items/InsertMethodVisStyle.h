@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,26 +34,15 @@
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Visualization::ItemStyle
+class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Super<Visualization::ItemStyle>
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::StaticStyle icon_;
-		Visualization::StaticStyle separator_;
-		Visualization::VListStyle arguments_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~InsertMethodVisStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::StaticStyle& separator() const;
-		const Visualization::VListStyle& arguments() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
+		Property<Visualization::StaticStyle> icon{this,"icon"};
+		Property<Visualization::StaticStyle> separator{this,"separator"};
+		Property<Visualization::VListStyle> arguments{this,"arguments"};
 };
-
-inline const Visualization::SequentialLayoutStyle& InsertMethodVisStyle::layout() const { return layout_; }
-inline const Visualization::StaticStyle& InsertMethodVisStyle::icon() const { return icon_; }
-inline const Visualization::StaticStyle& InsertMethodVisStyle::separator() const { return separator_; }
-inline const Visualization::VListStyle& InsertMethodVisStyle::arguments() const { return arguments_; }
 
 }

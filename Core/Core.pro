@@ -6,7 +6,8 @@ INSTALLS += target
 DEFINES += CORE_LIBRARY
 CONFIG += plugin
 QT += xml
-HEADERS += src/reflect/typeIdMacros.h \
+HEADERS += src/Profiler.h \
+    src/reflect/typeIdMacros.h \
     src/reflect/Reflect.h \
     src/AdapterManager.h \
     src/InitializationRegistry.h \
@@ -23,7 +24,8 @@ HEADERS += src/reflect/typeIdMacros.h \
     src/TestRunner.h \
     src/PluginManager.h \
     src/EnvisionWindow.h
-SOURCES += src/AdapterManager.cpp \
+SOURCES += src/Profiler.cpp \
+    src/AdapterManager.cpp \
     src/InitializationRegistry.cpp \
     src/EnvisionException.cpp \
     src/EnvisionManager.cpp \

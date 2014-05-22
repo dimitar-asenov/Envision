@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -78,9 +78,27 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual Item* focusedChild() const;
 
 		virtual QRectF boundingRect() const;
-		int width() const;
-		int height() const;
-		QSizeF size() const;
+
+		int widthInLocal() const;
+		int heightInLocal() const;
+		QSizeF sizeInLocal() const;
+
+		int widthInParent() const;
+		int heightInParent() const;
+		QSizeF sizeInParent() const;
+
+		int widthInScene() const;
+		int heightInScene() const;
+		QSizeF sizeInScene() const;
+
+		qreal xEndInParent() const;
+		qreal yEndInParent() const;
+
+		int fromParent(int x) const;
+		int fromScene(int x) const;
+
+		qreal totalScale() const;
+
 		virtual bool sizeDependsOnParent() const;
 
 		enum UpdateType {
@@ -114,6 +132,16 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		virtual UpdateType needsUpdate();
 		virtual void updateSubtree();
+
+		/**
+		 * Requests that the item updates the position of its children and its size.
+		 *
+		 * If any of \a availableWidth or \a availableHeight are different from 0, the item is allowed to stretch to fill
+		 * any available space as indicated. Both arguments are in the parent coordinate system and will be transformed
+		 * using the item's transformations before they are used.
+		 *
+		 * This method adjusts the passed arguments and calls updateGeometry() to do the actual rearranging.
+		 */
 		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0);
 
 		virtual bool isEmpty() const;
@@ -130,7 +158,16 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			MoveDown, /**< Move the cursor down from its current position within the item. */
 			MoveLeft, /**< Move the cursor left from its current position within the item. */
 			MoveRight, /**< Move the cursor right from its current position within the item. */
+
 			MoveOnPosition, /**< Move the cursor as close as possible to the specified reference point within the item. */
+			MoveOnTop, /**< Move the cursor to the top of the item*/
+			MoveOnLeft, /**< Move the cursor to the left of the item*/
+			MoveOnBottom, /**< Move the cursor to the bottom of the item*/
+			MoveOnRight, /**< Move the cursor to the right of the item*/
+			MoveOnTopLeft, /**< Move the cursor to the top-left corner of the item*/
+			MoveOnBottomRight, /**< Move the cursor to the bottom-right corner of the item*/
+			MoveOnCenter, /**< Move the cursor to the center of the item*/
+
 			MoveUpOf, /**< Move the cursor as close as possible above the specified reference point. */
 			MoveDownOf, /**< Move the cursor as close as possible below the specified reference point. */
 			MoveLeftOf, /**< Move the cursor as close as possible to left of the specified reference point. */
@@ -160,6 +197,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint());
 		void setDefaultMoveCursorProxy(Item* proxy);
 
+		/**
+		 * Returns a list of regions that determine where there are curosrs and where there are child items in this item.
+		 *
+		 * All region coordinates are in item local coordinates.
+		 */
 		virtual QList<ItemRegion> regions();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -217,9 +259,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		PositionConstraints satisfiedPositionConstraints(const QPoint& point) const;
 
-		qreal xEnd() const;
-		qreal yEnd() const;
-
 		/**
 		 * \brief Returns the child item that is visualizing \a node or nullptr if no such child exists.
 		 *
@@ -242,6 +281,24 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void setChildNodePurpose(const Model::Node* node, int purpose);
 		void clearChildNodePurpose(const Model::Node* node);
 		bool definesChildNodePurpose(const Model::Node* node) const;
+
+		/**
+		 * Returns what semantic zoom level should the children of this item be chosen for when deciding what
+		 * visualizations to use.
+		 *
+		 * If the item's own semantic zoom level has been set, it's value will be returned. Otherwise the value of the
+		 * item's parent will be returned. If the item has no parent the return value is an unspecified semantic zoom
+		 * level (-1).
+		 */
+		int semanticZoomLevel() const;
+
+		void setSemanticZoomLevel(int semanticZoomLevel);
+		void clearSemanticZoomLevel();
+
+		int childNodeSemanticZoomLevel(const Model::Node* node) const;
+		void setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel);
+		void clearChildNodeSemanticZoomLevel(const Model::Node* node);
+		bool definesChildNodeSemanticZoomLevel(const Model::Node* node) const;
 
 		/**
 		 * Registers a class derived from Item and returns the typeId for that class.
@@ -295,6 +352,36 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual QList<Item*> childItems() const;
 
+		/**
+		 * Returns the scaling factor applied by the main view associated of this item's scene
+		 */
+		qreal mainViewScalingFactor() const;
+
+		/**
+		 * Returns the scaling factor used before the active one
+		 */
+		qreal previousMainViewScalingFactor() const;
+
+		/**
+		 * This method returns true if the item's geometry should be updated when the main view's zoom level changes.
+		 *
+		 * It is assumed that this method will always return the same value for the entire lifetime of a single item.
+		 */
+		virtual bool itemGeometryChangesWithZoom() const;
+
+		/**
+		 * Sets the item's scale if it is a direct child of a PositionLayout. Then propagates the information
+		 *	down to the child items recursively.
+		 *
+		 * This method is used to ensure that changes to parent item's always reach child items in order to prevent them
+		 * from overscaling (geometric zoom scale * totalScale() > 1).
+		 * \a parentScale is a parameter for optimization purposes only.
+		 *
+		 * This method could become possibly obsolete once PositionLayouts get updated in the right order (top-down the
+		 * program structure) after a geometric scale change.
+		 */
+		void setItemScale(qreal newScale, qreal parentScale);
+
 	protected:
 
 		void setWidth(int width);
@@ -303,7 +390,23 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void setSize(const QSizeF& size);
 
 		virtual void determineChildren() = 0;
+
+		/**
+		 * This method sets the position of child elements, stretching them if needed, and determines the final size
+		 * of the item.
+		 *
+		 * If any of \a availableWidth or \a availableHeight is different than 0, the item is allowed to stretch in
+		 * the specified dimension until it fills all the available space. Both parameters are in item local coordinates.
+		 *
+		 * Reimplemnet in derived classes to define the behavior.
+		 */
 		virtual void updateGeometry(int availableWidth, int availableHeight) = 0;
+
+		/**
+		 * This is a helper method that classes can use when reimplementing updateGeometry().
+		 *
+		 * It does the appropriate update, if the current item is a thin wrapper around \a content.
+		 */
 		void updateGeometry(Item* content, int availableWidth, int availableHeight);
 
 		void synchronizeItem(Item*& item, Model::Node* node);
@@ -366,6 +469,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		int purpose_;
 		QMap<const Model::Node*, int> childNodePurpose_;
 
+		int semanticZoomLevel_;
+		QMap<const Model::Node*, int> childNodeSemanticZoomLevel_;
+
 		Scene::ItemCategory itemCategory_;
 
 		void updateAddOnItems();
@@ -413,14 +519,39 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
 
 inline Item* Item::parent() const {return static_cast<Item*>(parentItem()); }
-inline int Item::width() const { return boundingRect_.width(); }
-inline int Item::height() const { return boundingRect_.height(); }
-inline QSizeF Item::size() const { return boundingRect_.size();}
+
+inline int Item::widthInLocal() const { return boundingRect_.width(); }
+inline int Item::heightInLocal() const { return boundingRect_.height(); }
+inline QSizeF Item::sizeInLocal() const { return boundingRect_.size();}
+
+// TODO: Support other transformations if necessary
+inline int Item::widthInParent() const
+{auto s = scale(); return s == 1.0 ? widthInLocal() : std::ceil(widthInLocal()*s);}
+inline int Item::heightInParent() const
+{auto s = scale(); return s == 1.0 ? heightInLocal() : std::ceil(heightInLocal()*s);}
+inline QSizeF Item::sizeInParent() const
+{auto s = scale(); return s == 1.0 ? sizeInLocal() : sizeInLocal()*s;}
+
+// TODO: Support other transformations if necessary
+inline int Item::widthInScene() const
+{auto s = totalScale(); return s == 1.0 ? widthInLocal() : std::ceil(widthInLocal()*s);}
+inline int Item::heightInScene() const
+{auto s = totalScale(); return s == 1.0 ? heightInLocal() : std::ceil(heightInLocal()*s);}
+inline QSizeF Item::sizeInScene() const
+{auto s = totalScale(); return s == 1.0 ? sizeInLocal() : sizeInLocal()*s;}
+
+// TODO: Support other transformations if necessary
+inline int Item::fromParent(int x) const
+{auto s = scale(); return s == 1.0 ? x : std::ceil(x/s);}
+inline int Item::fromScene(int x) const
+{auto s = totalScale(); return s == 1.0 ? x : std::ceil(x/s);}
+
+inline qreal Item::xEndInParent() const { return x() + widthInParent() - 1; }
+inline qreal Item::yEndInParent() const { return y() + heightInParent() - 1; }
+
 inline const ItemStyle* Item::style() const { return style_; }
 inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
-inline qreal Item::xEnd() const { return x() + width() - 1; }
-inline qreal Item::yEnd() const { return y() + height() - 1; }
 inline void Item::setDefaultMoveCursorProxy(Item* proxy) {defaultMoveCursorProxy_ = proxy;}
 
 inline Scene* Item::scene() const { return static_cast<Visualization::Scene*> (QGraphicsItem::scene()); }

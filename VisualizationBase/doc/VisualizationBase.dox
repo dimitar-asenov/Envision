@@ -136,9 +136,9 @@ in the item's style.
 VBoolean, VCharacter, VInteger, VFloat, VText, VReference, VList, VComposite - As a convention item names of the
 form \e Vnode are used when they visualize the correspondingly named node. Thus these items are used to show the
 similarly named nodes defined in ModelBase. Most of these items are thin wrappers around TextRenderer. VList uses
-a SequentialLayout and shows the contents of a List object. VComposite is based on a PanelBorderLayout layout
-and serves as a generic visualization for any class deriving from CompositeNode. It lists all the attributes
-of such an item as a pair of attribute name and attribute visualization per row.
+a SequentialLayout and shows the contents of a List object. VComposite serves as a generic visualization for any
+class deriving from CompositeNode. It lists all the attributes of such an item as a pair of attribute name and
+attribute visualization per row.
 
 The figure below is a screen shot from Envision showing how some of the predefined items are visualized.
 
@@ -175,29 +175,6 @@ style settings.
 
 This layout is useful for arranging objects which logically belong to an ordered sequence, such as the statements
 of a method.
-
-PanelLayout - This layout visualizes a linear sequence of up to three items called \e first , \e middle and \e last.
-The layout will stretch along the sequence direction in order to fill any space that the parent reports as available.
-The \e first item will be placed in the beginning of the space available to the layout, the \e middle one at the
-center and the \e last item will be located at the end. The figure below illustrates this concept with a few examples.
-
-\image html "panel_layout.png" "A panel layout. Available space reported by the parent is indicated in green. If the parent reports more available space than required, the layout will stretch to fill this space."
-
-This layout is useful for headers of objects. For example an icon can be placed on the left, while the object title
-appears in the middle.
-
-PanelBorderLayout - This is a complex layout that consists of one item in the middle, surrounded by four instances of
-PanelLayout that serve as a border. The objects on the border are optional. The figure below depicts the look of this
-layout.
-
-\image html "panel_border_layout.png" "A panel border layout. The background shape is shown in green."
-
-PanelBorderLayout can also override the default drawing of its background shape, if any. In this case the shape is not
-drawn to encompass all objects in the layout, but rather goes through the middle of the panel layouts on the border.
-
-This layout is useful for displaying objects which represent higher level composite entities. For example classes or
-methods visualized in such a way can include an icon and a name in the top bar while having their content displayed in
-the middle. Additional indicators can be placed on the side bars.
 
 GridLayout - Items in this layout are arranged in a grid as demonstrated on the figure below. It is possible to adjust
 the horizontal and vertical alignment of items as well as the space between them. For maximum convenience it is possible

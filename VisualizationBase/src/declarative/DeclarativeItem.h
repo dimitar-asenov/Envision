@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -96,6 +96,10 @@ class DeclarativeItem : public DeclarativeItemBase
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
+		template <class ChildItemVisualizationType, class ParentStyleType>
+			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+			item(ChildItemVisualizationType* VisualizationType::* item,
+					 Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
 
 		/**
 		 * A factory method to get an item wrapper element with a node and a visualization, it takes a pointer to member,
@@ -108,6 +112,16 @@ class DeclarativeItem : public DeclarativeItemBase
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);
+		template <class ChildItemVisualizationType, class ParentStyleType>
+			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+			item(ChildItemVisualizationType* VisualizationType::* item,
+					std::function<typename ChildItemVisualizationType::NodeType* (VisualizationType* v)> nodeGetter,
+					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
+		template <class ChildItemVisualizationType, class ParentStyleType, class ParentNodeType, class ParentNodeSubType>
+			static NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+			item(ChildItemVisualizationType* VisualizationType::* item,
+					ParentNodeSubType* (ParentNodeType::*nodePointer)(),
+					Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer);
 };
 
 }

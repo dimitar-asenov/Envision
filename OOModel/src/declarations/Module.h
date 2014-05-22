@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -29,14 +29,7 @@
 #include "../oomodel_api.h"
 
 #include "Class.h"
-#include "Method.h"
-#include "Field.h"
-
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Module)
 
@@ -56,7 +49,7 @@ class OOMODEL_API Module : public Super<Declaration>
 		Module(const QString& name);
 
 		virtual SymbolTypes symbolType() const override;
-		virtual QList<Model::UsedLibrary*> usedLibraries() override;
+		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
 };
 
 }

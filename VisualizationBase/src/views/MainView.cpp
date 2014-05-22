@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -27,6 +27,10 @@
 #include "views/MainView.h"
 #include "Scene.h"
 #include "Logger/src/Timer.h"
+#include "cursor/Cursor.h"
+#include "items/Item.h"
+
+#include <items/RootItem.h>
 
 namespace Visualization {
 
@@ -111,6 +115,8 @@ void MainView::wheelEvent(QWheelEvent *event)
 		setTransform(QTransform::fromScale(factor, factor));
 
 		if ( miniMap ) miniMap->visibleRectChanged();
+
+		scene()->setMainViewScalingFactor(factor);
 	}
 	// Scroll
 	else if (event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)
@@ -120,13 +126,15 @@ void MainView::wheelEvent(QWheelEvent *event)
 
 		bar->setValue( bar->value() - event->delta() );
 	}
+	else
+		View::wheelEvent(event);
 }
 
 qreal MainView::scaleFactor() const
 {
 	if (scaleLevel < SCALING_FACTOR)
 		return SCALING_FACTOR / (qreal) scaleLevel;
-	else return std::pow(2, SCALING_FACTOR - scaleLevel);
+	else return std::pow(1.1, SCALING_FACTOR - scaleLevel);
 }
 
 void MainView::scrollContentsBy(int dx, int dy)
@@ -141,6 +149,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			&& event->key() == Qt::Key_Print)
 	{
 		event->accept();
+		scene()->setHiddenItemCategories(0);
 
 		QPrinter printer;
 		printer.setOutputFormat(QPrinter::PdfFormat);
@@ -150,7 +159,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 		QSvgGenerator svggen;
 		svggen.setResolution(90);
 
-
+		bool ownerIgnoresScale = setCursorAndOwnerIgnoreScaleForScreenShot(false, false);
 
 		if (event->modifiers() & Qt::ShiftModifier)
 		{
@@ -197,6 +206,8 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			render(&pmapPainter);
 			image.save("screenshot-view.png");
 		}
+
+		setCursorAndOwnerIgnoreScaleForScreenShot(true, ownerIgnoresScale);
 	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F11)
 	{
@@ -306,7 +317,7 @@ void MainView::mousePressEvent(QMouseEvent *event)
 	event->accept();
 	isPanning_ = true;
 	panStartPos_ = event->pos();
-   setCursor(Qt::ClosedHandCursor);
+	setCursor(Qt::ClosedHandCursor);
 }
 
 void MainView::mouseReleaseEvent(QMouseEvent *event)
@@ -316,6 +327,30 @@ void MainView::mouseReleaseEvent(QMouseEvent *event)
 	event->accept();
 	setCursor(Qt::ArrowCursor);
 	isPanning_ = false;
+}
+
+bool MainView::setCursorAndOwnerIgnoreScaleForScreenShot(bool ignore, bool modifyOwner)
+{
+	bool ownerIgnoresScale = false;
+
+	auto cursor = scene()->mainCursor();
+	if (cursor)
+	{
+		if ( auto vis = cursor->visualization() ) vis->setFlag(Item::ItemIgnoresTransformations, ignore);
+		auto owner = cursor->owner();
+		if (owner)
+		{
+			while (owner->parent()) owner = owner->parent();
+			if (!ignore)
+			{
+				ownerIgnoresScale = owner->flags() & Item::ItemIgnoresTransformations;
+				if (ownerIgnoresScale) owner->setFlag(Item::ItemIgnoresTransformations, false);
+			}
+			else if (modifyOwner) owner->setFlag(Item::ItemIgnoresTransformations, true);
+		}
+	}
+
+	return ownerIgnoresScale;
 }
 
 }

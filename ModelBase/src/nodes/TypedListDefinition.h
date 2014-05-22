@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -63,15 +63,15 @@ Super(parent, store, loadPartially)
 {
 }
 
-template<class T> T* TypedList<T>::first()
+template<class T> T* TypedList<T>::first() const
 {
 	return List::first<T>();
 }
-template<class T> T* TypedList<T>::last()
+template<class T> T* TypedList<T>::last() const
 {
 	return List::last<T>();
 }
-template<class T> T* TypedList<T>::at(int i)
+template<class T> T* TypedList<T>::at(int i) const
 {
 	return List::at<T>(i);
 }

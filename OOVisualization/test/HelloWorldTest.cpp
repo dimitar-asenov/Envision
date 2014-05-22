@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -720,6 +720,19 @@ Method* addLongMethod(Class* parent)
 	assignEach->setLeft(new ReferenceExpression("var1"));
 	assignEach->setOp(AssignmentExpression::DIVIDE_ASSIGN);
 	assignEach->setRight(new ReferenceExpression("elem"));
+
+	auto trycatch = new TryCatchFinallyStatement();
+	trycatch->tryBody()->append(new ExpressionStatement(new ReferenceExpression("var1")));
+	auto catch1 = new CatchClause();
+	trycatch->catchClauses()->append(catch1);
+	catch1->setExceptionToCatch(new ReferenceExpression("someExpDecl"));
+	catch1->body()->append(new ExpressionStatement(new ReferenceExpression("var2")));
+	auto catch2 = new CatchClause();
+	trycatch->catchClauses()->append(catch2);
+	catch2->setExceptionToCatch(new ReferenceExpression("someOtherExpDecl"));
+	catch2->body()->append(new ExpressionStatement(new ReferenceExpression("var3")));
+	trycatch->finallyBody()->append(new ExpressionStatement(new ReferenceExpression("var4")));
+	longMethod->items()->append(trycatch);
 
 	ReturnStatement* longMethodReturn = new ReturnStatement();
 	longMethod->items()->append(longMethodReturn);

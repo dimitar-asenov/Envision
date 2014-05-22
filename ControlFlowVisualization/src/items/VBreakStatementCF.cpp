@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -58,20 +58,20 @@ void VBreakStatementCF::updateGeometry(int, int)
 	breaks_.clear();
 
 	vis_->setPos(style()->pinLength(), style()->pinLength());
-	setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
+	setSize(vis_->widthInParent() + 2*style()->pinLength(), vis_->heightInParent() + 2*style()->pinLength());
 
 	if (preferredBreakExit_ == ControlFlowItem::EXIT_LEFT)
 	{
-		breaks_.append( QPoint(0, height()/2));
+		breaks_.append( QPoint(0, heightInLocal()/2));
 		addConnector(breaks_.first() + QPoint(style()->pinLength(),0), breaks_.first(), false);
 	}
 	else
 	{
-		breaks_.append( QPoint(width(), height()/2));
+		breaks_.append( QPoint(widthInLocal(), heightInLocal()/2));
 		addConnector(breaks_.first()- QPoint(style()->pinLength(),0), breaks_.first(), false);
 	}
 
-	entrance_ = QPoint(width()/2, 0);
+	entrance_ = QPoint(widthInLocal()/2, 0);
 	exit_ = QPoint(0,0);
 	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
 }

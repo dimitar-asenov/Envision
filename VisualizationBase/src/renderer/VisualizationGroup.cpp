@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -39,11 +39,7 @@ VisualizationGroup::VisualizationGroup(ConditionFunction condition, int scorePoi
 
 VisualizationGroup::~VisualizationGroup()
 {
-	for(auto g : subGroups_)
-		SAFE_DELETE(g);
-
-	subGroups_.clear();
-	visualizations_.clear();
+	clear();
 }
 
 bool VisualizationGroup::matchesContext(Item* item, Model::Node* node)

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,26 +32,15 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API AutoCompleteVisStyle : public Visualization::ItemStyle
+class INTERACTIONBASE_API AutoCompleteVisStyle : public Super<Visualization::ItemStyle>
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::StaticStyle noProposals_;
-		int heightLimit_;
-		int distanceToCursor_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~AutoCompleteVisStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::StaticStyle&  noProposals() const;
-		int heightLimit() const;
-		int distanceToCursor() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
+		Property<Visualization::StaticStyle> noProposals{this,"noProposals"};
+		Property<int> heightLimit{this,"heightLimit"};
+		Property<int> distanceToCursor{this,"distanceToCursor"};
 };
-
-inline const Visualization::SequentialLayoutStyle& AutoCompleteVisStyle::layout() const {return layout_; }
-inline const Visualization::StaticStyle& AutoCompleteVisStyle::noProposals() const {return noProposals_; }
-inline int AutoCompleteVisStyle::heightLimit() const {return heightLimit_; }
-inline int AutoCompleteVisStyle::distanceToCursor() const {return distanceToCursor_; }
 
 } /* namespace Interaction */

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,6 +34,7 @@ PersistentStore::~PersistentStore() {}
 void PersistentStore::setReferenceTargetr(Reference* r, Node* target)
 {
 	r->target_ = target;
+	r->state_ = Reference::ReferenceEstablished;
 }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,33 +32,17 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API PositionLayoutStyle : public LayoutStyle
+class VISUALIZATIONBASE_API PositionLayoutStyle : public Super<LayoutStyle>
 {
-	private:
-		int leftInnerMargin_;
-		int rightInnerMargin_;
-		int topInnerMargin_;
-		int bottomInnerMargin_;
-		int spaceBetweenElements_;
-		int gridSize_;
-
 	public:
-		PositionLayoutStyle();
-		virtual void load(StyleLoader& sl);
+		virtual ~PositionLayoutStyle() override;
 
-		int leftInnerMargin() const;
-		int rightInnerMargin() const;
-		int topInnerMargin() const;
-		int bottomInnerMargin() const;
-		int spaceBetweenElements() const;
-		int gridSize() const;
+		Property<int> leftInnerMargin{this,"leftInnerMargin"};
+		Property<int> rightInnerMargin{this,"rightInnerMargin"};
+		Property<int> topInnerMargin{this,"topInnerMargin"};
+		Property<int> bottomInnerMargin{this,"bottomInnerMargin"};
+		Property<int> spaceBetweenElements{this,"spaceBetweenElements"};
+		Property<int> gridSize{this,"gridSize"};
 };
-
-inline int PositionLayoutStyle::leftInnerMargin() const { return leftInnerMargin_; }
-inline int PositionLayoutStyle::rightInnerMargin() const { return rightInnerMargin_; }
-inline int PositionLayoutStyle::topInnerMargin() const { return topInnerMargin_; }
-inline int PositionLayoutStyle::bottomInnerMargin() const {return bottomInnerMargin_; }
-inline int PositionLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
-inline int PositionLayoutStyle::gridSize() const {	return gridSize_; }
 
 }

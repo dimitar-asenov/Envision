@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -345,7 +345,7 @@ className* className::createDefaultInstance( Node* parent) { return proxyClassNa
 private:																																					\
 		static ::Model::CompositeIndex name##Index;																							\
 public:																																					\
-		type* name() { return static_cast< type* > (get(name##Index)); }																\
+		type* name() const { return static_cast< type* > (get(name##Index)); }														\
 		void setMethodName(type* node) { set(name##Index, node); }																		\
 private:																																					\
 

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,20 +32,14 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API ControlFlowItemStyle : public Visualization::ItemStyle
+class CONTROLFLOWVISUALIZATION_API ControlFlowItemStyle : public Super<Visualization::ItemStyle>
 {
-	private:
-		int pinLength_;
-		QPen pin_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~ControlFlowItemStyle() override;
 
-		int pinLength() const;
-		const QPen& pin() const;
+		Property<int> pinLength{this,"pinLength"};
+		Property<QPen> pin{this,"pin"};
 };
 
-inline int ControlFlowItemStyle::pinLength() const {	return pinLength_; }
-inline const QPen& ControlFlowItemStyle::pin() const {	return pin_; }
 
 }

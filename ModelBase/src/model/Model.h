@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,9 +33,9 @@
 
 namespace Model {
 
-class Reference;
 class UndoCommand;
 class NodeOwningCommand;
+class NameText;
 
 /**
  * The Model class is a management and access entity for a program tree.
@@ -293,14 +293,26 @@ class MODELBASE_API Model: public QObject
 		PersistentStore* store();
 
 		/**
+		 * Adds \a node to the list of modified nodes during an edit operation or immediately emits a nodesModified
+		 * signal with the specified node if no modification to the model is ongoing.
+		 *
+		 * For usual edit operations that alter the model, you do not need to explicitly call this method. It is useful
+		 * for cases where only a caching property of a node has changed which might lead to changes in its visualization.
+		 *
+		 * For example this method can be used when resolving references to notify visualizations of changes to the
+		 * reference targets.
+		 */
+		void notifyNodeChange(Node* node);
+
+		/**
 		 * Causes a nameModified signal to be emitted.
 		 *
 		 * @param node
-		 * 				Which node's name has changed
+		 * 				The node that represents the name that has changed
 		 * @param oldNmae
 		 * 				What was the old name of the node
 		 */
-		void emitNameModified(Node* node, const QString &oldName);
+		void emitNameModified(NameText* node, const QString &oldName);
 
 		/**
 		 * Causes a nodeFullyLoaded signal to be emitted.
@@ -317,39 +329,6 @@ class MODELBASE_API Model: public QObject
 		 * 				The node which is now partially loaded.
 		 */
 		void emitNodePartiallyLoaded(Node* node);
-
-		/**
-		 * \brief Returns a list of all loaded unresolved references in the model.
-		 *
-		 * Unresolved references which are persisted but not loaded are will not be in the returned list.
-		 */
-		const QSet<Reference*>& unresolvedReferences() const;
-
-		/**
-		 * \brief Adds the specified reference to the unresolved references list.
-		 */
-		void addUnresolvedReference(Reference* ref);
-
-		/**
-		 * \brief Removes the specified reference to the unresolved references list.
-		 *
-		 * Call this method when a reference has been resolved.
-		 */
-		void removeUnresolvedReference(Reference* ref);
-
-		/**
-		 * Scans the root node for unresolved references and records them in unresolvedReferences_.
-		 *
-		 * The old contents of unresolvedReferences_ is lost when this method is called.
-		 */
-		void scanUnresolvedReferences();
-
-		/**
-		 * \brief Attempt to resolve all unresolved references.
-		 *
-		 * This method must be called within a modification session.
-		 */
-		void tryResolvingReferences();
 
 		ModelManager& manager() const;
 
@@ -477,11 +456,6 @@ class MODELBASE_API Model: public QObject
 		 * It can also be used by other stores when the model needs to be saved to a different location.
 		 */
 		PersistentStore* store_{};
-
-		/**
-		 * A list of all unresolved references which are currently loaded nodes.
-		 */
-		QSet<Reference*> unresolvedReferences_;
 };
 
 inline bool Model::isBeingModified() const { return modificationInProgress; }
@@ -493,9 +467,6 @@ inline QString Model::name() { return name_; }
 inline void Model::setName(const QString& name) { name_ = name; }
 
 inline PersistentStore* Model::store() { return store_; }
-inline void Model::emitNameModified(Node* node, const QString &oldName) { emit nameModified(node, oldName); }
-
-inline const QSet<Reference*>& Model::unresolvedReferences() const { return unresolvedReferences_; }
 
 inline ModelManager& Model::manager() const { return ModelManager::instance(); }
 

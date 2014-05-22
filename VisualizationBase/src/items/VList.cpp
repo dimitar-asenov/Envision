@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,7 +26,6 @@
 
 #include "VList.h"
 #include "Static.h"
-#include "Text.h"
 #include "../declarative/DeclarativeItemDef.h"
 #include "../shapes/Shape.h"
 
@@ -108,7 +107,9 @@ bool VList::moveCursor(CursorMoveDirection dir, QPoint reference)
 	bool startsFocused = hasFocus();
 
 	// If we're already focused and the user pressed a keyboard key, do not stay within the item
-	if (startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && dir != MoveOnPosition)
+	if (startsFocused && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && dir != MoveOnPosition
+			&& dir != MoveOnTop && dir != MoveOnLeft && dir != MoveOnBottom && dir != MoveOnRight
+			&& dir != MoveOnTopLeft && dir != MoveOnBottomRight && dir != MoveOnCenter)
 		return false;
 
 	bool res = Super::moveCursor(dir, reference);
@@ -123,10 +124,10 @@ void VList::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
 
-	if (node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && (height() == 0 || width() == 0))
+	if (node()->isEmpty() && style()->showTipWhenSelectedAndEmpty() && (heightInLocal() == 0 || widthInLocal() == 0))
 	{
-		if (height() == 0) setHeight(1);
-		if (width() == 0) setWidth(1);
+		if (heightInLocal() == 0) setHeight(1);
+		if (widthInLocal() == 0) setWidth(1);
 	}
 }
 
@@ -135,7 +136,7 @@ QList<ItemRegion> VList::regions()
 	if (!node()->isEmpty() || !style()->showTipWhenSelectedAndEmpty())
 		return Super::regions();
 
-	//Otherwise returna whole item region
+	//Otherwise return a whole item region
 	auto ir = ItemRegion(boundingRect().toRect());
 
 	Cursor* cur = new Cursor(this, Cursor::BoxCursor);
@@ -155,9 +156,18 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 	auto children = childItems();
 	if (children.isEmpty()) return;
 
+	auto horizontal = style()->itemsStyle().isHorizontal();
+	// Sort the children so that they appear in the right order
+	if (horizontal)
+		qSort(children.begin(), children.end(), [](const Item* left, const Item* right)
+		{return left->pos().x() < right->pos().x();});
+	else
+		qSort(children.begin(), children.end(), [=](const Item* left, const Item* right)
+		{return left->pos().y() < right->pos().y();});
+
 	QPoint topLeft{0,0};
-	auto w = width();
-	auto h = height();
+	auto w = widthInLocal();
+	auto h = heightInLocal();
 	QPoint endPoint{w, h};
 
 	if (auto shape = getShape())
@@ -171,15 +181,17 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 		endPoint.setY(topLeft.y() + h);
 	}
 
-	auto horizontal = style()->itemsStyle().isHorizontal();
+
 	for(int i = 0; i<children.size(); ++i)
 	{
 		if (i+1 < children.size())
 		{
 			if (horizontal)
-				w = (children.at(i)->pos().x() + children.at(i)->width() + children.at(i+1)->pos().x())/2 - topLeft.x();
+				w = (children.at(i)->pos().x() + children.at(i)->widthInParent() + children.at(i+1)->pos().x())/2
+						- topLeft.x();
 			else
-				h = (children.at(i)->pos().y() + children.at(i)->height() + children.at(i+1)->pos().y())/2 - topLeft.y();
+				h = (children.at(i)->pos().y() + children.at(i)->heightInParent() + children.at(i+1)->pos().y())/2
+						- topLeft.y();
 		}
 		else
 		{

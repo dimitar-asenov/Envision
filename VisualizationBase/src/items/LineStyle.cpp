@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,12 +28,6 @@
 
 namespace Visualization {
 
-void LineStyle::load(StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("pen", pen_);
-	sl.load("width", width_);
-	sl.load("height", height_);
-}
+LineStyle::~LineStyle(){}
 
 } /* namespace Visualization */

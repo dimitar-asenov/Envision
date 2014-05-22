@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -222,10 +222,10 @@ void CommandPrompt::saveReceiverCursorPosition()
 void CommandPrompt::setPromptPosition()
 {
 	QPointF promptPos = commandReceiver_->mapToScene(0,0);
-	if (commandReceiver_->height() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
+	if (commandReceiver_->heightInScene() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
 	{
 		// Show the prompt under the receiver item.
-		promptPos.setY( promptPos.y() + commandReceiver_->height() + PROMPT_TO_RECEIVER_DISTANCE);
+		promptPos.setY( promptPos.y() + commandReceiver_->heightInScene() + PROMPT_TO_RECEIVER_DISTANCE);
 	}
 	else
 	{

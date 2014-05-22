@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -78,11 +78,11 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 	int sizeHeight = 0;
 	for (auto i : itemList)
 	{
-		if (maxChildWidth < i->width()) maxChildWidth = i->width();
-		if (maxChildHeight < i->height()) maxChildHeight = i->height();
+		if (maxChildWidth < i->widthInParent()) maxChildWidth = i->widthInParent();
+		if (maxChildHeight < i->heightInParent()) maxChildHeight = i->heightInParent();
 
-		sizeWidth += i->width();
-		sizeHeight += i->height();
+		sizeWidth += i->widthInParent();
+		sizeHeight += i->heightInParent();
 	}
 	if (!itemList.isEmpty())
 	{
@@ -143,25 +143,25 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		{
 			int y = h;
 			if (alignment_ == LayoutStyle::Alignment::Bottom)
-				y += maxChildHeight - itemList[i]->height();
+				y += maxChildHeight - itemList[i]->heightInParent();
 			if (alignment_ == LayoutStyle::Alignment::Center)
-				y += (maxChildHeight - itemList[i]->height()) / 2;
+				y += (maxChildHeight - itemList[i]->heightInParent()) / 2;
 
 			if ( i != begin ) w += spaceBetweenElements(item);
 			itemList[i]->setPos(w, y);
-			w += itemList[i]->width();
+			w += itemList[i]->widthInParent();
 		}
 		else
 		{
 			int x = w;
 			if (alignment_ == LayoutStyle::Alignment::Right)
-				x += maxChildWidth - itemList[i]->width();
+				x += maxChildWidth - itemList[i]->widthInParent();
 			if (alignment_ == LayoutStyle::Alignment::Center)
-				x += (maxChildWidth - itemList[i]->width()) / 2;
+				x += (maxChildWidth - itemList[i]->widthInParent()) / 2;
 
 			if ( i != begin ) h += spaceBetweenElements(item);
 			itemList[i]->setPos(x, h);
-			h += itemList[i]->height();
+			h += itemList[i]->heightInParent();
 		}
 
 }
@@ -333,16 +333,16 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		if (horizontal)
 		{
 			elementBoundary.setTop(0);
-			elementBoundary.setHeight( item->height() );
+			elementBoundary.setHeight( item->heightInLocal() );
 		}
 		else
 		{
 			elementBoundary.setLeft(0);
-			elementBoundary.setWidth( item->width() );
+			elementBoundary.setWidth( item->widthInLocal() );
 		}
 	}
 
-	auto wholeArea = extraCursors ? QRect(QPoint(0,0), item->size().toSize()) : elementBoundary;
+	auto wholeArea = extraCursors ? QRect(QPoint(0,0), item->sizeInLocal().toSize()) : elementBoundary;
 
 	auto elementsArea = elementBoundary.adjusted(+leftMargin(), topMargin(), -rightMargin(), -bottomMargin());
 
@@ -364,27 +364,31 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		if (horizontal && forward_)
 		{
 			cursorRegion.setRegion(QRect(last, elementBoundary.top(), itemList[i]->x() - last, elementBoundary.height()));
-			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->width(), elementBoundary.height()));
-			last = itemList[i]->xEnd() + offset;
+			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->widthInParent(),
+												elementBoundary.height()));
+			last = itemList[i]->xEndInParent() + offset;
 		}
 		else if (horizontal && !forward_)
 		{
-			cursorRegion.setRegion(QRect(itemList[i]->xEnd()+1, elementBoundary.top(), last, elementBoundary.height()));
-			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->width(), elementBoundary.height()));
+			cursorRegion.setRegion(QRect(itemList[i]->xEndInParent()+1, elementBoundary.top(), last,
+												  elementBoundary.height()));
+			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->widthInParent(),
+												elementBoundary.height()));
 			last = itemList[i]->x() - offset;
 		}
 		else if (!horizontal && forward_)
 		{
 			cursorRegion.setRegion(QRect(elementBoundary.left(), last,  elementBoundary.width(), itemList[i]->y() - last));
 			itemRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->y(), elementBoundary.width(),
-												itemList[i]->height()));
-			last = itemList[i]->yEnd() + offset;
+												itemList[i]->heightInParent()));
+			last = itemList[i]->yEndInParent() + offset;
 		}
 		else
 		{
-			cursorRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->yEnd()+1, elementBoundary.width(), last));
+			cursorRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->yEndInParent()+1, elementBoundary.width(),
+												  last));
 			itemRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->y(), elementBoundary.width(),
-												itemList[i]->height()));
+												itemList[i]->heightInParent()));
 			last = itemList[i]->y() - offset;
 		}
 
@@ -462,13 +466,13 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 
 		// Front
 		if (horizontal && forward_)
-			extra.setRect(0, 0, midArea.left(), item->height());
+			extra.setRect(0, 0, midArea.left(), item->heightInLocal());
 		else if (horizontal && !forward_)
-			extra.setRect(midArea.right() + 1, 0, item->width() - midArea.right() - 1, item->height());
+			extra.setRect(midArea.right() + 1, 0, item->widthInLocal() - midArea.right() - 1, item->heightInLocal());
 		else if (!horizontal && forward_)
-			extra.setRect(0, 0,  item->width(), midArea.top());
+			extra.setRect(0, 0,  item->widthInLocal(), midArea.top());
 		else
-			extra.setRect(0, midArea.bottom() + 1, item->width(), item->height() - midArea.bottom() - 1);
+			extra.setRect(0, midArea.bottom() + 1, item->widthInLocal(), item->heightInLocal() - midArea.bottom() - 1);
 
 		adjustCursorRegionToAvoidZeroSize(extra, horizontal, true, false);
 
@@ -479,20 +483,20 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		regs.last().setCursor(lc);
 		lc->setIndex(-1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, item->height()) : QSize(item->width(), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, item->heightInLocal()) : QSize(item->widthInLocal(), 2));
 		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
 
 		// Back
 		if (horizontal && forward_)
-			extra.setRect(midArea.right() + 1, 0, item->width() - midArea.right() - 1, item->height());
+			extra.setRect(midArea.right() + 1, 0, item->widthInLocal() - midArea.right() - 1, item->heightInLocal());
 		else if (horizontal && !forward_)
-			extra.setRect(0, 0, midArea.left(), item->height());
+			extra.setRect(0, 0, midArea.left(), item->heightInLocal());
 		else if (!horizontal && forward_)
-			extra.setRect(0, midArea.bottom() + 1, item->width(), item->height() - midArea.bottom() - 1);
+			extra.setRect(0, midArea.bottom() + 1, item->widthInLocal(), item->heightInLocal() - midArea.bottom() - 1);
 		else
-			extra.setRect(0, 0,  item->width(), midArea.top());
+			extra.setRect(0, 0,  item->widthInLocal(), midArea.top());
 
 		adjustCursorRegionToAvoidZeroSize(extra, horizontal, false, true);
 
@@ -503,7 +507,7 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		regs.last().setCursor(lc);
 		lc->setIndex(itemList.size()+1);
 
-		auto vSize = horizontal ? QSize(2, item->height()) : QSize(item->width(), 2);
+		auto vSize = horizontal ? QSize(2, item->heightInLocal()) : QSize(item->widthInLocal(), 2);
 		lc->setVisualizationSize(vSize);
 		lc->setVisualizationPosition(regs.last().region().bottomRight() -QPoint(vSize.width(), vSize.height()));
 

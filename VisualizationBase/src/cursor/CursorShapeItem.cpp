@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,7 +26,6 @@
 
 #include "CursorShapeItem.h"
 #include "Cursor.h"
-#include "../views/MainView.h"
 #include "shapes/Shape.h"
 
 namespace Visualization {
@@ -61,40 +60,27 @@ void CursorShapeItem::updateGeometry(int, int)
 	if (hasShape())
 	{
 		getShape()->setInnerSize(size_.width(), size_.height());
-
-
-		QPointF ref = useCenter_ ?
-				center_ - QPointF( getShape()->contentLeft(), getShape()->contentTop() ) : topLeft_;
+		QPointF ref = useCenter_ ? center_ - QPointF( getShape()->contentLeft(), getShape()->contentTop() ) : topLeft_;
+		auto scalingFactor = mainViewScalingFactor();
 
 		// Adjust for the scaling if this cursor should ignore transformations
-		if (flags() & ItemIgnoresTransformations)
+		if ((flags() & ItemIgnoresTransformations) && scalingFactor != 1.0)
 		{
 			// TODO: While this does work, one might wonder if it is the best idea. Things get a bit too coupled.
-			for (auto v : scene()->views())
-			{
-				auto mv = dynamic_cast<MainView*>(v);
-				if (mv)
-				{
-					if (mv->scaleFactor() != 1.0)
-					{
-						// The top-left corner of the topmost parent of owner() is relative to where we should draw the cursor
-						// as this location is scaled normally regardless of ItemIgnoresTransformations
-						auto topmost = cursor_->owner();
-						while (topmost->parent()) topmost = topmost->parent();
 
-						// The difference to the top-left corner must be scaled with the reverse factor
-						ref += cursor_->owner()->scenePos() - topmost->scenePos();
-						ref /= mv->scaleFactor();
-						ref += topmost->scenePos();
+			// The top-left corner of the topmost parent of owner() is relative to where we should draw the cursor
+			// as this location is scaled normally regardless of ItemIgnoresTransformations
+			auto topmost = cursor_->owner();
+			while (topmost->parent()) topmost = topmost->parent();
 
-						setPos(ref);
-						return;
-					}
-				}
-			}
+			// The difference to the top-left corner must be scaled with the reverse factor
+			ref += cursor_->owner()->scenePos() - topmost->scenePos();
+			ref /= scalingFactor;
+			ref += topmost->scenePos();
+
+			setPos(ref);
 		}
-
-		setPos(cursor_->owner()->scenePos() + ref);
+		else setPos(cursor_->owner()->scenePos() + ref);
 	}
 }
 

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,49 +32,38 @@
 #include "OOModel/src/elements/CatchClause.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class Static;
-	class SequentialLayout;
-	class PanelBorderLayout;
+	class NodeWrapper;
 }
 
 namespace OOVisualization {
 
-class VStatementItemList;
-
 class OOVISUALIZATION_API VCatchClause
 	: public Super<Visualization::ItemWithNode<VCatchClause,
-	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::CatchClause>>
+	  Visualization::DeclarativeItem<VCatchClause>, OOModel::CatchClause>>
 {
 	ITEM_COMMON(VCatchClause)
 
 	public:
 		VCatchClause(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VCatchClause();
 
-		Visualization::SequentialLayout* header() const;
 		Visualization::Static* icon() const;
-		Visualization::Item* expressionToCatch() const;
-		Visualization::SequentialLayout* expressionBackground() const;
-		VStatementItemList* body() const;
+		Visualization::NodeWrapper* expressionToCatch() const;
+		Visualization::Item* body() const;
 
-	protected:
-		void determineChildren();
+		static void initializeForms();
 
 	private:
-		Visualization::SequentialLayout* header_{};
 		Visualization::Static* icon_{};
-		Visualization::Item* expressionToCatch_{};
-		Visualization::SequentialLayout* expressionBackground_{};
-		VStatementItemList* body_{};
+		Visualization::NodeWrapper* expressionToCatch_{};
+		Visualization::Item* body_{};
 };
 
-inline Visualization::SequentialLayout* VCatchClause::header() const {return header_; }
 inline Visualization::Static* VCatchClause::icon() const {return icon_; }
-inline Visualization::Item* VCatchClause::expressionToCatch() const {return expressionToCatch_; }
-inline Visualization::SequentialLayout* VCatchClause::expressionBackground() const {return expressionBackground_; }
-inline VStatementItemList* VCatchClause::body() const {return body_; }
+inline Visualization::NodeWrapper* VCatchClause::expressionToCatch() const {return expressionToCatch_; }
+inline Visualization::Item* VCatchClause::body() const {return body_; }
 
 } /* namespace OOVisualization */

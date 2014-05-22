@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -287,12 +287,12 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	{
 		if (newOffset == 0)
 		{
-			item()->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,item()->height()/2));
+			item()->moveCursor( Visualization::Item::MoveOnLeft);
 			return;
 		}
 		else if (index+1 == components.size() && offset == components[index].size())
 		{
-			item()->moveCursor( Visualization::Item::MoveOnPosition, QPoint(item()->xEnd(), item()->height()/2));
+			item()->moveCursor( Visualization::Item::MoveOnRight);
 			return;
 		}
 		else throw OOInteractionException("Could not find adjacent cells when setting GridBased offset.");

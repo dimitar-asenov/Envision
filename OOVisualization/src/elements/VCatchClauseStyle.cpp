@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,15 +28,6 @@
 
 namespace OOVisualization {
 
-void VCatchClauseStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("header", header_);
-	sl.load("icon", icon_);
-	sl.load("expressionBackground", expressionBackground_);
-	sl.load("body", body_);
-}
+VCatchClauseStyle::~VCatchClauseStyle(){}
 
 } /* namespace OOVisualization */

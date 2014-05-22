@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -45,7 +45,8 @@ class OOINTERACTION_API OOOperatorDescriptorList : public Interaction::OperatorD
 		static void add(Interaction::OperatorDescriptor* descriptor);
 
 		template<class T>
-		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty);
+		static void extractCommaInto(OOModel::Expression* expression, T* destination, bool ignoreEmpty,
+											  bool convertTrailingCommaErrorsIntoEmptyExpressions);
 };
 
 inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)

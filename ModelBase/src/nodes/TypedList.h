@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,9 +36,9 @@ class TypedList: public Super<List>
 	NODE_DECLARE_STANDARD_METHODS(TypedList)
 
 	public:
-		T* first();
-		T* last();
-		T* at(int i);
+		T* first() const;
+		T* last() const;
+		T* at(int i) const;
 
 		virtual bool replaceChild(Node* child, Node* replacement);
 

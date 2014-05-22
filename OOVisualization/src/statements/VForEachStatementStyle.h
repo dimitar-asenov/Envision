@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,45 +28,22 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
-#include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBase.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VForEachStatementStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	private:
-		Visualization::PanelBorderLayoutStyle layout_;
-		Visualization::SequentialLayoutStyle header_;
-		Visualization::StaticStyle icon_;
-		Visualization::SequentialLayoutStyle varContainer_;
-		Visualization::TextStyle varName_;
-		Visualization::SequentialLayoutStyle collection_;
-		Visualization::VListStyle body_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VForEachStatementStyle() override;
 
-		const Visualization::PanelBorderLayoutStyle& layout() const;
-		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::StaticStyle& icon() const;
-
-		const Visualization::SequentialLayoutStyle& varContainer() const;
-		const Visualization::TextStyle& varName() const;
-		const Visualization::SequentialLayoutStyle& collection() const;
-		const Visualization::VListStyle& body() const;
+		Property<Visualization::StaticStyle> icon{this,"icon"};
+		Property<Visualization::ItemStyle> varType{this,"varType"};
+		Property<Visualization::TextStyle> varName{this,"varName"};
+		Property<Visualization::ItemStyle> collection{this,"collection"};
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VForEachStatementStyle::layout() const { return layout_; }
-inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::header() const { return header_; }
-inline const Visualization::StaticStyle& VForEachStatementStyle::icon() const { return icon_; }
-
-inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::varContainer() const { return varContainer_; }
-inline const Visualization::TextStyle& VForEachStatementStyle::varName() const { return varName_; }
-inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::collection() const { return collection_; }
-inline const Visualization::VListStyle& VForEachStatementStyle::body() const { return body_; }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -100,8 +100,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 
 		const static int MIN_TEXT_WIDTH = 10;
 
-		QRectF bound();
-		QRectF bound(QFontMetrics &qfm);
+		QSize staticTextSize(QFontMetrics& qfm);
+		QRectF nonStaticTextBound();
 };
 
 inline QString TextRenderer::text() { return staticText_.text(); }

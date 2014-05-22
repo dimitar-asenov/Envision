@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -70,7 +70,7 @@ class VISUALIZATIONBASE_API VisualizationGroup {
 inline void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization)
 { visualizations_ << visualization; }
 inline void VisualizationGroup::addSubGroup(VisualizationGroup* group) { subGroups_ << group; }
-inline void VisualizationGroup::clear() {visualizations_.clear(); subGroups_.clear();}
+inline void VisualizationGroup::clear() {visualizations_.clear(); qDeleteAll(subGroups_); subGroups_.clear();}
 inline void VisualizationGroup::setConditionFunction(ConditionFunction condition, int scorePoints)
 { contextCondition_ = condition; scorePoints_ = scorePoints;}
 

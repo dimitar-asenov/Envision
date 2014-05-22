@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -54,7 +54,6 @@ class OOVISUALIZATION_API VMethod
 		VMethod(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		Visualization::VText* name() const;
-		VStatementItemList* body() const;
 		VStatementItemList* annotations() const;
 		Visualization::VList* typeArguments() const;
 		Visualization::VList* arguments() const;
@@ -67,7 +66,7 @@ class OOVISUALIZATION_API VMethod
 		Visualization::VList* typeArguments_{};
 		Visualization::VList* arguments_{};
 		Visualization::Line* signatureLine_{};
-		VStatementItemList* body_{};
+		Item* body_{};
 		VStatementItemList* annotations_{};
 		Visualization::SequentialLayout* addons_{};
 		Visualization::VList* results_{};
@@ -75,7 +74,6 @@ class OOVISUALIZATION_API VMethod
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }
-inline VStatementItemList* VMethod::body() const { return body_; }
 inline VStatementItemList* VMethod::annotations() const { return annotations_; }
 inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -30,35 +30,39 @@
 
 #include "ItemWithNode.h"
 #include "VCompositeStyle.h"
-#include "../layouts/SequentialLayout.h"
-#include "../layouts/PanelBorderLayout.h"
+#include "../declarative/DeclarativeItem.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VComposite : public Super<ItemWithNode<VComposite, Item, Model::CompositeNode>>
+class EmptyItem;
+class Text;
+
+class VISUALIZATIONBASE_API VComposite
+: public Super<ItemWithNode<VComposite, DeclarativeItem<VComposite>, Model::CompositeNode>>
 {
 	ITEM_COMMON(VComposite)
 
 	public:
 		VComposite(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VComposite();
 
 		void setExpanded(bool expanded = true);
 		bool expanded() const;
 
-	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
+		static void initializeForms();
+		int determineForm() override;
 
 	private:
-		SequentialLayout* header;
-		PanelBorderLayout* layout; //only used when expanded
-		SequentialLayout* attributes; //only used when expanded
+		Item* name_{};
+		Text* typeName_{};
+		EmptyItem* headerBackground_{};
 
-		bool expanded_;
-		bool expandedSwtiched() const;
+		bool expanded_{};
 
+		Model::Node* nameNode();
+
+		QList<Item*> attributes();
+		QList<Item*> attributes_;
 };
 
 inline bool VComposite::expanded() const { return expanded_; }

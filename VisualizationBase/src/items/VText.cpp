@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -52,10 +52,7 @@ QString VText::currentText()
 
 bool VText::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
-	if (dir == MoveDefault)
-	{
-		return Super::moveCursor(MoveLeftOf, QPoint(xEnd()+1,0));
-	}
+	if (dir == MoveDefault) return Super::moveCursor(MoveOnRight);
 	else return Super::moveCursor(dir, reference);
 }
 

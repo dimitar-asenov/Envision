@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -38,9 +38,9 @@ class VISUALIZATIONBASE_API RootItem : public Super<ItemWithNode<RootItem, Item,
 
 	public:
 		// Included because it is required for initialization. Parent must always be nullptr.
-		RootItem(Item* parent, NodeType* node, int purpose = 0);
-		RootItem(NodeType* node, int purpose = 0);
-		RootItem(Item* item, int purpose = 0);
+		RootItem(Item* parent, NodeType* node, int purpose = 0, int semanticZoomLevel = 0);
+		RootItem(NodeType* node, int purpose = 0, int semanticZoomLevel = 0);
+		RootItem(Item* item, int purpose = 0, int semanticZoomLevel = 0);
 		~RootItem();
 
 		Item* item();

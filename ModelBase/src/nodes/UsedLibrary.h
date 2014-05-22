@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -43,7 +43,7 @@ class MODELBASE_API UsedLibrary : public Super<CompositeNode>
 
 	public:
 		UsedLibrary(const QString& name);
-		virtual QList<UsedLibrary*> usedLibraries() override;
+		virtual QList<const UsedLibrary*> usedLibraries() const override;
 
 		Node* libraryRoot() const;
 		Model* libraryModel() const;

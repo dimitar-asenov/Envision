@@ -3,7 +3,8 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/nodes/UsedLibrary.h \
+HEADERS += src/nodes/NameText.h \
+    src/nodes/UsedLibrary.h \
     src/SymbolMatcher.h \
     src/commands/CompositeNodeChangeChild.h \
     src/nodes/composite/CompositeNode.h \
@@ -24,7 +25,6 @@ HEADERS += src/nodes/UsedLibrary.h \
     src/commands/ListPut.h \
     src/commands/ListRemove.h \
     src/commands/NameChange.h \
-    src/commands/PointerFieldSet.h \
     src/commands/UndoCommand.h \
     src/modelbase_api.h \
     src/nodes/Boolean.h \
@@ -53,7 +53,8 @@ HEADERS += src/nodes/UsedLibrary.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/nodes/UsedLibrary.cpp \
+SOURCES += src/nodes/NameText.cpp \
+    src/nodes/UsedLibrary.cpp \
     src/SymbolMatcher.cpp \
     src/commands/CompositeNodeChangeChild.cpp \
     src/nodes/composite/CompositeNode.cpp \

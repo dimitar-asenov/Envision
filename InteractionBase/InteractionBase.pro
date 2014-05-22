@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/commands/CSceneHandlerSave.h \
+HEADERS += src/expression_editor/tree_builder/AddSubExpression.h \
+    src/commands/CSceneHandlerSave.h \
     src/commands/CSceneHandlerLoad.h \
     src/commands/CFind.h \
     src/handlers/HComposite.h \
@@ -69,7 +70,8 @@ HEADERS += src/commands/CSceneHandlerSave.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/commands/CSceneHandlerSave.cpp \
+SOURCES += src/expression_editor/tree_builder/AddSubExpression.cpp \
+    src/commands/CSceneHandlerSave.cpp \
     src/commands/CSceneHandlerLoad.cpp \
     src/commands/CFind.cpp \
     src/handlers/HComposite.cpp \

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -64,7 +64,7 @@ void SelectedItem::updateGeometry(int, int)
 {
 	if (hasShape())
 	{
-		getShape()->setInnerSize(selectedItem_->width(), selectedItem_->height());
+		getShape()->setInnerSize(selectedItem_->widthInScene(), selectedItem_->heightInScene());
 		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
 
 		setPos(selectedItem_->mapToScene(0,0) - pos);

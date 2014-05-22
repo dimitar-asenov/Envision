@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -62,7 +62,7 @@ void BoxTest::determineChildren()
 
 void BoxTest::updateGeometry(int, int)
 {
-	getShape()->setInnerSize(items.width(), items.height());
+	getShape()->setInnerSize(items.widthInParent(), items.heightInParent());
 	items.setPos(getShape()->contentLeft(), getShape()->contentTop());
 }
 

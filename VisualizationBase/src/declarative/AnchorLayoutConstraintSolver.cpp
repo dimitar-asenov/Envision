@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -44,19 +44,65 @@ AnchorLayoutConstraintSolver::~AnchorLayoutConstraintSolver()
 	cleanUpConstraintSolver();
 }
 
+inline int AnchorLayoutConstraintSolver::startVariable(int elementIndex) {	return 2 * elementIndex;}
+inline int AnchorLayoutConstraintSolver::endVariable(int elementIndex) { return 2 * elementIndex + 1; }
 
-void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& elements, QList<AnchorLayoutAnchor*>& anchors,
-		AnchorLayoutAnchor::Orientation orientation, Item* item)
+void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& elements,
+		QList<AnchorLayoutAnchor*>& anchors, AnchorLayoutAnchor::Orientation orientation, Item* item)
+{
+	Q_ASSERT(numVariables_ == 0 || numVariables_ == elements.size() * 2);
+
+	if (!lp_) prepareLP(elements, anchors, orientation, item);
+	else updateLP(elements, orientation, item);
+
+	QVector<float> solution = solveConstraints();
+
+	// Apply the solution
+	for (int i=0; i<elements.size(); ++i)
+	{
+		FormElement* element = elements.at(i);
+		int size = std::ceil(solution[endVariable(i)] - solution[startVariable(i)]);
+		int position = std::ceil(solution[startVariable(i)]);
+
+		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
+		{
+			if (size > element->size(item).width())
+				element->computeSize(item, size, element->size(item).height());
+			element->setPos(item, QPoint(position, element->pos(item).y()));
+		}
+		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
+		{
+			if (size > element->size(item).height())
+				element->computeSize(item, element->size(item).width(), size);
+			element->setPos(item, QPoint(element->pos(item).x(), position));
+		}
+	}
+}
+
+void AnchorLayoutConstraintSolver::prepareLP(const QVector<FormElement*>& elements, QList<AnchorLayoutAnchor*>& anchors,
+					AnchorLayoutAnchor::Orientation orientation, Item* item)
 {
 	// elements already have a minimum size
 
 	initializeConstraintSolver(elements.size() * 2);
+
+	// add objective function
+	// minimize the sum of the sizes of all the elements
+	QVector<float> objectiveRow;
+	for (int i=0; i<elements.size(); ++i)
+	{
+		objectiveRow.append(-1.0); // start variable of i-th element
+		objectiveRow.append(1.0); // end variable of i-th element
+	}
+	setMinimizeObjective(objectiveRow);
 
 	// add size constraints for each element
 	// if element's size depends on parent's size
 	// 	element.end - element.start >= element.size
 	// else
 	// 	element.end - element.start = element.size
+	// NOTE: This set of constraints must come immediately after the objective function and must be the first set
+	// in lp_. This is assumed in updateLP() where we only update rows [1 .. elements.size()]
 	for (auto e : elements)
 	{
 		int elementIndex = elements.indexOf(e);
@@ -68,9 +114,9 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
 			size = (float) e->size(item).height();
 		if (e->sizeDependsOnParent(item))
-			addGreaterEqualConstraint(constraintRow, size);
+			addConstraint(GE,constraintRow, size);
 		else
-			addEqualConstraint(constraintRow, size);
+			addConstraint(EQ, constraintRow, size);
 	}
 
 	// add constraints for each anchor
@@ -88,78 +134,52 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 					QPair<int, float>(startVariable(fixedElementIndex), -(1 - a->relativeFixedEdgePosition())),
 					QPair<int, float>(endVariable(fixedElementIndex),-a->relativeFixedEdgePosition())
 			};
-		addEqualConstraint(constraintRow, (float) a->offset());
-	}
-
-	// add objective function
-	// minimize the sum of the sizes of all the elements
-	QVector<float> objectiveRow;
-	for (int i=0; i<elements.size(); ++i)
-	{
-		objectiveRow.append(-1.0); // start variable of i-th element
-		objectiveRow.append(1.0); // end variable of i-th element
-	}
-	setMinimizeObjective(objectiveRow);
-
-	try
-	{
-		QVector<float> solution = solveConstraints();
-
-		cleanUpConstraintSolver();
-
-		// Apply the solution
-		for (int i=0; i<elements.size(); ++i)
-		{
-			FormElement* element = elements.at(i);
-			int size = std::ceil(solution[endVariable(i)] - solution[startVariable(i)]);
-			int position = std::ceil(solution[startVariable(i)]);
-
-			if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-			{
-				if (size > element->size(item).width())
-					element->computeSize(item, size, element->size(item).height());
-				element->setPos(item, QPoint(position, element->pos(item).y()));
-			}
-			else // orientation == AnchorLayoutAnchor::Orientation::Vertical
-			{
-				if (size > element->size(item).height())
-					element->computeSize(item, element->size(item).width(), size);
-				element->setPos(item, QPoint(element->pos(item).x(), position));
-			}
-		}
-	}
-	catch (VisualizationException e)
-	{
-		cleanUpConstraintSolver();
-		throw e;
+		addConstraint(EQ, constraintRow, (float) a->offset());
 	}
 }
 
-void AnchorLayoutConstraintSolver::addGreaterEqualConstraint(QVector<QPair<int, float>> constraintRow, float result)
+void AnchorLayoutConstraintSolver::updateLP(const QVector<FormElement*>& elements,
+					AnchorLayoutAnchor::Orientation orientation, Item* item)
+{
+	// Only the size constraints change from run to run.
+	
+	set_add_rowmode(lp_, true);
+	
+	// add size constraints for each element
+	// if element's size depends on parent's size
+	// 	element.end - element.start >= element.size
+	// else
+	// 	element.end - element.start = element.size
+	
+	int i = 1; // Row 0 is something else, perhaps the objective function
+	for (auto e : elements)
+	{
+		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
+			set_rh(lp_, i, (float) e->size(item).width());
+		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
+			set_rh(lp_, i, (float) e->size(item).height());
+
+		if (e->sizeDependsOnParent(item)) set_constr_type(lp_, i, GE);
+		else set_constr_type(lp_, i, EQ);
+
+		++i;
+	}
+}
+
+void AnchorLayoutConstraintSolver::addConstraint(int type, QVector<QPair<int, float>> constraintRow,
+																				 float result)
 {
 	for (int i=0; i<constraintRow.size(); ++i)
 	{
 		columnIndices_[i] = constraintRow[i].first + 1;
 		rowValues_[i] = (double) constraintRow[i].second;
 	}
-	bool success = add_constraintex(lp_, constraintRow.size(), rowValues_, columnIndices_, GE, result);
-	Q_ASSERT(success);
-}
-
-void AnchorLayoutConstraintSolver::addEqualConstraint(QVector<QPair<int, float>> constraintRow, float result)
-{
-	for (int i=0; i<constraintRow.size(); ++i)
-	{
-		columnIndices_[i] = constraintRow[i].first + 1;
-		rowValues_[i] = (double) constraintRow[i].second;
-	}
-	bool success = add_constraintex(lp_, constraintRow.size(), rowValues_, columnIndices_, EQ, result);
+	bool success = add_constraintex(lp_, constraintRow.size(), rowValues_, columnIndices_, type, result);
 	Q_ASSERT(success);
 }
 
 void AnchorLayoutConstraintSolver::setMinimizeObjective(QVector<float> objectiveRow)
 {
-	set_add_rowmode(lp_, false);
 	for (int i=0; i<numVariables_; ++i)
 	{
 		columnIndices_[i] = i+1;
@@ -167,12 +187,14 @@ void AnchorLayoutConstraintSolver::setMinimizeObjective(QVector<float> objective
 	}
 	bool success = set_obj_fnex(lp_, numVariables_, rowValues_, columnIndices_);
 	Q_ASSERT(success);
-	set_minim(lp_);
 }
 
 QVector<float> AnchorLayoutConstraintSolver::solveConstraints()
 {
+	set_add_rowmode(lp_, false);
+
 	set_verbose(lp_, CRITICAL);
+	default_basis(lp_); // Make sure to reset the basis between calls in order to get the correct result
 	int success = solve(lp_);
 	if (success != OPTIMAL) throw VisualizationException("Failed to solve anchor constraints.");
 	get_variables(lp_, rowValues_);
@@ -210,7 +232,6 @@ void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 		delete[] columnIndices_;
 		columnIndices_ = nullptr;
 	}
-	numVariables_ = 0;
 }
 
 } /* namespace Visualization */

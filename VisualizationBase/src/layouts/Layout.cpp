@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -50,8 +50,8 @@ void Layout::setInnerSize(int width_, int height_)
 		{
 			getShape()->setOffset(style()->leftMargin(), style()->topMargin());
 			getShape()->setInnerSize(width_, height_);
-			setWidth(width() + style()->rightMargin());
-			setHeight(height() + style()->bottomMargin());
+			setWidth(widthInLocal() + style()->rightMargin());
+			setHeight(heightInLocal() + style()->bottomMargin());
 		}
 		else
 		{

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
+class VISUALIZATIONBASE_API StaticStyle : public Super<ItemStyle>
 {
 	private:
 		QString itemClass_;
@@ -50,7 +50,7 @@ class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
 		bool isEmpty() const;
 };
 
-class VISUALIZATIONBASE_API StaticSequenceStyle : public Visualization::ItemStyle
+class VISUALIZATIONBASE_API StaticSequenceStyle : public Super<Visualization::ItemStyle>
 {
 	private:
 		QVector<StaticStyle> seq_;

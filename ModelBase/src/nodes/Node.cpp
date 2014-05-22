@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -56,10 +56,10 @@ QSet<const Node*>& Node::partiallyLoadedNodes()
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
-Node::Node(Node* parent) : parent_{parent}
+Node::Node(Node* parent) : parent_{parent}, model_{parent ? parent->model_ : nullptr}
 {
 	if (parent && !parent->isModifyable())
-		throw ModelException("Trying to create a node with an non-modifiable parent.");
+		throw ModelException("Trying to create a node with a non-modifiable parent.");
 }
 
 
@@ -169,8 +169,8 @@ bool Node::replaceChild(Node*, Node*)
 	return false;
 }
 
-bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source, FindSymbolDirection direction,
-		SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	bool found{};
 
@@ -179,7 +179,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* 
 		if (symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Node*>(this));
 		}
 	}
 	else if (direction == SEARCH_DOWN)
@@ -197,7 +197,7 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* 
 		if ((exhaustAllScopes || !found) && symbolMatches(matcher, symbolTypes))
 		{
 			found = true;
-			result.insert(this);
+			result.insert(const_cast<Node*>(this));
 		}
 
 		if ((exhaustAllScopes || !found) && parent_)
@@ -253,35 +253,32 @@ bool Node::hasPartiallyLoadedChildren() const
  **********************************************************************************************************************/
 void Node::setParent(Node* parent)
 {
-	//TODO: is this operation efficient and even possible when performed on top level objects such as namespaces and
-	// packages?
-
-	auto mOld = model();
-	auto mNew = parent ? parent->model() : nullptr;
-
-	if (mOld || mNew)
-	{
-		QList<Node*> queue;
-		queue.append(this);
-
-		// Transfer unresolved references from the old model to the new one
-		while (!queue.isEmpty())
-		{
-			if (auto r = dynamic_cast<Reference*>(queue.first()))
-			{
-				if (!r->isResolved() )
-				{
-					if (mOld) mOld->removeUnresolvedReference(r);
-					if (mNew) mNew->addUnresolvedReference(r);
-				}
-			}
-
-			queue.append(queue.first()->children());
-			queue.removeFirst();
-		}
-	}
-
 	parent_ = parent;
+	auto oldModel = model_;
+	model_ = parent ? parent->model_ : nullptr;
+	if (oldModel != model_)	propagateModelToChildren();
+
+	if (model_) Reference::unresolveAfterNewSubTree(this);
+}
+
+void Node::propagateModelToChildren()
+{
+	QList<Node*> stack;
+	stack.append(children());
+	while (!stack.isEmpty())
+	{
+		auto top = stack.takeLast();
+		top->model_ = model_;
+		stack.append(top->children());
+	}
+}
+
+void Node::setRootModel(Model* model)
+{
+	Q_ASSERT(!parent_);
+	Q_ASSERT(model);
+	model_ = model;
+	propagateModelToChildren();
 }
 
 QList<Node*> Node::children() const
@@ -347,9 +344,9 @@ NodeReadWriteLock* Node::accessLock() const
 		return model()->rootLock();
 }
 
-QList<UsedLibrary*> Node::usedLibraries()
+QList<const UsedLibrary*> Node::usedLibraries() const
 {
-	QList<UsedLibrary*> all;
+	QList<const UsedLibrary*> all;
 	for(auto c : children())
 		all << c->usedLibraries();
 	return all;
@@ -367,7 +364,7 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 	nodeConstructorRegister.insert(type, constructor);
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
 
-	ModelBase::log()->add(Log::LOGINFO, "Registered new node type " + type);
+	log.info("Registered new node type " + type);
 
 	++numRegisteredTypes_;
 	return numRegisteredTypes_; // Id 0 is reserved for Node
@@ -382,7 +379,7 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type '"
+		log.error("Could not create new node. Requested node type '"
 				+ type +"' has not been registered.");
 		return nullptr;
 	}
@@ -397,7 +394,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &st
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type '"
+		log.error("Could not create new node from persistence. Requested node type '"
 				+ type + "' has not been registered.");
 		return nullptr;
 	}

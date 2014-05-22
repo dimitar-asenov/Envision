@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -37,11 +37,14 @@
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/icons/Icon.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
+
+#include <ModelBase/src/nodes/Text.h>
 
 namespace Interaction {
 
@@ -361,15 +364,17 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		AutoComplete::hide();
 	}
 	else if ( ((event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape) // Regular command prompt
-			     || (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F)) // Find command
+				  || (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F)) // Find command
+
 			&& !(actionPrompt_ && actionPrompt_->isVisible())
 			&& !(commandPrompt_ && (commandPrompt_ == target || commandPrompt_->isAncestorOf(target))) )
 	{
 		event->accept();
 
 		// Only show the command prompt if this event was not received within it.
-		if (event->modifiers() == Qt::NoModifier) showCommandPrompt(target);
-		else showCommandPrompt(target, "find ");
+		if (event->key() == Qt::Key_Escape) showCommandPrompt(target);
+		else if (event->modifiers() == Qt::ControlModifier) showCommandPrompt(target, "find ");
+		else Q_ASSERT(false);
 	}
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
 			&& !(commandPrompt_ && commandPrompt_->isVisible()))
@@ -378,6 +383,26 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		// Only show the action prompt if none of the other "menu items" are visible
 		showActionPrompt(target, true);
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete
+			&& DCast<Visualization::Icon>(target))
+	{
+		event->accept();
+
+		auto p = target;
+		while(!p->node() && p->parent()) p = p->parent();
+
+		if (auto node = p->node())
+		{
+			// Check if the parent of the node is a list and if so, delete this node
+			if (auto list = DCast<Model::List>(node->parent()))
+			{
+				list->beginModification("removeChild");
+				list->remove(node);
+				list->endModification();
+				p->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			}
+		}
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
@@ -456,7 +481,7 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 				} break;
 				case Qt::Key_Down:
 				{
-					int border = current->scenePos().y() + current->height()-1;
+					int border = current->scenePos().y() + current->heightInScene()-1;
 					reference = QPoint(cursorOriginMidPoint_.x(), border);
 				} break;
 				case Qt::Key_Left:
@@ -466,7 +491,7 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 				} break;
 				case Qt::Key_Right:
 				{
-					int border = current->scenePos().x() + current->width()-1;
+					int border = current->scenePos().x() + current->widthInScene()-1;
 					reference = QPoint(border, cursorOriginMidPoint_.y());
 				} break;
 			}
@@ -512,6 +537,63 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
 {
 	// Do no use the default handlers.
+}
+
+void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheelEvent *event)
+{
+	if (event->modifiers() == Qt::AltModifier) // modify the semantic zoom level
+	{
+		if (target->scene()->selectedItems().size() > 0)
+		{
+			// individual semantic zoom level change
+
+			Model::Node* node = nullptr;
+			Visualization::Item* parent = nullptr;
+
+			for (auto n : target->scene()->selectedItems())
+			{
+				// get the nearest parent item that has a node which is not of type Model::Text
+				while (n && (!n->node() || n->node()->isSubtypeOf(Model::Text::typeIdStatic()))) n = n->parent();
+				if (!n) return;
+
+				auto p = n->parent();
+				if ( p )
+				{
+					node = n->node();
+					parent = p;
+
+					int newSemanticZoomLevel = 0;
+					if (p->definesChildNodeSemanticZoomLevel(n->node()))
+					{
+						newSemanticZoomLevel = event->delta() < 0 ?
+							target->scene()->renderer()->getCoarserSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node())):
+							target->scene()->renderer()->getFinerSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node()));
+
+					}
+
+					if (newSemanticZoomLevel >= 0) p->setChildNodeSemanticZoomLevel(n->node(), newSemanticZoomLevel);
+					else p->clearChildNodeSemanticZoomLevel(n->node());
+				}
+			}
+
+			if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent(parent, node));
+		}
+		else
+		{
+			// global semantic zoom level change
+
+			for (auto ri : target->scene()->topLevelItems())
+			{
+				auto newSemanticZoomLevel = event->delta() < 0 ?
+							target->scene()->renderer()->getCoarserSemanticZoomLevel(ri->semanticZoomLevel()) :
+							target->scene()->renderer()->getFinerSemanticZoomLevel(ri->semanticZoomLevel());
+
+				ri->setSemanticZoomLevel(newSemanticZoomLevel);
+
+				qApp->postEvent(target->scene(), new SetCursorEvent(ri, ri->node()));
+			}
+		}
+	}
 }
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,32 +32,21 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SvgShapeStyle : public ShapeStyle
+class VISUALIZATIONBASE_API SvgShapeStyle : public Super<ShapeStyle>
 {
-	private:
-		QString filename_;
-		QSvgRenderer renderer_;
-		double topContentMarginFraction_;
-		double bottomContentMarginFraction_;
-		double leftContentMarginFraction_;
-		double rightContentMarginFraction_;
-
 	public:
+		virtual ~SvgShapeStyle() override;
 		virtual void load(StyleLoader& sl);
-
-		const QString& filename() const;
-		double topContentMarginFraction() const;
-		double bottomContentMarginFraction() const;
-		double leftContentMarginFraction() const;
-		double rightContentMarginFraction() const;
-
 		void paint(QPainter* painter, int x, int y, int width, int height) const;
-};
 
-inline const QString& SvgShapeStyle::filename() const { return filename_; }
-inline double SvgShapeStyle::topContentMarginFraction() const { return topContentMarginFraction_; }
-inline double SvgShapeStyle::bottomContentMarginFraction() const { return bottomContentMarginFraction_; }
-inline double SvgShapeStyle::leftContentMarginFraction() const { return leftContentMarginFraction_; }
-inline double SvgShapeStyle::rightContentMarginFraction() const { return rightContentMarginFraction_; }
+		Property<QString> filename{this,"filename"};
+		Property<double> topContentMarginFraction{this,"topContentMarginFraction"};
+		Property<double> bottomContentMarginFraction{this,"bottomContentMarginFraction"};
+		Property<double> leftContentMarginFraction{this,"leftContentMarginFraction"};
+		Property<double> rightContentMarginFraction{this,"rightContentMarginFraction"};
+
+	private:
+		QSvgRenderer renderer_;
+};
 
 } /* namespace Visualization */

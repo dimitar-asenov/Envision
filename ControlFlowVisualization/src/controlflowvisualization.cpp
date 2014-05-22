@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -59,8 +59,8 @@ bool ControlFlowVisualization::initialize(Core::EnvisionManager&)
 
 	// Register visualizations
 	itemTypeInitializationRegistry().initializeAll();
-	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VMethodCF, Method>);
+	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VListCF, StatementItemList>);
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), visualizationPurpose(),
 			createVisualization<VBlockCF, Block>);
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), visualizationPurpose(),

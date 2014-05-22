@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,19 +33,12 @@ DECLARE_TYPED_LIST(MODELBASE_API, Model, Text)
 
 namespace Model {
 
-class NameChange;
 template<class T> class FieldSet;
 
 class MODELBASE_API Text: public Super<Node>
 {
-	friend class NameChange;
-
 	NODE_DECLARE_STANDARD_METHODS(Text)
 
-	private:
-		QString text;
-
-		FieldSet<QString>* getSetCommand(const QString& newText);
 	public:
 
 		Text(const QString& text);
@@ -56,9 +49,14 @@ class MODELBASE_API Text: public Super<Node>
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
+
+	private:
+		QString text_;
+
+		virtual FieldSet<QString>* getSetCommand(QString& textField, const QString& newText);
 };
 
-inline const QString& Text::get() const { return text; }
-inline Text::operator const QString&() const { return text; }
+inline const QString& Text::get() const { return text_; }
+inline Text::operator const QString&() const { return text_; }
 
 }

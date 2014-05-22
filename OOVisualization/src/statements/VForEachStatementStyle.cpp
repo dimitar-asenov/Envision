@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,17 +28,6 @@
 
 namespace OOVisualization {
 
-void VForEachStatementStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("header", header_);
-	sl.load("icon", icon_);
-	sl.load("varContainer", varContainer_);
-	sl.load("varName", varName_);
-	sl.load("collection", collection_);
-	sl.load("body", body_);
-}
+VForEachStatementStyle::~VForEachStatementStyle() {}
 
 }

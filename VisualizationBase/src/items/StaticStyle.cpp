@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -41,7 +41,7 @@ StaticStyle::~StaticStyle()
 
 void StaticStyle::load(StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("itemClass", itemClass_);
 
@@ -54,7 +54,7 @@ void StaticStyle::load(StyleLoader& sl)
 
 void StaticSequenceStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	Super::load(sl);
 
 	sl.load("statics", seq_);
 }

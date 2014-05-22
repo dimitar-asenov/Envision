@@ -32,7 +32,7 @@
 
 namespace Comments {
 
-class COMMENTS_API VCommentDiagramShapeStyle : public Visualization::ItemStyle {
+class COMMENTS_API VCommentDiagramShapeStyle : public Super<Visualization::ItemStyle> {
 	public:
 		virtual ~VCommentDiagramShapeStyle() override;
 
@@ -40,7 +40,7 @@ class COMMENTS_API VCommentDiagramShapeStyle : public Visualization::ItemStyle {
 		Property<QColor> color{this, "color"};
 };
 
-class COMMENTS_API VCommentDiagramShapeSequenceStyle : public Visualization::ItemStyle
+class COMMENTS_API VCommentDiagramShapeSequenceStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~VCommentDiagramShapeSequenceStyle() override;

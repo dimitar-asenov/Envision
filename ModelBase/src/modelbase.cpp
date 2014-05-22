@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -29,7 +29,6 @@
 
 #include "model/ModelManager.h"
 
-#include "nodes/Text.h"
 #include "nodes/Integer.h"
 #include "nodes/Float.h"
 #include "nodes/Boolean.h"
@@ -50,7 +49,13 @@ Q_EXPORT_PLUGIN2( modelbase, Model::ModelBase )
 
 namespace Model {
 
-Log* ModelBase::logger = nullptr;
+Logger::Log& log = ModelBase::log();
+
+Log& ModelBase::log()
+{
+	static auto l = Logger::Log::getLogger("modelbase");
+	return *l;
+}
 
 Core::InitializationRegistry& nodeTypeInitializationRegistry()
 {
@@ -61,8 +66,6 @@ Core::InitializationRegistry& nodeTypeInitializationRegistry()
 bool ModelBase::initialize(Core::EnvisionManager&)
 {
 	ModelManager::init();
-
-	logger = Logger::Log::getLogger("modelbase");
 
 	nodeTypeInitializationRegistry().initializeAll();
 
@@ -82,11 +85,6 @@ void ModelBase::selfTest(QString)
 	TestNodes::BinaryNode::registerNewExtension<TestNodes::PositionExtension>();
 
 	SelfTest::TestManager<ModelBase>::runAllTests().printResultStatistics();
-}
-
-Log* ModelBase::log()
-{
-	return logger;
 }
 
 }

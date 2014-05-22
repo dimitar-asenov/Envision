@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -59,6 +59,7 @@
 #ifdef Q_OS_LINUX
 	#include <google/profiler.h>
 #endif
+#include <QtCore/QElapsedTimer>
 
 #if defined(CORE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of

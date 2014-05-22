@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -58,6 +58,12 @@ Method* addTestMethod()
 	ExpressionStatement* es = new ExpressionStatement();
 	es->setExpression( new EmptyExpression());
 	testMethod->items()->append(es);
+
+	//Errors
+	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("{{b}{}")));
+	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a[,,]")));
+	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("++{{c,d}")));
+	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("++{{a,b},{c,d}")));
 
 	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int")));
 	testMethod->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("true")));
@@ -253,6 +259,15 @@ Method* addTestMethod()
 	testMethod->items()->append(divbysixReturn);
 
 	return testMethod;
+}
+
+Method* addMainMethod()
+{
+	auto method = new Method("Main");
+
+	method->items()->append(new ExpressionStatement(
+			OOExpressionBuilder::getOOExpression("System.out.println(\"Hello world\")")));
+	return method;
 }
 
 TEST(OOInteraction, SimpleTest)

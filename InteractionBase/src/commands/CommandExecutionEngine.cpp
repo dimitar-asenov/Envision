@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -134,7 +134,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	{
 		lastCommandResult_ = QSharedPointer<CommandResult>(
 				new CommandResult(new CommandError("Unknown command '" + command + "' ")));
-		InteractionBase::log()->add(Logger::Log::LOGWARNING, "Unknown command: " + command);
+		log.warning("Unknown command: " + command);
 	}
 }
 

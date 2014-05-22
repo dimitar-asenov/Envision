@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,23 +34,15 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API TextAndDescriptionStyle : public Visualization::ItemStyle
+class INTERACTIONBASE_API TextAndDescriptionStyle : public Super<Visualization::ItemStyle>
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::TextStyle text_;
-		Visualization::TextStyle description_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~TextAndDescriptionStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::TextStyle&  text() const;
-		const Visualization::TextStyle&  description() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
+		Property<Visualization::TextStyle> text{this,"text"};
+		Property<Visualization::TextStyle> description{this,"description"};
 };
 
-inline const Visualization::SequentialLayoutStyle& TextAndDescriptionStyle::layout() const {return layout_; }
-inline const Visualization::TextStyle& TextAndDescriptionStyle::text() const {return text_; }
-inline const Visualization::TextStyle& TextAndDescriptionStyle::description() const {return description_; }
 
 }

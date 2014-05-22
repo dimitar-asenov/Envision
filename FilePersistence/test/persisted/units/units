@@ -1,10 +1,10 @@
 <!DOCTYPE EnvisionFilePersistence>
 <model nextid="8">
  <BinaryNode id="0" name="units">
-  <Text id="1" name="name">S_Root</Text>
+  <NameText id="1" name="name">S_Root</NameText>
   <persistencenewunit name="left">S_2</persistencenewunit>
   <BinaryNode id="6" name="right">
-   <Text id="7" name="name">S_Right child</Text>
+   <NameText id="7" name="name">S_Right child</NameText>
   </BinaryNode>
  </BinaryNode>
 </model>

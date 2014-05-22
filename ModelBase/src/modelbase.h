@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -29,8 +29,6 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "modelbase_api.h"
 
-#include "Logger/src/Log.h"
-
 namespace Model {
 
 class ModelBase : public QObject, public Core::EnvisionPlugin
@@ -43,10 +41,7 @@ class ModelBase : public QObject, public Core::EnvisionPlugin
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 
-		static Logger::Log* log();
-
-	private:
-		static Logger::Log* logger;
+		static Logger::Log& log();
 };
 
 MODELBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();

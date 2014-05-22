@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,19 +28,5 @@
 
 namespace OOVisualization {
 
-void VModuleStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("header", header_);
-	sl.load("name", name_);
-	sl.load("icon", icon_);
-	sl.load("body", body_);
-	sl.load("content", content_);
-	sl.load("fields", fields_);
-	sl.load("declarations", declarations_);
-	sl.load("libraries", libraries_);
-}
-
+VModuleStyle::~VModuleStyle(){} // Put the VTable here
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -30,7 +30,6 @@
 
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/shapes/Shape.h"
 
@@ -128,15 +127,15 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	{
 		painter->setPen(QPen(Qt::red, EDIT_OUTLINE_SIZE));
 		painter->drawRect( QRect{QPoint(EDIT_OUTLINE_SIZE/2, EDIT_OUTLINE_SIZE/2),
-										 size().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
+										 sizeInLocal().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
 	}
 	else if(!hasShape())
-		painter->drawRect(QRect{QPoint(0,0), size().toSize()});
+		painter->drawRect(QRect{QPoint(0,0), sizeInLocal().toSize()});
 
 	if(shapes_.isEmpty())
 	{
 		painter->setPen(QPen(QColor(100, 100, 100)));
-		painter->drawText(QRect{QPoint(0,0), size().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
+		painter->drawText(QRect{QPoint(0,0), sizeInLocal().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
 								"This diagram does not contain any shapes yet.");
 	}
 }

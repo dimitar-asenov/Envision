@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,12 +32,11 @@
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/items/LineStyle.h"
-#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBaseStyle
+class OOVISUALIZATION_API VMethodStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~VMethodStyle() override;
@@ -56,7 +55,6 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBa
 		Property<Visualization::StaticStyle> conversionIcon{this, "conversionIcon"};
 		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
 		Property<Visualization::LineStyle> signatureLine{this, "signatureLine"};
-		Property<Visualization::VListStyle> body{this, "body"};
 		Property<Visualization::VListStyle> annotations{this, "annotations"};
 		Property<Visualization::SequentialLayoutStyle> addons{this, "addons"};
 		Property<Visualization::SequentialLayoutStyle> content{this, "content"};

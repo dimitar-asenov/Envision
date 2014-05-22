@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -52,7 +52,8 @@ void TextCursor::update(const QFontMetrics& qfm)
 	int xend = qfm.width(owner()->text().left(selectionLastIndex()));
 	setX(xstart, xend);
 
-	QSize cursorSize = QSize(2, owner()->height() - 2);
+	//TODO: Transform the cursor appropriately if the item is transformed
+	QSize cursorSize = QSize(2, owner()->heightInScene() - 2);
 	setVisualizationSize(cursorSize);
 	setRegion(QRect(position(), cursorSize));
 }
@@ -76,7 +77,8 @@ void TextCursor::setX(int xBegin, int xEnd)
 	xEnd_ = xEnd;
 
 	int caretX = isCursorBeforeSelection() ? xBegin : xEnd;
-	setPosition(QPoint(caretX + owner()->textXOffset(), 2));
+
+	setPosition(QPoint((caretX + owner()->textXOffset()) * owner()->totalScale(), 2));
 
 	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
 	ci->setCursorCenter(position());

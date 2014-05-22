@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -144,6 +144,11 @@ class MODELBASE_API Node
 		void setParent(Node* parent);
 
 		/**
+		 * Sets the model of this root node to \a model. This node must not have a parent.
+		 */
+		void setRootModel(Model* model);
+
+		/**
 		 * Returns a list of all child nodes.
 		 *
 		 * Reimplement this method in derived classes that have children. The default implementation returns an empty
@@ -224,8 +229,8 @@ class MODELBASE_API Node
 		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
 		 * other than FindSymbolMode::SEARCH_UP
 		 */
-		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes);
+		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const;
 
 
 		/**
@@ -241,7 +246,7 @@ class MODELBASE_API Node
 		 * Returns true if this node defines a symbol that has a name matching \a matcher and types common with \a
 		 * symbolTypes.
 		 */
-		bool symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes);
+		bool symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes) const;
 
 		/**
 		 * Returns the revision of this node.
@@ -453,7 +458,7 @@ class MODELBASE_API Node
 		 * list. This implementation is sufficient for correct operation, but derived classes can nevertheless override
 		 * this method in order to prune the search tree.
 		 */
-		virtual QList<UsedLibrary*> usedLibraries();
+		virtual QList<const UsedLibrary*> usedLibraries() const;
 
 		/**
 		 * Converts this node to a string for use in debug purposes only.
@@ -468,6 +473,9 @@ class MODELBASE_API Node
 	private:
 		Node* parent_{};
 		int revision_{};
+		Model* model_{};
+
+		void propagateModelToChildren();
 
 		static int numRegisteredTypes_;
 		static QHash<QString, NodeConstructor> nodeConstructorRegister;
@@ -478,7 +486,7 @@ class MODELBASE_API Node
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
 
-inline Model* Node::model() const { return ModelManager::instance().find(root()); }
+inline Model* Node::model() const { return model_; }
 
 inline void Node::setPartiallyLoaded() { partiallyLoadedNodes().insert(this); }
 inline bool Node::isPartiallyLoaded() const {return partiallyLoadedNodes().contains(this);}
@@ -492,7 +500,7 @@ inline Node* Node::root() const
 
 inline Node* Node::parent() const { return parent_; }
 
-inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes)
+inline bool Node::symbolMatches(const SymbolMatcher& matcher, SymbolTypes symbolTypes) const
 {
 	return definesSymbol() && (symbolType() & symbolTypes) && matcher.matches(symbolName());
 }

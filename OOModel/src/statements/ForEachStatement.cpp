@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ForEachStatement)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ForEachStatement)
 
-REGISTER_ATTRIBUTE(ForEachStatement, varName, Text, false, false, true)
+REGISTER_ATTRIBUTE(ForEachStatement, varName, NameText, false, false, true)
 REGISTER_ATTRIBUTE(ForEachStatement, varType, Expression, false, true, true)
 REGISTER_ATTRIBUTE(ForEachStatement, collection, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ForEachStatement, body, StatementItemList, false, false, true)

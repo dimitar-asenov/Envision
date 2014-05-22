@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,16 +31,11 @@
 
 namespace Visualization {
 
-class DeclarativeTestStyle : public DeclarativeItemBaseStyle
+class DeclarativeTestStyle : public Super<DeclarativeItemBaseStyle>
 {
-		SymbolStyle symbol_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
-
-		const SymbolStyle& symbol() const;
+		virtual ~DeclarativeTestStyle() override;
+		Property<SymbolStyle> symbol{this,"symbol"};
 };
-
-inline const SymbolStyle& DeclarativeTestStyle::symbol() const { return symbol_; }
 
 } /* namespace Visualization */

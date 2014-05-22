@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -64,8 +64,8 @@ TypeAlias::SymbolTypes TypeAlias::symbolType() const
 	else return UNSPECIFIED;
 }
 
-bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes)
+bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	// TODO: Search type arguments
 
@@ -73,7 +73,7 @@ bool TypeAlias::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& mat
 	{
 		if (symbolMatches(matcher, symbolTypes))
 		{
-			result.insert(this);
+			result.insert(const_cast<TypeAlias*>(this));
 			return true;
 		}
 	}

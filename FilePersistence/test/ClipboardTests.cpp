@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,7 +32,7 @@
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Integer.h"
-#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/List.h"
 
 namespace FilePersistence {
@@ -52,9 +52,9 @@ TEST(FilePersistence, CopyToClipboard)
 	sc.putNode(root);
 
 	QString clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <BinaryNode name=\"0\"> <Text name=\"name\">"
-			"S_Root</Text> <BinaryNode name=\"left\"> <Text name=\"name\">S_Left child</Text> </BinaryNode> "
-			"<BinaryNode name=\"right\"> <Text name=\"name\">S_Right child</Text> </BinaryNode> </BinaryNode> </clipboard>"
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <BinaryNode name=\"0\"> <NameText name=\"name\">"
+			"S_Root</NameText> <BinaryNode name=\"left\"> <NameText name=\"name\">S_Left child</NameText> </BinaryNode> "
+			"<BinaryNode name=\"right\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode> </BinaryNode> </clipboard>"
 			,clipboardText);
 
 	QList<const Model::Node*> nodes;
@@ -63,8 +63,8 @@ TEST(FilePersistence, CopyToClipboard)
 	sc.putNodes(nodes);
 
 	clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <Text name=\"0\">S_Root</Text> "
-			"<BinaryNode name=\"1\"> <Text name=\"name\">S_Right child</Text> </BinaryNode> </clipboard>",clipboardText);
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <NameText name=\"0\">S_Root</NameText> "
+			"<BinaryNode name=\"1\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode> </clipboard>",clipboardText);
 }
 
 TEST(FilePersistence, CopyPartialToClipboard)

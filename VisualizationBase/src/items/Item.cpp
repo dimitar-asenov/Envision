@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,9 +32,12 @@
 #include "../VisualizationException.h"
 #include "../Scene.h"
 #include "../renderer/ModelRenderer.h"
+#include "../views/MainView.h"
 #include "VisualizationAddOn.h"
 
 #include "../cursor/Cursor.h"
+
+#include <layouts/PositionLayout.h>
 
 namespace Visualization {
 
@@ -80,7 +83,7 @@ QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
 
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
-	itemCategory_(Scene::NoItemCategory)
+	semanticZoomLevel_(-1), itemCategory_(Scene::NoItemCategory)
 {
 	// By default no flags in a QGraphicsItem are enabled.
 	GraphicsItemFlags flags;
@@ -106,6 +109,10 @@ Item::Item(Item* parent, const StyleType* style) :
 
 Item::~Item()
 {
+	// Mark this item as not needing updates
+	if (auto s = scene())
+		s->setUpdateItemGeometryWhenZoomChanges(this, false);
+
 	SAFE_DELETE(shape_);
 }
 
@@ -152,6 +159,43 @@ void Item::clearPurpose()
 {
 	purpose_ = -1;
 	setUpdateNeeded(FullUpdate);
+}
+
+void Item::setSemanticZoomLevel(int semanticZoomLevel)
+{
+	semanticZoomLevel_ = semanticZoomLevel;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearSemanticZoomLevel()
+{
+	semanticZoomLevel_ = -1;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::setItemScale(qreal newScale, qreal parentScale)
+{
+	if (DCast<PositionLayout>(parent()))
+	{
+		qreal geometricZoomScale = mainViewScalingFactor();
+
+		qreal totalScale = geometricZoomScale * newScale * parentScale;
+
+		// calculate the maximum scale (used to hardcap the scale of an item)
+		qreal maxScale = geometricZoomScale < 1 ? 1 : geometricZoomScale;
+
+		if (totalScale >= maxScale)
+			newScale = maxScale / geometricZoomScale / parentScale;
+
+		setScale(newScale);
+	}
+	else
+	{
+		newScale = 1;
+	}
+
+	for (Item* child : childItems())
+		child->setItemScale(child->scale(), newScale*parentScale);
 }
 
 void Item::setStyle(const ItemStyle* style)
@@ -215,11 +259,19 @@ void Item::updateSubtree()
 			if (hasNode()) setRevision( node()->revision() );
 		}
 	}
+
+	if (itemGeometryChangesWithZoom())
+		scene()->setUpdateItemGeometryWhenZoomChanges(this, true);
+}
+
+bool Item::itemGeometryChangesWithZoom() const
+{
+	return false;
 }
 
 void Item::changeGeometry(int availableWidth, int availableHeight)
 {
-	updateGeometry(availableWidth, availableHeight);
+	updateGeometry(fromParent(availableWidth), fromParent(availableHeight));
 	update();
 }
 
@@ -270,11 +322,11 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 			if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
 				content->changeGeometry(inner.width(), inner.height());
 
-			if (content->width() > inner.width() ) inner.setWidth( content->width() );
-			if (content->height() > inner.height() ) inner.setHeight( content->height() );
+			if (content->widthInParent() > inner.width() ) inner.setWidth( content->widthInParent() );
+			if (content->heightInParent() > inner.height() ) inner.setHeight( content->heightInParent() );
 			getShape()->setInnerSize(inner.width(), inner.height());
 		}
-		else getShape()->setInnerSize(content->width(), content->height());
+		else getShape()->setInnerSize(content->widthInParent(), content->heightInParent());
 
 		content->setPos(getShape()->contentLeft(), getShape()->contentTop());
 	}
@@ -283,7 +335,7 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 		if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
 			content->changeGeometry(availableWidth, availableHeight);
 		content->setPos(0,0);
-		setSize(content->size());
+		setSize(content->sizeInParent());
 	}
 }
 
@@ -350,6 +402,9 @@ void Item::removeFromScene()
 		if (mc && (mc->owner() == this || isAncestorOf(mc->owner())))
 			scene()->setMainCursor(nullptr);
 
+		// Mark this item as not needing updates
+		scene()->setUpdateItemGeometryWhenZoomChanges(this, false);
+
 		if (parent()) scene()->removeItem(this);
 		else scene()->removeTopLevelItem(this);
 	}
@@ -383,22 +438,25 @@ int Item::distanceTo(const QPoint& p) const
 	{
 		// Above
 		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
-		else if (p.x() > width()) return  std::sqrt(p.y()*p.y() + (p.x()-width())*(p.x()-width())); // To the right
+		else if (p.x() > widthInLocal())
+			return  std::sqrt(p.y()*p.y() + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
 		else return -p.y(); // Directly above
 	}
-	else if (p.y() > height())
+	else if (p.y() > heightInLocal())
 	{
 		// Below
-		if (p.x() < 0) return std::sqrt((p.y()-height())*(p.y()-height()) + p.x()*p.x()); // To the left
-		else if (p.x() > width())
-			return std::sqrt((p.y()-height())*(p.y()-height()) + (p.x()-width())*(p.x()-width())); // To the right
-		else return p.y()-height(); // Directly below
+		if (p.x() < 0)
+			return std::sqrt((p.y()-heightInLocal())*(p.y()-heightInLocal()) + p.x()*p.x()); // To the left
+		else if (p.x() > widthInLocal())
+			return std::sqrt((p.y()-heightInLocal())*(p.y()-heightInLocal())
+								  + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
+		else return p.y()-heightInLocal(); // Directly below
 	}
 	else
 	{
 		// Within the same height
 		if (p.x() < 0) return -p.x(); // To the left
-		else if (p.x() > width()) return  p.x()-width(); // To the right
+		else if (p.x() > widthInLocal()) return  p.x()-widthInLocal(); // To the right
 		else return 0; // Inside
 	}
 }
@@ -430,13 +488,13 @@ Item::PositionConstraints Item::satisfiedPositionConstraints(const QPoint& p) co
 {
 	PositionConstraints constraints = NoConstraints;
 
-	if ( p.y() < height() - 1) constraints |= Below;
+	if ( p.y() < heightInLocal() - 1) constraints |= Below;
 	if ( p.y() > 0) constraints |= Above;
 
-	if ( p.x() < width() - 1) constraints |= RightOf;
+	if ( p.x() < widthInLocal() - 1) constraints |= RightOf;
 	if ( p.x() > 0) constraints |= LeftOf;
 
-	if ( p.y() >= 0 && p.y() < height() &&  p.x() >= 0 && p.x() < width())
+	if ( p.y() >= 0 && p.y() < heightInLocal() &&  p.x() >= 0 && p.x() < widthInLocal())
 		constraints |= Overlap;
 
 	return constraints;
@@ -455,7 +513,7 @@ QList<ItemRegion> Item::regions()
 			for(auto child : childItems())
 			{
 				hasChildren = true;
-				QRect rect = child->boundingRect().toRect();
+				QRect rect = QRect(QPoint(0,0), child->sizeInParent().toSize());
 				rect.translate(child->pos().toPoint());
 				regs.append(ItemRegion(rect));
 				regs.last().setItem(child);
@@ -514,7 +572,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 					case MoveDown: reference = QPoint(reference.x(), r.region().y() + r.region().height()); break;
 					case MoveLeft: reference = QPoint(r.region().x(), reference.y()); break;
 					case MoveRight: reference = QPoint(r.region().x() + r.region().width(), reference.y()); break;
-					default: /* Will never be the case because of the top-level if statement */ break;
+					default: Q_ASSERT(false); /* Will never be the case because of the top-level if statement */ break;
 				}
 				break;
 			}
@@ -522,14 +580,28 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 	}
 
 	// Find all regions that match the constraints
+	// Also adjust the reference where necessary
 	ItemRegion::PositionConstraint constraints = ItemRegion::NoConstraints;
+	auto xEnd = widthInLocal() - 1;
+	auto yEnd = heightInLocal() - 1;
+	auto xMid = widthInLocal()/2;
+	auto yMid = heightInLocal()/2;
 	switch(dir)
 	{
 		case MoveUp: constraints = ItemRegion::Above; break;
 		case MoveDown: constraints = ItemRegion::Below; break;
 		case MoveLeft: constraints = ItemRegion::LeftOf; break;
 		case MoveRight: constraints = ItemRegion::RightOf; break;
+
 		case MoveOnPosition: constraints = ItemRegion::NoConstraints; break;
+		case MoveOnTop: constraints = ItemRegion::NoConstraints; reference = {xMid, 0}; break;
+		case MoveOnLeft: constraints = ItemRegion::NoConstraints; reference = {0, yMid}; break;
+		case MoveOnBottom: constraints = ItemRegion::NoConstraints; reference = {xMid, yEnd}; break;
+		case MoveOnRight: constraints = ItemRegion::NoConstraints; reference = {xEnd, yMid}; break;
+		case MoveOnTopLeft: constraints = ItemRegion::NoConstraints; reference = {0, 0}; break;
+		case MoveOnBottomRight: constraints = ItemRegion::NoConstraints; reference = {xEnd, yEnd}; break;
+		case MoveOnCenter: constraints = ItemRegion::NoConstraints; reference = {xMid, yMid}; break;
+
 		case MoveUpOf: constraints = ItemRegion::Above; break;
 		case MoveDownOf: constraints = ItemRegion::Below; break;
 		case MoveLeftOf: constraints = ItemRegion::LeftOf; break;
@@ -598,7 +670,16 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 				case MoveDown: childDirection = MoveDownOf; break;
 				case MoveLeft: childDirection = MoveLeftOf; break;
 				case MoveRight: childDirection = MoveRightOf; break;
+
 				case MoveOnPosition: childDirection = MoveOnPosition; break;
+				case MoveOnTop: childDirection = MoveOnTop; break;
+				case MoveOnLeft: childDirection = MoveOnLeft; break;
+				case MoveOnBottom: childDirection = MoveOnBottom; break;
+				case MoveOnRight: childDirection = MoveOnRight; break;
+				case MoveOnTopLeft: childDirection = MoveOnTopLeft; break;
+				case MoveOnBottomRight: childDirection = MoveOnBottomRight; break;
+				case MoveOnCenter: childDirection = MoveOnCenter; break;
+
 				case MoveUpOf: childDirection = MoveUpOf; break;
 				case MoveDownOf: childDirection = MoveDownOf; break;
 				case MoveLeftOf: childDirection = MoveLeftOf; break;
@@ -666,7 +747,7 @@ int Item::childNodePurpose(const Model::Node* node) const
 	auto c = childNodePurpose_.find(node);
 	if (c != childNodePurpose_.end()) return *c;
 
-	return purpose();
+	return std::max(0, purpose());
 }
 
 void Item::setChildNodePurpose(const Model::Node* node, int purpose)
@@ -684,6 +765,41 @@ void Item::clearChildNodePurpose(const Model::Node* node)
 bool Item::definesChildNodePurpose(const Model::Node* node) const
 {
 	return childNodePurpose_.find(node) != childNodePurpose_.end();
+}
+
+int Item::semanticZoomLevel() const
+{
+	if (semanticZoomLevel_ >= 0) return semanticZoomLevel_;
+	if (!parent()) return -1;
+
+	if ( node() ) return parent()->childNodeSemanticZoomLevel( node() );
+	else return parent()->semanticZoomLevel();
+}
+
+
+int Item::childNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	auto c = childNodeSemanticZoomLevel_.find(node);
+	if (c != childNodeSemanticZoomLevel_.end()) return *c;
+
+	return semanticZoomLevel();
+}
+
+void Item::setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel)
+{
+	childNodeSemanticZoomLevel_.insert(node, semanticZoomLevel);
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearChildNodeSemanticZoomLevel(const Model::Node* node)
+{
+	childNodeSemanticZoomLevel_.remove(node);
+	setUpdateNeeded(FullUpdate);
+}
+
+bool Item::definesChildNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	return childNodeSemanticZoomLevel_.find(node) != childNodeSemanticZoomLevel_.end();
 }
 
 QList<VisualizationAddOn*> Item::addOns()
@@ -713,7 +829,7 @@ Scene::ItemCategory Item::itemCategory()
 
 void Item::setWidth(int width)
 {
-	if (width != this->width())
+	if (width != this->widthInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setWidth(width);
@@ -721,7 +837,7 @@ void Item::setWidth(int width)
 }
 void Item::setHeight(int height)
 {
-	if (height != this->height())
+	if (height != this->heightInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setHeight(height);
@@ -729,7 +845,7 @@ void Item::setHeight(int height)
 }
 void Item::setSize(int width, int height)
 {
-	if (width != this->width() || height != this->height())
+	if (width != this->widthInLocal() || height != this->heightInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setSize(QSizeF(width, height));
@@ -737,7 +853,7 @@ void Item::setSize(int width, int height)
 }
 void Item::setSize(const QSizeF& size)
 {
-	if (size != this->size())
+	if (size != this->sizeInLocal())
 	{
 		prepareGeometryChange();
 		boundingRect_.setSize(size);
@@ -750,6 +866,31 @@ QList<Item*> Item::childItems() const
 	auto && children = QGraphicsItem::childItems();
 	auto && ch = reinterpret_cast<QList<Item*>*>(&children);
 	return *ch;
+}
+
+qreal Item::mainViewScalingFactor() const
+{
+	if (auto s = scene()) return s->mainViewScalingFactor();
+	else return 1;
+}
+
+qreal Item::previousMainViewScalingFactor() const
+{
+	if (auto s = scene()) return s->previousMainViewScalingFactor();
+	else return 1;
+}
+
+qreal Item::totalScale() const
+{
+	auto s = scale();
+	auto p = parent();
+	while (p)
+	{
+		s *= p->scale();
+		p = p->parent();
+	}
+
+	return s;
 }
 
 /***********************************************************************************************************************

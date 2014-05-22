@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,17 +31,12 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API IconStyle : public ItemStyle
+class VISUALIZATIONBASE_API IconStyle : public Super<ItemStyle>
 {
-	private:
-		QPen outline_;
-
 	public:
-		virtual void load(StyleLoader& sl);
+		virtual ~IconStyle() override;
+		Property<QPen> outline{this,"outline"};
 
-		const QPen& outline() const;
 };
-
-inline const QPen& IconStyle::outline() const { return outline_; }
 
 }

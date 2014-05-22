@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -67,27 +67,24 @@ void TextRenderer::determineChildren()
 {
 }
 
-inline QRectF TextRenderer::bound()
+inline QSize TextRenderer::staticTextSize(QFontMetrics& qfm)
 {
-	QFontMetrics qfm(style()->font());
-	return bound(qfm);
+	if (staticText_.text().isEmpty()) return QSize{MIN_TEXT_WIDTH, qfm.height()};
+	else return staticText_.size().toSize();
 }
 
-inline QRectF TextRenderer::bound(QFontMetrics& qfm)
+inline QRectF TextRenderer::nonStaticTextBound()
 {
-	QRectF bound;
+	Q_ASSERT(!isHtml());
 
+	QRectF bound;
+	QFontMetrics qfm(style()->font());
 	if (staticText_.text().isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
 	else
 	{
-		if ( isHtml() )
-			bound = QRectF(QPointF(0,0), staticText_.size());
-		else
-		{
-			bound = qfm.boundingRect(staticText_.text());
-			if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
-			if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
-		}
+		bound = qfm.boundingRect(staticText_.text());
+		if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
+		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
 	}
 	return bound;
 }
@@ -100,10 +97,10 @@ void TextRenderer::updateGeometry(int, int)
 	staticText_.prepare(QTransform(), style()->font());
 
 	QFontMetrics qfm(style()->font());
-	auto bound = this->bound(qfm);
+	auto textSize = this->staticTextSize(qfm);
 	if (this->hasShape())
 	{
-		this->getShape()->setInnerSize(bound.width(), bound.height());
+		this->getShape()->setInnerSize(textSize.width(), textSize.height());
 		textXOffset_ = this->getShape()->contentLeft();
 		textYOffset_ = this->getShape()->contentTop();
 	}
@@ -111,7 +108,7 @@ void TextRenderer::updateGeometry(int, int)
 	{
 		textXOffset_ = 0;
 		textYOffset_ = 0;
-		this->setSize(bound.size());
+		this->setSize(textSize);
 	}
 
 	// Correct underline, otherwise it is drawn in the middle of two pixels and appears fat and transparent.
@@ -150,13 +147,16 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		int end = selectionCursor->selectionLastIndex();
 
 		QPointF offset(textXOffset_, textYOffset_);
-		offset -= bound().topLeft();
+
+		// Might be a bit slow but that's OK, since we have very little selected text
+		// Here topLeft is the absolute corner of the text if it is drawn at 0,0.
+		offset -= nonStaticTextBound().topLeft();
 
 		// Draw selection background
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(style()->selectionBackground());
 		painter->drawRect(textXOffset_ + selectionCursor->xBegin(), 0,
-				selectionCursor->xEnd() - selectionCursor->xBegin(), this->height());
+				selectionCursor->xEnd() - selectionCursor->xBegin(), this->heightInLocal());
 		painter->setBrush(Qt::NoBrush);
 
 		// Draw selected text
@@ -193,13 +193,27 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 		}
 		else return false;
 	}
-	else if (dir == MoveOnPosition || dir == MoveDefault)
+	else if (dir == MoveOnPosition || dir == MoveDefault || dir == MoveOnTop || dir == MoveOnLeft || dir == MoveOnBottom
+			|| dir == MoveOnRight || dir == MoveOnTopLeft || dir == MoveOnBottomRight || dir == MoveOnCenter)
 	{
 		setFocus();
 		TextCursor* tc = new TextCursor(this);
 
-		if (dir == MoveDefault) tc->setCaretPosition(0);
-		else tc->setSelectedByDrag(reference.x(), reference.x());
+		auto xEnd = widthInLocal() - 1;
+		auto xMid = widthInLocal()/2;
+		switch(dir)
+		{
+			case MoveDefault: tc->setCaretPosition(0); break;
+			case MoveOnPosition: tc->setSelectedByDrag(reference.x(), reference.x()); break;
+			case MoveOnTop: tc->setSelectedByDrag(xMid, xMid); break;
+			case MoveOnLeft: tc->setSelectedByDrag(0, 0);  break;
+			case MoveOnBottom: tc->setSelectedByDrag(xMid, xMid); break;
+			case MoveOnRight: tc->setSelectedByDrag(xEnd, xEnd); break;
+			case MoveOnTopLeft: tc->setSelectedByDrag(0, 0); break;
+			case MoveOnBottomRight: tc->setSelectedByDrag(xEnd, xEnd); break;
+			case MoveOnCenter: tc->setSelectedByDrag(xMid, xMid); break;
+			default: Q_ASSERT(false); break;
+		}
 
 		scene()->setMainCursor(tc);
 		return true;

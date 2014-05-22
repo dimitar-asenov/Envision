@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,12 +28,6 @@
 
 namespace Interaction {
 
-void TextAndDescriptionStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("layout", layout_);
-	sl.load("text", text_);
-	sl.load("description", description_);
-}
+TextAndDescriptionStyle::~TextAndDescriptionStyle(){}
 
 }

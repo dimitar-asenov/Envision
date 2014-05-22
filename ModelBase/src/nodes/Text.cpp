@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -40,7 +40,7 @@ Text::Text(Node *parent) : Super(parent)
 
 Text::Text(Node *parent, PersistentStore &store, bool) :	Super(parent)
 {
-	text = store.loadStringValue();
+	text_ = store.loadStringValue();
 }
 
 Text::Text(const QString& text) :
@@ -51,12 +51,12 @@ Text::Text(const QString& text) :
 
 void Text::set(const QString &newText)
 {
-	execute(getSetCommand(newText));
+	execute(getSetCommand(text_, newText));
 }
 
 void Text::save(PersistentStore &store) const
 {
-	store.saveStringValue(text);
+	store.saveStringValue(text_);
 }
 
 void Text::load(PersistentStore &store)
@@ -67,9 +67,9 @@ void Text::load(PersistentStore &store)
 	set(store.loadStringValue());
 }
 
-FieldSet<QString>* Text::getSetCommand(const QString& newText)
+FieldSet<QString>* Text::getSetCommand(QString& textField, const QString& newText)
 {
-	return new FieldSet<QString> (this, text, newText);
+	return new FieldSet<QString> (this, textField, newText);
 }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,39 +26,27 @@
 
 #include "commands/NameChange.h"
 #include "commands/FieldSet.h"
-#include "nodes/Text.h"
+#include "nodes/NameText.h"
 #include "nodes/Node.h"
 #include "../model/Model.h"
 
 namespace Model {
 
-NameChange::NameChange(Node *target, const QString& oldName_, const QString& newName_, UndoCommand* command_) :
-	UndoCommand(target, "Change name"), oldName(oldName_), newName(newName_), command(command_)
-{
-}
-
-NameChange::NameChange(Node *target, Text* text_, const QString& newName_) :
-		UndoCommand(target, "Change name"), oldName(text_->get()), newName(newName_), command(text_->getSetCommand(newName_))
-{
-}
-
-NameChange::~NameChange()
-{
-	SAFE_DELETE(command);
-}
+NameChange::NameChange(NameText* target, QString& fieldToSet, QString setTo)
+: FieldSet(target, fieldToSet, setTo){}
 
 void NameChange::redo()
 {
-	command->redo();
-	if (auto model = UndoCommand::target()->model())
-		model->emitNameModified(UndoCommand::target(), oldName);
+	FieldSet<QString>::redo();
+	if (auto model = target()->model())
+		model->emitNameModified(static_cast<NameText*>(target()), oldValue);
 }
 
 void NameChange::undo()
 {
-	command->undo();
-	if (auto model = UndoCommand::target()->model())
-			model->emitNameModified(UndoCommand::target(), newName);
+	FieldSet<QString>::undo();
+	if (auto model = target()->model())
+			model->emitNameModified(static_cast<NameText*>(target()), newValue);
 }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,16 +36,13 @@ class AutoCompleteEntry;
 class INTERACTIONBASE_API AutoComplete {
 	public:
 
-		static void show(const QList<AutoCompleteEntry*>& entries, bool explicitSelection = false);
-
 		/**
-		 * Hides the auto completion menu immediately.
+		 * Schedules an event that will show the auto completion menu on the next scene update.
 		 *
-		 * This method removes the menu from the scene and deletes the visualization.
-		 *
-		 * \sa delayedHide();
+		 * The menu will be shown with the provided \a entries. If \a explicitSelection is set no default selection
+		 * will be made and the user will be required to explicitly select a menu item.
 		 */
-		static void hide();
+		static void show(const QList<AutoCompleteEntry*> entries, bool explicitSelection = false);
 
 		/**
 		 * Schedules an event that will hide the auto completion menu on the next scene update.
@@ -53,7 +50,7 @@ class INTERACTIONBASE_API AutoComplete {
 		 * Use this method when you do not want to immediately hide the visualization but wait until the next update. If
 		 * show() is called before the next update, the visualization is never hidden. This way flickering can be avoided.
 		 */
-		static void delayedHide();
+		static void hide();
 
 		static bool isVisible();
 
@@ -62,6 +59,18 @@ class INTERACTIONBASE_API AutoComplete {
 	private:
 		static AutoCompleteVis* vis_;
 		static bool hideRequested_;
+
+		/**
+		 * Updates the existing AutoComplete visualization or adds a new one to the top level items of a scene.
+		 */
+		static void showNow(const QList<AutoCompleteEntry*>& entries, bool explicitSelection);
+
+		/**
+		 * Hides the auto completion menu immediately.
+		 *
+		 * This method removes the menu from the scene and deletes the visualization.
+		 */
+		static void hideNow();
 };
 
 } /* namespace Interaction */

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -30,7 +30,7 @@
 
 #include "../nodes/composite/CompositeNode.h"
 #include "../nodes/nodeMacros.h"
-#include "../nodes/Text.h"
+#include "../nodes/NameText.h"
 
 DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNode)
 
@@ -40,7 +40,7 @@ class MODELBASE_API BinaryNode: public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryNode)
 
-	ATTRIBUTE(Model::Text, name, setName)
+	ATTRIBUTE(Model::NameText, name, setName)
 	ATTRIBUTE(BinaryNode, left, setLeft)
 	ATTRIBUTE(BinaryNode, right, setRight)
 

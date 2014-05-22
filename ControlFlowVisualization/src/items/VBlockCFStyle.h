@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,17 +34,13 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public ControlFlowItemStyle
+class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public Super<ControlFlowItemStyle>
 {
-	private:
-		VListCFStyle statements_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VBlockCFStyle() override;
 
-		const VListCFStyle& statements() const;
+		Property<VListCFStyle> statements{this,"statements"};
 };
 
-inline const VListCFStyle& VBlockCFStyle::statements() const { return statements_; }
 
 }

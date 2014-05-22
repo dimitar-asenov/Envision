@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -82,8 +82,8 @@ void ItemWrapperFormElement<ParentType,ChildItemType>::computeSize(Item* item, i
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem)
 	{
-		int width = childItem->width() + leftMargin() + rightMargin();
-		int height = childItem->height() + topMargin() + bottomMargin();
+		int width = childItem->widthInParent() + leftMargin() + rightMargin();
+		int height = childItem->heightInParent() + topMargin() + bottomMargin();
 		if (availableWidth > width) width = availableWidth;
 		if (availableHeight > height) height = availableHeight;
 		if (availableWidth > 0 || availableHeight > 0)
@@ -114,7 +114,7 @@ QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(Decl
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 
 	if(childItem) {
-		QRect rect = childItem->boundingRect().toRect();
+		QRect rect = QRect(QPoint(0,0), childItem->sizeInParent().toSize());
 		rect.translate(childItem->pos().toPoint());
 		QList<ItemRegion> regs;
 		regs.append(ItemRegion(rect));

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -42,7 +42,7 @@ int EmptyExpressionStringOffsetProvider::offset(Qt::Key /*key*/)
 
 void EmptyExpressionStringOffsetProvider::setOffset(int)
 {
-	vis_->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+	vis_->moveCursor(Visualization::Item::MoveOnLeft);
 }
 
 } /* namespace OOInteraction */

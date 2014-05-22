@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -77,6 +77,26 @@ class LOGGER_API Log : public QObject
 		virtual void add(Level l, QString message) = 0;
 
 		/**
+		 * A convenience function that adds a new info message to the log.
+		 */
+		void info(const QString& message);
+
+		/**
+		* A convenience function that adds a new warning message to the log.
+		*/
+		void warning(const QString& message);
+
+		/**
+		* A convenience function that adds a new error message to the log.
+		*/
+		void error(const QString& message);
+
+		/**
+		 * A convenience function that logs a new debug message to the log.
+		 */
+		void debug(const QString& message);
+
+		/**
 		 * Returns true if there are unread messages in the log.
 		 */
 		virtual bool hasUnreadEntries() = 0;
@@ -115,5 +135,9 @@ class LOGGER_API Log : public QObject
 		void newLogEntry();
 };
 
+inline void Log::info(const QString& message) { add(LOGINFO, message); }
+inline void Log::warning(const QString& message) { add(LOGWARNING, message); }
+inline void Log::error(const QString& message) { add(LOGERROR, message); }
+inline void Log::debug(const QString& message) { add(LOGDEBUG, message); }
 
 }

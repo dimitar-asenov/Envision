@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,18 +32,13 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SymbolStyle : public TextStyle
+class VISUALIZATIONBASE_API SymbolStyle : public Super<TextStyle>
 {
-	private:
-		QString symbol_;
-
 	public:
-		void load(StyleLoader& sl);
+		virtual ~SymbolStyle() override;
 
-		const QString& symbol() const;
+		Property<QString> symbol{this,"symbol"};
 };
-
-inline const QString& SymbolStyle::symbol() const { return symbol_; }
 
 
 }

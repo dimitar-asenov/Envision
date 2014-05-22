@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,34 +32,24 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TextStyle : public ItemStyle
+class VISUALIZATIONBASE_API TextStyle : public Super<ItemStyle>
 {
-	private:
-		QPen pen_;
-		QFont font_;
-		QPen selectionPen_;
-		QFont selectionFont_;
-		QBrush selectionBackground_;
-		bool htmlFormat_{};
-
-
 	public:
-		TextStyle();
+		virtual ~TextStyle() override;
 		void load(StyleLoader& sl);
 
-		const QPen& pen() const;
-		const QFont& font() const;
-		const QPen& selectionPen() const;
-		const QFont& selectionFont() const;
+		Property<QPen> pen{this,"pen"};
+		Property<QFont> font{this,"font"};
+		Property<QPen> selectionPen{this,"selectionPen"};
+		Property<QFont> selectionFont{this,"selectionFont"};
+		Property<bool> htmlFormat{this,"htmlFormat"};
+
 		const QBrush& selectionBackground() const;
-		bool htmlFormat() const;
+
+	private:
+		QBrush selectionBackground_;
 };
 
-inline const QPen& TextStyle::pen() const { return pen_; }
-inline const QFont& TextStyle::font() const { return font_; }
-inline const QPen& TextStyle::selectionPen() const { return selectionPen_; }
-inline const QFont& TextStyle::selectionFont() const { return selectionFont_; }
 inline const QBrush& TextStyle::selectionBackground() const { return selectionBackground_; }
-inline bool TextStyle::htmlFormat() const { return htmlFormat_; }
 
 }

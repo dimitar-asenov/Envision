@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,6 +28,7 @@
 #include "commands/FieldSet.h"
 #include "model/Model.h"
 #include "ModelException.h"
+#include "NameText.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::Reference)
@@ -36,42 +37,77 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
-Reference::Reference(Node *parent) : Super(parent), target_()
+QList<Reference*> Reference::allReferences_;
+QSet<Reference*> Reference::pendingResolution_;
+QList<std::function<void (Node* subTree)>> Reference::unresolutionSteps_;
+
+Reference::Reference(Node *parent) : Super(parent)
 {
-	manageUnresolvedReferencesListInModel();
+	allReferences_.append(this);
+	if (parent && parent->model()) pendingResolution_.insert(this);
 }
 
-Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent), target_()
+Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 {
+	allReferences_.append(this);
 	name_ = store.loadReferenceValue(this);
-	manageUnresolvedReferencesListInModel();
+	if (state_ == ReferenceNeedsToBeResolved && parent && parent->model())
+		pendingResolution_.insert(this);
 }
 
-void Reference::setName(const QString &name, bool tryResolvingImmediately)
+Reference::~Reference()
 {
-	execute(new FieldSet<QString> (this, name_, name));
-	execute(new FieldSet<Node*> (this, target_, nullptr));
-
-	if (tryResolvingImmediately) resolve();
-	manageUnresolvedReferencesListInModel();
+	pendingResolution_.remove(this);
+	allReferences_.removeAll(this);
 }
 
-void Reference::setTarget(Node* target)
+void Reference::setName(const QString &name)
 {
-	if (target == target_) return;
-
-	if (auto m = model()) m->changeModificationTarget(this);
-	if (target) execute(new FieldSet<QString> (this, name_, QString()));
-	else execute(new FieldSet<QString> (this, name_, name()));
-
-	execute(new FieldSet<Node*> (this, target_, target));
-	manageUnresolvedReferencesListInModel();
+	if (name != name_)
+	{
+		execute(new FieldSet<QString> (this, name_, name));
+		target_ = nullptr;
+		setResolutionNeeded();
+	}
 }
 
-bool Reference::resolve()
+Node* Reference::computeTarget() const
 {
-	return false;
+	Q_ASSERT(false && "Should not call Reference::computeTarget()");
+	return nullptr;
 }
+
+bool Reference::resolveHelper(bool indirect)
+{
+	// TODO this is not multithread friendly.
+	if (state_ != ReferenceNeedsToBeResolved) return isResolved();
+	state_ = ReferenceIsBeingResolved;
+
+	auto newTarget = computeTarget();
+
+	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
+
+	auto oldTarget = target_;
+	target_ = newTarget;
+
+	if (target_ || !indirect)
+	{
+		// This is needed because of the following situation.
+		// We are resolving a reference A, and during the process we explore reference B, needed for the resolution of A,
+		// and reference C, which is not needed for the resolution of A. All references but A will be explored indirectly.
+		// It could happen that to resolve C properly we need to resolve A first. Therefore when failing to resolve a
+		// reference that is explored indirectly, we shouldn't assume that resolution will fail.
+		pendingResolution_.remove(this);
+		state_ = ReferenceEstablished;
+	}
+	else state_ = ReferenceNeedsToBeResolved;
+
+	if (oldTarget != target_) targetChanged(oldTarget);
+
+	return isResolved();
+}
+
+void Reference::targetChanged(Node*){}
 
 void Reference::save(PersistentStore &store) const
 {
@@ -89,19 +125,166 @@ void Reference::load(PersistentStore &store)
 	setName( store.loadReferenceValue(this) );
 }
 
-void Reference::manageUnresolvedReferencesListInModel()
+Node* Reference::target()
 {
-	if (model())
+	if (state_ == ReferenceNeedsToBeResolved) resolveHelper(true);
+	return state_ == ReferenceEstablished ? target_ : nullptr;
+}
+
+void Reference::setResolutionNeeded()
+{
+	state_ = ReferenceNeedsToBeResolved;
+	pendingResolution_.insert(this);
+}
+
+template<class NodeType>
+void Reference::forAll(Node* subTree, std::function<void (NodeType*)> function)
+{
+	if (subTree)
 	{
-		if (isResolved()) model()->removeUnresolvedReference(this);
-		else model()->addUnresolvedReference(this);
+		QList<Node*> stack;
+		stack << subTree;
+		while (!stack.isEmpty())
+		{
+			auto top = stack.takeLast();
+
+			if (auto node = DCast<NodeType>(top) ) function(node);
+			else stack.append(top->children());
+		}
 	}
 }
 
-Node* Reference::target()
+void Reference::unresolveReferencesHelper(Node* subTree, bool all,
+	const QSet<QString>& names)
 {
-	if (!target_) resolve();
-	return target_;
+	if (!subTree || (!all && names.isEmpty())) return;
+
+	auto targetModel = subTree->model();
+	bool isRoot = !subTree->parent();
+
+	std::function<void (Reference*)> f;
+	if (all)
+	{
+		f = [](Reference* ref) { ref->setResolutionNeeded();};
+	}
+	else
+	{
+		if (names.size() == 2)
+		{
+			//This case occurs when changing a name. This happens when the user is typing and therefore it is very
+			//performance sensitive. Thus we optimize it specially.
+
+			QString first = *names.begin();
+			QString second = *++names.begin();
+
+			// Removing this if, and just leaving the statement at the of this method to handle the updates using the
+			// defined f function is slow. In one test an additional 4-5ms were needed on top of the 10-13ms processing
+			// time on a 3.4GHz CPU. Therefore there is a significant cost associated with calling the f function, and
+			// it's betterto just process this case here directly.
+			// If needed this optimization could also be used in the other cases.
+			if (isRoot)
+			{
+				for(auto ref : allReferences_)
+					if (targetModel == ref->model())
+					{
+						auto& refName = ref->name();
+						if (refName == first || refName == second)
+							ref->setResolutionNeeded();
+					}
+				return;
+			}
+
+			f = [=](Reference* ref)
+				{ auto& refName = ref->name(); if (refName == first || refName == second) ref->setResolutionNeeded();};
+		}
+		else if (names.size() < 20) // Optimize in the case of just a few names, by avoiding hasing.
+		{
+			// TODO: Find out what's a good value for the magick number 20 above.
+			QMap<QString, int> mapNames;
+			for (auto n : names) mapNames.insert(n,0); // TODO: isn't there a way to put void here?
+
+			f = [=](Reference* ref) { if (mapNames.contains(ref->name())) ref->setResolutionNeeded();};
+		}
+		else
+		{
+			f = [=](Reference* ref) { if (names.contains(ref->name())) ref->setResolutionNeeded();};
+		}
+	}
+
+	if (isRoot)
+	{
+		for(auto ref : allReferences_) if (targetModel == ref->model()) f(ref);
+	}
+	else
+	{
+		// If this is not the root, then explore the references only in the specified subTree, which is faster
+		forAll<Reference>(subTree, f);
+	}
+
+
+}
+
+void Reference::unresolveAll(Node* subTree)
+{
+	unresolveReferencesHelper(subTree, true, {});
+}
+
+void Reference::unresolveNames(Node* subTree, const QSet<QString>& names)
+{
+	unresolveReferencesHelper(subTree, false, names);
+}
+
+void Reference::unresolveIfNameIntroduced(Node* subTreeToUnresolve,
+		Node* subTreeToLookForNewNames)
+{
+	QSet<QString> names;
+	forAll<NameText>(subTreeToLookForNewNames, [&names](NameText* name){ names.insert(name->get());});
+	unresolveReferencesHelper(subTreeToUnresolve, false, names);
+}
+
+void Reference::unresolveAfterNewSubTree(Node* subTree)
+{
+	Reference::unresolveAll(subTree);
+	Reference::unresolveIfNameIntroduced(subTree->root(), subTree);
+	for (auto step : unresolutionSteps_) step(subTree);
+}
+
+void Reference::addUnresolutionSteps(std::function<void (Node* subTree)> step)
+{
+	unresolutionSteps_.append(step);
+}
+
+void Reference::resolvePending()
+{
+	log.debug("Resolving references");
+
+	int i = 0;
+	int round = 0;
+	int resolved = 0;
+	auto pending = pendingResolution_;
+
+	while(!pending.isEmpty())
+	{
+		log.debug("resolution round " + QString::number(round) + ", "
+					 + QString::number(pendingResolution_.size()) + " references pending.");
+		++round;
+
+		for (auto r : pending)
+		{
+			if ( r->resolve() ) ++resolved;
+			if (++i % 10000 == 0)	log.debug("Processed " + QString::number(i) + " references.");
+		}
+
+		// As a result of resolution of some references, some other references could have become invalid.
+		pending = pendingResolution_;
+	}
+
+	log.debug(QString::number(resolved) + " resolution" + (resolved == 1 ? "" : "s") + " in "
+				 + QString::number(round) + (round > 1 ? " rounds." : " round."));
+
+	int totalResolvedReferences = 0;
+	for (auto r : allReferences_) if (r->isResolved()) ++totalResolvedReferences;
+	log.debug("Total number of resolved references: " + QString::number(totalResolvedReferences));
 }
 
 }

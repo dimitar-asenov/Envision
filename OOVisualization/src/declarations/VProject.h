@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,35 +32,39 @@
 #include "OOModel/src/declarations/Project.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class VText;
-	class PanelBorderLayout;
 	class PositionLayout;
 	class VList;
+	class Static;
 }
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VProject
-: public Super<Visualization::ItemWithNode<VProject, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  	  OOModel::Project>>
+: public Super<Visualization::ItemWithNode<VProject, Visualization::DeclarativeItem<VProject>, OOModel::Project>>
 {
 	ITEM_COMMON(VProject)
 
 	public:
 		VProject(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VProject();
+
+		static void initializeForms();
+
+		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+		virtual bool itemGeometryChangesWithZoom() const override;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
-		Visualization::SequentialLayout* header{};
-		Visualization::VText* name{};
+		Visualization::Static* icon_{};
+		Visualization::VText* name_{};
+
 		Visualization::PositionLayout* body_{};
-		Visualization::SequentialLayout* content_{};
 		Visualization::VList* libraries_{};
 		Visualization::VList* declarations_{};
 		Visualization::VList* fields_{};

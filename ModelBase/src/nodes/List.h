@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -37,8 +37,6 @@
 
 namespace Model {
 
-class Text;
-
 class MODELBASE_API List: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(List)
@@ -53,9 +51,9 @@ class MODELBASE_API List: public Super<Node>
 
 		int size() const;
 		bool isEmpty() const;
-		template <class T = Node> T* first();
-		template <class T = Node> T* last();
-		template <class T = Node> T* at(int i);
+		template <class T = Node> T* first() const;
+		template <class T = Node> T* last() const;
+		template <class T = Node> T* at(int i) const;
 
 		int indexOf(const Node* item) const;
 		int indexToSubnode(const Node* node) const;
@@ -89,8 +87,8 @@ class MODELBASE_API List: public Super<Node>
 
 		const QVector<Node*>& nodes();
 
-		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, Node* source,
-				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) override;
+		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
+				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 
 		virtual bool replaceChild(Node* child, Node* replacement);
 
@@ -123,19 +121,19 @@ inline List::iterator List::end() {return nodes_.end();}
 inline List::const_iterator List::end() const {return nodes_.end();}
 inline List::const_iterator List::cend() const {return nodes_.constEnd();}
 
-template <class T> T* List::first()
+template <class T> T* List::first() const
 {
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return static_cast<T*> (nodes_.first());
 }
 
-template <class T> T* List::last()
+template <class T> T* List::last() const
 {
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return static_cast<T*> (nodes_.last());
 }
 
-template <class T> T* List::at(int i)
+template <class T> T* List::at(int i) const
 {
 	return static_cast<T*> (nodes_[i]);
 }

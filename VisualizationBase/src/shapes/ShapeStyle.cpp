@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2013 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,24 +28,6 @@
 
 namespace Visualization {
 
-ShapeStyle::ShapeStyle() :
-	outline_(Qt::SolidPattern, 1)
-{
-}
-
-ShapeStyle::~ShapeStyle()
-{
-}
-
-void ShapeStyle::setOutline(const QPen& outline)
-{
-	outline_ = outline;
-}
-
-void ShapeStyle::load(StyleLoader& sl)
-{
-	Style::load(sl);
-	sl.load("outline", outline_);
-}
+ShapeStyle::~ShapeStyle(){}
 
 }

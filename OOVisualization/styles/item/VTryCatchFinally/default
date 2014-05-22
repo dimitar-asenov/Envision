@@ -1,46 +1,31 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
-	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline>
-				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>200</red>
-					<green>200</green>
-					<blue>200</blue>
-				</color>
-			</outline>
-			<backgroundBrush>
-				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>224</red>
-					<green>224</green>
-					<blue>224</blue>
-				</color>
-			</backgroundBrush>
-			<cornerRadius>4</cornerRadius>
-		</shape>
-		<leftInnerMargin>1</leftInnerMargin>
-		<rightInnerMargin>0</rightInnerMargin>
-		<bottomInnerMargin>0</bottomInnerMargin>
-	</layout>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>1</width>
+			<color>
+				<alpha>255</alpha>
+				<red>200</red>
+				<green>200</green>
+				<blue>200</blue>
+			</color>
+		</outline>
+		<backgroundBrush>
+			<style>12</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>224</green>
+				<blue>224</blue>
+			</color>
+		</backgroundBrush>
+		<cornerRadius>4</cornerRadius>
+	</shape>
 	
 	<tryIcon prototypes="item/Symbol/keyword">
 		<symbol>try</symbol>
 	</tryIcon>
-		
-	<contents prototypes="layout/SequentialLayout/default">
-		<alignment>1</alignment>
-		<direction>2</direction>
-		<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
-		<hasCursorWhenEmpty>false</hasCursorWhenEmpty>
-		<spaceBetweenElements>1</spaceBetweenElements>
-	</contents>
-	
-	<tryBody prototypes="item/VStatementItemList/default" />
 	
 	<catchClauses prototypes="item/VList/default">
 		<shape />
@@ -53,7 +38,7 @@
 		</itemsStyle>
 	</catchClauses>
 
-	<finallyOutline prototypes="layout/PanelBorderLayout/default">
+	<finallyOutline prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<outline>
@@ -76,14 +61,9 @@
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>
 		</shape>
-		<leftInnerMargin>1</leftInnerMargin>
-		<rightInnerMargin>0</rightInnerMargin>
-		<bottomInnerMargin>0</bottomInnerMargin>
 	</finallyOutline>
 	
 	<finallyIcon prototypes="item/Symbol/keyword">
 		<symbol>finally</symbol>
 	</finallyIcon>
-	
-	<finallyBody prototypes="item/VStatementItemList/default" />
 </style>

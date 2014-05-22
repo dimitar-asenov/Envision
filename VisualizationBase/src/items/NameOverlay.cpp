@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2013 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -95,49 +95,44 @@ Item::UpdateType NameOverlay::needsUpdate()
 
 void NameOverlay::determineChildren()
 {
-	for (auto v : scene()->views())
+	const double OVERLAY_SCALE_TRESHOLD = 0.5;
+
+	auto scalingFactor = mainViewScalingFactor();
+	if (scalingFactor < OVERLAY_SCALE_TRESHOLD && !bottomItems_)
 	{
-		if (auto mv = dynamic_cast<MainView*>(v))
+		// Add the overlays
+		bottomItems_ = new BottomItemNode{};
+
+		QList<Item*> stack = scene()->topLevelItems();
+		while(!stack.isEmpty())
 		{
-			const double OVERLAY_SCALE_TRESHOLD = 0.5;
-			if (mv->scaleFactor() < OVERLAY_SCALE_TRESHOLD && !bottomItems_)
-			{
-				// Add the overlays
-				bottomItems_ = new BottomItemNode{};
+			auto item = stack.takeLast();
 
-				QList<Item*> stack = scene()->topLevelItems();
-				while(!stack.isEmpty())
-				{
-					auto item = stack.takeLast();
+			const double OVERLAY_MIN_WIDTH = 200;
+			const double OVERLAY_MIN_HEIGHT = 200;
+				if (item->widthInParent() < OVERLAY_MIN_WIDTH
+						|| item->heightInParent() < OVERLAY_MIN_HEIGHT)
+					continue;
 
-					const double OVERLAY_MIN_WIDTH = 200;
-					const double OVERLAY_MIN_HEIGHT = 200;
-						if (item->boundingRect().width() < OVERLAY_MIN_WIDTH
-								|| item->boundingRect().height() < OVERLAY_MIN_HEIGHT)
-							continue;
+			auto definesSymbol = item->node() && item->node()->definesSymbol();
 
-					auto definesSymbol = item->node() && item->node()->definesSymbol();
+			if (definesSymbol) bottomItems_->insert(item);
+			stack.append(item->childItems());
+		}
 
-					if (definesSymbol) bottomItems_->insert(item);
-					stack.append(item->childItems());
-				}
-
-				// Prepare a more efficient way to explore the nodes when rendering
-				dfsOrder_.clear();
-				QList<BottomItemNode*> dfsStack = {bottomItems_};
-				while(!dfsStack.isEmpty())
-				{
-					auto last = dfsStack.takeLast();
-					dfsOrder_.prepend(last);
-					dfsStack.append(last->children);
-				}
-			}
-			else if (mv->scaleFactor() >= OVERLAY_SCALE_TRESHOLD && bottomItems_)
-				SAFE_DELETE(bottomItems_);
-
-			break;
+		// Prepare a more efficient way to explore the nodes when rendering
+		dfsOrder_.clear();
+		QList<BottomItemNode*> dfsStack = {bottomItems_};
+		while(!dfsStack.isEmpty())
+		{
+			auto last = dfsStack.takeLast();
+			dfsOrder_.prepend(last);
+			dfsStack.append(last->children);
 		}
 	}
+	else if (scalingFactor >= OVERLAY_SCALE_TRESHOLD && bottomItems_)
+		SAFE_DELETE(bottomItems_);
+
 }
 
 void NameOverlay::updateGeometry(int, int)
@@ -178,7 +173,7 @@ void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 			auto item = node->item;
 			if (!item) continue;
 
-			auto rect = item->mapToScene(item->boundingRect()).boundingRect().toRect();
+			auto rect = item->sceneBoundingRect().toRect();
 
 			// Only render texts that are inside the view
 			auto inView = true;

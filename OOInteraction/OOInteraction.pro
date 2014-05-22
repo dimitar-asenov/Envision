@@ -9,7 +9,8 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -lfilepersistence
-HEADERS += src/expression_editor/CommandDescriptor.h \
+HEADERS += src/handlers/HArrayInitializer.h \
+    src/expression_editor/CommandDescriptor.h \
     src/expression_editor/CompoundObjectDescriptor.h \
     src/expression_editor/commands/CommandExpression.h \
     src/expression_editor/commands/CreateMethodCall.h \
@@ -49,7 +50,8 @@ HEADERS += src/expression_editor/CommandDescriptor.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/expression_editor/CommandDescriptor.cpp \
+SOURCES += src/handlers/HArrayInitializer.cpp \
+    src/expression_editor/CommandDescriptor.cpp \
     src/expression_editor/CompoundObjectDescriptor.cpp \
     src/expression_editor/commands/CreateMethodCall.cpp \
     src/string_offset_providers/GridConstructors.cpp \
