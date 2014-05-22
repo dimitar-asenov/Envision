@@ -426,8 +426,8 @@ inline bool PositionLayout::allChildrenAbstracted(ArrangementAlgorithmItem& item
 inline void PositionLayout::automaticSemanticZoomLevelChange(ArrangementAlgorithmItem& item,
 	QVector<ArrangementAlgorithmItem>& allItems, bool zoomedIn, bool zoomedOut, qreal geometricZoomScale)
 {
-	// defines the threshold when an item gets abstracted if its perceived scale falls below the value
-	const qreal ABSTRACTION_THRESHOLD = 0.8;
+	// defines the threshold when an item gets abstracted if its perceived width falls below the value
+	const qreal ABSTRACTION_THRESHOLD = 200;
 
 	// defines the semantic zoom level to be used when abstracting an item
 	// for performance reasons this is a constant but in the interest of general consistency it's value should be
@@ -440,8 +440,8 @@ inline void PositionLayout::automaticSemanticZoomLevelChange(ArrangementAlgorith
 
 		if (geometricZoomScale < 1)
 		{
-			if (item.scale * scale() * geometricZoomScale < ABSTRACTION_THRESHOLD && zoomedOut &&
-					 item.item->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
+			if (item.scale * scale() * geometricZoomScale * item.item->widthInLocal() < ABSTRACTION_THRESHOLD && zoomedOut
+				&& item.item->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
 			{
 				if (allChildrenAbstracted(item))
 				{
