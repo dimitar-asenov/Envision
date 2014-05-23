@@ -59,3 +59,6 @@ SOURCES += src/handlers/HCommentImage.cpp \
     src/CommentDiagramToolbar.cpp \
     src/items/VCommentDiagramStyle.cpp \
     src/ColorPicker.cpp
+
+RESOURCES += \
+    res.qrc

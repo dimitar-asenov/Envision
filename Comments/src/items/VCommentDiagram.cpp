@@ -193,7 +193,6 @@ void VCommentDiagram::toggleEditing()
 	else toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);
-
 }
 
 void VCommentDiagram::setShowConnectorPoints(bool show)

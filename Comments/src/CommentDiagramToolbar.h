@@ -51,9 +51,7 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 
 	private:
 		QToolButton* bSelection_{};
-		QToolButton* bRectangle_{};
-		QToolButton* bEllipse_{};
-		QToolButton* bDiamond_{};
+		QToolButton* bSelectShape_{};
 		QToolButton* bConnections_{};
 
 		ColorPicker* colorPickerBackground_{};
@@ -69,7 +67,7 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		Visualization::Item* currentShape_{};
 
 	public slots:
-		void setSelection();
+		void setSelection(bool sel);
 		void createRectangle();
 		void createEllipse();
 		void createDiamond();

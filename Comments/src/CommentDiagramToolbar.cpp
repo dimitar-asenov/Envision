@@ -35,7 +35,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	this->setWindowTitle("Diagram Editing Toolbar");
 
 	bSelection_ = new QToolButton;
-	bSelection_->setText("Selection");
+	bSelection_->setIcon(QIcon(":/icons/selection.png"));
 	bSelection_->setCheckable(true);
 	this->addWidget(bSelection_);
 	bSelection_->setChecked(true);
@@ -43,24 +43,17 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	this->addSeparator();
 
-	bRectangle_ = new QToolButton;
-	bRectangle_->setText("Rectangle");
-	bRectangle_->setCheckable(true);
-	this->addWidget(bRectangle_);
-	bEllipse_ = new QToolButton;
-	bEllipse_->setText("Ellipse");
-	bEllipse_->setCheckable(true);
-	this->addWidget(bEllipse_);
-	bDiamond_ = new QToolButton;
-	bDiamond_->setText("Diamond");
-	bDiamond_->setCheckable(true);
-	this->addWidget(bDiamond_);
+	bSelectShape_ = new QToolButton;
+	bSelectShape_->setText("Select Shape");
+	this->addWidget(bSelectShape_);
 
-	group_ = new QButtonGroup(this);
-	group_->addButton(bSelection_);
-	group_->addButton(bRectangle_);
-	group_->addButton(bEllipse_);
-	group_->addButton(bDiamond_);
+	QMenu* menu = new QMenu();
+	menu->addAction(QIcon(":/icons/rectangle.png"),"Rectangle")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon(":/icons/ellipse.png"),"Ellipse")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon(":/icons/diamond.png"),"Diamond")->setIconVisibleInMenu(true);
+
+	bSelectShape_->setPopupMode(QToolButton::InstantPopup);
+	bSelectShape_->setMenu(menu);
 
 	this->addSeparator();
 
@@ -80,10 +73,10 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	this->setWindowFlags(Qt::WindowStaysOnTopHint);
 
-	connect(bSelection_, SIGNAL(toggled(bool)), this, SLOT(setSelection()));
-	connect(bRectangle_, SIGNAL(toggled(bool)), this, SLOT(createRectangle()));
-	connect(bEllipse_, SIGNAL(toggled(bool)), this, SLOT(createEllipse()));
-	connect(bDiamond_, SIGNAL(toggled(bool)), this, SLOT(createDiamond()));
+	connect(bSelection_, SIGNAL(toggled(bool)), this, SLOT(setSelection(bool)));
+	connect(menu->actions().at(0), SIGNAL(triggered(bool)), this, SLOT(createRectangle()));
+	connect(menu->actions().at(1), SIGNAL(triggered(bool)), this, SLOT(createEllipse()));
+	connect(menu->actions().at(2), SIGNAL(triggered(bool)), this, SLOT(createDiamond()));
 	connect(colorPickerBackground_, SIGNAL(colorChanged(QString)), this, SLOT(applyBackgroundColor(QString)));
 	connect(colorPickerBorder_, SIGNAL(colorChanged(QString)), this, SLOT(applyBorderColor(QString)));
 	connect(colorPickerText_, SIGNAL(colorChanged(QString)), this, SLOT(applyTextColor(QString)));
@@ -96,9 +89,7 @@ void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
 	colorPickerBackground_->setColors(diagram->style()->getColors());
 	colorPickerBorder_->setColors(diagram->style()->getColors());
 	colorPickerText_->setColors(diagram->style()->getColors());
-
 }
-
 
 void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 {
@@ -110,39 +101,27 @@ void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 	colorPickerText_->setselectedColor(shape->node()->textColor());
 }
 
-void CommentDiagramToolbar::setSelection()
+void CommentDiagramToolbar::setSelection(bool sel)
 {
-	selection_ = true;
+	selection_ = sel;
 }
 
 void CommentDiagramToolbar::createRectangle()
 {
-	//auto shape = new CommentDiagramShape(0, 0, 100, 100, CommentDiagramShape::ShapeType::Rectangle);
-	//diagram_->model()->beginModification(diagram_, "create shape");
-	//diagram_->shapes()->append(shape);
-	//diagram_->model()->endModification();
 	nextShapeToAdd_ = CommentDiagramShape::ShapeType::Rectangle;
-	selection_ = false;
+	bSelection_->setChecked(false);
 }
 
 void CommentDiagramToolbar::createEllipse()
 {
-	//auto shape = new CommentDiagramShape(0, 0, 100, 100, CommentDiagramShape::ShapeType::Ellipse);
-	//diagram_->model()->beginModification(diagram_, "create shape");
-	//diagram_->shapes()->append(shape);
-	//diagram_->model()->endModification();
 	nextShapeToAdd_ = CommentDiagramShape::ShapeType::Ellipse;
-	selection_ = false;
+	bSelection_->setChecked(false);
 }
 
 void CommentDiagramToolbar::createDiamond()
 {
-	//auto shape = new CommentDiagramShape(0, 0, 100, 100, CommentDiagramShape::ShapeType::Diamond);
-	//diagram_->model()->beginModification(diagram_, "create shape");
-	//diagram_->shapes()->append(shape);
-	//diagram_->model()->endModification();
 	nextShapeToAdd_ = CommentDiagramShape::ShapeType::Diamond;
-	selection_ = false;
+	bSelection_->setChecked(false);
 }
 
 void CommentDiagramToolbar::applyBackgroundColor(QString color)
@@ -172,7 +151,7 @@ void CommentDiagramToolbar::applyTextColor(QString color)
 void CommentDiagramToolbar::setSelectionMode(bool sel)
 {
 	bSelection_->setChecked(sel);
-	selection_ = sel;
+	//selection_ = sel;
 }
 
 bool CommentDiagramToolbar::getSelectionMode()
