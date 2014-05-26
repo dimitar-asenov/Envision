@@ -46,8 +46,8 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 	auto shape = DCast<VCommentDiagramShape>(target);
 	event->ignore();
 
-	if(shape->diagram()->editing())
-	{
+	//if(shape->diagram()->editing())
+	//{
 		if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
 		{
 			event->accept();
@@ -55,7 +55,7 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 			shape->diagram()->node()->removeShape(shape->node());
 			shape->diagram()->node()->endModification();
 		}
-	}
+	//}
 
 	if (!event->isAccepted())
 		GenericHandler::keyPressEvent(target, event);
@@ -66,8 +66,9 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 	event->ignore();
 	auto vShape = DCast<VCommentDiagramShape>(target);
 	auto vDiagram = vShape->diagram();
+	vDiagram->toggleEditing();
 
-	if(vDiagram->editing() && vDiagram->toolbar_->getSelectionMode())
+	if(vDiagram->toolbar_->getSelectionMode())
 	{
 		vDiagram->toolbar_->setCurrentShape(target);
 		vDiagram->node()->beginModification("shape");
@@ -84,7 +85,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 			else
 				vShape->setCursor(Qt::ClosedHandCursor);
 		}
-		else if(event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier)
+		if(event->button() == Qt::LeftButton && vDiagram->showConnectorPoints())
 		{
 			event->accept();
 			int connectorIndex = vShape->node()->connectorPointNear(clickPos);
@@ -168,7 +169,7 @@ void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphics
 void HCommentDiagramShape::hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *)
 {
 	auto shape = DCast<VCommentDiagramShape>(target);
-	if(shape->diagram()->editing())
+	//if(shape->diagram()->editing())
 		shape->setCursor(Qt::OpenHandCursor);
 }
 

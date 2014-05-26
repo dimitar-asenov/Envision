@@ -27,9 +27,18 @@
 #include "ColorPicker.h"
 
 ColorPicker::ColorPicker(QWidget *parent) : QToolButton(parent)
-{}
+{
+	mapEnvisionTextColors_.insert("black","#000000");
+	mapEnvisionTextColors_.insert("blue","#0000ff");
+	mapEnvisionTextColors_.insert("green","#00ff00");
+	mapEnvisionTextColors_.insert("lime","#bfff00");
+	mapEnvisionTextColors_.insert("purple","#ff00ff");
+	mapEnvisionTextColors_.insert("red","#ff0000");
+	mapEnvisionTextColors_.insert("white","#ffffff");
+	mapEnvisionTextColors_.insert("yellow","#ffff00");
+}
 
-void ColorPicker::setColors(QVector<QColor> colors)
+void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 {
 	QMenu* menu = new QMenu;
 	QWidgetAction* wiAction = new QWidgetAction(this);
@@ -51,10 +60,43 @@ void ColorPicker::setColors(QVector<QColor> colors)
 			aButton->setStyleSheet("border: none;");
 			pixmap.fill(colors.at(i));
 			aButton->setIcon(QIcon(pixmap));
-			aLayout->addWidget(aButton,i/10,i%10);
+			aLayout->addWidget(aButton,i/colorsPerRow,i%colorsPerRow);
 			signalMapper->setMapping(aButton,colors.at(i).name());
 			connect(aButton,SIGNAL(clicked()),signalMapper,SLOT(map()));
 	}
+	menu->addAction(wiAction);
+	this->setMenu(menu);
+	this->setPopupMode(QToolButton::InstantPopup);
+}
+
+void ColorPicker::setEnvisionTextColors()
+{
+	QMenu* menu = new QMenu;
+	QWidgetAction* wiAction = new QWidgetAction(this);
+
+	QSignalMapper* signalMapper = new QSignalMapper(this);
+	connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(handleColorPicked(QString)));
+
+	QPixmap pixmap(100,100);
+	QWidget* aWidget = new QWidget(this);
+	QGridLayout* aLayout = new QGridLayout;
+	aLayout->setSpacing(0);
+	aWidget->setLayout(aLayout);
+	wiAction->setDefaultWidget(aWidget);
+
+	QToolButton* aButton;
+	QMap<QString, QString>::iterator i;
+	for (i = mapEnvisionTextColors_.begin(); i != mapEnvisionTextColors_.end(); ++i)
+	{
+		aButton = new QToolButton;
+		aButton->setStyleSheet("border: none;");
+		pixmap.fill(i.value());
+		aButton->setIcon(QIcon(pixmap));
+		aLayout->addWidget(aButton,1,std::distance(mapEnvisionTextColors_.begin(),i));
+		signalMapper->setMapping(aButton,i.key());
+		connect(aButton,SIGNAL(clicked()),signalMapper,SLOT(map()));
+	}
+
 	menu->addAction(wiAction);
 	this->setMenu(menu);
 	this->setPopupMode(QToolButton::InstantPopup);

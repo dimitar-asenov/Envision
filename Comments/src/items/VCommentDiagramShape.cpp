@@ -62,7 +62,7 @@ void VCommentDiagramShape::determineChildren()
 	shapeColor_ = style()->colorFromName(node()->shapeColor());
 	backgroundColor_ = style()->colorFromName(node()->backgroundColor());
 	text_->setStyle(VText::itemStyles().get(node()->textColor()));
-	text_->setEditable(diagram()->editing());
+	text_->setEditable(true);
 }
 
 void VCommentDiagramShape::updateGeometry(int, int)
@@ -105,8 +105,8 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			break;
 	}
 
-	if(diagram()->editing())
-	{
+	//if(diagram()->editing())
+	//{
 		if(diagram()->showConnectorPoints())
 		{
 			// Temporarily assume a thicker painter with a different color for drawing the connector points
@@ -130,9 +130,9 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 				}
 			}
 		}
-		else
-			for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
-	}
+		//else
+			//for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
+	//}
 }
 
 VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) const

@@ -128,8 +128,7 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	if(editing_)
 	{
 		painter->setPen(QPen(Qt::red, EDIT_OUTLINE_SIZE));
-		painter->drawRect( QRect{QPoint(EDIT_OUTLINE_SIZE/2, EDIT_OUTLINE_SIZE/2),
-										 sizeInLocal().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
+		//painter->drawRect( QRect{QPoint(EDIT_OUTLINE_SIZE/2, EDIT_OUTLINE_SIZE/2),sizeInLocal().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
 	}
 	else if(!hasShape())
 		painter->drawRect(QRect{QPoint(0,0), sizeInLocal().toSize()});
@@ -184,13 +183,7 @@ void VCommentDiagram::synchronizeWithNodes(const QVector<Model::Node*>& nodes, Q
 
 void VCommentDiagram::toggleEditing()
 {
-	editing_ = !editing_;
-	if(!editing_)
-	{
-		showConnectorPoints_ = false;
-		toolbar_->close();
-	}
-	else toolbar_->show();
+	toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);
 }

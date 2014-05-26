@@ -28,6 +28,8 @@
 
 #include "items/VCommentDiagramShape.h"
 
+using namespace Visualization;
+
 namespace Comments{
 
 CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
@@ -86,9 +88,9 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
 {
 	diagram_ = diagram;
-	colorPickerBackground_->setColors(diagram->style()->getColors());
-	colorPickerBorder_->setColors(diagram->style()->getColors());
-	colorPickerText_->setColors(diagram->style()->getColors());
+	colorPickerBackground_->setColors(diagram->style()->getColors(),diagram->style()->getColorsPerRow());
+	colorPickerBorder_->setColors(diagram->style()->getColors(),diagram->style()->getColorsPerRow());
+	colorPickerText_->setEnvisionTextColors();
 }
 
 void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
@@ -151,7 +153,6 @@ void CommentDiagramToolbar::applyTextColor(QString color)
 void CommentDiagramToolbar::setSelectionMode(bool sel)
 {
 	bSelection_->setChecked(sel);
-	//selection_ = sel;
 }
 
 bool CommentDiagramToolbar::getSelectionMode()

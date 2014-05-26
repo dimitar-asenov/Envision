@@ -62,6 +62,7 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 
 		bool selection_{};
 		bool connection_{};
+		int colorsPerRow_{};
 
 		VCommentDiagram* diagram_{};
 		Visualization::Item* currentShape_{};

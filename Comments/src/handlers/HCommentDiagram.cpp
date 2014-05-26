@@ -55,7 +55,7 @@ void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 	else if(event->key() == Qt::Key_Shift || event->modifiers() & Qt::Key_Shift)
 	{
 		event->accept();
-		diagram->setShowConnectorPoints(true);
+		//diagram->setShowConnectorPoints(true);
 	}
 
 	if (!event->isAccepted())
@@ -69,16 +69,17 @@ void HCommentDiagram::keyReleaseEvent(Visualization::Item *target, QKeyEvent *ev
 	if(diagram->showConnectorPoints() && !(event->modifiers() & Qt::Key_Shift))
 	{
 		event->accept();
-		diagram->setShowConnectorPoints(false);
+		//diagram->setShowConnectorPoints(false);
 	}
 }
 
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto diagram = DCast<VCommentDiagram>(target);
+	diagram->toggleEditing();
 	event->ignore();
 
-	if(diagram->editing() && event->button() == Qt::RightButton)
+	if(event->button() == Qt::RightButton)
 	{
 		event->accept();
 
@@ -94,25 +95,34 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 			showCommandPrompt(target);
 		}
 	}
-	if(diagram->editing() && event->button() == Qt::LeftButton)
+	if(event->button() == Qt::LeftButton)
 	{
 		if(!diagram->toolbar_->getSelectionMode())
 		{
+			event->accept();
 			auto diagram2 = DCast<CommentDiagram>(target->node());
-			auto shape = new CommentDiagramShape(event->pos().x()-10, event->pos().y()-10, 100, 100, diagram->toolbar_->nextShapeToAdd_);
+			newShape_ = new CommentDiagramShape(event->pos().x(), event->pos().y(), 1, 1, diagram->toolbar_->nextShapeToAdd_);
 			diagram2->model()->beginModification(diagram2, "create shape");
-			diagram2->shapes()->append(shape);
+			diagram2->shapes()->append(newShape_);
 			diagram2->model()->endModification();
 			diagram->toolbar_->setSelectionMode(true);
 		}
 	}
 }
 
-void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *)
+void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	if(event->pos() == event->buttonDownPos(Qt::LeftButton))
+	{
+		newShape_->beginModification("Resizing shape");
+		newShape_->setWidth(100);
+		newShape_->setHeight(100);
+		newShape_->endModification();
+	}
 	auto diagram = DCast<VCommentDiagram>(target);
 	diagram->setCursor(Qt::ArrowCursor);
 	resizing_ = false;
+	newShape_ = NULL;
 }
 
 void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -127,6 +137,14 @@ void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 		diagram->node()->setSize(newSize);
 		diagram->node()->endModification();
 		diagram->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	}
+	else if (newShape_ != NULL)
+	{
+		QPointF diff = event->pos() - event->buttonDownPos(Qt::LeftButton);
+		newShape_->beginModification("Resizing shape");
+		newShape_->setWidth(diff.x());
+		newShape_->setHeight(diff.y());
+		newShape_->endModification();
 	}
 }
 

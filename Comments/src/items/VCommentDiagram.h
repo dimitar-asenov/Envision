@@ -96,7 +96,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 inline QPoint VCommentDiagram::lastRightClick() const { return lastRightClick_; }
 inline void VCommentDiagram::setLastRightClick(QPoint pos) { lastRightClick_ = pos; }
 inline bool VCommentDiagram::editing() const { return editing_; }
-inline bool VCommentDiagram::showConnectorPoints() const { return editing() && showConnectorPoints_; }
+inline bool VCommentDiagram::showConnectorPoints() const { return showConnectorPoints_; }
 inline QPair<int,int> VCommentDiagram::lastConnector() const { return lastConnector_; }
 inline void VCommentDiagram::setLastConnector(int shape, int point) { lastConnector_ = qMakePair(shape, point); }
 inline VCommentDiagramShape* VCommentDiagram::diagramShape(int index) { return shapes_.at(index);}

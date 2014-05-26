@@ -27,6 +27,7 @@
 #pragma once
 
 #include "comments_api.h"
+#include "nodes/CommentDiagramShape.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
 
@@ -48,6 +49,7 @@ class COMMENTS_API HCommentDiagram : public Interaction::GenericHandler {
 	private:
 		QSizeF originalSize_;
 		bool resizing_{};
+		CommentDiagramShape* newShape_{};
 };
 
 }

@@ -27,13 +27,19 @@
 #ifndef COLORPICKER_H
 #pragma once
 
+#include <QMap>
+
 class ColorPicker : public QToolButton
 {
 		Q_OBJECT
 	public:
 		explicit ColorPicker(QWidget *parent = 0);
-		void setColors(QVector<QColor> colors);
+		void setColors(QVector<QColor> colors, int colorsPerRow);
+		void setEnvisionTextColors();
 		void setselectedColor(QString aColor);
+
+	private:
+		QMap<QString, QString> mapEnvisionTextColors_;
 
 	signals:
 		void colorChanged(QString color);

@@ -13,6 +13,7 @@
 		<cornerType>1</cornerType>
 		<cornerRadius>3</cornerRadius>
 	</shape>
+	<colorsPerRow>10</colorsPerRow>
 	<colors>
 		<e0 prototypes="color">
 			<color>

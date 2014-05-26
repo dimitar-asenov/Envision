@@ -41,4 +41,9 @@ QVector<QColor> VCommentDiagramSequenceStyle::getColors() const
 	return aVector;
 }
 
+int VCommentDiagramSequenceStyle::getColorsPerRow() const
+{
+	return colorsPerRow();
+}
+
 } /* namespace Comments */

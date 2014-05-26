@@ -36,6 +36,7 @@ class COMMENTS_API VCommentDiagramStyle : public Super<Visualization::ItemStyle>
 	public:
 		virtual ~VCommentDiagramStyle() override;
 
+
 		Property<QColor> color{this, "color"};
 };
 
@@ -44,7 +45,9 @@ class COMMENTS_API VCommentDiagramSequenceStyle : public Super<Visualization::It
 	public:
 		virtual ~VCommentDiagramSequenceStyle() override;
 		QVector<QColor> getColors() const;
+		int getColorsPerRow() const;
 
+		Property<int> colorsPerRow{this, "colorsPerRow"};
 		Property<QVector<VCommentDiagramStyle>> colors{this, "colors"};
 };
 
