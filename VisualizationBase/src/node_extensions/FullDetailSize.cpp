@@ -29,8 +29,8 @@
 namespace Visualization {
 
 DEFINE_EXTENSION(FullDetailSize)
-REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, width, Float, false, true, false)
-REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, height, Float, false, true, false)
+REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, width, Float, false, true, true)
+REGISTER_EXTENSION_ATTRIBUTE(FullDetailSize, height, Float, false, true, true)
 
 void FullDetailSize::set(qreal width, qreal height)
 {

@@ -50,8 +50,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VDeclarationConstantSz
-: public Super<Visualization::ItemWithNode<VDeclarationConstantSz, Visualization::DeclarativeItem<VDeclarationConstantSz>,
-		OOModel::Declaration, false>>
+: public Super<Visualization::ItemWithNode<
+		VDeclarationConstantSz, Visualization::DeclarativeItem<VDeclarationConstantSz>, OOModel::Declaration, false>>
 {
 	ITEM_COMMON(VDeclarationConstantSz)
 
@@ -60,17 +60,15 @@ class OOVISUALIZATION_API VDeclarationConstantSz
 
 		static void initializeForms();
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
 		virtual bool itemGeometryChangesWithZoom() const override;
+
+	protected:
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
 		Visualization::EmptyItem* stretchItem_{};
-
-		Model::CompositeNode* node_;
-
 };
 
 }

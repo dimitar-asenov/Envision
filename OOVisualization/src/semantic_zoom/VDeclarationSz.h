@@ -59,14 +59,14 @@ class OOVISUALIZATION_API VDeclarationSz
 
 		static void initializeForms();
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
 		virtual bool itemGeometryChangesWithZoom() const override;
+
+	protected:
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
-
 };
 
 }

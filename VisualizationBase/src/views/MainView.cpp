@@ -134,7 +134,7 @@ qreal MainView::scaleFactor() const
 {
 	if (scaleLevel < SCALING_FACTOR)
 		return SCALING_FACTOR / (qreal) scaleLevel;
-	else return std::pow(1.1, SCALING_FACTOR - scaleLevel);
+	else return std::pow(1.2, SCALING_FACTOR - scaleLevel);
 }
 
 void MainView::scrollContentsBy(int dx, int dy)

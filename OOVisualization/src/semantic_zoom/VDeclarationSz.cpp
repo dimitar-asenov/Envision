@@ -93,7 +93,6 @@ void VDeclarationSz::updateGeometry(int availableWidth, int availableHeight)
 
 bool VDeclarationSz::itemGeometryChangesWithZoom() const
 {
-	//static bool changesWithZoom = DCast<RootItem>(parent());
 	return true;
 }
 

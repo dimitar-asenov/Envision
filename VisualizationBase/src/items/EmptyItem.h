@@ -59,7 +59,7 @@ class VISUALIZATIONBASE_API EmptyItem : public Super<Item>
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		bool hasCustomSize_;
+		bool hasCustomSize_{};
 
 };
 

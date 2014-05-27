@@ -57,8 +57,6 @@ VDeclarationConstantSz::VDeclarationConstantSz(Item* parent, NodeType* node, con
 	else if (DCast<Project>(node))
 		setStyle(itemStyles().get("project"));
 
-	node_ = node;
-
 	setDefaultMoveCursorProxy(name_);
 }
 
@@ -90,7 +88,7 @@ void VDeclarationConstantSz::initializeForms()
 
 void VDeclarationConstantSz::updateGeometry(int availableWidth, int availableHeight)
 {
-	FullDetailSize* fds = node_->extension<FullDetailSize>();
+	FullDetailSize* fds = node()->extension<FullDetailSize>();
 	if (fds && fds->widthNode() && fds->heightNode())
 	{
 		qreal totalWidth = fds->width();

@@ -60,12 +60,8 @@ void VClassSzPublic::determineChildren()
 	QList<Model::Node*> bodyItems = node()->classes()->nodes().toList();
 
 	// only keep methods which are public
-	for (auto i = node()->methods()->begin(); i != node()->methods()->end(); ++i)
-	{
-		auto method = *i;
-
+	for (auto method : *node()->methods())
 		if (method->modifiers()->isSet(Modifier::Public)) bodyItems.append(method);
-	}
 
 	body_->synchronizeWithNodes( bodyItems, renderer());;
 
