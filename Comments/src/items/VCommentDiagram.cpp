@@ -42,6 +42,7 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagram, "item")
 VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 	: Super(parent, node, itemStyles().get())
 {
+	 toolbar_ = new CommentDiagramToolbar();
 }
 
 void VCommentDiagram::determineChildren()
@@ -183,7 +184,12 @@ void VCommentDiagram::synchronizeWithNodes(const QVector<Model::Node*>& nodes, Q
 void VCommentDiagram::toggleEditing()
 {
 	editing_ = !editing_;
-	if(!editing_) showConnectorPoints_ = false;
+	if(!editing_)
+	{
+		showConnectorPoints_ = false;
+		toolbar_->close();
+	}
+	else toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);
 }
@@ -195,3 +201,5 @@ void VCommentDiagram::setShowConnectorPoints(bool show)
 }
 
 } /* namespace Comments */
+
+

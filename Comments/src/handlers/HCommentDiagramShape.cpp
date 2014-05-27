@@ -66,6 +66,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 	event->ignore();
 	auto vShape = DCast<VCommentDiagramShape>(target);
 	auto vDiagram = vShape->diagram();
+	vDiagram->toolbar_->setCurrentShape(target);
 
 	if(vDiagram->editing())
 	{

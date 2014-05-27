@@ -36,6 +36,8 @@
 #include "../nodes/CommentDiagram.h"
 #include "../nodes/CommentNode.h"
 
+#include "../CommentDiagramToolbar.h"
+
 namespace Comments {
 
 class VCommentDiagramShape;
@@ -62,6 +64,8 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		QPair<int,int> lastConnector() const;
 		void setLastConnector(int shape, int point);
 		VCommentDiagramShape* diagramShape(int index);
+
+		CommentDiagramToolbar* toolbar_{};
 
 	protected:
 		virtual void determineChildren() override;
