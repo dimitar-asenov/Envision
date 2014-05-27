@@ -11,7 +11,6 @@ HEADERS += src/nodes/NameText.h \
     src/nodes/composite/CompositeIndex.h \
     src/nodes/composite/Attribute.h \
     src/nodes/composite/AttributeChain.h \
-    src/test_nodes/TestNodesInitializer.h \
     src/commands/NodeOwningCommand.h \
     src/model/ModelManager.h \
     src/concurrent/InterruptibleThread.h \
@@ -62,7 +61,6 @@ SOURCES += src/nodes/NameText.cpp \
     src/nodes/composite/Attribute.cpp \
     src/nodes/composite/AttributeChain.cpp \
     src/persistence/ClipboardStore.cpp \
-    src/test_nodes/TestNodesInitializer.cpp \
     src/commands/NodeOwningCommand.cpp \
     src/model/ModelManager.cpp \
     src/concurrent/NodeReadWriteLock.cpp \

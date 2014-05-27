@@ -42,8 +42,4 @@ class VisualizationBase : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-VISUALIZATIONBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
-VISUALIZATIONBASE_API Core::InitializationRegistry& itemTypeInitializationRegistry();
-VISUALIZATIONBASE_API Core::InitializationRegistry& shapeTypeInitializationRegistry();
-
 }

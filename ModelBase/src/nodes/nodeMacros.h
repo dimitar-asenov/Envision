@@ -192,12 +192,11 @@ template class Model::TypedList<className>;																									\
  * This is just the common subpart of the two macros below. Do not use it directly.
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
-::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
-DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
+DEFINE_TYPE_ID_DERIVED(className, #className,)																								\
 																																							\
 void className::initType()																															\
 {																																							\
-	typeIdVariable() = Node::registerNodeType(																								\
+	Node::registerNodeType(																															\
 		#className,																																		\
 		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
 		[](::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)-> ::Model::Node*						\
@@ -242,12 +241,11 @@ className* className::createDefaultInstance( Node* parent) { return proxyClassNa
  * This is just the common subpart of the two macros below. Do not use it directly.
  */
 #define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)															\
-::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
-DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
+DEFINE_TYPE_ID_DERIVED(className, #className,)																								\
 																																							\
 void className::initType()																															\
 {																																							\
-	typeIdVariable() = Node::registerNodeType(																								\
+	Node::registerNodeType(																															\
 		#className,																																		\
 		[](::Model::Node* parent) -> ::Model::Node* { return className::createDefaultInstance(parent); },					\
 		[](::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)	-> ::Model::Node* 				\

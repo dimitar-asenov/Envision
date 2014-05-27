@@ -42,7 +42,6 @@
 #include <QtXml/QDomDocument>
 
 #include <QtCore/QDir>
-#include <QtCore/QMutex>
 
 #if defined(FILEPERSISTENCE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of

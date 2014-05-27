@@ -36,29 +36,15 @@
 #include "items/VCommentDiagramConnector.h"
 #include "items/VCommentImage.h"
 
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2(comments, Comments::Comments)
 
 namespace Comments {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
 bool Comments::initialize(Core::EnvisionManager&)
 {
-	nodeTypeInitializationRegistry().initializeAll();
-	itemTypeInitializationRegistry().initializeAll();
+	Core::TypeRegistry::initializeNewTypes();
 
 	VComment::setDefaultClassHandler(HComment::instance());
 	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
@@ -75,7 +61,6 @@ void Comments::unload()
 
 void Comments::selfTest(QString testid)
 {
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
 }

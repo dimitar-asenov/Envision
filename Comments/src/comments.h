@@ -52,6 +52,4 @@ class Comments : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-COMMENTS_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
-COMMENTS_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 }

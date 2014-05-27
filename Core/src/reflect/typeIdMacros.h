@@ -30,8 +30,7 @@
  * Declares standard methods for querying a classes's type statically or at run-time.
  *
  * This macro declares a static method initType which should be called during the initialization of the a plug-in where
- * the class is defined. This will assure that the new class's type is properly initialized. This happens automatically
- * by means of an InitializationRegistry.
+ * the class is defined. This will assure that the new class's type is properly initialized.
  *
  * This macro should appear as the first line after the class declaration e.g. :
  *
@@ -52,19 +51,11 @@
 		virtual bool isSubtypeOf(const QString& type) const;																				\
 																																							\
 		static const QString& typeNameStatic();																								\
-		static int typeIdStatic();																													\
+		static int typeIdStatic() { return typeId_; }																						\
 		static void initType();																														\
 																																							\
-		static ::Core::InitializationRegistry& initializationRegistry();																\
-		class InitializerClass																														\
-		{																																					\
-				static InitializerClass instance_;																								\
-			public:																																		\
-				InitializerClass();																													\
-		};																																					\
-																																							\
 	private:																																				\
-		static int& typeIdVariable();																												\
+		static int typeId_;																															\
 
 /**********************************************************************************************************************/
 
@@ -88,9 +79,6 @@
  * 			If className designates a template class, then templatePrefix should be the usual template related code
  * 			that comes before member definitions.
  *
- * @param initIdValue
- * 			The initial value of the type ID variable. This should be -1 for derived classes which are initialized
- * 			with initType(). Base classes are typically not initialized and should specify this value to be 0.
  *
  * Note that this macro does not define the initType method. This should be done accordingly for each type that is being
  * used. The initType() method should set the typeIdVariable() to the type's ID.
@@ -101,26 +89,8 @@
  * DEFINE_TYPE_ID_COMMON
  * 	...
  */
-#define DEFINE_TYPE_ID_COMMON(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix, initIdValue)\
-/* Forward declaration. This function must be defined in the enclosing namespace*/												\
-templatePrefix ::Core::InitializationRegistry& className::initializationRegistry()												\
-{																																							\
-	return globalPluginInitializationRegistryGetterFunction();																			\
-}																																							\
-																																							\
-/* Used to register a default initialization routine*/																					\
-templatePrefix className::InitializerClass::InitializerClass()																			\
-{																																							\
-	className::initializationRegistry().add(className::initType);																		\
-}																																							\
-templatePrefix typename className::InitializerClass className::InitializerClass::instance_;									\
-																																							\
-/* This must be initialized in the plug-in's initialize() method */																	\
-templatePrefix int& className::typeIdVariable()																								\
-{																																							\
-	static int value{initIdValue};																												\
-	return value;																																		\
-}																																							\
+#define DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)															\
+templatePrefix int className::typeId_ = ::Core::TypeRegistry::add<className>();													\
 																																							\
 templatePrefix const QString& className::typeName() const																				\
 {																																							\
@@ -129,12 +99,7 @@ templatePrefix const QString& className::typeName() const																				\
 																																							\
 templatePrefix int className::typeId()	const																									\
 {																																							\
-	return typeIdVariable();																														\
-}																																							\
-																																							\
-templatePrefix int className::typeIdStatic()																									\
-{																																							\
-	return typeIdVariable();																														\
+	return typeIdStatic();																															\
 }																																							\
 																																							\
 templatePrefix const QString& className::typeNameStatic()																				\
@@ -154,13 +119,14 @@ templatePrefix const QString& className::typeNameStatic()																				\
  * DEFINE_TYPE_ID_COMMON
  * 	...
  */
-#define DEFINE_TYPE_ID_BASE(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix)\
-DEFINE_TYPE_ID_COMMON(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix, 0)\
+#define DEFINE_TYPE_ID_BASE(className, nameExpression, templatePrefix)																\
+DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)																		\
 																																							\
 templatePrefix void className::initType() {}																									\
 templatePrefix QList<int> className::hierarchyTypeIds() const																			\
 {																																							\
-	return QList<int>() << typeIdStatic();																										\
+	static QList<int> h = {typeIdStatic()};																									\
+	return h;																																			\
 }																																							\
 templatePrefix bool className::isSubtypeOf(int type) const																				\
 {																																							\
@@ -183,18 +149,17 @@ templatePrefix bool className::isSubtypeOf(const QString& type) const											
  * DEFINE_TYPE_ID_COMMON
  * 	...
  */
-#define DEFINE_TYPE_ID_DERIVED(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix)\
-DEFINE_TYPE_ID_COMMON(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix, -1)\
+#define DEFINE_TYPE_ID_DERIVED(className, nameExpression, templatePrefix)															\
+DEFINE_TYPE_ID_COMMON(className, nameExpression, templatePrefix)																		\
 																																							\
 templatePrefix QList<int> className::hierarchyTypeIds() const																			\
 {																																							\
-	auto l = Super::hierarchyTypeIds();																											\
-	l.prepend( typeIdStatic() );																													\
-	return l;																																			\
+	static QList<int> h = QList<int>{} << typeIdStatic() << Super::hierarchyTypeIds();											\
+	return h;																																			\
 }																																							\
 templatePrefix bool className::isSubtypeOf(int type) const																				\
 {																																							\
-	return typeIdStatic() == type || Super::isSubtypeOf(type);																			\
+	return typeIdStatic() == type || Super::hierarchyTypeIds().contains(type);														\
 }																																							\
 templatePrefix bool className::isSubtypeOf(const QString& type) const																\
 {																																							\

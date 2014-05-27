@@ -33,15 +33,9 @@ Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
 namespace OOModel {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
 bool OOModel::initialize(Core::EnvisionManager&)
 {
-	nodeTypeInitializationRegistry().initializeAll();
+	Core::TypeRegistry::initializeNewTypes();
 
 	Model::Reference::addUnresolutionSteps(OOReference::unresolveOOReferencesAfterSubTree);
 

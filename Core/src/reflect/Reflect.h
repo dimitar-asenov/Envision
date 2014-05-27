@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #pragma once
+#include "TypeRegistry.h" // Convenience include header
 
 namespace Core {
 

@@ -68,12 +68,11 @@ private:
  * 			to look for this shape's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
 #define SHAPE_COMMON_DEFINITIONS( ShapeClass, classType )																				\
-::Core::InitializationRegistry& shapeTypeInitializationRegistry();																	\
-DEFINE_TYPE_ID_DERIVED(ShapeClass, shapeTypeInitializationRegistry, #ShapeClass,)												\
+DEFINE_TYPE_ID_DERIVED(ShapeClass, #ShapeClass,)																							\
 																																							\
 void ShapeClass::initType()																														\
 {																																							\
-	ShapeClass::typeIdVariable() = Shape::registerShape<ShapeClass>();																\
+	Shape::registerShape<ShapeClass>();																											\
 }																																							\
 																																							\
 void ShapeClass::setStyle(const Visualization::ShapeStyle* style_)																	\

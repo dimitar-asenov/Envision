@@ -24,14 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#include "TestNodesInitializer.h"
+#pragma once
 
-namespace TestNodes {
+#include "../core_api.h"
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
+namespace Core {
+
+class CORE_API TypeRegistry {
+	public:
+		using InitializationFunction = void (*)();
+
+		template <class T> static int add();
+		static void initializeNewTypes();
+
+	private:
+		static int add(InitializationFunction func);
+
+		static QList<InitializationFunction> initializationFunctions_;
+		static int initialized_;
+};
+
+template <class T> inline int TypeRegistry::add()
 {
-	static Core::InitializationRegistry r;
-	return r;
+	return add(T::initType);
 }
 
-} /* namespace TestNodes */
+} /* namespace Core */

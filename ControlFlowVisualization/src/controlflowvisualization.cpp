@@ -40,12 +40,6 @@ using namespace Visualization;
 
 namespace ControlFlowVisualization {
 
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
 int ControlFlowVisualization::visualizationPurpose()
 {
 	static int purpose = Scene::defaultRenderer()->registerVisualizationPurpose("control_flow");
@@ -58,7 +52,7 @@ bool ControlFlowVisualization::initialize(Core::EnvisionManager&)
 	visualizationPurpose();
 
 	// Register visualizations
-	itemTypeInitializationRegistry().initializeAll();
+	Core::TypeRegistry::initializeNewTypes();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(), visualizationPurpose(),
 			createVisualization<VListCF, StatementItemList>);
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), visualizationPurpose(),

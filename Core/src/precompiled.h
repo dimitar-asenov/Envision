@@ -51,6 +51,9 @@
 #include <QtCore/QVector>
 #include <QtCore/QList>
 
+#include <QtCore/QMutexLocker>
+#include <QtCore/QMutex>
+
 #include <QtCore/QDebug>
 
 #include <functional>

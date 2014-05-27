@@ -50,7 +50,6 @@
 #include "node_extensions/Position.h"
 #include "nodes/TestBoxNode.h"
 
-#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
@@ -58,37 +57,16 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 namespace Visualization
 {
 
-Core::InitializationRegistry& nodeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
-Core::InitializationRegistry& itemTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
-Core::InitializationRegistry& shapeTypeInitializationRegistry()
-{
-	static Core::InitializationRegistry r;
-	return r;
-}
-
 bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 {
 	VisualizationManager& vmi = VisualizationManager::instance();
 	vmi.init(&manager);
 
-	shapeTypeInitializationRegistry().initializeAll();
-
 	// Register extensions and nodes
 	Position::registerExtension();
-	nodeTypeInitializationRegistry().initializeAll();
 
-	// Register visualizations
-	itemTypeInitializationRegistry().initializeAll();
+	Core::TypeRegistry::initializeNewTypes();
+
 	Scene::defaultRenderer()->registerVisualization(
 			TestBoxNode::typeIdStatic(), createVisualization<TestBox, TestBoxNode>);
 
@@ -117,7 +95,6 @@ void VisualizationBase::unload()
 
 void VisualizationBase::selfTest(QString)
 {
-	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 	SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
 }
 

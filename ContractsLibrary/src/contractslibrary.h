@@ -50,6 +50,4 @@ class ContractsLibrary : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-CONTRACTSLIBRARY_API Core::InitializationRegistry& itemTypeInitializationRegistry();
-
 }

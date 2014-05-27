@@ -32,8 +32,26 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	-# Start Qt Creator and configure the version of Qt that you want to use. You can leave the default settings or you
 	can point to a custom Qt version. See below.
 	-# Open the \c envision.pro file with Qt Creator.
-	-# Configure the license template (Tools > Options > C++ > File Naming) to point to the LICENSE file inside the main
-	repository directory.
+	-# In the Projects view, change the arguments of make to specify parallel compilation and the *install* target:
+		\verbatim-j8 install\endverbatim
+		The *install* target is needed in order to copy all necessary files to the DebugBuild directory.
+		Substitute 8 for the number of threads your hardware supports.
+	-# Add run configurations
+		- The executable of all run configurations must be Envision:
+		\verbatim%{sourceDir}/DebugBuild/Envision\endverbatim
+		- The working directory of all run configurations must be DebugBuild:
+		\verbatim%{sourceDir}/DebugBuild\endverbatim
+		- The arguments passed to Envision should at a minimum include:
+		\verbatim-graphicssystem raster\endverbatim
+		- For each different test(demo) you want to run, make a new run configuration that also includes the appropriate
+			argument. For example, to run the tests for the OOVisualization project:
+		\verbatim-graphicssystem raster --test oovisualization\endverbatim
+		To see the tests (demos) associated with a project, just supply its name, converted to lowercase, as the
+		parameter to the *test* argument. Do not test more than one project at a time. See \ref try_envision "here" for
+		more details about the different demos.
+
+	Note that you will need to compile the JavaImportTool project separately, if you want to experiment with showing a
+	Java project inside Envision.
 
 \section eclipse Eclipse (recommended for Java; works for C++, but could require a lot of tweaking)
 	-# Install the latest version of Eclipse.
@@ -46,8 +64,6 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	directories where each one is an Eclipse project.
 	-# Import all projects into your Eclipse workspace as Git projects. Eclipse/Qt might try to change some project
 	files. Reject all requested changes.
-	-# Configure Eclipse's C++ file templates to use the text from the LICENSE file from the main directory in the
-	repository.
 
 \section customqt Using a custom build of Qt
 
@@ -69,6 +85,7 @@ above version of Qt. Here is how:
 	-# Make a symbolic link from \c DebugBuild/qt to \c qt/qt-build/lib .
 	-# Configure Qt Creator or Eclipse to use the Qt found in \c qt-build .
 
+Work is underway for our extensions to appear as part of the regular Qt framework, starting with version 5.4
 \section try Running Envision
 
 After you have compiled Envision give it a try! See \ref try_envision "this page" for some interesting examples.

@@ -29,14 +29,13 @@
 
 namespace Model {
 
-::Core::InitializationRegistry& nodeTypeInitializationRegistry();
-DEFINE_TYPE_ID_DERIVED(CompositeNode, nodeTypeInitializationRegistry, "CompositeNode",)
+DEFINE_TYPE_ID_DERIVED(CompositeNode, "CompositeNode",)
 
 int CompositeNode::nextExtensionId_ = 0;
 
 void CompositeNode::initType()
 {
-	typeIdVariable() = Node::registerNodeType("CompositeNode",
+	Node::registerNodeType("CompositeNode",
 			[](Node* parent) -> Node* { return CompositeNode::createDefaultInstance(parent);} ,
 			[](Node *parent, PersistentStore &store, bool partialLoadHint) -> Node*
 			{ return new CompositeNode(parent, store, partialLoadHint);});

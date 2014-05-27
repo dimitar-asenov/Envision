@@ -44,8 +44,6 @@ class TypedList: public Super<List>
 
 		virtual Node* createDefaultElement() override;
 
-		static ::Core::InitializationRegistry& elementInitializationRegistry();
-
 		virtual int lowerTypeBoundForElements() const override;
 
 	// Iterator

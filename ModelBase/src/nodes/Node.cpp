@@ -37,13 +37,11 @@ using namespace Logger;
 
 namespace Model {
 
-::Core::InitializationRegistry& nodeTypeInitializationRegistry();
-DEFINE_TYPE_ID_BASE(Node, nodeTypeInitializationRegistry, "Node",)
+DEFINE_TYPE_ID_BASE(Node, "Node",)
 
 /***********************************************************************************************************************
  * STATIC MEMBERS
  **********************************************************************************************************************/
-int Node::numRegisteredTypes_ = 0;
 QHash<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
 QHash<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
@@ -355,7 +353,7 @@ QList<const UsedLibrary*> Node::usedLibraries() const
 /***********************************************************************************************************************
  * STATIC METHODS
  **********************************************************************************************************************/
-int Node::registerNodeType(const QString &type, const NodeConstructor constructor,
+void Node::registerNodeType(const QString &type, const NodeConstructor constructor,
 		const NodePersistenceConstructor persistenceconstructor)
 {
 	if ( isTypeRegistered(type) )
@@ -365,9 +363,6 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
 
 	log.info("Registered new node type " + type);
-
-	++numRegisteredTypes_;
-	return numRegisteredTypes_; // Id 0 is reserved for Node
 }
 
 Node* Node::createNewNode(const QString &type, Node* parent)

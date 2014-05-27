@@ -50,6 +50,4 @@ class CustomMethodCall : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-CUSTOMMETHODCALL_API Core::InitializationRegistry& itemTypeInitializationRegistry();
-
 }

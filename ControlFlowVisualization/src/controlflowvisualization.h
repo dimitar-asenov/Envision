@@ -52,6 +52,4 @@ class ControlFlowVisualization : public QObject, public Core::EnvisionPlugin
 		static int visualizationPurpose();
 };
 
-CONTROLFLOWVISUALIZATION_API Core::InitializationRegistry& itemTypeInitializationRegistry();
-
 }
