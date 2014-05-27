@@ -110,7 +110,6 @@ void VProject::updateGeometry(int availableWidth, int availableHeight)
 	if (!DCast<RootItem>(parent())) return;
 
 	qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
-
 	if (icon_->scale() != invGeometricZoomScale)
 	{
 		icon_->setScale(invGeometricZoomScale);
@@ -120,8 +119,7 @@ void VProject::updateGeometry(int availableWidth, int availableHeight)
 
 bool VProject::itemGeometryChangesWithZoom() const
 {
-	//static bool changesWithZoom = DCast<RootItem>(parent());
-	return true;
+	return !parent() || DCast<RootItem>(parent());
 }
 
 }
