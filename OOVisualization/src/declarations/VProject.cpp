@@ -32,6 +32,8 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
+#include <VisualizationBase/src/items/RootItem.h>
+
 using namespace Visualization;
 using namespace OOModel;
 
@@ -99,6 +101,27 @@ void VProject::initializeForms()
 		->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
 		->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
 		->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
+}
+
+void VProject::updateGeometry(int availableWidth, int availableHeight)
+{
+	Super::updateGeometry(availableWidth, availableHeight);
+
+	if (!DCast<RootItem>(parent())) return;
+
+	qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
+
+	if (icon_->scale() != invGeometricZoomScale)
+	{
+		icon_->setScale(invGeometricZoomScale);
+		name_->setScale(invGeometricZoomScale);
+	}
+}
+
+bool VProject::itemGeometryChangesWithZoom() const
+{
+	//static bool changesWithZoom = DCast<RootItem>(parent());
+	return true;
 }
 
 }

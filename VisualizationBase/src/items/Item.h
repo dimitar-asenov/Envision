@@ -283,6 +283,24 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		bool definesChildNodePurpose(const Model::Node* node) const;
 
 		/**
+		 * Returns what semantic zoom level should the children of this item be chosen for when deciding what
+		 * visualizations to use.
+		 *
+		 * If the item's own semantic zoom level has been set, it's value will be returned. Otherwise the value of the
+		 * item's parent will be returned. If the item has no parent the return value is an unspecified semantic zoom
+		 * level (-1).
+		 */
+		int semanticZoomLevel() const;
+
+		void setSemanticZoomLevel(int semanticZoomLevel);
+		void clearSemanticZoomLevel();
+
+		int childNodeSemanticZoomLevel(const Model::Node* node) const;
+		void setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel);
+		void clearChildNodeSemanticZoomLevel(const Model::Node* node);
+		bool definesChildNodeSemanticZoomLevel(const Model::Node* node) const;
+
+		/**
 		 * Registers a class derived from Item and returns the typeId for that class.
 		 *
 		 * Each class that is an Item should register itself to receive a unique id. This method is thread-safe so it can
@@ -340,11 +358,29 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		qreal mainViewScalingFactor() const;
 
 		/**
+		 * Returns the scaling factor used before the active one
+		 */
+		qreal previousMainViewScalingFactor() const;
+
+		/**
 		 * This method returns true if the item's geometry should be updated when the main view's zoom level changes.
 		 *
 		 * It is assumed that this method will always return the same value for the entire lifetime of a single item.
 		 */
 		virtual bool itemGeometryChangesWithZoom() const;
+
+		/**
+		 * Sets the item's scale if it is a direct child of a PositionLayout. Then propagates the information
+		 *	down to the child items recursively.
+		 *
+		 * This method is used to ensure that changes to parent item's always reach child items in order to prevent them
+		 * from overscaling (geometric zoom scale * totalScale() > 1).
+		 * \a parentScale is a parameter for optimization purposes only.
+		 *
+		 * This method could become possibly obsolete once PositionLayouts get updated in the right order (top-down the
+		 * program structure) after a geometric scale change.
+		 */
+		void setItemScale(qreal newScale, qreal parentScale);
 
 	protected:
 
@@ -432,6 +468,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		int purpose_;
 		QMap<const Model::Node*, int> childNodePurpose_;
+
+		int semanticZoomLevel_;
+		QMap<const Model::Node*, int> childNodeSemanticZoomLevel_;
 
 		Scene::ItemCategory itemCategory_;
 

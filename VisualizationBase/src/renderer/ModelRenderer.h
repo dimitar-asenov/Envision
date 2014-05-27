@@ -27,7 +27,9 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
+#include "SzLevelOrderingManager.h"
 #include "VisualizationGroup.h"
+#include "VisualizationGroupsManager.h"
 
 namespace Visualization {
 
@@ -45,35 +47,93 @@ class VISUALIZATIONBASE_API ModelRenderer
 		 * If \a purpose is specified (\a purpose >= 0) it is used as the target purpose when determining an appropriate
 		 * visualization. Otherwise the purpose of \a parent is used. If \a parent is nullptr the default purpose is used.
 		 */
-		virtual Item* render(Item* parent, Model::Node* node, int purpose = -1);
+		virtual Item* render(Item* parent, Model::Node* node, int purpose = -1, int semanticZoomLevel = -1);
 
 		/**
 		 * Returns whether a specific visualization has been registered for nodes of type \a nodeTypeId  and the provided
 		 * \a purpose.
 		 */
-		bool hasVisualization(int nodeTypeId, int purpose = 0);
-		void registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization);
+		bool hasVisualization(int nodeTypeId, int purpose = 0, int semanticZoomLevel = 0);
+
 		void registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization);
-		void registerGroup(int nodeTypeId, int purpose, VisualizationGroup* group);
+		void registerVisualization(int nodeTypeId, int purpose, int semanticZoomLevel,
+											VisualizationGroup::ItemConstructor visualization);
+		void registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization);
+		void registerVisualization(int nodeTypeId, QString purpose, QString semanticZoomLevel,
+											VisualizationGroup::ItemConstructor visualization);
+		void registerVisualization(int nodeTypeId, QString purpose, VisualizationGroup::ItemConstructor visualization);
+		void registerGroup(int nodeTypeId, int purpose, int semanticZoomLevel, VisualizationGroup* group);
 		void registerGroup(int nodeTypeId, VisualizationGroup* group);
 
 		int registerVisualizationPurpose(const QString& name);
 		int numRegisteredPurposes() const;
 		QString purposeName(int purpose);
+		int purposeId(QString name);
+
+		int registerSemanticZoomLevel(const QString& name, int orderingNumber);
+		int numRegisteredSemanticZoomLevels() const;
+		QString semanticZoomLevelName(int semanticZoomLevel);
+		int semanticZoomLevelId(QString name);
+
+		int getCoarserSemanticZoomLevel(int currentSemanticZoomLevel);
+		int getFinerSemanticZoomLevel(int currentSemanticZoomLevel);
 
 	private:
-		QVector<QVector<VisualizationGroup*>> groups_;
+		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE = 1;
+		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL = 2;
+
 		QVector<QString > purposes_;
+		QVector<QString > semanticZoomLevels_;
+
+		SzLevelOrderingManager szLevelOrderingManager_;
+
+		VisualizationGroupsManager visualizationGroupsManager_;
+
+		int visualizationChoiceStrategy_{VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE};
+
+		Item* visualizationChoiceStrategyTypeOverSemanticZoomLevelOverPurpose(Item* parent, Model::Node* node,
+																									 int purpose, int semanticZoomLevel);
+		Item* visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
+																									 int purpose, int semanticZoomLevel);
+
+		/**
+		 * Returns a visualization that is most suitable for the given parameter values.
+		 *
+		 * It uses a priority based approach that first searches for a match according to a function provided as \a
+		 * option1. If no match was found it proceeds with \a option2 then with \a option3.
+		 */
+		Item *basicStrategy(Item *parent, Model::Node *node, int purpose, int semanticZoomLevel,
+								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option1,
+								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option2,
+								  std::function<QVector<VisualizationGroup*> ((int, int, int))> option3);
 };
+
+inline void ModelRenderer::registerVisualization(int nodeTypeId, int purpose,
+																 VisualizationGroup::ItemConstructor visualization)
+{
+	registerVisualization(nodeTypeId, purpose, 0, visualization);
+}
 
 inline void ModelRenderer::registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization)
 {
-	registerVisualization(nodeTypeId, 0, visualization);
+	registerVisualization(nodeTypeId, 0, 0, visualization);
+}
+
+inline void ModelRenderer::registerVisualization(int nodeTypeId, QString purpose,
+																 VisualizationGroup::ItemConstructor visualization)
+{
+	registerVisualization(nodeTypeId, purposeId(purpose), 0, visualization);
+}
+
+inline void ModelRenderer::registerVisualization(int nodeTypeId, QString purpose, QString semanticZoomLevel,
+																 VisualizationGroup::ItemConstructor visualization)
+{
+	registerVisualization(nodeTypeId, purposeId(purpose), semanticZoomLevelId(semanticZoomLevel), visualization);
 }
 
 inline void ModelRenderer::registerGroup(int nodeTypeId, VisualizationGroup* group)
 {
-	registerGroup(nodeTypeId, 0, group);
+	registerGroup(nodeTypeId, 0, 0, group);
 }
 
 template<class VIS, class NODE>
@@ -84,6 +144,11 @@ Item* createVisualization(Item* parent, Model::Node* node)
 
 inline int ModelRenderer::numRegisteredPurposes() const { return purposes_.size(); }
 inline QString ModelRenderer::purposeName(int purpose) { return purposes_[purpose]; }
+inline int ModelRenderer::purposeId(QString name) { return purposes_.indexOf(name); }
 
+inline int ModelRenderer::numRegisteredSemanticZoomLevels() const { return semanticZoomLevels_.size(); }
+inline QString ModelRenderer::semanticZoomLevelName(int semanticZoomLevel)
+	{ return semanticZoomLevels_[semanticZoomLevel]; }
+inline int ModelRenderer::semanticZoomLevelId(QString name) { return semanticZoomLevels_.indexOf(name); }
 
 }

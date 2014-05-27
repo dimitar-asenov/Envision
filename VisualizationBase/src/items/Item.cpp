@@ -37,6 +37,8 @@
 
 #include "../cursor/Cursor.h"
 
+#include <layouts/PositionLayout.h>
+
 namespace Visualization {
 
 static constexpr int MAX_CURSOR_JUMP_DISTANCE = 300;
@@ -81,7 +83,7 @@ QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
 
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
-	itemCategory_(Scene::NoItemCategory)
+	semanticZoomLevel_(-1), itemCategory_(Scene::NoItemCategory)
 {
 	// By default no flags in a QGraphicsItem are enabled.
 	GraphicsItemFlags flags;
@@ -157,6 +159,43 @@ void Item::clearPurpose()
 {
 	purpose_ = -1;
 	setUpdateNeeded(FullUpdate);
+}
+
+void Item::setSemanticZoomLevel(int semanticZoomLevel)
+{
+	semanticZoomLevel_ = semanticZoomLevel;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearSemanticZoomLevel()
+{
+	semanticZoomLevel_ = -1;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::setItemScale(qreal newScale, qreal parentScale)
+{
+	if (DCast<PositionLayout>(parent()))
+	{
+		qreal geometricZoomScale = mainViewScalingFactor();
+
+		qreal totalScale = geometricZoomScale * newScale * parentScale;
+
+		// calculate the maximum scale (used to hardcap the scale of an item)
+		qreal maxScale = geometricZoomScale < 1 ? 1 : geometricZoomScale;
+
+		if (totalScale >= maxScale)
+			newScale = maxScale / geometricZoomScale / parentScale;
+
+		setScale(newScale);
+	}
+	else
+	{
+		newScale = 1;
+	}
+
+	for (Item* child : childItems())
+		child->setItemScale(child->scale(), newScale*parentScale);
 }
 
 void Item::setStyle(const ItemStyle* style)
@@ -728,6 +767,41 @@ bool Item::definesChildNodePurpose(const Model::Node* node) const
 	return childNodePurpose_.find(node) != childNodePurpose_.end();
 }
 
+int Item::semanticZoomLevel() const
+{
+	if (semanticZoomLevel_ >= 0) return semanticZoomLevel_;
+	if (!parent()) return -1;
+
+	if ( node() ) return parent()->childNodeSemanticZoomLevel( node() );
+	else return parent()->semanticZoomLevel();
+}
+
+
+int Item::childNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	auto c = childNodeSemanticZoomLevel_.find(node);
+	if (c != childNodeSemanticZoomLevel_.end()) return *c;
+
+	return semanticZoomLevel();
+}
+
+void Item::setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel)
+{
+	childNodeSemanticZoomLevel_.insert(node, semanticZoomLevel);
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearChildNodeSemanticZoomLevel(const Model::Node* node)
+{
+	childNodeSemanticZoomLevel_.remove(node);
+	setUpdateNeeded(FullUpdate);
+}
+
+bool Item::definesChildNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	return childNodeSemanticZoomLevel_.find(node) != childNodeSemanticZoomLevel_.end();
+}
+
 QList<VisualizationAddOn*> Item::addOns()
 {
 	return staticAddOns();
@@ -797,6 +871,12 @@ QList<Item*> Item::childItems() const
 qreal Item::mainViewScalingFactor() const
 {
 	if (auto s = scene()) return s->mainViewScalingFactor();
+	else return 1;
+}
+
+qreal Item::previousMainViewScalingFactor() const
+{
+	if (auto s = scene()) return s->previousMainViewScalingFactor();
 	else return 1;
 }
 

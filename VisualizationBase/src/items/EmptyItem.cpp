@@ -31,20 +31,34 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(EmptyItem, "item")
 
-EmptyItem::EmptyItem(Item* parent, const StyleType* style) : Super(parent, style)
+EmptyItem::EmptyItem(Item* parent, const StyleType* style) : Super(parent, style), hasCustomSize_{false}
 {
 	setZValue(-1);
+}
+
+void EmptyItem::setCustomSize(int width, int height)
+{
+	auto shape = getShape();
+
+	if (shape)
+		shape->setOutterSize(width, height);
+	else
+		setSize(width, height);
+
+	hasCustomSize_ = true;
 }
 
 void EmptyItem::determineChildren(){}
 
 bool EmptyItem::sizeDependsOnParent() const
 {
-	return true;
+	return !hasCustomSize_;
 }
 
 void EmptyItem::updateGeometry(int availableWidth, int availableHeight)
 {
+	if (hasCustomSize_) return;
+
 	auto shape = getShape();
 
 	if (shape)

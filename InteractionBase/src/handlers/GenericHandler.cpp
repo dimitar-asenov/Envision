@@ -44,6 +44,8 @@
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 
+#include <ModelBase/src/nodes/Text.h>
+
 namespace Interaction {
 
 void GenericHandlerModelListener::nodesUpdated(QSet<Node*>)
@@ -535,6 +537,63 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
 {
 	// Do no use the default handlers.
+}
+
+void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheelEvent *event)
+{
+	if (event->modifiers() == Qt::AltModifier) // modify the semantic zoom level
+	{
+		if (target->scene()->selectedItems().size() > 0)
+		{
+			// individual semantic zoom level change
+
+			Model::Node* node = nullptr;
+			Visualization::Item* parent = nullptr;
+
+			for (auto n : target->scene()->selectedItems())
+			{
+				// get the nearest parent item that has a node which is not of type Model::Text
+				while (n && (!n->node() || n->node()->isSubtypeOf(Model::Text::typeIdStatic()))) n = n->parent();
+				if (!n) return;
+
+				auto p = n->parent();
+				if ( p )
+				{
+					node = n->node();
+					parent = p;
+
+					int newSemanticZoomLevel = 0;
+					if (p->definesChildNodeSemanticZoomLevel(n->node()))
+					{
+						newSemanticZoomLevel = event->delta() < 0 ?
+							target->scene()->renderer()->getCoarserSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node())):
+							target->scene()->renderer()->getFinerSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node()));
+
+					}
+
+					if (newSemanticZoomLevel >= 0) p->setChildNodeSemanticZoomLevel(n->node(), newSemanticZoomLevel);
+					else p->clearChildNodeSemanticZoomLevel(n->node());
+				}
+			}
+
+			if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent(parent, node));
+		}
+		else
+		{
+			// global semantic zoom level change
+
+			for (auto ri : target->scene()->topLevelItems())
+			{
+				auto newSemanticZoomLevel = event->delta() < 0 ?
+							target->scene()->renderer()->getCoarserSemanticZoomLevel(ri->semanticZoomLevel()) :
+							target->scene()->renderer()->getFinerSemanticZoomLevel(ri->semanticZoomLevel());
+
+				ri->setSemanticZoomLevel(newSemanticZoomLevel);
+
+				qApp->postEvent(target->scene(), new SetCursorEvent(ri, ri->node()));
+			}
+		}
+	}
 }
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)

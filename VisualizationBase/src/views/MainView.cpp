@@ -30,6 +30,8 @@
 #include "cursor/Cursor.h"
 #include "items/Item.h"
 
+#include <items/RootItem.h>
+
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :
@@ -124,13 +126,15 @@ void MainView::wheelEvent(QWheelEvent *event)
 
 		bar->setValue( bar->value() - event->delta() );
 	}
+	else
+		View::wheelEvent(event);
 }
 
 qreal MainView::scaleFactor() const
 {
 	if (scaleLevel < SCALING_FACTOR)
 		return SCALING_FACTOR / (qreal) scaleLevel;
-	else return std::pow(2, SCALING_FACTOR - scaleLevel);
+	else return std::pow(1.1, SCALING_FACTOR - scaleLevel);
 }
 
 void MainView::scrollContentsBy(int dx, int dy)
@@ -313,7 +317,7 @@ void MainView::mousePressEvent(QMouseEvent *event)
 	event->accept();
 	isPanning_ = true;
 	panStartPos_ = event->pos();
-   setCursor(Qt::ClosedHandCursor);
+	setCursor(Qt::ClosedHandCursor);
 }
 
 void MainView::mouseReleaseEvent(QMouseEvent *event)

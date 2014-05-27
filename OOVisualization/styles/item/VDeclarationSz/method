@@ -1,0 +1,33 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="default.shape">Box</shape>
+	
+	<name prototypes="item/Text/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<gradient>
+					<stopPoints>
+						<e1>
+							<first>1.0</first>
+							<second>
+								<alpha>255</alpha>
+								<red>255</red>
+								<green>209</green>
+								<blue>139</blue>
+							</second>
+						</e1>	
+					</stopPoints>
+				</gradient>
+			</backgroundBrush>
+			<cornerType>1</cornerType>
+			<cornerRadius>5</cornerRadius>
+		</shape>
+	</name>
+		
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/gears.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</icon>
+</style>

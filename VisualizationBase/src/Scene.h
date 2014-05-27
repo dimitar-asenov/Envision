@@ -129,6 +129,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		qreal mainViewScalingFactor() const;
 		void setMainViewScalingFactor(qreal factor);
 
+		/**
+		 * Returns the scaling factor used before the active one
+		 */
+		qreal previousMainViewScalingFactor() const;
+
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
 
@@ -160,6 +165,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool inAnUpdate_{};
 
 		qreal mainViewScalingFactor_{1.0};
+		qreal previousMainViewScalingFactor_{mainViewScalingFactor_};
 		bool mainViewScalingFactorChanged_{false};
 
 		ItemCategories hiddenItemCategories_;
@@ -195,6 +201,6 @@ inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePres
 inline View* Scene::currentPaintView() const { return currentPaintView_; }
 
 inline qreal Scene::mainViewScalingFactor() const { return mainViewScalingFactor_; }
-
+inline qreal Scene::previousMainViewScalingFactor() const { return previousMainViewScalingFactor_; }
 
 }

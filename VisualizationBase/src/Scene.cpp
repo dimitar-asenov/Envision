@@ -436,6 +436,7 @@ void Scene::setMainViewScalingFactor(qreal factor)
 {
 	if (factor != mainViewScalingFactor_)
 	{
+		previousMainViewScalingFactor_ = mainViewScalingFactor_;
 		mainViewScalingFactor_ = factor;
 		mainViewScalingFactorChanged_ = true;
 		scheduleUpdate();
