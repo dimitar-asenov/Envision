@@ -33,12 +33,11 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 #include "ModelBase/src/nodes/Node.h"
-
-#include <VisualizationBase/src/views/MainView.h>
 
 using namespace Visualization;
 using namespace OOModel;

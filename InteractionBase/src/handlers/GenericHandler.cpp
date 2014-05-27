@@ -43,8 +43,7 @@
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
-
-#include <ModelBase/src/nodes/Text.h>
+#include "ModelBase/src/nodes/Text.h"
 
 namespace Interaction {
 
@@ -543,57 +542,39 @@ void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheel
 {
 	if (event->modifiers() == Qt::AltModifier) // modify the semantic zoom level
 	{
-		if (target->scene()->selectedItems().size() > 0)
+		// individual semantic zoom level chang
+		Model::Node* node = nullptr;
+		Visualization::Item* parent = nullptr;
+
+		auto selectedItem = target->scene()->mainCursor() ? target->scene()->mainCursor()->owner() : nullptr;
+		if (selectedItem)
 		{
-			// individual semantic zoom level change
+			// get the nearest parent item that has a node which is not of type Model::Text
+			while (selectedItem
+					 && (!selectedItem->node() || selectedItem->node()->isSubtypeOf(Model::Text::typeIdStatic())))
+				selectedItem = selectedItem->parent();
+			if (!selectedItem) return;
 
-			Model::Node* node = nullptr;
-			Visualization::Item* parent = nullptr;
-
-			for (auto n : target->scene()->selectedItems())
+			parent = selectedItem->parent();
+			if ( parent )
 			{
-				// get the nearest parent item that has a node which is not of type Model::Text
-				while (n && (!n->node() || n->node()->isSubtypeOf(Model::Text::typeIdStatic()))) n = n->parent();
-				if (!n) return;
+				node = selectedItem->node();
 
-				auto p = n->parent();
-				if ( p )
+				int newSemanticZoomLevel = 0;
+				if (parent->definesChildNodeSemanticZoomLevel(node))
 				{
-					node = n->node();
-					parent = p;
-
-					int newSemanticZoomLevel = 0;
-					if (p->definesChildNodeSemanticZoomLevel(n->node()))
-					{
-						newSemanticZoomLevel = event->delta() < 0 ?
-							target->scene()->renderer()->getCoarserSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node())):
-							target->scene()->renderer()->getFinerSemanticZoomLevel(p->childNodeSemanticZoomLevel(n->node()));
-
-					}
-
-					if (newSemanticZoomLevel >= 0) p->setChildNodeSemanticZoomLevel(n->node(), newSemanticZoomLevel);
-					else p->clearChildNodeSemanticZoomLevel(n->node());
+					newSemanticZoomLevel = event->delta() < 0 ?
+						target->scene()->renderer()->getCoarserSemanticZoomLevel( parent->childNodeSemanticZoomLevel(node)):
+						target->scene()->renderer()->getFinerSemanticZoomLevel( parent->childNodeSemanticZoomLevel(node));
 				}
-			}
 
-			if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent(parent, node));
-		}
-		else
-		{
-			// global semantic zoom level change
-
-			for (auto ri : target->scene()->topLevelItems())
-			{
-				auto newSemanticZoomLevel = event->delta() < 0 ?
-							target->scene()->renderer()->getCoarserSemanticZoomLevel(ri->semanticZoomLevel()) :
-							target->scene()->renderer()->getFinerSemanticZoomLevel(ri->semanticZoomLevel());
-
-				ri->setSemanticZoomLevel(newSemanticZoomLevel);
-
-				qApp->postEvent(target->scene(), new SetCursorEvent(ri, ri->node()));
+				if (newSemanticZoomLevel >= 0) parent->setChildNodeSemanticZoomLevel(node, newSemanticZoomLevel);
+				else parent->clearChildNodeSemanticZoomLevel(node);
 			}
 		}
-	}
+
+		if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent(parent, node));
+	} else InteractionHandler::wheelEvent(target, event);
 }
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)

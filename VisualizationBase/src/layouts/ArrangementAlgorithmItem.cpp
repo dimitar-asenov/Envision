@@ -26,7 +26,7 @@
 
 #include "ArrangementAlgorithmItem.h"
 
-#include <items/Item.h>
+#include "../items/Item.h"
 
 namespace  Visualization {
 

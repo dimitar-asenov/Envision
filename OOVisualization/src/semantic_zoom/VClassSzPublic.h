@@ -33,8 +33,7 @@
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-#include <VisualizationBase/src/layouts/PositionLayout.h>
+#include "VisualizationBase/src/layouts/PositionLayout.h"
 
 namespace Visualization {
 	class VText;

@@ -30,9 +30,9 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-#include <VisualizationBase/src/items/RootItem.h>
 
 using namespace Visualization;
 using namespace OOModel;

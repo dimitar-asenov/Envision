@@ -27,6 +27,7 @@
 #include "Item.h"
 #include "ItemStyle.h"
 #include "../layouts/SequentialLayout.h"
+#include "../layouts/PositionLayout.h"
 #include "../shapes/Shape.h"
 #include "../shapes/ShapeStyle.h"
 #include "../VisualizationException.h"
@@ -36,8 +37,6 @@
 #include "VisualizationAddOn.h"
 
 #include "../cursor/Cursor.h"
-
-#include <layouts/PositionLayout.h>
 
 namespace Visualization {
 

@@ -35,11 +35,6 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/node_extensions/FullDetailSize.h"
 
-#include <semantic_zoom/VClassSzPublic.h>
-#include <semantic_zoom/VDeclarationConstantSz.h>
-#include <semantic_zoom/VDeclarationSz.h>
-#include <semantic_zoom/VMethodSzPublic.h>
-
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
 using namespace OOModel;

@@ -27,18 +27,16 @@
 #include "VDeclarationConstantSz.h"
 #include "OOVisualizationException.h"
 
+#include "OOModel/src/declarations/Module.h"
+#include "OOModel/src/declarations/Project.h"
+
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/node_extensions/FullDetailSize.h"
 
 #include "ModelBase/src/nodes/Node.h"
-
-#include <OOModel/src/declarations/Module.h>
-#include <OOModel/src/declarations/Project.h>
-
-#include <VisualizationBase/src/items/RootItem.h>
-
-#include <VisualizationBase/src/node_extensions/FullDetailSize.h>
 
 using namespace Visualization;
 using namespace OOModel;

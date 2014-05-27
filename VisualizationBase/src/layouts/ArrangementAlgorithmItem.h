@@ -26,10 +26,7 @@
 
 #pragma once
 
-#include "ArrangementAlgorithmItem.h"
-
-#include <qrect.h>
-#include <qlist.h>
+#include "../visualizationbase_api.h"
 
 namespace Visualization {
 
@@ -48,7 +45,7 @@ class Item;
  *
  * It is supposed to be used only by the arrangement algorithm inside PositionLayout.
  */
-struct ArrangementAlgorithmItem
+struct VISUALIZATIONBASE_API ArrangementAlgorithmItem
 {
 	/**
 	 * We use a QVector of ArrangmentAlgorithmItems in the arrangement algorithm. Therefore this

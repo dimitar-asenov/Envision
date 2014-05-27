@@ -30,8 +30,7 @@
 
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
-
-#include <VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h>
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace OOVisualization {
 
@@ -41,7 +40,6 @@ class OOVISUALIZATION_API VDeclarationSzStyle : public Visualization::Declarativ
 		virtual ~VDeclarationSzStyle() override;
 
 		Property<Visualization::TextStyle> name{this, "name"};
-
 		Property<Visualization::StaticStyle> icon{this, "icon"};
 };
 

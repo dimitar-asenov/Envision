@@ -57,3 +57,8 @@
 #include "statements/VCaseStatement.h"
 
 #include "alternative/VKeywordMethodCall.h"
+
+#include "semantic_zoom/VClassSzPublic.h"
+#include "semantic_zoom/VDeclarationConstantSz.h"
+#include "semantic_zoom/VDeclarationSz.h"
+#include "semantic_zoom/VMethodSzPublic.h"

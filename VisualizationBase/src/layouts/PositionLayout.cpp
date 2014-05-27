@@ -27,10 +27,10 @@
 #include "layouts/PositionLayout.h"
 #include "shapes/Shape.h"
 #include "../renderer/ModelRenderer.h"
+#include "../views/MainView.h"
 
 #include "ModelBase/src/model/Model.h"
 
-#include <views/MainView.h>
 
 namespace Visualization {
 
