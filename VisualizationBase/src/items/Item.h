@@ -352,24 +352,16 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		qreal previousMainViewScalingFactor() const;
 
 		/**
-		 * This method returns true if the item's geometry should be updated when the main view's zoom level changes.
+		 * Returns true if the item should be updated if its scale changes, e.g. when the user zooms in or out.
 		 *
 		 * It is assumed that this method will always return the same value for the entire lifetime of a single item.
 		 */
-		virtual bool itemGeometryChangesWithZoom() const;
+		virtual bool isSensitiveToScale() const;
 
 		/**
-		 * Sets the item's scale if it is a direct child of a PositionLayout. Then propagates the information
-		 *	down to the child items recursively.
-		 *
-		 * This method is used to ensure that changes to parent item's always reach child items in order to prevent them
-		 * from overscaling (geometric zoom scale * totalScale() > 1).
-		 * \a parentScale is a parameter for optimization purposes only.
-		 *
-		 * This method could become possibly obsolete once PositionLayouts get updated in the right order (top-down the
-		 * program structure) after a geometric scale change.
+		 * Sets the item's scale and schedules an update for all descendant items that are sensitive to scale changes.
 		 */
-		void setItemScale(qreal newScale, qreal parentScale);
+		void setScale(qreal newScale);
 
 	protected:
 

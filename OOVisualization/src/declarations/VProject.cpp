@@ -117,7 +117,7 @@ void VProject::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-bool VProject::itemGeometryChangesWithZoom() const
+bool VProject::isSensitiveToScale() const
 {
 	return !parent() || DCast<RootItem>(parent());
 }

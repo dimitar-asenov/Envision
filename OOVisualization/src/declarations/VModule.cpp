@@ -116,7 +116,7 @@ void VModule::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-bool VModule::itemGeometryChangesWithZoom() const
+bool VModule::isSensitiveToScale() const
 {
 	return !parent() || DCast<RootItem>(parent());
 }

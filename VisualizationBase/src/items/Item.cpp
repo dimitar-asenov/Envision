@@ -27,7 +27,6 @@
 #include "Item.h"
 #include "ItemStyle.h"
 #include "../layouts/SequentialLayout.h"
-#include "../layouts/PositionLayout.h"
 #include "../shapes/Shape.h"
 #include "../shapes/ShapeStyle.h"
 #include "../VisualizationException.h"
@@ -100,7 +99,7 @@ Item::~Item()
 {
 	// Mark this item as not needing updates
 	if (auto s = scene())
-		s->setUpdateItemGeometryWhenZoomChanges(this, false);
+		s->setItemIsSensitiveToScale(this, false);
 
 	SAFE_DELETE(shape_);
 }
@@ -162,29 +161,24 @@ void Item::clearSemanticZoomLevel()
 	setUpdateNeeded(FullUpdate);
 }
 
-void Item::setItemScale(qreal newScale, qreal parentScale)
+void Item::setScale(qreal newScale)
 {
-	if (DCast<PositionLayout>(parent()))
+	if (scale() != newScale)
 	{
-		qreal geometricZoomScale = mainViewScalingFactor();
+		QGraphicsItem::setScale(newScale);
 
-		qreal totalScale = geometricZoomScale * newScale * parentScale;
-
-		// calculate the maximum scale (used to hardcap the scale of an item)
-		qreal maxScale = geometricZoomScale < 1 ? 1 : geometricZoomScale;
-
-		if (totalScale >= maxScale)
-			newScale = maxScale / geometricZoomScale / parentScale;
-
-		setScale(newScale);
+		if (isSensitiveToScale()) setUpdateNeeded(StandardUpdate);
+		else
+		{
+			QList<Item*> stack = childItems();
+			while (!stack.empty())
+			{
+				Item* last = stack.takeLast();
+				if (last->isSensitiveToScale()) last->setUpdateNeeded(StandardUpdate);
+				else stack << last->childItems();
+			}
+		}
 	}
-	else
-	{
-		newScale = 1;
-	}
-
-	for (Item* child : childItems())
-		child->setItemScale(child->scale(), newScale*parentScale);
 }
 
 void Item::setStyle(const ItemStyle* style)
@@ -249,11 +243,11 @@ void Item::updateSubtree()
 		}
 	}
 
-	if (itemGeometryChangesWithZoom())
-		scene()->setUpdateItemGeometryWhenZoomChanges(this, true);
+	if (isSensitiveToScale())
+		scene()->setItemIsSensitiveToScale(this, true);
 }
 
-bool Item::itemGeometryChangesWithZoom() const
+bool Item::isSensitiveToScale() const
 {
 	return false;
 }
@@ -392,7 +386,7 @@ void Item::removeFromScene()
 			scene()->setMainCursor(nullptr);
 
 		// Mark this item as not needing updates
-		scene()->setUpdateItemGeometryWhenZoomChanges(this, false);
+		scene()->setItemIsSensitiveToScale(this, false);
 
 		if (parent()) scene()->removeItem(this);
 		else scene()->removeTopLevelItem(this);

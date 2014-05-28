@@ -124,7 +124,7 @@ void VDeclarationConstantSz::updateGeometry(int availableWidth, int availableHei
 	if (scale() != invGeometricZoomScale) setScale(invGeometricZoomScale);
 }
 
-bool VDeclarationConstantSz::itemGeometryChangesWithZoom() const
+bool VDeclarationConstantSz::isSensitiveToScale() const
 {
 	return true;
 }

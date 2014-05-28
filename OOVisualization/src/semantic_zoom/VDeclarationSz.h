@@ -59,7 +59,7 @@ class OOVISUALIZATION_API VDeclarationSz
 
 		static void initializeForms();
 
-		virtual bool itemGeometryChangesWithZoom() const override;
+		virtual bool isSensitiveToScale() const override;
 
 	protected:
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;

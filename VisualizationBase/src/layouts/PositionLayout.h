@@ -28,10 +28,8 @@
 
 #include "../visualizationbase_api.h"
 #include "../node_extensions/Position.h"
-#include "../node_extensions/FullDetailSize.h"
 
 #include "../items/ItemWithNode.h"
-#include "ArrangementAlgorithmItem.h"
 #include "Layout.h"
 #include "PositionLayoutStyle.h"
 
@@ -71,65 +69,25 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
 
 		virtual bool isEmpty() const;
-
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual bool isSensitiveToScale() const override;
 
 		int focusedElementIndex() const;
 
-		virtual bool itemGeometryChangesWithZoom() const override;
-
 	protected:
-		void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void determineChildren() override;
 
 	private:
-		/**
-		 * Rearranges the items in an attempt to make them as readable as possible.
-		 */
-		void arrangeItems(int sizeWidth, int sizeHeight);
-
-		/**
-		 * Scales the item as large as possible with respect to the area available to it.
-		 * Returns whether the item could reach a perceived scale (geometric zoom scale * totalScale) of 1.
-		 *
-		 * This function is used to find out whether an item has already enough space to be shown large enough.
-		 * The geometric zoom scale is a parameter for optimization purposes.
-		 */
-		bool scaleItem(ArrangementAlgorithmItem* item, qreal geometricZoomScale);
-
-		/**
-		 * Handles the automatic semantic zoom level change of an item.
-		 *
-		 * Geometric zoom scale, zoomedIn and zoomedOut are parameters for optimization purposes.
-		 */
-		void automaticSemanticZoomLevelChange(ArrangementAlgorithmItem& item, QVector<ArrangementAlgorithmItem>& allItems,
-													 bool zoomedIn, bool zoomedOut, qreal geometricZoomScale);
-
-		/**
-		 * Returns an estimation of the size of the provided item when shown in full detail.
-		 *
-		 * This function is used in the automatic semantic zoom level switch mechanism when there is no exact information
-		 * available about on which level an item became less detailed.
-		 */
-		QSizeF estimatedItemSizeInFullDetail(Item* item);
-
-		/**
-		 * Stores the geometric zoom scale on which an item was abstracted by the automatic semantic zoom level change.
-		 */
-		QMap<Item*,qreal> automaticSemanticZoomLevelChangeGeometricZoomLevel_;
-
-		void calculateNodesPositionInfo();
-
 		QVector<Item*> items;
 		QVector<Position*> positions;
-		QVector<FullDetailSize*> fullDetailSize;
 		bool allNodesLackPositionInfo{};
 
 		void swap(int i, int j);
 
 		/**
-		 * Returns whether all children of \a item are abstracted.
+		 * Returns true if the semantic zoom level of at least one child item was adjusted.
 		 */
-		bool allChildrenAbstracted(ArrangementAlgorithmItem &item);
+		bool adjustChildrenSemanticZoom();
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }

@@ -46,8 +46,7 @@ void VisualizationGroupsManager::clear()
 VisualizationGroup *VisualizationGroupsManager::getExactMatch(int typeId, int purpose, int semanticZoomLevel)
 {
 	if (typeId < groupsTypePurposeSz_.size() && purpose < groupsTypePurposeSz_[typeId].size() &&
-		 semanticZoomLevel < groupsTypePurposeSz_[typeId][purpose].size() &&
-		 groupsTypePurposeSz_[typeId][purpose][semanticZoomLevel])
+		 semanticZoomLevel < groupsTypePurposeSz_[typeId][purpose].size())
 		return groupsTypePurposeSz_[typeId][purpose][semanticZoomLevel];
 	else return nullptr;
 }
@@ -132,8 +131,7 @@ bool VisualizationGroupsManager::hasVisualization(int nodeTypeId, int purpose, i
 	if (nodeTypeId >= groupsTypePurposeSz_.size()) return false;
 	if (purpose >= groupsTypePurposeSz_[nodeTypeId].size()) return false;
 	if (semanticZoomLevel >= groupsTypePurposeSz_[nodeTypeId][purpose].size()) return false;
-	if (!groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel]) return false;
-	return true;
+	return groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel];
 	//TODO: One could also check whether there are any registered visualizations/subgroups.
 }
 

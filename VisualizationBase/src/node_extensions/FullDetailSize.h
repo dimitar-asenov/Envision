@@ -43,6 +43,13 @@ class VISUALIZATIONBASE_API FullDetailSize
 
 	public:
 		void set(qreal width, qreal height);
+		void set(QSize size);
+
+		QSize size() const;
+		bool hasSize() const;
 };
 
+inline void FullDetailSize::set(QSize size) { set(size.width(), size.height()); }
+inline QSize FullDetailSize::size() const { return QSize(width(), height()); }
+inline bool FullDetailSize::hasSize() const { return widthNode() && heightNode();}
 }

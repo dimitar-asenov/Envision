@@ -121,7 +121,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		View* currentPaintView() const;
 
-		void setUpdateItemGeometryWhenZoomChanges(Item* item, bool update);
+		void setItemIsSensitiveToScale(Item* item, bool update);
 
 		/**
 		 * Returns the scaling factor applied by the main view associated of this item's scene
@@ -176,7 +176,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		QList<RefreshActionFunction> refreshActionFunctions_;
 
-		QSet<Item*> itemsToUpdateGeometryWhenZoomChanges_;
+		QSet<Item*> itemsSensitiveToScale_;
 
 		View* currentPaintView_{};
 		friend class View;

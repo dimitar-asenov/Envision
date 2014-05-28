@@ -41,7 +41,8 @@ RootItem::RootItem(Item* parent, NodeType* node, int purpose, int semanticZoomLe
 	setSemanticZoomLevel(semanticZoomLevel);
 }
 
-RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel) : Super(nullptr, node, itemStyles().get()), item_(nullptr)
+RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel)
+: Super(nullptr, node, itemStyles().get()), item_(nullptr)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setItemCategory(Scene::CodeItemCategory);
@@ -49,7 +50,8 @@ RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel) : Super(n
 	setSemanticZoomLevel(semanticZoomLevel);
 }
 
-RootItem::RootItem(Item* item, int purpose, int semanticZoomLevel) : Super(nullptr, nullptr, itemStyles().get()), item_(item)
+RootItem::RootItem(Item* item, int purpose, int semanticZoomLevel)
+: Super(nullptr, nullptr, itemStyles().get()), item_(item)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setPurpose(purpose);

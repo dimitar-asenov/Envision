@@ -134,7 +134,7 @@ void Scene::updateItems()
 	if (mainViewScalingFactorChanged_)
 	{
 		mainViewScalingFactorChanged_ = false;
-		for (auto item : itemsToUpdateGeometryWhenZoomChanges_)
+		for (auto item : itemsSensitiveToScale_)
 				item->changeGeometry();
 	}
 
@@ -414,19 +414,19 @@ void Scene::computeSceneRect()
 	for(auto v: views()) v->setSceneRect(viewRect);
 }
 
-void Scene::setUpdateItemGeometryWhenZoomChanges(Item* item, bool update)
+void Scene::setItemIsSensitiveToScale(Item* item, bool update)
 {
 	Q_ASSERT(item);
-	if (update) itemsToUpdateGeometryWhenZoomChanges_.insert(item);
+	if (update) itemsSensitiveToScale_.insert(item);
 	else
 	{
-		itemsToUpdateGeometryWhenZoomChanges_.remove(item);
+		itemsSensitiveToScale_.remove(item);
 
-		auto it = itemsToUpdateGeometryWhenZoomChanges_.begin();
-		while (it != itemsToUpdateGeometryWhenZoomChanges_.end())
+		auto it = itemsSensitiveToScale_.begin();
+		while (it != itemsSensitiveToScale_.end())
 		{
 			if (item->isAncestorOf(*it))
-				it = itemsToUpdateGeometryWhenZoomChanges_.erase(it);
+				it = itemsSensitiveToScale_.erase(it);
 			else ++it;
 		}
 	}
