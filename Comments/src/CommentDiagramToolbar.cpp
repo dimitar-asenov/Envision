@@ -46,7 +46,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	this->addSeparator();
 
 	bSelectShape_ = new QToolButton;
-	bSelectShape_->setText("Select Shape");
+	bSelectShape_->setIcon(QIcon(":/icons/shapes.png"));
 	this->addWidget(bSelectShape_);
 
 	QMenu* menu = new QMenu();
@@ -60,19 +60,27 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	this->addSeparator();
 
 	colorPickerBackground_ = new ColorPicker;
+	colorPickerBackground_->setColorPickerType(ColorPicker::background);
+	colorPickerBackground_->setEnabled(false);
 	this->addWidget(colorPickerBackground_);
 	colorPickerBorder_ = new ColorPicker;
+	colorPickerBorder_->setColorPickerType(ColorPicker::shape);
+	colorPickerBorder_->setEnabled(false);
 	this->addWidget(colorPickerBorder_);
 	colorPickerText_ = new ColorPicker;
+	colorPickerText_->setColorPickerType(ColorPicker::text);
+	colorPickerText_->setEnabled(false);
 	this->addWidget(colorPickerText_);
 
 	this->addSeparator();
 
 	bConnections_ = new QToolButton;
-	bConnections_->setText("Connections");
+	bConnections_->setIcon(QIcon(":/icons/connection.png"));
 	bConnections_->setCheckable(true);
 	this->addWidget(bConnections_);
 
+	aTimer_ = new QTimer;
+	aTimer_->setInterval(200);
 	this->setWindowFlags(Qt::WindowStaysOnTopHint);
 
 	connect(bSelection_, SIGNAL(toggled(bool)), this, SLOT(setSelection(bool)));
@@ -83,6 +91,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	connect(colorPickerBorder_, SIGNAL(colorChanged(QString)), this, SLOT(applyBorderColor(QString)));
 	connect(colorPickerText_, SIGNAL(colorChanged(QString)), this, SLOT(applyTextColor(QString)));
 	connect(bConnections_, SIGNAL(toggled(bool)), this, SLOT(showConnectionPoints(bool)));
+	connect(aTimer_, SIGNAL(timeout()), this, SLOT(handleTimerEvent()));
 }
 
 void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
@@ -101,6 +110,10 @@ void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 	colorPickerBackground_->setselectedColor(shape->node()->backgroundColor());
 	colorPickerBorder_->setselectedColor(shape->node()->shapeColor());
 	colorPickerText_->setselectedColor(shape->node()->textColor());
+
+	colorPickerBackground_->setEnabled(true);
+	colorPickerBorder_->setEnabled(true);
+	colorPickerText_->setEnabled(true);
 }
 
 void CommentDiagramToolbar::setSelection(bool sel)
@@ -164,11 +177,23 @@ void CommentDiagramToolbar::showConnectionPoints(bool show)
 {
 	connection_ = true;
 	diagram_->setShowConnectorPoints(show);
+	diagram_->scene()->scheduleUpdate();
 }
 
 bool CommentDiagramToolbar::getConnectionMode()
 {
 	return connection_;
+}
+
+void CommentDiagramToolbar::handleTimerEvent()
+{
+	//TODO
+}
+
+void CommentDiagramToolbar::show()
+{
+	QToolBar::show();
+	aTimer_->start();
 }
 
 } /* namespace Comments */

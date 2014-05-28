@@ -48,7 +48,6 @@ class VCommentDiagramConnector;
 class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VCommentDiagram,
 						Visualization::Item, CommentDiagram> >
 {
-	//ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, Visualization::ItemStyle)
 	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, VCommentDiagramSequenceStyle)
 
 	public:
@@ -67,8 +66,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		QPair<int,int> lastConnector() const;
 		void setLastConnector(int shape, int point);
 		VCommentDiagramShape* diagramShape(int index);
-
-		CommentDiagramToolbar* toolbar_{};
+		CommentDiagramToolbar* getToolbar();
 
 	protected:
 		virtual void determineChildren() override;
@@ -86,6 +84,8 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		bool showConnectorPoints_{};
 		QPair<int,int> lastConnector_{-1, -1};
 		QPoint lastRightClick_;
+
+		CommentDiagramToolbar* toolbar_{};
 
 		template <class T>
 		void synchronizeWithNodes(const QVector<Model::Node*>& nodes, QVector<T*>& destination);

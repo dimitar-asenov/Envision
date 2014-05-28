@@ -26,6 +26,8 @@
 
 #include "ColorPicker.h"
 
+namespace Comments{
+
 ColorPicker::ColorPicker(QWidget *parent) : QToolButton(parent)
 {
 	mapEnvisionTextColors_.insert("black","#000000");
@@ -104,16 +106,43 @@ void ColorPicker::setEnvisionTextColors()
 
 void ColorPicker::handleColorPicked(QString aColor)
 {
-	QPixmap pixmap(100,100);
-	pixmap.fill(QColor(aColor));
-	this->setIcon(QIcon(pixmap));
+	if(type_ == text)
+		setselectedColor(mapEnvisionTextColors_.value(aColor));
+	else
+		setselectedColor(aColor);
 	this->menu()->close();
 	emit colorChanged(aColor);
 }
 
 void ColorPicker::setselectedColor(QString aColor)
 {
-	QPixmap pixmap(100,100);
+	QPixmap pixmap(24,24);
 	pixmap.fill(QColor(aColor));
+	QPainter* aPainter = new QPainter(&pixmap);
+	aPainter->setPen(Qt::black);
+	QFont font = aPainter->font();
+	font.setPointSize(16);
+	aPainter->setFont(font);
+	switch (type_)
+	{
+		case background:
+			aPainter->setBrush(QBrush(Qt::black));
+			aPainter->drawRect(5,5,13,13);
+		break;
+		case shape:
+			aPainter->drawRect(5,5,13,13);
+		break;
+		case text:
+			aPainter->drawText(6,20,"T");
+		break;
+	}
+	aPainter->end();
 	this->setIcon(QIcon(pixmap));
 }
+
+void ColorPicker::setColorPickerType(ColorPickerType type)
+{
+	type_ = type;
+}
+
+} /* namespace Comments */

@@ -125,12 +125,7 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	if(!hasShape()) painter->setBrush(Qt::white);
 	else painter->setBrush(Qt::NoBrush);
 
-	if(editing_)
-	{
-		painter->setPen(QPen(Qt::red, EDIT_OUTLINE_SIZE));
-		//painter->drawRect( QRect{QPoint(EDIT_OUTLINE_SIZE/2, EDIT_OUTLINE_SIZE/2),sizeInLocal().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
-	}
-	else if(!hasShape())
+	if(!hasShape())
 		painter->drawRect(QRect{QPoint(0,0), sizeInLocal().toSize()});
 
 	if(shapes_.isEmpty())
@@ -192,6 +187,11 @@ void VCommentDiagram::setShowConnectorPoints(bool show)
 {
 	showConnectorPoints_ = show;
 	setUpdateNeeded(VCommentDiagram::StandardUpdate);
+}
+
+CommentDiagramToolbar* VCommentDiagram::getToolbar()
+{
+	return toolbar_;
 }
 
 } /* namespace Comments */

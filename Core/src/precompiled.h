@@ -51,6 +51,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QList>
 #include <QtCore/QSignalMapper>
+#include <QtCore/QTimer>
 #include <QtGui/QToolBar>
 #include <QtGui/QToolButton>
 #include <QtGui/QButtonGroup>

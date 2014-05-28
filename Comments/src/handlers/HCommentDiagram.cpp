@@ -42,37 +42,6 @@ HCommentDiagram* HCommentDiagram::instance()
 	return &h;
 }
 
-void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	auto diagram = DCast<VCommentDiagram>(target);
-	event->ignore();
-
-	if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
-	{
-		event->accept();
-		diagram->toggleEditing();
-	}
-	else if(event->key() == Qt::Key_Shift || event->modifiers() & Qt::Key_Shift)
-	{
-		event->accept();
-		//diagram->setShowConnectorPoints(true);
-	}
-
-	if (!event->isAccepted())
-		GenericHandler::keyPressEvent(target, event);
-}
-
-void HCommentDiagram::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	auto diagram = DCast<VCommentDiagram>(target);
-
-	if(diagram->showConnectorPoints() && !(event->modifiers() & Qt::Key_Shift))
-	{
-		event->accept();
-		//diagram->setShowConnectorPoints(false);
-	}
-}
-
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto diagram = DCast<VCommentDiagram>(target);
@@ -97,39 +66,57 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 	}
 	if(event->button() == Qt::LeftButton)
 	{
-		if(!diagram->toolbar_->getSelectionMode())
+		if(!diagram->getToolbar()->getSelectionMode())
 		{
+			diagram->moveCursor();
 			event->accept();
-			auto diagram2 = DCast<CommentDiagram>(target->node());
-			newShape_ = new CommentDiagramShape(event->pos().x(), event->pos().y(), 1, 1, diagram->toolbar_->nextShapeToAdd_);
-			diagram2->model()->beginModification(diagram2, "create shape");
-			diagram2->shapes()->append(newShape_);
-			diagram2->model()->endModification();
-			diagram->toolbar_->setSelectionMode(true);
+			auto diagramNode = DCast<CommentDiagram>(target->node());
+			newShape_ = new CommentDiagramShape(event->pos().x(), event->pos().y(), 1, 1, diagram->getToolbar()->nextShapeToAdd_);
+			diagramNode->model()->beginModification(diagramNode, "create shape");
+			diagramNode->shapes()->append(newShape_);
+			diagramNode->model()->endModification();
+			diagram->getToolbar()->setSelectionMode(true);
 		}
 	}
 }
 
 void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if(event->pos() == event->buttonDownPos(Qt::LeftButton))
+	if(!resizing_)
 	{
-		newShape_->beginModification("Resizing shape");
-		newShape_->setWidth(100);
-		newShape_->setHeight(100);
-		newShape_->endModification();
+		if(event->pos() == event->buttonDownPos(Qt::LeftButton))
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setWidth(100);
+			newShape_->setHeight(100);
+			newShape_->endModification();
+		}
+		if(event->pos().x() < event->buttonDownPos(Qt::LeftButton).x())
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setX(event->pos().x());
+			newShape_->setWidth(event->buttonDownPos(Qt::LeftButton).x() - event->pos().x());
+			newShape_->endModification();
+		}
+		if (event->pos().y() < event->buttonDownPos(Qt::LeftButton).y())
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setY(event->pos().y());
+			newShape_->setHeight(event->buttonDownPos(Qt::LeftButton).y() - event->pos().y());
+			newShape_->endModification();
+		}
 	}
 	auto diagram = DCast<VCommentDiagram>(target);
 	diagram->setCursor(Qt::ArrowCursor);
 	resizing_ = false;
-	newShape_ = NULL;
+	newShape_ = nullptr;
 }
 
 void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	auto diagram = DCast<VCommentDiagram>(target);
 	if(resizing_)
 	{
-		auto diagram = DCast<VCommentDiagram>(target);
 		QPointF diff = event->pos() - event->buttonDownPos(Qt::RightButton);
 		QSize newSize(originalSize_.width() + diff.x(), originalSize_.height() + diff.y());
 
@@ -138,7 +125,7 @@ void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 		diagram->node()->endModification();
 		diagram->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	}
-	else if (newShape_ != NULL)
+	else if (newShape_ != nullptr)
 	{
 		QPointF diff = event->pos() - event->buttonDownPos(Qt::LeftButton);
 		newShape_->beginModification("Resizing shape");

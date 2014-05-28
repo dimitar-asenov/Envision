@@ -24,7 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMENTDIAGRAMTOOLBAR_H
 #pragma once
 
 #include "ColorPicker.h"
@@ -39,15 +38,26 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 {
 		Q_OBJECT
 	public:
-		explicit CommentDiagramToolbar(QWidget *parent = 0);
-
+		CommentDiagramToolbar(QWidget *parent = 0);
 		void setDiagram(VCommentDiagram* diagram);
 		void setCurrentShape(Visualization::Item *currentShape);
 		void setSelectionMode(bool sel);
 		bool getSelectionMode();
 		bool getConnectionMode();
+		void show();
 
 		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+
+	public slots:
+		void setSelection(bool sel);
+		void createRectangle();
+		void createEllipse();
+		void createDiamond();
+		void applyBackgroundColor(QString color);
+		void applyBorderColor(QString color);
+		void applyTextColor(QString color);
+		void showConnectionPoints(bool show);
+		void handleTimerEvent();
 
 	private:
 		QToolButton* bSelection_{};
@@ -67,17 +77,7 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		VCommentDiagram* diagram_{};
 		Visualization::Item* currentShape_{};
 
-	public slots:
-		void setSelection(bool sel);
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void showConnectionPoints(bool show);
+		QTimer* aTimer_{};
 };
 
 } /* namespace Comments */
-
-#endif // COMMENTDIAGRAMTOOLBAR_H

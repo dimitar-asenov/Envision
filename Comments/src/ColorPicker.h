@@ -24,22 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COLORPICKER_H
 #pragma once
 
-#include <QMap>
+#include "comments_api.h"
 
-class ColorPicker : public QToolButton
+namespace Comments {
+
+class COMMENTS_API ColorPicker : public QToolButton
 {
 		Q_OBJECT
 	public:
-		explicit ColorPicker(QWidget *parent = 0);
+		enum ColorPickerType {background, shape, text};
+
+		ColorPicker(QWidget *parent = 0);
 		void setColors(QVector<QColor> colors, int colorsPerRow);
 		void setEnvisionTextColors();
 		void setselectedColor(QString aColor);
-
-	private:
-		QMap<QString, QString> mapEnvisionTextColors_;
+		void setColorPickerType(enum ColorPickerType type);
 
 	signals:
 		void colorChanged(QString color);
@@ -47,6 +48,10 @@ class ColorPicker : public QToolButton
 	public slots:
 		void handleColorPicked(QString aColor);
 
+	private:
+		QMap<QString, QString> mapEnvisionTextColors_;
+		ColorPickerType type_{};
+
 };
 
-#endif // COLORPICKER_H
+} /* namespace Comments */

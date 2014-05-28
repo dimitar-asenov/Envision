@@ -105,34 +105,34 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			break;
 	}
 
-	//if(diagram()->editing())
-	//{
-		if(diagram()->showConnectorPoints())
-		{
-			// Temporarily assume a thicker painter with a different color for drawing the connector points
-			QBrush blackBrush(Qt::black), redBrush(Qt::red);
+	if(diagram()->showConnectorPoints())
+	{
+		// Temporarily assume a thicker painter with a different color for drawing the connector points
+		QBrush blackBrush(Qt::black), redBrush(Qt::red);
 
-			int shapeIndex = node()->index();
-			auto last = diagram()->lastConnector();
-			for(int i = 0; i < 16; ++i)
+		int shapeIndex = node()->index();
+		auto last = diagram()->lastConnector();
+		for(int i = 0; i < 16; ++i)
+		{
+			if(last.first == shapeIndex && last.second == i)
 			{
-				if(last.first == shapeIndex && last.second == i)
-				{
-					painter->setBrush(blackBrush);
-					painter->setPen(QPen(Qt::black));
-					painter->drawEllipse(node()->connectorPoint(i), 7, 7);
-				}
-				else
-				{
-					painter->setBrush(redBrush);
-					painter->setPen(QPen(Qt::red));
-					painter->drawEllipse(node()->connectorPoint(i), 3, 3);
-				}
+				painter->setBrush(blackBrush);
+				painter->setPen(QPen(Qt::black));
+				painter->drawEllipse(node()->connectorPoint(i), 7, 7);
+			}
+			else
+			{
+				painter->setBrush(redBrush);
+				painter->setPen(QPen(Qt::red));
+				painter->drawEllipse(node()->connectorPoint(i), 3, 3);
 			}
 		}
-		//else
-			//for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
-	//}
+	}
+	if(this->scene()->mainCursor() != nullptr)
+		if(this->scene()->mainCursor()->owner() != nullptr)
+			if(this->scene()->mainCursor()->owner() == this)
+				for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
+
 }
 
 VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) const
