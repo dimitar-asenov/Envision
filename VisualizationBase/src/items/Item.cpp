@@ -771,13 +771,13 @@ int Item::childNodeSemanticZoomLevel(const Model::Node* node) const
 void Item::setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel)
 {
 	childNodeSemanticZoomLevel_.insert(node, semanticZoomLevel);
-	setUpdateNeeded(FullUpdate);
+	setUpdateNeeded(StandardUpdate);
 }
 
 void Item::clearChildNodeSemanticZoomLevel(const Model::Node* node)
 {
 	childNodeSemanticZoomLevel_.remove(node);
-	setUpdateNeeded(FullUpdate);
+	setUpdateNeeded(StandardUpdate);
 }
 
 bool Item::definesChildNodeSemanticZoomLevel(const Model::Node* node) const
