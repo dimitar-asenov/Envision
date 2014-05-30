@@ -56,7 +56,7 @@ void VClass::determineChildren()
 	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
 	QList<Model::Node*> bodyItems = node()->classes()->nodes().toList();
 	bodyItems << node()->methods()->nodes().toList();
-	body_->synchronizeWithNodes( bodyItems, renderer());;
+	body_->synchronizeWithNodes(bodyItems, renderer());
 
 	// call determineChildren of super class
 	Super::determineChildren();

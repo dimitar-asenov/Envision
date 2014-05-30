@@ -104,16 +104,17 @@ void VModule::initializeForms()
 
 void VModule::updateGeometry(int availableWidth, int availableHeight)
 {
-	Super::updateGeometry(availableWidth, availableHeight);
-
-	if (!DCast<RootItem>(parent())) return;
-
-	qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
-	if (icon_->scale() != invGeometricZoomScale)
+	if (DCast<RootItem>(parent()))
 	{
-		icon_->setScale(invGeometricZoomScale);
-		name_->setScale(invGeometricZoomScale);
+		qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
+		if (icon_->scale() != invGeometricZoomScale)
+		{
+			icon_->setScale(invGeometricZoomScale);
+			name_->setScale(invGeometricZoomScale);
+		}
 	}
+
+	Super::updateGeometry(availableWidth, availableHeight);
 }
 
 bool VModule::isSensitiveToScale() const
