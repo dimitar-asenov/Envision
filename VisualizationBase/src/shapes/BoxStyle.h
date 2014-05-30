@@ -58,6 +58,8 @@ class VISUALIZATIONBASE_API BoxStyle : public Super<ShapeStyle>
 						int contentBoxHeight) const;
 		void optimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
 								int contentBoxHeight) const;
+		void simplifiedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
+								int contentBoxHeight) const;
 		void generatePixmaps(qreal scaleFactor, const QPainter* painterSpecifyingRenderHints) const;
 };
 

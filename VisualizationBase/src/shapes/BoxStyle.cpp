@@ -71,6 +71,11 @@ void BoxStyle::paint(QPainter* painter, int xOffset, int yOffset, int contentBox
 //			&& (outline().style() == Qt::NoPen || outline().style() == Qt::SolidLine))
 //		optimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
 //	else
+
+	qreal scaleFactor = painter->worldTransform().m11();
+	if (scaleFactor < 0.5 && scaleFactor*outline().width() < 0.1)
+		simplifiedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight );
+	else
 		unoptimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
 }
 
@@ -211,6 +216,20 @@ void BoxStyle::optimizedPaint(QPainter* painter, int xOffset, int yOffset, int c
 		// right
 		painter->fillRect(xOffset + contentBoxWidth - outlineWidth, yOffset + subImageSize,
 				outlineWidth, innerHeight, outline().color());
+	}
+}
+
+void BoxStyle::simplifiedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
+						int contentBoxHeight) const
+{
+	// Draw a simplified version
+	if (background().style() != Qt::NoBrush)
+	{
+		if (background().gradient())
+			painter->fillRect(xOffset, yOffset, contentBoxWidth, contentBoxHeight,
+									background().gradient()->stops().last().second);
+		else
+			painter->fillRect(xOffset, yOffset, contentBoxWidth, contentBoxHeight, background().color());
 	}
 }
 
