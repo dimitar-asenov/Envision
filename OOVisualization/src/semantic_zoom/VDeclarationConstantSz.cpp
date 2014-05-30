@@ -75,15 +75,9 @@ void VDeclarationConstantSz::initializeForms()
 						return &v->style()->name();
 					}));
 
-	auto shapeElement = new ShapeFormElement();
-
 	addForm((new AnchorLayoutFormElement())
-				->put(TheLeftOf, stretchItem, AtLeftOf, shapeElement)
-				->put(TheTopOf, stretchItem, AtTopOf, shapeElement)
-				->put(TheRightOf, stretchItem, AtRightOf, shapeElement)
-				->put(TheBottomOf, stretchItem, AtBottomOf, shapeElement)
-				->put(TheVCenterOf, content, AtVCenterOf, shapeElement)
-				->put(TheHCenterOf, content, AtHCenterOf, shapeElement));
+				->put(TheVCenterOf, content, AtVCenterOf, stretchItem)
+				->put(TheHCenterOf, content, AtHCenterOf, stretchItem));
 }
 
 void VDeclarationConstantSz::updateGeometry(int availableWidth, int availableHeight)
