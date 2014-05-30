@@ -98,7 +98,7 @@ Item::Item(Item* parent, const StyleType* style) :
 Item::~Item()
 {
 	// Mark this item as not needing updates
-	if (auto s = scene())
+	for (auto s : Scene::allScenes())
 		s->setItemIsSensitiveToScale(this, false);
 
 	SAFE_DELETE(shape_);

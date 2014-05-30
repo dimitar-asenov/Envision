@@ -134,6 +134,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		 */
 		qreal previousMainViewScalingFactor() const;
 
+		/**
+		 * Returns all existing scenes.
+		 */
+		static QList<Scene*>& allScenes();
+
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
 

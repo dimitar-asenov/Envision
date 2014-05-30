@@ -52,6 +52,12 @@ class UpdateSceneEvent : public QEvent
 
 const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
+QList<Scene*>& Scene::allScenes()
+{
+	static QList<Scene*> list;
+	return list;
+}
+
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()),
 	  	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)),
@@ -60,6 +66,7 @@ Scene::Scene()
 	setItemIndexMethod(NoIndex);
 
 	initialized_ = true;
+	allScenes().append(this);
 }
 
 Scene::~Scene()
@@ -76,6 +83,8 @@ Scene::~Scene()
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
+
+	allScenes().removeAll(this);
 }
 
 ModelRenderer* Scene::defaultRenderer()
@@ -418,18 +427,7 @@ void Scene::setItemIsSensitiveToScale(Item* item, bool update)
 {
 	Q_ASSERT(item);
 	if (update) itemsSensitiveToScale_.insert(item);
-	else
-	{
-		itemsSensitiveToScale_.remove(item);
-
-		auto it = itemsSensitiveToScale_.begin();
-		while (it != itemsSensitiveToScale_.end())
-		{
-			if (item->isAncestorOf(*it))
-				it = itemsSensitiveToScale_.erase(it);
-			else ++it;
-		}
-	}
+	else itemsSensitiveToScale_.remove(item);
 }
 
 void Scene::setMainViewScalingFactor(qreal factor)
