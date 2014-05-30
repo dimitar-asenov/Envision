@@ -47,34 +47,34 @@ class VISUALIZATIONBASE_API VisualizationGroup {
 		VisualizationGroup(ConditionFunction condition, int scorePoints = 1);
 		virtual ~VisualizationGroup();
 
-		void addVisualization(VisualizationGroup::ItemConstructor visualization);
-		void addVisualization(VisualizationGroup::ItemConstructor visualization, ConditionFunction condition);
+		void addVisualization(VisualizationGroup::ItemConstructor visualization, int itemTypeId);
+		void addVisualization(VisualizationGroup::ItemConstructor visualization, int itemTypeId,
+				ConditionFunction condition);
 		void addSubGroup(VisualizationGroup* group);
 		void clear();
 
 		void setConditionFunction(ConditionFunction condition, int scorePoints = 1);
 
-		virtual bool matchesContext(Item* parent, Model::Node* node);
+		bool matchesContext(Item* parent, Model::Node* node);
 
-		virtual QList<QPair<VisualizationSuitabilityScore, ItemConstructor> > visualizationsForContext(Item* parent,
+		QList<QPair<VisualizationSuitabilityScore, QPair<int, ItemConstructor>>> visualizationsForContext(Item* parent,
 				Model::Node* node);
 
 	private:
 		QVector<VisualizationGroup*> subGroups_;
 		QVector<ItemConstructor> visualizations_;
+		QVector<int> itemTypeIds_;
 
 		ConditionFunction contextCondition_;
 		int scorePoints_;
 };
 
-inline void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization)
-{ visualizations_ << visualization; }
 inline void VisualizationGroup::addSubGroup(VisualizationGroup* group) { subGroups_ << group; }
 inline void VisualizationGroup::clear() {visualizations_.clear(); qDeleteAll(subGroups_); subGroups_.clear();}
 inline void VisualizationGroup::setConditionFunction(ConditionFunction condition, int scorePoints)
 { contextCondition_ = condition; scorePoints_ = scorePoints;}
 
-bool operator< (const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& left,
-		const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& right);
+bool operator< (const QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>& left,
+		const QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>& right);
 
 } /* namespace Visualization */

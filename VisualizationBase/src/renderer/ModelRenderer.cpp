@@ -48,6 +48,48 @@ ModelRenderer::~ModelRenderer()
 
 Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose, int semanticZoomLevel)
 {
+	auto best = bestVisualizationForContext(parent, node, purpose, semanticZoomLevel);
+
+	Item* rendered = best.second(parent, node);
+	if (!parent && rendered->purpose() < 0)
+		rendered->setPurpose( purpose < 0 ? 0 : purpose);
+	return rendered;
+}
+
+void ModelRenderer::render(Item*& item, Item* parent, Model::Node* node)
+{
+	Q_ASSERT(parent); // If this is ever removed, make sure to set the purpose of parentless items explicitly
+
+	if (!node && item)
+	{
+		SAFE_DELETE_ITEM(item);
+		parent->setUpdateNeeded(Item::StandardUpdate);
+		return;
+	}
+
+	auto best = bestVisualizationForContext(parent, node);
+
+	if (item && item->typeId() != best.first)
+	{
+		SAFE_DELETE_ITEM(item);
+		parent->setUpdateNeeded(Item::StandardUpdate);
+	}
+
+	if (!item && node)
+	{
+		item = best.second(parent, node); // Note that we don't need to set the purpose since we have a parent
+		parent->setUpdateNeeded(Item::StandardUpdate);
+	}
+
+	if (item && item->node() != node)
+	{
+		item->setUpdateNeeded(Item::StandardUpdate); // Update the item, not the parent
+	}
+}
+
+QPair<int, VisualizationGroup::ItemConstructor> ModelRenderer::bestVisualizationForContext
+(Item* parent, Model::Node* node, int purpose, int semanticZoomLevel)
+{
 	switch (visualizationChoiceStrategy_)
 	{
 	case VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE:
@@ -56,11 +98,12 @@ Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose, int se
 		return visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(parent, node, purpose, semanticZoomLevel);
 	default:
 		Q_ASSERT(false);
-		return nullptr;
+		return {};
 	}
 }
 
-Item* ModelRenderer::visualizationChoiceStrategyTypeOverSemanticZoomLevelOverPurpose(Item* parent, Model::Node* node,
+QPair<int, VisualizationGroup::ItemConstructor>
+ModelRenderer::visualizationChoiceStrategyTypeOverSemanticZoomLevelOverPurpose(Item* parent, Model::Node* node,
 																												 int purpose, int semanticZoomLevel)
 {
 	return basicStrategy(parent, node, purpose, semanticZoomLevel,
@@ -72,7 +115,8 @@ Item* ModelRenderer::visualizationChoiceStrategyTypeOverSemanticZoomLevelOverPur
 				 {return this->visualizationGroupsManager_.getByTypeId(id); });
 }
 
-Item* ModelRenderer::visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
+QPair<int, VisualizationGroup::ItemConstructor>
+ModelRenderer::visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomLevel(Item* parent, Model::Node* node,
 																												 int purpose, int semanticZoomLevel)
 {
 	return basicStrategy(parent, node, purpose, semanticZoomLevel,
@@ -84,8 +128,8 @@ Item* ModelRenderer::visualizationChoiceStrategyTypeOverPurposeOverSemanticZoomL
 				 {return this->visualizationGroupsManager_.getByTypeId(id); });
 }
 
-Item* ModelRenderer::basicStrategy(Item* parent, Model::Node* node,
-							int purpose, int semanticZoomLevel,
+QPair<int, VisualizationGroup::ItemConstructor>
+ModelRenderer::basicStrategy(Item* parent, Model::Node* node, int purpose, int semanticZoomLevel,
 							std::function<QVector<VisualizationGroup*> ((int id, int purpose, int semanticZoomLevel))> option1,
 							std::function<QVector<VisualizationGroup*> ((int id, int purpose, int semanticZoomLevel))> option2,
 							std::function<QVector<VisualizationGroup*> ((int id, int purpose, int semanticZoomLevel))> option3)
@@ -106,7 +150,7 @@ Item* ModelRenderer::basicStrategy(Item* parent, Model::Node* node,
 
 	for(int id : typeIds)
 	{
-		QList<QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor> > list;
+		QList<QPair<VisualizationSuitabilityScore, QPair<int,VisualizationGroup::ItemConstructor>>> list;
 
 		// Try to find a match for the specific purpose and semantic zoom level
 		VisualizationGroup* group = visualizationGroupsManager_.getExactMatch(id, finalPurpose, finalSemanticZoomLevel);
@@ -143,9 +187,7 @@ Item* ModelRenderer::basicStrategy(Item* parent, Model::Node* node,
 		if (list.size() > 0)
 		{
 			qSort(list);
-			Item* item = list.last().second(parent, node);
-			if (!parent && item->purpose() < 0) item->setPurpose(finalPurpose);
-			return item;
+			return list.last().second;
 		}
 	}
 
@@ -182,9 +224,9 @@ int ModelRenderer::registerSemanticZoomLevel(const QString& name, int orderingNu
 }
 
 void ModelRenderer::registerVisualization(int nodeTypeId, int purpose, int semanticZoomLevel,
-		VisualizationGroup::ItemConstructor visualization)
+		VisualizationGroup::ItemConstructor visualization, int itemTypeId)
 {
-	visualizationGroupsManager_.addVisualization(nodeTypeId, purpose, semanticZoomLevel, visualization);
+	visualizationGroupsManager_.addVisualization(nodeTypeId, purpose, semanticZoomLevel, visualization, itemTypeId);
 }
 
 void ModelRenderer::registerGroup(int nodeTypeId, int purpose, int semanticZoomLevel, VisualizationGroup* group)

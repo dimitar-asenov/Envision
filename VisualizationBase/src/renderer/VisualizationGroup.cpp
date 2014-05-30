@@ -48,14 +48,15 @@ bool VisualizationGroup::matchesContext(Item* item, Model::Node* node)
 	else return true;
 }
 
-QList<QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor> >
+QList<QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>>
 VisualizationGroup::visualizationsForContext(Item* parent, Model::Node* node)
 {
-	QList<QPair<VisualizationSuitabilityScore, ItemConstructor> > result;
+	QList<QPair<VisualizationSuitabilityScore, QPair<int, ItemConstructor>>> result;
 	if (matchesContext(parent, node))
 	{
-		for(auto v : visualizations_)
-			result << qMakePair(VisualizationSuitabilityScore(scorePoints_), v);
+		for(int i = 0; i<visualizations_.size(); ++i)
+			result << qMakePair(VisualizationSuitabilityScore(scorePoints_),
+					qMakePair(itemTypeIds_[i], visualizations_[i]));
 
 		for(auto sg : subGroups_)
 		{
@@ -70,17 +71,23 @@ VisualizationGroup::visualizationsForContext(Item* parent, Model::Node* node)
 	return result;
 }
 
-bool operator< (const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& left,
-		const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& right)
+bool operator< (const QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>& left,
+		const QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>& right)
 {
 	return left.first < right.first;
 }
 
-void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization,
+void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization, int itemTypeId)
+{
+	visualizations_ << visualization;
+	itemTypeIds_ << itemTypeId;
+}
+
+void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization, int itemTypeId,
 		ConditionFunction condition)
 {
 	auto g = new VisualizationGroup(condition);
-	g->addVisualization(visualization);
+	g->addVisualization(visualization, itemTypeId);
 	addSubGroup(g);
 }
 

@@ -174,25 +174,25 @@ Class* addCollection(Project* parent)
 	});
 
 	// Register Visualizations in the group
-	g->addVisualization(createVisualization<FindMethodVis, MethodCallExpression>,
+	g->addVisualization(createVisualization<FindMethodVis, MethodCallExpression>, FindMethodVis::typeIdStatic(),
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
 				return call->methodDefinition() == find;
 			});
-	g->addVisualization(createVisualization<EmptyMethodVis, MethodCallExpression>,
+	g->addVisualization(createVisualization<EmptyMethodVis, MethodCallExpression>, EmptyMethodVis::typeIdStatic(),
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
 				return call->methodDefinition() == empty;
 			});
-	g->addVisualization(createVisualization<InsertMethodVis, MethodCallExpression>,
+	g->addVisualization(createVisualization<InsertMethodVis, MethodCallExpression>, InsertMethodVis::typeIdStatic(),
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
 				return call->methodDefinition() == insert;
 			});
-	g->addVisualization(createVisualization<SumMethodVis, MethodCallExpression>,
+	g->addVisualization(createVisualization<SumMethodVis, MethodCallExpression>, SumMethodVis::typeIdStatic(),
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);

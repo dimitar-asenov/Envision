@@ -70,7 +70,7 @@ class VISUALIZATIONBASE_API VisualizationGroupsManager
 		 * Adds a visualization to the managed pool.
 		 */
 		void addVisualization(int nodeTypeId, int purpose, int semanticZoomLevel,
-									 VisualizationGroup::ItemConstructor visualization);
+									 VisualizationGroup::ItemConstructor visualization, int itemTypeId);
 
 		/**
 		 * Adds a visualization group to the managed pool.

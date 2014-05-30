@@ -87,12 +87,12 @@ QVector<VisualizationGroup *> VisualizationGroupsManager::getByTypeIdAndSemantic
 }
 
 void VisualizationGroupsManager::addVisualization(int nodeTypeId, int purpose, int semanticZoomLevel,
-																  VisualizationGroup::ItemConstructor visualization)
+																  VisualizationGroup::ItemConstructor visualization, int itemTypeId)
 {
 	Q_ASSERT(nodeTypeId > 0);
 	prepareAddingVisualizationGroupOrVisualization(nodeTypeId, purpose, semanticZoomLevel);
 
-	groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel]->addVisualization(visualization);
+	groupsTypePurposeSz_[nodeTypeId][purpose][semanticZoomLevel]->addVisualization(visualization, itemTypeId);
 }
 
 void VisualizationGroupsManager::addGroup(int nodeTypeId, int purpose, int semanticZoomLevel, VisualizationGroup *group)

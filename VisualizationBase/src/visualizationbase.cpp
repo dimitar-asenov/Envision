@@ -68,7 +68,7 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 	Core::TypeRegistry::initializeNewTypes();
 
 	Scene::defaultRenderer()->registerVisualization(
-			TestBoxNode::typeIdStatic(), createVisualization<TestBox, TestBoxNode>);
+			TestBoxNode::typeIdStatic(), createVisualization<TestBox, TestBoxNode>, TestBox::typeIdStatic());
 
 	// Register static visualizations
 	Static::registerStaticItem<Symbol>();
