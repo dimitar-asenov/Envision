@@ -41,6 +41,7 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		CommentDiagramToolbar(QWidget *parent = 0);
 		void setDiagram(VCommentDiagram* diagram);
 		void setCurrentShape(Visualization::Item *currentShape);
+		void clearCurrentShape();
 		void setSelectionMode(bool sel);
 		bool getSelectionMode();
 		bool getConnectionMode();

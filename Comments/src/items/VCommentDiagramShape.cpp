@@ -128,11 +128,9 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			}
 		}
 	}
-	if(this->scene()->mainCursor() != nullptr)
-		if(this->scene()->mainCursor()->owner() != nullptr)
-			if(this->scene()->mainCursor()->owner() == this)
-				for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
 
+	if(this->isSelected())
+		for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
 }
 
 VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) const

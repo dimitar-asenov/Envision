@@ -63,6 +63,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 	event->ignore();
 	auto vShape = DCast<VCommentDiagramShape>(target);
 	auto vDiagram = vShape->diagram();
+	vDiagram->getToolbar()->setDiagram(vDiagram);
 	vDiagram->toggleEditing();
 
 	if(vDiagram->getToolbar()->getSelectionMode())

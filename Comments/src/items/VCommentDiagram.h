@@ -59,6 +59,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 		bool editing() const;
 		void toggleEditing();
+		void selectLastShape();
 
 		bool showConnectorPoints() const;
 		void setShowConnectorPoints(bool show);
@@ -85,7 +86,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		QPair<int,int> lastConnector_{-1, -1};
 		QPoint lastRightClick_;
 
-		CommentDiagramToolbar* toolbar_{};
+		static CommentDiagramToolbar* toolbar_;
 
 		template <class T>
 		void synchronizeWithNodes(const QVector<Model::Node*>& nodes, QVector<T*>& destination);

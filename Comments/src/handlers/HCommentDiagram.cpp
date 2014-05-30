@@ -45,8 +45,8 @@ HCommentDiagram* HCommentDiagram::instance()
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto diagram = DCast<VCommentDiagram>(target);
+	diagram->getToolbar()->setDiagram(diagram);
 	diagram->toggleEditing();
-	event->ignore();
 
 	if(event->button() == Qt::RightButton)
 	{
@@ -66,9 +66,9 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 	}
 	if(event->button() == Qt::LeftButton)
 	{
+		diagram->getToolbar()->clearCurrentShape();
 		if(!diagram->getToolbar()->getSelectionMode())
 		{
-			diagram->moveCursor();
 			event->accept();
 			auto diagramNode = DCast<CommentDiagram>(target->node());
 			newShape_ = new CommentDiagramShape(event->pos().x(), event->pos().y(), 1, 1, diagram->getToolbar()->nextShapeToAdd_);
@@ -82,7 +82,8 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if(!resizing_)
+	auto diagram = DCast<VCommentDiagram>(target);
+	if(!resizing_ && newShape_ != nullptr)
 	{
 		if(event->pos() == event->buttonDownPos(Qt::LeftButton))
 		{
@@ -91,22 +92,8 @@ void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSc
 			newShape_->setHeight(100);
 			newShape_->endModification();
 		}
-		if(event->pos().x() < event->buttonDownPos(Qt::LeftButton).x())
-		{
-			newShape_->beginModification("Resizing shape");
-			newShape_->setX(event->pos().x());
-			newShape_->setWidth(event->buttonDownPos(Qt::LeftButton).x() - event->pos().x());
-			newShape_->endModification();
-		}
-		if (event->pos().y() < event->buttonDownPos(Qt::LeftButton).y())
-		{
-			newShape_->beginModification("Resizing shape");
-			newShape_->setY(event->pos().y());
-			newShape_->setHeight(event->buttonDownPos(Qt::LeftButton).y() - event->pos().y());
-			newShape_->endModification();
-		}
+		diagram->selectLastShape();
 	}
-	auto diagram = DCast<VCommentDiagram>(target);
 	diagram->setCursor(Qt::ArrowCursor);
 	resizing_ = false;
 	newShape_ = nullptr;
@@ -132,6 +119,21 @@ void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 		newShape_->setWidth(diff.x());
 		newShape_->setHeight(diff.y());
 		newShape_->endModification();
+		if(event->pos().x() < event->buttonDownPos(Qt::LeftButton).x())
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setX(event->pos().x());
+			newShape_->setWidth(event->buttonDownPos(Qt::LeftButton).x() - event->pos().x());
+			newShape_->endModification();
+		}
+		if (event->pos().y() < event->buttonDownPos(Qt::LeftButton).y())
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setY(event->pos().y());
+			newShape_->setHeight(event->buttonDownPos(Qt::LeftButton).y() - event->pos().y());
+			newShape_->endModification();
+		}
+		diagram->selectLastShape();
 	}
 }
 

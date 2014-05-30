@@ -81,6 +81,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	aTimer_ = new QTimer;
 	aTimer_->setInterval(200);
+
 	this->setWindowFlags(Qt::WindowStaysOnTopHint);
 
 	connect(bSelection_, SIGNAL(toggled(bool)), this, SLOT(setSelection(bool)));
@@ -114,6 +115,15 @@ void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 	colorPickerBackground_->setEnabled(true);
 	colorPickerBorder_->setEnabled(true);
 	colorPickerText_->setEnabled(true);
+}
+
+void CommentDiagramToolbar::clearCurrentShape()
+{
+	currentShape_ = nullptr;
+
+	colorPickerBackground_->setEnabled(false);
+	colorPickerBorder_->setEnabled(false);
+	colorPickerText_->setEnabled(false);
 }
 
 void CommentDiagramToolbar::setSelection(bool sel)
@@ -187,7 +197,16 @@ bool CommentDiagramToolbar::getConnectionMode()
 
 void CommentDiagramToolbar::handleTimerEvent()
 {
-	//TODO
+	bool active = this->diagram_->isSelected();
+	for(auto e : this->diagram_->children())
+	{
+		active = active || e->isSelected();
+	}
+	if(!active)
+	{
+		aTimer_->stop();
+		this->close();
+	}
 }
 
 void CommentDiagramToolbar::show()

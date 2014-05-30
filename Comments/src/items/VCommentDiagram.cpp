@@ -41,10 +41,7 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagram, "item")
 
 VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 	: Super(parent, node, itemStyles().get())
-{
-	toolbar_ = new CommentDiagramToolbar();
-	toolbar_->setDiagram(this);
-}
+{}
 
 void VCommentDiagram::determineChildren()
 {
@@ -193,5 +190,14 @@ CommentDiagramToolbar* VCommentDiagram::getToolbar()
 {
 	return toolbar_;
 }
+
+void VCommentDiagram::selectLastShape()
+{
+	shapes_.last()->moveCursor();
+	shapes_.last()->setSelected(true);
+	this->toolbar_->setCurrentShape(shapes_.last());
+}
+
+CommentDiagramToolbar* VCommentDiagram::toolbar_ = new CommentDiagramToolbar();
 
 } /* namespace Comments */
