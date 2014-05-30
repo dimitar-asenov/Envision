@@ -38,6 +38,8 @@ EmptyItem::EmptyItem(Item* parent, const StyleType* style) : Super(parent, style
 
 void EmptyItem::setCustomSize(int width, int height)
 {
+	if (hasCustomSize_ && width == widthInLocal() && height == heightInLocal()) return;
+
 	auto shape = getShape();
 
 	if (shape)
