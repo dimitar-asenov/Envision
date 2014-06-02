@@ -41,7 +41,8 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		CommentDiagramToolbar(QWidget *parent = 0);
 		void setDiagram(VCommentDiagram* diagram);
 		void setCurrentShape(Visualization::Item *currentShape);
-		void clearCurrentShape();
+		void setCurrentConnector(Visualization::Item *currentConnector);
+		void clearCurrentItem();
 		void setSelectionMode(bool sel);
 		bool getSelectionMode();
 		bool getConnectionMode();
@@ -57,6 +58,8 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		void applyBackgroundColor(QString color);
 		void applyBorderColor(QString color);
 		void applyTextColor(QString color);
+		void applyOutlineType(int i);
+		void applyOutlineSize(int i);
 		void showConnectionPoints(bool show);
 		void handleTimerEvent();
 
@@ -69,6 +72,9 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		ColorPicker* colorPickerBorder_{};
 		ColorPicker* colorPickerText_{};
 
+		QComboBox* cbOutlineType_{};
+		QComboBox* cbOutlineSize_{};
+
 		QButtonGroup* group_{};
 
 		bool selection_{};
@@ -76,7 +82,7 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		int colorsPerRow_{};
 
 		VCommentDiagram* diagram_{};
-		Visualization::Item* currentShape_{};
+		Visualization::Item* currentItem_{};
 
 		QTimer* aTimer_{};
 };

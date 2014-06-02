@@ -66,7 +66,7 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 	}
 	if(event->button() == Qt::LeftButton)
 	{
-		diagram->getToolbar()->clearCurrentShape();
+		diagram->getToolbar()->clearCurrentItem();
 		if(!diagram->getToolbar()->getSelectionMode())
 		{
 			event->accept();

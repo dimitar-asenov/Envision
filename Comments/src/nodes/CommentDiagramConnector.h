@@ -45,6 +45,8 @@ class COMMENTS_API CommentDiagramConnector : public Super<Model::CompositeNode> 
 	ATTRIBUTE_VALUE(::Model::Integer, startPoint, setStartPoint, int)
 	ATTRIBUTE_VALUE(::Model::Integer, endShape, setEndShape, int)
 	ATTRIBUTE_VALUE(::Model::Integer, endPoint, setEndPoint, int)
+	ATTRIBUTE_VALUE(Model::Integer, outlineType, setOutlineType, int)
+	ATTRIBUTE_VALUE(Model::Integer, outlineSize, setOutlineSize, int)
 
 	public:
 		CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint);

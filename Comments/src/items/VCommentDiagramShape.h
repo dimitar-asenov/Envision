@@ -60,6 +60,8 @@ class COMMENTS_API VCommentDiagramShape
 
 		QColor shapeColor_, textColor_, backgroundColor_;
 		Visualization::VText *text_{};
+		Qt::PenStyle outlineType_{};
+		int outlineSize_{};
 
 		inline const std::array<const QRect,4> resizeRects() const;
 };

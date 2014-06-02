@@ -59,9 +59,19 @@ void HCommentDiagramConnector::keyPressEvent(Visualization::Item *target, QKeyEv
 		GenericHandler::keyPressEvent(target, event);
 }
 
-void HCommentDiagramConnector::mousePressEvent(Visualization::Item *, QGraphicsSceneMouseEvent *event)
+void HCommentDiagramConnector::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	event->ignore();
+	auto vConnector = DCast<VCommentDiagramConnector>(target);
+	auto vDiagram = vConnector->diagram();
+	vDiagram->getToolbar()->setDiagram(vDiagram);
+	vDiagram->toggleEditing();
+
+	if(vDiagram->getToolbar()->getSelectionMode())
+	{
+		event->accept();
+		vDiagram->getToolbar()->setCurrentConnector(target);
+	}
 }
 
 } /* namespace Comments */

@@ -63,6 +63,8 @@ void VCommentDiagramShape::determineChildren()
 	backgroundColor_ = style()->colorFromName(node()->backgroundColor());
 	text_->setStyle(VText::itemStyles().get(node()->textColor()));
 	text_->setEditable(true);
+	outlineType_ = static_cast<Qt::PenStyle>(node()->outlineType());
+	outlineSize_ = node()->outlineSize();
 }
 
 void VCommentDiagramShape::updateGeometry(int, int)
@@ -79,8 +81,13 @@ void VCommentDiagramShape::updateGeometry(int, int)
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	// rectangle to draw the shape in
-	QRect rect(0, 0, widthInLocal(), heightInLocal());
-	painter->setPen(shapeColor_);
+	QRectF rect((double)outlineSize_/2, (double)outlineSize_/2, widthInLocal()-outlineSize_, heightInLocal()-outlineSize_);
+	QPen pen;
+	pen.setColor(shapeColor_);
+	pen.setStyle(outlineType_);
+	pen.setWidth(outlineSize_);
+	pen.setJoinStyle(Qt::RoundJoin);
+	painter->setPen(pen);
 	painter->setBrush(QBrush(backgroundColor_));
 
 	switch(node()->shapeType())
@@ -95,11 +102,11 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			break;
 
 		case CommentDiagramShape::ShapeType::Diamond:
-			QPoint points[4] = {
-				QPoint(widthInLocal()/2,	0),
-				QPoint(widthInLocal(),	   heightInLocal()/2),
-				QPoint(widthInLocal()/2,	heightInLocal()),
-				QPoint(0,						heightInLocal()/2)
+			QPointF points[4] = {
+				QPointF((double)widthInLocal()/2, (double)outlineSize_/2),
+				QPointF((double)widthInLocal()-(double)outlineSize_/2, (double)heightInLocal()/2),
+				QPointF((double)widthInLocal()/2, (double)heightInLocal()-(double)outlineSize_/2),
+				QPointF((double)outlineSize_/2, (double)heightInLocal()/2)
 			};
 			painter->drawConvexPolygon(points, 4);
 			break;
