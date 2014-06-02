@@ -123,6 +123,7 @@ void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
 	colorPickerBackground_->setColors(diagram->style()->getColors(),diagram->style()->getColorsPerRow());
 	colorPickerBorder_->setColors(diagram->style()->getColors(),diagram->style()->getColorsPerRow());
 	colorPickerText_->setEnvisionTextColors();
+	bConnections_->setChecked(diagram->showConnectorPoints());
 }
 
 void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
@@ -136,7 +137,7 @@ void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 	colorPickerBackground_->setEnabled(true);
 	colorPickerBorder_->setEnabled(true);
 	colorPickerText_->setEnabled(true);
-	cbOutlineType_->setCurrentIndex(shape->node()->outlineType()-1);
+	cbOutlineType_->setCurrentIndex(shape->node()->outlineTyp()-1);
 	cbOutlineType_->setEnabled(true);
 	cbOutlineSize_->setCurrentIndex(shape->node()->outlineSize()-1);
 	cbOutlineSize_->setEnabled(true);
@@ -148,7 +149,7 @@ void CommentDiagramToolbar::setCurrentConnector(Visualization::Item *currentConn
 	currentItem_ = currentConnector;
 	auto connector = DCast<VCommentDiagramConnector>(currentItem_);
 
-	cbOutlineType_->setCurrentIndex(connector->node()->outlineType()-1);
+	cbOutlineType_->setCurrentIndex(connector->node()->outlineTyp()-1);
 	cbOutlineSize_->setCurrentIndex(connector->node()->outlineSize()-1);
 
 	cbOutlineType_->setEnabled(true);
@@ -219,14 +220,14 @@ void CommentDiagramToolbar::applyOutlineType(int i)
 	{
 		auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
 		shape->node()->model()->beginModification(shape->node(), "Setting OutlineType");
-		shape->node()->setOutlineType(i+1);
+		shape->node()->setOutlineTyp(static_cast<Qt::PenStyle>(i+1));
 		shape->node()->model()->endModification();
 	}
 	else
 	{
 		auto connector = dynamic_cast<VCommentDiagramConnector*>(currentItem_);
 		connector->node()->model()->beginModification(connector->node(), "Setting OutlineType");
-		connector->node()->setOutlineType(i+1);
+		connector->node()->setOutlineTyp(static_cast<Qt::PenStyle>(i+1));
 		connector->node()->model()->endModification();
 	}
 }
@@ -254,7 +255,7 @@ void CommentDiagramToolbar::setSelectionMode(bool sel)
 	bSelection_->setChecked(sel);
 }
 
-bool CommentDiagramToolbar::getSelectionMode()
+bool CommentDiagramToolbar::selectionMode()
 {
 	return selection_;
 }
@@ -266,7 +267,7 @@ void CommentDiagramToolbar::showConnectionPoints(bool show)
 	diagram_->scene()->scheduleUpdate();
 }
 
-bool CommentDiagramToolbar::getConnectionMode()
+bool CommentDiagramToolbar::connectionMode()
 {
 	return connection_;
 }

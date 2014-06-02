@@ -49,13 +49,13 @@ VCommentDiagram* VCommentDiagramConnector::diagram()
 }
 
 void VCommentDiagramConnector::determineChildren()
-{
-	outlineType_ = static_cast<Qt::PenStyle>(node()->outlineType());
-	outlineSize_ = node()->outlineSize();
-}
+{}
 
 void VCommentDiagramConnector::updateGeometry(int, int)
 {
+	outlineType_ = node()->outlineTyp();
+	outlineSize_ = node()->outlineSize();
+
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
 	// it here again.
 	auto startShape = diagram()->diagramShape(node()->startShape());

@@ -59,11 +59,11 @@ VCommentDiagram* VCommentDiagramShape::diagram()
 
 void VCommentDiagramShape::determineChildren()
 {
-	shapeColor_ = style()->colorFromName(node()->shapeColor());
-	backgroundColor_ = style()->colorFromName(node()->backgroundColor());
+	outlineColor_ = style()->colorFromName(node()->shapeColor());
+	fillColor_ = style()->colorFromName(node()->backgroundColor());
 	text_->setStyle(VText::itemStyles().get(node()->textColor()));
 	text_->setEditable(true);
-	outlineType_ = static_cast<Qt::PenStyle>(node()->outlineType());
+	outlineType_ = node()->outlineTyp();
 	outlineSize_ = node()->outlineSize();
 }
 
@@ -81,14 +81,14 @@ void VCommentDiagramShape::updateGeometry(int, int)
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	// rectangle to draw the shape in
-	QRectF rect((double)outlineSize_/2, (double)outlineSize_/2, widthInLocal()-outlineSize_, heightInLocal()-outlineSize_);
+	QRectF rect(outlineSize_/2.0, outlineSize_/2.0, widthInLocal()-outlineSize_, heightInLocal()-outlineSize_);
 	QPen pen;
-	pen.setColor(shapeColor_);
+	pen.setColor(outlineColor_);
 	pen.setStyle(outlineType_);
 	pen.setWidth(outlineSize_);
 	pen.setJoinStyle(Qt::RoundJoin);
 	painter->setPen(pen);
-	painter->setBrush(QBrush(backgroundColor_));
+	painter->setBrush(QBrush(fillColor_));
 
 	switch(node()->shapeType())
 	{
@@ -103,10 +103,10 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 		case CommentDiagramShape::ShapeType::Diamond:
 			QPointF points[4] = {
-				QPointF((double)widthInLocal()/2, (double)outlineSize_/2),
-				QPointF((double)widthInLocal()-(double)outlineSize_/2, (double)heightInLocal()/2),
-				QPointF((double)widthInLocal()/2, (double)heightInLocal()-(double)outlineSize_/2),
-				QPointF((double)outlineSize_/2, (double)heightInLocal()/2)
+				QPointF(widthInLocal()/2.0, outlineSize_/2.0),
+				QPointF(widthInLocal()-outlineSize_/2.0, heightInLocal()/2.0),
+				QPointF(widthInLocal()/2.0, heightInLocal()-outlineSize_/2.0),
+				QPointF(outlineSize_/2.0, heightInLocal()/2.0)
 			};
 			painter->drawConvexPolygon(points, 4);
 			break;

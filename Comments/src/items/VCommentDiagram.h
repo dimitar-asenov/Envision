@@ -67,7 +67,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		QPair<int,int> lastConnector() const;
 		void setLastConnector(int shape, int point);
 		VCommentDiagramShape* diagramShape(int index);
-		CommentDiagramToolbar* getToolbar();
+		CommentDiagramToolbar* toolbar();
 
 	protected:
 		virtual void determineChildren() override;

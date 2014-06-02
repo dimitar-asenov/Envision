@@ -45,7 +45,7 @@ HCommentDiagram* HCommentDiagram::instance()
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto diagram = DCast<VCommentDiagram>(target);
-	diagram->getToolbar()->setDiagram(diagram);
+	diagram->toolbar()->setDiagram(diagram);
 	diagram->toggleEditing();
 
 	if(event->button() == Qt::RightButton)
@@ -66,16 +66,16 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 	}
 	if(event->button() == Qt::LeftButton)
 	{
-		diagram->getToolbar()->clearCurrentItem();
-		if(!diagram->getToolbar()->getSelectionMode())
+		diagram->toolbar()->clearCurrentItem();
+		if(!diagram->toolbar()->selectionMode())
 		{
 			event->accept();
 			auto diagramNode = DCast<CommentDiagram>(target->node());
-			newShape_ = new CommentDiagramShape(event->pos().x(), event->pos().y(), 1, 1, diagram->getToolbar()->nextShapeToAdd_);
+			newShape_ = new CommentDiagramShape(event->pos().x(), event->pos().y(), 1, 1, diagram->toolbar()->nextShapeToAdd_);
 			diagramNode->model()->beginModification(diagramNode, "create shape");
 			diagramNode->shapes()->append(newShape_);
 			diagramNode->model()->endModification();
-			diagram->getToolbar()->setSelectionMode(true);
+			diagram->toolbar()->setSelectionMode(true);
 		}
 	}
 }

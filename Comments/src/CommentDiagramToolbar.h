@@ -44,8 +44,8 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		void setCurrentConnector(Visualization::Item *currentConnector);
 		void clearCurrentItem();
 		void setSelectionMode(bool sel);
-		bool getSelectionMode();
-		bool getConnectionMode();
+		bool selectionMode();
+		bool connectionMode();
 		void show();
 
 		CommentDiagramShape::ShapeType nextShapeToAdd_{};

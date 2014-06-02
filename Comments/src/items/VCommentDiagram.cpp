@@ -186,7 +186,7 @@ void VCommentDiagram::setShowConnectorPoints(bool show)
 	setUpdateNeeded(VCommentDiagram::StandardUpdate);
 }
 
-CommentDiagramToolbar* VCommentDiagram::getToolbar()
+CommentDiagramToolbar* VCommentDiagram::toolbar()
 {
 	return toolbar_;
 }

@@ -58,7 +58,7 @@ class COMMENTS_API VCommentDiagramShape
 
 	private:
 
-		QColor shapeColor_, textColor_, backgroundColor_;
+		QColor outlineColor_, textColor_, fillColor_;
 		Visualization::VText *text_{};
 		Qt::PenStyle outlineType_{};
 		int outlineSize_{};

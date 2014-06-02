@@ -45,13 +45,13 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode>
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, shapeColor, setShapeColor, QString, const QString&)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, textColor, setTextColor, QString, const QString&)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, backgroundColor, setBackgroundColor, QString, const QString&)
-	ATTRIBUTE_VALUE(Model::Integer, outlineType, setOutlineType, int)
 	ATTRIBUTE_VALUE(Model::Integer, outlineSize, setOutlineSize, int)
 	ATTRIBUTE_VALUE(Model::Integer, x, setX, int)
 	ATTRIBUTE_VALUE(Model::Integer, y, setY, int)
 	ATTRIBUTE_VALUE(Model::Integer, width, setWidth, int)
 	ATTRIBUTE_VALUE(Model::Integer, height, setHeight, int)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, shapeTypePrivate, setShapeTypePrivate, int)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, outlineType, setOutlineType, int)
 
 	public:
 		enum class ShapeType : int { Rectangle, Ellipse, Diamond };
@@ -67,6 +67,9 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode>
 
 		QPoint connectorPoint(int index) const;
 		int connectorPointNear(QPoint pos) const;
+
+		Qt::PenStyle outlineTyp() const;
+		void setOutlineTyp(const Qt::PenStyle& outlineTyp);
 
 	private:
 		mutable int lastRevisionForConnectors_ = {revision() -1};
@@ -94,5 +97,8 @@ inline void CommentDiagramShape::assureConnectorPointsUpToDate() const
 
 inline QPoint CommentDiagramShape::connectorPoint(int index) const
 { assureConnectorPointsUpToDate(); return connectorPoints_.at(index); }
+
+inline Qt::PenStyle CommentDiagramShape::outlineTyp() const { return static_cast<Qt::PenStyle> (outlineType()); }
+inline void CommentDiagramShape::setOutlineTyp(const Qt::PenStyle& outlineTyp) { setOutlineType(outlineTyp); }
 
 } /* namespace Comments */

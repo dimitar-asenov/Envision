@@ -64,13 +64,13 @@ void HCommentDiagramConnector::mousePressEvent(Visualization::Item *target, QGra
 	event->ignore();
 	auto vConnector = DCast<VCommentDiagramConnector>(target);
 	auto vDiagram = vConnector->diagram();
-	vDiagram->getToolbar()->setDiagram(vDiagram);
+	vDiagram->toolbar()->setDiagram(vDiagram);
 	vDiagram->toggleEditing();
 
-	if(vDiagram->getToolbar()->getSelectionMode())
+	if(vDiagram->toolbar()->selectionMode())
 	{
 		event->accept();
-		vDiagram->getToolbar()->setCurrentConnector(target);
+		vDiagram->toolbar()->setCurrentConnector(target);
 	}
 }
 
