@@ -36,6 +36,17 @@
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
 
+#include <QtCore/QSignalMapper>
+#include <QtCore/QTimer>
+#include <QtGui/QToolBar>
+#include <QtGui/QToolButton>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QWidget>
+#include <QtGui/QComboBox>
+#include <QtGui/QGridLayout>
+#include <QtGui/QMenu>
+#include <QtGui/QWidgetAction>
+
 #if defined __cplusplus
 // Add C++ includes here
 

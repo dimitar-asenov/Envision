@@ -53,6 +53,8 @@ class COMMENTS_API VCommentDiagramConnector: public Super<Visualization::ItemWit
 
 	private:
 		QPoint startPoint_, endPoint_;
+		Qt::PenStyle outlineType_{};
+		int outlineSize_{};
 };
 
 } /* namespace Comments */

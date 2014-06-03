@@ -59,10 +59,12 @@ VCommentDiagram* VCommentDiagramShape::diagram()
 
 void VCommentDiagramShape::determineChildren()
 {
-	shapeColor_ = style()->colorFromName(node()->shapeColor());
-	backgroundColor_ = style()->colorFromName(node()->backgroundColor());
+	outlineColor_ = style()->colorFromName(node()->shapeColor());
+	fillColor_ = style()->colorFromName(node()->backgroundColor());
 	text_->setStyle(VText::itemStyles().get(node()->textColor()));
-	text_->setEditable(diagram()->editing());
+	text_->setEditable(true);
+	outlineType_ = node()->outlineType();
+	outlineSize_ = node()->outlineSize();
 }
 
 void VCommentDiagramShape::updateGeometry(int, int)
@@ -79,9 +81,14 @@ void VCommentDiagramShape::updateGeometry(int, int)
 void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
 	// rectangle to draw the shape in
-	QRect rect(0, 0, widthInLocal(), heightInLocal());
-	painter->setPen(shapeColor_);
-	painter->setBrush(QBrush(backgroundColor_));
+	QRectF rect(outlineSize_/2.0, outlineSize_/2.0, widthInLocal()-outlineSize_, heightInLocal()-outlineSize_);
+	QPen pen;
+	pen.setColor(outlineColor_);
+	pen.setStyle(outlineType_);
+	pen.setWidth(outlineSize_);
+	pen.setJoinStyle(Qt::RoundJoin);
+	painter->setPen(pen);
+	painter->setBrush(QBrush(fillColor_));
 
 	switch(node()->shapeType())
 	{
@@ -95,44 +102,42 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			break;
 
 		case CommentDiagramShape::ShapeType::Diamond:
-			QPoint points[4] = {
-				QPoint(widthInLocal()/2,	0),
-				QPoint(widthInLocal(),	   heightInLocal()/2),
-				QPoint(widthInLocal()/2,	heightInLocal()),
-				QPoint(0,						heightInLocal()/2)
+			QPointF points[4] = {
+				QPointF(widthInLocal()/2.0, outlineSize_/2.0),
+				QPointF(widthInLocal()-outlineSize_/2.0, heightInLocal()/2.0),
+				QPointF(widthInLocal()/2.0, heightInLocal()-outlineSize_/2.0),
+				QPointF(outlineSize_/2.0, heightInLocal()/2.0)
 			};
 			painter->drawConvexPolygon(points, 4);
 			break;
 	}
 
-	if(diagram()->editing())
+	if(diagram()->showConnectorPoints())
 	{
-		if(diagram()->showConnectorPoints())
-		{
-			// Temporarily assume a thicker painter with a different color for drawing the connector points
-			QBrush blackBrush(Qt::black), redBrush(Qt::red);
+		// Temporarily assume a thicker painter with a different color for drawing the connector points
+		QBrush blackBrush(Qt::black), redBrush(Qt::red);
 
-			int shapeIndex = node()->index();
-			auto last = diagram()->lastConnector();
-			for(int i = 0; i < 16; ++i)
+		int shapeIndex = node()->index();
+		auto last = diagram()->lastConnector();
+		for(int i = 0; i < 16; ++i)
+		{
+			if(last.first == shapeIndex && last.second == i)
 			{
-				if(last.first == shapeIndex && last.second == i)
-				{
-					painter->setBrush(blackBrush);
-					painter->setPen(QPen(Qt::black));
-					painter->drawEllipse(node()->connectorPoint(i), 7, 7);
-				}
-				else
-				{
-					painter->setBrush(redBrush);
-					painter->setPen(QPen(Qt::red));
-					painter->drawEllipse(node()->connectorPoint(i), 3, 3);
-				}
+				painter->setBrush(blackBrush);
+				painter->setPen(QPen(Qt::black));
+				painter->drawEllipse(node()->connectorPoint(i), 7, 7);
+			}
+			else
+			{
+				painter->setBrush(redBrush);
+				painter->setPen(QPen(Qt::red));
+				painter->drawEllipse(node()->connectorPoint(i), 3, 3);
 			}
 		}
-		else
-			for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
 	}
+
+	if(this->isSelected())
+		for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
 }
 
 VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) const

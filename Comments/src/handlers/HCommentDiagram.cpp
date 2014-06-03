@@ -42,43 +42,13 @@ HCommentDiagram* HCommentDiagram::instance()
 	return &h;
 }
 
-void HCommentDiagram::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	auto diagram = DCast<VCommentDiagram>(target);
-	event->ignore();
-
-	if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
-	{
-		event->accept();
-		diagram->toggleEditing();
-	}
-	else if(event->key() == Qt::Key_Shift || event->modifiers() & Qt::Key_Shift)
-	{
-		event->accept();
-		diagram->setShowConnectorPoints(true);
-	}
-
-	if (!event->isAccepted())
-		GenericHandler::keyPressEvent(target, event);
-}
-
-void HCommentDiagram::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	auto diagram = DCast<VCommentDiagram>(target);
-
-	if(diagram->showConnectorPoints() && !(event->modifiers() & Qt::Key_Shift))
-	{
-		event->accept();
-		diagram->setShowConnectorPoints(false);
-	}
-}
-
 void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto diagram = DCast<VCommentDiagram>(target);
-	event->ignore();
+	diagram->toolbar()->setDiagram(diagram);
+	diagram->toggleEditing();
 
-	if(diagram->editing() && event->button() == Qt::RightButton)
+	if(event->button() == Qt::RightButton)
 	{
 		event->accept();
 
@@ -94,20 +64,46 @@ void HCommentDiagram::mousePressEvent(Visualization::Item *target, QGraphicsScen
 			showCommandPrompt(target);
 		}
 	}
+	if(event->button() == Qt::LeftButton)
+	{
+		diagram->toolbar()->clearCurrentItem();
+		if(!diagram->toolbar()->selectionMode())
+		{
+			event->accept();
+			auto diagramNode = DCast<CommentDiagram>(target->node());
+			newShape_ = new CommentDiagramShape(event->pos().x(), event->pos().y(), 1, 1, diagram->toolbar()->nextShapeToAdd_);
+			diagramNode->model()->beginModification(diagramNode, "create shape");
+			diagramNode->shapes()->append(newShape_);
+			diagramNode->model()->endModification();
+			diagram->toolbar()->setSelectionMode(true);
+		}
+	}
 }
 
-void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *)
+void HCommentDiagram::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto diagram = DCast<VCommentDiagram>(target);
+	if(!resizing_ && newShape_ != nullptr)
+	{
+		if(event->pos() == event->buttonDownPos(Qt::LeftButton))
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setWidth(100);
+			newShape_->setHeight(100);
+			newShape_->endModification();
+		}
+		diagram->selectLastShape();
+	}
 	diagram->setCursor(Qt::ArrowCursor);
 	resizing_ = false;
+	newShape_ = nullptr;
 }
 
 void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	auto diagram = DCast<VCommentDiagram>(target);
 	if(resizing_)
 	{
-		auto diagram = DCast<VCommentDiagram>(target);
 		QPointF diff = event->pos() - event->buttonDownPos(Qt::RightButton);
 		QSize newSize(originalSize_.width() + diff.x(), originalSize_.height() + diff.y());
 
@@ -115,6 +111,29 @@ void HCommentDiagram::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 		diagram->node()->setSize(newSize);
 		diagram->node()->endModification();
 		diagram->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	}
+	else if (newShape_ != nullptr)
+	{
+		QPointF diff = event->pos() - event->buttonDownPos(Qt::LeftButton);
+		newShape_->beginModification("Resizing shape");
+		newShape_->setWidth(diff.x());
+		newShape_->setHeight(diff.y());
+		newShape_->endModification();
+		if(event->pos().x() < event->buttonDownPos(Qt::LeftButton).x())
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setX(event->pos().x());
+			newShape_->setWidth(event->buttonDownPos(Qt::LeftButton).x() - event->pos().x());
+			newShape_->endModification();
+		}
+		if (event->pos().y() < event->buttonDownPos(Qt::LeftButton).y())
+		{
+			newShape_->beginModification("Resizing shape");
+			newShape_->setY(event->pos().y());
+			newShape_->setHeight(event->buttonDownPos(Qt::LeftButton).y() - event->pos().y());
+			newShape_->endModification();
+		}
+		diagram->selectLastShape();
 	}
 }
 

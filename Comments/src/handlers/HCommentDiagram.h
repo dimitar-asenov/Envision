@@ -27,6 +27,7 @@
 #pragma once
 
 #include "comments_api.h"
+#include "nodes/CommentDiagramShape.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
 
@@ -36,8 +37,6 @@ class COMMENTS_API HCommentDiagram : public Interaction::GenericHandler {
 	public:
 		static HCommentDiagram* instance();
 
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
-		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event) override;
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
@@ -48,6 +47,7 @@ class COMMENTS_API HCommentDiagram : public Interaction::GenericHandler {
 	private:
 		QSizeF originalSize_;
 		bool resizing_{};
+		CommentDiagramShape* newShape_{};
 };
 
 }

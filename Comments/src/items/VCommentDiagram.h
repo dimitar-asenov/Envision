@@ -28,6 +28,8 @@
 
 #include "../comments_api.h"
 
+#include "VCommentDiagramStyle.h"
+
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
@@ -35,6 +37,8 @@
 
 #include "../nodes/CommentDiagram.h"
 #include "../nodes/CommentNode.h"
+
+#include "../CommentDiagramToolbar.h"
 
 namespace Comments {
 
@@ -44,7 +48,7 @@ class VCommentDiagramConnector;
 class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VCommentDiagram,
 						Visualization::Item, CommentDiagram> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, Visualization::ItemStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentDiagram, VCommentDiagramSequenceStyle)
 
 	public:
 		VCommentDiagram(Visualization::Item* parent, NodeType* node);
@@ -55,6 +59,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 		bool editing() const;
 		void toggleEditing();
+		void selectLastShape();
 
 		bool showConnectorPoints() const;
 		void setShowConnectorPoints(bool show);
@@ -62,6 +67,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		QPair<int,int> lastConnector() const;
 		void setLastConnector(int shape, int point);
 		VCommentDiagramShape* diagramShape(int index);
+		CommentDiagramToolbar* toolbar();
 
 	protected:
 		virtual void determineChildren() override;
@@ -80,6 +86,8 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		QPair<int,int> lastConnector_{-1, -1};
 		QPoint lastRightClick_;
 
+		static CommentDiagramToolbar* toolbar_;
+
 		template <class T>
 		void synchronizeWithNodes(const QVector<Model::Node*>& nodes, QVector<T*>& destination);
 
@@ -89,7 +97,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 inline QPoint VCommentDiagram::lastRightClick() const { return lastRightClick_; }
 inline void VCommentDiagram::setLastRightClick(QPoint pos) { lastRightClick_ = pos; }
 inline bool VCommentDiagram::editing() const { return editing_; }
-inline bool VCommentDiagram::showConnectorPoints() const { return editing() && showConnectorPoints_; }
+inline bool VCommentDiagram::showConnectorPoints() const { return showConnectorPoints_; }
 inline QPair<int,int> VCommentDiagram::lastConnector() const { return lastConnector_; }
 inline void VCommentDiagram::setLastConnector(int shape, int point) { lastConnector_ = qMakePair(shape, point); }
 inline VCommentDiagramShape* VCommentDiagram::diagramShape(int index) { return shapes_.at(index);}
