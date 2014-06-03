@@ -15,7 +15,7 @@
 	</shape>
 	<colorsPerRow>10</colorsPerRow>
 	<colors>
-		<e0 prototypes="color">
+		<e0 prototypes="../Item/default">
 			<color>
 				<red>0</red>
 				<green>0</green>
@@ -23,7 +23,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e0>
-		<e1 prototypes="color">
+		<e1 prototypes="../Item/default">
 			<color>
 				<red>67</red>
 				<green>67</green>
@@ -31,7 +31,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e1>
-		<e2 prototypes="color">
+		<e2 prototypes="../Item/default">
 			<color>
 				<red>102</red>
 				<green>102</green>
@@ -39,7 +39,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e2>
-		<e3 prototypes="color">
+		<e3 prototypes="../Item/default">
 			<color>
 				<red>153</red>
 				<green>153</green>
@@ -47,7 +47,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e3>
-		<e4 prototypes="color">
+		<e4 prototypes="../Item/default">
 			<color>
 				<red>183</red>
 				<green>183</green>
@@ -55,7 +55,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e4>
-		<e5 prototypes="color">
+		<e5 prototypes="../Item/default">
 			<color>
 				<red>204</red>
 				<green>204</green>
@@ -63,7 +63,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e5>
-		<e6 prototypes="color">
+		<e6 prototypes="../Item/default">
 			<color>
 				<red>217</red>
 				<green>217</green>
@@ -71,7 +71,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e6>
-		<e7 prototypes="color">
+		<e7 prototypes="../Item/default">
 			<color>
 				<red>239</red>
 				<green>239</green>
@@ -79,7 +79,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e7>
-		<e8 prototypes="color">
+		<e8 prototypes="../Item/default">
 			<color>
 				<red>243</red>
 				<green>243</green>
@@ -87,7 +87,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e8>
-		<e9 prototypes="color">
+		<e9 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>255</green>
@@ -95,7 +95,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e9>
-		<e10 prototypes="color">
+		<e10 prototypes="../Item/default">
 			<color>
 				<red>152</red>
 				<green>0</green>
@@ -103,7 +103,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e10>
-		<e11 prototypes="color">
+		<e11 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>0</green>
@@ -111,7 +111,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e11>
-		<e12 prototypes="color">
+		<e12 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>153</green>
@@ -119,7 +119,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e12>
-		<e13 prototypes="color">
+		<e13 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>255</green>
@@ -127,7 +127,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e13>
-		<e14 prototypes="color">
+		<e14 prototypes="../Item/default">
 			<color>
 				<red>0</red>
 				<green>255</green>
@@ -135,7 +135,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e14>
-		<e15 prototypes="color">
+		<e15 prototypes="../Item/default">
 			<color>
 				<red>0</red>
 				<green>255</green>
@@ -143,7 +143,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e15>
-		<e16 prototypes="color">
+		<e16 prototypes="../Item/default">
 			<color>
 				<red>74</red>
 				<green>134</green>
@@ -151,7 +151,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e16>
-		<e17 prototypes="color">
+		<e17 prototypes="../Item/default">
 			<color>
 				<red>0</red>
 				<green>0</green>
@@ -159,7 +159,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e17>
-		<e18 prototypes="color">
+		<e18 prototypes="../Item/default">
 			<color>
 				<red>143</red>
 				<green>0</green>
@@ -167,7 +167,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e18>
-		<e19 prototypes="color">
+		<e19 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>0</green>
@@ -175,7 +175,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e19>
-		<e20 prototypes="color">
+		<e20 prototypes="../Item/default">
 			<color>
 				<red>230</red>
 				<green>184</green>
@@ -183,7 +183,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e20>
-		<e21 prototypes="color">
+		<e21 prototypes="../Item/default">
 			<color>
 				<red>244</red>
 				<green>204</green>
@@ -191,7 +191,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e21>
-		<e22 prototypes="color">
+		<e22 prototypes="../Item/default">
 			<color>
 				<red>252</red>
 				<green>229</green>
@@ -199,7 +199,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e22>
-		<e23 prototypes="color">
+		<e23 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>242</green>
@@ -207,7 +207,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e23>
-		<e24 prototypes="color">
+		<e24 prototypes="../Item/default">
 			<color>
 				<red>217</red>
 				<green>234</green>
@@ -215,7 +215,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e24>
-		<e25 prototypes="color">
+		<e25 prototypes="../Item/default">
 			<color>
 				<red>208</red>
 				<green>224</green>
@@ -223,7 +223,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e25>
-		<e26 prototypes="color">
+		<e26 prototypes="../Item/default">
 			<color>
 				<red>201</red>
 				<green>218</green>
@@ -231,7 +231,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e26>
-		<e27 prototypes="color">
+		<e27 prototypes="../Item/default">
 			<color>
 				<red>207</red>
 				<green>226</green>
@@ -239,7 +239,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e27>
-		<e28 prototypes="color">
+		<e28 prototypes="../Item/default">
 			<color>
 				<red>217</red>
 				<green>210</green>
@@ -247,7 +247,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e28>
-		<e29 prototypes="color">
+		<e29 prototypes="../Item/default">
 			<color>
 				<red>234</red>
 				<green>209</green>
@@ -255,7 +255,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e29>
-		<e30 prototypes="color">
+		<e30 prototypes="../Item/default">
 			<color>
 				<red>221</red>
 				<green>126</green>
@@ -263,7 +263,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e30>
-		<e31 prototypes="color">
+		<e31 prototypes="../Item/default">
 			<color>
 				<red>234</red>
 				<green>153</green>
@@ -271,7 +271,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e31>
-		<e32 prototypes="color">
+		<e32 prototypes="../Item/default">
 			<color>
 				<red>249</red>
 				<green>203</green>
@@ -279,7 +279,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e32>
-		<e33 prototypes="color">
+		<e33 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>229</green>
@@ -287,7 +287,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e33>
-		<e34 prototypes="color">
+		<e34 prototypes="../Item/default">
 			<color>
 				<red>182</red>
 				<green>215</green>
@@ -295,7 +295,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e34>
-		<e35 prototypes="color">
+		<e35 prototypes="../Item/default">
 			<color>
 				<red>162</red>
 				<green>196</green>
@@ -303,7 +303,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e35>
-		<e36 prototypes="color">
+		<e36 prototypes="../Item/default">
 			<color>
 				<red>164</red>
 				<green>194</green>
@@ -311,7 +311,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e36>
-		<e37 prototypes="color">
+		<e37 prototypes="../Item/default">
 			<color>
 				<red>159</red>
 				<green>197</green>
@@ -319,7 +319,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e37>
-		<e38 prototypes="color">
+		<e38 prototypes="../Item/default">
 			<color>
 				<red>180</red>
 				<green>167</green>
@@ -327,7 +327,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e38>
-		<e39 prototypes="color">
+		<e39 prototypes="../Item/default">
 			<color>
 				<red>213</red>
 				<green>166</green>
@@ -335,7 +335,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e39>
-		<e40 prototypes="color">
+		<e40 prototypes="../Item/default">
 			<color>
 				<red>204</red>
 				<green>65</green>
@@ -343,7 +343,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e40>
-		<e41 prototypes="color">
+		<e41 prototypes="../Item/default">
 			<color>
 				<red>224</red>
 				<green>102</green>
@@ -351,7 +351,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e41>
-		<e42 prototypes="color">
+		<e42 prototypes="../Item/default">
 			<color>
 				<red>246</red>
 				<green>178</green>
@@ -359,7 +359,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e42>
-		<e43 prototypes="color">
+		<e43 prototypes="../Item/default">
 			<color>
 				<red>255</red>
 				<green>217</green>
@@ -367,7 +367,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e43>
-		<e44 prototypes="color">
+		<e44 prototypes="../Item/default">
 			<color>
 				<red>147</red>
 				<green>196</green>
@@ -375,7 +375,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e44>
-		<e45 prototypes="color">
+		<e45 prototypes="../Item/default">
 			<color>
 				<red>118</red>
 				<green>165</green>
@@ -383,7 +383,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e45>
-		<e46 prototypes="color">
+		<e46 prototypes="../Item/default">
 			<color>
 				<red>109</red>
 				<green>158</green>
@@ -391,7 +391,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e46>
-		<e47 prototypes="color">
+		<e47 prototypes="../Item/default">
 			<color>
 				<red>111</red>
 				<green>168</green>
@@ -399,7 +399,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e47>
-		<e48 prototypes="color">
+		<e48 prototypes="../Item/default">
 			<color>
 				<red>142</red>
 				<green>124</green>
@@ -407,7 +407,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e48>
-		<e49 prototypes="color">
+		<e49 prototypes="../Item/default">
 			<color>
 				<red>194</red>
 				<green>123</green>
@@ -415,7 +415,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e49>
-		<e50 prototypes="color">
+		<e50 prototypes="../Item/default">
 			<color>
 				<red>166</red>
 				<green>28</green>
@@ -423,7 +423,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e50>
-		<e51 prototypes="color">
+		<e51 prototypes="../Item/default">
 			<color>
 				<red>204</red>
 				<green>0</green>
@@ -431,7 +431,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e51>
-		<e52 prototypes="color">
+		<e52 prototypes="../Item/default">
 			<color>
 				<red>230</red>
 				<green>145</green>
@@ -439,7 +439,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e52>
-		<e53 prototypes="color">
+		<e53 prototypes="../Item/default">
 			<color>
 				<red>241</red>
 				<green>194</green>
@@ -447,7 +447,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e53>
-		<e54 prototypes="color">
+		<e54 prototypes="../Item/default">
 			<color>
 				<red>106</red>
 				<green>168</green>
@@ -455,7 +455,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e54>
-		<e55 prototypes="color">
+		<e55 prototypes="../Item/default">
 			<color>
 				<red>69</red>
 				<green>129</green>
@@ -463,7 +463,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e55>
-		<e56 prototypes="color">
+		<e56 prototypes="../Item/default">
 			<color>
 				<red>60</red>
 				<green>120</green>
@@ -471,7 +471,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e56>
-		<e57 prototypes="color">
+		<e57 prototypes="../Item/default">
 			<color>
 				<red>61</red>
 				<green>133</green>
@@ -479,7 +479,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e57>
-		<e58 prototypes="color">
+		<e58 prototypes="../Item/default">
 			<color>
 				<red>103</red>
 				<green>78</green>
@@ -487,7 +487,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e58>
-		<e59 prototypes="color">
+		<e59 prototypes="../Item/default">
 			<color>
 				<red>166</red>
 				<green>77</green>
@@ -495,7 +495,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e59>
-		<e60 prototypes="color">
+		<e60 prototypes="../Item/default">
 			<color>
 				<red>133</red>
 				<green>32</green>
@@ -503,7 +503,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e60>
-		<e61 prototypes="color">
+		<e61 prototypes="../Item/default">
 			<color>
 				<red>153</red>
 				<green>0</green>
@@ -511,7 +511,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e61>
-		<e62 prototypes="color">
+		<e62 prototypes="../Item/default">
 			<color>
 				<red>180</red>
 				<green>95</green>
@@ -519,7 +519,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e62>
-		<e63 prototypes="color">
+		<e63 prototypes="../Item/default">
 			<color>
 				<red>191</red>
 				<green>144</green>
@@ -527,7 +527,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e63>
-		<e64 prototypes="color">
+		<e64 prototypes="../Item/default">
 			<color>
 				<red>56</red>
 				<green>118</green>
@@ -535,7 +535,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e64>
-		<e65 prototypes="color">
+		<e65 prototypes="../Item/default">
 			<color>
 				<red>19</red>
 				<green>79</green>
@@ -543,7 +543,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e65>
-		<e66 prototypes="color">
+		<e66 prototypes="../Item/default">
 			<color>
 				<red>17</red>
 				<green>85</green>
@@ -551,7 +551,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e66>
-		<e67 prototypes="color">
+		<e67 prototypes="../Item/default">
 			<color>
 				<red>11</red>
 				<green>83</green>
@@ -559,7 +559,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e67>
-		<e68 prototypes="color">
+		<e68 prototypes="../Item/default">
 			<color>
 				<red>53</red>
 				<green>28</green>
@@ -567,7 +567,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e68>
-		<e69 prototypes="color">
+		<e69 prototypes="../Item/default">
 			<color>
 				<red>116</red>
 				<green>27</green>
@@ -575,7 +575,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e69>
-		<e70 prototypes="color">
+		<e70 prototypes="../Item/default">
 			<color>
 				<red>91</red>
 				<green>15</green>
@@ -583,7 +583,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e70>
-		<e71 prototypes="color">
+		<e71 prototypes="../Item/default">
 			<color>
 				<red>102</red>
 				<green>0</green>
@@ -591,7 +591,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e71>
-		<e72 prototypes="color">
+		<e72 prototypes="../Item/default">
 			<color>
 				<red>120</red>
 				<green>63</green>
@@ -599,7 +599,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e72>
-		<e73 prototypes="color">
+		<e73 prototypes="../Item/default">
 			<color>
 				<red>127</red>
 				<green>96</green>
@@ -607,7 +607,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e73>
-		<e74 prototypes="color">
+		<e74 prototypes="../Item/default">
 			<color>
 				<red>39</red>
 				<green>78</green>
@@ -615,7 +615,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e74>
-		<e75 prototypes="color">
+		<e75 prototypes="../Item/default">
 			<color>
 				<red>12</red>
 				<green>52</green>
@@ -623,7 +623,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e75>
-		<e76 prototypes="color">
+		<e76 prototypes="../Item/default">
 			<color>
 				<red>28</red>
 				<green>69</green>
@@ -631,7 +631,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e76>
-		<e77 prototypes="color">
+		<e77 prototypes="../Item/default">
 			<color>
 				<red>7</red>
 				<green>55</green>
@@ -639,7 +639,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e77>
-		<e78 prototypes="color">
+		<e78 prototypes="../Item/default">
 			<color>
 				<red>32</red>
 				<green>18</green>
@@ -647,7 +647,7 @@
 				<alpha>255</alpha>
 			</color>
 		</e78>
-		<e79 prototypes="color">
+		<e79 prototypes="../Item/default">
 			<color>
 				<red>76</red>
 				<green>17</green>
