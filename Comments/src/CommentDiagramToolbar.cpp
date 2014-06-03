@@ -137,7 +137,7 @@ void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 	colorPickerBackground_->setEnabled(true);
 	colorPickerBorder_->setEnabled(true);
 	colorPickerText_->setEnabled(true);
-	cbOutlineType_->setCurrentIndex(shape->node()->outlineTyp()-1);
+	cbOutlineType_->setCurrentIndex(shape->node()->outlineType()-1);
 	cbOutlineType_->setEnabled(true);
 	cbOutlineSize_->setCurrentIndex(shape->node()->outlineSize()-1);
 	cbOutlineSize_->setEnabled(true);
@@ -149,7 +149,7 @@ void CommentDiagramToolbar::setCurrentConnector(Visualization::Item *currentConn
 	currentItem_ = currentConnector;
 	auto connector = DCast<VCommentDiagramConnector>(currentItem_);
 
-	cbOutlineType_->setCurrentIndex(connector->node()->outlineTyp()-1);
+	cbOutlineType_->setCurrentIndex(connector->node()->outlineType()-1);
 	cbOutlineSize_->setCurrentIndex(connector->node()->outlineSize()-1);
 
 	cbOutlineType_->setEnabled(true);
@@ -220,14 +220,14 @@ void CommentDiagramToolbar::applyOutlineType(int i)
 	{
 		auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
 		shape->node()->model()->beginModification(shape->node(), "Setting OutlineType");
-		shape->node()->setOutlineTyp(static_cast<Qt::PenStyle>(i+1));
+		shape->node()->setOutlineType(static_cast<Qt::PenStyle>(i+1));
 		shape->node()->model()->endModification();
 	}
 	else
 	{
 		auto connector = dynamic_cast<VCommentDiagramConnector*>(currentItem_);
 		connector->node()->model()->beginModification(connector->node(), "Setting OutlineType");
-		connector->node()->setOutlineTyp(static_cast<Qt::PenStyle>(i+1));
+		connector->node()->setOutlineType(static_cast<Qt::PenStyle>(i+1));
 		connector->node()->model()->endModification();
 	}
 }
@@ -274,12 +274,7 @@ bool CommentDiagramToolbar::connectionMode()
 
 void CommentDiagramToolbar::handleTimerEvent()
 {
-	bool active = this->diagram_->isSelected();
-	for(auto e : this->diagram_->children())
-	{
-		active = active || e->isSelected();
-	}
-	if(!active)
+	if(!this->diagram_->itemOrChildHasFocus())
 	{
 		aTimer_->stop();
 		this->close();

@@ -63,7 +63,7 @@ void VCommentDiagramShape::determineChildren()
 	fillColor_ = style()->colorFromName(node()->backgroundColor());
 	text_->setStyle(VText::itemStyles().get(node()->textColor()));
 	text_->setEditable(true);
-	outlineType_ = node()->outlineTyp();
+	outlineType_ = node()->outlineType();
 	outlineSize_ = node()->outlineSize();
 }
 

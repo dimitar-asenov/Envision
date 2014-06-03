@@ -38,7 +38,7 @@ REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, t
 REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineType, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
 
 // references for primitive types?
@@ -49,7 +49,7 @@ CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint,
 	setStartPoint(startPoint);
 	setEndShape(endShape);
 	setEndPoint(endPoint);
-	setOutlineType(1);
+	setOutlineTypeStore(1);
 	setOutlineSize(1);
 }
 

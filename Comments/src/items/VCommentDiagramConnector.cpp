@@ -53,7 +53,7 @@ void VCommentDiagramConnector::determineChildren()
 
 void VCommentDiagramConnector::updateGeometry(int, int)
 {
-	outlineType_ = node()->outlineTyp();
+	outlineType_ = node()->outlineType();
 	outlineSize_ = node()->outlineSize();
 
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute

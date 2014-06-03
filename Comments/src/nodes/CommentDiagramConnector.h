@@ -46,16 +46,18 @@ class COMMENTS_API CommentDiagramConnector : public Super<Model::CompositeNode> 
 	ATTRIBUTE_VALUE(::Model::Integer, endShape, setEndShape, int)
 	ATTRIBUTE_VALUE(::Model::Integer, endPoint, setEndPoint, int)
 	ATTRIBUTE_VALUE(Model::Integer, outlineSize, setOutlineSize, int)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, outlineType, setOutlineType, int)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, outlineTypeStore, setOutlineTypeStore, int)
 
 	public:
 		CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint);
 
-		Qt::PenStyle outlineTyp() const;
-		void setOutlineTyp(const Qt::PenStyle& outlineTyp);
+		Qt::PenStyle outlineType() const;
+		void setOutlineType(const Qt::PenStyle& outlineType);
 };
 
-inline Qt::PenStyle CommentDiagramConnector::outlineTyp() const { return static_cast<Qt::PenStyle> (outlineType()); }
-inline void CommentDiagramConnector::setOutlineTyp(const Qt::PenStyle& outlineTyp) { setOutlineType(outlineTyp); }
+inline Qt::PenStyle CommentDiagramConnector::outlineType() const
+{ return static_cast<Qt::PenStyle> (outlineTypeStore()); }
+inline void CommentDiagramConnector::setOutlineType(const Qt::PenStyle& outlineType)
+{ setOutlineTypeStore(outlineType); }
 
 } /* namespace Comments */
