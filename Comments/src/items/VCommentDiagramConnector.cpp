@@ -48,10 +48,14 @@ VCommentDiagram* VCommentDiagramConnector::diagram()
 	return DCast<VCommentDiagram>(parent());
 }
 
-void VCommentDiagramConnector::determineChildren(){}
+void VCommentDiagramConnector::determineChildren()
+{}
 
 void VCommentDiagramConnector::updateGeometry(int, int)
 {
+	outlineType_ = node()->outlineType();
+	outlineSize_ = node()->outlineSize();
+
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
 	// it here again.
 	auto startShape = diagram()->diagramShape(node()->startShape());
@@ -64,14 +68,18 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 	endPoint_ -= origin;
 
 	// make sure we get at least one pixel to draw inside!
-	int dx = std::max(1, std::abs(startPoint_.x() - endPoint_.x()));
-	int dy = std::max(1, std::abs(startPoint_.y() - endPoint_.y()));
+	int dx = std::max(outlineSize_, std::abs(startPoint_.x() - endPoint_.x()));
+	int dy = std::max(outlineSize_, std::abs(startPoint_.y() - endPoint_.y()));
 	setSize(dx, dy);
 }
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
-	painter->setPen(QPen(Qt::black, 1.0));
+	QPen pen;
+	pen.setColor("black");
+	pen.setStyle(outlineType_);
+	pen.setWidth(outlineSize_);
+	painter->setPen(pen);
 	painter->drawLine(startPoint_, endPoint_);
 }
 

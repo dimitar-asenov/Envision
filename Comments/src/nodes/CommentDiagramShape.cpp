@@ -44,6 +44,8 @@ REGISTER_ATTRIBUTE(CommentDiagramShape, shapeTypePrivate, Integer, false, false,
 REGISTER_ATTRIBUTE(CommentDiagramShape, shapeColor, Text, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, textColor, Text, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, backgroundColor, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramShape, outlineTypeStore, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramShape, outlineSize, Integer, false, false, true)
 
 CommentDiagramShape::CommentDiagramShape(int x, int y, int width, int height, ShapeType shapeType)
 	: Super{nullptr, CommentDiagramShape::getMetaData()}
@@ -56,6 +58,8 @@ CommentDiagramShape::CommentDiagramShape(int x, int y, int width, int height, Sh
 	setShapeColor("black");
 	setTextColor("black");
 	setBackgroundColor("white");
+	setOutlineTypeStore(1);
+	setOutlineSize(1);
 }
 
 int CommentDiagramShape::index() const

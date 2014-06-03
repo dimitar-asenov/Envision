@@ -37,6 +37,7 @@ class COMMENTS_API HCommentDiagramConnector : public Interaction::GenericHandler
 		static HCommentDiagramConnector* instance();
 
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
 	protected:
 		HCommentDiagramConnector();

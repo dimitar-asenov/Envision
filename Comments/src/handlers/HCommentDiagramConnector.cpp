@@ -45,21 +45,33 @@ void HCommentDiagramConnector::keyPressEvent(Visualization::Item *target, QKeyEv
 	auto diagram = vConnector->diagram()->node();
 	event->ignore();
 
-	if(vConnector->diagram()->editing())
+	if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
 	{
-		if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
-		{
-			event->accept();
-			target->scene()->setMainCursor(nullptr);
+		event->accept();
+		target->scene()->setMainCursor(nullptr);
 
-			diagram->beginModification("delete connector");
-			diagram->connectors()->remove(vConnector->node());
-			diagram->endModification();
-		}
+		diagram->beginModification("delete connector");
+		diagram->connectors()->remove(vConnector->node());
+		diagram->endModification();
 	}
 
 	if (!event->isAccepted())
 		GenericHandler::keyPressEvent(target, event);
+}
+
+void HCommentDiagramConnector::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
+	auto vConnector = DCast<VCommentDiagramConnector>(target);
+	auto vDiagram = vConnector->diagram();
+	vDiagram->toolbar()->setDiagram(vDiagram);
+	vDiagram->toggleEditing();
+
+	if(vDiagram->toolbar()->selectionMode())
+	{
+		event->accept();
+		vDiagram->toolbar()->setCurrentConnector(target);
+	}
 }
 
 } /* namespace Comments */

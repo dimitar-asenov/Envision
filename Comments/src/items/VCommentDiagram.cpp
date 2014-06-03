@@ -41,8 +41,7 @@ ITEM_COMMON_DEFINITIONS(VCommentDiagram, "item")
 
 VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 	: Super(parent, node, itemStyles().get())
-{
-}
+{}
 
 void VCommentDiagram::determineChildren()
 {
@@ -123,13 +122,7 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	if(!hasShape()) painter->setBrush(Qt::white);
 	else painter->setBrush(Qt::NoBrush);
 
-	if(editing_)
-	{
-		painter->setPen(QPen(Qt::red, EDIT_OUTLINE_SIZE));
-		painter->drawRect( QRect{QPoint(EDIT_OUTLINE_SIZE/2, EDIT_OUTLINE_SIZE/2),
-										 sizeInLocal().toSize() - QSize(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE)} );
-	}
-	else if(!hasShape())
+	if(!hasShape())
 		painter->drawRect(QRect{QPoint(0,0), sizeInLocal().toSize()});
 
 	if(shapes_.isEmpty())
@@ -182,8 +175,7 @@ void VCommentDiagram::synchronizeWithNodes(const QVector<Model::Node*>& nodes, Q
 
 void VCommentDiagram::toggleEditing()
 {
-	editing_ = !editing_;
-	if(!editing_) showConnectorPoints_ = false;
+	toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);
 }
@@ -193,5 +185,19 @@ void VCommentDiagram::setShowConnectorPoints(bool show)
 	showConnectorPoints_ = show;
 	setUpdateNeeded(VCommentDiagram::StandardUpdate);
 }
+
+CommentDiagramToolbar* VCommentDiagram::toolbar()
+{
+	return toolbar_;
+}
+
+void VCommentDiagram::selectLastShape()
+{
+	shapes_.last()->moveCursor();
+	shapes_.last()->setSelected(true);
+	this->toolbar_->setCurrentShape(shapes_.last());
+}
+
+CommentDiagramToolbar* VCommentDiagram::toolbar_ = new CommentDiagramToolbar();
 
 } /* namespace Comments */
