@@ -137,10 +137,13 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		qreal size = painter->worldTransform().m11() * style()->font().pixelSize();
 		if (size < 0.5) return;
 
-		if (size < 5.0)
+		if (size < 3.0)
 		{
 			// Draw just a filler
-			painter->fillRect(0, heightInLocal()/8 , widthInLocal(), heightInLocal()/4, style()->pen().color());
+			auto c = style()->pen().color();
+			c.setAlpha(64);
+			painter->fillRect(QRectF(textXOffset_, textYOffset_ + heightInLocal()/4.0 ,
+											 staticText_.size().width(), staticText_.size().height()/2.0), c);
 		}
 		else
 		{
