@@ -95,7 +95,7 @@ Item::UpdateType NameOverlay::needsUpdate()
 
 void NameOverlay::determineChildren()
 {
-	const double OVERLAY_SCALE_TRESHOLD = 0.00000000005;
+	const double OVERLAY_SCALE_TRESHOLD = 0.5;
 
 	auto scalingFactor = mainViewScalingFactor();
 	if (scalingFactor < OVERLAY_SCALE_TRESHOLD && !bottomItems_)
