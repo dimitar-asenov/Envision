@@ -2,6 +2,7 @@ var searchData=
 [
   ['testfailed',['TestFailed',['../classSelfTest_1_1TestResult.html#ad02bc2cbf5dc5941330845a8c38c919ca409682f34a80fc302d0e55cc97586501',1,'SelfTest::TestResult']]],
   ['testpassed',['TestPassed',['../classSelfTest_1_1TestResult.html#ad02bc2cbf5dc5941330845a8c38c919caf990022a98c8bc6197ea3be1f2b89f08',1,'SelfTest::TestResult']]],
+  ['text',['text',['../classComments_1_1ColorPicker.html#a3e5a410adbf3e0e697cfff1f84d63562a08b6af6e5a3e3e669e4cd2b4a957756c',1,'Comments::ColorPicker']]],
   ['thebottomof',['TheBottomOf',['../namespaceDeclarativeEnumerations.html#a9b49f32fb9bdbdd48738c851bf537dbfa5c5b0c2389518f0ab3fa81a226240cd9',1,'DeclarativeEnumerations']]],
   ['thecenterof',['TheCenterOf',['../namespaceDeclarativeEnumerations.html#a9b49f32fb9bdbdd48738c851bf537dbfa6a03556f7e4405cfc90cbeda484cf1e6',1,'DeclarativeEnumerations']]],
   ['thehcenterof',['TheHCenterOf',['../namespaceDeclarativeEnumerations.html#a9b49f32fb9bdbdd48738c851bf537dbfa165ccd4a066f34456c63e669f8df352e',1,'DeclarativeEnumerations']]],
@@ -9,12 +10,10 @@ var searchData=
   ['therightof',['TheRightOf',['../namespaceDeclarativeEnumerations.html#a9b49f32fb9bdbdd48738c851bf537dbfa07c1ced0e0f62ba50ebe3a82899ef632',1,'DeclarativeEnumerations']]],
   ['thetopof',['TheTopOf',['../namespaceDeclarativeEnumerations.html#a9b49f32fb9bdbdd48738c851bf537dbfab4372dcfbed3de56d862fd0673fdf49d',1,'DeclarativeEnumerations']]],
   ['thevcenterof',['TheVCenterOf',['../namespaceDeclarativeEnumerations.html#a9b49f32fb9bdbdd48738c851bf537dbfa4aa92d42fe28651b80ab6bdffeb105de',1,'DeclarativeEnumerations']]],
-  ['third',['THIRD',['../classTestSpace_1_1TestSpace_1_1Testing.html#a52f152ab112f6bced940908b973b9fd0a8f00ed30deaa9b54b3388a61012a4f3e',1,'TestSpace::TestSpace::Testing']]],
   ['times',['TIMES',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a08a7948f1be94933df97ce29ff8fcc1e',1,'OOModel::BinaryOperation']]],
   ['times_5fassign',['TIMES_ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a4d2cf92f5cf2e3f23154e397e4a6b8d6',1,'OOModel::AssignmentExpression']]],
   ['top',['Top',['../classVisualization_1_1AnchorLayoutFormElement.html#a109beb02eabe2436d47b5e5b5d57cd08a398a1b41f7a7994ee1fa4872b33009e4',1,'Visualization::AnchorLayoutFormElement::Top()'],['../classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31aa4ffdcf0dc1f31b9acaf295d75b51d00',1,'Visualization::LayoutStyle::Top()']]],
   ['toptobottom',['TopToBottom',['../classVisualization_1_1LayoutStyle.html#a1b3aa8687e4ef411466637b201eaef0baf2b1a19a8d0f523d042f9ede79a80804',1,'Visualization::LayoutStyle']]],
-  ['two',['TWO',['../classCasts.html#a760889120bb57e723e69f3fcf6401a99a27d87a7c5953184ac2a88c36ed4771dc',1,'Casts']]],
   ['type',['Type',['../classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7aa1fa27779242b4902f7ae3bdd5c6d508',1,'OOModel::OOReference::Type()'],['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5aac336d2b3de7e08d2153de51945f63e3',1,'Interaction::ExpectedToken::TYPE()']]],
   ['typeid',['TypeId',['../classOOModel_1_1TypeTraitExpression.html#a2e202999f5168c0938a227677b4243c0a94d4163e13b7618d0c782033c6e2a69c',1,'OOModel::TypeTraitExpression']]]
 ];

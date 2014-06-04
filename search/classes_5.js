@@ -16,7 +16,6 @@ var searchData=
   ['formalresult',['FormalResult',['../classOOModel_1_1FormalResult.html',1,'OOModel']]],
   ['formaltypeargument',['FormalTypeArgument',['../classOOModel_1_1FormalTypeArgument.html',1,'OOModel']]],
   ['formelement',['FormElement',['../classVisualization_1_1FormElement.html',1,'Visualization']]],
-  ['friendtest',['FriendTest',['../classFriendTest.html',1,'']]],
   ['functiontype',['FunctionType',['../classOOModel_1_1FunctionType.html',1,'OOModel']]],
   ['functiontypeexpression',['FunctionTypeExpression',['../classOOModel_1_1FunctionTypeExpression.html',1,'OOModel']]]
 ];

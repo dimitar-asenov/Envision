@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['pair',['Pair',['../classPair.html',1,'']]],
   ['parser',['Parser',['../classInteraction_1_1Parser.html',1,'Interaction']]],
   ['parseresult',['ParseResult',['../classInteraction_1_1ParseResult.html',1,'Interaction']]],
   ['partiallist',['PartialList',['../classTestNodes_1_1PartialList.html',1,'TestNodes']]],

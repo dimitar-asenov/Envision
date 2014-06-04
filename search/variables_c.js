@@ -9,6 +9,7 @@ var searchData=
   ['mainwindow_5f',['mainWindow_',['../classCore_1_1EnvisionManager.html#abfa4dba35a7198408817363922342cc2',1,'Core::EnvisionManager']]],
   ['majorversion',['majorVersion',['../structCore_1_1PluginDependency.html#a0acedce37f195c86fb7b838c86402d2e',1,'Core::PluginDependency']]],
   ['map',['map',['../classFilePersistence_1_1NodeIdMap.html#a3bc7871132ca6a3534c40b481b4b7fe1',1,'FilePersistence::NodeIdMap']]],
+  ['mapenvisiontextcolors_5f',['mapEnvisionTextColors_',['../classComments_1_1ColorPicker.html#a8f431ebf3caf8da9d4dd6179c5672a22',1,'Comments::ColorPicker']]],
   ['margin',['margin',['../classVisualization_1_1MiniMap.html#a107b71190fa70e0bc5d56d738651d463',1,'Visualization::MiniMap']]],
   ['marginbottom_5f',['marginBottom_',['../classVisualization_1_1FormElement.html#a83bdd64434e7172839f19b4ef0924515',1,'Visualization::FormElement']]],
   ['marginleft_5f',['marginLeft_',['../classVisualization_1_1FormElement.html#ac1502dd2e939f6577c897028d9df5909',1,'Visualization::FormElement']]],
@@ -48,6 +49,5 @@ var searchData=
   ['modifiednodes',['modifiedNodes',['../classModel_1_1NotificationListener.html#a24793fa3ecc6212d9f4330fbdbb72c8c',1,'Model::NotificationListener']]],
   ['modifiedtargets',['modifiedTargets',['../classModel_1_1AddModifiedNode.html#a19c22ce528fd569410925c0d85a29d08',1,'Model::AddModifiedNode::modifiedTargets()'],['../classModel_1_1SetModificationTarget.html#afdeeb35efc2a1420616c2c6e06bf3a4f',1,'Model::SetModificationTarget::modifiedTargets()'],['../classModel_1_1Model.html#aee2f7308b881140826ce11c040056281',1,'Model::Model::modifiedTargets()']]],
   ['modifiers_5f',['modifiers_',['../classOOModel_1_1Modifier.html#ad49ee09f7335597e462c0c846fb97161',1,'OOModel::Modifier']]],
-  ['msg_5f',['msg_',['../classCore_1_1EnvisionException.html#a8dbde5412f49cf1a3f162e4828efcacd',1,'Core::EnvisionException']]],
-  ['myval',['myVal',['../classClassArg.html#af08ce8c276d71afc0037837befd4a390',1,'ClassArg']]]
+  ['msg_5f',['msg_',['../classCore_1_1EnvisionException.html#a8dbde5412f49cf1a3f162e4828efcacd',1,'Core::EnvisionException']]]
 ];

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['b',['B',['../classB.html',1,'']]],
   ['binarynode',['BinaryNode',['../classTestNodes_1_1BinaryNode.html',1,'TestNodes']]],
   ['binarynodeaccessunit',['BinaryNodeAccessUnit',['../classTestNodes_1_1BinaryNodeAccessUnit.html',1,'TestNodes']]],
   ['binarynodepersistenceunit',['BinaryNodePersistenceUnit',['../classTestNodes_1_1BinaryNodePersistenceUnit.html',1,'TestNodes']]],

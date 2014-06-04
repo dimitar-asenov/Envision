@@ -1,17 +1,11 @@
 var searchData=
 [
   ['templateargumentvisitor',['TemplateArgumentVisitor',['../classCppImport_1_1TemplateArgumentVisitor.html',1,'CppImport']]],
-  ['templatepair',['TemplatePair',['../classTemplatePair.html',1,'']]],
-  ['test',['Test',['../classTest.html',1,'']]],
-  ['test',['Test',['../classtest_1_1Test.html',1,'test']]],
   ['test',['Test',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['testbox',['TestBox',['../classVisualization_1_1TestBox.html',1,'Visualization']]],
   ['testboxnode',['TestBoxNode',['../classVisualization_1_1TestBoxNode.html',1,'Visualization']]],
   ['testevent',['TestEvent',['../classCore_1_1TestEvent.html',1,'Core']]],
-  ['testing',['Testing',['../classTestSpace_1_1TestSpace_1_1Testing.html',1,'TestSpace::TestSpace']]],
-  ['testmanager',['TestManager',['../classtest_1_1TestManager.html',1,'test']]],
   ['testmanager',['TestManager',['../classSelfTest_1_1TestManager.html',1,'SelfTest']]],
-  ['testrangeloop',['TestRangeLoop',['../classTestRangeLoop.html',1,'']]],
   ['testresult',['TestResult',['../classSelfTest_1_1TestResult.html',1,'SelfTest']]],
   ['testresults',['TestResults',['../classSelfTest_1_1TestResults.html',1,'SelfTest']]],
   ['testrunner',['TestRunner',['../classCore_1_1TestRunner.html',1,'Core']]],

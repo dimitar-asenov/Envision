@@ -11,8 +11,6 @@ var searchData=
   ['hcommentdiagramshape',['HCommentDiagramShape',['../classComments_1_1HCommentDiagramShape.html',1,'Comments']]],
   ['hcommentimage',['HCommentImage',['../classComments_1_1HCommentImage.html',1,'Comments']]],
   ['hcomposite',['HComposite',['../classInteraction_1_1HComposite.html',1,'Interaction']]],
-  ['header',['Header',['../classHeader.html',1,'']]],
-  ['headerchild',['HeaderChild',['../classHeaderChild.html',1,'']]],
   ['helloworld',['HelloWorld',['../classHello_1_1HelloWorld.html',1,'Hello']]],
   ['helloworldprinter',['HelloWorldPrinter',['../classHello_1_1HelloWorldPrinter.html',1,'Hello']]],
   ['hexpression',['HExpression',['../classOOInteraction_1_1HExpression.html',1,'OOInteraction']]],

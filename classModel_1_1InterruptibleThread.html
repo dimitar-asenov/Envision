@@ -132,7 +132,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Requests an interrupt in the operation of the thread due to a writer needing access to the specified node. </p>
-<p><a class="el" href="classA.html">A</a> interruptible thread uses this method to implement interrupt behavior. This could include setting an interrupt flag, or posting an interrupt message on the thread's message queue if event processing was started with exec().</p>
+<p>A interruptible thread uses this method to implement interrupt behavior. This could include setting an interrupt flag, or posting an interrupt message on the thread's message queue if event processing was started with exec().</p>
 <p>Threads which perform long operations (such as verification) should generally be interruptible to allow the user to interact with the system.</p>
 <p>NOTE: If the thread has acquired the lock corresponding to writeRequestTarget multiple times, this method will be called once for each nested acquire operation. </p>
 

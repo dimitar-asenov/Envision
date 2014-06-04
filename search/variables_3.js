@@ -31,6 +31,7 @@ var searchData=
   ['descriptor_5f',['descriptor_',['../classInteraction_1_1Operator.html#afa722b66a98ddacc348db628229e9f3e',1,'Interaction::Operator::descriptor_()'],['../classInteraction_1_1AddOperator.html#af52ec3f7868d752c7a3b264e3130fc60',1,'Interaction::AddOperator::descriptor_()']]],
   ['destructoricon',['destructorIcon',['../classOOVisualization_1_1VMethodStyle.html#a18e2f57998115e5177ce89129a378767',1,'OOVisualization::VMethodStyle']]],
   ['dfsorder_5f',['dfsOrder_',['../classVisualization_1_1NameOverlay.html#a05db42f6da8ac29a30d7817e60c10787',1,'Visualization::NameOverlay']]],
+  ['diagram_5f',['diagram_',['../classComments_1_1CommentDiagramToolbar.html#ab7d4a86c94aa6ad35fa59c7d1a248ccf',1,'Comments::CommentDiagramToolbar']]],
   ['dimensions',['dimensions',['../classOOVisualization_1_1VNewExpressionStyle.html#a3753139aad8815540a537099962ba34a',1,'OOVisualization::VNewExpressionStyle']]],
   ['dimensions_5f',['dimensions_',['../classOOVisualization_1_1VNewExpression.html#a5cc4e58534fdab14c3cf7d7244d8dc83',1,'OOVisualization::VNewExpression']]],
   ['direction',['direction',['../classVisualization_1_1SequentialLayoutStyle.html#ae69cc67f9d14fb02792a05d43db40e6b',1,'Visualization::SequentialLayoutStyle']]],

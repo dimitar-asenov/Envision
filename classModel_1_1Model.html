@@ -222,7 +222,7 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a2a9ccf2a9ed7591c5a0728512506ace8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The node that is the top-most ancestor of all other nodes that are currently being modification.  <a href="#a2a9ccf2a9ed7591c5a0728512506ace8">More...</a><br/></td></tr>
 <tr class="separator:a2a9ccf2a9ed7591c5a0728512506ace8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7ae87570c8d651c9c409d85c00925be"><td class="memItemLeft" align="right" valign="top">QReadWriteLock&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#ac7ae87570c8d651c9c409d85c00925be">exclusiveAccess</a></td></tr>
-<tr class="memdesc:ac7ae87570c8d651c9c409d85c00925be"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classA.html">A</a> ReadWrite lock used for exclusive writer or reader access.  <a href="#ac7ae87570c8d651c9c409d85c00925be">More...</a><br/></td></tr>
+<tr class="memdesc:ac7ae87570c8d651c9c409d85c00925be"><td class="mdescLeft">&#160;</td><td class="mdescRight">A ReadWrite lock used for exclusive writer or reader access.  <a href="#ac7ae87570c8d651c9c409d85c00925be">More...</a><br/></td></tr>
 <tr class="separator:ac7ae87570c8d651c9c409d85c00925be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a559bedefff94e91981fce6cbe2efbb13"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a559bedefff94e91981fce6cbe2efbb13">modificationInProgress</a> {}</td></tr>
 <tr class="memdesc:a559bedefff94e91981fce6cbe2efbb13"><td class="mdescLeft">&#160;</td><td class="mdescRight">This flag indicates if a modification is currently in progress.  <a href="#a559bedefff94e91981fce6cbe2efbb13">More...</a><br/></td></tr>
@@ -231,7 +231,7 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a8398579927ddedec02ed9a251a1f8442"><td class="mdescLeft">&#160;</td><td class="mdescRight">The test message associated with the current modification operation.  <a href="#a8398579927ddedec02ed9a251a1f8442">More...</a><br/></td></tr>
 <tr class="separator:a8398579927ddedec02ed9a251a1f8442"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee2f7308b881140826ce11c040056281"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#aee2f7308b881140826ce11c040056281">modifiedTargets</a></td></tr>
-<tr class="memdesc:aee2f7308b881140826ce11c040056281"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classA.html">A</a> set of all top-level nodes which were modified as part of the last modification operation.  <a href="#aee2f7308b881140826ce11c040056281">More...</a><br/></td></tr>
+<tr class="memdesc:aee2f7308b881140826ce11c040056281"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of all top-level nodes which were modified as part of the last modification operation.  <a href="#aee2f7308b881140826ce11c040056281">More...</a><br/></td></tr>
 <tr class="separator:aee2f7308b881140826ce11c040056281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8280fc98d4e4a7153f462f5e5dbbbd50"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a8280fc98d4e4a7153f462f5e5dbbbd50">name_</a></td></tr>
 <tr class="memdesc:a8280fc98d4e4a7153f462f5e5dbbbd50"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of this model.  <a href="#a8280fc98d4e4a7153f462f5e5dbbbd50">More...</a><br/></td></tr>
@@ -416,7 +416,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Checks if a node can be modified. </p>
-<p><a class="el" href="classA.html">A</a> node can be modified if the following three conditions are met:</p>
+<p>A node can be modified if the following three conditions are met:</p>
 <ul>
 <li>The <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree. ">Model</a> is in a modification session, started with Model::beginModification().</li>
 <li>It is, or has as a parent, the current modification target.</li>
@@ -865,7 +865,7 @@ Private Attributes</h2></td></tr>
 <p>Emitted at the end of a modification block. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">nodes</td><td><a class="el" href="classA.html">A</a> set of all nodes modified within this block. </td></tr>
+    <tr><td class="paramname">nodes</td><td>A set of all nodes modified within this block. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1021,7 +1021,7 @@ Private Attributes</h2></td></tr>
 <p>Emitted when a new root node was set. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">root</td><td><a class="el" href="classA.html">A</a> pointer to the new root node </td></tr>
+    <tr><td class="paramname">root</td><td>A pointer to the new root node </td></tr>
   </table>
   </dd>
 </dl>
@@ -1190,7 +1190,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The lock of the access unit that is responsible for the current modification target node. </p>
-<p>Each node has exactly one access unit corresponding to it. <a class="el" href="classA.html">A</a> writer must acquire this lock before any modification can occur. The currently acquired lock is stored here so that each write operation can be checked to assure that no write occurs outside of the access unit. </p>
+<p>Each node has exactly one access unit corresponding to it. A writer must acquire this lock before any modification can occur. The currently acquired lock is stored here so that each write operation can be checked to assure that no write occurs outside of the access unit. </p>
 
 </div>
 </div>
@@ -1235,9 +1235,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classA.html">A</a> ReadWrite lock used for exclusive writer or reader access. </p>
+<p>A ReadWrite lock used for exclusive writer or reader access. </p>
 <p>Writers always acquire this lock first and then proceed to acquire exactly one other lock corresponding to the access unit they want to write to.</p>
-<p><a class="el" href="classA.html">A</a> reader that requires exclusive access (other readers can still read, but writers can not) can also acquire this lock. Typically however readers do not acquire this lock. </p>
+<p>A reader that requires exclusive access (other readers can still read, but writers can not) can also acquire this lock. Typically however readers do not acquire this lock. </p>
 
 </div>
 </div>
@@ -1305,7 +1305,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classA.html">A</a> set of all top-level nodes which were modified as part of the last modification operation. </p>
+<p>A set of all top-level nodes which were modified as part of the last modification operation. </p>
 <p>This is only used to signal to anyone who is interested in monitoring changes. </p>
 
 </div>
@@ -1352,7 +1352,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Indicates if <a class="el" href="classModel_1_1Model.html#af858da7a498955c10641f3e81014635b" title="Undoes the commands executed in the previous modification block. ">undo()</a> or <a class="el" href="classModel_1_1Model.html#ab9fc71567c8d9aa643dcd21b8770b5cb" title="Redoes the commands executed in the next modification block. ">redo()</a> were called during the last modification operation. </p>
-<p><a class="el" href="classA.html">A</a> modification operation can do two things:</p>
+<p>A modification operation can do two things:</p>
 <ul>
 <li>Add new commands on the stack</li>
 <li>Call undo/redo</li>
@@ -1380,7 +1380,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Indicates if the last modification operation pushed commands on stack. </p>
-<p><a class="el" href="classA.html">A</a> modification operation can do two things:</p>
+<p>A modification operation can do two things:</p>
 <ul>
 <li>Add new commands on the stack</li>
 <li>Call undo/redo</li>

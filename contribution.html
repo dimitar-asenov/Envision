@@ -115,7 +115,7 @@ Setting up Eclipse and Qt Creator</h2>
 Formatting and white space</h2>
 <ul>
 <li>Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.</li>
-<li>Lines should be at most 120 characters. <a class="el" href="classA.html">A</a> TAB counts as 3 characters.</li>
+<li>Lines should be at most 120 characters. A TAB counts as 3 characters.</li>
 <li>If the body of an <code>if</code>, <code>while</code>, or <code>for</code> is a single statement, do not use curly braces around it. If the condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a newline: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
 <div class="line"><span class="keywordflow">if</span> (foo)</div>
 <div class="line">{</div>
@@ -164,7 +164,7 @@ Naming</h2>
 Language features</h2>
 <ul>
 <li>Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.</li>
-<li>Use exceptions Qt's assertions <code>Q_ASSERT</code>. <a class="el" href="classExceptions.html">Exceptions</a> should be thrown in situation where a problem is caused due the user's input or the user's actions, and this problem can not be prevented in code. For all other situations you should use assertions. In particular use assertions to introduce checks at various places in the code where you expect the assertion to hold. The presumption should be that if an assertion fails, this indicates a buggy and incomplete code, and it is possible to fix this once and for all in the code.</li>
+<li>Use exceptions Qt's assertions <code>Q_ASSERT</code>. Exceptions should be thrown in situation where a problem is caused due the user's input or the user's actions, and this problem can not be prevented in code. For all other situations you should use assertions. In particular use assertions to introduce checks at various places in the code where you expect the assertion to hold. The presumption should be that if an assertion fails, this indicates a buggy and incomplete code, and it is possible to fix this once and for all in the code.</li>
 <li>Use RTTI where appropriate. Avoid C casts and use C++ casts instead: (<code>static_cast</code>, <code>dynamic_cast</code>, <code>const_cast</code>, <code>reinterpret_cast</code>). Better still, is to use the Envision provided <code>DCast</code>, instead of C++'s <code>dynamic_cast</code>, whenever possibly. <code>DCast</code> is faster but you can only use it if the class hierarchy you're trying to cast within supports it. These are currently all <code>Node</code> subclasses and all <code>Item</code> subclasses. Any other type can be made to support <code>DCast</code> by using the <code>Super</code> template to inherit from a base class and using the appropriate type id macros from <code>Core/src/reflect/typeIdMacros.h</code> </li>
 <li>Make use of <a href="http://www.stroustrup.com/C++11FAQ.html">C++11 features</a>.</li>
 <li>All class members should have a default initializer using the new C++11 syntax with curly braces in the class declaration: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
@@ -234,8 +234,8 @@ Further reading</h2>
 <h1><a class="anchor" id="committing"></a>
 Commit policy</h1>
 <ul>
-<li><a class="el" href="classA.html">A</a> single commit should focus on a single bug fix, or a single aspect of an enhancement. Unrelated changes should be committed separately.</li>
-<li>Do not squash multiple commits into one. <a class="el" href="classA.html">A</a> bug fix or enhancement should have its own branch that contains all necessary commits.</li>
+<li>A single commit should focus on a single bug fix, or a single aspect of an enhancement. Unrelated changes should be committed separately.</li>
+<li>Do not squash multiple commits into one. A bug fix or enhancement should have its own branch that contains all necessary commits.</li>
 <li>Always include a commit message which should at a minimum contain at least a title</li>
 <li>Commit titles should be limited to 72 characters and use the present tense to indicate what the commit will do: <pre class="fragment">Right: Fix a bug where typing 42 would crash Envision
 Wrong: Fixes a bug where typing 42 would crash Envision
