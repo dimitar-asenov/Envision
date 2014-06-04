@@ -105,15 +105,18 @@ void VProject::initializeForms()
 
 void VProject::updateGeometry(int availableWidth, int availableHeight)
 {
-	if (DCast<RootItem>(parent()))
-	{
-		qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
-		if (icon_->scale() != invGeometricZoomScale)
-		{
-			icon_->setScale(invGeometricZoomScale);
-			name_->setScale(invGeometricZoomScale);
-		}
-	}
+// As it turns out, scaling the header triggers a complete repaint of the entire content of the project. This is rather
+// slow, so for now, we disable it.
+//
+//	if (DCast<RootItem>(parent()))
+//	{
+//		qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
+//		if (icon_->scale() != invGeometricZoomScale)
+//		{
+//			icon_->setScale(invGeometricZoomScale);
+//			name_->setScale(invGeometricZoomScale);
+//		}
+//	}
 
 	Super::updateGeometry(availableWidth, availableHeight);
 }
