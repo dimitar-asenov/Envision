@@ -54,21 +54,21 @@ bool ControlFlowVisualization::initialize(Core::EnvisionManager&)
 	// Register visualizations
 	Core::TypeRegistry::initializeNewTypes();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VListCF, StatementItemList>);
+			createVisualization<VListCF, StatementItemList>, VListCF::typeIdStatic());
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VBlockCF, Block>);
+			createVisualization<VBlockCF, Block>, VBlockCF::typeIdStatic());
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VReturnStatementCF, ReturnStatement>);
+			createVisualization<VReturnStatementCF, ReturnStatement>, VReturnStatementCF::typeIdStatic());
 	Scene::defaultRenderer()->registerVisualization(IfStatement::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VIfStatementCF, IfStatement>);
+			createVisualization<VIfStatementCF, IfStatement>, VIfStatementCF::typeIdStatic());
 	Scene::defaultRenderer()->registerVisualization(LoopStatement::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VLoopStatementCF, LoopStatement>);
+			createVisualization<VLoopStatementCF, LoopStatement>, VLoopStatementCF::typeIdStatic());
 //	Scene::defaultRenderer()->registerVisualization(ForEachStatement::typeIdStatic(), visualizationPurpose(),
-//			createVisualization<VForEachStatementCF, ForEachStatement>);
+//			createVisualization<VForEachStatementCF, ForEachStatement>, VForEachStatementCF::typeIdStatic());
 	Scene::defaultRenderer()->registerVisualization(BreakStatement::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VBreakStatementCF, BreakStatement>);
+			createVisualization<VBreakStatementCF, BreakStatement>, VBreakStatementCF::typeIdStatic());
 	Scene::defaultRenderer()->registerVisualization(ContinueStatement::typeIdStatic(), visualizationPurpose(),
-			createVisualization<VContinueStatementCF, ContinueStatement>);
+			createVisualization<VContinueStatementCF, ContinueStatement>, VContinueStatementCF::typeIdStatic());
 
 	// Register handlers
 	// TODO: register custom handlers, possibly from OOInteraction Plugin

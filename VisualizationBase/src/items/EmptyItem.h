@@ -47,11 +47,25 @@ class VISUALIZATIONBASE_API EmptyItem : public Super<Item>
 	public:
 		EmptyItem(Item* parent, const StyleType* style = itemStyles().get());
 
+		/**
+		 * Sets a custom size for this empty item.
+		 *
+		 * If a size is set, this item will use it and will no longer stretch to fill any available space.
+		 */
+		void setCustomSize(int width, int height);
+
+		/**
+		 * Returns true, unless setCustomSize() has been called.
+		 */
 		virtual bool sizeDependsOnParent() const override;
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
+	private:
+		bool hasCustomSize_{};
+
 };
 
 } /* namespace Interaction */

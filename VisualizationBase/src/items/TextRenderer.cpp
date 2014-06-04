@@ -134,9 +134,24 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	if ( !selectionCursor )
 	{
 		// In this common case use static text.
-		painter->setPen(style()->pen());
-		painter->setFont(style()->font());
-		painter->drawStaticText(QPointF(textXOffset_, textYOffset_), staticText_);
+		qreal size = painter->worldTransform().m11() * style()->font().pixelSize();
+		if (size < 0.5) return;
+
+		if (size < 3.0)
+		{
+			// Draw just a filler
+			auto c = style()->pen().color();
+			c.setAlpha(64);
+			painter->fillRect(QRectF(textXOffset_, textYOffset_ + heightInLocal()/4.0 ,
+											 staticText_.size().width(), staticText_.size().height()/2.0), c);
+		}
+		else
+		{
+			// Draw actual text
+			painter->setPen(style()->pen());
+			painter->setFont(style()->font());
+			painter->drawStaticText(QPointF(textXOffset_, textYOffset_), staticText_);
+		}
 	}
 	else
 	{

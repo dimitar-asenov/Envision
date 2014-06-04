@@ -1,0 +1,134 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerRadius>10</cornerRadius>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
+		</backgroundBrush>
+	</shape>
+	<namePublic prototypes="default.namePublic" />
+	<nameStaticPublic prototypes="default.nameStatic,default.namePublic" />
+	
+	<defaultIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/gears.svg</filename>
+		<width>30</width>
+		<height>30</height>
+	</defaultIcon>
+	<constructorIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/methodConstructor.svg</filename>
+		<width>30</width>
+		<height>30</height>
+	</constructorIcon>
+	<destructorIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/methodDestructor.svg</filename>
+		<width>30</width>
+		<height>30</height>
+	</destructorIcon>
+	<conversionIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/gears.svg</filename>
+		<width>30</width>
+		<height>30</height>
+	</conversionIcon>
+	
+	<header prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>10</spaceBetweenElements>
+	</header>
+	<content prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+		<alignment>1</alignment>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</content>
+	<addons prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+		<alignment>1</alignment>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</addons>
+	<typeArguments prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>240</red>
+					<green>240</green>
+					<blue>255</blue>
+				</color>
+			</backgroundBrush>
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>128</red>
+					<green>128</green>
+					<blue>255</blue>
+				</color>
+			</outline>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>10</spaceBetweenElements>
+			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
+		</itemsStyle>
+		<selectedTip>
+			<symbol>add type argument</symbol>
+		</selectedTip>
+	</typeArguments>
+	<arguments prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerRadius>3</cornerRadius>
+			<cornerType>2</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>10</spaceBetweenElements>
+			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
+		</itemsStyle>
+		<selectedTip>
+			<symbol>add argument</symbol>
+		</selectedTip>
+	</arguments>
+	<results prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+				Box
+				<cornerRadius>3</cornerRadius>
+				<cornerType>2</cornerType>
+				<backgroundBrush>
+					<style>1</style>
+					<color>
+						<alpha>255</alpha>
+						<red>255</red>
+						<green>255</green>
+						<blue>255</blue>
+					</color>
+				</backgroundBrush>
+			</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>2</direction>
+			<alignment>1</alignment>
+			<spaceBetweenElements>5</spaceBetweenElements>
+		</itemsStyle>
+		<selectedTip>
+			<symbol>add result</symbol>
+		</selectedTip>
+	</results>
+</style>

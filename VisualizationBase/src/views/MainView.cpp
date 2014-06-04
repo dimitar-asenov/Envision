@@ -26,9 +26,10 @@
 
 #include "views/MainView.h"
 #include "Scene.h"
+#include "../cursor/Cursor.h"
+#include "../items/Item.h"
+
 #include "Logger/src/Timer.h"
-#include "cursor/Cursor.h"
-#include "items/Item.h"
 
 namespace Visualization {
 
@@ -124,6 +125,8 @@ void MainView::wheelEvent(QWheelEvent *event)
 
 		bar->setValue( bar->value() - event->delta() );
 	}
+	else
+		View::wheelEvent(event);
 }
 
 qreal MainView::scaleFactor() const
@@ -313,7 +316,7 @@ void MainView::mousePressEvent(QMouseEvent *event)
 	event->accept();
 	isPanning_ = true;
 	panStartPos_ = event->pos();
-   setCursor(Qt::ClosedHandCursor);
+	setCursor(Qt::ClosedHandCursor);
 }
 
 void MainView::mouseReleaseEvent(QMouseEvent *event)

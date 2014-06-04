@@ -27,12 +27,22 @@
 #include "layouts/PositionLayout.h"
 #include "shapes/Shape.h"
 #include "../renderer/ModelRenderer.h"
+#include "../node_extensions/FullDetailSize.h"
+#include "../views/MainView.h"
 
 #include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( PositionLayout, "layout" )
+
+constexpr bool ENABLE_AUTOMATIC_SEMANTIC_ZOOM = false;
+
+// TODO: Do this properly.
+// Defines the semantic zoom level to be used when abstracting an item.
+// for performance reasons this is a constant but in the interest of general consistency its value should be
+// scene()->defaultRenderer()->semanticZoomLevelId("project_module_class_method_abstraction");
+constexpr int FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL = 5;
 
 PositionLayout::PositionLayout(Item* parent, const StyleType* style) :
 Super(parent, style)
@@ -67,9 +77,8 @@ void PositionLayout::insert(Item* item)
 		throw VisualizationException("Adding an Item that does not implement CompositeNode to a PositionLayout");
 
 	Position* pos = extNode->extension<Position>();
-
-	if (!pos)
-		throw VisualizationException("Adding a Item whose node does not have a Position extension to a PositionLayout");
+	Q_ASSERT(pos);
+	Q_ASSERT(extNode->extension<FullDetailSize>());
 
 	item->setParentItem(this);
 	items.append(item);
@@ -149,7 +158,12 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 			}
 		}
 
-		if (i >= items.size() ) insert( renderer->render(this, nodes[i]));	// This node is new
+		if (i >= items.size() )
+		{
+			if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM)
+				setChildNodeSemanticZoomLevel(nodes[i], FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
+			insert( renderer->render(this, nodes[i] ));	// This node is new
+		}
 		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
 		else
 		{
@@ -169,6 +183,8 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 			// The node was not found, insert a visualization here
 			if (!found )
 			{
+				if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM)
+					setChildNodeSemanticZoomLevel(nodes[i], FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
 				insert( renderer->render(this, nodes[i]) );
 				swap(i, items.size()-1);
 			}
@@ -196,6 +212,12 @@ bool PositionLayout::isEmpty() const
 
 void PositionLayout::updateGeometry(int, int)
 {
+	QList<Model::Model*> modifiedModels;
+	// This is a list of all models that are modified as a result of this call. Models are modified when the elements of
+	// a PositionLayout are arranged for the first time or when the size of an element is updated.
+
+	Model::Model* lastModifiedModel = nullptr;
+
 	// Arrange items if they were all missing positions.
 	if (allNodesLackPositionInfo && !items.isEmpty())
 	{
@@ -239,11 +261,10 @@ void PositionLayout::updateGeometry(int, int)
 		int colWidth = 0;
 
 
-		auto model = items[0]->node()->model();
-		QList<Model::Model*> models{ {model} };
+		lastModifiedModel = items[0]->node()->model();
+		modifiedModels << lastModifiedModel;
 
-		model->beginModification(items[0]->node(), "Automatically set position");
-		// It is important to batch the modifications, since model::endModification() send a notification signal.
+		lastModifiedModel->beginModification(items[0]->node(), "Automatically set position");
 
 		for(int i = 0; i<items.size(); ++i)
 		{
@@ -270,24 +291,59 @@ void PositionLayout::updateGeometry(int, int)
 
 			auto newModel = items[i]->node()->model();
 
-			if (newModel != model)
+			if (newModel != lastModifiedModel)
 			{
-				if (!models.contains(newModel))
+				if (!modifiedModels.contains(newModel))
 				{
-					models << newModel;
+					modifiedModels << newModel;
 					newModel->beginModification(items[i]->node(), "Automatically set position");
 				}
 
-				model = newModel;
+				lastModifiedModel = newModel;
 			}
 
-			model->changeModificationTarget(items[i]->node());
+			lastModifiedModel->changeModificationTarget(items[i]->node());
 			positions[i]->setX(x);
 			positions[i]->setY(y);
 		}
 
-		for (auto m : models) m->endModification(false);
+
 		allNodesLackPositionInfo = false;
+	}
+
+	// Set the size of all items
+	for(auto item : items)
+	{
+		Model::Node* node = item->node();
+		auto fds = (static_cast<Model::CompositeNode*>(node))->extension<FullDetailSize>();
+
+		if (!fds->hasSize() || fds->size() != item->sizeInParent().toSize())
+		{
+			auto newModel = node->model();
+
+			if (newModel != lastModifiedModel)
+			{
+				if (!modifiedModels.contains(newModel))
+				{
+					modifiedModels << newModel;
+					newModel->beginModification(node, "Set size");
+				}
+
+				lastModifiedModel = newModel;
+			}
+
+			lastModifiedModel->changeModificationTarget(node);
+			fds->set(item->sizeInParent().toSize());
+		}
+	}
+
+	// It is important to batch the modifications, since model::endModification() send a notification signal.
+	for (auto m : modifiedModels) m->endModification(false);
+
+	if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM && adjustChildrenSemanticZoom())
+	{
+		setUpdateNeeded(RepeatUpdate);
+		return;
 	}
 
 	QPoint topLeft;
@@ -327,6 +383,76 @@ int PositionLayout::focusedElementIndex() const
 		if ( items[i]->itemOrChildHasFocus()) return i;
 
 	return -1;
+}
+
+bool PositionLayout::isSensitiveToScale() const
+{
+	return ENABLE_AUTOMATIC_SEMANTIC_ZOOM;
+}
+
+void PositionLayout::determineChildren()
+{
+	for(auto & item : items)
+		renderer()->render(item, this, item->node());
+
+	Super::determineChildren();
+}
+
+bool PositionLayout::adjustChildrenSemanticZoom()
+{
+	// An item gets abstracted if its perceived width falls below this value
+	constexpr qreal ABSTRACTION_THRESHOLD = 200;
+
+	bool changesMade = false;
+
+	qreal geometricZoomScale = mainViewScalingFactor();
+	if (geometricZoomScale != previousMainViewScalingFactor())
+	{
+		// Computes wherehter this Layout is entirely outside of view
+		bool inViewport = false;
+		for (auto views : scene()->views())
+		{
+			if (auto mv = dynamic_cast<MainView*>(views))
+			{
+				inViewport = mv->visibleRect().intersects(mapRectToScene(0,0, widthInLocal(), heightInLocal()));
+				break;
+			}
+		}
+
+		for(auto item : items)
+		{
+			if (geometricZoomScale < 1)
+			{
+				if (!inViewport || (item->totalScale() * geometricZoomScale * item->widthInLocal() < ABSTRACTION_THRESHOLD))
+				{
+					if (item->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
+					{
+						setChildNodeSemanticZoomLevel(item->node(), FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
+						changesMade = true;
+					}
+				}
+				else
+				{
+					if (inViewport && item->semanticZoomLevel() == FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
+					{
+						clearChildNodeSemanticZoomLevel(item->node());
+						changesMade = true;
+					}
+				}
+			}
+			else
+			{
+				// if the geometric zoom scale is larger or equal to 1 everything should be shown in full detail
+				if(definesChildNodeSemanticZoomLevel(item->node()))
+				{
+					clearChildNodeSemanticZoomLevel(item->node());
+					changesMade = true;
+				}
+			}
+		}
+	}
+
+	return changesMade;
 }
 
 }

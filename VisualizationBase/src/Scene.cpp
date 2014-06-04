@@ -52,6 +52,12 @@ class UpdateSceneEvent : public QEvent
 
 const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
+QList<Scene*>& Scene::allScenes()
+{
+	static QList<Scene*> list;
+	return list;
+}
+
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()),
 	  	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)),
@@ -60,6 +66,7 @@ Scene::Scene()
 	setItemIndexMethod(NoIndex);
 
 	initialized_ = true;
+	allScenes().append(this);
 }
 
 Scene::~Scene()
@@ -76,6 +83,8 @@ Scene::~Scene()
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
+
+	allScenes().removeAll(this);
 }
 
 ModelRenderer* Scene::defaultRenderer()
@@ -126,17 +135,17 @@ void Scene::updateItems()
 				break;
 			}
 
-	// Update Top level items
-	for (auto item : topLevelItems_)
-		item->updateSubtree();
-
 	// Update items on zoom
 	if (mainViewScalingFactorChanged_)
 	{
 		mainViewScalingFactorChanged_ = false;
-		for (auto item : itemsToUpdateGeometryWhenZoomChanges_)
-				item->changeGeometry();
+		for (auto item : itemsSensitiveToScale_)
+				item->setUpdateNeeded(Item::StandardUpdate);
 	}
+	
+	// Update Top level items
+	for (auto item : topLevelItems_)
+		item->updateSubtree();
 
 	Core::Profiler::stop("Initial item update");
 
@@ -414,28 +423,18 @@ void Scene::computeSceneRect()
 	for(auto v: views()) v->setSceneRect(viewRect);
 }
 
-void Scene::setUpdateItemGeometryWhenZoomChanges(Item* item, bool update)
+void Scene::setItemIsSensitiveToScale(Item* item, bool update)
 {
 	Q_ASSERT(item);
-	if (update) itemsToUpdateGeometryWhenZoomChanges_.insert(item);
-	else
-	{
-		itemsToUpdateGeometryWhenZoomChanges_.remove(item);
-
-		auto it = itemsToUpdateGeometryWhenZoomChanges_.begin();
-		while (it != itemsToUpdateGeometryWhenZoomChanges_.end())
-		{
-			if (item->isAncestorOf(*it))
-				it = itemsToUpdateGeometryWhenZoomChanges_.erase(it);
-			else ++it;
-		}
-	}
+	if (update) itemsSensitiveToScale_.insert(item);
+	else itemsSensitiveToScale_.remove(item);
 }
 
 void Scene::setMainViewScalingFactor(qreal factor)
 {
 	if (factor != mainViewScalingFactor_)
 	{
+		previousMainViewScalingFactor_ = mainViewScalingFactor_;
 		mainViewScalingFactor_ = factor;
 		mainViewScalingFactorChanged_ = true;
 		scheduleUpdate();

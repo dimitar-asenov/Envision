@@ -1,0 +1,45 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">	
+	<name>
+		<shape>Box
+			<backgroundBrush>
+				<gradient>
+					<stopPoints>
+						<e1>
+							<second>
+								<alpha>255</alpha>
+								<red>255</red>
+								<green>209</green>
+								<blue>139</blue>
+							</second>
+						</e1>	
+					</stopPoints>
+				</gradient>
+			</backgroundBrush>
+		</shape>
+	</name>
+		
+	<icon>
+		<filename>styles/icon/gears.svg</filename>
+	</icon>
+	
+	<stretchItem prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<gradient>
+					<stopPoints>
+						<e1>
+							<second>
+								<alpha>255</alpha>
+								<red>255</red>
+								<green>255</green>
+								<blue>190</blue>
+							</second>
+						</e1>	
+					</stopPoints>
+				</gradient>
+			</backgroundBrush>
+		</shape>
+	</stretchItem>
+</style>

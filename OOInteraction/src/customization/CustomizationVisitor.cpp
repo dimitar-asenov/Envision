@@ -74,7 +74,7 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 										return new OOVisualization::VKeywordMethodCall(
 												parent, static_cast<OOModel::MethodCallExpression*> (node),
 												OOVisualization::VKeywordMethodCall::itemStyles().get(styleNameString));
-									},
+									}, OOVisualization::VKeywordMethodCall::typeIdStatic(),
 									[=](Visualization::Item*, Model::Node* node) -> bool
 									{
 										auto call = static_cast<OOModel::MethodCallExpression*>(node);

@@ -283,6 +283,24 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		bool definesChildNodePurpose(const Model::Node* node) const;
 
 		/**
+		 * Returns what semantic zoom level should the children of this item be chosen for when deciding what
+		 * visualizations to use.
+		 *
+		 * If the item's own semantic zoom level has been set, it's value will be returned. Otherwise the value of the
+		 * item's parent will be returned. If the item has no parent the return value is an unspecified semantic zoom
+		 * level (-1).
+		 */
+		int semanticZoomLevel() const;
+
+		void setSemanticZoomLevel(int semanticZoomLevel);
+		void clearSemanticZoomLevel();
+
+		int childNodeSemanticZoomLevel(const Model::Node* node) const;
+		void setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel);
+		void clearChildNodeSemanticZoomLevel(const Model::Node* node);
+		bool definesChildNodeSemanticZoomLevel(const Model::Node* node) const;
+
+		/**
 		 * Returns all visualization add-ons of this and inherited classes.
 		 */
 		virtual QList<VisualizationAddOn*> addOns();
@@ -329,11 +347,21 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		qreal mainViewScalingFactor() const;
 
 		/**
-		 * This method returns true if the item's geometry should be updated when the main view's zoom level changes.
+		 * Returns the scaling factor used before the active one
+		 */
+		qreal previousMainViewScalingFactor() const;
+
+		/**
+		 * Returns true if the item should be updated if its scale changes, e.g. when the user zooms in or out.
 		 *
 		 * It is assumed that this method will always return the same value for the entire lifetime of a single item.
 		 */
-		virtual bool itemGeometryChangesWithZoom() const;
+		virtual bool isSensitiveToScale() const;
+
+		/**
+		 * Sets the item's scale and schedules an update for all descendant items that are sensitive to scale changes.
+		 */
+		void setScale(qreal newScale);
 
 	protected:
 
@@ -421,6 +449,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		int purpose_;
 		QMap<const Model::Node*, int> childNodePurpose_;
+
+		int semanticZoomLevel_;
+		QMap<const Model::Node*, int> childNodeSemanticZoomLevel_;
 
 		Scene::ItemCategory itemCategory_;
 

@@ -43,6 +43,7 @@
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
 
 namespace Interaction {
 
@@ -535,6 +536,45 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
 {
 	// Do no use the default handlers.
+}
+
+void GenericHandler::wheelEvent(Visualization::Item* target, QGraphicsSceneWheelEvent *event)
+{
+	if (event->modifiers() == Qt::AltModifier) // modify the semantic zoom level
+	{
+		// individual semantic zoom level chang
+		Model::Node* node = nullptr;
+		Visualization::Item* parent = nullptr;
+
+		auto selectedItem = target->scene()->mainCursor() ? target->scene()->mainCursor()->owner() : nullptr;
+		if (selectedItem)
+		{
+			// get the nearest parent item that has a node which is not of type Model::Text
+			while (selectedItem
+					 && (!selectedItem->node() || selectedItem->node()->isSubtypeOf(Model::Text::typeIdStatic())))
+				selectedItem = selectedItem->parent();
+			if (!selectedItem) return;
+
+			parent = selectedItem->parent();
+			if ( parent )
+			{
+				node = selectedItem->node();
+
+				int newSemanticZoomLevel = 0;
+				if (parent->definesChildNodeSemanticZoomLevel(node))
+				{
+					newSemanticZoomLevel = event->delta() < 0 ?
+						target->scene()->renderer()->getCoarserSemanticZoomLevel( parent->childNodeSemanticZoomLevel(node)):
+						target->scene()->renderer()->getFinerSemanticZoomLevel( parent->childNodeSemanticZoomLevel(node));
+				}
+
+				if (newSemanticZoomLevel >= 0) parent->setChildNodeSemanticZoomLevel(node, newSemanticZoomLevel);
+				else parent->clearChildNodeSemanticZoomLevel(node);
+			}
+		}
+
+		if (node) qApp->postEvent(target->scene(), new Interaction::SetCursorEvent(parent, node));
+	} else InteractionHandler::wheelEvent(target, event);
 }
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)

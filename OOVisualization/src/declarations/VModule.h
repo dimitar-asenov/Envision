@@ -54,7 +54,7 @@ class OOVISUALIZATION_API VModule
 		static void initializeForms();
 
 	protected:
-		void determineChildren() override;
+		virtual void determineChildren() override;
 
 	private:
 		Visualization::Static* icon_{};

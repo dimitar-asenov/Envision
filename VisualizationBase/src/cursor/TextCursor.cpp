@@ -77,7 +77,7 @@ void TextCursor::setX(int xBegin, int xEnd)
 	xEnd_ = xEnd;
 
 	int caretX = isCursorBeforeSelection() ? xBegin : xEnd;
-	setPosition(QPoint(caretX + owner()->textXOffset(), 2));
+	setPosition(QPoint((caretX + owner()->textXOffset()) * owner()->totalScale(), 2));
 
 	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
 	ci->setCursorCenter(position());

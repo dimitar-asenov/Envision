@@ -69,10 +69,13 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
 
 		virtual bool isEmpty() const;
-
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual bool isSensitiveToScale() const override;
 
 		int focusedElementIndex() const;
+
+	protected:
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void determineChildren() override;
 
 	private:
 		QVector<Item*> items;
@@ -80,6 +83,11 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		bool allNodesLackPositionInfo{};
 
 		void swap(int i, int j);
+
+		/**
+		 * Returns true if the semantic zoom level of at least one child item was adjusted.
+		 */
+		bool adjustChildrenSemanticZoom();
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }

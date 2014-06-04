@@ -71,7 +71,7 @@ QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
 
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
-	itemCategory_(Scene::NoItemCategory)
+	semanticZoomLevel_(-1), itemCategory_(Scene::NoItemCategory)
 {
 	// By default no flags in a QGraphicsItem are enabled.
 	GraphicsItemFlags flags;
@@ -98,8 +98,8 @@ Item::Item(Item* parent, const StyleType* style) :
 Item::~Item()
 {
 	// Mark this item as not needing updates
-	if (auto s = scene())
-		s->setUpdateItemGeometryWhenZoomChanges(this, false);
+	for (auto s : Scene::allScenes())
+		s->setItemIsSensitiveToScale(this, false);
 
 	SAFE_DELETE(shape_);
 }
@@ -147,6 +147,38 @@ void Item::clearPurpose()
 {
 	purpose_ = -1;
 	setUpdateNeeded(FullUpdate);
+}
+
+void Item::setSemanticZoomLevel(int semanticZoomLevel)
+{
+	semanticZoomLevel_ = semanticZoomLevel;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearSemanticZoomLevel()
+{
+	semanticZoomLevel_ = -1;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::setScale(qreal newScale)
+{
+	if (scale() != newScale)
+	{
+		QGraphicsItem::setScale(newScale);
+
+		if (isSensitiveToScale()) setUpdateNeeded(StandardUpdate);
+		else
+		{
+			QList<Item*> stack = childItems();
+			while (!stack.empty())
+			{
+				Item* last = stack.takeLast();
+				if (last->isSensitiveToScale()) last->setUpdateNeeded(StandardUpdate);
+				else stack << last->childItems();
+			}
+		}
+	}
 }
 
 void Item::setStyle(const ItemStyle* style)
@@ -211,11 +243,11 @@ void Item::updateSubtree()
 		}
 	}
 
-	if (itemGeometryChangesWithZoom())
-		scene()->setUpdateItemGeometryWhenZoomChanges(this, true);
+	if (isSensitiveToScale())
+		scene()->setItemIsSensitiveToScale(this, true);
 }
 
-bool Item::itemGeometryChangesWithZoom() const
+bool Item::isSensitiveToScale() const
 {
 	return false;
 }
@@ -354,7 +386,7 @@ void Item::removeFromScene()
 			scene()->setMainCursor(nullptr);
 
 		// Mark this item as not needing updates
-		scene()->setUpdateItemGeometryWhenZoomChanges(this, false);
+		scene()->setItemIsSensitiveToScale(this, false);
 
 		if (parent()) scene()->removeItem(this);
 		else scene()->removeTopLevelItem(this);
@@ -718,6 +750,41 @@ bool Item::definesChildNodePurpose(const Model::Node* node) const
 	return childNodePurpose_.find(node) != childNodePurpose_.end();
 }
 
+int Item::semanticZoomLevel() const
+{
+	if (semanticZoomLevel_ >= 0) return semanticZoomLevel_;
+	if (!parent()) return -1;
+
+	if ( node() ) return parent()->childNodeSemanticZoomLevel( node() );
+	else return parent()->semanticZoomLevel();
+}
+
+
+int Item::childNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	auto c = childNodeSemanticZoomLevel_.find(node);
+	if (c != childNodeSemanticZoomLevel_.end()) return *c;
+
+	return semanticZoomLevel();
+}
+
+void Item::setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel)
+{
+	childNodeSemanticZoomLevel_.insert(node, semanticZoomLevel);
+	setUpdateNeeded(StandardUpdate);
+}
+
+void Item::clearChildNodeSemanticZoomLevel(const Model::Node* node)
+{
+	childNodeSemanticZoomLevel_.remove(node);
+	setUpdateNeeded(StandardUpdate);
+}
+
+bool Item::definesChildNodeSemanticZoomLevel(const Model::Node* node) const
+{
+	return childNodeSemanticZoomLevel_.find(node) != childNodeSemanticZoomLevel_.end();
+}
+
 QList<VisualizationAddOn*> Item::addOns()
 {
 	return staticAddOns();
@@ -787,6 +854,12 @@ QList<Item*> Item::childItems() const
 qreal Item::mainViewScalingFactor() const
 {
 	if (auto s = scene()) return s->mainViewScalingFactor();
+	else return 1;
+}
+
+qreal Item::previousMainViewScalingFactor() const
+{
+	if (auto s = scene()) return s->previousMainViewScalingFactor();
 	else return 1;
 }
 

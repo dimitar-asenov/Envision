@@ -89,7 +89,7 @@ void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::initType()
 	{
 		// Only register a default visualization if there is no other visualization so far.
 		Scene::defaultRenderer()->registerVisualization(
-				NodeType::typeIdStatic(), createVisualization<Derived, NodeType>);
+				NodeType::typeIdStatic(), createVisualization<Derived, NodeType>, Derived::typeIdStatic());
 	}
 	Super::initType();
 }

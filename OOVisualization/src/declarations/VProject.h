@@ -53,8 +53,11 @@ class OOVISUALIZATION_API VProject
 
 		static void initializeForms();
 
+		virtual bool isSensitiveToScale() const override;
+
 	protected:
-		void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void determineChildren() override;
 
 	private:
 		Visualization::Static* icon_{};

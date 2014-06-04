@@ -33,6 +33,7 @@
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
+#include "VisualizationBase/src/node_extensions/FullDetailSize.h"
 
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
@@ -49,10 +50,75 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	Class::registerNewExtension<Position>();
 	Method::registerNewExtension<Position>();
 
+	Project::registerNewExtension<FullDetailSize>();
+	Module::registerNewExtension<FullDetailSize>();
+	Class::registerNewExtension<FullDetailSize>();
+	Method::registerNewExtension<FullDetailSize>();
+
 	// Register visualizations
 	Core::TypeRegistry::initializeNewTypes();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
-			createVisualization<VStatementItemList, StatementItemList>);
+			createVisualization<VStatementItemList, StatementItemList>, VStatementItemList::typeIdStatic());
+
+
+	/*Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface", 1);
+
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose", "public_interface",
+		createVisualization<VClassSzPublic, Class>, VClassSzPublic::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "public_interface",
+		createVisualization<VMethodSzPublic, Method>, VMethodSzPublic::typeIdStatic());*/
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("method_abstraction", 2);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose", "method_abstraction",
+		createVisualization<VDeclarationSz, Method>, VDeclarationSz::typeIdStatic());
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("class_method_abstraction", 3);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+		"class_method_abstraction", createVisualization<VDeclarationSz, Method>, VDeclarationSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+		"class_method_abstraction", createVisualization<VDeclarationSz, Class>, VDeclarationSz::typeIdStatic());
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("module_class_method_abstraction", 4);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+		"module_class_method_abstraction", createVisualization<VDeclarationSz, Method>, VDeclarationSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+		"module_class_method_abstraction", createVisualization<VDeclarationSz, Class>, VDeclarationSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), "default_purpose",
+		"module_class_method_abstraction", createVisualization<VDeclarationSz, Module>, VDeclarationSz::typeIdStatic());
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("project_module_class_method_abstraction", 5);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+		"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Method>,
+																	VDeclarationSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+		"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Class>,
+																	VDeclarationSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), "default_purpose",
+		"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Module>,
+																	VDeclarationSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), "default_purpose",
+		"project_module_class_method_abstraction", createVisualization<VDeclarationSz, Project>,
+																	VDeclarationSz::typeIdStatic());
+
+
+	Scene::defaultRenderer()->registerSemanticZoomLevel("test", 1);
+
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), "default_purpose",
+		"test", createVisualization<VDeclarationConstantSz, Method>, VDeclarationConstantSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), "default_purpose",
+		"test", createVisualization<VDeclarationConstantSz, Class>, VDeclarationConstantSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), "default_purpose",
+		"test", createVisualization<VDeclarationConstantSz, Module>, VDeclarationConstantSz::typeIdStatic());
+	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), "default_purpose",
+		"test", createVisualization<VDeclarationConstantSz, Project>, VDeclarationConstantSz::typeIdStatic());
 
 	return true;
 }
