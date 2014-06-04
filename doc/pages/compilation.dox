@@ -10,9 +10,11 @@ GCC version 4.8 or newer should be sufficient. Other dependencies are:
 	importing C++ is preliminary and incomplete.
 	- <b>On Linux: Google Performance Tools</b>: http://code.google.com/p/gperftools/ <br /> Used for profiling.
 
-To install the dependencies on Ubuntu 13.10, do the following:
+To install the dependencies on Ubuntu 14.04, do the following:
 	-# Install the Qt SDK:
 		\verbatim sudo apt-get install qt-sdk \endverbatim
+	-# Make Qt 4 the default for compilation:
+		\verbatim sudo apt-get install qt4-default \endverbatim
 	-# Install the lp_solve development library version 5.5:
 		-# Install the packages \c lp-solve (for the shared library) and \c liblpsolve55-dev (for the header files):
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
@@ -29,8 +31,13 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 \section qtcreator Qt Creator (recommended for C++; does not work with Java)
 	-# Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process
 	Qt Creator will create additional directories alongside the repository clone.
-	-# Start Qt Creator and configure the version of Qt that you want to use. You can leave the default settings or you
-	can point to a custom Qt version. See below.
+	-# Start Qt Creator and configure the version of Qt that you want to use:
+		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you have at least one Qt 4.8 version
+			(Compilation will fail if you try to use Qt 5). This could be either Qt in PATH, or a custom Qt version that
+			you compiled yourself. Compiling your own version of Qt is required if you want to use Envision with projects
+			that have more than a few tens of classes. See below for Qt compilation instructions.
+		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
+			of Qt.
 	-# Open the \c envision.pro file with Qt Creator.
 	-# In the Projects view, change the arguments of make to specify parallel compilation and the *install* target:
 		\verbatim-j8 install\endverbatim
