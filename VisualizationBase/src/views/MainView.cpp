@@ -28,7 +28,6 @@
 #include "Scene.h"
 #include "../cursor/Cursor.h"
 #include "../items/Item.h"
-#include "../items/RootItem.h"
 
 #include "Logger/src/Timer.h"
 
