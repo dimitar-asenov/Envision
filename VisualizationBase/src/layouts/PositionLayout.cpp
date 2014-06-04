@@ -28,12 +28,21 @@
 #include "shapes/Shape.h"
 #include "../renderer/ModelRenderer.h"
 #include "../node_extensions/FullDetailSize.h"
+#include "../views/MainView.h"
 
 #include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( PositionLayout, "layout" )
+
+constexpr bool ENABLE_AUTOMATIC_SEMANTIC_ZOOM = false;
+
+// TODO: Do this properly.
+// Defines the semantic zoom level to be used when abstracting an item.
+// for performance reasons this is a constant but in the interest of general consistency its value should be
+// scene()->defaultRenderer()->semanticZoomLevelId("project_module_class_method_abstraction");
+constexpr int FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL = 5;
 
 PositionLayout::PositionLayout(Item* parent, const StyleType* style) :
 Super(parent, style)
@@ -149,7 +158,12 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 			}
 		}
 
-		if (i >= items.size() ) insert( renderer->render(this, nodes[i]));	// This node is new
+		if (i >= items.size() )
+		{
+			if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM)
+				setChildNodeSemanticZoomLevel(nodes[i], FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
+			insert( renderer->render(this, nodes[i] ));	// This node is new
+		}
 		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
 		else
 		{
@@ -169,6 +183,8 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 			// The node was not found, insert a visualization here
 			if (!found )
 			{
+				if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM)
+					setChildNodeSemanticZoomLevel(nodes[i], FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
 				insert( renderer->render(this, nodes[i]) );
 				swap(i, items.size()-1);
 			}
@@ -324,7 +340,11 @@ void PositionLayout::updateGeometry(int, int)
 	// It is important to batch the modifications, since model::endModification() send a notification signal.
 	for (auto m : modifiedModels) m->endModification(false);
 
-	adjustChildrenSemanticZoom();
+	if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM && adjustChildrenSemanticZoom())
+	{
+		setUpdateNeeded(RepeatUpdate);
+		return;
+	}
 
 	QPoint topLeft;
 	QPoint bottomRight;
@@ -367,7 +387,7 @@ int PositionLayout::focusedElementIndex() const
 
 bool PositionLayout::isSensitiveToScale() const
 {
-	return true;
+	return ENABLE_AUTOMATIC_SEMANTIC_ZOOM;
 }
 
 void PositionLayout::determineChildren()
@@ -381,24 +401,29 @@ void PositionLayout::determineChildren()
 bool PositionLayout::adjustChildrenSemanticZoom()
 {
 	// An item gets abstracted if its perceived width falls below this value
-	const qreal ABSTRACTION_THRESHOLD = 200;
-
-	//TODO: do this properly.
-	// Defines the semantic zoom level to be used when abstracting an item.
-	// for performance reasons this is a constant but in the interest of general consistency its value should be
-	// scene()->defaultRenderer()->semanticZoomLevelId("project_module_class_method_abstraction");
-	const int FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL = 5;
+	constexpr qreal ABSTRACTION_THRESHOLD = 200;
 
 	bool changesMade = false;
 
 	qreal geometricZoomScale = mainViewScalingFactor();
 	if (geometricZoomScale != previousMainViewScalingFactor())
 	{
+		// Computes wherehter this Layout is entirely outside of view
+		bool inViewport = false;
+		for (auto views : scene()->views())
+		{
+			if (auto mv = dynamic_cast<MainView*>(views))
+			{
+				inViewport = mv->visibleRect().intersects(mapRectToScene(0,0, widthInLocal(), heightInLocal()));
+				break;
+			}
+		}
+
 		for(auto item : items)
 		{
 			if (geometricZoomScale < 1)
 			{
-				if (item->totalScale() * geometricZoomScale * item->widthInLocal() < ABSTRACTION_THRESHOLD)
+				if (!inViewport || (item->totalScale() * geometricZoomScale * item->widthInLocal() < ABSTRACTION_THRESHOLD))
 				{
 					if (item->semanticZoomLevel() != FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
 					{
@@ -408,7 +433,7 @@ bool PositionLayout::adjustChildrenSemanticZoom()
 				}
 				else
 				{
-					if (item->semanticZoomLevel() == FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
+					if (inViewport && item->semanticZoomLevel() == FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL)
 					{
 						clearChildNodeSemanticZoomLevel(item->node());
 						changesMade = true;
@@ -418,8 +443,11 @@ bool PositionLayout::adjustChildrenSemanticZoom()
 			else
 			{
 				// if the geometric zoom scale is larger or equal to 1 everything should be shown in full detail
-				clearChildNodeSemanticZoomLevel(item->node());
-				changesMade = true;
+				if(definesChildNodeSemanticZoomLevel(item->node()))
+				{
+					clearChildNodeSemanticZoomLevel(item->node());
+					changesMade = true;
+				}
 			}
 		}
 	}
