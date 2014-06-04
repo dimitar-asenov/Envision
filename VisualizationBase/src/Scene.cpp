@@ -135,17 +135,17 @@ void Scene::updateItems()
 				break;
 			}
 
-	// Update Top level items
-	for (auto item : topLevelItems_)
-		item->updateSubtree();
-
 	// Update items on zoom
 	if (mainViewScalingFactorChanged_)
 	{
 		mainViewScalingFactorChanged_ = false;
 		for (auto item : itemsSensitiveToScale_)
-				item->changeGeometry();
+				item->setUpdateNeeded(Item::StandardUpdate);
 	}
+	
+	// Update Top level items
+	for (auto item : topLevelItems_)
+		item->updateSubtree();
 
 	Core::Profiler::stop("Initial item update");
 
