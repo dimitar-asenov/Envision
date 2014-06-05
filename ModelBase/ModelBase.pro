@@ -3,7 +3,8 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/nodes/NameText.h \
+HEADERS += src/persistence/NodeIdMap.h \
+    src/nodes/NameText.h \
     src/nodes/UsedLibrary.h \
     src/SymbolMatcher.h \
     src/commands/CompositeNodeChangeChild.h \
@@ -52,7 +53,8 @@ HEADERS += src/nodes/NameText.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/nodes/NameText.cpp \
+SOURCES += src/persistence/NodeIdMap.cpp \
+    src/nodes/NameText.cpp \
     src/nodes/UsedLibrary.cpp \
     src/SymbolMatcher.cpp \
     src/commands/CompositeNodeChangeChild.cpp \

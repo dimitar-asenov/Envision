@@ -28,9 +28,9 @@
 
 #include "../filepersistence_api.h"
 #include "GenericNode.h"
-#include "../NodeIdMap.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
+#include "ModelBase/src/persistence/NodeIdMap.h"
 
 namespace FilePersistence {
 
@@ -102,7 +102,6 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		GenericNodeAllocator* allocator_{};
 		GenericNode* persisted_{};
-		NodeIdMap ids_;
 
 		/**
 		 * This is a list of all references which have been constructed and which have a target that is not yet set.

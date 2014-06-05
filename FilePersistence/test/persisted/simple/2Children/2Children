@@ -1,7 +1,6 @@
-model model 6
-	2Children BinaryNode 0
-		name NameText 1. S_Root
-		left BinaryNode 2
-			name NameText 3. S_Left child
-		right BinaryNode 4
-			name NameText 5. S_Right child
+2Children BinaryNode {00000000-0000-0000-0000-000000000001}
+	name NameText {00000000-0000-0000-0000-000000000002}. S_RootNode
+	left BinaryNode {00000000-0000-0000-0000-000000000003}
+		name NameText {00000000-0000-0000-0000-000000000004}. S_Left child
+	right BinaryNode {00000000-0000-0000-0000-000000000005}
+		name NameText {00000000-0000-0000-0000-000000000006}. S_Right child

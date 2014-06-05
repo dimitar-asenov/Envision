@@ -53,8 +53,10 @@ TEST(FilePersistence, CopyToClipboard)
 
 	QString clipboardText = QApplication::clipboard()->text().simplified();
 	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <BinaryNode name=\"0\"> <NameText name=\"name\">"
-			"S_Root</NameText> <BinaryNode name=\"left\"> <NameText name=\"name\">S_Left child</NameText> </BinaryNode> "
-			"<BinaryNode name=\"right\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode> </BinaryNode> </clipboard>"
+			"S_RootNode</NameText>"
+			" <BinaryNode name=\"left\"> <NameText name=\"name\">S_Left child</NameText> </BinaryNode>"
+			" <BinaryNode name=\"right\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode>"
+			" </BinaryNode> </clipboard>"
 			,clipboardText);
 
 	QList<const Model::Node*> nodes;
@@ -63,8 +65,9 @@ TEST(FilePersistence, CopyToClipboard)
 	sc.putNodes(nodes);
 
 	clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <NameText name=\"0\">S_Root</NameText> "
-			"<BinaryNode name=\"1\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode> </clipboard>",clipboardText);
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <NameText name=\"0\">S_RootNode</NameText> "
+			"<BinaryNode name=\"1\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode> </clipboard>",
+						 clipboardText);
 }
 
 TEST(FilePersistence, CopyPartialToClipboard)
@@ -108,7 +111,7 @@ TEST(FilePersistence, PasteTextFromClipboard)
 	model.beginModification(root->left()->name(), "paste");
 	root->left()->name()->load(sc);
 	model.endModification();
-	CHECK_STR_EQUAL("Root", root->left()->name()->get());
+	CHECK_STR_EQUAL("RootNode", root->left()->name()->get());
 }
 
 TEST(FilePersistence, PasteBinaryFromClipboard)
@@ -134,7 +137,7 @@ TEST(FilePersistence, PasteBinaryFromClipboard)
 	left->load(sc);
 	model.endModification();
 
-	CHECK_STR_EQUAL("Root", left->name()->get());
+	CHECK_STR_EQUAL("RootNode", left->name()->get());
 	CHECK_CONDITION(left->left());
 	CHECK_CONDITION(left->right());
 	CHECK_STR_EQUAL("Left child", left->left()->name()->get());

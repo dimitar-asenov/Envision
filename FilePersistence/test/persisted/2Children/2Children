@@ -1,12 +1,10 @@
 <!DOCTYPE EnvisionFilePersistence>
-<model nextid="6">
- <BinaryNode id="0" name="2Children">
-  <NameText id="1" name="name">S_Root</NameText>
-  <BinaryNode id="2" name="left">
-   <NameText id="3" name="name">S_Left child</NameText>
-  </BinaryNode>
-  <BinaryNode id="4" name="right">
-   <NameText id="5" name="name">S_Right child</NameText>
-  </BinaryNode>
+<BinaryNode id="{00000000-0000-0000-0000-000000000001}" name="2Children">
+ <NameText id="{00000000-0000-0000-0000-000000000002}" name="name">S_RootNode</NameText>
+ <BinaryNode id="{00000000-0000-0000-0000-000000000003}" name="left">
+  <NameText id="{00000000-0000-0000-0000-000000000004}" name="name">S_Left child</NameText>
  </BinaryNode>
-</model>
+ <BinaryNode id="{00000000-0000-0000-0000-000000000005}" name="right">
+  <NameText id="{00000000-0000-0000-0000-000000000006}" name="name">S_Right child</NameText>
+ </BinaryNode>
+</BinaryNode>

@@ -32,6 +32,7 @@
 #include "Reference.h"
 #include "Core/src/AdapterManager.h"
 #include "UsedLibrary.h"
+#include "../persistence/NodeIdMap.h"
 
 using namespace Logger;
 
@@ -64,6 +65,7 @@ Node::Node(Node* parent) : parent_{parent}, model_{parent ? parent->model_ : nul
 Node::~Node()
 {
 	partiallyLoadedNodes().remove(this);
+	NodeIdMap::remove(this);
 }
 
 Node* Node::createDefaultInstance(Node*)

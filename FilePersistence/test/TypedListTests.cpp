@@ -112,6 +112,9 @@ TEST(FilePersistence, SavingTypedList)
 		two->set("two");
 		list->append(two);
 		model.endModification();
+		NodeIdMap::setId(list, "{00000000-0000-0000-0000-000000000001}");
+		NodeIdMap::setId(one, "{00000000-0000-0000-0000-000000000002}");
+		NodeIdMap::setId(two, "{00000000-0000-0000-0000-000000000003}");
 
 		model.setName("typedList");
 		model.save(store);

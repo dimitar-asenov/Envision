@@ -1,3 +1,2 @@
-model model 2
-	rootOnly BinaryNode 0
-		name NameText 1. S_Title
+rootOnly BinaryNode {00000000-0000-0000-0000-000000000001}
+	name NameText {00000000-0000-0000-0000-000000000002}. S_Title

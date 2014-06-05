@@ -1,7 +1,0 @@
-<!DOCTYPE EnvisionFilePersistence>
-<BinaryNodePersistenceUnit id="2" name="left">
- <NameText id="3" name="name">S_Left child</NameText>
- <BinaryNode id="4" name="left">
-  <NameText id="5" name="name">S_in a new unit</NameText>
- </BinaryNode>
-</BinaryNodePersistenceUnit>

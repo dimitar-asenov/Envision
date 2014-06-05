@@ -2,15 +2,15 @@
     <qresource prefix="/FilePersistence">
         <file>test/persisted/2Children/2Children</file>
         <file>test/persisted/rootOnly/rootOnly</file>
-        <file>test/persisted/units/2</file>
+        <file>test/persisted/units/{00000000-0000-0000-0000-000000000003}</file>
         <file>test/persisted/units/units</file>
         <file>test/persisted/partial/partial</file>
         <file>test/persisted/typedList/typedList</file>
-        <file>test/persisted/simple/2Children/2Children</file>
         <file>test/persisted/simple/rootOnly/rootOnly</file>
-        <file>test/persisted/simple/units/2</file>
+        <file>test/persisted/simple/units/{00000000-0000-0000-0000-000000000003}</file>
         <file>test/persisted/simple/units/units</file>
         <file>test/persisted/simple/partial/partial</file>
         <file>test/persisted/simple/typedList/typedList</file>
+        <file>test/persisted/simple/2Children/2Children</file>
     </qresource>
 </RCC>

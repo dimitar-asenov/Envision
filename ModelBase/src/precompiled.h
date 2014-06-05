@@ -43,7 +43,7 @@
 
 #include <QtCore/QReadWriteLock>
 #include <QtCore/QThread>
-
+#include <QtCore/QUuid>
 #include <QtCore/QRegExp>
 
 #include <iterator>

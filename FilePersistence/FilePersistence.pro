@@ -10,7 +10,6 @@ HEADERS += src/simple/GenericNode.h \
     src/simple/SimpleTextFileStore.h \
     src/FilePersistenceException.h \
     src/FileStore.h \
-    src/NodeIdMap.h \
     src/SystemClipboard.h \
     src/XMLModel.h \
     src/filepersistence_api.h \
@@ -19,7 +18,6 @@ HEADERS += src/simple/GenericNode.h \
 SOURCES += src/simple/GenericNode.cpp \
     src/simple/GenericNodeAllocator.cpp \
     src/simple/SimpleTextFileStore.cpp \
-    src/NodeIdMap.cpp \
     test/TypedListTests.cpp \
     test/ClipboardTests.cpp \
     src/XMLModel.cpp \

@@ -36,7 +36,7 @@ class PersistedValue: public PersistedNode
 {
 	public:
 		PersistedValue();
-		virtual ~PersistedValue();
+		virtual ~PersistedValue() override;
 		void set(const T& value);
 		T& value();
 
@@ -53,7 +53,7 @@ template < class T>
 class PersistedValue < QList<T*> >: public PersistedNode
 {
 	public:
-		~PersistedValue();
+		virtual ~PersistedValue() override;
 		QList<T*>& value();
 
 	private:

@@ -1,6 +1,5 @@
-model model 8
-	units BinaryNode 0
-		name NameText 1. S_Root
-		left persistencenewunit 2
-		right BinaryNode 6
-			name NameText 7. S_Right child
+units BinaryNode {00000000-0000-0000-0000-000000000001}
+	name NameText {00000000-0000-0000-0000-000000000002}. S_Root
+	left persistencenewunit {00000000-0000-0000-0000-000000000003}
+	right BinaryNode {00000000-0000-0000-0000-000000000007}
+		name NameText {00000000-0000-0000-0000-000000000008}. S_Right child

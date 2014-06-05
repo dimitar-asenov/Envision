@@ -94,7 +94,7 @@ TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 		CHECK_STR_EQUAL("BinaryNode", root->typeName() );
-		CHECK_STR_EQUAL("Root", root->name()->get() );
+		CHECK_STR_EQUAL("RootNode", root->name()->get() );
 		CHECK_CONDITION(root->left() != nullptr);
 		CHECK_CONDITION(root->right() != nullptr);
 		CHECK_STR_EQUAL("BinaryNode", root->left()->typeName() );

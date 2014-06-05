@@ -28,7 +28,6 @@
 
 #include "filepersistence_api.h"
 #include "XMLModel.h"
-#include "NodeIdMap.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
@@ -106,7 +105,6 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		void checkIsWorking() const;
 
 		XMLModel* xml;
-		NodeIdMap ids;
 
 		/**
 		 * \brief This is a list of all references which have been constructed and which have a target that is not yet

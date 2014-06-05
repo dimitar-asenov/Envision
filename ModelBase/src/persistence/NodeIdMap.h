@@ -26,32 +26,26 @@
 
 #pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "PersistentStore.h"
 
-namespace FilePersistence {
+namespace Model {
 
-class NodeIdMap {
+class MODELBASE_API NodeIdMap {
 	public:
-		typedef int NodeIdType;
+		static NodeIdType id(const Node* node);
+		static void setId(const Node* node, NodeIdType id);
 
-		NodeIdMap();
+		static NodeIdType generateNewId();
+		static const Node* node(NodeIdType id);
 
-		NodeIdType getId(const Model::Node* node);
-		void setId(const Model::Node* node, NodeIdType id);
-
-		NodeIdType getNextId();
-		void setNextId(NodeIdType nextId);
-		const Model::Node* getNodeForId(NodeIdType id) const;
-
-		void clear();
+		static void remove(const Node* node);
 
 	private:
-		NodeIdType nextId_;
-		QHash<const Model::Node*, NodeIdType> map;
+		static QHash<const Node*, NodeIdType> nodeToId;
+		static QHash<NodeIdType, const Node*> idToNode;
 };
 
-inline NodeIdMap::NodeIdType NodeIdMap::getNextId() { return nextId_; }
-inline void NodeIdMap::setNextId(NodeIdType nextId) { nextId_ = nextId; }
-inline void NodeIdMap::clear() { map.clear(); }
+inline NodeIdType NodeIdMap::generateNewId() { return QUuid::createUuid(); }
+inline const Node* NodeIdMap::node(NodeIdType id) { return idToNode.value(id);}
 
-} /* namespace FilePersistence */
+}

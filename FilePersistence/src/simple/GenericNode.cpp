@@ -133,7 +133,7 @@ GenericNode* GenericNode::addChild(GenericNode* child)
 	return child;
 }
 
-GenericNode* GenericNode::find(NodeIdMap::NodeIdType id)
+GenericNode* GenericNode::find(Model::NodeIdType id)
 {
 	ensureDataRead();
 	if (id_ == id) return this;
@@ -160,7 +160,7 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 {
 	for(int i = 0; i<tabLevel; ++i) stream << '\t';
 	stream << name_ << ' ' << type_;
-	if (id_ >= 0) stream << ' ' << id_;
+	if (!id_.isNull()) stream << ' ' << id_;
 	if (hasValue())
 	{
 		if (valueType_ == STRING_VALUE) stream << ". " << PREFIX_STRING << escape(value_);
@@ -188,7 +188,7 @@ GenericNode* GenericNode::load(const QString& filename, bool lazy, GenericNodeAl
 
 	// We need to make a copy since the memory will be unmapped after the file object gets out of scope.
 	auto data = new char[totalFileSize];
-	memcpy(data,mapped, totalFileSize);
+	memcpy(data, mapped, totalFileSize);
 
 	QList<GenericNode*> nodeStack;
 	GenericNode* top = nullptr;
@@ -266,7 +266,7 @@ void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEn
 	if(moreHeaderParts)
 	{
 		bool isId = true;
-		NodeIdMap::NodeIdType id = toId(data, start, headerPartEnd, isId);
+		Model::NodeIdType id = toId(data, start, headerPartEnd, isId);
 
 		if ( isId ) node->setId( id );
 		else throw FilePersistenceException("Unknown node header element "
@@ -373,23 +373,58 @@ QString GenericNode::rawStringToQString(char* data, int start, int endInclusive)
 	return res;
 }
 
-int GenericNode::toId(char* data, int start, int endInclusive, bool& ok)
+Model::NodeIdType GenericNode::toId(char* data, int start, int endInclusive, bool& ok)
 {
-	int id = 0;
-
-	for(int i = start; i<=endInclusive; ++i)
+	// length of "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}" is 38.
+	char* idStart = data + start;
+	if (endInclusive - start != 37 || data[start] != '{' || data[endInclusive] != '}'
+		 || idStart[9] != '-' || idStart[14] != '-' || idStart[19] != '-' || idStart[24] != '-')
 	{
-		auto c = data[i];
-		if (c >= '0' && c<= '9') id = id*10 + (c - '0');
-		else
-		{
-			ok = false;
-			return 0;
-		}
+		ok = false;
+		return {};
 	}
 
 	ok = true;
-	return id;
+	uint l = hexDigitToChar(idStart[1], ok) << 28
+		| hexDigitToChar(idStart[2], ok) << 24
+		| hexDigitToChar(idStart[3], ok) << 20
+		| hexDigitToChar(idStart[4], ok) << 16
+		| hexDigitToChar(idStart[5], ok) << 12
+		| hexDigitToChar(idStart[6], ok) << 8
+		| hexDigitToChar(idStart[7], ok) << 4
+		| hexDigitToChar(idStart[8], ok);
+	ushort w1 = hexDigitToChar(idStart[10], ok) << 12
+		| hexDigitToChar(idStart[11], ok) << 8
+		| hexDigitToChar(idStart[12], ok) << 4
+		| hexDigitToChar(idStart[13], ok);
+	ushort w2 = hexDigitToChar(idStart[15], ok) << 12
+		| hexDigitToChar(idStart[16], ok) << 8
+		| hexDigitToChar(idStart[17], ok) << 4
+		| hexDigitToChar(idStart[18], ok);
+	uchar b1 = hexDigitToChar(idStart[20], ok) << 4 | hexDigitToChar(idStart[21],ok);
+	uchar b2 = hexDigitToChar(idStart[22], ok) << 4 | hexDigitToChar(idStart[23],ok);
+	uchar b3 = hexDigitToChar(idStart[25], ok) << 4 | hexDigitToChar(idStart[26],ok);
+	uchar b4 = hexDigitToChar(idStart[27], ok) << 4 | hexDigitToChar(idStart[28],ok);
+	uchar b5 = hexDigitToChar(idStart[29], ok) << 4 | hexDigitToChar(idStart[30],ok);
+	uchar b6 = hexDigitToChar(idStart[31], ok) << 4 | hexDigitToChar(idStart[32],ok);
+	uchar b7 = hexDigitToChar(idStart[33], ok) << 4 | hexDigitToChar(idStart[34],ok);
+	uchar b8 = hexDigitToChar(idStart[35], ok) << 4 | hexDigitToChar(idStart[36],ok);
+
+	if (!ok) return {};
+	return QUuid(l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
+}
+
+uchar GenericNode::hexDigitToChar(char d, bool& ok)
+{
+	if (d >= '0' && d<= '9') return d - '0';
+
+	// lowercase
+	constexpr char bitMask = 'A' ^ 'a';
+	d |= bitMask;
+	if (d >= 'a' && d<= 'f') return d - 'a' + 10;
+
+	ok = false;
+	return 0;
 }
 
 bool GenericNode::nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd)
@@ -482,7 +517,7 @@ void GenericNode::resetForLoading(char* data, int lineStart, int lineEndInclusiv
 	type_.clear();
 	value_.clear();
 	valueType_ = NO_VALUE;
-	id_ = -1;
+	id_ = {};
 	children_.clear(); // No need to delete these
 }
 

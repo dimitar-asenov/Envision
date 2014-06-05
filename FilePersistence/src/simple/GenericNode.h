@@ -28,7 +28,7 @@
 
 #include "../filepersistence_api.h"
 #include "../FilePersistenceException.h"
-#include "../NodeIdMap.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
 namespace FilePersistence {
 
@@ -48,7 +48,7 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(double value);
 		void setValue(long value);
 
-		void setId(NodeIdMap::NodeIdType id);
+		void setId(Model::NodeIdType id);
 
 		GenericNode* addChild(GenericNode* child);
 		GenericNode* child(const QString& name);
@@ -66,9 +66,9 @@ class FILEPERSISTENCE_API GenericNode {
 		bool hasIntValue() const;
 		bool hasDoubleValue() const;
 
-		GenericNode* find(NodeIdMap::NodeIdType id);
+		GenericNode* find(Model::NodeIdType id);
 
-		NodeIdMap::NodeIdType id() const;
+		Model::NodeIdType id() const;
 
 		void save(QTextStream& stream, int tabLevel = 0);
 		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
@@ -86,7 +86,7 @@ class FILEPERSISTENCE_API GenericNode {
 		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 		ValueType valueType_{};
 
-		NodeIdMap::NodeIdType id_{-1};
+		Model::NodeIdType id_{};
 		QList<GenericNode*> children_;
 
 		char* data_{};
@@ -104,7 +104,8 @@ class FILEPERSISTENCE_API GenericNode {
 		static QString rawStringToQString(char* data, int startAt, int endInclusive);
 		static QString escape(const QString& line);
 
-		static int toId(char* data, int start, int endInclusive, bool& ok);
+		static Model::NodeIdType toId(char* data, int start, int endInclusive, bool& ok);
+		static uchar hexDigitToChar(char d, bool& ok);
 
 		static bool nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd);
 		static int indexOf(const char c, char* data, int start, int endInclusive);
@@ -113,12 +114,12 @@ class FILEPERSISTENCE_API GenericNode {
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
-inline void GenericNode::setId(NodeIdMap::NodeIdType id) { id_ = id; }
+inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
 inline bool GenericNode::hasValue() const { ensureDataRead(); return valueType_ != NO_VALUE; }
-inline NodeIdMap::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
+inline Model::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
 inline const QList<GenericNode*>& GenericNode::children() const { ensureDataRead(); return children_; }
 
 inline bool GenericNode::hasStringValue() const { ensureDataRead(); return valueType_ == STRING_VALUE; }

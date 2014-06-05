@@ -1,11 +1,9 @@
 <!DOCTYPE EnvisionFilePersistence>
-<model nextid="6">
- <PartialList id="0" name="partial">
-  <List id="1" name="list">
-   <Text id="2" name="0">S_one</Text>
-   <Text id="3" name="1">S_two</Text>
-   <Text id="4" name="2">S_three</Text>
-   <Text id="5" name="3">S_four</Text>
-  </List>
- </PartialList>
-</model>
+<PartialList id="{00000000-0000-0000-0000-000000000001}" name="partial">
+ <List id="{00000000-0000-0000-0000-000000000002}" name="list">
+  <Text id="{00000000-0000-0000-0000-000000000003}" name="0">S_one</Text>
+  <Text id="{00000000-0000-0000-0000-000000000004}" name="1">S_two</Text>
+  <Text id="{00000000-0000-0000-0000-000000000005}" name="2">S_three</Text>
+  <Text id="{00000000-0000-0000-0000-000000000006}" name="3">S_four</Text>
+ </List>
+</PartialList>

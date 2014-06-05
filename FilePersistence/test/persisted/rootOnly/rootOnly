@@ -1,6 +1,4 @@
 <!DOCTYPE EnvisionFilePersistence>
-<model nextid="2">
- <BinaryNode id="0" name="rootOnly">
-  <NameText id="1" name="name">S_Title</NameText>
- </BinaryNode>
-</model>
+<BinaryNode id="{00000000-0000-0000-0000-000000000001}" name="rootOnly">
+ <NameText id="{00000000-0000-0000-0000-000000000002}" name="name">S_Title</NameText>
+</BinaryNode>

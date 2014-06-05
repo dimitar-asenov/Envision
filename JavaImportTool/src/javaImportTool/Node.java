@@ -33,6 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Stack;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -48,12 +49,9 @@ public class Node {
 	private Node parent_;
 	private String tag_;
 	private String name_;
-	private long id_;
+	private UUID id_;
 	private String symbol_ = null; // only set this if this node defines a symbol (e.g. class or method definition)
 	private String text_ = null; // only set this if this is a terminal node and contains text (e.g. a literal)
-	
-	// Each new node is assigned a unique id
-	private static long nextId_ = 0;
 	
 	// These are used when writing the nodes to a stream
 	private static String outputDir_ = null;
@@ -91,7 +89,7 @@ public class Node {
 	{
 		parent_ = parent;
 		tag_ = tag;
-		id_ = nextId_++;
+		id_ = UUID.randomUUID();
 		NodeDescriptors.initialize(this, tag_);
 	}
 	
@@ -197,17 +195,9 @@ public class Node {
 			out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
 		
 		if (format_ == OutputFormat.CLIPBOARD) out_.peek().println("<clipboard>");
-		else
-		{
-			setName(symbol_);
-			if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
-				out_.peek().println("<model nextid=\"" + nextId_ + "\">");
-			else if (format_ == OutputFormat.SIMPLE)
-				out_.peek().println("model model " + nextId_);
-		}
+		else setName(symbol_);
 		renderTree("\t", false);
-		if (format_ == OutputFormat.XML) out_.peek().println("</model>");
-		else if (format_ == OutputFormat.CLIPBOARD) out_.peek().println("</clipboard>");
+		if (format_ == OutputFormat.CLIPBOARD) out_.peek().println("</clipboard>");
 	}
 	
 	
@@ -220,12 +210,12 @@ public class Node {
 			if (format_ == OutputFormat.XML)
 			{
 				out_.peek().println(indentation + "<persistencenewunit name=\""
-						+ name_ + "\">S_" + id_ + "</persistencenewunit>");
+						+ name_ + "\">S_{" + id_ + "}</persistencenewunit>");
 			}
 			else if (format_ == OutputFormat.SIMPLE)
-				out_.peek().println(indentation + name_ + " persistencenewunit " + id_ );
+				out_.peek().println(indentation + name_ + " persistencenewunit {" + id_ +"}");
 			
-			out_.push( new PrintStream(new File(outputDir_ + id_), "UTF-8") );
+			out_.push( new PrintStream(new File(outputDir_ + "{" + id_ + "}"), "UTF-8") );
 			if (format_ == OutputFormat.XML) out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
 			renderTree("", false);
 			out_.pop().close();
@@ -239,7 +229,7 @@ public class Node {
 			if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
 			{
 				out_.peek().print(indentation + "<" + tag_);
-				if (format_ == OutputFormat.XML) out_.peek().print(" id=\"" + id_ + "\"");
+				if (format_ == OutputFormat.XML) out_.peek().print(" id=\"{" + id_ + "}\"");
 				out_.peek().print(" name=\"" + name_ + "\"");
 				
 				if (text_ != null) out_.peek().println(">" + StringEscapeUtils.escapeXml(text_) + "</" + tag_ + ">");
@@ -254,7 +244,7 @@ public class Node {
 			}
 			else if (format_ == OutputFormat.SIMPLE)
 			{
-				out_.peek().print(indentation + name_ + " " + tag_ + " " + id_);
+				out_.peek().print(indentation + name_ + " " + tag_ + " {" + id_+"}");
 				if (text_ != null) out_.peek().print(". " + escape(text_));
 				out_.peek().println();
 				for(Node child : children_) child.renderTree(indentation + "\t", true);

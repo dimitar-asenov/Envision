@@ -27,6 +27,8 @@
 #include "XMLModel.h"
 #include "FilePersistenceException.h"
 
+#include "ModelBase/src/persistence/NodeIdMap.h"
+
 namespace FilePersistence {
 
 static const char* XML_DOM_TYPE = "EnvisionFilePersistence";
@@ -116,14 +118,9 @@ void XMLModel::saveNext(const QString& tag)
 	elemStack.append(elem);
 }
 
-void XMLModel::setNextId(Model::NodeIdType id)
-{
-	elem.setAttribute("nextid", QString::number(id));
-}
-
 void XMLModel::setId(Model::NodeIdType id)
 {
-	elem.setAttribute("id", QString::number(id));
+	elem.setAttribute("id", id.toString());
 }
 
 void XMLModel::setName(const QString& name)
@@ -243,7 +240,7 @@ bool XMLModel::goToElement(Model::NodeIdType id, bool startFromRoot)
 
 	if (elem.isNull()) return false;
 
-	if ( elem.hasAttribute("id") && getId() == id) return true;
+	if ( elem.hasAttribute("id") && (id.isNull() || getId() == id)) return true;
 
 	QDomElement child = elem.firstChildElement();
 	while ( !child.isNull() )
@@ -291,25 +288,12 @@ QString XMLModel::getType() const
 	return elem.tagName();
 }
 
-Model::NodeIdType XMLModel::getNextId() const
-{
-	if ( elem.hasAttribute("nextid") )
-	{
-		bool ok = true;
-		Model::NodeIdType id = elem.attribute("nextid", "error").toInt(&ok);
-		if (ok) return id;
-		else throw FilePersistenceException("Incorrect next id '" + elem.attribute("nextid") + "' for node of type: " + elem.tagName());
-	}
-	else throw FilePersistenceException("Next id not found for node of type: " + elem.tagName());
-}
-
 Model::NodeIdType XMLModel::getId() const
 {
 	if ( elem.hasAttribute("id") )
 	{
-		bool ok = true;
-		Model::NodeIdType id = elem.attribute("id", "error").toInt(&ok);
-		if (ok) return id;
+		Model::NodeIdType id = elem.attribute("id", "error");
+		if (!id.isNull()) return id;
 		else throw FilePersistenceException("Incorrect id '" + elem.attribute("id") + "' for node of type: " + elem.tagName());
 	}
 	else throw FilePersistenceException("Id not found for node of type: " + elem.tagName());

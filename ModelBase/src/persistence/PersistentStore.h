@@ -30,7 +30,7 @@
 
 namespace Model {
 
-typedef long long NodeIdType;
+using NodeIdType = QUuid;
 
 class Node;
 class Model;

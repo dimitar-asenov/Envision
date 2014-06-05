@@ -1,7 +1,5 @@
 <!DOCTYPE EnvisionFilePersistence>
-<model nextid="3">
- <TypedListOfText id="0" name="typedList">
-  <Text id="1" name="0">S_one</Text>
-  <Text id="2" name="1">S_two</Text>
- </TypedListOfText>
-</model>
+<TypedListOfText id="{00000000-0000-0000-0000-000000000001}" name="typedList">
+ <Text id="{00000000-0000-0000-0000-000000000002}" name="0">S_one</Text>
+ <Text id="{00000000-0000-0000-0000-000000000003}" name="1">S_two</Text>
+</TypedListOfText>

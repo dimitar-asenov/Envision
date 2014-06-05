@@ -66,17 +66,21 @@ TEST(FilePersistence, SaveRootOnly)
 		model.beginModification(root->name(), "set title");
 		root->name()->set("Title");
 		model.endModification();
+		NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
+		NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
 
 		model.setName("rootOnly");
 		model.save(store);
 
 		if (i==0)
 		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/rootOnly/rootOnly", testDir + "/rootOnly/rootOnly");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/rootOnly/rootOnly",
+					testDir + "/rootOnly/rootOnly");
 		}
 		else if ( i==1 )
 		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/rootOnly/rootOnly", testDir +"/rootOnly/rootOnly");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/rootOnly/rootOnly",
+					testDir +"/rootOnly/rootOnly");
 		}
 
 		SAFE_DELETE(store);
@@ -109,7 +113,7 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 		Model::Model model(root);
 
 		model.beginModification(root, "set title");
-		root->name()->set("Root");
+		root->name()->set("RootNode");
 		TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
 		root->setLeft(left);
 		TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
@@ -118,17 +122,25 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 		left->name()->set("Left child");
 		right->name()->set("Right child");
 		model.endModification();
+		NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
+		NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
+		NodeIdMap::setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
+		NodeIdMap::setId(root->left()->name(), "{00000000-0000-0000-0000-000000000004}");
+		NodeIdMap::setId(root->right(), "{00000000-0000-0000-0000-000000000005}");
+		NodeIdMap::setId(root->right()->name(), "{00000000-0000-0000-0000-000000000006}");
 
 		model.setName("2Children");
 		model.save(store);
 
 		if (i==0)
 		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/2Children/2Children", testDir + "/2Children/2Children");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/2Children/2Children",
+					testDir + "/2Children/2Children");
 		}
 		else if ( i==1 )
 		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/2Children/2Children", testDir +"/2Children/2Children");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/2Children/2Children",
+					testDir +"/2Children/2Children");
 		}
 
 		SAFE_DELETE(store);
@@ -173,6 +185,14 @@ TEST(FilePersistence, SaveMultipleUnits)
 		leftleft->name()->set("in a new unit");
 		right->name()->set("Right child");
 		model.endModification();
+		NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
+		NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
+		NodeIdMap::setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
+		NodeIdMap::setId(root->left()->name(), "{00000000-0000-0000-0000-000000000004}");
+		NodeIdMap::setId(root->left()->left(), "{00000000-0000-0000-0000-000000000005}");
+		NodeIdMap::setId(root->left()->left()->name(), "{00000000-0000-0000-0000-000000000006}");
+		NodeIdMap::setId(root->right(), "{00000000-0000-0000-0000-000000000007}");
+		NodeIdMap::setId(root->right()->name(), "{00000000-0000-0000-0000-000000000008}");
 
 		model.setName("units");
 		model.save(store);
@@ -180,12 +200,14 @@ TEST(FilePersistence, SaveMultipleUnits)
 		if (i==0)
 		{
 			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/units", testDir + "/units/units");
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/2", testDir + "/units/2");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/{00000000-0000-0000-0000-000000000003}",
+					testDir + "/units/{00000000-0000-0000-0000-000000000003}");
 		}
 		else if ( i==1 )
 		{
 			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/units/units", testDir +"/units/units");
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/units/2", testDir +"/units/2");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/units/{00000000-0000-0000-0000-000000000003}",
+					testDir +"/units/{00000000-0000-0000-0000-000000000003}");
 		}
 
 		SAFE_DELETE(store);

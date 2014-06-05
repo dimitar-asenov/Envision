@@ -25,43 +25,44 @@
  **********************************************************************************************************************/
 
 #include "NodeIdMap.h"
-#include "FilePersistenceException.h"
 
-namespace FilePersistence {
+namespace Model {
 
-NodeIdMap::NodeIdMap()
-	: nextId_(0)
+QHash<const Node*, NodeIdType> NodeIdMap::nodeToId;
+QHash<NodeIdType, const Node*> NodeIdMap::idToNode;
+
+NodeIdType NodeIdMap::id(const Node* node)
 {
-}
+	QHash<const Node*, NodeIdType>::const_iterator iter = nodeToId.find(node);
+	if ( iter != nodeToId.end() ) return *iter;
 
-NodeIdMap::NodeIdType NodeIdMap::getId(const Model::Node* node)
-{
-	QHash<const Model::Node*, NodeIdType>::const_iterator iter = map.find(node);
-	if ( iter != map.end() ) return *iter;
-
-	int id = nextId_++;
-	map.insert(node, id);
+	NodeIdType id = generateNewId();
+	nodeToId.insert(node, id);
+	idToNode.insert(id, node);
 	return id;
 }
 
-void NodeIdMap::setId(const Model::Node* node, NodeIdType id)
+void NodeIdMap::setId(const Node* node, NodeIdType id)
 {
-	QHash<const Model::Node*, NodeIdType>::const_iterator iter = map.find(node);
-	if (iter != map.end())
+	QHash<const Node*, NodeIdType>::const_iterator iter = nodeToId.find(node);
+	if (iter != nodeToId.end())
 	{
-		if (*iter == id) return;
-		else throw FilePersistenceException("Setting an inconsistent node id in NodeIdMap");
+		Q_ASSERT(*iter == id);
+		return;
 	}
 
-	map.insert(node, id);
+	nodeToId.insert(node, id);
+	idToNode.insert(id, node);
 }
 
-const Model::Node* NodeIdMap::getNodeForId(NodeIdType id) const
+void NodeIdMap::remove(const Node* node)
 {
-	for (auto i = map.begin(); i != map.end(); ++i)
-		if (i.value() == id) return i.key();
-
-	return nullptr;
+	auto idIter = nodeToId.find(node);
+	if (idIter != nodeToId.end())
+	{
+		idToNode.remove(*idIter);
+		nodeToId.erase(idIter);
+	}
 }
 
-} /* namespace FilePersistence */
+}
