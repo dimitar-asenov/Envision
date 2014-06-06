@@ -4,5 +4,6 @@ var searchData=
   ['getitemtofocus_5f',['getItemToFocus_',['../classInteraction_1_1SetCursorEvent.html#a72b2839a5102e9dd58421bda73788f27',1,'Interaction::SetCursorEvent']]],
   ['gridsize',['gridSize',['../classVisualization_1_1PositionLayoutStyle.html#a5677828233ab19b770664d6957c4df44',1,'Visualization::PositionLayoutStyle']]],
   ['group_5f',['group_',['../classComments_1_1CommentDiagramToolbar.html#ae39fdec7f3721362cc087294d62d415d',1,'Comments::CommentDiagramToolbar']]],
-  ['groups_5f',['groups_',['../classVisualization_1_1ModelRenderer.html#a41820329e848e7b00c292c9b72dccea3',1,'Visualization::ModelRenderer']]]
+  ['groupstypepurposesz_5f',['groupsTypePurposeSz_',['../classVisualization_1_1VisualizationGroupsManager.html#a7831e8302d65e2be4efa06d8ec16ad97',1,'Visualization::VisualizationGroupsManager']]],
+  ['groupstypeszpurpose_5f',['groupsTypeSzPurpose_',['../classVisualization_1_1VisualizationGroupsManager.html#a78134e70f887da94670530c27f11acb9',1,'Visualization::VisualizationGroupsManager']]]
 ];

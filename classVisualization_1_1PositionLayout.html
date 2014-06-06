@@ -91,6 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -143,6 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4caf805dd44f0c38493172581ada4894"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab40326f5003df299c9021bb987cdea97"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#ab40326f5003df299c9021bb987cdea97">isEmpty</a> () const </td></tr>
 <tr class="separator:ab40326f5003df299c9021bb987cdea97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c9ba31efd8813582fbcef2bde81cd3a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a6c9ba31efd8813582fbcef2bde81cd3a">isSensitiveToScale</a> () const override</td></tr>
+<tr class="separator:a6c9ba31efd8813582fbcef2bde81cd3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4d6d566e121e027f986facbb6bbcbd8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#aa4d6d566e121e027f986facbb6bbcbd8">length</a> () const </td></tr>
 <tr class="separator:aa4d6d566e121e027f986facbb6bbcbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0784f8e8d32fe48ee9c06aca4d3f4df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#af0784f8e8d32fe48ee9c06aca4d3f4df">remove</a> (int index, bool deleteItem=true)</td></tr>
@@ -157,8 +160,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a81ba0ef3226d18ed80e624b3aaa9bda7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31fa7311861f528d295ff60392f9dc19"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a31fa7311861f528d295ff60392f9dc19">toGrid</a> (const int &amp;pos) const </td></tr>
 <tr class="separator:a31fa7311861f528d295ff60392f9dc19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4effb960b59389c557c844e53cb17540"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a4effb960b59389c557c844e53cb17540">updateGeometry</a> (int availableWidth, int availableHeight)</td></tr>
-<tr class="separator:a4effb960b59389c557c844e53cb17540"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -175,8 +176,18 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a2bbed0a4468bdc6587569ccd5415a048"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a2bbed0a4468bdc6587569ccd5415a048">setDefaultClassHandler</a> (<a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *<a class="el" href="classVisualization_1_1PositionLayout.html#a36de9822f7217d5ad16acec59d451a8d">handler</a>)</td></tr>
 <tr class="separator:a2bbed0a4468bdc6587569ccd5415a048"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a13eebe6041d42756a64c41d335caf98c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a13eebe6041d42756a64c41d335caf98c">determineChildren</a> () override</td></tr>
+<tr class="separator:a13eebe6041d42756a64c41d335caf98c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56737e7ac87b74068ac96c6fcb40c9d5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a56737e7ac87b74068ac96c6fcb40c9d5">updateGeometry</a> (int availableWidth, int availableHeight) override</td></tr>
+<tr class="separator:a56737e7ac87b74068ac96c6fcb40c9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a37598493cffaa9127c311523149eecdb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a37598493cffaa9127c311523149eecdb">adjustChildrenSemanticZoom</a> ()</td></tr>
+<tr class="memdesc:a37598493cffaa9127c311523149eecdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the semantic zoom level of at least one child item was adjusted.  <a href="#a37598493cffaa9127c311523149eecdb">More...</a><br/></td></tr>
+<tr class="separator:a37598493cffaa9127c311523149eecdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a380b71328a713f54d8d1a998a41518a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a380b71328a713f54d8d1a998a41518a8">swap</a> (int i, int j)</td></tr>
 <tr class="separator:a380b71328a713f54d8d1a998a41518a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -310,6 +321,31 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a37598493cffaa9127c311523149eecdb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::PositionLayout::adjustChildrenSemanticZoom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns true if the semantic zoom level of at least one child item was adjusted. </p>
+
+</div>
+</div>
 <a class="anchor" id="a6e60da4a2c4f9ef4c06da0cfd317df95"></a>
 <div class="memitem">
 <div class="memproto">
@@ -401,6 +437,29 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a13eebe6041d42756a64c41d335caf98c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::PositionLayout::determineChildren </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae703e01d1baa38835352123297393d5d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -480,6 +539,29 @@ template&lt;class T &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6c9ba31efd8813582fbcef2bde81cd3a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::PositionLayout::isSensitiveToScale </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -770,7 +852,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a4effb960b59389c557c844e53cb17540"></a>
+<a class="anchor" id="a56737e7ac87b74068ac96c6fcb40c9d5"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -797,7 +879,7 @@ template&lt;class T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

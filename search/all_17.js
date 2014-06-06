@@ -13,7 +13,7 @@ var searchData=
   ['xml_5fnewunit_5fnode_5ftag',['XML_NEWUNIT_NODE_TAG',['../namespaceFilePersistence.html#aee14e6859e371eace785b276a1004e09',1,'FilePersistence']]],
   ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html',1,'FilePersistence']]],
   ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html#a551c3ea11ac089c0e5b2962c3ddd05f0',1,'FilePersistence::XMLModel::XMLModel()'],['../classFilePersistence_1_1XMLModel.html#aedc66313f6a7e1e964c7cace7902f224',1,'FilePersistence::XMLModel::XMLModel(const QString &amp;filename)']]],
-  ['xnode',['xNode',['../classTestNodes_1_1PositionExtension.html#acc65629ba61c0548233db308e8c8e7ea',1,'TestNodes::PositionExtension']]],
+  ['xnode',['xNode',['../classTestNodes_1_1PositionExtension.html#a561635397834b49a5ac1df12112c26a2',1,'TestNodes::PositionExtension']]],
   ['xoffset',['xOffset',['../classVisualization_1_1Icon.html#af439bd0e9c3593473db8ee29ce3f58a8',1,'Visualization::Icon::xOffset()'],['../classVisualization_1_1Layout.html#a7d5b9828841ac365dcf8bb528951d43a',1,'Visualization::Layout::xOffset()'],['../classVisualization_1_1Shape.html#a2b126e7ac14b2bccb11e82fd93b555a0',1,'Visualization::Shape::xOffset()']]],
   ['xoffset_5f',['xOffset_',['../classVisualization_1_1Shape.html#a341a2a8b57b87e153004eaab1d7a1c09',1,'Visualization::Shape']]],
   ['xor',['XOR',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a3270011030b6f7c46b3c9aaeb619ba73',1,'OOModel::BinaryOperation']]],

@@ -8,7 +8,6 @@ var searchData=
   ['mainviewscalingfactorchanged_5f',['mainViewScalingFactorChanged_',['../classVisualization_1_1Scene.html#a23def133c6e9bbf13037913a29b58189',1,'Visualization::Scene']]],
   ['mainwindow_5f',['mainWindow_',['../classCore_1_1EnvisionManager.html#abfa4dba35a7198408817363922342cc2',1,'Core::EnvisionManager']]],
   ['majorversion',['majorVersion',['../structCore_1_1PluginDependency.html#a0acedce37f195c86fb7b838c86402d2e',1,'Core::PluginDependency']]],
-  ['map',['map',['../classFilePersistence_1_1NodeIdMap.html#a3bc7871132ca6a3534c40b481b4b7fe1',1,'FilePersistence::NodeIdMap']]],
   ['mapenvisiontextcolors_5f',['mapEnvisionTextColors_',['../classComments_1_1ColorPicker.html#a8f431ebf3caf8da9d4dd6179c5672a22',1,'Comments::ColorPicker']]],
   ['margin',['margin',['../classVisualization_1_1MiniMap.html#a107b71190fa70e0bc5d56d738651d463',1,'Visualization::MiniMap']]],
   ['marginbottom_5f',['marginBottom_',['../classVisualization_1_1FormElement.html#a83bdd64434e7172839f19b4ef0924515',1,'Visualization::FormElement']]],

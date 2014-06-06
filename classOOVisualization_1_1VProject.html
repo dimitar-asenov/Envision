@@ -110,6 +110,8 @@ Inheritance diagram for OOVisualization::VProject:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a311b121194b3b305b1c393a6fcce0f92"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VProject.html#a311b121194b3b305b1c393a6fcce0f92">VProject</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, NodeType *node, const StyleType *style=itemStyles().get())</td></tr>
 <tr class="separator:a311b121194b3b305b1c393a6fcce0f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a013242653b42e3a63009eda8e997bdfc"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VProject.html#a013242653b42e3a63009eda8e997bdfc">isSensitiveToScale</a> () const override</td></tr>
+<tr class="separator:a013242653b42e3a63009eda8e997bdfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -118,8 +120,10 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a2023092b290d7011f63a458b8524df6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VProject.html#a2023092b290d7011f63a458b8524df6b">determineChildren</a> () override</td></tr>
+<tr class="memitem:a2023092b290d7011f63a458b8524df6b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VProject.html#a2023092b290d7011f63a458b8524df6b">determineChildren</a> () override</td></tr>
 <tr class="separator:a2023092b290d7011f63a458b8524df6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bca9c39c014f2e50ac9dea7b6051777"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VProject.html#a9bca9c39c014f2e50ac9dea7b6051777">updateGeometry</a> (int availableWidth, int availableHeight) override</td></tr>
+<tr class="separator:a9bca9c39c014f2e50ac9dea7b6051777"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -192,7 +196,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -216,6 +220,63 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a013242653b42e3a63009eda8e997bdfc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool OOVisualization::VProject::isSensitiveToScale </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9bca9c39c014f2e50ac9dea7b6051777"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OOVisualization::VProject::updateGeometry </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>availableWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>availableHeight</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -3,7 +3,7 @@ var searchData=
   ['lambdalayout_5f',['lambdaLayout_',['../classOOVisualization_1_1VFormalArgumentStyle.html#af7bad17155a983889519abeae8ad3da5',1,'OOVisualization::VFormalArgumentStyle']]],
   ['lastcell_5f',['lastCell_',['../classVisualization_1_1GridLayoutFormElement.html#a841ad381b7fd1e43965fca967f8b66d9',1,'Visualization::GridLayoutFormElement']]],
   ['lastcommandresult_5f',['lastCommandResult_',['../classInteraction_1_1CommandExecutionEngine.html#ae2e7d101094727d78078e99e1bce8e76',1,'Interaction::CommandExecutionEngine']]],
-  ['lastconnector_5f',['lastConnector_',['../classComments_1_1VCommentDiagram.html#af8272e3929e9145e1dff18f5947445c7',1,'Comments::VCommentDiagram']]],
+  ['lastconnector_5f',['lastConnector_',['../classComments_1_1VCommentDiagram.html#a72a543f43c553eeab6a7e7d8cbaba8f6',1,'Comments::VCommentDiagram']]],
   ['lastcursorposition_5f',['lastCursorPosition_',['../classInteraction_1_1GenericHandler.html#a181ffd275f9aaa6196986a322e73a001',1,'Interaction::GenericHandler']]],
   ['lastmousepresstimer_5f',['lastMousePressTimer_',['../classVisualization_1_1Scene.html#abd8a613abb0646b1e2511288bfb57e69',1,'Visualization::Scene']]],
   ['lastrevisionforconnectors_5f',['lastRevisionForConnectors_',['../classComments_1_1CommentDiagramShape.html#a51fb12174f4dda34ddbbcfac9a6d71cf',1,'Comments::CommentDiagramShape']]],

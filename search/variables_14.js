@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['unaryopmap_5f',['unaryOpMap_',['../classCppImport_1_1CppImportLogger.html#ae42fee5f220ba9bfadcad21c09c8e421',1,'CppImport::CppImportLogger']]],
+  ['unaryopmap_5f',['unaryOpMap_',['../classCppImport_1_1CppImportLogger.html#ab669a2854326afa08b6a26f92ca652dd',1,'CppImport::CppImportLogger']]],
   ['undone',['undone',['../classModel_1_1UndoCommand.html#afbb10978f3371b64aebddd96965a40ee',1,'Model::UndoCommand']]],
   ['unfinished_5f',['unfinished_',['../classInteraction_1_1ExpressionTreeBuilder.html#a1d8e79d7d03a34746c138d548f28a77e',1,'Interaction::ExpressionTreeBuilder']]],
   ['uninitializedreferences',['uninitializedReferences',['../classFilePersistence_1_1FileStore.html#a7e36e3dfb2160166b61f3c79ddd6b7bc',1,'FilePersistence::FileStore']]],
   ['uninitializedreferences_5f',['uninitializedReferences_',['../classFilePersistence_1_1SimpleTextFileStore.html#a388a3f3852b12f5ef937cf9a99721bf3',1,'FilePersistence::SimpleTextFileStore']]],
-  ['unionicon',['unionIcon',['../classOOVisualization_1_1VClassStyle.html#a21f92f81f8bba18be60c9d135cdb26ec',1,'OOVisualization::VClassStyle']]],
+  ['unionicon',['unionIcon',['../classOOVisualization_1_1VClassStyle.html#a21f92f81f8bba18be60c9d135cdb26ec',1,'OOVisualization::VClassStyle::unionIcon()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#a53197d08309d28a6fb18e76fd97334ec',1,'OOVisualization::VClassSzPublicStyle::unionIcon()']]],
   ['unmatchedafterend',['unmatchedAfterEnd',['../structInteraction_1_1TokenSplitData.html#a6f16fb5e4780eb38c248dc82f5fbfb91',1,'Interaction::TokenSplitData']]],
   ['unmatchedbeforeend',['unmatchedBeforeEnd',['../structInteraction_1_1TokenSplitData.html#acad7ac294c36c7e0dbdfd2e9d5fd7f7b',1,'Interaction::TokenSplitData']]],
   ['unresolutionsteps_5f',['unresolutionSteps_',['../classModel_1_1Reference.html#a1ba75803b726d89f41ceb1892741bfa1',1,'Model::Reference']]],

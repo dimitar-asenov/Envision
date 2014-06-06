@@ -124,11 +124,11 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a1ea9e6660435a3e8e0156b147122bb6e"><td class="memItemLeft" align="right" valign="top">Property&lt; QBrush &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#a1ea9e6660435a3e8e0156b147122bb6e">background</a> {this,&quot;backgroundBrush&quot;}</td></tr>
+<tr class="memitem:a1ea9e6660435a3e8e0156b147122bb6e"><td class="memItemLeft" align="right" valign="top">Property&lt; QBrush &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#a1ea9e6660435a3e8e0156b147122bb6e">background</a> {this, &quot;backgroundBrush&quot;}</td></tr>
 <tr class="separator:a1ea9e6660435a3e8e0156b147122bb6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71fd335e86ae4277c8713b21cfdef7f7"><td class="memItemLeft" align="right" valign="top">Property&lt; <a class="el" href="classVisualization_1_1BoxStyle.html#a34873df385d4000d55252672b7178af0">CornerType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#a71fd335e86ae4277c8713b21cfdef7f7">corner</a> {this,&quot;cornerType&quot;}</td></tr>
+<tr class="memitem:a71fd335e86ae4277c8713b21cfdef7f7"><td class="memItemLeft" align="right" valign="top">Property&lt; <a class="el" href="classVisualization_1_1BoxStyle.html#a34873df385d4000d55252672b7178af0">CornerType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#a71fd335e86ae4277c8713b21cfdef7f7">corner</a> {this, &quot;cornerType&quot;}</td></tr>
 <tr class="separator:a71fd335e86ae4277c8713b21cfdef7f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaecedf07ba9242d9de83ef0544657693"><td class="memItemLeft" align="right" valign="top">Property&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#aaecedf07ba9242d9de83ef0544657693">cornerRadius</a> {this,&quot;cornerRadius&quot;}</td></tr>
+<tr class="memitem:aaecedf07ba9242d9de83ef0544657693"><td class="memItemLeft" align="right" valign="top">Property&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#aaecedf07ba9242d9de83ef0544657693">cornerRadius</a> {this, &quot;cornerRadius&quot;}</td></tr>
 <tr class="separator:aaecedf07ba9242d9de83ef0544657693"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
@@ -139,6 +139,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:adbdd65d275ae6625136a0a58c1007148"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64fe10f23dcbfb60fa374913d9ab2894"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#a64fe10f23dcbfb60fa374913d9ab2894">optimizedPaint</a> (QPainter *painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const </td></tr>
 <tr class="separator:a64fe10f23dcbfb60fa374913d9ab2894"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97509391d995308a4e4402f7b7cfcc51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#a97509391d995308a4e4402f7b7cfcc51">simplifiedPaint</a> (QPainter *painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const </td></tr>
+<tr class="separator:a97509391d995308a4e4402f7b7cfcc51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeeab6e8af7d44a6066166a81f4330057"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1BoxStyle.html#aeeab6e8af7d44a6066166a81f4330057">unoptimizedPaint</a> (QPainter *painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const </td></tr>
 <tr class="separator:aeeab6e8af7d44a6066166a81f4330057"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -389,6 +391,58 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a97509391d995308a4e4402f7b7cfcc51"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::BoxStyle::simplifiedPaint </td>
+          <td>(</td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>xOffset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>yOffset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>contentBoxWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>contentBoxHeight</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aeeab6e8af7d44a6066166a81f4330057"></a>
 <div class="memitem">
 <div class="memproto">
@@ -447,7 +501,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property&lt;QBrush&gt; Visualization::BoxStyle::background {this,&quot;backgroundBrush&quot;}</td>
+          <td class="memname">Property&lt;QBrush&gt; Visualization::BoxStyle::background {this, &quot;backgroundBrush&quot;}</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -499,7 +553,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property&lt;<a class="el" href="classVisualization_1_1BoxStyle.html#a34873df385d4000d55252672b7178af0">CornerType</a>&gt; Visualization::BoxStyle::corner {this,&quot;cornerType&quot;}</td>
+          <td class="memname">Property&lt;<a class="el" href="classVisualization_1_1BoxStyle.html#a34873df385d4000d55252672b7178af0">CornerType</a>&gt; Visualization::BoxStyle::corner {this, &quot;cornerType&quot;}</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -511,7 +565,7 @@ Additional Inherited Members</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Property&lt;int&gt; Visualization::BoxStyle::cornerRadius {this,&quot;cornerRadius&quot;}</td>
+          <td class="memname">Property&lt;int&gt; Visualization::BoxStyle::cornerRadius {this, &quot;cornerRadius&quot;}</td>
         </tr>
       </table>
 </div><div class="memdoc">

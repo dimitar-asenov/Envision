@@ -46,5 +46,6 @@ var searchData=
   ['symbolmatcher',['SymbolMatcher',['../classModel_1_1SymbolMatcher.html',1,'Model']]],
   ['symbolprovidertype',['SymbolProviderType',['../classOOModel_1_1SymbolProviderType.html',1,'OOModel']]],
   ['symbolstyle',['SymbolStyle',['../classVisualization_1_1SymbolStyle.html',1,'Visualization']]],
-  ['systemclipboard',['SystemClipboard',['../classFilePersistence_1_1SystemClipboard.html',1,'FilePersistence']]]
+  ['systemclipboard',['SystemClipboard',['../classFilePersistence_1_1SystemClipboard.html',1,'FilePersistence']]],
+  ['szlevelorderingmanager',['SzLevelOrderingManager',['../classVisualization_1_1SzLevelOrderingManager.html',1,'Visualization']]]
 ];
