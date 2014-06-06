@@ -765,7 +765,7 @@ int Item::childNodeSemanticZoomLevel(const Model::Node* node) const
 	auto c = childNodeSemanticZoomLevel_.find(node);
 	if (c != childNodeSemanticZoomLevel_.end()) return *c;
 
-	return semanticZoomLevel();
+	return std::max(0, semanticZoomLevel());
 }
 
 void Item::setChildNodeSemanticZoomLevel(const Model::Node* node, int semanticZoomLevel)
