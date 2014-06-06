@@ -44,7 +44,7 @@ QPainterPath ControlFlowItem::connector(const QList< QPoint >& points, bool arro
 
 	// Draw Linear path
 	if (!points.isEmpty() ) path.moveTo(points.at(0));
-	for(int i = 1; i<points.size(); ++i) path.lineTo(points.at(i));
+	for (int i = 1; i<points.size(); ++i) path.lineTo(points.at(i));
 
 	// Draw arrow if specified
 	int sizeMinusTwo = points.size() - 2; // This is used in order to avoid a GCC warning about overflow
@@ -108,7 +108,7 @@ void ControlFlowItem::addConnector(QList< QPoint >& points, bool arrowEnding)
 
 void ControlFlowItem::addConnector(int xBegin, int yBegin, int xEnd, int yEnd, bool arrowEnding)
 {
-	addConnector(QPoint(xBegin, yBegin),QPoint(xEnd, yEnd), arrowEnding);
+	addConnector(QPoint(xBegin, yBegin), QPoint(xEnd, yEnd), arrowEnding);
 }
 
 void ControlFlowItem::addConnector(const QPoint& begin, const QPoint& end, bool arrowEnding)
@@ -121,7 +121,7 @@ void ControlFlowItem::addConnector(const QPoint& begin, const QPoint& end, bool 
 
 void ControlFlowItem::addToLastConnector(int x, int y)
 {
-	connectors_.last().append(QPoint(x,y));
+	connectors_.last().append(QPoint(x, y));
 }
 
 void ControlFlowItem::addToLastConnector(const QPoint& point)
@@ -154,7 +154,7 @@ void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	painter->setBrush(Qt::NoBrush);
 	painter->translate( xOffset + style()->pin().width()/2.0, yOffset + style()->pin().width()/2.0);
 
-	for(int i = 0; i < connectors_.size(); ++i)
+	for (int i = 0; i < connectors_.size(); ++i)
 	{
 		painter->drawPath( connector(connectors_.at(i), arrowEndings_.at(i)) );
 	}

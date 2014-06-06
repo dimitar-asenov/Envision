@@ -46,7 +46,7 @@ void HCommentDiagramShape::keyPressEvent(Visualization::Item *target, QKeyEvent 
 	auto shape = DCast<VCommentDiagramShape>(target);
 	event->ignore();
 
-	if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
+	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
 	{
 		event->accept();
 		shape->diagram()->node()->beginModification("Remove shape");
@@ -65,40 +65,40 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 	auto vDiagram = vShape->diagram();
 	vDiagram->toolbar()->setDiagram(vDiagram);
 	vDiagram->toggleEditing();
-	if(vDiagram->toolbar()->selectionMode())
+	if (vDiagram->toolbar()->selectionMode())
 	{
 		vDiagram->toolbar()->setCurrentShape(target);
 		vDiagram->node()->beginModification("shape");
 
 		QPoint clickPos(event->pos().toPoint());
 
-		if(event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
 		{
 			event->accept();
 			clickedRect_ = vShape->hitsResizeRects(clickPos);
 
-			if(clickedRect_ != RECT_NONE)
+			if (clickedRect_ != RECT_NONE)
 				vShape->setCursor(Qt::SizeAllCursor);
 			else
 				vShape->setCursor(Qt::ClosedHandCursor);
 		}
-		if(event->button() == Qt::LeftButton && vDiagram->showConnectorPoints())
+		if (event->button() == Qt::LeftButton && vDiagram->showConnectorPoints())
 		{
 			event->accept();
 			int connectorIndex = vShape->node()->connectorPointNear(clickPos);
-			if(connectorIndex != -1)
+			if (connectorIndex != -1)
 			{
 				int shapeIndex = vShape->node()->index();
 				auto last = vDiagram->lastConnector();
 
-				if(last.first == shapeIndex && last.second == connectorIndex)
+				if (last.first == shapeIndex && last.second == connectorIndex)
 				{
 					// unselect connector if selected a second time
 					shapeIndex = -1;
 					connectorIndex = -1;
 				}
 				// make sure connectors are between two *different* shapes
-				else if(last.first != -1 && last.second != -1 && last.first != shapeIndex)
+				else if (last.first != -1 && last.second != -1 && last.first != shapeIndex)
 				{
 					vDiagram->node()->connectors()->append(
 								new CommentDiagramConnector(last.first, last.second, shapeIndex, connectorIndex));
@@ -109,7 +109,7 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 				vDiagram->setLastConnector(shapeIndex, connectorIndex);
 			}
 		}
-		else if(event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier)
+		else if (event->button() == Qt::RightButton && event->modifiers() == Qt::NoModifier)
 		{
 			event->accept();
 			showCommandPrompt(target);
@@ -133,11 +133,11 @@ void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphics
 {
 	auto shape = DCast<VCommentDiagramShape>(target);
 
-	if(event->buttons() & Qt::LeftButton)
+	if (event->buttons() & Qt::LeftButton)
 	{
 		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
 
-		switch(clickedRect_)
+		switch (clickedRect_)
 		{
 			case RECT_NONE:
 				moveBy(shape, diff);
@@ -178,8 +178,8 @@ void HCommentDiagramShape::hoverLeaveEvent(Visualization::Item *target, QGraphic
 void HCommentDiagramShape::moveBy(VCommentDiagramShape* shape, QPoint pos)
 {
 	QPoint dest(shape->node()->pos() + pos);
-	if(dest.x() < 0) dest.setX(0);
-	if(dest.y() < 0) dest.setY(0);
+	if (dest.x() < 0) dest.setX(0);
+	if (dest.y() < 0) dest.setY(0);
 
 	shape->node()->beginModification("Moving shape");
 	shape->node()->setX(dest.x());
@@ -190,8 +190,8 @@ void HCommentDiagramShape::moveBy(VCommentDiagramShape* shape, QPoint pos)
 void HCommentDiagramShape::resizeBy(VCommentDiagramShape* shape, QSize size)
 {
 	QSize dest(shape->node()->size() + size);
-	if(dest.width() < 0) dest.setWidth(0);
-	if(dest.height() < 0) dest.setHeight(0);
+	if (dest.width() < 0) dest.setWidth(0);
+	if (dest.height() < 0) dest.setHeight(0);
 
 	shape->node()->beginModification("Resizing shape");
 	shape->node()->setWidth(dest.width());

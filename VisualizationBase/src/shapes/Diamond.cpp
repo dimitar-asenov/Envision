@@ -141,14 +141,16 @@ void Diamond::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
 	{
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(style()->shadow());
-		painter->drawPath(getDiamondPath(xOffset() + style()->xShadowOffset(), yOffset() + style()->yShadowOffset(), widthWithoutShadow, heightWithoutShadow));
+		painter->drawPath(getDiamondPath(xOffset() + style()->xShadowOffset(), yOffset() + style()->yShadowOffset(),
+													widthWithoutShadow, heightWithoutShadow));
 	}
 
 	// Draw box.
 	painter->setPen(style()->outline());
 
 	// Set the brush and fix the gradient if needed.
-	if ( style()->background().style() == Qt::LinearGradientPattern && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
+	if ( style()->background().style() == Qt::LinearGradientPattern
+		  && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
 	{
 		QLinearGradient g = *(static_cast<const QLinearGradient*> (style()->background().gradient()));
 		g.setStart(x + g.start().x(), y + g.start().y());
@@ -156,7 +158,8 @@ void Diamond::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget
 		painter->setBrush(g);
 
 	}
-	else if ( style()->background().style()  == Qt::RadialGradientPattern && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
+	else if ( style()->background().style()  == Qt::RadialGradientPattern
+				 && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
 	{
 		QRadialGradient g = *(static_cast<const QRadialGradient*> (style()->background().gradient()));
 		g.setCenter(x + g.center().x(), y + g.center().y());

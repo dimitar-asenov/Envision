@@ -62,4 +62,4 @@ class VISUALIZATIONBASE_API Mipmap {
 inline qreal Mipmap::minimalScaleFactor() { return minimalScaleFactor_; }
 inline void Mipmap::setMinimalScaleFactor(qreal factor) { minimalScaleFactor_ = factor; }
 
-} /* namespace Visualization */
+}

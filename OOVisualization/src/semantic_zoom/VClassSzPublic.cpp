@@ -87,7 +87,7 @@ void VClassSzPublic::initializeForms()
 							case OOModel::Class::ConstructKind::Union : return &v->style()->unionIcon();
 							case OOModel::Class::ConstructKind::Enum : return &v->style()->enumIcon();
 							case OOModel::Class::ConstructKind::Annotation : return &v->style()->annotationIcon();
-							default : return &v->style()->classIcon();
+							default: return &v->style()->classIcon();
 						}
 					}))
 				->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)

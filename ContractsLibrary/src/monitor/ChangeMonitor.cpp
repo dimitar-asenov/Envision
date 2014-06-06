@@ -47,15 +47,15 @@ void ChangeMonitor::listenToModel(Model::Model* model)
 void ChangeMonitor::nodesModified(QSet<Node*> nodes)
 {
 	ValueAtReturnVisitor v;
-	for(auto n : nodes) v.visit(n);
+	for (auto n : nodes) v.visit(n);
 }
 
 void ChangeMonitor::expressionModified(OOModel::Expression*& exp, int& cursorIndex)
 {
 	ValueAtReturnVisitor v;
 	v.visit(exp);
-	const int l = QString("Contract.ValueAtReturn(").size();
-	cursorIndex += (v.numWrapped() - v.numUnwrapped())*l;
+	const int length = QString("Contract.ValueAtReturn(").size();
+	cursorIndex += (v.numWrapped() - v.numUnwrapped())*length;
 }
 
 } /* namespace ContractsLibrary */

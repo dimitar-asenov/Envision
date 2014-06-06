@@ -67,7 +67,7 @@ void SelectedItem::updateGeometry(int, int)
 		getShape()->setInnerSize(selectedItem_->widthInScene(), selectedItem_->heightInScene());
 		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
 
-		setPos(selectedItem_->mapToScene(0,0) - pos);
+		setPos(selectedItem_->mapToScene(0, 0) - pos);
 	}
 }
 

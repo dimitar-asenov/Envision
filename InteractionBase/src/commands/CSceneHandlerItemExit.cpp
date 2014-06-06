@@ -42,7 +42,8 @@ CommandResult* CSceneHandlerItemExit::execute(Visualization::Item*, Visualizatio
 	return new CommandResult();
 }
 
-QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
+QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, Visualization::Item*,
+																			const QString& textSoFar)
 {
 	QList<CommandSuggestion*> s;
 	if (QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )

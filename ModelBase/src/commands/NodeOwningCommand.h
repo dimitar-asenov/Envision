@@ -44,4 +44,4 @@ class MODELBASE_API NodeOwningCommand : public UndoCommand {
 		Node* ownedIfUndone_{};
 };
 
-} /* namespace Model */
+}

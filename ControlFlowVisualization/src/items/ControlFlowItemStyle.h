@@ -37,8 +37,8 @@ class CONTROLFLOWVISUALIZATION_API ControlFlowItemStyle : public Super<Visualiza
 	public:
 		virtual ~ControlFlowItemStyle() override;
 
-		Property<int> pinLength{this,"pinLength"};
-		Property<QPen> pin{this,"pin"};
+		Property<int> pinLength{this, "pinLength"};
+		Property<QPen> pin{this, "pin"};
 };
 
 

@@ -51,11 +51,10 @@ void VNewExpression::determineChildren()
 	auto hasDimensions = node()->dimensions()->size() > 0;
 	auto showType = hasDimensions || !node()->initializer();
 
-	layout()->synchronizeFirst(prefix_ , true, &style()->prefix());
-	layout()->synchronizeMid(type_, showType ? node()->newType() : nullptr , 1);
+	layout()->synchronizeFirst(prefix_, true, &style()->prefix());
+	layout()->synchronizeMid(type_, showType ? node()->newType() : nullptr, 1);
 	layout()->synchronizeMid(dimensions_, (hasDimensions ? node()->dimensions() : nullptr), &style()->dimensions(), 2);
 	layout()->synchronizeLast(initializer_, node()->initializer());
-
 
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?

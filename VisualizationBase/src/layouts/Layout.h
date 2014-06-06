@@ -56,7 +56,8 @@ class VISUALIZATIONBASE_API Layout: public Super<Item>
 				const typename T::StyleType* style);
 };
 
-template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalItem, bool present, const typename T::StyleType* style)
+template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalItem, bool present,
+																const typename T::StyleType* style)
 {
 	// When refactoring this method have in mind that layoutItem might point to the same item as externalItem.
 
@@ -84,7 +85,8 @@ template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalI
 	}
 }
 
-template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalItem, typename T::NodeType* node, const typename T::StyleType* style)
+template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalItem, typename T::NodeType* node,
+																const typename T::StyleType* style)
 {
 	// When refactoring this method have in mind that layoutItem might point to the same item as externalItem.
 

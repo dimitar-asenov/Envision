@@ -54,13 +54,13 @@ VisualizationGroup::visualizationsForContext(Item* parent, Model::Node* node)
 	QList<QPair<VisualizationSuitabilityScore, QPair<int, ItemConstructor>>> result;
 	if (matchesContext(parent, node))
 	{
-		for(int i = 0; i<visualizations_.size(); ++i)
+		for (int i = 0; i<visualizations_.size(); ++i)
 			result << qMakePair(VisualizationSuitabilityScore(scorePoints_),
 					qMakePair(itemTypeIds_[i], visualizations_[i]));
 
-		for(auto sg : subGroups_)
+		for (auto sg : subGroups_)
 		{
-			for(auto v : sg->visualizationsForContext(parent, node) )
+			for (auto v : sg->visualizationsForContext(parent, node) )
 			{
 				v.first.score += scorePoints_;
 				result << v;

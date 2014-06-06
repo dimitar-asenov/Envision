@@ -66,7 +66,7 @@ void EmptyItem::updateGeometry(int availableWidth, int availableHeight)
 	if (shape)
 	{
 		if (availableWidth == 0 && availableHeight == 0)
-			shape->setInnerSize(2,2);
+			shape->setInnerSize(2, 2);
 		else
 		{
 			shape->setOutterSize(availableWidth, availableHeight);
@@ -74,7 +74,7 @@ void EmptyItem::updateGeometry(int availableWidth, int availableHeight)
 		}
 	}
 	else
-		setSize(1,1);
+		setSize(1, 1);
 }
 
 } /* namespace Interaction */

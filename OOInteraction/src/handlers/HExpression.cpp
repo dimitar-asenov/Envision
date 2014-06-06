@@ -211,7 +211,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 		{
 			StatementItem* st = nullptr;
 			Model::Node* toFocus = nullptr;
-			if(trimmedText == "for")
+			if (trimmedText == "for")
 			{
 				auto loop =  new LoopStatement();
 				loop->setInitStep(new EmptyExpression());
@@ -259,7 +259,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				toFocus = ret;
 				st = new DeclarationStatement(ret);
 			}
-			else if(trimmedText == "do")
+			else if (trimmedText == "do")
 			{
 				auto loop =  new LoopStatement(LoopStatement::LoopKind::PostCheck);
 				auto empty = new EmptyExpression();
@@ -268,7 +268,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				toFocus = empty;
 				st = loop;
 			}
-			else if(trimmedText == "//")
+			else if (trimmedText == "//")
 			{
 				auto comment = new CommentStatementItem();
 				auto line = comment->comment()->lines()->createDefaultElement();
@@ -356,7 +356,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			return;
 		}
 	}
-	catch(Core::EnvisionException &e)
+	catch (Core::EnvisionException &e)
    {
 		e.printError();
    }
@@ -370,7 +370,7 @@ Item* HExpression::stringInfo(Item* target, Qt::Key key, QString& str, int& inde
 	auto* topMostSP = Core::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
 	auto p = topMostItem->parent();
-	while(p)
+	while (p)
 	{
 		auto* adapted = Core::AdapterManager::adapt<StringOffsetProvider>(p);
 		if (adapted)
@@ -457,7 +457,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 
 	userWord = userWord.right(userWord.size() - index);
 	QString searchPattern = userWord;
-	for(int i = searchPattern.size(); i>=0; --i) searchPattern.insert(i, "*");
+	for (int i = searchPattern.size(); i>=0; --i) searchPattern.insert(i, "*");
 
 	QList<AutoCompleteEntry*> entries;
 
@@ -505,7 +505,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 			target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
 			afterDot == false);
 
-	for(auto n : foundSymbols)
+	for (auto n : foundSymbols)
 			entries.append(new AutoCompleteEntry(n->symbolName(), QString(), nullptr,
 				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
 

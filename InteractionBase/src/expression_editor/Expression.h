@@ -65,4 +65,4 @@ class INTERACTIONBASE_API Expression {
 		Operator* parent_;
 };
 
-} /* namespace InteractionBase */
+}

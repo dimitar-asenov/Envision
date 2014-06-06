@@ -74,7 +74,7 @@ class LOGGER_API Log : public QObject
 		 * @oaram message
 		 * 				The message to add
 		 */
-		virtual void add(Level l, QString message) = 0;
+		virtual void add(Level level, QString message) = 0;
 
 		/**
 		 * A convenience function that adds a new info message to the log.

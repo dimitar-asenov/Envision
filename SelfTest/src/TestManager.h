@@ -83,7 +83,8 @@ class TestManager
 
 			if (testConstructors)
 			{
-				for (QMap<QString, Test::TestConstructor>::iterator testConstructor = testConstructors->begin(); testConstructor != testConstructors->end(); testConstructor++)
+				for (QMap<QString, Test::TestConstructor>::iterator testConstructor = testConstructors->begin();
+					  testConstructor != testConstructors->end(); testConstructor++)
 				{
 					Test* test = (*testConstructor)();
 					test->run(testRes);

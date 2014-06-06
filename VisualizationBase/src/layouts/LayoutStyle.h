@@ -41,10 +41,10 @@ class VISUALIZATIONBASE_API LayoutStyle : public Super<ItemStyle>
 
 		virtual ~LayoutStyle() override;
 
-		Property<int> leftMargin{this,"leftMargin"};
-		Property<int> rightMargin{this,"rightMargin"};
-		Property<int> topMargin{this,"topMargin"};
-		Property<int> bottomMargin{this,"bottomMargin"};
+		Property<int> leftMargin{this, "leftMargin"};
+		Property<int> rightMargin{this, "rightMargin"};
+		Property<int> topMargin{this, "topMargin"};
+		Property<int> bottomMargin{this, "bottomMargin"};
 
 };
 

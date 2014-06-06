@@ -66,7 +66,7 @@ void Static::updateGeometry(int availableWidth, int availableHeight)
 			getShape()->setOffset(0, 0);
 			getShape()->setInnerSize(0, 0);
 		}
-		else setSize(QSize(0,0));
+		else setSize(QSize(0, 0));
 	}
 }
 

@@ -37,7 +37,7 @@ namespace Visualization {
 class Item;
 
 /**
- * The DeclarativeItem class is the base class for all visualization items that use the declarative API for visualizations.
+ * The DeclarativeItem class is the base class for all items that use the declarative API for visualizations.
  *
  * It is a template class, such that every descendant visualization type has its own static list of available forms.
  *

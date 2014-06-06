@@ -276,7 +276,8 @@ inline GridLayoutFormElement* GridLayoutFormElement::setColumnHorizontalAlignmen
 
 	return this;
 }
-inline GridLayoutFormElement* GridLayoutFormElement::setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment)
+inline GridLayoutFormElement* GridLayoutFormElement::setRowVerticalAlignment(
+		int row, LayoutStyle::Alignment verticalAlignment)
 {
 	adjustSize(0, row);
 
@@ -285,7 +286,8 @@ inline GridLayoutFormElement* GridLayoutFormElement::setRowVerticalAlignment(int
 		cellVerticalAlignmentGrid_[x][row] = verticalAlignment;
 	return this;
 }
-inline GridLayoutFormElement* GridLayoutFormElement::setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
+inline GridLayoutFormElement* GridLayoutFormElement::setCellHorizontalAlignment(
+		LayoutStyle::Alignment horizontalAlignment)
 {
 	int column = lastCell_.first;
 	int row = lastCell_.second;

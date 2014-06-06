@@ -49,7 +49,8 @@ StyleNode::StyleNode(StyleNode* parent_, const QString& prototypeName, const QSt
 	parent(parent_)
 {
 	folder = currentFolder + "/" + prototypeName; // Try relative address
-	if (!QFile::exists(folder)) folder = baseFolder + "/" + prototypeName; // Try absolute path (rooted at the styles folder)
+	if (!QFile::exists(folder))
+		folder = baseFolder + "/" + prototypeName; // Try absolute path (rooted at the styles folder)
 	if (!QFile::exists(folder)) throw VisualizationException("Could not find the prototype style " + prototypeName);
 
 	QString fileName = QFileInfo(folder).fileName();
@@ -123,7 +124,8 @@ QDomDocument StyleNode::openStyleDoc(const QString& path)
 {
 	QDomDocument doc = QDomDocument(XML_DOM_TYPE);
 	QFile file(path);
-	if ( !file.open(QIODevice::ReadOnly) ) throw VisualizationException("Could not open style file " + file.fileName() + ".");
+	if ( !file.open(QIODevice::ReadOnly) )
+		throw VisualizationException("Could not open style file " + file.fileName() + ".");
 
 	if ( !doc.setContent(&file) || doc.isNull() )
 	{

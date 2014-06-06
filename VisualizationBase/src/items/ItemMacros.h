@@ -77,7 +77,7 @@ private:																																					\
  * 			look for this item's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
 #define ITEM_COMMON_DEFINITIONS( ItemClass, classType )																					\
-DEFINE_TYPE_ID_DERIVED(ItemClass, #ItemClass,)																								\
+DEFINE_TYPE_ID_DERIVED(ItemClass, #ItemClass, )																								\
 																																							\
 void ItemClass::initType() { Super::initType(); }																							\
 																																							\

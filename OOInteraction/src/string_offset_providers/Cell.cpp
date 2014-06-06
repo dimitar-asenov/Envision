@@ -49,12 +49,12 @@ Cell::~Cell()
 
 int Cell::offset(const QStringList& allComponents, Qt::Key key, int* length)
 {
-	int l = 0;
+	int len = 0;
 	for (int i = stringComponentsStart(); i <= stringComponentsEnd(); ++i)
-		l += allComponents[i].length();
+		len += allComponents[i].length();
 
-	if (length) *length = l;
-	return StringOffsetProvider::itemOffset(item(), l, key);
+	if (length) *length = len;
+	return StringOffsetProvider::itemOffset(item(), len, key);
 }
 
 void Cell::setOffset(int newOffset)

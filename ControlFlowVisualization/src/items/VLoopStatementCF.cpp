@@ -192,10 +192,10 @@ void VLoopStatementCF::updateGeometry(int, int)
 	exit_ = QPoint( -left, y);
 
 	// Set the positions
-	if (initStep) initStepBackground->setPos(initPos - QPoint(left,0));
-	if (updateStep) updateStepBackground->setPos(updatePos - QPoint(left,0));
-	if (condition) conditionBackground->setPos(condPos - QPoint(left,0));
-	if (body) body->setPos(bodyPos - QPoint(left,0));
+	if (initStep) initStepBackground->setPos(initPos - QPoint(left, 0));
+	if (updateStep) updateStepBackground->setPos(updatePos - QPoint(left, 0));
+	if (condition) conditionBackground->setPos(condPos - QPoint(left, 0));
+	if (body) body->setPos(bodyPos - QPoint(left, 0));
 
 	// Put connectors
 	y = style()->pinLength();
@@ -205,7 +205,7 @@ void VLoopStatementCF::updateGeometry(int, int)
 		y += initStepBackground->heightInParent();
 	}
 
-	addConnector(entrance_ + QPoint(0,y), entrance_ + QPoint(0, y+style()->pinLength()), false);
+	addConnector(entrance_ + QPoint(0, y), entrance_ + QPoint(0, y+style()->pinLength()), false);
 	y += style()->pinLength();
 
 	QPoint updateConnect(entrance_.x() + style()->pinLength(), y);
@@ -236,7 +236,7 @@ void VLoopStatementCF::updateGeometry(int, int)
 		condTrueConnect.setY(y + conditionBackground->heightInParent()/2);
 		condTrueConnect.setX(condPos.x() - left + conditionBackground->widthInParent() + style()->pinLength());
 
-		addConnector(condTrueConnect, condTrueConnect - QPoint(style()->pinLength(),0), false);
+		addConnector(condTrueConnect, condTrueConnect - QPoint(style()->pinLength(), 0), false);
 
 		y += conditionBackground->heightInParent();
 
@@ -266,7 +266,7 @@ void VLoopStatementCF::updateGeometry(int, int)
 		{
 			QPoint cont = body->continues().at(i);
 			if (cont.x() > 0)
-				addConnector(bPos.x() + body->widthInParent(), bPos.y() + cont.y() , r, bPos.y() + cont.y(), true );
+				addConnector(bPos.x() + body->widthInParent(), bPos.y() + cont.y(), r, bPos.y() + cont.y(), true );
 			if (cont.y() + body->pos().y() > lowestContinue) lowestContinue = cont.y() + body->pos().y();
 		}
 

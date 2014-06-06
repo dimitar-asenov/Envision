@@ -48,7 +48,7 @@ void MiniMap::updatePosition()
 {
 	QGraphicsView* parent = static_cast<QGraphicsView*> (parentWidget());
 
-	move(0,parent->viewport()->height() - height() + 2*frameWidth());
+	move(0, parent->viewport()->height() - height() + 2*frameWidth());
 }
 
 void MiniMap::resizeEvent( QResizeEvent *event )
@@ -78,7 +78,7 @@ void MiniMap::paintEvent(QPaintEvent *event)
 	painter.setPen(Qt::red);
 	painter.drawRect(drawnRect);
 	if (drawnRect.width() <= 2 || drawnRect.height() <= 2)
-		painter.drawEllipse(drawnRect.center(), 5,5);
+		painter.drawEllipse(drawnRect.center(), 5, 5);
 
 	// Indicate clearly selected items
 	for (auto sel : scene()->selectedItems())
@@ -129,7 +129,7 @@ void MiniMap::updateMap()
 	// for the pen width of the drawn rectangle.
 	drawnRect.setRect(rectX, rectY, ceil(visibleRect.width()*scale - 1.5), ceil(visibleRect.height()*scale - 1.5));
 
-	setTransform(QTransform::fromScale(scale,scale).translate(margin, margin));
+	setTransform(QTransform::fromScale(scale, scale).translate(margin, margin));
 
 	viewport()->update();
 }

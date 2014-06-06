@@ -53,7 +53,7 @@ void VCommentImage::updateGeometry(int, int)
 {
 	QSize minSize = image_.isNull() ? errorSize_ : size_;
 
-	if(hasShape()) getShape()->setInnerSize(minSize.width(), minSize.height());
+	if (hasShape()) getShape()->setInnerSize(minSize.width(), minSize.height());
 	else setSize(minSize);
 }
 
@@ -70,26 +70,26 @@ void VCommentImage::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
 	if (image_.isNull())
 	{
 		painter->setPen(QPen(QColor(100, 100, 100)));
-		painter->drawText(QRect{QPoint(xOffset,yOffset), errorSize_}, Qt::AlignCenter | Qt::TextWordWrap,
+		painter->drawText(QRect{QPoint(xOffset, yOffset), errorSize_}, Qt::AlignCenter | Qt::TextWordWrap,
 								"This image could not be loaded: " + path_);
 	}
 	else
-		painter->drawImage(QRect{QPoint(xOffset,yOffset), size_}, image_);
+		painter->drawImage(QRect{QPoint(xOffset, yOffset), size_}, image_);
 }
 
 bool VCommentImage::updateSize(QSize size)
 {
 	Q_ASSERT(size.isValid());
 
-	if(!image_.isNull())
+	if (!image_.isNull())
 	{
 		QSize imageSize = image_.size();
 
-		if(size.width() == 0 && size.height() == 0)
+		if (size.width() == 0 && size.height() == 0)
 			size = imageSize;
-		else if(size.width() == 0)
+		else if (size.width() == 0)
 			size.setWidth(imageSize.width() * ((double)size.height() / imageSize.height()));
-		else if(size.height() == 0)
+		else if (size.height() == 0)
 			size.setHeight(imageSize.height() * ((double)size.width() / imageSize.width()));
 
 		size_ = size;
@@ -104,5 +104,4 @@ bool VCommentImage::updateSize(QSize size)
 	}
 }
 
-} /* namespace Comments */
-
+}

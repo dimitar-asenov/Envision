@@ -37,4 +37,4 @@ class INTERACTIONBASE_API AddEmptyValue : public ExpressionTreeBuildInstruction 
 		virtual void perform(ExpressionTreeBuilder& tb);
 };
 
-} /* namespace InteractionBase */
+}

@@ -83,13 +83,13 @@ void NodeItemWrapperFormElement<ParentType>::synchronizeWithItem(Item* item)
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	auto node = nodeGetter_(static_cast<ParentType*>(item));
 
-	if(childItem && childItem->node() != node)
+	if (childItem && childItem->node() != node)
 	{
 		SAFE_DELETE_ITEM(childItem);
 		item->setUpdateNeeded(Item::StandardUpdate);
 	}
 
-	if(!childItem && (node || createIfNoNode_))
+	if (!childItem && (node || createIfNoNode_))
 	{
 		childItem = item->renderer()->render(item, node);
 		item->setUpdateNeeded(Item::StandardUpdate);

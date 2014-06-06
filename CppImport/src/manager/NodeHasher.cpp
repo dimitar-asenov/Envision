@@ -40,7 +40,7 @@ const QString NodeHasher::hashFunction(const clang::FunctionDecl* functionDecl)
 	hash.prepend(QString::fromStdString(functionDecl->getResultType().getAsString()).append("_"));
 	hash.append("_").append(functionDecl->getNumParams());
 
-	for(unsigned i = 0; i < functionDecl->param_size(); i++)
+	for (unsigned i = 0; i < functionDecl->param_size(); i++)
 	{
 		hash.append("_").append(hashType(functionDecl->getParamDecl(i)->getType()));
 	}
@@ -54,7 +54,7 @@ const QString NodeHasher::hashMethod(const clang::CXXMethodDecl* methodDecl)
 	hash.append("_").append(hashRecord(methodDecl->getParent()));
 	hash.append("_").append(methodDecl->getNumParams());
 
-	for(unsigned i = 0; i < methodDecl->param_size(); i++)
+	for (unsigned i = 0; i < methodDecl->param_size(); i++)
 	{
 		hash.append("_").append(hashType(methodDecl->getParamDecl(i)->getType()));
 	}
@@ -64,11 +64,11 @@ const QString NodeHasher::hashMethod(const clang::CXXMethodDecl* methodDecl)
 const QString NodeHasher::hashNameSpace(const clang::NamespaceDecl* namespaceDecl)
 {
 	QString hash = QString::fromStdString(namespaceDecl->getNameAsString());
-	if(auto ctxt = namespaceDecl->getDeclContext())
+	if (auto ctxt = namespaceDecl->getDeclContext())
 	{
-		if(ctxt->isTranslationUnit())
+		if (ctxt->isTranslationUnit())
 			return hash;
-		else if(auto pn = llvm::dyn_cast<clang::NamespaceDecl>(ctxt))
+		else if (auto pn = llvm::dyn_cast<clang::NamespaceDecl>(ctxt))
 			return hash.prepend(hashNameSpace(pn));
 		throw CppImportException("Invalid decl context in namespace");
 	}
@@ -77,23 +77,23 @@ const QString NodeHasher::hashNameSpace(const clang::NamespaceDecl* namespaceDec
 
 const QString NodeHasher::hashRecord(const clang::RecordDecl* recordDecl)
 {
-	if(auto classTemplateSpec = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(recordDecl))
+	if (auto classTemplateSpec = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(recordDecl))
 		return hashClassTemplateSpec(classTemplateSpec);
 	QString hash = QString::fromStdString(recordDecl->getNameAsString());
-	if(auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(recordDecl->getParent()))
+	if (auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(recordDecl->getParent()))
 		hash.prepend("_").prepend(QString::fromStdString(parentNamedDecl->getNameAsString()));
-	if(auto cxxRecord = llvm::dyn_cast<clang::CXXRecordDecl>(recordDecl))
+	if (auto cxxRecord = llvm::dyn_cast<clang::CXXRecordDecl>(recordDecl))
 	{
-		if(auto classTemplate = cxxRecord->getDescribedClassTemplate())
+		if (auto classTemplate = cxxRecord->getDescribedClassTemplate())
 		{
 			auto templateParamList = classTemplate->getTemplateParameters();
-			for( auto templateParam = templateParamList->begin();
+			for ( auto templateParam = templateParamList->begin();
 				  templateParam != templateParamList->end(); ++templateParam)
 			{
 				hash.append("_");
-				if(auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
+				if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
 					hash.append(hashTemplateTypeParm(templateType));
-				else if(auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
+				else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
 					hash.append(hashTemplateTypeParm(nonTemplateType));
 			}
 		}
@@ -104,16 +104,16 @@ const QString NodeHasher::hashRecord(const clang::RecordDecl* recordDecl)
 const QString NodeHasher::hashClassTemplate(const clang::ClassTemplateDecl* classTemplate)
 {
 	QString hash = QString::fromStdString(classTemplate->getNameAsString());
-	if(auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(classTemplate->getTemplatedDecl()->getParent()))
+	if (auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(classTemplate->getTemplatedDecl()->getParent()))
 		hash.prepend("_").prepend(QString::fromStdString(parentNamedDecl->getNameAsString()));
 	auto templateParamList = classTemplate->getTemplateParameters();
-	for( auto templateParam = templateParamList->begin();
+	for ( auto templateParam = templateParamList->begin();
 		  templateParam != templateParamList->end(); ++templateParam)
 	{
 		hash.append("_");
-		if(auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
+		if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
 			hash.append(hashTemplateTypeParm(templateType));
-		else if(auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
+		else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
 			hash.append(hashTemplateTypeParm(nonTemplateType));
 	}
 	return hash;
@@ -122,9 +122,9 @@ const QString NodeHasher::hashClassTemplate(const clang::ClassTemplateDecl* clas
 const QString NodeHasher::hashClassTemplateSpec(const clang::ClassTemplateSpecializationDecl* classTemplateSpec)
 {
 	QString hash = QString::fromStdString(classTemplateSpec->getNameAsString());
-	if(auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(classTemplateSpec->getParent()))
+	if (auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(classTemplateSpec->getParent()))
 		hash.prepend("_").prepend(QString::fromStdString(parentNamedDecl->getNameAsString()));
-	for(unsigned i = 0; i < classTemplateSpec->getTemplateArgs().size(); i++)
+	for (unsigned i = 0; i < classTemplateSpec->getTemplateArgs().size(); i++)
 		hash.append("_").append(hashTemplateArg(classTemplateSpec->getTemplateArgs().get(i)));
 	return hash;
 }
@@ -139,30 +139,30 @@ const QString NodeHasher::hashStaticField(const clang::VarDecl* varDecl)
 
 const QString NodeHasher::hashParentOfStaticField(const clang::DeclContext* context)
 {
-	if(auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))
+	if (auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))
 		return hashClassTemplateSpec(cts);
-	else if(auto ct = llvm::dyn_cast<clang::ClassTemplateDecl>(context))
+	else if (auto ct = llvm::dyn_cast<clang::ClassTemplateDecl>(context))
 		return hashClassTemplate(ct);
-	else if(auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
+	else if (auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
 		return hashRecord(c);
 	throw CppImportException("Invalid parent to hash a static var");
 }
 
 const QString NodeHasher::hashUsingParent(const clang::DeclContext* context)
 {
-	if(context->isTranslationUnit())
+	if (context->isTranslationUnit())
 		return QString();
-	if(auto ns = llvm::dyn_cast<clang::NamespaceDecl>(context))
+	if (auto ns = llvm::dyn_cast<clang::NamespaceDecl>(context))
 		return hashNameSpace(ns);
-	else if(auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))
+	else if (auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))
 		return hashClassTemplateSpec(cts);
-	else if(auto ct = llvm::dyn_cast<clang::ClassTemplateDecl>(context))
+	else if (auto ct = llvm::dyn_cast<clang::ClassTemplateDecl>(context))
 		return hashClassTemplate(ct);
-	else if(auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
+	else if (auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
 		return hashRecord(c);
-	else if(auto m = llvm::dyn_cast<clang::CXXMethodDecl>(context))
+	else if (auto m = llvm::dyn_cast<clang::CXXMethodDecl>(context))
 		return hashMethod(m);
-	else if(auto f = llvm::dyn_cast<clang::FunctionDecl>(context))
+	else if (auto f = llvm::dyn_cast<clang::FunctionDecl>(context))
 		return hashFunction(f);
 	throw CppImportException("Invalid parent for using directive or using decl");
 }
@@ -170,7 +170,7 @@ const QString NodeHasher::hashUsingParent(const clang::DeclContext* context)
 const QString NodeHasher::hashUsingDirective(const clang::UsingDirectiveDecl* usingDirective)
 {
 	QString hash = QString::fromStdString(usingDirective->getNominatedNamespaceAsWritten()->getNameAsString());
-	if(auto p = usingDirective->getQualifier())
+	if (auto p = usingDirective->getQualifier())
 		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
 	hash.prepend("_").prepend(hashUsingParent(usingDirective->getDeclContext()));
 	return hash;
@@ -179,7 +179,7 @@ const QString NodeHasher::hashUsingDirective(const clang::UsingDirectiveDecl* us
 const QString NodeHasher::hashUsingDecl(const clang::UsingDecl* usingDecl)
 {
 	QString hash = QString::fromStdString(usingDecl->getNameAsString());
-	if(auto p = usingDecl->getQualifier())
+	if (auto p = usingDecl->getQualifier())
 		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
 	hash.prepend("_").prepend(hashUsingParent(usingDecl->getDeclContext()));
 	return hash;
@@ -188,7 +188,7 @@ const QString NodeHasher::hashUsingDecl(const clang::UsingDecl* usingDecl)
 const QString NodeHasher::hashUnresolvedUsingDecl(const clang::UnresolvedUsingValueDecl* unresolvedUsing)
 {
 	QString hash = QString::fromStdString(unresolvedUsing->getNameInfo().getAsString());
-	if(auto p = unresolvedUsing->getQualifier())
+	if (auto p = unresolvedUsing->getQualifier())
 		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
 	hash.prepend("_").prepend(hashUsingParent(unresolvedUsing->getDeclContext()));
 	return hash;
@@ -215,13 +215,13 @@ const QString NodeHasher::hashTypeAliasTemplate(const clang::TypeAliasTemplateDe
 {
 	QString hash = hashTypeAlias(typeAliasTemplate->getTemplatedDecl());
 	auto templateParamList = typeAliasTemplate->getTemplateParameters();
-	for( auto templateParam = templateParamList->begin();
+	for ( auto templateParam = templateParamList->begin();
 		  templateParam != templateParamList->end(); ++templateParam)
 	{
 		hash.append("_");
-		if(auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
+		if (auto templateType = llvm::dyn_cast<clang::TemplateTypeParmDecl>(*templateParam))
 			hash.append(hashTemplateTypeParm(templateType));
-		else if(auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
+		else if (auto nonTemplateType = llvm::dyn_cast<clang::NonTypeTemplateParmDecl>(*templateParam))
 			hash.append(hashTemplateTypeParm(nonTemplateType));
 	}
 	return hash;
@@ -230,7 +230,7 @@ const QString NodeHasher::hashTypeAliasTemplate(const clang::TypeAliasTemplateDe
 const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName)
 {
 	QString hash;
-	switch(nestedName->getKind())
+	switch (nestedName->getKind())
 	{
 		case clang::NestedNameSpecifier::Identifier:
 			hash = QString(nestedName->getAsIdentifier()->getNameStart());
@@ -251,7 +251,7 @@ const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifi
 			hash = "_";
 			break;
 	}
-	if(auto p = nestedName->getPrefix())
+	if (auto p = nestedName->getPrefix())
 		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
 	return hash;
 }
@@ -271,7 +271,7 @@ const QString NodeHasher::hashTypeSourceInfo(const clang::TypeSourceInfo* info)
 const QString NodeHasher::hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam)
 {
 	QString hash = QString::fromStdString(templTypeParam->getNameAsString());
-	if(templTypeParam->hasDefaultArgument())
+	if (templTypeParam->hasDefaultArgument())
 		hash.append("=").append(hashType(templTypeParam->getDefaultArgument()));
 	return hash;
 }
@@ -280,7 +280,7 @@ const QString NodeHasher::hashTemplateTypeParm(const clang::NonTypeTemplateParmD
 {
 	QString hash = QString::fromStdString(nonTypeTemplParam->getNameAsString());
 	hash.append("_").append(QString::fromStdString(nonTypeTemplParam->getType().getCanonicalType().getAsString()));
-	if(nonTypeTemplParam->hasDefaultArgument())
+	if (nonTypeTemplParam->hasDefaultArgument())
 		hash.append("=").append(QString(srcMngr_->getCharacterData(nonTypeTemplParam->getDefaultArgumentLoc())));
 	return hash;
 }
@@ -288,7 +288,7 @@ const QString NodeHasher::hashTemplateTypeParm(const clang::NonTypeTemplateParmD
 const QString NodeHasher::hashTemplateArg(const clang::TemplateArgument& templateArg)
 {
 	QString hash;
-	switch(templateArg.getKind())
+	switch (templateArg.getKind())
 	{
 		case clang::TemplateArgument::ArgKind::Null:
 			hash = "null"; break;

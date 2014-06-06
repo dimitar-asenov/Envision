@@ -42,4 +42,4 @@ class OOINTERACTION_API HProject : public Interaction::GenericHandler {
 		static HProject* instance();
 };
 
-} /* namespace OOInteraction */
+}

@@ -60,8 +60,6 @@ QMainWindow* EnvisionManager::getMainWindow()
 	return mainWindow_;
 }
 
-
-
 void EnvisionManager::setPluginManager(PluginManager* pm)
 {
 	pm_ = pm;

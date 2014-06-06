@@ -608,7 +608,7 @@ inline const QMultiMap<VisualizationAddOn*, Item* >& Item::addOnItems()
 
 inline Item* Item::envisionItem(QGraphicsItem* item)
 {
-	while(item && !dynamic_cast<Item*>(item)) item = item->parentItem();
+	while (item && !dynamic_cast<Item*>(item)) item = item->parentItem();
 	return static_cast<Item*>(item);
 }
 

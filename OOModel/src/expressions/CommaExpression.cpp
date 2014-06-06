@@ -42,8 +42,8 @@ REGISTER_ATTRIBUTE(CommaExpression, right, Expression, false, false, true)
 CommaExpression::CommaExpression(Expression* left, Expression* right)
 : Super(nullptr, CommaExpression::getMetaData())
 {
-	if(left) setLeft(left);
-	if(right) setRight(right);
+	if (left) setLeft(left);
+	if (right) setRight(right);
 }
 
 QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)

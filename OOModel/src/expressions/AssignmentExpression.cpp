@@ -42,8 +42,8 @@ AssignmentExpression::AssignmentExpression(const AssignmentTypes &op, Expression
 : Super(nullptr, AssignmentExpression::getMetaData())
 {
 	setOp(op);
-	if(left) setLeft(left);
-	if(right) setRight(right);
+	if (left) setLeft(left);
+	if (right) setRight(right);
 }
 
 Type* AssignmentExpression::type()

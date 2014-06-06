@@ -38,7 +38,7 @@ const QEvent::Type SetExpressionCursorEvent::EventType = static_cast<QEvent::Typ
 SetExpressionCursorEvent::SetExpressionCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset)
 	: CustomSceneEvent(EventType), parentContainerChain_{}, node_(node), offset_(offset)
 {
-	while(parentContainer)
+	while (parentContainer)
 	{
 		parentContainerChain_.prepend(parentContainer);
 		parentContainer = parentContainer->parent();
@@ -50,7 +50,7 @@ void SetExpressionCursorEvent::execute()
 	// First start with the parent container and try to find the last descendent item that is still in the chain
 	// TODO: Do not assume that the first element of the parentContainerChain_ is a valid (non-deleted) item.
 	int container = 0;
-	while(container+1 < parentContainerChain_.size() &&
+	while (container+1 < parentContainerChain_.size() &&
 			parentContainerChain_.at(container)->childItems().contains(parentContainerChain_.at(container+1)))
 		++container;
 

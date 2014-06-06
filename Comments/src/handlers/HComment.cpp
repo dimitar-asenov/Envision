@@ -43,7 +43,7 @@ void HComment::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	auto vcomment = dynamic_cast<VComment*> ( target );
 	event->ignore();
 
-	if(event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
+	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_E)
 	{
 		event->accept();
 

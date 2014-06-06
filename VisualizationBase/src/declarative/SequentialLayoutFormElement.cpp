@@ -342,7 +342,7 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		}
 	}
 
-	auto wholeArea = extraCursors ? QRect(QPoint(0,0), item->sizeInLocal().toSize()) : elementBoundary;
+	auto wholeArea = extraCursors ? QRect(QPoint(0, 0), item->sizeInLocal().toSize()) : elementBoundary;
 
 	auto elementsArea = elementBoundary.adjusted(+leftMargin(), topMargin(), -rightMargin(), -bottomMargin());
 
@@ -355,9 +355,9 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 
 	int last = forward_ ?
 			( horizontal ? midArea.left() : midArea.top()) :
-			( horizontal ? midArea.right() + offset : midArea.bottom() + offset) ;
+			( horizontal ? midArea.right() + offset : midArea.bottom() + offset);
 
-	for(int i = 0; i<itemList.size(); ++i)
+	for (int i = 0; i<itemList.size(); ++i)
 	{
 		ItemRegion cursorRegion;
 		ItemRegion itemRegion;

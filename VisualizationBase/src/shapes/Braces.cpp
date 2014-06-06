@@ -65,7 +65,7 @@ void Braces::update()
 		QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
 		QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
 
-		while(textSize_ >= 0 && (lb.width() + rb.width() > width() || lb.height() + rb.height() > height()))
+		while (textSize_ >= 0 && (lb.width() + rb.width() > width() || lb.height() + rb.height() > height()))
 		{
 			textSize_--;
 			lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
@@ -82,7 +82,7 @@ void Braces::update()
 
 QSize Braces::getSizeOfBrace(const QString& brace, const QFont& font, int innerHeight, QPointF* offset) const
 {
-	if (innerHeight < 1) return QSize(0,0);
+	if (innerHeight < 1) return QSize(0, 0);
 
 	if (brace.isEmpty()) return QSize(0, innerHeight);
 
@@ -123,7 +123,7 @@ QSize Braces::innerSize(QSize outterSize) const
 	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);
 	QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 
-	while(size >= 0 && (lb.width() + rb.width() > outterSize.width() || lb.height() + rb.height() > outterSize.height()))
+	while (size >= 0 && (lb.width() + rb.width() > outterSize.width() || lb.height() + rb.height() > outterSize.height()))
 	{
 		size--;
 		lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);

@@ -37,7 +37,7 @@ class VISUALIZATIONBASE_API SymbolStyle : public Super<TextStyle>
 	public:
 		virtual ~SymbolStyle() override;
 
-		Property<QString> symbol{this,"symbol"};
+		Property<QString> symbol{this, "symbol"};
 };
 
 

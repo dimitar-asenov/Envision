@@ -31,7 +31,7 @@
 #include "AnchorLayoutAnchor.h"
 #include "Enumerations.h"
 
-using namespace DeclarativeEnumerations;
+using namespace DeclarativeEnumerations; // This shuold be here to enable client code to use the names directly.
 namespace Visualization {
 
 class AnchorLayoutConstraintSolver;

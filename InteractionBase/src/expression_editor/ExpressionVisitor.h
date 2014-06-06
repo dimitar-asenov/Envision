@@ -47,4 +47,4 @@ class INTERACTIONBASE_API ExpressionVisitor {
 		void visitChildren(Operator* op);
 };
 
-} /* namespace InteractionBase */
+}

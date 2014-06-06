@@ -184,7 +184,7 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 			// If needed this optimization could also be used in the other cases.
 			if (isRoot)
 			{
-				for(auto ref : allReferences_)
+				for (auto ref : allReferences_)
 					if (targetModel == ref->model())
 					{
 						auto& refName = ref->name();
@@ -201,7 +201,7 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 		{
 			// TODO: Find out what's a good value for the magick number 20 above.
 			QMap<QString, int> mapNames;
-			for (auto n : names) mapNames.insert(n,0); // TODO: isn't there a way to put void here?
+			for (auto n : names) mapNames.insert(n, 0); // TODO: isn't there a way to put void here?
 
 			f = [=](Reference* ref) { if (mapNames.contains(ref->name())) ref->setResolutionNeeded();};
 		}
@@ -213,7 +213,7 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 
 	if (isRoot)
 	{
-		for(auto ref : allReferences_) if (targetModel == ref->model()) f(ref);
+		for (auto ref : allReferences_) if (targetModel == ref->model()) f(ref);
 	}
 	else
 	{
@@ -263,7 +263,7 @@ void Reference::resolvePending()
 	int resolved = 0;
 	auto pending = pendingResolution_;
 
-	while(!pending.isEmpty())
+	while (!pending.isEmpty())
 	{
 		log.debug("resolution round " + QString::number(round) + ", "
 					 + QString::number(pendingResolution_.size()) + " references pending.");

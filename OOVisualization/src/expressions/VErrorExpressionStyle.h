@@ -52,4 +52,4 @@ inline const Visualization::SequentialLayoutStyle& VErrorExpressionStyle::layout
 inline const Visualization::TextStyle& VErrorExpressionStyle::prefix() const { return prefix_; }
 inline const Visualization::TextStyle& VErrorExpressionStyle::postfix() const { return postfix_; }
 
-} /* namespace OOVisualization */
+}

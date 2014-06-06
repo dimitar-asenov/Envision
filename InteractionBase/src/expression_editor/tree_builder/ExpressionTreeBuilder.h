@@ -54,4 +54,4 @@ inline Expression*& ExpressionTreeBuilder::top() { return top_; }
 inline QList<UnfinishedOperator*>& ExpressionTreeBuilder::unfinished() { return unfinished_; }
 inline Expression*& ExpressionTreeBuilder::left() { return left_; }
 
-} /* namespace InteractionBase */
+}

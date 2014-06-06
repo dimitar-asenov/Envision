@@ -33,7 +33,7 @@ A<double>::A() {
 }
 
 int main() {
-   A<int,5> x;
+   A<int, 5> x;
    A<> y;
    A<double, 10> z;
    A<double> k;

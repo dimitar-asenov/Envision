@@ -59,4 +59,4 @@ class INTERACTIONBASE_API ExpressionTreeUtils {
 		static void rotateLeft(Expression*& top, Operator* child, Operator* parent);
 };
 
-} /* namespace InteractionBase */
+}

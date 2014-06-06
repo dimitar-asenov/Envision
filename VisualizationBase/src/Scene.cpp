@@ -74,9 +74,9 @@ Scene::~Scene()
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
-	while(!topLevelItems_.isEmpty())
+	while (!topLevelItems_.isEmpty())
 		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
-	while(!selections_.isEmpty())
+	while (!selections_.isEmpty())
 		SAFE_DELETE_ITEM(selections_.takeLast());
 
 	SAFE_DELETE_ITEM(nameOverlay_);
@@ -128,7 +128,7 @@ void Scene::updateItems()
 	static bool alreadyProfiled = false;
 	if (!alreadyProfiled)
 		for (auto item : topLevelItems_)
-			if(item->typeName() == "RootItem")
+			if (item->typeName() == "RootItem")
 			{
 				alreadyProfiled = true;
 				Core::Profiler::startOnce(true, "Initial item update", "updateItems.prof");
@@ -220,7 +220,7 @@ void Scene::listenToModel(Model::Model* model)
 
 void Scene::nodesUpdated(QSet<Node*> nodes)
 {
-	for(auto node : nodes)
+	for (auto node : nodes)
 	{
 		auto it = Item::nodeItemsMap().find(node);
 		auto end = Item::nodeItemsMap().end();
@@ -275,7 +275,7 @@ bool Scene::event(QEvent *event)
 		if (event->type() == QEvent::GraphicsSceneMousePress)
 		{
 			auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
-			sceneHandlerItem_->setPos(e->scenePos() - QPointF(1,1));
+			sceneHandlerItem_->setPos(e->scenePos() - QPointF(1, 1));
 		}
 
 		if (event->type() == QEvent::KeyPress)
@@ -292,7 +292,7 @@ bool Scene::event(QEvent *event)
 		inEventHandler_ = false;
 
 		if (needsUpdate_) updateItems();
-		for(auto e : postEventActions_)
+		for (auto e : postEventActions_)
 		{
 			customEvent(e);
 			SAFE_DELETE(e);
@@ -379,7 +379,7 @@ void Scene::computeSceneRect()
 			viewRect = viewRect.united(br);
 	}
 
-	if (viewRect.isNull()) viewRect = QRectF(sceneRect.x(),sceneRect.y(),1,1);
+	if (viewRect.isNull()) viewRect = QRectF(sceneRect.x(), sceneRect.y(), 1, 1);
 
 	// TODO: Currently the user is not able to scroll in a way that will make menu items visible, if they are outside
 	// the outter bounding (scene) rectangle of normal items. The code below was meant to fix this, but it caused
@@ -415,12 +415,12 @@ void Scene::computeSceneRect()
 //		viewRect.setY(viewRect.y() - bottomExtra + topExtra);
 //	}
 
-	viewRect.adjust(-20,-20,20,20); // Add some margin
-	sceneRect.adjust(-20,-20,20,20); // Add some margin
+	viewRect.adjust(-20, -20, 20, 20); // Add some margin
+	sceneRect.adjust(-20, -20, 20, 20); // Add some margin
 
 	//sceneRect = viewRect.united(sceneRect);
 	setSceneRect(sceneRect);
-	for(auto v: views()) v->setSceneRect(viewRect);
+	for (auto v: views()) v->setSceneRect(viewRect);
 }
 
 void Scene::setItemIsSensitiveToScale(Item* item, bool update)

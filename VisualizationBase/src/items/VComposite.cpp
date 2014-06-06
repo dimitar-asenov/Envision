@@ -106,7 +106,7 @@ QList<Item*> VComposite::attributes()
 	auto attr = node()->getAllAttributes();
 
 	// Remove elements from attributes which are outdated
-	for(int i = attributes_.size() - 1; i>=0; --i)
+	for (int i = attributes_.size() - 1; i>=0; --i)
 	{
 		bool found = false;
 		for (int k = 0; k<attr.size(); ++k)

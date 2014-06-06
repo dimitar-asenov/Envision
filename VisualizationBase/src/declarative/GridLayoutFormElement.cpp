@@ -38,7 +38,7 @@ GridLayoutFormElement::GridLayoutFormElement()
 	elementGrid_ = QVector<QVector<FormElement*>>(numColumns_, QVector<FormElement*>(numRows_));
 
 	// initialize span grid
-	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_,QVector<QPair<int, int>>(numRows_, QPair<int, int>(1, 1)));
+	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_, QVector<QPair<int, int>>(numRows_, QPair<int, int>(1, 1)));
 
 	// initialize alignments
 	defaultColumnHorizontalAlignments_ = QVector<LayoutStyle::Alignment>(numColumns_, defaultVerticalAlignment_);
@@ -82,8 +82,8 @@ GridLayoutFormElement::GridLayoutFormElement(const GridLayoutFormElement& other)
 	overallRowStretchFactor_{other.overallRowStretchFactor_}
 {
 	// Adjust child Elements
-	for(int x = 0; x<elementGrid_.size(); ++x)
-		for(int y = 0; y<elementGrid_[x].size(); ++y)
+	for (int x = 0; x<elementGrid_.size(); ++x)
+		for (int y = 0; y<elementGrid_[x].size(); ++y)
 			if (elementGrid_[x][y])
 				{
 					auto child = elementGrid_[x][y]->clone();
@@ -125,8 +125,8 @@ void GridLayoutFormElement::computeSize(Item* item, int availableWidth, int avai
 	QVector<int> tallestInRow(numRows_, 0);
 	bool hasMultiColumn = false;
 	bool hasMultiRow = false;
-	for(int x=0; x<numColumns_; x++)
-		for(int y=0; y<numRows_; y++)
+	for (int x=0; x<numColumns_; x++)
+		for (int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
 				FormElement* element = elementGrid_[x][y];
@@ -146,8 +146,8 @@ void GridLayoutFormElement::computeSize(Item* item, int availableWidth, int avai
 
 	// modify widest cells in columns and tallest cells in rows if there are merged columns
 	if (hasMultiColumn or hasMultiRow)
-		for(int x=0; x<numColumns_; x++)
-			for(int y=0; y<numRows_; y++)
+		for (int x=0; x<numColumns_; x++)
+			for (int y=0; y<numRows_; y++)
 			{
 				if (spanGrid_[x][y].first > 1)
 				{
@@ -234,8 +234,8 @@ void GridLayoutFormElement::computeSize(Item* item, int availableWidth, int avai
 	setSize(item, QSize(totalWidth, totalHeight));
 
 	// Recompute all the element's sizes, if their size depends on their parent's size
-	for(int x=0; x<numColumns_; x++)
-		for(int y=0; y<numRows_; y++)
+	for (int x=0; x<numColumns_; x++)
+		for (int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr && elementGrid_[x][y]->sizeDependsOnParent(item))
 			{
 				FormElement* element = elementGrid_[x][y];
@@ -258,10 +258,10 @@ void GridLayoutFormElement::computeSize(Item* item, int availableWidth, int avai
 
 	// Set element positions
 	int left = leftMargin();
-	for(int x=0; x<numColumns_; ++x)
+	for (int x=0; x<numColumns_; ++x)
 	{
 		int top = topMargin();
-		for(int y=0; y<numRows_; ++y)
+		for (int y=0; y<numRows_; ++y)
 		{
 			if (elementGrid_[x][y] != nullptr)
 			{
@@ -337,9 +337,9 @@ QList<ItemRegion> GridLayoutFormElement::regions(DeclarativeItemBase* item, int 
 	QList<ItemRegion> allRegions;
 
 	// regions for the child elements
-	for(int x=0; x<numColumns_; x++)
-		for(int y=0; y<numRows_; y++)
-			if(elementGrid_[x][y])
+	for (int x=0; x<numColumns_; x++)
+		for (int y=0; y<numRows_; y++)
+			if (elementGrid_[x][y])
 				allRegions.append(elementGrid_[x][y]->regions(item, this->x(item) + parentX, this->y(item) + parentY));
 
 	// if grid consists of exactly one row or one column, add more cursor regions
@@ -367,7 +367,7 @@ QList<ItemRegion> GridLayoutFormElement::regions(DeclarativeItemBase* item, int 
 
 		int thisElementPos = horizontal ? parentX + x(item) : parentY + y(item);
 
-		for(int i = 0; i < (list_size); ++i)
+		for (int i = 0; i < (list_size); ++i)
 		{
 			ItemRegion cursorRegion;
 			if (horizontal)
@@ -449,10 +449,10 @@ QList<ItemRegion> GridLayoutFormElement::regions(DeclarativeItemBase* item, int 
 void GridLayoutFormElement::computeOverallStretchFactors()
 {
 	overallColumnStretchFactor_ = 0;
-	for(auto stretchFactor : columnStretchFactors_) overallColumnStretchFactor_ += stretchFactor;
+	for (auto stretchFactor : columnStretchFactors_) overallColumnStretchFactor_ += stretchFactor;
 
 	overallRowStretchFactor_ = 0;
-	for(auto stretchFactor : rowStretchFactors_) overallRowStretchFactor_ += stretchFactor;
+	for (auto stretchFactor : rowStretchFactors_) overallRowStretchFactor_ += stretchFactor;
 }
 
 void GridLayoutFormElement::adjustSize(int containColumn, int containRow)
@@ -472,7 +472,7 @@ void GridLayoutFormElement::adjustSize(int containColumn, int containRow)
 
 		// adjust span grid
 		auto newSpanGrid = QVector<QVector<QPair<int, int>>>(
-				newNumColumns,QVector<QPair<int, int>>(newNumRows, QPair<int, int>(1, 1)));
+				newNumColumns, QVector<QPair<int, int>>(newNumRows, QPair<int, int>(1, 1)));
 		for (int x=0; x<numColumns_; x++)
 			for (int y=0; y<numRows_; y++)
 				newSpanGrid[x][y] = spanGrid_[x][y];
@@ -540,7 +540,8 @@ void GridLayoutFormElement::adjustSize(int containColumn, int containRow)
 	}
 }
 
-inline void GridLayoutFormElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last)
+inline void GridLayoutFormElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first,
+																							bool last)
 {
 	// Make sure there is at least some space for the cursor Region.
 	if (horizontal && region.width() == 0) region.adjust((first?0:-1), 0, (last?0:1), 0);

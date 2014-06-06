@@ -50,7 +50,7 @@ VEmptyExpression::~VEmptyExpression()
 
 void VEmptyExpression::determineChildren()
 {
-	if(dynamic_cast<OOModel::ExpressionStatement*>(node()->parent()))
+	if (dynamic_cast<OOModel::ExpressionStatement*>(node()->parent()))
 		vis_->setStyle(&style()->emptyLine());
 	else
 		vis_->setStyle(&style()->normal());

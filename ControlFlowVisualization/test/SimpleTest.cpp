@@ -198,7 +198,7 @@ Method* addDivBySix(Class* parent)
 	div2->setLeft(new ReferenceExpression("n"));
 	div2->setOp(BinaryOperation::REMAINDER);
 	div2->setRight(new IntegerLiteral(2));
-	ifdiv2->elseBranch()->append(new  ContinueStatement());
+	ifdiv2->elseBranch()->append(new ContinueStatement());
 
 	IfStatement* ifdiv3 = new IfStatement();
 	ifdiv2->thenBranch()->append(ifdiv3);

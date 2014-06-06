@@ -66,7 +66,7 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 						break;
 					}
 					else --num_intermediate_ops;
-				} else if( dynamic_cast<AddOperator*> (instructions[x]) || dynamic_cast<AddErrorOperator*> (instructions[x]))
+				} else if ( dynamic_cast<AddOperator*> (instructions[x]) || dynamic_cast<AddErrorOperator*> (instructions[x]))
 				{
 					++num_intermediate_ops;
 				}

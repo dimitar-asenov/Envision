@@ -41,7 +41,7 @@ ItemRegion::~ItemRegion()
 
 qreal ItemRegion::distanceTo(const QPointF& point)
 {
-	// Translate the region so that its upper left corner is at 0,0
+	// Translate the region so that its upper left corner is at 0, 0
 	QPointF p = point - region_.topLeft();
 	qreal width = region_.width();
 	qreal height = region_.height();
@@ -50,7 +50,7 @@ qreal ItemRegion::distanceTo(const QPointF& point)
 	{
 		// Above
 		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
-		else if (p.x() > width) return  std::sqrt(p.y()*p.y() + (p.x()-width)*(p.x()-width)); // To the right
+		else if (p.x() > width) return std::sqrt(p.y()*p.y() + (p.x()-width)*(p.x()-width)); // To the right
 		else return -p.y(); // Directly above
 	}
 	else if (p.y() > height)
@@ -65,14 +65,14 @@ qreal ItemRegion::distanceTo(const QPointF& point)
 	{
 		// Within the same height
 		if (p.x() < 0) return -p.x(); // To the left
-		else if (p.x() > width) return  p.x()-width; // To the right
+		else if (p.x() > width) return p.x()-width; // To the right
 		else return 0; // Inside
 	}
 }
 
 ItemRegion::PositionConstraints ItemRegion::satisfiedPositionConstraints(const QPoint& point) const
 {
-	// Translate the region so that its upper left corner is at 0,0
+	// Translate the region so that its upper left corner is at 0, 0
 	QPointF p = point - region_.topLeft();
 
 	PositionConstraints constraints = NoConstraints;

@@ -51,9 +51,9 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	this->addWidget(bSelectShape_);
 
 	QMenu* menu = new QMenu();
-	menu->addAction(QIcon(":/icons/rectangle.png"),"Rectangle")->setIconVisibleInMenu(true);
-	menu->addAction(QIcon(":/icons/ellipse.png"),"Ellipse")->setIconVisibleInMenu(true);
-	menu->addAction(QIcon(":/icons/diamond.png"),"Diamond")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon(":/icons/rectangle.png"), "Rectangle")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon(":/icons/ellipse.png"), "Ellipse")->setIconVisibleInMenu(true);
+	menu->addAction(QIcon(":/icons/diamond.png"), "Diamond")->setIconVisibleInMenu(true);
 
 	bSelectShape_->setPopupMode(QToolButton::InstantPopup);
 	bSelectShape_->setMenu(menu);
@@ -85,7 +85,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	this->addWidget(cbOutlineType_);
 
 	cbOutlineSize_ = new QComboBox;
-	for(int i = 1; i <= 10; i++)
+	for (int i = 1; i <= 10; i++)
 	{
 		cbOutlineSize_->addItem(QString::number(i));
 	}
@@ -120,8 +120,8 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
 {
 	diagram_ = diagram;
-	colorPickerBackground_->setColors(diagram->style()->getColors(),diagram->style()->getColorsPerRow());
-	colorPickerBorder_->setColors(diagram->style()->getColors(),diagram->style()->getColorsPerRow());
+	colorPickerBackground_->setColors(diagram->style()->getColors(), diagram->style()->getColorsPerRow());
+	colorPickerBorder_->setColors(diagram->style()->getColors(), diagram->style()->getColorsPerRow());
 	colorPickerText_->setEnvisionTextColors();
 	bConnections_->setChecked(diagram->showConnectorPoints());
 }
@@ -216,7 +216,7 @@ void CommentDiagramToolbar::applyTextColor(QString color)
 
 void CommentDiagramToolbar::applyOutlineType(int i)
 {
-	if(colorPickerText_->isEnabled())
+	if (colorPickerText_->isEnabled())
 	{
 		auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
 		shape->node()->model()->beginModification(shape->node(), "Setting OutlineType");
@@ -234,7 +234,7 @@ void CommentDiagramToolbar::applyOutlineType(int i)
 
 void CommentDiagramToolbar::applyOutlineSize(int i)
 {
-	if(colorPickerText_->isEnabled())
+	if (colorPickerText_->isEnabled())
 	{
 		auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
 		shape->node()->model()->beginModification(shape->node(), "Setting OutlineSize");
@@ -274,7 +274,7 @@ bool CommentDiagramToolbar::connectionMode()
 
 void CommentDiagramToolbar::handleTimerEvent()
 {
-	if(!this->diagram_->itemOrChildHasFocus())
+	if (!this->diagram_->itemOrChildHasFocus())
 	{
 		aTimer_->stop();
 		this->close();

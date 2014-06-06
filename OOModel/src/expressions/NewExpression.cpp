@@ -51,7 +51,7 @@ Type* NewExpression::type()
 	auto t = newType()->type();
 	t->setValueType(true);
 
-	for(int i = 0; i< dimensions()->size(); ++i)
+	for (int i = 0; i< dimensions()->size(); ++i)
 		t = new ArrayType(t, true);
 
 	return t;

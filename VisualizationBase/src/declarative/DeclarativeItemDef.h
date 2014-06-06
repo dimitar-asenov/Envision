@@ -39,7 +39,7 @@ DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleTyp
 		DeclarativeItemBase(parent, style)
 {
 		static bool initialized = false;
-		if(!initialized)
+		if (!initialized)
 		{
 			VisualizationType::initializeForms();
 			for (auto f : forms())
@@ -52,7 +52,7 @@ DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleTyp
 template <class VisualizationType>
 DeclarativeItem<VisualizationType>::~DeclarativeItem()
 {
-	for(FormElement* form : formsStatic())
+	for (FormElement* form : formsStatic())
 		form->destroyChildItems(this, {});
 }
 
@@ -107,7 +107,8 @@ template <class ChildItemVisualizationType>
 										std::function<const
 											typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter)
 {
-	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>(itemStorage, styleGetter);
+	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>(itemStorage,
+																																 styleGetter);
 }
 
 template <class VisualizationType>
@@ -149,7 +150,7 @@ template <class ChildItemVisualizationType, class ParentStyleType, class ParentN
 			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
 {
 	return new NodeWithVisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>
-	(itemStorage, [=](I* v){return (v->node()->*nodePointer)();},[=](I* v) { return &((v->style()->*stylePointer)()); });
+	(itemStorage, [=](I* v){return (v->node()->*nodePointer)();}, [=](I* v) { return &((v->style()->*stylePointer)()); });
 }
 
 }

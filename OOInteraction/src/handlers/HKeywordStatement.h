@@ -42,4 +42,4 @@ class OOINTERACTION_API HKeywordStatement : public HStatement {
 		HKeywordStatement();
 };
 
-} /* namespace OOInteraction */
+}

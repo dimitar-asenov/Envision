@@ -49,4 +49,3 @@ class OOMODEL_API ExplicitTemplateInstantiation : public Super<Declaration>
 };
 
 }
-

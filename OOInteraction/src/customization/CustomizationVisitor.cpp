@@ -53,7 +53,7 @@ void CustomizationVisitor::init(Visualization::VisualizationGroup* customization
 
 Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::Method* met)
 {
-	for(auto annotation : *met->annotations())
+	for (auto annotation : *met->annotations())
 	{
 		if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(annotation) )
 			if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
@@ -82,7 +82,7 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 									});
 						}
 					}
-					else if  (ref->prefix() == nullptr && ref->name() == "EnvisionShortcut"
+					else if (ref->prefix() == nullptr && ref->name() == "EnvisionShortcut"
 							&& call->arguments()->size() >= 1 && call->arguments()->size() <=2)
 					{
 						if (auto keyword = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))

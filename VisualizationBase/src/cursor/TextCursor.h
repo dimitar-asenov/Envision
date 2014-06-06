@@ -99,10 +99,9 @@ inline int TextCursor::selectionLastIndex()
 	{ return selectionBegin_ > selectionEnd_ ? selectionBegin_ : selectionEnd_; }
 inline bool TextCursor::isCursorBeforeSelection() { return selectionEnd_ < selectionBegin_; }
 
-inline void TextCursor::setCaretPosition(int beforeCharacter) { setSelectedCharacters(beforeCharacter,beforeCharacter);}
+inline void TextCursor::setCaretPosition(int beforeCharacter) {setSelectedCharacters(beforeCharacter, beforeCharacter);}
 inline int TextCursor::caretPosition() { return selectionEnd_; }
 
 inline bool TextCursor:: hasSelection() { return selectionEnd_ != selectionBegin_; }
 
-
-} /* namespace Visualization */
+}

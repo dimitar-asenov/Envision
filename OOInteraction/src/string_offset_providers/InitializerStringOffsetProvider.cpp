@@ -52,7 +52,7 @@ int InitializerStringOffsetProvider::offset(Qt::Key key)
 		auto focusedIndex = vis_->layout()->focusedElementIndex();
 
 		int index = 1;
-		for(int y = 0; y < focusedIndex.y(); ++y)
+		for (int y = 0; y < focusedIndex.y(); ++y)
 		{
 			result += components[index++].size();
 			result += components[index++].size(); // This is for the comma after the element
@@ -62,7 +62,7 @@ int InitializerStringOffsetProvider::offset(Qt::Key key)
 		result += subComponents[0].size();
 
 		int subIndex = 1;
-		for(int x = 0; x<focusedIndex.x(); ++x)
+		for (int x = 0; x<focusedIndex.x(); ++x)
 		{
 			result += subComponents[subIndex++].size();
 			result += subComponents[subIndex++].size();
@@ -105,7 +105,7 @@ void InitializerStringOffsetProvider::setOffset(int offset)
 		int subIndex = 0;
 		offset -= subComponents[subIndex++].size();
 		if (offset < 0) offset = 0;
-		while(subIndex < subComponents.size() && offset > subComponents[subIndex].size())
+		while (subIndex < subComponents.size() && offset > subComponents[subIndex].size())
 		{
 			offset -= subComponents[subIndex++].size();
 			offset -= subComponents[subIndex++].size();
@@ -114,7 +114,7 @@ void InitializerStringOffsetProvider::setOffset(int offset)
 		if (offset < 0) offset = 0;
 		if (subIndex == subComponents.size()) subIndex -= 2;
 
-		auto childItem = vis_->layout()->at<Visualization::Item>((subIndex-1)/2,(index-1)/2);
+		auto childItem = vis_->layout()->at<Visualization::Item>((subIndex-1)/2, (index-1)/2);
 		if ( setOffsetInItem(offset, childItem) )
 			return;
 	}

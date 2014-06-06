@@ -50,8 +50,8 @@ NodeOwningCommand::~NodeOwningCommand()
 	// - It is not currently owned by any other command in any undo stack
 	if (n && !n->model())
 	{
-		for(auto m : ModelManager::instance().loadedModels())
-			if (m->isOwnedByUndoStack(n,this)) return;
+		for (auto m : ModelManager::instance().loadedModels())
+			if (m->isOwnedByUndoStack(n, this)) return;
 
 		SAFE_DELETE(n);
 	}

@@ -251,7 +251,7 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 	QSet<Method*> filtered;
 
 	// Get all methods and forget about the rest.
-	for(auto target : candidates)
+	for (auto target : candidates)
 		if (auto method = DCast<Method>(target))
 			filtered.insert(method);
 	if (filtered.size() == 1) return *filtered.begin();
@@ -273,7 +273,7 @@ Model::Node* OOReference::resolveAmbiguousMethodCall(QSet<Model::Node*>& candida
 	if (filtered.size() == 1) return *filtered.begin();
 
 	candidates.clear();
-	for(auto m : filtered) candidates.insert(m);
+	for (auto m : filtered) candidates.insert(m);
 	//TODO: check for correct access of public/private
 
 	return nullptr;
@@ -287,7 +287,7 @@ void OOReference::removeMethodsWithDifferentNumberOfArguments(QSet<Method*>& met
 	// Exclude methods with less type arguments or unequal number of formal arguments
 	// TODO: Consider default method arguments and variable method arity.
 	auto it = methods.begin();
-	while(it != methods.end())
+	while (it != methods.end())
 	{
 		if ((*it)->typeArguments()->size() < callee->typeArguments()->size()
 				|| callExpression->arguments()->size() != (*it)->arguments()->size())
@@ -300,12 +300,12 @@ void OOReference::removeMethodsWithIncompatibleTypeOfArguments(QSet<Method*>& me
 		MethodCallExpression* callExpression) const
 {
 	int argId = 0;
-	for(auto arg: *callExpression->arguments())
+	for (auto arg: *callExpression->arguments())
 	{
 		auto actualArgType = arg->type();
 
 		auto it = methods.begin();
-		while(it != methods.end())
+		while (it != methods.end())
 		{
 			auto formalArgType = (*it)->arguments()->at(argId)->typeExpression()->type();
 
@@ -353,7 +353,7 @@ void OOReference::removeOverridenMethods(QSet<Method*>& methods) const
 void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 {
 	QSet<Method*> mostSpecific;
-	while(!methods.isEmpty())
+	while (!methods.isEmpty())
 	{
 		enum Specificity {UNDETERMINED, MORE, LESS, SAME};
 		Specificity overallSpecificity = UNDETERMINED;
@@ -366,20 +366,20 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 		// Compare this method to all the ones that are already most specifc.
 		// Remove any most specific method that is strictly less specific than the current one.
 		auto sIt = mostSpecific.begin();
-		while(sIt != mostSpecific.end())
+		while (sIt != mostSpecific.end())
 		{
 			Specificity specificity = UNDETERMINED;
-			for(int argId = 0; argId < filteredTypes.size(); ++argId)
+			for (int argId = 0; argId < filteredTypes.size(); ++argId)
 			{
 				auto spType = (*sIt)->arguments()->at(argId)->typeExpression()->type();
 				auto relation = filteredTypes.at(argId)->relationTo(spType);
 
-				if (relation.testFlag(TypeSystem::Equal)) /* Do nothing*/;
+				if (relation.testFlag(TypeSystem::Equal)); /* Do nothing*/
 				else if (relation.testFlag(TypeSystem::IsSubtype) && specificity == UNDETERMINED) specificity = MORE;
-				else if (relation.testFlag(TypeSystem::IsSubtype) && specificity == MORE) /* Do nothing*/;
+				else if (relation.testFlag(TypeSystem::IsSubtype) && specificity == MORE); /* Do nothing*/
 				else if (relation.testFlag(TypeSystem::IsSubtype) && specificity == LESS) specificity = SAME;
 				else if (relation.testFlag(TypeSystem::IsSupertype) && specificity == UNDETERMINED) specificity = LESS;
-				else if (relation.testFlag(TypeSystem::IsSupertype) && specificity == LESS) /* Do nothing*/;
+				else if (relation.testFlag(TypeSystem::IsSupertype) && specificity == LESS); /* Do nothing*/
 				else if (relation.testFlag(TypeSystem::IsSupertype) && specificity == MORE) specificity = SAME;
 
 				SAFE_DELETE(spType);
@@ -391,7 +391,7 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 			{
 				sIt = mostSpecific.erase(sIt);
 				Q_ASSERT(overallSpecificity != LESS);
-				if(overallSpecificity == UNDETERMINED) overallSpecificity = MORE;
+				if (overallSpecificity == UNDETERMINED) overallSpecificity = MORE;
 			}
 			else if (specificity == LESS)
 			{
@@ -407,7 +407,7 @@ void OOReference::removeLessSpecificMethods(QSet<Method*>& methods) const
 			}
 		}
 
-		for(auto t : filteredTypes) SAFE_DELETE(t);
+		for (auto t : filteredTypes) SAFE_DELETE(t);
 
 		Q_ASSERT(mostSpecific.isEmpty() || overallSpecificity != UNDETERMINED);
 		if (overallSpecificity != LESS) mostSpecific.insert(m);

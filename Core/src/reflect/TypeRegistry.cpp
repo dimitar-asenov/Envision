@@ -32,7 +32,7 @@ int TypeRegistry::initialized_{0};
 
 void TypeRegistry::initializeNewTypes()
 {
-	for(;initialized_ < initializationFunctions_.size(); ++initialized_)
+	for (;initialized_ < initializationFunctions_.size(); ++initialized_)
 		initializationFunctions_[initialized_]();
 }
 

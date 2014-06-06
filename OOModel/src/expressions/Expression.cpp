@@ -44,7 +44,7 @@ Type* Expression::type()
 Expression* Expression::topMostExpressionParent() const
 {
 	auto e = this;
-	while(true)
+	while (true)
 	{
 		auto p = e->parent();
 		if (auto pe = DCast<Expression>(p))

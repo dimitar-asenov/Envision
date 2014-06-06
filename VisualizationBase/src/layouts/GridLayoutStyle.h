@@ -37,10 +37,10 @@ class VISUALIZATIONBASE_API GridLayoutStyle : public Super<LayoutStyle>
 	public:
 		virtual ~GridLayoutStyle() override;
 
-		Property<Alignment> horizontalAlignment{this,"horizontalAlignment"};
-		Property<Alignment> verticalAlignment{this,"verticalAlignment"};
-		Property<int> horizontalSpace{this,"horizontalSpace"};
-		Property<int> verticalSpace{this,"verticalSpace"};
+		Property<Alignment> horizontalAlignment{this, "horizontalAlignment"};
+		Property<Alignment> verticalAlignment{this, "verticalAlignment"};
+		Property<int> horizontalSpace{this, "horizontalSpace"};
+		Property<int> verticalSpace{this, "verticalSpace"};
 };
 
 }

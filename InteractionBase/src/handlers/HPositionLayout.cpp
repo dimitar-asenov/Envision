@@ -53,7 +53,7 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 		Visualization::Item* itemToMove = nullptr;
 		if (layout->length() >=2)
 		{
-			for(int i = 0; i<layout->length(); ++i)
+			for (int i = 0; i<layout->length(); ++i)
 			{
 				itemToMove = layout->at<Visualization::Item>(i);
 				if (itemToMove->contains(itemToMove->mapFromParent(event->pos()))) break;
@@ -93,7 +93,7 @@ void HPositionLayout::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 		int currentItemPositionY = currentItemPosition->yNode() ? currentItemPosition->y() : 0;
 		if (newX != currentItemPositionX || newY != currentItemPositionY)
 		{
-			currentItem->node()->model()->beginModification(currentItem->node(),"Change position");
+			currentItem->node()->model()->beginModification(currentItem->node(), "Change position");
 			currentItemPosition->setX( newX );
 			currentItemPosition->setY( newY );
 			currentItem->node()->model()->endModification();

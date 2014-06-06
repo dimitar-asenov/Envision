@@ -37,4 +37,4 @@ class INTERACTIONBASE_API LeaveUnfinished : public ExpressionTreeBuildInstructio
 		virtual void perform(ExpressionTreeBuilder& tb);
 };
 
-} /* namespace Interaction */
+}

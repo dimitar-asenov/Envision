@@ -37,7 +37,7 @@ using namespace OOModel;
 namespace OOInteraction {
 
 CCreateClass::CCreateClass() : CreateNamedObjectWithAttributes("class",
-		{{"public", "private","protected"}})
+		{{"public", "private", "protected"}})
 {
 }
 

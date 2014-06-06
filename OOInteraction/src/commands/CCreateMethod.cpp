@@ -36,7 +36,7 @@ using namespace OOModel;
 namespace OOInteraction {
 
 CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private","protected"}, {"static"}})
+		{{"public", "private", "protected"}, {"static"}})
 {
 }
 

@@ -42,7 +42,7 @@ TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
 : Super(nullptr, TypeAlias::getMetaData())
 {
 	setName(name);
-	if(typeExpression) setTypeExpression(typeExpression);
+	if (typeExpression) setTypeExpression(typeExpression);
 }
 
 Model::Node* TypeAlias::target() const

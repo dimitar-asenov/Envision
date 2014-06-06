@@ -39,7 +39,7 @@ class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public Super<ControlFlowItemS
 	public:
 		virtual ~VBlockCFStyle() override;
 
-		Property<VListCFStyle> statements{this,"statements"};
+		Property<VListCFStyle> statements{this, "statements"};
 };
 
 

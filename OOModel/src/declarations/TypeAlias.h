@@ -55,4 +55,3 @@ class OOMODEL_API TypeAlias : public Super<Declaration>
 };
 
 }
-

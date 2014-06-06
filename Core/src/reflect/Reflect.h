@@ -51,4 +51,3 @@ inline Derived* DCast(Base* b)
 	else
 		return nullptr;
 }
-

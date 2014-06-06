@@ -44,20 +44,20 @@ void DefaultLog::add(QString message)
 	add(LOGINFO, message);
 }
 
-void DefaultLog::add(Level l, QString message)
+void DefaultLog::add(Level level, QString message)
 {
 	QMutexLocker locker(&logAccess);
 
 	QTextStream out(stdout);
 	QTextStream err(stderr);
 
-	if (l == LOGERROR) err<<	"ERROR   " << pluginId << ": " << message << endl;
-	if (l == LOGDEBUG) out<<	"DEBUG   " << pluginId << ": " << message << endl;
-	if (l == LOGINFO) out<<		"INFO    " << pluginId << ": " << message << endl;
-	if (l == LOGWARNING) out<<	"WARNING " << pluginId << ": " << message << endl;
+	if (level == LOGERROR) err<<	"ERROR   " << pluginId << ": " << message << endl;
+	if (level == LOGDEBUG) out<<	"DEBUG   " << pluginId << ": " << message << endl;
+	if (level == LOGINFO) out<<		"INFO    " << pluginId << ": " << message << endl;
+	if (level == LOGWARNING) out<<	"WARNING " << pluginId << ": " << message << endl;
 
 	loggedEvents.append(LogEntry());
-	loggedEvents.last().level = l;
+	loggedEvents.last().level = level;
 	loggedEvents.last().message = message;
 	loggedEvents.last().pluginId = pluginId;
 

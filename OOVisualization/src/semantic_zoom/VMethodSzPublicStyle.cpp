@@ -31,4 +31,3 @@ namespace OOVisualization {
 VMethodSzPublicStyle::~VMethodSzPublicStyle(){} // Put the VTable here
 
 }
-

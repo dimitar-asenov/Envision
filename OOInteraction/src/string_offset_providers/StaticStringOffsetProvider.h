@@ -49,4 +49,4 @@ class StaticStringOffsetProvider : public StringOffsetProvider {
 		Visualization::Static* vis_;
 };
 
-} /* namespace OOInteraction */
+}

@@ -49,7 +49,7 @@ class COMMENTS_API VComment : public Super<Visualization::ItemWithNode<VComment,
 		static void initializeForms();
 		virtual int determineForm() override;
 
-		QList<QPair<QString,QString>> parseMarkdownArguments(const QString& argString);
+		QList<QPair<QString, QString>> parseMarkdownArguments(const QString& argString);
 
 		void toggleEditing();
 		bool editing() const;

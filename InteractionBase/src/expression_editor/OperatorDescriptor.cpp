@@ -42,16 +42,16 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 	signature_.replaceInStrings("SPACE", " ");
 	computeExpectedTokens();
 
-	for(auto s : signature_)
+	for (auto s : signature_)
 		if (!isDelimiter(s)) ++num_operands_;
 
 	// Compute prefix
-	for(int i = 0; i < signature_.size() && isDelimiter(signature_.at(i)); ++i)
+	for (int i = 0; i < signature_.size() && isDelimiter(signature_.at(i)); ++i)
 		prefix_.append( signature_.at(i) );
 
 	// Compute posfix
 	int postfix_index = signature_.size()-1;
-	for(; postfix_index>=0 && isDelimiter(signature_.at(postfix_index)); --postfix_index)
+	for (; postfix_index>=0 && isDelimiter(signature_.at(postfix_index)); --postfix_index)
 		postfix_.prepend( signature_.at(postfix_index) );
 
 	// If the postfix encompasses the entire expression, then this expression is likely just a single keyword e.g. this
@@ -72,16 +72,16 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 
 QStringList OperatorDescriptor::delimiters()
 {
-	QStringList l;
-	l.append("");
+	QStringList list;
+	list.append("");
 
 	for (int i = 0; i< signature_.size(); ++i)
 	{
-		if ( !isDelimiter(signature_.at(i))) l.append("");
-		else l.last().append( signature_.at(i) );
+		if ( !isDelimiter(signature_.at(i))) list.append("");
+		else list.last().append( signature_.at(i) );
 	}
 
-	return l;
+	return list;
 }
 
 void OperatorDescriptor::computeExpectedTokens()

@@ -192,7 +192,7 @@ template class Model::TypedList<className>;																									\
  * This is just the common subpart of the two macros below. Do not use it directly.
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)																		\
-DEFINE_TYPE_ID_DERIVED(className, #className,)																								\
+DEFINE_TYPE_ID_DERIVED(className, #className, )																								\
 																																							\
 void className::initType()																															\
 {																																							\
@@ -241,7 +241,7 @@ className* className::createDefaultInstance( Node* parent) { return proxyClassNa
  * This is just the common subpart of the two macros below. Do not use it directly.
  */
 #define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS_COMMON(className)															\
-DEFINE_TYPE_ID_DERIVED(className, #className,)																								\
+DEFINE_TYPE_ID_DERIVED(className, #className, )																								\
 																																							\
 void className::initType()																															\
 {																																							\

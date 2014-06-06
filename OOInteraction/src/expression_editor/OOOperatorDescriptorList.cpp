@@ -88,7 +88,7 @@ void OOOperatorDescriptorList::extractCommaInto (Expression* expression, T* dest
 	// Expand all the commas
 	if (auto comma = DCast<CommaExpression>(expressionToExpand))
 	{
-		for(auto arg : comma->allSubOperands(true)) destination->append(arg);
+		for (auto arg : comma->allSubOperands(true)) destination->append(arg);
 		SAFE_DELETE(comma);
 	}
 	else
@@ -121,7 +121,7 @@ void OOOperatorDescriptorList::extractCommaInto (Expression* expression, T* dest
 			}
 		}
 
-		for(int i = 0; i < emptyToAdd; ++i) destination->append( new EmptyExpression());
+		for (int i = 0; i < emptyToAdd; ++i) destination->append( new EmptyExpression());
 	}
 }
 
@@ -281,7 +281,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new ArrayInitializer();
 
-		for(auto e: operands) extractCommaInto(e, opr->values(), false, false);
+		for (auto e: operands) extractCommaInto(e, opr->values(), false, false);
 
 		return opr;
 	}));

@@ -46,4 +46,4 @@ class OOINTERACTION_API InitializerStringOffsetProvider : public StringOffsetPro
 		OOVisualization::VArrayInitializer* vis_;
 };
 
-} /* namespace OOInteraction */
+}

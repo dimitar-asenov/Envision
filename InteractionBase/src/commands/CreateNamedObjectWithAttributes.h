@@ -59,4 +59,4 @@ class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public Command
 		const QList<QStringList> attributes_;
 };
 
-} /* namespace InteractionBase */
+}

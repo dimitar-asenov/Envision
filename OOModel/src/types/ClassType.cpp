@@ -29,7 +29,7 @@
 
 namespace OOModel {
 
-ClassType::ClassType(Class* classDefinition, bool isValueType) : SymbolProviderType(classDefinition ,isValueType)
+ClassType::ClassType(Class* classDefinition, bool isValueType) : SymbolProviderType(classDefinition, isValueType)
 {}
 
 Class* ClassType::classDefinition() const

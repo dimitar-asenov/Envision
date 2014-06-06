@@ -89,7 +89,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 
 	// Get a lower bound on trailing tokens
 	int numTokens = endTokens_ - token;
-	for(auto e : expected) if (e.type != ExpectedToken::END) --numTokens;
+	for (auto e : expected) if (e.type != ExpectedToken::END) --numTokens;
 	if (numTokens < 0)
 	{
 		Q_ASSERT(result.missingTrailingTokens <= -numTokens);
@@ -111,7 +111,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	}
 
 	bool error = false;
-	switch(token->type())
+	switch (token->type())
 	{
 		case Token::Identifier:
 		case Token::Literal:

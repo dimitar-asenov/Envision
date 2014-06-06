@@ -46,7 +46,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VMethodSzPublic
-: public Super<Visualization::ItemWithNode<VMethodSzPublic, Visualization::DeclarativeItem<VMethodSzPublic>, OOModel::Method>>
+: public Super<Visualization::ItemWithNode<VMethodSzPublic, Visualization::DeclarativeItem<VMethodSzPublic>,
+		OOModel::Method>>
 {
 	ITEM_COMMON(VMethodSzPublic)
 

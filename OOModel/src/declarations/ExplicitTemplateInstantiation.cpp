@@ -39,7 +39,7 @@ REGISTER_ATTRIBUTE(ExplicitTemplateInstantiation, instantiatedClass, ReferenceEx
 ExplicitTemplateInstantiation::ExplicitTemplateInstantiation(ReferenceExpression* instantiatedClass)
 : Super(nullptr, ExplicitTemplateInstantiation::getMetaData())
 {
-	if(instantiatedClass)
+	if (instantiatedClass)
 		setInstantiatedClass(instantiatedClass);
 }
 

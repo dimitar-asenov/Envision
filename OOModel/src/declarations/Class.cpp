@@ -125,7 +125,7 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 					found = findInTarget(implicit, result, matcher, symbolTypes, exhaustAllScopes) || found;
 			}
 			else
-				for(auto bc : *baseClasses())
+				for (auto bc : *baseClasses())
 					found = findInTarget(bc, result, matcher, symbolTypes, exhaustAllScopes) || found;
 		}
 	}
@@ -146,7 +146,7 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 					found = findInTarget(implicit, result, matcher, symbolTypes, exhaustAllScopes) || found;
 			}
 			else
-				for(auto bc : *baseClasses())
+				for (auto bc : *baseClasses())
 					found = findInTarget(bc, result, matcher, symbolTypes, exhaustAllScopes) || found;
 		}
 
@@ -166,7 +166,7 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 Expression* Class::defaultImplicitBaseFromProject() const
 {
 	auto p = parent();
-	while(p)
+	while (p)
 	{
 		if (auto proj = DCast<Project>(p))
 		{
@@ -182,7 +182,7 @@ QSet<Class*> Class::allBaseClasses()
 {
 	QSet<Class*> bases;
 
-	for(auto base : *baseClasses())
+	for (auto base : *baseClasses())
 	{
 		auto type = base->type();
 		auto ct = dynamic_cast<ClassType*>(type);

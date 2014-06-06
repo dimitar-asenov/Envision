@@ -41,4 +41,3 @@ class OOMODEL_API AutoTypeExpression : public Super<TypeExpression>
 };
 
 }
-

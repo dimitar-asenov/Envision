@@ -63,4 +63,3 @@ void Integer::load(PersistentStore &store)
 }
 
 }
-

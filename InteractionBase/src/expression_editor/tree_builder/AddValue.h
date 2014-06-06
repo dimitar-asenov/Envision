@@ -42,4 +42,4 @@ class INTERACTIONBASE_API AddValue : public ExpressionTreeBuildInstruction
 		QString text_;
 };
 
-} /* namespace InteractionBase */
+}

@@ -137,10 +137,10 @@ GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<Merge>> elements)
 {
 	auto grid = new GridLayoutFormElement();
 
-	for(int y = 0; y < elements.size(); ++y)
+	for (int y = 0; y < elements.size(); ++y)
 	{
 		auto& row = elements.at(y);
-		for(int x = 0; x < row.size(); ++x)
+		for (int x = 0; x < row.size(); ++x)
 		{
 			auto m = row.at(x);
 			if (m.element) grid->put(x, y, m.element);
@@ -156,5 +156,3 @@ GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<Merge>> elements)
 }
 
 }
-
-

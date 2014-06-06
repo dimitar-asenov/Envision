@@ -52,7 +52,7 @@ QStringList StringComponents::components()
 
 	auto iter = componentFunctions().find(node_->typeId());
 	if (iter != componentFunctions().end()) return iter.value()(node_);
-	if (auto l = dynamic_cast<Model::List*>(node_)) return c( list(l) );
+	if (auto listNode = dynamic_cast<Model::List*>(node_)) return c( list(listNode) );
 
 	throw OOInteractionException("No string component function registered for node of type " + node_->typeName());
 }
@@ -127,14 +127,14 @@ void StringComponents::initConversions()
 			" ", e->typeExpression() ); });
 	add<AutoTypeExpression>([](AutoTypeExpression* ){ return c( "auto" ); });
 	add<FunctionTypeExpression>([](FunctionTypeExpression* e){ return c( "[]",
-			list(e->arguments(),"(",",",")", false, true),
+			list(e->arguments(), "(", ",", ")", false, true),
 			Optional("->", e->results()->size() > 0),
-			list(e->results(),"(",",",")", true, true)
+			list(e->results(), "(", ",", ")", true, true)
 	);});
 
 	// Operators
 	add<AssignmentExpression>([](AssignmentExpression* e){ return c(
-		QString() , e->left() , choose(e->op(),
+		QString(), e->left(), choose(e->op(),
 			AssignmentExpression::ASSIGN, "=",
 			AssignmentExpression::PLUS_ASSIGN, "+=",
 			AssignmentExpression::MINUS_ASSIGN, "-=",
@@ -150,7 +150,7 @@ void StringComponents::initConversions()
 		e->right(), QString()
 	); });
 	add<BinaryOperation>([](BinaryOperation* e){ return c(
-		QString() , e->left() , choose(e->op(),
+		QString(), e->left(), choose(e->op(),
 			BinaryOperation::TIMES, "*",
 			BinaryOperation::DIVIDE, "/",
 			BinaryOperation::REMAINDER, "%",
@@ -224,34 +224,34 @@ void StringComponents::initConversions()
 	add<CastExpression>([](CastExpression* e){ return c( "(", e->castType(), ")", e->expr() ); });
 	add<CommaExpression>([](CommaExpression* e){ return c( QString(), e->left(), ",", e->right(), QString() ); });
 	add<ConditionalExpression>([](ConditionalExpression* e){ return c(
-		QString(), e->condition(), "?", e->trueExpression(), ":", e->falseExpression() , QString() ); });
+		QString(), e->condition(), "?", e->trueExpression(), ":", e->falseExpression(), QString() ); });
 	add<ThisExpression>([](ThisExpression* ){ return c( "this" ); });
 	add<GlobalScopeExpression>([](GlobalScopeExpression* ){ return c( "::" ); });
 	add<ThrowExpression>([](ThrowExpression* e ){ return c( "throw", " ", e->expr() ); });
 	add<TypeNameOperator>([](TypeNameOperator* e ){ return c( "typename", " ", e->typeExpression() ); });
 	add<DeleteExpression>([](DeleteExpression* e ){ return c( e->isArray() ? "delete[]":"delete", " ", e->expr() ); });
 	add<VariableDeclarationExpression>([](VariableDeclarationExpression* e ){ return c( e->decl()->typeExpression(), " ",
-			e->decl()->name(), Optional("=",e->decl()->initialValue()), Optional(e->decl()->initialValue())); });
+			e->decl()->name(), Optional("=", e->decl()->initialValue()), Optional(e->decl()->initialValue())); });
 
 	add<LambdaExpression>([](LambdaExpression* e ){ return c( CompoundObjectDescriptor::storeExpression(e)); });
 
-	add<ArrayInitializer>([](ArrayInitializer* e){ return c( list(e->values(),"{",",","}", false, false) ); });
+	add<ArrayInitializer>([](ArrayInitializer* e){ return c( list(e->values(), "{", ",", "}", false, false) ); });
 
 	add<MethodCallExpression>([](MethodCallExpression* e){ return c(
-		e->callee(), list(e->arguments(),"(",",",")", false, true) ); });
+		e->callee(), list(e->arguments(), "(", ",", ")", false, true) ); });
 
 	add<NewExpression>([](NewExpression* e){ return c( "new", " ",
 			Optional( (e->dimensions()->size() > 0 || !e->initializer()) ? e->newType() : nullptr, AUTO),
-			list(e->dimensions(),"[",",","]", true, true), Optional(e->initializer(), AUTO) ); });
+			list(e->dimensions(), "[", ",", "]", true, true), Optional(e->initializer(), AUTO) ); });
 
 	add<ReferenceExpression>([](ReferenceExpression* e){ return c(
 		Optional(e->prefix(), AUTO), Optional(".", e->prefix()), e->name(),
-		list(e->typeArguments(),"<",",",">", true, true) ); });
+		list(e->typeArguments(), "<", ",", ">", true, true) ); });
 
 	// Flexible input expressions
 	add<EmptyExpression>([](EmptyExpression*){ return c( "" ); });
 	add<ErrorExpression>([](ErrorExpression* e){ return c(
-		Optional(e->prefix(), !e->prefix().isEmpty()) , e->arg(), Optional(e->postfix(), !e->postfix().isEmpty()) ); });
+		Optional(e->prefix(), !e->prefix().isEmpty()), e->arg(), Optional(e->postfix(), !e->postfix().isEmpty()) ); });
 	add<UnfinishedOperator>([](UnfinishedOperator* e)
 	{
 		QStringList result;

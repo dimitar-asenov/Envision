@@ -56,8 +56,8 @@ TEST(FilePersistence, CopyToClipboard)
 			"S_RootNode</NameText>"
 			" <BinaryNode name=\"left\"> <NameText name=\"name\">S_Left child</NameText> </BinaryNode>"
 			" <BinaryNode name=\"right\"> <NameText name=\"name\">S_Right child</NameText> </BinaryNode>"
-			" </BinaryNode> </clipboard>"
-			,clipboardText);
+			" </BinaryNode> </clipboard>",
+			clipboardText);
 
 	QList<const Model::Node*> nodes;
 	nodes.append(root->name());
@@ -87,7 +87,7 @@ TEST(FilePersistence, CopyPartialToClipboard)
 	QString clipboardText = QApplication::clipboard()->text().simplified();
 	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <PartialList name=\"0\"> <List name=\"list\"> "
 			"<Text name=\"0\">S_one</Text> <Text name=\"1\">S_two</Text> <Text name=\"2\">S_three</Text> "
-			"<Text name=\"3\">S_four</Text> </List> </PartialList> </clipboard>",clipboardText);
+			"<Text name=\"3\">S_four</Text> </List> </PartialList> </clipboard>", clipboardText);
 }
 
 TEST(FilePersistence, PasteTextFromClipboard)
@@ -172,13 +172,13 @@ TEST(FilePersistence, PasteListFromClipboard)
 	model.endModification();
 
 	CHECK_INT_EQUAL(1, root->size());
-	CHECK_STR_EQUAL("third",root->at<Model::Text>(0)->get());
+	CHECK_STR_EQUAL("third", root->at<Model::Text>(0)->get());
 }
 
 TEST(FilePersistence, PasteInListFromClipboard)
 {
 	auto root = new Model::List;
-	Model::Model model("test",root);
+	Model::Model model("test", root);
 
 	model.beginModification(root, "elems");
 	Model::Text* first = new Model::Text();
@@ -202,13 +202,13 @@ TEST(FilePersistence, PasteInListFromClipboard)
 	sc.readClipboard();
 
 	model.beginModification(root, "paste");
-	root->paste(sc,3);
+	root->paste(sc, 3);
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
-	CHECK_STR_EQUAL("first",root->at<Model::Text>(3)->get());
+	CHECK_STR_EQUAL("first", root->at<Model::Text>(3)->get());
 	CHECK_INT_EQUAL(1, root->at<Model::List>(4)->size());
-	CHECK_STR_EQUAL("third",root->at<Model::List>(4)->at<Model::Text>(0)->get());
+	CHECK_STR_EQUAL("third", root->at<Model::List>(4)->at<Model::Text>(0)->get());
 }
 
 }

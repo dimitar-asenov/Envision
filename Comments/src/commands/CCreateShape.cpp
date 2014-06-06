@@ -46,8 +46,8 @@ Interaction::CommandResult* CCreateShape::create(Visualization::Item*, Visualiza
 	auto diagram = dynamic_cast<CommentDiagram*> (target->node());
 	auto shape = new CommentDiagramShape(x, y, 100, 100, CommentDiagramShape::ShapeType::Rectangle);
 	// what kind of shape?
-	if(attributes.first() == "ellipse") shape->setShapeType(CommentDiagramShape::ShapeType::Ellipse);
-	else if(attributes.first() == "diamond") shape->setShapeType(CommentDiagramShape::ShapeType::Diamond);
+	if (attributes.first() == "ellipse") shape->setShapeType(CommentDiagramShape::ShapeType::Ellipse);
+	else if (attributes.first() == "diamond") shape->setShapeType(CommentDiagramShape::ShapeType::Diamond);
 
 	diagram->model()->beginModification(diagram, "create shape");
 	diagram->shapes()->append(shape);

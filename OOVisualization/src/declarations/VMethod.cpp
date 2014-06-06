@@ -117,7 +117,7 @@ void VMethod::initializeForms()
 			->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
 			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
 			->put(TheRightOf, contentElement, AtRightOf, headerElement)
-			->put(TheTopOf, contentElement, 10,FromBottomOf, headerElement)
+			->put(TheTopOf, contentElement, 10, FromBottomOf, headerElement)
 			->put(TheRightOf, shapeElement, 10, FromRightOf, contentElement)
 			->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement));
 }

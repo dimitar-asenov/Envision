@@ -107,7 +107,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		 * A helper function called by RecursiveASTVisitor parent class.
 		 * In our case this function should return false because we use a custom traversal strategy.
 		 */
-		bool shouldUseDataRecursionFor(clang::Stmt* S);
+		bool shouldUseDataRecursionfor (clang::Stmt* S);
 
 	private:
 		using Base = clang::RecursiveASTVisitor<ClangAstVisitor>;

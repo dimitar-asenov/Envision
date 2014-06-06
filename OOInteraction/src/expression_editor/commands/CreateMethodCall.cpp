@@ -51,7 +51,7 @@ OOModel::Expression* CreateMethodCall::create(const QList<OOModel::Expression*>&
 	Q_ASSERT(ref);
 
 	int typeArguments = expectedTypeArguments_;
-	for(auto a: arguments)
+	for (auto a: arguments)
 	{
 		if (typeArguments > 0)
 		{

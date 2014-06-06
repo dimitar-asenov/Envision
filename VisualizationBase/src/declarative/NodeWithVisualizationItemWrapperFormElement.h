@@ -46,9 +46,9 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 																GetStyleTypeFunction styleGetter);
 		NodeWithVisualizationItemWrapperFormElement() = delete;
 		NodeWithVisualizationItemWrapperFormElement(
-				const NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = default;
-		NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&
-			operator=(const NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = delete;
+				const NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>&) = default;
+		NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>&
+			operator=(const NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>&) = delete;
 		virtual ~NodeWithVisualizationItemWrapperFormElement() {};
 
 		virtual NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>* clone() const override;
@@ -57,7 +57,7 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 		/**
 		 * Sets if a wrapped item is created, even if there is no node to \a create. It is false by default.
 		 */
-		NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>* setCreateIfNoNode(bool create);
+		NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>* setCreateIfNoNode(bool create);
 
 	private:
 
@@ -102,7 +102,7 @@ void NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>:
 		item->setUpdateNeeded(Item::StandardUpdate);
 	}
 
-	if(childItem) childItem->setStyle(style);
+	if (childItem) childItem->setStyle(style);
 }
 
 template <class ParentType, class VisualizationType>

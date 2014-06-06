@@ -75,7 +75,8 @@ if (name##_) ++index;																																\
 //********************************************************************************************************************
 
 #define WRAPPED_OPERAND(name, wrapId)																											\
-layout()->synchronizeMid<::Visualization::Item, ::Visualization::NodeWrapper>(name##_, node()->name(), &opStyle->operand##wrapId##Wrapper(),index);	\
+layout()->synchronizeMid<::Visualization::Item, ::Visualization::NodeWrapper>														\
+									(name##_, node()->name(), &opStyle->operand##wrapId##Wrapper(), index);							\
 if (name##_) {																																			\
 	++index;																																				\
 	name##_->setStyle( &opStyle->operand##wrapId##Wrapper() );				 															\

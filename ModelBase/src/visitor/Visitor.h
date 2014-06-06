@@ -93,7 +93,6 @@ class VISITOR_EXPORT ExtendedVisitor : public BaseVisitor {
 };
 
 
-
 #if defined(ModelBase_VisitorDefinition)
 /* *********************************************************************************************************************
  * Visitor implementation
@@ -105,7 +104,7 @@ Visitor<ConcreteVisitor, Result>::~Visitor()
 template <class ConcreteVisitor, class Result>
 Result Visitor<ConcreteVisitor, Result>::visit(Node* n)
 {
-	for(auto id : n->hierarchyTypeIds())
+	for (auto id : n->hierarchyTypeIds())
 	{
 		auto f = findFunctionForId(id);
 		if (f) return f(static_cast<ConcreteVisitor*>(this), n);

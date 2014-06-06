@@ -48,4 +48,4 @@ class INTERACTIONBASE_API HActionPrompt: public GenericHandler
 		bool tryExecutingAction(ActionPrompt *prompt, bool requirePreciseMatch);
 };
 
-} /* namespace Interaction */
+}

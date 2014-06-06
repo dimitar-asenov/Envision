@@ -58,4 +58,4 @@ class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisi
 		void createErrorExpression(Interaction::Operator* op);
 };
 
-} /* namespace InteractionBase */
+}

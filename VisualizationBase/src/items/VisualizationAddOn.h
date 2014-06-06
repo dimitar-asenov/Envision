@@ -40,4 +40,4 @@ class VISUALIZATIONBASE_API VisualizationAddOn {
 		virtual QList<Item*> determineItems(Item* vis, const QList<Item*>& currentItems) = 0;
 };
 
-} /* namespace Visualization */
+}

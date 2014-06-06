@@ -30,14 +30,14 @@ namespace Comments{
 
 ColorPicker::ColorPicker(QWidget *parent) : QToolButton(parent)
 {
-	mapEnvisionTextColors_.insert("black","#000000");
-	mapEnvisionTextColors_.insert("blue","#0000ff");
-	mapEnvisionTextColors_.insert("green","#00ff00");
-	mapEnvisionTextColors_.insert("lime","#bfff00");
-	mapEnvisionTextColors_.insert("purple","#ff00ff");
-	mapEnvisionTextColors_.insert("red","#ff0000");
-	mapEnvisionTextColors_.insert("white","#ffffff");
-	mapEnvisionTextColors_.insert("yellow","#ffff00");
+	mapEnvisionTextColors_.insert("black", "#000000");
+	mapEnvisionTextColors_.insert("blue", "#0000ff");
+	mapEnvisionTextColors_.insert("green", "#00ff00");
+	mapEnvisionTextColors_.insert("lime", "#bfff00");
+	mapEnvisionTextColors_.insert("purple", "#ff00ff");
+	mapEnvisionTextColors_.insert("red", "#ff0000");
+	mapEnvisionTextColors_.insert("white", "#ffffff");
+	mapEnvisionTextColors_.insert("yellow", "#ffff00");
 }
 
 void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
@@ -48,7 +48,7 @@ void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 	QSignalMapper* signalMapper = new QSignalMapper(this);
 	connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(handleColorPicked(QString)));
 
-	QPixmap pixmap(100,100);
+	QPixmap pixmap(100, 100);
 	QWidget* aWidget = new QWidget(this);
 	QGridLayout* aLayout = new QGridLayout;
 	aLayout->setSpacing(0);
@@ -56,15 +56,15 @@ void ColorPicker::setColors(QVector<QColor> colors, int colorsPerRow)
 	wiAction->setDefaultWidget(aWidget);
 
 	QToolButton* aButton;
-	for(int i = 0; i < colors.size(); i++)
+	for (int i = 0; i < colors.size(); i++)
 	{
 			aButton = new QToolButton;
 			aButton->setStyleSheet("border: none;");
 			pixmap.fill(colors.at(i));
 			aButton->setIcon(QIcon(pixmap));
-			aLayout->addWidget(aButton,i/colorsPerRow,i%colorsPerRow);
-			signalMapper->setMapping(aButton,colors.at(i).name());
-			connect(aButton,SIGNAL(clicked()),signalMapper,SLOT(map()));
+			aLayout->addWidget(aButton, i/colorsPerRow, i%colorsPerRow);
+			signalMapper->setMapping(aButton, colors.at(i).name());
+			connect(aButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 	}
 	menu->addAction(wiAction);
 	this->setMenu(menu);
@@ -79,7 +79,7 @@ void ColorPicker::setEnvisionTextColors()
 	QSignalMapper* signalMapper = new QSignalMapper(this);
 	connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(handleColorPicked(QString)));
 
-	QPixmap pixmap(100,100);
+	QPixmap pixmap(100, 100);
 	QWidget* aWidget = new QWidget(this);
 	QGridLayout* aLayout = new QGridLayout;
 	aLayout->setSpacing(0);
@@ -94,9 +94,9 @@ void ColorPicker::setEnvisionTextColors()
 		aButton->setStyleSheet("border: none;");
 		pixmap.fill(i.value());
 		aButton->setIcon(QIcon(pixmap));
-		aLayout->addWidget(aButton,1,std::distance(mapEnvisionTextColors_.begin(),i));
-		signalMapper->setMapping(aButton,i.key());
-		connect(aButton,SIGNAL(clicked()),signalMapper,SLOT(map()));
+		aLayout->addWidget(aButton, 1, std::distance(mapEnvisionTextColors_.begin(), i));
+		signalMapper->setMapping(aButton, i.key());
+		connect(aButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 	}
 
 	menu->addAction(wiAction);
@@ -106,7 +106,7 @@ void ColorPicker::setEnvisionTextColors()
 
 void ColorPicker::handleColorPicked(QString aColor)
 {
-	if(type_ == text)
+	if (type_ == text)
 		setselectedColor(mapEnvisionTextColors_.value(aColor));
 	else
 		setselectedColor(aColor);
@@ -116,7 +116,7 @@ void ColorPicker::handleColorPicked(QString aColor)
 
 void ColorPicker::setselectedColor(QString aColor)
 {
-	QPixmap pixmap(24,24);
+	QPixmap pixmap(24, 24);
 	pixmap.fill(QColor(aColor));
 	QPainter* aPainter = new QPainter(&pixmap);
 	aPainter->setPen(Qt::black);
@@ -127,13 +127,13 @@ void ColorPicker::setselectedColor(QString aColor)
 	{
 		case background:
 			aPainter->setBrush(QBrush(Qt::black));
-			aPainter->drawRect(5,5,13,13);
+			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case shape:
-			aPainter->drawRect(5,5,13,13);
+			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case text:
-			aPainter->drawText(6,20,"T");
+			aPainter->drawText(6, 20, "T");
 		break;
 	}
 	aPainter->end();

@@ -49,7 +49,7 @@ QRectF View::visibleRect()
 {
 	int h = horizontalScrollBar() ? horizontalScrollBar()->height() : 0;
 	int w = verticalScrollBar() ? verticalScrollBar()->width() : 0;
-	return mapToScene(viewport()->rect().adjusted(0,0,-w,-h)).boundingRect();
+	return mapToScene(viewport()->rect().adjusted(0, 0, -w, -h)).boundingRect();
 }
 
 Scene* View::scene()

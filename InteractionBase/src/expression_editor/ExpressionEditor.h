@@ -48,4 +48,4 @@ class INTERACTIONBASE_API ExpressionEditor {
 inline void ExpressionEditor::setText(const QString& expression_text) { text_ = expression_text; }
 inline void ExpressionEditor::setOperatorDescriptors(const OperatorDescriptorList* ops) { ops_ = ops; }
 
-} /* namespace InteractionBase */
+}

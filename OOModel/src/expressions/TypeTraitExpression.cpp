@@ -49,7 +49,7 @@ TypeTraitExpression::TypeTraitExpression(TypeTraitKind kind, Expression* expr)
 
 Type* TypeTraitExpression::type()
 {
-	if(typeTraitKind() == TypeTraitKind::SizeOf || typeTraitKind() == TypeTraitKind::AlignOf)
+	if (typeTraitKind() == TypeTraitKind::SizeOf || typeTraitKind() == TypeTraitKind::AlignOf)
 		return new PrimitiveType(PrimitiveType::PrimitiveTypes::INT, true);
 	return new ErrorType("Typeinfo request but not supported in TypeTraitExpression");
 }

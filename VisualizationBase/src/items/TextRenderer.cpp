@@ -142,7 +142,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			// Draw just a filler
 			auto c = style()->pen().color();
 			c.setAlpha(64);
-			painter->fillRect(QRectF(textXOffset_, textYOffset_ + heightInLocal()/4.0 ,
+			painter->fillRect(QRectF(textXOffset_, textYOffset_ + heightInLocal()/4.0,
 											 staticText_.size().width(), staticText_.size().height()/2.0), c);
 		}
 		else
@@ -164,7 +164,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		QPointF offset(textXOffset_, textYOffset_);
 
 		// Might be a bit slow but that's OK, since we have very little selected text
-		// Here topLeft is the absolute corner of the text if it is drawn at 0,0.
+		// Here topLeft is the absolute corner of the text if it is drawn at 0, 0.
 		offset -= nonStaticTextBound().topLeft();
 
 		// Draw selection background
@@ -216,7 +216,7 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 
 		auto xEnd = widthInLocal() - 1;
 		auto xMid = widthInLocal()/2;
-		switch(dir)
+		switch (dir)
 		{
 			case MoveDefault: tc->setCaretPosition(0); break;
 			case MoveOnPosition: tc->setSelectedByDrag(reference.x(), reference.x()); break;

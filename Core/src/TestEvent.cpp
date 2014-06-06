@@ -34,6 +34,4 @@ TestEvent::TestEvent(QString testTarget, QString testId) :
 		QEvent(EventType), testTarget_(testTarget), testId_(testId)
 {}
 
-
-
 }

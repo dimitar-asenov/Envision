@@ -102,8 +102,10 @@ bool ExpressionTreeUtils::fixExprPrecedence(Expression*& top, Expression* e)
 		{
 			if (op->descriptor()->precedence() < left->descriptor()->precedence() // Must rotate because of precedence
 
-				 // Must rotate because of associativity. This assumes that the associativity of different operators at the same precedence level is the same.
-				 || ( (op->descriptor()->precedence() == left->descriptor()->precedence()) && op->descriptor()->associativity() == OperatorDescriptor::RightAssociative)
+				 // Must rotate because of associativity. This assumes that the associativity of different operators at
+				 // the same precedence level is the same.
+				 || ( (op->descriptor()->precedence() == left->descriptor()->precedence())
+						&& op->descriptor()->associativity() == OperatorDescriptor::RightAssociative)
 				 )
 			{
 				rotateRight(top, left, op);
@@ -120,8 +122,10 @@ bool ExpressionTreeUtils::fixExprPrecedence(Expression*& top, Expression* e)
 		{
 			if (op->descriptor()->precedence() < right->descriptor()->precedence() // Must rotate because of precedence
 
-				 // Must rotate because of associativity. This assumes that the associativity of different operators at the same precedence level is the same.
-				 || ( (op->descriptor()->precedence() == right->descriptor()->precedence()) && op->descriptor()->associativity() == OperatorDescriptor::LeftAssociative)
+				 // Must rotate because of associativity. This assumes that the associativity of different operators at
+				 // the same precedence level is the same.
+				 || ( (op->descriptor()->precedence() == right->descriptor()->precedence())
+						&& op->descriptor()->associativity() == OperatorDescriptor::LeftAssociative)
 				 )
 			{
 				rotateLeft(top, right, op);
@@ -166,8 +170,11 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 		// engulf the entire parent.
 		op->globalDelimiterBoundaries(leftside ? op->descriptor()->numOperands() : 0, delim_begin, delim_end);
 		ExpressionContext c_other = top->findContext(leftside ? delim_end : delim_begin );
-		if (   ( leftside && c_other.rightType() == ExpressionContext::OpBoundary && c_other.rightText() == op->descriptor()->postfix() && c_other.rightDelim() == c_other.rightOp()->size())
-			 || ( rightside && c_other.leftType() == ExpressionContext::OpBoundary && c_other.leftText() == op->descriptor()->prefix() && c_other.leftDelim() == 0) )
+		if (   ( leftside && c_other.rightType() == ExpressionContext::OpBoundary
+					&& c_other.rightText() == op->descriptor()->postfix()
+					&& c_other.rightDelim() == c_other.rightOp()->size())
+			 || ( rightside && c_other.leftType() == ExpressionContext::OpBoundary
+					&& c_other.leftText() == op->descriptor()->prefix() && c_other.leftDelim() == 0) )
 			wrap_parent = true;
 		else
 		return;
@@ -175,7 +182,8 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 
 	// Special case when the parent ends with a pre/postfix in the direction we're growing.
 	// In that case we must wrap the whole operator as we can not break the delimiters.
-	wrap_parent = wrap_parent || ( !(leftside && parent->descriptor()->prefix().isEmpty()) && !(rightside && parent->descriptor()->postfix().isEmpty()));
+	wrap_parent = wrap_parent || ( !(leftside && parent->descriptor()->prefix().isEmpty())
+											 && !(rightside && parent->descriptor()->postfix().isEmpty()));
 	if (wrap_parent)
 	{
 		Expression* placeholder = new Empty();
@@ -197,7 +205,8 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 		top_op = top_op->parent();
 		if (!top_op) return;
 	}
-	Expression* to_wrap = leftside ? top_op->first()->smallestRightmostSubExpr() : top_op->last()->smallestLeftmostSubExpr();
+	Expression* to_wrap = leftside ? top_op->first()->smallestRightmostSubExpr()
+											 : top_op->last()->smallestLeftmostSubExpr();
 
 	// Do the exchange --------------------------------------
 
@@ -205,8 +214,8 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 	// Note that if we've reached this point then first and last must be two different nodes
 	Expression* top_op_placeholder = new Empty();
 	replace(top, top_op, top_op_placeholder);
-	Expression* top_op_last = top_op->last(true);   // Special case when rightside: top_op_last could be identical to to_wrap
-	Expression* top_op_first = top_op->first(true); // Special case when leftside: top_op_first could be identical to to_wrap
+	Expression* top_op_last = top_op->last(true);   // Special case when rightside: top_op_last == to_wrap
+	Expression* top_op_first = top_op->first(true); // Special case when leftside: top_op_first == to_wrap
 
 	// Disconnect the to_wrap expression if not yet disconnected
 	Expression* to_wrap_placeholder = nullptr;
@@ -267,7 +276,8 @@ void ExpressionTreeUtils::shrink(Expression*& top, Operator* op, bool leftside)
 	if ( (leftside && op->descriptor()->prefix().isEmpty() ) || (!leftside && op->descriptor()->postfix().isEmpty()))
 		return;
 
-	Expression* new_border_expr = (leftside ? op->first() : op->last())->findCutExpression(leftside, leftside ? op->descriptor()->postfix() : op->descriptor()->prefix());
+	Expression* new_border_expr = (leftside ? op->first() : op->last())
+			->findCutExpression(leftside, leftside ? op->descriptor()->postfix() : op->descriptor()->prefix());
 	if (new_border_expr == nullptr) return;
 
 	Operator* cut_op = new_border_expr->parent();
@@ -302,7 +312,7 @@ void ExpressionTreeUtils::fixWrongIds(Expression*& top)
 	QList<Expression*> toFix;
 	toFix << top;
 
-	while(!toFix.isEmpty())
+	while (!toFix.isEmpty())
 	{
 		auto e = toFix.first();
 		toFix.removeFirst();
@@ -319,7 +329,7 @@ void ExpressionTreeUtils::fixWrongIds(Expression*& top)
 					if (s == "id")
 					{
 						auto v = dynamic_cast<Value*> (op->operands().at(operandIndex));
-						badId = badId || !v || v->text().isEmpty() || !(v->text()[0].isLetter() || v->text()[0] == '_') ;
+						badId = badId || !v || v->text().isEmpty() || !(v->text()[0].isLetter() || v->text()[0] == '_');
 						if (badId) break;
 					}
 

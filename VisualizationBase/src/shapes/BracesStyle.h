@@ -37,15 +37,15 @@ class VISUALIZATIONBASE_API BracesStyle : public Super<ShapeStyle>
 	public:
 		virtual ~BracesStyle() override;
 
-		Property<int> minHeight{this,"minHeight"};
+		Property<int> minHeight{this, "minHeight"};
 
-		Property<QPen> leftBracePen{this,"leftBracePen"};
-		Property<QFont> leftBraceFont{this,"leftBraceFont"};
-		Property<QString> leftBrace{this,"leftBrace"};
+		Property<QPen> leftBracePen{this, "leftBracePen"};
+		Property<QFont> leftBraceFont{this, "leftBraceFont"};
+		Property<QString> leftBrace{this, "leftBrace"};
 
-		Property<QPen> rightBracePen{this,"rightBracePen"};
-		Property<QFont> rightBraceFont{this,"rightBraceFont"};
-		Property<QString> rightBrace{this,"rightBrace"};
+		Property<QPen> rightBracePen{this, "rightBracePen"};
+		Property<QFont> rightBraceFont{this, "rightBraceFont"};
+		Property<QString> rightBrace{this, "rightBrace"};
 };
 
 }

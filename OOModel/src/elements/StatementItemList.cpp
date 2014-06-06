@@ -47,7 +47,7 @@ bool StatementItemList::findSymbols(QSet<Node*>& result, const Model::SymbolMatc
 		if (sourceIndex < 0 || sourceIndex > size()) sourceIndex = size();
 
 		auto ignore = childToSubnode(source);
-		for(int i = 0; i<sourceIndex; ++i)
+		for (int i = 0; i<sourceIndex; ++i)
 			if (at(i) != ignore)
 				// Optimize the search by skipping the scope of the source, since we've already searched there
 				found = at(i)->findSymbols(result, matcher, source, SEARCH_HERE, symbolTypes, false) || found;

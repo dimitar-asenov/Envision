@@ -115,4 +115,4 @@ inline Cursor::CursorType Cursor::type() const {return type_;}
 inline bool Cursor::notLocationEquivalent() const { return notLocationEquivalent_;}
 inline void Cursor::setNotLocationEquivalent(bool notEquivalent) { notLocationEquivalent_ = notEquivalent; }
 
-} /* namespace Visualization */
+}

@@ -148,7 +148,8 @@ bool AttributeChain::hasExtensionInHierarchy(int extensionId) const
 
 QVector<CompositeIndex>& AttributeChain::addExtension(int extensionId)
 {
-	if (hasExtensionInHierarchy(extensionId)) throw ModelException("Adding an extension which has already exists in the type hierarchy");
+	if (hasExtensionInHierarchy(extensionId))
+		throw ModelException("Adding an extension which has already exists in the type hierarchy");
 	extensions_.insert(extensionId, QVector<CompositeIndex>());
 	return extensions_[extensionId];
 }

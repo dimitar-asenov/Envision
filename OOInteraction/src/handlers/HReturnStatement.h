@@ -42,4 +42,4 @@ class OOINTERACTION_API HReturnStatement : public HStatement {
 		HReturnStatement();
 };
 
-} /* namespace OOInteraction */
+}

@@ -51,7 +51,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 	bool escaped = false;
 	bool inString = false;
 
-	for(int i = 0; i<input.size(); ++i )
+	for (int i = 0; i<input.size(); ++i )
 	{
 		QChar ch = input[i];
 
@@ -85,7 +85,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		}
 
 		// Finalize the token if it's ready
-		if(finalizeToken)
+		if (finalizeToken)
 		{
 			Type t;
 			if (inString)
@@ -96,7 +96,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 			else
 				t = first.isDigit() ? Literal : Identifier;
 
-			result.append(Token(token,t));
+			result.append(Token(token, t));
 
 			token = "";
 			inString = false;
@@ -117,15 +117,15 @@ bool Token::tokenExistsInOperators(QString token, const OperatorDescriptorList* 
 
 QVector<Token> Token::createSubExpressions(const QVector<Token>& tokens)
 {
-	QVector<QChar> parens = {'(',')','{','}','[',']'};
+	QVector<QChar> parens = {'(', ')', '{', '}', '[', ']'};
 
-	QMultiMap<int, QPair<QChar,QChar>> parensSorted;
+	QMultiMap<int, QPair<QChar, QChar>> parensSorted;
 	for (int i = 0; i<parens.size(); i+=2)
 		parensSorted.insert(
 				countUnmatched(tokens.begin(), tokens.end(), parens[i], parens[i+1]), qMakePair(parens[i], parens[i+1]));
 
 	QVector<Token> result = tokens;
-	for(auto parens : parensSorted.values())
+	for (auto parens : parensSorted.values())
 		result = createSubExpressions(result.begin(), result.end(), parens.first, parens.second);
 
 	return result;
@@ -157,13 +157,13 @@ QVector<Token> Token::createSubExpressions(QVector<Token>::const_iterator start,
 	if (foundSplit)
 	{
 		// Create sub expression
-		result.append(Token(QString(),SubExpression));
+		result.append(Token(QString(), SubExpression));
 		Token& sub = result.last();
 		sub.subExpressionTokens_ = createSubExpressions(splitStart, splitEnd, openParen, closeParen);
-		for(auto t : sub.subExpressionTokens_) sub.text_ += t.text_;
+		for (auto t : sub.subExpressionTokens_) sub.text_ += t.text_;
 
 		// Add trailing tokens
-		for(auto t : createSubExpressions(splitEnd, end, openParen, closeParen))
+		for (auto t : createSubExpressions(splitEnd, end, openParen, closeParen))
 		result.append(t);
 	}
 
@@ -175,7 +175,7 @@ int Token::countUnmatched(QVector<Token>::const_iterator start, QVector<Token>::
 {
 	int current = 0;
 	int unmatched = 0;
-	while(start != end)
+	while (start != end)
 	{
 		if (start->type_ == OperatorDelimiter)
 		{
@@ -255,7 +255,7 @@ bool Token::findSplit(QVector<Token>::const_iterator& splitStart, QVector<Token>
 		}
 
 		++splitMid;
-	} while( splitMid != splitEnd);
+	} while ( splitMid != splitEnd);
 
 	if (foundSplit) splitEnd = bestSplit.end;
 	return foundSplit;

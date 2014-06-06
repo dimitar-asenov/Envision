@@ -234,7 +234,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		else InteractionHandler::keyPressEvent(target, event);
 	}
 	else if (event->matches(QKeySequence::Undo))
-	{		
+	{
 		if (target->hasNode())
 		{
 			event->accept();
@@ -349,12 +349,12 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				oldOwner = t->scene()->mainCursor()->owner();
 				moved = moveCursor(t, event->key()) || moved;
 				t = t->scene()->mainCursor()->owner();
-			} while
-				(t->scene()->mainCursor()->isLocationEquivalent(oldNotLocationEquivalent, oldType, oldBoundary, oldOwner));
+			} while (t->scene()->mainCursor()->isLocationEquivalent(oldNotLocationEquivalent, oldType, oldBoundary,
+																					  oldOwner));
 
 			// If the arrow key did not result in a movement, let the handlers of parent items try and process the key
 			// press.
-			if(!moved) InteractionHandler::keyPressEvent(target, event);
+			if (!moved) InteractionHandler::keyPressEvent(target, event);
 		}
 	}
 	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible() && !commandPrompt_)
@@ -389,7 +389,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		event->accept();
 
 		auto p = target;
-		while(!p->node() && p->parent()) p = p->parent();
+		while (!p->node() && p->parent()) p = p->parent();
 
 		if (auto node = p->node())
 		{
@@ -428,7 +428,7 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 	}
 
 	QPoint midpoint = target->mapFromScene(cursorOriginMidPoint_).toPoint();
-	switch(key)
+	switch (key)
 	{
 		case Qt::Key_Up:
 		{
@@ -471,7 +471,7 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 			if (!parent) break;
 
 			QPoint reference;
-			switch( key )
+			switch ( key )
 			{
 				case Qt::Key_Up:
 				{
@@ -611,7 +611,7 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 
 	// Filter out items whose parent is also included in the selection.
 	for (int i = selection.size() - 1; i>=0; --i)
-		for(int k = selection.size() - 1; k>=0; --k)
+		for (int k = selection.size() - 1; k>=0; --k)
 			if (k!=i && selection.at(k)->isAncestorOf(selection.at(i)))
 			{
 				selection.at(i)->setSelected(false);
@@ -673,7 +673,7 @@ bool GenericHandler::removeFromList(Visualization::Item* target)
 {
 	Visualization::VList* list = nullptr;
 	auto p = target->parent();
-	while(p)
+	while (p)
 	{
 		list = dynamic_cast<Visualization::VList* >(p);
 		if (list) break;
@@ -714,7 +714,7 @@ void GenericHandler::showActionPrompt(Visualization::Item *actionRecevier, bool 
 
 void GenericHandler::action(Visualization::Item *target, const QString& action)
 {
-	for(auto a : Action::actions(target->node()))
+	for (auto a : Action::actions(target->node()))
 	{
 		if (a->shortcut() == action)
 		{

@@ -40,16 +40,16 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public Super<LayoutStyle>
 		bool isHorizontal() const;
 		bool isForward() const;
 
-		Property<Direction> direction{this,"direction"};
-		Property<Alignment> alignment{this,"alignment"};
-		Property<int> spaceBetweenElements{this,"spaceBetweenElements"};
-		Property<bool> notLocationEquivalentCursors{this,"notLocationEquivalentCursors"};
-		Property<bool> noInnerCursors{this,"noInnerCursors"};
-		Property<bool> noBoundaryCursorsInsideShape{this,"noBoundaryCursorsInsideShape"};
-		Property<bool> extraCursorsOutsideShape{this,"extraCursorsOutsideShape"};
-		Property<bool> hasCursorWhenEmpty{this,"hasCursorWhenEmpty"};
-		Property<int> minWidth{this,"minWidth"};
-		Property<int> minHeight{this,"minHeight"};
+		Property<Direction> direction{this, "direction"};
+		Property<Alignment> alignment{this, "alignment"};
+		Property<int> spaceBetweenElements{this, "spaceBetweenElements"};
+		Property<bool> notLocationEquivalentCursors{this, "notLocationEquivalentCursors"};
+		Property<bool> noInnerCursors{this, "noInnerCursors"};
+		Property<bool> noBoundaryCursorsInsideShape{this, "noBoundaryCursorsInsideShape"};
+		Property<bool> extraCursorsOutsideShape{this, "extraCursorsOutsideShape"};
+		Property<bool> hasCursorWhenEmpty{this, "hasCursorWhenEmpty"};
+		Property<int> minWidth{this, "minWidth"};
+		Property<int> minHeight{this, "minHeight"};
 };
 
 inline bool SequentialLayoutStyle::isHorizontal() const

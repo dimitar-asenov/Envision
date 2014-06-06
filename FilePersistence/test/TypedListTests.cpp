@@ -39,7 +39,7 @@ namespace FilePersistence {
 
 TEST(FilePersistence, LoadingTypedList)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 
@@ -81,7 +81,7 @@ TEST(FilePersistence, LoadingTypedList)
 
 TEST(FilePersistence, SavingTypedList)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 		QString testDir;
@@ -121,11 +121,13 @@ TEST(FilePersistence, SavingTypedList)
 
 		if (i==0)
 		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/typedList/typedList", testDir + "/typedList/typedList");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/typedList/typedList",
+										  testDir + "/typedList/typedList");
 		}
 		else if ( i==1 )
 		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/typedList/typedList", testDir +"/typedList/typedList");
+			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/typedList/typedList",
+										  testDir +"/typedList/typedList");
 		}
 
 		SAFE_DELETE(store);

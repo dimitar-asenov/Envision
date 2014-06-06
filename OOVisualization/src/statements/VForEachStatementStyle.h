@@ -39,10 +39,10 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Super<Visualization::D
 	public:
 		virtual ~VForEachStatementStyle() override;
 
-		Property<Visualization::StaticStyle> icon{this,"icon"};
-		Property<Visualization::ItemStyle> varType{this,"varType"};
-		Property<Visualization::TextStyle> varName{this,"varName"};
-		Property<Visualization::ItemStyle> collection{this,"collection"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::ItemStyle> varType{this, "varType"};
+		Property<Visualization::TextStyle> varName{this, "varName"};
+		Property<Visualization::ItemStyle> collection{this, "collection"};
 };
 
 

@@ -62,17 +62,17 @@ class CPPIMPORT_API CppImportLogger
 		void outputStatistics();
 	private:
 		// type of output for writeOut function
-		enum OUTTYPE {ERROR,WARNING};
+		enum OUTTYPE {ERROR, WARNING};
 		void writeOut(const QString& inWhichClass, const clang::Decl* decl,
 						  OUTTYPE outType, const Reason& r, const QString& reason = QString());
 		void writeOut(const QString& inWhichClass, const clang::Stmt *stmt,
 						  OUTTYPE outType, const Reason& r, const QString& reason = QString());
 		void initStreams();
-		void printStatistic(const char* message, const QMap<QString,int>& map);
+		void printStatistic(const char* message, const QMap<QString, int>& map);
 
 		const QString getReasonString(const Reason& r);
 		// reason strings to append on maps (keep in sync with reason enum
-		const QString reasons_[4] = {"_O","_NS","_NP","_IP"};
+		const QString reasons_[4] = {"_O", "_NS", "_NP", "_IP"};
 
 		// outstreams
 		QTextStream* errStream_{};
@@ -84,11 +84,11 @@ class CPPIMPORT_API CppImportLogger
 		// SourceManager to get file names from clang
 		const clang::SourceManager* sourceManger_{};
 
-		QMap<QString,int> countMap_;
-		QMap<QString,int> typeCountMap_;
-		QMap<QString,int> unaryOpMap_;
-		QMap<QString,int> overloadMap_;
-		QMap<QString,int> storageMap_;
+		QMap<QString, int> countMap_;
+		QMap<QString, int> typeCountMap_;
+		QMap<QString, int> unaryOpMap_;
+		QMap<QString, int> overloadMap_;
+		QMap<QString, int> storageMap_;
 };
 
 inline void CppImportLogger::writeError
@@ -108,6 +108,3 @@ inline void CppImportLogger::writeWarning
 { writeOut(inWhichClass, stmt, WARNING, r, reason); }
 
 }
-
-
-

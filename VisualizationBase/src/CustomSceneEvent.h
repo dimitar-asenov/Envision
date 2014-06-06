@@ -50,4 +50,4 @@ class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
 
 inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
 
-} /* namespace Visualization */
+}

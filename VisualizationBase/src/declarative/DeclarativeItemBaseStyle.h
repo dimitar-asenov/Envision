@@ -36,7 +36,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public Super<ItemStyle>
 	public:
 		virtual ~DeclarativeItemBaseStyle() override;
 
-		Property<bool> extraCursorsOutsideShape{this,"extraCursorsOutsideShape"};
+		Property<bool> extraCursorsOutsideShape{this, "extraCursorsOutsideShape"};
 };
 
 } /* namespace Visualization */

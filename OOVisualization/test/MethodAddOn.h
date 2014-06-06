@@ -41,4 +41,4 @@ class MethodAddOn : public Visualization::VisualizationAddOn {
 		QString targetMethodName_;
 };
 
-} /* namespace OOVisualization */
+}

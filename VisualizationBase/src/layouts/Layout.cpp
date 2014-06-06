@@ -43,7 +43,7 @@ Super(parent, style)
 
 void Layout::setInnerSize(int width_, int height_)
 {
-	if (isEmpty() && !style()->drawShapeWhenEmpty()) setSize(0,0);
+	if (isEmpty() && !style()->drawShapeWhenEmpty()) setSize(0, 0);
 	else
 	{
 		if ( hasShape() )

@@ -406,7 +406,7 @@ Model::PersistedNode* SimpleTextFileStore::loadNodeData()
 		result = val;
 
 		auto previousPersisted = persisted_;
-		for(auto c : persisted_->children())
+		for (auto c : persisted_->children())
 		{
 			persisted_ = c;
 

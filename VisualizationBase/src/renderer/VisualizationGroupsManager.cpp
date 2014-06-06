@@ -34,9 +34,9 @@ VisualizationGroupsManager::VisualizationGroupsManager()
 
 void VisualizationGroupsManager::clear()
 {
-	for(auto groupsNodeType : groupsTypePurposeSz_)
-		for(auto groupsPurpose : groupsNodeType)
-			for(auto g : groupsPurpose)
+	for (auto groupsNodeType : groupsTypePurposeSz_)
+		for (auto groupsPurpose : groupsNodeType)
+			for (auto g : groupsPurpose)
 			SAFE_DELETE(g);
 
 	groupsTypePurposeSz_.clear();

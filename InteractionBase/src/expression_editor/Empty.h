@@ -48,4 +48,4 @@ class INTERACTIONBASE_API Empty : public Expression {
 
 inline int Empty::type() { return 0; }
 
-} /* namespace InteractionBase */
+}

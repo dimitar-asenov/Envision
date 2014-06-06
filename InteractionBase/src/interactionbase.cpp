@@ -74,8 +74,8 @@ Logger::Log& log = InteractionBase::log();
 
 Log& InteractionBase::log()
 {
-	static auto l = Logger::Log::getLogger("interactionbase");
-	return *l;
+	static auto log = Logger::Log::getLogger("interactionbase");
+	return *log;
 }
 
 bool InteractionBase::initialize(Core::EnvisionManager& envisionManager)

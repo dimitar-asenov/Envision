@@ -38,11 +38,11 @@ class VISUALIZATIONBASE_API TextStyle : public Super<ItemStyle>
 		virtual ~TextStyle() override;
 		void load(StyleLoader& sl);
 
-		Property<QPen> pen{this,"pen"};
-		Property<QFont> font{this,"font"};
-		Property<QPen> selectionPen{this,"selectionPen"};
-		Property<QFont> selectionFont{this,"selectionFont"};
-		Property<bool> htmlFormat{this,"htmlFormat"};
+		Property<QPen> pen{this, "pen"};
+		Property<QFont> font{this, "font"};
+		Property<QPen> selectionPen{this, "selectionPen"};
+		Property<QFont> selectionFont{this, "selectionFont"};
+		Property<bool> htmlFormat{this, "htmlFormat"};
 
 		const QBrush& selectionBackground() const;
 

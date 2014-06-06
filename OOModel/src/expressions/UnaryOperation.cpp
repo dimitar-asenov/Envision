@@ -44,7 +44,7 @@ UnaryOperation::UnaryOperation(const OperatorTypes& op, Expression* operand)
 : Super(nullptr, UnaryOperation::getMetaData())
 {
 	setOp(op);
-	if(operand) setOperand(operand);
+	if (operand) setOperand(operand);
 }
 
 Type* UnaryOperation::type()

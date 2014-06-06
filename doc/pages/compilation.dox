@@ -24,6 +24,8 @@ To install the dependencies on Ubuntu 14.04, do the following:
 		\verbatim sudo apt-get install libclang-3.4-dev clang-3.4 llvm-3.4 \endverbatim
 	-# Install the Google Performance Tools:
 		\verbatim sudo apt-get install google-perftools libgoogle-perftools-dev \endverbatim
+	-# Install the Vera++ tool which performs style checks for the code:
+		\verbatim sudo apt-get install vera++ \endverbatim
 
 Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want
 to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.

@@ -66,7 +66,7 @@ ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const 
 
 ActionPrompt::~ActionPrompt()
 {
-	if(scene()) scene()->removeTopLevelItem(this);
+	if (scene()) scene()->removeTopLevelItem(this);
 
 	// These items are completely out of our control, we just know about them.
 	currentActionReceiver_ = nullptr;
@@ -88,7 +88,7 @@ void ActionPrompt::initializeForms()
 			auto self = static_cast<ActionPrompt*>(item);
 
 			if (self->isVisible())
-				for(auto a : self->actions())
+				for (auto a : self->actions())
 				{
 					if (a->shortcut().startsWith(self->actionText_->text()))
 						ret.append(new TextAndDescription(a->shortcut(), a->name(), &self->style()->actionStyle()));
@@ -166,7 +166,7 @@ void ActionPrompt::acquireCursor()
 	Q_ASSERT(actionText_);
 
 	// Save the current cursor
-	receiverCursorPosition_ = QPoint(0,0);
+	receiverCursorPosition_ = QPoint(0, 0);
 	if (originalActionReceiver_->scene()->mainCursor()->owner() == originalActionReceiver_)
 		// Note that the cursor's position is in item local coordinates.
 		receiverCursorPosition_ = originalActionReceiver_->scene()->mainCursor()->position();
@@ -176,7 +176,7 @@ void ActionPrompt::acquireCursor()
 
 void ActionPrompt::setPromptPosition()
 {
-	for( auto v : originalActionReceiver_->scene()->views())
+	for ( auto v : originalActionReceiver_->scene()->views())
 	{
 		if (v->isActiveWindow())
 		{
@@ -221,7 +221,7 @@ void ActionPrompt::computeCurrentActionReceiver()
 		// Get a linear order of children
 		auto children = originalActionReceiver_->childItems();
 		int i = 0;
-		while(i < children.size())
+		while (i < children.size())
 		{
 			// While exploring the children in a BFS manner, look out for reaching the desired child node
 			auto child = children.at(i);

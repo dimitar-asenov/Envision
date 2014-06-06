@@ -56,7 +56,7 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 	if (auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(vis))
 	{
 		setFilterNullAndEmptyComponents();
-		for(int i = 0; i < layoutProvider->layout()->length(); ++i)
+		for (int i = 0; i < layoutProvider->layout()->length(); ++i)
 			add(new Cell(i, layoutProvider->layout()->at<Visualization::Item>(i), i));
 
 		return;
@@ -72,14 +72,14 @@ GridBasedOffsetProvider::~GridBasedOffsetProvider()
 	cells_.clear();
 }
 
-bool GridBasedOffsetProvider::hasGridConstructorFor(Visualization::Item* item)
+bool GridBasedOffsetProvider::hasGridConstructorfor (Visualization::Item* item)
 {
 	return (gridConstructors().find(item->typeId()) != gridConstructors().end());
 }
 
 void GridBasedOffsetProvider::add(Cell* cell)
 {
-	for(auto c: cells_)
+	for (auto c: cells_)
 		if (c->region().contains(cell->region()) || cell->region().contains(c->region()))
 			throw OOInteractionException("Trying to add an overlapping cell to GridOffsetProvider");
 
@@ -90,7 +90,7 @@ void GridBasedOffsetProvider::add(Cell* cell)
 
 Cell* GridBasedOffsetProvider::findCell(const QRect& start, Direction dir) const
 {
-	for(auto c : cells_)
+	for (auto c : cells_)
 	{
 		if (start== c->region()) continue;
 
@@ -252,10 +252,10 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 	if (!target) return -1; // This means that we should not do anything
 
 	if (left || right) result = 0;
-	if (right) for(int i = target->stringComponentsStart(); i <= target->stringComponentsEnd(); ++i)
+	if (right) for (int i = target->stringComponentsStart(); i <= target->stringComponentsEnd(); ++i)
 		result += components[i].size();
 
-	for(int i = 0; i < target->stringComponentsStart(); ++i) result += components[i].size();
+	for (int i = 0; i < target->stringComponentsStart(); ++i) result += components[i].size();
 
 	return result;
 }
@@ -268,7 +268,7 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	int offset = newOffset;
 	int index = 0;
 
-	while( index < components.size() && offset > components[index].size())
+	while ( index < components.size() && offset > components[index].size())
 	{
 		offset -= components[index].size();
 		++index;
@@ -277,7 +277,7 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	// Find the cells corresponding to the this index and the next (if any)
 	Cell* indexCell = nullptr;
 	Cell* nextCell = nullptr;
-	for(auto c : cells_)
+	for (auto c : cells_)
 	{
 		if (c->stringComponentsStart() <= index && c->stringComponentsEnd() >= index) indexCell = c;
 		if (c->stringComponentsStart() <= index+1 && c->stringComponentsEnd() >= index+1) nextCell = c;

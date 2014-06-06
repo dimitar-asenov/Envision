@@ -37,9 +37,9 @@ class VISUALIZATIONBASE_API LineStyle : public Super<ItemStyle>
 	public:
 		virtual ~LineStyle() override;
 
-		Property<int> width{this,"width"};
-		Property<int> height{this,"height"};
-		Property<QPen> pen{this,"pen"};
+		Property<int> width{this, "width"};
+		Property<int> height{this, "height"};
+		Property<QPen> pen{this, "pen"};
 };
 
 } /* namespace Visualization */

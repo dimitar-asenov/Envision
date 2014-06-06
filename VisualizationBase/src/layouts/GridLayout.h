@@ -82,7 +82,8 @@ class VISUALIZATIONBASE_API GridLayout: public Super<Layout>
 
 		void synchronize(Item*& item, Model::Node* node, int x, int y);
 		template <class T> void synchronize(T*& item, bool present, const typename T::StyleType* style, int x, int y);
-		template <class T> void synchronize(T*& item, typename T::NodeType* node, const typename T::StyleType* style, int x, int y);
+		template <class T> void synchronize(T*& item, typename T::NodeType* node, const typename T::StyleType* style,
+														int x, int y);
 
 	private:
 		QVector< QVector<Item*> > items_;
@@ -99,7 +100,8 @@ inline QSize GridLayout::gridSize() const { return QSize(sizeX_, sizeY_); }
 template <class T> inline T* GridLayout::at(int x, int y) { return static_cast<T*> (items_[x][y]); }
 template <class T> inline T* GridLayout::at(int x, int y) const { return static_cast<T*> (items_[x][y]); }
 
-template <class T> void GridLayout::synchronize(T*& item, bool present, const typename T::StyleType* style, int x, int y)
+template <class T> void GridLayout::synchronize(T*& item, bool present, const typename T::StyleType* style,
+																int x, int y)
 {
 	if (item && !present)
 	{
@@ -116,7 +118,8 @@ template <class T> void GridLayout::synchronize(T*& item, bool present, const ty
 	}
 }
 
-template <class T> void GridLayout::synchronize(T*& item, typename T::NodeType* node, const typename T::StyleType* style, int x, int y)
+template <class T> void GridLayout::synchronize(T*& item, typename T::NodeType* node,
+																const typename T::StyleType* style, int x, int y)
 {
 	if (item && item->node() != node)
 	{

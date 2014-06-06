@@ -29,14 +29,14 @@
 
 namespace Model {
 
-DEFINE_TYPE_ID_DERIVED(CompositeNode, "CompositeNode",)
+DEFINE_TYPE_ID_DERIVED(CompositeNode, "CompositeNode", )
 
 int CompositeNode::nextExtensionId_ = 0;
 
 void CompositeNode::initType()
 {
 	Node::registerNodeType("CompositeNode",
-			[](Node* parent) -> Node* { return CompositeNode::createDefaultInstance(parent);} ,
+			[](Node* parent) -> Node* { return CompositeNode::createDefaultInstance(parent);},
 			[](Node *parent, PersistentStore &store, bool partialLoadHint) -> Node*
 			{ return new CompositeNode(parent, store, partialLoadHint);});
 }
@@ -216,7 +216,7 @@ QList< QPair<QString, Node*> > CompositeNode::getAllAttributes(bool includeNullV
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes_[level][i] || includeNullValues )
-				result.append(QPair<QString,Node*>((*currentLevel)[i].name(),subnodes_[level][i]));
+				result.append(QPair<QString, Node*>((*currentLevel)[i].name(), subnodes_[level][i]));
 	}
 
 	return result;
@@ -264,7 +264,7 @@ void CompositeNode::load(PersistentStore &store)
 
 		// Skip loading partial optional children.
 		if (!store.isLoadingPartially() || !attribute.optional() || !attribute.partial())
-			execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(),index.index()), &subnodes_));
+			execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(), index.index()), &subnodes_));
 	}
 
 	verifyHasAllMandatoryAttributes();
@@ -275,7 +275,7 @@ void CompositeNode::removeAllNodes()
 	for (int level = 0; level < subnodes_.size(); ++level)
 		for (int i = 0; i < subnodes_[level].size(); ++i)
 			if ( subnodes_[level][i] )
-				execute(new CompositeNodeChangeChild(this, nullptr, CompositeIndex(level,i), &subnodes_));
+				execute(new CompositeNodeChangeChild(this, nullptr, CompositeIndex(level, i), &subnodes_));
 }
 
 void CompositeNode::verifyHasAllMandatoryAttributes()
@@ -325,4 +325,3 @@ Node* CompositeNode::setDefault(QString nodeName)
 }
 
 }
-

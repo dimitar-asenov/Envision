@@ -37,4 +37,4 @@ class INTERACTIONBASE_API FinishOperator : public ExpressionTreeBuildInstruction
 		virtual void perform(ExpressionTreeBuilder& tb);
 };
 
-} /* namespace InteractionBase */
+}

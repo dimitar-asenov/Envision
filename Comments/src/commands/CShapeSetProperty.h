@@ -35,11 +35,15 @@ namespace Comments {
 class COMMENTS_API CShapeSetProperty : public Interaction::Command
 {
 	public:
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
-		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+										  const QStringList& commandTokens) override;
+		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+																  const QStringList& commandTokens) override;
 
-		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
+		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+																				 const QString& textSoFar) override;
+		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
+													const QString& textSoFar) override;
 };
 
 }

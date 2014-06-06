@@ -42,7 +42,7 @@ GenericNode::GenericNode(){}
 GenericNode::~GenericNode()
 {
 	if (lineStartInData_ == 0 && lineEndInData_ == 0)
-		for(auto c : children_) SAFE_DELETE(c);
+		for (auto c : children_) SAFE_DELETE(c);
 }
 
 const QString& GenericNode::valueAsString() const
@@ -79,7 +79,7 @@ double GenericNode::valueAsDouble() const
 GenericNode* GenericNode::child(const QString& name)
 {
 	ensureDataRead();
-	for(auto c : children_)
+	for (auto c : children_)
 		if (c->name() == name) return c;
 
 	return nullptr;
@@ -137,7 +137,7 @@ GenericNode* GenericNode::find(Model::NodeIdType id)
 {
 	ensureDataRead();
 	if (id_ == id) return this;
-	for(auto c : children_)
+	for (auto c : children_)
 		if (auto found = c->find(id)) return found;
 
 	return nullptr;
@@ -147,7 +147,7 @@ inline int GenericNode::countTabs(char* data, int lineStart, int lineEnd)
 {
 	int numTabs = 0;
 
-	for(int i = lineStart; i<=lineEnd; ++i)
+	for (int i = lineStart; i<=lineEnd; ++i)
 	{
 		if (data[i] == '\t') ++numTabs;
 		else break;
@@ -158,7 +158,7 @@ inline int GenericNode::countTabs(char* data, int lineStart, int lineEnd)
 
 void GenericNode::save(QTextStream& stream, int tabLevel)
 {
-	for(int i = 0; i<tabLevel; ++i) stream << '\t';
+	for (int i = 0; i<tabLevel; ++i) stream << '\t';
 	stream << name_ << ' ' << type_;
 	if (!id_.isNull()) stream << ' ' << id_;
 	if (hasValue())
@@ -170,7 +170,7 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 	}
 	stream << '\n';
 
-	for(auto c : children_)
+	for (auto c : children_)
 		c->save(stream, tabLevel+1);
 }
 
@@ -263,14 +263,14 @@ void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEn
 	// Id (optional)
 	start = headerPartEnd+1;
 	moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
-	if(moreHeaderParts)
+	if (moreHeaderParts)
 	{
 		bool isId = true;
 		Model::NodeIdType id = toId(data, start, headerPartEnd, isId);
 
 		if ( isId ) node->setId( id );
 		else throw FilePersistenceException("Unknown node header element "
-				+ QString::fromAscii(data+start,headerPartEnd-start+1));
+				+ QString::fromAscii(data+start, headerPartEnd-start+1));
 	}
 
 	if (moreHeaderParts)
@@ -300,7 +300,7 @@ void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEn
 		{
 			// There were some characters, but the string is empty.
 			// See if this was the UTF-8 BOM, which Qt ignores in strings, but it might be relevant for characters
-			if(lineEnd-start == 2 && data[start] == (char)0xEF
+			if (lineEnd-start == 2 && data[start] == (char)0xEF
 					&& data[start+1] == (char)0xBB && data[start+2] == (char)0xBF)
 			s = QChar{QChar::ByteOrderMark};
 			else
@@ -316,7 +316,7 @@ void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEn
 		node->setValue(DOUBLE_VALUE, QString::fromLatin1(data+start+PREFIX_DOUBLE.length(),
 				lineEnd - start - PREFIX_DOUBLE.length() + 1 ));
 	else throw FilePersistenceException("Unknown value prefix" +
-			QString::fromUtf8(data+start,lineEnd-start+1));
+			QString::fromUtf8(data+start, lineEnd-start+1));
 }
 
 QString GenericNode::escape(const QString& line)
@@ -338,7 +338,7 @@ QString GenericNode::rawStringToQString(char* data, int start, int endInclusive)
 
 	// The unescape it
 	bool escaped = false;
-	for(auto c : utf8Escaped)
+	for (auto c : utf8Escaped)
 	{
 		if (!escaped && c == '\\')
 		{
@@ -385,7 +385,7 @@ Model::NodeIdType GenericNode::toId(char* data, int start, int endInclusive, boo
 	}
 
 	ok = true;
-	uint l = hexDigitToChar(idStart[1], ok) << 28
+	uint low = hexDigitToChar(idStart[1], ok) << 28
 		| hexDigitToChar(idStart[2], ok) << 24
 		| hexDigitToChar(idStart[3], ok) << 20
 		| hexDigitToChar(idStart[4], ok) << 16
@@ -401,17 +401,17 @@ Model::NodeIdType GenericNode::toId(char* data, int start, int endInclusive, boo
 		| hexDigitToChar(idStart[16], ok) << 8
 		| hexDigitToChar(idStart[17], ok) << 4
 		| hexDigitToChar(idStart[18], ok);
-	uchar b1 = hexDigitToChar(idStart[20], ok) << 4 | hexDigitToChar(idStart[21],ok);
-	uchar b2 = hexDigitToChar(idStart[22], ok) << 4 | hexDigitToChar(idStart[23],ok);
-	uchar b3 = hexDigitToChar(idStart[25], ok) << 4 | hexDigitToChar(idStart[26],ok);
-	uchar b4 = hexDigitToChar(idStart[27], ok) << 4 | hexDigitToChar(idStart[28],ok);
-	uchar b5 = hexDigitToChar(idStart[29], ok) << 4 | hexDigitToChar(idStart[30],ok);
-	uchar b6 = hexDigitToChar(idStart[31], ok) << 4 | hexDigitToChar(idStart[32],ok);
-	uchar b7 = hexDigitToChar(idStart[33], ok) << 4 | hexDigitToChar(idStart[34],ok);
-	uchar b8 = hexDigitToChar(idStart[35], ok) << 4 | hexDigitToChar(idStart[36],ok);
+	uchar b1 = hexDigitToChar(idStart[20], ok) << 4 | hexDigitToChar(idStart[21], ok);
+	uchar b2 = hexDigitToChar(idStart[22], ok) << 4 | hexDigitToChar(idStart[23], ok);
+	uchar b3 = hexDigitToChar(idStart[25], ok) << 4 | hexDigitToChar(idStart[26], ok);
+	uchar b4 = hexDigitToChar(idStart[27], ok) << 4 | hexDigitToChar(idStart[28], ok);
+	uchar b5 = hexDigitToChar(idStart[29], ok) << 4 | hexDigitToChar(idStart[30], ok);
+	uchar b6 = hexDigitToChar(idStart[31], ok) << 4 | hexDigitToChar(idStart[32], ok);
+	uchar b7 = hexDigitToChar(idStart[33], ok) << 4 | hexDigitToChar(idStart[34], ok);
+	uchar b8 = hexDigitToChar(idStart[35], ok) << 4 | hexDigitToChar(idStart[36], ok);
 
 	if (!ok) return {};
-	return QUuid(l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
+	return QUuid(low, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
 }
 
 uchar GenericNode::hexDigitToChar(char d, bool& ok)
@@ -487,7 +487,7 @@ bool GenericNode::nextNonEmptyLine(char* data, int dataSize, int& lineStart, int
 
 int GenericNode::indexOf(const char c, char* data, int start, int endInclusive)
 {
-	for(int i = start; i<=endInclusive; ++i) if(data[i]==c) return i;
+	for (int i = start; i<=endInclusive; ++i) if (data[i]==c) return i;
 	return -1;
 }
 

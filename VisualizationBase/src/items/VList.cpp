@@ -165,7 +165,7 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 		qSort(children.begin(), children.end(), [=](const Item* left, const Item* right)
 		{return left->pos().y() < right->pos().y();});
 
-	QPoint topLeft{0,0};
+	QPoint topLeft{0, 0};
 	auto w = widthInLocal();
 	auto h = heightInLocal();
 	QPoint endPoint{w, h};
@@ -182,7 +182,7 @@ void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 	}
 
 
-	for(int i = 0; i<children.size(); ++i)
+	for (int i = 0; i<children.size(); ++i)
 	{
 		if (i+1 < children.size())
 		{

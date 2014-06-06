@@ -113,7 +113,7 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 void PluginManager::unloadAllPlugins()
 {
 	QTextStream out(stdout);
-	while( !loadedPlugins.isEmpty() )
+	while ( !loadedPlugins.isEmpty() )
 	{
 		auto plugin = loadedPlugins.takeLast();
 		auto id = idToPluginLoaderMap.key(plugin);

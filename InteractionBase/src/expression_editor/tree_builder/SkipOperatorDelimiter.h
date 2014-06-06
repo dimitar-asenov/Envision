@@ -37,4 +37,4 @@ class INTERACTIONBASE_API SkipOperatorDelimiter : public ExpressionTreeBuildInst
 		virtual void perform(ExpressionTreeBuilder& tb);
 };
 
-} /* namespace InteractionBase */
+}

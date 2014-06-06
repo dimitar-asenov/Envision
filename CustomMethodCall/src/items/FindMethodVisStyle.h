@@ -40,10 +40,10 @@ class CUSTOMMETHODCALL_API FindMethodVisStyle : public Super<Visualization::Item
 	public:
 		virtual ~FindMethodVisStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
-		Property<Visualization::TextStyle> name{this,"name"};
-		Property<Visualization::StaticStyle> separator{this,"separator"};
-		Property<Visualization::VListStyle> arguments{this,"arguments"};
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::TextStyle> name{this, "name"};
+		Property<Visualization::StaticStyle> separator{this, "separator"};
+		Property<Visualization::VListStyle> arguments{this, "arguments"};
 };
 
 }

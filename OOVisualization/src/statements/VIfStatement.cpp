@@ -46,7 +46,7 @@ void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 	int contentWidth = 0;
 	if (thenBranch_) contentWidth += thenBranch_->widthInParent();
 	if (elseBranch_) contentWidth += elseBranch_->widthInParent();
-	if( horizontal_ != (contentWidth <= style()->contentWidthSwitchTreshold()))
+	if ( horizontal_ != (contentWidth <= style()->contentWidthSwitchTreshold()))
 	{
 		horizontal_ = !horizontal_;
 		setUpdateNeeded(RepeatUpdate);

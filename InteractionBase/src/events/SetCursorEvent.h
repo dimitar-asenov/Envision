@@ -72,7 +72,7 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 		Visualization::Scene* scene_{};
 		Model::Node* node_{};
 		CursorPlacement placement_{};
-		QPoint point_{-1,-1};
+		QPoint point_{-1, -1};
 		bool showPrompt_{false};
 };
 

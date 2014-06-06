@@ -54,7 +54,7 @@ QString VModifier::currentText()
 	if (node()->isSet(Modifier::Override)) text += " override";
 	if (node()->isSet(Modifier::Inline)) text += " inline";
 
-	if (!text.isEmpty() && text.at(0) == ' ') text.remove(0,1);
+	if (!text.isEmpty() && text.at(0) == ' ') text.remove(0, 1);
 	return text;
 }
 

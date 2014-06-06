@@ -41,8 +41,8 @@ FunctionType::FunctionType(bool isValueType, QList<const Type*> arguments, Type*
 FunctionType::FunctionType(const FunctionType& other)
 : Type(other)
 {
-	for(auto a : other.arguments_) arguments_.append(a->clone());
-	for(auto r : other.results_) results_.append(r->clone());
+	for (auto a : other.arguments_) arguments_.append(a->clone());
+	for (auto r : other.results_) results_.append(r->clone());
 }
 
 FunctionType::~FunctionType()
@@ -59,10 +59,10 @@ bool FunctionType::equals(const Type* other) const
 	if (arguments_.size() != ft->arguments_.size()) return false;
 	if (results_.size() != ft->results_.size()) return false;
 
-	for(int i = 0; i<arguments_.size(); ++i)
+	for (int i = 0; i<arguments_.size(); ++i)
 		if (! arguments_.at(i)->equals(ft->arguments_.at(i))) return false;
 
-	for(int i = 0; i<results_.size(); ++i)
+	for (int i = 0; i<results_.size(); ++i)
 		if (! results_.at(i)->equals(ft->results_.at(i))) return false;
 
 	return true;

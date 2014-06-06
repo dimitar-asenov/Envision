@@ -80,7 +80,10 @@ inline const QPoint& ControlFlowItem::exit() { return exit_; }
 inline const QList< QPoint >& ControlFlowItem::breaks() { return breaks_; }
 inline const QList< QPoint >& ControlFlowItem::continues() { return continues_; }
 
-inline void ControlFlowItem::setPreferredContinueExit(PreferedExitDirection preference) { preferredContinueExit_ = preference; }
-inline void ControlFlowItem::setPreferredBreakExit(PreferedExitDirection preference) { preferredBreakExit_ = preference; }
+inline void ControlFlowItem::setPreferredContinueExit(PreferedExitDirection preference)
+{ preferredContinueExit_ = preference; }
+
+inline void ControlFlowItem::setPreferredBreakExit(PreferedExitDirection preference)
+{ preferredBreakExit_ = preference; }
 
 }

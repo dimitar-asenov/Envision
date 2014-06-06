@@ -167,7 +167,7 @@ void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int positi
 
 bool SequentialLayout::isEmpty() const
 {
-	for(int i = 0; i<items.size(); ++i)
+	for (int i = 0; i<items.size(); ++i)
 		if (!items[i]->isEmpty()) return false;
 
 	return true;
@@ -330,7 +330,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		itemsArea.adjust(style()->leftMargin(), style()->topMargin(), -style()->rightMargin(), -style()->bottomMargin());
 	}
 	else
-		itemsArea = QRect( QPoint(0,0), sizeInLocal().toSize());
+		itemsArea = QRect( QPoint(0, 0), sizeInLocal().toSize());
 
 	bool horizontal = isHorizontal();
 	bool forward = isForward();
@@ -342,9 +342,9 @@ QList<ItemRegion> SequentialLayout::regions()
 
 	int last = forward ?
 			( horizontal ? midArea.left() : midArea.top()) :
-			( horizontal ? midArea.right() + 1 : midArea.bottom() + 1) ;
+			( horizontal ? midArea.right() + 1 : midArea.bottom() + 1);
 
-	for(int i = 0; i<items.size(); ++i)
+	for (int i = 0; i<items.size(); ++i)
 	{
 		ItemRegion cursorRegion;
 		ItemRegion itemRegion;

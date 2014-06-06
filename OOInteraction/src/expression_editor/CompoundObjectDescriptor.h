@@ -45,7 +45,7 @@ class OOINTERACTION_API CompoundObjectDescriptor : public OOOperatorDescriptor {
 		static bool processDeleteOrBackspaceKey(Qt::Key key, QString& expression, int& index);
 
 	private:
-		static QMap<int,OOModel::Expression*>& storedExpressions();
+		static QMap<int, OOModel::Expression*>& storedExpressions();
 		static int nextId();
 
 		static bool isInQuotes(int index, const QString& string, const QChar& quote = '\"');

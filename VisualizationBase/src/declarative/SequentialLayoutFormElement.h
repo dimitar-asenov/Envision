@@ -199,13 +199,15 @@ inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListNode(Lis
 	listNodeGetter_ = listNodeGetter;
 	return this;
 }
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListOfNodes(ListOfNodesGetterFunction nodeListGetter)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListOfNodes(
+		ListOfNodesGetterFunction nodeListGetter)
 {
 	Q_ASSERT(!listNodeGetter_ && !itemListGetter_);
 	nodeListGetter_ = nodeListGetter;
 	return this;
 }
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListOfItems(ListOfItemsGetterFunction itemListGetter)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListOfItems(
+		ListOfItemsGetterFunction itemListGetter)
 {
 	Q_ASSERT(!nodeListGetter_ && !listNodeGetter_);
 	itemListGetter_ = itemListGetter;

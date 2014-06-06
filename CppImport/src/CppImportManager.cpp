@@ -49,10 +49,10 @@ CppImportManager::~CppImportManager()
 void CppImportManager::setImportPath(const QString& sourcePath, const bool subProjects)
 {
 	setProjectName(sourcePath);
-	if(subProjects)
+	if (subProjects)
 	{
 		QDirIterator dirIterator(sourcePath, QDir::Dirs | QDir::NoDotAndDotDot);
-		while(dirIterator.hasNext())
+		while (dirIterator.hasNext())
 			initPath(dirIterator.next());
 	}
 	else
@@ -73,14 +73,14 @@ Model::Model*CppImportManager::createModel(const bool statisticsPerProject)
 		ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(visitor, log);
 		tool->run(frontendActionFactory);
 		// statistics
-		if(statisticsPerProject)
+		if (statisticsPerProject)
 			log->outputStatistics();
 		//clean up
 		SAFE_DELETE(frontendActionFactory);
 		SAFE_DELETE(tool);
 	}
 	// statistics
-	if(!statisticsPerProject)
+	if (!statisticsPerProject)
 		log->outputStatistics();
 	SAFE_DELETE(visitor);
 	SAFE_DELETE(log);
@@ -98,26 +98,26 @@ void CppImportManager::setupTest()
 	QString rootPath = rootDir.canonicalPath();
 	// open testSelector file to read in dir
 	QFile selector(rootPath + QDir::separator() + "testSelector");
-	if(!selector.open(QFile::ReadOnly))
+	if (!selector.open(QFile::ReadOnly))
 		throw CppImportException("Could not open testSelector file");
 	QTextStream inStream(&selector);
 	QString testDir;
-	while(!inStream.atEnd())
+	while (!inStream.atEnd())
 	{
 		testDir = inStream.readLine();
 		if (testDir.trimmed().isEmpty())
 			continue;
-		else if(testDir.startsWith("path:"))
+		else if (testDir.startsWith("path:"))
 		{
-			testDir.replace(0,5,"");
+			testDir.replace(0, 5, "");
 			return setImportPath(QCoreApplication::applicationDirPath() + "/test" + testDir);
 		}
-		else if(testDir.startsWith("spath:"))
+		else if (testDir.startsWith("spath:"))
 		{
-			testDir.replace(0,6,"");
+			testDir.replace(0, 6, "");
 			return setImportPath(QCoreApplication::applicationDirPath() + "/test" + testDir, true);
 		}
-		else if(!testDir.startsWith("#"))
+		else if (!testDir.startsWith("#"))
 		{
 			rootPath.append(QDir::separator()).append(testDir);
 			createCompilationDbForTest(rootPath);
@@ -131,7 +131,7 @@ void CppImportManager::initPath(const QString& sourcePath)
 {
 	// check if there is a compilation db file in this directory otherwise we exclude it
 	QDir curDir(sourcePath);
-	if(!curDir.exists("compile_commands.json"))
+	if (!curDir.exists("compile_commands.json"))
 	{
 		qDebug() << "Ignoring directory" << sourcePath << "because there is no compile_commands.json file";
 		return;
@@ -152,7 +152,7 @@ void CppImportManager::readInFiles(const QString& sourcePath)
 {
 	QDirIterator dirIterator(sourcePath, cppFilter_, QDir::Files, QDirIterator::Subdirectories);
 	std::vector<std::string>* sources = new std::vector<std::string>();
-	while(dirIterator.hasNext())
+	while (dirIterator.hasNext())
 		sources->push_back(dirIterator.next().toStdString());
 	sourcesMap_.insert(sourcePath, sources);
 }
@@ -160,8 +160,8 @@ void CppImportManager::readInFiles(const QString& sourcePath)
 void CppImportManager::setCompilationDbPath(const QString& sourcePath)
 {
 	std::string Error;
-	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toAscii().data(),Error);
-	if(!compDB)
+	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toAscii().data(), Error);
+	if (!compDB)
 		throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
 	compilationDbMap_.insert(sourcePath, compDB);
 }
@@ -169,11 +169,11 @@ void CppImportManager::setCompilationDbPath(const QString& sourcePath)
 void CppImportManager::createCompilationDbForTest(const QString& testPath)
 {
 	QDir curDir(testPath);
-	if(!curDir.exists("compile_commands.json"))
+	if (!curDir.exists("compile_commands.json"))
 	{
 		QString test = testPath.split(QDir::separator()).last();
 		QFile db(testPath + QDir::separator() + "compile_commands.json");
-		if(!db.open(QFile::ReadWrite))
+		if (!db.open(QFile::ReadWrite))
 			throw CppImportException("Cannot create compile_commands file for test: " + test);
 		QTextStream out(&db);
 		out << "[" << endl;

@@ -48,4 +48,4 @@ inline const QString& AddErrorOperator::text() { return text_; }
 inline void AddErrorOperator::setText(QString new_text) { text_ = new_text; }
 
 
-} /* namespace InteractionBase */
+}

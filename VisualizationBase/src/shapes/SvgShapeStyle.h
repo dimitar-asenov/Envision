@@ -39,11 +39,11 @@ class VISUALIZATIONBASE_API SvgShapeStyle : public Super<ShapeStyle>
 		virtual void load(StyleLoader& sl);
 		void paint(QPainter* painter, int x, int y, int width, int height) const;
 
-		Property<QString> filename{this,"filename"};
-		Property<double> topContentMarginFraction{this,"topContentMarginFraction"};
-		Property<double> bottomContentMarginFraction{this,"bottomContentMarginFraction"};
-		Property<double> leftContentMarginFraction{this,"leftContentMarginFraction"};
-		Property<double> rightContentMarginFraction{this,"rightContentMarginFraction"};
+		Property<QString> filename{this, "filename"};
+		Property<double> topContentMarginFraction{this, "topContentMarginFraction"};
+		Property<double> bottomContentMarginFraction{this, "bottomContentMarginFraction"};
+		Property<double> leftContentMarginFraction{this, "leftContentMarginFraction"};
+		Property<double> rightContentMarginFraction{this, "rightContentMarginFraction"};
 
 	private:
 		QSvgRenderer renderer_;

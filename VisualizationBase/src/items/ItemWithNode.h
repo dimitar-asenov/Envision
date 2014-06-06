@@ -55,35 +55,35 @@ class ItemWithNode : public Super
 };
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::ItemWithNode(Item* parent, ContainedNode* node,
+ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::ItemWithNode(Item* parent, ContainedNode* node,
 		const typename Super::StyleType* style)
 	: Super(parent, style), node_(node), revision_(-1)
 {
-	Super::nodeItemsMap().insert(node,this);
+	Super::nodeItemsMap().insert(node, this);
 }
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::~ItemWithNode()
+ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::~ItemWithNode()
 {
-	auto removed = Super::nodeItemsMap().remove(node_,this);
+	auto removed = Super::nodeItemsMap().remove(node_, this);
 	Q_ASSERT(removed == 1);
 }
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-inline bool ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::hasNode() const { return true; }
+inline bool ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::hasNode() const { return true; }
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-inline  ContainedNode* ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::node() const { return node_; }
+inline ContainedNode* ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::node() const { return node_; }
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-inline  int ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::revision() const { return revision_; }
+inline  int ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::revision() const { return revision_; }
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-inline  void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::setRevision(int newRevision)
+inline  void ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::setRevision(int newRevision)
 { revision_ = newRevision; }
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::initType()
+void ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::initType()
 {
 	if (defaultInitialization && !Scene::defaultRenderer()->hasVisualization(NodeType::typeIdStatic()))
 	{

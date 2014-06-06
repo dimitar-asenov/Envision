@@ -48,4 +48,4 @@ class OOVISUALIZATION_API VEmptyExpressionStyle : public Super<Visualization::It
 inline const Visualization::StaticStyle& VEmptyExpressionStyle::normal() const { return normal_; }
 inline const Visualization::StaticStyle& VEmptyExpressionStyle::emptyLine() const { return emptyLine_; }
 
-} /* namespace OOVisualization */
+}

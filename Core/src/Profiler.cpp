@@ -80,7 +80,7 @@ void Profiler::stop(const QString& jobName)
 {
 	if (DISABLE_ALL) return;
 
-	if(currentJob_ && currentJob_->jobName == jobName)
+	if (currentJob_ && currentJob_->jobName == jobName)
 	{
 #ifdef Q_OS_LINUX
 		if (!DISABLE_CALL_PROFILING) ProfilerStop();

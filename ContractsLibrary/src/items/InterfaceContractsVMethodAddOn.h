@@ -47,4 +47,4 @@ class CONTRACTSLIBRARY_API InterfaceContractsVMethodAddOn : public Visualization
 		OOModel::Method* contractClassMethod_;
 };
 
-} /* namespace ContractsLibrary */
+}

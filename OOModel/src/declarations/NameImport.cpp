@@ -42,8 +42,8 @@ REGISTER_ATTRIBUTE(NameImport, importAll, Boolean, false, false, true)
 NameImport::NameImport(Expression *importedName, bool importAllChildrenInScope)
 : Super(nullptr, NameImport::getMetaData())
 {
-	if(importedName) setImportedName(importedName);
-	if(importAllChildrenInScope) setImportAll(true);
+	if (importedName) setImportedName(importedName);
+	if (importAllChildrenInScope) setImportAll(true);
 }
 
 bool NameImport::definesSymbol() const
@@ -65,7 +65,7 @@ Model::Node* NameImport::target() const
 }
 
 bool NameImport::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Model::Node* source,
-		FindSymbolDirection direction, SymbolTypes symbolTypes,bool exhaustAllScopes) const
+		FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const
 {
 	Q_ASSERT(direction != SEARCH_DOWN);
 

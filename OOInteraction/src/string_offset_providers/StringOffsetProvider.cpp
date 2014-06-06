@@ -195,7 +195,7 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 		int focusedNodeIndex = list->focusedNodeIndex();
 		Q_ASSERT(focusedNodeIndex >= 0);
 
-		for(int i = 0; i<focusedNodeIndex; ++i)
+		for (int i = 0; i<focusedNodeIndex; ++i)
 			result += components[i].size() + separator.size();
 
 		result += itemOffset(list->itemAt<Visualization::Item>(list->focusedItemIndex()),
@@ -207,7 +207,7 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 
 StringOffsetProvider* StringOffsetProvider::defaultProvider(Visualization::Item* item)
 {
-	if ( GridBasedOffsetProvider::hasGridConstructorFor(item)) return new GridBasedOffsetProvider(item);
+	if ( GridBasedOffsetProvider::hasGridConstructorfor (item)) return new GridBasedOffsetProvider(item);
 	if ( auto tr = dynamic_cast<Visualization::TextRenderer*>(item)) return new TextRendererStringOffsetProvider(tr);
 
 	// TODO: The next condition is a bit flaky. Find a way to improve that. Perhaps with information regarding the parent

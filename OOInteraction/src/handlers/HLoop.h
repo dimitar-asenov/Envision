@@ -42,4 +42,4 @@ class OOINTERACTION_API HLoop : public HStatement {
 		HLoop();
 };
 
-} /* namespace OOInteraction */
+}

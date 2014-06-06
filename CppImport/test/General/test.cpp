@@ -32,7 +32,7 @@ int NameSpaceMethod(){
     return 100;
 }
 
-enum SomeNameEnum {FIRST=10,SECOND};
+enum SomeNameEnum {FIRST=10, SECOND};
 
 class Testing {
 public:
@@ -42,11 +42,11 @@ public:
         i=0;
     }
 
-    enum AnEnum {FIRST,SECOND=(100+25),THIRD};
+    enum AnEnum {FIRST, SECOND=(100+25), THIRD};
     int myFunction(int argument1, bool argument2){
-        enum FuncEnum {LOL,LOL1};
+        enum FuncEnum {LOL, LOL1};
         int k = 20;
-        if(k && argument2)
+        if (k && argument2)
         {
             int l = 100;
             l = k | 10;
@@ -58,14 +58,14 @@ public:
             k*=0;
         }
         bool __plus;
-        int __c,__lit, __lc;
+        int __c, __lit, __lc;
         if ((__plus || __c == __lit)
             && !(__lc && __c == __lc)
             && !(__c == __lc))
             return 0;
         return k;}
     int callExpr() {
-        return this->myFunction(1,true);
+        return this->myFunction(1, true);
     }
 
     int someCall() {
@@ -91,7 +91,7 @@ class Another {
     Testing aTestingObj;
     bool aBoolVar;
     void aVoidFunc(){
-        aTestingObj.myFunction(10,true);
+        aTestingObj.myFunction(10, true);
         bool aNotherBoolVar;}
 public:
     int aPublicvar;
@@ -105,7 +105,7 @@ public:
      return 0;
     }
     int aSwitchFunction(int k) {
-        switch(k) {
+        switch (k) {
         case 0:
             return 10;
         case 1==1:
@@ -161,25 +161,25 @@ class OneMore{
         int oneMoreVariable, oneMoreVar2;
         oneMoreVariable = 100 + oneMoreVar2;
         bool same = oneMoreVariable == oneMoreVar2;
-        while(oneMoreVariable < 1000)
+        while (oneMoreVariable < 1000)
         {
             oneMoreVariable = (oneMoreVariable+100);
-            if(oneMoreVariable>10)
+            if (oneMoreVariable>10)
                 continue;
         }
-        if(oneMoreVariable <=1000)
+        if (oneMoreVariable <=1000)
         {
             oneMoreVariable = oneMoreVariable+50;
         }
-        else if(oneMoreVariable > 1000)
+        else if (oneMoreVariable > 1000)
         {
             oneMoreVariable = oneMoreVariable+200;
         }
-        else if(oneMoreVar2 >= 1000)
+        else if (oneMoreVar2 >= 1000)
         {
             oneMoreVariable = oneMoreVariable+300;
         }
-        else if(!oneMoreVariable)
+        else if (!oneMoreVariable)
             return TestSpace::TestSpace::k;
         return 100;
     }
@@ -271,7 +271,7 @@ T GetMin (T a, U b) {
 
 class FriendTest {
     friend int method(int a) {
-        if(a>10)
+        if (a>10)
             return 0;
         else
             return 10;
@@ -297,9 +297,9 @@ int Header::headerFunc()
     float someFloat = 13.4;
     unsigned long uLong;
     int someArray[10];
-    for(int a=0;a<10;a++)
+    for (int a=0;a<10;a++)
         someArray[a] = a;
-    int array[] = {1,2,3};
+    int array[] = {1, 2, 3};
     const char* string = "Testing";
     volatile int volInt = 10;
     const volatile int constVolInt = 100;
@@ -308,17 +308,17 @@ int Header::headerFunc()
     int k;
     int g=10;
     k = (g++, g+1);
-    for(int i=0, someChar = 'c'; i<100;i++)
+    for (int i=0, someChar = 'c'; i<100;i++)
     {
         k = i;
-        if(k>10)
+        if (k>10)
             break;
     }
     auto r = k;
 
-    int i,j;
+    int i, j;
     long l;
-    i = GetMin<int,long> (j,l);
+    i = GetMin<int, long> (j, l);
 
 
     return r;

@@ -39,7 +39,7 @@ class CONTROLFLOWVISUALIZATION_API VListCFStyle : public Super<ControlFlowItemSt
 	public:
 		virtual ~VListCFStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> sequence{this,"sequence"};
+		Property<Visualization::SequentialLayoutStyle> sequence{this, "sequence"};
 };
 
 }

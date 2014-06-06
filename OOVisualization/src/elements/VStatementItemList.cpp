@@ -54,6 +54,4 @@ void VStatementItemList::determineRange() {
 	setRange(begin, end);
 }
 
-
-
 } /* namespace OOVisualization */

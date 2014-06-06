@@ -104,7 +104,7 @@ void NameOverlay::determineChildren()
 		bottomItems_ = new BottomItemNode{};
 
 		QList<Item*> stack = scene()->topLevelItems();
-		while(!stack.isEmpty())
+		while (!stack.isEmpty())
 		{
 			auto item = stack.takeLast();
 
@@ -123,7 +123,7 @@ void NameOverlay::determineChildren()
 		// Prepare a more efficient way to explore the nodes when rendering
 		dfsOrder_.clear();
 		QList<BottomItemNode*> dfsStack = {bottomItems_};
-		while(!dfsStack.isEmpty())
+		while (!dfsStack.isEmpty())
 		{
 			auto last = dfsStack.takeLast();
 			dfsOrder_.prepend(last);
@@ -177,7 +177,7 @@ void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 			// Only render texts that are inside the view
 			auto inView = true;
-			if(mainView)
+			if (mainView)
 			{
 				auto viewRect = mainView->mapFromScene(rect).boundingRect();
 				if (viewRect.right() < 0 || viewRect.bottom() < 0) inView = false;

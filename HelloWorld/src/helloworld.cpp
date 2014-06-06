@@ -31,8 +31,6 @@ Q_EXPORT_PLUGIN2( helloworld, Hello::HelloWorld )
 
 namespace Hello {
 
-
-
 bool HelloWorld::initialize(Core::EnvisionManager&)
 {
 	HelloWorldPrinter::sayHello("the initialization of the hello test Envision plugin");

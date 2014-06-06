@@ -80,4 +80,4 @@ inline QRect& ItemRegion::region() { return region_; }
 inline Item* ItemRegion::item() const { return item_; }
 inline Cursor* ItemRegion::cursor() const { return cursor_; }
 
-} /* namespace Visualization */
+}

@@ -51,4 +51,4 @@ class OOINTERACTION_API ListCell : public Cell
 		QString postfix_;
 };
 
-} /* namespace OOInteraction */
+}

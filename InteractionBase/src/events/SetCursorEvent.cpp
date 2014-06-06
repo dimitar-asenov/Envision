@@ -76,7 +76,7 @@ void SetCursorEvent::execute()
 	}
 	else
 	{
-		for(auto i : scene_->topLevelItems())
+		for (auto i : scene_->topLevelItems())
 		{
 			item = i->findVisualizationOf(node_);
 			if (item) break;
@@ -94,7 +94,7 @@ void SetCursorEvent::execute()
 		auto parent = item->parent();
 
 		if (getCursorPlacement_) placement_ = getCursorPlacement_();
-		switch(placement_)
+		switch (placement_)
 		{
 			case CursorOnTop: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnTop); break;
 			case CursorOnBottom: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnBottom); break;
@@ -121,7 +121,7 @@ void SetCursorEvent::execute()
 		auto it = item->scene()->focusItem();
 		if (it)
 		{
-			if(auto hand = dynamic_cast<Interaction::GenericHandler*>(it->handler()))
+			if (auto hand = dynamic_cast<Interaction::GenericHandler*>(it->handler()))
 			{
 				// This indirection (add a new event) is necessary because otherwise, something goes wrong with the view
 				// update and there are some pixels which are not cleared and still remain after the new prompt has been

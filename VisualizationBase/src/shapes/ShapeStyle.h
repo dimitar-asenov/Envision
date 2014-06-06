@@ -37,7 +37,7 @@ class VISUALIZATIONBASE_API ShapeStyle : public Style
 	public:
 		virtual ~ShapeStyle() override;
 
-		Property<QPen> outline{this,"outline"};
+		Property<QPen> outline{this, "outline"};
 };
 
 }

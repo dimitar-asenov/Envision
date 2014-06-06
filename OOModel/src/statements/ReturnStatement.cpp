@@ -39,7 +39,7 @@ REGISTER_ATTRIBUTE(ReturnStatement, values, TypedListOfExpression, false, false,
 ReturnStatement::ReturnStatement(Expression* firstReturnValue)
 : Super(nullptr, ReturnStatement::getMetaData())
 {
-	if(firstReturnValue) values()->append(firstReturnValue);
+	if (firstReturnValue) values()->append(firstReturnValue);
 }
 
 }

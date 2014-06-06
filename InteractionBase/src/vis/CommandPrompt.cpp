@@ -88,7 +88,7 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, 
 
 CommandPrompt::~CommandPrompt()
 {
-	if(scene()) scene()->removeTopLevelItem(this);
+	if (scene()) scene()->removeTopLevelItem(this);
 	commandReceiver_ = nullptr; // This item is completely out of our control, we just know about it.
 
 	removeResult();
@@ -214,14 +214,14 @@ void CommandPrompt::removeSuggestions()
 void CommandPrompt::saveReceiverCursorPosition()
 {
 	// Save the current cursor
-	receiverCursorPosition_ = QPoint(0,0);
+	receiverCursorPosition_ = QPoint(0, 0);
 	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
 		receiverCursorPosition_ = commandReceiver_->scene()->mainCursor()->position();
 }
 
 void CommandPrompt::setPromptPosition()
 {
-	QPointF promptPos = commandReceiver_->mapToScene(0,0);
+	QPointF promptPos = commandReceiver_->mapToScene(0, 0);
 	if (commandReceiver_->heightInScene() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
 	{
 		// Show the prompt under the receiver item.

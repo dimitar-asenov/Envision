@@ -59,17 +59,17 @@ class VStatementItem  : public Visualization::ItemWithNode<Derived, Super, Conta
 };
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-VStatementItem<Derived,Super,ContainedNode,defaultInitialization>::
+VStatementItem<Derived, Super, ContainedNode, defaultInitialization>::
 	VStatementItem(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style)
 	:Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>(parent, node, style)
 {}
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-Visualization::InteractionHandler*  VStatementItem<Derived,Super,ContainedNode,defaultInitialization>::handler() const
+Visualization::InteractionHandler*  VStatementItem<Derived, Super, ContainedNode, defaultInitialization>::handler()
+const
 {
 	if (VStatementItemStaticData::defaultClassHandler()) return VStatementItemStaticData::defaultClassHandler();
 	return Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::handler();
 }
 
-} /* namespace OOVisualization */
-
+}

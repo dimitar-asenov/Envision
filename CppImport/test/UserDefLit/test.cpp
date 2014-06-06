@@ -4,4 +4,4 @@ int operator"" _toInt(long double n) {
 
 int main(){
   int m = 5.0_toInt;
-} 
+}

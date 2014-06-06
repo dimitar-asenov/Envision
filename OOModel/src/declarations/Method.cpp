@@ -167,11 +167,11 @@ bool Method::overrides(Method* other)
 
 	// Second check whether the class hierarchy matches
 	auto p = parent();
-	while(p)
+	while (p)
 	{
 		if (auto cl = DCast<Class>(p))
 		{
-			for(auto baseClass : cl->allBaseClasses())
+			for (auto baseClass : cl->allBaseClasses())
 				if (baseClass->methods()->contains(other))
 					return true;
 

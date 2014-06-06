@@ -30,8 +30,10 @@
 
 namespace Model {
 
-SetModificationTarget::SetModificationTarget(Node* &field_, NodeReadWriteLock* &lock_, QSet<Node*>& modifiedTargets_, Node* newTarget_) :
-	UndoCommand(nullptr, "Change modification target"), field(field_), lock(lock_), modifiedTargets(modifiedTargets_), oldTarget(field_), newTarget(newTarget_)
+SetModificationTarget::SetModificationTarget(Node* &field_, NodeReadWriteLock* &lock_, QSet<Node*>& modifiedTargets_,
+															Node* newTarget_) :
+	UndoCommand(nullptr, "Change modification target"), field(field_), lock(lock_), modifiedTargets(modifiedTargets_),
+	oldTarget(field_), newTarget(newTarget_)
 {
 }
 

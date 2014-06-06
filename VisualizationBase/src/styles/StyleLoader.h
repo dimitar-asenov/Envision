@@ -74,7 +74,7 @@ class VISUALIZATIONBASE_API StyleLoader
 		void loadComposite(QRadialGradient& value);
 		template <typename T> void loadComposite(QVector<T>& value);
 		template <typename T> void loadComposite(QList<T>& value);
-		template <typename F, typename S> void loadComposite(QPair<F,S>& value);
+		template <typename F, typename S> void loadComposite(QPair<F, S>& value);
 };
 
 template <class T> T* StyleLoader::loadStyle(const QString& path, const QString& styleName)
@@ -112,7 +112,7 @@ template <class T> void StyleLoader::loadComposite(QVector<T>& value)
 template <typename T> void StyleLoader::loadComposite(QList<T>& value)
 {
 	value.clear();
-	for(int i = 0; ; ++i)
+	for (int i = 0; ; ++i)
 	{
 		auto elementName = "e"+QString::number(i);
 
@@ -126,13 +126,13 @@ template <typename T> void StyleLoader::loadComposite(QList<T>& value)
 	}
 }
 
-template <typename F, typename S> void StyleLoader::loadComposite(QPair<F,S>& value)
+template <typename F, typename S> void StyleLoader::loadComposite(QPair<F, S>& value)
 {
 	F first;
 	S second;
 	load("first", first);
 	load("second", second);
-	value = QPair<F,S>(first, second);
+	value = QPair<F, S>(first, second);
 }
 
 }

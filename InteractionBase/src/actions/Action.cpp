@@ -134,7 +134,7 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 			{
 				// Add create optional, if it is a list, also create an element
 				shortcuts << calculateSuitableShortcut(name, shortcuts);
-				list.append( new Action(shortcuts.last(),"+ " + name,
+				list.append( new Action(shortcuts.last(), "+ " + name,
 						Action::ActionFunctionOnItem([name, isList](Item* item){
 							auto cn = static_cast<CompositeNode*>(item->node());
 							Q_ASSERT( cn->get(name) == nullptr);
@@ -218,7 +218,7 @@ void Action::createStandardRemoveAction(QList<Action*>& list)
 			scene->addPostEventAction(new SetCursorEvent(scene, parent));
 		}),
 		[](Node* node){
-			return dynamic_cast<CompositeNode*>(node->parent()) || dynamic_cast<List*>(node->parent()) ;
+			return dynamic_cast<CompositeNode*>(node->parent()) || dynamic_cast<List*>(node->parent());
 		})
 	);
 }
@@ -227,7 +227,7 @@ QString Action::calculateSuitableShortcut(const QString& name, const QStringList
 {
 	// Try to find a shortcut with as few letters as possible
 	QString nameWithSpace = name + " ";
-	for(int i = 1; i <= nameWithSpace.length(); ++i)
+	for (int i = 1; i <= nameWithSpace.length(); ++i)
 	{
 		QString prefix = nameWithSpace.left(i);
 		bool found = false;

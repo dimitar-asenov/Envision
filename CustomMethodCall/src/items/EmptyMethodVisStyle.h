@@ -38,9 +38,9 @@ class CUSTOMMETHODCALL_API EmptyMethodVisStyle : public Super<Visualization::Ite
 	public:
 		virtual ~EmptyMethodVisStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
-		Property<Visualization::StaticStyle> icon{this,"icon"};
-		Property<Visualization::StaticStyle> separator{this,"separator"};
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::StaticStyle> separator{this, "separator"};
 };
 
 }

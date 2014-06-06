@@ -38,7 +38,7 @@ using namespace Logger;
 
 namespace Model {
 
-DEFINE_TYPE_ID_BASE(Node, "Node",)
+DEFINE_TYPE_ID_BASE(Node, "Node", )
 
 /***********************************************************************************************************************
  * STATIC MEMBERS
@@ -205,9 +205,9 @@ bool Node::findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const 
 
 		// Search in libraries. This is only valid for root nodes
 		if ((exhaustAllScopes || !found) && !parent_)
-			for(auto l : usedLibraries())
+			for (auto lib : usedLibraries())
 			{
-				auto libRoot = l->libraryRoot();
+				auto libRoot = lib->libraryRoot();
 				if (libRoot)
 					found = libRoot->findSymbols(result, matcher, libRoot, SEARCH_DOWN, symbolTypes, exhaustAllScopes)
 							|| found;
@@ -347,7 +347,7 @@ NodeReadWriteLock* Node::accessLock() const
 QList<const UsedLibrary*> Node::usedLibraries() const
 {
 	QList<const UsedLibrary*> all;
-	for(auto c : children())
+	for (auto c : children())
 		all << c->usedLibraries();
 	return all;
 }

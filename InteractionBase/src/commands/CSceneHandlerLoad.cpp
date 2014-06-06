@@ -69,7 +69,7 @@ QList<CommandSuggestion*> CSceneHandlerLoad::suggest(Item*, Item*, const QString
 	QStringList matchingNames = projectName.isEmpty() ? availableProjectsOnDisk() : matchingProjects(projectName);
 
 	QList<CommandSuggestion*> suggestions;
-	for(auto name : matchingNames)
+	for (auto name : matchingNames)
 		suggestions.append(new CommandSuggestion("load " + name, "Loads the '" + name +"' project"));
 
 	return suggestions;
@@ -93,11 +93,11 @@ QStringList CSceneHandlerLoad::matchingProjects(QString projectNameToLookFor)
 {
 	// Use a pattern like this 'p*r*j*' in order to simplify the search. Note that the first letter must match.
 	QString searchPattern = projectNameToLookFor;
-	for(int i = searchPattern.size(); i>=1; --i) searchPattern.insert(i, "*");
+	for (int i = searchPattern.size(); i>=1; --i) searchPattern.insert(i, "*");
 	auto regExp = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
 
 	QStringList result;
-	for(auto s : availableProjectsOnDisk())
+	for (auto s : availableProjectsOnDisk())
 		if (regExp.exactMatch(s)) result << s;
 
 	return result;

@@ -44,4 +44,4 @@ class INTERACTIONBASE_API AddOperator : public ExpressionTreeBuildInstruction
 		OperatorDescriptor* descriptor_;
 };
 
-} /* namespace InteractionBase */
+}

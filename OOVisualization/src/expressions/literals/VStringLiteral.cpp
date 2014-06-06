@@ -55,13 +55,13 @@ VStringLiteral::~VStringLiteral()
 void VStringLiteral::determineChildren()
 {
 	int index = 0;
-	layout()->synchronizeFirst(pre_ , !style()->preSymbol().isEmpty(), &style()->preSymbol());
+	layout()->synchronizeFirst(pre_, !style()->preSymbol().isEmpty(), &style()->preSymbol());
 	index += pre_?1:0;
 
 	layout()->synchronizeMid(vis_, node()->valueNode(), &style()->string(), index);
 	index += vis_?1:0;
 
-	layout()->synchronizeLast(post_ , !style()->postSymbol().isEmpty(), &style()->postSymbol());
+	layout()->synchronizeLast(post_, !style()->postSymbol().isEmpty(), &style()->postSymbol());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

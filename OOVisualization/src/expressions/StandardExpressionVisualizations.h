@@ -38,7 +38,7 @@ namespace Visualization {
 
 #define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType, styleTypeName)				\
 class apiSpecification className																													\
-	: public ::Super<::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType>> {		\
+	: public ::Super<::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType>> {			\
 	ITEM_COMMON_CUSTOM_STYLENAME(className, styleTypeName)																				\
 																																							\
 	public:																																				\
@@ -53,7 +53,8 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeT
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, enumeration)		\
-BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType, ::OOVisualization::OperatorSequenceStyle)
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType,											\
+::OOVisualization::OperatorSequenceStyle)
 //********************************************************************************************************************
 
 #define BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, flag)							\
@@ -99,4 +100,3 @@ namespace OOVisualization {
 #undef OPERAND
 #undef WRAPPED_OPERAND
 #undef STANDARD_KEYWORD_EXPRESSION
-

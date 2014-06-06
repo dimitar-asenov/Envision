@@ -58,9 +58,9 @@ Project::SymbolTypes Project::symbolType() const
 QList<const Model::UsedLibrary*> Project::usedLibraries() const
 {
 	QList<const Model::UsedLibrary*> all;
-	for(auto l : *libraries()) all.append(l);
-	for(auto p : *projects()) all << p->usedLibraries();
-	for(auto m : *modules()) all << m->usedLibraries();
+	for (auto libs : *libraries()) all.append(libs);
+	for (auto p : *projects()) all << p->usedLibraries();
+	for (auto m : *modules()) all << m->usedLibraries();
 	return all;
 }
 

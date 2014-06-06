@@ -47,4 +47,4 @@ class INTERACTIONBASE_API ShowCommandPromptEvent : public Visualization::CustomS
 		Visualization::Scene* scene_;
 };
 
-} /* namespace Interaction */
+}

@@ -59,7 +59,7 @@ void UsedLibrary::loadLibraryModel(PersistentStore* store) const
 
 Model* UsedLibrary::libraryModel() const
 {
-	for(auto m : ModelManager::instance().loadedModels())
+	for (auto m : ModelManager::instance().loadedModels())
 		if (m->name() == name()) return m;
 
 	return nullptr;

@@ -48,11 +48,11 @@ class VISUALIZATIONBASE_API ItemStyle : public Super<Style>
 
 		virtual void load(StyleLoader& sl);
 
-		Property<bool> drawsOnlyShape{this,"drawsOnlyShape"};
-		Property<bool> drawShapeWhenEmpty{this,"drawShapeWhenEmpty"};
-		Property<bool> wholeItemCursor{this,"wholeItemCursor"};
-		Property<bool> noItemRegions{this,"noItemRegions"};
-		Property<bool> allowEquivalentCursorsThroughBoundary{this,"allowEquivalentCursorsThroughBoundary"};
+		Property<bool> drawsOnlyShape{this, "drawsOnlyShape"};
+		Property<bool> drawShapeWhenEmpty{this, "drawShapeWhenEmpty"};
+		Property<bool> wholeItemCursor{this, "wholeItemCursor"};
+		Property<bool> noItemRegions{this, "noItemRegions"};
+		Property<bool> allowEquivalentCursorsThroughBoundary{this, "allowEquivalentCursorsThroughBoundary"};
 
 	private:
 		QString shapeName_;

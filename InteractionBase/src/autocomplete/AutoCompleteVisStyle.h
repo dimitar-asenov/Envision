@@ -37,10 +37,10 @@ class INTERACTIONBASE_API AutoCompleteVisStyle : public Super<Visualization::Ite
 	public:
 		virtual ~AutoCompleteVisStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
-		Property<Visualization::StaticStyle> noProposals{this,"noProposals"};
-		Property<int> heightLimit{this,"heightLimit"};
-		Property<int> distanceToCursor{this,"distanceToCursor"};
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::StaticStyle> noProposals{this, "noProposals"};
+		Property<int> heightLimit{this, "heightLimit"};
+		Property<int> distanceToCursor{this, "distanceToCursor"};
 };
 
 } /* namespace Interaction */

@@ -52,8 +52,8 @@ Logger::Log& log = ModelBase::log();
 
 Log& ModelBase::log()
 {
-	static auto l = Logger::Log::getLogger("modelbase");
-	return *l;
+	static auto log = Logger::Log::getLogger("modelbase");
+	return *log;
 }
 
 bool ModelBase::initialize(Core::EnvisionManager&)

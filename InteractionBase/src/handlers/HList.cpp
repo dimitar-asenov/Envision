@@ -49,7 +49,7 @@ HList* HList::instance()
 void HList::focusOutEvent(Visualization::Item *target, QFocusEvent *event)
 {
 	Visualization::VList* list = static_cast<Visualization::VList*> (target);
-	if(list->node()->isEmpty() && list->style()->showTipWhenSelectedAndEmpty())
+	if (list->node()->isEmpty() && list->style()->showTipWhenSelectedAndEmpty())
 		list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	GenericHandler::focusOutEvent(target, event);
 }
@@ -70,11 +70,11 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (clipboard.numNodes() > 0)
 		{
-			Model::List* l = dynamic_cast<Model::List*> (list->node());
+			Model::List* listNode = dynamic_cast<Model::List*> (list->node());
 			FilePersistence::SystemClipboard clipboard;
-			l->model()->beginModification(l, "paste into list");
-			if (l) l->paste(clipboard, selIndex);
-			l->model()->endModification();
+			listNode->beginModification("paste into list");
+			if (listNode) listNode->paste(clipboard, selIndex);
+			listNode->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 	}
@@ -86,11 +86,11 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (clipboard.numNodes() > 0 && selIndex >= 0)
 		{
-			Model::List* l = dynamic_cast<Model::List*> (list->node());
+			Model::List* listNode = dynamic_cast<Model::List*> (list->node());
 			FilePersistence::SystemClipboard clipboard;
-			l->model()->beginModification(l, "paste into list");
-			if (l) l->paste(clipboard, selIndex+1);
-			l->model()->endModification();
+			listNode->beginModification("paste into list");
+			if (listNode) listNode->paste(clipboard, selIndex+1);
+			listNode->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 	}

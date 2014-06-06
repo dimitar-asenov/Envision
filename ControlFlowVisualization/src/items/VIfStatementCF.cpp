@@ -118,7 +118,7 @@ void VIfStatementCF::updateGeometry(int, int)
 	int height = conditionBackground->heightInParent() + style()->pinLength();
 	int branchesTop = height;
 	height += ( thenBranch->heightInParent() > elseBranch->heightInParent() )
-			? thenBranch->heightInParent() : elseBranch->heightInParent() ;
+			? thenBranch->heightInParent() : elseBranch->heightInParent();
 	height += 3*style()->pinLength();
 
 	// Set the size
@@ -126,7 +126,7 @@ void VIfStatementCF::updateGeometry(int, int)
 	else setSize(leftHalf + rightHalf, height);
 
 	// Set the positions
-	conditionBackground->setPos(leftHalf - conditionBackground->widthInParent()/2,style()->pinLength());
+	conditionBackground->setPos(leftHalf - conditionBackground->widthInParent()/2, style()->pinLength());
 	thenBranch->setPos(0, branchesTop);
 	elseBranch->setPos(leftHalf + extraRight + style()->pinLength(), branchesTop);
 	entrance_ = QPoint(leftHalf, 0);
@@ -183,7 +183,7 @@ void VIfStatementCF::updateGeometry(int, int)
 	// If there are any break or continue statements on the inside put the corresponding connectors
 	if (thenBranchInnerBegin < height)
 	{
-		addConnector(thenBranch->widthInParent(), thenBranchInnerBegin, thenBranch->widthInParent() ,
+		addConnector(thenBranch->widthInParent(), thenBranchInnerBegin, thenBranch->widthInParent(),
 				height - 3*style()->pinLength(), false);
 		addToLastConnector(widthInParent(), height - 3*style()->pinLength());
 
@@ -194,7 +194,7 @@ void VIfStatementCF::updateGeometry(int, int)
 
 	if (elseBranchInnerBegin < height)
 	{
-		addConnector(elseBranch->pos().x(), elseBranchInnerBegin, elseBranch->pos().x() ,
+		addConnector(elseBranch->pos().x(), elseBranchInnerBegin, elseBranch->pos().x(),
 				height - 2*style()->pinLength(), false);
 		addToLastConnector(0, height - 2*style()->pinLength());
 
@@ -204,7 +204,7 @@ void VIfStatementCF::updateGeometry(int, int)
 	}
 
 	// Handle the exit and its connectors
-	if (thenBranch->exit().isNull() && elseBranch->exit().isNull()) exit_ = QPoint(0,0);
+	if (thenBranch->exit().isNull() && elseBranch->exit().isNull()) exit_ = QPoint(0, 0);
 	else if (thenBranch->exit().isNull())
 	{
 		exit_ = QPoint(elseBranch->pos().x() + elseBranch->exit().x(), height);
@@ -219,7 +219,7 @@ void VIfStatementCF::updateGeometry(int, int)
 	{
 		exit_ = QPoint(entrance_.x(), height);
 		int lineHeight = height - style()->pinLength();
-		addConnector(exit_ - QPoint(0,style()->pinLength()), exit_, false);
+		addConnector(exit_ - QPoint(0, style()->pinLength()), exit_, false);
 		addConnector(thenBranch->pos().toPoint() + thenBranch->exit(),
 				QPoint(thenBranch->pos().x() + thenBranch->exit().x(), lineHeight), false);
 		addToLastConnector(elseBranch->pos().x() + elseBranch->exit().x(), lineHeight);

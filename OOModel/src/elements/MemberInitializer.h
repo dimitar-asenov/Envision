@@ -57,4 +57,3 @@ class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
 };
 
 }
-

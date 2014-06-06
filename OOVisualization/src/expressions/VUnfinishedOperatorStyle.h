@@ -49,4 +49,4 @@ class OOVISUALIZATION_API VUnfinishedOperatorStyle : public Super<Visualization:
 inline const Visualization::SequentialLayoutStyle& VUnfinishedOperatorStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VUnfinishedOperatorStyle::delimiters() const { return delimiters_; }
 
-} /* namespace OOVisualization */
+}

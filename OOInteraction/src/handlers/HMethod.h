@@ -49,4 +49,4 @@ class OOINTERACTION_API HMethod : public Interaction::GenericHandler {
 		void createNewArgument(OOVisualization::VMethod* method, int position);
 };
 
-} /* namespace OOInteraction */
+}

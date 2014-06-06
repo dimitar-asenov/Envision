@@ -148,13 +148,13 @@ void StyleLoader::loadComposite(QBrush& value)
 	if (style == Qt::LinearGradientPattern)
 	{
 		QLinearGradient gradient;
-		load("gradient",gradient);
+		load("gradient", gradient);
 		value = QBrush(gradient);
 	}
 	else if (style == Qt::RadialGradientPattern)
 	{
 		QRadialGradient gradient;
-		load("gradient",gradient);
+		load("gradient", gradient);
 		value = QBrush(gradient);
 	}
 	else if (style != Qt::NoBrush)

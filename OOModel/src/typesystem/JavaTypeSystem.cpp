@@ -95,7 +95,7 @@ TypeSystem::TypeRelations JavaTypeSystem::relationFirstToSecond(const Type* firs
 
 int JavaTypeSystem::primitiveTypeToSubtypingOrder(const PrimitiveType* primitive)
 {
-	switch(primitive->type())
+	switch (primitive->type())
 	{
 		case PrimitiveType::DOUBLE: return 0;
 		case PrimitiveType::FLOAT: return 1;
@@ -239,14 +239,14 @@ TypeSystem::TypeRelations JavaTypeSystem::relationClassToOther(const ClassType* 
 		if (classType->classDefinition() == otherClass->classDefinition()) return TypeRelations{EQUALTYPES};
 
 		TypeRelations ret{None};
-		for(auto thisBase : classType->classDefinition()->allBaseClasses())
+		for (auto thisBase : classType->classDefinition()->allBaseClasses())
 			if (thisBase == otherClass->classDefinition())
 			{
 				ret |= IsSubtype | IsConvertibleTo;
 				break;
 			}
 
-		for(auto otherBase : otherClass->classDefinition()->allBaseClasses())
+		for (auto otherBase : otherClass->classDefinition()->allBaseClasses())
 			if (otherBase == classType->classDefinition())
 			{
 				ret |= IsSupertype | IsConvertibleFrom;
@@ -258,7 +258,5 @@ TypeSystem::TypeRelations JavaTypeSystem::relationClassToOther(const ClassType* 
 
 	return None;
 }
-
-
 
 } /* namespace OOModel */

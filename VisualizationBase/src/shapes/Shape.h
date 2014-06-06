@@ -125,9 +125,9 @@ template <class ShapeClass> inline void Shape::registerShape()
 				+ ShapeClass::typeNameStatic());
 
 	shapeConstructors.insert(ShapeClass::typeNameStatic(),
-			makeDefaultShape<Shape,ShapeClass>);
+			makeDefaultShape<Shape, ShapeClass>);
 	shapeStyleConstructors.insert(ShapeClass::typeNameStatic(),
-			makeDefaultStyle<ShapeStyle,typename ShapeClass::StyleType>);
+			makeDefaultStyle<ShapeStyle, typename ShapeClass::StyleType>);
 }
 
 }

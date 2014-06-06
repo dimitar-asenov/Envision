@@ -78,8 +78,8 @@ TEST(InteractionBase, TextSelect)
 	scene->addTopLevelItem( top );
 	QApplication::processEvents();
 
-	VList* l = dynamic_cast<VList*> (top->item());
-	l->itemAt<VComposite>(0)->setExpanded();
+	VList* list2 = dynamic_cast<VList*> (top->item());
+	list2->itemAt<VComposite>(0)->setExpanded();
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 

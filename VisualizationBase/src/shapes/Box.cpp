@@ -70,7 +70,7 @@ int Box::contentTop()
 QRect Box::contentRect()
 {
 	auto cte = contentToEdgeDistance();
-	return QRect{xOffset() + cte, yOffset() + cte, outerWidth_ - 2*cte , outerHeight_ - 2*cte};
+	return QRect{xOffset() + cte, yOffset() + cte, outerWidth_ - 2*cte, outerHeight_ - 2*cte};
 }
 
 QSize Box::innerSize(QSize outterSize) const

@@ -46,4 +46,4 @@ class OOINTERACTION_API CSceneHandlerItemTest  : public Interaction::Command {
 				const QString& textSoFar) override;
 };
 
-} /* namespace OOInteraction */
+}

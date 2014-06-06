@@ -173,7 +173,7 @@ void GridConstructors::initializeAll()
 			grid->setSize(3, 1);
 		}
 		else
-			for(int i = 0; i<vis->layout()->length(); ++i)
+			for (int i = 0; i<vis->layout()->length(); ++i)
 				grid->add(new Cell(i, vis->layout()->at<Visualization::Item>(i), i));
 	});
 

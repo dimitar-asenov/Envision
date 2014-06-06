@@ -41,4 +41,4 @@ class OOINTERACTION_API HForEachStatement : public HStatement {
 	protected:
 		HForEachStatement();
 };
-} /* namespace OOInteraction */
+}

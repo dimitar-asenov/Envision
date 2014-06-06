@@ -40,7 +40,7 @@ namespace SelfTest {
 class SELFTEST_API TestResult
 {
 	public:
-		typedef enum{TestPassed, TestFailed} TestOutcome;
+		typedef enum {TestPassed, TestFailed} TestOutcome;
 
 	private:
 		TestOutcome outcome;

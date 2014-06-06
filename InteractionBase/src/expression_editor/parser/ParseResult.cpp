@@ -42,15 +42,15 @@ ParseResult::ParseResult(int errors, int emptyExpressions, int missing_inner_tok
 
 bool operator< (const ParseResult& left, const ParseResult& right)
 {
-	if ( left.errors != right.errors ) return  left.errors < right.errors;
+	if ( left.errors != right.errors ) return left.errors < right.errors;
 	if ( left.missingInnerTokens != right.missingInnerTokens )
-		return  left.missingInnerTokens < right.missingInnerTokens;
+		return left.missingInnerTokens < right.missingInnerTokens;
 	if ( left.missingTrailingTokens != right.missingTrailingTokens )
-		return  left.missingTrailingTokens < right.missingTrailingTokens;
+		return left.missingTrailingTokens < right.missingTrailingTokens;
 	if ( left.emptyExpressions != right.emptyExpressions )
-		return  left.emptyExpressions < right.emptyExpressions;
+		return left.emptyExpressions < right.emptyExpressions;
 	if ( left.numOperators != right.numOperators )
-		return  left.numOperators < right.numOperators;
+		return left.numOperators < right.numOperators;
 
 	return false;
 }

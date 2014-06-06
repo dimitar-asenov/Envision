@@ -32,7 +32,8 @@
 
 namespace Interaction {
 
-Operator::Operator(OperatorDescriptor* descriptor, Operator* parent) : Expression(type(), parent), descriptor_(descriptor), do_not_delete_transient_descriptor_(false)
+Operator::Operator(OperatorDescriptor* descriptor, Operator* parent)
+	: Expression(type(), parent), descriptor_(descriptor), do_not_delete_transient_descriptor_(false)
 {
 }
 
@@ -162,7 +163,7 @@ ExpressionContext Operator::findContext(int cursor_pos)
 
 	// The cursor must be somewhere in the middle
 	int length_so_far = 0;
-	for(int d = 0; d < delims.size(); ++d)
+	for (int d = 0; d < delims.size(); ++d)
 	{
 		QString current_d = delims.at(d);
 		length_so_far += current_d.size();
@@ -193,7 +194,8 @@ ExpressionContext Operator::findContext(int cursor_pos)
 			c.setLeftText(delims.at(d));
 
 			// If d is the last 'visible' delimiter this is an OP, otherwise it is a boundary
-			c.setLeftType( (d == delims.size()-2) && delims.last().isEmpty() ? ExpressionContext::OpDelim : ExpressionContext::OpBoundary);
+			c.setLeftType( (d == delims.size()-2) && delims.last().isEmpty() ? ExpressionContext::OpDelim
+																								  : ExpressionContext::OpBoundary);
 			return c;
 		}
 
@@ -242,7 +244,7 @@ void Operator::globalExpressionBoundaries(Expression* e, int& begin, int& end)
 	else begin = 0;
 
 	QStringList delims = descriptor_->delimiters();
-	for(int i = 0; i<size(); ++i)
+	for (int i = 0; i<size(); ++i)
 	{
 		begin += delims.at(i).size();
 		end = begin + operands_.at(i)->length();
@@ -260,7 +262,7 @@ void Operator::globalDelimiterBoundaries(int delim, int& begin, int& end)
 	end = begin + descriptor_->prefix().size();
 
 	QStringList delims = descriptor_->delimiters();
-	for(int i = 1; i<=delim; ++i)
+	for (int i = 1; i<=delim; ++i)
 	{
 		begin = end + operands_.at(i-1)->length();
 		end = begin + delims.at(i).size();
@@ -273,7 +275,8 @@ Expression* Operator::findCutExpression(bool leftside, QString cut_string)
 
 	// If there is no delimiter, try to cut the subexpression closer to the cutting side
 	if ( leftside ? descriptor_->prefix().isEmpty() : descriptor_->postfix().isEmpty() )
-		result = leftside ? first()->findCutExpression(leftside, cut_string) : last()->findCutExpression(leftside, cut_string);
+		result = leftside ? first()->findCutExpression(leftside, cut_string)
+								: last()->findCutExpression(leftside, cut_string);
 
 	if (result == nullptr)
 	{

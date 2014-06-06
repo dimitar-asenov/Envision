@@ -114,7 +114,7 @@ void AnchorLayoutConstraintSolver::prepareLP(const QVector<FormElement*>& elemen
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
 			size = (float) e->size(item).height();
 		if (e->sizeDependsOnParent(item))
-			addConstraint(GE,constraintRow, size);
+			addConstraint(GE, constraintRow, size);
 		else
 			addConstraint(EQ, constraintRow, size);
 	}
@@ -129,10 +129,10 @@ void AnchorLayoutConstraintSolver::prepareLP(const QVector<FormElement*>& elemen
 
 		QVector<QPair<int, float>> constraintRow =
 			{
-					QPair<int, float>(startVariable(placeElementIndex),1 - a->relativePlaceEdgePosition()),
-					QPair<int, float>(endVariable(placeElementIndex),a->relativePlaceEdgePosition()),
+					QPair<int, float>(startVariable(placeElementIndex), 1 - a->relativePlaceEdgePosition()),
+					QPair<int, float>(endVariable(placeElementIndex), a->relativePlaceEdgePosition()),
 					QPair<int, float>(startVariable(fixedElementIndex), -(1 - a->relativeFixedEdgePosition())),
-					QPair<int, float>(endVariable(fixedElementIndex),-a->relativeFixedEdgePosition())
+					QPair<int, float>(endVariable(fixedElementIndex), -a->relativeFixedEdgePosition())
 			};
 		addConstraint(EQ, constraintRow, (float) a->offset());
 	}
@@ -224,12 +224,12 @@ void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 
 	if (rowValues_)
 	{
-		delete[] rowValues_;
+		delete [] rowValues_;
 		rowValues_ = nullptr;
 	}
 	if (columnIndices_)
 	{
-		delete[] columnIndices_;
+		delete [] columnIndices_;
 		columnIndices_ = nullptr;
 	}
 }

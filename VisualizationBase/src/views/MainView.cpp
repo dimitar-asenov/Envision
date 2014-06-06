@@ -179,7 +179,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			image.fill(Qt::transparent);
 			QPainter pmapPainter(&image);
 			pmapPainter.setRenderHint(QPainter::Antialiasing);
-			//pmapPainter.scale(2,2);
+			//pmapPainter.scale(2, 2);
 			scene()->render(&pmapPainter);
 			image.save("screenshot-scene.png");
 		}
@@ -245,7 +245,7 @@ void MainView::updateInfoLabels()
 	{
 		if (!infoLabels_.isEmpty())
 		{
-			for (auto l : infoLabels_) SAFE_DELETE(l);
+			for (auto label : infoLabels_) SAFE_DELETE(label);
 			infoLabels_.clear();
 		}
 		return;

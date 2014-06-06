@@ -43,9 +43,9 @@ class ItemWrapperFormElement : public FormElement
 
 		ItemWrapperFormElement(ChildItem item);
 		ItemWrapperFormElement() = delete;
-		ItemWrapperFormElement(const ItemWrapperFormElement<ParentType,ChildItemType>&) = default;
-		ItemWrapperFormElement<ParentType,ChildItemType>&
-			operator=(const ItemWrapperFormElement<ParentType,ChildItemType>&) = delete;
+		ItemWrapperFormElement(const ItemWrapperFormElement<ParentType, ChildItemType>&) = default;
+		ItemWrapperFormElement<ParentType, ChildItemType>&
+			operator=(const ItemWrapperFormElement<ParentType, ChildItemType>&) = delete;
 		virtual ~ItemWrapperFormElement() {};
 
 	public: // Methods executable when items need to be rendered
@@ -72,15 +72,15 @@ class ItemWrapperFormElement : public FormElement
 };
 
 template <class ParentType, class ChildItemType>
-ItemWrapperFormElement<ParentType,ChildItemType>::ItemWrapperFormElement(ChildItem item)
+ItemWrapperFormElement<ParentType, ChildItemType>::ItemWrapperFormElement(ChildItem item)
 : item_(item)
 {}
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperFormElement<ParentType,ChildItemType>::computeSize(Item* item, int availableWidth, int availableHeight)
+void ItemWrapperFormElement<ParentType, ChildItemType>::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	if(childItem)
+	if (childItem)
 	{
 		int width = childItem->widthInParent() + leftMargin() + rightMargin();
 		int height = childItem->heightInParent() + topMargin() + bottomMargin();
@@ -90,31 +90,31 @@ void ItemWrapperFormElement<ParentType,ChildItemType>::computeSize(Item* item, i
 			childItem->changeGeometry(width - leftMargin() - rightMargin(), height - topMargin() - bottomMargin());
 		setSize(item, QSize(width, height));
 	}
-	else setSize(item, QSize(0,0));
+	else setSize(item, QSize(0, 0));
 }
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperFormElement<ParentType,ChildItemType>::setItemPositions(Item* item, int parentX, int parentY)
+void ItemWrapperFormElement<ParentType, ChildItemType>::setItemPositions(Item* item, int parentX, int parentY)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	if(childItem) childItem->setPos(parentX + x(item) + leftMargin(), parentY + y(item) + topMargin());
+	if (childItem) childItem->setPos(parentX + x(item) + leftMargin(), parentY + y(item) + topMargin());
 }
 
 template <class ParentType, class ChildItemType>
-bool ItemWrapperFormElement<ParentType,ChildItemType>::sizeDependsOnParent(const Item* item) const
+bool ItemWrapperFormElement<ParentType, ChildItemType>::sizeDependsOnParent(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
-	if(childItem) return childItem->sizeDependsOnParent();
+	if (childItem) return childItem->sizeDependsOnParent();
 	else return false;
 }
 
 template <class ParentType, class ChildItemType>
-QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(DeclarativeItemBase* item, int , int)
+QList<ItemRegion> ItemWrapperFormElement<ParentType, ChildItemType>::regions(DeclarativeItemBase* item, int, int)
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 
-	if(childItem) {
-		QRect rect = QRect(QPoint(0,0), childItem->sizeInParent().toSize());
+	if (childItem) {
+		QRect rect = QRect(QPoint(0, 0), childItem->sizeInParent().toSize());
 		rect.translate(childItem->pos().toPoint());
 		QList<ItemRegion> regs;
 		regs.append(ItemRegion(rect));
@@ -125,13 +125,13 @@ QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(Decl
 }
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperFormElement<ParentType,ChildItemType>::destroyChildItems(Item* item,
+void ItemWrapperFormElement<ParentType, ChildItemType>::destroyChildItems(Item* item,
 		QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
 	FormElement::destroyChildItems(item, handledChildren);
 
 	auto childPointer = reinterpret_cast<const Item* const DeclarativeItemBase::*> (this->item());
-	if(! handledChildren.contains(childPointer))
+	if (! handledChildren.contains(childPointer))
 	{
 		auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 		SAFE_DELETE_ITEM(childItem);
@@ -140,20 +140,20 @@ void ItemWrapperFormElement<ParentType,ChildItemType>::destroyChildItems(Item* i
 
 template <class ParentType, class ChildItemType>
 QList<const Item* const DeclarativeItemBase::*>
-ItemWrapperFormElement<ParentType,ChildItemType>::allHandledChildPointers()
+ItemWrapperFormElement<ParentType, ChildItemType>::allHandledChildPointers()
 {
 	return {reinterpret_cast<const Item* const DeclarativeItemBase::*> (this->item())};
 }
 
 template <class ParentType, class ChildItemType>
-typename ItemWrapperFormElement<ParentType,ChildItemType>::ChildItem
-ItemWrapperFormElement<ParentType,ChildItemType>::item() const
+typename ItemWrapperFormElement<ParentType, ChildItemType>::ChildItem
+ItemWrapperFormElement<ParentType, ChildItemType>::item() const
 {
 	return item_;
 }
 
 template <class ParentType, class ChildItemType>
-bool ItemWrapperFormElement<ParentType,ChildItemType>::elementOrChildHasFocus(Item* item) const
+bool ItemWrapperFormElement<ParentType, ChildItemType>::elementOrChildHasFocus(Item* item) const
 {
 	if (FormElement::elementOrChildHasFocus(item))
 		return true;
@@ -163,7 +163,7 @@ bool ItemWrapperFormElement<ParentType,ChildItemType>::elementOrChildHasFocus(It
 }
 
 template <class ParentType, class ChildItemType>
-bool ItemWrapperFormElement<ParentType,ChildItemType>::isEmpty(const Item* item) const
+bool ItemWrapperFormElement<ParentType, ChildItemType>::isEmpty(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 	if (childItem) return childItem->isEmpty();

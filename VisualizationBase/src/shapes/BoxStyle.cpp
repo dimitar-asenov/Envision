@@ -211,7 +211,7 @@ void BoxStyle::optimizedPaint(QPainter* painter, int xOffset, int yOffset, int c
 		painter->fillRect(xOffset + subImageSize, yOffset + contentBoxHeight - outlineWidth,
 				innerWidth, outlineWidth, outline().color());
 		// left
-		painter->fillRect(xOffset , yOffset + subImageSize,
+		painter->fillRect(xOffset, yOffset + subImageSize,
 				outlineWidth, innerHeight, outline().color());
 		// right
 		painter->fillRect(xOffset + contentBoxWidth - outlineWidth, yOffset + subImageSize,
@@ -250,11 +250,11 @@ void BoxStyle::generatePixmaps(qreal scaleFactor, const QPainter* painterSpecify
 	int extra = outlineWidth; // The is just to give us some buffer in between the corners.
 	int squareSize = extra + 2*cornerRadius() + outlineWidth;
 	int scaledSquare = std::ceil(squareSize * scaleFactor);
-	QImage img = QImage(QSize(scaledSquare,scaledSquare), QImage::Format_ARGB32);
+	QImage img = QImage(QSize(scaledSquare, scaledSquare), QImage::Format_ARGB32);
 	img.fill(0);
 
 	QPainter painter(&img);
-	painter.scale(scaleFactor,scaleFactor);
+	painter.scale(scaleFactor, scaleFactor);
 	painter.setRenderHints(painterSpecifyingRenderHints->renderHints());
 	painter.setPen(outline());
 	painter.setBrush(background());
@@ -262,10 +262,10 @@ void BoxStyle::generatePixmaps(qreal scaleFactor, const QPainter* painterSpecify
 
 	int subImageSize = scaleFactor*(cornerRadius() + std::ceil(outlineWidth/2.0));
 	int endStarts = scaleFactor*squareSize - subImageSize;
-	topLeftCorner_.setImage(img.copy(0,0,subImageSize,subImageSize), scaleFactor);
-	topRightCorner_.setImage(img.copy(endStarts,0,subImageSize,subImageSize), scaleFactor);
-	bottomLeftCorner_.setImage(img.copy(0,endStarts,subImageSize,subImageSize), scaleFactor);
-	bottomRightCorner_.setImage(img.copy(endStarts,endStarts,subImageSize,subImageSize), scaleFactor);
+	topLeftCorner_.setImage(img.copy(0, 0, subImageSize, subImageSize), scaleFactor);
+	topRightCorner_.setImage(img.copy(endStarts, 0, subImageSize, subImageSize), scaleFactor);
+	bottomLeftCorner_.setImage(img.copy(0, endStarts, subImageSize, subImageSize), scaleFactor);
+	bottomRightCorner_.setImage(img.copy(endStarts, endStarts, subImageSize, subImageSize), scaleFactor);
 }
 
 }

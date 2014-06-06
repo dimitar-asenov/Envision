@@ -41,4 +41,4 @@ class OOINTERACTION_API CCreateField : public Interaction::CreateNamedObjectWith
 			const QString& name, const QStringList& attributes) override;
 };
 
-} /* namespace OOInteraction */
+}

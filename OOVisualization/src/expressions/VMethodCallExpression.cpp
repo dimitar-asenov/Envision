@@ -52,9 +52,9 @@ void VMethodCallExpression::determineChildren()
 	if (auto ref = dynamic_cast<ReferenceExpression*>(node()->callee()))
 	{
 		// TODO: Find a way around that ugly hack. It might eve
-		layout()->synchronizeFirst<Item,VReferenceExpression>(callee_, ref, &style()->name());
+		layout()->synchronizeFirst<Item, VReferenceExpression>(callee_, ref, &style()->name());
 
-		if(callee_) static_cast<VReferenceExpression*>(callee_)->setStyle( &style()->name());
+		if (callee_) static_cast<VReferenceExpression*>(callee_)->setStyle( &style()->name());
 	}
 	else
 		layout()->synchronizeFirst(callee_, node()->callee());

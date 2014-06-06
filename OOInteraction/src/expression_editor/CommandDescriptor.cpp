@@ -73,7 +73,7 @@ OOModel::Expression* CommandDescriptor::create(const QList<OOModel::Expression*>
 	{
 		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
 		{
-			for(auto arg : comma->allSubOperands(true)) arguments.append(arg);
+			for (auto arg : comma->allSubOperands(true)) arguments.append(arg);
 			SAFE_DELETE(comma);
 		}
 		else
@@ -100,7 +100,7 @@ OOModel::UnfinishedOperator* CommandDescriptor::createUnfinished(const QString& 
 	{
 		unf->delimiters()->append(new Model::Text("("));
 
-		for(int i = 0; i< arguments.size(); ++i)
+		for (int i = 0; i< arguments.size(); ++i)
 		{
 			if (i > 0) unf->delimiters()->append(new Model::Text(","));
 			unf->operands()->append(arguments[i]);

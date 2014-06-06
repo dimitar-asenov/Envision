@@ -39,16 +39,17 @@ bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*,
 					|| commandTokens.first() == "bordercolor");
 }
 
-Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Visualization::Item* target, const QStringList& commandTokens)
+Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Visualization::Item* target,
+																		 const QStringList& commandTokens)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
 	shape->node()->model()->beginModification(shape->node(), "Setting color");
 
-	if(commandTokens.first() == "textcolor")
+	if (commandTokens.first() == "textcolor")
 		shape->node()->setTextColor(commandTokens.last());
-	else if(commandTokens.first() == "bgcolor")
+	else if (commandTokens.first() == "bgcolor")
 		shape->node()->setBackgroundColor(commandTokens.last());
-	else if(commandTokens.first() == "bordercolor")
+	else if (commandTokens.first() == "bordercolor")
 		shape->node()->setShapeColor(commandTokens.last());
 
 	shape->node()->model()->endModification();
@@ -56,14 +57,15 @@ Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Vis
 	return new Interaction::CommandResult();
 }
 
-QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
+QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization::Item*, Visualization::Item*,
+																						const QString& textSoFar)
 {
 	QList<Interaction::CommandSuggestion*> s;
-	if(QString("textcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	if (QString("textcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion("textcolor", "Set shape's foreground color"));
-	if(QString("bgcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	if (QString("bgcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion("bgcolor", "Set shape's background color"));
-	if(QString("bordercolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
+	if (QString("bordercolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion("bordercolor", "Set shape's border color"));
 	return s;
 }

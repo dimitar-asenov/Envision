@@ -83,7 +83,7 @@ void OOExpressionBuilder::visit(Interaction::Operator* op)
 	else
 	{
 		QList<OOModel::Expression*> operands;
-		for(auto e : op->operands())
+		for (auto e : op->operands())
 		{
 			e->accept(this);
 			operands.append(expression);
@@ -102,7 +102,7 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 		QString lastDelimiter;
 		OOModel::UnfinishedOperator* unf = new OOModel::UnfinishedOperator();
 		int operand_index = 0;
-		for(int i = 0; i <unfinished->numComplete(); ++i)
+		for (int i = 0; i <unfinished->numComplete(); ++i)
 		{
 			QString current = unfinished->descriptor()->signature().at(i);
 

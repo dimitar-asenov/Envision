@@ -41,9 +41,9 @@ class VISUALIZATIONBASE_API SVGIconStyle : public Super<IconStyle>
 
 		void paint(QPainter* painter, int x, int y) const;
 
-		Property<QString> filename{this,"filename"};
-		Property<int> width{this,"width"};
-		Property<int> height{this,"height"};
+		Property<QString> filename{this, "filename"};
+		Property<int> width{this, "width"};
+		Property<int> height{this, "height"};
 
 	private:
 		mutable QSvgRenderer renderer_;

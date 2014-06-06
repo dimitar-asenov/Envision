@@ -177,7 +177,7 @@ void XMLModel::beginLoadChildNode(const QString& nodeName)
 	if (elem.isNull()) child = doc.firstChildElement();
 	else child = elem.firstChildElement();
 
-	while(!child.isNull())
+	while (!child.isNull())
 	{
 		if (child.attribute("name") == nodeName) break;
 		child = child.nextSiblingElement();
@@ -294,7 +294,8 @@ Model::NodeIdType XMLModel::getId() const
 	{
 		Model::NodeIdType id = elem.attribute("id", "error");
 		if (!id.isNull()) return id;
-		else throw FilePersistenceException("Incorrect id '" + elem.attribute("id") + "' for node of type: " + elem.tagName());
+		else throw FilePersistenceException("Incorrect id '" + elem.attribute("id") + "' for node of type: "
+														+ elem.tagName());
 	}
 	else throw FilePersistenceException("Id not found for node of type: " + elem.tagName());
 }

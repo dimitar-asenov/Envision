@@ -52,8 +52,8 @@ AutoCompleteVis::~AutoCompleteVis()
 {
 	layout()->clear(false);
 	SAFE_DELETE_ITEM(noProposals_);
-	for(auto e : entries_) SAFE_DELETE(e);
-	for(auto e : newEntries_) SAFE_DELETE(e);
+	for (auto e : entries_) SAFE_DELETE(e);
+	for (auto e : newEntries_) SAFE_DELETE(e);
 	entries_.clear();
 	newEntries_.clear();
 
@@ -79,7 +79,7 @@ void AutoCompleteVis::updateEntries()
 	newEntriesSet_ = false;
 	layout()->clear(false);
 	SAFE_DELETE_ITEM(noProposals_);
-	for(auto e : entries_) SAFE_DELETE(e);
+	for (auto e : entries_) SAFE_DELETE(e);
 	entries_ = newEntries_;
 	newEntries_.clear();
 
@@ -137,7 +137,7 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 	}
 	else
 	{
-		layout()->setPos(0,0);
+		layout()->setPos(0, 0);
 		QSize s = layout()->sizeInParent().toSize();
 		if (s.height() > style()->heightLimit()) s.setHeight(style()->heightLimit());
 		setSize(s);

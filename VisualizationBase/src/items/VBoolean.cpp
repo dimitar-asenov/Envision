@@ -40,7 +40,8 @@ VBoolean::VBoolean(Item* parent, NodeType *node, const StyleType *style) : Super
 
 bool VBoolean::setText(const QString& newText)
 {
-	if (newText.contains(' ') || newText.compare("true", Qt::CaseInsensitive) == 0 || newText.compare("false", Qt::CaseInsensitive) == 0)
+	if (newText.contains(' ') || newText.compare("true", Qt::CaseInsensitive) == 0
+		 || newText.compare("false", Qt::CaseInsensitive) == 0)
 	{
 		node()->model()->beginModification(node(), "Set boolean");
 		if ( newText.contains(' ') ) node()->set( !node()->get() );
@@ -56,7 +57,7 @@ bool VBoolean::setText(const QString& newText)
 
 QString VBoolean::currentText()
 {
-	return node()->get() ? "true" : "false" ;
+	return node()->get() ? "true" : "false";
 }
 
 }

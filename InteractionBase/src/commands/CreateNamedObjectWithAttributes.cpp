@@ -108,7 +108,7 @@ void CreateNamedObjectWithAttributes::findParts(const QStringList& tokens, QStri
 	if (tokens.size() <= 2 + attributes_.size()) // 1 for name, 1 for command and the rest for the number of attributes.
 	{
 		int index = 0; // To keep track of how many tokens we've visited
-		for(QString t: tokens)
+		for (QString t: tokens)
 		{
 			++index;
 			// If we've seen a command name and this is the last token, it is considered the name
@@ -121,7 +121,7 @@ void CreateNamedObjectWithAttributes::findParts(const QStringList& tokens, QStri
 			// Try to interpret this token as an attribute
 			auto attr = attributes.begin();
 			bool found = false;
-			for(auto attrValues : attributes_)
+			for (auto attrValues : attributes_)
 			{
 				for (auto val : attrValues)
 				{

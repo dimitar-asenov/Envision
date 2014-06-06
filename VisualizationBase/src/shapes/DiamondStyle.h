@@ -37,10 +37,10 @@ class VISUALIZATIONBASE_API DiamondStyle : public Super<ShapeStyle>
 	public:
 		virtual ~DiamondStyle() override;
 
-		Property<QBrush> background{this,"backgroundBrush"};
-		Property<QBrush> shadow{this,"shadowBrush"};
-		Property<int> xShadowOffset{this,"shadowXOffset"};
-		Property<int> yShadowOffset{this,"shadowYOffset"};
+		Property<QBrush> background{this, "backgroundBrush"};
+		Property<QBrush> shadow{this, "shadowBrush"};
+		Property<int> xShadowOffset{this, "shadowXOffset"};
+		Property<int> yShadowOffset{this, "shadowYOffset"};
 };
 
 }

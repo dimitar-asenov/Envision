@@ -37,12 +37,12 @@ class INTERACTIONBASE_API CommandPromptStyle : public Super<Visualization::ItemS
 	public:
 		virtual ~CommandPromptStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
-		Property<Visualization::SequentialLayoutStyle> suggestionContainer{this,"suggestionContainer"};
-		Property<Visualization::SequentialLayoutStyle> errorContainer{this,"errorContainer"};
-		Property<Visualization::TextStyle> commandText{this,"commandText"};
-		Property<TextAndDescriptionStyle> defaultSuggestion{this,"defaultSuggestion"};
-		Property<TextAndDescriptionStyle> defaultError{this,"defaultError"};
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::SequentialLayoutStyle> suggestionContainer{this, "suggestionContainer"};
+		Property<Visualization::SequentialLayoutStyle> errorContainer{this, "errorContainer"};
+		Property<Visualization::TextStyle> commandText{this, "commandText"};
+		Property<TextAndDescriptionStyle> defaultSuggestion{this, "defaultSuggestion"};
+		Property<TextAndDescriptionStyle> defaultError{this, "defaultError"};
 };
 
 }

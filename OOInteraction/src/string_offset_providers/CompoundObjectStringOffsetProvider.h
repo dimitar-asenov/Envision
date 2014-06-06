@@ -41,4 +41,4 @@ class CompoundObjectStringOffsetProvider : public StringOffsetProvider {
 		Visualization::Item* vis_;
 };
 
-} /* namespace OOInteraction */
+}

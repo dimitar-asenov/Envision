@@ -42,4 +42,4 @@ class OOINTERACTION_API HFormalArgument : public Interaction::GenericHandler {
 		HFormalArgument();
 };
 
-} /* namespace OOInteraction */
+}

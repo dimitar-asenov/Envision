@@ -41,33 +41,33 @@ class OOVISUALIZATION_API VClassStyle : public Super<Visualization::DeclarativeI
 	public:
 		virtual ~VClassStyle() override;
 
-		Property<Visualization::TextStyle> nameDefault{this,"nameDefault"};
-		Property<Visualization::TextStyle> namePublic{this,"namePublic"};
-		Property<Visualization::TextStyle> namePrivate{this,"namePrivate"};
-		Property<Visualization::TextStyle> nameProtected{this,"nameProtected"};
+		Property<Visualization::TextStyle> nameDefault{this, "nameDefault"};
+		Property<Visualization::TextStyle> namePublic{this, "namePublic"};
+		Property<Visualization::TextStyle> namePrivate{this, "namePrivate"};
+		Property<Visualization::TextStyle> nameProtected{this, "nameProtected"};
 
-		Property<Visualization::StaticStyle> classIcon{this,"classIcon"};
-		Property<Visualization::StaticStyle> interfaceIcon{this,"interfaceIcon"};
-		Property<Visualization::StaticStyle> structIcon{this,"structIcon"};
-		Property<Visualization::StaticStyle> unionIcon{this,"unionIcon"};
-		Property<Visualization::StaticStyle> enumIcon{this,"enumIcon"};
-		Property<Visualization::StaticStyle> annotationIcon{this,"annotationIcon"};
+		Property<Visualization::StaticStyle> classIcon{this, "classIcon"};
+		Property<Visualization::StaticStyle> interfaceIcon{this, "interfaceIcon"};
+		Property<Visualization::StaticStyle> structIcon{this, "structIcon"};
+		Property<Visualization::StaticStyle> unionIcon{this, "unionIcon"};
+		Property<Visualization::StaticStyle> enumIcon{this, "enumIcon"};
+		Property<Visualization::StaticStyle> annotationIcon{this, "annotationIcon"};
 
-		Property<Visualization::SequentialLayoutStyle> header{this,"header"};
-		Property<Visualization::VListStyle> typeArguments{this,"typeArguments"};
-		Property<Visualization::VListStyle> baseClasses{this,"baseClasses"};
-		Property<Visualization::VListStyle> annotations{this,"annotations"};
-		Property<Visualization::VListStyle> enumerators{this,"enumerators"};
-		Property<Visualization::StaticStyle> friendsSymbol{this,"friendsSymbol"};
-		Property<Visualization::VListStyle> friends{this,"friends"};
-		Property<Visualization::VListStyle> declarations{this,"declarations"};
-		Property<Visualization::PositionLayoutStyle> body{this,"body"};
-		Property<Visualization::SequentialLayoutStyle> content{this,"content"};
-		Property<Visualization::SequentialLayoutStyle> fieldContainer{this,"fieldContainer"};
-		Property<Visualization::SequentialLayoutStyle> publicFieldArea{this,"publicFieldArea"};
-		Property<Visualization::SequentialLayoutStyle> privateFieldArea{this,"privateFieldArea"};
-		Property<Visualization::SequentialLayoutStyle> protectedFieldArea{this,"protectedFieldArea"};
-		Property<Visualization::SequentialLayoutStyle> defaultFieldArea{this,"defaultFieldArea"};
+		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
+		Property<Visualization::VListStyle> typeArguments{this, "typeArguments"};
+		Property<Visualization::VListStyle> baseClasses{this, "baseClasses"};
+		Property<Visualization::VListStyle> annotations{this, "annotations"};
+		Property<Visualization::VListStyle> enumerators{this, "enumerators"};
+		Property<Visualization::StaticStyle> friendsSymbol{this, "friendsSymbol"};
+		Property<Visualization::VListStyle> friends{this, "friends"};
+		Property<Visualization::VListStyle> declarations{this, "declarations"};
+		Property<Visualization::PositionLayoutStyle> body{this, "body"};
+		Property<Visualization::SequentialLayoutStyle> content{this, "content"};
+		Property<Visualization::SequentialLayoutStyle> fieldContainer{this, "fieldContainer"};
+		Property<Visualization::SequentialLayoutStyle> publicFieldArea{this, "publicFieldArea"};
+		Property<Visualization::SequentialLayoutStyle> privateFieldArea{this, "privateFieldArea"};
+		Property<Visualization::SequentialLayoutStyle> protectedFieldArea{this, "protectedFieldArea"};
+		Property<Visualization::SequentialLayoutStyle> defaultFieldArea{this, "defaultFieldArea"};
 };
 
 }

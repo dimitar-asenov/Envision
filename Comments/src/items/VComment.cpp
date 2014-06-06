@@ -66,7 +66,7 @@ void VComment::parseLines()
 	int lineNumber = -1;
 	QSize htmlSize;
 
-	for(auto nodeLine : *node()->lines())
+	for (auto nodeLine : *node()->lines())
 	{
 		QString line = nodeLine->get();
 		++lineNumber;
@@ -75,11 +75,11 @@ void VComment::parseLines()
 		// Bullet lists
 		//************************************************************************
 		// is this a new enumeration item?
-		if(line.startsWith(" * "))
+		if (line.startsWith(" * "))
 		{
 			listCount++;
 			// does this create a new list?
-			if(listCount == 0) linesOfCurrentElement << "<ul><li>&bull;\t" << line.mid(3);
+			if (listCount == 0) linesOfCurrentElement << "<ul><li>&bull;\t" << line.mid(3);
 			// otherwise, just add another list item
 			else linesOfCurrentElement << "</li><li>&bull;\t" << line.mid(3);
 
@@ -87,14 +87,14 @@ void VComment::parseLines()
 		}
 
 		// or is this extending an existing list?
-		if(line.startsWith("   ") && listCount > -1)
+		if (line.startsWith("   ") && listCount > -1)
 		{
 			linesOfCurrentElement << "<br/>&nbsp;&nbsp;" << line.mid(3);
 			continue;
 		}
 
 		// if this is not an enumeration item, reset listCount
-		if(listCount > -1)
+		if (listCount > -1)
 		{
 			linesOfCurrentElement << "</li></ul>";
 			listCount = -1;
@@ -104,7 +104,7 @@ void VComment::parseLines()
 		// Embedded HTML
 		//************************************************************************
 		// is this HTML?
-		if(line.startsWith("<html") && line.right(1) == ">" && (line.mid(5,1) == " " || line.mid(5,1) == ">"))
+		if (line.startsWith("<html") && line.right(1) == ">" && (line.mid(5, 1) == " " || line.mid(5, 1) == ">"))
 		{
 			createTextualCommentElement(linesOfCurrentElement); // Flush any existing content
 			isHTML = true;
@@ -112,21 +112,21 @@ void VComment::parseLines()
 			// invalidate htmlSize
 			htmlSize.setWidth(-1);
 
-			auto mid = line.mid(5+1,line.size()-5-1-1);
-			if(line.mid(5,1) == " " && mid.size() > 3)
+			auto mid = line.mid(5+1, line.size()-5-1-1);
+			if (line.mid(5, 1) == " " && mid.size() > 3)
 				htmlSize = parseSize(mid);
 
 			continue;
 		}
 
-		if(isHTML)
+		if (isHTML)
 		{
-			if(line == "</html>")
+			if (line == "</html>")
 			{
 				isHTML = false;
 				auto browser = DCast<VCommentBrowser>(createTextualCommentElement(linesOfCurrentElement, true));
 
-				if(browser != nullptr && htmlSize.isValid())
+				if (browser != nullptr && htmlSize.isValid())
 					browser->updateSize(htmlSize);
 			}
 			else linesOfCurrentElement << line;
@@ -139,19 +139,19 @@ void VComment::parseLines()
 		//************************************************************************
 		QRegExp rx("^={3,}|-{3,}|\\.{3,}$");
 
-		if(rx.exactMatch(line))
+		if (rx.exactMatch(line))
 		{
 			createTextualCommentElement(linesOfCurrentElement); // Flush current text
 
 			// A line consists of one of . - = that is repeated three times or more
 			// The used character defines the strength of the header, i.e. one of three levels
 			QString style;
-			switch(line[0].toAscii())
+			switch (line[0].toAscii())
 			{
 				case '.': style = "single"; break;
 				case '-': style = "double"; break;
 				case '=': style = "triple"; break;
-				default: Q_ASSERT_X(false,"","Unknown line character");
+				default: Q_ASSERT_X(false, "", "Unknown line character");
 			}
 
 			commentElements_.append(new Line(this, Line::itemStyles().get(style)));
@@ -163,7 +163,7 @@ void VComment::parseLines()
 		//************************************************************************
 		rx.setPattern("^(#+)([^#].*)");
 		// allow headers h1 to h6
-		if(rx.exactMatch(line) && rx.cap(1).length() <= 6)
+		if (rx.exactMatch(line) && rx.cap(1).length() <= 6)
 		{
 			QString len = QString::number(rx.cap(1).length());
 			linesOfCurrentElement << "<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">";
@@ -175,7 +175,7 @@ void VComment::parseLines()
 		// Diagrams
 		//************************************************************************
 		// is this a diagram? format: [diagram#diagramName]
-		if(line.startsWith("[diagram#") && line.right(1) == "]" && line.size() > 9+1)
+		if (line.startsWith("[diagram#") && line.right(1) == "]" && line.size() > 9+1)
 		{
 			createTextualCommentElement(linesOfCurrentElement); // Flush current text
 
@@ -193,7 +193,7 @@ void VComment::parseLines()
 		// Browsers
 		//************************************************************************
 		// urls are specified as [browser#http://www.example.com]
-		if(line.startsWith("[browser#") && line.right(1) == "]" && line.size() > 9+1)
+		if (line.startsWith("[browser#") && line.right(1) == "]" && line.size() > 9+1)
 		{
 			createTextualCommentElement(linesOfCurrentElement); // Flush current text
 
@@ -203,7 +203,7 @@ void VComment::parseLines()
 			QString url = items.at(0).second;
 			auto browser = new VCommentBrowser(nullptr, QUrl(url));
 
-			if(items.size() > 1)
+			if (items.size() > 1)
 			{
 				QSize size = parseSize(items.at(1).second);
 				browser->updateSize(size);
@@ -219,7 +219,7 @@ void VComment::parseLines()
 		// images are specified as
 		//   [image#/home/user/image.png]
 		//   [image#image.png|300x300] to specify a size
-		if(line.startsWith("[image#") && line.right(1) == "]" && line.size() > 7+1)
+		if (line.startsWith("[image#") && line.right(1) == "]" && line.size() > 7+1)
 		{
 			createTextualCommentElement(linesOfCurrentElement); // Flush current text
 
@@ -227,8 +227,8 @@ void VComment::parseLines()
 			// read width and height, if specified
 			auto items = parseMarkdownArguments(mid);
 
-			QSize size(0,0);
-			if(items.size() > 1)
+			QSize size(0, 0);
+			if (items.size() > 1)
 				size = parseSize(items.at(1).second);
 
 			auto image = new VCommentImage(nullptr, items.at(0).second, size);
@@ -253,10 +253,10 @@ QSize VComment::parseSize(const QString& str)
 	bool ok{};
 
 	int width = str.left(index).toInt(&ok);
-	if(index > 0 && !ok) return QSize{}; // Invalid size
+	if (index > 0 && !ok) return QSize{}; // Invalid size
 
 	int height = str.mid(index+1).toInt(&ok);
-	if(index+1 < str.size()-1 && !ok) return QSize{}; // Invalid size
+	if (index+1 < str.size()-1 && !ok) return QSize{}; // Invalid size
 
 	return QSize(width, height);
 }
@@ -267,13 +267,13 @@ QList<QPair<QString, QString> > VComment::parseMarkdownArguments(const QString& 
 	auto lines = argString.split('|');
 	// TODO: get rid of escaped pipes \| e.g. in case an url contains one
 
-	auto pairs = QList<QPair<QString,QString>>();
+	auto pairs = QList<QPair<QString, QString>>();
 	// read key/value pairs
 	QRegExp rx("^[a-zA-Z]{,15}=");
-	for(auto line : lines)
+	for (auto line : lines)
 	{
 		int index = rx.indexIn(line);
-		if(index == -1) pairs.append(qMakePair(QString(), line));
+		if (index == -1) pairs.append(qMakePair(QString(), line));
 		else pairs.append(qMakePair(line.left(index), line.mid(index+1)));
 	}
 
@@ -297,11 +297,11 @@ Item* VComment::createTextualCommentElement(QStringList& contents, bool asHtml)
 {
 	Item* item = nullptr;
 
-	if(contents.size() > 0)
+	if (contents.size() > 0)
 	{
 		auto joined = contents.join("\n");
 
-		if(asHtml)
+		if (asHtml)
 		{
 			auto browser = new VCommentBrowser(this, joined);
 			commentElements_.append(browser);
@@ -323,10 +323,10 @@ Item* VComment::createTextualCommentElement(QStringList& contents, bool asHtml)
 
 void VComment::toggleEditing()
 {
-	if(node()->lines()->size() == 0) editing_ = true;
+	if (node()->lines()->size() == 0) editing_ = true;
 	else editing_ = !editing_;
 
-	if(!editing_)
+	if (!editing_)
 	{
 		node()->synchronizeDiagramsToText();
 		parseLines();

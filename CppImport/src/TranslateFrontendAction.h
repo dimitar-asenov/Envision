@@ -55,4 +55,3 @@ class CPPIMPORT_API TranslateFrontendAction : public clang::ASTFrontendAction
 };
 
 }
-

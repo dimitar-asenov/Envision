@@ -64,7 +64,7 @@ void VTryCatchFinally::initializeForms()
 		->put(TheTopOf, finallyOutline, AtCenterOf, finallyIcon)
 		->put(TheBottomOf, finallyOutline, 2, FromBottomOf, finallyBody);
 
-	auto contentElement = grid({{tryBody},{catchClauses},{finallyCombined}})
+	auto contentElement = grid({{tryBody}, {catchClauses}, {finallyCombined}})
 				->setColumnStretchFactor(1, 1);
 
 	auto shapeElement = new ShapeFormElement();

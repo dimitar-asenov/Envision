@@ -32,5 +32,3 @@ namespace Core {
 int CORE_API coreMain(int argc, char *argv[]);
 
 }
-
-

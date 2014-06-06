@@ -55,11 +55,11 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 //	}
 //	else
 //	{
-		if(!mipmap_.paint(painter,x,y))
+		if (!mipmap_.paint(painter, x, y))
 		{
 			if (drawScaledPixmapInMipmap(painter->worldTransform().m11()))
 			{
-				auto painted = mipmap_.paint(painter,x,y);
+				auto painted = mipmap_.paint(painter, x, y);
 				Q_ASSERT(painted);
 			}
 		}
@@ -68,7 +68,7 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 
 bool SVGIconStyle::drawScaledPixmapInMipmap(qreal scaleFactor) const
 {
-	auto size = (QSizeF(width(),height()) * scaleFactor).toSize();
+	auto size = (QSizeF(width(), height()) * scaleFactor).toSize();
 	if (size.width() > 0 && size.height() > 0)
 	{
 		QImage img = QImage(size, QImage::Format_ARGB32);

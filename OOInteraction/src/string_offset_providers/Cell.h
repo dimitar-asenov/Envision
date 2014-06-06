@@ -65,4 +65,4 @@ inline Visualization::Item* Cell::item() const { return item_; }
 inline int Cell::stringComponentsStart() const { return stringComponentsStart_; }
 inline int Cell::stringComponentsEnd() const { return stringComponentsEnd_; }
 
-} /* namespace OOInteraction */
+}

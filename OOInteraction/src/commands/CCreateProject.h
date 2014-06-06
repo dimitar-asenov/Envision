@@ -42,4 +42,4 @@ class OOINTERACTION_API CCreateProject : public Interaction::CreateNamedObjectWi
 			const QString& name, const QStringList& attributes) override;
 };
 
-} /* namespace OOInteraction */
+}

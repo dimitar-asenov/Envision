@@ -38,4 +38,4 @@ class INTERACTIONBASE_API ExpressionTreeBuildInstruction {
 		virtual void perform(ExpressionTreeBuilder& tb) = 0;
 };
 
-} /* namespace InteractionBase */
+}

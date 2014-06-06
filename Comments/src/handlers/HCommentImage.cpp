@@ -43,7 +43,7 @@ void HCommentImage::mousePressEvent(Visualization::Item* target, QGraphicsSceneM
 {
 	event->ignore();
 
-	if(event->button() == Qt::RightButton && event->modifiers() == Qt::ShiftModifier)
+	if (event->button() == Qt::RightButton && event->modifiers() == Qt::ShiftModifier)
 	{
 		event->accept();
 		resizing_ = true;
@@ -55,14 +55,14 @@ void HCommentImage::mousePressEvent(Visualization::Item* target, QGraphicsSceneM
 
 void HCommentImage::mouseReleaseEvent(Visualization::Item * /* target */, QGraphicsSceneMouseEvent *)
 {
-	if(resizing_) resizing_ = false;
+	if (resizing_) resizing_ = false;
 }
 
 void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto image = DCast<VCommentImage>(target);
 
-	if(resizing_ && event->buttons() & Qt::RightButton)
+	if (resizing_ && event->buttons() & Qt::RightButton)
 	{
 		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
 		auto newSize = image->imageSize() + QSize(diff.x(), diff.y());
@@ -75,7 +75,7 @@ void HCommentImage::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMo
 			auto line = child->get();
 
 			auto pipe = line.lastIndexOf('|');
-			if(pipe == -1)
+			if (pipe == -1)
 				pipe = line.size() - 1;
 
 			auto updated = line.left(pipe) +

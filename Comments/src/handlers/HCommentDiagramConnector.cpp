@@ -45,7 +45,7 @@ void HCommentDiagramConnector::keyPressEvent(Visualization::Item *target, QKeyEv
 	auto diagram = vConnector->diagram()->node();
 	event->ignore();
 
-	if(event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
+	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
 	{
 		event->accept();
 		target->scene()->setMainCursor(nullptr);
@@ -67,7 +67,7 @@ void HCommentDiagramConnector::mousePressEvent(Visualization::Item *target, QGra
 	vDiagram->toolbar()->setDiagram(vDiagram);
 	vDiagram->toggleEditing();
 
-	if(vDiagram->toolbar()->selectionMode())
+	if (vDiagram->toolbar()->selectionMode())
 	{
 		event->accept();
 		vDiagram->toolbar()->setCurrentConnector(target);

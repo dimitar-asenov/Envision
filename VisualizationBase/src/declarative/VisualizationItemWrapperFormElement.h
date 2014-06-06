@@ -45,9 +45,9 @@ class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<Parent
 		VisualizationItemWrapperFormElement(ChildItem item, GetStyleFunction style);
 		VisualizationItemWrapperFormElement() = delete;
 		VisualizationItemWrapperFormElement(
-				const VisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = default;
-		VisualizationItemWrapperFormElement<ParentType,VisualizationType>&
-				operator=(const VisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = delete;
+				const VisualizationItemWrapperFormElement<ParentType, VisualizationType>&) = default;
+		VisualizationItemWrapperFormElement<ParentType, VisualizationType>&
+				operator=(const VisualizationItemWrapperFormElement<ParentType, VisualizationType>&) = delete;
 		virtual ~VisualizationItemWrapperFormElement() {};
 
 		virtual VisualizationItemWrapperFormElement<ParentType, VisualizationType>* clone() const override;
@@ -91,13 +91,13 @@ void VisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchro
 	auto style = style_(static_cast<ParentType*>(item));
 	auto enabled = !enabled_ || enabled_(static_cast<ParentType*>(item));
 
-	if(childItem && !enabled)
+	if (childItem && !enabled)
 	{
 		SAFE_DELETE_ITEM(childItem);
 		item->setUpdateNeeded(Item::StandardUpdate);
 	}
 
-	if(!childItem && enabled)
+	if (!childItem && enabled)
 	{
 		childItem = new VisualizationType(item, style);
 		item->setUpdateNeeded(Item::StandardUpdate);

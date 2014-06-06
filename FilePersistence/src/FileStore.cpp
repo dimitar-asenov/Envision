@@ -386,13 +386,13 @@ Model::PersistedNode* FileStore::loadNodeData()
 	}
 	else
 	{
-		Model::PersistedValue< QList<Model::PersistedNode*> > *val = new Model::PersistedValue< QList<Model::PersistedNode*> >();
+		auto val = new Model::PersistedValue< QList<Model::PersistedNode*> >();
 		result = val;
 
 		if (xml->hasChildren())
 		{
 			xml->goToFirstChild();
-			while(true)
+			while (true)
 			{
 				Model::PersistedNode* child;
 				child = loadNodeData();

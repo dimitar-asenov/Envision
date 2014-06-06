@@ -59,13 +59,13 @@ class VExpression  : public Visualization::ItemWithNode<Derived, Super, Containe
 };
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-VExpression<Derived,Super,ContainedNode,defaultInitialization>::
+VExpression<Derived, Super, ContainedNode, defaultInitialization>::
 	VExpression(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style)
 	:Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>(parent, node, style)
 {}
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-Visualization::InteractionHandler*  VExpression<Derived,Super,ContainedNode,defaultInitialization>::handler() const
+Visualization::InteractionHandler*  VExpression<Derived, Super, ContainedNode, defaultInitialization>::handler() const
 {
 	if (VExpressionStaticData::defaultClassHandler()) return VExpressionStaticData::defaultClassHandler();
 	return Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::handler();

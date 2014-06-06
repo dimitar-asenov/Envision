@@ -63,18 +63,18 @@ void CommentDiagram::removeShape(CommentDiagramShape *shape)
 	// the size may change inside the loop, cache its original value
 	int connectorsSize = connectors()->size();
 	// find all connectors that reference this shape
-	for(int i = 0; i < connectorsSize; ++i)
+	for (int i = 0; i < connectorsSize; ++i)
 	{
 		// iterate in reverse to avoid ordering issues
 		int index = connectorsSize - i - 1;
 		auto c = connectors()->at(index);
-		if(c->startShape() == shapeIndex || c->endShape() == shapeIndex)
+		if (c->startShape() == shapeIndex || c->endShape() == shapeIndex)
 			connectors()->remove(index);
 		// else decrease all shape indexes bigger than the removed one by one
 		else
 		{
-			if(c->startShape() > shapeIndex) c->setStartShape(c->startShape() - 1);
-			if(c->endShape() > shapeIndex) c->setEndShape(c->endShape() - 1);
+			if (c->startShape() > shapeIndex) c->setStartShape(c->startShape() - 1);
+			if (c->endShape() > shapeIndex) c->setEndShape(c->endShape() - 1);
 		}
 	}
 

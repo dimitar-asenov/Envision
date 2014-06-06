@@ -39,7 +39,7 @@ namespace FilePersistence {
 
 TEST(FilePersistence, LoadRootOnly)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 
@@ -72,7 +72,7 @@ TEST(FilePersistence, LoadRootOnly)
 
 TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 
@@ -112,7 +112,7 @@ TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 
 TEST(FilePersistence, LoadMultipleUnits)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 

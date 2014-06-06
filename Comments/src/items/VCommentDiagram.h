@@ -64,7 +64,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 		bool showConnectorPoints() const;
 		void setShowConnectorPoints(bool show);
 
-		QPair<int,int> lastConnector() const;
+		QPair<int, int> lastConnector() const;
 		void setLastConnector(int shape, int point);
 		VCommentDiagramShape* diagramShape(int index);
 		CommentDiagramToolbar* toolbar();
@@ -83,7 +83,7 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 		bool editing_{};
 		bool showConnectorPoints_{};
-		QPair<int,int> lastConnector_{-1, -1};
+		QPair<int, int> lastConnector_{-1, -1};
 		QPoint lastRightClick_;
 
 		static CommentDiagramToolbar* toolbar_;
@@ -98,7 +98,7 @@ inline QPoint VCommentDiagram::lastRightClick() const { return lastRightClick_; 
 inline void VCommentDiagram::setLastRightClick(QPoint pos) { lastRightClick_ = pos; }
 inline bool VCommentDiagram::editing() const { return editing_; }
 inline bool VCommentDiagram::showConnectorPoints() const { return showConnectorPoints_; }
-inline QPair<int,int> VCommentDiagram::lastConnector() const { return lastConnector_; }
+inline QPair<int, int> VCommentDiagram::lastConnector() const { return lastConnector_; }
 inline void VCommentDiagram::setLastConnector(int shape, int point) { lastConnector_ = qMakePair(shape, point); }
 inline VCommentDiagramShape* VCommentDiagram::diagramShape(int index) { return shapes_.at(index);}
 

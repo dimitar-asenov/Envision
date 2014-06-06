@@ -70,9 +70,9 @@ OOModel::Expression* CompoundObjectDescriptor::create(const QList<OOModel::Expre
 	return e;
 }
 
-QMap<int,OOModel::Expression*>& CompoundObjectDescriptor::storedExpressions()
+QMap<int, OOModel::Expression*>& CompoundObjectDescriptor::storedExpressions()
 {
-	static QMap<int,OOModel::Expression*> map;
+	static QMap<int, OOModel::Expression*> map;
 	return map;
 }
 
@@ -98,7 +98,7 @@ const QString CompoundObjectDescriptor::storeExpression(OOModel::Expression* obj
 	else
 	{
 		id = nextId();
-		storedExpressions().insert(id,object);
+		storedExpressions().insert(id, object);
 	}
 
 	auto str = compoundSignature();
@@ -119,12 +119,12 @@ bool CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key key, QString&
 	if (key == Qt::Key_Delete)
 	{
 		if ( expression.at(index) != '@') return false;
-		if (isInQuotes(index,expression)) return false;
+		if (isInQuotes(index, expression)) return false;
 	}
 	if (key == Qt::Key_Backspace)
 	{
 		if (expression.at(index-1) != '@') return false;
-		if (isInQuotes(index,expression)) return false;
+		if (isInQuotes(index, expression)) return false;
 	}
 
 	// Try to match the expression to the compound signature
@@ -133,7 +133,7 @@ bool CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key key, QString&
 	int i = key == Qt::Key_Delete ? index : index-1;
 	int step = key == Qt::Key_Delete ? 1 : -1;
 
-	while(i>=0 && i < expression.length())
+	while (i>=0 && i < expression.length())
 	{
 		auto c = expression.at(i);
 		if ( c == '@') ++delimitersFound;
@@ -174,7 +174,7 @@ bool CompoundObjectDescriptor::isInQuotes(int index, const QString& string, cons
 	bool inQuote = false;
 	bool escaped = false;
 
-	for(int i = 0; i<index; ++i)
+	for (int i = 0; i<index; ++i)
 	{
 		if (escaped)
 		{

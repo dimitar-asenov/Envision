@@ -57,7 +57,7 @@ class MODELBASE_API PersistedNode
 inline void PersistedNode::setId(NodeIdType id) { id_ = id; }
 inline void PersistedNode::setType(const QString& type) { type_ = type; }
 inline void PersistedNode::setName(const QString& name) { name_ = name; }
-inline void PersistedNode::setNewPersistenceUnit(bool newPersistenceUnit) { isNewPersistenceUnit_ = newPersistenceUnit; }
+inline void PersistedNode::setNewPersistenceUnit(bool newPersistenceUnit) {isNewPersistenceUnit_ = newPersistenceUnit;}
 
 inline NodeIdType PersistedNode::id() const { return id_; }
 inline const QString& PersistedNode::type() const { return type_; }

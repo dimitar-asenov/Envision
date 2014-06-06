@@ -52,4 +52,3 @@ class OOMODEL_API Enumerator : public Super<Model::CompositeNode>
 };
 
 }
-

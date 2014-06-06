@@ -45,7 +45,7 @@ AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& 
 	cloneConstraints(horizontalConstraints_, other.horizontalConstraints_, matching);
 	cloneConstraints(verticalConstraints_, other.verticalConstraints_, matching);
 
-	for(auto it = other.externalMatches_.constBegin(); it != other.externalMatches_.constEnd(); ++it)
+	for (auto it = other.externalMatches_.constBegin(); it != other.externalMatches_.constEnd(); ++it)
 	{
 		auto newMatch = matching.value(it.value());
 		Q_ASSERT(newMatch);
@@ -56,7 +56,7 @@ AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& 
 void AnchorLayoutFormElement::cloneConstraints(QList<AnchorLayoutAnchor*>& thisConstraints,
 		const QList<AnchorLayoutAnchor*>& otherConstraints, QMap<FormElement*, FormElement*>& matching)
 {
-	for(auto c : otherConstraints)
+	for (auto c : otherConstraints)
 	{
 		auto cloned = c->clone();
 		thisConstraints.append(cloned);
@@ -111,8 +111,8 @@ AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormE
 					fixedElement);
 }
 
-AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement, int offset, FromEdge fromEdge,
-		FormElement* fixedElement)
+AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement,
+																		int offset, FromEdge fromEdge, FormElement* fixedElement)
 {
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 	Edge fixedEdge = static_cast<Edge>(fromEdge);
@@ -126,8 +126,8 @@ AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormE
 					fixedElement);
 }
 
-AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement, float relativeEdgePosition,
-		FormElement* fixedElement)
+AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement,
+																		float relativeEdgePosition, FormElement* fixedElement)
 {
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 

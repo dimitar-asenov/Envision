@@ -46,4 +46,4 @@ class OOINTERACTION_API EmptyExpressionStringOffsetProvider : public StringOffse
 		OOVisualization::VEmptyExpression* vis_;
 };
 
-} /* namespace OOInteraction */
+}

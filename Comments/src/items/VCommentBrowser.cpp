@@ -81,7 +81,7 @@ void VCommentBrowser::updateGeometry(int, int)
 	else
 	{
 		setSize(size_);
-		browser_->setPos(0,0);
+		browser_->setPos(0, 0);
 	}
 }
 
@@ -92,9 +92,8 @@ QList<Visualization::Item*> VCommentBrowser::childItems() const
 
 void VCommentBrowser::updateSize(QSize size)
 {
-	if(size.width() > 0 && size.height() > 0)
+	if (size.width() > 0 && size.height() > 0)
 		size_ = size;
 }
 
-} /* namespace Comments */
-
+}

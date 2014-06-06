@@ -28,7 +28,7 @@
 
 namespace Visualization {
 
-DEFINE_TYPE_ID_BASE(Shape, "Shape",)
+DEFINE_TYPE_ID_BASE(Shape, "Shape", )
 
 QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;
 QMap<QString, Shape::ShapeStyleConstructor> Shape::shapeStyleConstructors;
@@ -97,13 +97,15 @@ int Shape::contentTop()
 
 QSize Shape::innerSize(QSize outterSize) const
 {
-	if (style_) return QSize(outterSize.width() - std::ceil(style_->outline().width()), outterSize.height() - std::ceil(style_->outline().width()) );
+	if (style_) return QSize(outterSize.width() - std::ceil(style_->outline().width()),
+									 outterSize.height() - std::ceil(style_->outline().width()) );
 	return QSize(outterSize.width(), outterSize.height());
 }
 
 QSize Shape::outterSize(QSize innerSize) const
 {
-	if (style_) return QSize(innerSize.width() + std::ceil(style_->outline().width()), innerSize.height() + std::ceil(style_->outline().width()) );
+	if (style_) return QSize(innerSize.width() + std::ceil(style_->outline().width()),
+									 innerSize.height() + std::ceil(style_->outline().width()) );
 	return QSize(innerSize.width(), innerSize.height());
 }
 

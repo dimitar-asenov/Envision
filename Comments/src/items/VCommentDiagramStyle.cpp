@@ -34,7 +34,7 @@ VCommentDiagramSequenceStyle::~VCommentDiagramSequenceStyle(){} // Put the VTabl
 QVector<QColor> VCommentDiagramSequenceStyle::getColors() const
 {
 	QVector<QColor> aVector;
-	for(auto color : colors())
+	for (auto color : colors())
 	{
 		aVector.append(color.color());
 	}

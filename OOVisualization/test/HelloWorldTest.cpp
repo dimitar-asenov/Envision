@@ -58,13 +58,13 @@ void addConstructorAndDestructor(Class* cl)
 
 	auto con = new Method(cl->name(), Modifier::Public, Method::MethodKind::Constructor);
 	cl->methods()->append(con);
-	con->extension<Position>()->set(400,0);
+	con->extension<Position>()->set(400, 0);
 	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("Super"), new IntegerLiteral(42)));
 	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("name"), new StringLiteral("hi")));
 
 	auto des = new Method("~" + cl->name(), Modifier::Public, Method::MethodKind::Destructor);
 	cl->methods()->append(des);
-	des->extension<Position>()->set(400,160);
+	des->extension<Position>()->set(400, 160);
 }
 
 Class* addHelloWorld(Project* parent)
@@ -157,7 +157,7 @@ Class* addGeneric(Project* parent)
 	foobar->items()->append(callBarSt);
 
 	// Set positions
-	gen->extension<Position>()->set(860,300);
+	gen->extension<Position>()->set(860, 300);
 	bar->extension<Position>()->setY(80);
 	foobar->extension<Position>()->setY(140);
 
@@ -187,7 +187,7 @@ Class* addAnnotatedWithFriends(Project* parent)
 	var->decl()->setInitialValue(new IntegerLiteral(42));
 
 	// Set positions
-	ann->extension<Position>()->set(860,620);
+	ann->extension<Position>()->set(860, 620);
 
 	return ann;
 }
@@ -202,7 +202,7 @@ Class* addEnumeration(Project* parent)
 	en->enumerators()->append( new Enumerator("BLUE", new IntegerLiteral(5)));
 
 	// Set positions
-	en->extension<Position>()->set(860,880);
+	en->extension<Position>()->set(860, 880);
 
 	return en;
 }
@@ -213,7 +213,7 @@ Class* addAnnotation(Project* parent)
 	if (parent) parent->classes()->append(ann);
 
 	// Set positions
-	ann->extension<Position>()->set(860,1020);
+	ann->extension<Position>()->set(860, 1020);
 
 	return ann;
 }
@@ -303,7 +303,7 @@ Module* addLambda()
 	le->body()->append(new ExpressionStatement(someOpCall));
 
 	// Positions
-	mod->extension<Position>()->set(1300,300);
+	mod->extension<Position>()->set(1300, 300);
 	return mod;
 }
 
@@ -315,7 +315,7 @@ Class* addInner()
 	outer->classes()->append( new Class("InnerInterface", Class::ConstructKind::Interface));
 
 	// Set positions
-	outer->extension<Position>()->set(1300,860);
+	outer->extension<Position>()->set(1300, 860);
 
 	return outer;
 }
@@ -588,8 +588,8 @@ Method* addLongMethod(Class* parent)
 
 	auto var22 = new VariableDeclarationExpression("var22", new FunctionTypeExpression(
 			{new VariableDeclarationExpression("val",
-					new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
-			,new VariableDeclarationExpression("name", new ClassTypeExpression(new ReferenceExpression("String")))}));
+					new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)),
+			 new VariableDeclarationExpression("name", new ClassTypeExpression(new ReferenceExpression("String")))}));
 	longMethod->items()->append(new ExpressionStatement(var22));
 
 	auto var23 = new VariableDeclarationExpression("var23", new FunctionTypeExpression( {},
@@ -599,12 +599,12 @@ Method* addLongMethod(Class* parent)
 
 	auto var24 = new VariableDeclarationExpression("var24", new FunctionTypeExpression(
 				{new VariableDeclarationExpression("val",
-						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
-				,new VariableDeclarationExpression("name",
+						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)),
+				 new VariableDeclarationExpression("name",
 						new ClassTypeExpression(new ReferenceExpression("String")))},
 				{new VariableDeclarationExpression("x",
-						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
-				,new VariableDeclarationExpression("y",
+						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)),
+				 new VariableDeclarationExpression("y",
 						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
 		longMethod->items()->append(new ExpressionStatement(var24));
 
@@ -921,11 +921,11 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	////////////////////////////////////////////////// Set Scene
 	Model::Node* top_level = nullptr;
 	if (prj) top_level = prj;
-	else if(hello) top_level = hello;
-	else if(gen) top_level = gen;
-	else if(ann) top_level = ann;
-	else if(en) top_level = en;
-	else if(java) top_level = java;
+	else if (hello) top_level = hello;
+	else if (gen) top_level = gen;
+	else if (ann) top_level = ann;
+	else if (en) top_level = en;
+	else if (java) top_level = java;
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;
 

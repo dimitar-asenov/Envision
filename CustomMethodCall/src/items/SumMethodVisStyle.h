@@ -38,9 +38,9 @@ class CUSTOMMETHODCALL_API SumMethodVisStyle : public Super<Visualization::ItemS
 	public:
 		virtual ~SumMethodVisStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
-		Property<Visualization::StaticStyle> name{this,"name"};
-		Property<Visualization::SequentialLayoutStyle> arguments{this,"arguments"};
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::StaticStyle> name{this, "name"};
+		Property<Visualization::SequentialLayoutStyle> arguments{this, "arguments"};
 };
 
 }

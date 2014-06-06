@@ -39,9 +39,9 @@ class INTERACTIONBASE_API TextAndDescriptionStyle : public Super<Visualization::
 	public:
 		virtual ~TextAndDescriptionStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
-		Property<Visualization::TextStyle> text{this,"text"};
-		Property<Visualization::TextStyle> description{this,"description"};
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::TextStyle> text{this, "text"};
+		Property<Visualization::TextStyle> description{this, "description"};
 };
 
 

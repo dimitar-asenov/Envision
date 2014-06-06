@@ -48,4 +48,4 @@ class INTERACTIONBASE_API ParseResult {
 
 bool operator< (const ParseResult& left, const ParseResult& right);
 
-} /* namespace InteractionBase */
+}

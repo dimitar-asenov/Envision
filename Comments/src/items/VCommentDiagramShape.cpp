@@ -41,7 +41,7 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 	setZValue(1);
 }
 
-inline const std::array<const QRect,4> VCommentDiagramShape::resizeRects() const
+inline const std::array<const QRect, 4> VCommentDiagramShape::resizeRects() const
 {
 	const int size = 5;
 	return { QRect{0,								0,								size, size},
@@ -90,7 +90,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	painter->setPen(pen);
 	painter->setBrush(QBrush(fillColor_));
 
-	switch(node()->shapeType())
+	switch (node()->shapeType())
 	{
 		default:
 		case CommentDiagramShape::ShapeType::Rectangle:
@@ -112,16 +112,16 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			break;
 	}
 
-	if(diagram()->showConnectorPoints())
+	if (diagram()->showConnectorPoints())
 	{
 		// Temporarily assume a thicker painter with a different color for drawing the connector points
 		QBrush blackBrush(Qt::black), redBrush(Qt::red);
 
 		int shapeIndex = node()->index();
 		auto last = diagram()->lastConnector();
-		for(int i = 0; i < 16; ++i)
+		for (int i = 0; i < 16; ++i)
 		{
-			if(last.first == shapeIndex && last.second == i)
+			if (last.first == shapeIndex && last.second == i)
 			{
 				painter->setBrush(blackBrush);
 				painter->setPen(QPen(Qt::black));
@@ -136,7 +136,7 @@ void VCommentDiagramShape::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		}
 	}
 
-	if(this->isSelected())
+	if (this->isSelected())
 		for (auto r : resizeRects()) painter->fillRect(r, Qt::black);
 }
 
@@ -150,7 +150,7 @@ VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) cons
 	for (auto r : resizeRects())
 	{
 		auto m = (pos - r.center()).manhattanLength();
-		if(m < manhattan)
+		if (m < manhattan)
 		{
 			rect = i;
 			manhattan = m;
@@ -159,7 +159,7 @@ VCommentDiagramResizeRect VCommentDiagramShape::hitsResizeRects(QPoint pos) cons
 		++i;
 	}
 
-	switch(rect)
+	switch (rect)
 	{
 		case 0: return RECT_TOP_LEFT;
 		case 1: return RECT_TOP_RIGHT;

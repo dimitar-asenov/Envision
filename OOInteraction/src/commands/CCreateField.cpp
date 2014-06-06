@@ -37,7 +37,7 @@ using namespace OOModel;
 namespace OOInteraction {
 
 CCreateField::CCreateField() : CreateNamedObjectWithAttributes("field",
-		{{"public", "private","protected"}, {"static"}})
+		{{"public", "private", "protected"}, {"static"}})
 {
 }
 

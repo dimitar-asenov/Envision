@@ -57,7 +57,7 @@ bool LayoutProviderBase::isEmpty() const
 
 Item* LayoutProviderBase::childClosestTo(const QPoint& point, PositionConstraints childConstraint) const
 {
-	return layout_->childClosestTo(mapToItem(layout_,point).toPoint(), childConstraint);
+	return layout_->childClosestTo(mapToItem(layout_, point).toPoint(), childConstraint);
 }
 
 }

@@ -74,7 +74,7 @@ QList<FormElement*> FormElement::shapeElements()
 
 void FormElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for(FormElement* element : children())
+	for (FormElement* element : children())
 		element->setItemPositions(item, parentX + x(item), parentY + y(item));
 }
 
@@ -88,7 +88,7 @@ QList<ItemRegion> FormElement::regions(DeclarativeItemBase* item, int parentX, i
 
 void FormElement::synchronizeWithItem(Item* item)
 {
-	for(FormElement* element : children())
+	for (FormElement* element : children())
 		if (element != nullptr) element->synchronizeWithItem(item);
 }
 
@@ -163,5 +163,3 @@ FormElement* FormElement::cloneIfAlreadyUsed()
 }
 
 }
-
-

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+RULES=\
+' --rule F001'\
+' --rule L001'\
+' --rule L003'\
+' --rule L004'\
+' --rule L005'\
+' --rule L006'\
+' --rule T001'\
+' --rule T002'\
+' --rule T003'\
+' --rule T004'\
+' --rule T005'\
+' --rule T006'\
+' --rule T007'\
+' --rule T008'\
+' --rule T009'\
+' --rule T010'\
+' --rule T013'\
+' --rule T017'\
+' --rule T018'
+
+PARAMS=\
+' --parameter max-line-length=120'
+
+find "$1" -path "$1"/qt -prune -o -name '*.h' -print -o -name '*.cpp' -print \
+| grep -v '/DebugBuild/' \
+| grep -v '/ReleaseBuild/' \
+| grep -v '/debug/' \
+| grep -v '/release/' \
+| grep -v '/misc/' \
+| grep -v '/JavaImportTool/' \
+| grep -v '/CppImport/test/' \
+| vera++ $RULES $PARAMS --error 2>&1\
+| grep -v "keyword 'delete' not followed by a single space" \
+| grep -v "/declarative/AnchorLayoutFormElement\.h.*using namespace not allowed in header file" 1>&2
+
+if (($? > 0)); then
+    exit 0
+fi
+
+exit 1

@@ -35,7 +35,7 @@ class DeclarativeTestStyle : public Super<DeclarativeItemBaseStyle>
 {
 	public:
 		virtual ~DeclarativeTestStyle() override;
-		Property<SymbolStyle> symbol{this,"symbol"};
+		Property<SymbolStyle> symbol{this, "symbol"};
 };
 
 } /* namespace Visualization */

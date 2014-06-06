@@ -110,7 +110,7 @@ void TestBox::updateGeometry(int availableWidth, int availableHeight)
 	{
 		int w = availableWidth > widthInLocal() ? availableWidth : widthInLocal();
 		int h = availableHeight > heightInLocal() ? availableHeight : heightInLocal();
-		setSize(w,h);
+		setSize(w, h);
 	}
 
 	// Also update the color

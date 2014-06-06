@@ -61,7 +61,7 @@ int PositionLayout::length() const
 
 bool PositionLayout::containsNode(Model::Node* node_)
 {
-	for(int i=0; i<items.size(); ++i)
+	for (int i=0; i<items.size(); ++i)
 		if (items[i]->node() == node_) return true;
 
 	return false;
@@ -89,7 +89,7 @@ void PositionLayout::insert(Item* item)
 void PositionLayout::remove(int index, bool deleteItem)
 {
 	if (deleteItem) SAFE_DELETE_ITEM( items[index]);
-	else if(items[index]) items[index]->setParentItem(nullptr);
+	else if (items[index]) items[index]->setParentItem(nullptr);
 
 	SAFE_DELETE( positions[index] );
 	items.remove(index);
@@ -204,7 +204,7 @@ int PositionLayout::toGrid(const int& pos) const
 
 bool PositionLayout::isEmpty() const
 {
-	for(int i = 0; i<items.size(); ++i)
+	for (int i = 0; i<items.size(); ++i)
 		if (!items[i]->isEmpty()) return false;
 
 	return true;
@@ -224,7 +224,7 @@ void PositionLayout::updateGeometry(int, int)
 		// Get averages
 		double averageWidth = 0;
 		double averageHeight = 0;
-		for(auto i : items)
+		for (auto i : items)
 		{
 			averageWidth += i->widthInParent();
 			averageHeight += i->heightInParent();
@@ -266,7 +266,7 @@ void PositionLayout::updateGeometry(int, int)
 
 		lastModifiedModel->beginModification(items[0]->node(), "Automatically set position");
 
-		for(int i = 0; i<items.size(); ++i)
+		for (int i = 0; i<items.size(); ++i)
 		{
 			int x = lastRight;
 			int y = lastBottom;
@@ -312,7 +312,7 @@ void PositionLayout::updateGeometry(int, int)
 	}
 
 	// Set the size of all items
-	for(auto item : items)
+	for (auto item : items)
 	{
 		Model::Node* node = item->node();
 		auto fds = (static_cast<Model::CompositeNode*>(node))->extension<FullDetailSize>();
@@ -349,7 +349,7 @@ void PositionLayout::updateGeometry(int, int)
 	QPoint topLeft;
 	QPoint bottomRight;
 
-	for(int i = 0; i<items.size(); ++i)
+	for (int i = 0; i<items.size(); ++i)
 	{
 		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
 		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
@@ -392,7 +392,7 @@ bool PositionLayout::isSensitiveToScale() const
 
 void PositionLayout::determineChildren()
 {
-	for(auto & item : items)
+	for (auto & item : items)
 		renderer()->render(item, this, item->node());
 
 	Super::determineChildren();
@@ -414,12 +414,12 @@ bool PositionLayout::adjustChildrenSemanticZoom()
 		{
 			if (auto mv = dynamic_cast<MainView*>(views))
 			{
-				inViewport = mv->visibleRect().intersects(mapRectToScene(0,0, widthInLocal(), heightInLocal()));
+				inViewport = mv->visibleRect().intersects(mapRectToScene(0, 0, widthInLocal(), heightInLocal()));
 				break;
 			}
 		}
 
-		for(auto item : items)
+		for (auto item : items)
 		{
 			if (geometricZoomScale < 1)
 			{
@@ -443,7 +443,7 @@ bool PositionLayout::adjustChildrenSemanticZoom()
 			else
 			{
 				// if the geometric zoom scale is larger or equal to 1 everything should be shown in full detail
-				if(definesChildNodeSemanticZoomLevel(item->node()))
+				if (definesChildNodeSemanticZoomLevel(item->node()))
 				{
 					clearChildNodeSemanticZoomLevel(item->node());
 					changesMade = true;

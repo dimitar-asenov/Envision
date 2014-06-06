@@ -57,11 +57,11 @@ void VCommentDiagram::updateGeometry(int, int)
 {
 	QSize minSize;
 
-	if(shapes_.isEmpty()) minSize = QSize(200, 50); // If there are no shapes yet, make space for a text message
+	if (shapes_.isEmpty()) minSize = QSize(200, 50); // If there are no shapes yet, make space for a text message
 	else
 	{
 		// Compute minimum required size
-		minSize = QSize{0,0};
+		minSize = QSize{0, 0};
 		for (auto vShape : shapes_)
 		{
 			auto nShape = vShape->node();
@@ -74,18 +74,18 @@ void VCommentDiagram::updateGeometry(int, int)
 
 	// override with user set size if provided
 	QSize expanded = minSize.expandedTo(QSize(node()->width(), node()->height()));
-	if(editing_) expanded += QSize(2*EDIT_OUTLINE_SIZE, 2*EDIT_OUTLINE_SIZE);
+	if (editing_) expanded += QSize(2*EDIT_OUTLINE_SIZE, 2*EDIT_OUTLINE_SIZE);
 
-	if(hasShape())
+	if (hasShape())
 	{
 		if (editing_) getShape()->setOutterSize(expanded.width(), expanded.height());
 		else getShape()->setInnerSize(expanded.width(), expanded.height());
 	}
 	else setSize(expanded);
 
-	QPoint offset{0,0};
-	if( editing_) offset+= QPoint(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE);
-	if( hasShape() )
+	QPoint offset{0, 0};
+	if ( editing_) offset+= QPoint(EDIT_OUTLINE_SIZE, EDIT_OUTLINE_SIZE);
+	if ( hasShape() )
 	{
 		if (getShape()->contentLeft() > offset.x()) offset.setX( getShape()->contentLeft());
 		if (getShape()->contentTop() > offset.y()) offset.setY( getShape()->contentTop());
@@ -119,16 +119,16 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	Item::paint(painter, option, widget);
 
 	// assume a default white background
-	if(!hasShape()) painter->setBrush(Qt::white);
+	if (!hasShape()) painter->setBrush(Qt::white);
 	else painter->setBrush(Qt::NoBrush);
 
-	if(!hasShape())
-		painter->drawRect(QRect{QPoint(0,0), sizeInLocal().toSize()});
+	if (!hasShape())
+		painter->drawRect(QRect{QPoint(0, 0), sizeInLocal().toSize()});
 
-	if(shapes_.isEmpty())
+	if (shapes_.isEmpty())
 	{
 		painter->setPen(QPen(QColor(100, 100, 100)));
-		painter->drawText(QRect{QPoint(0,0), sizeInLocal().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
+		painter->drawText(QRect{QPoint(0, 0), sizeInLocal().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
 								"This diagram does not contain any shapes yet.");
 	}
 }

@@ -75,27 +75,27 @@ void CommentDiagramShape::reCalculateConnectorPoints() const
 	auto shapeWidth = width();
 	auto shapeHeight = height();
 
-	switch(shapeType())
+	switch (shapeType())
 	{
 		case ShapeType::Rectangle:
-			for(int i = 0; i < 16; ++i)
+			for (int i = 0; i < 16; ++i)
 			{
 				// index 0 is upper left corner, normalize to compass directions (0 = top center = north)
 				int index = (i + 2) % 16;
 
-				if     (index >=  0 && index <  4)
+				if (index >=  0 && index <  4)
 					connectorPoints_.append(QPoint(index/4.*shapeWidth, 0));
-				else if(index >=  4 && index <  8)
+				else if (index >=  4 && index <  8)
 					connectorPoints_.append(QPoint(shapeWidth, (index-4)/4.*shapeHeight));
-				else if(index >=  8 && index < 12)
+				else if (index >=  8 && index < 12)
 					connectorPoints_.append(QPoint((12-index)/4.*shapeWidth, shapeHeight));
-				else if(index >= 12 && index < 16)
+				else if (index >= 12 && index < 16)
 					connectorPoints_.append(QPoint(0, (16-index)/4.*shapeHeight));
 			}
 			break;
 
 		case ShapeType::Ellipse:
-			for(int i = 0; i < 16; ++i)
+			for (int i = 0; i < 16; ++i)
 			{
 				// index 0 is at the right center, normalize to compass directions
 				int index = (i + 12) % 16;
@@ -110,31 +110,31 @@ void CommentDiagramShape::reCalculateConnectorPoints() const
 				double t = tan(angle);
 				double x = a*b/(sqrt(b*b+a*a*t*t));
 				// invert sign of result for angles between pi/2 and 3pi/2
-				if(index > 4 && index < 12)
+				if (index > 4 && index < 12)
 					x = -x;
 
 				double y = t*x;
 
 				// special cases where angle is pi/2 or 3pi/2
-				if(index == 4)  y =  b;
-				if(index == 12) y = -b;
+				if (index == 4)  y =  b;
+				if (index == 12) y = -b;
 
 				connectorPoints_.append( QPoint(center.x()+x, center.y()+y));
 			}
 			break;
 
 		case ShapeType::Diamond:
-			for(int i = 0; i < 16; ++i)
+			for (int i = 0; i < 16; ++i)
 			{
 				// index 0 is already in the top center (north)
 				//  => no compass normalization needed!
-				if(i >=  0 && i <  4)
+				if (i >=  0 && i <  4)
 					connectorPoints_.append(QPoint((i+4)/8.*shapeWidth, i/8.*shapeHeight));
-				if(i >=  4 && i <  8)
+				if (i >=  4 && i <  8)
 						connectorPoints_.append(QPoint((8-(i-4))/8.*shapeWidth, (i/8.*shapeHeight)));
-				if(i >=  8 && i < 12)
+				if (i >=  8 && i < 12)
 					connectorPoints_.append(QPoint((4-(i-8))/8.*shapeWidth, (8-(i-8))/8.*shapeHeight));
-				if(i >= 12 && i < 16)
+				if (i >= 12 && i < 16)
 					connectorPoints_.append(QPoint((i-12)/8.*shapeWidth, (4-(i-12))/8.*shapeHeight));
 			}
 			break;
@@ -150,12 +150,12 @@ int CommentDiagramShape::connectorPointNear(QPoint pos) const
 	// max manhattan distance + 1 (area around the point to accept as a hit)
 	int manhattan = 15;
 
-	for(int i = 0; i < connectorPoints_.size(); ++i)
+	for (int i = 0; i < connectorPoints_.size(); ++i)
 	{
 		auto point = connectorPoints_[i];
 		QPoint diff = point - pos;
 		int m = diff.manhattanLength();
-		if(m < manhattan)
+		if (m < manhattan)
 		{
 			manhattan = m;
 			index = i;

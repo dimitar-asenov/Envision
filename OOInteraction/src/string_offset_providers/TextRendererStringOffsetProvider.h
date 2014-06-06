@@ -47,4 +47,4 @@ class TextRendererStringOffsetProvider : public StringOffsetProvider {
 		Visualization::TextRenderer* vis_;
 };
 
-} /* namespace OOInteraction */
+}

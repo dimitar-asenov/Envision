@@ -37,12 +37,12 @@ class VISUALIZATIONBASE_API PositionLayoutStyle : public Super<LayoutStyle>
 	public:
 		virtual ~PositionLayoutStyle() override;
 
-		Property<int> leftInnerMargin{this,"leftInnerMargin"};
-		Property<int> rightInnerMargin{this,"rightInnerMargin"};
-		Property<int> topInnerMargin{this,"topInnerMargin"};
-		Property<int> bottomInnerMargin{this,"bottomInnerMargin"};
-		Property<int> spaceBetweenElements{this,"spaceBetweenElements"};
-		Property<int> gridSize{this,"gridSize"};
+		Property<int> leftInnerMargin{this, "leftInnerMargin"};
+		Property<int> rightInnerMargin{this, "rightInnerMargin"};
+		Property<int> topInnerMargin{this, "topInnerMargin"};
+		Property<int> bottomInnerMargin{this, "bottomInnerMargin"};
+		Property<int> spaceBetweenElements{this, "spaceBetweenElements"};
+		Property<int> gridSize{this, "gridSize"};
 };
 
 }

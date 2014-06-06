@@ -38,4 +38,4 @@ class INTERACTIONBASE_API DetectMainSceneActivated : public QObject
 		virtual bool eventFilter(QObject* watched, QEvent* event) override;
 };
 
-} /* namespace Interaction */
+}

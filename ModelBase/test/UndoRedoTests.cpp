@@ -48,7 +48,7 @@ TEST(ModelBase, UndoRedoTextSet)
 	CHECK_INT_EQUAL(1, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 
-	model.beginModification(root->name(),"testing");
+	model.beginModification(root->name(), "testing");
 	root->name()->set("t222");
 	model.endModification();
 	CHECK_CONDITION(root->name()->get() == "t222");

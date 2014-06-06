@@ -42,7 +42,8 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VReturnStatement
-	: public Super<VStatementItem<VReturnStatement, Visualization::DeclarativeItem<VReturnStatement>, OOModel::ReturnStatement>>
+	: public Super<VStatementItem<VReturnStatement, Visualization::DeclarativeItem<VReturnStatement>,
+		OOModel::ReturnStatement>>
 {
 	ITEM_COMMON(VReturnStatement)
 

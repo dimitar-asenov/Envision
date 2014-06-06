@@ -41,7 +41,7 @@ namespace Visualization {
 
 static constexpr int MAX_CURSOR_JUMP_DISTANCE = 300;
 
-DEFINE_TYPE_ID_BASE(Item, "Item",)
+DEFINE_TYPE_ID_BASE(Item, "Item", )
 
 InteractionHandler* Item::defaultClassHandler_ = InteractionHandler::instance();
 
@@ -272,7 +272,7 @@ void Item::updateAddOnItems()
 		decltype(values) new_values;
 		if (!deleted) new_values = key->determineItems(this, values);
 
-		for(auto item : values)
+		for (auto item : values)
 		{
 			if (!deleted && new_values.contains( item )) new_values.removeAll(item);
 			else
@@ -289,7 +289,7 @@ void Item::updateAddOnItems()
 	// Whatever is left in addons now is a new addon and must be processed
 	for (auto a : addons)
 		for (auto i : a->determineItems(this, QList<Item*>()))
-			addOnItems_.insert(a,i);
+			addOnItems_.insert(a, i);
 }
 
 void Item::updateGeometry(Item* content, int availableWidth, int availableHeight)
@@ -317,7 +317,7 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 	{
 		if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
 			content->changeGeometry(availableWidth, availableHeight);
-		content->setPos(0,0);
+		content->setPos(0, 0);
 		setSize(content->sizeInParent());
 	}
 }
@@ -370,7 +370,7 @@ bool Item::itemOrChildHasFocus() const
 
 Item* Item::focusedChild() const
 {
-	for(auto child : childItems())
+	for (auto child : childItems())
 		if (child->itemOrChildHasFocus()) return child;
 
 	return nullptr;
@@ -422,7 +422,7 @@ int Item::distanceTo(const QPoint& p) const
 		// Above
 		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
 		else if (p.x() > widthInLocal())
-			return  std::sqrt(p.y()*p.y() + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
+			return std::sqrt(p.y()*p.y() + (p.x()-widthInLocal())*(p.x()-widthInLocal())); // To the right
 		else return -p.y(); // Directly above
 	}
 	else if (p.y() > heightInLocal())
@@ -439,7 +439,7 @@ int Item::distanceTo(const QPoint& p) const
 	{
 		// Within the same height
 		if (p.x() < 0) return -p.x(); // To the left
-		else if (p.x() > widthInLocal()) return  p.x()-widthInLocal(); // To the right
+		else if (p.x() > widthInLocal()) return p.x()-widthInLocal(); // To the right
 		else return 0; // Inside
 	}
 }
@@ -449,7 +449,7 @@ Item* Item::childClosestTo(const QPoint& point, PositionConstraints childConstra
 	Item* closest = nullptr;
 	int closest_distance = 0;
 
-	for(auto child : childItems())
+	for (auto child : childItems())
 	{
 		QPoint childCoordinates = mapToItem(child, point).toPoint();
 
@@ -493,10 +493,10 @@ QList<ItemRegion> Item::regions()
 
 		if (!style()->wholeItemCursor())
 		{
-			for(auto child : childItems())
+			for (auto child : childItems())
 			{
 				hasChildren = true;
-				QRect rect = QRect(QPoint(0,0), child->sizeInParent().toSize());
+				QRect rect = QRect(QPoint(0, 0), child->sizeInParent().toSize());
 				rect.translate(child->pos().toPoint());
 				regs.append(ItemRegion(rect));
 				regs.last().setItem(child);
@@ -535,7 +535,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 			defaultMoveCursorProxy_->moveCursor(MoveDefault);
 			return true;
 		}
-		reference = QPoint(0,0);
+		reference = QPoint(0, 0);
 	}
 
 	ItemRegion* current = nullptr;
@@ -549,7 +549,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 			if (c->isSame(r.cursor()))
 			{
 				current = &r;
-				switch(dir)
+				switch (dir)
 				{
 					case MoveUp: reference = QPoint(reference.x(), r.region().y()); break;
 					case MoveDown: reference = QPoint(reference.x(), r.region().y() + r.region().height()); break;
@@ -569,7 +569,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 	auto yEnd = heightInLocal() - 1;
 	auto xMid = widthInLocal()/2;
 	auto yMid = heightInLocal()/2;
-	switch(dir)
+	switch (dir)
 	{
 		case MoveUp: constraints = ItemRegion::Above; break;
 		case MoveDown: constraints = ItemRegion::Below; break;
@@ -627,7 +627,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 		currentCursorPos = currentCursor->owner()->mapToItem(this, currentCursor->region().center());
 	}
 
-	for(auto r : matching.values())
+	for (auto r : matching.values())
 	{
 		// Ignore cursors which are very far away from the current cursor
 		if (limitCursorJumpDistance && r->distanceTo(currentCursorPos) > MAX_CURSOR_JUMP_DISTANCE) continue;
@@ -647,7 +647,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 			// This is a child item region
 
 			CursorMoveDirection childDirection;
-			switch(dir)
+			switch (dir)
 			{
 				case MoveUp: childDirection = MoveUpOf; break;
 				case MoveDown: childDirection = MoveDownOf; break;
@@ -670,7 +670,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 				case MoveDefault: childDirection = MoveDefault; break;
 				default: throw VisualizationException("Unknown move direction: " + QString::number(dir));
 			}
-			if( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).toPoint()))
+			if ( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).toPoint()))
 			{
 				canFocus = true;
 				break;
@@ -797,7 +797,7 @@ void Item::putAddOnItemsInSequence(SequentialLayout* layout)
 	{
 		auto item = layout->at<Item>(i);
 		if (values.contains(item)) values.removeAll(item);
-		else layout->removeAll(item,true);
+		else layout->removeAll(item, true);
 	}
 
 	for (auto item : values)

@@ -103,7 +103,7 @@ bool HActionPrompt::tryExecutingAction(ActionPrompt *prompt, bool requirePrecise
 {
 	Action* found{};
 
-	for(auto a : Action::actions(prompt->currentActionReceiver()->node()) )
+	for (auto a : Action::actions(prompt->currentActionReceiver()->node()) )
 	{
 		auto match = requirePreciseMatch ?
 				a->shortcut() == prompt->text()->text() :

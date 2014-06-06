@@ -50,8 +50,8 @@ void GridLayout::setGridSize(int sizeX, int sizeY, bool deleteExtraItems)
 {
 	if (sizeX < sizeX_)
 	{
-		for(int x = sizeX; x < sizeX_; x++)
-			for(int y = 0; y < sizeY_; y++)
+		for (int x = sizeX; x < sizeX_; x++)
+			for (int y = 0; y < sizeY_; y++)
 				if (deleteExtraItems) SAFE_DELETE_ITEM( items_[x][y] );
 				else if ( items_[x][y] ) items_[x][y]->setParentItem(nullptr);
 	}
@@ -63,7 +63,7 @@ void GridLayout::setGridSize(int sizeX, int sizeY, bool deleteExtraItems)
 	{
 		if (sizeY < sizeY_ )
 		{
-			for(int y = sizeY; y<items_[x].size(); ++y)
+			for (int y = sizeY; y<items_[x].size(); ++y)
 				if (deleteExtraItems) SAFE_DELETE_ITEM( items_[x][y] );
 				else if ( items_[x][y] ) items_[x][y]->setParentItem(nullptr);
 		}
@@ -81,7 +81,7 @@ bool GridLayout::isEmpty(int x, int y) const
 
 void GridLayout::set(Item* item, int x, int y, bool deleteOldItem)
 {
-	if(item) item->setParentItem(this);
+	if (item) item->setParentItem(this);
 	if (deleteOldItem) SAFE_DELETE_ITEM( items_[x][y]);
 	else if (items_[x][y]) items_[x][y]->setParentItem(nullptr);
 	items_[x][y] = item;
@@ -99,7 +99,7 @@ void GridLayout::swap(int x1, int y1, int x2, int y2)
 void GridLayout::remove(int x, int y, bool deleteItem_)
 {
 	if (deleteItem_) SAFE_DELETE_ITEM( items_[x][y]);
-	else if(items_[x][y]) items_[x][y]->setParentItem(nullptr);
+	else if (items_[x][y]) items_[x][y]->setParentItem(nullptr);
 	items_[x][y] = nullptr;
 	setUpdateNeeded(StandardUpdate);
 }
@@ -109,7 +109,7 @@ void GridLayout::remove(Item* item, bool deleteItem)
 	if (item == nullptr) return;
 
 	for (int x = 0; x<sizeX_; ++x)
-		for(int y = 0; y<sizeY_; ++y)
+		for (int y = 0; y<sizeY_; ++y)
 			if (items_[x][y] == item) items_[x][y] = nullptr;
 
 	if (deleteItem) SAFE_DELETE_ITEM(item);
@@ -120,7 +120,7 @@ void GridLayout::remove(Item* item, bool deleteItem)
 void GridLayout::clear(bool deleteItems)
 {
 	for (int x = 0; x<sizeX_; ++x)
-		for(int y = 0; y<sizeY_; ++y)
+		for (int y = 0; y<sizeY_; ++y)
 		{
 			if (deleteItems) SAFE_DELETE_ITEM(items_[x][y]);
 			else if (items_[x][y]) items_[x][y]->setParentItem(nullptr);
@@ -191,8 +191,8 @@ void GridLayout::synchronize(Item*& item, Model::Node* node, int x, int y)
 
 bool GridLayout::isEmpty() const
 {
-	for(int x = 0; x<sizeX_; ++x)
-		for(int y = 0; y<sizeY_; ++y)
+	for (int x = 0; x<sizeX_; ++x)
+		for (int y = 0; y<sizeY_; ++y)
 			if (!items_[x][y]->isEmpty()) return false;
 
 	return true;
@@ -203,9 +203,9 @@ void GridLayout::updateGeometry(int, int)
 	// Get the widest and tallest items
 	QVector<int> widestInColumn(sizeX_, 0);
 	QVector<int> tallestInRow(sizeY_, 0);
-	for(int x=0; x<sizeX_; ++x)
+	for (int x=0; x<sizeX_; ++x)
 	{
-		for(int y=0; y<sizeY_; ++y)
+		for (int y=0; y<sizeY_; ++y)
 			if (items_[x][y] != nullptr)
 			{
 				if (items_[x][y]->widthInParent() > widestInColumn[x]) widestInColumn[x] = items_[x][y]->widthInParent();
@@ -227,10 +227,10 @@ void GridLayout::updateGeometry(int, int)
 	// Set item positions
 
 	int left = xOffset();
-	for(int x=0; x<sizeX_; ++x)
+	for (int x=0; x<sizeX_; ++x)
 	{
 		int top = yOffset();
-		for(int y=0; y<sizeY_; ++y)
+		for (int y=0; y<sizeY_; ++y)
 		{
 			if (items_[x][y] != nullptr)
 			{
@@ -260,17 +260,17 @@ void GridLayout::updateGeometry(int, int)
 
 QPoint GridLayout::focusedElementIndex() const
 {
-	for(int x=0; x<sizeX_; ++x)
-		for(int y=0; y<sizeY_; ++y)
-			if ( items_[x][y] && items_[x][y]->itemOrChildHasFocus()) return QPoint(x,y);
+	for (int x=0; x<sizeX_; ++x)
+		for (int y=0; y<sizeY_; ++y)
+			if ( items_[x][y] && items_[x][y]->itemOrChildHasFocus()) return QPoint(x, y);
 
-	return QPoint(-1,-1);
+	return QPoint(-1, -1);
 }
 
 Item* GridLayout::findFirstVertical(bool startFromTop)
 {
-	for(int y = 0; y<sizeY_; ++y)
-		for(int x = 0; x<sizeX_; ++x)
+	for (int y = 0; y<sizeY_; ++y)
+		for (int x = 0; x<sizeX_; ++x)
 		{
 			int yIndex = startFromTop ? y : (sizeY_-y-1);
 			if (items_[x][yIndex] != nullptr) return items_[x][yIndex];
@@ -281,8 +281,8 @@ Item* GridLayout::findFirstVertical(bool startFromTop)
 
 Item* GridLayout::findFirstHorizontal(bool startFromLeft)
 {
-	for(int x = 0; x<sizeX_; ++x)
-		for(int y = 0; y<sizeY_; ++y)
+	for (int x = 0; x<sizeX_; ++x)
+		for (int y = 0; y<sizeY_; ++y)
 		{
 			int xIndex = startFromLeft ? x : (sizeX_-x-1);
 			if (items_[xIndex][y] != nullptr) return items_[xIndex][y];

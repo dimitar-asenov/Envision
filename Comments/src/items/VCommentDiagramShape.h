@@ -63,9 +63,7 @@ class COMMENTS_API VCommentDiagramShape
 		Qt::PenStyle outlineType_{};
 		int outlineSize_{};
 
-		inline const std::array<const QRect,4> resizeRects() const;
+		inline const std::array<const QRect, 4> resizeRects() const;
 };
 
-
-
-} /* namespace Comments */
+}

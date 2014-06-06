@@ -77,13 +77,13 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 
 	bool processed = false;
 
-	while(target != nullptr && !processed)
+	while (target != nullptr && !processed)
 	{
 		GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
 
 		if (handler)
 		{
-			for(int i = 0; i< handler->commands().size(); ++i)
+			for (int i = 0; i< handler->commands().size(); ++i)
 			{
 				if ( handler->commands().at(i)->canInterpret(source, target, tokens) )
 				{
@@ -138,7 +138,8 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	}
 }
 
-QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::Item *originator, const QString& textSoFar)
+QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::Item *originator,
+																					const QString& textSoFar)
 {
 	QList<CommandSuggestion*> result;
 
@@ -155,11 +156,11 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 		Visualization::Item* target = source;
 
 		// Get suggestion from item and parents
-		while(target != nullptr)
+		while (target != nullptr)
 		{
 			GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
 			if (handler)
-				for(int i = 0; i< handler->commands().size(); ++i)
+				for (int i = 0; i< handler->commands().size(); ++i)
 					result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
 
 			target = target->parent();
@@ -185,8 +186,8 @@ QString CommandExecutionEngine::extractNavigationString(QString& command)
 	QString simplified = trimmed.simplified(); // Note that this will destroy any spacing within quotations.
 	QString navigation;
 
-	if ( simplified.startsWith("~ ") || simplified.startsWith(".. ") || simplified.startsWith(". ") || simplified.startsWith("../")
-			|| simplified.startsWith("./") || simplified.startsWith("/") )
+	if ( simplified.startsWith("~ ") || simplified.startsWith(".. ") || simplified.startsWith(". ")
+		  || simplified.startsWith("../") || simplified.startsWith("./") || simplified.startsWith("/") )
 	{
 		navigation = trimmed.left(simplified.indexOf(' '));
 		command = trimmed.mid(navigation.size()).trimmed();
@@ -201,7 +202,8 @@ Visualization::Item* CommandExecutionEngine::navigate(Visualization::Item *origi
 	return originator;
 }
 
-QStringList CommandExecutionEngine::tokenize(const QString& string, const QString& quoteSymbols, const QString& escapeSymbols)
+QStringList CommandExecutionEngine::tokenize(const QString& string, const QString& quoteSymbols,
+															const QString& escapeSymbols)
 {
 	QStringList result;
 	QString str;
@@ -272,7 +274,8 @@ QStringList CommandExecutionEngine::tokenizeNonQuoted(const QString& string)
 		{
 			str += string[i];
 		}
-		else if ( (string[i].isLetter() || string[i].isDigit() || string[i] == '_') != (last.isLetter() || last.isDigit() || last == '_') )
+		else if ( (string[i].isLetter() || string[i].isDigit() || string[i] == '_')
+					 != (last.isLetter() || last.isDigit() || last == '_') )
 		{
 			if ( !str.isNull() ) result.append(str);
 			str = string[i];
@@ -290,7 +293,8 @@ QStringList CommandExecutionEngine::tokenizeNonQuoted(const QString& string)
 	return result;
 }
 
-bool CommandExecutionEngine::doQuotesMatch(const QString& string, const QString& quoteSymbols, const QString& escapeSymbols)
+bool CommandExecutionEngine::doQuotesMatch(const QString& string, const QString& quoteSymbols,
+														 const QString& escapeSymbols)
 {
 	QChar quote;
 

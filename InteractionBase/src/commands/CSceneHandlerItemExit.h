@@ -35,11 +35,15 @@ namespace Interaction {
 class INTERACTIONBASE_API CSceneHandlerItemExit : public Command
 {
 	public:
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+										  const QStringList& commandTokens);
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+												 const QStringList& commandTokens);
 
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+																const QString& textSoFar);
+		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
+													const QString& textSoFar);
 };
 
 }

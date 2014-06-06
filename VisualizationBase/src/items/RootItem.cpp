@@ -74,7 +74,7 @@ void RootItem::setItem(Item* item)
 void RootItem::updateGeometry(int availableWidth, int availableHeight)
 {
 	if (item_) Item::updateGeometry(item_, availableWidth, availableHeight);
-	else setSize(QSize(0,0));
+	else setSize(QSize(0, 0));
 }
 
 void RootItem::determineChildren()

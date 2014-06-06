@@ -76,4 +76,4 @@ class CONTRACTSLIBRARY_API ValueAtReturnVisitor : public Model::Visitor<ValueAtR
 
 inline int ValueAtReturnVisitor::numWrapped() { return numWrapped_;}
 inline int ValueAtReturnVisitor::numUnwrapped() { return numUnwrapped_;}
-} /* namespace ContractsLibrary */
+}

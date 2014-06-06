@@ -40,7 +40,7 @@ namespace FilePersistence {
 
 TEST(FilePersistence, SaveRootOnly)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 		QString testDir;
@@ -89,7 +89,7 @@ TEST(FilePersistence, SaveRootOnly)
 
 TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 		QString testDir;
@@ -149,7 +149,7 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 
 TEST(FilePersistence, SaveMultipleUnits)
 {
-	for(int i = 0; i<2; ++i)
+	for (int i = 0; i<2; ++i)
 	{
 		PersistentStore* store{};
 		QString testDir;

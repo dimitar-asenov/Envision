@@ -167,11 +167,11 @@ void Model::redo()
 
 bool Model::isOwnedByUndoStack(const Node* node, const NodeOwningCommand* excludeCommand) const
 {
-	for(int i = 0; i<commands.count(); ++i)
+	for (int i = 0; i<commands.count(); ++i)
 	{
 		auto parent = commands.command(i);
 		Q_ASSERT(parent->childCount() > 0);
-		for(int childIndex = 0; childIndex < parent->childCount(); ++childIndex)
+		for (int childIndex = 0; childIndex < parent->childCount(); ++childIndex)
 			if (isOwnedByCommand(node, static_cast<const UndoCommand*>(parent->child(childIndex)), excludeCommand))
 				return true;
 	}
@@ -181,7 +181,7 @@ bool Model::isOwnedByUndoStack(const Node* node, const NodeOwningCommand* exclud
 bool Model::isOwnedByCommand(const Node* node, const UndoCommand* cmd, const NodeOwningCommand* excludeCommand)
 {
 	if ( cmd->owned() == node && cmd!=excludeCommand) return true;
-	for(int childIndex = 0; childIndex < cmd->childCount(); ++childIndex)
+	for (int childIndex = 0; childIndex < cmd->childCount(); ++childIndex)
 		if (isOwnedByCommand(node, static_cast<const UndoCommand*>(cmd->child(childIndex)), excludeCommand))
 			return true;
 
@@ -214,7 +214,7 @@ void Model::load(PersistentStore* store, const QString& name, bool loadPartially
 
 	Core::Profiler::startOnce(name == "java", "Loading the Java library", "load.prof");
 	auto root = store->loadModel(this, name, loadPartially);
-	for(auto lib : root->usedLibraries())
+	for (auto lib : root->usedLibraries())
 		lib->loadLibraryModel(store->clone());
 	Core::Profiler::stop("Loading the Java library");
 

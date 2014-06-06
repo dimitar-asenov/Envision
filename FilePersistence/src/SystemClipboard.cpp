@@ -230,7 +230,7 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 		xml = new XMLModel();
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
 
-		for(int i = 0; i<nodes.size(); ++i)
+		for (int i = 0; i<nodes.size(); ++i)
 		{
 			xml->beginSaveChildNode(nodes[i]->typeName());
 			xml->setName(QString::number(i));

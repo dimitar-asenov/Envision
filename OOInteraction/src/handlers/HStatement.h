@@ -42,4 +42,4 @@ class OOINTERACTION_API HStatement : public Interaction::GenericHandler {
 		HStatement();
 };
 
-} /* namespace OOInteraction */
+}

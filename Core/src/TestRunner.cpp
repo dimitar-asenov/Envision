@@ -63,7 +63,7 @@ void TestRunner::enqueueSelfTests(PluginManager& pm)
 {
 	pm_ = &pm;
 
-	for(auto t : requestedTests_)
+	for (auto t : requestedTests_)
 	{
 
 		if (pm.isPluginLoaded(t->target()) ) qApp->postEvent(this, const_cast<TestEvent*>(t));

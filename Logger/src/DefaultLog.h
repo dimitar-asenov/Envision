@@ -44,7 +44,7 @@ class DefaultLog: public Log
 		~DefaultLog();
 
 		void add(QString message);
-		void add(Level l, QString message);
+		void add(Level level, QString message);
 
 		bool hasUnreadEntries();
 		Log::LogEntry getNextEntry();

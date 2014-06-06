@@ -2,7 +2,7 @@
 
 void sFunction(int arg)
 {
- switch(arg)
+ switch (arg)
  {
    std::cout << "pre amble";
    case 0:

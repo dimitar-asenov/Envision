@@ -62,7 +62,7 @@ class PersistedValue < QList<T*> >: public PersistedNode
 
 template <class T> PersistedValue< QList<T*> >::~PersistedValue()
 {
-	for( int i = 0; i< value_.size(); ++i) SAFE_DELETE(value_[i]);
+	for ( int i = 0; i< value_.size(); ++i) SAFE_DELETE(value_[i]);
 	value_.clear();
 }
 

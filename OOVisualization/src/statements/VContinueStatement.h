@@ -37,7 +37,8 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VContinueStatement
-	: public Super<VStatementItem<VContinueStatement, Visualization::DeclarativeItem<VContinueStatement>, OOModel::ContinueStatement>>
+	: public Super<VStatementItem<VContinueStatement, Visualization::DeclarativeItem<VContinueStatement>,
+		OOModel::ContinueStatement>>
 {
 	ITEM_COMMON(VContinueStatement)
 

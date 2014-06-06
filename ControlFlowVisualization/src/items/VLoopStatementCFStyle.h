@@ -40,10 +40,10 @@ class CONTROLFLOWVISUALIZATION_API VLoopStatementCFStyle : public Super<ControlF
 	public:
 		virtual ~VLoopStatementCFStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> initStep{this,"initStep"};
-		Property<Visualization::SequentialLayoutStyle> condition{this,"condition"};
-		Property<Visualization::SequentialLayoutStyle> updateStep{this,"updateStep"};
-		Property<VListCFStyle> body{this,"body"};
+		Property<Visualization::SequentialLayoutStyle> initStep{this, "initStep"};
+		Property<Visualization::SequentialLayoutStyle> condition{this, "condition"};
+		Property<Visualization::SequentialLayoutStyle> updateStep{this, "updateStep"};
+		Property<VListCFStyle> body{this, "body"};
 };
 
 }

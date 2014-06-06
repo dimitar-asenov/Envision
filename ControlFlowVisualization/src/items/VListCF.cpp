@@ -97,21 +97,21 @@ void VListCF::updateGeometry(int, int)
 		if ( hasShape() ) getShape()->setInnerSize(style()->pinLength(), style()->pinLength());
 			else setSize(style()->pinLength(), style()->pinLength());
 
-		entrance_ = QPoint(style()->pinLength()/2,0);
-		exit_ = QPoint(style()->pinLength()/2,style()->pinLength());
+		entrance_ = QPoint(style()->pinLength()/2, 0);
+		exit_ = QPoint(style()->pinLength()/2, style()->pinLength());
 		addConnector(entrance_, exit_, false);
 		return;
 	}
 
 	QList< QPoint > pos;
-	for(int i = 0; i<items_.size(); ++i) pos.append( QPoint() );
+	for (int i = 0; i<items_.size(); ++i) pos.append( QPoint() );
 
 	QPoint location;
 	QPoint topLeft;
 	QPoint bottomRight;
 
 	// Begin placing the elements in a virtual plane.
-	for(int i = 0; i < items_.size(); ++i)
+	for (int i = 0; i < items_.size(); ++i)
 	{
 		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (items_[i]);
 		if (cfi)
@@ -119,7 +119,7 @@ void VListCF::updateGeometry(int, int)
 			pos[i] = QPoint( location.x() - cfi->entrance().x(), location.y());
 			location.ry() += items_[i]->heightInParent();
 
-			if (cfi->exit().isNull()) exit_ = QPoint(0,0);
+			if (cfi->exit().isNull()) exit_ = QPoint(0, 0);
 			else
 			{
 				location.rx() += cfi->exit().x() - cfi->entrance().x();
@@ -234,7 +234,7 @@ void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 {
 	SequentialLayout* seq = nullptr;
 
-	for(int i = 0; i<singleItems.size(); ++i)
+	for (int i = 0; i<singleItems.size(); ++i)
 	{
 		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (singleItems[i]);
 		if (cfi)

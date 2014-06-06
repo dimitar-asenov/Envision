@@ -58,7 +58,6 @@ void VArrayInitializer::determineChildren()
 		matrixForm_ = false;
 
 
-
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
@@ -72,9 +71,9 @@ void VArrayInitializer::determineChildren()
 		if (matrixForm_) values_ = nullptr; // this was deleted by the clear() operation above
 		else
 		{
-			layout()->setGridSize(1,1, false);
+			layout()->setGridSize(1, 1, false);
 			values_ = new VList(layout(), node()->values(), &style()->values());
-			layout()->set(values_,0,0, true);
+			layout()->set(values_, 0, 0, true);
 		}
 	}
 
@@ -83,14 +82,14 @@ void VArrayInitializer::determineChildren()
 		useShape();
 
 		QList< QList< Model::Node*> > nodes;
-		for(auto genericRow : *node()->values())
+		for (auto genericRow : *node()->values())
 		{
 			nodes.append( QList< Model::Node*>() );
 
 			ArrayInitializer* column = dynamic_cast< ArrayInitializer* >(genericRow);
 			if (column)
 			{
-				for(auto genericColumn : *column->values())
+				for (auto genericColumn : *column->values())
 					nodes.last().append(genericColumn);
 			}
 			else nodes.last().append( genericRow );
@@ -102,7 +101,7 @@ void VArrayInitializer::determineChildren()
 	{
 		removeShape();
 
-		layout()->synchronize(values_, node()->values(), &style()->values(), 0,0);
+		layout()->synchronize(values_, node()->values(), &style()->values(), 0, 0);
 		values_->setStyle( &style()->values() );
 		values_->setSuppressDefaultRemovalHandler(true);
 	}

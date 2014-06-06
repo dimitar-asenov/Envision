@@ -70,7 +70,7 @@ void VFormalArgument::initializeForms()
 
 int VFormalArgument::determineForm()
 {
-	if(node()->parent() && node()->parent()->parent() && node()->parent()->parent()->typeId()
+	if (node()->parent() && node()->parent()->parent() && node()->parent()->parent()->typeId()
 			== OOModel::LambdaExpression::typeIdStatic()) return 1;
 	else return 0;
 }

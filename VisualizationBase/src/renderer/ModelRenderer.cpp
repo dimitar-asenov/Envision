@@ -148,9 +148,9 @@ ModelRenderer::basicStrategy(Item* parent, Model::Node* node, int purpose, int s
 		throw VisualizationException("Trying to render a node with an unregistered semantic zoom level id: " +
 											  finalSemanticZoomLevel);
 
-	for(int id : typeIds)
+	for (int id : typeIds)
 	{
-		QList<QPair<VisualizationSuitabilityScore, QPair<int,VisualizationGroup::ItemConstructor>>> list;
+		QList<QPair<VisualizationSuitabilityScore, QPair<int, VisualizationGroup::ItemConstructor>>> list;
 
 		// Try to find a match for the specific purpose and semantic zoom level
 		VisualizationGroup* group = visualizationGroupsManager_.getExactMatch(id, finalPurpose, finalSemanticZoomLevel);

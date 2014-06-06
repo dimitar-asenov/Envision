@@ -35,7 +35,7 @@ class VISUALIZATIONBASE_API IconStyle : public Super<ItemStyle>
 {
 	public:
 		virtual ~IconStyle() override;
-		Property<QPen> outline{this,"outline"};
+		Property<QPen> outline{this, "outline"};
 
 };
 

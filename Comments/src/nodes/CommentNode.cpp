@@ -41,14 +41,14 @@ CommentNode::CommentNode(const QString& text)
 : Super{nullptr, CommentNode::getMetaData()}
 {
 	QStringList linesList = text.split(QRegExp("\\r?\\n"));
-	for(auto line : linesList)
+	for (auto line : linesList)
 		lines()->append(new Model::Text(line));
 }
 
 CommentDiagram* CommentNode::diagram(const QString& name)
 {
-	for(auto diagram : *diagrams())
-		if(diagram->name() == name) return diagram;
+	for (auto diagram : *diagrams())
+		if (diagram->name() == name) return diagram;
 
 	return nullptr;
 }
@@ -56,7 +56,7 @@ CommentDiagram* CommentNode::diagram(const QString& name)
 void CommentNode::synchronizeDiagramsToText()
 {
 	QStringList diagramNamesFromText;
-	for(auto lineNode : *lines())
+	for (auto lineNode : *lines())
 	{
 		auto line = lineNode->get();
 		if (line.startsWith("[diagram#") && line.right(1) == "]" && line.size() > 9+1)
@@ -66,7 +66,7 @@ void CommentNode::synchronizeDiagramsToText()
 	diagramNamesFromText.removeDuplicates();
 
 	// Remove old diagrams
-	for(int i = diagrams()->size() - 1; i>=0; --i)
+	for (int i = diagrams()->size() - 1; i>=0; --i)
 	{
 		if (diagramNamesFromText.contains(diagrams()->at(i)->name()))
 			diagramNamesFromText.removeOne(diagrams()->at(i)->name()); // There should be only one, we removed duplicates
@@ -74,7 +74,7 @@ void CommentNode::synchronizeDiagramsToText()
 	}
 
 	// Add new diagrams
-	for(auto newDiagram : diagramNamesFromText)
+	for (auto newDiagram : diagramNamesFromText)
 		diagrams()->append(new CommentDiagram(nullptr, newDiagram));
 }
 

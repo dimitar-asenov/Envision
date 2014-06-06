@@ -39,9 +39,9 @@ class CONTROLFLOWVISUALIZATION_API VIfStatementCFStyle : public Super<ControlFlo
 	public:
 		virtual ~VIfStatementCFStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> condition{this,"condition"};
-		Property<VListCFStyle> thenBranch{this,"thenBranch"};
-		Property<VListCFStyle> elseBranch{this,"elseBranch"};
+		Property<Visualization::SequentialLayoutStyle> condition{this, "condition"};
+		Property<VListCFStyle> thenBranch{this, "thenBranch"};
+		Property<VListCFStyle> elseBranch{this, "elseBranch"};
 };
 
 }

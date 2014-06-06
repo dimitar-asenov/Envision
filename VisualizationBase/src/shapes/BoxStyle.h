@@ -36,15 +36,15 @@ namespace Visualization {
 class VISUALIZATIONBASE_API BoxStyle : public Super<ShapeStyle>
 {
 	public:
-		enum class CornerType : int {RightAngle, Round, Cut} ;
+		enum class CornerType : int {RightAngle, Round, Cut};
 
 		virtual ~BoxStyle() override;
 
 		void paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const;
 
-		Property<QBrush> background{this,"backgroundBrush"};
-		Property<CornerType> corner{this,"cornerType"};
-		Property<int> cornerRadius{this,"cornerRadius"};
+		Property<QBrush> background{this, "backgroundBrush"};
+		Property<CornerType> corner{this, "cornerType"};
+		Property<int> cornerRadius{this, "cornerRadius"};
 
 	protected:
 		mutable Mipmap topLeftCorner_;

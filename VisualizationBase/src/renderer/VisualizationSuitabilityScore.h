@@ -39,4 +39,4 @@ class VISUALIZATIONBASE_API VisualizationSuitabilityScore {
 
 bool operator< (const VisualizationSuitabilityScore& left, const VisualizationSuitabilityScore& right);
 
-} /* namespace Visualization */
+}

@@ -39,10 +39,10 @@ class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Super<Visualization::It
 	public:
 		virtual ~InsertMethodVisStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this,"layout"};
-		Property<Visualization::StaticStyle> icon{this,"icon"};
-		Property<Visualization::StaticStyle> separator{this,"separator"};
-		Property<Visualization::VListStyle> arguments{this,"arguments"};
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::StaticStyle> separator{this, "separator"};
+		Property<Visualization::VListStyle> arguments{this, "arguments"};
 };
 
 }

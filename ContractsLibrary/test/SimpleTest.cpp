@@ -113,8 +113,6 @@ Module* createContractsLibrary()
 	// Plus it is a nice example of what code was substituted by just using annotations within the code.
 
 
-
-
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Contract class?
 //	auto g = new VisualizationGroup();
 //	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
@@ -191,7 +189,7 @@ Module* createContractsLibrary()
 //	CommandDescriptor::registerCommand(new CreateMethodCall("requires", "Contract.Requires"));
 //	CommandDescriptor::registerCommand(new CreateMethodCall("ensures", "Contract.Ensures"));
 //	CommandDescriptor::registerCommand(new CreateMethodCall("old", "Contract.OldValue"));
-//	CommandDescriptor::registerCommand(new CreateMethodCall("result", "Contract.Result",1));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("result", "Contract.Result", 1));
 
 	// Customizations
 	if (!DISABLE_ALL_CUSTOMIZATIONS)
@@ -226,15 +224,15 @@ Module* createContractsLibrary()
 		}
 
 
-		if(!DISABLE_VALUE_AT_RETURN_VISITOR) ValueAtReturnVisitor::setMethods(ens, out);
-		if(!DISABLE_METHOD_ADDONS)
+		if (!DISABLE_VALUE_AT_RETURN_VISITOR) ValueAtReturnVisitor::setMethods(ens, out);
+		if (!DISABLE_METHOD_ADDONS)
 		{
 			// Register method add-ons
 			VMethod::addAddOn( new InterfaceContractsVMethodAddOn(contractClass) );
 			VMethod::addAddOn( new SignatureContractsVMethodAddOn(contractClass) );
 		}
 
-		if(!DISABLE_FILTERS)
+		if (!DISABLE_FILTERS)
 		{
 			// Install filters
 			OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::showOnlyContractsFilter );
