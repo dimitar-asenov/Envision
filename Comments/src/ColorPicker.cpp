@@ -119,14 +119,19 @@ void ColorPicker::setselectedColor(QString aColor)
 	QPixmap pixmap(24, 24);
 	pixmap.fill(QColor(aColor));
 	QPainter* aPainter = new QPainter(&pixmap);
-	aPainter->setPen(Qt::black);
+	QColor paintColor = Qt::white;
+	if (QColor(aColor).black() < 127)
+		paintColor = Qt::black;
+	else
+		paintColor = Qt::white;
+	aPainter->setPen(paintColor);
 	QFont font = aPainter->font();
 	font.setPointSize(16);
 	aPainter->setFont(font);
 	switch (type_)
 	{
 		case background:
-			aPainter->setBrush(QBrush(Qt::black));
+			aPainter->setBrush(QBrush(paintColor));
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case shape:

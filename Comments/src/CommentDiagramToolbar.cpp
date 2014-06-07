@@ -35,10 +35,12 @@ namespace Comments{
 
 CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 {
+	this->setIconSize(QSize(96, 24));
 	this->setWindowTitle("Diagram Editing Toolbar");
 
 	bSelection_ = new QToolButton;
 	bSelection_->setIcon(QIcon(":/icons/selection.png"));
+	bSelection_->setFixedSize(QSize(36, 36));
 	bSelection_->setCheckable(true);
 	this->addWidget(bSelection_);
 	bSelection_->setChecked(true);
@@ -48,6 +50,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	bSelectShape_ = new QToolButton;
 	bSelectShape_->setIcon(QIcon(":/icons/shapes.png"));
+	bSelectShape_->setFixedSize(QSize(42, 36));
 	this->addWidget(bSelectShape_);
 
 	QMenu* menu = new QMenu();
@@ -62,27 +65,25 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	colorPickerBackground_ = new ColorPicker;
 	colorPickerBackground_->setColorPickerType(ColorPicker::background);
+	colorPickerBackground_->setFixedSize(QSize(42, 36));
 	colorPickerBackground_->setEnabled(false);
 	this->addWidget(colorPickerBackground_);
 	colorPickerBorder_ = new ColorPicker;
 	colorPickerBorder_->setColorPickerType(ColorPicker::shape);
+	colorPickerBorder_->setFixedSize(QSize(42, 36));
 	colorPickerBorder_->setEnabled(false);
 	this->addWidget(colorPickerBorder_);
 	colorPickerText_ = new ColorPicker;
 	colorPickerText_->setColorPickerType(ColorPicker::text);
+	colorPickerText_->setFixedSize(QSize(42, 36));
 	colorPickerText_->setEnabled(false);
 	this->addWidget(colorPickerText_);
 
 	this->addSeparator();
 
-	cbOutlineType_ = new QComboBox;
-	cbOutlineType_->addItem("Solid Line");
-	cbOutlineType_->addItem("Dash Line");
-	cbOutlineType_->addItem("Dot Line");
-	cbOutlineType_->addItem("Dash-Dot Line");
-	cbOutlineType_->addItem("Dash-Dot-Dot Line");
-	cbOutlineType_->setEnabled(false);
-	this->addWidget(cbOutlineType_);
+	OutlineTypePicker_ = new OutlineTypePicker;
+	OutlineTypePicker_->setEnabled(false);
+	this->addWidget(OutlineTypePicker_);
 
 	cbOutlineSize_ = new QComboBox;
 	for (int i = 1; i <= 10; i++)
@@ -90,12 +91,14 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 		cbOutlineSize_->addItem(QString::number(i));
 	}
 	cbOutlineSize_->setEnabled(false);
+	cbOutlineSize_->setFixedWidth(48);
 	this->addWidget(cbOutlineSize_);
 
 	this->addSeparator();
 
 	bConnections_ = new QToolButton;
 	bConnections_->setIcon(QIcon(":/icons/connection.png"));
+	bConnections_->setFixedSize(QSize(36, 36));
 	bConnections_->setCheckable(true);
 	this->addWidget(bConnections_);
 
@@ -111,7 +114,7 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	connect(colorPickerBackground_, SIGNAL(colorChanged(QString)), this, SLOT(applyBackgroundColor(QString)));
 	connect(colorPickerBorder_, SIGNAL(colorChanged(QString)), this, SLOT(applyBorderColor(QString)));
 	connect(colorPickerText_, SIGNAL(colorChanged(QString)), this, SLOT(applyTextColor(QString)));
-	connect(cbOutlineType_, SIGNAL(currentIndexChanged(int)), this, SLOT(applyOutlineType(int)));
+	connect(OutlineTypePicker_, SIGNAL(outlineTypeChanged(int)), this, SLOT(applyOutlineType(int)));
 	connect(cbOutlineSize_, SIGNAL(currentIndexChanged(int)), this, SLOT(applyOutlineSize(int)));
 	connect(bConnections_, SIGNAL(toggled(bool)), this, SLOT(showConnectionPoints(bool)));
 	connect(aTimer_, SIGNAL(timeout()), this, SLOT(handleTimerEvent()));
@@ -137,8 +140,8 @@ void CommentDiagramToolbar::setCurrentShape(Visualization::Item *currentShape)
 	colorPickerBackground_->setEnabled(true);
 	colorPickerBorder_->setEnabled(true);
 	colorPickerText_->setEnabled(true);
-	cbOutlineType_->setCurrentIndex(shape->node()->outlineType()-1);
-	cbOutlineType_->setEnabled(true);
+	OutlineTypePicker_->setselectedOutlineType(shape->node()->outlineType());
+	OutlineTypePicker_->setEnabled(true);
 	cbOutlineSize_->setCurrentIndex(shape->node()->outlineSize()-1);
 	cbOutlineSize_->setEnabled(true);
 }
@@ -149,10 +152,10 @@ void CommentDiagramToolbar::setCurrentConnector(Visualization::Item *currentConn
 	currentItem_ = currentConnector;
 	auto connector = DCast<VCommentDiagramConnector>(currentItem_);
 
-	cbOutlineType_->setCurrentIndex(connector->node()->outlineType()-1);
+	OutlineTypePicker_->setselectedOutlineType(connector->node()->outlineType());
 	cbOutlineSize_->setCurrentIndex(connector->node()->outlineSize()-1);
 
-	cbOutlineType_->setEnabled(true);
+	OutlineTypePicker_->setEnabled(true);
 	cbOutlineSize_->setEnabled(true);
 }
 
@@ -163,7 +166,7 @@ void CommentDiagramToolbar::clearCurrentItem()
 	colorPickerBackground_->setEnabled(false);
 	colorPickerBorder_->setEnabled(false);
 	colorPickerText_->setEnabled(false);
-	cbOutlineType_->setEnabled(false);
+	OutlineTypePicker_->setEnabled(false);
 	cbOutlineSize_->setEnabled(false);
 }
 
@@ -220,14 +223,14 @@ void CommentDiagramToolbar::applyOutlineType(int i)
 	{
 		auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
 		shape->node()->model()->beginModification(shape->node(), "Setting OutlineType");
-		shape->node()->setOutlineType(static_cast<Qt::PenStyle>(i+1));
+		shape->node()->setOutlineType(static_cast<Qt::PenStyle>(i));
 		shape->node()->model()->endModification();
 	}
 	else
 	{
 		auto connector = dynamic_cast<VCommentDiagramConnector*>(currentItem_);
 		connector->node()->model()->beginModification(connector->node(), "Setting OutlineType");
-		connector->node()->setOutlineType(static_cast<Qt::PenStyle>(i+1));
+		connector->node()->setOutlineType(static_cast<Qt::PenStyle>(i));
 		connector->node()->model()->endModification();
 	}
 }

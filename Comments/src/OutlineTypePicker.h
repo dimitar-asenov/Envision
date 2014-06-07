@@ -26,66 +26,25 @@
 
 #pragma once
 
-#include "ColorPicker.h"
-#include "OutlineTypePicker.h"
-
-#include "nodes/CommentDiagram.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
+#include "comments_api.h"
 
 namespace Comments {
 
-class COMMENTS_API CommentDiagramToolbar : public QToolBar
+class COMMENTS_API OutlineTypePicker : public QToolButton
 {
 		Q_OBJECT
 	public:
-		CommentDiagramToolbar(QWidget *parent = 0);
-		void setDiagram(VCommentDiagram* diagram);
-		void setCurrentShape(Visualization::Item *currentShape);
-		void setCurrentConnector(Visualization::Item *currentConnector);
-		void clearCurrentItem();
-		void setSelectionMode(bool sel);
-		bool selectionMode();
-		bool connectionMode();
-		void show();
-
-		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+		OutlineTypePicker(QWidget *parent = 0);
+		void setselectedOutlineType(int aType);
 
 	public slots:
-		void setSelection(bool sel);
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void applyOutlineType(int i);
-		void applyOutlineSize(int i);
-		void showConnectionPoints(bool show);
-		void handleTimerEvent();
+		void handleOutlineTypePicked(int aType);
+
+	signals:
+		void outlineTypeChanged(int aType);
 
 	private:
-		QToolButton* bSelection_{};
-		QToolButton* bSelectShape_{};
-		QToolButton* bConnections_{};
-
-		ColorPicker* colorPickerBackground_{};
-		ColorPicker* colorPickerBorder_{};
-		ColorPicker* colorPickerText_{};
-
-		OutlineTypePicker* OutlineTypePicker_{};
-		QComboBox* cbOutlineSize_{};
-
-		QButtonGroup* group_{};
-
-		bool selection_{};
-		bool connection_{};
-		int colorsPerRow_{};
-
-		VCommentDiagram* diagram_{};
-		Visualization::Item* currentItem_{};
-
-		QTimer* aTimer_{};
+		QList<QPixmap> pixList_{};
 };
 
 } /* namespace Comments */

@@ -33,7 +33,8 @@ HEADERS += src/handlers/HCommentImage.h \
     src/comments.h \
     src/CommentDiagramToolbar.h \
     src/items/VCommentDiagramStyle.h \
-    src/ColorPicker.h
+    src/ColorPicker.h \
+    src/OutlineTypePicker.h
 SOURCES += src/handlers/HCommentImage.cpp \
     src/items/VCommentStyle.cpp \
     src/commands/CShapeSetProperty.cpp \
@@ -58,7 +59,8 @@ SOURCES += src/handlers/HCommentImage.cpp \
     test/SimpleTest.cpp \
     src/CommentDiagramToolbar.cpp \
     src/items/VCommentDiagramStyle.cpp \
-    src/ColorPicker.cpp
+    src/ColorPicker.cpp \
+    src/OutlineTypePicker.cpp
 
 RESOURCES += \
     res.qrc
