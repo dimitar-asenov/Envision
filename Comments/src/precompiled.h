@@ -38,6 +38,7 @@
 
 #include <QtCore/QSignalMapper>
 #include <QtCore/QTimer>
+#include <QtCore/qmath.h>
 #include <QtGui/QToolBar>
 #include <QtGui/QToolButton>
 #include <QtGui/QButtonGroup>
@@ -46,6 +47,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QMenu>
 #include <QtGui/QWidgetAction>
+#include <QtGui/QCheckBox>
 
 #if defined __cplusplus
 // Add C++ includes here

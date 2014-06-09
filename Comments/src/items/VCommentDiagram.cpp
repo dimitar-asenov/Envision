@@ -109,7 +109,7 @@ void VCommentDiagram::updateGeometry(int, int)
 		auto startPoint = startShape->pos() + startShape->node()->connectorPoint(nConnector->startPoint());
 		auto endPoint = endShape->pos() + endShape->node()->connectorPoint(nConnector->endPoint());
 
-		QPoint pos(std::min(startPoint.x(), endPoint.x()), std::min(startPoint.y(), endPoint.y()));
+		QPoint pos((std::min(startPoint.x(), endPoint.x()))-10, (std::min(startPoint.y(), endPoint.y()))-10);
 		vConnector->setPos(pos);
 	}
 }

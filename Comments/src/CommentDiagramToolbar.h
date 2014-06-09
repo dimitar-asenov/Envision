@@ -63,6 +63,8 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		void applyOutlineSize(int i);
 		void showConnectionPoints(bool show);
 		void handleTimerEvent();
+		void applyStartArrow();
+		void applyEndArrow();
 
 	private:
 		QToolButton* bSelection_{};
@@ -75,6 +77,9 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 
 		OutlineTypePicker* OutlineTypePicker_{};
 		QComboBox* cbOutlineSize_{};
+
+		QCheckBox* boxStartArrow_{};
+		QCheckBox* boxEndArrow_{};
 
 		QButtonGroup* group_{};
 

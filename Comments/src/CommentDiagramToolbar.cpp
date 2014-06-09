@@ -96,6 +96,16 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 
 	this->addSeparator();
 
+	boxStartArrow_ = new QCheckBox;
+	boxStartArrow_->setText("S");
+	boxStartArrow_->setEnabled(false);
+	this->addWidget(boxStartArrow_);
+
+	boxEndArrow_ = new QCheckBox;
+	boxEndArrow_->setText("E");
+	boxEndArrow_->setEnabled(false);
+	this->addWidget(boxEndArrow_);
+
 	bConnections_ = new QToolButton;
 	bConnections_->setIcon(QIcon(":/icons/connection.png"));
 	bConnections_->setFixedSize(QSize(36, 36));
@@ -118,6 +128,8 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	connect(cbOutlineSize_, SIGNAL(currentIndexChanged(int)), this, SLOT(applyOutlineSize(int)));
 	connect(bConnections_, SIGNAL(toggled(bool)), this, SLOT(showConnectionPoints(bool)));
 	connect(aTimer_, SIGNAL(timeout()), this, SLOT(handleTimerEvent()));
+	connect(boxStartArrow_, SIGNAL(stateChanged(int)), this, SLOT(applyStartArrow()));
+	connect(boxEndArrow_, SIGNAL(stateChanged(int)), this, SLOT(applyEndArrow()));
 }
 
 void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
@@ -155,8 +167,14 @@ void CommentDiagramToolbar::setCurrentConnector(Visualization::Item *currentConn
 	OutlineTypePicker_->setselectedOutlineType(connector->node()->outlineType());
 	cbOutlineSize_->setCurrentIndex(connector->node()->outlineSize()-1);
 
+	boxStartArrow_->setChecked(connector->node()->startArrow());
+	boxEndArrow_->setChecked(connector->node()->endArrow());
+
 	OutlineTypePicker_->setEnabled(true);
 	cbOutlineSize_->setEnabled(true);
+
+	boxStartArrow_->setEnabled(true);
+	boxEndArrow_->setEnabled(true);
 }
 
 void CommentDiagramToolbar::clearCurrentItem()
@@ -168,6 +186,8 @@ void CommentDiagramToolbar::clearCurrentItem()
 	colorPickerText_->setEnabled(false);
 	OutlineTypePicker_->setEnabled(false);
 	cbOutlineSize_->setEnabled(false);
+	boxStartArrow_->setEnabled(false);
+	boxEndArrow_->setEnabled(false);
 }
 
 void CommentDiagramToolbar::setSelection(bool sel)
@@ -288,6 +308,22 @@ void CommentDiagramToolbar::show()
 {
 	QToolBar::show();
 	aTimer_->start();
+}
+
+void CommentDiagramToolbar::applyStartArrow()
+{
+	auto connector = dynamic_cast<VCommentDiagramConnector*>(currentItem_);
+	connector->node()->model()->beginModification(connector->node(), "Setting startArrow");
+	connector->node()->setStartArrow(boxStartArrow_->isChecked());
+	connector->node()->model()->endModification();
+}
+
+void CommentDiagramToolbar::applyEndArrow()
+{
+	auto connector = dynamic_cast<VCommentDiagramConnector*>(currentItem_);
+	connector->node()->model()->beginModification(connector->node(), "Setting endArrow");
+	connector->node()->setEndArrow(boxEndArrow_->isChecked());
+	connector->node()->model()->endModification();
 }
 
 } /* namespace Comments */

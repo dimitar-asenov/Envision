@@ -55,6 +55,8 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 {
 	outlineType_ = node()->outlineType();
 	outlineSize_ = node()->outlineSize();
+	startArrow_ = node()->startArrow();
+	endArrow_ = node()->endArrow();
 
 	// The connectors always connect two shapes which clearly encompass the connectors, therefore no need to compute
 	// it here again.
@@ -63,24 +65,57 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 
 	startPoint_ = startShape->node()->pos() + startShape->node()->connectorPoint(node()->startPoint());
 	endPoint_ = endShape->node()->pos() + endShape->node()->connectorPoint(node()->endPoint());
-	auto origin = QPoint(std::min(startPoint_.x(), endPoint_.x()), std::min(startPoint_.y(), endPoint_.y()));
+	auto origin = QPoint((std::min(startPoint_.x(), endPoint_.x()))-10, (std::min(startPoint_.y(), endPoint_.y()))-10);
 	startPoint_ -= origin;
 	endPoint_ -= origin;
 
 	// make sure we get at least one pixel to draw inside!
-	int dx = std::max(outlineSize_, std::abs(startPoint_.x() - endPoint_.x()));
-	int dy = std::max(outlineSize_, std::abs(startPoint_.y() - endPoint_.y()));
-	setSize(dx, dy);
+	int dx = std::abs(startPoint_.x() - endPoint_.x());
+	int dy = std::abs(startPoint_.y() - endPoint_.y());
+	setSize(dx+20, dy+20);
 }
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
+	double m = -QLineF(startPoint_, endPoint_).angle()*M_PI/180;
+
+	QPolygonF aH;
+	aH << QPointF(0, 0) << QPointF(25, -10) << QPointF(25, 10);
+	QPolygonF arrow1, arrow2;
+	arrow1 << aH[0]
+		<< QPointF(qCos(m)*aH[1].x()-qSin(m)*aH[1].y(), qSin(m)*aH[1].x()+qCos(m)*aH[1].y())
+		<< QPointF(qCos(m)*aH[2].x()-qSin(m)*aH[2].y(), qSin(m)*aH[2].x()+qCos(m)*aH[2].y());
+	arrow2 << aH[0]
+		<< QPointF(qCos(m+M_PI)*aH[1].x()-qSin(m+M_PI)*aH[1].y(), qSin(m+M_PI)*aH[1].x()+qCos(m+M_PI)*aH[1].y())
+		<< QPointF(qCos(m+M_PI)*aH[2].x()-qSin(m+M_PI)*aH[2].y(), qSin(m+M_PI)*aH[2].x()+qCos(m+M_PI)*aH[2].y());
+
+	arrow1.translate(startPoint_);
+	arrow2.translate(endPoint_);
+
+	QPointF newStart = startPoint_;
+	QPointF newEnd = endPoint_;
+	if (startArrow_)
+		newStart = QPointF((arrow1[1].x() + arrow1[2].x())/2, (arrow1[1].y() + arrow1[2].y())/2);
+	if (endArrow_)
+		newEnd = QPointF((arrow2[1].x() + arrow2[2].x())/2, (arrow2[1].y() + arrow2[2].y())/2);
+
 	QPen pen;
-	pen.setColor("black");
+	pen.setColor(Qt::black);
 	pen.setStyle(outlineType_);
 	pen.setWidth(outlineSize_);
 	painter->setPen(pen);
-	painter->drawLine(startPoint_, endPoint_);
+
+	painter->drawLine(newStart, newEnd);
+
+	pen.setWidth(1);
+	pen.setStyle(Qt::SolidLine);
+	painter->setPen(pen);
+	painter->setBrush(QBrush(Qt::black));
+
+	if (startArrow_)
+		painter->drawPolygon(arrow1);
+	if (endArrow_)
+		painter->drawPolygon(arrow2);
 }
 
 } /* namespace Comments */
