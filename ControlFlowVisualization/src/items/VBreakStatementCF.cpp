@@ -49,7 +49,7 @@ VBreakStatementCF::~VBreakStatementCF()
 
 void VBreakStatementCF::determineChildren()
 {
-	synchronizeItem<VBreakStatement>(vis_, node(), nullptr);
+	synchronizeItem<VBreakStatement, VBreakStatement>(vis_, node(), nullptr);
 }
 
 void VBreakStatementCF::updateGeometry(int, int)

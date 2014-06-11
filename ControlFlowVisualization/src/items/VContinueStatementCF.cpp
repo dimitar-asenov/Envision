@@ -49,7 +49,7 @@ VContinueStatementCF::~VContinueStatementCF()
 
 void VContinueStatementCF::determineChildren()
 {
-	synchronizeItem<VContinueStatement>(vis_, node(), nullptr);
+	synchronizeItem<VContinueStatement, VContinueStatement>(vis_, node(), nullptr);
 }
 
 void VContinueStatementCF::updateGeometry(int, int)

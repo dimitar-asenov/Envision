@@ -394,21 +394,6 @@ void Item::removeFromScene()
 	setParentItem(nullptr);
 }
 
-void Item::synchronizeItem(Item*& item, Model::Node* node)
-{
-	if (item && item->node() != node )
-	{
-		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded(StandardUpdate);
-	}
-
-	if (!item && node)
-	{
-		item = renderer()->render(this, node);
-		setUpdateNeeded(StandardUpdate);
-	}
-}
-
 ModelRenderer* Item::renderer()
 {
 	if ( (static_cast<Scene*>(scene()))->renderer() ) return (static_cast<Scene*>(scene()))->renderer();

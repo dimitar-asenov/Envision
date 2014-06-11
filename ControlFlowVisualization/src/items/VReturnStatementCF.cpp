@@ -49,7 +49,7 @@ VReturnStatementCF::~VReturnStatementCF()
 
 void VReturnStatementCF::determineChildren()
 {
-	synchronizeItem<VReturnStatement>(vis_, node(), nullptr);
+	synchronizeItem<VReturnStatement, VReturnStatement>(vis_, node(), nullptr);
 }
 
 void VReturnStatementCF::updateGeometry(int, int)
