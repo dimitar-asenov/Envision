@@ -51,8 +51,11 @@ class VISUALIZATIONBASE_API ModelRenderer
 
 		/**
 		 * (Re)renders an item in the context of a parent item.
+		 *
+		 * Returns true is the item was destroyed or rerendered. If nothing happened to the item, the return value is
+		 * false.
 		 */
-		void render(Item*& item, Item* parent, Model::Node* node);
+		bool sync(Item*& item, Item* parent, Model::Node* node);
 
 		QPair<int, VisualizationGroup::ItemConstructor>
 		bestVisualizationForContext(Item* parent, Model::Node*, int purpose = -1, int semanticZoomLevel = -1);

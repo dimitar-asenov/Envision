@@ -232,7 +232,10 @@ void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<M
 	for (int i = 0; i < nodes.size(); ++i)
 	{
 		if (i >= itemList.size()) itemList.append(item->renderer()->render(item, nodes[i]));	// This node is new
-		else if (itemList[i]->node() == nodes[i])	continue;	// This node is already there
+		else if (itemList[i]->node() == nodes[i])	// This node is already there
+		{
+			item->renderer()->sync(itemList[i], item, nodes[i]);
+		}
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it
@@ -243,6 +246,7 @@ void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<M
 				{
 					// We found this node, swap the visualizations
 					swap(item, i, k);
+					item->renderer()->sync(itemList[i], item, nodes[i]);
 					found = true;
 					break;
 				}

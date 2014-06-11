@@ -164,7 +164,10 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 				setChildNodeSemanticZoomLevel(nodes[i], FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
 			insert( renderer->render(this, nodes[i] ));	// This node is new
 		}
-		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
+		else if ( items[i]->node() == nodes[i] ) // This node is already there
+		{
+			renderer->sync(items[i], this, nodes[i]);
+		}
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it
@@ -175,6 +178,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 				{
 					// We found this node, swap the visualizations
 					swap(i, k);
+					renderer->sync(items[i], this, nodes[i]);
 					found = true;
 					break;
 				}
@@ -393,7 +397,7 @@ bool PositionLayout::isSensitiveToScale() const
 void PositionLayout::determineChildren()
 {
 	for (auto & item : items)
-		renderer()->render(item, this, item->node());
+		renderer()->sync(item, this, item->node());
 
 	Super::determineChildren();
 }

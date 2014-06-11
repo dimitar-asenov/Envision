@@ -114,7 +114,10 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 	for (int i = 0; i < nodes.size(); ++i)
 	{
 		if (i >= items.size() ) append( renderer->render(this, nodes[i]));	// This node is new
-		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
+		else if ( items[i]->node() == nodes[i] )// This node is already there
+		{
+			renderer->sync(items[i], this, nodes[i]);
+		}
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it
@@ -125,6 +128,7 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 				{
 					// We found this node, swap the visualizations
 					swap(i, k);
+					renderer->sync(items[i], this, nodes[i]);
 					found = true;
 					break;
 				}
