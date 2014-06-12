@@ -213,7 +213,7 @@
 			<symbol>add sub declaration</symbol>
 		</selectedTip>
 	</declarations>
-	<fieldContainer prototypes="layout/SequentialLayout/default">
+	<fieldContainer prototypes="items/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<cornerRadius>5</cornerRadius>
@@ -227,8 +227,6 @@
 				</color>
 			</backgroundBrush>
 		</shape>
-		<direction>2</direction>
-		<alignment>1</alignment>
 	</fieldContainer>
 	<publicFieldArea prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>

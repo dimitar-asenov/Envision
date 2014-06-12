@@ -35,7 +35,7 @@
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
-#include "VisualizationBase/src/items/NodeWrapper.h"
+#include "VisualizationBase/src/items/EmptyItem.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -67,9 +67,6 @@ void VClassSzPublic::determineChildren()
 
 	// call determineChildren of super class
 	Super::determineChildren();
-
-	// make field background behave as a special background element
-	if (fieldBackground_) fieldBackground_->setStretchable(true);
 }
 
 void VClassSzPublic::initializeForms()
@@ -115,9 +112,7 @@ void VClassSzPublic::initializeForms()
 								->setListOfNodes([](Item* i){return (static_cast<VClassSzPublic*>(i))->publicFields_;}));
 
 	auto shapeElement = new ShapeFormElement();
-	auto backgroundElement = item<NodeWrapper>(&I::fieldBackground_, [](I*){return nullptr;},
-																	[](I* v){return &v->style()->fieldContainer();})
-										->setCreateIfNoNode(true);
+	auto backgroundElement = item<EmptyItem>(&I::fieldBackground_, &StyleType::fieldContainer);
 
 	// Form 0: with field nodes
 	addForm((new AnchorLayoutFormElement())

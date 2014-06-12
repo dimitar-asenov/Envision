@@ -34,7 +34,7 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
-#include "VisualizationBase/src/items/NodeWrapper.h"
+#include "VisualizationBase/src/items/EmptyItem.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -61,9 +61,6 @@ void VClass::determineChildren()
 	// call determineChildren of super class
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
-
-	// make field background behave as a special background element
-	if (fieldBackground_) fieldBackground_->setStretchable(true);
 }
 
 void VClass::initializeForms()
@@ -130,9 +127,7 @@ void VClass::initializeForms()
 								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->defaultFields_;}));
 
 	auto shapeElement = new ShapeFormElement();
-	auto backgroundElement = item<NodeWrapper>(&I::fieldBackground_, [](I*){return nullptr;},
-																	[](I* v){return &v->style()->fieldContainer();})
-										->setCreateIfNoNode(true);
+	auto backgroundElement = item<EmptyItem>(&I::fieldBackground_, &StyleType::fieldContainer);
 
 	// Form 0: with field nodes
 	addForm((new AnchorLayoutFormElement())
