@@ -54,17 +54,11 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 		virtual NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>* clone() const override;
 		virtual void synchronizeWithItem(Item* item) override;
 
-		/**
-		 * Sets if a wrapped item is created, even if there is no node to \a create. It is false by default.
-		 */
-		NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>* setCreateIfNoNode(bool create);
-
 	private:
 
 		// Do not forget to update the copy constructor if adding new members.
 		GetNodeTypeFunction nodeGetter_;
 		GetStyleTypeFunction styleGetter_;
-		bool createIfNoNode_{false};
 };
 
 template <class ParentType, class VisualizationType>
@@ -88,29 +82,7 @@ void NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>:
 	auto node = nodeGetter_(static_cast<ParentType*>(item));
 	auto style = styleGetter_(static_cast<ParentType*>(item));
 
-	if (childItem && childItem->node() != node )
-	{
-		SAFE_DELETE_ITEM(childItem);
-		item->setUpdateNeeded(Item::StandardUpdate);
-	}
-
-	if (!childItem && (node || createIfNoNode_))
-	{
-		if (style) childItem = new VisualizationType(item, node, style);
-		else childItem = new VisualizationType(item, node);
-
-		item->setUpdateNeeded(Item::StandardUpdate);
-	}
-
-	if (childItem) childItem->setStyle(style);
-}
-
-template <class ParentType, class VisualizationType>
-inline NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>*
-NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::setCreateIfNoNode(bool create)
-{
-	createIfNoNode_ = create;
-	return this;
+	item->synchronizeItem(childItem, node, style);
 }
 
 } /* namespace Visualization */

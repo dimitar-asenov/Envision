@@ -91,18 +91,7 @@ void VisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchro
 	auto style = style_(static_cast<ParentType*>(item));
 	auto enabled = !enabled_ || enabled_(static_cast<ParentType*>(item));
 
-	if (childItem && !enabled)
-	{
-		SAFE_DELETE_ITEM(childItem);
-		item->setUpdateNeeded(Item::StandardUpdate);
-	}
-
-	if (!childItem && enabled)
-	{
-		childItem = new VisualizationType(item, style);
-		item->setUpdateNeeded(Item::StandardUpdate);
-	}
-	else if (enabled) childItem->setStyle(style);
+	item->synchronizeItem(childItem, enabled, style);
 }
 
 } /* namespace Visualization */

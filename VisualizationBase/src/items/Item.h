@@ -443,6 +443,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	private:
 		friend class Shape;
 		friend class InteractionHandler;
+		template <class ParentType> friend class NodeItemWrapperFormElement;
+		template <class ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
+		template <class ParentType, class VisualizationType> friend class VisualizationItemWrapperFormElement;
+
 		QRectF boundingRect_;
 		const ItemStyle* style_;
 		Shape* shape_;
@@ -563,6 +567,8 @@ bool Item::synchronizeItem(FieldType*& item, bool present, const typename Visual
 		setUpdateNeeded(StandardUpdate);
 	}
 
+	if (item && !changed) item->setStyle(style);
+
 	return changed;
 }
 
@@ -587,6 +593,8 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 
 		setUpdateNeeded(StandardUpdate);
 	}
+
+	if (item && !changed) item->setStyle(style);
 
 	return changed;
 }
