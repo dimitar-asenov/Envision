@@ -155,18 +155,29 @@ void SequentialLayout::synchronizeLast(Item*& item, Model::Node* node)
 
 void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int position)
 {
-	if (item && item->node() != node )
+	Item* oldItem = item;
+	Item::synchronizeItem(item, node);
+	placeSynchronized(oldItem, item, position);
+}
+
+void SequentialLayout::placeSynchronized(Item* oldItem, Item* newItem, int pos)
+{
+	if (oldItem && oldItem == newItem)
 	{
-		removeAll(item);
-		item = nullptr;
+		// There is no provision to move an item at the moment.
+		Q_ASSERT(items.at(pos >= length() ? length() - 1 : pos) == newItem);
+		return;
 	}
 
-	if (!item && node)
+	// Remove the old item
+	if (oldItem && oldItem != newItem)
 	{
-		item = renderer()->render(this, node);
-		insert(item, ((position > length()) ? length() : position) );
+		for (int i = items.size() - 1; i>=0; --i)
+			if (items.at(i) == oldItem) items.remove(i);
 	}
 
+	if (newItem && oldItem != newItem)
+		items.insert(((pos > length()) ? length() : pos), newItem);
 }
 
 bool SequentialLayout::isEmpty() const
