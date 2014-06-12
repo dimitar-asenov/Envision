@@ -73,7 +73,7 @@ void VArrayInitializer::determineChildren()
 			else nodes.last().append( genericRow );
 		}
 
-		grid_->synchronizeWithNodes(nodes, renderer());
+		grid_->synchronizeWithNodes(nodes);
 	}
 }
 

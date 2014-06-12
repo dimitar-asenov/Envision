@@ -74,11 +74,8 @@ class VISUALIZATIONBASE_API GridLayout: public Super<Layout>
 		 * @param nodes
 		 * 				A list of rows. The first row in the list is the topmost one. Each row is a list of nodes starting
 		 * 				from the leftmost node.
-		 *
-		 * @param renderer
-		 * 				The renderer to use when visualizing the nodes.
 		 */
-		void synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes, ModelRenderer* renderer);
+		void synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes);
 
 	private:
 		QVector< QVector<Item*> > items_;
