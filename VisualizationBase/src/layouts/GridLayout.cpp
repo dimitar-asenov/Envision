@@ -172,23 +172,6 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 		}
 }
 
-
-void GridLayout::synchronize(Item*& item, Model::Node* node, int x, int y)
-{
-	if (item && item->node() != node )
-	{
-		remove(item);
-		item = nullptr;
-	}
-
-	if (!item && node)
-	{
-		item = renderer()->render(this, node);
-		set(item, x, y, true);
-	}
-
-}
-
 bool GridLayout::isEmpty() const
 {
 	for (int x = 0; x<sizeX_; ++x)
