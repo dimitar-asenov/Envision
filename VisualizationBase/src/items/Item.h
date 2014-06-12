@@ -398,6 +398,13 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 				const typename VisualizationType::StyleType* style);
 
 		/**
+		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
+		 */
+		template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+		bool synchronizeCollections(const Definition& def, Store& store, CompareFunction compare,
+											 CreateFunction create, SyncFunction sync);
+
+		/**
 		 * Returns a map that associates each registered add-on with all items corresponding to it.
 		 */
 		const QMultiMap<VisualizationAddOn*, Item* >& addOnItems();
@@ -443,6 +450,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	private:
 		friend class Shape;
 		friend class InteractionHandler;
+		friend class SequentialLayoutFormElement;
 		template <class ParentType> friend class NodeItemWrapperFormElement;
 		template <class ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
 		template <class ParentType, class VisualizationType> friend class VisualizationItemWrapperFormElement;
@@ -596,6 +604,63 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 
 	if (item && !changed) item->setStyle(style);
 
+	return changed;
+}
+
+template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+bool Item::synchronizeCollections(const Definition& def, Store& store, CompareFunction compare,
+											 CreateFunction create, SyncFunction sync)
+{
+	static_assert(std::is_pointer<decltype(def.value(0))>::value, "the elements of def must be pointers");
+	static_assert(std::is_pointer<decltype(store.value(0))>::value, "the elements of store must be pointers");
+
+	bool changed = false;
+
+	for (int i = 0; i < def.size(); ++i)
+	{
+		if (i >= store.size() ) // This element is new
+		{
+			changed = true;
+			store.append(create(this, def[i]));
+		}
+		else if ( compare(def[i], store[i]) )// This element is already there, sync it
+		{
+			changed = sync(this, def[i], store[i]) | changed;
+		}
+		else // This element might appear somewhere ahead, we should look for it
+		{
+			changed = true;
+
+			bool found = false;
+			for (int k = i + 1; k<store.size(); ++k)
+			{
+				if ( compare(def[i], store[k]) )
+				{
+					// We found this element, swap the positions
+					auto temp = store[i];
+					store[i] = store[k];
+					store[k] = temp;
+					sync(this, def[i], store[i]);
+
+					found = true;
+					break;
+				}
+			}
+
+			// The node was not found, insert a visualization here
+			if (!found ) store.insert( i, create(this, def[i]) );
+		}
+	}
+
+	// Remove excess items
+	while (store.size() > def.size())
+	{
+		changed = true;
+		SAFE_DELETE_ITEM(store.last());
+		store.pop_back();
+	}
+
+	if (changed) setUpdateNeeded(StandardUpdate);
 	return changed;
 }
 

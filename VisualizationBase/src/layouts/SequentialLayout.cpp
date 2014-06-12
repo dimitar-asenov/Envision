@@ -108,39 +108,12 @@ void SequentialLayout::clear(bool deleteItems)
 	setUpdateNeeded(StandardUpdate);
 }
 
-void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
+void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 {
-	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
-	for (int i = 0; i < nodes.size(); ++i)
-	{
-		if (i >= items.size() ) append( renderer->render(this, nodes[i]));	// This node is new
-		else if ( items[i]->node() == nodes[i] )// This node is already there
-		{
-			renderer->sync(items[i], this, nodes[i]);
-		}
-		else
-		{
-			// This node might appear somewhere ahead, we should look for it
-			bool found = false;
-			for (int k = i + 1; k<items.size(); ++k)
-			{
-				if ( items[k]->node() == nodes[i] )
-				{
-					// We found this node, swap the visualizations
-					swap(i, k);
-					renderer->sync(items[i], this, nodes[i]);
-					found = true;
-					break;
-				}
-			}
-
-			// The node was not found, insert a visualization here
-			if (!found ) insert( renderer->render(this, nodes[i]), i);
-		}
-	}
-
-	// Remove excess items
-	while (items.size() > nodes.size()) remove(items.size()-1);
+	synchronizeCollections(nodes, items,
+		[](Model::Node* node, Item* item){return item->node() == node;},
+		[](Item* parent, Model::Node* node){return parent->renderer()->render(parent, node);},
+		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);});
 }
 
 void SequentialLayout::synchronizeFirst(Item*& item, Model::Node* node)

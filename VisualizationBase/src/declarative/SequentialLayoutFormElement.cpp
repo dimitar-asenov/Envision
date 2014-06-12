@@ -228,70 +228,20 @@ void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<M
 {
 	auto& itemList = listForItem(item);
 
-	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
-	for (int i = 0; i < nodes.size(); ++i)
-	{
-		if (i >= itemList.size()) itemList.append(item->renderer()->render(item, nodes[i]));	// This node is new
-		else if (itemList[i]->node() == nodes[i])	// This node is already there
-		{
-			item->renderer()->sync(itemList[i], item, nodes[i]);
-		}
-		else
-		{
-			// This node might appear somewhere ahead, we should look for it
-			bool found = false;
-			for (int k = i + 1; k<itemList.size(); ++k)
-			{
-				if (itemList[k]->node() == nodes[i])
-				{
-					// We found this node, swap the visualizations
-					swap(item, i, k);
-					item->renderer()->sync(itemList[i], item, nodes[i]);
-					found = true;
-					break;
-				}
-			}
-
-			// The node was not found, insert a visualization here
-			if (!found) itemList.insert(i, item->renderer()->render(item, nodes[i]));
-		}
-	}
-
-	// Remove excess items
-	while (itemList.size() > nodes.size()) removeFromItemList(item, itemList.size()-1, true);
+	item->synchronizeCollections(nodes, itemList,
+		[](Model::Node* node, Item* item){return item->node() == node;},
+		[](Item* parent, Model::Node* node){return parent->renderer()->render(parent, node);},
+		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);});
 }
 
 void SequentialLayoutFormElement::synchronizeWithItems(Item* item, const QList<Item*>& items)
 {
 	auto& itemList = listForItem(item);
 
-	// Inserts elements that are not yet visualized and adjusts the order to match that in 'items'.
-	for (int i = 0; i < items.size(); ++i)
-	{
-		if (i >= itemList.size()) itemList.append(items[i]);	// This item is new
-		else if (itemList[i] == items[i])	continue;	// This item is already there
-		else
-		{
-			// This item might appear somewhere ahead, we should look for it
-			bool found = false;
-			for (int k = i + 1; k<itemList.size(); ++k)
-			{
-				if (itemList[k] == items[i])
-				{
-					// We found this node, swap the visualizations
-					swap(item, i, k);
-					found = true;
-					break;
-				}
-			}
-
-			// The item was not found, insert a visualization here
-			if (!found) itemList.insert(i, items[i]);
-		}
-	}
-
-	// Remove excess items
-	while (itemList.size() > items.size()) removeFromItemList(item, itemList.size()-1, true);
+	item->synchronizeCollections(items, itemList,
+		[](Item* newItem, Item* oldItem){return newItem == oldItem;},
+		[](Item*, Item* newItem){return newItem;},
+		[](Item*, Item*, Item*&){return false;});
 }
 
 void SequentialLayoutFormElement::removeFromItemList(Item* item, int index, bool deleteItem)

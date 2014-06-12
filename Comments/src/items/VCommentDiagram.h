@@ -88,9 +88,6 @@ class COMMENTS_API VCommentDiagram : public Super<Visualization::ItemWithNode<VC
 
 		static CommentDiagramToolbar* toolbar_;
 
-		template <class T>
-		void synchronizeWithNodes(const QVector<Model::Node*>& nodes, QVector<T*>& destination);
-
 		void clearChildren();
 };
 

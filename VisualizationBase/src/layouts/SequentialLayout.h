@@ -74,7 +74,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Super<Layout>
 		int spaceBetweenElements() const;
 		void setSpaceBetweenElements(bool use, int space = 0);
 
-		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
+		void synchronizeWithNodes(const QList<Model::Node*>& nodes);
 
 		// Synchronize methods with a node
 		void synchronizeFirst(Item*& item, Model::Node* node);

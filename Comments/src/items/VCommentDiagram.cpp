@@ -45,8 +45,17 @@ VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 
 void VCommentDiagram::determineChildren()
 {
-	synchronizeWithNodes(node()->shapes()->nodes(), shapes_);
-	synchronizeWithNodes(node()->connectors()->nodes(), connectors_);
+	synchronizeCollections(node()->shapes()->nodes(), shapes_,
+		[](Model::Node* node, Item* item){return item->node() == node;},
+		[](Item* parent, Model::Node* node)
+			{return new VCommentDiagramShape(parent, static_cast<CommentDiagramShape*>(node));},
+		[](Item*, Model::Node*, VCommentDiagramShape*&){return false;});
+
+	synchronizeCollections(node()->connectors()->nodes(), connectors_,
+		[](Model::Node* node, Item* item){return item->node() == node;},
+		[](Item* parent, Model::Node* node)
+			{return new VCommentDiagramConnector(parent, static_cast<CommentDiagramConnector*>(node));},
+		[](Item*, Model::Node*, VCommentDiagramConnector*&){return false;});
 
 	// Always update children
 	for (auto s : shapes_) s->setUpdateNeeded(StandardUpdate);
@@ -130,46 +139,6 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		painter->setPen(QPen(QColor(100, 100, 100)));
 		painter->drawText(QRect{QPoint(0, 0), sizeInLocal().toSize()}, Qt::AlignCenter | Qt::TextWordWrap,
 								"This diagram does not contain any shapes yet.");
-	}
-}
-
-template <class T>
-void VCommentDiagram::synchronizeWithNodes(const QVector<Model::Node*>& nodes, QVector<T*>& destination)
-{
-	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
-	for (int i = 0; i < nodes.size(); ++i)
-	{
-		if (i >= destination.size() )
-			destination.append( new T(this, static_cast<typename T::NodeType*>(nodes[i])));	// This node is new
-		else if ( destination[i]->node() == nodes[i] )	continue;	// This node is already there
-		else
-		{
-			// This node might appear somewhere ahead, we should look for it
-			bool found = false;
-			for (int k = i + 1; k < destination.size(); ++k)
-			{
-				if ( destination[k]->node() == nodes[i] )
-				{
-					// We found this node, swap the visualizations
-					T* t = destination[i];
-					destination[i] = destination[k];
-					destination[k] = t;
-
-					found = true;
-					break;
-				}
-			}
-
-			// The node was not found, insert a visualization here
-			if (!found ) destination.insert(i, new T(this, static_cast<typename T::NodeType*>(nodes[i])));
-		}
-	}
-
-	// Remove excess items
-	while (destination.size() > nodes.size())
-	{
-		SAFE_DELETE_ITEM(destination.last());
-		destination.pop_back();
 	}
 }
 
