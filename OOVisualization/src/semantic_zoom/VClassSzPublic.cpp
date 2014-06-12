@@ -63,7 +63,7 @@ void VClassSzPublic::determineChildren()
 	for (auto method : *node()->methods())
 		if (method->modifiers()->isSet(Modifier::Public)) bodyItems.append(method);
 
-	body_->synchronizeWithNodes( bodyItems, renderer());;
+	body_->synchronizeWithNodes( bodyItems);
 
 	// call determineChildren of super class
 	Super::determineChildren();

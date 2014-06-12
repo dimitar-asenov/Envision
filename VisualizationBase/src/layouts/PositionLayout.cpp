@@ -70,19 +70,10 @@ bool PositionLayout::containsNode(Model::Node* node_)
 void PositionLayout::insert(Item* item)
 {
 	// Check whether this item has a node and a position associated with it
-	if ( !item->hasNode() ) throw VisualizationException("Adding an Item that has no node to a PositionLayout");
-
-	Model::CompositeNode* extNode = dynamic_cast<Model::CompositeNode*> (item->node());
-	if (!extNode)
-		throw VisualizationException("Adding an Item that does not implement CompositeNode to a PositionLayout");
-
-	Position* pos = extNode->extension<Position>();
-	Q_ASSERT(pos);
-	Q_ASSERT(extNode->extension<FullDetailSize>());
+	ensureItemHasCompositeNode(item);
 
 	item->setParentItem(this);
 	items.append(item);
-	positions.append(pos);
 	setUpdateNeeded(StandardUpdate);
 }
 
@@ -91,9 +82,7 @@ void PositionLayout::remove(int index, bool deleteItem)
 	if (deleteItem) SAFE_DELETE_ITEM( items[index]);
 	else if (items[index]) items[index]->setParentItem(nullptr);
 
-	SAFE_DELETE( positions[index] );
 	items.remove(index);
-	positions.remove(index);
 	setUpdateNeeded(StandardUpdate);
 }
 
@@ -102,11 +91,7 @@ void PositionLayout::removeAll(Item* item, bool deleteItem)
 	for (int i = items.size() - 1; i>=0; --i)
 	{
 		if (items.at(i) == item)
-		{
 			items.remove(i);
-			SAFE_DELETE( positions[i] );
-			positions.remove(i);
-		}
 	}
 
 	if (deleteItem) SAFE_DELETE_ITEM(item);
@@ -123,9 +108,7 @@ void PositionLayout::clear(bool deleteItems)
 		else if (items[i]) items[i]->setParentItem(nullptr);
 	}
 
-	for (int i = 0; i<positions.size(); ++i) SAFE_DELETE(positions[i]);
 	items.clear();
-	positions.clear();
 }
 
 void PositionLayout::swap(int i, int j)
@@ -133,70 +116,38 @@ void PositionLayout::swap(int i, int j)
 	Item* t = items[i];
 	items[i] = items[j];
 	items[j] = t;
-
-	Position* p = positions[i];
-	positions[i] = positions[j];
-	positions[j] = p;
 }
 
-void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
+void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 {
+	// Check if any node is lacking a position info
 	allNodesLackPositionInfo = items.isEmpty();
+	if (allNodesLackPositionInfo)
+		for (auto node : nodes)
+			if (auto extNode = DCast<Model::CompositeNode> (node))
+				if (auto pos = extNode->extension<Position>())
+					if (pos->xNode() || pos->yNode())
+					{
+						allNodesLackPositionInfo = false;
+						break;
+					}
 
-	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
-	for (int i = 0; i < nodes.size(); ++i)
-	{
-		// Check if node has position info
-		Model::CompositeNode* extNode = dynamic_cast<Model::CompositeNode*> (nodes[i]);
-		if (extNode)
-		{
-			Position* pos = extNode->extension<Position>();
-			if (pos)
-			{
-				if (pos->xNode() || pos->yNode())
-					allNodesLackPositionInfo = false;
-			}
-		}
-
-		if (i >= items.size() )
-		{
-			if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM)
-				setChildNodeSemanticZoomLevel(nodes[i], FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
-			insert( renderer->render(this, nodes[i] ));	// This node is new
-		}
-		else if ( items[i]->node() == nodes[i] ) // This node is already there
-		{
-			renderer->sync(items[i], this, nodes[i]);
-		}
-		else
-		{
-			// This node might appear somewhere ahead, we should look for it
-			bool found = false;
-			for (int k = i + 1; k<items.size(); ++k)
-			{
-				if ( items[k]->node() == nodes[i] )
-				{
-					// We found this node, swap the visualizations
-					swap(i, k);
-					renderer->sync(items[i], this, nodes[i]);
-					found = true;
-					break;
-				}
-			}
-
-			// The node was not found, insert a visualization here
-			if (!found )
+	synchronizeCollections(nodes, items,
+		[](Model::Node* node, Item* item){return item->node() == node;},
+		[](Item* parent, Model::Node* node) -> Item*
 			{
 				if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM)
-					setChildNodeSemanticZoomLevel(nodes[i], FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
-				insert( renderer->render(this, nodes[i]) );
-				swap(i, items.size()-1);
-			}
-		}
-	}
-
-	// Remove excess items
-	while (items.size() > nodes.size()) remove(items.size()-1);
+					parent->setChildNodeSemanticZoomLevel(node, FULL_DECLARATION_ABSTRACTION_SEMANTIC_ZOOM_LEVEL);
+				auto newItem = parent->renderer()->render(parent, node);
+				ensureItemHasCompositeNode(newItem);
+				return newItem;
+			},
+		[](Item* parent, Model::Node* node, Item*& item) ->bool
+			{
+				bool changed = parent->renderer()->sync(item, parent, node);
+				ensureItemHasCompositeNode(item);
+				return changed;
+			});
 }
 
 int PositionLayout::toGrid(const int& pos) const
@@ -307,8 +258,8 @@ void PositionLayout::updateGeometry(int, int)
 			}
 
 			lastModifiedModel->changeModificationTarget(items[i]->node());
-			positions[i]->setX(x);
-			positions[i]->setY(y);
+			QScopedPointer<Position> position{positionOf(items[i])};
+			position->set(x, y);
 		}
 
 
@@ -339,6 +290,8 @@ void PositionLayout::updateGeometry(int, int)
 			lastModifiedModel->changeModificationTarget(node);
 			fds->set(item->sizeInParent().toSize());
 		}
+
+		delete fds;
 	}
 
 	// It is important to batch the modifications, since model::endModification() send a notification signal.
@@ -355,8 +308,9 @@ void PositionLayout::updateGeometry(int, int)
 
 	for (int i = 0; i<items.size(); ++i)
 	{
-		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
-		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
+		QScopedPointer<Position> position{positionOf(items[i])};
+		int x = position->xNode() ? toGrid(position->x()) : 0;
+		int y = position->yNode() ? toGrid(position->y()) : 0;
 
 		if (i==0 || topLeft.x() > x )
 			topLeft.setX( x );
@@ -374,8 +328,9 @@ void PositionLayout::updateGeometry(int, int)
 
 	for (int i =0; i<items.size(); ++i)
 	{
-		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
-		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
+		QScopedPointer<Position> position{positionOf(items[i])};
+		int x = position->xNode() ? toGrid(position->x()) : 0;
+		int y = position->yNode() ? toGrid(position->y()) : 0;
 		items[i]->setPos( xOffset() + style()->leftInnerMargin() + x - topLeft.x(),
 								yOffset() + style()->topInnerMargin() + y - topLeft.y());
 	}

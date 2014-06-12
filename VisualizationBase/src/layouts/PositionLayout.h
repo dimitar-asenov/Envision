@@ -66,7 +66,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 
 		int toGrid(const int& pos) const;
 
-		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
+		void synchronizeWithNodes(const QList<Model::Node*>& nodes);
 
 		virtual bool isEmpty() const;
 		virtual bool isSensitiveToScale() const override;
@@ -79,7 +79,6 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 
 	private:
 		QVector<Item*> items;
-		QVector<Position*> positions;
 		bool allNodesLackPositionInfo{};
 
 		void swap(int i, int j);
@@ -88,9 +87,19 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		 * Returns true if the semantic zoom level of at least one child item was adjusted.
 		 */
 		bool adjustChildrenSemanticZoom();
+		static Position* positionOf(Item* item);
+		static void ensureItemHasCompositeNode(const Item* item);
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }
 template <class T> T* PositionLayout::at(int index) const { return static_cast<T*> (items[index]); }
+inline Position* PositionLayout::positionOf(Item* item)
+{ return (static_cast<Model::CompositeNode*>(item->node()))->extension<Position>();	}
+
+inline void PositionLayout::ensureItemHasCompositeNode(const Item* item)
+{
+	Q_ASSERT(item->node());
+	Q_ASSERT(DCast<Model::CompositeNode> (item->node()));
+}
 
 }

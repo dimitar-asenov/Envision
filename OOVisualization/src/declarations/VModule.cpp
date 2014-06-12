@@ -51,7 +51,7 @@ void VModule::determineChildren()
 	QList<Model::Node*> bodyItems = node()->modules()->nodes().toList();
 	bodyItems << node()->classes()->nodes().toList();
 	bodyItems << node()->methods()->nodes().toList();
-	body_->synchronizeWithNodes( bodyItems, renderer());
+	body_->synchronizeWithNodes( bodyItems);
 
 	// call determineChildren of super class
 	Super::determineChildren();
