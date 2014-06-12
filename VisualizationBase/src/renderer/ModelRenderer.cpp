@@ -78,7 +78,7 @@ bool ModelRenderer::sync(Item*& item, Item* parent, Model::Node* node)
 
 	bool changed = false;
 
-	if (item && item->typeId() != best.first)
+	if (item && ((item->node() != node) || (item->typeId() != best.first)))
 	{
 		changed = true;
 		SAFE_DELETE_ITEM(item);
@@ -91,11 +91,6 @@ bool ModelRenderer::sync(Item*& item, Item* parent, Model::Node* node)
 	}
 
 	if (changed) parent->setUpdateNeeded(Item::StandardUpdate);
-
-	Q_ASSERT(item);
-
-	if (!changed && item->node() != node)
-		item->setUpdateNeeded(Item::StandardUpdate); // Update the item, not the parent
 
 	return changed;
 }
