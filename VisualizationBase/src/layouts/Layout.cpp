@@ -77,30 +77,4 @@ int Layout::yOffset() const
 	else return style()->topMargin();
 }
 
-void Layout::synchronizeItem(Item*& layoutItem, Item*& externalItem, Model::Node* node)
-{
-	// When refactoring this method have in mind that layoutItem might point to the same item as externalItem.
-
-
-	if (externalItem != layoutItem)
-	{
-		SAFE_DELETE_ITEM(layoutItem);
-		setUpdateNeeded(StandardUpdate);
-	}
-
-	if (externalItem && externalItem->node() != node )
-	{
-		SAFE_DELETE_ITEM(externalItem);
-		layoutItem = nullptr; // One of the safe deletes above deleted this item
-		setUpdateNeeded(StandardUpdate);
-	}
-
-	if (!externalItem && node)
-	{
-		externalItem = renderer()->render(this, node);
-		layoutItem = externalItem;
-		setUpdateNeeded(StandardUpdate);
-	}
-}
-
 }
