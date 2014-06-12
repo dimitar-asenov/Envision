@@ -28,6 +28,7 @@
 
 #include "VisualizationBase/src/layouts/GridLayout.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -36,51 +37,28 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VArrayInitializer, "item")
 
-VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	values_(nullptr),
-	matrixForm_(false)
+VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
+
+void VArrayInitializer::initializeForms()
 {
+	addForm(item<VList>(&I::list_, [](I* v){return v->node()->values();}, &StyleType::list));
+	addForm(item(&I::grid_, &StyleType::grid));
 }
 
-VArrayInitializer::~VArrayInitializer()
+int VArrayInitializer::determineForm()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	values_ = nullptr;
+	return (node()->values()->size()  > 0 && dynamic_cast<ArrayInitializer*>(node()->values()->at(0))) ? 1 : 0;
 }
 
 void VArrayInitializer::determineChildren()
 {
-	// Automatically switch to matrix form if there are nested ArrayInitializers
-	if (node()->values()->size()  > 0 && dynamic_cast<ArrayInitializer*>(node()->values()->at(0)))
-		matrixForm_ = true;
-	else
-		matrixForm_ = false;
+	Super::determineChildren();
 
+	if (list_) list_->setSuppressDefaultRemovalHandler(true);
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-
-	if (viewFormSwitched())
+	if (grid_)
 	{
-		layout()->clear();
-
-		if (matrixForm_) values_ = nullptr; // this was deleted by the clear() operation above
-		else
-		{
-			layout()->setGridSize(1, 1, false);
-			values_ = new VList(layout(), node()->values(), &style()->values());
-			layout()->set(values_, 0, 0, true);
-		}
-	}
-
-	if (matrixForm_)
-	{
-		useShape();
-
 		QList< QList< Model::Node*> > nodes;
 		for (auto genericRow : *node()->values())
 		{
@@ -95,30 +73,8 @@ void VArrayInitializer::determineChildren()
 			else nodes.last().append( genericRow );
 		}
 
-		layout()->synchronizeWithNodes(nodes, renderer());
+		grid_->synchronizeWithNodes(nodes, renderer());
 	}
-	else
-	{
-		removeShape();
-
-		layout()->synchronize(values_, node()->values(), &style()->values(), 0, 0);
-		values_->setStyle( &style()->values() );
-		values_->setSuppressDefaultRemovalHandler(true);
-	}
-}
-
-void VArrayInitializer::showInMatrixForm(bool matrixForm)
-{
-	if ( matrixForm != matrixForm_ )
-	{
-		matrixForm_ = matrixForm;
-		setUpdateNeeded(FullUpdate);
-	}
-}
-
-bool VArrayInitializer::viewFormSwitched() const
-{
-	return matrixForm_ == (values_ != nullptr) || layout()->gridSize().width() == 0;
 }
 
 }

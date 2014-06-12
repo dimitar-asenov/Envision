@@ -28,12 +28,5 @@
 
 namespace OOVisualization {
 
-void VArrayInitializerStyle::load(Visualization::StyleLoader& sl)
-{
-	Super::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("values", values_);
-}
-
+VArrayInitializerStyle::~VArrayInitializerStyle(){}
 }

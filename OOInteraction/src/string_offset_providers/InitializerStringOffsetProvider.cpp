@@ -49,7 +49,7 @@ int InitializerStringOffsetProvider::offset(Qt::Key key)
 		// Always include the leading '{' in the returned offset
 		result += components[0].size();
 
-		auto focusedIndex = vis_->layout()->focusedElementIndex();
+		auto focusedIndex = vis_->grid()->focusedElementIndex();
 
 		int index = 1;
 		for (int y = 0; y < focusedIndex.y(); ++y)
@@ -68,9 +68,9 @@ int InitializerStringOffsetProvider::offset(Qt::Key key)
 			result += subComponents[subIndex++].size();
 		}
 
-		result += itemOffset(vis_->layout()->focusedChild(), subComponents[subIndex].size(), key);
+		result += itemOffset(vis_->grid()->focusedChild(), subComponents[subIndex].size(), key);
 	}
-	else result += listItemOffset(vis_->values(), "{", ",", "}", key);
+	else result += listItemOffset(vis_->list(), "{", ",", "}", key);
 
 	return result;
 }
@@ -114,13 +114,13 @@ void InitializerStringOffsetProvider::setOffset(int offset)
 		if (offset < 0) offset = 0;
 		if (subIndex == subComponents.size()) subIndex -= 2;
 
-		auto childItem = vis_->layout()->at<Visualization::Item>((subIndex-1)/2, (index-1)/2);
+		auto childItem = vis_->grid()->at<Visualization::Item>((subIndex-1)/2, (index-1)/2);
 		if ( setOffsetInItem(offset, childItem) )
 			return;
 	}
 	else
 	{
-		if (setOffsetInListItem(offset, vis_->values(), "{", ",", "}") )
+		if (setOffsetInListItem(offset, vis_->list(), "{", ",", "}") )
 			return;
 	}
 

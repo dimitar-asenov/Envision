@@ -1,15 +1,15 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
-	<shape prototypes="shape/Braces/default">
-		Braces
-		<leftBrace>(</leftBrace>
-		<rightBrace>)</rightBrace>
-	</shape>
-	<layout prototypes="layout/GridLayout/default">
+<style prototypes="item/DeclarativeItemBase/default">
+	<grid prototypes="layout/GridLayout/default">
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>(</leftBrace>
+			<rightBrace>)</rightBrace>
+		</shape>
 		<horizontalSpace>5</horizontalSpace>
 		<verticalSpace>2</verticalSpace>
-	</layout>
-	<values prototypes="item/VList/default">
+	</grid>
+	<list prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>
@@ -31,5 +31,5 @@
 			<noInnerCursors>true</noInnerCursors>
 			<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
 		</itemsStyle>
-	</values>
+	</list>
 </style>
