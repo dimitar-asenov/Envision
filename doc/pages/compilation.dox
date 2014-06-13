@@ -95,7 +95,11 @@ above version of Qt. Here is how:
 	-# Configure Qt Creator or Eclipse to use the Qt found in \c qt-build .
 
 Work is underway for our extensions to appear as part of the regular Qt framework, starting with version 5.4
-\section try Running Envision
 
+\section try Running Envision
 After you have compiled Envision give it a try! See \ref try_envision "this page" for some interesting examples.
+
+\section faq Common problems
+<b>Gcc crashes with a segmentation fault error when compiling Envision, what's wrong?</b><br />
+If you are running in a virtual machine, try increasing the amount of RAM of the machine. It should be at least 1 GB.
 */
