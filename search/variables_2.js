@@ -72,7 +72,6 @@ var searchData=
   ['countmap_5f',['countMap_',['../classCppImport_1_1CppImportLogger.html#a2a899dc9ec8372d9624c1a944c78c857',1,'CppImport::CppImportLogger']]],
   ['cppfilter_5f',['cppFilter_',['../classCppImport_1_1CppImportManager.html#ad5951f9260410692e4dae885b3e6123f',1,'CppImport::CppImportManager']]],
   ['createfunction_5f',['createFunction_',['../classOOInteraction_1_1OOOperatorDescriptor.html#a45fea52dca369edfb79eefc59aaaf93e',1,'OOInteraction::OOOperatorDescriptor']]],
-  ['createifnonode_5f',['createIfNoNode_',['../classVisualization_1_1NodeItemWrapperFormElement.html#a53e854e5d49b81128907d6b7d13cb37a',1,'Visualization::NodeItemWrapperFormElement::createIfNoNode_()'],['../classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html#a4e9958bd8ebe6ef61534d9af06187ee7',1,'Visualization::NodeWithVisualizationItemWrapperFormElement::createIfNoNode_()']]],
   ['currentactionreceiver_5f',['currentActionReceiver_',['../classInteraction_1_1ActionPrompt.html#a7ca67d35bf5925794b2e3a3fb00ee7ed',1,'Interaction::ActionPrompt']]],
   ['currentchunk_5f',['currentChunk_',['../classFilePersistence_1_1GenericNodeAllocator.html#ab3a6c7520507651ae89e260ec3de3b4e',1,'FilePersistence::GenericNodeAllocator']]],
   ['currentchunkid_5f',['currentChunkId_',['../classFilePersistence_1_1GenericNodeAllocator.html#a001d928ffa0d366a6d2fba5056f637db',1,'FilePersistence::GenericNodeAllocator']]],

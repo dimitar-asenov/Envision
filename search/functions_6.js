@@ -59,7 +59,7 @@ var searchData=
   ['gotofirstchild',['goToFirstChild',['../classFilePersistence_1_1XMLModel.html#a44ba82ed635674b00dd0831dd41e86b7',1,'FilePersistence::XMLModel']]],
   ['gotoparent',['goToParent',['../classFilePersistence_1_1XMLModel.html#a31a4fa267136ee6d199ba7c0ece9841f',1,'FilePersistence::XMLModel']]],
   ['gotoroot',['goToRoot',['../classFilePersistence_1_1XMLModel.html#ad5680add86652ef1452eecb8964d8245',1,'FilePersistence::XMLModel']]],
-  ['grid',['grid',['../classVisualization_1_1DeclarativeItemBase.html#ad79c0cb80c2e0216dc7e05a2aa11a83b',1,'Visualization::DeclarativeItemBase']]],
+  ['grid',['grid',['../classOOVisualization_1_1VArrayInitializer.html#a4b13f769e801df1dc89118ed12c0f583',1,'OOVisualization::VArrayInitializer::grid()'],['../classVisualization_1_1DeclarativeItemBase.html#ad79c0cb80c2e0216dc7e05a2aa11a83b',1,'Visualization::DeclarativeItemBase::grid()']]],
   ['gridbasedoffsetprovider',['GridBasedOffsetProvider',['../classOOInteraction_1_1GridBasedOffsetProvider.html#a09cb75e69adb59638cbbf716a71ed8d8',1,'OOInteraction::GridBasedOffsetProvider']]],
   ['gridconstructors',['gridConstructors',['../classOOInteraction_1_1GridBasedOffsetProvider.html#ab1758b3c4b5f2b2a22bfb978dbc6d18f',1,'OOInteraction::GridBasedOffsetProvider']]],
   ['gridlayout',['GridLayout',['../classVisualization_1_1GridLayout.html#a8cd2bb2a80581202aa45368aa7087cb2',1,'Visualization::GridLayout']]],

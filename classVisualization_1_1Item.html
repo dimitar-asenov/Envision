@@ -408,14 +408,18 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a94c785e278e2d6756d69423659b1b28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1de8c67e785ae6d1971a13d2b0426d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ab1de8c67e785ae6d1971a13d2b0426d8">setWidth</a> (int width)</td></tr>
 <tr class="separator:ab1de8c67e785ae6d1971a13d2b0426d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cb715cea612fb11d4b3af3cf426025e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a8cb715cea612fb11d4b3af3cf426025e">synchronizeItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;item, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>)</td></tr>
-<tr class="separator:a8cb715cea612fb11d4b3af3cf426025e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d48e65b682915253faa9651d828878c"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a5d48e65b682915253faa9651d828878c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a5d48e65b682915253faa9651d828878c">synchronizeItem</a> (T *&amp;item, bool present, const typename T::StyleType *<a class="el" href="classVisualization_1_1Item.html#a7abeb14552c32e25c2ebb027971e565e">style</a>)</td></tr>
-<tr class="separator:a5d48e65b682915253faa9651d828878c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2c02c148099eeb0f01ce5600c9dc49e"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:aa2c02c148099eeb0f01ce5600c9dc49e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aa2c02c148099eeb0f01ce5600c9dc49e">synchronizeItem</a> (T *&amp;item, typename T::NodeType *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>, const typename T::StyleType *<a class="el" href="classVisualization_1_1Item.html#a7abeb14552c32e25c2ebb027971e565e">style</a>)</td></tr>
-<tr class="separator:aa2c02c148099eeb0f01ce5600c9dc49e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa050410819e9f23e994785eb36a1294b"><td class="memTemplParams" colspan="2">template&lt;class Definition , class Store , class CompareFunction , class CreateFunction , class SyncFunction &gt; </td></tr>
+<tr class="memitem:aa050410819e9f23e994785eb36a1294b"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aa050410819e9f23e994785eb36a1294b">synchronizeCollections</a> (const Definition &amp;def, Store &amp;store, CompareFunction compare, CreateFunction create, SyncFunction sync)</td></tr>
+<tr class="memdesc:aa050410819e9f23e994785eb36a1294b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts elements that are not yet in store and adjusts the order to match that in def.  <a href="#aa050410819e9f23e994785eb36a1294b">More...</a><br/></td></tr>
+<tr class="separator:aa050410819e9f23e994785eb36a1294b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b86f223743efbb99d0bfeabbb21814"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a22b86f223743efbb99d0bfeabbb21814">synchronizeItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;item, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>)</td></tr>
+<tr class="separator:a22b86f223743efbb99d0bfeabbb21814"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a909f345b6574c2ac9c49ea3c3e54409e"><td class="memTemplParams" colspan="2">template&lt;class FieldType , class VisualizationType  = FieldType&gt; </td></tr>
+<tr class="memitem:a909f345b6574c2ac9c49ea3c3e54409e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a909f345b6574c2ac9c49ea3c3e54409e">synchronizeItem</a> (FieldType *&amp;item, bool present, const typename VisualizationType::StyleType *<a class="el" href="classVisualization_1_1Item.html#a7abeb14552c32e25c2ebb027971e565e">style</a>)</td></tr>
+<tr class="separator:a909f345b6574c2ac9c49ea3c3e54409e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73435a3525984ab4c3485a853b5d71aa"><td class="memTemplParams" colspan="2">template&lt;class FieldType , class VisualizationType  = FieldType&gt; </td></tr>
+<tr class="memitem:a73435a3525984ab4c3485a853b5d71aa"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a73435a3525984ab4c3485a853b5d71aa">synchronizeItem</a> (FieldType *&amp;item, typename VisualizationType::NodeType *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>, const typename VisualizationType::StyleType *<a class="el" href="classVisualization_1_1Item.html#a7abeb14552c32e25c2ebb027971e565e">style</a>)</td></tr>
+<tr class="separator:a73435a3525984ab4c3485a853b5d71aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9210d3dcf0b73d38e3f710ee0f0db8fd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a9210d3dcf0b73d38e3f710ee0f0db8fd">updateGeometry</a> (int availableWidth, int availableHeight)=0</td></tr>
 <tr class="memdesc:a9210d3dcf0b73d38e3f710ee0f0db8fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method sets the position of child elements, stretching them if needed, and determines the final size of the item.  <a href="#a9210d3dcf0b73d38e3f710ee0f0db8fd">More...</a><br/></td></tr>
 <tr class="separator:a9210d3dcf0b73d38e3f710ee0f0db8fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -506,8 +510,19 @@ Static Private Attributes</h2></td></tr>
 Friends</h2></td></tr>
 <tr class="memitem:a88d872693bb1a53576a98e6375d50095"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a88d872693bb1a53576a98e6375d50095">InteractionHandler</a></td></tr>
 <tr class="separator:a88d872693bb1a53576a98e6375d50095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af809279c2023eb3627ef3065b7b04a88"><td class="memTemplParams" colspan="2">template&lt;class ParentType &gt; </td></tr>
+<tr class="memitem:af809279c2023eb3627ef3065b7b04a88"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#af809279c2023eb3627ef3065b7b04a88">NodeItemWrapperFormElement</a></td></tr>
+<tr class="separator:af809279c2023eb3627ef3065b7b04a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61d1273fafe914c791644b3c658c2793"><td class="memTemplParams" colspan="2">template&lt;class ParentType , class VisualizationType &gt; </td></tr>
+<tr class="memitem:a61d1273fafe914c791644b3c658c2793"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a61d1273fafe914c791644b3c658c2793">NodeWithVisualizationItemWrapperFormElement</a></td></tr>
+<tr class="separator:a61d1273fafe914c791644b3c658c2793"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9134536ed3f954add95f21d87c15758"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ad9134536ed3f954add95f21d87c15758">SequentialLayoutFormElement</a></td></tr>
+<tr class="separator:ad9134536ed3f954add95f21d87c15758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a1e1ef8352d0a310bace7f7a3307d1378">Shape</a></td></tr>
 <tr class="separator:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f53d4b83618408d14b4b16a19727d6c"><td class="memTemplParams" colspan="2">template&lt;class ParentType , class VisualizationType &gt; </td></tr>
+<tr class="memitem:a0f53d4b83618408d14b4b16a19727d6c"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a0f53d4b83618408d14b4b16a19727d6c">VisualizationItemWrapperFormElement</a></td></tr>
+<tr class="separator:a0f53d4b83618408d14b4b16a19727d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a2b08d7c411aac65805ef268b89317272"></a>
@@ -3301,7 +3316,63 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a8cb715cea612fb11d4b3af3cf426025e"></a>
+<a class="anchor" id="aa050410819e9f23e994785eb36a1294b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Definition , class Store , class CompareFunction , class CreateFunction , class SyncFunction &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::Item::synchronizeCollections </td>
+          <td>(</td>
+          <td class="paramtype">const Definition &amp;&#160;</td>
+          <td class="paramname"><em>def</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Store &amp;&#160;</td>
+          <td class="paramname"><em>store</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CompareFunction&#160;</td>
+          <td class="paramname"><em>compare</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CreateFunction&#160;</td>
+          <td class="paramname"><em>create</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SyncFunction&#160;</td>
+          <td class="paramname"><em>sync</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Inserts elements that are not yet in store and adjusts the order to match that in def. </p>
+
+</div>
+</div>
+<a class="anchor" id="a22b86f223743efbb99d0bfeabbb21814"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -3309,7 +3380,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Visualization::Item::synchronizeItem </td>
+          <td class="memname">bool Visualization::Item::synchronizeItem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;&#160;</td>
           <td class="paramname"><em>item</em>, </td>
@@ -3328,26 +3399,26 @@ template&lt;class T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a5d48e65b682915253faa9651d828878c"></a>
+<a class="anchor" id="a909f345b6574c2ac9c49ea3c3e54409e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T &gt; </div>
+template&lt;class FieldType , class VisualizationType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Visualization::Item::synchronizeItem </td>
+          <td class="memname">bool Visualization::Item::synchronizeItem </td>
           <td>(</td>
-          <td class="paramtype">T *&amp;&#160;</td>
+          <td class="paramtype">FieldType *&amp;&#160;</td>
           <td class="paramname"><em>item</em>, </td>
         </tr>
         <tr>
@@ -3359,7 +3430,7 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const typename T::StyleType *&#160;</td>
+          <td class="paramtype">const typename VisualizationType::StyleType *&#160;</td>
           <td class="paramname"><em>style</em>&#160;</td>
         </tr>
         <tr>
@@ -3377,31 +3448,31 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa2c02c148099eeb0f01ce5600c9dc49e"></a>
+<a class="anchor" id="a73435a3525984ab4c3485a853b5d71aa"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T &gt; </div>
+template&lt;class FieldType , class VisualizationType &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Visualization::Item::synchronizeItem </td>
+          <td class="memname">bool Visualization::Item::synchronizeItem </td>
           <td>(</td>
-          <td class="paramtype">T *&amp;&#160;</td>
+          <td class="paramtype">FieldType *&amp;&#160;</td>
           <td class="paramname"><em>item</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">typename T::NodeType *&#160;</td>
+          <td class="paramtype">typename VisualizationType::NodeType *&#160;</td>
           <td class="paramname"><em>node</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const typename T::StyleType *&#160;</td>
+          <td class="paramtype">const typename VisualizationType::StyleType *&#160;</td>
           <td class="paramname"><em>style</em>&#160;</td>
         </tr>
         <tr>
@@ -3736,6 +3807,70 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="af809279c2023eb3627ef3065b7b04a88"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ParentType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classVisualization_1_1NodeItemWrapperFormElement.html">NodeItemWrapperFormElement</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a61d1273fafe914c791644b3c658c2793"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ParentType , class VisualizationType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html">NodeWithVisualizationItemWrapperFormElement</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad9134536ed3f954add95f21d87c15758"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html">SequentialLayoutFormElement</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1e1ef8352d0a310bace7f7a3307d1378"></a>
 <div class="memitem">
 <div class="memproto">
@@ -3745,6 +3880,28 @@ template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">friend class <a class="el" href="classVisualization_1_1Shape.html">Shape</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0f53d4b83618408d14b4b16a19727d6c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ParentType , class VisualizationType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classVisualization_1_1VisualizationItemWrapperFormElement.html">VisualizationItemWrapperFormElement</a></td>
         </tr>
       </table>
   </td>

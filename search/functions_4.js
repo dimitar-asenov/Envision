@@ -22,6 +22,7 @@ var searchData=
   ['endvariable',['endVariable',['../classVisualization_1_1AnchorLayoutConstraintSolver.html#af897ffc239dbbbd53484781f6a4784af',1,'Visualization::AnchorLayoutConstraintSolver']]],
   ['enqueueselftests',['enqueueSelfTests',['../classCore_1_1TestRunner.html#ad50c0e8e3c24c809d0f98f5cd2d46bcf',1,'Core::TestRunner']]],
   ['ensuredataread',['ensureDataRead',['../classFilePersistence_1_1GenericNode.html#ab33e6a4a5c8c5090d29f7cebbce93439',1,'FilePersistence::GenericNode']]],
+  ['ensureitemhascompositenode',['ensureItemHasCompositeNode',['../classVisualization_1_1PositionLayout.html#a1f62662b305730c7d7339c0b70b641a9',1,'Visualization::PositionLayout']]],
   ['entrance',['entrance',['../classControlFlowVisualization_1_1ControlFlowItem.html#a388841c4442739e4ca2233caaba5945f',1,'ControlFlowVisualization::ControlFlowItem']]],
   ['enumerator',['Enumerator',['../classOOModel_1_1Enumerator.html#a22a7824a5236dfbd190bf4bce84cf7ca',1,'OOModel::Enumerator']]],
   ['envisionapplication',['EnvisionApplication',['../classCore_1_1EnvisionApplication.html#ade5208f2f5cbbf86707e70005e2d9a48',1,'Core::EnvisionApplication']]],

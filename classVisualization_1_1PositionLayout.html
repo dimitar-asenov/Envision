@@ -156,8 +156,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af9ae5358cd225a156940af764cc854d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab2bb219f378178e3f2aceb2c03620e6"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1PositionLayout.html#aa2af1ba6c616744698c18e684e0e310b">StyleType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#aab2bb219f378178e3f2aceb2c03620e6">style</a> () const </td></tr>
 <tr class="separator:aab2bb219f378178e3f2aceb2c03620e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81ba0ef3226d18ed80e624b3aaa9bda7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a81ba0ef3226d18ed80e624b3aaa9bda7">synchronizeWithNodes</a> (const QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;nodes, <a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *renderer)</td></tr>
-<tr class="separator:a81ba0ef3226d18ed80e624b3aaa9bda7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3388aa960352e1e18bff674fc4c0ddd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#af3388aa960352e1e18bff674fc4c0ddd">synchronizeWithNodes</a> (const QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;nodes)</td></tr>
+<tr class="separator:af3388aa960352e1e18bff674fc4c0ddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31fa7311861f528d295ff60392f9dc19"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a31fa7311861f528d295ff60392f9dc19">toGrid</a> (const int &amp;pos) const </td></tr>
 <tr class="separator:a31fa7311861f528d295ff60392f9dc19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -193,6 +193,10 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a1f62662b305730c7d7339c0b70b641a9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a1f62662b305730c7d7339c0b70b641a9">ensureItemHasCompositeNode</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
+<tr class="separator:a1f62662b305730c7d7339c0b70b641a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae49b79fec92c956ba48122a1454d841b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1Position.html">Position</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#ae49b79fec92c956ba48122a1454d841b">positionOf</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
+<tr class="separator:ae49b79fec92c956ba48122a1454d841b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5984c245c1c05ba7f72b6be15af8bd14"><td class="memItemLeft" align="right" valign="top">static QList<br class="typebreak"/>
 &lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#a5984c245c1c05ba7f72b6be15af8bd14">staticAddOns</a> ()</td></tr>
 <tr class="separator:a5984c245c1c05ba7f72b6be15af8bd14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,8 +207,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a84911c0ddac4a5d785333c05ef0bf085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7a2ba65211ea161ecf2d4e431a9d422"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#ae7a2ba65211ea161ecf2d4e431a9d422">items</a></td></tr>
 <tr class="separator:ae7a2ba65211ea161ecf2d4e431a9d422"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab765fc176ea79d28b96aed7d1dddb4bc"><td class="memItemLeft" align="right" valign="top">QVector&lt; <a class="el" href="classVisualization_1_1Position.html">Position</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1PositionLayout.html#ab765fc176ea79d28b96aed7d1dddb4bc">positions</a></td></tr>
-<tr class="separator:ab765fc176ea79d28b96aed7d1dddb4bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -460,6 +462,30 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a1f62662b305730c7d7339c0b70b641a9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::PositionLayout::ensureItemHasCompositeNode </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ae703e01d1baa38835352123297393d5d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -602,6 +628,30 @@ template&lt;class T &gt; </div>
           <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae49b79fec92c956ba48122a1454d841b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Position.html">Position</a> * Visualization::PositionLayout::positionOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -810,7 +860,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a81ba0ef3226d18ed80e624b3aaa9bda7"></a>
+<a class="anchor" id="af3388aa960352e1e18bff674fc4c0ddd"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -818,18 +868,8 @@ template&lt;class T &gt; </div>
           <td class="memname">void Visualization::PositionLayout::synchronizeWithNodes </td>
           <td>(</td>
           <td class="paramtype">const QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>nodes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>nodes</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td>
-          <td class="paramname"><em>renderer</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -936,26 +976,6 @@ template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">QVector&lt;<a class="el" href="classVisualization_1_1Item.html">Item</a>*&gt; Visualization::PositionLayout::items</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab765fc176ea79d28b96aed7d1dddb4bc"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QVector&lt;<a class="el" href="classVisualization_1_1Position.html">Position</a>*&gt; Visualization::PositionLayout::positions</td>
         </tr>
       </table>
   </td>

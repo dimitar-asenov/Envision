@@ -137,7 +137,7 @@ var searchData=
   ['_7etype',['~Type',['../classOOModel_1_1Type.html#a6cabee05a06c8a9aa1117de8e3f88a91',1,'OOModel::Type']]],
   ['_7etypesystem',['~TypeSystem',['../classOOModel_1_1TypeSystem.html#a4d6ac6f1c2ab86817358cd6ef04f6228',1,'OOModel::TypeSystem']]],
   ['_7eundocommand',['~UndoCommand',['../classModel_1_1UndoCommand.html#a321caa7ad72aec74dc9c6fb850c21267',1,'Model::UndoCommand']]],
-  ['_7evarrayinitializer',['~VArrayInitializer',['../classOOVisualization_1_1VArrayInitializer.html#aa8464a6cea83ab830a86ec3fce1d3162',1,'OOVisualization::VArrayInitializer']]],
+  ['_7evarrayinitializerstyle',['~VArrayInitializerStyle',['../classOOVisualization_1_1VArrayInitializerStyle.html#a3f054885269963de0402ebbbcf66b98e',1,'OOVisualization::VArrayInitializerStyle']]],
   ['_7evautotype',['~VAutoType',['../classOOVisualization_1_1VAutoType.html#a72a01552e05c65e8730495b1f0f63476',1,'OOVisualization::VAutoType']]],
   ['_7evbinaryoperation',['~VBinaryOperation',['../classOOVisualization_1_1VBinaryOperation.html#af30d45a2fb5ebedb041c15c502ad9c91',1,'OOVisualization::VBinaryOperation']]],
   ['_7evblock',['~VBlock',['../classOOVisualization_1_1VBlock.html#a71e1c913fd9f992cec55c3d6c11f895c',1,'OOVisualization::VBlock']]],

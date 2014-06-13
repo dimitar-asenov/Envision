@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['unary',['Unary',['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a19c6e8d6e2caeaff0ac8881e05c25010',1,'CppImport::CppImportUtilities::Unary()'],['../classOOInteraction_1_1OOOperatorDescriptor.html#aa295a02369185bb1af61f696263d4c1b',1,'OOInteraction::OOOperatorDescriptor::unary()']]],
+  ['unary',['unary',['../classOOInteraction_1_1OOOperatorDescriptor.html#aa295a02369185bb1af61f696263d4c1b',1,'OOInteraction::OOOperatorDescriptor::unary()'],['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a19c6e8d6e2caeaff0ac8881e05c25010',1,'CppImport::CppImportUtilities::Unary()']]],
   ['unaryoperation',['UnaryOperation',['../classOOModel_1_1UnaryOperation.html#a7c74d4f2bc57b262576a47168412e26c',1,'OOModel::UnaryOperation']]],
   ['unaryoperation',['UnaryOperation',['../classOOModel_1_1UnaryOperation.html',1,'OOModel']]],
   ['unaryopmap_5f',['unaryOpMap_',['../classCppImport_1_1CppImportLogger.html#ab669a2854326afa08b6a26f92ca652dd',1,'CppImport::CppImportLogger']]],
@@ -58,7 +58,7 @@ var searchData=
   ['updatesubtree',['updateSubtree',['../classVisualization_1_1Item.html#af5fd4ff62001cc2b45e3546c3a3b5eb2',1,'Visualization::Item']]],
   ['updatetype',['UpdateType',['../classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890',1,'Visualization::Item']]],
   ['upparentactionslevel',['upParentActionsLevel',['../classInteraction_1_1ActionPrompt.html#a81edbb1abf400e510be903130a49d336',1,'Interaction::ActionPrompt']]],
-  ['use',['USE',['../classOOInteraction_1_1StringComponents.html#af8e6a3c10cba6eb6e59718009709fb95ac1180b01d5c0276b1a228c33dce27b2d',1,'OOInteraction::StringComponents::USE()'],['../structOOInteraction_1_1StringComponents_1_1Optional.html#a627d2273a81fca8698e281560f03c149',1,'OOInteraction::StringComponents::Optional::use()']]],
+  ['use',['use',['../structOOInteraction_1_1StringComponents_1_1Optional.html#a627d2273a81fca8698e281560f03c149',1,'OOInteraction::StringComponents::Optional::use()'],['../classOOInteraction_1_1StringComponents.html#af8e6a3c10cba6eb6e59718009709fb95ac1180b01d5c0276b1a228c33dce27b2d',1,'OOInteraction::StringComponents::USE()']]],
   ['usebackgroundcolors',['useBackgroundColors',['../classVisualization_1_1VListStyle.html#a9583974f5b3c9d2570f695260283c19b',1,'Visualization::VListStyle']]],
   ['usecenter_5f',['useCenter_',['../classVisualization_1_1CursorShapeItem.html#a0dbd1ce7bcc0a4a10a2cbd1f4fe258d9',1,'Visualization::CursorShapeItem']]],
   ['usedlibraries',['usedLibraries',['../classModel_1_1Node.html#afceaa207bf87136fe98fe490a063b144',1,'Model::Node::usedLibraries()'],['../classModel_1_1UsedLibrary.html#abbc49d2fe053035875015eb206947d16',1,'Model::UsedLibrary::usedLibraries()'],['../classOOModel_1_1Module.html#abd2904683f93e0d6bdb775b3d2f730f9',1,'OOModel::Module::usedLibraries()'],['../classOOModel_1_1Project.html#a818dc7d74036f075e2553b803674810e',1,'OOModel::Project::usedLibraries()']]],

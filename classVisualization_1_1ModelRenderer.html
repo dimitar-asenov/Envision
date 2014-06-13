@@ -142,13 +142,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a29b3c912c28c4146c543702e1fb05e97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a29b3c912c28c4146c543702e1fb05e97">render</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, int purpose=-1, int semanticZoomLevel=-1)</td></tr>
 <tr class="memdesc:a29b3c912c28c4146c543702e1fb05e97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an <a class="el" href="classVisualization_1_1Item.html">Item</a> which has a parent <em>parent</em> and is a rendering of <em>node</em>.  <a href="#a29b3c912c28c4146c543702e1fb05e97">More...</a><br/></td></tr>
 <tr class="separator:a29b3c912c28c4146c543702e1fb05e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9bd8ad078df4a2ad550bbf3987fb91e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#af9bd8ad078df4a2ad550bbf3987fb91e">render</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;item, <a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
-<tr class="memdesc:af9bd8ad078df4a2ad550bbf3987fb91e"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Re)renders an item in the context of a parent item.  <a href="#af9bd8ad078df4a2ad550bbf3987fb91e">More...</a><br/></td></tr>
-<tr class="separator:af9bd8ad078df4a2ad550bbf3987fb91e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fd0d8b96b121ebccaddae73d917ebdd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a5fd0d8b96b121ebccaddae73d917ebdd">semanticZoomLevelId</a> (QString name)</td></tr>
 <tr class="separator:a5fd0d8b96b121ebccaddae73d917ebdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fcafb3159a2e24e720d628769defd0a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a5fcafb3159a2e24e720d628769defd0a">semanticZoomLevelName</a> (int semanticZoomLevel)</td></tr>
 <tr class="separator:a5fcafb3159a2e24e720d628769defd0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fa49da8794fb3ec9cbf0eec27e08bad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a1fa49da8794fb3ec9cbf0eec27e08bad">sync</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;item, <a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
+<tr class="memdesc:a1fa49da8794fb3ec9cbf0eec27e08bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Re)renders an item in the context of a parent item.  <a href="#a1fa49da8794fb3ec9cbf0eec27e08bad">More...</a><br/></td></tr>
+<tr class="separator:a1fa49da8794fb3ec9cbf0eec27e08bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -871,40 +871,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af9bd8ad078df4a2ad550bbf3987fb91e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Visualization::ModelRenderer::render </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;&#160;</td>
-          <td class="paramname"><em>item</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>parent</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>(Re)renders an item in the context of a parent item. </p>
-
-</div>
-</div>
 <a class="anchor" id="a5fd0d8b96b121ebccaddae73d917ebdd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -950,6 +916,41 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1fa49da8794fb3ec9cbf0eec27e08bad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::ModelRenderer::sync </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>(Re)renders an item in the context of a parent item. </p>
+<p>Returns true is the item was destroyed or rerendered. If nothing happened to the item, the return value is false. </p>
 
 </div>
 </div>

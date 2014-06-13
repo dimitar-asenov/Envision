@@ -192,8 +192,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0318c5513189c6900ad178ab52e28802"><td class="memTemplParams" colspan="2">template&lt;class FieldType , class VisualizationType  = FieldType&gt; </td></tr>
 <tr class="memitem:a0318c5513189c6900ad178ab52e28802"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayout.html#a0318c5513189c6900ad178ab52e28802">synchronizeMid</a> (FieldType *&amp;item, typename VisualizationType::NodeType *node, const typename VisualizationType::StyleType *<a class="el" href="classVisualization_1_1SequentialLayout.html#ab0a47cf2ab77e0a11a4fe1513986efeb">style</a>, int position)</td></tr>
 <tr class="separator:a0318c5513189c6900ad178ab52e28802"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00bc3952140f6d3ec255d83c8b479cca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayout.html#a00bc3952140f6d3ec255d83c8b479cca">synchronizeWithNodes</a> (const QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;nodes, <a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *renderer)</td></tr>
-<tr class="separator:a00bc3952140f6d3ec255d83c8b479cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6c891e88346e9fdbc18e3c001c9b3cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayout.html#af6c891e88346e9fdbc18e3c001c9b3cb">synchronizeWithNodes</a> (const QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;nodes)</td></tr>
+<tr class="separator:af6c891e88346e9fdbc18e3c001c9b3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32e71f115ff6e80796bfb962bad97a9b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayout.html#a32e71f115ff6e80796bfb962bad97a9b">updateGeometry</a> (int availableWidth, int availableHeight)</td></tr>
 <tr class="separator:a32e71f115ff6e80796bfb962bad97a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -216,6 +216,8 @@ Static Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a6cf77ebf506ffefdce825c035d87f27c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayout.html#a6cf77ebf506ffefdce825c035d87f27c">adjustCursorRegionToAvoidZeroSize</a> (QRect &amp;region, bool horizontal, bool forward, bool first, bool last)</td></tr>
 <tr class="separator:a6cf77ebf506ffefdce825c035d87f27c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d0a11931e9226eb2c39468da29efe50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayout.html#a4d0a11931e9226eb2c39468da29efe50">placeSynchronized</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *oldItem, <a class="el" href="classVisualization_1_1Item.html">Item</a> *newItem, int pos)</td></tr>
+<tr class="separator:a4d0a11931e9226eb2c39468da29efe50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -671,6 +673,46 @@ template&lt;class T &gt; </div>
           <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4d0a11931e9226eb2c39468da29efe50"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::SequentialLayout::placeSynchronized </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>oldItem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>newItem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -1274,7 +1316,7 @@ template&lt;class FieldType , class VisualizationType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a00bc3952140f6d3ec255d83c8b479cca"></a>
+<a class="anchor" id="af6c891e88346e9fdbc18e3c001c9b3cb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1282,18 +1324,8 @@ template&lt;class FieldType , class VisualizationType &gt; </div>
           <td class="memname">void Visualization::SequentialLayout::synchronizeWithNodes </td>
           <td>(</td>
           <td class="paramtype">const QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>nodes</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>nodes</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td>
-          <td class="paramname"><em>renderer</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

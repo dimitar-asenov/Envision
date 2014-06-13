@@ -14,7 +14,6 @@ var searchData=
   ['marginleft_5f',['marginLeft_',['../classVisualization_1_1FormElement.html#ac1502dd2e939f6577c897028d9df5909',1,'Visualization::FormElement']]],
   ['marginright_5f',['marginRight_',['../classVisualization_1_1FormElement.html#a2caed31b2e6fd191336d28d0518f1e9a',1,'Visualization::FormElement']]],
   ['margintop_5f',['marginTop_',['../classVisualization_1_1FormElement.html#a856f05e34322fe6408e5c188711a4729',1,'Visualization::FormElement']]],
-  ['matrixform_5f',['matrixForm_',['../classOOVisualization_1_1VArrayInitializer.html#a67a8764273198cd864346b24101c7f7e',1,'OOVisualization::VArrayInitializer']]],
   ['max_5fcursor_5fjump_5fdistance',['MAX_CURSOR_JUMP_DISTANCE',['../namespaceVisualization.html#a9f11a0b9f6d9ea3130c79fbe0d15a565',1,'Visualization']]],
   ['max_5fdouble_5fprecision',['MAX_DOUBLE_PRECISION',['../namespaceFilePersistence.html#ae30af4b3e5ad1cc83d4c6fa725f3ae27',1,'FilePersistence::MAX_DOUBLE_PRECISION()'],['../namespaceFilePersistence.html#ae30af4b3e5ad1cc83d4c6fa725f3ae27',1,'FilePersistence::MAX_DOUBLE_PRECISION()']]],
   ['max_5fmilliseconds_5ffor_5fa_5fclick',['MAX_MILLISECONDS_FOR_A_CLICK',['../classVisualization_1_1Scene.html#a4d17344617d24f6a3a55fa13807fc017',1,'Visualization::Scene']]],
