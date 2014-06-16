@@ -52,7 +52,7 @@ void CppImportManager::setImportPath(const QString& sourcePath, const bool subPr
 	if (subProjects)
 	{
 		QDirIterator dirIterator(sourcePath, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
-		while(dirIterator.hasNext())
+		while (dirIterator.hasNext())
 			initPath(dirIterator.next());
 	}
 	else
@@ -160,8 +160,8 @@ void CppImportManager::readInFiles(const QString& sourcePath)
 void CppImportManager::setCompilationDbPath(const QString& sourcePath)
 {
 	std::string Error;
-	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toLatin1().data(),Error);
-	if(!compDB)
+	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toLatin1().data(), Error);
+	if (!compDB)
 		throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
 	compilationDbMap_.insert(sourcePath, compDB);
 }

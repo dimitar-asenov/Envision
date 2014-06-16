@@ -38,14 +38,14 @@
 
 #include <QtCore/QSignalMapper>
 #include <QtCore/QTimer>
-#include <QtGui/QToolBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QWidget>
-#include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QMenu>
-#include <QtGui/QWidgetAction>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QWidgetAction>
 
 #if defined __cplusplus
 // Add C++ includes here

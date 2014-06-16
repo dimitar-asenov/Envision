@@ -152,7 +152,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 
 	QString filename;
 	if ( oldPersisted == nullptr ) filename = name; // This is the root of the model, save the file name
-	else filename = Model::NodeIdMap::id(node); // This is not the root, so save by id
+	else filename = Model::NodeIdMap::id(node).toString(); // This is not the root, so save by id
 
 	QFile file(modelDir_.absoluteFilePath(filename));
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
