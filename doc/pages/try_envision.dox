@@ -66,6 +66,6 @@ lo my
 		The *load* command will load and visualize the entire project. Depending on the size of the
 		project this could be instant or take several minutes (e.g. if you're trying to visualize a million lines of
 		code). If you want to experiment with projects that have more than a few
-		tens of classes, you must manually compile and use a custom version of Qt as explained \ref compilation "here",
+		tens of classes, you must manually compile and use the latest version of Qt as explained \ref compilation "here",
 		otherwise the interface will be unusably slow.
 */

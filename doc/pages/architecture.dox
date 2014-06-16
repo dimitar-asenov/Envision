@@ -89,7 +89,7 @@ general-purpose software development.
 			natively supported in C++11, when the project was started C++ did not offer a good solution.
 		\li XML processing - classes for working with XML files and data structures are provided and different access
 			methods are supported (DOM and SAX).
-		\li Excellent graphics framework - <a href="http://qt-project.org/doc/qt-4.8/graphicsview.html">Qt’s GraphicsView
+		\li Excellent graphics framework - <a href="qt-project.org/doc/graphicsview.html">Qt’s GraphicsView
 			framework</a> is a perfect match for Envision’s visualization requirements. It offers a powerful toolkit for
 			designing custom visualizations and managing huge hierarchies of graphical objects. It also supports rendering
 			through OpenGL for optimized user experience.
