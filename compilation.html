@@ -82,8 +82,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><p>Envision is written in C++ and uses features from the C++11 standard.</p>
 <p>Make sure your C++ compiler is up-to-date. GCC version 4.8 or newer should be sufficient. Other dependencies are:</p>
 <ul>
-<li><b>Qt 4.8</b>: <a href="http://qt-project.org/">http://qt-project.org/</a> <br/>
- This is the underlying framework that we use to build Envision's visualizations and cross-platform support. A migration to Qt 5 is planned in the near future.</li>
+<li><b>Qt 5</b>: <a href="http://qt-project.org/">http://qt-project.org/</a> <br/>
+ This is the underlying framework that we use to build Envision's visualizations and cross-platform support.</li>
 <li><b>lp_solve 5.5</b>: <a href="http://lpsolve.sourceforge.net/">http://lpsolve.sourceforge.net/</a> <br/>
  Lp Solve is used for calculating some of the more complex visualization layouts.</li>
 <li><b>Clang 3.4</b>: <a href="http://clang.llvm.org/">http://clang.llvm.org/</a> <br/>
@@ -94,7 +94,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>To install the dependencies on Ubuntu 14.04, do the following:</p>
 <ol type="1">
 <li>Install the Qt SDK: <pre class="fragment">sudo apt-get install qt-sdk </pre></li>
-<li>Make Qt 4 the default for compilation: <pre class="fragment">sudo apt-get install qt4-default </pre></li>
 <li>Install the lp_solve development library version 5.5:<ol type="a">
 <li>Install the packages <code>lp-solve</code> (for the shared library) and <code>liblpsolve55-dev</code> (for the header files): <pre class="fragment">sudo apt-get install lp-solve liblpsolve55-dev </pre></li>
 <li>Make the following symbolic link: <pre class="fragment">sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so </pre></li>
@@ -110,7 +109,7 @@ Qt Creator (recommended for C++; does not work with Java)</h1>
 <ol type="1">
 <li>Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process Qt Creator will create additional directories alongside the repository clone.</li>
 <li>Start Qt Creator and configure the version of Qt that you want to use:<ul>
-<li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Qt Versions. Make sure that you have at least one Qt 4.8 version (Compilation will fail if you try to use Qt 5). This could be either Qt in PATH, or a custom Qt version that you compiled yourself. Compiling your own version of Qt is required if you want to use Envision with projects that have more than a few tens of classes. See below for Qt compilation instructions.</li>
+<li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Qt Versions. Make sure that you are using Qt 5. This could be either Qt in PATH, or a Qt version that you compiled yourself. Compiling the latest version of Qt is required if you want to use Envision with projects that have more than a few tens of classes. See below for Qt compilation instructions.</li>
 <li>Go to: Tools &gt; Options &gt; Build &amp; Run &gt; Kits. Make sure that the default desktop kit uses the appropriate version of Qt.</li>
 </ul>
 </li>
@@ -123,6 +122,10 @@ Qt Creator (recommended for C++; does not work with Java)</h1>
 <li>For each different test(demo) you want to run, make a new run configuration that also includes the appropriate argument. For example, to run the tests for the <a class="el" href="namespaceOOVisualization.html">OOVisualization</a> project: <pre class="fragment">-graphicssystem raster --test oovisualization</pre> To see the tests (demos) associated with a project, just supply its name, converted to lowercase, as the parameter to the <em>test</em> argument. Do not test more than one project at a time. See <a class="el" href="try_envision.html">here</a> for more details about the different demos.</li>
 </ul>
 </li>
+<li>(Recommended) If you want to debug Envision using gdb, you might notice that gdb takes quite a while to load debug symbols. It is possible to postpone this load to happen as late as possible, thereby speeding startup.<ul>
+<li>Go to: Tools &gt; Options &gt; Debugger &gt; GDB Extended and enable the "Attempt Quick Start" option. Additionally you might want to remove unnecessary debug symbols, such as for Qt WebKit which take a long time to load. If you compiled Qt manually using the approach outlined below, simply remove any ".debug" files you do not need from the "qt/qt5-build/lib" directory.</li>
+</ul>
+</li>
 </ol>
 <p>Note that you will need to compile the JavaImportTool project separately, if you want to experiment with showing a Java project inside Envision.</p>
 <h1><a class="anchor" id="eclipse"></a>
@@ -130,24 +133,23 @@ Eclipse (recommended for Java; works for C++, but could require a lot of tweakin
 <ol type="1">
 <li>Install the latest version of Eclipse.</li>
 <li>Download and install the Qt Integration plug-in for Eclipse. This plug-in is, unfortunately, no longer supported and the latest version is quite outdated. Look for the file: <code>qt-eclipse-integration-linux.x86_64-1.6.1.tar.gz</code> </li>
-<li>Start Eclipse and configure the version of Qt that you want to use. You can use the version provided by your system or you can point to a custom Qt version. See below.</li>
+<li>Start Eclipse and configure the version of Qt that you want to use. You can use the version provided by your system or you can point to a custom Qt version. See below for instructions on compiling the latest Qt version.</li>
 <li>Clone Envision's GitHub repository to a directory on your computer. The project is structured in separate directories where each one is an Eclipse project.</li>
 <li>Import all projects into your Eclipse workspace as Git projects. Eclipse/Qt might try to change some project files. Reject all requested changes.</li>
 </ol>
-<h1><a class="anchor" id="customqt"></a>
-Using a custom build of Qt</h1>
-<p>In order to make Envision's visualizations scale to very large projects we modified the rendering process in the Graphics View framework to avoid rendering objects which are too small. This customized Qt version can be found here: <code><a href="https://qt.gitorious.org/qt/qt-envision-enhancements">https://qt.gitorious.org/qt/qt-envision-enhancements</a></code> </p>
-<p>If you want to use Envision with a large amount of visual objects displayed at once we recommend you build and use the above version of Qt. Here is how:</p>
+<h1><a class="anchor" id="latestqt"></a>
+Using the latest build of Qt</h1>
+<p>In order to make Envision's visualizations scale to very large projects, we made several enhancements to the Graphics View framework. If you want to use Envision with a large amount of visual objects displayed at once you must use Qt 5.4 (once it comes out in late 2014) or compile the latest development version.</p>
+<p>If you want to compile and use the latest development version of Qt, you can simply run the <code>misc/use-qt5-dev.sh</code> script. It is designed for and tested with Ubuntu 14.04. Running the script will:</p>
 <ol type="1">
-<li>Clone the above repository into a new directory called <code>qt-envision-enhancements</code> inside the <code>qt</code> directory of the main Envision repository. The <code>qt</code> directory is ignored so you don't have to worry about polluting the main repository.</li>
-<li>Refer to the Qt's compilation guidelines to make sure that you have installed all dependencies. Here is a useful list for Ubuntu: <a href="http://qt-project.org/wiki/Compile_Qt_4.7_on_Ubuntu_10.10">Compile Qt 4.7 on Ubuntu 10.10</a></li>
-<li>Run the <code>configure-envision</code> script to confire the compilation of all components necessary for Envision.</li>
-<li>Run <code>make</code> and then <code>make</code> <code>install</code> .</li>
-<li>You should have a directory called <code>qt-build</code> alongside the <code>qt-envision-enhancements</code> directory.</li>
-<li>Make a symbolic link from <code>DebugBuild/qt</code> to <code>qt/qt-build/lib</code> .</li>
-<li>Configure Qt Creator or Eclipse to use the Qt found in <code>qt-build</code> .</li>
+<li>Install all dependencies required to compile Qt5 and Qt WebKit.</li>
+<li>Download the latest Qt 5 development branches of all Qt modules in <code>qt/qt5-dev</code>.</li>
+<li>Configure the build for a release version of Qt and WebKit with separate debug symbols.</li>
+<li>Compile all Qt modules including WebKit using 8 threads. Note that this could take a few hours even on high end machines.</li>
+<li>Install the compiled files it <code>qt/qt5-build</code>.</li>
+<li>Make a symbolic link: <code>DebugBuild/qt</code> -&gt; <code>qt/qt5-build/lib</code>. This is needed for Envision to use the correct Qt version at run-time.</li>
 </ol>
-<p>Work is underway for our extensions to appear as part of the regular Qt framework, starting with version 5.4</p>
+<p>After you run the script you will need to configure Qt Creator to the the newly built version of Qt and rebuild Envision.</p>
 <h1><a class="anchor" id="try"></a>
 Running Envision</h1>
 <p>After you have compiled Envision give it a try! See <a class="el" href="try_envision.html">this page</a> for some interesting examples.</p>
