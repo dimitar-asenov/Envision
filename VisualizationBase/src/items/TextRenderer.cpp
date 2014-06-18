@@ -112,7 +112,7 @@ void TextRenderer::updateGeometry(int, int)
 	}
 
 	// Correct underline, otherwise it is drawn in the middle of two pixels and appears fat and transparent.
-	if (style()->font().underline() && qfm.lineWidth() % 2)
+	if (style()->font().underline() && (qfm.lineWidth() % 2 == 0))
 	{
 		textXOffset_ += 0.5;
 		textYOffset_ += 0.5;
