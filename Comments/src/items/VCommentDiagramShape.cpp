@@ -44,10 +44,10 @@ VCommentDiagramShape::VCommentDiagramShape(Item* parent, NodeType* node, const S
 inline const std::array<const QRect, 4> VCommentDiagramShape::resizeRects() const
 {
 	const int size = 5;
-	return { QRect{0,								0,								size, size},
+	return {{QRect{0,								0,								size, size},
 				QRect{widthInLocal() - size,	0,								size, size},
 				QRect{widthInLocal() - size,	heightInLocal() - size,	size, size},
-				QRect{0,								heightInLocal() - size,	size, size}};
+				QRect{0,								heightInLocal() - size,	size, size}}};
 }
 
 VCommentDiagram* VCommentDiagramShape::diagram()

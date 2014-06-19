@@ -35,9 +35,6 @@ static const char* XML_DOM_TYPE = "EnvisionFilePersistence";
 
 static const int MAX_DOUBLE_PRECISION = 15;
 
-static const int ATTRIBUTE_TRUE = 1;
-static const int ATTRIBUTE_FALSE = 0;
-
 static const QString PREFIX_STRING = QString("S_");
 static const QString PREFIX_INTEGER = QString("I_");
 static const QString PREFIX_DOUBLE = QString("D_");
