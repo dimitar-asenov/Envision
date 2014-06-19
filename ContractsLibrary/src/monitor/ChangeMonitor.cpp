@@ -29,7 +29,7 @@
 #include "ValueAtReturnVisitor.h"
 #include "OOModel/src/expressions/Expression.h"
 #include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace ContractsLibrary {
 
@@ -39,9 +39,9 @@ ChangeMonitor::ChangeMonitor()
 ChangeMonitor::~ChangeMonitor()
 {}
 
-void ChangeMonitor::listenToModel(Model::Model* model)
+void ChangeMonitor::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(model, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesModified(QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesModified(QSet<Node*>)), Qt::QueuedConnection);
 }
 
 void ChangeMonitor::nodesModified(QSet<Node*> nodes)

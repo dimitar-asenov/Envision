@@ -26,7 +26,7 @@
 
 #include "items/VInteger.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -44,9 +44,9 @@ bool VInteger::setText(const QString& newText)
 	int value = newText.toInt(&ok);
 	if (ok)
 	{
-		node()->model()->beginModification(node(), "Set integer");
+		node()->beginModification("Set integer");
 		node()->set(value);
-		node()->model()->endModification();
+		node()->endModification();
 		TextRenderer::setText(newText);
 		return true;
 	}

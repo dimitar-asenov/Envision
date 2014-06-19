@@ -29,16 +29,16 @@
 
 #include "allOOModelNodes.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace OOModel {
 
 TEST(OOModelPlugin, JavaLibraryAndHelloWorldTest)
 {
 	auto prj = new Project("HelloWorld");
-	Model::Model model(prj);
+	Model::TreeManager manager(prj);
 
-	model.beginModification(prj, "build simple java library and a hello world app");
+	manager.beginModification(prj, "build simple java library and a hello world app");
 
 	// Build a simple Java Library
 	Project* java = new Project();
@@ -93,7 +93,7 @@ TEST(OOModelPlugin, JavaLibraryAndHelloWorldTest)
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
 
-	model.endModification();
+	manager.endModification();
 
 	CHECK_STR_EQUAL("Java", java->name());
 

@@ -27,7 +27,7 @@
 #pragma once
 
 #include "UndoCommand.h"
-#include "../model/Model.h"
+#include "../model/TreeManager.h"
 
 namespace Model {
 

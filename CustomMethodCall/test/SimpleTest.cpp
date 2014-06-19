@@ -207,10 +207,10 @@ Class* addCollection(Project* parent)
 TEST(CustomMethodCallPlugin, CustomVisTest)
 {
 	auto collection = addCollection(nullptr);
-	auto model = new Model::Model(collection);
+	auto manager = new Model::TreeManager(collection);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(collection));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(collection != nullptr);
 }

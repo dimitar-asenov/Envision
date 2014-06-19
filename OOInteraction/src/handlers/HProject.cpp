@@ -60,7 +60,7 @@ void HProject::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				auto newProj = new OOModel::Project();
 				proj->node()->projects()->append(newProj);
 				newProj->load(clipboard);
-				proj->node()->model()->endModification();
+				proj->node()->endModification();
 				proj->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			}
 			else GenericHandler::keyPressEvent(target, event);

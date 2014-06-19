@@ -27,7 +27,7 @@
 #include "CompoundObjectDescriptor.h"
 #include "OOModel/src/expressions/IntegerLiteral.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace OOInteraction {
 
@@ -45,21 +45,21 @@ OOModel::Expression* CompoundObjectDescriptor::create(const QList<OOModel::Expre
 	SAFE_DELETE(ilit);
 	Q_ASSERT(e);
 
-	if (auto model = e->model())
+	if (auto manager = e->manager())
 	{
-		auto beingModified = model->isBeingModified();
-		auto oldModificationTarget = beingModified ? nullptr : model->modificationTarget();
+		auto beingModified = manager->isBeingModified();
+		auto oldModificationTarget = beingModified ? nullptr : manager->modificationTarget();
 		auto oldParent = e->parent();
 
 		Q_ASSERT(e!=oldModificationTarget && !e->isAncestorOf(oldModificationTarget));
 
 		if (!beingModified) oldParent->beginModification("extract expression");
-		else model->changeModificationTarget(oldParent);
+		else manager->changeModificationTarget(oldParent);
 		auto replaceSuccessfull = oldParent->replaceChild(e, new OOModel::EmptyExpression());
 		Q_ASSERT(replaceSuccessfull);
 
 		if (!beingModified) oldParent->endModification();
-		else model->changeModificationTarget(oldModificationTarget);
+		else manager->changeModificationTarget(oldModificationTarget);
 	}
 	else
 	{

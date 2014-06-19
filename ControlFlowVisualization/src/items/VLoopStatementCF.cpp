@@ -95,7 +95,7 @@ void VLoopStatementCF::determineChildren()
 		updateStepBackground = nullptr;
 	}
 
-	// Create nodes which are present in the model
+	// Create nodes which are present in the tree
 	if (!initStep && node()->initStep())
 	{
 		initStepBackground = new SequentialLayout(this, &style()->initStep());

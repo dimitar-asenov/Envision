@@ -29,33 +29,33 @@
 
 #include "allOOModelNodes.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace OOModel {
 
 TEST(OOModelPlugin, SimpleClassTest)
 {
 	auto root = new Class;
-	Model::Model model(root);
+	Model::TreeManager manager(root);
 
 	CHECK_CONDITION(root != nullptr);
 	CHECK_CONDITION(root->name().isEmpty());
-	model.beginModification(root, "setName");
+	manager.beginModification(root, "setName");
 	root->setName("Test");
-	model.endModification();
+	manager.endModification();
 	CHECK_STR_EQUAL("Test", root->name());
 }
 
 TEST(OOModelPlugin, SimpleProjectTest)
 {
 	auto root = new Project;
-	Model::Model model(root);
+	Model::TreeManager manager(root);
 
 	CHECK_CONDITION(root != nullptr);
 	CHECK_CONDITION(root->name().isEmpty());
-	model.beginModification(root, "setName");
+	manager.beginModification(root, "setName");
 	root->setName("prj");
-	model.endModification();
+	manager.endModification();
 	CHECK_STR_EQUAL("prj", root->name());
 }
 

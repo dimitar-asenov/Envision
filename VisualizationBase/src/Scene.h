@@ -29,7 +29,7 @@
 #include "visualizationbase_api.h"
 
 namespace Model {
-	class Model;
+	class TreeManager;
 	class Node;
 }
 
@@ -50,7 +50,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 	private:
 
 		// This is needed in order to make the Signals and Slots mechanism work. Otherwise we are not able to connect to
-		// the signal provided from Model. This is because the signatures of the two methods, must match exactly
+		// the signal provided from TreeManager. This is because the signatures of the two methods, must match exactly
 		// (stringwise).
 		typedef Model::Node Node;
 
@@ -68,7 +68,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void addTopLevelItem(Item* item);
 		void removeTopLevelItem(Item* item);
 		void scheduleUpdate();
-		void listenToModel(Model::Model* model);
+		void listenToTreeManager(Model::TreeManager* manager);
 
 		Cursor* mainCursor();
 		void setMainCursor(Cursor* cursor);

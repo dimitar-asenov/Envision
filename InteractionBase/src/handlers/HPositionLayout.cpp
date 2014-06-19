@@ -28,7 +28,7 @@
 
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/Scene.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Interaction {
 
@@ -93,10 +93,10 @@ void HPositionLayout::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 		int currentItemPositionY = currentItemPosition->yNode() ? currentItemPosition->y() : 0;
 		if (newX != currentItemPositionX || newY != currentItemPositionY)
 		{
-			currentItem->node()->model()->beginModification(currentItem->node(), "Change position");
+			currentItem->node()->manager()->beginModification(currentItem->node(), "Change position");
 			currentItemPosition->setX( newX );
 			currentItemPosition->setY( newY );
-			currentItem->node()->model()->endModification();
+			currentItem->node()->manager()->endModification();
 			currentItem->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->scheduleUpdate();
 		}

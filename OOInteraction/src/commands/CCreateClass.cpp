@@ -54,7 +54,7 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 	else if (attributes.first()  == "protected" ) cl->modifiers()->set(Modifier::Protected);
 	else if (attributes.first()  == "public" ) cl->modifiers()->set(Modifier::Public);
 
-	bool newModel = false;
+	bool newManager = false;
 	if (pr)
 	{
 		pr->beginModification("create class");
@@ -63,18 +63,18 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 	}
 	else
 	{
-		newModel = true;
-		auto model = new Model::Model();
-		model->setRoot(cl);
+		newManager = true;
+		auto manager = new Model::TreeManager();
+		manager->setRoot(cl);
 
 		auto vis = new Visualization::RootItem(cl);
 		vis->setPos(target->pos());
 		target->scene()->addTopLevelItem( vis );
-		target->scene()->listenToModel(model);
+		target->scene()->listenToTreeManager(manager);
 	}
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-		if (newModel) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), cl,
+		if (newManager) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), cl,
 				Interaction::SetCursorEvent::CursorDefault, true));
 		else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, cl,
 				Interaction::SetCursorEvent::CursorDefault, true));

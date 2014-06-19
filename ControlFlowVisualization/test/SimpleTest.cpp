@@ -233,10 +233,10 @@ TEST(ControlFlowVisualizationPlugin, SimpleTest)
 	addComplicated(cl);
 	addDivBySix(cl);
 
-	auto model = new Model::Model(cl);
+	auto manager = new Model::TreeManager(cl);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(cl));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(cl != nullptr);
 }

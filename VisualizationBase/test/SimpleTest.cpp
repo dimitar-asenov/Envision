@@ -37,16 +37,16 @@
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
 //TEST(VisualizationBasePlugin, CompositeTest)
 //{
-//	Model::Model* model = new Model::Model();
-//	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
+//	Model::TreeManager* manager = new Model::TreeManager();
+//	Model::List* list = static_cast<Model::List*> (manager->createRoot("List"));
 //
-//	model->beginModification(list, "set");
+//	manager->beginModification(list, "set");
 //	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
 //	list->append(first);
 //	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
@@ -69,7 +69,7 @@ namespace Visualization {
 //	list->append(new TestBoxNode("someText"));
 //	list->append(new TestBoxNode("stretch", true));
 //
-//	model->endModification();
+//	manager->endModification();
 //
 //	auto top = new RootItem(list);
 //	auto scene = VisualizationManager::instance().mainScene();
@@ -79,7 +79,7 @@ namespace Visualization {
 //	VList* l = dynamic_cast<VList*> (top->item());
 //	l->itemAt<VComposite>(1)->setExpanded(false);
 //	scene->scheduleUpdate();
-//	scene->listenToModel(model);
+//	scene->listenToTreeManager(manager);
 //
 //	CHECK_CONDITION(scene);
 //}
@@ -87,9 +87,9 @@ namespace Visualization {
 TEST(VisualizationBasePlugin, CompositeTest)
 {
 	auto list = new Model::List();
-	auto model = new Model::Model(list);
+	auto manager = new Model::TreeManager(list);
 
-	model->beginModification(list, "set");
+	manager->beginModification(list, "set");
 	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
 	list->append(first);
 	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
@@ -114,7 +114,7 @@ TEST(VisualizationBasePlugin, CompositeTest)
 	list->append(new TestBoxNode("An html node with <b>bold text</b><br/> next html line", false, true));
 	list->append(new TestBoxNode("An html node with no formatting", false, true));
 
-	model->endModification();
+	manager->endModification();
 
 	auto it = new DeclarativeTest(nullptr, first, list, //new TestBoxNode("first", true),
 																new TestBoxNode("second", Qt::darkGreen, true, false),

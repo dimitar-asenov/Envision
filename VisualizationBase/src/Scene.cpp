@@ -36,7 +36,7 @@
 #include "CustomSceneEvent.h"
 
 #include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 #include "Logger/src/Timer.h"
 #include "Core/src/Profiler.h"
@@ -217,9 +217,9 @@ void Scene::updateItems()
 	inAnUpdate_ = false;
 }
 
-void Scene::listenToModel(Model::Model* model)
+void Scene::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(model, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
 }
 
 void Scene::nodesUpdated(QSet<Node*> nodes)

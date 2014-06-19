@@ -62,9 +62,9 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			auto empty = new OOModel::EmptyExpression();
 			auto es = new OOModel::ExpressionStatement();
 			es->setExpression(empty);
-			lst->node()->model()->beginModification(lst->node(), "add empty statement");
+			lst->node()->beginModification( "add empty statement");
 			lst->node()->insert(index, es);
-			lst->node()->model()->endModification();
+			lst->node()->endModification();
 
 			lst->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty));

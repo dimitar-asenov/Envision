@@ -179,7 +179,7 @@ void List::paste(ClipboardStore& clipboard, int position)
 	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{
 		// We provide a null parent as this will be set in the instruction below.
-		Node* newNode = clipboard.create(model(), nullptr);
+		Node* newNode = clipboard.create(manager(), nullptr);
 
 		execute(new ListInsert(this, nodes_, newNode, position+i));
 

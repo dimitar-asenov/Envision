@@ -27,7 +27,7 @@
 #include "FileStore.h"
 #include "FilePersistenceException.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/ModelException.h"
 #include "ModelBase/src/persistence/NodeIdMap.h"
@@ -65,7 +65,7 @@ QString FileStore::getPersistenceUnitName(const Model::Node *node)
 	Model::NodeIdType persistenceUnitId = Model::NodeIdMap::id( node->persistentUnitNode() );
 
 	QString name;
-	if (persistenceUnitId.isNull()) name = node->model()->name();
+	if (persistenceUnitId.isNull()) name = node->manager()->name();
 	else name = persistenceUnitId.toString();
 
 	return name;
@@ -75,34 +75,34 @@ QString FileStore::getPersistenceUnitName(const Model::Node *node)
 // Methods from Persistent Store
 //**********************************************************************************************************************
 
-void FileStore::saveModel(Model::Model* model, const QString &name)
+void FileStore::saveTree(Model::TreeManager* manager, const QString &name)
 {
 	storeAccess.lock();
 	working = true;
-	model->beginExclusiveRead();
+	manager->beginExclusiveRead();
 
 	try
 	{
 		if ( !baseFolder.exists(name) )
 		{
 			if ( !baseFolder.mkpath(name) )
-				throw FilePersistenceException("Could not create folder " + baseFolder.path() + " for model.");
+				throw FilePersistenceException("Could not create folder " + baseFolder.path() + " for tree.");
 		}
 
-		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + name);
+		treeDir_ = baseFolder.path() + QDir::toNativeSeparators("/" + name);
 
-		if ( !modelDir.exists() ) throw FilePersistenceException("Error opening model folder " + modelDir.path());
+		if ( !treeDir_.exists() ) throw FilePersistenceException("Error opening tree folder " + treeDir_.path());
 
-		saveNewPersistenceUnit(model->root(), name);
+		saveNewPersistenceUnit(manager->root(), name);
 	}
 	catch (Model::ModelException& e)
 	{
-		model->endExclusiveRead();
+		manager->endExclusiveRead();
 		working = false;
 		storeAccess.unlock();
 		throw;
 	}
-	model->endExclusiveRead();
+	manager->endExclusiveRead();
 	working = false;
 	storeAccess.unlock();
 }
@@ -152,11 +152,11 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 	saveNodeDirectly(node, name);
 
 	QString filename;
-	if ( oldXML == nullptr ) filename = name; // This is the root of the model, save the file name
+	if ( oldXML == nullptr ) filename = name; // This is the root of the tree, save the file name
 	else
 		filename = Model::NodeIdMap::id(node).toString(); // This is not the root, so save by id
 
-	QFile file(modelDir.absoluteFilePath(filename));
+	QFile file(treeDir_.absoluteFilePath(filename));
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
 		throw FilePersistenceException("Could not open file " + file.fileName() + ". " +file.errorString());
 
@@ -189,19 +189,19 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name)
 	xml->endSaveChildNode();
 }
 
-Model::Node* FileStore::loadModel(Model::Model*, const QString &name, bool loadPartially)
+Model::Node* FileStore::loadTree(Model::TreeManager*, const QString &name, bool loadPartially)
 {
 	storeAccess.lock();
 	working = true;
-	partiallyLoadingAModel_ = loadPartially;
+	partiallyLoadingATree_ = loadPartially;
 	Model::LoadedNode ln;
 
 	try
 	{
-		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + name);
-		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
+		treeDir_ = baseFolder.path() + QDir::toNativeSeparators("/" + name);
+		if ( !treeDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
 
-		xml = new XMLModel(modelDir.absoluteFilePath(name));
+		xml = new XMLModel(treeDir_.absoluteFilePath(name));
 		xml->goToFirstChild();
 		ln =  loadNode(nullptr, loadPartially);
 
@@ -237,7 +237,7 @@ Model::Node* FileStore::loadModel(Model::Model*, const QString &name, bool loadP
 Model::LoadedNode FileStore::loadNewPersistenceUnit(const QString& name, Model::Node* parent, bool loadPartially)
 {
 	XMLModel* oldXML = xml;
-	xml = new XMLModel(modelDir.absoluteFilePath(name));
+	xml = new XMLModel(treeDir_.absoluteFilePath(name));
 	xml->goToFirstChild();
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
@@ -279,7 +279,7 @@ Model::LoadedNode FileStore::loadNode(Model::Node* parent, bool loadPartially)
 {
 	Model::LoadedNode node;
 	node.name = xml->getName();
-	node.node = Model::Node::createNewNode(xml->getType(), parent, *this, partiallyLoadingAModel_ && loadPartially);
+	node.node = Model::Node::createNewNode(xml->getType(), parent, *this, partiallyLoadingATree_ && loadPartially);
 	Model::NodeIdMap::setId( node.node, xml->getId() ); // Record id
 	return node;
 }
@@ -308,7 +308,7 @@ QString FileStore::currentNodeType() const
 	return xml->getType();
 }
 
-Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node)
+Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& treeName, const Model::Node* node)
 {
 	storeAccess.lock();
 	working = true;
@@ -325,14 +325,14 @@ Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelNam
 
 	try
 	{
-		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + modelName);
-		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
+		treeDir_ = baseFolder.path() + QDir::toNativeSeparators("/" + treeName);
+		if ( !treeDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
 
 		QString filename;
 		if (!persistenceUnitId.isNull()) filename = persistenceUnitId.toString();
-		else filename = modelName;
+		else filename = treeName;
 
-		xml = new XMLModel(modelDir.absoluteFilePath(filename));
+		xml = new XMLModel(treeDir_.absoluteFilePath(filename));
 
 		// Search through the content in order to find the requested node id.
 		if (!xml->goToElement(nodeId) )
@@ -419,7 +419,7 @@ Model::PersistedNode* FileStore::loadPersistentUnitData( )
 	checkIsWorking();
 
 	XMLModel* oldXML = xml;
-	xml = new XMLModel(modelDir.absoluteFilePath(oldXML->loadStringValue()));
+	xml = new XMLModel(treeDir_.absoluteFilePath(oldXML->loadStringValue()));
 	xml->goToFirstChild();
 
 	Model::PersistedNode* result = loadNodeData();
@@ -469,7 +469,7 @@ void FileStore::checkIsWorking() const
 
 bool FileStore::isLoadingPartially() const
 {
-	return partiallyLoadingAModel_;
+	return partiallyLoadingATree_;
 }
 
 }

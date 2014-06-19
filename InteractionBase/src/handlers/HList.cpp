@@ -139,9 +139,9 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				// At this point, index indicates where in the LAYOUT we should put the new element.
 				if (index >= 0)
 				{
-					list->node()->model()->beginModification(list->node(), "add new list element");
+					list->node()->beginModification("add new list element");
 					list->node()->insert(index + list->rangeBegin(), newElem);
-					list->node()->model()->endModification();
+					list->node()->endModification();
 
 					list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 					target->scene()->addPostEventAction( new SetCursorEvent(list, newElem,

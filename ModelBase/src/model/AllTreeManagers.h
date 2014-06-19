@@ -24,56 +24,73 @@
  **
  **********************************************************************************************************************/
 
-#include "ModelManager.h"
-#include "Model.h"
+#pragma once
+
+#include "../modelbase_api.h"
 
 namespace Model {
 
-void ModelManager::init()
-{
-	qRegisterMetaType< QSet<Node*> >("QSet<Node*>");
-}
+class TreeManager;
+class Node;
 
-void ModelManager::cleanup()
-{
-	// We make a copy of loadedModel_ since Models will call remove() when being destroyed.
-	auto copy = instance().loadedModels_;
-	instance().loadedModels_.clear();
+/**
+ * The AllTreeManagers class contains all existing tree managers.
+ */
+class MODELBASE_API AllTreeManagers {
+	friend class TreeManager;
 
-	for (auto m : copy) SAFE_DELETE(m);
-}
+	public:
+		~AllTreeManagers();
+		AllTreeManagers(const AllTreeManagers&) = delete;
+		AllTreeManagers& operator=(const AllTreeManagers&) = delete;
 
-ModelManager& ModelManager::instance()
-{
-	static ModelManager man;
-	return man;
-}
+		/**
+		 * Registers types with the meta object system of Qt to allow signals and slots to work with lists.
+		 */
+		static void init();
 
-ModelManager::ModelManager()
-{}
+		/**
+		 * Closes all loaded tree managers.
+		 */
+		static void cleanup();
 
-ModelManager::~ModelManager()
-{
-	Q_ASSERT(loadedModels_.isEmpty());
-}
+		static AllTreeManagers& instance();
 
-Model* ModelManager::find(Node* root) const
-{
-	for (auto m : loadedModels_)
-		if ( m->root() == root ) return m;
+		/**
+		 * Returns the TreeManager object that has as its root node the node indicated.
+		 */
+		TreeManager* find(Node* root) const;
 
-	return nullptr;
-}
+		/**
+		 * Returns a list to all currently loaded tree managers.
+		 */
+		const QList<TreeManager*>& loadedManagers() const;
 
-void ModelManager::add(Model* model)
-{
-	if (!loadedModels_.contains(model)) loadedModels_.append(model);
-}
+	private:
+		AllTreeManagers();
 
-Model* ModelManager::remove(Model* model)
-{
-	loadedModels_.removeOne(model);
-	return model;
-}
+		/**
+		 * Adds \a treeManager the list of tree managers. This manager will take ownership of \a treeManager.
+		 *
+		 * Newly created instances of TreeManager call this method in their constructors.
+		 */
+		void add(TreeManager* treeManager);
+
+		/**
+		 * Removes \a treeManager from the list of tree managers. This manager will give up ownership of \a treeManager.
+		 *
+		 * The removed tree manager is returned. This method is called in the desctructor of TreeManager.
+		 *
+		 */
+		TreeManager* remove(TreeManager* treeManager);
+
+		/**
+		 * A list of all TreeManager objects that are currently instantiated. This is used to find the TreeManager
+		 * corresponding to a particular root object.
+		 */
+		QList<TreeManager*> loadedManagers_;
+};
+
+inline const QList<TreeManager*>& AllTreeManagers::loadedManagers() const { return loadedManagers_; }
 
 } /* namespace Model */

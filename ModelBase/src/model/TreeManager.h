@@ -29,7 +29,7 @@
 #include "../modelbase_api.h"
 #include "../nodes/Node.h"
 #include "../concurrent/NodeReadWriteLock.h"
-#include "ModelManager.h"
+#include "AllTreeManagers.h"
 
 namespace Model {
 
@@ -38,23 +38,23 @@ class NodeOwningCommand;
 class NameText;
 
 /**
- * The Model class is a management and access entity for a program tree.
+ * The TreeManager class is a management and access entity for a program tree.
  *
- * Each program or project in Envision is represented as a tree of nodes called a program model. To manage this tree
- * each project has an associated Model object.
+ * Each program or project in Envision is represented as a tree of nodes. To manage this tree each project has an
+ * associated TreeManager object.
  *
- * The life cycle of a project begins with the creation of a new Model object. This object can then be populated with
- * program nodes by loading an existing tree from a persistent store or by creating a new tree structure.
+ * The life cycle of a project begins with the creation of a new TreeManager object. This object can then be populated
+ * with program nodes by loading an existing tree from a persistent store or by creating a new tree structure.
  *
- * Further access and operations on the tree are performed through the Model object. Here is a list of the functionality
- * of a Model:
- * 	- Root node creation
- * 	- Saving/loading a model to/from a persistent store
- *  - Access control to nodes in a concurrent setting
- *  - Undo/redo functionality
- *  - Notifications of model change
+ * Further access and operations on the tree are performed through the TreeManager object. Here is a list of the
+ * functionality of a TreeManager:
+ * - Root node creation
+ * - Saving/loading a project to/from a persistent store
+ * - Access control to nodes in a concurrent setting
+ * - Undo/redo functionality
+ * - Notifications of project change
  */
-class MODELBASE_API Model: public QObject
+class MODELBASE_API TreeManager: public QObject
 {
 	Q_OBJECT
 	// The moc compiler is used only to support signals and slots.
@@ -62,34 +62,34 @@ class MODELBASE_API Model: public QObject
 	public:
 
 		/**
-		 * Constructs a new Model with the given \a root.
+		 * Constructs a new TreeManager with the given \a root.
 		 *
 		 * The undo history limit is set to 100 operations.
 		 */
-		Model(Node* root = nullptr);
+		TreeManager(Node* root = nullptr);
 
 		/**
-		 * Constructs a new Model with the given \a name and \a root.
+		 * Constructs a new TreeManager with the given \a name and \a root.
 		 *
 		 * The undo history limit is set to 100 operations.
 		 */
-		Model(const QString& name, Node* root = nullptr);
+		TreeManager(const QString& name, Node* root = nullptr);
 
 		/**
-		 * Deletes the root node corresponding to the Model.
+		 * Deletes the root node corresponding to the TreeManager.
 		 *
 		 * Deleting a node normally causes the corresponding subtree to be deleted.
 		 */
-		virtual ~Model();
+		virtual ~TreeManager();
 
 		/**
 		 * Begins a modification session.
 		 *
 		 * Before calling a method on a tree node that modifies the node, a writer thread must first begin a modification
-		 * session. Write access  to the underlying tree model must always occure in a modification block. Call
-		 * Model::beginModification() to begin this block and Model::endModification() to end the block:
+		 * session. Write access to the underlying tree must always occur in a modification block. Call
+		 * TreeManager::beginModification() to begin this block and TreeManager::endModification() to end the block:
 		 *
-		 * Model m;
+		 * TreeManager m;
 		 * ...
 		 * Node* someNode;
 		 * ...
@@ -104,12 +104,12 @@ class MODELBASE_API Model: public QObject
 		 *
 		 * Each node has a unique access unit associated with it. An access unit is simply identified by a lock. The
 		 * Node::getAccessLock() method can be used to get the access lock associated with a node. By default this is the
-		 * lock of the parent node, or if there is no parent node (this is the root node), the lock of the Model. The
-		 * user can reimplement the Node::getAccessLock() method to return a new access lock therby defining a new access
+		 * lock of the parent node, or if there is no parent node (this is the root node), the lock of the TreeManager.
+		 * The user can reimplement the Node::getAccessLock() method to return a new access lock therby defining a new access
 		 * unit.
 		 *
-		 * If there is a reader that has requested exclusive access via Model::beginExclusiveRead() this method will block
-		 * until the reader calls Model::endExclusiveRead()
+		 * If there is a reader that has requested exclusive access via TreeManager::beginExclusiveRead() this method
+		 * will block until the reader calls TreeManager::endExclusiveRead()
 		 *
 		 * @param modificationTarget
 		 * 				the top-most ancestor node of all nodes that will be modified.
@@ -123,11 +123,11 @@ class MODELBASE_API Model: public QObject
 		/**
 		 * Ends a modification session.
 		 *
-		 * This method must always be called after a call Model::beginModification(). It concludes the modification
+		 * This method must always be called after a call TreeManager::beginModification(). It concludes the modification
 		 * session by releasing all acquired locks and emits the Mode::nodesModified signal to notify listeners
 		 * about the changes.
 		 *
-		 * This method must be called before the any other thread can gain exclusive access to the tree model.
+		 * This method must be called before the any other thread can gain exclusive access to the tree.
 		 *
 		 * If \a tryResolvingReferences is true, then an attempt will be made to resolve all unresolved references.
 		 */
@@ -146,7 +146,7 @@ class MODELBASE_API Model: public QObject
 		 * 				to modify all nodes belonging to the subtree of this target and falling within the same access unit
 		 *
 		 * @exception ModelException
-		 * 				if this method is called without calling Model::beginModification() first.
+		 * 				if this method is called without calling TreeManager::beginModification() first.
 		 */
 		void changeModificationTarget(Node* modificationTarget);
 
@@ -155,17 +155,17 @@ class MODELBASE_API Model: public QObject
 		/**
 		 * Begins an exclusive read.
 		 *
-		 * During an exclusive read, the application model can not be modified by any other thread. Other readers,
-		 * including exclusive readers will be allowed to access the model.
+		 * During an exclusive read, the tree can not be modified by any other thread. Other readers,
+		 * including exclusive readers will be allowed to access the tree.
 		 *
-		 * Call Model::endExclusiveRead() to end the exclusive reading block.
+		 * Call TreeManager::endExclusiveRead() to end the exclusive reading block.
 		 */
 		void beginExclusiveRead();
 
 		/**
 		 * Ends an exclusive read.
 		 *
-		 * This function must always be called after a call to Model::beginExclusiveRead()
+		 * This function must always be called after a call to TreeManager::beginExclusiveRead()
 		 */
 		void endExclusiveRead();
 
@@ -178,7 +178,7 @@ class MODELBASE_API Model: public QObject
 		 * Checks if a node can be modified.
 		 *
 		 * A node can be modified if the following three conditions are met:
-		 * 	- The Model is in a modification session, started with Model::beginModification().
+		 * 	- The manager is in a modification session, started with TreeManager::beginModification().
 		 * 	- It is, or has as a parent, the current modification target.
 		 * 	- It belongs to the same access unit as the current modification target.
 		 *
@@ -190,24 +190,25 @@ class MODELBASE_API Model: public QObject
 		bool canBeModified(const Node* node) const;
 
 		/**
-		 * Returns the root node for this model.
+		 * Returns the root node for this manager.
 		 */
 		Node* root();
 
 		/**
-		 * Returns the name of the model. This is the name under which this model can be found in the persistent store.
+		 * Returns the name of the manged tree. This is the name under which this tree can be found in the persistent
+		 * store.
 		 */
 		QString name();
 
 		/**
-		 * Sets the name of the model. This is the name under which this model will be save in the persistent store.
+		 * Sets the name of the tree. This is the name under which this tree will be save in the persistent store.
 		 */
 		void setName(const QString& name);
 
 		/**
-		 * Sets the root node of this model to \a node.
+		 * Sets the root node of this manager to \a node.
 		 *
-		 * The model should not have a root node set. This method must be called outside of a modification block.
+		 * The TreeManager should not have a root node set. This method must be called outside of a modification block.
 		 * This action can not be undone.
 		 */
 		void setRoot(Node* node);
@@ -215,15 +216,15 @@ class MODELBASE_API Model: public QObject
 		/**
 		 * Pushes the specified command on the undo stack and executes it.
 		 *
-		 * This method can only be called inside a modification block initiated with Model::beginModification().
-		 * Furthermore no calls to Model::undo or Model::redo can be made in the current modification block.
+		 * This method can only be called inside a modification block initiated with TreeManager::beginModification().
+		 * Furthermore no calls to TreeManager::undo or TreeManager::redo can be made in the current modification block.
 		 *
 		 * @param command
 		 * 				The command to add to the stack.
 		 *
 		 * @exception ModelException
-		 * 				if called without calling Model::beginModification() first or if calls to Model::undo() or
-		 * 				Model::redo() have already been made.
+		 * 				if called without calling TreeManager::beginModification() first or if calls to
+		 *					TreeManager::undo() or TreeManager::redo() have already been made.
 		 */
 		void pushCommandOnUndoStack(UndoCommand* command);
 
@@ -240,8 +241,8 @@ class MODELBASE_API Model: public QObject
 		 * Redoes the commands executed in the next modification block.
 		 *
 		 * @exception ModelException
-		 * 				if called without calling Model::beginModification() first or if a call to
-		 * 				Model::pushCommandOnUndoStack() has already been made within this modification block.
+		 * 				if called without calling TreeManager::beginModification() first or if a call to
+		 * 				TreeManager::pushCommandOnUndoStack() has already been made within this modification block.
 		 */
 		void redo();
 
@@ -253,50 +254,50 @@ class MODELBASE_API Model: public QObject
 		bool isOwnedByUndoStack(const Node* node, const NodeOwningCommand* excludeCommand) const;
 
 		/**
-		 * Saves the model tree in persistent store of the model.
+		 * Saves the tree in persistent store of the tree manager.
 		 *
-		 * If this model does not have a current store, the store argument must not be NULL. In that case the provided
-		 * store will become the current store of the model.
+		 * If this manager does not have a current store, the store argument must not be NULL. In that case the provided
+		 * store will become the current store of the manager.
 		 *
 		 * @param store
-		 * 				The persistent store where the model should be saved. If this is NULL the current store will be
-		 * 				used. The current store is the one from which the model was loaded. If this is not NULL it will
+		 * 				The persistent store where the tree should be saved. If this is NULL the current store will be
+		 * 				used. The current store is the one from which the tree was loaded. If this is not NULL it will
 		 * 				be used instead of the current store.
 		 */
 		void save(PersistentStore* store = nullptr);
 
 		/**
-		 * Loads the current model tree from the specified persistent store. The provided store will become the current
-		 * store of the model.
+		 * Loads the manager's tree from the specified persistent store. The provided store will become the current
+		 * store of the manager.
 		 *
-		 * If this model already has a root node, this method does nothing.
+		 * If this manager already has a root node, this method does nothing.
 		 *
 		 * @param store
-		 * 				The persistent store where the model should be loaded from.
+		 * 				The persistent store where the manager's tree should be loaded from.
 		 *
 		 * @param name
-		 * 				The model name in the persistent store which contains the model tree.
+		 * 				The tree name in the persistent store.
 		 *
 		 * @param loadPartially
-		 * 				Whether the model should only be partially loaded. The intention is that a partially loaded model
-		 * 				is read only and should only contain the publicly visible part of a model. Typically this means
+		 * 				Whether the tree should only be partially loaded. The intention is that a partially loaded tree
+		 * 				is read only and should only contain the publicly visible part of the tree. Typically this means
 		 * 				excluding method bodies from loading.
 		 */
 		void load(PersistentStore* store, const QString& name, bool loadPartially);
 
 		/**
-		 * Returns the current store for this model.
+		 * Returns the current store for this manager.
 		 *
-		 * The current store is the store used to load the model. If this model was created rather than loaded and has
-		 * not been saved to a persistent store yet this method will return NULL.
+		 * The current store is the store used to load the manager's tree. If the tree was created rather than loaded and
+		 * has not been saved to a persistent store yet this method will return NULL.
 		 */
 		PersistentStore* store();
 
 		/**
 		 * Adds \a node to the list of modified nodes during an edit operation or immediately emits a nodesModified
-		 * signal with the specified node if no modification to the model is ongoing.
+		 * signal with the specified node if no modification to the tree is ongoing.
 		 *
-		 * For usual edit operations that alter the model, you do not need to explicitly call this method. It is useful
+		 * For usual edit operations that alter the tree, you do not need to explicitly call this method. It is useful
 		 * for cases where only a caching property of a node has changed which might lead to changes in its visualization.
 		 *
 		 * For example this method can be used when resolving references to notify visualizations of changes to the
@@ -330,7 +331,7 @@ class MODELBASE_API Model: public QObject
 		 */
 		void emitNodePartiallyLoaded(Node* node);
 
-		ModelManager& manager() const;
+		AllTreeManagers& manager() const;
 
 	signals:
 		/**
@@ -371,10 +372,10 @@ class MODELBASE_API Model: public QObject
 		 */
 		static bool isOwnedByCommand(const Node* node, const UndoCommand* cmd, const NodeOwningCommand* excludeCommand);
 
-		/** The name of this model. This name will be used to save the model in the persistent store. */
+		/** The name of this manager's tree. This name will be used to save the tree in the persistent store. */
 		QString name_;
 
-		/** The root node for this model */
+		/** The root node for this manager's tree */
 		Node* root_{};
 
 		/** The command stack that holds the undo history */
@@ -450,24 +451,24 @@ class MODELBASE_API Model: public QObject
 		bool modificationInProgress{};
 
 		/**
-		 * The persistent store where the model is currently stored.
+		 * The persistent store where the manager's tree is currently stored.
 		 *
 		 * This is used in calls to Node::loadFully when a partially loaded node needs to load its entire contents.
-		 * It can also be used by other stores when the model needs to be saved to a different location.
+		 * It can also be used by other stores when the tree needs to be saved to a different location.
 		 */
 		PersistentStore* store_{};
 };
 
-inline bool Model::isBeingModified() const { return modificationInProgress; }
-inline Node* Model::modificationTarget() const { return currentModificationTarget; }
-inline NodeReadWriteLock* Model::rootLock() { return &rootLock_; }
+inline bool TreeManager::isBeingModified() const { return modificationInProgress; }
+inline Node* TreeManager::modificationTarget() const { return currentModificationTarget; }
+inline NodeReadWriteLock* TreeManager::rootLock() { return &rootLock_; }
 
-inline Node* Model::root(){ return root_; }
-inline QString Model::name() { return name_; }
-inline void Model::setName(const QString& name) { name_ = name; }
+inline Node* TreeManager::root(){ return root_; }
+inline QString TreeManager::name() { return name_; }
+inline void TreeManager::setName(const QString& name) { name_ = name; }
 
-inline PersistentStore* Model::store() { return store_; }
+inline PersistentStore* TreeManager::store() { return store_; }
 
-inline ModelManager& Model::manager() const { return ModelManager::instance(); }
+inline AllTreeManagers& TreeManager::manager() const { return AllTreeManagers::instance(); }
 
 }

@@ -30,7 +30,7 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Interaction {
 

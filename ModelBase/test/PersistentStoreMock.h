@@ -48,7 +48,7 @@ class PersistentStoreMock: public PersistentStore
 
 		virtual QList<LoadedNode> loadAllSubNodes(Node* parent, const QSet<QString>& loadPartially) override;
 		virtual Node* loadSubNode(Node* parent, const QString& name, bool loadPartially) override;
-		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Node* node) override;
+		virtual PersistedNode* loadCompleteNodeSubtree(const QString& treeName, const Node* node) override;
 		virtual QString currentNodeType() const override;
 
 		virtual int loadIntValue() override;
@@ -64,8 +64,8 @@ class PersistentStoreMock: public PersistentStore
 		virtual bool isLoadingPartially() const override;
 
 	protected:
-		virtual void saveModel(Model* model, const QString &name) override;
-		virtual Node* loadModel(Model* model, const QString &name, bool loadPartially) override;
+		virtual void saveTree(TreeManager* manager, const QString &name) override;
+		virtual Node* loadTree(TreeManager* manager, const QString &name, bool loadPartially) override;
 
 };
 

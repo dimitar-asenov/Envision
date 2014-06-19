@@ -54,7 +54,7 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)override;
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name, bool loadPartially) override;
 		virtual QString currentNodeType() const override;
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node) override;
+		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& treeName, const Model::Node* node) override;
 
 		virtual int loadIntValue() override;
 		virtual QString loadStringValue() override;
@@ -64,26 +64,26 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		virtual bool isLoadingPartially() const override;
 
 	protected:
-		virtual void saveModel(Model::Model* model, const QString &name) override;
-		virtual Model::Node* loadModel(Model::Model* model, const QString &name, bool loadPartially) override;
+		virtual void saveTree(Model::TreeManager* manager, const QString &name) override;
+		virtual Model::Node* loadTree(Model::TreeManager* manager, const QString &name, bool loadPartially) override;
 
 	private:
 
-		/** The folder where all models are stored. Each model is a separate sub folder in the base folder. */
+		/** The folder where all trees are stored. Each tree is a separate sub folder in the base folder. */
 		QDir baseFolder_;
 
-		/** A mutex that assures exclusive model saving and loading operations. */
+		/** A mutex that assures exclusive tree saving and loading operations. */
 		QMutex storeAccess_;
 
-		/** A flag that indicates if the store is currently in the middle of saving or loading a model. */
+		/** A flag that indicates if the store is currently in the middle of saving or loading a tree. */
 		bool working_{};
-		bool partiallyLoadingAModel_{};
+		bool partiallyLoadingATree_{};
 
 		/**
-		 * This is the folder where the current model is being saved to or loaded from. This is only valid if working is
+		 * This is the folder where the current tree is being saved to or loaded from. This is only valid if working is
 		 * true.
 		 */
-		QDir modelDir_;
+		QDir treeDir_;
 
 		void saveNewPersistenceUnit(const Model::Node *node, const QString &name);
 		Model::LoadedNode loadNewPersistenceUnit(const QString& name, Model::Node* parent, bool loadPartially);

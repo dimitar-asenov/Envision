@@ -45,15 +45,15 @@ namespace CppImport {
 
 TEST(CppImportPlugin, SimpleTest)
 {
-	CppImportManager manager;
+	CppImportManager importManager;
 
-	manager.setupTest();
+	importManager.setupTest();
 
-	Model::Model* model = manager.createModel();
-	Model::Node* top_level = model->root();
+	Model::TreeManager* treeManager = importManager.createTreeManager();
+	Model::Node* top_level = treeManager->root();
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(treeManager);
 
 	CHECK_CONDITION(top_level != nullptr);
 }

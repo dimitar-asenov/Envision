@@ -47,7 +47,7 @@ VComment::VComment(Item* parent, NodeType* node) : Super(parent, node, itemStyle
 
 void VComment::determineChildren()
 {
-	//TODO: VComment currently does not call parseLines() when the model changes. Thus operations like Undo or other
+	//TODO: VComment currently does not call parseLines() when the tree changes. Thus operations like Undo or other
 	//indirect ways to edit the comments, do not refresh the comment's appearance. We must call parseLines somewhere in
 	//the update loop. The problem is that we must also make sure not to completely recreate all visual objects as we
 	//do currently in parseLines. It is necessary to synchronize all objects and let them update if possible.

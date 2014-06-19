@@ -71,9 +71,9 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			auto empty = new OOModel::EmptyExpression();
 			auto es = new OOModel::ExpressionStatement();
 			es->setExpression(empty);
-			vif->node()->model()->beginModification(vif->node(), "create then branch");
+			vif->node()->beginModification("create then branch");
 			vif->node()->thenBranch()->append(es);
-			vif->node()->model()->endModification();
+			vif->node()->endModification();
 
 			vif->thenBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -93,9 +93,9 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			auto empty = new OOModel::EmptyExpression();
 			auto es = new OOModel::ExpressionStatement();
 			es->setExpression(empty);
-			vif->node()->model()->beginModification(vif->node(), "create else branch");
+			vif->node()->beginModification("create else branch");
 			vif->node()->elseBranch()->append(es);
-			vif->node()->model()->endModification();
+			vif->node()->endModification();
 
 			vif->elseBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));

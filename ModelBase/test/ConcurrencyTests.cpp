@@ -28,7 +28,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/Integer.h"
 #include "nodes/Text.h"
 
@@ -37,9 +37,9 @@ namespace Model {
 TEST(ModelBasePlugin, SingleWriteUnitCheck)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model(root);
+	TreeManager manager(root);
 
-	model.beginModification(root, "make tree");
+	manager.beginModification(root, "make tree");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
 	TestNodes::BinaryNode* right = new TestNodes::BinaryNodeAccessUnit();
 	TestNodes::BinaryNode* one = new TestNodes::BinaryNodeAccessUnit();
@@ -48,7 +48,7 @@ TEST(ModelBasePlugin, SingleWriteUnitCheck)
 	root->setRight(right);
 	root->left()->setLeft(one);
 	root->left()->setRight(two);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_STR_EQUAL(QString(), root->name()->get());
 	CHECK_STR_EQUAL(QString(), left->name()->get());
@@ -56,7 +56,7 @@ TEST(ModelBasePlugin, SingleWriteUnitCheck)
 	CHECK_STR_EQUAL(QString(), one->name()->get());
 	CHECK_STR_EQUAL(QString(), two->name()->get());
 
-	model.beginModification(root, "Modify root");
+	manager.beginModification(root, "Modify root");
 
 	root->name()->set("This is ok");
 	CHECK_STR_EQUAL("This is ok", root->name()->get());
@@ -64,18 +64,18 @@ TEST(ModelBasePlugin, SingleWriteUnitCheck)
 	CHECK_FOR_EXCEPTION(ModelException, one->name()->set("This should fail"));
 	CHECK_STR_EQUAL(QString(), one->name()->get());
 
-	model.changeModificationTarget(one);
+	manager.changeModificationTarget(one);
 	CHECK_FOR_EXCEPTION(ModelException, root->name()->set("This should fail"));
 	CHECK_STR_EQUAL("This is ok", root->name()->get());
 
 	one->name()->set("one set");
 	CHECK_STR_EQUAL("one set", one->name()->get());
 
-	model.endModification();
+	manager.endModification();
 
-	model.beginModification(nullptr);
-	model.undo();
-	model.endModification();
+	manager.beginModification(nullptr);
+	manager.undo();
+	manager.endModification();
 
 	CHECK_STR_EQUAL(QString(), root->name()->get());
 	CHECK_STR_EQUAL(QString(), left->name()->get());
@@ -83,9 +83,9 @@ TEST(ModelBasePlugin, SingleWriteUnitCheck)
 	CHECK_STR_EQUAL(QString(), one->name()->get());
 	CHECK_STR_EQUAL(QString(), two->name()->get());
 
-	model.beginModification(nullptr);
-	model.redo();
-	model.endModification();
+	manager.beginModification(nullptr);
+	manager.redo();
+	manager.endModification();
 
 	CHECK_STR_EQUAL("This is ok", root->name()->get());
 	CHECK_STR_EQUAL(QString(), left->name()->get());

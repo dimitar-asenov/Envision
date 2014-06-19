@@ -39,7 +39,7 @@
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Interaction {
 
@@ -50,9 +50,9 @@ TEST(InteractionBasePlugin, TextSelect)
 	Visualization::VComposite::setDefaultClassHandler(HBinaryNode::instance());
 
 	auto list = new Model::List;
-	auto model = new Model::Model(list);
+	auto manager = new Model::TreeManager(list);
 
-	model->beginModification(list, "set");
+	manager->beginModification(list, "set");
 	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
 	list->append(first);
 	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
@@ -71,7 +71,7 @@ TEST(InteractionBasePlugin, TextSelect)
 	second->name()->set("Empty node");
 
 	third->set("Some independent text");
-	model->endModification();
+	manager->endModification();
 
 	auto top = new RootItem(list);
 	auto scene = VisualizationManager::instance().mainScene();
@@ -81,7 +81,7 @@ TEST(InteractionBasePlugin, TextSelect)
 	VList* list2 = dynamic_cast<VList*> (top->item());
 	list2->itemAt<VComposite>(0)->setExpanded();
 	scene->scheduleUpdate();
-	scene->listenToModel(model);
+	scene->listenToTreeManager(manager);
 
 	CHECK_CONDITION(scene);
 }

@@ -29,7 +29,7 @@
 #include "ClangFrontendActionFactory.h"
 #include "CppImportException.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace CppImport {
 
@@ -59,9 +59,8 @@ void CppImportManager::setImportPath(const QString& sourcePath, const bool subPr
 		initPath(sourcePath);
 }
 
-Model::Model*CppImportManager::createModel(const bool statisticsPerProject)
+Model::TreeManager*CppImportManager::createTreeManager(const bool statisticsPerProject)
 {
-
 	OOModel::Project* project = new OOModel::Project(projectName_);
 	CppImportLogger* log = new CppImportLogger();
 	ClangAstVisitor* visitor = new ClangAstVisitor(project, log);
@@ -86,7 +85,7 @@ Model::Model*CppImportManager::createModel(const bool statisticsPerProject)
 	SAFE_DELETE(log);
 	// reset the path (because clang tool changes it)
 	QDir::setCurrent(qApp->applicationDirPath());
-	return new Model::Model("CppImport", project);
+	return new Model::TreeManager("CppImport", project);
 }
 
 void CppImportManager::setupTest()

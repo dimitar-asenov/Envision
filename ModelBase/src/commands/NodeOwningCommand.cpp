@@ -26,8 +26,8 @@
 
 #include "NodeOwningCommand.h"
 #include "../nodes/Node.h"
-#include "../model/ModelManager.h"
-#include "../model/Model.h"
+#include "../model/AllTreeManagers.h"
+#include "../model/TreeManager.h"
 
 namespace Model {
 
@@ -35,7 +35,7 @@ NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* o
 : UndoCommand(target, text), ownedIfDone_(ownedIfDone), ownedIfUndone_(ownedIfUndone)
 {
 	// If the target node is not yet owned, do not assume ownership over its subnodes.
-	if (target->model() == nullptr)
+	if (target->manager() == nullptr)
 	{
 		ownedIfDone_ = nullptr;
 		ownedIfUndone_ = nullptr;
@@ -46,11 +46,11 @@ NodeOwningCommand::~NodeOwningCommand()
 {
 	auto n = owned();
 	// Only delete a node if:
-	// - It is not part of a model
+	// - It is not part of a manager
 	// - It is not currently owned by any other command in any undo stack
-	if (n && !n->model())
+	if (n && !n->manager())
 	{
-		for (auto m : ModelManager::instance().loadedModels())
+		for (auto m : AllTreeManagers::instance().loadedManagers())
 			if (m->isOwnedByUndoStack(n, this)) return;
 
 		SAFE_DELETE(n);

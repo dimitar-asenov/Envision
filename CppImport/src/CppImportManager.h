@@ -29,7 +29,7 @@
 #include "cppimport_api.h"
 
 namespace Model {
-	class Model;
+	class TreeManager;
 }
 
 namespace CppImport {
@@ -37,7 +37,7 @@ namespace CppImport {
 /**
  * This is the core manager of the CppImport plugin.
  * To import C++ code you have to specify a path to import with the \a setImportPath method.
- *	After having set the source path you can translate the code with the \a createModel method.
+ *	After having set the source path you can translate the code with the \a createTreeManager method.
  *
  * To experiment/test you may want to use the \a setupTest method.
  */
@@ -57,7 +57,7 @@ class CPPIMPORT_API CppImportManager
 		 * Be sure to have set the sourcePath before calling this method
 		 * Set \a statisticsPerProject if you want statistics output for each subproject
 		 */
-		Model::Model* createModel(const bool statisticsPerProject = false);
+		Model::TreeManager* createTreeManager(const bool statisticsPerProject = false);
 
 		/**
 		 * Imports code from a test.cpp file in a subdirectory of ENVISION_ROOT/CppImport/test

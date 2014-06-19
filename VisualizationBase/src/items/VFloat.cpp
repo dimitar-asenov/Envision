@@ -26,7 +26,7 @@
 
 #include "items/VFloat.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -43,9 +43,9 @@ bool VFloat::setText(const QString& newText)
 	double value = newText.toDouble(&ok);
 	if (ok)
 	{
-		node()->model()->beginModification(node(), "Set float");
+		node()->beginModification("Set float");
 		node()->set(value);
-		node()->model()->endModification();
+		node()->endModification();
 		TextRenderer::setText(newText);
 		return true;
 	}

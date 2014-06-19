@@ -41,7 +41,7 @@ bool ContractsLibraryPlugin::initialize(Core::EnvisionManager&)
 
 	// Create a change monitor
 	//auto cm = new ChangeMonitor();
-	//cm->listenToModel(model);
+	//cm->listenToTreeManamger(manager);
 	OOInteraction::HExpression::instance()->appendExpressionMonitor(ChangeMonitor::expressionModified);
 
 	return true;

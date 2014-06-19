@@ -27,7 +27,7 @@
 #include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "model/ModelManager.h"
+#include "model/AllTreeManagers.h"
 
 #include "nodes/Integer.h"
 #include "nodes/Float.h"
@@ -56,7 +56,7 @@ Log& ModelBasePlugin::log()
 
 bool ModelBasePlugin::initialize(Core::EnvisionManager&)
 {
-	ModelManager::init();
+	AllTreeManagers::init();
 
 	Core::TypeRegistry::initializeNewTypes();
 
@@ -65,7 +65,7 @@ bool ModelBasePlugin::initialize(Core::EnvisionManager&)
 
 void ModelBasePlugin::unload()
 {
-	ModelManager::cleanup();
+	AllTreeManagers::cleanup();
 }
 
 void ModelBasePlugin::selfTest(QString)

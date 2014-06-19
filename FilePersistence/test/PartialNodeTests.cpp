@@ -29,7 +29,7 @@
 #include "simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 
@@ -56,9 +56,9 @@ TEST(FilePersistencePlugin, LoadingPartialList)
 			store = s;
 		}
 
-		Model::Model model;
-		model.load(store, "partial", true);
-		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
+		Model::TreeManager manager;
+		manager.load(store, "partial", true);
+		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
 		CHECK_CONDITION(root != nullptr);
 
 		List* list = root->list();
@@ -92,9 +92,9 @@ TEST(FilePersistencePlugin, LoadingFullList)
 		}
 
 
-		Model::Model model;
-		model.load(store, "partial", false);
-		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
+		Model::TreeManager manager;
+		manager.load(store, "partial", false);
+		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
 		CHECK_CONDITION(root != nullptr);
 
 		List* list = root->list();

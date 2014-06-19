@@ -40,19 +40,19 @@
 #include "VisualizationBase/src/icons/Icon.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
 namespace Interaction {
 
-void GenericHandlerModelListener::nodesUpdated(QSet<Node*>)
+void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>)
 {
-	GenericHandler::fixCursorPositionForUndoAfterModelChange();
+	GenericHandler::fixCursorPositionForUndoAfterTreeManagerChange();
 }
 
-Model::Model* GenericHandlerModelListener::modelOf(Visualization::Item* item)
+Model::TreeManager* GenericHandlerManagerListener::managerOf(Visualization::Item* item)
 {
 	auto node = item->node();
 	while (!node && item->parent())
@@ -62,31 +62,31 @@ Model::Model* GenericHandlerModelListener::modelOf(Visualization::Item* item)
 	}
 
 	if (!node) return nullptr;
-	else return node->model();
+	else return node->manager();
 }
 
-void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
+void GenericHandlerManagerListener::listenToTreeManagerOf(Visualization::Item* item)
 {
-	auto model = modelOf(item);
-	if (!model) return;
+	auto manager = managerOf(item);
+	if (!manager) return;
 
-	if (!models_.contains(model))
+	if (!managers_.contains(manager))
 	{
-		models_.append(model);
-		connect(model, SIGNAL(nodesModified(QSet<Node*>)), this,
+		managers_.append(manager);
+		connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,
 				SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
 	}
 }
 
-void GenericHandlerModelListener::stopListeningToModelOf(Visualization::Item* item)
+void GenericHandlerManagerListener::stopListeningToTreeManagerOf(Visualization::Item* item)
 {
-	auto model = modelOf(item);
-	if (!model) return;
+	auto manager = managerOf(item);
+	if (!manager) return;
 
-	if (models_.contains(model))
+	if (managers_.contains(manager))
 	{
-		models_.removeAll(model);
-		disconnect(model, SIGNAL(nodesModified(QSet<Node*>)), this, SLOT(nodesUpdated(QSet<Node*>)));
+		managers_.removeAll(manager);
+		disconnect(manager, SIGNAL(nodesModified(QSet<Node*>)), this, SLOT(nodesUpdated(QSet<Node*>)));
 	}
 }
 
@@ -101,9 +101,9 @@ QList<QPair<Visualization::Item*, QPoint> > GenericHandler::cursorPositionsForUn
 int GenericHandler::cursorUndoIndex_{-1};
 QPair<Visualization::Item*, QPoint> GenericHandler::lastCursorPosition_;
 
-GenericHandlerModelListener& GenericHandler::modelListener()
+GenericHandlerManagerListener& GenericHandler::managerListener()
 {
-	static GenericHandlerModelListener m;
+	static GenericHandlerManagerListener m;
 	return m;
 }
 
@@ -164,7 +164,7 @@ void GenericHandler::command(Visualization::Item *target, const QString& command
 void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 {
 	recordCursorPosition(target);
-	modelListener().listenToModelOf(target);
+	managerListener().listenToTreeManagerOf(target);
 
 	if (	event->type() == QEvent::GraphicsSceneMouseMove
 			|| event->type() == QEvent::GraphicsSceneMousePress
@@ -183,15 +183,14 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		QList<const Model::Node*> nodesToCopy;
 		auto selected = target->scene()->selectedItems();
 
-		// Get all items from the current selection that are model items.
+		// Get all items from the current selection that have a node
 		for (int i = 0; i<selected.size(); ++i)
 		{
 			auto item = selected.at(i);
 			if (item->hasNode()) nodesToCopy.append(item->node());
 		}
 
-		// In case there is exactly one selected item that is not a model item try to find the first parent that it has
-		// which is a model item.
+		// In case there is exactly one selected item and it has no node, try to find the first parent that has a node
 		if (nodesToCopy.size() == 0 && selected.size() == 1)
 		{
 			auto item = selected.at(0);
@@ -224,9 +223,9 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		{
 			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
 			{
-				target->node()->model()->beginModification(target->node(), "paste");
+				target->node()->manager()->beginModification(target->node(), "paste");
 				target->node()->load(clipboard);
-				target->node()->model()->endModification();
+				target->node()->manager()->endModification();
 				target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			}
 			else InteractionHandler::keyPressEvent(target, event);
@@ -239,15 +238,15 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		{
 			event->accept();
 			auto scene = target->scene();
-			modelListener().stopListeningToModelOf(target);
+			managerListener().stopListeningToTreeManagerOf(target);
 
-			Model::Model* m = target->node()->model();
+			Model::TreeManager* m = target->node()->manager();
 			m->beginModification(nullptr, "undo");
 			m->undo();
 			m->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
-			// Reposition the cursor to the location it had before the model was changed
+			// Reposition the cursor to the location it had before the tree was changed
 			if (cursorUndoIndex_ + 1 == cursorPositionsForUndo_.size())
 			{
 				cursorPositionsForUndo_.append(lastCursorPosition_);
@@ -273,15 +272,15 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		{
 			event->accept();
 			auto scene = target->scene();
-			modelListener().stopListeningToModelOf(target);
+			managerListener().stopListeningToTreeManagerOf(target);
 
-			Model::Model* m = target->node()->model();
+			Model::TreeManager* m = target->node()->manager();
 			m->beginModification(nullptr, "redo");
 			m->redo();
 			m->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
-			// Reposition the cursor to the location it had after the model was changed
+			// Reposition the cursor to the location it had after the tree was changed
 			if (cursorUndoIndex_+1 < cursorPositionsForUndo_.size())
 			{
 				auto undoData = cursorPositionsForUndo_.at(++cursorUndoIndex_);
@@ -619,18 +618,18 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 				break;
 			}
 
-	// Check if there are any selected model items remaining.
-	bool modelItemSelected = false;
+	// Check if there are any selected items with nodes remaining.
+	bool itemWithNodeSelected = false;
 	selection = target->scene()->selectedItems();
 	for (int i = 0; i<selection.size(); ++i)
 		if ( selection.at(i)->hasNode() )
 		{
-			modelItemSelected = true;
+			itemWithNodeSelected = true;
 			break;
 		}
 
-	// If there is at least one model item, discard all items which are not model items.
-	if (modelItemSelected)
+	// If there is at least one item with a node, discard all items which do not have a node.
+	if (itemWithNodeSelected)
 		for (int i = selection.size() - 1; i>=0; --i)
 			if ( !selection.at(i)->hasNode() )
 			{
@@ -738,7 +737,7 @@ void GenericHandler::recordCursorPosition(Visualization::Item* target)
 	}
 }
 
-void GenericHandler::fixCursorPositionForUndoAfterModelChange()
+void GenericHandler::fixCursorPositionForUndoAfterTreeManagerChange()
 {
 	// If making changes after an Undo, discard the remaining hierarchy
 	while (cursorUndoIndex_ + 1 < cursorPositionsForUndo_.size())

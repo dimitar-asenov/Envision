@@ -30,7 +30,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/List.h"
@@ -40,14 +40,14 @@ namespace FilePersistence {
 TEST(FilePersistencePlugin, CopyToClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
+	Model::TreeManager manager;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "2Children", false);
+	manager.load(&store, "2Children", false);
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
 
 	sc.putNode(root);
 
@@ -73,12 +73,12 @@ TEST(FilePersistencePlugin, CopyToClipboard)
 TEST(FilePersistencePlugin, CopyPartialToClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
+	Model::TreeManager manager;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "partial", false);
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
+	manager.load(&store, "partial", false);
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
 	CHECK_CONDITION(root != nullptr);
 
 	SystemClipboard sc;
@@ -93,14 +93,14 @@ TEST(FilePersistencePlugin, CopyPartialToClipboard)
 TEST(FilePersistencePlugin, PasteTextFromClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
+	Model::TreeManager manager;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "2Children", false);
+	manager.load(&store, "2Children", false);
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
 
 	sc.putNode(root->name());
 
@@ -108,23 +108,23 @@ TEST(FilePersistencePlugin, PasteTextFromClipboard)
 	CHECK_CONDITION(clipboardDataOK);
 
 	CHECK_STR_EQUAL("Left child", root->left()->name()->get());
-	model.beginModification(root->left()->name(), "paste");
+	manager.beginModification(root->left()->name(), "paste");
 	root->left()->name()->load(sc);
-	model.endModification();
+	manager.endModification();
 	CHECK_STR_EQUAL("RootNode", root->left()->name()->get());
 }
 
 TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
-	Model::Model model;
+	Model::TreeManager manager;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(&store, "2Children", false);
+	manager.load(&store, "2Children", false);
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
 
 	sc.putNode(root);
 
@@ -133,9 +133,9 @@ TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
 
 	TestNodes::BinaryNode* left = dynamic_cast<TestNodes::BinaryNode*> (root->left());
 
-	model.beginModification(left, "paste");
+	manager.beginModification(left, "paste");
 	left->load(sc);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_STR_EQUAL("RootNode", left->name()->get());
 	CHECK_CONDITION(left->left());
@@ -147,9 +147,9 @@ TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
 TEST(FilePersistencePlugin, PasteListFromClipboard)
 {
 	auto root = new Model::List;
-	Model::Model model("test", root);
+	Model::TreeManager manager("test", root);
 
-	model.beginModification(root, "elems");
+	manager.beginModification(root, "elems");
 	Model::Text* first = new Model::Text();
 	first->set("first");
 	root->append(first);
@@ -161,15 +161,15 @@ TEST(FilePersistencePlugin, PasteListFromClipboard)
 	Model::Text* third = new Model::Text();
 	third->set("third");
 	list->append(third);
-	model.endModification();
+	manager.endModification();
 
 	SystemClipboard sc;
 	sc.putNode(list);
 	sc.readClipboard();
 
-	model.beginModification(root, "paste");
+	manager.beginModification(root, "paste");
 	root->load(sc);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(1, root->size());
 	CHECK_STR_EQUAL("third", root->at<Model::Text>(0)->get());
@@ -178,9 +178,9 @@ TEST(FilePersistencePlugin, PasteListFromClipboard)
 TEST(FilePersistencePlugin, PasteInListFromClipboard)
 {
 	auto root = new Model::List;
-	Model::Model model("test", root);
+	Model::TreeManager manager("test", root);
 
-	model.beginModification(root, "elems");
+	manager.beginModification(root, "elems");
 	Model::Text* first = new Model::Text();
 	first->set("first");
 	root->append(first);
@@ -192,7 +192,7 @@ TEST(FilePersistencePlugin, PasteInListFromClipboard)
 	Model::Text* third = new Model::Text();
 	third->set("third");
 	list->append(third);
-	model.endModification();
+	manager.endModification();
 
 	SystemClipboard sc;
 	QList<const Model::Node*> nodes;
@@ -201,9 +201,9 @@ TEST(FilePersistencePlugin, PasteInListFromClipboard)
 	sc.putNodes(nodes);
 	sc.readClipboard();
 
-	model.beginModification(root, "paste");
+	manager.beginModification(root, "paste");
 	root->paste(sc, 3);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
 	CHECK_STR_EQUAL("first", root->at<Model::Text>(3)->get());

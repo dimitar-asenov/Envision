@@ -278,9 +278,9 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			}
 
 			Model::Node* containerNode = replaceStatement->parent();
-			containerNode->model()->beginModification(containerNode, "replace expression statement");
+			containerNode->manager()->beginModification(containerNode, "replace expression statement");
 			containerNode->replaceChild(replaceStatement, st);
-			containerNode->model()->endModification();
+			containerNode->manager()->endModification();
 
 			// Get a parent which represents a list (of statements or statement items)
 			auto parent = topMostItem->parent();
@@ -300,9 +300,9 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				if (stList)
 				{
 					auto es = new ExpressionStatement(new EmptyExpression());
-					stList->model()->beginModification(stList, "add empty statement");
+					stList->beginModification("add empty statement");
 					stList->insert(stList->indexOf(expSt) + (index==0 && !str.isEmpty()?0:1), es);
-					stList->model()->endModification();
+					stList->endModification();
 
 					// Issue a cursor update
 					if ( index == 0 && !str.isEmpty())
@@ -407,9 +407,9 @@ void HExpression::setNewExpression(Item* target, Item* topMostItem, const QStrin
 	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
 
 	Model::Node* containerNode = topMostItem->node()->parent();
-	containerNode->model()->beginModification(containerNode, "edit expression");
+	containerNode->manager()->beginModification(containerNode, "edit expression");
 	containerNode->replaceChild(topMostItem->node(), newExpression);
-	containerNode->model()->endModification();
+	containerNode->manager()->endModification();
 
 	// Compute the new offset. This can change in case the string of the new expression is different.
 	QString expString = StringComponents::stringForNode(newExpression);

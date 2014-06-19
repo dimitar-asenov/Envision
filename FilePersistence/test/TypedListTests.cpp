@@ -29,7 +29,7 @@
 #include "simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 
@@ -57,10 +57,10 @@ TEST(FilePersistencePlugin, LoadingTypedList)
 		}
 
 
-		Model::Model model;
-		model.load(store, "typedList", false);
+		TreeManager manager;
+		manager.load(store, "typedList", false);
 
-		auto list = dynamic_cast<TypedList<Text>*> (model.root());
+		auto list = dynamic_cast<TypedList<Text>*> (manager.root());
 		CHECK_CONDITION(list != nullptr);
 
 		CHECK_STR_EQUAL("TypedListOfText", list->typeName() );
@@ -102,22 +102,22 @@ TEST(FilePersistencePlugin, SavingTypedList)
 		}
 
 		auto list = new TypedList<Text>;
-		Model::Model model(list);
+		Model::TreeManager manager(list);
 
-		model.beginModification(list, "create");
+		manager.beginModification(list, "create");
 		auto one = new Text();
 		one->set("one");
 		list->append(one);
 		auto two = new Text();
 		two->set("two");
 		list->append(two);
-		model.endModification();
+		manager.endModification();
 		NodeIdMap::setId(list, "{00000000-0000-0000-0000-000000000001}");
 		NodeIdMap::setId(one, "{00000000-0000-0000-0000-000000000002}");
 		NodeIdMap::setId(two, "{00000000-0000-0000-0000-000000000003}");
 
-		model.setName("typedList");
-		model.save(store);
+		manager.setName("typedList");
+		manager.save(store);
 
 		if (i==0)
 		{

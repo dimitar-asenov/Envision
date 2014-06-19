@@ -278,11 +278,11 @@ TEST(OOInteractionPlugin, SimpleTest)
 	cl->methods()->append(addTestMethod());
 
 	auto top_level = pr;
-	auto model = new Model::Model(top_level);
+	auto manager = new Model::TreeManager(top_level);
 
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(top_level != nullptr);
 }

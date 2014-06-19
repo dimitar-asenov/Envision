@@ -31,7 +31,7 @@
 
 #include "OOModel/src/declarations/Project.h"
 #include "FilePersistence/src/FileStore.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Reference.h"
 
 namespace OOInteraction {
@@ -47,17 +47,17 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 	//Test code goes here
 
 	QString testDir = "projects/";
-	Model::Model* model = new Model::Model();
+	Model::TreeManager* manager = new Model::TreeManager();
 	FilePersistence::FileStore store;
 	store.setBaseFolder(testDir);
 
-	//model->load(&store, "tetris");
-	model->load(&store, "large", false);
-	auto prj = dynamic_cast<OOModel::Project*> (model->root());
+	//manager->load(&store, "tetris");
+	manager->load(&store, "large", false);
+	auto prj = dynamic_cast<OOModel::Project*> (manager->root());
 	Model::Reference::resolvePending();
 
 	Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem( new Visualization::RootItem(prj));
-	Visualization::VisualizationManager::instance().mainScene()->listenToModel(model);
+	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	return new Interaction::CommandResult();
 }

@@ -26,7 +26,7 @@
 
 #include "Node.h"
 #include "../ModelBasePlugin.h"
-#include "../model/Model.h"
+#include "../model/TreeManager.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include "Reference.h"
@@ -55,7 +55,7 @@ QSet<const Node*>& Node::partiallyLoadedNodes()
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
-Node::Node(Node* parent) : parent_{parent}, model_{parent ? parent->model_ : nullptr}
+Node::Node(Node* parent) : parent_{parent}, manager_{parent ? parent->manager_ : nullptr}
 {
 	if (parent && !parent->isModifyable())
 		throw ModelException("Trying to create a node with a non-modifiable parent.");
@@ -82,7 +82,7 @@ void Node::execute(UndoCommand *command)
 	if ( this != command->target() )
 		throw ModelException("Command target differs from current node when executing commands");
 
-	Model* m = model();
+	TreeManager* m = manager();
 
 	if (m)
 	{
@@ -159,7 +159,7 @@ Node* Node::childToSubnode(const Node* other) const
 
 bool Node::isModifyable() const
 {
-	Model* m = model();
+	TreeManager* m = manager();
 
 	return !m || m->canBeModified(this);
 }
@@ -224,13 +224,13 @@ QList<Node*> Node::childrenInScope() const
 
 void Node::beginModification(const QString &text)
 {
-	if (auto m = model())
+	if (auto m = manager())
 		m->beginModification(this, text);
 }
 
 void Node::endModification()
 {
-	if (auto m = model()) m->endModification();
+	if (auto m = manager()) m->endModification();
 }
 
 QString Node::toDebugString()
@@ -254,31 +254,31 @@ bool Node::hasPartiallyLoadedChildren() const
 void Node::setParent(Node* parent)
 {
 	parent_ = parent;
-	auto oldModel = model_;
-	model_ = parent ? parent->model_ : nullptr;
-	if (oldModel != model_)	propagateModelToChildren();
+	auto oldManager = manager_;
+	manager_ = parent ? parent->manager_ : nullptr;
+	if (oldManager != manager_)	propagateManagerToChildren();
 
-	if (model_) Reference::unresolveAfterNewSubTree(this);
+	if (manager_) Reference::unresolveAfterNewSubTree(this);
 }
 
-void Node::propagateModelToChildren()
+void Node::propagateManagerToChildren()
 {
 	QList<Node*> stack;
 	stack.append(children());
 	while (!stack.isEmpty())
 	{
 		auto top = stack.takeLast();
-		top->model_ = model_;
+		top->manager_ = manager_;
 		stack.append(top->children());
 	}
 }
 
-void Node::setRootModel(Model* model)
+void Node::setRootManager(TreeManager* manager)
 {
 	Q_ASSERT(!parent_);
-	Q_ASSERT(model);
-	model_ = model;
-	propagateModelToChildren();
+	Q_ASSERT(manager);
+	manager_ = manager;
+	propagateManagerToChildren();
 }
 
 QList<Node*> Node::children() const
@@ -341,7 +341,7 @@ NodeReadWriteLock* Node::accessLock() const
 {
 	if ( parent_ ) return parent_->accessLock();
 	else
-		return model()->rootLock();
+		return manager()->rootLock();
 }
 
 QList<const UsedLibrary*> Node::usedLibraries() const

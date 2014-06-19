@@ -193,25 +193,25 @@ void CommentDiagramToolbar::createDiamond()
 void CommentDiagramToolbar::applyBackgroundColor(QString color)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
-	shape->node()->model()->beginModification(shape->node(), "Setting color");
+	shape->node()->manager()->beginModification(shape->node(), "Setting color");
 	shape->node()->setBackgroundColor(color);
-	shape->node()->model()->endModification();
+	shape->node()->manager()->endModification();
 }
 
 void CommentDiagramToolbar::applyBorderColor(QString color)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
-	shape->node()->model()->beginModification(shape->node(), "Setting color");
+	shape->node()->manager()->beginModification(shape->node(), "Setting color");
 	shape->node()->setShapeColor(color);
-	shape->node()->model()->endModification();
+	shape->node()->manager()->endModification();
 }
 
 void CommentDiagramToolbar::applyTextColor(QString color)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
-	shape->node()->model()->beginModification(shape->node(), "Setting color");
+	shape->node()->manager()->beginModification(shape->node(), "Setting color");
 	shape->node()->setTextColor(color);
-	shape->node()->model()->endModification();
+	shape->node()->manager()->endModification();
 }
 
 void CommentDiagramToolbar::applyOutlineType(int i)
@@ -219,16 +219,16 @@ void CommentDiagramToolbar::applyOutlineType(int i)
 	if (colorPickerText_->isEnabled())
 	{
 		auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
-		shape->node()->model()->beginModification(shape->node(), "Setting OutlineType");
+		shape->node()->manager()->beginModification(shape->node(), "Setting OutlineType");
 		shape->node()->setOutlineType(static_cast<Qt::PenStyle>(i+1));
-		shape->node()->model()->endModification();
+		shape->node()->manager()->endModification();
 	}
 	else
 	{
 		auto connector = dynamic_cast<VCommentDiagramConnector*>(currentItem_);
-		connector->node()->model()->beginModification(connector->node(), "Setting OutlineType");
+		connector->node()->manager()->beginModification(connector->node(), "Setting OutlineType");
 		connector->node()->setOutlineType(static_cast<Qt::PenStyle>(i+1));
-		connector->node()->model()->endModification();
+		connector->node()->manager()->endModification();
 	}
 }
 
@@ -237,16 +237,16 @@ void CommentDiagramToolbar::applyOutlineSize(int i)
 	if (colorPickerText_->isEnabled())
 	{
 		auto shape = dynamic_cast<VCommentDiagramShape*>(currentItem_);
-		shape->node()->model()->beginModification(shape->node(), "Setting OutlineSize");
+		shape->node()->manager()->beginModification(shape->node(), "Setting OutlineSize");
 		shape->node()->setOutlineSize(i+1);
-		shape->node()->model()->endModification();
+		shape->node()->manager()->endModification();
 	}
 	else
 	{
 		auto connector = dynamic_cast<VCommentDiagramConnector*>(currentItem_);
-		connector->node()->model()->beginModification(connector->node(), "Setting OutlineSize");
+		connector->node()->manager()->beginModification(connector->node(), "Setting OutlineSize");
 		connector->node()->setOutlineSize(i+1);
-		connector->node()->model()->endModification();
+		connector->node()->manager()->endModification();
 	}
 }
 

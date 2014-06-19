@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "Model.h"
+#include "TreeManager.h"
 #include "../ModelException.h"
 #include "../commands/NodeOwningCommand.h"
 #include "../commands/SetModificationTarget.h"
@@ -37,7 +37,7 @@
 
 namespace Model {
 
-Model::Model(Node* root)
+TreeManager::TreeManager(Node* root)
 {
 	commands.setUndoLimit(100);
 	manager().add(this);
@@ -45,21 +45,21 @@ Model::Model(Node* root)
 	if (root) setRoot(root);
 }
 
-Model::Model(const QString& name, Node* root) : Model{root}
+TreeManager::TreeManager(const QString& name, Node* root) : TreeManager{root}
 {
 	setName(name);
 }
 
-Model::~Model()
+TreeManager::~TreeManager()
 {
 	manager().remove(this);
 
 	// TODO Make sure to persist and destroy the tree in a nice way.
-	// TODO Emit a signal that this model is no longer valid.
+	// TODO Emit a signal that this manager is no longer valid.
 	SAFE_DELETE( root_ );
 }
 
-void Model::beginModification(Node* modificationTarget, const QString &text)
+void TreeManager::beginModification(Node* modificationTarget, const QString &text)
 {
 	exclusiveAccess.lockForWrite();
 	modificationInProgress = true;
@@ -69,16 +69,16 @@ void Model::beginModification(Node* modificationTarget, const QString &text)
 	if ( modificationTarget ) changeModificationTarget(modificationTarget);
 }
 
-void Model::changeModificationTarget(Node* modificationTarget)
+void TreeManager::changeModificationTarget(Node* modificationTarget)
 {
 	if ( !modificationInProgress )
-		throw ModelException("Switching modification targets without calling Model.beginModification() first");
+		throw ModelException("Switching modification targets without calling TreeManager.beginModification() first");
 
 	pushCommandOnUndoStack( new SetModificationTarget(currentModificationTarget, currentModificationLock,
 			modifiedTargets, modificationTarget));
 }
 
-void Model::endModification(bool resolveReferences)
+void TreeManager::endModification(bool resolveReferences)
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
@@ -101,17 +101,17 @@ void Model::endModification(bool resolveReferences)
 	emit nodesModified(mt);
 }
 
-void Model::beginExclusiveRead()
+void TreeManager::beginExclusiveRead()
 {
 	exclusiveAccess.lockForRead();
 }
 
-void Model::endExclusiveRead()
+void TreeManager::endExclusiveRead()
 {
 	exclusiveAccess.unlock();
 }
 
-bool Model::canBeModified(const Node* node) const
+bool TreeManager::canBeModified(const Node* node) const
 {
 	// Check that we are in a modification block
 	if ( !modificationInProgress ) return false;
@@ -126,10 +126,10 @@ bool Model::canBeModified(const Node* node) const
 	return node->accessLock() == currentModificationLock;
 }
 
-void Model::pushCommandOnUndoStack(UndoCommand* command)
+void TreeManager::pushCommandOnUndoStack(UndoCommand* command)
 {
 	if ( !modificationInProgress )
-		throw ModelException("Changing the application tree without calling Model.beginModification() first");
+		throw ModelException("Changing the application tree without calling TreeManager.beginModification() first");
 	if ( performedUndoRedo )
 		throw ModelException("Trying to execute new commands after performing an Undo or a Redo operation.");
 
@@ -143,10 +143,10 @@ void Model::pushCommandOnUndoStack(UndoCommand* command)
 	if (command->target()) commands.push(new AddModifiedNode(modifiedTargets, command->target()));
 }
 
-void Model::undo()
+void TreeManager::undo()
 {
 	if ( !modificationInProgress )
-		throw ModelException("Requesting an Undo without calling Model.beginModification() first");
+		throw ModelException("Requesting an Undo without calling TreeManager.beginModification() first");
 	if ( pushedNewCommandsOnTheStack )
 		throw ModelException("Requesting an undo in the middle of a modification after executing new commands.");
 	performedUndoRedo = true;
@@ -154,10 +154,10 @@ void Model::undo()
 	commands.undo();
 }
 
-void Model::redo()
+void TreeManager::redo()
 {
 	if ( !modificationInProgress )
-		throw ModelException("Requesting a Redo without calling Model.beginModification() first");
+		throw ModelException("Requesting a Redo without calling TreeManager.beginModification() first");
 	if ( pushedNewCommandsOnTheStack )
 		throw ModelException("Requesting a Redo in the middle of a modification after executing new commands.");
 	performedUndoRedo = true;
@@ -165,7 +165,7 @@ void Model::redo()
 	commands.redo();
 }
 
-bool Model::isOwnedByUndoStack(const Node* node, const NodeOwningCommand* excludeCommand) const
+bool TreeManager::isOwnedByUndoStack(const Node* node, const NodeOwningCommand* excludeCommand) const
 {
 	for (int i = 0; i<commands.count(); ++i)
 	{
@@ -178,7 +178,7 @@ bool Model::isOwnedByUndoStack(const Node* node, const NodeOwningCommand* exclud
 	return false;
 }
 
-bool Model::isOwnedByCommand(const Node* node, const UndoCommand* cmd, const NodeOwningCommand* excludeCommand)
+bool TreeManager::isOwnedByCommand(const Node* node, const UndoCommand* cmd, const NodeOwningCommand* excludeCommand)
 {
 	if ( cmd->owned() == node && cmd!=excludeCommand) return true;
 	for (int childIndex = 0; childIndex < cmd->childCount(); ++childIndex)
@@ -188,34 +188,34 @@ bool Model::isOwnedByCommand(const Node* node, const UndoCommand* cmd, const Nod
 	return false;
 }
 
-void Model::save(PersistentStore* store)
+void TreeManager::save(PersistentStore* store)
 {
-	if (name_.isEmpty()) throw ModelException("Saving a model without a name");
+	if (name_.isEmpty()) throw ModelException("Saving a tree without a name");
 
 	if (root_)
 	{
-		if (store) store->saveModel(this, name_);
-		else if (store_) store_->saveModel(this, name_);
-		else throw ModelException("Saving model '" + name_ + "' without specifying a persistent store");
+		if (store) store->saveTree(this, name_);
+		else if (store_) store_->saveTree(this, name_);
+		else throw ModelException("Saving tree '" + name_ + "' without specifying a persistent store");
 	}
 
 	if (store && !store_) store_ = store;
 }
 
-void Model::load(PersistentStore* store, const QString& name, bool loadPartially)
+void TreeManager::load(PersistentStore* store, const QString& name, bool loadPartially)
 {
 	Q_ASSERT(!root_);
 
-	if (name.isEmpty()) throw ModelException("Loading a model without specifying a name");
-	if (!store) throw ModelException("Loading model '" + name + "' without specifying a persistent store");
+	if (name.isEmpty()) throw ModelException("Loading a tree without specifying a name");
+	if (!store) throw ModelException("Loading tree '" + name + "' without specifying a persistent store");
 
 	name_ = name;
 	store_ = store;
 
 	Core::Profiler::startOnce(name == "java", "Loading the Java library", "load.prof");
-	auto root = store->loadModel(this, name, loadPartially);
+	auto root = store->loadTree(this, name, loadPartially);
 	for (auto lib : root->usedLibraries())
-		lib->loadLibraryModel(store->clone());
+		lib->loadLibrary(store->clone());
 	Core::Profiler::stop("Loading the Java library");
 
 	Core::Profiler::startOnce(name == "java", "Resolving references", "resolve.prof");
@@ -223,7 +223,7 @@ void Model::load(PersistentStore* store, const QString& name, bool loadPartially
 	Core::Profiler::stop("Resolving references");
 }
 
-void Model::setRoot(Node* node)
+void TreeManager::setRoot(Node* node)
 {
 	Q_ASSERT(!root_);
 	Q_ASSERT(node);
@@ -232,20 +232,20 @@ void Model::setRoot(Node* node)
 	commands.clear();
 	root_ = node;
 
-	root_->setRootModel(this);
+	root_->setRootManager(this);
 	Reference::unresolveAll(root_);
 	Reference::resolvePending();
 
 	emit rootNodeSet(root_);
 }
 
-void Model::notifyNodeChange(Node* node)
+void TreeManager::notifyNodeChange(Node* node)
 {
 	if (modificationInProgress) modifiedTargets.insert(node);
 	else emit nodesModified(QSet<Node*>() << node);
 }
 
-void Model::emitNameModified(NameText* node, const QString &oldName)
+void TreeManager::emitNameModified(NameText* node, const QString &oldName)
 {
 	QSet<QString> names;
 	names << node->get() << oldName;

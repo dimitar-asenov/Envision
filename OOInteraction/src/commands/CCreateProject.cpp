@@ -44,7 +44,7 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	auto project = new OOModel::Project();
 	if (!name.isEmpty()) project->setName(name);
 
-	bool newModel = false;
+	bool newManager = false;
 	if (parent)
 	{
 		parent->beginModification("create project");
@@ -53,18 +53,18 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	}
 	else
 	{
-		newModel = true;
-		auto model = new Model::Model();
-		model->setRoot(project);
+		newManager = true;
+		auto manager = new Model::TreeManager();
+		manager->setRoot(project);
 
 		auto vis = new Visualization::RootItem(project);
 		vis->setPos(target->pos());
 		target->scene()->addTopLevelItem( vis );
-		target->scene()->listenToModel(model);
+		target->scene()->listenToTreeManager(manager);
 	}
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	if (newModel) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), project,
+	if (newManager) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), project,
 			Interaction::SetCursorEvent::CursorDefault, true));
 	else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, project,
 			Interaction::SetCursorEvent::CursorDefault, true));

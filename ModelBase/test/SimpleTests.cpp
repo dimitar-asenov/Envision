@@ -28,7 +28,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/NameText.h"
 #include "nodes/Integer.h"
 #include "nodes/Reference.h"
@@ -72,40 +72,40 @@ TEST(ModelBasePlugin, CompositeMetaData)
 	CHECK_CONDITION(metaExt[4].partial() == false);
 }
 
-TEST(ModelBasePlugin, SimpleModelCreation)
+TEST(ModelBasePlugin, SimpleTreeManagerCreation)
 {
-	Model model;
-	CHECK_CONDITION( model.root() == nullptr );
+	TreeManager manager;
+	CHECK_CONDITION( manager.root() == nullptr );
 
 	auto root = new TestNodes::BinaryNode();
-	model.setRoot(root);
-	CHECK_CONDITION( model.root() == root );
+	manager.setRoot(root);
+	CHECK_CONDITION( manager.root() == root );
 
-	CHECK_CONDITION( root->model() == &model );
+	CHECK_CONDITION( root->manager() == &manager );
 
-	CHECK_CONDITION( root->name()->model() == &model );
+	CHECK_CONDITION( root->name()->manager() == &manager );
 }
 
 TEST(ModelBasePlugin, RemoveOptional)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model(root);
+	TreeManager manager(root);
 
-	model.beginModification(root, "Making left node");
+	manager.beginModification(root, "Making left node");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
 	root->setLeft(left);
-	model.endModification();
+	manager.endModification();
 	CHECK_CONDITION( root->left() == left );
 	CHECK_CONDITION( root->left() != nullptr );
 
-	model.beginModification(root, "Removing left node");
+	manager.beginModification(root, "Removing left node");
 	root->removeLeftNode();
-	model.endModification();
+	manager.endModification();
 	CHECK_CONDITION( root->left() == nullptr);
 
-	model.beginModification(root, "Making left node");
+	manager.beginModification(root, "Making left node");
 	root->setLeft(new TestNodes::BinaryNode());
-	model.endModification();
+	manager.endModification();
 	CHECK_CONDITION( root->left() != left );
 	CHECK_CONDITION( root->left() != nullptr );
 }
@@ -113,14 +113,14 @@ TEST(ModelBasePlugin, RemoveOptional)
 TEST(ModelBasePlugin, ChildNodeRetrieval)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model(root);
+	TreeManager manager(root);
 
-	model.beginModification(root, "Making nodes");
+	manager.beginModification(root, "Making nodes");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
 	root->setLeft(left);
 	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
 	root->setRight(right);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_CONDITION(root->hasAttribute("name"));
 	CHECK_CONDITION(root->hasAttribute("left"));
@@ -136,19 +136,19 @@ TEST(ModelBasePlugin, ChildNodeRetrieval)
 TEST(ModelBasePlugin, ProperRegistration)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model(root);
+	TreeManager manager(root);
 	CHECK_CONDITION(root->typeId() > 0);
 
-	Model model2;
+	TreeManager manager2;
 	auto t = new Text();
-	model2.setRoot(t);
+	manager2.setRoot(t);
 
 	CHECK_CONDITION(t->typeId() > 0);
 	CHECK_CONDITION(t->typeId() != root->typeId());
 
-	Model model3;
+	TreeManager manager3;
 	auto i = new Integer();
-	model3.setRoot(i);
+	manager3.setRoot(i);
 	CHECK_CONDITION(i->typeId() > 0);
 	CHECK_CONDITION(i->typeId() != root->typeId());
 	CHECK_CONDITION(i->typeId() != t->typeId());

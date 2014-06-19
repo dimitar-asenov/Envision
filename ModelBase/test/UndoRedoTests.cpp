@@ -27,7 +27,7 @@
 #include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/Text.h"
 
 namespace Model {
@@ -35,63 +35,63 @@ namespace Model {
 TEST(ModelBasePlugin, UndoRedoTextSet)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model(root);
+	TreeManager manager(root);
 
 	CHECK_CONDITION(root->name()->get().isNull());
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
 
-	model.beginModification(root->name(), "testing");
+	manager.beginModification(root->name(), "testing");
 	root->name()->set("t1");
-	model.endModification();
+	manager.endModification();
 	CHECK_CONDITION(root->name()->get() == "t1");
 	CHECK_INT_EQUAL(1, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 
-	model.beginModification(root->name(), "testing");
+	manager.beginModification(root->name(), "testing");
 	root->name()->set("t222");
-	model.endModification();
+	manager.endModification();
 	CHECK_CONDITION(root->name()->get() == "t222");
 	CHECK_INT_EQUAL(2, root->name()->revision());
 	CHECK_INT_EQUAL(2, root->revision());
 
-	model.beginModification(nullptr);
-	model.undo();
+	manager.beginModification(nullptr);
+	manager.undo();
 	CHECK_CONDITION(root->name()->get() == "t1");
 	CHECK_INT_EQUAL(1, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 
-	model.undo();
+	manager.undo();
 	CHECK_CONDITION(root->name()->get().isNull());
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
 
-	model.redo();
+	manager.redo();
 	CHECK_CONDITION(root->name()->get() == "t1");
 	CHECK_INT_EQUAL(1, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 
-	model.redo();
+	manager.redo();
 	CHECK_CONDITION(root->name()->get() == "t222");
 	CHECK_INT_EQUAL(2, root->name()->revision());
 	CHECK_INT_EQUAL(2, root->revision());
-	model.endModification();
+	manager.endModification();
 }
 
 TEST(ModelBasePlugin, UndoRedoOptionalNodes)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model(root);
+	TreeManager manager(root);
 
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
 	CHECK_CONDITION(root->left() == nullptr);
 	CHECK_CONDITION(root->right() == nullptr);
 
-	model.beginModification(root, "testing");
+	manager.beginModification(root, "testing");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
 	root->setLeft(left);
-	model.endModification();
+	manager.endModification();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 	CHECK_CONDITION(root->left() == left);
@@ -100,10 +100,10 @@ TEST(ModelBasePlugin, UndoRedoOptionalNodes)
 	CHECK_INT_EQUAL(0, left->name()->revision());
 	CHECK_INT_EQUAL(0, left->revision());
 
-	model.beginModification(root, "testing");
+	manager.beginModification(root, "testing");
 	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
 	root->setRight(right);
-	model.endModification();
+	manager.endModification();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(2, root->revision());
 	CHECK_CONDITION(root->left() == left);
@@ -117,8 +117,8 @@ TEST(ModelBasePlugin, UndoRedoOptionalNodes)
 
 	CHECK_CONDITION(left != right);
 
-	model.beginModification(nullptr);
-	model.undo();
+	manager.beginModification(nullptr);
+	manager.undo();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 	CHECK_CONDITION(root->left() == left);
@@ -127,13 +127,13 @@ TEST(ModelBasePlugin, UndoRedoOptionalNodes)
 	CHECK_INT_EQUAL(0, left->name()->revision());
 	CHECK_INT_EQUAL(0, left->revision());
 
-	model.undo();
+	manager.undo();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
 	CHECK_CONDITION(root->left() == nullptr);
 	CHECK_CONDITION(root->right() == nullptr);
 
-	model.redo();
+	manager.redo();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 	CHECK_CONDITION(root->left() == left);
@@ -142,7 +142,7 @@ TEST(ModelBasePlugin, UndoRedoOptionalNodes)
 	CHECK_INT_EQUAL(0, left->name()->revision());
 	CHECK_INT_EQUAL(0, left->revision());
 
-	model.redo();
+	manager.redo();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(2, root->revision());
 	CHECK_CONDITION(root->left() == left);
@@ -156,34 +156,34 @@ TEST(ModelBasePlugin, UndoRedoOptionalNodes)
 
 	CHECK_CONDITION(left != right);
 
-	model.endModification();
+	manager.endModification();
 }
 
 TEST(ModelBasePlugin, UndoRedoGroupTextSet)
 {
 	auto root = new Text();
-	Model model(root);
+	TreeManager manager(root);
 
 	CHECK_INT_EQUAL(0, root->revision());
 
-	model.beginModification(root, "Modification group");
+	manager.beginModification(root, "Modification group");
 	root->set("change1");
 	root->set("change2");
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(2, root->revision());
 	CHECK_CONDITION( root->get() == "change2");
 
-	model.beginModification(nullptr);
-	model.undo();
+	manager.beginModification(nullptr);
+	manager.undo();
 	CHECK_INT_EQUAL(0, root->revision());
 	CHECK_CONDITION( root->get().isNull());
 
-	model.redo();
+	manager.redo();
 	CHECK_INT_EQUAL(2, root->revision());
 	CHECK_CONDITION( root->get() == "change2");
 
-	model.endModification();
+	manager.endModification();
 }
 
 }

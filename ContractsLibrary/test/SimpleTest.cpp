@@ -33,7 +33,7 @@
 #include "monitor/ValueAtReturnVisitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 
@@ -432,7 +432,7 @@ Module* createClientModule()
 
 TEST(ContractsLibraryPlugin, ContractsLibraryTest)
 {
-	////////////////////////////////////////////////// Create Model
+	////////////////////////////////////////////////// Create Manager
 
 	// Create project
 	auto prj = new Project("CustomizationDemo");
@@ -441,7 +441,7 @@ TEST(ContractsLibraryPlugin, ContractsLibraryTest)
 	auto contracts = createContractsLibrary();
 	prj->modules()->append( contracts );
 
-	auto model = new Model::Model(prj);
+	auto manager = new Model::TreeManager(prj);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
 //	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client));
@@ -450,7 +450,7 @@ TEST(ContractsLibraryPlugin, ContractsLibraryTest)
 //	VisualizationManager::instance().mainScene()->addTopLevelItem(
 //			new RootItem(contracts->classes()->at(0)->methods()->at(0)));
 
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CustomizationVisitor customizations;
 	customizations.visit(prj);

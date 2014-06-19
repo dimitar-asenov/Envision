@@ -43,7 +43,7 @@ Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Vis
 																		 const QStringList& commandTokens)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
-	shape->node()->model()->beginModification(shape->node(), "Setting color");
+	shape->node()->manager()->beginModification(shape->node(), "Setting color");
 
 	if (commandTokens.first() == "textcolor")
 		shape->node()->setTextColor(commandTokens.last());
@@ -52,7 +52,7 @@ Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Vis
 	else if (commandTokens.first() == "bordercolor")
 		shape->node()->setShapeColor(commandTokens.last());
 
-	shape->node()->model()->endModification();
+	shape->node()->manager()->endModification();
 	shape->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	return new Interaction::CommandResult();
 }

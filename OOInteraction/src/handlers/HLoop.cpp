@@ -66,9 +66,9 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			vloop->node()->model()->beginModification(vloop->node(), "create condition");
+			vloop->node()->beginModification("create condition");
 			vloop->node()->setCondition(empty);
-			vloop->node()->model()->endModification();
+			vloop->node()->endModification();
 
 			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -84,9 +84,9 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			else
 			{
 				auto empty = new OOModel::EmptyExpression();
-				vloop->node()->model()->beginModification(vloop->node(), "create updateStep");
+				vloop->node()->beginModification("create updateStep");
 				vloop->node()->setUpdateStep(empty);
-				vloop->node()->model()->endModification();
+				vloop->node()->endModification();
 
 				vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -101,9 +101,9 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			vloop->node()->model()->beginModification(vloop->node(), "create initStep");
+			vloop->node()->beginModification("create initStep");
 			vloop->node()->setInitStep(empty);
-			vloop->node()->model()->endModification();
+			vloop->node()->endModification();
 
 			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -121,9 +121,9 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			vloop->node()->model()->beginModification(vloop->node(), "create loop body");
+			vloop->node()->beginModification("create loop body");
 			vloop->node()->body()->append( new OOModel::ExpressionStatement(empty) );
-			vloop->node()->model()->endModification();
+			vloop->node()->endModification();
 
 			vloop->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -137,9 +137,9 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			vloop->node()->model()->beginModification(vloop->node(), "create condition");
+			vloop->node()->beginModification("create condition");
 			vloop->node()->setCondition(empty);
-			vloop->node()->model()->endModification();
+			vloop->node()->endModification();
 
 			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));

@@ -57,7 +57,7 @@ void OOReference::targetChanged(Node*)
 		{
 			if (refExpr->ref() == child)
 			{
-				if (auto m = p->model()) m->notifyNodeChange(p);
+				if (auto m = p->manager()) m->notifyNodeChange(p);
 			}
 			else {
 				refExpr->ref()->setResolutionNeeded();

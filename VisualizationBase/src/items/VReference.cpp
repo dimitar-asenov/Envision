@@ -26,7 +26,7 @@
 
 #include "items/VReference.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -39,9 +39,9 @@ VReference::VReference(Item* parent, NodeType *node, const StyleType *style) :
 
 bool VReference::setText(const QString& newText)
 {
-	node()->model()->beginModification(node(), "Set boolean");
+	node()->beginModification("Set boolean");
 	node()->setName(newText);
-	node()->model()->endModification();
+	node()->endModification();
 	return true;
 }
 

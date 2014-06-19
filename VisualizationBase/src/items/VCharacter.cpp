@@ -26,7 +26,7 @@
 
 #include "items/VCharacter.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -41,9 +41,9 @@ bool VCharacter::setText(const QString& newText)
 {
 	if (newText.length() == 1)
 	{
-		node()->model()->beginModification(node(), "Set character");
+		node()->beginModification("Set character");
 		node()->set(newText[0]);
-		node()->model()->endModification();
+		node()->endModification();
 		TextRenderer::setText(newText[0]);
 		return true;
 	}

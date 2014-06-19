@@ -26,8 +26,8 @@
 
 #include "UsedLibrary.h"
 
-#include "../model/Model.h"
-#include "../model/ModelManager.h"
+#include "../model/TreeManager.h"
+#include "../model/AllTreeManagers.h"
 
 #include "TypedListDefinition.h"
 DEFINE_TYPED_LIST(Model::UsedLibrary)
@@ -50,16 +50,16 @@ QList<const UsedLibrary*> UsedLibrary::usedLibraries() const
 	return {this};
 }
 
-void UsedLibrary::loadLibraryModel(PersistentStore* store) const
+void UsedLibrary::loadLibrary(PersistentStore* store) const
 {
-	if (libraryModel() == nullptr)
-		(new Model())->load(store, name(), true); // Automatically ends up in the ModelManager
+	if (libraryManager() == nullptr)
+		(new TreeManager())->load(store, name(), true); // Automatically ends up in the ModelManager
 }
 
 
-Model* UsedLibrary::libraryModel() const
+TreeManager* UsedLibrary::libraryManager() const
 {
-	for (auto m : ModelManager::instance().loadedModels())
+	for (auto m : AllTreeManagers::instance().loadedManagers())
 		if (m->name() == name()) return m;
 
 	return nullptr;

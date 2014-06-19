@@ -72,9 +72,9 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			vfor->node()->model()->beginModification(vfor->node(), "create collection");
+			vfor->node()->beginModification("create collection");
 			vfor->node()->setCollection(empty);
-			vfor->node()->model()->endModification();
+			vfor->node()->endModification();
 
 			vfor->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -88,9 +88,9 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			vfor->node()->model()->beginModification(vfor->node(), "create variable type");
+			vfor->node()->beginModification("create variable type");
 			vfor->node()->setVarType(empty);
-			vfor->node()->model()->endModification();
+			vfor->node()->endModification();
 
 			vfor->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -108,9 +108,9 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			vfor->node()->model()->beginModification(vfor->node(), "create loop body");
+			vfor->node()->beginModification("create loop body");
 			vfor->node()->body()->append( new OOModel::ExpressionStatement(empty) );
-			vfor->node()->model()->endModification();
+			vfor->node()->endModification();
 
 			vfor->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));

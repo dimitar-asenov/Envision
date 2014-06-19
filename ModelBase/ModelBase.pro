@@ -13,10 +13,8 @@ HEADERS += src/persistence/NodeIdMap.h \
     src/nodes/composite/Attribute.h \
     src/nodes/composite/AttributeChain.h \
     src/commands/NodeOwningCommand.h \
-    src/model/ModelManager.h \
     src/concurrent/InterruptibleThread.h \
     src/concurrent/NodeReadWriteLock.h \
-    src/model/Model.h \
     src/visitor/VisitorDefinition.h \
     src/visitor/Visitor.h \
     src/ModelException.h \
@@ -52,7 +50,9 @@ HEADERS += src/persistence/NodeIdMap.h \
     test/NotificationListener.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
-    src/ModelBasePlugin.h
+    src/ModelBasePlugin.h \
+    src/model/TreeManager.h \
+    src/model/AllTreeManagers.h
 SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/NameText.cpp \
     src/nodes/UsedLibrary.cpp \
@@ -64,9 +64,7 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/composite/AttributeChain.cpp \
     src/persistence/ClipboardStore.cpp \
     src/commands/NodeOwningCommand.cpp \
-    src/model/ModelManager.cpp \
     src/concurrent/NodeReadWriteLock.cpp \
-    src/model/Model.cpp \
     test/VisitorTests.cpp \
     src/persistence/PersistentStore.cpp \
     src/commands/AddModifiedNode.cpp \
@@ -100,4 +98,6 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     test/UndoRedoTests.cpp \
     test/SimpleTests.cpp \
     src/nodes/Text.cpp \
-    src/ModelBasePlugin.cpp
+    src/ModelBasePlugin.cpp \
+    src/model/TreeManager.cpp \
+    src/model/AllTreeManagers.cpp

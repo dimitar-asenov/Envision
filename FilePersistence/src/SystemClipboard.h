@@ -56,7 +56,7 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)override;
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name, bool loadPartially) override;
 		virtual QString currentNodeType() const override;
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node) override;
+		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& treeName, const Model::Node* node) override;
 
 		virtual int loadIntValue() override;
 		virtual QString loadStringValue() override;
@@ -73,11 +73,11 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual int numNodes() const override;
 		virtual bool hasNext() const override;
 		virtual void next() override;
-		virtual Model::Node* create(Model::Model* model, Model::Node* parent) override;
+		virtual Model::Node* create(Model::TreeManager* manager, Model::Node* parent) override;
 
 	protected:
-		virtual void saveModel(Model::Model* model, const QString &name) override;
-		virtual Model::Node* loadModel(Model::Model* model, const QString &name, bool loadPartially) override;
+		virtual void saveTree(Model::TreeManager* manager, const QString &name) override;
+		virtual Model::Node* loadTree(Model::TreeManager* manager, const QString &name, bool loadPartially) override;
 
 	private:
 		XMLModel* xml;

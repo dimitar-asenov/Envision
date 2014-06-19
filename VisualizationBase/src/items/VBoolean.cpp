@@ -26,7 +26,7 @@
 
 #include "items/VBoolean.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -43,11 +43,11 @@ bool VBoolean::setText(const QString& newText)
 	if (newText.contains(' ') || newText.compare("true", Qt::CaseInsensitive) == 0
 		 || newText.compare("false", Qt::CaseInsensitive) == 0)
 	{
-		node()->model()->beginModification(node(), "Set boolean");
+		node()->beginModification("Set boolean");
 		if ( newText.contains(' ') ) node()->set( !node()->get() );
 		else if ( newText.compare("true", Qt::CaseInsensitive) == 0 ) node()->set(true);
 		else node()->set(false);
-		node()->model()->endModification();
+		node()->endModification();
 		if (node()->get()) TextRenderer::setText( "true" );
 		else TextRenderer::setText( "false" );
 		return true;

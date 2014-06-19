@@ -24,73 +24,56 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../modelbase_api.h"
+#include "AllTreeManagers.h"
+#include "TreeManager.h"
 
 namespace Model {
 
-class Model;
-class Node;
+void AllTreeManagers::init()
+{
+	qRegisterMetaType< QSet<Node*> >("QSet<Node*>");
+}
 
-/**
- * The ModelManager class contains all existing models.
- */
-class MODELBASE_API ModelManager {
-	friend class Model;
+void AllTreeManagers::cleanup()
+{
+	// We make a copy of loadedManagers_ since any TreeManager will call remove() when being destroyed.
+	auto copy = instance().loadedManagers_;
+	instance().loadedManagers_.clear();
 
-	public:
-		~ModelManager();
-		ModelManager(const ModelManager&) = delete;
-		ModelManager& operator=(const ModelManager&) = delete;
+	for (auto m : copy) SAFE_DELETE(m);
+}
 
-		/**
-		 * Registers types with the meta object system of Qt to allow signals and slots to work with lists.
-		 */
-		static void init();
+AllTreeManagers& AllTreeManagers::instance()
+{
+	static AllTreeManagers manager;
+	return manager;
+}
 
-		/**
-		 * Closes all loaded models.
-		 */
-		static void cleanup();
+AllTreeManagers::AllTreeManagers()
+{}
 
-		static ModelManager& instance();
+AllTreeManagers::~AllTreeManagers()
+{
+	Q_ASSERT(loadedManagers_.isEmpty());
+}
 
-		/**
-		 * Returns the model object that has as its root node the node indicated.
-		 */
-		Model* find(Node* root) const;
+TreeManager* AllTreeManagers::find(Node* root) const
+{
+	for (auto m : loadedManagers_)
+		if ( m->root() == root ) return m;
 
-		/**
-		 * Returns a list to all currently loaded models.
-		 */
-		const QList<Model*>& loadedModels() const;
+	return nullptr;
+}
 
-	private:
-		ModelManager();
+void AllTreeManagers::add(TreeManager* manager)
+{
+	if (!loadedManagers_.contains(manager)) loadedManagers_.append(manager);
+}
 
-		/**
-		 * Adds \a model the list of managed models. This manager will take ownership of \a model.
-		 *
-		 * Newly created instances of Model call this method in their constructors.
-		 */
-		void add(Model* model);
-
-		/**
-		 * Removes \a model from the list of managed models. This manager will give up ownership of \a model.
-		 *
-		 * The removed model is returned. This method is called in the desctructor of Model.
-		 *
-		 */
-		Model* remove(Model* model);
-
-		/**
-		 * A list of all Model objects that are currently instantiated. This is used to find the Model corresponding to a
-		 * particular root object.
-		 */
-		QList<Model*> loadedModels_;
-};
-
-inline const QList<Model*>& ModelManager::loadedModels() const { return loadedModels_; }
+TreeManager* AllTreeManagers::remove(TreeManager* manager)
+{
+	loadedManagers_.removeOne(manager);
+	return manager;
+}
 
 } /* namespace Model */

@@ -27,39 +27,39 @@
 #include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "NotificationListener.h"
 
 namespace Model {
 
 TEST(ModelBasePlugin, ModificationNotificationTests)
 {
-	Model model;
-	NotificationListener nl(model);
+	TreeManager manager;
+	NotificationListener nl(manager);
 
 	CHECK_CONDITION(nl.root == nullptr);
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());
 
 	auto root = new TestNodes::BinaryNode();
-	model.setRoot(root);
+	manager.setRoot(root);
 
 	CHECK_CONDITION(root == nl.root);
 
-	model.beginModification(root, "make tree");
+	manager.beginModification(root, "make tree");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
 	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
 	root->setLeft(left);
 	root->setRight(right);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(1, nl.modifiedNodes.size());
 	CHECK_CONDITION(nl.modifiedNodes.contains( root) );
 
-	model.beginModification(left, "modify");
+	manager.beginModification(left, "modify");
 	left->name()->set("Left text");
-	model.changeModificationTarget(right);
+	manager.changeModificationTarget(right);
 	right->name()->set("Right text");
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(4, nl.modifiedNodes.size());
 	CHECK_CONDITION(nl.modifiedNodes.contains( left ));
@@ -68,10 +68,10 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	CHECK_CONDITION(nl.modifiedNodes.contains( right->name()));
 
 	nl.modifiedNodes.clear();
-	model.beginModification(nullptr);
-	model.undo();
-	model.undo();
-	model.endModification();
+	manager.beginModification(nullptr);
+	manager.undo();
+	manager.undo();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(5, nl.modifiedNodes.size());
 	CHECK_CONDITION(nl.modifiedNodes.contains( right));
