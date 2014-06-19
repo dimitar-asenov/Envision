@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
@@ -37,7 +37,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistence, LoadingPartialList)
+TEST(FilePersistencePlugin, LoadingPartialList)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -72,7 +72,7 @@ TEST(FilePersistence, LoadingPartialList)
 	}
 }
 
-TEST(FilePersistence, LoadingFullList)
+TEST(FilePersistencePlugin, LoadingFullList)
 {
 	for (int i = 0; i<2; ++i)
 	{

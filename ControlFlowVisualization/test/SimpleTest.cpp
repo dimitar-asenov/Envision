@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "controlflowvisualization.h"
+#include "ControlFlowVisualizationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "OOModel/src/allOOModelNodes.h"
@@ -226,7 +226,7 @@ Method* addDivBySix(Class* parent)
 	return divbysix;
 }
 
-TEST(ControlFlowVisualization, SimpleTest)
+TEST(ControlFlowVisualizationPlugin, SimpleTest)
 {
 	auto cl = new Class("SomeClass");
 

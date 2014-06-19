@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
@@ -35,7 +35,7 @@
 
 namespace Model {
 
-TEST(ModelBase, CompositeMetaData)
+TEST(ModelBasePlugin, CompositeMetaData)
 {
 	AttributeChain& metaExt = TestNodes::BinaryNode::getMetaData();
 	AttributeChain& metaUnit = TestNodes::BinaryNodeAccessUnit::getMetaData();
@@ -72,7 +72,7 @@ TEST(ModelBase, CompositeMetaData)
 	CHECK_CONDITION(metaExt[4].partial() == false);
 }
 
-TEST(ModelBase, SimpleModelCreation)
+TEST(ModelBasePlugin, SimpleModelCreation)
 {
 	Model model;
 	CHECK_CONDITION( model.root() == nullptr );
@@ -86,7 +86,7 @@ TEST(ModelBase, SimpleModelCreation)
 	CHECK_CONDITION( root->name()->model() == &model );
 }
 
-TEST(ModelBase, RemoveOptional)
+TEST(ModelBasePlugin, RemoveOptional)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model(root);
@@ -110,7 +110,7 @@ TEST(ModelBase, RemoveOptional)
 	CHECK_CONDITION( root->left() != nullptr );
 }
 
-TEST(ModelBase, ChildNodeRetrieval)
+TEST(ModelBasePlugin, ChildNodeRetrieval)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model(root);
@@ -133,7 +133,7 @@ TEST(ModelBase, ChildNodeRetrieval)
 	CHECK_CONDITION(root->get("right") == right);
 }
 
-TEST(ModelBase, ProperRegistration)
+TEST(ModelBasePlugin, ProperRegistration)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model(root);

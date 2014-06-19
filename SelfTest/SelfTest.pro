@@ -11,8 +11,8 @@ HEADERS += src/SelfTestSuite.h \
     src/TestResults.h \
     src/precompiled.h \
     src/selftest_api.h \
-    src/selftest.h
+    src/SelfTestPlugin.h
 SOURCES += src/TestResult.cpp \
     src/TestResults.cpp \
     src/Test.cpp \
-    src/selftest.cpp
+    src/SelfTestPlugin.cpp

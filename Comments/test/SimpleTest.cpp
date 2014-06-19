@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
+#include "CommentsPlugin.h"
 #include "nodes/CommentNode.h"
 #include "nodes/CommentDiagram.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -45,7 +45,7 @@ namespace Comments {
 
 using namespace Visualization;
 
-TEST(Comments, SimpleTest)
+TEST(CommentsPlugin, SimpleTest)
 {
 	auto list = new Model::List();
 	auto model = new Model::Model(list);

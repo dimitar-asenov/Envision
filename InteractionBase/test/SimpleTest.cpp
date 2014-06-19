@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "interactionbase.h"
+#include "InteractionBasePlugin.h"
 #include "HBinaryNode.h"
 #include "../src/autocomplete/AutoComplete.h"
 
@@ -45,7 +45,7 @@ namespace Interaction {
 
 using namespace Visualization;
 
-TEST(InteractionBase, TextSelect)
+TEST(InteractionBasePlugin, TextSelect)
 {
 	Visualization::VComposite::setDefaultClassHandler(HBinaryNode::instance());
 

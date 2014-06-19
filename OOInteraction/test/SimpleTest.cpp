@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "oointeraction.h"
+#include "OOInteractionPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "expression_editor/OOExpressionBuilder.h"
@@ -270,7 +270,7 @@ Method* addMainMethod()
 	return method;
 }
 
-TEST(OOInteraction, SimpleTest)
+TEST(OOInteractionPlugin, SimpleTest)
 {
 	auto pr = new Project("NewProject");
 	auto cl = new Class("SomeClass");

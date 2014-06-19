@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -36,7 +36,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistence, LoadDataMultipleUnits)
+TEST(FilePersistencePlugin, LoadDataMultipleUnits)
 {
 	for (int i = 0; i<2; ++i)
 	{

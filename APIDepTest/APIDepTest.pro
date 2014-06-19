@@ -5,5 +5,6 @@ win32:LIBS += -lhelloworld
 QT = core
 
 HEADERS += src/precompiled.h \
-    src/apideptest.h
-SOURCES += src/apideptest.cpp
+    src/APIDepTestPlugin.h
+SOURCES += \
+    src/APIDepTestPlugin.cpp

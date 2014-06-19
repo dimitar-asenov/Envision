@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "custommethodcall.h"
+#include "CustomMethodCallPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "items/FindMethodVis.h"
@@ -204,7 +204,7 @@ Class* addCollection(Project* parent)
 	return col;
 }
 
-TEST(CustomMethodCall, CustomVisTest)
+TEST(CustomMethodCallPlugin, CustomVisTest)
 {
 	auto collection = addCollection(nullptr);
 	auto model = new Model::Model(collection);

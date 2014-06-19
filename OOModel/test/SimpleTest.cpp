@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "oomodel.h"
+#include "OOModelPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "allOOModelNodes.h"
@@ -33,7 +33,7 @@
 
 namespace OOModel {
 
-TEST(OOModel, SimpleClassTest)
+TEST(OOModelPlugin, SimpleClassTest)
 {
 	auto root = new Class;
 	Model::Model model(root);
@@ -46,7 +46,7 @@ TEST(OOModel, SimpleClassTest)
 	CHECK_STR_EQUAL("Test", root->name());
 }
 
-TEST(OOModel, SimpleProjectTest)
+TEST(OOModelPlugin, SimpleProjectTest)
 {
 	auto root = new Project;
 	Model::Model model(root);

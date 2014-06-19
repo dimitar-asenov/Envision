@@ -103,7 +103,6 @@ HEADERS += src/expressions/VNewExpressionStyle.h \
     src/statements/VLoopStatementStyle.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
-    src/oovisualization.h \
     src/semantic_zoom/VClassSzPublic.h \
     src/semantic_zoom/VClassSzPublicStyle.h \
     src/semantic_zoom/VMethodSzPublic.h \
@@ -111,7 +110,8 @@ HEADERS += src/expressions/VNewExpressionStyle.h \
     src/semantic_zoom/VDeclarationSz.h \
     src/semantic_zoom/VDeclarationSzStyle.h \
     src/semantic_zoom/VDeclarationConstantSzStyle.h \
-    src/semantic_zoom/VDeclarationConstantSz.h
+    src/semantic_zoom/VDeclarationConstantSz.h \
+    src/OOVisualizationPlugin.h
 SOURCES += src/expressions/VNewExpressionStyle.cpp \
     src/expressions/VNewExpression.cpp \
     src/elements/VCommentStatementItem.cpp \
@@ -204,7 +204,6 @@ SOURCES += src/expressions/VNewExpressionStyle.cpp \
     src/expressions/VReferenceExpressionStyle.cpp \
     test/HelloWorldTest.cpp \
     src/OOVisualizationException.cpp \
-    src/oovisualization.cpp \
     src/semantic_zoom/VClassSzPublic.cpp \
     src/semantic_zoom/VClassSzPublicStyle.cpp \
     src/semantic_zoom/VMethodSzPublic.cpp \
@@ -212,4 +211,5 @@ SOURCES += src/expressions/VNewExpressionStyle.cpp \
     src/semantic_zoom/VDeclarationSz.cpp \
     src/semantic_zoom/VDeclarationSzStyle.cpp \
     src/semantic_zoom/VDeclarationConstantSzStyle.cpp \
-    src/semantic_zoom/VDeclarationConstantSz.cpp
+    src/semantic_zoom/VDeclarationConstantSz.cpp \
+    src/OOVisualizationPlugin.cpp

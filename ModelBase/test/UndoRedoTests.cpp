@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "model/Model.h"
@@ -32,7 +32,7 @@
 
 namespace Model {
 
-TEST(ModelBase, UndoRedoTextSet)
+TEST(ModelBasePlugin, UndoRedoTextSet)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model(root);
@@ -78,7 +78,7 @@ TEST(ModelBase, UndoRedoTextSet)
 	model.endModification();
 }
 
-TEST(ModelBase, UndoRedoOptionalNodes)
+TEST(ModelBasePlugin, UndoRedoOptionalNodes)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model(root);
@@ -159,7 +159,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	model.endModification();
 }
 
-TEST(ModelBase, UndoRedoGroupTextSet)
+TEST(ModelBasePlugin, UndoRedoGroupTextSet)
 {
 	auto root = new Text();
 	Model model(root);

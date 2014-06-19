@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "cppimport.h"
+#include "CppImportPlugin.h"
 #include "CppImportManager.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
@@ -43,7 +43,7 @@ using namespace Visualization;
 
 namespace CppImport {
 
-TEST(CppImport, SimpleTest)
+TEST(CppImportPlugin, SimpleTest)
 {
 	CppImportManager manager;
 

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
@@ -34,7 +34,7 @@
 
 namespace Model {
 
-TEST(ModelBase, SingleWriteUnitCheck)
+TEST(ModelBasePlugin, SingleWriteUnitCheck)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model(root);

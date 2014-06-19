@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../comments.h"
+#include "../CommentsPlugin.h"
 
 #include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 

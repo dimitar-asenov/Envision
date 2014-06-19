@@ -8,9 +8,9 @@ HEADERS += src/Timer.h \
     src/precompiled.h \
     test/LogTester.h \
     src/DefaultLog.h \
-    src/logger.h
+    src/LoggerPlugin.h
 SOURCES += src/Timer.cpp \
     test/LogTester.cpp \
     src/DefaultLog.cpp \
     src/Log.cpp \
-    src/logger.cpp
+    src/LoggerPlugin.cpp

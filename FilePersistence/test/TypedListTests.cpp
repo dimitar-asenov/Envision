@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
@@ -37,7 +37,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistence, LoadingTypedList)
+TEST(FilePersistencePlugin, LoadingTypedList)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -79,7 +79,7 @@ TEST(FilePersistence, LoadingTypedList)
 	}
 }
 
-TEST(FilePersistence, SavingTypedList)
+TEST(FilePersistencePlugin, SavingTypedList)
 {
 	for (int i = 0; i<2; ++i)
 	{

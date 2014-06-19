@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "model/Model.h"
@@ -34,7 +34,7 @@
 
 namespace Model {
 
-TEST(ModelBase, PersistenceSave)
+TEST(ModelBasePlugin, PersistenceSave)
 {
 	auto root = new TestNodes::BinaryNode();
 	Model model("root", root);

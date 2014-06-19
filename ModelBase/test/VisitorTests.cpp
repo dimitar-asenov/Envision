@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "model/Model.h"
 #include "nodes/List.h"
@@ -85,7 +85,7 @@ class VisitorC : public Visitor<VisitorC>{
 		QString text;
 };
 
-TEST(ModelBase, VisitorSample)
+TEST(ModelBasePlugin, VisitorSample)
 {
 	auto root = new List();
 	Model model(root);

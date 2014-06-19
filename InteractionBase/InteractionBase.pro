@@ -69,7 +69,7 @@ HEADERS += src/expression_editor/tree_builder/AddSubExpression.h \
     src/vis/CommandPromptStyle.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
-    src/interactionbase.h
+    src/InteractionBasePlugin.h
 SOURCES += src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
     src/commands/CSceneHandlerLoad.cpp \
@@ -132,4 +132,4 @@ SOURCES += src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CommandResult.cpp \
     src/commands/Command.cpp \
     test/SimpleTest.cpp \
-    src/interactionbase.cpp
+    src/InteractionBasePlugin.cpp

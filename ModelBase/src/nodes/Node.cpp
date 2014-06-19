@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "Node.h"
-#include "../modelbase.h"
+#include "../ModelBasePlugin.h"
 #include "../model/Model.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"

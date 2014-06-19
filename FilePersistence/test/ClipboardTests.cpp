@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "SystemClipboard.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -37,7 +37,7 @@
 
 namespace FilePersistence {
 
-TEST(FilePersistence, CopyToClipboard)
+TEST(FilePersistencePlugin, CopyToClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::Model model;
@@ -70,7 +70,7 @@ TEST(FilePersistence, CopyToClipboard)
 						 clipboardText);
 }
 
-TEST(FilePersistence, CopyPartialToClipboard)
+TEST(FilePersistencePlugin, CopyPartialToClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::Model model;
@@ -90,7 +90,7 @@ TEST(FilePersistence, CopyPartialToClipboard)
 			"<Text name=\"3\">S_four</Text> </List> </PartialList> </clipboard>", clipboardText);
 }
 
-TEST(FilePersistence, PasteTextFromClipboard)
+TEST(FilePersistencePlugin, PasteTextFromClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::Model model;
@@ -114,7 +114,7 @@ TEST(FilePersistence, PasteTextFromClipboard)
 	CHECK_STR_EQUAL("RootNode", root->left()->name()->get());
 }
 
-TEST(FilePersistence, PasteBinaryFromClipboard)
+TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::Model model;
@@ -144,7 +144,7 @@ TEST(FilePersistence, PasteBinaryFromClipboard)
 	CHECK_STR_EQUAL("Right child", left->right()->name()->get());
 }
 
-TEST(FilePersistence, PasteListFromClipboard)
+TEST(FilePersistencePlugin, PasteListFromClipboard)
 {
 	auto root = new Model::List;
 	Model::Model model("test", root);
@@ -175,7 +175,7 @@ TEST(FilePersistence, PasteListFromClipboard)
 	CHECK_STR_EQUAL("third", root->at<Model::Text>(0)->get());
 }
 
-TEST(FilePersistence, PasteInListFromClipboard)
+TEST(FilePersistencePlugin, PasteInListFromClipboard)
 {
 	auto root = new Model::List;
 	Model::Model model("test", root);

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -38,7 +38,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistence, SaveRootOnly)
+TEST(FilePersistencePlugin, SaveRootOnly)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -87,7 +87,7 @@ TEST(FilePersistence, SaveRootOnly)
 	}
 }
 
-TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
+TEST(FilePersistencePlugin, SaveModeNodesSingleUnitOnly)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -147,7 +147,7 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 	}
 }
 
-TEST(FilePersistence, SaveMultipleUnits)
+TEST(FilePersistencePlugin, SaveMultipleUnits)
 {
 	for (int i = 0; i<2; ++i)
 	{

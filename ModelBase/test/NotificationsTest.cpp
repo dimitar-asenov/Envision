@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "model/Model.h"
@@ -32,7 +32,7 @@
 
 namespace Model {
 
-TEST(ModelBase, ModificationNotificationTests)
+TEST(ModelBasePlugin, ModificationNotificationTests)
 {
 	Model model;
 	NotificationListener nl(model);

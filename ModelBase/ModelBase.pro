@@ -52,7 +52,7 @@ HEADERS += src/persistence/NodeIdMap.h \
     test/NotificationListener.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
-    src/modelbase.h
+    src/ModelBasePlugin.h
 SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/NameText.cpp \
     src/nodes/UsedLibrary.cpp \
@@ -100,4 +100,4 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     test/UndoRedoTests.cpp \
     test/SimpleTests.cpp \
     src/nodes/Text.cpp \
-    src/modelbase.cpp
+    src/ModelBasePlugin.cpp

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "model/Model.h"
 #include "nodes/Text.h"
@@ -34,7 +34,7 @@
 
 namespace Model {
 
-TEST(ModelBase, ListCreation)
+TEST(ModelBasePlugin, ListCreation)
 {
 	auto root = new List();
 	Model model(root);
@@ -62,7 +62,7 @@ TEST(ModelBase, ListCreation)
 	CHECK_CONDITION(root->at<Node>(2) == c);
 }
 
-TEST(ModelBase, ListInsertion)
+TEST(ModelBasePlugin, ListInsertion)
 {
 	auto root = new List();
 	Model model(root);
@@ -95,7 +95,7 @@ TEST(ModelBase, ListInsertion)
 	CHECK_CONDITION(root->last<Node>() == c);
 }
 
-TEST(ModelBase, ListRemoval)
+TEST(ModelBasePlugin, ListRemoval)
 {
 	auto root = new List();
 	Model model(root);
@@ -134,7 +134,7 @@ TEST(ModelBase, ListRemoval)
 	CHECK_CONDITION(root->last<Node>() == f);
 }
 
-TEST(ModelBase, ListUndo)
+TEST(ModelBasePlugin, ListUndo)
 {
 	auto root = new List();
 	Model model(root);

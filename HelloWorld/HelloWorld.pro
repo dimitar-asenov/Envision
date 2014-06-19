@@ -6,6 +6,6 @@ QT = core
 HEADERS += src/HelloWorldPrinter.h \
     src/helloworld_api.h \
     src/precompiled.h \
-    src/helloworld.h
+    src/HelloWorldPlugin.h
 SOURCES += src/HelloWorldPrinter.cpp \
-    src/helloworld.cpp
+    src/HelloWorldPlugin.cpp

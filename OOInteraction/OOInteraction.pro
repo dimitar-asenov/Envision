@@ -49,7 +49,7 @@ HEADERS += src/handlers/HArrayInitializer.h \
     src/string_offset_providers/StaticStringOffsetProvider.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
-    src/oointeraction.h
+    src/OOInteractionPlugin.h
 SOURCES += src/handlers/HArrayInitializer.cpp \
     src/expression_editor/CommandDescriptor.cpp \
     src/expression_editor/CompoundObjectDescriptor.cpp \
@@ -87,5 +87,5 @@ SOURCES += src/handlers/HArrayInitializer.cpp \
     src/expression_editor/OOOperatorDescriptor.cpp \
     src/expression_editor/OOExpressionBuilder.cpp \
     src/OOInteractionException.cpp \
-    src/oointeraction.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/OOInteractionPlugin.cpp

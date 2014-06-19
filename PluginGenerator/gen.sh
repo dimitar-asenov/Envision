@@ -66,9 +66,9 @@ echo "Renaming files..."
 mv $PLUGIN_DIR/eclipse.project $PLUGIN_DIR/.project
 mv $PLUGIN_DIR/eclipse.cproject $PLUGIN_DIR/.cproject
 mv $PLUGIN_DIR/src/plugin_api.h $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}_api.h
+mv $PLUGIN_DIR/src/PluginClass.h $PLUGIN_DIR/src/${PLUGIN_NAME}Plugin.h
+mv $PLUGIN_DIR/src/PluginClass.cpp $PLUGIN_DIR/src/${PLUGIN_NAME}Plugin.cpp
 mv $PLUGIN_DIR/src/PluginException.h $PLUGIN_DIR/src/${PLUGIN_NAME}Exception.h
-mv $PLUGIN_DIR/src/plugin.h $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}.h
-mv $PLUGIN_DIR/src/plugin.cpp $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}.cpp
 mv $PLUGIN_DIR/src/PluginException.cpp $PLUGIN_DIR/src/${PLUGIN_NAME}Exception.cpp
 mv $PLUGIN_DIR/Plugin.launch $PLUGIN_DIR/${PLUGIN_NAME}.launch
 mv $PLUGIN_DIR/Plugin.pro $PLUGIN_DIR/${PLUGIN_NAME}.pro

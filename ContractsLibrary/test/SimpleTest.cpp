@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "contractslibrary.h"
+#include "ContractsLibraryPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "items/InterfaceContractsVMethodAddOn.h"
@@ -430,7 +430,7 @@ Module* createClientModule()
 	return module;
 }
 
-TEST(ContractsLibrary, ContractsLibraryTest)
+TEST(ContractsLibraryPlugin, ContractsLibraryTest)
 {
 	////////////////////////////////////////////////// Create Model
 

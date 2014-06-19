@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "oovisualization.h"
+#include "OOVisualizationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "MethodAddOn.h"
@@ -862,7 +862,7 @@ Method* addExtraMethod(Class* parent)
 	return extra;
 }
 
-TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
+TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 {
 	// Create project
 	auto prj = new Project("HelloWorld");

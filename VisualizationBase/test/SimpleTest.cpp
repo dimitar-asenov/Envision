@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "visualizationbase.h"
+#include "VisualizationBasePlugin.h"
 #include "VisualizationManager.h"
 #include "Scene.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -41,7 +41,7 @@
 
 namespace Visualization {
 
-//TEST(VisualizationBase, CompositeTest)
+//TEST(VisualizationBasePlugin, CompositeTest)
 //{
 //	Model::Model* model = new Model::Model();
 //	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
@@ -84,7 +84,7 @@ namespace Visualization {
 //	CHECK_CONDITION(scene);
 //}
 
-TEST(VisualizationBase, CompositeTest)
+TEST(VisualizationBasePlugin, CompositeTest)
 {
 	auto list = new Model::List();
 	auto model = new Model::Model(list);

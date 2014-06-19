@@ -80,7 +80,6 @@ HEADERS += src/typesystem/JavaTypeSystem.h \
     src/statements/ReturnStatement.h \
     src/statements/Statement.h \
     src/statements/SwitchStatement.h \
-    src/oomodel.h \
     src/types/ReferenceType.h \
     src/types/PointerType.h \
     src/expressions/types/PointerTypeExpression.h \
@@ -95,7 +94,8 @@ HEADERS += src/typesystem/JavaTypeSystem.h \
     src/expressions/TypeTraitExpression.h \
     src/expressions/TypeNameOperator.h \
     src/expressions/GlobalScopeExpression.h \
-    src/declarations/ExplicitTemplateInstantiation.h
+    src/declarations/ExplicitTemplateInstantiation.h \
+    src/OOModelPlugin.h
 SOURCES += src/typesystem/JavaTypeSystem.cpp \
     src/typesystem/TypeSystem.cpp \
     src/elements/CommentStatementItem.cpp \
@@ -168,7 +168,6 @@ SOURCES += src/typesystem/JavaTypeSystem.cpp \
     src/statements/Statement.cpp \
     src/expressions/Expression.cpp \
     src/OOModelException.cpp \
-    src/oomodel.cpp \
     test/SimpleTest.cpp \
     src/types/ReferenceType.cpp \
     src/types/PointerType.cpp \
@@ -184,4 +183,5 @@ SOURCES += src/typesystem/JavaTypeSystem.cpp \
     src/expressions/TypeTraitExpression.cpp \
     src/expressions/TypeNameOperator.cpp \
     src/expressions/GlobalScopeExpression.cpp \
-    src/declarations/ExplicitTemplateInstantiation.cpp
+    src/declarations/ExplicitTemplateInstantiation.cpp \
+    src/OOModelPlugin.cpp

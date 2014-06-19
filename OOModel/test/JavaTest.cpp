@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "oomodel.h"
+#include "OOModelPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "allOOModelNodes.h"
@@ -33,7 +33,7 @@
 
 namespace OOModel {
 
-TEST(OOModel, JavaLibraryAndHelloWorldTest)
+TEST(OOModelPlugin, JavaLibraryAndHelloWorldTest)
 {
 	auto prj = new Project("HelloWorld");
 	Model::Model model(prj);

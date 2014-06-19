@@ -30,10 +30,10 @@ HEADERS += src/handlers/HCommentImage.h \
     src/precompiled.h \
     src/CommentsException.h \
     src/comments_api.h \
-    src/comments.h \
     src/CommentDiagramToolbar.h \
     src/items/VCommentDiagramStyle.h \
-    src/ColorPicker.h
+    src/ColorPicker.h \
+    src/CommentsPlugin.h
 SOURCES += src/handlers/HCommentImage.cpp \
     src/items/VCommentStyle.cpp \
     src/commands/CShapeSetProperty.cpp \
@@ -54,11 +54,11 @@ SOURCES += src/handlers/HCommentImage.cpp \
     src/items/VCommentDiagramShapeStyle.cpp \
     src/items/VCommentImage.cpp \
     src/CommentsException.cpp \
-    src/comments.cpp \
     test/SimpleTest.cpp \
     src/CommentDiagramToolbar.cpp \
     src/items/VCommentDiagramStyle.cpp \
-    src/ColorPicker.cpp
+    src/ColorPicker.cpp \
+    src/CommentsPlugin.cpp
 
 RESOURCES += \
     res.qrc

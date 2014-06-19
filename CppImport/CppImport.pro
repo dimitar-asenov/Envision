@@ -44,7 +44,6 @@ LIBS += -lclangTooling\
 HEADERS += src/precompiled.h \
     src/CppImportException.h \
 	src/cppimport_api.h \
-    src/cppimport.h \
     src/ClangAstConsumer.h \
     src/visitors/ClangAstVisitor.h \
     src/CppImportManager.h \
@@ -55,9 +54,9 @@ HEADERS += src/precompiled.h \
     src/visitors/TemplateArgumentVisitor.h \
     src/manager/NodeHasher.h \
     src/manager/TranslateManager.h \
-    src/TranslateFrontendAction.h
+    src/TranslateFrontendAction.h \
+    src/CppImportPlugin.h
 SOURCES += src/CppImportException.cpp \
-	src/cppimport.cpp \
 	test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
     src/visitors/ClangAstVisitor.cpp \
@@ -69,4 +68,5 @@ SOURCES += src/CppImportException.cpp \
     src/visitors/TemplateArgumentVisitor.cpp \
     src/manager/NodeHasher.cpp \
     src/manager/TranslateManager.cpp \
-    src/TranslateFrontendAction.cpp
+    src/TranslateFrontendAction.cpp \
+    src/CppImportPlugin.cpp
