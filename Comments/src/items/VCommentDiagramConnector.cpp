@@ -65,57 +65,60 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 
 	startPoint_ = startShape->node()->pos() + startShape->node()->connectorPoint(node()->startPoint());
 	endPoint_ = endShape->node()->pos() + endShape->node()->connectorPoint(node()->endPoint());
-	auto origin = QPoint((std::min(startPoint_.x(), endPoint_.x()))-10, (std::min(startPoint_.y(), endPoint_.y()))-10);
+	auto origin = QPoint((std::min(startPoint_.x(), endPoint_.x()))-MAX_ARROW_WIDTH,
+								(std::min(startPoint_.y(), endPoint_.y()))-MAX_ARROW_WIDTH);
 	startPoint_ -= origin;
 	endPoint_ -= origin;
 
 	// make sure we get at least one pixel to draw inside!
 	int dx = std::abs(startPoint_.x() - endPoint_.x());
 	int dy = std::abs(startPoint_.y() - endPoint_.y());
-	setSize(dx+20, dy+20);
+	setSize(dx+2*MAX_ARROW_WIDTH, dy+2*MAX_ARROW_WIDTH);
 }
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
-	double m = -QLineF(startPoint_, endPoint_).angle()*M_PI/180;
+	QPen pen;
+	pen.setWidth(1);
+	pen.setStyle(Qt::SolidLine);
+	painter->setPen(pen);
+	painter->setBrush(QBrush(Qt::black));
 
-	QPolygonF aH;
-	aH << QPointF(0, 0) << QPointF(25, -10) << QPointF(25, 10);
-	QPolygonF arrow1, arrow2;
-	arrow1 << aH[0]
-		<< QPointF(qCos(m)*aH[1].x()-qSin(m)*aH[1].y(), qSin(m)*aH[1].x()+qCos(m)*aH[1].y())
-		<< QPointF(qCos(m)*aH[2].x()-qSin(m)*aH[2].y(), qSin(m)*aH[2].x()+qCos(m)*aH[2].y());
-	arrow2 << aH[0]
-		<< QPointF(qCos(m+M_PI)*aH[1].x()-qSin(m+M_PI)*aH[1].y(), qSin(m+M_PI)*aH[1].x()+qCos(m+M_PI)*aH[1].y())
-		<< QPointF(qCos(m+M_PI)*aH[2].x()-qSin(m+M_PI)*aH[2].y(), qSin(m+M_PI)*aH[2].x()+qCos(m+M_PI)*aH[2].y());
-
-	arrow1.translate(startPoint_);
-	arrow2.translate(endPoint_);
+	double angle = -QLineF(startPoint_, endPoint_).angle();
 
 	QPointF newStart = startPoint_;
 	QPointF newEnd = endPoint_;
-	if (startArrow_)
-		newStart = QPointF((arrow1[1].x() + arrow1[2].x())/2, (arrow1[1].y() + arrow1[2].y())/2);
-	if (endArrow_)
-		newEnd = QPointF((arrow2[1].x() + arrow2[2].x())/2, (arrow2[1].y() + arrow2[2].y())/2);
 
-	QPen pen;
+	if (node()->startArrow() || node()->endArrow())
+	{
+		QPolygonF anArrowhead, arrow;
+		anArrowhead << QPointF(0, 0) << QPointF(20+outlineSize_, -5-outlineSize_) << QPointF(20+outlineSize_, 5+outlineSize_);
+		QMatrix matrix;
+		if (node()->startArrow())
+		{
+			matrix.rotate(angle);
+			arrow = matrix.map(anArrowhead);
+			arrow.translate(startPoint_);
+			painter->drawPolygon(arrow);
+			newStart = QPointF((arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2);
+		}
+		if (node()->endArrow())
+		{
+			matrix.reset();
+			matrix.rotate(angle + 180);
+			arrow = matrix.map(anArrowhead);
+			arrow.translate(endPoint_);
+			painter->drawPolygon(arrow);
+			newEnd = QPointF((arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2);
+		}
+	}
+
 	pen.setColor(Qt::black);
 	pen.setStyle(outlineType_);
 	pen.setWidth(outlineSize_);
 	painter->setPen(pen);
 
 	painter->drawLine(newStart, newEnd);
-
-	pen.setWidth(1);
-	pen.setStyle(Qt::SolidLine);
-	painter->setPen(pen);
-	painter->setBrush(QBrush(Qt::black));
-
-	if (startArrow_)
-		painter->drawPolygon(arrow1);
-	if (endArrow_)
-		painter->drawPolygon(arrow2);
 }
 
 } /* namespace Comments */

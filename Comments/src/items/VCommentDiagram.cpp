@@ -109,7 +109,8 @@ void VCommentDiagram::updateGeometry(int, int)
 		auto startPoint = startShape->pos() + startShape->node()->connectorPoint(nConnector->startPoint());
 		auto endPoint = endShape->pos() + endShape->node()->connectorPoint(nConnector->endPoint());
 
-		QPoint pos((std::min(startPoint.x(), endPoint.x()))-10, (std::min(startPoint.y(), endPoint.y()))-10);
+		QPoint pos((std::min(startPoint.x(), endPoint.x()))-VCommentDiagramConnector::MAX_ARROW_WIDTH,
+					  (std::min(startPoint.y(), endPoint.y()))-VCommentDiagramConnector::MAX_ARROW_WIDTH);
 		vConnector->setPos(pos);
 	}
 }
@@ -175,6 +176,9 @@ void VCommentDiagram::synchronizeWithNodes(const QVector<Model::Node*>& nodes, Q
 
 void VCommentDiagram::toggleEditing()
 {
+	QGraphicsView *v = scene()->views().first();
+	QPointF sceneP = this->mapToScene(this->boundingRect().bottomLeft());
+	toolbar_->move(v->viewport()->mapToGlobal(v->mapFromScene(sceneP)));
 	toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);

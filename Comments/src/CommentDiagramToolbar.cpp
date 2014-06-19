@@ -97,12 +97,12 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	this->addSeparator();
 
 	boxStartArrow_ = new QCheckBox;
-	boxStartArrow_->setText("S");
+	boxStartArrow_->setIcon(QIcon(":/icons/startArrow.png"));
 	boxStartArrow_->setEnabled(false);
 	this->addWidget(boxStartArrow_);
 
 	boxEndArrow_ = new QCheckBox;
-	boxEndArrow_->setText("E");
+	boxEndArrow_->setIcon(QIcon(":/icons/endArrow.png"));
 	boxEndArrow_->setEnabled(false);
 	this->addWidget(boxEndArrow_);
 

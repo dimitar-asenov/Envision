@@ -117,10 +117,15 @@ void ColorPicker::handleColorPicked(QString aColor)
 void ColorPicker::setselectedColor(QString aColor)
 {
 	QPixmap pixmap(24, 24);
-	pixmap.fill(QColor(aColor));
+	QColor selectedColor = QColor(aColor);
+	pixmap.fill(QColor(selectedColor));
 	QPainter* aPainter = new QPainter(&pixmap);
-	QColor paintColor = Qt::white;
-	if (QColor(aColor).black() < 127)
+	QColor paintColor;
+	float distanceToBlack = selectedColor.redF()*selectedColor.redF() + selectedColor.greenF()*selectedColor.greenF()
+		+ selectedColor.blueF()*selectedColor.blueF();
+	float distanceToWhite = (selectedColor.redF()-1) * (selectedColor.redF()-1)
+		+ (selectedColor.greenF()-1)*(selectedColor.greenF()-1) + (selectedColor.blueF()-1)*(selectedColor.blueF()-1);
+	if (distanceToBlack > distanceToWhite)
 		paintColor = Qt::black;
 	else
 		paintColor = Qt::white;

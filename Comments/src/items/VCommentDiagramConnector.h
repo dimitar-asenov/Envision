@@ -45,6 +45,7 @@ class COMMENTS_API VCommentDiagramConnector: public Super<Visualization::ItemWit
 	public:
 		VCommentDiagramConnector(Visualization::Item* parent, NodeType* node);
 		VCommentDiagram* diagram();
+		static const int MAX_ARROW_WIDTH = 15;
 
 	protected:
 		virtual void determineChildren() override;
