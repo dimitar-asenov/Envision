@@ -146,7 +146,7 @@ void VComment::parseLines()
 			// A line consists of one of . - = that is repeated three times or more
 			// The used character defines the strength of the header, i.e. one of three levels
 			QString style;
-			switch (line[0].toAscii())
+			switch (line[0].toLatin1())
 			{
 				case '.': style = "single"; break;
 				case '-': style = "double"; break;

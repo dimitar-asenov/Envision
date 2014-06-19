@@ -33,20 +33,13 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VArrayInitializerStyle : public Super<Visualization::ItemStyle>
+class OOVISUALIZATION_API VArrayInitializerStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	private:
-		Visualization::GridLayoutStyle layout_;
-		Visualization::VListStyle values_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VArrayInitializerStyle() override;
 
-		const Visualization::GridLayoutStyle& layout() const;
-		const Visualization::VListStyle& values() const;
+		Property<Visualization::GridLayoutStyle> grid{this, "grid"};
+		Property<Visualization::VListStyle> list{this, "list"};
 };
-
-inline const Visualization::GridLayoutStyle& VArrayInitializerStyle::layout() const { return layout_; }
-inline const Visualization::VListStyle& VArrayInitializerStyle::values() const { return values_; }
 
 }

@@ -27,8 +27,6 @@
 #include "PLUGINNAME_LOWERCASE.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( PLUGINNAME_LOWERCASE, NAMESPACE::PLUGINNAME )
-
 namespace NAMESPACE {
 
 Core::InitializationRegistry& nodeTypeInitializationRegistry()

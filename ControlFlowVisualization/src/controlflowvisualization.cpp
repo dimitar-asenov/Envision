@@ -33,8 +33,6 @@
 
 #include "VisualizationBase/src/Scene.h"
 
-Q_EXPORT_PLUGIN2( controlflowvisualization, ControlFlowVisualization::ControlFlowVisualization )
-
 using namespace OOModel;
 using namespace Visualization;
 

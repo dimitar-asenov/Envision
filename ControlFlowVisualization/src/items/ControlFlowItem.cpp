@@ -47,11 +47,11 @@ QPainterPath ControlFlowItem::connector(const QList< QPoint >& points, bool arro
 	for (int i = 1; i<points.size(); ++i) path.lineTo(points.at(i));
 
 	// Draw arrow if specified
-	int sizeMinusTwo = points.size() - 2; // This is used in order to avoid a GCC warning about overflow
-	if (arrowEnding && sizeMinusTwo >= 0)
+	if (arrowEnding && points.size() >= 2)
 	{
 		QPoint last = points.last();
-		QPoint prev = points.at( sizeMinusTwo );
+		unsigned int size = points.size(); // This is used in order to avoid a GCC warning about overflow
+		QPoint prev = points.at( size - 2);
 
 		if (last.y() == prev.y())
 		{

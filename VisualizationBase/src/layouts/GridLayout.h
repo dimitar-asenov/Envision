@@ -74,16 +74,8 @@ class VISUALIZATIONBASE_API GridLayout: public Super<Layout>
 		 * @param nodes
 		 * 				A list of rows. The first row in the list is the topmost one. Each row is a list of nodes starting
 		 * 				from the leftmost node.
-		 *
-		 * @param renderer
-		 * 				The renderer to use when visualizing the nodes.
 		 */
-		void synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes, ModelRenderer* renderer);
-
-		void synchronize(Item*& item, Model::Node* node, int x, int y);
-		template <class T> void synchronize(T*& item, bool present, const typename T::StyleType* style, int x, int y);
-		template <class T> void synchronize(T*& item, typename T::NodeType* node, const typename T::StyleType* style,
-														int x, int y);
+		void synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes);
 
 	private:
 		QVector< QVector<Item*> > items_;
@@ -99,41 +91,4 @@ inline QSize GridLayout::gridSize() const { return QSize(sizeX_, sizeY_); }
 
 template <class T> inline T* GridLayout::at(int x, int y) { return static_cast<T*> (items_[x][y]); }
 template <class T> inline T* GridLayout::at(int x, int y) const { return static_cast<T*> (items_[x][y]); }
-
-template <class T> void GridLayout::synchronize(T*& item, bool present, const typename T::StyleType* style,
-																int x, int y)
-{
-	if (item && !present)
-	{
-		remove(item);
-		item = nullptr;
-	}
-
-	if (!item && present)
-	{
-		if (style) item = new T(nullptr, style);
-		else item = new T(nullptr);
-
-		set(item, x, y, true);
-	}
-}
-
-template <class T> void GridLayout::synchronize(T*& item, typename T::NodeType* node,
-																const typename T::StyleType* style, int x, int y)
-{
-	if (item && item->node() != node)
-	{
-		remove(item);
-		item = nullptr;
-	}
-
-	if (!item && node)
-	{
-		if (style) item = new T(nullptr, node, style);
-		else item = new T(nullptr, node);
-
-		set(item, x, y, true);
-	}
-}
-
 }

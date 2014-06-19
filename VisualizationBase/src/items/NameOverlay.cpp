@@ -189,7 +189,7 @@ void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 			auto tooSmall = scaledSize.width() < 20 || scaledSize.height() < 20;
 
 			auto text = overlayText(item);
-			if (inView && !tooSmall && fitsInRect(text, font, rect))
+			if (inView && !tooSmall && fitsInRect(text, qfm, rect))
 			{
 				node->markPainted();
 				painter->setPen(style()->pen());

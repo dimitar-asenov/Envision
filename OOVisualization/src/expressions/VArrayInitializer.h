@@ -32,7 +32,7 @@
 #include "OOModel/src/expressions/ArrayInitializer.h"
 
 #include "VExpression.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class GridLayout;
@@ -42,31 +42,32 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayInitializer
-	: public Super<VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
+	: public Super<VExpression<VArrayInitializer, Visualization::DeclarativeItem<VArrayInitializer>,
 	  OOModel::ArrayInitializer>>
 {
 	ITEM_COMMON(VArrayInitializer)
 
 	public:
 		VArrayInitializer(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VArrayInitializer();
 
-		void showInMatrixForm(bool matrixForm = true);
+		static void initializeForms();
+		virtual int determineForm() override;
+
 		bool isShownInMatrixForm() const;
 
-		Visualization::VList* values() const;
+		Visualization::VList* list() const;
+		Visualization::GridLayout* grid() const;
 
 	protected:
 		void determineChildren();
 
 	private:
-		Visualization::VList* values_;
-		bool matrixForm_;
-
-		bool viewFormSwitched() const;
+		Visualization::VList* list_{};
+		Visualization::GridLayout* grid_{};
 };
 
-inline bool VArrayInitializer::isShownInMatrixForm() const { return matrixForm_; }
-inline Visualization::VList* VArrayInitializer::values() const { return values_; }
+inline bool VArrayInitializer::isShownInMatrixForm() const { return grid_; }
+inline Visualization::VList* VArrayInitializer::list() const { return list_; }
+inline Visualization::GridLayout* VArrayInitializer::grid() const { return grid_; }
 
 }

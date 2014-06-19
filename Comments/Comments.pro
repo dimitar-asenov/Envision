@@ -1,7 +1,7 @@
 TARGET = comments
 include(../Core/common_plugin.pri)
 DEFINES += COMMENTS_LIBRARY
-QT += webkit
+QT += webkitwidgets
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \

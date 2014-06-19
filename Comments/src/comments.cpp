@@ -38,8 +38,6 @@
 
 #include "SelfTest/src/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2(comments, Comments::Comments)
-
 namespace Comments {
 
 bool Comments::initialize(Core::EnvisionManager&)

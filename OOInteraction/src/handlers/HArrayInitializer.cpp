@@ -48,7 +48,7 @@ void HArrayInitializer::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			&& (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
 
-		auto focus = vArray->layout()->focusedElementIndex();
+		auto focus = vArray->grid()->focusedElementIndex();
 		auto newSubArray = new OOModel::ArrayInitializer();
 		auto empty = new OOModel::EmptyExpression();
 		newSubArray->values()->append(empty);

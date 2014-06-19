@@ -29,8 +29,6 @@
 
 #include "SelfTest/src/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
-
 namespace OOModel {
 
 bool OOModel::initialize(Core::EnvisionManager&)

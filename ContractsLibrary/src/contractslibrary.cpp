@@ -32,8 +32,6 @@
 
 #include "OOInteraction/src/handlers/HExpression.h"
 
-Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
-
 namespace ContractsLibrary {
 
 bool ContractsLibrary::initialize(Core::EnvisionManager&)

@@ -38,16 +38,15 @@
 
 #include <QtCore/QSignalMapper>
 #include <QtCore/QTimer>
-#include <QtCore/qmath.h>
-#include <QtGui/QToolBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QWidget>
-#include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
-#include <QtGui/QMenu>
-#include <QtGui/QWidgetAction>
-#include <QtGui/QCheckBox>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QWidgetAction>
+#include <QtWidgets/QCheckBox>
 
 #if defined __cplusplus
 // Add C++ includes here
@@ -58,7 +57,7 @@
 #if defined(COMMENTS_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
-#include <QtWebKit/QGraphicsWebView>
+#include <QtWebKitWidgets/QGraphicsWebView>
 #endif
 
 #endif

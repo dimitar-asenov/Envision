@@ -79,13 +79,10 @@ Item::Item(Item* parent, const StyleType* style) :
 	if ( !style || style->drawsOnlyShape() ) flags |= ItemHasNoContents;
 
 	flags	|=	ItemIsFocusable
-			| ItemIsSelectable
-			| ItemClipsToShape
-			| ItemClipsChildrenToShape;
+			| ItemIsSelectable;
 
-#ifdef QT_GRAPHICSVIEW_ENVISION_EXTENSIONS
-	flags |= ItemDoesNotEnforceClip
-			| ItemSkipsPaintingIfTooSmall;
+#if QT_VERSION >= 0x050400
+	flags |= ItemContainsChildrenInShape;
 #endif
 
 	// This is an expensive operation, so only do it once.
@@ -392,21 +389,6 @@ void Item::removeFromScene()
 		else scene()->removeTopLevelItem(this);
 	}
 	setParentItem(nullptr);
-}
-
-void Item::synchronizeItem(Item*& item, Model::Node* node)
-{
-	if (item && item->node() != node )
-	{
-		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded(StandardUpdate);
-	}
-
-	if (!item && node)
-	{
-		item = renderer()->render(this, node);
-		setUpdateNeeded(StandardUpdate);
-	}
 }
 
 ModelRenderer* Item::renderer()

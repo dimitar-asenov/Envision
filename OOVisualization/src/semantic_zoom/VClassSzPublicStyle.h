@@ -63,7 +63,7 @@ class OOVISUALIZATION_API VClassSzPublicStyle : public Visualization::Declarativ
 		Property<Visualization::VListStyle> declarations{this, "declarations"};
 		Property<Visualization::PositionLayoutStyle> body{this, "body"};
 		Property<Visualization::SequentialLayoutStyle> content{this, "content"};
-		Property<Visualization::SequentialLayoutStyle> fieldContainer{this, "fieldContainer"};
+		Property<Visualization::ItemStyle> fieldContainer{this, "fieldContainer"};
 		Property<Visualization::SequentialLayoutStyle> publicFieldArea{this, "publicFieldArea"};
 		Property<Visualization::SequentialLayoutStyle> privateFieldArea{this, "privateFieldArea"};
 		Property<Visualization::SequentialLayoutStyle> protectedFieldArea{this, "protectedFieldArea"};

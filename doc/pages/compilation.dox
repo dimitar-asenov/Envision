@@ -2,8 +2,8 @@
 
 Envision is written in C++ and uses features from the C++11 standard. Make sure your C++ compiler is up-to-date.
 GCC version 4.8 or newer should be sufficient. Other dependencies are:
-	- <b>Qt 4.8</b>: http://qt-project.org/ <br/> This is the underlying framework that we use to build Envision's
-	visualizations and cross-platform support. A migration to Qt 5 is planned in the near future.
+	- <b>Qt 5</b>: http://qt-project.org/ <br/> This is the underlying framework that we use to build Envision's
+	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
 	- <b>Clang 3.4</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
@@ -13,8 +13,6 @@ GCC version 4.8 or newer should be sufficient. Other dependencies are:
 To install the dependencies on Ubuntu 14.04, do the following:
 	-# Install the Qt SDK:
 		\verbatim sudo apt-get install qt-sdk \endverbatim
-	-# Make Qt 4 the default for compilation:
-		\verbatim sudo apt-get install qt4-default \endverbatim
 	-# Install the lp_solve development library version 5.5:
 		-# Install the packages \c lp-solve (for the shared library) and \c liblpsolve55-dev (for the header files):
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
@@ -34,9 +32,9 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	-# Clone Envision's GitHub repository to a directory on your computer. Have in mind that during the build process
 	Qt Creator will create additional directories alongside the repository clone.
 	-# Start Qt Creator and configure the version of Qt that you want to use:
-		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you have at least one Qt 4.8 version
-			(Compilation will fail if you try to use Qt 5). This could be either Qt in PATH, or a custom Qt version that
-			you compiled yourself. Compiling your own version of Qt is required if you want to use Envision with projects
+		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.
+			This could be either Qt in PATH, or a Qt version that
+			you compiled yourself. Compiling the latest version of Qt is required if you want to use Envision with projects
 			that have more than a few tens of classes. See below for Qt compilation instructions.
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
@@ -58,6 +56,12 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 		To see the tests (demos) associated with a project, just supply its name, converted to lowercase, as the
 		parameter to the *test* argument. Do not test more than one project at a time. See \ref try_envision "here" for
 		more details about the different demos.
+	-# (Recommended) If you want to debug Envision using gdb, you might notice that gdb takes quite a while to load debug
+	symbols. It is possible to postpone this load to happen as late as possible, thereby speeding startup.
+		- Go to: Tools > Options > Debugger > GDB Extended and enable the "Attempt Quick Start" option. Additionally you
+		might want to remove unnecessary debug symbols, such as for Qt WebKit which take a long time to load. If you
+		compiled Qt manually using the approach outlined below, simply remove any ".debug" files you do not need from
+		the "qt/qt5-build/lib" directory.
 
 	Note that you will need to compile the JavaImportTool project separately, if you want to experiment with showing a
 	Java project inside Envision.
@@ -68,34 +72,36 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	unfortunately, no longer supported and the latest version is quite outdated. Look for the file:
 	\c qt-eclipse-integration-linux.x86_64-1.6.1.tar.gz
 	-# Start Eclipse and configure the version of Qt that you want to use. You can use the version provided by your
-	system or you can point to a custom Qt version. See below.
+	system or you can point to a custom Qt version. See below for instructions on compiling the latest Qt version.
 	-# Clone Envision's GitHub repository to a directory on your computer. The project is structured in separate
 	directories where each one is an Eclipse project.
 	-# Import all projects into your Eclipse workspace as Git projects. Eclipse/Qt might try to change some project
 	files. Reject all requested changes.
 
-\section customqt Using a custom build of Qt
+\section latestqt Using the latest build of Qt
 
-In order to make Envision's visualizations scale to very large projects we modified the rendering process in the
-Graphics View framework to avoid rendering objects which are too small. This customized Qt version can be found here:
-\c https://qt.gitorious.org/qt/qt-envision-enhancements
+In order to make Envision's visualizations scale to very large projects, we made several enhancements to the Graphics
+View framework. If you want to use Envision with a large amount of visual objects displayed at once you must use
+Qt 5.4 (once it comes out in late 2014) or compile the latest development version.
 
-If you want to use Envision with a large amount of visual objects displayed at once we recommend you build and use the
-above version of Qt. Here is how:
-	-# Clone the above repository into a new directory called \c qt-envision-enhancements inside the \c qt directory
-	of the main Envision repository. The \c qt directory is ignored so you don't have to worry about polluting the main
-	repository.
-	-# Refer to the Qt's compilation guidelines to make sure that you have installed all dependencies. Here is a useful
-	list for Ubuntu: <a href="http://qt-project.org/wiki/Compile_Qt_4.7_on_Ubuntu_10.10">Compile Qt 4.7 on Ubuntu
-		10.10</a>
-	-# Run the \c configure-envision script to confire the compilation of all components necessary for Envision.
-	-# Run \c make and then \c make \c install .
-	-# You should have a directory called \c qt-build alongside the \c qt-envision-enhancements directory.
-	-# Make a symbolic link from \c DebugBuild/qt to \c qt/qt-build/lib .
-	-# Configure Qt Creator or Eclipse to use the Qt found in \c qt-build .
+If you want to compile and use the latest development version of Qt, you can simply run the \c misc/use-qt5-dev.sh
+script. It is designed for and tested with Ubuntu 14.04. Running the script will:
+	-# Install all dependencies required to compile Qt5 and Qt WebKit.
+	-# Download the latest Qt 5 development branches of all Qt modules in \c qt/qt5-dev.
+	-# Configure the build for a release version of Qt and WebKit with separate debug symbols.
+	-# Compile all Qt modules including WebKit using 8 threads. Note that this could take a few hours even on high end
+		machines.
+	-# Install the compiled files it \c qt/qt5-build.
+	-# Make a symbolic link: \c DebugBuild/qt -> \c qt/qt5-build/lib. This is needed for Envision to use the correct Qt
+		version at run-time.
 
-Work is underway for our extensions to appear as part of the regular Qt framework, starting with version 5.4
+After you run the script you will need to configure Qt Creator to the the newly built version of Qt and rebuild
+Envision.
+
 \section try Running Envision
-
 After you have compiled Envision give it a try! See \ref try_envision "this page" for some interesting examples.
+
+\section faq Common problems
+<b>Gcc crashes with a segmentation fault error when compiling Envision, what's wrong?</b><br />
+If you are running in a virtual machine, try increasing the amount of RAM of the machine. It should be at least 1 GB.
 */

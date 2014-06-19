@@ -56,35 +56,43 @@ Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose, int se
 	return rendered;
 }
 
-void ModelRenderer::render(Item*& item, Item* parent, Model::Node* node)
+bool ModelRenderer::sync(Item*& item, Item* parent, Model::Node* node)
 {
 	Q_ASSERT(parent); // If this is ever removed, make sure to set the purpose of parentless items explicitly
 
-	if (!node && item)
+	if (!node)
 	{
-		SAFE_DELETE_ITEM(item);
-		parent->setUpdateNeeded(Item::StandardUpdate);
-		return;
+		if (item)
+		{
+			SAFE_DELETE_ITEM(item);
+			parent->setUpdateNeeded(Item::StandardUpdate);
+			return true;
+		}
+		else
+			return false;
 	}
+
+	Q_ASSERT(node);
 
 	auto best = bestVisualizationForContext(parent, node);
 
-	if (item && item->typeId() != best.first)
+	bool changed = false;
+
+	if (item && ((item->node() != node) || (item->typeId() != best.first)))
 	{
+		changed = true;
 		SAFE_DELETE_ITEM(item);
-		parent->setUpdateNeeded(Item::StandardUpdate);
 	}
 
-	if (!item && node)
+	if (!item)
 	{
+		changed = true;
 		item = best.second(parent, node); // Note that we don't need to set the purpose since we have a parent
-		parent->setUpdateNeeded(Item::StandardUpdate);
 	}
 
-	if (item && item->node() != node)
-	{
-		item->setUpdateNeeded(Item::StandardUpdate); // Update the item, not the parent
-	}
+	if (changed) parent->setUpdateNeeded(Item::StandardUpdate);
+
+	return changed;
 }
 
 QPair<int, VisualizationGroup::ItemConstructor> ModelRenderer::bestVisualizationForContext

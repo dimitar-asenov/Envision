@@ -32,6 +32,7 @@
 #include "../InteractionHandler.h"
 #include "../Scene.h"
 #include "../cursor/Cursor.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -40,7 +41,6 @@ namespace Visualization {
 class Shape;
 class ShapeStyle;
 class ItemStyle;
-class ModelRenderer;
 class VisualizationAddOn;
 class SequentialLayout;
 
@@ -390,9 +390,19 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		void updateGeometry(Item* content, int availableWidth, int availableHeight);
 
-		void synchronizeItem(Item*& item, Model::Node* node);
-		template <class T> void synchronizeItem(T*& item, bool present, const typename T::StyleType* style);
-		template <class T> void synchronizeItem(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+		bool synchronizeItem(Item*& item, Model::Node* node);
+		template <class FieldType, class VisualizationType = FieldType>
+		bool synchronizeItem(FieldType*& item, bool present, const typename VisualizationType::StyleType* style);
+		template <class FieldType, class VisualizationType = FieldType>
+		bool synchronizeItem(FieldType*& item, typename VisualizationType::NodeType* node,
+				const typename VisualizationType::StyleType* style);
+
+		/**
+		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
+		 */
+		template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+		bool synchronizeCollections(const Definition& def, Store& store, CompareFunction compare,
+											 CreateFunction create, SyncFunction sync);
 
 		/**
 		 * Returns a map that associates each registered add-on with all items corresponding to it.
@@ -440,6 +450,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	private:
 		friend class Shape;
 		friend class InteractionHandler;
+		friend class SequentialLayoutFormElement;
+		template <class ParentType> friend class NodeItemWrapperFormElement;
+		template <class ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
+		template <class ParentType, class VisualizationType> friend class VisualizationItemWrapperFormElement;
+
 		QRectF boundingRect_;
 		const ItemStyle* style_;
 		Shape* shape_;
@@ -538,38 +553,115 @@ inline void Item::setDefaultMoveCursorProxy(Item* proxy) {defaultMoveCursorProxy
 inline Scene* Item::scene() const { return static_cast<Visualization::Scene*> (QGraphicsItem::scene()); }
 inline bool Item::hasSceneCursor() const { auto mc = scene()->mainCursor(); return mc && mc->owner() == this;}
 
-template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
+inline bool Item::synchronizeItem(Item*& item, Model::Node* node) { return renderer()->sync(item, this, node); }
+
+template <class FieldType, class VisualizationType>
+bool Item::synchronizeItem(FieldType*& item, bool present, const typename VisualizationType::StyleType* style)
 {
+	bool changed = false;
 	if (item && !present )
 	{
+		changed = true;
 		SAFE_DELETE_ITEM(item);
 		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && present)
 	{
-		if (style) item = new T(this, style);
-		else item = new T(this);
+		changed = true;
+		if (style) item = new VisualizationType(this, style);
+		else item = new VisualizationType(this);
 
 		setUpdateNeeded(StandardUpdate);
 	}
+
+	if (item && !changed) item->setStyle(style);
+
+	return changed;
 }
 
-template <class T> void Item::synchronizeItem(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+template <class FieldType, class VisualizationType>
+bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeType* node,
+		const typename VisualizationType::StyleType* style)
 {
+	bool changed = false;
+
 	if (item && item->node() != node )
 	{
+		changed = true;
 		SAFE_DELETE_ITEM(item);
 		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && node)
 	{
-		if (style) item = new T(this, node, style);
-		else item = new T(this, node);
+		changed = true;
+		if (style) item = new VisualizationType(this, node, style);
+		else item = new VisualizationType(this, node);
 
 		setUpdateNeeded(StandardUpdate);
 	}
+
+	if (item && !changed) item->setStyle(style);
+
+	return changed;
+}
+
+template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+bool Item::synchronizeCollections(const Definition& def, Store& store, CompareFunction compare,
+											 CreateFunction create, SyncFunction sync)
+{
+	static_assert(std::is_pointer<decltype(def.value(0))>::value, "the elements of def must be pointers");
+	static_assert(std::is_pointer<decltype(store.value(0))>::value, "the elements of store must be pointers");
+
+	bool changed = false;
+
+	for (int i = 0; i < def.size(); ++i)
+	{
+		if (i >= store.size() ) // This element is new
+		{
+			changed = true;
+			store.append(create(this, def[i]));
+		}
+		else if ( compare(def[i], store[i]) )// This element is already there, sync it
+		{
+			changed = sync(this, def[i], store[i]) | changed;
+		}
+		else // This element might appear somewhere ahead, we should look for it
+		{
+			changed = true;
+
+			bool found = false;
+			for (int k = i + 1; k<store.size(); ++k)
+			{
+				if ( compare(def[i], store[k]) )
+				{
+					// We found this element, swap the positions
+					auto temp = store[i];
+					store[i] = store[k];
+					store[k] = temp;
+					sync(this, def[i], store[i]);
+
+					found = true;
+					break;
+				}
+			}
+
+			// The node was not found, insert a visualization here
+			if (!found ) store.insert( i, create(this, def[i]) );
+		}
+	}
+
+	// Remove excess items
+	while (store.size() > def.size())
+	{
+		changed = true;
+		SAFE_DELETE_ITEM(store.last());
+		store.pop_back();
+	}
+
+	if (changed) setUpdateNeeded(StandardUpdate);
+	return changed;
 }
 
 // Do not make this a non-template function since then the reference to pointer won't work as it is not polymorphic.

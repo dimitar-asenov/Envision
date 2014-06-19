@@ -75,7 +75,7 @@ void VUnfinishedOperator::determineChildren()
 			operandIndex++;
 		}
 	}
-	layout()->synchronizeWithNodes(nodes, renderer());
+	layout()->synchronizeWithNodes(nodes);
 	for (int i = prefixEmpty ? 1 : 0; i < layout()->length(); i+=2 )
 	{
 		layout()->at<VText>(i)->setStyle(&style()->delimiters());

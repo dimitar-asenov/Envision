@@ -74,8 +74,6 @@
 
 #include "Core/src/AdapterManager.h"
 
-Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
-
 namespace OOInteraction {
 
 bool OOInteraction::initialize(Core::EnvisionManager&)

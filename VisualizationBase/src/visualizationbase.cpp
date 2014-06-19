@@ -52,8 +52,6 @@
 
 #include "SelfTest/src/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
-
 namespace Visualization
 {
 

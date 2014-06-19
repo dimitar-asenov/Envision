@@ -39,7 +39,7 @@ namespace Visualization {
 	class VText;
 	class VList;
 	class Static;
-	class NodeWrapper;
+	class EmptyItem;
 }
 
 namespace Model {
@@ -75,7 +75,7 @@ class OOVISUALIZATION_API VClassSzPublic
 		Visualization::VList* friends_{};
 		Visualization::VList* declarations_{};
 		Visualization::PositionLayout* body_{};
-		Visualization::NodeWrapper* fieldBackground_{};
+		Visualization::EmptyItem* fieldBackground_{};
 		QList<Model::Node*> publicFields_{};
 };
 

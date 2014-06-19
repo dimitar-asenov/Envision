@@ -86,7 +86,7 @@ QStringList CSceneHandlerLoad::commandForms(Item*, Item*, const QString& textSoF
 QStringList CSceneHandlerLoad::availableProjectsOnDisk()
 {
 	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
 }
 
 QStringList CSceneHandlerLoad::matchingProjects(QString projectNameToLookFor)

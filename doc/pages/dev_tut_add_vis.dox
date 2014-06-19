@@ -30,7 +30,7 @@ example.
 Here is \c VIfStatement.h :
 \dontinclude OOVisualization/src/statements/VIfStatement.h
 \skip pragma
-\until } /* namespace OOVisualization
+\until } /\* namespace OOVisualization
 \dontinclude OOVisualization/src/statements/VIfStatement.h
 
 Let's examine it starting from the top. The first interesting bit after the includes is:
@@ -88,7 +88,7 @@ For more info about styles see \ref styles at the end of this tutorial.
 
 Next we have the constructor:
 
-\skipline VIfStatement(Item*
+\skipline VIfStatement(Item\*
 All items representing a node (inheriting from Visualization::ItemWithNode) must have a constructor of this form.
 The \a style argument should always be initialized by default to \c itemStyles().get() - equivalent to
 \c itemStyles().get("default") - which returns the default style.
@@ -192,7 +192,7 @@ form will be used to arrange the children. Let's see how it all works in the .cp
 Here is \c VIfStatement.cpp :
 \dontinclude OOVisualization/src/statements/VIfStatement.cpp
 \skip VIfStatement.h"
-\until } /* namespace OOVisualization
+\until } /\* namespace OOVisualization
 \dontinclude OOVisualization/src/statements/VIfStatement.cpp
 
 The first thing to notice is this inlcude:
@@ -235,7 +235,7 @@ decision is based only on the node that is represented, and not on any visual in
 Finally let's see the real work that we need to do in order to use Visualization::DeclarativeItem - defining the 
 \c initializeForms() method:
 \skip VIfStatement::initializeForms
-\until } /* namespace OOVisualization
+\until } /\* namespace OOVisualization
 We won't go into detail here, please refer to
 <a href="http://www.pm.inf.ethz.ch/education/theses/student_docs/Andrea_Helfenstein/BA_report_Andrea_Helfenstein">
 Andrea Helfenstein's Bachelor Thesis Report</a> for the various ways to use Visualization::DeclarativeItem. In short:
@@ -269,7 +269,7 @@ Creating a style class is straight forward, all you really need to do is list th
 header of the style class for if statements \c (VIfStatementStyle.h):
 \dontinclude OOVisualization/src/statements/VIfStatementStyle.h
 \skip pragma
-\until } /* namespace OOVisualization
+\until } /\* namespace OOVisualization
 
 There are three things to notice here:
 	- The style must ultimately inherit from Visualization::ItemStyle. If your item inherits from
@@ -288,7 +288,7 @@ There are three things to notice here:
 The corresponding \c .cpp file is trivial and the same for most styles:
 \dontinclude OOVisualization/src/statements/VIfStatementStyle.cpp
 \skip include
-\until } /* namespace OOVisualization
+\until } /\* namespace OOVisualization
 
 And here is the corresponding default XML file \c (OOVisualization/styles/item/VIfStatement/default). Things here can
 get a bit clunky, but the important thing to see is that each top-level tag corresponds to a property of the style

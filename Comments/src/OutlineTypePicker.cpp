@@ -49,7 +49,7 @@ OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton(parent)
 	QPen aPen;
 	aPen.setColor(Qt::black);
 	aPen.setWidth(4);
-	pixList_.append(NULL);
+	pixList_.append(QPixmap());
 	for (int i = 1; i < 6; i++)
 	{
 		pixmap.fill(Qt::transparent);

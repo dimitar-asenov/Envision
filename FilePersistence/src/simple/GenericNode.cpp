@@ -160,7 +160,7 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 {
 	for (int i = 0; i<tabLevel; ++i) stream << '\t';
 	stream << name_ << ' ' << type_;
-	if (!id_.isNull()) stream << ' ' << id_;
+	if (!id_.isNull()) stream << ' ' << id_.toString();
 	if (hasValue())
 	{
 		if (valueType_ == STRING_VALUE) stream << ". " << PREFIX_STRING << escape(value_);
@@ -270,7 +270,7 @@ void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEn
 
 		if ( isId ) node->setId( id );
 		else throw FilePersistenceException("Unknown node header element "
-				+ QString::fromAscii(data+start, headerPartEnd-start+1));
+				+ QString::fromLatin1(data+start, headerPartEnd-start+1));
 	}
 
 	if (moreHeaderParts)
@@ -304,7 +304,7 @@ void GenericNode::parseData(GenericNode* node, char* data, int start, int lineEn
 					&& data[start+1] == (char)0xBB && data[start+2] == (char)0xBF)
 			s = QChar{QChar::ByteOrderMark};
 			else
-				throw FilePersistenceException("Invalid string sequence when reading node id " + node->id());
+				throw FilePersistenceException("Invalid string sequence when reading node id " + node->id().toString());
 		}
 
 		node->setValue(STRING_VALUE, s);

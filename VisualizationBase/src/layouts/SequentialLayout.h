@@ -74,7 +74,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Super<Layout>
 		int spaceBetweenElements() const;
 		void setSpaceBetweenElements(bool use, int space = 0);
 
-		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
+		void synchronizeWithNodes(const QList<Model::Node*>& nodes);
 
 		// Synchronize methods with a node
 		void synchronizeFirst(Item*& item, Model::Node* node);
@@ -110,6 +110,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Super<Layout>
 		int spaceBetweenElements_;
 
 		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool forward, bool first, bool last);
+
+		void placeSynchronized(Item* oldItem, Item* newItem, int pos);
 };
 
 inline bool SequentialLayout::isHorizontal() const { return style()->isHorizontal(); }
@@ -136,19 +138,9 @@ template <class FieldType, class VisualizationType>
 void SequentialLayout::synchronizeMid(FieldType*& item, bool present,
 		const typename VisualizationType::StyleType* style, int position)
 {
-	if (item && !present)
-	{
-		removeAll(item);
-		item = nullptr;
-	}
-
-	if (!item && present)
-	{
-		if (style) item = new VisualizationType(nullptr, style);
-		else item = new VisualizationType(nullptr);
-
-		insert(item, ((position > length()) ? length() : position) );
-	}
+	Item* oldItem = item;
+	Item::synchronizeItem<FieldType, VisualizationType>(item, present, style);
+	placeSynchronized(oldItem, item, position);
 }
 
 template <class FieldType, class VisualizationType>
@@ -169,19 +161,9 @@ template  <class FieldType, class VisualizationType>
 void SequentialLayout::synchronizeMid(FieldType*& item, typename VisualizationType::NodeType* node,
 		const typename VisualizationType::StyleType* style, int position)
 {
-	if (item && item->node() != node)
-	{
-		removeAll(item);
-		item = nullptr;
-	}
-
-	if (!item && node)
-	{
-		if (style) item = new VisualizationType(nullptr, node, style);
-		else item = new VisualizationType(nullptr, node);
-
-		insert(item, ((position > length()) ? length() : position) );
-	}
+	Item* oldItem = item;
+	Item::synchronizeItem<FieldType, VisualizationType>(item, node, style);
+	placeSynchronized(oldItem, item, position);
 }
 
 }

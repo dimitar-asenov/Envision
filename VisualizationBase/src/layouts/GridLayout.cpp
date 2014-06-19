@@ -130,7 +130,7 @@ void GridLayout::clear(bool deleteItems)
 	setUpdateNeeded(StandardUpdate);
 }
 
-void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes, ModelRenderer* renderer)
+void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes)
 {
 	// Remove all elements from the current grid that do not match a node
 	// If a node exists record it's location
@@ -149,6 +149,7 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 						found = true;
 						nodesFound.append(items_[x][y]->node());
 						itemsFound.append(items_[x][y]);
+						synchronizeItem(items_[x][y], items_[x][y]->node());
 						break;
 					}
 
@@ -168,25 +169,8 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 		{
 			int oldIndex = nodesFound.indexOf(nodes[y][x]);
 			if (oldIndex >=0) set(itemsFound[oldIndex], x, y, false);
-			else set(renderer->render(this, nodes[y][x]), x, y, false);
+			else set(renderer()->render(this, nodes[y][x]), x, y, false);
 		}
-}
-
-
-void GridLayout::synchronize(Item*& item, Model::Node* node, int x, int y)
-{
-	if (item && item->node() != node )
-	{
-		remove(item);
-		item = nullptr;
-	}
-
-	if (!item && node)
-	{
-		item = renderer()->render(this, node);
-		set(item, x, y, true);
-	}
-
 }
 
 bool GridLayout::isEmpty() const

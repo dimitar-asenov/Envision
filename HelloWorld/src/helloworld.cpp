@@ -27,8 +27,6 @@
 #include "helloworld.h"
 #include "HelloWorldPrinter.h"
 
-Q_EXPORT_PLUGIN2( helloworld, Hello::HelloWorld )
-
 namespace Hello {
 
 bool HelloWorld::initialize(Core::EnvisionManager&)

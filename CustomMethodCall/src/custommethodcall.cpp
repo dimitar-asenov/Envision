@@ -27,8 +27,6 @@
 #include "custommethodcall.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( custommethodcall, CustomMethodCall::CustomMethodCall )
-
 namespace CustomMethodCall {
 
 bool CustomMethodCall::initialize(Core::EnvisionManager&)

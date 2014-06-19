@@ -65,6 +65,10 @@ Scene::Scene()
 {
 	setItemIndexMethod(NoIndex);
 
+#if QT_VERSION >= 0x050400
+	setMinimumRenderSize(1.0);
+#endif
+
 	initialized_ = true;
 	allScenes().append(this);
 }
@@ -222,13 +226,23 @@ void Scene::nodesUpdated(QSet<Node*> nodes)
 {
 	for (auto node : nodes)
 	{
-		auto it = Item::nodeItemsMap().find(node);
-		auto end = Item::nodeItemsMap().end();
-		while (it != end && it.key() == node)
+		auto nodeToFind = node;
+		bool found = false;
+
+		// Find and update all visualizations of this node. If there are none, then look recursively for all
+		// visualizations of ancestor nodes, until there is a node which has at least one visualization.
+		while (!found && nodeToFind )
 		{
-			auto item = it.value();
-			if (item->scene() == this) item->setUpdateNeeded(Item::StandardUpdate);
-			++it;
+			auto it = Item::nodeItemsMap().find(nodeToFind);
+			while (it != Item::nodeItemsMap().end() && it.key() == nodeToFind)
+			{
+				found = true;
+				auto item = it.value();
+				if (item->scene() == this) item->setUpdateNeeded(Item::StandardUpdate);
+				++it;
+			}
+
+			if (!found) nodeToFind = nodeToFind->parent();
 		}
 	}
 

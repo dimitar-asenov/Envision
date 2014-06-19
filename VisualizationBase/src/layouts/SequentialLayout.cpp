@@ -108,35 +108,12 @@ void SequentialLayout::clear(bool deleteItems)
 	setUpdateNeeded(StandardUpdate);
 }
 
-void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
+void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 {
-	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
-	for (int i = 0; i < nodes.size(); ++i)
-	{
-		if (i >= items.size() ) append( renderer->render(this, nodes[i]));	// This node is new
-		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
-		else
-		{
-			// This node might appear somewhere ahead, we should look for it
-			bool found = false;
-			for (int k = i + 1; k<items.size(); ++k)
-			{
-				if ( items[k]->node() == nodes[i] )
-				{
-					// We found this node, swap the visualizations
-					swap(i, k);
-					found = true;
-					break;
-				}
-			}
-
-			// The node was not found, insert a visualization here
-			if (!found ) insert( renderer->render(this, nodes[i]), i);
-		}
-	}
-
-	// Remove excess items
-	while (items.size() > nodes.size()) remove(items.size()-1);
+	synchronizeCollections(nodes, items,
+		[](Model::Node* node, Item* item){return item->node() == node;},
+		[](Item* parent, Model::Node* node){return parent->renderer()->render(parent, node);},
+		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);});
 }
 
 void SequentialLayout::synchronizeFirst(Item*& item, Model::Node* node)
@@ -151,18 +128,29 @@ void SequentialLayout::synchronizeLast(Item*& item, Model::Node* node)
 
 void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int position)
 {
-	if (item && item->node() != node )
+	Item* oldItem = item;
+	Item::synchronizeItem(item, node);
+	placeSynchronized(oldItem, item, position);
+}
+
+void SequentialLayout::placeSynchronized(Item* oldItem, Item* newItem, int pos)
+{
+	if (oldItem && oldItem == newItem)
 	{
-		removeAll(item);
-		item = nullptr;
+		// There is no provision to move an item at the moment.
+		Q_ASSERT(items.at(pos >= length() ? length() - 1 : pos) == newItem);
+		return;
 	}
 
-	if (!item && node)
+	// Remove the old item
+	if (oldItem && oldItem != newItem)
 	{
-		item = renderer()->render(this, node);
-		insert(item, ((position > length()) ? length() : position) );
+		for (int i = items.size() - 1; i>=0; --i)
+			if (items.at(i) == oldItem) items.remove(i);
 	}
 
+	if (newItem && oldItem != newItem)
+		items.insert(((pos > length()) ? length() : pos), newItem);
 }
 
 bool SequentialLayout::isEmpty() const
