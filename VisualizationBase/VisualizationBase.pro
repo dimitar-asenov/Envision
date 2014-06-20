@@ -116,7 +116,8 @@ HEADERS += src/items/EmptyItem.h \
     src/renderer/VisualizationGroupsManager.h \
     src/renderer/SzLevelOrderingManager.h \
     src/node_extensions/FullDetailSize.h \
-    src/VisualizationBasePlugin.h
+    src/VisualizationBasePlugin.h \
+    src/declarative/GridLayouter.h
 SOURCES += src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
