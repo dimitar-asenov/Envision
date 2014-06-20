@@ -117,7 +117,8 @@ HEADERS += src/items/EmptyItem.h \
     src/renderer/SzLevelOrderingManager.h \
     src/node_extensions/FullDetailSize.h \
     src/VisualizationBasePlugin.h \
-    src/declarative/GridLayouter.h
+    src/declarative/GridLayouter.h \
+    src/declarative/DynamicGridFormElement.h
 SOURCES += src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
@@ -210,4 +211,5 @@ SOURCES += src/items/EmptyItem.cpp \
     src/renderer/VisualizationGroupsManager.cpp \
     src/renderer/SzLevelOrderingManager.cpp \
     src/node_extensions/FullDetailSize.cpp \
-    src/VisualizationBasePlugin.cpp
+    src/VisualizationBasePlugin.cpp \
+    src/declarative/DynamicGridFormElement.cpp
