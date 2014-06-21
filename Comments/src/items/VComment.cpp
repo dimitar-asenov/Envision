@@ -28,6 +28,8 @@
 #include "VCommentBrowser.h"
 #include "VCommentImage.h"
 #include "VCommentDiagram.h"
+#include "VCommentFreeNode.h"
+#include "VCommentTable.h"
 #include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/Text.h"
@@ -62,6 +64,8 @@ void VComment::parseLines()
 
 	QStringList linesOfCurrentElement;
 	QSet<QString> diagramNames{};
+	QSet<QString> codeNames{};
+	QSet<QString> tableNames{};
 	int listCount = -1;
 	int lineNumber = -1;
 	QSize htmlSize;
@@ -186,6 +190,43 @@ void VComment::parseLines()
 			Q_ASSERT(diagram);
 
 			commentElements_.append( new VCommentDiagram(nullptr, diagram) );
+			continue;
+		}
+
+		//************************************************************************
+		// Code
+		//************************************************************************
+		// is this code? format: [code#codeName]
+		if (line.startsWith("[code#") && line.right(1) == "]" && line.size() > 6+1)
+		{
+			createTextualCommentElement(linesOfCurrentElement); // Flush current text
+
+			QString name = line.mid(6, line.size()-6-1);
+			codeNames << name;
+
+			auto code = node()->code(name);
+			Q_ASSERT(code);
+
+			commentElements_.append(new VCommentFreeNode(nullptr, code) );
+
+			continue;
+		}
+
+		//************************************************************************
+		// Table
+		//************************************************************************
+		// is this a table? format: [table#tableName#rowCount#columnCount]
+		if (line.startsWith("[table#") && line.right(1) == "]" && line.size() > 7+1)
+		{
+			createTextualCommentElement(linesOfCurrentElement); // Flush current text
+
+			QString name = line.mid(7, (line.indexOf('#', 7)-line.indexOf('#'))-1);
+			tableNames << name;
+
+			auto table = node()->table(name);
+			Q_ASSERT(table);
+
+			commentElements_.append(new VCommentTable(nullptr, table) );
 			continue;
 		}
 
@@ -329,6 +370,8 @@ void VComment::toggleEditing()
 	if (!editing_)
 	{
 		node()->synchronizeDiagramsToText();
+		node()->synchronizeCodesToText();
+		node()->synchronizeTablesToText();
 		parseLines();
 	}
 

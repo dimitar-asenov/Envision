@@ -24,46 +24,24 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "handlers/HCommentImage.h"
-#include "handlers/HCommentText.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-#include "items/VCommentImage.h"
-#include "items/VCommentText.h"
+#include "CommentFreeNode.h"
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+
+DEFINE_TYPED_LIST(Comments::CommentFreeNode)
 
 namespace Comments {
 
-bool Comments::initialize(Core::EnvisionManager&)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentFreeNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentFreeNode)
+
+REGISTER_ATTRIBUTE(CommentFreeNode, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentFreeNode, node, Node, false, true, true)
+
+CommentFreeNode::CommentFreeNode(Node *parent, QString name) : Super(parent, CommentFreeNode::getMetaData())
 {
-	Core::TypeRegistry::initializeNewTypes();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
-	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
-	VCommentText::setDefaultClassHandler(HCommentText::instance());
-
-	return true;
+	setName(name);
+	setNode(new CommentText());
 }
 
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

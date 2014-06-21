@@ -36,6 +36,8 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentNode)
 
 REGISTER_ATTRIBUTE(CommentNode, lines, TypedListOfText, false, false, true)
 REGISTER_ATTRIBUTE(CommentNode, diagrams, TypedListOfCommentDiagram, false, false, true)
+REGISTER_ATTRIBUTE(CommentNode, codes, TypedListOfCommentFreeNode, false, false, true)
+REGISTER_ATTRIBUTE(CommentNode, tables, TypedListOfCommentTable, false, false, true)
 
 CommentNode::CommentNode(const QString& text)
 : Super{nullptr, CommentNode::getMetaData()}
@@ -49,6 +51,23 @@ CommentDiagram* CommentNode::diagram(const QString& name)
 {
 	for (auto diagram : *diagrams())
 		if (diagram->name() == name) return diagram;
+
+	return nullptr;
+}
+
+CommentFreeNode* CommentNode::code(const QString& name)
+{
+	for (auto code : *codes())
+		if (code->name() == name) return code;
+
+	return nullptr;
+}
+
+
+CommentTable* CommentNode::table(const QString& name)
+{
+	for (auto table : *tables())
+		if (table->name() == name) return table;
 
 	return nullptr;
 }
@@ -77,5 +96,63 @@ void CommentNode::synchronizeDiagramsToText()
 	for (auto newDiagram : diagramNamesFromText)
 		diagrams()->append(new CommentDiagram(nullptr, newDiagram));
 }
+
+void CommentNode::synchronizeCodesToText()
+{
+	QStringList codeNamesFromText;
+	for (auto lineNode : *lines())
+	{
+		auto line = lineNode->get();
+		if (line.startsWith("[code#") && line.right(1) == "]" && line.size() > 6+1)
+			codeNamesFromText << line.mid(6, line.size()-6-1);
+	}
+
+	codeNamesFromText.removeDuplicates();
+
+	// Remove old codes
+	for (int i = codes()->size() - 1; i>=0; --i)
+	{
+		if (codeNamesFromText.contains(codes()->at(i)->name()))
+			codeNamesFromText.removeOne(codes()->at(i)->name()); // There should be only one, we removed duplicates
+		else codes()->remove(i);
+	}
+
+	// Add new codes
+	for (auto newCode : codeNamesFromText)
+		codes()->append(new CommentFreeNode(nullptr, newCode));
+}
+
+void CommentNode::synchronizeTablesToText()
+{
+	QStringList tableNamesFromText;
+	int rowCount = 0;
+	int columnCount = 0;
+	for (auto lineNode : *lines())
+	{
+		auto line = lineNode->get();
+		if (line.startsWith("[table#") && line.right(1) == "]" && line.size() > 7+1)
+		{
+			QStringList aList = line.split("#");
+			tableNamesFromText << aList[1];
+			rowCount = aList[2].toInt();
+			columnCount = aList[3].remove(']').toInt();
+		}
+	}
+
+	tableNamesFromText.removeDuplicates();
+
+	// Remove old codes
+	for (int i = tables()->size() - 1; i>=0; --i)
+	{
+		if (tableNamesFromText.contains(tables()->at(i)->name()))
+			tableNamesFromText.removeOne(tables()->at(i)->name()); // There should be only one, we removed duplicates
+		else codes()->remove(i);
+	}
+
+	// Add new codes
+	for (auto newTable : tableNamesFromText)
+		tables()->append(new CommentTable(nullptr, newTable, rowCount, columnCount));
+}
+
 
 } /* namespace Comments */

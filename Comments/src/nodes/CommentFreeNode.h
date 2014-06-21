@@ -24,46 +24,28 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "handlers/HCommentImage.h"
-#include "handlers/HCommentText.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-#include "items/VCommentImage.h"
-#include "items/VCommentText.h"
+#pragma once
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "../comments_api.h"
+
+#include "CommentText.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/Node.h"
+
+DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentFreeNode)
 
 namespace Comments {
 
-bool Comments::initialize(Core::EnvisionManager&)
+class COMMENTS_API CommentFreeNode : public Super<Model::CompositeNode>
 {
-	Core::TypeRegistry::initializeNewTypes();
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentFreeNode)
 
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
-	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
-	VCommentText::setDefaultClassHandler(HCommentText::instance());
+	ATTRIBUTE_VALUE(Model::Text, name, setName, QString)
+	ATTRIBUTE(Model::Node, node, setNode)
 
-	return true;
-}
+	public:
+		CommentFreeNode(Node *parent, QString name);
+};
 
-void Comments::unload()
-{
-}
-
-void Comments::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

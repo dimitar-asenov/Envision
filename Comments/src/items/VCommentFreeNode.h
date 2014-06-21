@@ -24,46 +24,35 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "handlers/HCommentImage.h"
-#include "handlers/HCommentText.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-#include "items/VCommentImage.h"
-#include "items/VCommentText.h"
+#pragma once
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "../comments_api.h"
+
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/renderer/ModelRenderer.h"
+
+#include "../nodes/CommentFreeNode.h"
 
 namespace Comments {
 
-bool Comments::initialize(Core::EnvisionManager&)
+class COMMENTS_API VCommentFreeNode : public Super<Visualization::ItemWithNode<VCommentFreeNode,
+						Visualization::Item, CommentFreeNode> >
 {
-	Core::TypeRegistry::initializeNewTypes();
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentFreeNode, Visualization::ItemStyle)
 
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
-	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
-	VCommentText::setDefaultClassHandler(HCommentText::instance());
+	public:
+		VCommentFreeNode(Visualization::Item* parent, NodeType* node);
 
-	return true;
-}
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 
-void Comments::unload()
-{
-}
+	private:
+		Visualization::Item* node_;
+		void clearChildren();
+		QGraphicsColorizeEffect* anEffect_{};
+};
 
-void Comments::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

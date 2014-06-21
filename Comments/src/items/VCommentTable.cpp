@@ -24,46 +24,42 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "handlers/HCommentImage.h"
-#include "handlers/HCommentText.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-#include "items/VCommentImage.h"
-#include "items/VCommentText.h"
+#include "VCommentTable.h"
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/layouts/GridLayout.h"
+
+using namespace Visualization;
 
 namespace Comments {
 
-bool Comments::initialize(Core::EnvisionManager&)
+ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
+
+VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get()), node_(nullptr)
 {
-	Core::TypeRegistry::initializeNewTypes();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
-	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
-	VCommentText::setDefaultClassHandler(HCommentText::instance());
-
-	return true;
+	aGrid_ = new Visualization::GridLayout(this);
 }
 
-void Comments::unload()
+void VCommentTable::determineChildren()
 {
+	QList< QList< Model::Node*> > anArray;
+	for (int i = 0; i < node()->rowCount(); i++)
+	{
+		anArray.append(QList< Model::Node*>());
+
+		for (int j = 0; j < node()->columnCount(); j++)
+		{
+			anArray[i].append(node()->nodes()->at((node()->rowCount() * j) + i));
+		}
+
+	}
+	aGrid_->synchronizeWithNodes(anArray);
 }
 
-void Comments::selfTest(QString testid)
+void VCommentTable::updateGeometry(int availableWidth, int availableHeight)
 {
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
+	Item::updateGeometry(aGrid_, availableWidth, availableHeight);
 }
 
-}
+} /* namespace Comments */

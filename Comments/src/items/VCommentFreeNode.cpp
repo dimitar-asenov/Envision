@@ -24,46 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "handlers/HCommentImage.h"
-#include "handlers/HCommentText.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-#include "items/VCommentImage.h"
-#include "items/VCommentText.h"
+#include "VCommentFreeNode.h"
 
-#include "SelfTest/src/SelfTestSuite.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/VText.h"
+
+using namespace Visualization;
 
 namespace Comments {
 
-bool Comments::initialize(Core::EnvisionManager&)
+ITEM_COMMON_DEFINITIONS(VCommentFreeNode, "item")
+
+VCommentFreeNode::VCommentFreeNode(Item* parent, NodeType* node)
+	: Super(parent, node, itemStyles().get()), node_(nullptr)
 {
-	Core::TypeRegistry::initializeNewTypes();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
-	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
-	VCommentText::setDefaultClassHandler(HCommentText::instance());
-
-	return true;
+	anEffect_ = new QGraphicsColorizeEffect();
+	anEffect_->setColor(QColor(Qt::black));
+	Item::setGraphicsEffect(anEffect_);
 }
 
-void Comments::unload()
+void VCommentFreeNode::determineChildren()
 {
+	anEffect_->setEnabled(!this->itemOrChildHasFocus());
+	synchronizeItem(node_, node()->node());
 }
 
-void Comments::selfTest(QString testid)
+void VCommentFreeNode::updateGeometry(int availableWidth, int availableHeight)
 {
-	if (testid.isEmpty()) SelfTest::TestManager<Comments>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<Comments>::runTest(testid).printResultStatistics();
+	Item::updateGeometry(node_, availableWidth, availableHeight);
 }
 
-}
+} /* namespace Comments */
