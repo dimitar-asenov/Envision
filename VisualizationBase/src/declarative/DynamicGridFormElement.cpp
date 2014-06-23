@@ -187,8 +187,8 @@ void DynamicGridFormElement::destroyChildItems(Item* item,
 										 QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
 	LayoutFormElement::destroyChildItems(item, handledChildren);
-	auto dataIterator = itemData_.find(item);
 
+	auto dataIterator = itemData_.find(item);
 	if (dataIterator != itemData_.end())
 	{
 		for (auto list : dataIterator.value()->itemGrid_)
@@ -196,7 +196,7 @@ void DynamicGridFormElement::destroyChildItems(Item* item,
 				SAFE_DELETE_ITEM(item);
 
 		SAFE_DELETE(dataIterator.value());
-		itemData_.remove(item);
+		itemData_.erase(dataIterator);
 	}
 }
 
