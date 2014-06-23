@@ -90,9 +90,20 @@ void AutoCompleteVis::updateEntries()
 	if (entries_.isEmpty()) layout()->synchronizeFirst(noProposals_, true, &style()->noProposals());
 	else for (auto e : entries_) layout()->append(e->visualization().data());
 
-	// Install event handler
+	// Remove old event handler
+	if (filteredItem_)
+	{
+		if (scene() && scene()->items().contains(filteredItem_))
+			filteredItem_->removeSceneEventFilter(this);
+		filteredItem_ = nullptr;
+	}
+
+	// Install new event handler
 	if (scene() && scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
-		scene()->mainCursor()->owner()->installSceneEventFilter(this);
+	{
+		filteredItem_ = scene()->mainCursor()->owner();
+		filteredItem_->installSceneEventFilter(this);
+	}
 }
 
 void AutoCompleteVis::determineChildren()
@@ -164,7 +175,6 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 
 	if (cursorOwner != watched)
 	{
-		watched->removeSceneEventFilter(this);
 		return false;
 	}
 
