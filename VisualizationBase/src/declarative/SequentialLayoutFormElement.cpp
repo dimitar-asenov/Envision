@@ -47,9 +47,12 @@ SequentialLayoutFormElement::SequentialLayoutFormElement(const SequentialLayoutF
 
 SequentialLayoutFormElement::~SequentialLayoutFormElement()
 {
-	for (auto list : itemListMap_)
-		for (auto item : *list)
+	for (auto data : itemData_)
+	{
+		for (auto item : data->items_)
 			SAFE_DELETE_ITEM(item);
+		SAFE_DELETE(data);
+	}
 }
 
 
@@ -60,7 +63,9 @@ SequentialLayoutFormElement* SequentialLayoutFormElement::clone() const
 
 void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
-	auto& itemList = listForItem(item);
+	auto& itemData = dataForItem(item);
+	auto& itemList = itemData.items_;
+	auto& itemPositions = itemData.itemPositionWithinLayout_;
 	bool horizontal = orientation_ == Qt::Horizontal;
 	int spacing = spaceBetweenElements(item);
 	int size = itemList.size();
@@ -81,7 +86,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[](int, int, int, int){},	// computeElementSize
 				[&itemList](int x, int, int w, int h){itemList[x]->changeGeometry(w, h);},	// changeGeometry
 				[&itemList](int x, int){return itemList[x]->sizeDependsOnParent();},	// isStretchable
-				[&itemList](int x, int, QPoint pos){itemList[x]->setPos(pos);},	// setPosition
+				[&itemPositions](int x, int, QPoint pos){itemPositions[x] = pos;},	// setPosition
 				[](int){return 0;},	// rowStretchFactors
 				[&itemList](int x){return itemList[x]->sizeDependsOnParent() ? 1 : 0;},	// columnStretchFactors
 				[](int, int){return LayoutStyle::Alignment::Left;},	// horizontalAlignment
@@ -108,7 +113,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[](int, int, int, int){},	// computeElementSize
 				[&itemList](int, int y, int w, int h){itemList[y]->changeGeometry(w, h);},	// changeGeometry
 				[&itemList](int, int y){return itemList[y]->sizeDependsOnParent();},	// isStretchable
-				[&itemList](int, int y, QPoint pos){itemList[y]->setPos(pos);},	// setPosition
+				[&itemPositions](int, int y, QPoint pos){itemPositions[y] = pos;},	// setPosition
 				[&itemList](int y){return itemList[y]->sizeDependsOnParent() ? 1 : 0;},	// rowStretchFactors
 				[](int){return 0;},	// columnStretchFactors
 				[this](int, int){return alignment_;},	// horizontalAlignment
@@ -139,7 +144,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[](int, int, int, int){},	// computeElementSize
 				[&itemList, invert](int x, int, int w, int h){itemList[invert(x)]->changeGeometry(w, h);},	// changeGeom.
 				[&itemList, invert](int x, int){return itemList[invert(x)]->sizeDependsOnParent();},	// isStretchable
-				[&itemList, invert](int x, int, QPoint pos){itemList[invert(x)]->setPos(pos);},	// setPosition
+				[&itemPositions, invert](int x, int, QPoint pos){itemPositions[invert(x)] = pos;},	// setPosition
 				[](int){return 0;},	// rowStretchFactors
 				[&itemList, invert](int x){return itemList[invert(x)]->sizeDependsOnParent() ? 1 : 0;},	// columnStretchF.
 				[](int, int){return LayoutStyle::Alignment::Left;},	// horizontalAlignment
@@ -166,7 +171,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 				[](int, int, int, int){},	// computeElementSize
 				[&itemList, invert](int, int y, int w, int h){itemList[invert(y)]->changeGeometry(w, h);},	// changeGeom.
 				[&itemList, invert](int, int y){return itemList[invert(y)]->sizeDependsOnParent();},	// isStretchable
-				[&itemList, invert](int, int y, QPoint pos){itemList[invert(y)]->setPos(pos);},	// setPosition
+				[&itemPositions, invert](int, int y, QPoint pos){itemPositions[invert(y)] = pos;},	// setPosition
 				[&itemList, invert](int y){return itemList[invert(y)]->sizeDependsOnParent() ? 1 : 0;},	// rowStretchF.
 				[](int){return 0;},	// columnStretchFactors
 				[this](int, int){return alignment_;},	// horizontalAlignment
@@ -188,13 +193,19 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 
 void SequentialLayoutFormElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for (auto i : listForItem(item))
-		i->setPos(parentX + x(item) + i->x() + leftMargin(), parentY + y(item) + i->y() + topMargin());
+	auto& data = dataForItem(item);
+	for (int i = 0; i<data.items_.size(); ++i)
+	{
+		QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[i].x() + leftMargin(),
+					parentY + y(item) + data.itemPositionWithinLayout_[i].y() + topMargin()};
+
+		if (newPos != data.items_[i]->pos())
+			data.items_[i]->setPos(newPos); // setting the position is an expensive operation so only do it if it changed
+	}
 }
 
 void SequentialLayoutFormElement::synchronizeWithItem(Item* item)
 {
-	auto& itemList = listForItem(item);
 	if (listNodeGetter_)
 	{
 		Model::List* listNode = listNodeGetter_(item);
@@ -207,12 +218,17 @@ void SequentialLayoutFormElement::synchronizeWithItem(Item* item)
 		Q_ASSERT(itemListGetter_);
 		synchronizeWithItems(item, itemListGetter_(item));
 	}
-	for (auto i : itemList) i->setParentItem(item);
+
+	auto& itemData = dataForItem(item);
+	itemData.itemPositionWithinLayout_.resize(itemData.items_.size());
+	//Note that we do not need to initialize the positions in any way since they will be overwritten in computeSize()
+
+	for (auto i : itemData.items_) i->setParentItem(item);
 }
 
 bool SequentialLayoutFormElement::sizeDependsOnParent(const Item* item) const
 {
-	for (auto i : listForItem(item))
+	for (auto i : dataForItem(item).items_)
 		if (i->sizeDependsOnParent())
 			return true;
 	return false;
@@ -222,19 +238,26 @@ void SequentialLayoutFormElement::destroyChildItems(Item* item,
 		QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
 	LayoutFormElement::destroyChildItems(item, handledChildren);
-	if (itemListMap_.contains(item))
+
+	auto dataIterator = itemData_.find(item);
+	if (dataIterator != itemData_.end())
 	{
-		for (auto i : *itemListMap_.value(item))
-			SAFE_DELETE_ITEM(i);
-		itemListMap_.remove(item);
+		for (auto item : dataIterator.value()->items_)
+			SAFE_DELETE_ITEM(item);
+
+		SAFE_DELETE(dataIterator.value());
+		itemData_.erase(dataIterator);
 	}
 }
 
-QList<Item*>& SequentialLayoutFormElement::listForItem(const Item* item) const
+SequentialLayoutFormElement::ItemData& SequentialLayoutFormElement::dataForItem(const Item* item) const
 {
-	if (!itemListMap_.contains(item))
-		itemListMap_.insert(item, new QList<Item*>());
-	return *itemListMap_.value(item);
+	auto dataIterator = itemData_.find(item);
+	if (dataIterator != itemData_.end()) return *(dataIterator.value());
+
+	auto data = new ItemData;
+	itemData_.insert(item, data);
+	return *data;
 }
 
 int SequentialLayoutFormElement::spaceBetweenElements(Item* item)
@@ -246,9 +269,7 @@ int SequentialLayoutFormElement::spaceBetweenElements(Item* item)
 
 void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes)
 {
-	auto& itemList = listForItem(item);
-
-	item->synchronizeCollections(nodes, itemList,
+	item->synchronizeCollections(nodes, dataForItem(item).items_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node){return parent->renderer()->render(parent, node);},
 		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);});
@@ -256,37 +277,16 @@ void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<M
 
 void SequentialLayoutFormElement::synchronizeWithItems(Item* item, const QList<Item*>& items)
 {
-	auto& itemList = listForItem(item);
-
-	item->synchronizeCollections(items, itemList,
+	item->synchronizeCollections(items, dataForItem(item).items_,
 		[](Item* newItem, Item* oldItem){return newItem == oldItem;},
 		[](Item*, Item* newItem){return newItem;},
 		[](Item*, Item*, Item*&){return false;});
 }
 
-void SequentialLayoutFormElement::removeFromItemList(Item* item, int index, bool deleteItem)
-{
-	auto& itemList = listForItem(item);
-	if (deleteItem) SAFE_DELETE_ITEM( itemList[index]);
-	else itemList[index]->setParentItem(nullptr);
-	itemList.removeAt(index);
-	item->setUpdateNeeded(Item::StandardUpdate);
-}
-
-void SequentialLayoutFormElement::swap(Item* item, int i, int j)
-{
-	auto& itemList = listForItem(item);
-
-	Item* t = itemList[i];
-	itemList[i] = itemList[j];
-	itemList[j] = t;
-	item->setUpdateNeeded(Item::StandardUpdate);
-}
-
 QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
 {
 	QList<ItemRegion> regs;
-	auto& itemList = listForItem(item);
+	auto& itemList = dataForItem(item).items_;
 
 	// If this layout is not visible return no regions
 	if (itemList.isEmpty() && !hasCursorWhenEmpty(item))
@@ -511,7 +511,7 @@ inline void SequentialLayoutFormElement::adjustCursorRegionToAvoidZeroSize(QRect
 
 bool SequentialLayoutFormElement::isEmpty(const Item* item) const
 {
-	for (auto i : listForItem(item))
+	for (auto i : dataForItem(item).items_)
 		if (!i->isEmpty())
 			return false;
 	return true;
@@ -521,7 +521,7 @@ bool SequentialLayoutFormElement::elementOrChildHasFocus(Item* item) const
 {
 	if (LayoutFormElement::elementOrChildHasFocus(item))
 		return true;
-	for (auto i : listForItem(item))
+	for (auto i : dataForItem(item).items_)
 		if (i->itemOrChildHasFocus())
 			return true;
 	return false;
@@ -529,7 +529,7 @@ bool SequentialLayoutFormElement::elementOrChildHasFocus(Item* item) const
 
 int SequentialLayoutFormElement::focusedElementIndex(const Item* item) const
 {
-	auto& itemList = listForItem(item);
+	auto& itemList = dataForItem(item).items_;
 
 	for (int i = 0; i<itemList.size(); ++i)
 		if (itemList[i]->itemOrChildHasFocus()) return i;
@@ -539,8 +539,7 @@ int SequentialLayoutFormElement::focusedElementIndex(const Item* item) const
 
 int SequentialLayoutFormElement::length(const Item* item) const
 {
-	auto& itemList = listForItem(item);
-	return itemList.size();
+	return dataForItem(item).items_.size();
 }
 
 }

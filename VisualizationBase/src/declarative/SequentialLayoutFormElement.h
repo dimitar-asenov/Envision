@@ -164,12 +164,18 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		int minWidth_{};
 		int minHeight_{};
 
-		mutable QHash<const Item*, QList<Item*>*> itemListMap_{};
+		struct ItemData
+		{
+			QVector<Item*> items_;
+			QVector<QPointF> itemPositionWithinLayout_;
+		};
+
+		mutable QHash<const Item*, ItemData*> itemData_{};
 
 		/**
 		 * Returns the cached item list for this item.
 		 */
-		QList<Item*>& listForItem(const Item* item) const;
+		ItemData& dataForItem(const Item* item) const;
 		/**
 		 * Computes the space between elements from the getter and the previously set space.
 		 */
@@ -182,15 +188,7 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		 * Synchronizes the old list of items for this \a item with the new list of \a items.
 		 */
 		void synchronizeWithItems(Item* item, const QList<Item*>& items);
-		/**
-		 * Swaps the items at positions \a i and \a j in the list of items for \a item.
-		 */
-		void swap(Item* item, int i, int j);
 		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
-		/**
-		 * Removes the item at \a index from the itemList of \a item. If \a deleteItem is set, the item also gets deleted.
-		 */
-		void removeFromItemList(Item* item, int index, bool deleteItem);
 };
 
 inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListNode(ListNodeGetterFunction listNodeGetter)
@@ -268,8 +266,7 @@ inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeight(in
 
 template <class T> T* SequentialLayoutFormElement::itemAt(const Item* item, int itemIndex) const
 {
-	auto& itemList = listForItem(item);
-	return static_cast<T*>(itemList.at(itemIndex));
+	return static_cast<T*>(dataForItem(item).items_.at(itemIndex));
 }
 
 } /* namespace Visualization */
