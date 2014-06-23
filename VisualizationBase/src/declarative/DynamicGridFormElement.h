@@ -105,13 +105,12 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 			int numColumns_{};
 			QVector<QVector<Item*>> itemGrid_;
 			QVector<QVector<QPair<int, int>>> itemSpan_;
+			QVector<QVector<QPointF>> itemPositionWithinLayout_;
 		};
 
 		mutable QHash<const Item*, ItemData*> itemData_{};
 
 		ItemData& dataForItem(const Item* item) const;
-
-		void setGridSize(ItemData& data, int sizeX, int sizeY);
 };
 
 inline DynamicGridFormElement* DynamicGridFormElement::setNodesGetter(NodesGetterFunction nodeGetter)

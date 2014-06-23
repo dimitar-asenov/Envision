@@ -85,7 +85,7 @@ void DynamicGridFormElement::computeSize(Item* item, int availableWidth, int ava
 		[](int, int, int, int){},	// computeElementSize
 		[&data](int x, int y, int w, int h){data.itemGrid_[x][y]->changeGeometry(w, h);},	// changeGeometry
 		[&data](int x, int y){return data.itemGrid_[x][y]->sizeDependsOnParent();},	// isStretchable
-		[&data](int x, int y, QPoint pos){data.itemGrid_[x][y]->setPos(pos);},	// setPosition
+		[&data](int x, int y, QPoint pos){data.itemPositionWithinLayout_[x][y] = pos;},	// setPosition
 		[](int){return 0;},	// rowStretchFactors
 		[](int){return 0;},	// columnStretchFactors
 		[this](int, int){return horizontalAlignment_;},	// horizontalAlignment
@@ -110,8 +110,7 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 
 	// Remove all elements from the current grid that do not match a node
 	// If a node exists record it's location
-	QList<Model::Node*> nodesFound;
-	QList<Item*> itemsFound;
+	QHash<Model::Node*, Item*> existingItems;
 
 	for (int x = 0; x < data.numColumns_; ++x)
 		for (int y = 0; y < data.numRows_; ++y)
@@ -123,8 +122,7 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 					if (nodes[n].contains(data.itemGrid_[x][y]->node()))
 					{
 						found = true;
-						nodesFound.append(data.itemGrid_[x][y]->node());
-						itemsFound.append(data.itemGrid_[x][y]);
+						existingItems.insert(data.itemGrid_[x][y]->node(), data.itemGrid_[x][y]);
 						item->synchronizeItem(data.itemGrid_[x][y], data.itemGrid_[x][y]->node());
 						break;
 					}
@@ -134,18 +132,28 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 			}
 
 	// Get the new size.
-	int newY = nodes.size();
-	int newX = 0;
-	for (int y = 0; y<newY; ++y)
-		if (newX < nodes[y].size()) newX = nodes[y].size();
-	setGridSize(data, newX, newY);
+	data.numRows_ = nodes.size();
+	data.numColumns_ = 0;
+	for (int y = 0; y<data.numRows_; ++y)
+		if (data.numColumns_ < nodes[y].size()) data.numColumns_ = nodes[y].size();
+
+	// Set new grid size
+	data.itemGrid_.resize(data.numColumns_);
+	data.itemPositionWithinLayout_.resize(data.numColumns_);
+	for (auto x = 0; x < data.numColumns_; ++x)
+	{
+		data.itemGrid_[x].resize(data.numRows_);
+		data.itemPositionWithinLayout_[x].resize(data.numRows_);
+	}
 
 	for (int y = 0; y<nodes.size(); ++y)
 		for (int x = 0; x<nodes[y].size(); ++x)
 		{
-			int oldIndex = nodesFound.indexOf(nodes[y][x]);
-			if (oldIndex >=0) data.itemGrid_[x][y] = itemsFound[oldIndex];
+			auto existingIterator = existingItems.find(nodes[y][x]);
+			if (existingIterator != existingItems.end()) data.itemGrid_[x][y] = existingIterator.value();
 			else data.itemGrid_[x][y] = item->renderer()->render(item, nodes[y][x]);
+			// Note that we don't need to update the position here since it will be overwritten anyway by
+			// computeSize()
 		}
 
 	// Set the span if any
@@ -157,43 +165,22 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 		for (int x = 0; x < data.numColumns_; ++x)
 			data.itemSpan_[x] = QVector<QPair<int, int>>(data.numRows_, {1, 1});
 	}
-
-	item->setUpdateNeeded(Item::StandardUpdate);
-}
-
-void DynamicGridFormElement::setGridSize(ItemData& data, int sizeX, int sizeY)
-{
-	if (sizeX < data.numColumns_)
-	{
-		for (int x = sizeX; x < data.numColumns_; x++)
-			for (int y = 0; y < data.numRows_; y++)
-				if ( data.itemGrid_[x][y] )
-					data.itemGrid_[x][y]->setParentItem(nullptr);
-	}
-
-	data.numColumns_ = sizeX;
-	data.itemGrid_.resize(data.numColumns_);
-
-	for (int x = 0; x < data.numColumns_; ++x)
-	{
-		if (sizeY < data.numRows_ )
-		{
-			for (int y = sizeY; y<data.itemGrid_[x].size(); ++y)
-				if ( data.itemGrid_[x][y] )
-					data.itemGrid_[x][y]->setParentItem(nullptr);
-		}
-
-		data.itemGrid_[x].resize(sizeY);
-	}
-
-	data.numRows_ = sizeY;
 }
 
 void DynamicGridFormElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for (auto list : dataForItem(item).itemGrid_)
-		for (auto i : list)
-			if (i) i->setPos(parentX + x(item) + i->x() + leftMargin(), parentY + y(item) + i->y() + topMargin());
+	auto& data = dataForItem(item);
+
+	for (int xIt = 0; xIt<data.numColumns_; ++xIt)
+		for (int yIt = 0; yIt < data.numRows_; ++yIt)
+			if (auto childItem = data.itemGrid_[xIt][yIt])
+			{
+				QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[xIt][yIt].x() + leftMargin(),
+							parentY + y(item) + data.itemPositionWithinLayout_[xIt][yIt].y() + topMargin()};
+
+				if (newPos != childItem->pos())
+					childItem->setPos(newPos); // setting the position is an expensive operation so only do it if it changed
+			}
 }
 
 void DynamicGridFormElement::destroyChildItems(Item* item,
