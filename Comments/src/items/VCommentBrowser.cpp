@@ -50,8 +50,7 @@ VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& con
 {
 	browser_->setResizesToContents(true);
 	browser_->setHtml(content);
-	browser_->setMaximumSize(defaultSize);
-	browser_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	browser_->resize(size_);
 }
 
 VCommentBrowser::~VCommentBrowser()
@@ -67,12 +66,14 @@ VCommentBrowser::~VCommentBrowser()
 	SAFE_DELETE(browser_);
 }
 
-void VCommentBrowser::determineChildren() {}
+void VCommentBrowser::determineChildren()
+{
+	if (size_.isValid())
+		browser_->resize(size_);
+}
 
 void VCommentBrowser::updateGeometry(int, int)
 {
-	browser_->setMaximumSize(size_);
-
 	if (hasShape())
 	{
 		getShape()->setInnerSize(size_.width(), size_.height());
@@ -94,6 +95,7 @@ void VCommentBrowser::updateSize(QSize size)
 {
 	if (size.width() > 0 && size.height() > 0)
 		size_ = size;
+	setUpdateNeeded(StandardUpdate);
 }
 
 }
