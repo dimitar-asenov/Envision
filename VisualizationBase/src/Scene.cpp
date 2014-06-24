@@ -306,12 +306,13 @@ bool Scene::event(QEvent *event)
 		inEventHandler_ = false;
 
 		if (needsUpdate_) updateItems();
-		for (auto e : postEventActions_)
+		auto postEventActions = postEventActions_;
+		postEventActions_.clear();
+		for (auto e : postEventActions)
 		{
 			customEvent(e);
 			SAFE_DELETE(e);
 		}
-		postEventActions_.clear();
 
 		// On keyboard events, make sure the cursor is visible
 		if (mainCursorsJustSet_ && mainCursor_ && mainCursor_->visualization()
@@ -362,6 +363,7 @@ void Scene::setMainCursor(Cursor* cursor)
 	SAFE_DELETE(mainCursor_);
 	mainCursor_ = cursor;
 	mainCursorsJustSet_ = true;
+	if (!cursor) clearFocus();
 }
 
 Item* Scene::focusItem() const
