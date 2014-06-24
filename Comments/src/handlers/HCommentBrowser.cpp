@@ -23,48 +23,30 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#include "CommentsPlugin.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "handlers/HCommentImage.h"
-#include "handlers/HCommentBrowser.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-#include "items/VCommentImage.h"
-#include "items/VCommentBrowser.h"
-
-
-#include "SelfTest/src/SelfTestSuite.h"
+#include "HCommentBrowser.h"
+#include "VisualizationBase/src/views/MainView.h"
 
 namespace Comments {
 
-bool CommentsPlugin::initialize(Core::EnvisionManager&)
+HCommentBrowser::HCommentBrowser()
+{}
+
+HCommentBrowser* HCommentBrowser::instance()
 {
-	Core::TypeRegistry::initializeNewTypes();
-
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
-	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
-	VCommentBrowser::setDefaultClassHandler(HCommentBrowser::instance());
-
-	return true;
+	static HCommentBrowser h;
+	return &h;
 }
 
-void CommentsPlugin::unload()
+void HCommentBrowser::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
 {
+	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F11)
+		if (auto scene = item->scene())
+			for (auto view : scene->views())
+				if (dynamic_cast<Visualization::MainView*>(view))
+					view->centerOn(item);
+
+
+	// Accept all events and prevent them from being propagated to parents.
 }
 
-void CommentsPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<CommentsPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<CommentsPlugin>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */

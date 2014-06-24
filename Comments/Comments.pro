@@ -8,7 +8,8 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -lfilepersistence
-HEADERS += src/handlers/HCommentImage.h \
+HEADERS += src/handlers/HCommentBrowser.h \
+    src/handlers/HCommentImage.h \
     src/items/VCommentStyle.h \
     src/commands/CShapeSetProperty.h \
     src/commands/CCreateShape.h \
@@ -34,7 +35,8 @@ HEADERS += src/handlers/HCommentImage.h \
     src/items/VCommentDiagramStyle.h \
     src/ColorPicker.h \
     src/CommentsPlugin.h
-SOURCES += src/handlers/HCommentImage.cpp \
+SOURCES += src/handlers/HCommentBrowser.cpp \
+    src/handlers/HCommentImage.cpp \
     src/items/VCommentStyle.cpp \
     src/commands/CShapeSetProperty.cpp \
     src/commands/CCreateShape.cpp \
@@ -59,6 +61,4 @@ SOURCES += src/handlers/HCommentImage.cpp \
     src/items/VCommentDiagramStyle.cpp \
     src/ColorPicker.cpp \
     src/CommentsPlugin.cpp
-
-RESOURCES += \
-    res.qrc
+RESOURCES += res.qrc

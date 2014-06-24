@@ -24,47 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentsPlugin.h"
-#include "handlers/HComment.h"
-#include "handlers/HCommentDiagram.h"
-#include "handlers/HCommentDiagramShape.h"
-#include "handlers/HCommentDiagramConnector.h"
-#include "handlers/HCommentImage.h"
-#include "handlers/HCommentBrowser.h"
-#include "items/VComment.h"
-#include "items/VCommentDiagram.h"
-#include "items/VCommentDiagramShape.h"
-#include "items/VCommentDiagramConnector.h"
-#include "items/VCommentImage.h"
-#include "items/VCommentBrowser.h"
+#pragma once
 
-
-#include "SelfTest/src/SelfTestSuite.h"
+#include "comments_api.h"
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace Comments {
 
-bool CommentsPlugin::initialize(Core::EnvisionManager&)
-{
-	Core::TypeRegistry::initializeNewTypes();
+class COMMENTS_API HCommentBrowser : public Interaction::GenericHandler {
 
-	VComment::setDefaultClassHandler(HComment::instance());
-	VCommentDiagram::setDefaultClassHandler(HCommentDiagram::instance());
-	VCommentDiagramShape::setDefaultClassHandler(HCommentDiagramShape::instance());
-	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
-	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
-	VCommentBrowser::setDefaultClassHandler(HCommentBrowser::instance());
+	public:
+		static HCommentBrowser* instance();
 
-	return true;
-}
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 
-void CommentsPlugin::unload()
-{
-}
+	protected:
+		HCommentBrowser();
+};
 
-void CommentsPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<CommentsPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<CommentsPlugin>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace Comments */
