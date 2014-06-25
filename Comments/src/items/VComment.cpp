@@ -215,18 +215,22 @@ void VComment::parseLines()
 		//************************************************************************
 		// Table
 		//************************************************************************
-		// is this a table? format: [table#tableName#rowCount#columnCount]
+		// is this a table? format: [table#tableName#rowCount#columnCount] or [table#tableName]
 		if (line.startsWith("[table#") && line.right(1) == "]" && line.size() > 7+1)
 		{
 			createTextualCommentElement(linesOfCurrentElement); // Flush current text
 
-			QString name = line.mid(7, (line.indexOf('#', 7)-line.indexOf('#'))-1);
+			QString name;
+			if (line.count('#')==3)
+				name = line.mid(7, (line.indexOf('#', 7)-line.indexOf('#'))-1);
+			else
+				name =  line.mid(7, line.size()-7-1);
 			tableNames << name;
 
 			auto table = node()->table(name);
-			Q_ASSERT(table);
 
-			commentElements_.append(new VCommentTable(nullptr, table) );
+			if (table != nullptr)
+				commentElements_.append(new VCommentTable(nullptr, table) );
 			continue;
 		}
 

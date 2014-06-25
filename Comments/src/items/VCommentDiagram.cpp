@@ -145,9 +145,12 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
 void VCommentDiagram::toggleEditing()
 {
-	QGraphicsView *v = scene()->views().first();
-	QPointF sceneP = this->mapToScene(this->boundingRect().bottomLeft());
-	toolbar_->move(v->viewport()->mapToGlobal(v->mapFromScene(sceneP)));
+	if (!toolbar()->isVisible())
+	{
+		QGraphicsView *v = scene()->views().first();
+		QPointF sceneP = this->mapToScene(this->boundingRect().bottomLeft());
+		toolbar_->move(v->viewport()->mapToGlobal(v->mapFromScene(sceneP)));
+	}
 	toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);

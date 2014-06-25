@@ -67,6 +67,8 @@ TEST(Comments, SimpleTest)
 
 		"# Tables!\n"
 		"[table#aTable#3#4]\n"
+		"And again\n"
+		"[table#aTable]\n"
 
 		"Also, lists work...\n"
 		" * A first item\n"
@@ -122,10 +124,10 @@ TEST(Comments, SimpleTest)
 	node->codes()->append(code);
 
 	auto table = new CommentTable(nullptr, "aTable", 3, 4);
-	table->setNodeAt(0, 0, new CommentNode("#Column 1"));
-	table->setNodeAt(0, 1, new CommentNode("#Column 2"));
-	table->setNodeAt(0, 2, new CommentNode("#Column 3"));
-	table->setNodeAt(0, 3, new CommentNode("#Column 4"));
+	table->setNodeAt(0, 0, new CommentNode("##Column 1"));
+	table->setNodeAt(0, 1, new CommentNode("##Column 2"));
+	table->setNodeAt(0, 2, new CommentNode("##Column 3"));
+	table->setNodeAt(0, 3, new CommentNode("##Column 4"));
 	table->setNodeAt(1, 0, new Class("ClassA"));
 	table->setNodeAt(1, 1, new Class("ClassB"));
 	table->setNodeAt(1, 2, new Class("ClassC"));

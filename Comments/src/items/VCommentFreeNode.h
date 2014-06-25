@@ -50,8 +50,7 @@ class COMMENTS_API VCommentFreeNode : public Super<Visualization::ItemWithNode<V
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Item* node_;
-		void clearChildren();
+		Visualization::Item* node_{};
 		QGraphicsColorizeEffect* anEffect_{};
 };
 

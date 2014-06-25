@@ -31,6 +31,7 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/Boolean.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramConnector)
@@ -47,8 +48,8 @@ class COMMENTS_API CommentDiagramConnector : public Super<Model::CompositeNode> 
 	ATTRIBUTE_VALUE(::Model::Integer, endPoint, setEndPoint, int)
 	ATTRIBUTE_VALUE(Model::Integer, outlineSize, setOutlineSize, int)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, outlineTypeStore, setOutlineTypeStore, int)
-	ATTRIBUTE_VALUE(::Model::Integer, startArrow, setStartArrow, bool)
-	ATTRIBUTE_VALUE(::Model::Integer, endArrow, setEndArrow, bool)
+	ATTRIBUTE_VALUE(::Model::Boolean, startArrow, setStartArrow, bool)
+	ATTRIBUTE_VALUE(::Model::Boolean, endArrow, setEndArrow, bool)
 
 	public:
 		CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint);

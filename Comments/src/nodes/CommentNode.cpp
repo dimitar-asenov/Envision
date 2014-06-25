@@ -125,33 +125,41 @@ void CommentNode::synchronizeCodesToText()
 void CommentNode::synchronizeTablesToText()
 {
 	QStringList tableNamesFromText;
-	int rowCount = 0;
-	int columnCount = 0;
+	QMap<QString, int> mapRows;
+	QMap<QString, int> mapColumns;
 	for (auto lineNode : *lines())
 	{
 		auto line = lineNode->get();
-		if (line.startsWith("[table#") && line.right(1) == "]" && line.size() > 7+1)
+		if (line.startsWith("[table#") && line.right(1) == "]" && line.size() > 7+1 && line.count('#')==3)
 		{
 			QStringList aList = line.split("#");
 			tableNamesFromText << aList[1];
-			rowCount = aList[2].toInt();
-			columnCount = aList[3].remove(']').toInt();
+			mapRows.insert(aList[1], aList[2].toInt());
+			mapColumns.insert(aList[1], aList[3].remove(']').toInt());
 		}
 	}
 
 	tableNamesFromText.removeDuplicates();
 
-	// Remove old codes
+	// Remove old tables
 	for (int i = tables()->size() - 1; i>=0; --i)
 	{
 		if (tableNamesFromText.contains(tables()->at(i)->name()))
+		{
 			tableNamesFromText.removeOne(tables()->at(i)->name()); // There should be only one, we removed duplicates
-		else codes()->remove(i);
+			if (tables()->at(i)->rowCount()!= mapRows.value(tables()->at(i)->name()) ||
+				 tables()->at(i)->columnCount() != mapColumns.value(tables()->at(i)->name()))
+			{
+				tables()->at(i)->resize(mapRows.value(tables()->at(i)->name()), mapColumns.value(tables()->at(i)->name()));
+			}
+
+		}
+		else tables()->remove(i);
 	}
 
-	// Add new codes
+	// Add new tables
 	for (auto newTable : tableNamesFromText)
-		tables()->append(new CommentTable(nullptr, newTable, rowCount, columnCount));
+		tables()->append(new CommentTable(nullptr, newTable, mapRows.value(newTable), mapColumns.value(newTable)));
 }
 
 

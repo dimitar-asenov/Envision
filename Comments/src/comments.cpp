@@ -30,12 +30,14 @@
 #include "handlers/HCommentDiagramShape.h"
 #include "handlers/HCommentDiagramConnector.h"
 #include "handlers/HCommentImage.h"
+#include "handlers/HCommentFreeNode.h"
 #include "handlers/HCommentText.h"
 #include "items/VComment.h"
 #include "items/VCommentDiagram.h"
 #include "items/VCommentDiagramShape.h"
 #include "items/VCommentDiagramConnector.h"
 #include "items/VCommentImage.h"
+#include "items/VCommentFreeNode.h"
 #include "items/VCommentText.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
@@ -52,6 +54,7 @@ bool Comments::initialize(Core::EnvisionManager&)
 	VCommentDiagramConnector::setDefaultClassHandler(HCommentDiagramConnector::instance());
 	VCommentImage::setDefaultClassHandler(HCommentImage::instance());
 	VCommentText::setDefaultClassHandler(HCommentText::instance());
+	VCommentFreeNode::setDefaultClassHandler(HCommentFreeNode::instance());
 
 	return true;
 }

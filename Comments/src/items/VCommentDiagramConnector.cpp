@@ -92,7 +92,8 @@ void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphi
 	if (node()->startArrow() || node()->endArrow())
 	{
 		QPolygonF anArrowhead, arrow;
-		anArrowhead << QPointF(0, 0) << QPointF(20+outlineSize_, -5-outlineSize_) << QPointF(20+outlineSize_, 5+outlineSize_);
+		anArrowhead << QPointF(0, 0) <<
+							QPointF(20+outlineSize_, -5-outlineSize_) << QPointF(20+outlineSize_, 5+outlineSize_);
 		QMatrix matrix;
 		if (node()->startArrow())
 		{

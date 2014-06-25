@@ -28,6 +28,8 @@
 
 #include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "../nodes/CommentText.h"
+#include "../nodes/CommentNode.h"
 
 using namespace Visualization;
 
@@ -39,13 +41,15 @@ VCommentFreeNode::VCommentFreeNode(Item* parent, NodeType* node)
 	: Super(parent, node, itemStyles().get()), node_(nullptr)
 {
 	anEffect_ = new QGraphicsColorizeEffect();
-	anEffect_->setColor(QColor(Qt::black));
+	anEffect_->setColor(QColor(Qt::white));
+	anEffect_->setStrength(0.7);
 	Item::setGraphicsEffect(anEffect_);
 }
 
 void VCommentFreeNode::determineChildren()
 {
-	anEffect_->setEnabled(!this->itemOrChildHasFocus());
+	anEffect_->setEnabled(!this->itemOrChildHasFocus()
+								 && !(DCast<CommentText>(node()->node()) || DCast<CommentNode>(node()->node())));
 	synchronizeItem(node_, node()->node());
 }
 

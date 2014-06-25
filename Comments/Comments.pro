@@ -41,7 +41,8 @@ HEADERS += src/handlers/HCommentImage.h \
     src/nodes/CommentTable.h \
     src/nodes/CommentText.h \
     src/handlers/HCommentText.h \
-    src/items/VCommentText.h
+    src/items/VCommentText.h \
+    src/handlers/HCommentFreeNode.h
 SOURCES += src/handlers/HCommentImage.cpp \
     src/items/VCommentStyle.cpp \
     src/commands/CShapeSetProperty.cpp \
@@ -74,7 +75,8 @@ SOURCES += src/handlers/HCommentImage.cpp \
     src/nodes/CommentTable.cpp \
     src/nodes/CommentText.cpp \
     src/handlers/HCommentText.cpp \
-    src/items/VCommentText.cpp
+    src/items/VCommentText.cpp \
+    src/handlers/HCommentFreeNode.cpp
 
 RESOURCES += \
     res.qrc
