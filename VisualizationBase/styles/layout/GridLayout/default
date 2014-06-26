@@ -2,6 +2,18 @@
 <style prototypes="../Layout/default">
 	<horizontalAlignment>0</horizontalAlignment>
 	<verticalAlignment>0</verticalAlignment>
-	<horizontalSpace>0</horizontalSpace>
-	<verticalSpace>0</verticalSpace>
+	<horizontalSpace>6</horizontalSpace>
+	<verticalSpace>6</verticalSpace>
+	<borderPen>
+		<width>1</width>
+		<style>1</style>
+		<color>
+			<red>0</red>
+			<green>0</green>
+			<blue>0</blue>
+			<alpha>255</alpha>
+		</color>
+		<capStyle>0</capStyle>
+		<joinStyle>0</joinStyle>
+	</borderPen>
 </style>

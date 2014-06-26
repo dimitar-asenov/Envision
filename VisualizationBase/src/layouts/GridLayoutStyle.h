@@ -41,6 +41,7 @@ class VISUALIZATIONBASE_API GridLayoutStyle : public Super<LayoutStyle>
 		Property<Alignment> verticalAlignment{this, "verticalAlignment"};
 		Property<int> horizontalSpace{this, "horizontalSpace"};
 		Property<int> verticalSpace{this, "verticalSpace"};
+		Property<QPen> borderPen{this, "borderPen"};
 };
 
 }

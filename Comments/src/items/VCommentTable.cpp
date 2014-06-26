@@ -36,7 +36,7 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
 
-VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get()), node_(nullptr)
+VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
 	aGrid_ = new Visualization::GridLayout(this);
 }
@@ -52,7 +52,6 @@ void VCommentTable::determineChildren()
 		{
 			anArray[i].append(node()->nodes()->at((node()->rowCount() * j) + i));
 		}
-
 	}
 	aGrid_->synchronizeWithNodes(anArray);
 }
@@ -60,6 +59,11 @@ void VCommentTable::determineChildren()
 void VCommentTable::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(aGrid_, availableWidth, availableHeight);
+}
+
+void VCommentTable::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	aGrid_->paint(painter, option, widget);
 }
 
 } /* namespace Comments */

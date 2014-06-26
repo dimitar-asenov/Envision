@@ -49,9 +49,9 @@ class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCom
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	private:
-		Visualization::Item* node_{};
 		QVector< QVector<Visualization::Item*> > items_;
 		Visualization::GridLayout* aGrid_{};
 
