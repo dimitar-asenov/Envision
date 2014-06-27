@@ -72,25 +72,33 @@ CommentTable* CommentNode::table(const QString& name)
 	return nullptr;
 }
 
-void CommentNode::synchronizeDiagramsToText()
+template <typename T>
+QStringList CommentNode::synchronizeItem(QString aString, T aList)
 {
-	QStringList diagramNamesFromText;
+	QStringList itemNamesFromText;
 	for (auto lineNode : *lines())
 	{
 		auto line = lineNode->get();
-		if (line.startsWith("[diagram#") && line.right(1) == "]" && line.size() > 9+1)
-			diagramNamesFromText << line.mid(9, line.size()-9-1);
+		if (line.startsWith(aString) && line.right(1) == "]" && line.size() > aString.length()+1)
+			itemNamesFromText << line.mid(aString.length(), line.size()-aString.length()-1);
 	}
 
-	diagramNamesFromText.removeDuplicates();
+	itemNamesFromText.removeDuplicates();
 
-	// Remove old diagrams
-	for (int i = diagrams()->size() - 1; i>=0; --i)
+	// Remove old items
+	for (int i = aList->size() - 1; i>=0; --i)
 	{
-		if (diagramNamesFromText.contains(diagrams()->at(i)->name()))
-			diagramNamesFromText.removeOne(diagrams()->at(i)->name()); // There should be only one, we removed duplicates
-		else diagrams()->remove(i);
+		if (itemNamesFromText.contains(aList->at(i)->name()))
+			itemNamesFromText.removeOne(aList->at(i)->name()); // There should be only one, we removed duplicates
+		else aList->remove(i);
 	}
+
+	return itemNamesFromText;
+}
+
+void CommentNode::synchronizeDiagramsToText()
+{
+	QStringList diagramNamesFromText = synchronizeItem("[diagram#", diagrams());
 
 	// Add new diagrams
 	for (auto newDiagram : diagramNamesFromText)
@@ -99,23 +107,7 @@ void CommentNode::synchronizeDiagramsToText()
 
 void CommentNode::synchronizeCodesToText()
 {
-	QStringList codeNamesFromText;
-	for (auto lineNode : *lines())
-	{
-		auto line = lineNode->get();
-		if (line.startsWith("[code#") && line.right(1) == "]" && line.size() > 6+1)
-			codeNamesFromText << line.mid(6, line.size()-6-1);
-	}
-
-	codeNamesFromText.removeDuplicates();
-
-	// Remove old codes
-	for (int i = codes()->size() - 1; i>=0; --i)
-	{
-		if (codeNamesFromText.contains(codes()->at(i)->name()))
-			codeNamesFromText.removeOne(codes()->at(i)->name()); // There should be only one, we removed duplicates
-		else codes()->remove(i);
-	}
+	QStringList codeNamesFromText = synchronizeItem("[code#", codes());
 
 	// Add new codes
 	for (auto newCode : codeNamesFromText)
