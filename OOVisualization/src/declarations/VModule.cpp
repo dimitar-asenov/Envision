@@ -101,4 +101,10 @@ void VModule::initializeForms()
 		->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
 }
 
+QColor VModule::customShapeColor() const
+{
+	if (!color_.isValid()) color_ = QColor::fromHsl(qrand() % 256, 120, 200);
+	return color_;
+}
+
 }
