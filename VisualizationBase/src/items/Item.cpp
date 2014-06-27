@@ -211,6 +211,11 @@ void Item::removeShape()
 	setUpdateNeeded(StandardUpdate);
 }
 
+QColor Item::customShapeColor() const
+{
+	return {};
+}
+
 bool Item::sizeDependsOnParent() const
 {
 	return false;

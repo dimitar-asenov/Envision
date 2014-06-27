@@ -87,7 +87,7 @@ QSize Box::outterSize(QSize innerSize) const
 
 void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	style()->paint(painter, xOffset(), yOffset(), outerWidth_, outerHeight_);
+	style()->paint(painter, xOffset(), yOffset(), outerWidth_, outerHeight_, parentItem()->customShapeColor());
 }
 
 }

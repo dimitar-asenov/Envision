@@ -81,6 +81,7 @@ class VISUALIZATIONBASE_API Shape
 
 		void setItemSize(int width, int height);
 		void setParentNeedsUpdate();
+		Item* parentItem() const;
 
 		virtual void update() = 0;
 
@@ -109,6 +110,7 @@ inline int Shape::height() const { return height_; }
 inline int Shape::xOffset() const { return xOffset_; }
 inline int Shape::yOffset() const { return yOffset_; }
 inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
+inline Item* Shape::parentItem() const { return parent; }
 
 inline QSize Shape::innerSize(int outterWidth, int outterHeight) const
 { return innerSize(QSize(outterWidth, outterHeight)); }

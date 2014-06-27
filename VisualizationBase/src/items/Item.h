@@ -152,6 +152,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Shape* getShape() const;
 		void useShape();
 		void removeShape();
+		virtual QColor customShapeColor() const;
 
 		enum CursorMoveDirection {
 			MoveUp, /**< Move the cursor up from its current position within the item. */

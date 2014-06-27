@@ -40,27 +40,20 @@ class VISUALIZATIONBASE_API BoxStyle : public Super<ShapeStyle>
 
 		virtual ~BoxStyle() override;
 
-		void paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const;
+		void paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight,
+					  QColor customColor) const;
 
 		Property<QBrush> background{this, "backgroundBrush"};
 		Property<CornerType> corner{this, "cornerType"};
 		Property<int> cornerRadius{this, "cornerRadius"};
 
 	protected:
-		mutable Mipmap topLeftCorner_;
-		mutable Mipmap topRightCorner_;
-		mutable Mipmap bottomLeftCorner_;
-		mutable Mipmap bottomRightCorner_;
-
 		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height) const;
 
 		void unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-						int contentBoxHeight) const;
-		void optimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-								int contentBoxHeight) const;
+						int contentBoxHeight, QColor customColor) const;
 		void simplifiedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-								int contentBoxHeight) const;
-		void generatePixmaps(qreal scaleFactor, const QPainter* painterSpecifyingRenderHints) const;
+								int contentBoxHeight, QColor customColor) const;
 };
 
 }
