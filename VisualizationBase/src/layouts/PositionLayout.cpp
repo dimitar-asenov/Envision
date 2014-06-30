@@ -267,32 +267,34 @@ void PositionLayout::updateGeometry(int, int)
 	}
 
 	// Set the size of all items
-	for (auto item : items)
-	{
-		Model::Node* node = item->node();
-		auto fds = (static_cast<Model::CompositeNode*>(node))->extension<FullDetailSize>();
+	// TODO: Enabling this prevents undo as it always registers a new action. There should be a better time to do this.
+//	for (auto item : items)
+//	{
+//		Model::Node* node = item->node();
+//		auto fds = (static_cast<Model::CompositeNode*>(node))->extension<FullDetailSize>();
 
-		if (!fds->hasSize() || fds->size() != item->sizeInParent().toSize())
-		{
-			auto newManager = node->manager();
+//		if (!fds->hasSize() || fds->size() != item->sizeInParent().toSize())
+//		{
+//			auto newManager = node->manager();
 
-			if (newManager != lastModifiedManager)
-			{
-				if (!modifiedManagers.contains(newManager))
-				{
-					modifiedManagers << newManager;
-					newManager->beginModification(node, "Set size");
-				}
+//			if (newManager != lastModifiedManager)
+//			{
+//				if (!modifiedManagers.contains(newManager))
+//				{
+//					modifiedManagers << newManager;
+//					newManager->beginModification(node, "Set size");
+//					qDebug() << "SETTING SIZE";
+//				}
 
-				lastModifiedManager = newManager;
-			}
+//				lastModifiedManager = newManager;
+//			}
 
-			lastModifiedManager->changeModificationTarget(node);
-			fds->set(item->sizeInParent().toSize());
-		}
+//			lastModifiedManager->changeModificationTarget(node);
+//			fds->set(item->sizeInParent().toSize());
+//		}
 
-		delete fds;
-	}
+//		delete fds;
+//	}
 
 	// It is important to batch the modifications, since model::endModification() send a notification signal.
 	for (auto m : modifiedManagers) m->endModification(false);
