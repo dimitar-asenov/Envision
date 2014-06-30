@@ -40,6 +40,7 @@
 #include "handlers/HReturnStatement.h"
 #include "handlers/HKeywordStatement.h"
 #include "handlers/HArrayInitializer.h"
+#include "handlers/HStatementItemList.h"
 
 #include "commands/CCreateProject.h"
 #include "commands/CCreateClass.h"
@@ -93,6 +94,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	OOVisualization::VContinueStatement::setDefaultClassHandler(HKeywordStatement::instance());
 	OOVisualization::VReturnStatement::setDefaultClassHandler(HReturnStatement::instance());
 	OOVisualization::VArrayInitializer::setDefaultClassHandler(HArrayInitializer::instance());
+	OOVisualization::VStatementItemList::setDefaultClassHandler(HStatementItemList::instance());
 
 	// Register string components that convert an expression to a string list representing its components
 	StringComponents::initConversions();
