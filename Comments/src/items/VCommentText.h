@@ -26,71 +26,30 @@
 
 #pragma once
 
-#include "ColorPicker.h"
-#include "OutlineTypePicker.h"
+#include "../comments_api.h"
 
-#include "nodes/CommentDiagram.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/TextRenderer.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+
+#include "../nodes/CommentText.h"
 
 namespace Comments {
 
-class COMMENTS_API CommentDiagramToolbar : public QToolBar
+class COMMENTS_API VCommentText :
+		public Super<Visualization::ItemWithNode<VCommentText, Visualization::TextRenderer, CommentText>>
 {
-		Q_OBJECT
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommentText, Visualization::TextStyle)
+
 	public:
-		CommentDiagramToolbar(QWidget *parent = 0);
-		void setDiagram(VCommentDiagram* diagram);
-		void setCurrentShape(Visualization::Item *currentShape);
-		void setCurrentConnector(Visualization::Item *currentConnector);
-		void clearCurrentItem();
-		void setSelectionMode(bool sel);
-		bool selectionMode();
-		bool connectionMode();
-		void show();
+		VCommentText(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual bool setText(const QString& newText);
 
-		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
 
-	public slots:
-		void setSelection(bool sel);
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void applyOutlineType(int i);
-		void applyOutlineSize(int i);
-		void showConnectionPoints(bool show);
-		void handleTimerEvent();
-		void applyStartArrow();
-		void applyEndArrow();
-
-	private:
-		QToolButton* bSelection_{};
-		QToolButton* bSelectShape_{};
-		QToolButton* bConnections_{};
-
-		ColorPicker* colorPickerBackground_{};
-		ColorPicker* colorPickerBorder_{};
-		ColorPicker* colorPickerText_{};
-
-		OutlineTypePicker* OutlineTypePicker_{};
-		QComboBox* cbOutlineSize_{};
-
-		QCheckBox* boxStartArrow_{};
-		QCheckBox* boxEndArrow_{};
-
-		QButtonGroup* group_{};
-
-		bool selection_{};
-		bool connection_{};
-		int colorsPerRow_{};
-
-		VCommentDiagram* diagram_{};
-		Visualization::Item* currentItem_{};
-
-		QTimer* aTimer_{};
+	protected:
+		virtual QString currentText();
 };
 
-} /* namespace Comments */
+}

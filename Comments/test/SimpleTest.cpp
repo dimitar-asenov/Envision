@@ -35,15 +35,17 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/nodes/TestBoxNode.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/model/TreeManager.h"
 
-namespace Comments {
-
+using namespace OOModel;
 using namespace Visualization;
+
+namespace Comments {
 
 TEST(CommentsPlugin, SimpleTest)
 {
@@ -59,6 +61,14 @@ TEST(CommentsPlugin, SimpleTest)
 		"[diagram#main]\n"
 		"And again\n"
 		"[diagram#main]\n"
+
+		"# Sourcecode!\n"
+		"[code#aCode]\n"
+
+		"# Tables!\n"
+		"[table#aTable#3#4]\n"
+		"And again\n"
+		"[table#aTable]\n"
 
 		"Also, lists work...\n"
 		" * A first item\n"
@@ -107,6 +117,24 @@ TEST(CommentsPlugin, SimpleTest)
 	diagram->connectors()->append(new CommentDiagramConnector(2, 0,  0, 10));
 
 	node->diagrams()->append(diagram);
+
+	auto code = new CommentFreeNode(nullptr, "aCode");
+	auto aClass = new Class("HelloWorld");
+	code->setNode(aClass);
+	node->codes()->append(code);
+
+	auto table = new CommentTable(nullptr, "aTable", 3, 4);
+	table->setNodeAt(0, 0, new CommentNode("##Column 1"));
+	table->setNodeAt(0, 1, new CommentNode("##Column 2"));
+	table->setNodeAt(0, 2, new CommentNode("##Column 3"));
+	table->setNodeAt(0, 3, new CommentNode("##Column 4"));
+	table->setNodeAt(1, 0, new Class("ClassA"));
+	table->setNodeAt(1, 1, new Class("ClassB"));
+	table->setNodeAt(1, 2, new Class("ClassC"));
+	table->setNodeAt(1, 3, new Class("ClassD"));
+	table->setNodeAt(2, 0, new CommentText("just text"));
+	table->setNodeAt(2, 1, new CommentText("more text"));
+	node->tables()->append(table);
 
 	list->append(node);
 

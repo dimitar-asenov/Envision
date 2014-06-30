@@ -60,7 +60,7 @@
 #include <typeinfo>
 
 #ifdef Q_OS_LINUX
-	#include <google/profiler.h>
+	#include <gperftools/profiler.h>
 #endif
 #include <QtCore/QElapsedTimer>
 

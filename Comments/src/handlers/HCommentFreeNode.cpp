@@ -24,73 +24,35 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HCommentFreeNode.h"
 
-#include "ColorPicker.h"
-#include "OutlineTypePicker.h"
+#include "nodes/CommentFreeNode.h"
+#include "nodes/CommentText.h"
 
-#include "nodes/CommentDiagram.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
+using namespace Visualization;
 
 namespace Comments {
 
-class COMMENTS_API CommentDiagramToolbar : public QToolBar
+HCommentFreeNode::HCommentFreeNode()
+{}
+
+HCommentFreeNode* HCommentFreeNode::instance()
 {
-		Q_OBJECT
-	public:
-		CommentDiagramToolbar(QWidget *parent = 0);
-		void setDiagram(VCommentDiagram* diagram);
-		void setCurrentShape(Visualization::Item *currentShape);
-		void setCurrentConnector(Visualization::Item *currentConnector);
-		void clearCurrentItem();
-		void setSelectionMode(bool sel);
-		bool selectionMode();
-		bool connectionMode();
-		void show();
+	static HCommentFreeNode h;
+	return &h;
+}
 
-		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+void HCommentFreeNode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Delete)
+	{
+		auto aNode = DCast<CommentFreeNode>(target->node());
+		aNode->beginModification("set node");
+		aNode->setNode(new CommentText());
+		aNode->endModification();
+	}
+	else
+		GenericHandler::keyPressEvent(target, event);
+}
 
-	public slots:
-		void setSelection(bool sel);
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void applyOutlineType(int i);
-		void applyOutlineSize(int i);
-		void showConnectionPoints(bool show);
-		void handleTimerEvent();
-		void applyStartArrow();
-		void applyEndArrow();
-
-	private:
-		QToolButton* bSelection_{};
-		QToolButton* bSelectShape_{};
-		QToolButton* bConnections_{};
-
-		ColorPicker* colorPickerBackground_{};
-		ColorPicker* colorPickerBorder_{};
-		ColorPicker* colorPickerText_{};
-
-		OutlineTypePicker* OutlineTypePicker_{};
-		QComboBox* cbOutlineSize_{};
-
-		QCheckBox* boxStartArrow_{};
-		QCheckBox* boxEndArrow_{};
-
-		QButtonGroup* group_{};
-
-		bool selection_{};
-		bool connection_{};
-		int colorsPerRow_{};
-
-		VCommentDiagram* diagram_{};
-		Visualization::Item* currentItem_{};
-
-		QTimer* aTimer_{};
-};
-
-} /* namespace Comments */
+}

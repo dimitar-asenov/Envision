@@ -117,16 +117,26 @@ void ColorPicker::handleColorPicked(QString aColor)
 void ColorPicker::setselectedColor(QString aColor)
 {
 	QPixmap pixmap(24, 24);
-	pixmap.fill(QColor(aColor));
+	QColor selectedColor = QColor(aColor);
+	pixmap.fill(QColor(selectedColor));
 	QPainter* aPainter = new QPainter(&pixmap);
-	aPainter->setPen(Qt::black);
+	QColor paintColor;
+	float distanceToBlack = selectedColor.redF()*selectedColor.redF() + selectedColor.greenF()*selectedColor.greenF()
+		+ selectedColor.blueF()*selectedColor.blueF();
+	float distanceToWhite = (selectedColor.redF()-1) * (selectedColor.redF()-1)
+		+ (selectedColor.greenF()-1)*(selectedColor.greenF()-1) + (selectedColor.blueF()-1)*(selectedColor.blueF()-1);
+	if (distanceToBlack > distanceToWhite)
+		paintColor = Qt::black;
+	else
+		paintColor = Qt::white;
+	aPainter->setPen(paintColor);
 	QFont font = aPainter->font();
 	font.setPointSize(16);
 	aPainter->setFont(font);
 	switch (type_)
 	{
 		case background:
-			aPainter->setBrush(QBrush(Qt::black));
+			aPainter->setBrush(QBrush(paintColor));
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case shape:

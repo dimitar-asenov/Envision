@@ -32,6 +32,8 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Boolean.h"
 #include "CommentDiagram.h"
+#include "CommentFreeNode.h"
+#include "CommentTable.h"
 
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentNode)
 
@@ -42,12 +44,18 @@ class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
 
 	ATTRIBUTE(Model::TypedList<Model::Text>, lines, setLines)
 	ATTRIBUTE(Model::TypedList<CommentDiagram>, diagrams, setDiagrams)
+	ATTRIBUTE(Model::TypedList<CommentFreeNode>, codes, setCodes)
+	ATTRIBUTE(Model::TypedList<CommentTable>, tables, setTables)
 
 	public:
 		CommentNode(const QString& text);
 		CommentDiagram* diagram(const QString& name);
+		CommentFreeNode* code(const QString& name);
+		CommentTable* table(const QString& name);
 
 		void synchronizeDiagramsToText();
+		void synchronizeCodesToText();
+		void synchronizeTablesToText();
 };
 
 } /* namespace Comments */

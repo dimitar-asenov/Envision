@@ -46,6 +46,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QWidgetAction>
+#include <QtWidgets/QCheckBox>
 
 #if defined __cplusplus
 // Add C++ includes here

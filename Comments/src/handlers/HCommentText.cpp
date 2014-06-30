@@ -24,73 +24,85 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HCommentText.h"
+#include "nodes/CommentFreeNode.h"
 
-#include "ColorPicker.h"
-#include "OutlineTypePicker.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "nodes/CommentDiagram.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
+using namespace OOModel;
+using namespace Visualization;
 
 namespace Comments {
 
-class COMMENTS_API CommentDiagramToolbar : public QToolBar
+HCommentText::HCommentText()
+{}
+
+HCommentText* HCommentText::instance()
 {
-		Q_OBJECT
-	public:
-		CommentDiagramToolbar(QWidget *parent = 0);
-		void setDiagram(VCommentDiagram* diagram);
-		void setCurrentShape(Visualization::Item *currentShape);
-		void setCurrentConnector(Visualization::Item *currentConnector);
-		void clearCurrentItem();
-		void setSelectionMode(bool sel);
-		bool selectionMode();
-		bool connectionMode();
-		void show();
+	static HCommentText h;
+	return &h;
+}
 
-		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+void HCommentText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Return)
+	{
+		auto aText = DCast<CommentText>(target->node());
+		Model::Node* newNode = nullptr;
 
-	public slots:
-		void setSelection(bool sel);
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void applyOutlineType(int i);
-		void applyOutlineSize(int i);
-		void showConnectionPoints(bool show);
-		void handleTimerEvent();
-		void applyStartArrow();
-		void applyEndArrow();
+		if (aText->get() == "comment")
+		{
+			newNode = new CommentNode();
+		}
+		else if (aText->get() == "class")
+		{
+			newNode = new Class();
+		}
+		else if (aText->get() == "method")
+		{
+			newNode = new Method();
+		}
+		else if (aText->get() == "statement")
+		{
+			newNode = new Statement();
+		}
+		else if (aText->get() == "block")
+		{
+			newNode = new Block();
+		}
+		else if (aText->get() == "foreach")
+		{
+			newNode = new ForEachStatement();
+		}
+		else if (aText->get() == "if")
+		{
+			newNode = new IfStatement();
+		}
+		else if (aText->get() == "loop")
+		{
+			newNode = new LoopStatement();
+		}
+		else if (aText->get() == "switch")
+		{
+			newNode = new SwitchStatement();
+		}
+		else if (aText->get() == "expression")
+		{
+			newNode = new ExpressionStatement();
+		}
+		else
+		{
+			newNode = new CommentText();
+		}
 
-	private:
-		QToolButton* bSelection_{};
-		QToolButton* bSelectShape_{};
-		QToolButton* bConnections_{};
+		auto aNode = DCast<CommentFreeNode>(target->node()->parent());
+		aNode->beginModification("set node");
+		aNode->setNode(newNode);
+		aNode->endModification();
+	}
+	else
+		HText::keyPressEvent(target, event);
+}
 
-		ColorPicker* colorPickerBackground_{};
-		ColorPicker* colorPickerBorder_{};
-		ColorPicker* colorPickerText_{};
-
-		OutlineTypePicker* OutlineTypePicker_{};
-		QComboBox* cbOutlineSize_{};
-
-		QCheckBox* boxStartArrow_{};
-		QCheckBox* boxEndArrow_{};
-
-		QButtonGroup* group_{};
-
-		bool selection_{};
-		bool connection_{};
-		int colorsPerRow_{};
-
-		VCommentDiagram* diagram_{};
-		Visualization::Item* currentItem_{};
-
-		QTimer* aTimer_{};
-};
-
-} /* namespace Comments */
+}

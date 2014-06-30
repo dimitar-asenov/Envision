@@ -24,37 +24,16 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentDiagramConnector.h"
+#include "CommentText.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Comments::CommentDiagramConnector)
+DEFINE_TYPED_LIST(Comments::CommentText)
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentText)
+NODE_DEFINE_EMPTY_CONSTRUCTORS(CommentText)
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
+CommentText::CommentText(const QString& text) : Super(text){}
 
-// references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)
-: Super{nullptr, CommentDiagramConnector::getMetaData()}
-{
-	setStartShape(startShape);
-	setStartPoint(startPoint);
-	setEndShape(endShape);
-	setEndPoint(endPoint);
-	setOutlineTypeStore(1);
-	setOutlineSize(1);
-	setStartArrow(false);
-	setEndArrow(false);
-}
-
-} /* namespace Comments */
+} /* namespace Model */

@@ -24,37 +24,24 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentDiagramConnector.h"
+#include "CommentFreeNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Comments::CommentDiagramConnector)
+
+DEFINE_TYPED_LIST(Comments::CommentFreeNode)
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentFreeNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentFreeNode)
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentFreeNode, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentFreeNode, node, Node, false, true, true)
 
-// references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)
-: Super{nullptr, CommentDiagramConnector::getMetaData()}
+CommentFreeNode::CommentFreeNode(Node *parent, QString name) : Super(parent, CommentFreeNode::getMetaData())
 {
-	setStartShape(startShape);
-	setStartPoint(startPoint);
-	setEndShape(endShape);
-	setEndPoint(endPoint);
-	setOutlineTypeStore(1);
-	setOutlineSize(1);
-	setStartArrow(false);
-	setEndArrow(false);
+	setName(name);
+	setNode(new CommentText());
 }
 
 } /* namespace Comments */

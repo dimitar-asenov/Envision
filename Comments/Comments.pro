@@ -34,7 +34,16 @@ HEADERS += src/handlers/HCommentBrowser.h \
     src/CommentDiagramToolbar.h \
     src/items/VCommentDiagramStyle.h \
     src/ColorPicker.h \
-    src/CommentsPlugin.h
+    src/CommentsPlugin.h \ 
+    src/OutlineTypePicker.h \
+    src/items/VCommentFreeNode.h \
+    src/items/VCommentTable.h \
+    src/nodes/CommentFreeNode.h \
+    src/nodes/CommentTable.h \
+    src/nodes/CommentText.h \
+    src/handlers/HCommentText.h \
+    src/items/VCommentText.h \
+    src/handlers/HCommentFreeNode.h
 SOURCES += src/handlers/HCommentBrowser.cpp \
     src/handlers/HCommentImage.cpp \
     src/items/VCommentStyle.cpp \
@@ -60,5 +69,14 @@ SOURCES += src/handlers/HCommentBrowser.cpp \
     src/CommentDiagramToolbar.cpp \
     src/items/VCommentDiagramStyle.cpp \
     src/ColorPicker.cpp \
-    src/CommentsPlugin.cpp
+    src/CommentsPlugin.cpp \
+    src/OutlineTypePicker.cpp \
+    src/items/VCommentFreeNode.cpp \
+    src/items/VCommentTable.cpp \
+    src/nodes/CommentFreeNode.cpp \
+    src/nodes/CommentTable.cpp \
+    src/nodes/CommentText.cpp \
+    src/handlers/HCommentText.cpp \
+    src/items/VCommentText.cpp \
+    src/handlers/HCommentFreeNode.cpp
 RESOURCES += res.qrc

@@ -24,73 +24,65 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "ColorPicker.h"
 #include "OutlineTypePicker.h"
 
-#include "nodes/CommentDiagram.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
+namespace Comments{
 
-namespace Comments {
-
-class COMMENTS_API CommentDiagramToolbar : public QToolBar
+OutlineTypePicker::OutlineTypePicker(QWidget *parent) : QToolButton(parent)
 {
-		Q_OBJECT
-	public:
-		CommentDiagramToolbar(QWidget *parent = 0);
-		void setDiagram(VCommentDiagram* diagram);
-		void setCurrentShape(Visualization::Item *currentShape);
-		void setCurrentConnector(Visualization::Item *currentConnector);
-		void clearCurrentItem();
-		void setSelectionMode(bool sel);
-		bool selectionMode();
-		bool connectionMode();
-		void show();
+	QMenu* menu = new QMenu;
+	QWidgetAction* wiAction = new QWidgetAction(this);
 
-		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+	QSignalMapper* signalMapper = new QSignalMapper(this);
+	connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(handleOutlineTypePicked(int)));
 
-	public slots:
-		void setSelection(bool sel);
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void applyOutlineType(int i);
-		void applyOutlineSize(int i);
-		void showConnectionPoints(bool show);
-		void handleTimerEvent();
-		void applyStartArrow();
-		void applyEndArrow();
+	QPixmap pixmap(96, 24);
+	QWidget* aWidget = new QWidget(this);
+	QVBoxLayout* aLayout = new QVBoxLayout;
+	aLayout->setSpacing(0);
+	aWidget->setLayout(aLayout);
+	wiAction->setDefaultWidget(aWidget);
 
-	private:
-		QToolButton* bSelection_{};
-		QToolButton* bSelectShape_{};
-		QToolButton* bConnections_{};
+	QToolButton* aButton;
+	pixmap.fill(Qt::transparent);
+	QPainter* aPainter = new QPainter(&pixmap);
+	QPen aPen;
+	aPen.setColor(Qt::black);
+	aPen.setWidth(4);
+	pixList_.append(QPixmap());
+	for (int i = 1; i < 6; i++)
+	{
+		pixmap.fill(Qt::transparent);
 
-		ColorPicker* colorPickerBackground_{};
-		ColorPicker* colorPickerBorder_{};
-		ColorPicker* colorPickerText_{};
+		aPen.setStyle(static_cast<Qt::PenStyle>(i));
+		aPainter->setPen(aPen);
+		aPainter->drawLine(2, 13, 94, 13);
+		pixList_.append(pixmap);
+		aButton = new QToolButton;
+		aButton->setIconSize(QSize(96, 24));
+		aButton->setStyleSheet("border: none;");
+		aButton->setIcon(QIcon(pixmap));
+		aLayout->addWidget(aButton);
+		signalMapper->setMapping(aButton, i);
+		connect(aButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+	}
+	aPainter->end();
 
-		OutlineTypePicker* OutlineTypePicker_{};
-		QComboBox* cbOutlineSize_{};
+	menu->addAction(wiAction);
+	this->setMenu(menu);
+	this->setPopupMode(QToolButton::InstantPopup);
+}
 
-		QCheckBox* boxStartArrow_{};
-		QCheckBox* boxEndArrow_{};
+void OutlineTypePicker::handleOutlineTypePicked(int aType)
+{
+	this->setIcon(pixList_.at(aType));
+	this->menu()->close();
+	emit outlineTypeChanged(aType);
+}
 
-		QButtonGroup* group_{};
-
-		bool selection_{};
-		bool connection_{};
-		int colorsPerRow_{};
-
-		VCommentDiagram* diagram_{};
-		Visualization::Item* currentItem_{};
-
-		QTimer* aTimer_{};
-};
+void OutlineTypePicker::setselectedOutlineType(int aType)
+{
+	this->setIcon(pixList_.at(aType));
+}
 
 } /* namespace Comments */

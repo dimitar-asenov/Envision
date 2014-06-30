@@ -24,37 +24,38 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentDiagramConnector.h"
+#include "VCommentFreeNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Comments::CommentDiagramConnector)
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "../nodes/CommentText.h"
+#include "../nodes/CommentNode.h"
+
+using namespace Visualization;
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
+ITEM_COMMON_DEFINITIONS(VCommentFreeNode, "item")
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
-
-// references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)
-: Super{nullptr, CommentDiagramConnector::getMetaData()}
+VCommentFreeNode::VCommentFreeNode(Item* parent, NodeType* node)
+	: Super(parent, node, itemStyles().get()), node_(nullptr)
 {
-	setStartShape(startShape);
-	setStartPoint(startPoint);
-	setEndShape(endShape);
-	setEndPoint(endPoint);
-	setOutlineTypeStore(1);
-	setOutlineSize(1);
-	setStartArrow(false);
-	setEndArrow(false);
+	anEffect_ = new QGraphicsColorizeEffect();
+	anEffect_->setColor(QColor(Qt::white));
+	anEffect_->setStrength(0.7);
+	Item::setGraphicsEffect(anEffect_);
+}
+
+void VCommentFreeNode::determineChildren()
+{
+	anEffect_->setEnabled(!this->itemOrChildHasFocus()
+								 && !(DCast<CommentText>(node()->node()) || DCast<CommentNode>(node()->node())));
+	synchronizeItem(node_, node()->node());
+}
+
+void VCommentFreeNode::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(node_, availableWidth, availableHeight);
 }
 
 } /* namespace Comments */

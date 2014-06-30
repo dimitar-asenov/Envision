@@ -24,37 +24,42 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentDiagramConnector.h"
+#include "VCommentTable.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Comments::CommentDiagramConnector)
+#include "VisualizationBase/src/items/ItemStyle.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/layouts/GridLayout.h"
+
+using namespace Visualization;
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
+ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
-
-// references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)
-: Super{nullptr, CommentDiagramConnector::getMetaData()}
+VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get()), node_(nullptr)
 {
-	setStartShape(startShape);
-	setStartPoint(startPoint);
-	setEndShape(endShape);
-	setEndPoint(endPoint);
-	setOutlineTypeStore(1);
-	setOutlineSize(1);
-	setStartArrow(false);
-	setEndArrow(false);
+	aGrid_ = new Visualization::GridLayout(this);
+}
+
+void VCommentTable::determineChildren()
+{
+	QList< QList< Model::Node*> > anArray;
+	for (int i = 0; i < node()->rowCount(); i++)
+	{
+		anArray.append(QList< Model::Node*>());
+
+		for (int j = 0; j < node()->columnCount(); j++)
+		{
+			anArray[i].append(node()->nodes()->at((node()->rowCount() * j) + i));
+		}
+
+	}
+	aGrid_->synchronizeWithNodes(anArray);
+}
+
+void VCommentTable::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(aGrid_, availableWidth, availableHeight);
 }
 
 } /* namespace Comments */

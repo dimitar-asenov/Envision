@@ -6,5 +6,7 @@
         <file>icons/rectangle.png</file>
         <file>icons/shapes.png</file>
         <file>icons/connection.png</file>
+        <file>icons/endArrow.png</file>
+        <file>icons/startArrow.png</file>
     </qresource>
 </RCC>

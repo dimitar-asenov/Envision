@@ -24,37 +24,35 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentDiagramConnector.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Comments::CommentDiagramConnector)
+#include "../comments_api.h"
+
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/List.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/Integer.h"
+#include "CommentFreeNode.h"
+
+DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentTable)
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
-
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
-
-// references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)
-: Super{nullptr, CommentDiagramConnector::getMetaData()}
+class COMMENTS_API CommentTable : public Super<Model::CompositeNode>
 {
-	setStartShape(startShape);
-	setStartPoint(startPoint);
-	setEndShape(endShape);
-	setEndPoint(endPoint);
-	setOutlineTypeStore(1);
-	setOutlineSize(1);
-	setStartArrow(false);
-	setEndArrow(false);
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentTable)
+
+	ATTRIBUTE_VALUE(Model::Text, name, setName, QString)
+	ATTRIBUTE_VALUE(Model::Integer, rowCount, setRowCount, int)
+	ATTRIBUTE_VALUE(Model::Integer, columnCount, setColumnCount, int)
+	ATTRIBUTE(Model::TypedList<CommentFreeNode>, nodes, setNodes)
+
+	public:
+		CommentTable(Node *parent, QString name, int rowCount, int columnCount);
+		void setNodeAt(int m, int n, Model::Node* aNode);
+		CommentFreeNode* getNodeAt(int m, int n);
+		void resize(int m, int n);
+};
 
 } /* namespace Comments */

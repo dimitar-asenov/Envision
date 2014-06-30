@@ -24,73 +24,34 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "ColorPicker.h"
-#include "OutlineTypePicker.h"
-
-#include "nodes/CommentDiagram.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "items/VComment.h"
+#include "VCommentText.h"
 
 namespace Comments {
 
-class COMMENTS_API CommentDiagramToolbar : public QToolBar
+ITEM_COMMON_DEFINITIONS(VCommentText, "item")
+
+VCommentText::VCommentText(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
-		Q_OBJECT
-	public:
-		CommentDiagramToolbar(QWidget *parent = 0);
-		void setDiagram(VCommentDiagram* diagram);
-		void setCurrentShape(Visualization::Item *currentShape);
-		void setCurrentConnector(Visualization::Item *currentConnector);
-		void clearCurrentItem();
-		void setSelectionMode(bool sel);
-		bool selectionMode();
-		bool connectionMode();
-		void show();
+	TextRenderer::setText(node->get());
+}
 
-		CommentDiagramShape::ShapeType nextShapeToAdd_{};
+bool VCommentText::setText(const QString& newText)
+{
+	node()->beginModification("Set text");
+	node()->set(newText);
+	node()->endModification();
+	return TextRenderer::setText(newText);
+}
 
-	public slots:
-		void setSelection(bool sel);
-		void createRectangle();
-		void createEllipse();
-		void createDiamond();
-		void applyBackgroundColor(QString color);
-		void applyBorderColor(QString color);
-		void applyTextColor(QString color);
-		void applyOutlineType(int i);
-		void applyOutlineSize(int i);
-		void showConnectionPoints(bool show);
-		void handleTimerEvent();
-		void applyStartArrow();
-		void applyEndArrow();
+QString VCommentText::currentText()
+{
+	return node()->get();
+}
 
-	private:
-		QToolButton* bSelection_{};
-		QToolButton* bSelectShape_{};
-		QToolButton* bConnections_{};
+bool VCommentText::moveCursor(CursorMoveDirection dir, QPoint reference)
+{
+	if (dir == MoveDefault) return Super::moveCursor(MoveOnRight);
+	else return Super::moveCursor(dir, reference);
+}
 
-		ColorPicker* colorPickerBackground_{};
-		ColorPicker* colorPickerBorder_{};
-		ColorPicker* colorPickerText_{};
-
-		OutlineTypePicker* OutlineTypePicker_{};
-		QComboBox* cbOutlineSize_{};
-
-		QCheckBox* boxStartArrow_{};
-		QCheckBox* boxEndArrow_{};
-
-		QButtonGroup* group_{};
-
-		bool selection_{};
-		bool connection_{};
-		int colorsPerRow_{};
-
-		VCommentDiagram* diagram_{};
-		Visualization::Item* currentItem_{};
-
-		QTimer* aTimer_{};
-};
-
-} /* namespace Comments */
+}

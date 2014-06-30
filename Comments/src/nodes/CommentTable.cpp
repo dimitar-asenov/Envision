@@ -24,37 +24,65 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentDiagramConnector.h"
+#include "CommentTable.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Comments::CommentDiagramConnector)
+
+DEFINE_TYPED_LIST(Comments::CommentTable)
 
 namespace Comments {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramConnector)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramConnector)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentTable)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentTable)
 
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endShape, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endPoint, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineTypeStore, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, outlineSize, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, startArrow, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentDiagramConnector, endArrow, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentTable, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentTable, rowCount, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentTable, columnCount, Integer, false, false, true)
+REGISTER_ATTRIBUTE(CommentTable, nodes, TypedListOfCommentFreeNode, false, false, true)
 
-// references for primitive types?
-CommentDiagramConnector::CommentDiagramConnector(int startShape, int startPoint, int endShape, int endPoint)
-: Super{nullptr, CommentDiagramConnector::getMetaData()}
+CommentTable::CommentTable(Node *parent, QString name, int rowCount, int columnCount)
+	: Super(parent, CommentTable::getMetaData())
 {
-	setStartShape(startShape);
-	setStartPoint(startPoint);
-	setEndShape(endShape);
-	setEndPoint(endPoint);
-	setOutlineTypeStore(1);
-	setOutlineSize(1);
-	setStartArrow(false);
-	setEndArrow(false);
+	setName(name);
+	setRowCount(rowCount);
+	setColumnCount(columnCount);
+	for (int i = 0; i < columnCount; i++)
+		for (int j = 0; j < rowCount; j++)
+			nodes()->append(new CommentFreeNode(nullptr, "#"+QString::number(j)+"#"+QString::number(i)));
+}
+
+void CommentTable::setNodeAt(int m, int n, Model::Node *aNode)
+{
+	nodes()->at(n*rowCount() + m)->setNode(aNode);
+}
+
+CommentFreeNode* CommentTable::getNodeAt(int m, int n)
+{
+	return nodes()->at(n*rowCount() + m);
+}
+
+void CommentTable::resize(int m, int n)
+{
+	auto aList = new Model::TypedList<CommentFreeNode>;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (j < rowCount() && i < columnCount())
+			{
+				CommentFreeNode* aFreeNode = getNodeAt(j, i);
+				nodes()->replaceChild(aFreeNode, new CommentFreeNode(nullptr, ""));
+				aFreeNode->setName("#"+QString::number(j)+"#"+QString::number(i));
+				aList->append(aFreeNode);
+			}
+			else
+				aList->append(new CommentFreeNode(nullptr, "#"+QString::number(j)+"#"+QString::number(i)));
+		}
+	}
+
+	replaceChild(nodes(), aList);
+	setRowCount(m);
+	setColumnCount(n);
 }
 
 } /* namespace Comments */

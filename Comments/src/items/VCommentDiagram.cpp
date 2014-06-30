@@ -118,7 +118,8 @@ void VCommentDiagram::updateGeometry(int, int)
 		auto startPoint = startShape->pos() + startShape->node()->connectorPoint(nConnector->startPoint());
 		auto endPoint = endShape->pos() + endShape->node()->connectorPoint(nConnector->endPoint());
 
-		QPoint pos(std::min(startPoint.x(), endPoint.x()), std::min(startPoint.y(), endPoint.y()));
+		QPoint pos((std::min(startPoint.x(), endPoint.x()))-VCommentDiagramConnector::MAX_ARROW_WIDTH,
+					  (std::min(startPoint.y(), endPoint.y()))-VCommentDiagramConnector::MAX_ARROW_WIDTH);
 		vConnector->setPos(pos);
 	}
 }
@@ -144,6 +145,12 @@ void VCommentDiagram::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
 void VCommentDiagram::toggleEditing()
 {
+	if (!toolbar()->isVisible())
+	{
+		QGraphicsView *v = scene()->views().first();
+		QPointF sceneP = this->mapToScene(this->boundingRect().bottomLeft());
+		toolbar_->move(v->viewport()->mapToGlobal(v->mapFromScene(sceneP)));
+	}
 	toolbar_->show();
 
 	setUpdateNeeded(StandardUpdate);
