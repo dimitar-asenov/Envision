@@ -24,41 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentTable.h"
-
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/layouts/GridLayout.h"
-
-using namespace Visualization;
+#include "VCommentTableStyle.h"
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
-
-VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
-{
-	aGrid_ = new Visualization::GridLayout(this, &style()->gridstyle());
-}
-
-void VCommentTable::determineChildren()
-{
-	QList< QList< Model::Node*> > anArray;
-	for (int i = 0; i < node()->rowCount(); i++)
-	{
-		anArray.append(QList< Model::Node*>());
-
-		for (int j = 0; j < node()->columnCount(); j++)
-		{
-			anArray[i].append(node()->nodes()->at((node()->rowCount() * j) + i));
-		}
-	}
-	aGrid_->synchronizeWithNodes(anArray);
-}
-
-void VCommentTable::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(aGrid_, availableWidth, availableHeight);
-}
+VCommentTableStyle::~VCommentTableStyle(){} // Put the VTable here
 
 } /* namespace Comments */

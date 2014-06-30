@@ -30,6 +30,7 @@
 #include "nodes/CommentFreeNode.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "OOModel/src/allOOModelNodes.h"
+#include "../items/VCommentText.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -49,53 +50,20 @@ void HCommentText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Return)
 	{
-		auto aText = DCast<CommentText>(target->node());
+		auto aText = static_cast<VCommentText*>(target)->node();
 		Model::Node* newNode = nullptr;
 
-		if (aText->get() == "comment")
-		{
-			newNode = new CommentNode();
-		}
-		else if (aText->get() == "class")
-		{
-			newNode = new Class();
-		}
-		else if (aText->get() == "method")
-		{
-			newNode = new Method();
-		}
-		else if (aText->get() == "statement")
-		{
-			newNode = new Statement();
-		}
-		else if (aText->get() == "block")
-		{
-			newNode = new Block();
-		}
-		else if (aText->get() == "foreach")
-		{
-			newNode = new ForEachStatement();
-		}
-		else if (aText->get() == "if")
-		{
-			newNode = new IfStatement();
-		}
-		else if (aText->get() == "loop")
-		{
-			newNode = new LoopStatement();
-		}
-		else if (aText->get() == "switch")
-		{
-			newNode = new SwitchStatement();
-		}
-		else if (aText->get() == "expression")
-		{
-			newNode = new ExpressionStatement();
-		}
-		else
-		{
-			newNode = new CommentText();
-		}
+		if (aText->get() == "comment") newNode = new CommentNode();
+		else if (aText->get() == "class") newNode = new Class();
+		else if (aText->get() == "method") newNode = new Method();
+		else if (aText->get() == "statement") newNode = new Statement();
+		else if (aText->get() == "block") newNode = new Block();
+		else if (aText->get() == "foreach") newNode = new ForEachStatement();
+		else if (aText->get() == "if") newNode = new IfStatement();
+		else if (aText->get() == "loop") newNode = new LoopStatement();
+		else if (aText->get() == "switch") newNode = new SwitchStatement();
+		else if (aText->get() == "expression") newNode = new ExpressionStatement();
+		else newNode = new CommentText();
 
 		auto aNode = DCast<CommentFreeNode>(target->node()->parent());
 		aNode->model()->beginModification(aNode, "set node");

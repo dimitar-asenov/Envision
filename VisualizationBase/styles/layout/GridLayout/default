@@ -2,11 +2,11 @@
 <style prototypes="../Layout/default">
 	<horizontalAlignment>0</horizontalAlignment>
 	<verticalAlignment>0</verticalAlignment>
-	<horizontalSpace>6</horizontalSpace>
-	<verticalSpace>6</verticalSpace>
+	<horizontalSpace>0</horizontalSpace>
+	<verticalSpace>0</verticalSpace>
 	<borderPen>
 		<width>1</width>
-		<style>1</style>
+		<style>0</style>
 		<color>
 			<red>0</red>
 			<green>0</green>
@@ -16,4 +16,5 @@
 		<capStyle>0</capStyle>
 		<joinStyle>0</joinStyle>
 	</borderPen>
+	<drawsOnlyShape>false</drawsOnlyShape>
 </style>

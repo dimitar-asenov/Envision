@@ -56,7 +56,7 @@ void CommentTable::setNodeAt(int m, int n, Model::Node *aNode)
 	nodes()->at(n*rowCount() + m)->setNode(aNode);
 }
 
-CommentFreeNode* CommentTable::getNodeAt(int m, int n)
+CommentFreeNode* CommentTable::NodeAt(int m, int n)
 {
 	return nodes()->at(n*rowCount() + m);
 }
@@ -70,7 +70,7 @@ void CommentTable::resize(int m, int n)
 		{
 			if (j < rowCount() && i < columnCount())
 			{
-				CommentFreeNode* aFreeNode = getNodeAt(j, i);
+				CommentFreeNode* aFreeNode = NodeAt(j, i);
 				nodes()->replaceChild(aFreeNode, new CommentFreeNode(nullptr, ""));
 				aFreeNode->setName("#"+QString::number(j)+"#"+QString::number(i));
 				aList->append(aFreeNode);

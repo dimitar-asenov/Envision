@@ -24,41 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "VCommentTable.h"
+#pragma once
 
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/layouts/GridLayout.h"
+#include "../comments_api.h"
 
-using namespace Visualization;
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/layouts/GridLayoutStyle.h"
 
 namespace Comments {
 
-ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
+class COMMENTS_API VCommentTableStyle : public Super<Visualization::ItemStyle> {
+	public:
+		virtual ~VCommentTableStyle() override;
 
-VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
-{
-	aGrid_ = new Visualization::GridLayout(this, &style()->gridstyle());
-}
-
-void VCommentTable::determineChildren()
-{
-	QList< QList< Model::Node*> > anArray;
-	for (int i = 0; i < node()->rowCount(); i++)
-	{
-		anArray.append(QList< Model::Node*>());
-
-		for (int j = 0; j < node()->columnCount(); j++)
-		{
-			anArray[i].append(node()->nodes()->at((node()->rowCount() * j) + i));
-		}
-	}
-	aGrid_->synchronizeWithNodes(anArray);
-}
-
-void VCommentTable::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(aGrid_, availableWidth, availableHeight);
-}
+		Property<Visualization::GridLayoutStyle> gridstyle{this, "gridstyle"};
+};
 
 } /* namespace Comments */
