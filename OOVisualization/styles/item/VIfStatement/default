@@ -65,7 +65,7 @@
 		<spaceBetweenElements>1</spaceBetweenElements>
 	</contentVertical>
 	
-	<contentWidthSwitchTreshold>800</contentWidthSwitchTreshold>
+	<contentWidthSwitchTreshold>600</contentWidthSwitchTreshold>
 	
 	<thenBranch prototypes="item/VStatementItemList/default">
 		<shape prototypes="shape/Box/default">
