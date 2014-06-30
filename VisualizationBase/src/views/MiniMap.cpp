@@ -95,6 +95,12 @@ void MiniMap::paintEvent(QPaintEvent *event)
 
 void MiniMap::mouseMoveEvent(QMouseEvent *event)
 {
+	// TODO: The next line should not be necessary, this seems like a Qt bug. Presently if the line is removed:
+	// - Starting a test like OOVisualization, runs and behaves normally
+	// - Starting Envision without a test, and opening a project later, causes the minimap to always scroll when the
+	//   mouse is moved above it (even without a pressed key). Those mouseMoveEvents should not be received since
+	//   mouse tracking is disabled.
+	if (event->buttons() == Qt::NoButton) return;
 	View::mouseMoveEvent(event);
 	parent->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
 }
