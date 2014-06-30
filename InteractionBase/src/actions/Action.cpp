@@ -128,7 +128,8 @@ void Action::createStandardActionsForCompositeNode(CompositeNode* node, QList<Ac
 			if (name.startsWith("_")) continue; // Avoid "hidden" attributes which should only be modified indirectly
 
 			bool isOptional = (*currentLevel)[i].optional();
-			bool isList = (*currentLevel)[i].type().startsWith("TypedListOf");
+			bool isList = (*currentLevel)[i].type().startsWith("TypedListOf")
+					|| (*currentLevel)[i].type().endsWith("List");
 
 			if ( isOptional )
 			{
