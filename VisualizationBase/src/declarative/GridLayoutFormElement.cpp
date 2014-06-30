@@ -27,6 +27,7 @@
 #include "GridLayoutFormElement.h"
 
 #include "DeclarativeItemBase.h"
+#include "GridLayouter.h"
 #include "../items/ItemRegion.h"
 #include "../cursor/LayoutCursor.h"
 
@@ -119,212 +120,32 @@ GridLayoutFormElement* GridLayoutFormElement::put(int column, int row, FormEleme
 
 void GridLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
-	// Compute default sizes of all the elements
-	// Get the widest and tallest items (without merged cells)
-	QVector<int> widestInColumn(numColumns_, 0);
-	QVector<int> tallestInRow(numRows_, 0);
-	bool hasMultiColumn = false;
-	bool hasMultiRow = false;
-	for (int x=0; x<numColumns_; x++)
-		for (int y=0; y<numRows_; y++)
-			if (elementGrid_[x][y] != nullptr)
-			{
-				FormElement* element = elementGrid_[x][y];
-				QPair<int, int> cellSpan = spanGrid_[x][y];
-				element->computeSize(item, 0, 0); // any additional space is distributed later
-				if (cellSpan.first == 1)
-				{
-					if (element->width(item) > widestInColumn[x]) widestInColumn[x] = element->width(item);
-				}
-				else hasMultiColumn = true;
-				if (cellSpan.second == 1)
-				{
-					if (element->height(item) > tallestInRow[y]) tallestInRow[y] = element->height(item);
-				}
-				else hasMultiRow = true;
-			}
+	QSize finalSize = GridLayouter::computeSize<true>(availableWidth, availableHeight,
+		[this](){return numRows_;},	// numRows
+		[this](){return numColumns_;},	// numColumns
+		[this](int x, int y){return elementGrid_[x][y];},	// has
+		[this](int x, int y){return spanGrid_[x][y];},	// spanGrid
+		[this, item](int x, int y){return elementGrid_[x][y]->width(item);},	// width
+		[this, item](int x, int y){return elementGrid_[x][y]->height(item);},	// height
+		[this, item](int x, int y, int w, int h){elementGrid_[x][y]->computeSize(item, w, h);},	// computeElementSize
+		[this, item](int x, int y, int w, int h){elementGrid_[x][y]->computeSize(item, w, h);},	// changeGeometry
+		[this, item](int x, int y){return elementGrid_[x][y]->sizeDependsOnParent(item);},	// isStretchable
+		[this, item](int x, int y, QPoint pos){elementGrid_[x][y]->setPos(item, pos);},	// setPosition
+		[this](int y){return rowStretchFactors_[y];},	// rowStretchFactors
+		[this](int x){return columnStretchFactors_[x];},	// columnStretchFactors
+		[this](int x, int y){return cellHorizontalAlignmentGrid_[x][y];},	// horizontalAlignment
+		[this](int x, int y){return cellVerticalAlignmentGrid_[x][y];},	// verticalAlignment
+		[this](){return spaceBetweenRows_;},	// spaceBetweenRows
+		[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
+		[this](){return topMargin();},	// topMargin
+		[this](){return bottomMargin();},	// bottomMargin
+		[this](){return leftMargin();},	// leftMargin
+		[this](){return rightMargin();},	// rightMargin
+		[](){return 0;},	// minWidth
+		[](){return 0;}	// minHeight
+	);
 
-	// modify widest cells in columns and tallest cells in rows if there are merged columns
-	if (hasMultiColumn or hasMultiRow)
-		for (int x=0; x<numColumns_; x++)
-			for (int y=0; y<numRows_; y++)
-			{
-				if (spanGrid_[x][y].first > 1)
-				{
-					int availableSpace = 0;
-					float availableStretchFactor = 0;
-					for (int column=x; column<x+spanGrid_[x][y].first; column++)
-					{
-						availableSpace += widestInColumn[column];
-						availableStretchFactor += columnStretchFactors_[column];
-					}
-					availableSpace += spaceBetweenColumns_ * (spanGrid_[x][y].first - 1);
-
-					int missingSpace = elementGrid_[x][y]->width(item) - availableSpace;
-					if (missingSpace > 0)
-					{
-						if (availableStretchFactor == 0) // add the additional space to some column
-							widestInColumn[x] += missingSpace;
-						else // distribute the additional space according to the stretch factors
-							for (int column=x; column<x+spanGrid_[x][y].first; column++)
-								widestInColumn[column] +=
-										std::ceil(missingSpace / availableStretchFactor * columnStretchFactors_[column]);
-					}
-				}
-				if (spanGrid_[x][y].second > 1)
-				{
-					int availableSpace = 0;
-					float availableStretchFactor = 0;
-					for (int row=y; row<y+spanGrid_[x][y].second; row++)
-					{
-						availableSpace += tallestInRow[row];
-						availableStretchFactor += rowStretchFactors_[row];
-					}
-					availableSpace += spaceBetweenRows_ * (spanGrid_[x][y].second - 1);
-
-					int missingSpace = elementGrid_[x][y]->height(item) - availableSpace;
-					if (missingSpace > 0)
-					{
-						if (availableStretchFactor == 0) // add the additional space to some column
-							tallestInRow[y] += missingSpace;
-						else // distribute the additional space according to the stretch factors
-							for (int row=y; row<y+spanGrid_[x][y].second; row++)
-								tallestInRow[row] +=
-										std::ceil(missingSpace / availableStretchFactor * rowStretchFactors_[row]);
-					}
-				}
-			}
-
-	// Compute grid size
-	int totalWidth = 0;
-	int totalHeight = 0;
-
-	// Compute grid width
-	for (auto columnWidth : widestInColumn) totalWidth += columnWidth;
-	if (numColumns_ > 0) totalWidth += leftMargin() + rightMargin();
-	if (numColumns_ > 1) totalWidth += spaceBetweenColumns_ * (numColumns_ - 1);
-
-	// Adjust widest cell in column values if there is additional space available
-	int additionalWidth = availableWidth - totalWidth;
-	// if availableWidth == 0, this is always false
-	if (additionalWidth > 0)
-	{
-		if (overallColumnStretchFactor_ > 0) // distribute the additional space according to the stretch factors
-			for (int x = 0; x<numColumns_; ++x)
-				widestInColumn[x] += std::floor(additionalWidth / overallColumnStretchFactor_ * columnStretchFactors_[x]);
-		totalWidth = availableWidth;
-	}
-
-	// Compute grid height
-	for (auto rowHeight : tallestInRow) totalHeight += rowHeight;
-	if (numRows_ > 0) totalHeight += topMargin() + bottomMargin();
-	if (numRows_ > 1) totalHeight += spaceBetweenRows_ * (numRows_ - 1);
-
-	// Adjust tallest cell in row values if there is additional space available
-	int additionalHeight = availableHeight - totalHeight;
-	// if availableHeight == 0, this is always false
-	if (additionalHeight > 0)
-	{
-		if (overallRowStretchFactor_ > 0) // distribute the additional space according to the stretch factors
-			for (int y = 0; y<numRows_; ++y)
-				tallestInRow[y] += std::floor(additionalHeight / overallRowStretchFactor_ * rowStretchFactors_[y]);
-		totalHeight = availableHeight;
-	}
-
-	setSize(item, QSize(totalWidth, totalHeight));
-
-	// Recompute all the element's sizes, if their size depends on their parent's size
-	for (int x=0; x<numColumns_; x++)
-		for (int y=0; y<numRows_; y++)
-			if (elementGrid_[x][y] != nullptr && elementGrid_[x][y]->sizeDependsOnParent(item))
-			{
-				FormElement* element = elementGrid_[x][y];
-				QPair<int, int> cellSpan = spanGrid_[x][y];
-				if (cellSpan.first == 1 && cellSpan.second == 1)
-					element->computeSize(item, widestInColumn[x], tallestInRow[y]);
-				else
-				{
-					int localAvailableWidth = 0;
-					for (int column=x; column<x+spanGrid_[x][y].first; column++)
-						localAvailableWidth += widestInColumn[column];
-
-					int localAvailableHeight = 0;
-					for (int row=y; row<y+spanGrid_[x][y].second; row++)
-						localAvailableHeight += tallestInRow[row];
-
-					element->computeSize(item, localAvailableWidth, localAvailableHeight);
-				}
-			}
-
-	// Set element positions
-	int left = leftMargin();
-	for (int x=0; x<numColumns_; ++x)
-	{
-		int top = topMargin();
-		for (int y=0; y<numRows_; ++y)
-		{
-			if (elementGrid_[x][y] != nullptr)
-			{
-				int xPos = left;
-				if (cellHorizontalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Center)
-				{
-					if (spanGrid_[x][y].first == 1)
-						xPos += (widestInColumn[x] - elementGrid_[x][y]->width(item))/2;
-					else
-					{
-						int localAvailableWidth = 0;
-						for (int column=x; column<x+spanGrid_[x][y].first; column++)
-							localAvailableWidth += widestInColumn[column];
-						xPos += (localAvailableWidth - elementGrid_[x][y]->width(item))/2;
-					}
-				}
-				else if (cellHorizontalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Right)
-				{
-					if (spanGrid_[x][y].first == 1)
-						xPos += (widestInColumn[x] - elementGrid_[x][y]->width(item));
-					else
-					{
-						int localAvailableWidth = 0;
-						for (int column=x; column<x+spanGrid_[x][y].first; column++)
-							localAvailableWidth += widestInColumn[column];
-						xPos += (localAvailableWidth - elementGrid_[x][y]->width(item));
-					}
-				}
-
-				int yPos = top;
-				if (cellVerticalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Center)
-				{
-					if (spanGrid_[x][y].second == 1)
-						yPos += (tallestInRow[y] - elementGrid_[x][y]->height(item))/2;
-					else
-					{
-						int localAvailableHeight = 0;
-						for (int row=y; row<y+spanGrid_[x][y].second; row++)
-							localAvailableHeight += tallestInRow[row];
-						yPos += (localAvailableHeight - elementGrid_[x][y]->height(item))/2;
-					}
-				}
-				else if (cellVerticalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Bottom)
-				{
-					if (spanGrid_[x][y].second == 1)
-						yPos += tallestInRow[y] - elementGrid_[x][y]->height(item);
-					else
-					{
-						int localAvailableHeight = 0;
-						for (int row=y; row<y+spanGrid_[x][y].second; row++)
-							localAvailableHeight += tallestInRow[row];
-						yPos += localAvailableHeight - elementGrid_[x][y]->height(item);
-					}
-				}
-
-				elementGrid_[x][y]->setPos(item, QPoint(xPos, yPos));
-			}
-
-			top += tallestInRow[y] + spaceBetweenRows_;
-		}
-
-		left += widestInColumn[x] + spaceBetweenColumns_;
-	}
+	setSize(item, finalSize);
 }
 
 bool GridLayoutFormElement::sizeDependsOnParent(const Item*) const

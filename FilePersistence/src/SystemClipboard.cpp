@@ -27,7 +27,7 @@
 #include "SystemClipboard.h"
 #include "FilePersistenceException.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Reference.h"
 #include "ModelBase/src/persistence/PersistedNode.h"
 #include "ModelBase/src/persistence/PersistedValue.h"
@@ -56,15 +56,15 @@ SystemClipboard* SystemClipboard::clone() const
 }
 
 // Methods from Persistent Store
-void SystemClipboard::saveModel(::Model::Model* model, const QString &name)
+void SystemClipboard::saveTree(::Model::TreeManager* manager, const QString &name)
 {
-	if (model->root())
+	if (manager->root())
 	{
 		SAFE_DELETE(xml);
 		xml = new XMLModel();
 
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
-		saveNode(model->root(), name);
+		saveNode(manager->root(), name);
 		xml->endSaveChildNode();
 
 		QApplication::clipboard()->setText(xml->documentText());
@@ -134,9 +134,9 @@ void SystemClipboard::saveNodeFromOldStore(PersistedNode* node)
 	xml->endSaveChildNode();
 }
 
-Node* SystemClipboard::loadModel(::Model::Model*, const QString &, bool)
+Node* SystemClipboard::loadTree(::Model::TreeManager*, const QString &, bool)
 {
-	throw FilePersistenceException("The clipboard does not support the loadModel() method.");
+	throw FilePersistenceException("The clipboard does not support the loadTree() method.");
 }
 
 QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node*, const QSet<QString>&)
@@ -294,7 +294,7 @@ void SystemClipboard::next()
 	else throw FilePersistenceException("Could not find next clipboard element.");
 }
 
-Node* SystemClipboard::create(::Model::Model*, Node* parent)
+Node* SystemClipboard::create(::Model::TreeManager*, Node* parent)
 {
 	Node* node = Node::createNewNode(xml->getType(), parent, *this, false);
 	return node;

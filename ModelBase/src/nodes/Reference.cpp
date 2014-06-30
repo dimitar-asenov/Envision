@@ -26,7 +26,7 @@
 
 #include "nodes/Reference.h"
 #include "commands/FieldSet.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "ModelException.h"
 #include "NameText.h"
 
@@ -44,14 +44,14 @@ QList<std::function<void (Node* subTree)>> Reference::unresolutionSteps_;
 Reference::Reference(Node *parent) : Super(parent)
 {
 	allReferences_.append(this);
-	if (parent && parent->model()) pendingResolution_.insert(this);
+	if (parent && parent->manager()) pendingResolution_.insert(this);
 }
 
 Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 {
 	allReferences_.append(this);
 	name_ = store.loadReferenceValue(this);
-	if (state_ == ReferenceNeedsToBeResolved && parent && parent->model())
+	if (state_ == ReferenceNeedsToBeResolved && parent && parent->manager())
 		pendingResolution_.insert(this);
 }
 
@@ -159,7 +159,7 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 {
 	if (!subTree || (!all && names.isEmpty())) return;
 
-	auto targetModel = subTree->model();
+	auto targetManager = subTree->manager();
 	bool isRoot = !subTree->parent();
 
 	std::function<void (Reference*)> f;
@@ -185,7 +185,7 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 			if (isRoot)
 			{
 				for (auto ref : allReferences_)
-					if (targetModel == ref->model())
+					if (targetManager == ref->manager())
 					{
 						auto& refName = ref->name();
 						if (refName == first || refName == second)
@@ -213,7 +213,7 @@ void Reference::unresolveReferencesHelper(Node* subTree, bool all,
 
 	if (isRoot)
 	{
-		for (auto ref : allReferences_) if (targetModel == ref->model()) f(ref);
+		for (auto ref : allReferences_) if (targetManager == ref->manager()) f(ref);
 	}
 	else
 	{

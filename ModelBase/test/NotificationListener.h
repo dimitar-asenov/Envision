@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/Node.h"
 
 namespace Model {
@@ -39,7 +39,7 @@ class NotificationListener : public QObject
 		QSet<Node*> modifiedNodes;
 		Node* root;
 
-		NotificationListener(Model& model);
+		NotificationListener(TreeManager& manager);
 
 	public slots:
 		void setModifiedNodes( QSet<Node*> nodes);

@@ -65,22 +65,18 @@ QPainterPath BoxStyle::getRectanglePath(qreal x, qreal y, int width, int height)
 	return path;
 }
 
-void BoxStyle::paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const
+void BoxStyle::paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight,
+							QColor customColor) const
 {
-//	if ( (background().style() == Qt::NoBrush || background().style() == Qt::SolidPattern)
-//			&& (outline().style() == Qt::NoPen || outline().style() == Qt::SolidLine))
-//		optimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
-//	else
-
 	qreal scaleFactor = painter->worldTransform().m11();
 	if (scaleFactor < 0.5 && scaleFactor*outline().width() < 0.1)
-		simplifiedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight );
+		simplifiedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight, customColor);
 	else
-		unoptimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
+		unoptimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight, customColor);
 }
 
 void BoxStyle::unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-				int contentBoxHeight) const
+				int contentBoxHeight, QColor customColor) const
 {
 	qreal x = xOffset;
 	qreal y = yOffset;
@@ -117,110 +113,15 @@ void BoxStyle::unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int
 	}
 	else
 	{
-		painter->setBrush(background());
+		if (customColor.isValid()) painter->setBrush(customColor);
+		else painter->setBrush(background());
 	}
 
 	painter->drawPath(getRectanglePath(x, y, contentBoxWidth - outlineWidth, contentBoxHeight - outlineWidth));
 }
 
-void BoxStyle::optimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-				int contentBoxHeight) const
-{
-	qreal scaleFactor = painter->worldTransform().m11();
-	int outlineWidth = outline().style()==Qt::SolidLine ? outline().width() : 0;
-	int halfOutline = std::ceil(outlineWidth/2.0);
-
-	if (corner() == CornerType::RightAngle || cornerRadius()*scaleFactor <= 1.0 )
-	{
-		int innerWidth = contentBoxWidth - 2*halfOutline;
-		int innerHieght = contentBoxHeight - 2*halfOutline;
-
-		// Note that the half of the outline overlaps the background.
-
-		// Draw a simplified version
-		if (background().style() == Qt::SolidPattern)
-			painter->fillRect(xOffset + halfOutline, yOffset + halfOutline, innerWidth, innerHieght, background().color());
-
-		// Paint outline
-		if (outline().style() == Qt::SolidLine)
-		{
-			//Top
-			painter->fillRect(xOffset, yOffset, contentBoxWidth, outlineWidth, outline().color());
-			//Left
-			painter->fillRect(xOffset, yOffset + outlineWidth, outlineWidth,
-					contentBoxHeight-2*outlineWidth, outline().color());
-			//Bottom
-			painter->fillRect(xOffset, yOffset + contentBoxHeight - outlineWidth, contentBoxWidth,
-					outlineWidth, outline().color());
-			//Right
-			painter->fillRect(xOffset + contentBoxWidth - outlineWidth, yOffset + outlineWidth,
-					outlineWidth, contentBoxHeight-2*outlineWidth, outline().color());
-		}
-
-		return;
-	}
-
-	int subImageSize = cornerRadius() + halfOutline;
-
-	// Paint corners
-	if (cornerRadius() > 0)
-	{
-		if (scaleFactor*cornerRadius() >= 1)
-		{
-			// Draw the corners in case there are at least one pixel
-			bool hasScale = topLeftCorner_.paint(painter, xOffset, yOffset);
-			if (!hasScale)
-			{
-				generatePixmaps(scaleFactor, painter);
-				topLeftCorner_.paint(painter, xOffset, yOffset);
-			}
-
-			int rightCornerStart = contentBoxWidth - subImageSize;
-			int bottomCornerStart = contentBoxHeight - subImageSize;
-
-			topRightCorner_.paint(painter, xOffset + rightCornerStart, yOffset);
-			bottomLeftCorner_.paint(painter, xOffset, yOffset + bottomCornerStart);
-			bottomRightCorner_.paint(painter, xOffset + rightCornerStart, yOffset + bottomCornerStart);
-		}
-	}
-
-	int innerWidth = contentBoxWidth - 2*subImageSize;
-	int innerHeight = contentBoxHeight - 2*subImageSize;
-
-	// Paint background
-	if (background().style() == Qt::SolidPattern)
-	{
-		// vertical middle
-		painter->fillRect(xOffset + subImageSize, yOffset + outlineWidth,
-				innerWidth, contentBoxHeight - 2*outlineWidth, background().color());
-		// left
-		painter->fillRect(xOffset + outlineWidth, yOffset + subImageSize,
-				subImageSize - outlineWidth, innerHeight, background().color());
-		// right
-		painter->fillRect(xOffset + contentBoxWidth - subImageSize, yOffset + subImageSize,
-				subImageSize - outlineWidth, innerHeight, background().color());
-	}
-
-	// Paint outline
-	if (outline().style() == Qt::SolidLine)
-	{
-		// top
-		painter->fillRect(xOffset + subImageSize, yOffset,
-				innerWidth, outlineWidth, outline().color());
-		// bottom
-		painter->fillRect(xOffset + subImageSize, yOffset + contentBoxHeight - outlineWidth,
-				innerWidth, outlineWidth, outline().color());
-		// left
-		painter->fillRect(xOffset, yOffset + subImageSize,
-				outlineWidth, innerHeight, outline().color());
-		// right
-		painter->fillRect(xOffset + contentBoxWidth - outlineWidth, yOffset + subImageSize,
-				outlineWidth, innerHeight, outline().color());
-	}
-}
-
 void BoxStyle::simplifiedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
-						int contentBoxHeight) const
+						int contentBoxHeight, QColor customColor) const
 {
 	// Draw a simplified version
 	if (background().style() != Qt::NoBrush)
@@ -229,43 +130,9 @@ void BoxStyle::simplifiedPaint(QPainter* painter, int xOffset, int yOffset, int 
 			painter->fillRect(xOffset, yOffset, contentBoxWidth, contentBoxHeight,
 									background().gradient()->stops().last().second);
 		else
-			painter->fillRect(xOffset, yOffset, contentBoxWidth, contentBoxHeight, background().color());
+			painter->fillRect(xOffset, yOffset, contentBoxWidth, contentBoxHeight,
+									(customColor.isValid() ? customColor : background().color()));
 	}
-}
-
-void BoxStyle::generatePixmaps(qreal scaleFactor, const QPainter* painterSpecifyingRenderHints) const
-{
-	qreal x = 0;
-	qreal y = 0;
-
-	int outlineWidth = 0;
-	if ( outline().style() != Qt::NoPen)
-	{
-		outlineWidth = outline().width();
-		x = outlineWidth / 2.0;
-		y = outlineWidth / 2.0;
-	}
-
-	// Draw a square.
-	int extra = outlineWidth; // The is just to give us some buffer in between the corners.
-	int squareSize = extra + 2*cornerRadius() + outlineWidth;
-	int scaledSquare = std::ceil(squareSize * scaleFactor);
-	QImage img = QImage(QSize(scaledSquare, scaledSquare), QImage::Format_ARGB32);
-	img.fill(0);
-
-	QPainter painter(&img);
-	painter.scale(scaleFactor, scaleFactor);
-	painter.setRenderHints(painterSpecifyingRenderHints->renderHints());
-	painter.setPen(outline());
-	painter.setBrush(background());
-	painter.drawPath(getRectanglePath(x, y, squareSize - outlineWidth, squareSize - outlineWidth));
-
-	int subImageSize = scaleFactor*(cornerRadius() + std::ceil(outlineWidth/2.0));
-	int endStarts = scaleFactor*squareSize - subImageSize;
-	topLeftCorner_.setImage(img.copy(0, 0, subImageSize, subImageSize), scaleFactor);
-	topRightCorner_.setImage(img.copy(endStarts, 0, subImageSize, subImageSize), scaleFactor);
-	bottomLeftCorner_.setImage(img.copy(0, endStarts, subImageSize, subImageSize), scaleFactor);
-	bottomRightCorner_.setImage(img.copy(endStarts, endStarts, subImageSize, subImageSize), scaleFactor);
 }
 
 }

@@ -28,7 +28,7 @@
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 using namespace Visualization;
 
@@ -51,20 +51,20 @@ CommandResult* CSceneHandlerSave::execute(Item* source, Item*, const QStringList
 	}
 
 	Q_ASSERT(node);
-	auto model = node->model();
-	Q_ASSERT(model);
+	auto manager = node->manager();
+	Q_ASSERT(manager);
 
 	if (commandTokens.size() == 1)
 	{
-		// Just save the model
-		model->save();
+		// Just save the tree
+		manager->save();
 	}
 
 	if (commandTokens.size() == 2)
 	{
-		// Save the model at a particular location and with a particular name
-		model->setName(commandTokens[1]);
-		model->save(new FilePersistence::SimpleTextFileStore("projects/"));
+		// Save the tree at a particular location and with a particular name
+		manager->setName(commandTokens[1]);
+		manager->save(new FilePersistence::SimpleTextFileStore("projects/"));
 	}
 
 	return new CommandResult();
@@ -80,7 +80,7 @@ QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString
 	auto name = split.size() > 1 ? split[1] : QString();
 
 	QString commandString = "save";
-	QString text = "Save the current model";
+	QString text = "Save the current tree";
 	if (!name.isNull())
 	{
 		commandString += " " + name;

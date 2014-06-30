@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
 #include "nodes/Reference.h"
@@ -34,14 +34,14 @@
 
 namespace Model {
 
-TEST(ModelBase, ListCreation)
+TEST(ModelBasePlugin, ListCreation)
 {
 	auto root = new List();
-	Model model(root);
+	TreeManager manager(root);
 
 	CHECK_INT_EQUAL(0, root->size());
 
-	model.beginModification(root, "add elements to list");
+	manager.beginModification(root, "add elements to list");
 
 	Text* a = new Text();
 	Text* b = new Text();
@@ -54,7 +54,7 @@ TEST(ModelBase, ListCreation)
 	root->append(a);
 	root->append(b);
 	root->append(c);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(3, root->size());
 	CHECK_CONDITION(root->at<Node>(0) == a);
@@ -62,12 +62,12 @@ TEST(ModelBase, ListCreation)
 	CHECK_CONDITION(root->at<Node>(2) == c);
 }
 
-TEST(ModelBase, ListInsertion)
+TEST(ModelBasePlugin, ListInsertion)
 {
 	auto root = new List();
-	Model model(root);
+	TreeManager manager(root);
 
-	model.beginModification(root, "add elements to list");
+	manager.beginModification(root, "add elements to list");
 	Text* a = new Text();
 	Text* b = new Text();
 	Text* c = new Text();
@@ -83,7 +83,7 @@ TEST(ModelBase, ListInsertion)
 	root->insert(2, e);
 	root->insert(3, f);
 	root->insert(1, g);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
 	CHECK_CONDITION(root->first<Node>() == d);
@@ -95,12 +95,12 @@ TEST(ModelBase, ListInsertion)
 	CHECK_CONDITION(root->last<Node>() == c);
 }
 
-TEST(ModelBase, ListRemoval)
+TEST(ModelBasePlugin, ListRemoval)
 {
 	auto root = new List();
-	Model model(root);
+	TreeManager manager(root);
 
-	model.beginModification(root, "add elements to list");
+	manager.beginModification(root, "add elements to list");
 	Text* a = new Text();
 	Text* b = new Text();
 	Text* c = new Text();
@@ -116,14 +116,14 @@ TEST(ModelBase, ListRemoval)
 	root->append(e);
 	root->append(f);
 	root->append(g);
-	model.endModification();
+	manager.endModification();
 
-	model.beginModification(root, "remove elements from list");
+	manager.beginModification(root, "remove elements from list");
 	root->remove(3);
 	root->remove(a);
 	root->remove(4);
 	root->remove(b);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_CONDITION(d != nullptr);
 	CHECK_CONDITION(g != nullptr);
@@ -134,12 +134,12 @@ TEST(ModelBase, ListRemoval)
 	CHECK_CONDITION(root->last<Node>() == f);
 }
 
-TEST(ModelBase, ListUndo)
+TEST(ModelBasePlugin, ListUndo)
 {
 	auto root = new List();
-	Model model(root);
+	TreeManager manager(root);
 
-	model.beginModification(root, "add elements to list");
+	manager.beginModification(root, "add elements to list");
 	Text* a = new Text();
 	Text* b = new Text();
 	Text* c = new Text();
@@ -155,7 +155,7 @@ TEST(ModelBase, ListUndo)
 	root->append(e);
 	root->append(f);
 	root->append(g);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
 	CHECK_CONDITION(root->at<Node>(0) == a);
@@ -166,15 +166,15 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(5) == f);
 	CHECK_CONDITION(root->at<Node>(6) == g);
 
-	model.beginModification(nullptr);
-	model.undo();
-	model.endModification();
+	manager.beginModification(nullptr);
+	manager.undo();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(0, root->size());
 
-	model.beginModification(nullptr);
-	model.redo();
-	model.endModification();
+	manager.beginModification(nullptr);
+	manager.redo();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
 	CHECK_CONDITION(root->at<Node>(0) == a);
@@ -185,10 +185,10 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(5) == f);
 	CHECK_CONDITION(root->at<Node>(6) == g);
 
-	model.beginModification(root, "add elements to list");
+	manager.beginModification(root, "add elements to list");
 	root->remove(a);
 	root->remove(e);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
 	CHECK_CONDITION(root->at<Node>(0) == b);
@@ -197,9 +197,9 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(3) == f);
 	CHECK_CONDITION(root->at<Node>(4) == g);
 
-	model.beginModification(nullptr);
-	model.undo();
-	model.endModification();
+	manager.beginModification(nullptr);
+	manager.undo();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
 	CHECK_CONDITION(root->at<Node>(0) == a);
@@ -210,9 +210,9 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(5) == f);
 	CHECK_CONDITION(root->at<Node>(6) == g);
 
-	model.beginModification(nullptr);
-	model.redo();
-	model.endModification();
+	manager.beginModification(nullptr);
+	manager.redo();
+	manager.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
 	CHECK_CONDITION(root->at<Node>(0) == b);

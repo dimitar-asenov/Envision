@@ -73,9 +73,9 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				auto empty = new OOModel::EmptyExpression();
 				auto es = new OOModel::ExpressionStatement();
 				es->setExpression(empty);
-				m->node()->model()->beginModification(m->node(), "add empty statement");
+				m->node()->beginModification("add empty statement");
 				m->node()->items()->append(es);
-				m->node()->model()->endModification();
+				m->node()->endModification();
 
 				m->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
@@ -105,9 +105,9 @@ void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 {
 	auto arg = new OOModel::FormalArgument();
 	arg->setTypeExpression(new OOModel::EmptyExpression());
-	method->node()->model()->beginModification(method->node(), "add new argument");
+	method->node()->beginModification("add new argument");
 	method->node()->arguments()->insert(position, arg);
-	method->node()->model()->endModification();
+	method->node()->endModification();
 
 	method->arguments()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg));

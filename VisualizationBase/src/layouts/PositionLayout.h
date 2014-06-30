@@ -51,8 +51,9 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		 * Inserts the specified item into the Layout.
 		 *
 		 *	@param item
-		 *					The Item to insert. This item must implement ModelItem that represents a node derived from
-		 *					Model::CompositeNode. Furthermore the represented node must have the Position Extension.
+		 *					The Item to insert. This item must implement an Item that represents a node derived from
+		 *					Model::CompositeNode. Furthermore the represented node must have the Position and the
+		 *					FullDetailSize extensions.
 		 */
 		void insert(Item* item);
 

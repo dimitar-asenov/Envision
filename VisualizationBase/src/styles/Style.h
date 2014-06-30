@@ -43,7 +43,6 @@ class VISUALIZATIONBASE_API Style
 		using PropertyLoader = std::function<void (StyleLoader& sl)>;
 		void addPropertyLoader( PropertyLoader loader );
 
-	protected:
 		template <class A, class B = void> using Property = StyleProperty<A, B>;
 
 	private:

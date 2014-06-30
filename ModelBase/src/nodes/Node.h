@@ -29,22 +29,22 @@
 #include "../modelbase_api.h"
 #include "../persistence/PersistentStore.h"
 #include "../SymbolMatcher.h"
-#include "../model/ModelManager.h"
+#include "../model/AllTreeManagers.h"
 
 #include "Core/src/reflect/Reflect.h"
 #include "Core/src/reflect/typeIdMacros.h"
 
 namespace Model {
 
-class Model;
+class TreeManager;
 class UndoCommand;
 class NodeReadWriteLock;
 class UsedLibrary;
 
 /**
- * The Node class is the foundation element in the model tree in Envision. An application in Envision is a collection of
- * objects of type Node (and derived) that are managed by a single Model object. Nodes are combined together in a tree
- * structure. This class defines the minimal interface of each node and implements some service functions.
+ * The Node class is the foundation element in the tree in Envision. An application in Envision is a collection of
+ * objects of type Node (and derived) that are managed by a single TreeManager object. Nodes are combined together in
+ * a tree structure. This class defines the minimal interface of each node and implements some service functions.
  *
  * Each class that derives from Node must have at least two constructors which need to be registered before that class
  * can be used. This is achieved using the static method 'registerNodeType()'.
@@ -88,7 +88,7 @@ class MODELBASE_API Node
 		 *
 		 * @param parent
 		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
-		 * 				node for the model. Otherwise it should be non-NULL.
+		 * 				node for the TreeManager. Otherwise it should be non-NULL.
 		 * @param id
 		 * 				The id of the node from the persistent store.
 		 * @param store
@@ -107,9 +107,9 @@ class MODELBASE_API Node
 		 * @param parent
 		 * 				The parent of this node. This may be 'nullptr'.
 		 *
-		 * 				If the parent is not null, then the model associated with the parent will also be the model for
-		 * 				this node. If the parent is nullptr, then this node will not be associated with a model initially.
-		 * 				It can later be added to an existing model.
+		 * 				If the parent is not null, then the manager associated with the parent will also be the manager for
+		 * 				this node. If the parent is nullptr, then this node will not be associated with a manager initially.
+		 * 				It can later be added to an existing manager.
 		 */
 		Node(Node* parent = nullptr);
 
@@ -121,11 +121,11 @@ class MODELBASE_API Node
 		static Node* createDefaultInstance(Node* parent);
 
 		/**
-		 * Returns the model managing the tree of the current Node.
+		 * Returns the tree manager of the current Node.
 		 *
 		 * Calling this method during the creation of the root Node will return a nullptr.
 		 */
-		Model* model() const;
+		TreeManager* manager() const;
 
 		/**
 		 * Returns the root node of tree where of this node.
@@ -143,9 +143,9 @@ class MODELBASE_API Node
 		void setParent(Node* parent);
 
 		/**
-		 * Sets the model of this root node to \a model. This node must not have a parent.
+		 * Sets the manager of this root node to \a manager. This node must not have a parent.
 		 */
-		void setRootModel(Model* model);
+		void setRootManager(TreeManager* manager);
 
 		/**
 		 * Returns a list of all child nodes.
@@ -282,7 +282,7 @@ class MODELBASE_API Node
 		 * the node.
 		 *
 		 * The default implementation just asks for the lock of the parent, or if the parent is NULL for the root lock of
-		 * the model.
+		 * the manager.
 		 */
 		virtual NodeReadWriteLock* accessLock() const;
 
@@ -417,9 +417,9 @@ class MODELBASE_API Node
 		 * Returns true is the this node can be modified or false otherwise.
 		 *
 		 * A node is modifiable if it is part of an access unit which is currently acquired by a writer thread. This is
-		 * managed by the 'Model' associated with the node.
+		 * managed by the TreeManager associated with the node.
 		 *
-		 * If a node does not have an associated model it is always modifiable.
+		 * If a node does not have an associated manager it is always modifiable.
 		 */
 		bool isModifyable() const;
 
@@ -472,9 +472,9 @@ class MODELBASE_API Node
 	private:
 		Node* parent_{};
 		int revision_{};
-		Model* model_{};
+		TreeManager* manager_{};
 
-		void propagateModelToChildren();
+		void propagateManagerToChildren();
 
 		static QHash<QString, NodeConstructor> nodeConstructorRegister;
 		static QHash<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
@@ -484,7 +484,7 @@ class MODELBASE_API Node
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
 
-inline Model* Node::model() const { return model_; }
+inline TreeManager* Node::manager() const { return manager_; }
 
 inline void Node::setPartiallyLoaded() { partiallyLoadedNodes().insert(this); }
 inline bool Node::isPartiallyLoaded() const {return partiallyLoadedNodes().contains(this);}

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "controlflowvisualization.h"
+#include "ControlFlowVisualizationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "OOModel/src/allOOModelNodes.h"
@@ -226,17 +226,17 @@ Method* addDivBySix(Class* parent)
 	return divbysix;
 }
 
-TEST(ControlFlowVisualization, SimpleTest)
+TEST(ControlFlowVisualizationPlugin, SimpleTest)
 {
 	auto cl = new Class("SomeClass");
 
 	addComplicated(cl);
 	addDivBySix(cl);
 
-	auto model = new Model::Model(cl);
+	auto manager = new Model::TreeManager(cl);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(cl));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(cl != nullptr);
 }

@@ -26,7 +26,7 @@
 
 #include "PersistentStoreMock.h"
 #include "nodes/Node.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "ModelException.h"
 
 namespace Model {
@@ -41,9 +41,9 @@ PersistentStoreMock::~PersistentStoreMock()
 
 PersistentStore* PersistentStoreMock::clone() const {return nullptr;}
 
-void PersistentStoreMock::saveModel(Model* model, const QString &name)
+void PersistentStoreMock::saveTree(TreeManager* manager, const QString &name)
 {
-	saveNode(model->root(), name);
+	saveNode(manager->root(), name);
 }
 
 void PersistentStoreMock::saveStringValue(const QString &value)
@@ -77,7 +77,7 @@ void PersistentStoreMock::saveReferenceValue(const QString &, const Node*)
 	throw ModelException("The Persistent store mock does not support references");
 }
 
-Node* PersistentStoreMock::loadModel(Model*, const QString &, bool)
+Node* PersistentStoreMock::loadTree(TreeManager*, const QString &, bool)
 {
 	return nullptr;
 }

@@ -61,10 +61,10 @@ Model::Node* ValueAtReturnVisitor::visitChildren(Model::Node* n)
 		auto newChild = visit(child);
 		if (newChild != child)
 		{
-			auto model = n->model();
-			model->beginModification(n, "replace child in visitor");
+			auto manager = n->manager();
+			manager->beginModification(n, "replace child in visitor");
 			n->replaceChild(child, newChild);
-			model->endModification();
+			manager->endModification();
 		}
 	}
 
@@ -93,10 +93,10 @@ Model::Node* ValueAtReturnVisitor::visitMethodCall(ValueAtReturnVisitor* v, OOMo
 		{
 			// Replace this method call by its arguments
 			auto arg = call->arguments()->at(0);
-			auto model = call->model();
-			model->beginModification(call, "remove valueAtReturn call in visitor");
+			auto manager = call->manager();
+			manager->beginModification(call, "remove valueAtReturn call in visitor");
 			call->arguments()->remove(0);
-			model->endModification();
+			manager->endModification();
 			++v->numUnwrapped_;
 
 			return arg;

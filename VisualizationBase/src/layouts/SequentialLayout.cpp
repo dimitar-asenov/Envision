@@ -135,21 +135,22 @@ void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int positi
 
 void SequentialLayout::placeSynchronized(Item* oldItem, Item* newItem, int pos)
 {
-	if (oldItem && oldItem == newItem)
-	{
-		// There is no provision to move an item at the moment.
-		Q_ASSERT(items.at(pos >= length() ? length() - 1 : pos) == newItem);
-		return;
-	}
-
 	// Remove the old item
-	if (oldItem && oldItem != newItem)
+	if (oldItem)
 	{
-		for (int i = items.size() - 1; i>=0; --i)
-			if (items.at(i) == oldItem) items.remove(i);
+		int index = items.indexOf(oldItem);
+		Q_ASSERT(index >= 0);
+
+		if (newItem && (pos == index || (pos >= length() && index == length()-1)))
+		{
+			items.replace(index, newItem);
+			return;
+		}
+		else
+			items.remove(index);
 	}
 
-	if (newItem && oldItem != newItem)
+	if (newItem)
 		items.insert(((pos > length()) ? length() : pos), newItem);
 }
 

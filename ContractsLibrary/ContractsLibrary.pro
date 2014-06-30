@@ -17,12 +17,12 @@ HEADERS += src/items/ContractFilter.h \
     src/precompiled.h \
     src/ContractsLibraryException.h \
     src/contractslibrary_api.h \
-    src/contractslibrary.h
+    src/ContractsLibraryPlugin.h
 SOURCES += src/items/ContractFilter.cpp \
     src/items/SignatureContractsVMethodAddOn.cpp \
     src/items/InterfaceContractsVMethodAddOn.cpp \
     src/monitor/ValueAtReturnVisitor.cpp \
     src/monitor/ChangeMonitor.cpp \
     src/ContractsLibraryException.cpp \
-    src/contractslibrary.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/ContractsLibraryPlugin.cpp

@@ -28,7 +28,7 @@
 #include "commands/FieldSet.h"
 #include "nodes/NameText.h"
 #include "nodes/Node.h"
-#include "../model/Model.h"
+#include "../model/TreeManager.h"
 
 namespace Model {
 
@@ -38,15 +38,15 @@ NameChange::NameChange(NameText* target, QString& fieldToSet, QString setTo)
 void NameChange::redo()
 {
 	FieldSet<QString>::redo();
-	if (auto model = target()->model())
-		model->emitNameModified(static_cast<NameText*>(target()), oldValue);
+	if (auto manager = target()->manager())
+		manager->emitNameModified(static_cast<NameText*>(target()), oldValue);
 }
 
 void NameChange::undo()
 {
 	FieldSet<QString>::undo();
-	if (auto model = target()->model())
-			model->emitNameModified(static_cast<NameText*>(target()), newValue);
+	if (auto manager = target()->manager())
+			manager->emitNameModified(static_cast<NameText*>(target()), newValue);
 }
 
 }

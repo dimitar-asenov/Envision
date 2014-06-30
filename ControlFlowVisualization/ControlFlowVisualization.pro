@@ -26,7 +26,7 @@ HEADERS += src/ControlFlowVisualizationException.h \
     src/items/VLoopStatementCFStyle.h \
     src/items/VReturnStatementCF.h \
     src/precompiled.h \
-    src/controlflowvisualization.h
+    src/ControlFlowVisualizationPlugin.h
 SOURCES += src/items/VBlockCF.cpp \
     src/items/VBlockCFStyle.cpp \
     src/items/VReturnStatementCF.cpp \
@@ -41,5 +41,5 @@ SOURCES += src/items/VBlockCF.cpp \
     src/items/ControlFlowItem.cpp \
     src/items/ControlFlowItemStyle.cpp \
     src/ControlFlowVisualizationException.cpp \
-    src/controlflowvisualization.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/ControlFlowVisualizationPlugin.cpp

@@ -24,12 +24,12 @@
  **
  **********************************************************************************************************************/
 
-#include "PLUGINNAME_LOWERCASE.h"
+#include "PLUGINNAMEPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 namespace NAMESPACE {
 
-TEST(PLUGINNAME, SimpleTest)
+TEST(PLUGINNAMEPlugin, SimpleTest)
 {
 	CHECK_INT_EQUAL(1, 1);
 }

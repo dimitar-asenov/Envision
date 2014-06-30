@@ -147,14 +147,15 @@ ModelRenderer::basicStrategy(Item* parent, Model::Node* node, int purpose, int s
 	int finalPurpose = purpose >= 0 ? purpose : (parent ? parent->childNodePurpose(node) : 0);
 
 	if (finalPurpose >= purposes_.size())
-		throw VisualizationException("Trying to render a node with an unregistered purpose id: " + finalPurpose);
+		throw VisualizationException("Trying to render a node with an unregistered purpose id: "
+											  + QString::number(finalPurpose));
 
 	int finalSemanticZoomLevel = semanticZoomLevel >= 0 ? semanticZoomLevel :
 																			(parent ? parent->childNodeSemanticZoomLevel(node) : 0);
 
 	if (finalSemanticZoomLevel >= semanticZoomLevels_.size())
-		throw VisualizationException("Trying to render a node with an unregistered semantic zoom level id: " +
-											  finalSemanticZoomLevel);
+		throw VisualizationException("Trying to render a node with an unregistered semantic zoom level id: "
+											  + QString::number(finalSemanticZoomLevel));
 
 	for (int id : typeIds)
 	{
@@ -221,7 +222,7 @@ int ModelRenderer::registerSemanticZoomLevel(const QString& name, int orderingNu
 						+ name);
 
 	if (szLevelOrderingManager_.hasOrderingNumber(orderingNumber))
-		throw VisualizationException("Ordering number already in use: " + orderingNumber);
+		throw VisualizationException("Ordering number already in use: " + QString::number(orderingNumber));
 
 
 	semanticZoomLevels_.append(name);

@@ -53,6 +53,8 @@ class OOVISUALIZATION_API VModule
 
 		static void initializeForms();
 
+		virtual QColor customShapeColor() const override;
+
 	protected:
 		virtual void determineChildren() override;
 
@@ -64,6 +66,8 @@ class OOVISUALIZATION_API VModule
 		Visualization::VList* libraries_{};
 		Visualization::VList* declarations_{};
 		Visualization::VList* fields_{};
+
+		mutable QColor color_{};
 };
 
 }

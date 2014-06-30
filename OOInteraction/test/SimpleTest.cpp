@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "oointeraction.h"
+#include "OOInteractionPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "expression_editor/OOExpressionBuilder.h"
@@ -270,7 +270,7 @@ Method* addMainMethod()
 	return method;
 }
 
-TEST(OOInteraction, SimpleTest)
+TEST(OOInteractionPlugin, SimpleTest)
 {
 	auto pr = new Project("NewProject");
 	auto cl = new Class("SomeClass");
@@ -278,11 +278,11 @@ TEST(OOInteraction, SimpleTest)
 	cl->methods()->append(addTestMethod());
 
 	auto top_level = pr;
-	auto model = new Model::Model(top_level);
+	auto manager = new Model::TreeManager(top_level);
 
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(top_level != nullptr);
 }

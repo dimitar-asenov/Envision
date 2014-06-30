@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "custommethodcall.h"
+#include "CustomMethodCallPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "items/FindMethodVis.h"
@@ -204,13 +204,13 @@ Class* addCollection(Project* parent)
 	return col;
 }
 
-TEST(CustomMethodCall, CustomVisTest)
+TEST(CustomMethodCallPlugin, CustomVisTest)
 {
 	auto collection = addCollection(nullptr);
-	auto model = new Model::Model(collection);
+	auto manager = new Model::TreeManager(collection);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(collection));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(collection != nullptr);
 }

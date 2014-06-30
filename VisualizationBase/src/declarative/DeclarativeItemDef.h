@@ -31,6 +31,7 @@
 #include "AnchorLayoutFormElement.h"
 #include "SequentialLayoutFormElement.h"
 #include "ShapeFormElement.h"
+#include "DynamicGridFormElement.h"
 
 namespace Visualization {
 

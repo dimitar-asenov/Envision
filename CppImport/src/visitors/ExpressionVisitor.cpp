@@ -338,7 +338,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 		ooExprStack_.push(ooMethodCall);
 		return true;
 	}
-	// clang models lambda construct expressions weird, the name of the lambda is in the first argument
+	// clang implements lambda construct expressions weirdly, the name of the lambda is in the first argument
 	if (constructExpr->getNumArgs() != 1)
 		log_->writeError(className_, constructExpr, CppImportLogger::Reason::OTHER, "ContructExpr need inspectation");
 	for (auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)

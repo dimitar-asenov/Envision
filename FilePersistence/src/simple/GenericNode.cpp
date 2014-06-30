@@ -31,9 +31,6 @@ namespace FilePersistence {
 
 static const int MAX_DOUBLE_PRECISION = 15;
 
-static const int ATTRIBUTE_TRUE = 1;
-static const int ATTRIBUTE_FALSE = 0;
-
 static const QString PREFIX_STRING = QString("S_");
 static const QString PREFIX_INTEGER = QString("I_");
 static const QString PREFIX_DOUBLE = QString("D_");
@@ -166,7 +163,7 @@ void GenericNode::save(QTextStream& stream, int tabLevel)
 		if (valueType_ == STRING_VALUE) stream << ". " << PREFIX_STRING << escape(value_);
 		else if (valueType_ == INT_VALUE) stream << ". " << PREFIX_INTEGER << value_;
 		else if (valueType_ == DOUBLE_VALUE) stream << ". " << PREFIX_DOUBLE << value_;
-		else throw FilePersistenceException("Unknown value type" + valueType_);
+		else throw FilePersistenceException("Unknown value type " + QString::number(valueType_));
 	}
 	stream << '\n';
 

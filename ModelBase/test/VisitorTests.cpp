@@ -24,9 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/List.h"
 #include "nodes/Integer.h"
 #include "nodes/Text.h"
@@ -85,19 +85,19 @@ class VisitorC : public Visitor<VisitorC>{
 		QString text;
 };
 
-TEST(ModelBase, VisitorSample)
+TEST(ModelBasePlugin, VisitorSample)
 {
 	auto root = new List();
-	Model model(root);
+	TreeManager manager(root);
 
-	model.setName("root");
+	manager.setName("root");
 
-	model.beginModification(root, "make tree");
+	manager.beginModification(root, "make tree");
 	root->append(new Text("hello"));
 	auto i = new Integer();
 	i->set(42);
 	root->append( i);
-	model.endModification();
+	manager.endModification();
 
 	VisitorA::init();
 	auto visA = new VisitorA();

@@ -38,7 +38,7 @@ class TemplateArgumentVisitor;
  * This is the core visitor of the CppImport plugin it translates declarations and statements
  * from clang's AST to Envision's AST.
  *
- * One can specify to model system headers with the \a modelSysHeader_ variable.
+ * One can specify to also import system headers with the \a importSysHeader_ variable.
  */
 class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
@@ -121,7 +121,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		ExpressionVisitor* exprVisitor_{};
 		TemplateArgumentVisitor* templArgVisitor_{};
 		const clang::SourceManager* sourceManager_{};
-		bool modelSysHeader_{false};
+		bool importSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};
 		/**
@@ -131,7 +131,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind);
 
 		/**
-		 * Insert the class in the model and will visit the body and insert base classes.
+		 * Insert the class in the tree and will visit the body and insert base classes.
 		 * It does not visit type arguments they should be handled on the caller site.
 		 */
 		void TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::Class* ooClass);
@@ -159,10 +159,10 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
 
 		/**
-		 * Returns if it is intended to model the code at the \a location.
-		 * The decision is based on wheter the \a location is valid and on the value of \a modelSysHeader_
+		 * Returns if it is intended to import the code at the \a location.
+		 * The decision is based on wheter the \a location is valid and on the value of \a importSysHeader_
 		 */
-		bool shouldModel(const clang::SourceLocation& location);
+		bool shouldImport(const clang::SourceLocation& location);
 };
 
 // method

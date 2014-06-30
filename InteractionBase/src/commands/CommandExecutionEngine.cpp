@@ -30,7 +30,7 @@
 #include "commands/CommandSuggestion.h"
 #include "handlers/GenericHandler.h"
 
-#include "interactionbase.h"
+#include "InteractionBasePlugin.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"

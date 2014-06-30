@@ -33,31 +33,31 @@
 
 namespace Model {
 	class Node;
-	class Model;
+	class TreeManager;
 }
 
 namespace Interaction {
 
-class INTERACTIONBASE_API GenericHandlerModelListener : public QObject
+class INTERACTIONBASE_API GenericHandlerManagerListener : public QObject
 {
 	Q_OBJECT
 
 	private:
 		// This is needed in order to make the Signals and Slots mechanism work. Otherwise we are not able to connect to
-		// the signal provided from Model. This is because the signatures of the two methods, must match exactly
+		// the signal provided from TreeManager. This is because the signatures of the two methods, must match exactly
 		// (stringwise).
 		using Node = Model::Node;
 
 	public:
-		void listenToModelOf(Visualization::Item* item);
-		void stopListeningToModelOf(Visualization::Item* item);
+		void listenToTreeManagerOf(Visualization::Item* item);
+		void stopListeningToTreeManagerOf(Visualization::Item* item);
 
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
 
 	private:
-		Model::Model* modelOf(Visualization::Item* item);
-		QList<Model::Model*> models_{};
+		Model::TreeManager* managerOf(Visualization::Item* item);
+		QList<Model::TreeManager*> managers_{};
 };
 
 class Command;
@@ -116,7 +116,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		void showActionPrompt(Visualization::Item *actionRecevier, bool autoExecuteAction);
 		virtual void action(Visualization::Item *target, const QString& action);
 
-		static void fixCursorPositionForUndoAfterModelChange();
+		static void fixCursorPositionForUndoAfterTreeManagerChange();
 
 	protected:
 		GenericHandler();
@@ -144,7 +144,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		static QPair<Visualization::Item*, QPoint> lastCursorPosition_;
 		static int cursorUndoIndex_;
 		static void recordCursorPosition(Visualization::Item* target);
-		static GenericHandlerModelListener& modelListener();
+		static GenericHandlerManagerListener& managerListener();
 };
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }

@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "TestBox.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -75,9 +75,9 @@ bool TestBox::setText(const QString& newText)
 {
 	if (node_)
 	{
-		node_->model()->beginModification(node(), "Set TestBox text");
+		node_->beginModification("Set TestBox text");
 		node_->setLabel(newText);
-		node_->model()->endModification();
+		node_->endModification();
 	}
 
 	return TextRenderer::setText(newText);

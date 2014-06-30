@@ -36,7 +36,7 @@
 #include "CustomSceneEvent.h"
 
 #include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 #include "Logger/src/Timer.h"
 #include "Core/src/Profiler.h"
@@ -217,9 +217,9 @@ void Scene::updateItems()
 	inAnUpdate_ = false;
 }
 
-void Scene::listenToModel(Model::Model* model)
+void Scene::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(model, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
 }
 
 void Scene::nodesUpdated(QSet<Node*> nodes)
@@ -306,12 +306,13 @@ bool Scene::event(QEvent *event)
 		inEventHandler_ = false;
 
 		if (needsUpdate_) updateItems();
-		for (auto e : postEventActions_)
+		auto postEventActions = postEventActions_;
+		postEventActions_.clear();
+		for (auto e : postEventActions)
 		{
 			customEvent(e);
 			SAFE_DELETE(e);
 		}
-		postEventActions_.clear();
 
 		// On keyboard events, make sure the cursor is visible
 		if (mainCursorsJustSet_ && mainCursor_ && mainCursor_->visualization()
@@ -362,6 +363,7 @@ void Scene::setMainCursor(Cursor* cursor)
 	SAFE_DELETE(mainCursor_);
 	mainCursor_ = cursor;
 	mainCursorsJustSet_ = true;
+	if (!cursor) clearFocus();
 }
 
 Item* Scene::focusItem() const

@@ -29,7 +29,7 @@
 #include "../contractslibrary_api.h"
 
 namespace Model {
-	class Model;
+	class TreeManager;
 	class Node;
 }
 
@@ -44,7 +44,7 @@ class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
 
 	private:
 		// This is needed in order to make the Signals and Slots mechanism work. Otherwise we are not able to connect to
-		// the signal provided from Model. This is because the signatures of the two methods, must match exactly
+		// the signal provided from the TreeManager. This is because the signatures of the two methods, must match exactly
 		// (stringwise).
 		typedef Model::Node Node;
 
@@ -52,7 +52,7 @@ class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
 		ChangeMonitor();
 		virtual ~ChangeMonitor();
 
-		void listenToModel(Model::Model* model);
+		void listenToTreeManager(Model::TreeManager* manager);
 
 		static void expressionModified(OOModel::Expression*& exp, int& cursorIndex);
 

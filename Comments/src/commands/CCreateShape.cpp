@@ -49,9 +49,9 @@ Interaction::CommandResult* CCreateShape::create(Visualization::Item*, Visualiza
 	if (attributes.first() == "ellipse") shape->setShapeType(CommentDiagramShape::ShapeType::Ellipse);
 	else if (attributes.first() == "diamond") shape->setShapeType(CommentDiagramShape::ShapeType::Diamond);
 
-	diagram->model()->beginModification(diagram, "create shape");
+	diagram->beginModification("create shape");
 	diagram->shapes()->append(shape);
-	diagram->model()->endModification();
+	diagram->endModification();
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 	return new Interaction::CommandResult();

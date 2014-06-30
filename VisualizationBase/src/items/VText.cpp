@@ -26,7 +26,7 @@
 
 #include "items/VText.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -39,9 +39,9 @@ VText::VText(Item* parent, NodeType* node, const StyleType* style) : Super(paren
 
 bool VText::setText(const QString& newText)
 {
-	node()->model()->beginModification(node(), "Set text");
+	node()->beginModification("Set text");
 	node()->set(newText);
-	node()->model()->endModification();
+	node()->endModification();
 	return TextRenderer::setText(newText);
 }
 

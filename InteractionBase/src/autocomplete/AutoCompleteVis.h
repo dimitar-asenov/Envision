@@ -76,6 +76,8 @@ class INTERACTIONBASE_API AutoCompleteVis : public Super<Visualization::LayoutPr
 
 		bool explicitSelection_{};
 
+		Visualization::Item* filteredItem_{};
+
 		void updateEntries();
 		void updateSelection();
 		void selectUp();

@@ -24,12 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 
@@ -37,7 +37,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistence, LoadingPartialList)
+TEST(FilePersistencePlugin, LoadingPartialList)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -56,9 +56,9 @@ TEST(FilePersistence, LoadingPartialList)
 			store = s;
 		}
 
-		Model::Model model;
-		model.load(store, "partial", true);
-		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
+		Model::TreeManager manager;
+		manager.load(store, "partial", true);
+		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
 		CHECK_CONDITION(root != nullptr);
 
 		List* list = root->list();
@@ -72,7 +72,7 @@ TEST(FilePersistence, LoadingPartialList)
 	}
 }
 
-TEST(FilePersistence, LoadingFullList)
+TEST(FilePersistencePlugin, LoadingFullList)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -92,9 +92,9 @@ TEST(FilePersistence, LoadingFullList)
 		}
 
 
-		Model::Model model;
-		model.load(store, "partial", false);
-		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
+		Model::TreeManager manager;
+		manager.load(store, "partial", false);
+		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
 		CHECK_CONDITION(root != nullptr);
 
 		List* list = root->list();

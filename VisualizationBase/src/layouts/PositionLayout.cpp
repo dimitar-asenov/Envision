@@ -30,7 +30,7 @@
 #include "../node_extensions/FullDetailSize.h"
 #include "../views/MainView.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -167,11 +167,11 @@ bool PositionLayout::isEmpty() const
 
 void PositionLayout::updateGeometry(int, int)
 {
-	QList<Model::Model*> modifiedModels;
-	// This is a list of all models that are modified as a result of this call. Models are modified when the elements of
-	// a PositionLayout are arranged for the first time or when the size of an element is updated.
+	QList<Model::TreeManager*> modifiedManagers;
+	// This is a list of all managers that are modified as a result of this call. Managers are modified when the
+	// elements of a PositionLayout are arranged for the first time or when the size of an element is updated.
 
-	Model::Model* lastModifiedModel = nullptr;
+	Model::TreeManager* lastModifiedManager = nullptr;
 
 	// Arrange items if they were all missing positions.
 	if (allNodesLackPositionInfo && !items.isEmpty())
@@ -216,10 +216,10 @@ void PositionLayout::updateGeometry(int, int)
 		int colWidth = 0;
 
 
-		lastModifiedModel = items[0]->node()->model();
-		modifiedModels << lastModifiedModel;
+		lastModifiedManager = items[0]->node()->manager();
+		modifiedManagers << lastModifiedManager;
 
-		lastModifiedModel->beginModification(items[0]->node(), "Automatically set position");
+		lastModifiedManager->beginModification(items[0]->node(), "Automatically set position");
 
 		for (int i = 0; i<items.size(); ++i)
 		{
@@ -244,20 +244,20 @@ void PositionLayout::updateGeometry(int, int)
 				colWidth = items[i]->widthInParent();
 			}
 
-			auto newModel = items[i]->node()->model();
+			auto newManager = items[i]->node()->manager();
 
-			if (newModel != lastModifiedModel)
+			if (newManager != lastModifiedManager)
 			{
-				if (!modifiedModels.contains(newModel))
+				if (!modifiedManagers.contains(newManager))
 				{
-					modifiedModels << newModel;
-					newModel->beginModification(items[i]->node(), "Automatically set position");
+					modifiedManagers << newManager;
+					newManager->beginModification(items[i]->node(), "Automatically set position");
 				}
 
-				lastModifiedModel = newModel;
+				lastModifiedManager = newManager;
 			}
 
-			lastModifiedModel->changeModificationTarget(items[i]->node());
+			lastModifiedManager->changeModificationTarget(items[i]->node());
 			QScopedPointer<Position> position{positionOf(items[i])};
 			position->set(x, y);
 		}
@@ -267,35 +267,37 @@ void PositionLayout::updateGeometry(int, int)
 	}
 
 	// Set the size of all items
-	for (auto item : items)
-	{
-		Model::Node* node = item->node();
-		auto fds = (static_cast<Model::CompositeNode*>(node))->extension<FullDetailSize>();
+	// TODO: Enabling this prevents undo as it always registers a new action. There should be a better time to do this.
+//	for (auto item : items)
+//	{
+//		Model::Node* node = item->node();
+//		auto fds = (static_cast<Model::CompositeNode*>(node))->extension<FullDetailSize>();
 
-		if (!fds->hasSize() || fds->size() != item->sizeInParent().toSize())
-		{
-			auto newModel = node->model();
+//		if (!fds->hasSize() || fds->size() != item->sizeInParent().toSize())
+//		{
+//			auto newManager = node->manager();
 
-			if (newModel != lastModifiedModel)
-			{
-				if (!modifiedModels.contains(newModel))
-				{
-					modifiedModels << newModel;
-					newModel->beginModification(node, "Set size");
-				}
+//			if (newManager != lastModifiedManager)
+//			{
+//				if (!modifiedManagers.contains(newManager))
+//				{
+//					modifiedManagers << newManager;
+//					newManager->beginModification(node, "Set size");
+//					qDebug() << "SETTING SIZE";
+//				}
 
-				lastModifiedModel = newModel;
-			}
+//				lastModifiedManager = newManager;
+//			}
 
-			lastModifiedModel->changeModificationTarget(node);
-			fds->set(item->sizeInParent().toSize());
-		}
+//			lastModifiedManager->changeModificationTarget(node);
+//			fds->set(item->sizeInParent().toSize());
+//		}
 
-		delete fds;
-	}
+//		delete fds;
+//	}
 
 	// It is important to batch the modifications, since model::endModification() send a notification signal.
-	for (auto m : modifiedModels) m->endModification(false);
+	for (auto m : modifiedManagers) m->endModification(false);
 
 	if (ENABLE_AUTOMATIC_SEMANTIC_ZOOM && adjustChildrenSemanticZoom())
 	{

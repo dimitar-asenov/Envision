@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "oovisualization.h"
+#include "OOVisualizationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "MethodAddOn.h"
@@ -43,7 +43,7 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
 
 using namespace OOModel;
@@ -51,7 +51,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-// The methods below add a certain construct to an existing model or model entity.
+// The methods below add a certain construct to an existing Manager or node.
 
 void addConstructorAndDestructor(Class* cl)
 {
@@ -862,7 +862,7 @@ Method* addExtraMethod(Class* parent)
 	return extra;
 }
 
-TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
+TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 {
 	// Create project
 	auto prj = new Project("HelloWorld");
@@ -929,10 +929,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;
 
-	auto model = new Model::Model(top_level);
+	auto manager = new Model::TreeManager(top_level);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(top_level != nullptr);
 }

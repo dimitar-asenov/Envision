@@ -113,10 +113,12 @@ HEADERS += src/items/EmptyItem.h \
     src/views/View.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
-    src/visualizationbase.h \
     src/renderer/VisualizationGroupsManager.h \
     src/renderer/SzLevelOrderingManager.h \
-    src/node_extensions/FullDetailSize.h
+    src/node_extensions/FullDetailSize.h \
+    src/VisualizationBasePlugin.h \
+    src/declarative/GridLayouter.h \
+    src/declarative/DynamicGridFormElement.h
 SOURCES += src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
@@ -204,9 +206,10 @@ SOURCES += src/items/EmptyItem.cpp \
     src/layouts/SequentialLayout.cpp \
     test/SimpleTest.cpp \
     src/VisualizationManager.cpp \
-    src/visualizationbase.cpp \
     src/VisualizationException.cpp \
     src/Scene.cpp \
     src/renderer/VisualizationGroupsManager.cpp \
     src/renderer/SzLevelOrderingManager.cpp \
-    src/node_extensions/FullDetailSize.cpp
+    src/node_extensions/FullDetailSize.cpp \
+    src/VisualizationBasePlugin.cpp \
+    src/declarative/DynamicGridFormElement.cpp

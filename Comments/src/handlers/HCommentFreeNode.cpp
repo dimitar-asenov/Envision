@@ -26,7 +26,6 @@
 
 #include "HCommentFreeNode.h"
 
-#include "ModelBase/src/model/Model.h"
 #include "nodes/CommentFreeNode.h"
 #include "nodes/CommentText.h"
 
@@ -48,9 +47,9 @@ void HCommentFreeNode::keyPressEvent(Visualization::Item *target, QKeyEvent *eve
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Delete)
 	{
 		auto aNode = DCast<CommentFreeNode>(target->node());
-		aNode->model()->beginModification(aNode, "set node");
+		aNode->beginModification("set node");
 		aNode->setNode(new CommentText());
-		aNode->model()->endModification();
+		aNode->endModification();
 	}
 	else
 		GenericHandler::keyPressEvent(target, event);

@@ -9,7 +9,7 @@ win32:LIBS += -llogger \
 HEADERS += src/precompiled.h \
     src/PLUGINNAMEException.h \
 	src/PLUGINNAME_LOWERCASE_api.h \
-    src/PLUGINNAME_LOWERCASE.h
+    src/PLUGINNAMEPlugin.h
 SOURCES += src/PLUGINNAMEException.cpp \
-	src/PLUGINNAME_LOWERCASE.cpp \
+	src/PLUGINNAMEPlugin.cpp \
 	test/SimpleTest.cpp

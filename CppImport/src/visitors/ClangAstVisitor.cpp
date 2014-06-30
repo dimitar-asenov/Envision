@@ -75,7 +75,7 @@ Model::Node*ClangAstVisitor::popOOStack()
 
 bool ClangAstVisitor::VisitDecl(clang::Decl* decl)
 {
-	if (!shouldModel(decl->getLocation()))
+	if (!shouldImport(decl->getLocation()))
 		return true;
 
 	if (decl && !llvm::isa<clang::AccessSpecDecl>(decl))
@@ -88,7 +88,7 @@ bool ClangAstVisitor::VisitDecl(clang::Decl* decl)
 
 bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 {
-	if (!shouldModel(namespaceDecl->getLocation()))
+	if (!shouldImport(namespaceDecl->getLocation()))
 		return true;
 	OOModel::Module* ooModule = trMngr_->insertNamespace(namespaceDecl);
 	if (!ooModule)
@@ -110,7 +110,7 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 
 bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classTemplate)
 {
-	if (!shouldModel(classTemplate->getLocation()) || !classTemplate->isThisDeclarationADefinition())
+	if (!shouldImport(classTemplate->getLocation()) || !classTemplate->isThisDeclarationADefinition())
 		return true;
 
 	clang::CXXRecordDecl* recordDecl = classTemplate->getTemplatedDecl();
@@ -132,7 +132,7 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 (clang::ClassTemplateSpecializationDecl* specializationDecl)
 {
-	if (!shouldModel(specializationDecl->getLocation()) || !specializationDecl->isThisDeclarationADefinition())
+	if (!shouldImport(specializationDecl->getLocation()) || !specializationDecl->isThisDeclarationADefinition())
 		return true;
 
 	//	explicit instation declaration
@@ -153,7 +153,7 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		if (auto p = llvm::dyn_cast<clang::NamedDecl>(specializationDecl->getSpecializedTemplate()->getDeclContext()))
 			ooRef->setPrefix(new OOModel::ReferenceExpression(QString::fromStdString(p->getNameAsString())));
 		ooExplicitTemplateInst->setInstantiatedClass(ooRef);
-		// add to model
+		// add to tree
 		if (auto decl = DCast<OOModel::Declaration>(ooStack_.top()))
 			decl->subDeclarations()->append(ooExplicitTemplateInst);
 		else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
@@ -187,7 +187,7 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
-	if (!shouldModel(recordDecl->getLocation()) || !recordDecl->isThisDeclarationADefinition())
+	if (!shouldImport(recordDecl->getLocation()) || !recordDecl->isThisDeclarationADefinition())
 		return true;
 
 	if (auto ooClass = createClass(recordDecl))
@@ -212,18 +212,18 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 {
-	if (!shouldModel(functionDecl->getLocation()) || llvm::isa<clang::CXXMethodDecl>(functionDecl))
+	if (!shouldImport(functionDecl->getLocation()) || llvm::isa<clang::CXXMethodDecl>(functionDecl))
 		return true;
 
 	if (auto ooFunction = trMngr_->insertFunctionDecl(functionDecl))
 	{
 		if (!ooFunction->parent())
 		{
-			// insert in model
+			// insert in tree
 			if (OOModel::Project* curProject = DCast<OOModel::Project>(ooStack_.top()))
 				curProject->methods()->append(ooFunction);
-			else if (OOModel::Module* curModel = DCast<OOModel::Module>(ooStack_.top()))
-				curModel->methods()->append(ooFunction);
+			else if (OOModel::Module* curModule = DCast<OOModel::Module>(ooStack_.top()))
+				curModule->methods()->append(ooFunction);
 			else if (OOModel::Class* curClass = DCast<OOModel::Class>(ooStack_.top()))
 			{
 				// happens in the case of friend functions
@@ -252,7 +252,7 @@ bool ClangAstVisitor::TraverseFunctionTemplateDecl(clang::FunctionTemplateDecl* 
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 {
-	if (!shouldModel(varDecl->getLocation()))
+	if (!shouldImport(varDecl->getLocation()))
 		return true;
 
 	if (llvm::isa<clang::ParmVarDecl>(varDecl))
@@ -341,7 +341,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 {
-	if (!shouldModel(fieldDecl->getLocation()))
+	if (!shouldImport(fieldDecl->getLocation()))
 		return true;
 	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if (!field)
@@ -369,16 +369,16 @@ bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 
 bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 {
-	if (!shouldModel(enumDecl->getLocation()))
+	if (!shouldImport(enumDecl->getLocation()))
 		return true;
 
 	OOModel::Class* ooEnumClass = new OOModel::Class
 			(QString::fromStdString(enumDecl->getNameAsString()), OOModel::Class::ConstructKind::Enum);
-	// insert in model
+	// insert in tree
 	if (OOModel::Project* curProject = DCast<OOModel::Project>(ooStack_.top()))
 		curProject->classes()->append(ooEnumClass);
-	else if (OOModel::Module* curModel = DCast<OOModel::Module>(ooStack_.top()))
-		curModel->classes()->append(ooEnumClass);
+	else if (OOModel::Module* curModule = DCast<OOModel::Module>(ooStack_.top()))
+		curModule->classes()->append(ooEnumClass);
 	else if (OOModel::Class* curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooEnumClass);
 	else if (OOModel::StatementItemList* itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
@@ -411,7 +411,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 {
 	// This method is a walkup such that it covers both subtypes (typedef and typealias)
-	if (!shouldModel(typedefDecl->getLocation()))
+	if (!shouldImport(typedefDecl->getLocation()))
 		return true;
 	if (auto ooTypeAlias = trMngr_->insertTypeAlias(typedefDecl))
 	{
@@ -430,7 +430,7 @@ bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefD
 
 bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl* typeAliasTemplate)
 {
-	if (!shouldModel(typeAliasTemplate->getLocation()))
+	if (!shouldImport(typeAliasTemplate->getLocation()))
 		return true;
 	if (auto ooTypeAlias = trMngr_->insertTypeAliasTemplate(typeAliasTemplate))
 	{
@@ -443,7 +443,7 @@ bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl
 		for ( auto templateParam = templateParamList->begin();
 			  templateParam != templateParamList->end(); ++templateParam)
 			ooTypeAlias->typeArguments()->append(templArgVisitor_->translateTemplateArg(*templateParam));
-		// insert in model
+		// insert in tree
 		if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
 		else if (auto declaration = DCast<OOModel::Declaration>(ooStack_.top()))
@@ -456,7 +456,7 @@ bool ClangAstVisitor::TraverseTypeAliasTemplateDecl(clang::TypeAliasTemplateDecl
 
 bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias)
 {
-	if (!shouldModel(namespaceAlias->getLocation()))
+	if (!shouldImport(namespaceAlias->getLocation()))
 		return true;
 	if (auto ooTypeAlias = trMngr_->insertNamespaceAlias(namespaceAlias))
 	{
@@ -481,7 +481,7 @@ bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* name
 
 bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 {
-	if (!shouldModel(usingDecl->getLocation()))
+	if (!shouldImport(usingDecl->getLocation()))
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDecl(usingDecl))
 	{
@@ -505,7 +505,7 @@ bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 
 bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl)
 {
-	if (!shouldModel(usingDirectiveDecl->getLocation()))
+	if (!shouldImport(usingDirectiveDecl->getLocation()))
 		return true;
 	if (auto ooNameImport = trMngr_->insertUsingDirective(usingDirectiveDecl))
 	{
@@ -529,7 +529,7 @@ bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usin
 
 bool ClangAstVisitor::TraverseUnresolvedUsingValueDecl(clang::UnresolvedUsingValueDecl* unresolvedUsing)
 {
-	if (!shouldModel(unresolvedUsing->getLocation()))
+	if (!shouldImport(unresolvedUsing->getLocation()))
 		return true;
 	if (auto ooNameImport = trMngr_->insertUnresolvedUsing(unresolvedUsing))
 	{
@@ -894,7 +894,7 @@ bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 	// pop the body of the previous case
 	ooStack_.pop();
 	OOModel::CaseStatement* ooSwitchCase = new OOModel::CaseStatement();
-	// insert in model
+	// insert in tree
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(ooSwitchCase);
 	else
@@ -919,7 +919,7 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 	// pop the body of the previous case
 	ooStack_.pop();
 	OOModel::CaseStatement* ooDefaultCase = new OOModel::CaseStatement();
-	// insert in model
+	// insert in tree
 	if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
 		itemList->append(ooDefaultCase);
 	else
@@ -1000,11 +1000,11 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::Class* ooClass)
 {
 	Q_ASSERT(ooClass);
-	// insert in model
+	// insert in tree
 	if (auto curProject = DCast<OOModel::Project>(ooStack_.top()))
 		curProject->classes()->append(ooClass);
-	else if (auto curModel = DCast<OOModel::Module>(ooStack_.top()))
-		curModel->classes()->append(ooClass);
+	else if (auto curModule = DCast<OOModel::Module>(ooStack_.top()))
+		curModule->classes()->append(ooClass);
 	else if (auto curClass = DCast<OOModel::Class>(ooStack_.top()))
 		curClass->classes()->append(ooClass);
 	else if (auto itemList = DCast<OOModel::StatementItemList>(ooStack_.top()))
@@ -1137,13 +1137,13 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 	ooClass->friends()->append(ooMCall);
 }
 
-bool ClangAstVisitor::shouldModel(const clang::SourceLocation& location)
+bool ClangAstVisitor::shouldImport(const clang::SourceLocation& location)
 {
 	QString fileName;
 	if (auto file = sourceManager_->getPresumedLoc(location).getFilename())
 		fileName = QString(file);
 	if (sourceManager_->isInSystemHeader(location) || fileName.isEmpty() || fileName.contains("qt"))
-		return modelSysHeader_;
+		return importSysHeader_;
 	return true;
 }
 

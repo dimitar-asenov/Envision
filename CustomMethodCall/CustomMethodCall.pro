@@ -20,7 +20,7 @@ HEADERS += src/CustomMethodCallException.h \
     src/items/SumMethodVis.h \
     src/items/SumMethodVisStyle.h \
     src/precompiled.h \
-    src/custommethodcall.h
+    src/CustomMethodCallPlugin.h
 SOURCES += src/items/SumMethodVis.cpp \
     src/items/SumMethodVisStyle.cpp \
     src/items/InsertMethodVis.cpp \
@@ -30,5 +30,5 @@ SOURCES += src/items/SumMethodVis.cpp \
     src/items/FindMethodVis.cpp \
     src/items/FindMethodVisStyle.cpp \
     src/CustomMethodCallException.cpp \
-    src/custommethodcall.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/CustomMethodCallPlugin.cpp

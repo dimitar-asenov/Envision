@@ -24,13 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/test_nodes/BinaryNodePersistenceUnit.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/Text.h"
 
@@ -38,7 +38,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistence, SaveRootOnly)
+TEST(FilePersistencePlugin, SaveRootOnly)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -61,16 +61,16 @@ TEST(FilePersistence, SaveRootOnly)
 		}
 
 		auto root = new TestNodes::BinaryNode;
-		Model::Model model(root);
+		Model::TreeManager manager(root);
 
-		model.beginModification(root->name(), "set title");
+		manager.beginModification(root->name(), "set title");
 		root->name()->set("Title");
-		model.endModification();
+		manager.endModification();
 		NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
 		NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
 
-		model.setName("rootOnly");
-		model.save(store);
+		manager.setName("rootOnly");
+		manager.save(store);
 
 		if (i==0)
 		{
@@ -87,7 +87,7 @@ TEST(FilePersistence, SaveRootOnly)
 	}
 }
 
-TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
+TEST(FilePersistencePlugin, SaveModeNodesSingleUnitOnly)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -110,9 +110,9 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 		}
 
 		auto root = new TestNodes::BinaryNode;
-		Model::Model model(root);
+		Model::TreeManager manager(root);
 
-		model.beginModification(root, "set title");
+		manager.beginModification(root, "set title");
 		root->name()->set("RootNode");
 		TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
 		root->setLeft(left);
@@ -121,7 +121,7 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 
 		left->name()->set("Left child");
 		right->name()->set("Right child");
-		model.endModification();
+		manager.endModification();
 		NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
 		NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
 		NodeIdMap::setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
@@ -129,8 +129,8 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 		NodeIdMap::setId(root->right(), "{00000000-0000-0000-0000-000000000005}");
 		NodeIdMap::setId(root->right()->name(), "{00000000-0000-0000-0000-000000000006}");
 
-		model.setName("2Children");
-		model.save(store);
+		manager.setName("2Children");
+		manager.save(store);
 
 		if (i==0)
 		{
@@ -147,7 +147,7 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 	}
 }
 
-TEST(FilePersistence, SaveMultipleUnits)
+TEST(FilePersistencePlugin, SaveMultipleUnits)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -170,9 +170,9 @@ TEST(FilePersistence, SaveMultipleUnits)
 		}
 
 		auto root = new TestNodes::BinaryNode;
-		Model::Model model(root);
+		Model::TreeManager manager(root);
 
-		model.beginModification(root, "set title");
+		manager.beginModification(root, "set title");
 		root->name()->set("Root");
 		TestNodes::BinaryNode* left = new TestNodes::BinaryNodePersistenceUnit();
 		root->setLeft(left);
@@ -184,7 +184,7 @@ TEST(FilePersistence, SaveMultipleUnits)
 		left->setLeft(leftleft);
 		leftleft->name()->set("in a new unit");
 		right->name()->set("Right child");
-		model.endModification();
+		manager.endModification();
 		NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
 		NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
 		NodeIdMap::setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
@@ -194,8 +194,8 @@ TEST(FilePersistence, SaveMultipleUnits)
 		NodeIdMap::setId(root->right(), "{00000000-0000-0000-0000-000000000007}");
 		NodeIdMap::setId(root->right()->name(), "{00000000-0000-0000-0000-000000000008}");
 
-		model.setName("units");
-		model.save(store);
+		manager.setName("units");
+		manager.save(store);
 
 		if (i==0)
 		{

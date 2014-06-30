@@ -29,7 +29,7 @@
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 using namespace Visualization;
 
@@ -49,11 +49,11 @@ CommandResult* CSceneHandlerLoad::execute(Item*, Item*, const QStringList& comma
 	auto matching = matchingProjects(commandTokens.last());
 	Q_ASSERT(matching.size() == 1);
 
-	auto model = new Model::Model();
-	model->load(new FilePersistence::SimpleTextFileStore("projects/"), matching.first(), false);
+	auto manager = new Model::TreeManager();
+	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), matching.first(), false);
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(model->root()));
-	VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(manager->root()));
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	return new CommandResult();
 }

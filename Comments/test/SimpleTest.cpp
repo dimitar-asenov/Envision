@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "comments.h"
+#include "CommentsPlugin.h"
 #include "nodes/CommentNode.h"
 #include "nodes/CommentDiagram.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -40,19 +40,19 @@
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 using namespace OOModel;
 using namespace Visualization;
 
 namespace Comments {
 
-TEST(Comments, SimpleTest)
+TEST(CommentsPlugin, SimpleTest)
 {
 	auto list = new Model::List();
-	auto model = new Model::Model(list);
+	auto manager = new Model::TreeManager(list);
 
-	model->beginModification(list, "set");
+	manager->beginModification(list, "set");
 
 	auto node = new CommentNode(
 		"Comments support *quite* some stuff by **now**. For example...\n"
@@ -138,7 +138,7 @@ TEST(Comments, SimpleTest)
 
 	list->append(node);
 
-	model->endModification();
+	manager->endModification();
 
 	auto top = new RootItem(list);
 	auto scene = VisualizationManager::instance().mainScene();
@@ -146,7 +146,7 @@ TEST(Comments, SimpleTest)
 	QApplication::processEvents();
 
 	scene->scheduleUpdate();
-	scene->listenToModel(model);
+	scene->listenToTreeManager(manager);
 
 	CHECK_CONDITION(scene);
 }

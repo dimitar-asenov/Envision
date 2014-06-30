@@ -25,9 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "HCommentText.h"
-
-#include "ModelBase/src/model/Model.h"
 #include "nodes/CommentFreeNode.h"
+
 #include "ModelBase/src/nodes/Node.h"
 #include "OOModel/src/allOOModelNodes.h"
 #include "../items/VCommentText.h"
@@ -66,9 +65,9 @@ void HCommentText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		else newNode = new CommentText();
 
 		auto aNode = DCast<CommentFreeNode>(target->node()->parent());
-		aNode->model()->beginModification(aNode, "set node");
+		aNode->beginModification("set node");
 		aNode->setNode(newNode);
-		aNode->model()->endModification();
+		aNode->endModification();
 	}
 	else
 		HText::keyPressEvent(target, event);

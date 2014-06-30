@@ -24,37 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/Integer.h"
 #include "nodes/NameText.h"
 #include "PersistentStoreMock.h"
 
 namespace Model {
 
-TEST(ModelBase, PersistenceSave)
+TEST(ModelBasePlugin, PersistenceSave)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model("root", root);
+	TreeManager manager("root", root);
 	PersistentStoreMock store;
-	model.save(&store);
+	manager.save(&store);
 
 	CHECK_STR_EQUAL("BinaryNode,root,NameText,name,,Integer,_ext_PositionExtension_x,0,Integer,"
 						 "_ext_PositionExtension_y,0,",
 			store.getSaved());
 
-	model.beginModification(root, "make tree");
+	manager.beginModification(root, "make tree");
 	root->setLeft(new TestNodes::BinaryNode());
 	root->setRight( new TestNodes::BinaryNode());
 	root->name()->set("Troot");
 	root->left()->name()->set("Tleft");
 	root->right()->name()->set("Tright");
-	model.endModification();
+	manager.endModification();
 
 	store.clear();
-	model.save();
+	manager.save();
 
 	CHECK_STR_EQUAL("BinaryNode,root,NameText,name,Troot,BinaryNode,left,NameText,name,Tleft,Integer,"
 						 "_ext_PositionExtension_x,0,Integer,_ext_PositionExtension_y,0,BinaryNode,right,NameText,"

@@ -152,6 +152,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Shape* getShape() const;
 		void useShape();
 		void removeShape();
+		virtual QColor customShapeColor() const;
 
 		enum CursorMoveDirection {
 			MoveUp, /**< Move the cursor up from its current position within the item. */
@@ -451,6 +452,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		friend class Shape;
 		friend class InteractionHandler;
 		friend class SequentialLayoutFormElement;
+		friend class DynamicGridFormElement;
 		template <class ParentType> friend class NodeItemWrapperFormElement;
 		template <class ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
 		template <class ParentType, class VisualizationType> friend class VisualizationItemWrapperFormElement;

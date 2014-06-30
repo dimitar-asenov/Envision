@@ -27,6 +27,7 @@
 #include "SequentialLayoutFormElement.h"
 
 #include "DeclarativeItemBase.h"
+#include "GridLayouter.h"
 #include "../renderer/ModelRenderer.h"
 #include "../items/Item.h"
 #include "../items/ItemRegion.h"
@@ -46,9 +47,12 @@ SequentialLayoutFormElement::SequentialLayoutFormElement(const SequentialLayoutF
 
 SequentialLayoutFormElement::~SequentialLayoutFormElement()
 {
-	for (auto list : itemListMap_)
-		for (auto item : *list)
+	for (auto data : itemData_)
+	{
+		for (auto item : data->items_)
 			SAFE_DELETE_ITEM(item);
+		SAFE_DELETE(data);
+	}
 }
 
 
@@ -59,122 +63,149 @@ SequentialLayoutFormElement* SequentialLayoutFormElement::clone() const
 
 void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
-	auto& itemList = listForItem(item);
-
-	int maxChildWidth = 0;
-	int maxChildHeight = 0;
-
+	auto& itemData = dataForItem(item);
+	auto& itemList = itemData.items_;
+	auto& itemPositions = itemData.itemPositionWithinLayout_;
 	bool horizontal = orientation_ == Qt::Horizontal;
+	int spacing = spaceBetweenElements(item);
+	int size = itemList.size();
 
-	if ((horizontal && availableHeight > 0) || (!horizontal && availableWidth > 0))
-	{
-		// This sequential layout's size depends on its parent size and more space is available.
-		if (horizontal) maxChildHeight = availableHeight - topMargin() - bottomMargin();
-		else maxChildWidth = availableWidth - leftMargin() - rightMargin();
-	}
+	QSize finalSize;
 
-	// Get the maximum width and height of any element and use those to compute the total width and height.
-	int sizeWidth = 0;
-	int sizeHeight = 0;
-	for (auto i : itemList)
-	{
-		if (maxChildWidth < i->widthInParent()) maxChildWidth = i->widthInParent();
-		if (maxChildHeight < i->heightInParent()) maxChildHeight = i->heightInParent();
-
-		sizeWidth += i->widthInParent();
-		sizeHeight += i->heightInParent();
-	}
-	if (!itemList.isEmpty())
-	{
-		sizeWidth += (itemList.size() - 1) * spaceBetweenElements(item);
-		sizeHeight += (itemList.size() - 1) * spaceBetweenElements(item);
-	}
-
-	// minWidth and minHeight always apply to the dimension opposite of the direction.
-	// In case there are no items in the list the minimum in the direction of the list also applies.
-	if (horizontal)
-	{
-		if (maxChildHeight < minHeight_) maxChildHeight = minHeight_;
-		if (itemList.isEmpty()) maxChildWidth = minWidth_;
-	}
-	else
-	{
-		if (maxChildWidth < minWidth_) maxChildWidth = minWidth_;
-		if (itemList.isEmpty()) maxChildHeight = minHeight_;
-	}
-
-	// Update the geometry of children whose size varies
-	for (auto i : itemList)
-		if (i->sizeDependsOnParent())
-		{
-			if (horizontal) i->changeGeometry(0, maxChildHeight);
-			else i->changeGeometry(maxChildWidth, 0);
-		}
-
-	// Set the size
-	if (horizontal) sizeHeight = topMargin() + maxChildHeight + bottomMargin();
-	else sizeWidth = leftMargin() + maxChildWidth + rightMargin();
-
-	setSize(item, QSize(sizeWidth, sizeHeight));
-
-	// Get the iteration parameters
-	int begin;
-	int end;
-	int step;
 	if (forward_)
 	{
-		begin = 0;
-		end = itemList.size();
-		step = 1;
-	}
-	else
-	{
-		begin = itemList.size() - 1;
-		end = -1;
-		step = -1;
-	}
-
-	int w = leftMargin();
-	int h = topMargin();
-
-	// Set the positions of all elements
-	for (int i = begin; i != end; i += step)
 		if (horizontal)
 		{
-			int y = h;
-			if (alignment_ == LayoutStyle::Alignment::Bottom)
-				y += maxChildHeight - itemList[i]->heightInParent();
-			if (alignment_ == LayoutStyle::Alignment::Center)
-				y += (maxChildHeight - itemList[i]->heightInParent()) / 2;
-
-			if ( i != begin ) w += spaceBetweenElements(item);
-			itemList[i]->setPos(w, y);
-			w += itemList[i]->widthInParent();
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+				[](){return 1;},	// numRows
+				[size](){return size;},	// numColumns
+				[](int, int){return true;},	// has
+				[](int, int){return QPair<int, int>{1, 1};},	// spanGrid
+				[&itemList](int x, int){return itemList[x]->widthInParent();},	// width
+				[&itemList](int x, int){return itemList[x]->heightInParent();},	// height
+				[](int, int, int, int){},	// computeElementSize
+				[&itemList](int x, int, int w, int h){itemList[x]->changeGeometry(w, h);},	// changeGeometry
+				[&itemList](int x, int){return itemList[x]->sizeDependsOnParent();},	// isStretchable
+				[&itemPositions](int x, int, QPoint pos){itemPositions[x] = pos;},	// setPosition
+				[](int){return 0;},	// rowStretchFactors
+				[&itemList](int x){return itemList[x]->sizeDependsOnParent() ? 1 : 0;},	// columnStretchFactors
+				[](int, int){return LayoutStyle::Alignment::Left;},	// horizontalAlignment
+				[this](int, int){return alignment_;},	// verticalAlignment
+				[](){return 0;},	// spaceBetweenRows
+				[spacing](){return spacing;},	// spaceBetweenColumns
+				[this](){return topMargin();},	// topMargin
+				[this](){return bottomMargin();},	// bottomMargin
+				[this](){return leftMargin();},	// leftMargin
+				[this](){return rightMargin();},	// rightMargin
+				[this](){return minWidth_;},	// minWidth
+				[this](){return minHeight_;}	// minHeight
+			);
 		}
 		else
 		{
-			int x = w;
-			if (alignment_ == LayoutStyle::Alignment::Right)
-				x += maxChildWidth - itemList[i]->widthInParent();
-			if (alignment_ == LayoutStyle::Alignment::Center)
-				x += (maxChildWidth - itemList[i]->widthInParent()) / 2;
-
-			if ( i != begin ) h += spaceBetweenElements(item);
-			itemList[i]->setPos(x, h);
-			h += itemList[i]->heightInParent();
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+				[size](){return size;},	// numRows
+				[](){return 1;},	// numColumns
+				[](int, int){return true;},	// has
+				[](int, int){return QPair<int, int>{1, 1};},	// spanGrid
+				[&itemList](int, int y){return itemList[y]->widthInParent();},	// width
+				[&itemList](int, int y){return itemList[y]->heightInParent();},	// height
+				[](int, int, int, int){},	// computeElementSize
+				[&itemList](int, int y, int w, int h){itemList[y]->changeGeometry(w, h);},	// changeGeometry
+				[&itemList](int, int y){return itemList[y]->sizeDependsOnParent();},	// isStretchable
+				[&itemPositions](int, int y, QPoint pos){itemPositions[y] = pos;},	// setPosition
+				[&itemList](int y){return itemList[y]->sizeDependsOnParent() ? 1 : 0;},	// rowStretchFactors
+				[](int){return 0;},	// columnStretchFactors
+				[this](int, int){return alignment_;},	// horizontalAlignment
+				[](int, int){return LayoutStyle::Alignment::Top;},	// verticalAlignment
+				[spacing](){return spacing;},	// spaceBetweenRows
+				[](){return 0;},	// spaceBetweenColumns
+				[this](){return topMargin();},	// topMargin
+				[this](){return bottomMargin();},	// bottomMargin
+				[this](){return leftMargin();},	// leftMargin
+				[this](){return rightMargin();},	// rightMargin
+				[this](){return minWidth_;},	// minWidth
+				[this](){return minHeight_;}	// minHeight
+			);
 		}
+	}
+	else // Reversed order
+	{
+		auto invert = [size](int i){return size-1-i;};
+		if (horizontal)
+		{
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+				[](){return 1;},	// numRows
+				[size](){return size;},	// numColumns
+				[](int, int){return true;},	// has
+				[](int, int){return QPair<int, int>{1, 1};},	// spanGrid
+				[&itemList, invert](int x, int){return itemList[invert(x)]->widthInParent();},	// width
+				[&itemList, invert](int x, int){return itemList[invert(x)]->heightInParent();},	// height
+				[](int, int, int, int){},	// computeElementSize
+				[&itemList, invert](int x, int, int w, int h){itemList[invert(x)]->changeGeometry(w, h);},	// changeGeom.
+				[&itemList, invert](int x, int){return itemList[invert(x)]->sizeDependsOnParent();},	// isStretchable
+				[&itemPositions, invert](int x, int, QPoint pos){itemPositions[invert(x)] = pos;},	// setPosition
+				[](int){return 0;},	// rowStretchFactors
+				[&itemList, invert](int x){return itemList[invert(x)]->sizeDependsOnParent() ? 1 : 0;},	// columnStretchF.
+				[](int, int){return LayoutStyle::Alignment::Left;},	// horizontalAlignment
+				[this](int, int){return alignment_;},	// verticalAlignment
+				[](){return 0;},	// spaceBetweenRows
+				[spacing](){return spacing;},	// spaceBetweenColumns
+				[this](){return topMargin();},	// topMargin
+				[this](){return bottomMargin();},	// bottomMargin
+				[this](){return leftMargin();},	// leftMargin
+				[this](){return rightMargin();},	// rightMargin
+				[this](){return minWidth_;},	// minWidth
+				[this](){return minHeight_;}	// minHeight
+			);
+		}
+		else
+		{
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+				[size](){return size;},	// numRows
+				[](){return 1;},	// numColumns
+				[](int, int){return true;},	// has
+				[](int, int){return QPair<int, int>{1, 1};},	// spanGrid
+				[&itemList, invert](int, int y){return itemList[invert(y)]->widthInParent();},	// width
+				[&itemList, invert](int, int y){return itemList[invert(y)]->heightInParent();},	// height
+				[](int, int, int, int){},	// computeElementSize
+				[&itemList, invert](int, int y, int w, int h){itemList[invert(y)]->changeGeometry(w, h);},	// changeGeom.
+				[&itemList, invert](int, int y){return itemList[invert(y)]->sizeDependsOnParent();},	// isStretchable
+				[&itemPositions, invert](int, int y, QPoint pos){itemPositions[invert(y)] = pos;},	// setPosition
+				[&itemList, invert](int y){return itemList[invert(y)]->sizeDependsOnParent() ? 1 : 0;},	// rowStretchF.
+				[](int){return 0;},	// columnStretchFactors
+				[this](int, int){return alignment_;},	// horizontalAlignment
+				[](int, int){return LayoutStyle::Alignment::Top;},	// verticalAlignment
+				[spacing](){return spacing;},	// spaceBetweenRows
+				[](){return 0;},	// spaceBetweenColumns
+				[this](){return topMargin();},	// topMargin
+				[this](){return bottomMargin();},	// bottomMargin
+				[this](){return leftMargin();},	// leftMargin
+				[this](){return rightMargin();},	// rightMargin
+				[this](){return minWidth_;},	// minWidth
+				[this](){return minHeight_;}	// minHeight
+			);
+		}
+	}
 
+	setSize(item, finalSize);
 }
 
 void SequentialLayoutFormElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for (auto i : listForItem(item))
-		i->setPos(parentX + x(item) + i->x() + leftMargin(), parentY + y(item) + i->y() + topMargin());
+	auto& data = dataForItem(item);
+	for (int i = 0; i<data.items_.size(); ++i)
+	{
+		QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[i].x() + leftMargin(),
+					parentY + y(item) + data.itemPositionWithinLayout_[i].y() + topMargin()};
+
+		if (newPos != data.items_[i]->pos())
+			data.items_[i]->setPos(newPos); // setting the position is an expensive operation so only do it if it changed
+	}
 }
 
 void SequentialLayoutFormElement::synchronizeWithItem(Item* item)
 {
-	auto& itemList = listForItem(item);
 	if (listNodeGetter_)
 	{
 		Model::List* listNode = listNodeGetter_(item);
@@ -187,12 +218,17 @@ void SequentialLayoutFormElement::synchronizeWithItem(Item* item)
 		Q_ASSERT(itemListGetter_);
 		synchronizeWithItems(item, itemListGetter_(item));
 	}
-	for (auto i : itemList) i->setParentItem(item);
+
+	auto& itemData = dataForItem(item);
+	itemData.itemPositionWithinLayout_.resize(itemData.items_.size());
+	//Note that we do not need to initialize the positions in any way since they will be overwritten in computeSize()
+
+	for (auto i : itemData.items_) i->setParentItem(item);
 }
 
 bool SequentialLayoutFormElement::sizeDependsOnParent(const Item* item) const
 {
-	for (auto i : listForItem(item))
+	for (auto i : dataForItem(item).items_)
 		if (i->sizeDependsOnParent())
 			return true;
 	return false;
@@ -202,19 +238,26 @@ void SequentialLayoutFormElement::destroyChildItems(Item* item,
 		QList<const Item* const DeclarativeItemBase::*> handledChildren)
 {
 	LayoutFormElement::destroyChildItems(item, handledChildren);
-	if (itemListMap_.contains(item))
+
+	auto dataIterator = itemData_.find(item);
+	if (dataIterator != itemData_.end())
 	{
-		for (auto i : *itemListMap_.value(item))
-			SAFE_DELETE_ITEM(i);
-		itemListMap_.remove(item);
+		for (auto item : dataIterator.value()->items_)
+			SAFE_DELETE_ITEM(item);
+
+		SAFE_DELETE(dataIterator.value());
+		itemData_.erase(dataIterator);
 	}
 }
 
-QList<Item*>& SequentialLayoutFormElement::listForItem(const Item* item) const
+SequentialLayoutFormElement::ItemData& SequentialLayoutFormElement::dataForItem(const Item* item) const
 {
-	if (!itemListMap_.contains(item))
-		itemListMap_.insert(item, new QList<Item*>());
-	return *itemListMap_.value(item);
+	auto dataIterator = itemData_.find(item);
+	if (dataIterator != itemData_.end()) return *(dataIterator.value());
+
+	auto data = new ItemData;
+	itemData_.insert(item, data);
+	return *data;
 }
 
 int SequentialLayoutFormElement::spaceBetweenElements(Item* item)
@@ -226,9 +269,7 @@ int SequentialLayoutFormElement::spaceBetweenElements(Item* item)
 
 void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes)
 {
-	auto& itemList = listForItem(item);
-
-	item->synchronizeCollections(nodes, itemList,
+	item->synchronizeCollections(nodes, dataForItem(item).items_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node){return parent->renderer()->render(parent, node);},
 		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);});
@@ -236,37 +277,16 @@ void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<M
 
 void SequentialLayoutFormElement::synchronizeWithItems(Item* item, const QList<Item*>& items)
 {
-	auto& itemList = listForItem(item);
-
-	item->synchronizeCollections(items, itemList,
+	item->synchronizeCollections(items, dataForItem(item).items_,
 		[](Item* newItem, Item* oldItem){return newItem == oldItem;},
 		[](Item*, Item* newItem){return newItem;},
 		[](Item*, Item*, Item*&){return false;});
 }
 
-void SequentialLayoutFormElement::removeFromItemList(Item* item, int index, bool deleteItem)
-{
-	auto& itemList = listForItem(item);
-	if (deleteItem) SAFE_DELETE_ITEM( itemList[index]);
-	else itemList[index]->setParentItem(nullptr);
-	itemList.removeAt(index);
-	item->setUpdateNeeded(Item::StandardUpdate);
-}
-
-void SequentialLayoutFormElement::swap(Item* item, int i, int j)
-{
-	auto& itemList = listForItem(item);
-
-	Item* t = itemList[i];
-	itemList[i] = itemList[j];
-	itemList[j] = t;
-	item->setUpdateNeeded(Item::StandardUpdate);
-}
-
 QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
 {
 	QList<ItemRegion> regs;
-	auto& itemList = listForItem(item);
+	auto& itemList = dataForItem(item).items_;
 
 	// If this layout is not visible return no regions
 	if (itemList.isEmpty() && !hasCursorWhenEmpty(item))
@@ -491,7 +511,7 @@ inline void SequentialLayoutFormElement::adjustCursorRegionToAvoidZeroSize(QRect
 
 bool SequentialLayoutFormElement::isEmpty(const Item* item) const
 {
-	for (auto i : listForItem(item))
+	for (auto i : dataForItem(item).items_)
 		if (!i->isEmpty())
 			return false;
 	return true;
@@ -501,7 +521,7 @@ bool SequentialLayoutFormElement::elementOrChildHasFocus(Item* item) const
 {
 	if (LayoutFormElement::elementOrChildHasFocus(item))
 		return true;
-	for (auto i : listForItem(item))
+	for (auto i : dataForItem(item).items_)
 		if (i->itemOrChildHasFocus())
 			return true;
 	return false;
@@ -509,7 +529,7 @@ bool SequentialLayoutFormElement::elementOrChildHasFocus(Item* item) const
 
 int SequentialLayoutFormElement::focusedElementIndex(const Item* item) const
 {
-	auto& itemList = listForItem(item);
+	auto& itemList = dataForItem(item).items_;
 
 	for (int i = 0; i<itemList.size(); ++i)
 		if (itemList[i]->itemOrChildHasFocus()) return i;
@@ -519,8 +539,7 @@ int SequentialLayoutFormElement::focusedElementIndex(const Item* item) const
 
 int SequentialLayoutFormElement::length(const Item* item) const
 {
-	auto& itemList = listForItem(item);
-	return itemList.size();
+	return dataForItem(item).items_.size();
 }
 
 }

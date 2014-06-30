@@ -8,7 +8,8 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -lfilepersistence
-HEADERS += src/handlers/HCommentImage.h \
+HEADERS += src/handlers/HCommentBrowser.h \
+    src/handlers/HCommentImage.h \
     src/items/VCommentStyle.h \
     src/commands/CShapeSetProperty.h \
     src/commands/CCreateShape.h \
@@ -30,10 +31,10 @@ HEADERS += src/handlers/HCommentImage.h \
     src/precompiled.h \
     src/CommentsException.h \
     src/comments_api.h \
-    src/comments.h \
     src/CommentDiagramToolbar.h \
     src/items/VCommentDiagramStyle.h \
     src/ColorPicker.h \
+    src/CommentsPlugin.h \ 
     src/OutlineTypePicker.h \
     src/items/VCommentFreeNode.h \
     src/items/VCommentTable.h \
@@ -44,7 +45,8 @@ HEADERS += src/handlers/HCommentImage.h \
     src/items/VCommentText.h \
     src/handlers/HCommentFreeNode.h \
     src/items/VCommentTableStyle.h
-SOURCES += src/handlers/HCommentImage.cpp \
+SOURCES += src/handlers/HCommentBrowser.cpp \
+    src/handlers/HCommentImage.cpp \
     src/items/VCommentStyle.cpp \
     src/commands/CShapeSetProperty.cpp \
     src/commands/CCreateShape.cpp \
@@ -64,11 +66,11 @@ SOURCES += src/handlers/HCommentImage.cpp \
     src/items/VCommentDiagramShapeStyle.cpp \
     src/items/VCommentImage.cpp \
     src/CommentsException.cpp \
-    src/comments.cpp \
     test/SimpleTest.cpp \
     src/CommentDiagramToolbar.cpp \
     src/items/VCommentDiagramStyle.cpp \
     src/ColorPicker.cpp \
+    src/CommentsPlugin.cpp \
     src/OutlineTypePicker.cpp \
     src/items/VCommentFreeNode.cpp \
     src/items/VCommentTable.cpp \
@@ -79,6 +81,4 @@ SOURCES += src/handlers/HCommentImage.cpp \
     src/items/VCommentText.cpp \
     src/handlers/HCommentFreeNode.cpp \
     src/items/VCommentTableStyle.cpp
-
-RESOURCES += \
-    res.qrc
+RESOURCES += res.qrc

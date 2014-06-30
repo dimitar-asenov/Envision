@@ -26,8 +26,6 @@
 
 #include "VCommentText.h"
 
-#include "ModelBase/src/model/Model.h"
-
 namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentText, "item")
@@ -39,9 +37,9 @@ VCommentText::VCommentText(Item* parent, NodeType* node, const StyleType* style)
 
 bool VCommentText::setText(const QString& newText)
 {
-	node()->model()->beginModification(node(), "Set text");
+	node()->beginModification("Set text");
 	node()->set(newText);
-	node()->model()->endModification();
+	node()->endModification();
 	return TextRenderer::setText(newText);
 }
 

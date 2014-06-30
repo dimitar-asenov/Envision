@@ -24,12 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#include "filepersistence.h"
+#include "FilePersistencePlugin.h"
 #include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
-#include "ModelBase/src/model/Model.h"
+#include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/Text.h"
 
@@ -37,7 +37,7 @@ using namespace Model;
 
 namespace FilePersistence {
 
-TEST(FilePersistence, LoadRootOnly)
+TEST(FilePersistencePlugin, LoadRootOnly)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -56,9 +56,9 @@ TEST(FilePersistence, LoadRootOnly)
 			store = s;
 		}
 
-		Model::Model model;
-		model.load(store, "rootOnly", false);
-		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+		Model::TreeManager manager;
+		manager.load(store, "rootOnly", false);
+		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
 
 		CHECK_CONDITION(root);
 		CHECK_STR_EQUAL("BinaryNode", root->typeName() );
@@ -70,7 +70,7 @@ TEST(FilePersistence, LoadRootOnly)
 	}
 }
 
-TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
+TEST(FilePersistencePlugin, LoadModeNodesSingleUnitOnly)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -89,9 +89,9 @@ TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 			store = s;
 		}
 
-		Model::Model model;
-		model.load(store, "2Children", false);
-		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+		Model::TreeManager manager;
+		manager.load(store, "2Children", false);
+		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
 
 		CHECK_STR_EQUAL("BinaryNode", root->typeName() );
 		CHECK_STR_EQUAL("RootNode", root->name()->get() );
@@ -110,7 +110,7 @@ TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 	}
 }
 
-TEST(FilePersistence, LoadMultipleUnits)
+TEST(FilePersistencePlugin, LoadMultipleUnits)
 {
 	for (int i = 0; i<2; ++i)
 	{
@@ -129,10 +129,10 @@ TEST(FilePersistence, LoadMultipleUnits)
 			store = s;
 		}
 
-		Model::Model model;
+		Model::TreeManager manager;
 
-		model.load(store, "units", false);
-		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
+		manager.load(store, "units", false);
+		TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (manager.root());
 
 		CHECK_STR_EQUAL("BinaryNode", root->typeName() );
 		CHECK_STR_EQUAL("Root", root->name()->get() );

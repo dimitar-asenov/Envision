@@ -28,10 +28,10 @@
 
 namespace Model {
 
-NotificationListener::NotificationListener(Model& model) : root(nullptr)
+NotificationListener::NotificationListener(TreeManager& manager) : root(nullptr)
 {
-	QObject::connect(&model, SIGNAL(nodesModified(QSet<Node*>)), this, SLOT(setModifiedNodes(QSet<Node*>)));
-	QObject::connect(&model, SIGNAL(rootNodeSet(Node*)), this, SLOT(rootNodeSet(Node*)));
+	QObject::connect(&manager, SIGNAL(nodesModified(QSet<Node*>)), this, SLOT(setModifiedNodes(QSet<Node*>)));
+	QObject::connect(&manager, SIGNAL(rootNodeSet(Node*)), this, SLOT(rootNodeSet(Node*)));
 
 }
 

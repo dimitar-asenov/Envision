@@ -24,19 +24,19 @@
 **
 ***********************************************************************************************************************/
 
-#include "modelbase.h"
+#include "ModelBasePlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/PositionExtension.h"
-#include "model/Model.h"
+#include "model/TreeManager.h"
 #include "nodes/Integer.h"
 
 namespace Model {
 
-TEST(ModelBase, PositionExtension)
+TEST(ModelBasePlugin, PositionExtension)
 {
 	auto root = new TestNodes::BinaryNode();
-	Model model(root);
+	TreeManager manager(root);
 
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_x"));
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_y"));
@@ -46,10 +46,10 @@ TEST(ModelBase, PositionExtension)
 	CHECK_INT_EQUAL( 0, pos->x() );
 	CHECK_INT_EQUAL( 0, pos->y() );
 
-	model.beginModification(root, "Setting values");
+	manager.beginModification(root, "Setting values");
 	pos->setX(42);
 	pos->setY(-18);
-	model.endModification();
+	manager.endModification();
 
 	CHECK_INT_EQUAL( 42, pos->x() );
 	CHECK_INT_EQUAL( -18, pos->y() );
