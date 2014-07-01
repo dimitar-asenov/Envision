@@ -92,7 +92,10 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		Visualization::Static* emptyTip_{};
 };
 
-inline int VList::length() const { return static_cast<SequentialLayoutFormElement*>(currentForm())->length(this); }
+inline int VList::length() const
+{
+	return currentFormIndex() < 2 ? static_cast<SequentialLayoutFormElement*>(currentForm())->length(this) : 0;
+}
 inline int VList::focusedItemIndex() const
 {
 	return static_cast<SequentialLayoutFormElement*>(currentForm())->focusedElementIndex(this);
