@@ -208,8 +208,32 @@ void MainView::keyPressEvent(QKeyEvent *event)
 
 		setCursorAndOwnerIgnoreScaleForScreenShot(true, ownerIgnoresScale);
 	}
+	else if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && event->key() == Qt::Key_P)
+	{
+		// Toggle presentation mode (full screen + no scroll bars + no minimap)
+
+		event->accept();
+		QWidget* window = this;
+		while (window->parentWidget()) window = window->parentWidget();
+
+		if (window->isFullScreen())
+		{
+			window->showNormal();
+			setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+			setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+			miniMap->show();
+		}
+		else
+		{
+			window->showFullScreen();
+			setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+			setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+			miniMap->hide();
+		}
+	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F11)
 	{
+		// Toggle fullscreen only
 		event->accept();
 		QWidget* window = this;
 		while (window->parentWidget()) window = window->parentWidget();
