@@ -58,8 +58,8 @@ class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
 		void synchronizeTablesToText();
 
 	private:
-		template <typename T>
-		QStringList synchronizeItem(QString aString, T aList);
+		template <typename T, typename AppendFunction>
+		void synchronizeItem(QString aString, T aList, AppendFunction appendFunction);
 };
 
 } /* namespace Comments */

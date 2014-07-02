@@ -72,8 +72,8 @@ CommentTable* CommentNode::table(const QString& name)
 	return nullptr;
 }
 
-template <typename T>
-QStringList CommentNode::synchronizeItem(QString aString, T aList)
+template <typename T, typename AppendFunction>
+void CommentNode::synchronizeItem(QString aString, T aList, AppendFunction appendFunction)
 {
 	QStringList itemNamesFromText;
 	for (auto lineNode : *lines())
@@ -93,25 +93,20 @@ QStringList CommentNode::synchronizeItem(QString aString, T aList)
 		else aList->remove(i);
 	}
 
-	return itemNamesFromText;
+	for (auto newItem : itemNamesFromText)
+		appendFunction(newItem);
 }
 
 void CommentNode::synchronizeDiagramsToText()
 {
-	QStringList diagramNamesFromText = synchronizeItem("[diagram#", diagrams());
-
-	// Add new diagrams
-	for (auto newDiagram : diagramNamesFromText)
-		diagrams()->append(new CommentDiagram(nullptr, newDiagram));
+	synchronizeItem("[diagram#", diagrams(),
+		[this](QString itemName){diagrams()->append(new CommentDiagram(nullptr, itemName));});
 }
 
 void CommentNode::synchronizeCodesToText()
 {
-	QStringList codeNamesFromText = synchronizeItem("[code#", codes());
-
-	// Add new codes
-	for (auto newCode : codeNamesFromText)
-		codes()->append(new CommentFreeNode(nullptr, newCode));
+	synchronizeItem("[code#", codes(),
+		[this](QString itemName){codes()->append(new CommentFreeNode(nullptr, itemName));});
 }
 
 void CommentNode::synchronizeTablesToText()

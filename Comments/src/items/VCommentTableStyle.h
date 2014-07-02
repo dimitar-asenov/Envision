@@ -37,7 +37,7 @@ class COMMENTS_API VCommentTableStyle : public Super<Visualization::ItemStyle> {
 	public:
 		virtual ~VCommentTableStyle() override;
 
-		Property<Visualization::GridLayoutStyle> gridstyle{this, "gridstyle"};
+		Property<Visualization::GridLayoutStyle> grid{this, "grid"};
 };
 
 } /* namespace Comments */

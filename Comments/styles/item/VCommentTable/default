@@ -13,23 +13,19 @@
 		<cornerType>1</cornerType>
 		<cornerRadius>3</cornerRadius>
 	</shape>
-	<gridstyle prototypes="layout/GridLayout/default">
-		<horizontalAlignment>0</horizontalAlignment>
-		<verticalAlignment>0</verticalAlignment>
+	<grid prototypes="layout/GridLayout/default">
 		<horizontalSpace>6</horizontalSpace>
 		<verticalSpace>6</verticalSpace>
 		<borderPen>
 			<width>1</width>
-			<style>1</style>
+			<style>2</style>
 			<color>
-				<red>0</red>
-				<green>0</green>
-				<blue>0</blue>
+				<red>192</red>
+				<green>192</green>
+				<blue>192</blue>
 				<alpha>255</alpha>
 			</color>
-			<capStyle>0</capStyle>
-			<joinStyle>0</joinStyle>
 		</borderPen>
 		<drawsOnlyShape>false</drawsOnlyShape>
-	</gridstyle>
+	</grid>
 </style>

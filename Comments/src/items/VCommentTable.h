@@ -42,7 +42,7 @@ namespace Comments {
 class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCommentTable,
 						Visualization::Item, CommentTable> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentTable, VCommentTableStyle)
+	ITEM_COMMON(VCommentTable)
 
 	public:
 		VCommentTable(Visualization::Item* parent, NodeType* node);
