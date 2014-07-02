@@ -97,19 +97,19 @@ TEST(CommentsPlugin, SimpleTest)
 	auto diagram = new CommentDiagram(nullptr, "main");
 
 	auto shape1 = new CommentDiagramShape(0, 50, 200, 50, CommentDiagramShape::ShapeType::Rectangle);
-	shape1->setLabel(new Model::Text("First shape"));
+	shape1->setLabel(new CommentText("First shape"));
 	shape1->setShapeColor("blue");
 	shape1->setTextColor("red");
 	diagram->shapes()->append(shape1);
 
 	auto shape2 = new CommentDiagramShape(100, 150, 200,  50, CommentDiagramShape::ShapeType::Ellipse);
-	shape2->setLabel(new Model::Text("Another shape"));
+	shape2->setLabel(new CommentText("Another shape"));
 	shape2->setShapeColor("magenta");
 	shape2->setTextColor("yellow");
 	diagram->shapes()->append(shape2);
 
 	auto shape3 = new CommentDiagramShape(0, 150, 100, 150, CommentDiagramShape::ShapeType::Diamond);
-	shape3->setLabel(new Model::Text("Diamond"));
+	shape3->setLabel(new CommentText("Diamond"));
 	diagram->shapes()->append(shape3);
 
 	diagram->connectors()->append(new CommentDiagramConnector(0, 6, 1, 0));

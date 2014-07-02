@@ -31,12 +31,14 @@
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HText.h"
 
+
 namespace Comments {
 
 class COMMENTS_API HCommentText : public Interaction::HText
 {
 	public:
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 		static HCommentText* instance();
 
 	protected:
