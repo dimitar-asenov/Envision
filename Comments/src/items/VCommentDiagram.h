@@ -38,7 +38,7 @@
 #include "../nodes/CommentDiagram.h"
 #include "../nodes/CommentNode.h"
 
-#include "../CommentDiagramToolbar.h"
+#include "../toolbars/CommentDiagramToolbar.h"
 
 namespace Comments {
 
