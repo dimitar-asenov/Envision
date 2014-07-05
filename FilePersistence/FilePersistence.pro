@@ -15,7 +15,8 @@ HEADERS += src/simple/GenericNode.h \
     src/filepersistence_api.h \
     src/precompiled.h \
     src/FilePersistencePlugin.h \
-    src/version_control/ChangeDescription.h
+    src/version_control/ChangeDescription.h \
+    src/version_control/Diff.h
 SOURCES += src/simple/GenericNode.cpp \
     src/simple/GenericNodeAllocator.cpp \
     src/simple/SimpleTextFileStore.cpp \
@@ -30,5 +31,6 @@ SOURCES += src/simple/GenericNode.cpp \
     test/SaveTests.cpp \
     src/FileStore.cpp \
     src/FilePersistencePlugin.cpp \
-    src/version_control/ChangeDescription.cpp
+    src/version_control/ChangeDescription.cpp \
+    src/version_control/Diff.cpp
 RESOURCES = FilePersistence.qrc
