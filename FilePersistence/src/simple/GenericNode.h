@@ -36,6 +36,7 @@ class GenericNodeAllocator;
 
 class FILEPERSISTENCE_API GenericNode {
 	friend class GenericNodeAllocator;
+	friend class ChangeDescription;
 
 	public:
 		GenericNode();
@@ -53,6 +54,8 @@ class FILEPERSISTENCE_API GenericNode {
 		GenericNode* addChild(GenericNode* child);
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
+
+		QSharedPointer<GenericNode> parent() const;
 
 		const QString& name() const;
 		const QString& type() const;
@@ -87,6 +90,7 @@ class FILEPERSISTENCE_API GenericNode {
 		ValueType valueType_{};
 
 		Model::NodeIdType id_{};
+		QSharedPointer<GenericNode> parent_;
 		QList<GenericNode*> children_;
 
 		char* data_{};
@@ -116,6 +120,7 @@ inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
 
+inline QSharedPointer<GenericNode> GenericNode::parent() const { ensureDataRead(); return parent_; }
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
 inline bool GenericNode::hasValue() const { ensureDataRead(); return valueType_ != NO_VALUE; }
