@@ -36,7 +36,7 @@ CCreateProject::CCreateProject() : CreateNamedObjectWithAttributes("project", {}
 {
 }
 
-Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source*/, Visualization::Item* target,
+Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const QString& name, const QStringList& /*attributes*/)
 {
 	auto parent = dynamic_cast<OOModel::Project*> (target->node());

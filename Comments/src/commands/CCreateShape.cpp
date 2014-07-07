@@ -36,7 +36,7 @@ CCreateShape::CCreateShape() : Interaction::CreateNamedObjectWithAttributes("sha
 {
 }
 
-Interaction::CommandResult* CCreateShape::create(Visualization::Item*, Visualization::Item* target,
+Interaction::CommandResult* CCreateShape::executeNamed(Visualization::Item*, Visualization::Item* target,
 	const QString&, const QStringList& attributes)
 {
 	auto vdiagram = dynamic_cast<VCommentDiagram*>(target);

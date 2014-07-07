@@ -38,7 +38,7 @@ class OOINTERACTION_API CCreateProject : public Interaction::CreateNamedObjectWi
 		CCreateProject();
 
 	protected:
-		virtual Interaction::CommandResult* create(Visualization::Item* source, Visualization::Item* target,
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
 			const QString& name, const QStringList& attributes) override;
 };
 

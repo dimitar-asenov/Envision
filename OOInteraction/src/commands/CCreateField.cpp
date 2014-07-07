@@ -41,7 +41,7 @@ CCreateField::CCreateField() : CreateNamedObjectWithAttributes("field",
 {
 }
 
-Interaction::CommandResult* CCreateField::create(Visualization::Item* /*source*/, Visualization::Item* target,
+Interaction::CommandResult* CCreateField::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const QString& name, const QStringList& attributes)
 {
 	auto cl = dynamic_cast<OOModel::Class*> (target->node());
