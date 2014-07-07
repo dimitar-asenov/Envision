@@ -35,6 +35,7 @@
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "items/VCommentText.h"
 
 namespace Comments {
 
@@ -59,7 +60,7 @@ class COMMENTS_API VCommentDiagramShape
 	private:
 
 		QColor outlineColor_, textColor_, fillColor_;
-		Visualization::VText *text_{};
+		VCommentText *text_{};
 		Qt::PenStyle outlineType_{};
 		int outlineSize_{};
 

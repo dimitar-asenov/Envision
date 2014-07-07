@@ -24,36 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
-
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/renderer/ModelRenderer.h"
-#include "VisualizationBase/src/layouts/GridLayout.h"
-
-#include "../nodes/CommentTable.h"
 #include "VCommentTableStyle.h"
 
 namespace Comments {
 
-class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCommentTable,
-						Visualization::Item, CommentTable> >
-{
-	ITEM_COMMON(VCommentTable)
-
-	public:
-		VCommentTable(Visualization::Item* parent, NodeType* node);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		QVector< QVector<Visualization::Item*> > items_;
-		Visualization::GridLayout* aGrid_{};
-};
+VCommentTableStyle::~VCommentTableStyle(){} // Put the VTable here
 
 } /* namespace Comments */

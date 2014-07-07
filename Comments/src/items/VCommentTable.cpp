@@ -36,9 +36,9 @@ namespace Comments {
 
 ITEM_COMMON_DEFINITIONS(VCommentTable, "item")
 
-VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get()), node_(nullptr)
+VCommentTable::VCommentTable(Item* parent, NodeType* node) : Super(parent, node, itemStyles().get())
 {
-	aGrid_ = new Visualization::GridLayout(this);
+	aGrid_ = new Visualization::GridLayout(this, &style()->grid());
 }
 
 void VCommentTable::determineChildren()
@@ -52,7 +52,6 @@ void VCommentTable::determineChildren()
 		{
 			anArray[i].append(node()->nodes()->at((node()->rowCount() * j) + i));
 		}
-
 	}
 	aGrid_->synchronizeWithNodes(anArray);
 }

@@ -31,11 +31,8 @@ HEADERS += src/handlers/HCommentBrowser.h \
     src/precompiled.h \
     src/CommentsException.h \
     src/comments_api.h \
-    src/CommentDiagramToolbar.h \
     src/items/VCommentDiagramStyle.h \
-    src/ColorPicker.h \
     src/CommentsPlugin.h \ 
-    src/OutlineTypePicker.h \
     src/items/VCommentFreeNode.h \
     src/items/VCommentTable.h \
     src/nodes/CommentFreeNode.h \
@@ -43,7 +40,11 @@ HEADERS += src/handlers/HCommentBrowser.h \
     src/nodes/CommentText.h \
     src/handlers/HCommentText.h \
     src/items/VCommentText.h \
-    src/handlers/HCommentFreeNode.h
+    src/handlers/HCommentFreeNode.h \
+    src/items/VCommentTableStyle.h \
+    src/toolbars/ColorPicker.h \
+    src/toolbars/CommentDiagramToolbar.h \
+    src/toolbars/OutlineTypePicker.h
 SOURCES += src/handlers/HCommentBrowser.cpp \
     src/handlers/HCommentImage.cpp \
     src/items/VCommentStyle.cpp \
@@ -66,11 +67,8 @@ SOURCES += src/handlers/HCommentBrowser.cpp \
     src/items/VCommentImage.cpp \
     src/CommentsException.cpp \
     test/SimpleTest.cpp \
-    src/CommentDiagramToolbar.cpp \
     src/items/VCommentDiagramStyle.cpp \
-    src/ColorPicker.cpp \
     src/CommentsPlugin.cpp \
-    src/OutlineTypePicker.cpp \
     src/items/VCommentFreeNode.cpp \
     src/items/VCommentTable.cpp \
     src/nodes/CommentFreeNode.cpp \
@@ -78,5 +76,9 @@ SOURCES += src/handlers/HCommentBrowser.cpp \
     src/nodes/CommentText.cpp \
     src/handlers/HCommentText.cpp \
     src/items/VCommentText.cpp \
-    src/handlers/HCommentFreeNode.cpp
+    src/handlers/HCommentFreeNode.cpp \
+    src/items/VCommentTableStyle.cpp \
+    src/toolbars/ColorPicker.cpp \
+    src/toolbars/CommentDiagramToolbar.cpp \
+    src/toolbars/OutlineTypePicker.cpp
 RESOURCES += res.qrc

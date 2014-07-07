@@ -44,11 +44,9 @@ CommentTable::CommentTable(Node *parent, QString name, int rowCount, int columnC
 	: Super(parent, CommentTable::getMetaData())
 {
 	setName(name);
-	setRowCount(rowCount);
-	setColumnCount(columnCount);
-	for (int i = 0; i < columnCount; i++)
-		for (int j = 0; j < rowCount; j++)
-			nodes()->append(new CommentFreeNode(nullptr, "#"+QString::number(j)+"#"+QString::number(i)));
+	setRowCount(0);
+	setColumnCount(0);
+	resize(rowCount, columnCount);
 }
 
 void CommentTable::setNodeAt(int m, int n, Model::Node *aNode)
@@ -56,7 +54,7 @@ void CommentTable::setNodeAt(int m, int n, Model::Node *aNode)
 	nodes()->at(n*rowCount() + m)->setNode(aNode);
 }
 
-CommentFreeNode* CommentTable::getNodeAt(int m, int n)
+CommentFreeNode* CommentTable::nodeAt(int m, int n)
 {
 	return nodes()->at(n*rowCount() + m);
 }
@@ -70,7 +68,7 @@ void CommentTable::resize(int m, int n)
 		{
 			if (j < rowCount() && i < columnCount())
 			{
-				CommentFreeNode* aFreeNode = getNodeAt(j, i);
+				CommentFreeNode* aFreeNode = nodeAt(j, i);
 				nodes()->replaceChild(aFreeNode, new CommentFreeNode(nullptr, ""));
 				aFreeNode->setName("#"+QString::number(j)+"#"+QString::number(i));
 				aList->append(aFreeNode);

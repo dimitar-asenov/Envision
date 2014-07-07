@@ -51,7 +51,7 @@ class COMMENTS_API CommentTable : public Super<Model::CompositeNode>
 	public:
 		CommentTable(Node *parent, QString name, int rowCount, int columnCount);
 		void setNodeAt(int m, int n, Model::Node* aNode);
-		CommentFreeNode* getNodeAt(int m, int n);
+		CommentFreeNode* nodeAt(int m, int n);
 		void resize(int m, int n);
 };
 
