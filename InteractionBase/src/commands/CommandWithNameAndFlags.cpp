@@ -29,7 +29,7 @@
 namespace Interaction {
 
 CommandWithNameAndFlags::CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes,
-	bool requireName) : commandName_(commandName), attributes_(attributes), requireName_{requireName}
+	bool usePossibleNames) : commandName_(commandName), attributes_(attributes), usePossibleNames_{usePossibleNames}
 {
 }
 
@@ -56,8 +56,16 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 
 	findParts(commandTokens, name, attributes, commandFound, unknownFormat);
 
-	if (requireName_ && name.isNull())
-		return new CommandResult(new CommandError("No name specified for '" + commandName_ + "'command"));
+	if (usePossibleNames_)
+	{
+		auto matching = matchingNames(name);
+		if (matching.isEmpty())
+			return new CommandResult(new CommandError(name + " is not a valid name for " + commandName()));
+		if (matching.size() > 1)
+					return new CommandResult(new CommandError(name + " is ambiguous for " + commandName()));
+
+		name = matching.first();
+	}
 
 	return executeNamed(source, target, name, attributes);
 }
@@ -65,7 +73,7 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* /*source*/,
 		Visualization::Item* /*target*/, const QString& textSoFar)
 {
-	QList<CommandSuggestion*> s;
+
 
 	QString name;
 	QStringList attributes;
@@ -74,28 +82,35 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* 
 
 	findParts(textSoFar.split(" "), name, attributes, commandFound, unknownFormat);
 
-	if (!unknownFormat) s.append(suggestNamed(textSoFar, name, attributes, commandFound));
-
-	return s;
+	if (unknownFormat) return {};
+	return suggestNamed(textSoFar, name, attributes, commandFound);
 }
 
-CommandSuggestion* CommandWithNameAndFlags::suggestNamed(const QString& textSoFar, const QString& name,
+QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& textSoFar, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {
 	QString commandText = textSoFar + (commandFound?"":" " + commandName_);
 	QString explanation = commandName_;
-	if (!attributes.isEmpty()) explanation += " [";
 	bool atLeastOneAttribute = false;
 	for (auto attr : attributes)
 		if (!attr.isEmpty())
 			{
+				if (!atLeastOneAttribute) explanation += " [";
 				explanation += (atLeastOneAttribute ? "," : "") + attr;
 				atLeastOneAttribute = true;
 			}
-	if (!attributes.isEmpty()) explanation += "]";
+	if (atLeastOneAttribute) explanation += "]";
 
-	explanation += (name.isEmpty() ? "" : " " + name);
-	return new CommandSuggestion(commandText, explanation);
+	if (!usePossibleNames_)
+		return {new CommandSuggestion(commandText, explanation + (name.isEmpty() ? "" : " " + name))};
+	else
+	{
+		QList<CommandSuggestion*> s;
+		for (auto matching : matchingNames(name))
+			s.append(new CommandSuggestion(commandText + (name.isEmpty() ? " " + matching : ""),
+					explanation + " " + matching));
+		return s;
+	}
 }
 
 QStringList CommandWithNameAndFlags::commandForms(Visualization::Item* /*source*/,
@@ -164,6 +179,27 @@ void CommandWithNameAndFlags::findParts(const QStringList& tokens, QString& name
 		}
 	}
 	else unknownFormat = true;
+}
+
+QStringList CommandWithNameAndFlags::possibleNames()
+{
+	return {};
+}
+
+QStringList CommandWithNameAndFlags::matchingNames(const QString& nameToLookFor)
+{
+	if (nameToLookFor.isNull()) return possibleNames();
+
+	// Use a pattern like this 'a*b*c*' in order to simplify the search. Note that the first letter must match.
+	QString searchPattern = nameToLookFor;
+	for (int i = searchPattern.size(); i>=1; --i) searchPattern.insert(i, "*");
+	auto regExp = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
+
+	QStringList result;
+	for (auto s : possibleNames())
+		if (regExp.exactMatch(s)) result << s;
+
+	return result;
 }
 
 } /* namespace OOInteraction */

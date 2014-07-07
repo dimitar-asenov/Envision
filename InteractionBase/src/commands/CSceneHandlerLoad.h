@@ -26,26 +26,23 @@
 
 #pragma once
 
-#include "Command.h"
+#include "CommandWithNameAndFlags.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CSceneHandlerLoad : public Command
+class INTERACTIONBASE_API CSceneHandlerLoad : public CommandWithNameAndFlags
 {
 	public:
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
+		CSceneHandlerLoad();
 
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
+	protected:
+		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+			const QString& name, const QStringList& attributes) override;
+
+		virtual QStringList possibleNames() override;
 
 	private:
 		QStringList availableProjectsOnDisk();
-		QStringList matchingProjects(QString projectNameToLookFor);
 };
 
 } /* namespace Interaction */

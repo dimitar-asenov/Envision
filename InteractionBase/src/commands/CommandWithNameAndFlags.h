@@ -35,7 +35,7 @@ namespace Interaction {
 class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 {
 	public:
-		CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes, bool requireName);
+		CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes, bool usePossibleNames);
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens) override;
@@ -51,8 +51,10 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
 				const QString& name, const QStringList& attributes) = 0;
 
-		virtual CommandSuggestion* suggestNamed(const QString& textSoFar, const QString& name,
+		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar, const QString& name,
 				const QStringList& attributes, bool commandFound);
+
+		virtual QStringList possibleNames();
 
 		const QString& commandName();
 
@@ -60,9 +62,11 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 		void findParts(const QStringList& tokens, QString& name, QStringList& attributes,
 			bool& methodFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
 
+		QStringList matchingNames(const QString& nameToLookFor);
+
 		const QString commandName_;
 		const QList<QStringList> attributes_;
-		const bool requireName_{};
+		const bool usePossibleNames_{};
 };
 
 inline const QString& CommandWithNameAndFlags::commandName() { return commandName_;}

@@ -33,7 +33,7 @@ CreateNamedObjectWithAttributes::CreateNamedObjectWithAttributes(const QString& 
 {
 }
 
-CommandSuggestion* CreateNamedObjectWithAttributes::suggestNamed(const QString& textSoFar, const QString& name,
+QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggestNamed(const QString& textSoFar, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {
 	QString commandText = textSoFar + (commandFound?"":" " + commandName());
@@ -41,7 +41,7 @@ CommandSuggestion* CreateNamedObjectWithAttributes::suggestNamed(const QString& 
 	for (auto attr : attributes)
 		if (!attr.isEmpty()) explanation += attr + " ";
 	explanation += commandName() + (name.isEmpty() ? "" : " called '" + name + "'");
-	return new CommandSuggestion(commandText, explanation);
+	return {new CommandSuggestion(commandText, explanation)};
 }
 
 } /* namespace OOInteraction */
