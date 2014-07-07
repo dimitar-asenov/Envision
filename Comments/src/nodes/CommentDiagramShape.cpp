@@ -35,7 +35,7 @@ namespace Comments {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentDiagramShape)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentDiagramShape)
 
-REGISTER_ATTRIBUTE(CommentDiagramShape, label, Text, false, false, true)
+REGISTER_ATTRIBUTE(CommentDiagramShape, label, CommentText, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, x, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, y, Integer, false, false, true)
 REGISTER_ATTRIBUTE(CommentDiagramShape, width, Integer, false, false, true)
