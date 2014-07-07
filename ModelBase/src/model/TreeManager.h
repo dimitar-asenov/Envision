@@ -333,6 +333,11 @@ class MODELBASE_API TreeManager: public QObject
 
 		AllTreeManagers& manager() const;
 
+		/**
+		 * Returns whether this tree has been partially loaded (as a library).
+		 */
+		bool isPartiallyLoaded() const;
+
 	signals:
 		/**
 		 * Emitted when a new root node was set.
@@ -457,6 +462,11 @@ class MODELBASE_API TreeManager: public QObject
 		 * It can also be used by other stores when the tree needs to be saved to a different location.
 		 */
 		PersistentStore* store_{};
+
+		/**
+		 * Indicates whether this tree has been partially loaded (as a library) from a store.
+		 */
+		bool partiallyLoaded_{};
 };
 
 inline bool TreeManager::isBeingModified() const { return modificationInProgress; }
@@ -470,5 +480,7 @@ inline void TreeManager::setName(const QString& name) { name_ = name; }
 inline PersistentStore* TreeManager::store() { return store_; }
 
 inline AllTreeManagers& TreeManager::manager() const { return AllTreeManagers::instance(); }
+
+inline bool TreeManager::isPartiallyLoaded() const { return partiallyLoaded_; }
 
 }
