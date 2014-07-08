@@ -33,7 +33,17 @@ namespace FilePersistence {
 static const int MAX_DOUBLE_PRECISION = 15;
 
 GenericNode::GenericNode(){}
+GenericNode::GenericNode(const char* dataLine, int dataLineLength, bool lazy)
+{
+	reset(dataLine, dataLineLength, lazy);
+}
+
 GenericNode::~GenericNode()
+{
+	deleteChildrenIfNoAllocator();
+}
+
+void GenericNode::deleteChildrenIfNoAllocator()
 {
 	// This is the case when this node is not owned by an allocator
 	if (dataLineLength_ == 0)
@@ -138,19 +148,33 @@ GenericNode* GenericNode::find(Model::NodeIdType id)
 	return nullptr;
 }
 
-void GenericNode::resetForLoading(const char* dataLine, int dataLineLength)
+void GenericNode::reset(const char* dataLine, int dataLineLength, bool lazy)
 {
+	Q_ASSERT(dataLine);
 	Q_ASSERT(dataLineLength > 0);
 
-	dataLine_ = dataLine;
-	dataLineLength_ = dataLineLength;
+	deleteChildrenIfNoAllocator();
 
 	name_.clear();
 	type_.clear();
 	value_.clear();
 	valueType_ = NO_VALUE;
 	id_ = {};
-	children_.clear(); // No need to delete these
+	children_.clear();
+	parent_ = nullptr;
+
+	if (lazy)
+	{
+		dataLine_ = dataLine;
+		dataLineLength_ = dataLineLength;
+	}
+	else
+	{
+		dataLine_ = nullptr;
+		dataLineLength_ = 0;
+		Parser::parseLine(const_cast<GenericNode*>(this), dataLine, dataLineLength);
+	}
+
 }
 
 void GenericNode::ensureDataRead() const

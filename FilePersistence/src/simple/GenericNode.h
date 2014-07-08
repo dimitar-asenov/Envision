@@ -32,16 +32,27 @@
 
 namespace FilePersistence {
 
-class GenericNodeAllocator;
-
 class FILEPERSISTENCE_API GenericNode {
-	friend class GenericNodeAllocator;
 
 	public:
 		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 
 		GenericNode();
+
+		/**
+		 * Creates this node and loads it given the specified parameters. See \sa reset().
+		 */
+		GenericNode(const char* dataLine, int dataLineLength, bool lazy);
 		~GenericNode();
+
+		/**
+		 * Loads all the properties of this node using the provided \a dataLine. Any old content of this node will be
+		 * removed. If this node did not belong to an allocator, it's children will be deleted.
+		 *
+		 * Set \a lazy to true when loading with an allocator. In this case \a dataLine will be saved and only parsed
+		 * on demand. If \a lazy is false, then the node will be immediately initialized with the provided data.
+		 */
+		void reset(const char* dataLine, int dataLineLength, bool lazy);
 
 		void setName(const QString& name);
 		void setType(const QString& type);
@@ -53,9 +64,11 @@ class FILEPERSISTENCE_API GenericNode {
 
 		void setId(Model::NodeIdType id);
 
+		void setParent(GenericNode* parent);
 		GenericNode* addChild(GenericNode* child);
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
+		GenericNode* parent() const;
 
 		const QString& name() const;
 		const QString& type() const;
@@ -79,7 +92,7 @@ class FILEPERSISTENCE_API GenericNode {
 	private:
 		// //////////////////////////////////////////////////////////////////////////////////////////
 		// !!!
-		// Make sure to reset all the members in the resetForLoading() method
+		// When adding new members, make sure to reset them in the reset() method
 		// !!!
 
 		QString name_;
@@ -88,6 +101,7 @@ class FILEPERSISTENCE_API GenericNode {
 		ValueType valueType_{};
 
 		Model::NodeIdType id_{};
+		GenericNode* parent_{};
 		QList<GenericNode*> children_;
 
 		/**
@@ -98,13 +112,14 @@ class FILEPERSISTENCE_API GenericNode {
 		int dataLineLength_{};
 		// //////////////////////////////////////////////////////////////////////////////////////////
 
-		void resetForLoading(const char* dataLine, int dataLineLength);
 		void ensureDataRead() const;
+		void deleteChildrenIfNoAllocator();
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
+inline void GenericNode::setParent(GenericNode* parent) { parent_ = parent;}
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
@@ -113,6 +128,7 @@ inline GenericNode::ValueType GenericNode::valueType() const { ensureDataRead();
 inline const QString& GenericNode::rawValue() const { ensureDataRead(); return value_; }
 inline Model::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
 inline const QList<GenericNode*>& GenericNode::children() const { ensureDataRead(); return children_; }
+inline GenericNode* GenericNode::parent() const {ensureDataRead(); return parent_;} // Parent must be explicitly set
 
 inline bool GenericNode::hasStringValue() const { ensureDataRead(); return valueType_ == STRING_VALUE; }
 inline bool GenericNode::hasIntValue() const { ensureDataRead(); return valueType_ == INT_VALUE; }
