@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "GenericNodeAllocator.h"
+#include "GenericNode.h"
 
 namespace FilePersistence {
 

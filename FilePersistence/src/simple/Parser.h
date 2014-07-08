@@ -25,39 +25,35 @@
  **********************************************************************************************************************/
 
 #pragma once
+
+#include "../filepersistence_api.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
 
-class Parser;
 class GenericNode;
+class GenericNodeAllocator;
 
-class GenericNodeAllocator {
-	friend class Parser;
-
+class FILEPERSISTENCE_API Parser {
 	public:
-		GenericNodeAllocator();
-		~GenericNodeAllocator();
 
-		void endThisLoad();
+		static void parseData(GenericNode* node, char* data, int start, int lineEnd);
+
+		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
+		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
 
 	private:
-		GenericNode* newRoot(char* data, int lineStart, int lineEndInclusive);
-		GenericNode* newChild(int lineStart, int lineEndInclusive);
 
-		const int ALLOCATION_CHUNK_SIZE = 10000; // num elements to allocate at once
+		static int countTabs(char* data, int lineStart, int lineEnd);
+		static QString rawStringToQString(char* data, int startAt, int endInclusive);
+		static QString escape(const QString& line);
 
-		QList<char*> dataMappings_;
+		static Model::NodeIdType toId(char* data, int start, int endInclusive, bool& ok);
+		static uchar hexDigitToChar(char d, bool& ok);
 
-		QList<int> rewindRootChunkId_;
-		QList<int> rewindRootId_;
-
-		QList<GenericNode*> chunks_;
-
-		// These are the indices of the last given node
-		GenericNode* currentChunk_{};
-		int currentChunkId_{-1};
-		int currentNodeInChunk_{ALLOCATION_CHUNK_SIZE};
-
-		GenericNode* nextNode();
+		static bool nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd);
+		static int indexOf(const char c, char* data, int start, int endInclusive);
+		static bool nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd);
 };
 
 } /* namespace FilePersistence */

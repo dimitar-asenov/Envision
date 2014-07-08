@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "FilePersistencePlugin.h"
-#include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
@@ -38,96 +37,84 @@ namespace FilePersistence {
 
 TEST(FilePersistencePlugin, LoadDataMultipleUnits)
 {
-	for (int i = 0; i<2; ++i)
-	{
-		PersistentStore* store{};
+	PersistentStore* store{};
 
-		if (i==0)
-		{
-			auto s = new FileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted");
-			store = s;
-		}
-		else if (i==1)
-		{
-			auto s = new SimpleTextFileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
-			store = s;
-		}
+	auto s = new SimpleTextFileStore();
+	s->setBaseFolder(":/FilePersistence/test/persisted");
+	store = s;
 
-		typedef PersistedValue< QString >* String;
-		typedef PersistedValue< QList<PersistedNode*> >* Composite;
+	typedef PersistedValue< QString >* String;
+	typedef PersistedValue< QList<PersistedNode*> >* Composite;
 
-		// Root Node
-		Composite root = dynamic_cast<Composite> (store->loadCompleteNodeSubtree("units", nullptr));
-		CHECK_CONDITION(root);
-		CHECK_STR_EQUAL("BinaryNode", root->type() );
-		CHECK_STR_EQUAL("units", root->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000001}", root->id().toString());
-		CHECK_CONDITION(!root->isNewPersistenceUnit());
-		CHECK_INT_EQUAL(3, root->value().size());
+	// Root Node
+	Composite root = dynamic_cast<Composite> (store->loadCompleteNodeSubtree("units", nullptr));
+	CHECK_CONDITION(root);
+	CHECK_STR_EQUAL("BinaryNode", root->type() );
+	CHECK_STR_EQUAL("units", root->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000001}", root->id().toString());
+	CHECK_CONDITION(!root->isNewPersistenceUnit());
+	CHECK_INT_EQUAL(3, root->value().size());
 
-		// Root Node children
-		String rootName = dynamic_cast<String> (root->value().at(0));
-		CHECK_CONDITION(rootName);
-		CHECK_STR_EQUAL("NameText", rootName->type() );
-		CHECK_STR_EQUAL("name", rootName->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000002}", rootName->id().toString());
-		CHECK_CONDITION(!rootName->isNewPersistenceUnit());
-		CHECK_STR_EQUAL("Root", rootName->value());
+	// Root Node children
+	String rootName = dynamic_cast<String> (root->value().at(0));
+	CHECK_CONDITION(rootName);
+	CHECK_STR_EQUAL("NameText", rootName->type() );
+	CHECK_STR_EQUAL("name", rootName->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000002}", rootName->id().toString());
+	CHECK_CONDITION(!rootName->isNewPersistenceUnit());
+	CHECK_STR_EQUAL("Root", rootName->value());
 
-		Composite left = dynamic_cast<Composite> (root->value().at(1));
-		CHECK_CONDITION(left);
-		CHECK_STR_EQUAL("BinaryNodePersistenceUnit", left->type() );
-		CHECK_STR_EQUAL("left", left->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000003}", left->id().toString());
-		CHECK_CONDITION(left->isNewPersistenceUnit());
-		CHECK_INT_EQUAL(2, left->value().size());
+	Composite left = dynamic_cast<Composite> (root->value().at(1));
+	CHECK_CONDITION(left);
+	CHECK_STR_EQUAL("BinaryNodePersistenceUnit", left->type() );
+	CHECK_STR_EQUAL("left", left->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000003}", left->id().toString());
+	CHECK_CONDITION(left->isNewPersistenceUnit());
+	CHECK_INT_EQUAL(2, left->value().size());
 
-		Composite right = dynamic_cast<Composite> (root->value().at(2));
-		CHECK_CONDITION(right);
-		CHECK_STR_EQUAL("BinaryNode", right->type() );
-		CHECK_STR_EQUAL("right", right->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000007}", right->id().toString());
-		CHECK_CONDITION(!right->isNewPersistenceUnit());
-		CHECK_INT_EQUAL(1, right->value().size());
+	Composite right = dynamic_cast<Composite> (root->value().at(2));
+	CHECK_CONDITION(right);
+	CHECK_STR_EQUAL("BinaryNode", right->type() );
+	CHECK_STR_EQUAL("right", right->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000007}", right->id().toString());
+	CHECK_CONDITION(!right->isNewPersistenceUnit());
+	CHECK_INT_EQUAL(1, right->value().size());
 
-		// Left Node children
-		String leftName = dynamic_cast<String> (left->value().at(0));
-		CHECK_CONDITION(leftName);
-		CHECK_STR_EQUAL("NameText", leftName->type() );
-		CHECK_STR_EQUAL("name", leftName->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000004}", leftName->id().toString());
-		CHECK_CONDITION(!leftName->isNewPersistenceUnit());
-		CHECK_STR_EQUAL("Left child", leftName->value());
+	// Left Node children
+	String leftName = dynamic_cast<String> (left->value().at(0));
+	CHECK_CONDITION(leftName);
+	CHECK_STR_EQUAL("NameText", leftName->type() );
+	CHECK_STR_EQUAL("name", leftName->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000004}", leftName->id().toString());
+	CHECK_CONDITION(!leftName->isNewPersistenceUnit());
+	CHECK_STR_EQUAL("Left child", leftName->value());
 
-		Composite leftleft = dynamic_cast<Composite> (left->value().at(1));
-		CHECK_CONDITION(leftleft);
-		CHECK_STR_EQUAL("BinaryNode", leftleft->type() );
-		CHECK_STR_EQUAL("left", leftleft->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000005}", leftleft->id().toString());
-		CHECK_CONDITION(!leftleft->isNewPersistenceUnit());
-		CHECK_INT_EQUAL(1, leftleft->value().size());
+	Composite leftleft = dynamic_cast<Composite> (left->value().at(1));
+	CHECK_CONDITION(leftleft);
+	CHECK_STR_EQUAL("BinaryNode", leftleft->type() );
+	CHECK_STR_EQUAL("left", leftleft->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000005}", leftleft->id().toString());
+	CHECK_CONDITION(!leftleft->isNewPersistenceUnit());
+	CHECK_INT_EQUAL(1, leftleft->value().size());
 
-		String leftleftName = dynamic_cast<String> (leftleft->value().at(0));
-		CHECK_CONDITION(leftleftName);
-		CHECK_STR_EQUAL("NameText", leftleftName->type() );
-		CHECK_STR_EQUAL("name", leftleftName->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000006}", leftleftName->id().toString());
-		CHECK_CONDITION(!leftleftName->isNewPersistenceUnit());
-		CHECK_STR_EQUAL("in a new unit", leftleftName->value());
+	String leftleftName = dynamic_cast<String> (leftleft->value().at(0));
+	CHECK_CONDITION(leftleftName);
+	CHECK_STR_EQUAL("NameText", leftleftName->type() );
+	CHECK_STR_EQUAL("name", leftleftName->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000006}", leftleftName->id().toString());
+	CHECK_CONDITION(!leftleftName->isNewPersistenceUnit());
+	CHECK_STR_EQUAL("in a new unit", leftleftName->value());
 
-		// Right Node children
-		String rightName = dynamic_cast<String> (right->value().at(0));
-		CHECK_CONDITION(rightName);
-		CHECK_STR_EQUAL("NameText", rightName->type() );
-		CHECK_STR_EQUAL("name", rightName->name());
-		CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000008}", rightName->id().toString());
-		CHECK_CONDITION(!rightName->isNewPersistenceUnit());
-		CHECK_STR_EQUAL("Right child", rightName->value());
+	// Right Node children
+	String rightName = dynamic_cast<String> (right->value().at(0));
+	CHECK_CONDITION(rightName);
+	CHECK_STR_EQUAL("NameText", rightName->type() );
+	CHECK_STR_EQUAL("name", rightName->name());
+	CHECK_STR_EQUAL("{00000000-0000-0000-0000-000000000008}", rightName->id().toString());
+	CHECK_CONDITION(!rightName->isNewPersistenceUnit());
+	CHECK_STR_EQUAL("Right child", rightName->value());
 
-		SAFE_DELETE(store);
-	}
+	SAFE_DELETE(store);
 }
 
 }
