@@ -297,7 +297,7 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 		}
 
 		// The top of the stack should now contain the element that we must add now
-		if (!lazy) nodeStack.last()->ensureDataRead();
+		if (!lazy) nodeStack.last()->name(); // This will ensure that all data is read. We don't actually need the name.
 	}
 
 	return top;

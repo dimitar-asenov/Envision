@@ -36,7 +36,6 @@ class GenericNodeAllocator;
 
 class FILEPERSISTENCE_API GenericNode {
 	friend class GenericNodeAllocator;
-	friend class Parser;
 
 	public:
 		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
