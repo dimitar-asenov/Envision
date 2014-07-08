@@ -33,7 +33,7 @@ const QString PREFIX_STRING = QString("S_");
 const QString PREFIX_INTEGER = QString("I_");
 const QString PREFIX_DOUBLE = QString("D_");
 
-inline int Parser::countTabs(char* data, int lineStart, int lineEnd)
+inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
 {
 	int numTabs = 0;
 
@@ -44,6 +44,191 @@ inline int Parser::countTabs(char* data, int lineStart, int lineEnd)
 	}
 
 	return numTabs;
+}
+
+QString Parser::escape(const QString& line)
+{
+	QString res = line;
+	res.replace('\\', "\\\\");
+	res.replace('\r', "\\r");
+	res.replace('\n', "\\n");
+
+	return res;
+}
+
+QString Parser::rawStringToQString(const char* data, int start, int endInclusive)
+{
+	// First get the escaped string
+	QString utf8Escaped = QString::fromUtf8(data + start, endInclusive - start + 1);
+	QString res;
+	res.reserve(utf8Escaped.length());
+
+	// The unescape it
+	bool escaped = false;
+	for (auto c : utf8Escaped)
+	{
+		if (!escaped && c == '\\')
+		{
+			escaped = true;
+			continue;
+		}
+
+		if (!escaped)
+		{
+			res += c;
+			continue;
+		}
+
+		if (c == '\\')
+		{
+			res += '\\';
+			escaped = false;
+		}
+		else if (c== 'n')
+		{
+			res += '\n';
+			escaped = false;
+		}
+		else if (c== 'r')
+		{
+			res += '\r';
+			escaped = false;
+		}
+		else throw FilePersistenceException("Unrecognized escape character " + QString(c));
+	}
+
+	return res;
+}
+
+Model::NodeIdType Parser::toId(const char* data, int start, int endInclusive, bool& ok)
+{
+	// length of "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}" is 38.
+	const char* idStart = data + start;
+	if (endInclusive - start != 37 || data[start] != '{' || data[endInclusive] != '}'
+		 || idStart[9] != '-' || idStart[14] != '-' || idStart[19] != '-' || idStart[24] != '-')
+	{
+		ok = false;
+		return {};
+	}
+
+	ok = true;
+	uint low = hexDigitToChar(idStart[1], ok) << 28
+		| hexDigitToChar(idStart[2], ok) << 24
+		| hexDigitToChar(idStart[3], ok) << 20
+		| hexDigitToChar(idStart[4], ok) << 16
+		| hexDigitToChar(idStart[5], ok) << 12
+		| hexDigitToChar(idStart[6], ok) << 8
+		| hexDigitToChar(idStart[7], ok) << 4
+		| hexDigitToChar(idStart[8], ok);
+	ushort w1 = hexDigitToChar(idStart[10], ok) << 12
+		| hexDigitToChar(idStart[11], ok) << 8
+		| hexDigitToChar(idStart[12], ok) << 4
+		| hexDigitToChar(idStart[13], ok);
+	ushort w2 = hexDigitToChar(idStart[15], ok) << 12
+		| hexDigitToChar(idStart[16], ok) << 8
+		| hexDigitToChar(idStart[17], ok) << 4
+		| hexDigitToChar(idStart[18], ok);
+	uchar b1 = hexDigitToChar(idStart[20], ok) << 4 | hexDigitToChar(idStart[21], ok);
+	uchar b2 = hexDigitToChar(idStart[22], ok) << 4 | hexDigitToChar(idStart[23], ok);
+	uchar b3 = hexDigitToChar(idStart[25], ok) << 4 | hexDigitToChar(idStart[26], ok);
+	uchar b4 = hexDigitToChar(idStart[27], ok) << 4 | hexDigitToChar(idStart[28], ok);
+	uchar b5 = hexDigitToChar(idStart[29], ok) << 4 | hexDigitToChar(idStart[30], ok);
+	uchar b6 = hexDigitToChar(idStart[31], ok) << 4 | hexDigitToChar(idStart[32], ok);
+	uchar b7 = hexDigitToChar(idStart[33], ok) << 4 | hexDigitToChar(idStart[34], ok);
+	uchar b8 = hexDigitToChar(idStart[35], ok) << 4 | hexDigitToChar(idStart[36], ok);
+
+	if (!ok) return {};
+	return QUuid(low, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
+}
+
+uchar Parser::hexDigitToChar(char d, bool& ok)
+{
+	if (d >= '0' && d<= '9') return d - '0';
+
+	// lowercase
+	constexpr char bitMask = 'A' ^ 'a';
+	d |= bitMask;
+	if (d >= 'a' && d<= 'f') return d - 'a' + 10;
+
+	ok = false;
+	return 0;
+}
+
+bool Parser::nextNonEmptyLine(const char* data, int dataSize, int& lineStart, int& lineEnd)
+{
+	lineStart = lineEnd + 1;
+
+	while (lineStart < dataSize)
+	{
+		auto c = data[lineStart];
+		Q_ASSERT((c & (char)0x80) == 0); // Make sure that this character is an ASCII one and not some UTF-8 codepoint
+		Q_ASSERT(c != 0);
+		if (c =='\n' || c== '\r') ++lineStart;
+		else break;
+	}
+
+	if (lineStart >= dataSize) return false;
+
+	// LineEnd is the last character that belongs to the line. It does not point to the end of line character.
+	lineEnd = lineStart + 1;
+
+	bool onlyWhiteSpace = true;
+
+	while (lineEnd < dataSize)
+	{
+		auto c = data[lineEnd];
+
+		int utf8Bytes = 1;
+		if ((c & 0x80) == 0) utf8Bytes = 1;
+		else if ((c & 0xE0) == 0xC0) utf8Bytes = 2;
+		else if ((c & 0xF0) == 0xE0) utf8Bytes = 3;
+		else if ((c & 0xF8) == 0xF0) utf8Bytes = 4;
+		else Q_ASSERT(false);
+
+		if (utf8Bytes > 1)
+		{
+			lineEnd += utf8Bytes;
+			onlyWhiteSpace = false;
+		}
+		else
+		{
+			if (c == '\n' || c == '\r') break;
+			else
+			{
+				++lineEnd;
+				if (c != ' ' && c != '\t') onlyWhiteSpace = false;
+			}
+		}
+	}
+
+	--lineEnd;
+	if (lineEnd >= dataSize) lineEnd = dataSize - 1; // To compensate for possible unicode issues
+
+	if (lineEnd >= lineStart)
+	{
+		if (onlyWhiteSpace) return nextNonEmptyLine(data, dataSize, lineStart, lineEnd);
+		return true;
+	}
+	else return false;
+}
+
+int Parser::indexOf(const char c, const char* data, int start, int endInclusive)
+{
+	for (int i = start; i<=endInclusive; ++i) if (data[i]==c) return i;
+	return -1;
+}
+
+bool Parser::nextHeaderPart(const char* data, int& start, int&endInclusive, int lineEnd)
+{
+	while (start <= lineEnd && (data[start] == ' ' || data[start] == '\t')) ++start;
+	if (start > lineEnd || data[start] == '.') return false;
+
+	endInclusive = start + 1;
+	while (endInclusive <= lineEnd && data[endInclusive] != ' ' && data[endInclusive] != '\t'
+			&& data[endInclusive] != '.') ++endInclusive;
+
+	--endInclusive;
+	return true;
 }
 
 void Parser::save(QTextStream& stream, GenericNode* node, int tabLevel)
@@ -82,7 +267,6 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 
 	QList<GenericNode*> nodeStack;
 	GenericNode* top = nullptr;
-	int previousTabLevel = std::numeric_limits<int>::max();
 
 	int start = 0;
 	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
@@ -93,35 +277,23 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 
 		if (top == nullptr)
 		{
+			Q_ASSERT(tabLevel == 0);
+
 			// Top can't be in the allNodes array since it must delete that array in its own destructor.
 			top = allocator->newRoot(data, start, lineEnd);
 			nodeStack.append(top);
-			previousTabLevel = tabLevel;
 		}
 		else
 		{
-			Q_ASSERT(tabLevel <= previousTabLevel + 1);
+			Q_ASSERT(tabLevel > 0);
+			Q_ASSERT(nodeStack.size() >= tabLevel);
 
 			GenericNode* child = allocator->newChild(start, lineEnd);
 
-			if (tabLevel == previousTabLevel + 1)
-			{
-				nodeStack.last()->addChild(child);
-				nodeStack.append(child);
-				previousTabLevel = tabLevel;
-			}
-			else
-			{
-				// Some nodes are finished, pop them
-				nodeStack.removeLast(); // We always remove at least one element (only one in case prev level = tab level)
-				while (previousTabLevel > tabLevel)
-				{
-					--previousTabLevel;
-					nodeStack.removeLast();
-				}
-				nodeStack.last()->addChild(child);
-				nodeStack.append(child);
-			}
+			while (nodeStack.size() > tabLevel) nodeStack.removeLast();
+
+			nodeStack.last()->addChild(child);
+			nodeStack.append(child);
 		}
 
 		// The top of the stack should now contain the element that we must add now
@@ -131,7 +303,7 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 	return top;
 }
 
-void Parser::parseLine(GenericNode* node, char* line, int lineLength)
+void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 {
 	int start = 0;
 	int lineEnd = lineLength - 1; // Last character which belongs to the line, excluding new line characters.
@@ -210,191 +382,6 @@ void Parser::parseLine(GenericNode* node, char* line, int lineLength)
 				lineEnd - start - PREFIX_DOUBLE.length() + 1 ));
 	else throw FilePersistenceException("Unknown value prefix" +
 			QString::fromUtf8(line+start, lineEnd-start+1));
-}
-
-QString Parser::escape(const QString& line)
-{
-	QString res = line;
-	res.replace('\\', "\\\\");
-	res.replace('\r', "\\r");
-	res.replace('\n', "\\n");
-
-	return res;
-}
-
-QString Parser::rawStringToQString(char* data, int start, int endInclusive)
-{
-	// First get the escaped string
-	QString utf8Escaped = QString::fromUtf8(data + start, endInclusive - start + 1);
-	QString res;
-	res.reserve(utf8Escaped.length());
-
-	// The unescape it
-	bool escaped = false;
-	for (auto c : utf8Escaped)
-	{
-		if (!escaped && c == '\\')
-		{
-			escaped = true;
-			continue;
-		}
-
-		if (!escaped)
-		{
-			res += c;
-			continue;
-		}
-
-		if (c == '\\')
-		{
-			res += '\\';
-			escaped = false;
-		}
-		else if (c== 'n')
-		{
-			res += '\n';
-			escaped = false;
-		}
-		else if (c== 'r')
-		{
-			res += '\r';
-			escaped = false;
-		}
-		else throw FilePersistenceException("Unrecognized escape character " + QString(c));
-	}
-
-	return res;
-}
-
-Model::NodeIdType Parser::toId(char* data, int start, int endInclusive, bool& ok)
-{
-	// length of "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}" is 38.
-	char* idStart = data + start;
-	if (endInclusive - start != 37 || data[start] != '{' || data[endInclusive] != '}'
-		 || idStart[9] != '-' || idStart[14] != '-' || idStart[19] != '-' || idStart[24] != '-')
-	{
-		ok = false;
-		return {};
-	}
-
-	ok = true;
-	uint low = hexDigitToChar(idStart[1], ok) << 28
-		| hexDigitToChar(idStart[2], ok) << 24
-		| hexDigitToChar(idStart[3], ok) << 20
-		| hexDigitToChar(idStart[4], ok) << 16
-		| hexDigitToChar(idStart[5], ok) << 12
-		| hexDigitToChar(idStart[6], ok) << 8
-		| hexDigitToChar(idStart[7], ok) << 4
-		| hexDigitToChar(idStart[8], ok);
-	ushort w1 = hexDigitToChar(idStart[10], ok) << 12
-		| hexDigitToChar(idStart[11], ok) << 8
-		| hexDigitToChar(idStart[12], ok) << 4
-		| hexDigitToChar(idStart[13], ok);
-	ushort w2 = hexDigitToChar(idStart[15], ok) << 12
-		| hexDigitToChar(idStart[16], ok) << 8
-		| hexDigitToChar(idStart[17], ok) << 4
-		| hexDigitToChar(idStart[18], ok);
-	uchar b1 = hexDigitToChar(idStart[20], ok) << 4 | hexDigitToChar(idStart[21], ok);
-	uchar b2 = hexDigitToChar(idStart[22], ok) << 4 | hexDigitToChar(idStart[23], ok);
-	uchar b3 = hexDigitToChar(idStart[25], ok) << 4 | hexDigitToChar(idStart[26], ok);
-	uchar b4 = hexDigitToChar(idStart[27], ok) << 4 | hexDigitToChar(idStart[28], ok);
-	uchar b5 = hexDigitToChar(idStart[29], ok) << 4 | hexDigitToChar(idStart[30], ok);
-	uchar b6 = hexDigitToChar(idStart[31], ok) << 4 | hexDigitToChar(idStart[32], ok);
-	uchar b7 = hexDigitToChar(idStart[33], ok) << 4 | hexDigitToChar(idStart[34], ok);
-	uchar b8 = hexDigitToChar(idStart[35], ok) << 4 | hexDigitToChar(idStart[36], ok);
-
-	if (!ok) return {};
-	return QUuid(low, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
-}
-
-uchar Parser::hexDigitToChar(char d, bool& ok)
-{
-	if (d >= '0' && d<= '9') return d - '0';
-
-	// lowercase
-	constexpr char bitMask = 'A' ^ 'a';
-	d |= bitMask;
-	if (d >= 'a' && d<= 'f') return d - 'a' + 10;
-
-	ok = false;
-	return 0;
-}
-
-bool Parser::nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd)
-{
-	lineStart = lineEnd + 1;
-
-	while (lineStart < dataSize)
-	{
-		auto c = data[lineStart];
-		Q_ASSERT((c & (char)0x80) == 0); // Make sure that this character is an ASCII one and not some UTF-8 codepoint
-		Q_ASSERT(c != 0);
-		if (c =='\n' || c== '\r') ++lineStart;
-		else break;
-	}
-
-	if (lineStart >= dataSize) return false;
-
-	// LineEnd is the last character that belongs to the line. It does not point to the end of line character.
-	lineEnd = lineStart + 1;
-
-	bool onlyWhiteSpace = true;
-
-	while (lineEnd < dataSize)
-	{
-		auto c = data[lineEnd];
-
-		int utf8Bytes = 1;
-		if ((c & 0x80) == 0) utf8Bytes = 1;
-		else if ((c & 0xE0) == 0xC0) utf8Bytes = 2;
-		else if ((c & 0xF0) == 0xE0) utf8Bytes = 3;
-		else if ((c & 0xF8) == 0xF0) utf8Bytes = 4;
-		else Q_ASSERT(false);
-
-		if (utf8Bytes > 1)
-		{
-			lineEnd += utf8Bytes;
-			onlyWhiteSpace = false;
-		}
-		else
-		{
-			if (c == '\n' || c == '\r') break;
-			else
-			{
-				++lineEnd;
-				if (c != ' ' && c != '\t') onlyWhiteSpace = false;
-			}
-		}
-	}
-
-	--lineEnd;
-	if (lineEnd >= dataSize) lineEnd = dataSize - 1; // To compensate for possible unicode issues
-
-	if (lineEnd >= lineStart)
-	{
-		if (onlyWhiteSpace) return nextNonEmptyLine(data, dataSize, lineStart, lineEnd);
-		return true;
-	}
-	else return false;
-}
-
-int Parser::indexOf(const char c, char* data, int start, int endInclusive)
-{
-	for (int i = start; i<=endInclusive; ++i) if (data[i]==c) return i;
-	return -1;
-}
-
-bool Parser::nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd)
-{
-	while (start <= lineEnd && (data[start] == ' ' || data[start] == '\t')) ++start;
-	if (start > lineEnd || data[start] == '.') return false;
-
-	endInclusive = start + 1;
-	while (endInclusive <= lineEnd && data[endInclusive] != ' ' && data[endInclusive] != '\t'
-			&& data[endInclusive] != '.') ++endInclusive;
-
-	--endInclusive;
-	return true;
 }
 
 } /* namespace FilePersistence */

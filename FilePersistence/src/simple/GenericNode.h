@@ -95,11 +95,11 @@ class FILEPERSISTENCE_API GenericNode {
 		 * The text line from which this node should be created. It should start with the indenting tabs and should end
 		 * with the last content character of the node. The line should not include the final line break characters.
 		 */
-		char* dataLine_{};
+		const char* dataLine_{};
 		int dataLineLength_{};
 		// //////////////////////////////////////////////////////////////////////////////////////////
 
-		void resetForLoading(char* dataLine, int dataLineLength);
+		void resetForLoading(const char* dataLine, int dataLineLength);
 		void ensureDataRead() const;
 };
 

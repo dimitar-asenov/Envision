@@ -37,23 +37,22 @@ class GenericNodeAllocator;
 class FILEPERSISTENCE_API Parser {
 	public:
 
-		static void parseLine(GenericNode* node, char* line, int lineLength);
+		static void parseLine(GenericNode* node, const char* line, int lineLength);
 
 		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
 		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
 
 	private:
-
-		static int countTabs(char* data, int lineStart, int lineEnd);
-		static QString rawStringToQString(char* data, int startAt, int endInclusive);
+		static int countTabs(const char* data, int lineStart, int lineEnd);
+		static QString rawStringToQString(const char* data, int startAt, int endInclusive);
 		static QString escape(const QString& line);
 
-		static Model::NodeIdType toId(char* data, int start, int endInclusive, bool& ok);
+		static Model::NodeIdType toId(const char* data, int start, int endInclusive, bool& ok);
 		static uchar hexDigitToChar(char d, bool& ok);
 
-		static bool nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd);
-		static int indexOf(const char c, char* data, int start, int endInclusive);
-		static bool nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd);
+		static bool nextNonEmptyLine(const char* data, int dataSize, int& lineStart, int& lineEnd);
+		static int indexOf(const char c, const char* data, int start, int endInclusive);
+		static bool nextHeaderPart(const char* data, int& start, int&endInclusive, int lineEnd);
 };
 
 } /* namespace FilePersistence */

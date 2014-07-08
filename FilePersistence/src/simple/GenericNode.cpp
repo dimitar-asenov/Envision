@@ -35,6 +35,7 @@ static const int MAX_DOUBLE_PRECISION = 15;
 GenericNode::GenericNode(){}
 GenericNode::~GenericNode()
 {
+	// This is the case when this node is not owned by an allocator
 	if (dataLineLength_ == 0)
 		for (auto c : children_) SAFE_DELETE(c);
 }
@@ -137,7 +138,7 @@ GenericNode* GenericNode::find(Model::NodeIdType id)
 	return nullptr;
 }
 
-void GenericNode::resetForLoading(char* dataLine, int dataLineLength)
+void GenericNode::resetForLoading(const char* dataLine, int dataLineLength)
 {
 	Q_ASSERT(dataLineLength > 0);
 

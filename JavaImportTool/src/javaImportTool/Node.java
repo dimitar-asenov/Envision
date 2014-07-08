@@ -196,7 +196,7 @@ public class Node {
 		
 		if (format_ == OutputFormat.CLIPBOARD) out_.peek().println("<clipboard>");
 		else setName(symbol_);
-		renderTree("\t", false);
+		renderTree("", false);
 		if (format_ == OutputFormat.CLIPBOARD) out_.peek().println("</clipboard>");
 	}
 	
