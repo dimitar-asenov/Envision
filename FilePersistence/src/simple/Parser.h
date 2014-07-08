@@ -37,7 +37,7 @@ class GenericNodeAllocator;
 class FILEPERSISTENCE_API Parser {
 	public:
 
-		static void parseData(GenericNode* node, char* data, int start, int lineEnd);
+		static void parseLine(GenericNode* node, char* line, int lineLength);
 
 		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
 		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);

@@ -91,12 +91,15 @@ class FILEPERSISTENCE_API GenericNode {
 		Model::NodeIdType id_{};
 		QList<GenericNode*> children_;
 
-		char* data_{};
-		int lineStartInData_{};
-		int lineEndInData_{};
+		/**
+		 * The text line from which this node should be created. It should start with the indenting tabs and should end
+		 * with the last content character of the node. The line should not include the final line break characters.
+		 */
+		char* dataLine_{};
+		int dataLineLength_{};
 		// //////////////////////////////////////////////////////////////////////////////////////////
 
-		void resetForLoading(char* data, int lineStart, int lineEndInclusive);
+		void resetForLoading(char* dataLine, int dataLineLength);
 		void ensureDataRead() const;
 };
 

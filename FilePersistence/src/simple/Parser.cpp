@@ -131,42 +131,45 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 	return top;
 }
 
-void Parser::parseData(GenericNode* node, char* data, int start, int lineEnd)
+void Parser::parseLine(GenericNode* node, char* line, int lineLength)
 {
-	auto tabLevel = countTabs(data, start, lineEnd);
+	int start = 0;
+	int lineEnd = lineLength - 1; // Last character which belongs to the line, excluding new line characters.
+
+	auto tabLevel = countTabs(line, start, lineEnd);
 
 	// Handle Headers
 	start+=tabLevel;
 	int headerPartEnd = -1;
 
 	// Name
-	auto moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+	auto moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
 	Q_ASSERT(moreHeaderParts);
-	node->setName( QString::fromLatin1(data + start, headerPartEnd-start+1) );
+	node->setName( QString::fromLatin1(line + start, headerPartEnd-start+1) );
 
 	// Type
 	start = headerPartEnd+1;
-	moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+	moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
 	Q_ASSERT(moreHeaderParts);
-	node->setType( QString::fromLatin1(data + start, headerPartEnd-start+1) );
+	node->setType( QString::fromLatin1(line + start, headerPartEnd-start+1) );
 
 	// Id (optional)
 	start = headerPartEnd+1;
-	moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+	moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
 	if (moreHeaderParts)
 	{
 		bool isId = true;
-		Model::NodeIdType id = toId(data, start, headerPartEnd, isId);
+		Model::NodeIdType id = toId(line, start, headerPartEnd, isId);
 
 		if ( isId ) node->setId( id );
 		else throw FilePersistenceException("Unknown node header element "
-				+ QString::fromLatin1(data+start, headerPartEnd-start+1));
+				+ QString::fromLatin1(line+start, headerPartEnd-start+1));
 	}
 
 	if (moreHeaderParts)
 	{
 		start = headerPartEnd+1;
-		moreHeaderParts = nextHeaderPart(data, start, headerPartEnd, lineEnd);
+		moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
 	}
 
 	Q_ASSERT(!moreHeaderParts);
@@ -174,24 +177,24 @@ void Parser::parseData(GenericNode* node, char* data, int start, int lineEnd)
 
 	// Handle Value
 	if (start > lineEnd) return;
-	Q_ASSERT(data[start] == '.');
+	Q_ASSERT(line[start] == '.');
 
 	// Ignore white spaces
 	++start;
-	while (start <= lineEnd && (data[start] == ' ' || data[start] == '\t')) ++start;
+	while (start <= lineEnd && (line[start] == ' ' || line[start] == '\t')) ++start;
 	if (start > lineEnd) return; // no value
 
-	if (PREFIX_STRING == QString::fromLatin1(data + start, PREFIX_STRING.length()))
+	if (PREFIX_STRING == QString::fromLatin1(line + start, PREFIX_STRING.length()))
 	{
 		start += PREFIX_STRING.length();
-		auto s = rawStringToQString(data, start, lineEnd);
+		auto s = rawStringToQString(line, start, lineEnd);
 
 		if (s.isEmpty() && start <= lineEnd)
 		{
 			// There were some characters, but the string is empty.
 			// See if this was the UTF-8 BOM, which Qt ignores in strings, but it might be relevant for characters
-			if (lineEnd-start == 2 && data[start] == (char)0xEF
-					&& data[start+1] == (char)0xBB && data[start+2] == (char)0xBF)
+			if (lineEnd-start == 2 && line[start] == (char)0xEF
+					&& line[start+1] == (char)0xBB && line[start+2] == (char)0xBF)
 			s = QChar{QChar::ByteOrderMark};
 			else
 				throw FilePersistenceException("Invalid string sequence when reading node id " + node->id().toString());
@@ -199,14 +202,14 @@ void Parser::parseData(GenericNode* node, char* data, int start, int lineEnd)
 
 		node->setValue(GenericNode::STRING_VALUE, s);
 	}
-	else if (PREFIX_INTEGER == QString::fromLatin1(data + start, PREFIX_INTEGER.length()))
-		node->setValue(GenericNode::INT_VALUE, QString::fromLatin1(data+start+PREFIX_INTEGER.length(),
+	else if (PREFIX_INTEGER == QString::fromLatin1(line + start, PREFIX_INTEGER.length()))
+		node->setValue(GenericNode::INT_VALUE, QString::fromLatin1(line+start+PREFIX_INTEGER.length(),
 				lineEnd - start - PREFIX_INTEGER.length() + 1 ));
-	else if (PREFIX_DOUBLE == QString::fromLatin1(data + start, PREFIX_DOUBLE.length()))
-		node->setValue(GenericNode::DOUBLE_VALUE, QString::fromLatin1(data+start+PREFIX_DOUBLE.length(),
+	else if (PREFIX_DOUBLE == QString::fromLatin1(line + start, PREFIX_DOUBLE.length()))
+		node->setValue(GenericNode::DOUBLE_VALUE, QString::fromLatin1(line+start+PREFIX_DOUBLE.length(),
 				lineEnd - start - PREFIX_DOUBLE.length() + 1 ));
 	else throw FilePersistenceException("Unknown value prefix" +
-			QString::fromUtf8(data+start, lineEnd-start+1));
+			QString::fromUtf8(line+start, lineEnd-start+1));
 }
 
 QString Parser::escape(const QString& line)

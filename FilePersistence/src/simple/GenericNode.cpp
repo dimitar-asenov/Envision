@@ -35,7 +35,7 @@ static const int MAX_DOUBLE_PRECISION = 15;
 GenericNode::GenericNode(){}
 GenericNode::~GenericNode()
 {
-	if (lineStartInData_ == 0 && lineEndInData_ == 0)
+	if (dataLineLength_ == 0)
 		for (auto c : children_) SAFE_DELETE(c);
 }
 
@@ -137,14 +137,12 @@ GenericNode* GenericNode::find(Model::NodeIdType id)
 	return nullptr;
 }
 
-void GenericNode::resetForLoading(char* data, int lineStart, int lineEndInclusive)
+void GenericNode::resetForLoading(char* dataLine, int dataLineLength)
 {
-	Q_ASSERT(lineStart >= 0);
-	Q_ASSERT(lineEndInclusive >= lineStart);
+	Q_ASSERT(dataLineLength > 0);
 
-	data_ = data;
-	lineStartInData_ = lineStart;
-	lineEndInData_ = lineEndInclusive;
+	dataLine_ = dataLine;
+	dataLineLength_ = dataLineLength;
 
 	name_.clear();
 	type_.clear();
@@ -156,11 +154,11 @@ void GenericNode::resetForLoading(char* data, int lineStart, int lineEndInclusiv
 
 void GenericNode::ensureDataRead() const
 {
-	if (data_)
+	if (dataLine_)
 	{
-		Parser::parseData(const_cast<GenericNode*>(this), data_, lineStartInData_, lineEndInData_);
+		Parser::parseLine(const_cast<GenericNode*>(this), dataLine_, dataLineLength_);
 		// Don't delete this, just mark it unused. The allocator will delete it.
-		const_cast<GenericNode*>(this)->data_ = nullptr;
+		const_cast<GenericNode*>(this)->dataLine_ = nullptr;
 	}
 }
 
