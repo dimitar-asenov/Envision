@@ -293,6 +293,7 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 			while (nodeStack.size() > tabLevel) nodeStack.removeLast();
 
 			nodeStack.last()->addChild(child);
+			child->setParent(nodeStack.last());
 			nodeStack.append(child);
 		}
 
