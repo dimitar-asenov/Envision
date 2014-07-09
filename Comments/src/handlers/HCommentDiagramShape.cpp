@@ -81,6 +81,8 @@ void HCommentDiagramShape::mousePressEvent(Visualization::Item* target, QGraphic
 				vShape->setCursor(Qt::SizeAllCursor);
 			else
 				vShape->setCursor(Qt::ClosedHandCursor);
+			shapePosition_ = vShape->node()->pos();
+			shapeSize_ = vShape->node()->size();
 		}
 		if (event->button() == Qt::LeftButton && vDiagram->showConnectorPoints())
 		{
@@ -132,10 +134,10 @@ void HCommentDiagramShape::mouseReleaseEvent(Visualization::Item *target, QGraph
 void HCommentDiagramShape::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	auto shape = DCast<VCommentDiagramShape>(target);
-
 	if (event->buttons() & Qt::LeftButton)
 	{
-		QPoint diff((event->scenePos() - event->lastScenePos()).toPoint());
+		//there are some rounding errors if zoomed in, if we simply compute the delta to the last known position.
+		QPoint diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)).toPoint());
 
 		switch (clickedRect_)
 		{
@@ -177,7 +179,7 @@ void HCommentDiagramShape::hoverLeaveEvent(Visualization::Item *target, QGraphic
 
 void HCommentDiagramShape::moveBy(VCommentDiagramShape* shape, QPoint pos)
 {
-	QPoint dest(shape->node()->pos() + pos);
+	QPoint dest(shapePosition_ + pos);
 	if (dest.x() < 0) dest.setX(0);
 	if (dest.y() < 0) dest.setY(0);
 
@@ -189,7 +191,7 @@ void HCommentDiagramShape::moveBy(VCommentDiagramShape* shape, QPoint pos)
 
 void HCommentDiagramShape::resizeBy(VCommentDiagramShape* shape, QSize size)
 {
-	QSize dest(shape->node()->size() + size);
+	QSize dest(shapeSize_ + size);
 	if (dest.width() < 0) dest.setWidth(0);
 	if (dest.height() < 0) dest.setHeight(0);
 

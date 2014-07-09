@@ -49,6 +49,8 @@ class COMMENTS_API HCommentDiagramShape : public Interaction::GenericHandler {
 
 	private:
 		enum VCommentDiagramResizeRect clickedRect_;
+		QPoint shapePosition_{};
+		QSize shapeSize_{};
 
 		void moveBy(VCommentDiagramShape* shape, QPoint pos);
 		void resizeBy(VCommentDiagramShape* shape, QSize pos);

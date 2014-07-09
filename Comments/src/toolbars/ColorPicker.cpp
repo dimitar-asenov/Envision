@@ -118,7 +118,7 @@ void ColorPicker::setselectedColor(QString aColor)
 {
 	QPixmap pixmap(24, 24);
 	QColor selectedColor = QColor(aColor);
-	pixmap.fill(Qt::white);
+	pixmap.fill(Qt::transparent);
 	QPainter* aPainter = new QPainter(&pixmap);
 	aPainter->setPen(selectedColor);
 	aPainter->setBrush(QBrush(selectedColor));
@@ -135,7 +135,7 @@ void ColorPicker::setselectedColor(QString aColor)
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case shape:
-			aPainter->setBrush(QBrush(Qt::white));
+			aPainter->setBrush(QBrush(Qt::transparent));
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case text:
