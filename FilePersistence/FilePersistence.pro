@@ -5,11 +5,11 @@ win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
 QT += xml
-HEADERS += src/simple/GenericNode.h \
+HEADERS += src/simple/Parser.h \
+    src/simple/GenericNode.h \
     src/simple/GenericNodeAllocator.h \
     src/simple/SimpleTextFileStore.h \
     src/FilePersistenceException.h \
-    src/FileStore.h \
     src/SystemClipboard.h \
     src/XMLModel.h \
     src/filepersistence_api.h \
@@ -17,7 +17,8 @@ HEADERS += src/simple/GenericNode.h \
     src/FilePersistencePlugin.h \
     src/version_control/ChangeDescription.h \
     src/version_control/Diff.h
-SOURCES += src/simple/GenericNode.cpp \
+SOURCES += src/simple/Parser.cpp \
+    src/simple/GenericNode.cpp \
     src/simple/GenericNodeAllocator.cpp \
     src/simple/SimpleTextFileStore.cpp \
     test/TypedListTests.cpp \
@@ -29,7 +30,6 @@ SOURCES += src/simple/GenericNode.cpp \
     src/FilePersistenceException.cpp \
     test/LoadTests.cpp \
     test/SaveTests.cpp \
-    src/FileStore.cpp \
     src/FilePersistencePlugin.cpp \
     src/version_control/ChangeDescription.cpp \
     src/version_control/Diff.cpp

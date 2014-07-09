@@ -27,8 +27,6 @@
 #pragma once
 
 #include <QFlags>
-#include <QScopedPointer>
-#include <QSharedPointer>
 
 #include "../simple/GenericNode.h"
 
@@ -39,8 +37,8 @@ enum class ChangeType {Unclassified, Added, Deleted, Moved, Stationary};
 class ChangeDescription
 {
 	public:
-		ChangeDescription(QSharedPointer<GenericNode> unchangedNode);
-		ChangeDescription(QSharedPointer<GenericNode> oldNode, QSharedPointer<GenericNode> newNode);
+		ChangeDescription(GenericNode* unchangedNode);
+		ChangeDescription(GenericNode* oldNode, GenericNode* newNode);
 
 		enum UpdateType
 		{
@@ -61,8 +59,8 @@ class ChangeDescription
 
 		const UpdateFlags flags() const;
 
-		const QSharedPointer<GenericNode> newNode() const;
-		const QSharedPointer<GenericNode> oldNode() const;
+		const GenericNode* newNode() const;
+		const GenericNode* oldNode() const;
 
 	private:
 		void fundamentalChangeClassification();
@@ -75,8 +73,8 @@ class ChangeDescription
 
 		UpdateFlags updateFlags_;
 
-		QSharedPointer<GenericNode> oldNode_{};
-		QSharedPointer<GenericNode> newNode_{};
+		GenericNode* oldNode_{};
+		GenericNode* newNode_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
@@ -85,7 +83,7 @@ inline const ChangeType& ChangeDescription::type() const { return type_; }
 
 inline const ChangeDescription::UpdateFlags ChangeDescription::flags() const { return updateFlags_; }
 
-inline const QSharedPointer<GenericNode> ChangeDescription::newNode() const { return newNode_; }
-inline const QSharedPointer<GenericNode> ChangeDescription::oldNode() const { return oldNode_; }
+inline const GenericNode* ChangeDescription::newNode() const { return newNode_; }
+inline const GenericNode* ChangeDescription::oldNode() const { return oldNode_; }
 
 } /* namespace FilePersistence */

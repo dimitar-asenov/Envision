@@ -26,20 +26,49 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
+#include "../interactionbase_api.h"
 
-#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
+#include "Command.h"
 
-namespace OOInteraction {
+namespace Interaction {
 
-class OOINTERACTION_API CCreateMethod : public Interaction::CreateNamedObjectWithAttributes
+class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 {
 	public:
-		CCreateMethod();
+		CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes, bool usePossibleNames);
+
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens) override;
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens) override;
+
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar) override;
+		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar) override;
 
 	protected:
-		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-			const QString& name, const QStringList& attributes) override;
+		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+				const QString& name, const QStringList& attributes) = 0;
+
+		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar, const QString& name,
+				const QStringList& attributes, bool commandFound);
+
+		virtual QStringList possibleNames();
+
+		const QString& commandName();
+
+	private:
+		void findParts(const QStringList& tokens, QString& name, QStringList& attributes,
+			bool& methodFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
+
+		QStringList matchingNames(const QString& nameToLookFor);
+
+		const QString commandName_;
+		const QList<QStringList> attributes_;
+		const bool usePossibleNames_{};
 };
+
+inline const QString& CommandWithNameAndFlags::commandName() { return commandName_;}
 
 }

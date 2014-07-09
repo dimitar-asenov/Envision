@@ -24,22 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "VCommentTableStyle.h"
 
-#include "../oointeraction_api.h"
+namespace Comments {
 
-#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
+VCommentTableStyle::~VCommentTableStyle(){} // Put the VTable here
 
-namespace OOInteraction {
-
-class OOINTERACTION_API CCreateMethod : public Interaction::CreateNamedObjectWithAttributes
-{
-	public:
-		CCreateMethod();
-
-	protected:
-		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-			const QString& name, const QStringList& attributes) override;
-};
-
-}
+} /* namespace Comments */

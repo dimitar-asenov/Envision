@@ -118,32 +118,28 @@ void ColorPicker::setselectedColor(QString aColor)
 {
 	QPixmap pixmap(24, 24);
 	QColor selectedColor = QColor(aColor);
-	pixmap.fill(QColor(selectedColor));
+	pixmap.fill(Qt::white);
 	QPainter* aPainter = new QPainter(&pixmap);
-	QColor paintColor;
-	float distanceToBlack = selectedColor.redF()*selectedColor.redF() + selectedColor.greenF()*selectedColor.greenF()
-		+ selectedColor.blueF()*selectedColor.blueF();
-	float distanceToWhite = (selectedColor.redF()-1) * (selectedColor.redF()-1)
-		+ (selectedColor.greenF()-1)*(selectedColor.greenF()-1) + (selectedColor.blueF()-1)*(selectedColor.blueF()-1);
-	if (distanceToBlack > distanceToWhite)
-		paintColor = Qt::black;
-	else
-		paintColor = Qt::white;
-	aPainter->setPen(paintColor);
+	aPainter->setPen(selectedColor);
+	aPainter->setBrush(QBrush(selectedColor));
+	aPainter->drawRect(12, 12, 12, 12);
+
+	aPainter->setPen(Qt::black);
 	QFont font = aPainter->font();
 	font.setPointSize(16);
 	aPainter->setFont(font);
 	switch (type_)
 	{
 		case background:
-			aPainter->setBrush(QBrush(paintColor));
+			aPainter->setBrush(QBrush(Qt::gray));
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case shape:
+			aPainter->setBrush(QBrush(Qt::white));
 			aPainter->drawRect(5, 5, 13, 13);
 		break;
 		case text:
-			aPainter->drawText(6, 20, "T");
+			aPainter->drawText(3, 20, "T");
 		break;
 	}
 	aPainter->end();

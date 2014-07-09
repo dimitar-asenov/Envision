@@ -35,13 +35,14 @@
 #include "VisualizationBase/src/layouts/GridLayout.h"
 
 #include "../nodes/CommentTable.h"
+#include "VCommentTableStyle.h"
 
 namespace Comments {
 
 class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCommentTable,
 						Visualization::Item, CommentTable> >
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentTable, Visualization::ItemStyle)
+	ITEM_COMMON(VCommentTable)
 
 	public:
 		VCommentTable(Visualization::Item* parent, NodeType* node);
@@ -51,11 +52,8 @@ class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCom
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Item* node_{};
 		QVector< QVector<Visualization::Item*> > items_;
 		Visualization::GridLayout* aGrid_{};
-
-		void clearChildren();
 };
 
 } /* namespace Comments */

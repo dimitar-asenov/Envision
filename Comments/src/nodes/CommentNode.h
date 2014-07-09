@@ -56,6 +56,10 @@ class COMMENTS_API CommentNode : public Super<Model::CompositeNode> {
 		void synchronizeDiagramsToText();
 		void synchronizeCodesToText();
 		void synchronizeTablesToText();
+
+	private:
+		template <typename T, typename AppendFunction>
+		void synchronizeItem(QString aString, T aList, AppendFunction appendFunction);
 };
 
 } /* namespace Comments */

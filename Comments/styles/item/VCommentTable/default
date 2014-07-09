@@ -13,4 +13,19 @@
 		<cornerType>1</cornerType>
 		<cornerRadius>3</cornerRadius>
 	</shape>
+	<grid prototypes="layout/GridLayout/default">
+		<horizontalSpace>6</horizontalSpace>
+		<verticalSpace>6</verticalSpace>
+		<borderPen>
+			<width>1</width>
+			<style>2</style>
+			<color>
+				<red>192</red>
+				<green>192</green>
+				<blue>192</blue>
+				<alpha>255</alpha>
+			</color>
+		</borderPen>
+		<drawsOnlyShape>false</drawsOnlyShape>
+	</grid>
 </style>

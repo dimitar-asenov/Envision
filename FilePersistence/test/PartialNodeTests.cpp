@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "FilePersistencePlugin.h"
-#include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -39,91 +38,66 @@ namespace FilePersistence {
 
 TEST(FilePersistencePlugin, LoadingPartialList)
 {
-	for (int i = 0; i<2; ++i)
-	{
-		PersistentStore* store{};
+	PersistentStore* store{};
 
-		if (i==0)
-		{
-			auto s = new FileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted");
-			store = s;
-		}
-		else if (i==1)
-		{
-			auto s = new SimpleTextFileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
-			store = s;
-		}
+	auto s = new SimpleTextFileStore();
+	s->setBaseFolder(":/FilePersistence/test/persisted");
+	store = s;
 
-		Model::TreeManager manager;
-		manager.load(store, "partial", true);
-		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
-		CHECK_CONDITION(root != nullptr);
+	Model::TreeManager manager;
+	manager.load(store, "partial", true);
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
+	CHECK_CONDITION(root != nullptr);
 
-		List* list = root->list();
+	List* list = root->list();
 
-		CHECK_CONDITION(list != nullptr);
-		CHECK_STR_EQUAL("List", list->typeName() );
-		CHECK_CONDITION(list->isPartiallyLoaded());
-		CHECK_INT_EQUAL(0, list->size());
+	CHECK_CONDITION(list != nullptr);
+	CHECK_STR_EQUAL("List", list->typeName() );
+	CHECK_CONDITION(list->isPartiallyLoaded());
+	CHECK_INT_EQUAL(0, list->size());
 
-		SAFE_DELETE(store);
-	}
+	SAFE_DELETE(store);
 }
 
 TEST(FilePersistencePlugin, LoadingFullList)
 {
-	for (int i = 0; i<2; ++i)
-	{
-		PersistentStore* store{};
+	PersistentStore* store{};
 
-		if (i==0)
-		{
-			auto s = new FileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted");
-			store = s;
-		}
-		else if (i==1)
-		{
-			auto s = new SimpleTextFileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
-			store = s;
-		}
+	auto s = new SimpleTextFileStore();
+	s->setBaseFolder(":/FilePersistence/test/persisted");
+	store = s;
 
+	Model::TreeManager manager;
+	manager.load(store, "partial", false);
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
+	CHECK_CONDITION(root != nullptr);
 
-		Model::TreeManager manager;
-		manager.load(store, "partial", false);
-		TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (manager.root());
-		CHECK_CONDITION(root != nullptr);
+	List* list = root->list();
 
-		List* list = root->list();
+	CHECK_CONDITION(list != nullptr);
+	CHECK_STR_EQUAL("List", list->typeName() );
 
-		CHECK_CONDITION(list != nullptr);
-		CHECK_STR_EQUAL("List", list->typeName() );
+	CHECK_CONDITION(!list->isPartiallyLoaded());
+	CHECK_INT_EQUAL(4, list->size());
 
-		CHECK_CONDITION(!list->isPartiallyLoaded());
-		CHECK_INT_EQUAL(4, list->size());
+	Text* one = list->at<Text>(0);
+	Text* two = list->at<Text>(1);
+	Text* three = list->at<Text>(2);
+	Text* four = list->at<Text>(3);
 
-		Text* one = list->at<Text>(0);
-		Text* two = list->at<Text>(1);
-		Text* three = list->at<Text>(2);
-		Text* four = list->at<Text>(3);
+	CHECK_CONDITION(one != nullptr);
+	CHECK_STR_EQUAL("one", one->get());
 
-		CHECK_CONDITION(one != nullptr);
-		CHECK_STR_EQUAL("one", one->get());
+	CHECK_CONDITION(two != nullptr);
+	CHECK_STR_EQUAL("two", two->get());
 
-		CHECK_CONDITION(two != nullptr);
-		CHECK_STR_EQUAL("two", two->get());
+	CHECK_CONDITION(three != nullptr);
+	CHECK_STR_EQUAL("three", three->get());
 
-		CHECK_CONDITION(three != nullptr);
-		CHECK_STR_EQUAL("three", three->get());
+	CHECK_CONDITION(four != nullptr);
+	CHECK_STR_EQUAL("four", four->get());
 
-		CHECK_CONDITION(four != nullptr);
-		CHECK_STR_EQUAL("four", four->get());
-
-		SAFE_DELETE(store);
-	}
+	SAFE_DELETE(store);
 }
 
 }

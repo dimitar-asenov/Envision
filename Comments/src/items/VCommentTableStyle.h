@@ -26,20 +26,18 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
+#include "../comments_api.h"
 
-#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/layouts/GridLayoutStyle.h"
 
-namespace OOInteraction {
+namespace Comments {
 
-class OOINTERACTION_API CCreateMethod : public Interaction::CreateNamedObjectWithAttributes
-{
+class COMMENTS_API VCommentTableStyle : public Super<Visualization::ItemStyle> {
 	public:
-		CCreateMethod();
+		virtual ~VCommentTableStyle() override;
 
-	protected:
-		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-			const QString& name, const QStringList& attributes) override;
+		Property<Visualization::GridLayoutStyle> grid{this, "grid"};
 };
 
-}
+} /* namespace Comments */

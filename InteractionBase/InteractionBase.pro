@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/expression_editor/tree_builder/AddSubExpression.h \
+HEADERS += src/commands/CommandWithNameAndFlags.h \
+    src/expression_editor/tree_builder/AddSubExpression.h \
     src/commands/CSceneHandlerSave.h \
     src/commands/CSceneHandlerLoad.h \
     src/commands/CFind.h \
@@ -70,7 +71,8 @@ HEADERS += src/expression_editor/tree_builder/AddSubExpression.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h
-SOURCES += src/expression_editor/tree_builder/AddSubExpression.cpp \
+SOURCES += src/commands/CommandWithNameAndFlags.cpp \
+    src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
     src/commands/CSceneHandlerLoad.cpp \
     src/commands/CFind.cpp \

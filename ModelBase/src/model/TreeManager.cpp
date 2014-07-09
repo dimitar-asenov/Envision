@@ -211,6 +211,7 @@ void TreeManager::load(PersistentStore* store, const QString& name, bool loadPar
 
 	name_ = name;
 	store_ = store;
+	partiallyLoaded_ = loadPartially;
 
 	Core::Profiler::startOnce(name == "java", "Loading the Java library", "load.prof");
 	auto root = store->loadTree(this, name, loadPartially);

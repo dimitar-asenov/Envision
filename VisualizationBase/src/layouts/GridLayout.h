@@ -48,6 +48,7 @@ class VISUALIZATIONBASE_API GridLayout: public Super<Layout>
 		virtual bool isEmpty() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 		QPoint focusedElementIndex() const;
 

@@ -27,6 +27,7 @@
 #include "SimpleTextFileStore.h"
 #include "../FilePersistenceException.h"
 #include "GenericNodeAllocator.h"
+#include "Parser.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
@@ -160,7 +161,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 
 	QTextStream ts(&file);
 	ts.setCodec("UTF-8");
-	persisted_->save(ts);
+	Parser::save(ts, persisted_);
 	file.close();
 
 	SAFE_DELETE(persisted_);
@@ -203,7 +204,7 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager*, const QString &n
 		treeDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
 		if ( !treeDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
 		allocator_ = new GenericNodeAllocator();
-		persisted_ = GenericNode::load(treeDir_.absoluteFilePath(name), true, allocator_);
+		persisted_ = Parser::load(treeDir_.absoluteFilePath(name), true, allocator_);
 
 		ln =  loadNode(nullptr, loadPartially);
 
@@ -244,7 +245,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 {
 	GenericNode* oldPersisted = persisted_;
 
-	persisted_ = GenericNode::load(treeDir_.absoluteFilePath(name), true, allocator_);
+	persisted_ = Parser::load(treeDir_.absoluteFilePath(name), true, allocator_);
 
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
@@ -338,7 +339,7 @@ Model::PersistedNode* SimpleTextFileStore::loadCompleteNodeSubtree(const QString
 		else filename = treeName;
 
 		allocator_= new GenericNodeAllocator();
-		persisted_ = GenericNode::load(treeDir_.absoluteFilePath(filename), true, allocator_);
+		persisted_ = Parser::load(treeDir_.absoluteFilePath(filename), true, allocator_);
 
 		// Search through the content in order to find the requested node id.
 		if (!nodeId.isNull()) persisted_ = persisted_->find(nodeId);
@@ -430,7 +431,7 @@ Model::PersistedNode* SimpleTextFileStore::loadPersistentUnitData( )
 	checkIsWorking();
 
 	GenericNode* previousPersisted = persisted_;
-	persisted_ = GenericNode::load(treeDir_.absoluteFilePath(persisted_->id().toString()), true, allocator_);
+	persisted_ = Parser::load(treeDir_.absoluteFilePath(persisted_->id().toString()), true, allocator_);
 
 	Model::PersistedNode* result = loadNodeData();
 	result->setNewPersistenceUnit(true);

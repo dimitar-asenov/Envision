@@ -30,7 +30,7 @@
 #include "VisualizationBase/src/VisualizationManager.h"
 
 #include "OOModel/src/declarations/Project.h"
-#include "FilePersistence/src/FileStore.h"
+#include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Reference.h"
 
@@ -48,7 +48,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 
 	QString testDir = "projects/";
 	Model::TreeManager* manager = new Model::TreeManager();
-	FilePersistence::FileStore store;
+	FilePersistence::SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
 	//manager->load(&store, "tetris");

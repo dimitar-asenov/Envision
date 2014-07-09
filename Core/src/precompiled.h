@@ -56,6 +56,7 @@
 
 #include <QtCore/QDebug>
 
+#include <algorithm>
 #include <functional>
 #include <typeinfo>
 

@@ -27,6 +27,7 @@
 #include "CCreateProject.h"
 
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/NameImport.h"
 #include "VisualizationBase/src/items/RootItem.h"
 #include "InteractionBase/src/events/SetCursorEvent.h"
 
@@ -36,7 +37,7 @@ CCreateProject::CCreateProject() : CreateNamedObjectWithAttributes("project", {}
 {
 }
 
-Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source*/, Visualization::Item* target,
+Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const QString& name, const QStringList& /*attributes*/)
 {
 	auto parent = dynamic_cast<OOModel::Project*> (target->node());
@@ -53,6 +54,20 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	}
 	else
 	{
+		// If Java is loaded as a library then use it in this project
+		for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+		{
+			if (manager->isPartiallyLoaded() && manager->name().contains("java", Qt::CaseInsensitive))
+			{
+				project->libraries()->append(new Model::UsedLibrary(manager->name()));
+				auto import = new OOModel::NameImport( new OOModel::ReferenceExpression("lang",
+																		new OOModel::ReferenceExpression("java")));
+				import->setImportAll(true);
+				project->subDeclarations()->append(import);
+				break;
+			}
+		}
+
 		newManager = true;
 		auto manager = new Model::TreeManager();
 		manager->setRoot(project);

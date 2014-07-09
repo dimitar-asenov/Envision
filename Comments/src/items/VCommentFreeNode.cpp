@@ -38,11 +38,12 @@ namespace Comments {
 ITEM_COMMON_DEFINITIONS(VCommentFreeNode, "item")
 
 VCommentFreeNode::VCommentFreeNode(Item* parent, NodeType* node)
-	: Super(parent, node, itemStyles().get()), node_(nullptr)
+	: Super(parent, node, itemStyles().get()), content_(nullptr)
 {
 	anEffect_ = new QGraphicsColorizeEffect();
 	anEffect_->setColor(QColor(Qt::white));
-	anEffect_->setStrength(0.7);
+	const qreal strength = 0.7;
+	anEffect_->setStrength(strength);
 	Item::setGraphicsEffect(anEffect_);
 }
 
@@ -50,12 +51,12 @@ void VCommentFreeNode::determineChildren()
 {
 	anEffect_->setEnabled(!this->itemOrChildHasFocus()
 								 && !(DCast<CommentText>(node()->node()) || DCast<CommentNode>(node()->node())));
-	synchronizeItem(node_, node()->node());
+	synchronizeItem(content_, node()->node());
 }
 
 void VCommentFreeNode::updateGeometry(int availableWidth, int availableHeight)
 {
-	Item::updateGeometry(node_, availableWidth, availableHeight);
+	Item::updateGeometry(content_, availableWidth, availableHeight);
 }
 
 } /* namespace Comments */

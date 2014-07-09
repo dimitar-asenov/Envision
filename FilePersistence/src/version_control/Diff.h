@@ -33,11 +33,9 @@
 
 namespace FilePersistence {
 
-typedef QSharedPointer<GenericNode> SharedGenNodePtr;
-typedef QHash<Model::NodeIdType, SharedGenNodePtr> IdToGenericNodeHash;
 
-typedef QSharedPointer<ChangeDescription> SharedChangeDescrPtr;
-typedef QHash<Model::NodeIdType, SharedChangeDescrPtr> IdToChangeDescriptionHash;
+typedef QHash<Model::NodeIdType, GenericNode*> IdToGenericNodeHash;
+typedef QHash<Model::NodeIdType, ChangeDescription*> IdToChangeDescriptionHash;
 
 class Diff
 {
@@ -49,7 +47,7 @@ class Diff
 	private:
 		void idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);
 		void includeAndMarkParents();
-		void includeAndMarkParent(const SharedGenNodePtr child);
+		void includeAndMarkParent(const GenericNode* child);
 
 		IdToChangeDescriptionHash changeDescriptions_;
 };

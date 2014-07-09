@@ -30,7 +30,7 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(QSharedPointer<GenericNode> unchangedNode)
+ChangeDescription::ChangeDescription(GenericNode* unchangedNode)
 {
 	Q_ASSERT(unchangedNode != nullptr);
 
@@ -40,7 +40,7 @@ ChangeDescription::ChangeDescription(QSharedPointer<GenericNode> unchangedNode)
 	// TODO
 }
 
-ChangeDescription::ChangeDescription(QSharedPointer<GenericNode> oldNode, QSharedPointer<GenericNode> newNode)
+ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
 {
 	Q_ASSERT(oldNode != nullptr || newNode != nullptr);
 
@@ -99,7 +99,7 @@ void ChangeDescription::detectValueUpdate()
 
 
 	// check for same type -> type change
-	int typeChange = QString::compare(oldNode_->value_, newNode_->value_);
+	int typeChange = QString::compare(oldNode_->rawValue(), newNode_->rawValue());
 	if (typeChange != 0)
 		updateFlags_ |= Value;
 	else

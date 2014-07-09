@@ -67,16 +67,21 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 	colorPickerBackground_->setColorPickerType(ColorPicker::background);
 	colorPickerBackground_->setFixedSize(QSize(42, 36));
 	colorPickerBackground_->setEnabled(false);
+	colorPickerBackground_->setColors(VCommentDiagram::itemStyles().get()->getColors(),
+												 VCommentDiagram::itemStyles().get()->getColorsPerRow());
 	this->addWidget(colorPickerBackground_);
 	colorPickerBorder_ = new ColorPicker;
 	colorPickerBorder_->setColorPickerType(ColorPicker::shape);
 	colorPickerBorder_->setFixedSize(QSize(42, 36));
 	colorPickerBorder_->setEnabled(false);
+	colorPickerBorder_->setColors(VCommentDiagram::itemStyles().get()->getColors(),
+											VCommentDiagram::itemStyles().get()->getColorsPerRow());
 	this->addWidget(colorPickerBorder_);
 	colorPickerText_ = new ColorPicker;
 	colorPickerText_->setColorPickerType(ColorPicker::text);
 	colorPickerText_->setFixedSize(QSize(42, 36));
 	colorPickerText_->setEnabled(false);
+	colorPickerText_->setEnvisionTextColors();
 	this->addWidget(colorPickerText_);
 
 	this->addSeparator();
@@ -135,9 +140,6 @@ CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 void CommentDiagramToolbar::setDiagram(VCommentDiagram *diagram)
 {
 	diagram_ = diagram;
-	colorPickerBackground_->setColors(diagram->style()->getColors(), diagram->style()->getColorsPerRow());
-	colorPickerBorder_->setColors(diagram->style()->getColors(), diagram->style()->getColorsPerRow());
-	colorPickerText_->setEnvisionTextColors();
 	bConnections_->setChecked(diagram->showConnectorPoints());
 }
 

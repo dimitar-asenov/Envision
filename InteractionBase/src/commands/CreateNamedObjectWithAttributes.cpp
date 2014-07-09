@@ -29,127 +29,19 @@
 namespace Interaction {
 
 CreateNamedObjectWithAttributes::CreateNamedObjectWithAttributes(const QString& commandName,
-		const QList<QStringList>& attributes): commandName_(commandName), attributes_(attributes)
+		const QList<QStringList>& attributes) : CommandWithNameAndFlags{commandName, attributes, false}
 {
 }
 
-bool CreateNamedObjectWithAttributes::canInterpret(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
-		const QStringList& commandTokens)
+QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggestNamed(const QString& textSoFar, const QString& name,
+		const QStringList& attributes, bool commandFound)
 {
-	QString name;
-	QStringList attributes;
-	bool commandFound;
-	bool unknownFormat;
-
-	findParts(commandTokens, name, attributes, commandFound, unknownFormat);
-
-	return commandFound && !unknownFormat;
-}
-
-CommandResult* CreateNamedObjectWithAttributes::execute(Visualization::Item* source,
-		Visualization::Item* target, const QStringList& commandTokens)
-{
-	QString name;
-	QStringList attributes;
-	bool commandFound;
-	bool unknownFormat;
-
-	findParts(commandTokens, name, attributes, commandFound, unknownFormat);
-
-	return create(source, target, name, attributes);
-}
-
-QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggest(Visualization::Item* /*source*/,
-		Visualization::Item* /*target*/, const QString& textSoFar)
-{
-	QList<CommandSuggestion*> s;
-
-	QString name;
-	QStringList attributes;
-	bool commandFound;
-	bool unknownFormat;
-
-	findParts(textSoFar.split(" "), name, attributes, commandFound, unknownFormat);
-
-	if (!unknownFormat)
-	{
-		QString commandText = textSoFar + (commandFound?"":" " + commandName_);
-		QString explanation = "Create a ";
-		for (auto attr : attributes)
-			if (!attr.isEmpty()) explanation += attr + " ";
-		explanation += commandName_ + (name.isEmpty() ? "" : " called '" + name + "'");
-		s.append(new CommandSuggestion(commandText, explanation));
-	}
-
-	return s;
-}
-
-QStringList CreateNamedObjectWithAttributes::commandForms(Visualization::Item* /*source*/,
-		Visualization::Item* /*target*/, const QString& /*textSoFar*/)
-{
-	//TODO: Implement this
-	return QStringList();
-}
-
-void CreateNamedObjectWithAttributes::findParts(const QStringList& tokens, QString& name, QStringList& attributes,
-				bool& commandFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute)
-{
-	name = QString();
-	attributes.clear();
-
-	if (useFirstValueAsDefaultAttribute)
-		for (auto attributeValues : attributes_) attributes.append(attributeValues.first());
-	else
-		for (int i = 0; i<attributes_.size(); ++i) attributes.append(QString());
-
-	commandFound = false;
-	unknownFormat = false;
-
-	if (tokens.size() <= 2 + attributes_.size()) // 1 for name, 1 for command and the rest for the number of attributes.
-	{
-		int index = 0; // To keep track of how many tokens we've visited
-		for (QString t: tokens)
-		{
-			++index;
-			// If we've seen a command name and this is the last token, it is considered the name
-			if (commandFound && index == tokens.size())
-			{
-				name = t;
-				break;
-			}
-
-			// Try to interpret this token as an attribute
-			auto attr = attributes.begin();
-			bool found = false;
-			for (auto attrValues : attributes_)
-			{
-				for (auto val : attrValues)
-				{
-					// A prefix of the attributes is enough
-					if (val.startsWith(t))
-					{
-						*attr = val;
-						found = true;
-						break;
-					}
-				}
-				if (found) break;
-				++attr;
-			}
-
-			// If this token was not recognized as an attribute try the command name
-			if (!found)
-			{
-				if (commandName_.startsWith(t)) commandFound = true;
-				else
-				{
-					unknownFormat = true;
-					break;
-				}
-			}
-		}
-	}
-	else unknownFormat = true;
+	QString commandText = textSoFar + (commandFound?"":" " + commandName());
+	QString explanation = "Create a ";
+	for (auto attr : attributes)
+		if (!attr.isEmpty()) explanation += attr + " ";
+	explanation += commandName() + (name.isEmpty() ? "" : " called '" + name + "'");
+	return {new CommandSuggestion(commandText, explanation)};
 }
 
 } /* namespace OOInteraction */

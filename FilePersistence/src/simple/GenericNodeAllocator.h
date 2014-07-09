@@ -25,13 +25,13 @@
  **********************************************************************************************************************/
 
 #pragma once
-
-#include "GenericNode.h"
-
 namespace FilePersistence {
 
+class Parser;
+class GenericNode;
+
 class GenericNodeAllocator {
-	friend class GenericNode;
+	friend class Parser;
 
 	public:
 		GenericNodeAllocator();

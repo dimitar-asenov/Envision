@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "GenericNodeAllocator.h"
+#include "GenericNode.h"
 
 namespace FilePersistence {
 
@@ -86,7 +87,7 @@ GenericNode* GenericNodeAllocator::newRoot(char* data, int lineStart, int lineEn
 GenericNode* GenericNodeAllocator::newChild(int lineStart, int lineEndInclusive)
 {
 	auto node = nextNode();
-	node->resetForLoading(dataMappings_.last(), lineStart, lineEndInclusive);
+	node->reset(dataMappings_.last()+lineStart, lineEndInclusive - lineStart + 1, true);
 	return node;
 }
 

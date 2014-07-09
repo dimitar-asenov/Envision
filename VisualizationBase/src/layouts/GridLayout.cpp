@@ -242,6 +242,46 @@ void GridLayout::updateGeometry(int, int)
 	}
 }
 
+void GridLayout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	Super::paint(painter, option, widget);
+	if (style()->borderPen().style() == Qt::NoPen)
+		return;
+
+	// Get the widest and tallest items
+	QVector<int> widestInColumn(sizeX_, 0);
+	QVector<int> tallestInRow(sizeY_, 0);
+	for (int x=0; x<sizeX_; ++x)
+	{
+		for (int y=0; y<sizeY_; ++y)
+			if (items_[x][y] != nullptr)
+			{
+				if (items_[x][y]->widthInParent() > widestInColumn[x]) widestInColumn[x] = items_[x][y]->widthInParent();
+				if (items_[x][y]->heightInParent() > tallestInRow[y]) tallestInRow[y] = items_[x][y]->heightInParent();
+			}
+	}
+
+	painter->setPen(style()->borderPen());
+
+	int sum = 0;
+	for (int i = 0; i < widestInColumn.size()-1; i++)
+	{
+		sum += widestInColumn.at(i);
+		painter->drawLine(sum+((style()->horizontalSpace())/2), 0,
+								sum+((style()->horizontalSpace())/2), heightInParent());
+		sum += style()->horizontalSpace();
+	}
+
+	sum = 0;
+	for (int i = 0; i < tallestInRow.size()-1; i++)
+	{
+		sum += tallestInRow.at(i);
+		painter->drawLine(0, sum+((style()->verticalSpace())/2), widthInParent(), sum+((style()->verticalSpace())/2));
+		sum += style()->verticalSpace();
+	}
+
+}
+
 QPoint GridLayout::focusedElementIndex() const
 {
 	for (int x=0; x<sizeX_; ++x)

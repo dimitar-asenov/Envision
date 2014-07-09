@@ -1,7 +1,4 @@
-<!DOCTYPE EnvisionFilePersistence>
-<BinaryNodePersistenceUnit id="{00000000-0000-0000-0000-000000000003}" name="left">
- <NameText id="{00000000-0000-0000-0000-000000000004}" name="name">S_Left child</NameText>
- <BinaryNode id="{00000000-0000-0000-0000-000000000005}" name="left">
-  <NameText id="{00000000-0000-0000-0000-000000000006}" name="name">S_in a new unit</NameText>
- </BinaryNode>
-</BinaryNodePersistenceUnit>
+left BinaryNodePersistenceUnit {00000000-0000-0000-0000-000000000003}
+	name NameText {00000000-0000-0000-0000-000000000004}. S_Left child
+	left BinaryNode {00000000-0000-0000-0000-000000000005}
+		name NameText {00000000-0000-0000-0000-000000000006}. S_in a new unit

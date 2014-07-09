@@ -35,52 +35,24 @@ using namespace Visualization;
 
 namespace Interaction {
 
-bool CSceneHandlerLoad::canInterpret(Item*, Item*, const QStringList& commandTokens)
+
+CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithNameAndFlags{"load", {{"library"}}, true}
+{}
+
+CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
+			const QString& name, const QStringList& attributes)
 {
-	if (commandTokens.size() == 2 && QString("load").startsWith(commandTokens.first()))
-		return matchingProjects(commandTokens.last()).size() == 1;
-
-	return false;
-}
-
-CommandResult* CSceneHandlerLoad::execute(Item*, Item*, const QStringList& commandTokens)
-{
-	Q_ASSERT(commandTokens.size() == 2);
-	auto matching = matchingProjects(commandTokens.last());
-	Q_ASSERT(matching.size() == 1);
-
 	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), matching.first(), false);
+	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(manager->root()));
-	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+	if (attributes.first() != "library")
+	{
+
+		VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(manager->root()));
+		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+	}
 
 	return new CommandResult();
-}
-
-QList<CommandSuggestion*> CSceneHandlerLoad::suggest(Item*, Item*, const QString& textSoFar)
-{
-	auto trimmed = textSoFar.trimmed();
-	auto split = trimmed.split(" ");
-	if (split.size() > 2 ) return {};
-	if (split.size() > 0 && ! QString("load").startsWith(split.first())) return {};
-
-	auto projectName = split.size() == 2 ? split.last() : "";
-	QStringList matchingNames = projectName.isEmpty() ? availableProjectsOnDisk() : matchingProjects(projectName);
-
-	QList<CommandSuggestion*> suggestions;
-	for (auto name : matchingNames)
-		suggestions.append(new CommandSuggestion("load " + name, "Loads the '" + name +"' project"));
-
-	return suggestions;
-}
-
-QStringList CSceneHandlerLoad::commandForms(Item*, Item*, const QString& textSoFar)
-{
-	QStringList forms;
-	if (textSoFar.isEmpty() || QString("load").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("load");
-	return forms;
 }
 
 QStringList CSceneHandlerLoad::availableProjectsOnDisk()
@@ -89,18 +61,9 @@ QStringList CSceneHandlerLoad::availableProjectsOnDisk()
 	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
 }
 
-QStringList CSceneHandlerLoad::matchingProjects(QString projectNameToLookFor)
+QStringList CSceneHandlerLoad::possibleNames()
 {
-	// Use a pattern like this 'p*r*j*' in order to simplify the search. Note that the first letter must match.
-	QString searchPattern = projectNameToLookFor;
-	for (int i = searchPattern.size(); i>=1; --i) searchPattern.insert(i, "*");
-	auto regExp = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
-
-	QStringList result;
-	for (auto s : availableProjectsOnDisk())
-		if (regExp.exactMatch(s)) result << s;
-
-	return result;
+	return availableProjectsOnDisk();
 }
 
 } /* namespace Interaction */

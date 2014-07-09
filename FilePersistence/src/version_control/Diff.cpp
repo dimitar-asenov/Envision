@@ -41,9 +41,9 @@ Diff::Diff(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes)
 
 void Diff::print() const
 {
-	QList<SharedChangeDescrPtr> descriptions = changeDescriptions_.values();
+	QList<ChangeDescription*> descriptions = changeDescriptions_.values();
 
-	for (SharedChangeDescrPtr current : descriptions)
+	for (ChangeDescription* current : descriptions)
 	{
 		std::cout << "----------------------------------------" << std::endl;
 		current->print();
@@ -55,24 +55,24 @@ void Diff::print() const
 void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes)
 {
 	QSet<Model::NodeIdType> onlyInNewNodes = QSet<Model::NodeIdType>::fromList(newNodes.keys());
-	QList<SharedGenNodePtr> oldNodesValueList = oldNodes.values();
+	QList<GenericNode*> oldNodesValueList = oldNodes.values();
 
-	SharedChangeDescrPtr description;
+	ChangeDescription* description = nullptr;
 
 	IdToGenericNodeHash::iterator iter;
-	for (SharedGenNodePtr oldNode : oldNodesValueList)
+	for (GenericNode* oldNode : oldNodesValueList)
 	{
 		iter = newNodes.find(oldNode->id());
 		if (iter == newNodes.end())
 		{
 			// no such id in newNodes
-			description = SharedChangeDescrPtr(new ChangeDescription(oldNode, SharedGenNodePtr()));
+			description = new ChangeDescription(oldNode, nullptr);
 			changeDescriptions_.insert(oldNode->id(), description);
 		}
 		else
 		{
 			// found id
-			description = SharedChangeDescrPtr(new ChangeDescription(oldNode, iter.value()));
+			description = new ChangeDescription(oldNode, iter.value());
 			changeDescriptions_.insert(oldNode->id(), description);
 			// id is also present in oldNodes
 			onlyInNewNodes.remove(iter.key());
@@ -82,16 +82,16 @@ void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes
 	for (Model::NodeIdType newId : onlyInNewNodes)
 	{
 		iter = newNodes.find(newId);
-		description = SharedChangeDescrPtr(new ChangeDescription(SharedGenNodePtr(), iter.value()));
+		description = new ChangeDescription(nullptr, iter.value());
 		changeDescriptions_.insert(newId, description);
 	}
 }
 
 void Diff::includeAndMarkParents()
 {
-	QList<SharedChangeDescrPtr> beforeIncludingParents = changeDescriptions_.values();
+	QList<ChangeDescription*> beforeIncludingParents = changeDescriptions_.values();
 
-	for (SharedChangeDescrPtr description : beforeIncludingParents)
+	for (ChangeDescription* description : beforeIncludingParents)
 	{
 		ChangeDescription::UpdateFlags flags = description->flags();
 		switch (description->type())
@@ -124,16 +124,16 @@ void Diff::includeAndMarkParents()
 	}
 }
 
-void Diff::includeAndMarkParent(const SharedGenNodePtr child)
+void Diff::includeAndMarkParent(const GenericNode* child)
 {
 	if (child->parent() != nullptr)
 	{
-		SharedChangeDescrPtr description;
+		ChangeDescription* description = nullptr;
 		IdToChangeDescriptionHash::iterator iter = changeDescriptions_.find(child->parent()->id());
 		if (iter == changeDescriptions_.end())
 		{
 			// no parent in changeDescriptions
-			description = SharedChangeDescrPtr(new ChangeDescription(child->parent(), child->parent()));
+			description = new ChangeDescription(child->parent(), child->parent());
 			description->setChildrenUpdate(true);
 			changeDescriptions_.insert(child->parent()->id(), description);
 		}

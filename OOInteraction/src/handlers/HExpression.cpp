@@ -505,9 +505,18 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 			target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
 			afterDot == false);
 
+	// Insert in sorted order, skipping duplicates.
 	for (auto n : foundSymbols)
-			entries.append(new AutoCompleteEntry(n->symbolName(), QString(), nullptr,
+	{
+		auto insertionPoint = std::find_if(entries.begin(), entries.end(),
+				[=](AutoCompleteEntry* e){return e->text() >= n->symbolName();});
+
+		if ( insertionPoint == entries.end() || (*insertionPoint)->text() != n->symbolName())
+		{
+			entries.insert(insertionPoint, new AutoCompleteEntry(n->symbolName(), QString(), nullptr,
 				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
+		}
+	}
 
 	SAFE_DELETE(scopePrefix);
 

@@ -83,9 +83,9 @@ void VComment::parseLines()
 		{
 			listCount++;
 			// does this create a new list?
-			if (listCount == 0) linesOfCurrentElement << "<ul><li>&bull;\t" << line.mid(3);
+			if (listCount == 0) linesOfCurrentElement << "<ul><li>" << line.mid(3);
 			// otherwise, just add another list item
-			else linesOfCurrentElement << "</li><li>&bull;\t" << line.mid(3);
+			else linesOfCurrentElement << "</li><li>" << line.mid(3);
 
 			continue;
 		}

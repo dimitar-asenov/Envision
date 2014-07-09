@@ -28,35 +28,18 @@
 
 #include "../interactionbase_api.h"
 
-#include "Command.h"
+#include "CommandWithNameAndFlags.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public Command
+class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
 {
 	public:
 		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
-
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
-
 	protected:
-		virtual CommandResult* create(Visualization::Item* source, Visualization::Item* target,
-				const QString& name, const QStringList& attributes) = 0;
-
-	private:
-		void findParts(const QStringList& tokens, QString& name, QStringList& attributes,
-			bool& methodFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
-
-		const QString commandName_;
-		const QList<QStringList> attributes_;
+		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar, const QString& name,
+						const QStringList& attributes, bool commandFound) override;
 };
 
 }

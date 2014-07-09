@@ -26,20 +26,33 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
+#include "../filepersistence_api.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
-#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
+namespace FilePersistence {
 
-namespace OOInteraction {
+class GenericNode;
+class GenericNodeAllocator;
 
-class OOINTERACTION_API CCreateMethod : public Interaction::CreateNamedObjectWithAttributes
-{
+class FILEPERSISTENCE_API Parser {
 	public:
-		CCreateMethod();
 
-	protected:
-		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-			const QString& name, const QStringList& attributes) override;
+		static void parseLine(GenericNode* node, const char* line, int lineLength);
+
+		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
+		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
+
+	private:
+		static int countTabs(const char* data, int lineStart, int lineEnd);
+		static QString rawStringToQString(const char* data, int startAt, int endInclusive);
+		static QString escape(const QString& line);
+
+		static Model::NodeIdType toId(const char* data, int start, int endInclusive, bool& ok);
+		static uchar hexDigitToChar(char d, bool& ok);
+
+		static bool nextNonEmptyLine(const char* data, int dataSize, int& lineStart, int& lineEnd);
+		static int indexOf(const char c, const char* data, int start, int endInclusive);
+		static bool nextHeaderPart(const char* data, int& start, int&endInclusive, int lineEnd);
 };
 
-}
+} /* namespace FilePersistence */

@@ -28,6 +28,7 @@
 
 #include "../filepersistence_api.h"
 #include "GenericNode.h"
+#include "GenericNodeAllocator.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 #include "ModelBase/src/persistence/NodeIdMap.h"

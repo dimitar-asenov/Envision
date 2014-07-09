@@ -32,6 +32,7 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/TypedList.h"
+#include "CommentText.h"
 
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentDiagramShape)
 
@@ -41,7 +42,7 @@ class COMMENTS_API CommentDiagramShape : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentDiagramShape)
 
-	ATTRIBUTE(Model::Text, label, setLabel)
+	ATTRIBUTE(Comments::CommentText, label, setLabel)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, shapeColor, setShapeColor, QString, const QString&)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, textColor, setTextColor, QString, const QString&)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, backgroundColor, setBackgroundColor, QString, const QString&)
