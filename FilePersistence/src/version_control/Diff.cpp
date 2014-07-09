@@ -26,7 +26,7 @@
 
 #include "Diff.h"
 
-#include <QDebug>
+#include "ChangeDescription.h"
 
 #include <iostream>
 

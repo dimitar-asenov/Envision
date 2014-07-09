@@ -26,15 +26,13 @@
 
 #pragma once
 
-#include <QFlags>
-
 #include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 
 enum class ChangeType {Unclassified, Added, Deleted, Moved, Stationary};
 
-class ChangeDescription
+class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
 		ChangeDescription(GenericNode* unchangedNode);

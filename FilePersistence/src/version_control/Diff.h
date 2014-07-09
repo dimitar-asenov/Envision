@@ -26,18 +26,16 @@
 
 #pragma once
 
-#include <QHash>
-#include <QSharedPointer>
-
-#include "ChangeDescription.h"
+#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 
+class ChangeDescription;
 
-typedef QHash<Model::NodeIdType, GenericNode*> IdToGenericNodeHash;
-typedef QHash<Model::NodeIdType, ChangeDescription*> IdToChangeDescriptionHash;
+using IdToGenericNodeHash = QHash<Model::NodeIdType, GenericNode*>;
+using IdToChangeDescriptionHash = QHash<Model::NodeIdType, ChangeDescription*>;
 
-class Diff
+class FILEPERSISTENCE_API Diff
 {
 	public:
 		Diff(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);
