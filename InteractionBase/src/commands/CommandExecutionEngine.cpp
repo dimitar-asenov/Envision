@@ -155,13 +155,23 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 		// This is the node (source or one of its ancestors) where we manage to process the command.
 		Visualization::Item* target = source;
 
+		// This set keeps a list of commands that have already contributed some suggestions. If a command contributes
+		// suggestions at a more specific context, then we ignore it in less specific contexts, even if it could
+		// contribute more suggestions. The stored value is the hash code of a type_info structure
+		QSet<std::size_t> alreadySuggested;
+
 		// Get suggestion from item and parents
 		while (target != nullptr)
 		{
 			GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
 			if (handler)
-				for (int i = 0; i< handler->commands().size(); ++i)
-					result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
+				for (auto command : handler->commands())
+				{
+					if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
+					auto suggestions = command->suggest(source, target, trimmed);
+					result.append( suggestions );
+					if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
+				}
 
 			target = target->parent();
 		}
@@ -171,8 +181,13 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 		{
 			GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
 			if ( handler )
-				for (int i = 0; i < handler->commands().size(); ++i)
-					result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
+				for (auto command : handler->commands())
+				{
+					if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
+					auto suggestions = command->suggest(source, target, trimmed);
+					result.append( suggestions );
+					if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
+				}
 		}
 	}
 
