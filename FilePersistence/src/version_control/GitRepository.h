@@ -28,11 +28,24 @@
 
 #include "Diff.h"
 
+#include <QDateTime>
+
 struct git_repository;
 struct git_tree;
 struct git_commit;
 
 namespace FilePersistence {
+
+struct CommitProperties {
+	QString sha_;
+	QString message_;
+	QDateTime dateTime_;
+	QString committerName_;
+	QString committerEMail_;
+	QString authorName_;
+	QString authorEMail_;
+	QList<QString> parents_;
+};
 
 class FILEPERSISTENCE_API GitRepository
 {
@@ -41,6 +54,8 @@ class FILEPERSISTENCE_API GitRepository
 		~GitRepository();
 
 		Diff diff(QString oldCommit, QString newCommit) const;
+
+		CommitProperties getCommitProperties(QString commit);
 
 	private:
 		void findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tree) const;

@@ -211,6 +211,45 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 }
 
 
+CommitProperties GitRepository::getCommitProperties(QString commit)
+{
+	git_commit* gitCommit = parseCommit(commit);
+
+	CommitProperties properties;
+
+	const git_oid* oid = git_commit_id(gitCommit);
+	char* sha = git_oid_allocfmt(oid);
+	properties.sha_ = QString(sha);
+	delete sha;
+
+	const char* msg = git_commit_message(gitCommit);
+	properties.message_ = QString(msg);
+
+	git_time_t time = git_commit_time(gitCommit);
+	properties.dateTime_.setTime_t(time);
+
+	const git_signature* committer = git_commit_committer(gitCommit);
+	properties.committerName_ = QString(committer->name);
+	properties.committerEMail_ = QString(committer->email);
+
+	const git_signature* author = git_commit_author(gitCommit);
+	properties.authorName_ = QString(author->name);
+	properties.authorEMail_ = QString(author->email);
+
+	unsigned int parentCount = git_commit_parentcount(gitCommit);
+	for (unsigned int i = 0; i < parentCount; i++)
+	{
+		const git_oid* parentID = git_commit_parent_id(gitCommit, i);
+		char* sha = git_oid_allocfmt(parentID);
+		properties.parents_.append(QString(sha));
+		delete sha;
+	}
+
+	git_commit_free(gitCommit);
+	return properties;
+}
+
+
 // Private methods
 
 void GitRepository::findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tree) const
