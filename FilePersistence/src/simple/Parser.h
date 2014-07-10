@@ -41,6 +41,7 @@ class FILEPERSISTENCE_API Parser {
 
 		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
 		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
+		static GenericNode* load(const char* data, int dataLength, bool lazy, GenericNodeAllocator* allocator);
 
 	private:
 		static int countTabs(const char* data, int lineStart, int lineEnd);

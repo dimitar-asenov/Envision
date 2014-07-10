@@ -261,9 +261,14 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 	auto mapped = reinterpret_cast<char*>(file.map(0, totalFileSize));
 	Q_ASSERT(mapped);
 
+	return load(mapped, totalFileSize, lazy, allocator);
+}
+
+GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericNodeAllocator* allocator)
+{
 	// We need to make a copy since the memory will be unmapped after the file object gets out of scope.
-	auto data = new char[totalFileSize];
-	memcpy(data, mapped, totalFileSize);
+	auto dataCopy = new char[dataLength];
+	memcpy(dataCopy, data, dataLength);
 
 	QList<GenericNode*> nodeStack;
 	GenericNode* top = nullptr;
@@ -271,16 +276,16 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 	int start = 0;
 	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
 
-	while ( nextNonEmptyLine(data, totalFileSize, start, lineEnd) )
+	while ( nextNonEmptyLine(dataCopy, dataLength, start, lineEnd) )
 	{
-		auto tabLevel = countTabs(data, start, lineEnd);
+		auto tabLevel = countTabs(dataCopy, start, lineEnd);
 
 		if (top == nullptr)
 		{
 			Q_ASSERT(tabLevel == 0);
 
 			// Top can't be in the allNodes array since it must delete that array in its own destructor.
-			top = allocator->newRoot(data, start, lineEnd);
+			top = allocator->newRoot(dataCopy, start, lineEnd);
 			nodeStack.append(top);
 		}
 		else
