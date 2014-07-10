@@ -148,6 +148,8 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 	errorCode = git_diff_init_options(&diffOptions, GIT_DIFF_OPTIONS_VERSION);
 	diffOptions.context_lines = 0;
 
+	git_commit* oldGitCommit = nullptr;
+	git_commit* newGitCommit = nullptr;
 	git_tree* oldGitTree = nullptr;
 	git_tree* newGitTree = nullptr;
 	if (diffKind == DiffKind::IndexToWorkdir)
@@ -156,7 +158,7 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 	{
 		Q_ASSERT(oldCommit != nullptr);
 		// parse oldCommit and get git_tree
-		git_commit* oldGitCommit = parseCommit(oldCommit);
+		oldGitCommit = parseCommit(oldCommit);
 		errorCode = git_commit_tree(&oldGitTree, oldGitCommit);
 		checkError(errorCode);
 
@@ -168,7 +170,7 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 		{
 			Q_ASSERT(newCommit != nullptr);
 			// parse newCommit and get git_tree
-			git_commit* newGitCommit = parseCommit(newCommit);
+			newGitCommit = parseCommit(newCommit);
 			errorCode = git_commit_tree(&newGitTree, newGitCommit);
 			checkError(errorCode);
 			errorCode = git_diff_tree_to_tree(&gitDiff, repository_, oldGitTree, newGitTree, &diffOptions);
@@ -206,6 +208,13 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 		default:
 			Q_ASSERT(false);
 	}
+
+	// clean up
+	git_commit_free(oldGitCommit);
+	git_commit_free(newGitCommit);
+	git_tree_free(oldGitTree);
+	git_tree_free(newGitTree);
+	git_diff_free(gitDiff);
 
 	return Diff(carryAlongData.oldNodes_, carryAlongData.newNodes_);
 }
@@ -246,6 +255,7 @@ CommitProperties GitRepository::getCommitProperties(QString commit)
 	}
 
 	git_commit_free(gitCommit);
+
 	return properties;
 }
 
@@ -274,6 +284,10 @@ void GitRepository::findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tr
 		(void) rawContent;
 		(void) contentSize;
 	}
+
+	// clean up GitTreeBlobs
+	for (git_blob* blob : carryAlongData.blobs_)
+		git_blob_free(blob);
 }
 
 void GitRepository::findParentsInGitIndex(IdToGenericNodeHash nodes) const
@@ -358,6 +372,9 @@ git_commit* GitRepository::parseCommit(QString commit) const
 		git_tag_free(tag);
 
 		obj = dereferencedTarget;
+
+		// clean up
+		git_tag_free(tag);
 	}
 
 	if (git_object_type(obj) == GIT_OBJ_COMMIT)
@@ -368,6 +385,8 @@ git_commit* GitRepository::parseCommit(QString commit) const
 		Q_ASSERT(false);
 	}
 
+	// clean up
+	git_object_free(obj);
 }
 
 GitRepository::DiffKind GitRepository::kind(QString oldCommit, QString newCommit)
