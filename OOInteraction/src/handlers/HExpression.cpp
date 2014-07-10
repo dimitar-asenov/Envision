@@ -456,6 +456,12 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	++index;
 
 	userWord = userWord.right(userWord.size() - index);
+	if (!userWord.isEmpty() && userWord.at(0).isDigit()) // No auto completion for digits
+	{
+		AutoComplete::hide();
+		return;
+	}
+
 	QString searchPattern = userWord;
 	for (int i = searchPattern.size(); i>=0; --i) searchPattern.insert(i, "*");
 
