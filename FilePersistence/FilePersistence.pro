@@ -34,7 +34,8 @@ SOURCES += src/simple/Parser.cpp \
     src/FilePersistencePlugin.cpp \
     src/version_control/ChangeDescription.cpp \
     src/version_control/Diff.cpp \
-    src/version_control/GitRepository.cpp
+    src/version_control/GitRepository.cpp \
+    test/VersionControlDiffTests.cpp
 RESOURCES = FilePersistence.qrc
 
 # Fix this in a way that library is included in project
