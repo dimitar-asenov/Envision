@@ -68,7 +68,7 @@ OOVisualization::VIfStatement <--  Super  <--  OOVisualization::VStatementItem <
 Visualization::DeclarativeItem <-- Visualization::DeclarativeItemBase <-- Visualization::Item  <-- QGraphicsItem
 
 A note on the name of the visualization class: when you create a new 'stand-alone' item, you are free to call it
-anything. By convention, items that visualize nodes from the model should have the same name as the node type, with a
+anything. By convention, items that visualize nodes from the tree should have the same name as the node type, with a
 'V' prefix (for visualization). In our example we are visualizing nodes of type OOModel::IfStatement so the
 corresponding item class is called OOVisualization::VIfStatement.
 
