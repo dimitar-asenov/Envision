@@ -37,7 +37,10 @@ ChangeDescription::ChangeDescription(GenericNode* unchangedNode)
 	oldNode_ = unchangedNode;
 	newNode_ = unchangedNode;
 
-	// TODO
+	type_ = ChangeType::Unclassified;
+	updateFlags_ &= ~Order;
+	updateFlags_ &= ~Value;
+	updateFlags_ &= ~Type;
 }
 
 ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
@@ -135,6 +138,10 @@ void ChangeDescription::print() const
 
 		case ChangeType::Stationary:
 			std::cout << "Stationary" << std::endl;
+			break;
+
+		case ChangeType::Unclassified:
+			std::cout << "Unclassified" << std::endl;
 			break;
 
 		default:

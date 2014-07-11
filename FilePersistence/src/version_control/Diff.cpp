@@ -152,7 +152,7 @@ void Diff::includeAndMarkParent(const GenericNode* child)
 		if (iter == changeDescriptions_.end())
 		{
 			// no parent in changeDescriptions
-			description = new ChangeDescription(child->parent(), child->parent());
+			description = new ChangeDescription(child->parent());
 			description->setChildrenUpdate(true);
 			changeDescriptions_.insert(child->parent()->id(), description);
 			nodes_.append(child->parent());
