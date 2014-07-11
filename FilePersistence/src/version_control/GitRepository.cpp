@@ -29,6 +29,7 @@
 #include <git2.h>
 
 #include "../simple/Parser.h"
+#include "../simple/GenericNodeAllocator.h"
 
 #include <iostream>
 
@@ -219,7 +220,6 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 	return Diff(carryAlongData.oldNodes_, carryAlongData.newNodes_);
 }
 
-
 CommitProperties GitRepository::getCommitProperties(QString commit)
 {
 	git_commit* gitCommit = parseCommit(commit);
@@ -278,11 +278,11 @@ void GitRepository::findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tr
 		const char* rawContent = (const char*)git_blob_rawcontent(blob);
 		qint64 contentSize = git_blob_rawsize(blob);
 
-		//extractParents(nodes, rawContent, contentSize);
-		// FIXME use parser
-		(void) nodes;
-		(void) rawContent;
-		(void) contentSize;
+		GenericNodeAllocator* allocator = nullptr;
+		GenericNode* root = Parser::load(rawContent, contentSize, false, allocator);
+		extractParents(nodes, root);
+		allocator->endThisLoad();
+		delete allocator;
 	}
 
 	// clean up GitTreeBlobs
@@ -298,8 +298,16 @@ void GitRepository::findParentsInGitIndex(IdToGenericNodeHash nodes) const
 
 void GitRepository::findParentsInGitWorkdir(IdToGenericNodeHash nodes) const
 {
-	(void) nodes;
-	// TODO
+	QDir workdir = QDir(path_);
+	QFileInfoList list = workdir.entryInfoList();
+	for (QFileInfo fileInfo : list)
+	{
+		GenericNodeAllocator* allocator = nullptr;
+		GenericNode* root = Parser::load(fileInfo.path(), false, allocator);
+		extractParents(nodes, root);
+		allocator->endThisLoad();
+		delete allocator;
+	}
 }
 
 void GitRepository::extractParents(IdToGenericNodeHash nodes, GenericNode* root) const
@@ -318,7 +326,6 @@ void GitRepository::extractParents(IdToGenericNodeHash nodes, GenericNode* root)
 				node->setParent(nullptr);
 		}
 	}
-
 }
 
 GenericNode* GitRepository::copyGenericNode(const GenericNode* node)
