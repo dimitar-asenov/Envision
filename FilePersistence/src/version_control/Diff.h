@@ -42,6 +42,8 @@ class FILEPERSISTENCE_API Diff
 
 		void print() const;
 
+		IdToChangeDescriptionHash changes() const;
+
 	private:
 		void idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);
 		void includeAndMarkParents();
@@ -49,5 +51,7 @@ class FILEPERSISTENCE_API Diff
 
 		IdToChangeDescriptionHash changeDescriptions_;
 };
+
+inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}
 
 } /* namespace FilePersistence */
