@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['model',['Model',['../classModel_1_1ModelManager.html#a2bf2a0e9b454c55aa5dcb5aa4698697b',1,'Model::ModelManager::Model()'],['../classModel_1_1PersistentStore.html#a2bf2a0e9b454c55aa5dcb5aa4698697b',1,'Model::PersistentStore::Model()']]]
+  ['nodeitemwrapperformelement',['NodeItemWrapperFormElement',['../classVisualization_1_1Item.html#af809279c2023eb3627ef3065b7b04a88',1,'Visualization::Item']]],
+  ['nodewithvisualizationitemwrapperformelement',['NodeWithVisualizationItemWrapperFormElement',['../classVisualization_1_1Item.html#a61d1273fafe914c791644b3c658c2793',1,'Visualization::Item']]]
 ];

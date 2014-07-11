@@ -97,7 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>This is the core visitor of the <a class="el" href="classCppImport_1_1CppImport.html" title="Implements the interface between the CppImport plug-in and Envision. ">CppImport</a> plugin it translates declarations and statements from clang's AST to Envision's AST.  
+<p>This is the core visitor of the <a class="el" href="namespaceCppImport.html">CppImport</a> plugin it translates declarations and statements from clang's AST to Envision's AST.  
  <a href="classCppImport_1_1ClangAstVisitor.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for CppImport::ClangAstVisitor:</div>
@@ -215,11 +215,11 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a78e4afca5171a3414ccd24bdab4f55ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a78e4afca5171a3414ccd24bdab4f55ef">insertFriendFunction</a> (clang::FunctionDecl *friendFunction, <a class="el" href="classOOModel_1_1Class.html">OOModel::Class</a> *ooClass)</td></tr>
 <tr class="memdesc:a78e4afca5171a3414ccd24bdab4f55ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts the friend function <em>friendFunction</em> in <em>ooClass</em>.  <a href="#a78e4afca5171a3414ccd24bdab4f55ef">More...</a><br/></td></tr>
 <tr class="separator:a78e4afca5171a3414ccd24bdab4f55ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35cb6649462d5f23830b60c84f72ee07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a35cb6649462d5f23830b60c84f72ee07">shouldModel</a> (const clang::SourceLocation &amp;location)</td></tr>
-<tr class="memdesc:a35cb6649462d5f23830b60c84f72ee07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if it is intended to model the code at the <em>location</em>.  <a href="#a35cb6649462d5f23830b60c84f72ee07">More...</a><br/></td></tr>
-<tr class="separator:a35cb6649462d5f23830b60c84f72ee07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67b955ff9923975791e4b082191ffaed"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a67b955ff9923975791e4b082191ffaed">shouldImport</a> (const clang::SourceLocation &amp;location)</td></tr>
+<tr class="memdesc:a67b955ff9923975791e4b082191ffaed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if it is intended to import the code at the <em>location</em>.  <a href="#a67b955ff9923975791e4b082191ffaed">More...</a><br/></td></tr>
+<tr class="separator:a67b955ff9923975791e4b082191ffaed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a543ffa56cda11313de3e151d1ee33b4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a543ffa56cda11313de3e151d1ee33b4b">TraverseClass</a> (clang::CXXRecordDecl *recordDecl, <a class="el" href="classOOModel_1_1Class.html">OOModel::Class</a> *ooClass)</td></tr>
-<tr class="memdesc:a543ffa56cda11313de3e151d1ee33b4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert the class in the model and will visit the body and insert base classes.  <a href="#a543ffa56cda11313de3e151d1ee33b4b">More...</a><br/></td></tr>
+<tr class="memdesc:a543ffa56cda11313de3e151d1ee33b4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert the class in the tree and will visit the body and insert base classes.  <a href="#a543ffa56cda11313de3e151d1ee33b4b">More...</a><br/></td></tr>
 <tr class="separator:a543ffa56cda11313de3e151d1ee33b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb89cf1b516ea2eb3a09ab8fee642e89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#abb89cf1b516ea2eb3a09ab8fee642e89">TraverseFunction</a> (clang::FunctionDecl *functionDecl, <a class="el" href="classOOModel_1_1Method.html">OOModel::Method</a> *ooFunction)</td></tr>
 <tr class="memdesc:abb89cf1b516ea2eb3a09ab8fee642e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract function to handle common parts between FunctionDecl and its subclasses.  <a href="#abb89cf1b516ea2eb3a09ab8fee642e89">More...</a><br/></td></tr>
@@ -234,12 +234,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:af1fc490c88f10a058f150a26dab710fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaae3a67e8c9e49d4467c847c411e076f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#aaae3a67e8c9e49d4467c847c411e076f">exprVisitor_</a> {}</td></tr>
 <tr class="separator:aaae3a67e8c9e49d4467c847c411e076f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae479872f1da25265451f8e12996a55b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#ae479872f1da25265451f8e12996a55b8">importSysHeader_</a> {false}</td></tr>
+<tr class="separator:ae479872f1da25265451f8e12996a55b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49e6aa656cbb43530ea6bf6cd1376a98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a49e6aa656cbb43530ea6bf6cd1376a98">inBody_</a> {true}</td></tr>
 <tr class="separator:a49e6aa656cbb43530ea6bf6cd1376a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9c67aedf9c2eb11a5abb54c6c06f851"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#af9c67aedf9c2eb11a5abb54c6c06f851">log_</a> {}</td></tr>
 <tr class="separator:af9c67aedf9c2eb11a5abb54c6c06f851"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45ca1130ecddb1ef75fa8c267a8259dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a45ca1130ecddb1ef75fa8c267a8259dc">modelSysHeader_</a> {false}</td></tr>
-<tr class="separator:a45ca1130ecddb1ef75fa8c267a8259dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ef87633cffaf57c232c089da650d652"><td class="memItemLeft" align="right" valign="top">QStack&lt; <a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a6ef87633cffaf57c232c089da650d652">ooExprStack_</a></td></tr>
 <tr class="separator:a6ef87633cffaf57c232c089da650d652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59b8ec74b5fc133e4de4baacc113bb0a"><td class="memItemLeft" align="right" valign="top">QStack&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a59b8ec74b5fc133e4de4baacc113bb0a">ooStack_</a></td></tr>
@@ -254,8 +254,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a77178486c0a889b4e49fc3e0d4c040a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This is the core visitor of the <a class="el" href="classCppImport_1_1CppImport.html" title="Implements the interface between the CppImport plug-in and Envision. ">CppImport</a> plugin it translates declarations and statements from clang's AST to Envision's AST. </p>
-<p>One can specify to model system headers with the <em>modelSysHeader_</em> variable. </p>
+<div class="textblock"><p>This is the core visitor of the <a class="el" href="namespaceCppImport.html">CppImport</a> plugin it translates declarations and statements from clang's AST to Envision's AST. </p>
+<p>One can specify to also import system headers with the <em>importSysHeader_</em> variable. </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="abfd564d53adb8d4ac4e4393b8e63dcbe"></a>
 <div class="memitem">
@@ -481,7 +481,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a35cb6649462d5f23830b60c84f72ee07"></a>
+<a class="anchor" id="a67b955ff9923975791e4b082191ffaed"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -489,7 +489,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool CppImport::ClangAstVisitor::shouldModel </td>
+          <td class="memname">bool CppImport::ClangAstVisitor::shouldImport </td>
           <td>(</td>
           <td class="paramtype">const clang::SourceLocation &amp;&#160;</td>
           <td class="paramname"><em>location</em></td><td>)</td>
@@ -503,8 +503,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns if it is intended to model the code at the <em>location</em>. </p>
-<p>The decision is based on wheter the <em>location</em> is valid and on the value of <em>modelSysHeader_</em> </p>
+<p>Returns if it is intended to import the code at the <em>location</em>. </p>
+<p>The decision is based on wheter the <em>location</em> is valid and on the value of <em>importSysHeader_</em> </p>
 
 </div>
 </div>
@@ -591,7 +591,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Insert the class in the model and will visit the body and insert base classes. </p>
+<p>Insert the class in the tree and will visit the body and insert base classes. </p>
 <p>It does not visit type arguments they should be handled on the caller site. </p>
 
 </div>
@@ -1289,6 +1289,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae479872f1da25265451f8e12996a55b8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CppImport::ClangAstVisitor::importSysHeader_ {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a49e6aa656cbb43530ea6bf6cd1376a98"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1318,26 +1338,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classCppImport_1_1CppImportLogger.html">CppImportLogger</a>* CppImport::ClangAstVisitor::log_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a45ca1130ecddb1ef75fa8c267a8259dc"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool CppImport::ClangAstVisitor::modelSysHeader_ {false}</td>
         </tr>
       </table>
   </td>

@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classInteraction_1_1CSceneHandlerLoad-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Interaction::CSceneHandlerLoad Class Reference</div>  </div>
@@ -100,34 +101,67 @@ Inheritance diagram for Interaction::CSceneHandlerLoad:</div>
  <div class="center">
   <img src="classInteraction_1_1CSceneHandlerLoad.png" usemap="#Interaction::CSceneHandlerLoad_map" alt=""/>
   <map id="Interaction::CSceneHandlerLoad_map" name="Interaction::CSceneHandlerLoad_map">
-<area href="classInteraction_1_1Command.html" alt="Interaction::Command" shape="rect" coords="0,0,195,24"/>
+<area href="classInteraction_1_1CommandWithNameAndFlags.html" alt="Interaction::CommandWithNameAndFlags" shape="rect" coords="0,56,242,80"/>
+<area href="classInteraction_1_1Command.html" alt="Interaction::Command" shape="rect" coords="0,0,242,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af1bdb87fc0dab38b8053162e07544ab4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#af1bdb87fc0dab38b8053162e07544ab4">canInterpret</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens) override</td></tr>
-<tr class="separator:af1bdb87fc0dab38b8053162e07544ab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a727779d2828a523b6703b1b378aca1ff"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#a727779d2828a523b6703b1b378aca1ff">commandForms</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar) override</td></tr>
-<tr class="separator:a727779d2828a523b6703b1b378aca1ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00fce6cd1492873c12512a143c46235d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#a00fce6cd1492873c12512a143c46235d">execute</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens) override</td></tr>
-<tr class="separator:a00fce6cd1492873c12512a143c46235d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2effa82574b0ffd8d2c4d6b038e22453"><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
-&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#a2effa82574b0ffd8d2c4d6b038e22453">suggest</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar) override</td></tr>
-<tr class="separator:a2effa82574b0ffd8d2c4d6b038e22453"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1ee8489c7fdf681370086ff1e91f226"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#ae1ee8489c7fdf681370086ff1e91f226">CSceneHandlerLoad</a> ()</td></tr>
+<tr class="separator:ae1ee8489c7fdf681370086ff1e91f226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classInteraction_1_1CommandWithNameAndFlags')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html">Interaction::CommandWithNameAndFlags</a></td></tr>
+<tr class="memitem:aec8a7096c947623d86247a8e0ded8062 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#aec8a7096c947623d86247a8e0ded8062">CommandWithNameAndFlags</a> (const QString &amp;<a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a7e7e491619aba0d15ca2bcc123128190">commandName</a>, const QList&lt; QStringList &gt; &amp;attributes, bool usePossibleNames)</td></tr>
+<tr class="separator:aec8a7096c947623d86247a8e0ded8062 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbc28ddfa8dd5efc20e3dc28daa3b008 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#abbc28ddfa8dd5efc20e3dc28daa3b008">canInterpret</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens) override</td></tr>
+<tr class="separator:abbc28ddfa8dd5efc20e3dc28daa3b008 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4fb5c82dc381d2e0666622687016534 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#ac4fb5c82dc381d2e0666622687016534">commandForms</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar) override</td></tr>
+<tr class="separator:ac4fb5c82dc381d2e0666622687016534 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d358a80b12c05cdf6f32f319d3f8992 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a2d358a80b12c05cdf6f32f319d3f8992">execute</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens) override</td></tr>
+<tr class="separator:a2d358a80b12c05cdf6f32f319d3f8992 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fb63b433dcede03385b8824251673c5 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
+&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a9fb63b433dcede03385b8824251673c5">suggest</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar) override</td></tr>
+<tr class="separator:a9fb63b433dcede03385b8824251673c5 inherit pub_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classInteraction_1_1Command"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classInteraction_1_1Command')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classInteraction_1_1Command.html">Interaction::Command</a></td></tr>
 <tr class="memitem:ae7482c6a210727ee57689756a8f9fdd0 inherit pub_methods_classInteraction_1_1Command"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#ae7482c6a210727ee57689756a8f9fdd0">~Command</a> ()</td></tr>
 <tr class="separator:ae7482c6a210727ee57689756a8f9fdd0 inherit pub_methods_classInteraction_1_1Command"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adeb6144c422f49b714465b0e6f5d5b96 inherit pub_methods_classInteraction_1_1Command"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classInteraction_1_1CommandHelp.html">CommandHelp</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#adeb6144c422f49b714465b0e6f5d5b96">extendedHelp</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;commandForm=QString())</td></tr>
 <tr class="separator:adeb6144c422f49b714465b0e6f5d5b96 inherit pub_methods_classInteraction_1_1Command"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a9bf452f4c1cbccf24921c85bb436cf8d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#a9bf452f4c1cbccf24921c85bb436cf8d">executeNamed</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;name, const QStringList &amp;attributes) override</td></tr>
+<tr class="separator:a9bf452f4c1cbccf24921c85bb436cf8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad88f64444c57eba65dfe838a21398f78"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#ad88f64444c57eba65dfe838a21398f78">possibleNames</a> () override</td></tr>
+<tr class="separator:ad88f64444c57eba65dfe838a21398f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classInteraction_1_1CommandWithNameAndFlags"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classInteraction_1_1CommandWithNameAndFlags')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html">Interaction::CommandWithNameAndFlags</a></td></tr>
+<tr class="memitem:a7e7e491619aba0d15ca2bcc123128190 inherit pro_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a7e7e491619aba0d15ca2bcc123128190">commandName</a> ()</td></tr>
+<tr class="separator:a7e7e491619aba0d15ca2bcc123128190 inherit pro_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac79b4552593c9fc0ff36d05e7c791562 inherit pro_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
+&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#ac79b4552593c9fc0ff36d05e7c791562">suggestNamed</a> (const QString &amp;textSoFar, const QString &amp;name, const QStringList &amp;attributes, bool commandFound)</td></tr>
+<tr class="separator:ac79b4552593c9fc0ff36d05e7c791562 inherit pro_methods_classInteraction_1_1CommandWithNameAndFlags"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aef07410c56fcb195059d63c03e80773f"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#aef07410c56fcb195059d63c03e80773f">availableProjectsOnDisk</a> ()</td></tr>
 <tr class="separator:aef07410c56fcb195059d63c03e80773f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad18d76908aba7b9ed9033c02424ed6d7"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CSceneHandlerLoad.html#ad18d76908aba7b9ed9033c02424ed6d7">matchingProjects</a> (QString projectNameToLookFor)</td></tr>
-<tr class="separator:ad18d76908aba7b9ed9033c02424ed6d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ae1ee8489c7fdf681370086ff1e91f226"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Interaction::CSceneHandlerLoad::CSceneHandlerLoad </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="aef07410c56fcb195059d63c03e80773f"></a>
 <div class="memitem">
@@ -152,7 +186,7 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af1bdb87fc0dab38b8053162e07544ab4"></a>
+<a class="anchor" id="a9bf452f4c1cbccf24921c85bb436cf8d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -160,49 +194,7 @@ Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Interaction::CSceneHandlerLoad::canInterpret </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QStringList &amp;&#160;</td>
-          <td class="paramname"><em>commandTokens</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplemented from <a class="el" href="classInteraction_1_1Command.html#aa5abdc16b8de63a104c5564f4cc78132">Interaction::Command</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a727779d2828a523b6703b1b378aca1ff"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QStringList Interaction::CSceneHandlerLoad::commandForms </td>
+          <td class="memname">virtual <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a>* Interaction::CSceneHandlerLoad::executeNamed </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
           <td class="paramname"><em>source</em>, </td>
@@ -217,49 +209,13 @@ Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>textSoFar</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="classInteraction_1_1Command.html#ae1415287dfd174a002de3f79f45a95a5">Interaction::Command</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a00fce6cd1492873c12512a143c46235d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> * Interaction::CSceneHandlerLoad::execute </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
+          <td class="paramname"><em>name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QStringList &amp;&#160;</td>
-          <td class="paramname"><em>commandTokens</em>&#160;</td>
+          <td class="paramname"><em>attributes</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -269,16 +225,16 @@ Private Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classInteraction_1_1Command.html#ac6c2742dc99ed1543e0192b037abec79">Interaction::Command</a>.</p>
+<p>Implements <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#acfd42fd701fcb9bcbb87bf603cdf868d">Interaction::CommandWithNameAndFlags</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ad18d76908aba7b9ed9033c02424ed6d7"></a>
+<a class="anchor" id="ad88f64444c57eba65dfe838a21398f78"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -286,61 +242,20 @@ Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QStringList Interaction::CSceneHandlerLoad::matchingProjects </td>
+          <td class="memname">virtual QStringList Interaction::CSceneHandlerLoad::possibleNames </td>
           <td>(</td>
-          <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>projectNameToLookFor</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a2effa82574b0ffd8d2c4d6b038e22453"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt; Interaction::CSceneHandlerLoad::suggest </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>source</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
-          <td class="paramname"><em>target</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>textSoFar</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Reimplemented from <a class="el" href="classInteraction_1_1Command.html#a9d5d10708d0eb173b223c086ac87b7ac">Interaction::Command</a>.</p>
+<p>Reimplemented from <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#af341cd21168bd7c66a920b2a873eb619">Interaction::CommandWithNameAndFlags</a>.</p>
 
 </div>
 </div>

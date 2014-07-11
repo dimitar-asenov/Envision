@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['data_5f',['data_',['../classFilePersistence_1_1GenericNode.html#abee778f42f113f4d8f17d068e7d1d8c9',1,'FilePersistence::GenericNode']]],
+  ['dataline_5f',['dataLine_',['../classFilePersistence_1_1GenericNode.html#a166f7d235227b223981f32c0e59a5c5d',1,'FilePersistence::GenericNode']]],
+  ['datalinelength_5f',['dataLineLength_',['../classFilePersistence_1_1GenericNode.html#ada8c5a77f960b33fd2dcf07edd6c8607',1,'FilePersistence::GenericNode']]],
   ['datamappings_5f',['dataMappings_',['../classFilePersistence_1_1GenericNodeAllocator.html#af2cca8810c07249f111fbf1ff6798bcf',1,'FilePersistence::GenericNodeAllocator']]],
   ['decl_5f',['decl_',['../classOOVisualization_1_1VDeclarationStatement.html#abf07b590b4a0e898764731535d75c54b',1,'OOVisualization::VDeclarationStatement']]],
   ['declarations',['declarations',['../classOOVisualization_1_1VClassStyle.html#adac931c88120a38e6b7405ecd820f74a',1,'OOVisualization::VClassStyle::declarations()'],['../classOOVisualization_1_1VModuleStyle.html#a193dd4eaead50490f35b90e426afcaaf',1,'OOVisualization::VModuleStyle::declarations()'],['../classOOVisualization_1_1VProjectStyle.html#ae04fbf5257eb7c7414e5bac39549bcb3',1,'OOVisualization::VProjectStyle::declarations()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#afd59848757d38f6c9faa192c71378ce1',1,'OOVisualization::VClassSzPublicStyle::declarations()']]],

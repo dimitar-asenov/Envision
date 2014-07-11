@@ -9,6 +9,7 @@ var searchData=
   ['addonitems_5f',['addOnItems_',['../classVisualization_1_1Item.html#a9beeaf1dfeb9d2d4251a635963a31ef5',1,'Visualization::Item']]],
   ['addons',['addons',['../classOOVisualization_1_1VMethodStyle.html#ac8060941444eae6eac65d3f458c9fee0',1,'OOVisualization::VMethodStyle::addons()'],['../classOOVisualization_1_1VMethodSzPublicStyle.html#a9dbca21be74b076c1c8ee7a012e829bb',1,'OOVisualization::VMethodSzPublicStyle::addons()']]],
   ['addons_5f',['addons_',['../classOOVisualization_1_1VMethod.html#a7c0104ce3554b7c77354efeb343ed1d2',1,'OOVisualization::VMethod']]],
+  ['agrid_5f',['aGrid_',['../classComments_1_1VCommentTable.html#a48c0cb559078997bbef1294f95e44ec3',1,'Comments::VCommentTable']]],
   ['alignment',['alignment',['../classVisualization_1_1SequentialLayoutStyle.html#ab7b507bba2478d79c3e70240851150a7',1,'Visualization::SequentialLayoutStyle']]],
   ['alignment_5f',['alignment_',['../classVisualization_1_1SequentialLayoutFormElement.html#ad389369ebe0529bd58ec186918360ecc',1,'Visualization::SequentialLayoutFormElement']]],
   ['allnodeslackpositioninfo',['allNodesLackPositionInfo',['../classVisualization_1_1PositionLayout.html#a84911c0ddac4a5d785333c05ef0bf085',1,'Visualization::PositionLayout']]],
@@ -16,6 +17,7 @@ var searchData=
   ['allocator_5f',['allocator_',['../classFilePersistence_1_1SimpleTextFileStore.html#ac41cf9a5407e8fd18355547a2cce2a88',1,'FilePersistence::SimpleTextFileStore']]],
   ['allowequivalentcursorsthroughboundary',['allowEquivalentCursorsThroughBoundary',['../classVisualization_1_1ItemStyle.html#a4fca4be2879a4237273183519b1acd9b',1,'Visualization::ItemStyle']]],
   ['allreferences_5f',['allReferences_',['../classModel_1_1Reference.html#ae5516e774a441914ddaec6cc5829644e',1,'Model::Reference']]],
+  ['aneffect_5f',['anEffect_',['../classComments_1_1VCommentFreeNode.html#a756b5604c7747efc8466e8c6d85e3479',1,'Comments::VCommentFreeNode']]],
   ['annotationicon',['annotationIcon',['../classOOVisualization_1_1VClassStyle.html#a107475773f9ad0a484a001372f393efc',1,'OOVisualization::VClassStyle::annotationIcon()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#a5abd22c6beedcae2bd39dd381e3382c8',1,'OOVisualization::VClassSzPublicStyle::annotationIcon()']]],
   ['annotations',['annotations',['../classOOVisualization_1_1VClassStyle.html#a10cc3aedac0ce1671a97c33b69d108bd',1,'OOVisualization::VClassStyle::annotations()'],['../classOOVisualization_1_1VMethodStyle.html#a846485ef0d7938aac7956fecbd8e1f47',1,'OOVisualization::VMethodStyle::annotations()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#a94c37279a90f31e35ef641ca35230b31',1,'OOVisualization::VClassSzPublicStyle::annotations()']]],
   ['annotations_5f',['annotations_',['../classOOVisualization_1_1VClass.html#a9f438e83085fb02bcf413fdcb1c8802d',1,'OOVisualization::VClass::annotations_()'],['../classOOVisualization_1_1VMethod.html#affd4dc3dcf57f53899c516a05668338e',1,'OOVisualization::VMethod::annotations_()'],['../classOOVisualization_1_1VClassSzPublic.html#acf7a21beaef5ce1f1fe58bf5a7eb218e',1,'OOVisualization::VClassSzPublic::annotations_()']]],
@@ -28,9 +30,7 @@ var searchData=
   ['astvisitor_5f',['astVisitor_',['../classCppImport_1_1ClangAstConsumer.html#afee87c578530a7019a0240ad938cc17e',1,'CppImport::ClangAstConsumer']]],
   ['atimer_5f',['aTimer_',['../classComments_1_1CommentDiagramToolbar.html#a2a947cade11bd17dfd671601f70a562b',1,'Comments::CommentDiagramToolbar']]],
   ['attr_5f',['attr_',['../classTestNodes_1_1PositionExtension.html#a8994043baa9c7282e57e3655b551d3d9',1,'TestNodes::PositionExtension']]],
-  ['attribute_5ffalse',['ATTRIBUTE_FALSE',['../namespaceFilePersistence.html#a226f8b3597752a7df68f16a5cd464ad3',1,'FilePersistence::ATTRIBUTE_FALSE()'],['../namespaceFilePersistence.html#a226f8b3597752a7df68f16a5cd464ad3',1,'FilePersistence::ATTRIBUTE_FALSE()']]],
-  ['attribute_5ftrue',['ATTRIBUTE_TRUE',['../namespaceFilePersistence.html#a8c0b6de0db0563a6a33a10baae6eb86e',1,'FilePersistence::ATTRIBUTE_TRUE()'],['../namespaceFilePersistence.html#a8c0b6de0db0563a6a33a10baae6eb86e',1,'FilePersistence::ATTRIBUTE_TRUE()']]],
   ['attributeindex',['attributeIndex',['../classModel_1_1CompositeNodeChangeChild.html#a5e0ce1e253609d96866a5c618e1b0d05',1,'Model::CompositeNodeChangeChild']]],
-  ['attributes_5f',['attributes_',['../classInteraction_1_1CreateNamedObjectWithAttributes.html#a8e039721f6f8678c5da7c283a5db04e2',1,'Interaction::CreateNamedObjectWithAttributes::attributes_()'],['../classVisualization_1_1VComposite.html#a031b338c559690ce1bc2e43f16a19f22',1,'Visualization::VComposite::attributes_()']]],
+  ['attributes_5f',['attributes_',['../classInteraction_1_1CommandWithNameAndFlags.html#a833ad109751196b05948e91745665921',1,'Interaction::CommandWithNameAndFlags::attributes_()'],['../classVisualization_1_1VComposite.html#a031b338c559690ce1bc2e43f16a19f22',1,'Visualization::VComposite::attributes_()']]],
   ['autoexecuteaction_5f',['autoExecuteAction_',['../classInteraction_1_1ActionPrompt.html#a0434f3ed7220ffa7663d27da6f3fb00c',1,'Interaction::ActionPrompt']]]
 ];

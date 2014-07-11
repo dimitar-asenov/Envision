@@ -1,9 +1,8 @@
 var searchData=
 [
   ['generatenewid',['generateNewId',['../classModel_1_1NodeIdMap.html#af815f762c40d9e6d45d51f554e334510',1,'Model::NodeIdMap']]],
-  ['generatepixmaps',['generatePixmaps',['../classVisualization_1_1BoxStyle.html#a6ea139929d0cd07d9bab2d82fc322c33',1,'Visualization::BoxStyle']]],
   ['generichandler',['GenericHandler',['../classInteraction_1_1GenericHandler.html#aac56d9d227e645418f66c8218843b003',1,'Interaction::GenericHandler']]],
-  ['genericnode',['GenericNode',['../classFilePersistence_1_1GenericNode.html#aa579a9a82ade341260f0c10bf02e5489',1,'FilePersistence::GenericNode']]],
+  ['genericnode',['GenericNode',['../classFilePersistence_1_1GenericNode.html#aa579a9a82ade341260f0c10bf02e5489',1,'FilePersistence::GenericNode::GenericNode()'],['../classFilePersistence_1_1GenericNode.html#adc594218c064d08dd9021348aa276ca8',1,'FilePersistence::GenericNode::GenericNode(const char *dataLine, int dataLineLength, bool lazy)']]],
   ['genericnodeallocator',['GenericNodeAllocator',['../classFilePersistence_1_1GenericNodeAllocator.html#a560b1761e74e73c34de66d9636d78158',1,'FilePersistence::GenericNodeAllocator']]],
   ['get',['get',['../classModel_1_1Boolean.html#acae5160d3c2a793800e81207075ec454',1,'Model::Boolean::get()'],['../classModel_1_1Character.html#a0b6629c22f3b1a2befa1fffd75af40ba',1,'Model::Character::get()'],['../classModel_1_1CompositeNode.html#af71e395c2ee80fffcd49089c438ac182',1,'Model::CompositeNode::get(const CompositeIndex &amp;attributeIndex) const '],['../classModel_1_1CompositeNode.html#abfaa8adfa444c718cec9383d0e28f67d',1,'Model::CompositeNode::get(const QString &amp;attributeName) const '],['../classModel_1_1Float.html#a61717f2f3e46c3a816e7782b45f07fe8',1,'Model::Float::get()'],['../classModel_1_1Integer.html#aae2cbc177af8436039fc3cea827f51a3',1,'Model::Integer::get()'],['../classModel_1_1Text.html#ace41c1044aa779e0e8b56645b43b8671',1,'Model::Text::get()'],['../classOOModel_1_1Modifier.html#aafe7df0517cdcba02f5d8d0aa74215cf',1,'OOModel::Modifier::get()'],['../classVisualization_1_1StyleSet.html#a63bb2d5233325fe7c0a2b6a8b4321c05',1,'Visualization::StyleSet::get()']]],
   ['getallattributes',['getAllAttributes',['../classModel_1_1CompositeNode.html#ac84c16c79a263bad51c3d73aa43bc9be',1,'Model::CompositeNode']]],
@@ -42,7 +41,7 @@ var searchData=
   ['getooexpression',['getOOExpression',['../classOOInteraction_1_1OOExpressionBuilder.html#a02cc8c178af071f8a524d352dcdc694f',1,'OOInteraction::OOExpressionBuilder::getOOExpression(const QString &amp;exprText)'],['../classOOInteraction_1_1OOExpressionBuilder.html#a4a96ff43b782c9fa35c8552bd89e0696',1,'OOInteraction::OOExpressionBuilder::getOOExpression(Interaction::Expression *expression)']]],
   ['getoutcome',['getOutcome',['../classSelfTest_1_1TestResult.html#af1c9d065e6e1701e1c56c42f44a34d07',1,'SelfTest::TestResult']]],
   ['getoverloadkind',['getOverloadKind',['../classCppImport_1_1CppImportUtilities.html#a55d2b7c04e6cc82791e76906a483044b',1,'CppImport::CppImportUtilities']]],
-  ['getpersistenceunitname',['getPersistenceUnitName',['../classFilePersistence_1_1FileStore.html#aaca33491ba7403df7af2041a6aec9ccf',1,'FilePersistence::FileStore::getPersistenceUnitName()'],['../classFilePersistence_1_1SimpleTextFileStore.html#ad076f1980567d87ad2e9dcf60fb330bf',1,'FilePersistence::SimpleTextFileStore::getPersistenceUnitName()']]],
+  ['getpersistenceunitname',['getPersistenceUnitName',['../classFilePersistence_1_1SimpleTextFileStore.html#ad076f1980567d87ad2e9dcf60fb330bf',1,'FilePersistence::SimpleTextFileStore']]],
   ['getproperty',['getProperty',['../classVisualization_1_1StyleLoader.html#ab06c3d70fca26ad190dffee7d30c2a4f',1,'Visualization::StyleLoader::getProperty()'],['../classVisualization_1_1StyleNode.html#a269c831e32edcf4ce349985a2ee0f721',1,'Visualization::StyleNode::getProperty()']]],
   ['getreasonstring',['getReasonString',['../classCppImport_1_1CppImportLogger.html#a931c36fa80ca1960afb3b5976412f917',1,'CppImport::CppImportLogger']]],
   ['getrectanglepath',['getRectanglePath',['../classVisualization_1_1BoxStyle.html#adbdd65d275ae6625136a0a58c1007148',1,'Visualization::BoxStyle']]],
@@ -64,6 +63,6 @@ var searchData=
   ['gridconstructors',['gridConstructors',['../classOOInteraction_1_1GridBasedOffsetProvider.html#ab1758b3c4b5f2b2a22bfb978dbc6d18f',1,'OOInteraction::GridBasedOffsetProvider']]],
   ['gridlayout',['GridLayout',['../classVisualization_1_1GridLayout.html#a8cd2bb2a80581202aa45368aa7087cb2',1,'Visualization::GridLayout']]],
   ['gridlayoutformelement',['GridLayoutFormElement',['../classVisualization_1_1GridLayoutFormElement.html#a8867a5e494b7b9f084a4674000844055',1,'Visualization::GridLayoutFormElement::GridLayoutFormElement()'],['../classVisualization_1_1GridLayoutFormElement.html#a632502f9e2717abaca0397b035ff3835',1,'Visualization::GridLayoutFormElement::GridLayoutFormElement(const GridLayoutFormElement &amp;other)']]],
-  ['gridsize',['gridSize',['../classVisualization_1_1GridLayout.html#aa00c99978a32a1ef6881ebfefb92c04f',1,'Visualization::GridLayout']]],
+  ['gridsize',['gridSize',['../classVisualization_1_1DynamicGridFormElement.html#a55ce3e80a7791f58b7a13ec709015cb4',1,'Visualization::DynamicGridFormElement::gridSize()'],['../classVisualization_1_1GridLayout.html#aa00c99978a32a1ef6881ebfefb92c04f',1,'Visualization::GridLayout::gridSize()']]],
   ['grow',['grow',['../classInteraction_1_1ExpressionTreeUtils.html#ac5c3aff557c21230519569503068f970',1,'Interaction::ExpressionTreeUtils']]]
 ];

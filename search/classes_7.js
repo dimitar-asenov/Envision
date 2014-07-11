@@ -6,12 +6,15 @@ var searchData=
   ['hclass',['HClass',['../classOOInteraction_1_1HClass.html',1,'OOInteraction']]],
   ['hcommandprompt',['HCommandPrompt',['../classInteraction_1_1HCommandPrompt.html',1,'Interaction']]],
   ['hcomment',['HComment',['../classComments_1_1HComment.html',1,'Comments']]],
+  ['hcommentbrowser',['HCommentBrowser',['../classComments_1_1HCommentBrowser.html',1,'Comments']]],
   ['hcommentdiagram',['HCommentDiagram',['../classComments_1_1HCommentDiagram.html',1,'Comments']]],
   ['hcommentdiagramconnector',['HCommentDiagramConnector',['../classComments_1_1HCommentDiagramConnector.html',1,'Comments']]],
   ['hcommentdiagramshape',['HCommentDiagramShape',['../classComments_1_1HCommentDiagramShape.html',1,'Comments']]],
+  ['hcommentfreenode',['HCommentFreeNode',['../classComments_1_1HCommentFreeNode.html',1,'Comments']]],
   ['hcommentimage',['HCommentImage',['../classComments_1_1HCommentImage.html',1,'Comments']]],
+  ['hcommenttext',['HCommentText',['../classComments_1_1HCommentText.html',1,'Comments']]],
   ['hcomposite',['HComposite',['../classInteraction_1_1HComposite.html',1,'Interaction']]],
-  ['helloworld',['HelloWorld',['../classHello_1_1HelloWorld.html',1,'Hello']]],
+  ['helloworldplugin',['HelloWorldPlugin',['../classHello_1_1HelloWorldPlugin.html',1,'Hello']]],
   ['helloworldprinter',['HelloWorldPrinter',['../classHello_1_1HelloWorldPrinter.html',1,'Hello']]],
   ['hexpression',['HExpression',['../classOOInteraction_1_1HExpression.html',1,'OOInteraction']]],
   ['hforeachstatement',['HForEachStatement',['../classOOInteraction_1_1HForEachStatement.html',1,'OOInteraction']]],
@@ -27,5 +30,6 @@ var searchData=
   ['hrootitem',['HRootItem',['../classInteraction_1_1HRootItem.html',1,'Interaction']]],
   ['hscenehandleritem',['HSceneHandlerItem',['../classInteraction_1_1HSceneHandlerItem.html',1,'Interaction']]],
   ['hstatement',['HStatement',['../classOOInteraction_1_1HStatement.html',1,'OOInteraction']]],
+  ['hstatementitemlist',['HStatementItemList',['../classOOInteraction_1_1HStatementItemList.html',1,'OOInteraction']]],
   ['htext',['HText',['../classInteraction_1_1HText.html',1,'Interaction']]]
 ];

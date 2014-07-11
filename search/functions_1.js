@@ -4,9 +4,9 @@ var searchData=
   ['basicstrategy',['basicStrategy',['../classVisualization_1_1ModelRenderer.html#a1194f81d36e8550d3df50be3b57e1c17',1,'Visualization::ModelRenderer']]],
   ['beforeevent',['beforeEvent',['../classInteraction_1_1GenericHandler.html#aff4641c4a8c0ef23a635bbfd6dcb20ad',1,'Interaction::GenericHandler::beforeEvent()'],['../classVisualization_1_1InteractionHandler.html#a7cbc0d5280745fddc108704f36825f3a',1,'Visualization::InteractionHandler::beforeEvent()']]],
   ['begin',['begin',['../classModel_1_1List.html#ae3edd0b2d8acd549976573dbdc5f6058',1,'Model::List::begin()'],['../classModel_1_1List.html#a02111cad0275af6372e2e0aadf8424f2',1,'Model::List::begin() const '],['../classModel_1_1TypedList.html#a8f5204d23b767bfa5f0e3f52ecab36f0',1,'Model::TypedList::begin()'],['../classModel_1_1TypedList.html#ac5fdfd66a0b91e3a2793017ab683584e',1,'Model::TypedList::begin() const ']]],
-  ['beginexclusiveread',['beginExclusiveRead',['../classModel_1_1Model.html#aa1eff88fb639e3b79144268858b029e1',1,'Model::Model']]],
+  ['beginexclusiveread',['beginExclusiveRead',['../classModel_1_1TreeManager.html#a26ef85c4beb28c42d8df6523315d00d2',1,'Model::TreeManager']]],
   ['beginloadchildnode',['beginLoadChildNode',['../classFilePersistence_1_1XMLModel.html#ae168b1c783100646df9e61dc44db3ade',1,'FilePersistence::XMLModel']]],
-  ['beginmodification',['beginModification',['../classModel_1_1Model.html#aeb529525d3f1a3b95f9abfec9aa7487d',1,'Model::Model::beginModification()'],['../classModel_1_1Node.html#ae6c6fa88579de718cfc16e2a5c22e8e3',1,'Model::Node::beginModification()']]],
+  ['beginmodification',['beginModification',['../classModel_1_1TreeManager.html#a2aefa4b91245e7540bf1e79964368564',1,'Model::TreeManager::beginModification()'],['../classModel_1_1Node.html#ae6c6fa88579de718cfc16e2a5c22e8e3',1,'Model::Node::beginModification()']]],
   ['beginsavechildnode',['beginSaveChildNode',['../classFilePersistence_1_1XMLModel.html#afb78df72dbdea7cdafb0a80b5b7e2bce',1,'FilePersistence::XMLModel']]],
   ['bestvisualizationforcontext',['bestVisualizationForContext',['../classVisualization_1_1ModelRenderer.html#aeed63b918fe89ffd19317e13980d5579',1,'Visualization::ModelRenderer']]],
   ['binary',['binary',['../classOOInteraction_1_1OOOperatorDescriptor.html#aa59c749ea291ffeadeb8c43865241292',1,'OOInteraction::OOOperatorDescriptor']]],
@@ -24,6 +24,7 @@ var searchData=
   ['boxtest',['BoxTest',['../classVisualization_1_1BoxTest.html#acbc3d66209f7a7e3ecf4ce2514ad81ce',1,'Visualization::BoxTest']]],
   ['braces',['Braces',['../classVisualization_1_1Braces.html#a58699a6182121c1b0d898ac4097897c2',1,'Visualization::Braces']]],
   ['breaks',['breaks',['../classControlFlowVisualization_1_1ControlFlowItem.html#a68624f1d097777005f5c1a776a437d3a',1,'ControlFlowVisualization::ControlFlowItem']]],
+  ['browser',['browser',['../classComments_1_1VCommentBrowser.html#a8023f47be65243dc44c59b1664c33f44',1,'Comments::VCommentBrowser']]],
   ['build',['build',['../classInteraction_1_1ExpressionTreeBuilder.html#a3d37d5afb36760b0653e68d8a72d7309',1,'Interaction::ExpressionTreeBuilder']]],
   ['buildcompositeitems',['buildCompositeItems',['../classControlFlowVisualization_1_1VListCF.html#a0082777cc1d0f647ffdc1856fa73412c',1,'ControlFlowVisualization::VListCF']]]
 ];

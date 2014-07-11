@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classVisualization_1_1SequentialLayoutFormElement-members.html">List of all members</a> &#124;
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
@@ -110,6 +111,11 @@ Inheritance diagram for Visualization::SequentialLayoutFormElement:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structVisualization_1_1SequentialLayoutFormElement_1_1ItemData.html">ItemData</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aa78bc6ceb5913aec98b8a5db8a389b21"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#aa78bc6ceb5913aec98b8a5db8a389b21">ListNodeGetterFunction</a> = std::function&lt; <a class="el" href="classModel_1_1List.html">Model::List</a> *(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;</td></tr>
@@ -319,18 +325,12 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a9f3e447cb7a9fd584e47889ede1ad64d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a9f3e447cb7a9fd584e47889ede1ad64d">adjustCursorRegionToAvoidZeroSize</a> (QRect &amp;region, bool horizontal, bool first, bool last)</td></tr>
 <tr class="separator:a9f3e447cb7a9fd584e47889ede1ad64d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad74509cdcb241191ecc8b0a607576017"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#ad74509cdcb241191ecc8b0a607576017">listForItem</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
-<tr class="memdesc:ad74509cdcb241191ecc8b0a607576017"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cached item list for this item.  <a href="#ad74509cdcb241191ecc8b0a607576017">More...</a><br/></td></tr>
-<tr class="separator:ad74509cdcb241191ecc8b0a607576017"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a3822db2ba717fc959d1ee031be17ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a6a3822db2ba717fc959d1ee031be17ec">removeFromItemList</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int index, bool deleteItem)</td></tr>
-<tr class="memdesc:a6a3822db2ba717fc959d1ee031be17ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the item at <em>index</em> from the itemList of <em>item</em>.  <a href="#a6a3822db2ba717fc959d1ee031be17ec">More...</a><br/></td></tr>
-<tr class="separator:a6a3822db2ba717fc959d1ee031be17ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3925bada04cc52d168d8ad748957a1e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structVisualization_1_1SequentialLayoutFormElement_1_1ItemData.html">ItemData</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a3925bada04cc52d168d8ad748957a1e9">dataForItem</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
+<tr class="memdesc:a3925bada04cc52d168d8ad748957a1e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cached item list for this item.  <a href="#a3925bada04cc52d168d8ad748957a1e9">More...</a><br/></td></tr>
+<tr class="separator:a3925bada04cc52d168d8ad748957a1e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a853ef57f5697d730aeb877f6893b2da0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a853ef57f5697d730aeb877f6893b2da0">spaceBetweenElements</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
 <tr class="memdesc:a853ef57f5697d730aeb877f6893b2da0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the space between elements from the getter and the previously set space.  <a href="#a853ef57f5697d730aeb877f6893b2da0">More...</a><br/></td></tr>
 <tr class="separator:a853ef57f5697d730aeb877f6893b2da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29bc5a606886c4c4feea2aa53f27b697"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a29bc5a606886c4c4feea2aa53f27b697">swap</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int i, int j)</td></tr>
-<tr class="memdesc:a29bc5a606886c4c4feea2aa53f27b697"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swaps the items at positions <em>i</em> and <em>j</em> in the list of items for <em>item</em>.  <a href="#a29bc5a606886c4c4feea2aa53f27b697">More...</a><br/></td></tr>
-<tr class="separator:a29bc5a606886c4c4feea2aa53f27b697"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eda58f73523e1e357fc75f5653333cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a9eda58f73523e1e357fc75f5653333cd">synchronizeWithItems</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, const QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &amp;items)</td></tr>
 <tr class="memdesc:a9eda58f73523e1e357fc75f5653333cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronizes the old list of items for this <em>item</em> with the new list of <em>items</em>.  <a href="#a9eda58f73523e1e357fc75f5653333cd">More...</a><br/></td></tr>
 <tr class="separator:a9eda58f73523e1e357fc75f5653333cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,11 +346,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8e582218962d3349c25e137c35d42262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87b8ae4bab667a8102b529b774b5384e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a87b8ae4bab667a8102b529b774b5384e">forward_</a> {true}</td></tr>
 <tr class="separator:a87b8ae4bab667a8102b529b774b5384e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79b988f60ab6bf1af2a6344735893a56"><td class="memItemLeft" align="right" valign="top">QHash&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *, <a class="el" href="structVisualization_1_1SequentialLayoutFormElement_1_1ItemData.html">ItemData</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a79b988f60ab6bf1af2a6344735893a56">itemData_</a> {}</td></tr>
+<tr class="separator:a79b988f60ab6bf1af2a6344735893a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77144e563e901bba964f1d01924d9a66"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a9562bdbadecedcaff201ed94e13139eb">ListOfItemsGetterFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a77144e563e901bba964f1d01924d9a66">itemListGetter_</a> {}</td></tr>
 <tr class="separator:a77144e563e901bba964f1d01924d9a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ff419b414712fc69ed3693b1faf7e73"><td class="memItemLeft" align="right" valign="top">QHash&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *, QList<br class="typebreak"/>
-&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#a4ff419b414712fc69ed3693b1faf7e73">itemListMap_</a> {}</td></tr>
-<tr class="separator:a4ff419b414712fc69ed3693b1faf7e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0eb42826d55736c246643ea85b796a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#aa78bc6ceb5913aec98b8a5db8a389b21">ListNodeGetterFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#af0eb42826d55736c246643ea85b796a9">listNodeGetter_</a> {}</td></tr>
 <tr class="separator:af0eb42826d55736c246643ea85b796a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbebbcc09229c559c47e26efb59a8145"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SequentialLayoutFormElement.html#acbebbcc09229c559c47e26efb59a8145">minHeight_</a> {}</td></tr>
@@ -623,6 +622,32 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3925bada04cc52d168d8ad748957a1e9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structVisualization_1_1SequentialLayoutFormElement_1_1ItemData.html">SequentialLayoutFormElement::ItemData</a> &amp; Visualization::SequentialLayoutFormElement::dataForItem </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the cached item list for this item. </p>
+
+</div>
+</div>
 <a class="anchor" id="ae2726580f93446d081c3ee329fe26a4a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -791,32 +816,6 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad74509cdcb241191ecc8b0a607576017"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &amp; Visualization::SequentialLayoutFormElement::listForItem </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>item</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the cached item list for this item. </p>
-
-</div>
-</div>
 <a class="anchor" id="a68545b9a8f1798315e1fd3835ba26a05"></a>
 <div class="memitem">
 <div class="memproto">
@@ -883,49 +882,6 @@ template&lt;class T &gt; </div>
 <p><em>parentX</em> and <em>parentY</em> are the offsets that this element needs to have from the parent <em>item</em> (similar to the setItemPositions method). </p>
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1FormElement.html#a8a2d94559a289bd50d359cdc7fec8242">Visualization::FormElement</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6a3822db2ba717fc959d1ee031be17ec"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Visualization::SequentialLayoutFormElement::removeFromItemList </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>item</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>index</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>deleteItem</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Removes the item at <em>index</em> from the itemList of <em>item</em>. </p>
-<p>If <em>deleteItem</em> is set, the item also gets deleted. </p>
 
 </div>
 </div>
@@ -1637,48 +1593,6 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a29bc5a606886c4c4feea2aa53f27b697"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Visualization::SequentialLayoutFormElement::swap </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>item</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>i</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>j</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Swaps the items at positions <em>i</em> and <em>j</em> in the list of items for <em>item</em>. </p>
-
-</div>
-</div>
 <a class="anchor" id="a4195970c6ba6dc4ea1543f51691eca82"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1841,6 +1755,26 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a79b988f60ab6bf1af2a6344735893a56"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;const <a class="el" href="classVisualization_1_1Item.html">Item</a>*, <a class="el" href="structVisualization_1_1SequentialLayoutFormElement_1_1ItemData.html">ItemData</a>*&gt; Visualization::SequentialLayoutFormElement::itemData_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a77144e563e901bba964f1d01924d9a66"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1855,26 +1789,6 @@ template&lt;class T &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4ff419b414712fc69ed3693b1faf7e73"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QHash&lt;const <a class="el" href="classVisualization_1_1Item.html">Item</a>*, QList&lt;<a class="el" href="classVisualization_1_1Item.html">Item</a>*&gt;*&gt; Visualization::SequentialLayoutFormElement::itemListMap_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -110,6 +110,8 @@ Inheritance diagram for OOVisualization::VModule:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a79752090040103f12f35b1078e53e529"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VModule.html#a79752090040103f12f35b1078e53e529">VModule</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, NodeType *node, const StyleType *style=itemStyles().get())</td></tr>
 <tr class="separator:a79752090040103f12f35b1078e53e529"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06a0d4d19005c5662c02b7f74e657d45"><td class="memItemLeft" align="right" valign="top">virtual QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VModule.html#a06a0d4d19005c5662c02b7f74e657d45">customShapeColor</a> () const override</td></tr>
+<tr class="separator:a06a0d4d19005c5662c02b7f74e657d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -123,8 +125,8 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a7054bf17a3f7538491ac9d509b418536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1PositionLayout.html">Visualization::PositionLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VModule.html#a7054bf17a3f7538491ac9d509b418536">body_</a> {}</td></tr>
-<tr class="separator:a7054bf17a3f7538491ac9d509b418536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c429618dbeff12b851fe9b76a7b2f3"><td class="memItemLeft" align="right" valign="top">QColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VModule.html#aa3c429618dbeff12b851fe9b76a7b2f3">color_</a> {}</td></tr>
+<tr class="separator:aa3c429618dbeff12b851fe9b76a7b2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7e51821a9b556aaa6a9d473a917688a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VModule.html#ae7e51821a9b556aaa6a9d473a917688a">declarations_</a> {}</td></tr>
 <tr class="separator:ae7e51821a9b556aaa6a9d473a917688a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e5b918b22b5a8894d402a6e42da77ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VModule.html#a3e5b918b22b5a8894d402a6e42da77ba">fields_</a> {}</td></tr>
@@ -176,6 +178,29 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a06a0d4d19005c5662c02b7f74e657d45"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QColor OOVisualization::VModule::customShapeColor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="acac20ebb74f76cfa13280106a1bebff4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -223,7 +248,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a7054bf17a3f7538491ac9d509b418536"></a>
+<a class="anchor" id="aa3c429618dbeff12b851fe9b76a7b2f3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -231,12 +256,12 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1PositionLayout.html">Visualization::PositionLayout</a>* OOVisualization::VModule::body_ {}</td>
+          <td class="memname">QColor OOVisualization::VModule::color_ {}</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

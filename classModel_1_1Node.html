@@ -101,7 +101,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> class is the foundation element in the model tree in Envision.  
+<p>The <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> class is the foundation element in the tree in Envision.  
  <a href="classModel_1_1Node.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -186,11 +186,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abb715885b1d1e5cb97aec8ab7888334b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#abb715885b1d1e5cb97aec8ab7888334b">lowestCommonAncestor</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *other)</td></tr>
 <tr class="memdesc:abb715885b1d1e5cb97aec8ab7888334b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lowest common ancestor of this node and other.  <a href="#abb715885b1d1e5cb97aec8ab7888334b">More...</a><br/></td></tr>
 <tr class="separator:abb715885b1d1e5cb97aec8ab7888334b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8eb7d7162522ca5e4000ce4e2c77ab35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a8eb7d7162522ca5e4000ce4e2c77ab35">model</a> () const </td></tr>
-<tr class="memdesc:a8eb7d7162522ca5e4000ce4e2c77ab35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the model managing the tree of the current <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a>.  <a href="#a8eb7d7162522ca5e4000ce4e2c77ab35">More...</a><br/></td></tr>
-<tr class="separator:a8eb7d7162522ca5e4000ce4e2c77ab35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0ec6807ca4e9e48845bfd44ca946195"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ab0ec6807ca4e9e48845bfd44ca946195">manager</a> () const </td></tr>
+<tr class="memdesc:ab0ec6807ca4e9e48845bfd44ca946195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tree manager of the current <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a>.  <a href="#ab0ec6807ca4e9e48845bfd44ca946195">More...</a><br/></td></tr>
+<tr class="separator:ab0ec6807ca4e9e48845bfd44ca946195"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0027c2328323a4733b3e594958b6998a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a> () const </td></tr>
-<tr class="memdesc:a0027c2328323a4733b3e594958b6998a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> or NULL if this is the root.  <a href="#a0027c2328323a4733b3e594958b6998a">More...</a><br/></td></tr>
+<tr class="memdesc:a0027c2328323a4733b3e594958b6998a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> or NULL if this is the root.  <a href="#a0027c2328323a4733b3e594958b6998a">More...</a><br/></td></tr>
 <tr class="separator:a0027c2328323a4733b3e594958b6998a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38b8c8cba2f1ec245a6565436b40693b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a38b8c8cba2f1ec245a6565436b40693b">persistentUnitNode</a> () const </td></tr>
 <tr class="memdesc:a38b8c8cba2f1ec245a6565436b40693b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node that defines the persistence unit for this node.  <a href="#a38b8c8cba2f1ec245a6565436b40693b">More...</a><br/></td></tr>
@@ -208,11 +208,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a30d34fac51548633d6748b09f47a3d92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the current node to a persistent store.  <a href="#a30d34fac51548633d6748b09f47a3d92">More...</a><br/></td></tr>
 <tr class="separator:a30d34fac51548633d6748b09f47a3d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0662a376982b4cce855e731a0d8134a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0662a376982b4cce855e731a0d8134a8">setParent</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>)</td></tr>
-<tr class="memdesc:a0662a376982b4cce855e731a0d8134a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a>.  <a href="#a0662a376982b4cce855e731a0d8134a8">More...</a><br/></td></tr>
+<tr class="memdesc:a0662a376982b4cce855e731a0d8134a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a>.  <a href="#a0662a376982b4cce855e731a0d8134a8">More...</a><br/></td></tr>
 <tr class="separator:a0662a376982b4cce855e731a0d8134a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a377ab4ce48fbc110ed61caf881562381"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a377ab4ce48fbc110ed61caf881562381">setRootModel</a> (<a class="el" href="classModel_1_1Model.html">Model</a> *<a class="el" href="classModel_1_1Node.html#a8eb7d7162522ca5e4000ce4e2c77ab35">model</a>)</td></tr>
-<tr class="memdesc:a377ab4ce48fbc110ed61caf881562381"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the model of this root node to <em>model</em>.  <a href="#a377ab4ce48fbc110ed61caf881562381">More...</a><br/></td></tr>
-<tr class="separator:a377ab4ce48fbc110ed61caf881562381"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5b3b92f33676eef70c7c7ce525ad97f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aa5b3b92f33676eef70c7c7ce525ad97f">setRootManager</a> (<a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *<a class="el" href="classModel_1_1Node.html#ab0ec6807ca4e9e48845bfd44ca946195">manager</a>)</td></tr>
+<tr class="memdesc:aa5b3b92f33676eef70c7c7ce525ad97f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the manager of this root node to <em>manager</em>.  <a href="#aa5b3b92f33676eef70c7c7ce525ad97f">More...</a><br/></td></tr>
+<tr class="separator:aa5b3b92f33676eef70c7c7ce525ad97f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02456394b3aa6526a11ff61cd4e6fcfe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a02456394b3aa6526a11ff61cd4e6fcfe">symbolMatches</a> (const <a class="el" href="classModel_1_1SymbolMatcher.html">SymbolMatcher</a> &amp;matcher, SymbolTypes symbolTypes) const </td></tr>
 <tr class="memdesc:a02456394b3aa6526a11ff61cd4e6fcfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol that has a name matching <em>matcher</em> and types common with <em>symbolTypes</em>.  <a href="#a02456394b3aa6526a11ff61cd4e6fcfe">More...</a><br/></td></tr>
 <tr class="separator:a02456394b3aa6526a11ff61cd4e6fcfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -233,7 +233,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6da5da50350c88318893b891940ccf60"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a6da5da50350c88318893b891940ccf60">createDefaultInstance</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>)</td></tr>
-<tr class="memdesc:a6da5da50350c88318893b891940ccf60"><td class="mdescLeft">&#160;</td><td class="mdescRight">As <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> is an abstract class this method always returns nullptr.  <a href="#a6da5da50350c88318893b891940ccf60">More...</a><br/></td></tr>
+<tr class="memdesc:a6da5da50350c88318893b891940ccf60"><td class="mdescLeft">&#160;</td><td class="mdescRight">As <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> is an abstract class this method always returns nullptr.  <a href="#a6da5da50350c88318893b891940ccf60">More...</a><br/></td></tr>
 <tr class="separator:a6da5da50350c88318893b891940ccf60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ca79f2a20d8993eea0e86ca6088da7c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0ca79f2a20d8993eea0e86ca6088da7c">createNewNode</a> (const QString &amp;type, <a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>=nullptr)</td></tr>
 <tr class="memdesc:a0ca79f2a20d8993eea0e86ca6088da7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new node of the specified type.  <a href="#a0ca79f2a20d8993eea0e86ca6088da7c">More...</a><br/></td></tr>
@@ -245,7 +245,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:abce3db1f4cf4cf5192694631148aebcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if there are already registered constructs for a type with the specified name and false otherwise.  <a href="#abce3db1f4cf4cf5192694631148aebcb">More...</a><br/></td></tr>
 <tr class="separator:abce3db1f4cf4cf5192694631148aebcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae241d587f6660096695f8e714e5008fd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ae241d587f6660096695f8e714e5008fd">registerNodeType</a> (const QString &amp;type, const <a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">NodeConstructor</a> constructor, const <a class="el" href="classModel_1_1Node.html#a36d456dafe5835b3f28142507f90cd89">NodePersistenceConstructor</a> persistenceconstructor)</td></tr>
-<tr class="memdesc:ae241d587f6660096695f8e714e5008fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the constructors of a class derived from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a>.  <a href="#ae241d587f6660096695f8e714e5008fd">More...</a><br/></td></tr>
+<tr class="memdesc:ae241d587f6660096695f8e714e5008fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the constructors of a class derived from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a>.  <a href="#ae241d587f6660096695f8e714e5008fd">More...</a><br/></td></tr>
 <tr class="separator:ae241d587f6660096695f8e714e5008fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
@@ -255,8 +255,8 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a3f5fb7e6c0a3d41fd06441f4caf2ce9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a3f5fb7e6c0a3d41fd06441f4caf2ce9d">propagateModelToChildren</a> ()</td></tr>
-<tr class="separator:a3f5fb7e6c0a3d41fd06441f4caf2ce9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b556959f8eb58b5e0ad2c154700e810"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a4b556959f8eb58b5e0ad2c154700e810">propagateManagerToChildren</a> ()</td></tr>
+<tr class="separator:a4b556959f8eb58b5e0ad2c154700e810"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -265,8 +265,8 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a57ec9b9237b696cdb0dd3ae36b0246fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a57ec9b9237b696cdb0dd3ae36b0246fa">model_</a> {}</td></tr>
-<tr class="separator:a57ec9b9237b696cdb0dd3ae36b0246fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a617cdb5ee1a5c38e2a29716b4a84b15e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a617cdb5ee1a5c38e2a29716b4a84b15e">manager_</a> {}</td></tr>
+<tr class="separator:a617cdb5ee1a5c38e2a29716b4a84b15e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3a6f51536abb137ede5c427725222d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ad3a6f51536abb137ede5c427725222d3">parent_</a> {}</td></tr>
 <tr class="separator:ad3a6f51536abb137ede5c427725222d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cec2acbdfb8620d4901ada5600faacd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a7cec2acbdfb8620d4901ada5600faacd">revision_</a> {}</td></tr>
@@ -282,14 +282,14 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a1ccb5dd46db0cc4e08f1aea6b982b6d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> class is the foundation element in the model tree in Envision. </p>
-<p>An application in Envision is a collection of objects of type <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> (and derived) that are managed by a single <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree. ">Model</a> object. Nodes are combined together in a tree structure. This class defines the minimal interface of each node and implements some service functions.</p>
-<p>Each class that derives from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> must have at least two constructors which need to be registered before that class can be used. This is achieved using the static method '<a class="el" href="classModel_1_1Node.html#ae241d587f6660096695f8e714e5008fd" title="Registers the constructors of a class derived from Node. ">registerNodeType()</a>'.</p>
+<div class="textblock"><p>The <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> class is the foundation element in the tree in Envision. </p>
+<p>An application in Envision is a collection of objects of type <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> (and derived) that are managed by a single <a class="el" href="classModel_1_1TreeManager.html" title="The TreeManager class is a management and access entity for a program tree. ">TreeManager</a> object. Nodes are combined together in a tree structure. This class defines the minimal interface of each node and implements some service functions.</p>
+<p>Each class that derives from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> must have at least two constructors which need to be registered before that class can be used. This is achieved using the static method '<a class="el" href="classModel_1_1Node.html#ae241d587f6660096695f8e714e5008fd" title="Registers the constructors of a class derived from Node. ">registerNodeType()</a>'.</p>
 <p>Derived classes must implement the '<a class="el" href="classModel_1_1Node.html#a30d34fac51548633d6748b09f47a3d92" title="Saves the current node to a persistent store. ">save()</a>' and '<a class="el" href="classModel_1_1Node.html#a20246c48b754e0fceeb7c921f2f1f57b" title="Reloads this node from a persistent store. ">load()</a>' methods that specify how the node is stored in a persistent store.</p>
-<p>A new class that derives from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> must define many standard methods and constructors. Many macros have been defined that greatly simplify this task. See 'nodeMacros.h' for more details.</p>
+<p>A new class that derives from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> must define many standard methods and constructors. Many macros have been defined that greatly simplify this task. See 'nodeMacros.h' for more details.</p>
 <p>A node in the tree has a revision number. Each time a node is created or loaded from a persistent store this number is reset to 0. Any modification to the node causes the revision to be incremented. This can be then used by visualizations or other plug-ins to track the evolution of node and update it necessary. A node's revision number will also increase when any of its descendants is modified, added or removed.</p>
 <p>A node that supports partial loading, should reimplement the 'loadFully()' method to enable this functionality.</p>
-<p>The functionality offered by the <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> class includes:</p>
+<p>The functionality offered by the <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> class includes:</p>
 <ul>
 <li>Navigation routines between parents and children.</li>
 <li>Navigation routines between different subtrees.</li>
@@ -331,7 +331,7 @@ Static Private Attributes</h2></td></tr>
 <p>This function pointer type is used to register the constructor for nodes that are being loaded from a persistent store. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">parent</td><td>The parent node of the newly created node. This can be NULL to indicate that this node is the root node for the model. Otherwise it should be non-NULL. </td></tr>
+    <tr><td class="paramname">parent</td><td>The parent node of the newly created node. This can be NULL to indicate that this node is the root node for the <a class="el" href="classModel_1_1TreeManager.html" title="The TreeManager class is a management and access entity for a program tree. ">TreeManager</a>. Otherwise it should be non-NULL. </td></tr>
     <tr><td class="paramname">id</td><td>The id of the node from the persistent store. </td></tr>
     <tr><td class="paramname">store</td><td>The store that is contains this node and its subtree. This will be used to load the children of the node. </td></tr>
     <tr><td class="paramname">partialLoadHint</td><td>A flag that hints whether this node should be fully or partially loaded. The constructor of the node is allowed to ignore this flag. </td></tr>
@@ -419,7 +419,7 @@ Static Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>If the parent is not null, then the model associated with the parent will also be the model for this node. If the parent is nullptr, then this node will not be associated with a model initially. It can later be added to an existing model. </p>
+<p>If the parent is not null, then the manager associated with the parent will also be the manager for this node. If the parent is nullptr, then this node will not be associated with a manager initially. It can later be added to an existing manager. </p>
 
 </div>
 </div>
@@ -470,7 +470,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Returns the lock used to control access to this node. </p>
 <p>If a node should represent a new access unit, this method should be overriden to return a lock associated with the node.</p>
-<p>The default implementation just asks for the lock of the parent, or if the parent is NULL for the root lock of the model. </p>
+<p>The default implementation just asks for the lock of the parent, or if the parent is NULL for the root lock of the manager. </p>
 
 </div>
 </div>
@@ -508,7 +508,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Begins a modification session with the current node as a modification target. </p>
 <p><em>text</em> is the description that will be associated with this modification.</p>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classModel_1_1Model.html#aeb529525d3f1a3b95f9abfec9aa7487d" title="Begins a modification session. ">Model::beginModification()</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>Model::beginModification() </dd></dl>
 
 </div>
 </div>
@@ -606,7 +606,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>As <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> is an abstract class this method always returns nullptr. </p>
+<p>As <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> is an abstract class this method always returns nullptr. </p>
 
 </div>
 </div>
@@ -750,7 +750,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Ends a modification session. </p>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classModel_1_1Model.html#aa5429b5a5a213ddb4436223bf7c7bf67" title="Ends a modification session. ">Model::endModification()</a> </dd></dl>
+<dl class="section see"><dt>See Also</dt><dd>Model::endModification() </dd></dl>
 
 </div>
 </div>
@@ -832,7 +832,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Returns in <em>result</em> a set of all nodes which define a symbol with a name matching <em>matcher</em> in the scope of this node. </p>
 <p>The return value is true if a symbol was found and false otherwise.</p>
-<p>The <em>source</em> <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> specifies what node should be used as a reference when determining what symbols are visible.</p>
+<p>The <em>source</em> <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> specifies what node should be used as a reference when determining what symbols are visible.</p>
 <p>The <em>direction</em> specifies what search to perform.</p>
 <p>The <em>symbolTypes</em> specifies what symbol types should be returned. If a symbol matches any of the requested types it will be returned.</p>
 <p>If <em>exhaustAllScopes</em> is false, the search will halt as soon as symbols are found within a scope. This is useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope. If <em>exhaustAllScopes</em> is true, the search will explore all scopes in corresponding to the provided mode. This is useful when <em>symbolExp</em> can match multiple symbols with different names (for example during auto completion list build up).</p>
@@ -907,8 +907,8 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns true is the this node can be modified or false otherwise. </p>
-<p>A node is modifiable if it is part of an access unit which is currently acquired by a writer thread. This is managed by the '<a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree. ">Model</a>' associated with the node.</p>
-<p>If a node does not have an associated model it is always modifiable. </p>
+<p>A node is modifiable if it is part of an access unit which is currently acquired by a writer thread. This is managed by the <a class="el" href="classModel_1_1TreeManager.html" title="The TreeManager class is a management and access entity for a program tree. ">TreeManager</a> associated with the node.</p>
+<p>If a node does not have an associated manager it is always modifiable. </p>
 
 </div>
 </div>
@@ -1038,7 +1038,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8eb7d7162522ca5e4000ce4e2c77ab35"></a>
+<a class="anchor" id="ab0ec6807ca4e9e48845bfd44ca946195"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1046,7 +1046,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classModel_1_1Model.html">Model</a> * Model::Node::model </td>
+          <td class="memname"><a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> * Model::Node::manager </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1059,8 +1059,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns the model managing the tree of the current <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a>. </p>
-<p>Calling this method during the creation of the root <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> will return a nullptr. </p>
+<p>Returns the tree manager of the current <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a>. </p>
+<p>Calling this method during the creation of the root <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> will return a nullptr. </p>
 
 </div>
 </div>
@@ -1085,7 +1085,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Returns the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> or NULL if this is the root. </p>
+<p>Returns the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> or NULL if this is the root. </p>
 
 </div>
 </div>
@@ -1129,7 +1129,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3f5fb7e6c0a3d41fd06441f4caf2ce9d"></a>
+<a class="anchor" id="a4b556959f8eb58b5e0ad2c154700e810"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1137,7 +1137,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Model::Node::propagateModelToChildren </td>
+          <td class="memname">void Model::Node::propagateManagerToChildren </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1190,8 +1190,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Registers the constructors of a class derived from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a>. </p>
-<p>Each class derived from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a> must be registered before it can be used.</p>
+<p>Registers the constructors of a class derived from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a>. </p>
+<p>Each class derived from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a> must be registered before it can be used.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">type</td><td>The string name of the class. </td></tr>
@@ -1329,7 +1329,7 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision. ">Node</a>. </p>
+<p>Sets the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the tree in Envision. ">Node</a>. </p>
 
 </div>
 </div>
@@ -1356,21 +1356,21 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a377ab4ce48fbc110ed61caf881562381"></a>
+<a class="anchor" id="aa5b3b92f33676eef70c7c7ce525ad97f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Model::Node::setRootModel </td>
+          <td class="memname">void Model::Node::setRootManager </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Model.html">Model</a> *&#160;</td>
-          <td class="paramname"><em>model</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *&#160;</td>
+          <td class="paramname"><em>manager</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the model of this root node to <em>model</em>. </p>
+<p>Sets the manager of this root node to <em>manager</em>. </p>
 <p>This node must not have a parent. </p>
 
 </div>
@@ -1509,7 +1509,7 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a57ec9b9237b696cdb0dd3ae36b0246fa"></a>
+<a class="anchor" id="a617cdb5ee1a5c38e2a29716b4a84b15e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1517,7 +1517,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classModel_1_1Model.html">Model</a>* Model::Node::model_ {}</td>
+          <td class="memname"><a class="el" href="classModel_1_1TreeManager.html">TreeManager</a>* Model::Node::manager_ {}</td>
         </tr>
       </table>
   </td>

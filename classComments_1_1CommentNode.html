@@ -88,7 +88,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classComments_1_1CommentNode-members.html">List of all members</a> &#124;
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Comments::CommentNode Class Reference</div>  </div>
 </div><!--header-->
@@ -107,10 +108,24 @@ Inheritance diagram for Comments::CommentNode:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aea6ff72e5f9cb9a17bd41ebf52b21f76"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#aea6ff72e5f9cb9a17bd41ebf52b21f76">CommentNode</a> (const QString &amp;text)</td></tr>
 <tr class="separator:aea6ff72e5f9cb9a17bd41ebf52b21f76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10aaf0da3e0dc34494e23aa69c5ee3d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classComments_1_1CommentFreeNode.html">CommentFreeNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a10aaf0da3e0dc34494e23aa69c5ee3d8">code</a> (const QString &amp;name)</td></tr>
+<tr class="separator:a10aaf0da3e0dc34494e23aa69c5ee3d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c720ad056aa187bb42802244744cd84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classComments_1_1CommentDiagram.html">CommentDiagram</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a4c720ad056aa187bb42802244744cd84">diagram</a> (const QString &amp;name)</td></tr>
 <tr class="separator:a4c720ad056aa187bb42802244744cd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77e231c637f434f7eabbf77983126e61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a77e231c637f434f7eabbf77983126e61">synchronizeCodesToText</a> ()</td></tr>
+<tr class="separator:a77e231c637f434f7eabbf77983126e61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8532a2dea4c5c720c8fe9b275dd1ab8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a8532a2dea4c5c720c8fe9b275dd1ab8a">synchronizeDiagramsToText</a> ()</td></tr>
 <tr class="separator:a8532a2dea4c5c720c8fe9b275dd1ab8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96f69805cbc4e77726e710eb9c2af01d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a96f69805cbc4e77726e710eb9c2af01d">synchronizeTablesToText</a> ()</td></tr>
+<tr class="separator:a96f69805cbc4e77726e710eb9c2af01d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b37b0242bbf0357d8452dfea4c95a28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classComments_1_1CommentTable.html">CommentTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a0b37b0242bbf0357d8452dfea4c95a28">table</a> (const QString &amp;name)</td></tr>
+<tr class="separator:a0b37b0242bbf0357d8452dfea4c95a28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a30c37fb73f7f51099d23778426866c87"><td class="memTemplParams" colspan="2">template&lt;typename T , typename AppendFunction &gt; </td></tr>
+<tr class="memitem:a30c37fb73f7f51099d23778426866c87"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classComments_1_1CommentNode.html#a30c37fb73f7f51099d23778426866c87">synchronizeItem</a> (QString aString, T aList, AppendFunction appendFunction)</td></tr>
+<tr class="separator:a30c37fb73f7f51099d23778426866c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -136,6 +151,22 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a10aaf0da3e0dc34494e23aa69c5ee3d8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classComments_1_1CommentFreeNode.html">CommentFreeNode</a> * Comments::CommentNode::code </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a4c720ad056aa187bb42802244744cd84"></a>
 <div class="memitem">
 <div class="memproto">
@@ -152,6 +183,21 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a77e231c637f434f7eabbf77983126e61"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Comments::CommentNode::synchronizeCodesToText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8532a2dea4c5c720c8fe9b275dd1ab8a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -160,6 +206,79 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void Comments::CommentNode::synchronizeDiagramsToText </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a30c37fb73f7f51099d23778426866c87"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename AppendFunction &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Comments::CommentNode::synchronizeItem </td>
+          <td>(</td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>aString</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>aList</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AppendFunction&#160;</td>
+          <td class="paramname"><em>appendFunction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a96f69805cbc4e77726e710eb9c2af01d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Comments::CommentNode::synchronizeTablesToText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0b37b0242bbf0357d8452dfea4c95a28"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classComments_1_1CommentTable.html">CommentTable</a> * Comments::CommentNode::table </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
           <td></td>
         </tr>
       </table>

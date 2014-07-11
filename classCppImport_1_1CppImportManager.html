@@ -96,16 +96,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>This is the core manager of the <a class="el" href="classCppImport_1_1CppImport.html" title="Implements the interface between the CppImport plug-in and Envision. ">CppImport</a> plugin.  
+<p>This is the core manager of the <a class="el" href="namespaceCppImport.html">CppImport</a> plugin.  
  <a href="classCppImport_1_1CppImportManager.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a92ac678b5f8897c98deb5b541a2dcba0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a92ac678b5f8897c98deb5b541a2dcba0">~CppImportManager</a> ()</td></tr>
 <tr class="separator:a92ac678b5f8897c98deb5b541a2dcba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f5af30fafeeb231f1f727cdc938824c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Model.html">Model::Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a1f5af30fafeeb231f1f727cdc938824c">createModel</a> (const bool statisticsPerProject=false)</td></tr>
-<tr class="memdesc:a1f5af30fafeeb231f1f727cdc938824c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a clang tool and translates the sourcecode to Envision's AST and returns the root Be sure to have set the sourcePath before calling this method Set <em>statisticsPerProject</em> if you want statistics output for each subproject.  <a href="#a1f5af30fafeeb231f1f727cdc938824c">More...</a><br/></td></tr>
-<tr class="separator:a1f5af30fafeeb231f1f727cdc938824c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eeb35028605e1de00e9140ed2698fe2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a1eeb35028605e1de00e9140ed2698fe2">createTreeManager</a> (const bool statisticsPerProject=false)</td></tr>
+<tr class="memdesc:a1eeb35028605e1de00e9140ed2698fe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a clang tool and translates the sourcecode to Envision's AST and returns the root Be sure to have set the sourcePath before calling this method Set <em>statisticsPerProject</em> if you want statistics output for each subproject.  <a href="#a1eeb35028605e1de00e9140ed2698fe2">More...</a><br/></td></tr>
+<tr class="separator:a1eeb35028605e1de00e9140ed2698fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a381a639f82e7f76324235b7584aefeff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1CppImportManager.html#a381a639f82e7f76324235b7584aefeff">setImportPath</a> (const QString &amp;sourcePath, const bool subProjects=false)</td></tr>
 <tr class="memdesc:a381a639f82e7f76324235b7584aefeff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this function to set <em>sourcePath</em> which you want to import.  <a href="#a381a639f82e7f76324235b7584aefeff">More...</a><br/></td></tr>
 <tr class="separator:a381a639f82e7f76324235b7584aefeff"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,8 +147,8 @@ clang::tooling::CompilationDatabase * &gt;&#160;</td><td class="memItemRight" va
 <tr class="separator:ae4cd03e0fc1be9d8276c369b9bfe7426"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This is the core manager of the <a class="el" href="classCppImport_1_1CppImport.html" title="Implements the interface between the CppImport plug-in and Envision. ">CppImport</a> plugin. </p>
-<p>To import C++ code you have to specify a path to import with the <em>setImportPath</em> method. After having set the source path you can translate the code with the <em>createModel</em> method.</p>
+<div class="textblock"><p>This is the core manager of the <a class="el" href="namespaceCppImport.html">CppImport</a> plugin. </p>
+<p>To import C++ code you have to specify a path to import with the <em>setImportPath</em> method. After having set the source path you can translate the code with the <em>createTreeManager</em> method.</p>
 <p>To experiment/test you may want to use the <em>setupTest</em> method. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a92ac678b5f8897c98deb5b541a2dcba0"></a>
@@ -193,12 +193,12 @@ clang::tooling::CompilationDatabase * &gt;&#160;</td><td class="memItemRight" va
 
 </div>
 </div>
-<a class="anchor" id="a1f5af30fafeeb231f1f727cdc938824c"></a>
+<a class="anchor" id="a1eeb35028605e1de00e9140ed2698fe2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classModel_1_1Model.html">Model::Model</a> * CppImport::CppImportManager::createModel </td>
+          <td class="memname"><a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> * CppImport::CppImportManager::createTreeManager </td>
           <td>(</td>
           <td class="paramtype">const bool&#160;</td>
           <td class="paramname"><em>statisticsPerProject</em> = <code>false</code></td><td>)</td>

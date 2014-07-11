@@ -3,7 +3,6 @@ var searchData=
   ['unaryopmap_5f',['unaryOpMap_',['../classCppImport_1_1CppImportLogger.html#ab669a2854326afa08b6a26f92ca652dd',1,'CppImport::CppImportLogger']]],
   ['undone',['undone',['../classModel_1_1UndoCommand.html#afbb10978f3371b64aebddd96965a40ee',1,'Model::UndoCommand']]],
   ['unfinished_5f',['unfinished_',['../classInteraction_1_1ExpressionTreeBuilder.html#a1d8e79d7d03a34746c138d548f28a77e',1,'Interaction::ExpressionTreeBuilder']]],
-  ['uninitializedreferences',['uninitializedReferences',['../classFilePersistence_1_1FileStore.html#a7e36e3dfb2160166b61f3c79ddd6b7bc',1,'FilePersistence::FileStore']]],
   ['uninitializedreferences_5f',['uninitializedReferences_',['../classFilePersistence_1_1SimpleTextFileStore.html#a388a3f3852b12f5ef937cf9a99721bf3',1,'FilePersistence::SimpleTextFileStore']]],
   ['unionicon',['unionIcon',['../classOOVisualization_1_1VClassStyle.html#a21f92f81f8bba18be60c9d135cdb26ec',1,'OOVisualization::VClassStyle::unionIcon()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#a53197d08309d28a6fb18e76fd97334ec',1,'OOVisualization::VClassSzPublicStyle::unionIcon()']]],
   ['unmatchedafterend',['unmatchedAfterEnd',['../structInteraction_1_1TokenSplitData.html#a6f16fb5e4780eb38c248dc82f5fbfb91',1,'Interaction::TokenSplitData']]],
@@ -16,6 +15,7 @@ var searchData=
   ['use',['use',['../structOOInteraction_1_1StringComponents_1_1Optional.html#a627d2273a81fca8698e281560f03c149',1,'OOInteraction::StringComponents::Optional']]],
   ['usebackgroundcolors',['useBackgroundColors',['../classVisualization_1_1VListStyle.html#a9583974f5b3c9d2570f695260283c19b',1,'Visualization::VListStyle']]],
   ['usecenter_5f',['useCenter_',['../classVisualization_1_1CursorShapeItem.html#a0dbd1ce7bcc0a4a10a2cbd1f4fe258d9',1,'Visualization::CursorShapeItem']]],
+  ['usepossiblenames_5f',['usePossibleNames_',['../classInteraction_1_1CommandWithNameAndFlags.html#a5046161f11c2bc97a522423ffa8d26a2',1,'Interaction::CommandWithNameAndFlags']]],
   ['usingdeclmap_5f',['usingDeclMap_',['../classCppImport_1_1TranslateManager.html#a854adc87b80e35f07b49a09fb3b502a9',1,'CppImport::TranslateManager']]],
   ['usingdirectivemap_5f',['usingDirectiveMap_',['../classCppImport_1_1TranslateManager.html#a21094c2609d78a7ded1fecb2c3a3bef3',1,'CppImport::TranslateManager']]],
   ['utils_5f',['utils_',['../classCppImport_1_1TranslateManager.html#abb2339319fb1ffc087fd938a192a57ce',1,'CppImport::TranslateManager::utils_()'],['../classCppImport_1_1ClangAstVisitor.html#a77178486c0a889b4e49fc3e0d4c040a6',1,'CppImport::ClangAstVisitor::utils_()'],['../classCppImport_1_1ExpressionVisitor.html#a85b5efa136157169e4e55e09568edab6',1,'CppImport::ExpressionVisitor::utils_()'],['../classCppImport_1_1TemplateArgumentVisitor.html#a2d30ebf575d9b3621f73174d494bd2eb',1,'CppImport::TemplateArgumentVisitor::utils_()']]]

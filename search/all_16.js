@@ -13,7 +13,6 @@ var searchData=
   ['widthinparent',['widthInParent',['../classVisualization_1_1Item.html#a05bd2bae003f29db8cbc77774ffd8ffd',1,'Visualization::Item']]],
   ['widthinscene',['widthInScene',['../classVisualization_1_1Item.html#a9d3e8634e641e543509810a4eb25bcc9',1,'Visualization::Item']]],
   ['widthwithoutshadow',['widthWithoutShadow',['../classVisualization_1_1Diamond.html#acde911548206cb9a49c31afa89117231',1,'Visualization::Diamond']]],
-  ['working',['working',['../classFilePersistence_1_1FileStore.html#a8980ffb8c846f5e7726e8b8d4f67af19',1,'FilePersistence::FileStore']]],
   ['working_5f',['working_',['../classFilePersistence_1_1SimpleTextFileStore.html#a37d4d6344a6df09e86477ccc3b5b7403',1,'FilePersistence::SimpleTextFileStore']]],
   ['wrappeditem',['wrappedItem',['../classVisualization_1_1NodeWrapper.html#ab489382bc568ca0ada183a3155fe075c',1,'Visualization::NodeWrapper']]],
   ['wrappeditem_5f',['wrappedItem_',['../classVisualization_1_1NodeWrapper.html#a2aa87e697ac44bc5b34a529c694b084a',1,'Visualization::NodeWrapper']]],

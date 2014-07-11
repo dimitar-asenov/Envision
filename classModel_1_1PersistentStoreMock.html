@@ -123,8 +123,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a39c0af782f77f9ab398909c8d69e8005"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d4df13b019dca0a2c1a365c0fb2494b"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structModel_1_1LoadedNode.html">LoadedNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#a9d4df13b019dca0a2c1a365c0fb2494b">loadAllSubNodes</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *parent, const QSet&lt; QString &gt; &amp;loadPartially) override</td></tr>
 <tr class="separator:a9d4df13b019dca0a2c1a365c0fb2494b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f137553ffa560d841b8ff7592d2f71c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1PersistedNode.html">PersistedNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#a4f137553ffa560d841b8ff7592d2f71c">loadCompleteNodeSubtree</a> (const QString &amp;modelName, const <a class="el" href="classModel_1_1Node.html">Node</a> *node) override</td></tr>
-<tr class="separator:a4f137553ffa560d841b8ff7592d2f71c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbc6c54f505a93ff236860eea4f2657d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1PersistedNode.html">PersistedNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#abbc6c54f505a93ff236860eea4f2657d">loadCompleteNodeSubtree</a> (const QString &amp;treeName, const <a class="el" href="classModel_1_1Node.html">Node</a> *node) override</td></tr>
+<tr class="separator:abbc6c54f505a93ff236860eea4f2657d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3d5a5028a519b018218760c37fc5cfc"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#ac3d5a5028a519b018218760c37fc5cfc">loadDoubleValue</a> () override</td></tr>
 <tr class="separator:ac3d5a5028a519b018218760c37fc5cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e3646badba3c61eb28c323affdf45fa"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#a4e3646badba3c61eb28c323affdf45fa">loadIntValue</a> () override</td></tr>
@@ -152,10 +152,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:ae5e5ffa5eebc848daae08514f9d8be38"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#ae5e5ffa5eebc848daae08514f9d8be38">loadModel</a> (<a class="el" href="classModel_1_1Model.html">Model</a> *model, const QString &amp;name, bool loadPartially) override</td></tr>
-<tr class="separator:ae5e5ffa5eebc848daae08514f9d8be38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2298510fb7dd018d96cc7c2d583fcb3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#ac2298510fb7dd018d96cc7c2d583fcb3">saveModel</a> (<a class="el" href="classModel_1_1Model.html">Model</a> *model, const QString &amp;name) override</td></tr>
-<tr class="separator:ac2298510fb7dd018d96cc7c2d583fcb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1a34bbbb0710f0a5f7ac77fa10f8375"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#ac1a34bbbb0710f0a5f7ac77fa10f8375">loadTree</a> (<a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *manager, const QString &amp;name, bool loadPartially) override</td></tr>
+<tr class="separator:ac1a34bbbb0710f0a5f7ac77fa10f8375"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a695f7c1eee74e58b5ab5a317eba7dc04"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStoreMock.html#a695f7c1eee74e58b5ab5a317eba7dc04">saveTree</a> (<a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *manager, const QString &amp;name) override</td></tr>
+<tr class="separator:a695f7c1eee74e58b5ab5a317eba7dc04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classModel_1_1PersistentStore"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classModel_1_1PersistentStore')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classModel_1_1PersistentStore.html">Model::PersistentStore</a></td></tr>
 <tr class="memitem:aa4cea64fab5a34453daf2aef3cd6007d inherit pro_methods_classModel_1_1PersistentStore"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#aa4cea64fab5a34453daf2aef3cd6007d">setReferenceTargetr</a> (<a class="el" href="classModel_1_1Reference.html">Reference</a> *r, <a class="el" href="classModel_1_1Node.html">Node</a> *target)</td></tr>
 <tr class="separator:aa4cea64fab5a34453daf2aef3cd6007d inherit pro_methods_classModel_1_1PersistentStore"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -338,7 +338,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4f137553ffa560d841b8ff7592d2f71c"></a>
+<a class="anchor" id="abbc6c54f505a93ff236860eea4f2657d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -349,7 +349,7 @@ Private Attributes</h2></td></tr>
           <td class="memname"><a class="el" href="classModel_1_1PersistedNode.html">PersistedNode</a> * Model::PersistentStoreMock::loadCompleteNodeSubtree </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>modelName</em>, </td>
+          <td class="paramname"><em>treeName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -370,7 +370,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a8f171be77e7fe553327c6de15ce3f792">Model::PersistentStore</a>.</p>
+<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a93cc32b6f42c5cd11ea11c3ee72e70d2">Model::PersistentStore</a>.</p>
 
 </div>
 </div>
@@ -421,48 +421,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a0c8ecaebd65a986086b32d1c07b8d7a4">Model::PersistentStore</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae5e5ffa5eebc848daae08514f9d8be38"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * Model::PersistentStoreMock::loadModel </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Model.html">Model</a> *&#160;</td>
-          <td class="paramname"><em>model</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>loadPartially</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#af12f12aa9c7aa78cbeb1026daffc493f">Model::PersistentStore</a>.</p>
 
 </div>
 </div>
@@ -562,6 +520,48 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac1a34bbbb0710f0a5f7ac77fa10f8375"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * Model::PersistentStoreMock::loadTree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *&#160;</td>
+          <td class="paramname"><em>manager</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>loadPartially</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#ad3ed810b770601d50993f9230bea028e">Model::PersistentStore</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a6792d57ec9c82e06eaa3ba045cbb0bf3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -611,42 +611,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a0353cb41dd7053b44afdbfbdaf296128">Model::PersistentStore</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ac2298510fb7dd018d96cc7c2d583fcb3"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Model::PersistentStoreMock::saveModel </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Model.html">Model</a> *&#160;</td>
-          <td class="paramname"><em>model</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#aa89103167ea12fe88f1a06cd047d6a1e">Model::PersistentStore</a>.</p>
 
 </div>
 </div>
@@ -745,6 +709,42 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a8773b79c6c41b09cf659f75843a74320">Model::PersistentStore</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a695f7c1eee74e58b5ab5a317eba7dc04"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::PersistentStoreMock::saveTree </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1TreeManager.html">TreeManager</a> *&#160;</td>
+          <td class="paramname"><em>manager</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#ad81cb11321be6932cd56303926098e79">Model::PersistentStore</a>.</p>
 
 </div>
 </div>

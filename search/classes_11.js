@@ -25,6 +25,7 @@ var searchData=
   ['tokensplitdata',['TokenSplitData',['../structInteraction_1_1TokenSplitData.html',1,'Interaction']]],
   ['translatefrontendaction',['TranslateFrontendAction',['../classCppImport_1_1TranslateFrontendAction.html',1,'CppImport']]],
   ['translatemanager',['TranslateManager',['../classCppImport_1_1TranslateManager.html',1,'CppImport']]],
+  ['treemanager',['TreeManager',['../classModel_1_1TreeManager.html',1,'Model']]],
   ['trycatchfinallystatement',['TryCatchFinallyStatement',['../classOOModel_1_1TryCatchFinallyStatement.html',1,'OOModel']]],
   ['type',['Type',['../classOOModel_1_1Type.html',1,'OOModel']]],
   ['typealias',['TypeAlias',['../classOOModel_1_1TypeAlias.html',1,'OOModel']]],

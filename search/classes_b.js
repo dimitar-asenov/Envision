@@ -8,10 +8,8 @@ var searchData=
   ['methodcallexpression',['MethodCallExpression',['../classOOModel_1_1MethodCallExpression.html',1,'OOModel']]],
   ['minimap',['MiniMap',['../classVisualization_1_1MiniMap.html',1,'Visualization']]],
   ['mipmap',['Mipmap',['../classVisualization_1_1Mipmap.html',1,'Visualization']]],
-  ['model',['Model',['../classModel_1_1Model.html',1,'Model']]],
-  ['modelbase',['ModelBase',['../classModel_1_1ModelBase.html',1,'Model']]],
+  ['modelbaseplugin',['ModelBasePlugin',['../classModel_1_1ModelBasePlugin.html',1,'Model']]],
   ['modelexception',['ModelException',['../classModel_1_1ModelException.html',1,'Model']]],
-  ['modelmanager',['ModelManager',['../classModel_1_1ModelManager.html',1,'Model']]],
   ['modelrenderer',['ModelRenderer',['../classVisualization_1_1ModelRenderer.html',1,'Visualization']]],
   ['modifier',['Modifier',['../classOOModel_1_1Modifier.html',1,'OOModel']]],
   ['module',['Module',['../classOOModel_1_1Module.html',1,'OOModel']]]
