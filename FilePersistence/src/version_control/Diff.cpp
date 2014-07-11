@@ -35,8 +35,27 @@ namespace FilePersistence {
 Diff::Diff(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes)
 {
 	Q_ASSERT(changeDescriptions_.isEmpty());
+	Q_ASSERT(nodes_.isEmpty());
+
+	for (GenericNode* node : oldNodes.values())
+		nodes_.append(node);
+
+	for (GenericNode* node : newNodes.values())
+		nodes_.append(node);
+
 	idMatching(oldNodes, newNodes);
 	includeAndMarkParents();
+}
+
+Diff::~Diff()
+{
+	// delete all nodes
+	for (GenericNode* node : nodes_)
+		delete node;
+
+	// delete all changeDescriptions
+	for (ChangeDescription* description : changeDescriptions_.values())
+		delete description;
 }
 
 void Diff::print() const
@@ -136,6 +155,7 @@ void Diff::includeAndMarkParent(const GenericNode* child)
 			description = new ChangeDescription(child->parent(), child->parent());
 			description->setChildrenUpdate(true);
 			changeDescriptions_.insert(child->parent()->id(), description);
+			nodes_.append(child->parent());
 		}
 		else
 		{

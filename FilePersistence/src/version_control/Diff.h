@@ -39,6 +39,7 @@ class FILEPERSISTENCE_API Diff
 {
 	public:
 		Diff(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);
+		~Diff();
 
 		void print() const;
 
@@ -50,6 +51,9 @@ class FILEPERSISTENCE_API Diff
 		void includeAndMarkParent(const GenericNode* child);
 
 		IdToChangeDescriptionHash changeDescriptions_;
+
+		// used for memory management
+		QList<GenericNode*> nodes_;
 };
 
 inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}
