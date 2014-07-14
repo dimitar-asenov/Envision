@@ -17,7 +17,8 @@ HEADERS += src/simple/Parser.h \
     src/FilePersistencePlugin.h \
     src/version_control/ChangeDescription.h \
     src/version_control/Diff.h \
-    src/version_control/GitRepository.h
+    src/version_control/GitRepository.h \
+    src/version_control/CommitGraph.h
 SOURCES += src/simple/Parser.cpp \
     src/simple/GenericNode.cpp \
     src/simple/GenericNodeAllocator.cpp \
@@ -35,7 +36,8 @@ SOURCES += src/simple/Parser.cpp \
     src/version_control/ChangeDescription.cpp \
     src/version_control/Diff.cpp \
     src/version_control/GitRepository.cpp \
-    test/VersionControlDiffTests.cpp
+    test/VersionControlDiffTests.cpp \
+    src/version_control/CommitGraph.cpp
 RESOURCES = FilePersistence.qrc
 
 # Fix this in a way that library is included in project
