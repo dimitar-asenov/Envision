@@ -28,6 +28,7 @@
 #include "../visualizationbase_api.h"
 #include "LayoutFormElement.h"
 #include "../layouts/LayoutStyle.h"
+#include "GridLayouter.h"
 
 namespace Model {
 	class Node;
@@ -71,6 +72,15 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 		 */
 		DynamicGridFormElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
 
+		/**
+		 * Sets the major axis of this layout.
+		 * Returns a pointer to this DynamicGridFormElement.
+		 *
+		 * If a major axis is set, the input grid is assumed to be a vector of [MajorAxis][MinorAxis].
+		 */
+		DynamicGridFormElement* setMajorAxis(GridLayouter::MajorAxis majorAxis);
+
+
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
@@ -95,6 +105,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 
 		int spaceBetweenColumns_{};
 		int spaceBetweenRows_{};
+		GridLayouter::MajorAxis majorAxis_{};
 
 		LayoutStyle::Alignment horizontalAlignment_{LayoutStyle::Alignment::Left};
 		LayoutStyle::Alignment verticalAlignment_{LayoutStyle::Alignment::Top};
@@ -129,6 +140,12 @@ inline DynamicGridFormElement* DynamicGridFormElement::setSpacing(int spaceBetwe
 {
 	spaceBetweenColumns_ = spaceBetweenColumns;
 	spaceBetweenRows_ = spaceBetweenRows;
+	return this;
+}
+
+inline DynamicGridFormElement* DynamicGridFormElement::setMajorAxis(GridLayouter::MajorAxis majorAxis)
+{
+	majorAxis_ = majorAxis;
 	return this;
 }
 

@@ -120,7 +120,7 @@ GridLayoutFormElement* GridLayoutFormElement::put(int column, int row, FormEleme
 
 void GridLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
-	QSize finalSize = GridLayouter::computeSize<true>(availableWidth, availableHeight,
+	QSize finalSize = GridLayouter::computeSize<true>(availableWidth, availableHeight, GridLayouter::NoMajor,
 		[this](){return numRows_;},	// numRows
 		[this](){return numColumns_;},	// numColumns
 		[this](int x, int y){return elementGrid_[x][y];},	// has

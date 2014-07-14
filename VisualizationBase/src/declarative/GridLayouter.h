@@ -33,12 +33,15 @@ namespace Visualization {
 class VISUALIZATIONBASE_API GridLayouter
 {
 	public:
+
+		enum MajorAxis {NoMajor, ColumnMajor, RowMajor};
 		template < bool mayHaveMergedCells, class NumRows, class NumColumns, class HasElement, class Width, class Height,
 					 class ComputeElementSize, class ChangeGeometry, class IsStretchable, class SetPosition, class SpanGrid,
 					 class RowStretchFactors, class ColumnStretchFactors, class HorizontalAlignment, class VerticalAlignment,
 					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
 					 class LeftMargin, class RightMargin, class MinWidth, class MinHeight>
-		static QSize computeSize(int availableWidth, int availableHeight, NumRows numRows, NumColumns numColumns,
+		static QSize computeSize(int availableWidth, int availableHeight, MajorAxis majorAxis,
+										NumRows numRows, NumColumns numColumns,
 										HasElement has, SpanGrid spanGrid, Width width, Height height,
 										ComputeElementSize computeElementSize, ChangeGeometry changeGeometry,
 										IsStretchable isStretchable, SetPosition setPosition,
@@ -48,10 +51,14 @@ class VISUALIZATIONBASE_API GridLayouter
 										TopMargin topMargin, BottomMargin bottomMargin, LeftMargin leftMargin,
 										RightMargin rightMargin, MinWidth minWidth, MinHeight minHeight)
 		{
+			Q_ASSERT(!mayHaveMergedCells || majorAxis == NoMajor);
+
 			// Compute default sizes of all the elements
 			// Get the widest and tallest items (without merged cells)
 			QVector<int> widestInColumn(numColumns(), 0);
 			QVector<int> tallestInRow(numRows(), 0);
+			QVector<int> totalHeightInColumn(numColumns(), 0);
+			QVector<int> totalWidthInRow(numRows(), 0);
 			bool hasMultiColumn = false;
 			bool hasMultiRow = false;
 			for (int x=0; x<numColumns(); x++)
@@ -59,6 +66,9 @@ class VISUALIZATIONBASE_API GridLayouter
 					if (has(x, y))
 					{
 						computeElementSize(x, y, 0, 0); // any additional space is distributed later
+						if (majorAxis == ColumnMajor) totalHeightInColumn[x] += height(x, y) + (y==0 ? 0 :spaceBetweenRows());
+						if (majorAxis == RowMajor) totalWidthInRow[y] += width(x, y) + (x==0 ? 0 : spaceBetweenColumns());
+
 						if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
 						{
 							if (width(x, y) > widestInColumn[x]) widestInColumn[x] = width(x, y);
@@ -127,47 +137,69 @@ class VISUALIZATIONBASE_API GridLayouter
 			QSize finalSize{0, 0};
 
 			// Compute grid width and overall column stretch factor
-			decltype(columnStretchFactors(0)) overallColumnStretchFactor = 0;
-			for (int i = 0; i< numColumns(); ++i)
-			{
-				finalSize.rwidth() += widestInColumn[i];
-				overallColumnStretchFactor += columnStretchFactors(i);
-			}
 			if (numColumns() > 0) finalSize.rwidth() += leftMargin() + rightMargin();
-			if (numColumns() > 1) finalSize.rwidth() += spaceBetweenColumns() * (numColumns() - 1);
-
-			// Adjust widest cell in column values if there is additional space available
-			availableWidth = std::max(availableWidth, minWidth());
-			int additionalWidth = availableWidth - finalSize.rwidth();
-			// if availableWidth == 0, this is always false
-			if (additionalWidth > 0)
+			if (majorAxis != RowMajor)
 			{
-				if (overallColumnStretchFactor > 0) // distribute the additional space according to the stretch factors
-					for (int x = 0; x<numColumns(); ++x)
-						widestInColumn[x] += std::floor(additionalWidth / overallColumnStretchFactor * columnStretchFactors(x));
-				finalSize.rwidth() = availableWidth;
+				decltype(columnStretchFactors(0)) overallColumnStretchFactor = 0;
+				for (int i = 0; i< numColumns(); ++i)
+				{
+					finalSize.rwidth() += widestInColumn[i];
+					overallColumnStretchFactor += columnStretchFactors(i);
+				}
+				if (numColumns() > 1) finalSize.rwidth() += spaceBetweenColumns() * (numColumns() - 1);
+
+				// Adjust widest cell in column values if there is additional space available
+				availableWidth = std::max(availableWidth, minWidth());
+				int additionalWidth = availableWidth - finalSize.rwidth();
+				// if availableWidth == 0, this is always false
+				if (additionalWidth > 0)
+				{
+					if (overallColumnStretchFactor > 0) // distribute the additional space according to the stretch factors
+						for (int x = 0; x<numColumns(); ++x)
+							widestInColumn[x] += std::floor(additionalWidth / overallColumnStretchFactor * columnStretchFactors(x));
+					finalSize.rwidth() = availableWidth;
+				}
+			}
+			else
+			{
+				// No stretching
+
+				// Already includes the spacing
+				finalSize.rwidth() += totalWidthInRow.isEmpty() ? 0 :
+												*std::max_element(totalWidthInRow.begin(), totalWidthInRow.end());
 			}
 
 			// Compute grid height and overall row stretch factor
-			decltype(rowStretchFactors(0)) overallRowStretchFactor = 0;
-			for (int i = 0; i<numRows(); ++i)
-			{
-				finalSize.rheight() += tallestInRow[i];
-				overallRowStretchFactor += rowStretchFactors(i);
-			}
 			if (numRows() > 0) finalSize.rheight() += topMargin() + bottomMargin();
-			if (numRows() > 1) finalSize.rheight() += spaceBetweenRows() * (numRows() - 1);
-
-			// Adjust tallest cell in row values if there is additional space available
-			availableHeight = std::max(availableHeight, minHeight());
-			int additionalHeight = availableHeight - finalSize.rheight();
-			// if availableHeight == 0, this is always false
-			if (additionalHeight > 0)
+			if (majorAxis != ColumnMajor)
 			{
-				if (overallRowStretchFactor > 0) // distribute the additional space according to the stretch factors
-					for (int y = 0; y<numRows(); ++y)
-						tallestInRow[y] += std::floor(additionalHeight / overallRowStretchFactor * rowStretchFactors(y));
-				finalSize.rheight() = availableHeight;
+				decltype(rowStretchFactors(0)) overallRowStretchFactor = 0;
+				for (int i = 0; i<numRows(); ++i)
+				{
+					finalSize.rheight() += tallestInRow[i];
+					overallRowStretchFactor += rowStretchFactors(i);
+				}
+				if (numRows() > 1) finalSize.rheight() += spaceBetweenRows() * (numRows() - 1);
+
+				// Adjust tallest cell in row values if there is additional space available
+				availableHeight = std::max(availableHeight, minHeight());
+				int additionalHeight = availableHeight - finalSize.rheight();
+				// if availableHeight == 0, this is always false
+				if (additionalHeight > 0)
+				{
+					if (overallRowStretchFactor > 0) // distribute the additional space according to the stretch factors
+						for (int y = 0; y<numRows(); ++y)
+							tallestInRow[y] += std::floor(additionalHeight / overallRowStretchFactor * rowStretchFactors(y));
+					finalSize.rheight() = availableHeight;
+				}
+			}
+			else
+			{
+				// No stretching
+
+				// Already includes the spacing
+				finalSize.rheight() += totalHeightInColumn.isEmpty() ? 0 :
+												*std::max_element(totalHeightInColumn.begin(), totalHeightInColumn.end());
 			}
 
 			// DONE With size. At this point the finalSize object contains the final size of this object.
@@ -177,90 +209,147 @@ class VISUALIZATIONBASE_API GridLayouter
 				for (int y=0; y<numRows(); y++)
 					if (has(x, y) && isStretchable(x, y))
 					{
+						int localAvailableWidth = 0;
+						int localAvailableHeight = 0;
+
 						if (!mayHaveMergedCells || (spanGrid(x, y).first == 1 && spanGrid(x, y).second == 1))
-							changeGeometry(x, y, widestInColumn[x], tallestInRow[y]);
+						{
+							localAvailableWidth = widestInColumn[x];
+							localAvailableHeight = tallestInRow[y];
+						}
 						else
 						{
-							int localAvailableWidth = 0;
 							for (int column=x; column<x+spanGrid(x, y).first; column++)
 								localAvailableWidth += widestInColumn[column];
 
-							int localAvailableHeight = 0;
 							for (int row=y; row<y+spanGrid(x, y).second; row++)
 								localAvailableHeight += tallestInRow[row];
-
-							changeGeometry(x, y, localAvailableWidth, localAvailableHeight);
 						}
+
+						if (majorAxis == RowMajor) localAvailableWidth = 0;
+						if (majorAxis == ColumnMajor) localAvailableHeight = 0;
+						changeGeometry(x, y, localAvailableWidth, localAvailableHeight);
 					}
 
 			// Set element positions
-			int left = leftMargin();
-			for (int x=0; x<numColumns(); ++x)
+			if (majorAxis == NoMajor)
+			{
+				int left = leftMargin();
+				for (int x=0; x<numColumns(); ++x)
+				{
+					int top = topMargin();
+					for (int y=0; y<numRows(); ++y)
+					{
+						if (has(x, y))
+						{
+							int xPos = left;
+							if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Center)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
+									xPos += (widestInColumn[x] - width(x, y))/2;
+								else
+								{
+									int localAvailableWidth = 0;
+									for (int column=x; column<x+spanGrid(x, y).first; column++)
+										localAvailableWidth += widestInColumn[column];
+									xPos += (localAvailableWidth - width(x, y))/2;
+								}
+							}
+							else if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Right)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
+									xPos += (widestInColumn[x] - width(x, y));
+								else
+								{
+									int localAvailableWidth = 0;
+									for (int column=x; column<x+spanGrid(x, y).first; column++)
+										localAvailableWidth += widestInColumn[column];
+									xPos += (localAvailableWidth - width(x, y));
+								}
+							}
+
+							int yPos = top;
+							if (verticalAlignment(x, y) == LayoutStyle::Alignment::Center)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+									yPos += (tallestInRow[y] - height(x, y))/2;
+								else
+								{
+									int localAvailableHeight = 0;
+									for (int row=y; row<y+spanGrid(x, y).second; row++)
+										localAvailableHeight += tallestInRow[row];
+									yPos += (localAvailableHeight - height(x, y))/2;
+								}
+							}
+							else if (verticalAlignment(x, y) == LayoutStyle::Alignment::Bottom)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+									yPos += tallestInRow[y] - height(x, y);
+								else
+								{
+									int localAvailableHeight = 0;
+									for (int row=y; row<y+spanGrid(x, y).second; row++)
+										localAvailableHeight += tallestInRow[row];
+									yPos += localAvailableHeight - height(x, y);
+								}
+							}
+
+							setPosition(x, y, QPoint(xPos, yPos));
+						}
+
+						top += tallestInRow[y] + spaceBetweenRows();
+					}
+
+					left += widestInColumn[x] + spaceBetweenColumns();
+				}
+			}
+			else if (majorAxis == ColumnMajor)
+			{
+				int left = leftMargin();
+				for (int x=0; x<numColumns(); ++x)
+				{
+					int top = topMargin();
+					for (int y=0; y<numRows(); ++y)
+					{
+						if (has(x, y))
+						{
+							int xPos = left;
+							if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Center)
+								xPos += (widestInColumn[x] - width(x, y))/2;
+							else if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Right)
+								xPos += (widestInColumn[x] - width(x, y));
+
+							setPosition(x, y, QPoint(xPos, top));
+							top += height(x, y) + spaceBetweenRows();
+						}
+					}
+
+					left += widestInColumn[x] + spaceBetweenColumns();
+				}
+			}
+			else if (majorAxis == RowMajor)
 			{
 				int top = topMargin();
 				for (int y=0; y<numRows(); ++y)
 				{
-					if (has(x, y))
+					int left = leftMargin();
+					for (int x=0; x<numColumns(); ++x)
 					{
-						int xPos = left;
-						if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Center)
+						if (has(x, y))
 						{
-							if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
-								xPos += (widestInColumn[x] - width(x, y))/2;
-							else
-							{
-								int localAvailableWidth = 0;
-								for (int column=x; column<x+spanGrid(x, y).first; column++)
-									localAvailableWidth += widestInColumn[column];
-								xPos += (localAvailableWidth - width(x, y))/2;
-							}
-						}
-						else if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Right)
-						{
-							if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
-								xPos += (widestInColumn[x] - width(x, y));
-							else
-							{
-								int localAvailableWidth = 0;
-								for (int column=x; column<x+spanGrid(x, y).first; column++)
-									localAvailableWidth += widestInColumn[column];
-								xPos += (localAvailableWidth - width(x, y));
-							}
-						}
-
-						int yPos = top;
-						if (verticalAlignment(x, y) == LayoutStyle::Alignment::Center)
-						{
-							if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+							int yPos = top;
+							if (verticalAlignment(x, y) == LayoutStyle::Alignment::Center)
 								yPos += (tallestInRow[y] - height(x, y))/2;
-							else
-							{
-								int localAvailableHeight = 0;
-								for (int row=y; row<y+spanGrid(x, y).second; row++)
-									localAvailableHeight += tallestInRow[row];
-								yPos += (localAvailableHeight - height(x, y))/2;
-							}
-						}
-						else if (verticalAlignment(x, y) == LayoutStyle::Alignment::Bottom)
-						{
-							if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+							else if (verticalAlignment(x, y) == LayoutStyle::Alignment::Bottom)
 								yPos += tallestInRow[y] - height(x, y);
-							else
-							{
-								int localAvailableHeight = 0;
-								for (int row=y; row<y+spanGrid(x, y).second; row++)
-									localAvailableHeight += tallestInRow[row];
-								yPos += localAvailableHeight - height(x, y);
-							}
-						}
 
-						setPosition(x, y, QPoint(xPos, yPos));
+							setPosition(x, y, QPoint(left, yPos));
+							left += width(x, y) + spaceBetweenColumns();
+						}
 					}
 
 					top += tallestInRow[y] + spaceBetweenRows();
 				}
-
-				left += widestInColumn[x] + spaceBetweenColumns();
 			}
 
 			return finalSize;

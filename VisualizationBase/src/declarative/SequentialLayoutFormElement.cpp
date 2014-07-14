@@ -76,7 +76,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 	{
 		if (horizontal)
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[](){return 1;},	// numRows
 				[size](){return size;},	// numColumns
 				[](int, int){return true;},	// has
@@ -103,7 +103,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		}
 		else
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[size](){return size;},	// numRows
 				[](){return 1;},	// numColumns
 				[](int, int){return true;},	// has
@@ -134,7 +134,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		auto invert = [size](int i){return size-1-i;};
 		if (horizontal)
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[](){return 1;},	// numRows
 				[size](){return size;},	// numColumns
 				[](int, int){return true;},	// has
@@ -161,7 +161,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		}
 		else
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[size](){return size;},	// numRows
 				[](){return 1;},	// numColumns
 				[](int, int){return true;},	// has
