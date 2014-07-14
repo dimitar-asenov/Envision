@@ -27,6 +27,7 @@
 
 #include "../visualizationbase_api.h"
 #include "../layouts/LayoutStyle.h"
+#include "../cursor/LayoutCursor.h"
 
 namespace Visualization {
 
@@ -353,6 +354,204 @@ class VISUALIZATIONBASE_API GridLayouter
 			}
 
 			return finalSize;
+		}
+
+
+		/**
+		 * Does not consider spans.
+		 */
+		template <class NumRows, class NumColumns, class ChildItem,
+					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
+					 class LeftMargin, class RightMargin>
+		static QList<ItemRegion> regions(Item* parent, FormElement* formElement,
+										MajorAxis majorAxis, bool showCursorWhenEmpty, bool onlyInnerCursors,
+										bool extraCursorsAroundParentShape, bool notLocationEquivalentCursors,
+										NumRows numRows, NumColumns numColumns, ChildItem childItem,
+										SpaceBetweenRows spaceBetweenRows, SpaceBetweenColumns spaceBetweenColumns,
+										TopMargin topMargin, BottomMargin bottomMargin, LeftMargin leftMargin,
+										RightMargin rightMargin)
+		{
+			QList<ItemRegion> regs;
+
+			auto isEmpty = numColumns() == 0 || numRows() == 0;
+			if ( isEmpty && !showCursorWhenEmpty) return regs;
+
+			extraCursorsAroundParentShape = extraCursorsAroundParentShape && parent->hasShape();
+
+			// Get the widest and tallest items and the precise position of different columns
+			QVector<int> columnLeft(numColumns(), std::numeric_limits<int>::max());
+			QVector<int> columnRight(numColumns(), 0);
+			QVector<int> rowTop(numRows(), std::numeric_limits<int>::max());
+			QVector<int> rowBottom(numRows(), 0);
+			for (int x=0; x<numColumns(); x++)
+				for (int y=0; y<numRows(); y++)
+					if (auto child = childItem(x, y))
+					{
+						if (child->x() < columnLeft[x]) columnLeft[x] = child->x();
+						if (child->xEndInParent() > columnRight[x]) columnRight[x] = child->xEndInParent();
+
+						if (child->y() < rowTop[y]) rowTop[y] = child->y();
+						if (child->yEndInParent() > rowBottom[y]) rowBottom[y] = child->yEndInParent();
+					}
+
+			// Set Child item regions and remember rects
+			QVector< QVector<QRect> > itemAreas(numColumns(), QVector<QRect>(numRows(), QRect()));
+			QVector<int> columnNextTop(numColumns(), numRows() > 0 ?  rowTop[0] : 0);
+			QVector<int> rowNextLeft(numRows(), numColumns() > 0 ? columnLeft[0] : 0);
+			for (int x=0; x<numColumns(); x++)
+				for (int y=0; y<numRows(); y++)
+					if (auto child = childItem(x, y))
+					{
+						regs.append( ItemRegion() );
+						regs.last().setItem( child );
+
+						QRect itemArea;
+
+						// Set vertical position and dimensions
+						if (majorAxis == ColumnMajor)
+						{
+							itemArea.setTop(columnNextTop[x]);
+							itemArea.setHeight( child->heightInParent() );
+							columnNextTop[x] += itemArea.height() + spaceBetweenRows();
+						}
+						else
+						{
+							itemArea.setTop(rowTop[y]);
+							itemArea.setBottom( rowBottom[y] );
+						}
+
+						// Set horizontal position and dimensions
+						if (majorAxis == RowMajor)
+						{
+							itemArea.setLeft(rowNextLeft[y]);
+							itemArea.setWidth( child->widthInParent() );
+							rowNextLeft[y] += itemArea.width() + spaceBetweenColumns();
+						}
+						else
+						{
+							itemArea.setLeft(columnLeft[x]);
+							itemArea.setRight( columnRight[x] );
+						}
+
+						itemAreas[x][y] = itemArea;
+						regs.last().setRegion(itemArea);
+					}
+					else
+					{
+						// Add a dummy area rect to make putting cursors easier
+						if (majorAxis == NoMajor)
+						{
+							itemAreas[x][y].setTopLeft( QPoint(columnLeft[x], rowTop[y]) );
+							itemAreas[x][y].setBottomRight( QPoint(columnRight[x], rowBottom[y]) );
+						}
+					}
+
+			// Set front and inner cursor regions.
+			// Inner cursors span the spacing between items.
+			// Front and Back cursors, if present, are in the margins.
+			// Cursors outside shape, if present, are outside the margins.
+			int frontCursorLeft = numColumns() > 0 ? columnLeft[0] - leftMargin() + 1 : 0;
+			int frontCursorTop = numRows() > 0 ? rowTop[0] - topMargin() + 1: 0;
+
+			for (int x=0; x<numColumns(); x++)
+				for (int y=0; y<numRows(); y++)
+				{
+					int columnWidth = columnRight[x]-columnLeft[x]+1;
+					int rowHeight = rowBottom[y]-rowTop[y]+1;
+
+					// Front cursor. Always there if requested.
+					if (((x == 0 && majorAxis != ColumnMajor) || (y==0 && majorAxis == ColumnMajor)) && !onlyInnerCursors)
+					{
+						regs.append( cursorRegion(parent, formElement, x, y, majorAxis, !extraCursorsAroundParentShape,
+								notLocationEquivalentCursors, !extraCursorsAroundParentShape, true,
+								majorAxis == ColumnMajor
+								? QRect(columnLeft[x], frontCursorTop, columnWidth, topMargin())
+								: QRect(frontCursorLeft, rowTop[y], leftMargin(), rowHeight) ));
+					}
+
+					// Inner cursor to next element, if any
+					if (!itemAreas[x][y].isNull()
+							&& (	((majorAxis == ColumnMajor && y + 1 < numRows() && !itemAreas[x][y+1].isNull()))
+								||
+									(majorAxis != ColumnMajor && x + 1 < numColumns() && !itemAreas[x+1][y].isNull())))
+					{
+						regs.append( cursorRegion(parent, formElement,
+								majorAxis == ColumnMajor ? x : x+1,
+								majorAxis == ColumnMajor ? y+1 : y, majorAxis, false,
+								notLocationEquivalentCursors, true, true,
+								majorAxis == ColumnMajor
+								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, spaceBetweenRows())
+								: QRect(itemAreas[x][y].right()+1, rowTop[y], spaceBetweenColumns(), rowHeight) ));
+					}
+
+					// Back cursor, if requested, and if there is at least one element
+					if (!itemAreas[x][y].isNull() && !onlyInnerCursors
+							&& (	((majorAxis == ColumnMajor && (y + 1 == numRows() || itemAreas[x][y+1].isNull())))
+								||
+									(majorAxis != ColumnMajor && (x + 1 == numColumns() || itemAreas[x+1][y].isNull()))))
+					{
+						regs.append( cursorRegion(parent, formElement,
+								majorAxis == ColumnMajor ? x : x+1,
+								majorAxis == ColumnMajor ? y+1 : y, majorAxis, !extraCursorsAroundParentShape,
+								notLocationEquivalentCursors, true, !extraCursorsAroundParentShape,
+								majorAxis == ColumnMajor
+								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, bottomMargin())
+								: QRect(itemAreas[x][y].right()+1, rowTop[y], rightMargin(), rowHeight) ));
+					}
+
+				}
+
+			// Cursors outside shape
+			constexpr int CURSOR_SIZE = 2;
+			if (extraCursorsAroundParentShape)
+			{
+				// Front
+				regs.append(cursorRegion(parent, formElement, -1, -1, majorAxis, true,
+								notLocationEquivalentCursors, false, true,
+								majorAxis == ColumnMajor
+								? QRect(0, 0, parent->widthInLocal(), CURSOR_SIZE)
+								: QRect(0, 0, CURSOR_SIZE, parent->heightInLocal()) ));
+
+				// Back
+				regs.append(cursorRegion(parent, formElement, numColumns()+1, numRows()+1, majorAxis, true,
+								notLocationEquivalentCursors, true, false,
+								majorAxis == ColumnMajor
+								? QRect(0, parent->heightInLocal() - CURSOR_SIZE - 1, parent->widthInLocal(), CURSOR_SIZE)
+								: QRect(parent->widthInLocal() - CURSOR_SIZE - 1, 0, CURSOR_SIZE, parent->heightInLocal()) ));
+			}
+
+			return regs;
+		}
+
+
+	//*******************************************************************************************************************
+	// Helpers
+	//*******************************************************************************************************************
+	private:
+
+		static ItemRegion cursorRegion(Item* parent, FormElement* formElement, int xIndex, int yIndex,
+				MajorAxis majorAxis, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
+				QRect area)
+		{
+			auto horizontal = majorAxis != ColumnMajor;
+
+			// Make sure there is at least some space for the cursor Region.
+			if (horizontal && area.width() == 0) area.adjust((mayExpandFront?-1:0), 0, (mayExpandBack?1:0), 0);
+			if (!horizontal && area.height() == 0 ) area.adjust(0, (mayExpandFront?-1:0), 0, (mayExpandBack?1:0));
+
+			// Note below, that a horizontal layout, means a vertical cursor
+			auto lc = new LayoutCursor(parent, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+			lc->setOwnerElement(formElement);
+			lc->set2DIndex(xIndex, yIndex);
+			lc->setVisualizationSize( horizontal ? QSize(2, area.height()) : QSize(area.width(), 2) );
+			lc->setVisualizationPosition( area.topLeft() );
+			lc->setRegion( area );
+			lc->setIsAtBoundary(atBoundary);
+			lc->setNotLocationEquivalent(notLocationEquivalent);
+
+			auto region = ItemRegion(area);
+			region.setCursor(lc);
+			return region;
 		}
 };
 

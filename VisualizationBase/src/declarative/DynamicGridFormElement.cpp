@@ -26,6 +26,7 @@
 
 #include "DynamicGridFormElement.h"
 #include "../items/Item.h"
+#include "DeclarativeItemBase.h"
 
 
 namespace Visualization {
@@ -257,6 +258,24 @@ bool DynamicGridFormElement::elementOrChildHasFocus(Item* item) const
 			if (item && item->itemOrChildHasFocus())
 				return true;
 	return false;
+}
+
+QList<ItemRegion> DynamicGridFormElement::regions(DeclarativeItemBase* item, int, int)
+{
+	auto& data = dataForItem(item);
+
+	return GridLayouter::regions(item, this, majorAxis_, true, false,
+			item->style()->extraCursorsOutsideShape(), true,
+			[&data](){return data.numRows_;},	// numRows
+			[&data](){return data.numColumns_;},	// numColumns
+			[&data](int x, int y){return data.itemGrid_[x][y];},	// childItem
+			[this](){return spaceBetweenRows_;},	// spaceBetweenRows
+			[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
+			[this](){return topMargin();},	// topMargin
+			[this](){return bottomMargin();},	// bottomMargin
+			[this](){return leftMargin();},	// leftMargin
+			[this](){return rightMargin();}	// rightMargin
+		);
 }
 
 } // namespace Visualization

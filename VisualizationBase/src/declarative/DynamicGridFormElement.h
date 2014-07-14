@@ -96,6 +96,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 		QSize gridSize(const Item* item) const;
 		virtual bool elementOrChildHasFocus(Item* item) const override;
 		virtual bool isEmpty(const Item* item) const override;
+		virtual QList<ItemRegion> regions(DeclarativeItemBase* item, int parentX, int parentY) override;
 
 	private:
 
