@@ -57,6 +57,9 @@ class FILEPERSISTENCE_API GitRepository
 
 		CommitProperties getCommitProperties(QString commit);
 
+		static const QString WORKDIR;
+		static const QString INDEX;
+
 	private:
 		void findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tree) const;
 		void findParentsInGitIndex(IdToGenericNodeHash nodes) const;
