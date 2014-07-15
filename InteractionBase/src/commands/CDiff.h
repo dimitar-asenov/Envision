@@ -6,12 +6,12 @@
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
 ** following conditions are met:
 **
-**    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
-**      disclaimer.
-**    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
-**      following disclaimer in the documentation and/or other materials provided with the distribution.
-**    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
-**      derived from this software without specific prior written permission.
+** * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+** disclaimer.
+** * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+** following disclaimer in the documentation and/or other materials provided with the distribution.
+** * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
+** derived from this software without specific prior written permission.
 **
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -24,32 +24,25 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HSceneHandlerItem.h"
+#pragma once
 
-#include "commands/CSceneHandlerItemExit.h"
-#include "commands/CFind.h"
-#include "commands/CSceneHandlerLoad.h"
-#include "commands/CSceneHandlerSave.h"
-
-#include "commands/CDiff.h"
+#include "CommandWithNameAndFlags.h"
 
 namespace Interaction {
 
-HSceneHandlerItem::HSceneHandlerItem()
+class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
 {
-	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CSceneHandlerItemExit());
-	addCommand(new CFind());
-	addCommand(new CSceneHandlerLoad());
-	addCommand(new CSceneHandlerSave());
+	public:
+		CDiff();
 
-	addCommand(new CDiff());
-}
+	protected:
+		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+			const QString& name, const QStringList& attributes) override;
 
-HSceneHandlerItem* HSceneHandlerItem::instance()
-{
-	static HSceneHandlerItem h;
-	return &h;
-}
+		virtual QStringList possibleNames() override;
 
-}
+	private:
+		QStringList availableProjectsOnDisk();
+};
+
+} /* namespace Interaction */
