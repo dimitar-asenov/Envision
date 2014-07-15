@@ -27,9 +27,12 @@
 
 #include "../visualizationbase_api.h"
 #include "../layouts/LayoutStyle.h"
-#include "../cursor/LayoutCursor.h"
+#include "../items/ItemRegion.h"
+#include "../items/Item.h"
 
 namespace Visualization {
+
+class FormElement;
 
 class VISUALIZATIONBASE_API GridLayouter
 {
@@ -363,7 +366,7 @@ class VISUALIZATIONBASE_API GridLayouter
 		template <class NumRows, class NumColumns, class ChildItem,
 					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
 					 class LeftMargin, class RightMargin>
-		static QList<ItemRegion> regions(Item* parent, FormElement* formElement,
+		static QList<ItemRegion> regions(Item* parent, FormElement* formElement, int xOffset, int yOffset,
 										MajorAxis majorAxis, bool showCursorWhenEmpty, bool onlyInnerCursors,
 										bool extraCursorsAroundParentShape, bool notLocationEquivalentCursors,
 										NumRows numRows, NumColumns numColumns, ChildItem childItem,
@@ -393,6 +396,40 @@ class VISUALIZATIONBASE_API GridLayouter
 						if (child->y() < rowTop[y]) rowTop[y] = child->y();
 						if (child->yEndInParent() > rowBottom[y]) rowBottom[y] = child->yEndInParent();
 					}
+
+			// If a row or a column is completely empty it still contains std::numeric_limits<int>::max().
+			// We need to correctly set the elements in that case.
+			// To make the cursors more visible, we use the available margins/space, halfway on both sides
+			int leftSoFar = xOffset + leftMargin();
+			int leftPrevSpace = leftMargin();
+			int topSoFar = yOffset + topMargin();
+			int topPrevSpace = topMargin();
+			for (int x = 0; x<numColumns(); ++x)
+			{
+				int nextSpace = (x+1 == numColumns() ? rightMargin() : spaceBetweenColumns() );
+				if (columnLeft[x] == std::numeric_limits<int>::max())
+				{
+					columnLeft[x] = leftSoFar - leftPrevSpace/2;
+					columnRight[x] = leftSoFar + nextSpace/2;
+					leftSoFar += nextSpace;
+				}
+				else leftSoFar = columnRight[x] + nextSpace;
+
+				leftPrevSpace = nextSpace;
+			}
+			for (int y = 0; y<numRows(); ++y)
+			{
+				int nextSpace = (y+1 == numRows() ? bottomMargin() : spaceBetweenRows() );
+				if (rowTop[y] == std::numeric_limits<int>::max())
+				{
+					rowTop[y] = topSoFar - topPrevSpace/2;
+					rowBottom[y] = topSoFar + nextSpace/2;
+					topSoFar += nextSpace;
+				}
+				topSoFar = rowBottom[y] + nextSpace;
+
+				topPrevSpace = nextSpace;
+			}
 
 			// Set Child item regions and remember rects
 			QVector< QVector<QRect> > itemAreas(numColumns(), QVector<QRect>(numRows(), QRect()));
@@ -450,8 +487,8 @@ class VISUALIZATIONBASE_API GridLayouter
 			// Inner cursors span the spacing between items.
 			// Front and Back cursors, if present, are in the margins.
 			// Cursors outside shape, if present, are outside the margins.
-			int frontCursorLeft = numColumns() > 0 ? columnLeft[0] - leftMargin() + 1 : 0;
-			int frontCursorTop = numRows() > 0 ? rowTop[0] - topMargin() + 1: 0;
+			int frontCursorLeft = numColumns() > 0 ? columnLeft[0] - leftMargin() : 0;
+			int frontCursorTop = numRows() > 0 ? rowTop[0] - topMargin() : 0;
 
 			for (int x=0; x<numColumns(); x++)
 				for (int y=0; y<numRows(); y++)
@@ -528,31 +565,9 @@ class VISUALIZATIONBASE_API GridLayouter
 	// Helpers
 	//*******************************************************************************************************************
 	private:
-
 		static ItemRegion cursorRegion(Item* parent, FormElement* formElement, int xIndex, int yIndex,
 				MajorAxis majorAxis, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
-				QRect area)
-		{
-			auto horizontal = majorAxis != ColumnMajor;
-
-			// Make sure there is at least some space for the cursor Region.
-			if (horizontal && area.width() == 0) area.adjust((mayExpandFront?-1:0), 0, (mayExpandBack?1:0), 0);
-			if (!horizontal && area.height() == 0 ) area.adjust(0, (mayExpandFront?-1:0), 0, (mayExpandBack?1:0));
-
-			// Note below, that a horizontal layout, means a vertical cursor
-			auto lc = new LayoutCursor(parent, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
-			lc->setOwnerElement(formElement);
-			lc->set2DIndex(xIndex, yIndex);
-			lc->setVisualizationSize( horizontal ? QSize(2, area.height()) : QSize(area.width(), 2) );
-			lc->setVisualizationPosition( area.topLeft() );
-			lc->setRegion( area );
-			lc->setIsAtBoundary(atBoundary);
-			lc->setNotLocationEquivalent(notLocationEquivalent);
-
-			auto region = ItemRegion(area);
-			region.setCursor(lc);
-			return region;
-		}
+				QRect area);
 };
 
 } // namespace Visualization

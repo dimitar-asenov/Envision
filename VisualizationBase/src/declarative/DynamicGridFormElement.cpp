@@ -213,8 +213,9 @@ void DynamicGridFormElement::setItemPositions(Item* item, int parentX, int paren
 		for (int yIt = 0; yIt < data.numRows_; ++yIt)
 			if (auto childItem = data.itemGrid_[xIt][yIt])
 			{
-				QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[xIt][yIt].x() + leftMargin(),
-							parentY + y(item) + data.itemPositionWithinLayout_[xIt][yIt].y() + topMargin()};
+				// Note that margins have already been accounted for.
+				QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[xIt][yIt].x(),
+							parentY + y(item) + data.itemPositionWithinLayout_[xIt][yIt].y()};
 
 				if (newPos != childItem->pos())
 					childItem->setPos(newPos); // setting the position is an expensive operation so only do it if it changed
@@ -260,11 +261,11 @@ bool DynamicGridFormElement::elementOrChildHasFocus(Item* item) const
 	return false;
 }
 
-QList<ItemRegion> DynamicGridFormElement::regions(DeclarativeItemBase* item, int, int)
+QList<ItemRegion> DynamicGridFormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
 {
 	auto& data = dataForItem(item);
 
-	return GridLayouter::regions(item, this, majorAxis_, true, false,
+	return GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), majorAxis_, true, false,
 			item->style()->extraCursorsOutsideShape(), true,
 			[&data](){return data.numRows_;},	// numRows
 			[&data](){return data.numColumns_;},	// numColumns
