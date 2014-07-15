@@ -26,37 +26,28 @@
 
 #pragma once
 
-#include "../filepersistence_api.h"
+#include "../simple/GenericNode.h"
+#include "CommitGraph.h"
 
 namespace FilePersistence {
 
-struct CommitGraphItem
-{
-	QString commitSHA_;
+class GitRepository;
 
-	QList<CommitGraphItem*> children_;
-	QList<CommitGraphItem*> parents_;
-};
-
-class FILEPERSISTENCE_API CommitGraph
+class FILEPERSISTENCE_API History
 {
 	public:
-		CommitGraph();
-		~CommitGraph();
-
-		void add(QString fromCommitSHA, QString toCommitSHA);
-
-		const CommitGraphItem* start() const;
-		const CommitGraphItem* end() const;
+		History(Model::NodeIdType rootNodeId, CommitGraph* historyGraph, GitRepository* repository);
+		~History();
 
 	private:
-		CommitGraphItem* startPoint_;
-		CommitGraphItem* endPoint_;
+		void detectRelevantCommits(CommitGraphItem* current, GitRepository* repository);
 
-		QHash<QString, CommitGraphItem*> items_;
+
+		Model::NodeIdType rootNodeId_;
+
+		CommitGraph* historyGraph_{};
+
+		QSet<QString> relevantCommits_;
 };
-
-inline const CommitGraphItem* CommitGraph::start() const { return startPoint_; }
-inline const CommitGraphItem* CommitGraph::end() const { return endPoint_; }
 
 } /* namespace FilePersistence */

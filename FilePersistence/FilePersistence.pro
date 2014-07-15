@@ -18,7 +18,8 @@ HEADERS += src/simple/Parser.h \
     src/version_control/ChangeDescription.h \
     src/version_control/Diff.h \
     src/version_control/GitRepository.h \
-    src/version_control/CommitGraph.h
+    src/version_control/CommitGraph.h \
+    src/version_control/History.h
 SOURCES += src/simple/Parser.cpp \
     src/simple/GenericNode.cpp \
     src/simple/GenericNodeAllocator.cpp \
@@ -37,9 +38,9 @@ SOURCES += src/simple/Parser.cpp \
     src/version_control/Diff.cpp \
     src/version_control/GitRepository.cpp \
     test/VersionControlDiffTests.cpp \
-    src/version_control/CommitGraph.cpp
+    src/version_control/CommitGraph.cpp \
+    src/version_control/History.cpp
 RESOURCES = FilePersistence.qrc
 
-# Fix this in a way that library is included in project
 unix:LIBS += -lgit2
 INCLUDEPATH += /usr/local/lib/libgit2-0.21.0/include/

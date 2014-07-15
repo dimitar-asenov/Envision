@@ -24,39 +24,46 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "History.h"
 
-#include "../filepersistence_api.h"
+#include "GitRepository.h"
 
 namespace FilePersistence {
 
-struct CommitGraphItem
+History::History(Model::NodeIdType rootNodeId, CommitGraph* historyGraph, GitRepository* repository)
 {
-	QString commitSHA_;
+	rootNodeId_ = rootNodeId;
+	historyGraph_ = historyGraph;
 
-	QList<CommitGraphItem*> children_;
-	QList<CommitGraphItem*> parents_;
-};
+	relevantCommits_.insert(historyGraph_->start()->commitSHA_);
+	relevantCommits_.insert(historyGraph_->end()->commitSHA_);
 
-class FILEPERSISTENCE_API CommitGraph
+	// TODO call detectRelevantCommits
+	(void) repository;
+}
+
+History::~History()
 {
-	public:
-		CommitGraph();
-		~CommitGraph();
+	delete historyGraph_;
+}
 
-		void add(QString fromCommitSHA, QString toCommitSHA);
 
-		const CommitGraphItem* start() const;
-		const CommitGraphItem* end() const;
+void History::detectRelevantCommits(CommitGraphItem* current, GitRepository* repository)
+{
+	// TODO load current GenericNode AST
 
-	private:
-		CommitGraphItem* startPoint_;
-		CommitGraphItem* endPoint_;
+	// TODO find subtree nodes
 
-		QHash<QString, CommitGraphItem*> items_;
-};
+	for (CommitGraphItem* child : current->children_)
+	{
+		// run diff
+		Diff diff = repository->diff(current->commitSHA_, child->commitSHA_);
+		IdToChangeDescriptionHash changes = diff.changes();
 
-inline const CommitGraphItem* CommitGraph::start() const { return startPoint_; }
-inline const CommitGraphItem* CommitGraph::end() const { return endPoint_; }
+		// TODO check if a subtree node is affected
+
+		// TODO recursive call on child
+	}
+}
 
 } /* namespace FilePersistence */
