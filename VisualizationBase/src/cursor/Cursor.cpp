@@ -36,9 +36,18 @@ Cursor::Cursor(Item* owner, CursorType type, Item* visualization)
 	if (visualization) setVisualization(visualization);
 }
 
+Cursor::Cursor(const Cursor& other) :	position_{other.position_}, region_{other.region_}, owner_{other.owner_},
+		type_{other.type_}, notLocationEquivalent_{other.notLocationEquivalent_}
+{}
+
 Cursor::~Cursor()
 {
 	setVisualization(nullptr);
+}
+
+Cursor* Cursor::clone() const
+{
+	return new Cursor(*this);
 }
 
 Item* Cursor::owner() const

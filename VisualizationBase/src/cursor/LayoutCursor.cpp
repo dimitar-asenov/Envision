@@ -36,6 +36,11 @@ LayoutCursor::LayoutCursor(Item* owner, CursorType type)
 {
 }
 
+LayoutCursor* LayoutCursor::clone() const
+{
+	return new LayoutCursor(*this);
+}
+
 
 void LayoutCursor::setVisualizationSize(const QSize& size)
 {
