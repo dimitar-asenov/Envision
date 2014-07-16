@@ -36,13 +36,14 @@
 
 namespace OOInteraction {
 
-bool CSceneHandlerItemTest::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens)
+bool CSceneHandlerItemTest::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return commandTokens.size() == 1 && commandTokens.first() == "test";
 }
 
 Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*, Visualization::Item*,
-		const QStringList&)
+		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
 	//Test code goes here
 
@@ -63,7 +64,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 }
 
 QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualization::Item*, Visualization::Item*,
-		const QString& textSoFar)
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QList<Interaction::CommandSuggestion*> s;
 	if (QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
@@ -71,7 +72,8 @@ QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualizat
 	return s;
 }
 
-QStringList CSceneHandlerItemTest::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
+QStringList CSceneHandlerItemTest::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	QStringList forms;
 	if (textSoFar.isEmpty() || QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )

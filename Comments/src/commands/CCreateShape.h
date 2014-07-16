@@ -39,6 +39,7 @@ class COMMENTS_API CCreateShape : public Interaction::CreateNamedObjectWithAttri
 
 	protected:
 		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+			const std::unique_ptr<Visualization::Cursor>& cursor,
 			const QString& name, const QStringList& attributes) override;
 };
 

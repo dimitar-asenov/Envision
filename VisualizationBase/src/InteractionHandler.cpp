@@ -60,7 +60,7 @@ void InteractionHandler::beforeEvent(Item *, QEvent*) {}
 void InteractionHandler::afterEvent(Item *, QEvent*) {}
 
 // Command events
-void InteractionHandler::command(Item *, const QString&) {}
+void InteractionHandler::command(Item *, const QString&, const std::unique_ptr<Cursor>&) {}
 
 // Keyboard events
 void InteractionHandler::keyPressEvent(Item *target, QKeyEvent *event)

@@ -101,7 +101,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event) override;
 
 		// Command events
-		virtual void command(Visualization::Item *target, const QString& command) override;
+		virtual void command(Visualization::Item *target, const QString& command,
+				const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 		/**
 		 * Removes the node visualized by \a target from the list which contains it.

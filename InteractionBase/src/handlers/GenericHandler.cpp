@@ -156,9 +156,10 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 	}
 }
 
-void GenericHandler::command(Visualization::Item *target, const QString& command)
+void GenericHandler::command(Visualization::Item *target, const QString& command,
+		const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-	executionEngine_->execute(target, command);
+	executionEngine_->execute(target, command, cursor);
 }
 
 void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)

@@ -42,16 +42,16 @@ class INTERACTIONBASE_API Command
 		virtual ~Command();
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-										  const QStringList& commandTokens);
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
 		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-												 const QStringList& commandTokens) = 0;
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) = 0;
 
 		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-																const QString& textSoFar);
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor);
 		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-													const QString& textSoFar) = 0;
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) = 0;
 		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target,
-															  const QString& commandForm = QString());
+				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& commandForm = QString());
 };
 
 }

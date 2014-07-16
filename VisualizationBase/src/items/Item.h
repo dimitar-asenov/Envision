@@ -208,7 +208,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 		virtual InteractionHandler* handler() const;
-		void execute(const QString& command);
+		void execute(const QString& command, const std::unique_ptr<Cursor>& );
 
 		void removeFromScene();
 
