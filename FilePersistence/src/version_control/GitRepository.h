@@ -57,6 +57,8 @@ class FILEPERSISTENCE_API GitRepository
 
 		CommitProperties getCommitProperties(QString commit);
 
+		void checkout(QString commit, bool force);
+
 		static const QString WORKDIR;
 		static const QString INDEX;
 

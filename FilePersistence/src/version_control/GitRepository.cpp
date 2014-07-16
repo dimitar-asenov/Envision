@@ -264,6 +264,29 @@ CommitProperties GitRepository::getCommitProperties(QString commit)
 	return properties;
 }
 
+void GitRepository::checkout(QString commit, bool force)
+{
+	if (commit.compare(WORKDIR) != 0)
+	{
+		git_checkout_options options;
+		git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);
+		if (force)
+			options.checkout_strategy = GIT_CHECKOUT_FORCE;
+		else
+			options.checkout_strategy = GIT_CHECKOUT_SAFE;
+
+		if (commit.compare(INDEX) == 0)
+			git_checkout_index(repository_, nullptr, &options);
+		else
+		{
+			git_commit* gitCommit = parseCommit(commit);
+			git_checkout_tree(repository_, (git_object*)gitCommit, &options);
+
+			git_commit_free(gitCommit);
+		}
+	}
+}
+
 
 // Private methods
 
