@@ -369,6 +369,7 @@ class VISUALIZATIONBASE_API GridLayouter
 		static QList<ItemRegion> regions(Item* parent, FormElement* formElement, int xOffset, int yOffset,
 										MajorAxis majorAxis, bool showCursorWhenEmpty, bool onlyInnerCursors,
 										bool extraCursorsAroundParentShape, bool notLocationEquivalentCursors,
+										bool showMajorCursors,
 										NumRows numRows, NumColumns numColumns, ChildItem childItem,
 										SpaceBetweenRows spaceBetweenRows, SpaceBetweenColumns spaceBetweenColumns,
 										TopMargin topMargin, BottomMargin bottomMargin, LeftMargin leftMargin,
@@ -388,6 +389,8 @@ class VISUALIZATIONBASE_API GridLayouter
 			QVector<int> rowBottom(numRows(), 0);
 			QVector<int> lastChildIndexInColumn(numColumns(), -1);
 			QVector<int> lastChildIndexInRow(numRows(), -1);
+			int rightMostPoint = 0;
+			int bottomMostPoint = 0;
 			for (int x=0; x<numColumns(); x++)
 				for (int y=0; y<numRows(); y++)
 					if (auto child = childItem(x, y))
@@ -399,6 +402,9 @@ class VISUALIZATIONBASE_API GridLayouter
 
 						if (child->y() < rowTop[y]) rowTop[y] = child->y();
 						if (child->yEndInParent() > rowBottom[y]) rowBottom[y] = child->yEndInParent();
+
+						if (child->xEndInParent() > rightMostPoint) rightMostPoint = child->xEndInParent();
+						if (child->yEndInParent() > bottomMostPoint) bottomMostPoint = child->yEndInParent();
 					}
 
 			// If a row or a column is completely empty it still contains std::numeric_limits<int>::max().
@@ -493,6 +499,8 @@ class VISUALIZATIONBASE_API GridLayouter
 			// Cursors outside shape, if present, are outside the margins.
 			int frontCursorLeft = numColumns() > 0 ? columnLeft[0] - leftMargin() : 0;
 			int frontCursorTop = numRows() > 0 ? rowTop[0] - topMargin() : 0;
+			int totalWidth = rightMostPoint - frontCursorLeft;
+			int totalHeight = bottomMostPoint - frontCursorTop;
 
 			for (int x=0; x<numColumns(); x++)
 				for (int y=0; y<numRows(); y++)
@@ -500,14 +508,27 @@ class VISUALIZATIONBASE_API GridLayouter
 					int columnWidth = columnRight[x]-columnLeft[x]+1;
 					int rowHeight = rowBottom[y]-rowTop[y]+1;
 
-					// Front cursor. Always there if requested.
+					// Front minor cursor. Always there if requested.
 					if (((x == 0 && majorAxis != ColumnMajor) || (y==0 && majorAxis == ColumnMajor)) && !onlyInnerCursors)
 					{
-						regs.append( cursorRegion(parent, formElement, x, y, majorAxis, !extraCursorsAroundParentShape,
+						regs.append( cursorRegion(parent, formElement, x, y, majorAxis == ColumnMajor,
+								!extraCursorsAroundParentShape,
 								notLocationEquivalentCursors, !extraCursorsAroundParentShape, true,
 								majorAxis == ColumnMajor
 								? QRect(columnLeft[x], frontCursorTop, columnWidth, topMargin())
 								: QRect(frontCursorLeft, rowTop[y], leftMargin(), rowHeight) ));
+					}
+
+					// Inner major cursor after the current major axis, if requested
+					if (showMajorCursors &&
+							((majorAxis == ColumnMajor && x>0 && y==0) || (majorAxis != ColumnMajor && y>0 && x==0)))
+					{
+						regs.append( cursorRegion(parent, formElement,
+							majorAxis == ColumnMajor ? x+1 : -1, majorAxis == ColumnMajor ? -1 : y+1,
+							majorAxis != ColumnMajor, false, true, true, true,
+							majorAxis == ColumnMajor
+							? QRect(columnRight[x]+1, frontCursorTop, leftMargin(), totalHeight)
+							: QRect(frontCursorLeft, rowBottom[y]+1, totalWidth, topMargin()) ));
 					}
 
 					// Inner cursor to next element, if any
@@ -518,7 +539,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					{
 						regs.append( cursorRegion(parent, formElement,
 								majorAxis == ColumnMajor ? x : x+1,
-								majorAxis == ColumnMajor ? y+1 : y, majorAxis, false,
+								majorAxis == ColumnMajor ? y+1 : y, majorAxis == ColumnMajor, false,
 								notLocationEquivalentCursors, true, true,
 								majorAxis == ColumnMajor
 								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, spaceBetweenRows())
@@ -533,7 +554,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					{
 						regs.append( cursorRegion(parent, formElement,
 								majorAxis == ColumnMajor ? x : x+1,
-								majorAxis == ColumnMajor ? y+1 : y, majorAxis, !extraCursorsAroundParentShape,
+								majorAxis == ColumnMajor ? y+1 : y, majorAxis == ColumnMajor, !extraCursorsAroundParentShape,
 								notLocationEquivalentCursors, true, !extraCursorsAroundParentShape,
 								majorAxis == ColumnMajor
 								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, bottomMargin())
@@ -542,19 +563,40 @@ class VISUALIZATIONBASE_API GridLayouter
 
 				}
 
+
+			// Front and back major cursor. Always there if requested.
+			if (showMajorCursors)
+			{
+				// Front
+				regs.append( cursorRegion(parent, formElement,
+						majorAxis == ColumnMajor ? 0 : -1, majorAxis == ColumnMajor ? -1 : 0,
+						majorAxis != ColumnMajor, false, true, false, true,
+						majorAxis == ColumnMajor
+						? QRect(frontCursorLeft, frontCursorTop, leftMargin(), totalHeight)
+						: QRect(frontCursorLeft, frontCursorTop, totalWidth, topMargin()) ));
+
+				//Back
+				regs.append( cursorRegion(parent, formElement,
+						majorAxis == ColumnMajor ? numColumns() : -1, majorAxis == ColumnMajor ? -1 : numRows(),
+						majorAxis != ColumnMajor, false, true, true, false,
+						majorAxis == ColumnMajor
+						? QRect(numColumns()>0 ? columnRight[numColumns()-1]+1 : 0, frontCursorTop, leftMargin(), totalHeight)
+						: QRect(frontCursorLeft, numRows()>0 ? rowBottom[numRows()-1]+1 : 0, totalWidth, topMargin()) ));
+			}
+
 			// Cursors outside shape
 			constexpr int CURSOR_SIZE = 2;
 			if (extraCursorsAroundParentShape)
 			{
 				// Front
-				regs.append(cursorRegion(parent, formElement, -1, -1, majorAxis, true,
+				regs.append(cursorRegion(parent, formElement, -1, -1, majorAxis == ColumnMajor, true,
 								notLocationEquivalentCursors, false, true,
 								majorAxis == ColumnMajor
 								? QRect(0, 0, parent->widthInLocal(), CURSOR_SIZE)
 								: QRect(0, 0, CURSOR_SIZE, parent->heightInLocal()) ));
 
 				// Back
-				regs.append(cursorRegion(parent, formElement, numColumns()+1, numRows()+1, majorAxis, true,
+				regs.append(cursorRegion(parent, formElement, numColumns()+1, numRows()+1, majorAxis == ColumnMajor, true,
 								notLocationEquivalentCursors, true, false,
 								majorAxis == ColumnMajor
 								? QRect(0, parent->heightInLocal() - CURSOR_SIZE - 1, parent->widthInLocal(), CURSOR_SIZE)
@@ -574,13 +616,14 @@ class VISUALIZATIONBASE_API GridLayouter
 	//*******************************************************************************************************************
 	private:
 		static ItemRegion cursorRegion(Item* parent, FormElement* formElement, int xIndex, int yIndex,
-				MajorAxis majorAxis, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
+				bool horizontal, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
 				QRect area);
 
 		template<class Container, class Value>
 		static void resizeReplace(Container& container, int majorIndex, int minorIndex, Value value);
 
-		static void pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis);
+		static void pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis,
+				bool pushAllMajor);
 };
 
 } // namespace Visualization

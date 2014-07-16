@@ -32,17 +32,14 @@
 namespace Visualization {
 
 ItemRegion GridLayouter::cursorRegion(Item* parent, FormElement* formElement, int xIndex, int yIndex,
-		MajorAxis majorAxis, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
+		bool horizontal, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
 		QRect area)
 {
-	auto horizontal = majorAxis != ColumnMajor;
-
 	// Make sure there is at least some space for the cursor Region.
-	if (horizontal && area.width() == 0) area.adjust((mayExpandFront?-1:0), 0, (mayExpandBack?1:0), 0);
-	if (!horizontal && area.height() == 0 ) area.adjust(0, (mayExpandFront?-1:0), 0, (mayExpandBack?1:0));
+	if (horizontal && area.height() == 0 ) area.adjust(0, (mayExpandFront?-1:0), 0, (mayExpandBack?1:0));
+	if (!horizontal && area.width() == 0) area.adjust((mayExpandFront?-1:0), 0, (mayExpandBack?1:0), 0);
 
-	// Note below, that a horizontal layout, means a vertical cursor
-	auto lc = new LayoutCursor(parent, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+	auto lc = new LayoutCursor(parent, horizontal ? Cursor::HorizontalCursor : Cursor::VerticalCursor);
 	lc->setOwnerElement(formElement);
 	lc->set2DIndex(xIndex, yIndex);
 	lc->setVisualizationSize( area.size() );
@@ -106,13 +103,13 @@ void GridLayouter::setPositionInGrid(QVector<Model::Node*> nodes, int x, int y, 
 	if (nodes.contains(node)) removeFromGrid(nodes, node, majorAxis);
 	else normalizeGridIndices(nodes, majorAxis); // Otherwise this is called from removeFromGrid()
 
-	pushNodes(nodes, x, y, 1, majorAxis);
+	pushNodes(nodes, x, y, 1, majorAxis, x==-1 || y==-1);
 
 	auto composite = DCast<Model::CompositeNode>(node);
 	Q_ASSERT(composite);
 	auto position = std::unique_ptr<Position>(composite->extension<Position>());
 	Q_ASSERT(position);
-	position->set(x, y);
+	position->set(std::max(x, 0), std::max(y, 0));
 }
 
 void GridLayouter::removeFromGrid(QVector<Model::Node*> nodes, Model::Node* node, MajorAxis majorAxis)
@@ -125,14 +122,15 @@ void GridLayouter::removeFromGrid(QVector<Model::Node*> nodes, Model::Node* node
 	Q_ASSERT(position);
 	if ( position->xNode()  == nullptr && position->yNode() == nullptr) return;
 
-	pushNodes(nodes, position->x(), position->y(), -1, majorAxis);
+	pushNodes(nodes, position->x(), position->y(), -1, majorAxis, false);
 
 	position->setXNode(nullptr);
 	position->setYNode(nullptr);
 
 }
 
-void GridLayouter::pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis)
+void GridLayouter::pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis,
+		bool pushAllMajor)
 {
 	for (auto existingNode : nodes)
 	{
@@ -143,10 +141,20 @@ void GridLayouter::pushNodes(QVector<Model::Node*> nodes, int x, int y, int push
 
 		if ( position->xNode() && position->yNode() )
 		{
-			if (majorAxis == ColumnMajor && x == position->x() && y<= position->y())
-				position->setY(position->y() + pushAmount);
-			if (majorAxis != ColumnMajor && y == position->y() && x<= position->x())
-				position->setX(position->x() + pushAmount);
+			if (pushAllMajor)
+			{
+				if (majorAxis == ColumnMajor && position->x() >= x)
+					position->setX(position->x() + pushAmount);
+				if (majorAxis != ColumnMajor && position->y() >= y)
+					position->setY(position->y() + pushAmount);
+			}
+			else
+			{
+				if (majorAxis == ColumnMajor && x == position->x() && y<= position->y())
+					position->setY(position->y() + pushAmount);
+				if (majorAxis != ColumnMajor && y == position->y() && x<= position->x())
+					position->setX(position->x() + pushAmount);
+			}
 		}
 	}
 }
