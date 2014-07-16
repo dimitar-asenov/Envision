@@ -182,16 +182,19 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 	for (int major = 0; major<nodes.size(); ++major)
 		for (int minor = 0; minor<nodes[major].size(); ++minor)
 		{
-			auto existingIterator = existingItems.find(nodes[major][minor]);
-			auto value = existingIterator != existingItems.end()
-					? existingIterator.value()
-					: item->renderer()->render(item, nodes[major][minor]);
+			if (nodes[major][minor])
+			{
+				auto existingIterator = existingItems.find(nodes[major][minor]);
+				auto value = existingIterator != existingItems.end()
+						? existingIterator.value()
+						: item->renderer()->render(item, nodes[major][minor]);
 
-			if (majorAxis_ == GridLayouter::ColumnMajor) data.itemGrid_[major][minor] = value;
-			else data.itemGrid_[minor][major] = value;
+				if (majorAxis_ == GridLayouter::ColumnMajor) data.itemGrid_[major][minor] = value;
+				else data.itemGrid_[minor][major] = value;
 
-			// Note that we don't need to update the position here since it will be overwritten anyway by
-			// computeSize()
+				// Note that we don't need to update the position here since it will be overwritten anyway by
+				// computeSize()
+			}
 		}
 
 	// Set the span if any
