@@ -26,6 +26,8 @@
 
 #include "GridLayouter.h"
 #include "../cursor/LayoutCursor.h"
+#include "../node_extensions/Position.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace Visualization {
 
@@ -52,6 +54,121 @@ ItemRegion GridLayouter::cursorRegion(Item* parent, FormElement* formElement, in
 	auto region = ItemRegion(area);
 	region.setCursor(lc);
 	return region;
+}
+
+template<class Container, class Value>
+inline void GridLayouter::resizeReplace(Container& container, int majorIndex, int minorIndex, Value value)
+{
+	if (container.size() <= majorIndex) container.resize(majorIndex+1);
+	if (container[majorIndex].size() <= minorIndex) container[majorIndex].resize(minorIndex+1);
+	container[majorIndex][minorIndex] = value;
+}
+
+QVector< QVector<Model::Node*>> GridLayouter::arrange(QVector<Model::Node*> nodes, MajorAxis majorAxis)
+{
+	QVector< QVector<Model::Node*>> result;
+	QVector<Model::Node*> nodesWithoutPosition;
+	// Compute width and height
+	for (auto node : nodes)
+	{
+		auto composite = DCast<Model::CompositeNode>(node);
+		Q_ASSERT(composite);
+		auto position = std::unique_ptr<Position>(composite->extension<Position>());
+		Q_ASSERT(position);
+
+		if ( position->xNode() && position->yNode() )
+		{
+			if (majorAxis == ColumnMajor)
+				resizeReplace(result, position->x(), position->y(), composite);
+			else
+				resizeReplace(result, position->y(), position->x(), composite);
+		}
+		else nodesWithoutPosition.append(node);
+	}
+
+	int finalMajor = result.size();
+	int minorIndex = 0;
+	for (auto node : nodesWithoutPosition)
+		resizeReplace(result, finalMajor, minorIndex++, node);
+
+	// If using a major axis, make sure not to include nullptr nodes.
+	if (majorAxis != NoMajor)
+		for (auto& minorVector : result)
+			for (int i = minorVector.size() - 1; i>=0; --i)
+				if (minorVector[i] == nullptr)
+					minorVector.remove(i);
+
+	return result;
+}
+
+void GridLayouter::setPositionInGrid(QVector<Model::Node*> nodes, int x, int y, Model::Node* node, MajorAxis majorAxis)
+{
+	if (nodes.contains(node)) removeFromGrid(nodes, node, majorAxis);
+	else normalizeGridIndices(nodes, majorAxis); // Otherwise this is called from removeFromGrid()
+
+	pushNodes(nodes, x, y, 1, majorAxis);
+
+	auto composite = DCast<Model::CompositeNode>(node);
+	Q_ASSERT(composite);
+	auto position = std::unique_ptr<Position>(composite->extension<Position>());
+	Q_ASSERT(position);
+	position->set(x, y);
+}
+
+void GridLayouter::removeFromGrid(QVector<Model::Node*> nodes, Model::Node* node, MajorAxis majorAxis)
+{
+	normalizeGridIndices(nodes, majorAxis);
+
+	auto composite = DCast<Model::CompositeNode>(node);
+	Q_ASSERT(composite);
+	auto position = std::unique_ptr<Position>(composite->extension<Position>());
+	Q_ASSERT(position);
+	if ( position->xNode()  == nullptr && position->yNode() == nullptr) return;
+
+	pushNodes(nodes, position->x(), position->y(), -1, majorAxis);
+
+	position->setXNode(nullptr);
+	position->setYNode(nullptr);
+
+}
+
+void GridLayouter::pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis)
+{
+	for (auto existingNode : nodes)
+	{
+		auto composite = DCast<Model::CompositeNode>(existingNode);
+		Q_ASSERT(composite);
+		auto position = std::unique_ptr<Position>(composite->extension<Position>());
+		Q_ASSERT(position);
+
+		if ( position->xNode() && position->yNode() )
+		{
+			if (majorAxis == ColumnMajor && x == position->x() && y<= position->y())
+				position->setY(position->y() + pushAmount);
+			if (majorAxis != ColumnMajor && y == position->y() && x<= position->x())
+				position->setX(position->x() + pushAmount);
+		}
+	}
+}
+
+void GridLayouter::normalizeGridIndices(QVector<Model::Node*> nodes, MajorAxis majorAxis)
+{
+	if (majorAxis == NoMajor) return;
+	auto normalized = arrange(nodes, majorAxis);
+	for (int major = 0; major < normalized.size(); ++major)
+		for (int minor = 0; minor < normalized[major].size(); ++minor)
+		{
+			auto composite = DCast<Model::CompositeNode>(normalized[major][minor]);
+			Q_ASSERT(composite);
+			auto position = std::unique_ptr<Position>(composite->extension<Position>());
+			Q_ASSERT(position);
+
+			int normalizedX = majorAxis == ColumnMajor ? major : minor;
+			int normalizedY = majorAxis == ColumnMajor ? minor : major;
+			if ( !position->xNode() || !position->yNode()||
+					position->x() != normalizedX || position->y() != normalizedY)
+				position->set(normalizedX, normalizedY);
+		}
 }
 
 }

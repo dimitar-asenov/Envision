@@ -386,10 +386,14 @@ class VISUALIZATIONBASE_API GridLayouter
 			QVector<int> columnRight(numColumns(), 0);
 			QVector<int> rowTop(numRows(), std::numeric_limits<int>::max());
 			QVector<int> rowBottom(numRows(), 0);
+			QVector<int> lastChildIndexInColumn(numColumns(), -1);
+			QVector<int> lastChildIndexInRow(numRows(), -1);
 			for (int x=0; x<numColumns(); x++)
 				for (int y=0; y<numRows(); y++)
 					if (auto child = childItem(x, y))
 					{
+						lastChildIndexInColumn[x] = y;
+						lastChildIndexInRow[y] = x;
 						if (child->x() < columnLeft[x]) columnLeft[x] = child->x();
 						if (child->xEndInParent() > columnRight[x]) columnRight[x] = child->xEndInParent();
 
@@ -508,9 +512,9 @@ class VISUALIZATIONBASE_API GridLayouter
 
 					// Inner cursor to next element, if any
 					if (!itemAreas[x][y].isNull()
-							&& (	((majorAxis == ColumnMajor && y + 1 < numRows() && !itemAreas[x][y+1].isNull()))
+							&& (	(majorAxis == ColumnMajor && y < lastChildIndexInColumn[x])
 								||
-									(majorAxis != ColumnMajor && x + 1 < numColumns() && !itemAreas[x+1][y].isNull())))
+									(majorAxis != ColumnMajor && x < lastChildIndexInRow[y])))
 					{
 						regs.append( cursorRegion(parent, formElement,
 								majorAxis == ColumnMajor ? x : x+1,
@@ -523,9 +527,9 @@ class VISUALIZATIONBASE_API GridLayouter
 
 					// Back cursor, if requested, and if there is at least one element
 					if (!itemAreas[x][y].isNull() && !onlyInnerCursors
-							&& (	((majorAxis == ColumnMajor && (y + 1 == numRows() || itemAreas[x][y+1].isNull())))
+							&& (	(majorAxis == ColumnMajor && y == lastChildIndexInColumn[x])
 								||
-									(majorAxis != ColumnMajor && (x + 1 == numColumns() || itemAreas[x+1][y].isNull()))))
+									(majorAxis != ColumnMajor && x == lastChildIndexInRow[y])))
 					{
 						regs.append( cursorRegion(parent, formElement,
 								majorAxis == ColumnMajor ? x : x+1,
@@ -561,6 +565,10 @@ class VISUALIZATIONBASE_API GridLayouter
 		}
 
 
+		static QVector< QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes, MajorAxis majorAxis);
+		static void setPositionInGrid(QVector<Model::Node*> nodes, int x, int y, Model::Node* node, MajorAxis majorAxis);
+		static void removeFromGrid(QVector<Model::Node*> nodes, Model::Node* node, MajorAxis majorAxis);
+		static void normalizeGridIndices(QVector<Model::Node*> nodes, MajorAxis majorAxis);
 	//*******************************************************************************************************************
 	// Helpers
 	//*******************************************************************************************************************
@@ -568,6 +576,11 @@ class VISUALIZATIONBASE_API GridLayouter
 		static ItemRegion cursorRegion(Item* parent, FormElement* formElement, int xIndex, int yIndex,
 				MajorAxis majorAxis, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
 				QRect area);
+
+		template<class Container, class Value>
+		static void resizeReplace(Container& container, int majorIndex, int minorIndex, Value value);
+
+		static void pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis);
 };
 
 } // namespace Visualization
