@@ -65,8 +65,12 @@ int gitDiffExtractLineCB(
 				 void* carryAlongData)
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
+	size_t lineLength = line->content_len;
 
-	GenericNode* node = new GenericNode(line->content, line->content_len, false);;
+	while (line->content[lineLength] == '\t')
+		lineLength--;
+
+	GenericNode* node = new GenericNode(line->content, lineLength, false);;
 	switch (line->origin)
 	{
 		case GIT_DIFF_LINE_ADDITION:
@@ -275,15 +279,17 @@ void GitRepository::checkout(QString commit, bool force)
 		else
 			options.checkout_strategy = GIT_CHECKOUT_SAFE;
 
+		int errorCode = 0;
 		if (commit.compare(INDEX) == 0)
-			git_checkout_index(repository_, nullptr, &options);
+			errorCode = git_checkout_index(repository_, nullptr, &options);
 		else
 		{
 			git_commit* gitCommit = parseCommit(commit);
-			git_checkout_tree(repository_, (git_object*)gitCommit, &options);
+			errorCode = git_checkout_tree(repository_, (git_object*)gitCommit, &options);
 
 			git_commit_free(gitCommit);
 		}
+		checkError(errorCode);
 	}
 }
 
@@ -306,7 +312,7 @@ void GitRepository::findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tr
 		const char* rawContent = (const char*)git_blob_rawcontent(blob);
 		qint64 contentSize = git_blob_rawsize(blob);
 
-		GenericNodeAllocator* allocator = nullptr;
+		GenericNodeAllocator* allocator = new GenericNodeAllocator();
 		GenericNode* root = Parser::load(rawContent, contentSize, false, allocator);
 		extractParents(nodes, root);
 		allocator->endThisLoad();
@@ -362,7 +368,8 @@ GenericNode* GitRepository::copyGenericNode(const GenericNode* node)
 
 	copy->setName(node->name());
 	copy->setType(node->type());
-	copy->setValue(node->valueType(), node->rawValue());
+	if (node->valueType() != GenericNode::ValueType::NO_VALUE)
+		copy->setValue(node->valueType(), node->rawValue());
 
 	copy->setId(node->id());
 	copy->setParent(node->parent());
