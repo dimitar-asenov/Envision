@@ -35,6 +35,13 @@
 
 namespace FilePersistence {
 
+
+CommitContent::~CommitContent()
+{
+	for (const char* data : content_.values())
+		delete data;
+}
+
 // === Libgit2 call-back functions ===
 
 struct GitDiffExtract
@@ -46,7 +53,14 @@ struct GitDiffExtract
 struct GitTreeBlobs
 {
 	git_repository* repository_;
+	QList<QString> fileNames_;
 	QList<git_blob*> blobs_;
+
+	~GitTreeBlobs()
+	{
+		for (git_blob* blob : blobs_)
+			git_blob_free(blob);
+	}
 };
 
 int gitDiffExtractFileCB(
@@ -108,6 +122,9 @@ int treeWalkBlobExtractionCB(const char *,
 		{
 			git_blob* blob = (git_blob*)obj;
 			data->blobs_.append(blob);
+
+			QString file(git_tree_entry_name(entry));
+			data->fileNames_.append(file);
 		}
 	}
 	else
@@ -271,6 +288,43 @@ CommitProperties GitRepository::getCommitProperties(QString commit)
 	return properties;
 }
 
+CommitContent GitRepository::getCommitContent(QString commit) const
+{
+	CommitContent commitContent;
+	int errorCode = 0;
+
+	// parse commit
+	git_commit* gitCommit = parseCommit(commit);
+	git_tree* tree = nullptr;
+	errorCode = git_commit_tree(&tree, gitCommit);
+	checkError(errorCode);
+
+	// extract blobs here and store them
+	GitTreeBlobs carryAlongData;
+	carryAlongData.repository_ = repository_;
+
+	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkBlobExtractionCB, &carryAlongData);
+	checkError(errorCode);
+
+	for (int i = 0; i < carryAlongData.blobs_.size(); i++)
+	{
+		git_blob* blob = carryAlongData.blobs_.at(i);
+		QString fileName = carryAlongData.fileNames_.at(i);
+
+		const char* rawContent = (const char*)git_blob_rawcontent(blob);
+		qint64 contentSize = git_blob_rawsize(blob);
+
+		char* content = new char[contentSize];
+		memcpy(content, rawContent, contentSize);
+
+		commitContent.files_.append(fileName);
+		commitContent.content_.insert(fileName, content);
+		commitContent.size_.insert(fileName, contentSize);
+	}
+
+	return commitContent;
+}
+
 void GitRepository::checkout(QString commit, bool force)
 {
 	if (commit.compare(WORKDIR) != 0)
@@ -321,10 +375,6 @@ void GitRepository::findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tr
 		allocator->endThisLoad();
 		delete allocator;
 	}
-
-	// clean up GitTreeBlobs
-	for (git_blob* blob : carryAlongData.blobs_)
-		git_blob_free(blob);
 }
 
 void GitRepository::findParentsInGitIndex(IdToGenericNodeHash nodes) const

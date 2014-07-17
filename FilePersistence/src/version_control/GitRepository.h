@@ -47,6 +47,14 @@ struct CommitProperties {
 	QList<QString> parents_;
 };
 
+struct CommitContent {
+	QList<QString> files_;
+	QHash<QString, qint64> size_;
+	QHash<QString, const char*> content_;
+
+	~CommitContent();
+};
+
 class FILEPERSISTENCE_API GitRepository
 {
 	public:
@@ -56,6 +64,7 @@ class FILEPERSISTENCE_API GitRepository
 		Diff diff(QString oldCommit, QString newCommit) const;
 
 		CommitProperties getCommitProperties(QString commit);
+		CommitContent getCommitContent(QString commit) const;
 
 		void checkout(QString commit, bool force);
 
