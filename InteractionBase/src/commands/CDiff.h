@@ -28,6 +28,8 @@
 
 #include "CommandWithNameAndFlags.h"
 
+#include "FilePersistence/src/version_control/GitRepository.h"
+
 namespace Interaction {
 
 class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
@@ -43,6 +45,8 @@ class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
 
 	private:
 		QStringList availableProjectsOnDisk();
+
+		FilePersistence::GitRepository* repository_{};
 };
 
 } /* namespace Interaction */

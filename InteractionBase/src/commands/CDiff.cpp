@@ -31,33 +31,67 @@
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "ModelBase/src/model/TreeManager.h"
 
+#include "FilePersistence/src/version_control/ChangeDescription.h"
+#include "VisualizationBase/src/items/Item.h"
+
 using namespace Visualization;
 
 namespace Interaction {
 
 CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"library"}}, true}
-{}
+{
+	QString path("/home/motth/Documents/Envision/Envision/DebugBuild/projects/Hello/.git");
+	repository_ = new FilePersistence::GitRepository(path);
+}
 
 CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item*,
 			const QString& name, const QStringList& attributes)
 {
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+	QString commitOld("abf18");
+	repository_->checkout(commitOld, true);
 
-	if (attributes.first() != "library")
+	auto managerOld = new Model::TreeManager();
+	managerOld->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+	managerOld->setName("Hello (Old)");
+
+	QString commitNew("413d2");
+	repository_->checkout(commitNew, true);
+
+	auto managerNew = new Model::TreeManager();
+	managerNew->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+	managerNew->setName("Hello (New)");
+
+	FilePersistence::Diff diff = repository_->diff(commitOld, commitNew);
+	FilePersistence::IdToChangeDescriptionHash changes = diff.changes();
+
+	Item* oldRoot = new RootItem(managerOld->root());
+	oldRoot->setPos(-200.f, 0.f);
+
+	Item* newRoot = new RootItem(managerNew->root());
+	newRoot->setPos(200.f, 0.f);
+
+	QList<Visualization::Item*> stack;
+
+	for (FilePersistence::ChangeDescription* change : changes.values())
 	{
-		Item* root = nullptr;
-
-		root = new RootItem(manager->root());
-		root->setPos(-200.f, 0.f);
-		VisualizationManager::instance().mainScene()->addTopLevelItem(root);
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-
-		root = new RootItem(manager->root());
-		root->setPos(200.f, 0.f);
-		VisualizationManager::instance().mainScene()->addTopLevelItem(root);
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+		Model::Node* node = const_cast<Model::Node*>(Model::NodeIdMap::node(change->id()));
+		if (node->parent() == nullptr)
+			qDebug() << "nullptr";
+		Item* item = nullptr;
+		// FIXME: No visualizations are found
+		item = newRoot->findVisualizationOf(node);
+		if (item != nullptr)
+		{
+			qDebug() << "Test";
+			stack.append(item);
+		}
 	}
+
+	VisualizationManager::instance().mainScene()->addTopLevelItem(oldRoot);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(managerOld);
+
+	VisualizationManager::instance().mainScene()->addTopLevelItem(newRoot);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(managerNew);
 
 	return new CommandResult();
 }
