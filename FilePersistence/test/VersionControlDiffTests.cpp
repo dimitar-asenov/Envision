@@ -446,4 +446,75 @@ TEST(FilePersistencePlugin, moveDetection)
 	CHECK_CONDITION(parentBFlags.testFlag(ChangeDescription::Children));
 }
 
+TEST(FilePersistencePlugin, combinationDetection)
+{
+	Model::NodeIdType nodeID = QUuid::createUuid();
+	Model::NodeIdType parentID = QUuid::createUuid();
+
+	GenericNode* nodeA = new GenericNode();
+	GenericNode* nodeB = new GenericNode();
+	GenericNode* parentA = new GenericNode();
+	GenericNode* parentB = new GenericNode();
+
+	nodeA->setName("value");
+	nodeA->setType("Integer");
+	nodeA->setValue(GenericNode::INT_VALUE, "I_0");
+	nodeA->setId(nodeID);
+	nodeA->setParent(parentA);
+
+	nodeB->setName("lpKind");
+	nodeB->setType("LongInteger");
+	nodeB->setValue(GenericNode::INT_VALUE, "I_1");
+	nodeB->setId(nodeID);
+	nodeB->setParent(parentB);
+
+	parentA->setName("initialValue");
+	parentA->setType("IntegerLiteral");
+	parentA->setId(parentID);
+	// set no value
+	// set no parent
+
+	parentB->setName("initialValue");
+	parentB->setType("LongIntegerLiteral");
+	parentB->setId(parentID);
+	// set no value
+	// set no parent
+
+	IdToGenericNodeHash oldNodes;
+	oldNodes.insert(nodeID, nodeA);
+	oldNodes.insert(parentID, parentA);
+
+	IdToGenericNodeHash newNodes;
+	newNodes.insert(nodeID, nodeB);
+	newNodes.insert(parentID, parentB);
+
+	Diff diff(oldNodes, newNodes);
+
+	IdToChangeDescriptionHash changes = diff.changes();
+	IdToChangeDescriptionHash::iterator iter;
+
+	iter = changes.find(nodeID);
+	ChangeDescription* nodeChange = iter.value();
+
+	ChangeType changeType = nodeChange->type();
+	CHECK_CONDITION(changeType == ChangeType::Stationary);
+
+	ChangeDescription::UpdateFlags flags = nodeChange->flags();
+	CHECK_CONDITION(flags.testFlag(ChangeDescription::Order));
+	CHECK_CONDITION(flags.testFlag(ChangeDescription::Type));
+	CHECK_CONDITION(flags.testFlag(ChangeDescription::Value));
+	CHECK_CONDITION(!flags.testFlag(ChangeDescription::Children));
+
+	// parent gets included into diff
+	CHECK_CONDITION(changes.contains(parentID));
+
+	iter = changes.find(parentID);
+	ChangeDescription* parentChange = iter.value();
+	ChangeDescription::UpdateFlags parentFlags = parentChange->flags();
+	CHECK_CONDITION(!parentFlags.testFlag(ChangeDescription::Order));
+	CHECK_CONDITION(parentFlags.testFlag(ChangeDescription::Type));
+	CHECK_CONDITION(!parentFlags.testFlag(ChangeDescription::Value));
+	CHECK_CONDITION(parentFlags.testFlag(ChangeDescription::Children));
+}
+
 } /* namespace FilePersistence */
