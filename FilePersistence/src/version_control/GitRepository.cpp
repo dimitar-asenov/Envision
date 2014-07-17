@@ -128,6 +128,9 @@ GitRepository::GitRepository(QString path)
 	path_ = path;
 	repository_ = nullptr;
 
+	if (path_.endsWith(".git"))
+		path_.chop(4);
+
 	int error = git_repository_open(&(repository_), path_.toStdString().c_str());
 	checkError(error);
 }
