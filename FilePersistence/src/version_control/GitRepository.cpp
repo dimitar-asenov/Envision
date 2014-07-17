@@ -333,11 +333,11 @@ void GitRepository::findParentsInGitIndex(IdToGenericNodeHash nodes) const
 void GitRepository::findParentsInGitWorkdir(IdToGenericNodeHash nodes) const
 {
 	QDir workdir = QDir(path_);
-	QFileInfoList list = workdir.entryInfoList();
+	QFileInfoList list = workdir.entryInfoList(QDir::Files | QDir::NoDot | QDir::NoDotDot);
 	for (QFileInfo fileInfo : list)
 	{
-		GenericNodeAllocator* allocator = nullptr;
-		GenericNode* root = Parser::load(fileInfo.path(), false, allocator);
+		GenericNodeAllocator* allocator = new GenericNodeAllocator();
+		GenericNode* root = Parser::load(fileInfo.filePath(), false, allocator);
 		extractParents(nodes, root);
 		allocator->endThisLoad();
 		delete allocator;
