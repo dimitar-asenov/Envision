@@ -246,6 +246,28 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 	return Diff(carryAlongData.oldNodes_, carryAlongData.newNodes_);
 }
 
+CommitGraph GitRepository::commitGraph(QString start, QString end) const
+{
+	git_commit* gitStartCommit = parseCommit(start);
+	const git_oid* startOID = git_commit_id(gitStartCommit);
+	char* sha = git_oid_allocfmt(startOID);
+	QString startSHA(sha);
+	delete sha;
+
+	git_commit* gitEndCommit = parseCommit(end);
+	const git_oid* endOID = git_commit_id(gitEndCommit);
+	sha = git_oid_allocfmt(endOID);
+	QString endSHA(sha);
+	delete sha;
+
+	CommitGraph graph(startSHA, endSHA);
+	traverseCommitGraph(&graph, gitEndCommit, startOID);
+
+	git_commit_free(gitStartCommit);
+	git_commit_free(gitEndCommit);
+	return graph;
+}
+
 CommitProperties GitRepository::getCommitProperties(QString commit)
 {
 	CommitProperties properties;
@@ -429,6 +451,42 @@ GenericNode* GitRepository::copyGenericNode(const GenericNode* node)
 
 	// children list stays empty
 	return copy;
+}
+
+void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const
+{
+	const git_oid* oid = git_commit_id(current);
+	char* sha = git_oid_allocfmt(oid);
+	QString currentSHA(sha);
+	delete sha;
+
+	if (git_oid_cmp(oid, target) != 0)
+	{
+		unsigned int numParents = git_commit_parentcount(current);
+		for (unsigned int i = 0; i < numParents; i++)
+		{
+			git_commit* parent = nullptr;
+			int errorCode = git_commit_parent(&parent, current, i);
+			checkError(errorCode);
+
+			const git_oid* parentOID = git_commit_id(parent);
+			int parentIsTarget = git_oid_cmp(parentOID, target);
+			int isConnected = git_graph_descendant_of(repository_, parentOID, target);
+			if (isConnected == 1 || parentIsTarget == 0) {
+				sha = git_oid_allocfmt(parentOID);
+				QString parentSHA(sha);
+				delete sha;
+
+				graph->add(parentSHA, currentSHA);
+
+				traverseCommitGraph(graph, parent, target);
+			}
+			else if (isConnected != 0)
+				checkError(isConnected);
+
+			git_commit_free(parent);
+		}
+	}
 }
 
 git_commit* GitRepository::parseCommit(QString commit) const

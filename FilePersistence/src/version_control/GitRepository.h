@@ -27,12 +27,14 @@
 #pragma once
 
 #include "Diff.h"
+#include "CommitGraph.h"
 
 #include <QDateTime>
 
 struct git_repository;
 struct git_tree;
 struct git_commit;
+struct git_oid;
 
 namespace FilePersistence {
 
@@ -62,6 +64,7 @@ class FILEPERSISTENCE_API GitRepository
 		~GitRepository();
 
 		Diff diff(QString oldCommit, QString newCommit) const;
+		CommitGraph commitGraph(QString start, QString end) const;
 
 		CommitProperties getCommitProperties(QString commit);
 		CommitContent getCommitContent(QString commit) const;
@@ -78,6 +81,8 @@ class FILEPERSISTENCE_API GitRepository
 
 		void extractParents(IdToGenericNodeHash nodes, GenericNode* root) const;
 		static GenericNode* copyGenericNode(const GenericNode* node);
+
+		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 
 		git_commit* parseCommit(QString commit) const;
 
