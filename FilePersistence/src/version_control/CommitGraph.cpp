@@ -28,7 +28,16 @@
 
 namespace FilePersistence {
 
-CommitGraph::CommitGraph(){}
+CommitGraphItem::CommitGraphItem(QString sha) { commitSHA_ = sha; }
+
+CommitGraph::CommitGraph(QString start, QString end)
+{
+	start_ = new CommitGraphItem(start);
+	items_.insert(start, start_);
+
+	end_ = new CommitGraphItem(end);
+	items_.insert(end, end_);
+}
 
 CommitGraph::~CommitGraph()
 {
@@ -46,8 +55,8 @@ void CommitGraph::add(QString fromCommitSHA, QString toCommitSHA)
 		fromItem = iter.value();
 	else
 	{
-		fromItem = new CommitGraphItem();
-		fromItem->commitSHA_ = fromCommitSHA;
+		fromItem = new CommitGraphItem(fromCommitSHA);
+		items_.insert(fromCommitSHA, fromItem);
 	}
 
 	iter = items_.find(toCommitSHA);
@@ -55,12 +64,21 @@ void CommitGraph::add(QString fromCommitSHA, QString toCommitSHA)
 		toItem = iter.value();
 	else
 	{
-		toItem = new CommitGraphItem();
-		toItem->commitSHA_ = fromCommitSHA;
+		toItem = new CommitGraphItem(toCommitSHA);
+		items_.insert(toCommitSHA, toItem);
 	}
 
 	fromItem->children_.append(toItem);
 	toItem->parents_.append(fromItem);
+}
+
+const CommitGraphItem* CommitGraph::find(QString commit) const
+{
+	QHash<QString, CommitGraphItem*>::const_iterator iter = items_.find(commit);
+	if (iter != items_.end())
+		return nullptr;
+	else
+		return iter.value();
 }
 
 } /* namespace FilePersistence */

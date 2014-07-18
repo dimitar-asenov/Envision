@@ -36,27 +36,32 @@ struct CommitGraphItem
 
 	QList<CommitGraphItem*> children_;
 	QList<CommitGraphItem*> parents_;
+
+	CommitGraphItem(QString sha);
 };
+
 
 class FILEPERSISTENCE_API CommitGraph
 {
 	public:
-		CommitGraph();
+		CommitGraph(QString start, QString end);
 		~CommitGraph();
 
 		void add(QString fromCommitSHA, QString toCommitSHA);
+
+		const CommitGraphItem* find(QString commit) const;
 
 		const CommitGraphItem* start() const;
 		const CommitGraphItem* end() const;
 
 	private:
-		CommitGraphItem* startPoint_;
-		CommitGraphItem* endPoint_;
+		CommitGraphItem* start_;
+		CommitGraphItem* end_;
 
 		QHash<QString, CommitGraphItem*> items_;
 };
 
-inline const CommitGraphItem* CommitGraph::start() const { return startPoint_; }
-inline const CommitGraphItem* CommitGraph::end() const { return endPoint_; }
+inline const CommitGraphItem* CommitGraph::start() const { return start_; }
+inline const CommitGraphItem* CommitGraph::end() const { return end_; }
 
 } /* namespace FilePersistence */
