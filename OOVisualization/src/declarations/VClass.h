@@ -79,6 +79,7 @@ class OOVISUALIZATION_API VClass
 		QList<Model::Node*> privateFields_{};
 		QList<Model::Node*> protectedFields_{};
 		QList<Model::Node*> defaultFields_{};
+		Item* comment_{};
 };
 
 }

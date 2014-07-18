@@ -45,6 +45,8 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
+#include "Comments/src/nodes/CommentNode.h"
+
 namespace Interaction {
 
 void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>)
@@ -401,6 +403,60 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				p->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			}
 		}
+	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F1)
+	{
+		auto aNode = target;
+		while (aNode)
+		{
+			auto aCompositeNode = DCast<Model::CompositeNode>(aNode->node());
+			if (aCompositeNode && aCompositeNode->comment() == nullptr)
+			{
+				aCompositeNode->beginModification("add comment");
+				aCompositeNode->setComment(new Comments::CommentNode());
+				aCompositeNode->endModification();
+				break;
+			}
+			aNode = aNode->parent();
+		}
+	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F2)
+	{
+		auto aNode = target;
+		while (aNode)
+		{
+			auto aCompositeNode = DCast<Model::CompositeNode>(aNode->node());
+			if (aCompositeNode && aCompositeNode->comment() != nullptr)
+			{
+				aCompositeNode->beginModification("delete comment");
+				aCompositeNode->setComment(nullptr);
+				aCompositeNode->endModification();
+				break;
+			}
+			aNode = aNode->parent();
+		}
+	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F3)
+	{
+		auto scene = target->scene();
+		scene->clearFocus();
+		scene->clearSelection();
+		scene->setMainCursor(nullptr);
+
+		QList<Visualization::Item*> stack = scene->topLevelItems();
+
+		while (!stack.isEmpty())
+		{
+			auto i = stack.takeLast();
+			if (auto aCompositeNode = DCast<Model::CompositeNode>(i->node()))
+			{
+				if (aCompositeNode->comment() != nullptr)
+					i->setSelected(true);
+			}
+			stack.append(i->childItems());
+		}
+
+		scene->scheduleUpdate();
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }

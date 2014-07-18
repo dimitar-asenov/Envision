@@ -33,6 +33,7 @@
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "Comments/src/items/VComment.h"
 
 namespace Visualization {
 	class VText;
@@ -67,6 +68,7 @@ class OOVISUALIZATION_API VMethod
 		Visualization::VList* arguments_{};
 		Visualization::Line* signatureLine_{};
 		Item* body_{};
+		Item* comment_{};
 		VStatementItemList* annotations_{};
 		Visualization::SequentialLayout* addons_{};
 		Visualization::VList* results_{};

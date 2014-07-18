@@ -26,10 +26,13 @@
 
 #include "nodes/composite/CompositeNode.h"
 #include "../../commands/CompositeNodeChangeChild.h"
+#include "Comments/src/nodes/CommentNode.h"
 
 namespace Model {
 
 DEFINE_TYPE_ID_DERIVED(CompositeNode, "CompositeNode", )
+
+REGISTER_ATTRIBUTE(CompositeNode, comment, Node, false, true, true)
 
 int CompositeNode::nextExtensionId_ = 0;
 
@@ -39,6 +42,10 @@ void CompositeNode::initType()
 			[](Node* parent) -> Node* { return CompositeNode::createDefaultInstance(parent);},
 			[](Node *parent, PersistentStore &store, bool partialLoadHint) -> Node*
 			{ return new CompositeNode(parent, store, partialLoadHint);});
+
+	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)
+		attributesToRegisterAtInitialization_().at(i).first =
+				registerNewAttribute(attributesToRegisterAtInitialization_().at(i).second);
 }
 
 CompositeNode* CompositeNode::createDefaultInstance( Node* parent)
@@ -142,6 +149,26 @@ CompositeIndex CompositeNode::registerNewAttribute(AttributeChain& metaData, con
 	return CompositeIndex(metaData.numLevels() - 1, metaData.size() - 1);
 }
 
+CompositeIndex CompositeNode::registerNewAttribute(const Attribute& attribute)
+{
+	return registerNewAttribute(getMetaData(), attribute);
+}
+
+CompositeIndex CompositeNode::addAttributeToInitialRegistrationList_ (CompositeIndex& index,
+	const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional,
+			 bool isPersistent)
+{
+	attributesToRegisterAtInitialization_().append(QPair< CompositeIndex&, Attribute>(index,
+			Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));
+	return CompositeIndex();
+}
+
+QList<QPair< CompositeIndex&, Attribute> >& CompositeNode::attributesToRegisterAtInitialization_()
+{
+	static QList<QPair< CompositeIndex&, Attribute> > a;
+	return a;
+}
+
 void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 {
 	Q_ASSERT( attributeIndex.isValid() );
@@ -149,7 +176,7 @@ void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 	Q_ASSERT( attributeIndex.index() < subnodes_[attributeIndex.level()].size());
 	auto attribute = meta_.attribute(attributeIndex);
 	Q_ASSERT( node || attribute.optional());
-	Q_ASSERT( !node || node->isSubtypeOf(attribute.type()));
+	//Q_ASSERT( !node || node->isSubtypeOf(attribute.type()));
 	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes_));
 }
 

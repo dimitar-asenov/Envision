@@ -36,6 +36,7 @@
 
 using namespace Visualization;
 using namespace OOModel;
+using namespace Comments;
 
 namespace OOVisualization {
 
@@ -97,6 +98,8 @@ void VMethod::initializeForms()
 													v->node()->memberInitializers() : nullptr;},
 											[](I* v){return &v->style()->memberInitializers();});
 
+	auto comment = item(&I::comment_, [](I* v){return v->node()->comment();});
+
 	auto signatureLineElement = item<Line>(&I::signatureLine_, [](I* v){return &v->style()->signatureLine();});
 
 	auto bodyElement = item(&I::body_, [](I* v){return v->node()->items();});
@@ -106,9 +109,10 @@ void VMethod::initializeForms()
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->put(0, 0, addonsElement)
 			->put(0, 1, annotationsElement)
-			->put(0, 2, signatureLineElement)
-			->put(0, 3, memberInitializersElement)
-			->put(0, 4, bodyElement);
+			->put(0, 2, comment)
+			->put(0, 3, signatureLineElement)
+			->put(0, 4, memberInitializersElement)
+			->put(0, 5, bodyElement);
 
 	auto shapeElement = new ShapeFormElement();
 
