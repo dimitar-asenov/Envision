@@ -347,6 +347,19 @@ CommitContent GitRepository::getCommitContent(QString commit) const
 	return commitContent;
 }
 
+QString GitRepository::getSHA(QString commit) const
+{
+	git_commit* gitCommit = parseCommit(commit);
+
+	const git_oid* oid = git_commit_id(gitCommit);
+	char* sha = git_oid_allocfmt(oid);
+	QString commitSHA(sha);
+	delete sha;
+	git_commit_free(gitCommit);
+
+	return commitSHA;
+}
+
 void GitRepository::checkout(QString commit, bool force)
 {
 	if (commit.compare(WORKDIR) != 0)

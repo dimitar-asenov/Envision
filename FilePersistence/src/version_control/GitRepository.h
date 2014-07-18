@@ -69,6 +69,8 @@ class FILEPERSISTENCE_API GitRepository
 		CommitProperties getCommitProperties(QString commit);
 		CommitContent getCommitContent(QString commit) const;
 
+		QString getSHA(QString commit) const;
+
 		void checkout(QString commit, bool force);
 
 		static const QString WORKDIR;
