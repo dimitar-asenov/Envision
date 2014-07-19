@@ -517,4 +517,24 @@ TEST(FilePersistencePlugin, combinationDetection)
 	CHECK_CONDITION(parentFlags.testFlag(ChangeDescription::Children));
 }
 
+TEST(FilePersistencePlugin, compareUpdateFlags)
+{
+	ChangeDescription::UpdateFlags flags1;
+	ChangeDescription::UpdateFlags flags2;
+	ChangeDescription::UpdateFlags flags3;
+
+	flags1 |= ChangeDescription::Order;
+	flags1 |= ChangeDescription::Value;
+
+	flags2 |= ChangeDescription::Order;
+	flags2 |= ChangeDescription::Value;
+
+	flags3 |= ChangeDescription::Order;
+	flags3 |= ChangeDescription::Type;
+
+	CHECK_CONDITION(ChangeDescription::compareUpdateFlags(flags1, flags2));
+	CHECK_CONDITION(!ChangeDescription::compareUpdateFlags(flags1, flags3));
+	CHECK_CONDITION(!ChangeDescription::compareUpdateFlags(flags2, flags3));
+}
+
 } /* namespace FilePersistence */

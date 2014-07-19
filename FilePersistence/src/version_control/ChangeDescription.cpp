@@ -59,6 +59,14 @@ ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
 	}
 }
 
+bool ChangeDescription::compareUpdateFlags(const UpdateFlags flags1, const UpdateFlags flags2)
+{
+	if (int(flags1) == int(flags2))
+		return true;
+	else
+		return false;
+}
+
 void ChangeDescription::fundamentalChangeClassification()
 {
 	if (oldNode_ == nullptr)

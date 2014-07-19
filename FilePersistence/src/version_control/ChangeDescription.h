@@ -47,6 +47,8 @@ class FILEPERSISTENCE_API ChangeDescription
 		};
 		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
 
+		static bool compareUpdateFlags(const UpdateFlags flags1, const UpdateFlags flags2);
+
 		void print() const;
 
 		void setChildrenUpdate(bool isUpdate);
