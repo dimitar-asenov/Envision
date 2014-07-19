@@ -27,10 +27,9 @@
 #pragma once
 
 #include "../simple/GenericNode.h"
+#include "ChangeDescription.h"
 
 namespace FilePersistence {
-
-class ChangeDescription;
 
 using IdToGenericNodeHash = QHash<Model::NodeIdType, GenericNode*>;
 using IdToChangeDescriptionHash = QHash<Model::NodeIdType, ChangeDescription*>;
@@ -44,6 +43,8 @@ class FILEPERSISTENCE_API Diff
 		void print() const;
 
 		IdToChangeDescriptionHash changes() const;
+		IdToChangeDescriptionHash changes(ChangeType type) const;
+		IdToChangeDescriptionHash changes(ChangeType type, ChangeDescription::UpdateFlags flags) const;
 
 	private:
 		void idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);

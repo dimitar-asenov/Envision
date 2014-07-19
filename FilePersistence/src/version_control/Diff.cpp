@@ -70,6 +70,29 @@ void Diff::print() const
 	std::cout << "----------------------------------------" << std::endl;
 }
 
+IdToChangeDescriptionHash Diff::changes(ChangeType type) const
+{
+	IdToChangeDescriptionHash changesOfType;
+	for (ChangeDescription* change : changeDescriptions_.values())
+	{
+		if (change->type() == type)
+			changesOfType.insert(change->id(), change);
+	}
+	return changesOfType;
+}
+
+IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::UpdateFlags flags) const
+{
+	IdToChangeDescriptionHash changesOfType;
+	for (ChangeDescription* change : changeDescriptions_.values())
+	{
+		if (change->type() == type &&
+			 ChangeDescription::compareUpdateFlags(flags, change->flags()))
+			changesOfType.insert(change->id(), change);
+	}
+	return changesOfType;
+}
+
 // Private methods
 void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes)
 {
