@@ -443,9 +443,11 @@ void GitRepository::extractParents(IdToGenericNodeHash nodes, GenericNode* root)
 		{
 			// found node in tree
 			if (current->parent() != nullptr)
-				node->setParent(copyGenericNode(current->parent()));
-			else
-				node->setParent(nullptr);
+			{
+				GenericNode* parent = copyGenericNode(current->parent());
+				node->setParent(parent);
+				parent->addChild(node);
+			}
 		}
 	}
 }
