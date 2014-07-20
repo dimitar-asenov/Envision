@@ -83,12 +83,15 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::
 
 QSet<Model::NodeIdType> History::trackSubtree(const GitRepository* repository) const
 {
-	QString startCommit = historyGraph_->start()->commitSHA_;
-	CommitContent commitContent = repository->getCommitContent(startCommit);
+	// TODO adapt to new GitRepository
+
+	QString startCommitSpec = historyGraph_->start()->commitSHA_;
+	Commit startCommit = repository->getCommit(startCommitSpec);
 
 	QSet<Model::NodeIdType> trackedIDs;
 
-	for (QString file : commitContent.files_)
+	/*
+	for (QString file : startCommit.files_)
 	{
 		const char* data = commitContent.content_.value(file);
 		qint64 dataLength = commitContent.size_.value(file);
@@ -113,6 +116,7 @@ QSet<Model::NodeIdType> History::trackSubtree(const GitRepository* repository) c
 		}
 		delete allocator;
 	}
+	*/
 
 	return trackedIDs;
 }

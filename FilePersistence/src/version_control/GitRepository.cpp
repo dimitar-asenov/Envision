@@ -35,19 +35,18 @@
 
 namespace FilePersistence {
 
-
-CommitContent::~CommitContent()
-{
-	for (const char* data : content_.values())
-		delete data;
-}
-
 // === Libgit2 call-back functions ===
 
 struct GitDiffExtract
 {
 	IdToGenericNodeHash oldNodes_;
 	IdToGenericNodeHash newNodes_;
+};
+
+struct GitCommitExtract
+{
+		git_repository* repository_;
+		QList<CommitFile*> files_;
 };
 
 struct GitTreeBlobs
@@ -105,6 +104,45 @@ int gitDiffExtractLineCB(
 }
 
 // Tree Walk Callback
+int treeWalkCommitExtractCB(const char* root,
+									 const git_tree_entry* entry,
+									 void* walkData)
+{
+	GitCommitExtract* data = (GitCommitExtract*) walkData;
+
+	git_object* obj = nullptr;
+	int errorCode = git_tree_entry_to_object(&obj, data->repository_, entry);
+
+	if (errorCode == 0)
+	{
+		if (git_object_type(obj) == GIT_OBJ_BLOB)
+		{
+			CommitFile* file = new CommitFile();
+
+			QString rootPath(root);
+			QString fileName(git_tree_entry_name(entry));
+			QString relativePath = rootPath.append(fileName);
+			file->relativePath_ = relativePath;
+
+			git_blob* blob = (git_blob*)obj;
+
+			qint64 contentSize = git_blob_rawsize(blob);
+			file->size_ = contentSize;
+
+			const char* rawContent = (const char*)git_blob_rawcontent(blob);
+			char* content = new char[contentSize];
+			memcpy(content, rawContent, contentSize);
+			file->content_ = content;
+
+			git_blob_free(blob);
+		}
+	}
+	else
+		Q_ASSERT(false);
+
+	return 0;
+}
+
 
 int treeWalkBlobExtractionCB(const char *,
 				const git_tree_entry *entry,
@@ -268,83 +306,117 @@ CommitGraph GitRepository::commitGraph(QString start, QString end) const
 	return graph;
 }
 
-CommitProperties GitRepository::getCommitProperties(QString commit)
+Commit GitRepository::getCommit(QString commitSpec) const
 {
-	CommitProperties properties;
+	Q_ASSERT(commitSpec.compare(WORKDIR) != 0);
+	Q_ASSERT(commitSpec.compare(INDEX) != 0);
 
-	if (commit.compare(WORKDIR) != 0 && commit.compare(INDEX) != 0)
-	{
-		git_commit* gitCommit = parseCommit(commit);
-
-		const git_oid* oid = git_commit_id(gitCommit);
-		char* sha = git_oid_allocfmt(oid);
-		properties.sha_ = QString(sha);
-		delete sha;
-
-		const char* msg = git_commit_message(gitCommit);
-		properties.message_ = QString(msg);
-
-		git_time_t time = git_commit_time(gitCommit);
-		properties.dateTime_.setTime_t(time);
-
-		const git_signature* committer = git_commit_committer(gitCommit);
-		properties.committerName_ = QString(committer->name);
-		properties.committerEMail_ = QString(committer->email);
-
-		const git_signature* author = git_commit_author(gitCommit);
-		properties.authorName_ = QString(author->name);
-		properties.authorEMail_ = QString(author->email);
-
-		unsigned int parentCount = git_commit_parentcount(gitCommit);
-		for (unsigned int i = 0; i < parentCount; i++)
-		{
-			const git_oid* parentID = git_commit_parent_id(gitCommit, i);
-			char* sha = git_oid_allocfmt(parentID);
-			properties.parents_.append(QString(sha));
-			delete sha;
-		}
-
-		git_commit_free(gitCommit);
-	}
-
-	return properties;
-}
-
-CommitContent GitRepository::getCommitContent(QString commit) const
-{
-	CommitContent commitContent;
 	int errorCode = 0;
 
-	// parse commit
-	git_commit* gitCommit = parseCommit(commit);
+	git_commit* gitCommit = parseCommit(commitSpec);
 	git_tree* tree = nullptr;
 	errorCode = git_commit_tree(&tree, gitCommit);
 	checkError(errorCode);
 
-	// extract blobs here and store them
-	GitTreeBlobs carryAlongData;
-	carryAlongData.repository_ = repository_;
+	GitCommitExtract treeWalkData;
+	treeWalkData.repository_ = repository_;
 
-	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkBlobExtractionCB, &carryAlongData);
+	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkCommitExtractCB, &treeWalkData);
 	checkError(errorCode);
 
-	for (int i = 0; i < carryAlongData.blobs_.size(); i++)
+	CommitInformation info = getCommitInformation(commitSpec);
+
+	git_commit_free(gitCommit);
+	git_tree_free(tree);
+
+	Commit commit(info, treeWalkData.files_);
+	return commit;
+}
+
+CommitFile GitRepository::getCommitFile(QString commitSpec, QString relativePath) const
+{
+	Q_ASSERT(commitSpec.compare(WORKDIR) != 0);
+	Q_ASSERT(commitSpec.compare(INDEX) != 0);
+
+	int errorCode = 0;
+
+	git_commit* gitCommit = parseCommit(commitSpec);
+	git_tree* tree = nullptr;
+	errorCode = git_commit_tree(&tree, gitCommit);
+	checkError(errorCode);
+
+	git_tree_entry* treeEntry = nullptr;
+	errorCode = git_tree_entry_bypath(&treeEntry, tree, relativePath.toStdString().c_str());
+	checkError(errorCode);
+
+	git_object* obj = nullptr;
+	errorCode = git_tree_entry_to_object(&obj, repository_, treeEntry);
+	checkError(errorCode);
+
+	CommitFile file;
+	if (git_object_type(obj) == GIT_OBJ_BLOB)
 	{
-		git_blob* blob = carryAlongData.blobs_.at(i);
-		QString fileName = carryAlongData.fileNames_.at(i);
+		file.relativePath_ = relativePath;
+
+		git_blob* blob = (git_blob*)obj;
+
+		qint64 contentSize = git_blob_rawsize(blob);
+		file.size_ = contentSize;
 
 		const char* rawContent = (const char*)git_blob_rawcontent(blob);
-		qint64 contentSize = git_blob_rawsize(blob);
-
 		char* content = new char[contentSize];
 		memcpy(content, rawContent, contentSize);
-
-		commitContent.files_.append(fileName);
-		commitContent.content_.insert(fileName, content);
-		commitContent.size_.insert(fileName, contentSize);
+		file.content_ = content;
 	}
 
-	return commitContent;
+	git_commit_free(gitCommit);
+	git_tree_free(tree);
+	git_tree_entry_free(treeEntry);
+	git_object_free(obj);
+
+	return file;
+}
+
+CommitInformation GitRepository::getCommitInformation(QString commitSpec) const
+{
+	CommitInformation info;
+
+	if (commitSpec.compare(WORKDIR) != 0 && commitSpec.compare(INDEX) != 0)
+	{
+		git_commit* gitCommit = parseCommit(commitSpec);
+
+		// SHA
+		const git_oid* oid = git_commit_id(gitCommit);
+		char* sha = git_oid_allocfmt(oid);
+		info.sha_ = QString(sha);
+		delete sha;
+
+		// Message
+		const char* msg = git_commit_message(gitCommit);
+		info.message_ = QString(msg);
+
+		// Date and Time
+		git_time_t time = git_commit_time(gitCommit);
+		info.dateTime_.setTime_t(time);
+
+		// Committer
+		Signature committer;
+		const git_signature* gitCommitter = git_commit_committer(gitCommit);
+		committer.name_ = QString(gitCommitter->name);
+		committer.eMail_ = QString(gitCommitter->email);
+		info.committer_ = committer;
+
+		// Author
+		Signature author;
+		const git_signature* gitAuthor = git_commit_author(gitCommit);
+		author.name_ = QString(gitAuthor->name);
+		author.eMail_ = QString(gitAuthor->email);
+		info.author_ = author;
+
+		git_commit_free(gitCommit);
+	}
+
+	return info;
 }
 
 QString GitRepository::getSHA(QString commit) const

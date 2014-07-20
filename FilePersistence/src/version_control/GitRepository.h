@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "Commit.h"
 #include "Diff.h"
 #include "CommitGraph.h"
 
@@ -38,25 +39,6 @@ struct git_oid;
 
 namespace FilePersistence {
 
-struct CommitProperties {
-	QString sha_;
-	QString message_;
-	QDateTime dateTime_;
-	QString committerName_;
-	QString committerEMail_;
-	QString authorName_;
-	QString authorEMail_;
-	QList<QString> parents_;
-};
-
-struct CommitContent {
-	QList<QString> files_;
-	QHash<QString, qint64> size_;
-	QHash<QString, const char*> content_;
-
-	~CommitContent();
-};
-
 class FILEPERSISTENCE_API GitRepository
 {
 	public:
@@ -66,8 +48,9 @@ class FILEPERSISTENCE_API GitRepository
 		Diff diff(QString oldCommit, QString newCommit) const;
 		CommitGraph commitGraph(QString start, QString end) const;
 
-		CommitProperties getCommitProperties(QString commit);
-		CommitContent getCommitContent(QString commit) const;
+		Commit getCommit(QString commitSpec) const;
+		CommitFile getCommitFile(QString commitSpec, QString relativePath) const;
+		CommitInformation getCommitInformation(QString commitSpec) const;
 
 		QString getSHA(QString commit) const;
 
