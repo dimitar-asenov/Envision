@@ -27,19 +27,22 @@
 #include "History.h"
 
 #include "GitRepository.h"
+#include "ChangeDescription.h"
+#include "simple/Parser.h"
+#include "simple/GenericNodeAllocator.h"
 
 namespace FilePersistence {
 
-History::History(Model::NodeIdType rootNodeId, CommitGraph* historyGraph, GitRepository* repository)
+History::History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, const GitRepository* repository)
 {
 	rootNodeId_ = rootNodeId;
 	historyGraph_ = historyGraph;
 
-	relevantCommits_.insert(historyGraph_->start()->commitSHA_);
-	relevantCommits_.insert(historyGraph_->end()->commitSHA_);
+	const CommitGraphItem* start = historyGraph_->start();
+	relevantCommits_.insert(start->commitSHA_);
 
-	// TODO call detectRelevantCommits
-	(void) repository;
+	QSet<Model::NodeIdType> trackedIDs = trackSubtree(repository);
+	detectRelevantCommits(start, trackedIDs, repository);
 }
 
 History::~History()
@@ -48,22 +51,230 @@ History::~History()
 }
 
 
-void History::detectRelevantCommits(CommitGraphItem* current, GitRepository* repository)
+void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::NodeIdType> trackedIDs,
+												const GitRepository* repository)
 {
-	// TODO load current GenericNode AST
-
-	// TODO find subtree nodes
-
 	for (CommitGraphItem* child : current->children_)
 	{
-		// run diff
 		Diff diff = repository->diff(current->commitSHA_, child->commitSHA_);
 		IdToChangeDescriptionHash changes = diff.changes();
 
-		// TODO check if a subtree node is affected
+		bool isRelevant = false;
+		for (ChangeDescription* change : changes.values())
+		{
+			if (trackedIDs.contains(change->id()))
+			{
+				isRelevant = true;
+				break;
+			}
+		}
 
-		// TODO recursive call on child
+		if (isRelevant)
+		{
+			relevantCommits_.insert(child->commitSHA_);
+			QSet<Model::NodeIdType> newTrackedIDs = updateTrackedIDs(newTrackedIDs, &diff);
+
+			detectRelevantCommits(child, newTrackedIDs, repository);
+		}
+		else
+			detectRelevantCommits(child, trackedIDs, repository);
 	}
+}
+
+QSet<Model::NodeIdType> History::trackSubtree(const GitRepository* repository) const
+{
+	QString startCommit = historyGraph_->start()->commitSHA_;
+	CommitContent commitContent = repository->getCommitContent(startCommit);
+
+	QSet<Model::NodeIdType> trackedIDs;
+
+	for (QString file : commitContent.files_)
+	{
+		const char* data = commitContent.content_.value(file);
+		qint64 dataLength = commitContent.size_.value(file);
+		GenericNodeAllocator* allocator = new GenericNodeAllocator();
+		GenericNode* fileRoot = Parser::load(data, dataLength, false, allocator);
+
+		GenericNode* subtreeRoot = fileRoot->find(rootNodeId_);
+		if (subtreeRoot != nullptr)
+		{
+			QList<GenericNode*> stack;
+			stack.append(subtreeRoot);
+			while (!stack.isEmpty())
+			{
+				GenericNode* current = stack.last();
+				stack.removeLast();
+
+				trackedIDs.insert(current->id());
+
+				for (GenericNode* child : current->children())
+					stack.append(child);
+			}
+		}
+		delete allocator;
+	}
+
+	return trackedIDs;
+}
+
+QSet<Model::NodeIdType> History::updateTrackedIDs(const QSet<Model::NodeIdType> trackedIDs, const Diff* diff) const
+{
+	QSet<Model::NodeIdType> newTrackedIDs(trackedIDs);
+	QSet<Model::NodeIdType> coveredStationaryOld;
+	QSet<Model::NodeIdType> coveredStationaryNew;
+
+	IdToChangeDescriptionHash changes = diff->changes();
+
+	IdToChangeDescriptionHash stationary = diff->changes(ChangeType::Stationary);
+	for (ChangeDescription* change : stationary.values())
+	{
+		ChangeDescription::UpdateFlags flags = change->flags();
+		if (trackedIDs.contains(change->id()) && flags.testFlag(ChangeDescription::Children))
+		{
+			QList<const GenericNode*> nodes;
+			const GenericNode* current = nullptr;
+
+			const GenericNode* oldNode = change->oldNode();
+			if (!coveredStationaryOld.contains(change->id()))
+			{
+				nodes.append(oldNode);
+				coveredStationaryOld.insert(change->id());
+			}
+			while (!nodes.isEmpty())
+			{
+				current = nodes.last();
+				nodes.removeLast();
+
+				for (GenericNode* child : current->children())
+				{
+					Model::NodeIdType id = child->id();
+					IdToChangeDescriptionHash::iterator iter = changes.find(id);
+					Q_ASSERT(iter != changes.end());
+					ChangeDescription* childChange = iter.value();
+					ChangeType type = childChange->type();
+
+					switch (type)
+					{
+						case ChangeType::Deleted:
+						{
+							newTrackedIDs.remove(id);
+							nodes.append(child);
+						}
+							break;
+
+						case ChangeType::Moved:
+						{
+							QList<const GenericNode*> movedNodes;
+							const GenericNode* currentMoved;
+
+							movedNodes.append(child);
+							while (!movedNodes.isEmpty())
+							{
+								currentMoved = movedNodes.last();
+								movedNodes.removeLast();
+
+								newTrackedIDs.remove(currentMoved->id());
+
+								for (GenericNode* childChild : currentMoved->children())
+								{
+									movedNodes.append(childChild);
+									iter = changes.find(childChild->id());
+									if (iter != changes.end())
+									{
+										ChangeDescription* description = iter.value();
+										if (description->type() == ChangeType::Stationary)
+											coveredStationaryOld.insert(childChild->id());
+									}
+								}
+							}
+						}
+							break;
+
+						case ChangeType::Stationary:
+						{
+							if (!coveredStationaryOld.contains(child->id()))
+								nodes.append(child);
+						}
+							break;
+
+						default:
+							Q_ASSERT(false);
+					}
+				}
+			}
+
+			Q_ASSERT(nodes.isEmpty());
+			const GenericNode* newNode = change->newNode();
+			if (!coveredStationaryNew.contains(change->id()))
+			{
+				nodes.append(newNode);
+				coveredStationaryNew.insert(change->id());
+			}
+			while (!nodes.isEmpty())
+			{
+				current = nodes.last();
+				nodes.removeLast();
+
+				for (GenericNode* child : current->children())
+				{
+					Model::NodeIdType id = child->id();
+					IdToChangeDescriptionHash::iterator iter = changes.find(id);
+					Q_ASSERT(iter != changes.end());
+					ChangeDescription* childChange = iter.value();
+					ChangeType type = childChange->type();
+
+					switch (type)
+					{
+						case ChangeType::Added:
+						{
+							newTrackedIDs.insert(id);
+							nodes.append(child);
+						}
+							break;
+
+						case ChangeType::Moved:
+						{
+							QList<const GenericNode*> movedNodes;
+							const GenericNode* currentMoved;
+
+							movedNodes.append(child);
+							while (!movedNodes.isEmpty())
+							{
+								currentMoved = movedNodes.last();
+								movedNodes.removeLast();
+
+								newTrackedIDs.remove(currentMoved->id());
+
+								for (GenericNode* childChild : currentMoved->children())
+								{
+									movedNodes.append(childChild);
+									iter = changes.find(childChild->id());
+									if (iter != changes.end())
+									{
+										ChangeDescription* description = iter.value();
+										if (description->type() == ChangeType::Stationary)
+											coveredStationaryNew.insert(childChild->id());
+									}
+								}
+							}
+						}
+							break;
+
+						case ChangeType::Stationary:
+						{
+							if (!coveredStationaryNew.contains(child->id()))
+								nodes.append(child);
+						}
+							break;
+
+						default:
+							Q_ASSERT(false);
+					}
+				}
+			}
+		}
+	}
+	return newTrackedIDs;
 }
 
 } /* namespace FilePersistence */

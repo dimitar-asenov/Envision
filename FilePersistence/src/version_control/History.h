@@ -32,21 +32,23 @@
 namespace FilePersistence {
 
 class GitRepository;
+class Diff;
 
 class FILEPERSISTENCE_API History
 {
 	public:
-		History(Model::NodeIdType rootNodeId, CommitGraph* historyGraph, GitRepository* repository);
+		History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, const GitRepository* repository);
 		~History();
 
 	private:
-		void detectRelevantCommits(CommitGraphItem* current, GitRepository* repository);
+		void detectRelevantCommits(const CommitGraphItem* current, QSet<Model::NodeIdType> tackedIDs,
+											const GitRepository* repository);
 
+		QSet<Model::NodeIdType> trackSubtree(const GitRepository* repository) const;
+		QSet<Model::NodeIdType> updateTrackedIDs(const QSet<Model::NodeIdType> trackedIDs, const Diff* diff) const;
 
 		Model::NodeIdType rootNodeId_;
-
-		CommitGraph* historyGraph_{};
-
+		const CommitGraph* historyGraph_{};
 		QSet<QString> relevantCommits_;
 };
 
