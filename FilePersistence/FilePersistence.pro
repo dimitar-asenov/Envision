@@ -19,7 +19,8 @@ HEADERS += src/simple/Parser.h \
     src/version_control/Diff.h \
     src/version_control/GitRepository.h \
     src/version_control/CommitGraph.h \
-    src/version_control/History.h
+    src/version_control/History.h \
+    src/version_control/Commit.h
 SOURCES += src/simple/Parser.cpp \
     src/simple/GenericNode.cpp \
     src/simple/GenericNodeAllocator.cpp \
@@ -39,7 +40,8 @@ SOURCES += src/simple/Parser.cpp \
     src/version_control/GitRepository.cpp \
     test/VersionControlDiffTests.cpp \
     src/version_control/CommitGraph.cpp \
-    src/version_control/History.cpp
+    src/version_control/History.cpp \
+    src/version_control/Commit.cpp
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2
