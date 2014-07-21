@@ -30,6 +30,7 @@
 #include "../autocomplete/AutoComplete.h"
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
+#include "vis/CommentWrapper.h"
 #include "actions/Action.h"
 #include "actions/ActionPrompt.h"
 
@@ -96,6 +97,8 @@ CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngin
 CommandPrompt* GenericHandler::commandPrompt_{};
 ActionPrompt* GenericHandler::actionPrompt_{};
 
+CommentWrapper* GenericHandler::commentWrapper_{};
+
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
 
@@ -155,6 +158,24 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 	{
 		removeCommandPrompt();
 		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
+	}
+}
+
+void GenericHandler::showComment(Visualization::Item *commentRecevier, Model::Node *aNode)
+{
+	if (commentWrapper_ && commentWrapper_->wrappedItem()->node() == aNode)
+	{
+		if (commentWrapper_->isVisible())
+			commentWrapper_->hide();
+		else
+		{
+			commentWrapper_->show();
+		}
+	}
+	else
+	{
+		SAFE_DELETE_ITEM(commentWrapper_);
+		commentWrapper_ = new CommentWrapper(commentRecevier, aNode);
 	}
 }
 
@@ -410,11 +431,15 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		while (aNode)
 		{
 			auto aCompositeNode = DCast<Model::CompositeNode>(aNode->node());
-			if (aCompositeNode && aCompositeNode->comment() == nullptr)
+			if (aCompositeNode)
 			{
-				aCompositeNode->beginModification("add comment");
-				aCompositeNode->setComment(new Comments::CommentNode());
-				aCompositeNode->endModification();
+				if (aCompositeNode->comment() == nullptr)
+				{
+					aCompositeNode->beginModification("add comment");
+					aCompositeNode->setComment(new Comments::CommentNode("Enter comment here"));
+					aCompositeNode->endModification();
+				}
+				showComment(aNode, aCompositeNode->comment());
 				break;
 			}
 			aNode = aNode->parent();
@@ -426,11 +451,15 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		while (aNode)
 		{
 			auto aCompositeNode = DCast<Model::CompositeNode>(aNode->node());
-			if (aCompositeNode && aCompositeNode->comment() != nullptr)
+			if (aCompositeNode)
 			{
-				aCompositeNode->beginModification("delete comment");
-				aCompositeNode->setComment(nullptr);
-				aCompositeNode->endModification();
+				if (aCompositeNode->comment() != nullptr)
+				{
+					aCompositeNode->beginModification("delete comment");
+					aCompositeNode->setComment(nullptr);
+					aCompositeNode->endModification();
+				}
+				commentWrapper_->hide();
 				break;
 			}
 			aNode = aNode->parent();
