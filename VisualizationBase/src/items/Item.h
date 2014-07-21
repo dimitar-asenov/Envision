@@ -364,6 +364,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		void setScale(qreal newScale);
 
+		Item* comment();
+
 	protected:
 
 		void setWidth(int width);
@@ -447,6 +449,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		// Focus events
 		virtual void focusInEvent(QFocusEvent *event);
 		virtual void focusOutEvent(QFocusEvent *event);
+
+		Item* comment_{};
 
 	private:
 		friend class Shape;
@@ -711,5 +715,7 @@ inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCatego
 
 inline void Item::setDefaultClassHandler(InteractionHandler* handler) {defaultClassHandler_ = handler;}
 inline InteractionHandler* Item::defaultClassHandler() {return defaultClassHandler_;}
+
+inline Item* Item::comment() {return comment_; }
 
 }

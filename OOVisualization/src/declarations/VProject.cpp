@@ -86,7 +86,8 @@ void VProject::initializeForms()
 				->put(0, 2, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						&StyleType::declarations))
-				->put(0, 3, item<PositionLayout>(&I::body_, &StyleType::body));
+				->put(0, 3, item(&I::comment_, [](I* v){return v->node()->comment();}))
+				->put(0, 4, item<PositionLayout>(&I::body_, &StyleType::body));
 
 	auto shapeElement = new ShapeFormElement();
 

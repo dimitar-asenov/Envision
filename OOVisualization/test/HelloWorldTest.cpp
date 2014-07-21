@@ -48,6 +48,7 @@
 
 using namespace OOModel;
 using namespace Visualization;
+using namespace Comments;
 
 namespace OOVisualization {
 
@@ -553,6 +554,21 @@ Method* addLongMethod(Class* parent)
 	col3Init->values()->append(new IntegerLiteral(8));
 	col3Init->values()->append(new IntegerLiteral(9));
 
+	auto aCommentNode = new CommentNode("[table#aTable#3#3]");
+	var18->setComment(aCommentNode);
+
+	auto table = new CommentTable(nullptr, "aTable", 3, 3);
+	table->setNodeAt(0, 0, new CommentNode("#1"));
+	table->setNodeAt(0, 1, new CommentNode("#2"));
+	table->setNodeAt(0, 2, new CommentNode("#3"));
+	table->setNodeAt(1, 0, new CommentNode("#4"));
+	table->setNodeAt(1, 1, new CommentNode("#5"));
+	table->setNodeAt(1, 2, new CommentNode("#6"));
+	table->setNodeAt(2, 0, new CommentNode("#7"));
+	table->setNodeAt(2, 1, new CommentNode("#8"));
+	table->setNodeAt(2, 2, new CommentNode("#9"));
+	aCommentNode->tables()->append(table);
+
 	VariableDeclarationExpression* var19 = new VariableDeclarationExpression("var19");
 	longMethod->items()->append(new ExpressionStatement(var19));
 	var19->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -751,6 +767,8 @@ Method* addFactorial(Class* parent)
 	auto factorial = new Method("factorial");
 	if (parent) parent->methods()->append(factorial);
 
+	factorial->setComment(new CommentNode("This is an iterative implementation\n of a factorial function"));
+
 	FormalResult* factorialResult = new FormalResult();
 	factorial->results()->append(factorialResult);
 	factorialResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -878,6 +896,13 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 	prj->fields()->append(new Field("global2",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG)));
+
+	prj->setComment(new CommentNode("This is the HelloWorld-Project. The following classes are available\n"
+															" * HelloWorld\n"
+															" * Annotation\n"
+															" * Colors\n"
+															" * Generic\n"
+															" * AnnotatedWithFriends"));
 
 	Project* java = nullptr;
 	java = addJavaLibrary(prj);
