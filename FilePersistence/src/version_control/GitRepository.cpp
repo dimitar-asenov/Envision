@@ -612,9 +612,6 @@ git_commit* GitRepository::parseCommit(QString commit) const
 		git_tag_free(tag);
 
 		obj = dereferencedTarget;
-
-		// clean up
-		git_tag_free(tag);
 	}
 
 	if (git_object_type(obj) == GIT_OBJ_COMMIT)
