@@ -42,7 +42,7 @@ CommitGraph::CommitGraph(QString start, QString end)
 CommitGraph::~CommitGraph()
 {
 	for (CommitGraphItem* item : items_.values())
-		delete item;
+		SAFE_DELETE(item);
 }
 
 void CommitGraph::add(QString fromCommitSHA, QString toCommitSHA)
