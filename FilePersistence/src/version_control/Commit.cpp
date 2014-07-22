@@ -28,6 +28,23 @@
 
 namespace FilePersistence {
 
+CommitFile::CommitFile(QString relativePath, qint64 size, const char* content)
+{
+	relativePath_ = relativePath;
+	size_ = size;
+
+	// make a copy of the content
+	auto contentCopy = new char[size];
+	memcpy(contentCopy, content, size);
+
+	content_ = contentCopy;
+}
+
+CommitFile::~CommitFile()
+{
+	SAFE_DELETE(content_);
+}
+
 Commit::Commit(CommitInformation info, QList<CommitFile*> files)
 {
 	information_ = info;
@@ -38,8 +55,7 @@ Commit::~Commit()
 {
 	for (CommitFile* file : files_)
 	{
-		delete file->content_;
-		delete file;
+		SAFE_DELETE(file);
 	}
 }
 

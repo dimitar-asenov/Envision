@@ -49,6 +49,9 @@ struct CommitFile {
 		QString relativePath_;
 		qint64 size_;
 		const char* content_;
+
+		CommitFile(QString relativePath, qint64 size, const char* content);
+		~CommitFile();
 };
 
 class FILEPERSISTENCE_API Commit
