@@ -96,7 +96,10 @@ Item::~Item()
 {
 	// Mark this item as not needing updates
 	for (auto s : Scene::allScenes())
+	{
 		s->setItemIsSensitiveToScale(this, false);
+		s->removeFromHighlights(this);
+	}
 
 	SAFE_DELETE(shape_);
 }
@@ -390,6 +393,10 @@ void Item::removeFromScene()
 		// Mark this item as not needing updates
 		scene()->setItemIsSensitiveToScale(this, false);
 
+		//Remove highlights if any
+		scene()->removeFromHighlights(this);
+
+		//Finally remove this item from the scene
 		if (parent()) scene()->removeItem(this);
 		else scene()->removeTopLevelItem(this);
 	}

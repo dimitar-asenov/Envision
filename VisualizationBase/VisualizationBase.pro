@@ -9,7 +9,8 @@ LIBS += -llpsolve55
 QT += xml \
     svg \
     printsupport
-HEADERS += src/items/EmptyItem.h \
+HEADERS += src/Highlight.h \
+    src/items/EmptyItem.h \
     src/items/VUsedLibraryStyle.h \
     src/items/VUsedLibrary.h \
     src/styles/StyleProperty.h \
@@ -119,7 +120,8 @@ HEADERS += src/items/EmptyItem.h \
     src/VisualizationBasePlugin.h \
     src/declarative/GridLayouter.h \
     src/declarative/DynamicGridFormElement.h
-SOURCES += src/items/EmptyItem.cpp \
+SOURCES += src/Highlight.cpp \
+    src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
     src/items/NameOverlay.cpp \
