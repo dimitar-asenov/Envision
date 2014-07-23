@@ -57,13 +57,12 @@ struct CommitFile {
 class FILEPERSISTENCE_API Commit
 {
 	public:
-		Commit(CommitMetaData info, QList<CommitFile*> files);
-		~Commit();
+		Commit(CommitMetaData info, QList<CommitFile> files);
 
 	private:
 		CommitMetaData information_;
 
-		QList<CommitFile*> files_;
+		QList<CommitFile> files_;
 
 };
 

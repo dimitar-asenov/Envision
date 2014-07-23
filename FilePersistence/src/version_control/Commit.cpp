@@ -45,18 +45,10 @@ CommitFile::~CommitFile()
 	SAFE_DELETE(content_);
 }
 
-Commit::Commit(CommitMetaData info, QList<CommitFile*> files)
+Commit::Commit(CommitMetaData info, QList<CommitFile> files)
 {
 	information_ = info;
 	files_ = files;
-}
-
-Commit::~Commit()
-{
-	for (CommitFile* file : files_)
-	{
-		SAFE_DELETE(file);
-	}
 }
 
 } /* namespace FilePersistence */
