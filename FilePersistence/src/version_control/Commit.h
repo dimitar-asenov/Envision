@@ -37,7 +37,7 @@ struct Signature {
 		QString eMail_;
 };
 
-struct CommitInformation {
+struct CommitMetaData {
 		QString sha_;
 		QString message_;
 		QDateTime dateTime_;
@@ -57,11 +57,11 @@ struct CommitFile {
 class FILEPERSISTENCE_API Commit
 {
 	public:
-		Commit(CommitInformation info, QList<CommitFile*> files);
+		Commit(CommitMetaData info, QList<CommitFile*> files);
 		~Commit();
 
 	private:
-		CommitInformation information_;
+		CommitMetaData information_;
 
 		QList<CommitFile*> files_;
 

@@ -45,7 +45,7 @@ CommitFile::~CommitFile()
 	SAFE_DELETE(content_);
 }
 
-Commit::Commit(CommitInformation info, QList<CommitFile*> files)
+Commit::Commit(CommitMetaData info, QList<CommitFile*> files)
 {
 	information_ = info;
 	files_ = files;
