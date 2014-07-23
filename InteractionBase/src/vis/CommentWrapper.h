@@ -36,7 +36,15 @@ class INTERACTIONBASE_API CommentWrapper : public Super<Visualization::NodeWrapp
 	ITEM_COMMON_CUSTOM_STYLENAME(CommentWrapper, Visualization::ItemStyle)
 
 	public:
-		CommentWrapper(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		CommentWrapper(Item* itemWithComment, NodeType* node, const StyleType* style = itemStyles().get());
+
+		void showComment();
+		Item* itemWithComment();
+
+	private:
+		Item* itemWithComment_{};
+
+		void setCommentPosition();
 };
 
 }

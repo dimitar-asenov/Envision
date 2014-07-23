@@ -32,7 +32,28 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(CommentWrapper, "item")
 
-CommentWrapper::CommentWrapper(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
-{}
+CommentWrapper::CommentWrapper(Item* itemWithComment, NodeType* node, const StyleType* style)
+	: Super(nullptr, node, style)
+{
+	itemWithComment_ = itemWithComment;
+	itemWithComment_->scene()->addTopLevelItem(this);
+}
+
+void CommentWrapper::showComment()
+{
+	setCommentPosition();
+	show();
+}
+
+void CommentWrapper::setCommentPosition()
+{
+	QPointF commentPos = itemWithComment_->mapToScene(0, 0);
+	setPos(commentPos.x() + itemWithComment_->widthInScene(), commentPos.y());
+}
+
+Item* CommentWrapper::itemWithComment()
+{
+	return itemWithComment_;
+}
 
 }

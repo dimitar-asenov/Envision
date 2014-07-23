@@ -40,6 +40,10 @@ AttributeChain::AttributeChain(const QString& typeName, AttributeChain* parentCh
 	Q_ASSERT(parentChain);
 	Q_ASSERT(parentChain != this);
 
+	//By uncommenting the following two lines, CompositeNode will not have attributes which saves memory.
+	//if (parentChain == &CompositeNode::getMetaData() )
+	//	return; // a null parent indicates direct inheritance from CompositeNode
+
 	parent_ = parentChain;
 
 	// Compute the number of levels

@@ -161,25 +161,22 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 	}
 }
 
-void GenericHandler::showComment(Visualization::Item *commentRecevier, Model::Node *aNode)
+void GenericHandler::showComment(Visualization::Item *itemWithComment, Model::Node *aNode)
 {
-	if (commentWrapper_ && commentWrapper_->wrappedItem()->node() == aNode && commentRecevier->comment() == nullptr)
+	if (commentWrapper_ && itemWithComment == commentWrapper_->itemWithComment()
+		 && !itemWithComment->findVisualizationOf(aNode))
 	{
 		if (commentWrapper_->isVisible())
 			commentWrapper_->hide();
 		else
-		{
-			commentWrapper_->show();
-			commentWrapper_->setX(commentRecevier->xEndInParent());
-		}
+			commentWrapper_->showComment();
 	}
 	else
 	{
 		SAFE_DELETE_ITEM(commentWrapper_);
-		commentWrapper_ = new CommentWrapper(commentRecevier, aNode);
-		commentWrapper_->hide();
+		commentWrapper_ = new CommentWrapper(itemWithComment, aNode);
+		if (!itemWithComment->findVisualizationOf(aNode)) commentWrapper_->showComment();
 	}
-
 }
 
 void GenericHandler::command(Visualization::Item *target, const QString& command)
@@ -468,7 +465,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			aNode = aNode->parent();
 		}
 	}
-	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F3)
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F1)
 	{
 		auto scene = target->scene();
 		scene->clearFocus();

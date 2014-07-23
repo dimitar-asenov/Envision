@@ -86,7 +86,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		void removeCommandPrompt();
 		void showCommandPrompt(Visualization::Item* commandRecevier, QString initialCommandText = QString());
 
-		void showComment(Visualization::Item* commentRecevier, Model::Node* aNode);
+		void showComment(Visualization::Item* itemWithComment, Model::Node* aNode);
 
 		virtual void beforeEvent(Visualization::Item *target, QEvent* event) override;
 

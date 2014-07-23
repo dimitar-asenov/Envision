@@ -36,7 +36,6 @@
 
 using namespace Visualization;
 using namespace OOModel;
-using namespace Comments;
 
 namespace OOVisualization {
 

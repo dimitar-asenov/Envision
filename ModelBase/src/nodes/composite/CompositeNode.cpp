@@ -26,7 +26,6 @@
 
 #include "nodes/composite/CompositeNode.h"
 #include "../../commands/CompositeNodeChangeChild.h"
-#include "Comments/src/nodes/CommentNode.h"
 
 namespace Model {
 
@@ -176,7 +175,7 @@ void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 	Q_ASSERT( attributeIndex.index() < subnodes_[attributeIndex.level()].size());
 	auto attribute = meta_.attribute(attributeIndex);
 	Q_ASSERT( node || attribute.optional());
-	//Q_ASSERT( !node || node->isSubtypeOf(attribute.type()));
+	Q_ASSERT( !node || node->isSubtypeOf(attribute.type()));
 	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes_));
 }
 
