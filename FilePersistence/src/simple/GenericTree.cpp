@@ -23,37 +23,37 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#pragma once
-
-#include "../filepersistence_api.h"
-#include "ModelBase/src/persistence/PersistentStore.h"
+#include "GenericTree.h"
+#include "GenericNode.h"
 
 namespace FilePersistence {
 
-class GenericNode;
-class GenericPersistentUnit;
+GenericTree::GenericTree(QString name, QString commitName) :	name_{name}, commitName_{commitName}
+{}
 
-class FILEPERSISTENCE_API Parser {
-	public:
+GenericTree::~GenericTree()
+{
+	persistentUnits_.clear();
+	for (auto c : emptyChunks_) delete [] c;
+}
 
-		static void parseLine(GenericNode* node, const char* line, int lineLength);
+GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, int dataSize)
+{
+	Q_ASSERT(!name.isEmpty());
+	Q_ASSERT(!persistentUnits_.contains(name));
 
-		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
-		static GenericNode* load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit);
-		static GenericNode* load(const char* data, int dataLength, bool lazy, GenericPersistentUnit& persistentUnit);
+	return persistentUnits_.insert(name, GenericPersistentUnit(this, name, data, dataSize)).value();
+}
 
-	private:
-		static int countTabs(const char* data, int lineStart, int lineEnd);
-		static QString rawStringToQString(const char* data, int startAt, int endInclusive);
-		static QString escape(const QString& line);
+GenericNode* GenericTree::emptyChunk()
+{
+	if (emptyChunks_.isEmpty()) return new GenericNode[ALLOCATION_CHUNK_SIZE];
+	else return emptyChunks_.takeLast();
+}
 
-		static Model::NodeIdType toId(const char* data, int start, int endInclusive, bool& ok);
-		static uchar hexDigitToChar(char d, bool& ok);
-
-		static bool nextNonEmptyLine(const char* data, int dataSize, int& lineStart, int& lineEnd);
-		static int indexOf(const char c, const char* data, int start, int endInclusive);
-		static bool nextHeaderPart(const char* data, int& start, int&endInclusive, int lineEnd);
-};
+void GenericTree::releaseChunk(GenericNode* unusedChunk)
+{
+	emptyChunks_.append(unusedChunk);
+}
 
 } /* namespace FilePersistence */

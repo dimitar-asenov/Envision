@@ -27,13 +27,15 @@
 #pragma once
 
 #include "../filepersistence_api.h"
-#include "GenericNode.h"
-#include "GenericNodeAllocator.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 #include "ModelBase/src/persistence/NodeIdMap.h"
 
 namespace FilePersistence {
+
+class GenericNode;
+class GenericPersistentUnit;
+class GenericTree;
 
 class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 {
@@ -101,8 +103,8 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		void checkIsWorking() const;
 
-		GenericNodeAllocator* allocator_{};
-		GenericNode* persisted_{};
+		GenericTree* genericTree_{};
+		GenericNode* genericNode_{};
 
 		/**
 		 * This is a list of all references which have been constructed and which have a target that is not yet set.

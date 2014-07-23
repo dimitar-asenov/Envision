@@ -25,39 +25,46 @@
  **********************************************************************************************************************/
 
 #pragma once
+
+#include "../filepersistence_api.h"
+#include "GenericPersistentUnit.h"
+
 namespace FilePersistence {
 
-class Parser;
 class GenericNode;
 
-class GenericNodeAllocator {
-	friend class Parser;
-
+class FILEPERSISTENCE_API GenericTree {
 	public:
-		GenericNodeAllocator();
-		~GenericNodeAllocator();
+		GenericTree(QString name = QString(), QString commitName = QString());
+		~GenericTree();
 
-		void endThisLoad();
+		const QString& name() const;
+		const QString& commitName() const;
+
+		void remove(const QString& persistentUnitName);
+		void remove(const GenericPersistentUnit& unit);
+
+		GenericPersistentUnit& newPersistentUnit(QString name, char* data = nullptr, int dataSize = 0);
 
 	private:
-		GenericNode* newRoot(char* data, int lineStart, int lineEndInclusive);
-		GenericNode* newChild(int lineStart, int lineEndInclusive);
+		friend class GenericPersistentUnit;
 
-		const int ALLOCATION_CHUNK_SIZE = 10000; // num elements to allocate at once
+		QString name_;
+		QString commitName_;
 
-		QList<char*> dataMappings_;
+		QHash<QString, GenericPersistentUnit> persistentUnits_;
 
-		QList<int> rewindRootChunkId_;
-		QList<int> rewindRootId_;
+		constexpr static int ALLOCATION_CHUNK_SIZE = 1000; // num elements to allocate at once
+		QList<GenericNode*> emptyChunks_;
 
-		QList<GenericNode*> chunks_;
-
-		// These are the indices of the last given node
-		GenericNode* currentChunk_{};
-		int currentChunkId_{-1};
-		int currentNodeInChunk_{ALLOCATION_CHUNK_SIZE};
-
-		GenericNode* nextNode();
+		GenericNode* emptyChunk();
+		void releaseChunk(GenericNode* unusedChunk);
 };
+
+inline const QString& GenericTree::name() const { return name_; }
+inline const QString& GenericTree::commitName() const { return commitName_; }
+
+inline void GenericTree::remove(const QString& persistentUnitName) { persistentUnits_.remove(persistentUnitName); }
+inline void GenericTree::remove(const GenericPersistentUnit& unit) { remove(unit.name()); }
 
 } /* namespace FilePersistence */

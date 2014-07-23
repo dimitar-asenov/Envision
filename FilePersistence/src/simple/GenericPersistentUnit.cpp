@@ -23,37 +23,85 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#pragma once
-
-#include "../filepersistence_api.h"
-#include "ModelBase/src/persistence/PersistentStore.h"
+#include "GenericPersistentUnit.h"
+#include "GenericTree.h"
+#include "GenericNode.h"
 
 namespace FilePersistence {
 
-class GenericNode;
-class GenericPersistentUnit;
+GenericPersistentUnit::GenericPersistentUnit(GenericTree* tree, QString name, char* data, int dataSize)
+: tree_{tree}, name_{name}, data_{data}, dataSize_{dataSize},
+  lastNodeIndexInLastChunk_{GenericTree::ALLOCATION_CHUNK_SIZE}
+{
+	Q_ASSERT(tree_);
+}
 
-class FILEPERSISTENCE_API Parser {
-	public:
+GenericPersistentUnit::~GenericPersistentUnit()
+{
+	for (auto c : chunks_) tree_->releaseChunk(c);
+	chunks_.clear();
 
-		static void parseLine(GenericNode* node, const char* line, int lineLength);
+	if (data_) delete [] data_;
+	data_ = nullptr;
+}
 
-		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
-		static GenericNode* load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit);
-		static GenericNode* load(const char* data, int dataLength, bool lazy, GenericPersistentUnit& persistentUnit);
+GenericNode* GenericPersistentUnit::nextNode()
+{
+	++lastNodeIndexInLastChunk_;
 
-	private:
-		static int countTabs(const char* data, int lineStart, int lineEnd);
-		static QString rawStringToQString(const char* data, int startAt, int endInclusive);
-		static QString escape(const QString& line);
+	if (chunks_.isEmpty() || lastNodeIndexInLastChunk_ >= GenericTree::ALLOCATION_CHUNK_SIZE)
+	{
+		// We must get a new chunk
+		lastNodeIndexInLastChunk_ = 0;
+		chunks_.append( tree_->emptyChunk() );
+	}
 
-		static Model::NodeIdType toId(const char* data, int start, int endInclusive, bool& ok);
-		static uchar hexDigitToChar(char d, bool& ok);
+	return chunks_.last() + lastNodeIndexInLastChunk_;
+}
 
-		static bool nextNonEmptyLine(const char* data, int dataSize, int& lineStart, int& lineEnd);
-		static int indexOf(const char c, const char* data, int start, int endInclusive);
-		static bool nextHeaderPart(const char* data, int& start, int&endInclusive, int lineEnd);
-};
+GenericNode* GenericPersistentUnit::newNode()
+{
+	Q_ASSERT(!data_);
+	auto node = nextNode();
+	node->reset(this);
+	return node;
+}
+
+GenericNode* GenericPersistentUnit::newNode(int lineStart, int lineEndEnclusive)
+{
+	Q_ASSERT(data_);
+	Q_ASSERT(lineEndEnclusive < dataSize_);
+
+	auto node = nextNode();
+	node->reset(this, data_+lineStart, lineEndEnclusive - lineStart + 1, true);
+	return node;
+}
+
+GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
+{
+	Q_ASSERT(!data_);
+	auto node = nextNode();
+	node->reset(this, data, dataLength, false);
+	return node;
+}
+
+GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy)
+{
+	Q_ASSERT(!data_);
+	auto node = nextNode();
+	node->reset(this, nodeToCopy);
+	return node;
+}
+
+const char* GenericPersistentUnit::setData(const char* data, int dataSize)
+{
+	Q_ASSERT(!data_);
+	Q_ASSERT(data);
+	Q_ASSERT(dataSize > 0);
+	data_ = new char[dataSize];
+	dataSize_ = dataSize;
+	memcpy(data_, data, dataSize);
+	return data_;
+}
 
 } /* namespace FilePersistence */

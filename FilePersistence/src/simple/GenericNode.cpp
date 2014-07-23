@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "GenericNode.h"
-#include "GenericNodeAllocator.h"
+#include "GenericPersistentUnit.h"
 #include "Parser.h"
 
 namespace FilePersistence {
@@ -33,21 +33,10 @@ namespace FilePersistence {
 static const int MAX_DOUBLE_PRECISION = 15;
 
 GenericNode::GenericNode(){}
-GenericNode::GenericNode(const char* dataLine, int dataLineLength, bool lazy)
-{
-	reset(dataLine, dataLineLength, lazy);
-}
 
-GenericNode::~GenericNode()
+inline bool GenericNode::sameTree(const GenericNode* other)
 {
-	deleteChildrenIfNoAllocator();
-}
-
-void GenericNode::deleteChildrenIfNoAllocator()
-{
-	// This is the case when this node is not owned by an allocator
-	if (dataLineLength_ == 0)
-		for (auto c : children_) SAFE_DELETE(c);
+	return persistentUnit_->tree() == other->persistentUnit_->tree();
 }
 
 const QString& GenericNode::valueAsString() const
@@ -127,12 +116,19 @@ void GenericNode::setValue(ValueType type, const QString& value)
 	value_ = value;
 }
 
+
+void GenericNode::setParent(GenericNode* parent)
+{
+	if (parent) Q_ASSERT(sameTree(parent));
+	parent_ = parent;
+}
+
 GenericNode* GenericNode::addChild(GenericNode* child)
 {
+	Q_ASSERT(child);
+	Q_ASSERT(sameTree(child));
 	Q_ASSERT(value_.isEmpty());
 	Q_ASSERT(valueType_ == NO_VALUE);
-
-	Q_ASSERT(child);
 
 	children_.append(child);
 	return child;
@@ -148,12 +144,10 @@ GenericNode* GenericNode::find(Model::NodeIdType id)
 	return nullptr;
 }
 
-void GenericNode::reset(const char* dataLine, int dataLineLength, bool lazy)
+void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 {
-	Q_ASSERT(dataLine);
-	Q_ASSERT(dataLineLength > 0);
-
-	deleteChildrenIfNoAllocator();
+	Q_ASSERT(persistentUnit);
+	persistentUnit_ = persistentUnit;
 
 	name_.clear();
 	type_.clear();
@@ -162,6 +156,15 @@ void GenericNode::reset(const char* dataLine, int dataLineLength, bool lazy)
 	id_ = {};
 	children_.clear();
 	parent_ = nullptr;
+	dataLine_ = nullptr;
+	dataLineLength_ = {};
+}
+
+void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy)
+{
+	reset(persistentUnit);
+	Q_ASSERT(dataLine);
+	Q_ASSERT(dataLineLength > 0);
 
 	if (lazy)
 	{
@@ -169,12 +172,24 @@ void GenericNode::reset(const char* dataLine, int dataLineLength, bool lazy)
 		dataLineLength_ = dataLineLength;
 	}
 	else
-	{
-		dataLine_ = nullptr;
-		dataLineLength_ = 0;
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine, dataLineLength);
-	}
+}
 
+void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy)
+{
+	Q_ASSERT(nodeToCopy);
+	reset(persistentUnit);
+
+	if (nodeToCopy->dataLine_)
+		Parser::parseLine(const_cast<GenericNode*>(this), nodeToCopy->dataLine_, nodeToCopy->dataLineLength_);
+	else
+	{
+		name_ = nodeToCopy->name_;
+		type_ = nodeToCopy->type_;
+		value_ = nodeToCopy->value_;
+		valueType_ = nodeToCopy->valueType_;
+		id_ = nodeToCopy->id_;
+	}
 }
 
 void GenericNode::ensureDataRead() const
@@ -182,7 +197,7 @@ void GenericNode::ensureDataRead() const
 	if (dataLine_)
 	{
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine_, dataLineLength_);
-		// Don't delete this, just mark it unused. The allocator will delete it.
+		// Don't delete the line, we don't own it.
 		const_cast<GenericNode*>(this)->dataLine_ = nullptr;
 	}
 }
