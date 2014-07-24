@@ -53,6 +53,7 @@ Class* addCollection(Project* parent)
 	Method* find = new Method();
 	col->methods()->append(find);
 	find->setName("find");
+	std::unique_ptr<Position>(find->extension<Position>())->set(0, 0);
 	FormalArgument* findArg = new FormalArgument();
 	find->arguments()->append(findArg);
 	findArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -64,7 +65,7 @@ Class* addCollection(Project* parent)
 	Method* insert = new Method();
 	col->methods()->append(insert);
 	insert->setName("insert");
-	insert->extension<Position>()->setY(100);
+	std::unique_ptr<Position>(insert->extension<Position>())->set(0, 1);
 	FormalArgument* insertArg = new FormalArgument();
 	insert->arguments()->append(insertArg);
 	insertArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -73,7 +74,7 @@ Class* addCollection(Project* parent)
 	Method* empty = new Method();
 	col->methods()->append(empty);
 	empty->setName("empty");
-	empty->extension<Position>()->setY(200);
+	std::unique_ptr<Position>(empty->extension<Position>())->set(0, 2);
 	FormalResult* emptyResult = new FormalResult();
 	emptyResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
 	empty->results()->append(emptyResult);
@@ -81,7 +82,7 @@ Class* addCollection(Project* parent)
 	Method* exists = new Method();
 	col->methods()->append(exists);
 	exists->setName(QChar(0x2203));
-	exists->extension<Position>()->setY(300);
+	std::unique_ptr<Position>(exists->extension<Position>())->set(0, 3);
 	FormalArgument* existsArg = new FormalArgument();
 	exists->arguments()->append(existsArg);
 	existsArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -93,7 +94,7 @@ Class* addCollection(Project* parent)
 	Method* sum = new Method();
 	col->methods()->append(sum);
 	sum->setName("sum");
-	sum->extension<Position>()->setY(400);
+	std::unique_ptr<Position>(sum->extension<Position>())->set(0, 4);
 	FormalArgument* sumArgFrom = new FormalArgument();
 	sum->arguments()->append(sumArgFrom);
 	sumArgFrom->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -109,7 +110,7 @@ Class* addCollection(Project* parent)
 	Method* test = new Method();
 	col->methods()->append(test);
 	test->setName("test");
-	test->extension<Position>()->setX(300);
+	std::unique_ptr<Position>(test->extension<Position>())->set(1, 0);
 
 	IfStatement* ifs = new IfStatement();
 	test->items()->append(ifs);
