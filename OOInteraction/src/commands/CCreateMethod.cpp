@@ -43,7 +43,7 @@ CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
 }
 
 Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
+	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
 {
 	auto cl = dynamic_cast<OOModel::Class*> (target->node());
 	Q_ASSERT(cl);
@@ -59,9 +59,14 @@ Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*s
 	// Set scope
 	if (attributes.last() == "static") m->modifiers()->set(Modifier::Static);
 
-	cl->methods()->beginModification("create method");
+	cl->beginModification("create method");
+	if (auto lc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
+	{
+		Visualization::GridLayouter::setPositionInGrid(cl->classes()->nodes() + cl->methods()->nodes(),	lc->x(), lc->y(),
+				m, Visualization::GridLayouter::ColumnMajor);
+	}
 	cl->methods()->append(m);
-	cl->methods()->endModification();
+	cl->endModification();
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, m,
