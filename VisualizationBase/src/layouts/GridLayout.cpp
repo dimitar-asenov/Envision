@@ -147,9 +147,9 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes)
 					if (nodes[n].contains(items_[x][y]->node()))
 					{
 						found = true;
+						synchronizeItem(items_[x][y], items_[x][y]->node());
 						nodesFound.append(items_[x][y]->node());
 						itemsFound.append(items_[x][y]);
-						synchronizeItem(items_[x][y], items_[x][y]->node());
 						break;
 					}
 
