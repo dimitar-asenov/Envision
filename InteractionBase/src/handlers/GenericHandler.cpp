@@ -467,10 +467,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F1)
 	{
+		bool allSelected = true;
 		auto scene = target->scene();
-		scene->clearFocus();
-		scene->clearSelection();
-		scene->setMainCursor(nullptr);
 
 		QList<Visualization::Item*> stack = scene->topLevelItems();
 
@@ -479,10 +477,28 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			auto i = stack.takeLast();
 			if (auto aCompositeNode = DCast<Model::CompositeNode>(i->node()))
 			{
-				if (aCompositeNode->comment() != nullptr)
-					i->setSelected(true);
+				if (aCompositeNode->comment() != nullptr && !i->findVisualizationOf(aCompositeNode->comment()))
+					allSelected = allSelected && i->isSelected();
 			}
 			stack.append(i->childItems());
+		}
+
+		scene->clearSelection();
+
+		if (!allSelected)
+		{
+			stack = scene->topLevelItems();
+
+			while (!stack.isEmpty())
+			{
+				auto i = stack.takeLast();
+				if (auto aCompositeNode = DCast<Model::CompositeNode>(i->node()))
+				{
+					if (aCompositeNode->comment() != nullptr && !i->findVisualizationOf(aCompositeNode->comment()))
+						i->setSelected(true);
+				}
+				stack.append(i->childItems());
+			}
 		}
 
 		scene->scheduleUpdate();
