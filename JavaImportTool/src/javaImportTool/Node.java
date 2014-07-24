@@ -52,6 +52,7 @@ public class Node {
 	private UUID id_;
 	private String symbol_ = null; // only set this if this node defines a symbol (e.g. class or method definition)
 	private String text_ = null; // only set this if this is a terminal node and contains text (e.g. a literal)
+	private SizeEstimator.Size estimatedSize_ = null;
 	
 	// These are used when writing the nodes to a stream
 	private static String outputDir_ = null;
@@ -65,6 +66,12 @@ public class Node {
 	public String tag() { return tag_; }
 	public String name() { return name_; }
 	public int numChildren() { return children_.size(); }
+	public List<Node> children() { return children_;}
+	public SizeEstimator.Size estimatedSize() throws ConversionException
+	{
+		if (estimatedSize_ == null) estimatedSize_ = SizeEstimator.estimateSize(this);
+		return estimatedSize_;
+	}
 	
 	public void setName(String name) { name_ = name; }
 	public void setName(int name) { name_ = Integer.toString(name); }
@@ -72,6 +79,9 @@ public class Node {
 	public void setStringValue(String val) { text_ = "S_" + val; }
 	public void setLongValue(long val){ text_ = "I_" + Integer.toString((int)val); }
 	//TODO: In Envision, implement long integers
+	
+	public boolean hasValue() { return text_ != null;}
+	public String valueAsText() { return text_; }
 	
 	public boolean isPersistenceUnit()
 	{
@@ -110,6 +120,14 @@ public class Node {
 		n.parent_ = this;
 		children_.add(n);
 		return n;
+	}
+	
+	public Node childOrNull(String name)
+	{
+		for (Node c : children_)
+			if (c.name_.equals(name)) return c;
+		
+		return null;
 	}
 	
 	public Node child(String name) throws ConversionException
