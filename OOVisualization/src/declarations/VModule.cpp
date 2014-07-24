@@ -41,18 +41,10 @@ ITEM_COMMON_DEFINITIONS(VModule, "item")
 
 VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
-	body_ = new PositionLayout(this, &style->body());
 }
 
 void VModule::determineChildren()
 {
-	// manually update the body item
-	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
-	QList<Model::Node*> bodyItems = node()->modules()->nodes().toList();
-	bodyItems << node()->classes()->nodes().toList();
-	bodyItems << node()->methods()->nodes().toList();
-	body_->synchronizeWithNodes( bodyItems);
-
 	// call determineChildren of super class
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
@@ -84,7 +76,16 @@ void VModule::initializeForms()
 				->put(0, 2, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
-				->put(0, 3, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
+				->put(0, 3, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+					->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
+					->setNodesGetter(
+						[](Item* v)->QVector<QVector<Model::Node*>>{
+						auto self = static_cast<I*>(v);
+						return Visualization::GridLayouter::arrange(
+								self->node()->modules()->nodes() + self->node()->classes()->nodes() +
+								self->node()->methods()->nodes(),
+								Visualization::GridLayouter::ColumnMajor);
+					}));
 
 	auto shapeElement = new ShapeFormElement();
 
