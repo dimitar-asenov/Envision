@@ -42,6 +42,7 @@ ItemRegion GridLayouter::cursorRegion(Item* parent, FormElement* formElement, in
 	auto lc = new LayoutCursor(parent, horizontal ? Cursor::HorizontalCursor : Cursor::VerticalCursor);
 	lc->setOwnerElement(formElement);
 	lc->set2DIndex(xIndex, yIndex);
+	lc->setIndex( horizontal ? yIndex : xIndex); // Works for 1D sequences
 	lc->setVisualizationSize( area.size() );
 	lc->setVisualizationPosition( area.topLeft() );
 	lc->setRegion( area );

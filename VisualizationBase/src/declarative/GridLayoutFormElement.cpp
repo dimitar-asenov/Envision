@@ -163,28 +163,24 @@ QList<ItemRegion> GridLayoutFormElement::regions(DeclarativeItemBase* item, int 
 			if (elementGrid_[x][y])
 				allRegions.append(elementGrid_[x][y]->regions(item, this->x(item) + parentX, this->y(item) + parentY));
 
-	Q_ASSERT(noInnerCursors(item) == false || noBoundaryCursors(item) == true);
-	if (noBoundaryCursors(item) == false || noInnerCursors(item) == false)
-	{
-		allRegions << GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), GridLayouter::RowMajor,
-														false, noBoundaryCursors(item),
-				item->style()->extraCursorsOutsideShape(), true, false,
-				[this](){return numRows_;},	// numRows
-				[this](){return numColumns_;},	// numColumns
-				[this](int x, int y){return elementGrid_[x][y];},	// has
-				[this, item](int x, int y){return elementGrid_[x][y]->width(item);},	// width
-				[this, item](int x, int y){return elementGrid_[x][y]->height(item);},	// height
-				[this, item](int x, int y){return elementGrid_[x][y]->x(item) + this->x(item);},	// xPos
-				[this, item](int x, int y){return elementGrid_[x][y]->y(item) + this->y(item);},	// yPos
-				[](int, int)->Item*{return nullptr;},	// childItem
-				[this](){return spaceBetweenRows_;},	// spaceBetweenRows
-				[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
-				[this](){return topMargin();},	// topMargin
-				[this](){return bottomMargin();},	// bottomMargin
-				[this](){return leftMargin();},	// leftMargin
-				[this](){return rightMargin();}	// rightMargin
-			);
-	}
+	allRegions << GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), GridLayouter::RowMajor,
+													false, true, !noBoundaryCursors(item),
+			item->style()->extraCursorsOutsideShape(), false, true,
+			[this](){return numRows_;},	// numRows
+			[this](){return numColumns_;},	// numColumns
+			[this](int x, int y){return elementGrid_[x][y];},	// has
+			[this, item](int x, int y){return elementGrid_[x][y]->width(item);},	// width
+			[this, item](int x, int y){return elementGrid_[x][y]->height(item);},	// height
+			[this, item](int x, int y){return elementGrid_[x][y]->x(item) + this->x(item);},	// xPos
+			[this, item](int x, int y){return elementGrid_[x][y]->y(item) + this->y(item);},	// yPos
+			[](int, int)->Item*{return nullptr;},	// childItem
+			[this](){return spaceBetweenRows_;},	// spaceBetweenRows
+			[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
+			[this](){return topMargin();},	// topMargin
+			[this](){return bottomMargin();},	// bottomMargin
+			[this](){return leftMargin();},	// leftMargin
+			[this](){return rightMargin();}	// rightMargin
+		);
 
 	return allRegions;
 }

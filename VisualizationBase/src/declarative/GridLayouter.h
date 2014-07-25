@@ -368,9 +368,10 @@ class VISUALIZATIONBASE_API GridLayouter
 					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
 					 class LeftMargin, class RightMargin>
 		static QList<ItemRegion> regions(Item* parent, FormElement* formElement, int xOffset, int yOffset,
-										MajorAxis majorAxis, bool showCursorWhenEmpty, bool onlyInnerCursors,
-										bool extraCursorsAroundParentShape, bool notLocationEquivalentCursors,
-										bool showMajorCursors,
+										MajorAxis majorAxis, bool showCursorWhenEmpty, bool showInnerCursors,
+										bool showBoundaryCursors, bool extraCursorsAroundParentShape, bool showMajorCursors,
+										bool notLocationEquivalentCursors,
+
 										NumRows numRows, NumColumns numColumns,
 										HasElement has, Width width, Height height, XPos xPos, YPos yPos,
 										ChildItem childItem,
@@ -516,7 +517,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					int rowHeight = rowBottom[y]-rowTop[y]+1;
 
 					// Front minor cursor. Always there if requested.
-					if (((x == 0 && majorAxis != ColumnMajor) || (y==0 && majorAxis == ColumnMajor)) && !onlyInnerCursors)
+					if (showBoundaryCursors && ((x == 0 && majorAxis != ColumnMajor) || (y==0 && majorAxis == ColumnMajor)))
 					{
 						regs.append( cursorRegion(parent, formElement, x, y, majorAxis == ColumnMajor,
 								!extraCursorsAroundParentShape,
@@ -540,7 +541,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					}
 
 					// Inner cursor to next element, if any
-					if (!itemAreas[x][y].isNull()
+					if (showInnerCursors && !itemAreas[x][y].isNull()
 							&& (	(majorAxis == ColumnMajor && y < lastChildIndexInColumn[x])
 								||
 									(majorAxis != ColumnMajor && x < lastChildIndexInRow[y])))
@@ -555,7 +556,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					}
 
 					// Back cursor, if requested, and if there is at least one element
-					if (!itemAreas[x][y].isNull() && !onlyInnerCursors
+					if (showBoundaryCursors && !itemAreas[x][y].isNull()
 							&& (	(majorAxis == ColumnMajor && y == lastChildIndexInColumn[x])
 								||
 									(majorAxis != ColumnMajor && x == lastChildIndexInRow[y])))
