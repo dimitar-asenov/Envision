@@ -40,11 +40,11 @@ Diff::Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
 	newTree_ = newTree;
 
 	IdToGenericNodeHash oldNodesHash;
-	for (GenericNode* node : oldNodes)
+	for (auto node : oldNodes)
 		oldNodesHash.insert(node->id(), node);
 
 	IdToGenericNodeHash newNodesHash;
-	for (GenericNode* node : newNodes)
+	for (auto node : newNodes)
 		newNodesHash.insert(node->id(), node);
 
 	findParentsInCommit(oldNodesHash, oldTree_, repository);
@@ -63,7 +63,7 @@ void Diff::print() const
 {
 	QList<ChangeDescription*> descriptions = changeDescriptions_.values();
 
-	for (ChangeDescription* current : descriptions)
+	for (auto current : descriptions)
 	{
 		std::cout << "----------------------------------------" << std::endl;
 		current->print();
@@ -74,7 +74,7 @@ void Diff::print() const
 IdToChangeDescriptionHash Diff::changes(ChangeType type) const
 {
 	IdToChangeDescriptionHash changesOfType;
-	for (ChangeDescription* change : changeDescriptions_.values())
+	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == type)
 			changesOfType.insert(change->id(), change);
@@ -85,7 +85,7 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type) const
 IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::UpdateFlags flags) const
 {
 	IdToChangeDescriptionHash changesOfType;
-	for (ChangeDescription* change : changeDescriptions_.values())
+	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == type && change->hasAtLeastFlags(flags))
 			changesOfType.insert(change->id(), change);
@@ -102,7 +102,7 @@ void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes
 	ChangeDescription* description = nullptr;
 
 	IdToGenericNodeHash::iterator iter;
-	for (GenericNode* oldNode : oldNodesValueList)
+	for (auto oldNode : oldNodesValueList)
 	{
 		iter = newNodes.find(oldNode->id());
 		if (iter == newNodes.end())
@@ -121,7 +121,7 @@ void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes
 		}
 	}
 
-	for (Model::NodeIdType newId : onlyInNewNodes)
+	for (auto newId : onlyInNewNodes)
 	{
 		iter = newNodes.find(newId);
 		description = new ChangeDescription(nullptr, iter.value());
@@ -133,19 +133,19 @@ void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
 										 const GitRepository* repository)
 {
 	QHash<QString, Model::NodeIdType> fileToNodeIDs;
-	for (GenericNode* node : nodes.values())
+	for (auto node : nodes.values())
 		fileToNodeIDs.insert(node->persistentUnit()->name(), node->id());
 
 	const QString fullFile("Diff::findParentsInCommit");
 
 	IdToGenericNodeHash::iterator iter = nodes.end();
-	for (QString path : fileToNodeIDs.uniqueKeys())
+	for (auto path : fileToNodeIDs.uniqueKeys())
 	{
 		GenericPersistentUnit fullFileUnit = tree->newPersistentUnit(fullFile);
 		GenericPersistentUnit* unit = tree->persistentUnit(path);
 		CommitFile file = repository->getCommitFile(tree->commitName(), path);
 		GenericNode* root = Parser::load(file.content_, file.size_, false, fullFileUnit);
-		for (Model::NodeIdType id : fileToNodeIDs.values(path))
+		for (auto id : fileToNodeIDs.values(path))
 		{
 			GenericNode* nodeInFile = root->find(id);
 			GenericNode* parentInFile = nodeInFile->parent();

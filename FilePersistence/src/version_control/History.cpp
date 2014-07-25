@@ -54,13 +54,13 @@ History::~History()
 void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::NodeIdType> trackedIDs,
 												const GitRepository* repository)
 {
-	for (CommitGraphItem* child : current->children_)
+	for (auto child : current->children_)
 	{
 		Diff diff = repository->diff(current->commitSHA_, child->commitSHA_);
 		IdToChangeDescriptionHash changes = diff.changes();
 
 		bool isRelevant = false;
-		for (ChangeDescription* change : changes.values())
+		for (auto change : changes.values())
 		{
 			if (trackedIDs.contains(change->id()))
 			{
@@ -130,7 +130,7 @@ QSet<Model::NodeIdType> History::updateTrackedIDs(const QSet<Model::NodeIdType> 
 	IdToChangeDescriptionHash changes = diff->changes();
 
 	IdToChangeDescriptionHash stationary = diff->changes(ChangeType::Stationary);
-	for (ChangeDescription* change : stationary.values())
+	for (auto change : stationary.values())
 	{
 		ChangeDescription::UpdateFlags flags = change->flags();
 		if (trackedIDs.contains(change->id()) && flags.testFlag(ChangeDescription::Children))
@@ -149,7 +149,7 @@ QSet<Model::NodeIdType> History::updateTrackedIDs(const QSet<Model::NodeIdType> 
 				current = nodes.last();
 				nodes.removeLast();
 
-				for (GenericNode* child : current->children())
+				for (auto child : current->children())
 				{
 					Model::NodeIdType id = child->id();
 					IdToChangeDescriptionHash::iterator iter = changes.find(id);
@@ -179,7 +179,7 @@ QSet<Model::NodeIdType> History::updateTrackedIDs(const QSet<Model::NodeIdType> 
 
 								newTrackedIDs.remove(currentMoved->id());
 
-								for (GenericNode* childChild : currentMoved->children())
+								for (auto childChild : currentMoved->children())
 								{
 									movedNodes.append(childChild);
 									iter = changes.find(childChild->id());
@@ -219,7 +219,7 @@ QSet<Model::NodeIdType> History::updateTrackedIDs(const QSet<Model::NodeIdType> 
 				current = nodes.last();
 				nodes.removeLast();
 
-				for (GenericNode* child : current->children())
+				for (auto child : current->children())
 				{
 					Model::NodeIdType id = child->id();
 					IdToChangeDescriptionHash::iterator iter = changes.find(id);
@@ -249,7 +249,7 @@ QSet<Model::NodeIdType> History::updateTrackedIDs(const QSet<Model::NodeIdType> 
 
 								newTrackedIDs.remove(currentMoved->id());
 
-								for (GenericNode* childChild : currentMoved->children())
+								for (auto childChild : currentMoved->children())
 								{
 									movedNodes.append(childChild);
 									iter = changes.find(childChild->id());

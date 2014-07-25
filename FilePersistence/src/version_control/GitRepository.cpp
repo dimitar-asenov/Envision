@@ -55,7 +55,7 @@ struct GitTreeBlobs
 
 	~GitTreeBlobs()
 	{
-		for (git_blob* blob : blobs_)
+		for (auto blob : blobs_)
 			git_blob_free(blob);
 	}
 };
