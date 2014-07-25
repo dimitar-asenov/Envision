@@ -35,7 +35,6 @@ enum class ChangeType {Unclassified, Added, Deleted, Moved, Stationary};
 class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
-		ChangeDescription(GenericNode* unchangedNode);
 		ChangeDescription(GenericNode* oldNode, GenericNode* newNode);
 
 		enum UpdateType
@@ -47,7 +46,7 @@ class FILEPERSISTENCE_API ChangeDescription
 		};
 		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
 
-		static bool compareUpdateFlags(const UpdateFlags flags1, const UpdateFlags flags2);
+		bool hasAtLeastFlags(const UpdateFlags flags);
 
 		void print() const;
 

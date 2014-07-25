@@ -28,19 +28,6 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(GenericNode* unchangedNode)
-{
-	Q_ASSERT(unchangedNode != nullptr);
-
-	oldNode_ = unchangedNode;
-	newNode_ = unchangedNode;
-
-	type_ = ChangeType::Unclassified;
-	updateFlags_ &= ~Order;
-	updateFlags_ &= ~Value;
-	updateFlags_ &= ~Type;
-}
-
 ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
 {
 	Q_ASSERT(oldNode != nullptr || newNode != nullptr);
@@ -57,12 +44,18 @@ ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
 	}
 }
 
-bool ChangeDescription::compareUpdateFlags(const UpdateFlags flags1, const UpdateFlags flags2)
+bool ChangeDescription::hasAtLeastFlags(const UpdateFlags flags)
 {
-	if (int(flags1) == int(flags2))
-		return true;
-	else
+	if (flags.testFlag(Order) && !updateFlags_.testFlag(Order))
 		return false;
+	if (flags.testFlag(Value) && !updateFlags_.testFlag(Value))
+		return false;
+	if (flags.testFlag(Type) && !updateFlags_.testFlag(Type))
+		return false;
+	if (flags.testFlag(Children) && !updateFlags_.testFlag(Children))
+		return false;
+
+	return true;
 }
 
 void ChangeDescription::fundamentalChangeClassification()

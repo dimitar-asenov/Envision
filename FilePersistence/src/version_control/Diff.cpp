@@ -87,8 +87,7 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 	IdToChangeDescriptionHash changesOfType;
 	for (ChangeDescription* change : changeDescriptions_.values())
 	{
-		if (change->type() == type &&
-			 ChangeDescription::compareUpdateFlags(flags, change->flags()))
+		if (change->type() == type && change->hasAtLeastFlags(flags))
 			changesOfType.insert(change->id(), change);
 	}
 	return changesOfType;
