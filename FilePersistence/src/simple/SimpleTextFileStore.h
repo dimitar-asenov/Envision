@@ -57,7 +57,6 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)override;
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name, bool loadPartially) override;
 		virtual QString currentNodeType() const override;
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& treeName, const Model::Node* node) override;
 
 		virtual int loadIntValue() override;
 		virtual QString loadStringValue() override;
