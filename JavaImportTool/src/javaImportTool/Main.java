@@ -152,6 +152,10 @@ public class Main {
 				System.out.println("Done");
 			}
 			
+			System.out.print("Estimating size and arrangement...");
+			root.estimatedSize();
+			System.out.println("Done");
+			
 			String outputDir = outputDirectory + projectName + File.separator;
 			System.out.print("Writing the result to " + outputDir + "...");
 			

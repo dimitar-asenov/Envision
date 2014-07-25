@@ -31,6 +31,8 @@
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/declarative/GridLayouter.h"
 
 using namespace OOModel;
 
@@ -42,7 +44,7 @@ CCreateClass::CCreateClass() : CreateNamedObjectWithAttributes("class",
 }
 
 Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
+	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
 {
 	auto pr = dynamic_cast<OOModel::Project*> (target->node());
 
@@ -58,6 +60,12 @@ Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*so
 	if (pr)
 	{
 		pr->beginModification("create class");
+		if (auto layc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
+		{
+			Visualization::GridLayouter::setPositionInGrid( pr->projects()->nodes() + pr->modules()->nodes() +
+					pr->classes()->nodes() + pr->methods()->nodes(), layc->x(), layc->y(),
+					cl, Visualization::GridLayouter::ColumnMajor);
+		}
 		pr->classes()->append(cl);
 		pr->endModification();
 	}

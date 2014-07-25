@@ -133,7 +133,7 @@ Method* addComplicated(Class* parent)
 	ReturnStatement* metReturn = new ReturnStatement();
 	metReturn->values()->append(new IntegerLiteral(42));
 	met->items()->append(metReturn);
-	met->extension<Position>()->setX(500);
+	std::unique_ptr<Position>(met->extension<Position>())->set(1, 0);
 
 	return met;
 }
@@ -222,6 +222,8 @@ Method* addDivBySix(Class* parent)
 	ReturnStatement* divbysixFinalReturn = new ReturnStatement();
 	divbysixFinalReturn->values()->append(new ReferenceExpression("result"));
 	divbysix->items()->append(divbysixFinalReturn);
+
+	std::unique_ptr<Position>(divbysix->extension<Position>())->set(0, 0);
 
 	return divbysix;
 }

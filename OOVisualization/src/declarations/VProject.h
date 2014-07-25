@@ -36,7 +36,6 @@
 
 namespace Visualization {
 	class VText;
-	class PositionLayout;
 	class VList;
 	class Static;
 }
@@ -63,7 +62,6 @@ class OOVISUALIZATION_API VProject
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
 
-		Visualization::PositionLayout* body_{};
 		Visualization::VList* libraries_{};
 		Visualization::VList* declarations_{};
 		Visualization::VList* fields_{};

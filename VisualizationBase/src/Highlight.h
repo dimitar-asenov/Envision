@@ -24,55 +24,40 @@
  **
  **********************************************************************************************************************/
 
-#include "commands/CCreateMethod.h"
+#pragma once
 
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Method.h"
+#include "visualizationbase_api.h"
 
-#include "VisualizationBase/src/declarative/GridLayouter.h"
-#include "VisualizationBase/src/cursor/LayoutCursor.h"
-#include "InteractionBase/src/events/SetCursorEvent.h"
+namespace Visualization {
 
-using namespace OOModel;
+class Scene;
+class SelectedItem;
+class Item;
 
-namespace OOInteraction {
+class VISUALIZATIONBASE_API Highlight {
 
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private", "protected"}, {"static"}})
-{
-}
+	public:
+		~Highlight();
 
-Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
-{
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
+		const QString& name() const;
+		Scene* scene() const;
 
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
+		void addHighlightedItem(Item* item);
+		void removeHighlightedItem(Item* item);
 
-	// Set visibility
-	if (attributes.first() == "private" ) m->modifiers()->set(Modifier::Private);
-	else if (attributes.first() == "protected" ) m->modifiers()->set(Modifier::Protected);
-	else if (attributes.first() == "public" ) m->modifiers()->set(Modifier::Public);
+	private:
+		friend class Scene;
 
-	// Set scope
-	if (attributes.last() == "static") m->modifiers()->set(Modifier::Static);
+		Scene* scene_{};
+		QString name_;
+		QString styleName_;
+		QHash<Item*, SelectedItem*> highlightItems_;
 
-	cl->beginModification("create method");
-	if (auto lc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
-	{
-		Visualization::GridLayouter::setPositionInGrid(cl->classes()->nodes() + cl->methods()->nodes(),	lc->x(), lc->y(),
-				m, Visualization::GridLayouter::ColumnMajor);
-	}
-	cl->methods()->append(m);
-	cl->endModification();
+		Highlight(Scene* scene, const QString& name, const QString& styleName);
+		void updateAllHighlights();
+};
 
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, m,
-			Interaction::SetCursorEvent::CursorDefault, false));
+inline const QString& Highlight::name() const {return name_;}
+inline Scene* Highlight::scene() const {return scene_;}
 
-	return new Interaction::CommandResult();
-}
-
-} /* namespace OOInteraction */
+} /* namespace Visualization */

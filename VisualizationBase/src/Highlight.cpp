@@ -23,56 +23,40 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "Highlight.h"
+#include "items/SelectedItem.h"
 
-#include "commands/CCreateMethod.h"
+namespace Visualization {
 
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Method.h"
-
-#include "VisualizationBase/src/declarative/GridLayouter.h"
-#include "VisualizationBase/src/cursor/LayoutCursor.h"
-#include "InteractionBase/src/events/SetCursorEvent.h"
-
-using namespace OOModel;
-
-namespace OOInteraction {
-
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private", "protected"}, {"static"}})
+Highlight::Highlight(Scene* scene, const QString& name, const QString& styleName)
+: scene_{scene}, name_{name}, styleName_{styleName}
 {
+	Q_ASSERT(scene_);
+	Q_ASSERT(!name.isEmpty());
 }
 
-Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
+Highlight::~Highlight()
 {
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
-
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
-
-	// Set visibility
-	if (attributes.first() == "private" ) m->modifiers()->set(Modifier::Private);
-	else if (attributes.first() == "protected" ) m->modifiers()->set(Modifier::Protected);
-	else if (attributes.first() == "public" ) m->modifiers()->set(Modifier::Public);
-
-	// Set scope
-	if (attributes.last() == "static") m->modifiers()->set(Modifier::Static);
-
-	cl->beginModification("create method");
-	if (auto lc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
-	{
-		Visualization::GridLayouter::setPositionInGrid(cl->classes()->nodes() + cl->methods()->nodes(),	lc->x(), lc->y(),
-				m, Visualization::GridLayouter::ColumnMajor);
-	}
-	cl->methods()->append(m);
-	cl->endModification();
-
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, m,
-			Interaction::SetCursorEvent::CursorDefault, false));
-
-	return new Interaction::CommandResult();
+	for (auto sel : highlightItems_) SAFE_DELETE_ITEM(sel);
 }
 
-} /* namespace OOInteraction */
+void Highlight::addHighlightedItem(Item* item)
+{
+	auto highlight = new SelectedItem(item, SelectedItem::itemStyles().get(styleName_));
+	highlightItems_.insert(item, highlight );
+	scene_->addItem(highlight);
+	scene_->scheduleUpdate();
+}
+
+void Highlight::updateAllHighlights()
+{
+	for (auto it = highlightItems_.begin(); it != highlightItems_.end(); ++it)
+		it.value()->updateSubtree();
+}
+
+void Highlight::removeHighlightedItem(Item* item)
+{
+	highlightItems_.remove(item);
+}
+
+} /* namespace Visualization */

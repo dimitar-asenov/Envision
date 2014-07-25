@@ -152,8 +152,8 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 					if (nodes[n].contains(data.itemGrid_[x][y]->node()))
 					{
 						found = true;
-						existingItems.insert(data.itemGrid_[x][y]->node(), data.itemGrid_[x][y]);
 						item->synchronizeItem(data.itemGrid_[x][y], data.itemGrid_[x][y]->node());
+						existingItems.insert(data.itemGrid_[x][y]->node(), data.itemGrid_[x][y]);
 						break;
 					}
 

@@ -304,6 +304,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	else if (event->modifiers() == 0 && event->key() == Qt::Key_F3)
 	{
 		event->accept();
+		target->setUpdateNeeded(Visualization::Item::FullUpdate);
 		auto n = target;
 		while (n && ! n->node()) n = n->parent();
 

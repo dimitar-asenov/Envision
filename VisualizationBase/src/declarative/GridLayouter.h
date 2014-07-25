@@ -521,7 +521,8 @@ class VISUALIZATIONBASE_API GridLayouter
 
 					// Inner major cursor after the current major axis, if requested
 					if (showMajorCursors &&
-							((majorAxis == ColumnMajor && x>0 && y==0) || (majorAxis != ColumnMajor && y>0 && x==0)))
+							(		(majorAxis == ColumnMajor && x+1<numColumns() && y==0)
+							 ||	(majorAxis != ColumnMajor && y+1<numRows() && x==0)))
 					{
 						regs.append( cursorRegion(parent, formElement,
 							majorAxis == ColumnMajor ? x+1 : -1, majorAxis == ColumnMajor ? -1 : y+1,
