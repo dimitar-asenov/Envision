@@ -28,9 +28,7 @@
 
 #include "GitRepository.h"
 
-#include "simple/Parser.h"
-
-#include <iostream>
+#include "../simple/Parser.h"
 
 namespace FilePersistence {
 

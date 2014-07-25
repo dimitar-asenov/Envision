@@ -26,8 +26,9 @@
 
 #pragma once
 
-#include "../simple/GenericTree.h"
 #include "ChangeDescription.h"
+
+#include "../simple/GenericTree.h"
 
 namespace FilePersistence {
 

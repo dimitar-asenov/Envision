@@ -26,11 +26,7 @@
 
 #include "GitRepository.h"
 
-#include <git2.h>
-
 #include "../simple/GenericTree.h"
-
-#include <iostream>
 
 namespace FilePersistence {
 

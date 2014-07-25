@@ -28,8 +28,6 @@
 
 #include "../filepersistence_api.h"
 
-#include <QDateTime>
-
 namespace FilePersistence {
 
 struct Signature {

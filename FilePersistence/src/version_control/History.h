@@ -26,8 +26,9 @@
 
 #pragma once
 
-#include "../simple/GenericNode.h"
 #include "CommitGraph.h"
+
+#include "../simple/GenericNode.h"
 
 namespace FilePersistence {
 

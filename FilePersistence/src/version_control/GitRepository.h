@@ -30,8 +30,6 @@
 #include "Diff.h"
 #include "CommitGraph.h"
 
-#include <QDateTime>
-
 struct git_repository;
 struct git_tree;
 struct git_commit;

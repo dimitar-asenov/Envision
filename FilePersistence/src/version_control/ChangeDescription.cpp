@@ -26,8 +26,6 @@
 
 #include "ChangeDescription.h"
 
-#include <iostream>
-
 namespace FilePersistence {
 
 ChangeDescription::ChangeDescription(GenericNode* unchangedNode)
