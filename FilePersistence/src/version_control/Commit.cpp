@@ -49,7 +49,7 @@ CommitFile::CommitFile(QString relativePath, qint64 size, const char* content)
 
 CommitFile::~CommitFile()
 {
-	SAFE_DELETE(content_);
+	delete[] content_;
 }
 
 Commit::Commit(CommitMetaData info, QList<CommitFile> files)

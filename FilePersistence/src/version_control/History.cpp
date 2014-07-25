@@ -47,7 +47,7 @@ History::History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, 
 
 History::~History()
 {
-	delete historyGraph_;
+	SAFE_DELETE(historyGraph_);
 }
 
 

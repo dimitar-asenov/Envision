@@ -55,8 +55,8 @@ Diff::Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
 
 Diff::~Diff()
 {
-	delete oldTree_;
-	delete newTree_;
+	SAFE_DELETE(oldTree_);
+	SAFE_DELETE(newTree_);
 }
 
 void Diff::print() const
