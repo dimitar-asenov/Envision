@@ -24,29 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HCommentWrapper.h"
 
-#include "interactionbase_api.h"
-#include "VisualizationBase/src/items/NodeWrapper.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+
+using namespace Visualization;
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommentWrapper : public Super<Visualization::NodeWrapper>
+HCommentWrapper::HCommentWrapper()
+{}
+
+HCommentWrapper* HCommentWrapper::instance()
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(CommentWrapper, Visualization::ItemStyle)
+	static HCommentWrapper h;
+	return &h;
+}
 
-	public:
-		CommentWrapper(Item* itemWithComment, NodeType* node, const StyleType* style = itemStyles().get());
-
-		void showComment();
-		Item* itemWithComment() const;
-
-	private:
-		Item* itemWithComment_{};
-
-		void setCommentPosition();
-};
-
-inline Visualization::Item* CommentWrapper::itemWithComment() const { return itemWithComment_; }
+void HCommentWrapper::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
+	{
+		target->hide();
+	}
+	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Delete)
+	{
+		auto aCompositeNode = DCast<Model::CompositeNode>(target->node()->parent());
+		aCompositeNode->beginModification("delete comment");
+		aCompositeNode->setComment(nullptr);
+		aCompositeNode->endModification();
+		target->hide();
+		GenericHandler::resetCommentWrapper();
+	}
+	else
+		GenericHandler::keyPressEvent(target, event);
+}
 
 }

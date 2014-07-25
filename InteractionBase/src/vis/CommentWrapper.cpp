@@ -51,9 +51,4 @@ void CommentWrapper::setCommentPosition()
 	setPos(commentPos.x() + itemWithComment_->widthInScene(), commentPos.y());
 }
 
-Item* CommentWrapper::itemWithComment()
-{
-	return itemWithComment_;
-}
-
 }

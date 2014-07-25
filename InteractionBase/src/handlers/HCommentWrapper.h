@@ -26,27 +26,20 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
-#include "VisualizationBase/src/items/NodeWrapper.h"
+#include "../interactionbase_api.h"
+
+#include "GenericHandler.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommentWrapper : public Super<Visualization::NodeWrapper>
+class INTERACTIONBASE_API HCommentWrapper : public GenericHandler
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(CommentWrapper, Visualization::ItemStyle)
-
 	public:
-		CommentWrapper(Item* itemWithComment, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+		static HCommentWrapper* instance();
 
-		void showComment();
-		Item* itemWithComment() const;
-
-	private:
-		Item* itemWithComment_{};
-
-		void setCommentPosition();
+	protected:
+		HCommentWrapper();
 };
-
-inline Visualization::Item* CommentWrapper::itemWithComment() const { return itemWithComment_; }
 
 }

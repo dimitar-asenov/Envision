@@ -459,7 +459,11 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					aCompositeNode->setComment(nullptr);
 					aCompositeNode->endModification();
 				}
-				if (commentWrapper_) commentWrapper_->hide();
+				if (commentWrapper_)
+				{
+					commentWrapper_->hide();
+					commentWrapper_ = nullptr;
+				}
 				break;
 			}
 			aNode = aNode->parent();

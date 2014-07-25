@@ -35,8 +35,10 @@
 #include "handlers/HSceneHandlerItem.h"
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
+#include "handlers/HCommentWrapper.h"
 
 #include "vis/CommandPrompt.h"
+#include "vis/CommentWrapper.h"
 #include "vis/TextAndDescription.h"
 #include "actions/ActionPrompt.h"
 
@@ -87,6 +89,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::PositionLayout::setDefaultClassHandler(HPositionLayout::instance());
 	CommandPrompt::setDefaultClassHandler(HCommandPrompt::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
+	CommentWrapper::setDefaultClassHandler(HCommentWrapper::instance());
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.
 	if (!envisionManager.areSelfTestsPending())
