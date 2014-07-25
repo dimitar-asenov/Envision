@@ -78,7 +78,7 @@ TEST(InteractionBasePlugin, TextSelect)
 	scene->addTopLevelItem( top );
 	QApplication::processEvents();
 
-	VList* list2 = dynamic_cast<VList*> (top->item());
+	VList* list2 = dynamic_cast<VList*> (top->wrappedItem());
 	list2->itemAt<VComposite>(0)->setExpanded();
 	scene->scheduleUpdate();
 	scene->listenToTreeManager(manager);

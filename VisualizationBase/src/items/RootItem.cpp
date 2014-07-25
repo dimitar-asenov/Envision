@@ -25,61 +25,18 @@
  **********************************************************************************************************************/
 
 #include "RootItem.h"
-#include "ItemStyle.h"
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(RootItem, "item")
 
-RootItem::RootItem(Item* parent, NodeType* node, int purpose, int semanticZoomLevel)
-	: Super(nullptr, node, itemStyles().get()), item_(nullptr)
-{
-	Q_ASSERT(parent == nullptr);
-	setFlag(QGraphicsItem::ItemHasNoContents);
-	setItemCategory(Scene::CodeItemCategory);
-	setPurpose(purpose);
-	setSemanticZoomLevel(semanticZoomLevel);
-}
-
 RootItem::RootItem(NodeType *node, int purpose, int semanticZoomLevel)
-: Super(nullptr, node, itemStyles().get()), item_(nullptr)
+: Super(nullptr, node, itemStyles().get())
 {
+	Q_ASSERT(node);
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setItemCategory(Scene::CodeItemCategory);
 	setPurpose(purpose);
 	setSemanticZoomLevel(semanticZoomLevel);
-}
-
-RootItem::RootItem(Item* item, int purpose, int semanticZoomLevel)
-: Super(nullptr, nullptr, itemStyles().get()), item_(item)
-{
-	setFlag(QGraphicsItem::ItemHasNoContents);
-	setPurpose(purpose);
-	setSemanticZoomLevel(semanticZoomLevel);
-	if (item_) item_->setParentItem(this);
-}
-
-RootItem::~RootItem()
-{
-	SAFE_DELETE_ITEM(item_);
-}
-
-void RootItem::setItem(Item* item)
-{
-	item_ = item;
-	if (item_) item_->setParentItem(this);
-	setUpdateNeeded(StandardUpdate);
-}
-
-void RootItem::updateGeometry(int availableWidth, int availableHeight)
-{
-	if (item_) Item::updateGeometry(item_, availableWidth, availableHeight);
-	else setSize(QSize(0, 0));
-}
-
-void RootItem::determineChildren()
-{
-	synchronizeItem(item_, node());
 }
 
 } /* namespace Visualization */
