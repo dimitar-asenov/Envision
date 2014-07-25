@@ -79,7 +79,8 @@ void VIfStatement::initializeForms()
 
 	// Form 0: then and else branch arranged horizontally
 	auto contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
-			->put(0, 0, thenBranch)->put(1, 0, elseBranch);
+			->put(0, 0, thenBranch)->put(1, 0, elseBranch)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, header, AtLeftOf, contentElement)
@@ -92,7 +93,8 @@ void VIfStatement::initializeForms()
 
 	// Form 1: then and else branch arranged vertically
 	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
-			->put(0, 0, thenBranch)->put(0, 1, elseBranch);
+			->put(0, 0, thenBranch)->put(0, 1, elseBranch)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, header, AtLeftOf, contentElement)
