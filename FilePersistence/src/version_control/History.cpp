@@ -29,7 +29,6 @@
 #include "GitRepository.h"
 #include "ChangeDescription.h"
 #include "simple/Parser.h"
-#include "simple/GenericNodeAllocator.h"
 
 namespace FilePersistence {
 
@@ -38,11 +37,11 @@ History::History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, 
 	rootNodeId_ = rootNodeId;
 	historyGraph_ = historyGraph;
 
-	const CommitGraphItem* start = historyGraph_->start();
-	relevantCommits_.insert(start->commitSHA_);
+	const CommitGraphItem start = historyGraph_->start();
+	relevantCommits_.insert(start.commitSHA_);
 
 	QSet<Model::NodeIdType> trackedIDs = trackSubtree(repository);
-	detectRelevantCommits(start, trackedIDs, repository);
+	detectRelevantCommits(&start, trackedIDs, repository);
 }
 
 History::~History()
@@ -85,7 +84,7 @@ QSet<Model::NodeIdType> History::trackSubtree(const GitRepository* repository) c
 {
 	// TODO adapt to new GitRepository
 
-	QString startCommitSpec = historyGraph_->start()->commitSHA_;
+	QString startCommitSpec = historyGraph_->start().commitSHA_;
 	Commit startCommit = repository->getCommit(startCommitSpec);
 
 	QSet<Model::NodeIdType> trackedIDs;

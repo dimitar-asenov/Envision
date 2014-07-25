@@ -212,4 +212,5 @@ SOURCES += src/items/EmptyItem.cpp \
     src/renderer/SzLevelOrderingManager.cpp \
     src/node_extensions/FullDetailSize.cpp \
     src/VisualizationBasePlugin.cpp \
-    src/declarative/DynamicGridFormElement.cpp
+    src/declarative/DynamicGridFormElement.cpp \
+    src/declarative/GridLayouter.cpp

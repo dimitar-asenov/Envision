@@ -23,27 +23,49 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "GenericTree.h"
+#include "GenericNode.h"
 
-#pragma once
+namespace FilePersistence {
 
-#include "../interactionbase_api.h"
+GenericTree::GenericTree(QString name, QString commitName) :	name_{name}, commitName_{commitName}
+{}
 
-#include "../commands/Command.h"
-
-namespace Interaction {
-
-class INTERACTIONBASE_API CFind : public Command
+GenericTree::~GenericTree()
 {
-	public:
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+	persistentUnits_.clear();
+	for (auto c : emptyChunks_) delete [] c;
+}
 
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-};
+GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, int dataSize)
+{
+	Q_ASSERT(!name.isEmpty());
+	Q_ASSERT(!persistentUnits_.contains(name));
 
-} /* namespace Interaction */
+	return persistentUnits_.insert(name, GenericPersistentUnit(this, name, data, dataSize)).value();
+}
+
+GenericPersistentUnit* GenericTree::persistentUnit(const QString& name)
+{
+	Q_ASSERT(!name.isEmpty());
+
+	QHash<QString, GenericPersistentUnit>::iterator iter = persistentUnits_.find(name);
+	if (iter != persistentUnits_.end())
+		return &iter.value();
+	else
+		return nullptr;
+}
+
+
+GenericNode* GenericTree::emptyChunk()
+{
+	if (emptyChunks_.isEmpty()) return new GenericNode[ALLOCATION_CHUNK_SIZE];
+	else return emptyChunks_.takeLast();
+}
+
+void GenericTree::releaseChunk(GenericNode* unusedChunk)
+{
+	emptyChunks_.append(unusedChunk);
+}
+
+} /* namespace FilePersistence */

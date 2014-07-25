@@ -5,9 +5,10 @@ win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
 QT += xml
-HEADERS += src/simple/Parser.h \
+HEADERS += src/simple/GenericPersistentUnit.h \
+    src/simple/GenericTree.h \
+    src/simple/Parser.h \
     src/simple/GenericNode.h \
-    src/simple/GenericNodeAllocator.h \
     src/simple/SimpleTextFileStore.h \
     src/FilePersistenceException.h \
     src/SystemClipboard.h \
@@ -16,14 +17,15 @@ HEADERS += src/simple/Parser.h \
     src/precompiled.h \
     src/FilePersistencePlugin.h \
     src/version_control/ChangeDescription.h \
+    src/version_control/Commit.h \
+    src/version_control/CommitGraph.h \
     src/version_control/Diff.h \
     src/version_control/GitRepository.h \
-    src/version_control/CommitGraph.h \
-    src/version_control/History.h \
-    src/version_control/Commit.h
-SOURCES += src/simple/Parser.cpp \
+    src/version_control/History.h
+SOURCES += src/simple/GenericPersistentUnit.cpp \
+    src/simple/GenericTree.cpp \
+    src/simple/Parser.cpp \
     src/simple/GenericNode.cpp \
-    src/simple/GenericNodeAllocator.cpp \
     src/simple/SimpleTextFileStore.cpp \
     test/TypedListTests.cpp \
     test/ClipboardTests.cpp \

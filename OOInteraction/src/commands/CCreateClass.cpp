@@ -42,7 +42,7 @@ CCreateClass::CCreateClass() : CreateNamedObjectWithAttributes("class",
 }
 
 Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
+	const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
 {
 	auto pr = dynamic_cast<OOModel::Project*> (target->node());
 

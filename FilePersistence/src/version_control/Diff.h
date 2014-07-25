@@ -26,10 +26,12 @@
 
 #pragma once
 
-#include "../simple/GenericNode.h"
+#include "../simple/GenericTree.h"
 #include "ChangeDescription.h"
 
 namespace FilePersistence {
+
+class GitRepository;
 
 using IdToGenericNodeHash = QHash<Model::NodeIdType, GenericNode*>;
 using IdToChangeDescriptionHash = QHash<Model::NodeIdType, ChangeDescription*>;
@@ -37,7 +39,10 @@ using IdToChangeDescriptionHash = QHash<Model::NodeIdType, ChangeDescription*>;
 class FILEPERSISTENCE_API Diff
 {
 	public:
-		Diff(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);
+		Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
+			  QList<GenericNode*> newNodes, GenericTree* newTree,
+			  const GitRepository* repository);
+
 		~Diff();
 
 		void print() const;
@@ -48,13 +53,12 @@ class FILEPERSISTENCE_API Diff
 
 	private:
 		void idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);
-		void includeAndMarkParents();
-		void includeAndMarkParent(const GenericNode* child);
+		void findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree, const GitRepository* repository);
 
 		IdToChangeDescriptionHash changeDescriptions_;
 
-		// used for memory management
-		QList<GenericNode*> nodes_;
+		GenericTree* oldTree_{};
+		GenericTree* newTree_{};
 };
 
 inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}

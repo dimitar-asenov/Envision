@@ -23,51 +23,85 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "GenericPersistentUnit.h"
+#include "GenericTree.h"
+#include "GenericNode.h"
 
-#include "cursor/LayoutCursor.h"
-#include "cursor/CursorShapeItem.h"
-#include "layouts/Layout.h"
+namespace FilePersistence {
 
-namespace Visualization {
-
-LayoutCursor::LayoutCursor(Item* owner, CursorType type)
-	: Cursor(owner, type, new CursorShapeItem(this)), x_(0), y_(0), index_(0), isAtBoundary_(false),
-	  ownerElement_(nullptr)
+GenericPersistentUnit::GenericPersistentUnit(GenericTree* tree, QString name, char* data, int dataSize)
+: tree_{tree}, name_{name}, data_{data}, dataSize_{dataSize},
+  lastNodeIndexInLastChunk_{GenericTree::ALLOCATION_CHUNK_SIZE}
 {
+	Q_ASSERT(tree_);
 }
 
-LayoutCursor* LayoutCursor::clone() const
+GenericPersistentUnit::~GenericPersistentUnit()
 {
-	return new LayoutCursor(*this);
+	for (auto c : chunks_) tree_->releaseChunk(c);
+	chunks_.clear();
+
+	if (data_) delete [] data_;
+	data_ = nullptr;
 }
 
-
-void LayoutCursor::setVisualizationSize(const QSize& size)
+GenericNode* GenericPersistentUnit::nextNode()
 {
-	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
-	ci->setCursorSize(size);
+	++lastNodeIndexInLastChunk_;
+
+	if (chunks_.isEmpty() || lastNodeIndexInLastChunk_ >= GenericTree::ALLOCATION_CHUNK_SIZE)
+	{
+		// We must get a new chunk
+		lastNodeIndexInLastChunk_ = 0;
+		chunks_.append( tree_->emptyChunk() );
+	}
+
+	return chunks_.last() + lastNodeIndexInLastChunk_;
 }
 
-void LayoutCursor::setVisualizationPosition(const QPoint& pos)
+GenericNode* GenericPersistentUnit::newNode()
 {
-	setPosition(pos);
-	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
-	ci->setCursorTopLeft(position());
+	Q_ASSERT(!data_);
+	auto node = nextNode();
+	node->reset(this);
+	return node;
 }
 
-bool LayoutCursor::isSame(Cursor* c)
+GenericNode* GenericPersistentUnit::newNode(int lineStart, int lineEndEnclusive)
 {
-	auto lc = dynamic_cast<LayoutCursor*>(c);
-	if (lc)
-		return lc->owner() == owner() && lc->x() == x() && lc->y() == y() && lc->index() == index()
-				&& lc->ownerElement() == ownerElement();
+	Q_ASSERT(data_);
+	Q_ASSERT(lineEndEnclusive < dataSize_);
 
-	return false;
+	auto node = nextNode();
+	node->reset(this, data_+lineStart, lineEndEnclusive - lineStart + 1, true);
+	return node;
 }
 
-bool LayoutCursor::isAtBoundary() const
+GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
 {
-	return isAtBoundary_;
+	Q_ASSERT(!data_);
+	auto node = nextNode();
+	node->reset(this, data, dataLength, false);
+	return node;
 }
 
-} /* namespace Visualization */
+GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy)
+{
+	Q_ASSERT(!data_);
+	auto node = nextNode();
+	node->reset(this, nodeToCopy);
+	return node;
+}
+
+const char* GenericPersistentUnit::setData(const char* data, int dataSize)
+{
+	Q_ASSERT(!data_);
+	Q_ASSERT(data);
+	Q_ASSERT(dataSize > 0);
+	data_ = new char[dataSize];
+	dataSize_ = dataSize;
+	memcpy(data_, data, dataSize);
+	return data_;
+}
+
+} /* namespace FilePersistence */

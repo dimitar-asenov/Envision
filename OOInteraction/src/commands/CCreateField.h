@@ -38,7 +38,8 @@ class OOINTERACTION_API CCreateField : public Interaction::CreateNamedObjectWith
 
 	protected:
 		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-			const QString& name, const QStringList& attributes) override;
+				const std::unique_ptr<Visualization::Cursor>& cursor,
+				const QString& name, const QStringList& attributes) override;
 };
 
 }

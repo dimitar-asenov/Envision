@@ -28,8 +28,7 @@
 
 #include <git2.h>
 
-#include "../simple/Parser.h"
-#include "../simple/GenericNodeAllocator.h"
+#include "../simple/GenericTree.h"
 
 #include <iostream>
 
@@ -39,14 +38,17 @@ namespace FilePersistence {
 
 struct GitDiffExtract
 {
-	IdToGenericNodeHash oldNodes_;
-	IdToGenericNodeHash newNodes_;
+	GenericTree* oldTree_;
+	GenericTree* newTree_;
+
+	QList<GenericNode*> oldNodes_;
+	QList<GenericNode*> newNodes_;
 };
 
 struct GitCommitExtract
 {
 		git_repository* repository_;
-		QList<CommitFile*> files_;
+		QList<CommitFile> files_;
 };
 
 struct GitTreeBlobs
@@ -65,38 +67,55 @@ struct GitTreeBlobs
 int gitDiffExtractFileCB(
 				 const git_diff_delta *delta,
 				 float /*progress*/,
-				 void* /*carryAlongData*/)
+				 void* carryAlongData)
 {
-	std::cout << "Git diff extract: " << delta->new_file.path << std::endl;
+	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
+
+	QString oldRelativePath(delta->old_file.path);
+	data->oldTree_->newPersistentUnit(oldRelativePath);
+
+	QString newRelativePath(delta->new_file.path);
+	data->newTree_->newPersistentUnit(newRelativePath);
+
 	return 0;
 }
 
 int gitDiffExtractLineCB(
-				 const git_diff_delta* /*delta*/,
+				 const git_diff_delta* delta,
 				 const git_diff_hunk* /*hunk*/,
 				 const git_diff_line* line,
 				 void* carryAlongData)
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
-	size_t lineLength = line->content_len;
 
+	size_t lineLength = line->content_len;
 	while (line->content[lineLength] == '\t')
 		lineLength--;
 
-	GenericNode* node = new GenericNode(line->content, lineLength, false);;
 	switch (line->origin)
 	{
 		case GIT_DIFF_LINE_ADDITION:
-			// add node to newNodes
-			data->newNodes_.insert(node->id(), node);
+		{
+			// appear on new side
+			QString relativePath(delta->new_file.path);
+			GenericPersistentUnit* unit = data->newTree_->persistentUnit(relativePath);
+			Q_ASSERT(unit != nullptr);
+			GenericNode* node = unit->newNode(line->content, lineLength);
+			data->newNodes_.append(node);
 			break;
+		}
+
 		case GIT_DIFF_LINE_DELETION:
-			// add node to oldNodes
-			data->oldNodes_.insert(node->id(), node);
+		{
+			// appear on old side
+			QString relativePath(delta->old_file.path);
+			GenericPersistentUnit* unit = data->oldTree_->persistentUnit(relativePath);
+			Q_ASSERT(unit != nullptr);
+			GenericNode* node = unit->newNode(line->content, lineLength);
+			data->oldNodes_.append(node);
 			break;
-		case GIT_DIFF_LINE_CONTEXT:
-			// skip node (content did not change)
-			break;
+		}
+
 		default:
 			Q_ASSERT(false);
 	}
@@ -117,52 +136,22 @@ int treeWalkCommitExtractCB(const char* root,
 	{
 		if (git_object_type(obj) == GIT_OBJ_BLOB)
 		{
-			CommitFile* file = new CommitFile();
-
 			QString rootPath(root);
 			QString fileName(git_tree_entry_name(entry));
 			QString relativePath = rootPath.append(fileName);
-			file->relativePath_ = relativePath;
 
 			git_blob* blob = (git_blob*)obj;
 
 			qint64 contentSize = git_blob_rawsize(blob);
-			file->size_ = contentSize;
 
 			const char* rawContent = (const char*)git_blob_rawcontent(blob);
 			char* content = new char[contentSize];
 			memcpy(content, rawContent, contentSize);
-			file->content_ = content;
+
+			CommitFile file(relativePath, contentSize, content);
+			data->files_.append(file);
 
 			git_blob_free(blob);
-		}
-	}
-	else
-		Q_ASSERT(false);
-
-	return 0;
-}
-
-
-int treeWalkBlobExtractionCB(const char *,
-				const git_tree_entry *entry,
-				void *carryAlongData)
-{
-	GitTreeBlobs* data = (GitTreeBlobs*) carryAlongData;
-
-	git_object* obj = nullptr;
-	int errorCode = git_tree_entry_to_object(&obj, data->repository_, entry);
-
-	if (errorCode == 0)
-	{
-
-		if (git_object_type(obj) == GIT_OBJ_BLOB)
-		{
-			git_blob* blob = (git_blob*)obj;
-			data->blobs_.append(blob);
-
-			QString file(git_tree_entry_name(entry));
-			data->fileNames_.append(file);
 		}
 	}
 	else
@@ -245,34 +234,11 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 
 	// Use callback on diff to extract node information -> oldNodes & newNodes
 	GitDiffExtract carryAlongData;
+	QString oldCommitSHA = getSHA(oldCommit);
+	carryAlongData.oldTree_ = new GenericTree("oldDiff", oldCommitSHA);
+	QString newCommitSHA = getSHA(newCommit);
+	carryAlongData.newTree_ = new GenericTree("newDiff", newCommitSHA);
 	git_diff_foreach(gitDiff, gitDiffExtractFileCB, NULL, gitDiffExtractLineCB, &(carryAlongData));
-
-	// get parent information of oldNodes & newNodes
-	switch (diffKind)
-	{
-		case DiffKind::IndexToWorkdir:
-			findParentsInGitIndex(carryAlongData.oldNodes_);
-			findParentsInGitWorkdir(carryAlongData.newNodes_);
-			break;
-
-		case DiffKind::CommitToWorkdir:
-			findParentsInGitTree(carryAlongData.oldNodes_, oldGitTree);
-			findParentsInGitWorkdir(carryAlongData.newNodes_);
-			break;
-
-		case DiffKind::CommitToIndex:
-			findParentsInGitTree(carryAlongData.oldNodes_, oldGitTree);
-			findParentsInGitIndex(carryAlongData.newNodes_);
-			break;
-
-		case DiffKind::CommitToCommit:
-			findParentsInGitTree(carryAlongData.oldNodes_, oldGitTree);
-			findParentsInGitTree(carryAlongData.newNodes_, newGitTree);
-			break;
-
-		default:
-			Q_ASSERT(false);
-	}
 
 	// clean up
 	git_commit_free(oldGitCommit);
@@ -281,7 +247,9 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 	git_tree_free(newGitTree);
 	git_diff_free(gitDiff);
 
-	return Diff(carryAlongData.oldNodes_, carryAlongData.newNodes_);
+	return Diff(carryAlongData.oldNodes_, carryAlongData.oldTree_,
+					carryAlongData.newNodes_, carryAlongData.newTree_,
+					this);
 }
 
 CommitGraph GitRepository::commitGraph(QString start, QString end) const
@@ -324,7 +292,7 @@ Commit GitRepository::getCommit(QString commitSpec) const
 	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkCommitExtractCB, &treeWalkData);
 	checkError(errorCode);
 
-	CommitInformation info = getCommitInformation(commitSpec);
+	CommitMetaData info = getCommitInformation(commitSpec);
 
 	git_commit_free(gitCommit);
 	git_tree_free(tree);
@@ -377,9 +345,9 @@ CommitFile GitRepository::getCommitFile(QString commitSpec, QString relativePath
 	return file;
 }
 
-CommitInformation GitRepository::getCommitInformation(QString commitSpec) const
+CommitMetaData GitRepository::getCommitInformation(QString commitSpec) const
 {
-	CommitInformation info;
+	CommitMetaData info;
 
 	if (commitSpec.compare(WORKDIR) != 0 && commitSpec.compare(INDEX) != 0)
 	{
@@ -459,86 +427,6 @@ void GitRepository::checkout(QString commit, bool force)
 
 
 // Private methods
-
-void GitRepository::findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tree) const
-{
-	int errorCode = 0;
-
-	// extract blobs here and store them
-	GitTreeBlobs carryAlongData;
-	carryAlongData.repository_ = repository_;
-
-	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkBlobExtractionCB, &carryAlongData);
-	checkError(errorCode);
-
-	for (git_blob* blob : carryAlongData.blobs_)
-	{
-		const char* rawContent = (const char*)git_blob_rawcontent(blob);
-		qint64 contentSize = git_blob_rawsize(blob);
-
-		GenericNodeAllocator* allocator = new GenericNodeAllocator();
-		GenericNode* root = Parser::load(rawContent, contentSize, false, allocator);
-		extractParents(nodes, root);
-		allocator->endThisLoad();
-		delete allocator;
-	}
-}
-
-void GitRepository::findParentsInGitIndex(IdToGenericNodeHash nodes) const
-{
-	// TODO
-	(void) nodes;
-}
-
-void GitRepository::findParentsInGitWorkdir(IdToGenericNodeHash nodes) const
-{
-	QDir workdir = QDir(path_);
-	QFileInfoList list = workdir.entryInfoList(QDir::Files | QDir::NoDot | QDir::NoDotDot);
-	for (QFileInfo fileInfo : list)
-	{
-		GenericNodeAllocator* allocator = new GenericNodeAllocator();
-		GenericNode* root = Parser::load(fileInfo.filePath(), false, allocator);
-		extractParents(nodes, root);
-		allocator->endThisLoad();
-		delete allocator;
-	}
-}
-
-void GitRepository::extractParents(IdToGenericNodeHash nodes, GenericNode* root) const
-{
-	QList<GenericNode*> nodeList = nodes.values();
-	GenericNode* current = nullptr;
-	for (GenericNode* node : nodeList)
-	{
-		current = root->find(node->id());
-		if (current != nullptr)
-		{
-			// found node in tree
-			if (current->parent() != nullptr)
-			{
-				GenericNode* parent = copyGenericNode(current->parent());
-				node->setParent(parent);
-				parent->addChild(node);
-			}
-		}
-	}
-}
-
-GenericNode* GitRepository::copyGenericNode(const GenericNode* node)
-{
-	GenericNode* copy = new GenericNode();
-
-	copy->setName(node->name());
-	copy->setType(node->type());
-	if (node->valueType() != GenericNode::ValueType::NO_VALUE)
-		copy->setValue(node->valueType(), node->rawValue());
-
-	copy->setId(node->id());
-	copy->setParent(node->parent());
-
-	// children list stays empty
-	return copy;
-}
 
 void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const
 {

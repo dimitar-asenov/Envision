@@ -41,8 +41,10 @@ class INTERACTIONBASE_API CommandExecutionEngine
 		virtual ~CommandExecutionEngine();
 		static CommandExecutionEngine* instance();
 
-		virtual void execute(Visualization::Item *target, const QString& command);
-		virtual QList<CommandSuggestion*> autoComplete(Visualization::Item *target, const QString& textSoFar);
+		virtual void execute(Visualization::Item *target, const QString& command,
+				const std::unique_ptr<Visualization::Cursor>& cursor);
+		virtual QList<CommandSuggestion*> autoComplete(Visualization::Item *target, const QString& textSoFar,
+				const std::unique_ptr<Visualization::Cursor>& cursor);
 
 		QSharedPointer<CommandResult> result();
 

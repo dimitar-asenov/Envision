@@ -32,7 +32,7 @@
 namespace FilePersistence {
 
 class GenericNode;
-class GenericNodeAllocator;
+class GenericPersistentUnit;
 
 class FILEPERSISTENCE_API Parser {
 	public:
@@ -40,8 +40,8 @@ class FILEPERSISTENCE_API Parser {
 		static void parseLine(GenericNode* node, const char* line, int lineLength);
 
 		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
-		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
-		static GenericNode* load(const char* data, int dataLength, bool lazy, GenericNodeAllocator* allocator);
+		static GenericNode* load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit);
+		static GenericNode* load(const char* data, int dataLength, bool lazy, GenericPersistentUnit& persistentUnit);
 
 	private:
 		static int countTabs(const char* data, int lineStart, int lineEnd);

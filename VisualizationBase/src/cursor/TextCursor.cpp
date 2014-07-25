@@ -35,6 +35,11 @@ TextCursor::TextCursor(TextRenderer* owner)
 {
 }
 
+TextCursor* TextCursor::clone() const
+{
+	return new TextCursor(*this);
+}
+
 TextRenderer* TextCursor::owner() const
 {
 	return static_cast<TextRenderer*> (Cursor::owner());

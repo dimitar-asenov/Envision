@@ -36,6 +36,7 @@ class VISUALIZATIONBASE_API TextCursor : public Cursor {
 
 	public:
 		TextCursor(TextRenderer* owner);
+		virtual TextCursor* clone() const override;
 
 		int selectionBegin();
 		int selectionEnd();

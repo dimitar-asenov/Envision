@@ -34,12 +34,14 @@ using namespace Visualization;
 
 namespace Interaction {
 
-bool CSceneHandlerSave::canInterpret(Item*, Item*, const QStringList& commandTokens)
+bool CSceneHandlerSave::canInterpret(Item*, Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return (commandTokens.size() <= 2) && QString("save").startsWith(commandTokens.first());
 }
 
-CommandResult* CSceneHandlerSave::execute(Item* source, Item*, const QStringList& commandTokens)
+CommandResult* CSceneHandlerSave::execute(Item* source, Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	Model::Node* node = nullptr;
 	auto p = source;
@@ -70,7 +72,8 @@ CommandResult* CSceneHandlerSave::execute(Item* source, Item*, const QStringList
 	return new CommandResult();
 }
 
-QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString& textSoFar)
+QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	auto trimmed = textSoFar.trimmed();
 	auto split = trimmed.split(" ");
@@ -90,7 +93,8 @@ QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString
 	return {new CommandSuggestion(commandString, text)};
 }
 
-QStringList CSceneHandlerSave::commandForms(Item*, Item*, const QString& textSoFar)
+QStringList CSceneHandlerSave::commandForms(Item*, Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	QStringList forms;
 	if (textSoFar.isEmpty() || QString("save").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )

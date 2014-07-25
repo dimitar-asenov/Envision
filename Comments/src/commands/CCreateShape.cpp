@@ -37,7 +37,8 @@ CCreateShape::CCreateShape() : Interaction::CreateNamedObjectWithAttributes("sha
 }
 
 Interaction::CommandResult* CCreateShape::executeNamed(Visualization::Item*, Visualization::Item* target,
-	const QString&, const QStringList& attributes)
+		const std::unique_ptr<Visualization::Cursor>&,
+		const QString&, const QStringList& attributes)
 {
 	auto vdiagram = dynamic_cast<VCommentDiagram*>(target);
 	auto last = vdiagram->lastRightClick();

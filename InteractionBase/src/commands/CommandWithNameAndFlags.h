@@ -38,20 +38,22 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 		CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes, bool usePossibleNames);
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	protected:
 		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-				const QString& name, const QStringList& attributes) = 0;
+				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
+				const QStringList& attributes) = 0;
 
-		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar, const QString& name,
+		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar,
+				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
 				const QStringList& attributes, bool commandFound);
 
 		virtual QStringList possibleNames();

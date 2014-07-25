@@ -340,9 +340,9 @@ InteractionHandler* Item::handler() const
 	return defaultClassHandler();
 }
 
-void Item::execute(const QString& command)
+void Item::execute(const QString& command, const std::unique_ptr<Cursor>& cursor)
 {
-	handler()->command(this, command);
+	handler()->command(this, command, cursor);
 }
 
 bool Item::hasNode() const

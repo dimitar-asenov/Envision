@@ -26,36 +26,39 @@
 
 #include "Diff.h"
 
-#include "ChangeDescription.h"
+#include "GitRepository.h"
+
+#include "simple/Parser.h"
 
 #include <iostream>
 
 namespace FilePersistence {
 
-Diff::Diff(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes)
+Diff::Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
+	  QList<GenericNode*> newNodes, GenericTree* newTree,
+	  const GitRepository* repository)
 {
-	Q_ASSERT(changeDescriptions_.isEmpty());
-	Q_ASSERT(nodes_.isEmpty());
+	oldTree_ = oldTree;
+	newTree_ = newTree;
 
-	for (GenericNode* node : oldNodes.values())
-		nodes_.append(node);
+	IdToGenericNodeHash oldNodesHash;
+	for (GenericNode* node : oldNodes)
+		oldNodesHash.insert(node->id(), node);
 
-	for (GenericNode* node : newNodes.values())
-		nodes_.append(node);
+	IdToGenericNodeHash newNodesHash;
+	for (GenericNode* node : newNodes)
+		newNodesHash.insert(node->id(), node);
 
-	idMatching(oldNodes, newNodes);
-	includeAndMarkParents();
+	findParentsInCommit(oldNodesHash, oldTree_, repository);
+	findParentsInCommit(newNodesHash, newTree_, repository);
+
+	idMatching(oldNodesHash, newNodesHash);
 }
 
 Diff::~Diff()
 {
-	// delete all nodes
-	for (GenericNode* node : nodes_)
-		delete node;
-
-	// delete all changeDescriptions
-	for (ChangeDescription* description : changeDescriptions_.values())
-		delete description;
+	delete oldTree_;
+	delete newTree_;
 }
 
 void Diff::print() const
@@ -129,63 +132,42 @@ void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes
 	}
 }
 
-void Diff::includeAndMarkParents()
+void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
+										 const GitRepository* repository)
 {
-	QList<ChangeDescription*> beforeIncludingParents = changeDescriptions_.values();
+	QHash<QString, Model::NodeIdType> fileToNodeIDs;
+	for (GenericNode* node : nodes.values())
+		fileToNodeIDs.insert(node->persistentUnit()->name(), node->id());
 
-	for (ChangeDescription* description : beforeIncludingParents)
+	const QString fullFile("Diff::findParentsInCommit");
+
+	IdToGenericNodeHash::iterator iter = nodes.end();
+	for (QString path : fileToNodeIDs.uniqueKeys())
 	{
-		ChangeDescription::UpdateFlags flags = description->flags();
-		switch (description->type())
+		GenericPersistentUnit fullFileUnit = tree->newPersistentUnit(fullFile);
+		GenericPersistentUnit* unit = tree->persistentUnit(path);
+		CommitFile file = repository->getCommitFile(tree->commitName(), path);
+		GenericNode* root = Parser::load(file.content_, file.size_, false, fullFileUnit);
+		for (Model::NodeIdType id : fileToNodeIDs.values(path))
 		{
-			case ChangeType::Added:
-				includeAndMarkParent(description->newNode());
-				break;
-
-			case ChangeType::Deleted:
-				includeAndMarkParent(description->oldNode());
-				break;
-
-			case ChangeType::Moved:
-				includeAndMarkParent(description->oldNode());
-				includeAndMarkParent(description->newNode());
-				break;
-
-			case ChangeType::Stationary:
-				// need to be a reordering
-				if (flags.testFlag(ChangeDescription::Order))
-				{
-					Q_ASSERT(description->oldNode()->parent()->id() == description->newNode()->parent()->id());
-					includeAndMarkParent(description->oldNode());
-				}
-				break;
-
-			default:
-				Q_ASSERT(false);
+			GenericNode* nodeInFile = root->find(id);
+			GenericNode* parentInFile = nodeInFile->parent();
+			Q_ASSERT(nodes.contains(id));
+			iter = nodes.find(id);
+			GenericNode* node = iter.value();
+			iter = nodes.find(parentInFile->id());
+			GenericNode* parent = nullptr;
+			if (iter == nodes.end())
+			{
+				parent = unit->newNode(parentInFile);
+				nodes.insert(parent->id(), parent);
+			}
+			else
+				parent = iter.value();
+			node->setParent(parent);
+			parent->addChild(node);
 		}
-	}
-}
-
-void Diff::includeAndMarkParent(const GenericNode* child)
-{
-	if (child->parent() != nullptr)
-	{
-		ChangeDescription* description = nullptr;
-		IdToChangeDescriptionHash::iterator iter = changeDescriptions_.find(child->parent()->id());
-		if (iter == changeDescriptions_.end())
-		{
-			// no parent in changeDescriptions
-			description = new ChangeDescription(child->parent());
-			description->setChildrenUpdate(true);
-			changeDescriptions_.insert(child->parent()->id(), description);
-			nodes_.append(child->parent());
-		}
-		else
-		{
-			// parent already exists in changeDescriptions
-			description = iter.value();
-			description->setChildrenUpdate(true);
-		}
+		tree->remove(fullFileUnit);
 	}
 }
 

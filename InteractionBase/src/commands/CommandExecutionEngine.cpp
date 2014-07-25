@@ -49,7 +49,8 @@ CommandExecutionEngine* CommandExecutionEngine::instance()
 	return &engine;
 }
 
-void CommandExecutionEngine::execute(Visualization::Item *originator, const QString& command)
+void CommandExecutionEngine::execute(Visualization::Item *originator, const QString& command,
+		const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	lastCommandResult_.clear();
 
@@ -85,10 +86,10 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 		{
 			for (int i = 0; i< handler->commands().size(); ++i)
 			{
-				if ( handler->commands().at(i)->canInterpret(source, target, tokens) )
+				if ( handler->commands().at(i)->canInterpret(source, target, tokens, cursor) )
 				{
 					lastCommandResult_ = QSharedPointer<CommandResult>(
-							handler->commands().at(i)->execute(source, target, tokens));
+							handler->commands().at(i)->execute(source, target, tokens, cursor));
 
 					if (lastCommandResult_->code() != CommandResult::CanNotInterpret)
 					{
@@ -113,10 +114,10 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 		{
 			for (int i = 0; i < handler->commands().size(); ++i)
 			{
-				if ( handler->commands().at(i)->canInterpret(source, sceneHandlerItem, tokens) )
+				if ( handler->commands().at(i)->canInterpret(source, sceneHandlerItem, tokens, cursor) )
 				{
 					lastCommandResult_ = QSharedPointer<CommandResult>(
-							handler->commands().at(i)->execute(source, sceneHandlerItem, tokens));
+							handler->commands().at(i)->execute(source, sceneHandlerItem, tokens, cursor));
 
 					if ( lastCommandResult_->code() != CommandResult::CanNotInterpret )
 					{
@@ -139,7 +140,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 }
 
 QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::Item *originator,
-																					const QString& textSoFar)
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QList<CommandSuggestion*> result;
 
@@ -168,7 +169,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 				for (auto command : handler->commands())
 				{
 					if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
-					auto suggestions = command->suggest(source, target, trimmed);
+					auto suggestions = command->suggest(source, target, trimmed, cursor);
 					result.append( suggestions );
 					if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
 				}
@@ -184,7 +185,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 				for (auto command : handler->commands())
 				{
 					if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
-					auto suggestions = command->suggest(source, target, trimmed);
+					auto suggestions = command->suggest(source, target, trimmed, cursor);
 					result.append( suggestions );
 					if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
 				}

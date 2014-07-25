@@ -32,17 +32,13 @@ CommitGraphItem::CommitGraphItem(QString sha) { commitSHA_ = sha; }
 
 CommitGraph::CommitGraph(QString start, QString end)
 {
-	start_ = new CommitGraphItem(start);
-	items_.insert(start, start_);
+	CommitGraphItem startItem(start);
+	start_ = &startItem;
+	items_.insert(start, startItem);
 
-	end_ = new CommitGraphItem(end);
-	items_.insert(end, end_);
-}
-
-CommitGraph::~CommitGraph()
-{
-	for (CommitGraphItem* item : items_.values())
-		SAFE_DELETE(item);
+	CommitGraphItem endItem(end);
+	end_ = &endItem;
+	items_.insert(end, endItem);
 }
 
 void CommitGraph::add(QString fromCommitSHA, QString toCommitSHA)
@@ -50,22 +46,24 @@ void CommitGraph::add(QString fromCommitSHA, QString toCommitSHA)
 	CommitGraphItem* fromItem = nullptr;
 	CommitGraphItem* toItem = nullptr;
 
-	QHash<QString, CommitGraphItem*>::iterator iter = items_.find(fromCommitSHA);
+	QHash<QString, CommitGraphItem>::iterator iter = items_.find(fromCommitSHA);
 	if (iter != items_.end())
-		fromItem = iter.value();
+		fromItem = &iter.value();
 	else
 	{
-		fromItem = new CommitGraphItem(fromCommitSHA);
-		items_.insert(fromCommitSHA, fromItem);
+		CommitGraphItem newFromItem(fromCommitSHA);
+		fromItem = &newFromItem;
+		items_.insert(fromCommitSHA, newFromItem);
 	}
 
 	iter = items_.find(toCommitSHA);
 	if (iter != items_.end())
-		toItem = iter.value();
+		toItem = &iter.value();
 	else
 	{
-		toItem = new CommitGraphItem(toCommitSHA);
-		items_.insert(toCommitSHA, toItem);
+		CommitGraphItem newToItem(toCommitSHA);
+		toItem = &newToItem;
+		items_.insert(toCommitSHA, newToItem);
 	}
 
 	fromItem->children_.append(toItem);
@@ -74,11 +72,11 @@ void CommitGraph::add(QString fromCommitSHA, QString toCommitSHA)
 
 const CommitGraphItem* CommitGraph::find(QString commit) const
 {
-	QHash<QString, CommitGraphItem*>::const_iterator iter = items_.find(commit);
-	if (iter != items_.end())
+	QHash<QString, CommitGraphItem>::const_iterator iter = items_.find(commit);
+	if (iter == items_.constEnd())
 		return nullptr;
 	else
-		return iter.value();
+		return &iter.value();
 }
 
 } /* namespace FilePersistence */

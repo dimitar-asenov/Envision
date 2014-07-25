@@ -34,6 +34,8 @@
 #include "FilePersistence/src/version_control/ChangeDescription.h"
 #include "VisualizationBase/src/items/Item.h"
 
+#include "VisualizationBase/src/CustomSceneEvent.h"
+
 using namespace Visualization;
 
 namespace Interaction {
@@ -44,9 +46,14 @@ CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"library"}}, true}
 	repository_ = new FilePersistence::GitRepository(path);
 }
 
-CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item*,
-			const QString& name, const QStringList& attributes)
+CommandResult* CDiff::executeNamed(Visualization::Item* source, Visualization::Item* target,
+		const std::unique_ptr<Visualization::Cursor>& cursor,
+		const QString& name, const QStringList& attributes)
 {
+	(void) source;
+	(void) target;
+	(void) cursor;
+
 	QString commitOld("abf18");
 	repository_->checkout(commitOld, true);
 
@@ -61,37 +68,32 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item*,
 	managerNew->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
 	managerNew->setName("Hello (New)");
 
-	FilePersistence::Diff diff = repository_->diff(commitOld, commitNew);
-	FilePersistence::IdToChangeDescriptionHash changes = diff.changes();
-
 	Item* oldRoot = new RootItem(managerOld->root());
 	oldRoot->setPos(-200.f, 0.f);
 
 	Item* newRoot = new RootItem(managerNew->root());
 	newRoot->setPos(200.f, 0.f);
 
-	QList<Visualization::Item*> stack;
-
-	for (FilePersistence::ChangeDescription* change : changes.values())
-	{
-		Model::Node* node = const_cast<Model::Node*>(Model::NodeIdMap::node(change->id()));
-		if (node->parent() == nullptr)
-			qDebug() << "nullptr";
-		Item* item = nullptr;
-		// FIXME: No visualizations are found
-		item = newRoot->findVisualizationOf(node);
-		if (item != nullptr)
-		{
-			qDebug() << "Test";
-			stack.append(item);
-		}
-	}
-
 	VisualizationManager::instance().mainScene()->addTopLevelItem(oldRoot);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(managerOld);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem(newRoot);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(managerNew);
+
+	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
+		new Visualization::CustomSceneEvent( [newRoot, commitOld, commitNew, this](){
+
+			FilePersistence::Diff diff = repository_->diff(commitOld, commitNew);
+			FilePersistence::IdToChangeDescriptionHash changes = diff.changes();
+
+			for (FilePersistence::ChangeDescription* change : changes.values())
+			{
+				Model::Node* node = const_cast<Model::Node*>(Model::NodeIdMap::node(change->id()));
+				if (auto item = newRoot->findVisualizationOf(node)) item->setSelected(true);
+			}
+
+	} ) );
+
 
 	return new CommandResult();
 }

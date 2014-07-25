@@ -28,6 +28,13 @@
 
 namespace FilePersistence {
 
+CommitFile::CommitFile()
+{
+	relativePath_ = QString();
+	size_ = 0;
+	content_ = nullptr;
+}
+
 CommitFile::CommitFile(QString relativePath, qint64 size, const char* content)
 {
 	relativePath_ = relativePath;

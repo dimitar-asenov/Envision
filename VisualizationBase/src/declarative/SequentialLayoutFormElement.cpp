@@ -76,7 +76,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 	{
 		if (horizontal)
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[](){return 1;},	// numRows
 				[size](){return size;},	// numColumns
 				[](int, int){return true;},	// has
@@ -103,7 +103,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		}
 		else
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[size](){return size;},	// numRows
 				[](){return 1;},	// numColumns
 				[](int, int){return true;},	// has
@@ -134,7 +134,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		auto invert = [size](int i){return size-1-i;};
 		if (horizontal)
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[](){return 1;},	// numRows
 				[size](){return size;},	// numColumns
 				[](int, int){return true;},	// has
@@ -161,7 +161,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		}
 		else
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[size](){return size;},	// numRows
 				[](){return 1;},	// numColumns
 				[](int, int){return true;},	// has
@@ -196,8 +196,9 @@ void SequentialLayoutFormElement::setItemPositions(Item* item, int parentX, int 
 	auto& data = dataForItem(item);
 	for (int i = 0; i<data.items_.size(); ++i)
 	{
-		QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[i].x() + leftMargin(),
-					parentY + y(item) + data.itemPositionWithinLayout_[i].y() + topMargin()};
+		// Note that margins have already been accounted for.
+		QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[i].x(),
+					parentY + y(item) + data.itemPositionWithinLayout_[i].y()};
 
 		if (newPos != data.items_[i]->pos())
 			data.items_[i]->setPos(newPos); // setting the position is an expensive operation so only do it if it changed

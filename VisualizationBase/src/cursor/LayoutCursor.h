@@ -37,6 +37,7 @@ class FormElement;
 class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 	public:
 		LayoutCursor(Item* owner, CursorType type);
+		virtual LayoutCursor* clone() const override;
 
 		void setVisualizationSize(const QSize& size);
 

@@ -137,7 +137,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				}
 
 				// At this point, index indicates where in the LAYOUT we should put the new element.
-				if (index >= 0)
+				if (index >= 0 && index + list->rangeBegin() <= list->node()->size())
 				{
 					list->node()->beginModification("add new list element");
 					list->node()->insert(index + list->rangeBegin(), newElem);

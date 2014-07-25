@@ -34,14 +34,14 @@ class INTERACTIONBASE_API CSceneHandlerSave : public Command
 {
 	public:
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens) override;
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar) override;
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
 } /* namespace Interaction */

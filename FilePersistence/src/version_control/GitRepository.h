@@ -50,7 +50,7 @@ class FILEPERSISTENCE_API GitRepository
 
 		Commit getCommit(QString commitSpec) const;
 		CommitFile getCommitFile(QString commitSpec, QString relativePath) const;
-		CommitInformation getCommitInformation(QString commitSpec) const;
+		CommitMetaData getCommitInformation(QString commitSpec) const;
 
 		QString getSHA(QString commit) const;
 
@@ -60,13 +60,6 @@ class FILEPERSISTENCE_API GitRepository
 		static const QString INDEX;
 
 	private:
-		void findParentsInGitTree(IdToGenericNodeHash nodes, git_tree* tree) const;
-		void findParentsInGitIndex(IdToGenericNodeHash nodes) const;
-		void findParentsInGitWorkdir(IdToGenericNodeHash nodes) const;
-
-		void extractParents(IdToGenericNodeHash nodes, GenericNode* root) const;
-		static GenericNode* copyGenericNode(const GenericNode* node);
-
 		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 
 		git_commit* parseCommit(QString commit) const;

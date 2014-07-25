@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "Parser.h"
 #include "GenericNode.h"
-#include "GenericNodeAllocator.h"
+#include "GenericPersistentUnit.h"
 
 namespace FilePersistence {
 
@@ -249,7 +249,7 @@ void Parser::save(QTextStream& stream, GenericNode* node, int tabLevel)
 		save(stream, child, tabLevel+1);
 }
 
-GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocator* allocator)
+GenericNode* Parser::load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit)
 {
 	QFile file(filename);
 	if ( !file.open(QIODevice::ReadOnly) )
@@ -261,14 +261,13 @@ GenericNode* Parser::load(const QString& filename, bool lazy, GenericNodeAllocat
 	auto mapped = reinterpret_cast<char*>(file.map(0, totalFileSize));
 	Q_ASSERT(mapped);
 
-	return load(mapped, totalFileSize, lazy, allocator);
+	return load(mapped, totalFileSize, lazy, persistentUnit);
 }
 
-GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericNodeAllocator* allocator)
+GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPersistentUnit& persistentUnit)
 {
 	// We need to make a copy since the memory will be unmapped after the file object gets out of scope.
-	auto dataCopy = new char[dataLength];
-	memcpy(dataCopy, data, dataLength);
+	auto dataCopy = persistentUnit.setData(data, dataLength);
 
 	QList<GenericNode*> nodeStack;
 	GenericNode* top = nullptr;
@@ -285,7 +284,7 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericNo
 			Q_ASSERT(tabLevel == 0);
 
 			// Top can't be in the allNodes array since it must delete that array in its own destructor.
-			top = allocator->newRoot(dataCopy, start, lineEnd);
+			top = persistentUnit.newNode(start, lineEnd);
 			nodeStack.append(top);
 		}
 		else
@@ -293,7 +292,7 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericNo
 			Q_ASSERT(tabLevel > 0);
 			Q_ASSERT(nodeStack.size() >= tabLevel);
 
-			GenericNode* child = allocator->newChild(start, lineEnd);
+			GenericNode* child = persistentUnit.newNode(start, lineEnd);
 
 			while (nodeStack.size() > tabLevel) nodeStack.removeLast();
 

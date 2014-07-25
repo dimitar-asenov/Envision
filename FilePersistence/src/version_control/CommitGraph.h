@@ -45,23 +45,22 @@ class FILEPERSISTENCE_API CommitGraph
 {
 	public:
 		CommitGraph(QString start, QString end);
-		~CommitGraph();
 
 		void add(QString fromCommitSHA, QString toCommitSHA);
 
 		const CommitGraphItem* find(QString commit) const;
 
-		const CommitGraphItem* start() const;
-		const CommitGraphItem* end() const;
+		const CommitGraphItem& start() const;
+		const CommitGraphItem& end() const;
 
 	private:
 		CommitGraphItem* start_;
 		CommitGraphItem* end_;
 
-		QHash<QString, CommitGraphItem*> items_;
+		QHash<QString, CommitGraphItem> items_;
 };
 
-inline const CommitGraphItem* CommitGraph::start() const { return start_; }
-inline const CommitGraphItem* CommitGraph::end() const { return end_; }
+inline const CommitGraphItem& CommitGraph::start() const { return *start_; }
+inline const CommitGraphItem& CommitGraph::end() const { return *end_; }
 
 } /* namespace FilePersistence */

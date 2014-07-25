@@ -27,18 +27,25 @@
 
 #include "../visualizationbase_api.h"
 #include "../layouts/LayoutStyle.h"
+#include "../items/ItemRegion.h"
+#include "../items/Item.h"
 
 namespace Visualization {
+
+class FormElement;
 
 class VISUALIZATIONBASE_API GridLayouter
 {
 	public:
+
+		enum MajorAxis {NoMajor, ColumnMajor, RowMajor};
 		template < bool mayHaveMergedCells, class NumRows, class NumColumns, class HasElement, class Width, class Height,
 					 class ComputeElementSize, class ChangeGeometry, class IsStretchable, class SetPosition, class SpanGrid,
 					 class RowStretchFactors, class ColumnStretchFactors, class HorizontalAlignment, class VerticalAlignment,
 					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
 					 class LeftMargin, class RightMargin, class MinWidth, class MinHeight>
-		static QSize computeSize(int availableWidth, int availableHeight, NumRows numRows, NumColumns numColumns,
+		static QSize computeSize(int availableWidth, int availableHeight, MajorAxis majorAxis,
+										NumRows numRows, NumColumns numColumns,
 										HasElement has, SpanGrid spanGrid, Width width, Height height,
 										ComputeElementSize computeElementSize, ChangeGeometry changeGeometry,
 										IsStretchable isStretchable, SetPosition setPosition,
@@ -48,10 +55,14 @@ class VISUALIZATIONBASE_API GridLayouter
 										TopMargin topMargin, BottomMargin bottomMargin, LeftMargin leftMargin,
 										RightMargin rightMargin, MinWidth minWidth, MinHeight minHeight)
 		{
+			Q_ASSERT(!mayHaveMergedCells || majorAxis == NoMajor);
+
 			// Compute default sizes of all the elements
 			// Get the widest and tallest items (without merged cells)
 			QVector<int> widestInColumn(numColumns(), 0);
 			QVector<int> tallestInRow(numRows(), 0);
+			QVector<int> totalHeightInColumn(numColumns(), 0);
+			QVector<int> totalWidthInRow(numRows(), 0);
 			bool hasMultiColumn = false;
 			bool hasMultiRow = false;
 			for (int x=0; x<numColumns(); x++)
@@ -59,6 +70,9 @@ class VISUALIZATIONBASE_API GridLayouter
 					if (has(x, y))
 					{
 						computeElementSize(x, y, 0, 0); // any additional space is distributed later
+						if (majorAxis == ColumnMajor) totalHeightInColumn[x] += height(x, y) + (y==0 ? 0 :spaceBetweenRows());
+						if (majorAxis == RowMajor) totalWidthInRow[y] += width(x, y) + (x==0 ? 0 : spaceBetweenColumns());
+
 						if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
 						{
 							if (width(x, y) > widestInColumn[x]) widestInColumn[x] = width(x, y);
@@ -127,47 +141,69 @@ class VISUALIZATIONBASE_API GridLayouter
 			QSize finalSize{0, 0};
 
 			// Compute grid width and overall column stretch factor
-			decltype(columnStretchFactors(0)) overallColumnStretchFactor = 0;
-			for (int i = 0; i< numColumns(); ++i)
-			{
-				finalSize.rwidth() += widestInColumn[i];
-				overallColumnStretchFactor += columnStretchFactors(i);
-			}
 			if (numColumns() > 0) finalSize.rwidth() += leftMargin() + rightMargin();
-			if (numColumns() > 1) finalSize.rwidth() += spaceBetweenColumns() * (numColumns() - 1);
-
-			// Adjust widest cell in column values if there is additional space available
-			availableWidth = std::max(availableWidth, minWidth());
-			int additionalWidth = availableWidth - finalSize.rwidth();
-			// if availableWidth == 0, this is always false
-			if (additionalWidth > 0)
+			if (majorAxis != RowMajor)
 			{
-				if (overallColumnStretchFactor > 0) // distribute the additional space according to the stretch factors
-					for (int x = 0; x<numColumns(); ++x)
-						widestInColumn[x] += std::floor(additionalWidth / overallColumnStretchFactor * columnStretchFactors(x));
-				finalSize.rwidth() = availableWidth;
+				decltype(columnStretchFactors(0)) overallColumnStretchFactor = 0;
+				for (int i = 0; i< numColumns(); ++i)
+				{
+					finalSize.rwidth() += widestInColumn[i];
+					overallColumnStretchFactor += columnStretchFactors(i);
+				}
+				if (numColumns() > 1) finalSize.rwidth() += spaceBetweenColumns() * (numColumns() - 1);
+
+				// Adjust widest cell in column values if there is additional space available
+				availableWidth = std::max(availableWidth, minWidth());
+				int additionalWidth = availableWidth - finalSize.rwidth();
+				// if availableWidth == 0, this is always false
+				if (additionalWidth > 0)
+				{
+					if (overallColumnStretchFactor > 0) // distribute the additional space according to the stretch factors
+						for (int x = 0; x<numColumns(); ++x)
+							widestInColumn[x] += std::floor(additionalWidth / overallColumnStretchFactor * columnStretchFactors(x));
+					finalSize.rwidth() = availableWidth;
+				}
+			}
+			else
+			{
+				// No stretching
+
+				// Already includes the spacing
+				finalSize.rwidth() += totalWidthInRow.isEmpty() ? 0 :
+												*std::max_element(totalWidthInRow.begin(), totalWidthInRow.end());
 			}
 
 			// Compute grid height and overall row stretch factor
-			decltype(rowStretchFactors(0)) overallRowStretchFactor = 0;
-			for (int i = 0; i<numRows(); ++i)
-			{
-				finalSize.rheight() += tallestInRow[i];
-				overallRowStretchFactor += rowStretchFactors(i);
-			}
 			if (numRows() > 0) finalSize.rheight() += topMargin() + bottomMargin();
-			if (numRows() > 1) finalSize.rheight() += spaceBetweenRows() * (numRows() - 1);
-
-			// Adjust tallest cell in row values if there is additional space available
-			availableHeight = std::max(availableHeight, minHeight());
-			int additionalHeight = availableHeight - finalSize.rheight();
-			// if availableHeight == 0, this is always false
-			if (additionalHeight > 0)
+			if (majorAxis != ColumnMajor)
 			{
-				if (overallRowStretchFactor > 0) // distribute the additional space according to the stretch factors
-					for (int y = 0; y<numRows(); ++y)
-						tallestInRow[y] += std::floor(additionalHeight / overallRowStretchFactor * rowStretchFactors(y));
-				finalSize.rheight() = availableHeight;
+				decltype(rowStretchFactors(0)) overallRowStretchFactor = 0;
+				for (int i = 0; i<numRows(); ++i)
+				{
+					finalSize.rheight() += tallestInRow[i];
+					overallRowStretchFactor += rowStretchFactors(i);
+				}
+				if (numRows() > 1) finalSize.rheight() += spaceBetweenRows() * (numRows() - 1);
+
+				// Adjust tallest cell in row values if there is additional space available
+				availableHeight = std::max(availableHeight, minHeight());
+				int additionalHeight = availableHeight - finalSize.rheight();
+				// if availableHeight == 0, this is always false
+				if (additionalHeight > 0)
+				{
+					if (overallRowStretchFactor > 0) // distribute the additional space according to the stretch factors
+						for (int y = 0; y<numRows(); ++y)
+							tallestInRow[y] += std::floor(additionalHeight / overallRowStretchFactor * rowStretchFactors(y));
+					finalSize.rheight() = availableHeight;
+				}
+			}
+			else
+			{
+				// No stretching
+
+				// Already includes the spacing
+				finalSize.rheight() += totalHeightInColumn.isEmpty() ? 0 :
+												*std::max_element(totalHeightInColumn.begin(), totalHeightInColumn.end());
 			}
 
 			// DONE With size. At this point the finalSize object contains the final size of this object.
@@ -177,94 +213,417 @@ class VISUALIZATIONBASE_API GridLayouter
 				for (int y=0; y<numRows(); y++)
 					if (has(x, y) && isStretchable(x, y))
 					{
+						int localAvailableWidth = 0;
+						int localAvailableHeight = 0;
+
 						if (!mayHaveMergedCells || (spanGrid(x, y).first == 1 && spanGrid(x, y).second == 1))
-							changeGeometry(x, y, widestInColumn[x], tallestInRow[y]);
+						{
+							localAvailableWidth = widestInColumn[x];
+							localAvailableHeight = tallestInRow[y];
+						}
 						else
 						{
-							int localAvailableWidth = 0;
 							for (int column=x; column<x+spanGrid(x, y).first; column++)
 								localAvailableWidth += widestInColumn[column];
 
-							int localAvailableHeight = 0;
 							for (int row=y; row<y+spanGrid(x, y).second; row++)
 								localAvailableHeight += tallestInRow[row];
-
-							changeGeometry(x, y, localAvailableWidth, localAvailableHeight);
 						}
+
+						if (majorAxis == RowMajor) localAvailableWidth = 0;
+						if (majorAxis == ColumnMajor) localAvailableHeight = 0;
+						changeGeometry(x, y, localAvailableWidth, localAvailableHeight);
 					}
 
 			// Set element positions
-			int left = leftMargin();
-			for (int x=0; x<numColumns(); ++x)
+			if (majorAxis == NoMajor)
+			{
+				int left = leftMargin();
+				for (int x=0; x<numColumns(); ++x)
+				{
+					int top = topMargin();
+					for (int y=0; y<numRows(); ++y)
+					{
+						if (has(x, y))
+						{
+							int xPos = left;
+							if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Center)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
+									xPos += (widestInColumn[x] - width(x, y))/2;
+								else
+								{
+									int localAvailableWidth = 0;
+									for (int column=x; column<x+spanGrid(x, y).first; column++)
+										localAvailableWidth += widestInColumn[column];
+									xPos += (localAvailableWidth - width(x, y))/2;
+								}
+							}
+							else if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Right)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
+									xPos += (widestInColumn[x] - width(x, y));
+								else
+								{
+									int localAvailableWidth = 0;
+									for (int column=x; column<x+spanGrid(x, y).first; column++)
+										localAvailableWidth += widestInColumn[column];
+									xPos += (localAvailableWidth - width(x, y));
+								}
+							}
+
+							int yPos = top;
+							if (verticalAlignment(x, y) == LayoutStyle::Alignment::Center)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+									yPos += (tallestInRow[y] - height(x, y))/2;
+								else
+								{
+									int localAvailableHeight = 0;
+									for (int row=y; row<y+spanGrid(x, y).second; row++)
+										localAvailableHeight += tallestInRow[row];
+									yPos += (localAvailableHeight - height(x, y))/2;
+								}
+							}
+							else if (verticalAlignment(x, y) == LayoutStyle::Alignment::Bottom)
+							{
+								if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+									yPos += tallestInRow[y] - height(x, y);
+								else
+								{
+									int localAvailableHeight = 0;
+									for (int row=y; row<y+spanGrid(x, y).second; row++)
+										localAvailableHeight += tallestInRow[row];
+									yPos += localAvailableHeight - height(x, y);
+								}
+							}
+
+							setPosition(x, y, QPoint(xPos, yPos));
+						}
+
+						top += tallestInRow[y] + spaceBetweenRows();
+					}
+
+					left += widestInColumn[x] + spaceBetweenColumns();
+				}
+			}
+			else if (majorAxis == ColumnMajor)
+			{
+				int left = leftMargin();
+				for (int x=0; x<numColumns(); ++x)
+				{
+					int top = topMargin();
+					for (int y=0; y<numRows(); ++y)
+					{
+						if (has(x, y))
+						{
+							int xPos = left;
+							if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Center)
+								xPos += (widestInColumn[x] - width(x, y))/2;
+							else if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Right)
+								xPos += (widestInColumn[x] - width(x, y));
+
+							setPosition(x, y, QPoint(xPos, top));
+							top += height(x, y) + spaceBetweenRows();
+						}
+					}
+
+					left += widestInColumn[x] + spaceBetweenColumns();
+				}
+			}
+			else if (majorAxis == RowMajor)
 			{
 				int top = topMargin();
 				for (int y=0; y<numRows(); ++y)
 				{
-					if (has(x, y))
+					int left = leftMargin();
+					for (int x=0; x<numColumns(); ++x)
 					{
-						int xPos = left;
-						if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Center)
+						if (has(x, y))
 						{
-							if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
-								xPos += (widestInColumn[x] - width(x, y))/2;
-							else
-							{
-								int localAvailableWidth = 0;
-								for (int column=x; column<x+spanGrid(x, y).first; column++)
-									localAvailableWidth += widestInColumn[column];
-								xPos += (localAvailableWidth - width(x, y))/2;
-							}
-						}
-						else if (horizontalAlignment(x, y) == LayoutStyle::Alignment::Right)
-						{
-							if (!mayHaveMergedCells || spanGrid(x, y).first == 1)
-								xPos += (widestInColumn[x] - width(x, y));
-							else
-							{
-								int localAvailableWidth = 0;
-								for (int column=x; column<x+spanGrid(x, y).first; column++)
-									localAvailableWidth += widestInColumn[column];
-								xPos += (localAvailableWidth - width(x, y));
-							}
-						}
-
-						int yPos = top;
-						if (verticalAlignment(x, y) == LayoutStyle::Alignment::Center)
-						{
-							if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+							int yPos = top;
+							if (verticalAlignment(x, y) == LayoutStyle::Alignment::Center)
 								yPos += (tallestInRow[y] - height(x, y))/2;
-							else
-							{
-								int localAvailableHeight = 0;
-								for (int row=y; row<y+spanGrid(x, y).second; row++)
-									localAvailableHeight += tallestInRow[row];
-								yPos += (localAvailableHeight - height(x, y))/2;
-							}
-						}
-						else if (verticalAlignment(x, y) == LayoutStyle::Alignment::Bottom)
-						{
-							if (!mayHaveMergedCells || spanGrid(x, y).second == 1)
+							else if (verticalAlignment(x, y) == LayoutStyle::Alignment::Bottom)
 								yPos += tallestInRow[y] - height(x, y);
-							else
-							{
-								int localAvailableHeight = 0;
-								for (int row=y; row<y+spanGrid(x, y).second; row++)
-									localAvailableHeight += tallestInRow[row];
-								yPos += localAvailableHeight - height(x, y);
-							}
-						}
 
-						setPosition(x, y, QPoint(xPos, yPos));
+							setPosition(x, y, QPoint(left, yPos));
+							left += width(x, y) + spaceBetweenColumns();
+						}
 					}
 
 					top += tallestInRow[y] + spaceBetweenRows();
 				}
-
-				left += widestInColumn[x] + spaceBetweenColumns();
 			}
 
 			return finalSize;
 		}
+
+
+		/**
+		 * Does not consider spans.
+		 */
+		template <class NumRows, class NumColumns, class ChildItem,
+					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
+					 class LeftMargin, class RightMargin>
+		static QList<ItemRegion> regions(Item* parent, FormElement* formElement, int xOffset, int yOffset,
+										MajorAxis majorAxis, bool showCursorWhenEmpty, bool onlyInnerCursors,
+										bool extraCursorsAroundParentShape, bool notLocationEquivalentCursors,
+										bool showMajorCursors,
+										NumRows numRows, NumColumns numColumns, ChildItem childItem,
+										SpaceBetweenRows spaceBetweenRows, SpaceBetweenColumns spaceBetweenColumns,
+										TopMargin topMargin, BottomMargin bottomMargin, LeftMargin leftMargin,
+										RightMargin rightMargin)
+		{
+			QList<ItemRegion> regs;
+
+			auto isEmpty = numColumns() == 0 || numRows() == 0;
+			if ( isEmpty && !showCursorWhenEmpty) return regs;
+
+			extraCursorsAroundParentShape = extraCursorsAroundParentShape && parent->hasShape();
+
+			// Get the widest and tallest items and the precise position of different columns
+			QVector<int> columnLeft(numColumns(), std::numeric_limits<int>::max());
+			QVector<int> columnRight(numColumns(), 0);
+			QVector<int> rowTop(numRows(), std::numeric_limits<int>::max());
+			QVector<int> rowBottom(numRows(), 0);
+			QVector<int> lastChildIndexInColumn(numColumns(), -1);
+			QVector<int> lastChildIndexInRow(numRows(), -1);
+			int rightMostPoint = 0;
+			int bottomMostPoint = 0;
+			for (int x=0; x<numColumns(); x++)
+				for (int y=0; y<numRows(); y++)
+					if (auto child = childItem(x, y))
+					{
+						lastChildIndexInColumn[x] = y;
+						lastChildIndexInRow[y] = x;
+						if (child->x() < columnLeft[x]) columnLeft[x] = child->x();
+						if (child->xEndInParent() > columnRight[x]) columnRight[x] = child->xEndInParent();
+
+						if (child->y() < rowTop[y]) rowTop[y] = child->y();
+						if (child->yEndInParent() > rowBottom[y]) rowBottom[y] = child->yEndInParent();
+
+						if (child->xEndInParent() > rightMostPoint) rightMostPoint = child->xEndInParent();
+						if (child->yEndInParent() > bottomMostPoint) bottomMostPoint = child->yEndInParent();
+					}
+
+			// If a row or a column is completely empty it still contains std::numeric_limits<int>::max().
+			// We need to correctly set the elements in that case.
+			// To make the cursors more visible, we use the available margins/space, halfway on both sides
+			int leftSoFar = xOffset + leftMargin();
+			int leftPrevSpace = leftMargin();
+			int topSoFar = yOffset + topMargin();
+			int topPrevSpace = topMargin();
+			for (int x = 0; x<numColumns(); ++x)
+			{
+				int nextSpace = (x+1 == numColumns() ? rightMargin() : spaceBetweenColumns() );
+				if (columnLeft[x] == std::numeric_limits<int>::max())
+				{
+					columnLeft[x] = leftSoFar - leftPrevSpace/2;
+					columnRight[x] = leftSoFar + nextSpace/2;
+					leftSoFar += nextSpace;
+				}
+				else leftSoFar = columnRight[x] + nextSpace;
+
+				leftPrevSpace = nextSpace;
+			}
+			for (int y = 0; y<numRows(); ++y)
+			{
+				int nextSpace = (y+1 == numRows() ? bottomMargin() : spaceBetweenRows() );
+				if (rowTop[y] == std::numeric_limits<int>::max())
+				{
+					rowTop[y] = topSoFar - topPrevSpace/2;
+					rowBottom[y] = topSoFar + nextSpace/2;
+					topSoFar += nextSpace;
+				}
+				topSoFar = rowBottom[y] + nextSpace;
+
+				topPrevSpace = nextSpace;
+			}
+
+			// Set Child item regions and remember rects
+			QVector< QVector<QRect> > itemAreas(numColumns(), QVector<QRect>(numRows(), QRect()));
+			QVector<int> columnNextTop(numColumns(), numRows() > 0 ?  rowTop[0] : 0);
+			QVector<int> rowNextLeft(numRows(), numColumns() > 0 ? columnLeft[0] : 0);
+			for (int x=0; x<numColumns(); x++)
+				for (int y=0; y<numRows(); y++)
+					if (auto child = childItem(x, y))
+					{
+						regs.append( ItemRegion() );
+						regs.last().setItem( child );
+
+						QRect itemArea;
+
+						// Set vertical position and dimensions
+						if (majorAxis == ColumnMajor)
+						{
+							itemArea.setTop(columnNextTop[x]);
+							itemArea.setHeight( child->heightInParent() );
+							columnNextTop[x] += itemArea.height() + spaceBetweenRows();
+						}
+						else
+						{
+							itemArea.setTop(rowTop[y]);
+							itemArea.setBottom( rowBottom[y] );
+						}
+
+						// Set horizontal position and dimensions
+						if (majorAxis == RowMajor)
+						{
+							itemArea.setLeft(rowNextLeft[y]);
+							itemArea.setWidth( child->widthInParent() );
+							rowNextLeft[y] += itemArea.width() + spaceBetweenColumns();
+						}
+						else
+						{
+							itemArea.setLeft(columnLeft[x]);
+							itemArea.setRight( columnRight[x] );
+						}
+
+						itemAreas[x][y] = itemArea;
+						regs.last().setRegion(itemArea);
+					}
+					else
+					{
+						// Add a dummy area rect to make putting cursors easier
+						if (majorAxis == NoMajor)
+						{
+							itemAreas[x][y].setTopLeft( QPoint(columnLeft[x], rowTop[y]) );
+							itemAreas[x][y].setBottomRight( QPoint(columnRight[x], rowBottom[y]) );
+						}
+					}
+
+			// Set front and inner cursor regions.
+			// Inner cursors span the spacing between items.
+			// Front and Back cursors, if present, are in the margins.
+			// Cursors outside shape, if present, are outside the margins.
+			int frontCursorLeft = numColumns() > 0 ? columnLeft[0] - leftMargin() : 0;
+			int frontCursorTop = numRows() > 0 ? rowTop[0] - topMargin() : 0;
+			int totalWidth = rightMostPoint - frontCursorLeft;
+			int totalHeight = bottomMostPoint - frontCursorTop;
+
+			for (int x=0; x<numColumns(); x++)
+				for (int y=0; y<numRows(); y++)
+				{
+					int columnWidth = columnRight[x]-columnLeft[x]+1;
+					int rowHeight = rowBottom[y]-rowTop[y]+1;
+
+					// Front minor cursor. Always there if requested.
+					if (((x == 0 && majorAxis != ColumnMajor) || (y==0 && majorAxis == ColumnMajor)) && !onlyInnerCursors)
+					{
+						regs.append( cursorRegion(parent, formElement, x, y, majorAxis == ColumnMajor,
+								!extraCursorsAroundParentShape,
+								notLocationEquivalentCursors, !extraCursorsAroundParentShape, true,
+								majorAxis == ColumnMajor
+								? QRect(columnLeft[x], frontCursorTop, columnWidth, topMargin())
+								: QRect(frontCursorLeft, rowTop[y], leftMargin(), rowHeight) ));
+					}
+
+					// Inner major cursor after the current major axis, if requested
+					if (showMajorCursors &&
+							((majorAxis == ColumnMajor && x>0 && y==0) || (majorAxis != ColumnMajor && y>0 && x==0)))
+					{
+						regs.append( cursorRegion(parent, formElement,
+							majorAxis == ColumnMajor ? x+1 : -1, majorAxis == ColumnMajor ? -1 : y+1,
+							majorAxis != ColumnMajor, false, true, true, true,
+							majorAxis == ColumnMajor
+							? QRect(columnRight[x]+1, frontCursorTop, leftMargin(), totalHeight)
+							: QRect(frontCursorLeft, rowBottom[y]+1, totalWidth, topMargin()) ));
+					}
+
+					// Inner cursor to next element, if any
+					if (!itemAreas[x][y].isNull()
+							&& (	(majorAxis == ColumnMajor && y < lastChildIndexInColumn[x])
+								||
+									(majorAxis != ColumnMajor && x < lastChildIndexInRow[y])))
+					{
+						regs.append( cursorRegion(parent, formElement,
+								majorAxis == ColumnMajor ? x : x+1,
+								majorAxis == ColumnMajor ? y+1 : y, majorAxis == ColumnMajor, false,
+								notLocationEquivalentCursors, true, true,
+								majorAxis == ColumnMajor
+								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, spaceBetweenRows())
+								: QRect(itemAreas[x][y].right()+1, rowTop[y], spaceBetweenColumns(), rowHeight) ));
+					}
+
+					// Back cursor, if requested, and if there is at least one element
+					if (!itemAreas[x][y].isNull() && !onlyInnerCursors
+							&& (	(majorAxis == ColumnMajor && y == lastChildIndexInColumn[x])
+								||
+									(majorAxis != ColumnMajor && x == lastChildIndexInRow[y])))
+					{
+						regs.append( cursorRegion(parent, formElement,
+								majorAxis == ColumnMajor ? x : x+1,
+								majorAxis == ColumnMajor ? y+1 : y, majorAxis == ColumnMajor, !extraCursorsAroundParentShape,
+								notLocationEquivalentCursors, true, !extraCursorsAroundParentShape,
+								majorAxis == ColumnMajor
+								? QRect(columnLeft[x], itemAreas[x][y].bottom()+1, columnWidth, bottomMargin())
+								: QRect(itemAreas[x][y].right()+1, rowTop[y], rightMargin(), rowHeight) ));
+					}
+
+				}
+
+
+			// Front and back major cursor. Always there if requested.
+			if (showMajorCursors)
+			{
+				// Front
+				regs.append( cursorRegion(parent, formElement,
+						majorAxis == ColumnMajor ? 0 : -1, majorAxis == ColumnMajor ? -1 : 0,
+						majorAxis != ColumnMajor, false, true, false, true,
+						majorAxis == ColumnMajor
+						? QRect(frontCursorLeft, frontCursorTop, leftMargin(), totalHeight)
+						: QRect(frontCursorLeft, frontCursorTop, totalWidth, topMargin()) ));
+
+				//Back
+				regs.append( cursorRegion(parent, formElement,
+						majorAxis == ColumnMajor ? numColumns() : -1, majorAxis == ColumnMajor ? -1 : numRows(),
+						majorAxis != ColumnMajor, false, true, true, false,
+						majorAxis == ColumnMajor
+						? QRect(numColumns()>0 ? columnRight[numColumns()-1]+1 : 0, frontCursorTop, leftMargin(), totalHeight)
+						: QRect(frontCursorLeft, numRows()>0 ? rowBottom[numRows()-1]+1 : 0, totalWidth, topMargin()) ));
+			}
+
+			// Cursors outside shape
+			constexpr int CURSOR_SIZE = 2;
+			if (extraCursorsAroundParentShape)
+			{
+				// Front
+				regs.append(cursorRegion(parent, formElement, -1, -1, majorAxis == ColumnMajor, true,
+								notLocationEquivalentCursors, false, true,
+								majorAxis == ColumnMajor
+								? QRect(0, 0, parent->widthInLocal(), CURSOR_SIZE)
+								: QRect(0, 0, CURSOR_SIZE, parent->heightInLocal()) ));
+
+				// Back
+				regs.append(cursorRegion(parent, formElement, numColumns()+1, numRows()+1, majorAxis == ColumnMajor, true,
+								notLocationEquivalentCursors, true, false,
+								majorAxis == ColumnMajor
+								? QRect(0, parent->heightInLocal() - CURSOR_SIZE - 1, parent->widthInLocal(), CURSOR_SIZE)
+								: QRect(parent->widthInLocal() - CURSOR_SIZE - 1, 0, CURSOR_SIZE, parent->heightInLocal()) ));
+			}
+
+			return regs;
+		}
+
+
+		static QVector< QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes, MajorAxis majorAxis);
+		static void setPositionInGrid(QVector<Model::Node*> nodes, int x, int y, Model::Node* node, MajorAxis majorAxis);
+		static void removeFromGrid(QVector<Model::Node*> nodes, Model::Node* node, MajorAxis majorAxis);
+		static void normalizeGridIndices(QVector<Model::Node*> nodes, MajorAxis majorAxis);
+	//*******************************************************************************************************************
+	// Helpers
+	//*******************************************************************************************************************
+	private:
+		static ItemRegion cursorRegion(Item* parent, FormElement* formElement, int xIndex, int yIndex,
+				bool horizontal, bool atBoundary, bool notLocationEquivalent, bool mayExpandFront, bool mayExpandBack,
+				QRect area);
+
+		template<class Container, class Value>
+		static void resizeReplace(Container& container, int majorIndex, int minorIndex, Value value);
+
+		static void pushNodes(QVector<Model::Node*> nodes, int x, int y, int pushAmount, MajorAxis majorAxis,
+				bool pushAllMajor);
 };
 
 } // namespace Visualization

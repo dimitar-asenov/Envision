@@ -34,7 +34,7 @@ CommandWithNameAndFlags::CommandWithNameAndFlags(const QString& commandName, con
 }
 
 bool CommandWithNameAndFlags::canInterpret(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
-		const QStringList& commandTokens)
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QString name;
 	QStringList attributes;
@@ -47,7 +47,8 @@ bool CommandWithNameAndFlags::canInterpret(Visualization::Item* /*source*/, Visu
 }
 
 CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
-		Visualization::Item* target, const QStringList& commandTokens)
+		Visualization::Item* target, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QString name;
 	QStringList attributes;
@@ -67,14 +68,12 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 		name = matching.first();
 	}
 
-	return executeNamed(source, target, name, attributes);
+	return executeNamed(source, target, cursor, name, attributes);
 }
 
 QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* /*source*/,
-		Visualization::Item* /*target*/, const QString& textSoFar)
+		Visualization::Item* /*target*/, const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-
-
 	QString name;
 	QStringList attributes;
 	bool commandFound;
@@ -83,10 +82,11 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* 
 	findParts(textSoFar.split(" "), name, attributes, commandFound, unknownFormat);
 
 	if (unknownFormat) return {};
-	return suggestNamed(textSoFar, name, attributes, commandFound);
+	return suggestNamed(textSoFar, cursor, name, attributes, commandFound);
 }
 
-QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& textSoFar, const QString& name,
+QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {
 	QString commandText = textSoFar + (commandFound?"":" " + commandName_);
@@ -114,7 +114,8 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& t
 }
 
 QStringList CommandWithNameAndFlags::commandForms(Visualization::Item* /*source*/,
-		Visualization::Item* /*target*/, const QString& /*textSoFar*/)
+		Visualization::Item* /*target*/, const QString& /*textSoFar*/,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	//TODO: Implement this
 	return QStringList();

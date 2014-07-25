@@ -50,6 +50,7 @@ struct CommitFile {
 		qint64 size_;
 		const char* content_;
 
+		CommitFile();
 		CommitFile(QString relativePath, qint64 size, const char* content);
 		~CommitFile();
 };

@@ -76,7 +76,7 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, 
 
 	if (initialCommandText.isNull()) command_->setText("Type a command");
 	else command_->setText(initialCommandText);
-	saveReceiverCursorPosition();
+	saveReceiverCursor();
 	setPromptPosition();
 	command_->moveCursor();
 
@@ -101,6 +101,11 @@ CommandPrompt::~CommandPrompt()
 	errorContainer_ = nullptr;
 }
 
+inline QPoint CommandPrompt::receiverCursorPosition()
+{
+	return commandReceiverCursor_ ? commandReceiverCursor_->position() : QPoint(0, 0);
+}
+
 void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 {
 	command_->setText(suggestion->text());
@@ -110,7 +115,7 @@ void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 
 void CommandPrompt::showPrompt(QString initialCommandText)
 {
-	saveReceiverCursorPosition();
+	saveReceiverCursor();
 	setPromptPosition();
 	show();
 	if (! initialCommandText.isNull()) command_->setText(initialCommandText);
@@ -129,7 +134,7 @@ void CommandPrompt::hidePrompt()
 	hide();
 
 	if (scene()->mainCursor()) // If the main cursor was deleted, then do not select anything.
-		commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition_);
+		commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition());
 }
 
 void CommandPrompt::determineChildren()
@@ -139,7 +144,7 @@ void CommandPrompt::determineChildren()
 	if (h)
 	{
 		removeSuggestions();
-		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command_->text()));
+		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command_->text(), commandReceiverCursor_));
 	}
 }
 
@@ -211,12 +216,11 @@ void CommandPrompt::removeSuggestions()
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
-void CommandPrompt::saveReceiverCursorPosition()
+void CommandPrompt::saveReceiverCursor()
 {
-	// Save the current cursor
-	receiverCursorPosition_ = QPoint(0, 0);
-	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
-		receiverCursorPosition_ = commandReceiver_->scene()->mainCursor()->position();
+	commandReceiverCursor_.reset();
+	if (commandReceiver_->scene()->mainCursor() && commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
+		commandReceiverCursor_.reset(commandReceiver_->scene()->mainCursor()->clone());
 }
 
 void CommandPrompt::setPromptPosition()
@@ -230,7 +234,7 @@ void CommandPrompt::setPromptPosition()
 	else
 	{
 		// If the item is rather large show the prompt at the cursor
-		promptPos += receiverCursorPosition_;
+		promptPos += receiverCursorPosition();
 	}
 
 	setPos(promptPos);

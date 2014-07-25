@@ -29,8 +29,8 @@ general-purpose software development.
 		description of each plug-in from this layer:
 			\li Logger provides a simple means to keep a log of events that have occurred in the system.
 			\li SelfTest implements a small test framework for Envision plug-ins.
-			\li \link Model ModelBase \endlink defines the foundation for application models. This includes some basic nodes,
-				concurrent access mechanisms, persistence interfaces and others.
+			\li \link Model ModelBase \endlink defines the foundation for application models - ASTs. This includes some
+				basic nodes, concurrent access mechanisms, persistence interfaces and others.
 			\li \link Visualization VisualizationBase \endlink defines the basic visualization behavior of Envision. It
 				provides graphical representations for the generic nodes defined in ModelBase, a number of layouts, shapes
 				and other useful visual items.

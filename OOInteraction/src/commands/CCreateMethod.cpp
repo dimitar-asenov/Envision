@@ -29,6 +29,8 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
 
+#include "VisualizationBase/src/declarative/GridLayouter.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "InteractionBase/src/events/SetCursorEvent.h"
 
 using namespace OOModel;
@@ -41,7 +43,7 @@ CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
 }
 
 Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
+	const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
 {
 	auto cl = dynamic_cast<OOModel::Class*> (target->node());
 	Q_ASSERT(cl);
