@@ -29,7 +29,6 @@
 
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"

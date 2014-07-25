@@ -32,7 +32,6 @@
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
-#include "VisualizationBase/src/layouts/PositionLayoutStyle.h"
 
 namespace OOVisualization {
 
@@ -61,7 +60,6 @@ class OOVISUALIZATION_API VClassSzPublicStyle : public Visualization::Declarativ
 		Property<Visualization::StaticStyle> friendsSymbol{this, "friendsSymbol"};
 		Property<Visualization::VListStyle> friends{this, "friends"};
 		Property<Visualization::VListStyle> declarations{this, "declarations"};
-		Property<Visualization::PositionLayoutStyle> body{this, "body"};
 		Property<Visualization::SequentialLayoutStyle> content{this, "content"};
 		Property<Visualization::ItemStyle> fieldContainer{this, "fieldContainer"};
 		Property<Visualization::SequentialLayoutStyle> publicFieldArea{this, "publicFieldArea"};
