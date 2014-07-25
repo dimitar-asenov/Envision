@@ -213,7 +213,7 @@
 			<symbol>add sub declaration</symbol>
 		</selectedTip>
 	</declarations>
-	<fieldContainer prototypes="items/Item/default">
+	<fieldContainer prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<cornerRadius>5</cornerRadius>
