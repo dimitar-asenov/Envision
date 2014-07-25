@@ -402,10 +402,8 @@ void GitRepository::checkout(QString commit, bool force)
 	{
 		git_checkout_options options;
 		git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);
-		if (force)
-			options.checkout_strategy = GIT_CHECKOUT_FORCE;
-		else
-			options.checkout_strategy = GIT_CHECKOUT_SAFE;
+
+		options.checkout_strategy = force ? GIT_CHECKOUT_FORCE : GIT_CHECKOUT_SAFE;
 
 		int errorCode = 0;
 		if (commit.compare(INDEX) == 0)
