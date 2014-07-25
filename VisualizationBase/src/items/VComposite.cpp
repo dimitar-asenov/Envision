@@ -146,7 +146,7 @@ void VComposite::setExpanded(bool expanded)
 	if ( expanded != expanded_ )
 	{
 		expanded_ = expanded;
-		setUpdateNeeded(FullUpdate);
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 

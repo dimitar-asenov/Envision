@@ -70,7 +70,7 @@ QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
 }
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(StandardUpdate), purpose_(-1),
 	semanticZoomLevel_(-1), itemCategory_(Scene::NoItemCategory)
 {
 	// By default no flags in a QGraphicsItem are enabled.
@@ -111,12 +111,27 @@ QRectF Item::boundingRect() const
 
 void Item::setUpdateNeeded(UpdateType updateType)
 {
+	// Set own update
 	needsUpdate_ = updateType;
+
+	// Request that all parents are updated
 	Item* p = parent();
 	while (p)
 	{
 		if (p->needsUpdate() == NoUpdate) p->needsUpdate_ = StandardUpdate;
 		p = p->parent();
+	}
+
+	// If Full update, update all children
+	if (updateType == FullUpdate)
+	{
+		QList<Item*> stack = childItems();
+		while (!stack.isEmpty())
+		{
+			auto child = stack.takeLast();
+			child->needsUpdate_ = StandardUpdate;
+			stack << child->childItems();
+		}
 	}
 }
 
