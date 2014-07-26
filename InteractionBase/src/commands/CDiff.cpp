@@ -42,7 +42,7 @@ namespace Interaction {
 
 CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"library"}}, true}
 {
-	QString path("/home/motth/Documents/Envision/Envision/DebugBuild/projects/Hello/.git");
+	QString path("projects/Hello/.git");
 	repository_ = new FilePersistence::GitRepository(path);
 }
 
@@ -81,15 +81,29 @@ CommandResult* CDiff::executeNamed(Visualization::Item* source, Visualization::I
 	VisualizationManager::instance().mainScene()->listenToTreeManager(managerNew);
 
 	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-		new Visualization::CustomSceneEvent( [newRoot, commitOld, commitNew, this](){
+		new Visualization::CustomSceneEvent( [oldRoot, newRoot, commitOld, commitNew, this](){
 
 			FilePersistence::Diff diff = repository_->diff(commitOld, commitNew);
 			FilePersistence::IdToChangeDescriptionHash changes = diff.changes();
 
+			auto insertHighlight = VisualizationManager::instance().mainScene()->addHighlight("Insert", "green");
+			auto deleteHighlight = VisualizationManager::instance().mainScene()->addHighlight("Delete", "red");
+
 			for (FilePersistence::ChangeDescription* change : changes.values())
 			{
 				Model::Node* node = const_cast<Model::Node*>(Model::NodeIdMap::node(change->id()));
-				if (auto item = newRoot->findVisualizationOf(node)) item->setSelected(true);
+
+				if (auto item = oldRoot->findVisualizationOf(node))
+				{
+					if (change->type() == FilePersistence::ChangeType::Deleted)
+						deleteHighlight->addHighlightedItem(item);
+				}
+
+				if (auto item = newRoot->findVisualizationOf(node))
+				{
+					if (change->type() == FilePersistence::ChangeType::Added)
+						insertHighlight->addHighlightedItem(item);
+				}
 			}
 
 	} ) );
