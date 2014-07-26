@@ -163,8 +163,7 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 
 void GenericHandler::showComment(Visualization::Item *itemWithComment, Model::Node *aNode)
 {
-	if (commentWrapper_ && itemWithComment == commentWrapper_->itemWithComment()
-		 && !itemWithComment->findVisualizationOf(aNode))
+	if (commentWrapper_ && itemWithComment == commentWrapper_->itemWithComment())
 	{
 		if (commentWrapper_->isVisible())
 			commentWrapper_->hide();
@@ -175,7 +174,7 @@ void GenericHandler::showComment(Visualization::Item *itemWithComment, Model::No
 	{
 		SAFE_DELETE_ITEM(commentWrapper_);
 		commentWrapper_ = new CommentWrapper(itemWithComment, aNode);
-		if (!itemWithComment->findVisualizationOf(aNode)) commentWrapper_->showComment();
+		commentWrapper_->showComment();
 	}
 }
 
@@ -438,8 +437,10 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					aCompositeNode->beginModification("add comment");
 					aCompositeNode->setComment(new Comments::CommentNode("Enter comment here"));
 					aCompositeNode->endModification();
+					aNode->updateSubtree();
 				}
-				showComment(aNode, aCompositeNode->comment());
+				if (!aNode->findVisualizationOf(aCompositeNode->comment()))
+					showComment(aNode, aCompositeNode->comment());
 				break;
 			}
 			aNode = aNode->parent();
