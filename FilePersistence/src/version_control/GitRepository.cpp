@@ -60,7 +60,7 @@ struct GitTreeBlobs
 	}
 };
 
-int gitDiffExtractFileCB(
+int gitDiffExtractFileCallBack(
 				 const git_diff_delta *delta,
 				 float /*progress*/,
 				 void* carryAlongData)
@@ -76,7 +76,7 @@ int gitDiffExtractFileCB(
 	return 0;
 }
 
-int gitDiffExtractLineCB(
+int gitDiffExtractLineCallBack(
 				 const git_diff_delta* delta,
 				 const git_diff_hunk* /*hunk*/,
 				 const git_diff_line* line,
@@ -119,7 +119,7 @@ int gitDiffExtractLineCB(
 }
 
 // Tree Walk Callback
-int treeWalkCommitExtractCB(const char* root,
+int treeWalkCommitExtractCallBack(const char* root,
 									 const git_tree_entry* entry,
 									 void* walkData)
 {
@@ -184,11 +184,11 @@ GitRepository::~GitRepository()
 	git_threads_shutdown();
 }
 
-Diff GitRepository::diff(QString oldCommit, QString newCommit) const
+Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 {
 	int errorCode = 0;
 
-	DiffKind diffKind = kind(oldCommit, newCommit);
+	DiffKind diffKind = kind(oldRevision, newRevision);
 	Q_ASSERT(diffKind != DiffKind::Unspecified);
 
 
@@ -206,9 +206,8 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 		errorCode = git_diff_index_to_workdir(&gitDiff, repository_, nullptr, &diffOptions);
 	else
 	{
-		Q_ASSERT(oldCommit != nullptr);
 		// parse oldCommit and get git_tree
-		oldGitCommit = parseCommit(oldCommit);
+		oldGitCommit = parseCommit(oldRevision);
 		errorCode = git_commit_tree(&oldGitTree, oldGitCommit);
 		checkError(errorCode);
 
@@ -218,9 +217,8 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, oldGitTree, &diffOptions);
 		else
 		{
-			Q_ASSERT(newCommit != nullptr);
 			// parse newCommit and get git_tree
-			newGitCommit = parseCommit(newCommit);
+			newGitCommit = parseCommit(newRevision);
 			errorCode = git_commit_tree(&newGitTree, newGitCommit);
 			checkError(errorCode);
 			errorCode = git_diff_tree_to_tree(&gitDiff, repository_, oldGitTree, newGitTree, &diffOptions);
@@ -230,11 +228,11 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 
 	// Use callback on diff to extract node information -> oldNodes & newNodes
 	GitDiffExtract carryAlongData;
-	QString oldCommitSHA = getSHA(oldCommit);
-	carryAlongData.oldTree_ = new GenericTree("oldDiff", oldCommitSHA);
-	QString newCommitSHA = getSHA(newCommit);
-	carryAlongData.newTree_ = new GenericTree("newDiff", newCommitSHA);
-	git_diff_foreach(gitDiff, gitDiffExtractFileCB, NULL, gitDiffExtractLineCB, &(carryAlongData));
+	QString oldCommitSHA1 = getSHA1(oldRevision);
+	carryAlongData.oldTree_ = new GenericTree("oldDiff", oldCommitSHA1);
+	QString newCommitSHA1 = getSHA1(newRevision);
+	carryAlongData.newTree_ = new GenericTree("newDiff", newCommitSHA1);
+	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, NULL, gitDiffExtractLineCallBack, &(carryAlongData));
 
 	// clean up
 	git_commit_free(oldGitCommit);
@@ -248,21 +246,21 @@ Diff GitRepository::diff(QString oldCommit, QString newCommit) const
 					this);
 }
 
-CommitGraph GitRepository::commitGraph(QString start, QString end) const
+CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevision) const
 {
-	git_commit* gitStartCommit = parseCommit(start);
+	git_commit* gitStartCommit = parseCommit(startRevision);
 	const git_oid* startOID = git_commit_id(gitStartCommit);
-	char* sha = git_oid_allocfmt(startOID);
-	QString startSHA(sha);
-	delete sha;
+	char* sha1 = git_oid_allocfmt(startOID);
+	QString startSHA1(sha1);
+	delete sha1;
 
-	git_commit* gitEndCommit = parseCommit(end);
+	git_commit* gitEndCommit = parseCommit(endRevision);
 	const git_oid* endOID = git_commit_id(gitEndCommit);
-	sha = git_oid_allocfmt(endOID);
-	QString endSHA(sha);
-	delete sha;
+	sha1 = git_oid_allocfmt(endOID);
+	QString endSHA1(sha1);
+	delete sha1;
 
-	CommitGraph graph(startSHA, endSHA);
+	CommitGraph graph(startSHA1, endSHA1);
 	traverseCommitGraph(&graph, gitEndCommit, startOID);
 
 	git_commit_free(gitStartCommit);
@@ -270,14 +268,14 @@ CommitGraph GitRepository::commitGraph(QString start, QString end) const
 	return graph;
 }
 
-Commit GitRepository::getCommit(QString commitSpec) const
+Commit GitRepository::getCommit(QString revision) const
 {
-	Q_ASSERT(commitSpec.compare(WORKDIR) != 0);
-	Q_ASSERT(commitSpec.compare(INDEX) != 0);
+	Q_ASSERT(revision.compare(WORKDIR) != 0);
+	Q_ASSERT(revision.compare(INDEX) != 0);
 
 	int errorCode = 0;
 
-	git_commit* gitCommit = parseCommit(commitSpec);
+	git_commit* gitCommit = parseCommit(revision);
 	git_tree* tree = nullptr;
 	errorCode = git_commit_tree(&tree, gitCommit);
 	checkError(errorCode);
@@ -285,10 +283,10 @@ Commit GitRepository::getCommit(QString commitSpec) const
 	GitCommitExtract treeWalkData;
 	treeWalkData.repository_ = repository_;
 
-	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkCommitExtractCB, &treeWalkData);
+	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkCommitExtractCallBack, &treeWalkData);
 	checkError(errorCode);
 
-	CommitMetaData info = getCommitInformation(commitSpec);
+	CommitMetaData info = getCommitInformation(revision);
 
 	git_commit_free(gitCommit);
 	git_tree_free(tree);
@@ -297,14 +295,14 @@ Commit GitRepository::getCommit(QString commitSpec) const
 	return commit;
 }
 
-CommitFile GitRepository::getCommitFile(QString commitSpec, QString relativePath) const
+CommitFile GitRepository::getCommitFile(QString revision, QString relativePath) const
 {
-	Q_ASSERT(commitSpec.compare(WORKDIR) != 0);
-	Q_ASSERT(commitSpec.compare(INDEX) != 0);
+	Q_ASSERT(revision.compare(WORKDIR) != 0);
+	Q_ASSERT(revision.compare(INDEX) != 0);
 
 	int errorCode = 0;
 
-	git_commit* gitCommit = parseCommit(commitSpec);
+	git_commit* gitCommit = parseCommit(revision);
 	git_tree* tree = nullptr;
 	errorCode = git_commit_tree(&tree, gitCommit);
 	checkError(errorCode);
@@ -341,19 +339,19 @@ CommitFile GitRepository::getCommitFile(QString commitSpec, QString relativePath
 	return file;
 }
 
-CommitMetaData GitRepository::getCommitInformation(QString commitSpec) const
+CommitMetaData GitRepository::getCommitInformation(QString revision) const
 {
 	CommitMetaData info;
 
-	if (commitSpec.compare(WORKDIR) != 0 && commitSpec.compare(INDEX) != 0)
+	if (revision.compare(WORKDIR) != 0 && revision.compare(INDEX) != 0)
 	{
-		git_commit* gitCommit = parseCommit(commitSpec);
+		git_commit* gitCommit = parseCommit(revision);
 
-		// SHA
+		// SHA1
 		const git_oid* oid = git_commit_id(gitCommit);
-		char* sha = git_oid_allocfmt(oid);
-		info.sha_ = QString(sha);
-		delete sha;
+		char* sha1 = git_oid_allocfmt(oid);
+		info.sha1_ = QString(sha1);
+		delete sha1;
 
 		// Message
 		const char* msg = git_commit_message(gitCommit);
@@ -383,22 +381,22 @@ CommitMetaData GitRepository::getCommitInformation(QString commitSpec) const
 	return info;
 }
 
-QString GitRepository::getSHA(QString commit) const
+QString GitRepository::getSHA1(QString revision) const
 {
-	git_commit* gitCommit = parseCommit(commit);
+	git_commit* gitCommit = parseCommit(revision);
 
 	const git_oid* oid = git_commit_id(gitCommit);
-	char* sha = git_oid_allocfmt(oid);
-	QString commitSHA(sha);
-	delete sha;
+	char* sha1 = git_oid_allocfmt(oid);
+	QString commitSHA1(sha1);
+	delete sha1;
 	git_commit_free(gitCommit);
 
-	return commitSHA;
+	return commitSHA1;
 }
 
-void GitRepository::checkout(QString commit, bool force)
+void GitRepository::checkout(QString revesion, bool force)
 {
-	if (commit.compare(WORKDIR) != 0)
+	if (revesion.compare(WORKDIR) != 0)
 	{
 		git_checkout_options options;
 		git_checkout_init_options(&options, GIT_CHECKOUT_OPTIONS_VERSION);
@@ -406,11 +404,11 @@ void GitRepository::checkout(QString commit, bool force)
 		options.checkout_strategy = force ? GIT_CHECKOUT_FORCE : GIT_CHECKOUT_SAFE;
 
 		int errorCode = 0;
-		if (commit.compare(INDEX) == 0)
+		if (revesion.compare(INDEX) == 0)
 			errorCode = git_checkout_index(repository_, nullptr, &options);
 		else
 		{
-			git_commit* gitCommit = parseCommit(commit);
+			git_commit* gitCommit = parseCommit(revesion);
 			errorCode = git_checkout_tree(repository_, (git_object*)gitCommit, &options);
 
 			git_commit_free(gitCommit);
@@ -425,9 +423,9 @@ void GitRepository::checkout(QString commit, bool force)
 void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const
 {
 	const git_oid* oid = git_commit_id(current);
-	char* sha = git_oid_allocfmt(oid);
-	QString currentSHA(sha);
-	delete sha;
+	char* sha1 = git_oid_allocfmt(oid);
+	QString currentSHA1(sha1);
+	delete sha1;
 
 	if (git_oid_cmp(oid, target) != 0)
 	{
@@ -442,11 +440,11 @@ void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current,
 			int parentIsTarget = git_oid_cmp(parentOID, target);
 			int isConnected = git_graph_descendant_of(repository_, parentOID, target);
 			if (isConnected == 1 || parentIsTarget == 0) {
-				sha = git_oid_allocfmt(parentOID);
-				QString parentSHA(sha);
-				delete sha;
+				sha1 = git_oid_allocfmt(parentOID);
+				QString parentSHA1(sha1);
+				delete sha1;
 
-				graph->add(parentSHA, currentSHA);
+				graph->add(parentSHA1, currentSHA1);
 
 				traverseCommitGraph(graph, parent, target);
 			}
@@ -458,26 +456,26 @@ void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current,
 	}
 }
 
-git_commit* GitRepository::parseCommit(QString commit) const
+git_commit* GitRepository::parseCommit(QString revision) const
 {
 	int errorCode = 0;
 	git_object* obj = nullptr;
 
-	errorCode = git_revparse_single(&obj, repository_, commit.toStdString().c_str());
+	errorCode = git_revparse_single(&obj, repository_, revision.toStdString().c_str());
 
 	switch (errorCode)
 	{
 		// FIXME pass errors to the next level
 		case GIT_ENOTFOUND:
-			std::cout << "Error: " << commit.toStdString().c_str() << " not found!" << std::endl;
+			std::cout << "Error: " << revision.toStdString().c_str() << " not found!" << std::endl;
 			Q_ASSERT(false);
 
 		case GIT_EAMBIGUOUS:
-			std::cout << "Error: " << commit.toStdString().c_str() << " is ambiguous!" << std::endl;
+			std::cout << "Error: " << revision.toStdString().c_str() << " is ambiguous!" << std::endl;
 			Q_ASSERT(false);
 
 		case GIT_EINVALIDSPEC:
-			std::cout << "Error: " << commit.toStdString().c_str() << " is invalid!" << std::endl;
+			std::cout << "Error: " << revision.toStdString().c_str() << " is invalid!" << std::endl;
 			Q_ASSERT(false);
 
 		default:
@@ -500,7 +498,7 @@ git_commit* GitRepository::parseCommit(QString commit) const
 		return (git_commit*)obj;
 	else
 	{
-		std::cout << "Error: " << commit.toStdString().c_str() << " is not a commit!" << std::endl;
+		std::cout << "Error: " << revision.toStdString().c_str() << " is not a commit!" << std::endl;
 		Q_ASSERT(false);
 	}
 
@@ -508,15 +506,15 @@ git_commit* GitRepository::parseCommit(QString commit) const
 	git_object_free(obj);
 }
 
-GitRepository::DiffKind GitRepository::kind(QString oldCommit, QString newCommit)
+GitRepository::DiffKind GitRepository::kind(QString newRevision, QString oldRevision)
 {
 	DiffKind diffKind{};
 
-	if (oldCommit.compare(INDEX) == 0 && newCommit.compare(WORKDIR) == 0)
+	if (oldRevision.compare(INDEX) == 0 && newRevision.compare(WORKDIR) == 0)
 		diffKind = DiffKind::IndexToWorkdir;
-	else if (newCommit.compare(WORKDIR) == 0)
+	else if (newRevision.compare(WORKDIR) == 0)
 		diffKind = DiffKind::CommitToWorkdir;
-	else if (newCommit.compare(INDEX) == 0)
+	else if (newRevision.compare(INDEX) == 0)
 		diffKind = DiffKind::CommitToIndex;
 	else
 		diffKind = DiffKind::CommitToCommit;

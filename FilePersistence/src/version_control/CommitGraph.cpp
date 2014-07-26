@@ -28,7 +28,7 @@
 
 namespace FilePersistence {
 
-CommitGraphItem::CommitGraphItem(QString sha) { commitSHA_ = sha; }
+CommitGraphItem::CommitGraphItem(QString sha1) { commitSHA1_ = sha1; }
 
 CommitGraph::CommitGraph(QString start, QString end)
 {
@@ -41,29 +41,29 @@ CommitGraph::CommitGraph(QString start, QString end)
 	items_.insert(end, endItem);
 }
 
-void CommitGraph::add(QString fromCommitSHA, QString toCommitSHA)
+void CommitGraph::add(QString fromCommitSHA1, QString toCommitSHA1)
 {
 	CommitGraphItem* fromItem = nullptr;
 	CommitGraphItem* toItem = nullptr;
 
-	QHash<QString, CommitGraphItem>::iterator iter = items_.find(fromCommitSHA);
+	QHash<QString, CommitGraphItem>::iterator iter = items_.find(fromCommitSHA1);
 	if (iter != items_.end())
 		fromItem = &iter.value();
 	else
 	{
-		CommitGraphItem newFromItem(fromCommitSHA);
+		CommitGraphItem newFromItem(fromCommitSHA1);
 		fromItem = &newFromItem;
-		items_.insert(fromCommitSHA, newFromItem);
+		items_.insert(fromCommitSHA1, newFromItem);
 	}
 
-	iter = items_.find(toCommitSHA);
+	iter = items_.find(toCommitSHA1);
 	if (iter != items_.end())
 		toItem = &iter.value();
 	else
 	{
-		CommitGraphItem newToItem(toCommitSHA);
+		CommitGraphItem newToItem(toCommitSHA1);
 		toItem = &newToItem;
-		items_.insert(toCommitSHA, newToItem);
+		items_.insert(toCommitSHA1, newToItem);
 	}
 
 	fromItem->children_.append(toItem);

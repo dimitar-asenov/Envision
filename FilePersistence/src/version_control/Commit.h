@@ -36,7 +36,7 @@ struct Signature {
 };
 
 struct CommitMetaData {
-		QString sha_;
+		QString sha1_;
 		QString message_;
 		QDateTime dateTime_;
 		Signature committer_;

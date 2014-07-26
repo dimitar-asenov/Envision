@@ -43,16 +43,16 @@ class FILEPERSISTENCE_API GitRepository
 		GitRepository(QString path);
 		~GitRepository();
 
-		Diff diff(QString oldCommit, QString newCommit) const;
-		CommitGraph commitGraph(QString start, QString end) const;
+		Diff diff(QString oldRevision, QString newRevision) const;
+		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
 
-		Commit getCommit(QString commitSpec) const;
-		CommitFile getCommitFile(QString commitSpec, QString relativePath) const;
-		CommitMetaData getCommitInformation(QString commitSpec) const;
+		Commit getCommit(QString revision) const;
+		CommitFile getCommitFile(QString revision, QString relativePath) const;
+		CommitMetaData getCommitInformation(QString revision) const;
 
-		QString getSHA(QString commit) const;
+		QString getSHA1(QString revision) const;
 
-		void checkout(QString commit, bool force);
+		void checkout(QString revision, bool force);
 
 		static const QString WORKDIR;
 		static const QString INDEX;
@@ -60,10 +60,10 @@ class FILEPERSISTENCE_API GitRepository
 	private:
 		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 
-		git_commit* parseCommit(QString commit) const;
+		git_commit* parseCommit(QString revision) const;
 
 		enum class DiffKind {Unspecified, IndexToWorkdir, CommitToWorkdir, CommitToIndex, CommitToCommit};
-		static DiffKind kind(QString oldCommit, QString newCommit);
+		static DiffKind kind(QString oldRevision, QString newRevision);
 
 		static void checkError(int errorCode);
 

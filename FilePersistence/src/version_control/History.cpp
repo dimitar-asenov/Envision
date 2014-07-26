@@ -39,7 +39,7 @@ History::History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, 
 	historyGraph_ = historyGraph;
 
 	const CommitGraphItem start = historyGraph_->start();
-	relevantCommits_.insert(start.commitSHA_);
+	relevantCommits_.insert(start.commitSHA1_);
 
 	QSet<Model::NodeIdType> trackedIDs = trackSubtree(repository);
 	detectRelevantCommits(&start, trackedIDs, repository);
@@ -56,7 +56,7 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::
 {
 	for (auto child : current->children_)
 	{
-		Diff diff = repository->diff(current->commitSHA_, child->commitSHA_);
+		Diff diff = repository->diff(current->commitSHA1_, child->commitSHA1_);
 		IdToChangeDescriptionHash changes = diff.changes();
 
 		bool isRelevant = false;
@@ -71,7 +71,7 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::
 
 		if (isRelevant)
 		{
-			relevantCommits_.insert(child->commitSHA_);
+			relevantCommits_.insert(child->commitSHA1_);
 			QSet<Model::NodeIdType> newTrackedIDs = updateTrackedIDs(newTrackedIDs, &diff);
 
 			detectRelevantCommits(child, newTrackedIDs, repository);
@@ -85,7 +85,7 @@ QSet<Model::NodeIdType> History::trackSubtree(const GitRepository* repository) c
 {
 	// TODO adapt to new GitRepository
 
-	QString startCommitSpec = historyGraph_->start().commitSHA_;
+	QString startCommitSpec = historyGraph_->start().commitSHA1_;
 	Commit startCommit = repository->getCommit(startCommitSpec);
 
 	QSet<Model::NodeIdType> trackedIDs;

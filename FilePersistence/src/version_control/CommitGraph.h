@@ -32,12 +32,12 @@ namespace FilePersistence {
 
 struct CommitGraphItem
 {
-	QString commitSHA_;
+	QString commitSHA1_;
 
 	QList<CommitGraphItem*> children_;
 	QList<CommitGraphItem*> parents_;
 
-	CommitGraphItem(QString sha);
+	CommitGraphItem(QString sha1);
 };
 
 
