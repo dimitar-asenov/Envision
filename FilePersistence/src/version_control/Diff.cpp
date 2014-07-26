@@ -32,6 +32,8 @@
 
 namespace FilePersistence {
 
+Diff::Diff(){}
+
 Diff::Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
 	  QList<GenericNode*> newNodes, GenericTree* newTree,
 	  const GitRepository* repository)

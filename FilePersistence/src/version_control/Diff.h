@@ -40,6 +40,7 @@ using IdToChangeDescriptionHash = QHash<Model::NodeIdType, ChangeDescription*>;
 class FILEPERSISTENCE_API Diff
 {
 	public:
+		Diff();
 		Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
 			  QList<GenericNode*> newNodes, GenericTree* newTree,
 			  const GitRepository* repository);

@@ -62,7 +62,9 @@ class FILEPERSISTENCE_API GitRepository
 
 		git_commit* parseCommit(QString revision) const;
 
-		enum class DiffKind {Unspecified, IndexToWorkdir, CommitToWorkdir, CommitToIndex, CommitToCommit};
+		enum class DiffKind {Unspecified, WorkdirToWorkdir, WorkdirToIndex, WorkdirToCommit,
+									IndexToWorkdir, IndexToIndex, IndexToCommit,
+									CommitToWorkdir, CommitToIndex, CommitToCommit};
 		static DiffKind kind(QString oldRevision, QString newRevision);
 
 		static void checkError(int errorCode);
