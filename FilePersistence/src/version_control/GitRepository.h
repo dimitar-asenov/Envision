@@ -47,7 +47,7 @@ class FILEPERSISTENCE_API GitRepository
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
 
 		Commit getCommit(QString revision) const;
-		CommitFile getCommitFile(QString revision, QString relativePath) const;
+		const CommitFile* getCommitFile(QString revision, QString relativePath) const;
 		CommitMetaData getCommitInformation(QString revision) const;
 
 		QString getSHA1(QString revision) const;
@@ -60,9 +60,9 @@ class FILEPERSISTENCE_API GitRepository
 	private:
 		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 
-		CommitFile getCommitFileFromWorkdir(QString relativePath) const;
-		CommitFile getCommitFileFromIndex(QString relativePath) const;
-		CommitFile getCommitFileFromTree(QString revision, QString relativePath) const;
+		const CommitFile* getCommitFileFromWorkdir(QString relativePath) const;
+		const CommitFile* getCommitFileFromIndex(QString relativePath) const;
+		const CommitFile* getCommitFileFromTree(QString revision, QString relativePath) const;
 
 		git_commit* parseCommit(QString revision) const;
 

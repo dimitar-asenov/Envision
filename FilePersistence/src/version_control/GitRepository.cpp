@@ -344,7 +344,7 @@ Commit GitRepository::getCommit(QString revision) const
 	return commit;
 }
 
-CommitFile GitRepository::getCommitFile(QString revision, QString relativePath) const
+const CommitFile* GitRepository::getCommitFile(QString revision, QString relativePath) const
 {
 	if (revision.compare(WORKDIR) == 0)
 		return getCommitFileFromWorkdir(relativePath);
@@ -471,13 +471,13 @@ void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current,
 	}
 }
 
-CommitFile GitRepository::getCommitFileFromWorkdir(QString relativePath) const
+const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) const
 {
 	QString fullRelativePath = path_;
 	fullRelativePath.append(relativePath);
 
 	if (!QFile::exists(fullRelativePath))
-		return CommitFile();
+		return new CommitFile();
 
 	QFile file(fullRelativePath);
 	if ( !file.open(QIODevice::ReadOnly) )
@@ -489,26 +489,25 @@ CommitFile GitRepository::getCommitFileFromWorkdir(QString relativePath) const
 	auto mapped = reinterpret_cast<char*>(file.map(0, totalFileSize));
 	Q_ASSERT(mapped);
 
-	CommitFile commitFile(relativePath, totalFileSize, mapped);
+	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, mapped);
 	file.close();
 
 	return commitFile;
 }
 
-CommitFile GitRepository::getCommitFileFromIndex(QString relativePath) const
+const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) const
 {
 	// check if such a file is in the index
 	git_index* index = nullptr;
 	int errorCode = git_repository_index(&index, repository_);
 	checkError(errorCode);
 
-	qDebug() << relativePath;
 	const char* path = relativePath.toStdString().c_str();
 	const git_index_entry* entry = git_index_get_bypath(index, path, 0);
 
 	if (entry == nullptr)
 	{
-		return CommitFile();
+		return new CommitFile();
 	}
 
 	git_checkout_options options;
@@ -527,14 +526,11 @@ CommitFile GitRepository::getCommitFileFromIndex(QString relativePath) const
 	// make a copy of current workdir file
 	QString fullRelativePath = path_;
 	fullRelativePath.append(relativePath);
-	qDebug() << path_;
 	QFile workdirFile(fullRelativePath);
 	QString copyName = fullRelativePath;
 	copyName.append("_COPY_FOR_INDEX_CHECKOUT");
 	bool success = workdirFile.copy(copyName);
 	Q_ASSERT(success);
-
-	qDebug() << copyName;
 	workdirFile.close();
 
 	errorCode = git_checkout_index(repository_, nullptr, &options);
@@ -550,9 +546,7 @@ CommitFile GitRepository::getCommitFileFromIndex(QString relativePath) const
 	auto mapped = reinterpret_cast<char*>(file.map(0, totalFileSize));
 	Q_ASSERT(mapped);
 
-	CommitFile commitFile(relativePath, totalFileSize, mapped);
-
-	qDebug() << fullRelativePath;
+	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, mapped);
 
 	success = file.remove();
 	Q_ASSERT(success);
@@ -561,16 +555,10 @@ CommitFile GitRepository::getCommitFileFromIndex(QString relativePath) const
 	success = QFile::remove(copyName);
 	Q_ASSERT(success);
 
-	qDebug() << commitFile.content_;
-
-	qDebug() << "END OF METHOD";
-
-	// FIXME after return commitFile has no content!
-
 	return commitFile;
 }
 
-CommitFile GitRepository::getCommitFileFromTree(QString revision, QString relativePath) const
+const CommitFile* GitRepository::getCommitFileFromTree(QString revision, QString relativePath) const
 {
 	Q_ASSERT(revision.compare(WORKDIR) != 0);
 	Q_ASSERT(revision.compare(INDEX) != 0);
@@ -585,28 +573,27 @@ CommitFile GitRepository::getCommitFileFromTree(QString revision, QString relati
 	git_tree_entry* treeEntry = nullptr;
 	errorCode = git_tree_entry_bypath(&treeEntry, tree, relativePath.toStdString().c_str());
 	if (errorCode == GIT_ENOTFOUND)
-		return CommitFile();
+		return new CommitFile();
 	checkError(errorCode);
 
 	git_object* obj = nullptr;
 	errorCode = git_tree_entry_to_object(&obj, repository_, treeEntry);
 	checkError(errorCode);
 
-	CommitFile file;
-	if (git_object_type(obj) == GIT_OBJ_BLOB)
-	{
-		file.relativePath_ = relativePath;
 
-		git_blob* blob = (git_blob*)obj;
+	if (git_object_type(obj) != GIT_OBJ_BLOB)
+		return new CommitFile();
 
-		qint64 contentSize = git_blob_rawsize(blob);
-		file.size_ = contentSize;
 
-		const char* rawContent = (const char*)git_blob_rawcontent(blob);
-		char* content = new char[contentSize];
-		memcpy(content, rawContent, contentSize);
-		file.content_ = content;
-	}
+	git_blob* blob = (git_blob*)obj;
+
+	qint64 contentSize = git_blob_rawsize(blob);
+
+	const char* rawContent = (const char*)git_blob_rawcontent(blob);
+	char* content = new char[contentSize];
+	memcpy(content, rawContent, contentSize);
+
+	CommitFile* file = new CommitFile(relativePath, contentSize, content);
 
 	git_commit_free(gitCommit);
 	git_tree_free(tree);

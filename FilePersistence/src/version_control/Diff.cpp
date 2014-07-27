@@ -145,8 +145,8 @@ void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
 	{
 		GenericPersistentUnit fullFileUnit = tree->newPersistentUnit(fullFile);
 		GenericPersistentUnit* unit = tree->persistentUnit(path);
-		CommitFile file = repository->getCommitFile(tree->commitName(), path);
-		GenericNode* root = Parser::load(file.content_, file.size_, false, fullFileUnit);
+		const CommitFile* file = repository->getCommitFile(tree->commitName(), path);
+		GenericNode* root = Parser::load(file->content_, file->size_, false, fullFileUnit);
 		for (auto id : fileToNodeIDs.values(path))
 		{
 			GenericNode* nodeInFile = root->find(id);
