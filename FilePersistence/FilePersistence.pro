@@ -47,3 +47,4 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2
+INCLUDEPATH += /usr/local/lib/libgit2-0.21.0/include/

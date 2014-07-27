@@ -60,6 +60,10 @@ class FILEPERSISTENCE_API GitRepository
 	private:
 		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 
+		CommitFile getCommitFileFromWorkdir(QString relativePath) const;
+		CommitFile getCommitFileFromIndex(QString relativePath) const;
+		CommitFile getCommitFileFromTree(QString revision, QString relativePath) const;
+
 		git_commit* parseCommit(QString revision) const;
 
 		enum class DiffKind {Unspecified, WorkdirToWorkdir, WorkdirToIndex, WorkdirToCommit,

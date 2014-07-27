@@ -32,6 +32,7 @@
 #include "ModelBase/src/model/TreeManager.h"
 
 #include "FilePersistence/src/version_control/ChangeDescription.h"
+#include "FilePersistence/src/version_control/Commit.h"
 #include "VisualizationBase/src/items/Item.h"
 
 #include "VisualizationBase/src/CustomSceneEvent.h"
@@ -67,6 +68,11 @@ CommandResult* CDiff::executeNamed(Visualization::Item* source, Visualization::I
 	auto managerNew = new Model::TreeManager();
 	managerNew->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
 	managerNew->setName("Hello (New)");
+
+	FilePersistence::CommitFile file =
+			repository_->getCommitFile(FilePersistence::GitRepository::INDEX, "Hello");
+	qDebug() << file.relativePath_ << file.size_;
+	qDebug() << file.content_;
 
 	Item* oldRoot = new RootItem(managerOld->root());
 	oldRoot->setPos(-200.f, 0.f);
