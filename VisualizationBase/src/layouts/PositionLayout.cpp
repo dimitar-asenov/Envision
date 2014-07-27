@@ -125,7 +125,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 	if (allNodesLackPositionInfo)
 		for (auto node : nodes)
 			if (auto extNode = DCast<Model::CompositeNode> (node))
-				if (auto pos = extNode->extension<Position>())
+				if (auto pos = std::unique_ptr<Position>(extNode->extension<Position>()))
 					if (pos->xNode() || pos->yNode())
 					{
 						allNodesLackPositionInfo = false;
@@ -258,8 +258,7 @@ void PositionLayout::updateGeometry(int, int)
 			}
 
 			lastModifiedManager->changeModificationTarget(items[i]->node());
-			QScopedPointer<Position> position{positionOf(items[i])};
-			position->set(x, y);
+			positionOf(items[i])->set(x, y);
 		}
 
 
@@ -310,7 +309,7 @@ void PositionLayout::updateGeometry(int, int)
 
 	for (int i = 0; i<items.size(); ++i)
 	{
-		QScopedPointer<Position> position{positionOf(items[i])};
+		auto position = positionOf(items[i]);
 		int x = position->xNode() ? toGrid(position->x()) : 0;
 		int y = position->yNode() ? toGrid(position->y()) : 0;
 
@@ -330,7 +329,7 @@ void PositionLayout::updateGeometry(int, int)
 
 	for (int i =0; i<items.size(); ++i)
 	{
-		QScopedPointer<Position> position{positionOf(items[i])};
+		auto position = positionOf(items[i]);
 		int x = position->xNode() ? toGrid(position->x()) : 0;
 		int y = position->yNode() ? toGrid(position->y()) : 0;
 		items[i]->setPos( xOffset() + style()->leftInnerMargin() + x - topLeft.x(),

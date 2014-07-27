@@ -29,6 +29,8 @@
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/NameImport.h"
 #include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/declarative/GridLayouter.h"
 #include "InteractionBase/src/events/SetCursorEvent.h"
 
 namespace OOInteraction {
@@ -38,7 +40,7 @@ CCreateProject::CCreateProject() : CreateNamedObjectWithAttributes("project", {}
 }
 
 Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& /*attributes*/)
+	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& /*attributes*/)
 {
 	auto parent = dynamic_cast<OOModel::Project*> (target->node());
 
@@ -49,6 +51,13 @@ Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*
 	if (parent)
 	{
 		parent->beginModification("create project");
+		if (auto layc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
+				{
+					Visualization::GridLayouter::setPositionInGrid(
+							parent->projects()->nodes() + parent->modules()->nodes() +
+							parent->classes()->nodes() + parent->methods()->nodes(), layc->x(), layc->y(),
+							project, Visualization::GridLayouter::ColumnMajor);
+				}
 		parent->projects()->append(project);
 		parent->endModification();
 	}

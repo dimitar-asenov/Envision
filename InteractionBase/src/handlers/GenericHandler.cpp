@@ -178,9 +178,10 @@ void GenericHandler::showComment(Visualization::Item *itemWithComment, Model::No
 	}
 }
 
-void GenericHandler::command(Visualization::Item *target, const QString& command)
+void GenericHandler::command(Visualization::Item *target, const QString& command,
+		const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-	executionEngine_->execute(target, command);
+	executionEngine_->execute(target, command, cursor);
 }
 
 void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
@@ -378,7 +379,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			if (!moved) InteractionHandler::keyPressEvent(target, event);
 		}
 	}
-	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible() && !commandPrompt_)
+	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible()
+				&& (!commandPrompt_ || commandPrompt_->isVisible() == false))
 	{
 		event->accept();
 		AutoComplete::hide();

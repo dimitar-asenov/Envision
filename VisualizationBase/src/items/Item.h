@@ -106,9 +106,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			StandardUpdate, /**< Update the geometry of the item and properties depending on child items. This update
 									should be used when a child item has changed and the parent just needs to account for this
 									change.*/
-			FullUpdate, /**< The item should completely update itself and recreate all child items. This should be used
-								when the item has been directly edited, or when it's style, purpose or similar defining
-								properties have changed. */
+			FullUpdate, /**< The item and all its children will be updated using a StandardUpdate. */
 			RepeatUpdate /**< This update is similar to StandardUpdate but can also be requested while the item is being
 			 	 	 	 	 	updated. Normally, update requests which happen while an item is being updated are disregarded.
 			 	 	 	 	 	If a RepeatUpdate is requested, the item will be updated one more time after the current update
@@ -208,7 +206,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 		virtual InteractionHandler* handler() const;
-		void execute(const QString& command);
+		void execute(const QString& command, const std::unique_ptr<Cursor>& );
 
 		void removeFromScene();
 

@@ -59,6 +59,7 @@
 #include <algorithm>
 #include <functional>
 #include <typeinfo>
+#include <memory>
 
 #ifdef Q_OS_LINUX
 	#include <gperftools/profiler.h>

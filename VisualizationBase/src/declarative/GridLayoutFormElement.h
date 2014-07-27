@@ -217,7 +217,6 @@ class VISUALIZATIONBASE_API GridLayoutFormElement : public LayoutFormElement {
 		 * with index \a containColumn. The grid dimensions can only grow.
 		 */
 		void adjustSize(int containColumn, int containRow);
-		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
 };
 
 inline GridLayoutFormElement* GridLayoutFormElement::setSpacing(int spacing)

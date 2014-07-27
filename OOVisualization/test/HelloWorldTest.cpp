@@ -59,18 +59,19 @@ void addConstructorAndDestructor(Class* cl)
 
 	auto con = new Method(cl->name(), Modifier::Public, Method::MethodKind::Constructor);
 	cl->methods()->append(con);
-	con->extension<Position>()->set(400, 0);
+	std::unique_ptr<Position>(con->extension<Position>())->set(0, 1);
 	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("Super"), new IntegerLiteral(42)));
 	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("name"), new StringLiteral("hi")));
 
 	auto des = new Method("~" + cl->name(), Modifier::Public, Method::MethodKind::Destructor);
 	cl->methods()->append(des);
-	des->extension<Position>()->set(400, 160);
+	std::unique_ptr<Position>(des->extension<Position>())->set(0, 2);
 }
 
 Class* addHelloWorld(Project* parent)
 {
 	auto hello = new Class("HelloWorld", Modifier::Public);
+	std::unique_ptr<Position>(hello->extension<Position>())->set(0, 0);
 	if (parent) parent->classes()->append(hello);
 
 	hello->subDeclarations()->append(new NameImport(
@@ -80,6 +81,7 @@ Class* addHelloWorld(Project* parent)
 	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression("Java")));
 
 	Method* main = new Method("main", Modifier::Public | Modifier::Static);
+	std::unique_ptr<Position>(main->extension<Position>())->set(0, 0);
 	hello->methods()->append(main);
 
 	FormalArgument* mainArgs = new FormalArgument();
@@ -158,9 +160,10 @@ Class* addGeneric(Project* parent)
 	foobar->items()->append(callBarSt);
 
 	// Set positions
-	gen->extension<Position>()->set(860, 300);
-	bar->extension<Position>()->setY(80);
-	foobar->extension<Position>()->setY(140);
+	std::unique_ptr<Position>(gen->extension<Position>())->set(1, 0);
+	std::unique_ptr<Position>(foo->extension<Position>())->set(0, 0);
+	std::unique_ptr<Position>(bar->extension<Position>())->set(0, 1);
+	std::unique_ptr<Position>(foobar->extension<Position>())->set(0, 2);
 
 	return gen;
 }
@@ -188,7 +191,7 @@ Class* addAnnotatedWithFriends(Project* parent)
 	var->decl()->setInitialValue(new IntegerLiteral(42));
 
 	// Set positions
-	ann->extension<Position>()->set(860, 620);
+	std::unique_ptr<Position>(ann->extension<Position>())->set(1, 1);
 
 	return ann;
 }
@@ -203,7 +206,7 @@ Class* addEnumeration(Project* parent)
 	en->enumerators()->append( new Enumerator("BLUE", new IntegerLiteral(5)));
 
 	// Set positions
-	en->extension<Position>()->set(860, 880);
+	std::unique_ptr<Position>(en->extension<Position>())->set(1, 2);
 
 	return en;
 }
@@ -214,9 +217,22 @@ Class* addAnnotation(Project* parent)
 	if (parent) parent->classes()->append(ann);
 
 	// Set positions
-	ann->extension<Position>()->set(860, 1020);
+	std::unique_ptr<Position>(ann->extension<Position>())->set(1, 3);
 
 	return ann;
+}
+
+Class* addInner()
+{
+	Class* outer = new Class("Outer", Modifier::Public);
+
+	outer->classes()->append( new Class("InnerStruct", Class::ConstructKind::Struct));
+	outer->classes()->append( new Class("InnerInterface", Class::ConstructKind::Interface));
+
+	// Set positions
+	std::unique_ptr<Position>(outer->extension<Position>())->set(1, 4);
+
+	return outer;
 }
 
 Module* addLambda()
@@ -304,21 +320,12 @@ Module* addLambda()
 	le->body()->append(new ExpressionStatement(someOpCall));
 
 	// Positions
-	mod->extension<Position>()->set(1300, 300);
+	std::unique_ptr<Position>(mod->extension<Position>())->set(2, 0);
+	std::unique_ptr<Position>(iUnary->extension<Position>())->set(0, 0);
+	std::unique_ptr<Position>(iBinary->extension<Position>())->set(0, 1);
+	std::unique_ptr<Position>(iNoRet->extension<Position>())->set(0, 2);
+	std::unique_ptr<Position>(test->extension<Position>())->set(1, 0);
 	return mod;
-}
-
-Class* addInner()
-{
-	Class* outer = new Class("Outer", Modifier::Public);
-
-	outer->classes()->append( new Class("InnerStruct", Class::ConstructKind::Struct));
-	outer->classes()->append( new Class("InnerInterface", Class::ConstructKind::Interface));
-
-	// Set positions
-	outer->extension<Position>()->set(1300, 860);
-
-	return outer;
 }
 
 Project* addJavaLibrary(Project* parent)
@@ -363,9 +370,10 @@ Project* addJavaLibrary(Project* parent)
 	prefix->ref()->setName("io");
 
 	// Set positions
-	java->extension<Position>()->setX(860);
-	string->extension<Position>()->setY(100);
-	io->extension<Position>()->setX(240);
+	std::unique_ptr<Position>(java->extension<Position>())->set(2, 1);
+	std::unique_ptr<Position>(string->extension<Position>())->set(0, 0);
+	std::unique_ptr<Position>(system->extension<Position>())->set(0, 1);
+	std::unique_ptr<Position>(io->extension<Position>())->set(1, 0);
 
 	return java;
 }
@@ -754,10 +762,7 @@ Method* addLongMethod(Class* parent)
 	longMethod->items()->append(longMethodReturn);
 	longMethodReturn->values()->append(new IntegerLiteral(42));
 
-	if (parent && parent->parent())
-		longMethod->extension<Position>()->setY(100);
-	else
-		longMethod->extension<Position>()->setX(400);
+	std::unique_ptr<Position>(longMethod->extension<Position>())->set(1, 0);
 
 	return longMethod;
 }
@@ -827,7 +832,7 @@ Method* addFactorial(Class* parent)
 	factorial->items()->append(factorialReturn);
 	factorialReturn->values()->append(new ReferenceExpression("result"));
 
-	factorial->extension<Position>()->set(400, 260);
+	std::unique_ptr<Position>(factorial->extension<Position>())->set(0, 3);
 
 	return factorial;
 }
@@ -875,7 +880,7 @@ Method* addExtraMethod(Class* parent)
 	loop->body()->append(new BreakStatement());
 
 
-	extra->extension<Position>()->set(400, 600);
+	std::unique_ptr<Position>(extra->extension<Position>())->set(0, 4);
 
 	return extra;
 }

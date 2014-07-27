@@ -38,7 +38,8 @@ class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNa
 		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
 
 	protected:
-		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar, const QString& name,
+		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar,
+						const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
 						const QStringList& attributes, bool commandFound) override;
 };
 

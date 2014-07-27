@@ -26,7 +26,8 @@
 
 #include "DynamicGridFormElement.h"
 #include "../items/Item.h"
-#include "GridLayouter.h"
+#include "DeclarativeItemBase.h"
+
 
 namespace Visualization {
 
@@ -34,6 +35,7 @@ namespace Visualization {
 DynamicGridFormElement::DynamicGridFormElement(const DynamicGridFormElement& other) : LayoutFormElement{other},
 	nodesGetterFunction_{other.nodesGetterFunction_}, spanGetterFunction_{other.spanGetterFunction_},
 	spaceBetweenColumns_{other.spaceBetweenColumns_}, spaceBetweenRows_{other.spaceBetweenRows_},
+	majorAxis_{other.majorAxis_},
 	horizontalAlignment_{other.horizontalAlignment_}, verticalAlignment_{other.verticalAlignment_}
 {
 	// There are no child memebrs to adjust
@@ -75,30 +77,58 @@ DynamicGridFormElement::ItemData&  DynamicGridFormElement::dataForItem(const Ite
 void DynamicGridFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	auto& data = dataForItem(item);
-	QSize finalSize = GridLayouter::computeSize<true>(availableWidth, availableHeight,
-		[&data](){return data.numRows_;},	// numRows
-		[&data](){return data.numColumns_;},	// numColumns
-		[&data](int x, int y){return data.itemGrid_[x][y];},	// has
-		[&data](int x, int y){return data.itemSpan_[x][y];},	// spanGrid
-		[&data](int x, int y){return data.itemGrid_[x][y]->widthInParent();},	// width
-		[&data](int x, int y){return data.itemGrid_[x][y]->heightInParent();},	// height
-		[](int, int, int, int){},	// computeElementSize
-		[&data](int x, int y, int w, int h){data.itemGrid_[x][y]->changeGeometry(w, h);},	// changeGeometry
-		[&data](int x, int y){return data.itemGrid_[x][y]->sizeDependsOnParent();},	// isStretchable
-		[&data](int x, int y, QPoint pos){data.itemPositionWithinLayout_[x][y] = pos;},	// setPosition
-		[](int){return 0;},	// rowStretchFactors
-		[](int){return 0;},	// columnStretchFactors
-		[this](int, int){return horizontalAlignment_;},	// horizontalAlignment
-		[this](int, int){return verticalAlignment_;},	// verticalAlignment
-		[this](){return spaceBetweenRows_;},	// spaceBetweenRows
-		[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
-		[this](){return topMargin();},	// topMargin
-		[this](){return bottomMargin();},	// bottomMargin
-		[this](){return leftMargin();},	// leftMargin
-		[this](){return rightMargin();},	// rightMargin
-		[](){return 0;},	// minWidth
-		[](){return 0;}	// minHeight
-	);
+	QSize finalSize;
+
+	if (majorAxis_ == GridLayouter::NoMajor)
+		finalSize = GridLayouter::computeSize<true>(availableWidth, availableHeight, GridLayouter::NoMajor,
+			[&data](){return data.numRows_;},	// numRows
+			[&data](){return data.numColumns_;},	// numColumns
+			[&data](int x, int y){return data.itemGrid_[x][y];},	// has
+			[&data](int x, int y){return data.itemSpan_[x][y];},	// spanGrid
+			[&data](int x, int y){return data.itemGrid_[x][y]->widthInParent();},	// width
+			[&data](int x, int y){return data.itemGrid_[x][y]->heightInParent();},	// height
+			[](int, int, int, int){},	// computeElementSize
+			[&data](int x, int y, int w, int h){data.itemGrid_[x][y]->changeGeometry(w, h);},	// changeGeometry
+			[&data](int x, int y){return data.itemGrid_[x][y]->sizeDependsOnParent();},	// isStretchable
+			[&data](int x, int y, QPoint pos){data.itemPositionWithinLayout_[x][y] = pos;},	// setPosition
+			[](int){return 0;},	// rowStretchFactors
+			[](int){return 0;},	// columnStretchFactors
+			[this](int, int){return horizontalAlignment_;},	// horizontalAlignment
+			[this](int, int){return verticalAlignment_;},	// verticalAlignment
+			[this](){return spaceBetweenRows_;},	// spaceBetweenRows
+			[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
+			[this](){return topMargin();},	// topMargin
+			[this](){return bottomMargin();},	// bottomMargin
+			[this](){return leftMargin();},	// leftMargin
+			[this](){return rightMargin();},	// rightMargin
+			[](){return 0;},	// minWidth
+			[](){return 0;}	// minHeight
+		);
+	else
+		finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, majorAxis_,
+				[&data](){return data.numRows_;},	// numRows
+				[&data](){return data.numColumns_;},	// numColumns
+				[&data](int x, int y){return data.itemGrid_[x][y];},	// has
+				[](int, int){return QPair<int, int>{1, 1};},	// spanGrid
+				[&data](int x, int y){return data.itemGrid_[x][y]->widthInParent();},	// width
+				[&data](int x, int y){return data.itemGrid_[x][y]->heightInParent();},	// height
+				[](int, int, int, int){},	// computeElementSize
+				[&data](int x, int y, int w, int h){data.itemGrid_[x][y]->changeGeometry(w, h);},	// changeGeometry
+				[&data](int x, int y){return data.itemGrid_[x][y]->sizeDependsOnParent();},	// isStretchable
+				[&data](int x, int y, QPoint pos){data.itemPositionWithinLayout_[x][y] = pos;},	// setPosition
+				[](int){return 0;},	// rowStretchFactors
+				[](int){return 0;},	// columnStretchFactors
+				[this](int, int){return horizontalAlignment_;},	// horizontalAlignment
+				[this](int, int){return verticalAlignment_;},	// verticalAlignment
+				[this](){return spaceBetweenRows_;},	// spaceBetweenRows
+				[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
+				[this](){return topMargin();},	// topMargin
+				[this](){return bottomMargin();},	// bottomMargin
+				[this](){return leftMargin();},	// leftMargin
+				[this](){return rightMargin();},	// rightMargin
+				[](){return 0;},	// minWidth
+				[](){return 0;}	// minHeight
+			);
 
 	setSize(item, finalSize);
 }
@@ -122,8 +152,8 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 					if (nodes[n].contains(data.itemGrid_[x][y]->node()))
 					{
 						found = true;
-						existingItems.insert(data.itemGrid_[x][y]->node(), data.itemGrid_[x][y]);
 						item->synchronizeItem(data.itemGrid_[x][y], data.itemGrid_[x][y]->node());
+						existingItems.insert(data.itemGrid_[x][y]->node(), data.itemGrid_[x][y]);
 						break;
 					}
 
@@ -132,10 +162,13 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 			}
 
 	// Get the new size.
-	data.numRows_ = nodes.size();
-	data.numColumns_ = 0;
-	for (int y = 0; y<data.numRows_; ++y)
-		if (data.numColumns_ < nodes[y].size()) data.numColumns_ = nodes[y].size();
+	auto resizeAxes = [](const QVector<QVector<Model::Node*>>& nodes, int& sizeMajor, int& sizeMinor){
+		sizeMajor = nodes.size();
+		sizeMinor = nodes.isEmpty() ? 0 : std::max_element(nodes.begin(), nodes.end(),
+				[](const QVector<Model::Node*>& a, const QVector<Model::Node*>& b){return a.size() < b.size();})->size();
+	};
+	if (majorAxis_ == GridLayouter::ColumnMajor) resizeAxes(nodes, data.numColumns_, data.numRows_);
+	else resizeAxes(nodes, data.numRows_, data.numColumns_);
 
 	// Set new grid size
 	data.itemGrid_.resize(data.numColumns_);
@@ -146,14 +179,22 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 		data.itemPositionWithinLayout_[x].resize(data.numRows_);
 	}
 
-	for (int y = 0; y<nodes.size(); ++y)
-		for (int x = 0; x<nodes[y].size(); ++x)
+	for (int major = 0; major<nodes.size(); ++major)
+		for (int minor = 0; minor<nodes[major].size(); ++minor)
 		{
-			auto existingIterator = existingItems.find(nodes[y][x]);
-			if (existingIterator != existingItems.end()) data.itemGrid_[x][y] = existingIterator.value();
-			else data.itemGrid_[x][y] = item->renderer()->render(item, nodes[y][x]);
-			// Note that we don't need to update the position here since it will be overwritten anyway by
-			// computeSize()
+			if (nodes[major][minor])
+			{
+				auto existingIterator = existingItems.find(nodes[major][minor]);
+				auto value = existingIterator != existingItems.end()
+						? existingIterator.value()
+						: item->renderer()->render(item, nodes[major][minor]);
+
+				if (majorAxis_ == GridLayouter::ColumnMajor) data.itemGrid_[major][minor] = value;
+				else data.itemGrid_[minor][major] = value;
+
+				// Note that we don't need to update the position here since it will be overwritten anyway by
+				// computeSize()
+			}
 		}
 
 	// Set the span if any
@@ -175,8 +216,9 @@ void DynamicGridFormElement::setItemPositions(Item* item, int parentX, int paren
 		for (int yIt = 0; yIt < data.numRows_; ++yIt)
 			if (auto childItem = data.itemGrid_[xIt][yIt])
 			{
-				QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[xIt][yIt].x() + leftMargin(),
-							parentY + y(item) + data.itemPositionWithinLayout_[xIt][yIt].y() + topMargin()};
+				// Note that margins have already been accounted for.
+				QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[xIt][yIt].x(),
+							parentY + y(item) + data.itemPositionWithinLayout_[xIt][yIt].y()};
 
 				if (newPos != childItem->pos())
 					childItem->setPos(newPos); // setting the position is an expensive operation so only do it if it changed
@@ -220,6 +262,29 @@ bool DynamicGridFormElement::elementOrChildHasFocus(Item* item) const
 			if (item && item->itemOrChildHasFocus())
 				return true;
 	return false;
+}
+
+QList<ItemRegion> DynamicGridFormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
+{
+	auto& data = dataForItem(item);
+
+	return GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), majorAxis_, true, true, true,
+			item->style()->extraCursorsOutsideShape(), true, true,
+			[&data](){return data.numRows_;},	// numRows
+			[&data](){return data.numColumns_;},	// numColumns
+			[&data](int x, int y){return data.itemGrid_[x][y];},	// has
+			[&data](int x, int y){return data.itemGrid_[x][y]->widthInParent();},	// width
+			[&data](int x, int y){return data.itemGrid_[x][y]->heightInParent();},	// height
+			[&data](int x, int y){return (int) data.itemGrid_[x][y]->x();},	// xPos
+			[&data](int x, int y){return (int) data.itemGrid_[x][y]->y();},	// yPos
+			[&data](int x, int y){return data.itemGrid_[x][y];},	// childItem
+			[this](){return spaceBetweenRows_;},	// spaceBetweenRows
+			[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns
+			[this](){return topMargin();},	// topMargin
+			[this](){return bottomMargin();},	// bottomMargin
+			[this](){return leftMargin();},	// leftMargin
+			[this](){return rightMargin();}	// rightMargin
+		);
 }
 
 } // namespace Visualization

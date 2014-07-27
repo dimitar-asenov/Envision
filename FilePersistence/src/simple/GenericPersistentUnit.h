@@ -24,70 +24,51 @@
  **
  **********************************************************************************************************************/
 
-#include "GenericNodeAllocator.h"
+#pragma once
+
+#include "../filepersistence_api.h"
 
 namespace FilePersistence {
 
-GenericNodeAllocator::GenericNodeAllocator()
-{}
+class GenericTree;
+class GenericNode;
 
-GenericNodeAllocator::~GenericNodeAllocator()
-{
-	Q_ASSERT(dataMappings_.isEmpty());
-	Q_ASSERT(currentChunkId_ == -1);
-	Q_ASSERT(currentChunk_ == nullptr);
-	Q_ASSERT(currentNodeInChunk_ == ALLOCATION_CHUNK_SIZE);
+class FILEPERSISTENCE_API GenericPersistentUnit {
+	public:
+		~GenericPersistentUnit();
 
-	for (auto c : chunks_) delete [] c;
-}
+		const QString& name() const;
+		GenericTree* tree() const;
 
-void GenericNodeAllocator::endThisLoad()
-{
-	currentChunkId_ = rewindRootChunkId_.takeLast();
-	currentNodeInChunk_ = rewindRootId_.takeLast();
-	if (currentChunkId_ >= 0) currentChunk_ = chunks_.at(currentChunkId_);
-	else currentChunk_ = nullptr;
+		GenericNode* newNode();
+		GenericNode* newNode(int lineStart, int lineEndEnclusive);
+		GenericNode* newNode(const char* data, int dataLength);
+		GenericNode* newNode(const GenericNode* nodeToCopy);
 
-	delete [] dataMappings_.takeLast();
-}
+		/**
+		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
+		 * destroyed with the object.
+		 *
+		 * Returns a pointer to the copied data.
+		 */
+		const char* setData(const char* data, int dataSize);
 
-GenericNode* GenericNodeAllocator::nextNode()
-{
-	++currentNodeInChunk_;
+	private:
+		friend class GenericTree;
+		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
 
-	if (currentNodeInChunk_ < ALLOCATION_CHUNK_SIZE) return &currentChunk_[currentNodeInChunk_];
+		GenericTree* tree_{};
+		QString name_;
+		char* data_{};
+		int dataSize_{};
 
-	// We must advance lists
-	currentNodeInChunk_ = 0;
-	++currentChunkId_;
+		QList<GenericNode*> chunks_;
+		int lastNodeIndexInLastChunk_{};
 
-	if (currentChunkId_ < chunks_.size())
-	{
-		currentChunk_ = chunks_.at(currentChunkId_);
-		return &currentChunk_[currentNodeInChunk_];
-	}
+		GenericNode* nextNode();
+};
 
-	// We must create a new list
-	Q_ASSERT(currentChunkId_ == chunks_.size());
-	currentChunk_ = new GenericNode[ALLOCATION_CHUNK_SIZE];
-	chunks_.append(currentChunk_);
-	return &currentChunk_[currentNodeInChunk_];
-}
-
-GenericNode* GenericNodeAllocator::newRoot(char* data, int lineStart, int lineEndInclusive)
-{
-	rewindRootChunkId_.append(currentChunkId_);
-	rewindRootId_.append(currentNodeInChunk_);
-	dataMappings_.append(data);
-
-	return newChild(lineStart, lineEndInclusive);
-}
-
-GenericNode* GenericNodeAllocator::newChild(int lineStart, int lineEndInclusive)
-{
-	auto node = nextNode();
-	node->resetForLoading(dataMappings_.last(), lineStart, lineEndInclusive);
-	return node;
-}
+inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }
+inline const QString& GenericPersistentUnit::name() const { return name_; }
 
 } /* namespace FilePersistence */

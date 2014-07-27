@@ -28,32 +28,16 @@
 
 #include "../visualizationbase_api.h"
 #include "Item.h"
-#include "ItemWithNode.h"
+#include "NodeWrapper.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API RootItem : public Super<ItemWithNode<RootItem, Item, Model::Node, false>> {
+class VISUALIZATIONBASE_API RootItem : public Super<NodeWrapper> {
 
 	ITEM_COMMON_CUSTOM_STYLENAME(RootItem, ItemStyle)
 
 	public:
-		// Included because it is required for initialization. Parent must always be nullptr.
-		RootItem(Item* parent, NodeType* node, int purpose = 0, int semanticZoomLevel = 0);
 		RootItem(NodeType* node, int purpose = 0, int semanticZoomLevel = 0);
-		RootItem(Item* item, int purpose = 0, int semanticZoomLevel = 0);
-		~RootItem();
-
-		Item* item();
-		void setItem(Item* item);
-
-	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		Item* item_;
 };
-
-inline Item* RootItem::item() { return item_; }
 
 } /* namespace Visualization */

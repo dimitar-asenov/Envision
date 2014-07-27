@@ -26,7 +26,6 @@
 
 #include "VProject.h"
 
-#include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
@@ -43,19 +42,10 @@ ITEM_COMMON_DEFINITIONS(VProject, "item")
 
 VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :Super(parent, node, style)
 {
-	body_ = new PositionLayout(this, &style->body());
 }
 
 void VProject::determineChildren()
 {
-	// manually update the body item
-	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
-	QList<Model::Node*> bodyItems = node()->projects()->nodes().toList();
-	bodyItems << node()->modules()->nodes().toList();
-	bodyItems << node()->classes()->nodes().toList();
-	bodyItems << node()->methods()->nodes().toList();
-	body_->synchronizeWithNodes(bodyItems);
-
 	// call determineChildren of super class
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
@@ -87,7 +77,16 @@ void VProject::initializeForms()
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						&StyleType::declarations))
 				->put(0, 3, item(&I::comment_, [](I* v){return v->node()->comment();}))
-				->put(0, 4, item<PositionLayout>(&I::body_, &StyleType::body));
+				->put(0, 4, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
+						->setNodesGetter(
+							[](Item* v)->QVector<QVector<Model::Node*>>{
+							auto self = static_cast<I*>(v);
+							return Visualization::GridLayouter::arrange(
+									self->node()->projects()->nodes() + self->node()->modules()->nodes() +
+									self->node()->classes()->nodes() + self->node()->methods()->nodes(),
+									Visualization::GridLayouter::ColumnMajor);
+						}));
 
 	auto shapeElement = new ShapeFormElement();
 

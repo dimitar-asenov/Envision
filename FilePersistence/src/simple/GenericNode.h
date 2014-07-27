@@ -32,27 +32,29 @@
 
 namespace FilePersistence {
 
-class GenericNodeAllocator;
+class GenericTree;
+class GenericPersistentUnit;
 
 class FILEPERSISTENCE_API GenericNode {
-	friend class GenericNodeAllocator;
 
 	public:
-		GenericNode();
-		~GenericNode();
+		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 
 		void setName(const QString& name);
 		void setType(const QString& type);
 
+		void setValue(ValueType type, const QString& value);
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
 
 		void setId(Model::NodeIdType id);
 
+		void setParent(GenericNode* parent);
 		GenericNode* addChild(GenericNode* child);
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
+		GenericNode* parent() const;
 
 		const QString& name() const;
 		const QString& type() const;
@@ -62,6 +64,9 @@ class FILEPERSISTENCE_API GenericNode {
 		long valueAsLong() const;
 		double valueAsDouble() const;
 
+		ValueType valueType() const;
+		const QString& rawValue() const;
+
 		bool hasStringValue() const;
 		bool hasIntValue() const;
 		bool hasDoubleValue() const;
@@ -70,46 +75,54 @@ class FILEPERSISTENCE_API GenericNode {
 
 		Model::NodeIdType id() const;
 
-		void save(QTextStream& stream, int tabLevel = 0);
-		static GenericNode* load(const QString& filename, bool lazy, GenericNodeAllocator* allocator);
+		GenericPersistentUnit* persistentUnit() const;
 
 	private:
+		friend class GenericTree;
+		friend class GenericPersistentUnit;
+
 		// //////////////////////////////////////////////////////////////////////////////////////////
 		// !!!
-		// Make sure to reset all the members in the resetForLoading() method
+		// When adding new members, make sure to reset them in the reset() method
 		// !!!
 
 		QString name_;
 		QString type_;
 		QString value_;
-
-		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 		ValueType valueType_{};
 
 		Model::NodeIdType id_{};
+		GenericNode* parent_{};
 		QList<GenericNode*> children_;
 
-		char* data_{};
-		int lineStartInData_{};
-		int lineEndInData_{};
+		/**
+		 * The text line from which this node should be created.
+		 */
+		const char* dataLine_{};
+		int dataLineLength_{};
+
+		GenericPersistentUnit* persistentUnit_{};
 		// //////////////////////////////////////////////////////////////////////////////////////////
 
-		void resetForLoading(char* data, int lineStart, int lineEndInclusive);
-		void setValue(ValueType type, const QString& value);
+		GenericNode();
+
+		/**
+		 * Loads all the properties of this node using the provided \a dataLine. Any old content of this node will be
+		 * removed. If this node did not belong to an allocator, it's children will be deleted.
+		 *
+		 * \a dataLine should start with the indenting tabs and should end with the last content character of the node.
+		 * The line should not include the final line break characters.
+		 *
+		 * Set \a lazy to true when loading with an allocator. In this case \a dataLine will be saved and only parsed
+		 * on demand. If \a lazy is false, then the node will be immediately initialized with the provided data.
+		 */
+		void reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy);
+		void reset(GenericPersistentUnit* persistentUnit);
+		void reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy);
+
 		void ensureDataRead() const;
 
-		static void parseData(GenericNode* node, char* data, int start, int lineEnd);
-
-		static int countTabs(char* data, int lineStart, int lineEnd);
-		static QString rawStringToQString(char* data, int startAt, int endInclusive);
-		static QString escape(const QString& line);
-
-		static Model::NodeIdType toId(char* data, int start, int endInclusive, bool& ok);
-		static uchar hexDigitToChar(char d, bool& ok);
-
-		static bool nextNonEmptyLine(char* data, int dataSize, int& lineStart, int& lineEnd);
-		static int indexOf(const char c, char* data, int start, int endInclusive);
-		static bool nextHeaderPart(char* data, int& start, int&endInclusive, int lineEnd);
+		bool sameTree(const GenericNode* other);
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
@@ -119,21 +132,16 @@ inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
 inline bool GenericNode::hasValue() const { ensureDataRead(); return valueType_ != NO_VALUE; }
+inline GenericNode::ValueType GenericNode::valueType() const { ensureDataRead(); return valueType_; }
+inline const QString& GenericNode::rawValue() const { ensureDataRead(); return value_; }
 inline Model::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
 inline const QList<GenericNode*>& GenericNode::children() const { ensureDataRead(); return children_; }
+inline GenericNode* GenericNode::parent() const {ensureDataRead(); return parent_;} // Parent must be explicitly set
 
 inline bool GenericNode::hasStringValue() const { ensureDataRead(); return valueType_ == STRING_VALUE; }
 inline bool GenericNode::hasIntValue() const { ensureDataRead(); return valueType_ == INT_VALUE; }
 inline bool GenericNode::hasDoubleValue() const { ensureDataRead(); return valueType_ == DOUBLE_VALUE; }
 
-inline void GenericNode::ensureDataRead() const
-{
-	if (data_)
-	{
-		parseData(const_cast<GenericNode*>(this), data_, lineStartInData_, lineEndInData_);
-		// Don't delete this, just mark it unused. The allocator will delete it.
-		const_cast<GenericNode*>(this)->data_ = nullptr;
-	}
-}
+inline GenericPersistentUnit* GenericNode::persistentUnit() const {return persistentUnit_;}
 
 } /* namespace FilePersistence */

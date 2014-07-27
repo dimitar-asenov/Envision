@@ -70,7 +70,7 @@ QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
 }
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(StandardUpdate), purpose_(-1),
 	semanticZoomLevel_(-1), itemCategory_(Scene::NoItemCategory)
 {
 	// By default no flags in a QGraphicsItem are enabled.
@@ -96,7 +96,10 @@ Item::~Item()
 {
 	// Mark this item as not needing updates
 	for (auto s : Scene::allScenes())
+	{
 		s->setItemIsSensitiveToScale(this, false);
+		s->removeFromHighlights(this);
+	}
 
 	SAFE_DELETE(shape_);
 }
@@ -108,12 +111,27 @@ QRectF Item::boundingRect() const
 
 void Item::setUpdateNeeded(UpdateType updateType)
 {
+	// Set own update
 	needsUpdate_ = updateType;
+
+	// Request that all parents are updated
 	Item* p = parent();
 	while (p)
 	{
 		if (p->needsUpdate() == NoUpdate) p->needsUpdate_ = StandardUpdate;
 		p = p->parent();
+	}
+
+	// If Full update, update all children
+	if (updateType == FullUpdate)
+	{
+		QList<Item*> stack = childItems();
+		while (!stack.isEmpty())
+		{
+			auto child = stack.takeLast();
+			child->needsUpdate_ = StandardUpdate;
+			stack << child->childItems();
+		}
 	}
 }
 
@@ -340,9 +358,9 @@ InteractionHandler* Item::handler() const
 	return defaultClassHandler();
 }
 
-void Item::execute(const QString& command)
+void Item::execute(const QString& command, const std::unique_ptr<Cursor>& cursor)
 {
-	handler()->command(this, command);
+	handler()->command(this, command, cursor);
 }
 
 bool Item::hasNode() const
@@ -390,6 +408,10 @@ void Item::removeFromScene()
 		// Mark this item as not needing updates
 		scene()->setItemIsSensitiveToScale(this, false);
 
+		//Remove highlights if any
+		scene()->removeFromHighlights(this);
+
+		//Finally remove this item from the scene
 		if (parent()) scene()->removeItem(this);
 		else scene()->removeTopLevelItem(this);
 	}

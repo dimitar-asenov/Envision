@@ -26,38 +26,38 @@
 
 #pragma once
 
-#include "GenericNode.h"
+#include "visualizationbase_api.h"
 
-namespace FilePersistence {
+namespace Visualization {
 
-class GenericNodeAllocator {
-	friend class GenericNode;
+class Scene;
+class SelectedItem;
+class Item;
+
+class VISUALIZATIONBASE_API Highlight {
 
 	public:
-		GenericNodeAllocator();
-		~GenericNodeAllocator();
+		~Highlight();
 
-		void endThisLoad();
+		const QString& name() const;
+		Scene* scene() const;
+
+		void addHighlightedItem(Item* item);
+		void removeHighlightedItem(Item* item);
 
 	private:
-		GenericNode* newRoot(char* data, int lineStart, int lineEndInclusive);
-		GenericNode* newChild(int lineStart, int lineEndInclusive);
+		friend class Scene;
 
-		const int ALLOCATION_CHUNK_SIZE = 10000; // num elements to allocate at once
+		Scene* scene_{};
+		QString name_;
+		QString styleName_;
+		QHash<Item*, SelectedItem*> highlightItems_;
 
-		QList<char*> dataMappings_;
-
-		QList<int> rewindRootChunkId_;
-		QList<int> rewindRootId_;
-
-		QList<GenericNode*> chunks_;
-
-		// These are the indices of the last given node
-		GenericNode* currentChunk_{};
-		int currentChunkId_{-1};
-		int currentNodeInChunk_{ALLOCATION_CHUNK_SIZE};
-
-		GenericNode* nextNode();
+		Highlight(Scene* scene, const QString& name, const QString& styleName);
+		void updateAllHighlights();
 };
 
-} /* namespace FilePersistence */
+inline const QString& Highlight::name() const {return name_;}
+inline Scene* Highlight::scene() const {return scene_;}
+
+} /* namespace Visualization */

@@ -19,11 +19,11 @@
 	Envision is an IDE and an information system. A core principle of the platform is the separation of concerns of
 	reading, modifying, analyzing, and storing programs.  
 	
-	The \b %Model is the central data structure that defines an application. It has no inherent representation,
-	neither textual nor visual. The model is similar to the abstract syntax tree of a programming language but is more
-	than just that. Here are the main features that Envision's model will offer:
-		- <em>Rich content</em> - the model can contain not only the program structure but also software engineering
-		artifacts such as comments, images, tables, documentation, graphs, plans, schedules, etc.
+	The application tree  is the central data structure that defines an application. It has no inherent representation,
+	neither textual nor visual. The tree is similar to the abstract syntax tree of a programming language but is more
+	than just that. Here are the main features that Envision's tree will offer:
+		- <em>Rich content</em> - the application tree can contain not only the program structure but also software
+		engineering artifacts such as comments, images, tables, documentation, graphs, plans, schedules, etc.
 		- <em>Content linking</em> - information from different parts of the system can be linked to ease navigation
 		and maintain consistency. For example, values of program constants can be derived from values which appear in
 		the documentation of the project.
@@ -33,20 +33,20 @@
 		- <em>Flexible and implicit persistence</em> - projects can be automatically persisted on disk, in a database
 		or in a different way defined by the programmer. It is no longer necessary to manually structure files on disk
 		and programmers can focus on the logical structure of the application they are developing.
-		- <em>Language independent model</em> - Envision's model is based on programming concepts and not on the
-		features of a particular programming language. Programmers use Envision to create a model of an application
+		- <em>Language independent application tree</em> - Envision's tree is based on programming concepts and not on the
+		features of a particular programming language. Programmers use Envision to create an application
 		using these concepts. Concepts for example are classes, inheritance, dynamic dispatch, static methods,
 		constants, operators, generics and many other commonly found features in modern programming languages. Such a
-		model can then be translated to any programming language's syntax as needed. This has the advantage that many
-		tools can be created to operate on the generic model and their results will then automatically apply to a wider
+		tree can then be translated to any programming language's syntax as needed. This has the advantage that many
+		tools can be created to operate on the generic tree and their results will then automatically apply to a wider
 		range of programming languages. This includes tools for refactoring, analysis, visualization and others.
 		Naturally it will still be possible to parametrize such a tool with a specific target programming language when
 		this is essential for the tool's operation (for example profiling and optimization tools).
 
-	The \b %View is a particular way to visualize the model to the user. A view may display the entire model or part
-	of it. It can display a segment of the program in complete detail or it can show a summary of the more important
-	features of that part. The view can consist of text, visual elements and any combination of the two. Some of the
-	key features of this approach are:
+	The \b %View is a particular way to visualize the application tree to the user. A view may display the entire tree
+	or part of it. It can display a segment of the program in complete detail or it can show a summary of the more
+	important features of that part. The view can consist of text, visual elements and any combination of the two.
+	Some of the key features of this approach are:
 		- <em>Rich and flexible visuals</em> - programs are represented as a mixture of textual and visual elements
 		and are not limited to text files. It is possible to display images, tables, animations or other artifacts in
 		the same view as the program fragments that they refer to.
@@ -54,7 +54,7 @@
 		overlay directly on top of the program segment they refer to. This could be used for example to highlight
 		errors found by a type system or a verifier, to indicate which branches of a method have not been covered by
 		test cases, show values of variables during debugging and others.
-		- <em>Multiple views</em> - a model may have many associated views which visualize it in a number of ways
+		- <em>Multiple views</em> - a tree may have many associated views which visualize it in a number of ways
 		suitable for different tasks.
 		- <em>Visual cognitive processing</em> - programming constructs are rendered visually using lines, colors,
 		icons, and positions. Such visual elements are processed faster in the human brain compared to text and are
@@ -68,21 +68,21 @@
 		zooming in on it.
 
 
-	The \b %Controller is the mechanism by which the model can be modified. Unlike conventional IDEs where programmers
-	directly modify the structure of the program by writing text, in Envision they rely on the aid of the controller
-	to do this more efficiently. Some key ideas of this approach are:
+	The \b %Controller is the mechanism by which the application tree can be modified. Unlike conventional IDEs where
+	programmers directly modify the structure of the program by writing text, in Envision they rely on the aid of the
+	controller to do this more efficiently. Some key ideas of this approach are:
 		- <em>Relaxed or no syntax</em> - Since Envision features a structured editor there is no complicated syntax
 		to deal with. To enable keyboard interaction developers still need to know some commands but these are simple
 		and intuitive.
 		- <em>Direct manipulation</em> - programmers can interact in a natural way directly with the visual objects
-		that represent a segment of the model. This helps preserve focus, which could otherwise be lost, for example if
+		that represent a segment of the tree. This helps preserve focus, which could otherwise be lost, for example if
 		the developer needs to go through a series of menus to perform a task.
 		- <em>Keyboard centric interaction</em> - while keyboard input is standard for traditional text-based
 		programming, many visual programming systems are centered on mouse interactions. Unlike these systems, Envision
 		focuses heavily on keyboard input and uses the mouse to complement it. We believe that in the hands of an
 		experienced developer, the keyboard is a very effective input mechanism and provides for better productivity
 		compared to mouse based interactions.
-		- <em>Command based interaction</em> - one way to modify the model or invoke IDE functions is via textual
+		- <em>Command based interaction</em> - one way to modify the tree or invoke IDE functions is via textual
 		commands. The commands are context sensitive and are applied to the currently selected item. This enables a
 		powerful interaction mechanism with the IDE that is similar to an operating system's terminal.
 

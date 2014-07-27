@@ -29,8 +29,6 @@
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Reference.h"
-#include "ModelBase/src/persistence/PersistedNode.h"
-#include "ModelBase/src/persistence/PersistedValue.h"
 
 using namespace Model;
 
@@ -104,36 +102,6 @@ void SystemClipboard::saveNode(const Node *node, const QString &name)
 	xml->endSaveChildNode();
 }
 
-void SystemClipboard::saveNodeFromOldStore(PersistedNode* node)
-{
-	xml->beginSaveChildNode( node->type() );
-	xml->setName(node->name());
-
-	PersistedValue< QString >* string =  dynamic_cast< PersistedValue< QString >* > (node);
-	if (string) xml->saveStringValue(string->value());
-	else
-	{
-		PersistedValue< int >* integer =  dynamic_cast< PersistedValue< int >* > (node);
-		if (integer) xml->saveIntValue( integer->value() );
-		else
-		{
-			PersistedValue< double >* dbl =  dynamic_cast< PersistedValue< double >* > (node);
-			if (dbl) xml->saveDoubleValue(dbl->value());
-			else
-			{
-				auto composite = dynamic_cast< PersistedValue< QList<PersistedNode*> >* > (node);
-				if (composite)
-				{
-					for (int i = 0; i< composite->value().size(); ++i) saveNodeFromOldStore(composite->value()[i]);
-				}
-				else throw FilePersistenceException("Unknown PersistedNode type.");
-			}
-		}
-	}
-
-	xml->endSaveChildNode();
-}
-
 Node* SystemClipboard::loadTree(::Model::TreeManager*, const QString &, bool)
 {
 	throw FilePersistenceException("The clipboard does not support the loadTree() method.");
@@ -182,13 +150,6 @@ LoadedNode SystemClipboard::loadNode(Node* parent)
 QString SystemClipboard::currentNodeType() const
 {
 	return xml->getType();
-}
-
-PersistedNode* SystemClipboard::loadCompleteNodeSubtree(const QString&, const Node*)
-{
-	throw FilePersistenceException("The loadCompleteNodeSubtree(...) method is not supported in the SystemClipboard"
-			" store. This might indicate that an object only partially loaded itself,"
-			" ignoring the provided partial hint.");
 }
 
 int SystemClipboard::loadIntValue()

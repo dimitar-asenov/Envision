@@ -39,7 +39,10 @@ class VISUALIZATIONBASE_API Cursor {
 		enum CursorType {VerticalCursor, HorizontalCursor, BoxCursor};
 
 		Cursor(Item* owner, CursorType type, Item* visualization = nullptr);
+		Cursor(const Cursor& other);
+		Cursor& operator= (const Cursor& other) = delete;
 		virtual ~Cursor();
+		virtual Cursor* clone() const;
 
 		virtual Item* owner() const;
 
@@ -97,8 +100,8 @@ class VISUALIZATIONBASE_API Cursor {
 	private:
 		QPoint position_;
 		QRect region_;
-		Item* owner_;
-		Item* visualization_;
+		Item* owner_{};
+		Item* visualization_{};
 		CursorType type_;
 		bool notLocationEquivalent_;
 

@@ -99,7 +99,6 @@
 		<alignment>1</alignment>
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</content>
-	<body prototypes="layout/PositionLayout/default" />
 	<annotations prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box

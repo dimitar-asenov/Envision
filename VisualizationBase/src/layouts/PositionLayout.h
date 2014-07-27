@@ -88,14 +88,14 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 		 * Returns true if the semantic zoom level of at least one child item was adjusted.
 		 */
 		bool adjustChildrenSemanticZoom();
-		static Position* positionOf(Item* item);
+		static std::unique_ptr<Position> positionOf(Item* item);
 		static void ensureItemHasCompositeNode(const Item* item);
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }
 template <class T> T* PositionLayout::at(int index) const { return static_cast<T*> (items[index]); }
-inline Position* PositionLayout::positionOf(Item* item)
-{ return (static_cast<Model::CompositeNode*>(item->node()))->extension<Position>();	}
+inline std::unique_ptr<Position> PositionLayout::positionOf(Item* item)
+{ return std::unique_ptr<Position>((static_cast<Model::CompositeNode*>(item->node()))->extension<Position>());	}
 
 inline void PositionLayout::ensureItemHasCompositeNode(const Item* item)
 {

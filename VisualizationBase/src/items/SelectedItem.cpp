@@ -52,7 +52,7 @@ void SelectedItem::setSelectedItem(Item* item)
 
 Item::UpdateType SelectedItem::needsUpdate()
 {
-	return FullUpdate;
+	return StandardUpdate;
 }
 
 void SelectedItem::determineChildren()

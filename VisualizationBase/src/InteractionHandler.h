@@ -31,6 +31,7 @@
 namespace Visualization {
 
 class Item;
+class Cursor;
 
 class VISUALIZATIONBASE_API InteractionHandler
 {
@@ -71,7 +72,8 @@ class VISUALIZATIONBASE_API InteractionHandler
 		virtual void focusOutEvent(Item *target, QFocusEvent *event);
 
 		// Command events
-		virtual void command(Item *target, const QString& command); // Introduced by Envision
+		// Introduced by Envision
+		virtual void command(Item *target, const QString& command, const std::unique_ptr<Cursor>& cursor);
 
 		// Destructor
 		virtual ~InteractionHandler();

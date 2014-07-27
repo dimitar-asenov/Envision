@@ -43,19 +43,21 @@
 	\subsection implemented Implemented features
 		- A core component that finds and loads plug-ins at run time
 		- A small test framework for testing plug-ins
-		- An extensible application model which currently supports a subset of Java (partial generics, no interfaces, no
-		reflection, no libraries), and C++ (some templates, partial C++11 support, few 'exotic features')
-		- Flexible visualizations for elements of the model
-		- Cod editing using a structured editor
+		- An extensible application model (AST) which currently supports a subset of Java (partial generics,
+			no interfaces, no reflection, no libraries), and C++ (some templates, partial C++11 support,
+			few 'exotic' features)
+		- Flexible visualizations
+		- Code editing using a structured editor
 		- Ability to customize how AST nodes are rendered based on context
+		- Rich comments, including formatted text, diagrams, and embedded HTML/Javascript
 		- Partial support for importing Java code
 
 	\subsection missing Missing features required for basic usability
 		- Full support for importing/exporting to/from a programming language
-		- Support for external libraries
 
 \section dev-doc Developer documentation and guidelines for contributors
-	NOTE: This developer documentation is currently being created and is not fully complete.
+	NOTE: This developer documentation is continuously being updated with new content and is not yet fully complete. If
+	there is something particular you would like to see here, let us know.
 
 	For an introduction to the project's design and organization for contributors, please check out
 	\ref architecture "the architecture of Envision".

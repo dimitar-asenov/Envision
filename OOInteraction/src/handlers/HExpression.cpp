@@ -439,7 +439,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	// Make a string pattern to look for. Given an input like:
 	// someclass.met|hod
 	// The pattern will look this this:
-	// *m*e*t*
+	// m*e*t*   (Note that the first letter has to match)
 	// Everything after the cursor is discarded. The identifier characters before the cursor are used and each character
 	// is surrounded with *
 	QString userWord;
@@ -456,10 +456,24 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	++index;
 
 	userWord = userWord.right(userWord.size() - index);
-	QString searchPattern = userWord;
-	for (int i = searchPattern.size(); i>=0; --i) searchPattern.insert(i, "*");
+	if (!userWord.isEmpty() && userWord.at(0).isDigit()) // No auto completion for digits
+	{
+		AutoComplete::hide();
+		return;
+	}
 
-	QList<AutoCompleteEntry*> entries;
+	QString searchPattern = userWord;
+	for (int i = searchPattern.size(); i>0; --i) searchPattern.insert(i, "*");
+
+	QStringList autoCompleteCandidates;
+	// Try to match built in keywords and types
+	{
+		auto matcher = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
+		for (QString str : {"int", "bool", "long", "float", "double", "short", "byte", "char", "for", "if", "while"})
+			if (matcher.exactMatch(str))
+				autoCompleteCandidates.append(str);
+	}
+
 
 	SymbolProviderType* scopePrefix = nullptr;
 	bool afterDot = false;
@@ -505,15 +519,18 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 			target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), Model::Node::ANY_SYMBOL,
 			afterDot == false);
 
+	for (auto n : foundSymbols) autoCompleteCandidates.append(n->symbolName());
+
+	QList<AutoCompleteEntry*> entries;
 	// Insert in sorted order, skipping duplicates.
-	for (auto n : foundSymbols)
+	for (auto candidate : autoCompleteCandidates)
 	{
 		auto insertionPoint = std::find_if(entries.begin(), entries.end(),
-				[=](AutoCompleteEntry* e){return e->text() >= n->symbolName();});
+				[=](AutoCompleteEntry* e){return e->text() >= candidate;});
 
-		if ( insertionPoint == entries.end() || (*insertionPoint)->text() != n->symbolName())
+		if ( insertionPoint == entries.end() || (*insertionPoint)->text() != candidate)
 		{
-			entries.insert(insertionPoint, new AutoCompleteEntry(n->symbolName(), QString(), nullptr,
+			entries.insert(insertionPoint, new AutoCompleteEntry(candidate, QString(), nullptr,
 				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
 		}
 	}

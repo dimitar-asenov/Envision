@@ -76,7 +76,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 	{
 		if (horizontal)
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[](){return 1;},	// numRows
 				[size](){return size;},	// numColumns
 				[](int, int){return true;},	// has
@@ -103,7 +103,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		}
 		else
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[size](){return size;},	// numRows
 				[](){return 1;},	// numColumns
 				[](int, int){return true;},	// has
@@ -134,7 +134,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		auto invert = [size](int i){return size-1-i;};
 		if (horizontal)
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[](){return 1;},	// numRows
 				[size](){return size;},	// numColumns
 				[](int, int){return true;},	// has
@@ -161,7 +161,7 @@ void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, in
 		}
 		else
 		{
-			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight,
+			finalSize = GridLayouter::computeSize<false>(availableWidth, availableHeight, GridLayouter::NoMajor,
 				[size](){return size;},	// numRows
 				[](){return 1;},	// numColumns
 				[](int, int){return true;},	// has
@@ -196,8 +196,9 @@ void SequentialLayoutFormElement::setItemPositions(Item* item, int parentX, int 
 	auto& data = dataForItem(item);
 	for (int i = 0; i<data.items_.size(); ++i)
 	{
-		QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[i].x() + leftMargin(),
-					parentY + y(item) + data.itemPositionWithinLayout_[i].y() + topMargin()};
+		// Note that margins have already been accounted for.
+		QPointF newPos{parentX + x(item) + data.itemPositionWithinLayout_[i].x(),
+					parentY + y(item) + data.itemPositionWithinLayout_[i].y()};
 
 		if (newPos != data.items_[i]->pos())
 			data.items_[i]->setPos(newPos); // setting the position is an expensive operation so only do it if it changed
@@ -286,227 +287,116 @@ void SequentialLayoutFormElement::synchronizeWithItems(Item* item, const QList<I
 QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
 {
 	QList<ItemRegion> regs;
-	auto& itemList = dataForItem(item).items_;
+
+	auto& itemData = dataForItem(item);
+	auto& itemList = itemData.items_;
 
 	// If this layout is not visible return no regions
 	if (itemList.isEmpty() && !hasCursorWhenEmpty(item))
 		return regs;
 
-	bool extraCursors = false;
-	if (parent() == nullptr)
-	{
-		// This is a top-level list. Take into consideration the style of the parent item and its shape.
-		extraCursors = item->hasShape() && item->style()->extraCursorsOutsideShape();
-	}
+	bool horizontal = orientation_ == Qt::Horizontal;
+	int spacing = spaceBetweenElements(item);
+	int size = itemList.size();
 
-	bool horizontal = (orientation_ == Qt::Horizontal);
 
-	auto elementBoundary = QRect(QPoint(x(item) + parentX, y(item) + parentY), size(item));
-	if (extraCursors && itemList.isEmpty())
-	{
-		if (horizontal)
+	if (forward_)
 		{
-			elementBoundary.setTop(0);
-			elementBoundary.setHeight( item->heightInLocal() );
+			if (horizontal)
+			{
+				regs = GridLayouter::regions(item, this, parentX + x(item), parentY + y(item),
+						GridLayouter::RowMajor,
+						hasCursorWhenEmpty(item), !noInnerCursors(item), !noBoundaryCursors(item),
+						item->style()->extraCursorsOutsideShape(), false, notLocationEquivalentCursors(item),
+						[](){return 1;},	// numRows
+						[size](){return size;},	// numColumns
+						[](int, int){return true;},	// has
+						[&itemList](int x, int){return itemList[x]->widthInParent();},	// width
+						[&itemList](int x, int){return itemList[x]->heightInParent();},	// height
+						[&itemList](int x, int){return (int) itemList[x]->x();},	// xPos
+						[&itemList](int x, int){return (int) itemList[x]->y();},	// yPos
+						[&itemList](int x, int){return itemList[x];},	// childItem
+						[spacing](){return spacing;},	// spaceBetweenRows
+						[spacing](){return spacing;},	// spaceBetweenColumns
+						[this](){return topMargin();},	// topMargin
+						[this](){return bottomMargin();},	// bottomMargin
+						[this](){return leftMargin();},	// leftMargin
+						[this](){return rightMargin();}	// rightMargin
+					);
+			}
+			else
+			{
+				regs = GridLayouter::regions(item, this, parentX + x(item), parentY + y(item),
+						GridLayouter::ColumnMajor,
+						hasCursorWhenEmpty(item), !noInnerCursors(item), !noBoundaryCursors(item),
+						item->style()->extraCursorsOutsideShape(), false, notLocationEquivalentCursors(item),
+						[size](){return size;},	// numRows
+						[](){return 1;},	// numColumns
+						[](int, int){return true;},	// has
+						[&itemList](int, int y){return itemList[y]->widthInParent();},	// width
+						[&itemList](int, int y){return itemList[y]->heightInParent();},	// height
+						[&itemList](int, int y){return (int) itemList[y]->x();},	// xPos
+						[&itemList](int, int y){return (int) itemList[y]->y();},	// yPos
+						[&itemList](int, int y){return itemList[y];},	// childItem
+						[spacing](){return spacing;},	// spaceBetweenRows
+						[spacing](){return spacing;},	// spaceBetweenColumns
+						[this](){return topMargin();},	// topMargin
+						[this](){return bottomMargin();},	// bottomMargin
+						[this](){return leftMargin();},	// leftMargin
+						[this](){return rightMargin();}	// rightMargin
+					);
+			}
 		}
-		else
+		else // Reversed order
 		{
-			elementBoundary.setLeft(0);
-			elementBoundary.setWidth( item->widthInLocal() );
+			auto invert = [size](int i){return size-1-i;};
+			if (horizontal)
+			{
+				regs = GridLayouter::regions(item, this, parentX + x(item), parentY + y(item),
+						GridLayouter::RowMajor,
+						hasCursorWhenEmpty(item), !noInnerCursors(item), !noBoundaryCursors(item),
+						item->style()->extraCursorsOutsideShape(), false, notLocationEquivalentCursors(item),
+						[](){return 1;},	// numRows
+						[size](){return size;},	// numColumns
+						[](int, int){return true;},	// has
+						[&itemList, invert](int x, int){return itemList[invert(x)]->widthInParent();},	// width
+						[&itemList, invert](int x, int){return itemList[invert(x)]->heightInParent();},	// height
+						[&itemList, invert](int x, int){return (int) itemList[invert(x)]->x();},	// xPos
+						[&itemList, invert](int x, int){return (int) itemList[invert(x)]->y();},	// yPos
+						[&itemList, invert](int x, int){return itemList[invert(x)];},	// childItem
+						[spacing](){return spacing;},	// spaceBetweenRows
+						[spacing](){return spacing;},	// spaceBetweenColumns
+						[this](){return topMargin();},	// topMargin
+						[this](){return bottomMargin();},	// bottomMargin
+						[this](){return leftMargin();},	// leftMargin
+						[this](){return rightMargin();}	// rightMargin
+					);
+			}
+			else
+			{
+				regs = GridLayouter::regions(item, this, parentX + x(item), parentY + y(item),
+						GridLayouter::ColumnMajor,
+						hasCursorWhenEmpty(item), !noInnerCursors(item), !noBoundaryCursors(item),
+						item->style()->extraCursorsOutsideShape(), false, notLocationEquivalentCursors(item),
+						[size](){return size;},	// numRows
+						[](){return 1;},	// numColumns
+						[](int, int){return true;},	// has
+						[&itemList, invert](int, int y){return itemList[invert(y)]->widthInParent();},	// width
+						[&itemList, invert](int, int y){return itemList[invert(y)]->heightInParent();},	// height
+						[&itemList, invert](int, int y){return (int) itemList[invert(y)]->x();},	// xPos
+						[&itemList, invert](int, int y){return (int) itemList[invert(y)]->y();},	// yPos
+						[&itemList, invert](int, int y){return itemList[invert(y)];},	// childItem
+						[spacing](){return spacing;},	// spaceBetweenRows
+						[spacing](){return spacing;},	// spaceBetweenColumns
+						[this](){return topMargin();},	// topMargin
+						[this](){return bottomMargin();},	// bottomMargin
+						[this](){return leftMargin();},	// leftMargin
+						[this](){return rightMargin();}	// rightMargin
+					);
+			}
 		}
-	}
-
-	auto wholeArea = extraCursors ? QRect(QPoint(0, 0), item->sizeInLocal().toSize()) : elementBoundary;
-
-	auto elementsArea = elementBoundary.adjusted(+leftMargin(), topMargin(), -rightMargin(), -bottomMargin());
-
-	// This is the rectangle half-way between the bounding box of the layout and elementsArea.
-	QRect midArea = QRect( (wholeArea.left() + elementsArea.left()) / 2, (wholeArea.top() + elementsArea.top()) / 2,
-			(wholeArea.width() + elementsArea.width()) / 2, (wholeArea.height() + elementsArea.height()) / 2 );
-
-	//int offset = (spaceBetweenElements(item) > 0) ? spaceBetweenElements(item)/2 : 1;
-	int offset = 1;
-
-	int last = forward_ ?
-			( horizontal ? midArea.left() : midArea.top()) :
-			( horizontal ? midArea.right() + offset : midArea.bottom() + offset);
-
-	for (int i = 0; i<itemList.size(); ++i)
-	{
-		ItemRegion cursorRegion;
-		ItemRegion itemRegion;
-		if (horizontal && forward_)
-		{
-			cursorRegion.setRegion(QRect(last, elementBoundary.top(), itemList[i]->x() - last, elementBoundary.height()));
-			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->widthInParent(),
-												elementBoundary.height()));
-			last = itemList[i]->xEndInParent() + offset;
-		}
-		else if (horizontal && !forward_)
-		{
-			cursorRegion.setRegion(QRect(itemList[i]->xEndInParent()+1, elementBoundary.top(), last,
-												  elementBoundary.height()));
-			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->widthInParent(),
-												elementBoundary.height()));
-			last = itemList[i]->x() - offset;
-		}
-		else if (!horizontal && forward_)
-		{
-			cursorRegion.setRegion(QRect(elementBoundary.left(), last,  elementBoundary.width(), itemList[i]->y() - last));
-			itemRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->y(), elementBoundary.width(),
-												itemList[i]->heightInParent()));
-			last = itemList[i]->yEndInParent() + offset;
-		}
-		else
-		{
-			cursorRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->yEndInParent()+1, elementBoundary.width(),
-												  last));
-			itemRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->y(), elementBoundary.width(),
-												itemList[i]->heightInParent()));
-			last = itemList[i]->y() - offset;
-		}
-
-		itemRegion.setItem(itemList[i]);
-		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, !extraCursors && i==0, false);
-
-		// Note below, that a horizontal layout, means a vertical cursor
-		auto lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
-		lc->setOwnerElement(this);
-		cursorRegion.setCursor(lc);
-		lc->setIndex(i);
-		if (horizontal)
-		{
-			lc->setVisualizationPosition(QPoint(cursorRegion.region().center().x(), cursorRegion.region().top()));
-			lc->setVisualizationSize(QSize(2, elementBoundary.height()));
-		}
-		else
-		{
-			lc->setVisualizationPosition(QPoint(cursorRegion.region().left(), cursorRegion.region().center().y()));
-			lc->setVisualizationSize(QSize(elementBoundary.width(), 2));
-		}
-		lc->setOwnerElement(this);
-		if (i==0 && !extraCursors) lc->setIsAtBoundary(true);
-
-		cursorRegion.cursor()->setRegion(cursorRegion.region());
-		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
-
-		// Skip cursor?
-		if (!((i == 0) && noBoundaryCursors(item)) && !((i > 0) && noInnerCursors(item)))
-			regs.append(cursorRegion);
-		regs.append(itemRegion);
-	}
-
-	// Add trailing cursor region if not omitted
-	if (!noBoundaryCursors(item))
-	{
-		QRect trailing;
-		if (horizontal && forward_)
-			trailing.setRect(last, elementBoundary.top(), midArea.right() + 1 - last, elementBoundary.height());
-		else if (horizontal && !forward_)
-			trailing.setRect(midArea.left(), elementBoundary.top(), last - midArea.left(), elementBoundary.height());
-		else if (!horizontal && forward_)
-			trailing.setRect(elementBoundary.left(), last,  elementBoundary.width(), midArea.bottom() + 1 - last);
-		else trailing.setRect(elementBoundary.left(), midArea.top(),  elementBoundary.width(), last - midArea.top());
-
-		adjustCursorRegionToAvoidZeroSize(trailing, horizontal, false, !extraCursors);
-
-		regs.append(ItemRegion(trailing));
-		// Note below, that a horizontal layout, means a vertical cursor
-		auto lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
-		lc->setOwnerElement(this);
-		regs.last().setCursor(lc);
-		lc->setIndex(itemList.size());
-
-		auto vSize = horizontal ? QSize(2, elementBoundary.height()) : QSize(elementBoundary.width(), 2);
-		lc->setVisualizationSize(vSize);
-		auto vPos = regs.last().region().topLeft();
-		if (itemList.isEmpty())
-		{
-			// Center the cursors. The final + 1 is just for rounding, it looks more centered with it.
-			if (horizontal) vPos.rx() += (regs.last().region().width() - vSize.width()) / 2 + 1;
-			else vPos.ry() += (regs.last().region().height() - vSize.height()) / 2 + 1;
-		}
-		lc->setVisualizationPosition(vPos);
-
-		lc->setRegion(trailing);
-		if (!extraCursors) lc->setIsAtBoundary(true);
-		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
-	}
-
-	// Finally add the two extra cursors if requested
-	if (extraCursors)
-	{
-		QRect extra;
-
-		// Front
-		if (horizontal && forward_)
-			extra.setRect(0, 0, midArea.left(), item->heightInLocal());
-		else if (horizontal && !forward_)
-			extra.setRect(midArea.right() + 1, 0, item->widthInLocal() - midArea.right() - 1, item->heightInLocal());
-		else if (!horizontal && forward_)
-			extra.setRect(0, 0,  item->widthInLocal(), midArea.top());
-		else
-			extra.setRect(0, midArea.bottom() + 1, item->widthInLocal(), item->heightInLocal() - midArea.bottom() - 1);
-
-		adjustCursorRegionToAvoidZeroSize(extra, horizontal, true, false);
-
-		regs.append(ItemRegion(extra));
-		// Note below, that a horizontal layout, means a vertical cursor
-		auto lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
-		lc->setOwnerElement(this);
-		regs.last().setCursor(lc);
-		lc->setIndex(-1);
-		lc->setVisualizationPosition(regs.last().region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, item->heightInLocal()) : QSize(item->widthInLocal(), 2));
-		lc->setRegion(extra);
-		lc->setIsAtBoundary(true);
-		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
-
-		// Back
-		if (horizontal && forward_)
-			extra.setRect(midArea.right() + 1, 0, item->widthInLocal() - midArea.right() - 1, item->heightInLocal());
-		else if (horizontal && !forward_)
-			extra.setRect(0, 0, midArea.left(), item->heightInLocal());
-		else if (!horizontal && forward_)
-			extra.setRect(0, midArea.bottom() + 1, item->widthInLocal(), item->heightInLocal() - midArea.bottom() - 1);
-		else
-			extra.setRect(0, 0,  item->widthInLocal(), midArea.top());
-
-		adjustCursorRegionToAvoidZeroSize(extra, horizontal, false, true);
-
-		regs.append(ItemRegion(extra));
-		// Note below, that a horizontal layout, means a vertical cursor
-		lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
-		lc->setOwnerElement(this);
-		regs.last().setCursor(lc);
-		lc->setIndex(itemList.size()+1);
-
-		auto vSize = horizontal ? QSize(2, item->heightInLocal()) : QSize(item->widthInLocal(), 2);
-		lc->setVisualizationSize(vSize);
-		lc->setVisualizationPosition(regs.last().region().bottomRight() -QPoint(vSize.width(), vSize.height()));
-
-		lc->setRegion(extra);
-		lc->setIsAtBoundary(true);
-		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
-	}
 
 	return regs;
-}
-
-inline void SequentialLayoutFormElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first,
-		bool last)
-{
-	// Make sure there is at least some space for the cursor Region.
-	if (horizontal && region.width() == 0)
-	{
-		if (forward_) region.adjust((first?0:-1), 0, (last?0:1), 0);
-		else region.adjust((last?0:-1), 0, (first?0:1), 0);
-	}
-	if (!horizontal && region.height() == 0 )
-	{
-		if (forward_) region.adjust(0, (first?0:-1), 0, (last?0:1));
-		else  region.adjust(0, (last?0:-1), 0, (first?0:1));
-	}
 }
 
 bool SequentialLayoutFormElement::isEmpty(const Item* item) const

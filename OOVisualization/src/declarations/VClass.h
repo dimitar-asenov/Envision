@@ -38,7 +38,6 @@ namespace Visualization {
 	class VText;
 	class VList;
 	class Static;
-	class PositionLayout;
 	class EmptyItem;
 }
 
@@ -73,7 +72,6 @@ class OOVISUALIZATION_API VClass
 		Visualization::Static* friendsSymbol_{};
 		Visualization::VList* friends_{};
 		Visualization::VList* declarations_{};
-		Visualization::PositionLayout* body_{};
 		Visualization::EmptyItem* fieldBackground_{};
 		QList<Model::Node*> publicFields_{};
 		QList<Model::Node*> privateFields_{};

@@ -188,7 +188,6 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		 * Synchronizes the old list of items for this \a item with the new list of \a items.
 		 */
 		void synchronizeWithItems(Item* item, const QList<Item*>& items);
-		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
 };
 
 inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListNode(ListNodeGetterFunction listNodeGetter)

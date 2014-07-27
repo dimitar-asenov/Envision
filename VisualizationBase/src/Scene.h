@@ -27,6 +27,7 @@
 #pragma once
 
 #include "visualizationbase_api.h"
+#include "Highlight.h"
 
 namespace Model {
 	class TreeManager;
@@ -139,6 +140,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		 */
 		static QList<Scene*>& allScenes();
 
+		Highlight* addHighlight(const QString& name, const QString& style);
+		Highlight* highlight(const QString& name);
+		void removeHighlight(const QString& name);
+		void removeFromHighlights(Item* itemToRemove, const QString& highlightName = QString());
+
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
 
@@ -161,6 +167,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		QList<Item*> topLevelItems_;
 		QList<SelectedItem*> selections_;
 		NameOverlay* nameOverlay_{};
+		QHash<QString, Highlight> highlights_;
 
 		Cursor* mainCursor_{};
 		bool mainCursorsJustSet_{};

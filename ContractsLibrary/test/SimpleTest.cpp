@@ -66,47 +66,47 @@ static const bool DISABLE_FILTERS = false;
 Module* createContractsLibrary()
 {
 	Module* module = new Module("CodeContracts");
+	std::unique_ptr<Position>(module->extension<Position>())->set(1, 0);
 
 	Class* contract = new Class("Contract");
 	module->classes()->append(contract);
-	contract->extension<Position>()->setY(0);
 
 	Method* req = new Method("Requires", Modifier::Public | Modifier::Static);
 	contract->methods()->append(req);
 	req->arguments()->append( new FormalArgument("precondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
-	req->extension<Position>()->setY(0);
+	std::unique_ptr<Position>(req->extension<Position>())->set(0, 0);
 
 	Method* ens = new Method("Ensures", Modifier::Public | Modifier::Static);
 	contract->methods()->append(ens);
 	ens->arguments()->append( new FormalArgument("postcondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
-	ens->extension<Position>()->setY(120);
+	std::unique_ptr<Position>(ens->extension<Position>())->set(0, 1);
 
 	Method* res = new Method("Result", Modifier::Public | Modifier::Static);
 	contract->methods()->append(res);
 	res->typeArguments()->append( new FormalTypeArgument("T") );
-	res->extension<Position>()->setY(240);
+	std::unique_ptr<Position>(res->extension<Position>())->set(0, 2);
 
 	Method* old = new Method("OldValue", Modifier::Public | Modifier::Static);
 	contract->methods()->append(old);
 	old->typeArguments()->append(new FormalTypeArgument("T"));
 	old->arguments()->append( new FormalArgument("variable", new ReferenceExpression("T")) );
-	old->extension<Position>()->setY(360);
+	std::unique_ptr<Position>(old->extension<Position>())->set(0, 3);
 
 	Method* out = new Method("ValueAtReturn", Modifier::Public | Modifier::Static);
 	contract->methods()->append(out);
 	out->typeArguments()->append( new FormalTypeArgument("T") );
 	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
-	out->extension<Position>()->setY(720);
+	std::unique_ptr<Position>(out->extension<Position>())->set(0, 4);
 
 	Method* contractClass = new Method("ContractClass", Modifier::Public | Modifier::Static);
 	contract->methods()->append(contractClass);
 	contractClass->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
-	contractClass->extension<Position>()->setY(480);
+	std::unique_ptr<Position>(contractClass->extension<Position>())->set(0, 5);
 
 	Method* contractClassFor = new Method("ContractClassFor", Modifier::Public | Modifier::Static);
 	contract->methods()->append(contractClassFor);
 	contractClassFor->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
-	contractClassFor->extension<Position>()->setY(600);
+	std::unique_ptr<Position>(contractClassFor->extension<Position>())->set(0, 6);
 
 	// DO NOT DELETE THE COMMENTED CODE BELOW
 	// It can be used as a good example of how to do visualization groups with a condition.
@@ -246,6 +246,7 @@ Module* createContractsLibrary()
 Class* createBaseClass()
 {
 	Class* car = new Class("Car", Modifier::Public);
+	std::unique_ptr<Position>(car->extension<Position>())->set(0, 0);
 
 	auto *fuel = new Field( "fuel", new PrimitiveTypeExpression(PrimitiveType::INT), Modifier::Public);
 	car->fields()->append(fuel);
@@ -273,6 +274,7 @@ Class* createBaseClass()
 Class* createDerivedClass()
 {
 	Class* car = new Class("SelfDrivingCar", Modifier::Public);
+	std::unique_ptr<Position>(car->extension<Position>())->set(0, 1);
 	car->baseClasses()->append(new ReferenceExpression("Car"));
 
 	auto *travel = new Method("travel", Modifier::Public);
@@ -289,6 +291,7 @@ Class* createDerivedClass()
 Class* createDerivedDerivedClass()
 {
 	Class* car = new Class("SelfDrivingBus", Modifier::Public);
+	std::unique_ptr<Position>(car->extension<Position>())->set(0, 2);
 	car->baseClasses()->append(new ReferenceExpression("SelfDrivingCar"));
 
 	auto *travel = new Method("travel", Modifier::Public);
@@ -302,6 +305,7 @@ Class* createDerivedDerivedClass()
 Class* createInterface()
 {
 	Class* interface = new Class("ICalc", Modifier::Public);
+	std::unique_ptr<Position>(interface->extension<Position>())->set(1, 0);
 	interface->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"Contract.ContractClass(ICalcContracts)")));
 
@@ -317,6 +321,7 @@ Class* createInterface()
 Class* createInterfaceContracts()
 {
 	Class* calcContracts = new Class("ICalcContracts", Modifier::Public);
+	std::unique_ptr<Position>(calcContracts->extension<Position>())->set(1, 1);
 	calcContracts->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 				"Contract.ContractClassFor(ICalc)")));
 	calcContracts->baseClasses()->append(OOExpressionBuilder::getOOExpression("ICalc"));
@@ -391,18 +396,19 @@ Method* createAppend()
 Class* createPaperClass()
 {
 	Class* paperClass = new Class("Paper", Modifier::Public);
+	std::unique_ptr<Position>(paperClass->extension<Position>())->set(2, 0);
 
 	auto *minMax = createMinMax();
 	paperClass->methods()->append(minMax);
-	minMax->extension<Position>()->setY(0);
+	std::unique_ptr<Position>(minMax->extension<Position>())->set(0, 0);
 
 	auto *fact = createFactorial();
 	paperClass->methods()->append(fact);
-	fact->extension<Position>()->setY(180);
+	std::unique_ptr<Position>(fact->extension<Position>())->set(0, 1);
 
 	auto *app = createAppend();
 	paperClass->methods()->append(app);
-	app->extension<Position>()->setY(320);
+	std::unique_ptr<Position>(app->extension<Position>())->set(0, 2);
 
 	return paperClass;
 }
@@ -410,6 +416,7 @@ Class* createPaperClass()
 Module* createClientModule()
 {
 	Module* module = new Module("Client");
+	std::unique_ptr<Position>(module->extension<Position>())->set(0, 0);
 
 	module->classes()->append( createBaseClass());
 	module->classes()->append( createDerivedClass() );

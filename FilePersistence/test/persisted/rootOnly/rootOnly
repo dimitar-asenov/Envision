@@ -1,4 +1,2 @@
-<!DOCTYPE EnvisionFilePersistence>
-<BinaryNode id="{00000000-0000-0000-0000-000000000001}" name="rootOnly">
- <NameText id="{00000000-0000-0000-0000-000000000002}" name="name">S_Title</NameText>
-</BinaryNode>
+rootOnly BinaryNode {00000000-0000-0000-0000-000000000001}
+	name NameText {00000000-0000-0000-0000-000000000002}. S_Title

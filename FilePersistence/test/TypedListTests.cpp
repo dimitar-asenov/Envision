@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "FilePersistencePlugin.h"
-#include "FileStore.h"
 #include "simple/SimpleTextFileStore.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -39,99 +38,65 @@ namespace FilePersistence {
 
 TEST(FilePersistencePlugin, LoadingTypedList)
 {
-	for (int i = 0; i<2; ++i)
-	{
-		PersistentStore* store{};
+	PersistentStore* store{};
 
-		if (i==0)
-		{
-			auto s = new FileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted");
-			store = s;
-		}
-		else if (i==1)
-		{
-			auto s = new SimpleTextFileStore();
-			s->setBaseFolder(":/FilePersistence/test/persisted/simple");
-			store = s;
-		}
+	auto s = new SimpleTextFileStore();
+	s->setBaseFolder(":/FilePersistence/test/persisted");
+	store = s;
 
+	TreeManager manager;
+	manager.load(store, "typedList", false);
 
-		TreeManager manager;
-		manager.load(store, "typedList", false);
+	auto list = dynamic_cast<TypedList<Text>*> (manager.root());
+	CHECK_CONDITION(list != nullptr);
 
-		auto list = dynamic_cast<TypedList<Text>*> (manager.root());
-		CHECK_CONDITION(list != nullptr);
+	CHECK_STR_EQUAL("TypedListOfText", list->typeName() );
+	CHECK_INT_EQUAL(2, list->size());
 
-		CHECK_STR_EQUAL("TypedListOfText", list->typeName() );
-		CHECK_INT_EQUAL(2, list->size());
+	Text* one = list->at(0);
+	Text* two = list->at(1);
 
-		Text* one = list->at(0);
-		Text* two = list->at(1);
+	CHECK_CONDITION(one != nullptr);
+	CHECK_STR_EQUAL("one", one->get());
 
-		CHECK_CONDITION(one != nullptr);
-		CHECK_STR_EQUAL("one", one->get());
+	CHECK_CONDITION(two != nullptr);
+	CHECK_STR_EQUAL("two", two->get());
 
-		CHECK_CONDITION(two != nullptr);
-		CHECK_STR_EQUAL("two", two->get());
-
-		SAFE_DELETE(store);
-	}
+	SAFE_DELETE(store);
 }
 
 TEST(FilePersistencePlugin, SavingTypedList)
 {
-	for (int i = 0; i<2; ++i)
-	{
-		PersistentStore* store{};
-		QString testDir;
+	PersistentStore* store{};
+	QString testDir;
 
-		if (i==0)
-		{
-			auto s = new FileStore();
-			testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
-			s->setBaseFolder(testDir);
-			store = s;
-		}
-		else if (i==1)
-		{
-			auto s = new SimpleTextFileStore();
-			testDir = QDir::tempPath() + "/Envision/FilePersistence/tests/simple";
-			s->setBaseFolder(testDir);
-			store = s;
-		}
+	auto s = new SimpleTextFileStore();
+	testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
+	s->setBaseFolder(testDir);
+	store = s;
 
-		auto list = new TypedList<Text>;
-		Model::TreeManager manager(list);
+	auto list = new TypedList<Text>;
+	Model::TreeManager manager(list);
 
-		manager.beginModification(list, "create");
-		auto one = new Text();
-		one->set("one");
-		list->append(one);
-		auto two = new Text();
-		two->set("two");
-		list->append(two);
-		manager.endModification();
-		NodeIdMap::setId(list, "{00000000-0000-0000-0000-000000000001}");
-		NodeIdMap::setId(one, "{00000000-0000-0000-0000-000000000002}");
-		NodeIdMap::setId(two, "{00000000-0000-0000-0000-000000000003}");
+	manager.beginModification(list, "create");
+	auto one = new Text();
+	one->set("one");
+	list->append(one);
+	auto two = new Text();
+	two->set("two");
+	list->append(two);
+	manager.endModification();
+	NodeIdMap::setId(list, "{00000000-0000-0000-0000-000000000001}");
+	NodeIdMap::setId(one, "{00000000-0000-0000-0000-000000000002}");
+	NodeIdMap::setId(two, "{00000000-0000-0000-0000-000000000003}");
 
-		manager.setName("typedList");
-		manager.save(store);
+	manager.setName("typedList");
+	manager.save(store);
 
-		if (i==0)
-		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/typedList/typedList",
-										  testDir + "/typedList/typedList");
-		}
-		else if ( i==1 )
-		{
-			CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/simple/typedList/typedList",
-										  testDir +"/typedList/typedList");
-		}
+	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/typedList/typedList",
+									  testDir +"/typedList/typedList");
 
-		SAFE_DELETE(store);
-	}
+	SAFE_DELETE(store);
 }
 
 }

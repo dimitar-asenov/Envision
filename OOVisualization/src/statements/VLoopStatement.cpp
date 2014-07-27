@@ -57,6 +57,7 @@ void VLoopStatement::initializeForms()
 																					[](I* v){return &v->style()->updateStep();}));
 
 	auto body = (new GridLayoutFormElement())
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->setColumnStretchFactor(0, 1)
 			->put(0, 0, item<VStatementItemList>(&I::body_, [](I* v){return v->node()->body();},
 							[](I* v){return &v->style()->body();}));

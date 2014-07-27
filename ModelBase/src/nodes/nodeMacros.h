@@ -644,6 +644,7 @@ public:																																					\
 		type* name##Node() const { return static_cast< type* > (self_->get(attr_[name##Index])); }							\
 		valueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }						\
 		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
+		void setMethodName##Node(type* node) { self_->set(attr_[name##Index], node); }											\
 private:																																					\
 
 /*********************************************************************************************************************/

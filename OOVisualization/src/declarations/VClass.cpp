@@ -29,7 +29,6 @@
 
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
@@ -47,17 +46,10 @@ ITEM_COMMON_DEFINITIONS(VClass, "item")
 
 VClass::VClass(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
-	body_ = new PositionLayout(this, &style->body());
 }
 
 void VClass::determineChildren()
 {
-	// manually update the body item
-	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
-	QList<Model::Node*> bodyItems = node()->classes()->nodes().toList();
-	bodyItems << node()->methods()->nodes().toList();
-	body_->synchronizeWithNodes(bodyItems);
-
 	// call determineChildren of super class
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
@@ -114,7 +106,16 @@ void VClass::initializeForms()
 				->put(1, 3, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
-				->put(1, 4, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
+				->put(1, 4, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
+						->setNodesGetter(
+						[](Item* v)->QVector<QVector<Model::Node*>>{
+						auto self = static_cast<I*>(v);
+						return Visualization::GridLayouter::arrange(
+								self->node()->classes()->nodes() + self->node()->methods()->nodes(),
+								Visualization::GridLayouter::ColumnMajor);
+					}));
+
 
 	auto fieldContainerElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)

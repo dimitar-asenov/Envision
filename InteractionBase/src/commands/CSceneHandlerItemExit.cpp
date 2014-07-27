@@ -30,12 +30,14 @@
 
 namespace Interaction {
 
-bool CSceneHandlerItemExit::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens)
+bool CSceneHandlerItemExit::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return commandTokens.size() == 1 && commandTokens.first() == "exit";
 }
 
-CommandResult* CSceneHandlerItemExit::execute(Visualization::Item*, Visualization::Item*, const QStringList&)
+CommandResult* CSceneHandlerItemExit::execute(Visualization::Item*, Visualization::Item*, const QStringList&,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	Visualization::VisualizationManager::instance().getMainWindow()->close();
 
@@ -43,7 +45,7 @@ CommandResult* CSceneHandlerItemExit::execute(Visualization::Item*, Visualizatio
 }
 
 QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, Visualization::Item*,
-																			const QString& textSoFar)
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QList<CommandSuggestion*> s;
 	if (QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
@@ -51,7 +53,8 @@ QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, V
 	return s;
 }
 
-QStringList CSceneHandlerItemExit::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
+QStringList CSceneHandlerItemExit::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	QStringList forms;
 	if (textSoFar.isEmpty() || QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )

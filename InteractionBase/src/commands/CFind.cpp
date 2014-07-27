@@ -27,15 +27,18 @@
 #include "CFind.h"
 
 #include "VisualizationBase/src/items/TextRenderer.h"
+#include "VisualizationBase/src/items/RootItem.h"
 
 namespace Interaction {
 
-bool CFind::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens)
+bool CFind::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return (commandTokens.size() == 1 || commandTokens.size() == 2) && commandTokens.first() == "find";
 }
 
-CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target, const QStringList& commandTokens)
+CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	if (commandTokens.size() < 2) return new CommandResult(new CommandError("Please specify a search string"));
 
@@ -44,7 +47,10 @@ CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target,
 	scene->clearSelection();
 	scene->setMainCursor(nullptr);
 
-	QList<Visualization::Item*> stack = scene->topLevelItems();
+	QList<Visualization::Item*> stack;
+	for (auto item : scene->topLevelItems())
+		if (DCast<Visualization::RootItem>(item))
+			stack.append(item);
 
 	while (!stack.isEmpty())
 	{
@@ -62,7 +68,8 @@ CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target,
 	return new CommandResult();
 }
 
-QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
+QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	QList<CommandSuggestion*> s;
 
@@ -77,7 +84,8 @@ QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::It
 	return s;
 }
 
-QStringList CFind::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar)
+QStringList CFind::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	QStringList forms;
 	if (textSoFar.isEmpty() || QString("find").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )

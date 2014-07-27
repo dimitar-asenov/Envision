@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "FilePersistencePlugin.h"
-#include "FileStore.h"
+#include "simple/SimpleTextFileStore.h"
 #include "SystemClipboard.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
@@ -41,7 +41,7 @@ TEST(FilePersistencePlugin, CopyToClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
-	FileStore store;
+	SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
 	manager.load(&store, "2Children", false);
@@ -74,7 +74,7 @@ TEST(FilePersistencePlugin, CopyPartialToClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
-	FileStore store;
+	SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
 	manager.load(&store, "partial", false);
@@ -94,7 +94,7 @@ TEST(FilePersistencePlugin, PasteTextFromClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
-	FileStore store;
+	SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
 	manager.load(&store, "2Children", false);
@@ -118,7 +118,7 @@ TEST(FilePersistencePlugin, PasteBinaryFromClipboard)
 {
 	QString testDir = ":/FilePersistence/test/persisted";
 	Model::TreeManager manager;
-	FileStore store;
+	SimpleTextFileStore store;
 	store.setBaseFolder(testDir);
 
 	manager.load(&store, "2Children", false);

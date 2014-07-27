@@ -27,12 +27,15 @@
 #pragma once
 
 #include "../filepersistence_api.h"
-#include "GenericNode.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 #include "ModelBase/src/persistence/NodeIdMap.h"
 
 namespace FilePersistence {
+
+class GenericNode;
+class GenericPersistentUnit;
+class GenericTree;
 
 class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 {
@@ -54,7 +57,6 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)override;
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name, bool loadPartially) override;
 		virtual QString currentNodeType() const override;
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& treeName, const Model::Node* node) override;
 
 		virtual int loadIntValue() override;
 		virtual QString loadStringValue() override;
@@ -100,8 +102,8 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		void checkIsWorking() const;
 
-		GenericNodeAllocator* allocator_{};
-		GenericNode* persisted_{};
+		GenericTree* genericTree_{};
+		GenericNode* genericNode_{};
 
 		/**
 		 * This is a list of all references which have been constructed and which have a target that is not yet set.

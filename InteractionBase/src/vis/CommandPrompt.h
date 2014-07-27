@@ -60,6 +60,7 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 
 		QString text() const;
 		void takeSuggestion(CommandSuggestion* suggestion);
+		const std::unique_ptr<Visualization::Cursor>& commandReceiverCursor();
 
 		void showPrompt(QString initialCommandText = QString());
 		void hidePrompt();
@@ -70,6 +71,8 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 
 	private:
 		Visualization::Item* commandReceiver_{};
+		std::unique_ptr<Visualization::Cursor> commandReceiverCursor_{};
+
 		Visualization::SequentialLayout* layout_{};
 		Visualization::SequentialLayout* errorContainer_{};
 		Visualization::Text* command_{};
@@ -80,15 +83,16 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		QSharedPointer<CommandResult> result_;
 		QList<CommandSuggestion*> suggestions_;
 
-		QPoint receiverCursorPosition_;
-
-		void saveReceiverCursorPosition();
+		void saveReceiverCursor();
 		void setPromptPosition();
 		void showAutocompleteBasedOnSuggestions();
+		QPoint receiverCursorPosition();
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }
 inline QString CommandPrompt::text() const {return command_->text();}
+inline const std::unique_ptr<Visualization::Cursor>& CommandPrompt::commandReceiverCursor()
+{ return commandReceiverCursor_;}
 
 inline QSharedPointer<CommandResult> CommandPrompt::result() { return result_; }
 inline QList<CommandSuggestion*>& CommandPrompt::suggestions() { return suggestions_; }

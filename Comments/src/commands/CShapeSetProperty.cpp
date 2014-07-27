@@ -31,7 +31,8 @@
 
 namespace Comments {
 
-bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens)
+bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return commandTokens.size() == 2 &&
 			(commandTokens.first() == "textcolor"
@@ -40,7 +41,7 @@ bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*,
 }
 
 Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Visualization::Item* target,
-																		 const QStringList& commandTokens)
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
 	auto shape = dynamic_cast<VCommentDiagramShape*>(target);
 	shape->node()->manager()->beginModification(shape->node(), "Setting color");
@@ -58,7 +59,7 @@ Interaction::CommandResult* CShapeSetProperty::execute(Visualization::Item*, Vis
 }
 
 QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization::Item*, Visualization::Item*,
-																						const QString& textSoFar)
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QList<Interaction::CommandSuggestion*> s;
 	if (QString("textcolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
@@ -70,7 +71,8 @@ QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization:
 	return s;
 }
 
-QStringList CShapeSetProperty::commandForms(Visualization::Item*, Visualization::Item*, const QString&)
+QStringList CShapeSetProperty::commandForms(Visualization::Item*, Visualization::Item*, const QString&,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	QStringList forms;
 	return forms;

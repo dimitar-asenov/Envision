@@ -73,7 +73,7 @@ Next, we ignore the current event:
 By default, whenever we reimplement a handler method, Qt assumes that the event is handled. We need to mark the event
 as ignored and then we can try to process it. Only if we do some processing, will we mark it as accepted (handled).
 
-Inside the event handler we can do pretty much anything we want. We can alter the model, change properties of the
+Inside the event handler we can do pretty much anything we want. We can alter the AST, change properties of the
 visualization, schedule updates, move the cursor, and much more. In this particular case we want to provide some
 shortcuts for navigating between the various parts of an if statement. We distinguish between the \e Enter and
 the \e TAB keys:
@@ -97,7 +97,7 @@ If there are already some items, simply switch to the first one:
 otherwise create a new empty expression and focus it:
 \skip empty
 \until SetCursorEvent
-Notice how we explicitly request an update on the current item since we made a change to the model.
+Notice how we explicitly request an update on the current item since we made a change to the tree.
 
 The code for switching to the \e else branch when the \e then branch is selected is almost identical:
 \skip thenBranch

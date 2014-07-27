@@ -43,13 +43,7 @@ NodeWrapper::~NodeWrapper()
 
 void NodeWrapper::determineChildren()
 {
-	// remove the item if its node has changed
-	if (wrappedItem_ && wrappedItem_->node() != node())
-		SAFE_DELETE(wrappedItem_);
-
-	// create an item if a node is present
-	if (!wrappedItem_ && node())
-		wrappedItem_ = renderer()->render(this, node());
+	synchronizeItem(wrappedItem_, node());
 }
 
 bool NodeWrapper::isEmpty() const
@@ -79,12 +73,12 @@ void NodeWrapper::updateGeometry(int availableWidth, int availableHeight)
 		getShape()->setOffset(0, 0);
 		getShape()->setOutterSize(availableWidth, availableHeight);
 		setSize(availableWidth, availableHeight);
-		setZValue(-1);
+		if (zValue() != -1 ) setZValue(-1);
 	}
 	else
 	{
 		Item::updateGeometry(wrappedItem_, availableWidth, availableHeight);
-		setZValue(0);
+		if (zValue() != 0) setZValue(0);
 	}
 }
 
