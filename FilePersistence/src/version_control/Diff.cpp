@@ -43,14 +43,17 @@ Diff::Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
 
 	IdToGenericNodeHash oldNodesHash;
 	for (auto node : oldNodes)
-		oldNodesHash.insert(node->id(), node);
+		oldNodesHash.insertMulti(node->id(), node);
 
 	IdToGenericNodeHash newNodesHash;
 	for (auto node : newNodes)
-		newNodesHash.insert(node->id(), node);
+		newNodesHash.insertMulti(node->id(), node);
 
 	findParentsInCommit(oldNodesHash, oldTree_, repository);
 	findParentsInCommit(newNodesHash, newTree_, repository);
+
+	filterPersistenceUnits(oldNodesHash);
+	filterPersistenceUnits(newNodesHash);
 
 	idMatching(oldNodesHash, newNodesHash);
 }
@@ -136,7 +139,7 @@ void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
 {
 	QHash<QString, Model::NodeIdType> fileToNodeIDs;
 	for (auto node : nodes.values())
-		fileToNodeIDs.insert(node->persistentUnit()->name(), node->id());
+		fileToNodeIDs.insertMulti(node->persistentUnit()->name(), node->id());
 
 	const QString fullFile("Diff::findParentsInCommit");
 
@@ -169,5 +172,38 @@ void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
 		tree->remove(fullFileUnit);
 	}
 }
+
+void Diff::filterPersistenceUnits(IdToGenericNodeHash nodes)
+{
+	for (auto key : nodes.uniqueKeys())
+	{
+		if (nodes.count(key) == 2)
+		{
+			GenericNode* persistenceUnitDefinition = nullptr;
+			GenericNode* persistenceUnitRoot = nullptr;
+
+			QList<GenericNode*> persistenceList = nodes.values(key);
+			if (persistenceUnitType.compare(persistenceList.first()->type()) == 0)
+			{
+				persistenceUnitDefinition = persistenceList.first();
+				persistenceUnitRoot = persistenceList.last();
+			}
+			else
+			{
+				persistenceUnitDefinition = persistenceList.last();
+				persistenceUnitRoot = persistenceList.first();
+			}
+
+			persistenceUnitRoot->setParent(persistenceUnitDefinition->parent());
+
+			nodes.remove(key);
+			nodes.insert(key, persistenceUnitRoot);
+		}
+
+		Q_ASSERT(nodes.count(key) == 1);
+	}
+}
+
+const QString Diff::persistenceUnitType = "persistencenewunit";
 
 } /* namespace FilePersistence */

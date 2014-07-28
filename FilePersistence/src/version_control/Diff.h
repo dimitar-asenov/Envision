@@ -57,6 +57,10 @@ class FILEPERSISTENCE_API Diff
 		void idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes);
 		void findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree, const GitRepository* repository);
 
+		void filterPersistenceUnits(IdToGenericNodeHash nodes);
+
+		static const QString persistenceUnitType;
+
 		IdToChangeDescriptionHash changeDescriptions_;
 
 		GenericTree* oldTree_{};
