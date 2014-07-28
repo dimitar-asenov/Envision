@@ -38,15 +38,18 @@ class Diff;
 class FILEPERSISTENCE_API History
 {
 	public:
-		History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, const GitRepository* repository);
+		History(QString relativePath, Model::NodeIdType rootNodeId,
+				  const CommitGraph* historyGraph, const GitRepository* repository);
 		~History();
 
 	private:
 		void detectRelevantCommits(const CommitGraphItem* current, QSet<Model::NodeIdType> tackedIDs,
-											const GitRepository* repository);
+											QString relativePathRootNode, const GitRepository* repository);
 
-		QSet<Model::NodeIdType> trackSubtree(const GitRepository* repository) const;
-		QSet<Model::NodeIdType> updateTrackedIDs(const QSet<Model::NodeIdType> trackedIDs, const Diff* diff) const;
+		QSet<Model::NodeIdType> trackSubtree(QString revision, QString relativePath,
+														 const GitRepository* repository) const;
+
+		static const QString persistenceUnitType;
 
 		Model::NodeIdType rootNodeId_;
 		const CommitGraph* historyGraph_{};

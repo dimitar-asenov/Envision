@@ -33,7 +33,8 @@
 
 namespace FilePersistence {
 
-History::History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, const GitRepository* repository)
+History::History(QString relativePath, Model::NodeIdType rootNodeId,
+					  const CommitGraph* historyGraph, const GitRepository* repository)
 {
 	rootNodeId_ = rootNodeId;
 	historyGraph_ = historyGraph;
@@ -41,8 +42,9 @@ History::History(Model::NodeIdType rootNodeId, const CommitGraph* historyGraph, 
 	const CommitGraphItem start = historyGraph_->start();
 	relevantCommits_.insert(start.commitSHA1_);
 
-	QSet<Model::NodeIdType> trackedIDs = trackSubtree(repository);
-	detectRelevantCommits(&start, trackedIDs, repository);
+	QString startRevision = historyGraph_->start().commitSHA1_;
+	QSet<Model::NodeIdType> trackedIDs = trackSubtree(startRevision, relativePath, repository);
+	detectRelevantCommits(&start, trackedIDs, relativePath, repository);
 }
 
 History::~History()
@@ -52,7 +54,7 @@ History::~History()
 
 
 void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::NodeIdType> trackedIDs,
-												const GitRepository* repository)
+												QString relativePathRootNode, const GitRepository* repository)
 {
 	for (auto child : current->children_)
 	{
@@ -69,216 +71,75 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::
 			}
 		}
 
+		QString childsRelativePathRootNode = relativePathRootNode;
+		IdToChangeDescriptionHash::iterator iter = changes.find(rootNodeId_);
+		if (iter != changes.end())
+		{
+			ChangeDescription* change = iter.value();
+			const GenericNode* rootNode = change->newNode();
+			childsRelativePathRootNode = rootNode->persistentUnit()->name();
+		}
+
 		if (isRelevant)
 		{
 			relevantCommits_.insert(child->commitSHA1_);
-			QSet<Model::NodeIdType> newTrackedIDs = updateTrackedIDs(newTrackedIDs, &diff);
+			QSet<Model::NodeIdType> newTrackedIDs = trackSubtree(child->commitSHA1_, childsRelativePathRootNode,
+																				  repository);
 
-			detectRelevantCommits(child, newTrackedIDs, repository);
+			detectRelevantCommits(child, newTrackedIDs, childsRelativePathRootNode, repository);
 		}
 		else
-			detectRelevantCommits(child, trackedIDs, repository);
+			detectRelevantCommits(child, trackedIDs, relativePathRootNode, repository);
 	}
 }
 
-QSet<Model::NodeIdType> History::trackSubtree(const GitRepository* repository) const
+QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relativePath,
+															 const GitRepository* repository) const
 {
-	// TODO adapt to new GitRepository
-
-	QString startCommitSpec = historyGraph_->start().commitSHA1_;
-	Commit startCommit = repository->getCommit(startCommitSpec);
-
 	QSet<Model::NodeIdType> trackedIDs;
+	QList<const CommitFile*> commitFiles;
 
-	/*
-	for (QString file : startCommit.files_)
+
+	const CommitFile* startFile = repository->getCommitFile(revision, relativePath);
+	commitFiles.append(startFile);
+
+	GenericTree tree("History", revision);
+
+	GenericPersistentUnit unit = tree.newPersistentUnit(relativePath);
+	GenericNode* unitRoot = Parser::load(startFile->content_, startFile->size_, false, unit);
+
+	GenericNode* subtreeRoot = unitRoot->find(rootNodeId_);
+	Q_ASSERT(subtreeRoot != nullptr);
+
+	QList<GenericNode*> stack;
+	stack.append(subtreeRoot);
+	while (!stack.empty())
 	{
-		const char* data = commitContent.content_.value(file);
-		qint64 dataLength = commitContent.size_.value(file);
-		GenericNodeAllocator* allocator = new GenericNodeAllocator();
-		GenericNode* fileRoot = Parser::load(data, dataLength, false, allocator);
+		GenericNode* current = stack.last();
+		stack.removeLast();
 
-		GenericNode* subtreeRoot = fileRoot->find(rootNodeId_);
-		if (subtreeRoot != nullptr)
+		trackedIDs.insert(current->id());
+
+		if (persistenceUnitType.compare(current->type()) == 0)
 		{
-			QList<GenericNode*> stack;
-			stack.append(subtreeRoot);
-			while (!stack.isEmpty())
-			{
-				GenericNode* current = stack.last();
-				stack.removeLast();
-
-				trackedIDs.insert(current->id());
-
-				for (GenericNode* child : current->children())
-					stack.append(child);
-			}
+			QString subUnitrelativePath = current->id().toString();
+			const CommitFile* file = repository->getCommitFile(revision, subUnitrelativePath);
+			commitFiles.append(file);
+			GenericPersistentUnit subUnit = tree.newPersistentUnit(subUnitrelativePath);
+			GenericNode* subUnitRoot = Parser::load(file->content_, file->size_, false, subUnit);
+			stack.append(subUnitRoot);
 		}
-		delete allocator;
+
+		for (auto child : current->children())
+			stack.append(child);
 	}
-	*/
+
+	for (auto file : commitFiles)
+		SAFE_DELETE(file);
 
 	return trackedIDs;
 }
 
-QSet<Model::NodeIdType> History::updateTrackedIDs(const QSet<Model::NodeIdType> trackedIDs, const Diff* diff) const
-{
-	QSet<Model::NodeIdType> newTrackedIDs(trackedIDs);
-	QSet<Model::NodeIdType> coveredStationaryOld;
-	QSet<Model::NodeIdType> coveredStationaryNew;
-
-	IdToChangeDescriptionHash changes = diff->changes();
-
-	IdToChangeDescriptionHash stationary = diff->changes(ChangeType::Stationary);
-	for (auto change : stationary.values())
-	{
-		ChangeDescription::UpdateFlags flags = change->flags();
-		if (trackedIDs.contains(change->id()) && flags.testFlag(ChangeDescription::Children))
-		{
-			QList<const GenericNode*> nodes;
-			const GenericNode* current = nullptr;
-
-			const GenericNode* oldNode = change->oldNode();
-			if (!coveredStationaryOld.contains(change->id()))
-			{
-				nodes.append(oldNode);
-				coveredStationaryOld.insert(change->id());
-			}
-			while (!nodes.isEmpty())
-			{
-				current = nodes.last();
-				nodes.removeLast();
-
-				for (auto child : current->children())
-				{
-					Model::NodeIdType id = child->id();
-					IdToChangeDescriptionHash::iterator iter = changes.find(id);
-					Q_ASSERT(iter != changes.end());
-					ChangeDescription* childChange = iter.value();
-					ChangeType type = childChange->type();
-
-					switch (type)
-					{
-						case ChangeType::Deleted:
-						{
-							newTrackedIDs.remove(id);
-							nodes.append(child);
-						}
-							break;
-
-						case ChangeType::Moved:
-						{
-							QList<const GenericNode*> movedNodes;
-							const GenericNode* currentMoved;
-
-							movedNodes.append(child);
-							while (!movedNodes.isEmpty())
-							{
-								currentMoved = movedNodes.last();
-								movedNodes.removeLast();
-
-								newTrackedIDs.remove(currentMoved->id());
-
-								for (auto childChild : currentMoved->children())
-								{
-									movedNodes.append(childChild);
-									iter = changes.find(childChild->id());
-									if (iter != changes.end())
-									{
-										ChangeDescription* description = iter.value();
-										if (description->type() == ChangeType::Stationary)
-											coveredStationaryOld.insert(childChild->id());
-									}
-								}
-							}
-						}
-							break;
-
-						case ChangeType::Stationary:
-						{
-							if (!coveredStationaryOld.contains(child->id()))
-								nodes.append(child);
-						}
-							break;
-
-						default:
-							Q_ASSERT(false);
-					}
-				}
-			}
-
-			Q_ASSERT(nodes.isEmpty());
-			const GenericNode* newNode = change->newNode();
-			if (!coveredStationaryNew.contains(change->id()))
-			{
-				nodes.append(newNode);
-				coveredStationaryNew.insert(change->id());
-			}
-			while (!nodes.isEmpty())
-			{
-				current = nodes.last();
-				nodes.removeLast();
-
-				for (auto child : current->children())
-				{
-					Model::NodeIdType id = child->id();
-					IdToChangeDescriptionHash::iterator iter = changes.find(id);
-					Q_ASSERT(iter != changes.end());
-					ChangeDescription* childChange = iter.value();
-					ChangeType type = childChange->type();
-
-					switch (type)
-					{
-						case ChangeType::Added:
-						{
-							newTrackedIDs.insert(id);
-							nodes.append(child);
-						}
-							break;
-
-						case ChangeType::Moved:
-						{
-							QList<const GenericNode*> movedNodes;
-							const GenericNode* currentMoved;
-
-							movedNodes.append(child);
-							while (!movedNodes.isEmpty())
-							{
-								currentMoved = movedNodes.last();
-								movedNodes.removeLast();
-
-								newTrackedIDs.remove(currentMoved->id());
-
-								for (auto childChild : currentMoved->children())
-								{
-									movedNodes.append(childChild);
-									iter = changes.find(childChild->id());
-									if (iter != changes.end())
-									{
-										ChangeDescription* description = iter.value();
-										if (description->type() == ChangeType::Stationary)
-											coveredStationaryNew.insert(childChild->id());
-									}
-								}
-							}
-						}
-							break;
-
-						case ChangeType::Stationary:
-						{
-							if (!coveredStationaryNew.contains(child->id()))
-								nodes.append(child);
-						}
-							break;
-
-						default:
-							Q_ASSERT(false);
-					}
-				}
-			}
-		}
-	}
-	return newTrackedIDs;
-}
+const QString History::persistenceUnitType = "persistencenewunit";
 
 } /* namespace FilePersistence */
