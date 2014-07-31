@@ -29,6 +29,7 @@
 #include "Commit.h"
 #include "Diff.h"
 #include "CommitGraph.h"
+#include "Merge.h"
 
 struct git_repository;
 struct git_tree;
@@ -43,6 +44,11 @@ class FILEPERSISTENCE_API GitRepository
 		GitRepository(QString path);
 		~GitRepository();
 
+		bool isMerging() const;
+		Merge* merge(QString revision, bool useFastForward = true);
+		bool abortMerge();
+		bool commitMerge(Signature committer, QString commitMessage);
+
 		Diff diff(QString oldRevision, QString newRevision) const;
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
 
@@ -53,6 +59,11 @@ class FILEPERSISTENCE_API GitRepository
 		QString getSHA1(QString revision) const;
 
 		void checkout(QString revision, bool force);
+
+		QString currentBranch() const;
+
+		static const QString HEAD_DETACHED;
+		static const QString HEAD_UNBORN;
 
 		static const QString WORKDIR;
 		static const QString INDEX;
@@ -66,6 +77,16 @@ class FILEPERSISTENCE_API GitRepository
 
 		git_commit* parseCommit(QString revision) const;
 
+		const git_oid* buildTreeFromWorkdir();
+
+		bool hasCleanIndex() const;
+		bool hasCleanWorkdir() const;
+
+		static Merge::Kind classifyMerge(const git_oid* revision, const git_oid* head, const git_oid* mergeBase);
+
+		static const QString REFS_HEADS_PATH;
+		void setBranchHeadToCommit(QString branch, QString revision);
+
 		enum class DiffKind {Unspecified, WorkdirToWorkdir, WorkdirToIndex, WorkdirToCommit,
 									IndexToWorkdir, IndexToIndex, IndexToCommit,
 									CommitToWorkdir, CommitToIndex, CommitToCommit};
@@ -73,9 +94,15 @@ class FILEPERSISTENCE_API GitRepository
 
 		static void checkError(int errorCode);
 
+		static const char* HEAD;
+
+		Merge* currentMerge_{};
+
 		QString path_;
 		git_repository* repository_{};
 
 };
+
+inline bool GitRepository::isMerging() const { return (currentMerge_ != nullptr); }
 
 } /* namespace FilePersistence */

@@ -157,6 +157,9 @@ int treeWalkCommitExtractCallBack(const char* root,
 const QString GitRepository::WORKDIR = "GitRepositoryWorkdir";
 const QString GitRepository::INDEX = "GitRepositoryIndex";
 
+const QString GitRepository::HEAD_DETACHED = "GitRepositoryHeadDetached";
+const QString GitRepository::HEAD_UNBORN = "GitRepositoryHeadUnborn";
+
 GitRepository::GitRepository(QString path)
 {
 	// Bugfix: initialize git threads is usually done automatically
@@ -180,6 +183,160 @@ GitRepository::~GitRepository()
 	// Bugfix: shutdown git threads is usually done automatically
 	// but there seem to be a bug related to libgit2 and Qt
 	git_threads_shutdown();
+}
+
+Merge* GitRepository::merge(QString revision, bool useFastForward)
+{
+	Q_ASSERT(!isMerging());
+
+	int errorCode = 0;
+
+	currentMerge_ = new Merge(revision, useFastForward, this);
+
+	git_commit* headCommit = parseCommit("HEAD");
+	const git_oid* headOid = git_commit_id(headCommit);
+
+	git_commit* revisionCommit = parseCommit(revision);
+	const git_oid* revisionOid = git_commit_id(revisionCommit);
+
+	git_oid* mergeBaseOid = nullptr;
+	errorCode = git_merge_base(mergeBaseOid, repository_, headOid, revisionOid);
+	if (errorCode == GIT_ENOTFOUND)
+	{
+		currentMerge_->error_ = Merge::Error::NoMergeBase;
+		return currentMerge_;
+	}
+	checkError(errorCode);
+
+	Merge::Kind mergeKind = classifyMerge(revisionOid, headOid, mergeBaseOid);
+	currentMerge_->kind_ = mergeKind;
+	currentMerge_->stage_ = Merge::Stage::Classified;
+
+	switch (mergeKind)
+	{
+		case Merge::Kind::AlreadyUpToDate:
+			currentMerge_->stage_ = Merge::Stage::Complete;
+			delete currentMerge_;
+			currentMerge_ = nullptr;
+			break;
+
+		case Merge::Kind::FastForward:
+			if (useFastForward)
+			{
+				QString branch = currentBranch();
+				setBranchHeadToCommit(branch, revision);
+				currentMerge_->stage_ = Merge::Stage::Complete;
+				delete currentMerge_;
+				currentMerge_ = nullptr;
+			}
+			else
+			{
+				// load tree into index
+				git_tree* revisionTree = nullptr;
+				errorCode = git_commit_tree(&revisionTree, revisionCommit);
+				checkError(errorCode);
+
+				git_index* index = nullptr;
+				errorCode = git_repository_index(&index, repository_);
+				checkError(errorCode);
+
+				errorCode = git_index_read_tree(index, revisionTree);
+				checkError(errorCode);
+
+				errorCode = git_index_write(index);
+				checkError(errorCode);
+
+				currentMerge_->stage_ = Merge::Stage::ReadyToCommit;
+
+				git_tree_free(revisionTree);
+				git_index_free(index);
+			}
+			break;
+
+		case Merge::Kind::TrueMerge:
+			// TODO
+			Q_ASSERT(false);
+			break;
+
+		default:
+			Q_ASSERT(false);
+	}
+
+	git_commit_free(headCommit);
+	git_commit_free(revisionCommit);
+
+	return currentMerge_;
+}
+
+bool GitRepository::abortMerge()
+{
+	if (currentMerge_)
+	{
+		QString branch = currentBranch();
+
+		checkout(currentMerge_->oldHEAD_, true);
+		setBranchHeadToCommit(branch, currentMerge_->oldHEAD_);
+
+		delete currentMerge_;
+		currentMerge_ = nullptr;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool GitRepository::commitMerge(Signature committer, QString commitMessage)
+{
+	int errorCode = 0;
+
+	if (currentMerge_->stage_ == Merge::Stage::ReadyToCommit)
+	{
+		// write index to tree
+		git_index* index = nullptr;
+		errorCode = git_repository_index(&index, repository_);
+		checkError(errorCode);
+
+		git_oid treeOid;
+		errorCode = git_index_write_tree(&treeOid, index);
+		if (errorCode == GIT_EUNMERGED)
+			Q_ASSERT(false);
+		checkError(errorCode);
+
+		git_tree* tree = nullptr;
+		errorCode = git_tree_lookup(&tree, repository_, &treeOid);
+
+		// prepare commit data
+		git_signature* signature = nullptr;
+		errorCode = git_signature_now(&signature, committer.name_.toStdString().c_str(),
+												committer.eMail_.toStdString().c_str());
+		checkError(errorCode);
+
+		char* message = commitMessage.toUtf8().data();
+
+
+		git_commit* revisionCommit = parseCommit(currentMerge_->revision_);
+		git_commit* headCommit = parseCommit(currentMerge_->oldHEAD_);
+
+		const git_commit* parents[] = {headCommit, revisionCommit};
+
+		// create commit
+		git_oid newCommitOid;
+		errorCode = git_commit_create(&newCommitOid, repository_, HEAD, signature, signature,
+												"UTF-8", message, tree, 2, parents);
+
+		delete currentMerge_;
+		currentMerge_ = nullptr;
+
+		git_index_free(index);
+		git_tree_free(tree);
+		git_signature_free(signature);
+		git_commit_free(revisionCommit);
+		git_commit_free(headCommit);
+
+		return true;
+	}
+	else
+		return false;
 }
 
 Diff GitRepository::diff(QString oldRevision, QString newRevision) const
@@ -432,6 +589,31 @@ void GitRepository::checkout(QString revesion, bool force)
 	}
 }
 
+QString GitRepository::currentBranch() const
+{
+	int errorCode = 0;
+
+	int detached = git_repository_head_detached(repository_);
+	if (detached == 1)
+		return HEAD_DETACHED;
+	checkError(detached);
+
+	git_reference* head = nullptr;
+	errorCode = git_repository_head(&head, repository_);
+	if (errorCode == GIT_EUNBORNBRANCH)
+		return HEAD_UNBORN;
+	checkError(errorCode);
+
+	const char* branch = nullptr;
+	errorCode = git_branch_name(&branch, head);
+	checkError(errorCode);
+
+	QString branchName(branch);
+
+	git_reference_free(head);
+
+	return branchName;
+}
 
 // Private methods
 
@@ -653,6 +835,91 @@ git_commit* GitRepository::parseCommit(QString revision) const
 	git_object_free(obj);
 }
 
+bool GitRepository::hasCleanIndex() const
+{
+	int errorCode = 0;
+
+	git_object* obj = nullptr;
+	errorCode = git_revparse_single(&obj, repository_, "HEAD^{tree}");
+	checkError(errorCode);
+
+	git_tree* tree = nullptr;
+	errorCode = git_tree_lookup(&tree, repository_, git_object_id(obj));
+	checkError(errorCode);
+
+	git_diff* diff = nullptr;
+	errorCode = git_diff_tree_to_index(&diff, repository_, tree, nullptr, nullptr);
+	checkError(errorCode);
+
+	size_t numDeltas = git_diff_num_deltas(diff);
+	return (numDeltas == 0);
+}
+
+bool GitRepository::hasCleanWorkdir() const
+{
+	int errorCode = 0;
+
+	git_object* obj = nullptr;
+	errorCode = git_revparse_single(&obj, repository_, "HEAD^{tree}");
+	checkError(errorCode);
+
+	git_tree* tree = nullptr;
+	errorCode = git_tree_lookup(&tree, repository_, git_object_id(obj));
+	checkError(errorCode);
+
+	git_diff* diff = nullptr;
+	errorCode = git_diff_tree_to_workdir_with_index(&diff, repository_, tree, nullptr);
+	checkError(errorCode);
+
+	size_t numDeltas = git_diff_num_deltas(diff);
+	return (numDeltas == 0);
+}
+
+Merge::Kind GitRepository::classifyMerge(const git_oid* revision, const git_oid* head, const git_oid* mergeBase)
+{
+	Merge::Kind kind;
+
+	if (git_oid_cmp(mergeBase, revision) == 0)
+		kind = Merge::Kind::AlreadyUpToDate;
+	else if (git_oid_cmp(mergeBase, head) == 0)
+		kind = Merge::Kind::FastForward;
+	else
+		kind = Merge::Kind::TrueMerge;
+
+	return kind;
+}
+
+const QString GitRepository::REFS_HEADS_PATH = "refs/heads/";
+
+void GitRepository::setBranchHeadToCommit(QString branch, QString revision)
+{
+	int errorCode = 0;
+
+	QString branchName = REFS_HEADS_PATH;
+	branchName.append(branch);
+
+	git_reference* ref = nullptr;
+	errorCode = git_reference_lookup(&ref, repository_, branchName.toStdString().c_str());
+	if (errorCode == GIT_ENOTFOUND)
+		Q_ASSERT(false);
+	if (errorCode == GIT_EINVALIDSPEC)
+		Q_ASSERT(false);
+	checkError(errorCode);
+
+	git_commit* commit = parseCommit(revision);
+	const git_oid* commitOID = git_commit_id(commit);
+
+	git_reference* newRef = nullptr;
+	git_reference_set_target(&newRef, ref, commitOID, nullptr, nullptr);
+	if (errorCode == GIT_EMODIFIED)
+		Q_ASSERT(false);
+	checkError(errorCode);
+
+	git_reference_free(ref);
+	git_reference_free(newRef);
+	git_commit_free(commit);
+}
+
 GitRepository::DiffKind GitRepository::kind(QString oldRevision, QString newRevision)
 {
 	DiffKind diffKind = DiffKind::Unspecified;
@@ -698,5 +965,7 @@ void GitRepository::checkError(int errorCode)
 		exit(errorCode);
 	}
 }
+
+const char* GitRepository::HEAD = "HEAD";
 
 } /* namespace FilePersistence */
