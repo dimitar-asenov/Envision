@@ -51,10 +51,10 @@ class Merge
 
 		bool useFastForward_{};
 
+		// Revisions
+		QString head_;
 		QString revision_;
 		QString mergeBase_;
-
-		QString oldHEAD_;
 
 		GitRepository* repository_{};
 };

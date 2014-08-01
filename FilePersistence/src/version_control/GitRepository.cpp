@@ -274,8 +274,8 @@ bool GitRepository::abortMerge()
 	{
 		QString branch = currentBranch();
 
-		checkout(currentMerge_->oldHEAD_, true);
-		setBranchHeadToCommit(branch, currentMerge_->oldHEAD_);
+		checkout(currentMerge_->head_, true);
+		setBranchHeadToCommit(branch, currentMerge_->head_);
 
 		delete currentMerge_;
 		currentMerge_ = nullptr;
@@ -315,7 +315,7 @@ bool GitRepository::commitMerge(Signature committer, QString commitMessage)
 
 
 		git_commit* revisionCommit = parseCommit(currentMerge_->revision_);
-		git_commit* headCommit = parseCommit(currentMerge_->oldHEAD_);
+		git_commit* headCommit = parseCommit(currentMerge_->head_);
 
 		const git_commit* parents[] = {headCommit, revisionCommit};
 
