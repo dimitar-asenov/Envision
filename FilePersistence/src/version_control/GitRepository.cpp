@@ -454,17 +454,13 @@ Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 
 CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevision) const
 {
+	QString startSHA1 = getSHA1(startRevision);
+	QString endSHA1 = getSHA1(endRevision);
+
 	git_commit* gitStartCommit = parseCommit(startRevision);
 	const git_oid* startOID = git_commit_id(gitStartCommit);
-	char* sha1 = git_oid_allocfmt(startOID);
-	QString startSHA1(sha1);
-	delete sha1;
 
 	git_commit* gitEndCommit = parseCommit(endRevision);
-	const git_oid* endOID = git_commit_id(gitEndCommit);
-	sha1 = git_oid_allocfmt(endOID);
-	QString endSHA1(sha1);
-	delete sha1;
 
 	CommitGraph graph(startSHA1, endSHA1);
 	traverseCommitGraph(&graph, gitEndCommit, startOID);
@@ -521,9 +517,10 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 
 		// SHA1
 		const git_oid* oid = git_commit_id(gitCommit);
-		char* sha1 = git_oid_allocfmt(oid);
+		char sha1[41];
+		sha1[40] = '\0';
+		git_oid_fmt(sha1, oid);
 		info.sha1_ = QString(sha1);
-		delete sha1;
 
 		// Message
 		const char* msg = git_commit_message(gitCommit);
@@ -556,11 +553,13 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 QString GitRepository::getSHA1(QString revision) const
 {
 	git_commit* gitCommit = parseCommit(revision);
-
 	const git_oid* oid = git_commit_id(gitCommit);
-	char* sha1 = git_oid_allocfmt(oid);
+
+	char sha1[41];
+	sha1[40] = '\0';
+	git_oid_fmt(sha1, oid);
 	QString commitSHA1(sha1);
-	delete sha1;
+
 	git_commit_free(gitCommit);
 
 	return commitSHA1;
@@ -620,9 +619,10 @@ QString GitRepository::currentBranch() const
 void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const
 {
 	const git_oid* oid = git_commit_id(current);
-	char* sha1 = git_oid_allocfmt(oid);
+	char sha1[41];
+	sha1[40] = '\0';
+	git_oid_fmt(sha1, oid);
 	QString currentSHA1(sha1);
-	delete sha1;
 
 	if (git_oid_cmp(oid, target) != 0)
 	{
@@ -637,9 +637,8 @@ void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current,
 			int parentIsTarget = git_oid_cmp(parentOID, target);
 			int isConnected = git_graph_descendant_of(repository_, parentOID, target);
 			if (isConnected == 1 || parentIsTarget == 0) {
-				sha1 = git_oid_allocfmt(parentOID);
+				git_oid_fmt(sha1, parentOID);
 				QString parentSHA1(sha1);
-				delete sha1;
 
 				graph->add(parentSHA1, currentSHA1);
 
