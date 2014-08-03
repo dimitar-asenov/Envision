@@ -28,6 +28,8 @@
 
 #include <QString>
 
+#include "Diff.h"
+
 namespace FilePersistence {
 
 class GitRepository;
@@ -45,11 +47,21 @@ class Merge
 		Merge(QString revision, bool useFastForward, GitRepository* repository);
 		~Merge();
 
+		void detectConflicts();
+
+		void loadMergeBase();
+
 		Kind kind_{};
 		Stage stage_{};
 		Error error_{};
 
 		bool useFastForward_{};
+
+		Model::TreeManager* baseTree_;
+
+		// Diffs to base version
+		Diff baseRevisionDiff_;
+		Diff baseHeadDiff_;
 
 		// Revisions
 		QString head_;

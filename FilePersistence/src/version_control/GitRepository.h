@@ -62,6 +62,8 @@ class FILEPERSISTENCE_API GitRepository
 
 		QString currentBranch() const;
 
+		QString workdirPath() const;
+
 		static const QString HEAD_DETACHED;
 		static const QString HEAD_UNBORN;
 
@@ -104,5 +106,6 @@ class FILEPERSISTENCE_API GitRepository
 };
 
 inline bool GitRepository::isMerging() const { return (currentMerge_ != nullptr); }
+inline QString GitRepository::workdirPath() const { return path_; }
 
 } /* namespace FilePersistence */

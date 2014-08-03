@@ -28,6 +28,9 @@
 
 #include "GitRepository.h"
 
+#include "FilePersistence/src/simple/SimpleTextFileStore.h"
+#include "ModelBase/src/model/TreeManager.h"
+
 namespace FilePersistence {
 
 Merge::Merge(QString revision, bool useFastForward, GitRepository* repository)
@@ -39,5 +42,38 @@ Merge::Merge(QString revision, bool useFastForward, GitRepository* repository)
 }
 
 Merge::~Merge() {}
+
+void Merge::detectConflicts()
+{
+	baseHeadDiff_ = repository_->diff(mergeBase_, head_);
+	baseRevisionDiff_ = repository_->diff(mergeBase_, revision_);
+
+	loadMergeBase();
+
+
+}
+
+void Merge::loadMergeBase()
+{
+	repository_->checkout(mergeBase_, true);
+
+	QString path = repository_->workdirPath();
+
+	int index = path.lastIndexOf("/");
+	index++;
+
+	QString name = path.mid(index);
+
+	QString pathWithoutName = path;
+	pathWithoutName.remove(index, name.size());
+
+	auto manager = new Model::TreeManager();
+	manager->load(new FilePersistence::SimpleTextFileStore(pathWithoutName), name, false);
+	manager->setName("Base version of merge");
+
+	baseTree_ = manager;
+
+	repository_->checkout(head_, true);
+}
 
 } /* namespace FilePersistence */
