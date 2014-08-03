@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "CDiff.h"
+#include "CDiffTest.h"
 
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/VisualizationManager.h"
@@ -41,13 +41,13 @@ using namespace Visualization;
 
 namespace Interaction {
 
-CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"library"}}, true}
+CDiffTest::CDiffTest() : CommandWithNameAndFlags{"diff", {{"library"}}, true}
 {
 	QString path("projects/Hello/.git");
 	repository_ = new FilePersistence::GitRepository(path);
 }
 
-CommandResult* CDiff::executeNamed(Visualization::Item* source, Visualization::Item* target,
+CommandResult* CDiffTest::executeNamed(Visualization::Item* source, Visualization::Item* target,
 		const std::unique_ptr<Visualization::Cursor>& cursor,
 		const QString& name, const QStringList& attributes)
 {
@@ -117,13 +117,13 @@ CommandResult* CDiff::executeNamed(Visualization::Item* source, Visualization::I
 	return new CommandResult();
 }
 
-QStringList CDiff::availableProjectsOnDisk()
+QStringList CDiffTest::availableProjectsOnDisk()
 {
 	auto dir = QDir( "projects/" );
 	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
 }
 
-QStringList CDiff::possibleNames()
+QStringList CDiffTest::possibleNames()
 {
 	return availableProjectsOnDisk();
 }

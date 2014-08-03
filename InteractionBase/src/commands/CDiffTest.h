@@ -32,10 +32,10 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
+class INTERACTIONBASE_API CDiffTest : public CommandWithNameAndFlags
 {
 	public:
-		CDiff();
+		CDiffTest();
 
 	protected:
 		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
