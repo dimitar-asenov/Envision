@@ -28,9 +28,6 @@
 
 namespace Model {
 
-QHash<const Node*, NodeIdType> NodeIdMap::nodeToId;
-QHash<NodeIdType, const Node*> NodeIdMap::idToNode;
-
 NodeIdType NodeIdMap::id(const Node* node)
 {
 	QHash<const Node*, NodeIdType>::const_iterator iter = nodeToId.find(node);

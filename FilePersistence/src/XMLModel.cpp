@@ -27,8 +27,6 @@
 #include "XMLModel.h"
 #include "FilePersistenceException.h"
 
-#include "ModelBase/src/persistence/NodeIdMap.h"
-
 namespace FilePersistence {
 
 static const char* XML_DOM_TYPE = "EnvisionFilePersistence";

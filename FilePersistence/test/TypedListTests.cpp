@@ -86,9 +86,9 @@ TEST(FilePersistencePlugin, SavingTypedList)
 	two->set("two");
 	list->append(two);
 	manager.endModification();
-	NodeIdMap::setId(list, "{00000000-0000-0000-0000-000000000001}");
-	NodeIdMap::setId(one, "{00000000-0000-0000-0000-000000000002}");
-	NodeIdMap::setId(two, "{00000000-0000-0000-0000-000000000003}");
+	manager.nodeIdMap().setId(list, "{00000000-0000-0000-0000-000000000001}");
+	manager.nodeIdMap().setId(one, "{00000000-0000-0000-0000-000000000002}");
+	manager.nodeIdMap().setId(two, "{00000000-0000-0000-0000-000000000003}");
 
 	manager.setName("typedList");
 	manager.save(store);

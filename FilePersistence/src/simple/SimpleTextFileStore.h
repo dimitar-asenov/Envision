@@ -29,7 +29,6 @@
 #include "../filepersistence_api.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
-#include "ModelBase/src/persistence/NodeIdMap.h"
 
 namespace FilePersistence {
 
@@ -76,6 +75,9 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		/** A mutex that assures exclusive tree saving and loading operations. */
 		QMutex storeAccess_;
+
+		/** The manager that requested the last load/save operation. */
+		Model::TreeManager* treeManager_{};
 
 		/** A flag that indicates if the store is currently in the middle of saving or loading a tree. */
 		bool working_{};

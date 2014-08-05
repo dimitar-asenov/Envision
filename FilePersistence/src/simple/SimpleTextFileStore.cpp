@@ -67,7 +67,7 @@ void SimpleTextFileStore::setBaseFolder(const QString& path)
 
 QString SimpleTextFileStore::getPersistenceUnitName(const Model::Node *node)
 {
-	Model::NodeIdType persistenceUnitId = Model::NodeIdMap::id( node->persistentUnitNode() );
+	Model::NodeIdType persistenceUnitId = treeManager_->nodeIdMap().id( node->persistentUnitNode() );
 
 	QString name;
 	if (persistenceUnitId.isNull()) name = node->manager()->name();
@@ -85,6 +85,7 @@ void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &n
 	storeAccess_.lock();
 	working_ = true;
 	manager->beginExclusiveRead();
+	treeManager_ = manager;
 
 	try
 	{
@@ -135,7 +136,7 @@ void SimpleTextFileStore::saveDoubleValue(double value)
 void SimpleTextFileStore::saveReferenceValue(const QString &name, const Model::Node* target)
 {
 	checkIsWorking();
-	QString targetString = target ? Model::NodeIdMap::id(target).toString() : NULL_STRING;
+	QString targetString = target ? treeManager_->nodeIdMap().id(target).toString() : NULL_STRING;
 	QString nameString = name.isNull() ? NULL_STRING : name;
 	genericNode_->setValue(targetString + ":" + nameString);
 }
@@ -151,7 +152,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 		auto child = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
 		child->setName(name);
 		child->setType(PERSISTENT_UNIT_NODE_TYPE);
-		child->setId(Model::NodeIdMap::id(node));
+		child->setId(treeManager_->nodeIdMap().id(node));
 	}
 
 	genericNode_ = genericTree_->newPersistentUnit(name).newNode();
@@ -159,7 +160,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 
 	QString filename;
 	if ( oldPersisted == nullptr ) filename = name; // This is the root of the tree, save the file name
-	else filename = Model::NodeIdMap::id(node).toString(); // This is not the root, so save by id
+	else filename = treeManager_->nodeIdMap().id(node).toString(); // This is not the root, so save by id
 
 	QFile file(treeDir_.absoluteFilePath(filename));
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
@@ -193,15 +194,16 @@ void SimpleTextFileStore::saveNodeDirectly(const Model::Node *node, const QStrin
 	Q_ASSERT(!node->isPartiallyLoaded());
 	genericNode_->setName(name);
 	genericNode_->setType(node->typeName());
-	genericNode_->setId(Model::NodeIdMap::id(node));
+	genericNode_->setId(treeManager_->nodeIdMap().id(node));
 
 	node->save(*this);
 }
 
-Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager*, const QString &name, bool loadPartially)
+Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager* manager, const QString &name, bool loadPartially)
 {
 	storeAccess_.lock();
 	working_ = true;
+	treeManager_ = manager;
 	partiallyLoadingATree_ = loadPartially;
 	Model::LoadedNode ln;
 
@@ -219,7 +221,7 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager*, const QString &n
 			Model::NodeIdType id = p.second;
 			if (id.isNull()) throw FilePersistenceException("Incorrect id format for reference target " + p.second);
 
-			Model::Node* target = const_cast<Model::Node*> (Model::NodeIdMap::node(id));
+			Model::Node* target = const_cast<Model::Node*> (treeManager_->nodeIdMap().node(id));
 			if (!target) throw FilePersistenceException("A reference is pointing to an unloaded node " + p.second);
 
 			setReferenceTargetr(p.first, target);
@@ -285,7 +287,7 @@ Model::LoadedNode SimpleTextFileStore::loadNode(Model::Node* parent, bool loadPa
 	Model::LoadedNode node;
 	node.name = genericNode_->name();
 	node.node = Model::Node::createNewNode(genericNode_->type(), parent, *this, partiallyLoadingATree_ && loadPartially);
-	Model::NodeIdMap::setId( node.node, genericNode_->id() ); // Record id
+	treeManager_->nodeIdMap().setId( node.node, genericNode_->id() ); // Record id
 	return node;
 }
 
