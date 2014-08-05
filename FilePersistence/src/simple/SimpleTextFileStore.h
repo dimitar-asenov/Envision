@@ -39,7 +39,10 @@ class GenericTree;
 class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 {
 	public:
+		using FileGetterFunction = std::function<bool (QString filename, const char*& data, int& dataLength)>;
 		SimpleTextFileStore(const QString& baseDir = QString::null);
+		SimpleTextFileStore(FileGetterFunction fileGetter);
+
 		virtual ~SimpleTextFileStore();
 
 		virtual SimpleTextFileStore* clone() const override;
@@ -69,6 +72,9 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		virtual Model::Node* loadTree(Model::TreeManager* manager, const QString &name, bool loadPartially) override;
 
 	private:
+
+		/** If specified, this function will be used to get the data of the files. Only used for loading. */
+		FileGetterFunction fileGetter_{};
 
 		/** The folder where all trees are stored. Each tree is a separate sub folder in the base folder. */
 		QDir baseFolder_;
