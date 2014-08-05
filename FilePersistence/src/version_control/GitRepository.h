@@ -38,6 +38,10 @@ struct git_oid;
 
 namespace FilePersistence {
 
+using GitReference = QString;
+using SHA1 = QString;
+using RevisionString = QString;
+
 class FILEPERSISTENCE_API GitRepository
 {
 	public:
@@ -56,16 +60,22 @@ class FILEPERSISTENCE_API GitRepository
 		const CommitFile* getCommitFile(QString revision, QString relativePath) const;
 		CommitMetaData getCommitInformation(QString revision) const;
 
-		QString getSHA1(QString revision) const;
-
 		void checkout(QString revision, bool force);
-
-		QString currentBranch() const;
 
 		QString workdirPath() const;
 
-		static const QString HEAD_DETACHED;
-		static const QString HEAD_UNBORN;
+		SHA1 getSHA1(QString revision) const;
+
+		enum class HEADState {UNBORN, ATTACHED, DETACHED};
+		HEADState getHEADState() const;
+
+		enum class GitReferenceType {INVALID, NOTFOUND, BRANCH, NOTE, REMOTE, TAG};
+		GitReferenceType referenceType(GitReference reference) const;
+
+		GitReference currentBranch() const;
+
+		enum class RevisionStringState {INVALID, NOTFOUND, AMBIGUOUS, VALID};
+		bool isValidRevisionString(RevisionString revision) const;
 
 		static const QString WORKDIR;
 		static const QString INDEX;

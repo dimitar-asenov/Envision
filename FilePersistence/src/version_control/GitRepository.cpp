@@ -157,9 +157,6 @@ int treeWalkCommitExtractCallBack(const char* root,
 const QString GitRepository::WORKDIR = "GitRepositoryWorkdir";
 const QString GitRepository::INDEX = "GitRepositoryIndex";
 
-const QString GitRepository::HEAD_DETACHED = "GitRepositoryHeadDetached";
-const QString GitRepository::HEAD_UNBORN = "GitRepositoryHeadUnborn";
-
 GitRepository::GitRepository(QString path)
 {
 	// Bugfix: initialize git threads is usually done automatically
@@ -588,19 +585,16 @@ void GitRepository::checkout(QString revesion, bool force)
 	}
 }
 
-QString GitRepository::currentBranch() const
+GitReference GitRepository::currentBranch() const
 {
-	int errorCode = 0;
+	HEADState state = getHEADState();
+	if (state != HEADState::ATTACHED)
+		return QString();
 
-	int detached = git_repository_head_detached(repository_);
-	if (detached == 1)
-		return HEAD_DETACHED;
-	checkError(detached);
+	int errorCode = 0;
 
 	git_reference* head = nullptr;
 	errorCode = git_repository_head(&head, repository_);
-	if (errorCode == GIT_EUNBORNBRANCH)
-		return HEAD_UNBORN;
 	checkError(errorCode);
 
 	const char* branch = nullptr;
@@ -612,6 +606,93 @@ QString GitRepository::currentBranch() const
 	git_reference_free(head);
 
 	return branchName;
+}
+
+GitRepository::HEADState GitRepository::getHEADState() const
+{
+	int state = 0;
+
+	state = git_repository_head_unborn(repository_);
+	if (state > 0)
+	{
+		if (state == 1)
+			return HEADState::UNBORN;
+		checkError(state);
+	}
+
+	state = git_repository_head_detached(repository_);
+	if (state > 0)
+	{
+		if (state == 1)
+			return HEADState::DETACHED;
+		checkError(state);
+	}
+
+	return HEADState::ATTACHED;
+}
+
+GitRepository::GitReferenceType GitRepository::referenceType(GitReference reference) const
+{
+	int errorCode = 0;
+	GitReferenceType type = GitReferenceType::INVALID;
+	bool noReference = false;
+	git_reference* gitReference = nullptr;
+	errorCode = git_reference_lookup(&gitReference, repository_, reference.toStdString().c_str());
+
+	if (errorCode == GIT_EINVALIDSPEC)
+	{
+		noReference = true;
+		type = GitReferenceType::INVALID;
+	}
+	if (errorCode == GIT_ENOTFOUND)
+	{
+		noReference = true;
+		type = GitReferenceType::NOTFOUND;
+	}
+	checkError(errorCode);
+
+	if (!noReference)
+	{
+		errorCode = git_reference_is_branch(gitReference);
+		if (errorCode == 1)
+			type = GitReferenceType::BRANCH;
+
+		errorCode = git_reference_is_note(gitReference);
+		if (errorCode == 1)
+			type = GitReferenceType::NOTE;
+
+		errorCode = git_reference_is_remote(gitReference);
+		if (errorCode == 1)
+			type = GitReferenceType::REMOTE;
+
+		if (errorCode == 1)
+			type = GitReferenceType::TAG;
+	}
+
+	git_reference_free(gitReference);
+
+	return type;
+}
+
+bool GitRepository::isValidRevisionString(RevisionString revision) const
+{
+	int errorCode = 0;
+	bool isValid = true;
+	git_object* obj = nullptr;
+	errorCode = git_revparse_single(&obj, repository_, revision.toStdString().c_str());
+
+	if (errorCode == GIT_ENOTFOUND)
+		isValid = false;
+	if (errorCode == GIT_EINVALIDSPEC)
+		isValid = false;
+	if (errorCode == GIT_EAMBIGUOUS)
+		isValid = false;
+
+	checkError(errorCode);
+
+	git_object_free(obj);
+
+	return isValid;
 }
 
 // Private methods
