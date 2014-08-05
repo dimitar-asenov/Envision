@@ -31,7 +31,6 @@
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/layouts/PositionLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 
 namespace OOVisualization {
@@ -42,7 +41,6 @@ class OOVISUALIZATION_API VProjectStyle : public Super<Visualization::Declarativ
 		virtual ~VProjectStyle() override;
 		Property<Visualization::TextStyle> name{this, "name"};
 		Property<Visualization::StaticStyle> icon{this, "icon"};
-		Property<Visualization::PositionLayoutStyle> body{this, "body"};
 		Property<Visualization::VListStyle> fields{this, "fields"};
 		Property<Visualization::VListStyle> declarations{this, "declarations"};
 		Property<Visualization::VListStyle> libraries{this, "libraries"};

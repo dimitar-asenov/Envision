@@ -363,14 +363,18 @@ class VISUALIZATIONBASE_API GridLayouter
 		/**
 		 * Does not consider spans.
 		 */
-		template <class NumRows, class NumColumns, class ChildItem,
+		template <class NumRows, class NumColumns, class HasElement, class Width, class Height,
+					 class XPos, class YPos, class ChildItem,
 					 class SpaceBetweenRows, class SpaceBetweenColumns, class TopMargin, class BottomMargin,
 					 class LeftMargin, class RightMargin>
 		static QList<ItemRegion> regions(Item* parent, FormElement* formElement, int xOffset, int yOffset,
-										MajorAxis majorAxis, bool showCursorWhenEmpty, bool onlyInnerCursors,
-										bool extraCursorsAroundParentShape, bool notLocationEquivalentCursors,
-										bool showMajorCursors,
-										NumRows numRows, NumColumns numColumns, ChildItem childItem,
+										MajorAxis majorAxis, bool showCursorWhenEmpty, bool showInnerCursors,
+										bool showBoundaryCursors, bool extraCursorsAroundParentShape, bool showMajorCursors,
+										bool notLocationEquivalentCursors,
+
+										NumRows numRows, NumColumns numColumns,
+										HasElement has, Width width, Height height, XPos xPos, YPos yPos,
+										ChildItem childItem,
 										SpaceBetweenRows spaceBetweenRows, SpaceBetweenColumns spaceBetweenColumns,
 										TopMargin topMargin, BottomMargin bottomMargin, LeftMargin leftMargin,
 										RightMargin rightMargin)
@@ -393,18 +397,19 @@ class VISUALIZATIONBASE_API GridLayouter
 			int bottomMostPoint = 0;
 			for (int x=0; x<numColumns(); x++)
 				for (int y=0; y<numRows(); y++)
-					if (auto child = childItem(x, y))
+					if (has(x, y))
 					{
 						lastChildIndexInColumn[x] = y;
 						lastChildIndexInRow[y] = x;
-						if (child->x() < columnLeft[x]) columnLeft[x] = child->x();
-						if (child->xEndInParent() > columnRight[x]) columnRight[x] = child->xEndInParent();
+						QRect elementRect{xPos(x, y), yPos(x, y), width(x, y), height(x, y)};
+						if (elementRect.left() < columnLeft[x]) columnLeft[x] = elementRect.left();
+						if (elementRect.right() > columnRight[x]) columnRight[x] = elementRect.right();
 
-						if (child->y() < rowTop[y]) rowTop[y] = child->y();
-						if (child->yEndInParent() > rowBottom[y]) rowBottom[y] = child->yEndInParent();
+						if (elementRect.top() < rowTop[y]) rowTop[y] = elementRect.top();
+						if (elementRect.bottom() > rowBottom[y]) rowBottom[y] = elementRect.bottom();
 
-						if (child->xEndInParent() > rightMostPoint) rightMostPoint = child->xEndInParent();
-						if (child->yEndInParent() > bottomMostPoint) bottomMostPoint = child->yEndInParent();
+						if (elementRect.right() > rightMostPoint) rightMostPoint = elementRect.right();
+						if (elementRect.bottom() > bottomMostPoint) bottomMostPoint = elementRect.bottom();
 					}
 
 			// If a row or a column is completely empty it still contains std::numeric_limits<int>::max().
@@ -447,18 +452,15 @@ class VISUALIZATIONBASE_API GridLayouter
 			QVector<int> rowNextLeft(numRows(), numColumns() > 0 ? columnLeft[0] : 0);
 			for (int x=0; x<numColumns(); x++)
 				for (int y=0; y<numRows(); y++)
-					if (auto child = childItem(x, y))
+					if (has(x, y))
 					{
-						regs.append( ItemRegion() );
-						regs.last().setItem( child );
-
 						QRect itemArea;
 
 						// Set vertical position and dimensions
 						if (majorAxis == ColumnMajor)
 						{
 							itemArea.setTop(columnNextTop[x]);
-							itemArea.setHeight( child->heightInParent() );
+							itemArea.setHeight( height(x, y) );
 							columnNextTop[x] += itemArea.height() + spaceBetweenRows();
 						}
 						else
@@ -471,7 +473,7 @@ class VISUALIZATIONBASE_API GridLayouter
 						if (majorAxis == RowMajor)
 						{
 							itemArea.setLeft(rowNextLeft[y]);
-							itemArea.setWidth( child->widthInParent() );
+							itemArea.setWidth( width(x, y) );
 							rowNextLeft[y] += itemArea.width() + spaceBetweenColumns();
 						}
 						else
@@ -481,7 +483,13 @@ class VISUALIZATIONBASE_API GridLayouter
 						}
 
 						itemAreas[x][y] = itemArea;
-						regs.last().setRegion(itemArea);
+
+						if (auto child = childItem(x, y))
+						{
+							regs.append( ItemRegion() );
+							regs.last().setItem( child );
+							regs.last().setRegion(itemArea);
+						}
 					}
 					else
 					{
@@ -509,7 +517,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					int rowHeight = rowBottom[y]-rowTop[y]+1;
 
 					// Front minor cursor. Always there if requested.
-					if (((x == 0 && majorAxis != ColumnMajor) || (y==0 && majorAxis == ColumnMajor)) && !onlyInnerCursors)
+					if (showBoundaryCursors && ((x == 0 && majorAxis != ColumnMajor) || (y==0 && majorAxis == ColumnMajor)))
 					{
 						regs.append( cursorRegion(parent, formElement, x, y, majorAxis == ColumnMajor,
 								!extraCursorsAroundParentShape,
@@ -533,7 +541,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					}
 
 					// Inner cursor to next element, if any
-					if (!itemAreas[x][y].isNull()
+					if (showInnerCursors && !itemAreas[x][y].isNull()
 							&& (	(majorAxis == ColumnMajor && y < lastChildIndexInColumn[x])
 								||
 									(majorAxis != ColumnMajor && x < lastChildIndexInRow[y])))
@@ -548,7 +556,7 @@ class VISUALIZATIONBASE_API GridLayouter
 					}
 
 					// Back cursor, if requested, and if there is at least one element
-					if (!itemAreas[x][y].isNull() && !onlyInnerCursors
+					if (showBoundaryCursors && !itemAreas[x][y].isNull()
 							&& (	(majorAxis == ColumnMajor && y == lastChildIndexInColumn[x])
 								||
 									(majorAxis != ColumnMajor && x == lastChildIndexInRow[y])))

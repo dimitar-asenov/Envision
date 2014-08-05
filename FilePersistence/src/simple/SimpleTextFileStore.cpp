@@ -37,8 +37,6 @@
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/ModelException.h"
 #include "ModelBase/src/persistence/NodeIdMap.h"
-#include "ModelBase/src/persistence/PersistedNode.h"
-#include "ModelBase/src/persistence/PersistedValue.h"
 
 namespace FilePersistence {
 
@@ -64,12 +62,13 @@ SimpleTextFileStore* SimpleTextFileStore::clone() const
 
 void SimpleTextFileStore::setBaseFolder(const QString& path)
 {
+	Q_ASSERT(!fileGetter_);
 	baseFolder_ = path;
 }
 
 QString SimpleTextFileStore::getPersistenceUnitName(const Model::Node *node)
 {
-	Model::NodeIdType persistenceUnitId = Model::NodeIdMap::id( node->persistentUnitNode() );
+	Model::NodeIdType persistenceUnitId = treeManager_->nodeIdMap().id( node->persistentUnitNode() );
 
 	QString name;
 	if (persistenceUnitId.isNull()) name = node->manager()->name();
@@ -87,9 +86,11 @@ void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &n
 	storeAccess_.lock();
 	working_ = true;
 	manager->beginExclusiveRead();
+	treeManager_ = manager;
 
 	try
 	{
+		Q_ASSERT(!fileGetter_);
 		if ( !baseFolder_.exists(name) )
 			if ( !baseFolder_.mkpath(name) )
 				throw FilePersistenceException("Could not create folder " + baseFolder_.path() + " for tree.");
@@ -137,7 +138,7 @@ void SimpleTextFileStore::saveDoubleValue(double value)
 void SimpleTextFileStore::saveReferenceValue(const QString &name, const Model::Node* target)
 {
 	checkIsWorking();
-	QString targetString = target ? Model::NodeIdMap::id(target).toString() : NULL_STRING;
+	QString targetString = target ? treeManager_->nodeIdMap().id(target).toString() : NULL_STRING;
 	QString nameString = name.isNull() ? NULL_STRING : name;
 	genericNode_->setValue(targetString + ":" + nameString);
 }
@@ -153,7 +154,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 		auto child = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
 		child->setName(name);
 		child->setType(PERSISTENT_UNIT_NODE_TYPE);
-		child->setId(Model::NodeIdMap::id(node));
+		child->setId(treeManager_->nodeIdMap().id(node));
 	}
 
 	genericNode_ = genericTree_->newPersistentUnit(name).newNode();
@@ -161,7 +162,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 
 	QString filename;
 	if ( oldPersisted == nullptr ) filename = name; // This is the root of the tree, save the file name
-	else filename = Model::NodeIdMap::id(node).toString(); // This is not the root, so save by id
+	else filename = treeManager_->nodeIdMap().id(node).toString(); // This is not the root, so save by id
 
 	QFile file(treeDir_.absoluteFilePath(filename));
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
@@ -195,22 +196,27 @@ void SimpleTextFileStore::saveNodeDirectly(const Model::Node *node, const QStrin
 	Q_ASSERT(!node->isPartiallyLoaded());
 	genericNode_->setName(name);
 	genericNode_->setType(node->typeName());
-	genericNode_->setId(Model::NodeIdMap::id(node));
+	genericNode_->setId(treeManager_->nodeIdMap().id(node));
 
 	node->save(*this);
 }
 
-Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager*, const QString &name, bool loadPartially)
+Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager* manager, const QString &name, bool loadPartially)
 {
 	storeAccess_.lock();
 	working_ = true;
+	treeManager_ = manager;
 	partiallyLoadingATree_ = loadPartially;
 	Model::LoadedNode ln;
 
 	try
 	{
-		treeDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
-		if ( !treeDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
+		if (!fileGetter_)
+		{
+			treeDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
+			if ( !treeDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
+		}
+
 		genericTree_ = new GenericTree(name);
 
 		ln = loadNewPersistenceUnit(name, nullptr, loadPartially);
@@ -221,7 +227,7 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager*, const QString &n
 			Model::NodeIdType id = p.second;
 			if (id.isNull()) throw FilePersistenceException("Incorrect id format for reference target " + p.second);
 
-			Model::Node* target = const_cast<Model::Node*> (Model::NodeIdMap::node(id));
+			Model::Node* target = const_cast<Model::Node*> (treeManager_->nodeIdMap().node(id));
 			if (!target) throw FilePersistenceException("A reference is pointing to an unloaded node " + p.second);
 
 			setReferenceTargetr(p.first, target);
@@ -248,7 +254,19 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 {
 	GenericNode* oldPersisted = genericNode_;
 
-	genericNode_ = Parser::load(treeDir_.absoluteFilePath(name), true, genericTree_->newPersistentUnit(name));
+	if (fileGetter_)
+	{
+		const char* data = nullptr;
+		int dataLength = 0;
+		bool success = fileGetter_(name, data, dataLength);
+		Q_ASSERT(success);
+		Q_ASSERT(data);
+		Q_ASSERT(dataLength > 0);
+
+		genericNode_ = Parser::load(data, dataLength, true, genericTree_->newPersistentUnit(name));
+	}
+	else
+		genericNode_ = Parser::load(treeDir_.absoluteFilePath(name), true, genericTree_->newPersistentUnit(name));
 
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
@@ -287,7 +305,7 @@ Model::LoadedNode SimpleTextFileStore::loadNode(Model::Node* parent, bool loadPa
 	Model::LoadedNode node;
 	node.name = genericNode_->name();
 	node.node = Model::Node::createNewNode(genericNode_->type(), parent, *this, partiallyLoadingATree_ && loadPartially);
-	Model::NodeIdMap::setId( node.node, genericNode_->id() ); // Record id
+	treeManager_->nodeIdMap().setId( node.node, genericNode_->id() ); // Record id
 	return node;
 }
 
@@ -315,134 +333,6 @@ QString SimpleTextFileStore::currentNodeType() const
 	checkIsWorking();
 
 	return genericNode_->type();
-}
-
-Model::PersistedNode* SimpleTextFileStore::loadCompleteNodeSubtree(const QString& treeName, const Model::Node* node)
-{
-	storeAccess_.lock();
-	working_ = true;
-
-	Model::PersistedNode* result = nullptr;
-
-	Model::NodeIdType nodeId;
-	Model::NodeIdType persistenceUnitId;
-	if (node)
-	{
-		nodeId = Model::NodeIdMap::id(node);
-		persistenceUnitId = Model::NodeIdMap::id( node->persistentUnitNode() );
-	}
-
-
-	try
-	{
-		treeDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + treeName);
-		if ( !treeDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
-
-		QString filename;
-		if (!persistenceUnitId.isNull()) filename = persistenceUnitId.toString();
-		else filename = treeName;
-
-		genericTree_= new GenericTree(filename);
-		genericNode_ = Parser::load(treeDir_.absoluteFilePath(filename), true, genericTree_->newPersistentUnit(filename));
-
-		// Search through the content in order to find the requested node id.
-		if (!nodeId.isNull()) genericNode_ = genericNode_->find(nodeId);
-
-		if (!genericNode_)
-			throw FilePersistenceException("Could not find the persisted data for partial node with id "
-					+ nodeId.toString());
-
-		// Load the node and return it.
-		result = loadNodeData();
-
-		genericNode_ = nullptr;
-		SAFE_DELETE(genericTree_);
-	}
-	catch (Model::ModelException& e)
-	{
-		SAFE_DELETE(genericTree_);
-		genericNode_ = nullptr;
-		working_ = false;
-		storeAccess_.unlock();
-		throw;
-	}
-
-	working_ = false;
-	storeAccess_.unlock();
-
-	return result;
-}
-
-Model::PersistedNode* SimpleTextFileStore::loadNodeData()
-{
-	checkIsWorking();
-
-	if (genericNode_->type() == PERSISTENT_UNIT_NODE_TYPE) return loadPersistentUnitData();
-
-	Model::PersistedNode* result = nullptr;
-
-	// Determine the type of the node
-	if (genericNode_->hasValue())
-	{
-		if ( genericNode_->hasStringValue() )
-		{
-			Model::PersistedValue<QString> *val = new Model::PersistedValue<QString>();
-			val->set( genericNode_->valueAsString() );
-			result = val;
-		}
-		else if ( genericNode_->hasIntValue() )
-		{
-			Model::PersistedValue<int> *val = new Model::PersistedValue<int>();
-			val->set( genericNode_->valueAsLong() );
-			result = val;
-		}
-		else if ( genericNode_->hasDoubleValue() )
-		{
-			Model::PersistedValue<double> *val = new Model::PersistedValue<double>();
-			val->set( genericNode_->valueAsDouble() );
-			result = val;
-		}
-	}
-	else
-	{
-		auto val = new Model::PersistedValue< QList<Model::PersistedNode*> >();
-		result = val;
-
-		auto previousPersisted = genericNode_;
-		for (auto c : genericNode_->children())
-		{
-			genericNode_ = c;
-
-			Model::PersistedNode* child;
-			child = loadNodeData();
-			val->value().append(child);
-		}
-		genericNode_ = previousPersisted;
-	}
-
-	if (!genericNode_->id().isNull()) result->setId(genericNode_->id());
-	result->setType(genericNode_->type());
-	result->setName(genericNode_->name());
-	result->setNewPersistenceUnit(false);
-
-	return result;
-}
-
-Model::PersistedNode* SimpleTextFileStore::loadPersistentUnitData( )
-{
-	checkIsWorking();
-
-	GenericNode* previousPersisted = genericNode_;
-	QString unitName = genericNode_->id().toString();
-	genericNode_ = Parser::load(treeDir_.absoluteFilePath(unitName), true, genericTree_->newPersistentUnit(unitName));
-
-	Model::PersistedNode* result = loadNodeData();
-	result->setNewPersistenceUnit(true);
-
-	genericTree_->remove(unitName);
-	genericNode_ = previousPersisted;
-
-	return result;
 }
 
 int SimpleTextFileStore::loadIntValue()

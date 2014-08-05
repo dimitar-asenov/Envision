@@ -69,7 +69,6 @@
 		<width>60</width>
 		<height>60</height>
 	</icon>
-	<body prototypes="layout/PositionLayout/default" />
 	<declarations prototypes="item/VList/default">
 		<shape/>
 		<itemsStyle prototypes="layout/SequentialLayout/default">

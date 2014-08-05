@@ -90,7 +90,7 @@ NameOverlay::~NameOverlay()
 
 Item::UpdateType NameOverlay::needsUpdate()
 {
-	return FullUpdate;
+	return StandardUpdate;
 }
 
 void NameOverlay::determineChildren()

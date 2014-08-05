@@ -37,8 +37,6 @@ HEADERS += src/persistence/NodeIdMap.h \
     src/nodes/TypedListDefinition.h \
     src/nodes/nodeMacros.h \
     src/persistence/ClipboardStore.h \
-    src/persistence/PersistedNode.h \
-    src/persistence/PersistedValue.h \
     src/persistence/PersistentStore.h \
     src/precompiled.h \
     src/test_nodes/BinaryNode.h \
@@ -73,7 +71,6 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/Boolean.cpp \
     src/nodes/Float.cpp \
     src/commands/ListPut.cpp \
-    src/persistence/PersistedNode.cpp \
     src/test_nodes/BinaryNodePersistenceUnit.cpp \
     src/test_nodes/PartialList.cpp \
     src/test_nodes/BinaryNodeAccessUnit.cpp \

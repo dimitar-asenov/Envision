@@ -48,7 +48,6 @@ class PersistentStoreMock: public PersistentStore
 
 		virtual QList<LoadedNode> loadAllSubNodes(Node* parent, const QSet<QString>& loadPartially) override;
 		virtual Node* loadSubNode(Node* parent, const QString& name, bool loadPartially) override;
-		virtual PersistedNode* loadCompleteNodeSubtree(const QString& treeName, const Node* node) override;
 		virtual QString currentNodeType() const override;
 
 		virtual int loadIntValue() override;

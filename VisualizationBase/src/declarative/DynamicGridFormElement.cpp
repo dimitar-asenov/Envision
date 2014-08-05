@@ -268,10 +268,15 @@ QList<ItemRegion> DynamicGridFormElement::regions(DeclarativeItemBase* item, int
 {
 	auto& data = dataForItem(item);
 
-	return GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), majorAxis_, true, false,
+	return GridLayouter::regions(item, this, parentX + x(item), parentY + y(item), majorAxis_, true, true, true,
 			item->style()->extraCursorsOutsideShape(), true, true,
 			[&data](){return data.numRows_;},	// numRows
 			[&data](){return data.numColumns_;},	// numColumns
+			[&data](int x, int y){return data.itemGrid_[x][y];},	// has
+			[&data](int x, int y){return data.itemGrid_[x][y]->widthInParent();},	// width
+			[&data](int x, int y){return data.itemGrid_[x][y]->heightInParent();},	// height
+			[&data](int x, int y){return (int) data.itemGrid_[x][y]->x();},	// xPos
+			[&data](int x, int y){return (int) data.itemGrid_[x][y]->y();},	// yPos
 			[&data](int x, int y){return data.itemGrid_[x][y];},	// childItem
 			[this](){return spaceBetweenRows_;},	// spaceBetweenRows
 			[this](){return spaceBetweenColumns_;},	// spaceBetweenColumns

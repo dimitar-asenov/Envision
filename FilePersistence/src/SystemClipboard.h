@@ -32,7 +32,6 @@
 #include "ModelBase/src/persistence/ClipboardStore.h"
 
 namespace Model {
-	class PersistedNode;
 	class Reference;
 }
 
@@ -56,7 +55,6 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent, const QSet<QString>& loadPartially)override;
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name, bool loadPartially) override;
 		virtual QString currentNodeType() const override;
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& treeName, const Model::Node* node) override;
 
 		virtual int loadIntValue() override;
 		virtual QString loadStringValue() override;
@@ -83,7 +81,6 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		XMLModel* xml;
 		int numNodes_;
 
-		void saveNodeFromOldStore(Model::PersistedNode* node);
 		Model::LoadedNode loadNode(Model::Node* parent);
 
 		static const QString NULL_STRING;

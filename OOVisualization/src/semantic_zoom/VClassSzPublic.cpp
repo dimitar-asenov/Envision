@@ -29,7 +29,6 @@
 
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
@@ -47,26 +46,13 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VClassSzPublic, "item")
 
 VClassSzPublic::VClassSzPublic(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
-{
-	setDefaultMoveCursorProxy(name_);
-
-	body_ = new PositionLayout(this, &style->body());
-}
+{}
 
 void VClassSzPublic::determineChildren()
 {
-	// manually update the body item
-	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
-	QList<Model::Node*> bodyItems = node()->classes()->nodes().toList();
-
-	// only keep methods which are public
-	for (auto method : *node()->methods())
-		if (method->modifiers()->isSet(Modifier::Public)) bodyItems.append(method);
-
-	body_->synchronizeWithNodes( bodyItems);
-
-	// call determineChildren of super class
+	qDebug() << "here";
 	Super::determineChildren();
+	setDefaultMoveCursorProxy(name_);
 }
 
 void VClassSzPublic::initializeForms()
@@ -104,7 +90,16 @@ void VClassSzPublic::initializeForms()
 	auto contentElement = (new GridLayoutFormElement())
 				->setSpacing(3)->setColumnStretchFactor(1, 1)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(1, 4, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));;
+				->put(1, 0, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
+						->setNodesGetter(
+						[](Item* v)->QVector<QVector<Model::Node*>>{
+						auto self = static_cast<I*>(v);
+						auto bodyNodes = self->node()->classes()->nodes();
+						for (auto method : *self->node()->methods())
+							if (method->modifiers()->isSet(Modifier::Public)) bodyNodes.append(method);
+						return Visualization::GridLayouter::arrange(bodyNodes, Visualization::GridLayouter::ColumnMajor);
+					}));
 
 	auto fieldContainerElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)

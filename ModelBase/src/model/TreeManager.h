@@ -29,6 +29,7 @@
 #include "../modelbase_api.h"
 #include "../nodes/Node.h"
 #include "../concurrent/NodeReadWriteLock.h"
+#include "../persistence/NodeIdMap.h"
 #include "AllTreeManagers.h"
 
 namespace Model {
@@ -338,6 +339,9 @@ class MODELBASE_API TreeManager: public QObject
 		 */
 		bool isPartiallyLoaded() const;
 
+		const NodeIdMap& nodeIdMap() const;
+		NodeIdMap& nodeIdMap();
+
 	signals:
 		/**
 		 * Emitted when a new root node was set.
@@ -467,6 +471,8 @@ class MODELBASE_API TreeManager: public QObject
 		 * Indicates whether this tree has been partially loaded (as a library) from a store.
 		 */
 		bool partiallyLoaded_{};
+
+		NodeIdMap nodeIdMap_;
 };
 
 inline bool TreeManager::isBeingModified() const { return modificationInProgress; }
@@ -482,5 +488,7 @@ inline PersistentStore* TreeManager::store() { return store_; }
 inline AllTreeManagers& TreeManager::manager() const { return AllTreeManagers::instance(); }
 
 inline bool TreeManager::isPartiallyLoaded() const { return partiallyLoaded_; }
+inline const NodeIdMap& TreeManager::nodeIdMap() const { return nodeIdMap_; }
+inline NodeIdMap& TreeManager::nodeIdMap() { return nodeIdMap_; }
 
 }

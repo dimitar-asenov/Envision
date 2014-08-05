@@ -32,7 +32,6 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     test/ClipboardTests.cpp \
     src/XMLModel.cpp \
     src/SystemClipboard.cpp \
-    test/LoadNodeDataTests.cpp \
     test/PartialNodeTests.cpp \
     src/FilePersistenceException.cpp \
     test/LoadTests.cpp \
