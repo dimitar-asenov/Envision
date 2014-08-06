@@ -48,6 +48,8 @@ SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
 		baseFolder_{baseDir.isNull() ? QDir::home().path() + QDir::toNativeSeparators("/Envision/projects") : baseDir}
 {}
 
+SimpleTextFileStore::SimpleTextFileStore(FileGetterFunction fileGetter) : fileGetter_{fileGetter} {}
+
 SimpleTextFileStore::~SimpleTextFileStore()
 {
 	Q_ASSERT(genericNode_ == nullptr);
