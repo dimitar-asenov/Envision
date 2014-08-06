@@ -39,12 +39,7 @@ CommitFile::CommitFile(QString relativePath, qint64 size, const char* content)
 {
 	relativePath_ = relativePath;
 	size_ = size;
-
-	// make a copy of the content
-	auto contentCopy = new char[size];
-	memcpy(contentCopy, content, size);
-
-	content_ = contentCopy;
+	content_ = content;
 }
 
 CommitFile::~CommitFile()
@@ -52,10 +47,41 @@ CommitFile::~CommitFile()
 	delete[] content_;
 }
 
-Commit::Commit(CommitMetaData info, QList<CommitFile> files)
+Commit::Commit() {}
+
+Commit::~Commit()
 {
-	information_ = info;
-	files_ = files;
+	for (auto file : files_.values())
+		delete file;
+}
+
+void Commit::setMetaData(CommitMetaData data)
+{
+	information_ = data;
+}
+
+CommitMetaData Commit::metaData() const
+{
+	return information_;
+}
+
+void Commit::addFile(QString relativePath, qint64 size, const char* content)
+{
+	files_.insert(relativePath, new CommitFile(relativePath, size, content));
+}
+
+bool Commit::getFileContent(QString fileName, const char*& content, int& contentSize) const
+{
+	QHash<QString, CommitFile*>::const_iterator iter = files_.find(fileName);
+	if (iter != files_.constEnd())
+	{
+		contentSize = iter.value()->size_;
+		content = iter.value()->content_;
+
+		return true;
+	}
+	else
+		return false;
 }
 
 } /* namespace FilePersistence */

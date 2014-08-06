@@ -45,21 +45,8 @@ struct GitDiffExtract
 
 struct GitCommitExtract
 {
-		git_repository* repository_;
-		QList<CommitFile> files_;
-};
-
-struct GitTreeBlobs
-{
-	git_repository* repository_;
-	QList<QString> fileNames_;
-	QList<git_blob*> blobs_;
-
-	~GitTreeBlobs()
-	{
-		for (auto blob : blobs_)
-			git_blob_free(blob);
-	}
+		git_repository* repository_{};
+		Commit* commit_{};
 };
 
 int gitDiffExtractFileCallBack(
@@ -142,8 +129,7 @@ int treeWalkCommitExtractCallBack(const char* root,
 			char* content = new char[contentSize];
 			memcpy(content, rawContent, contentSize);
 
-			CommitFile file(relativePath, contentSize, content);
-			data->files_.append(file);
+			data->commit_->addFile(relativePath, contentSize, content);
 
 			git_blob_free(blob);
 		}
@@ -467,7 +453,7 @@ CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevisio
 	return graph;
 }
 
-Commit GitRepository::getCommit(QString revision) const
+const Commit* GitRepository::getCommit(QString revision) const
 {
 	Q_ASSERT(revision.compare(WORKDIR) != 0);
 	Q_ASSERT(revision.compare(INDEX) != 0);
@@ -481,17 +467,18 @@ Commit GitRepository::getCommit(QString revision) const
 
 	GitCommitExtract treeWalkData;
 	treeWalkData.repository_ = repository_;
+	treeWalkData.commit_ = new Commit();
+
+	CommitMetaData info = getCommitInformation(revision);
+	treeWalkData.commit_->setMetaData(info);
 
 	errorCode = git_tree_walk(tree, GIT_TREEWALK_PRE, treeWalkCommitExtractCallBack, &treeWalkData);
 	checkError(errorCode);
 
-	CommitMetaData info = getCommitInformation(revision);
-
 	git_commit_free(gitCommit);
 	git_tree_free(tree);
 
-	Commit commit(info, treeWalkData.files_);
-	return commit;
+	return treeWalkData.commit_;
 }
 
 const CommitFile* GitRepository::getCommitFile(QString revision, QString relativePath) const

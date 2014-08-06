@@ -56,7 +56,7 @@ class FILEPERSISTENCE_API GitRepository
 		Diff diff(QString oldRevision, QString newRevision) const;
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
 
-		Commit getCommit(QString revision) const;
+		const Commit* getCommit(QString revision) const;
 		const CommitFile* getCommitFile(QString revision, QString relativePath) const;
 		CommitMetaData getCommitInformation(QString revision) const;
 

@@ -56,12 +56,19 @@ struct CommitFile {
 class FILEPERSISTENCE_API Commit
 {
 	public:
-		Commit(CommitMetaData info, QList<CommitFile> files);
+		Commit();
+		~Commit();
+
+		void setMetaData(CommitMetaData data);
+		CommitMetaData metaData() const;
+
+		void addFile(QString relativePath, qint64 size, const char* content);
+		bool getFileContent(QString fileName, const char*& content, int& contentSize) const;
 
 	private:
 		CommitMetaData information_;
 
-		QList<CommitFile> files_;
+		QHash<QString, CommitFile*> files_;
 
 };
 
