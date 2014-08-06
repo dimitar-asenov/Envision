@@ -41,7 +41,7 @@ using namespace Visualization;
 
 namespace Interaction {
 
-CDiffTest::CDiffTest() : CommandWithNameAndFlags{"diff", {{"library"}}, true}
+CDiffTest::CDiffTest() : CommandWithNameAndFlags{"diffTest", {}, true}
 {
 	QString path("projects/Hello/.git");
 	repository_ = new FilePersistence::GitRepository(path);
@@ -54,24 +54,31 @@ CommandResult* CDiffTest::executeNamed(Visualization::Item* source, Visualizatio
 	(void) source;
 	(void) target;
 	(void) cursor;
+	(void) attributes;
 
-	QString commitOld("abf18");
-	repository_->checkout(commitOld, true);
+	QString oldRevision("abf18");
+	const FilePersistence::Commit* oldCommit = repository_->getCommit(oldRevision);
+
+	auto oldFileStore = new FilePersistence::SimpleTextFileStore(
+				[this, &oldCommit](QString name, const char*& data, int& size)
+				{ return oldCommit->getFileContent(name, data, size); }
+			);
 
 	auto managerOld = new Model::TreeManager();
-	managerOld->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+	managerOld->load(oldFileStore, name, false);
 	managerOld->setName("Hello (Old)");
 
-	QString commitNew("413d2");
-	repository_->checkout(commitNew, true);
+	QString newRevision("413d2");
+	const FilePersistence::Commit* newCommit = repository_->getCommit(newRevision);
+
+	auto newFileStore = new FilePersistence::SimpleTextFileStore(
+				[this, &newCommit](QString name, const char*& data, int& size)
+				{ return newCommit->getFileContent(name, data, size); }
+			);
 
 	auto managerNew = new Model::TreeManager();
-	managerNew->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+	managerNew->load(newFileStore, name, false);
 	managerNew->setName("Hello (New)");
-
-	const FilePersistence::CommitFile* file =
-			repository_->getCommitFile(FilePersistence::GitRepository::INDEX, "Hello");
-	qDebug() << file->relativePath_ << file->size_;
 
 	Item* oldRoot = new RootItem(managerOld->root());
 	oldRoot->setPos(-200.f, 0.f);
@@ -86,33 +93,40 @@ CommandResult* CDiffTest::executeNamed(Visualization::Item* source, Visualizatio
 	VisualizationManager::instance().mainScene()->listenToTreeManager(managerNew);
 
 	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
-		new Visualization::CustomSceneEvent( [oldRoot, newRoot, commitOld, commitNew, this](){
+		new Visualization::CustomSceneEvent( [oldRoot, newRoot, managerOld, managerNew, oldRevision, newRevision, this](){
 
-			FilePersistence::Diff diff = repository_->diff(commitOld, commitNew);
+			FilePersistence::Diff diff = repository_->diff(oldRevision, newRevision);
 			FilePersistence::IdToChangeDescriptionHash changes = diff.changes();
 
 			auto insertHighlight = VisualizationManager::instance().mainScene()->addHighlight("Insert", "green");
 			auto deleteHighlight = VisualizationManager::instance().mainScene()->addHighlight("Delete", "red");
 
+			Model::Node* node = nullptr;
 			for (FilePersistence::ChangeDescription* change : changes.values())
 			{
-				Model::Node* node = const_cast<Model::Node*>(Model::NodeIdMap::node(change->id()));
-
-				if (auto item = oldRoot->findVisualizationOf(node))
+				switch (change->type())
 				{
-					if (change->type() == FilePersistence::ChangeType::Deleted)
-						deleteHighlight->addHighlightedItem(item);
-				}
+					case FilePersistence::ChangeType::Added:
+						node = const_cast<Model::Node*>(managerNew->nodeIdMap().node(change->id()));
+						if (auto item = newRoot->findVisualizationOf(node))
+							insertHighlight->addHighlightedItem(item);
+						break;
 
-				if (auto item = newRoot->findVisualizationOf(node))
-				{
-					if (change->type() == FilePersistence::ChangeType::Added)
-						insertHighlight->addHighlightedItem(item);
+					case FilePersistence::ChangeType::Deleted:
+						node = const_cast<Model::Node*>(managerOld->nodeIdMap().node(change->id()));
+						if (auto item = oldRoot->findVisualizationOf(node))
+							deleteHighlight->addHighlightedItem(item);
+						break;
+
+					default:
+						break;
 				}
 			}
 
 	} ) );
 
+	delete oldCommit;
+	delete newCommit;
 
 	return new CommandResult();
 }
