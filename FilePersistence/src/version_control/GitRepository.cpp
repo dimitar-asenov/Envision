@@ -536,17 +536,22 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 
 QString GitRepository::getSHA1(QString revision) const
 {
-	git_commit* gitCommit = parseCommit(revision);
-	const git_oid* oid = git_commit_id(gitCommit);
+	if (revision.compare(WORKDIR) != 0 && revision.compare(INDEX) != 0)
+	{
+		git_commit* gitCommit = parseCommit(revision);
+		const git_oid* oid = git_commit_id(gitCommit);
 
-	char sha1[41];
-	sha1[40] = '\0';
-	git_oid_fmt(sha1, oid);
-	QString commitSHA1(sha1);
+		char sha1[41];
+		sha1[40] = '\0';
+		git_oid_fmt(sha1, oid);
+		QString commitSHA1(sha1);
 
-	git_commit_free(gitCommit);
+		git_commit_free(gitCommit);
 
-	return commitSHA1;
+		return commitSHA1;
+	}
+	else
+		return revision;
 }
 
 void GitRepository::checkout(QString revesion, bool force)
@@ -738,7 +743,10 @@ const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) 
 	auto mapped = reinterpret_cast<char*>(file.map(0, totalFileSize));
 	Q_ASSERT(mapped);
 
-	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, mapped);
+	char* content = new char[totalFileSize];
+	memcpy(content, mapped, totalFileSize);
+
+	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, content);
 	file.close();
 
 	return commitFile;
@@ -795,7 +803,10 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	auto mapped = reinterpret_cast<char*>(file.map(0, totalFileSize));
 	Q_ASSERT(mapped);
 
-	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, mapped);
+	char* content = new char[totalFileSize];
+	memcpy(content, mapped, totalFileSize);
+
+	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, content);
 
 	success = file.remove();
 	Q_ASSERT(success);
