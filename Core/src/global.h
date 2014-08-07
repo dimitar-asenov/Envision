@@ -25,6 +25,9 @@
 ***********************************************************************************************************************/
 
 #pragma once
+// Note that this file is assumed to be loaded after all the system headers in Core/src/precompiled.h have been already
+// included
+
 
 template <class T> inline void SAFE_DELETE( T* & object)
 {
@@ -39,3 +42,19 @@ template <class T> inline void SAFE_DELETE( T* && object)
 {
 	if (object) delete object;
 }
+
+class OnScopeExit
+{
+	public:
+		OnScopeExit(const OnScopeExit& other) = delete;
+		OnScopeExit(OnScopeExit&& other) = delete;
+		OnScopeExit& operator= (const OnScopeExit other) = delete;
+
+		template<class T>
+		explicit OnScopeExit(T&& functionToCall) : functionToCall_{std::forward<T>(functionToCall)}{}
+
+		~OnScopeExit() {functionToCall_();}
+
+	private:
+		std::function<void ()> functionToCall_;
+};

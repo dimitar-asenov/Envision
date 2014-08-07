@@ -32,7 +32,6 @@
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
-#include "global.h"
 
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QApplication>
@@ -60,11 +59,14 @@
 #include <functional>
 #include <typeinfo>
 #include <memory>
+#include <utility>
 
 #ifdef Q_OS_LINUX
 	#include <gperftools/profiler.h>
 #endif
 #include <QtCore/QElapsedTimer>
+
+#include "global.h"
 
 #if defined(CORE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
