@@ -416,9 +416,9 @@ Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 	// Use callback on diff to extract node information -> oldNodes & newNodes
 	GitDiffExtract carryAlongData;
 	QString oldCommitSHA1 = getSHA1(oldRevision);
-	carryAlongData.oldTree_ = new GenericTree("oldDiff", oldCommitSHA1);
+	carryAlongData.oldTree_ = new GenericTree(oldCommitSHA1, oldCommitSHA1);
 	QString newCommitSHA1 = getSHA1(newRevision);
-	carryAlongData.newTree_ = new GenericTree("newDiff", newCommitSHA1);
+	carryAlongData.newTree_ = new GenericTree(newCommitSHA1, newCommitSHA1);
 
 	carryAlongData.reverseOldNew_ = reverseOldNew;
 	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, NULL, gitDiffExtractLineCallBack, &(carryAlongData));
@@ -728,6 +728,7 @@ void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current,
 const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) const
 {
 	QString fullRelativePath = path_;
+	fullRelativePath.append(QDir::separator());
 	fullRelativePath.append(relativePath);
 
 	if (!QFile::exists(fullRelativePath))
