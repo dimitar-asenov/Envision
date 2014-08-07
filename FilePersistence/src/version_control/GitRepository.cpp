@@ -600,6 +600,74 @@ GitReference GitRepository::currentBranch() const
 	return branchName;
 }
 
+QStringList GitRepository::localBranches() const
+{
+	int errorCode = 0;
+
+	git_branch_iterator* iter = nullptr;
+	git_branch_t type;
+
+	errorCode = git_branch_iterator_new(&iter, repository_, GIT_BRANCH_LOCAL);
+	checkError(errorCode);
+
+	QStringList branches;
+	git_reference* ref = nullptr;
+	while (git_branch_next(&ref, &type, iter) != GIT_ITEROVER)
+	{
+		QString name(git_reference_name(ref));
+		name.remove("refs/heads/");
+		branches.append(name);
+
+		git_reference_free(ref);
+	}
+
+	git_branch_iterator_free(iter);
+
+	return branches;
+}
+
+QStringList GitRepository::tags() const
+{
+	int errorCode = 0;
+
+	git_strarray tags;
+	errorCode = git_tag_list(&tags, repository_);
+	checkError(errorCode);
+
+	QStringList tagList;
+	for (size_t i = 0; i < tags.count; i++)
+		tagList.append(QString(tags.strings[i]));
+
+	git_strarray_free(&tags);
+
+	return tagList;
+}
+
+QStringList GitRepository::revisions() const
+{
+	int error = 0;
+
+	git_revwalk* walker = nullptr;
+	error = git_revwalk_new(&walker, repository_);
+	checkError(error);
+
+	error = git_revwalk_push_glob(walker, "refs/heads/*");
+	checkError(error);
+
+	git_oid oid;
+	char sha1[41];
+	sha1[40] = '\0';
+	QStringList revisionList;
+	while (!git_revwalk_next(&oid, walker)) {
+		git_oid_fmt(sha1, &oid);
+		revisionList.append(QString(sha1));
+	}
+
+	git_revwalk_free(walker);
+
+	return revisionList;
+}
+
 GitRepository::HEADState GitRepository::getHEADState() const
 {
 	int state = 0;

@@ -74,6 +74,10 @@ class FILEPERSISTENCE_API GitRepository
 
 		GitReference currentBranch() const;
 
+		QStringList localBranches() const;
+		QStringList tags() const;
+		QStringList revisions() const;
+
 		enum class RevisionStringState {INVALID, NOTFOUND, AMBIGUOUS, VALID};
 		bool isValidRevisionString(RevisionString revision) const;
 
