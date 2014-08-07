@@ -23,31 +23,28 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "CompositeFragment.h"
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+namespace Export {
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+CompositeFragment::CompositeFragment(Model::Node* node, const QString& name, const QString& type)
+	: SourceFragment{node}, name_{name}, type_{type}
+{}
 
-#if defined __cplusplus
-// Add C++ includes here
+CompositeFragment::CompositeFragment(Model::Node* node, const QString& prefix, const QString& separator,
+												 const QString& postfix)
+	: SourceFragment{node}, prefix_{prefix}, separator_{separator}, postfix_{postfix}
+{}
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+CompositeFragment::CompositeFragment(Model::Node* node, const QString& name, const QString& type,
+												 const QString& prefix, const QString& separator, const QString& postfix)
+	: SourceFragment{node}, name_{name}, type_{type}, prefix_{prefix}, separator_{separator}, postfix_{postfix}
+{}
 
+CompositeFragment::~CompositeFragment()
+{
+	for (auto f : fragments_) SAFE_DELETE(f);
+	fragments_.clear();
+}
 
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
-
-#endif
-
-#endif
-
-#endif /* PRECOMPILED_EXPORT_H_ */
+} /* namespace Export */

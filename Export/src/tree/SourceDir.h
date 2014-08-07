@@ -24,30 +24,42 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+#pragma once
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+#include "../export_api.h"
+#include "SourceFile.h"
 
-#if defined __cplusplus
-// Add C++ includes here
+namespace Export {
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+class EXPORT_API SourceDir {
+	public:
+		SourceDir(SourceDir* parent, const QString& name);
 
+		const QString& name() const;
+		QString path() const;
 
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
+		QList<SourceDir>& directories();
+		QList<SourceFile>& files();
 
-#endif
+		// All of the methods below may contain nested paths using /
+		SourceDir& subDir(const QString& subDirName);
+		bool hasSubDir(const QString& subDirName) const;
+		SourceFile& file(const QString& fileName);
+		bool hasFile(const QString& fileName) const;
 
-#endif
+	private:
+		SourceDir* parent_{};
+		QString name_;
+		QList<SourceDir> directories_;
+		QList<SourceFile> files_;
 
-#endif /* PRECOMPILED_EXPORT_H_ */
+		template<class T> T* find(const QString& name, QList<T>& container, bool createIfNotFound);
+		SourceDir* findDirectories(const QString& name, bool createIfNotFound);
+};
+
+inline const QString& SourceDir::name() const { return name_; }
+inline QList<SourceDir>& SourceDir::directories() { return directories_; }
+inline QList<SourceFile>& SourceDir::files() { return files_; }
+inline QString SourceDir::path() const { return (parent_? parent_->path() : "") + name_ + "/";}
+
+} /* namespace Export */

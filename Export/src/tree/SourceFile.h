@@ -24,30 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+#pragma once
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+#include "../export_api.h"
+#include "SourceFragment.h"
 
-#if defined __cplusplus
-// Add C++ includes here
+namespace Export {
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+class SourceDir;
 
+class EXPORT_API SourceFile {
+	public:
+		SourceFile(SourceDir* parent, const QString& name);
+		~SourceFile();
 
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
+		const QString& name() const;
+		QString path() const;
+		QList<SourceFragment*> fragments();
 
-#endif
+	private:
+		SourceDir* parent_{};
+		QString name_;
 
-#endif
+		QList<SourceFragment*> fragments_;
+};
 
-#endif /* PRECOMPILED_EXPORT_H_ */
+inline const QString& SourceFile::name() const { return name_; }
+inline QList<SourceFragment*> SourceFile:: fragments() { return fragments_; }
+
+} /* namespace Export */

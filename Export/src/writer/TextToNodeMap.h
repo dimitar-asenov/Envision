@@ -24,30 +24,50 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+#pragma once
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+#include "../export_api.h"
 
-#if defined __cplusplus
-// Add C++ includes here
+namespace Model {
+	class Node;
+}
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+namespace Export {
 
+struct EXPORT_API Span
+{
+	int startLine_;
+	int startColumn_;
+	int endLine_;
+	int endColumn_;
 
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
+	bool includes(int line, int column) const;
+};
+inline bool Span::includes(int line, int column) const
+{
+	bool startOk = startLine_ < line || startColumn_ <= column;
+	bool endOk = line < endLine_ || column <= endColumn_;
+	return startOk && endOk;
+}
 
-#endif
+struct EXPORT_API SourceLocation
+{
+	QString filename_;
+	Span span_;
+};
 
-#endif
+class EXPORT_API TextToNodeMap {
+	public:
+		TextToNodeMap();
 
-#endif /* PRECOMPILED_EXPORT_H_ */
+		Model::Node* node(const QString& fileName, int line, int column) const;
+		QList<SourceLocation> locations(Model::Node* node) const;
+
+		void add(Model::Node* node, SourceLocation location);
+
+	private:
+		QMultiHash<Model::Node*, SourceLocation> nodeToLocation_;
+		QHash<QString, QList<QPair<Span, Model::Node*>>> filenameToSpans;
+};
+
+} /* namespace Export */

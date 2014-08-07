@@ -24,30 +24,45 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+#pragma once
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+#include "../export_api.h"
+#include "SourceFragment.h"
 
-#if defined __cplusplus
-// Add C++ includes here
+namespace Export {
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+class EXPORT_API CompositeFragment : public SourceFragment {
+	public:
+		CompositeFragment(Model::Node* node, const QString& name = QString(), const QString& type = QString());
+		CompositeFragment(Model::Node* node, const QString& prefix, const QString& separator,
+								const QString& postfix);
+		CompositeFragment(Model::Node* node, const QString& name, const QString& type, const QString& prefix,
+								const QString& separator, const QString& postfix);
+		virtual ~CompositeFragment();
 
+		const QString& name() const;
+		const QString& type() const;
+		const QString& prefix() const;
+		const QString& postfix() const;
+		const QString& separator() const;
+		QList<SourceFragment*>& fragments();
 
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
+	private:
+		QString name_;
 
-#endif
+		/** Used by the layouter to determine indentation and white spacing. */
+		QString type_;
+		QString prefix_;
+		QString separator_;
+		QString postfix_;
+		QList<SourceFragment*> fragments_;
+};
 
-#endif
+inline const QString& CompositeFragment::name() const { return name_;}
+inline const QString& CompositeFragment::type() const { return type_;}
+inline const QString& CompositeFragment::prefix() const { return prefix_;}
+inline const QString& CompositeFragment::postfix() const { return postfix_;}
+inline const QString& CompositeFragment::separator() const { return separator_;}
+inline QList<SourceFragment*>& CompositeFragment::fragments() { return fragments_;}
 
-#endif /* PRECOMPILED_EXPORT_H_ */
+} /* namespace Export */

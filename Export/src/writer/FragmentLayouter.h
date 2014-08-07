@@ -24,30 +24,72 @@
  **
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+#pragma once
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+#include "../export_api.h"
+#include "TextToNodeMap.h"
 
-#if defined __cplusplus
-// Add C++ includes here
+namespace Model {
+	class Node;
+}
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+namespace Export {
+
+class SourceFile;
+class SourceFragment;
+
+class EXPORT_API FragmentLayouter {
+	public:
+		FragmentLayouter(const QString& indentation);
+
+		enum IndentationFlag {
+			NoIndentation = 0x0,
+			IndentPrePostFix = 0x1,
+			IndentChildFragments = 0x2,
+			SpaceAfterPrefix = 0x4,
+			NewLineAfterPrefix = 0x8,
+			SpaceBeforePostfix = 0x10,
+			NewLineBeforePostfix = 0x20,
+			NewLineAfterPostfix = 0x40,
+			SpaceBeforeSeparator = 0x80,
+			SpaceAfterSeparator = 0x100,
+			EmptyLineAtEnd = 0x200
+		};
+		Q_DECLARE_FLAGS(IndentationFlags, IndentationFlag)
+
+		void addRule(const QString& fragmentType, IndentationFlags parameters);
+
+		QString render(SourceFile* file, TextToNodeMap* map);
+
+	private:
+		QString indentation_;
+		QHash<QString, IndentationFlags> rules_;
+
+		// These are only used while rendering a source file
+		QString fileName_;
+		TextToNodeMap* map_{};
+		int currentLine_{};
+		int currentColumn_{};
+		QString renderedFile_;
+		QList<Model::Node*> nodeStack_;
+
+		Model::Node* pendingNodeToMap_{};
+		Span pendingSpanToMap_{0, 0, 0, 0};
+		void mapUntil(int endLine, int endColumn);
+		void flushPending();
 
 
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
+		void write(const QString& str);
+		void writeLine(const QString& str = QString());
+		void render(SourceFragment* fragment, QString indentationSoFar);
+};
 
-#endif
+Q_DECLARE_OPERATORS_FOR_FLAGS(FragmentLayouter::IndentationFlags)
 
-#endif
+inline void FragmentLayouter::addRule(const QString& fragmentType, IndentationFlags parameters)
+{
+	Q_ASSERT(!rules_.contains(fragmentType));
+	rules_.insert(fragmentType, parameters);
+}
 
-#endif /* PRECOMPILED_EXPORT_H_ */
+} /* namespace Export */

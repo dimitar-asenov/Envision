@@ -23,31 +23,32 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "TextToNodeMap.h"
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+namespace Export {
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+TextToNodeMap::TextToNodeMap() {}
 
-#if defined __cplusplus
-// Add C++ includes here
+Model::Node* TextToNodeMap::node(const QString& fileName, int line, int column) const
+{
+	auto it = filenameToSpans.find(fileName);
+	if (it == filenameToSpans.end()) return nullptr;
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
+	auto found = std::find_if(it->begin(), it->end(),
+		[line, column](const QPair<Span, Model::Node*>& pair){ return pair.first.includes(line, column); });
 
+	return found != it->end() ? found->second : nullptr;
+}
 
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
+QList<SourceLocation> TextToNodeMap::locations(Model::Node* node) const
+{
+	return nodeToLocation_.values(node);
+}
 
-#endif
+void TextToNodeMap::add(Model::Node* node, SourceLocation location)
+{
+	nodeToLocation_.insert(node, location);
+	filenameToSpans[location.filename_].append(qMakePair(location.span_, node));
+}
 
-#endif
-
-#endif /* PRECOMPILED_EXPORT_H_ */
+} /* namespace Export */

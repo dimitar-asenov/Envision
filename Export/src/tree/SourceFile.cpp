@@ -23,31 +23,21 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "SourceFile.h"
+#include "SourceDir.h"
 
-#ifndef PRECOMPILED_EXPORT_H_
-#define PRECOMPILED_EXPORT_H_
+namespace Export {
 
-// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
-// hose headers will be included here
-#include "ModelBase/src/precompiled.h"
-#include "Logger/src/precompiled.h"
-#include "SelfTest/src/precompiled.h"
-#include "Core/src/precompiled.h"
+SourceFile::SourceFile(SourceDir* parent, const QString& name) : parent_{parent}, name_{name} {}
+SourceFile::~SourceFile()
+{
+	for (auto f : fragments_) SAFE_DELETE(f);
+	fragments_.clear();
+}
 
-#if defined __cplusplus
-// Add C++ includes here
+QString SourceFile::path() const
+{
+	return (parent_? parent_->path() : "") + name_;
+}
 
-// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
-// and will be included in their precompiled headers
-
-
-#if defined(EXPORT_LIBRARY)
-// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
-// plug-ins which depend on this one will not include these headers.
-#include <QtCore/QDir>
-
-#endif
-
-#endif
-
-#endif /* PRECOMPILED_EXPORT_H_ */
+} /* namespace Export */
