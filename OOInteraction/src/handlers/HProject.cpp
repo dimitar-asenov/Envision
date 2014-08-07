@@ -28,6 +28,8 @@
 
 #include "commands/CCreateClass.h"
 
+#include "InteractionBase/src/commands/CDiff.h"
+
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
 #include "FilePersistence/src/SystemClipboard.h"
@@ -38,6 +40,8 @@ HProject::HProject()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
 	addCommand(new CCreateClass());
+
+	addCommand(new Interaction::CDiff());
 }
 
 HProject* HProject::instance()

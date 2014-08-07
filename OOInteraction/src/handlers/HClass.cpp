@@ -29,6 +29,8 @@
 #include "commands/CCreateMethod.h"
 #include "commands/CCreateField.h"
 
+#include "InteractionBase/src/commands/CDiff.h"
+
 namespace OOInteraction {
 
 HClass::HClass()
@@ -36,6 +38,8 @@ HClass::HClass()
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
 	addCommand(new CCreateMethod());
 	addCommand(new CCreateField());
+
+	addCommand(new Interaction::CDiff());
 }
 
 HClass* HClass::instance()
