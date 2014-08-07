@@ -4,9 +4,11 @@ SUBDIRS= Core \
 	ContractsLibrary \
 	ControlFlowVisualization \
 	CustomMethodCall \
+	Export \
 	FilePersistence \
 	HelloWorld \
 	InteractionBase \
+	JavaExport \
 	Launcher \
 	Logger \
 	ModelBase \

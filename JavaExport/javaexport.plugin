@@ -1,0 +1,14 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="javaexport" name="A plug-in that exports Envision trees to Java" version="1.0.0">
+	<dependencies>
+		<dependency pluginid="logger" version="0" />
+		<dependency pluginid="selftest" version="0" />
+		<dependency pluginid="modelbase" version="0" />
+		<dependency pluginid="export" version="1" />
+		<dependency pluginid="oomodel" version="1" />
+		<dependency pluginid="visualizationbase" version="0" />
+		<dependency pluginid="interactionbase" version="1" />
+		<dependency pluginid="oovisualization" version="1" />
+		<dependency pluginid="oointeraction" version="1" />
+	</dependencies>
+</plugin>
