@@ -24,29 +24,30 @@
  **
  **********************************************************************************************************************/
 
-#include "JavaExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#pragma once
 
-#include "commands/CJavaExport.h"
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "../javaexport_api.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace JavaExport {
 
-bool JavaExportPlugin::initialize(Core::EnvisionManager&)
-{
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaExport());
+class JAVAEXPORT_API ExportError {
+	public:
+		ExportError(const QString& errorMessage);
+		ExportError(Model::Node* node, const QString& errorMessage);
 
-	return true;
-}
+		Model::Node* node() const;
+		const QString& message() const;
 
-void JavaExportPlugin::unload()
-{
-}
+	private:
+		Model::Node* node_{};
+		QString message_;
+};
 
-void JavaExportPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<JavaExportPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<JavaExportPlugin>::runTest(testid).printResultStatistics();
-}
+inline Model::Node* ExportError::node() const { return node_; }
+inline const QString& ExportError::message() const { return message_; }
 
-}
+} /* namespace JavaExport */

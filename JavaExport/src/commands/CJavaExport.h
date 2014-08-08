@@ -24,29 +24,23 @@
  **
  **********************************************************************************************************************/
 
-#include "JavaExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#pragma once
 
-#include "commands/CJavaExport.h"
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "../javaexport_api.h"
+
+#include "InteractionBase/src/commands/CommandWithNameAndFlags.h"
 
 namespace JavaExport {
 
-bool JavaExportPlugin::initialize(Core::EnvisionManager&)
+class JAVAEXPORT_API CJavaExport : public Interaction::CommandWithNameAndFlags
 {
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaExport());
+	public:
+		CJavaExport();
 
-	return true;
-}
+	protected:
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor,
+				const QString& name, const QStringList& attributes) override;
+};
 
-void JavaExportPlugin::unload()
-{
-}
-
-void JavaExportPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<JavaExportPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<JavaExportPlugin>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace JavaExport */

@@ -23,30 +23,11 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#include "JavaExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "commands/CJavaExport.h"
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "ExportError.h"
 
 namespace JavaExport {
 
-bool JavaExportPlugin::initialize(Core::EnvisionManager&)
-{
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaExport());
+ExportError::ExportError(const QString& errorMessage) : message_{errorMessage} {}
+ExportError::ExportError(Model::Node* node, const QString& errorMessage) : node_{node}, message_{errorMessage} {}
 
-	return true;
-}
-
-void JavaExportPlugin::unload()
-{
-}
-
-void JavaExportPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<JavaExportPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<JavaExportPlugin>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace JavaExport */

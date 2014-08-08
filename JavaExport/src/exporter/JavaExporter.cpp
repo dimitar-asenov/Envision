@@ -23,30 +23,38 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "JavaExporter.h"
+#include "../visitors/TopLevelVisitor.h"
 
-#include "JavaExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "OOModel/src/declarations/Project.h"
 
-#include "commands/CJavaExport.h"
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "Export/src/writer/Exporter.h"
+#include "Export/src/writer/FragmentLayouter.h"
+#include "Export/src/tree/SourceDir.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace JavaExport {
 
-bool JavaExportPlugin::initialize(Core::EnvisionManager&)
+QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaExport());
+	auto project = DCast<OOModel::Project>(manager->root());
+	Q_ASSERT(project);
 
-	return true;
+	TopLevelVisitor tlv;
+	auto dir = std::unique_ptr<Export::SourceDir>( tlv.visitProject(project) );
+
+	auto layouter = Export::FragmentLayouter{"\t"};
+	layouter.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
+	layouter.addRule("space", Export::FragmentLayouter::SpaceAtEnd, "", " ", "");
+	layouter.addRule("comma", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
+	layouter.addRule("argsList", Export::FragmentLayouter::SpaceAfterSeparator, "(", ",", ")");
+	layouter.addRule("body", Export::FragmentLayouter::NewLineBefore | Export::FragmentLayouter::IndentChildFragments
+							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
+							"{", "\n", "}");
+
+	Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+
+	return tlv.errors();
 }
 
-void JavaExportPlugin::unload()
-{
-}
-
-void JavaExportPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<JavaExportPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<JavaExportPlugin>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace JavaExport */

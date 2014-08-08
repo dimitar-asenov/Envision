@@ -23,30 +23,28 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "CJavaExport.h"
 
-#include "JavaExportPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "commands/CJavaExport.h"
-#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "../exporter/JavaExporter.h"
 
 namespace JavaExport {
 
-bool JavaExportPlugin::initialize(Core::EnvisionManager&)
+CJavaExport::CJavaExport() : CommandWithNameAndFlags{"export-as-java", {}, false}
+{}
+
+Interaction::CommandResult* CJavaExport::executeNamed(Visualization::Item* source, Visualization::Item*,
+		const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
 {
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaExport());
+	while (source && !source->node()) source = source->parent();
+	if (source)
+	{
+		if (auto manager = source->node()->manager())
+		{
+			JavaExporter::exportTree(manager, "exported/");
+		}
+	}
 
-	return true;
+	return new Interaction::CommandResult();
 }
 
-void JavaExportPlugin::unload()
-{
-}
-
-void JavaExportPlugin::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<JavaExportPlugin>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<JavaExportPlugin>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace JavaExport */
