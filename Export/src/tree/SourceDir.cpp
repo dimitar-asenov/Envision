@@ -27,7 +27,12 @@
 
 namespace Export {
 
-SourceDir::SourceDir(SourceDir* parent, const QString& name) : parent_{parent}, name_{name} {}
+SourceDir::SourceDir(SourceDir* parent, const QString& name) : parent_{parent}, name_{name}
+{
+	Q_ASSERT(!name_.isEmpty());
+	Q_ASSERT(name_ != ".");
+	Q_ASSERT(name_ != "..");
+}
 
 template<class T> T* SourceDir::find(const QString& name, QList<T>& container, bool createIfNotFound)
 {
@@ -51,7 +56,7 @@ SourceDir* SourceDir::findDirectories(const QString& name, bool createIfNotFound
 	int skipFirst = name.startsWith('/') ? 1 : 0;
 	int mid = name.indexOf('/');
 	QString first = name.mid(skipFirst, mid - skipFirst);
-	QString remaining = name.mid(mid+1);
+	QString remaining = mid < 0 ? "" : name.mid(mid+1);
 
 	auto found = find(first, directories_, createIfNotFound);
 	if (!found || remaining.isEmpty()) return found;

@@ -26,6 +26,7 @@
 #include "Exporter.h"
 #include "FragmentLayouter.h"
 #include "TextToNodeMap.h"
+#include "ExportPlugin.h"
 #include "../tree/SourceDir.h"
 #include "../ExportException.h"
 
@@ -57,10 +58,13 @@ void Exporter::saveDir(QDir& fileSystemDir, SourceDir* sourceDir, FragmentLayout
 		{
 			QDir sub{fileSystemDir.path()};
 			sub.cd(entry.fileName());
+
+			log.info("Removing unnecessary directory during export: " + sub.absolutePath());
 			sub.removeRecursively();
 		}
 		else if (entry.isFile() && !sourceDir->hasFile(entry.fileName()))
 		{
+			log.info("Removing unnecessary file during export: " + fileSystemDir.absoluteFilePath(entry.fileName()));
 			fileSystemDir.remove(entry.fileName());
 		}
 	}
@@ -98,8 +102,8 @@ void Exporter::saveFile(QDir& fileSystemDir, SourceFile* sourceFile, FragmentLay
 		}
 		else throw ExportException("Could not open file " + fileName + " for reading");
 
-		// File has changed
-		file.remove();
+		// File has changed, remove it
+		if (!file.remove()) throw ExportException("Could not remove file " + fileName);
 	}
 
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))

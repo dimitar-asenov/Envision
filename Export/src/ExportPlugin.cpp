@@ -29,6 +29,14 @@
 
 namespace Export {
 
+Logger::Log& log = ExportPlugin::log();
+
+Logger::Log& ExportPlugin::log()
+{
+	static auto log = Logger::Log::getLogger("export");
+	return *log;
+}
+
 bool ExportPlugin::initialize(Core::EnvisionManager&)
 {
 	return true;

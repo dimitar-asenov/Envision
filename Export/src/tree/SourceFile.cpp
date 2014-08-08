@@ -28,7 +28,13 @@
 
 namespace Export {
 
-SourceFile::SourceFile(SourceDir* parent, const QString& name) : parent_{parent}, name_{name} {}
+SourceFile::SourceFile(SourceDir* parent, const QString& name) : parent_{parent}, name_{name}
+{
+	Q_ASSERT(!name_.isEmpty());
+	Q_ASSERT(name_ != ".");
+	Q_ASSERT(name_ != "..");
+}
+
 SourceFile::~SourceFile()
 {
 	for (auto f : fragments_) SAFE_DELETE(f);
