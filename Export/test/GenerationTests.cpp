@@ -27,11 +27,31 @@
 #include "ExportPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "../src/writer/Exporter.h"
+#include "../src/writer/FragmentLayouter.h"
+#include "../src/tree/SourceDir.h"
+#include "../src/tree/SourceFile.h"
+#include "../src/tree/TextFragment.h"
+#include "../src/tree/CompositeFragment.h"
+
+using namespace Model;
+
 namespace Export {
 
-TEST(ExportPlugin, SimpleTest)
+TEST(ExportPlugin, ExportJustText)
 {
-	CHECK_INT_EQUAL(1, 1);
+	QString testDir = QDir::tempPath() + "/Envision/Export/tests";
+	FragmentLayouter layouter{"\t"};
+
+	SourceDir root{nullptr, "text"};
+	auto& file = root.file("text");
+	file.append( reinterpret_cast<Node*>(1), "Test text" ); // The pointer is irrelevant for now
+
+	auto map = Exporter::exportToFileSystem(testDir, &root, &layouter);
+
+	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/text/text", testDir +"/text/text");
+
+	SAFE_DELETE(map);
 }
 
 }

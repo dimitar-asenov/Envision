@@ -16,7 +16,8 @@ HEADERS += src/writer/Exporter.h \
     src/ExportException.h \
     src/export_api.h \
     src/ExportPlugin.h
-SOURCES += src/writer/Exporter.cpp \
+SOURCES += test/GenerationTests.cpp \
+    src/writer/Exporter.cpp \
     src/writer/TextToNodeMap.cpp \
     src/writer/FragmentLayouter.cpp \
     src/tree/CompositeFragment.cpp \
@@ -25,5 +26,5 @@ SOURCES += src/writer/Exporter.cpp \
     src/tree/SourceFile.cpp \
     src/tree/SourceDir.cpp \
     src/ExportException.cpp \
-    src/ExportPlugin.cpp \
-    test/SimpleTest.cpp
+    src/ExportPlugin.cpp
+RESOURCES = Export.qrc
