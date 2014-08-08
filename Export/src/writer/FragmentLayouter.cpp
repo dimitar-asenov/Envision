@@ -108,6 +108,7 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	if (rule.first.testFlag(IndentPrePostFix)) writer_->write(indentation_);
 	if (rule.first.testFlag(SpaceBeforePostfix)) writer_->write(" ");
 	writer_->write(rule.second.postfix_);
+	if (rule.first.testFlag(SpaceAtEnd) && !writer_->lastCharacterIsWhiteSpace()) writer_->write(" ");
 	if (rule.first.testFlag(NewLineAfterPostfix)) writer_->writeLine();
 	if (rule.first.testFlag(EmptyLineAtEnd)) writer_->writeLine();
 }

@@ -40,6 +40,7 @@ class EXPORT_API FileWriter {
 		FileWriter(const QString& fileName, TextToNodeMap* map);
 
 		bool isAtStartOfLine() const;
+		bool lastCharacterIsWhiteSpace() const;
 		void write(const QString& str);
 		void writeLine(const QString& str = QString());
 
@@ -67,6 +68,9 @@ class EXPORT_API FileWriter {
 };
 
 inline bool FileWriter::isAtStartOfLine() const { return currentColumn_ == 0;}
+inline bool FileWriter::lastCharacterIsWhiteSpace() const
+{ return renderedFile_.isEmpty() || renderedFile_.endsWith('\n')
+			|| renderedFile_.endsWith('\t') || renderedFile_.endsWith(' '); }
 inline void FileWriter::appendNodeToStack(Model::Node* node) { nodeStack_.append(node); }
 inline void FileWriter::popLastNodeFromStack() { nodeStack_.removeLast(); }
 

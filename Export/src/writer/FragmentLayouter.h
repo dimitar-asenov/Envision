@@ -58,7 +58,8 @@ class EXPORT_API FragmentLayouter {
 			NewLineAfterPostfix = 0x80,
 			SpaceBeforeSeparator = 0x100,
 			SpaceAfterSeparator = 0x200,
-			EmptyLineAtEnd = 0x400
+			EmptyLineAtEnd = 0x400,
+			SpaceAtEnd = 0x800
 		};
 		Q_DECLARE_FLAGS(IndentationFlags, IndentationFlag)
 

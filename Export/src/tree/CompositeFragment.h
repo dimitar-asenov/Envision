@@ -44,6 +44,10 @@ class EXPORT_API CompositeFragment : public SourceFragment {
 		template <class T> T* append(T* fragment);
 		TextFragment* append(Model::Node* node, const QString& text);
 
+		CompositeFragment& operator<<(SourceFragment* childFragment);
+		CompositeFragment& operator<<(const QList<SourceFragment*>& childFragments);
+		CompositeFragment& operator<<(const QString& text);
+
 	private:
 		QString name_;
 		/** Used by the layouter to determine indentation and white spacing. */
@@ -60,5 +64,29 @@ template <class T>
 inline T* CompositeFragment::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
 inline TextFragment* CompositeFragment::append(Model::Node* node, const QString& text)
 { return append(new TextFragment(node, text)); }
+
+inline CompositeFragment& CompositeFragment::operator<<(SourceFragment* childFragment)
+{
+	Q_ASSERT(childFragment);
+	fragments_.append(childFragment);
+	return *this;
+}
+
+inline CompositeFragment& CompositeFragment::operator<<(const QString& text)
+{
+	fragments_.append( new TextFragment(node(), text) );
+	return *this;
+}
+
+
+inline CompositeFragment& CompositeFragment::operator<<(const QList<SourceFragment*>& childFragments)
+{
+	for (auto cf : childFragments)
+	{
+		Q_ASSERT(cf);
+		fragments_.append(cf);
+	}
+	return *this;
+}
 
 } /* namespace Export */
