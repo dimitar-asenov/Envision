@@ -24,7 +24,8 @@
  **
  **********************************************************************************************************************/
 #include "FragmentLayouter.h"
-#include "TextToNodeMap.h"
+
+#include "FileWriter.h"
 #include "../tree/SourceFile.h"
 #include "../tree/TextFragment.h"
 #include "../tree/CompositeFragment.h"
@@ -38,33 +39,24 @@ FragmentLayouter::FragmentLayouter(const QString& indentation)
 QString FragmentLayouter::render(SourceFile* file, TextToNodeMap* map)
 {
 	Q_ASSERT(file);
-	Q_ASSERT(map);
 
-	fileName_ = file->path();
-	map_ = map;
-	currentLine_ = 0;
-	currentColumn_ = 0;
+	writer_ = new FileWriter(file->path(), map);
+	std::unique_ptr<FileWriter> deleter{writer_};
 
 	for (auto fragment : file->fragments())
 		render(fragment, "");
-	flushPending();
 
-	map_ = nullptr;
-	fileName_.clear();
-	currentLine_ = 0;
-	currentColumn_ = 0;
-
-	return renderedFile_;
+	return writer_->fileContents();
 }
 
 void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar)
 {
-	nodeStack_.append(fragment->node());
-	OnScopeExit removeLastNode{[this](){nodeStack_.removeLast();}};
+	writer_->appendNodeToStack(fragment->node());
+	OnScopeExit removeLastNode{[this](){writer_->popLastNodeFromStack();}};
 
 	if (auto text = dynamic_cast<TextFragment*>(fragment))
 	{
-		write(text->text());
+		writer_->write(text->text());
 		return;
 	}
 
@@ -72,15 +64,15 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	Q_ASSERT(composite);
 
 	// Indent first line
-	if (currentColumn_ == 0) write(indentationSoFar);
+	if (writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
 
 	auto rules = rules_.value(composite->type());
 
 	// Prefix
-	if (rules.testFlag(IndentPrePostFix)) write(indentation_);
-	write(composite->prefix());
-	if (rules.testFlag(SpaceAfterPrefix)) write(" ");
-	if (rules.testFlag(NewLineAfterPrefix)) writeLine();
+	if (rules.testFlag(IndentPrePostFix)) writer_->write(indentation_);
+	writer_->write(composite->prefix());
+	if (rules.testFlag(SpaceAfterPrefix)) writer_->write(" ");
+	if (rules.testFlag(NewLineAfterPrefix)) writer_->writeLine();
 
 	// Child fragments
 	auto firstSubFragment = true;
@@ -90,10 +82,10 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 		// Separator, after first child
 		if (!firstSubFragment)
 		{
-			if (rules.testFlag(SpaceBeforeSeparator)) write(" ");
-			if ( composite->separator() == "\n") writeLine();
-			else write(composite->separator());
-			if (rules.testFlag(SpaceAfterSeparator)) write(" ");
+			if (rules.testFlag(SpaceBeforeSeparator)) writer_->write(" ");
+			if ( composite->separator() == "\n") writer_->writeLine();
+			else writer_->write(composite->separator());
+			if (rules.testFlag(SpaceAfterSeparator)) writer_->write(" ");
 		}
 
 		// This child fragment
@@ -102,52 +94,13 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	}
 
 	// Postfix
-	if (rules.testFlag(NewLineBeforePostfix) && currentColumn_ != 0) writeLine();
-	if (currentColumn_ == 0) write(indentationSoFar);
-	if (rules.testFlag(IndentPrePostFix)) write(indentation_);
-	if (rules.testFlag(SpaceBeforePostfix)) write(" ");
-	write(composite->postfix());
-	if (rules.testFlag(NewLineAfterPostfix)) writeLine();
-	if (rules.testFlag(EmptyLineAtEnd)) writeLine();
-}
-
-void FragmentLayouter::mapUntil(int endLine, int endColumn)
-{
-	if (nodeStack_.last() != pendingNodeToMap_)
-	{
-		flushPending();
-		pendingNodeToMap_ = nodeStack_.last();
-		pendingSpanToMap_.startLine_  = currentLine_;
-		pendingSpanToMap_.startColumn_ = currentColumn_;
-	}
-
-	pendingSpanToMap_.endLine_ = endLine;
-	pendingSpanToMap_.endColumn_ = endColumn;
-}
-
-void FragmentLayouter::flushPending()
-{
-	if (pendingNodeToMap_)
-	{
-		map_->add(pendingNodeToMap_, {fileName_, pendingSpanToMap_});
-		pendingNodeToMap_ = nullptr;
-	}
-}
-
-void FragmentLayouter::write(const QString& str)
-{
-	if (str.isEmpty()) return;
-	mapUntil(currentLine_, currentColumn_ + str.size());
-	currentColumn_ += str.size();
-	renderedFile_ += str;
-}
-
-
-void FragmentLayouter::writeLine(const QString& str)
-{
-	write(str);
-	currentLine_++;
-	currentColumn_ = 0;
+	if (rules.testFlag(NewLineBeforePostfix) && !writer_->isAtStartOfLine()) writer_->writeLine();
+	if (writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
+	if (rules.testFlag(IndentPrePostFix)) writer_->write(indentation_);
+	if (rules.testFlag(SpaceBeforePostfix)) writer_->write(" ");
+	writer_->write(composite->postfix());
+	if (rules.testFlag(NewLineAfterPostfix)) writer_->writeLine();
+	if (rules.testFlag(EmptyLineAtEnd)) writer_->writeLine();
 }
 
 } /* namespace Export */

@@ -23,56 +23,53 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#pragma once
-
-#include "../export_api.h"
+#include "FileWriter.h"
 
 namespace Export {
 
-class SourceFile;
-class SourceFragment;
-class FileWriter;
-class TextToNodeMap;
-
-class EXPORT_API FragmentLayouter {
-	public:
-		FragmentLayouter(const QString& indentation);
-
-		enum IndentationFlag {
-			NoIndentation = 0x0,
-			IndentPrePostFix = 0x1,
-			IndentChildFragments = 0x2,
-			SpaceAfterPrefix = 0x4,
-			NewLineAfterPrefix = 0x8,
-			SpaceBeforePostfix = 0x10,
-			NewLineBeforePostfix = 0x20,
-			NewLineAfterPostfix = 0x40,
-			SpaceBeforeSeparator = 0x80,
-			SpaceAfterSeparator = 0x100,
-			EmptyLineAtEnd = 0x200
-		};
-		Q_DECLARE_FLAGS(IndentationFlags, IndentationFlag)
-
-		void addRule(const QString& fragmentType, IndentationFlags parameters);
-
-		QString render(SourceFile* file, TextToNodeMap* map);
-
-	private:
-		QString indentation_;
-		QHash<QString, IndentationFlags> rules_;
-
-		FileWriter* writer_{}; // Only used while renderering
-
-		void render(SourceFragment* fragment, QString indentationSoFar);
-};
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(FragmentLayouter::IndentationFlags)
-
-inline void FragmentLayouter::addRule(const QString& fragmentType, IndentationFlags parameters)
+FileWriter::FileWriter(const QString& fileName, TextToNodeMap* map)
+	: fileName_{fileName}, map_{map}
 {
-	Q_ASSERT(!rules_.contains(fragmentType));
-	rules_.insert(fragmentType, parameters);
+	Q_ASSERT(map);
+}
+
+void FileWriter::mapUntil(int endLine, int endColumn)
+{
+	if (nodeStack_.last() != pendingNodeToMap_)
+	{
+		flushPending();
+		pendingNodeToMap_ = nodeStack_.last();
+		pendingSpanToMap_.startLine_  = currentLine_;
+		pendingSpanToMap_.startColumn_ = currentColumn_;
+	}
+
+	pendingSpanToMap_.endLine_ = endLine;
+	pendingSpanToMap_.endColumn_ = endColumn;
+}
+
+void FileWriter::flushPending()
+{
+	if (pendingNodeToMap_)
+	{
+		map_->add(pendingNodeToMap_, {fileName_, pendingSpanToMap_});
+		pendingNodeToMap_ = nullptr;
+	}
+}
+
+void FileWriter::write(const QString& str)
+{
+	if (str.isEmpty()) return;
+	mapUntil(currentLine_, currentColumn_ + str.size());
+	currentColumn_ += str.size();
+	renderedFile_ += str;
+}
+
+
+void FileWriter::writeLine(const QString& str)
+{
+	write(str);
+	currentLine_++;
+	currentColumn_ = 0;
 }
 
 } /* namespace Export */

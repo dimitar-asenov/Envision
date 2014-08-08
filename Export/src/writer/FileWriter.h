@@ -27,52 +27,46 @@
 #pragma once
 
 #include "../export_api.h"
+#include "TextToNodeMap.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace Export {
 
-class SourceFile;
-class SourceFragment;
-class FileWriter;
-class TextToNodeMap;
-
-class EXPORT_API FragmentLayouter {
+class EXPORT_API FileWriter {
 	public:
-		FragmentLayouter(const QString& indentation);
+		FileWriter(const QString& fileName, TextToNodeMap* map);
 
-		enum IndentationFlag {
-			NoIndentation = 0x0,
-			IndentPrePostFix = 0x1,
-			IndentChildFragments = 0x2,
-			SpaceAfterPrefix = 0x4,
-			NewLineAfterPrefix = 0x8,
-			SpaceBeforePostfix = 0x10,
-			NewLineBeforePostfix = 0x20,
-			NewLineAfterPostfix = 0x40,
-			SpaceBeforeSeparator = 0x80,
-			SpaceAfterSeparator = 0x100,
-			EmptyLineAtEnd = 0x200
-		};
-		Q_DECLARE_FLAGS(IndentationFlags, IndentationFlag)
+		bool isAtStartOfLine() const;
+		void write(const QString& str);
+		void writeLine(const QString& str = QString());
 
-		void addRule(const QString& fragmentType, IndentationFlags parameters);
+		void appendNodeToStack(Model::Node* node);
+		void popLastNodeFromStack();
 
-		QString render(SourceFile* file, TextToNodeMap* map);
+		QString fileContents();
 
 	private:
-		QString indentation_;
-		QHash<QString, IndentationFlags> rules_;
+		QString fileName_;
+		TextToNodeMap* map_{};
+		int currentLine_{};
+		int currentColumn_{};
+		QString renderedFile_;
+		QList<Model::Node*> nodeStack_;
 
-		FileWriter* writer_{}; // Only used while renderering
+		Model::Node* pendingNodeToMap_{};
+		Span pendingSpanToMap_{0, 0, 0, 0};
 
-		void render(SourceFragment* fragment, QString indentationSoFar);
+		void flushPending();
+		void mapUntil(int endLine, int endColumn);
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(FragmentLayouter::IndentationFlags)
+inline bool FileWriter::isAtStartOfLine() const { return currentColumn_ == 0;}
+inline QString FileWriter::fileContents() { flushPending(); return renderedFile_;}
 
-inline void FragmentLayouter::addRule(const QString& fragmentType, IndentationFlags parameters)
-{
-	Q_ASSERT(!rules_.contains(fragmentType));
-	rules_.insert(fragmentType, parameters);
-}
+inline void FileWriter::appendNodeToStack(Model::Node* node) { nodeStack_.append(node); }
+inline void FileWriter::popLastNodeFromStack() { nodeStack_.removeLast(); }
 
 } /* namespace Export */

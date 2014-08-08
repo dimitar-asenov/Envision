@@ -4,7 +4,8 @@ DEFINES += EXPORT_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/writer/Exporter.h \
+HEADERS += src/writer/FileWriter.h \
+    src/writer/Exporter.h \
     src/writer/TextToNodeMap.h \
     src/writer/FragmentLayouter.h \
     src/tree/CompositeFragment.h \
@@ -16,7 +17,8 @@ HEADERS += src/writer/Exporter.h \
     src/ExportException.h \
     src/export_api.h \
     src/ExportPlugin.h
-SOURCES += test/GenerationTests.cpp \
+SOURCES += src/writer/FileWriter.cpp \
+    test/GenerationTests.cpp \
     src/writer/Exporter.cpp \
     src/writer/TextToNodeMap.cpp \
     src/writer/FragmentLayouter.cpp \
