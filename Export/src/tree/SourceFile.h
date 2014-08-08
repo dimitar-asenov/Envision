@@ -28,6 +28,7 @@
 
 #include "../export_api.h"
 #include "SourceFragment.h"
+#include "TextFragment.h"
 
 namespace Export {
 
@@ -42,6 +43,9 @@ class EXPORT_API SourceFile {
 		QString path() const;
 		QList<SourceFragment*> fragments();
 
+		void append(SourceFragment* fragment);
+		void append(Model::Node* node, const QString& text);
+
 	private:
 		SourceDir* parent_{};
 		QString name_;
@@ -50,6 +54,8 @@ class EXPORT_API SourceFile {
 };
 
 inline const QString& SourceFile::name() const { return name_; }
-inline QList<SourceFragment*> SourceFile:: fragments() { return fragments_; }
+inline QList<SourceFragment*> SourceFile::fragments() { return fragments_; }
+inline void SourceFile::append(SourceFragment* fragment) { Q_ASSERT(fragment); fragments_.append(fragment);}
+inline void SourceFile::append(Model::Node* node, const QString& text) { append(new TextFragment(node, text)); }
 
 } /* namespace Export */
