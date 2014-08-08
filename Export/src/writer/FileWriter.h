@@ -46,6 +46,9 @@ class EXPORT_API FileWriter {
 		void appendNodeToStack(Model::Node* node);
 		void popLastNodeFromStack();
 
+		/**
+		 * Flushes any remaining writes, appends an empty line to the end of the file, and returns the entire file text.
+		 */
 		QString fileContents();
 
 	private:
@@ -64,8 +67,6 @@ class EXPORT_API FileWriter {
 };
 
 inline bool FileWriter::isAtStartOfLine() const { return currentColumn_ == 0;}
-inline QString FileWriter::fileContents() { flushPending(); return renderedFile_;}
-
 inline void FileWriter::appendNodeToStack(Model::Node* node) { nodeStack_.append(node); }
 inline void FileWriter::popLastNodeFromStack() { nodeStack_.removeLast(); }
 

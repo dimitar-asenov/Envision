@@ -59,7 +59,7 @@ void FileWriter::flushPending()
 void FileWriter::write(const QString& str)
 {
 	if (str.isEmpty()) return;
-	mapUntil(currentLine_, currentColumn_ + str.size());
+	mapUntil(currentLine_, currentColumn_ + str.size() - 1);
 	currentColumn_ += str.size();
 	renderedFile_ += str;
 }
@@ -70,6 +70,14 @@ void FileWriter::writeLine(const QString& str)
 	write(str + "\n");
 	currentLine_++;
 	currentColumn_ = 0;
+}
+
+
+QString FileWriter::fileContents()
+{
+	flushPending();
+	if (!isAtStartOfLine()) renderedFile_.append("\n");
+	return renderedFile_;
 }
 
 } /* namespace Export */

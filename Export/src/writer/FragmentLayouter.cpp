@@ -36,6 +36,13 @@ FragmentLayouter::FragmentLayouter(const QString& indentation)
 	:indentation_{indentation}
 {}
 
+void FragmentLayouter::addRule(const QString& fragmentType, IndentationFlags parameters, const QString& prefix,
+										 const QString& separator, const QString& postfix)
+{
+	Q_ASSERT(!rules_.contains(fragmentType));
+	rules_.insert(fragmentType, qMakePair(parameters, FragmentDecoration{prefix, separator, postfix}));
+}
+
 QString FragmentLayouter::render(SourceFile* file, TextToNodeMap* map)
 {
 	Q_ASSERT(file);
@@ -64,30 +71,30 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	auto composite = dynamic_cast<CompositeFragment*>(fragment);
 	Q_ASSERT(composite);
 
-	auto rules = rules_.value(composite->type());
+	auto rule = rules_.value(composite->type());
 
 	// Indent first line
-	if (rules.testFlag(NewLineBefore) && !writer_->isAtStartOfLine()) writer_->writeLine();
+	if (rule.first.testFlag(NewLineBefore) && !writer_->isAtStartOfLine()) writer_->writeLine();
 	if (writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
 
 	// Prefix
-	if (rules.testFlag(IndentPrePostFix)) writer_->write(indentation_);
-	writer_->write(composite->prefix());
-	if (rules.testFlag(SpaceAfterPrefix)) writer_->write(" ");
-	if (rules.testFlag(NewLineAfterPrefix)) writer_->writeLine();
+	if (rule.first.testFlag(IndentPrePostFix)) writer_->write(indentation_);
+	writer_->write(rule.second.prefix_);
+	if (rule.first.testFlag(SpaceAfterPrefix)) writer_->write(" ");
+	if (rule.first.testFlag(NewLineAfterPrefix)) writer_->writeLine();
 
 	// Child fragments
 	auto firstSubFragment = true;
-	QString childFragmentIndentation = indentationSoFar + (rules.testFlag(IndentChildFragments) ? indentation_ : "");
+	QString childFragmentIndentation = indentationSoFar + (rule.first.testFlag(IndentChildFragments) ? indentation_ : "");
 	for ( auto subFragment : composite->fragments())
 	{
 		// Separator, after first child
 		if (!firstSubFragment)
 		{
-			if (rules.testFlag(SpaceBeforeSeparator)) writer_->write(" ");
-			if ( composite->separator() == "\n") writer_->writeLine();
-			else writer_->write(composite->separator());
-			if (rules.testFlag(SpaceAfterSeparator)) writer_->write(" ");
+			if (rule.first.testFlag(SpaceBeforeSeparator)) writer_->write(" ");
+			if ( rule.second.separator_ == "\n") writer_->writeLine();
+			else writer_->write(rule.second.separator_);
+			if (rule.first.testFlag(SpaceAfterSeparator)) writer_->write(" ");
 		}
 
 		// This child fragment
@@ -96,13 +103,13 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	}
 
 	// Postfix
-	if (rules.testFlag(NewLineBeforePostfix) && !writer_->isAtStartOfLine()) writer_->writeLine();
+	if (rule.first.testFlag(NewLineBeforePostfix) && !writer_->isAtStartOfLine()) writer_->writeLine();
 	if (writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
-	if (rules.testFlag(IndentPrePostFix)) writer_->write(indentation_);
-	if (rules.testFlag(SpaceBeforePostfix)) writer_->write(" ");
-	writer_->write(composite->postfix());
-	if (rules.testFlag(NewLineAfterPostfix)) writer_->writeLine();
-	if (rules.testFlag(EmptyLineAtEnd)) writer_->writeLine();
+	if (rule.first.testFlag(IndentPrePostFix)) writer_->write(indentation_);
+	if (rule.first.testFlag(SpaceBeforePostfix)) writer_->write(" ");
+	writer_->write(rule.second.postfix_);
+	if (rule.first.testFlag(NewLineAfterPostfix)) writer_->writeLine();
+	if (rule.first.testFlag(EmptyLineAtEnd)) writer_->writeLine();
 }
 
 } /* namespace Export */

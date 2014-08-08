@@ -35,17 +35,10 @@ namespace Export {
 class EXPORT_API CompositeFragment : public SourceFragment {
 	public:
 		CompositeFragment(Model::Node* node, const QString& type = QString(), const QString& name = QString());
-		CompositeFragment(Model::Node* node, const QString& prefix, const QString& separator,
-								const QString& postfix);
-		CompositeFragment(Model::Node* node, const QString& type, const QString& name, const QString& prefix,
-								const QString& separator, const QString& postfix);
 		virtual ~CompositeFragment();
 
 		const QString& name() const;
 		const QString& type() const;
-		const QString& prefix() const;
-		const QString& postfix() const;
-		const QString& separator() const;
 		QList<SourceFragment*>& fragments();
 
 		template <class T> T* append(T* fragment);
@@ -53,20 +46,13 @@ class EXPORT_API CompositeFragment : public SourceFragment {
 
 	private:
 		QString name_;
-
 		/** Used by the layouter to determine indentation and white spacing. */
 		QString type_;
-		QString prefix_;
-		QString separator_;
-		QString postfix_;
 		QList<SourceFragment*> fragments_;
 };
 
 inline const QString& CompositeFragment::name() const { return name_;}
 inline const QString& CompositeFragment::type() const { return type_;}
-inline const QString& CompositeFragment::prefix() const { return prefix_;}
-inline const QString& CompositeFragment::postfix() const { return postfix_;}
-inline const QString& CompositeFragment::separator() const { return separator_;}
 inline QList<SourceFragment*>& CompositeFragment::fragments() { return fragments_;}
 
 

@@ -35,6 +35,13 @@ class SourceFragment;
 class FileWriter;
 class TextToNodeMap;
 
+struct EXPORT_API FragmentDecoration
+{
+	QString prefix_;
+	QString separator_;
+	QString postfix_;
+};
+
 class EXPORT_API FragmentLayouter {
 	public:
 		FragmentLayouter(const QString& indentation);
@@ -55,13 +62,14 @@ class EXPORT_API FragmentLayouter {
 		};
 		Q_DECLARE_FLAGS(IndentationFlags, IndentationFlag)
 
-		void addRule(const QString& fragmentType, IndentationFlags parameters);
+		void addRule(const QString& fragmentType, IndentationFlags parameters, const QString& prefix = QString(),
+						 const QString& separator = QString(), const QString& postfix = QString());
 
 		QString render(SourceFile* file, TextToNodeMap* map);
 
 	private:
 		QString indentation_;
-		QHash<QString, IndentationFlags> rules_;
+		QHash<QString, QPair<IndentationFlags, FragmentDecoration>> rules_;
 
 		FileWriter* writer_{}; // Only used while renderering
 
@@ -69,11 +77,5 @@ class EXPORT_API FragmentLayouter {
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FragmentLayouter::IndentationFlags)
-
-inline void FragmentLayouter::addRule(const QString& fragmentType, IndentationFlags parameters)
-{
-	Q_ASSERT(!rules_.contains(fragmentType));
-	rules_.insert(fragmentType, parameters);
-}
 
 } /* namespace Export */

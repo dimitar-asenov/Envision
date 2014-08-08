@@ -36,17 +36,20 @@ namespace Export {
 
 struct EXPORT_API Span
 {
-	int startLine_;
-	int startColumn_;
-	int endLine_;
-	int endColumn_;
+	int startLine_{};
+	int startColumn_{};
+	int endLine_{};
+	int endColumn_{};
 
+	Span(int startLine, int startColumn, int endLine, int endColumn);
 	bool includes(int line, int column) const;
 };
+inline Span::Span(int startLine, int startColumn, int endLine, int endColumn)
+	: startLine_{startLine}, startColumn_{startColumn}, endLine_{endLine}, endColumn_{endColumn}{}
 inline bool Span::includes(int line, int column) const
 {
-	bool startOk = startLine_ < line || startColumn_ <= column;
-	bool endOk = line < endLine_ || column <= endColumn_;
+	bool startOk = startLine_ < line || (startLine_ == line && startColumn_ <= column);
+	bool endOk = line < endLine_ || (line == endLine_ && column <= endColumn_);
 	return startOk && endOk;
 }
 
