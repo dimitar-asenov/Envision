@@ -28,7 +28,9 @@
 namespace Export {
 
 SourceFragment::SourceFragment(Model::Node* node) : node_{node}
-{}
+{
+	Q_ASSERT(node_);
+}
 
 SourceFragment::~SourceFragment()
 {
