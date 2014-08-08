@@ -17,7 +17,8 @@ HEADERS += src/writer/FileWriter.h \
     src/ExportException.h \
     src/export_api.h \
     src/ExportPlugin.h
-SOURCES += src/writer/FileWriter.cpp \
+SOURCES += test/LayoutTests.cpp \
+    src/writer/FileWriter.cpp \
     test/GenerationTests.cpp \
     src/writer/Exporter.cpp \
     src/writer/TextToNodeMap.cpp \

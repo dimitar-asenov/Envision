@@ -56,6 +56,7 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 
 	if (auto text = dynamic_cast<TextFragment*>(fragment))
 	{
+		if (writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
 		writer_->write(text->text());
 		return;
 	}
@@ -63,10 +64,11 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 	auto composite = dynamic_cast<CompositeFragment*>(fragment);
 	Q_ASSERT(composite);
 
-	// Indent first line
-	if (writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
-
 	auto rules = rules_.value(composite->type());
+
+	// Indent first line
+	if (rules.testFlag(NewLineBefore) && !writer_->isAtStartOfLine()) writer_->writeLine();
+	if (writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
 
 	// Prefix
 	if (rules.testFlag(IndentPrePostFix)) writer_->write(indentation_);

@@ -43,8 +43,8 @@ class EXPORT_API SourceFile {
 		QString path() const;
 		QList<SourceFragment*> fragments();
 
-		void append(SourceFragment* fragment);
-		void append(Model::Node* node, const QString& text);
+		template <class T> T* append(T* fragment);
+		TextFragment* append(Model::Node* node, const QString& text);
 
 	private:
 		SourceDir* parent_{};
@@ -55,7 +55,10 @@ class EXPORT_API SourceFile {
 
 inline const QString& SourceFile::name() const { return name_; }
 inline QList<SourceFragment*> SourceFile::fragments() { return fragments_; }
-inline void SourceFile::append(SourceFragment* fragment) { Q_ASSERT(fragment); fragments_.append(fragment);}
-inline void SourceFile::append(Model::Node* node, const QString& text) { append(new TextFragment(node, text)); }
+
+template <class T>
+inline T* SourceFile::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
+inline TextFragment* SourceFile::append(Model::Node* node, const QString& text)
+{ return append(new TextFragment(node, text)); }
 
 } /* namespace Export */

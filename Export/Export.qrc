@@ -1,6 +1,7 @@
 <RCC>
-    <qresource prefix="/Export">
-        <file>test/data/text/text</file>
-		  <file>test/data/text/text_modified</file>
-    </qresource>
+	<qresource prefix="/Export">
+		<file>test/data/text/text</file>
+		<file>test/data/text/text_modified</file>
+		<file>test/data/composite/composite</file>
+	</qresource>
 </RCC>

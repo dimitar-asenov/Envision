@@ -27,7 +27,7 @@
 
 namespace Export {
 
-CompositeFragment::CompositeFragment(Model::Node* node, const QString& name, const QString& type)
+CompositeFragment::CompositeFragment(Model::Node* node, const QString& type, const QString& name )
 	: SourceFragment{node}, name_{name}, type_{type}
 {}
 
@@ -36,7 +36,7 @@ CompositeFragment::CompositeFragment(Model::Node* node, const QString& prefix, c
 	: SourceFragment{node}, prefix_{prefix}, separator_{separator}, postfix_{postfix}
 {}
 
-CompositeFragment::CompositeFragment(Model::Node* node, const QString& name, const QString& type,
+CompositeFragment::CompositeFragment(Model::Node* node, const QString& type, const QString& name,
 												 const QString& prefix, const QString& separator, const QString& postfix)
 	: SourceFragment{node}, name_{name}, type_{type}, prefix_{prefix}, separator_{separator}, postfix_{postfix}
 {}

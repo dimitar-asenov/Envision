@@ -28,15 +28,16 @@
 
 #include "../export_api.h"
 #include "SourceFragment.h"
+#include "TextFragment.h"
 
 namespace Export {
 
 class EXPORT_API CompositeFragment : public SourceFragment {
 	public:
-		CompositeFragment(Model::Node* node, const QString& name = QString(), const QString& type = QString());
+		CompositeFragment(Model::Node* node, const QString& type = QString(), const QString& name = QString());
 		CompositeFragment(Model::Node* node, const QString& prefix, const QString& separator,
 								const QString& postfix);
-		CompositeFragment(Model::Node* node, const QString& name, const QString& type, const QString& prefix,
+		CompositeFragment(Model::Node* node, const QString& type, const QString& name, const QString& prefix,
 								const QString& separator, const QString& postfix);
 		virtual ~CompositeFragment();
 
@@ -46,6 +47,9 @@ class EXPORT_API CompositeFragment : public SourceFragment {
 		const QString& postfix() const;
 		const QString& separator() const;
 		QList<SourceFragment*>& fragments();
+
+		template <class T> T* append(T* fragment);
+		TextFragment* append(Model::Node* node, const QString& text);
 
 	private:
 		QString name_;
@@ -64,5 +68,11 @@ inline const QString& CompositeFragment::prefix() const { return prefix_;}
 inline const QString& CompositeFragment::postfix() const { return postfix_;}
 inline const QString& CompositeFragment::separator() const { return separator_;}
 inline QList<SourceFragment*>& CompositeFragment::fragments() { return fragments_;}
+
+
+template <class T>
+inline T* CompositeFragment::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
+inline TextFragment* CompositeFragment::append(Model::Node* node, const QString& text)
+{ return append(new TextFragment(node, text)); }
 
 } /* namespace Export */

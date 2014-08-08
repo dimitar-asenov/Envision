@@ -67,7 +67,7 @@ void FileWriter::write(const QString& str)
 
 void FileWriter::writeLine(const QString& str)
 {
-	write(str);
+	write(str + "\n");
 	currentLine_++;
 	currentColumn_ = 0;
 }

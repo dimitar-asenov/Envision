@@ -41,16 +41,17 @@ class EXPORT_API FragmentLayouter {
 
 		enum IndentationFlag {
 			NoIndentation = 0x0,
-			IndentPrePostFix = 0x1,
-			IndentChildFragments = 0x2,
-			SpaceAfterPrefix = 0x4,
-			NewLineAfterPrefix = 0x8,
-			SpaceBeforePostfix = 0x10,
-			NewLineBeforePostfix = 0x20,
-			NewLineAfterPostfix = 0x40,
-			SpaceBeforeSeparator = 0x80,
-			SpaceAfterSeparator = 0x100,
-			EmptyLineAtEnd = 0x200
+			NewLineBefore = 0x1,
+			IndentPrePostFix = 0x2,
+			IndentChildFragments = 0x4,
+			SpaceAfterPrefix = 0x8,
+			NewLineAfterPrefix = 0x10,
+			SpaceBeforePostfix = 0x20,
+			NewLineBeforePostfix = 0x40,
+			NewLineAfterPostfix = 0x80,
+			SpaceBeforeSeparator = 0x100,
+			SpaceAfterSeparator = 0x200,
+			EmptyLineAtEnd = 0x400
 		};
 		Q_DECLARE_FLAGS(IndentationFlags, IndentationFlag)
 
