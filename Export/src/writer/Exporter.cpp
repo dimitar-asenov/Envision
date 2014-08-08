@@ -36,11 +36,10 @@ TextToNodeMap* Exporter::exportToFileSystem(const QString& pathToProjectContaine
 										  FragmentLayouter* layouter)
 {
 	QDir dir{pathToProjectContainerDir};
+	if (!dir.exists(projectDir->name()))
+		dir.mkpath(projectDir->name());
 
-	if (!dir.exists()) throw ExportException("The directory to which a project will be exported must exist: "
-																  + pathToProjectContainerDir);
-
-	dir.mkdir(projectDir->name());
+	Q_ASSERT(dir.exists(projectDir->name()));
 	dir.cd(projectDir->name());
 
 	auto map =  new TextToNodeMap();
