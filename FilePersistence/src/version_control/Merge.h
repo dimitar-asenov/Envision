@@ -26,36 +26,48 @@
 
 #pragma once
 
-#include <QString>
-
 #include "Diff.h"
+#include "Commit.h"
 
 namespace FilePersistence {
 
+using GitReference = QString;
+using SHA1 = QString;
+using RevisionString = QString;
+
 class GitRepository;
 
-class Merge
+class FILEPERSISTENCE_API Merge
 {
 	public:
 		enum class Kind {Unclassified, AlreadyUpToDate, FastForward, TrueMerge};
-		enum class Stage {Initial, Classified, ConflictsDetected, ReadyToCommit, Complete};
+		enum class Stage {NoMerge, Initialized, Classified, ConflictsDetected, ReadyToCommit, Complete};
 		enum class Error {NoError, NoMergeBase};
+
+		bool abort();
+		bool commit(Signature author, Signature committer, QString message);
 
 	private:
 		friend class GitRepository;
 
-		Merge(QString revision, bool useFastForward, GitRepository* repository);
+		Merge(GitRepository* repository);
 		~Merge();
 
-		void detectConflicts();
+		bool newMerge(RevisionString revision, bool fastForward);
 
+		void initialize(RevisionString revision, bool fastForward);
+		void classifyKind();
+
+		void startMerging();
+
+		void performFastForward();
+
+		void detectConflicts();
 		void loadMergeBase();
 
 		Kind kind_{};
 		Stage stage_{};
 		Error error_{};
-
-		bool useFastForward_{};
 
 		Model::TreeManager* baseTree_;
 
@@ -63,10 +75,12 @@ class Merge
 		Diff baseRevisionDiff_;
 		Diff baseHeadDiff_;
 
+		bool fastForward_{};
+
 		// Revisions
-		QString head_;
-		QString revision_;
-		QString mergeBase_;
+		SHA1 head_;
+		SHA1 revision_;
+		SHA1 mergeBase_;
 
 		GitRepository* repository_{};
 };

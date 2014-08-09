@@ -28,6 +28,12 @@
 
 namespace FilePersistence {
 
+Signature::Signature()
+{
+	dateTime_ = QDateTime::currentDateTimeUtc();
+	timeZone_ = QTimeZone(QTimeZone::systemTimeZoneId());
+}
+
 CommitFile::CommitFile()
 {
 	relativePath_ = QString();

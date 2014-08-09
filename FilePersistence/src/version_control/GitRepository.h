@@ -35,6 +35,7 @@ struct git_repository;
 struct git_tree;
 struct git_commit;
 struct git_oid;
+struct git_signature;
 
 namespace FilePersistence {
 
@@ -48,10 +49,8 @@ class FILEPERSISTENCE_API GitRepository
 		GitRepository(QString path);
 		~GitRepository();
 
-		bool isMerging() const;
-		Merge* merge(QString revision, bool useFastForward = true);
-		bool abortMerge();
-		bool commitMerge(Signature committer, QString commitMessage);
+		bool merge(QString revision, bool fastForward = true);
+		Merge& currentMerge();
 
 		Diff diff(QString oldRevision, QString newRevision) const;
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
@@ -72,7 +71,7 @@ class FILEPERSISTENCE_API GitRepository
 		enum class GitReferenceType {INVALID, NOTFOUND, BRANCH, NOTE, REMOTE, TAG};
 		GitReferenceType referenceType(GitReference reference) const;
 
-		GitReference currentBranch() const;
+		QString currentBranchName() const;
 
 		QStringList localBranches() const;
 		QStringList tags() const;
@@ -85,6 +84,24 @@ class FILEPERSISTENCE_API GitRepository
 		static const QString INDEX;
 
 	private:
+		friend class Merge;
+
+		void writeRevisionIntoIndex(RevisionString revision);
+		SHA1 writeIndexToTree();
+
+		void newCommit(SHA1 tree, QString message, Signature author, Signature committer, QStringList parents);
+		SHA1 findMergeBase(RevisionString revision) const;
+
+		git_signature* createGitSignature(Signature signature);
+
+		static const QString PATH_HEADS;
+		static const QString PATH_REMOTES;
+		static const QString PATH_TAGS;
+		static const QString PATH_NOTES;
+
+		GitReference currentBranch() const;
+		bool setReferenceTarget(GitReference reference, RevisionString target);
+
 		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 
 		const CommitFile* getCommitFileFromWorkdir(QString relativePath) const;
@@ -93,15 +110,8 @@ class FILEPERSISTENCE_API GitRepository
 
 		git_commit* parseCommit(QString revision) const;
 
-		const git_oid* buildTreeFromWorkdir();
-
 		bool hasCleanIndex() const;
 		bool hasCleanWorkdir() const;
-
-		static Merge::Kind classifyMerge(const git_oid* revision, const git_oid* head, const git_oid* mergeBase);
-
-		static const QString REFS_HEADS_PATH;
-		void setBranchHeadToCommit(QString branch, QString revision);
 
 		enum class DiffKind {Unspecified, WorkdirToWorkdir, WorkdirToIndex, WorkdirToCommit,
 									IndexToWorkdir, IndexToIndex, IndexToCommit,
@@ -112,14 +122,15 @@ class FILEPERSISTENCE_API GitRepository
 
 		static const char* HEAD;
 
-		Merge* currentMerge_{};
+		Merge* merge_{};
 
 		QString path_;
 		git_repository* repository_{};
 
 };
 
-inline bool GitRepository::isMerging() const { return (currentMerge_ != nullptr); }
 inline QString GitRepository::workdirPath() const { return path_; }
+
+inline Merge& GitRepository::currentMerge() { return *merge_; }
 
 } /* namespace FilePersistence */

@@ -33,15 +33,129 @@
 
 namespace FilePersistence {
 
-Merge::Merge(QString revision, bool useFastForward, GitRepository* repository)
+bool Merge::abort()
 {
-	revision_ = revision;
-	repository_ = repository;
+	if (stage_ != Stage::NoMerge && stage_ != Stage::Complete)
+	{
+		GitReference branch = repository_->currentBranch();
 
-	useFastForward_ = useFastForward;
+		repository_->checkout(head_, true);
+		repository_->setReferenceTarget(branch, head_);
+
+		stage_ = Stage::NoMerge;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool Merge::commit(Signature author, Signature committer, QString message)
+{
+	if (stage_ == Stage::ReadyToCommit)
+	{
+		SHA1 treeSHA1 = repository_->writeIndexToTree();
+
+		QStringList parents;
+		parents.append(head_);
+		parents.append(revision_);
+
+		repository_->newCommit(treeSHA1, message, author, committer, parents);
+
+		stage_ = Stage::Complete;
+
+		return true;
+	}
+	else
+		return false;
+}
+
+// ======== private ========
+
+Merge::Merge(GitRepository* repository)
+{
+	repository_ = repository;
 }
 
 Merge::~Merge() {}
+
+bool Merge::newMerge(RevisionString revision, bool fastForward)
+{
+	if (stage_ == Stage::NoMerge)
+	{
+		initialize(revision, fastForward);
+		if (error_ != Error::NoError)
+			return true;
+
+		classifyKind();
+		startMerging();
+
+		return true;
+	}
+	else
+		return false;
+}
+
+void Merge::initialize(RevisionString revision, bool fastForward)
+{
+	head_ = repository_->getSHA1("HEAD");
+	revision_ = repository_->getSHA1(revision);
+
+	fastForward_ = fastForward;
+
+	mergeBase_ = repository_->findMergeBase(revision);
+	if (mergeBase_.isNull())
+		error_ = Error::NoMergeBase;
+
+	stage_ = Stage::Initialized;
+}
+
+void Merge::classifyKind()
+{
+	if (mergeBase_.compare(revision_) == 0)
+		kind_ = Merge::Kind::AlreadyUpToDate;
+	else if (mergeBase_.compare(head_) == 0)
+		kind_ = Merge::Kind::FastForward;
+	else
+		kind_ = Merge::Kind::TrueMerge;
+
+	stage_ = Stage::Classified;
+}
+
+void Merge::startMerging()
+{
+	switch (kind_)
+	{
+		case Kind::AlreadyUpToDate:
+			stage_ = Merge::Stage::Complete;
+			break;
+
+		case Merge::Kind::FastForward:
+			if (fastForward_)
+				performFastForward();
+			else
+			{
+				repository_->writeRevisionIntoIndex(revision_);
+				stage_ = Merge::Stage::ReadyToCommit;
+			}
+			break;
+
+		case Merge::Kind::TrueMerge:
+			// TODO
+			Q_ASSERT(false);
+			break;
+
+		default:
+			Q_ASSERT(false);
+	}
+}
+
+void Merge::performFastForward()
+{
+	GitReference branch = repository_->currentBranch();
+
+	repository_->setReferenceTarget(branch, revision_);
+	stage_ = Merge::Stage::Complete;
+}
 
 void Merge::detectConflicts()
 {
@@ -49,8 +163,6 @@ void Merge::detectConflicts()
 	baseRevisionDiff_ = repository_->diff(mergeBase_, revision_);
 
 	loadMergeBase();
-
-
 }
 
 void Merge::loadMergeBase()

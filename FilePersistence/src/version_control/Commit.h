@@ -33,6 +33,10 @@ namespace FilePersistence {
 struct Signature {
 		QString name_;
 		QString eMail_;
+		QDateTime dateTime_;
+		QTimeZone timeZone_;
+
+		Signature();
 };
 
 struct CommitMetaData {
