@@ -24,63 +24,23 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentTable.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "../oointeraction_api.h"
 
-DEFINE_TYPED_LIST(Comments::CommentTable)
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
-namespace Comments {
+namespace OOInteraction {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentTable)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentTable)
-
-REGISTER_ATTRIBUTE(CommentTable, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, rowCount, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, columnCount, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, nodes, TypedListOfCommentFreeNode, false, false, true)
-
-CommentTable::CommentTable(Node *parent, QString name, int rowCount, int columnCount)
-	: Super(parent, CommentTable::getMetaData())
+class OOINTERACTION_API CDoxygen : public Interaction::CreateNamedObjectWithAttributes
 {
-	setName(name);
-	setRowCount(0);
-	setColumnCount(0);
-	resize(rowCount, columnCount);
+	public:
+		CDoxygen();
+
+	protected:
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor,
+				const QString& name, const QStringList& attributes) override;
+};
+
 }
-
-void CommentTable::setNodeAt(int m, int n, Model::Node *aNode)
-{
-	nodes()->at(n*rowCount() + m)->setNode(aNode);
-}
-
-CommentFreeNode* CommentTable::nodeAt(int m, int n)
-{
-	return nodes()->at(n*rowCount() + m);
-}
-
-void CommentTable::resize(int m, int n)
-{
-	auto aList = new Model::TypedList<CommentFreeNode>;
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			if (j < rowCount() && i < columnCount())
-			{
-				CommentFreeNode* aFreeNode = nodeAt(j, i);
-				nodes()->replaceChild(aFreeNode, new CommentFreeNode(nullptr, ""));
-				aFreeNode->setName(name()+"_"+QString::number(j)+"_"+QString::number(i));
-				aList->append(aFreeNode);
-			}
-			else
-				aList->append(new CommentFreeNode(nullptr, name()+"_"+QString::number(j)+"_"+QString::number(i)));
-		}
-	}
-
-	replaceChild(nodes(), aList);
-	setRowCount(m);
-	setColumnCount(n);
-}
-
-} /* namespace Comments */

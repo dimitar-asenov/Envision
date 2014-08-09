@@ -50,7 +50,9 @@ HEADERS += src/handlers/HArrayInitializer.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/OOInteractionPlugin.h \
-    src/handlers/HStatementItemList.h
+    src/handlers/HStatementItemList.h \
+    src/DoxyVisitor.h \
+    src/commands/CDoxygen.h
 SOURCES += src/handlers/HArrayInitializer.cpp \
     src/expression_editor/CommandDescriptor.cpp \
     src/expression_editor/CompoundObjectDescriptor.cpp \
@@ -90,4 +92,6 @@ SOURCES += src/handlers/HArrayInitializer.cpp \
     src/OOInteractionException.cpp \
     test/SimpleTest.cpp \
     src/OOInteractionPlugin.cpp \
-    src/handlers/HStatementItemList.cpp
+    src/handlers/HStatementItemList.cpp \
+    src/DoxyVisitor.cpp \
+    src/commands/CDoxygen.cpp

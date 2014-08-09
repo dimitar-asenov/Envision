@@ -91,6 +91,8 @@ class VISUALIZATIONBASE_API ModelRenderer
 		int getCoarserSemanticZoomLevel(int currentSemanticZoomLevel);
 		int getFinerSemanticZoomLevel(int currentSemanticZoomLevel);
 
+		static QImage renderToImage(Model::Node* aNode);
+
 	private:
 		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE = 1;
 		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_PURPOSE_OVER_SEMANTIC_ZOOM_LEVEL = 2;

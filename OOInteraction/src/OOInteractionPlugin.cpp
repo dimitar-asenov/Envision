@@ -45,6 +45,7 @@
 #include "commands/CCreateProject.h"
 #include "commands/CCreateClass.h"
 #include "commands/CSceneHandlerItemTest.h"
+#include "commands/CDoxygen.h"
 
 #include "string_offset_providers/StringComponents.h"
 
@@ -124,6 +125,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CDoxygen());
 
 	// Initialize customization support
 	auto customizationGroup = new Visualization::VisualizationGroup();

@@ -24,63 +24,39 @@
  **
  **********************************************************************************************************************/
 
-#include "CommentTable.h"
+#include "commands/CDoxygen.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "OOInteraction//src/DoxyVisitor.h"
 
-DEFINE_TYPED_LIST(Comments::CommentTable)
+namespace OOInteraction {
 
-namespace Comments {
-
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentTable)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentTable)
-
-REGISTER_ATTRIBUTE(CommentTable, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, rowCount, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, columnCount, Integer, false, false, true)
-REGISTER_ATTRIBUTE(CommentTable, nodes, TypedListOfCommentFreeNode, false, false, true)
-
-CommentTable::CommentTable(Node *parent, QString name, int rowCount, int columnCount)
-	: Super(parent, CommentTable::getMetaData())
+CDoxygen::CDoxygen() : CreateNamedObjectWithAttributes("doxygen",
+		{{}})
 {
-	setName(name);
-	setRowCount(0);
-	setColumnCount(0);
-	resize(rowCount, columnCount);
 }
 
-void CommentTable::setNodeAt(int m, int n, Model::Node *aNode)
+Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, Visualization::Item* /*target*/,
+	const std::unique_ptr<Visualization::Cursor>&, const QString& /*name*/, const QStringList& /*attributes*/)
 {
-	nodes()->at(n*rowCount() + m)->setNode(aNode);
+	QDir dir(QDir::currentPath());
+	dir.mkpath("html/images");
+
+	OOInteraction::DoxyVisitor::init();
+	auto aDoxyVisitor = new OOInteraction::DoxyVisitor();
+	QString valDoxy = aDoxyVisitor->visit(source->node()->root());
+	delete aDoxyVisitor;
+
+	QFile file("doxy.cpp");
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&file);
+	out << valDoxy;
+	file.close();
+
+	QProcess::execute("doxygen");
+
+	QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/html/index.html"));
+
+	return new Interaction::CommandResult();
 }
 
-CommentFreeNode* CommentTable::nodeAt(int m, int n)
-{
-	return nodes()->at(n*rowCount() + m);
-}
-
-void CommentTable::resize(int m, int n)
-{
-	auto aList = new Model::TypedList<CommentFreeNode>;
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			if (j < rowCount() && i < columnCount())
-			{
-				CommentFreeNode* aFreeNode = nodeAt(j, i);
-				nodes()->replaceChild(aFreeNode, new CommentFreeNode(nullptr, ""));
-				aFreeNode->setName(name()+"_"+QString::number(j)+"_"+QString::number(i));
-				aList->append(aFreeNode);
-			}
-			else
-				aList->append(new CommentFreeNode(nullptr, name()+"_"+QString::number(j)+"_"+QString::number(i)));
-		}
-	}
-
-	replaceChild(nodes(), aList);
-	setRowCount(m);
-	setColumnCount(n);
-}
-
-} /* namespace Comments */
+} /* namespace OOInteraction */

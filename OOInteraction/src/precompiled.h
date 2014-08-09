@@ -38,6 +38,10 @@
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
 
+#include "QProcess"
+#include "QDesktopServices"
+#include "QDir"
+
 #if defined __cplusplus
 // Add C++ includes here
 

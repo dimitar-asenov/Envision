@@ -241,6 +241,12 @@ Module* addLambda()
 	mod->fields()->append(new Field("common",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
+	mod->setComment(new CommentNode("This is the Lambda-Module. The following classes are available\n"
+													" * IUnary\n"
+													" * IBinary\n"
+													" * INoReturn\n"
+													" * LambdaTest\n"));
+
 	auto iUnary = new Class("IUnary", Modifier::Public);
 	mod->classes()->append(iUnary);
 	auto unMet = new Method("op");
@@ -772,7 +778,7 @@ Method* addFactorial(Class* parent)
 	auto factorial = new Method("factorial");
 	if (parent) parent->methods()->append(factorial);
 
-	factorial->setComment(new CommentNode("This is an iterative implementation\n of a factorial function"));
+	factorial->setComment(new CommentNode("This is an iterative implementation of a factorial function"));
 
 	FormalResult* factorialResult = new FormalResult();
 	factorial->results()->append(factorialResult);
@@ -901,13 +907,6 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 	prj->fields()->append(new Field("global2",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG)));
-
-	prj->setComment(new CommentNode("This is the HelloWorld-Project. The following classes are available\n"
-															" * HelloWorld\n"
-															" * Annotation\n"
-															" * Colors\n"
-															" * Generic\n"
-															" * AnnotatedWithFriends"));
 
 	Project* java = nullptr;
 	java = addJavaLibrary(prj);

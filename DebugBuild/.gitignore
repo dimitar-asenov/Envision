@@ -11,3 +11,5 @@
 /*.pdf
 /*.perf
 /*.prof
+/html/**
+/doxy.cpp
