@@ -67,6 +67,9 @@ void FileWriter::write(const QString& str)
 
 void FileWriter::writeLine(const QString& str)
 {
+	if (str.isEmpty() && !renderedFile_.isEmpty() && renderedFile_.endsWith('\n'))
+		return; // Don't repeat empty lines.
+
 	write(str + "\n");
 	flushPending(); // do not span mapping across lines.
 	currentLine_++;
