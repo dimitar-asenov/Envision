@@ -25,6 +25,10 @@
  **********************************************************************************************************************/
 #include "DeclarationVisitor.h"
 
+#include "StatementVisitor.h"
+#include "ExpressionVisitor.h"
+#include "ElementVisitor.h"
+
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/NameImport.h"
 
@@ -104,7 +108,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	if (!classs->baseClasses()->isEmpty())
 	{
 		*fragment << " extends ";
-		*fragment << list(classs->baseClasses(), this, "comma");
+		*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
 	}
 
 	notAllowed(classs->friends());
@@ -121,7 +125,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	*fragment << visitDeclaration(method) << new TextFragment(method->nameNode(), method->name());
 
 	//TODO
-	*fragment << list(method->items(), this, "body");
+	*fragment << list(method->items(), StatementVisitor(data()), "body");
 
 	return fragment;
 }
@@ -144,7 +148,7 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 SourceFragment* DeclarationVisitor::visitDeclaration(Declaration* declaration)
 {
 	auto fragment = new CompositeFragment(declaration, "vertical");
-	*fragment << list(declaration->annotations(), this, "vertical");
+	*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
 	auto header = fragment->append(new CompositeFragment(declaration, "space"));
 
 	if (declaration->modifiers()->isSet(Modifier::Public))
@@ -169,20 +173,6 @@ SourceFragment* DeclarationVisitor::visitDeclaration(Declaration* declaration)
 	if (declaration->modifiers()->isSet(Modifier::Inline))
 		error(declaration->modifiers(), "Inline modifier is invalid in Java");
 
-	return fragment;
-}
-
-
-SourceFragment* DeclarationVisitor::visit(StatementItem* statementItem)
-{
-	auto fragment = new CompositeFragment(statementItem);
-	return fragment;
-}
-
-
-SourceFragment* DeclarationVisitor::visit(Expression* expression)
-{
-	auto fragment = new CompositeFragment(expression);
 	return fragment;
 }
 

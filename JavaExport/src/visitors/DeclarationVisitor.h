@@ -36,18 +36,6 @@ namespace Export {
 	class SourceFragment;
 }
 
-namespace OOModel {
-	class Project;
-	class Module;
-	class Class;
-	class Method;
-	class Field;
-	class NameImport;
-	class Declaration;
-	class StatementItem;
-	class Expression;
-}
-
 namespace JavaExport {
 
 class JAVAEXPORT_API DeclarationVisitor : public Visitor {
@@ -62,9 +50,6 @@ class JAVAEXPORT_API DeclarationVisitor : public Visitor {
 		Export::SourceFragment* visit(OOModel::Method* method);
 		Export::SourceFragment* visit(OOModel::Field* field);
 		Export::SourceFragment* visit(OOModel::NameImport* nameImport);
-
-		Export::SourceFragment* visit(OOModel::StatementItem* statementItem);
-		Export::SourceFragment* visit(OOModel::Expression* expression);
 
 		Export::SourceFragment* visitDeclaration(OOModel::Declaration* declaration);
 };

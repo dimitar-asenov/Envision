@@ -29,13 +29,8 @@
 #include "../javaexport_api.h"
 #include "../exporter/ExportError.h"
 
+#include "OOModel/src/allOOModelNodes.h"
 #include "Export/src/tree/CompositeFragment.h"
-
-namespace Model {
-	class Node;
-	class List;
-	template <class T> class TypedList;
-}
 
 namespace JavaExport {
 
@@ -49,11 +44,11 @@ class Visitor
 {
 	public:
 		Visitor();
+		Visitor(std::shared_ptr<VisitorData> data);
 
 		QList<ExportError> errors() const;
 
 	protected:
-		Visitor(std::shared_ptr<VisitorData> data);
 		std::shared_ptr<VisitorData> data();
 
 		QStringList& packageStack();
@@ -66,7 +61,10 @@ class Visitor
 		void error(Model::Node* node, const QString& errorMessage);
 
 		template<class ListElement, class VisitorClass>
-		Export::SourceFragment* list(Model::TypedList<ListElement>* list, VisitorClass v,
+		Export::SourceFragment* list(Model::TypedList<ListElement>* list, VisitorClass* v,
+											  const QString& fragmentType = QString());
+		template<class ListElement, class VisitorClass>
+		Export::SourceFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
 											  const QString& fragmentType = QString());
 
 	private:
@@ -84,11 +82,18 @@ inline void Visitor::error(Model::Node* node, const QString& errorMessage)
 { data_->errors_.append(ExportError(node, errorMessage)); }
 
 template<class ListElement, class VisitorClass>
-Export::SourceFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass v, const QString& fragmentType)
+Export::SourceFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass* v, const QString& fragmentType)
 {
 	auto fragment = new Export::CompositeFragment(list, fragmentType);
 	for (auto node : *list) *fragment << v->visit(node);
 	return fragment;
+}
+
+template<class ListElement, class VisitorClass>
+inline Export::SourceFragment* Visitor::list(Model::TypedList<ListElement>* list, VisitorClass&& v,
+												  const QString& fragmentType)
+{
+	return Visitor::list(list, &v, fragmentType);
 }
 
 } // namespace JavaExport
