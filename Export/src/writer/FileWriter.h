@@ -42,7 +42,8 @@ class EXPORT_API FileWriter {
 		bool isAtStartOfLine() const;
 		bool lastCharacterIsWhiteSpace() const;
 		void write(const QString& str);
-		void writeLine(const QString& str = QString());
+		void finishLine();
+		void writeEmptyLine();
 
 		void appendNodeToStack(Model::Node* node);
 		void popLastNodeFromStack();

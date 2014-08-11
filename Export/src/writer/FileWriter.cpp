@@ -65,17 +65,27 @@ void FileWriter::write(const QString& str)
 }
 
 
-void FileWriter::writeLine(const QString& str)
+void FileWriter::finishLine()
 {
-	if (str.isEmpty() && !renderedFile_.isEmpty() && renderedFile_.endsWith('\n'))
-		return; // Don't repeat empty lines.
+	if (renderedFile_.endsWith('\n')) return; // Don't insert lines.
 
-	write(str + "\n");
+	write("\n");
 	flushPending(); // do not span mapping across lines.
 	currentLine_++;
 	currentColumn_ = 0;
 }
 
+void FileWriter::writeEmptyLine()
+{
+	finishLine();
+
+	if (renderedFile_.endsWith("\n\n")) return; // Don't repeat empty lines.
+
+	write("\n");
+	flushPending(); // do not span mapping across lines.
+	currentLine_++;
+	currentColumn_ = 0;
+}
 
 QString FileWriter::fileContents()
 {
