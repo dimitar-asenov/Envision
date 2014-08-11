@@ -25,6 +25,8 @@
  **********************************************************************************************************************/
 #include "CompositeFragment.h"
 
+#include "ModelBase/src/nodes/Text.h"
+
 namespace Export {
 
 CompositeFragment::CompositeFragment(Model::Node* node, const QString& type, const QString& name )
@@ -35,6 +37,13 @@ CompositeFragment::~CompositeFragment()
 {
 	for (auto f : fragments_) SAFE_DELETE(f);
 	fragments_.clear();
+}
+
+
+CompositeFragment& CompositeFragment::operator<<(Model::Text* textNode)
+{
+	fragments_.append( new TextFragment(textNode, textNode->get()) );
+	return *this;
 }
 
 } /* namespace Export */

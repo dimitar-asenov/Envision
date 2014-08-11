@@ -30,6 +30,10 @@
 #include "SourceFragment.h"
 #include "TextFragment.h"
 
+namespace Model {
+	class Text;
+}
+
 namespace Export {
 
 class EXPORT_API CompositeFragment : public SourceFragment {
@@ -47,6 +51,7 @@ class EXPORT_API CompositeFragment : public SourceFragment {
 		CompositeFragment& operator<<(SourceFragment* childFragment);
 		CompositeFragment& operator<<(const QList<SourceFragment*>& childFragments);
 		CompositeFragment& operator<<(const QString& text);
+		CompositeFragment& operator<<(Model::Text* textNode);
 
 	private:
 		QString name_;
