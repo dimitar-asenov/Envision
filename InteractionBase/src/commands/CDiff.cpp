@@ -36,6 +36,7 @@
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
 
 using namespace Visualization;
+using namespace FilePersistence;
 
 namespace Interaction {
 
@@ -44,28 +45,22 @@ CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"project"}}, false}
 
 CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* target,
 											  const std::unique_ptr<Visualization::Cursor>&,
-											  const QString& name, const QStringList& attributes)
+											  const QString& name, const QStringList&)
 {
-	// TODO only display affected subtree
-	(void) attributes;
-
-	Model::TreeManager* manager = target->node()->manager();
-	QString managerName = manager->name();
+	Model::TreeManager* headManager = target->node()->manager();
+	QString managerName = headManager->name();
 
 	// get GitRepository
 	QString path("projects/");
 	path.append(managerName);
-	repository = new FilePersistence::GitRepository(path);
+	repository = new GitRepository(path);
 
-	// load HEAD into tree
-	auto headManager = new Model::TreeManager();
-	headManager->load(new FilePersistence::SimpleTextFileStore("projects/"), managerName, false);
 	headManager->setName("HEAD");
 
 	// load name into tree
-	const FilePersistence::Commit* commit = repository->getCommit(name);
+	const Commit* commit = repository->getCommit(name);
 
-	auto fileStore = new FilePersistence::SimpleTextFileStore(
+	auto fileStore = new SimpleTextFileStore(
 				[this, &commit](QString filename, const char*& data, int& size)
 				{ return commit->getFileContent(filename, data, size); }
 			);
@@ -75,52 +70,104 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 	revisionManager->setName(name);
 
 	// build visualization
-	Item* headRoot = new RootItem(headManager->root());
+	Item* headRoot = target;
+	while (headRoot->parent()) headRoot = headRoot->parent();
 
 	Item* revisionRoot = new RootItem(revisionManager->root());
 	revisionRoot->setPos(-400.f, 0.f);
-
-	VisualizationManager::instance().mainScene()->addTopLevelItem(headRoot);
-	VisualizationManager::instance().mainScene()->listenToTreeManager(headManager);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem(revisionRoot);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(revisionManager);
 
 	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
 		new Visualization::CustomSceneEvent([headRoot, headManager, revisionRoot, revisionManager,
-														name, this]()
+														name, target, this]()
 	{
-			FilePersistence::Diff diff = repository->diff(name, FilePersistence::GitRepository::WORKDIR);
-			FilePersistence::IdToChangeDescriptionHash changes = diff.changes();
+			Diff diff = repository->diff(name, GitRepository::WORKDIR);
+			IdToChangeDescriptionHash changes = diff.changes();
 
 			auto insertHighlight = VisualizationManager::instance().mainScene()->addHighlight("Insert", "green");
 			auto deleteHighlight = VisualizationManager::instance().mainScene()->addHighlight("Delete", "red");
 
-			Model::Node* node = nullptr;
-			for (FilePersistence::ChangeDescription* change : changes.values())
+			IdToChangeDescriptionHash::iterator iter;
+
+			QSet<Model::NodeIdType> relevantIDs;
+
+			QSet<Model::NodeIdType> completed;
+			QList<Model::Node*> stack;
+			stack.append(target->node());
+			while (!stack.isEmpty())
 			{
-				switch (change->type())
+				// HEAD version
+				Model::Node* current = stack.takeLast();
+
+				stack.append(current->children());
+
+				// check if relevant
+				Model::NodeIdType currentID = headManager->nodeIdMap().id(current);
+				//qDebug() << currentID.toString();
+				iter = changes.find(currentID);
+				if (iter != changes.end())
+					relevantIDs.insert(currentID);
+
+				// REVISION version
+				if (!completed.contains(currentID))
 				{
-					case FilePersistence::ChangeType::Added:
-						node = const_cast<Model::Node*>(headManager->nodeIdMap().node(change->id()));
-						if (auto item = headRoot->findVisualizationOf(node))
-							insertHighlight->addHighlightedItem(item);
-						break;
+					QList<Model::Node*> revisionStack;
+					Model::Node* revisionNode = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(currentID));
+					if (revisionNode != nullptr)
+					{
+						revisionStack.append(revisionNode);
+						while (!revisionStack.isEmpty())
+						{
+							revisionNode = revisionStack.takeLast();
+							Model::NodeIdType revisionNodeID = revisionManager->nodeIdMap().id(revisionNode);
+							completed.insert(revisionNodeID);
 
-					case FilePersistence::ChangeType::Deleted:
-						node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(change->id()));
-						if (auto item = revisionRoot->findVisualizationOf(node))
-							deleteHighlight->addHighlightedItem(item);
-						break;
+							revisionStack.append(revisionNode->children());
 
-					default:
-						break;
+							// check if relevant
+							iter = changes.find(revisionNodeID);
+							if (iter != changes.end())
+								relevantIDs.insert(revisionNodeID);
+						}
+					}
 				}
 			}
 
+			Model::Node* node = nullptr;
+			for (auto id : relevantIDs)
+			{
+				iter = changes.find(id);
+				if (iter != changes.end())
+				{
+					ChangeDescription* change = iter.value();
+					switch (change->type())
+					{
+						case ChangeType::Added:
+							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
+							if (auto item = headRoot->findVisualizationOf(node))
+								insertHighlight->addHighlightedItem(item);
+							break;
+
+						case ChangeType::Deleted:
+							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
+							if (auto item = revisionRoot->findVisualizationOf(node))
+								deleteHighlight->addHighlightedItem(item);
+							break;
+
+						default:
+							break;
+					}
+				}
+				else
+					Q_ASSERT(false);
+			}
+
+
 	} ) );
 
-	delete commit;
+	SAFE_DELETE(commit);
 
 	return new CommandResult();
 }
