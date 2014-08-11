@@ -36,6 +36,12 @@ class ElementVisitor : public Visitor
 	public:
 		using Visitor::Visitor;
 
+		Export::SourceFragment* visit(OOModel::FormalArgument* agument);
+		Export::SourceFragment* visit(OOModel::FormalResult* result);
+		Export::SourceFragment* visit(OOModel::FormalTypeArgument* typeArgument);
+		Export::SourceFragment* visit(OOModel::CatchClause* catchClause);
+		Export::SourceFragment* visit(OOModel::Enumerator* enumerator);
+		Export::SourceFragment* visit(OOModel::MemberInitializer* memberInitializer);
 };
 
 } // namespace JavaExport

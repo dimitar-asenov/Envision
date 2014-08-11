@@ -34,6 +34,7 @@ namespace JavaExport {
 SourceFragment* ExpressionVisitor::visit(Expression* expression)
 {
 	auto fragment = new CompositeFragment(expression);
+	*fragment << "EXPRESSION";
 	return fragment;
 }
 

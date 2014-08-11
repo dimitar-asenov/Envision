@@ -48,10 +48,14 @@ class JAVAEXPORT_API DeclarationVisitor : public Visitor {
 
 		Export::SourceFragment* visit(OOModel::Class* classs);
 		Export::SourceFragment* visit(OOModel::Method* method);
-		Export::SourceFragment* visit(OOModel::Field* field);
+		//Export::SourceFragment* visit(OOModel::Field* field); Omitted on purpose, VariableDeclaration suffices
 		Export::SourceFragment* visit(OOModel::NameImport* nameImport);
+		Export::SourceFragment* visit(OOModel::VariableDeclaration* vd);
 
-		Export::SourceFragment* visitDeclaration(OOModel::Declaration* declaration);
+		Export::SourceFragment* visit(OOModel::ExplicitTemplateInstantiation* eti);
+		Export::SourceFragment* visit(OOModel::TypeAlias* ta);
+
+		Export::SourceFragment* printAnnotationsAndModifiers(OOModel::Declaration* declaration);
 };
 
 } /* namespace JavaExport */

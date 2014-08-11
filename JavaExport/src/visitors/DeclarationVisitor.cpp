@@ -83,15 +83,16 @@ SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* par
 	Q_ASSERT(parent);
 	auto classFile = &parent->file(classs->name() + ".java");
 
-	auto fragment = classFile->append(new CompositeFragment(classs, "vertical"));
+	auto fragment = classFile->append(new CompositeFragment(classs, "sections"));
 
 	auto header = fragment->append(new CompositeFragment(classs));
 	if (!packageStack().isEmpty())
 		*header << "package " << packagesSoFar() << ";";
 
+	auto imports = fragment->append(new CompositeFragment(classs, "vertical"));
 	for (auto node : *classs->subDeclarations())
 	{
-		if (auto ni = DCast<NameImport>(node)) *fragment << visit(ni);
+		if (auto ni = DCast<NameImport>(node)) *imports << visit(ni);
 		else notAllowed(node);
 	}
 
@@ -103,7 +104,10 @@ SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* par
 SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
-	*fragment << visitDeclaration(classs) << "class " << new TextFragment(classs->nameNode(), classs->name());
+	*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
+
+	if (!classs->typeArguments()->isEmpty())
+		*fragment << list(classs->typeArguments(), ElementVisitor(data()), "typeArgsList");
 
 	if (!classs->baseClasses()->isEmpty())
 	{
@@ -114,7 +118,9 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	notAllowed(classs->friends());
 
 	//TODO
-	*fragment << list(classs->methods(), this, "body");
+	auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
+	*sections << list(classs->methods(), this, "sections");
+	*sections << list(classs->fields(), this, "vertical");
 
 	return fragment;
 }
@@ -122,7 +128,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
-	*fragment << visitDeclaration(method) << new TextFragment(method->nameNode(), method->name());
+	*fragment << printAnnotationsAndModifiers(method) << method->nameNode();
 
 	//TODO
 	*fragment << list(method->items(), StatementVisitor(data()), "body");
@@ -130,22 +136,32 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	return fragment;
 }
 
-SourceFragment* DeclarationVisitor::visit(Field* field)
+SourceFragment* DeclarationVisitor::visit(VariableDeclaration* vd)
 {
-	auto fragment = new CompositeFragment(field);
-	*fragment << visitDeclaration(field);
+	auto fragment = new CompositeFragment(vd);
+	*fragment << printAnnotationsAndModifiers(vd);
+	*fragment << ExpressionVisitor(data()).visit(vd->typeExpression()) << " " << vd->nameNode();
+	if (vd->initialValue())
+		*fragment << " = " << ExpressionVisitor(data()).visit(vd->initialValue());
 	return fragment;
 }
-
 
 SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 {
 	auto fragment = new CompositeFragment(nameImport);
-	*fragment << visitDeclaration(nameImport);
+	*fragment << printAnnotationsAndModifiers(nameImport);
+
+	notAllowed(nameImport->annotations());
+
+	*fragment << "import " << ExpressionVisitor(data()).visit(nameImport->importedName());
+	if (nameImport->importAll()) *fragment << ".*";
+	*fragment << ";";
+
 	return fragment;
 }
 
-SourceFragment* DeclarationVisitor::visitDeclaration(Declaration* declaration)
+
+SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* declaration)
 {
 	auto fragment = new CompositeFragment(declaration, "vertical");
 	*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
@@ -174,6 +190,18 @@ SourceFragment* DeclarationVisitor::visitDeclaration(Declaration* declaration)
 		error(declaration->modifiers(), "Inline modifier is invalid in Java");
 
 	return fragment;
+}
+
+SourceFragment* DeclarationVisitor::visit(ExplicitTemplateInstantiation* eti)
+{
+	notAllowed(eti);
+	return new TextFragment(eti);
+}
+
+SourceFragment* DeclarationVisitor::visit(TypeAlias* ta)
+{
+	notAllowed(ta);
+	return new TextFragment(ta);
 }
 
 } /* namespace JavaExport */

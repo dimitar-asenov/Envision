@@ -31,4 +31,45 @@ using namespace OOModel;
 
 namespace JavaExport {
 
+SourceFragment* ElementVisitor::visit(FormalArgument* agument)
+{
+	auto fragment = new CompositeFragment(agument);
+	*fragment << "ARGUMENT";
+	return fragment;
+}
+
+SourceFragment* ElementVisitor::visit(FormalResult* result)
+{
+	auto fragment = new CompositeFragment(result);
+	*fragment << "RESULT";
+	return fragment;
+}
+
+SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
+{
+	auto fragment = new CompositeFragment(typeArgument);
+	*fragment << "TYPE_ARGUMENT";
+	return fragment;
+}
+
+SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
+{
+	auto fragment = new CompositeFragment(catchClause);
+	*fragment << "CATCH_CLAUSE";
+	return fragment;
+}
+
+SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
+{
+	auto fragment = new CompositeFragment(enumerator);
+	*fragment << "ENUMERATOR";
+	return fragment;
+}
+
+SourceFragment* ElementVisitor::visit(MemberInitializer* memberInitializer)
+{
+	notAllowed(memberInitializer);
+	return new TextFragment(memberInitializer);
+}
+
 } // namespace JavaExport
