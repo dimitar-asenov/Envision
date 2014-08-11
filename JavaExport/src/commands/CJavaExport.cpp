@@ -26,6 +26,7 @@
 #include "CJavaExport.h"
 
 #include "../exporter/JavaExporter.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace JavaExport {
 
@@ -40,7 +41,7 @@ Interaction::CommandResult* CJavaExport::executeNamed(Visualization::Item* sourc
 	{
 		if (auto manager = source->node()->manager())
 		{
-			JavaExporter::exportTree(manager, "exported/");
+			JavaExporter::exportTree(manager, "exported/" + manager->root()->symbolName());
 		}
 	}
 

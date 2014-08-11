@@ -58,7 +58,7 @@ QString TopLevelVisitor::packagesSoFar() const
 
 SourceDir* TopLevelVisitor::visitProject(Project* project, SourceDir* parent)
 {
-	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, project->name());
+	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, "src");
 
 	if (parent) packageStack_.append(project->name());
 
