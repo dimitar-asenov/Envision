@@ -144,7 +144,7 @@ TEST(ExportPlugin, CompositeFragment)
 	CHECK_CONDITION(map->node("composite/composite", 0, 33) == reinterpret_cast<Node*>(11));
 
 	// any other number on the same line
-	CHECK_CONDITION(map->node("composite/composite", 0, 100) == reinterpret_cast<Node*>(11));
+	CHECK_CONDITION(map->node("composite/composite", 0, 34) == nullptr);
 
 	// LINE 1
 
@@ -257,7 +257,7 @@ TEST(ExportPlugin, CompositeFragment)
 	// new line
 	CHECK_CONDITION(map->node("composite/composite", 6, 15) == reinterpret_cast<Node*>(14));
 	// any other number on the same line
-	CHECK_CONDITION(map->node("composite/composite", 6, 16) == reinterpret_cast<Node*>(14));
+	CHECK_CONDITION(map->node("composite/composite", 6, 16) ==  nullptr);
 
 	// LINE 7
 
@@ -268,7 +268,7 @@ TEST(ExportPlugin, CompositeFragment)
 	// new line
 	CHECK_CONDITION(map->node("composite/composite", 7, 2) == reinterpret_cast<Node*>(11));
 	// any other number on the same line
-	CHECK_CONDITION(map->node("composite/composite", 7, 3) == reinterpret_cast<Node*>(11));
+	CHECK_CONDITION(map->node("composite/composite", 7, 3) == nullptr);
 
 	// LINE 8
 

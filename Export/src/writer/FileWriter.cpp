@@ -68,6 +68,7 @@ void FileWriter::write(const QString& str)
 void FileWriter::writeLine(const QString& str)
 {
 	write(str + "\n");
+	flushPending(); // do not span mapping across lines.
 	currentLine_++;
 	currentColumn_ = 0;
 }
