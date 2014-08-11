@@ -23,7 +23,7 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "TopLevelVisitor.h"
+#include "DeclarationVisitor.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/NameImport.h"
@@ -38,35 +38,17 @@ using namespace OOModel;
 
 namespace JavaExport {
 
-void TopLevelVisitor::notAllowed(Model::Node* node)
-{
-	if (!node) return;
-
-	if (auto list = DCast<Model::List>(node)) notAllowed(list);
-	else error(node, "Node not allowed");
-}
-
-void TopLevelVisitor::notAllowed(Model::List* list)
-{
-	if (list && !list->isEmpty()) error(list, "List must be empty");
-}
-
-QString TopLevelVisitor::packagesSoFar() const
-{
-	return packageStack_.join(".");
-}
-
-SourceDir* TopLevelVisitor::visitProject(Project* project, SourceDir* parent)
+SourceDir* DeclarationVisitor::visitProject(Project* project, SourceDir* parent)
 {
 	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, "src");
 
-	if (parent) packageStack_.append(project->name());
+	if (parent) packageStack().append(project->name());
 
 	for (auto node : *project->projects()) visitProject(node, projectDir);
 	for (auto node : *project->modules()) visitModule(node, projectDir);
 	for (auto node : *project->classes()) visitTopLevelClass(node, projectDir);
 
-	if (parent) packageStack_.removeLast();
+	if (parent) packageStack().removeLast();
 
 	notAllowed(project->methods());
 	notAllowed(project->fields());
@@ -74,17 +56,17 @@ SourceDir* TopLevelVisitor::visitProject(Project* project, SourceDir* parent)
 	return projectDir;
 }
 
-SourceDir* TopLevelVisitor::visitModule(Module* module, SourceDir* parent)
+SourceDir* DeclarationVisitor::visitModule(Module* module, SourceDir* parent)
 {
 	Q_ASSERT(parent);
 	auto moduleDir = &parent->subDir(module->name());
 
-	packageStack_.append(module->name());
+	packageStack().append(module->name());
 
 	for (auto node : *module->modules()) visitModule(node, moduleDir);
 	for (auto node : *module->classes()) visitTopLevelClass(node, moduleDir);
 
-	packageStack_.removeLast();
+	packageStack().removeLast();
 
 	notAllowed(module->methods());
 	notAllowed(module->fields());
@@ -92,15 +74,15 @@ SourceDir* TopLevelVisitor::visitModule(Module* module, SourceDir* parent)
 	return moduleDir;
 }
 
-SourceFile* TopLevelVisitor::visitTopLevelClass(Class* classs, SourceDir* parent)
+SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* parent)
 {
 	Q_ASSERT(parent);
-	auto classFile = &parent->file(classs->name());
+	auto classFile = &parent->file(classs->name() + ".java");
 
 	auto fragment = classFile->append(new CompositeFragment(classs, "vertical"));
 
 	auto header = fragment->append(new CompositeFragment(classs));
-	if (!packageStack_.isEmpty())
+	if (!packageStack().isEmpty())
 		*header << "package " << packagesSoFar() << ";";
 
 	for (auto node : *classs->subDeclarations())
@@ -114,7 +96,7 @@ SourceFile* TopLevelVisitor::visitTopLevelClass(Class* classs, SourceDir* parent
 	return classFile;
 }
 
-SourceFragment* TopLevelVisitor::visit(Class* classs)
+SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
 	*fragment << visitDeclaration(classs) << "class " << new TextFragment(classs->nameNode(), classs->name());
@@ -122,29 +104,29 @@ SourceFragment* TopLevelVisitor::visit(Class* classs)
 	if (!classs->baseClasses()->isEmpty())
 	{
 		*fragment << " extends ";
-		*fragment << list(classs->baseClasses(), "comma");
+		*fragment << list(classs->baseClasses(), this, "comma");
 	}
 
 	notAllowed(classs->friends());
 
 	//TODO
-	*fragment << list(classs->methods(), "body");
+	*fragment << list(classs->methods(), this, "body");
 
 	return fragment;
 }
 
-SourceFragment* TopLevelVisitor::visit(Method* method)
+SourceFragment* DeclarationVisitor::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
 	*fragment << visitDeclaration(method) << new TextFragment(method->nameNode(), method->name());
 
 	//TODO
-	*fragment << list(method->items(), "body");
+	*fragment << list(method->items(), this, "body");
 
 	return fragment;
 }
 
-SourceFragment* TopLevelVisitor::visit(Field* field)
+SourceFragment* DeclarationVisitor::visit(Field* field)
 {
 	auto fragment = new CompositeFragment(field);
 	*fragment << visitDeclaration(field);
@@ -152,17 +134,17 @@ SourceFragment* TopLevelVisitor::visit(Field* field)
 }
 
 
-SourceFragment* TopLevelVisitor::visit(NameImport* nameImport)
+SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 {
 	auto fragment = new CompositeFragment(nameImport);
 	*fragment << visitDeclaration(nameImport);
 	return fragment;
 }
 
-SourceFragment* TopLevelVisitor::visitDeclaration(Declaration* declaration)
+SourceFragment* DeclarationVisitor::visitDeclaration(Declaration* declaration)
 {
 	auto fragment = new CompositeFragment(declaration, "vertical");
-	*fragment << list(declaration->annotations(), "vertical");
+	*fragment << list(declaration->annotations(), this, "vertical");
 	auto header = fragment->append(new CompositeFragment(declaration, "space"));
 
 	if (declaration->modifiers()->isSet(Modifier::Public))
@@ -191,24 +173,16 @@ SourceFragment* TopLevelVisitor::visitDeclaration(Declaration* declaration)
 }
 
 
-SourceFragment* TopLevelVisitor::visit(StatementItem* statementItem)
+SourceFragment* DeclarationVisitor::visit(StatementItem* statementItem)
 {
 	auto fragment = new CompositeFragment(statementItem);
 	return fragment;
 }
 
 
-SourceFragment* TopLevelVisitor::visit(Expression* expression)
+SourceFragment* DeclarationVisitor::visit(Expression* expression)
 {
 	auto fragment = new CompositeFragment(expression);
-	return fragment;
-}
-
-template<class T>
-SourceFragment* TopLevelVisitor::list(Model::TypedList<T>* list, const QString& fragmentType)
-{
-	auto fragment = new CompositeFragment(list, fragmentType);
-	for (auto node : *list) *fragment << visit(node);
 	return fragment;
 }
 

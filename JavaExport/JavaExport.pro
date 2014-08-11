@@ -13,15 +13,17 @@ win32:LIBS += -llogger \
 HEADERS += src/commands/CJavaExport.h \
     src/exporter/ExportError.h \
     src/exporter/JavaExporter.h \
-    src/visitors/TopLevelVisitor.h \
     src/precompiled.h \
     src/JavaExportException.h \
     src/javaexport_api.h \
-    src/JavaExportPlugin.h
+    src/JavaExportPlugin.h \
+    src/visitors/DeclarationVisitor.h \
+    src/visitors/Visitor.h
 SOURCES += src/commands/CJavaExport.cpp \
     src/exporter/ExportError.cpp \
     src/exporter/JavaExporter.cpp \
-    src/visitors/TopLevelVisitor.cpp \
     src/JavaExportException.cpp \
     src/JavaExportPlugin.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/visitors/DeclarationVisitor.cpp \
+    src/visitors/Visitor.cpp

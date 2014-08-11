@@ -28,6 +28,7 @@
 
 #include "../javaexport_api.h"
 #include "../exporter/ExportError.h"
+#include "Visitor.h"
 
 namespace Export {
 	class SourceDir;
@@ -47,16 +48,12 @@ namespace OOModel {
 	class Expression;
 }
 
-namespace Model {
-	class Node;
-	class List;
-	template <class T> class TypedList;
-}
-
 namespace JavaExport {
 
-class JAVAEXPORT_API TopLevelVisitor {
+class JAVAEXPORT_API DeclarationVisitor : public Visitor {
 	public:
+		using Visitor::Visitor;
+
 		Export::SourceDir* visitProject(OOModel::Project* project, Export::SourceDir* parent = nullptr);
 		Export::SourceDir* visitModule(OOModel::Module* module, Export::SourceDir* parent);
 		Export::SourceFile* visitTopLevelClass(OOModel::Class* classs, Export::SourceDir* parent);
@@ -70,30 +67,6 @@ class JAVAEXPORT_API TopLevelVisitor {
 		Export::SourceFragment* visit(OOModel::Expression* expression);
 
 		Export::SourceFragment* visitDeclaration(OOModel::Declaration* declaration);
-
-
-		const QList<ExportError>& errors() const;
-
-	protected:
-		void error(const QString& errorMessage);
-		void error(Model::Node* node, const QString& errorMessage);
-
-	private:
-		QList<ExportError> errors_;
-		QStringList packageStack_;
-
-		void notAllowed(Model::Node* node);
-		void notAllowed(Model::List* list);
-
-		QString packagesSoFar() const;
-
-		template<class T>
-		Export::SourceFragment* list(Model::TypedList<T>* list, const QString& fragmentType = QString());
 };
-
-inline const QList<ExportError>& TopLevelVisitor::errors() const { return errors_; }
-inline void TopLevelVisitor::error(const QString& errorMessage) { errors_.append(ExportError(errorMessage)); }
-inline void TopLevelVisitor::error(Model::Node* node, const QString& errorMessage)
-{ errors_.append(ExportError(node, errorMessage)); }
 
 } /* namespace JavaExport */

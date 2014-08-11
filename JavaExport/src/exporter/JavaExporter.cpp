@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 #include "JavaExporter.h"
-#include "../visitors/TopLevelVisitor.h"
+#include "../visitors/DeclarationVisitor.h"
 
 #include "OOModel/src/declarations/Project.h"
 
@@ -40,8 +40,8 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
 
-	TopLevelVisitor tlv;
-	auto dir = std::unique_ptr<Export::SourceDir>( tlv.visitProject(project) );
+	DeclarationVisitor visitor;
+	auto dir = std::unique_ptr<Export::SourceDir>( visitor.visitProject(project) );
 
 	auto layouter = Export::FragmentLayouter{"\t"};
 	layouter.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
@@ -54,7 +54,7 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 
 	Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
 
-	return tlv.errors();
+	return visitor.errors();
 }
 
 } /* namespace JavaExport */
