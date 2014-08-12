@@ -64,7 +64,14 @@ SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 {
 	auto fragment = new CompositeFragment(catchClause);
-	*fragment << "CATCH_CLAUSE";
+
+	required(catchClause, catchClause->exceptionToCatch(), "Exception type to catch");
+
+	*fragment << "catch (";
+	if (catchClause->exceptionToCatch()) *fragment << expression(catchClause->exceptionToCatch());
+	*fragment << ")";
+	*fragment << list(catchClause->body(), StatementVisitor(data()), "body");
+
 	return fragment;
 }
 

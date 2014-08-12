@@ -34,8 +34,159 @@ namespace JavaExport {
 
 SourceFragment* StatementVisitor::visit(StatementItem* statementItem)
 {
+	if (auto castStatement = DCast<Block>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<BreakStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<CaseStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<ContinueStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<DeclarationStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<ExpressionStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<ForEachStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<IfStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<LoopStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<ReturnStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<SwitchStatement>(statementItem)) return visit(castStatement);
+	if (auto castStatement = DCast<TryCatchFinallyStatement>(statementItem)) return visit(castStatement);
+
+	// TODO: handle comments
 	auto fragment = new CompositeFragment(statementItem);
+	*fragment << "UNKNOWN STATEMENT TYPE";
 	return fragment;
 }
+
+SourceFragment* StatementVisitor::visit(Block* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+	*fragment << list(statement->items(), StatementVisitor(data()), "body");
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(BreakStatement* statement)
+{
+	return new TextFragment(statement, "break;");
+}
+
+SourceFragment* StatementVisitor::visit(CaseStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+	if (statement->caseExpression())
+		*fragment << "case " << expression(statement->caseExpression()) << ":";
+	else *fragment << "default:";
+
+	*fragment << list(statement->body(), StatementVisitor(data()), "body");
+
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(ContinueStatement* statement)
+{
+	return new TextFragment(statement, "continue;");
+}
+
+SourceFragment* StatementVisitor::visit(DeclarationStatement* statement)
+{
+	return declaration(statement->declaration());
+}
+
+SourceFragment* StatementVisitor::visit(ExpressionStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+	*fragment << expression(statement->expression()) << ";";
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(ForEachStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+
+	required(statement, statement->varType(), "explicit loop variable type");
+	*fragment << "for (";
+	if (statement->varType()) *fragment << expression(statement->varType()) << " ";
+	*fragment << statement->varNameNode() << " : ";
+	*fragment << expression(statement->collection()) << ")";
+	*fragment << list(statement->body(), StatementVisitor(data()), "body");
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(IfStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+	*fragment << "if (" << expression(statement->condition()) << ")";
+	*fragment << list(statement->thenBranch(), StatementVisitor(data()), "body");
+	if (!statement->elseBranch()->isEmpty())
+	{
+		*fragment << "else";
+		*fragment << list(statement->elseBranch(), StatementVisitor(data()), "body");
+	}
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(LoopStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+
+	if (statement->loopKind() == LoopStatement::LoopKind::PreCheck) // for and while loops
+	{
+		if (!statement->initStep() && !statement->updateStep()) // while loop
+		{
+			*fragment << "while (";
+			if (statement->condition()) *fragment << expression(statement->condition());
+			*fragment << ")" << list(statement->body(), StatementVisitor(data()), "body");
+		}
+		else // for loop
+		{
+			*fragment << "for (";
+			if (statement->initStep()) *fragment << expression(statement->initStep());
+			*fragment << " ; ";
+			if (statement->condition()) *fragment << expression(statement->condition());
+			*fragment << " ; ";
+			if (statement->updateStep()) *fragment << expression(statement->updateStep());
+			*fragment << ")" << list(statement->body(), StatementVisitor(data()), "body");
+		}
+	}
+	else	// do loop
+	{
+		*fragment << "do" << list(statement->body(), StatementVisitor(data()), "body") << "while (";
+		if (statement->condition()) *fragment << expression(statement->condition());
+		*fragment << ");";
+	}
+
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(ReturnStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+
+	if (statement->values()->size() > 1)
+		error(statement->values(), "Cannot have more than one return value in Java");
+
+	if (statement->values()->isEmpty()) *fragment << "return;";
+	else *fragment << "return " << expression(statement->values()->first()) << ";";
+
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(SwitchStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+	*fragment << "switch (" << expression(statement->switchExpression()) << ")";
+	*fragment << list(statement->body(), StatementVisitor(data()), "body");
+	return fragment;
+}
+
+SourceFragment* StatementVisitor::visit(TryCatchFinallyStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+	*fragment << "try";
+	*fragment << list(statement->tryBody(), StatementVisitor(data()), "body");
+	*fragment << list(statement->catchClauses(), ElementVisitor(data()), "vertical");
+	if (!statement->finallyBody()->isEmpty())
+	{
+		*fragment << "finally";
+		*fragment << list(statement->finallyBody(), StatementVisitor(data()), "body");
+	}
+	return fragment;
+}
+
 
 } // namespace JavaExport

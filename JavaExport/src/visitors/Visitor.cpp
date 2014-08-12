@@ -33,6 +33,12 @@ namespace JavaExport {
 Visitor::Visitor() : data_{new VisitorData}{}
 Visitor::Visitor(std::shared_ptr<VisitorData> data) : data_{data} {}
 
+void Visitor::required(Model::Node* parent, Model::Node* node, const QString& childName)
+{
+	if (node) return;
+	error(parent, "A required child (" + childName + ") is missing.");
+}
+
 void Visitor::notAllowed(Model::Node* node)
 {
 	if (!node) return;

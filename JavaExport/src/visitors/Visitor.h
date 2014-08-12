@@ -54,6 +54,7 @@ class Visitor
 		QStringList& packageStack();
 		QString packagesSoFar() const;
 
+		void required(Model::Node* parent, Model::Node* node, const QString& childName);
 		void notAllowed(Model::Node* node);
 		void notAllowed(Model::List* list);
 

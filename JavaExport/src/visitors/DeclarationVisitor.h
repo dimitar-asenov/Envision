@@ -46,6 +46,8 @@ class JAVAEXPORT_API DeclarationVisitor : public Visitor {
 		Export::SourceDir* visitModule(OOModel::Module* module, Export::SourceDir* parent);
 		Export::SourceFile* visitTopLevelClass(OOModel::Class* classs, Export::SourceDir* parent);
 
+		Export::SourceFragment* visit(OOModel::Declaration* declaration);
+
 		Export::SourceFragment* visit(OOModel::Class* classs);
 		Export::SourceFragment* visit(OOModel::Method* method);
 		//Export::SourceFragment* visit(OOModel::Field* field); Omitted on purpose, VariableDeclaration suffices

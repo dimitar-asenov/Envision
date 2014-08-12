@@ -36,6 +36,19 @@ class StatementVisitor : public Visitor
 	public:
 		using Visitor::Visitor;
 
+		Export::SourceFragment* visit(OOModel::Block* statement);
+		Export::SourceFragment* visit(OOModel::BreakStatement* statement);
+		Export::SourceFragment* visit(OOModel::CaseStatement* statement);
+		Export::SourceFragment* visit(OOModel::ContinueStatement* statement);
+		Export::SourceFragment* visit(OOModel::DeclarationStatement* statement);
+		Export::SourceFragment* visit(OOModel::ExpressionStatement* statement);
+		Export::SourceFragment* visit(OOModel::ForEachStatement* statement);
+		Export::SourceFragment* visit(OOModel::IfStatement* statement);
+		Export::SourceFragment* visit(OOModel::LoopStatement* statement);
+		Export::SourceFragment* visit(OOModel::ReturnStatement* statement);
+		Export::SourceFragment* visit(OOModel::SwitchStatement* statement);
+		Export::SourceFragment* visit(OOModel::TryCatchFinallyStatement* statement);
+
 		Export::SourceFragment* visit(OOModel::StatementItem* statementItem);
 };
 

@@ -40,6 +40,20 @@ using namespace OOModel;
 
 namespace JavaExport {
 
+SourceFragment* DeclarationVisitor::visit(Declaration* declaration)
+{
+	if (auto castDeclaration = DCast<Method>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<Class>(declaration)) return visit(castDeclaration);
+	if (auto castDeclaration = DCast<VariableDeclaration>(declaration)) return visit(castDeclaration);
+
+	notAllowed(declaration);
+
+	// TODO: handle comments
+	auto fragment = new CompositeFragment(declaration);
+	*fragment << "Invalid Declaration";
+	return fragment;
+}
+
 SourceDir* DeclarationVisitor::visitProject(Project* project, SourceDir* parent)
 {
 	auto projectDir = parent ? &parent->subDir(project->name()) : new SourceDir(nullptr, "src");
@@ -129,7 +143,7 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 	*fragment << printAnnotationsAndModifiers(method);
 
 	if (method->results()->size() > 1)
-		error(method->results(), "Can not have more than one return value in Java");
+		error(method->results(), "Cannot have more than one return value in Java");
 
 	if (!method->results()->isEmpty())
 		*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
