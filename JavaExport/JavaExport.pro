@@ -21,7 +21,8 @@ HEADERS += src/commands/CJavaExport.h \
     src/visitors/Visitor.h \
     src/visitors/StatementVisitor.h \
     src/visitors/ExpressionVisitor.h \
-    src/visitors/ElementVisitor.h
+    src/visitors/ElementVisitor.h \
+    src/visitors/VisitorDefs.h
 SOURCES += src/commands/CJavaExport.cpp \
     src/exporter/ExportError.cpp \
     src/exporter/JavaExporter.cpp \

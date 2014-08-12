@@ -25,9 +25,7 @@
  **********************************************************************************************************************/
 #include "DeclarationVisitor.h"
 
-#include "StatementVisitor.h"
-#include "ExpressionVisitor.h"
-#include "ElementVisitor.h"
+#include "VisitorDefs.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/NameImport.h"
@@ -140,9 +138,9 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* vd)
 {
 	auto fragment = new CompositeFragment(vd);
 	*fragment << printAnnotationsAndModifiers(vd);
-	*fragment << ExpressionVisitor(data()).visit(vd->typeExpression()) << " " << vd->nameNode();
+	*fragment << expression(vd->typeExpression()) << " " << vd->nameNode();
 	if (vd->initialValue())
-		*fragment << " = " << ExpressionVisitor(data()).visit(vd->initialValue());
+		*fragment << " = " << expression(vd->initialValue());
 	return fragment;
 }
 
@@ -153,7 +151,7 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 
 	notAllowed(nameImport->annotations());
 
-	*fragment << "import " << ExpressionVisitor(data()).visit(nameImport->importedName());
+	*fragment << "import " << expression(nameImport->importedName());
 	if (nameImport->importAll()) *fragment << ".*";
 	*fragment << ";";
 

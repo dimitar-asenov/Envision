@@ -67,6 +67,11 @@ class Visitor
 		Export::SourceFragment* list(Model::TypedList<ListElement>* list, VisitorClass&& v,
 											  const QString& fragmentType = QString());
 
+		template <class NodeType> Export::SourceFragment* declaration(NodeType* node);
+		template <class NodeType> Export::SourceFragment* statement(NodeType* node);
+		template <class NodeType> Export::SourceFragment* expression(NodeType* node);
+		template <class NodeType> Export::SourceFragment* element(NodeType* node);
+
 	private:
 		std::shared_ptr<VisitorData> data_;
 };
