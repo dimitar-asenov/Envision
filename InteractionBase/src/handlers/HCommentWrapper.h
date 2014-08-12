@@ -36,10 +36,14 @@ class INTERACTIONBASE_API HCommentWrapper : public GenericHandler
 {
 	public:
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+		virtual void afterEvent(Visualization::Item *target, QEvent* event) override;
 		static HCommentWrapper* instance();
 
 	protected:
 		HCommentWrapper();
+
+	private:
+		bool del_ = false;
 };
 
 }

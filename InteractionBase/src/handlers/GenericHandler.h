@@ -157,6 +157,5 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }
 inline void GenericHandler::addCommand(Command* command) { supportedCommands.append(command); }
-inline void GenericHandler::resetCommentWrapper() {commentWrapper_ = nullptr; }
 
 }

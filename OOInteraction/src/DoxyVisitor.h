@@ -32,6 +32,9 @@ namespace OOInteraction {
 class DoxyVisitor : public Model::Visitor<DoxyVisitor, QString>{
 	public:
 		static void init();
+	private:
+		static const QString DOXY_START;
+		static const QString DOXY_END;
 };
 
 }

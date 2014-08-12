@@ -277,7 +277,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void clearPurpose();
 
 		int childNodePurpose(const Model::Node* node) const;
-		int chilPurpose(const Model::Node* node) const;
 		void setChildNodePurpose(const Model::Node* node, int purpose);
 		void clearChildNodePurpose(const Model::Node* node);
 		bool definesChildNodePurpose(const Model::Node* node) const;

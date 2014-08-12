@@ -464,8 +464,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				}
 				if (commentWrapper_)
 				{
-					commentWrapper_->hide();
-					commentWrapper_ = nullptr;
+					GenericHandler::resetCommentWrapper();
 				}
 				break;
 			}
@@ -853,6 +852,11 @@ void GenericHandler::fixCursorPositionForUndoAfterTreeManagerChange()
 
 	cursorPositionsForUndo_.append(lastCursorPosition_);
 	++cursorUndoIndex_;
+}
+
+void GenericHandler::resetCommentWrapper()
+{
+	SAFE_DELETE_ITEM(commentWrapper_);
 }
 
 }

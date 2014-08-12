@@ -45,12 +45,12 @@ void DoxyVisitor::init()
 	Visitor::addType<Project>( [](DoxyVisitor* v, Project* t) -> QString
 	{
 		QString res = "";
-		//res = "/**\n";
+		//res = DOXY_START;
 		/*if (t->comment() != nullptr)
 		{
 			res += v->visit(t->comment());
 		}*/
-		//res += " */\n";
+		//res += DOXY_END;
 		for (auto node : *t->classes()) res += v->visit(node);
 		for (auto node : *t->modules()) res += v->visit(node);
 		return res;
@@ -58,12 +58,12 @@ void DoxyVisitor::init()
 
 	Visitor::addType<Module>( [](DoxyVisitor* v, Module* t) -> QString
 	{
-		QString res = "/**\n";
+		QString res = DOXY_START;
 		if (t->comment() != nullptr)
 		{
 			res += v->visit(t->comment());
 		}
-		res += " */\n";
+		res += DOXY_END;
 		res += "namespace " + t->name();
 		res += "\n{\n";
 		for (auto node : *t->fields())
@@ -75,12 +75,12 @@ void DoxyVisitor::init()
 
 	Visitor::addType<Class>( [](DoxyVisitor* v, Class* t) -> QString
 	{
-		QString res = "/**\n";
+		QString res = DOXY_START;
 		if (t->comment() != nullptr)
 		{
 			res += v->visit(t->comment());
 		}
-		res += " */\n";
+		res += DOXY_END;
 		res += "class " + t->name();
 		if (!t->baseClasses()->isEmpty()) res += " : ";
 		for (auto node : *t->baseClasses()) res += StringComponents::stringForNode(node) + ",";
@@ -95,7 +95,7 @@ void DoxyVisitor::init()
 
 	Visitor::addType<Method>( [](DoxyVisitor* v, Method* t) -> QString
 	{
-		QString res = "/**\n";
+		QString res = DOXY_START;
 		if (t->comment() != nullptr)
 		{
 			res += v->visit(t->comment());
@@ -108,7 +108,7 @@ void DoxyVisitor::init()
 				res += v->visit(node->comment());
 			}
 		}
-		res += " */\n";
+		res += DOXY_END;
 		res += "public: ";
 		if (t->results()->isEmpty())
 			res += "void ";
@@ -133,7 +133,7 @@ void DoxyVisitor::init()
 			{
 				res += " - "+ line->get().mid(3) + "\n";
 			}
-			if (line->get().startsWith("[browser#") && line->get().right(1) == "]" && line->get().size() > 9+1)
+			else if (line->get().startsWith("[browser#") && line->get().right(1) == "]" && line->get().size() > 9+1)
 			{
 				QString url = line->get().mid(9, line->get().size()-9-1);
 				res += "["+ url + "](" + url + ")\n";
@@ -215,5 +215,8 @@ void DoxyVisitor::init()
 	});
 
 }
+
+const QString DoxyVisitor::DOXY_START = QString("/**\n");
+const QString DoxyVisitor::DOXY_END = QString(" */\n");
 
 }

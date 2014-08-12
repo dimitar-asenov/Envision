@@ -38,17 +38,15 @@
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
 
-#include "QProcess"
-#include "QDesktopServices"
-#include "QDir"
-
 #if defined __cplusplus
 // Add C++ includes here
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
 #include <QtCore/QElapsedTimer>
-
+#include <QtCore/QProcess>
+#include <QtCore/QDir>
+#include <QtGui/QDesktopServices>
 
 #if defined(OOINTERACTION_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of

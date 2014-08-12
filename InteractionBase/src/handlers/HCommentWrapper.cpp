@@ -53,11 +53,17 @@ void HCommentWrapper::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 		aCompositeNode->beginModification("delete comment");
 		aCompositeNode->setComment(nullptr);
 		aCompositeNode->endModification();
-		target->hide();
-		GenericHandler::resetCommentWrapper();
+		del_ = true;
 	}
 	else
 		GenericHandler::keyPressEvent(target, event);
+}
+
+void HCommentWrapper::afterEvent(Visualization::Item*, QEvent*)
+{
+	if (del_)
+		GenericHandler::resetCommentWrapper();
+	del_ = false;
 }
 
 }
