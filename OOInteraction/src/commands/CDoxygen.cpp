@@ -39,22 +39,25 @@ Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, 
 	const std::unique_ptr<Visualization::Cursor>&, const QString& /*name*/, const QStringList& /*attributes*/)
 {
 	QDir dir(QDir::currentPath());
-	dir.mkpath("html/images");
+	dir.mkpath("doxygen/html/images");
 
 	OOInteraction::DoxyVisitor::init();
 	auto aDoxyVisitor = new OOInteraction::DoxyVisitor();
 	QString valDoxy = aDoxyVisitor->visit(source->node()->root());
 	delete aDoxyVisitor;
 
-	QFile file("doxy.cpp");
+	QFile file(QDir::currentPath() + "/doxygen/doxy.cpp");
 	file.open(QIODevice::WriteOnly | QIODevice::Text);
 	QTextStream out(&file);
 	out << valDoxy;
 	file.close();
 
-	QProcess::execute("doxygen");
+	QProcess aProcess;
+	aProcess.setWorkingDirectory(QDir::currentPath() + "/doxygen");
+	aProcess.start("doxygen");
+	aProcess.waitForFinished();
 
-	QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/html/index.html"));
+	QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/doxygen/html/index.html"));
 
 	return new Interaction::CommandResult();
 }

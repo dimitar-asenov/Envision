@@ -167,7 +167,7 @@ void DoxyVisitor::init()
 	{
 		QString imageName =  "diagram_" + t->name() +".png";
 		auto anItem = Visualization::ModelRenderer::renderToImage(t);
-		anItem.save(QDir::currentPath() + "/html/images/" + imageName);
+		anItem.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
 		return QString("![](images/" + imageName + ")");
 	});
 
@@ -179,7 +179,7 @@ void DoxyVisitor::init()
 		{
 			QString imageName =  "freenode_" + t->name() +".png";
 			auto anItem = Visualization::ModelRenderer::renderToImage(t);
-			anItem.save(QDir::currentPath() + "/html/images/" + imageName);
+			anItem.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
 			return QString("![](images/" + imageName + ")");
 		}
 	});

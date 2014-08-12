@@ -95,3 +95,8 @@ SOURCES += src/handlers/HArrayInitializer.cpp \
     src/handlers/HStatementItemList.cpp \
     src/DoxyVisitor.cpp \
     src/commands/CDoxygen.cpp
+
+doxy.path = $${BUILD_DIR}/doxygen
+doxy.files = doxy_data/*
+
+INSTALLS += doxy
