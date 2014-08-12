@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "StatementVisitor.h"
+#include "VisitorDefs.h"
 
 using namespace Export;
 using namespace OOModel;

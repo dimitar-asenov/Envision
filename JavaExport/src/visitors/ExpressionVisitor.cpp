@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ExpressionVisitor.h"
+#include "VisitorDefs.h"
 
 using namespace Export;
 using namespace OOModel;

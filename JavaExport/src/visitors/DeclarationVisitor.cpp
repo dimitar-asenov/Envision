@@ -126,10 +126,29 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 SourceFragment* DeclarationVisitor::visit(Method* method)
 {
 	auto fragment = new CompositeFragment(method);
-	*fragment << printAnnotationsAndModifiers(method) << method->nameNode();
+	*fragment << printAnnotationsAndModifiers(method);
 
-	//TODO
+	if (method->results()->size() > 1)
+		error(method->results(), "Can not have more than one return value in Java");
+
+	if (!method->results()->isEmpty())
+		*fragment << expression(method->results()->at(0)->typeExpression()) << " ";
+	else if (method->methodKind() != Method::MethodKind::Constructor)
+		*fragment << "void ";
+
+	if (method->methodKind() == Method::MethodKind::Destructor)
+		error(method, "Can not have a method of type Destructor in Java");
+
+	*fragment << method->nameNode();
+
+	if (!method->typeArguments()->isEmpty())
+		*fragment << list(method->typeArguments(), ElementVisitor(data()), "typeArgsList");
+
+	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
 	*fragment << list(method->items(), StatementVisitor(data()), "body");
+
+	notAllowed(method->subDeclarations());
+	notAllowed(method->memberInitializers());
 
 	return fragment;
 }
@@ -141,6 +160,8 @@ SourceFragment* DeclarationVisitor::visit(VariableDeclaration* vd)
 	*fragment << expression(vd->typeExpression()) << " " << vd->nameNode();
 	if (vd->initialValue())
 		*fragment << " = " << expression(vd->initialValue());
+
+	if (!DCast<Expression>(vd->parent())) *fragment << ";";
 	return fragment;
 }
 

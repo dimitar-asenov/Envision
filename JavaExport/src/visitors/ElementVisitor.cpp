@@ -25,16 +25,18 @@
 ***********************************************************************************************************************/
 
 #include "ElementVisitor.h"
+#include "VisitorDefs.h"
 
 using namespace Export;
 using namespace OOModel;
 
 namespace JavaExport {
 
-SourceFragment* ElementVisitor::visit(FormalArgument* agument)
+SourceFragment* ElementVisitor::visit(FormalArgument* argument)
 {
-	auto fragment = new CompositeFragment(agument);
-	*fragment << "ARGUMENT";
+	auto fragment = new CompositeFragment(argument);
+	*fragment << expression(argument->typeExpression()) << " ";
+	*fragment << argument->nameNode();
 	return fragment;
 }
 
@@ -48,7 +50,14 @@ SourceFragment* ElementVisitor::visit(FormalResult* result)
 SourceFragment* ElementVisitor::visit(FormalTypeArgument* typeArgument)
 {
 	auto fragment = new CompositeFragment(typeArgument);
-	*fragment << "TYPE_ARGUMENT";
+	*fragment << typeArgument->nameNode();
+	if (typeArgument->subTypeOfExpression())
+		*fragment << " extends " << expression(typeArgument->subTypeOfExpression());
+	if (typeArgument->superTypeOfExpression())
+		*fragment << " super " << expression(typeArgument->superTypeOfExpression());
+
+	notAllowed(typeArgument->specializationExpression());
+
 	return fragment;
 }
 
