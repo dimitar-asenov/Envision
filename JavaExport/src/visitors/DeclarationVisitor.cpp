@@ -193,11 +193,11 @@ SourceFragment* DeclarationVisitor::visit(NameImport* nameImport)
 	return fragment;
 }
 
-
 SourceFragment* DeclarationVisitor::printAnnotationsAndModifiers(Declaration* declaration)
 {
 	auto fragment = new CompositeFragment(declaration, "vertical");
-	*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
+	if (!declaration->annotations()->isEmpty()) // avoid an extra new line if there are no annotations
+		*fragment << list(declaration->annotations(), StatementVisitor(data()), "vertical");
 	auto header = fragment->append(new CompositeFragment(declaration, "space"));
 
 	if (declaration->modifiers()->isSet(Modifier::Public))
