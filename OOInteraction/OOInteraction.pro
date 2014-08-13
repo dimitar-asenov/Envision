@@ -52,7 +52,8 @@ HEADERS += src/handlers/HArrayInitializer.h \
     src/OOInteractionPlugin.h \
     src/handlers/HStatementItemList.h \
     src/DoxyVisitor.h \
-    src/commands/CDoxygen.h
+    src/commands/CDoxygen.h \
+    src/DoxyCommentVisitor.h
 SOURCES += src/handlers/HArrayInitializer.cpp \
     src/expression_editor/CommandDescriptor.cpp \
     src/expression_editor/CompoundObjectDescriptor.cpp \
@@ -94,7 +95,8 @@ SOURCES += src/handlers/HArrayInitializer.cpp \
     src/OOInteractionPlugin.cpp \
     src/handlers/HStatementItemList.cpp \
     src/DoxyVisitor.cpp \
-    src/commands/CDoxygen.cpp
+    src/commands/CDoxygen.cpp \
+    src/DoxyCommentVisitor.cpp
 
 doxy.path = $${BUILD_DIR}/doxygen
 doxy.files = doxy_data/*

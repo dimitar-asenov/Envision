@@ -29,14 +29,9 @@
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
-#include "OOModel/src/declarations/Module.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
-#include "Comments/src/nodes/CommentNode.h"
 
 using namespace OOModel;
-using namespace Comments;
 
 namespace OOInteraction {
 
@@ -45,12 +40,7 @@ void DoxyVisitor::init()
 	Visitor::addType<Project>( [](DoxyVisitor* v, Project* t) -> QString
 	{
 		QString res = "";
-		//res = DOXY_START;
-		/*if (t->comment() != nullptr)
-		{
-			res += v->visit(t->comment());
-		}*/
-		//res += DOXY_END;
+		//res += aDoxyCommentVisitor_->visit(t);
 		for (auto node : *t->classes()) res += v->visit(node);
 		for (auto node : *t->modules()) res += v->visit(node);
 		return res;
@@ -58,12 +48,8 @@ void DoxyVisitor::init()
 
 	Visitor::addType<Module>( [](DoxyVisitor* v, Module* t) -> QString
 	{
-		QString res = DOXY_START;
-		if (t->comment() != nullptr)
-		{
-			res += v->visit(t->comment());
-		}
-		res += DOXY_END;
+		QString res = "";
+		res += aDoxyCommentVisitor_->visit(t);
 		res += "namespace " + t->name();
 		res += "\n{\n";
 		for (auto node : *t->fields())
@@ -75,12 +61,8 @@ void DoxyVisitor::init()
 
 	Visitor::addType<Class>( [](DoxyVisitor* v, Class* t) -> QString
 	{
-		QString res = DOXY_START;
-		if (t->comment() != nullptr)
-		{
-			res += v->visit(t->comment());
-		}
-		res += DOXY_END;
+		QString res = "";
+		res += aDoxyCommentVisitor_->visit(t);
 		res += "class " + t->name();
 		if (!t->baseClasses()->isEmpty()) res += " : ";
 		for (auto node : *t->baseClasses()) res += StringComponents::stringForNode(node) + ",";
@@ -93,22 +75,10 @@ void DoxyVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<Method>( [](DoxyVisitor* v, Method* t) -> QString
+	Visitor::addType<Method>( [](DoxyVisitor*, Method* t) -> QString
 	{
-		QString res = DOXY_START;
-		if (t->comment() != nullptr)
-		{
-			res += v->visit(t->comment());
-		}
-		for (auto node : *t->arguments())
-		{
-			if (node->comment() != nullptr)
-			{
-				res += "\\param " + node->name() + "\n";
-				res += v->visit(node->comment());
-			}
-		}
-		res += DOXY_END;
+		QString res = "";
+		res += aDoxyCommentVisitor_->visit(t);
 		res += "public: ";
 		if (t->results()->isEmpty())
 			res += "void ";
@@ -124,99 +94,8 @@ void DoxyVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<CommentNode>( [](DoxyVisitor* v, CommentNode* t) -> QString
-	{
-		QString res = "";
-		for (auto line : *t->lines())
-		{
-			if (line->get().startsWith(" * ")) // Doxygen doesnt like * for lists, so exchange with -
-			{
-				res += " - "+ line->get().mid(3) + "\n";
-			}
-			else if (line->get().startsWith("[browser#") && line->get().right(1) == "]" && line->get().size() > 9+1)
-			{
-				QString url = line->get().mid(9, line->get().size()-9-1);
-				res += "["+ url + "](" + url + ")\n";
-			}
-			else if (line->get().startsWith("[diagram#") && line->get().right(1) == "]" && line->get().size() > 9+1)
-			{
-				QString name = line->get().mid(9, line->get().size()-9-1);
-				res += v->visit(t->diagram(name)) + "\n\n";
-			}
-			else if (line->get().startsWith("[code#") && line->get().right(1) == "]" && line->get().size() > 6+1)
-			{
-				QString name = line->get().mid(6, line->get().size()-6-1);
-				res += v->visit(t->code(name)) + "\n\n";
-			}
-			else if (line->get().startsWith("[table#") && line->get().right(1) == "]" && line->get().size() > 7+1)
-			{
-				QString name;
-				if (line->get().count('#')==3)
-					name = line->get().mid(7, (line->get().indexOf('#', 7)-line->get().indexOf('#'))-1);
-				else
-					name =  line->get().mid(7, line->get().size()-7-1);
-				res += v->visit(t->table(name)) + "\n\n";
-			}
-			else
-				res += line->get() + "\n";
-		}
-		return res;
-	});
-
-	Visitor::addType<CommentDiagram>( [](DoxyVisitor*, CommentDiagram* t) -> QString
-	{
-		QString imageName =  "diagram_" + t->name() +".png";
-		auto anItem = Visualization::ModelRenderer::renderToImage(t);
-		anItem.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
-		return QString("![](images/" + imageName + ")");
-	});
-
-	Visitor::addType<CommentFreeNode>( [](DoxyVisitor* v, CommentFreeNode* t) -> QString
-	{
-		if (DCast<CommentText>(t->node()))
-			return v->visit(t->node());
-		else
-		{
-			QString imageName =  "freenode_" + t->name() +".png";
-			auto anItem = Visualization::ModelRenderer::renderToImage(t);
-			anItem.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
-			return QString("![](images/" + imageName + ")");
-		}
-	});
-
-	Visitor::addType<CommentText>( [](DoxyVisitor*, CommentText* t) -> QString
-	{
-		return t->get();
-	});
-
-	Visitor::addType<CommentTable>( [](DoxyVisitor* v, CommentTable* t) -> QString
-	{
-		QString res = "";
-		for (int x = 0; x < t->rowCount(); x++)
-		{
-			if (x == 1)
-			{
-				res += "|";
-				for (int y = 0; y < t->columnCount(); y++)
-				{
-					res += "-|";
-				}
-				res += "\n";
-			}
-			res += "| ";
-			for (int y = 0; y < t->columnCount(); y++)
-			{
-				res += v->visit(t->nodeAt(x, y)) + " | ";
-			}
-			if (x != t->rowCount()-1)
-				res += "\n";
-		}
-		return res;
-	});
-
 }
 
-const QString DoxyVisitor::DOXY_START = QString("/**\n");
-const QString DoxyVisitor::DOXY_END = QString(" */\n");
+DoxyCommentVisitor* DoxyVisitor::aDoxyCommentVisitor_ = new DoxyCommentVisitor();
 
 }

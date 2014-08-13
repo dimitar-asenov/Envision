@@ -24,17 +24,18 @@
 **
 ***********************************************************************************************************************/
 
+#pragma once
+
 #include "ModelBase/src/visitor/VisitorDefinition.h"
-#include "VisualizationBase/src/items/Item.h"
-#include "OOInteraction/src/DoxyCommentVisitor.h"
 
 namespace OOInteraction {
 
-class DoxyVisitor : public Model::Visitor<DoxyVisitor, QString>{
+class DoxyCommentVisitor : public Model::Visitor<DoxyCommentVisitor, QString>{
 	public:
 		static void init();
 	private:
-		static DoxyCommentVisitor* aDoxyCommentVisitor_;
+		static const QString DOXY_START;
+		static const QString DOXY_END;
 };
 
 }

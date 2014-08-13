@@ -26,7 +26,8 @@
 
 #include "commands/CDoxygen.h"
 
-#include "OOInteraction//src/DoxyVisitor.h"
+#include "OOInteraction/src/DoxyVisitor.h"
+#include "OOInteraction/src/DoxyCommentVisitor.h"
 
 namespace OOInteraction {
 
@@ -41,7 +42,6 @@ Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, 
 	QDir dir(QDir::currentPath());
 	dir.mkpath("doxygen/html/images");
 
-	OOInteraction::DoxyVisitor::init();
 	auto aDoxyVisitor = new OOInteraction::DoxyVisitor();
 	QString valDoxy = aDoxyVisitor->visit(source->node()->root());
 	delete aDoxyVisitor;

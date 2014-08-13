@@ -74,6 +74,9 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
+#include "OOInteraction/src/DoxyVisitor.h"
+#include "OOInteraction/src/DoxyCommentVisitor.h"
+
 #include "Core/src/AdapterManager.h"
 
 namespace OOInteraction {
@@ -141,6 +144,9 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 
 	Visualization::VisualizationManager::instance().mainScene()->addRefreshActionFunction(
 			CustomizationVisitor::onSceneRefresh);
+
+	OOInteraction::DoxyVisitor::init();
+	OOInteraction::DoxyCommentVisitor::init();
 
 	return true;
 }
