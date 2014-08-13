@@ -51,6 +51,7 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 						  | Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n\n", "}");
 	layouter.addRule("space", Export::FragmentLayouter::SpaceAtEnd, "", " ", "");
 	layouter.addRule("comma", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
+	layouter.addRule("initializerList", Export::FragmentLayouter::SpaceAfterSeparator, "{", ",", "}");
 	layouter.addRule("argsList", Export::FragmentLayouter::SpaceAfterSeparator, "(", ",", ")");
 	layouter.addRule("typeArgsList", Export::FragmentLayouter::SpaceAfterSeparator, "<", ",", ">");
 
