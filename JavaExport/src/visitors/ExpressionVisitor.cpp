@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ExpressionVisitor.h"
+#include "../JavaExportException.h"
 #include "VisitorDefs.h"
 
 using namespace Export;
@@ -32,10 +33,193 @@ using namespace OOModel;
 
 namespace JavaExport {
 
+template <class T> Export::SourceFragment* ExpressionVisitor::optional(T* node)
+{
+	return node ? visit(node) : nullptr;
+}
+
 SourceFragment* ExpressionVisitor::visit(Expression* expression)
 {
 	auto fragment = new CompositeFragment(expression);
-	*fragment << "EXPRESSION";
+
+	// Types ============================================================================================================
+	if (auto e = DCast<ArrayTypeExpression>(expression))
+		*fragment << visit(e->typeExpression()) << "[" << optional(e->fixedSize()) << "]";
+	else if (auto e = DCast<ReferenceTypeExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<PointerTypeExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<ClassTypeExpression>(expression)) *fragment << visit(e->typeExpression());
+	else if (auto e = DCast<PrimitiveTypeExpression>(expression))
+	{
+		switch (e->typeValue())
+		{
+			case PrimitiveTypeExpression::PrimitiveTypes::INT: *fragment << "int"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::LONG: *fragment << "long"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT: notAllowed(e); break;
+			case PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG: notAllowed(e); break;
+			case PrimitiveTypeExpression::PrimitiveTypes::FLOAT: *fragment << "float"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::DOUBLE: *fragment << "double"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN: *fragment << "boolean"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::CHAR: *fragment << "char"; break;
+			case PrimitiveTypeExpression::PrimitiveTypes::VOID: *fragment << "void"; break;
+			default: error(e, "Unkown primitive type");
+		}
+	}
+	else if (auto e = DCast<TypeQualifierExpression>(expression))
+	{
+		switch (e->qualifier())
+		{
+			case TypeQualifierExpression::Qualifier::CONST: notAllowed(e); break;
+			case TypeQualifierExpression::Qualifier::VOLATILE: *fragment << "volatile"; break;
+			default: error(e, "Unkown qualifier");
+		}
+		*fragment << " " << visit(e->typeExpression());
+	}
+	else if (auto e = DCast<AutoTypeExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<FunctionTypeExpression>(expression)) notAllowed(e);
+
+	// Operators ========================================================================================================
+
+	else if (auto e = DCast<AssignmentExpression>(expression))
+	{
+		*fragment << visit(e->left()) << " ";
+		switch (e->op())
+		{
+			case AssignmentExpression::ASSIGN: *fragment << "="; break;
+			case AssignmentExpression::PLUS_ASSIGN: *fragment << "+="; break;
+			case AssignmentExpression::MINUS_ASSIGN: *fragment << "-="; break;
+			case AssignmentExpression::TIMES_ASSIGN: *fragment << "*="; break;
+			case AssignmentExpression::DIVIDE_ASSIGN: *fragment << "/="; break;
+			case AssignmentExpression::BIT_AND_ASSIGN: *fragment << "&="; break;
+			case AssignmentExpression::BIT_OR_ASSIGN: *fragment << "|="; break;
+			case AssignmentExpression::BIT_XOR_ASSIGN: *fragment << "^="; break;
+			case AssignmentExpression::REMAINDER_ASSIGN: *fragment << "%="; break;
+			case AssignmentExpression::LEFT_SHIFT_ASSIGN: *fragment << "<<="; break;
+			case AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN: *fragment << ">>="; break;
+			case AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: *fragment << ">>>="; break;
+			default: error(e, "Unkown assignment type");
+		}
+		*fragment << " " << visit(e->right());
+	}
+	else if (auto e = DCast<BinaryOperation>(expression))
+	{
+		*fragment << visit(e->left());
+		switch (e->op())
+		{
+			case BinaryOperation::TIMES: *fragment << "*"; break;
+			case BinaryOperation::DIVIDE: *fragment << "/"; break;
+			case BinaryOperation::REMAINDER: *fragment << "%"; break;
+			case BinaryOperation::PLUS: *fragment << "+"; break;
+			case BinaryOperation::MINUS: *fragment << "-"; break;
+			case BinaryOperation::LEFT_SHIFT: *fragment << " << "; break;
+			case BinaryOperation::RIGHT_SHIFT_SIGNED: *fragment << " >> "; break;
+			case BinaryOperation::RIGHT_SHIFT_UNSIGNED: *fragment << " >>> "; break;
+			case BinaryOperation::LESS: *fragment << " < "; break;
+			case BinaryOperation::GREATER: *fragment << " > "; break;
+			case BinaryOperation::LESS_EQUALS: *fragment << " <= "; break;
+			case BinaryOperation::GREATER_EQUALS: *fragment << " >= "; break;
+			case BinaryOperation::EQUALS: *fragment << " == "; break;
+			case BinaryOperation::NOT_EQUALS: *fragment << " != "; break;
+			case BinaryOperation::XOR: *fragment << " ^ "; break;
+			case BinaryOperation::AND: *fragment << " & "; break;
+			case BinaryOperation::OR: *fragment << " | "; break;
+			case BinaryOperation::CONDITIONAL_AND: *fragment << " && "; break;
+			case BinaryOperation::CONDITIONAL_OR: *fragment << " || "; break;
+			case BinaryOperation::ARRAY_INDEX: *fragment << "["; break;
+			default: error(e, "Unkown binary operator type");
+		}
+		*fragment << visit(e->right());
+		if (e->op() == BinaryOperation::ARRAY_INDEX) *fragment << "]";
+	}
+	else if (auto e = DCast<UnaryOperation>(expression))
+	{
+		switch (e->op())
+		{
+			case UnaryOperation::PREINCREMENT: *fragment << "++" << visit(e->operand()); break;
+			case UnaryOperation::PREDECREMENT: *fragment << "--" << visit(e->operand()); break;
+			case UnaryOperation::POSTINCREMENT: *fragment << visit(e->operand()) << "++"; break;
+			case UnaryOperation::POSTDECREMENT: *fragment << visit(e->operand()) << "--"; break;
+			case UnaryOperation::PLUS: *fragment << "+" << visit(e->operand()); break;
+			case UnaryOperation::MINUS: *fragment << "-" << visit(e->operand()); break;
+			case UnaryOperation::NOT: *fragment << "!" << visit(e->operand()); break;
+			case UnaryOperation::COMPLEMENT: *fragment << "~" << visit(e->operand()); break;
+			case UnaryOperation::PARENTHESIS: *fragment << "(" << visit(e->operand()) << ")"; break;
+			case UnaryOperation::DEREFERENCE: notAllowed(e); break;
+			case UnaryOperation::ADDRESSOF: notAllowed(e); break;
+			default: error(e, "Unkown unary operator type");
+		}
+	}
+	else if (auto e = DCast<TypeTraitExpression>(expression)) notAllowed(e);
+
+	// Literals =========================================================================================================
+
+	else if (auto e = DCast<BooleanLiteral>(expression)) *fragment << (e->value() ? "true" : "false");
+	else if (auto e = DCast<IntegerLiteral>(expression)) *fragment << QString::number( e->value());
+	else if (auto e = DCast<FloatLiteral>(expression)) *fragment << QString::number( e->value());
+	else if (DCast<NullLiteral>(expression)) *fragment << "null";
+	else if (auto e = DCast<StringLiteral>(expression)) *fragment << "\"" << e->value() << "\"";
+	else if (auto e = DCast<CharacterLiteral>(expression)) *fragment << "'" << e->value() << "'";
+
+	// Misc =============================================================================================================
+
+	else if (auto e = DCast<CastExpression>(expression))
+		*fragment << "(" << visit(e->castType()) << ") " << visit(e->expr());
+	else if (auto e = DCast<CommaExpression>(expression)) *fragment << visit(e->left()) << ", " << visit(e->right());
+	else if (auto e = DCast<ConditionalExpression>(expression))
+		*fragment << visit(e->condition()) << " ? " << visit(e->trueExpression()) << " : " << visit(e->falseExpression());
+	else if (DCast<ThisExpression>(expression)) *fragment << "this";
+	else if (auto e = DCast<GlobalScopeExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<ThrowExpression>(expression)) *fragment << "throw " << visit(e->expr());
+	else if (auto e = DCast<TypeNameOperator>(expression)) notAllowed(e);
+	else if (auto e = DCast<DeleteExpression>(expression)) notAllowed(e);
+	else if (auto e = DCast<VariableDeclarationExpression>(expression)) *fragment << declaration(e->decl());
+	else if (auto e = DCast<LambdaExpression>(expression))
+	{
+		*fragment << list(e->arguments(), ElementVisitor(data()), "argsList") << " -> ";
+		*fragment << list(e->body(), StatementVisitor(data()), "body");
+
+		if (e->results()->size() > 1) error(e->results(), "Cannot have more than one return value in Java");
+	}
+	else if (auto e = DCast<ArrayInitializer>(expression)) *fragment << list(e->values(), this, "initializerList");
+	else if (auto e = DCast<MethodCallExpression>(expression))
+		*fragment << visit(e->callee()) << list(e->arguments(), this, "argsList");
+	else if (auto e = DCast<NewExpression>(expression))
+	{
+		*fragment << "new " << visit(e->newType());
+		for (auto dim : *e->dimensions())
+			*fragment << "[" << visit(dim) << "]";
+		if (e->initializer()) *fragment << " = " << visit(e->initializer());
+	}
+	else if (auto e = DCast<ReferenceExpression>(expression))
+	{
+		if (e->prefix()) *fragment << visit(e->prefix()) << ".";
+		*fragment << e->name();
+		if (!e->typeArguments()->isEmpty()) *fragment << list(e->typeArguments(), this, "typeArgsList");
+	}
+
+	// Flexible input support ===========================================================================================
+
+	else if (DCast<EmptyExpression>(expression)); // do nothing
+	else if (auto e = DCast<ErrorExpression>(expression))
+	{
+		if (!e->prefix().isEmpty()) *fragment << e->prefix();
+		*fragment << visit(e->arg());
+		if (!e->postfix().isEmpty()) *fragment << e->postfix();
+	}
+	else if (auto e = DCast<UnfinishedOperator>(expression))
+	{
+		QStringList result;
+
+		for (int i=0; i< e->operands()->size(); ++i)
+			*fragment << e->delimiters()->at(i) << visit(e->operands()->at(i));
+
+		if (e->delimiters()->size() > e->operands()->size())
+			*fragment << e->delimiters()->last();
+	}
+	else
+	{
+		throw JavaExportException("Unhandled expression of type " + expression->typeName());
+	}
+
 	return fragment;
 }
 

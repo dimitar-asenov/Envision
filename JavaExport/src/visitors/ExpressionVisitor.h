@@ -37,6 +37,9 @@ class ExpressionVisitor : public Visitor
 		using Visitor::Visitor;
 
 		Export::SourceFragment* visit(OOModel::Expression* expression);
+
+	private:
+		template <class T> Export::SourceFragment* optional(T* node);
 };
 
 } // namespace JavaExport
