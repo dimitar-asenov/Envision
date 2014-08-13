@@ -72,8 +72,7 @@ inline TextFragment* CompositeFragment::append(Model::Node* node, const QString&
 
 inline CompositeFragment& CompositeFragment::operator<<(SourceFragment* childFragment)
 {
-	Q_ASSERT(childFragment);
-	fragments_.append(childFragment);
+	if (childFragment) fragments_.append(childFragment);
 	return *this;
 }
 

@@ -42,6 +42,7 @@ CompositeFragment::~CompositeFragment()
 
 CompositeFragment& CompositeFragment::operator<<(Model::Text* textNode)
 {
+	Q_ASSERT(textNode);
 	fragments_.append( new TextFragment(textNode, textNode->get()) );
 	return *this;
 }
