@@ -241,11 +241,20 @@ Module* addLambda()
 	mod->fields()->append(new Field("common",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
-	mod->setComment(new CommentNode("This is the Lambda-Module. The following classes are available\n"
-													" * IUnary\n"
-													" * IBinary\n"
-													" * INoReturn\n"
-													" * LambdaTest\n"));
+	auto lambdaCommentNode = new CommentNode("This is the Lambda-Module. The following classes are available\n"
+														  " * IUnary\n"
+														  " * IBinary\n"
+														  " * INoReturn\n"
+														  " * LambdaTest\n"
+														  "Here you find some more information about Classes\n"
+														  "[table#someTable#2#1]\n");
+
+	auto aTable = new CommentTable(nullptr, "someTable", 2, 1);
+	aTable->setNodeAt(0, 0, new CommentNode("#english wikipedia"));
+	aTable->setNodeAt(1, 0, new CommentNode("[browser#http://en.wikipedia.org]"));
+	lambdaCommentNode->tables()->append(aTable);
+
+	mod->setComment(lambdaCommentNode);
 
 	auto iUnary = new Class("IUnary", Modifier::Public);
 	mod->classes()->append(iUnary);
@@ -778,7 +787,9 @@ Method* addFactorial(Class* parent)
 	auto factorial = new Method("factorial");
 	if (parent) parent->methods()->append(factorial);
 
-	factorial->setComment(new CommentNode("This is an iterative implementation of a factorial function"));
+	auto factorialCommentNode = new CommentNode("This is an iterative implementation of a factorial function\n");
+
+	factorial->setComment(factorialCommentNode);
 
 	FormalResult* factorialResult = new FormalResult();
 	factorial->results()->append(factorialResult);
@@ -787,6 +798,16 @@ Method* addFactorial(Class* parent)
 	factorial->arguments()->append(factorialArgument);
 	factorialArgument->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	factorialArgument->setName("x");
+
+	auto factorialArgumentCommentNode = new CommentNode("Inline HTML to Browser\n"
+													"<html>\n"
+													"	<script type=\"text/javascript\">\n"
+													"		function hi() { alert(\"Hello World!\"); } \n"
+													"	</script>\n"
+													"	<button onclick=\"hi()\">Try it</button>\n"
+													"</html>");
+
+	factorialArgument->setComment(factorialArgumentCommentNode);
 
 	VariableDeclarationExpression* res = new VariableDeclarationExpression("result");
 	factorial->items()->append(new ExpressionStatement(res));
