@@ -189,6 +189,20 @@ void DoxyCommentVisitor::init()
 				res += v->visit(t->table(name)) + "\n";
 				continue;
 			}
+			if (line->get().startsWith("[image#") && line->get().right(1) == "]" && line->get().size() > 7+1)
+			{
+				QString path;
+				if (line->get().contains('|'))
+					path = line->get().mid(7, (line->get().indexOf('|')-7));
+				else
+					path =  line->get().mid(7, line->get().size()-7-1);
+
+				QFile file(path);
+				QString fileName = file.fileName().section("/", -1, -1);
+				file.copy("doxygen/html/images/" + fileName);
+				res += QString("<img src=images/" + fileName + ">");
+				continue;
+			}
 			res += line->get() + "<br>\n";
 		}
 		if (listCount > -1)

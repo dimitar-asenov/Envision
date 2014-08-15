@@ -414,6 +414,13 @@ Method* addLongMethod(Class* parent)
 	arg3->setName("epsilon");
 	longMethod->arguments()->append(arg3);
 
+	auto argumentCommentNode1 = new CommentNode("[image#styles/icon/globe.svg]");
+	arg1->setComment(argumentCommentNode1);
+	auto argumentCommentNode2 = new CommentNode("[image#styles/icon/pencil.svg]");
+	arg2->setComment(argumentCommentNode2);
+	auto argumentCommentNode3 = new CommentNode("[image#styles/icon/gurica_tree.svg]");
+	arg3->setComment(argumentCommentNode3);
+
 	auto var0 = new VariableDeclarationExpression("pSystem");
 	var0->decl()->setTypeExpression(new PointerTypeExpression(new ClassTypeExpression(
 			new ReferenceExpression("System", new ReferenceExpression("Java")))));
