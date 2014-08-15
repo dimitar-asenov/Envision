@@ -47,6 +47,11 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 											  const std::unique_ptr<Visualization::Cursor>&,
 											  const QString& name, const QStringList&)
 {
+	auto scene = target->scene();
+	scene->clearFocus();
+	scene->clearSelection();
+	scene->setMainCursor(nullptr);
+
 	Model::TreeManager* headManager = target->node()->manager();
 	QString managerName = headManager->name();
 
@@ -88,6 +93,8 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 
 			auto insertHighlight = VisualizationManager::instance().mainScene()->addHighlight("Insert", "green");
 			auto deleteHighlight = VisualizationManager::instance().mainScene()->addHighlight("Delete", "red");
+			auto moveHighlight = VisualizationManager::instance().mainScene()->addHighlight("Move", "yellow");
+			auto valueHighlight = VisualizationManager::instance().mainScene()->addHighlight("ValueUpdate", "blue");
 
 			IdToChangeDescriptionHash::iterator iter;
 
@@ -136,6 +143,8 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 			}
 
 			Model::Node* node = nullptr;
+			Model::Node* parent = nullptr;
+			Model::NodeIdType parentID;
 			for (auto id : relevantIDs)
 			{
 				iter = changes.find(id);
@@ -146,19 +155,71 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 					{
 						case ChangeType::Added:
 							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
+							parent = node->parent();
 							if (auto item = headRoot->findVisualizationOf(node))
-								insertHighlight->addHighlightedItem(item);
+							{
+								if (parent)
+								{
+									parentID = headManager->nodeIdMap().id(parent);
+									iter = changes.find(parentID);
+									if (iter != changes.end())
+									{
+										ChangeDescription* parentChange = iter.value();
+										if (parentChange->type() != ChangeType::Added)
+											insertHighlight->addHighlightedItem(item);
+									}
+									else
+										insertHighlight->addHighlightedItem(item);
+								}
+								else
+									insertHighlight->addHighlightedItem(item);
+							}
 							break;
 
 						case ChangeType::Deleted:
 							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
+							parent = node->parent();
 							if (auto item = revisionRoot->findVisualizationOf(node))
-								deleteHighlight->addHighlightedItem(item);
+							{
+								if (parent)
+								{
+									parentID = revisionManager->nodeIdMap().id(parent);
+									iter = changes.find(parentID);
+									if (iter != changes.end())
+									{
+										ChangeDescription* parentChange = iter.value();
+										if (parentChange->type() != ChangeType::Deleted)
+											deleteHighlight->addHighlightedItem(item);
+									}
+									else
+										deleteHighlight->addHighlightedItem(item);
+								}
+								else
+									deleteHighlight->addHighlightedItem(item);
+							}
+							break;
+
+						case ChangeType::Moved:
+							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
+							if (auto item = headRoot->findVisualizationOf(node))
+								moveHighlight->addHighlightedItem(item);
+
+							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
+							if (auto item = revisionRoot->findVisualizationOf(node))
+								moveHighlight->addHighlightedItem(item);
 							break;
 
 						default:
 							break;
-					}
+					} // end switch
+
+					// test update flag
+					node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
+					if (auto item = headRoot->findVisualizationOf(node))
+						if (change->flags().testFlag(ChangeDescription::UpdateType::Value))
+							valueHighlight->addHighlightedItem(item);
+
+
 				}
 				else
 					Q_ASSERT(false);
