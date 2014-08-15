@@ -29,7 +29,7 @@
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
-#include "OOModel/src/declarations/Module.h"
+#include "OOModel/src/declarations/Field.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "Comments/src/nodes/CommentNode.h"
 
@@ -99,6 +99,18 @@ void DoxyCommentVisitor::init()
 					res += "\\endparblock\n";
 				}
 			}
+			res += DOXY_END;
+		}
+		return res;
+	});
+
+	Visitor::addType<Field>( [](DoxyCommentVisitor* v, Field* t) -> QString
+	{
+		QString res = "";
+		if (t->comment() != nullptr)
+		{
+			res += DOXY_START;
+			res += v->visit(t->comment());
 			res += DOXY_END;
 		}
 		return res;
@@ -215,9 +227,19 @@ void DoxyCommentVisitor::init()
 
 	Visitor::addType<CommentDiagram>( [](DoxyCommentVisitor*, CommentDiagram* t) -> QString
 	{
-		QString imageName =  "diagram_" + t->name() +".png";
-		auto anItem = Visualization::ModelRenderer::renderToImage(t);
-		anItem.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
+		QString imageName = "diagram_" + t->name();
+		if (USE_SVG)
+		{
+			imageName += ".svg";
+			Visualization::ModelRenderer::renderToSVG(t, QDir::currentPath() + "/doxygen/html/images/" + imageName);
+		}
+		else
+		{
+			imageName += ".png";
+			auto anImage = Visualization::ModelRenderer::renderToImage(t);
+			anImage.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
+		}
+
 		return QString("<img src=images/" + imageName + ">");
 	});
 
@@ -227,9 +249,18 @@ void DoxyCommentVisitor::init()
 			return v->visit(t->node());
 		else
 		{
-			QString imageName =  "freenode_" + t->name() +".png";
-			auto anItem = Visualization::ModelRenderer::renderToImage(t);
-			anItem.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
+			QString imageName =  "freenode_" + t->name();
+			if (USE_SVG)
+			{
+				imageName += ".svg";
+				Visualization::ModelRenderer::renderToSVG(t, QDir::currentPath() + "/doxygen/html/images/" + imageName);
+			}
+			else
+			{
+				imageName += ".png";
+				auto anImage = Visualization::ModelRenderer::renderToImage(t);
+				anImage.save(QDir::currentPath() + "/doxygen/html/images/" + imageName);
+			}
 			return QString("<img src=images/" + imageName + ">");
 		}
 	});

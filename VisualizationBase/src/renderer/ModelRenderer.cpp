@@ -279,4 +279,21 @@ QImage ModelRenderer::renderToImage(Model::Node* aNode)
 	return image;
 }
 
+void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
+{
+	auto aScene = new Scene();
+	auto anItem = new Visualization::RootItem(aNode);
+	aScene->addTopLevelItem(anItem);
+
+	QApplication::processEvents();
+
+	QSvgGenerator* svggen = new QSvgGenerator;
+	svggen->setFileName(path);
+	svggen->setResolution(90);
+	svggen->setSize(aScene->sceneRect().size().toSize());
+	QPainter svgPainter(svggen);
+	svgPainter.setRenderHint(QPainter::Antialiasing);
+	aScene->render(&svgPainter, QRectF(), anItem->sceneBoundingRect());
+}
+
 }

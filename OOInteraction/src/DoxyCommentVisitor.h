@@ -36,6 +36,7 @@ class DoxyCommentVisitor : public Model::Visitor<DoxyCommentVisitor, QString>{
 	private:
 		static const QString DOXY_START;
 		static const QString DOXY_END;
+		static const bool USE_SVG = true;
 };
 
 }

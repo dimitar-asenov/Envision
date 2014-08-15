@@ -29,6 +29,7 @@
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Field.h"
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
 
 using namespace OOModel;
@@ -52,9 +53,9 @@ void DoxyVisitor::init()
 		res += aDoxyCommentVisitor_->visit(t);
 		res += "namespace " + t->name();
 		res += "\n{\n";
-		for (auto node : *t->fields())
-			res += StringComponents::stringForNode(node->typeExpression()) + " " + node->name() + ";\n";
+		for (auto node : *t->fields()) res += v->visit(node);
 		for (auto node : *t->classes()) res += v->visit(node);
+		for (auto node : *t->modules()) res += v->visit(node);
 		res += "}\n\n";
 		return res;
 	});
@@ -63,14 +64,14 @@ void DoxyVisitor::init()
 	{
 		QString res = "";
 		res += aDoxyCommentVisitor_->visit(t);
-		res += "class " + t->name();
+		res += "public: class " + t->name();
 		if (!t->baseClasses()->isEmpty()) res += " : ";
 		for (auto node : *t->baseClasses()) res += StringComponents::stringForNode(node) + ",";
 		if (!t->baseClasses()->isEmpty()) res.truncate(res.length()-1);
 		res += "\n{\n";
-		for (auto node : *t->fields())
-			res += "public: " + StringComponents::stringForNode(node->typeExpression()) + " " + node->name() + ";\n";
+		for (auto node : *t->fields()) res += v->visit(node);
 		for (auto node : *t->methods()) res += v->visit(node);
+		for (auto node : *t->classes()) res += v->visit(node);
 		res += "};\n\n";
 		return res;
 	});
@@ -91,6 +92,14 @@ void DoxyVisitor::init()
 		res += ")";
 		res += "\n{\n";
 		res += "}\n\n";
+		return res;
+	});
+
+	Visitor::addType<Field>( [](DoxyVisitor*, Field* t) -> QString
+	{
+		QString res = "";
+		res += aDoxyCommentVisitor_->visit(t);
+		res += "public: " + StringComponents::stringForNode(t->typeExpression()) + " " + t->name() + ";\n";
 		return res;
 	});
 

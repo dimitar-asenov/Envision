@@ -92,6 +92,7 @@ class VISUALIZATIONBASE_API ModelRenderer
 		int getFinerSemanticZoomLevel(int currentSemanticZoomLevel);
 
 		static QImage renderToImage(Model::Node* aNode);
+		static void renderToSVG(Model::Node* aNode, QString path);
 
 	private:
 		const static int VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE = 1;
