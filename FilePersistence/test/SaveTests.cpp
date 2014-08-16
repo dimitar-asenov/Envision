@@ -54,8 +54,8 @@ TEST(FilePersistencePlugin, SaveRootOnly)
 	manager.beginModification(root->name(), "set title");
 	root->name()->set("Title");
 	manager.endModification();
-	NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
-	NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
+	manager.nodeIdMap().setId(root, "{00000000-0000-0000-0000-000000000001}");
+	manager.nodeIdMap().setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
 
 	manager.setName("rootOnly");
 	manager.save(store);
@@ -88,12 +88,12 @@ TEST(FilePersistencePlugin, SaveModeNodesSingleUnitOnly)
 	left->name()->set("Left child");
 	right->name()->set("Right child");
 	manager.endModification();
-	NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
-	NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
-	NodeIdMap::setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
-	NodeIdMap::setId(root->left()->name(), "{00000000-0000-0000-0000-000000000004}");
-	NodeIdMap::setId(root->right(), "{00000000-0000-0000-0000-000000000005}");
-	NodeIdMap::setId(root->right()->name(), "{00000000-0000-0000-0000-000000000006}");
+	manager.nodeIdMap().setId(root, "{00000000-0000-0000-0000-000000000001}");
+	manager.nodeIdMap().setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
+	manager.nodeIdMap().setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
+	manager.nodeIdMap().setId(root->left()->name(), "{00000000-0000-0000-0000-000000000004}");
+	manager.nodeIdMap().setId(root->right(), "{00000000-0000-0000-0000-000000000005}");
+	manager.nodeIdMap().setId(root->right()->name(), "{00000000-0000-0000-0000-000000000006}");
 
 	manager.setName("2Children");
 	manager.save(store);
@@ -131,14 +131,14 @@ TEST(FilePersistencePlugin, SaveMultipleUnits)
 	leftleft->name()->set("in a new unit");
 	right->name()->set("Right child");
 	manager.endModification();
-	NodeIdMap::setId(root, "{00000000-0000-0000-0000-000000000001}");
-	NodeIdMap::setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
-	NodeIdMap::setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
-	NodeIdMap::setId(root->left()->name(), "{00000000-0000-0000-0000-000000000004}");
-	NodeIdMap::setId(root->left()->left(), "{00000000-0000-0000-0000-000000000005}");
-	NodeIdMap::setId(root->left()->left()->name(), "{00000000-0000-0000-0000-000000000006}");
-	NodeIdMap::setId(root->right(), "{00000000-0000-0000-0000-000000000007}");
-	NodeIdMap::setId(root->right()->name(), "{00000000-0000-0000-0000-000000000008}");
+	manager.nodeIdMap().setId(root, "{00000000-0000-0000-0000-000000000001}");
+	manager.nodeIdMap().setId(root->name(), "{00000000-0000-0000-0000-000000000002}");
+	manager.nodeIdMap().setId(root->left(), "{00000000-0000-0000-0000-000000000003}");
+	manager.nodeIdMap().setId(root->left()->name(), "{00000000-0000-0000-0000-000000000004}");
+	manager.nodeIdMap().setId(root->left()->left(), "{00000000-0000-0000-0000-000000000005}");
+	manager.nodeIdMap().setId(root->left()->left()->name(), "{00000000-0000-0000-0000-000000000006}");
+	manager.nodeIdMap().setId(root->right(), "{00000000-0000-0000-0000-000000000007}");
+	manager.nodeIdMap().setId(root->right()->name(), "{00000000-0000-0000-0000-000000000008}");
 
 	manager.setName("units");
 	manager.save(store);

@@ -65,7 +65,9 @@ Node::Node(Node* parent) : parent_{parent}, manager_{parent ? parent->manager_ :
 Node::~Node()
 {
 	partiallyLoadedNodes().remove(this);
-	NodeIdMap::remove(this);
+
+	for (auto m : AllTreeManagers::instance().loadedManagers())
+		m->nodeIdMap().remove(this);
 }
 
 Node* Node::createDefaultInstance(Node*)

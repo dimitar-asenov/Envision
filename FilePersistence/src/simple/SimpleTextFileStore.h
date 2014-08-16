@@ -29,7 +29,6 @@
 #include "../filepersistence_api.h"
 
 #include "ModelBase/src/persistence/PersistentStore.h"
-#include "ModelBase/src/persistence/NodeIdMap.h"
 
 namespace FilePersistence {
 
@@ -40,7 +39,10 @@ class GenericTree;
 class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 {
 	public:
+		using FileGetterFunction = std::function<bool (QString filename, const char*& data, int& dataLength)>;
 		SimpleTextFileStore(const QString& baseDir = QString::null);
+		SimpleTextFileStore(FileGetterFunction fileGetter);
+
 		virtual ~SimpleTextFileStore();
 
 		virtual SimpleTextFileStore* clone() const override;
@@ -71,11 +73,17 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 	private:
 
+		/** If specified, this function will be used to get the data of the files. Only used for loading. */
+		FileGetterFunction fileGetter_{};
+
 		/** The folder where all trees are stored. Each tree is a separate sub folder in the base folder. */
 		QDir baseFolder_;
 
 		/** A mutex that assures exclusive tree saving and loading operations. */
 		QMutex storeAccess_;
+
+		/** The manager that requested the last load/save operation. */
+		Model::TreeManager* treeManager_{};
 
 		/** A flag that indicates if the store is currently in the middle of saving or loading a tree. */
 		bool working_{};

@@ -11,4 +11,5 @@
 /*.pdf
 /*.perf
 /*.prof
+/exported
 /doxygen/**

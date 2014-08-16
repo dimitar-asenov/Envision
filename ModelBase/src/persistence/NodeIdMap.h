@@ -32,17 +32,17 @@ namespace Model {
 
 class MODELBASE_API NodeIdMap {
 	public:
-		static NodeIdType id(const Node* node);
-		static void setId(const Node* node, NodeIdType id);
+		NodeIdType id(const Node* node);
+		void setId(const Node* node, NodeIdType id);
 
 		static NodeIdType generateNewId();
-		static const Node* node(NodeIdType id);
+		const Node* node(NodeIdType id);
 
-		static void remove(const Node* node);
+		void remove(const Node* node);
 
 	private:
-		static QHash<const Node*, NodeIdType> nodeToId;
-		static QHash<NodeIdType, const Node*> idToNode;
+		QHash<const Node*, NodeIdType> nodeToId;
+		QHash<NodeIdType, const Node*> idToNode;
 };
 
 inline NodeIdType NodeIdMap::generateNewId() { return QUuid::createUuid(); }

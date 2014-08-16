@@ -198,6 +198,57 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			} break;
 		}
 
+		// Surround statements with an if
+		if (newText == "}")
+		{
+			if (auto parentStatement = parentExpressionStatement(DCast<OOModel::Expression>(target->node())))
+			{
+				if (auto list = DCast<OOModel::StatementItemList>(parentStatement->parent()))
+				{
+					// Scan the list for an if marker
+					for (int i = 0; i<list->size(); ++i)
+					{
+						if (list->at(i) == parentStatement) break;
+
+						if (auto es = DCast<ExpressionStatement>(list->at(i)))
+						{
+							if (StringComponents::stringForNode(es->expression()) == "if{")
+							{
+								StatementItem* st = nullptr;
+								Model::Node* toFocus = nullptr;
+
+								auto ifs =  new IfStatement();
+								ifs->setCondition(new EmptyExpression());
+
+								toFocus = ifs->condition();
+								st = ifs;
+
+								list->beginModification("surround statements with if");
+								list->replaceChild(es, st);
+								int middleElement = i+1;
+								while (middleElement < list->size())
+								{
+									auto statement = list->at(middleElement);
+									if (statement == parentStatement) break;
+									list->remove(middleElement);
+									ifs->thenBranch()->append(statement);
+								}
+								list->remove(parentStatement);
+								list->endModification();
+
+								// Get a parent which represents a list (of statements or statement items)
+								auto parent = topMostItem->parent();
+								while (! dynamic_cast<VList*>(parent) && parent->parent()) parent = parent->parent();
+
+								target->scene()->addPostEventAction(new SetCursorEvent(parent, toFocus));
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+
 		// Process keywords for statements
 		ExpressionStatement* replaceStatement = nullptr;
 		auto trimmedText = newText.trimmed();

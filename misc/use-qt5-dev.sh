@@ -16,6 +16,7 @@ sudo apt-get install build-essential perl python git
 sudo apt-get install "^libxcb.*" libx11-xcb-dev libglu1-mesa-dev libxrender-dev
 sudo apt-get install flex bison gperf libicu-dev libxslt-dev ruby
 sudo apt-get install libasound2-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+sudo apt-get install libfontconfig1-dev
 
 echo "################################################################################"
 echo "Cloning Qt repository to" $QT_SRC_DIR
