@@ -33,64 +33,136 @@
 
 namespace FilePersistence {
 
+History::CommitTime::CommitTime(QString sha1, qint64 time)
+{
+	commitSHA1_ = sha1;
+	timeSinceEpoch_ = time;
+}
+
+bool History::CommitTime::earlier(const CommitTime& left, const CommitTime& right)
+{
+	return (left.timeSinceEpoch_ < right.timeSinceEpoch_);
+}
+
+bool History::CommitTime::later(const CommitTime& left, const CommitTime& right)
+{
+	return (left.timeSinceEpoch_ > right.timeSinceEpoch_);
+}
+
 History::History(QString relativePath, Model::NodeIdType rootNodeId,
 					  const CommitGraph* historyGraph, const GitRepository* repository)
 {
 	rootNodeId_ = rootNodeId;
 	historyGraph_ = historyGraph;
 
-	const CommitGraphItem start = historyGraph_->start();
-	relevantCommits_.insert(start.commitSHA1_);
+	const CommitGraphItem endItem = historyGraph_->end();
+	QSet<const CommitGraphItem*> visited;
+	SHA1 end = endItem.commitSHA1_;
+	QSet<Model::NodeIdType> trackedIDs = trackSubtree(end, relativePath, repository);
 
-	QString startRevision = historyGraph_->start().commitSHA1_;
-	QSet<Model::NodeIdType> trackedIDs = trackSubtree(startRevision, relativePath, repository);
-	detectRelevantCommits(&start, trackedIDs, relativePath, repository);
+	detectRelevantCommits(&endItem, visited, relativePath, trackedIDs, repository);
 }
 
-History::~History()
+QList<QString> History::relevantCommitsByTime(const GitRepository* repository, bool reverse) const
 {
-	SAFE_DELETE(historyGraph_);
-}
-
-
-void History::detectRelevantCommits(const CommitGraphItem* current, QSet<Model::NodeIdType> trackedIDs,
-												QString relativePathRootNode, const GitRepository* repository)
-{
-	for (auto child : current->children_)
+	QList<CommitTime> commitTimeList;
+	for (auto commit : relevantCommits_)
 	{
-		Diff diff = repository->diff(current->commitSHA1_, child->commitSHA1_);
-		IdToChangeDescriptionHash changes = diff.changes();
+		CommitMetaData info = repository->getCommitInformation(commit);
+		qint64 time = info.dateTime_.toMSecsSinceEpoch();
+		commitTimeList.append(CommitTime(commit, time));
+	}
 
-		bool isRelevant = false;
-		for (auto change : changes.values())
+	if (reverse)
+		qSort(commitTimeList.begin(), commitTimeList.end(), CommitTime::later);
+	else
+		qSort(commitTimeList.begin(), commitTimeList.end(), CommitTime::earlier);
+
+	QList<QString> orderedCommits;
+	for (auto commitTime : commitTimeList)
+		orderedCommits.append(commitTime.commitSHA1_);
+
+	return orderedCommits;
+}
+
+void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const CommitGraphItem*> visited,
+												QString relativePathRootNode, QSet<Model::NodeIdType> trackedIDs,
+												const GitRepository* repository)
+{
+	if (!visited.contains(current) && !trackedIDs.isEmpty())
+	{
+		visited.insert(current);
+		bool isRelevant = true;
+		for (auto parent : current->parents_)
 		{
-			if (trackedIDs.contains(change->id()))
+			Diff diff = repository->diff(parent->commitSHA1_, current->commitSHA1_);
+			IdToChangeDescriptionHash changes = diff.changes();
+
+			bool subtreeIsAffected = false;
+			for (auto change : changes.values())
 			{
-				isRelevant = true;
-				break;
+				if (trackedIDs.contains(change->id()))
+				{
+					subtreeIsAffected = true;
+					break;
+				}
+			}
+
+			if (!subtreeIsAffected)
+				isRelevant = false;
+
+			QString parentRelativeRootPath =findRootPath(relativePathRootNode, &diff);
+
+			if (!parentRelativeRootPath.isNull())
+			{
+				if (subtreeIsAffected)
+				{
+					QSet<Model::NodeIdType> newTrackedIDs = trackSubtree(parent->commitSHA1_, parentRelativeRootPath,
+																						  repository);
+
+					detectRelevantCommits(parent, visited, parentRelativeRootPath, newTrackedIDs, repository);
+				}
+				else
+					detectRelevantCommits(parent, visited, parentRelativeRootPath, trackedIDs, repository);
 			}
 		}
 
-		QString childsRelativePathRootNode = relativePathRootNode;
-		IdToChangeDescriptionHash::iterator iter = changes.find(rootNodeId_);
-		if (iter != changes.end())
-		{
-			ChangeDescription* change = iter.value();
-			const GenericNode* rootNode = change->newNode();
-			childsRelativePathRootNode = rootNode->persistentUnit()->name();
-		}
-
 		if (isRelevant)
-		{
-			relevantCommits_.insert(child->commitSHA1_);
-			QSet<Model::NodeIdType> newTrackedIDs = trackSubtree(child->commitSHA1_, childsRelativePathRootNode,
-																				  repository);
-
-			detectRelevantCommits(child, newTrackedIDs, childsRelativePathRootNode, repository);
-		}
-		else
-			detectRelevantCommits(child, trackedIDs, relativePathRootNode, repository);
+			relevantCommits_.insert(current->commitSHA1_);
 	}
+}
+
+QString History::findRootPath(QString currentPath, const Diff* diff)
+{
+	IdToChangeDescriptionHash changes = diff->changes();
+
+	// check if rootNode is affected by changes directly
+	IdToChangeDescriptionHash::iterator iter = changes.find(rootNodeId_);
+	if (iter != changes.end())
+	{
+		ChangeDescription* change = iter.value();
+		const GenericNode* rootNode = change->oldNode();
+		if (rootNode)
+			return rootNode->persistentUnit()->name();
+		else
+			return QString();
+	}
+
+	// check if rootNode is still in current PU
+	// TODO find rootNodeId in PU
+
+	// check if rootNode is in other PU (affected by move)
+	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Moved);
+	for (auto move : moves)
+	{
+		if (currentPath.compare(move->newNode()->persistentUnit()->name()) == 0)
+		{
+			// TODO find rootNodeId in PU
+		}
+	}
+
+	// TODO return correct path
+	return currentPath;
 }
 
 QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relativePath,
@@ -109,6 +181,9 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 	GenericNode* unitRoot = Parser::load(startFile->content_, startFile->size_, false, unit);
 
 	GenericNode* subtreeRoot = unitRoot->find(rootNodeId_);
+	if (!subtreeRoot)
+		return QSet<Model::NodeIdType>();
+
 	Q_ASSERT(subtreeRoot != nullptr);
 
 	QList<GenericNode*> stack;

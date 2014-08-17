@@ -40,14 +40,31 @@ class FILEPERSISTENCE_API History
 	public:
 		History(QString relativePath, Model::NodeIdType rootNodeId,
 				  const CommitGraph* historyGraph, const GitRepository* repository);
-		~History();
+
+		QList<QString> relevantCommitsByTime(const GitRepository* repository, bool reverse = true) const;
+
+		QSet<QString> relevantCommits() const;
 
 	private:
-		void detectRelevantCommits(const CommitGraphItem* current, QSet<Model::NodeIdType> tackedIDs,
-											QString relativePathRootNode, const GitRepository* repository);
+		void detectRelevantCommits(const CommitGraphItem* current, QSet<const CommitGraphItem*> visited,
+											QString relativePathRootNode, QSet<Model::NodeIdType> trackedIDs,
+											const GitRepository* repository);
 
 		QSet<Model::NodeIdType> trackSubtree(QString revision, QString relativePath,
 														 const GitRepository* repository) const;
+
+		QString findRootPath(QString currentPath, const Diff* diff);
+
+		struct CommitTime
+		{
+				QString commitSHA1_;
+				qint64 timeSinceEpoch_;
+
+				CommitTime(QString sha1, qint64 time);
+
+				static bool earlier(const CommitTime& left, const CommitTime& right);
+				static bool later(const CommitTime& left, const CommitTime& right);
+		};
 
 		static const QString persistenceUnitType;
 
@@ -56,4 +73,5 @@ class FILEPERSISTENCE_API History
 		QSet<QString> relevantCommits_;
 };
 
+inline QSet<QString> History::relevantCommits() const { return relevantCommits_; }
 } /* namespace FilePersistence */
