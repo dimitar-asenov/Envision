@@ -29,6 +29,7 @@
 #include "commands/CCreateClass.h"
 
 #include "InteractionBase/src/commands/CDiff.h"
+#include "InteractionBase/src/commands/CHistory.h"
 
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
@@ -42,6 +43,7 @@ HProject::HProject()
 	addCommand(new CCreateClass());
 
 	addCommand(new Interaction::CDiff());
+	addCommand(new Interaction::CHistory());
 }
 
 HProject* HProject::instance()

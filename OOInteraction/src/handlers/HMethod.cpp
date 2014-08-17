@@ -27,6 +27,7 @@
 #include "handlers/HMethod.h"
 
 #include "InteractionBase/src/commands/CDiff.h"
+#include "InteractionBase/src/commands/CHistory.h"
 
 #include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
@@ -45,6 +46,7 @@ HMethod::HMethod()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
 	addCommand(new Interaction::CDiff());
+	addCommand(new Interaction::CHistory());
 }
 
 HMethod* HMethod::instance()

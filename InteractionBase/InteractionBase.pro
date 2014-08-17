@@ -72,7 +72,8 @@ HEADERS += src/commands/CommandWithNameAndFlags.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h \
     src/commands/CDiffTest.h \
-    src/commands/CDiff.h
+    src/commands/CDiff.h \
+    src/commands/CHistory.h
 SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -138,4 +139,5 @@ SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     test/SimpleTest.cpp \
     src/InteractionBasePlugin.cpp \
     src/commands/CDiffTest.cpp \
-    src/commands/CDiff.cpp
+    src/commands/CDiff.cpp \
+    src/commands/CHistory.cpp
