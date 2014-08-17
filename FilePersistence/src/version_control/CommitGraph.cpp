@@ -32,13 +32,13 @@ CommitGraphItem::CommitGraphItem(QString sha1) { commitSHA1_ = sha1; }
 
 CommitGraph::CommitGraph(QString start, QString end)
 {
-	CommitGraphItem startItem(start);
-	start_ = &startItem;
-	items_.insert(start, startItem);
+	items_.insert(start, CommitGraphItem(start));
+	QHash<QString, CommitGraphItem>::iterator iter = items_.find(start);
+	start_ = &iter.value();
 
-	CommitGraphItem endItem(end);
-	end_ = &endItem;
-	items_.insert(end, endItem);
+	items_.insert(end, CommitGraphItem(end));
+	iter = items_.find(end);
+	end_ = &iter.value();
 }
 
 void CommitGraph::add(QString fromCommitSHA1, QString toCommitSHA1)
@@ -47,24 +47,20 @@ void CommitGraph::add(QString fromCommitSHA1, QString toCommitSHA1)
 	CommitGraphItem* toItem = nullptr;
 
 	QHash<QString, CommitGraphItem>::iterator iter = items_.find(fromCommitSHA1);
-	if (iter != items_.end())
-		fromItem = &iter.value();
-	else
+	if (iter == items_.end())
 	{
-		CommitGraphItem newFromItem(fromCommitSHA1);
-		fromItem = &newFromItem;
-		items_.insert(fromCommitSHA1, newFromItem);
+		items_.insert(fromCommitSHA1, CommitGraphItem(fromCommitSHA1));
+		iter = items_.find(fromCommitSHA1);
 	}
+	fromItem = &iter.value();
 
 	iter = items_.find(toCommitSHA1);
-	if (iter != items_.end())
-		toItem = &iter.value();
-	else
+	if (iter == items_.end())
 	{
-		CommitGraphItem newToItem(toCommitSHA1);
-		toItem = &newToItem;
-		items_.insert(toCommitSHA1, newToItem);
+		items_.insert(toCommitSHA1, CommitGraphItem(toCommitSHA1));
+		iter = items_.find(toCommitSHA1);
 	}
+	toItem = &iter.value();
 
 	fromItem->children_.append(toItem);
 	toItem->parents_.append(fromItem);
