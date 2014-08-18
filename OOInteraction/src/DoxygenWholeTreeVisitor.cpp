@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "DoxyVisitor.h"
+#include "DoxygenWholeTreeVisitor.h"
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Class.h"
@@ -36,9 +36,9 @@ using namespace OOModel;
 
 namespace OOInteraction {
 
-void DoxyVisitor::init()
+void DoxygenWholeTreeVisitor::init()
 {
-	Visitor::addType<Project>( [](DoxyVisitor* v, Project* t) -> QString
+	Visitor::addType<Project>( [](DoxygenWholeTreeVisitor* v, Project* t) -> QString
 	{
 		QString res = "";
 		//res += aDoxyCommentVisitor_->visit(t);
@@ -47,7 +47,7 @@ void DoxyVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<Module>( [](DoxyVisitor* v, Module* t) -> QString
+	Visitor::addType<Module>( [](DoxygenWholeTreeVisitor* v, Module* t) -> QString
 	{
 		QString res = "";
 		res += aDoxyCommentVisitor_->visit(t);
@@ -60,7 +60,7 @@ void DoxyVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<Class>( [](DoxyVisitor* v, Class* t) -> QString
+	Visitor::addType<Class>( [](DoxygenWholeTreeVisitor* v, Class* t) -> QString
 	{
 		QString res = "";
 		res += aDoxyCommentVisitor_->visit(t);
@@ -76,7 +76,7 @@ void DoxyVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<Method>( [](DoxyVisitor*, Method* t) -> QString
+	Visitor::addType<Method>( [](DoxygenWholeTreeVisitor*, Method* t) -> QString
 	{
 		QString res = "";
 		res += aDoxyCommentVisitor_->visit(t);
@@ -95,7 +95,7 @@ void DoxyVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<Field>( [](DoxyVisitor*, Field* t) -> QString
+	Visitor::addType<Field>( [](DoxygenWholeTreeVisitor*, Field* t) -> QString
 	{
 		QString res = "";
 		res += aDoxyCommentVisitor_->visit(t);
@@ -105,6 +105,6 @@ void DoxyVisitor::init()
 
 }
 
-DoxyCommentVisitor* DoxyVisitor::aDoxyCommentVisitor_ = new DoxyCommentVisitor();
+DoxygenCommentsOnlyVisitor* DoxygenWholeTreeVisitor::aDoxyCommentVisitor_ = new DoxygenCommentsOnlyVisitor();
 
 }

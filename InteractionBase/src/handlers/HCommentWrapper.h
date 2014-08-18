@@ -43,7 +43,7 @@ class INTERACTIONBASE_API HCommentWrapper : public GenericHandler
 		HCommentWrapper();
 
 	private:
-		bool del_ = false;
+		bool deleteAfterEvent = false;
 };
 
 }

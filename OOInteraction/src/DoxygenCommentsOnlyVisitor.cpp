@@ -24,12 +24,9 @@
 **
 ***********************************************************************************************************************/
 
-#include "DoxyCommentVisitor.h"
-#include "OOModel/src/declarations/Project.h"
-#include "OOModel/src/declarations/Module.h"
-#include "OOModel/src/declarations/Class.h"
+#include "DoxygenCommentsOnlyVisitor.h"
+#include "OOModel/src/declarations/Declaration.h"
 #include "OOModel/src/declarations/Method.h"
-#include "OOModel/src/declarations/Field.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "Comments/src/nodes/CommentNode.h"
 
@@ -38,33 +35,9 @@ using namespace Comments;
 
 namespace OOInteraction {
 
-void DoxyCommentVisitor::init()
+void DoxygenCommentsOnlyVisitor::init()
 {
-	Visitor::addType<Project>( [](DoxyCommentVisitor* v, Project* t) -> QString
-	{
-		QString res = "";
-		if (t->comment() != nullptr)
-		{
-			res += DOXY_START;
-			res += v->visit(t->comment());
-			res += DOXY_END;
-		}
-		return res;
-	});
-
-	Visitor::addType<Module>( [](DoxyCommentVisitor* v, Module* t) -> QString
-	{
-		QString res = "";
-		if (t->comment() != nullptr)
-		{
-			res += DOXY_START;
-			res += v->visit(t->comment());
-			res += DOXY_END;
-		}
-		return res;
-	});
-
-	Visitor::addType<Class>( [](DoxyCommentVisitor* v, Class* t) -> QString
+	Visitor::addType<Declaration>( [](DoxygenCommentsOnlyVisitor* v, Declaration* t) -> QString
 	{
 		QString res = "";
 		if (t->comment() != nullptr)
@@ -77,7 +50,7 @@ void DoxyCommentVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<Method>( [](DoxyCommentVisitor* v, Method* t) -> QString
+	Visitor::addType<Method>( [](DoxygenCommentsOnlyVisitor* v, Method* t) -> QString
 	{
 		QString res = "";
 		bool commentsAvailable = t->comment();
@@ -104,19 +77,7 @@ void DoxyCommentVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<Field>( [](DoxyCommentVisitor* v, Field* t) -> QString
-	{
-		QString res = "";
-		if (t->comment() != nullptr)
-		{
-			res += DOXY_START;
-			res += v->visit(t->comment());
-			res += DOXY_END;
-		}
-		return res;
-	});
-
-	Visitor::addType<CommentNode>( [](DoxyCommentVisitor* v, CommentNode* t) -> QString
+	Visitor::addType<CommentNode>( [](DoxygenCommentsOnlyVisitor* v, CommentNode* t) -> QString
 	{
 		QString res = "";
 		int listCount = -1;
@@ -225,7 +186,7 @@ void DoxyCommentVisitor::init()
 		return res;
 	});
 
-	Visitor::addType<CommentDiagram>( [](DoxyCommentVisitor*, CommentDiagram* t) -> QString
+	Visitor::addType<CommentDiagram>( [](DoxygenCommentsOnlyVisitor*, CommentDiagram* t) -> QString
 	{
 		QString imageName = "diagram_" + t->name();
 		if (USE_SVG)
@@ -243,7 +204,7 @@ void DoxyCommentVisitor::init()
 		return QString("<img src=images/" + imageName + ">");
 	});
 
-	Visitor::addType<CommentFreeNode>( [](DoxyCommentVisitor* v, CommentFreeNode* t) -> QString
+	Visitor::addType<CommentFreeNode>( [](DoxygenCommentsOnlyVisitor* v, CommentFreeNode* t) -> QString
 	{
 		if (DCast<CommentText>(t->node()) || DCast<CommentNode>(t->node()))
 			return v->visit(t->node());
@@ -265,12 +226,12 @@ void DoxyCommentVisitor::init()
 		}
 	});
 
-	Visitor::addType<CommentText>( [](DoxyCommentVisitor*, CommentText* t) -> QString
+	Visitor::addType<CommentText>( [](DoxygenCommentsOnlyVisitor*, CommentText* t) -> QString
 	{
 		return t->get();
 	});
 
-	Visitor::addType<CommentTable>( [](DoxyCommentVisitor* v, CommentTable* t) -> QString
+	Visitor::addType<CommentTable>( [](DoxygenCommentsOnlyVisitor* v, CommentTable* t) -> QString
 	{
 		QString res = "<table>\n";
 		for (int x = 0; x < t->rowCount(); x++)
@@ -291,7 +252,7 @@ void DoxyCommentVisitor::init()
 
 }
 
-const QString DoxyCommentVisitor::DOXY_START = QString("/**\n");
-const QString DoxyCommentVisitor::DOXY_END = QString(" */\n");
+const QString DoxygenCommentsOnlyVisitor::DOXY_START = QString("/**\n");
+const QString DoxygenCommentsOnlyVisitor::DOXY_END = QString(" */\n");
 
 }

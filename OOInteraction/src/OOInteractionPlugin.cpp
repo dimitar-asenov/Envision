@@ -74,8 +74,8 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
-#include "OOInteraction/src/DoxyVisitor.h"
-#include "OOInteraction/src/DoxyCommentVisitor.h"
+#include "OOInteraction/src/DoxygenWholeTreeVisitor.h"
+#include "OOInteraction/src/DoxygenCommentsOnlyVisitor.h"
 
 #include "Core/src/AdapterManager.h"
 
@@ -145,8 +145,8 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Visualization::VisualizationManager::instance().mainScene()->addRefreshActionFunction(
 			CustomizationVisitor::onSceneRefresh);
 
-	OOInteraction::DoxyVisitor::init();
-	OOInteraction::DoxyCommentVisitor::init();
+	OOInteraction::DoxygenWholeTreeVisitor::init();
+	OOInteraction::DoxygenCommentsOnlyVisitor::init();
 
 	return true;
 }

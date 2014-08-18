@@ -30,7 +30,7 @@
 
 namespace OOInteraction {
 
-class DoxyCommentVisitor : public Model::Visitor<DoxyCommentVisitor, QString>{
+class DoxygenCommentsOnlyVisitor : public Model::Visitor<DoxygenCommentsOnlyVisitor, QString>{
 	public:
 		static void init();
 	private:

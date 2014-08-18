@@ -26,15 +26,15 @@
 
 #include "ModelBase/src/visitor/VisitorDefinition.h"
 #include "VisualizationBase/src/items/Item.h"
-#include "OOInteraction/src/DoxyCommentVisitor.h"
+#include "OOInteraction/src/DoxygenCommentsOnlyVisitor.h"
 
 namespace OOInteraction {
 
-class DoxyVisitor : public Model::Visitor<DoxyVisitor, QString>{
+class DoxygenWholeTreeVisitor : public Model::Visitor<DoxygenWholeTreeVisitor, QString>{
 	public:
 		static void init();
 	private:
-		static DoxyCommentVisitor* aDoxyCommentVisitor_;
+		static DoxygenCommentsOnlyVisitor* aDoxyCommentVisitor_;
 };
 
 }

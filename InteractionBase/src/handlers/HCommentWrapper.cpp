@@ -53,7 +53,7 @@ void HCommentWrapper::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 		aCompositeNode->beginModification("delete comment");
 		aCompositeNode->setComment(nullptr);
 		aCompositeNode->endModification();
-		del_ = true;
+		deleteAfterEvent = true;
 	}
 	else
 		GenericHandler::keyPressEvent(target, event);
@@ -61,9 +61,9 @@ void HCommentWrapper::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 
 void HCommentWrapper::afterEvent(Visualization::Item*, QEvent*)
 {
-	if (del_)
+	if (deleteAfterEvent)
 		GenericHandler::resetCommentWrapper();
-	del_ = false;
+	deleteAfterEvent = false;
 }
 
 }
