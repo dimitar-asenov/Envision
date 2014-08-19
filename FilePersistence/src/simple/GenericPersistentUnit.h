@@ -28,6 +28,8 @@
 
 #include "../filepersistence_api.h"
 
+#include "ModelBase/src/persistence/PersistentStore.h"
+
 namespace FilePersistence {
 
 class GenericTree;
@@ -52,6 +54,8 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		 * Returns a pointer to the copied data.
 		 */
 		const char* setData(const char* data, int dataSize);
+
+		GenericNode* find(Model::NodeIdType id) const;
 
 	private:
 		friend class GenericTree;
