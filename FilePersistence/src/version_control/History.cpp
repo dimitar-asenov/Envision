@@ -58,7 +58,9 @@ History::History(QString relativePath, Model::NodeIdType rootNodeId,
 	const CommitGraphItem endItem = historyGraph_->end();
 	QSet<const CommitGraphItem*> visited;
 	SHA1 end = endItem.commitSHA1_;
-	QSet<Model::NodeIdType> trackedIDs = trackSubtree(end, relativePath, repository);
+
+	GenericTree initialTree("History", end);
+	QSet<Model::NodeIdType> trackedIDs = trackSubtree(end, relativePath, &initialTree, repository);
 
 	detectRelevantCommits(&endItem, visited, relativePath, trackedIDs, repository);
 }
@@ -111,14 +113,17 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const C
 			if (!subtreeIsAffected)
 				isRelevant = false;
 
-			QString parentRelativeRootPath =findRootPath(relativePathRootNode, &diff);
+			// TODO perform correct call
+			GenericTree tree("History", parent->commitSHA1_);
+			QString parentRelativeRootPath =findRootPath(parent->commitSHA1_, relativePathRootNode, &diff,
+																		&tree, repository);
 
 			if (!parentRelativeRootPath.isNull())
 			{
 				if (subtreeIsAffected)
 				{
 					QSet<Model::NodeIdType> newTrackedIDs = trackSubtree(parent->commitSHA1_, parentRelativeRootPath,
-																						  repository);
+																						  &tree, repository);
 
 					detectRelevantCommits(parent, visited, parentRelativeRootPath, newTrackedIDs, repository);
 				}
@@ -132,7 +137,8 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const C
 	}
 }
 
-QString History::findRootPath(QString currentPath, const Diff* diff)
+QString History::findRootPath(QString revision, QString currentPath, const Diff* diff, GenericTree* tree,
+										const GitRepository* repository)
 {
 	IdToChangeDescriptionHash changes = diff->changes();
 
@@ -149,38 +155,59 @@ QString History::findRootPath(QString currentPath, const Diff* diff)
 	}
 
 	// check if rootNode is still in current PU
-	// TODO find rootNodeId in PU
+	if (!tree->persistentUnit(currentPath)) {
+		const CommitFile* file = repository->getCommitFile(revision, currentPath);
+		Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(currentPath));
+	}
+
+	GenericNode* rootNode = tree->persistentUnit(currentPath)->find(rootNodeId_);
+	if (rootNode)
+		return currentPath;
 
 	// check if rootNode is in other PU (affected by move)
+	QSet<QString> alreadyChecked;
+	alreadyChecked.insert(currentPath);
 	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Moved);
 	for (auto move : moves)
 	{
 		if (currentPath.compare(move->newNode()->persistentUnit()->name()) == 0)
 		{
-			// TODO find rootNodeId in PU
+			QString unitName = move->oldNode()->persistentUnit()->name();
+			if (!alreadyChecked.contains(unitName))
+			{
+				if (!tree->persistentUnit(unitName))
+				{
+					const CommitFile* file = repository->getCommitFile(revision, unitName);
+					Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(unitName));
+				}
+				GenericNode* rootNode = tree->persistentUnit(unitName)->find(rootNodeId_);
+				if (rootNode)
+					return unitName;
+			}
 		}
 	}
 
-	// TODO return correct path
-	return currentPath;
+	// rootNodeId can't be found but was not deleted!
+	Q_ASSERT(false);
+	return QString();
 }
 
-QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relativePath,
+QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relativePath, GenericTree* tree,
 															 const GitRepository* repository) const
 {
 	QSet<Model::NodeIdType> trackedIDs;
 	QList<const CommitFile*> commitFiles;
 
 
-	const CommitFile* startFile = repository->getCommitFile(revision, relativePath);
-	commitFiles.append(startFile);
+	if (!tree->persistentUnit(relativePath))
+	{
+		const CommitFile* startFile = repository->getCommitFile(revision, relativePath);
+		commitFiles.append(startFile);
 
-	GenericTree tree("History", revision);
+		Parser::load(startFile->content_, startFile->size_, false, tree->newPersistentUnit(relativePath));
+	}
 
-	GenericPersistentUnit unit = tree.newPersistentUnit(relativePath);
-	GenericNode* unitRoot = Parser::load(startFile->content_, startFile->size_, false, unit);
-
-	GenericNode* subtreeRoot = unitRoot->find(rootNodeId_);
+	GenericNode* subtreeRoot = tree->persistentUnit(relativePath)->find(rootNodeId_);
 	if (!subtreeRoot)
 		return QSet<Model::NodeIdType>();
 
@@ -198,10 +225,15 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 		if (persistenceUnitType.compare(current->type()) == 0)
 		{
 			QString subUnitrelativePath = current->id().toString();
-			const CommitFile* file = repository->getCommitFile(revision, subUnitrelativePath);
-			commitFiles.append(file);
-			GenericPersistentUnit subUnit = tree.newPersistentUnit(subUnitrelativePath);
-			GenericNode* subUnitRoot = Parser::load(file->content_, file->size_, false, subUnit);
+
+			if (!tree->persistentUnit(subUnitrelativePath))
+			{
+				const CommitFile* file = repository->getCommitFile(revision, subUnitrelativePath);
+				commitFiles.append(file);
+
+				Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(subUnitrelativePath));
+			}
+			GenericNode* subUnitRoot = tree->persistentUnit(subUnitrelativePath)->unitRootNode();
 			stack.append(subUnitRoot);
 		}
 

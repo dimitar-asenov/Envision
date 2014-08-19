@@ -50,10 +50,11 @@ class FILEPERSISTENCE_API History
 											QString relativePathRootNode, QSet<Model::NodeIdType> trackedIDs,
 											const GitRepository* repository);
 
-		QSet<Model::NodeIdType> trackSubtree(QString revision, QString relativePath,
+		QSet<Model::NodeIdType> trackSubtree(QString revision, QString relativePath, GenericTree* tree,
 														 const GitRepository* repository) const;
 
-		QString findRootPath(QString currentPath, const Diff* diff);
+		QString findRootPath(QString revision, QString currentPath, const Diff* diff, GenericTree* tree,
+									const GitRepository* repository);
 
 		struct CommitTime
 		{
