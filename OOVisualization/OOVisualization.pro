@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/expressions/VNewExpressionStyle.h \
+HEADERS += src/elements/VOOReference.h \
+    src/expressions/VNewExpressionStyle.h \
     src/expressions/VNewExpression.h \
     src/elements/VCommentStatementItem.h \
     src/declarations/VExplicitTemplateInstantiation.h \
@@ -112,7 +113,8 @@ HEADERS += src/expressions/VNewExpressionStyle.h \
     src/semantic_zoom/VDeclarationConstantSzStyle.h \
     src/semantic_zoom/VDeclarationConstantSz.h \
     src/OOVisualizationPlugin.h
-SOURCES += src/expressions/VNewExpressionStyle.cpp \
+SOURCES += src/elements/VOOReference.cpp \
+    src/expressions/VNewExpressionStyle.cpp \
     src/expressions/VNewExpression.cpp \
     src/elements/VCommentStatementItem.cpp \
     src/declarations/VExplicitTemplateInstantiation.cpp \

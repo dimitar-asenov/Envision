@@ -124,7 +124,7 @@ void Scene::scheduleUpdate()
 	}
 }
 
-void Scene::updateItems()
+void Scene::updateNow()
 {
 	inAnUpdate_ = true;
 	auto updateTimer = Logger::Timer::start("Scene update");
@@ -256,7 +256,7 @@ void Scene::nodesUpdated(QSet<Node*> nodes)
 
 void Scene::customEvent(QEvent *event)
 {
-	if ( event->type() == UpdateSceneEvent::EventType ) updateItems();
+	if ( event->type() == UpdateSceneEvent::EventType ) updateNow();
 	else if (auto e = dynamic_cast<CustomSceneEvent*>(event))
 	{
 		auto t = Logger::Timer::start("Custom event");
@@ -310,7 +310,7 @@ bool Scene::event(QEvent *event)
 
 		inEventHandler_ = false;
 
-		if (needsUpdate_) updateItems();
+		if (needsUpdate_) updateNow();
 		auto postEventActions = postEventActions_;
 		postEventActions_.clear();
 		for (auto e : postEventActions)

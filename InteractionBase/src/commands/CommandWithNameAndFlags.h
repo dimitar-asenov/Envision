@@ -35,7 +35,8 @@ namespace Interaction {
 class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 {
 	public:
-		CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes, bool usePossibleNames);
+		CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes,
+				bool usePossibleNames, bool limitToMatchingNames = true);
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
@@ -69,6 +70,7 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 		const QString commandName_;
 		const QList<QStringList> attributes_;
 		const bool usePossibleNames_{};
+		const bool limitToMatchingNames_{};
 };
 
 inline const QString& CommandWithNameAndFlags::commandName() { return commandName_;}

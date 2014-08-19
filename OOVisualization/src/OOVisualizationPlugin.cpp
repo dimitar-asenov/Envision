@@ -31,6 +31,8 @@
 
 #include "OOModel/src/allOOModelNodes.h"
 
+#include "InteractionBase/src/handlers/GenericHandler.h"
+
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/node_extensions/FullDetailSize.h"
@@ -57,6 +59,9 @@ bool OOVisualizationPlugin::initialize(Core::EnvisionManager&)
 	Core::TypeRegistry::initializeNewTypes();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
 			createVisualization<VStatementItemList, StatementItemList>, VStatementItemList::typeIdStatic());
+
+	// Use default handler:
+	VOOReference::setDefaultClassHandler(Interaction::GenericHandler::instance());
 
 
 	/*Scene::defaultRenderer()->registerSemanticZoomLevel("public_interface", 1);

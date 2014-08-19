@@ -69,6 +69,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void addTopLevelItem(Item* item);
 		void removeTopLevelItem(Item* item);
 		void scheduleUpdate();
+		void updateNow();
 		void listenToTreeManager(Model::TreeManager* manager);
 
 		Cursor* mainCursor();
@@ -194,7 +195,6 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		friend class View;
 		void setCurrentPaintView(View* view);
 
-		void updateItems();
 		void computeSceneRect();
 };
 

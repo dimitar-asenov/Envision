@@ -26,12 +26,9 @@
 
 #include "CCreateProject.h"
 
-#include "OOModel/src/declarations/Project.h"
+#include "CommandHelper.h"
+
 #include "OOModel/src/declarations/NameImport.h"
-#include "VisualizationBase/src/items/RootItem.h"
-#include "VisualizationBase/src/cursor/LayoutCursor.h"
-#include "VisualizationBase/src/declarative/GridLayouter.h"
-#include "InteractionBase/src/events/SetCursorEvent.h"
 
 namespace OOInteraction {
 
@@ -42,24 +39,13 @@ CCreateProject::CCreateProject() : CreateNamedObjectWithAttributes("project", {}
 Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& /*attributes*/)
 {
-	auto parent = dynamic_cast<OOModel::Project*> (target->node());
-
 	auto project = new OOModel::Project();
 	if (!name.isEmpty()) project->setName(name);
 
-	bool newManager = false;
-	if (parent)
+	if (auto parent = DCast<OOModel::Project> (target->node()))
 	{
-		parent->beginModification("create project");
-		if (auto layc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
-				{
-					Visualization::GridLayouter::setPositionInGrid(
-							parent->projects()->nodes() + parent->modules()->nodes() +
-							parent->classes()->nodes() + parent->methods()->nodes(), layc->x(), layc->y(),
-							project, Visualization::GridLayouter::ColumnMajor);
-				}
-		parent->projects()->append(project);
-		parent->endModification();
+		CommandHelper::addToParent(parent, parent->projects(), project, parent->projects()->nodes() +
+				parent->modules()->nodes() + parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
 	}
 	else
 	{
@@ -77,21 +63,8 @@ Interaction::CommandResult* CCreateProject::executeNamed(Visualization::Item* /*
 			}
 		}
 
-		newManager = true;
-		auto manager = new Model::TreeManager();
-		manager->setRoot(project);
-
-		auto vis = new Visualization::RootItem(project);
-		vis->setPos(target->pos());
-		target->scene()->addTopLevelItem( vis );
-		target->scene()->listenToTreeManager(manager);
+		CommandHelper::addFreshTree(project, target);
 	}
-
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	if (newManager) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), project,
-			Interaction::SetCursorEvent::CursorDefault, true));
-	else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, project,
-			Interaction::SetCursorEvent::CursorDefault, true));
 
 	return new Interaction::CommandResult();
 }
