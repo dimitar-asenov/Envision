@@ -56,6 +56,7 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		const char* setData(const char* data, int dataSize);
 
 		GenericNode* find(Model::NodeIdType id) const;
+		GenericNode* unitRootNode() const;
 
 	private:
 		friend class GenericTree;
