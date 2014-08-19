@@ -26,7 +26,11 @@
 
 #include "handlers/HProject.h"
 
+#include "commands/CCreateProject.h"
+#include "commands/CCreateModule.h"
 #include "commands/CCreateClass.h"
+#include "commands/CCreateMethod.h"
+#include "commands/CCreateField.h"
 
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
@@ -37,7 +41,11 @@ namespace OOInteraction {
 HProject::HProject()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
+	addCommand(new CCreateProject());
+	addCommand(new CCreateModule());
 	addCommand(new CCreateClass());
+	addCommand(new CCreateMethod());
+	addCommand(new CCreateField());
 }
 
 HProject* HProject::instance()

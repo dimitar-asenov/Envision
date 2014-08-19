@@ -26,8 +26,8 @@
 
 #include "CCreateField.h"
 
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Field.h"
+#include "CommandHelper.h"
+
 #include "OOModel/src/expressions/EmptyExpression.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
@@ -44,9 +44,7 @@ CCreateField::CCreateField() : CreateNamedObjectWithAttributes("field",
 Interaction::CommandResult* CCreateField::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
 {
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
-
+	Q_ASSERT(target->node());
 	auto f = new OOModel::Field();
 	f->setTypeExpression(new OOModel::EmptyExpression());
 	if (!name.isEmpty()) f->setName(name);
@@ -59,9 +57,15 @@ Interaction::CommandResult* CCreateField::executeNamed(Visualization::Item* /*so
 	// Set scope
 	if (attributes.last() == "static") f->modifiers()->set(Modifier::Static);
 
-	cl->fields()->beginModification("create field");
-	cl->fields()->append(f);
-	cl->fields()->endModification();
+	target->node()->beginModification("create field");
+	if (auto parent = DCast<OOModel::Project> (target->node()))
+		parent->fields()->append(f);
+	else if (auto parent = DCast<OOModel::Module> (target->node()))
+		parent->fields()->append(f);
+	else if (auto parent = DCast<OOModel::Class> (target->node()))
+		parent->fields()->append(f);
+	else Q_ASSERT(false);
+	target->node()->endModification();
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target,

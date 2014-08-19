@@ -26,13 +26,7 @@
 
 #include "commands/CCreateClass.h"
 
-#include "OOModel/src/declarations/Project.h"
-#include "OOModel/src/declarations/Class.h"
-
-#include "InteractionBase/src/events/SetCursorEvent.h"
-#include "VisualizationBase/src/items/RootItem.h"
-#include "VisualizationBase/src/cursor/LayoutCursor.h"
-#include "VisualizationBase/src/declarative/GridLayouter.h"
+#include "CommandHelper.h"
 
 using namespace OOModel;
 
@@ -46,8 +40,6 @@ CCreateClass::CCreateClass() : CreateNamedObjectWithAttributes("class",
 Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
 {
-	auto pr = dynamic_cast<OOModel::Project*> (target->node());
-
 	OOModel::Class* cl = new OOModel::Class();
 	if (!name.isEmpty()) cl->setName(name);
 
@@ -56,36 +48,22 @@ Interaction::CommandResult* CCreateClass::executeNamed(Visualization::Item* /*so
 	else if (attributes.first()  == "protected" ) cl->modifiers()->set(Modifier::Protected);
 	else if (attributes.first()  == "public" ) cl->modifiers()->set(Modifier::Public);
 
-	bool newManager = false;
-	if (pr)
+	if (auto parent = DCast<OOModel::Project> (target->node()))
 	{
-		pr->beginModification("create class");
-		if (auto layc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
-		{
-			Visualization::GridLayouter::setPositionInGrid( pr->projects()->nodes() + pr->modules()->nodes() +
-					pr->classes()->nodes() + pr->methods()->nodes(), layc->x(), layc->y(),
-					cl, Visualization::GridLayouter::ColumnMajor);
-		}
-		pr->classes()->append(cl);
-		pr->endModification();
+		CommandHelper::addToParent(parent, parent->classes(), cl, parent->projects()->nodes()
+				+ parent->modules()->nodes() + parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
 	}
-	else
+	else if (auto parent = DCast<OOModel::Module> (target->node()))
 	{
-		newManager = true;
-		auto manager = new Model::TreeManager();
-		manager->setRoot(cl);
-
-		auto vis = new Visualization::RootItem(cl);
-		vis->setPos(target->pos());
-		target->scene()->addTopLevelItem( vis );
-		target->scene()->listenToTreeManager(manager);
+		CommandHelper::addToParent(parent, parent->classes(),  cl, parent->modules()->nodes() +
+				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
 	}
-
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-		if (newManager) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), cl,
-				Interaction::SetCursorEvent::CursorDefault, true));
-		else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, cl,
-				Interaction::SetCursorEvent::CursorDefault, true));
+	else if (auto parent = DCast<OOModel::Class> (target->node()))
+	{
+		CommandHelper::addToParent(parent, parent->classes(),  cl,
+				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
+	}
+	else CommandHelper::addFreshTree(cl, target);
 
 	return new Interaction::CommandResult();
 }

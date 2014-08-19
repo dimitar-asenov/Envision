@@ -23,53 +23,60 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "HModule.h"
 
+#include "commands/CCreateModule.h"
+#include "commands/CCreateClass.h"
 #include "commands/CCreateMethod.h"
+#include "commands/CCreateField.h"
 
-#include "CommandHelper.h"
+#include "OOVisualization/src/declarations/VModule.h"
+#include "OOModel/src/declarations/Module.h"
 
-using namespace OOModel;
+#include "FilePersistence/src/SystemClipboard.h"
 
 namespace OOInteraction {
 
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private", "protected"}, {"static"}})
+HModule::HModule()
 {
+	addCommand(new CCreateModule());
+	addCommand(new CCreateClass());
+	addCommand(new CCreateMethod());
+	addCommand(new CCreateField());
 }
 
-Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
+HModule* HModule::instance()
 {
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
+	static HModule h;
+	return &h;
+}
 
-	// Set visibility
-	if (attributes.first() == "private" ) m->modifiers()->set(Modifier::Private);
-	else if (attributes.first() == "protected" ) m->modifiers()->set(Modifier::Protected);
-	else if (attributes.first() == "public" ) m->modifiers()->set(Modifier::Public);
-
-	// Set scope
-	if (attributes.last() == "static") m->modifiers()->set(Modifier::Static);
-
-	if (auto parent = DCast<OOModel::Project> (target->node()))
+void HModule::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->matches(QKeySequence::Paste))
 	{
-		CommandHelper::addToParent(parent, parent->methods(), m, parent->projects()->nodes()
-				+ parent->modules()->nodes() + parent->classes()->nodes() + parent->methods()->nodes(), target, cursor,
-											false);
+		FilePersistence::SystemClipboard clipboard;
+		if (clipboard.numNodes() == 1 && clipboard.currentNodeType() == OOModel::Module::typeNameStatic())
+		{
+			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
+			{
+				auto module = static_cast<OOVisualization::VModule*>(target);
+				module->node()->beginModification("paste a module");
+				auto newModule = new OOModel::Module();
+				module->node()->modules()->append(newModule);
+				newModule->load(clipboard);
+				module->node()->endModification();
+				module->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			}
+			else GenericHandler::keyPressEvent(target, event);
+		}
+		else GenericHandler::keyPressEvent(target, event);
 	}
-	else if (auto parent = DCast<OOModel::Module> (target->node()))
+	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
-		CommandHelper::addToParent(parent, parent->methods(),  m, parent->modules()->nodes() +
-				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor, false);
+		showCommandPrompt(target);
 	}
-	else if (auto parent = DCast<OOModel::Class> (target->node()))
-	{
-		CommandHelper::addToParent(parent, parent->methods(), m,
-				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor, false);
-	}
-	else CommandHelper::addFreshTree(m, target, false);
-
-	return new Interaction::CommandResult();
+	else GenericHandler::keyPressEvent(target, event);
 }
 
 } /* namespace OOInteraction */

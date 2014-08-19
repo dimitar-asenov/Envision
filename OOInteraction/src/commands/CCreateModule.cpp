@@ -23,51 +23,32 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#include "commands/CCreateMethod.h"
+#include "CCreateModule.h"
 
 #include "CommandHelper.h"
 
-using namespace OOModel;
-
 namespace OOInteraction {
 
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private", "protected"}, {"static"}})
+CCreateModule::CCreateModule(): CreateNamedObjectWithAttributes("module", {{}})
+{}
+
+Interaction::CommandResult* CCreateModule::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
+	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList&)
 {
-}
-
-Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
-	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
-{
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
-
-	// Set visibility
-	if (attributes.first() == "private" ) m->modifiers()->set(Modifier::Private);
-	else if (attributes.first() == "protected" ) m->modifiers()->set(Modifier::Protected);
-	else if (attributes.first() == "public" ) m->modifiers()->set(Modifier::Public);
-
-	// Set scope
-	if (attributes.last() == "static") m->modifiers()->set(Modifier::Static);
+	auto newModule = new OOModel::Module();
+	if (!name.isEmpty()) newModule->setName(name);
 
 	if (auto parent = DCast<OOModel::Project> (target->node()))
 	{
-		CommandHelper::addToParent(parent, parent->methods(), m, parent->projects()->nodes()
-				+ parent->modules()->nodes() + parent->classes()->nodes() + parent->methods()->nodes(), target, cursor,
-											false);
+		CommandHelper::addToParent(parent, parent->modules(), newModule, parent->projects()->nodes() +
+				parent->modules()->nodes() + parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
 	}
 	else if (auto parent = DCast<OOModel::Module> (target->node()))
 	{
-		CommandHelper::addToParent(parent, parent->methods(),  m, parent->modules()->nodes() +
-				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor, false);
+		CommandHelper::addToParent(parent, parent->modules(), newModule, parent->modules()->nodes() +
+				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
 	}
-	else if (auto parent = DCast<OOModel::Class> (target->node()))
-	{
-		CommandHelper::addToParent(parent, parent->methods(), m,
-				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor, false);
-	}
-	else CommandHelper::addFreshTree(m, target, false);
+	else CommandHelper::addFreshTree(newModule, target);
 
 	return new Interaction::CommandResult();
 }
