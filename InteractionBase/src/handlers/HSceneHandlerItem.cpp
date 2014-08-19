@@ -31,8 +31,6 @@
 #include "commands/CSceneHandlerLoad.h"
 #include "commands/CSceneHandlerSave.h"
 
-#include "commands/CDiffTest.h"
-
 namespace Interaction {
 
 HSceneHandlerItem::HSceneHandlerItem()
@@ -42,8 +40,6 @@ HSceneHandlerItem::HSceneHandlerItem()
 	addCommand(new CFind());
 	addCommand(new CSceneHandlerLoad());
 	addCommand(new CSceneHandlerSave());
-
-	addCommand(new CDiffTest());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()

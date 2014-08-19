@@ -71,7 +71,6 @@ HEADERS += src/commands/CommandWithNameAndFlags.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h \
-    src/commands/CDiffTest.h \
     src/commands/CDiff.h \
     src/commands/CHistory.h
 SOURCES += src/commands/CommandWithNameAndFlags.cpp \
@@ -138,6 +137,5 @@ SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/commands/Command.cpp \
     test/SimpleTest.cpp \
     src/InteractionBasePlugin.cpp \
-    src/commands/CDiffTest.cpp \
     src/commands/CDiff.cpp \
     src/commands/CHistory.cpp
