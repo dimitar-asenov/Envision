@@ -120,4 +120,17 @@ GenericNode* GenericPersistentUnit::find(Model::NodeIdType id) const
 	return nullptr;
 }
 
+GenericNode* GenericPersistentUnit::unitRootNode() const
+{
+	if (chunks_.isEmpty())
+		return nullptr;
+	else
+	{
+		GenericNode* current = &(chunks_.first()[0]);
+		while (current->parent_)
+			current = current->parent_;
+		return current;
+	}
+}
+
 } /* namespace FilePersistence */
