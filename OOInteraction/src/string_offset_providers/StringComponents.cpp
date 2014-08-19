@@ -248,6 +248,8 @@ void StringComponents::initConversions()
 		Optional(e->prefix(), AUTO), Optional(".", e->prefix()), e->name(),
 		list(e->typeArguments(), "<", ",", ">", true, true) ); });
 
+	add<OOReference>([](OOReference* e){ return c( e->name() ); });
+
 	// Flexible input expressions
 	add<EmptyExpression>([](EmptyExpression*){ return c( "" ); });
 	add<ErrorExpression>([](ErrorExpression* e){ return c(
