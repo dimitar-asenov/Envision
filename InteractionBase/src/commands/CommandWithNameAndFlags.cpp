@@ -29,7 +29,9 @@
 namespace Interaction {
 
 CommandWithNameAndFlags::CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes,
-	bool usePossibleNames) : commandName_(commandName), attributes_(attributes), usePossibleNames_{usePossibleNames}
+	bool usePossibleNames, bool limitToMatchingNames)
+: commandName_(commandName), attributes_(attributes), usePossibleNames_{usePossibleNames},
+  limitToMatchingNames_{limitToMatchingNames}
 {
 }
 
@@ -57,7 +59,7 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 
 	findParts(commandTokens, name, attributes, commandFound, unknownFormat);
 
-	if (usePossibleNames_)
+	if (usePossibleNames_ && limitToMatchingNames_)
 	{
 		auto matching = matchingNames(name);
 		if (matching.isEmpty())
@@ -101,16 +103,17 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& t
 			}
 	if (atLeastOneAttribute) explanation += "]";
 
-	if (!usePossibleNames_)
-		return {new CommandSuggestion(commandText, explanation + (name.isEmpty() ? "" : " " + name))};
-	else
-	{
-		QList<CommandSuggestion*> s;
+	QList<CommandSuggestion*> s;
+
+	if (usePossibleNames_)
 		for (auto matching : matchingNames(name))
 			s.append(new CommandSuggestion(commandText + (name.isEmpty() ? " " + matching : ""),
 					explanation + " " + matching));
-		return s;
-	}
+
+	if (!usePossibleNames_ || !limitToMatchingNames_)
+		s.append( new CommandSuggestion(commandText, explanation + (name.isEmpty() ? "" : " " + name)) );
+
+	return s;
 }
 
 QStringList CommandWithNameAndFlags::commandForms(Visualization::Item* /*source*/,
