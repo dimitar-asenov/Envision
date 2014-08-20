@@ -38,6 +38,7 @@
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/icons/Icon.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
@@ -424,6 +425,9 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				list->endModification();
 				p->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			}
+			// Check if this is a root item and remove it from the scene. The corresponding model is not removed.
+			else if (p->parent() && DCast<Visualization::RootItem>(p->parent()))
+				p->scene()->removeTopLevelItem(p->parent());
 		}
 	}
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F1)

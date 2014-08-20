@@ -26,22 +26,30 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
+#include "../oointeraction_api.h"
 
-#include "CommandWithNameAndFlags.h"
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
-namespace Interaction {
+namespace OOModel {
+	class Module;
+}
 
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
+namespace OOInteraction {
+
+class OOINTERACTION_API CCreateModule : public Interaction::CreateNamedObjectWithAttributes
 {
 	public:
-		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
+		CCreateModule();
 
 	protected:
-		virtual QList<CommandSuggestion*> suggestNamed(Visualization::Item* source, Visualization::Item* target,
-						const QString& textSoFar,
-						const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
-						const QStringList& attributes, bool commandFound) override;
+			virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+					const std::unique_ptr<Visualization::Cursor>& cursor,
+					const QString& name, const QStringList& attributes) override;
+
+	private:
+		template <class Parent>
+		void addToParent(Parent* p, OOModel::Module module, QVector<Model::Node*> existingChildren,
+				const std::unique_ptr<Visualization::Cursor>& cursor);
 };
 
-}
+} /* namespace OOInteraction */

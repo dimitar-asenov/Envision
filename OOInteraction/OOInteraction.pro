@@ -9,7 +9,10 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -lfilepersistence
-HEADERS += src/handlers/HArrayInitializer.h \
+HEADERS += src/commands/CommandHelper.h \
+    src/handlers/HModule.h \
+    src/commands/CCreateModule.h \
+    src/handlers/HArrayInitializer.h \
     src/expression_editor/CommandDescriptor.h \
     src/expression_editor/CompoundObjectDescriptor.h \
     src/expression_editor/commands/CommandExpression.h \
@@ -54,7 +57,9 @@ HEADERS += src/handlers/HArrayInitializer.h \
     src/commands/CDoxygen.h \
     src/DoxygenCommentsOnlyVisitor.h \
     src/DoxygenWholeTreeVisitor.h
-SOURCES += src/handlers/HArrayInitializer.cpp \
+SOURCES += src/handlers/HModule.cpp \
+    src/commands/CCreateModule.cpp \
+    src/handlers/HArrayInitializer.cpp \
     src/expression_editor/CommandDescriptor.cpp \
     src/expression_editor/CompoundObjectDescriptor.cpp \
     src/expression_editor/commands/CreateMethodCall.cpp \

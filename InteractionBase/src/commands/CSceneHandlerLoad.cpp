@@ -61,7 +61,8 @@ QStringList CSceneHandlerLoad::availableProjectsOnDisk()
 	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
 }
 
-QStringList CSceneHandlerLoad::possibleNames()
+QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
+															const std::unique_ptr<Visualization::Cursor>&)
 {
 	return availableProjectsOnDisk();
 }

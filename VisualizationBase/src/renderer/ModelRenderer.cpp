@@ -267,7 +267,7 @@ QImage ModelRenderer::renderToImage(Model::Node* aNode)
 	auto anItem = new Visualization::RootItem(aNode);
 	aScene->addTopLevelItem(anItem);
 
-	QApplication::processEvents();
+	aScene->updateNow();
 
 	QRectF r = anItem->boundingRect();
 	QImage image(r.width(), r.height(), QImage::Format_ARGB32);
@@ -285,7 +285,7 @@ void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
 	auto anItem = new Visualization::RootItem(aNode);
 	aScene->addTopLevelItem(anItem);
 
-	QApplication::processEvents();
+	aScene->updateNow();
 
 	QSvgGenerator* svggen = new QSvgGenerator;
 	svggen->setFileName(path);

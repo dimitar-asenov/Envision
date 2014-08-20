@@ -29,6 +29,7 @@
 #include "../oovisualization_api.h"
 #include "VReferenceExpressionStyle.h"
 #include "VExpression.h"
+#include "../elements/VOOReference.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
@@ -50,7 +51,7 @@ class OOVISUALIZATION_API VReferenceExpression : public Super<VExpression<VRefer
 		VReferenceExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReferenceExpression();
 
-		Visualization::Text* name() const;
+		VOOReference* name() const;
 		Visualization::Static* separator() const;
 		Visualization::Item* prefix() const;
 		Visualization::VList* typeArguments() const;
@@ -59,13 +60,13 @@ class OOVISUALIZATION_API VReferenceExpression : public Super<VExpression<VRefer
 		void determineChildren();
 
 	private:
-		Visualization::Text* name_;
+		VOOReference* name_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;
 		Visualization::VList* typeArguments_;
 };
 
-inline Visualization::Text* VReferenceExpression::name() const { return name_; }
+inline VOOReference* VReferenceExpression::name() const { return name_; }
 inline Visualization::Static* VReferenceExpression::separator() const { return separator_; }
 inline Visualization::Item* VReferenceExpression::prefix() const { return prefix_; }
 inline Visualization::VList* VReferenceExpression::typeArguments() const { return typeArguments_; }

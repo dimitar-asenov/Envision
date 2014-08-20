@@ -23,25 +23,60 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "HModule.h"
 
-#pragma once
+#include "commands/CCreateModule.h"
+#include "commands/CCreateClass.h"
+#include "commands/CCreateMethod.h"
+#include "commands/CCreateField.h"
 
-#include "../interactionbase_api.h"
+#include "OOVisualization/src/declarations/VModule.h"
+#include "OOModel/src/declarations/Module.h"
 
-#include "CommandWithNameAndFlags.h"
+#include "FilePersistence/src/SystemClipboard.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
+HModule::HModule()
 {
-	public:
-		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
-
-	protected:
-		virtual QList<CommandSuggestion*> suggestNamed(Visualization::Item* source, Visualization::Item* target,
-						const QString& textSoFar,
-						const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
-						const QStringList& attributes, bool commandFound) override;
-};
-
+	addCommand(new CCreateModule());
+	addCommand(new CCreateClass());
+	addCommand(new CCreateMethod());
+	addCommand(new CCreateField());
 }
+
+HModule* HModule::instance()
+{
+	static HModule h;
+	return &h;
+}
+
+void HModule::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->matches(QKeySequence::Paste))
+	{
+		FilePersistence::SystemClipboard clipboard;
+		if (clipboard.numNodes() == 1 && clipboard.currentNodeType() == OOModel::Module::typeNameStatic())
+		{
+			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
+			{
+				auto module = static_cast<OOVisualization::VModule*>(target);
+				module->node()->beginModification("paste a module");
+				auto newModule = new OOModel::Module();
+				module->node()->modules()->append(newModule);
+				newModule->load(clipboard);
+				module->node()->endModification();
+				module->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			}
+			else GenericHandler::keyPressEvent(target, event);
+		}
+		else GenericHandler::keyPressEvent(target, event);
+	}
+	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
+	{
+		showCommandPrompt(target);
+	}
+	else GenericHandler::keyPressEvent(target, event);
+}
+
+} /* namespace OOInteraction */

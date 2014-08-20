@@ -26,12 +26,7 @@
 
 #include "commands/CCreateMethod.h"
 
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Method.h"
-
-#include "VisualizationBase/src/declarative/GridLayouter.h"
-#include "VisualizationBase/src/cursor/LayoutCursor.h"
-#include "InteractionBase/src/events/SetCursorEvent.h"
+#include "CommandHelper.h"
 
 using namespace OOModel;
 
@@ -45,9 +40,6 @@ CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
 Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
 	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList& attributes)
 {
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
-
 	auto m = new OOModel::Method();
 	if (!name.isEmpty()) m->setName(name);
 
@@ -59,18 +51,23 @@ Interaction::CommandResult* CCreateMethod::executeNamed(Visualization::Item* /*s
 	// Set scope
 	if (attributes.last() == "static") m->modifiers()->set(Modifier::Static);
 
-	cl->beginModification("create method");
-	if (auto lc = dynamic_cast<Visualization::LayoutCursor*>(cursor.get()))
+	if (auto parent = DCast<OOModel::Project> (target->node()))
 	{
-		Visualization::GridLayouter::setPositionInGrid(cl->classes()->nodes() + cl->methods()->nodes(),	lc->x(), lc->y(),
-				m, Visualization::GridLayouter::ColumnMajor);
+		CommandHelper::addToParent(parent, parent->methods(), m, parent->projects()->nodes()
+				+ parent->modules()->nodes() + parent->classes()->nodes() + parent->methods()->nodes(), target, cursor,
+											false);
 	}
-	cl->methods()->append(m);
-	cl->endModification();
-
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, m,
-			Interaction::SetCursorEvent::CursorDefault, false));
+	else if (auto parent = DCast<OOModel::Module> (target->node()))
+	{
+		CommandHelper::addToParent(parent, parent->methods(),  m, parent->modules()->nodes() +
+				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor, false);
+	}
+	else if (auto parent = DCast<OOModel::Class> (target->node()))
+	{
+		CommandHelper::addToParent(parent, parent->methods(), m,
+				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor, false);
+	}
+	else CommandHelper::addFreshTree(m, target, false);
 
 	return new Interaction::CommandResult();
 }

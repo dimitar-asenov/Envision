@@ -56,7 +56,15 @@ void Highlight::updateAllHighlights()
 
 void Highlight::removeHighlightedItem(Item* item)
 {
-	highlightItems_.remove(item);
+	auto it = highlightItems_.find(item);
+	if (it != highlightItems_.end())
+	{
+		auto selection = it.value();
+		SAFE_DELETE(selection);
+		highlightItems_.erase(it);
+		scene_->scheduleUpdate();
+
+	}
 }
 
 } /* namespace Visualization */

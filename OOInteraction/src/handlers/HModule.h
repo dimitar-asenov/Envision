@@ -26,22 +26,20 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
+#include "../oointeraction_api.h"
 
-#include "CommandWithNameAndFlags.h"
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
-{
-	public:
-		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
-
+class HModule : public Interaction::GenericHandler {
 	protected:
-		virtual QList<CommandSuggestion*> suggestNamed(Visualization::Item* source, Visualization::Item* target,
-						const QString& textSoFar,
-						const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
-						const QStringList& attributes, bool commandFound) override;
+		HModule();
+
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+
+	public:
+		static HModule* instance();
 };
 
-}
+} /* namespace OOInteraction */

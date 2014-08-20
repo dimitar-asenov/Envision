@@ -23,25 +23,34 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "CCreateModule.h"
 
-#pragma once
+#include "CommandHelper.h"
 
-#include "../interactionbase_api.h"
+namespace OOInteraction {
 
-#include "CommandWithNameAndFlags.h"
+CCreateModule::CCreateModule(): CreateNamedObjectWithAttributes("module", {{}})
+{}
 
-namespace Interaction {
-
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
+Interaction::CommandResult* CCreateModule::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
+	const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name, const QStringList&)
 {
-	public:
-		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
+	auto newModule = new OOModel::Module();
+	if (!name.isEmpty()) newModule->setName(name);
 
-	protected:
-		virtual QList<CommandSuggestion*> suggestNamed(Visualization::Item* source, Visualization::Item* target,
-						const QString& textSoFar,
-						const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
-						const QStringList& attributes, bool commandFound) override;
-};
+	if (auto parent = DCast<OOModel::Project> (target->node()))
+	{
+		CommandHelper::addToParent(parent, parent->modules(), newModule, parent->projects()->nodes() +
+				parent->modules()->nodes() + parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
+	}
+	else if (auto parent = DCast<OOModel::Module> (target->node()))
+	{
+		CommandHelper::addToParent(parent, parent->modules(), newModule, parent->modules()->nodes() +
+				parent->classes()->nodes() + parent->methods()->nodes(), target, cursor);
+	}
+	else CommandHelper::addFreshTree(newModule, target);
 
+	return new Interaction::CommandResult();
 }
+
+} /* namespace OOInteraction */

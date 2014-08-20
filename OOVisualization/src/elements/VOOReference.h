@@ -26,22 +26,32 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
+#include "../oovisualization_api.h"
 
-#include "CommandWithNameAndFlags.h"
+#include "OOModel/src/elements/OOReference.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/TextRenderer.h"
 
-namespace Interaction {
+namespace OOVisualization {
 
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
+class OOVISUALIZATION_API VOOReference
+: public Super<Visualization::ItemWithNode<VOOReference, Visualization::TextRenderer, OOModel::OOReference>>
 {
+	ITEM_COMMON_CUSTOM_STYLENAME(VOOReference, Visualization::TextStyle)
+
 	public:
-		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
+		VOOReference(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+
+		/**
+		 * Fails as it should not be called.
+		 *
+		 * This method is normally called from the handler, but we don't allow the standard text handler to modify
+		 * references.
+		 */
+		virtual bool setText(const QString& newText) override;
 
 	protected:
-		virtual QList<CommandSuggestion*> suggestNamed(Visualization::Item* source, Visualization::Item* target,
-						const QString& textSoFar,
-						const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
-						const QStringList& attributes, bool commandFound) override;
+		virtual QString currentText() override;
 };
 
-}
+} /* namespace OOVisualization */

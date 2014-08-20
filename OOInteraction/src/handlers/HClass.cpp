@@ -26,6 +26,7 @@
 
 #include "handlers/HClass.h"
 
+#include "commands/CCreateClass.h"
 #include "commands/CCreateMethod.h"
 #include "commands/CCreateField.h"
 
@@ -34,6 +35,7 @@ namespace OOInteraction {
 HClass::HClass()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
+	addCommand(new CCreateClass());
 	addCommand(new CCreateMethod());
 	addCommand(new CCreateField());
 }

@@ -29,6 +29,7 @@
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 #include "handlers/HProject.h"
+#include "handlers/HModule.h"
 #include "handlers/HClass.h"
 #include "handlers/HMethod.h"
 #include "handlers/HExpression.h"
@@ -43,7 +44,9 @@
 #include "handlers/HStatementItemList.h"
 
 #include "commands/CCreateProject.h"
+#include "commands/CCreateModule.h"
 #include "commands/CCreateClass.h"
+#include "commands/CCreateMethod.h"
 #include "commands/CSceneHandlerItemTest.h"
 #include "commands/CDoxygen.h"
 
@@ -88,6 +91,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	OOVisualization::VExpressionStaticData::setDefaultClassHandler(HExpression::instance());
 	OOVisualization::VStatementItemStaticData::setDefaultClassHandler(HStatement::instance());
 	OOVisualization::VProject::setDefaultClassHandler(HProject::instance());
+	OOVisualization::VModule::setDefaultClassHandler(HModule::instance());
 	OOVisualization::VClass::setDefaultClassHandler(HClass::instance());
 	OOVisualization::VMethod::setDefaultClassHandler(HMethod::instance());
 	OOVisualization::VFormalArgument::setDefaultClassHandler(HFormalArgument::instance());
@@ -126,7 +130,9 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateModule());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateMethod());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CDoxygen());
 

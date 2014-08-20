@@ -23,25 +23,27 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "VOOReference.h"
 
-#pragma once
+namespace OOVisualization {
 
-#include "../interactionbase_api.h"
+ITEM_COMMON_DEFINITIONS(VOOReference, "item")
 
-#include "CommandWithNameAndFlags.h"
-
-namespace Interaction {
-
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
+VOOReference::VOOReference(Item* parent, NodeType* node, const StyleType* style)
+: Super(parent, node, style)
 {
-	public:
-		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
-
-	protected:
-		virtual QList<CommandSuggestion*> suggestNamed(Visualization::Item* source, Visualization::Item* target,
-						const QString& textSoFar,
-						const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
-						const QStringList& attributes, bool commandFound) override;
-};
-
+	Super::setText(node->name());
 }
+
+QString VOOReference::currentText()
+{
+	return node()->name();
+}
+
+bool VOOReference::setText(const QString&)
+{
+	Q_ASSERT(false);
+	return false;
+}
+
+} /* namespace OOVisualization */
