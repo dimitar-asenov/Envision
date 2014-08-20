@@ -33,7 +33,8 @@ CreateNamedObjectWithAttributes::CreateNamedObjectWithAttributes(const QString& 
 {
 }
 
-QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggestNamed(const QString& textSoFar,
+QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggestNamed(Visualization::Item*,
+		Visualization::Item*, const QString& textSoFar,
 		const std::unique_ptr<Visualization::Cursor>&, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {

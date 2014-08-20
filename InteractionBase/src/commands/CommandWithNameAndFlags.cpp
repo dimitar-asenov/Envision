@@ -73,8 +73,8 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 	return executeNamed(source, target, cursor, name, attributes);
 }
 
-QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* /*source*/,
-		Visualization::Item* /*target*/, const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
+QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* source,
+		Visualization::Item* target, const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QString name;
 	QStringList attributes;
@@ -84,10 +84,11 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* 
 	findParts(textSoFar.split(" "), name, attributes, commandFound, unknownFormat);
 
 	if (unknownFormat) return {};
-	return suggestNamed(textSoFar, cursor, name, attributes, commandFound);
+	return suggestNamed(source, target, textSoFar, cursor, name, attributes, commandFound);
 }
 
-QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& textSoFar,
+QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(Visualization::Item*,
+		Visualization::Item*, const QString& textSoFar,
 		const std::unique_ptr<Visualization::Cursor>&, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {
