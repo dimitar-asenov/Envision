@@ -30,8 +30,6 @@
 
 #include "CommandWithNameAndFlags.h"
 
-#include "FilePersistence/src/version_control/GitRepository.h"
-
 namespace Interaction {
 
 class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
@@ -47,8 +45,6 @@ class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
 		virtual QStringList possibleNames(Visualization::Item* source, Visualization::Item* target,
 													 const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-	private:
-		FilePersistence::GitRepository* repository;
 };
 
 } /* namespace Interaction */

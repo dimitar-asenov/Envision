@@ -34,13 +34,14 @@
 #include "VisualizationBase/src/CustomSceneEvent.h"
 
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
+#include "FilePersistence/src/version_control/GitRepository.h"
 
 using namespace Visualization;
 using namespace FilePersistence;
 
 namespace Interaction {
 
-CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"project"}}, false}
+CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"project"}}, true, false}
 {}
 
 CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* target,
@@ -58,7 +59,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 	// get GitRepository
 	QString path("projects/");
 	path.append(managerName);
-	repository = new GitRepository(path);
+	std::shared_ptr<FilePersistence::GitRepository> repository(new GitRepository(path));
 
 	headManager->setName("HEAD");
 
@@ -74,6 +75,8 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 	revisionManager->load(fileStore, managerName, false);
 	revisionManager->setName(name);
 
+	headManager->setName(managerName);
+
 	// build visualization
 	Item* headRoot = target;
 	while (headRoot->parent()) headRoot = headRoot->parent();
@@ -86,7 +89,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 
 	QApplication::postEvent(Visualization::VisualizationManager::instance().mainScene(),
 		new Visualization::CustomSceneEvent([headRoot, headManager, revisionRoot, revisionManager,
-														name, target, this]()
+														name, target, repository]()
 	{
 			Diff diff = repository->diff(name, GitRepository::WORKDIR);
 			IdToChangeDescriptionHash changes = diff.changes();
@@ -233,10 +236,23 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 	return new CommandResult();
 }
 
-QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
+QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization::Item* target,
 											const std::unique_ptr<Visualization::Cursor>& /*cursor*/)
 {
-	return QStringList();
+	Model::TreeManager* headManager = target->node()->manager();
+	QString managerName = headManager->name();
+
+	// get GitRepository
+	QString path("projects/");
+	path.append(managerName);
+	GitRepository repository(path);
+
+	QStringList names;
+	names.append(repository.localBranches());
+	names.append(repository.tags());
+	names.append(repository.revisions());
+
+	return names;
 }
 
 } /* namespace Interaction */
