@@ -83,7 +83,8 @@ CommandResult* CHistory::executeNamed(Visualization::Item* /*source*/, Visualiza
 	return new CommandResult();
 }
 
-QStringList CHistory::possibleNames()
+QStringList CHistory::possibleNames(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
+												const std::unique_ptr<Visualization::Cursor>& /*cursor*/)
 {
 	return QStringList();
 }

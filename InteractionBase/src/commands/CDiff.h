@@ -44,7 +44,8 @@ class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
 				const std::unique_ptr<Visualization::Cursor>& cursor,
 				const QString& name, const QStringList& attributes) override;
 
-		virtual QStringList possibleNames() override;
+		virtual QStringList possibleNames(Visualization::Item* source, Visualization::Item* target,
+													 const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
 		FilePersistence::GitRepository* repository;

@@ -233,7 +233,8 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 	return new CommandResult();
 }
 
-QStringList CDiff::possibleNames()
+QStringList CDiff::possibleNames(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
+											const std::unique_ptr<Visualization::Cursor>& /*cursor*/)
 {
 	return QStringList();
 }

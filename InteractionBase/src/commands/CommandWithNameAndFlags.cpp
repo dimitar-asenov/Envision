@@ -61,7 +61,7 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 
 	if (usePossibleNames_ && limitToMatchingNames_)
 	{
-		auto matching = matchingNames(name);
+		auto matching = matchingNames(source, target, cursor, name);
 		if (matching.isEmpty())
 			return new CommandResult(new CommandError(name + " is not a valid name for " + commandName()));
 		if (matching.size() > 1 && !matching.contains(name)) // No exact match, but multiple options => ambigious
@@ -73,8 +73,8 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 	return executeNamed(source, target, cursor, name, attributes);
 }
 
-QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* /*source*/,
-		Visualization::Item* /*target*/, const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
+QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* source,
+		Visualization::Item* target, const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QString name;
 	QStringList attributes;
@@ -84,11 +84,12 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* 
 	findParts(textSoFar.split(" "), name, attributes, commandFound, unknownFormat);
 
 	if (unknownFormat) return {};
-	return suggestNamed(textSoFar, cursor, name, attributes, commandFound);
+	return suggestNamed(source, target, textSoFar, cursor, name, attributes, commandFound);
 }
 
-QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& textSoFar,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name,
+QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(Visualization::Item* source,
+		Visualization::Item* target, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {
 	QString commandText = textSoFar + (commandFound?"":" " + commandName_);
@@ -106,7 +107,7 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(const QString& t
 	QList<CommandSuggestion*> s;
 
 	if (usePossibleNames_)
-		for (auto matching : matchingNames(name))
+		for (auto matching : matchingNames(source, target, cursor, name))
 			s.append(new CommandSuggestion(commandText + (name.isEmpty() ? " " + matching : ""),
 					explanation + " " + matching));
 
@@ -185,14 +186,16 @@ void CommandWithNameAndFlags::findParts(const QStringList& tokens, QString& name
 	else unknownFormat = true;
 }
 
-QStringList CommandWithNameAndFlags::possibleNames()
+QStringList CommandWithNameAndFlags::possibleNames(Visualization::Item*, Visualization::Item*,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return {};
 }
 
-QStringList CommandWithNameAndFlags::matchingNames(const QString& nameToLookFor)
+QStringList CommandWithNameAndFlags::matchingNames(Visualization::Item* source, Visualization::Item* target,
+		const std::unique_ptr<Visualization::Cursor>& cursor, const QString& nameToLookFor)
 {
-	if (nameToLookFor.isNull()) return possibleNames();
+	if (nameToLookFor.isNull()) return possibleNames(source, target, cursor);
 
 	// Use a pattern like this 'a*b*c*' in order to simplify the search. Note that the first letter must match.
 	QString searchPattern = nameToLookFor;
@@ -200,7 +203,7 @@ QStringList CommandWithNameAndFlags::matchingNames(const QString& nameToLookFor)
 	auto regExp = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
 
 	QStringList result;
-	for (auto s : possibleNames())
+	for (auto s : possibleNames(source, target, cursor))
 		if (regExp.exactMatch(s)) result << s;
 
 	return result;

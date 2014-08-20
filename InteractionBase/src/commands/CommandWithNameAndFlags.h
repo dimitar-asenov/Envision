@@ -53,11 +53,12 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
 				const QStringList& attributes) = 0;
 
-		virtual QList<CommandSuggestion*> suggestNamed(const QString& textSoFar,
-				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
-				const QStringList& attributes, bool commandFound);
+		virtual QList<CommandSuggestion*> suggestNamed(Visualization::Item* source, Visualization::Item* target,
+						const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
+						const QStringList& attributes, bool commandFound);
 
-		virtual QStringList possibleNames();
+		virtual QStringList possibleNames(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor);
 
 		const QString& commandName();
 
@@ -65,7 +66,8 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 		void findParts(const QStringList& tokens, QString& name, QStringList& attributes,
 			bool& methodFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
 
-		QStringList matchingNames(const QString& nameToLookFor);
+		QStringList matchingNames(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& nameToLookFor);
 
 		const QString commandName_;
 		const QList<QStringList> attributes_;
