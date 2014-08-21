@@ -801,6 +801,9 @@ Method* addFactorial(Class* parent)
 	FormalResult* factorialResult = new FormalResult();
 	factorial->results()->append(factorialResult);
 	factorialResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+
+	factorialResult->setComment(new CommentNode("This is the result of the factorial function"));
+
 	FormalArgument* factorialArgument = new FormalArgument();
 	factorial->arguments()->append(factorialArgument);
 	factorialArgument->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));

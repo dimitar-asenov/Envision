@@ -55,6 +55,7 @@ void DoxygenCommentsOnlyVisitor::init()
 		QString res = "";
 		bool commentsAvailable = t->comment();
 		for (auto node : *t->arguments()) commentsAvailable = commentsAvailable || node->comment();
+		for (auto node : *t->results()) commentsAvailable = commentsAvailable || node->comment();
 		if (commentsAvailable)
 		{
 			res += DOXY_START;
@@ -70,6 +71,14 @@ void DoxygenCommentsOnlyVisitor::init()
 					res += "\\parblock\n";
 					res += v->visit(node->comment());
 					res += "\\endparblock\n";
+				}
+			}
+			for (auto node : *t->results())
+			{
+				if (node->comment() != nullptr)
+				{
+					res += "\\result\n";
+					res += v->visit(node->comment());
 				}
 			}
 			res += DOXY_END;
