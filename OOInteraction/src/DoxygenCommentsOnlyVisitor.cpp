@@ -82,6 +82,7 @@ void DoxygenCommentsOnlyVisitor::init()
 		QString res = "";
 		int listCount = -1;
 		QString inlineHTML = "";
+		QRegExp rx;
 		for (auto line : *t->lines())
 		{
 			if (line->get().startsWith(" * "))
@@ -104,12 +105,27 @@ void DoxygenCommentsOnlyVisitor::init()
 				listCount = -1;
 				res += "</li>\n</ul>\n";
 			}
-			QRegExp rx("^(#+)([^#].*)");
+			rx.setPattern("^(#+)([^#].*)");
 			if (rx.exactMatch(line->get()) && rx.cap(1).length() <= 6)
 			{
 				QString len = QString::number(rx.cap(1).length());
 				res += "<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">\n";
 
+				continue;
+			}
+			rx.setPattern("^={3,}|-{3,}|\\.{3,}$");
+			if (rx.exactMatch(line->get()))
+			{
+				res += "\\htmlonly\n";
+				res += "<hr style=\"";
+				switch (line->get()[0].toLatin1())
+				{
+					case '.': res += "height:1px; "; break;
+					case '-': res += "height:2px; "; break;
+					case '=': res += "height:4px; "; break;
+				}
+				res += "border-color:black; background-color:black\">\n";
+				res += "\\endhtmlonly\n";
 				continue;
 			}
 			if (line->get().startsWith("<html") && line->get().right(1) == ">" &&
