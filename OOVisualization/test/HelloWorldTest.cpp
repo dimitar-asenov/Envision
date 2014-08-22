@@ -241,12 +241,12 @@ Module* addLambda()
 	mod->fields()->append(new Field("common",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
-	auto lambdaCommentNode = new CommentNode("This is the Lambda-Module. The following classes are available\n"
+	auto lambdaCommentNode = new CommentNode("This is the *Lambda*-Module. The following classes are available\n"
 														  " * IUnary\n"
 														  " * IBinary\n"
 														  " * INoReturn\n"
 														  " * LambdaTest\n"
-														  "Here you find some more information about Classes\n"
+														  "Here you find some more information about **Classes**\n"
 														  "[table#someTable#2#1]\n");
 
 	auto aTable = new CommentTable(nullptr, "someTable", 2, 1);
@@ -401,6 +401,31 @@ Method* addLongMethod(Class* parent)
 	FormalResult* result  = new FormalResult();
 	result->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	longMethod->results()->append(result);
+
+	auto resultComment = new CommentNode("**Nested tables example**\n"
+													 "[table#outerTable#2#2]");
+	result->setComment(resultComment);
+
+	auto InnerTableComment1 = new CommentNode("[table#innerTable1#2#1]");
+	auto InnerTableComment2 = new CommentNode("[table#innerTable2#2#1]");
+
+	auto outerTable = new CommentTable(nullptr, "outerTable", 2, 2);
+	outerTable->setNodeAt(0, 0, new CommentNode("###Inner Table 1"));
+	outerTable->setNodeAt(0, 1, new CommentNode("###Inner Table 2"));
+	outerTable->setNodeAt(1, 0, InnerTableComment1);
+	outerTable->setNodeAt(1, 1, InnerTableComment2);
+	resultComment->tables()->append(outerTable);
+
+	auto innerTable1 = new CommentTable(nullptr, "innerTable1", 2, 1);
+	innerTable1->setNodeAt(0, 0, new CommentNode("Class"));
+	innerTable1->setNodeAt(1, 0, new Class("SampleClass"));
+	InnerTableComment1->tables()->append(innerTable1);
+
+	auto innerTable2 = new CommentTable(nullptr, "innerTable2", 2, 1);
+	innerTable2->setNodeAt(0, 0, new CommentNode("Method"));
+	innerTable2->setNodeAt(1, 0, new Method("SampleMethod"));
+	InnerTableComment2->tables()->append(innerTable2);
+
 	FormalArgument* arg1 = new FormalArgument();
 	arg1->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	arg1->setName("x");

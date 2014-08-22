@@ -37,6 +37,7 @@ class DoxygenCommentsOnlyVisitor : public Model::Visitor<DoxygenCommentsOnlyVisi
 		static const QString DOXY_START;
 		static const QString DOXY_END;
 		static const bool USE_SVG = true;
+		static QString replaceMarkdown(QString str);
 };
 
 }

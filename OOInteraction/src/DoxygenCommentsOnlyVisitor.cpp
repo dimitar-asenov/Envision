@@ -208,7 +208,7 @@ void DoxygenCommentsOnlyVisitor::init()
 			listCount = -1;
 			res += "</li>\n</ul>\n";
 		}
-		return res;
+		return replaceMarkdown(res);
 	});
 
 	Visitor::addType<CommentDiagram>( [](DoxygenCommentsOnlyVisitor*, CommentDiagram* t) -> QString
@@ -275,6 +275,19 @@ void DoxygenCommentsOnlyVisitor::init()
 		return res;
 	});
 
+}
+
+QString DoxygenCommentsOnlyVisitor::replaceMarkdown(QString str)
+{
+	QRegExp rx;
+
+	rx.setPattern("\\*\\*([^\\*]+)\\*\\*");
+	str.replace(rx, "<b>\\1</b>");
+
+	rx.setPattern("\\*([^\\*]+)\\*");
+	str.replace(rx, "<i>\\1</i>");
+
+	return str;
 }
 
 const QString DoxygenCommentsOnlyVisitor::DOXY_START = QString("/**\n");
