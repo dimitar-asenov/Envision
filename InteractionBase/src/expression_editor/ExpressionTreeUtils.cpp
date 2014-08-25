@@ -30,6 +30,7 @@
 #include "expression_editor/Empty.h"
 #include "expression_editor/Operator.h"
 #include "expression_editor/UnfinishedOperator.h"
+#include "expression_editor/ErrorDescriptor.h"
 #include "expression_editor/OperatorDescriptor.h"
 
 namespace Interaction {
@@ -319,24 +320,28 @@ void ExpressionTreeUtils::fixWrongIds(Expression*& top)
 
 		if (auto op = dynamic_cast<Operator*>(e))
 		{
-			bool unfinished = dynamic_cast<UnfinishedOperator*>(op);
-			if (!unfinished)
+			bool isUnfinished = dynamic_cast<UnfinishedOperator*>(op);
+			if (!isUnfinished)
 			{
-				bool badId = false;
-				int operandIndex = 0;
-				for (auto s : op->descriptor()->signature())
+				bool isError = dynamic_cast<ErrorDescriptor*>(op->descriptor());
+				if (!isError)
 				{
-					if (s == "id")
+					bool badId = false;
+					int operandIndex = 0;
+					for (auto s : op->descriptor()->signature())
 					{
-						auto v = dynamic_cast<Value*> (op->operands().at(operandIndex));
-						badId = badId || !v || v->text().isEmpty() || !(v->text()[0].isLetter() || v->text()[0] == '_');
-						if (badId) break;
+						if (s == "id")
+						{
+							auto v = dynamic_cast<Value*> (op->operands().at(operandIndex));
+							badId = badId || !v || v->text().isEmpty() || !(v->text()[0].isLetter() || v->text()[0] == '_');
+							if (badId) break;
+						}
+
+						if (!OperatorDescriptor::isDelimiter(s)) ++operandIndex;
 					}
 
-					if (!OperatorDescriptor::isDelimiter(s)) ++operandIndex;
+					if (badId) op = UnfinishedOperator::replaceFinishedWithUnfinished(top, op);
 				}
-
-				if (badId) op = UnfinishedOperator::replaceFinishedWithUnfinished(top, op);
 			}
 
 			for (auto operand : op->operands())
