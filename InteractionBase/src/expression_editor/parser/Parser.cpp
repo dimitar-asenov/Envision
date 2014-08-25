@@ -87,7 +87,11 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 		hasLeft = true;
 	}
 
-	// Get a lower bound on trailing tokens
+	// Get a lower bound on trailing tokens.
+	// result.missingInnerTokens is only allowed to grow AND
+	// result.missingInnerTokens + result.missingTrailingTokens should also only grow.
+	// Together these two conditions are necessary to assure that the prunning to work correctly.
+	// The rest of this invariant is maintained in processExpectedOperatorDelimiters.
 	int numTokens = endTokens_ - token;
 	for (auto e : expected) if (e.type != ExpectedToken::END) --numTokens;
 	if (numTokens < 0)
@@ -95,7 +99,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 		Q_ASSERT(result.missingTrailingTokens <= -numTokens);
 		result.missingTrailingTokens = -numTokens;
 	}
-	else result.missingInnerTokens = 0;
+	else result.missingTrailingTokens = 0;
 
 	// Prune the search
 	if (bestParseSoFar < result) return result;
@@ -218,7 +222,13 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 			ParseResult pr = result;
 			QVector<ExpressionTreeBuildInstruction*> new_instructions = instructions;
 
+			// All missing inner tokens should have already been assumed to be trailing tokens.
+			// As soon as a new missing inner token is discovered, the corresponding trailing token count should be
+			// decreased
+			Q_ASSERT(pr.missingTrailingTokens >= index);
+			pr.missingTrailingTokens -= index;
 			pr.missingInnerTokens += index;
+
 			// Finish all intermediate positions
 			for (int i = 0; i<index; ++i)
 			{
