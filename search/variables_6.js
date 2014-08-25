@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['genericnode_5f',['genericNode_',['../classFilePersistence_1_1SimpleTextFileStore.html#aa7b4e8ed461a687f33671a47657899b6',1,'FilePersistence::SimpleTextFileStore']]],
+  ['generictree_5f',['genericTree_',['../classFilePersistence_1_1SimpleTextFileStore.html#a66e0a15a08efcbb1ce823d5a07b66098',1,'FilePersistence::SimpleTextFileStore']]],
   ['getcursorplacement_5f',['getCursorPlacement_',['../classInteraction_1_1SetCursorEvent.html#a545d6bac1078ed9daa4295a6f281230c',1,'Interaction::SetCursorEvent']]],
   ['getitemtofocus_5f',['getItemToFocus_',['../classInteraction_1_1SetCursorEvent.html#a72b2839a5102e9dd58421bda73788f27',1,'Interaction::SetCursorEvent']]],
   ['grid',['grid',['../classComments_1_1VCommentTableStyle.html#ac8b130cff8ae3eeeea2aa63e1bfbd047',1,'Comments::VCommentTableStyle::grid()'],['../classOOVisualization_1_1VArrayInitializerStyle.html#a632928c0558acc8e9b26c437accc89b8',1,'OOVisualization::VArrayInitializerStyle::grid()']]],

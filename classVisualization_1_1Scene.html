@@ -133,6 +133,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a97e3d22430d886780b60db5b53599227"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10a78b21e53b5b670a2965ff07fa0dd2"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a10a78b21e53b5b670a2965ff07fa0dd2">~Scene</a> ()</td></tr>
 <tr class="separator:a10a78b21e53b5b670a2965ff07fa0dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32fc56bf12ce15e94fc7ca3d25cad73b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Highlight.html">Highlight</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a32fc56bf12ce15e94fc7ca3d25cad73b">addHighlight</a> (const QString &amp;name, const QString &amp;style)</td></tr>
+<tr class="separator:a32fc56bf12ce15e94fc7ca3d25cad73b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7958ff559a8792633a9939d4b626a76f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a> (QEvent *action)</td></tr>
 <tr class="memdesc:a7958ff559a8792633a9939d4b626a76f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an action to be executed after the current event.  <a href="#a7958ff559a8792633a9939d4b626a76f">More...</a><br/></td></tr>
 <tr class="separator:a7958ff559a8792633a9939d4b626a76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,6 +149,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5bb50960f7a014fb6a9336c111f2f033"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a5bb50960f7a014fb6a9336c111f2f033">focusItem</a> () const </td></tr>
 <tr class="memdesc:a5bb50960f7a014fb6a9336c111f2f033"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the focused item if it is an instance of Item* or the closest of its ancestors that is an Item*.  <a href="#a5bb50960f7a014fb6a9336c111f2f033">More...</a><br/></td></tr>
 <tr class="separator:a5bb50960f7a014fb6a9336c111f2f033"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae183b83620c606c22e8b2519e7727a21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Highlight.html">Highlight</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ae183b83620c606c22e8b2519e7727a21">highlight</a> (const QString &amp;name)</td></tr>
+<tr class="separator:ae183b83620c606c22e8b2519e7727a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62554dd58a4fca59fffa7b25a46302d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a62554dd58a4fca59fffa7b25a46302d4">isCurrentMousePressAClick</a> () const </td></tr>
 <tr class="separator:a62554dd58a4fca59fffa7b25a46302d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a002fd8063039d5f128b74d6393ec47d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a002fd8063039d5f128b74d6393ec47d1">isHiddenCategory</a> (<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdd">ItemCategory</a> cat)</td></tr>
@@ -161,6 +165,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1a98ac6556661e3df9d980cbf095ced4"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a1a98ac6556661e3df9d980cbf095ced4">previousMainViewScalingFactor</a> () const </td></tr>
 <tr class="memdesc:a1a98ac6556661e3df9d980cbf095ced4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the scaling factor used before the active one.  <a href="#a1a98ac6556661e3df9d980cbf095ced4">More...</a><br/></td></tr>
 <tr class="separator:a1a98ac6556661e3df9d980cbf095ced4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a210ef2896a5e45028d0375863b09f3d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a210ef2896a5e45028d0375863b09f3d7">removeFromHighlights</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *itemToRemove, const QString &amp;highlightName=QString())</td></tr>
+<tr class="separator:a210ef2896a5e45028d0375863b09f3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a141841ed40c476de818b70fa18d521fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a141841ed40c476de818b70fa18d521fa">removeHighlight</a> (const QString &amp;name)</td></tr>
+<tr class="separator:a141841ed40c476de818b70fa18d521fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a103aa125c2dfccbbf0b33bf48a1d590a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a103aa125c2dfccbbf0b33bf48a1d590a">removeTopLevelItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
 <tr class="separator:a103aa125c2dfccbbf0b33bf48a1d590a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43650faf7c83feeede86f8ce354a9f5f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a43650faf7c83feeede86f8ce354a9f5f">renderer</a> ()</td></tr>
@@ -184,6 +192,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3762a526238072e86179f6bc2346f8b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3583704dd21370f35a907f07856c4a3"><td class="memItemLeft" align="right" valign="top">const QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aa3583704dd21370f35a907f07856c4a3">topLevelItems</a> () const </td></tr>
 <tr class="separator:aa3583704dd21370f35a907f07856c4a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd6a9200f5621a979a641a5fd130c7fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#acd6a9200f5621a979a641a5fd130c7fc">updateNow</a> ()</td></tr>
+<tr class="separator:acd6a9200f5621a979a641a5fd130c7fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -219,8 +229,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a504edce4b1b296ba7ca76499b57b3466"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae91a48782633d49de7be639b6fa61bb5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ae91a48782633d49de7be639b6fa61bb5">setCurrentPaintView</a> (<a class="el" href="classVisualization_1_1View.html">View</a> *view)</td></tr>
 <tr class="separator:ae91a48782633d49de7be639b6fa61bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23909ab1dc6c3c1efaaa82a7c2ed30d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a23909ab1dc6c3c1efaaa82a7c2ed30d7">updateItems</a> ()</td></tr>
-<tr class="separator:a23909ab1dc6c3c1efaaa82a7c2ed30d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -228,6 +236,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a57a159d11d40a238df9043e1817d1535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cfcbccb2058c9d691923bf6ed865097"><td class="memItemLeft" align="right" valign="top">ItemCategories&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a6cfcbccb2058c9d691923bf6ed865097">hiddenItemCategories_</a></td></tr>
 <tr class="separator:a6cfcbccb2058c9d691923bf6ed865097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a534c8f327aae166eabc6744fb18a9b67"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classVisualization_1_1Highlight.html">Highlight</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a534c8f327aae166eabc6744fb18a9b67">highlights_</a></td></tr>
+<tr class="separator:a534c8f327aae166eabc6744fb18a9b67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f18d062b249f463dcd50122e97de3fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7f18d062b249f463dcd50122e97de3fe">inAnUpdate_</a> {}</td></tr>
 <tr class="separator:a7f18d062b249f463dcd50122e97de3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafee0bd160f6bba0176a6b194dfb58ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aafee0bd160f6bba0176a6b194dfb58ef">inEventHandler_</a> {}</td></tr>
@@ -372,6 +382,32 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a32fc56bf12ce15e94fc7ca3d25cad73b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Highlight.html">Highlight</a> * Visualization::Scene::addHighlight </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>style</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a7958ff559a8792633a9939d4b626a76f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -588,6 +624,22 @@ Friends</h2></td></tr>
 
 <p>Returns the focused item if it is an instance of Item* or the closest of its ancestors that is an Item*. </p>
 <p>This method hides QGraphicsScene::focusItem() const. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae183b83620c606c22e8b2519e7727a21"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Highlight.html">Highlight</a> * Visualization::Scene::highlight </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -871,6 +923,48 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a210ef2896a5e45028d0375863b09f3d7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::Scene::removeFromHighlights </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>itemToRemove</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>highlightName</em> = <code>QString()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a141841ed40c476de818b70fa18d521fa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::Scene::removeHighlight </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a103aa125c2dfccbbf0b33bf48a1d590a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1120,25 +1214,17 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a23909ab1dc6c3c1efaaa82a7c2ed30d7"></a>
+<a class="anchor" id="acd6a9200f5621a979a641a5fd130c7fc"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Visualization::Scene::updateItems </td>
+          <td class="memname">void Visualization::Scene::updateNow </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -1194,6 +1280,26 @@ Friends</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">ItemCategories Visualization::Scene::hiddenItemCategories_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a534c8f327aae166eabc6744fb18a9b67"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;QString, <a class="el" href="classVisualization_1_1Highlight.html">Highlight</a>&gt; Visualization::Scene::highlights_</td>
         </tr>
       </table>
   </td>

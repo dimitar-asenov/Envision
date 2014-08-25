@@ -91,7 +91,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a>  </div>
   <div class="headertitle">
 <div class="title">FilePersistence::GenericNode Class Reference</div>  </div>
 </div><!--header-->
@@ -108,13 +109,6 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa579a9a82ade341260f0c10bf02e5489"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#aa579a9a82ade341260f0c10bf02e5489">GenericNode</a> ()</td></tr>
-<tr class="separator:aa579a9a82ade341260f0c10bf02e5489"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc594218c064d08dd9021348aa276ca8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#adc594218c064d08dd9021348aa276ca8">GenericNode</a> (const char *dataLine, int dataLineLength, bool lazy)</td></tr>
-<tr class="memdesc:adc594218c064d08dd9021348aa276ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates this node and loads it given the specified parameters.  <a href="#adc594218c064d08dd9021348aa276ca8">More...</a><br/></td></tr>
-<tr class="separator:adc594218c064d08dd9021348aa276ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d35827bb0a5f1d0c8b8181a12ae17c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a5d35827bb0a5f1d0c8b8181a12ae17c7">~GenericNode</a> ()</td></tr>
-<tr class="separator:a5d35827bb0a5f1d0c8b8181a12ae17c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a908973abb5b28c172bd3faeb2c7b623f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a908973abb5b28c172bd3faeb2c7b623f">addChild</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *<a class="el" href="classFilePersistence_1_1GenericNode.html#a3438309a197427e455d4f399c8c16212">child</a>)</td></tr>
 <tr class="separator:a908973abb5b28c172bd3faeb2c7b623f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3438309a197427e455d4f399c8c16212"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a3438309a197427e455d4f399c8c16212">child</a> (const QString &amp;<a class="el" href="classFilePersistence_1_1GenericNode.html#aafd112a22c4f2855a6dfa5a8dd10a42e">name</a>)</td></tr>
@@ -137,11 +131,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aafd112a22c4f2855a6dfa5a8dd10a42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf8d1cd0f98fae3dfc9c7b70701b313"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#abdf8d1cd0f98fae3dfc9c7b70701b313">parent</a> () const </td></tr>
 <tr class="separator:abdf8d1cd0f98fae3dfc9c7b70701b313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8c1915b5c083d74db968c4d43fd0c80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#aa8c1915b5c083d74db968c4d43fd0c80">persistentUnit</a> () const </td></tr>
+<tr class="separator:aa8c1915b5c083d74db968c4d43fd0c80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8c638b4cad5dfa561663243a0f04593"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#ac8c638b4cad5dfa561663243a0f04593">rawValue</a> () const </td></tr>
 <tr class="separator:ac8c638b4cad5dfa561663243a0f04593"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad01be85db60c8124011e64570949b8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#aad01be85db60c8124011e64570949b8d">reset</a> (const char *dataLine, int dataLineLength, bool lazy)</td></tr>
-<tr class="memdesc:aad01be85db60c8124011e64570949b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all the properties of this node using the provided <em>dataLine</em>.  <a href="#aad01be85db60c8124011e64570949b8d">More...</a><br/></td></tr>
-<tr class="separator:aad01be85db60c8124011e64570949b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4129b5bbf559fa4e0618f26e572ef6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#ae4129b5bbf559fa4e0618f26e572ef6e">setId</a> (<a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> <a class="el" href="classFilePersistence_1_1GenericNode.html#a0d149418e079778c316db7d80c692a98">id</a>)</td></tr>
 <tr class="separator:ae4129b5bbf559fa4e0618f26e572ef6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ce2406ea0afc3b9c695b05bf4c3653f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a7ce2406ea0afc3b9c695b05bf4c3653f">setName</a> (const QString &amp;<a class="el" href="classFilePersistence_1_1GenericNode.html#aafd112a22c4f2855a6dfa5a8dd10a42e">name</a>)</td></tr>
@@ -171,10 +164,19 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:ada55f5a6712fc89f13eb7706c66bd17e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#ada55f5a6712fc89f13eb7706c66bd17e">deleteChildrenIfNoAllocator</a> ()</td></tr>
-<tr class="separator:ada55f5a6712fc89f13eb7706c66bd17e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa579a9a82ade341260f0c10bf02e5489"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#aa579a9a82ade341260f0c10bf02e5489">GenericNode</a> ()</td></tr>
+<tr class="separator:aa579a9a82ade341260f0c10bf02e5489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab33e6a4a5c8c5090d29f7cebbce93439"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#ab33e6a4a5c8c5090d29f7cebbce93439">ensureDataRead</a> () const </td></tr>
 <tr class="separator:ab33e6a4a5c8c5090d29f7cebbce93439"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92843539ac45a89e9a905eb9f0762a9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a92843539ac45a89e9a905eb9f0762a9f">reset</a> (<a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *<a class="el" href="classFilePersistence_1_1GenericNode.html#aa8c1915b5c083d74db968c4d43fd0c80">persistentUnit</a>, const char *dataLine, int dataLineLength, bool lazy)</td></tr>
+<tr class="memdesc:a92843539ac45a89e9a905eb9f0762a9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all the properties of this node using the provided <em>dataLine</em>.  <a href="#a92843539ac45a89e9a905eb9f0762a9f">More...</a><br/></td></tr>
+<tr class="separator:a92843539ac45a89e9a905eb9f0762a9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ed99fe00a9710058a572d5161768ed6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a9ed99fe00a9710058a572d5161768ed6">reset</a> (<a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *<a class="el" href="classFilePersistence_1_1GenericNode.html#aa8c1915b5c083d74db968c4d43fd0c80">persistentUnit</a>)</td></tr>
+<tr class="separator:a9ed99fe00a9710058a572d5161768ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a417903ad8437a19d7c6b9e18ed9ead22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a417903ad8437a19d7c6b9e18ed9ead22">reset</a> (<a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *<a class="el" href="classFilePersistence_1_1GenericNode.html#aa8c1915b5c083d74db968c4d43fd0c80">persistentUnit</a>, const <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *nodeToCopy)</td></tr>
+<tr class="separator:a417903ad8437a19d7c6b9e18ed9ead22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1da30012f4d7589d5660dbb1110ebb00"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a1da30012f4d7589d5660dbb1110ebb00">sameTree</a> (const <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *other)</td></tr>
+<tr class="separator:a1da30012f4d7589d5660dbb1110ebb00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -191,12 +193,21 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aaf02822b21c4f356c84e44e6d1b245ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6df03e2e35340f4352afdd7788bb03f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#ac6df03e2e35340f4352afdd7788bb03f">parent_</a> {}</td></tr>
 <tr class="separator:ac6df03e2e35340f4352afdd7788bb03f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a466a1aeb6ce5d781afecda8da03ae189"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a466a1aeb6ce5d781afecda8da03ae189">persistentUnit_</a> {}</td></tr>
+<tr class="separator:a466a1aeb6ce5d781afecda8da03ae189"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8362aa84b5a84b6c0e8d8ae85b362a03"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a8362aa84b5a84b6c0e8d8ae85b362a03">type_</a></td></tr>
 <tr class="separator:a8362aa84b5a84b6c0e8d8ae85b362a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a807a969be61875501c6b78f92d64e6f0"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a807a969be61875501c6b78f92d64e6f0">value_</a></td></tr>
 <tr class="separator:a807a969be61875501c6b78f92d64e6f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7791f35a674651bab54e28868d797a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html#abc7da14fae84133c449f8dd12f11f344">ValueType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#ad7791f35a674651bab54e28868d797a8">valueType_</a> {}</td></tr>
 <tr class="separator:ad7791f35a674651bab54e28868d797a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:aa54ba10f19f86419d19f4eae1f40e754"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#aa54ba10f19f86419d19f4eae1f40e754">GenericPersistentUnit</a></td></tr>
+<tr class="separator:aa54ba10f19f86419d19f4eae1f40e754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ae96c18bc1ada3419cb04d2ec4b85ba"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericNode.html#a6ae96c18bc1ada3419cb04d2ec4b85ba">GenericTree</a></td></tr>
+<tr class="separator:a6ae96c18bc1ada3419cb04d2ec4b85ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="abc7da14fae84133c449f8dd12f11f344"></a>
@@ -225,6 +236,9 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="aa579a9a82ade341260f0c10bf02e5489"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">FilePersistence::GenericNode::GenericNode </td>
@@ -233,57 +247,11 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="adc594218c064d08dd9021348aa276ca8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">FilePersistence::GenericNode::GenericNode </td>
-          <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>dataLine</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>dataLineLength</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>lazy</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Creates this node and loads it given the specified parameters. </p>
-<p>See </p>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="classFilePersistence_1_1GenericNode.html#aad01be85db60c8124011e64570949b8d" title="Loads all the properties of this node using the provided dataLine. ">reset()</a>. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a5d35827bb0a5f1d0c8b8181a12ae17c7"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">FilePersistence::GenericNode::~GenericNode </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -338,29 +306,6 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ada55f5a6712fc89f13eb7706c66bd17e"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void FilePersistence::GenericNode::deleteChildrenIfNoAllocator </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -567,6 +512,29 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa8c1915b5c083d74db968c4d43fd0c80"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> * FilePersistence::GenericNode::persistentUnit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ac8c638b4cad5dfa561663243a0f04593"></a>
 <div class="memitem">
 <div class="memproto">
@@ -590,13 +558,22 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aad01be85db60c8124011e64570949b8d"></a>
+<a class="anchor" id="a92843539ac45a89e9a905eb9f0762a9f"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void FilePersistence::GenericNode::reset </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *&#160;</td>
+          <td class="paramname"><em>persistentUnit</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>dataLine</em>, </td>
         </tr>
@@ -618,11 +595,99 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Loads all the properties of this node using the provided <em>dataLine</em>. </p>
 <p>Any old content of this node will be removed. If this node did not belong to an allocator, it's children will be deleted.</p>
+<p><em>dataLine</em> should start with the indenting tabs and should end with the last content character of the node. The line should not include the final line break characters.</p>
 <p>Set <em>lazy</em> to true when loading with an allocator. In this case <em>dataLine</em> will be saved and only parsed on demand. If <em>lazy</em> is false, then the node will be immediately initialized with the provided data. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9ed99fe00a9710058a572d5161768ed6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePersistence::GenericNode::reset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *&#160;</td>
+          <td class="paramname"><em>persistentUnit</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a417903ad8437a19d7c6b9e18ed9ead22"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePersistence::GenericNode::reset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *&#160;</td>
+          <td class="paramname"><em>persistentUnit</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td>
+          <td class="paramname"><em>nodeToCopy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1da30012f4d7589d5660dbb1110ebb00"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FilePersistence::GenericNode::sameTree </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -677,9 +742,6 @@ Private Attributes</h2></td></tr>
 <a class="anchor" id="a48401cb50ee612fd0ea77bf4c4696e42"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void FilePersistence::GenericNode::setParent </td>
@@ -689,11 +751,6 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -887,6 +944,47 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="aa54ba10f19f86419d19f4eae1f40e754"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6ae96c18bc1ada3419cb04d2ec4b85ba"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="ac0d8cd1e4fc9469deb7189bb5ac74199"></a>
 <div class="memitem">
@@ -927,7 +1025,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The text line from which this node should be created. </p>
-<p>It should start with the indenting tabs and should end with the last content character of the node. The line should not include the final line break characters. </p>
 
 </div>
 </div>
@@ -1000,6 +1097,26 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>* FilePersistence::GenericNode::parent_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a466a1aeb6ce5d781afecda8da03ae189"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a>* FilePersistence::GenericNode::persistentUnit_ {}</td>
         </tr>
       </table>
   </td>

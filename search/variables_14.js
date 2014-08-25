@@ -13,6 +13,7 @@ var searchData=
   ['updatestep_5f',['updateStep_',['../classOOVisualization_1_1VLoopStatement.html#aa9c6fc84009390e9707a8f0931be1a00',1,'OOVisualization::VLoopStatement::updateStep_()'],['../classOOVisualization_1_1VLoopStatementStyle.html#aea621a7e5d0798a13ab1ff2bf53ff66e',1,'OOVisualization::VLoopStatementStyle::updateStep_()']]],
   ['updatestepbackground',['updateStepBackground',['../classControlFlowVisualization_1_1VLoopStatementCF.html#afab338522a8c00853ec5987b898e8899',1,'ControlFlowVisualization::VLoopStatementCF']]],
   ['use',['use',['../structOOInteraction_1_1StringComponents_1_1Optional.html#a627d2273a81fca8698e281560f03c149',1,'OOInteraction::StringComponents::Optional']]],
+  ['use_5fsvg',['USE_SVG',['../classOOInteraction_1_1DoxygenCommentsOnlyVisitor.html#a2667ecdc08e9ee0b8e6ac8482c856479',1,'OOInteraction::DoxygenCommentsOnlyVisitor']]],
   ['usebackgroundcolors',['useBackgroundColors',['../classVisualization_1_1VListStyle.html#a9583974f5b3c9d2570f695260283c19b',1,'Visualization::VListStyle']]],
   ['usecenter_5f',['useCenter_',['../classVisualization_1_1CursorShapeItem.html#a0dbd1ce7bcc0a4a10a2cbd1f4fe258d9',1,'Visualization::CursorShapeItem']]],
   ['usepossiblenames_5f',['usePossibleNames_',['../classInteraction_1_1CommandWithNameAndFlags.html#a5046161f11c2bc97a522423ffa8d26a2',1,'Interaction::CommandWithNameAndFlags']]],

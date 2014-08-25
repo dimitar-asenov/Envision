@@ -176,6 +176,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a15ec062a1a6fa4ca0726542401ed8686"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a15ec062a1a6fa4ca0726542401ed8686">name</a> ()</td></tr>
 <tr class="memdesc:a15ec062a1a6fa4ca0726542401ed8686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the manged tree.  <a href="#a15ec062a1a6fa4ca0726542401ed8686">More...</a><br/></td></tr>
 <tr class="separator:a15ec062a1a6fa4ca0726542401ed8686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2994d61f89240710371f946644303d84"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a2994d61f89240710371f946644303d84">nodeIdMap</a> () const </td></tr>
+<tr class="separator:a2994d61f89240710371f946644303d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac95267d50f9f44805cda70179716e841"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#ac95267d50f9f44805cda70179716e841">nodeIdMap</a> ()</td></tr>
+<tr class="separator:ac95267d50f9f44805cda70179716e841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0119abce74eff60b2a22f5367cfad64f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a0119abce74eff60b2a22f5367cfad64f">notifyNodeChange</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *node)</td></tr>
 <tr class="memdesc:a0119abce74eff60b2a22f5367cfad64f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds <em>node</em> to the list of modified nodes during an edit operation or immediately emits a nodesModified signal with the specified node if no modification to the tree is ongoing.  <a href="#a0119abce74eff60b2a22f5367cfad64f">More...</a><br/></td></tr>
 <tr class="separator:a0119abce74eff60b2a22f5367cfad64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,6 +243,8 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aaf58027de7c27192d76d1d73185793e2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#aaf58027de7c27192d76d1d73185793e2">name_</a></td></tr>
 <tr class="memdesc:aaf58027de7c27192d76d1d73185793e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of this manager's tree.  <a href="#aaf58027de7c27192d76d1d73185793e2">More...</a><br/></td></tr>
 <tr class="separator:aaf58027de7c27192d76d1d73185793e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed69cb047e6e7bd7f5672b677c5eb467"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#aed69cb047e6e7bd7f5672b677c5eb467">nodeIdMap_</a></td></tr>
+<tr class="separator:aed69cb047e6e7bd7f5672b677c5eb467"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0738c02e6862297717b30650ea16f75d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a0738c02e6862297717b30650ea16f75d">partiallyLoaded_</a> {}</td></tr>
 <tr class="memdesc:a0738c02e6862297717b30650ea16f75d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether this tree has been partially loaded (as a library) from a store.  <a href="#a0738c02e6862297717b30650ea16f75d">More...</a><br/></td></tr>
 <tr class="separator:a0738c02e6862297717b30650ea16f75d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -869,6 +875,52 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2994d61f89240710371f946644303d84"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp; Model::TreeManager::nodeIdMap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac95267d50f9f44805cda70179716e841"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> &amp; Model::TreeManager::nodeIdMap </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab36e6cf382627eae02d4de65c3cbd7fa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1359,6 +1411,26 @@ Private Attributes</h2></td></tr>
 
 <p>The name of this manager's tree. </p>
 <p>This name will be used to save the tree in the persistent store. </p>
+
+</div>
+</div>
+<a class="anchor" id="aed69cb047e6e7bd7f5672b677c5eb467"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1NodeIdMap.html">NodeIdMap</a> Model::TreeManager::nodeIdMap_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

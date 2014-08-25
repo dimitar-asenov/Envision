@@ -97,8 +97,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a93e375c53bd710152198cdc733c6f635"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a93e375c53bd710152198cdc733c6f635">load</a> (const QString &amp;filename, bool lazy, <a class="el" href="classFilePersistence_1_1GenericNodeAllocator.html">GenericNodeAllocator</a> *allocator)</td></tr>
-<tr class="separator:a93e375c53bd710152198cdc733c6f635"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac254cf930e6042855a2f9a97d47b26f3"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#ac254cf930e6042855a2f9a97d47b26f3">load</a> (const QString &amp;filename, bool lazy, <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;persistentUnit)</td></tr>
+<tr class="separator:ac254cf930e6042855a2f9a97d47b26f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a213a0ab2183d26c7b14fd7f866d45c10"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a213a0ab2183d26c7b14fd7f866d45c10">load</a> (const char *data, int dataLength, bool lazy, <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;persistentUnit)</td></tr>
+<tr class="separator:a213a0ab2183d26c7b14fd7f866d45c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30701ed443b06a35c49ac4bbeff91ec2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a30701ed443b06a35c49ac4bbeff91ec2">parseLine</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, const char *line, int lineLength)</td></tr>
 <tr class="separator:a30701ed443b06a35c49ac4bbeff91ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d9c2e6b59b7592717984f9848ec093a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a8d9c2e6b59b7592717984f9848ec093a">save</a> (QTextStream &amp;stream, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, int tabLevel=0)</td></tr>
@@ -268,7 +270,7 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a93e375c53bd710152198cdc733c6f635"></a>
+<a class="anchor" id="ac254cf930e6042855a2f9a97d47b26f3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -290,8 +292,54 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericNodeAllocator.html">GenericNodeAllocator</a> *&#160;</td>
-          <td class="paramname"><em>allocator</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;&#160;</td>
+          <td class="paramname"><em>persistentUnit</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a213a0ab2183d26c7b14fd7f866d45c10"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * FilePersistence::Parser::load </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dataLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>lazy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;&#160;</td>
+          <td class="paramname"><em>persistentUnit</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

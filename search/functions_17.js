@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['y',['y',['../classTestNodes_1_1PositionExtension.html#ae68f93be0868ea7523c85d6029cc8172',1,'TestNodes::PositionExtension::y()'],['../classOOInteraction_1_1Cell.html#af75e1b4da22f7f036d8ebedcd27a7341',1,'OOInteraction::Cell::y()'],['../classVisualization_1_1LayoutCursor.html#abb27db5346ee0d930f1d6b48536eafd2',1,'Visualization::LayoutCursor::y()'],['../classVisualization_1_1FormElement.html#a56d02ecb2cc134f86817a1225d295849',1,'Visualization::FormElement::y()']]],
-  ['yend',['yEnd',['../classVisualization_1_1FormElement.html#a25b1279493bb13ec33cf810642dd1bf6',1,'Visualization::FormElement']]],
-  ['yendinparent',['yEndInParent',['../classVisualization_1_1Item.html#ac9b43db7db1adedb4b4992ce789e63fb',1,'Visualization::Item']]],
-  ['ynode',['yNode',['../classTestNodes_1_1PositionExtension.html#aa6c442fe9fe91671a688f30d170f162d',1,'TestNodes::PositionExtension']]],
-  ['yoffset',['yOffset',['../classVisualization_1_1Icon.html#a0652c6e7214f25a30b7b37ed1bdd0f62',1,'Visualization::Icon::yOffset()'],['../classVisualization_1_1Layout.html#ac95e85e5051b5f02f88bdeff4985d7b4',1,'Visualization::Layout::yOffset()'],['../classVisualization_1_1Shape.html#a092e5f1bc8d2fcf51f3b5165d009bd2f',1,'Visualization::Shape::yOffset()']]]
+  ['x',['x',['../classTestNodes_1_1PositionExtension.html#a47689eabbd60b6f58e8fc20d1f577ab4',1,'TestNodes::PositionExtension::x()'],['../classOOInteraction_1_1Cell.html#a3752117a15f1e472e06c8067ad9d444b',1,'OOInteraction::Cell::x()'],['../classVisualization_1_1LayoutCursor.html#a88e18d50b1cb241ad7136409128aad32',1,'Visualization::LayoutCursor::x()'],['../classVisualization_1_1FormElement.html#a63b9d8bcdd40e837c274fedeb80a2e8e',1,'Visualization::FormElement::x()']]],
+  ['xbegin',['xBegin',['../classVisualization_1_1TextCursor.html#abafcd39766244e57e3fda1806ef186a6',1,'Visualization::TextCursor']]],
+  ['xend',['xEnd',['../classVisualization_1_1TextCursor.html#a58e2745151b31bdf4aadf3957dc43cb6',1,'Visualization::TextCursor::xEnd()'],['../classVisualization_1_1FormElement.html#a71f5de7b877ff3c36817b0bcbb8dbe91',1,'Visualization::FormElement::xEnd()']]],
+  ['xendinparent',['xEndInParent',['../classVisualization_1_1Item.html#a60ab885ab41427cfd34317359311920e',1,'Visualization::Item']]],
+  ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html#a551c3ea11ac089c0e5b2962c3ddd05f0',1,'FilePersistence::XMLModel::XMLModel()'],['../classFilePersistence_1_1XMLModel.html#aedc66313f6a7e1e964c7cace7902f224',1,'FilePersistence::XMLModel::XMLModel(const QString &amp;filename)']]],
+  ['xnode',['xNode',['../classTestNodes_1_1PositionExtension.html#a561635397834b49a5ac1df12112c26a2',1,'TestNodes::PositionExtension']]],
+  ['xoffset',['xOffset',['../classVisualization_1_1Icon.html#af439bd0e9c3593473db8ee29ce3f58a8',1,'Visualization::Icon::xOffset()'],['../classVisualization_1_1Layout.html#a7d5b9828841ac365dcf8bb528951d43a',1,'Visualization::Layout::xOffset()'],['../classVisualization_1_1Shape.html#a2b126e7ac14b2bccb11e82fd93b555a0',1,'Visualization::Shape::xOffset()']]]
 ];

@@ -194,8 +194,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af5873d23266656eee5130fddcaa2887e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#af5873d23266656eee5130fddcaa2887e">distanceTo</a> (const QPoint &amp;point) const </td></tr>
 <tr class="memdesc:af5873d23266656eee5130fddcaa2887e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the distance between the item and <em>point</em>.  <a href="#af5873d23266656eee5130fddcaa2887e">More...</a><br/></td></tr>
 <tr class="separator:af5873d23266656eee5130fddcaa2887e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a4582c316ddb432a23a76da2c7a229b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a9a4582c316ddb432a23a76da2c7a229b">execute</a> (const QString &amp;command)</td></tr>
-<tr class="separator:a9a4582c316ddb432a23a76da2c7a229b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c66cbb24e66dbf475b06cac4b3cf0bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a1c66cbb24e66dbf475b06cac4b3cf0bf">execute</a> (const QString &amp;command, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> &gt; &amp;)</td></tr>
+<tr class="separator:a1c66cbb24e66dbf475b06cac4b3cf0bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c46045ad818ebe3fa3a9299146ac8e2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a2c46045ad818ebe3fa3a9299146ac8e2">findVisualizationOf</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>)</td></tr>
 <tr class="memdesc:a2c46045ad818ebe3fa3a9299146ac8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the child item that is visualizing <em>node</em> or nullptr if no such child exists.  <a href="#a2c46045ad818ebe3fa3a9299146ac8e2">More...</a><br/></td></tr>
 <tr class="separator:a2c46045ad818ebe3fa3a9299146ac8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -652,8 +652,7 @@ Friends</h2></td></tr>
 <p>This update should be used when a child item has changed and the parent just needs to account for this change. </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a47de8e8939254fa088668e32a52b2890aa5839b82785e9f407a7e2c076ac138b3"></a>FullUpdate</em>&#160;</td><td class="fielddoc">
-<p>The item should completely update itself and recreate all child items. </p>
-<p>This should be used when the item has been directly edited, or when it's style, purpose or similar defining properties have changed. </p>
+<p>The item and all its children will be updated using a StandardUpdate. </p>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a47de8e8939254fa088668e32a52b2890a96a2ca110776d6c08a97afe6374d758c"></a>RepeatUpdate</em>&#160;</td><td class="fielddoc">
 <p>This update is similar to StandardUpdate but can also be requested while the item is being updated. </p>
@@ -1702,7 +1701,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a9a4582c316ddb432a23a76da2c7a229b"></a>
+<a class="anchor" id="a1c66cbb24e66dbf475b06cac4b3cf0bf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1710,8 +1709,18 @@ template&lt;class T &gt; </div>
           <td class="memname">void Visualization::Item::execute </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>command</em></td><td>)</td>
+          <td class="paramname"><em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cursor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

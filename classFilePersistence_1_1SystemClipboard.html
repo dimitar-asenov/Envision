@@ -126,8 +126,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac65827257fb17dfc558519683f53e599"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae594a70b9991c32397c792776b081f2e"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structModel_1_1LoadedNode.html">Model::LoadedNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#ae594a70b9991c32397c792776b081f2e">loadAllSubNodes</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *parent, const QSet&lt; QString &gt; &amp;loadPartially) override</td></tr>
 <tr class="separator:ae594a70b9991c32397c792776b081f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa706db353001419d215ebba31be0cdf9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#aa706db353001419d215ebba31be0cdf9">loadCompleteNodeSubtree</a> (const QString &amp;treeName, const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node) override</td></tr>
-<tr class="separator:aa706db353001419d215ebba31be0cdf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf8499e2133fe7d8f0bedb10eea1fc88"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#acf8499e2133fe7d8f0bedb10eea1fc88">loadDoubleValue</a> () override</td></tr>
 <tr class="separator:acf8499e2133fe7d8f0bedb10eea1fc88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fbe4d3a7c1231dd16350d5e6996690e"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#a0fbe4d3a7c1231dd16350d5e6996690e">loadIntValue</a> () override</td></tr>
@@ -180,8 +178,6 @@ Protected Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a92b63396d539ed6ec210d598e7eeac35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structModel_1_1LoadedNode.html">Model::LoadedNode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#a92b63396d539ed6ec210d598e7eeac35">loadNode</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *parent)</td></tr>
 <tr class="separator:a92b63396d539ed6ec210d598e7eeac35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae595c0efaf44bee5a5da4fda1455ce20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SystemClipboard.html#ae595c0efaf44bee5a5da4fda1455ce20">saveNodeFromOldStore</a> (<a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> *node)</td></tr>
-<tr class="separator:ae595c0efaf44bee5a5da4fda1455ce20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -404,42 +400,6 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classModel_1_1PersistentStore.html#ad631eb84c0d1190034aad4f07d05a655">Model::PersistentStore</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa706db353001419d215ebba31be0cdf9"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classModel_1_1PersistedNode.html">PersistedNode</a> * FilePersistence::SystemClipboard::loadCompleteNodeSubtree </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>treeName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a93cc32b6f42c5cd11ea11c3ee72e70d2">Model::PersistentStore</a>.</p>
 
 </div>
 </div>
@@ -867,30 +827,6 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classModel_1_1PersistentStore.html#aebf3d85694c34028829060cff2dcd728">Model::PersistentStore</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae595c0efaf44bee5a5da4fda1455ce20"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void FilePersistence::SystemClipboard::saveNodeFromOldStore </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> *&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>

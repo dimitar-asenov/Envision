@@ -109,7 +109,6 @@ VIfStatement.h</h1>
 <div class="line"><span class="preprocessor">#include &quot;VisualizationBase/src/declarative/DeclarativeItem.h&quot;</span></div>
 <div class="line"></div>
 <div class="line"><span class="keyword">namespace </span>Visualization {</div>
-<div class="line">   <span class="keyword">class </span>PositionLayout;</div>
 <div class="line">   <span class="keyword">class </span>SequentialLayout;</div>
 <div class="line">   <span class="keyword">class </span>Static;</div>
 <div class="line">   <span class="keyword">class </span>NodeWrapper;</div>
@@ -275,7 +274,8 @@ VIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line">   <span class="comment">// Form 0: then and else branch arranged horizontally</span></div>
 <div class="line">   <span class="keyword">auto</span> contentElement = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>())-&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(1, 0, elseBranch);</div>
+<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(1, 0, elseBranch)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
 <div class="line"></div>
 <div class="line">   addForm((<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>())</div>
 <div class="line">         -&gt;put(TheLeftOf, header, AtLeftOf, contentElement)</div>
@@ -288,7 +288,8 @@ VIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line">   <span class="comment">// Form 1: then and else branch arranged vertically</span></div>
 <div class="line">   contentElement = (<span class="keyword">new</span> <a class="code" href="classVisualization_1_1GridLayoutFormElement.html">GridLayoutFormElement</a>())-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(0, 1, elseBranch);</div>
+<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(0, 1, elseBranch)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](<a class="code" href="classVisualization_1_1Item.html">Item</a>*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
 <div class="line"></div>
 <div class="line">   addForm((<span class="keyword">new</span> <a class="code" href="classVisualization_1_1AnchorLayoutFormElement.html">AnchorLayoutFormElement</a>())</div>
 <div class="line">         -&gt;put(TheLeftOf, header, AtLeftOf, contentElement)</div>
@@ -347,7 +348,8 @@ VIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line">   <span class="comment">// Form 0: then and else branch arranged horizontally</span></div>
 <div class="line">   <span class="keyword">auto</span> contentElement = (<span class="keyword">new</span> GridLayoutFormElement())-&gt;setColumnStretchFactor(1, 1)-&gt;setRowStretchFactor(0, 1)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(1, 0, elseBranch);</div>
+<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(1, 0, elseBranch)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
 <div class="line"></div>
 <div class="line">   addForm((<span class="keyword">new</span> AnchorLayoutFormElement())</div>
 <div class="line">         -&gt;put(TheLeftOf, header, AtLeftOf, contentElement)</div>
@@ -360,7 +362,8 @@ VIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line">   <span class="comment">// Form 1: then and else branch arranged vertically</span></div>
 <div class="line">   contentElement = (<span class="keyword">new</span> GridLayoutFormElement())-&gt;setColumnStretchFactor(0, 1)-&gt;setRowStretchFactor(1, 1)</div>
-<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(0, 1, elseBranch);</div>
+<div class="line">         -&gt;put(0, 0, thenBranch)-&gt;put(0, 1, elseBranch)</div>
+<div class="line">         -&gt;setNoBoundaryCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;})-&gt;setNoInnerCursors([](Item*){<span class="keywordflow">return</span> <span class="keyword">true</span>;});</div>
 <div class="line"></div>
 <div class="line">   addForm((<span class="keyword">new</span> AnchorLayoutFormElement())</div>
 <div class="line">         -&gt;put(TheLeftOf, header, AtLeftOf, contentElement)</div>

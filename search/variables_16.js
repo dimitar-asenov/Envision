@@ -7,5 +7,6 @@ var searchData=
   ['widthwithoutshadow',['widthWithoutShadow',['../classVisualization_1_1Diamond.html#acde911548206cb9a49c31afa89117231',1,'Visualization::Diamond']]],
   ['working_5f',['working_',['../classFilePersistence_1_1SimpleTextFileStore.html#a37d4d6344a6df09e86477ccc3b5b7403',1,'FilePersistence::SimpleTextFileStore']]],
   ['wrappeditem_5f',['wrappedItem_',['../classVisualization_1_1NodeWrapper.html#a2aa87e697ac44bc5b34a529c694b084a',1,'Visualization::NodeWrapper']]],
+  ['writer_5f',['writer_',['../classExport_1_1FragmentLayouter.html#a77bed748f16b1622a60f079bf1642fcd',1,'Export::FragmentLayouter']]],
   ['writetofile_5f',['writeToFile_',['../classCppImport_1_1CppImportLogger.html#a97f1f2952558b0566093efe24934a063',1,'CppImport::CppImportLogger']]]
 ];

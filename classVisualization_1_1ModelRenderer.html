@@ -89,6 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classVisualization_1_1ModelRenderer-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a>  </div>
@@ -149,6 +150,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1fa49da8794fb3ec9cbf0eec27e08bad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a1fa49da8794fb3ec9cbf0eec27e08bad">sync</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;item, <a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="memdesc:a1fa49da8794fb3ec9cbf0eec27e08bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Re)renders an item in the context of a parent item.  <a href="#a1fa49da8794fb3ec9cbf0eec27e08bad">More...</a><br/></td></tr>
 <tr class="separator:a1fa49da8794fb3ec9cbf0eec27e08bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a2ef46757762062e7b5c1f39aaa4da133"><td class="memItemLeft" align="right" valign="top">static QImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a2ef46757762062e7b5c1f39aaa4da133">renderToImage</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *aNode)</td></tr>
+<tr class="separator:a2ef46757762062e7b5c1f39aaa4da133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3837fa808802fddb5d2b366a926f32"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a4f3837fa808802fddb5d2b366a926f32">renderToSVG</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *aNode, QString path)</td></tr>
+<tr class="separator:a4f3837fa808802fddb5d2b366a926f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -868,6 +876,64 @@ Static Private Attributes</h2></td></tr>
 
 <p>Returns an <a class="el" href="classVisualization_1_1Item.html">Item</a> which has a parent <em>parent</em> and is a rendering of <em>node</em>. </p>
 <p>If <em>purpose</em> is specified (<em>purpose</em> &gt;= 0) it is used as the target purpose when determining an appropriate visualization. Otherwise the purpose of <em>parent</em> is used. If <em>parent</em> is nullptr the default purpose is used. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2ef46757762062e7b5c1f39aaa4da133"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QImage Visualization::ModelRenderer::renderToImage </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>aNode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4f3837fa808802fddb5d2b366a926f32"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::ModelRenderer::renderToSVG </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>aNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

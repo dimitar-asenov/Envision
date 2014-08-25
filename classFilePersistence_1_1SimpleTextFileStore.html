@@ -88,6 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classFilePersistence_1_1SimpleTextFileStore-members.html">List of all members</a> &#124;
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
@@ -107,10 +108,17 @@ Inheritance diagram for FilePersistence::SimpleTextFileStore:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ab0515edeb0ab9532bcbe2eb96f2ba1c0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a> = std::function&lt; bool(QString filename, const char *&amp;data, int &amp;dataLength)&gt;</td></tr>
+<tr class="separator:ab0515edeb0ab9532bcbe2eb96f2ba1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a005893d795a54f78e3c3d03286d5c9e7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a005893d795a54f78e3c3d03286d5c9e7">SimpleTextFileStore</a> (const QString &amp;baseDir=QString::null)</td></tr>
 <tr class="separator:a005893d795a54f78e3c3d03286d5c9e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abedce2e72fcd307402681cafb1bab08e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#abedce2e72fcd307402681cafb1bab08e">SimpleTextFileStore</a> (<a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a> fileGetter)</td></tr>
+<tr class="separator:abedce2e72fcd307402681cafb1bab08e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d938008f6781e47199471e20fc26ad5"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a7d938008f6781e47199471e20fc26ad5">~SimpleTextFileStore</a> ()</td></tr>
 <tr class="separator:a7d938008f6781e47199471e20fc26ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64533f3007787bae95498b7c30c1cd81"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html">SimpleTextFileStore</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a64533f3007787bae95498b7c30c1cd81">clone</a> () const override</td></tr>
@@ -121,8 +129,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aacc3acb5307a7995d6fa442c54d98292"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa02518459a1b54d6458fe8b01a8e4598"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structModel_1_1LoadedNode.html">Model::LoadedNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aa02518459a1b54d6458fe8b01a8e4598">loadAllSubNodes</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *parent, const QSet&lt; QString &gt; &amp;loadPartially) override</td></tr>
 <tr class="separator:aa02518459a1b54d6458fe8b01a8e4598"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a122687b7f863552676ba369f2f089451"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a122687b7f863552676ba369f2f089451">loadCompleteNodeSubtree</a> (const QString &amp;treeName, const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node) override</td></tr>
-<tr class="separator:a122687b7f863552676ba369f2f089451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abab3b46ba7928475446761b313825c16"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#abab3b46ba7928475446761b313825c16">loadDoubleValue</a> () override</td></tr>
 <tr class="separator:abab3b46ba7928475446761b313825c16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6028501a7d80a71f9c9220e080e6da68"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a6028501a7d80a71f9c9220e080e6da68">loadIntValue</a> () override</td></tr>
@@ -171,10 +177,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:adef90287d8ff72538588496d6eef7e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8174f08f69c6ea915f08c42b1e715451"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structModel_1_1LoadedNode.html">Model::LoadedNode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a8174f08f69c6ea915f08c42b1e715451">loadNode</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *parent, bool loadPartially)</td></tr>
 <tr class="separator:a8174f08f69c6ea915f08c42b1e715451"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabf0072260437d64bc09b20fee9ccf9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aabf0072260437d64bc09b20fee9ccf9d">loadNodeData</a> ()</td></tr>
-<tr class="separator:aabf0072260437d64bc09b20fee9ccf9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7120d9b1fa7451d881d7a1b1d5032c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ae7120d9b1fa7451d881d7a1b1d5032c0">loadPersistentUnitData</a> ()</td></tr>
-<tr class="separator:ae7120d9b1fa7451d881d7a1b1d5032c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff6d8e75d211a7542f71a7f617345f9c"><td class="memItemLeft" align="right" valign="top">Model::PersistedNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aff6d8e75d211a7542f71a7f617345f9c">loadNodeData</a> ()</td></tr>
+<tr class="separator:aff6d8e75d211a7542f71a7f617345f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15343461d44e54c78496b7f7d0141426"><td class="memItemLeft" align="right" valign="top">Model::PersistedNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a15343461d44e54c78496b7f7d0141426">loadPersistentUnitData</a> ()</td></tr>
+<tr class="separator:a15343461d44e54c78496b7f7d0141426"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad570a3b83a91a2baed04167119d263e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ad570a3b83a91a2baed04167119d263e4">saveNewPersistenceUnit</a> (const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, const QString &amp;name)</td></tr>
 <tr class="separator:ad570a3b83a91a2baed04167119d263e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac25dd7833b4088a1a11664a6c528945a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ac25dd7833b4088a1a11664a6c528945a">saveNodeDirectly</a> (const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, const QString &amp;name)</td></tr>
@@ -182,21 +188,27 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ac41cf9a5407e8fd18355547a2cce2a88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNodeAllocator.html">GenericNodeAllocator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ac41cf9a5407e8fd18355547a2cce2a88">allocator_</a> {}</td></tr>
-<tr class="separator:ac41cf9a5407e8fd18355547a2cce2a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab770a002c5c5e7d243bf4fc1289d1a9a"><td class="memItemLeft" align="right" valign="top">QDir&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab770a002c5c5e7d243bf4fc1289d1a9a">baseFolder_</a></td></tr>
 <tr class="memdesc:ab770a002c5c5e7d243bf4fc1289d1a9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The folder where all trees are stored.  <a href="#ab770a002c5c5e7d243bf4fc1289d1a9a">More...</a><br/></td></tr>
 <tr class="separator:ab770a002c5c5e7d243bf4fc1289d1a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe372a8281ee88c3de10ad07d54e2f9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#afe372a8281ee88c3de10ad07d54e2f9b">fileGetter_</a> {}</td></tr>
+<tr class="memdesc:afe372a8281ee88c3de10ad07d54e2f9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">If specified, this function will be used to get the data of the files.  <a href="#afe372a8281ee88c3de10ad07d54e2f9b">More...</a><br/></td></tr>
+<tr class="separator:afe372a8281ee88c3de10ad07d54e2f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7b4e8ed461a687f33671a47657899b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aa7b4e8ed461a687f33671a47657899b6">genericNode_</a> {}</td></tr>
+<tr class="separator:aa7b4e8ed461a687f33671a47657899b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66e0a15a08efcbb1ce823d5a07b66098"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a66e0a15a08efcbb1ce823d5a07b66098">genericTree_</a> {}</td></tr>
+<tr class="separator:a66e0a15a08efcbb1ce823d5a07b66098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a327a7880ee942f9b037ddfbe9815ef76"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a327a7880ee942f9b037ddfbe9815ef76">partiallyLoadingATree_</a> {}</td></tr>
 <tr class="separator:a327a7880ee942f9b037ddfbe9815ef76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a3cbbceba42fef2831b6c68023506ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a1a3cbbceba42fef2831b6c68023506ab">persisted_</a> {}</td></tr>
-<tr class="separator:a1a3cbbceba42fef2831b6c68023506ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad22fdf447dacd5a5c7438a9eb3765c9"><td class="memItemLeft" align="right" valign="top">QMutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#aad22fdf447dacd5a5c7438a9eb3765c9">storeAccess_</a></td></tr>
 <tr class="memdesc:aad22fdf447dacd5a5c7438a9eb3765c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A mutex that assures exclusive tree saving and loading operations.  <a href="#aad22fdf447dacd5a5c7438a9eb3765c9">More...</a><br/></td></tr>
 <tr class="separator:aad22fdf447dacd5a5c7438a9eb3765c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70802eeb6eb7194e07a1d4a245f05f37"><td class="memItemLeft" align="right" valign="top">QDir&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a70802eeb6eb7194e07a1d4a245f05f37">treeDir_</a></td></tr>
 <tr class="memdesc:a70802eeb6eb7194e07a1d4a245f05f37"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the folder where the current tree is being saved to or loaded from.  <a href="#a70802eeb6eb7194e07a1d4a245f05f37">More...</a><br/></td></tr>
 <tr class="separator:a70802eeb6eb7194e07a1d4a245f05f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ecc4ef6499f4a1506f93797c93b1f23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a7ecc4ef6499f4a1506f93797c93b1f23">treeManager_</a> {}</td></tr>
+<tr class="memdesc:a7ecc4ef6499f4a1506f93797c93b1f23"><td class="mdescLeft">&#160;</td><td class="mdescRight">The manager that requested the last load/save operation.  <a href="#a7ecc4ef6499f4a1506f93797c93b1f23">More...</a><br/></td></tr>
+<tr class="separator:a7ecc4ef6499f4a1506f93797c93b1f23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a388a3f3852b12f5ef937cf9a99721bf3"><td class="memItemLeft" align="right" valign="top">QList&lt; QPair&lt; <a class="el" href="classModel_1_1Reference.html">Model::Reference</a> <br class="typebreak"/>
 *, QString &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a388a3f3852b12f5ef937cf9a99721bf3">uninitializedReferences_</a></td></tr>
 <tr class="memdesc:a388a3f3852b12f5ef937cf9a99721bf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a list of all references which have been constructed and which have a target that is not yet set.  <a href="#a388a3f3852b12f5ef937cf9a99721bf3">More...</a><br/></td></tr>
@@ -210,6 +222,19 @@ Static Private Attributes</h2></td></tr>
 <tr class="memitem:ad5ced6dd8686a48a712ef7dd96ec445d"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ad5ced6dd8686a48a712ef7dd96ec445d">NULL_STRING</a> = &quot;____NULL____&quot;</td></tr>
 <tr class="separator:ad5ced6dd8686a48a712ef7dd96ec445d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="ab0515edeb0ab9532bcbe2eb96f2ba1c0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FilePersistence::SimpleTextFileStore::FileGetterFunction</a> =  std::function&lt;bool (QString filename, const char*&amp; data, int&amp; dataLength)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a005893d795a54f78e3c3d03286d5c9e7"></a>
 <div class="memitem">
@@ -220,6 +245,22 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>baseDir</em> = <code>QString::null</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abedce2e72fcd307402681cafb1bab08e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FilePersistence::SimpleTextFileStore::SimpleTextFileStore </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a>&#160;</td>
+          <td class="paramname"><em>fileGetter</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -411,42 +452,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a122687b7f863552676ba369f2f089451"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> * FilePersistence::SimpleTextFileStore::loadCompleteNodeSubtree </td>
-          <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>treeName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
-          <td class="paramname"><em>node</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="classModel_1_1PersistentStore.html#a93cc32b6f42c5cd11ea11c3ee72e70d2">Model::PersistentStore</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="abab3b46ba7928475446761b313825c16"></a>
 <div class="memitem">
 <div class="memproto">
@@ -571,7 +576,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aabf0072260437d64bc09b20fee9ccf9d"></a>
+<a class="anchor" id="aff6d8e75d211a7542f71a7f617345f9c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -579,7 +584,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> * FilePersistence::SimpleTextFileStore::loadNodeData </td>
+          <td class="memname">Model::PersistedNode* FilePersistence::SimpleTextFileStore::loadNodeData </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -594,7 +599,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae7120d9b1fa7451d881d7a1b1d5032c0"></a>
+<a class="anchor" id="a15343461d44e54c78496b7f7d0141426"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -602,7 +607,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classModel_1_1PersistedNode.html">Model::PersistedNode</a> * FilePersistence::SimpleTextFileStore::loadPersistentUnitData </td>
+          <td class="memname">Model::PersistedNode* FilePersistence::SimpleTextFileStore::loadPersistentUnitData </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1026,26 +1031,6 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="ac41cf9a5407e8fd18355547a2cce2a88"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericNodeAllocator.html">GenericNodeAllocator</a>* FilePersistence::SimpleTextFileStore::allocator_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="ab770a002c5c5e7d243bf4fc1289d1a9a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1066,6 +1051,69 @@ Static Private Attributes</h2></td></tr>
 
 <p>The folder where all trees are stored. </p>
 <p>Each tree is a separate sub folder in the base folder. </p>
+
+</div>
+</div>
+<a class="anchor" id="afe372a8281ee88c3de10ad07d54e2f9b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a> FilePersistence::SimpleTextFileStore::fileGetter_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If specified, this function will be used to get the data of the files. </p>
+<p>Only used for loading. </p>
+
+</div>
+</div>
+<a class="anchor" id="aa7b4e8ed461a687f33671a47657899b6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>* FilePersistence::SimpleTextFileStore::genericNode_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a66e0a15a08efcbb1ce823d5a07b66098"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a>* FilePersistence::SimpleTextFileStore::genericTree_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1098,26 +1146,6 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool FilePersistence::SimpleTextFileStore::partiallyLoadingATree_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a1a3cbbceba42fef2831b6c68023506ab"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>* FilePersistence::SimpleTextFileStore::persisted_ {}</td>
         </tr>
       </table>
   </td>
@@ -1171,6 +1199,28 @@ Static Private Attributes</h2></td></tr>
 
 <p>This is the folder where the current tree is being saved to or loaded from. </p>
 <p>This is only valid if working is true. </p>
+
+</div>
+</div>
+<a class="anchor" id="a7ecc4ef6499f4a1506f93797c93b1f23"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a>* FilePersistence::SimpleTextFileStore::treeManager_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The manager that requested the last load/save operation. </p>
 
 </div>
 </div>

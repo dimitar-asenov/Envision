@@ -101,17 +101,20 @@ Inheritance diagram for Interaction::Command:</div>
   <map id="Interaction::Command_map" name="Interaction::Command_map">
 <area href="classComments_1_1CShapeSetProperty.html" alt="Comments::CShapeSetProperty" shape="rect" coords="0,56,268,80"/>
 <area href="classInteraction_1_1CFind.html" alt="Interaction::CFind" shape="rect" coords="278,56,546,80"/>
-<area href="classInteraction_1_1CommandWithNameAndFlags.html" alt="Interaction::CommandWithNameAndFlags" shape="rect" coords="695,56,963,80"/>
-<area href="classInteraction_1_1CSceneHandlerItemExit.html" alt="Interaction::CSceneHandlerItemExit" shape="rect" coords="973,56,1241,80"/>
-<area href="classInteraction_1_1CSceneHandlerSave.html" alt="Interaction::CSceneHandlerSave" shape="rect" coords="1251,56,1519,80"/>
-<area href="classOOInteraction_1_1CSceneHandlerItemTest.html" alt="OOInteraction::CSceneHandlerItemTest" shape="rect" coords="1529,56,1797,80"/>
-<area href="classInteraction_1_1CreateNamedObjectWithAttributes.html" alt="Interaction::CreateNamedObjectWithAttributes" shape="rect" coords="556,112,824,136"/>
-<area href="classInteraction_1_1CSceneHandlerLoad.html" alt="Interaction::CSceneHandlerLoad" shape="rect" coords="834,112,1102,136"/>
+<area href="classInteraction_1_1CommandWithNameAndFlags.html" alt="Interaction::CommandWithNameAndFlags" shape="rect" coords="1112,56,1380,80"/>
+<area href="classInteraction_1_1CSceneHandlerItemExit.html" alt="Interaction::CSceneHandlerItemExit" shape="rect" coords="1390,56,1658,80"/>
+<area href="classInteraction_1_1CSceneHandlerSave.html" alt="Interaction::CSceneHandlerSave" shape="rect" coords="1668,56,1936,80"/>
+<area href="classOOInteraction_1_1CSceneHandlerItemTest.html" alt="OOInteraction::CSceneHandlerItemTest" shape="rect" coords="1946,56,2214,80"/>
+<area href="classInteraction_1_1CreateNamedObjectWithAttributes.html" alt="Interaction::CreateNamedObjectWithAttributes" shape="rect" coords="834,112,1102,136"/>
+<area href="classInteraction_1_1CSceneHandlerLoad.html" alt="Interaction::CSceneHandlerLoad" shape="rect" coords="1112,112,1380,136"/>
+<area href="classJavaExport_1_1CJavaExport.html" alt="JavaExport::CJavaExport" shape="rect" coords="1390,112,1658,136"/>
 <area href="classComments_1_1CCreateShape.html" alt="Comments::CCreateShape" shape="rect" coords="0,168,268,192"/>
 <area href="classOOInteraction_1_1CCreateClass.html" alt="OOInteraction::CCreateClass" shape="rect" coords="278,168,546,192"/>
 <area href="classOOInteraction_1_1CCreateField.html" alt="OOInteraction::CCreateField" shape="rect" coords="556,168,824,192"/>
 <area href="classOOInteraction_1_1CCreateMethod.html" alt="OOInteraction::CCreateMethod" shape="rect" coords="834,168,1102,192"/>
-<area href="classOOInteraction_1_1CCreateProject.html" alt="OOInteraction::CCreateProject" shape="rect" coords="1112,168,1380,192"/>
+<area href="classOOInteraction_1_1CCreateModule.html" alt="OOInteraction::CCreateModule" shape="rect" coords="1112,168,1380,192"/>
+<area href="classOOInteraction_1_1CCreateProject.html" alt="OOInteraction::CCreateProject" shape="rect" coords="1390,168,1658,192"/>
+<area href="classOOInteraction_1_1CDoxygen.html" alt="OOInteraction::CDoxygen" shape="rect" coords="1668,168,1936,192"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -119,17 +122,17 @@ Inheritance diagram for Interaction::Command:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae7482c6a210727ee57689756a8f9fdd0"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#ae7482c6a210727ee57689756a8f9fdd0">~Command</a> ()</td></tr>
 <tr class="separator:ae7482c6a210727ee57689756a8f9fdd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5abdc16b8de63a104c5564f4cc78132"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#aa5abdc16b8de63a104c5564f4cc78132">canInterpret</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens)</td></tr>
-<tr class="separator:aa5abdc16b8de63a104c5564f4cc78132"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1415287dfd174a002de3f79f45a95a5"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#ae1415287dfd174a002de3f79f45a95a5">commandForms</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar)=0</td></tr>
-<tr class="separator:ae1415287dfd174a002de3f79f45a95a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6c2742dc99ed1543e0192b037abec79"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#ac6c2742dc99ed1543e0192b037abec79">execute</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens)=0</td></tr>
-<tr class="separator:ac6c2742dc99ed1543e0192b037abec79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adeb6144c422f49b714465b0e6f5d5b96"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classInteraction_1_1CommandHelp.html">CommandHelp</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#adeb6144c422f49b714465b0e6f5d5b96">extendedHelp</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;commandForm=QString())</td></tr>
-<tr class="separator:adeb6144c422f49b714465b0e6f5d5b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d5d10708d0eb173b223c086ac87b7ac"><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
-&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#a9d5d10708d0eb173b223c086ac87b7ac">suggest</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar)</td></tr>
-<tr class="separator:a9d5d10708d0eb173b223c086ac87b7ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71699776a4d9872fbc42b4e268d9cc41"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#a71699776a4d9872fbc42b4e268d9cc41">canInterpret</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)</td></tr>
+<tr class="separator:a71699776a4d9872fbc42b4e268d9cc41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4f46943e4dcb6e610dd49ef41dec00f"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#ad4f46943e4dcb6e610dd49ef41dec00f">commandForms</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)=0</td></tr>
+<tr class="separator:ad4f46943e4dcb6e610dd49ef41dec00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a284e1db244f7af0860f34e34f4816324"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#a284e1db244f7af0860f34e34f4816324">execute</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QStringList &amp;commandTokens, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)=0</td></tr>
+<tr class="separator:a284e1db244f7af0860f34e34f4816324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77048e3682219c558b39327c5f79df9c"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classInteraction_1_1CommandHelp.html">CommandHelp</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#a77048e3682219c558b39327c5f79df9c">extendedHelp</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor, const QString &amp;commandForm=QString())</td></tr>
+<tr class="separator:a77048e3682219c558b39327c5f79df9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4adf8ed0238ba008fd9f391811df7590"><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
+&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1Command.html#a4adf8ed0238ba008fd9f391811df7590">suggest</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const QString &amp;textSoFar, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)</td></tr>
+<tr class="separator:a4adf8ed0238ba008fd9f391811df7590"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ae7482c6a210727ee57689756a8f9fdd0"></a>
@@ -156,7 +159,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa5abdc16b8de63a104c5564f4cc78132"></a>
+<a class="anchor" id="a71699776a4d9872fbc42b4e268d9cc41"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -179,7 +182,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QStringList &amp;&#160;</td>
-          <td class="paramname"><em>commandTokens</em>&#160;</td>
+          <td class="paramname"><em>commandTokens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cursor</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -194,11 +203,11 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#abbc28ddfa8dd5efc20e3dc28daa3b008">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classComments_1_1CShapeSetProperty.html#ac40a44768cc86a37f44fdcca6eecc3e7">Comments::CShapeSetProperty</a>, <a class="el" href="classInteraction_1_1CFind.html#a49ebdaa22af94ad6da0fd4ed28f8b3b6">Interaction::CFind</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#af29b4e3c3fddbc179bf24f09160b1983">Interaction::CSceneHandlerItemExit</a>, <a class="el" href="classOOInteraction_1_1CSceneHandlerItemTest.html#a3a4285e5bb518ad00b73f751f3b3b76e">OOInteraction::CSceneHandlerItemTest</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#aed23af3c6299aa431030587ee9e2377b">Interaction::CSceneHandlerSave</a>.</p>
+<p>Reimplemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#af3fffded2ec0fec1ace56dff701acfc6">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classInteraction_1_1CFind.html#ad2ea17564c56416aa9fb6d5d7efcc876">Interaction::CFind</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a38f5c6ec2b9df86963d737de39ad682f">Interaction::CSceneHandlerItemExit</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#a769244d895a8d72570a17d2b933f1fa4">Interaction::CSceneHandlerSave</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae1415287dfd174a002de3f79f45a95a5"></a>
+<a class="anchor" id="ad4f46943e4dcb6e610dd49ef41dec00f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -221,7 +230,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>textSoFar</em>&#160;</td>
+          <td class="paramname"><em>textSoFar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cursor</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -236,11 +251,11 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#ac4fb5c82dc381d2e0666622687016534">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classComments_1_1CShapeSetProperty.html#af9316acc55298e6ca2dc55a16495b75f">Comments::CShapeSetProperty</a>, <a class="el" href="classInteraction_1_1CFind.html#a7c75892419389c56278904d976b48b8e">Interaction::CFind</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a7bb08755c31a4c722aa213999dff670f">Interaction::CSceneHandlerItemExit</a>, <a class="el" href="classOOInteraction_1_1CSceneHandlerItemTest.html#ad8943f6ce3f7b3a395d59426b3b72da5">OOInteraction::CSceneHandlerItemTest</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#a166bf224cbcee321035edeedc803b288">Interaction::CSceneHandlerSave</a>.</p>
+<p>Implemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#aa81dd6c1ea19bfb448a6d474b0129b3b">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a50bb3485283e4195984f9aea17efe991">Interaction::CSceneHandlerItemExit</a>, <a class="el" href="classInteraction_1_1CFind.html#a16c14e968982a32c09a9a5d5f34585e1">Interaction::CFind</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#ace9ce4d99e6d2cc3feb77a907a36e876">Interaction::CSceneHandlerSave</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac6c2742dc99ed1543e0192b037abec79"></a>
+<a class="anchor" id="a284e1db244f7af0860f34e34f4816324"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -263,7 +278,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QStringList &amp;&#160;</td>
-          <td class="paramname"><em>commandTokens</em>&#160;</td>
+          <td class="paramname"><em>commandTokens</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cursor</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -278,11 +299,11 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a2d358a80b12c05cdf6f32f319d3f8992">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classComments_1_1CShapeSetProperty.html#ac1b8d58ab355657bdf85235d9fe9b176">Comments::CShapeSetProperty</a>, <a class="el" href="classInteraction_1_1CFind.html#a3a9123b898d00c98ea36fc433c8ab144">Interaction::CFind</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a152dbc9cad178a09865bda34470b3b41">Interaction::CSceneHandlerItemExit</a>, <a class="el" href="classOOInteraction_1_1CSceneHandlerItemTest.html#ac7b5eaff60b564620005c5fe92c746de">OOInteraction::CSceneHandlerItemTest</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#abc23a244d80be7d13918b55592ab3ecd">Interaction::CSceneHandlerSave</a>.</p>
+<p>Implemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a35a11fa908e4d7406c626c81b164e0be">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classInteraction_1_1CFind.html#a30c709dce29874e5a4734882cf0dbab0">Interaction::CFind</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a8d5f1b37fff4aaa965d365ffc2cbadb4">Interaction::CSceneHandlerItemExit</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#a19c40e9f0c05ffea47be0ed0b7f324e2">Interaction::CSceneHandlerSave</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="adeb6144c422f49b714465b0e6f5d5b96"></a>
+<a class="anchor" id="a77048e3682219c558b39327c5f79df9c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -300,6 +321,12 @@ Public Member Functions</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
           <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cursor</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -322,7 +349,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9d5d10708d0eb173b223c086ac87b7ac"></a>
+<a class="anchor" id="a4adf8ed0238ba008fd9f391811df7590"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -345,7 +372,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>textSoFar</em>&#160;</td>
+          <td class="paramname"><em>textSoFar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cursor</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -360,7 +393,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a9fb63b433dcede03385b8824251673c5">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classComments_1_1CShapeSetProperty.html#a9bd6504bb4f973d4a825fbdb69c628f9">Comments::CShapeSetProperty</a>, <a class="el" href="classInteraction_1_1CFind.html#afb8c8a6ea2b318c5b4026840ab8c2dd7">Interaction::CFind</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a4aca1f2c6e0f6127999b263ee91afe37">Interaction::CSceneHandlerItemExit</a>, <a class="el" href="classOOInteraction_1_1CSceneHandlerItemTest.html#aa78896757ad6ea51bfafe1a406ca1c19">OOInteraction::CSceneHandlerItemTest</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#ad9a1feec587417633a4350cbcb51fa6d">Interaction::CSceneHandlerSave</a>.</p>
+<p>Reimplemented in <a class="el" href="classInteraction_1_1CommandWithNameAndFlags.html#a620d77265f804d733cf0cb2a00c020ed">Interaction::CommandWithNameAndFlags</a>, <a class="el" href="classInteraction_1_1CSceneHandlerItemExit.html#a5861588c9078d20e8e08c980caf9b858">Interaction::CSceneHandlerItemExit</a>, <a class="el" href="classInteraction_1_1CFind.html#a21975943ab37009b817f0bdb6b44a349">Interaction::CFind</a>, and <a class="el" href="classInteraction_1_1CSceneHandlerSave.html#a5ca45bedbda69f1808035890d2dc3024">Interaction::CSceneHandlerSave</a>.</p>
 
 </div>
 </div>

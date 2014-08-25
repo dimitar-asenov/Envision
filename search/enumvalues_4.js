@@ -2,6 +2,7 @@ var searchData=
 [
   ['ellipse',['Ellipse',['../classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64a119518c2134c46108179369f0ce81fa2',1,'Comments::CommentDiagramShape']]],
   ['empty',['Empty',['../classInteraction_1_1ExpressionContext.html#a529359d500858ebf0bf8984e1790926ba1e86d37c166baffe91799850b1625725',1,'Interaction::ExpressionContext']]],
+  ['emptylineatend',['EmptyLineAtEnd',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aa1f9969b3f194fc98f320f380b3daf0b7',1,'Export::FragmentLayouter']]],
   ['end',['END',['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5a8fbcefc8447776e2defa31794fcdaaef',1,'Interaction::ExpectedToken']]],
   ['enum',['Enum',['../classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1cacf20423ed48998082c20099488a0917c',1,'OOModel::Class']]],
   ['equal',['Equal',['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106a5184adf1a10d22bf7dbce6ebdfa750c1',1,'OOModel::TypeSystem']]],

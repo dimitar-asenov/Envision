@@ -118,6 +118,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5771ca77a1fccc06327f67c777ad0418"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53c12b91bc3726362008159b11942954"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a53c12b91bc3726362008159b11942954">commandReceiver</a> ()</td></tr>
 <tr class="separator:a53c12b91bc3726362008159b11942954"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a524ca5dac874371007a42c6fe7dd1b31"><td class="memItemLeft" align="right" valign="top">const std::unique_ptr<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a524ca5dac874371007a42c6fe7dd1b31">commandReceiverCursor</a> ()</td></tr>
+<tr class="separator:a524ca5dac874371007a42c6fe7dd1b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79dfbe906c192a9b72035d3c436245df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a79dfbe906c192a9b72035d3c436245df">hidePrompt</a> ()</td></tr>
 <tr class="separator:a79dfbe906c192a9b72035d3c436245df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2421f7ed0bf5103398a19a4f8fc6148b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a2421f7ed0bf5103398a19a4f8fc6148b">removeResult</a> ()</td></tr>
@@ -146,8 +149,10 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:aee483a597de273a79906edb12f115a58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#aee483a597de273a79906edb12f115a58">saveReceiverCursorPosition</a> ()</td></tr>
-<tr class="separator:aee483a597de273a79906edb12f115a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3285da61df3d34bc7d586663da2d5a5"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#af3285da61df3d34bc7d586663da2d5a5">receiverCursorPosition</a> ()</td></tr>
+<tr class="separator:af3285da61df3d34bc7d586663da2d5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbe319f71908683baf5593229a8abfa8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#acbe319f71908683baf5593229a8abfa8">saveReceiverCursor</a> ()</td></tr>
+<tr class="separator:acbe319f71908683baf5593229a8abfa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15994a64001c13f56954e8b4de3fda15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a15994a64001c13f56954e8b4de3fda15">setPromptPosition</a> ()</td></tr>
 <tr class="separator:a15994a64001c13f56954e8b4de3fda15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e1fbfb9ef3f10b42d7670061887f48d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a0e1fbfb9ef3f10b42d7670061887f48d">showAutocompleteBasedOnSuggestions</a> ()</td></tr>
@@ -159,6 +164,9 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a266837064793c3e7153b798729c45c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7e87b540187ddcf121ac30a07e5b666"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ad7e87b540187ddcf121ac30a07e5b666">commandReceiver_</a> {}</td></tr>
 <tr class="separator:ad7e87b540187ddcf121ac30a07e5b666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a389a2f20ca219e024308137ad60a2848"><td class="memItemLeft" align="right" valign="top">std::unique_ptr<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a389a2f20ca219e024308137ad60a2848">commandReceiverCursor_</a> {}</td></tr>
+<tr class="separator:a389a2f20ca219e024308137ad60a2848"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e4673a3d3ec5a35bbd252757f9edea3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a6e4673a3d3ec5a35bbd252757f9edea3">commandSelectedFirst_</a> {}</td></tr>
 <tr class="separator:a6e4673a3d3ec5a35bbd252757f9edea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e791cf79f6d137e21712fc0bedc5d10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a5e791cf79f6d137e21712fc0bedc5d10">commandSelectedLast_</a> {}</td></tr>
@@ -167,8 +175,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a98cf4b724a13c98742072e78408eb0a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3f9962c11fd22e3510c4be705576778"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ac3f9962c11fd22e3510c4be705576778">layout_</a> {}</td></tr>
 <tr class="separator:ac3f9962c11fd22e3510c4be705576778"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d35e3eb2c93ec489e515e3dfc42d15e"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a6d35e3eb2c93ec489e515e3dfc42d15e">receiverCursorPosition_</a></td></tr>
-<tr class="separator:a6d35e3eb2c93ec489e515e3dfc42d15e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c1d9ba3014a7e26bdbdcaaf61daa927"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a0c1d9ba3014a7e26bdbdcaaf61daa927">result_</a></td></tr>
 <tr class="separator:a0c1d9ba3014a7e26bdbdcaaf61daa927"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a140614dec5b0e973e0fe6d8bbec33a88"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a140614dec5b0e973e0fe6d8bbec33a88">suggestions_</a></td></tr>
@@ -292,6 +298,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a524ca5dac874371007a42c6fe7dd1b31"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp; Interaction::CommandPrompt::commandReceiverCursor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aee560bbcc988e81579a5a8427f534c08"></a>
 <div class="memitem">
 <div class="memproto">
@@ -326,6 +355,29 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af3285da61df3d34bc7d586663da2d5a5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPoint Interaction::CommandPrompt::receiverCursorPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -383,7 +435,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aee483a597de273a79906edb12f115a58"></a>
+<a class="anchor" id="acbe319f71908683baf5593229a8abfa8"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -391,7 +443,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Interaction::CommandPrompt::saveReceiverCursorPosition </td>
+          <td class="memname">void Interaction::CommandPrompt::saveReceiverCursor </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -621,6 +673,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a389a2f20ca219e024308137ad60a2848"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a>&gt; Interaction::CommandPrompt::commandReceiverCursor_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6e4673a3d3ec5a35bbd252757f9edea3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -690,26 +762,6 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a>* Interaction::CommandPrompt::layout_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6d35e3eb2c93ec489e515e3dfc42d15e"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">QPoint Interaction::CommandPrompt::receiverCursorPosition_</td>
         </tr>
       </table>
   </td>

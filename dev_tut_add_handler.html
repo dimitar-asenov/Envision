@@ -91,7 +91,10 @@ Introduction</h1>
 <p>In this tutorial we will look at the handler for the standard if statement visualization. This handler is <a class="el" href="classOOInteraction_1_1HIfStatement.html">OOInteraction::HIfStatement</a>.</p>
 <h1><a class="anchor" id="associating"></a>
 Associating a handler class with an item class</h1>
-<p>To set a handler to be the default handler to be used by an item class you need to call the item class' <code>setDefaultClassHandler()</code> method during the plug-in's <code>initialize()</code> method. Here is how this call looks in our example <code></code>(OOInteraction/src/oointeraction.cpp):  <div class="fragment"></div><!-- fragment --></p>
+<p>To set a handler to be the default handler to be used by an item class you need to call the item class' <code>setDefaultClassHandler()</code> method during the plug-in's <code>initialize()</code> method. Here is how this call looks in our example <code></code>(OOInteraction/src/OOInteractionPlugin.cpp):  <div class="fragment"><div class="line"><span class="keywordtype">bool</span> OOInteractionPlugin::initialize(<a class="code" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a>&amp;)</div>
+<div class="line">{</div>
+<div class="line">   OOVisualization::VIfStatement::setDefaultClassHandler(HIfStatement::instance());</div>
+</div><!-- fragment --></p>
 <p>Now let's see how to write the handler.</p>
 <h1><a class="anchor" id="hif_header"></a>
 HIfStatement.h</h1>

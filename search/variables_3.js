@@ -1,8 +1,9 @@
 var searchData=
 [
+  ['data_5f',['data_',['../classFilePersistence_1_1GenericPersistentUnit.html#adaa41b5ea1a596c90324dcfef311adb9',1,'FilePersistence::GenericPersistentUnit::data_()'],['../classJavaExport_1_1Visitor.html#ace4aaf2720ec087ddb988ee055e9f498',1,'JavaExport::Visitor::data_()']]],
   ['dataline_5f',['dataLine_',['../classFilePersistence_1_1GenericNode.html#a166f7d235227b223981f32c0e59a5c5d',1,'FilePersistence::GenericNode']]],
   ['datalinelength_5f',['dataLineLength_',['../classFilePersistence_1_1GenericNode.html#ada8c5a77f960b33fd2dcf07edd6c8607',1,'FilePersistence::GenericNode']]],
-  ['datamappings_5f',['dataMappings_',['../classFilePersistence_1_1GenericNodeAllocator.html#af2cca8810c07249f111fbf1ff6798bcf',1,'FilePersistence::GenericNodeAllocator']]],
+  ['datasize_5f',['dataSize_',['../classFilePersistence_1_1GenericPersistentUnit.html#a65c9b0e7dd8eafd7fae9cac474e0efc0',1,'FilePersistence::GenericPersistentUnit']]],
   ['decl_5f',['decl_',['../classOOVisualization_1_1VDeclarationStatement.html#abf07b590b4a0e898764731535d75c54b',1,'OOVisualization::VDeclarationStatement']]],
   ['declarations',['declarations',['../classOOVisualization_1_1VClassStyle.html#adac931c88120a38e6b7405ecd820f74a',1,'OOVisualization::VClassStyle::declarations()'],['../classOOVisualization_1_1VModuleStyle.html#a193dd4eaead50490f35b90e426afcaaf',1,'OOVisualization::VModuleStyle::declarations()'],['../classOOVisualization_1_1VProjectStyle.html#ae04fbf5257eb7c7414e5bac39549bcb3',1,'OOVisualization::VProjectStyle::declarations()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#afd59848757d38f6c9faa192c71378ce1',1,'OOVisualization::VClassSzPublicStyle::declarations()']]],
   ['declarations_5f',['declarations_',['../classOOVisualization_1_1VClass.html#afcb14fe3c68f85fe59b5c8b13ea3ddfd',1,'OOVisualization::VClass::declarations_()'],['../classOOVisualization_1_1VModule.html#ae7e51821a9b556aaa6a9d473a917688a',1,'OOVisualization::VModule::declarations_()'],['../classOOVisualization_1_1VProject.html#a8e904a8c15a67a8ef26690880b44eddc',1,'OOVisualization::VProject::declarations_()'],['../classOOVisualization_1_1VClassSzPublic.html#a828f859f99c8b632151b9fa9e88400a2',1,'OOVisualization::VClassSzPublic::declarations_()']]],
@@ -24,6 +25,7 @@ var searchData=
   ['defaultsuggestion',['defaultSuggestion',['../classInteraction_1_1CommandPromptStyle.html#aa3f4a0624ceff628c2da65f104c5cf3b',1,'Interaction::CommandPromptStyle']]],
   ['defaultverticalalignment_5f',['defaultVerticalAlignment_',['../classVisualization_1_1GridLayoutFormElement.html#a73efa8aca4715bbbe982344aae0b9bcf',1,'Visualization::GridLayoutFormElement']]],
   ['definessymbol',['definesSymbol',['../classOOModel_1_1FormalResult.html#a182e4e63aeeace7bcc8364b51655fc74',1,'OOModel::FormalResult']]],
+  ['deleteafterevent',['deleteAfterEvent',['../classInteraction_1_1HCommentWrapper.html#a59517f3c0e3c5aadc39e6e0186fce4e3',1,'Interaction::HCommentWrapper']]],
   ['delimiters_5f',['delimiters_',['../classOOVisualization_1_1VUnfinishedOperator.html#aac4672aa89b1f802a438f4103e439c5a',1,'OOVisualization::VUnfinishedOperator::delimiters_()'],['../classOOVisualization_1_1VUnfinishedOperatorStyle.html#ab8154f0cf33c515b87b1fc7e9ad1909d',1,'OOVisualization::VUnfinishedOperatorStyle::delimiters_()']]],
   ['dependencies',['dependencies',['../structCore_1_1PluginInfo.html#a766650c26101667a007b0341029d8b7b',1,'Core::PluginInfo']]],
   ['description',['description',['../classInteraction_1_1TextAndDescriptionStyle.html#afcc8f353fa6a291498b77171f3c0434e',1,'Interaction::TextAndDescriptionStyle']]],
@@ -36,6 +38,7 @@ var searchData=
   ['dimensions',['dimensions',['../classOOVisualization_1_1VNewExpressionStyle.html#a3753139aad8815540a537099962ba34a',1,'OOVisualization::VNewExpressionStyle']]],
   ['dimensions_5f',['dimensions_',['../classOOVisualization_1_1VNewExpression.html#a5cc4e58534fdab14c3cf7d7244d8dc83',1,'OOVisualization::VNewExpression']]],
   ['direction',['direction',['../classVisualization_1_1SequentialLayoutStyle.html#ae69cc67f9d14fb02792a05d43db40e6b',1,'Visualization::SequentialLayoutStyle']]],
+  ['directories_5f',['directories_',['../classExport_1_1SourceDir.html#ad2dddc93f099d9b29f05e0dbea9a4d16',1,'Export::SourceDir']]],
   ['disable_5fall',['DISABLE_ALL',['../namespaceCore.html#aa8b845b247f61b0de0dda02430cc8df0',1,'Core']]],
   ['disable_5fall_5fcustomizations',['DISABLE_ALL_CUSTOMIZATIONS',['../namespaceContractsLibrary.html#a2674911a8084b74b1c4d5a818326935f',1,'ContractsLibrary']]],
   ['disable_5fcall_5fprofiling',['DISABLE_CALL_PROFILING',['../namespaceCore.html#a83ed0785363fb80d28355fd27a7f3158',1,'Core']]],
@@ -49,6 +52,8 @@ var searchData=
   ['do_5fnot_5fdelete_5ftransient_5fdescriptor_5f',['do_not_delete_transient_descriptor_',['../classInteraction_1_1Operator.html#a7e0c8bae6a3fdcfac141f7bebb881c9a',1,'Interaction::Operator']]],
   ['doc',['doc',['../classFilePersistence_1_1XMLModel.html#a376d9a17e94b467db6f07b8b29b22108',1,'FilePersistence::XMLModel::doc()'],['../classVisualization_1_1StyleNode.html#a1ed21907e1e9e8b8aea0259c40356e07',1,'Visualization::StyleNode::doc()']]],
   ['doubleclick',['doubleClick',['../classInteraction_1_1HText.html#ac5fbf3233bce21e053940325c734c59c',1,'Interaction::HText']]],
+  ['doxy_5fend',['DOXY_END',['../classOOInteraction_1_1DoxygenCommentsOnlyVisitor.html#a566115fce0dd2659bc07fd04e3bf203b',1,'OOInteraction::DoxygenCommentsOnlyVisitor']]],
+  ['doxy_5fstart',['DOXY_START',['../classOOInteraction_1_1DoxygenCommentsOnlyVisitor.html#a9cf13191b2305d80300fb3d00c3b325c',1,'OOInteraction::DoxygenCommentsOnlyVisitor']]],
   ['drawnrect',['drawnRect',['../classVisualization_1_1MiniMap.html#acce650b225684262120b19f81842a70c',1,'Visualization::MiniMap']]],
   ['drawshapewhenempty',['drawShapeWhenEmpty',['../classVisualization_1_1ItemStyle.html#ab979cbe4b5adb0c8cc9d41dc44d14aad',1,'Visualization::ItemStyle']]],
   ['drawsonlyshape',['drawsOnlyShape',['../classVisualization_1_1ItemStyle.html#a6b81b1372be457382bb3c94d38c7501f',1,'Visualization::ItemStyle']]]

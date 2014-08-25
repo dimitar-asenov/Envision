@@ -16,6 +16,8 @@ var searchData=
   ['hiderequested_5f',['hideRequested_',['../classInteraction_1_1AutoComplete.html#aafc6d96ee38881475702397f9533a87a',1,'Interaction::AutoComplete']]],
   ['highestregisteredorderingnumber_5f',['highestRegisteredOrderingNumber_',['../classVisualization_1_1SzLevelOrderingManager.html#a261c1166f2ed2864d71b6ba93299b6a7',1,'Visualization::SzLevelOrderingManager']]],
   ['highlight_5f',['highlight_',['../classInteraction_1_1ActionPrompt.html#a53b3f91f85edc292140efe4faf745f8d',1,'Interaction::ActionPrompt']]],
+  ['highlightitems_5f',['highlightItems_',['../classVisualization_1_1Highlight.html#a9a9f5ceb6711d5804e7a96ac49d210d6',1,'Visualization::Highlight']]],
+  ['highlights_5f',['highlights_',['../classVisualization_1_1Scene.html#a534c8f327aae166eabc6744fb18a9b67',1,'Visualization::Scene']]],
   ['horizontal_5f',['horizontal_',['../classOOVisualization_1_1VIfStatement.html#a040e79efb09451de9fef210fc26b06cd',1,'OOVisualization::VIfStatement']]],
   ['horizontalalignment',['horizontalAlignment',['../classVisualization_1_1GridLayoutStyle.html#aa3a5cb6801823da824e5ae5874ab7841',1,'Visualization::GridLayoutStyle']]],
   ['horizontalalignment_5f',['horizontalAlignment_',['../classVisualization_1_1DynamicGridFormElement.html#a2d82833503af318d1825edfc45e0bcc7',1,'Visualization::DynamicGridFormElement']]],

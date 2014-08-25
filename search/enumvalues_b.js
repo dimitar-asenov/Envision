@@ -1,9 +1,15 @@
 var searchData=
 [
+  ['newlineafterpostfix',['NewLineAfterPostfix',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aac32d154feb1aefe9ffb17394bfc04634',1,'Export::FragmentLayouter']]],
+  ['newlineafterprefix',['NewLineAfterPrefix',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aae63ba4b51593a3519ac174f310b4e313',1,'Export::FragmentLayouter']]],
+  ['newlinebefore',['NewLineBefore',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aaabda6cac14fdeb0468e36fe452563ccd',1,'Export::FragmentLayouter']]],
+  ['newlinebeforepostfix',['NewLineBeforePostfix',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aa06b0f203df61f1536a543ae684f03a97',1,'Export::FragmentLayouter']]],
   ['no_5fparent',['NO_PARENT',['../classCppImport_1_1CppImportLogger.html#a0a0d5e2dcef9bc6a9431a9690ee37bc7ad528e999bf11721171e8e1b6c3cd47a4',1,'CppImport::CppImportLogger']]],
   ['no_5fvalue',['NO_VALUE',['../classFilePersistence_1_1GenericNode.html#abc7da14fae84133c449f8dd12f11f344a4d5c6d2808dbd3d4730d2976d5b7af43',1,'FilePersistence::GenericNode']]],
   ['noconstraints',['NoConstraints',['../classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946',1,'Visualization::Item::NoConstraints()'],['../classVisualization_1_1ItemRegion.html#a4c5ce94b208c205300fadb4271b9165ba91d36656ebd4e5550d06982782a585a4',1,'Visualization::ItemRegion::NoConstraints()']]],
+  ['noindentation',['NoIndentation',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aa41f9bac75de02f6620f5c7d823b5ec70',1,'Export::FragmentLayouter']]],
   ['noitemcategory',['NoItemCategory',['../classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd',1,'Visualization::Scene']]],
+  ['nomajor',['NoMajor',['../classVisualization_1_1GridLayouter.html#a8de41949f680ff7c0f397e13588934f3ab5071a36c9b094f2cdf122e2d9d21ee7',1,'Visualization::GridLayouter']]],
   ['none',['None',['../classInteraction_1_1ExpressionContext.html#a529359d500858ebf0bf8984e1790926ba44fedfa12d8f8c0915c3ae3762faa5f1',1,'Interaction::ExpressionContext::None()'],['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494fa861195f047c2ac227cc1a40445d4feca',1,'OOModel::Modifier::None()'],['../classOOModel_1_1TypeSystem.html#a2b403ace41805a5e0aeb969b5d623106af03d39167d1084409e876fb8f92fb5dd',1,'OOModel::TypeSystem::None()']]],
   ['noorientation',['NoOrientation',['../classInteraction_1_1GenericHandler.html#a618aa472ba56cb22999693d28b71e6d4a202ce0f357c0454ba181f2e857e6de4d',1,'Interaction::GenericHandler']]],
   ['not',['NOT',['../classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1a0fa19c55ac23e59a5adfa0627c868ea0',1,'OOModel::UnaryOperation']]],
