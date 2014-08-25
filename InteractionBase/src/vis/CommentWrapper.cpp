@@ -24,50 +24,31 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "vis/CommentWrapper.h"
 
-#include "../oovisualization_api.h"
-#include "VModuleStyle.h"
+using namespace Visualization;
 
-#include "OOModel/src/declarations/Module.h"
+namespace Interaction {
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+ITEM_COMMON_DEFINITIONS(CommentWrapper, "item")
 
-namespace Visualization {
-	class VText;
-	class VList;
-	class Static;
+CommentWrapper::CommentWrapper(Item* itemWithComment, NodeType* node, const StyleType* style)
+	: Super(nullptr, node, style)
+{
+	itemWithComment_ = itemWithComment;
+	itemWithComment_->scene()->addTopLevelItem(this);
 }
 
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VModule
-: public Super<Visualization::ItemWithNode<VModule, Visualization::DeclarativeItem<VModule>, OOModel::Module>>
+void CommentWrapper::showComment()
 {
-	ITEM_COMMON(VModule)
+	setCommentPosition();
+	show();
+}
 
-	public:
-		VModule(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		virtual QColor customShapeColor() const override;
-
-	protected:
-		virtual void determineChildren() override;
-
-	private:
-		Visualization::Static* icon_{};
-		Visualization::VText* name_{};
-
-		Visualization::VList* libraries_{};
-		Visualization::VList* declarations_{};
-		Visualization::VList* fields_{};
-
-		Item* comment_{};
-
-		mutable QColor color_{};
-};
+void CommentWrapper::setCommentPosition()
+{
+	QPointF commentPos = itemWithComment_->mapToScene(0, 0);
+	setPos(commentPos.x() + itemWithComment_->widthInScene(), commentPos.y());
+}
 
 }

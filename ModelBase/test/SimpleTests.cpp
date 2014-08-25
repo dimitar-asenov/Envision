@@ -40,12 +40,13 @@ TEST(ModelBasePlugin, CompositeMetaData)
 	AttributeChain& metaExt = TestNodes::BinaryNode::getMetaData();
 	AttributeChain& metaUnit = TestNodes::BinaryNodeAccessUnit::getMetaData();
 
-	CHECK_INT_EQUAL(1, metaExt.numLevels());
-	CHECK_INT_EQUAL(2, metaUnit.numLevels());
+	CHECK_INT_EQUAL(2, metaExt.numLevels());
+	CHECK_INT_EQUAL(3, metaUnit.numLevels());
 
 	CHECK_INT_EQUAL(5, metaExt.size());
 	CHECK_INT_EQUAL(0, metaUnit.size());
-	CHECK_CONDITION( metaUnit.level(0) == &metaExt);
+	CHECK_CONDITION( metaUnit.level(0) == &CompositeNode::getMetaData());
+	CHECK_CONDITION( metaUnit.level(1) == &metaExt);
 
 	CHECK_STR_EQUAL("name", metaExt[0].name());
 	CHECK_STR_EQUAL("left", metaExt[1].name());

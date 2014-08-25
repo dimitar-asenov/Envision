@@ -63,6 +63,7 @@ class INTERACTIONBASE_API GenericHandlerManagerListener : public QObject
 class Command;
 class CommandExecutionEngine;
 class CommandPrompt;
+class CommentWrapper;
 class ActionPrompt;
 
 class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
@@ -84,6 +85,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		CommandPrompt* commandPrompt();
 		void removeCommandPrompt();
 		void showCommandPrompt(Visualization::Item* commandRecevier, QString initialCommandText = QString());
+
+		void showComment(Visualization::Item* itemWithComment, Model::Node* aNode);
 
 		virtual void beforeEvent(Visualization::Item *target, QEvent* event) override;
 
@@ -119,6 +122,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		static void fixCursorPositionForUndoAfterTreeManagerChange();
 
+		static void resetCommentWrapper();
+
 	protected:
 		GenericHandler();
 
@@ -133,6 +138,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		static CommandExecutionEngine* executionEngine_;
 		static CommandPrompt* commandPrompt_;
 		static ActionPrompt* actionPrompt_;
+
+		static CommentWrapper* commentWrapper_;
 
 		static QPoint cursorOriginMidPoint_;
 		static CursorMoveOrientation cursorMoveOrientation_;

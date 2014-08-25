@@ -90,10 +90,11 @@ void VClass::initializeForms()
 	auto contentElement = (new GridLayoutFormElement())
 				->setSpacing(3)->setColumnStretchFactor(1, 1)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(1, 0, item<VStatementItemList>(&I::annotations_, [](I* v)
+				->put(1, 0, item(&I::comment_, [](I* v){return v->node()->comment();}))
+				->put(1, 1, item<VStatementItemList>(&I::annotations_, [](I* v)
 											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
 								[](I* v){return &v->style()->annotations();}))
-				->put(1, 1, item<VList>(&I::enumerators_, [](I* v)
+				->put(1, 2, item<VList>(&I::enumerators_, [](I* v)
 											{return v->node()->enumerators()->size() > 0 ? v->node()->enumerators() : nullptr;},
 								[](I* v){return &v->style()->enumerators();}))
 				->put(0, 2, item<Static>(&I::friendsSymbol_,

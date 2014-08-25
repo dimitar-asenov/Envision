@@ -70,11 +70,11 @@ void CommentTable::resize(int m, int n)
 			{
 				CommentFreeNode* aFreeNode = nodeAt(j, i);
 				nodes()->replaceChild(aFreeNode, new CommentFreeNode(nullptr, ""));
-				aFreeNode->setName("#"+QString::number(j)+"#"+QString::number(i));
+				aFreeNode->setName(name()+"_"+QString::number(j)+"_"+QString::number(i));
 				aList->append(aFreeNode);
 			}
 			else
-				aList->append(new CommentFreeNode(nullptr, "#"+QString::number(j)+"#"+QString::number(i)));
+				aList->append(new CommentFreeNode(nullptr, name()+"_"+QString::number(j)+"_"+QString::number(i)));
 		}
 	}
 

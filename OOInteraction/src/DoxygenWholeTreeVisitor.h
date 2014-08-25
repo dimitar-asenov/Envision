@@ -24,50 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ModelBase/src/visitor/VisitorDefinition.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "OOInteraction/src/DoxygenCommentsOnlyVisitor.h"
 
-#include "../oovisualization_api.h"
-#include "VModuleStyle.h"
+namespace OOInteraction {
 
-#include "OOModel/src/declarations/Module.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class VText;
-	class VList;
-	class Static;
-}
-
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VModule
-: public Super<Visualization::ItemWithNode<VModule, Visualization::DeclarativeItem<VModule>, OOModel::Module>>
-{
-	ITEM_COMMON(VModule)
-
+class DoxygenWholeTreeVisitor : public Model::Visitor<DoxygenWholeTreeVisitor, QString>{
 	public:
-		VModule(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		virtual QColor customShapeColor() const override;
-
-	protected:
-		virtual void determineChildren() override;
-
+		static void init();
 	private:
-		Visualization::Static* icon_{};
-		Visualization::VText* name_{};
-
-		Visualization::VList* libraries_{};
-		Visualization::VList* declarations_{};
-		Visualization::VList* fields_{};
-
-		Item* comment_{};
-
-		mutable QColor color_{};
+		static DoxygenCommentsOnlyVisitor* aDoxyCommentVisitor_;
 };
 
 }

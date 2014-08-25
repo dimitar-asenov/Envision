@@ -53,7 +53,10 @@ HEADERS += src/commands/CommandHelper.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/OOInteractionPlugin.h \
-    src/handlers/HStatementItemList.h
+    src/handlers/HStatementItemList.h \
+    src/commands/CDoxygen.h \
+    src/DoxygenCommentsOnlyVisitor.h \
+    src/DoxygenWholeTreeVisitor.h
 SOURCES += src/handlers/HModule.cpp \
     src/commands/CCreateModule.cpp \
     src/handlers/HArrayInitializer.cpp \
@@ -95,4 +98,12 @@ SOURCES += src/handlers/HModule.cpp \
     src/OOInteractionException.cpp \
     test/SimpleTest.cpp \
     src/OOInteractionPlugin.cpp \
-    src/handlers/HStatementItemList.cpp
+    src/handlers/HStatementItemList.cpp \
+    src/commands/CDoxygen.cpp \
+    src/DoxygenCommentsOnlyVisitor.cpp \
+    src/DoxygenWholeTreeVisitor.cpp
+
+doxy.path = $${BUILD_DIR}/doxygen
+doxy.files = doxy_data/*
+
+INSTALLS += doxy

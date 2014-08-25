@@ -24,50 +24,46 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HCommentWrapper.h"
 
-#include "../oovisualization_api.h"
-#include "VModuleStyle.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
-#include "OOModel/src/declarations/Module.h"
+using namespace Visualization;
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+namespace Interaction {
 
-namespace Visualization {
-	class VText;
-	class VList;
-	class Static;
+HCommentWrapper::HCommentWrapper()
+{}
+
+HCommentWrapper* HCommentWrapper::instance()
+{
+	static HCommentWrapper h;
+	return &h;
 }
 
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VModule
-: public Super<Visualization::ItemWithNode<VModule, Visualization::DeclarativeItem<VModule>, OOModel::Module>>
+void HCommentWrapper::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	ITEM_COMMON(VModule)
+	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
+	{
+		target->hide();
+	}
+	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Delete)
+	{
+		auto aCompositeNode = DCast<Model::CompositeNode>(target->node()->parent());
+		aCompositeNode->beginModification("delete comment");
+		aCompositeNode->setComment(nullptr);
+		aCompositeNode->endModification();
+		deleteAfterEvent = true;
+	}
+	else
+		GenericHandler::keyPressEvent(target, event);
+}
 
-	public:
-		VModule(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		virtual QColor customShapeColor() const override;
-
-	protected:
-		virtual void determineChildren() override;
-
-	private:
-		Visualization::Static* icon_{};
-		Visualization::VText* name_{};
-
-		Visualization::VList* libraries_{};
-		Visualization::VList* declarations_{};
-		Visualization::VList* fields_{};
-
-		Item* comment_{};
-
-		mutable QColor color_{};
-};
+void HCommentWrapper::afterEvent(Visualization::Item*, QEvent*)
+{
+	if (deleteAfterEvent)
+		GenericHandler::resetCommentWrapper();
+	deleteAfterEvent = false;
+}
 
 }
