@@ -56,6 +56,11 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		const char* setData(const char* data, int dataSize);
 
 		GenericNode* find(Model::NodeIdType id) const;
+
+		/**
+		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
+		 * loaded.
+		 */
 		GenericNode* unitRootNode() const;
 
 	private:
