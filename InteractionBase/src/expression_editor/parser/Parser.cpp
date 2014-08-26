@@ -93,7 +93,9 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	// Together these two conditions are necessary to assure that the prunning to work correctly.
 	// The rest of this invariant is maintained in processExpectedOperatorDelimiters.
 	int numTokens = endTokens_ - token;
-	for (auto e : expected) if (e.type != ExpectedToken::END) --numTokens;
+	for (auto e : expected) if (e.type == ExpectedToken::DELIM) --numTokens;
+	// Only count delimiters, since values/ids/types could be recorded in result.emptyExpressions
+
 	if (numTokens < 0)
 	{
 		Q_ASSERT(result.missingTrailingTokens <= -numTokens);
@@ -222,13 +224,6 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 			ParseResult pr = result;
 			QVector<ExpressionTreeBuildInstruction*> new_instructions = instructions;
 
-			// All missing inner tokens should have already been assumed to be trailing tokens.
-			// As soon as a new missing inner token is discovered, the corresponding trailing token count should be
-			// decreased
-			Q_ASSERT(pr.missingTrailingTokens >= index);
-			pr.missingTrailingTokens -= index;
-			pr.missingInnerTokens += index;
-
 			// Finish all intermediate positions
 			for (int i = 0; i<index; ++i)
 			{
@@ -245,9 +240,17 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 					// If the expectation is not one of the above then it must be either an end or a delimiter
 					new_instructions.append(fillMissingWithEmptyExpressions ?
 							(ExpressionTreeBuildInstruction*)new FinishOperator() : new LeaveUnfinished());
-					pr.numOperators++;
+					++pr.numOperators;
 				}
-				// Do nothing in case we are skipping over a delimiter.
+				else
+				{
+					// All missing inner tokens should have already been assumed to be trailing tokens.
+					// As soon as a new missing inner token is discovered, the corresponding trailing token count should be
+					// decreased
+					Q_ASSERT(pr.missingTrailingTokens >= 1);
+					--pr.missingTrailingTokens;
+					++pr.missingInnerTokens;
+				}
 			}
 
 			// Finish the actual delimiter
