@@ -45,6 +45,18 @@ GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, 
 	return persistentUnits_.insert(name, GenericPersistentUnit(this, name, data, dataSize)).value();
 }
 
+GenericPersistentUnit* GenericTree::persistentUnit(const QString& name)
+{
+	Q_ASSERT(!name.isEmpty());
+
+	QHash<QString, GenericPersistentUnit>::iterator iter = persistentUnits_.find(name);
+	if (iter != persistentUnits_.end())
+		return &iter.value();
+	else
+		return nullptr;
+}
+
+
 GenericNode* GenericTree::emptyChunk()
 {
 	if (emptyChunks_.isEmpty()) return new GenericNode[ALLOCATION_CHUNK_SIZE];
