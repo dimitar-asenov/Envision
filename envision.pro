@@ -18,6 +18,7 @@ SUBDIRS= Core \
 	SelfTest \
 	VisualizationBase \
 	CppImport \
-	Comments
+	Comments \
+	AlloyIntegration
 CONFIG+=debug_and_release
 CONFIG+=ordered

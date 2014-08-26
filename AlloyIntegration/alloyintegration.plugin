@@ -1,0 +1,14 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="alloyintegration" name="a Plugin that uses Alloy and code contracts to generate models of a data structure" version="1.0.0">
+	<dependencies>
+		<dependency pluginid="logger" version="0" />
+		<dependency pluginid="selftest" version="0" />
+		<dependency pluginid="modelbase" version="0" />
+		<dependency pluginid="oomodel" version="1" />
+		<dependency pluginid="visualizationbase" version="0" />
+		<dependency pluginid="interactionbase" version="1" />
+		<dependency pluginid="oovisualization" version="1" />
+		<dependency pluginid="oointeraction" version="1" />
+		<dependency pluginid="contractslibrary" version="1" />
+	</dependencies>
+</plugin>
