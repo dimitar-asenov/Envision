@@ -48,6 +48,7 @@
 
 using namespace OOModel;
 using namespace Visualization;
+using namespace Comments;
 
 namespace OOVisualization {
 
@@ -240,6 +241,21 @@ Module* addLambda()
 	mod->fields()->append(new Field("common",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
+	auto lambdaCommentNode = new CommentNode("This is the *Lambda*-Module. The following classes are available\n"
+														  " * IUnary\n"
+														  " * IBinary\n"
+														  " * INoReturn\n"
+														  " * LambdaTest\n"
+														  "Here you find some more information about **Classes**\n"
+														  "[table#someTable#2#1]\n");
+
+	auto aTable = new CommentTable(nullptr, "someTable", 2, 1);
+	aTable->setNodeAt(0, 0, new CommentNode("#english wikipedia"));
+	aTable->setNodeAt(1, 0, new CommentNode("[browser#http://en.wikipedia.org]"));
+	lambdaCommentNode->tables()->append(aTable);
+
+	mod->setComment(lambdaCommentNode);
+
 	auto iUnary = new Class("IUnary", Modifier::Public);
 	mod->classes()->append(iUnary);
 	auto unMet = new Method("op");
@@ -385,6 +401,31 @@ Method* addLongMethod(Class* parent)
 	FormalResult* result  = new FormalResult();
 	result->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	longMethod->results()->append(result);
+
+	auto resultComment = new CommentNode("**Nested tables example**\n"
+													 "[table#outerTable#2#2]");
+	result->setComment(resultComment);
+
+	auto InnerTableComment1 = new CommentNode("[table#innerTable1#2#1]");
+	auto InnerTableComment2 = new CommentNode("[table#innerTable2#2#1]");
+
+	auto outerTable = new CommentTable(nullptr, "outerTable", 2, 2);
+	outerTable->setNodeAt(0, 0, new CommentNode("###Inner Table 1"));
+	outerTable->setNodeAt(0, 1, new CommentNode("###Inner Table 2"));
+	outerTable->setNodeAt(1, 0, InnerTableComment1);
+	outerTable->setNodeAt(1, 1, InnerTableComment2);
+	resultComment->tables()->append(outerTable);
+
+	auto innerTable1 = new CommentTable(nullptr, "innerTable1", 2, 1);
+	innerTable1->setNodeAt(0, 0, new CommentNode("Class"));
+	innerTable1->setNodeAt(1, 0, new Class("SampleClass"));
+	InnerTableComment1->tables()->append(innerTable1);
+
+	auto innerTable2 = new CommentTable(nullptr, "innerTable2", 2, 1);
+	innerTable2->setNodeAt(0, 0, new CommentNode("Method"));
+	innerTable2->setNodeAt(1, 0, new Method("SampleMethod"));
+	InnerTableComment2->tables()->append(innerTable2);
+
 	FormalArgument* arg1 = new FormalArgument();
 	arg1->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	arg1->setName("x");
@@ -397,6 +438,13 @@ Method* addLongMethod(Class* parent)
 	arg3->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::FLOAT));
 	arg3->setName("epsilon");
 	longMethod->arguments()->append(arg3);
+
+	auto argumentCommentNode1 = new CommentNode("[image#styles/icon/globe.svg]");
+	arg1->setComment(argumentCommentNode1);
+	auto argumentCommentNode2 = new CommentNode("[image#styles/icon/pencil.svg]");
+	arg2->setComment(argumentCommentNode2);
+	auto argumentCommentNode3 = new CommentNode("[image#styles/icon/gurica_tree.svg]");
+	arg3->setComment(argumentCommentNode3);
 
 	auto var0 = new VariableDeclarationExpression("pSystem");
 	var0->decl()->setTypeExpression(new PointerTypeExpression(new ClassTypeExpression(
@@ -560,6 +608,21 @@ Method* addLongMethod(Class* parent)
 	col3Init->values()->append(new IntegerLiteral(7));
 	col3Init->values()->append(new IntegerLiteral(8));
 	col3Init->values()->append(new IntegerLiteral(9));
+
+	auto aCommentNode = new CommentNode("[table#aTable#3#3]");
+	var18->setComment(aCommentNode);
+
+	auto table = new CommentTable(nullptr, "aTable", 3, 3);
+	table->setNodeAt(0, 0, new CommentNode("#1"));
+	table->setNodeAt(0, 1, new CommentNode("#2"));
+	table->setNodeAt(0, 2, new CommentNode("#3"));
+	table->setNodeAt(1, 0, new CommentNode("#4"));
+	table->setNodeAt(1, 1, new CommentNode("#5"));
+	table->setNodeAt(1, 2, new CommentNode("#6"));
+	table->setNodeAt(2, 0, new CommentNode("#7"));
+	table->setNodeAt(2, 1, new CommentNode("#8"));
+	table->setNodeAt(2, 2, new CommentNode("#9"));
+	aCommentNode->tables()->append(table);
 
 	VariableDeclarationExpression* var19 = new VariableDeclarationExpression("var19");
 	longMethod->items()->append(new ExpressionStatement(var19));
@@ -756,13 +819,30 @@ Method* addFactorial(Class* parent)
 	auto factorial = new Method("factorial");
 	if (parent) parent->methods()->append(factorial);
 
+	auto factorialCommentNode = new CommentNode("This is an iterative implementation of a factorial function\n");
+
+	factorial->setComment(factorialCommentNode);
+
 	FormalResult* factorialResult = new FormalResult();
 	factorial->results()->append(factorialResult);
 	factorialResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+
+	factorialResult->setComment(new CommentNode("This is the result of the factorial function"));
+
 	FormalArgument* factorialArgument = new FormalArgument();
 	factorial->arguments()->append(factorialArgument);
 	factorialArgument->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	factorialArgument->setName("x");
+
+	auto factorialArgumentCommentNode = new CommentNode("Inline HTML to Browser\n"
+													"<html>\n"
+													"	<script type=\"text/javascript\">\n"
+													"		function hi() { alert(\"Hello World!\"); } \n"
+													"	</script>\n"
+													"	<button onclick=\"hi()\">Try it</button>\n"
+													"</html>");
+
+	factorialArgument->setComment(factorialArgumentCommentNode);
 
 	VariableDeclarationExpression* res = new VariableDeclarationExpression("result");
 	factorial->items()->append(new ExpressionStatement(res));

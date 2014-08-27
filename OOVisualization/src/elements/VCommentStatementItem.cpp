@@ -47,7 +47,7 @@ VCommentStatementItem::~VCommentStatementItem()
 
 void VCommentStatementItem::determineChildren()
 {
-	synchronizeItem(comment_, node()->comment());
+	synchronizeItem(comment_, node()->commentNode());
 }
 
 void VCommentStatementItem::updateGeometry(int availableWidth, int availableHeight)

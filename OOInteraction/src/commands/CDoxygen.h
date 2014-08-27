@@ -26,34 +26,21 @@
 
 #pragma once
 
-#include "comments_api.h"
+#include "../oointeraction_api.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
-#include "items/VCommentDiagramShape.h"
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
-namespace Comments {
+namespace OOInteraction {
 
-class COMMENTS_API HCommentDiagramShape : public Interaction::GenericHandler {
+class OOINTERACTION_API CDoxygen : public Interaction::CreateNamedObjectWithAttributes
+{
 	public:
-		static HCommentDiagramShape* instance();
-
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
-		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
-		virtual void hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
+		CDoxygen();
 
 	protected:
-		HCommentDiagramShape();
-
-	private:
-		enum VCommentDiagramResizeRect clickedRect_;
-		QPoint shapePosition_{};
-		QSize shapeSize_{};
-
-		void moveBy(VCommentDiagramShape* shape, QPoint pos);
-		void resizeBy(VCommentDiagramShape* shape, QSize pos);
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor,
+				const QString& name, const QStringList& attributes) override;
 };
 
 }

@@ -29,6 +29,7 @@
 #include "AttributeChain.h"
 #include "../Node.h"
 #include "../../ModelException.h"
+#include "../nodeMacros.h"
 
 namespace Model {
 
@@ -64,6 +65,8 @@ namespace Model {
 class MODELBASE_API CompositeNode: public Super<Node>
 {
 	DECLARE_TYPE_ID
+
+	ATTRIBUTE(Model::Node, comment, setComment)
 
 	public:
 		CompositeNode(Node *parent, AttributeChain& metaData);
@@ -137,11 +140,18 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		static CompositeIndex registerNewAttribute(AttributeChain& metaData, const Attribute& attribute);
 
+		static CompositeIndex registerNewAttribute(const Attribute& attribute);
+
 		virtual AttributeChain& topLevelMeta();
 
 	private:
 		AttributeChain& meta_;
 		QVector<QVector<Node*> > subnodes_;
+
+		static QList<QPair< CompositeIndex&, Attribute> >& attributesToRegisterAtInitialization_();
+		static CompositeIndex addAttributeToInitialRegistrationList_
+				(CompositeIndex& index, const QString &attributeName, const QString &attributeType,
+					bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
 
 		void removeAllNodes();
 		void verifyHasAllMandatoryAttributes();

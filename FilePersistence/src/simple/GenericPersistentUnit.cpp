@@ -106,29 +106,28 @@ const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 
 GenericNode* GenericPersistentUnit::find(Model::NodeIdType id) const
 {
-	int chunkSize = GenericTree::ALLOCATION_CHUNK_SIZE;
+	int numElementsInCurrentChunk = GenericTree::ALLOCATION_CHUNK_SIZE;
 	int currentChunk = 0;
 	for (auto chunk : chunks_)
 	{
 		if (currentChunk == chunks_.size() - 1)
-			chunkSize = lastNodeIndexInLastChunk_;
-		for (int j = 0; j < chunkSize; j++)
+			numElementsInCurrentChunk = lastNodeIndexInLastChunk_;
+		for (int j = 0; j < numElementsInCurrentChunk; ++j)
 			if (chunk[j].id() == id)
 				return &chunk[j];
-		currentChunk++;
+		++currentChunk;
 	}
 	return nullptr;
 }
 
 GenericNode* GenericPersistentUnit::unitRootNode() const
 {
-	if (chunks_.isEmpty())
-		return nullptr;
+	if (chunks_.isEmpty()) return nullptr;
 	else
 	{
 		GenericNode* current = &(chunks_.first()[0]);
-		while (current->parent_)
-			current = current->parent_;
+		while (current->parent() && current->parent()->persistentUnit() == this)
+			current = current->parent();
 		return current;
 	}
 }

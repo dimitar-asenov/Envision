@@ -42,6 +42,7 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		using FileGetterFunction = std::function<bool (QString filename, const char*& data, int& dataLength)>;
 		SimpleTextFileStore(const QString& baseDir = QString::null);
 		SimpleTextFileStore(FileGetterFunction fileGetter);
+		SimpleTextFileStore(GenericTree* externalTree);
 
 		virtual ~SimpleTextFileStore();
 
@@ -112,6 +113,9 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		GenericTree* genericTree_{};
 		GenericNode* genericNode_{};
+
+		// If the tree is external, only loading is supported and the tree will not be deleted.
+		GenericTree* externalTree_{};
 
 		/**
 		 * This is a list of all references which have been constructed and which have a target that is not yet set.

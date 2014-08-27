@@ -49,6 +49,7 @@ SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
 {}
 
 SimpleTextFileStore::SimpleTextFileStore(FileGetterFunction fileGetter) : fileGetter_{fileGetter} {}
+SimpleTextFileStore::SimpleTextFileStore(GenericTree* externalTree): externalTree_{externalTree} {}
 
 SimpleTextFileStore::~SimpleTextFileStore()
 {
@@ -59,12 +60,14 @@ SimpleTextFileStore* SimpleTextFileStore::clone() const
 {
 	auto ss = new SimpleTextFileStore();
 	ss->baseFolder_ = baseFolder_;
+	ss->externalTree_ = externalTree_;
 	return ss;
 }
 
 void SimpleTextFileStore::setBaseFolder(const QString& path)
 {
 	Q_ASSERT(!fileGetter_);
+	Q_ASSERT(!externalTree_);
 	baseFolder_ = path;
 }
 
@@ -93,6 +96,7 @@ void SimpleTextFileStore::saveTree(Model::TreeManager* manager, const QString &n
 	try
 	{
 		Q_ASSERT(!fileGetter_);
+		Q_ASSERT(!externalTree_);
 		if ( !baseFolder_.exists(name) )
 			if ( !baseFolder_.mkpath(name) )
 				throw FilePersistenceException("Could not create folder " + baseFolder_.path() + " for tree.");
@@ -213,13 +217,17 @@ Model::Node* SimpleTextFileStore::loadTree(Model::TreeManager* manager, const QS
 
 	try
 	{
-		if (!fileGetter_)
+		if (!externalTree_)
 		{
-			treeDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
-			if ( !treeDir_.exists() ) throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
-		}
+				if (!fileGetter_)
+				{
+					treeDir_ = baseFolder_.path() + QDir::toNativeSeparators("/" + name);
+					if ( !treeDir_.exists() )
+						throw FilePersistenceException("Can not find root node folder " + treeDir_.path());
+				}
 
-		genericTree_ = new GenericTree(name);
+				genericTree_ = new GenericTree(name);
+		}
 
 		ln = loadNewPersistenceUnit(name, nullptr, loadPartially);
 
@@ -256,7 +264,13 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 {
 	GenericNode* oldPersisted = genericNode_;
 
-	if (fileGetter_)
+	if (externalTree_)
+	{
+		auto pu = externalTree_->persistentUnit(name);
+		Q_ASSERT(pu);
+		genericNode_ = pu->unitRootNode();
+	}
+	else if (fileGetter_)
 	{
 		const char* data = nullptr;
 		int dataLength = 0;
@@ -270,9 +284,11 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 	else
 		genericNode_ = Parser::load(treeDir_.absoluteFilePath(name), true, genericTree_->newPersistentUnit(name));
 
+	Q_ASSERT(genericNode_);
+
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
-	genericTree_->remove(name);
+	if (!externalTree_) genericTree_->remove(name);
 	genericNode_ = oldPersisted;
 
 	return ln;

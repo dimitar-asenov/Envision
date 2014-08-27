@@ -30,6 +30,7 @@
 #include "../autocomplete/AutoComplete.h"
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
+#include "vis/CommentWrapper.h"
 #include "actions/Action.h"
 #include "actions/ActionPrompt.h"
 
@@ -45,6 +46,8 @@
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
+
+#include "Comments/src/nodes/CommentNode.h"
 
 namespace Interaction {
 
@@ -94,6 +97,8 @@ void GenericHandlerManagerListener::stopListeningToTreeManagerOf(Visualization::
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
 CommandPrompt* GenericHandler::commandPrompt_{};
 ActionPrompt* GenericHandler::actionPrompt_{};
+
+CommentWrapper* GenericHandler::commentWrapper_{};
 
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
@@ -154,6 +159,23 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 	{
 		removeCommandPrompt();
 		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
+	}
+}
+
+void GenericHandler::showComment(Visualization::Item *itemWithComment, Model::Node *aNode)
+{
+	if (commentWrapper_ && itemWithComment == commentWrapper_->itemWithComment())
+	{
+		if (commentWrapper_->isVisible())
+			commentWrapper_->hide();
+		else
+			commentWrapper_->showComment();
+	}
+	else
+	{
+		SAFE_DELETE_ITEM(commentWrapper_);
+		commentWrapper_ = new CommentWrapper(itemWithComment, aNode);
+		commentWrapper_->showComment();
 	}
 }
 
@@ -407,6 +429,89 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			else if (p->parent() && DCast<Visualization::RootItem>(p->parent()))
 				p->scene()->removeTopLevelItem(p->parent());
 		}
+	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F1)
+	{
+		auto aNode = target;
+		while (aNode)
+		{
+			auto aCompositeNode = DCast<Model::CompositeNode>(aNode->node());
+			if (aCompositeNode)
+			{
+				if (aCompositeNode->comment() == nullptr)
+				{
+					aCompositeNode->beginModification("add comment");
+					aCompositeNode->setComment(new Comments::CommentNode("Enter comment here"));
+					aCompositeNode->endModification();
+					aNode->updateSubtree();
+				}
+				if (!aNode->findVisualizationOf(aCompositeNode->comment()))
+					showComment(aNode, aCompositeNode->comment());
+				break;
+			}
+			aNode = aNode->parent();
+		}
+	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_F2)
+	{
+		auto aNode = target;
+		while (aNode)
+		{
+			auto aCompositeNode = DCast<Model::CompositeNode>(aNode->node());
+			if (aCompositeNode)
+			{
+				if (aCompositeNode->comment() != nullptr)
+				{
+					aCompositeNode->beginModification("delete comment");
+					aCompositeNode->setComment(nullptr);
+					aCompositeNode->endModification();
+				}
+				if (commentWrapper_)
+				{
+					GenericHandler::resetCommentWrapper();
+				}
+				break;
+			}
+			aNode = aNode->parent();
+		}
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F1)
+	{
+		bool allSelected = true;
+		auto scene = target->scene();
+
+		QList<Visualization::Item*> stack = scene->topLevelItems();
+
+		while (!stack.isEmpty())
+		{
+			auto i = stack.takeLast();
+			if (auto aCompositeNode = DCast<Model::CompositeNode>(i->node()))
+			{
+				if (aCompositeNode->comment() != nullptr && !i->findVisualizationOf(aCompositeNode->comment()))
+					allSelected = allSelected && i->isSelected();
+			}
+			stack.append(i->childItems());
+		}
+
+		scene->clearSelection();
+
+		if (!allSelected)
+		{
+			stack = scene->topLevelItems();
+
+			while (!stack.isEmpty())
+			{
+				auto i = stack.takeLast();
+				if (auto aCompositeNode = DCast<Model::CompositeNode>(i->node()))
+				{
+					if (aCompositeNode->comment() != nullptr && !i->findVisualizationOf(aCompositeNode->comment()))
+						i->setSelected(true);
+				}
+				stack.append(i->childItems());
+			}
+		}
+
+		scene->scheduleUpdate();
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
@@ -751,6 +856,11 @@ void GenericHandler::fixCursorPositionForUndoAfterTreeManagerChange()
 
 	cursorPositionsForUndo_.append(lastCursorPosition_);
 	++cursorUndoIndex_;
+}
+
+void GenericHandler::resetCommentWrapper()
+{
+	SAFE_DELETE_ITEM(commentWrapper_);
 }
 
 }

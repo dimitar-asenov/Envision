@@ -24,36 +24,41 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "commands/CDoxygen.h"
 
-#include "comments_api.h"
+#include "OOInteraction/src/DoxygenWholeTreeVisitor.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
-#include "items/VCommentDiagramShape.h"
+namespace OOInteraction {
 
-namespace Comments {
-
-class COMMENTS_API HCommentDiagramShape : public Interaction::GenericHandler {
-	public:
-		static HCommentDiagramShape* instance();
-
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
-		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-		virtual void hoverMoveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
-		virtual void hoverLeaveEvent(Visualization::Item *target, QGraphicsSceneHoverEvent *event) override;
-
-	protected:
-		HCommentDiagramShape();
-
-	private:
-		enum VCommentDiagramResizeRect clickedRect_;
-		QPoint shapePosition_{};
-		QSize shapeSize_{};
-
-		void moveBy(VCommentDiagramShape* shape, QPoint pos);
-		void resizeBy(VCommentDiagramShape* shape, QSize pos);
-};
-
+CDoxygen::CDoxygen() : CreateNamedObjectWithAttributes("doxygen",
+		{{}})
+{
 }
+
+Interaction::CommandResult* CDoxygen::executeNamed(Visualization::Item* source, Visualization::Item* /*target*/,
+	const std::unique_ptr<Visualization::Cursor>&, const QString& /*name*/, const QStringList& /*attributes*/)
+{
+	QDir dir(QDir::currentPath());
+	dir.mkpath("doxygen/html/images");
+
+	auto aDoxyVisitor = new OOInteraction::DoxygenWholeTreeVisitor();
+	QString valDoxy = aDoxyVisitor->visit(source->node()->root());
+	delete aDoxyVisitor;
+
+	QFile file(QDir::currentPath() + "/doxygen/doxy.cpp");
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&file);
+	out << valDoxy;
+	file.close();
+
+	QProcess aProcess;
+	aProcess.setWorkingDirectory(QDir::currentPath() + "/doxygen");
+	aProcess.start("doxygen");
+	aProcess.waitForFinished();
+
+	QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/doxygen/html/index.html"));
+
+	return new Interaction::CommandResult();
+}
+
+} /* namespace OOInteraction */

@@ -30,6 +30,9 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/items/RootItem.h"
+
 namespace Visualization {
 
 ModelRenderer::ModelRenderer()
@@ -256,6 +259,41 @@ int ModelRenderer::getCoarserSemanticZoomLevel(int currentSemanticZoomLevel)
 int ModelRenderer::getFinerSemanticZoomLevel(int currentSemanticZoomLevel)
 {
 	return szLevelOrderingManager_.getFinerSemanticZoomLevel(currentSemanticZoomLevel);
+}
+
+QImage ModelRenderer::renderToImage(Model::Node* aNode)
+{
+	auto aScene = new Scene();
+	auto anItem = new Visualization::RootItem(aNode);
+	aScene->addTopLevelItem(anItem);
+
+	aScene->updateNow();
+
+	QRectF r = anItem->boundingRect();
+	QImage image(r.width(), r.height(), QImage::Format_ARGB32);
+	image.fill(Qt::transparent);
+	QPainter pmapPainter(&image);
+	pmapPainter.setRenderHint(QPainter::Antialiasing);
+	aScene->render(&pmapPainter, QRectF(), anItem->sceneBoundingRect());
+
+	return image;
+}
+
+void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
+{
+	auto aScene = new Scene();
+	auto anItem = new Visualization::RootItem(aNode);
+	aScene->addTopLevelItem(anItem);
+
+	aScene->updateNow();
+
+	QSvgGenerator* svggen = new QSvgGenerator;
+	svggen->setFileName(path);
+	svggen->setResolution(90);
+	svggen->setSize(aScene->sceneRect().size().toSize());
+	QPainter svgPainter(svggen);
+	svgPainter.setRenderHint(QPainter::Antialiasing);
+	aScene->render(&svgPainter, QRectF(), anItem->sceneBoundingRect());
 }
 
 }

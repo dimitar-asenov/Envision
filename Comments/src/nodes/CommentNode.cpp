@@ -139,7 +139,6 @@ void CommentNode::synchronizeTablesToText()
 			{
 				tables()->at(i)->resize(mapRows.value(tables()->at(i)->name()), mapColumns.value(tables()->at(i)->name()));
 			}
-
 		}
 		else tables()->remove(i);
 	}
@@ -148,6 +147,5 @@ void CommentNode::synchronizeTablesToText()
 	for (auto newTable : tableNamesFromText)
 		tables()->append(new CommentTable(nullptr, newTable, mapRows.value(newTable), mapColumns.value(newTable)));
 }
-
 
 } /* namespace Comments */

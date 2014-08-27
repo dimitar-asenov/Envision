@@ -34,6 +34,6 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommentStatementItem)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommentStatementItem)
 
-REGISTER_ATTRIBUTE(CommentStatementItem, comment, CommentNode, false, false, true)
+REGISTER_ATTRIBUTE(CommentStatementItem, commentNode, CommentNode, false, false, true)
 
 }

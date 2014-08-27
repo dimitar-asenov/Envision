@@ -26,48 +26,24 @@
 
 #pragma once
 
-#include "../oovisualization_api.h"
-#include "VModuleStyle.h"
+#include "../interactionbase_api.h"
 
-#include "OOModel/src/declarations/Module.h"
+#include "GenericHandler.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+namespace Interaction {
 
-namespace Visualization {
-	class VText;
-	class VList;
-	class Static;
-}
-
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VModule
-: public Super<Visualization::ItemWithNode<VModule, Visualization::DeclarativeItem<VModule>, OOModel::Module>>
+class INTERACTIONBASE_API HCommentWrapper : public GenericHandler
 {
-	ITEM_COMMON(VModule)
-
 	public:
-		VModule(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-		virtual QColor customShapeColor() const override;
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+		virtual void afterEvent(Visualization::Item *target, QEvent* event) override;
+		static HCommentWrapper* instance();
 
 	protected:
-		virtual void determineChildren() override;
+		HCommentWrapper();
 
 	private:
-		Visualization::Static* icon_{};
-		Visualization::VText* name_{};
-
-		Visualization::VList* libraries_{};
-		Visualization::VList* declarations_{};
-		Visualization::VList* fields_{};
-
-		Item* comment_{};
-
-		mutable QColor color_{};
+		bool deleteAfterEvent = false;
 };
 
 }

@@ -108,6 +108,40 @@ Module* createContractsLibrary()
 	contractClassFor->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
 	std::unique_ptr<Position>(contractClassFor->extension<Position>())->set(0, 6);
 
+	Method* forAllCollection = new Method("ForAll", Modifier::Public | Modifier::Static);
+	contract->methods()->append(forAllCollection);
+	forAllCollection->typeArguments()->append( new FormalTypeArgument("T"));
+	forAllCollection->arguments()->append( new FormalArgument("collection",
+			OOExpressionBuilder::getOOExpression("IEnumerable<T>")) );
+	forAllCollection->arguments()->append( new FormalArgument("predicate",
+			OOExpressionBuilder::getOOExpression("Predicate<T>")) );
+	std::unique_ptr<Position>(forAllCollection->extension<Position>())->set(0, 7);
+
+	Method* forAllRange = new Method("ForAll", Modifier::Public | Modifier::Static);
+	contract->methods()->append(forAllRange);
+	forAllRange->arguments()->append( new FormalArgument("begin", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	forAllRange->arguments()->append( new FormalArgument("end", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	forAllRange->arguments()->append( new FormalArgument("predicate",
+			OOExpressionBuilder::getOOExpression("Predicate<int>")) );
+	std::unique_ptr<Position>(forAllRange->extension<Position>())->set(0, 8);
+
+	Method* existsCollection = new Method("Exists", Modifier::Public | Modifier::Static);
+	contract->methods()->append(existsCollection);
+	existsCollection->typeArguments()->append( new FormalTypeArgument("T"));
+	existsCollection->arguments()->append( new FormalArgument("collection",
+			OOExpressionBuilder::getOOExpression("IEnumerable<T>")) );
+	existsCollection->arguments()->append( new FormalArgument("predicate",
+			OOExpressionBuilder::getOOExpression("Predicate<T>")) );
+	std::unique_ptr<Position>(existsCollection->extension<Position>())->set(0, 9);
+
+	Method* existsRange = new Method("Exists", Modifier::Public | Modifier::Static);
+	contract->methods()->append(existsRange);
+	existsRange->arguments()->append( new FormalArgument("begin", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	existsRange->arguments()->append( new FormalArgument("end", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	existsRange->arguments()->append( new FormalArgument("predicate",
+			OOExpressionBuilder::getOOExpression("Predicate<int>")) );
+	std::unique_ptr<Position>(existsRange->extension<Position>())->set(0, 10);
+
 	// DO NOT DELETE THE COMMENTED CODE BELOW
 	// It can be used as a good example of how to do visualization groups with a condition.
 	// Plus it is a nice example of what code was substituted by just using annotations within the code.

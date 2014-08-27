@@ -48,6 +48,7 @@
 #include "commands/CCreateClass.h"
 #include "commands/CCreateMethod.h"
 #include "commands/CSceneHandlerItemTest.h"
+#include "commands/CDoxygen.h"
 
 #include "string_offset_providers/StringComponents.h"
 
@@ -75,6 +76,9 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/VisualizationManager.h"
+
+#include "OOInteraction/src/DoxygenWholeTreeVisitor.h"
+#include "OOInteraction/src/DoxygenCommentsOnlyVisitor.h"
 
 #include "Core/src/AdapterManager.h"
 
@@ -130,6 +134,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateMethod());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CDoxygen());
 
 	// Initialize customization support
 	auto customizationGroup = new Visualization::VisualizationGroup();
@@ -145,6 +150,9 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 
 	Visualization::VisualizationManager::instance().mainScene()->addRefreshActionFunction(
 			CustomizationVisitor::onSceneRefresh);
+
+	OOInteraction::DoxygenWholeTreeVisitor::init();
+	OOInteraction::DoxygenCommentsOnlyVisitor::init();
 
 	return true;
 }

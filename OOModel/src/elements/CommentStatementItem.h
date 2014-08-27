@@ -38,7 +38,7 @@ class OOMODEL_API CommentStatementItem : public Super<StatementItem>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentStatementItem)
 
-	ATTRIBUTE(Comments::CommentNode, comment, setComment)
+	ATTRIBUTE(Comments::CommentNode, commentNode, setCommentNode)
 };
 
 }
