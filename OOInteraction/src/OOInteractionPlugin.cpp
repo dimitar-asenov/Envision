@@ -84,6 +84,14 @@
 
 namespace OOInteraction {
 
+Logger::Log& log = OOInteractionPlugin::log();
+
+Logger::Log& OOInteractionPlugin::log()
+{
+	static auto log = Logger::Log::getLogger("oointeraction");
+	return *log;
+}
+
 bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 {
 	OOOperatorDescriptorList::initializeWithDefaultOperators();
