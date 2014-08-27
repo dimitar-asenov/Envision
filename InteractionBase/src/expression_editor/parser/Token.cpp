@@ -80,8 +80,21 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 			finalizeToken = next.isNull();
 			finalizeToken = finalizeToken
 					|| (first.isLetterOrNumber() || first == '_') != (next.isLetterOrNumber() || next == '_');
+
+			static constexpr int LOOK_AHEAD = 8;
+			// Check if any subset of the remaining characters can be matched to a complete token
+			bool nextMatch = false;
+			QString remaining;
+			for (int nextIndex = 1; nextIndex<=LOOK_AHEAD; ++nextIndex)
+			{
+				if (i + nextIndex >= input.size()) break;
+				remaining += input[i+nextIndex];
+				nextMatch = tokenExistsInOperators(token + remaining, ops);
+				if (nextMatch) break;
+			}
+
 			finalizeToken = finalizeToken
-					|| (!next.isLetterOrNumber() && !(next == '_') && !tokenExistsInOperators(token + next, ops));
+					|| (!next.isLetterOrNumber() && !(next == '_') && !nextMatch);
 		}
 
 		// Finalize the token if it's ready
