@@ -93,7 +93,9 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	// Together these two conditions are necessary to assure that the prunning to work correctly.
 	// The rest of this invariant is maintained in processExpectedOperatorDelimiters.
 	int numTokens = endTokens_ - token;
-	for (auto e : expected) if (e.type == ExpectedToken::DELIM) --numTokens;
+	for (auto e : expected)
+		if (e.type == ExpectedToken::FIRST_DELIM || e.type == ExpectedToken::FOLLOWING_DELIM)
+			--numTokens;
 	// Only count delimiters, since values/ids/types could be recorded in result.emptyExpressions
 
 	if (numTokens < 0)
@@ -173,6 +175,7 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 		else
 			++result.errors;
 		instructions.append( new AddErrorOperator(token->text()) );
+
 		if (!hasLeft) expected.insert(1, ExpectedToken(ExpectedToken::END));
 	}
 
@@ -216,9 +219,40 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 	for (int index = 0; index<expected.size(); ++index)
 	{
 		bool expectedIsEnd = expected.at(index).type == ExpectedToken::END;
-		bool expectedIsDelimiter = expected.at(index).type == ExpectedToken::DELIM;
+		bool expectedIsDelimiter = false;
 
-		if ( expectedIsDelimiter && firstUnseenDelimiter && expected.at(index).text == token->text())
+		bool tokensMatch = expected.at(index).text == token->text();
+
+		if (expected.at(index).type == ExpectedToken::FIRST_DELIM)
+		{
+			expectedIsDelimiter = true;
+
+			int nextIndex = index+1;
+			QVector<Token>::iterator nextToken = token + 1;
+			while (tokensMatch && nextIndex < expected.size()
+					&& expected.at(nextIndex).type == ExpectedToken::FOLLOWING_DELIM )
+			{
+				//Check if the following delimiters match
+				if (nextToken != endTokens_ && nextToken->type() == Token::OperatorDelimiter &&
+					 expected.at(nextIndex).text == nextToken->text())
+				{
+					++nextToken;
+					++nextIndex;
+				}
+				else tokensMatch = false;
+			}
+		}
+		else if (expected.at(index).type == ExpectedToken::FOLLOWING_DELIM)
+		{
+			expectedIsDelimiter = true;
+			//For this to be OK the previous instruction must have been SkipOperatorDelimiter
+			Q_ASSERT(!instructions.isEmpty());
+			if (dynamic_cast<AddOperator*>(instructions.last()) == nullptr &&
+				 dynamic_cast<SkipOperatorDelimiter*>(instructions.last()) == nullptr)
+				tokensMatch = false;
+		}
+
+		if ( expectedIsDelimiter && firstUnseenDelimiter && tokensMatch)
 		{
 			auto new_expected = expected;
 			ParseResult pr = result;
@@ -242,7 +276,7 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 							(ExpressionTreeBuildInstruction*)new FinishOperator() : new LeaveUnfinished());
 					++pr.numOperators;
 				}
-				else
+				else // The expectation is a delimiter.
 				{
 					// All missing inner tokens should have already been assumed to be trailing tokens.
 					// As soon as a new missing inner token is discovered, the corresponding trailing token count should be
@@ -284,7 +318,8 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<Ex
 		QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
 		QVector<ExpressionTreeBuildInstruction*>& instructions, ParseResult& bestParseSoFar)
 {
-	if (!expected.isEmpty() && expected.first().type == ExpectedToken::ID)
+	if (!expected.isEmpty() &&
+		 ( expected.first().type == ExpectedToken::ID || expected.first().type == ExpectedToken::FOLLOWING_DELIM))
 	{
 		error = true;
 	}
@@ -295,15 +330,24 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<Ex
 					|| expected.first().type == ExpectedToken::TYPE
 					|| expected.first().type == ExpectedToken::ANY);
 
+		QStringList allConsecutiveOperatorTokens = {token->text()};
+		QVector<Token>::iterator nextToken = token + 1;
+		while (nextToken != endTokens_ && nextToken->type() == Token::OperatorDelimiter)
+		{
+			allConsecutiveOperatorTokens.append(nextToken->text());
+			++nextToken;
+		}
+
+
 		QList<OperatorDescriptor*> matching_ops;
 		if (prefix) {
-			matching_ops.append( ops_->findByPrefix(token->text()) );
+			matching_ops.append( ops_->findByPrefix(allConsecutiveOperatorTokens) );
 		}
 		else {
 			if (hasLeft)
 			{
-				matching_ops.append( ops_->findByInfixWithoutPrefix(token->text()) );
-				matching_ops.append( ops_->findByPostfixWithoutPreInfix(token->text()) );
+				matching_ops.append( ops_->findByInfixWithoutPrefix(allConsecutiveOperatorTokens) );
+				matching_ops.append( ops_->findByPostfixWithoutPreInfix(allConsecutiveOperatorTokens) );
 			}
 			else
 			{

@@ -37,6 +37,7 @@ class INTERACTIONBASE_API OperatorDescriptor {
 
 		OperatorDescriptor();
 		OperatorDescriptor(const QString& name, const QString& signature, int precedence, Associativity associativity);
+		OperatorDescriptor(const QString& prefixText, const QString& postfixText); // Used for errors only.
 		virtual ~OperatorDescriptor();
 
 		// A transient operator descriptor is one that is created dynamically and is associated with a particular
@@ -50,16 +51,17 @@ class INTERACTIONBASE_API OperatorDescriptor {
 		int precedence();
 		Associativity associativity();
 		bool isTransient();
-		const QString& prefix();
-		const QStringList& infixes();
-		const QString& infix(int at);
-		const QString& postfix();
+		const QStringList& prefix() const;
+		const QList<QStringList>& infixes() const;
+		const QStringList& infix(int at) const;
+		const QStringList& postfix() const;
 
 		QStringList delimiters();
 
 		const QList<ExpectedToken>& expectedTokens() const;
 
 		static bool isDelimiter(const QString& str);
+		bool isDelimiter(int signatureIndex);
 
 	private:
 		QString name_;
@@ -71,11 +73,12 @@ class INTERACTIONBASE_API OperatorDescriptor {
 		QList<ExpectedToken> expectedTokens_;
 
 		// Based on the signature we precompute the prefix, infixes and postfix to speed up later processing
-		QString prefix_;
-		QStringList infixes_;
-		QString postfix_;
+		// These are lists where each token forming a prefix/infix/postfix is stored separately.
+		QStringList prefixTokens_;
+		QList<QStringList> infixesTokens_;
+		QStringList postfixTokens_;
 
-		void computeExpectedTokens();
+		bool isError_{};
 };
 
 inline void OperatorDescriptor::setTransient(bool transient) { transient_ = transient; }
@@ -86,10 +89,10 @@ inline int OperatorDescriptor::numOperands() { return num_operands_; }
 inline int OperatorDescriptor::precedence() { return precedence_; }
 inline OperatorDescriptor::Associativity OperatorDescriptor::associativity() { return associativity_; }
 inline bool OperatorDescriptor::isTransient() { return transient_; }
-inline const QString& OperatorDescriptor::prefix() { return prefix_; }
-inline const QStringList& OperatorDescriptor::infixes() { return infixes_; }
-inline const QString& OperatorDescriptor::infix(int at) { return infixes_.at(at); }
-inline const QString& OperatorDescriptor::postfix() { return postfix_; }
+inline const QStringList& OperatorDescriptor::prefix() const { return prefixTokens_; }
+inline const QList<QStringList>& OperatorDescriptor::infixes() const { return infixesTokens_; }
+inline const QStringList& OperatorDescriptor::infix(int at) const { return infixesTokens_.at(at); }
+inline const QStringList& OperatorDescriptor::postfix() const { return postfixTokens_; }
 inline const QList<ExpectedToken>& OperatorDescriptor::expectedTokens() const {return expectedTokens_;}
 
 inline bool OperatorDescriptor::isDelimiter(const QString& str)
