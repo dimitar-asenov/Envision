@@ -66,6 +66,8 @@ class FILEPERSISTENCE_API Commit
 		void setMetaData(CommitMetaData data);
 		CommitMetaData metaData() const;
 
+		QList<CommitFile*> files() const;
+
 		void addFile(QString relativePath, qint64 size, const char* content);
 		bool getFileContent(QString fileName, const char*& content, int& contentSize) const;
 
@@ -75,5 +77,7 @@ class FILEPERSISTENCE_API Commit
 		QHash<QString, CommitFile*> files_;
 
 };
+
+inline QList<CommitFile*> Commit::files() const { return files_.values(); }
 
 } /* namespace FilePersistence */
