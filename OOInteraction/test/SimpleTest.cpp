@@ -28,6 +28,10 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "expression_editor/OOExpressionBuilder.h"
+#include "../src/string_offset_providers/StringComponents.h"
+#include "../src/expression_editor/OOOperatorDescriptorList.h"
+
+#include "InteractionBase/src/expression_editor/OperatorDescriptor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -285,6 +289,96 @@ TEST(OOInteractionPlugin, SimpleTest)
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(top_level != nullptr);
+}
+
+TEST(OOInteractionPlugin, ExpressionParsingTest)
+{
+	// Try specific strings which have been problematic in the past
+	QStringList problematicStrings = {"x<>", "\\x ", "@@@@", "new [", "+=", "\\)", "new# "};
+	for (auto expressionString : problematicStrings)
+	{
+		auto expression = OOExpressionBuilder::getOOExpression(expressionString);
+		CHECK_CONDITION(expression);
+		CHECK_STR_EQUAL(expressionString, StringComponents::stringForNode(expression));
+		SAFE_DELETE(expression);
+	}
+
+	// Start with a list of some unused characters, together with a few variables and the empty space
+	QStringList operatorTokens{" ", "SPACE", "#", "_", "x", "5"};
+
+	// Add all keywords and symbols from operator signatures.
+	for (int i = 0; i< OOOperatorDescriptorList::instance()->size(); ++i)
+	{
+		auto descriptor = OOOperatorDescriptorList::instance()->at(i);
+		for (auto signatureElement : descriptor->signature())
+		{
+			Q_ASSERT(!signatureElement.isEmpty());
+
+			if (signatureElement[0].isLetter())
+			{
+				if (!operatorTokens.contains(signatureElement)) operatorTokens << signatureElement;
+			}
+			else
+				for (int j = 0; j < signatureElement.size(); ++j)
+					if (!operatorTokens.contains(QString{signatureElement[j]}))
+						operatorTokens << QString{signatureElement[j]};
+		}
+	}
+
+	// NOTE: Here we overwrite the list above, with a shorter version to speed up checking.
+	// The list below was created by printing the list above and carefully removing operators which are analogous in
+	// behavior (see the definitions in OOOOperatorDescriptorList.cpp)
+	operatorTokens = QStringList{" ", "SPACE", "#", "_", "x", "5", "+", "expr", "!", "~", "(", "typeOrExpr", ")", "*",
+							"&", "<", "-", ">", "=", "[", "]", "?", ":", "int", "type", "this", "auto", "null",
+							"true", ",", "{", "}", "new", "delete", ".", "id", "const", "throw", "sizeof", "\\", "@"};
+
+	// Generate all possible sequences of length up to MAX_SEQUENCE_LENGTH and test that each one is correctly
+	// parsed
+	constexpr int MAX_SEQUENCE_LENGTH = 4;
+	int indices[MAX_SEQUENCE_LENGTH];
+
+	long totalCombinations = 1;
+	for (int maxLenghtThisLoop = 1; maxLenghtThisLoop <= MAX_SEQUENCE_LENGTH; ++maxLenghtThisLoop )
+	{
+		totalCombinations *= operatorTokens.size();
+		log.info("Testing parsing of sequences of length " + QString::number(maxLenghtThisLoop));
+
+		for (int i = 0; i<maxLenghtThisLoop; ++i) indices[i] = 0;
+
+		QString testString;
+		long count = 0;
+		while (true)
+		{
+			// Test the current combination
+			testString.clear();
+			for (int i = 0; i<maxLenghtThisLoop; ++i) testString.append(operatorTokens[indices[i]]);
+			auto expression = OOExpressionBuilder::getOOExpression(testString);
+			CHECK_CONDITION(expression);
+			CHECK_STR_EQUAL(testString, StringComponents::stringForNode(expression));
+			SAFE_DELETE(expression);
+
+			//Advance counter
+			bool carry = true;
+			for (int i = maxLenghtThisLoop-1; carry && i>=0; --i)
+			{
+				++indices[i];
+				if (indices[i] == operatorTokens.size())
+				{
+					indices[i] = 0;
+					carry = true;
+				}
+				else carry = false;
+			}
+
+			if (carry || ++count % 10000 == 0)
+				log.info("Length: " + QString::number(maxLenghtThisLoop) + " done: " +QString::number(count)
+							 + " total: " +QString::number(totalCombinations));
+
+			if (carry) break;
+		}
+	}
+
+	CHECK_CONDITION(true);
 }
 
 }
