@@ -294,7 +294,7 @@ TEST(OOInteractionPlugin, SimpleTest)
 TEST(OOInteractionPlugin, ExpressionParsingTest)
 {
 	// Try specific strings which have been problematic in the past
-	QStringList problematicStrings = {"x<>", "\\x ", "@@@@", "new [", "+=", "\\)", "new# "};
+	QStringList problematicStrings = {"SPACE<(> ", "x<>", "\\x ", "@@@@", "new [", "+=", "\\)", "new# "};
 	for (auto expressionString : problematicStrings)
 	{
 		auto expression = OOExpressionBuilder::getOOExpression(expressionString);
@@ -334,7 +334,7 @@ TEST(OOInteractionPlugin, ExpressionParsingTest)
 
 	// Generate all possible sequences of length up to MAX_SEQUENCE_LENGTH and test that each one is correctly
 	// parsed
-	constexpr int MAX_SEQUENCE_LENGTH = 4;
+	constexpr int MAX_SEQUENCE_LENGTH = 5;
 	int indices[MAX_SEQUENCE_LENGTH];
 
 	long totalCombinations = 1;
