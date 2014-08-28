@@ -278,11 +278,10 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 				}
 				else // The expectation is a delimiter.
 				{
-					// All missing inner tokens should have already been assumed to be trailing tokens.
+					// A missing inner token could have already been assumed to be a trailing token.
 					// As soon as a new missing inner token is discovered, the corresponding trailing token count should be
 					// decreased
-					Q_ASSERT(pr.missingTrailingTokens >= 1);
-					--pr.missingTrailingTokens;
+					if (pr.missingTrailingTokens >= 1) --pr.missingTrailingTokens;
 					++pr.missingInnerTokens;
 				}
 			}
