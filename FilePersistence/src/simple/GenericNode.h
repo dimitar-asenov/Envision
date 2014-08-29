@@ -52,6 +52,7 @@ class FILEPERSISTENCE_API GenericNode {
 
 		void setParent(GenericNode* parent);
 		GenericNode* addChild(GenericNode* child);
+		void removeChild(GenericNode* child);
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
 		GenericNode* parent() const;

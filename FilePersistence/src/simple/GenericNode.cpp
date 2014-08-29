@@ -134,6 +134,11 @@ GenericNode* GenericNode::addChild(GenericNode* child)
 	return child;
 }
 
+void GenericNode::removeChild(GenericNode* child)
+{
+	children_.removeOne(child);
+}
+
 GenericNode* GenericNode::find(Model::NodeIdType id)
 {
 	ensureDataRead();
