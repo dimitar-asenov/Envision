@@ -45,7 +45,7 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		GenericNode* newNode();
 		GenericNode* newNode(int lineStart, int lineEndEnclusive);
 		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy);
+		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
 
 		/**
 		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be

@@ -85,11 +85,19 @@ GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
 	return node;
 }
 
-GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy)
+GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool deepCopy)
 {
-	Q_ASSERT(!data_);
 	auto node = nextNode();
 	node->reset(this, nodeToCopy);
+	if (deepCopy)
+	{
+		for (auto childToCopy : nodeToCopy->children())
+		{
+				auto child = newNode(childToCopy, true);
+				child->setParent(node);
+				node->addChild(child);
+		}
+	}
 	return node;
 }
 
