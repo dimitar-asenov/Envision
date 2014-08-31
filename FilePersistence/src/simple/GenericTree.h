@@ -47,7 +47,7 @@ class FILEPERSISTENCE_API GenericTree {
 		GenericPersistentUnit& newPersistentUnit(QString name, char* data = nullptr, int dataSize = 0);
 		GenericPersistentUnit* persistentUnit(const QString& name);
 
-		GenericNode* find(Model::NodeIdType id) const;
+		GenericNode* find(Model::NodeIdType id, const QString persistentUnitGuess = QString());
 
 	private:
 		friend class GenericPersistentUnit;
