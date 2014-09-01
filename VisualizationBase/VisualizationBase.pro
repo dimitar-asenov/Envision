@@ -11,7 +11,6 @@ QT += xml \
     printsupport
 HEADERS += src/overlays/Overlay.h \
     src/overlays/OverlayGroup.h \
-    src/Highlight.h \
     src/items/EmptyItem.h \
     src/items/VUsedLibraryStyle.h \
     src/items/VUsedLibrary.h \
@@ -124,7 +123,6 @@ HEADERS += src/overlays/Overlay.h \
     src/declarative/DynamicGridFormElement.h
 SOURCES += src/overlays/Overlay.cpp \
     src/overlays/OverlayGroup.cpp \
-    src/Highlight.cpp \
     src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \

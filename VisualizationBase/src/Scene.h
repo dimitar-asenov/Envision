@@ -27,7 +27,6 @@
 #pragma once
 
 #include "visualizationbase_api.h"
-#include "Highlight.h"
 #include "overlays/OverlayGroup.h"
 
 namespace Model {
@@ -141,11 +140,6 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		 */
 		static QList<Scene*>& allScenes();
 
-		Highlight* addHighlight(const QString& name, const QString& style);
-		Highlight* highlight(const QString& name);
-		void removeHighlight(const QString& name);
-		void removeFromHighlights(Item* itemToRemove, const QString& highlightName = QString());
-
 		OverlayGroup* addOverlayGroup(const QString& name);
 		OverlayGroup* overlayGroup(const QString& name);
 		void removeOverlayGroup(const QString& name);
@@ -173,7 +167,6 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
 		NameOverlay* nameOverlay_{};
-		QHash<QString, Highlight> highlights_;
 		QHash<QString, OverlayGroup> overlayGroups_;
 
 		Cursor* mainCursor_{};

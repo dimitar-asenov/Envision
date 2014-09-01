@@ -33,6 +33,10 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
+namespace Visualization {
+	class SelectedItem;
+}
+
 namespace Interaction {
 class Action;
 

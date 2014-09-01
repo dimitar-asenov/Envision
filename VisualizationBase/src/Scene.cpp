@@ -83,7 +83,6 @@ Scene::~Scene()
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
-	highlights_.clear();
 	overlayGroups_.clear();
 	while (!topLevelItems_.isEmpty())
 		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
@@ -157,10 +156,6 @@ void Scene::updateNow()
 		item->updateSubtree();
 
 	Core::Profiler::stop("Initial item update");
-
-	// Update highlighted items
-	for (auto it = highlights_.begin(); it != highlights_.end(); ++it)
-		it.value().updateAllHighlights();
 
 	// Update overlay groups (selections are handled as a dynamic group)
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
@@ -479,33 +474,6 @@ void Scene::setCurrentPaintView(View* view)
 {
 	Q_ASSERT((view != nullptr) != (currentPaintView_ != nullptr));
 	currentPaintView_ = view;
-}
-
-Highlight* Scene::addHighlight(const QString& name, const QString& style)
-{
-	Q_ASSERT(!name.isEmpty());
-	Q_ASSERT(!highlights_.contains(name));
-	scheduleUpdate();
-	return &highlights_.insert(name, Highlight(this, name, style)).value();
-}
-
-Highlight* Scene::highlight(const QString& name)
-{
-	auto h = highlights_.find(name);
-	if (h == highlights_.end()) return nullptr;
-	else return &h.value();
-}
-
-void Scene::removeHighlight(const QString& name)
-{
-	if ( highlights_.remove(name) ) scheduleUpdate();
-}
-
-void Scene::removeFromHighlights(Item* itemToRemove, const QString& highlightName)
-{
-	for (auto it = highlights_.begin(); it != highlights_.end(); ++it)
-		if (highlightName.isEmpty() || it.key() == highlightName)
-			it.value().removeHighlightedItem(itemToRemove);
 }
 
 OverlayGroup* Scene::addOverlayGroup(const QString& name)
