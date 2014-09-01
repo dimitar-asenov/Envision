@@ -34,7 +34,7 @@
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
-	class SelectedItem;
+	class SelectionOverlay;
 }
 
 namespace Interaction {
@@ -73,7 +73,7 @@ class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Declarative
 		Visualization::Text* nodeTypeName_{};
 		Visualization::Text* actionText_{};
 
-		Visualization::SelectedItem* highlight_{};
+		Visualization::SelectionOverlay* highlight_{};
 
 		QPoint receiverCursorPosition_;
 

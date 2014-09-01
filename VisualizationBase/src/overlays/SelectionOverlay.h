@@ -27,17 +27,17 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "ItemStyle.h"
+#include "../items/ItemStyle.h"
 #include "../overlays/Overlay.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SelectedItem: public Super<Overlay>
+class VISUALIZATIONBASE_API SelectionOverlay: public Super<Overlay>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(SelectedItem, ItemStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(SelectionOverlay, ItemStyle)
 
 	public:
-		SelectedItem(Item* selectedItem, const StyleType* style = itemStyles().get());
+		SelectionOverlay(Item* selectedItem, const StyleType* style = itemStyles().get());
 
 	protected:
 		virtual void determineChildren();

@@ -24,18 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/SelectedItem.h"
+#include "SelectionOverlay.h"
 #include "shapes/Shape.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SelectedItem, "item")
+ITEM_COMMON_DEFINITIONS(SelectionOverlay, "item")
 
-SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) : Super{{selectedItem}, style} {}
+SelectionOverlay::SelectionOverlay(Item* selectedItem, const StyleType* style) : Super{{selectedItem}, style} {}
 
-void SelectedItem::determineChildren(){}
+void SelectionOverlay::determineChildren(){}
 
-void SelectedItem::updateGeometry(int, int)
+void SelectionOverlay::updateGeometry(int, int)
 {
 	if (hasShape())
 	{

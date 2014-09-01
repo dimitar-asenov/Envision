@@ -28,10 +28,10 @@
 #include "VisualizationManager.h"
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
-#include "items/SelectedItem.h"
 #include "items/NameOverlay.h"
 #include "items/RootItem.h"
 #include "overlays/Overlay.h"
+#include "overlays/SelectionOverlay.h"
 #include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
@@ -74,7 +74,7 @@ Scene::Scene()
 	allScenes().append(this);
 
 	auto selectionGroup = addOverlayGroup("User Selected Items");
-	selectionGroup->setOverlayConstructor1Arg([](Item* item){return new SelectedItem(item);});
+	selectionGroup->setOverlayConstructor1Arg([](Item* item){return new SelectionOverlay(item);});
 	selectionGroup->setDynamic1Item([this](){return itemsThatShouldHaveASelection();});
 }
 

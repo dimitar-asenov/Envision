@@ -9,7 +9,8 @@ LIBS += -llpsolve55
 QT += xml \
     svg \
     printsupport
-HEADERS += src/overlays/Overlay.h \
+HEADERS += src/overlays/SelectionOverlay.h \
+    src/overlays/Overlay.h \
     src/overlays/OverlayGroup.h \
     src/items/EmptyItem.h \
     src/items/VUsedLibraryStyle.h \
@@ -71,7 +72,6 @@ HEADERS += src/overlays/Overlay.h \
     src/items/LayoutProvider.h \
     src/items/LayoutProviderBase.h \
     src/items/SceneHandlerItem.h \
-    src/items/SelectedItem.h \
     src/items/Static.h \
     src/items/StaticStyle.h \
     src/items/Symbol.h \
@@ -121,7 +121,8 @@ HEADERS += src/overlays/Overlay.h \
     src/VisualizationBasePlugin.h \
     src/declarative/GridLayouter.h \
     src/declarative/DynamicGridFormElement.h
-SOURCES += src/overlays/Overlay.cpp \
+SOURCES += src/overlays/SelectionOverlay.cpp \
+    src/overlays/Overlay.cpp \
     src/overlays/OverlayGroup.cpp \
     src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
@@ -185,7 +186,6 @@ SOURCES += src/overlays/Overlay.cpp \
     src/layouts/PositionLayoutStyle.cpp \
     src/layouts/PositionLayout.cpp \
     src/node_extensions/Position.cpp \
-    src/items/SelectedItem.cpp \
     src/items/SceneHandlerItem.cpp \
     src/items/TextRenderer.cpp \
     src/InteractionHandler.cpp \

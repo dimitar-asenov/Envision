@@ -29,7 +29,7 @@
 #include "Action.h"
 
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/items/SelectedItem.h"
+#include "VisualizationBase/src/overlays/SelectionOverlay.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
@@ -112,7 +112,7 @@ void ActionPrompt::setHighlight(bool show)
 		if (highlight_) highlight_->setItems({currentActionReceiver_});
 		else
 		{
-			highlight_ = new Visualization::SelectedItem(currentActionReceiver_);
+			highlight_ = new Visualization::SelectionOverlay(currentActionReceiver_);
 			Q_ASSERT(scene());
 			scene()->addTopLevelItem(highlight_);
 		}
