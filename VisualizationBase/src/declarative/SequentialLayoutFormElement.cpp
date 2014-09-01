@@ -270,7 +270,7 @@ int SequentialLayoutFormElement::spaceBetweenElements(Item* item)
 
 void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes)
 {
-	item->synchronizeCollections(nodes, dataForItem(item).items_,
+	Visualization::Item::synchronizeCollections(item, nodes, dataForItem(item).items_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node){return parent->renderer()->render(parent, node);},
 		[](Item* parent, Model::Node* node, Item*& item){return parent->renderer()->sync(item, parent, node);});
@@ -278,7 +278,7 @@ void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<M
 
 void SequentialLayoutFormElement::synchronizeWithItems(Item* item, const QList<Item*>& items)
 {
-	item->synchronizeCollections(items, dataForItem(item).items_,
+	Visualization::Item::synchronizeCollections(item, items, dataForItem(item).items_,
 		[](Item* newItem, Item* oldItem){return newItem == oldItem;},
 		[](Item*, Item* newItem){return newItem;},
 		[](Item*, Item*, Item*&){return false;});
