@@ -109,7 +109,7 @@ void ActionPrompt::setHighlight(bool show)
 {
 	if (show && currentActionReceiver_)
 	{
-		if (highlight_) highlight_->setSelectedItem(currentActionReceiver_);
+		if (highlight_) highlight_->setItems({currentActionReceiver_});
 		else
 		{
 			highlight_ = new Visualization::SelectedItem(currentActionReceiver_);

@@ -28,31 +28,20 @@
 
 #include "../visualizationbase_api.h"
 #include "ItemStyle.h"
-
-#include "Item.h"
+#include "../overlays/Overlay.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SelectedItem: public Super<Item>
+class VISUALIZATIONBASE_API SelectedItem: public Super<Overlay>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(SelectedItem, ItemStyle)
 
 	public:
 		SelectedItem(Item* selectedItem, const StyleType* style = itemStyles().get());
-		virtual ~SelectedItem();
-
-		virtual UpdateType needsUpdate() override;
-		Item* selectedItem();
-		void setSelectedItem(Item* item);
 
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		Item* selectedItem_;
 };
-
-inline Item* SelectedItem::selectedItem() { return selectedItem_; }
 
 }

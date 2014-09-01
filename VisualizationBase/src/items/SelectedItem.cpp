@@ -31,43 +31,18 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(SelectedItem, "item")
 
-SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
-Super(nullptr, style), selectedItem_(selectedItem)
-{
-	setFlags(0);
-	setAcceptedMouseButtons(0);
-	setZValue(LAYER_SELECTION_Z);
-	setItemCategory(Scene::SelectionItemCategory);
-}
+SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) : Super{{selectedItem}, style} {}
 
-SelectedItem::~SelectedItem()
-{
-	selectedItem_ = nullptr;
-}
-
-void SelectedItem::setSelectedItem(Item* item)
-{
-	selectedItem_ = item;
-}
-
-Item::UpdateType SelectedItem::needsUpdate()
-{
-	return StandardUpdate;
-}
-
-void SelectedItem::determineChildren()
-{
-
-}
+void SelectedItem::determineChildren(){}
 
 void SelectedItem::updateGeometry(int, int)
 {
 	if (hasShape())
 	{
-		getShape()->setInnerSize(selectedItem_->widthInScene(), selectedItem_->heightInScene());
+		getShape()->setInnerSize(item()->widthInScene(), item()->heightInScene());
 		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
 
-		setPos(selectedItem_->mapToScene(0, 0) - pos);
+		setPos(item()->mapToScene(0, 0) - pos);
 	}
 }
 

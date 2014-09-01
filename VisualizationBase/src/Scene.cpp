@@ -31,6 +31,7 @@
 #include "items/SelectedItem.h"
 #include "items/NameOverlay.h"
 #include "items/RootItem.h"
+#include "overlays/Overlay.h"
 #include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
@@ -71,6 +72,10 @@ Scene::Scene()
 
 	initialized_ = true;
 	allScenes().append(this);
+
+	auto selectionGroup = addOverlayGroup("User Selected Items");
+	selectionGroup->setOverlayConstructor1Arg([](Item* item){return new SelectedItem(item);});
+	selectionGroup->setDynamic1Item([this](){return itemsThatShouldHaveASelection();});
 }
 
 Scene::~Scene()
@@ -79,10 +84,9 @@ Scene::~Scene()
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
 	highlights_.clear();
+	overlayGroups_.clear();
 	while (!topLevelItems_.isEmpty())
 		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
-	while (!selections_.isEmpty())
-		SAFE_DELETE_ITEM(selections_.takeLast());
 
 	SAFE_DELETE_ITEM(nameOverlay_);
 
@@ -154,57 +158,13 @@ void Scene::updateNow()
 
 	Core::Profiler::stop("Initial item update");
 
-	// Update Selections
-	auto selected = selectedItems();
-
-	// Only display a selection when there are multiple selected items or no cursor
-	bool draw_selections = selected.size() !=1 || mainCursor_ == nullptr || mainCursor_->visualization() == nullptr;
-
-	if (!draw_selections)
-	{
-		// There is exactly one item and it has a cursor visualization
-		auto selectable = mainCursor_->owner();
-		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
-			selectable = selectable->parent();
-
-		draw_selections = !selectable || selectable != selected.first();
-	}
-
-	int numSelectionItems = 0;
-	auto selectionsIt = selections_.begin();
-	auto selectionsInitialSize = selections_.size();
-	if (draw_selections && !(selected.size() == 1 && selected.first() == sceneHandlerItem_))
-	{
-		for (auto selectedItem : selected)
-		{
-			if (numSelectionItems < selectionsInitialSize)
-			{
-				auto selectionMarker = *selectionsIt;
-				selectionMarker->setSelectedItem(selectedItem);
-				selectionMarker->updateSubtree();
-				++selectionsIt;
-			}
-			else
-			{
-				auto selectionMarker = new SelectedItem(selectedItem);
-				selectionMarker->updateSubtree();
-				selections_.append(selectionMarker);
-				addItem(selectionMarker);
-			}
-
-			++numSelectionItems;
-		}
-	}
-
-	while (numSelectionItems < selectionsInitialSize)
-	{
-		SAFE_DELETE_ITEM(selections_.takeLast());
-		--selectionsInitialSize;
-	}
-
 	// Update highlighted items
 	for (auto it = highlights_.begin(); it != highlights_.end(); ++it)
 		it.value().updateAllHighlights();
+
+	// Update overlay groups (selections are handled as a dynamic group)
+	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
+			it.value().update();
 
 	// Update the main cursor
 	if (mainCursor_ && mainCursor_->visualization())
@@ -220,6 +180,29 @@ void Scene::updateNow()
 	updateTimer->tick();
 	needsUpdate_ = false;
 	inAnUpdate_ = false;
+}
+
+QList<Item*> Scene::itemsThatShouldHaveASelection()
+{
+	auto selected = selectedItems();
+
+	// Only display a selection when there are multiple selected items or no cursor
+	bool draw_selections = selected.size() !=1 || mainCursor_ == nullptr || mainCursor_->visualization() == nullptr;
+
+	if (!draw_selections)
+	{
+		// There is exactly one item and it has a cursor visualization
+		auto selectable = mainCursor_->owner();
+		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
+			selectable = selectable->parent();
+
+		draw_selections = !selectable || selectable != selected.first();
+	}
+
+	draw_selections = draw_selections && !(selected.size() == 1 && selected.first() == sceneHandlerItem_);
+
+	if (!draw_selections) selected.clear();
+	return selected;
 }
 
 void Scene::listenToTreeManager(Model::TreeManager* manager)
@@ -523,6 +506,39 @@ void Scene::removeFromHighlights(Item* itemToRemove, const QString& highlightNam
 	for (auto it = highlights_.begin(); it != highlights_.end(); ++it)
 		if (highlightName.isEmpty() || it.key() == highlightName)
 			it.value().removeHighlightedItem(itemToRemove);
+}
+
+OverlayGroup* Scene::addOverlayGroup(const QString& name)
+{
+	Q_ASSERT(!name.isEmpty());
+	Q_ASSERT(!overlayGroups_.contains(name));
+	scheduleUpdate();
+	return &overlayGroups_.insert(name, OverlayGroup(this, name)).value();
+}
+
+OverlayGroup* Scene::overlayGroup(const QString& name)
+{
+	auto h = overlayGroups_.find(name);
+	if (h == overlayGroups_.end()) return nullptr;
+	else return &h.value();
+}
+
+void Scene::removeOverlayGroup(const QString& name)
+{
+	if ( overlayGroups_.remove(name) ) scheduleUpdate();
+}
+
+void Scene::removeOverlayGroup(OverlayGroup* group)
+{
+	Q_ASSERT(group);
+	removeOverlayGroup(group->name());
+}
+
+void Scene::removeFromOverlayGroup(Item* itemWithOverlay, const QString& groupName)
+{
+	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
+		if (groupName.isEmpty() || it.key() == groupName)
+			it.value().removeOverlayOf(itemWithOverlay);
 }
 
 }
