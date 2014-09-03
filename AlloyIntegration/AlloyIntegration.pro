@@ -15,7 +15,13 @@ win32:LIBS += -llogger \
 HEADERS += src/precompiled.h \
     src/AlloyIntegrationException.h \
 	src/alloyintegration_api.h \
-    src/AlloyIntegrationPlugin.h
+    src/AlloyIntegrationPlugin.h \
+    src/commands/CAlloy.h \
+    src/visitors/AlloyVisitor.h \
+    src/exporter/AlloyExporter.h
 SOURCES += src/AlloyIntegrationException.cpp \
 	src/AlloyIntegrationPlugin.cpp \
-	test/SimpleTest.cpp
+	test/SimpleTest.cpp \
+    src/commands/CAlloy.cpp \
+    src/visitors/AlloyVisitor.cpp \
+    src/exporter/AlloyExporter.cpp

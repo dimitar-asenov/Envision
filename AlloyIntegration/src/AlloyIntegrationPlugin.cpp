@@ -27,10 +27,19 @@
 #include "AlloyIntegrationPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "commands/CAlloy.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+
+#include "visitors/AlloyVisitor.h"
+
 namespace Alloy {
 
 bool AlloyIntegrationPlugin::initialize(Core::EnvisionManager&)
 {
+    Interaction::HSceneHandlerItem::instance()->addCommand(new CAlloy());
+
+    Alloy::AlloyVisitor::init();
+
 	return true;
 }
 

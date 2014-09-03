@@ -23,52 +23,32 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "AlloyExporter.h"
 
-#include "AlloyIntegrationPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
-
-#include "ModelBase/src/model/TreeManager.h"
-
-#include "OOModel/src/allOOModelNodes.h"
-
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "VisualizationBase/src/items/RootItem.h"
-
-#include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
-
-using namespace Visualization;
-using namespace OOModel;
-using namespace OOInteraction;
+#include "Export/src/writer/Exporter.h"
+#include "Export/src/writer/FragmentLayouter.h"
+#include "Export/src/tree/SourceDir.h"
+#include "Export/src/tree/SourceFragment.h"
+#include "visitors/AlloyVisitor.h"
 
 namespace Alloy {
 
-TEST(AlloyIntegrationPlugin, AlloyTest)
+void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 {
-    CHECK_INT_EQUAL(1, 1);
-    auto aLinkedList = new Class("LinkedList");
+    auto dir = new Export::SourceDir(nullptr, path);
+    dir->subDir("output");
 
-    auto aNode = new Class("Node");
-    aLinkedList->classes()->append(aNode);
+    auto file = &dir->file("model.als");
+    auto anAlloyVisitor = new AlloyVisitor();
+    file->append(anAlloyVisitor->visit(aNode));
+    delete anAlloyVisitor;
 
-    auto *rootNode = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
-    aLinkedList->fields()->append(rootNode);
-    auto *nextNode = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
-    aNode->fields()->append(nextNode);
+    file->append(aNode, "pred show() {}\n");
+    file->append(aNode, "run show for 2");
 
-    auto invariantMethodLinkedList = new Method("ObjectInvariant");
-    aLinkedList->methods()->append(invariantMethodLinkedList);
+	auto layouter = Export::FragmentLayouter{"\t"};
 
-    auto invariantMethodNode = new Method("ObjectInvariant");
-    aNode->methods()->append(invariantMethodNode);
-
-    invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-            "Contract.Invariant(next!=this)")));
-
-    auto manager = new Model::TreeManager(aLinkedList);
-
-    VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(aLinkedList));
-
-    VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+    Export::Exporter::exportToFileSystem(path, dir, &layouter);
 }
 
-}
+} /* namespace Alloy */

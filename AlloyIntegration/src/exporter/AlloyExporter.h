@@ -24,51 +24,17 @@
  **
  **********************************************************************************************************************/
 
-#include "AlloyIntegrationPlugin.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#pragma once
 
-#include "ModelBase/src/model/TreeManager.h"
-
-#include "OOModel/src/allOOModelNodes.h"
-
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "VisualizationBase/src/items/RootItem.h"
-
-#include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
-
-using namespace Visualization;
-using namespace OOModel;
-using namespace OOInteraction;
+#include "../alloyintegration_api.h"
+#include "ModelBase/src/nodes/Node.h"
 
 namespace Alloy {
 
-TEST(AlloyIntegrationPlugin, AlloyTest)
-{
-    CHECK_INT_EQUAL(1, 1);
-    auto aLinkedList = new Class("LinkedList");
+class ALLOYINTEGRATION_API AlloyExporter {
+	public:
 
-    auto aNode = new Class("Node");
-    aLinkedList->classes()->append(aNode);
+        static void exportTree(Model::Node* aNode, const QString& path);
+};
 
-    auto *rootNode = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
-    aLinkedList->fields()->append(rootNode);
-    auto *nextNode = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
-    aNode->fields()->append(nextNode);
-
-    auto invariantMethodLinkedList = new Method("ObjectInvariant");
-    aLinkedList->methods()->append(invariantMethodLinkedList);
-
-    auto invariantMethodNode = new Method("ObjectInvariant");
-    aNode->methods()->append(invariantMethodNode);
-
-    invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-            "Contract.Invariant(next!=this)")));
-
-    auto manager = new Model::TreeManager(aLinkedList);
-
-    VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(aLinkedList));
-
-    VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-}
-
-}
+} /* namespace JavaExport */
