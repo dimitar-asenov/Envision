@@ -50,6 +50,15 @@ Cursor* Cursor::clone() const
 	return new Cursor(*this);
 }
 
+void Cursor::update()
+{
+	if (type_ == BoxCursor)
+	{
+		setRegion( owner_->boundingRect().toRect() );
+		setPosition( region_.center() );
+	}
+}
+
 Item* Cursor::owner() const
 {
 	return owner_;

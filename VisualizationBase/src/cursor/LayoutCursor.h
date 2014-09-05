@@ -39,6 +39,8 @@ class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 		LayoutCursor(Item* owner, CursorType type);
 		virtual LayoutCursor* clone() const override;
 
+		virtual void update() override;
+
 		void setVisualizationSize(const QSize& size);
 
 		void set2DIndex(int x, int y);

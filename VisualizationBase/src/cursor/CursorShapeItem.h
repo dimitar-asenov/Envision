@@ -47,6 +47,11 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Super<Item>
 		void setCursorCenter(const QPoint& center);
 		void setCursorTopLeft(const QPoint& topLeft);
 
+		QSize cursorSize() const;
+		QPoint cursorCenter() const;
+		QPoint cursorTopLeft() const;
+		bool useCenter() const;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -60,5 +65,10 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Super<Item>
 };
 
 inline void CursorShapeItem::setCursorSize(const QSize& size) { size_ = size; }
+
+inline QSize CursorShapeItem::cursorSize() const { return size_; }
+inline QPoint CursorShapeItem::cursorCenter() const { return center_; }
+inline QPoint CursorShapeItem::cursorTopLeft() const { return topLeft_; }
+inline bool CursorShapeItem::useCenter() const { return useCenter_; }
 
 } /* namespace Visualization */

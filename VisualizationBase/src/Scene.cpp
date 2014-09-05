@@ -165,6 +165,7 @@ void Scene::updateNow()
 	if (mainCursor_ && mainCursor_->visualization())
 	{
 		if (mainCursor_->visualization()->scene() != this) addItem(mainCursor_->visualization());
+		mainCursor_->update();
 		mainCursor_->visualization()->updateSubtree();
 	}
 
