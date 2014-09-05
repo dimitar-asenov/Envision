@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SelectionOverlay: public Super<Overlay>
+class VISUALIZATIONBASE_API SelectionOverlay: public Super<Overlay<Item>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(SelectionOverlay, ItemStyle)
 

@@ -31,12 +31,11 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Overlay : public Super<Item> {
-
-	ITEM_COMMON_CUSTOM_STYLENAME(Overlay, ItemStyle)
-
+template <class Super>
+class Overlay : public Super
+{
 	public:
-		Overlay(QList<Item*> associatedItems, const StyleType* style = itemStyles().get());
+		Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style = nullptr);
 
 		Item* item() const;
 		Item* first() const;
@@ -51,10 +50,39 @@ class VISUALIZATIONBASE_API Overlay : public Super<Item> {
 
 };
 
-inline Item* Overlay::item() const { return associatedItems_.first(); }
-inline Item* Overlay::first() const { return associatedItems_.first(); }
-inline Item* Overlay::second() const { return associatedItems_.at(1); }
-inline Item* Overlay::last() const { return associatedItems_.last(); }
-inline const QList<Item*>& Overlay::associatedItems() const { return associatedItems_; }
+template <class Super>
+inline Item* Overlay<Super>::item() const { return associatedItems_.first(); }
+
+template <class Super>
+inline Item* Overlay<Super>::first() const { return associatedItems_.first(); }
+
+template <class Super>
+inline Item* Overlay<Super>::second() const { return associatedItems_.at(1); }
+
+template <class Super>
+inline Item* Overlay<Super>::last() const { return associatedItems_.last(); }
+
+template <class Super>
+inline const QList<Item*>& Overlay<Super>::associatedItems() const { return associatedItems_; }
+
+template <class Super>
+inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style)
+: Super{nullptr, style}, associatedItems_{associatedItems}
+{
+	Q_ASSERT(!associatedItems_.isEmpty());
+
+	Super::setFlags(0);
+	Super::setAcceptedMouseButtons(0);
+	Super::setZValue(Super::LAYER_SELECTION_Z);
+	Super::setItemCategory(Scene::SelectionItemCategory);
+}
+
+template <class Super>
+inline void Overlay<Super>::setAssociatedItems(QList<Item*> associatedItems)
+{
+	Q_ASSERT(!associatedItems.isEmpty());
+	associatedItems_ = associatedItems;
+	Super::setUpdateNeeded(Super::StandardUpdate);
+}
 
 } /* namespace Visualization */

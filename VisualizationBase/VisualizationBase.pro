@@ -123,7 +123,6 @@ HEADERS += src/overlays/OverlayAccessor.h \
     src/declarative/GridLayouter.h \
     src/declarative/DynamicGridFormElement.h
 SOURCES += src/overlays/SelectionOverlay.cpp \
-    src/overlays/Overlay.cpp \
     src/overlays/OverlayGroup.cpp \
     src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
