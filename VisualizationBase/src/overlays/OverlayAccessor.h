@@ -23,29 +23,54 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "Overlay.h"
-#include "../items/ItemStyle.h"
+
+#pragma once
+
+#include "../visualizationbase_api.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(Overlay, "item")
+// Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
 
-Overlay::Overlay(QList<Item*> associatedItems, const StyleType* style)
-: Super{nullptr, style}, associatedItems_{associatedItems}
+class VISUALIZATIONBASE_API OverlayAccessor {
+	public:
+		OverlayAccessor(const OverlayAccessor& other) = delete;
+		OverlayAccessor& operator=(const OverlayAccessor& other) = delete;
+		virtual ~OverlayAccessor() {};
+
+		virtual Item* overlayItem() const = 0;
+		virtual QList<Item*> associatedItems() const = 0;
+		virtual void setAssociatedItems(QList<Item*> associatedItems) = 0;
+
+		// This is required from SAFE_DELETE_ITEM, called from Item::synchronizeCollections.
+		// Essentially we want this to look like an Item for that call.
+		void removeFromScene() const {};
+
+	protected:
+		OverlayAccessor() = default;
+};
+
+template <class T>
+class OverlayAccessorTemplate : public OverlayAccessor
 {
-	Q_ASSERT(!associatedItems_.isEmpty());
+	public:
+		OverlayAccessorTemplate(T* overlayItem) : overlayItem_{overlayItem}{}
+		virtual ~OverlayAccessorTemplate() { SAFE_DELETE_ITEM(overlayItem_); }
 
-	setFlags(0);
-	setAcceptedMouseButtons(0);
-	setZValue(LAYER_SELECTION_Z);
-	setItemCategory(Scene::SelectionItemCategory);
-}
+		virtual T* overlayItem() const override { return overlayItem_; }
+		virtual QList<Item*> associatedItems() const  override { return overlayItem_->associatedItems(); }
+		virtual void setAssociatedItems(QList<Item*> associatedItems)  override
+		{ overlayItem_->setAssociatedItems(associatedItems); }
 
-void Overlay::setAssociatedItems(QList<Item*> associatedItems)
-{
-	Q_ASSERT(!associatedItems.isEmpty());
-	associatedItems_ = associatedItems;
-	setUpdateNeeded(StandardUpdate);
-}
+	private:
+		T* overlayItem_{};
+};
 
 } /* namespace Visualization */
+
+// Purposefully outside the namespace for easy creation
+template<class T>
+inline Visualization::OverlayAccessorTemplate<T>* makeOverlay(T* overlayItem)
+{
+	return new Visualization::OverlayAccessorTemplate<T>(overlayItem);
+}

@@ -30,7 +30,7 @@
 
 namespace Visualization {
 
-class Overlay;
+class OverlayAccessor;
 class Scene;
 class Item;
 
@@ -45,8 +45,8 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		void show();
 
 		// Methods for manually adding overlays
-		void addOverlay(Overlay* overlay);
-		void removeOverlay(Overlay* overlay);
+		void addOverlay(OverlayAccessor* overlay);
+		void removeOverlay(OverlayAccessor* overlay);
 		void removeOverlayOf(Item* itemWithOverlay);
 		void clear();
 
@@ -55,9 +55,9 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		void setDynamic1Item(ItemGetter1Item getter);
 		using ItemGetter2Items = std::function<QList<QPair<Item*, Item*>>()>;
 		void setDynamic2Items(ItemGetter2Items getter);
-		using OverlayConstructor1Arg = std::function<Overlay* (Item* item)>;
+		using OverlayConstructor1Arg = std::function<OverlayAccessor* (Item* item)>;
 		void setOverlayConstructor1Arg(OverlayConstructor1Arg constructor);
-		using OverlayConstructor2Args = std::function<Overlay* (Item* item1, Item* item2)>;
+		using OverlayConstructor2Args = std::function<OverlayAccessor* (Item* item1, Item* item2)>;
 		void setOverlayConstructor2Args(OverlayConstructor2Args constructor);
 		void addOverlayFor(Item* item);
 		void addOverlayFor(Item* item1, Item* item2);
@@ -71,14 +71,14 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		QString name_;
 		bool hidden_{};
 
-		QList<Overlay*> overlays_;
+		QList<OverlayAccessor*> overlays_;
 
 		ItemGetter1Item itemGetterFunction1_;
 		ItemGetter2Items itemGetterFunction2_;
 		OverlayConstructor1Arg constructorFunction1_;
 		OverlayConstructor2Args constructorFunction2_;
 
-		void removeOverlay(QList<Overlay*>::iterator it);
+		void removeOverlay(QList<OverlayAccessor*>::iterator it);
 
 		/**
 		 * Called by scene to update all Overlay items.

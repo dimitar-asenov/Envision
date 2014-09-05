@@ -25,15 +25,15 @@
  **********************************************************************************************************************/
 #include "OverlayGroup.h"
 
-#include "Overlay.h"
+#include "OverlayAccessor.h"
+#include "../items/Item.h"
 #include "../Scene.h"
-#include "../items/ItemStyle.h"
 
 namespace Visualization {
 
 OverlayGroup::~OverlayGroup()
 {
-	for (auto & overlay : overlays_) SAFE_DELETE_ITEM(overlay);
+	for (auto & overlay : overlays_) SAFE_DELETE(overlay);
 }
 
 OverlayGroup::OverlayGroup(Scene* scene, QString name) : scene_{scene}, name_{name}
@@ -45,26 +45,26 @@ OverlayGroup::OverlayGroup(Scene* scene, QString name) : scene_{scene}, name_{na
 void OverlayGroup::hide()
 {
 	hidden_ = true;
-	for (auto& o : overlays_) o->hide();
+	for (auto& o : overlays_) o->overlayItem()->hide();
 }
 
 void OverlayGroup::show()
 {
 	hidden_ = false;
-	for (auto& o : overlays_) o->show();
+	for (auto& o : overlays_) o->overlayItem()->show();
 }
 
-void OverlayGroup::addOverlay(Overlay* overlay)
+void OverlayGroup::addOverlay(OverlayAccessor* overlay)
 {
 	overlays_.append(overlay);
-	overlay->setUpdateNeeded(Item::StandardUpdate);
-	if (hidden_) overlay->hide();
+	overlay->overlayItem()->setUpdateNeeded(Item::StandardUpdate);
+	if (hidden_) overlay->overlayItem()->hide();
 
-	scene_->addItem(overlay);
+	scene_->addItem(overlay->overlayItem());
 	scene_->scheduleUpdate();
 }
 
-void OverlayGroup::removeOverlay(Overlay* overlay)
+void OverlayGroup::removeOverlay(OverlayAccessor* overlay)
 {
 	removeOverlay(std::find(overlays_.begin(), overlays_.end(), overlay));
 }
@@ -73,14 +73,14 @@ void OverlayGroup::removeOverlay(Overlay* overlay)
 void OverlayGroup::removeOverlayOf(Item* itemWithOverlay)
 {
 	removeOverlay( std::find_if(overlays_.begin(), overlays_.end(),
-			[=](Overlay* o){return o->allItems().contains(itemWithOverlay);}));
+			[=](OverlayAccessor* o){return o->associatedItems().contains(itemWithOverlay);}));
 }
 
-void OverlayGroup::removeOverlay(QList<Overlay*>::iterator it)
+void OverlayGroup::removeOverlay(QList<OverlayAccessor*>::iterator it)
 {
 	if (it != overlays_.end())
 	{
-		SAFE_DELETE_ITEM(*it);
+		SAFE_DELETE(*it);
 		overlays_.erase(it);
 		scene_->scheduleUpdate();
 	}
@@ -88,7 +88,7 @@ void OverlayGroup::removeOverlay(QList<Overlay*>::iterator it)
 
 void OverlayGroup::clear()
 {
-	for (auto& overlay : overlays_) SAFE_DELETE_ITEM(overlay);
+	for (auto& overlay : overlays_) SAFE_DELETE(overlay);
 	overlays_.clear();
 }
 
@@ -130,18 +130,18 @@ void OverlayGroup::update()
 		{
 			Q_ASSERT(constructorFunction1_);
 			Item::synchronizeCollections(nullptr, itemGetterFunction1_(), overlays_,
-					[](Item*, Overlay*){return true;}, // Always match and reuse/sync visualizations
+					[](Item*, OverlayAccessor*){return true;}, // Always match and reuse/sync items
 					[this](Item*, Item* itemToOverlay)
 					{
 						auto overlay = constructorFunction1_(itemToOverlay);
 						Q_ASSERT(overlay);
-						scene_->addItem(overlay);
+						scene_->addItem(overlay->overlayItem());
 						return overlay;
 					},
-					[](Item*, Item* itemToOverlay, Overlay* overlay)
+					[](Item*, Item* itemToOverlay, OverlayAccessor* overlay)
 					{
-						if (itemToOverlay == overlay->item()) return false;
-						overlay->setItems({itemToOverlay});
+						if (itemToOverlay == overlay->associatedItems().first()) return false;
+						overlay->setAssociatedItems({itemToOverlay});
 						return true;
 					});
 		}
@@ -150,24 +150,25 @@ void OverlayGroup::update()
 		{
 			Q_ASSERT(constructorFunction2_);
 			Item::synchronizeCollections(nullptr, itemGetterFunction2_(), overlays_,
-					[](const QPair<Item*, Item*>&, Overlay*){return true;}, // Always match and reuse/sync visualizations
+					[](const QPair<Item*, Item*>&, OverlayAccessor*){return true;}, // Always match and reuse/sync items
 					[this](Item*, const QPair<Item*, Item*>& pair)
 					{
 						auto overlay = constructorFunction2_(pair.first, pair.second);
 						Q_ASSERT(overlay);
-						scene_->addItem(overlay);
+						scene_->addItem(overlay->overlayItem());
 						return overlay;
 					},
-					[](Item*, const QPair<Item*, Item*>& pair, Overlay* overlay)
+					[](Item*, const QPair<Item*, Item*>& pair, OverlayAccessor* overlay)
 					{
-						if ( pair.first == overlay->first() && pair.second == overlay->second()) return false;
-						overlay->setItems({pair.first, pair.second});
+						if ( pair.first == overlay->associatedItems().first()
+								&& pair.second == overlay->associatedItems().at(1)) return false;
+						overlay->setAssociatedItems({pair.first, pair.second});
 						return true;
 					});
 		}
 
 		for (auto& overlay : overlays_)
-			overlay->updateSubtree();
+			overlay->overlayItem()->updateSubtree();
 	}
 }
 

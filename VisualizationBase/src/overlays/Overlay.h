@@ -42,9 +42,9 @@ class VISUALIZATIONBASE_API Overlay : public Super<Item> {
 		Item* first() const;
 		Item* second() const;
 		Item* last() const;
-		const QList<Item*>& allItems() const;
+		const QList<Item*>& associatedItems() const;
 
-		void setItems(QList<Item*> associatedItems);
+		void setAssociatedItems(QList<Item*> associatedItems);
 
 	private:
 		QList<Item*> associatedItems_;
@@ -55,6 +55,6 @@ inline Item* Overlay::item() const { return associatedItems_.first(); }
 inline Item* Overlay::first() const { return associatedItems_.first(); }
 inline Item* Overlay::second() const { return associatedItems_.at(1); }
 inline Item* Overlay::last() const { return associatedItems_.last(); }
-inline const QList<Item*>& Overlay::allItems() const { return associatedItems_; }
+inline const QList<Item*>& Overlay::associatedItems() const { return associatedItems_; }
 
 } /* namespace Visualization */

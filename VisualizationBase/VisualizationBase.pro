@@ -9,7 +9,8 @@ LIBS += -llpsolve55
 QT += xml \
     svg \
     printsupport
-HEADERS += src/overlays/SelectionOverlay.h \
+HEADERS += src/overlays/OverlayAccessor.h \
+    src/overlays/SelectionOverlay.h \
     src/overlays/Overlay.h \
     src/overlays/OverlayGroup.h \
     src/items/EmptyItem.h \
