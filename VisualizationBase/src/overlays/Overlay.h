@@ -37,10 +37,10 @@ class Overlay : public Super
 	public:
 		Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style = nullptr);
 
-		Item* item() const;
-		Item* first() const;
-		Item* second() const;
-		Item* last() const;
+		Item* associatedItem() const;
+		Item* firstAssociatedItem() const;
+		Item* secondAssociatedItem() const;
+		Item* lastAssociatedItem() const;
 		const QList<Item*>& associatedItems() const;
 
 		void setAssociatedItems(QList<Item*> associatedItems);
@@ -51,16 +51,16 @@ class Overlay : public Super
 };
 
 template <class Super>
-inline Item* Overlay<Super>::item() const { return associatedItems_.first(); }
+inline Item* Overlay<Super>::associatedItem() const { return associatedItems_.first(); }
 
 template <class Super>
-inline Item* Overlay<Super>::first() const { return associatedItems_.first(); }
+inline Item* Overlay<Super>::firstAssociatedItem() const { return associatedItems_.first(); }
 
 template <class Super>
-inline Item* Overlay<Super>::second() const { return associatedItems_.at(1); }
+inline Item* Overlay<Super>::secondAssociatedItem() const { return associatedItems_.at(1); }
 
 template <class Super>
-inline Item* Overlay<Super>::last() const { return associatedItems_.last(); }
+inline Item* Overlay<Super>::lastAssociatedItem() const { return associatedItems_.last(); }
 
 template <class Super>
 inline const QList<Item*>& Overlay<Super>::associatedItems() const { return associatedItems_; }
