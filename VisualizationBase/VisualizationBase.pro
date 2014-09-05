@@ -10,6 +10,7 @@ QT += xml \
     svg \
     printsupport
 HEADERS += src/overlays/OverlayAccessor.h \
+    src/overlays/ZoomLabelOverlay.h \
     src/overlays/SelectionOverlay.h \
     src/overlays/Overlay.h \
     src/overlays/OverlayGroup.h \
@@ -122,7 +123,8 @@ HEADERS += src/overlays/OverlayAccessor.h \
     src/VisualizationBasePlugin.h \
     src/declarative/GridLayouter.h \
     src/declarative/DynamicGridFormElement.h
-SOURCES += src/overlays/SelectionOverlay.cpp \
+SOURCES += src/overlays/ZoomLabelOverlay.cpp \
+    src/overlays/SelectionOverlay.cpp \
     src/overlays/OverlayGroup.cpp \
     src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \

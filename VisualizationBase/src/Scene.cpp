@@ -32,6 +32,7 @@
 #include "items/RootItem.h"
 #include "overlays/OverlayAccessor.h"
 #include "overlays/SelectionOverlay.h"
+#include "overlays/ZoomLabelOverlay.h"
 #include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
@@ -76,6 +77,10 @@ Scene::Scene()
 	auto selectionGroup = addOverlayGroup("User Selected Items");
 	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay(item));});
 	selectionGroup->setDynamic1Item([this](){return itemsThatShouldHaveASelection();});
+
+	auto zoomLabelGroup = addOverlayGroup("Zoom labels");
+	zoomLabelGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new ZoomLabelOverlay(item));});
+	zoomLabelGroup->setDynamic1Item([this](){return ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(this);});
 }
 
 Scene::~Scene()
