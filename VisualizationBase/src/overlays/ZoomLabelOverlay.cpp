@@ -156,8 +156,6 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 	{
 		auto item = stack.takeLast();
 
-		const double OVERLAY_MIN_WIDTH = 50;
-		const double OVERLAY_MIN_HEIGHT = 20;
 			if (item->widthInParent() * scalingFactor < OVERLAY_MIN_WIDTH
 					|| item->heightInParent() * scalingFactor < OVERLAY_MIN_HEIGHT)
 				continue;
@@ -204,26 +202,52 @@ void ZoomLabelOverlay::postUpdate(int revision)
 	adjustPositionOrHide();
 }
 
+inline void ZoomLabelOverlay::reduceRect(QRect& rectToReduce, const QRect& rectToExclude)
+{
+	if (!rectToReduce.intersects(rectToExclude)) return;
+	else
+	{
+		rectToReduce.setWidth(0);
+		rectToReduce.setHeight(0);
+	}
+}
+
+
 void ZoomLabelOverlay::adjustPositionOrHide()
 {
-	// For now we don't actually touch the position.
-	// TODO: Adjust the position in order to show more things.
+	auto availableRect = associatedItem()->sceneBoundingRect().toRect();
 	
-	bool visible = true;
 	auto item = associatedItem()->parent();
 	while (item)
 	{
 		auto overlayIt = itemToOverlay().find(item);
-		if (overlayIt != itemToOverlay().end())
-		{
-			if (overlayIt.value()->isVisible() && overlayIt.value()->sceneBoundingRect().intersects(sceneBoundingRect()))
-			{
-				visible = false;
-				break;
-			}
-		}
+		if (overlayIt != itemToOverlay().end() && overlayIt.value()->isVisible())
+			reduceRect(availableRect, overlayIt.value()->sceneBoundingRect().toRect());
 
 		item = item->parent();
+	}
+
+	// At this point we know in what amount of space we're supposed to fit.
+
+	// If the space is too small don't bother trying to compute a scale
+	bool visible = true;
+	auto scalingFactor = scene()->mainViewScalingFactor();
+	if (availableRect.width() * scalingFactor < OVERLAY_MIN_WIDTH
+			|| availableRect.height() * scalingFactor < OVERLAY_MIN_HEIGHT) visible = false;
+
+	// If there might be enough space, then try to fit in
+	if (visible)
+	{
+		setPos(availableRect.topLeft());
+
+		auto maxScale = 1/scalingFactor;
+		auto widthScale = availableRect.width() / (double) widthInLocal();
+		auto heightScale = availableRect.height() / (double) heightInLocal();
+		auto scaleToUse = maxScale;
+		if (widthScale < scaleToUse) scaleToUse = widthScale;
+		if (heightScale < scaleToUse) scaleToUse = heightScale;
+
+		setScale(scaleToUse);
 	}
 
 	if (visible != isVisible()) setVisible(visible);

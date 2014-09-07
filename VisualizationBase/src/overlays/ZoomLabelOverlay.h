@@ -72,6 +72,10 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 		static void setItemPositionsAndHideOverlapped(OverlayGroup& group);
 		void postUpdate(int revision);
 		void adjustPositionOrHide();
+		static void reduceRect(QRect& rectToReduce, const QRect& rectToExclude);
+
+		static constexpr double OVERLAY_MIN_WIDTH = 50;
+		static constexpr double OVERLAY_MIN_HEIGHT = 20;
 };
 
 } /* namespace Visualization */
