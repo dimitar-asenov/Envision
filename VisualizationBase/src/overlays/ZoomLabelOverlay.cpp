@@ -204,8 +204,52 @@ void ZoomLabelOverlay::postUpdate(int revision)
 
 inline void ZoomLabelOverlay::reduceRect(QRect& rectToReduce, const QRect& rectToExclude)
 {
-	if (!rectToReduce.intersects(rectToExclude)) return;
+	QRect intersected = rectToReduce.intersected(rectToExclude);
+	if (intersected.isEmpty()) return; // No intersection
+
+	// Now we will grow the intersected rect until it has at least three sides equal to the sides of rectToReduce
+	// Then we'll just take what's left
+
+	// Make sure only one of top/bottom is in the middle
+	int distanceToTop = intersected.top() - rectToReduce.top();
+	int distanceToBottom = rectToReduce.bottom() - intersected.bottom();
+	if (distanceToTop > distanceToBottom) intersected.setBottom(rectToReduce.bottom());
+	else intersected.setTop(rectToReduce.top());
+
+	Q_ASSERT(rectToReduce.top() == intersected.top() || rectToReduce.bottom() == intersected.bottom());
+
+	// Make sure only one of left/right is in the middle
+	int distanceToLeft = intersected.left() - rectToReduce.left();
+	int distanceToRight = rectToReduce.right() - intersected.right();
+	if (distanceToLeft > distanceToRight) intersected.setRight(rectToReduce.right());
+	else intersected.setLeft(rectToReduce.left());
+
+	Q_ASSERT(rectToReduce.left() == intersected.left() || rectToReduce.right() == intersected.right());
+
+	// At this point we might still have an intersecting rect in a corner. In that case take away the chunk that has
+	// the smaller area.
+	int horizontalArea = intersected.height()* rectToReduce.width();
+	int verticalArea = intersected.width()* rectToReduce.height();
+	if (horizontalArea < verticalArea)
+	{
+		intersected.setLeft( rectToReduce.left() );
+		intersected.setRight( rectToReduce.right() );
+	}
 	else
+	{
+		intersected.setTop( rectToReduce.top() );
+		intersected.setBottom( rectToReduce.bottom() );
+	}
+
+	Q_ASSERT( (rectToReduce.top() == intersected.top() && rectToReduce.bottom() == intersected.bottom()) ||
+				 (rectToReduce.left() == intersected.left() && rectToReduce.right() == intersected.right()));
+
+	// At this point we can just do rectToReduce = rectToReduce - intersected
+	if (rectToReduce.top() != intersected.top()) rectToReduce.setBottom(intersected.top());
+	else if (rectToReduce.bottom() != intersected.bottom()) rectToReduce.setTop(intersected.bottom()+1);
+	else if (rectToReduce.left() != intersected.left()) rectToReduce.setRight(intersected.left());
+	else if (rectToReduce.right() != intersected.right()) rectToReduce.setLeft(intersected.right()+1);
+	else // complete overlap
 	{
 		rectToReduce.setWidth(0);
 		rectToReduce.setHeight(0);
@@ -216,7 +260,7 @@ inline void ZoomLabelOverlay::reduceRect(QRect& rectToReduce, const QRect& rectT
 void ZoomLabelOverlay::adjustPositionOrHide()
 {
 	auto availableRect = associatedItem()->sceneBoundingRect().toRect();
-	
+
 	auto item = associatedItem()->parent();
 	while (item)
 	{
