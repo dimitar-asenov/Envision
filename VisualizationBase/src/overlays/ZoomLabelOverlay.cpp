@@ -32,6 +32,7 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/RootItem.h"
 
 namespace Visualization {
 
@@ -149,7 +150,7 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 					|| item->heightInParent() * scalingFactor < OVERLAY_MIN_HEIGHT)
 				continue;
 
-		auto definesSymbol = item->node() && item->node()->definesSymbol();
+		auto definesSymbol = !DCast<RootItem>(item) && item->node() && item->node()->definesSymbol();
 
 		if (definesSymbol) result.append(item);
 		stack.append(item->childItems());
