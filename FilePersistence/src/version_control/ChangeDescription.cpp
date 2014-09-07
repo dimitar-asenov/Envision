@@ -161,10 +161,13 @@ void ChangeDescription::print() const
 
 void ChangeDescription::setChildrenUpdate(bool isUpdate)
 {
-	if (isUpdate)
-		updateFlags_ |= Children;
-	else
-		updateFlags_ &= ~Children;
+	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
+	{
+		if (isUpdate)
+			updateFlags_ |= Children;
+		else
+			updateFlags_ &= ~Children;
+	}
 }
 
 Model::NodeIdType ChangeDescription::id() const
