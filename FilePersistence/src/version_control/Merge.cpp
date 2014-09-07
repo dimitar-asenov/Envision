@@ -28,7 +28,7 @@
 
 #include "GitRepository.h"
 
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
+#include "FilePersistence/src/simple/Parser.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace FilePersistence {
@@ -49,7 +49,7 @@ bool Merge::abort()
 		return false;
 }
 
-bool Merge::commit(Signature author, Signature committer, QString message)
+bool Merge::commit(Signature& author, Signature& committer, QString& message)
 {
 	if (stage_ == Stage::ReadyToCommit)
 	{
@@ -69,34 +69,26 @@ bool Merge::commit(Signature author, Signature committer, QString message)
 		return false;
 }
 
+std::unique_ptr<GenericTree> const& Merge::mergeTree() const
+{
+	return mergeTree_;
+}
+
 // ======== private ========
 
-Merge::Merge(GitRepository* repository)
+Merge::Merge(RevisionString revision, bool fastForward, GitRepository* repository)
 {
-	repository_ = repository;
+	initialize(revision, fastForward, repository);
+	classifyKind();
+	performMerge();
 }
 
 Merge::~Merge() {}
 
-bool Merge::newMerge(RevisionString revision, bool fastForward)
+void Merge::initialize(RevisionString revision, bool fastForward, GitRepository* repository)
 {
-	if (stage_ == Stage::NoMerge)
-	{
-		initialize(revision, fastForward);
-		if (error_ != Error::NoError)
-			return true;
+	repository_ = repository;
 
-		classifyKind();
-		startMerging();
-
-		return true;
-	}
-	else
-		return false;
-}
-
-void Merge::initialize(RevisionString revision, bool fastForward)
-{
 	head_ = repository_->getSHA1("HEAD");
 	revision_ = repository_->getSHA1(revision);
 
@@ -112,16 +104,16 @@ void Merge::initialize(RevisionString revision, bool fastForward)
 void Merge::classifyKind()
 {
 	if (mergeBase_.compare(revision_) == 0)
-		kind_ = Merge::Kind::AlreadyUpToDate;
+		kind_ = Kind::AlreadyUpToDate;
 	else if (mergeBase_.compare(head_) == 0)
-		kind_ = Merge::Kind::FastForward;
+		kind_ = Kind::FastForward;
 	else
-		kind_ = Merge::Kind::TrueMerge;
+		kind_ = Kind::TrueMerge;
 
 	stage_ = Stage::Classified;
 }
 
-void Merge::startMerging()
+void Merge::performMerge()
 {
 	switch (kind_)
 	{
@@ -129,20 +121,53 @@ void Merge::startMerging()
 			stage_ = Merge::Stage::Complete;
 			break;
 
-		case Merge::Kind::FastForward:
+		case Kind::FastForward:
 			if (fastForward_)
 				performFastForward();
 			else
 			{
+				repository_->checkout(revision_, true);
 				repository_->writeRevisionIntoIndex(revision_);
-				stage_ = Merge::Stage::ReadyToCommit;
+				stage_ = Stage::ReadyToCommit;
 			}
 			break;
 
-		case Merge::Kind::TrueMerge:
-			// TODO
-			Q_ASSERT(false);
+		case Kind::TrueMerge:
+		{
+
+			baseHeadDiff_ = repository_->diff(mergeBase_, head_);
+			baseRevisionDiff_ = repository_->diff(mergeBase_, revision_);
+
+			mergeBaseTree_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", mergeBase_));
+			loadGenericTree(mergeBaseTree_, mergeBase_);
+
+			revisionTree_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", revision_));
+			loadGenericTree(revisionTree_, revision_);
+
+			headTree_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", head_));
+			loadGenericTree(headTree_, head_);
+
+			buildConflictUnitMap(revisionCUToChangeMap_, revisionChangeToCUMap_, baseRevisionDiff_, revisionTree_,
+										mergeBaseTree_);
+			buildConflictUnitMap(headCUToChangeMap_, headChangeToCUMap_, baseHeadDiff_, headTree_, mergeBaseTree_);
+
+			QList<Model::NodeIdType> conflicts = detectConflictingConflictUnits();
+			stage_ = Stage::ConflictsDetected;
+
+			if (!conflicts.isEmpty())
+				markConflictRegions(conflicts);
+				// TODO: MARK CONFLICT REGIONS
+
+
+			computeMergeForLists(headTree_, revisionTree_, mergeBaseTree_, baseHeadDiff_.changes(), baseRevisionDiff_.changes());
+
+			mergeTree_ = std::unique_ptr<GenericTree>(new GenericTree("Merge"));
+			loadGenericTree(mergeTree_, head_);
+
+			mergeChangesIntoTree(mergeTree_, baseRevisionDiff_.changes(), conflictRegions_);
+
 			break;
+		}
 
 		default:
 			Q_ASSERT(false);
@@ -154,38 +179,842 @@ void Merge::performFastForward()
 	GitReference branch = repository_->currentBranch();
 
 	repository_->setReferenceTarget(branch, revision_);
-	stage_ = Merge::Stage::Complete;
+	repository_->checkout(revision_, true);
+
+	stage_ = Stage::Complete;
 }
 
-void Merge::detectConflicts()
+void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
+											QHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
+											const Diff& diff, std::unique_ptr<GenericTree> const& versionTree,
+											std::unique_ptr<GenericTree> const& baseTree)
 {
-	baseHeadDiff_ = repository_->diff(mergeBase_, head_);
-	baseRevisionDiff_ = repository_->diff(mergeBase_, revision_);
+	for (ChangeDescription* change : diff.changes())
+	{
+		Model::NodeIdType conflictUnit;
+		switch (change->type())
+		{
+			case ChangeType::Added:
+			{
+				// find CU in newTree
+				QString unitName = change->newNode()->persistentUnit()->name();
+				const GenericPersistentUnit* unit = versionTree->persistentUnit(unitName);
+				Q_ASSERT(unit);
+				conflictUnit = findConflicUnit(change->id(), false, diff, unit);
+				cuToChange.insertMulti(conflictUnit, change);
+				changeToCU.insert(change->id(), conflictUnit);
+				break;
+			}
 
-	loadMergeBase();
+			case ChangeType::Deleted:
+			{
+				// find CU in oldTree
+				QString unitName = change->oldNode()->persistentUnit()->name();
+				const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
+				Q_ASSERT(unit);
+				conflictUnit = findConflicUnit(change->id(), true, diff, unit);
+				cuToChange.insertMulti(conflictUnit, change);
+				changeToCU.insert(change->id(), conflictUnit);
+				break;
+			}
+
+			case ChangeType::Moved:
+			{
+				// find CU in oldTree
+				QString unitName = change->oldNode()->persistentUnit()->name();
+				const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
+				Q_ASSERT(unit);
+				conflictUnit = findConflicUnit(change->id(), true, diff, unit);
+				cuToChange.insertMulti(conflictUnit, change);
+				changeToCU.insertMulti(change->id(), conflictUnit);
+
+				// find CU in newTree
+				unitName = change->newNode()->persistentUnit()->name();
+				unit = versionTree->persistentUnit(unitName);
+				Q_ASSERT(unit);
+				Model::NodeIdType newConflictUnit = findConflicUnit(change->id(), false, diff, unit);
+				if (newConflictUnit != conflictUnit)
+				{
+					cuToChange.insertMulti(newConflictUnit, change);
+					changeToCU.insertMulti(change->id(), newConflictUnit);
+				}
+				break;
+			}
+
+			case ChangeType::Stationary:
+			{
+				if (change->flags().testFlag(ChangeDescription::Order))
+				{
+					// Reordering occured
+					// find CU in oldTree
+					QString unitName = change->oldNode()->persistentUnit()->name();
+					const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
+					Q_ASSERT(unit);
+					conflictUnit = findConflicUnit(change->id(), true, diff, unit);
+					cuToChange.insertMulti(conflictUnit, change);
+					changeToCU.insertMulti(change->id(), conflictUnit);
+
+					// find CU in newTree
+					unitName = change->newNode()->persistentUnit()->name();
+					unit = versionTree->persistentUnit(unitName);
+					Q_ASSERT(unit);
+					Model::NodeIdType newConflictUnit = findConflicUnit(change->id(), false, diff, unit);
+					if (newConflictUnit != conflictUnit)
+					{
+						cuToChange.insertMulti(newConflictUnit, change);
+						changeToCU.insertMulti(change->id(), newConflictUnit);
+					}
+				}
+				else
+				{
+					QString unitName = change->newNode()->persistentUnit()->name();
+					const GenericPersistentUnit* unit = versionTree->persistentUnit(unitName);
+					Q_ASSERT(unit);
+					conflictUnit = findConflicUnit(change->id(), false, diff, unit);
+					cuToChange.insertMulti(conflictUnit, change);
+					changeToCU.insert(change->id(), conflictUnit);
+					break;
+				}
+				break;
+			}
+
+			default:
+				Q_ASSERT(false);
+		}
+	}
 }
 
-void Merge::loadMergeBase()
+Model::NodeIdType Merge::findConflicUnit(Model::NodeIdType nodeID, bool inBase, const Diff& diff,
+													  const GenericPersistentUnit* unit) const
 {
-	repository_->checkout(mergeBase_, true);
+	const GenericNode* node = unit->find(nodeID);
+	IdToChangeDescriptionHash changes = diff.changes();
 
-	QString path = repository_->workdirPath();
+	while (node)
+	{
+		if (isConflictUnitNode(node))
+		{
+			if (inBase)
+				return node->id();
 
-	int index = path.lastIndexOf("/");
-	index++;
+			IdToChangeDescriptionHash::iterator iter = changes.find(node->id());
+			if (iter == changes.end())
+				return node->id();
+			else
+			{
+				ChangeDescription* change = iter.value();
+				Q_ASSERT(!inBase);
+				if (change->oldNode() && isConflictUnitNode(change->oldNode()))
+					return node->id();
+			}
+		}
+		node = node->parent();
+	}
 
-	QString name = path.mid(index);
+	Q_ASSERT(false);
+	return nodeID;
+}
 
-	QString pathWithoutName = path;
-	pathWithoutName.remove(index, name.size());
+// TODO: fill those lists correctly
+const QStringList Merge::ORDERED_LISTS = {"StatementItemList"
+													  };
 
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore(pathWithoutName), name, false);
-	manager->setName("Base version of merge");
+const QStringList Merge::UNORDERED_LISTS = {"TypedListOfClass",
+														 "TypedListOfMethod",
+														 "TypedListOfFormalArgument",
+														 "TypedListOfField"};
 
-	baseTree_ = manager;
 
-	repository_->checkout(head_, true);
+const QStringList Merge::STATEMENTS = {"Block",
+													"BreakStatement",
+													"CaseStatement",
+													"ContinueStatement",
+													"DeclarationStatement",
+													"ExpressionStatement",
+													"ForEachStatement",
+													"IfStatement",
+													"LoopStatement",
+													"ReturnStatement",
+													"Statement",
+													"SwitchStatement",
+													"TryCatchFinallyStatement"};
+
+const QStringList Merge::DECLARATIONS = {"Class",
+													  "Declaration",
+													  "ExplicitTemplateInstantiation",
+													  "Field",
+													  "Method",
+													  "Module",
+													  "NameImport",
+													  "Project",
+													  "TypeAlias",
+													  "VariableDeclaration"};
+
+const QStringList Merge::ADDITIONAL_NODES = {"CommentStatementItem",
+															"CatchClause",
+															"StatementItemList"};
+
+bool Merge::isConflictUnit(const GenericNode* node, NodeSource source, const ChangeDescription* baseToSource) const
+{
+	if (isConflictUnitNode(node))
+	{
+		if (source == NodeSource::Base)
+			return true;
+
+		if (!baseToSource)
+			return true;
+
+		if (baseToSource->oldNode() && isConflictUnitNode(baseToSource->oldNode()))
+			return true;
+	}
+
+	return false;
+}
+
+bool Merge::isConflictUnitNode(const GenericNode* node) const
+{
+	Q_ASSERT(node);
+
+	for (QString nodeType : STATEMENTS)
+		if (nodeType.compare(node->type()) == 0)
+			return true;
+
+	for (QString nodeType : DECLARATIONS)
+		if (nodeType.compare(node->type()) == 0)
+			return true;
+
+	for (QString nodeType : ADDITIONAL_NODES)
+		if (nodeType.compare(node->type()) == 0)
+			return true;
+
+	return false;
+}
+
+QList<Model::NodeIdType> Merge::detectConflictingConflictUnits()
+{
+	QList<Model::NodeIdType> conflictingCU;
+
+	for (Model::NodeIdType id : headCUToChangeMap_.uniqueKeys())
+	{
+		int numChangesInHead = headCUToChangeMap_.count(id);
+		int numChangesInRevision= revisionCUToChangeMap_.count(id);
+
+		if (numChangesInHead > 0 && numChangesInRevision > 0)
+			conflictingCU.append(id);
+	}
+
+	return conflictingCU;
+}
+
+void Merge::markConflictRegions(QList<Model::NodeIdType>& conflicts)
+{
+	for (auto conflict : conflicts)
+	{
+		// TODO
+		(void) conflict;
+	}
+}
+
+Merge::Hunk::Hunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
+						QList<Model::NodeIdType> baseList)
+{
+	stable_ = stable;
+	head_ = headList;
+	revision_ = revisionList;
+	base_ = baseList;
+}
+
+void Merge::computeMergeForLists(std::unique_ptr<GenericTree> const& head, std::unique_ptr<GenericTree> const& revision,
+											std::unique_ptr<GenericTree> const& base, const IdToChangeDescriptionHash& baseToHead,
+											const IdToChangeDescriptionHash& baseToRevision)
+{
+	for (ChangeDescription* change : baseToRevision)
+	{
+		ChangeType type = change->type();
+		if (type == ChangeType::Moved || type == ChangeType::Stationary)
+		{
+			ChangeDescription::UpdateFlags flags = change->flags();
+			if (flags.testFlag(ChangeDescription::Children))
+			{
+				if (!nodeToRegionMap_.contains(change->id()))
+				{
+					GenericNode* revisionNode = revision->find(change->id(), change->newNode()->persistentUnit()->name());
+					GenericNode* baseNode = base->find(change->id(), change->oldNode()->persistentUnit()->name());
+
+					GenericNode* headNode = baseNode;
+
+					ChangeDescription* headChange = baseToHead.value(change->id());
+					if (headChange && headChange->newNode())
+						headNode = head->find(change->id(), headChange->newNode()->persistentUnit()->name());
+
+					QList<Model::NodeIdType> headList = genericNodeListToNodeIdList(headNode->children());
+					QList<Model::NodeIdType> revisionList = genericNodeListToNodeIdList(revisionNode->children());
+					QList<Model::NodeIdType> baseList = genericNodeListToNodeIdList(baseNode->children());
+
+					mergeLists(headList, revisionList, baseList, change->id());
+				}
+			}
+		}
+	}
+}
+
+int Merge::listInsertionIndex(const QList<Model::NodeIdType>& target, const QList<Model::NodeIdType>& current,
+										Model::NodeIdType insertID) const
+{
+	int targetIndex = target.indexOf(insertID);
+	Q_ASSERT(targetIndex != -1);
+
+	int index = -1;
+	for (int i = targetIndex + 1; i < target.size(); ++i)
+	{
+		index = current.indexOf(target[i]);
+		if (index >= 0)
+			break;
+	}
+
+	if (index == -1)
+		index = current.size();
+
+	Q_ASSERT(0 <= index && index <= current.size());
+
+	return index;
+}
+
+
+QList<Model::NodeIdType> Merge::applyListMerge(const QList<Hunk>& hunkList, bool resolveOrder) const
+{
+	QList<Model::NodeIdType> mergedList;
+
+	for (Hunk hunk : hunkList)
+	{
+		if (hunk.stable_)
+			mergedList.append(hunk.head_);
+		else
+		{
+			if (hunk.base_ == hunk.head_ && hunk.base_ != hunk.revision_)
+			{
+				mergedList.append(hunk.revision_);
+			}
+			else if (hunk.base_ != hunk.head_ && hunk.base_ == hunk.revision_)
+			{
+				mergedList.append(hunk.head_);
+			}
+			else
+			{
+				if (!resolveOrder)
+				{
+					return QList<Model::NodeIdType>();
+				}
+
+				// Beware of inserting an ID twice
+				QList<Model::NodeIdType> baseHunk;
+				QList<Model::NodeIdType> headHunk(hunk.head_);
+				QList<Model::NodeIdType> revisionHunk(hunk.revision_);
+
+				for (Model::NodeIdType id : hunk.base_)
+				{
+					if (headHunk.contains(id) && revisionHunk.contains(id))
+						baseHunk.append(id);
+					else
+					{
+						headHunk.removeOne(id);
+						revisionHunk.removeOne(id);
+					}
+				}
+
+				QList<Model::NodeIdType> mergedHunk(headHunk);
+				for (Model::NodeIdType id : revisionHunk)
+				{
+					if (!baseHunk.contains(id))
+						mergedHunk.append(id);
+				}
+
+				mergedList.append(mergedHunk);
+			}
+		}
+	}
+
+	return mergedList;
+}
+
+QList<Merge::Hunk>& Merge::mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
+												 const QList<Model::NodeIdType> base, Model::NodeIdType id)
+{
+	QList<Model::NodeIdType> lcsBaseToHead = longestCommonSubsequence(base, head);
+	QList<Model::NodeIdType> lcsBaseToRevision = longestCommonSubsequence(base, revision);
+
+	QSet<Model::NodeIdType> baseHead = QSet<Model::NodeIdType>::fromList(lcsBaseToHead);
+	QSet<Model::NodeIdType> baseRevision = QSet<Model::NodeIdType>::fromList(lcsBaseToRevision);
+
+	QList<Model::NodeIdType> stableIDs;
+	for (Model::NodeIdType id : base)
+		if (baseHead.contains(id) && baseRevision.contains(id))
+			stableIDs.append(id);
+
+	QList<QList<Model::NodeIdType>> sublistHead = computeSublists(head, stableIDs);
+	QList<QList<Model::NodeIdType>> sublistRevision = computeSublists(revision, stableIDs);
+	QList<QList<Model::NodeIdType>> sublistBase = computeSublists(base, stableIDs);
+
+	QList<Hunk> hunks;
+
+	QList<QList<Model::NodeIdType>>::const_iterator iterA = sublistHead.constBegin();
+	QList<QList<Model::NodeIdType>>::const_iterator iterB = sublistRevision.constBegin();
+	QList<QList<Model::NodeIdType>>::const_iterator iterBase;
+
+	bool isStable = false;
+	for (iterBase = sublistBase.constBegin(); iterBase != sublistBase.constEnd(); ++iterBase)
+	{
+		if (!iterBase->isEmpty() || !iterA->isEmpty() || !iterB->isEmpty())
+			hunks.append(Hunk(isStable, *iterA, *iterB, *iterBase));
+		isStable = !isStable;
+		++iterA;
+		++iterB;
+	}
+	Q_ASSERT(isStable);
+
+	auto iterator = mergedLists_.insert(id, hunks);
+
+	return iterator.value();
+}
+
+QList<QList<Model::NodeIdType>> Merge::computeSublists(const QList<Model::NodeIdType> list,
+																		 const QList<Model::NodeIdType> stableIDs)
+{
+	QList<QList<Model::NodeIdType>> hunks;
+	QList<Model::NodeIdType> hunk;
+
+	QList<Model::NodeIdType>::const_iterator stableId = stableIDs.begin();
+	for (Model::NodeIdType id : list)
+	{
+		if (stableId != stableIDs.constEnd() && id == *stableId)
+		{
+			hunks.append(hunk);
+			hunk = QList<Model::NodeIdType>();
+			hunk.append(id);
+			hunks.append(hunk);
+			hunk = QList<Model::NodeIdType>();
+			stableId++;
+		}
+		else
+			hunk.append(id);
+	}
+	hunks.append(hunk);
+
+	Q_ASSERT(hunks.size() == 2*stableIDs.size() + 1);
+
+	return hunks;
+}
+
+QList<Model::NodeIdType> Merge::longestCommonSubsequence(const QList<Model::NodeIdType> listA,
+																			const QList<Model::NodeIdType> listB)
+{
+	int m = listA.size() + 1;
+	int n = listB.size() + 1;
+
+	int** lcsLength = new int*[m];
+	for (int i = 0; i < m; ++i)
+		lcsLength[i] = new int[n];
+
+	for (int i = 0; i < m; ++i)
+		for (int j = 0; j < n; ++j)
+			lcsLength[i][j] = 0;
+
+	for (int i = 1; i < m; ++i)
+		for (int j = 1; j < n; ++j)
+			if (listA.at(i-1) == listB.at(j-1))
+				lcsLength[i][j] = lcsLength[i-1][j-1] + 1;
+			else
+				lcsLength[i][j] = std::max(lcsLength[i][j-1], lcsLength[i-1][j]);
+
+	QList<Model::NodeIdType> lcs = backtrackLCS(lcsLength, listA, listB, listA.size(), listB.size());
+
+	for (int i = 0; i < m; ++i)
+		delete[] lcsLength[i];
+
+	delete[] lcsLength;
+
+	return lcs;
+}
+
+QList<Model::NodeIdType> Merge::backtrackLCS(int** data, const QList<Model::NodeIdType> listA,
+															const QList<Model::NodeIdType> listB, int posA, int posB)
+{
+	if (posA == 0 || posB == 0)
+		return QList<Model::NodeIdType>();
+	else if (listA.at(posA-1) == listB.at(posB-1))
+		return backtrackLCS(data, listA, listB, posA-1, posB-1)<<listA.at(posA-1);
+	else
+		if (data[posA][posB-1] > data[posA-1][posB])
+			return backtrackLCS(data, listA, listB, posA, posB-1);
+		else
+			return backtrackLCS(data, listA, listB, posA-1, posB);
+}
+
+QList<Model::NodeIdType> Merge::genericNodeListToNodeIdList(const QList<GenericNode*>& list)
+{
+	QVector<Model::NodeIdType> idList(list.size());
+	for (GenericNode* node : list)
+	{
+		int index = node->name().toInt();
+		Q_ASSERT(index >= 0 && index < list.size());
+		idList[index] = node->id();
+	}
+	return QList<Model::NodeIdType>::fromVector(idList);
+}
+
+
+Merge::ListType Merge::getListType(const GenericNode* node)
+{
+	for (QString listType : ORDERED_LISTS)
+		if (listType.compare(node->type()) == 0)
+			return ListType::OrderedList;
+
+	for (QString listType : UNORDERED_LISTS)
+		if (listType.compare(node->type()) == 0)
+			return ListType::UnorderedList;
+
+	return ListType::NoList;
+}
+
+bool Merge::isListType(const GenericNode* node)
+{
+	if (getListType(node) == ListType::NoList)
+		return false;
+	else
+		return true;
+}
+
+void Merge::loadGenericTree(std::unique_ptr<GenericTree> const& tree, const SHA1 version)
+{
+	IdToGenericNodeHash persistentUnitRoots;
+
+	const Commit* commit = repository_->getCommit(version);
+	for (auto file : commit->files())
+	{
+		GenericNode* unitRoot = Parser::load(file->content_, file->size_, false,
+														 tree->newPersistentUnit(file->relativePath_));
+
+		Q_ASSERT(unitRoot);
+		persistentUnitRoots.insert(unitRoot->id(), unitRoot);
+		Q_ASSERT(isConflictUnitNode(unitRoot));
+	}
+
+	IdToGenericNodeHash persistentUnitDeclarations;
+	for (GenericNode* node : persistentUnitRoots)
+		findPersistentUnitDeclarations(node, persistentUnitDeclarations);
+
+	for (GenericNode* root : persistentUnitRoots)
+	{
+		GenericNode* declaration = persistentUnitDeclarations.value(root->id());
+
+		if (declaration)
+		{
+			GenericNode* parent = declaration->parent();
+			root->setParent(parent);
+			parent->addChild(root);
+
+			declaration->remove();
+		}
+	}
+
+	SAFE_DELETE(commit);
+}
+
+void Merge::findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations)
+{
+	if (node->type().compare(GenericNode::persistentUnitType) == 0)
+		declarations.insert(node->id(), node);
+	else
+		for (GenericNode* child : node->children())
+			findPersistentUnitDeclarations(child, declarations);
+}
+
+void Merge::mergeChangesIntoTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes,
+											QList<QSet<Model::NodeIdType>>& conflictRegions)
+{
+	IdToChangeDescriptionHash applicableChanges;
+	for (ChangeDescription* change : changes.values())
+	{
+		bool doesConflict = false;
+		for (QSet<Model::NodeIdType> conflictRegion : conflictRegions)
+			if (conflictRegion.contains(change->id()))
+				doesConflict = true;
+
+		if (!doesConflict)
+			applicableChanges.insert(change->id(), change);
+	}
+
+	applyChangesToTree(tree, applicableChanges);
+}
+
+void Merge::applyChangesToTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes)
+{
+	QList<ChangeDescription*> changeQueue = changes.values();
+	IdToChangeDescriptionHash unappliedChanges(changes);
+
+	while (!changeQueue.isEmpty())
+	{
+		ChangeDescription* change = changeQueue.takeFirst();
+		bool success = false;
+
+		switch (change->type())
+		{
+			case ChangeType::Added:
+				success = applyAddToTree(tree, unappliedChanges, change);
+				break;
+
+			case ChangeType::Deleted:
+				success = applyDeleteToTree(tree, unappliedChanges, change);
+				break;
+
+			case ChangeType::Moved:
+				success = applyMoveToTree(tree, unappliedChanges, change);
+				break;
+
+			case ChangeType::Stationary:
+				success = applyStationaryChangeToTree(tree, unappliedChanges, change);
+				break;
+
+			default:
+				Q_ASSERT(false);
+		}
+
+		if (success)
+			unappliedChanges.remove(change->id());
+		else
+			changeQueue.append(change);
+	}
+}
+
+bool Merge::applyAddToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+									const ChangeDescription* addOp)
+{
+	GenericNode* parent = addOp->newNode()->parent();
+
+	if (parent && changes.contains(parent->id()))
+		return false;
+
+	QString persistentUnitName = addOp->newNode()->persistentUnit()->name();
+	GenericPersistentUnit* persistentUnit = tree->persistentUnit(persistentUnitName);
+	if (!persistentUnit)
+		persistentUnit = &tree->newPersistentUnit(persistentUnitName);
+
+	// perform insert
+	GenericNode* newNode = persistentUnit->newNode(addOp->newNode());
+	Q_ASSERT(!newNode->parent());
+	Q_ASSERT(newNode->children().isEmpty());
+
+	if (parent)
+	{
+		parent = tree->find(parent->id(), parent->persistentUnit()->name());
+
+		if (isListType(parent))
+			performInsertIntoList(parent, newNode);
+		else
+		{
+			parent->addChild(newNode);
+			newNode->setParent(parent);
+		}
+	}
+
+	return true;
+}
+
+bool Merge::applyDeleteToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& /*changes*/,
+										const ChangeDescription* deleteOp)
+{
+	QString persistentUnitName = deleteOp->oldNode()->persistentUnit()->name();
+	GenericNode* node = tree->find(deleteOp->id(), persistentUnitName);
+	Q_ASSERT(node);
+
+	if (node->children().size() > 0)
+		return false;
+
+	GenericNode* parent = node->parent();
+	if (parent && isListType(parent))
+	{
+		int index = node->name().toInt();
+		for (GenericNode* child : parent->children())
+		{
+			int childIndex = child->name().toInt();
+			if (index < childIndex)
+			{
+				--childIndex;
+				child->setName(QString::number(childIndex));
+			}
+		}
+	}
+	node->remove();
+
+	return true;
+}
+
+bool Merge::applyMoveToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+									 const ChangeDescription* moveOp)
+{
+	GenericNode* targetParent = moveOp->newNode()->parent();
+	if (targetParent && changes.contains(targetParent->id()))
+		return false;
+
+	QString targetPersistentUnitName = moveOp->newNode()->persistentUnit()->name();
+	GenericPersistentUnit* targetPersistentUnit = tree->persistentUnit(targetPersistentUnitName);
+	if (!targetPersistentUnit)
+		targetPersistentUnit = &tree->newPersistentUnit(targetPersistentUnitName);
+
+	GenericNode* nodeToMove = tree->find(moveOp->id(), moveOp->oldNode()->persistentUnit()->name());
+	Q_ASSERT(nodeToMove);
+	GenericNode* sourceParent = nodeToMove->parent();
+
+	GenericNode* newNode = targetPersistentUnit->newNode(nodeToMove, true);
+	nodeToMove->detach();
+
+	if (sourceParent && isListType(sourceParent))
+	{
+		int index = nodeToMove->name().toInt();
+		for (GenericNode* child : sourceParent->children())
+		{
+			int childIndex = child->name().toInt();
+			if (index < childIndex)
+			{
+				--childIndex;
+				child->setName(QString::number(childIndex));
+			}
+		}
+	}
+
+	if (targetParent)
+	{
+		targetParent = tree->find(targetParent->id(), targetParent->persistentUnit()->name());
+
+		if (isListType(targetParent))
+			performInsertIntoList(targetParent, newNode);
+		else
+		{
+			targetParent->addChild(newNode);
+			newNode->setParent(targetParent);
+		}
+	}
+
+	return true;
+}
+
+bool Merge::applyStationaryChangeToTree(std::unique_ptr<GenericTree> const& tree,
+													 IdToChangeDescriptionHash& /*changes*/,
+													 const ChangeDescription* stationaryOp)
+{
+	GenericNode* node = tree->find(stationaryOp->id(), stationaryOp->oldNode()->persistentUnit()->name());
+	Q_ASSERT(node);
+
+	ChangeDescription::UpdateFlags flags = stationaryOp->flags();
+
+	if (flags.testFlag(ChangeDescription::Value))
+	{
+		GenericNode::ValueType type = stationaryOp->newNode()->valueType();
+		QString value = stationaryOp->newNode()->rawValue();
+		node->resetValue(type, value);
+	}
+
+	if (flags.testFlag(ChangeDescription::Type))
+	{
+		QString type = stationaryOp->newNode()->type();
+		node->setType(type);
+	}
+
+	if (flags.testFlag(ChangeDescription::Order))
+	{
+		GenericNode* parent = stationaryOp->newNode()->parent();
+		if (parent)
+		{
+			parent = tree->find(parent->id(), parent->persistentUnit()->name());
+			Q_ASSERT(parent);
+
+			if (isListType(parent))
+			{
+				if (!reorderedLists_.contains(parent->id()))
+					performReorderInList(parent, node);
+			}
+			else
+				node->setName(stationaryOp->newNode()->name());
+		}
+		else
+			node->setName(stationaryOp->newNode()->name());
+	}
+
+	return true;
+}
+
+void Merge::performInsertIntoList(GenericNode* parent, GenericNode* node)
+{
+	Q_ASSERT(mergedLists_.contains(parent->id()));
+
+	ListType listType = getListType(parent);
+	bool resolveOrder;
+	if (listType == ListType::OrderedList)
+		resolveOrder = false;
+	else
+		resolveOrder = true;
+
+	QList<Model::NodeIdType> targetList = applyListMerge(mergedLists_.value(parent->id()), resolveOrder);
+	Q_ASSERT(!targetList.empty());
+	int index = listInsertionIndex(targetList, genericNodeListToNodeIdList(parent->children()), node->id());
+
+	for (GenericNode* child : parent->children())
+	{
+		int childIndex = child->name().toInt();
+		if (index <= childIndex)
+		{
+			++childIndex;
+			child->setName(QString::number(childIndex));
+		}
+	}
+
+	node->setName(QString::number(index));
+	parent->addChild(node);
+}
+
+void Merge::performReorderInList(GenericNode* parent, GenericNode* node)
+{
+	Q_ASSERT(mergedLists_.contains(parent->id()));
+	Q_ASSERT(node->parent() == parent);
+
+	ListType listType = getListType(parent);
+	bool resolveOrder;
+	if (listType == ListType::OrderedList)
+		resolveOrder = false;
+	else
+		resolveOrder = true;
+
+	QList<Model::NodeIdType> targetList = applyListMerge(mergedLists_.value(parent->id()), resolveOrder);
+	Q_ASSERT(!targetList.empty());
+
+	QSet<Model::NodeIdType> availableIds =
+			QSet<Model::NodeIdType>::fromList(genericNodeListToNodeIdList(parent->children()));
+
+	QHash<Model::NodeIdType, QString> indexList;
+	int index = 0;
+	for (Model::NodeIdType id : targetList)
+	{
+		if (availableIds.contains(id))
+		{
+			indexList.insert(id, QString::number(index));
+			qDebug() << id << index;
+			++index;
+		}
+	}
+
+	for (GenericNode* child : parent->children())
+	{
+		if (indexList.contains(child->id()))
+			child->setName(indexList.value(child->id()));
+		else
+		{
+			// these nodes will be deleted but still need a valid temporary index
+			child->setName(QString::number(index));
+			++index;
+		}
+	}
+
+	reorderedLists_.insert(parent->id());
 }
 
 } /* namespace FilePersistence */

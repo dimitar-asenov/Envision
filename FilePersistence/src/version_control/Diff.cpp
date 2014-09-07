@@ -34,9 +34,9 @@ namespace FilePersistence {
 
 Diff::Diff(){}
 
-Diff::Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
-	  QList<GenericNode*> newNodes, GenericTree* newTree,
-	  const GitRepository* repository)
+Diff::Diff(QList<GenericNode*>& oldNodes, std::shared_ptr<GenericTree> oldTree,
+			  QList<GenericNode*>& newNodes, std::shared_ptr<GenericTree> newTree,
+			  const GitRepository* repository)
 {
 	oldTree_ = oldTree;
 	newTree_ = newTree;
@@ -49,31 +49,16 @@ Diff::Diff(QList<GenericNode*> oldNodes, GenericTree* oldTree,
 	for (auto node : newNodes)
 		newNodesHash.insertMulti(node->id(), node);
 
-	findParentsInCommit(oldNodesHash, oldTree_, repository);
-	findParentsInCommit(newNodesHash, newTree_, repository);
+	IdToGenericNodeHash newlyCreatedParents;
+	findParentsInCommit(oldNodesHash, newlyCreatedParents, oldTree_, repository);
+	findParentsInCommit(newNodesHash, newlyCreatedParents, newTree_, repository);
 
 	filterPersistenceUnits(oldNodesHash);
 	filterPersistenceUnits(newNodesHash);
 
-	idMatching(oldNodesHash, newNodesHash);
-}
+	idMatching(oldNodesHash, newNodesHash, newlyCreatedParents);
 
-Diff::~Diff()
-{
-	SAFE_DELETE(oldTree_);
-	SAFE_DELETE(newTree_);
-}
-
-void Diff::print() const
-{
-	QList<ChangeDescription*> descriptions = changeDescriptions_.values();
-
-	for (auto current : descriptions)
-	{
-		std::cout << "----------------------------------------" << std::endl;
-		current->print();
-	}
-	std::cout << "----------------------------------------" << std::endl;
+	markChildUpdates();
 }
 
 IdToChangeDescriptionHash Diff::changes(ChangeType type) const
@@ -99,12 +84,11 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 }
 
 // Private methods
-void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes)
+void Diff::idMatching(IdToGenericNodeHash& oldNodes, IdToGenericNodeHash& newNodes,
+							 IdToGenericNodeHash& createdParents)
 {
 	QSet<Model::NodeIdType> onlyInNewNodes = QSet<Model::NodeIdType>::fromList(newNodes.keys());
 	QList<GenericNode*> oldNodesValueList = oldNodes.values();
-
-	ChangeDescription* description = nullptr;
 
 	IdToGenericNodeHash::iterator iter;
 	for (auto oldNode : oldNodesValueList)
@@ -113,14 +97,12 @@ void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes
 		if (iter == newNodes.end())
 		{
 			// no such id in newNodes
-			description = new ChangeDescription(oldNode, nullptr);
-			changeDescriptions_.insert(oldNode->id(), description);
+			changeDescriptions_.insert(oldNode->id(), new ChangeDescription(oldNode, nullptr));
 		}
 		else
 		{
 			// found id
-			description = new ChangeDescription(oldNode, iter.value());
-			changeDescriptions_.insert(oldNode->id(), description);
+			changeDescriptions_.insert(oldNode->id(), new ChangeDescription(oldNode, iter.value()));
 			// id is also present in oldNodes
 			onlyInNewNodes.remove(iter.key());
 		}
@@ -129,13 +111,15 @@ void Diff::idMatching(IdToGenericNodeHash oldNodes, IdToGenericNodeHash newNodes
 	for (auto newId : onlyInNewNodes)
 	{
 		iter = newNodes.find(newId);
-		description = new ChangeDescription(nullptr, iter.value());
-		changeDescriptions_.insert(newId, description);
+		changeDescriptions_.insert(newId, new ChangeDescription(nullptr, iter.value()));
 	}
+
+	for (auto parent : createdParents.values())
+		changeDescriptions_.insert(parent->id(), new ChangeDescription(parent, parent));
 }
 
-void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
-										 const GitRepository* repository)
+void Diff::findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& createdParents,
+										 std::shared_ptr<GenericTree> tree, const GitRepository* repository)
 {
 	QHash<QString, Model::NodeIdType> fileToNodeIDs;
 	for (auto node : nodes.values())
@@ -146,7 +130,6 @@ void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
 	IdToGenericNodeHash::iterator iter = nodes.end();
 	for (auto path : fileToNodeIDs.uniqueKeys())
 	{
-		//GenericPersistentUnit fullFileUnit = tree->newPersistentUnit(fullFile);
 		GenericPersistentUnit* unit = tree->persistentUnit(path);
 		const CommitFile* file = repository->getCommitFile(tree->commitName(), path);
 		GenericNode* root = Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(fullFile));
@@ -162,7 +145,7 @@ void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
 			if (iter == nodes.end())
 			{
 				parent = unit->newNode(parentInFile);
-				nodes.insert(parent->id(), parent);
+				createdParents.insert(parent->id(), parent);
 			}
 			else
 				parent = iter.value();
@@ -173,7 +156,80 @@ void Diff::findParentsInCommit(IdToGenericNodeHash nodes, GenericTree* tree,
 	}
 }
 
-void Diff::filterPersistenceUnits(IdToGenericNodeHash nodes)
+void Diff::markChildUpdates()
+{
+	for (ChangeDescription* change : changeDescriptions_.values())
+	{
+		switch (change->type())
+		{
+			case ChangeType::Added:
+			{
+				GenericNode* parent = change->newNode()->parent();
+				if (parent)
+				{
+					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
+					Q_ASSERT(parentChange);
+					parentChange->setChildrenUpdate(true);
+				}
+				break;
+			}
+
+			case ChangeType::Deleted:
+			{
+				GenericNode* parent = change->oldNode()->parent();
+				if (parent)
+				{
+					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
+					Q_ASSERT(parentChange);
+					parentChange->setChildrenUpdate(true);
+				}
+				break;
+			}
+
+			case ChangeType::Moved:
+			{
+				GenericNode* parent = change->oldNode()->parent();
+				if (parent)
+				{
+					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
+					Q_ASSERT(parentChange);
+					parentChange->setChildrenUpdate(true);
+				}
+
+				parent = change->newNode()->parent();
+				if (parent)
+				{
+					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
+					Q_ASSERT(parentChange);
+					parentChange->setChildrenUpdate(true);
+				}
+
+				break;
+			}
+
+			case ChangeType::Stationary:
+			{
+				ChangeDescription::UpdateFlags flags = change->flags();
+				if (flags.testFlag(ChangeDescription::Order))
+				{
+					GenericNode* parent = change->oldNode()->parent();
+					if (parent)
+					{
+						ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
+						Q_ASSERT(parentChange);
+						parentChange->setChildrenUpdate(true);
+					}
+				}
+				break;
+			}
+
+			default:
+				Q_ASSERT(false);
+		}
+	}
+}
+
+void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
 	for (auto key : nodes.uniqueKeys())
 	{
@@ -183,7 +239,7 @@ void Diff::filterPersistenceUnits(IdToGenericNodeHash nodes)
 			GenericNode* persistenceUnitRoot = nullptr;
 
 			QList<GenericNode*> persistenceList = nodes.values(key);
-			if (persistenceUnitType.compare(persistenceList.first()->type()) == 0)
+			if (GenericNode::persistentUnitType.compare(persistenceList.first()->type()) == 0)
 			{
 				persistenceUnitDefinition = persistenceList.first();
 				persistenceUnitRoot = persistenceList.last();
@@ -203,7 +259,5 @@ void Diff::filterPersistenceUnits(IdToGenericNodeHash nodes)
 		Q_ASSERT(nodes.count(key) == 1);
 	}
 }
-
-const QString Diff::persistenceUnitType = "persistencenewunit";
 
 } /* namespace FilePersistence */

@@ -49,8 +49,7 @@ class FILEPERSISTENCE_API GitRepository
 		GitRepository(QString path);
 		~GitRepository();
 
-		bool merge(QString revision, bool fastForward = true);
-		Merge& currentMerge();
+		std::shared_ptr<Merge> merge(QString revision, bool fastForward = true);
 
 		Diff diff(QString oldRevision, QString newRevision) const;
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
@@ -86,13 +85,15 @@ class FILEPERSISTENCE_API GitRepository
 	private:
 		friend class Merge;
 
+		QString projectName() const;
+
 		void writeRevisionIntoIndex(RevisionString revision);
 		SHA1 writeIndexToTree();
 
 		void newCommit(SHA1 tree, QString message, Signature author, Signature committer, QStringList parents);
 		SHA1 findMergeBase(RevisionString revision) const;
 
-		git_signature* createGitSignature(Signature signature);
+		git_signature* createGitSignature(Signature& signature);
 
 		static const QString PATH_HEADS;
 		static const QString PATH_REMOTES;
@@ -122,7 +123,7 @@ class FILEPERSISTENCE_API GitRepository
 
 		static const char* HEAD;
 
-		Merge* merge_{};
+		std::weak_ptr<Merge> merge_;
 
 		QString path_;
 		git_repository* repository_{};
@@ -130,7 +131,5 @@ class FILEPERSISTENCE_API GitRepository
 };
 
 inline QString GitRepository::workdirPath() const { return path_; }
-
-inline Merge& GitRepository::currentMerge() { return *merge_; }
 
 } /* namespace FilePersistence */

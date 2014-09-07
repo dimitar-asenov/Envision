@@ -40,36 +40,141 @@ class GitRepository;
 class FILEPERSISTENCE_API Merge
 {
 	public:
+		~Merge();
+
 		enum class Kind {Unclassified, AlreadyUpToDate, FastForward, TrueMerge};
+		Kind kind() const;
+
 		enum class Stage {NoMerge, Initialized, Classified, ConflictsDetected, ReadyToCommit, Complete};
+		Stage stage() const;
+
 		enum class Error {NoError, NoMergeBase};
+		Error error() const;
 
 		bool abort();
-		bool commit(Signature author, Signature committer, QString message);
+		bool commit(Signature& author, Signature& committer, QString& message);
+
+		std::unique_ptr<GenericTree> const& mergeTree() const;
 
 	private:
 		friend class GitRepository;
 
-		Merge(GitRepository* repository);
-		~Merge();
+		enum class NodeSource {Base, HEAD, Revision};
 
-		bool newMerge(RevisionString revision, bool fastForward);
+		Merge(RevisionString revision, bool fastForward, GitRepository* repository);
 
-		void initialize(RevisionString revision, bool fastForward);
+		void initialize(RevisionString revision, bool fastForward, GitRepository* repository);
+
 		void classifyKind();
 
-		void startMerging();
+		void performMerge();
 
 		void performFastForward();
 
-		void detectConflicts();
-		void loadMergeBase();
+		void buildConflictUnitMap(IdToChangeDescriptionHash& CUToChange,
+										  QHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
+										  const Diff& diff, std::unique_ptr<GenericTree> const& versionTree,
+										  std::unique_ptr<GenericTree> const& baseTree);
+
+		Model::NodeIdType findConflicUnit(Model::NodeIdType nodeID, bool inBase, const Diff& diff,
+													 const GenericPersistentUnit* unit) const;
+		bool isConflictUnit(const GenericNode* node, NodeSource source, const ChangeDescription* baseToSource) const;
+		bool isConflictUnitNode(const GenericNode*) const;
+
+		QList<Model::NodeIdType> detectConflictingConflictUnits();
+
+		void markConflictRegions(QList<Model::NodeIdType>& conflicts);
+
+		struct Hunk
+		{
+				bool stable_;
+				QList<Model::NodeIdType> head_;
+				QList<Model::NodeIdType> revision_;
+				QList<Model::NodeIdType> base_;
+
+				Hunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
+					  QList<Model::NodeIdType> baseList);
+		};
+
+		void computeMergeForLists(std::unique_ptr<GenericTree> const& head, std::unique_ptr<GenericTree> const& revision,
+										  std::unique_ptr<GenericTree> const& base, const IdToChangeDescriptionHash& baseToHead,
+										  const IdToChangeDescriptionHash& baseToRevision);
+
+		int listInsertionIndex(const QList<Model::NodeIdType>& target, const QList<Model::NodeIdType>& current,
+									  Model::NodeIdType insertID) const;
+
+		QList<Model::NodeIdType> applyListMerge(const QList<Hunk>& hunkList, bool resolveOrder) const;
+
+		QList<Hunk>& mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
+										const QList<Model::NodeIdType> base, Model::NodeIdType id);
+
+		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> list,
+																				 const QList<Model::NodeIdType> stableIDs);
+
+		static QList<Model::NodeIdType> longestCommonSubsequence(const QList<Model::NodeIdType> listA,
+																					const QList<Model::NodeIdType> listB);
+
+		static QList<Model::NodeIdType> backtrackLCS(int** data, const QList<Model::NodeIdType> x,
+																	const QList<Model::NodeIdType> y, int posX, int posY);
+
+		static QList<Model::NodeIdType> genericNodeListToNodeIdList(const QList<GenericNode*>& list);
+
+		enum class ListType {NoList, OrderedList, UnorderedList};
+		static ListType getListType(const GenericNode* node);
+		static bool isListType(const GenericNode* node);
+
+		void loadGenericTree(std::unique_ptr<GenericTree> const& tree, const SHA1 version);
+		void findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations);
+
+		void mergeChangesIntoTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes,
+										  QList<QSet<Model::NodeIdType>>& conflictRegions);
+		void applyChangesToTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes);
+
+
+		bool applyAddToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+								  const ChangeDescription* addOp);
+		bool applyDeleteToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+									  const ChangeDescription* deleteOp);
+		bool applyMoveToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+									const ChangeDescription* moveOp);
+		bool applyStationaryChangeToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+													const ChangeDescription* stationaryOp);
+
+		void performInsertIntoList(GenericNode* parent, GenericNode* node);
+		void performReorderInList(GenericNode* parent, GenericNode* node);
+
+		static const QStringList ORDERED_LISTS;
+		static const QStringList UNORDERED_LISTS;
+
+		static const QStringList STATEMENTS;
+		static const QStringList DECLARATIONS;
+		static const QStringList ADDITIONAL_NODES;
 
 		Kind kind_{};
 		Stage stage_{};
 		Error error_{};
 
-		Model::TreeManager* baseTree_;
+		// List handling
+		QHash<Model::NodeIdType, QList<Hunk>> mergedLists_;
+		QSet<Model::NodeIdType> reorderedLists_;
+
+		// Conflict regions
+		QList<QSet<Model::NodeIdType>> conflictRegions_;
+		QHash<Model::NodeIdType, QSet<Model::NodeIdType>&> nodeToRegionMap_;
+
+		// Conflict units maps
+		IdToChangeDescriptionHash revisionCUToChangeMap_;
+		IdToChangeDescriptionHash headCUToChangeMap_;
+
+		QHash<Model::NodeIdType, Model::NodeIdType> revisionChangeToCUMap_;
+		QHash<Model::NodeIdType, Model::NodeIdType> headChangeToCUMap_;
+
+		// GenericTrees
+		std::unique_ptr<GenericTree> mergeBaseTree_;
+		std::unique_ptr<GenericTree> revisionTree_;
+		std::unique_ptr<GenericTree> headTree_;
+
+		std::unique_ptr<GenericTree> mergeTree_;
 
 		// Diffs to base version
 		Diff baseRevisionDiff_;
@@ -84,5 +189,9 @@ class FILEPERSISTENCE_API Merge
 
 		GitRepository* repository_{};
 };
+
+inline Merge::Kind Merge::kind() const { return kind_; }
+inline Merge::Stage Merge::stage() const { return stage_; }
+inline Merge::Error Merge::error() const { return error_; }
 
 } /* namespace FilePersistence */

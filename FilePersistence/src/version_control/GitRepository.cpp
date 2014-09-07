@@ -157,14 +157,10 @@ GitRepository::GitRepository(QString path)
 
 	int error = git_repository_open(&(repository_), path_.toStdString().c_str());
 	checkError(error);
-
-	merge_ = new Merge(this);
 }
 
 GitRepository::~GitRepository()
 {
-	delete merge_;
-
 	git_repository_free(repository_);
 
 	// Bugfix: shutdown git threads is usually done automatically
@@ -172,10 +168,12 @@ GitRepository::~GitRepository()
 	git_threads_shutdown();
 }
 
-bool GitRepository::merge(QString revision, bool fastForward)
+std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 {
-	bool success = merge_->newMerge(revision, fastForward);
-	return success;
+	if (merge_.expired())
+		return std::shared_ptr<Merge>(new Merge(revision, fastForward, this));
+	else
+		return std::shared_ptr<Merge>();
 }
 
 Diff GitRepository::diff(QString oldRevision, QString newRevision) const
@@ -286,8 +284,11 @@ Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 	git_tree_free(newGitTree);
 	git_diff_free(gitDiff);
 
-	return Diff(carryAlongData.oldNodes_, carryAlongData.oldTree_,
-					carryAlongData.newNodes_, carryAlongData.newTree_,
+	std::shared_ptr<GenericTree> oldTree(carryAlongData.oldTree_);
+	std::shared_ptr<GenericTree> newTree(carryAlongData.newTree_);
+
+	return Diff(carryAlongData.oldNodes_, oldTree,
+					carryAlongData.newNodes_, newTree,
 					this);
 }
 
@@ -613,6 +614,18 @@ bool GitRepository::isValidRevisionString(RevisionString revision) const
 
 // Private methods
 
+QString GitRepository::projectName() const
+{
+	QString path(path_);
+
+	int index = path.lastIndexOf(QDir::separator());
+	index++;
+
+	QString name = path.right(index);
+
+	return name;
+}
+
 void GitRepository::writeRevisionIntoIndex(RevisionString revision)
 {
 	int errorCode = 0;
@@ -679,7 +692,8 @@ void GitRepository::newCommit(SHA1 tree, QString message, Signature author, Sign
 	git_signature* gitCommitter = createGitSignature(committer);
 
 
-	char* gitMessage = message.toUtf8().data();
+	char* gitMessage = new char[message.size()];
+	strcpy(gitMessage, message.toUtf8().data());
 
 	git_commit** gitParents = new git_commit* [parents.size()];
 	for (int i = 0; i < parents.size(); i++)
@@ -692,7 +706,7 @@ void GitRepository::newCommit(SHA1 tree, QString message, Signature author, Sign
 	// create commit
 	git_oid newCommitOid;
 	errorCode = git_commit_create(&newCommitOid, repository_, HEAD, gitAuthor, gitCommitter,
-											"UTF-8", gitMessage, gitTree, parents.size(),
+											nullptr, gitMessage, gitTree, parents.size(),
 											const_cast<const git_commit**>(gitParents));
 
 	git_tree_free(gitTree);
@@ -701,6 +715,7 @@ void GitRepository::newCommit(SHA1 tree, QString message, Signature author, Sign
 	for (int i = 0; i < parents.size(); i++)
 		git_commit_free(gitParents[i]);
 
+	SAFE_DELETE(gitMessage);
 }
 
 SHA1 GitRepository::findMergeBase(RevisionString revision) const
@@ -730,18 +745,25 @@ SHA1 GitRepository::findMergeBase(RevisionString revision) const
 	return mergeBase;
 }
 
-git_signature* GitRepository::createGitSignature(Signature signature)
+git_signature* GitRepository::createGitSignature(Signature& signature)
 {
 	int errorCode = 0;
 
-	const char* name = signature.name_.toStdString().c_str();
-	const char* eMail = signature.eMail_.toStdString().c_str();
+	char* name = new char[signature.name_.size()];
+	strcpy(name, signature.name_.toStdString().c_str());
+
+	char* eMail = new char[signature.eMail_.size()];
+	strcpy(eMail, signature.eMail_.toStdString().c_str());
+
 	git_time_t time = signature.dateTime_.toTime_t();
 	int offset = signature.timeZone_.offsetFromUtc(signature.dateTime_) / 60;
 
 	git_signature* gitSignature = nullptr;
 	errorCode = git_signature_new(&gitSignature, name, eMail, time, offset);
 	checkError(errorCode);
+
+	SAFE_DELETE(name);
+	SAFE_DELETE(eMail);
 
 	return gitSignature;
 }
