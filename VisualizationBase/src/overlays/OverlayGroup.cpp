@@ -112,6 +112,11 @@ void OverlayGroup::setOverlayConstructor2Args(OverlayConstructor2Args constructo
 	constructorFunction2_ = constructor;
 }
 
+void OverlayGroup::setPostUpdateFunction(PostUpdateFunction function)
+{
+	postUpdateFunction_ = function;
+}
+
 void OverlayGroup::addOverlayFor(Item* item)
 {
 	addOverlay(constructorFunction1_(item));
@@ -168,6 +173,8 @@ void OverlayGroup::update()
 
 		for (auto& overlay : overlays_)
 			overlay->overlayItem()->updateSubtree();
+
+		if (postUpdateFunction_) postUpdateFunction_(*this);
 	}
 }
 

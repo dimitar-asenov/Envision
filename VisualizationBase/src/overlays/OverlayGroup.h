@@ -61,7 +61,10 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		void setOverlayConstructor2Args(OverlayConstructor2Args constructor);
 		void addOverlayFor(Item* item);
 		void addOverlayFor(Item* item1, Item* item2);
+		using PostUpdateFunction = std::function<void (OverlayGroup& group)>;
+		void setPostUpdateFunction(PostUpdateFunction function);
 
+		const QList<OverlayAccessor*>& overlays() const;
 
 	private:
 		friend class Scene;
@@ -77,6 +80,7 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		ItemGetter2Items itemGetterFunction2_;
 		OverlayConstructor1Arg constructorFunction1_;
 		OverlayConstructor2Args constructorFunction2_;
+		PostUpdateFunction postUpdateFunction_;
 
 		void removeOverlay(QList<OverlayAccessor*>::iterator it);
 
@@ -88,5 +92,6 @@ class VISUALIZATIONBASE_API OverlayGroup {
 
 inline const QString& OverlayGroup::name() const {return name_;}
 inline Scene* OverlayGroup::scene() const {return scene_;}
+inline const QList<OverlayAccessor*>& OverlayGroup::overlays() const { return overlays_; }
 
 } /* namespace Visualization */
