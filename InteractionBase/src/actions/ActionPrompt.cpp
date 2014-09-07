@@ -107,19 +107,14 @@ void ActionPrompt::initializeForms()
 
 void ActionPrompt::setHighlight(bool show)
 {
+	SAFE_DELETE_ITEM(highlight_);
+
 	if (show && currentActionReceiver_)
 	{
-		if (highlight_) highlight_->setAssociatedItems({currentActionReceiver_});
-		else
-		{
-			highlight_ = new Visualization::SelectionOverlay(currentActionReceiver_);
-			Q_ASSERT(scene());
-			scene()->addTopLevelItem(highlight_);
-		}
+		highlight_ = new Visualization::SelectionOverlay(currentActionReceiver_);
+		Q_ASSERT(scene());
+		scene()->addTopLevelItem(highlight_);
 	}
-	else SAFE_DELETE_ITEM(highlight_);
-
-
 }
 
 void ActionPrompt::setReceiverName()

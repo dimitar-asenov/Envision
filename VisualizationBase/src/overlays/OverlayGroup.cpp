@@ -130,7 +130,10 @@ void OverlayGroup::update()
 		{
 			Q_ASSERT(constructorFunction1_);
 			Item::synchronizeCollections(nullptr, itemGetterFunction1_(), overlays_,
-					[](Item*, OverlayAccessor*){return true;}, // Always match and reuse/sync items
+					[](Item* itemToOverlay, OverlayAccessor* overlay)
+					{
+						return itemToOverlay == overlay->associatedItems().first();
+					},
 					[this](Item*, Item* itemToOverlay)
 					{
 						auto overlay = constructorFunction1_(itemToOverlay);
@@ -138,19 +141,20 @@ void OverlayGroup::update()
 						scene_->addItem(overlay->overlayItem());
 						return overlay;
 					},
-					[](Item*, Item* itemToOverlay, OverlayAccessor* overlay)
-					{
-						if (itemToOverlay == overlay->associatedItems().first()) return false;
-						overlay->setAssociatedItems({itemToOverlay});
-						return true;
-					});
+					[](Item*, Item*, OverlayAccessor*) {return false;}
+					);
 		}
 
 		if (itemGetterFunction2_)
 		{
 			Q_ASSERT(constructorFunction2_);
 			Item::synchronizeCollections(nullptr, itemGetterFunction2_(), overlays_,
-					[](const QPair<Item*, Item*>&, OverlayAccessor*){return true;}, // Always match and reuse/sync items
+					[](const QPair<Item*, Item*>& pair, OverlayAccessor* overlay)
+					{
+						return overlay->associatedItems().size() == 2
+								&& pair.first == overlay->associatedItems().first()
+								&& pair.second == overlay->associatedItems().at(1);
+					},
 					[this](Item*, const QPair<Item*, Item*>& pair)
 					{
 						auto overlay = constructorFunction2_(pair.first, pair.second);
@@ -158,13 +162,8 @@ void OverlayGroup::update()
 						scene_->addItem(overlay->overlayItem());
 						return overlay;
 					},
-					[](Item*, const QPair<Item*, Item*>& pair, OverlayAccessor* overlay)
-					{
-						if ( pair.first == overlay->associatedItems().first()
-								&& pair.second == overlay->associatedItems().at(1)) return false;
-						overlay->setAssociatedItems({pair.first, pair.second});
-						return true;
-					});
+					[](Item*, const QPair<Item*, Item*>&, OverlayAccessor*){return false;}
+					);
 		}
 
 		for (auto& overlay : overlays_)

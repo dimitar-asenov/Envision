@@ -43,8 +43,6 @@ class Overlay : public Super
 		Item* lastAssociatedItem() const;
 		const QList<Item*>& associatedItems() const;
 
-		void setAssociatedItems(QList<Item*> associatedItems);
-
 	private:
 		QList<Item*> associatedItems_;
 
@@ -75,14 +73,6 @@ inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Supe
 	Super::setAcceptedMouseButtons(0);
 	Super::setZValue(Super::LAYER_SELECTION_Z);
 	Super::setItemCategory(Scene::SelectionItemCategory);
-}
-
-template <class Super>
-inline void Overlay<Super>::setAssociatedItems(QList<Item*> associatedItems)
-{
-	Q_ASSERT(!associatedItems.isEmpty());
-	associatedItems_ = associatedItems;
-	Super::setUpdateNeeded(Super::StandardUpdate);
 }
 
 } /* namespace Visualization */
