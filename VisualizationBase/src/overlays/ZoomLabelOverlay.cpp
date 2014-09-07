@@ -52,9 +52,18 @@ void ZoomLabelOverlay::determineChildren()
 
 void ZoomLabelOverlay::updateGeometry(int availableWidth, int availableHeight)
 {
-	setPos(associatedItem()->scenePos());
-	setScale(1/mainViewScalingFactor());
 	Super::updateGeometry(availableWidth, availableHeight);
+
+	setPos(associatedItem()->scenePos());
+
+	auto maxScale = 1/mainViewScalingFactor();
+	auto widthScale = associatedItem()->widthInScene() / (double) widthInLocal();
+	auto heightScale = associatedItem()->heightInScene() / (double) heightInLocal();
+	auto scaleToUse = maxScale;
+	if (widthScale < scaleToUse) scaleToUse = widthScale;
+	if (heightScale < scaleToUse) scaleToUse = heightScale;
+
+	setScale(scaleToUse);
 }
 
 bool ZoomLabelOverlay::isSensitiveToScale() const
@@ -134,8 +143,8 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 	{
 		auto item = stack.takeLast();
 
-		const double OVERLAY_MIN_WIDTH = 100;
-		const double OVERLAY_MIN_HEIGHT = 50;
+		const double OVERLAY_MIN_WIDTH = 50;
+		const double OVERLAY_MIN_HEIGHT = 20;
 			if (item->widthInParent() * scalingFactor < OVERLAY_MIN_WIDTH
 					|| item->heightInParent() * scalingFactor < OVERLAY_MIN_HEIGHT)
 				continue;
