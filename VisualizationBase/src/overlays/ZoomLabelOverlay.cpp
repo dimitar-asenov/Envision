@@ -33,16 +33,24 @@
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/overlays/OverlayAccessor.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(ZoomLabelOverlay, "item")
+
+QHash<Item*, ZoomLabelOverlay*>& ZoomLabelOverlay::itemToOverlay()
+{
+	static QHash<Item*, ZoomLabelOverlay*> map;
+	return map;
+}
 
 ZoomLabelOverlay::ZoomLabelOverlay(Item* itemWithLabel, const StyleType* style) : Super{{itemWithLabel}, style}
 {
 	Q_ASSERT(itemWithLabel->node());
 	Q_ASSERT(itemWithLabel->node()->definesSymbol());
 	iconStyle_ = associatedItemIconStyle();
+	itemToOverlay().insert(itemWithLabel, this);
 }
 
 void ZoomLabelOverlay::determineChildren()
@@ -136,7 +144,11 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 	const double OVERLAY_SCALE_TRESHOLD = 0.5;
 	auto scalingFactor = scene->mainViewScalingFactor();
 
-	if (scalingFactor >= OVERLAY_SCALE_TRESHOLD) return result;
+	if (scalingFactor >= OVERLAY_SCALE_TRESHOLD)
+	{
+		itemToOverlay().clear();
+		return result;
+	}
 
 
 	QList<Item*> stack = scene->topLevelItems();
@@ -157,6 +169,64 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 	}
 
 	return result;
+}
+
+void ZoomLabelOverlay::setItemPositionsAndHideOverlapped(OverlayGroup& group)
+{
+	static int postUpdateRevision{};
+	++postUpdateRevision;
+
+	for (auto accessor : group.overlays())
+		static_cast<ZoomLabelOverlay*>(accessor->overlayItem())->postUpdate(postUpdateRevision);
+}
+
+void ZoomLabelOverlay::postUpdate(int revision)
+{
+	// If already updated, do nothing
+	if (postUpdateRevision_ == revision) return;
+	postUpdateRevision_ = revision;
+
+	// Make sure all overlays above this one are updated
+	auto item = associatedItem()->parent();
+	while (item)
+	{
+		auto overlayIt = itemToOverlay().find(item);
+		if (overlayIt != itemToOverlay().end())
+		{
+			overlayIt.value()->postUpdate(revision);
+			break;
+		}
+
+		item = item->parent();
+	}
+
+	// Finally adjust the position of this overlay so that it does not overlap or if that's impossible, hide it.
+	adjustPositionOrHide();
+}
+
+void ZoomLabelOverlay::adjustPositionOrHide()
+{
+	// For now we don't actually touch the position.
+	// TODO: Adjust the position in order to show more things.
+	
+	bool visible = true;
+	auto item = associatedItem()->parent();
+	while (item)
+	{
+		auto overlayIt = itemToOverlay().find(item);
+		if (overlayIt != itemToOverlay().end())
+		{
+			if (overlayIt.value()->isVisible() && overlayIt.value()->sceneBoundingRect().intersects(sceneBoundingRect()))
+			{
+				visible = false;
+				break;
+			}
+		}
+
+		item = item->parent();
+	}
+
+	if (visible != isVisible()) setVisible(visible);
 }
 
 } /* namespace Visualization */

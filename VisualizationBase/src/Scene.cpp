@@ -81,6 +81,7 @@ Scene::Scene()
 	auto zoomLabelGroup = addOverlayGroup("Zoom labels");
 	zoomLabelGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new ZoomLabelOverlay(item));});
 	zoomLabelGroup->setDynamic1Item([this](){return ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(this);});
+	zoomLabelGroup->setPostUpdateFunction(ZoomLabelOverlay::setItemPositionsAndHideOverlapped);
 }
 
 Scene::~Scene()

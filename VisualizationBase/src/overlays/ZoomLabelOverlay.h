@@ -37,6 +37,7 @@ class Static;
 class Text;
 class TextStyle;
 class StaticStyle;
+class OverlayGroup;
 
 class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeItem<ZoomLabelOverlay>>>
 {
@@ -60,12 +61,17 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 		Static* icon_{};
 		Text* text_{};
 		const StaticStyle* iconStyle_{};
+		int postUpdateRevision_{};
+		static QHash<Item*, ZoomLabelOverlay*>& itemToOverlay();
 
 		const StaticStyle* associatedItemIconStyle() const;
 		const QString& associatedItemText() const;
 		const TextStyle* associatedItemTextStyle() const;
 
 		static QList<Item*> itemsThatShouldHaveZoomLabel(Scene* scene);
+		static void setItemPositionsAndHideOverlapped(OverlayGroup& group);
+		void postUpdate(int revision);
+		void adjustPositionOrHide();
 };
 
 } /* namespace Visualization */
