@@ -74,7 +74,8 @@ HEADERS += src/commands/CommandWithNameAndFlags.h \
     src/commands/CDiff.h \
     src/commands/CHistory.h \
     src/vis/CommentWrapper.h \
-    src/handlers/HCommentWrapper.h
+    src/handlers/HCommentWrapper.h \
+    src/commands/CMerge.h
 SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -142,4 +143,5 @@ SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/commands/CDiff.cpp \
     src/commands/CHistory.cpp \
     src/vis/CommentWrapper.cpp \
-    src/handlers/HCommentWrapper.cpp
+    src/handlers/HCommentWrapper.cpp \
+    src/commands/CMerge.cpp
