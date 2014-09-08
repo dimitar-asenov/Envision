@@ -34,6 +34,7 @@
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
+#include "VisualizationBase/src/views/MainView.h"
 
 namespace Visualization {
 
@@ -150,20 +151,28 @@ QList<Item*> ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(Scene* scene)
 		return result;
 	}
 
+	View* mainView{};
+	for (auto view : scene->views())
+		if (auto mv = dynamic_cast<MainView*>(view))
+		{
+			mainView = mv;
+			break;
+		}
 
 	QList<Item*> stack = scene->topLevelItems();
 	while (!stack.isEmpty())
 	{
 		auto item = stack.takeLast();
 
-			if (item->widthInParent() * scalingFactor < OVERLAY_MIN_WIDTH
-					|| item->heightInParent() * scalingFactor < OVERLAY_MIN_HEIGHT)
-				continue;
+		auto scaledWidth = item->widthInParent() * scalingFactor;
+		auto scaledHeight = item->heightInParent() * scalingFactor;
+		if (scaledWidth < OVERLAY_MIN_WIDTH || scaledHeight < OVERLAY_MIN_HEIGHT) continue; // Do not explore children
+		if (!mainView->visibleRect().intersects(item->sceneBoundingRect())) continue; // Do not explore children
 
-		auto definesSymbol = !DCast<RootItem>(item) && item->node() && item->node()->definesSymbol();
-
-		if (definesSymbol) result.append(item);
 		stack.append(item->childItems());
+
+		bool definesSymbol = !DCast<RootItem>(item) && item->node() && item->node()->definesSymbol();
+		if (definesSymbol) result.append(item);
 	}
 
 	return result;
