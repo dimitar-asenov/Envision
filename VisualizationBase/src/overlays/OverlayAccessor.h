@@ -39,7 +39,7 @@ class VISUALIZATIONBASE_API OverlayAccessor {
 		virtual ~OverlayAccessor() {};
 
 		virtual Item* overlayItem() const = 0;
-		virtual QList<Item*> associatedItems() const = 0;
+		virtual const QList<Item*>& associatedItems() const = 0;
 
 		// This is required from SAFE_DELETE_ITEM, called from Item::synchronizeCollections.
 		// Essentially we want this to look like an Item for that call.
@@ -57,7 +57,7 @@ class OverlayAccessorTemplate : public OverlayAccessor
 		virtual ~OverlayAccessorTemplate() { SAFE_DELETE_ITEM(overlayItem_); }
 
 		virtual T* overlayItem() const override { return overlayItem_; }
-		virtual QList<Item*> associatedItems() const  override { return overlayItem_->associatedItems(); }
+		virtual const QList<Item*>& associatedItems() const  override { return overlayItem_->associatedItems(); }
 
 	private:
 		T* overlayItem_{};
