@@ -39,7 +39,6 @@ namespace Visualization {
 class Item;
 class ModelRenderer;
 class SceneHandlerItem;
-class NameOverlay;
 class Cursor;
 class View;
 
@@ -166,7 +165,6 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
-		NameOverlay* nameOverlay_{};
 		QHash<QString, OverlayGroup> overlayGroups_;
 
 		Cursor* mainCursor_{};

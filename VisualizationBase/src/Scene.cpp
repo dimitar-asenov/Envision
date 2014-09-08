@@ -28,7 +28,6 @@
 #include "VisualizationManager.h"
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
-#include "items/NameOverlay.h"
 #include "items/RootItem.h"
 #include "overlays/OverlayAccessor.h"
 #include "overlays/SelectionOverlay.h"
@@ -64,7 +63,7 @@ QList<Scene*>& Scene::allScenes()
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()),
 	  	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)),
-	  	  nameOverlay_{new NameOverlay(this)}, hiddenItemCategories_(NoItemCategory)
+	  	  hiddenItemCategories_(NoItemCategory)
 {
 	setItemIndexMethod(NoIndex);
 
@@ -96,8 +95,6 @@ Scene::~Scene()
 	overlayGroups_.clear();
 	while (!topLevelItems_.isEmpty())
 		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
-
-	SAFE_DELETE_ITEM(nameOverlay_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
@@ -180,8 +177,6 @@ void Scene::updateNow()
 	}
 
 	computeSceneRect();
-
-	nameOverlay_->updateSubtree();
 
 	updateTimer->tick();
 	needsUpdate_ = false;

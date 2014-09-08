@@ -18,7 +18,6 @@ HEADERS += src/overlays/OverlayAccessor.h \
     src/items/VUsedLibraryStyle.h \
     src/items/VUsedLibrary.h \
     src/styles/StyleProperty.h \
-    src/items/NameOverlay.h \
     test/DeclarativeTestStyle.h \
     src/declarative/DeclarativeItemBaseStyle.h \
     src/items/VCompositeStyle.h \
@@ -129,7 +128,6 @@ SOURCES += src/overlays/ZoomLabelOverlay.cpp \
     src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
-    src/items/NameOverlay.cpp \
     test/DeclarativeTestStyle.cpp \
     src/declarative/DeclarativeItemBaseStyle.cpp \
     src/items/VCompositeStyle.cpp \
