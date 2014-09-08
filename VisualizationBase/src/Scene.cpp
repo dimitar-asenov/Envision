@@ -42,6 +42,7 @@
 
 #include "Logger/src/Timer.h"
 #include "Core/src/Profiler.h"
+#include "Core/src/EnvisionApplication.h"
 
 namespace Visualization {
 
@@ -82,10 +83,13 @@ Scene::Scene()
 	zoomLabelGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new ZoomLabelOverlay(item));});
 	zoomLabelGroup->setDynamic1Item([this](){return ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(this);});
 	zoomLabelGroup->setPostUpdateFunction(ZoomLabelOverlay::setItemPositionsAndHideOverlapped);
+
+	Core::EnvisionApplication::addOnUserInputIdleAction(this, [this](){scheduleUpdate();});
 }
 
 Scene::~Scene()
 {
+	Core::EnvisionApplication::removeOnUserInputIdleAction(this);
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
