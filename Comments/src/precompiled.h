@@ -37,7 +37,6 @@
 #include "Core/src/precompiled.h"
 
 #include <QtCore/QSignalMapper>
-#include <QtCore/QTimer>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QButtonGroup>
