@@ -35,20 +35,20 @@ namespace Alloy {
 
 void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 {
-    auto dir = new Export::SourceDir(nullptr, path);
-    dir->subDir("output");
+	auto dir = new Export::SourceDir(nullptr, path);
+	dir->subDir("output");
 
-    auto file = &dir->file("model.als");
-    auto anAlloyVisitor = new AlloyVisitor();
-    file->append(anAlloyVisitor->visit(aNode));
-    delete anAlloyVisitor;
+	auto file = &dir->file("model.als");
+	auto anAlloyVisitor = new AlloyVisitor();
+	file->append(anAlloyVisitor->visit(aNode));
+	delete anAlloyVisitor;
 
-    file->append(aNode, "pred show() {}\n");
-    file->append(aNode, "run show for 2");
+	file->append(aNode, "pred show() {}\n");
+	file->append(aNode, "run show for 2");
 
 	auto layouter = Export::FragmentLayouter{"\t"};
 
-    Export::Exporter::exportToFileSystem(path, dir, &layouter);
+	Export::Exporter::exportToFileSystem(path, dir, &layouter);
 }
 
 } /* namespace Alloy */

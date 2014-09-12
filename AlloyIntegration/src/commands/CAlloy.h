@@ -36,7 +36,7 @@ namespace Alloy {
 class ALLOYINTEGRATION_API CAlloy : public Interaction::CreateNamedObjectWithAttributes
 {
 	public:
-        CAlloy();
+		CAlloy();
 
 	protected:
 		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,

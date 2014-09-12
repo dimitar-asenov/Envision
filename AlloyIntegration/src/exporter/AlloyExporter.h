@@ -33,8 +33,7 @@ namespace Alloy {
 
 class ALLOYINTEGRATION_API AlloyExporter {
 	public:
-
-        static void exportTree(Model::Node* aNode, const QString& path);
+		static void exportTree(Model::Node* aNode, const QString& path);
 };
 
 } /* namespace JavaExport */

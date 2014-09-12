@@ -36,38 +36,38 @@ CAlloy::CAlloy() : CreateNamedObjectWithAttributes("alloy",
 Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Visualization::Item* /*target*/,
 	const std::unique_ptr<Visualization::Cursor>&, const QString& /*name*/, const QStringList& /*attributes*/)
 {
-    QString tempAlloyPath = QDir::tempPath() + "/alloy";
+	QString tempAlloyPath = QDir::tempPath() + "/alloy";
 
-    AlloyExporter::exportTree(source->node()->root(), tempAlloyPath);
+	AlloyExporter::exportTree(source->node()->root(), tempAlloyPath);
 
-    QString inputFile = tempAlloyPath + "/model.als";
-    QString outputDirectory = tempAlloyPath + "/output/";
+	QString inputFile = tempAlloyPath + "/model.als";
+	QString outputDirectory = tempAlloyPath + "/output/";
 
-    QProcess aProcess;
-    aProcess.setWorkingDirectory(QDir::currentPath());
-    aProcess.start("java -jar AlloyIntegrationCLI.jar " + inputFile + " " + outputDirectory);
-    aProcess.waitForFinished();
+	QProcess aProcess;
+	aProcess.setWorkingDirectory(QDir::currentPath());
+	aProcess.start("java -jar AlloyIntegrationCLI.jar " + inputFile + " " + outputDirectory);
+	aProcess.waitForFinished();
 
-    //*** temporary html output
-    QDir dir(outputDirectory);
-    QString html = "<h1 align=center>" + QString::number(dir.entryInfoList(QStringList("*.png"),
-                     QDir::Files|QDir::NoDotAndDotDot).count()) + " solutions found</h1>\n";
-    html += "<table align=center border=1>\n";
-    foreach(QString dirFile, dir.entryList())
-    {
-        if (dirFile.endsWith(".png"))
-            html += "<tr><td><img src=" + dirFile + "></tr></td>\n";
-    }
-    html += "</table>";
+	//*** temporary html output
+	QDir dir(outputDirectory);
+	QString html = "<h1 align=center>" + QString::number(dir.entryInfoList(QStringList("*.png"),
+		QDir::Files|QDir::NoDotAndDotDot).count()) + " solutions found</h1>\n";
+	html += "<table align=center border=1>\n";
+	foreach(QString dirFile, dir.entryList())
+	{
+		if (dirFile.endsWith(".png"))
+			html += "<tr><td><img src=" + dirFile + "></tr></td>\n";
+	}
+	html += "</table>";
 
-    QFile htmlfile(outputDirectory + "index.html");
-    htmlfile.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out(&htmlfile);
-    out << html;
-    htmlfile.close();
+	QFile htmlfile(outputDirectory + "index.html");
+	htmlfile.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&htmlfile);
+	out << html;
+	htmlfile.close();
 
-    QDesktopServices::openUrl(QUrl(tempAlloyPath + "/output/index.html"));
-    //*** end of temporary html output
+	QDesktopServices::openUrl(QUrl(tempAlloyPath + "/output/index.html"));
+	//*** end of temporary html output
 
 	return new Interaction::CommandResult();
 }

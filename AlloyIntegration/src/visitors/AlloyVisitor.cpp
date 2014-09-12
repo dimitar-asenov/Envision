@@ -41,77 +41,74 @@ namespace Alloy {
 
 void AlloyVisitor::init()
 {
-    Visitor::addType<Project>( [](AlloyVisitor* v, Project* t) -> Export::SourceFragment*
+	Visitor::addType<Project>( [](AlloyVisitor* v, Project* t) -> Export::SourceFragment*
 	{
-        auto fragment = new Export::CompositeFragment(t);
-        for (auto node : *t->classes()) *fragment << v->visit(node);
-        for (auto node : *t->modules()) *fragment << v->visit(node);
-        return fragment;
+		auto fragment = new Export::CompositeFragment(t);
+		for (auto node : *t->classes()) *fragment << v->visit(node);
+		for (auto node : *t->modules()) *fragment << v->visit(node);
+		return fragment;
 	});
 
-    Visitor::addType<Module>( [](AlloyVisitor* v, Module* t) -> Export::SourceFragment*
+	Visitor::addType<Module>( [](AlloyVisitor* v, Module* t) -> Export::SourceFragment*
 	{
-        auto fragment = new Export::CompositeFragment(t);
-        //for (auto node : *t->fields()) *fragment << v->visit(node);
-        for (auto node : *t->classes()) *fragment << v->visit(node);
-        for (auto node : *t->modules()) *fragment << v->visit(node);
-        return fragment;
+		auto fragment = new Export::CompositeFragment(t);
+		//for (auto node : *t->fields()) *fragment << v->visit(node);
+		for (auto node : *t->classes()) *fragment << v->visit(node);
+		for (auto node : *t->modules()) *fragment << v->visit(node);
+		return fragment;
 	});
 
-    Visitor::addType<Class>( [](AlloyVisitor* v, Class* t) -> Export::SourceFragment*
+	Visitor::addType<Class>( [](AlloyVisitor* v, Class* t) -> Export::SourceFragment*
 	{
-        auto fragment = new Export::CompositeFragment(t);
-        *fragment << "sig " + t->name() + "";
-        *fragment << "{";
-        for (auto node : *t->fields()) *fragment << v->visit(node);
-        *fragment << "}\n";
-        for (auto node : *t->methods()) *fragment << v->visit(node);
-        for (auto node : *t->classes()) *fragment << v->visit(node);
-        return fragment;
+		auto fragment = new Export::CompositeFragment(t);
+		*fragment << "sig " + t->name() + "";
+		*fragment << "{";
+		for (auto node : *t->fields()) *fragment << v->visit(node);
+		*fragment << "}\n";
+		for (auto node : *t->methods()) *fragment << v->visit(node);
+		for (auto node : *t->classes()) *fragment << v->visit(node);
+		return fragment;
 	});
 
-    Visitor::addType<Method>( [](AlloyVisitor* v, Method* t) -> Export::SourceFragment*
+	Visitor::addType<Method>( [](AlloyVisitor* v, Method* t) -> Export::SourceFragment*
 	{
-        auto fragment = new Export::CompositeFragment(t);
-        for (auto node : *t->items()) *fragment << v->visit(node);
-        return fragment;
+		auto fragment = new Export::CompositeFragment(t);
+		for (auto node : *t->items()) *fragment << v->visit(node);
+		return fragment;
 	});
 
-    Visitor::addType<Field>( [](AlloyVisitor*, Field* t) -> Export::SourceFragment*
-    {
-        auto fragment = new Export::CompositeFragment(t);
-        *fragment << t->name() + ":" + OOInteraction::StringComponents::stringForNode(t->typeExpression()) + ",";
-        return fragment;
-    });
+	Visitor::addType<Field>( [](AlloyVisitor*, Field* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		*fragment << t->name() + ": lone " + OOInteraction::StringComponents::stringForNode(t->typeExpression()) + ",";
+		return fragment;
+	});
 
-    Visitor::addType<MethodCallExpression>( [](AlloyVisitor* v, MethodCallExpression* t) -> Export::SourceFragment*
-    {
-        auto fragment = new Export::CompositeFragment(t);
-        if (OOInteraction::StringComponents::stringForNode(t->callee()).startsWith("Contract"))
-        {
-            *fragment << "fact { ";
-            *fragment << v->visit(t->arguments()->at(0));
-            *fragment << " }\n";
-        }
-        return fragment;
-    });
+	Visitor::addType<MethodCallExpression>( [](AlloyVisitor* v, MethodCallExpression* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		if (OOInteraction::StringComponents::stringForNode(t->callee()).startsWith("Contract"))
+		{
+			*fragment << "fact { ";
+			*fragment << v->visit(t->arguments()->at(0));
+			*fragment << " }\n";
+		}
+	return fragment;
+	});
 
-    Visitor::addType<BinaryOperation>( [](AlloyVisitor*, BinaryOperation* t) -> Export::SourceFragment*
-    {
-        auto fragment = new Export::CompositeFragment(t);
-        switch (t->op())
-        {
-            case BinaryOperation::NOT_EQUALS:
-                //TODO
-                break;
-            default:
-            break;
-        }
-
-        return fragment;
-    });
-
-
+	Visitor::addType<BinaryOperation>( [](AlloyVisitor*, BinaryOperation* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		switch (t->op())
+		{
+			case BinaryOperation::NOT_EQUALS:
+			//TODO
+				break;
+			default:
+				break;
+		}
+	return fragment;
+	});
 }
 
 }

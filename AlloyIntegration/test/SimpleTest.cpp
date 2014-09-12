@@ -44,31 +44,31 @@ namespace Alloy {
 
 TEST(AlloyIntegrationPlugin, AlloyTest)
 {
-    CHECK_INT_EQUAL(1, 1);
-    auto aLinkedList = new Class("LinkedList");
+	CHECK_INT_EQUAL(1, 1);
+	auto aLinkedList = new Class("LinkedList");
 
-    auto aNode = new Class("Node");
-    aLinkedList->classes()->append(aNode);
+	auto aNode = new Class("Node");
+	aLinkedList->classes()->append(aNode);
 
-    auto *rootNode = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
-    aLinkedList->fields()->append(rootNode);
-    auto *nextNode = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
-    aNode->fields()->append(nextNode);
+	auto *rootNode = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
+	aLinkedList->fields()->append(rootNode);
+	auto *nextNode = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
+	aNode->fields()->append(nextNode);
 
-    auto invariantMethodLinkedList = new Method("ObjectInvariant");
-    aLinkedList->methods()->append(invariantMethodLinkedList);
+	auto invariantMethodLinkedList = new Method("ObjectInvariant");
+	aLinkedList->methods()->append(invariantMethodLinkedList);
 
-    auto invariantMethodNode = new Method("ObjectInvariant");
-    aNode->methods()->append(invariantMethodNode);
+	auto invariantMethodNode = new Method("ObjectInvariant");
+	aNode->methods()->append(invariantMethodNode);
 
-    invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-            "Contract.Invariant(next!=this)")));
+	invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+		"Contract.Invariant(this!=this.next)")));
 
-    auto manager = new Model::TreeManager(aLinkedList);
+	auto manager = new Model::TreeManager(aLinkedList);
 
-    VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(aLinkedList));
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(aLinkedList));
 
-    VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 }
 
 }
