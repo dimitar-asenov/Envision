@@ -27,36 +27,55 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "items/TextStyle.h"
-
-#include "Item.h"
+#include "../declarative/DeclarativeItem.h"
+#include "../declarative/DeclarativeItemBaseStyle.h"
+#include "../overlays/Overlay.h"
 
 namespace Visualization {
 
-class BottomItemNode;
+class Static;
+class Text;
+class TextStyle;
+class StaticStyle;
+class OverlayGroup;
 
-class VISUALIZATIONBASE_API NameOverlay: public Super<Item>
+class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeItem<ZoomLabelOverlay>>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(NameOverlay, TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(ZoomLabelOverlay, DeclarativeItemBaseStyle)
 
 	public:
-		NameOverlay(Scene* scene, const StyleType* style = itemStyles().get());
-		virtual ~NameOverlay();
+		ZoomLabelOverlay(Item* itemWithLabel, const StyleType* style = itemStyles().get());
 
-		virtual UpdateType needsUpdate() override;
+		static void initializeForms();
+		int determineForm() override;
 
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+		virtual bool isSensitiveToScale() const override;
 
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		BottomItemNode* bottomItems_{};
-		QList<BottomItemNode*> dfsOrder_{};
+		friend class Scene;
 
-		const QString& overlayText(Item* item) const;
-		bool fitsInRect(const QString& text, const QFontMetrics& qfm, const QRect& r) const;
+		Static* icon_{};
+		Text* text_{};
+		const StaticStyle* iconStyle_{};
+		int postUpdateRevision_{};
+		static QHash<Item*, ZoomLabelOverlay*>& itemToOverlay();
+
+		const StaticStyle* associatedItemIconStyle() const;
+		const QString& associatedItemText() const;
+		const TextStyle* associatedItemTextStyle() const;
+
+		static QList<Item*> itemsThatShouldHaveZoomLabel(Scene* scene);
+		static void setItemPositionsAndHideOverlapped(OverlayGroup& group);
+		void postUpdate(int revision);
+		void adjustPositionOrHide();
+		static void reduceRect(QRect& rectToReduce, const QRect& rectToExclude);
+
+		static constexpr double OVERLAY_MIN_WIDTH = 50;
+		static constexpr double OVERLAY_MIN_HEIGHT = 20;
 };
 
-}
+} /* namespace Visualization */

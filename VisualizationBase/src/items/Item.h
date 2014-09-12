@@ -362,6 +362,13 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		void setScale(qreal newScale);
 
+		/**
+		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
+		 */
+		template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
+		static bool synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
+											 CreateFunction create, SyncFunction sync);
+
 	protected:
 
 		void setWidth(int width);
@@ -395,13 +402,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		template <class FieldType, class VisualizationType = FieldType>
 		bool synchronizeItem(FieldType*& item, typename VisualizationType::NodeType* node,
 				const typename VisualizationType::StyleType* style);
-
-		/**
-		 * Inserts elements that are not yet in store and adjusts the order to match that in def.
-		 */
-		template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
-		bool synchronizeCollections(const Definition& def, Store& store, CompareFunction compare,
-											 CreateFunction create, SyncFunction sync);
 
 		/**
 		 * Returns a map that associates each registered add-on with all items corresponding to it.
@@ -608,10 +608,9 @@ bool Item::synchronizeItem(FieldType*& item, typename VisualizationType::NodeTyp
 }
 
 template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
-bool Item::synchronizeCollections(const Definition& def, Store& store, CompareFunction compare,
+bool Item::synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync)
 {
-	static_assert(std::is_pointer<decltype(def.value(0))>::value, "the elements of def must be pointers");
 	static_assert(std::is_pointer<decltype(store.value(0))>::value, "the elements of store must be pointers");
 
 	bool changed = false;
@@ -621,11 +620,11 @@ bool Item::synchronizeCollections(const Definition& def, Store& store, CompareFu
 		if (i >= store.size() ) // This element is new
 		{
 			changed = true;
-			store.append(create(this, def[i]));
+			store.append(create(parent, def[i]));
 		}
 		else if ( compare(def[i], store[i]) )// This element is already there, sync it
 		{
-			changed = sync(this, def[i], store[i]) | changed;
+			changed = sync(parent, def[i], store[i]) | changed;
 		}
 		else // This element might appear somewhere ahead, we should look for it
 		{
@@ -640,7 +639,7 @@ bool Item::synchronizeCollections(const Definition& def, Store& store, CompareFu
 					auto temp = store[i];
 					store[i] = store[k];
 					store[k] = temp;
-					sync(this, def[i], store[i]);
+					sync(parent, def[i], store[i]);
 
 					found = true;
 					break;
@@ -648,7 +647,7 @@ bool Item::synchronizeCollections(const Definition& def, Store& store, CompareFu
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) store.insert( i, create(this, def[i]) );
+			if (!found ) store.insert( i, create(parent, def[i]) );
 		}
 	}
 
@@ -660,7 +659,7 @@ bool Item::synchronizeCollections(const Definition& def, Store& store, CompareFu
 		store.pop_back();
 	}
 
-	if (changed) setUpdateNeeded(StandardUpdate);
+	if (changed && parent) parent->setUpdateNeeded(StandardUpdate);
 	return changed;
 }
 

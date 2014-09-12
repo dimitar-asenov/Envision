@@ -24,35 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../visualizationbase_api.h"
-#include "ItemStyle.h"
-
-#include "Item.h"
+#include "SelectionOverlay.h"
+#include "shapes/Shape.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SelectedItem: public Super<Item>
+ITEM_COMMON_DEFINITIONS(SelectionOverlay, "item")
+
+SelectionOverlay::SelectionOverlay(Item* selectedItem, const StyleType* style) : Super{{selectedItem}, style} {}
+
+void SelectionOverlay::determineChildren(){}
+
+void SelectionOverlay::updateGeometry(int, int)
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(SelectedItem, ItemStyle)
+	if (hasShape())
+	{
+		getShape()->setInnerSize(associatedItem()->widthInScene(), associatedItem()->heightInScene());
+		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
 
-	public:
-		SelectedItem(Item* selectedItem, const StyleType* style = itemStyles().get());
-		virtual ~SelectedItem();
-
-		virtual UpdateType needsUpdate() override;
-		Item* selectedItem();
-		void setSelectedItem(Item* item);
-
-	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		Item* selectedItem_;
-};
-
-inline Item* SelectedItem::selectedItem() { return selectedItem_; }
+		setPos(associatedItem()->mapToScene(0, 0) - pos);
+	}
+}
 
 }

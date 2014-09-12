@@ -38,8 +38,12 @@ class ExpressionTreeBuildInstruction;
 
 struct INTERACTIONBASE_API ExpectedToken
 {
-	enum ExpectedType {ANY, TYPE, VALUE, ID, DELIM, END};
+	enum ExpectedType {ANY, TYPE, VALUE, ID, FIRST_DELIM, FOLLOWING_DELIM, END};
 	// TYPE and VALUE are subtypes of ANY and are not yet used
+	// FIRST_DELIM is used for the first delimiter or a multi-delimiter prefix/infix/postfix. E.g. delete [] expr
+	// or new SPACE expr
+	// FOLLOWING_DELIM is used for any delimiters immediately following FIRST_DELIM. Each prefix, postfix and infix
+	// always starts with a FIRST_DELIM
 
 	ExpectedToken(ExpectedType type, const QString& text) : type{type}, text{text} {}
 	ExpectedToken(ExpectedType type = ANY) : type{type} {}

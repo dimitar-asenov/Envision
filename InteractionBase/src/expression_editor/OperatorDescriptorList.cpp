@@ -44,31 +44,44 @@ OperatorDescriptor* OperatorDescriptorList::findByName(QString name) const
 	return nullptr;
 }
 
-QList<OperatorDescriptor*> OperatorDescriptorList::findByPrefix(const QString&  prefix) const
+inline bool OperatorDescriptorList::listStartsWith(const QStringList& longList, const QStringList& prefixToCheck)
+{
+	if (longList.isEmpty() || prefixToCheck.isEmpty() || longList.size() < prefixToCheck.size())
+		return false;
+
+	for (int i = 0; i<prefixToCheck.size(); ++i)
+	{
+		if (longList.at(i) != prefixToCheck.at(i)) return false;
+	}
+
+	return true;
+}
+
+QList<OperatorDescriptor*> OperatorDescriptorList::findByPrefix(const QStringList&  prefixTokens) const
 {
 	QList<OperatorDescriptor*> list;
 	for (OperatorDescriptor* d : ops_)
-		if ( !d->prefix().isEmpty() && d->signature().first() == prefix)
+		if ( listStartsWith(prefixTokens, d->prefix()) )
 			list.append(d);
 
 	return list;
 }
 
-QList<OperatorDescriptor*> OperatorDescriptorList::findByInfixWithoutPrefix(const QString&  infix) const
+QList<OperatorDescriptor*> OperatorDescriptorList::findByInfixWithoutPrefix(const QStringList&  infixTokens) const
 {
 	QList<OperatorDescriptor*> list;
 	for (OperatorDescriptor* d : ops_)
-		if (d->prefix().isEmpty() && !d->infixes().isEmpty() && d->infixes().first() == infix)
+		if (d->prefix().isEmpty() && !d->infixes().isEmpty() && listStartsWith(infixTokens, d->infixes().first()))
 			list.append(d);
 
 	return list;
 }
 
-QList<OperatorDescriptor*> OperatorDescriptorList::findByPostfixWithoutPreInfix(const QString&  postfix) const
+QList<OperatorDescriptor*> OperatorDescriptorList::findByPostfixWithoutPreInfix(const QStringList&  postfixTokens) const
 {
 	QList<OperatorDescriptor*> list;
 	for (OperatorDescriptor* d : ops_)
-		if (d->prefix().isEmpty() && d->infixes().isEmpty() && d->signature().last() == postfix)
+		if (d->prefix().isEmpty() && d->infixes().isEmpty() &&  listStartsWith(postfixTokens, d->postfix()))
 			list.append(d);
 
 	return list;

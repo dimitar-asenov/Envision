@@ -112,16 +112,16 @@ Expression* Operator::replaceOperand(Expression* oldExpr, Expression* newExpr)
 QString Operator::renderText()
 {
 	QStringList children;
-	children.append(descriptor_->prefix());
+	children.append(descriptor_->prefix().join(""));
 	children.append(operands_.first()->renderText());
 
 	for (int i=0; i < descriptor_->infixes().size(); ++i)
 	{
-		children.append(descriptor_->infix(i));
+		children.append(descriptor_->infix(i).join(""));
 		children.append(operands_.at(i+1)->renderText());
 	}
 
-	children.append(descriptor_->postfix());
+	children.append(descriptor_->postfix().join(""));
 	return children.join("");
 }
 
@@ -138,7 +138,7 @@ ExpressionContext Operator::findContext(int cursor_pos)
 			ExpressionContext c;
 			c.setRight(this);
 			c.setRightDelim(0);
-			c.setRightText(descriptor_->prefix());
+			c.setRightText(descriptor_->prefix().join(""));
 			c.setRightType(ExpressionContext::Expr);
 			return c;
 		}
@@ -155,7 +155,7 @@ ExpressionContext Operator::findContext(int cursor_pos)
 			ExpressionContext c;
 			c.setLeft(this);
 			c.setLeftDelim(delims.size()-1);
-			c.setLeftText(descriptor_->postfix());
+			c.setLeftText(descriptor_->postfix().join(""));
 			c.setLeftType(ExpressionContext::Expr);
 			return c;
 		}
@@ -259,7 +259,7 @@ void Operator::globalDelimiterBoundaries(int delim, int& begin, int& end)
 	if (parent()) parent()->globalExpressionBoundaries(this, begin, end);
 	else begin = 0;
 
-	end = begin + descriptor_->prefix().size();
+	end = begin + descriptor_->prefix().join("").size();
 
 	QStringList delims = descriptor_->delimiters();
 	for (int i = 1; i<=delim; ++i)
@@ -282,9 +282,9 @@ Expression* Operator::findCutExpression(bool leftside, QString cut_string)
 	{
 		// Try to cut this operator directly.
 		if (leftside)
-			result = descriptor_->postfix().isEmpty() || descriptor_->postfix() == cut_string ? last() : nullptr;
+			result = descriptor_->postfix().isEmpty() || descriptor_->postfix().join("") == cut_string ? last() : nullptr;
 		else
-			result = descriptor_->prefix().isEmpty() || descriptor_->prefix() == cut_string  ? first() : nullptr;
+			result = descriptor_->prefix().isEmpty() || descriptor_->prefix().join("") == cut_string  ? first() : nullptr;
 	}
 
 	return result;

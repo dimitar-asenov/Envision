@@ -27,7 +27,7 @@
 #pragma once
 
 #include "visualizationbase_api.h"
-#include "Highlight.h"
+#include "overlays/OverlayGroup.h"
 
 namespace Model {
 	class TreeManager;
@@ -39,8 +39,6 @@ namespace Visualization {
 class Item;
 class ModelRenderer;
 class SceneHandlerItem;
-class SelectedItem;
-class NameOverlay;
 class Cursor;
 class View;
 
@@ -141,10 +139,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		 */
 		static QList<Scene*>& allScenes();
 
-		Highlight* addHighlight(const QString& name, const QString& style);
-		Highlight* highlight(const QString& name);
-		void removeHighlight(const QString& name);
-		void removeFromHighlights(Item* itemToRemove, const QString& highlightName = QString());
+		OverlayGroup* addOverlayGroup(const QString& name);
+		OverlayGroup* overlayGroup(const QString& name);
+		void removeOverlayGroup(const QString& name);
+		void removeOverlayGroup(OverlayGroup* group);
+		void removeFromOverlayGroup(Item* itemWithOverlay, const QString& groupName = QString());
 
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
@@ -166,9 +165,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
-		QList<SelectedItem*> selections_;
-		NameOverlay* nameOverlay_{};
-		QHash<QString, Highlight> highlights_;
+		QHash<QString, OverlayGroup> overlayGroups_;
 
 		Cursor* mainCursor_{};
 		bool mainCursorsJustSet_{};
@@ -196,6 +193,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void setCurrentPaintView(View* view);
 
 		void computeSceneRect();
+
+		QList<Item*> itemsThatShouldHaveASelection();
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Scene::ItemCategories)

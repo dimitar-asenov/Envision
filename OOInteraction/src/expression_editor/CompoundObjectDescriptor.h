@@ -49,6 +49,9 @@ class OOINTERACTION_API CompoundObjectDescriptor : public OOOperatorDescriptor {
 		static int nextId();
 
 		static bool isInQuotes(int index, const QString& string, const QChar& quote = '\"');
+
+		// If this number is too large, the tokenizer's LOOK_AHEAD would also have to be adjusted.
+		static constexpr int NUM_SIGNATURE_SYMBOLS = 8;
 };
 
 } /* namespace OOInteraction */

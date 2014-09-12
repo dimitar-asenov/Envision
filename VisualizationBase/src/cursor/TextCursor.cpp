@@ -45,6 +45,12 @@ TextRenderer* TextCursor::owner() const
 	return static_cast<TextRenderer*> (Cursor::owner());
 }
 
+void TextCursor::update()
+{
+	QFontMetrics qfm(owner()->style()->font());
+	update(qfm);
+}
+
 void TextCursor::setVisualizationSize(const QSize& size)
 {
 	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());

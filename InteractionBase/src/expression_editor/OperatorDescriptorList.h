@@ -39,14 +39,15 @@ class INTERACTIONBASE_API OperatorDescriptorList {
 		void addDescriptor(OperatorDescriptor* descriptor);
 
 		OperatorDescriptor* findByName(QString name) const;
-		QList<OperatorDescriptor*> findByPrefix(const QString& prefix) const;
-		QList<OperatorDescriptor*> findByInfixWithoutPrefix(const QString&  infix) const;
-		QList<OperatorDescriptor*> findByPostfixWithoutPreInfix(const QString&  postfix) const;
+		QList<OperatorDescriptor*> findByPrefix(const QStringList& prefixTokens) const;
+		QList<OperatorDescriptor*> findByInfixWithoutPrefix(const QStringList&  infixTokens) const;
+		QList<OperatorDescriptor*> findByPostfixWithoutPreInfix(const QStringList&  postfixTokens) const;
 		int size() const;
 		OperatorDescriptor* at(int i) const;
 
 	private:
 		QList<OperatorDescriptor*> ops_;
+		static bool listStartsWith(const QStringList& longList, const QStringList& prefixToCheck);
 };
 
 inline void OperatorDescriptorList::addDescriptor(OperatorDescriptor* descriptor) { ops_.append(descriptor); }

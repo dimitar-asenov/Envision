@@ -41,6 +41,21 @@ LayoutCursor* LayoutCursor::clone() const
 	return new LayoutCursor(*this);
 }
 
+void LayoutCursor::update()
+{
+	for (auto& r : owner()->regions())
+	{
+		if (isSame(r.cursor()))
+		{
+			auto lc = static_cast<LayoutCursor*>(r.cursor());
+			auto vis = static_cast<CursorShapeItem*>(lc->visualization());
+			setVisualizationSize(vis->cursorSize());
+			setVisualizationPosition(lc->position());
+		}
+
+		if (r.cursor()) delete r.cursor();
+	}
+}
 
 void LayoutCursor::setVisualizationSize(const QSize& size)
 {

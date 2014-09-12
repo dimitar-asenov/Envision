@@ -19,9 +19,9 @@ OOInteraction::HIfStatement.
 \section associating Associating a handler class with an item class
 To set a handler to be the default handler to be used by an item class you need to call the item class'
 \c setDefaultClassHandler() method during the plug-in's \c initialize() method. Here is how this call looks in our
-example \c (OOInteraction/src/oointeraction.cpp):
-\dontinclude OOInteraction/src/oointeraction.cpp
-\skipline OOInteraction::initialize
+example \c (OOInteraction/src/OOInteractionPlugin.cpp):
+\dontinclude OOInteraction/src/OOInteractionPlugin.cpp
+\skipline OOInteractionPlugin::initialize
 \skipline {
 \skipline HIfStatement
 

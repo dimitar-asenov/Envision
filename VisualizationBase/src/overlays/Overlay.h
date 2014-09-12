@@ -26,38 +26,53 @@
 
 #pragma once
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
+#include "../items/Item.h"
 
 namespace Visualization {
 
-class Scene;
-class SelectedItem;
-class Item;
-
-class VISUALIZATIONBASE_API Highlight {
-
+template <class Super>
+class Overlay : public Super
+{
 	public:
-		~Highlight();
+		Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style = nullptr);
 
-		const QString& name() const;
-		Scene* scene() const;
-
-		void addHighlightedItem(Item* item);
-		void removeHighlightedItem(Item* item);
+		Item* associatedItem() const;
+		Item* firstAssociatedItem() const;
+		Item* secondAssociatedItem() const;
+		Item* lastAssociatedItem() const;
+		const QList<Item*>& associatedItems() const;
 
 	private:
-		friend class Scene;
+		QList<Item*> associatedItems_;
 
-		Scene* scene_{};
-		QString name_;
-		QString styleName_;
-		QHash<Item*, SelectedItem*> highlightItems_;
-
-		Highlight(Scene* scene, const QString& name, const QString& styleName);
-		void updateAllHighlights();
 };
 
-inline const QString& Highlight::name() const {return name_;}
-inline Scene* Highlight::scene() const {return scene_;}
+template <class Super>
+inline Item* Overlay<Super>::associatedItem() const { return associatedItems_.first(); }
+
+template <class Super>
+inline Item* Overlay<Super>::firstAssociatedItem() const { return associatedItems_.first(); }
+
+template <class Super>
+inline Item* Overlay<Super>::secondAssociatedItem() const { return associatedItems_.at(1); }
+
+template <class Super>
+inline Item* Overlay<Super>::lastAssociatedItem() const { return associatedItems_.last(); }
+
+template <class Super>
+inline const QList<Item*>& Overlay<Super>::associatedItems() const { return associatedItems_; }
+
+template <class Super>
+inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style)
+: Super{nullptr, style}, associatedItems_{associatedItems}
+{
+	Q_ASSERT(!associatedItems_.isEmpty());
+
+	Super::setFlags(0);
+	Super::setAcceptedMouseButtons(0);
+	Super::setZValue(Super::LAYER_SELECTION_Z);
+	Super::setItemCategory(Scene::SelectionItemCategory);
+}
 
 } /* namespace Visualization */

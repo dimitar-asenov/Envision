@@ -30,6 +30,7 @@
 #include "expression_editor/Empty.h"
 #include "expression_editor/Operator.h"
 #include "expression_editor/UnfinishedOperator.h"
+#include "expression_editor/ErrorDescriptor.h"
 #include "expression_editor/OperatorDescriptor.h"
 
 namespace Interaction {
@@ -171,10 +172,10 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 		op->globalDelimiterBoundaries(leftside ? op->descriptor()->numOperands() : 0, delim_begin, delim_end);
 		ExpressionContext c_other = top->findContext(leftside ? delim_end : delim_begin );
 		if (   ( leftside && c_other.rightType() == ExpressionContext::OpBoundary
-					&& c_other.rightText() == op->descriptor()->postfix()
+					&& c_other.rightText() == op->descriptor()->postfix().join("")
 					&& c_other.rightDelim() == c_other.rightOp()->size())
 			 || ( rightside && c_other.leftType() == ExpressionContext::OpBoundary
-					&& c_other.leftText() == op->descriptor()->prefix() && c_other.leftDelim() == 0) )
+					&& c_other.leftText() == op->descriptor()->prefix().join("") && c_other.leftDelim() == 0) )
 			wrap_parent = true;
 		else
 		return;
@@ -277,7 +278,8 @@ void ExpressionTreeUtils::shrink(Expression*& top, Operator* op, bool leftside)
 		return;
 
 	Expression* new_border_expr = (leftside ? op->first() : op->last())
-			->findCutExpression(leftside, leftside ? op->descriptor()->postfix() : op->descriptor()->prefix());
+			->findCutExpression(leftside, leftside ?
+					op->descriptor()->postfix().join("") : op->descriptor()->prefix().join(""));
 	if (new_border_expr == nullptr) return;
 
 	Operator* cut_op = new_border_expr->parent();
@@ -319,24 +321,28 @@ void ExpressionTreeUtils::fixWrongIds(Expression*& top)
 
 		if (auto op = dynamic_cast<Operator*>(e))
 		{
-			bool unfinished = dynamic_cast<UnfinishedOperator*>(op);
-			if (!unfinished)
+			bool isUnfinished = dynamic_cast<UnfinishedOperator*>(op);
+			if (!isUnfinished)
 			{
-				bool badId = false;
-				int operandIndex = 0;
-				for (auto s : op->descriptor()->signature())
+				bool isError = dynamic_cast<ErrorDescriptor*>(op->descriptor());
+				if (!isError)
 				{
-					if (s == "id")
+					bool badId = false;
+					int operandIndex = 0;
+					for (auto s : op->descriptor()->signature())
 					{
-						auto v = dynamic_cast<Value*> (op->operands().at(operandIndex));
-						badId = badId || !v || v->text().isEmpty() || !(v->text()[0].isLetter() || v->text()[0] == '_');
-						if (badId) break;
+						if (s == "id")
+						{
+							auto v = dynamic_cast<Value*> (op->operands().at(operandIndex));
+							badId = badId || !v || v->text().isEmpty() || !(v->text()[0].isLetter() || v->text()[0] == '_');
+							if (badId) break;
+						}
+
+						if (!OperatorDescriptor::isDelimiter(s)) ++operandIndex;
 					}
 
-					if (!OperatorDescriptor::isDelimiter(s)) ++operandIndex;
+					if (badId) op = UnfinishedOperator::replaceFinishedWithUnfinished(top, op);
 				}
-
-				if (badId) op = UnfinishedOperator::replaceFinishedWithUnfinished(top, op);
 			}
 
 			for (auto operand : op->operands())

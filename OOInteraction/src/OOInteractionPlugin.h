@@ -55,6 +55,8 @@ class OOInteractionPlugin : public QObject, public Core::EnvisionPlugin
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 
+		static Logger::Log& log();
+
 	private:
 		static Model::NodeToDebugStringAdapter* nodeToDebugString(Model::Node* node);
 };

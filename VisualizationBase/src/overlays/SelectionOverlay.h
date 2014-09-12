@@ -24,51 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/SelectedItem.h"
-#include "shapes/Shape.h"
+#pragma once
+
+#include "../visualizationbase_api.h"
+#include "../items/ItemStyle.h"
+#include "../overlays/Overlay.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SelectedItem, "item")
-
-SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
-Super(nullptr, style), selectedItem_(selectedItem)
+class VISUALIZATIONBASE_API SelectionOverlay: public Super<Overlay<Item>>
 {
-	setFlags(0);
-	setAcceptedMouseButtons(0);
-	setZValue(LAYER_SELECTION_Z);
-	setItemCategory(Scene::SelectionItemCategory);
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(SelectionOverlay, ItemStyle)
 
-SelectedItem::~SelectedItem()
-{
-	selectedItem_ = nullptr;
-}
+	public:
+		SelectionOverlay(Item* selectedItem, const StyleType* style = itemStyles().get());
 
-void SelectedItem::setSelectedItem(Item* item)
-{
-	selectedItem_ = item;
-}
-
-Item::UpdateType SelectedItem::needsUpdate()
-{
-	return StandardUpdate;
-}
-
-void SelectedItem::determineChildren()
-{
-
-}
-
-void SelectedItem::updateGeometry(int, int)
-{
-	if (hasShape())
-	{
-		getShape()->setInnerSize(selectedItem_->widthInScene(), selectedItem_->heightInScene());
-		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
-
-		setPos(selectedItem_->mapToScene(0, 0) - pos);
-	}
-}
+	protected:
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
+};
 
 }

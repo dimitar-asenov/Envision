@@ -104,4 +104,32 @@ const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 	return data_;
 }
 
+GenericNode* GenericPersistentUnit::find(Model::NodeIdType id) const
+{
+	int numElementsInCurrentChunk = GenericTree::ALLOCATION_CHUNK_SIZE;
+	int currentChunk = 0;
+	for (auto chunk : chunks_)
+	{
+		if (currentChunk == chunks_.size() - 1)
+			numElementsInCurrentChunk = lastNodeIndexInLastChunk_;
+		for (int j = 0; j < numElementsInCurrentChunk; ++j)
+			if (chunk[j].id() == id)
+				return &chunk[j];
+		++currentChunk;
+	}
+	return nullptr;
+}
+
+GenericNode* GenericPersistentUnit::unitRootNode() const
+{
+	if (chunks_.isEmpty()) return nullptr;
+	else
+	{
+		GenericNode* current = &(chunks_.first()[0]);
+		while (current->parent() && current->parent()->persistentUnit() == this)
+			current = current->parent();
+		return current;
+	}
+}
+
 } /* namespace FilePersistence */

@@ -44,6 +44,16 @@ class VISUALIZATIONBASE_API Cursor {
 		virtual ~Cursor();
 		virtual Cursor* clone() const;
 
+		/**
+		 * Called on every scene update to update the cursor.
+		 *
+		 * The default implementation checks if this is a BoxCursor and if so it assumes it is a whole item cursor to
+		 * update its position and size. Otherwise it does nothing.
+		 *
+		 * Reimplement this in derived classes to update the cursor's position and size appropriately.
+		 */
+		virtual void update();
+
 		virtual Item* owner() const;
 
 		/**

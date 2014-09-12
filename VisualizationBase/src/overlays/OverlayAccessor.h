@@ -23,48 +23,51 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "Highlight.h"
-#include "items/SelectedItem.h"
+
+#pragma once
+
+#include "../visualizationbase_api.h"
 
 namespace Visualization {
 
-Highlight::Highlight(Scene* scene, const QString& name, const QString& styleName)
-: scene_{scene}, name_{name}, styleName_{styleName}
-{
-	Q_ASSERT(scene_);
-	Q_ASSERT(!name.isEmpty());
-}
+// Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
 
-Highlight::~Highlight()
-{
-	for (auto sel : highlightItems_) SAFE_DELETE_ITEM(sel);
-}
+class VISUALIZATIONBASE_API OverlayAccessor {
+	public:
+		OverlayAccessor(const OverlayAccessor& other) = delete;
+		OverlayAccessor& operator=(const OverlayAccessor& other) = delete;
+		virtual ~OverlayAccessor() {};
 
-void Highlight::addHighlightedItem(Item* item)
-{
-	auto highlight = new SelectedItem(item, SelectedItem::itemStyles().get(styleName_));
-	highlightItems_.insert(item, highlight );
-	scene_->addItem(highlight);
-	scene_->scheduleUpdate();
-}
+		virtual Item* overlayItem() const = 0;
+		virtual const QList<Item*>& associatedItems() const = 0;
 
-void Highlight::updateAllHighlights()
-{
-	for (auto it = highlightItems_.begin(); it != highlightItems_.end(); ++it)
-		it.value()->updateSubtree();
-}
+		// This is required from SAFE_DELETE_ITEM, called from Item::synchronizeCollections.
+		// Essentially we want this to look like an Item for that call.
+		void removeFromScene() const {};
 
-void Highlight::removeHighlightedItem(Item* item)
-{
-	auto it = highlightItems_.find(item);
-	if (it != highlightItems_.end())
-	{
-		auto selection = it.value();
-		SAFE_DELETE(selection);
-		highlightItems_.erase(it);
-		scene_->scheduleUpdate();
+	protected:
+		OverlayAccessor() = default;
+};
 
-	}
-}
+template <class T>
+class OverlayAccessorTemplate : public OverlayAccessor
+{
+	public:
+		OverlayAccessorTemplate(T* overlayItem) : overlayItem_{overlayItem}{}
+		virtual ~OverlayAccessorTemplate() { SAFE_DELETE_ITEM(overlayItem_); }
+
+		virtual T* overlayItem() const override { return overlayItem_; }
+		virtual const QList<Item*>& associatedItems() const  override { return overlayItem_->associatedItems(); }
+
+	private:
+		T* overlayItem_{};
+};
 
 } /* namespace Visualization */
+
+// Purposefully outside the namespace for easy creation
+template<class T>
+inline Visualization::OverlayAccessorTemplate<T>* makeOverlay(T* overlayItem)
+{
+	return new Visualization::OverlayAccessorTemplate<T>(overlayItem);
+}

@@ -29,14 +29,42 @@
 
 namespace Core {
 
-EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(argc, argv){}
+QMap<void*, EnvisionApplication::IdleFunction>& EnvisionApplication::idleActions()
+{
+	static QMap<void*, EnvisionApplication::IdleFunction> actions;
+	return actions;
+}
+
+EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(argc, argv)
+{
+	idleInputTimer_.setInterval(50);
+	idleInputTimer_.setSingleShot(true);
+	connect(&idleInputTimer_, SIGNAL(timeout()), this, SLOT(userInputIdle()));
+}
 
 bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
 {
+	if (	event->spontaneous()) idleInputTimer_.start();
+
 	EnvisionManager::processPreEventActions(receiver, event);
 	auto res = QApplication::notify(receiver, event);
 	EnvisionManager::processPostEventActions(receiver, event);
 	return res;
+}
+
+void EnvisionApplication::addOnUserInputIdleAction(void* actionId, IdleFunction action)
+{
+	idleActions().insert(actionId, action);
+}
+
+void EnvisionApplication::removeOnUserInputIdleAction(void* actionId)
+{
+	idleActions().remove(actionId);
+}
+
+void EnvisionApplication::userInputIdle()
+{
+	for (auto& a : idleActions().values()) a();
 }
 
 } /* namespace Core */

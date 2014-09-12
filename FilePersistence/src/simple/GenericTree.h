@@ -45,6 +45,7 @@ class FILEPERSISTENCE_API GenericTree {
 		void remove(const GenericPersistentUnit& unit);
 
 		GenericPersistentUnit& newPersistentUnit(QString name, char* data = nullptr, int dataSize = 0);
+		GenericPersistentUnit* persistentUnit(const QString& name);
 
 	private:
 		friend class GenericPersistentUnit;

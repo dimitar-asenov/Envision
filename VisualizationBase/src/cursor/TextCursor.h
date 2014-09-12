@@ -38,6 +38,8 @@ class VISUALIZATIONBASE_API TextCursor : public Cursor {
 		TextCursor(TextRenderer* owner);
 		virtual TextCursor* clone() const override;
 
+		virtual void update() override;
+
 		int selectionBegin();
 		int selectionEnd();
 		int xBegin();

@@ -28,9 +28,10 @@
 #include "VisualizationManager.h"
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
-#include "items/SelectedItem.h"
-#include "items/NameOverlay.h"
 #include "items/RootItem.h"
+#include "overlays/OverlayAccessor.h"
+#include "overlays/SelectionOverlay.h"
+#include "overlays/ZoomLabelOverlay.h"
 #include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
@@ -40,6 +41,7 @@
 
 #include "Logger/src/Timer.h"
 #include "Core/src/Profiler.h"
+#include "Core/src/EnvisionApplication.h"
 
 namespace Visualization {
 
@@ -61,7 +63,7 @@ QList<Scene*>& Scene::allScenes()
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()),
 	  	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)),
-	  	  nameOverlay_{new NameOverlay(this)}, hiddenItemCategories_(NoItemCategory)
+	  	  hiddenItemCategories_(NoItemCategory)
 {
 	setItemIndexMethod(NoIndex);
 
@@ -71,20 +73,28 @@ Scene::Scene()
 
 	initialized_ = true;
 	allScenes().append(this);
+
+	auto selectionGroup = addOverlayGroup("User Selected Items");
+	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay(item));});
+	selectionGroup->setDynamic1Item([this](){return itemsThatShouldHaveASelection();});
+
+	auto zoomLabelGroup = addOverlayGroup("Zoom labels");
+	zoomLabelGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new ZoomLabelOverlay(item));});
+	zoomLabelGroup->setDynamic1Item([this](){return ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(this);});
+	zoomLabelGroup->setPostUpdateFunction(ZoomLabelOverlay::setItemPositionsAndHideOverlapped);
+
+	Core::EnvisionApplication::addOnUserInputIdleAction(this, [this](){scheduleUpdate();});
 }
 
 Scene::~Scene()
 {
+	Core::EnvisionApplication::removeOnUserInputIdleAction(this);
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
-	highlights_.clear();
+	overlayGroups_.clear();
 	while (!topLevelItems_.isEmpty())
 		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
-	while (!selections_.isEmpty())
-		SAFE_DELETE_ITEM(selections_.takeLast());
-
-	SAFE_DELETE_ITEM(nameOverlay_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
@@ -154,7 +164,27 @@ void Scene::updateNow()
 
 	Core::Profiler::stop("Initial item update");
 
-	// Update Selections
+	// Update overlay groups (selections are handled as a dynamic group)
+	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
+			it.value().update();
+
+	// Update the main cursor
+	if (mainCursor_ && mainCursor_->visualization())
+	{
+		if (mainCursor_->visualization()->scene() != this) addItem(mainCursor_->visualization());
+		mainCursor_->update();
+		mainCursor_->visualization()->updateSubtree();
+	}
+
+	computeSceneRect();
+
+	updateTimer->tick();
+	needsUpdate_ = false;
+	inAnUpdate_ = false;
+}
+
+QList<Item*> Scene::itemsThatShouldHaveASelection()
+{
 	auto selected = selectedItems();
 
 	// Only display a selection when there are multiple selected items or no cursor
@@ -170,56 +200,10 @@ void Scene::updateNow()
 		draw_selections = !selectable || selectable != selected.first();
 	}
 
-	int numSelectionItems = 0;
-	auto selectionsIt = selections_.begin();
-	auto selectionsInitialSize = selections_.size();
-	if (draw_selections && !(selected.size() == 1 && selected.first() == sceneHandlerItem_))
-	{
-		for (auto selectedItem : selected)
-		{
-			if (numSelectionItems < selectionsInitialSize)
-			{
-				auto selectionMarker = *selectionsIt;
-				selectionMarker->setSelectedItem(selectedItem);
-				selectionMarker->updateSubtree();
-				++selectionsIt;
-			}
-			else
-			{
-				auto selectionMarker = new SelectedItem(selectedItem);
-				selectionMarker->updateSubtree();
-				selections_.append(selectionMarker);
-				addItem(selectionMarker);
-			}
+	draw_selections = draw_selections && !(selected.size() == 1 && selected.first() == sceneHandlerItem_);
 
-			++numSelectionItems;
-		}
-	}
-
-	while (numSelectionItems < selectionsInitialSize)
-	{
-		SAFE_DELETE_ITEM(selections_.takeLast());
-		--selectionsInitialSize;
-	}
-
-	// Update highlighted items
-	for (auto it = highlights_.begin(); it != highlights_.end(); ++it)
-		it.value().updateAllHighlights();
-
-	// Update the main cursor
-	if (mainCursor_ && mainCursor_->visualization())
-	{
-		if (mainCursor_->visualization()->scene() != this) addItem(mainCursor_->visualization());
-		mainCursor_->visualization()->updateSubtree();
-	}
-
-	computeSceneRect();
-
-	nameOverlay_->updateSubtree();
-
-	updateTimer->tick();
-	needsUpdate_ = false;
-	inAnUpdate_ = false;
+	if (!draw_selections) selected.clear();
+	return selected;
 }
 
 void Scene::listenToTreeManager(Model::TreeManager* manager)
@@ -498,31 +482,37 @@ void Scene::setCurrentPaintView(View* view)
 	currentPaintView_ = view;
 }
 
-Highlight* Scene::addHighlight(const QString& name, const QString& style)
+OverlayGroup* Scene::addOverlayGroup(const QString& name)
 {
 	Q_ASSERT(!name.isEmpty());
-	Q_ASSERT(!highlights_.contains(name));
+	Q_ASSERT(!overlayGroups_.contains(name));
 	scheduleUpdate();
-	return &highlights_.insert(name, Highlight(this, name, style)).value();
+	return &overlayGroups_.insert(name, OverlayGroup(this, name)).value();
 }
 
-Highlight* Scene::highlight(const QString& name)
+OverlayGroup* Scene::overlayGroup(const QString& name)
 {
-	auto h = highlights_.find(name);
-	if (h == highlights_.end()) return nullptr;
+	auto h = overlayGroups_.find(name);
+	if (h == overlayGroups_.end()) return nullptr;
 	else return &h.value();
 }
 
-void Scene::removeHighlight(const QString& name)
+void Scene::removeOverlayGroup(const QString& name)
 {
-	if ( highlights_.remove(name) ) scheduleUpdate();
+	if ( overlayGroups_.remove(name) ) scheduleUpdate();
 }
 
-void Scene::removeFromHighlights(Item* itemToRemove, const QString& highlightName)
+void Scene::removeOverlayGroup(OverlayGroup* group)
 {
-	for (auto it = highlights_.begin(); it != highlights_.end(); ++it)
-		if (highlightName.isEmpty() || it.key() == highlightName)
-			it.value().removeHighlightedItem(itemToRemove);
+	Q_ASSERT(group);
+	removeOverlayGroup(group->name());
+}
+
+void Scene::removeFromOverlayGroup(Item* itemWithOverlay, const QString& groupName)
+{
+	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
+		if (groupName.isEmpty() || it.key() == groupName)
+			it.value().removeOverlayOf(itemWithOverlay);
 }
 
 }
