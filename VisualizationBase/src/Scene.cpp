@@ -83,8 +83,6 @@ Scene::Scene()
 	zoomLabelGroup->setDynamic1Item([this](){return ZoomLabelOverlay::itemsThatShouldHaveZoomLabel(this);});
 	zoomLabelGroup->setPostUpdateFunction(ZoomLabelOverlay::setItemPositionsAndHideOverlapped);
 
-	addOverlayGroup("Browser");
-
 	Core::EnvisionApplication::addOnUserInputIdleAction(this, [this](){scheduleUpdate();});
 }
 

@@ -25,18 +25,15 @@
  **********************************************************************************************************************/
 
 #include "commands/CAlloy.h"
-#include "VisualizationBase/src/overlays/BrowserOverlay.h"
+#include "VisualizationBase/src/overlays/BoxOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
-#include "Comments/src/items/VCommentBrowser.h"
-#include "Comments/src/items/VCommentFreeNode.h"
-#include "Comments/src/nodes/CommentFreeNode.h"
+#include "Comments/src/nodes/CommentNode.h"
 
 namespace Alloy {
 
 CAlloy::CAlloy() : CreateNamedObjectWithAttributes("alloy",
 		{{}})
-{
-}
+{}
 
 Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Visualization::Item* /*target*/,
 	const std::unique_ptr<Visualization::Cursor>&, const QString& /*name*/, const QStringList& /*attributes*/)
@@ -74,13 +71,18 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 
 	QProcess::execute("cp " + QDir::currentPath() + "/alloy/AlloyModels.html " + outputDirectory + "/AlloyModels.html");
 
-	//QDesktopServices::openUrl(QUrl(tempAlloyPath + "/output/AlloyModels.html"));
+	auto scene = source->scene();
+	auto alloyModelGroup = scene->overlayGroup("AlloyModels");
+	if (!alloyModelGroup) alloyModelGroup = scene->addOverlayGroup("AlloyModels");
 
-	auto aBrowserOverlay =
-			new Visualization::BrowserOverlay(source, QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html"));
-	auto browserGroup = source->scene()->overlayGroup("Browser");
+	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
+	auto aBrowserComment = new Comments::CommentNode("[browser#" + anURl.toString() + "]");
 
-	browserGroup->addOverlay(new Visualization::OverlayAccessorTemplate<Visualization::BrowserOverlay>(aBrowserOverlay));
+	alloyModelGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(source,
+		[aBrowserComment](Visualization::BoxOverlay* self){
+		self->renderer()->sync(self->content(), self, aBrowserComment);
+		return QString("AlloyModels");
+	})));
 
 	return new Interaction::CommandResult();
 }

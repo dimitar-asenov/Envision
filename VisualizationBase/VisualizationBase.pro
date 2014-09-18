@@ -123,8 +123,7 @@ HEADERS += src/overlays/BoxOverlayStyle.h \
     src/node_extensions/FullDetailSize.h \
     src/VisualizationBasePlugin.h \
     src/declarative/GridLayouter.h \
-    src/declarative/DynamicGridFormElement.h \
-    src/overlays/BrowserOverlay.h
+    src/declarative/DynamicGridFormElement.h
 SOURCES += src/overlays/BoxOverlayStyle.cpp \
     src/overlays/BoxOverlay.cpp \
     src/overlays/ZoomLabelOverlay.cpp \
@@ -222,5 +221,4 @@ SOURCES += src/overlays/BoxOverlayStyle.cpp \
     src/node_extensions/FullDetailSize.cpp \
     src/VisualizationBasePlugin.cpp \
     src/declarative/DynamicGridFormElement.cpp \
-    src/declarative/GridLayouter.cpp \
-    src/overlays/BrowserOverlay.cpp
+    src/declarative/GridLayouter.cpp
