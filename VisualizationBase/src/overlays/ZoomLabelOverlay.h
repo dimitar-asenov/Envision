@@ -52,8 +52,8 @@ class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeI
 		virtual bool isSensitiveToScale() const override;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		friend class Scene;
