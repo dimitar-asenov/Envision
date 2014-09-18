@@ -28,6 +28,7 @@
 
 #include "visualizationbase_api.h"
 #include "overlays/OverlayGroup.h"
+#include "CustomSceneEvent.h"
 
 namespace Model {
 	class TreeManager;
@@ -83,6 +84,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		 * This method can only be called while handling an event.
 		 */
 		void addPostEventAction(QEvent* action);
+		void addPostEventAction(CustomSceneEvent::EventFunction function);
 
 		enum ItemCategory {
 			NoItemCategory = 0x0,
@@ -143,7 +145,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		OverlayGroup* overlayGroup(const QString& name);
 		void removeOverlayGroup(const QString& name);
 		void removeOverlayGroup(OverlayGroup* group);
-		void removeFromOverlayGroup(Item* itemWithOverlay, const QString& groupName = QString());
+		void removeOverlayOf(Item* itemWithOverlay, const QString& groupName = QString());
+		void removeOverlay(Item* overlay, const QString& groupName = QString());
 
 	public slots:
 		void nodesUpdated(QSet<Node*> nodes);
