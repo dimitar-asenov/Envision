@@ -40,6 +40,7 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/icons/Icon.h"
+#include "VisualizationBase/src/items/Static.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
 #include "ModelBase/src/model/TreeManager.h"
@@ -617,12 +618,16 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	if (auto staticParent = DCast<Visualization::Static>(target->parent()))
+	{
+		if (auto clickHandler = staticParent->style()->clickHandler())
+			if (clickHandler(staticParent)) return;
+	}
+
 	if (event->modifiers() == Qt::NoModifier)
 		target->moveCursor(Visualization::Item::MoveOnPosition, event->pos().toPoint());
-	else if (event->button() == Qt::RightButton)
-		{} // Accept the event
-	else
-		event->ignore();
+	else if (event->button() == Qt::RightButton) {} // Accept the event
+	else event->ignore();
 }
 
 
