@@ -23,59 +23,10 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#pragma once
-
-#include "../visualizationbase_api.h"
-#include "../declarative/DeclarativeItem.h"
-#include "../declarative/DeclarativeItemBaseStyle.h"
-#include "../overlays/Overlay.h"
+#include "BoxOverlayStyle.h"
 
 namespace Visualization {
 
-class Static;
-class Text;
-class TextStyle;
-class StaticStyle;
-class OverlayGroup;
-
-class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeItem<ZoomLabelOverlay>>>
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(ZoomLabelOverlay, DeclarativeItemBaseStyle)
-
-	public:
-		ZoomLabelOverlay(Item* itemWithLabel, const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-		int determineForm() override;
-
-		virtual bool isSensitiveToScale() const override;
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-		friend class Scene;
-
-		Static* icon_{};
-		Text* text_{};
-		const StaticStyle* iconStyle_{};
-		int postUpdateRevision_{};
-		static QHash<Item*, ZoomLabelOverlay*>& itemToOverlay();
-
-		const StaticStyle* associatedItemIconStyle() const;
-		const QString& associatedItemText() const;
-		const TextStyle* associatedItemTextStyle() const;
-
-		static QList<Item*> itemsThatShouldHaveZoomLabel(Scene* scene);
-		static void setItemPositionsAndHideOverlapped(OverlayGroup& group);
-		void postUpdate(int revision);
-		void adjustPositionOrHide();
-		static void reduceRect(QRect& rectToReduce, const QRect& rectToExclude);
-
-		static constexpr double OVERLAY_MIN_WIDTH = 50;
-		static constexpr double OVERLAY_MIN_HEIGHT = 20;
-};
+BoxOverlayStyle::~BoxOverlayStyle(){}
 
 } /* namespace Visualization */

@@ -93,6 +93,9 @@ class DeclarativeItem : public DeclarativeItemBase
 		 * always 'I') as the template arguments.
 		 */
 		template <class ChildItemVisualizationType>
+			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>*
+			item(ChildItemVisualizationType* VisualizationType::* item);
+		template <class ChildItemVisualizationType>
 			static VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 			item(ChildItemVisualizationType* VisualizationType::* item,
 					std::function<const typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter);

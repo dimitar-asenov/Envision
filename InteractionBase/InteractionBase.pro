@@ -70,9 +70,7 @@ HEADERS += src/commands/CommandWithNameAndFlags.h \
     src/vis/CommandPromptStyle.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
-    src/InteractionBasePlugin.h \
-    src/vis/CommentWrapper.h \
-    src/handlers/HCommentWrapper.h
+    src/InteractionBasePlugin.h
 SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -136,6 +134,4 @@ SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/commands/CommandResult.cpp \
     src/commands/Command.cpp \
     test/SimpleTest.cpp \
-    src/InteractionBasePlugin.cpp \
-    src/vis/CommentWrapper.cpp \
-    src/handlers/HCommentWrapper.cpp
+    src/InteractionBasePlugin.cpp

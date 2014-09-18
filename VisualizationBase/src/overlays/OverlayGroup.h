@@ -46,8 +46,9 @@ class VISUALIZATIONBASE_API OverlayGroup {
 
 		// Methods for manually adding overlays
 		void addOverlay(OverlayAccessor* overlay);
-		void removeOverlay(OverlayAccessor* overlay);
-		void removeOverlayOf(Item* itemWithOverlay);
+		bool removeOverlay(OverlayAccessor* overlay);
+		bool removeOverlay(Item* overlay);
+		bool removeOverlayOf(Item* itemWithOverlay);
 		void clear();
 
 		// Methods for dynamically constructing overlays from items
@@ -82,7 +83,7 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		OverlayConstructor2Args constructorFunction2_;
 		PostUpdateFunction postUpdateFunction_;
 
-		void removeOverlay(QList<OverlayAccessor*>::iterator it);
+		bool removeOverlay(QList<OverlayAccessor*>::iterator it);
 
 		/**
 		 * Called by scene to update all Overlay items.

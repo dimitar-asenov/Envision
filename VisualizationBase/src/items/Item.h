@@ -453,7 +453,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		friend class DynamicGridFormElement;
 		template <class ParentType> friend class NodeItemWrapperFormElement;
 		template <class ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
-		template <class ParentType, class VisualizationType> friend class VisualizationItemWrapperFormElement;
+		template <class ParentType, class VisualizationType, bool externalSynchronization = false>
+			friend class VisualizationItemWrapperFormElement;
+		template <class ChildItem, class Style, bool use>
+			friend struct VisualizationItemWrapperFormElementSyncMethod;
 
 		QRectF boundingRect_;
 		const ItemStyle* style_;

@@ -324,9 +324,14 @@ bool Scene::event(QEvent *event)
 
 void Scene::addPostEventAction(QEvent* action)
 {
-	if (inEventHandler_)
-		postEventActions_.append(action);
-	else throw VisualizationException("Can not add post event actions when not in event!");
+	Q_ASSERT(inEventHandler_);
+	postEventActions_.append(action);
+}
+
+void Scene::addPostEventAction(CustomSceneEvent::EventFunction function)
+{
+	Q_ASSERT(inEventHandler_);
+	postEventActions_.append(new CustomSceneEvent(function));
 }
 
 void Scene::keyPressEvent (QKeyEvent *event)
@@ -510,11 +515,18 @@ void Scene::removeOverlayGroup(OverlayGroup* group)
 	removeOverlayGroup(group->name());
 }
 
-void Scene::removeFromOverlayGroup(Item* itemWithOverlay, const QString& groupName)
+void Scene::removeOverlayOf(Item* itemWithOverlay, const QString& groupName)
 {
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
 		if (groupName.isEmpty() || it.key() == groupName)
 			it.value().removeOverlayOf(itemWithOverlay);
+}
+
+void Scene::removeOverlay(Item* overlay, const QString& groupName)
+{
+	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
+		if (groupName.isEmpty() || it.key() == groupName)
+			it.value().removeOverlay(overlay);
 }
 
 }

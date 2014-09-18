@@ -33,7 +33,7 @@ namespace Visualization {
 /**
  * This is an item wrapper element, with a specifiable style for the wrapped item.
  */
-template <class ParentType, class VisualizationType>
+template <class ParentType, class VisualizationType, bool externalSynchronization>
 class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<ParentType, VisualizationType> {
 		FLUENT_ELEMENT_INTERFACE(VisualizationItemWrapperFormElement);
 
@@ -42,19 +42,24 @@ class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<Parent
 		using GetStyleFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
 		using IsEnabledFunction = std::function<bool (ParentType* v)>;
 
+		VisualizationItemWrapperFormElement(ChildItem item);
 		VisualizationItemWrapperFormElement(ChildItem item, GetStyleFunction style);
 		VisualizationItemWrapperFormElement() = delete;
 		VisualizationItemWrapperFormElement(
-				const VisualizationItemWrapperFormElement<ParentType, VisualizationType>&) = default;
-		VisualizationItemWrapperFormElement<ParentType, VisualizationType>&
-				operator=(const VisualizationItemWrapperFormElement<ParentType, VisualizationType>&) = delete;
+				const VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>&)
+				= default;
+		VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>&
+				operator=(const VisualizationItemWrapperFormElement<ParentType, VisualizationType,
+							 externalSynchronization>&) = delete;
 		virtual ~VisualizationItemWrapperFormElement() {};
 
-		virtual VisualizationItemWrapperFormElement<ParentType, VisualizationType>* clone() const override;
+		virtual VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>* clone()
+			const override;
 
 		virtual void synchronizeWithItem(Item* item) override;
 
-		VisualizationItemWrapperFormElement<ParentType, VisualizationType>* setEnabled(IsEnabledFunction enabled);
+		VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>*
+		setEnabled(IsEnabledFunction enabled);
 
 	private:
 
@@ -63,35 +68,66 @@ class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<Parent
 		IsEnabledFunction enabled_{};
 };
 
-template <class ParentType, class VisualizationType>
-VisualizationItemWrapperFormElement<ParentType, VisualizationType>::VisualizationItemWrapperFormElement(
+template <class ParentType, class VisualizationType, bool externalSynchronization>
+VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
+::VisualizationItemWrapperFormElement(
+		ChildItem item)
+: ItemWrapperFormElement<ParentType, VisualizationType>{item}
+{}
+
+template <class ParentType, class VisualizationType, bool externalSynchronization>
+VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
+::VisualizationItemWrapperFormElement(
 		ChildItem item, GetStyleFunction style)
 : ItemWrapperFormElement<ParentType, VisualizationType>{item}, style_{style}
 {}
 
-template <class ParentType, class VisualizationType>
-VisualizationItemWrapperFormElement<ParentType, VisualizationType>*
-VisualizationItemWrapperFormElement<ParentType, VisualizationType>::clone() const
+template <class ParentType, class VisualizationType, bool externalSynchronization>
+VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>*
+VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>::clone() const
 {
-	return new VisualizationItemWrapperFormElement<ParentType, VisualizationType>(*this);
+	return new VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>(*this);
 }
 
-template <class ParentType, class VisualizationType>
-VisualizationItemWrapperFormElement<ParentType, VisualizationType>*
-VisualizationItemWrapperFormElement<ParentType, VisualizationType>::setEnabled(IsEnabledFunction enabled)
+template <class ParentType, class VisualizationType, bool externalSynchronization>
+VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>*
+VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
+::setEnabled(IsEnabledFunction enabled)
 {
 	enabled_ = enabled;
 	return this;
 }
 
-template <class ParentType, class VisualizationType>
-void VisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
+// Used below
+template <class ChildItem, class Style, bool use>
+struct VisualizationItemWrapperFormElementSyncMethod
 {
-	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	auto style = style_(static_cast<ParentType*>(item));
-	auto enabled = !enabled_ || enabled_(static_cast<ParentType*>(item));
+	inline static void sync(Item* item, ChildItem child, bool enabled, Style style)
+	{ item->synchronizeItem(child, enabled, style); }
+};
 
-	item->synchronizeItem(childItem, enabled, style);
+template <class ChildItem, class Style>
+struct VisualizationItemWrapperFormElementSyncMethod<ChildItem, Style, true>
+{
+	inline static void sync(Item*, ChildItem, bool, Style){}
+};
+
+template <class ParentType, class VisualizationType, bool externalSynchronization>
+void VisualizationItemWrapperFormElement<ParentType, VisualizationType, externalSynchronization>
+::synchronizeWithItem(Item* item)
+{
+	if (!externalSynchronization) // Only synchronize if a style was given, otherwise the synchronization is external.
+	{
+		Q_ASSERT(style_);
+		auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+		auto style = style_(static_cast<ParentType*>(item));
+		auto enabled = !enabled_ || enabled_(static_cast<ParentType*>(item));
+
+		// This is defined above
+		VisualizationItemWrapperFormElementSyncMethod
+		<decltype(childItem), decltype(style), externalSynchronization>::sync(item, childItem, enabled, style);
+		static_assert(std::is_reference<decltype(childItem)>::value, "Not a reference type");
+	}
 }
 
 } /* namespace Visualization */

@@ -27,55 +27,39 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
+#include "BoxOverlayStyle.h"
+#include "Overlay.h"
 #include "../declarative/DeclarativeItem.h"
-#include "../declarative/DeclarativeItemBaseStyle.h"
-#include "../overlays/Overlay.h"
 
 namespace Visualization {
 
 class Static;
 class Text;
-class TextStyle;
-class StaticStyle;
-class OverlayGroup;
 
-class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeItem<ZoomLabelOverlay>>>
+class VISUALIZATIONBASE_API BoxOverlay : public Super<Overlay<DeclarativeItem<BoxOverlay>>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(ZoomLabelOverlay, DeclarativeItemBaseStyle)
+	ITEM_COMMON(BoxOverlay)
 
 	public:
-		ZoomLabelOverlay(Item* itemWithLabel, const StyleType* style = itemStyles().get());
+		using SyncFunction = std::function<QString (BoxOverlay* self)>;
+		BoxOverlay(Item* associatedItem, const StyleType* style = itemStyles().get());
+		BoxOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
-		int determineForm() override;
 
-		virtual bool isSensitiveToScale() const override;
+		Item*& content();
 
 	protected:
 		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		friend class Scene;
-
-		Static* icon_{};
-		Text* text_{};
-		const StaticStyle* iconStyle_{};
-		int postUpdateRevision_{};
-		static QHash<Item*, ZoomLabelOverlay*>& itemToOverlay();
-
-		const StaticStyle* associatedItemIconStyle() const;
-		const QString& associatedItemText() const;
-		const TextStyle* associatedItemTextStyle() const;
-
-		static QList<Item*> itemsThatShouldHaveZoomLabel(Scene* scene);
-		static void setItemPositionsAndHideOverlapped(OverlayGroup& group);
-		void postUpdate(int revision);
-		void adjustPositionOrHide();
-		static void reduceRect(QRect& rectToReduce, const QRect& rectToExclude);
-
-		static constexpr double OVERLAY_MIN_WIDTH = 50;
-		static constexpr double OVERLAY_MIN_HEIGHT = 20;
+		Static* closeIcon_{};
+		Text* caption_{};
+		Item* content_{};
+		SyncFunction syncFunction_;
 };
+
+inline Item*& BoxOverlay::content() { return content_; }
 
 } /* namespace Visualization */
