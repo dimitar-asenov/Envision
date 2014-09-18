@@ -24,19 +24,28 @@
 **
 ***********************************************************************************************************************/
 
-#include "ModelBase/src/visitor/VisitorDefinition.h"
-#include "VisualizationBase/src/items/Item.h"
+#pragma once
 
-#include "Export/src/tree/CompositeFragment.h"
+#include "../visualizationbase_api.h"
+#include "../items/ItemStyle.h"
+#include "../overlays/Overlay.h"
+#include "Comments/src/items/VCommentBrowser.h"
 
-namespace Alloy {
+namespace Visualization {
 
-class AlloyVisitor : public Model::Visitor<AlloyVisitor, Export::SourceFragment*>{
+class VISUALIZATIONBASE_API BrowserOverlay: public Super<Overlay<Item>>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(BrowserOverlay, ItemStyle)
+
 	public:
-		static void init();
+		BrowserOverlay(Item* selectedItem, QUrl url, const StyleType* style = itemStyles().get());
+
+	protected:
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		static QString currentClass_;
+		Comments::VCommentBrowser* aBrowser_{};
 };
 
 }

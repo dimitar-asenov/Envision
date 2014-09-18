@@ -24,19 +24,25 @@
 **
 ***********************************************************************************************************************/
 
-#include "ModelBase/src/visitor/VisitorDefinition.h"
-#include "VisualizationBase/src/items/Item.h"
+#include "BrowserOverlay.h"
+#include "shapes/Shape.h"
+#include "Comments/src/items/VCommentBrowser.h"
 
-#include "Export/src/tree/CompositeFragment.h"
+namespace Visualization {
 
-namespace Alloy {
+ITEM_COMMON_DEFINITIONS(BrowserOverlay, "item")
 
-class AlloyVisitor : public Model::Visitor<AlloyVisitor, Export::SourceFragment*>{
-	public:
-		static void init();
+BrowserOverlay::BrowserOverlay(Item* selectedItem, QUrl url, const StyleType* style)
+	: Super{{selectedItem}, style}
+{
+	aBrowser_ = new Comments::VCommentBrowser(this, url);
+}
 
-	private:
-		static QString currentClass_;
-};
+void BrowserOverlay::determineChildren(){}
+
+void BrowserOverlay::updateGeometry(int, int)
+{
+	setPos(associatedItem()->mapToScene(0, 0));
+}
 
 }

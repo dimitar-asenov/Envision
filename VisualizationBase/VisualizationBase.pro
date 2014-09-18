@@ -121,7 +121,8 @@ HEADERS += src/overlays/OverlayAccessor.h \
     src/node_extensions/FullDetailSize.h \
     src/VisualizationBasePlugin.h \
     src/declarative/GridLayouter.h \
-    src/declarative/DynamicGridFormElement.h
+    src/declarative/DynamicGridFormElement.h \
+    src/overlays/BrowserOverlay.h
 SOURCES += src/overlays/ZoomLabelOverlay.cpp \
     src/overlays/SelectionOverlay.cpp \
     src/overlays/OverlayGroup.cpp \
@@ -217,4 +218,5 @@ SOURCES += src/overlays/ZoomLabelOverlay.cpp \
     src/node_extensions/FullDetailSize.cpp \
     src/VisualizationBasePlugin.cpp \
     src/declarative/DynamicGridFormElement.cpp \
-    src/declarative/GridLayouter.cpp
+    src/declarative/GridLayouter.cpp \
+    src/overlays/BrowserOverlay.cpp

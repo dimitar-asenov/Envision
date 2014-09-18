@@ -50,10 +50,12 @@ TEST(AlloyIntegrationPlugin, AlloyTest)
 	auto aNode = new Class("Node");
 	aLinkedList->classes()->append(aNode);
 
-	auto *rootNode = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
-	aLinkedList->fields()->append(rootNode);
-	auto *nextNode = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
-	aNode->fields()->append(nextNode);
+	auto *linkedListRoot = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
+	aLinkedList->fields()->append(linkedListRoot);
+	auto *nodeNext = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
+	aNode->fields()->append(nodeNext);
+	auto *nodeNumber = new Field( "number", new PrimitiveTypeExpression(PrimitiveType::INT), Modifier::Private);
+	aNode->fields()->append(nodeNumber);
 
 	auto invariantMethodLinkedList = new Method("ObjectInvariant");
 	aLinkedList->methods()->append(invariantMethodLinkedList);
@@ -63,6 +65,8 @@ TEST(AlloyIntegrationPlugin, AlloyTest)
 
 	invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
 		"Contract.Invariant(this!=this.next)")));
+	invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+		"Contract.Invariant(this.number==this.next.number-1)")));
 
 	auto manager = new Model::TreeManager(aLinkedList);
 

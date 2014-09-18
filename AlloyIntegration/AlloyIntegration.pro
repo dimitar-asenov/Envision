@@ -25,3 +25,8 @@ SOURCES += src/AlloyIntegrationException.cpp \
     src/commands/CAlloy.cpp \
     src/visitors/AlloyVisitor.cpp \
     src/exporter/AlloyExporter.cpp
+
+alloy.path = $${BUILD_DIR}/alloy
+alloy.files = alloy_data/*
+
+INSTALLS += alloy

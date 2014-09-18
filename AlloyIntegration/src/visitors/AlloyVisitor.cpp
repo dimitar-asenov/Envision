@@ -32,6 +32,12 @@
 #include "OOModel/src/declarations/Field.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/BinaryOperation.h"
+#include "OOModel/src/expressions/UnaryOperation.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
+#include "OOModel/src/expressions/ThisExpression.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
+#include "OOModel/src/elements/OOReference.h"
+#include "OOModel/src/expressions/IntegerLiteral.h"
 
 #include "OOInteraction/src/string_offset_providers/StringComponents.h"
 
@@ -60,6 +66,7 @@ void AlloyVisitor::init()
 
 	Visitor::addType<Class>( [](AlloyVisitor* v, Class* t) -> Export::SourceFragment*
 	{
+		currentClass_ = t->name();
 		auto fragment = new Export::CompositeFragment(t);
 		*fragment << "sig " + t->name() + "";
 		*fragment << "{";
@@ -80,35 +87,125 @@ void AlloyVisitor::init()
 	Visitor::addType<Field>( [](AlloyVisitor*, Field* t) -> Export::SourceFragment*
 	{
 		auto fragment = new Export::CompositeFragment(t);
-		*fragment << t->name() + ": lone " + OOInteraction::StringComponents::stringForNode(t->typeExpression()) + ",";
+		if (!DCast<PrimitiveTypeExpression>(t->typeExpression()))
+			*fragment << t->name() + ": lone " + OOInteraction::StringComponents::stringForNode(t->typeExpression()) + ",";
+		else
+		{
+			QString temp = OOInteraction::StringComponents::stringForNode(t->typeExpression());
+			temp[0] = temp[0].toUpper();
+			*fragment << t->name() + ": one " + temp + ",";
+		}
 		return fragment;
 	});
 
 	Visitor::addType<MethodCallExpression>( [](AlloyVisitor* v, MethodCallExpression* t) -> Export::SourceFragment*
 	{
 		auto fragment = new Export::CompositeFragment(t);
-		if (OOInteraction::StringComponents::stringForNode(t->callee()).startsWith("Contract"))
+		if (OOInteraction::StringComponents::stringForNode(t->callee()).startsWith("Contract.Invariant"))
 		{
-			*fragment << "fact { ";
+			*fragment << "fact {";
+			*fragment << "all n:" + currentClass_ + " | ";
 			*fragment << v->visit(t->arguments()->at(0));
-			*fragment << " }\n";
+			*fragment << "}\n";
 		}
-	return fragment;
+		else if (OOInteraction::StringComponents::stringForNode(t->callee()).startsWith("Contract.ForAll"))
+		{
+			//*fragment << v->visit(t->arguments()->at(0));
+			//*fragment << v->visit(t->arguments()->at(1));
+		}
+		return fragment;
 	});
 
-	Visitor::addType<BinaryOperation>( [](AlloyVisitor*, BinaryOperation* t) -> Export::SourceFragment*
+	Visitor::addType<BinaryOperation>( [](AlloyVisitor* v, BinaryOperation* t) -> Export::SourceFragment*
 	{
 		auto fragment = new Export::CompositeFragment(t);
 		switch (t->op())
 		{
 			case BinaryOperation::NOT_EQUALS:
-			//TODO
+				*fragment << v->visit(t->left());
+				*fragment << " != ";
+				*fragment << v->visit(t->right());
 				break;
-			default:
+			case BinaryOperation::EQUALS:
+				*fragment << v->visit(t->left());
+				*fragment << " = ";
+				*fragment << v->visit(t->right());
 				break;
+			case BinaryOperation::GREATER:
+				*fragment << v->visit(t->left());
+				*fragment << " > ";
+				*fragment << v->visit(t->right());
+				break;
+			case BinaryOperation::LESS:
+				*fragment << v->visit(t->left());
+				*fragment << " < ";
+				*fragment << v->visit(t->right());
+				break;
+			case BinaryOperation::PLUS:
+				*fragment << v->visit(t->left());
+				*fragment << ".add[";
+				*fragment << v->visit(t->right());
+				*fragment << "]";
+				break;
+			case BinaryOperation::MINUS:
+				*fragment << v->visit(t->left());
+				*fragment << ".sub[";
+				*fragment << v->visit(t->right());
+				*fragment << "]";
+				break;
+			default: *fragment << "unknown"; break;
 		}
-	return fragment;
+		return fragment;
 	});
+
+	Visitor::addType<UnaryOperation>( [](AlloyVisitor* v, UnaryOperation* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		switch (t->op())
+		{
+			case UnaryOperation::PLUS: *fragment << "+"; break;
+			case UnaryOperation::MINUS: *fragment << "-"; break;
+			default: *fragment << "unknown"; break;
+		}
+		*fragment << v->visit(t->operand());
+		return fragment;
+	});
+
+	Visitor::addType<ThisExpression>( [](AlloyVisitor*, ThisExpression* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		*fragment << "n";
+		return fragment;
+	});
+
+	Visitor::addType<ReferenceExpression>( [](AlloyVisitor* v, ReferenceExpression* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		*fragment << v->visit(t->prefix());
+		if (t->ref() != nullptr)
+		{
+			*fragment << ".";
+			*fragment << v->visit(t->ref());
+		}
+		return fragment;
+	});
+
+	Visitor::addType<OOReference>( [](AlloyVisitor*, OOReference* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		*fragment << t->name();
+		return fragment;
+	});
+
+	Visitor::addType<IntegerLiteral>( [](AlloyVisitor*, IntegerLiteral* t) -> Export::SourceFragment*
+	{
+		auto fragment = new Export::CompositeFragment(t);
+		*fragment << QString::number(t->value());
+		return fragment;
+	});
+
 }
+
+QString AlloyVisitor::currentClass_ = "";
 
 }

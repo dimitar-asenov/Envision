@@ -25,6 +25,11 @@
  **********************************************************************************************************************/
 
 #include "commands/CAlloy.h"
+#include "VisualizationBase/src/overlays/BrowserOverlay.h"
+#include "VisualizationBase/src/overlays/OverlayAccessor.h"
+#include "Comments/src/items/VCommentBrowser.h"
+#include "Comments/src/items/VCommentFreeNode.h"
+#include "Comments/src/nodes/CommentFreeNode.h"
 
 namespace Alloy {
 
@@ -48,26 +53,34 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	aProcess.start("java -jar AlloyIntegrationCLI.jar " + inputFile + " " + outputDirectory);
 	aProcess.waitForFinished();
 
-	//*** temporary html output
 	QDir dir(outputDirectory);
-	QString html = "<h1 align=center>" + QString::number(dir.entryInfoList(QStringList("*.png"),
-		QDir::Files|QDir::NoDotAndDotDot).count()) + " solutions found</h1>\n";
-	html += "<table align=center border=1>\n";
-	foreach(QString dirFile, dir.entryList())
+	QString jsArray = "var pictureArray = new Array();\n";
+	int i = 0;
+	for (auto dirFile: dir.entryList())
 	{
 		if (dirFile.endsWith(".png"))
-			html += "<tr><td><img src=" + dirFile + "></tr></td>\n";
+		{
+			jsArray += "pictureArray[" + QString::number(i) + "] = new Image()\n";
+			jsArray += "pictureArray[" + QString::number(i) + "].src = '" + dirFile + "'\n";
+			i = i+1;
+		}
 	}
-	html += "</table>";
 
-	QFile htmlfile(outputDirectory + "index.html");
-	htmlfile.open(QIODevice::WriteOnly | QIODevice::Text);
-	QTextStream out(&htmlfile);
-	out << html;
-	htmlfile.close();
+	QFile jsfile(outputDirectory + "pictureArray.js");
+	jsfile.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&jsfile);
+	out << jsArray;
+	jsfile.close();
 
-	QDesktopServices::openUrl(QUrl(tempAlloyPath + "/output/index.html"));
-	//*** end of temporary html output
+	QProcess::execute("cp " + QDir::currentPath() + "/alloy/AlloyModels.html " + outputDirectory + "/AlloyModels.html");
+
+	//QDesktopServices::openUrl(QUrl(tempAlloyPath + "/output/AlloyModels.html"));
+
+	auto aBrowserOverlay =
+			new Visualization::BrowserOverlay(source, QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html"));
+	auto browserGroup = source->scene()->overlayGroup("Browser");
+
+	browserGroup->addOverlay(new Visualization::OverlayAccessorTemplate<Visualization::BrowserOverlay>(aBrowserOverlay));
 
 	return new Interaction::CommandResult();
 }
