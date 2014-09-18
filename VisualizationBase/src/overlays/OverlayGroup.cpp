@@ -64,26 +64,33 @@ void OverlayGroup::addOverlay(OverlayAccessor* overlay)
 	scene_->scheduleUpdate();
 }
 
-void OverlayGroup::removeOverlay(OverlayAccessor* overlay)
+bool OverlayGroup::removeOverlay(OverlayAccessor* overlay)
 {
-	removeOverlay(std::find(overlays_.begin(), overlays_.end(), overlay));
+	return removeOverlay(std::find(overlays_.begin(), overlays_.end(), overlay));
 }
 
-
-void OverlayGroup::removeOverlayOf(Item* itemWithOverlay)
+bool OverlayGroup::removeOverlay(Item* overlay)
 {
-	removeOverlay( std::find_if(overlays_.begin(), overlays_.end(),
+	return removeOverlay( std::find_if(overlays_.begin(), overlays_.end(),
+			[=](OverlayAccessor* o){return o->overlayItem() == overlay;}));
+}
+
+bool OverlayGroup::removeOverlayOf(Item* itemWithOverlay)
+{
+	return removeOverlay( std::find_if(overlays_.begin(), overlays_.end(),
 			[=](OverlayAccessor* o){return o->associatedItems().contains(itemWithOverlay);}));
 }
 
-void OverlayGroup::removeOverlay(QList<OverlayAccessor*>::iterator it)
+bool OverlayGroup::removeOverlay(QList<OverlayAccessor*>::iterator it)
 {
 	if (it != overlays_.end())
 	{
 		SAFE_DELETE(*it);
 		overlays_.erase(it);
 		scene_->scheduleUpdate();
+		return true;
 	}
+	else return false;
 }
 
 void OverlayGroup::clear()
