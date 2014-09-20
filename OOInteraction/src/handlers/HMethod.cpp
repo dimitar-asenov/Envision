@@ -44,7 +44,6 @@ namespace OOInteraction {
 
 HMethod::HMethod()
 {
-	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
 	addCommand(new Interaction::CDiff());
 	addCommand(new Interaction::CHistory());
 }

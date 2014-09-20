@@ -44,9 +44,9 @@ namespace Interaction {
 CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"project"}}, true, false}
 {}
 
-CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* target,
-											  const std::unique_ptr<Visualization::Cursor>&,
-											  const QString& name, const QStringList&)
+CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
+											  const std::unique_ptr<Visualization::Cursor>& /*cursor*/,
+											  const QString& name, const QStringList& /*attributes*/)
 {
 	auto scene = target->scene();
 	scene->clearFocus();
@@ -64,7 +64,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 	headManager->setName("HEAD");
 
 	// load name into tree
-	const Commit* commit = repository->getCommit(name);
+	std::unique_ptr<const Commit> commit(repository->getCommit(name));
 
 	auto fileStore = new SimpleTextFileStore(
 				[this, &commit](QString filename, const char*& data, int& size)
@@ -230,8 +230,6 @@ CommandResult* CDiff::executeNamed(Visualization::Item*, Visualization::Item* ta
 
 
 	} ) );
-
-	SAFE_DELETE(commit);
 
 	return new CommandResult();
 }
