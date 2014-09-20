@@ -58,7 +58,7 @@ Commit::Commit() {}
 Commit::~Commit()
 {
 	for (auto file : files_.values())
-		delete file;
+		SAFE_DELETE(file);
 }
 
 void Commit::setMetaData(CommitMetaData data)
