@@ -44,20 +44,6 @@ ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
 	}
 }
 
-bool ChangeDescription::hasAtLeastFlags(const UpdateFlags flags)
-{
-	if (flags.testFlag(Order) && !updateFlags_.testFlag(Order))
-		return false;
-	if (flags.testFlag(Value) && !updateFlags_.testFlag(Value))
-		return false;
-	if (flags.testFlag(Type) && !updateFlags_.testFlag(Type))
-		return false;
-	if (flags.testFlag(Children) && !updateFlags_.testFlag(Children))
-		return false;
-
-	return true;
-}
-
 void ChangeDescription::fundamentalChangeClassification()
 {
 	if (oldNode_ == nullptr)

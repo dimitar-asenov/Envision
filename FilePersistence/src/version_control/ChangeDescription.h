@@ -46,7 +46,7 @@ class FILEPERSISTENCE_API ChangeDescription
 		};
 		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
 
-		bool hasAtLeastFlags(const UpdateFlags flags);
+		bool hasFlags(const UpdateFlags flags) const;
 
 		void print() const;
 
@@ -77,6 +77,8 @@ class FILEPERSISTENCE_API ChangeDescription
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
+
+inline bool ChangeDescription::hasFlags(const UpdateFlags flags) const { return (updateFlags_ & flags) == flags; }
 
 inline const ChangeType& ChangeDescription::type() const { return type_; }
 
