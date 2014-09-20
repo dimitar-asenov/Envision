@@ -43,8 +43,8 @@
 
 #include <QtCore/QDir>
 
-#include <QDateTime>
-#include <QTimeZone>
+#include <QtCore/QDateTime>
+#include <QtCore/QTimeZone>
 
 #if defined(FILEPERSISTENCE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
