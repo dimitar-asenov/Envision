@@ -570,9 +570,19 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 	{
 		// TODO: include templates. (and more?)
 		OOModel::FunctionTypeExpression* ooFunctionType = new OOModel::FunctionTypeExpression();
+#if ((CLANG_VERSION_MAJOR >= 3) && (CLANG_VERSION_MINOR >= 5))
+		ooFunctionType->results()->append(translateQualifiedType(functionProtoType->getReturnType(), location));
+#else
 		ooFunctionType->results()->append(translateQualifiedType(functionProtoType->getResultType(), location));
+#endif
+
+#if ((CLANG_VERSION_MAJOR >= 3) && (CLANG_VERSION_MINOR >= 5))
+		for (auto argIt = functionProtoType->param_type_begin(); argIt != functionProtoType->param_type_end(); ++argIt)
+		{
+#else
 		for (auto argIt = functionProtoType->arg_type_begin(); argIt != functionProtoType->arg_type_end(); ++argIt)
 		{
+#endif
 			ooFunctionType->arguments()->append(translateQualifiedType(*argIt, location));
 		}
 		translatedType = ooFunctionType;
