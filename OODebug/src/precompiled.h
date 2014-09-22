@@ -54,6 +54,8 @@
 #include <QtCore/QDebug>
 #include <QtCore/QRegularExpression>
 
+#include <QtCore/QProcess>
+
 #endif
 
 #endif
