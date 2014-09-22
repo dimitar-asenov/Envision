@@ -51,6 +51,8 @@
 // plug-ins which depend on this one will not include these headers.
 
 #include <QtCore/QString>
+#include <QtCore/QDebug>
+#include <QtCore/QRegularExpression>
 
 #endif
 
