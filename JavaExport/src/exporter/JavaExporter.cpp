@@ -31,6 +31,7 @@
 #include "Export/src/writer/Exporter.h"
 #include "Export/src/writer/FragmentLayouter.h"
 #include "Export/src/tree/SourceDir.h"
+#include "Export/src/writer/TextToNodeMap.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace JavaExport {
@@ -59,7 +60,8 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
 
-	Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+	SAFE_DELETE(map);
 
 	return visitor.errors();
 }
