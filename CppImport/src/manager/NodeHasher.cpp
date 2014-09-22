@@ -37,11 +37,7 @@ void NodeHasher::setSourceManager(const clang::SourceManager* sourceManager)
 const QString NodeHasher::hashFunction(const clang::FunctionDecl* functionDecl)
 {
 	QString hash = QString::fromStdString(functionDecl->getNameAsString());
-#if ((CLANG_VERSION_MAJOR >= 3) && (CLANG_VERSION_MINOR >= 5))
 	hash.prepend(QString::fromStdString(functionDecl->getReturnType().getAsString()).append("_"));
-#else
-	hash.prepend(QString::fromStdString(functionDecl->getResultType().getAsString()).append("_"));
-#endif
 	hash.append("_").append(functionDecl->getNumParams());
 
 	for (unsigned i = 0; i < functionDecl->param_size(); i++)
@@ -54,11 +50,7 @@ const QString NodeHasher::hashFunction(const clang::FunctionDecl* functionDecl)
 const QString NodeHasher::hashMethod(const clang::CXXMethodDecl* methodDecl)
 {
 	QString hash = QString::fromStdString(methodDecl->getNameAsString());
-#if ((CLANG_VERSION_MAJOR >= 3) && (CLANG_VERSION_MINOR >= 5))
 	hash.prepend(QString::fromStdString(methodDecl->getReturnType().getCanonicalType().getAsString()).append("_"));
-#else
-	hash.prepend(QString::fromStdString(methodDecl->getResultType().getCanonicalType().getAsString()).append("_"));
-#endif
 	hash.append("_").append(hashRecord(methodDecl->getParent()));
 	hash.append("_").append(methodDecl->getNumParams());
 
