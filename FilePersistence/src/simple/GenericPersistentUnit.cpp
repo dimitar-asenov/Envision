@@ -93,9 +93,9 @@ GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool 
 	{
 		for (auto childToCopy : nodeToCopy->children())
 		{
-				auto child = newNode(childToCopy, true);
-				child->setParent(node);
-				node->addChild(child);
+			auto child = newNode(childToCopy, true);
+			child->setParent(node);
+			node->addChild(child);
 		}
 	}
 	return node;
