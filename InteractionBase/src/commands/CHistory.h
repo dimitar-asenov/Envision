@@ -48,6 +48,8 @@ class INTERACTIONBASE_API CHistory : public CommandWithNameAndFlags
 													 const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
+		void printCommitMetaData(FilePersistence::CommitMetaData& data) const;
+
 		FilePersistence::GitRepository* repository;
 };
 
