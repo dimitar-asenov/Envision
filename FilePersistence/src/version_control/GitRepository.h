@@ -111,6 +111,8 @@ class FILEPERSISTENCE_API GitRepository
 
 		git_commit* parseCommit(QString revision) const;
 
+		QString oidToQString(const git_oid* oid) const;
+
 		bool hasCleanIndex() const;
 		bool hasCleanWorkdir() const;
 

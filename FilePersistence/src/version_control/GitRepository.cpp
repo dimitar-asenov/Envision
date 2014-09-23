@@ -358,10 +358,7 @@ CommitMetaData GitRepository::getCommitInformation(QString revision) const
 
 		// SHA1
 		const git_oid* oid = git_commit_id(gitCommit);
-		char sha1[41];
-		sha1[40] = '\0';
-		git_oid_fmt(sha1, oid);
-		info.sha1_ = QString(sha1);
+		info.sha1_ = oidToQString(oid);
 
 		// Message
 		const char* msg = git_commit_message(gitCommit);
@@ -398,10 +395,7 @@ QString GitRepository::getSHA1(QString revision) const
 		git_commit* gitCommit = parseCommit(revision);
 		const git_oid* oid = git_commit_id(gitCommit);
 
-		char sha1[41];
-		sha1[40] = '\0';
-		git_oid_fmt(sha1, oid);
-		QString commitSHA1(sha1);
+		QString commitSHA1 = oidToQString(oid);
 
 		git_commit_free(gitCommit);
 
@@ -512,13 +506,9 @@ QStringList GitRepository::revisions() const
 	checkError(error);
 
 	git_oid oid;
-	char sha1[41];
-	sha1[40] = '\0';
 	QStringList revisionList;
-	while (!git_revwalk_next(&oid, walker)) {
-		git_oid_fmt(sha1, &oid);
-		revisionList.append(QString(sha1));
-	}
+	while (!git_revwalk_next(&oid, walker))
+		revisionList.append(oidToQString(&oid));
 
 	git_revwalk_free(walker);
 
@@ -665,10 +655,7 @@ SHA1 GitRepository::writeIndexToTree()
 		Q_ASSERT(false);
 	checkError(errorCode);
 
-	char sha1[41];
-	sha1[40] = '\0';
-	git_oid_fmt(sha1, &treeOid);
-	QString currentSHA1(sha1);
+	QString currentSHA1 = oidToQString(&treeOid);
 
 	git_index_free(index);
 
@@ -734,10 +721,7 @@ SHA1 GitRepository::findMergeBase(RevisionString revision) const
 		return SHA1();
 	checkError(errorCode);
 
-	char sha1[41];
-	sha1[40] = '\0';
-	git_oid_fmt(sha1, &mergeBaseOid);
-	SHA1 mergeBase(sha1);
+	SHA1 mergeBase = oidToQString(&mergeBaseOid);
 
 	git_commit_free(gitHead);
 	git_commit_free(gitRevision);
@@ -825,10 +809,7 @@ bool GitRepository::setReferenceTarget(GitReference reference, RevisionString ta
 void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const
 {
 	const git_oid* oid = git_commit_id(current);
-	char sha1[41];
-	sha1[40] = '\0';
-	git_oid_fmt(sha1, oid);
-	QString currentSHA1(sha1);
+	QString currentSHA1 = oidToQString(oid);
 
 	if (git_oid_cmp(oid, target) != 0)
 	{
@@ -843,8 +824,7 @@ void GitRepository::traverseCommitGraph(CommitGraph* graph, git_commit* current,
 			int parentIsTarget = git_oid_cmp(parentOID, target);
 			int isConnected = git_graph_descendant_of(repository_, parentOID, target);
 			if (isConnected == 1 || parentIsTarget == 0) {
-				git_oid_fmt(sha1, parentOID);
-				QString parentSHA1(sha1);
+				QString parentSHA1 = oidToQString(parentOID);
 
 				graph->add(parentSHA1, currentSHA1);
 
@@ -1045,6 +1025,16 @@ git_commit* GitRepository::parseCommit(QString revision) const
 
 	// clean up
 	git_object_free(obj);
+}
+
+QString GitRepository::oidToQString(const git_oid* oid) const
+{
+	char sha1[41];
+	sha1[40] = '\0';
+
+	git_oid_fmt(sha1, oid);
+
+	return QString(sha1);
 }
 
 bool GitRepository::hasCleanIndex() const
