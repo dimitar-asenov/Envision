@@ -33,20 +33,23 @@
 
 namespace FilePersistence {
 
-History::CommitTime::CommitTime(QString sha1, qint64 time)
+History::CommitTime::CommitTime(QString sha1, QDateTime dateTime)
+	:commitSHA1_{sha1}, dateTime_{dateTime}
+{}
+
+bool History::CommitTime::operator < (const CommitTime& commitTime) const
 {
-	commitSHA1_ = sha1;
-	timeSinceEpoch_ = time;
+	return dateTime_ < commitTime.dateTime_;
 }
 
-bool History::CommitTime::earlier(const CommitTime& left, const CommitTime& right)
+bool History::CommitTime::operator > (const CommitTime& commitTime) const
 {
-	return (left.timeSinceEpoch_ < right.timeSinceEpoch_);
+	return dateTime_ > commitTime.dateTime_;
 }
 
 bool History::CommitTime::later(const CommitTime& left, const CommitTime& right)
 {
-	return (left.timeSinceEpoch_ > right.timeSinceEpoch_);
+	return left > right;
 }
 
 History::History(QString relativePath, Model::NodeIdType rootNodeId,
@@ -71,14 +74,13 @@ QList<QString> History::relevantCommitsByTime(const GitRepository* repository, b
 	for (auto commit : relevantCommits_)
 	{
 		CommitMetaData info = repository->getCommitInformation(commit);
-		qint64 time = info.dateTime_.toMSecsSinceEpoch();
-		commitTimeList.append(CommitTime(commit, time));
+		commitTimeList.append(CommitTime(commit, info.dateTime_));
 	}
 
 	if (reverse)
-		qSort(commitTimeList.begin(), commitTimeList.end(), CommitTime::later);
+		std::sort(commitTimeList.begin(), commitTimeList.end(), CommitTime::later);
 	else
-		qSort(commitTimeList.begin(), commitTimeList.end(), CommitTime::earlier);
+		std::sort(commitTimeList.begin(), commitTimeList.end());
 
 	QList<QString> orderedCommits;
 	for (auto commitTime : commitTimeList)

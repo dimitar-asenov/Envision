@@ -59,11 +59,13 @@ class FILEPERSISTENCE_API History
 		struct CommitTime
 		{
 				QString commitSHA1_;
-				qint64 timeSinceEpoch_;
+				QDateTime dateTime_;
 
-				CommitTime(QString sha1, qint64 time);
+				CommitTime(QString sha1, QDateTime dateTime);
 
-				static bool earlier(const CommitTime& left, const CommitTime& right);
+				bool operator < (const CommitTime& commitTime) const;
+				bool operator > (const CommitTime& commitTime) const;
+
 				static bool later(const CommitTime& left, const CommitTime& right);
 		};
 
