@@ -116,10 +116,9 @@ class FILEPERSISTENCE_API GitRepository
 		bool hasCleanIndex() const;
 		bool hasCleanWorkdir() const;
 
-		enum class DiffKind {Unspecified, WorkdirToWorkdir, WorkdirToIndex, WorkdirToCommit,
-									IndexToWorkdir, IndexToIndex, IndexToCommit,
-									CommitToWorkdir, CommitToIndex, CommitToCommit};
-		static DiffKind kind(QString revisionA, QString revisionB);
+		enum class SourceKind {Unspecified, Commit, Index, Workdir};
+		static SourceKind sourceKind(QString revision);
+		static QPair<SourceKind, SourceKind> kind(QString revisionA, QString revisionB);
 
 		static void checkError(int errorCode);
 

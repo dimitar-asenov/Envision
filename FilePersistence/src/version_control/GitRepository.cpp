@@ -180,9 +180,7 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 {
 	int errorCode = 0;
 
-	DiffKind diffKind = kind(revisionA, revisionB);
-	Q_ASSERT(diffKind != DiffKind::Unspecified);
-
+	QPair<SourceKind, SourceKind> diffKind = kind(revisionA, revisionB);
 
 	git_diff* gitDiff = nullptr;
 
@@ -196,76 +194,62 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 	git_tree* gitTreeB = nullptr;
 
 	bool reverseAB = false;
-	switch (diffKind)
+
+	Q_ASSERT(diffKind.first != SourceKind::Unspecified);
+	Q_ASSERT(diffKind.second != SourceKind::Unspecified);
+
+	if ((diffKind.first == SourceKind::Workdir && diffKind.second == SourceKind::Workdir) ||
+		 (diffKind.first == SourceKind::Index && diffKind.second == SourceKind::Index))
+		return Diff();
+
+	if ((diffKind.first == SourceKind::Index && diffKind.second == SourceKind::Workdir) ||
+		 (diffKind.first == SourceKind::Workdir && diffKind.second == SourceKind::Index))
 	{
-		case DiffKind::WorkdirToWorkdir:
-			return Diff();
-			break;
-
-		case DiffKind::WorkdirToIndex:
-			errorCode = git_diff_index_to_workdir(&gitDiff, repository_, nullptr, &diffOptions);
+		errorCode = git_diff_index_to_workdir(&gitDiff, repository_, nullptr, &diffOptions);
+		if (diffKind.first == SourceKind::Workdir)
 			reverseAB = true;
-			break;
+	}
+	else if (diffKind.first == SourceKind::Commit)
+	{
+		gitCommitA = parseCommit(revisionA);
+		errorCode = git_commit_tree(&gitTreeA, gitCommitA);
+		checkError(errorCode);
 
-		case DiffKind::WorkdirToCommit:
-			gitCommitB = parseCommit(revisionB);
-			errorCode = git_commit_tree(&gitTreeB, gitCommitB);
-			checkError(errorCode);
-
-			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, gitTreeB, &diffOptions);
-			reverseAB = true;
-			break;
-
-		case DiffKind::IndexToWorkdir:
-			errorCode = git_diff_index_to_workdir(&gitDiff, repository_, nullptr, &diffOptions);
-			break;
-
-		case DiffKind::IndexToIndex:
-			return Diff();
-			break;
-
-		case DiffKind::IndexToCommit:
-			gitCommitB = parseCommit(revisionB);
-			errorCode = git_commit_tree(&gitTreeB, gitCommitB);
-			checkError(errorCode);
-
-			errorCode = git_diff_tree_to_index(&gitDiff, repository_, gitTreeB, nullptr, &diffOptions);
-			reverseAB = true;
-			break;
-
-		case DiffKind::CommitToWorkdir:
-			gitCommitA = parseCommit(revisionA);
-			errorCode = git_commit_tree(&gitTreeA, gitCommitA);
-			checkError(errorCode);
-
+		if (diffKind.second == SourceKind::Workdir)
 			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, gitTreeA, &diffOptions);
-			break;
-
-		case DiffKind::CommitToIndex:
-			gitCommitA = parseCommit(revisionA);
-			errorCode = git_commit_tree(&gitTreeA, gitCommitA);
-			checkError(errorCode);
-
+		else if (diffKind.second == SourceKind::Index)
 			errorCode = git_diff_tree_to_index(&gitDiff, repository_, gitTreeA, nullptr, &diffOptions);
-			break;
-
-		case DiffKind::CommitToCommit:
-			gitCommitA = parseCommit(revisionA);
-			errorCode = git_commit_tree(&gitTreeA, gitCommitA);
-			checkError(errorCode);
+		else
+		{
+			Q_ASSERT(diffKind.second == SourceKind::Commit);
 
 			gitCommitB = parseCommit(revisionB);
 			errorCode = git_commit_tree(&gitTreeB, gitCommitB);
 			checkError(errorCode);
 
 			errorCode = git_diff_tree_to_tree(&gitDiff, repository_, gitTreeA, gitTreeB, &diffOptions);
-			break;
-
-		default:
-			Q_ASSERT(false);
-
+		}
+		checkError(errorCode);
 	}
-	checkError(errorCode);
+	else
+	{
+		Q_ASSERT(diffKind.second == SourceKind::Commit);
+
+		gitCommitB = parseCommit(revisionB);
+		errorCode = git_commit_tree(&gitTreeB, gitCommitB);
+		checkError(errorCode);
+
+		reverseAB = true;
+
+		if (diffKind.first == SourceKind::Workdir)
+			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, gitTreeB, &diffOptions);
+		else
+		{
+			Q_ASSERT(diffKind.first == SourceKind::Index);
+			errorCode = git_diff_tree_to_index(&gitDiff, repository_, gitTreeB, nullptr, &diffOptions);
+		}
+		checkError(errorCode);
+	}
 
 	// Use callback on diff to extract node information
 	GitDiffExtract carryAlongData;
@@ -1077,39 +1061,23 @@ bool GitRepository::hasCleanWorkdir() const
 	return (numDeltas == 0);
 }
 
-GitRepository::DiffKind GitRepository::kind(QString revisionA, QString revisionB)
+GitRepository::SourceKind GitRepository::sourceKind(QString revision)
 {
-	DiffKind diffKind = DiffKind::Unspecified;
-
-	if (revisionA.compare(WORKDIR) == 0)
-	{
-		if (revisionB.compare(WORKDIR) == 0)
-			diffKind = DiffKind::WorkdirToWorkdir;
-		else if (revisionB.compare(INDEX) == 0)
-			diffKind = DiffKind::WorkdirToIndex;
-		else
-			diffKind = DiffKind::WorkdirToCommit;
-	}
-	else if (revisionA.compare(INDEX) == 0)
-	{
-		if (revisionB.compare(WORKDIR) == 0)
-			diffKind = DiffKind::IndexToWorkdir;
-		else if (revisionB.compare(INDEX) == 0)
-			diffKind = DiffKind::IndexToIndex;
-		else
-			diffKind = DiffKind::IndexToCommit;
-	}
+	if (revision == WORKDIR)
+		return SourceKind::Workdir;
+	else if (revision == INDEX)
+		return SourceKind::Index;
 	else
-	{
-		if (revisionB.compare(WORKDIR) == 0)
-			diffKind = DiffKind::CommitToWorkdir;
-		else if (revisionB.compare(INDEX) == 0)
-			diffKind = DiffKind::CommitToIndex;
-		else
-			diffKind = DiffKind::CommitToCommit;
-	}
+		return SourceKind::Commit;
+}
 
-	Q_ASSERT(diffKind != DiffKind::Unspecified);
+QPair<GitRepository::SourceKind, GitRepository::SourceKind> GitRepository::kind(QString revisionA, QString revisionB)
+{
+	QPair<SourceKind, SourceKind> diffKind;
+
+	diffKind.first = sourceKind(revisionA);
+	diffKind.second = sourceKind(revisionB);
+
 	return diffKind;
 }
 
