@@ -34,13 +34,13 @@ namespace FilePersistence {
 
 struct GitDiffExtract
 {
-	GenericTree* oldTree_;
-	GenericTree* newTree_;
+	GenericTree* oldTree_{};
+	GenericTree* newTree_{};
 
 	QList<GenericNode*> oldNodes_;
 	QList<GenericNode*> newNodes_;
 
-	bool reverseOldNew_;
+	bool reverseOldNew_{};
 };
 
 struct GitCommitExtract
