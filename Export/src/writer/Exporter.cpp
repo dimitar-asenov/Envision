@@ -33,8 +33,8 @@
 
 namespace Export {
 
-TextToNodeMap* Exporter::exportToFileSystem(const QString& pathToProjectContainerDir, SourceDir* projectDir,
-										  FragmentLayouter* layouter)
+std::shared_ptr<TextToNodeMap> Exporter::exportToFileSystem(const QString& pathToProjectContainerDir,
+																				SourceDir* projectDir, FragmentLayouter* layouter)
 {
 	QDir dir{pathToProjectContainerDir};
 	if (!dir.exists(projectDir->name()))
@@ -47,8 +47,8 @@ TextToNodeMap* Exporter::exportToFileSystem(const QString& pathToProjectContaine
 	if (!(QFileInfo{dir.absolutePath()}).isWritable())
 		throw ExportException("Trying to export to a non writable directory : " + dir.absolutePath());
 
-	auto map =  new TextToNodeMap();
-	saveDir(dir, projectDir, layouter, map);
+	auto map = std::shared_ptr<TextToNodeMap>(new TextToNodeMap());
+	saveDir(dir, projectDir, layouter, map.get());
 	return map;
 }
 

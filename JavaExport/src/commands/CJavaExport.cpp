@@ -41,7 +41,8 @@ Interaction::CommandResult* CJavaExport::executeNamed(Visualization::Item* sourc
 	{
 		if (auto manager = source->node()->manager())
 		{
-			JavaExporter::exportTree(manager, "exported/" + manager->root()->symbolName());
+			std::shared_ptr<Export::TextToNodeMap> map;
+			JavaExporter::exportTree(manager, "exported/" + manager->root()->symbolName(), map);
 		}
 	}
 

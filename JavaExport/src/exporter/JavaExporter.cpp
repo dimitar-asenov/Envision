@@ -35,7 +35,8 @@
 
 namespace JavaExport {
 
-QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
+QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+														  std::shared_ptr<Export::TextToNodeMap>& map)
 {
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
@@ -59,7 +60,7 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
 
-	Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+	map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
 
 	return visitor.errors();
 }
