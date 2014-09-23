@@ -50,7 +50,6 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 {
 	auto scene = target->scene();
 	scene->clearFocus();
-	scene->clearSelection();
 	scene->setMainCursor(nullptr);
 
 	Model::TreeManager* headManager = target->node()->manager();
@@ -63,14 +62,9 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 
 	bool useFastForward = false;
 
-	(void) name;
-	(void) repository;
-	(void) useFastForward;
-
 	std::shared_ptr<Merge> merge = repository->merge(name, useFastForward);
 
 	// TODO: handle different merge scenarios!
-
 	if (merge->mergeTree())
 	{
 		// load name into tree
