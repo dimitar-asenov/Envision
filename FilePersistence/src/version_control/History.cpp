@@ -224,7 +224,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 
 		trackedIDs.insert(current->id());
 
-		if (persistenceUnitType.compare(current->type()) == 0)
+		if (current->type() == GenericNode::persistentUnitType)
 		{
 			QString subUnitrelativePath = current->id().toString();
 
@@ -248,7 +248,5 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 
 	return trackedIDs;
 }
-
-const QString History::persistenceUnitType = "persistencenewunit";
 
 } /* namespace FilePersistence */

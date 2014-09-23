@@ -67,8 +67,6 @@ class FILEPERSISTENCE_API History
 				static bool later(const CommitTime& left, const CommitTime& right);
 		};
 
-		static const QString persistenceUnitType;
-
 		Model::NodeIdType rootNodeId_;
 		const CommitGraph* historyGraph_{};
 		QSet<QString> relevantCommits_;
