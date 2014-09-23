@@ -34,29 +34,29 @@ namespace FilePersistence {
 
 Diff::Diff(){}
 
-Diff::Diff(QList<GenericNode*>& oldNodes, std::shared_ptr<GenericTree> oldTree,
-			  QList<GenericNode*>& newNodes, std::shared_ptr<GenericTree> newTree,
+Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
+			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB,
 			  const GitRepository* repository)
 {
-	oldTree_ = oldTree;
-	newTree_ = newTree;
+	treeA_ = treeA;
+	treeB_ = treeB;
 
-	IdToGenericNodeHash oldNodesHash;
-	for (auto node : oldNodes)
-		oldNodesHash.insertMulti(node->id(), node);
+	IdToGenericNodeHash nodesAHash;
+	for (auto node : nodesA)
+		nodesAHash.insertMulti(node->id(), node);
 
-	IdToGenericNodeHash newNodesHash;
-	for (auto node : newNodes)
-		newNodesHash.insertMulti(node->id(), node);
+	IdToGenericNodeHash nodesBHash;
+	for (auto node : nodesB)
+		nodesBHash.insertMulti(node->id(), node);
 
 	IdToGenericNodeHash newlyCreatedParents;
-	findParentsInCommit(oldNodesHash, newlyCreatedParents, oldTree_, repository);
-	findParentsInCommit(newNodesHash, newlyCreatedParents, newTree_, repository);
+	findParentsInCommit(nodesAHash, newlyCreatedParents, treeA_, repository);
+	findParentsInCommit(nodesBHash, newlyCreatedParents, treeB_, repository);
 
-	filterPersistenceUnits(oldNodesHash);
-	filterPersistenceUnits(newNodesHash);
+	filterPersistenceUnits(nodesAHash);
+	filterPersistenceUnits(nodesBHash);
 
-	idMatching(oldNodesHash, newNodesHash, newlyCreatedParents);
+	idMatching(nodesAHash, nodesBHash, newlyCreatedParents);
 
 	markChildUpdates();
 }
@@ -84,34 +84,33 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 }
 
 // Private methods
-void Diff::idMatching(IdToGenericNodeHash& oldNodes, IdToGenericNodeHash& newNodes,
+void Diff::idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB,
 							 IdToGenericNodeHash& createdParents)
 {
-	QSet<Model::NodeIdType> onlyInNewNodes = QSet<Model::NodeIdType>::fromList(newNodes.keys());
-	QList<GenericNode*> oldNodesValueList = oldNodes.values();
+	QSet<Model::NodeIdType> onlyInNodesB = QSet<Model::NodeIdType>::fromList(nodesB.keys());
 
 	IdToGenericNodeHash::iterator iter;
-	for (auto oldNode : oldNodesValueList)
+	for (auto nodeA : nodesA.values())
 	{
-		iter = newNodes.find(oldNode->id());
-		if (iter == newNodes.end())
+		iter = nodesB.find(nodeA->id());
+		if (iter == nodesB.end())
 		{
-			// no such id in newNodes
-			changeDescriptions_.insert(oldNode->id(), new ChangeDescription(oldNode, nullptr));
+			// no such id in nodesB
+			changeDescriptions_.insert(nodeA->id(), new ChangeDescription(nodeA, nullptr));
 		}
 		else
 		{
 			// found id
-			changeDescriptions_.insert(oldNode->id(), new ChangeDescription(oldNode, iter.value()));
-			// id is also present in oldNodes
-			onlyInNewNodes.remove(iter.key());
+			changeDescriptions_.insert(nodeA->id(), new ChangeDescription(nodeA, iter.value()));
+			// id is also present in nodesA
+			onlyInNodesB.remove(iter.key());
 		}
 	}
 
-	for (auto newId : onlyInNewNodes)
+	for (auto id : onlyInNodesB)
 	{
-		iter = newNodes.find(newId);
-		changeDescriptions_.insert(newId, new ChangeDescription(nullptr, iter.value()));
+		iter = nodesB.find(id);
+		changeDescriptions_.insert(id, new ChangeDescription(nullptr, iter.value()));
 	}
 
 	for (auto parent : createdParents.values())
@@ -164,7 +163,7 @@ void Diff::markChildUpdates()
 		{
 			case ChangeType::Added:
 			{
-				GenericNode* parent = change->newNode()->parent();
+				GenericNode* parent = change->nodeB()->parent();
 				if (parent)
 				{
 					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
@@ -176,7 +175,7 @@ void Diff::markChildUpdates()
 
 			case ChangeType::Deleted:
 			{
-				GenericNode* parent = change->oldNode()->parent();
+				GenericNode* parent = change->nodeA()->parent();
 				if (parent)
 				{
 					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
@@ -188,7 +187,7 @@ void Diff::markChildUpdates()
 
 			case ChangeType::Moved:
 			{
-				GenericNode* parent = change->oldNode()->parent();
+				GenericNode* parent = change->nodeA()->parent();
 				if (parent)
 				{
 					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
@@ -196,7 +195,7 @@ void Diff::markChildUpdates()
 					parentChange->setChildrenUpdate(true);
 				}
 
-				parent = change->newNode()->parent();
+				parent = change->nodeB()->parent();
 				if (parent)
 				{
 					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
@@ -212,7 +211,7 @@ void Diff::markChildUpdates()
 				ChangeDescription::UpdateFlags flags = change->flags();
 				if (flags.testFlag(ChangeDescription::Order))
 				{
-					GenericNode* parent = change->oldNode()->parent();
+					GenericNode* parent = change->nodeA()->parent();
 					if (parent)
 					{
 						ChangeDescription* parentChange = changeDescriptions_.value(parent->id());

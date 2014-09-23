@@ -35,7 +35,7 @@ enum class ChangeType {Unclassified, Added, Deleted, Moved, Stationary};
 class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
-		ChangeDescription(GenericNode* oldNode, GenericNode* newNode);
+		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
 
 		enum UpdateType
 		{
@@ -58,8 +58,8 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		const UpdateFlags flags() const;
 
-		const GenericNode* newNode() const;
-		const GenericNode* oldNode() const;
+		const GenericNode* nodeB() const;
+		const GenericNode* nodeA() const;
 
 	private:
 		void fundamentalChangeClassification();
@@ -72,8 +72,8 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		UpdateFlags updateFlags_;
 
-		GenericNode* oldNode_{};
-		GenericNode* newNode_{};
+		GenericNode* nodeA_{};
+		GenericNode* nodeB_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
@@ -84,7 +84,7 @@ inline const ChangeType& ChangeDescription::type() const { return type_; }
 
 inline const ChangeDescription::UpdateFlags ChangeDescription::flags() const { return updateFlags_; }
 
-inline const GenericNode* ChangeDescription::newNode() const { return newNode_; }
-inline const GenericNode* ChangeDescription::oldNode() const { return oldNode_; }
+inline const GenericNode* ChangeDescription::nodeB() const { return nodeB_; }
+inline const GenericNode* ChangeDescription::nodeA() const { return nodeA_; }
 
 } /* namespace FilePersistence */

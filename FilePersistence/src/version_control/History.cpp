@@ -147,7 +147,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	if (iter != changes.end())
 	{
 		ChangeDescription* change = iter.value();
-		const GenericNode* rootNode = change->oldNode();
+		const GenericNode* rootNode = change->nodeA();
 		if (rootNode)
 			return rootNode->persistentUnit()->name();
 		else
@@ -171,9 +171,9 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Moved);
 	for (auto move : moves)
 	{
-		if (currentPath.compare(move->newNode()->persistentUnit()->name()) == 0)
+		if (currentPath.compare(move->nodeB()->persistentUnit()->name()) == 0)
 		{
-			QString unitName = move->oldNode()->persistentUnit()->name();
+			QString unitName = move->nodeA()->persistentUnit()->name();
 			if (!alreadyChecked.contains(unitName))
 			{
 				if (!tree->persistentUnit(unitName))

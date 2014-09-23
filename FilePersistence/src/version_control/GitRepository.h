@@ -51,7 +51,7 @@ class FILEPERSISTENCE_API GitRepository
 
 		std::shared_ptr<Merge> merge(QString revision, bool fastForward = true);
 
-		Diff diff(QString oldRevision, QString newRevision) const;
+		Diff diff(QString revisionA, QString revisionB) const;
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
 
 		const Commit* getCommit(QString revision) const;
@@ -119,7 +119,7 @@ class FILEPERSISTENCE_API GitRepository
 		enum class DiffKind {Unspecified, WorkdirToWorkdir, WorkdirToIndex, WorkdirToCommit,
 									IndexToWorkdir, IndexToIndex, IndexToCommit,
 									CommitToWorkdir, CommitToIndex, CommitToCommit};
-		static DiffKind kind(QString oldRevision, QString newRevision);
+		static DiffKind kind(QString revisionA, QString revisionB);
 
 		static void checkError(int errorCode);
 

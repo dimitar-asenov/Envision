@@ -28,12 +28,12 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
+ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB)
 {
-	Q_ASSERT(oldNode != nullptr || newNode != nullptr);
+	Q_ASSERT(nodeA != nullptr || nodeB != nullptr);
 
-	oldNode_ = oldNode;
-	newNode_ = newNode;
+	nodeA_ = nodeA;
+	nodeB_ = nodeB;
 
 	fundamentalChangeClassification();
 	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
@@ -46,24 +46,24 @@ ChangeDescription::ChangeDescription(GenericNode* oldNode, GenericNode* newNode)
 
 void ChangeDescription::fundamentalChangeClassification()
 {
-	if (oldNode_ == nullptr)
+	if (nodeA_ == nullptr)
 		type_ = ChangeType::Added;
 	else
 	{
-		if (newNode_ == nullptr)
+		if (nodeB_ == nullptr)
 			type_ = ChangeType::Deleted;
 		else
 		{
-			if (oldNode_->parent() == nullptr || newNode_->parent() == nullptr)
+			if (nodeA_->parent() == nullptr || nodeB_->parent() == nullptr)
 			{
-				if (oldNode_->parent() == nullptr && newNode_->parent() == nullptr)
+				if (nodeA_->parent() == nullptr && nodeB_->parent() == nullptr)
 					type_ = ChangeType::Stationary;
 				else
 					type_ = ChangeType::Moved;
 			}
 			else
 			{
-				if (oldNode_->parent()->id() == newNode_->parent()->id())
+				if (nodeA_->parent()->id() == nodeB_->parent()->id())
 					type_ = ChangeType::Stationary;
 				else
 					type_ = ChangeType::Moved;
@@ -75,7 +75,7 @@ void ChangeDescription::fundamentalChangeClassification()
 void ChangeDescription::detectReorder()
 {
 	// check for same name -> reordering detection
-	int reorder = QString::compare(oldNode_->name(), newNode_->name());
+	int reorder = QString::compare(nodeA_->name(), nodeB_->name());
 	if (reorder != 0)
 		updateFlags_ |= Order;
 	else
@@ -87,7 +87,7 @@ void ChangeDescription::detectValueUpdate()
 
 
 	// check for same type -> type change
-	int typeChange = QString::compare(oldNode_->rawValue(), newNode_->rawValue());
+	int typeChange = QString::compare(nodeA_->rawValue(), nodeB_->rawValue());
 	if (typeChange != 0)
 		updateFlags_ |= Value;
 	else
@@ -97,7 +97,7 @@ void ChangeDescription::detectValueUpdate()
 void ChangeDescription::detectTypeUpdate()
 {
 	// check for same value -> update
-	int valueUpdate = QString::compare(oldNode_->type(), newNode_->type());
+	int valueUpdate = QString::compare(nodeA_->type(), nodeB_->type());
 	if (valueUpdate != 0)
 		updateFlags_ |= Type;
 	else
@@ -159,9 +159,9 @@ void ChangeDescription::setChildrenUpdate(bool isUpdate)
 Model::NodeIdType ChangeDescription::id() const
 {
 	if (type_ == ChangeType::Added)
-		return newNode_->id();
+		return nodeB_->id();
 	else
-		return oldNode_->id();
+		return nodeA_->id();
 }
 
 } /* namespace FilePersistence */

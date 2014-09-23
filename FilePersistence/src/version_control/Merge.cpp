@@ -196,8 +196,8 @@ void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 		{
 			case ChangeType::Added:
 			{
-				// find CU in newTree
-				QString unitName = change->newNode()->persistentUnit()->name();
+				// find CU in treeB
+				QString unitName = change->nodeB()->persistentUnit()->name();
 				const GenericPersistentUnit* unit = versionTree->persistentUnit(unitName);
 				Q_ASSERT(unit);
 				conflictUnit = findConflicUnit(change->id(), false, diff, unit);
@@ -208,8 +208,8 @@ void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 
 			case ChangeType::Deleted:
 			{
-				// find CU in oldTree
-				QString unitName = change->oldNode()->persistentUnit()->name();
+				// find CU in treeA
+				QString unitName = change->nodeA()->persistentUnit()->name();
 				const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
 				Q_ASSERT(unit);
 				conflictUnit = findConflicUnit(change->id(), true, diff, unit);
@@ -220,16 +220,16 @@ void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 
 			case ChangeType::Moved:
 			{
-				// find CU in oldTree
-				QString unitName = change->oldNode()->persistentUnit()->name();
+				// find CU in treeA
+				QString unitName = change->nodeA()->persistentUnit()->name();
 				const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
 				Q_ASSERT(unit);
 				conflictUnit = findConflicUnit(change->id(), true, diff, unit);
 				cuToChange.insertMulti(conflictUnit, change);
 				changeToCU.insertMulti(change->id(), conflictUnit);
 
-				// find CU in newTree
-				unitName = change->newNode()->persistentUnit()->name();
+				// find CU in treeB
+				unitName = change->nodeB()->persistentUnit()->name();
 				unit = versionTree->persistentUnit(unitName);
 				Q_ASSERT(unit);
 				Model::NodeIdType newConflictUnit = findConflicUnit(change->id(), false, diff, unit);
@@ -246,16 +246,16 @@ void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 				if (change->flags().testFlag(ChangeDescription::Order))
 				{
 					// Reordering occured
-					// find CU in oldTree
-					QString unitName = change->oldNode()->persistentUnit()->name();
+					// find CU in treeA
+					QString unitName = change->nodeA()->persistentUnit()->name();
 					const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
 					Q_ASSERT(unit);
 					conflictUnit = findConflicUnit(change->id(), true, diff, unit);
 					cuToChange.insertMulti(conflictUnit, change);
 					changeToCU.insertMulti(change->id(), conflictUnit);
 
-					// find CU in newTree
-					unitName = change->newNode()->persistentUnit()->name();
+					// find CU in treeB
+					unitName = change->nodeB()->persistentUnit()->name();
 					unit = versionTree->persistentUnit(unitName);
 					Q_ASSERT(unit);
 					Model::NodeIdType newConflictUnit = findConflicUnit(change->id(), false, diff, unit);
@@ -267,7 +267,7 @@ void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 				}
 				else
 				{
-					QString unitName = change->newNode()->persistentUnit()->name();
+					QString unitName = change->nodeB()->persistentUnit()->name();
 					const GenericPersistentUnit* unit = versionTree->persistentUnit(unitName);
 					Q_ASSERT(unit);
 					conflictUnit = findConflicUnit(change->id(), false, diff, unit);
@@ -304,7 +304,7 @@ Model::NodeIdType Merge::findConflicUnit(Model::NodeIdType nodeID, bool inBase, 
 			{
 				ChangeDescription* change = iter.value();
 				Q_ASSERT(!inBase);
-				if (change->oldNode() && isConflictUnitNode(change->oldNode()))
+				if (change->nodeA() && isConflictUnitNode(change->nodeA()))
 					return node->id();
 			}
 		}
@@ -364,7 +364,7 @@ bool Merge::isConflictUnit(const GenericNode* node, NodeSource source, const Cha
 		if (!baseToSource)
 			return true;
 
-		if (baseToSource->oldNode() && isConflictUnitNode(baseToSource->oldNode()))
+		if (baseToSource->nodeA() && isConflictUnitNode(baseToSource->nodeA()))
 			return true;
 	}
 
@@ -438,14 +438,14 @@ void Merge::computeMergeForLists(std::unique_ptr<GenericTree> const& head, std::
 			{
 				if (!nodeToRegionMap_.contains(change->id()))
 				{
-					GenericNode* revisionNode = revision->find(change->id(), change->newNode()->persistentUnit()->name());
-					GenericNode* baseNode = base->find(change->id(), change->oldNode()->persistentUnit()->name());
+					GenericNode* revisionNode = revision->find(change->id(), change->nodeB()->persistentUnit()->name());
+					GenericNode* baseNode = base->find(change->id(), change->nodeA()->persistentUnit()->name());
 
 					GenericNode* headNode = baseNode;
 
 					ChangeDescription* headChange = baseToHead.value(change->id());
-					if (headChange && headChange->newNode())
-						headNode = head->find(change->id(), headChange->newNode()->persistentUnit()->name());
+					if (headChange && headChange->nodeB())
+						headNode = head->find(change->id(), headChange->nodeB()->persistentUnit()->name());
 
 					QList<Model::NodeIdType> headList = genericNodeListToNodeIdList(headNode->children());
 					QList<Model::NodeIdType> revisionList = genericNodeListToNodeIdList(revisionNode->children());
@@ -789,18 +789,18 @@ void Merge::applyChangesToTree(std::unique_ptr<GenericTree> const& tree, const I
 bool Merge::applyAddToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
 									const ChangeDescription* addOp)
 {
-	GenericNode* parent = addOp->newNode()->parent();
+	GenericNode* parent = addOp->nodeB()->parent();
 
 	if (parent && changes.contains(parent->id()))
 		return false;
 
-	QString persistentUnitName = addOp->newNode()->persistentUnit()->name();
+	QString persistentUnitName = addOp->nodeB()->persistentUnit()->name();
 	GenericPersistentUnit* persistentUnit = tree->persistentUnit(persistentUnitName);
 	if (!persistentUnit)
 		persistentUnit = &tree->newPersistentUnit(persistentUnitName);
 
 	// perform insert
-	GenericNode* newNode = persistentUnit->newNode(addOp->newNode());
+	GenericNode* newNode = persistentUnit->newNode(addOp->nodeB());
 	Q_ASSERT(!newNode->parent());
 	Q_ASSERT(newNode->children().isEmpty());
 
@@ -823,7 +823,7 @@ bool Merge::applyAddToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeD
 bool Merge::applyDeleteToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& /*changes*/,
 										const ChangeDescription* deleteOp)
 {
-	QString persistentUnitName = deleteOp->oldNode()->persistentUnit()->name();
+	QString persistentUnitName = deleteOp->nodeA()->persistentUnit()->name();
 	GenericNode* node = tree->find(deleteOp->id(), persistentUnitName);
 	Q_ASSERT(node);
 
@@ -852,16 +852,16 @@ bool Merge::applyDeleteToTree(std::unique_ptr<GenericTree> const& tree, IdToChan
 bool Merge::applyMoveToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
 									 const ChangeDescription* moveOp)
 {
-	GenericNode* targetParent = moveOp->newNode()->parent();
+	GenericNode* targetParent = moveOp->nodeB()->parent();
 	if (targetParent && changes.contains(targetParent->id()))
 		return false;
 
-	QString targetPersistentUnitName = moveOp->newNode()->persistentUnit()->name();
+	QString targetPersistentUnitName = moveOp->nodeB()->persistentUnit()->name();
 	GenericPersistentUnit* targetPersistentUnit = tree->persistentUnit(targetPersistentUnitName);
 	if (!targetPersistentUnit)
 		targetPersistentUnit = &tree->newPersistentUnit(targetPersistentUnitName);
 
-	GenericNode* nodeToMove = tree->find(moveOp->id(), moveOp->oldNode()->persistentUnit()->name());
+	GenericNode* nodeToMove = tree->find(moveOp->id(), moveOp->nodeA()->persistentUnit()->name());
 	Q_ASSERT(nodeToMove);
 	GenericNode* sourceParent = nodeToMove->parent();
 
@@ -902,27 +902,27 @@ bool Merge::applyStationaryChangeToTree(std::unique_ptr<GenericTree> const& tree
 													 IdToChangeDescriptionHash& /*changes*/,
 													 const ChangeDescription* stationaryOp)
 {
-	GenericNode* node = tree->find(stationaryOp->id(), stationaryOp->oldNode()->persistentUnit()->name());
+	GenericNode* node = tree->find(stationaryOp->id(), stationaryOp->nodeA()->persistentUnit()->name());
 	Q_ASSERT(node);
 
 	ChangeDescription::UpdateFlags flags = stationaryOp->flags();
 
 	if (flags.testFlag(ChangeDescription::Value))
 	{
-		GenericNode::ValueType type = stationaryOp->newNode()->valueType();
-		QString value = stationaryOp->newNode()->rawValue();
+		GenericNode::ValueType type = stationaryOp->nodeB()->valueType();
+		QString value = stationaryOp->nodeB()->rawValue();
 		node->resetValue(type, value);
 	}
 
 	if (flags.testFlag(ChangeDescription::Type))
 	{
-		QString type = stationaryOp->newNode()->type();
+		QString type = stationaryOp->nodeB()->type();
 		node->setType(type);
 	}
 
 	if (flags.testFlag(ChangeDescription::Order))
 	{
-		GenericNode* parent = stationaryOp->newNode()->parent();
+		GenericNode* parent = stationaryOp->nodeB()->parent();
 		if (parent)
 		{
 			parent = tree->find(parent->id(), parent->persistentUnit()->name());
@@ -934,10 +934,10 @@ bool Merge::applyStationaryChangeToTree(std::unique_ptr<GenericTree> const& tree
 					performReorderInList(parent, node);
 			}
 			else
-				node->setName(stationaryOp->newNode()->name());
+				node->setName(stationaryOp->nodeB()->name());
 		}
 		else
-			node->setName(stationaryOp->newNode()->name());
+			node->setName(stationaryOp->nodeB()->name());
 	}
 
 	return true;

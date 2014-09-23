@@ -34,13 +34,13 @@ namespace FilePersistence {
 
 struct GitDiffExtract
 {
-	GenericTree* oldTree_{};
-	GenericTree* newTree_{};
+	GenericTree* treeA_{};
+	GenericTree* treeB_{};
 
-	QList<GenericNode*> oldNodes_;
-	QList<GenericNode*> newNodes_;
+	QList<GenericNode*> nodesA_;
+	QList<GenericNode*> nodesB_;
 
-	bool reverseOldNew_{};
+	bool reverseAB_{};
 };
 
 struct GitCommitExtract
@@ -56,11 +56,11 @@ int gitDiffExtractFileCallBack(
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
 
-	QString oldRelativePath(delta->old_file.path);
-	data->oldTree_->newPersistentUnit(oldRelativePath);
+	QString relativePathA(delta->old_file.path);
+	data->treeA_->newPersistentUnit(relativePathA);
 
-	QString newRelativePath(delta->new_file.path);
-	data->newTree_->newPersistentUnit(newRelativePath);
+	QString relativePathB(delta->new_file.path);
+	data->treeB_->newPersistentUnit(relativePathB);
 
 	return 0;
 }
@@ -77,25 +77,25 @@ int gitDiffExtractLineCallBack(
 	while (line->content[lineLength] == '\t')
 		lineLength--;
 
-	if ((!data->reverseOldNew_ && line->origin == GIT_DIFF_LINE_ADDITION) ||
-		 (data->reverseOldNew_ && line->origin == GIT_DIFF_LINE_DELETION))
+	if ((!data->reverseAB_ && line->origin == GIT_DIFF_LINE_ADDITION) ||
+		 (data->reverseAB_ && line->origin == GIT_DIFF_LINE_DELETION))
 	{
-		// appear on new side
+		// appear on side B
 		QString relativePath(delta->new_file.path);
-		GenericPersistentUnit* unit = data->newTree_->persistentUnit(relativePath);
+		GenericPersistentUnit* unit = data->treeB_->persistentUnit(relativePath);
 		Q_ASSERT(unit != nullptr);
 		GenericNode* node = unit->newNode(line->content, lineLength);
-		data->newNodes_.append(node);
+		data->nodesB_.append(node);
 	}
-	else if ((!data->reverseOldNew_ && line->origin == GIT_DIFF_LINE_DELETION) ||
-				(data->reverseOldNew_ && line->origin == GIT_DIFF_LINE_ADDITION))
+	else if ((!data->reverseAB_ && line->origin == GIT_DIFF_LINE_DELETION) ||
+				(data->reverseAB_ && line->origin == GIT_DIFF_LINE_ADDITION))
 	{
-		// appear on old side
+		// appear on side A
 		QString relativePath(delta->old_file.path);
-		GenericPersistentUnit* unit = data->oldTree_->persistentUnit(relativePath);
+		GenericPersistentUnit* unit = data->treeA_->persistentUnit(relativePath);
 		Q_ASSERT(unit != nullptr);
 		GenericNode* node = unit->newNode(line->content, lineLength);
-		data->oldNodes_.append(node);
+		data->nodesA_.append(node);
 	}
 	else
 		Q_ASSERT(false);
@@ -176,11 +176,11 @@ std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 		return std::shared_ptr<Merge>();
 }
 
-Diff GitRepository::diff(QString oldRevision, QString newRevision) const
+Diff GitRepository::diff(QString revisionA, QString revisionB) const
 {
 	int errorCode = 0;
 
-	DiffKind diffKind = kind(oldRevision, newRevision);
+	DiffKind diffKind = kind(revisionA, revisionB);
 	Q_ASSERT(diffKind != DiffKind::Unspecified);
 
 
@@ -190,12 +190,12 @@ Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 	errorCode = git_diff_init_options(&diffOptions, GIT_DIFF_OPTIONS_VERSION);
 	diffOptions.context_lines = 0;
 
-	git_commit* oldGitCommit = nullptr;
-	git_commit* newGitCommit = nullptr;
-	git_tree* oldGitTree = nullptr;
-	git_tree* newGitTree = nullptr;
+	git_commit* gitCommitA = nullptr;
+	git_commit* gitCommitB = nullptr;
+	git_tree* gitTreeA = nullptr;
+	git_tree* gitTreeB = nullptr;
 
-	bool reverseOldNew = false;
+	bool reverseAB = false;
 	switch (diffKind)
 	{
 		case DiffKind::WorkdirToWorkdir:
@@ -204,16 +204,16 @@ Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 
 		case DiffKind::WorkdirToIndex:
 			errorCode = git_diff_index_to_workdir(&gitDiff, repository_, nullptr, &diffOptions);
-			reverseOldNew = true;
+			reverseAB = true;
 			break;
 
 		case DiffKind::WorkdirToCommit:
-			newGitCommit = parseCommit(newRevision);
-			errorCode = git_commit_tree(&newGitTree, newGitCommit);
+			gitCommitB = parseCommit(revisionB);
+			errorCode = git_commit_tree(&gitTreeB, gitCommitB);
 			checkError(errorCode);
 
-			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, newGitTree, &diffOptions);
-			reverseOldNew = true;
+			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, gitTreeB, &diffOptions);
+			reverseAB = true;
 			break;
 
 		case DiffKind::IndexToWorkdir:
@@ -225,40 +225,40 @@ Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 			break;
 
 		case DiffKind::IndexToCommit:
-			newGitCommit = parseCommit(newRevision);
-			errorCode = git_commit_tree(&newGitTree, newGitCommit);
+			gitCommitB = parseCommit(revisionB);
+			errorCode = git_commit_tree(&gitTreeB, gitCommitB);
 			checkError(errorCode);
 
-			errorCode = git_diff_tree_to_index(&gitDiff, repository_, newGitTree, nullptr, &diffOptions);
-			reverseOldNew = true;
+			errorCode = git_diff_tree_to_index(&gitDiff, repository_, gitTreeB, nullptr, &diffOptions);
+			reverseAB = true;
 			break;
 
 		case DiffKind::CommitToWorkdir:
-			oldGitCommit = parseCommit(oldRevision);
-			errorCode = git_commit_tree(&oldGitTree, oldGitCommit);
+			gitCommitA = parseCommit(revisionA);
+			errorCode = git_commit_tree(&gitTreeA, gitCommitA);
 			checkError(errorCode);
 
-			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, oldGitTree, &diffOptions);
+			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, gitTreeA, &diffOptions);
 			break;
 
 		case DiffKind::CommitToIndex:
-			oldGitCommit = parseCommit(oldRevision);
-			errorCode = git_commit_tree(&oldGitTree, oldGitCommit);
+			gitCommitA = parseCommit(revisionA);
+			errorCode = git_commit_tree(&gitTreeA, gitCommitA);
 			checkError(errorCode);
 
-			errorCode = git_diff_tree_to_index(&gitDiff, repository_, oldGitTree, nullptr, &diffOptions);
+			errorCode = git_diff_tree_to_index(&gitDiff, repository_, gitTreeA, nullptr, &diffOptions);
 			break;
 
 		case DiffKind::CommitToCommit:
-			oldGitCommit = parseCommit(oldRevision);
-			errorCode = git_commit_tree(&oldGitTree, oldGitCommit);
+			gitCommitA = parseCommit(revisionA);
+			errorCode = git_commit_tree(&gitTreeA, gitCommitA);
 			checkError(errorCode);
 
-			newGitCommit = parseCommit(newRevision);
-			errorCode = git_commit_tree(&newGitTree, newGitCommit);
+			gitCommitB = parseCommit(revisionB);
+			errorCode = git_commit_tree(&gitTreeB, gitCommitB);
 			checkError(errorCode);
 
-			errorCode = git_diff_tree_to_tree(&gitDiff, repository_, oldGitTree, newGitTree, &diffOptions);
+			errorCode = git_diff_tree_to_tree(&gitDiff, repository_, gitTreeA, gitTreeB, &diffOptions);
 			break;
 
 		default:
@@ -267,28 +267,28 @@ Diff GitRepository::diff(QString oldRevision, QString newRevision) const
 	}
 	checkError(errorCode);
 
-	// Use callback on diff to extract node information -> oldNodes & newNodes
+	// Use callback on diff to extract node information
 	GitDiffExtract carryAlongData;
-	QString oldCommitSHA1 = getSHA1(oldRevision);
-	carryAlongData.oldTree_ = new GenericTree(oldCommitSHA1, oldCommitSHA1);
-	QString newCommitSHA1 = getSHA1(newRevision);
-	carryAlongData.newTree_ = new GenericTree(newCommitSHA1, newCommitSHA1);
+	QString sha1A = getSHA1(revisionA);
+	carryAlongData.treeA_ = new GenericTree(sha1A, sha1A);
+	QString sha1B = getSHA1(revisionB);
+	carryAlongData.treeB_ = new GenericTree(sha1B, sha1B);
 
-	carryAlongData.reverseOldNew_ = reverseOldNew;
+	carryAlongData.reverseAB_ = reverseAB;
 	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, NULL, gitDiffExtractLineCallBack, &(carryAlongData));
 
 	// clean up
-	git_commit_free(oldGitCommit);
-	git_commit_free(newGitCommit);
-	git_tree_free(oldGitTree);
-	git_tree_free(newGitTree);
+	git_commit_free(gitCommitA);
+	git_commit_free(gitCommitB);
+	git_tree_free(gitTreeA);
+	git_tree_free(gitTreeB);
 	git_diff_free(gitDiff);
 
-	std::shared_ptr<GenericTree> oldTree(carryAlongData.oldTree_);
-	std::shared_ptr<GenericTree> newTree(carryAlongData.newTree_);
+	std::shared_ptr<GenericTree> treeA(carryAlongData.treeA_);
+	std::shared_ptr<GenericTree> treeB(carryAlongData.treeB_);
 
-	return Diff(carryAlongData.oldNodes_, oldTree,
-					carryAlongData.newNodes_, newTree,
+	return Diff(carryAlongData.nodesA_, treeA,
+					carryAlongData.nodesB_, treeB,
 					this);
 }
 
@@ -1077,33 +1077,33 @@ bool GitRepository::hasCleanWorkdir() const
 	return (numDeltas == 0);
 }
 
-GitRepository::DiffKind GitRepository::kind(QString oldRevision, QString newRevision)
+GitRepository::DiffKind GitRepository::kind(QString revisionA, QString revisionB)
 {
 	DiffKind diffKind = DiffKind::Unspecified;
 
-	if (oldRevision.compare(WORKDIR) == 0)
+	if (revisionA.compare(WORKDIR) == 0)
 	{
-		if (newRevision.compare(WORKDIR) == 0)
+		if (revisionB.compare(WORKDIR) == 0)
 			diffKind = DiffKind::WorkdirToWorkdir;
-		else if (newRevision.compare(INDEX) == 0)
+		else if (revisionB.compare(INDEX) == 0)
 			diffKind = DiffKind::WorkdirToIndex;
 		else
 			diffKind = DiffKind::WorkdirToCommit;
 	}
-	else if (oldRevision.compare(INDEX) == 0)
+	else if (revisionA.compare(INDEX) == 0)
 	{
-		if (newRevision.compare(WORKDIR) == 0)
+		if (revisionB.compare(WORKDIR) == 0)
 			diffKind = DiffKind::IndexToWorkdir;
-		else if (newRevision.compare(INDEX) == 0)
+		else if (revisionB.compare(INDEX) == 0)
 			diffKind = DiffKind::IndexToIndex;
 		else
 			diffKind = DiffKind::IndexToCommit;
 	}
 	else
 	{
-		if (newRevision.compare(WORKDIR) == 0)
+		if (revisionB.compare(WORKDIR) == 0)
 			diffKind = DiffKind::CommitToWorkdir;
-		else if (newRevision.compare(INDEX) == 0)
+		else if (revisionB.compare(INDEX) == 0)
 			diffKind = DiffKind::CommitToIndex;
 		else
 			diffKind = DiffKind::CommitToCommit;
