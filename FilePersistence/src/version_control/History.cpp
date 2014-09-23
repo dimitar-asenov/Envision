@@ -158,6 +158,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	if (!tree->persistentUnit(currentPath)) {
 		const CommitFile* file = repository->getCommitFile(revision, currentPath);
 		Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(currentPath));
+		SAFE_DELETE(file);
 	}
 
 	GenericNode* rootNode = tree->persistentUnit(currentPath)->find(rootNodeId_);
@@ -179,6 +180,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 				{
 					const CommitFile* file = repository->getCommitFile(revision, unitName);
 					Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(unitName));
+					SAFE_DELETE(file);
 				}
 				GenericNode* rootNode = tree->persistentUnit(unitName)->find(rootNodeId_);
 				if (rootNode)
