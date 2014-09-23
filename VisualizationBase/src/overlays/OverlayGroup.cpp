@@ -179,7 +179,10 @@ void OverlayGroup::update()
 		}
 
 		for (auto& overlay : overlays_)
+		{
+			overlay->overlayItem()->setUpdateNeeded(Item::StandardUpdate);
 			overlay->overlayItem()->updateSubtree();
+		}
 
 		if (postUpdateFunction_) postUpdateFunction_(*this);
 	}
