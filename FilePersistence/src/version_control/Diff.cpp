@@ -230,32 +230,37 @@ void Diff::markChildUpdates()
 
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
-	for (auto key : nodes.uniqueKeys())
+	IdToGenericNodeHash::iterator i;
+	GenericNode* previous = nullptr;
+	for (i = nodes.begin(); i != nodes.end(); ++i)
 	{
-		if (nodes.count(key) == 2)
+		if (previous && (previous->id() == i.value()->id()))
 		{
 			GenericNode* persistenceUnitDefinition = nullptr;
 			GenericNode* persistenceUnitRoot = nullptr;
 
-			QList<GenericNode*> persistenceList = nodes.values(key);
-			if (GenericNode::persistentUnitType.compare(persistenceList.first()->type()) == 0)
+			if (previous->type() == GenericNode::persistentUnitType)
 			{
-				persistenceUnitDefinition = persistenceList.first();
-				persistenceUnitRoot = persistenceList.last();
+				persistenceUnitDefinition = previous;
+				persistenceUnitRoot = i.value();
 			}
 			else
 			{
-				persistenceUnitDefinition = persistenceList.last();
-				persistenceUnitRoot = persistenceList.first();
+				Q_ASSERT(i.value()->type() == GenericNode::persistentUnitType);
+				persistenceUnitDefinition = i.value();
+				persistenceUnitRoot = previous;
 			}
 
+			// reset child / parent references correctly and remove PU definition
 			persistenceUnitRoot->setParent(persistenceUnitDefinition->parent());
+			persistenceUnitDefinition->remove();
+			if (persistenceUnitRoot->parent())
+				persistenceUnitRoot->parent()->addChild(persistenceUnitRoot);
 
-			nodes.remove(key);
-			nodes.insert(key, persistenceUnitRoot);
+			nodes.remove(previous->id());
+			nodes.insert(previous->id(), persistenceUnitRoot);
 		}
-
-		Q_ASSERT(nodes.count(key) == 1);
+		previous = i.value();
 	}
 }
 
