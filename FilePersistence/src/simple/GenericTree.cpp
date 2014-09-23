@@ -64,22 +64,14 @@ GenericNode* GenericTree::find(const GenericNode* node)
 GenericNode* GenericTree::find(Model::NodeIdType id, QString persistentUnitGuess)
 {
 	if (!persistentUnitGuess.isNull())
-	{
-		GenericPersistentUnit* unit = persistentUnit(persistentUnitGuess);
-		if (unit)
-		{
-			GenericNode* node = unit->find(id);
-			if (node)
+		if (auto unit = persistentUnit(persistentUnitGuess))
+			if (auto node = unit->find(id))
 				return node;
-		}
-	}
 
-	for (GenericPersistentUnit& unit : persistentUnits_.values())
-	{
-		GenericNode* node = unit.find(id);
-		if (node)
+	for (auto unit : persistentUnits_.values())
+		if (auto node = unit.find(id))
 			return node;
-	}
+
 	return nullptr;
 }
 
