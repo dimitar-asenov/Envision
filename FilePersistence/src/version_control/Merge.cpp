@@ -77,29 +77,22 @@ const std::unique_ptr<GenericTree>& Merge::mergeTree() const
 // ======== private ========
 
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
+	: fastForward_{fastForward}, repository_{repository}
 {
-	initialize(revision, fastForward, repository);
-	classifyKind();
-	performMerge();
-}
-
-Merge::~Merge() {}
-
-void Merge::initialize(QString revision, bool fastForward, GitRepository* repository)
-{
-	repository_ = repository;
-
 	head_ = repository_->getSHA1("HEAD");
 	revision_ = repository_->getSHA1(revision);
-
-	fastForward_ = fastForward;
 
 	mergeBase_ = repository_->findMergeBase(revision);
 	if (mergeBase_.isNull())
 		error_ = Error::NoMergeBase;
 
 	stage_ = Stage::Initialized;
+
+	classifyKind();
+	performMerge();
 }
+
+Merge::~Merge() {}
 
 void Merge::classifyKind()
 {

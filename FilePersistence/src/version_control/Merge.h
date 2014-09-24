@@ -59,8 +59,6 @@ class FILEPERSISTENCE_API Merge
 
 		Merge(QString revision, bool fastForward, GitRepository* repository);
 
-		void initialize(QString revision, bool fastForward, GitRepository* repository);
-
 		void classifyKind();
 
 		void performMerge();
