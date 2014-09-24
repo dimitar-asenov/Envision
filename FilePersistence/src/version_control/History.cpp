@@ -115,7 +115,6 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const C
 			if (!subtreeIsAffected)
 				isRelevant = false;
 
-			// TODO perform correct call
 			GenericTree tree("History", parent->commitSHA1_);
 			QString parentRelativeRootPath =findRootPath(parent->commitSHA1_, relativePathRootNode, &diff,
 																		&tree, repository);
