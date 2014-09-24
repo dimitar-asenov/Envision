@@ -624,14 +624,6 @@ Merge::ListType Merge::getListType(const GenericNode* node)
 	return ListType::NoList;
 }
 
-bool Merge::isListType(const GenericNode* node)
-{
-	if (getListType(node) == ListType::NoList)
-		return false;
-	else
-		return true;
-}
-
 void Merge::loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version)
 {
 	IdToGenericNodeHash persistentUnitRoots;

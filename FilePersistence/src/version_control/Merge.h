@@ -189,4 +189,6 @@ inline Merge::Kind Merge::kind() const { return kind_; }
 inline Merge::Stage Merge::stage() const { return stage_; }
 inline Merge::Error Merge::error() const { return error_; }
 
+inline bool Merge::isListType(const GenericNode* node) { return getListType(node) != ListType::NoList; }
+
 } /* namespace FilePersistence */
