@@ -249,10 +249,14 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 
 	// Use callback on diff to extract node information
 	GitDiffExtract carryAlongData;
+
 	QString sha1A = getSHA1(revisionA);
-	carryAlongData.treeA_ = new GenericTree(sha1A, sha1A);
+	std::shared_ptr<GenericTree> treeA = std::make_shared<GenericTree>(sha1A, sha1A);
+	carryAlongData.treeA_ = treeA.get();
+
 	QString sha1B = getSHA1(revisionB);
-	carryAlongData.treeB_ = new GenericTree(sha1B, sha1B);
+	std::shared_ptr<GenericTree> treeB = std::make_shared<GenericTree>(sha1B, sha1B);
+	carryAlongData.treeB_ = treeB.get();
 
 	carryAlongData.reverseAB_ = reverseAB;
 	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, NULL, gitDiffExtractLineCallBack, &(carryAlongData));
@@ -263,9 +267,6 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 	git_tree_free(gitTreeA);
 	git_tree_free(gitTreeB);
 	git_diff_free(gitDiff);
-
-	std::shared_ptr<GenericTree> treeA(carryAlongData.treeA_);
-	std::shared_ptr<GenericTree> treeB(carryAlongData.treeB_);
 
 	return Diff(carryAlongData.nodesA_, treeA,
 					carryAlongData.nodesB_, treeB,
