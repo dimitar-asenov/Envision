@@ -842,18 +842,14 @@ void Merge::performInsertIntoList(GenericNode* parent, GenericNode* node)
 	Q_ASSERT(mergedLists_.contains(parent->id()));
 
 	ListType listType = getListType(parent);
-	bool resolveOrder;
-	if (listType == ListType::OrderedList)
-		resolveOrder = false;
-	else
-		resolveOrder = true;
+	bool resolveOrder = listType != ListType::OrderedList;
 
 	QList<Model::NodeIdType> targetList;
 	bool success = applyListMerge(targetList, mergedLists_.value(parent->id()), resolveOrder);
 	Q_ASSERT(success);
 	int index = listInsertionIndex(targetList, genericNodeListToNodeIdList(parent->children()), node->id());
 
-	for (GenericNode* child : parent->children())
+	for (auto child : parent->children())
 	{
 		int childIndex = child->name().toInt();
 		if (index <= childIndex)
@@ -873,11 +869,7 @@ void Merge::performReorderInList(GenericNode* parent, GenericNode* node)
 	Q_ASSERT(node->parent() == parent);
 
 	ListType listType = getListType(parent);
-	bool resolveOrder;
-	if (listType == ListType::OrderedList)
-		resolveOrder = false;
-	else
-		resolveOrder = true;
+	bool resolveOrder = listType != ListType::OrderedList;
 
 	QList<Model::NodeIdType> targetList;
 	bool success = applyListMerge(targetList, mergedLists_.value(parent->id()), resolveOrder);
@@ -888,17 +880,16 @@ void Merge::performReorderInList(GenericNode* parent, GenericNode* node)
 
 	QHash<Model::NodeIdType, QString> indexList;
 	int index = 0;
-	for (Model::NodeIdType id : targetList)
+	for (auto id : targetList)
 	{
 		if (availableIds.contains(id))
 		{
 			indexList.insert(id, QString::number(index));
-			qDebug() << id << index;
 			++index;
 		}
 	}
 
-	for (GenericNode* child : parent->children())
+	for (auto child : parent->children())
 	{
 		if (indexList.contains(child->id()))
 			child->setName(indexList.value(child->id()));
