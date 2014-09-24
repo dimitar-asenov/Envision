@@ -691,7 +691,7 @@ void Merge::loadGenericTree(std::unique_ptr<GenericTree> const& tree, const QStr
 	const Commit* commit = repository_->getCommit(version);
 	for (auto file : commit->files())
 	{
-		GenericNode* unitRoot = Parser::load(file->content_, file->size_, false,
+		GenericNode* unitRoot = Parser::load(file->content(), file->size_, false,
 														 tree->newPersistentUnit(file->relativePath_));
 
 		Q_ASSERT(unitRoot);

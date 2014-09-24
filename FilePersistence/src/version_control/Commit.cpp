@@ -36,13 +36,21 @@ Signature::Signature()
 
 CommitFile::CommitFile(){}
 
-CommitFile::CommitFile(QString relativePath, qint64 size, const char* content)
-	:relativePath_{relativePath}, size_{size}, content_{content}
+CommitFile::CommitFile(QString relativePath, qint64 size, std::unique_ptr<char[]> content)
+	: relativePath_{relativePath}, size_{size}, content_{std::move(content)}
 {}
 
-CommitFile::~CommitFile()
+CommitFile::CommitFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content)
+	: relativePath_{relativePath}, size_{size}, contentWithDeleter_{std::move(content)}
+{}
+
+const char* CommitFile::content() const
 {
-	delete[] content_;
+	Q_ASSERT((content_ && !contentWithDeleter_) || (!content_ && contentWithDeleter_));
+	if (content_)
+		return content_.get();
+	else
+		return contentWithDeleter_.get();
 }
 
 Commit::Commit() {}
@@ -53,9 +61,14 @@ Commit::~Commit()
 		SAFE_DELETE(file);
 }
 
-void Commit::addFile(QString relativePath, qint64 size, const char* content)
+void Commit::addFile(QString relativePath, qint64 size, std::unique_ptr<char[]> content)
 {
-	files_.insert(relativePath, new CommitFile(relativePath, size, content));
+	files_.insert(relativePath, new CommitFile(relativePath, size, std::move(content)));
+}
+
+void Commit::addFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content)
+{
+	files_.insert(relativePath, new CommitFile(relativePath, size, std::move(content)));
 }
 
 bool Commit::getFileContent(QString fileName, const char*& content, int& contentSize) const
@@ -64,7 +77,7 @@ bool Commit::getFileContent(QString fileName, const char*& content, int& content
 	if (iter != files_.constEnd())
 	{
 		contentSize = iter.value()->size_;
-		content = iter.value()->content_;
+		content = iter.value()->content();
 
 		return true;
 	}

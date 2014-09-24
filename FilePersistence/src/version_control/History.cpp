@@ -158,7 +158,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	// check if rootNode is still in current PU
 	if (!tree->persistentUnit(currentPath)) {
 		const CommitFile* file = repository->getCommitFile(revision, currentPath);
-		Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(currentPath));
+		Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(currentPath));
 		SAFE_DELETE(file);
 	}
 
@@ -180,7 +180,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 				if (!tree->persistentUnit(unitName))
 				{
 					const CommitFile* file = repository->getCommitFile(revision, unitName);
-					Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(unitName));
+					Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(unitName));
 					SAFE_DELETE(file);
 				}
 				GenericNode* rootNode = tree->persistentUnit(unitName)->find(rootNodeId_);
@@ -207,7 +207,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 		const CommitFile* startFile = repository->getCommitFile(revision, relativePath);
 		commitFiles.append(startFile);
 
-		Parser::load(startFile->content_, startFile->size_, false, tree->newPersistentUnit(relativePath));
+		Parser::load(startFile->content(), startFile->size_, false, tree->newPersistentUnit(relativePath));
 	}
 
 	GenericNode* subtreeRoot = tree->persistentUnit(relativePath)->find(rootNodeId_);
@@ -234,7 +234,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 				const CommitFile* file = repository->getCommitFile(revision, subUnitrelativePath);
 				commitFiles.append(file);
 
-				Parser::load(file->content_, file->size_, false, tree->newPersistentUnit(subUnitrelativePath));
+				Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(subUnitrelativePath));
 			}
 			GenericNode* subUnitRoot = tree->persistentUnit(subUnitrelativePath)->unitRootNode();
 			stack.append(subUnitRoot);

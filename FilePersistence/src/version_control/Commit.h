@@ -47,14 +47,21 @@ struct CommitMetaData {
 		Signature author_;
 };
 
+using CommitFileContentDeleter = std::function<void (char*)>;
+
 struct CommitFile {
 		QString relativePath_;
 		qint64 size_{};
-		const char* content_{};
 
 		CommitFile();
-		CommitFile(QString relativePath, qint64 size, const char* content);
-		~CommitFile();
+		CommitFile(QString relativePath, qint64 size, std::unique_ptr<char[]> content);
+		CommitFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content);
+
+		const char* content() const;
+
+	private:
+		std::unique_ptr<char[]> content_;
+		std::unique_ptr<char[], CommitFileContentDeleter> contentWithDeleter_;
 };
 
 class FILEPERSISTENCE_API Commit
@@ -68,7 +75,9 @@ class FILEPERSISTENCE_API Commit
 
 		QList<CommitFile*> files() const;
 
-		void addFile(QString relativePath, qint64 size, const char* content);
+		void addFile(QString relativePath, qint64 size, std::unique_ptr<char[]> content);
+		void addFile(QString relativePath, qint64 size, std::unique_ptr<char[], CommitFileContentDeleter> content);
+
 		bool getFileContent(QString fileName, const char*& content, int& contentSize) const;
 
 	private:

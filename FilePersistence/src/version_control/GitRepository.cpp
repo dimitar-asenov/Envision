@@ -125,13 +125,9 @@ int treeWalkCommitExtractCallBack(const char* root,
 
 			qint64 contentSize = git_blob_rawsize(blob);
 
-			const char* rawContent = (const char*)git_blob_rawcontent(blob);
-			char* content = new char[contentSize];
-			memcpy(content, rawContent, contentSize);
-
-			data->commit_->addFile(relativePath, contentSize, content);
-
-			git_blob_free(blob);
+			std::unique_ptr<char[], CommitFileContentDeleter>
+					content((char*)git_blob_rawcontent(blob), [blob](char*){ git_blob_free(blob); });
+			data->commit_->addFile(relativePath, contentSize, std::move(content));
 		}
 	}
 	else
@@ -844,7 +840,7 @@ const CommitFile* GitRepository::getCommitFileFromWorkdir(QString relativePath) 
 	char* content = new char[totalFileSize];
 	memcpy(content, mapped, totalFileSize);
 
-	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, content);
+	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, std::unique_ptr<char[]>(content));
 	file.close();
 
 	return commitFile;
@@ -904,7 +900,7 @@ const CommitFile* GitRepository::getCommitFileFromIndex(QString relativePath) co
 	char* content = new char[totalFileSize];
 	memcpy(content, mapped, totalFileSize);
 
-	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, content);
+	CommitFile* commitFile = new CommitFile(relativePath, totalFileSize, std::unique_ptr<char[]>(content));
 
 	success = file.remove();
 	Q_ASSERT(success);
@@ -947,16 +943,13 @@ const CommitFile* GitRepository::getCommitFileFromTree(QString revision, QString
 
 	qint64 contentSize = git_blob_rawsize(blob);
 
-	const char* rawContent = (const char*)git_blob_rawcontent(blob);
-	char* content = new char[contentSize];
-	memcpy(content, rawContent, contentSize);
-
-	CommitFile* file = new CommitFile(relativePath, contentSize, content);
+	std::unique_ptr<char[], CommitFileContentDeleter>
+			content((char*)git_blob_rawcontent(blob), [obj](char*){ git_object_free(obj);; });
+	CommitFile* file = new CommitFile(relativePath, contentSize, std::move(content));
 
 	git_commit_free(gitCommit);
 	git_tree_free(tree);
 	git_tree_entry_free(treeEntry);
-	git_object_free(obj);
 
 	return file;
 }
