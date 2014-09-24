@@ -280,7 +280,10 @@ Model::NodeIdType Merge::findConflictUnit(const GenericNode* node, const std::un
 }
 
 // TODO: fill those lists correctly
-const QStringList Merge::ORDERED_LISTS = {"StatementItemList"
+const QStringList Merge::ORDERED_LISTS = {"StatementItemList",
+														"TypedListOfResult",
+														"TypedListOfFormalTypeArgument",
+														"TypedListOfExpression"
 													  };
 
 const QStringList Merge::UNORDERED_LISTS = {"TypedListOfClass",
@@ -314,9 +317,9 @@ const QStringList Merge::DECLARATIONS = {"Class",
 													  "TypeAlias",
 													  "VariableDeclaration"};
 
-const QStringList Merge::ADDITIONAL_NODES = {"CommentStatementItem",
-															"CatchClause",
-															"StatementItemList"};
+const QStringList Merge::ADDITIONAL_CONFLICT_UNIT_NODES = {"CommentStatementItem",
+																			  "CatchClause",
+																			  "StatementItemList"};
 
 bool Merge::isConflictUnit(const GenericNode* node, NodeSource source, const ChangeDescription* baseToSource) const
 {
@@ -347,7 +350,7 @@ bool Merge::isConflictUnitNode(const GenericNode* node) const
 		if (nodeType.compare(node->type()) == 0)
 			return true;
 
-	for (QString nodeType : ADDITIONAL_NODES)
+	for (QString nodeType : ADDITIONAL_CONFLICT_UNIT_NODES)
 		if (nodeType.compare(node->type()) == 0)
 			return true;
 

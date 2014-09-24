@@ -146,7 +146,7 @@ class FILEPERSISTENCE_API Merge
 
 		static const QStringList STATEMENTS;
 		static const QStringList DECLARATIONS;
-		static const QStringList ADDITIONAL_NODES;
+		static const QStringList ADDITIONAL_CONFLICT_UNIT_NODES;
 
 		Kind kind_{};
 		Stage stage_{};
