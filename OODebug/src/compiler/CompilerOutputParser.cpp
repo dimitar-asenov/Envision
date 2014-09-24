@@ -28,11 +28,12 @@
 
 namespace OODebug {
 
-void CompilerOutputParser::parseGNUErrorFormat(const QString& output)
+void CompilerOutputParser::parseJavacErrorFormat(const QString& output)
 {
 	clearFeedback();
 
-	/* Standard GNU error format: file:line: message
+	/**
+	 * Javac Error format:
 	 *
 	 * The first group matches the filename
 	 * The second group matches the lineNumber

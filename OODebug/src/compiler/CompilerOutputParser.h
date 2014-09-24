@@ -35,15 +35,13 @@ namespace OODebug {
 class OODEBUG_API CompilerOutputParser
 {
 	public:
-		CompilerOutputParser() { }
-
 		/**
-		 * Parses the \a output, which should be in the GNU Error format: "sourcefile:lineno: message",
-		 * as described here: https://www.gnu.org/prep/standards/html_node/Errors.html
+		 * Parses the \a output, which should be in the Javac Error format: "sourcefile:lineno: type: message ^",
+		 * where ^ is the column identifier and is at the same time the end of one message.
 		 *
 		 * You can get the parsed feedback with the corresponding getters, e.g. \a getErrors(), etc.
 		 */
-		void parseGNUErrorFormat(const QString& output);
+		void parseJavacErrorFormat(const QString& output);
 
 		QList<CompilerFeedback> getErrors() const;
 		QList<CompilerFeedback> getWarnings() const;
@@ -55,15 +53,15 @@ class OODEBUG_API CompilerOutputParser
 		 * Clears all feedback lists.
 		 */
 		void clearFeedback();
-		QList<CompilerFeedback> errors_{}, warnings_{}, notes_{}, others_{};
+		QList<CompilerFeedback> errors_;
+		QList<CompilerFeedback> warnings_;
+		QList<CompilerFeedback> notes_;
+		QList<CompilerFeedback> others_;
 };
 
 inline QList<CompilerFeedback> CompilerOutputParser::getErrors() const { return errors_;}
-
 inline QList<CompilerFeedback> CompilerOutputParser::getWarnings() const { return warnings_;}
-
 inline QList<CompilerFeedback> CompilerOutputParser::getNotes() const { return notes_;}
-
 inline QList<CompilerFeedback> CompilerOutputParser::getOthers() const { return others_;}
 
 } /* namespace OODebug */

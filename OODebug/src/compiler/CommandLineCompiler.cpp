@@ -39,13 +39,13 @@ void CommandLineCompiler::compileFile(const QString& fileName, const QStringList
 	compilerProcess.waitForFinished(-1);
 	// check if everything went fine
 	if (compilerProcess.exitStatus() != QProcess::NormalExit) {
-		auto err = compilerProcess.error();
-		if (err == QProcess::FailedToStart)
+		auto error = compilerProcess.error();
+		if (error == QProcess::FailedToStart)
 			throw new OODebugException(QString("It seems like %1 is not installed on your system!").arg(command_));
 		else
-			throw new OODebugException(QString("Uknown error while executing %1: %2").arg(command_, err));
+			throw new OODebugException(QString("Uknown error while executing %1: %2").arg(command_, error));
 	}
-	parser_.parseGNUErrorFormat(QString(compilerProcess.readAllStandardOutput()));
+	parser_.parseJavacErrorFormat(QString(compilerProcess.readAllStandardOutput()));
 }
 
 } /* namespace OODebug */

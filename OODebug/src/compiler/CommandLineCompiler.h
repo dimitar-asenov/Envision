@@ -42,7 +42,7 @@ class OODEBUG_API CommandLineCompiler
 		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
 		 * For parsing the standard GNU Error format is assumed (see also \a CompilerOutputParser).
 		 */
-		CommandLineCompiler(const QString& compilerCommand) : command_(compilerCommand) { }
+		CommandLineCompiler(const QString& compilerCommand) : command_{compilerCommand} { }
 
 		/**
 		 * Compiles the file with name \a fileName using the arguments as in \a args.
@@ -59,17 +59,13 @@ class OODEBUG_API CommandLineCompiler
 		QList<CompilerFeedback> getOthers() const;
 
 	private:
-		CompilerOutputParser parser_{};
-
-		QString command_{};
+		CompilerOutputParser parser_;
+		QString command_;
 };
 
 inline QList<CompilerFeedback> CommandLineCompiler::getErrors() const { return parser_.getErrors();}
-
 inline QList<CompilerFeedback> CommandLineCompiler::getWarnings() const { return parser_.getWarnings();}
-
 inline QList<CompilerFeedback> CommandLineCompiler::getNotes() const { return parser_.getNotes();}
-
 inline QList<CompilerFeedback> CommandLineCompiler::getOthers() const { return parser_.getOthers();}
 
 } /* namespace OODebug */

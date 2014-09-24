@@ -50,11 +50,7 @@
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 
-#include <QtCore/QString>
-#include <QtCore/QDebug>
 #include <QtCore/QRegularExpression>
-
-#include <QtCore/QProcess>
 
 #endif
 
