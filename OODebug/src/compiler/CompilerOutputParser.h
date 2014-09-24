@@ -41,27 +41,8 @@ class OODEBUG_API CompilerOutputParser
 		 *
 		 * You can get the parsed feedback with the corresponding getters, e.g. \a getErrors(), etc.
 		 */
-		void parseJavacErrorFormat(const QString& output);
+		static CompilerFeedback parseJavacErrorFormat(const QString& output);
 
-		QList<CompilerFeedback> getErrors() const;
-		QList<CompilerFeedback> getWarnings() const;
-		QList<CompilerFeedback> getNotes() const;
-		QList<CompilerFeedback> getOthers() const;
-
-	private:
-		/**
-		 * Clears all feedback lists.
-		 */
-		void clearFeedback();
-		QList<CompilerFeedback> errors_;
-		QList<CompilerFeedback> warnings_;
-		QList<CompilerFeedback> notes_;
-		QList<CompilerFeedback> others_;
 };
-
-inline QList<CompilerFeedback> CompilerOutputParser::getErrors() const { return errors_;}
-inline QList<CompilerFeedback> CompilerOutputParser::getWarnings() const { return warnings_;}
-inline QList<CompilerFeedback> CompilerOutputParser::getNotes() const { return notes_;}
-inline QList<CompilerFeedback> CompilerOutputParser::getOthers() const { return others_;}
 
 } /* namespace OODebug */

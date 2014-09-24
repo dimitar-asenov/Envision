@@ -26,12 +26,12 @@
 
 #include "CompilerOutputParser.h"
 
+#include "CompilerMessage.h"
+
 namespace OODebug {
 
-void CompilerOutputParser::parseJavacErrorFormat(const QString& output)
+CompilerFeedback CompilerOutputParser::parseJavacErrorFormat(const QString& output)
 {
-	clearFeedback();
-
 	/**
 	 * Javac Error format:
 	 *
@@ -46,6 +46,9 @@ void CompilerOutputParser::parseJavacErrorFormat(const QString& output)
 	QRegularExpression feedbackReg("(^[a-zA-Z0-9_\\/]+\\.java):([0-9]+): ([a-z]+): ([^\\n]+)\\n[^\\n]+([^\\^]+)",
 				QRegularExpression::MultilineOption);
 
+	QList<std::shared_ptr<CompilerMessage> > messages;
+	std::shared_ptr<CompilerMessage> currentRoot;
+
 	auto matches = feedbackReg.globalMatch(output);
 	while (matches.hasNext()) {
 		auto currentMatch = matches.next();
@@ -56,24 +59,24 @@ void CompilerOutputParser::parseJavacErrorFormat(const QString& output)
 		int colNumber = currentMatch.captured(5).length();
 
 		if (!type.compare("error")) {
-			errors_.append(CompilerFeedback(CompilerFeedback::Error, file, msg, lineNumber, colNumber));
+			auto errorMessage = std::make_shared<CompilerMessage>(CompilerMessage::Error,
+																					file, msg, lineNumber, colNumber);
+			currentRoot = errorMessage;
+			messages.append(errorMessage);
 		} else if (!type.compare("warning")) {
-			warnings_.append(CompilerFeedback(CompilerFeedback::Warning, file, msg, lineNumber, colNumber));
+			auto warningMessage = std::make_shared<CompilerMessage>(CompilerMessage::Error,
+																					file, msg, lineNumber, colNumber);
+			currentRoot = warningMessage;
+			messages.append(warningMessage);
 		} else if (!type.compare("note")) {
-			notes_.append(CompilerFeedback(CompilerFeedback::Note, file, msg, lineNumber, colNumber));
+			messages.append(std::make_shared<CompilerMessage>(CompilerMessage::Note,
+																			  file, msg, lineNumber, colNumber, currentRoot));
 		} else {
 			qWarning() << "Not supported feedback type:" << type;
-			others_.append(CompilerFeedback(CompilerFeedback::Other, file, msg, lineNumber, colNumber));
+			messages.append(std::make_shared<CompilerMessage>(CompilerMessage::Other, file, msg, lineNumber, colNumber));
 		}
 	}
-}
-
-void CompilerOutputParser::clearFeedback()
-{
-	errors_.clear();
-	warnings_.clear();
-	notes_.clear();
-	others_.clear();
+	return CompilerFeedback(messages);
 }
 
 } /* namespace OODebug */

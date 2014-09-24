@@ -51,21 +51,10 @@ class OODEBUG_API CommandLineCompiler
 		 *
 		 * Note: This call is blocking, it blocks until the command is finished.
 		 */
-		void compileFile(const QString& fileName, const QStringList& args);
-
-		QList<CompilerFeedback> getErrors() const;
-		QList<CompilerFeedback> getWarnings() const;
-		QList<CompilerFeedback> getNotes() const;
-		QList<CompilerFeedback> getOthers() const;
+		CompilerFeedback compileFile(const QString& fileName, const QStringList& args);
 
 	private:
-		CompilerOutputParser parser_;
 		QString command_;
 };
-
-inline QList<CompilerFeedback> CommandLineCompiler::getErrors() const { return parser_.getErrors();}
-inline QList<CompilerFeedback> CommandLineCompiler::getWarnings() const { return parser_.getWarnings();}
-inline QList<CompilerFeedback> CommandLineCompiler::getNotes() const { return parser_.getNotes();}
-inline QList<CompilerFeedback> CommandLineCompiler::getOthers() const { return parser_.getOthers();}
 
 } /* namespace OODebug */

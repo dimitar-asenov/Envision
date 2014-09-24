@@ -30,7 +30,7 @@
 
 namespace OODebug {
 
-void CommandLineCompiler::compileFile(const QString& fileName, const QStringList& args)
+CompilerFeedback CommandLineCompiler::compileFile(const QString& fileName, const QStringList& args)
 {
 	QProcess compilerProcess;
 	compilerProcess.setProcessChannelMode(QProcess::MergedChannels);
@@ -45,7 +45,7 @@ void CommandLineCompiler::compileFile(const QString& fileName, const QStringList
 		else
 			throw new OODebugException(QString("Uknown error while executing %1: %2").arg(command_, error));
 	}
-	parser_.parseJavacErrorFormat(QString(compilerProcess.readAllStandardOutput()));
+	return CompilerOutputParser::parseJavacErrorFormat(QString(compilerProcess.readAllStandardOutput()));
 }
 
 } /* namespace OODebug */

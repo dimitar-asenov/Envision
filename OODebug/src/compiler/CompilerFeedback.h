@@ -28,38 +28,21 @@
 
 #include "../oodebug_api.h"
 
+#include "CompilerMessage.h"
+
 namespace OODebug {
 
 /**
- * A compiler feedback container, for errors, warnings, notes, and other types of feedback.
+ * \a CompilerFeedback contains all parsed messaged from one compile run.
  */
 class OODEBUG_API CompilerFeedback
 {
 	public:
-		enum FeedbackType { Error, Warning, Note, Other};
-		CompilerFeedback(FeedbackType type, const QString& fileName, const QString& message,
-							  int lineNumber, int columnNumber) :
-			type_{type}, fileName_{fileName}, message_{message},
-			lineNumber_{lineNumber}, columnNumber_{columnNumber} {}
-
-		FeedbackType getType() const;
-		QString getFileName() const;
-		QString getMessage() const;
-		int getLineNumber() const;
-		int getColumnNumber() const;
+		CompilerFeedback(QList<std::shared_ptr<CompilerMessage> > messages) :
+			messages_{messages} {}
 
 	private:
-		FeedbackType type_{};
-		QString fileName_;
-		QString message_;
-		int lineNumber_{};
-		int columnNumber_{};
+		QList<std::shared_ptr<CompilerMessage> > messages_;
 };
-
-inline CompilerFeedback::FeedbackType CompilerFeedback::getType() const { return type_;}
-inline QString CompilerFeedback::getFileName() const { return fileName_;}
-inline QString CompilerFeedback::getMessage() const { return message_;}
-inline int CompilerFeedback::getLineNumber() const { return lineNumber_;}
-inline int CompilerFeedback::getColumnNumber() const { return columnNumber_;}
 
 } /* namespace OODebug */
