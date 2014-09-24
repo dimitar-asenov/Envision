@@ -585,18 +585,6 @@ bool GitRepository::isValidRevisionString(QString revision) const
 
 // Private methods
 
-QString GitRepository::projectName() const
-{
-	QString path(path_);
-
-	int index = path.lastIndexOf(QDir::separator());
-	index++;
-
-	QString name = path.right(index);
-
-	return name;
-}
-
 void GitRepository::writeRevisionIntoIndex(QString revision)
 {
 	int errorCode = 0;
