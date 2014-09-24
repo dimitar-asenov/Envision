@@ -700,7 +700,7 @@ bool Merge::applyAddToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeD
 
 	if (parent)
 	{
-		parent = tree->find(parent->id(), parent->persistentUnit()->name());
+		parent = tree->find(parent);
 
 		if (isListType(parent))
 			performInsertIntoList(parent, newNode);
@@ -717,8 +717,7 @@ bool Merge::applyAddToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeD
 bool Merge::applyDeleteToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& /*changes*/,
 										const ChangeDescription* deleteOp)
 {
-	QString persistentUnitName = deleteOp->nodeA()->persistentUnit()->name();
-	GenericNode* node = tree->find(deleteOp->id(), persistentUnitName);
+	GenericNode* node = tree->find(deleteOp->nodeA());
 	Q_ASSERT(node);
 
 	if (node->children().size() > 0)
@@ -755,7 +754,7 @@ bool Merge::applyMoveToTree(const std::unique_ptr<GenericTree>& tree, IdToChange
 	if (!targetPersistentUnit)
 		targetPersistentUnit = &tree->newPersistentUnit(targetPersistentUnitName);
 
-	GenericNode* nodeToMove = tree->find(moveOp->id(), moveOp->nodeA()->persistentUnit()->name());
+	GenericNode* nodeToMove = tree->find(moveOp->nodeA());
 	Q_ASSERT(nodeToMove);
 	GenericNode* sourceParent = nodeToMove->parent();
 
@@ -796,7 +795,7 @@ bool Merge::applyStationaryChangeToTree(const std::unique_ptr<GenericTree>& tree
 													 IdToChangeDescriptionHash& /*changes*/,
 													 const ChangeDescription* stationaryOp)
 {
-	GenericNode* node = tree->find(stationaryOp->id(), stationaryOp->nodeA()->persistentUnit()->name());
+	GenericNode* node = tree->find(stationaryOp->nodeA());
 	Q_ASSERT(node);
 
 	ChangeDescription::UpdateFlags flags = stationaryOp->flags();
@@ -819,7 +818,7 @@ bool Merge::applyStationaryChangeToTree(const std::unique_ptr<GenericTree>& tree
 		GenericNode* parent = stationaryOp->nodeB()->parent();
 		if (parent)
 		{
-			parent = tree->find(parent->id(), parent->persistentUnit()->name());
+			parent = tree->find(parent);
 			Q_ASSERT(parent);
 
 			if (isListType(parent))
