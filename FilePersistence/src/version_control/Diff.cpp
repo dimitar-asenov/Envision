@@ -120,7 +120,7 @@ void Diff::idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB,
 void Diff::findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& createdParents,
 										 std::shared_ptr<GenericTree> tree, const GitRepository* repository)
 {
-	QHash<QString, Model::NodeIdType> fileToNodeIDs;
+	QMultiHash<QString, Model::NodeIdType> fileToNodeIDs;
 	for (auto node : nodes.values())
 		fileToNodeIDs.insertMulti(node->persistentUnit()->name(), node->id());
 
