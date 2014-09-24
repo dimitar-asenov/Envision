@@ -54,8 +54,8 @@ class FILEPERSISTENCE_API CommitGraph
 		const CommitGraphItem& end() const;
 
 	private:
-		CommitGraphItem* start_;
-		CommitGraphItem* end_;
+		CommitGraphItem* start_{};
+		CommitGraphItem* end_{};
 
 		QHash<QString, CommitGraphItem> items_;
 };

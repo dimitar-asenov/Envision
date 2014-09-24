@@ -28,7 +28,9 @@
 
 namespace FilePersistence {
 
-CommitGraphItem::CommitGraphItem(QString sha1) { commitSHA1_ = sha1; }
+CommitGraphItem::CommitGraphItem(QString sha1)
+	: commitSHA1_{sha1}
+{}
 
 CommitGraph::CommitGraph(QString start, QString end)
 {
