@@ -49,8 +49,8 @@ struct CommitMetaData {
 
 struct CommitFile {
 		QString relativePath_;
-		qint64 size_;
-		const char* content_;
+		qint64 size_{};
+		const char* content_{};
 
 		CommitFile();
 		CommitFile(QString relativePath, qint64 size, const char* content);
@@ -79,5 +79,8 @@ class FILEPERSISTENCE_API Commit
 };
 
 inline QList<CommitFile*> Commit::files() const { return files_.values(); }
+
+inline void Commit::setMetaData(CommitMetaData data) { information_ = data; }
+inline CommitMetaData Commit::metaData() const { return information_; }
 
 } /* namespace FilePersistence */

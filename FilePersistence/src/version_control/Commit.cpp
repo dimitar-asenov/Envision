@@ -34,19 +34,11 @@ Signature::Signature()
 	timeZone_ = QTimeZone(QTimeZone::systemTimeZoneId());
 }
 
-CommitFile::CommitFile()
-{
-	relativePath_ = QString();
-	size_ = 0;
-	content_ = nullptr;
-}
+CommitFile::CommitFile(){}
 
 CommitFile::CommitFile(QString relativePath, qint64 size, const char* content)
-{
-	relativePath_ = relativePath;
-	size_ = size;
-	content_ = content;
-}
+	:relativePath_{relativePath}, size_{size}, content_{content}
+{}
 
 CommitFile::~CommitFile()
 {
@@ -59,16 +51,6 @@ Commit::~Commit()
 {
 	for (auto file : files_.values())
 		SAFE_DELETE(file);
-}
-
-void Commit::setMetaData(CommitMetaData data)
-{
-	information_ = data;
-}
-
-CommitMetaData Commit::metaData() const
-{
-	return information_;
 }
 
 void Commit::addFile(QString relativePath, qint64 size, const char* content)
