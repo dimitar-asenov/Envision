@@ -321,23 +321,6 @@ const QStringList Merge::ADDITIONAL_CONFLICT_UNIT_NODES = {"CommentStatementItem
 																			  "CatchClause",
 																			  "StatementItemList"};
 
-bool Merge::isConflictUnit(const GenericNode* node, NodeSource source, const ChangeDescription* baseToSource) const
-{
-	if (isConflictUnitNode(node))
-	{
-		if (source == NodeSource::Base)
-			return true;
-
-		if (!baseToSource)
-			return true;
-
-		if (baseToSource->nodeA() && isConflictUnitNode(baseToSource->nodeA()))
-			return true;
-	}
-
-	return false;
-}
-
 bool Merge::isConflictUnitNode(const GenericNode* node) const
 {
 	Q_ASSERT(node);

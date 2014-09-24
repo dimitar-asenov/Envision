@@ -55,8 +55,6 @@ class FILEPERSISTENCE_API Merge
 	private:
 		friend class GitRepository;
 
-		enum class NodeSource {Base, HEAD, Revision};
-
 		Merge(QString revision, bool fastForward, GitRepository* repository);
 
 		void classifyKind();
@@ -76,7 +74,6 @@ class FILEPERSISTENCE_API Merge
 
 		Model::NodeIdType findConflictUnit(const GenericNode* node, const std::unique_ptr<GenericTree>& tree,
 													 bool inBase, const Diff& diff) const;
-		bool isConflictUnit(const GenericNode* node, NodeSource source, const ChangeDescription* baseToSource) const;
 		bool isConflictUnitNode(const GenericNode*) const;
 
 		QList<Model::NodeIdType> detectConflictingConflictUnits();
