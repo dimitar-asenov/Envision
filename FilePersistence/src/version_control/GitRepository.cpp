@@ -27,6 +27,7 @@
 #include "GitRepository.h"
 
 #include "../simple/GenericTree.h"
+#include "../simple/Parser.h"
 
 namespace FilePersistence {
 
@@ -583,6 +584,41 @@ bool GitRepository::isValidRevisionString(QString revision) const
 	return isValid;
 }
 
+void GitRepository::loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version)
+{
+	IdToGenericNodeHash persistentUnitRoots;
+
+	const Commit* commit = getCommit(version);
+	for (auto file : commit->files())
+	{
+		GenericNode* unitRoot = Parser::load(file->content(), file->size_, false,
+														 tree->newPersistentUnit(file->relativePath_));
+
+		Q_ASSERT(unitRoot);
+		persistentUnitRoots.insert(unitRoot->id(), unitRoot);
+	}
+
+	IdToGenericNodeHash persistentUnitDeclarations;
+	for (GenericNode* node : persistentUnitRoots)
+		findPersistentUnitDeclarations(node, persistentUnitDeclarations);
+
+	for (GenericNode* root : persistentUnitRoots)
+	{
+		GenericNode* declaration = persistentUnitDeclarations.value(root->id());
+
+		if (declaration)
+		{
+			GenericNode* parent = declaration->parent();
+			root->setParent(parent);
+			parent->addChild(root);
+
+			declaration->remove();
+		}
+	}
+
+	SAFE_DELETE(commit);
+}
+
 // Private methods
 
 void GitRepository::writeRevisionIntoIndex(QString revision)
@@ -1001,6 +1037,15 @@ QString GitRepository::oidToQString(const git_oid* oid) const
 	git_oid_fmt(sha1, oid);
 
 	return QString(sha1);
+}
+
+void GitRepository::findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations)
+{
+	if (node->type().compare(GenericNode::persistentUnitType) == 0)
+		declarations.insert(node->id(), node);
+	else
+		for (GenericNode* child : node->children())
+			findPersistentUnitDeclarations(child, declarations);
 }
 
 bool GitRepository::hasCleanIndex() const

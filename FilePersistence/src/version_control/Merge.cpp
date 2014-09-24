@@ -28,7 +28,6 @@
 
 #include "GitRepository.h"
 
-#include "FilePersistence/src/simple/Parser.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace FilePersistence {
@@ -132,13 +131,13 @@ void Merge::performMerge()
 			baseRevisionDiff_ = repository_->diff(mergeBase_, revision_);
 
 			mergeBaseTree_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", mergeBase_));
-			loadGenericTree(mergeBaseTree_, mergeBase_);
+			repository_->loadGenericTree(mergeBaseTree_, mergeBase_);
 
 			revisionTree_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", revision_));
-			loadGenericTree(revisionTree_, revision_);
+			repository_->loadGenericTree(revisionTree_, revision_);
 
 			headTree_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", head_));
-			loadGenericTree(headTree_, head_);
+			repository_->loadGenericTree(headTree_, head_);
 
 			buildConflictUnitMap(revisionCUToChangeMap_, revisionChangeToCUMap_, baseRevisionDiff_, revisionTree_,
 										mergeBaseTree_);
@@ -155,7 +154,7 @@ void Merge::performMerge()
 			computeMergeForLists(headTree_, revisionTree_, mergeBaseTree_, baseHeadDiff_.changes(), baseRevisionDiff_.changes());
 
 			mergeTree_ = std::unique_ptr<GenericTree>(new GenericTree("Merge"));
-			loadGenericTree(mergeTree_, head_);
+			repository_->loadGenericTree(mergeTree_, head_);
 
 			mergeChangesIntoTree(mergeTree_, baseRevisionDiff_.changes(), conflictRegions_);
 
@@ -622,51 +621,6 @@ Merge::ListType Merge::getListType(const GenericNode* node)
 			return ListType::UnorderedList;
 
 	return ListType::NoList;
-}
-
-void Merge::loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version)
-{
-	IdToGenericNodeHash persistentUnitRoots;
-
-	const Commit* commit = repository_->getCommit(version);
-	for (auto file : commit->files())
-	{
-		GenericNode* unitRoot = Parser::load(file->content(), file->size_, false,
-														 tree->newPersistentUnit(file->relativePath_));
-
-		Q_ASSERT(unitRoot);
-		persistentUnitRoots.insert(unitRoot->id(), unitRoot);
-		Q_ASSERT(isConflictUnitNode(unitRoot));
-	}
-
-	IdToGenericNodeHash persistentUnitDeclarations;
-	for (GenericNode* node : persistentUnitRoots)
-		findPersistentUnitDeclarations(node, persistentUnitDeclarations);
-
-	for (GenericNode* root : persistentUnitRoots)
-	{
-		GenericNode* declaration = persistentUnitDeclarations.value(root->id());
-
-		if (declaration)
-		{
-			GenericNode* parent = declaration->parent();
-			root->setParent(parent);
-			parent->addChild(root);
-
-			declaration->remove();
-		}
-	}
-
-	SAFE_DELETE(commit);
-}
-
-void Merge::findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations)
-{
-	if (node->type().compare(GenericNode::persistentUnitType) == 0)
-		declarations.insert(node->id(), node);
-	else
-		for (GenericNode* child : node->children())
-			findPersistentUnitDeclarations(child, declarations);
 }
 
 void Merge::mergeChangesIntoTree(const std::unique_ptr<GenericTree>& tree, const IdToChangeDescriptionHash& changes,

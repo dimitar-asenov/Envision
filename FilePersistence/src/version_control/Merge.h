@@ -118,9 +118,6 @@ class FILEPERSISTENCE_API Merge
 		static ListType getListType(const GenericNode* node);
 		static bool isListType(const GenericNode* node);
 
-		void loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version);
-		void findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations);
-
 		void mergeChangesIntoTree(const std::unique_ptr<GenericTree>& tree, const IdToChangeDescriptionHash& changes,
 										  QList<QSet<Model::NodeIdType>>& conflictRegions);
 		void applyChangesToTree(const std::unique_ptr<GenericTree>& tree, const IdToChangeDescriptionHash& changes);

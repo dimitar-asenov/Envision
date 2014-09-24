@@ -78,6 +78,8 @@ class FILEPERSISTENCE_API GitRepository
 		static const QString WORKDIR;
 		static const QString INDEX;
 
+		void loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version);
+
 	private:
 		friend class Merge;
 
@@ -108,6 +110,8 @@ class FILEPERSISTENCE_API GitRepository
 		git_commit* parseCommit(QString revision) const;
 
 		QString oidToQString(const git_oid* oid) const;
+
+		void findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations);
 
 		bool hasCleanIndex() const;
 		bool hasCleanWorkdir() const;
