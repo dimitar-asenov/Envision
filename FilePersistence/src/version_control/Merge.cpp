@@ -177,8 +177,8 @@ void Merge::performFastForward()
 	stage_ = Stage::Complete;
 }
 
-void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
-											QHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
+void Merge::buildConflictUnitMap(QMultiHash<Model::NodeIdType, ChangeDescription*>& cuToChange,
+											QMultiHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
 											const Diff& diff, const std::unique_ptr<GenericTree>& versionTree,
 											const std::unique_ptr<GenericTree>& baseTree)
 {
@@ -188,88 +188,51 @@ void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 		switch (change->type())
 		{
 			case ChangeType::Added:
-			{
 				// find CU in treeB
-				QString unitName = change->nodeB()->persistentUnit()->name();
-				const GenericPersistentUnit* unit = versionTree->persistentUnit(unitName);
-				Q_ASSERT(unit);
-				conflictUnit = findConflicUnit(change->id(), false, diff, unit);
-				cuToChange.insertMulti(conflictUnit, change);
-				changeToCU.insert(change->id(), conflictUnit);
+				conflictUnit = findConflictUnit(change->nodeB(), versionTree, false, diff);
+				insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
 				break;
-			}
 
 			case ChangeType::Deleted:
-			{
 				// find CU in treeA
-				QString unitName = change->nodeA()->persistentUnit()->name();
-				const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
-				Q_ASSERT(unit);
-				conflictUnit = findConflicUnit(change->id(), true, diff, unit);
-				cuToChange.insertMulti(conflictUnit, change);
-				changeToCU.insert(change->id(), conflictUnit);
+				conflictUnit = findConflictUnit(change->nodeA(), baseTree, true, diff);
+				insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
 				break;
-			}
 
 			case ChangeType::Moved:
-			{
 				// find CU in treeA
-				QString unitName = change->nodeA()->persistentUnit()->name();
-				const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
-				Q_ASSERT(unit);
-				conflictUnit = findConflicUnit(change->id(), true, diff, unit);
-				cuToChange.insertMulti(conflictUnit, change);
-				changeToCU.insertMulti(change->id(), conflictUnit);
+				conflictUnit = findConflictUnit(change->nodeA(), baseTree, true, diff);
+				insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
 
 				// find CU in treeB
-				unitName = change->nodeB()->persistentUnit()->name();
-				unit = versionTree->persistentUnit(unitName);
-				Q_ASSERT(unit);
-				Model::NodeIdType newConflictUnit = findConflicUnit(change->id(), false, diff, unit);
-				if (newConflictUnit != conflictUnit)
 				{
-					cuToChange.insertMulti(newConflictUnit, change);
-					changeToCU.insertMulti(change->id(), newConflictUnit);
+				Model::NodeIdType newConflictUnit = findConflictUnit(change->nodeB(), versionTree, false, diff);
+				if (newConflictUnit != conflictUnit)
+					insertIntoConflictUnitMaps(change, newConflictUnit, cuToChange, changeToCU);
 				}
 				break;
-			}
 
 			case ChangeType::Stationary:
-			{
 				if (change->flags().testFlag(ChangeDescription::Order))
 				{
 					// Reordering occured
 					// find CU in treeA
-					QString unitName = change->nodeA()->persistentUnit()->name();
-					const GenericPersistentUnit* unit = baseTree->persistentUnit(unitName);
-					Q_ASSERT(unit);
-					conflictUnit = findConflicUnit(change->id(), true, diff, unit);
-					cuToChange.insertMulti(conflictUnit, change);
-					changeToCU.insertMulti(change->id(), conflictUnit);
+					conflictUnit = findConflictUnit(change->nodeA(), baseTree, true, diff);
+					insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
 
 					// find CU in treeB
-					unitName = change->nodeB()->persistentUnit()->name();
-					unit = versionTree->persistentUnit(unitName);
-					Q_ASSERT(unit);
-					Model::NodeIdType newConflictUnit = findConflicUnit(change->id(), false, diff, unit);
-					if (newConflictUnit != conflictUnit)
 					{
-						cuToChange.insertMulti(newConflictUnit, change);
-						changeToCU.insertMulti(change->id(), newConflictUnit);
+					Model::NodeIdType newConflictUnit = findConflictUnit(change->nodeB(), versionTree, false, diff);
+					if (newConflictUnit != conflictUnit)
+						insertIntoConflictUnitMaps(change, newConflictUnit, cuToChange, changeToCU);
 					}
 				}
 				else
 				{
-					QString unitName = change->nodeB()->persistentUnit()->name();
-					const GenericPersistentUnit* unit = versionTree->persistentUnit(unitName);
-					Q_ASSERT(unit);
-					conflictUnit = findConflicUnit(change->id(), false, diff, unit);
-					cuToChange.insertMulti(conflictUnit, change);
-					changeToCU.insert(change->id(), conflictUnit);
-					break;
+					conflictUnit = findConflictUnit(change->nodeB(), versionTree, false, diff);
+					insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
 				}
 				break;
-			}
 
 			default:
 				Q_ASSERT(false);
@@ -277,35 +240,43 @@ void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 	}
 }
 
-Model::NodeIdType Merge::findConflicUnit(Model::NodeIdType nodeID, bool inBase, const Diff& diff,
-													  const GenericPersistentUnit* unit) const
+void Merge::insertIntoConflictUnitMaps(ChangeDescription* change, Model::NodeIdType conflictUnit,
+													QMultiHash<Model::NodeIdType, ChangeDescription*>& cuToChange,
+													QMultiHash<Model::NodeIdType, Model::NodeIdType>& changeToCU)
 {
-	const GenericNode* node = unit->find(nodeID);
+	cuToChange.insertMulti(conflictUnit, change);
+	changeToCU.insert(change->id(), conflictUnit);
+}
+
+Model::NodeIdType Merge::findConflictUnit(const GenericNode* node, const std::unique_ptr<GenericTree>& tree,
+														bool inBase, const Diff& diff) const
+{
+	const GenericNode* nodeInTree = tree->find(node);
 	IdToChangeDescriptionHash changes = diff.changes();
 
-	while (node)
+	while (nodeInTree)
 	{
-		if (isConflictUnitNode(node))
+		if (isConflictUnitNode(nodeInTree))
 		{
 			if (inBase)
-				return node->id();
+				return nodeInTree->id();
 
-			IdToChangeDescriptionHash::iterator iter = changes.find(node->id());
+			IdToChangeDescriptionHash::iterator iter = changes.find(nodeInTree->id());
 			if (iter == changes.end())
-				return node->id();
+				return nodeInTree->id();
 			else
 			{
 				ChangeDescription* change = iter.value();
 				Q_ASSERT(!inBase);
 				if (change->nodeA() && isConflictUnitNode(change->nodeA()))
-					return node->id();
+					return nodeInTree->id();
 			}
 		}
-		node = node->parent();
+		nodeInTree = nodeInTree->parent();
 	}
 
 	Q_ASSERT(false);
-	return nodeID;
+	return Model::NodeIdType();
 }
 
 // TODO: fill those lists correctly

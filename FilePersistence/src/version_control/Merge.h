@@ -65,13 +65,17 @@ class FILEPERSISTENCE_API Merge
 
 		void performFastForward();
 
-		void buildConflictUnitMap(IdToChangeDescriptionHash& CUToChange,
-										  QHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
+		void buildConflictUnitMap(QMultiHash<Model::NodeIdType, ChangeDescription*>& cuToChange,
+										  QMultiHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
 										  const Diff& diff, const std::unique_ptr<GenericTree>& versionTree,
 										  const std::unique_ptr<GenericTree>& baseTree);
 
-		Model::NodeIdType findConflicUnit(Model::NodeIdType nodeID, bool inBase, const Diff& diff,
-													 const GenericPersistentUnit* unit) const;
+		void insertIntoConflictUnitMaps(ChangeDescription* change, Model::NodeIdType conflictUnit,
+												  QMultiHash<Model::NodeIdType, ChangeDescription*>& cuToChange,
+												  QMultiHash<Model::NodeIdType, Model::NodeIdType>& changeToCU);
+
+		Model::NodeIdType findConflictUnit(const GenericNode* node, const std::unique_ptr<GenericTree>& tree,
+													 bool inBase, const Diff& diff) const;
 		bool isConflictUnit(const GenericNode* node, NodeSource source, const ChangeDescription* baseToSource) const;
 		bool isConflictUnitNode(const GenericNode*) const;
 
@@ -154,14 +158,14 @@ class FILEPERSISTENCE_API Merge
 
 		// Conflict regions
 		QList<QSet<Model::NodeIdType>> conflictRegions_;
-		QHash<Model::NodeIdType, QSet<Model::NodeIdType>&> nodeToRegionMap_;
+		QMultiHash<Model::NodeIdType, QSet<Model::NodeIdType>&> nodeToRegionMap_;
 
 		// Conflict units maps
-		IdToChangeDescriptionHash revisionCUToChangeMap_;
-		IdToChangeDescriptionHash headCUToChangeMap_;
+		QMultiHash<Model::NodeIdType, ChangeDescription*> revisionCUToChangeMap_;
+		QMultiHash<Model::NodeIdType, ChangeDescription*> headCUToChangeMap_;
 
-		QHash<Model::NodeIdType, Model::NodeIdType> revisionChangeToCUMap_;
-		QHash<Model::NodeIdType, Model::NodeIdType> headChangeToCUMap_;
+		QMultiHash<Model::NodeIdType, Model::NodeIdType> revisionChangeToCUMap_;
+		QMultiHash<Model::NodeIdType, Model::NodeIdType> headChangeToCUMap_;
 
 		// GenericTrees
 		std::unique_ptr<GenericTree> mergeBaseTree_;
