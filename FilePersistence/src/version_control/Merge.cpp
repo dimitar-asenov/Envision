@@ -365,14 +365,10 @@ void Merge::markConflictRegions(QList<Model::NodeIdType>& conflicts)
 	}
 }
 
-Merge::Hunk::Hunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
+Merge::Chunk::Chunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
 						QList<Model::NodeIdType> baseList)
-{
-	stable_ = stable;
-	head_ = headList;
-	revision_ = revisionList;
-	base_ = baseList;
-}
+	: stable_{stable}, head_{headList}, revision_{revisionList}, base_{baseList}
+{}
 
 void Merge::computeMergeForLists(const std::unique_ptr<GenericTree>& head, const std::unique_ptr<GenericTree>& revision,
 											const std::unique_ptr<GenericTree>& base, const IdToChangeDescriptionHash& baseToHead,
@@ -431,23 +427,23 @@ int Merge::listInsertionIndex(const QList<Model::NodeIdType>& target, const QLis
 }
 
 
-QList<Model::NodeIdType> Merge::applyListMerge(const QList<Hunk>& hunkList, bool resolveOrder) const
+QList<Model::NodeIdType> Merge::applyListMerge(const QList<Chunk>& chunkList, bool resolveOrder) const
 {
 	QList<Model::NodeIdType> mergedList;
 
-	for (Hunk hunk : hunkList)
+	for (Chunk chunk : chunkList)
 	{
-		if (hunk.stable_)
-			mergedList.append(hunk.head_);
+		if (chunk.stable_)
+			mergedList.append(chunk.head_);
 		else
 		{
-			if (hunk.base_ == hunk.head_ && hunk.base_ != hunk.revision_)
+			if (chunk.base_ == chunk.head_ && chunk.base_ != chunk.revision_)
 			{
-				mergedList.append(hunk.revision_);
+				mergedList.append(chunk.revision_);
 			}
-			else if (hunk.base_ != hunk.head_ && hunk.base_ == hunk.revision_)
+			else if (chunk.base_ != chunk.head_ && chunk.base_ == chunk.revision_)
 			{
-				mergedList.append(hunk.head_);
+				mergedList.append(chunk.head_);
 			}
 			else
 			{
@@ -457,29 +453,29 @@ QList<Model::NodeIdType> Merge::applyListMerge(const QList<Hunk>& hunkList, bool
 				}
 
 				// Beware of inserting an ID twice
-				QList<Model::NodeIdType> baseHunk;
-				QList<Model::NodeIdType> headHunk(hunk.head_);
-				QList<Model::NodeIdType> revisionHunk(hunk.revision_);
+				QList<Model::NodeIdType> baseChunk;
+				QList<Model::NodeIdType> headChunk(chunk.head_);
+				QList<Model::NodeIdType> revisionChunk(chunk.revision_);
 
-				for (Model::NodeIdType id : hunk.base_)
+				for (Model::NodeIdType id : chunk.base_)
 				{
-					if (headHunk.contains(id) && revisionHunk.contains(id))
-						baseHunk.append(id);
+					if (headChunk.contains(id) && revisionChunk.contains(id))
+						baseChunk.append(id);
 					else
 					{
-						headHunk.removeOne(id);
-						revisionHunk.removeOne(id);
+						headChunk.removeOne(id);
+						revisionChunk.removeOne(id);
 					}
 				}
 
-				QList<Model::NodeIdType> mergedHunk(headHunk);
-				for (Model::NodeIdType id : revisionHunk)
+				QList<Model::NodeIdType> mergedChunk(headChunk);
+				for (Model::NodeIdType id : revisionChunk)
 				{
-					if (!baseHunk.contains(id))
-						mergedHunk.append(id);
+					if (!baseChunk.contains(id))
+						mergedChunk.append(id);
 				}
 
-				mergedList.append(mergedHunk);
+				mergedList.append(mergedChunk);
 			}
 		}
 	}
@@ -487,7 +483,7 @@ QList<Model::NodeIdType> Merge::applyListMerge(const QList<Hunk>& hunkList, bool
 	return mergedList;
 }
 
-QList<Merge::Hunk>& Merge::mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
+QList<Merge::Chunk>& Merge::mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
 												 const QList<Model::NodeIdType> base, Model::NodeIdType id)
 {
 	QList<Model::NodeIdType> lcsBaseToHead = longestCommonSubsequence(base, head);
@@ -505,7 +501,7 @@ QList<Merge::Hunk>& Merge::mergeLists(const QList<Model::NodeIdType> head, const
 	QList<QList<Model::NodeIdType>> sublistRevision = computeSublists(revision, stableIDs);
 	QList<QList<Model::NodeIdType>> sublistBase = computeSublists(base, stableIDs);
 
-	QList<Hunk> hunks;
+	QList<Chunk> chunks;
 
 	QList<QList<Model::NodeIdType>>::const_iterator iterA = sublistHead.constBegin();
 	QList<QList<Model::NodeIdType>>::const_iterator iterB = sublistRevision.constBegin();
@@ -515,14 +511,14 @@ QList<Merge::Hunk>& Merge::mergeLists(const QList<Model::NodeIdType> head, const
 	for (iterBase = sublistBase.constBegin(); iterBase != sublistBase.constEnd(); ++iterBase)
 	{
 		if (!iterBase->isEmpty() || !iterA->isEmpty() || !iterB->isEmpty())
-			hunks.append(Hunk(isStable, *iterA, *iterB, *iterBase));
+			chunks.append(Chunk(isStable, *iterA, *iterB, *iterBase));
 		isStable = !isStable;
 		++iterA;
 		++iterB;
 	}
 	Q_ASSERT(isStable);
 
-	auto iterator = mergedLists_.insert(id, hunks);
+	auto iterator = mergedLists_.insert(id, chunks);
 
 	return iterator.value();
 }
@@ -530,29 +526,29 @@ QList<Merge::Hunk>& Merge::mergeLists(const QList<Model::NodeIdType> head, const
 QList<QList<Model::NodeIdType>> Merge::computeSublists(const QList<Model::NodeIdType> list,
 																		 const QList<Model::NodeIdType> stableIDs)
 {
-	QList<QList<Model::NodeIdType>> hunks;
-	QList<Model::NodeIdType> hunk;
+	QList<QList<Model::NodeIdType>> chunks;
+	QList<Model::NodeIdType> chunk;
 
 	QList<Model::NodeIdType>::const_iterator stableId = stableIDs.begin();
 	for (Model::NodeIdType id : list)
 	{
 		if (stableId != stableIDs.constEnd() && id == *stableId)
 		{
-			hunks.append(hunk);
-			hunk = QList<Model::NodeIdType>();
-			hunk.append(id);
-			hunks.append(hunk);
-			hunk = QList<Model::NodeIdType>();
+			chunks.append(chunk);
+			chunk = QList<Model::NodeIdType>();
+			chunk.append(id);
+			chunks.append(chunk);
+			chunk = QList<Model::NodeIdType>();
 			stableId++;
 		}
 		else
-			hunk.append(id);
+			chunk.append(id);
 	}
-	hunks.append(hunk);
+	chunks.append(chunk);
 
-	Q_ASSERT(hunks.size() == 2*stableIDs.size() + 1);
+	Q_ASSERT(chunks.size() == 2*stableIDs.size() + 1);
 
-	return hunks;
+	return chunks;
 }
 
 QList<Model::NodeIdType> Merge::longestCommonSubsequence(const QList<Model::NodeIdType> listA,

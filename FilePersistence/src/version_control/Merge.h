@@ -80,14 +80,14 @@ class FILEPERSISTENCE_API Merge
 
 		void markConflictRegions(QList<Model::NodeIdType>& conflicts);
 
-		struct Hunk
+		struct Chunk
 		{
 				bool stable_;
 				QList<Model::NodeIdType> head_;
 				QList<Model::NodeIdType> revision_;
 				QList<Model::NodeIdType> base_;
 
-				Hunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
+				Chunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
 					  QList<Model::NodeIdType> baseList);
 		};
 
@@ -98,9 +98,9 @@ class FILEPERSISTENCE_API Merge
 		int listInsertionIndex(const QList<Model::NodeIdType>& target, const QList<Model::NodeIdType>& current,
 									  Model::NodeIdType insertID) const;
 
-		QList<Model::NodeIdType> applyListMerge(const QList<Hunk>& hunkList, bool resolveOrder) const;
+		QList<Model::NodeIdType> applyListMerge(const QList<Chunk>& chunkList, bool resolveOrder) const;
 
-		QList<Hunk>& mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
+		QList<Chunk>& mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
 										const QList<Model::NodeIdType> base, Model::NodeIdType id);
 
 		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> list,
@@ -150,7 +150,7 @@ class FILEPERSISTENCE_API Merge
 		Error error_{};
 
 		// List handling
-		QHash<Model::NodeIdType, QList<Hunk>> mergedLists_;
+		QHash<Model::NodeIdType, QList<Chunk>> mergedLists_;
 		QSet<Model::NodeIdType> reorderedLists_;
 
 		// Conflict regions
