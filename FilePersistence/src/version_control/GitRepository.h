@@ -39,10 +39,6 @@ struct git_signature;
 
 namespace FilePersistence {
 
-using GitReference = QString;
-using SHA1 = QString;
-using RevisionString = QString;
-
 class FILEPERSISTENCE_API GitRepository
 {
 	public:
@@ -62,13 +58,13 @@ class FILEPERSISTENCE_API GitRepository
 
 		QString workdirPath() const;
 
-		SHA1 getSHA1(QString revision) const;
+		QString  getSHA1(QString revision) const;
 
 		enum class HEADState {UNBORN, ATTACHED, DETACHED};
 		HEADState getHEADState() const;
 
 		enum class GitReferenceType {INVALID, NOTFOUND, BRANCH, NOTE, REMOTE, TAG};
-		GitReferenceType referenceType(GitReference reference) const;
+		GitReferenceType referenceType(QString reference) const;
 
 		QString currentBranchName() const;
 
@@ -77,7 +73,7 @@ class FILEPERSISTENCE_API GitRepository
 		QStringList revisions() const;
 
 		enum class RevisionStringState {INVALID, NOTFOUND, AMBIGUOUS, VALID};
-		bool isValidRevisionString(RevisionString revision) const;
+		bool isValidRevisionString(QString  revision) const;
 
 		static const QString WORKDIR;
 		static const QString INDEX;
@@ -87,11 +83,11 @@ class FILEPERSISTENCE_API GitRepository
 
 		QString projectName() const;
 
-		void writeRevisionIntoIndex(RevisionString revision);
-		SHA1 writeIndexToTree();
+		void writeRevisionIntoIndex(QString  revision);
+		QString  writeIndexToTree();
 
-		void newCommit(SHA1 tree, QString message, Signature author, Signature committer, QStringList parents);
-		SHA1 findMergeBase(RevisionString revision) const;
+		void newCommit(QString  tree, QString message, Signature author, Signature committer, QStringList parents);
+		QString  findMergeBase(QString  revision) const;
 
 		git_signature* createGitSignature(Signature& signature);
 
@@ -100,8 +96,8 @@ class FILEPERSISTENCE_API GitRepository
 		static const QString PATH_TAGS;
 		static const QString PATH_NOTES;
 
-		GitReference currentBranch() const;
-		bool setReferenceTarget(GitReference reference, RevisionString target);
+		QString currentBranch() const;
+		bool setReferenceTarget(QString reference, QString  target);
 
 		void traverseCommitGraph(CommitGraph* graph, git_commit* current, const git_oid* target) const;
 

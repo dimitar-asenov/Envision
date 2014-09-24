@@ -60,7 +60,7 @@ History::History(QString relativePath, Model::NodeIdType rootNodeId,
 
 	const CommitGraphItem endItem = historyGraph_->end();
 	QSet<const CommitGraphItem*> visited;
-	SHA1 end = endItem.commitSHA1_;
+	QString end = endItem.commitSHA1_;
 
 	GenericTree initialTree("History", end);
 	QSet<Model::NodeIdType> trackedIDs = trackSubtree(end, relativePath, &initialTree, repository);

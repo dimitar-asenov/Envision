@@ -37,7 +37,7 @@ bool Merge::abort()
 {
 	if (stage_ != Stage::NoMerge && stage_ != Stage::Complete)
 	{
-		GitReference branch = repository_->currentBranch();
+		QString branch = repository_->currentBranch();
 
 		repository_->checkout(head_, true);
 		repository_->setReferenceTarget(branch, head_);
@@ -53,7 +53,7 @@ bool Merge::commit(Signature& author, Signature& committer, QString& message)
 {
 	if (stage_ == Stage::ReadyToCommit)
 	{
-		SHA1 treeSHA1 = repository_->writeIndexToTree();
+		QString treeSHA1 = repository_->writeIndexToTree();
 
 		QStringList parents;
 		parents.append(head_);
@@ -76,7 +76,7 @@ std::unique_ptr<GenericTree> const& Merge::mergeTree() const
 
 // ======== private ========
 
-Merge::Merge(RevisionString revision, bool fastForward, GitRepository* repository)
+Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 {
 	initialize(revision, fastForward, repository);
 	classifyKind();
@@ -85,7 +85,7 @@ Merge::Merge(RevisionString revision, bool fastForward, GitRepository* repositor
 
 Merge::~Merge() {}
 
-void Merge::initialize(RevisionString revision, bool fastForward, GitRepository* repository)
+void Merge::initialize(QString revision, bool fastForward, GitRepository* repository)
 {
 	repository_ = repository;
 
@@ -176,7 +176,7 @@ void Merge::performMerge()
 
 void Merge::performFastForward()
 {
-	GitReference branch = repository_->currentBranch();
+	QString branch = repository_->currentBranch();
 
 	repository_->setReferenceTarget(branch, revision_);
 	repository_->checkout(revision_, true);
@@ -684,7 +684,7 @@ bool Merge::isListType(const GenericNode* node)
 		return true;
 }
 
-void Merge::loadGenericTree(std::unique_ptr<GenericTree> const& tree, const SHA1 version)
+void Merge::loadGenericTree(std::unique_ptr<GenericTree> const& tree, const QString version)
 {
 	IdToGenericNodeHash persistentUnitRoots;
 

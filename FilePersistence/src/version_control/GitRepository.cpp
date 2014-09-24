@@ -416,7 +416,7 @@ QString GitRepository::currentBranchName() const
 {
 	HEADState state = getHEADState();
 	if (state != HEADState::ATTACHED)
-		return GitReference();
+		return QString();
 
 	int errorCode = 0;
 
@@ -428,7 +428,7 @@ QString GitRepository::currentBranchName() const
 	errorCode = git_branch_name(&branch, head);
 	checkError(errorCode);
 
-	GitReference branchName(branch);
+	QString branchName(branch);
 
 	git_reference_free(head);
 
@@ -522,7 +522,7 @@ GitRepository::HEADState GitRepository::getHEADState() const
 	return HEADState::ATTACHED;
 }
 
-GitRepository::GitReferenceType GitRepository::referenceType(GitReference reference) const
+GitRepository::GitReferenceType GitRepository::referenceType(QString reference) const
 {
 	int errorCode = 0;
 	GitReferenceType type = GitReferenceType::INVALID;
@@ -565,7 +565,7 @@ GitRepository::GitReferenceType GitRepository::referenceType(GitReference refere
 	return type;
 }
 
-bool GitRepository::isValidRevisionString(RevisionString revision) const
+bool GitRepository::isValidRevisionString(QString revision) const
 {
 	int errorCode = 0;
 	bool isValid = true;
@@ -600,7 +600,7 @@ QString GitRepository::projectName() const
 	return name;
 }
 
-void GitRepository::writeRevisionIntoIndex(RevisionString revision)
+void GitRepository::writeRevisionIntoIndex(QString revision)
 {
 	int errorCode = 0;
 
@@ -625,7 +625,7 @@ void GitRepository::writeRevisionIntoIndex(RevisionString revision)
 	git_index_free(index);
 }
 
-SHA1 GitRepository::writeIndexToTree()
+QString GitRepository::writeIndexToTree()
 {
 	int errorCode = 0;
 
@@ -646,7 +646,7 @@ SHA1 GitRepository::writeIndexToTree()
 	return currentSHA1;
 }
 
-void GitRepository::newCommit(SHA1 tree, QString message, Signature author, Signature committer, QStringList parents)
+void GitRepository::newCommit(QString tree, QString message, Signature author, Signature committer, QStringList parents)
 {
 	int errorCode = 0;
 
@@ -669,7 +669,7 @@ void GitRepository::newCommit(SHA1 tree, QString message, Signature author, Sign
 	git_commit** gitParents = new git_commit* [parents.size()];
 	for (int i = 0; i < parents.size(); i++)
 	{
-		RevisionString revision = parents.at(i);
+		QString revision = parents.at(i);
 		git_commit* gitCommit = parseCommit(revision);
 		gitParents[i] = gitCommit;
 	}
@@ -689,7 +689,7 @@ void GitRepository::newCommit(SHA1 tree, QString message, Signature author, Sign
 	SAFE_DELETE(gitMessage);
 }
 
-SHA1 GitRepository::findMergeBase(RevisionString revision) const
+QString GitRepository::findMergeBase(QString revision) const
 {
 	int errorCode = 0;
 
@@ -702,10 +702,10 @@ SHA1 GitRepository::findMergeBase(RevisionString revision) const
 	git_oid mergeBaseOid;
 	errorCode = git_merge_base(&mergeBaseOid, repository_, headOid, revisionOid);
 	if (errorCode == GIT_ENOTFOUND)
-		return SHA1();
+		return QString();
 	checkError(errorCode);
 
-	SHA1 mergeBase = oidToQString(&mergeBaseOid);
+	QString mergeBase = oidToQString(&mergeBaseOid);
 
 	git_commit_free(gitHead);
 	git_commit_free(gitRevision);
@@ -741,11 +741,11 @@ const QString PATH_REMOTES = QString(QDir::separator()) + "refs" + QString(QDir:
 const QString PATH_TAGS = QString(QDir::separator()) + "refs" + QString(QDir::separator()) + "tags";
 const QString PATH_NOTES = QString(QDir::separator()) + "refs" + QString(QDir::separator()) + "notes";
 
-GitReference GitRepository::currentBranch() const
+QString GitRepository::currentBranch() const
 {
 	HEADState state = getHEADState();
 	if (state != HEADState::ATTACHED)
-		return GitReference();
+		return QString();
 
 	int errorCode = 0;
 
@@ -755,14 +755,14 @@ GitReference GitRepository::currentBranch() const
 
 	const char* fullName = git_reference_name(head);
 
-	GitReference branch(fullName);
+	QString branch(fullName);
 
 	git_reference_free(head);
 
 	return branch;
 }
 
-bool GitRepository::setReferenceTarget(GitReference reference, RevisionString target)
+bool GitRepository::setReferenceTarget(QString reference, QString target)
 {
 	int errorCode = 0;
 

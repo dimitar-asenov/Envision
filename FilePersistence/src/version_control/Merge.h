@@ -31,10 +31,6 @@
 
 namespace FilePersistence {
 
-using GitReference = QString;
-using SHA1 = QString;
-using RevisionString = QString;
-
 class GitRepository;
 
 class FILEPERSISTENCE_API Merge
@@ -61,9 +57,9 @@ class FILEPERSISTENCE_API Merge
 
 		enum class NodeSource {Base, HEAD, Revision};
 
-		Merge(RevisionString revision, bool fastForward, GitRepository* repository);
+		Merge(QString revision, bool fastForward, GitRepository* repository);
 
-		void initialize(RevisionString revision, bool fastForward, GitRepository* repository);
+		void initialize(QString revision, bool fastForward, GitRepository* repository);
 
 		void classifyKind();
 
@@ -123,7 +119,7 @@ class FILEPERSISTENCE_API Merge
 		static ListType getListType(const GenericNode* node);
 		static bool isListType(const GenericNode* node);
 
-		void loadGenericTree(std::unique_ptr<GenericTree> const& tree, const SHA1 version);
+		void loadGenericTree(std::unique_ptr<GenericTree> const& tree, const QString version);
 		void findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations);
 
 		void mergeChangesIntoTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes,
@@ -183,9 +179,9 @@ class FILEPERSISTENCE_API Merge
 		bool fastForward_{};
 
 		// Revisions
-		SHA1 head_;
-		SHA1 revision_;
-		SHA1 mergeBase_;
+		QString head_;
+		QString revision_;
+		QString mergeBase_;
 
 		GitRepository* repository_{};
 };
