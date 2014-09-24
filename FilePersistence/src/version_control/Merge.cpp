@@ -49,7 +49,7 @@ bool Merge::abort()
 		return false;
 }
 
-bool Merge::commit(Signature& author, Signature& committer, QString& message)
+bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
 {
 	if (stage_ == Stage::ReadyToCommit)
 	{
@@ -69,7 +69,7 @@ bool Merge::commit(Signature& author, Signature& committer, QString& message)
 		return false;
 }
 
-std::unique_ptr<GenericTree> const& Merge::mergeTree() const
+const std::unique_ptr<GenericTree>& Merge::mergeTree() const
 {
 	return mergeTree_;
 }
@@ -186,8 +186,8 @@ void Merge::performFastForward()
 
 void Merge::buildConflictUnitMap(IdToChangeDescriptionHash& cuToChange,
 											QHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
-											const Diff& diff, std::unique_ptr<GenericTree> const& versionTree,
-											std::unique_ptr<GenericTree> const& baseTree)
+											const Diff& diff, const std::unique_ptr<GenericTree>& versionTree,
+											const std::unique_ptr<GenericTree>& baseTree)
 {
 	for (ChangeDescription* change : diff.changes())
 	{
@@ -424,8 +424,8 @@ Merge::Hunk::Hunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::N
 	base_ = baseList;
 }
 
-void Merge::computeMergeForLists(std::unique_ptr<GenericTree> const& head, std::unique_ptr<GenericTree> const& revision,
-											std::unique_ptr<GenericTree> const& base, const IdToChangeDescriptionHash& baseToHead,
+void Merge::computeMergeForLists(const std::unique_ptr<GenericTree>& head, const std::unique_ptr<GenericTree>& revision,
+											const std::unique_ptr<GenericTree>& base, const IdToChangeDescriptionHash& baseToHead,
 											const IdToChangeDescriptionHash& baseToRevision)
 {
 	for (ChangeDescription* change : baseToRevision)
@@ -684,7 +684,7 @@ bool Merge::isListType(const GenericNode* node)
 		return true;
 }
 
-void Merge::loadGenericTree(std::unique_ptr<GenericTree> const& tree, const QString version)
+void Merge::loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version)
 {
 	IdToGenericNodeHash persistentUnitRoots;
 
@@ -729,7 +729,7 @@ void Merge::findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHas
 			findPersistentUnitDeclarations(child, declarations);
 }
 
-void Merge::mergeChangesIntoTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes,
+void Merge::mergeChangesIntoTree(const std::unique_ptr<GenericTree>& tree, const IdToChangeDescriptionHash& changes,
 											QList<QSet<Model::NodeIdType>>& conflictRegions)
 {
 	IdToChangeDescriptionHash applicableChanges;
@@ -747,7 +747,7 @@ void Merge::mergeChangesIntoTree(std::unique_ptr<GenericTree> const& tree, const
 	applyChangesToTree(tree, applicableChanges);
 }
 
-void Merge::applyChangesToTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes)
+void Merge::applyChangesToTree(const std::unique_ptr<GenericTree>& tree, const IdToChangeDescriptionHash& changes)
 {
 	QList<ChangeDescription*> changeQueue = changes.values();
 	IdToChangeDescriptionHash unappliedChanges(changes);
@@ -786,7 +786,7 @@ void Merge::applyChangesToTree(std::unique_ptr<GenericTree> const& tree, const I
 	}
 }
 
-bool Merge::applyAddToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+bool Merge::applyAddToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& changes,
 									const ChangeDescription* addOp)
 {
 	GenericNode* parent = addOp->nodeB()->parent();
@@ -820,7 +820,7 @@ bool Merge::applyAddToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeD
 	return true;
 }
 
-bool Merge::applyDeleteToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& /*changes*/,
+bool Merge::applyDeleteToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& /*changes*/,
 										const ChangeDescription* deleteOp)
 {
 	QString persistentUnitName = deleteOp->nodeA()->persistentUnit()->name();
@@ -849,7 +849,7 @@ bool Merge::applyDeleteToTree(std::unique_ptr<GenericTree> const& tree, IdToChan
 	return true;
 }
 
-bool Merge::applyMoveToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+bool Merge::applyMoveToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& changes,
 									 const ChangeDescription* moveOp)
 {
 	GenericNode* targetParent = moveOp->nodeB()->parent();
@@ -898,7 +898,7 @@ bool Merge::applyMoveToTree(std::unique_ptr<GenericTree> const& tree, IdToChange
 	return true;
 }
 
-bool Merge::applyStationaryChangeToTree(std::unique_ptr<GenericTree> const& tree,
+bool Merge::applyStationaryChangeToTree(const std::unique_ptr<GenericTree>& tree,
 													 IdToChangeDescriptionHash& /*changes*/,
 													 const ChangeDescription* stationaryOp)
 {

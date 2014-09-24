@@ -48,7 +48,7 @@ class FILEPERSISTENCE_API Merge
 		Error error() const;
 
 		bool abort();
-		bool commit(Signature& author, Signature& committer, QString& message);
+		bool commit(const Signature& author, const Signature& committer, const QString& message);
 
 		std::unique_ptr<GenericTree> const& mergeTree() const;
 
@@ -69,8 +69,8 @@ class FILEPERSISTENCE_API Merge
 
 		void buildConflictUnitMap(IdToChangeDescriptionHash& CUToChange,
 										  QHash<Model::NodeIdType, Model::NodeIdType>& changeToCU,
-										  const Diff& diff, std::unique_ptr<GenericTree> const& versionTree,
-										  std::unique_ptr<GenericTree> const& baseTree);
+										  const Diff& diff, const std::unique_ptr<GenericTree>& versionTree,
+										  const std::unique_ptr<GenericTree>& baseTree);
 
 		Model::NodeIdType findConflicUnit(Model::NodeIdType nodeID, bool inBase, const Diff& diff,
 													 const GenericPersistentUnit* unit) const;
@@ -92,8 +92,8 @@ class FILEPERSISTENCE_API Merge
 					  QList<Model::NodeIdType> baseList);
 		};
 
-		void computeMergeForLists(std::unique_ptr<GenericTree> const& head, std::unique_ptr<GenericTree> const& revision,
-										  std::unique_ptr<GenericTree> const& base, const IdToChangeDescriptionHash& baseToHead,
+		void computeMergeForLists(const std::unique_ptr<GenericTree>& head, const std::unique_ptr<GenericTree>& revision,
+										  const std::unique_ptr<GenericTree>& base, const IdToChangeDescriptionHash& baseToHead,
 										  const IdToChangeDescriptionHash& baseToRevision);
 
 		int listInsertionIndex(const QList<Model::NodeIdType>& target, const QList<Model::NodeIdType>& current,
@@ -119,21 +119,21 @@ class FILEPERSISTENCE_API Merge
 		static ListType getListType(const GenericNode* node);
 		static bool isListType(const GenericNode* node);
 
-		void loadGenericTree(std::unique_ptr<GenericTree> const& tree, const QString version);
+		void loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version);
 		void findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations);
 
-		void mergeChangesIntoTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes,
+		void mergeChangesIntoTree(const std::unique_ptr<GenericTree>& tree, const IdToChangeDescriptionHash& changes,
 										  QList<QSet<Model::NodeIdType>>& conflictRegions);
-		void applyChangesToTree(std::unique_ptr<GenericTree> const& tree, const IdToChangeDescriptionHash& changes);
+		void applyChangesToTree(const std::unique_ptr<GenericTree>& tree, const IdToChangeDescriptionHash& changes);
 
 
-		bool applyAddToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+		bool applyAddToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& changes,
 								  const ChangeDescription* addOp);
-		bool applyDeleteToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+		bool applyDeleteToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& changes,
 									  const ChangeDescription* deleteOp);
-		bool applyMoveToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+		bool applyMoveToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& changes,
 									const ChangeDescription* moveOp);
-		bool applyStationaryChangeToTree(std::unique_ptr<GenericTree> const& tree, IdToChangeDescriptionHash& changes,
+		bool applyStationaryChangeToTree(const std::unique_ptr<GenericTree>& tree, IdToChangeDescriptionHash& changes,
 													const ChangeDescription* stationaryOp);
 
 		void performInsertIntoList(GenericNode* parent, GenericNode* node);
