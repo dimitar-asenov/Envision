@@ -36,12 +36,6 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB)
 	nodeB_ = nodeB;
 
 	fundamentalChangeClassification();
-	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
-	{
-		detectReorder();
-		detectTypeUpdate();
-		detectValueUpdate();
-	}
 }
 
 void ChangeDescription::fundamentalChangeClassification()
@@ -70,13 +64,19 @@ void ChangeDescription::fundamentalChangeClassification()
 			}
 		}
 	}
+
+	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
+	{
+		detectReorder();
+		detectTypeUpdate();
+		detectValueUpdate();
+	}
 }
 
 void ChangeDescription::detectReorder()
 {
 	// check for same name -> reordering detection
-	int reorder = QString::compare(nodeA_->name(), nodeB_->name());
-	if (reorder != 0)
+	if (nodeA_->name() != nodeB_->name())
 		updateFlags_ |= Order;
 	else
 		updateFlags_ &= ~Order;
@@ -84,11 +84,8 @@ void ChangeDescription::detectReorder()
 
 void ChangeDescription::detectValueUpdate()
 {
-
-
 	// check for same type -> type change
-	int typeChange = QString::compare(nodeA_->rawValue(), nodeB_->rawValue());
-	if (typeChange != 0)
+	if (nodeA_->rawValue() != nodeB_->rawValue())
 		updateFlags_ |= Value;
 	else
 		updateFlags_ &= ~Value;
@@ -97,8 +94,7 @@ void ChangeDescription::detectValueUpdate()
 void ChangeDescription::detectTypeUpdate()
 {
 	// check for same value -> update
-	int valueUpdate = QString::compare(nodeA_->type(), nodeB_->type());
-	if (valueUpdate != 0)
+	if (nodeA_->type() != nodeB_->type())
 		updateFlags_ |= Type;
 	else
 		updateFlags_ &= ~Type;
@@ -142,7 +138,6 @@ void ChangeDescription::print() const
 	if (updateFlags_.testFlag(Children))
 		std::cout << " Children";
 	std::cout << std::endl;
-
 }
 
 void ChangeDescription::setChildrenUpdate(bool isUpdate)
