@@ -397,7 +397,7 @@ void Merge::computeMergeForLists(const std::unique_ptr<GenericTree>& head, const
 					QList<Model::NodeIdType> revisionList = genericNodeListToNodeIdList(revisionNode->children());
 					QList<Model::NodeIdType> baseList = genericNodeListToNodeIdList(baseNode->children());
 
-					mergeLists(headList, revisionList, baseList, change->id());
+					computeMergeChunks(headList, revisionList, baseList, change->id());
 				}
 			}
 		}
@@ -427,10 +427,8 @@ int Merge::listInsertionIndex(const QList<Model::NodeIdType>& target, const QLis
 }
 
 
-QList<Model::NodeIdType> Merge::applyListMerge(const QList<Chunk>& chunkList, bool resolveOrder) const
+bool Merge::applyListMerge(QList<Model::NodeIdType>& mergedList, const QList<Chunk>& chunkList, bool resolveOrder) const
 {
-	QList<Model::NodeIdType> mergedList;
-
 	for (Chunk chunk : chunkList)
 	{
 		if (chunk.stable_)
@@ -449,7 +447,7 @@ QList<Model::NodeIdType> Merge::applyListMerge(const QList<Chunk>& chunkList, bo
 			{
 				if (!resolveOrder)
 				{
-					return QList<Model::NodeIdType>();
+					return false;
 				}
 
 				// Beware of inserting an ID twice
@@ -480,11 +478,15 @@ QList<Model::NodeIdType> Merge::applyListMerge(const QList<Chunk>& chunkList, bo
 		}
 	}
 
-	return mergedList;
+	// every id is inserted only once
+	Q_ASSERT(QSet<Model::NodeIdType>::fromList(mergedList).size() == mergedList.size());
+
+	return true;
 }
 
-QList<Merge::Chunk>& Merge::mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
-												 const QList<Model::NodeIdType> base, Model::NodeIdType id)
+QList<Merge::Chunk>& Merge::computeMergeChunks(const QList<Model::NodeIdType> head,
+															  const QList<Model::NodeIdType> revision,
+															  const QList<Model::NodeIdType> base, Model::NodeIdType id)
 {
 	QList<Model::NodeIdType> lcsBaseToHead = longestCommonSubsequence(base, head);
 	QList<Model::NodeIdType> lcsBaseToRevision = longestCommonSubsequence(base, revision);
@@ -900,8 +902,9 @@ void Merge::performInsertIntoList(GenericNode* parent, GenericNode* node)
 	else
 		resolveOrder = true;
 
-	QList<Model::NodeIdType> targetList = applyListMerge(mergedLists_.value(parent->id()), resolveOrder);
-	Q_ASSERT(!targetList.empty());
+	QList<Model::NodeIdType> targetList;
+	bool success = applyListMerge(targetList, mergedLists_.value(parent->id()), resolveOrder);
+	Q_ASSERT(success);
 	int index = listInsertionIndex(targetList, genericNodeListToNodeIdList(parent->children()), node->id());
 
 	for (GenericNode* child : parent->children())
@@ -930,8 +933,9 @@ void Merge::performReorderInList(GenericNode* parent, GenericNode* node)
 	else
 		resolveOrder = true;
 
-	QList<Model::NodeIdType> targetList = applyListMerge(mergedLists_.value(parent->id()), resolveOrder);
-	Q_ASSERT(!targetList.empty());
+	QList<Model::NodeIdType> targetList;
+	bool success = applyListMerge(targetList, mergedLists_.value(parent->id()), resolveOrder);
+	Q_ASSERT(success);
 
 	QSet<Model::NodeIdType> availableIds =
 			QSet<Model::NodeIdType>::fromList(genericNodeListToNodeIdList(parent->children()));

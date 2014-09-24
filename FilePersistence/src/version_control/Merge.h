@@ -98,10 +98,10 @@ class FILEPERSISTENCE_API Merge
 		int listInsertionIndex(const QList<Model::NodeIdType>& target, const QList<Model::NodeIdType>& current,
 									  Model::NodeIdType insertID) const;
 
-		QList<Model::NodeIdType> applyListMerge(const QList<Chunk>& chunkList, bool resolveOrder) const;
+		bool applyListMerge(QList<Model::NodeIdType>& mergedList, const QList<Chunk>& chunkList, bool resolveOrder) const;
 
-		QList<Chunk>& mergeLists(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
-										const QList<Model::NodeIdType> base, Model::NodeIdType id);
+		QList<Chunk>& computeMergeChunks(const QList<Model::NodeIdType> head, const QList<Model::NodeIdType> revision,
+													const QList<Model::NodeIdType> base, Model::NodeIdType id);
 
 		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> list,
 																				 const QList<Model::NodeIdType> stableIDs);
