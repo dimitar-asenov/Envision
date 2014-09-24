@@ -28,7 +28,7 @@
 
 #include "../oodebug_api.h"
 
-#include "CompilerOutputParser.h"
+#include "CompilerFeedback.h"
 
 namespace OODebug {
 
@@ -40,9 +40,11 @@ class OODEBUG_API CommandLineCompiler
 	public:
 		/**
 		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * For parsing the standard GNU Error format is assumed (see also \a CompilerOutputParser).
+		 * and \a parseFunction for parsing the output.
 		 */
-		CommandLineCompiler(const QString& compilerCommand) : command_{compilerCommand} { }
+		CommandLineCompiler(const QString& compilerCommand,
+								  std::function<CompilerFeedback(const QString&)> parseFunction)
+			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
 
 		/**
 		 * Compiles the file with name \a fileName using the arguments as in \a args.
@@ -55,6 +57,7 @@ class OODEBUG_API CommandLineCompiler
 
 	private:
 		QString command_;
+		std::function<CompilerFeedback(const QString&)> parseFunction_;
 };
 
 } /* namespace OODebug */

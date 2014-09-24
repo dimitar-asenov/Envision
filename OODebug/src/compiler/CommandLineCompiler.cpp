@@ -45,7 +45,7 @@ CompilerFeedback CommandLineCompiler::compileFile(const QString& fileName, const
 		else
 			throw new OODebugException(QString("Uknown error while executing %1: %2").arg(command_, error));
 	}
-	return CompilerOutputParser::parseJavacErrorFormat(QString(compilerProcess.readAllStandardOutput()));
+	return parseFunction_(QString(compilerProcess.readAllStandardOutput()));
 }
 
 } /* namespace OODebug */
