@@ -54,7 +54,8 @@ class FILEPERSISTENCE_API Diff
 		void findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& createdParents,
 										 std::shared_ptr<GenericTree> tree, const GitRepository* repository);
 
-		void markChildUpdates();
+		void setAllChildStructureUpdates();
+		void setChildStructureUpdateForNode(const GenericNode* node);
 
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
 

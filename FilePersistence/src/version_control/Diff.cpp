@@ -58,7 +58,7 @@ Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 
 	idMatching(nodesAHash, nodesBHash, newlyCreatedParents);
 
-	markChildUpdates();
+	setAllChildStructureUpdates();
 }
 
 IdToChangeDescriptionHash Diff::changes(ChangeType type) const
@@ -155,76 +155,43 @@ void Diff::findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& 
 	}
 }
 
-void Diff::markChildUpdates()
+void Diff::setAllChildStructureUpdates()
 {
 	for (ChangeDescription* change : changeDescriptions_.values())
 	{
 		switch (change->type())
 		{
 			case ChangeType::Added:
-			{
-				GenericNode* parent = change->nodeB()->parent();
-				if (parent)
-				{
-					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
-					Q_ASSERT(parentChange);
-					parentChange->setChildrenUpdate(true);
-				}
+				setChildStructureUpdateForNode(change->nodeB()->parent());
 				break;
-			}
 
 			case ChangeType::Deleted:
-			{
-				GenericNode* parent = change->nodeA()->parent();
-				if (parent)
-				{
-					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
-					Q_ASSERT(parentChange);
-					parentChange->setChildrenUpdate(true);
-				}
+				setChildStructureUpdateForNode(change->nodeA()->parent());
 				break;
-			}
 
 			case ChangeType::Moved:
-			{
-				GenericNode* parent = change->nodeA()->parent();
-				if (parent)
-				{
-					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
-					Q_ASSERT(parentChange);
-					parentChange->setChildrenUpdate(true);
-				}
-
-				parent = change->nodeB()->parent();
-				if (parent)
-				{
-					ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
-					Q_ASSERT(parentChange);
-					parentChange->setChildrenUpdate(true);
-				}
-
+				setChildStructureUpdateForNode(change->nodeA()->parent());
+				setChildStructureUpdateForNode(change->nodeB()->parent());
 				break;
-			}
 
 			case ChangeType::Stationary:
-			{
-				ChangeDescription::UpdateFlags flags = change->flags();
-				if (flags.testFlag(ChangeDescription::Order))
-				{
-					GenericNode* parent = change->nodeA()->parent();
-					if (parent)
-					{
-						ChangeDescription* parentChange = changeDescriptions_.value(parent->id());
-						Q_ASSERT(parentChange);
-						parentChange->setChildrenUpdate(true);
-					}
-				}
+				if (change->flags().testFlag(ChangeDescription::Order))
+					setChildStructureUpdateForNode(change->nodeA()->parent());
 				break;
-			}
 
 			default:
 				Q_ASSERT(false);
 		}
+	}
+}
+
+void Diff::setChildStructureUpdateForNode(const GenericNode* node)
+{
+	if (node)
+	{
+		auto changeDescription = changeDescriptions_.value(node->id());
+		Q_ASSERT(changeDescription);
+		changeDescription->setChildrenUpdate(true);
 	}
 }
 
