@@ -17,7 +17,8 @@ HEADERS += src/precompiled.h \
     src/OODebugPlugin.h \
     src/compiler/CompilerFeedback.h \
     src/compiler/CompilerOutputParser.h \
-    src/compiler/CommandLineCompiler.h
+    src/compiler/CommandLineCompiler.h \
+    src/compiler/CompilerMessage.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
