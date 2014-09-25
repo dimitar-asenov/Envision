@@ -9,5 +9,7 @@
                 <dependency pluginid="interactionbase" version="1" />
                 <dependency pluginid="oovisualization" version="1" />
                 <dependency pluginid="oointeraction" version="1" />
+                <dependency pluginid="export" version="1" />
+                <dependency pluginid="javaexport" version="1" />
         </dependencies>
 </plugin>

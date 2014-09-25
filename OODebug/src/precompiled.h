@@ -38,6 +38,8 @@
 #include "Logger/src/precompiled.h"
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
+#include "Export/src/precompiled.h"
+#include "JavaExport/src/precompiled.h"
 
 #if defined __cplusplus
 // Add C++ includes here

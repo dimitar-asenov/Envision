@@ -2,17 +2,19 @@
 <projectDescription>
 	<name>OODebug</name>
 	<comment></comment>
-        <projects>
-                <project>Core</project>
-                <project>InteractionBase</project>
-                <project>Logger</project>
-                <project>ModelBase</project>
-                <project>OOInteraction</project>
-                <project>OOModel</project>
-                <project>OOVisualization</project>
-                <project>SelfTest</project>
-                <project>VisualizationBase</project>
-        </projects>
+	<projects>
+		<project>Core</project>
+		<project>InteractionBase</project>
+		<project>Logger</project>
+		<project>ModelBase</project>
+		<project>OOInteraction</project>
+		<project>OOModel</project>
+		<project>OOVisualization</project>
+		<project>SelfTest</project>
+		<project>VisualizationBase</project>
+		<project>Export</project>
+		<project>JavaExport</project>
+	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>com.trolltech.qtcppproject.QtMakefileGenerator</name>

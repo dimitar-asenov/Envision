@@ -9,7 +9,9 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization \
-    -loointeraction
+    -loointeraction \
+    -lexport \
+    -ljavaexport
 
 HEADERS += src/precompiled.h \
     src/OODebugException.h \
