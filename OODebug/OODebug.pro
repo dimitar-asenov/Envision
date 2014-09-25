@@ -21,10 +21,12 @@ HEADERS += src/precompiled.h \
     src/compiler/CompilerOutputParser.h \
     src/compiler/CommandLineCompiler.h \
     src/compiler/CompilerMessage.h \
-    src/compiler/java/JavaCompiler.h
+    src/compiler/java/JavaCompiler.h \
+    src/commands/CJavaCompile.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
     src/compiler/CompilerOutputParser.cpp \
     src/compiler/CommandLineCompiler.cpp \
-    src/compiler/java/JavaCompiler.cpp
+    src/compiler/java/JavaCompiler.cpp \
+    src/commands/CJavaCompile.cpp

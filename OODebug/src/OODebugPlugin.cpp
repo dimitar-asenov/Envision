@@ -27,10 +27,15 @@
 #include "OODebugPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "commands/CJavaCompile.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+
 namespace OODebug {
 
 bool OODebugPlugin::initialize(Core::EnvisionManager&)
 {
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
+
 	return true;
 }
 
