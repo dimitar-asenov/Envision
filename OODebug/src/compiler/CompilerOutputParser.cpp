@@ -58,20 +58,27 @@ CompilerFeedback CompilerOutputParser::parseJavacErrorFormat(const QString& outp
 		QString msg = currentMatch.captured(4);
 		int colNumber = currentMatch.captured(5).length();
 
-		if (!type.compare("error")) {
+		if (!type.compare("error"))
+		{
 			auto errorMessage = std::make_shared<CompilerMessage>(CompilerMessage::Error,
 																					file, msg, lineNumber, colNumber);
 			currentRoot = errorMessage;
 			messages.append(errorMessage);
-		} else if (!type.compare("warning")) {
+		}
+		else if (!type.compare("warning"))
+		{
 			auto warningMessage = std::make_shared<CompilerMessage>(CompilerMessage::Error,
 																					file, msg, lineNumber, colNumber);
 			currentRoot = warningMessage;
 			messages.append(warningMessage);
-		} else if (!type.compare("note")) {
+		}
+		else if (!type.compare("note"))
+		{
 			messages.append(std::make_shared<CompilerMessage>(CompilerMessage::Note,
 																			  file, msg, lineNumber, colNumber, currentRoot));
-		} else {
+		}
+		else
+		{
 			qWarning() << "Not supported feedback type:" << type;
 			messages.append(std::make_shared<CompilerMessage>(CompilerMessage::Other, file, msg, lineNumber, colNumber));
 		}

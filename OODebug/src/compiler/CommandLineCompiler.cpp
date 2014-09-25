@@ -38,7 +38,8 @@ CompilerFeedback CommandLineCompiler::compileFile(const QString& fileName, const
 	// block until finished
 	compilerProcess.waitForFinished(-1);
 	// check if everything went fine
-	if (compilerProcess.exitStatus() != QProcess::NormalExit) {
+	if (compilerProcess.exitStatus() != QProcess::NormalExit)
+	{
 		auto error = compilerProcess.error();
 		if (error == QProcess::FailedToStart)
 			throw new OODebugException(QString("It seems like %1 is not installed on your system!").arg(command_));
