@@ -53,7 +53,7 @@ class OODEBUG_API CommandLineCompiler
 		 *
 		 * Note: This call is blocking, it blocks until the command is finished.
 		 */
-		CompilerFeedback compileFile(const QString& fileName, const QStringList& args);
+		CompilerFeedback compileFile(const QString& fileName, const QStringList& args = QStringList());
 
 	private:
 		QString command_;
