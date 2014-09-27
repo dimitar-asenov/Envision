@@ -37,6 +37,7 @@ class AlloyVisitor : public Model::Visitor<AlloyVisitor, Export::SourceFragment*
 
 	private:
 		static QString currentClass_;
+		static bool inFact_;
 };
 
 }

@@ -44,7 +44,7 @@ void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 	delete anAlloyVisitor;
 
 	file->append(aNode, "pred show() {}\n");
-	file->append(aNode, "run show for 2");
+	file->append(aNode, "run show for 3");
 
 	auto layouter = Export::FragmentLayouter{"\t"};
 

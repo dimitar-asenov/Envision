@@ -42,35 +42,90 @@ using namespace OOInteraction;
 
 namespace Alloy {
 
-TEST(AlloyIntegrationPlugin, AlloyTest)
+Class* addLinkedList()
 {
-	CHECK_INT_EQUAL(1, 1);
 	auto aLinkedList = new Class("LinkedList");
-
-	auto aNode = new Class("Node");
-	aLinkedList->classes()->append(aNode);
 
 	auto *linkedListRoot = new Field( "root", new ReferenceExpression("Node"), Modifier::Private);
 	aLinkedList->fields()->append(linkedListRoot);
+
+	auto invariantMethod = new Method("ObjectInvariant");
+	aLinkedList->methods()->append(invariantMethod);
+
+	auto containsMethod = new Method("contains");
+	aLinkedList->methods()->append(containsMethod);
+
+	FormalArgument* containsMethodArgument = new FormalArgument();
+	containsMethod->arguments()->append(containsMethodArgument);
+	containsMethodArgument->setName("aNode");
+	ClassTypeExpression* argType = new ClassTypeExpression();
+	containsMethodArgument->setTypeExpression(argType);
+	argType->typeExpression()->ref()->setName("Node");
+
+	FormalResult* containsResult  = new FormalResult();
+	containsResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	containsMethod->results()->append(containsResult);
+
+	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+		"Contract.Requires(aNode!=null)")));
+	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+		"Contract.Ensures(this.root.contains(aNode))")));
+
+	return aLinkedList;
+}
+
+Class* addNode()
+{
+	auto aNode = new Class("Node");
+
 	auto *nodeNext = new Field( "next", new ReferenceExpression("Node"), Modifier::Private);
 	aNode->fields()->append(nodeNext);
-	auto *nodeNumber = new Field( "number", new PrimitiveTypeExpression(PrimitiveType::INT), Modifier::Private);
-	aNode->fields()->append(nodeNumber);
+	auto *numberFieldNode = new Field( "number", new PrimitiveTypeExpression(PrimitiveType::INT), Modifier::Private);
+	aNode->fields()->append(numberFieldNode);
 
-	auto invariantMethodLinkedList = new Method("ObjectInvariant");
-	aLinkedList->methods()->append(invariantMethodLinkedList);
+	auto invariantMethod = new Method("ObjectInvariant");
+	aNode->methods()->append(invariantMethod);
 
-	auto invariantMethodNode = new Method("ObjectInvariant");
-	aNode->methods()->append(invariantMethodNode);
-
-	invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+	invariantMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
 		"Contract.Invariant(this!=this.next)")));
-	invariantMethodNode->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+	invariantMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
 		"Contract.Invariant(this.number==this.next.number-1)")));
+	invariantMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+		"Contract.Invariant(LinkedList.contains(this))")));
+
+	auto containsMethod = new Method("contains");
+	aNode->methods()->append(containsMethod);
+
+	FormalArgument* containsMethodArgument = new FormalArgument();
+	containsMethod->arguments()->append(containsMethodArgument);
+	containsMethodArgument->setName("aNode");
+	ClassTypeExpression* argType = new ClassTypeExpression();
+	containsMethodArgument->setTypeExpression(argType);
+	argType->typeExpression()->ref()->setName("Node");
+
+	FormalResult* containsResult  = new FormalResult();
+	containsResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	containsMethod->results()->append(containsResult);
+
+	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+		"Contract.Requires(aNode!=null)")));
+	containsMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
+		"Contract.Ensures(this==aNode||this.next!=null&&this.next.contains(aNode))")));
+
+	return aNode;
+}
+
+TEST(AlloyIntegrationPlugin, AlloyTest)
+{
+	CHECK_INT_EQUAL(1, 1);
+	auto aLinkedList = addLinkedList();
+
+	auto aNode = addNode();
+	aLinkedList->classes()->append(aNode);
 
 	auto manager = new Model::TreeManager(aLinkedList);
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(aLinkedList));
+	VisualizationManager::instance().mainScene()->addTopLevelItem(new RootItem(aLinkedList));
 
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 }

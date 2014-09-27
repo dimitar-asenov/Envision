@@ -28,6 +28,7 @@
 #include "VisualizationBase/src/overlays/BoxOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 #include "Comments/src/nodes/CommentNode.h"
+#include "OOModel/src/declarations/Class.h"
 
 namespace Alloy {
 
@@ -40,7 +41,13 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 {
 	QString tempAlloyPath = QDir::tempPath() + "/alloy";
 
-	AlloyExporter::exportTree(source->node()->root(), tempAlloyPath);
+	auto targetNode = source->node();
+	while (!DCast<OOModel::Class>(targetNode))
+	{
+		targetNode = targetNode->parent();
+	}
+
+	AlloyExporter::exportTree(targetNode, tempAlloyPath);
 
 	QString inputFile = tempAlloyPath + "/model.als";
 	QString outputDirectory = tempAlloyPath + "/output/";
@@ -74,6 +81,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	auto scene = source->scene();
 	auto alloyModelGroup = scene->overlayGroup("AlloyModels");
 	if (!alloyModelGroup) alloyModelGroup = scene->addOverlayGroup("AlloyModels");
+	alloyModelGroup->clear();
 
 	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
 	auto aBrowserComment = new Comments::CommentNode("[browser#" + anURl.toString() + "]");
