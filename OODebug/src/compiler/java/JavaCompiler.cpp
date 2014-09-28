@@ -90,7 +90,7 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 
 void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node, const QString& message)
 {
-	const QString overlayGroupName("CompilerMessages");
+	static const QString overlayGroupName("CompilerMessages");
 
 	auto scene = item->scene();
 	auto overlayGroup = scene->overlayGroup(overlayGroupName);
