@@ -79,7 +79,7 @@ CompilerFeedback CompilerOutputParser::parseJavacErrorFormat(const QString& outp
 		}
 		else
 		{
-			qWarning() << "Not supported feedback type:" << type;
+			log.warning("Not supported feedback type: " + type);
 			messages.append(std::make_shared<CompilerMessage>(CompilerMessage::Other, file, msg, lineNumber, colNumber));
 		}
 	}

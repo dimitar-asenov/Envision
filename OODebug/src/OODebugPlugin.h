@@ -29,6 +29,8 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "oodebug_api.h"
 
+#include "Logger/src/Log.h"
+
 namespace OODebug {
 
 /**
@@ -49,6 +51,8 @@ class OODebugPlugin : public QObject, public Core::EnvisionPlugin
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
+
+		static Logger::Log& log();
 };
 
 }

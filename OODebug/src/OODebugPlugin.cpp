@@ -32,6 +32,14 @@
 
 namespace OODebug {
 
+Logger::Log& log = OODebugPlugin::log();
+
+Logger::Log& OODebugPlugin::log()
+{
+	static auto log = Logger::Log::getLogger("oodebug");
+	return *log;
+}
+
 bool OODebugPlugin::initialize(Core::EnvisionManager&)
 {
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
