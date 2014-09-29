@@ -18,7 +18,7 @@ var searchData=
   ['emptyline_5f',['emptyLine_',['../classOOVisualization_1_1VEmptyExpressionStyle.html#a24384a54c921a3fc7067a376ac42d209',1,'OOVisualization::VEmptyExpressionStyle']]],
   ['emptytip_5f',['emptyTip_',['../classVisualization_1_1VList.html#a1a5ff261c10a08a63458fea2913a9649',1,'Visualization::VList']]],
   ['enable_5fautomatic_5fsemantic_5fzoom',['ENABLE_AUTOMATIC_SEMANTIC_ZOOM',['../namespaceVisualization.html#ae114623ba45ea29c91ca7b9499f943f9',1,'Visualization']]],
-  ['enabled_5f',['enabled_',['../classVisualization_1_1VisualizationItemWrapperFormElement.html#ae458d7943acd2687cd41d095e9b11a20',1,'Visualization::VisualizationItemWrapperFormElement']]],
+  ['enabled_5f',['enabled_',['../classVisualization_1_1VisualizationItemWrapperFormElement.html#aca3ec29def688ef033bf27ad308defaa',1,'Visualization::VisualizationItemWrapperFormElement']]],
   ['end',['end',['../structInteraction_1_1TokenSplitData.html#a3b43a4dd26469de6e883c90dbdb48319',1,'Interaction::TokenSplitData']]],
   ['endarrow_5f',['endArrow_',['../classComments_1_1VCommentDiagramConnector.html#afaac84383b14a8425524a124922a68eb',1,'Comments::VCommentDiagramConnector']]],
   ['endcolumn_5f',['endColumn_',['../structExport_1_1Span.html#a6b784e0edf1cc805a981203db6e18a3b',1,'Export::Span']]],
@@ -66,5 +66,6 @@ var searchData=
   ['extensionid_5f',['extensionId_',['../classTestNodes_1_1PositionExtension.html#a906c616e8ffc34387e395b08b34827cf',1,'TestNodes::PositionExtension']]],
   ['extensions_5f',['extensions_',['../classModel_1_1AttributeChain.html#abc84b06d38f5014fe3b940709a9fc5ce',1,'Model::AttributeChain']]],
   ['externalmatches_5f',['externalMatches_',['../classVisualization_1_1AnchorLayoutFormElement.html#a31ff696ac3b272d26064f97750f133a5',1,'Visualization::AnchorLayoutFormElement']]],
+  ['externaltree_5f',['externalTree_',['../classFilePersistence_1_1SimpleTextFileStore.html#ac99337fd5e404f608d13c4a41e51bc38',1,'FilePersistence::SimpleTextFileStore']]],
   ['extracursorsoutsideshape',['extraCursorsOutsideShape',['../classVisualization_1_1DeclarativeItemBaseStyle.html#ac6cd3a1baf695aeefc5703c9b6749a44',1,'Visualization::DeclarativeItemBaseStyle::extraCursorsOutsideShape()'],['../classVisualization_1_1SequentialLayoutStyle.html#a5e1ba82a5fd21fb6772819334ef2a148',1,'Visualization::SequentialLayoutStyle::extraCursorsOutsideShape()']]]
 ];

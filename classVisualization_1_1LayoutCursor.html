@@ -131,6 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab8f700ac0f751b691b91b14f50b104a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a469358d499513d9e203af81e75b49659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutCursor.html#a469358d499513d9e203af81e75b49659">setVisualizationSize</a> (const QSize &amp;size)</td></tr>
 <tr class="separator:a469358d499513d9e203af81e75b49659"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab18eac968b5d5ffdb919d99ccdda376a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutCursor.html#ab18eac968b5d5ffdb919d99ccdda376a">update</a> () override</td></tr>
+<tr class="memdesc:ab18eac968b5d5ffdb919d99ccdda376a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called on every scene update to update the cursor.  <a href="#ab18eac968b5d5ffdb919d99ccdda376a">More...</a><br/></td></tr>
+<tr class="separator:ab18eac968b5d5ffdb919d99ccdda376a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88e18d50b1cb241ad7136409128aad32"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutCursor.html#a88e18d50b1cb241ad7136409128aad32">x</a> ()</td></tr>
 <tr class="separator:a88e18d50b1cb241ad7136409128aad32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb27db5346ee0d930f1d6b48536eafd2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1LayoutCursor.html#abb27db5346ee0d930f1d6b48536eafd2">y</a> ()</td></tr>
@@ -486,6 +489,35 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab18eac968b5d5ffdb919d99ccdda376a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::LayoutCursor::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called on every scene update to update the cursor. </p>
+<p>The default implementation checks if this is a BoxCursor and if so it assumes it is a whole item cursor to update its position and size. Otherwise it does nothing.</p>
+<p>Reimplement this in derived classes to update the cursor's position and size appropriately. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Cursor.html#a7899b2bb8a13d98da5a652a2a8af9348">Visualization::Cursor</a>.</p>
 
 </div>
 </div>

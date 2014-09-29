@@ -233,7 +233,7 @@ VIfStatement.cpp</h1>
 <div class="line"></div>
 <div class="line">ITEM_COMMON_DEFINITIONS(VIfStatement, <span class="stringliteral">&quot;item&quot;</span>)</div>
 <div class="line"></div>
-<div class="line">VIfStatement::VIfStatement(<a class="code" href="classVisualization_1_1Item.html">Item</a>* parent, NodeType* node, const StyleType* style) : <a class="code" href="classCore_1_1Reflect.html">Super</a>(parent, node, style)</div>
+<div class="line">VIfStatement::VIfStatement(<a class="code" href="classVisualization_1_1Item.html">Item</a>* parent, NodeType* node, const StyleType* <a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>) : <a class="code" href="classCore_1_1Reflect.html">Super</a>(parent, node, <a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>)</div>
 <div class="line">{}</div>
 <div class="line"></div>
 <div class="line"><span class="keywordtype">void</span> VIfStatement::updateGeometry(<span class="keywordtype">int</span> availableWidth, <span class="keywordtype">int</span> availableHeight)</div>
@@ -241,7 +241,7 @@ VIfStatement.cpp</h1>
 <div class="line">   <span class="keywordtype">int</span> contentWidth = 0;</div>
 <div class="line">   <span class="keywordflow">if</span> (thenBranch_) contentWidth += thenBranch_-&gt;widthInParent();</div>
 <div class="line">   <span class="keywordflow">if</span> (elseBranch_) contentWidth += elseBranch_-&gt;widthInParent();</div>
-<div class="line">   <span class="keywordflow">if</span> ( horizontal_ != (contentWidth &lt;= style()-&gt;contentWidthSwitchTreshold()))</div>
+<div class="line">   <span class="keywordflow">if</span> ( horizontal_ != (contentWidth &lt;= <a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>()-&gt;contentWidthSwitchTreshold()))</div>
 <div class="line">   {</div>
 <div class="line">      horizontal_ = !horizontal_;</div>
 <div class="line">      setUpdateNeeded(RepeatUpdate);</div>

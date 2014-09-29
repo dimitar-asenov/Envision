@@ -2,7 +2,7 @@ var searchData=
 [
   ['scene',['Scene',['../classVisualization_1_1Scene.html',1,'Visualization']]],
   ['scenehandleritem',['SceneHandlerItem',['../classVisualization_1_1SceneHandlerItem.html',1,'Visualization']]],
-  ['selecteditem',['SelectedItem',['../classVisualization_1_1SelectedItem.html',1,'Visualization']]],
+  ['selectionoverlay',['SelectionOverlay',['../classVisualization_1_1SelectionOverlay.html',1,'Visualization']]],
   ['selftestplugin',['SelfTestPlugin',['../classSelfTest_1_1SelfTestPlugin.html',1,'SelfTest']]],
   ['sequentiallayout',['SequentialLayout',['../classVisualization_1_1SequentialLayout.html',1,'Visualization']]],
   ['sequentiallayoutformelement',['SequentialLayoutFormElement',['../classVisualization_1_1SequentialLayoutFormElement.html',1,'Visualization']]],

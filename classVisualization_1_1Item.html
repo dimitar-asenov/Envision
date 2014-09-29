@@ -341,6 +341,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ac7142d65940817b229c37f6643f80ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a804d6744b5e85f8b5a179c96d1397f08"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a804d6744b5e85f8b5a179c96d1397f08">setDefaultClassHandler</a> (<a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> *<a class="el" href="classVisualization_1_1Item.html#a39da69824c3f4029e2471af9727f14cf">handler</a>)</td></tr>
 <tr class="separator:a804d6744b5e85f8b5a179c96d1397f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a5cb72307723bedef5b247e074b3364"><td class="memTemplParams" colspan="2">template&lt;class Definition , class Store , class CompareFunction , class CreateFunction , class SyncFunction &gt; </td></tr>
+<tr class="memitem:a2a5cb72307723bedef5b247e074b3364"><td class="memTemplItemLeft" align="right" valign="top">static bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a2a5cb72307723bedef5b247e074b3364">synchronizeCollections</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Item.html#a5c1f61676f0f48e983eb3fa74005eb6b">parent</a>, const Definition &amp;def, Store &amp;store, CompareFunction compare, CreateFunction create, SyncFunction sync)</td></tr>
+<tr class="memdesc:a2a5cb72307723bedef5b247e074b3364"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts elements that are not yet in store and adjusts the order to match that in def.  <a href="#a2a5cb72307723bedef5b247e074b3364">More...</a><br/></td></tr>
+<tr class="separator:a2a5cb72307723bedef5b247e074b3364"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -410,10 +414,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a94c785e278e2d6756d69423659b1b28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1de8c67e785ae6d1971a13d2b0426d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ab1de8c67e785ae6d1971a13d2b0426d8">setWidth</a> (int width)</td></tr>
 <tr class="separator:ab1de8c67e785ae6d1971a13d2b0426d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa050410819e9f23e994785eb36a1294b"><td class="memTemplParams" colspan="2">template&lt;class Definition , class Store , class CompareFunction , class CreateFunction , class SyncFunction &gt; </td></tr>
-<tr class="memitem:aa050410819e9f23e994785eb36a1294b"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aa050410819e9f23e994785eb36a1294b">synchronizeCollections</a> (const Definition &amp;def, Store &amp;store, CompareFunction compare, CreateFunction create, SyncFunction sync)</td></tr>
-<tr class="memdesc:aa050410819e9f23e994785eb36a1294b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inserts elements that are not yet in store and adjusts the order to match that in def.  <a href="#aa050410819e9f23e994785eb36a1294b">More...</a><br/></td></tr>
-<tr class="separator:aa050410819e9f23e994785eb36a1294b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22b86f223743efbb99d0bfeabbb21814"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a22b86f223743efbb99d0bfeabbb21814">synchronizeItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *&amp;item, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>)</td></tr>
 <tr class="separator:a22b86f223743efbb99d0bfeabbb21814"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a909f345b6574c2ac9c49ea3c3e54409e"><td class="memTemplParams" colspan="2">template&lt;class FieldType , class VisualizationType  = FieldType&gt; </td></tr>
@@ -524,9 +524,12 @@ Friends</h2></td></tr>
 <tr class="separator:ad9134536ed3f954add95f21d87c15758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a1e1ef8352d0a310bace7f7a3307d1378">Shape</a></td></tr>
 <tr class="separator:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f53d4b83618408d14b4b16a19727d6c"><td class="memTemplParams" colspan="2">template&lt;class ParentType , class VisualizationType &gt; </td></tr>
-<tr class="memitem:a0f53d4b83618408d14b4b16a19727d6c"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a0f53d4b83618408d14b4b16a19727d6c">VisualizationItemWrapperFormElement</a></td></tr>
-<tr class="separator:a0f53d4b83618408d14b4b16a19727d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace1ff08a1ee06e3d92849bc38ba56b72"><td class="memTemplParams" colspan="2">template&lt;class ParentType , class VisualizationType , bool externalSynchronization = false&gt; </td></tr>
+<tr class="memitem:ace1ff08a1ee06e3d92849bc38ba56b72"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ace1ff08a1ee06e3d92849bc38ba56b72">VisualizationItemWrapperFormElement</a></td></tr>
+<tr class="separator:ace1ff08a1ee06e3d92849bc38ba56b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a867b252ca097fc46660723dda713c5ec"><td class="memTemplParams" colspan="2">template&lt;class ChildItem , class Style , bool use&gt; </td></tr>
+<tr class="memitem:a867b252ca097fc46660723dda713c5ec"><td class="memTemplItemLeft" align="right" valign="top">struct&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a867b252ca097fc46660723dda713c5ec">VisualizationItemWrapperFormElementSyncMethod</a></td></tr>
+<tr class="separator:a867b252ca097fc46660723dda713c5ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a2b08d7c411aac65805ef268b89317272"></a>
@@ -3352,7 +3355,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa050410819e9f23e994785eb36a1294b"></a>
+<a class="anchor" id="a2a5cb72307723bedef5b247e074b3364"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -3364,6 +3367,12 @@ template&lt;class Definition , class Store , class CompareFunction , class Creat
         <tr>
           <td class="memname">bool Visualization::Item::synchronizeCollections </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const Definition &amp;&#160;</td>
           <td class="paramname"><em>def</em>, </td>
         </tr>
@@ -3399,7 +3408,7 @@ template&lt;class Definition , class Store , class CompareFunction , class Creat
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -3947,17 +3956,39 @@ template&lt;class ParentType , class VisualizationType &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0f53d4b83618408d14b4b16a19727d6c"></a>
+<a class="anchor" id="ace1ff08a1ee06e3d92849bc38ba56b72"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class ParentType , class VisualizationType &gt; </div>
+template&lt;class ParentType , class VisualizationType , bool externalSynchronization = false&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">friend class <a class="el" href="classVisualization_1_1VisualizationItemWrapperFormElement.html">VisualizationItemWrapperFormElement</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a867b252ca097fc46660723dda713c5ec"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ChildItem , class Style , bool use&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend struct VisualizationItemWrapperFormElementSyncMethod</td>
         </tr>
       </table>
   </td>

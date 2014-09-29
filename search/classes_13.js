@@ -110,6 +110,7 @@ var searchData=
   ['visualizationgroup',['VisualizationGroup',['../classVisualization_1_1VisualizationGroup.html',1,'Visualization']]],
   ['visualizationgroupsmanager',['VisualizationGroupsManager',['../classVisualization_1_1VisualizationGroupsManager.html',1,'Visualization']]],
   ['visualizationitemwrapperformelement',['VisualizationItemWrapperFormElement',['../classVisualization_1_1VisualizationItemWrapperFormElement.html',1,'Visualization']]],
+  ['visualizationitemwrapperformelementsyncmethod_3c_20childitem_2c_20style_2c_20true_20_3e',['VisualizationItemWrapperFormElementSyncMethod&lt; ChildItem, Style, true &gt;',['../structVisualization_1_1VisualizationItemWrapperFormElementSyncMethod_3_01ChildItem_00_01Style_00_01true_01_4.html',1,'Visualization']]],
   ['visualizationmanager',['VisualizationManager',['../classVisualization_1_1VisualizationManager.html',1,'Visualization']]],
   ['visualizationsuitabilityscore',['VisualizationSuitabilityScore',['../classVisualization_1_1VisualizationSuitabilityScore.html',1,'Visualization']]],
   ['vkeywordmethodcall',['VKeywordMethodCall',['../classOOVisualization_1_1VKeywordMethodCall.html',1,'OOVisualization']]],

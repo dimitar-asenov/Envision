@@ -88,7 +88,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classCore_1_1EnvisionApplication-members.html">List of all members</a> &#124;
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-slots">Private Slots</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Core::EnvisionApplication Class Reference</div>  </div>
 </div><!--header-->
@@ -102,13 +107,54 @@ Inheritance diagram for Core::EnvisionApplication:</div>
 </map>
  </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a2bd8c1f9128fa2ef68c40201828b703f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#a2bd8c1f9128fa2ef68c40201828b703f">IdleFunction</a> = std::function&lt; void()&gt;</td></tr>
+<tr class="separator:a2bd8c1f9128fa2ef68c40201828b703f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ade5208f2f5cbbf86707e70005e2d9a48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#ade5208f2f5cbbf86707e70005e2d9a48">EnvisionApplication</a> (int &amp;argc, char **argv)</td></tr>
 <tr class="separator:ade5208f2f5cbbf86707e70005e2d9a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac11cde295dcf0b4fa80f770a2c3fde44"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#ac11cde295dcf0b4fa80f770a2c3fde44">notify</a> (QObject *receiver, QEvent *event) override</td></tr>
 <tr class="separator:ac11cde295dcf0b4fa80f770a2c3fde44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:af8ae6280ea27b2a52bb475bafab58e89"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#af8ae6280ea27b2a52bb475bafab58e89">addOnUserInputIdleAction</a> (void *actionId, <a class="el" href="classCore_1_1EnvisionApplication.html#a2bd8c1f9128fa2ef68c40201828b703f">IdleFunction</a> action)</td></tr>
+<tr class="separator:af8ae6280ea27b2a52bb475bafab58e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1d8cc36b98df93238ea42777955708"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#aaa1d8cc36b98df93238ea42777955708">removeOnUserInputIdleAction</a> (void *actionId)</td></tr>
+<tr class="separator:aaa1d8cc36b98df93238ea42777955708"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-slots"></a>
+Private Slots</h2></td></tr>
+<tr class="memitem:aca7f9e844e0a7772426256d96999d606"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#aca7f9e844e0a7772426256d96999d606">userInputIdle</a> ()</td></tr>
+<tr class="separator:aca7f9e844e0a7772426256d96999d606"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:aaa4d473ef25c2e31b22242c5bc76aab9"><td class="memItemLeft" align="right" valign="top">static QMap&lt; void <br class="typebreak"/>
+*, <a class="el" href="classCore_1_1EnvisionApplication.html#a2bd8c1f9128fa2ef68c40201828b703f">IdleFunction</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#aaa4d473ef25c2e31b22242c5bc76aab9">idleActions</a> ()</td></tr>
+<tr class="separator:aaa4d473ef25c2e31b22242c5bc76aab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aec97cb399075486780a769448370c9f2"><td class="memItemLeft" align="right" valign="top">QTimer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionApplication.html#aec97cb399075486780a769448370c9f2">idleInputTimer_</a></td></tr>
+<tr class="separator:aec97cb399075486780a769448370c9f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a2bd8c1f9128fa2ef68c40201828b703f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classCore_1_1EnvisionApplication.html#a2bd8c1f9128fa2ef68c40201828b703f">Core::EnvisionApplication::IdleFunction</a> =  std::function&lt;void ()&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ade5208f2f5cbbf86707e70005e2d9a48"></a>
 <div class="memitem">
@@ -137,6 +183,63 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="af8ae6280ea27b2a52bb475bafab58e89"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::EnvisionApplication::addOnUserInputIdleAction </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>actionId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classCore_1_1EnvisionApplication.html#a2bd8c1f9128fa2ef68c40201828b703f">IdleFunction</a>&#160;</td>
+          <td class="paramname"><em>action</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aaa4d473ef25c2e31b22242c5bc76aab9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMap&lt; void *, <a class="el" href="classCore_1_1EnvisionApplication.html#a2bd8c1f9128fa2ef68c40201828b703f">EnvisionApplication::IdleFunction</a> &gt; &amp; Core::EnvisionApplication::idleActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ac11cde295dcf0b4fa80f770a2c3fde44"></a>
 <div class="memitem">
 <div class="memproto">
@@ -165,6 +268,74 @@ Public Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aaa1d8cc36b98df93238ea42777955708"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::EnvisionApplication::removeOnUserInputIdleAction </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>actionId</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aca7f9e844e0a7772426256d96999d606"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::EnvisionApplication::userInputIdle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aec97cb399075486780a769448370c9f2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QTimer Core::EnvisionApplication::idleInputTimer_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

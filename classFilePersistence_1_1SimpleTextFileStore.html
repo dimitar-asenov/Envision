@@ -119,6 +119,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a005893d795a54f78e3c3d03286d5c9e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abedce2e72fcd307402681cafb1bab08e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#abedce2e72fcd307402681cafb1bab08e">SimpleTextFileStore</a> (<a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a> fileGetter)</td></tr>
 <tr class="separator:abedce2e72fcd307402681cafb1bab08e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a975b2f9fd534c54c3115c1a2f314ddb7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a975b2f9fd534c54c3115c1a2f314ddb7">SimpleTextFileStore</a> (<a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> *externalTree)</td></tr>
+<tr class="separator:a975b2f9fd534c54c3115c1a2f314ddb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d938008f6781e47199471e20fc26ad5"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a7d938008f6781e47199471e20fc26ad5">~SimpleTextFileStore</a> ()</td></tr>
 <tr class="separator:a7d938008f6781e47199471e20fc26ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64533f3007787bae95498b7c30c1cd81"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html">SimpleTextFileStore</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a64533f3007787bae95498b7c30c1cd81">clone</a> () const override</td></tr>
@@ -191,6 +193,8 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ab770a002c5c5e7d243bf4fc1289d1a9a"><td class="memItemLeft" align="right" valign="top">QDir&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab770a002c5c5e7d243bf4fc1289d1a9a">baseFolder_</a></td></tr>
 <tr class="memdesc:ab770a002c5c5e7d243bf4fc1289d1a9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The folder where all trees are stored.  <a href="#ab770a002c5c5e7d243bf4fc1289d1a9a">More...</a><br/></td></tr>
 <tr class="separator:ab770a002c5c5e7d243bf4fc1289d1a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac99337fd5e404f608d13c4a41e51bc38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ac99337fd5e404f608d13c4a41e51bc38">externalTree_</a> {}</td></tr>
+<tr class="separator:ac99337fd5e404f608d13c4a41e51bc38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe372a8281ee88c3de10ad07d54e2f9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#afe372a8281ee88c3de10ad07d54e2f9b">fileGetter_</a> {}</td></tr>
 <tr class="memdesc:afe372a8281ee88c3de10ad07d54e2f9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">If specified, this function will be used to get the data of the files.  <a href="#afe372a8281ee88c3de10ad07d54e2f9b">More...</a><br/></td></tr>
 <tr class="separator:afe372a8281ee88c3de10ad07d54e2f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -261,6 +265,22 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ab0515edeb0ab9532bcbe2eb96f2ba1c0">FileGetterFunction</a>&#160;</td>
           <td class="paramname"><em>fileGetter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a975b2f9fd534c54c3115c1a2f314ddb7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FilePersistence::SimpleTextFileStore::SimpleTextFileStore </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> *&#160;</td>
+          <td class="paramname"><em>externalTree</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1051,6 +1071,26 @@ Static Private Attributes</h2></td></tr>
 
 <p>The folder where all trees are stored. </p>
 <p>Each tree is a separate sub folder in the base folder. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac99337fd5e404f608d13c4a41e51bc38"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a>* FilePersistence::SimpleTextFileStore::externalTree_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

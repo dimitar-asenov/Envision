@@ -2,7 +2,6 @@ var searchData=
 [
   ['namechange',['NameChange',['../classModel_1_1NameChange.html',1,'Model']]],
   ['nameimport',['NameImport',['../classOOModel_1_1NameImport.html',1,'OOModel']]],
-  ['nameoverlay',['NameOverlay',['../classVisualization_1_1NameOverlay.html',1,'Visualization']]],
   ['nametext',['NameText',['../classModel_1_1NameText.html',1,'Model']]],
   ['newexpression',['NewExpression',['../classOOModel_1_1NewExpression.html',1,'OOModel']]],
   ['node',['Node',['../classModel_1_1Node.html',1,'Model']]],

@@ -182,12 +182,19 @@ Static Protected Member Functions</h2></td></tr>
 &lt; VisualizationType &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DeclarativeItem.html#ab52dad2d0dbbae628460e89aeb422a10">item</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *VisualizationType::*item, std::function&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> *(VisualizationType *v)&gt; nodeGetter)</td></tr>
 <tr class="memdesc:ab52dad2d0dbbae628460e89aeb422a10"><td class="mdescLeft">&#160;</td><td class="mdescRight">A factory method to get an item wrapper element with a node only, it takes a pointer to member, where the visualization <em>item</em> should be stored, and a method to get the node (<em>nodeGetter</em>) with which the <em>item</em> should be associated.  <a href="#ab52dad2d0dbbae628460e89aeb422a10">More...</a><br/></td></tr>
 <tr class="separator:ab52dad2d0dbbae628460e89aeb422a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae9213e48ddf45ba535bc1f014c9d9c4"><td class="memTemplParams" colspan="2">template&lt;class ChildItemVisualizationType &gt; </td></tr>
+<tr class="memitem:aae9213e48ddf45ba535bc1f014c9d9c4"><td class="memTemplItemLeft" align="right" valign="top">static <br class="typebreak"/>
+<a class="el" href="classVisualization_1_1VisualizationItemWrapperFormElement.html">VisualizationItemWrapperFormElement</a><br class="typebreak"/>
+&lt; VisualizationType, <br class="typebreak"/>
+ChildItemVisualizationType, <br class="typebreak"/>
+true &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DeclarativeItem.html#aae9213e48ddf45ba535bc1f014c9d9c4">item</a> (ChildItemVisualizationType *VisualizationType::*item)</td></tr>
+<tr class="memdesc:aae9213e48ddf45ba535bc1f014c9d9c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">A factory method to get an item wrapper element with a visualization only, it takes a pointer to member, where the visualization <em>item</em> should be stored, and a method to get the style (<em>styleGetter</em>) with which the <em>item</em> should be created.  <a href="#aae9213e48ddf45ba535bc1f014c9d9c4">More...</a><br/></td></tr>
+<tr class="separator:aae9213e48ddf45ba535bc1f014c9d9c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95bb8e629c717d7bcefabf4c9fafb490"><td class="memTemplParams" colspan="2">template&lt;class ChildItemVisualizationType &gt; </td></tr>
 <tr class="memitem:a95bb8e629c717d7bcefabf4c9fafb490"><td class="memTemplItemLeft" align="right" valign="top">static <br class="typebreak"/>
 <a class="el" href="classVisualization_1_1VisualizationItemWrapperFormElement.html">VisualizationItemWrapperFormElement</a><br class="typebreak"/>
 &lt; VisualizationType, <br class="typebreak"/>
 ChildItemVisualizationType &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DeclarativeItem.html#a95bb8e629c717d7bcefabf4c9fafb490">item</a> (ChildItemVisualizationType *VisualizationType::*item, std::function&lt; const typename ChildItemVisualizationType::StyleType *(VisualizationType *v)&gt; styleGetter)</td></tr>
-<tr class="memdesc:a95bb8e629c717d7bcefabf4c9fafb490"><td class="mdescLeft">&#160;</td><td class="mdescRight">A factory method to get an item wrapper element with a visualization only, it takes a pointer to member, where the visualization <em>item</em> should be stored, and a method to get the style (<em>styleGetter</em>) with which the <em>item</em> should be created.  <a href="#a95bb8e629c717d7bcefabf4c9fafb490">More...</a><br/></td></tr>
 <tr class="separator:a95bb8e629c717d7bcefabf4c9fafb490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17b381bff7ac68c03877b92b272221b0"><td class="memTemplParams" colspan="2">template&lt;class ChildItemVisualizationType , class ParentStyleType &gt; </td></tr>
 <tr class="memitem:a17b381bff7ac68c03877b92b272221b0"><td class="memTemplItemLeft" align="right" valign="top">static <br class="typebreak"/>
@@ -447,6 +454,37 @@ template&lt;class VisualizationType &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aae9213e48ddf45ba535bc1f014c9d9c4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class VisualizationType &gt; </div>
+<div class="memtemplate">
+template&lt;class ChildItemVisualizationType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1VisualizationItemWrapperFormElement.html">VisualizationItemWrapperFormElement</a>&lt; VisualizationType, ChildItemVisualizationType, true &gt; * <a class="el" href="classVisualization_1_1DeclarativeItem.html">Visualization::DeclarativeItem</a>&lt; VisualizationType &gt;::item </td>
+          <td>(</td>
+          <td class="paramtype">ChildItemVisualizationType *VisualizationType::*&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A factory method to get an item wrapper element with a visualization only, it takes a pointer to member, where the visualization <em>item</em> should be stored, and a method to get the style (<em>styleGetter</em>) with which the <em>item</em> should be created. </p>
+<p>To call it, one has to supply the visualization type and the parent type (which is always 'I') as the template arguments. </p>
+
+</div>
+</div>
 <a class="anchor" id="a95bb8e629c717d7bcefabf4c9fafb490"></a>
 <div class="memitem">
 <div class="memproto">
@@ -482,9 +520,6 @@ template&lt;class ChildItemVisualizationType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>A factory method to get an item wrapper element with a visualization only, it takes a pointer to member, where the visualization <em>item</em> should be stored, and a method to get the style (<em>styleGetter</em>) with which the <em>item</em> should be created. </p>
-<p>To call it, one has to supply the visualization type and the parent type (which is always 'I') as the template arguments. </p>
 
 </div>
 </div>

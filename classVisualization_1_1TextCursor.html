@@ -147,6 +147,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a36812113de1db764c4f24d840e3d46d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ff8d73544b897884f8ccf292c159f98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextCursor.html#a1ff8d73544b897884f8ccf292c159f98">setX</a> (int <a class="el" href="classVisualization_1_1TextCursor.html#abafcd39766244e57e3fda1806ef186a6">xBegin</a>, int <a class="el" href="classVisualization_1_1TextCursor.html#a58e2745151b31bdf4aadf3957dc43cb6">xEnd</a>)</td></tr>
 <tr class="separator:a1ff8d73544b897884f8ccf292c159f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a015cd3ddc78f25462f20c3cb4a7a9fb7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextCursor.html#a015cd3ddc78f25462f20c3cb4a7a9fb7">update</a> () override</td></tr>
+<tr class="memdesc:a015cd3ddc78f25462f20c3cb4a7a9fb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called on every scene update to update the cursor.  <a href="#a015cd3ddc78f25462f20c3cb4a7a9fb7">More...</a><br/></td></tr>
+<tr class="separator:a015cd3ddc78f25462f20c3cb4a7a9fb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae07471d5ede9fba86c6236542c24a1e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextCursor.html#ae07471d5ede9fba86c6236542c24a1e1">update</a> (const QFontMetrics &amp;qfm)</td></tr>
 <tr class="separator:ae07471d5ede9fba86c6236542c24a1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abafcd39766244e57e3fda1806ef186a6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextCursor.html#abafcd39766244e57e3fda1806ef186a6">xBegin</a> ()</td></tr>
@@ -677,6 +680,35 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a015cd3ddc78f25462f20c3cb4a7a9fb7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::TextCursor::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Called on every scene update to update the cursor. </p>
+<p>The default implementation checks if this is a BoxCursor and if so it assumes it is a whole item cursor to update its position and size. Otherwise it does nothing.</p>
+<p>Reimplement this in derived classes to update the cursor's position and size appropriately. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Cursor.html#a7899b2bb8a13d98da5a652a2a8af9348">Visualization::Cursor</a>.</p>
 
 </div>
 </div>

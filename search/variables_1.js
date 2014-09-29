@@ -14,7 +14,6 @@ var searchData=
   ['borderpen',['borderPen',['../classVisualization_1_1GridLayoutStyle.html#a6ef5da4506cce7df976199af83c01861',1,'Visualization::GridLayoutStyle']]],
   ['bottomcontentmarginfraction',['bottomContentMarginFraction',['../classVisualization_1_1SvgShapeStyle.html#afca89162cd354771f7e2d293cba79011',1,'Visualization::SvgShapeStyle']]],
   ['bottominnermargin',['bottomInnerMargin',['../classVisualization_1_1PositionLayoutStyle.html#aa42a84f7df609707226b936cf40208da',1,'Visualization::PositionLayoutStyle']]],
-  ['bottomitems_5f',['bottomItems_',['../classVisualization_1_1NameOverlay.html#afd984f2267d67a12a431a617f2437e18',1,'Visualization::NameOverlay']]],
   ['bottommargin',['bottomMargin',['../classVisualization_1_1LayoutStyle.html#a5a1288568b368c7ea58e8abc680647c1',1,'Visualization::LayoutStyle']]],
   ['boundingrect_5f',['boundingRect_',['../classVisualization_1_1Item.html#a99084bee37da6439935b68d4d1c7655c',1,'Visualization::Item']]],
   ['boxendarrow_5f',['boxEndArrow_',['../classComments_1_1CommentDiagramToolbar.html#a5eb0a2207a7226464eff71e612a6e0a3',1,'Comments::CommentDiagramToolbar']]],
