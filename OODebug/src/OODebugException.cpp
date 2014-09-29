@@ -24,44 +24,19 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "OODebugException.h"
 
-#include "../export_api.h"
-#include "SourceFragment.h"
-#include "TextFragment.h"
+namespace OODebug {
 
-namespace Export {
+OODebugException::OODebugException(const QString& message) :
+	Core::EnvisionException(message)
+{
+}
 
-class SourceDir;
+const QString& OODebugException::name() const
+{
+	static QString ename("OODebugException");
+	return ename;
+}
 
-class EXPORT_API SourceFile {
-	public:
-		SourceFile(SourceDir* parent, const QString& name);
-		~SourceFile();
-
-		const QString& name() const;
-		/**
-		 * Returns the relative path of this file including the name at the end.
-		 */
-		QString path() const;
-		QList<SourceFragment*> fragments();
-
-		template <class T> T* append(T* fragment);
-		TextFragment* append(Model::Node* node, const QString& text);
-
-	private:
-		SourceDir* parent_{};
-		QString name_;
-
-		QList<SourceFragment*> fragments_;
-};
-
-inline const QString& SourceFile::name() const { return name_; }
-inline QList<SourceFragment*> SourceFile::fragments() { return fragments_; }
-
-template <class T>
-inline T* SourceFile::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
-inline TextFragment* SourceFile::append(Model::Node* node, const QString& text)
-{ return append(new TextFragment(node, text)); }
-
-} /* namespace Export */
+}

@@ -24,44 +24,37 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "OODebugPlugin.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
-#include "../export_api.h"
-#include "SourceFragment.h"
-#include "TextFragment.h"
+#include "commands/CJavaCompile.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
-namespace Export {
+namespace OODebug {
 
-class SourceDir;
+Logger::Log& log = OODebugPlugin::log();
 
-class EXPORT_API SourceFile {
-	public:
-		SourceFile(SourceDir* parent, const QString& name);
-		~SourceFile();
+Logger::Log& OODebugPlugin::log()
+{
+	static auto log = Logger::Log::getLogger("oodebug");
+	return *log;
+}
 
-		const QString& name() const;
-		/**
-		 * Returns the relative path of this file including the name at the end.
-		 */
-		QString path() const;
-		QList<SourceFragment*> fragments();
+bool OODebugPlugin::initialize(Core::EnvisionManager&)
+{
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
 
-		template <class T> T* append(T* fragment);
-		TextFragment* append(Model::Node* node, const QString& text);
+	return true;
+}
 
-	private:
-		SourceDir* parent_{};
-		QString name_;
+void OODebugPlugin::unload()
+{
+}
 
-		QList<SourceFragment*> fragments_;
-};
+void OODebugPlugin::selfTest(QString testid)
+{
+	if (testid.isEmpty()) SelfTest::TestManager<OODebugPlugin>::runAllTests().printResultStatistics();
+	else SelfTest::TestManager<OODebugPlugin>::runTest(testid).printResultStatistics();
+}
 
-inline const QString& SourceFile::name() const { return name_; }
-inline QList<SourceFragment*> SourceFile::fragments() { return fragments_; }
-
-template <class T>
-inline T* SourceFile::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
-inline TextFragment* SourceFile::append(Model::Node* node, const QString& text)
-{ return append(new TextFragment(node, text)); }
-
-} /* namespace Export */
+}

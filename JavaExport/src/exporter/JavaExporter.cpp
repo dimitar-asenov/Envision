@@ -30,7 +30,6 @@
 
 #include "Export/src/writer/Exporter.h"
 #include "Export/src/writer/FragmentLayouter.h"
-#include "Export/src/tree/SourceDir.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace JavaExport {
@@ -38,11 +37,19 @@ namespace JavaExport {
 QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
 														  std::shared_ptr<Export::TextToNodeMap>& map)
 {
+	std::shared_ptr<Export::SourceDir> dummy;
+	return exportTree(manager, pathToProjectContainerDirectory, map, dummy);
+}
+
+QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+														  std::shared_ptr<Export::TextToNodeMap>& map,
+														  std::shared_ptr<Export::SourceDir>& dir)
+{
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
 
 	DeclarationVisitor visitor;
-	auto dir = std::unique_ptr<Export::SourceDir>( visitor.visitProject(project) );
+	dir = std::shared_ptr<Export::SourceDir>( visitor.visitProject(project) );
 
 	auto layouter = Export::FragmentLayouter{"\t"};
 	layouter.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");

@@ -26,42 +26,33 @@
 
 #pragma once
 
-#include "../export_api.h"
-#include "SourceFragment.h"
-#include "TextFragment.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "oodebug_api.h"
 
-namespace Export {
+#include "Logger/src/Log.h"
 
-class SourceDir;
+namespace OODebug {
 
-class EXPORT_API SourceFile {
+/**
+ * Implements the interface between the OODebug plug-in and Envision.
+ *
+ * The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before
+ * any other operations are performed.
+ *
+ * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
+ */
+class OODebugPlugin : public QObject, public Core::EnvisionPlugin
+{
+	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
+	Q_INTERFACES(Core::EnvisionPlugin)
+
 	public:
-		SourceFile(SourceDir* parent, const QString& name);
-		~SourceFile();
+		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual void unload() override;
+		virtual void selfTest(QString testid) override;
 
-		const QString& name() const;
-		/**
-		 * Returns the relative path of this file including the name at the end.
-		 */
-		QString path() const;
-		QList<SourceFragment*> fragments();
-
-		template <class T> T* append(T* fragment);
-		TextFragment* append(Model::Node* node, const QString& text);
-
-	private:
-		SourceDir* parent_{};
-		QString name_;
-
-		QList<SourceFragment*> fragments_;
+		static Logger::Log& log();
 };
 
-inline const QString& SourceFile::name() const { return name_; }
-inline QList<SourceFragment*> SourceFile::fragments() { return fragments_; }
-
-template <class T>
-inline T* SourceFile::append(T* fragment) { Q_ASSERT(fragment); fragments_.append(fragment); return fragment;}
-inline TextFragment* SourceFile::append(Model::Node* node, const QString& text)
-{ return append(new TextFragment(node, text)); }
-
-} /* namespace Export */
+}
