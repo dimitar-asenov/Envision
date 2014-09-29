@@ -1,6 +1,6 @@
 /*! \page credits Credits
 
-Envision is a research protoype developed at the <a href="http://www.pm.inf.ethz.ch/">Chair of Programming Methodology</a>, Department of Computer Science, ETH Zurich. External contributions are welcome.
+Envision is a research prototype developed at the <a href="http://www.pm.inf.ethz.ch/">Chair of Programming Methodology</a>, Department of Computer Science, ETH Zurich. External contributions are welcome.
 
 Envision maintainers : Dimitar Asenov
 
@@ -15,7 +15,8 @@ Dimitar Asenov - https://github.com/dimitar-asenov
 
 <br>
 Sascha Dinkel - https://github.com/Sashixi
-		- Improvements to the comments framework: diagram editor, tables, overall integration, Doxygen generation.
+		- Improvements to the comments framework: diagram editor, tables, overall integration, Doxygen generation
+		- Initial Alloy integration
 
 <br>
 Andrea Helfenstein - https://github.com/helandre
@@ -33,6 +34,8 @@ Jonas Trappenberg - https://github.com/teeberg
 Lukas Vogel - https://github.com/lukedirtwalker
 		- C++ import plug-in
 		- Enhancements to the object-oriented model
+		- Improvements to the build process and style guides
+		- Java debugging support
 
 \section special Special Thanks
 	- Peter Müller - for advising the PhD studies of Dimitar and guiding the work on Envision.
