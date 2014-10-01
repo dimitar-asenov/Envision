@@ -124,7 +124,16 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 	if (!classs->baseClasses()->isEmpty())
 	{
 		*fragment << " extends ";
-		*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
+		*fragment << expression(classs->baseClasses()->at(0));
+
+		if (classs->baseClasses()->size() > 1)
+		{
+			*fragment << " implements ";
+			int i = 1;
+			for (; i < classs->baseClasses()->size() - 1; ++i)
+				*fragment << expression(classs->baseClasses()->at(i)) << ", ";
+			*fragment << expression(classs->baseClasses()->at(i));
+		}
 	}
 
 	notAllowed(classs->friends());
