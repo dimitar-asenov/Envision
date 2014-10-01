@@ -282,13 +282,19 @@ Model::NodeIdType Merge::findConflictUnit(const GenericNode* node, const std::un
 const QStringList Merge::ORDERED_LISTS = {"StatementItemList",
 														"TypedListOfResult",
 														"TypedListOfFormalTypeArgument",
-														"TypedListOfExpression"
+														"TypedListOfExpression",
+														"TypedListOfDeclaration",
+														"TypedListOfMemberInitializer",
+														"TypedListOfEnumerator"
 													  };
 
 const QStringList Merge::UNORDERED_LISTS = {"TypedListOfClass",
 														 "TypedListOfMethod",
 														 "TypedListOfFormalArgument",
-														 "TypedListOfField"};
+														 "TypedListOfFormalResult",
+														 "TypedListOfField",
+														 "TypedListOfUsedLibrary"
+														 };
 
 
 const QStringList Merge::STATEMENTS = {"Block",
@@ -838,28 +844,34 @@ bool Merge::applyStationaryChangeToTree(const std::unique_ptr<GenericTree>& tree
 
 void Merge::performInsertIntoList(GenericNode* parent, GenericNode* node)
 {
-	Q_ASSERT(mergedLists_.contains(parent->id()));
-
-	ListType listType = getListType(parent);
-	bool resolveOrder = listType != ListType::OrderedList;
-
-	QList<Model::NodeIdType> targetList;
-	bool success = applyListMerge(targetList, mergedLists_.value(parent->id()), resolveOrder);
-	Q_ASSERT(success);
-	int index = listInsertionIndex(targetList, genericNodeListToNodeIdList(parent->children()), node->id());
-
-	for (auto child : parent->children())
+	if (mergedLists_.contains(parent->id()))
 	{
-		int childIndex = child->name().toInt();
-		if (index <= childIndex)
-		{
-			++childIndex;
-			child->setName(QString::number(childIndex));
-		}
-	}
+		ListType listType = getListType(parent);
+		bool resolveOrder = listType != ListType::OrderedList;
 
-	node->setName(QString::number(index));
-	parent->addChild(node);
+		QList<Model::NodeIdType> targetList;
+		bool success = applyListMerge(targetList, mergedLists_.value(parent->id()), resolveOrder);
+		Q_ASSERT(success);
+		int index = listInsertionIndex(targetList, genericNodeListToNodeIdList(parent->children()), node->id());
+
+		for (auto child : parent->children())
+		{
+			int childIndex = child->name().toInt();
+			if (index <= childIndex)
+			{
+				++childIndex;
+				child->setName(QString::number(childIndex));
+			}
+		}
+
+		node->setName(QString::number(index));
+		parent->addChild(node);
+	}
+	else
+	{
+		parent->addChild(node);
+		node->setParent(parent);
+	}
 }
 
 void Merge::performReorderInList(GenericNode* parent, GenericNode* node)
