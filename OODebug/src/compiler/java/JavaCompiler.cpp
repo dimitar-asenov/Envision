@@ -42,7 +42,6 @@ namespace OODebug {
 
 void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
-	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
 	auto nodeItemMap = Visualization::Item::nodeItemsMap();
 
 	std::shared_ptr<Export::TextToNodeMap> map;
@@ -61,10 +60,22 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		}
 	}
 
+	static const QString buildFolder("build");
+	QDir buildDir(pathToProjectContainerDirectory + QDir::separator() + buildFolder);
+	if (!buildDir.exists())
+	{
+		QDir projectDir(pathToProjectContainerDirectory);
+		Q_ASSERT(projectDir.exists());
+		Q_ASSERT(projectDir.mkdir(buildFolder));
+	}
+	const QStringList buildFolderArgs = {"-d", pathToProjectContainerDirectory + QDir::separator() + buildFolder};
+	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
+
 	for (auto file : dir->recursiveFiles())
 	{
 		Q_ASSERT(file);
-		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + file->path());
+		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + file->path(),
+														 buildFolderArgs);
 		for (auto& message : feedback.messages())
 		{
 			// In the map we don't have the pathToProjectContainerDirectory prefix
