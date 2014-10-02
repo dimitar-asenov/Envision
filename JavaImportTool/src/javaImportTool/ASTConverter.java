@@ -579,10 +579,10 @@ public class ASTConverter {
 		if ((modifiers & Modifier.PRIVATE) != 0) modifiersToSet |= 0x00000002;
 		if ((modifiers & Modifier.PROTECTED) != 0)  modifiersToSet |= 0x00000004;
 		if ((modifiers & Modifier.STATIC) != 0)  modifiersToSet |= 0x00000008;
+		if ((modifiers & Modifier.FINAL) != 0)  modifiersToSet |= 0x00000010;
+		if ((modifiers & Modifier.ABSTRACT) != 0)  modifiersToSet |= 0x00000020;
 
 		// TODO: Handle other modifiers
-		// abstract
-		// final
 		// native
 		// synchronized
 		// transient
