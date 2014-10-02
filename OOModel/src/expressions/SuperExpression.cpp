@@ -23,34 +23,47 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "SuperExpression.h"
+#include "declarations/Class.h"
+#include "../types/ClassType.h"
+#include "../types/ErrorType.h"
 
-#pragma once
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::SuperExpression)
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+namespace OOModel {
 
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SuperExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SuperExpression)
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+Type* SuperExpression::type()
+{
+	auto p = parent();
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+	while (p)
+	{
+		auto cl = dynamic_cast<Class*> (p);
+		if (cl)
+		{
+			if (cl->baseClasses()->isEmpty())
+			{
+				if (auto base = cl->implicitBaseFromProject())
+					return new ClassType(base, true);
+				else
+					return new ErrorType("Invalid usage of 'super' expression. Class has no super class.");
+			}
+			else
+			{
+				if (auto base = Class::expressionToClass(cl->baseClasses()->first()))
+					return new ClassType(base, true);
+				else
+					return new ErrorType("Invalid usage of 'super' expression. Base class expression is incorrect.");
+			}
+		}
+		p = p->parent();
+	}
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+	return new ErrorType("Invalid position for 'super' expression. Not within a class.");
+}
+
+} /* namespace OOModel */

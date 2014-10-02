@@ -26,31 +26,33 @@
 
 #pragma once
 
+#include "../oovisualization_api.h"
 #include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
 
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "OOModel/src/expressions/SuperExpression.h"
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+namespace OOVisualization {
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+class OOVISUALIZATION_API VSuperExpression : public Super<VExpression<VSuperExpression, Visualization::Item,
+OOModel::SuperExpression>>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(VSuperExpression, Visualization::StaticStyle)
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+	public:
+		VSuperExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
+		virtual ~VSuperExpression();
+
+		Visualization::Static* item() const;
+
+	protected:
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		Visualization::Static* vis_;
+};
+
+inline Visualization::Static* VSuperExpression::item() const { return vis_;}
+
+} /* namespace OOVisualization */

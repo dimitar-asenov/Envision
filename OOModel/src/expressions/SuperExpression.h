@@ -26,31 +26,18 @@
 
 #pragma once
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+#include "Expression.h"
 
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SuperExpression)
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+namespace OOModel {
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+class OOMODEL_API SuperExpression: public Super<Expression>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(SuperExpression)
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+	public:
+		virtual Type* type();
+};
+
+} /* namespace OOModel */
