@@ -841,6 +841,7 @@ public class ASTConverter {
 			node.setChild("falseExpression", expression(ce.getElseExpression(), "falseExpression"));
 		} else if (e instanceof FieldAccess)
 		{
+			// TODO: This code is almost identical to SuperFieldAccess
 			FieldAccess fa = (FieldAccess) e;
 			node = new Node(null, "ReferenceExpression", name);
 			if (fa.getExpression() != null)
@@ -892,6 +893,7 @@ public class ASTConverter {
 			node = new Node(null, "EmptyExpression", name); //TODO: Implement this
 		else if (e instanceof MethodInvocation)
 		{
+			// TODO: This code is almost identical to SuperMethodInvocation
 			MethodInvocation ie = (MethodInvocation) e;
 			node = new Node(null, "MethodCallExpression", name);
 			Node refNode = new Node(null, "ReferenceExpression", "callee");
@@ -988,9 +990,31 @@ public class ASTConverter {
 			node = new Node(null, "StringLiteral", name);
 			node.child("value").setStringValue(sl.getLiteralValue());
 		} else if (e instanceof SuperFieldAccess)
-			node = new Node(null, "EmptyExpression", name); //TODO: Implement this
+		{
+			// TODO: This code is almost identical to FieldAccess
+			SuperFieldAccess fa = (SuperFieldAccess) e;
+			node = new Node(null, "ReferenceExpression", name);
+			node.add(new Node(null, "SuperExpression", "prefix"));
+			node.child("ref").setStringValue("____NULL____:" + fa.getName().getIdentifier());
+		}
 		else if (e instanceof SuperMethodInvocation)
-			node = new Node(null, "EmptyExpression", name); //TODO: Implement this
+		{
+			// TODO: This code is almost identical to MethodInvocation
+			SuperMethodInvocation ie = (SuperMethodInvocation) e;
+			node = new Node(null, "MethodCallExpression", name);
+			Node refNode = new Node(null, "ReferenceExpression", "callee");
+			node.setChild("callee", refNode);
+			
+			refNode.add(new Node(null, "SuperExpression", "prefix"));
+			refNode.child("ref").setStringValue("____NULL____:" + ie.getName().getIdentifier());
+			
+			for (Type ta : (List<Type>) ie.typeArguments())
+				refNode.child("typeArguments").add(
+						typeExpression(ta, Integer.toString(refNode.child("typeArguments").numChildren())));
+			
+			for (Expression arg : (List<Expression>) ie.arguments())
+				node.child("arguments").add(expression(arg, Integer.toString(node.child("arguments").numChildren())));
+		}
 		else if (e instanceof ThisExpression)
 			node = new Node(null, "ThisExpression", name);
 		else if (e instanceof TypeLiteral)
