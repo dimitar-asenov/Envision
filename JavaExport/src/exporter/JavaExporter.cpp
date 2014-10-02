@@ -52,6 +52,7 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 	dir = std::shared_ptr<Export::SourceDir>( visitor.visitProject(project) );
 
 	auto layouter = Export::FragmentLayouter{"\t"};
+	layouter.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
 	layouter.addRule("vertical", Export::FragmentLayouter::NoIndentation, "", "\n", "");
 	layouter.addRule("sections", Export::FragmentLayouter::NoIndentation, "", "\n\n", "");
 	layouter.addRule("bodySections", Export::FragmentLayouter::NewLineBefore
