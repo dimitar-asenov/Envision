@@ -132,16 +132,31 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 	if (!classs->baseClasses()->isEmpty())
 	{
-		*fragment << " extends ";
-		*fragment << expression(classs->baseClasses()->at(0));
-
-		if (classs->baseClasses()->size() > 1)
+		if (Class::ConstructKind::Interface == classs->constructKind() ||
+			 Class::ConstructKind::Annotation == classs->constructKind())
+		{
+			*fragment << " extends ";
+			*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
+		}
+		else if (Class::ConstructKind::Enum == classs->constructKind())
 		{
 			*fragment << " implements ";
-			int i = 1;
-			for (; i < classs->baseClasses()->size() - 1; ++i)
-				*fragment << expression(classs->baseClasses()->at(i)) << ", ";
-			*fragment << expression(classs->baseClasses()->at(i));
+			*fragment << list(classs->baseClasses(), ExpressionVisitor(data()), "comma");
+		}
+		else
+		{
+			// TODO: there might not be an extend and only implements.
+			*fragment << " extends ";
+			*fragment << expression(classs->baseClasses()->at(0));
+
+			if (classs->baseClasses()->size() > 1)
+			{
+				*fragment << " implements ";
+				int i = 1;
+				for (; i < classs->baseClasses()->size() - 1; ++i)
+					*fragment << expression(classs->baseClasses()->at(i)) << ", ";
+				*fragment << expression(classs->baseClasses()->at(i));
+			}
 		}
 	}
 
