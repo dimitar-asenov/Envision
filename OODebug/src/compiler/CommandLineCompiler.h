@@ -47,13 +47,15 @@ class OODEBUG_API CommandLineCompiler
 			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
 
 		/**
-		 * Compiles the file with name \a fileName using the arguments as in \a args.
+		 * Starts the compile command in the directory \a workingDirectory and
+		 * compiles the file with name \a fileName using the arguments as in \a args.
 		 *
 		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
 		 *
 		 * Note: This call is blocking, it blocks until the command is finished.
 		 */
-		CompilerFeedback compileFile(const QString& fileName, const QStringList& args = QStringList());
+		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
+											  const QStringList& args = QStringList());
 
 	private:
 		QString command_;

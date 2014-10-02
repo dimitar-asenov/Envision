@@ -68,18 +68,26 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		Q_ASSERT(projectDir.exists());
 		Q_ASSERT(projectDir.mkdir(buildFolder));
 	}
-	const QStringList buildFolderArgs = {"-d", pathToProjectContainerDirectory + QDir::separator() + buildFolder};
+	const QStringList buildFolderArgs = {"-d", QString("..") + QDir::separator() + buildFolder};
 	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
 
 	for (auto file : dir->recursiveFiles())
 	{
 		Q_ASSERT(file);
-		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + file->path(),
-														 buildFolderArgs);
+		auto filePath = file->path();
+		// remove the src prefix
+		if (filePath.startsWith(QString("src") + QDir::separator()))
+			filePath.replace(0, 4, "");
+		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + "src",
+														 filePath, buildFolderArgs);
 		for (auto& message : feedback.messages())
 		{
-			// In the map we don't have the pathToProjectContainerDirectory prefix
-			auto fileName = message->getFileName().remove(pathToProjectContainerDirectory + QDir::separator());
+			// In the map we have the src prefix
+			auto fileName = message->getFileName();
+			if (fileName.startsWith(QString(".") + QDir::separator()))
+				fileName.replace(0, 1, "src");
+			else
+				fileName.prepend(QString("src") + QDir::separator());
 			// lines and columns -1 because javac begins at 1 and TextToNodeMap at 0
 			Model::Node* node = nullptr;
 			if (auto rootMsg = message->getRootMessage())
