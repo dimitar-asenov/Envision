@@ -147,6 +147,7 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 
 	//TODO
 	auto sections = fragment->append( new CompositeFragment(classs, "bodySections"));
+	*sections << list(classs->classes(), this, "declarations");
 	*sections << list(classs->methods(), this, "sections");
 	*sections << list(classs->fields(), this, "vertical");
 
