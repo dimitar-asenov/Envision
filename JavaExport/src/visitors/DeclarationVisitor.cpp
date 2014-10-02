@@ -122,7 +122,9 @@ SourceFragment* DeclarationVisitor::visit(Class* classs)
 		*fragment << printAnnotationsAndModifiers(classs) << "interface " << classs->nameNode();
 	else if (Class::ConstructKind::Enum == classs->constructKind())
 		*fragment << printAnnotationsAndModifiers(classs) << "enum " << classs->nameNode();
-	else // TODO: how to handle annotations?
+	else if (Class::ConstructKind::Annotation == classs->constructKind())
+		*fragment << printAnnotationsAndModifiers(classs) << "@interface " << classs->nameNode();
+	else
 		notAllowed(classs);
 
 	if (!classs->typeArguments()->isEmpty())
