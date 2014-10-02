@@ -30,6 +30,7 @@
 #include "ModelBase/src/nodes/Node.h"
 
 #include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/overlays/BoxOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 
@@ -40,8 +41,17 @@
 
 namespace OODebug {
 
+static const QString overlayGroupName("CompilerMessages");
+
 void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
+	// Remove previous error messages
+	for (auto scene : Visualization::Scene::allScenes())
+	{
+		Q_ASSERT(scene);
+		scene->removeOverlayGroup(overlayGroupName);
+	}
+
 	auto nodeItemMap = Visualization::Item::nodeItemsMap();
 
 	std::shared_ptr<Export::TextToNodeMap> map;
@@ -109,8 +119,6 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 
 void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node, const QString& message)
 {
-	static const QString overlayGroupName("CompilerMessages");
-
 	auto scene = item->scene();
 	auto overlayGroup = scene->overlayGroup(overlayGroupName);
 
