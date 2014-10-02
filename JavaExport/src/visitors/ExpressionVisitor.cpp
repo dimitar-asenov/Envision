@@ -187,7 +187,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		*fragment << "new " << visit(e->newType());
 		for (auto dim : *e->dimensions())
 			*fragment << "[" << visit(dim) << "]";
-		if (e->initializer()) *fragment << " = " << visit(e->initializer());
+		if (e->initializer()) *fragment << visit(e->initializer());
 	}
 	else if (auto e = DCast<ReferenceExpression>(expression))
 	{
