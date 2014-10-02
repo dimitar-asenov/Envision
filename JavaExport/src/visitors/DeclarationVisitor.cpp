@@ -116,7 +116,14 @@ SourceFile* DeclarationVisitor::visitTopLevelClass(Class* classs, SourceDir* par
 SourceFragment* DeclarationVisitor::visit(Class* classs)
 {
 	auto fragment = new CompositeFragment(classs);
-	*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
+	if (Class::ConstructKind::Class == classs->constructKind())
+		*fragment << printAnnotationsAndModifiers(classs) << "class " << classs->nameNode();
+	else if (Class::ConstructKind::Interface == classs->constructKind())
+		*fragment << printAnnotationsAndModifiers(classs) << "interface " << classs->nameNode();
+	else if (Class::ConstructKind::Enum == classs->constructKind())
+		*fragment << printAnnotationsAndModifiers(classs) << "enum " << classs->nameNode();
+	else // TODO: how to handle annotations?
+		notAllowed(classs);
 
 	if (!classs->typeArguments()->isEmpty())
 		*fragment << list(classs->typeArguments(), ElementVisitor(data()), "typeArgsList");
