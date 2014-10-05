@@ -54,7 +54,8 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 
 	QProcess aProcess;
 	aProcess.setWorkingDirectory(QDir::currentPath());
-	aProcess.start("java -jar AlloyIntegrationCLI.jar " + inputFile + " " + outputDirectory);
+	aProcess.start("java -jar AlloyIntegrationCLI.jar " + inputFile + " " + outputDirectory + " " +
+						QString::number(maxImages));
 	aProcess.waitForFinished();
 
 	QDir dir(outputDirectory);
@@ -84,7 +85,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	alloyModelGroup->clear();
 
 	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
-	auto aBrowserComment = new Comments::CommentNode("[browser#" + anURl.toString() + "]");
+	auto aBrowserComment = new Comments::CommentNode("[browser#" + anURl.toString() + "|640x480]");
 
 	alloyModelGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(source,
 		[aBrowserComment](Visualization::BoxOverlay* self){

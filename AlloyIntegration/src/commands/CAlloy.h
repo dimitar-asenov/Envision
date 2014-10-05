@@ -42,6 +42,9 @@ class ALLOYINTEGRATION_API CAlloy : public Interaction::CreateNamedObjectWithAtt
 		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor,
 				const QString& name, const QStringList& attributes) override;
+
+	private:
+		const int maxImages = 100;
 };
 
 }

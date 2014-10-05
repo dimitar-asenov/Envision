@@ -20,10 +20,11 @@ public class AlloyIntegrationCLI
 {
 	public static void main(String[] args) throws Err, IOException
 	{
-		if (args.length < 2)
-				return;
+		if (args.length < 3)
+			return;
 		String modelPath = args[0];
 		String outputPath = args[1];
+		int maxImages = Integer.parseInt(args[2]);
 		
 		A4Reporter rep = new A4Reporter();
 		Module world = CompUtil.parseEverything_fromFile(rep, null, modelPath);
@@ -34,7 +35,7 @@ public class AlloyIntegrationCLI
 		A4Solution sol = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), cmd, opt);
 		
 		int i = 0;
-		while (sol.satisfiable())
+		while (sol.satisfiable() && i < maxImages)
 		{
 			sol.writeXML(outputPath + "sol.xml");
 			AlloyInstance anAlloyInstance = StaticInstanceReader.parseInstance(new File(outputPath + "sol.xml"));

@@ -120,6 +120,7 @@ void AlloyVisitor::init()
 			for (auto node : *t->arguments())
 				*fragment <<  v->visit(node);
 			*fragment << "]";
+
 		}
 		return fragment;
 	});
@@ -130,34 +131,34 @@ void AlloyVisitor::init()
 		switch (t->op())
 		{
 			case BinaryOperation::NOT_EQUALS:
-				*fragment << v->visit(t->left()); *fragment << " != "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " != " << v->visit(t->right());
 				break;
 			case BinaryOperation::EQUALS:
-				*fragment << v->visit(t->left()); *fragment << " = "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " = " << v->visit(t->right());
 				break;
 			case BinaryOperation::GREATER:
-				*fragment << v->visit(t->left()); *fragment << " > "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " > " << v->visit(t->right());
 				break;
 			case BinaryOperation::GREATER_EQUALS:
-				*fragment << v->visit(t->left()); *fragment << " >= "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " >= " << v->visit(t->right());
 				break;
 			case BinaryOperation::LESS:
-				*fragment << v->visit(t->left()); *fragment << " < "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " < " << v->visit(t->right());
 				break;
 			case BinaryOperation::LESS_EQUALS:
-				*fragment << v->visit(t->left()); *fragment << " <= "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " <= " << v->visit(t->right());
 				break;
 			case BinaryOperation::CONDITIONAL_AND:
-				*fragment << v->visit(t->left()); *fragment << " and "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " and " << v->visit(t->right());
 				break;
 			case BinaryOperation::CONDITIONAL_OR:
-				*fragment << v->visit(t->left()); *fragment << " or "; *fragment << v->visit(t->right());
+				*fragment << v->visit(t->left()) << " or " << v->visit(t->right());
 				break;
 			case BinaryOperation::PLUS:
-				*fragment << v->visit(t->left()); *fragment << ".add["; *fragment << v->visit(t->right()); *fragment << "]";
+				*fragment << v->visit(t->left()) << ".add[" << v->visit(t->right()) << "]";
 				break;
 			case BinaryOperation::MINUS:
-				*fragment << v->visit(t->left()); *fragment << ".sub["; *fragment << v->visit(t->right()); *fragment << "]";
+				*fragment << v->visit(t->left()) << ".sub[" << v->visit(t->right()) << "]";
 				break;
 			default: *fragment << "unknownBinaryOperation"; break;
 		}
