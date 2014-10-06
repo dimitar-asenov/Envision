@@ -46,28 +46,23 @@ static bool isVoidReturnType(OOModel::Method *m)
 	return false;
 }
 
-void MainMethodFinder::init(MainMethodFinder::Language language)
+void MainMethodFinder::init()
 {
-	// For now we just support Java:
-	Q_ASSERT(Java == language);
+	addType<OOModel::Method>(visitMethod);
+}
 
-	addType<OOModel::Method>( [](MainMethodFinder* f, OOModel::Method* m){
-		static auto expectedModifier = OOModel::Modifier(OOModel::Modifier::Public | OOModel::Modifier::Static).get();
-		Q_ASSERT(m->modifiers());
-		if (!QString("main").compare(m->name()) && m->modifiers()->get() == expectedModifier && m->arguments())
-		{
-			if (m->arguments()->size() == 1)
-				if (auto firstArgument = m->arguments()->at(0))
-					if (auto arrayType = DCast<OOModel::ArrayTypeExpression>(firstArgument->typeExpression()))
-						 if (auto refType = DCast<OOModel::ReferenceExpression>(arrayType->typeExpression()))
-							 if (!QString("String").compare(refType->name()) && isVoidReturnType(m))
-							 {
-								 // We found a candidate:
-								 if (!f->possibleMainMethod_)
-									 f->possibleMainMethod_ = m; //TODO: Can we stop somehow?
-							 }
-		}
-	});
+OOModel::Method* MainMethodFinder::visitMethod(MainMethodFinder*, OOModel::Method* m)
+{
+	static auto expectedModifier = OOModel::Modifier(OOModel::Modifier::Public | OOModel::Modifier::Static).get();
+	Q_ASSERT(m->modifiers());
+	if (!QString("main").compare(m->name()) && m->modifiers()->get() == expectedModifier && m->arguments())
+		if (m->arguments()->size() == 1)
+			if (auto firstArgument = m->arguments()->at(0))
+				if (auto arrayType = DCast<OOModel::ArrayTypeExpression>(firstArgument->typeExpression()))
+					if (auto refType = DCast<OOModel::ReferenceExpression>(arrayType->typeExpression()))
+						if (!QString("String").compare(refType->name()) && isVoidReturnType(m))
+							return m;
+	return nullptr;
 }
 
 } /* namespace OODebug */

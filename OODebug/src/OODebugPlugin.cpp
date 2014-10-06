@@ -30,6 +30,8 @@
 #include "commands/CJavaCompile.h"
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
+#include "run_support/MainMethodFinder.h"
+
 namespace OODebug {
 
 Logger::Log& log = OODebugPlugin::log();
@@ -43,6 +45,8 @@ Logger::Log& OODebugPlugin::log()
 bool OODebugPlugin::initialize(Core::EnvisionManager&)
 {
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
+
+	MainMethodFinder::init();
 
 	return true;
 }

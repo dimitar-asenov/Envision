@@ -36,24 +36,17 @@ namespace OOModel {
 
 namespace OODebug {
 
-class OODEBUG_API MainMethodFinder : public Model::Visitor<MainMethodFinder>
+/**
+ * Implements a visitor to find a Java main-method. This is helpful e.g. when trying to run the program.
+ */
+class OODEBUG_API MainMethodFinder : public Model::Visitor<MainMethodFinder, OOModel::Method*>
 {
 	public:
-		/**
-		 * Defines for which language you are searching the main method.
-		 * For example in Java the main method has to be static void and take a String[] as argument,
-		 * in other languages this is different.
-		 */
-		enum Language {Java, Other};
-		static void init(Language language);
-
-		OOModel::Method* getMethod() const;
+		static void init();
 
 	private:
-		// Stores the first found main method
-		OOModel::Method* possibleMainMethod_{};
-};
+		static OOModel::Method* visitMethod(MainMethodFinder*, OOModel::Method* m);
 
-inline OOModel::Method* MainMethodFinder::getMethod() const {return possibleMainMethod_;}
+};
 
 } /* namespace OODebug */
