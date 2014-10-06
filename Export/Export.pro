@@ -16,7 +16,8 @@ HEADERS += src/writer/FileWriter.h \
     src/precompiled.h \
     src/ExportException.h \
     src/export_api.h \
-    src/ExportPlugin.h
+    src/ExportPlugin.h \
+    src/ExportMapContainer.h
 SOURCES += test/LayoutTests.cpp \
     src/writer/FileWriter.cpp \
     test/GenerationTests.cpp \
@@ -29,5 +30,6 @@ SOURCES += test/LayoutTests.cpp \
     src/tree/SourceFile.cpp \
     src/tree/SourceDir.cpp \
     src/ExportException.cpp \
-    src/ExportPlugin.cpp
+    src/ExportPlugin.cpp \
+    src/ExportMapContainer.cpp
 RESOURCES = Export.qrc
