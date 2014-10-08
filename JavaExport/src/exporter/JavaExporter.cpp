@@ -73,4 +73,10 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 	return visitor.errors();
 }
 
+Export::ExportMapContainer&JavaExporter::exportMaps()
+{
+	static Export::ExportMapContainer* container = new Export::ExportMapContainer();
+	return *container;
+}
+
 } /* namespace JavaExport */
