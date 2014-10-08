@@ -49,6 +49,8 @@ void TextToNodeMap::add(Model::Node* node, SourceLocation location)
 {
 	nodeToLocation_.insert(node, location);
 	filenameToSpans[location.filename_].append(qMakePair(location.span_, node));
+	if (mappedFiles_.indexOf(location.filename_) < 0)
+		mappedFiles_ << location.filename_;
 }
 
 } /* namespace Export */

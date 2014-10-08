@@ -65,12 +65,16 @@ class EXPORT_API TextToNodeMap {
 
 		Model::Node* node(const QString& fileName, int line, int column) const;
 		QList<SourceLocation> locations(Model::Node* node) const;
+		QStringList files() const;
 
 		void add(Model::Node* node, SourceLocation location);
 
 	private:
 		QMultiHash<Model::Node*, SourceLocation> nodeToLocation_;
 		QHash<QString, QList<QPair<Span, Model::Node*>>> filenameToSpans;
+		QStringList mappedFiles_;
 };
+
+inline QStringList TextToNodeMap::files() const { return mappedFiles_; }
 
 } /* namespace Export */
