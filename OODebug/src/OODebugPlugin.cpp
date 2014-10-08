@@ -28,6 +28,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "commands/CJavaCompile.h"
+#include "commands/CJavaRun.h"
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
 #include "run_support/MainMethodFinder.h"
@@ -45,6 +46,7 @@ Logger::Log& OODebugPlugin::log()
 bool OODebugPlugin::initialize(Core::EnvisionManager&)
 {
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaRun());
 
 	MainMethodFinder::init();
 
