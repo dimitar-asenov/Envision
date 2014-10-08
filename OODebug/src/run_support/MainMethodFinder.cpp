@@ -51,6 +51,26 @@ void MainMethodFinder::init()
 	addType<OOModel::Method>(visitMethod);
 }
 
+OOModel::Method* MainMethodFinder::visitChildren(Model::Node* n)
+{
+	auto children = n->children();
+	auto it = children.begin();
+	if (!children.isEmpty())
+	{
+		while (true)
+		{
+			// Return the first match
+			if (it+1 == children.end()) return visit(*it);
+			else if (auto ret = visit(*it))
+				return ret;
+			++it;
+		}
+	}
+
+	// Return default value otherwise.
+	return nullptr;
+}
+
 OOModel::Method* MainMethodFinder::visitMethod(MainMethodFinder*, OOModel::Method* m)
 {
 	static auto expectedModifier = OOModel::Modifier(OOModel::Modifier::Public | OOModel::Modifier::Static).get();

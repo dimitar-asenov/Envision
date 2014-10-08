@@ -43,6 +43,7 @@ class OODEBUG_API MainMethodFinder : public Model::Visitor<MainMethodFinder, OOM
 {
 	public:
 		static void init();
+		virtual OOModel::Method* visitChildren(Model::Node* n) override;
 
 	private:
 		static OOModel::Method* visitMethod(MainMethodFinder*, OOModel::Method* m);
