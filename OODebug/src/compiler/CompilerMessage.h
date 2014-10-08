@@ -44,12 +44,12 @@ class OODEBUG_API CompilerMessage
 			type_{type}, fileName_{fileName}, message_{message},
 			lineNumber_{lineNumber}, columnNumber_{columnNumber}, rootMessage_{rootMessage} {}
 
-		MessageType getType() const;
-		QString getFileName() const;
-		QString getMessage() const;
-		int getLineNumber() const;
-		int getColumnNumber() const;
-		std::shared_ptr<CompilerMessage> getRootMessage() const;
+		MessageType type() const;
+		QString fileName() const;
+		QString message() const;
+		int lineNumber() const;
+		int columnNumber() const;
+		std::shared_ptr<CompilerMessage> rootMessage() const;
 
 	private:
 		MessageType type_{};
@@ -60,11 +60,11 @@ class OODEBUG_API CompilerMessage
 		std::shared_ptr<CompilerMessage> rootMessage_;
 };
 
-inline CompilerMessage::MessageType CompilerMessage::getType() const { return type_;}
-inline QString CompilerMessage::getFileName() const { return fileName_;}
-inline QString CompilerMessage::getMessage() const { return message_;}
-inline int CompilerMessage::getLineNumber() const { return lineNumber_;}
-inline int CompilerMessage::getColumnNumber() const { return columnNumber_;}
-inline std::shared_ptr<CompilerMessage> CompilerMessage::getRootMessage() const { return rootMessage_;}
+inline CompilerMessage::MessageType CompilerMessage::type() const { return type_;}
+inline QString CompilerMessage::fileName() const { return fileName_;}
+inline QString CompilerMessage::message() const { return message_;}
+inline int CompilerMessage::lineNumber() const { return lineNumber_;}
+inline int CompilerMessage::columnNumber() const { return columnNumber_;}
+inline std::shared_ptr<CompilerMessage> CompilerMessage::rootMessage() const { return rootMessage_;}
 
 } /* namespace OODebug */

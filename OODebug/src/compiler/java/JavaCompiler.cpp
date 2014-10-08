@@ -107,24 +107,24 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		for (auto& message : feedback.messages())
 		{
 			// In the map we have the src prefix
-			auto fileName = message->getFileName();
+			auto fileName = message->fileName();
 			if (fileName.startsWith(QString(".") + QDir::separator()))
 				fileName.replace(0, 1, "src");
 			else
 				fileName.prepend(QString("src") + QDir::separator());
 			// lines and columns -1 because javac begins at 1 and TextToNodeMap at 0
 			Model::Node* node = nullptr;
-			if (auto rootMsg = message->getRootMessage())
-				node = map->node(fileName, rootMsg->getLineNumber() - 1, rootMsg->getColumnNumber() - 1);
+			if (auto rootMsg = message->rootMessage())
+				node = map->node(fileName, rootMsg->lineNumber() - 1, rootMsg->columnNumber() - 1);
 			else
-				node = map->node(fileName, message->getLineNumber() - 1, message->getColumnNumber() - 1);
+				node = map->node(fileName, message->lineNumber() - 1, message->columnNumber() - 1);
 			Q_ASSERT(node);
 
 			auto it = nodeItemMap.find(node);
 			while (it != nodeItemMap.end() && it.key() == node)
 			{
 				// TODO for notes which have a rootMessage add a link to the message location.
-				visualizeMessage(it.value(), node, message->getMessage());
+				visualizeMessage(it.value(), node, message->message());
 				++it;
 			}
 		}

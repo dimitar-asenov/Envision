@@ -38,8 +38,6 @@ class OODEBUG_API CompilerOutputParser
 		/**
 		 * Parses the \a output, which should be in the Javac Error format: "sourcefile:lineno: type: message ^",
 		 * where ^ is the column identifier and is at the same time the end of one message.
-		 *
-		 * You can get the parsed feedback with the corresponding getters, e.g. \a getErrors(), etc.
 		 */
 		static CompilerFeedback parseJavacErrorFormat(const QString& output);
 
