@@ -30,68 +30,35 @@
 
 namespace Export {
 
-int ExportMapContainer::getLatestDirRevision(Model::Node* node) const
+int ExportMapContainer::storedRevision(Model::Node* node) const
 {
-	Q_ASSERT(node);
-	auto search = dirMap_.constFind(node);
-	if (search != dirMap_.constEnd())
-		return search.value().lastKey();
+	auto search = map_.find(node);
+	if (search != map_.end())
+		return search->first;
 	return -1;
 }
 
-std::shared_ptr<SourceDir> ExportMapContainer::getLatestDir(Model::Node* node) const
+std::shared_ptr<TextToNodeMap> ExportMapContainer::map(Model::Node* node) const
 {
-	Q_ASSERT(node);
-	auto search = dirMap_.constFind(node);
-	if (search != dirMap_.constEnd())
-		return search.value().last();
+	auto search = map_.find(node);
+	if (search != map_.end())
+		return search->second;
 	return nullptr;
 }
 
-void ExportMapContainer::insertDir(Model::Node* node, std::shared_ptr<SourceDir> dir)
+bool ExportMapContainer::insertMap(Model::Node* node, std::shared_ptr<TextToNodeMap> map)
 {
-	Q_ASSERT(node);
-	dirMap_[node].insert(node->revision(), dir);
+	auto search = map_.find(node);
+	if (search != map_.end())
+		if (search->first > node->revision())
+			return false;
+	map_.insert(node, {node->revision(), map});
+	return true;
 }
 
-void ExportMapContainer::clearAllDirs(Model::Node* node)
+void ExportMapContainer::removeNode(Model::Node* node)
 {
-	Q_ASSERT(node);
-	auto search = dirMap_.find(node);
-	if (search != dirMap_.end())
-		search.value().clear();
-}
-
-int ExportMapContainer::getLatestTextToNodeRevision(Model::Node* node) const
-{
-	Q_ASSERT(node);
-	auto search = textToNodeMap_.constFind(node);
-	if (search != textToNodeMap_.constEnd())
-		return search.value().lastKey();
-	return -1;
-}
-
-std::shared_ptr<TextToNodeMap> ExportMapContainer::getLatestTextToNode(Model::Node* node) const
-{
-	Q_ASSERT(node);
-	auto search = textToNodeMap_.constFind(node);
-	if (search != textToNodeMap_.constEnd())
-		return search.value().last();
-	return nullptr;
-}
-
-void ExportMapContainer::insertTextToNode(Model::Node* node, std::shared_ptr<TextToNodeMap> map)
-{
-	Q_ASSERT(node);
-	textToNodeMap_[node].insert(node->revision(), map);
-}
-
-void ExportMapContainer::clearAllTextToNode(Model::Node* node)
-{
-	Q_ASSERT(node);
-	auto search = textToNodeMap_.find(node);
-	if (search != textToNodeMap_.end())
-		search.value().clear();
+	map_.remove(node);
 }
 
 } /* namespace Export */

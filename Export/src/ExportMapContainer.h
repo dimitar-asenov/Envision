@@ -40,19 +40,20 @@ class TextToNodeMap;
 class EXPORT_API ExportMapContainer
 {
 	public:
-		int getLatestDirRevision(Model::Node* node) const;
-		std::shared_ptr<SourceDir> getLatestDir(Model::Node* node) const;
-		void insertDir(Model::Node* node, std::shared_ptr<SourceDir> dir);
-		void clearAllDirs(Model::Node* node);
-
-		int getLatestTextToNodeRevision(Model::Node* node) const;
-		std::shared_ptr<TextToNodeMap> getLatestTextToNode(Model::Node* node) const;
-		void insertTextToNode(Model::Node* node, std::shared_ptr<TextToNodeMap> map);
-		void clearAllTextToNode(Model::Node* node);
+		/**
+		 * Returns the stored revision for \a node, if none is stored -1 is returned
+		 */
+		int storedRevision(Model::Node* node) const;
+		std::shared_ptr<TextToNodeMap> map(Model::Node* node) const;
+		/**
+		 * Replaces the \a map for the \a node, if \a node has a newer revision, and returns true on success.
+		 * If there is already a newer revision stored the map will not be inserted and false is returned.
+		 */
+		bool insertMap(Model::Node* node, std::shared_ptr<TextToNodeMap> map);
+		void removeNode(Model::Node* node);
 
 	private:
-		QHash<Model::Node*, QMap<int, std::shared_ptr<SourceDir> > > dirMap_;
-		QHash<Model::Node*, QMap<int, std::shared_ptr<TextToNodeMap> > > textToNodeMap_;
+		QHash<Model::Node*, QPair<int, std::shared_ptr<TextToNodeMap>>> map_;
 };
 
 } /* Export */
