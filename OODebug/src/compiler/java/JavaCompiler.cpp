@@ -34,6 +34,8 @@
 #include "VisualizationBase/src/overlays/BoxOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 
+#include "OOModel/src/declarations/Project.h"
+
 #include "JavaExport/src/exporter/JavaExporter.h"
 
 #include "../CommandLineCompiler.h"
@@ -52,24 +54,37 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		scene->removeOverlayGroup(overlayGroupName);
 	}
 
+	auto project = DCast<OOModel::Project>(manager->root());
+	Q_ASSERT(project);
+
 	auto nodeItemMap = Visualization::Item::nodeItemsMap();
 
+	// Export the project first if we need to
 	std::shared_ptr<Export::TextToNodeMap> map;
-	std::shared_ptr<Export::SourceDir> dir;
-
-	auto exportErrors = JavaExport::JavaExporter::exportTree(manager, pathToProjectContainerDirectory, map, dir);
-	// First handle export errors.
-	for (auto& error : exportErrors)
+	if (JavaExport::JavaExporter::exportMaps().storedRevision(project) >= project->revision())
 	{
-		auto node = error.node();
-		auto it = nodeItemMap.find(node);
-		while (it != nodeItemMap.end() && it.key() == node)
-		{
-			visualizeMessage(it.value(), node, error.message());
-			++it;
-		}
+		map = JavaExport::JavaExporter::exportMaps().map(project);
 	}
+	else
+	{
+		auto exportErrors = JavaExport::JavaExporter::exportTree(manager, pathToProjectContainerDirectory);
 
+		// Handle export errors.
+		for (auto& error : exportErrors)
+		{
+			auto node = error.node();
+			auto it = nodeItemMap.find(node);
+			while (it != nodeItemMap.end() && it.key() == node)
+			{
+				visualizeMessage(it.value(), node, error.message());
+				++it;
+			}
+		}
+		map = JavaExport::JavaExporter::exportMaps().map(project);
+	}
+	Q_ASSERT(map);
+
+	// Create a build folder and setup the compiler
 	static const QString buildFolder("build");
 	QDir buildDir(pathToProjectContainerDirectory + QDir::separator() + buildFolder);
 	if (!buildDir.exists())
@@ -81,15 +96,14 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 	const QStringList buildFolderArgs = {"-d", QString("..") + QDir::separator() + buildFolder};
 	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
 
-	for (auto file : dir->recursiveFiles())
+	// Compile each file and show the messages received from it
+	for (auto file : map->files())
 	{
-		Q_ASSERT(file);
-		auto filePath = file->path();
 		// remove the src prefix
-		if (filePath.startsWith(QString("src") + QDir::separator()))
-			filePath.replace(0, 4, "");
+		if (file.startsWith(QString("src") + QDir::separator()))
+			file.replace(0, 4, "");
 		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + "src",
-														 filePath, buildFolderArgs);
+														 file, buildFolderArgs);
 		for (auto& message : feedback.messages())
 		{
 			// In the map we have the src prefix
