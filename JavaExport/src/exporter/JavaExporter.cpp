@@ -60,12 +60,12 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 							"{", "\n", "}");
 
 	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
-	exportMaps().insertMap(project, map);
+	exportMaps().insert(project, map);
 
 	return visitor.errors();
 }
 
-Export::ExportMapContainer&JavaExporter::exportMaps()
+Export::ExportMapContainer& JavaExporter::exportMaps()
 {
 	static Export::ExportMapContainer* container = new Export::ExportMapContainer();
 	return *container;

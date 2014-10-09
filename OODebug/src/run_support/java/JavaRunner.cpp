@@ -27,11 +27,12 @@
 #include "JavaRunner.h"
 
 #include "ModelBase/src/model/TreeManager.h"
+
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/Method.h"
+
 #include "Export/src/writer/TextToNodeMap.h"
 #include "JavaExport/src/exporter/JavaExporter.h"
-
-#include "OOModel/src/declarations/Method.h"
 
 #include "../../compiler/java/JavaCompiler.h"
 #include "../MainMethodFinder.h"

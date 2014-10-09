@@ -61,7 +61,7 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 
 	// Export the project first if we need to
 	std::shared_ptr<Export::TextToNodeMap> map;
-	if (JavaExport::JavaExporter::exportMaps().storedRevision(project) >= project->revision())
+	if (JavaExport::JavaExporter::exportMaps().storedRevision(project) == project->revision())
 	{
 		map = JavaExport::JavaExporter::exportMaps().map(project);
 	}

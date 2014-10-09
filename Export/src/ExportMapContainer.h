@@ -49,8 +49,8 @@ class EXPORT_API ExportMapContainer
 		 * Replaces the \a map for the \a node, if \a node has a newer revision, and returns true on success.
 		 * If there is already a newer revision stored the map will not be inserted and false is returned.
 		 */
-		bool insertMap(Model::Node* node, std::shared_ptr<TextToNodeMap> map);
-		void removeNode(Model::Node* node);
+		bool insert(Model::Node* node, std::shared_ptr<TextToNodeMap> map);
+		void remove(Model::Node* node);
 
 	private:
 		QHash<Model::Node*, QPair<int, std::shared_ptr<TextToNodeMap>>> map_;

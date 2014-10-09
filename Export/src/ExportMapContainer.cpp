@@ -46,7 +46,7 @@ std::shared_ptr<TextToNodeMap> ExportMapContainer::map(Model::Node* node) const
 	return nullptr;
 }
 
-bool ExportMapContainer::insertMap(Model::Node* node, std::shared_ptr<TextToNodeMap> map)
+bool ExportMapContainer::insert(Model::Node* node, std::shared_ptr<TextToNodeMap> map)
 {
 	auto search = map_.find(node);
 	if (search != map_.end())
@@ -56,7 +56,7 @@ bool ExportMapContainer::insertMap(Model::Node* node, std::shared_ptr<TextToNode
 	return true;
 }
 
-void ExportMapContainer::removeNode(Model::Node* node)
+void ExportMapContainer::remove(Model::Node* node)
 {
 	map_.remove(node);
 }
