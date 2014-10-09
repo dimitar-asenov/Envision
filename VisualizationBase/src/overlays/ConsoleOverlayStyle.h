@@ -27,39 +27,20 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "ConsoleOverlayStyle.h"
-#include "Overlay.h"
-#include "../declarative/DeclarativeItem.h"
+
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace Visualization {
 
-class Static;
-class Text;
-
-class VISUALIZATIONBASE_API ConsoleOverlay : public Super<Overlay<DeclarativeItem<ConsoleOverlay>>>
+class VISUALIZATIONBASE_API ConsoleOverlayStyle : public Super<DeclarativeItemBaseStyle>
 {
-	ITEM_COMMON(ConsoleOverlay)
-
 	public:
-		ConsoleOverlay(Item* associatedItem, const StyleType* style = itemStyles().get());
+		virtual ~ConsoleOverlayStyle() override;
 
-		static void initializeForms();
-
-		Item*& content();
-
-		void appendText(const QString& text);
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-		QString text_;
-		Static* closeIcon_{};
-		Text* output_{};
-		Item* content_{};
+		Property<TextStyle> output{this, "output"};
+		Property<StaticStyle> closeIcon{this, "closeIcon"};
 };
-
-inline Item*& ConsoleOverlay::content() { return content_; }
 
 } /* namespace Visualization */

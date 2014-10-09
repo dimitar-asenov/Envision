@@ -26,6 +26,68 @@
 
 #include "ConsoleOverlay.h"
 
-ConsoleOverlay::ConsoleOverlay()
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "../declarative/DeclarativeItemDef.h"
+
+namespace Visualization {
+
+ITEM_COMMON_DEFINITIONS(ConsoleOverlay, "item")
+
+ConsoleOverlay::ConsoleOverlay(Item* associatedItem, const StyleType* style) : Super({associatedItem}, style)
 {
+	// TODO can we only hide it ? we shouldn't destroy it.
+	if (!style->closeIcon().clickHandler())
+	{
+		style->closeIcon().setClickHandler([](Static* staticParent)
+		{
+			// This indirection is needed since we can't destroy an item while we're in its even handler.
+			staticParent->scene()->addPostEventAction(
+						[staticParent](){	staticParent->scene()->removeOverlay(staticParent->parent());});
+			return true;
+		});
+	}
 }
+
+void ConsoleOverlay::appendText(const QString& text)
+{
+	text_.append(text);
+}
+
+void ConsoleOverlay::determineChildren()
+{
+	Super::determineChildren();
+	Q_ASSERT(output_);
+	output_->setText(text_);
+}
+
+void ConsoleOverlay::updateGeometry(int availableWidth, int availableHeight)
+{
+	Super::updateGeometry(availableWidth, availableHeight);
+
+	if (associatedItem()->heightInLocal() < 100)
+		setPos(associatedItem()->mapToScene(0, associatedItem()->heightInLocal()));
+	else if (associatedItem()->widthInLocal() < 200)
+		setPos(associatedItem()->mapToScene(associatedItem()->widthInLocal(), 0));
+	else
+		setPos( associatedItem()->mapToScene(10, 10) );
+}
+
+void ConsoleOverlay::initializeForms()
+{
+	auto header = (new GridLayoutFormElement())
+			->setSpacing(3)->setColumnStretchFactor(1, 1)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->put(0, 0, item<Text>(&I::output_, &StyleType::output))
+			->put(2, 0, item<Static>(&I::closeIcon_, &StyleType::closeIcon));
+
+	auto container = (new GridLayoutFormElement())
+			->put(0, 0, header)
+			->put(0, 1, item<Item>(&I::content_));
+
+	addForm(container);
+}
+
+} /* namespace Visualization */

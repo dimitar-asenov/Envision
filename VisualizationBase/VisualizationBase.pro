@@ -125,7 +125,9 @@ HEADERS += src/overlays/BoxOverlayStyle.h \
     src/declarative/GridLayouter.h \
     src/declarative/DynamicGridFormElement.h \
     src/overlays/MessageOverlay.h \
-    src/overlays/MessageOverlayStyle.h
+    src/overlays/MessageOverlayStyle.h \
+    src/overlays/ConsoleOverlay.h \
+    src/overlays/ConsoleOverlayStyle.h
 SOURCES += src/overlays/BoxOverlayStyle.cpp \
     src/overlays/BoxOverlay.cpp \
     src/overlays/ZoomLabelOverlay.cpp \
@@ -225,4 +227,6 @@ SOURCES += src/overlays/BoxOverlayStyle.cpp \
     src/declarative/DynamicGridFormElement.cpp \
     src/declarative/GridLayouter.cpp \
     src/overlays/MessageOverlay.cpp \
-    src/overlays/MessageOverlayStyle.cpp
+    src/overlays/MessageOverlayStyle.cpp \
+    src/overlays/ConsoleOverlay.cpp \
+    src/overlays/ConsoleOverlayStyle.cpp
