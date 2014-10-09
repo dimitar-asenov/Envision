@@ -31,7 +31,7 @@
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/overlays/BoxOverlay.h"
+#include "VisualizationBase/src/overlays/MessageOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 
 #include "OOModel/src/declarations/Project.h"
@@ -123,25 +123,29 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 			auto it = nodeItemMap.find(node);
 			while (it != nodeItemMap.end() && it.key() == node)
 			{
+				auto type = message->type();
+				QString typeString = type == CompilerMessage::Error ? "error" :
+														(type == CompilerMessage::Warning ? "warning" : "default");
 				// TODO for notes which have a rootMessage add a link to the message location.
-				visualizeMessage(it.value(), node, message->message());
+				visualizeMessage(it.value(), node, message->message(), typeString);
 				++it;
 			}
 		}
 	}
 }
 
-void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node, const QString& message)
+void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node,
+												const QString& message, const QString& type)
 {
 	auto scene = item->scene();
 	auto overlayGroup = scene->overlayGroup(overlayGroupName);
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
 
-	overlayGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(item,
-		[node, message](Visualization::BoxOverlay *){
+	overlayGroup->addOverlay(makeOverlay( new Visualization::MessageOverlay(item,
+		[node, message](Visualization::MessageOverlay *){
 		return message;
-	})));
+	}, Visualization::MessageOverlay::itemStyles().get(type))));
 }
 
 } /* namespace OODebug */
