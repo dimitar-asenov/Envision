@@ -96,6 +96,8 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 	const QStringList buildFolderArgs = {"-d", QString("..") + QDir::separator() + buildFolder};
 	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
 
+	QHash<QPair<QString, QPair<int, int>>, QString> seenMessages;
+
 	// Compile each file and show the messages received from it
 	for (auto file : map->files())
 	{
@@ -112,6 +114,13 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 				fileName.replace(0, 1, "src");
 			else
 				fileName.prepend(QString("src") + QDir::separator());
+
+			// check if we already mapped this message
+			auto search = seenMessages.find({fileName, {message->lineNumber(), message->columnNumber()}});
+			if (search != seenMessages.end() && !search.value().compare(message->message()))
+				continue;
+			seenMessages.insert({fileName, {message->lineNumber(), message->columnNumber()}}, message->message());
+
 			// lines and columns -1 because javac begins at 1 and TextToNodeMap at 0
 			Model::Node* node = nullptr;
 			if (auto rootMsg = message->rootMessage())
