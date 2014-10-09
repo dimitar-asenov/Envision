@@ -27,6 +27,12 @@
 #include "JavaRunner.h"
 
 #include "ModelBase/src/model/TreeManager.h"
+#include "ModelBase/src/nodes/Node.h"
+
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/overlays/MessageOverlay.h"
+#include "VisualizationBase/src/overlays/OverlayAccessor.h"
 
 #include "OOModel/src/declarations/Project.h"
 #include "OOModel/src/declarations/Method.h"
@@ -40,21 +46,21 @@
 
 namespace OODebug {
 
+static QProcess* runProcess_{};
+static OOModel::Project* lastProject_{};
+
 void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
-	auto project = DCast<OOModel::Project>(manager->root());
-	Q_ASSERT(project);
+	lastProject_ = DCast<OOModel::Project>(manager->root());
+	Q_ASSERT(lastProject_);
 
 	MainMethodFinder finder;
-	auto mainMethod = finder.visit(project);
+	auto mainMethod = finder.visit(lastProject_);
 	if (!mainMethod)
-	{
-		// TODO: display a warning;
-		return;
-	}
+		return noMainMethodWarning(lastProject_);
 
 	JavaCompiler::compileTree(manager, pathToProjectContainerDirectory);
-	auto map = JavaExport::JavaExporter::exportMaps().map(project);
+	auto map = JavaExport::JavaExporter::exportMaps().map(lastProject_);
 
 	// find the file of the main method:
 	auto locations = map->locations(mainMethod);
@@ -66,23 +72,52 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	// NOTE: This next line is dependent on export plugin
 	fileName.replace(QString("src") + QDir::separator(), "");
 
-	QProcess runProcess;
-	// For now we don't handle error and standard stream
-	runProcess.setProcessChannelMode(QProcess::MergedChannels);
-	runProcess.start("java", {"-cp", pathToProjectContainerDirectory + QDir::separator() + "build", fileName});
-	// block until finished
-	// TODO: this is not a solution, discuss what is better.
-	runProcess.waitForFinished(-1);
-	if (runProcess.exitStatus() != QProcess::NormalExit)
+	if (runProcess_)
+		runProcess_->kill(); // Deletion is done with the lambda below.
+	runProcess_ = new QProcess();
+
+	QObject::connect(runProcess_, &QProcess::readyReadStandardOutput, qApp, &handleOutput, Qt::QueuedConnection);
+	QObject::connect(runProcess_, &QProcess::readyReadStandardError, qApp, &handleErrorOutput, Qt::QueuedConnection);
+
+	// We have to make a copy here of the pointer such that we do not delete the new instance.
+	// By using the kill slot we know that we will always clean the memory of the old process.
+	QProcess* process = runProcess_;
+	QObject::connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished),
+						  [process](int){process->deleteLater();});
+
+	runProcess_->start("java", {"-cp", pathToProjectContainerDirectory + QDir::separator() + "build", fileName});
+}
+
+void JavaRunner::noMainMethodWarning(Model::Node* node)
+{
+	Q_ASSERT(node);
+
+	static const QString overlayGroupName("RunErrors");
+	auto nodeItemMap = Visualization::Item::nodeItemsMap();
+	auto it = nodeItemMap.find(node);
+	while (it != nodeItemMap.end() && it.key() == node)
 	{
-		auto error = runProcess.error();
-		if (error == QProcess::FailedToStart)
-			throw new OODebugException("No java on the system?");
-		else
-			throw new OODebugException(QString("Uknown error %1").arg(error));
+		auto item = it.value();
+		auto scene = item->scene();
+		auto overlayGroup = scene->overlayGroup(overlayGroupName);
+
+		if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
+
+		overlayGroup->addOverlay(makeOverlay( new Visualization::MessageOverlay(item,
+			[node](Visualization::MessageOverlay *){
+			return QString("No main method found");
+		}, Visualization::MessageOverlay::itemStyles().get("warning"))));
+
+		++it;
 	}
-	// TODO display output.
-	qDebug() << runProcess.readAllStandardOutput();
+}
+
+void JavaRunner::handleOutput()
+{
+}
+
+void JavaRunner::handleErrorOutput()
+{
 }
 
 } /* namespace OODebug */

@@ -24,26 +24,8 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ConsoleOverlay.h"
 
-#include "../../oodebug_api.h"
-
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OODebug {
-
-class OODEBUG_API JavaRunner
+ConsoleOverlay::ConsoleOverlay()
 {
-	public:
-		static void runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
-
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-};
-
-} /* namespace OODebug */
+}
