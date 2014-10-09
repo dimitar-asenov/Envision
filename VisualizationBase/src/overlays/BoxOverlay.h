@@ -51,7 +51,7 @@ class VISUALIZATIONBASE_API BoxOverlay : public Super<Overlay<DeclarativeItem<Bo
 
 	protected:
 		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Static* closeIcon_{};
