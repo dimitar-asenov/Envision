@@ -1,0 +1,23 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerRadius>2</cornerRadius>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>125</alpha>
+				<red>255</red>
+				<green>0</green>
+				<blue>0</blue>
+			</color>
+		</backgroundBrush>
+	</shape>
+	
+	<messageIcon prototypes="icon/SVGIcon/default">
+		<ignoreMouseEvents>true</ignoreMouseEvents>
+		<filename>styles/icon/cross-octagon.svg</filename>
+		<width>16</width>
+		<height>16</height>
+	</messageIcon>
+</style>

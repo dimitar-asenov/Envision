@@ -1,0 +1,16 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerRadius>2</cornerRadius>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>125</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>0</blue>
+			</color>
+		</backgroundBrush>
+	</shape>
+</style>
