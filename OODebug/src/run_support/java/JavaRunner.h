@@ -44,6 +44,8 @@ class OODEBUG_API JavaRunner
 		static void noMainMethodWarning(Model::Node* node);
 		static void handleOutput();
 		static void handleErrorOutput();
+
+		static void addConsole(Model::Node* node);
 };
 
 } /* namespace OODebug */

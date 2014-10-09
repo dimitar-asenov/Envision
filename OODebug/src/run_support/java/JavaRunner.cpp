@@ -32,6 +32,7 @@
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/overlays/MessageOverlay.h"
+#include "VisualizationBase/src/overlays/ConsoleOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 
 #include "OOModel/src/declarations/Project.h"
@@ -47,6 +48,7 @@
 namespace OODebug {
 
 static QProcess* runProcess_{};
+static Visualization::ConsoleOverlay* console_{};
 static OOModel::Project* lastProject_{};
 
 void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
@@ -114,10 +116,36 @@ void JavaRunner::noMainMethodWarning(Model::Node* node)
 
 void JavaRunner::handleOutput()
 {
+	Q_ASSERT(lastProject_ && runProcess_);
+	if (!console_)
+		addConsole(lastProject_);
+	console_->appendText(runProcess_->readAllStandardOutput());
 }
 
 void JavaRunner::handleErrorOutput()
 {
+	Q_ASSERT(lastProject_ && runProcess_);
+	if (!console_)
+		addConsole(lastProject_);
+	console_->appendText(runProcess_->readAllStandardError());
+}
+
+void JavaRunner::addConsole(Model::Node* node)
+{
+	static const QString overlayGroupName("Console overlay");
+	auto nodeItemMap = Visualization::Item::nodeItemsMap();
+	auto it = nodeItemMap.find(node);
+	Q_ASSERT(it != nodeItemMap.end());
+	// We don't iterate here, we only want one console.
+	auto item = it.value();
+	auto scene = item->scene();
+	auto overlayGroup = scene->overlayGroup(overlayGroupName);
+
+	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
+
+	console_ = new Visualization::ConsoleOverlay(item);
+
+	overlayGroup->addOverlay(makeOverlay(console_));
 }
 
 } /* namespace OODebug */
