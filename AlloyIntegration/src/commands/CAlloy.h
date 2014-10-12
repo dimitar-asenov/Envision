@@ -44,7 +44,7 @@ class ALLOYINTEGRATION_API CAlloy : public Interaction::CreateNamedObjectWithAtt
 				const QString& name, const QStringList& attributes) override;
 
 	private:
-		const int maxImages = 100;
+		const int MAX_IMAGES = 100;
 };
 
 }

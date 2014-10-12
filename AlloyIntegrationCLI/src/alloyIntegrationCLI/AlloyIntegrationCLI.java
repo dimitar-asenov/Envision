@@ -20,6 +20,9 @@ public class AlloyIntegrationCLI
 {
 	public static void main(String[] args) throws Err, IOException
 	{
+		//argument 1: The path to the file with the model
+		//argument 2: The path to the desired output directory
+		//argument 3: The maximum number of images that should be generated
 		if (args.length < 3)
 			return;
 		String modelPath = args[0];

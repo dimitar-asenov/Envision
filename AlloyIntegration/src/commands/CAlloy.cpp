@@ -28,6 +28,7 @@
 #include "VisualizationBase/src/overlays/BoxOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 #include "Comments/src/nodes/CommentNode.h"
+#include "Comments/src/items/VCommentBrowser.h"
 #include "OOModel/src/declarations/Class.h"
 
 namespace Alloy {
@@ -55,7 +56,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	QProcess aProcess;
 	aProcess.setWorkingDirectory(QDir::currentPath());
 	aProcess.start("java -jar AlloyIntegrationCLI.jar " + inputFile + " " + outputDirectory + " " +
-						QString::number(maxImages));
+						QString::number(MAX_IMAGES));
 	aProcess.waitForFinished();
 
 	QDir dir(outputDirectory);
@@ -85,11 +86,14 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	alloyModelGroup->clear();
 
 	auto anURl = QUrl::fromLocalFile(tempAlloyPath + "/output/AlloyModels.html");
-	auto aBrowserComment = new Comments::CommentNode("[browser#" + anURl.toString() + "|640x480]");
+	auto aBrowserComment = new Comments::VCommentBrowser(nullptr, anURl);
+	aBrowserComment->updateSize(QSize(720, 540));
+	aBrowserComment->browser()->settings()->setObjectCacheCapacities(0, 0, 0); //disable the cache
 
 	alloyModelGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(source,
 		[aBrowserComment](Visualization::BoxOverlay* self){
-		self->renderer()->sync(self->content(), self, aBrowserComment);
+		self->content() = aBrowserComment;
+		aBrowserComment->setParentItem(self);
 		return QString("AlloyModels");
 	})));
 

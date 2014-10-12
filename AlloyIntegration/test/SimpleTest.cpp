@@ -90,8 +90,42 @@ Class* addNode()
 		"Contract.Invariant(this!=this.next)")));
 	invariantMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
 		"Contract.Invariant(this.number==this.next.number-1)")));
-	invariantMethod->items()->append(new ExpressionStatement(OOExpressionBuilder::getOOExpression(
-		"Contract.Invariant(LinkedList.contains(this))")));
+
+	//Using Contract.ExactlyOne
+	/*auto callContractInvariant = new MethodCallExpression("Contract.Invariant");
+	invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
+	auto callContractExactlyOne = new MethodCallExpression("Contract.ExactlyOne");
+	callContractInvariant->arguments()->append(callContractExactlyOne);
+	dynamic_cast<ReferenceExpression*>(callContractExactlyOne->callee())
+			->typeArguments()->append(new ReferenceExpression("LinkedList"));
+	callContractExactlyOne->arguments()->append(new MethodCallExpression("getAllLinkedLists"));
+	auto le = new LambdaExpression();
+	callContractExactlyOne->arguments()->append(le);
+	le->arguments()->append(new FormalArgument("ll", new ReferenceExpression("LinkedList")));
+	le->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
+		"ll.contains(this)")));*/
+
+	//Using Contract.ForAll and Contract.Exists
+	auto callContractInvariant = new MethodCallExpression("Contract.Invariant");
+	invariantMethod->items()->append(new ExpressionStatement(callContractInvariant));
+	auto callContractExists = new MethodCallExpression("Contract.Exists");
+	callContractInvariant->arguments()->append(callContractExists);
+	dynamic_cast<ReferenceExpression*>(callContractExists->callee())
+			->typeArguments()->append(new ReferenceExpression("LinkedList"));
+	callContractExists->arguments()->append(new MethodCallExpression("getAllLinkedLists"));
+	auto le1 = new LambdaExpression();
+	callContractExists->arguments()->append(le1);
+	le1->arguments()->append(new FormalArgument("ll1", new ReferenceExpression("LinkedList")));
+	auto callContractForAll = new MethodCallExpression("Contract.ForAll");
+	le1->body()->append(new ReturnStatement(callContractForAll));
+	dynamic_cast<ReferenceExpression*>(callContractForAll->callee())
+			->typeArguments()->append(new ReferenceExpression("LinkedList"));
+	callContractForAll->arguments()->append(new MethodCallExpression("getAllLinkedLists"));
+	auto le2 = new LambdaExpression();
+	callContractForAll->arguments()->append(le2);
+	le2->arguments()->append(new FormalArgument("ll2", new ReferenceExpression("LinkedList")));
+	le2->body()->append(new ReturnStatement(OOExpressionBuilder::getOOExpression(
+		"ll1.contains(this)&&!(ll2.contains(this)&&ll1!=ll2)")));
 
 	auto containsMethod = new Method("contains");
 	aNode->methods()->append(containsMethod);
