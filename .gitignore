@@ -12,3 +12,5 @@
 /*/Makefile
 /*/Makefile.Release
 /*/Makefile.Debug
+
+*.directory

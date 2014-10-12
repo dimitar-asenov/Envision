@@ -40,6 +40,9 @@ class EXPORT_API SourceFile {
 		~SourceFile();
 
 		const QString& name() const;
+		/**
+		 * Returns the relative path of this file including the name at the end.
+		 */
 		QString path() const;
 		QList<SourceFragment*> fragments();
 

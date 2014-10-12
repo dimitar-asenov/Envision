@@ -83,6 +83,11 @@ void GridConstructors::initializeAll()
 		grid->add(new Cell(0, vis->item(), 0));
 	});
 
+	GridBasedOffsetProvider::addGridConstructor<VSuperExpression>(
+	[](GridBasedOffsetProvider* grid, VSuperExpression* vis){
+		grid->add(new Cell(0, vis->item(), 0));
+	});
+
 	GridBasedOffsetProvider::addGridConstructor<VThisExpression>(
 	[](GridBasedOffsetProvider* grid, VThisExpression* vis){
 		grid->add(new Cell(0, vis->item(), 0));

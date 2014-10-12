@@ -40,6 +40,10 @@ class EXPORT_API SourceDir {
 
 		QList<SourceDir>& directories();
 		QList<SourceFile>& files();
+		/**
+		 * Recursively lists all files from this directory and its sub directories.
+		 */
+		QList<SourceFile*> recursiveFiles();
 
 		// All of the methods below may contain nested paths using /
 		SourceDir& subDir(const QString& subDirName);

@@ -37,8 +37,8 @@ class TextToNodeMap;
 
 class EXPORT_API Exporter {
 	public:
-		static TextToNodeMap* exportToFileSystem(const QString& pathToProjectContainerDir, SourceDir* projectDir,
-												 FragmentLayouter* layouter);
+		static std::shared_ptr<TextToNodeMap> exportToFileSystem(const QString& pathToProjectContainerDir,
+																					SourceDir* projectDir, FragmentLayouter* layouter);
 
 	private:
 		static void saveDir(QDir& fileSystemDir, SourceDir* sourceDir, FragmentLayouter* layouter, TextToNodeMap* map);

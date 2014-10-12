@@ -58,6 +58,7 @@
 #include "expressions/BooleanLiteral.h"
 #include "expressions/CharacterLiteral.h"
 #include "expressions/NullLiteral.h"
+#include "expressions/SuperExpression.h"
 #include "expressions/ThisExpression.h"
 #include "expressions/NewExpression.h"
 #include "expressions/DeleteExpression.h"

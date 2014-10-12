@@ -166,6 +166,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 	else if (auto e = DCast<CommaExpression>(expression)) *fragment << visit(e->left()) << ", " << visit(e->right());
 	else if (auto e = DCast<ConditionalExpression>(expression))
 		*fragment << visit(e->condition()) << " ? " << visit(e->trueExpression()) << " : " << visit(e->falseExpression());
+	else if (DCast<SuperExpression>(expression)) *fragment << "super";
 	else if (DCast<ThisExpression>(expression)) *fragment << "this";
 	else if (auto e = DCast<GlobalScopeExpression>(expression)) notAllowed(e);
 	else if (auto e = DCast<ThrowExpression>(expression)) *fragment << "throw " << visit(e->expr());
@@ -187,7 +188,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 		*fragment << "new " << visit(e->newType());
 		for (auto dim : *e->dimensions())
 			*fragment << "[" << visit(dim) << "]";
-		if (e->initializer()) *fragment << " = " << visit(e->initializer());
+		if (e->initializer()) *fragment << visit(e->initializer());
 	}
 	else if (auto e = DCast<ReferenceExpression>(expression))
 	{

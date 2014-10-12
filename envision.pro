@@ -19,6 +19,7 @@ SUBDIRS= Core \
 	VisualizationBase \
 	CppImport \
 	Comments \
-	AlloyIntegration
+	AlloyIntegration \
+        OODebug
 CONFIG+=debug_and_release
 CONFIG+=ordered

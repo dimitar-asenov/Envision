@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.core_3.9.1.v_OTDT_r221_201309101918.jar"/>
+	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.core_3.9.2.v_OTDT_r222_201402180730.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_3.9.0.v20130326-1255.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.4.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.jobs_3.5.300.v20130429-1813.jar"/>

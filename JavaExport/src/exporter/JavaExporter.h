@@ -29,6 +29,9 @@
 #include "../javaexport_api.h"
 #include "ExportError.h"
 
+#include "Export/src/writer/TextToNodeMap.h"
+#include "Export/src/tree/SourceDir.h"
+
 namespace Model {
 	class TreeManager;
 }
@@ -37,8 +40,12 @@ namespace JavaExport {
 
 class JAVAEXPORT_API JavaExporter {
 	public:
+		static QList<ExportError> exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+														 std::shared_ptr<Export::TextToNodeMap>& map);
 
-		static QList<ExportError> exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
+		static QList<ExportError> exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+														 std::shared_ptr<Export::TextToNodeMap>& map,
+														 std::shared_ptr<Export::SourceDir>& dir);
 };
 
 } /* namespace JavaExport */

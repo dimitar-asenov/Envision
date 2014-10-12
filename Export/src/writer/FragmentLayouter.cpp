@@ -63,8 +63,13 @@ void FragmentLayouter::render(SourceFragment* fragment, QString indentationSoFar
 
 	if (auto text = dynamic_cast<TextFragment*>(fragment))
 	{
-		if (!text->text().isEmpty() && writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
-		writer_->write(text->text());
+		if (text->text() == "\n")
+			writer_->writeEmptyLine();
+		else
+		{
+			if (!text->text().isEmpty() && writer_->isAtStartOfLine()) writer_->write(indentationSoFar);
+			writer_->write(text->text());
+		}
 		return;
 	}
 

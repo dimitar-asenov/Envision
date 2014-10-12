@@ -32,6 +32,7 @@
 #include "VNewExpression.h"
 #include "VMethodCallExpression.h"
 #include "VReferenceExpression.h"
+#include "VSuperExpression.h"
 #include "VThisExpression.h"
 #include "VBinaryOperation.h"
 #include "VArrayInitializer.h"

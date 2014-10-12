@@ -197,20 +197,35 @@ QSet<Class*> Class::allBaseClasses()
 
 	if (baseClasses()->isEmpty())
 	{
-		if (auto implicitBase = defaultImplicitBaseFromProject())
+		if (auto classDef = implicitBaseFromProject())
 		{
-			auto type = implicitBase->type();
-			auto ct = dynamic_cast<ClassType*>(type);
-			if (ct && this != ct->classDefinition())
-			{
-				bases.insert(ct->classDefinition());
-				bases.unite(ct->classDefinition()->allBaseClasses());
-			}
-			SAFE_DELETE(type);
+				bases.insert(classDef);
+				bases.unite(classDef->allBaseClasses());
 		}
 	}
 
 	return bases;
+}
+
+Class* Class::implicitBaseFromProject() const
+{
+	if (auto classDef = expressionToClass(defaultImplicitBaseFromProject()))
+	{
+		if (this != classDef) return classDef;
+	}
+
+	return nullptr;
+}
+
+Class* Class::expressionToClass(Expression* expr)
+{
+	if (expr)
+	{
+		auto type = std::unique_ptr<Type>(expr->type());
+		if (auto ct = dynamic_cast<ClassType*>(type.get()))
+			return ct->classDefinition();
+	}
+	return nullptr;
 }
 
 }
