@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['value',['Value',['../classInteraction_1_1Value.html#af8efb30d6672b9f5e281c8fd15c6899e',1,'Interaction::Value::Value()'],['../classOOVisualization_1_1VEnumerator.html#a8b26694f85ded128dc0b0e672af552be',1,'OOVisualization::VEnumerator::value()']]],
+  ['value',['value',['../classOOVisualization_1_1VEnumerator.html#a8b26694f85ded128dc0b0e672af552be',1,'OOVisualization::VEnumerator::value()'],['../classInteraction_1_1Value.html#af8efb30d6672b9f5e281c8fd15c6899e',1,'Interaction::Value::Value()']]],
   ['valueasdouble',['valueAsDouble',['../classFilePersistence_1_1GenericNode.html#a4e5604da331fd0c99bbd55030e0fa611',1,'FilePersistence::GenericNode']]],
   ['valueaslong',['valueAsLong',['../classFilePersistence_1_1GenericNode.html#a38c35b2626b87114a3d1776fde1c03c0',1,'FilePersistence::GenericNode']]],
   ['valueasstring',['valueAsString',['../classFilePersistence_1_1GenericNode.html#aebecbb9ddb0d93cda8b6bb9aa4136ce8',1,'FilePersistence::GenericNode']]],
@@ -116,6 +116,7 @@ var searchData=
   ['vstatementitem',['VStatementItem',['../classOOVisualization_1_1VStatementItem.html#a0744844bc6c8cf2ddac5310af85be1f7',1,'OOVisualization::VStatementItem']]],
   ['vstatementitemlist',['VStatementItemList',['../classOOVisualization_1_1VStatementItemList.html#ab3044b66f4cf3315b4a70c022557beff',1,'OOVisualization::VStatementItemList']]],
   ['vstringliteral',['VStringLiteral',['../classOOVisualization_1_1VStringLiteral.html#a6ac18c6742144a84befc1ab690f5ef16',1,'OOVisualization::VStringLiteral']]],
+  ['vsuperexpression',['VSuperExpression',['../classOOVisualization_1_1VSuperExpression.html#a5f888c5a78a984ac182732a4f46472d7',1,'OOVisualization::VSuperExpression']]],
   ['vswitchstatement',['VSwitchStatement',['../classOOVisualization_1_1VSwitchStatement.html#a29d23a57da61252a22761124b2d05622',1,'OOVisualization::VSwitchStatement']]],
   ['vtext',['VText',['../classVisualization_1_1VText.html#a6a2ac2d2f0d376942864435e47415057',1,'Visualization::VText']]],
   ['vthisexpression',['VThisExpression',['../classOOVisualization_1_1VThisExpression.html#ac695016610d9858726a328ba727abda0',1,'OOVisualization::VThisExpression']]],

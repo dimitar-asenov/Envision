@@ -208,6 +208,7 @@ var searchData=
   ['_7evreferenceexpressionstyle',['~VReferenceExpressionStyle',['../classOOVisualization_1_1VReferenceExpressionStyle.html#a12d22bd315af75d57849fc9534fc1193',1,'OOVisualization::VReferenceExpressionStyle']]],
   ['_7evreturnstatementcf',['~VReturnStatementCF',['../classControlFlowVisualization_1_1VReturnStatementCF.html#ab8675d33b14a4d88e303b26cd9b8eaca',1,'ControlFlowVisualization::VReturnStatementCF']]],
   ['_7evstringliteral',['~VStringLiteral',['../classOOVisualization_1_1VStringLiteral.html#ad338ed651e65fa13280bfdff3931c09f',1,'OOVisualization::VStringLiteral']]],
+  ['_7evsuperexpression',['~VSuperExpression',['../classOOVisualization_1_1VSuperExpression.html#ad2c37282bdd1083ddadecf0ba5e35d18',1,'OOVisualization::VSuperExpression']]],
   ['_7evthisexpression',['~VThisExpression',['../classOOVisualization_1_1VThisExpression.html#a907685f30acd497afef573a105f80957',1,'OOVisualization::VThisExpression']]],
   ['_7evtrycatchfinallystyle',['~VTryCatchFinallyStyle',['../classOOVisualization_1_1VTryCatchFinallyStyle.html#a6f8e9644b814149b6aa18ede3f66675c',1,'OOVisualization::VTryCatchFinallyStyle']]],
   ['_7evtypealiasstyle',['~VTypeAliasStyle',['../classOOVisualization_1_1VTypeAliasStyle.html#a63cc78b87615ec954237dee355df9498',1,'OOVisualization::VTypeAliasStyle']]],

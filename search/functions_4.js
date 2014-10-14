@@ -60,6 +60,7 @@ var searchData=
   ['expressionmodified',['expressionModified',['../classContractsLibrary_1_1ChangeMonitor.html#a13642986906bd4947f010730e0304105',1,'ContractsLibrary::ChangeMonitor']]],
   ['expressionstatement',['ExpressionStatement',['../classOOModel_1_1ExpressionStatement.html#ad82ed6c91113ff8c542dd03e31d46878',1,'OOModel::ExpressionStatement']]],
   ['expressiontocatch',['expressionToCatch',['../classOOVisualization_1_1VCatchClause.html#af761851ba18c7e79ae96967e6026e20f',1,'OOVisualization::VCatchClause']]],
+  ['expressiontoclass',['expressionToClass',['../classOOModel_1_1Class.html#a04bf606563dbbe21db9ee8cc4fa690a2',1,'OOModel::Class']]],
   ['expressiontreebuilder',['ExpressionTreeBuilder',['../classInteraction_1_1ExpressionTreeBuilder.html#af2abd5f74a64cae157a36c4aaf1b5909',1,'Interaction::ExpressionTreeBuilder']]],
   ['expressionvisitor',['ExpressionVisitor',['../classCppImport_1_1ExpressionVisitor.html#ad3feb6411d1edee2bd144e053717b397',1,'CppImport::ExpressionVisitor']]],
   ['extendedhelp',['extendedHelp',['../classInteraction_1_1Command.html#a77048e3682219c558b39327c5f79df9c',1,'Interaction::Command']]],

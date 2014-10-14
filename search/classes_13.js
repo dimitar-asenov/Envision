@@ -157,6 +157,7 @@ var searchData=
   ['vstatementitemstaticdata',['VStatementItemStaticData',['../classOOVisualization_1_1VStatementItemStaticData.html',1,'OOVisualization']]],
   ['vstringliteral',['VStringLiteral',['../classOOVisualization_1_1VStringLiteral.html',1,'OOVisualization']]],
   ['vstringliteralstyle',['VStringLiteralStyle',['../classOOVisualization_1_1VStringLiteralStyle.html',1,'OOVisualization']]],
+  ['vsuperexpression',['VSuperExpression',['../classOOVisualization_1_1VSuperExpression.html',1,'OOVisualization']]],
   ['vswitchstatement',['VSwitchStatement',['../classOOVisualization_1_1VSwitchStatement.html',1,'OOVisualization']]],
   ['vswitchstatementstyle',['VSwitchStatementStyle',['../classOOVisualization_1_1VSwitchStatementStyle.html',1,'OOVisualization']]],
   ['vtext',['VText',['../classVisualization_1_1VText.html',1,'Visualization']]],

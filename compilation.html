@@ -79,14 +79,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Compiling Envision from source </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Envision is written in C++ and uses features from the C++11 standard.</p>
-<p>Make sure your C++ compiler is up-to-date. GCC version 4.8 or newer should be sufficient. Other dependencies are:</p>
+<div class="textblock"><p>Envision is written in C++14.</p>
+<p>You will need GCC version 4.9 or newer to compile the sources. You can check your current compiler version with: </p>
+<pre class="fragment">g++ --version
+</pre><p> In Ubuntu, you can easily get compiler updates by adding the following PPA (necessary for 14.04): </p>
+<pre class="fragment">sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update &amp;&amp; sudo apt-get upgrade
+</pre><p> Other dependencies are:</p>
 <ul>
 <li><b>Qt 5</b>: <a href="http://qt-project.org/">http://qt-project.org/</a> <br/>
  This is the underlying framework that we use to build Envision's visualizations and cross-platform support.</li>
 <li><b>lp_solve 5.5</b>: <a href="http://lpsolve.sourceforge.net/">http://lpsolve.sourceforge.net/</a> <br/>
  Lp Solve is used for calculating some of the more complex visualization layouts.</li>
-<li><b>Clang 3.4</b>: <a href="http://clang.llvm.org/">http://clang.llvm.org/</a> <br/>
+<li><b>Clang 3.5</b>: <a href="http://clang.llvm.org/">http://clang.llvm.org/</a> <br/>
  Clang is used for importing C++ projects in Envision. Support for importing C++ is preliminary and incomplete.</li>
 <li><b>On Linux: Google Performance Tools</b>: <a href="http://code.google.com/p/gperftools/">http://code.google.com/p/gperftools/</a> <br/>
  Used for profiling.</li>
@@ -99,7 +104,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>Make the following symbolic link: <pre class="fragment">sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so </pre></li>
 </ol>
 </li>
-<li>Install Clang 3.4: <pre class="fragment">sudo apt-get install libclang-3.4-dev clang-3.4 llvm-3.4 </pre></li>
+<li>Install Clang 3.5: <pre class="fragment">sudo apt-get install libclang-3.5-dev clang-3.5 llvm-3.5 </pre></li>
 <li>Install the Google Performance Tools: <pre class="fragment">sudo apt-get install google-perftools libgoogle-perftools-dev </pre></li>
 <li>Install the Vera++ tool which performs style checks for the code: <pre class="fragment">sudo apt-get install vera++ </pre></li>
 </ol>

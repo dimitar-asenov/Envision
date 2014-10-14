@@ -44,6 +44,7 @@ var searchData=
   ['styleset',['StyleSet',['../classVisualization_1_1StyleSet.html',1,'Visualization']]],
   ['summethodvis',['SumMethodVis',['../classCustomMethodCall_1_1SumMethodVis.html',1,'CustomMethodCall']]],
   ['summethodvisstyle',['SumMethodVisStyle',['../classCustomMethodCall_1_1SumMethodVisStyle.html',1,'CustomMethodCall']]],
+  ['superexpression',['SuperExpression',['../classOOModel_1_1SuperExpression.html',1,'OOModel']]],
   ['svgicon',['SVGIcon',['../classVisualization_1_1SVGIcon.html',1,'Visualization']]],
   ['svgiconstyle',['SVGIconStyle',['../classVisualization_1_1SVGIconStyle.html',1,'Visualization']]],
   ['svgshape',['SvgShape',['../classVisualization_1_1SvgShape.html',1,'Visualization']]],
