@@ -570,8 +570,9 @@ OOModel::Expression* CppImportUtilities::translateTypePtr(const clang::Type* typ
 	{
 		// TODO: include templates. (and more?)
 		OOModel::FunctionTypeExpression* ooFunctionType = new OOModel::FunctionTypeExpression();
-		ooFunctionType->results()->append(translateQualifiedType(functionProtoType->getResultType(), location));
-		for (auto argIt = functionProtoType->arg_type_begin(); argIt != functionProtoType->arg_type_end(); ++argIt)
+		ooFunctionType->results()->append(translateQualifiedType(functionProtoType->getReturnType(), location));
+
+		for (auto argIt = functionProtoType->param_type_begin(); argIt != functionProtoType->param_type_end(); ++argIt)
 		{
 			ooFunctionType->arguments()->append(translateQualifiedType(*argIt, location));
 		}
