@@ -1,6 +1,7 @@
 /qt
 /doc/generated
-/*.user
+/envision.pro.user
+/envision.pro.user.*
 /Makefile
 /*/object_script.*.Debug
 /*/object_script.*.Release
