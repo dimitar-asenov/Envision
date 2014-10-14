@@ -11,7 +11,8 @@ win32:LIBS += -llogger \
     -loovisualization \
     -loointeraction
 
-QMAKE_CXXFLAGS += -isystem ""$(shell llvm-config --includedir)"" # Use this instead of the line below to avoid warnings
+# Use this instead of the line under it to avoid warnings
+QMAKE_CXXFLAGS += -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)""
 #INCLUDEPATH +=  /usr/lib/llvm/include
 
 DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS
@@ -29,8 +30,8 @@ LIBS += -lclangTooling\
 				-lclangAST\
 				-lclangLex\
 				-lclangBasic\
-				""$(shell llvm-config --libs)"" \
-				$$system(llvm-config --ldflags --libs cppbackend)
+				""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --libs)"" \
+				$$system( $$_PRO_FILE_PWD_/llvm-config-envision.sh --ldflags --libs cppbackend)
 
 ## END LLVM SPECIFIC
 
