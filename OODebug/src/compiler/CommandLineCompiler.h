@@ -26,27 +26,38 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
-#include "VisualizationBase/src/items/NodeWrapper.h"
+#include "../oodebug_api.h"
 
-namespace Interaction {
+#include "CompilerFeedback.h"
 
-class INTERACTIONBASE_API CommentWrapper : public Super<Visualization::NodeWrapper>
+namespace OODebug {
+
+/**
+ * A wrapper class for command line compilers.
+ */
+class OODEBUG_API CommandLineCompiler
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(CommentWrapper, Visualization::ItemStyle)
-
 	public:
-		CommentWrapper(Item* itemWithComment, NodeType* node, const StyleType* style = itemStyles().get());
+		/**
+		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
+		 * and \a parseFunction for parsing the output.
+		 */
+		CommandLineCompiler(const QString& compilerCommand,
+								  std::function<CompilerFeedback(const QString&)> parseFunction)
+			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
 
-		void showComment();
-		Item* itemWithComment() const;
+		/**
+		 * Compiles the file with name \a fileName using the arguments as in \a args.
+		 *
+		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
+		 *
+		 * Note: This call is blocking, it blocks until the command is finished.
+		 */
+		CompilerFeedback compileFile(const QString& fileName, const QStringList& args = QStringList());
 
 	private:
-		Item* itemWithComment_{};
-
-		void setCommentPosition();
+		QString command_;
+		std::function<CompilerFeedback(const QString&)> parseFunction_;
 };
 
-inline Visualization::Item* CommentWrapper::itemWithComment() const { return itemWithComment_; }
-
-}
+} /* namespace OODebug */

@@ -172,10 +172,10 @@ void ExpressionTreeUtils::grow(Expression*& top, Operator* op, bool leftside)
 		op->globalDelimiterBoundaries(leftside ? op->descriptor()->numOperands() : 0, delim_begin, delim_end);
 		ExpressionContext c_other = top->findContext(leftside ? delim_end : delim_begin );
 		if (   ( leftside && c_other.rightType() == ExpressionContext::OpBoundary
-					&& c_other.rightText() == op->descriptor()->postfix()
+					&& c_other.rightText() == op->descriptor()->postfix().join("")
 					&& c_other.rightDelim() == c_other.rightOp()->size())
 			 || ( rightside && c_other.leftType() == ExpressionContext::OpBoundary
-					&& c_other.leftText() == op->descriptor()->prefix() && c_other.leftDelim() == 0) )
+					&& c_other.leftText() == op->descriptor()->prefix().join("") && c_other.leftDelim() == 0) )
 			wrap_parent = true;
 		else
 		return;
@@ -278,7 +278,8 @@ void ExpressionTreeUtils::shrink(Expression*& top, Operator* op, bool leftside)
 		return;
 
 	Expression* new_border_expr = (leftside ? op->first() : op->last())
-			->findCutExpression(leftside, leftside ? op->descriptor()->postfix() : op->descriptor()->prefix());
+			->findCutExpression(leftside, leftside ?
+					op->descriptor()->postfix().join("") : op->descriptor()->prefix().join(""));
 	if (new_border_expr == nullptr) return;
 
 	Operator* cut_op = new_border_expr->parent();

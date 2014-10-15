@@ -287,7 +287,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	if (!llvm::isa<clang::CXXConstructorDecl>(mDecl) && !llvm::isa<clang::CXXDestructorDecl>(mDecl))
 	{
 		// process result type
-		OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getResultType(), mDecl->getLocStart());
+		OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getReturnType(), mDecl->getLocStart());
 		if (restype)
 		{
 			OOModel::FormalResult* methodResult = new OOModel::FormalResult();
@@ -325,7 +325,7 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	OOModel::Method* ooFunction= new OOModel::Method();
 	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
 	// process result type
-	OOModel::Expression* restype = utils_->translateQualifiedType(functionDecl->getResultType(),
+	OOModel::Expression* restype = utils_->translateQualifiedType(functionDecl->getReturnType(),
 																					  functionDecl->getLocStart());
 	if (restype)
 	{

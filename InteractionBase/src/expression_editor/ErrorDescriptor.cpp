@@ -29,11 +29,7 @@
 namespace Interaction {
 
 ErrorDescriptor::ErrorDescriptor(const QString& prefix_text, const QString& postfix_text)
-	:OperatorDescriptor("Error: " + prefix_text + postfix_text,
-		QString(prefix_text).replace(" ", "SPACE") + " expr " + QString(postfix_text).replace(" ", "SPACE"),
-		0,
-		prefix_text.isEmpty() ? OperatorDescriptor::LeftAssociative : OperatorDescriptor::RightAssociative),
-		errorPrefix_(prefix_text), errorPostfix_(postfix_text)
+	:OperatorDescriptor(prefix_text, postfix_text), errorPrefix_(prefix_text), errorPostfix_(postfix_text)
 {
 	setTransient(true);
 }

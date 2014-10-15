@@ -23,48 +23,56 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "Highlight.h"
-#include "items/SelectedItem.h"
+
+#pragma once
+
+#include "../visualizationbase_api.h"
+#include "../items/Item.h"
 
 namespace Visualization {
 
-Highlight::Highlight(Scene* scene, const QString& name, const QString& styleName)
-: scene_{scene}, name_{name}, styleName_{styleName}
+template <class Super>
+class Overlay : public Super
 {
-	Q_ASSERT(scene_);
-	Q_ASSERT(!name.isEmpty());
-}
+	public:
+		Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style = nullptr);
 
-Highlight::~Highlight()
+		Item* associatedItem() const;
+		Item* firstAssociatedItem() const;
+		Item* secondAssociatedItem() const;
+		Item* lastAssociatedItem() const;
+		const QList<Item*>& associatedItems() const;
+
+	private:
+		QList<Item*> associatedItems_;
+
+};
+
+template <class Super>
+inline Item* Overlay<Super>::associatedItem() const { return associatedItems_.first(); }
+
+template <class Super>
+inline Item* Overlay<Super>::firstAssociatedItem() const { return associatedItems_.first(); }
+
+template <class Super>
+inline Item* Overlay<Super>::secondAssociatedItem() const { return associatedItems_.at(1); }
+
+template <class Super>
+inline Item* Overlay<Super>::lastAssociatedItem() const { return associatedItems_.last(); }
+
+template <class Super>
+inline const QList<Item*>& Overlay<Super>::associatedItems() const { return associatedItems_; }
+
+template <class Super>
+inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Super::StyleType* style)
+: Super{nullptr, style}, associatedItems_{associatedItems}
 {
-	for (auto sel : highlightItems_) SAFE_DELETE_ITEM(sel);
-}
+	Q_ASSERT(!associatedItems_.isEmpty());
 
-void Highlight::addHighlightedItem(Item* item)
-{
-	auto highlight = new SelectedItem(item, SelectedItem::itemStyles().get(styleName_));
-	highlightItems_.insert(item, highlight );
-	scene_->addItem(highlight);
-	scene_->scheduleUpdate();
-}
-
-void Highlight::updateAllHighlights()
-{
-	for (auto it = highlightItems_.begin(); it != highlightItems_.end(); ++it)
-		it.value()->updateSubtree();
-}
-
-void Highlight::removeHighlightedItem(Item* item)
-{
-	auto it = highlightItems_.find(item);
-	if (it != highlightItems_.end())
-	{
-		auto selection = it.value();
-		SAFE_DELETE(selection);
-		highlightItems_.erase(it);
-		scene_->scheduleUpdate();
-
-	}
+	Super::setFlags(0);
+	Super::setAcceptedMouseButtons(0);
+	Super::setZValue(Super::LAYER_SELECTION_Z);
+	Super::setItemCategory(Scene::SelectionItemCategory);
 }
 
 } /* namespace Visualization */

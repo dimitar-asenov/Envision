@@ -26,33 +26,27 @@
 
 #pragma once
 
-#include "../visualizationbase_api.h"
-#include "ItemStyle.h"
+#include "../oodebug_api.h"
 
-#include "Item.h"
+#include "CompilerMessage.h"
 
-namespace Visualization {
+namespace OODebug {
 
-class VISUALIZATIONBASE_API SelectedItem: public Super<Item>
+/**
+ * \a CompilerFeedback contains all parsed messaged from one compile run.
+ */
+class OODEBUG_API CompilerFeedback
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(SelectedItem, ItemStyle)
-
 	public:
-		SelectedItem(Item* selectedItem, const StyleType* style = itemStyles().get());
-		virtual ~SelectedItem();
+		CompilerFeedback(QList<std::shared_ptr<CompilerMessage> > messages) :
+			messages_{messages} {}
 
-		virtual UpdateType needsUpdate() override;
-		Item* selectedItem();
-		void setSelectedItem(Item* item);
-
-	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		QList<std::shared_ptr<CompilerMessage> >& messages();
 
 	private:
-		Item* selectedItem_;
+		QList<std::shared_ptr<CompilerMessage> > messages_;
 };
 
-inline Item* SelectedItem::selectedItem() { return selectedItem_; }
+inline QList<std::shared_ptr<CompilerMessage> >& CompilerFeedback::messages() { return messages_;}
 
-}
+} /* namespace OODebug */

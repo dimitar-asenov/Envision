@@ -26,15 +26,29 @@
 
 #pragma once
 
-#include "precompiled.h"
+#include "core_api.h"
 
 namespace Core {
 
-class EnvisionApplication : public QApplication {
+class CORE_API EnvisionApplication : public QApplication {
+
+	Q_OBJECT
+
 	public:
 		EnvisionApplication(int& argc, char** argv);
 
 		virtual bool notify(QObject* receiver, QEvent* event) override;
+
+		using IdleFunction = std::function<void ()>;
+		static void addOnUserInputIdleAction(void* actionId, IdleFunction action);
+		static void removeOnUserInputIdleAction(void* actionId);
+
+	private slots:
+		void userInputIdle();
+
+	private:
+		QTimer idleInputTimer_;
+		static QMap<void*, IdleFunction>& idleActions();
 };
 
 } /* namespace Core */

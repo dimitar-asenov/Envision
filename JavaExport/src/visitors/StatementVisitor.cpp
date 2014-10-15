@@ -90,7 +90,10 @@ SourceFragment* StatementVisitor::visit(DeclarationStatement* statement)
 SourceFragment* StatementVisitor::visit(ExpressionStatement* statement)
 {
 	auto fragment = new CompositeFragment(statement);
-	*fragment << expression(statement->expression()) << ";";
+	if (DCast<EmptyExpression>(statement->expression()))
+		*fragment << "\n";
+	else
+		*fragment << expression(statement->expression()) << ";";
 	return fragment;
 }
 

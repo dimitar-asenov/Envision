@@ -33,18 +33,22 @@
 
 namespace Export {
 
-TextToNodeMap* Exporter::exportToFileSystem(const QString& pathToProjectContainerDir, SourceDir* projectDir,
-										  FragmentLayouter* layouter)
+std::shared_ptr<TextToNodeMap> Exporter::exportToFileSystem(const QString& pathToProjectContainerDir,
+																				SourceDir* projectDir, FragmentLayouter* layouter)
 {
 	QDir dir{pathToProjectContainerDir};
 	if (!dir.exists(projectDir->name()))
-		dir.mkpath(projectDir->name());
+		if ( !dir.mkpath(projectDir->name()) )
+			throw ExportException("Could not create directory: " + dir.absoluteFilePath(projectDir->name()));
 
 	Q_ASSERT(dir.exists(projectDir->name()));
 	dir.cd(projectDir->name());
 
-	auto map =  new TextToNodeMap();
-	saveDir(dir, projectDir, layouter, map);
+	if (!(QFileInfo{dir.absolutePath()}).isWritable())
+		throw ExportException("Trying to export to a non writable directory : " + dir.absolutePath());
+
+	auto map = std::shared_ptr<TextToNodeMap>(new TextToNodeMap());
+	saveDir(dir, projectDir, layouter, map.get());
 	return map;
 }
 
@@ -60,12 +64,14 @@ void Exporter::saveDir(QDir& fileSystemDir, SourceDir* sourceDir, FragmentLayout
 			sub.cd(entry.fileName());
 
 			log.info("Removing unnecessary directory during export: " + sub.absolutePath());
-			sub.removeRecursively();
+			if (!sub.removeRecursively())
+				throw ExportException("Could not remove directory : " + sub.absolutePath());
 		}
 		else if (entry.isFile() && !sourceDir->hasFile(entry.fileName()))
 		{
 			log.info("Removing unnecessary file during export: " + fileSystemDir.absoluteFilePath(entry.fileName()));
-			fileSystemDir.remove(entry.fileName());
+			if (!fileSystemDir.remove(entry.fileName()))
+				throw ExportException("Could not remove file : " + fileSystemDir.absoluteFilePath(entry.fileName()));
 		}
 	}
 

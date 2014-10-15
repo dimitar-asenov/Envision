@@ -132,7 +132,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 						break;
 					}
 
-	synchronizeCollections(nodes, items,
+	synchronizeCollections(this, nodes, items,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node) -> Item*
 			{

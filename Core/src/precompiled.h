@@ -40,6 +40,7 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QtPlugin>
 #include <QtCore/QObject>
+#include <QtCore/QTimer>
 
 #include <QtCore/QTextStream>
 #include <QtCore/QStringList>
@@ -60,6 +61,11 @@
 #include <typeinfo>
 #include <memory>
 #include <utility>
+
+#include <vector>
+#include <unordered_set>
+#include <unordered_map>
+#include <stack>
 
 #ifdef Q_OS_LINUX
 	#include <gperftools/profiler.h>

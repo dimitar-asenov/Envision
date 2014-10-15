@@ -247,6 +247,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 
 
 	// Keywords
+	add(new OD( "super", "super", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+		return new SuperExpression(); }));
 	add(new OD( "this", "this", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
 		return new ThisExpression(); }));
 	add(new OD( "::", "::", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {

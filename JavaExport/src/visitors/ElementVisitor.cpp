@@ -78,7 +78,11 @@ SourceFragment* ElementVisitor::visit(CatchClause* catchClause)
 SourceFragment* ElementVisitor::visit(Enumerator* enumerator)
 {
 	auto fragment = new CompositeFragment(enumerator);
-	*fragment << "ENUMERATOR";
+	*fragment << enumerator->name();
+	if (auto value = enumerator->value())
+	{
+		*fragment << " = " << expression(value);
+	}
 	return fragment;
 }
 

@@ -499,6 +499,11 @@ Method* addLongMethod(Class* parent)
 	var9->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
 	var9->decl()->setInitialValue(new ThisExpression());
 
+	VariableDeclarationExpression* var92 = new VariableDeclarationExpression("var92");
+	longMethod->items()->append(new ExpressionStatement(var92));
+	var92->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	var92->decl()->setInitialValue(new SuperExpression());
+
 	VariableDeclarationExpression* var10 = new VariableDeclarationExpression("var10");
 	longMethod->items()->append(new ExpressionStatement(var10));
 	var10->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));

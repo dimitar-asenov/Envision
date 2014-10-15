@@ -45,13 +45,13 @@ VCommentDiagram::VCommentDiagram(Item* parent, NodeType* node)
 
 void VCommentDiagram::determineChildren()
 {
-	synchronizeCollections(node()->shapes()->nodes(), shapes_,
+	Visualization::Item::synchronizeCollections(this, node()->shapes()->nodes(), shapes_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node)
 			{return new VCommentDiagramShape(parent, static_cast<CommentDiagramShape*>(node));},
 		[](Item*, Model::Node*, VCommentDiagramShape*&){return false;});
 
-	synchronizeCollections(node()->connectors()->nodes(), connectors_,
+	Visualization::Item::synchronizeCollections(this, node()->connectors()->nodes(), connectors_,
 		[](Model::Node* node, Item* item){return item->node() == node;},
 		[](Item* parent, Model::Node* node)
 			{return new VCommentDiagramConnector(parent, static_cast<CommentDiagramConnector*>(node));},

@@ -34,40 +34,74 @@ OperatorDescriptor::OperatorDescriptor() {
 OperatorDescriptor::~OperatorDescriptor() {
 }
 
+OperatorDescriptor::OperatorDescriptor(const QString& prefixText, const QString& postfixText)
+	: name_{"Error: " + prefixText + postfixText}, precedence_{0},
+	  associativity_{prefixText.isEmpty() ? LeftAssociative : RightAssociative}, isError_{true}
+{
+	Q_ASSERT(prefixText.isEmpty() || postfixText.isEmpty());
+	num_operands_ = 1;
+	if (!prefixText.isEmpty())
+	{
+		signature_.append(prefixText);
+		expectedTokens_ <<  ExpectedToken(ExpectedToken::FIRST_DELIM, prefixText);
+		prefixTokens_.append(prefixText);
+	}
+	signature_.append("expr");
+	expectedTokens_ <<  ExpectedToken(ExpectedToken::VALUE);
+	if (!postfixText.isEmpty())
+	{
+		signature_.append(postfixText);
+		expectedTokens_ <<  ExpectedToken(ExpectedToken::FIRST_DELIM, postfixText);
+		postfixTokens_.append(postfixText);
+	}
+	expectedTokens_ << ExpectedToken(ExpectedToken::END);
+}
+
 OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signature, int precedence,
 		Associativity associativity)
 	: name_(name), precedence_(precedence), associativity_(associativity)
 {
 	signature_ = signature.split(" ", QString::SkipEmptyParts);
 	signature_.replaceInStrings("SPACE", " ");
-	computeExpectedTokens();
+
+	QList<QStringList> preInPostFixTokens;
+	preInPostFixTokens.append( QStringList{} ); // Add an empty prefix list to begin with
+
+	auto addNonDelimiter = [this, &preInPostFixTokens] (ExpectedToken::ExpectedType type)
+	{
+		Q_ASSERT(expectedTokens_.isEmpty() || expectedTokens_.last().type == ExpectedToken::FIRST_DELIM
+				  || expectedTokens_.last().type == ExpectedToken::FOLLOWING_DELIM);
+	  expectedTokens_ <<  ExpectedToken(type);
+	  ++num_operands_;
+	  preInPostFixTokens.append( QStringList{} ); // Begin a new infix/postfix
+	};
 
 	for (auto s : signature_)
-		if (!isDelimiter(s)) ++num_operands_;
-
-	// Compute prefix
-	for (int i = 0; i < signature_.size() && isDelimiter(signature_.at(i)); ++i)
-		prefix_.append( signature_.at(i) );
-
-	// Compute posfix
-	int postfix_index = signature_.size()-1;
-	for (; postfix_index>=0 && isDelimiter(signature_.at(postfix_index)); --postfix_index)
-		postfix_.prepend( signature_.at(postfix_index) );
-
-	// If the postfix encompasses the entire expression, then this expression is likely just a single keyword e.g. this
-	// or nullptr. In that case it only has a prefix and no infixes or postfixes
-	if (postfix_index < 0)
 	{
-		postfix_.clear();
+		if ( s == "id" ) addNonDelimiter(ExpectedToken::ID);
+		else if ( s == "type" ) addNonDelimiter(ExpectedToken::TYPE);
+		else if ( s == "expr" ) addNonDelimiter(ExpectedToken::VALUE);
+		else if ( s == "typeOrExpr" ) addNonDelimiter(ExpectedToken::ANY);
+		else
+		{
+			// This is a delimiter, but what kind?
+			if (expectedTokens_.isEmpty() ||
+				 (expectedTokens_.last().type != ExpectedToken::FIRST_DELIM
+					&& expectedTokens_.last().type != ExpectedToken::FOLLOWING_DELIM))
+			{
+				expectedTokens_ << ExpectedToken(ExpectedToken::FIRST_DELIM, s);
+			}
+			else expectedTokens_ << ExpectedToken(ExpectedToken::FOLLOWING_DELIM, s);
+			QStringList& last = preInPostFixTokens.last();
+			last.append(s);
+		}
 	}
-	else
-	{
-		// Compute infixes
-		infixes_ = delimiters();
-		infixes_.removeAll("");
-		if ( !prefix_.isEmpty() ) infixes_.removeFirst();
-		if ( !postfix_.isEmpty() ) infixes_.removeLast();
-	}
+	expectedTokens_ << ExpectedToken(ExpectedToken::END);
+
+	Q_ASSERT(num_operands_ == preInPostFixTokens.size() - 1);
+	prefixTokens_ = preInPostFixTokens.takeFirst();
+	if (!preInPostFixTokens.isEmpty()) postfixTokens_ = preInPostFixTokens.takeLast();
+	if (!preInPostFixTokens.isEmpty()) infixesTokens_ = preInPostFixTokens;
 }
 
 QStringList OperatorDescriptor::delimiters()
@@ -84,17 +118,11 @@ QStringList OperatorDescriptor::delimiters()
 	return list;
 }
 
-void OperatorDescriptor::computeExpectedTokens()
+bool OperatorDescriptor::isDelimiter(int signatureIndex)
 {
-	for (auto s : signature_)
-	{
-		if ( s == "id" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::ID);
-		else if ( s == "type" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::TYPE);
-		else if ( s == "expr" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::VALUE);
-		else if ( s == "typeOrExpr" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::ANY);
-		else expectedTokens_ << ExpectedToken(ExpectedToken::DELIM, s);
-	}
-	expectedTokens_ << ExpectedToken(ExpectedToken::END);
+	Q_ASSERT(signatureIndex < signature_.size());
+	if (isError_) return prefixTokens_.isEmpty() != (signatureIndex == 0);
+	else return isDelimiter(signature_[signatureIndex]);
 }
 
 }

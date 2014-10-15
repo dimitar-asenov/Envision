@@ -26,38 +26,56 @@
 
 #pragma once
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
+#include "../declarative/DeclarativeItem.h"
+#include "../declarative/DeclarativeItemBaseStyle.h"
+#include "../overlays/Overlay.h"
 
 namespace Visualization {
 
-class Scene;
-class SelectedItem;
-class Item;
+class Static;
+class Text;
+class TextStyle;
+class StaticStyle;
+class OverlayGroup;
 
-class VISUALIZATIONBASE_API Highlight {
+class VISUALIZATIONBASE_API ZoomLabelOverlay : public Super<Overlay<DeclarativeItem<ZoomLabelOverlay>>>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(ZoomLabelOverlay, DeclarativeItemBaseStyle)
 
 	public:
-		~Highlight();
+		ZoomLabelOverlay(Item* itemWithLabel, const StyleType* style = itemStyles().get());
 
-		const QString& name() const;
-		Scene* scene() const;
+		static void initializeForms();
+		int determineForm() override;
 
-		void addHighlightedItem(Item* item);
-		void removeHighlightedItem(Item* item);
+		virtual bool isSensitiveToScale() const override;
+
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		friend class Scene;
 
-		Scene* scene_{};
-		QString name_;
-		QString styleName_;
-		QHash<Item*, SelectedItem*> highlightItems_;
+		Static* icon_{};
+		Text* text_{};
+		const StaticStyle* iconStyle_{};
+		int postUpdateRevision_{};
+		static QHash<Item*, ZoomLabelOverlay*>& itemToOverlay();
 
-		Highlight(Scene* scene, const QString& name, const QString& styleName);
-		void updateAllHighlights();
+		const StaticStyle* associatedItemIconStyle() const;
+		const QString& associatedItemText() const;
+		const TextStyle* associatedItemTextStyle() const;
+
+		static QList<Item*> itemsThatShouldHaveZoomLabel(Scene* scene);
+		static void setItemPositionsAndHideOverlapped(OverlayGroup& group);
+		void postUpdate(int revision);
+		void adjustPositionOrHide();
+		static void reduceRect(QRect& rectToReduce, const QRect& rectToExclude);
+
+		static constexpr double OVERLAY_MIN_WIDTH = 50;
+		static constexpr double OVERLAY_MIN_HEIGHT = 20;
 };
-
-inline const QString& Highlight::name() const {return name_;}
-inline Scene* Highlight::scene() const {return scene_;}
 
 } /* namespace Visualization */

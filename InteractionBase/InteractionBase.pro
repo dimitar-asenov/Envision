@@ -73,8 +73,6 @@ HEADERS += src/commands/CommandWithNameAndFlags.h \
     src/InteractionBasePlugin.h \
     src/commands/CDiff.h \
     src/commands/CHistory.h \
-    src/vis/CommentWrapper.h \
-    src/handlers/HCommentWrapper.h \
     src/commands/CMerge.h
 SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
@@ -142,6 +140,4 @@ SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/InteractionBasePlugin.cpp \
     src/commands/CDiff.cpp \
     src/commands/CHistory.cpp \
-    src/vis/CommentWrapper.cpp \
-    src/handlers/HCommentWrapper.cpp \
     src/commands/CMerge.cpp

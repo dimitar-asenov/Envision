@@ -24,26 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "SelectionOverlay.h"
+#include "shapes/Shape.h"
 
-#include "../interactionbase_api.h"
+namespace Visualization {
 
-#include "GenericHandler.h"
+ITEM_COMMON_DEFINITIONS(SelectionOverlay, "item")
 
-namespace Interaction {
+SelectionOverlay::SelectionOverlay(Item* selectedItem, const StyleType* style) : Super{{selectedItem}, style} {}
 
-class INTERACTIONBASE_API HCommentWrapper : public GenericHandler
+void SelectionOverlay::determineChildren(){}
+
+void SelectionOverlay::updateGeometry(int, int)
 {
-	public:
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
-		virtual void afterEvent(Visualization::Item *target, QEvent* event) override;
-		static HCommentWrapper* instance();
+	if (hasShape())
+	{
+		getShape()->setInnerSize(associatedItem()->widthInScene(), associatedItem()->heightInScene());
+		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
 
-	protected:
-		HCommentWrapper();
-
-	private:
-		bool deleteAfterEvent = false;
-};
+		setPos(associatedItem()->mapToScene(0, 0) - pos);
+	}
+}
 
 }

@@ -11,10 +11,11 @@ win32:LIBS += -llogger \
     -loovisualization \
     -loointeraction
 
-QMAKE_CXXFLAGS += -isystem /usr/lib/llvm-3.4/include # Use this instead of the line below to suppress warnings
-#INCLUDEPATH +=  /usr/lib/llvm-3.4/include
+# Use this instead of the line under it to avoid warnings
+QMAKE_CXXFLAGS += -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)""
+#INCLUDEPATH +=  /usr/lib/llvm/include
 
-DEFINES += _GNU_SOURCE __STDC_CONSTANT_MACROS __STDC_FORMAT_MACROS __STDC_LIMIT_MACROS
+DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS
 
 
 LIBS += -lclangTooling\
@@ -22,22 +23,15 @@ LIBS += -lclangTooling\
 				-lclangFrontend\
 				-lclangDriver\
 				-lclangSerialization\
-				-lclangCodeGen\
 				-lclangParse\
 				-lclangSema\
-				-lclangStaticAnalyzerFrontend\
-				-lclangStaticAnalyzerCheckers\
-				-lclangStaticAnalyzerCore\
-				-lclangAnalysis\
-				-lclangARCMigrate\
-				-lclangRewriteFrontend\
-				-lclangRewriteCore\
+				-lclangAnalysis \
 				-lclangEdit\
 				-lclangAST\
 				-lclangLex\
 				-lclangBasic\
-				""$(shell llvm-config-3.4 --libs)"" \
-				$$system(llvm-config-3.4 --ldflags --libs cppbackend)
+				""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --libs)"" \
+				$$system( $$_PRO_FILE_PWD_/llvm-config-envision.sh --ldflags --libs cppbackend)
 
 ## END LLVM SPECIFIC
 

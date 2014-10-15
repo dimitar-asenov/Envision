@@ -79,7 +79,8 @@ QMap<int, OOModel::Expression*>& CompoundObjectDescriptor::storedExpressions()
 const QString& CompoundObjectDescriptor::compoundSignature()
 {
 	// If the signature is changed the processDeleteOrBackspaceKey() method must be adjusted accordingly
-	static const QString sig{"@@ expr @@"};
+	static const QString symbols{NUM_SIGNATURE_SYMBOLS, '@'};
+	static const QString sig{symbols + " expr " +symbols};
 	return sig;
 }
 
@@ -137,20 +138,20 @@ bool CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key key, QString&
 	{
 		auto c = expression.at(i);
 		if ( c == '@') ++delimitersFound;
-		else if (c.isDigit() && delimitersFound == 2)
+		else if (c.isDigit() && delimitersFound == NUM_SIGNATURE_SYMBOLS)
 		{
 			if (key == Qt::Key_Delete) number.append(c);
 			else number.prepend(c);
 		}
 		else return false;
 
-		if (delimitersFound > 2 && number.isEmpty()) return false;
-		if (delimitersFound == 4) break;
+		if (delimitersFound > NUM_SIGNATURE_SYMBOLS && number.isEmpty()) return false;
+		if (delimitersFound == 2*NUM_SIGNATURE_SYMBOLS) break;
 
 		i+=step;
 	}
 
-	if (delimitersFound != 4) return false;
+	if (delimitersFound != 2*NUM_SIGNATURE_SYMBOLS) return false;
 
 	// If we reach this point then the user is indeed trying to delete a compound expression. Make sure the number it
 	// refers to exists.

@@ -9,12 +9,17 @@ LIBS += -llpsolve55
 QT += xml \
     svg \
     printsupport
-HEADERS += src/Highlight.h \
+HEADERS += src/overlays/BoxOverlayStyle.h \
+    src/overlays/BoxOverlay.h \
+    src/overlays/OverlayAccessor.h \
+    src/overlays/ZoomLabelOverlay.h \
+    src/overlays/SelectionOverlay.h \
+    src/overlays/Overlay.h \
+    src/overlays/OverlayGroup.h \
     src/items/EmptyItem.h \
     src/items/VUsedLibraryStyle.h \
     src/items/VUsedLibrary.h \
     src/styles/StyleProperty.h \
-    src/items/NameOverlay.h \
     test/DeclarativeTestStyle.h \
     src/declarative/DeclarativeItemBaseStyle.h \
     src/items/VCompositeStyle.h \
@@ -70,7 +75,6 @@ HEADERS += src/Highlight.h \
     src/items/LayoutProvider.h \
     src/items/LayoutProviderBase.h \
     src/items/SceneHandlerItem.h \
-    src/items/SelectedItem.h \
     src/items/Static.h \
     src/items/StaticStyle.h \
     src/items/Symbol.h \
@@ -120,11 +124,14 @@ HEADERS += src/Highlight.h \
     src/VisualizationBasePlugin.h \
     src/declarative/GridLayouter.h \
     src/declarative/DynamicGridFormElement.h
-SOURCES += src/Highlight.cpp \
+SOURCES += src/overlays/BoxOverlayStyle.cpp \
+    src/overlays/BoxOverlay.cpp \
+    src/overlays/ZoomLabelOverlay.cpp \
+    src/overlays/SelectionOverlay.cpp \
+    src/overlays/OverlayGroup.cpp \
     src/items/EmptyItem.cpp \
     src/items/VUsedLibraryStyle.cpp \
     src/items/VUsedLibrary.cpp \
-    src/items/NameOverlay.cpp \
     test/DeclarativeTestStyle.cpp \
     src/declarative/DeclarativeItemBaseStyle.cpp \
     src/items/VCompositeStyle.cpp \
@@ -183,7 +190,6 @@ SOURCES += src/Highlight.cpp \
     src/layouts/PositionLayoutStyle.cpp \
     src/layouts/PositionLayout.cpp \
     src/node_extensions/Position.cpp \
-    src/items/SelectedItem.cpp \
     src/items/SceneHandlerItem.cpp \
     src/items/TextRenderer.cpp \
     src/InteractionHandler.cpp \

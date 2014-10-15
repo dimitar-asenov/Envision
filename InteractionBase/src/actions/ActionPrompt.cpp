@@ -29,7 +29,7 @@
 #include "Action.h"
 
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/items/SelectedItem.h"
+#include "VisualizationBase/src/overlays/SelectionOverlay.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
@@ -107,19 +107,14 @@ void ActionPrompt::initializeForms()
 
 void ActionPrompt::setHighlight(bool show)
 {
+	SAFE_DELETE_ITEM(highlight_);
+
 	if (show && currentActionReceiver_)
 	{
-		if (highlight_) highlight_->setSelectedItem(currentActionReceiver_);
-		else
-		{
-			highlight_ = new Visualization::SelectedItem(currentActionReceiver_);
-			Q_ASSERT(scene());
-			scene()->addTopLevelItem(highlight_);
-		}
+		highlight_ = new Visualization::SelectionOverlay(currentActionReceiver_);
+		Q_ASSERT(scene());
+		scene()->addTopLevelItem(highlight_);
 	}
-	else SAFE_DELETE_ITEM(highlight_);
-
-
 }
 
 void ActionPrompt::setReceiverName()

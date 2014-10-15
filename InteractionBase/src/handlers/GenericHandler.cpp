@@ -30,7 +30,6 @@
 #include "../autocomplete/AutoComplete.h"
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
-#include "vis/CommentWrapper.h"
 #include "actions/Action.h"
 #include "actions/ActionPrompt.h"
 
@@ -40,6 +39,9 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/icons/Icon.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/overlays/BoxOverlay.h"
+#include "VisualizationBase/src/overlays/OverlayAccessor.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
 #include "ModelBase/src/model/TreeManager.h"
@@ -97,8 +99,6 @@ void GenericHandlerManagerListener::stopListeningToTreeManagerOf(Visualization::
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
 CommandPrompt* GenericHandler::commandPrompt_{};
 ActionPrompt* GenericHandler::actionPrompt_{};
-
-CommentWrapper* GenericHandler::commentWrapper_{};
 
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
@@ -162,21 +162,21 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 	}
 }
 
-void GenericHandler::showComment(Visualization::Item *itemWithComment, Model::Node *aNode)
+void GenericHandler::toggleComment(Visualization::Item *itemWithComment, Model::Node *aNode, bool hideOnly)
 {
-	if (commentWrapper_ && itemWithComment == commentWrapper_->itemWithComment())
-	{
-		if (commentWrapper_->isVisible())
-			commentWrapper_->hide();
-		else
-			commentWrapper_->showComment();
-	}
-	else
-	{
-		SAFE_DELETE_ITEM(commentWrapper_);
-		commentWrapper_ = new CommentWrapper(itemWithComment, aNode);
-		commentWrapper_->showComment();
-	}
+	auto scene = itemWithComment->scene();
+	auto overlayGroup = scene->overlayGroup("PopupComments");
+
+	if (overlayGroup && overlayGroup->removeOverlayOf(itemWithComment)) return;
+	if (hideOnly) return;
+
+	if (!overlayGroup) overlayGroup = scene->addOverlayGroup("PopupComments");
+
+	overlayGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(itemWithComment,
+		[aNode](Visualization::BoxOverlay* self){
+		self->renderer()->sync(self->content(), self, aNode);
+		return QString("comment");
+	})));
 }
 
 void GenericHandler::command(Visualization::Item *target, const QString& command,
@@ -446,7 +446,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					aNode->updateSubtree();
 				}
 				if (!aNode->findVisualizationOf(aCompositeNode->comment()))
-					showComment(aNode, aCompositeNode->comment());
+					toggleComment(aNode, aCompositeNode->comment(), false);
 				break;
 			}
 			aNode = aNode->parent();
@@ -465,10 +465,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					aCompositeNode->beginModification("delete comment");
 					aCompositeNode->setComment(nullptr);
 					aCompositeNode->endModification();
-				}
-				if (commentWrapper_)
-				{
-					GenericHandler::resetCommentWrapper();
+					toggleComment(aNode, aCompositeNode->comment(), true);
 				}
 				break;
 			}
@@ -617,12 +614,16 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	if (auto staticParent = DCast<Visualization::Static>(target->parent()))
+	{
+		if (auto clickHandler = staticParent->style()->clickHandler())
+			if (clickHandler(staticParent)) return;
+	}
+
 	if (event->modifiers() == Qt::NoModifier)
 		target->moveCursor(Visualization::Item::MoveOnPosition, event->pos().toPoint());
-	else if (event->button() == Qt::RightButton)
-		{} // Accept the event
-	else
-		event->ignore();
+	else if (event->button() == Qt::RightButton) {} // Accept the event
+	else event->ignore();
 }
 
 
@@ -856,11 +857,6 @@ void GenericHandler::fixCursorPositionForUndoAfterTreeManagerChange()
 
 	cursorPositionsForUndo_.append(lastCursorPosition_);
 	++cursorUndoIndex_;
-}
-
-void GenericHandler::resetCommentWrapper()
-{
-	SAFE_DELETE_ITEM(commentWrapper_);
 }
 
 }

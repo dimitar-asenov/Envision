@@ -32,13 +32,14 @@
 
 namespace Visualization {
 
+class Static;
+
 class VISUALIZATIONBASE_API StaticStyle : public Super<ItemStyle>
 {
-	private:
-		QString itemClass_;
-		QSharedPointer<ItemStyle> itemStyle_;
-
 	public:
+
+		// Returns true if the even has been handled and should not be propagated any further.
+		using ClickHandler = std::function<bool (Static* clickedItem)>;
 		StaticStyle();
 		virtual ~StaticStyle();
 
@@ -48,6 +49,15 @@ class VISUALIZATIONBASE_API StaticStyle : public Super<ItemStyle>
 		const ItemStyle& itemStyle() const;
 
 		bool isEmpty() const;
+
+		ClickHandler clickHandler() const;
+		void setClickHandler(ClickHandler clickHandler) const;
+
+	private:
+		QString itemClass_;
+		QSharedPointer<ItemStyle> itemStyle_;
+
+		mutable ClickHandler clickHandler_{};
 };
 
 class VISUALIZATIONBASE_API StaticSequenceStyle : public Super<Visualization::ItemStyle>
@@ -67,5 +77,8 @@ inline const QString& StaticStyle::itemClass() const { return itemClass_; }
 inline const ItemStyle& StaticStyle::itemStyle() const { return *itemStyle_.data(); }
 
 inline bool StaticStyle::isEmpty() const { return itemClass_.isEmpty(); }
+
+inline StaticStyle::ClickHandler StaticStyle::clickHandler() const {return clickHandler_;}
+inline void StaticStyle::setClickHandler(ClickHandler clickHandler) const {clickHandler_ = clickHandler;}
 
 }

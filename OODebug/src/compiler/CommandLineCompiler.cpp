@@ -24,46 +24,29 @@
 **
 ***********************************************************************************************************************/
 
-#include "HCommentWrapper.h"
+#include "CommandLineCompiler.h"
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "../OODebugException.h"
 
-using namespace Visualization;
+namespace OODebug {
 
-namespace Interaction {
-
-HCommentWrapper::HCommentWrapper()
-{}
-
-HCommentWrapper* HCommentWrapper::instance()
+CompilerFeedback CommandLineCompiler::compileFile(const QString& fileName, const QStringList& args)
 {
-	static HCommentWrapper h;
-	return &h;
-}
-
-void HCommentWrapper::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Delete)
+	QProcess compilerProcess;
+	compilerProcess.setProcessChannelMode(QProcess::MergedChannels);
+	compilerProcess.start(command_, QStringList() << args << fileName);
+	// block until finished
+	compilerProcess.waitForFinished(-1);
+	// check if everything went fine
+	if (compilerProcess.exitStatus() != QProcess::NormalExit)
 	{
-		target->hide();
+		auto error = compilerProcess.error();
+		if (error == QProcess::FailedToStart)
+			throw new OODebugException(QString("It seems like %1 is not installed on your system!").arg(command_));
+		else
+			throw new OODebugException(QString("Uknown error while executing %1: %2").arg(command_, error));
 	}
-	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Delete)
-	{
-		auto aCompositeNode = DCast<Model::CompositeNode>(target->node()->parent());
-		aCompositeNode->beginModification("delete comment");
-		aCompositeNode->setComment(nullptr);
-		aCompositeNode->endModification();
-		deleteAfterEvent = true;
-	}
-	else
-		GenericHandler::keyPressEvent(target, event);
+	return parseFunction_(QString(compilerProcess.readAllStandardOutput()));
 }
 
-void HCommentWrapper::afterEvent(Visualization::Item*, QEvent*)
-{
-	if (deleteAfterEvent)
-		GenericHandler::resetCommentWrapper();
-	deleteAfterEvent = false;
-}
-
-}
+} /* namespace OODebug */

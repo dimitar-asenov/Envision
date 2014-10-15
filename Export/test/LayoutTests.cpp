@@ -282,8 +282,6 @@ TEST(ExportPlugin, CompositeFragment)
 	// LINE 9 (does not exist)
 	CHECK_CONDITION(map->node("composite/composite", 9, 0) == nullptr);
 
-	SAFE_DELETE(map);
-
 	CHECK_TEXT_FILES_EQUAL(":/Export/test/data/composite/composite", testDir +"/composite/composite");
 }
 

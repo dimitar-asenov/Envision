@@ -24,31 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#include "vis/CommentWrapper.h"
+#pragma once
 
-using namespace Visualization;
+#include "../oodebug_api.h"
 
-namespace Interaction {
+#include "InteractionBase/src/commands/CommandWithNameAndFlags.h"
 
-ITEM_COMMON_DEFINITIONS(CommentWrapper, "item")
+namespace OODebug {
 
-CommentWrapper::CommentWrapper(Item* itemWithComment, NodeType* node, const StyleType* style)
-	: Super(nullptr, node, style)
+class OODEBUG_API CJavaCompile : public Interaction::CommandWithNameAndFlags
 {
-	itemWithComment_ = itemWithComment;
-	itemWithComment_->scene()->addTopLevelItem(this);
-}
+	public:
+		CJavaCompile();
 
-void CommentWrapper::showComment()
-{
-	setCommentPosition();
-	show();
-}
+	protected:
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor,
+				const QString& name, const QStringList& attributes) override;
+};
 
-void CommentWrapper::setCommentPosition()
-{
-	QPointF commentPos = itemWithComment_->mapToScene(0, 0);
-	setPos(commentPos.x() + itemWithComment_->widthInScene(), commentPos.y());
-}
-
-}
+} /* namespace OODebug */

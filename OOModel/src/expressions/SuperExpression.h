@@ -26,37 +26,18 @@
 
 #pragma once
 
-#include "../visualizationbase_api.h"
-#include "items/TextStyle.h"
+#include "Expression.h"
 
-#include "Item.h"
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SuperExpression)
 
-namespace Visualization {
+namespace OOModel {
 
-class BottomItemNode;
-
-class VISUALIZATIONBASE_API NameOverlay: public Super<Item>
+class OOMODEL_API SuperExpression: public Super<Expression>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(NameOverlay, TextStyle)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(SuperExpression)
 
 	public:
-		NameOverlay(Scene* scene, const StyleType* style = itemStyles().get());
-		virtual ~NameOverlay();
-
-		virtual UpdateType needsUpdate() override;
-
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-
-	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		BottomItemNode* bottomItems_{};
-		QList<BottomItemNode*> dfsOrder_{};
-
-		const QString& overlayText(Item* item) const;
-		bool fitsInRect(const QString& text, const QFontMetrics& qfm, const QRect& r) const;
+		virtual Type* type();
 };
 
-}
+} /* namespace OOModel */

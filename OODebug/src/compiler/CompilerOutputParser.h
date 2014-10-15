@@ -24,51 +24,25 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/SelectedItem.h"
-#include "shapes/Shape.h"
+#pragma once
 
-namespace Visualization {
+#include "../oodebug_api.h"
 
-ITEM_COMMON_DEFINITIONS(SelectedItem, "item")
+#include "CompilerFeedback.h"
 
-SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
-Super(nullptr, style), selectedItem_(selectedItem)
+namespace OODebug {
+
+class OODEBUG_API CompilerOutputParser
 {
-	setFlags(0);
-	setAcceptedMouseButtons(0);
-	setZValue(LAYER_SELECTION_Z);
-	setItemCategory(Scene::SelectionItemCategory);
-}
+	public:
+		/**
+		 * Parses the \a output, which should be in the Javac Error format: "sourcefile:lineno: type: message ^",
+		 * where ^ is the column identifier and is at the same time the end of one message.
+		 *
+		 * You can get the parsed feedback with the corresponding getters, e.g. \a getErrors(), etc.
+		 */
+		static CompilerFeedback parseJavacErrorFormat(const QString& output);
 
-SelectedItem::~SelectedItem()
-{
-	selectedItem_ = nullptr;
-}
+};
 
-void SelectedItem::setSelectedItem(Item* item)
-{
-	selectedItem_ = item;
-}
-
-Item::UpdateType SelectedItem::needsUpdate()
-{
-	return StandardUpdate;
-}
-
-void SelectedItem::determineChildren()
-{
-
-}
-
-void SelectedItem::updateGeometry(int, int)
-{
-	if (hasShape())
-	{
-		getShape()->setInnerSize(selectedItem_->widthInScene(), selectedItem_->heightInScene());
-		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
-
-		setPos(selectedItem_->mapToScene(0, 0) - pos);
-	}
-}
-
-}
+} /* namespace OODebug */

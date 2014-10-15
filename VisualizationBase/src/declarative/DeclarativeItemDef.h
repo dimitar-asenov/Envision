@@ -103,6 +103,14 @@ template <class VisualizationType>
 
 template <class VisualizationType>
 template <class ChildItemVisualizationType>
+	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>*
+	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage)
+{
+	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, true>(itemStorage);
+}
+
+template <class VisualizationType>
+template <class ChildItemVisualizationType>
 	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 										std::function<const

@@ -225,6 +225,7 @@ void StringComponents::initConversions()
 	add<CommaExpression>([](CommaExpression* e){ return c( QString(), e->left(), ",", e->right(), QString() ); });
 	add<ConditionalExpression>([](ConditionalExpression* e){ return c(
 		QString(), e->condition(), "?", e->trueExpression(), ":", e->falseExpression(), QString() ); });
+	add<SuperExpression>([](SuperExpression* ){ return c( "super" ); });
 	add<ThisExpression>([](ThisExpression* ){ return c( "this" ); });
 	add<GlobalScopeExpression>([](GlobalScopeExpression* ){ return c( "::" ); });
 	add<ThrowExpression>([](ThrowExpression* e ){ return c( "throw", " ", e->expr() ); });
