@@ -7,7 +7,7 @@ COMMAND_TO_USE=""
 check() {
 	if [ "$COMMAND_TO_USE" == "" ]; then
 		if hash $1 2>/dev/null; then
-			if [ "`$1 --version`" == "$SUPPORTED_VERSION" ]; then
+			if [ `$1 --version | grep "^$SUPPORTED_VERSION" -c` == "1" ]; then
 				COMMAND_TO_USE=$1
 			fi
 		fi
