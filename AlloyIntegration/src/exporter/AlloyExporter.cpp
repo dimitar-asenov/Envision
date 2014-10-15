@@ -47,6 +47,15 @@ void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 	file->append(aNode, "run show for 3");
 
 	auto layouter = Export::FragmentLayouter{"\t"};
+	layouter.addRule("fieldList", Export::FragmentLayouter::SpaceAfterSeparator |
+						  Export::FragmentLayouter::NewLineAfterPostfix, "{", ",", "}");
+	layouter.addRule("argsDefinitionList", Export::FragmentLayouter::SpaceAfterSeparator |
+						  Export::FragmentLayouter::NewLineAfterPostfix, "(", ",", ")");
+	layouter.addRule("argsCallList", Export::FragmentLayouter::SpaceAfterSeparator, "[", ",", "]");
+	layouter.addRule("methodBody", Export::FragmentLayouter::NewLineAfterPrefix |
+						  Export::FragmentLayouter::NewLineBefore |
+						  Export::FragmentLayouter::NewLineAfterPostfix |
+						  Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n", "}");
 
 	Export::Exporter::exportToFileSystem(path, dir, &layouter);
 }

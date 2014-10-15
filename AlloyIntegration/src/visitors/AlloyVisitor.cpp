@@ -55,15 +55,8 @@ void AlloyVisitor::init()
 	{
 		currentClass_ = t->name();
 		auto fragment = new Export::CompositeFragment(t);
-		*fragment << "sig " + t->name() + "";
-		*fragment << "{";
-		for (auto node : *t->fields())
-		{
-			*fragment << v->visit(node);
-			if (node != t->fields()->last())
-				*fragment << ", ";
-		}
-		*fragment << "}\n";
+		*fragment << "sig " << t->name();
+		*fragment << list(t->fields(), v, "fieldList");
 		for (auto node : *t->methods()) *fragment << v->visit(node);
 		for (auto node : *t->classes()) *fragment << v->visit(node);
 		currentClass_ = t->name();
@@ -77,18 +70,9 @@ void AlloyVisitor::init()
 			for (auto node : *t->items()) *fragment << v->visit(node);
 		else if (!t->name().startsWith("~"))
 		{
-			*fragment << "pred " + currentClass_ + "::" + t->name() + "(";
-			for (auto node : *t->arguments())
-			{
-				*fragment <<  v->visit(node);
-				if (node != t->arguments()->last())
-					*fragment << ", ";
-			}
-			*fragment << ")\n";
-			*fragment << "{\n";
-			for (auto node : *t->items())
-				*fragment << v->visit(node);
-			*fragment << "}\n";
+			*fragment << "pred " << currentClass_ << "::" << t->name();
+			*fragment << list(t->arguments(), v, "argsDefinitionList");
+			*fragment << list(t->items(), v, "methodBody");
 		}
 		return fragment;
 	});
@@ -97,12 +81,12 @@ void AlloyVisitor::init()
 	{
 		auto fragment = new Export::CompositeFragment(t);
 		if (!DCast<PrimitiveTypeExpression>(t->typeExpression()))
-			*fragment << t->name() + ": lone " + StringComponents::stringForNode(t->typeExpression());
+			*fragment << t->name() << ": lone " << StringComponents::stringForNode(t->typeExpression());
 		else
 		{
 			QString temp = StringComponents::stringForNode(t->typeExpression());
 			temp[0] = temp[0].toUpper();
-			*fragment << t->name() + ": one " + temp;
+			*fragment << t->name() << ": one " << temp;
 		}
 		return fragment;
 	});
@@ -114,55 +98,66 @@ void AlloyVisitor::init()
 		{
 			inFact_ = true;
 			*fragment << "fact {";
-			*fragment << "all a" + currentClass_ + ":" + currentClass_ + " | ";
+			*fragment << "all a" << currentClass_ << ":" << currentClass_ << " | ";
 			*fragment << v->visit(t->arguments()->at(0));
 			*fragment << "}\n";
 			inFact_ = false;
 		}
 		else if (StringComponents::stringForNode(t->callee()).startsWith("Contract.ForAll"))
 		{
-			QString aString = StringComponents::stringForNode(t->callee());
-			aString = aString.mid(aString.indexOf("<")+1, aString.indexOf(">")-aString.indexOf("<")-1);
-			*fragment << "all " << someName_.pop() << ":" << aString << " | " << v->visit(t->arguments()->at(1));
+			if (auto refExp = DCast<ReferenceExpression>(t->callee()))
+			{
+				if (refExp->typeArguments()->size() == 1)
+				{
+					if (auto aLamda = DCast<LambdaExpression>(t->arguments()->at(1)))
+						*fragment << "all " << aLamda->arguments()->at(0)->name() << ":"
+							<< StringComponents::stringForNode(refExp->typeArguments()->first())
+							<< " | " << v->visit(t->arguments()->at(1));
+				}
+			}
 		}
 		else if (StringComponents::stringForNode(t->callee()).startsWith("Contract.Exists"))
 		{
-			QString aString = StringComponents::stringForNode(t->callee());
-			aString = aString.mid(aString.indexOf("<")+1, aString.indexOf(">")-aString.indexOf("<")-1);
-			*fragment << "some " << someName_.pop() << ":" << aString << " | " << v->visit(t->arguments()->at(1));
+			if (auto refExp = DCast<ReferenceExpression>(t->callee()))
+			{
+				if (refExp->typeArguments()->size() == 1)
+				{
+					if (auto aLamda = DCast<LambdaExpression>(t->arguments()->at(1)))
+						*fragment << "some " << aLamda->arguments()->at(0)->name() << ":"
+							<< StringComponents::stringForNode(refExp->typeArguments()->first())
+							<< " | " << v->visit(t->arguments()->at(1));
+				}
+			}
 		}
 		else if (StringComponents::stringForNode(t->callee()).startsWith("Contract.ExactlyOne"))
 		{
-			QString aString = StringComponents::stringForNode(t->callee());
-			aString = aString.mid(aString.indexOf("<")+1, aString.indexOf(">")-aString.indexOf("<")-1);
-			*fragment << "one " << someName_.pop() << ":" << aString << " | " << v->visit(t->arguments()->at(1));
+			if (auto refExp = DCast<ReferenceExpression>(t->callee()))
+			{
+				if (refExp->typeArguments()->size() == 1)
+				{
+					if (auto aLamda = DCast<LambdaExpression>(t->arguments()->at(1)))
+						*fragment << "one " << aLamda->arguments()->at(0)->name() << ":"
+							<< StringComponents::stringForNode(refExp->typeArguments()->first())
+							<< " | " << v->visit(t->arguments()->at(1));
+				}
+			}
 		}
 		else if (StringComponents::stringForNode(t->callee()).startsWith("Contract.Requires"))
 		{
 			inContract_ = true;
 			*fragment << v->visit(t->arguments()->at(0));
-			*fragment << "\n";
 			inContract_ = false;
 		}
 		else if (StringComponents::stringForNode(t->callee()).startsWith("Contract.Ensures"))
 		{
 			inContract_ = true;
 			*fragment << v->visit(t->arguments()->at(0));
-			*fragment << "\n";
 			inContract_ = false;
 		}
 		else if (inContract_ || inFact_)
 		{
 			*fragment << v->visit(t->callee());
-			*fragment << "[";
-			for (auto node : *t->arguments())
-			{
-				*fragment <<  v->visit(node);
-				if (node != t->arguments()->last())
-					*fragment << ", ";
-			}
-			*fragment << "]";
-
+			*fragment << list(t->arguments(), v, "argsCallList");
 		}
 		return fragment;
 	});
@@ -234,7 +229,7 @@ void AlloyVisitor::init()
 	{
 		auto fragment = new Export::CompositeFragment(t);
 		if (inFact_)
-			*fragment << "a"+currentClass_;
+			*fragment << "a" << currentClass_;
 		else if (inContract_)
 			*fragment << "this";
 		return fragment;
@@ -280,12 +275,12 @@ void AlloyVisitor::init()
 	{
 		auto fragment = new Export::CompositeFragment(t);
 		if (!DCast<PrimitiveTypeExpression>(t->typeExpression()))
-			*fragment << t->name() + ":" + StringComponents::stringForNode(t->typeExpression());
+			*fragment << t->name() << ":" << StringComponents::stringForNode(t->typeExpression());
 		else
 		{
 			QString temp = StringComponents::stringForNode(t->typeExpression());
 			temp[0] = temp[0].toUpper();
-			*fragment << t->name() + ":" + temp;
+			*fragment << t->name() << ":" << temp;
 		}
 		return fragment;
 	});
@@ -293,15 +288,22 @@ void AlloyVisitor::init()
 	Visitor::addType<LambdaExpression>( [](AlloyVisitor* v, LambdaExpression* t) -> Export::SourceFragment*
 	{
 		auto fragment = new Export::CompositeFragment(t);
-		someName_.push(t->arguments()->at(0)->name());
 		*fragment << v->visit(t->body()->last());
 		return fragment;
 	});
 
 }
 
+template<class ListElement>
+Export::SourceFragment* AlloyVisitor::list(Model::TypedList<ListElement>* aList, AlloyVisitor* v,
+const QString& fragmentType)
+{
+	auto fragment = new Export::CompositeFragment(aList, fragmentType);
+	for (auto node : *aList) *fragment << v->visit(node);
+	return fragment;
+}
+
 QString AlloyVisitor::currentClass_ = "";
-QStack<QString> AlloyVisitor::someName_ = QStack<QString>();
 bool AlloyVisitor::inFact_ = false;
 bool AlloyVisitor::inContract_ = false;
 

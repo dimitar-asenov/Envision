@@ -27,6 +27,7 @@
 #include "ModelBase/src/visitor/VisitorDefinition.h"
 #include "VisualizationBase/src/items/Item.h"
 
+#include "ModelBase/src/nodes/TypedList.h"
 #include "Export/src/tree/CompositeFragment.h"
 
 namespace Alloy {
@@ -37,9 +38,12 @@ class AlloyVisitor : public Model::Visitor<AlloyVisitor, Export::SourceFragment*
 
 	private:
 		static QString currentClass_;
-		static QStack<QString> someName_;
 		static bool inFact_;
 		static bool inContract_;
+
+		template<class ListElement>
+		static Export::SourceFragment* list(Model::TypedList<ListElement>* aList, AlloyVisitor* v,
+											  const QString& fragmentType = QString());
 };
 
 }
