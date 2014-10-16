@@ -58,7 +58,7 @@ void ConsoleOverlay::appendText(const QString& text)
 {
 	Q_ASSERT(output_);
 	QString currentText = output_->text();
-	output_->setText(currentText.append(QString(text).replace(QRegExp("\\r?\\n"), "<br>")));
+	output_->setText(currentText.append(QString(text).toHtmlEscaped().replace(QRegExp("\\r?\\n"), "<br>")));
 }
 
 void ConsoleOverlay::updateGeometry(int availableWidth, int availableHeight)
