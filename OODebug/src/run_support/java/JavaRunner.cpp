@@ -86,7 +86,10 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	// We have to make a copy here of the pointer such that we do not delete the new instance.
 	// By using the kill slot we know that we will always clean the memory of the old process.
 	QObject::connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished),
-						  [process](int){process->deleteLater();});
+						  [process](int){
+		process->deleteLater();
+		if (runProcess_.process() == process) runProcess_.setProcess(nullptr);
+	});
 
 	process->start("java", {"-cp", pathToProjectContainerDirectory + QDir::separator() + "build", fileName});
 }
