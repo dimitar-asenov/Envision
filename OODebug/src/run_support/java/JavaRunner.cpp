@@ -44,10 +44,11 @@
 #include "../../compiler/java/JavaCompiler.h"
 #include "../MainMethodFinder.h"
 #include "../../OODebugException.h"
+#include "../RunProcess.h"
 
 namespace OODebug {
 
-static QProcess* runProcess_{};
+static RunProcess runProcess_;
 static Visualization::ConsoleOverlay* console_{};
 static OOModel::Project* lastProject_{};
 
@@ -74,20 +75,20 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	// NOTE: This next line is dependent on export plugin
 	fileName.replace(QString("src") + QDir::separator(), "");
 
-	if (runProcess_)
-		runProcess_->kill(); // Deletion is done with the lambda below.
-	runProcess_ = new QProcess();
+	if (runProcess_.process())
+		runProcess_.process()->kill(); // Deletion is done with the lambda below.
+	auto process = new QProcess();
+	runProcess_.setProcess(process);
 
-	QObject::connect(runProcess_, &QProcess::readyReadStandardOutput, qApp, &handleOutput, Qt::QueuedConnection);
-	QObject::connect(runProcess_, &QProcess::readyReadStandardError, qApp, &handleErrorOutput, Qt::QueuedConnection);
+	QObject::connect(process, &QProcess::readyReadStandardOutput, qApp, &handleOutput, Qt::QueuedConnection);
+	QObject::connect(process, &QProcess::readyReadStandardError, qApp, &handleErrorOutput, Qt::QueuedConnection);
 
 	// We have to make a copy here of the pointer such that we do not delete the new instance.
 	// By using the kill slot we know that we will always clean the memory of the old process.
-	QProcess* process = runProcess_;
 	QObject::connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished),
 						  [process](int){process->deleteLater();});
 
-	runProcess_->start("java", {"-cp", pathToProjectContainerDirectory + QDir::separator() + "build", fileName});
+	process->start("java", {"-cp", pathToProjectContainerDirectory + QDir::separator() + "build", fileName});
 }
 
 void JavaRunner::noMainMethodWarning(Model::Node* node)
@@ -116,18 +117,18 @@ void JavaRunner::noMainMethodWarning(Model::Node* node)
 
 void JavaRunner::handleOutput()
 {
-	Q_ASSERT(lastProject_ && runProcess_);
+	Q_ASSERT(lastProject_ && runProcess_.process());
 	if (!console_)
 		addConsole(lastProject_);
-	console_->appendText(runProcess_->readAllStandardOutput());
+	console_->appendText(runProcess_.process()->readAllStandardOutput());
 }
 
 void JavaRunner::handleErrorOutput()
 {
-	Q_ASSERT(lastProject_ && runProcess_);
+	Q_ASSERT(lastProject_ && runProcess_.process());
 	if (!console_)
 		addConsole(lastProject_);
-	console_->appendText(runProcess_->readAllStandardError());
+	console_->appendText(runProcess_.process()->readAllStandardError());
 }
 
 void JavaRunner::addConsole(Model::Node* node)

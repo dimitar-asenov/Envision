@@ -25,7 +25,8 @@ HEADERS += src/precompiled.h \
     src/commands/CJavaCompile.h \
     src/run_support/MainMethodFinder.h \
     src/run_support/java/JavaRunner.h \
-    src/commands/CJavaRun.h
+    src/commands/CJavaRun.h \
+    src/run_support/RunProcess.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
