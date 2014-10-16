@@ -39,6 +39,7 @@ ITEM_COMMON_DEFINITIONS(ConsoleOverlay, "item")
 ConsoleOverlay::ConsoleOverlay(Item* associatedItem, const StyleType* style) : Super({associatedItem}, style)
 {
 	output_ = new Text(this);
+	output_->setTextFormat(Qt::RichText);
 
 	// TODO can we only hide it ? we shouldn't destroy it.
 	if (!style->closeIcon().clickHandler())
@@ -57,7 +58,7 @@ void ConsoleOverlay::appendText(const QString& text)
 {
 	Q_ASSERT(output_);
 	QString currentText = output_->text();
-	output_->setText(currentText.append(text));
+	output_->setText(currentText.append(QString(text).replace(QRegExp("\\r?\\n"), "<br>")));
 }
 
 void ConsoleOverlay::updateGeometry(int availableWidth, int availableHeight)

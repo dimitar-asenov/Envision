@@ -131,7 +131,7 @@ void JavaRunner::handleErrorOutput()
 	Q_ASSERT(lastProject_ && runProcess_.process());
 	if (!console_)
 		addConsole(lastProject_);
-	console_->appendText(runProcess_.process()->readAllStandardError());
+	console_->appendText("<font color=\"#FF0000\">" + runProcess_.process()->readAllStandardError() + "</font>");
 }
 
 void JavaRunner::addConsole(Model::Node* node)
