@@ -277,7 +277,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				++cursorUndoIndex_;
 			}
 
-			if (cursorUndoIndex_ >= 0)
+			if (cursorUndoIndex_ > 0)
 			{
 				auto undoData = cursorPositionsForUndo_.at(--cursorUndoIndex_);
 				if (scene->topLevelItems().contains(undoData.first))
