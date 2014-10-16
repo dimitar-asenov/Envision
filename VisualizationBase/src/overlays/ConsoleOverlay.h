@@ -50,11 +50,9 @@ class VISUALIZATIONBASE_API ConsoleOverlay : public Super<Overlay<DeclarativeIte
 		void appendText(const QString& text);
 
 	protected:
-		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		QString text_;
 		Static* closeIcon_{};
 		Text* output_{};
 		Item* content_{};

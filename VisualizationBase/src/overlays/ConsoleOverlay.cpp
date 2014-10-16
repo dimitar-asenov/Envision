@@ -38,6 +38,8 @@ ITEM_COMMON_DEFINITIONS(ConsoleOverlay, "item")
 
 ConsoleOverlay::ConsoleOverlay(Item* associatedItem, const StyleType* style) : Super({associatedItem}, style)
 {
+	output_ = new Text(this);
+
 	// TODO can we only hide it ? we shouldn't destroy it.
 	if (!style->closeIcon().clickHandler())
 	{
@@ -53,14 +55,9 @@ ConsoleOverlay::ConsoleOverlay(Item* associatedItem, const StyleType* style) : S
 
 void ConsoleOverlay::appendText(const QString& text)
 {
-	text_.append(text);
-}
-
-void ConsoleOverlay::determineChildren()
-{
-	Super::determineChildren();
 	Q_ASSERT(output_);
-	output_->setText(text_);
+	QString currentText = output_->text();
+	output_->setText(currentText.append(text));
 }
 
 void ConsoleOverlay::updateGeometry(int availableWidth, int availableHeight)
