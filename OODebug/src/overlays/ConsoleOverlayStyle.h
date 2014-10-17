@@ -26,38 +26,21 @@
 
 #pragma once
 
-#include "../visualizationbase_api.h"
-#include "ConsoleOverlayStyle.h"
-#include "Overlay.h"
-#include "../declarative/DeclarativeItem.h"
+#include "../oodebug_api.h"
 
-namespace Visualization {
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
-class Static;
-class Text;
+namespace OODebug {
 
-class VISUALIZATIONBASE_API ConsoleOverlay : public Super<Overlay<DeclarativeItem<ConsoleOverlay>>>
+class OODEBUG_API ConsoleOverlayStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	ITEM_COMMON(ConsoleOverlay)
-
 	public:
-		ConsoleOverlay(Item* associatedItem, const StyleType* style = itemStyles().get());
+		virtual ~ConsoleOverlayStyle() override;
 
-		static void initializeForms();
-
-		Item*& content();
-
-		void appendText(const QString& text);
-
-	protected:
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-		Static* closeIcon_{};
-		Text* output_{};
-		Item* content_{};
+		Property<Visualization::TextStyle> output{this, "output"};
+		Property<Visualization::StaticStyle> closeIcon{this, "closeIcon"};
 };
 
-inline Item*& ConsoleOverlay::content() { return content_; }
-
-} /* namespace Visualization */
+} /* namespace OODebug */

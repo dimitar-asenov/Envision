@@ -30,21 +30,22 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "../declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-namespace Visualization {
+namespace OODebug {
 
 ITEM_COMMON_DEFINITIONS(ConsoleOverlay, "item")
 
-ConsoleOverlay::ConsoleOverlay(Item* associatedItem, const StyleType* style) : Super({associatedItem}, style)
+ConsoleOverlay::ConsoleOverlay(Visualization::Item* associatedItem, const StyleType* style)
+	: Super({associatedItem}, style)
 {
-	output_ = new Text(this);
+	output_ = new Visualization::Text(this);
 	output_->setTextFormat(Qt::RichText);
 
 	// TODO can we only hide it ? we shouldn't destroy it.
 	if (!style->closeIcon().clickHandler())
 	{
-		style->closeIcon().setClickHandler([](Static* staticParent)
+		style->closeIcon().setClickHandler([](Visualization::Static* staticParent)
 		{
 			// This indirection is needed since we can't destroy an item while we're in its even handler.
 			staticParent->scene()->addPostEventAction(
@@ -75,17 +76,17 @@ void ConsoleOverlay::updateGeometry(int availableWidth, int availableHeight)
 
 void ConsoleOverlay::initializeForms()
 {
-	auto header = (new GridLayoutFormElement())
+	auto header = (new Visualization::GridLayoutFormElement())
 			->setSpacing(3)->setColumnStretchFactor(1, 1)
-			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-			->put(0, 0, item<Text>(&I::output_, &StyleType::output))
-			->put(2, 0, item<Static>(&I::closeIcon_, &StyleType::closeIcon));
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Visualization::Item*){return true;})
+			->put(0, 0, item<Visualization::Text>(&I::output_, &StyleType::output))
+			->put(2, 0, item<Visualization::Static>(&I::closeIcon_, &StyleType::closeIcon));
 
-	auto container = (new GridLayoutFormElement())
+	auto container = (new Visualization::GridLayoutFormElement())
 			->put(0, 0, header)
-			->put(0, 1, item<Item>(&I::content_));
+			->put(0, 1, item<Visualization::Item>(&I::content_));
 
 	addForm(container);
 }
 
-} /* namespace Visualization */
+} /* namespace OODebug */

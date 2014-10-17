@@ -32,7 +32,6 @@
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/overlays/MessageOverlay.h"
-#include "VisualizationBase/src/overlays/ConsoleOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 
 #include "OOModel/src/declarations/Project.h"
@@ -41,6 +40,7 @@
 #include "Export/src/writer/TextToNodeMap.h"
 #include "JavaExport/src/exporter/JavaExporter.h"
 
+#include "../../overlays/ConsoleOverlay.h"
 #include "../../compiler/java/JavaCompiler.h"
 #include "../MainMethodFinder.h"
 #include "../../OODebugException.h"
@@ -49,7 +49,7 @@
 namespace OODebug {
 
 static RunProcess runProcess_;
-static Visualization::ConsoleOverlay* console_{};
+static ConsoleOverlay* console_{};
 static OOModel::Project* lastProject_{};
 
 void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
@@ -147,7 +147,7 @@ void JavaRunner::addConsole(Model::Node* node)
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
 
-	console_ = new Visualization::ConsoleOverlay(item);
+	console_ = new ConsoleOverlay(item);
 
 	overlayGroup->addOverlay(makeOverlay(console_));
 }

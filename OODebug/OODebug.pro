@@ -26,7 +26,9 @@ HEADERS += src/precompiled.h \
     src/run_support/MainMethodFinder.h \
     src/run_support/java/JavaRunner.h \
     src/commands/CJavaRun.h \
-    src/run_support/RunProcess.h
+    src/run_support/RunProcess.h \
+    src/overlays/ConsoleOverlay.h \
+    src/overlays/ConsoleOverlayStyle.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -36,4 +38,6 @@ SOURCES += src/OODebugException.cpp \
     src/commands/CJavaCompile.cpp \
     src/run_support/MainMethodFinder.cpp \
     src/run_support/java/JavaRunner.cpp \
-    src/commands/CJavaRun.cpp
+    src/commands/CJavaRun.cpp \
+    src/overlays/ConsoleOverlay.cpp \
+    src/overlays/ConsoleOverlayStyle.cpp

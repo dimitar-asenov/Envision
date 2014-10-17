@@ -26,8 +26,8 @@
 
 #include "ConsoleOverlayStyle.h"
 
-namespace Visualization {
+namespace OODebug {
 
 ConsoleOverlayStyle::~ConsoleOverlayStyle(){}
 
-} /* namespace Visualization */
+} /* namespace OODebug */
