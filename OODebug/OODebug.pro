@@ -40,4 +40,5 @@ SOURCES += src/OODebugException.cpp \
     src/run_support/java/JavaRunner.cpp \
     src/commands/CJavaRun.cpp \
     src/overlays/ConsoleOverlay.cpp \
-    src/overlays/ConsoleOverlayStyle.cpp
+    src/overlays/ConsoleOverlayStyle.cpp \
+    src/run_support/RunProcess.cpp

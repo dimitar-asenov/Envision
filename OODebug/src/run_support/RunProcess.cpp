@@ -24,33 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../oodebug_api.h"
+#include "RunProcess.h"
 
 namespace OODebug {
 
-/**
- * A wrapper class for a QProcess pointer. This way we can use a static \a RunProcess and
- * make sure the managed QProcess is killed in the end.
- *
- * An example use case can be found in the \a JavaRunner class.
- */
-class OODEBUG_API RunProcess {
-	public:
-		~RunProcess();
+OODebug::RunProcess::~RunProcess()
+{
+	if (managedProcess_) managedProcess_->kill();
+}
 
-		/**
-		 * Kills the current process and creates a new process.
-		 */
-		QProcess* replaceProcess();
+QProcess* RunProcess::replaceProcess()
+{
+	if (managedProcess_)
+		managedProcess_->kill();
+	auto newProcess = new QProcess();
 
-		QProcess* process() const;
+	// We have to make a copy here of the pointer such that we do not delete the new instance.
+	// By using the kill slot we know that we will always clean the memory of the old process.
+	QObject::connect(newProcess, static_cast<void (QProcess::*)(int)>(&QProcess::finished),
+						  [this, newProcess](int){
+		newProcess->deleteLater();
+		if (managedProcess_ == newProcess)
+			managedProcess_ = nullptr;
+	});
 
-	private:
-		QProcess* managedProcess_{};
-};
+	managedProcess_ = newProcess;
+	return newProcess;
+}
 
-inline QProcess* RunProcess::process() const { return managedProcess_; }
 
 } /* namespace OODebug */

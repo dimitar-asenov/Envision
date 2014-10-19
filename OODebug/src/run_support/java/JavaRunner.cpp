@@ -48,7 +48,6 @@
 
 namespace OODebug {
 
-static RunProcess runProcess_;
 static ConsoleOverlay* console_{};
 static OOModel::Project* lastProject_{};
 
@@ -75,21 +74,10 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	// NOTE: This next line is dependent on export plugin
 	fileName.replace(QString("src") + QDir::separator(), "");
 
-	if (runProcess_.process())
-		runProcess_.process()->kill(); // Deletion is done with the lambda below.
-	auto process = new QProcess();
-	runProcess_.setProcess(process);
+	auto process = runProcess().replaceProcess();
 
 	QObject::connect(process, &QProcess::readyReadStandardOutput, qApp, &handleOutput, Qt::QueuedConnection);
 	QObject::connect(process, &QProcess::readyReadStandardError, qApp, &handleErrorOutput, Qt::QueuedConnection);
-
-	// We have to make a copy here of the pointer such that we do not delete the new instance.
-	// By using the kill slot we know that we will always clean the memory of the old process.
-	QObject::connect(process, static_cast<void (QProcess::*)(int)>(&QProcess::finished),
-						  [process](int){
-		process->deleteLater();
-		if (runProcess_.process() == process) runProcess_.setProcess(nullptr);
-	});
 
 	process->start("java", {"-cp", pathToProjectContainerDirectory + QDir::separator() + "build", fileName});
 }
@@ -120,18 +108,18 @@ void JavaRunner::noMainMethodWarning(Model::Node* node)
 
 void JavaRunner::handleOutput()
 {
-	Q_ASSERT(lastProject_ && runProcess_.process());
+	Q_ASSERT(lastProject_ && runProcess().process());
 	if (!console_)
 		addConsole(lastProject_);
-	console_->appendText(runProcess_.process()->readAllStandardOutput());
+	console_->appendText(runProcess().process()->readAllStandardOutput());
 }
 
 void JavaRunner::handleErrorOutput()
 {
-	Q_ASSERT(lastProject_ && runProcess_.process());
+	Q_ASSERT(lastProject_ && runProcess().process());
 	if (!console_)
 		addConsole(lastProject_);
-	console_->appendText("<font color=\"#FF0000\">" + runProcess_.process()->readAllStandardError() + "</font>");
+	console_->appendText("<font color=\"#FF0000\">" + runProcess().process()->readAllStandardError() + "</font>");
 }
 
 void JavaRunner::addConsole(Model::Node* node)
@@ -150,6 +138,12 @@ void JavaRunner::addConsole(Model::Node* node)
 	console_ = new ConsoleOverlay(item);
 
 	overlayGroup->addOverlay(makeOverlay(console_));
+}
+
+RunProcess& JavaRunner::runProcess()
+{
+	static RunProcess process;
+	return process;
 }
 
 } /* namespace OODebug */

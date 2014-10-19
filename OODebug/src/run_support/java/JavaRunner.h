@@ -35,6 +35,8 @@ namespace Model {
 
 namespace OODebug {
 
+class RunProcess;
+
 class OODEBUG_API JavaRunner
 {
 	public:
@@ -46,6 +48,8 @@ class OODEBUG_API JavaRunner
 		static void handleErrorOutput();
 
 		static void addConsole(Model::Node* node);
+
+		static RunProcess& runProcess();
 };
 
 } /* namespace OODebug */
