@@ -78,7 +78,7 @@ Interaction::CommandResult* CAlloy::executeNamed(Visualization::Item* source, Vi
 	out << jsArray;
 	jsfile.close();
 
-	QProcess::execute("cp " + QDir::currentPath() + "/alloy/AlloyModels.html " + outputDirectory + "/AlloyModels.html");
+	QFile::copy(QDir::currentPath() + "/alloy/AlloyModels.html", outputDirectory + "/AlloyModels.html");
 
 	auto scene = source->scene();
 	auto alloyModelGroup = scene->overlayGroup("AlloyModels");
