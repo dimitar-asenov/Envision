@@ -51,6 +51,8 @@ namespace OODebug {
 static ConsoleOverlay* console_{};
 static OOModel::Project* lastProject_{};
 
+// TODO: this Runner can be improved by allowing multiple main methods if there are multiple packages.
+// Then we can have Maps: Package->LIST[Process], Process->Console and thus allow multiple processes to run.
 void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
 	lastProject_ = DCast<OOModel::Project>(manager->root());
