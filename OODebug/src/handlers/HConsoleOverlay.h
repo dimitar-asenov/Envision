@@ -27,37 +27,28 @@
 #pragma once
 
 #include "../oodebug_api.h"
-#include "ConsoleOverlayStyle.h"
 
-#include "VisualizationBase/src/overlays/Overlay.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class Static;
-	class Text;
-}
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace OODebug {
 
-class OODEBUG_API ConsoleOverlay : public Super<Visualization::Overlay<Visualization::DeclarativeItem<ConsoleOverlay>>>
+class ConsoleOverlay;
+
+class OODEBUG_API HConsoleOverlay : public Interaction::GenericHandler
 {
-	ITEM_COMMON(ConsoleOverlay)
-
 	public:
-		ConsoleOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get());
+		static HConsoleOverlay* instance();
 
-		static void initializeForms();
+		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
-		Visualization::Item*& content();
-
-		void appendText(const QString& text);
+	protected:
+		HConsoleOverlay();
 
 	private:
-		Visualization::Static* closeIcon_{};
-		Visualization::Text* output_{};
-		Visualization::Item* content_{};
-};
+		QPointF consolePosition_;
 
-inline Visualization::Item*& ConsoleOverlay::content() { return content_; }
+		void move(ConsoleOverlay* console, const QPointF& to);
+};
 
 } /* namespace OODebug */

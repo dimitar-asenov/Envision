@@ -24,40 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HConsoleOverlay.h"
 
-#include "../oodebug_api.h"
-#include "ConsoleOverlayStyle.h"
-
-#include "VisualizationBase/src/overlays/Overlay.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class Static;
-	class Text;
-}
+#include "../overlays/ConsoleOverlay.h"
 
 namespace OODebug {
 
-class OODEBUG_API ConsoleOverlay : public Super<Visualization::Overlay<Visualization::DeclarativeItem<ConsoleOverlay>>>
+HConsoleOverlay::HConsoleOverlay()
+{}
+
+HConsoleOverlay* HConsoleOverlay::instance()
 {
-	ITEM_COMMON(ConsoleOverlay)
+	static HConsoleOverlay inst;
+	return &inst;
+}
 
-	public:
-		ConsoleOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get());
+void HConsoleOverlay::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		if (auto console = DCast<ConsoleOverlay>(target))
+			consolePosition_ = console->pos();
+}
 
-		static void initializeForms();
+void HConsoleOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->buttons() & Qt::LeftButton)
+	{
+		if (auto console = DCast<ConsoleOverlay>(target))
+		{
+			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
+			move(console, diff);
+		}
+	}
+}
 
-		Visualization::Item*& content();
+void HConsoleOverlay::move(ConsoleOverlay* console, const QPointF& to)
+{
+	QPointF dest(consolePosition_ + to);
+	if (dest.x() < 0) dest.setX(0);
+	if (dest.y() < 0) dest.setY(0);
 
-		void appendText(const QString& text);
+	console->setPos(dest);
+}
 
-	private:
-		Visualization::Static* closeIcon_{};
-		Visualization::Text* output_{};
-		Visualization::Item* content_{};
-};
-
-inline Visualization::Item*& ConsoleOverlay::content() { return content_; }
-
-} /* namespace OODebug */
+}

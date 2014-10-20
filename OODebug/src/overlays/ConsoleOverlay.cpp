@@ -41,6 +41,9 @@ ConsoleOverlay::ConsoleOverlay(Visualization::Item* associatedItem, const StyleT
 {
 	output_ = new Visualization::Text(this);
 	output_->setTextFormat(Qt::RichText);
+	// We don't want the text to grab away the buttons, but we want them on the overlay.
+	output_->setAcceptedMouseButtons(Qt::NoButton);
+	setAcceptedMouseButtons(Qt::AllButtons);
 
 	// TODO can we only hide it ? we shouldn't destroy it.
 	if (!style->closeIcon().clickHandler())
@@ -60,18 +63,6 @@ void ConsoleOverlay::appendText(const QString& text)
 	Q_ASSERT(output_);
 	QString currentText = output_->text();
 	output_->setText(currentText.append(QString(text).toHtmlEscaped().replace(QRegExp("\\r?\\n"), "<br>")));
-}
-
-void ConsoleOverlay::updateGeometry(int availableWidth, int availableHeight)
-{
-	Super::updateGeometry(availableWidth, availableHeight);
-
-	if (associatedItem()->heightInLocal() < 100)
-		setPos(associatedItem()->mapToScene(0, associatedItem()->heightInLocal()));
-	else if (associatedItem()->widthInLocal() < 200)
-		setPos(associatedItem()->mapToScene(associatedItem()->widthInLocal(), 0));
-	else
-		setPos( associatedItem()->mapToScene(10, 10) );
 }
 
 void ConsoleOverlay::initializeForms()
