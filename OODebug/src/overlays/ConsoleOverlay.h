@@ -51,6 +51,7 @@ class OODEBUG_API ConsoleOverlay : public Super<Visualization::Overlay<Visualiza
 		Visualization::Item*& content();
 
 		void appendText(const QString& text);
+		void appendError(const QString& errorText);
 
 	private:
 		Visualization::Static* closeIcon_{};

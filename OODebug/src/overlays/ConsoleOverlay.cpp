@@ -65,6 +65,15 @@ void ConsoleOverlay::appendText(const QString& text)
 	output_->setText(currentText.append(QString(text).toHtmlEscaped().replace(QRegExp("\\r?\\n"), "<br>")));
 }
 
+void ConsoleOverlay::appendError(const QString& errorText)
+{
+	Q_ASSERT(output_);
+	QString currentText = output_->text();
+	QString appendText = "<font color=\"#FF0000\">" +
+			QString(errorText).toHtmlEscaped().replace(QRegExp("\\r?\\n"), "<br>") + "</font>";
+	output_->setText(currentText.append(appendText));
+}
+
 void ConsoleOverlay::initializeForms()
 {
 	auto header = (new Visualization::GridLayoutFormElement())
