@@ -111,6 +111,7 @@ void JavaRunner::handleOutput()
 	Q_ASSERT(lastProject_ && runProcess().process());
 	if (!console_)
 		addConsole(lastProject_);
+	console_->show();
 	console_->appendText(runProcess().process()->readAllStandardOutput());
 }
 
@@ -119,6 +120,7 @@ void JavaRunner::handleErrorOutput()
 	Q_ASSERT(lastProject_ && runProcess().process());
 	if (!console_)
 		addConsole(lastProject_);
+	console_->show();
 	console_->appendError(runProcess().process()->readAllStandardError());
 }
 

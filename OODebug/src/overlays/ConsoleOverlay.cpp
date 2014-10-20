@@ -45,14 +45,13 @@ ConsoleOverlay::ConsoleOverlay(Visualization::Item* associatedItem, const StyleT
 	output_->setAcceptedMouseButtons(Qt::NoButton);
 	setAcceptedMouseButtons(Qt::AllButtons);
 
-	// TODO can we only hide it ? we shouldn't destroy it.
 	if (!style->closeIcon().clickHandler())
 	{
 		style->closeIcon().setClickHandler([](Visualization::Static* staticParent)
 		{
 			// This indirection is needed since we can't destroy an item while we're in its even handler.
 			staticParent->scene()->addPostEventAction(
-						[staticParent](){	staticParent->scene()->removeOverlay(staticParent->parent());});
+						[staticParent](){	staticParent->parent()->hide();});
 			return true;
 		});
 	}
