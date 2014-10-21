@@ -26,40 +26,41 @@
 
 #pragma once
 
-#include "../oodebug_api.h"
+#include "../visualizationbase_api.h"
+#include "MessageOverlayStyle.h"
+#include "Overlay.h"
+#include "../declarative/DeclarativeItem.h"
 
-#include "CompilerFeedback.h"
+namespace Visualization {
 
-namespace OODebug {
+class Static;
+class Text;
 
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+class VISUALIZATIONBASE_API MessageOverlay : public Super<Overlay<DeclarativeItem<MessageOverlay>>>
 {
-	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
+	ITEM_COMMON(MessageOverlay)
 
-		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
-		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
+	public:
+		using SyncFunction = std::function<QString (MessageOverlay* self)>;
+		MessageOverlay(Item* associatedItem, const StyleType* style = itemStyles().get());
+		MessageOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style = itemStyles().get());
+
+		static void initializeForms();
+
+		Item*& content();
+
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
+		Static* messageIcon_{};
+		Static* closeIcon_{};
+		Text* message_{};
+		Item* content_{};
+		SyncFunction syncFunction_{};
 };
 
-} /* namespace OODebug */
+inline Item*& MessageOverlay::content() { return content_; }
+
+} /* namespace Visualization */

@@ -34,22 +34,13 @@
 
 namespace JavaExport {
 
-QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-														  std::shared_ptr<Export::TextToNodeMap>& map)
-{
-	std::shared_ptr<Export::SourceDir> dummy;
-	return exportTree(manager, pathToProjectContainerDirectory, map, dummy);
-}
-
-QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-														  std::shared_ptr<Export::TextToNodeMap>& map,
-														  std::shared_ptr<Export::SourceDir>& dir)
+QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
 
 	DeclarationVisitor visitor;
-	dir = std::shared_ptr<Export::SourceDir>( visitor.visitProject(project) );
+	auto dir = std::unique_ptr<Export::SourceDir>( visitor.visitProject(project) );
 
 	auto layouter = Export::FragmentLayouter{"\t"};
 	layouter.addRule("enumerators", Export::FragmentLayouter::SpaceAfterSeparator, "", ",", "");
@@ -68,9 +59,16 @@ QList<ExportError> JavaExporter::exportTree(Model::TreeManager* manager, const Q
 							| Export::FragmentLayouter::NewLineAfterPrefix | Export::FragmentLayouter::NewLineBeforePostfix,
 							"{", "\n", "}");
 
-	map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+	auto map = Export::Exporter::exportToFileSystem(pathToProjectContainerDirectory, dir.get(), &layouter);
+	exportMaps().insert(project, map);
 
 	return visitor.errors();
+}
+
+Export::ExportMapContainer& JavaExporter::exportMaps()
+{
+	static Export::ExportMapContainer* container = new Export::ExportMapContainer();
+	return *container;
 }
 
 } /* namespace JavaExport */

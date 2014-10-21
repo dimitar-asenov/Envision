@@ -36,10 +36,6 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(BoxOverlay, "item")
 
 BoxOverlay::BoxOverlay(Item* associatedItem, const StyleType* style) : Super({associatedItem}, style)
-{}
-
-BoxOverlay::BoxOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style)
-	: Super({associatedItem}, style), syncFunction_{syncFunction}
 {
 	if (!style->closeIcon().clickHandler())
 	{
@@ -51,6 +47,12 @@ BoxOverlay::BoxOverlay(Item* associatedItem, SyncFunction syncFunction, const St
 			return true;
 		});
 	}
+}
+
+BoxOverlay::BoxOverlay(Item* associatedItem, SyncFunction syncFunction, const StyleType* style)
+	: BoxOverlay(associatedItem, style)
+{
+	 syncFunction_ = syncFunction;
 }
 
 

@@ -28,38 +28,19 @@
 
 #include "../oodebug_api.h"
 
-#include "CompilerFeedback.h"
+#include "InteractionBase/src/commands/CommandWithNameAndFlags.h"
 
 namespace OODebug {
 
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+class OODEBUG_API CJavaRun : public Interaction::CommandWithNameAndFlags
 {
 	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
+		CJavaRun();
 
-		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
-		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
-
-	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
+	protected:
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+																		 const std::unique_ptr<Visualization::Cursor>& cursor,
+																		 const QString& name, const QStringList& attributes) override;
 };
 
 } /* namespace OODebug */

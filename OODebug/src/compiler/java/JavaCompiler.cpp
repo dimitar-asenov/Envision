@@ -30,8 +30,11 @@
 #include "ModelBase/src/nodes/Node.h"
 
 #include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/overlays/BoxOverlay.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/overlays/MessageOverlay.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
+
+#include "OOModel/src/declarations/Project.h"
 
 #include "JavaExport/src/exporter/JavaExporter.h"
 
@@ -40,67 +43,119 @@
 
 namespace OODebug {
 
+static const QString overlayGroupName("CompilerMessages");
+
 void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
-	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
-	auto nodeItemMap = Visualization::Item::nodeItemsMap();
-
-	std::shared_ptr<Export::TextToNodeMap> map;
-	std::shared_ptr<Export::SourceDir> dir;
-
-	auto exportErrors = JavaExport::JavaExporter::exportTree(manager, pathToProjectContainerDirectory, map, dir);
-	// First handle export errors.
-	for (auto& error : exportErrors)
+	// Remove previous error messages
+	for (auto scene : Visualization::Scene::allScenes())
 	{
-		auto node = error.node();
-		auto it = nodeItemMap.find(node);
-		while (it != nodeItemMap.end() && it.key() == node)
-		{
-			visualizeMessage(it.value(), node, error.message());
-			++it;
-		}
+		Q_ASSERT(scene);
+		scene->removeOverlayGroup(overlayGroupName);
 	}
 
-	for (auto file : dir->recursiveFiles())
+	auto project = DCast<OOModel::Project>(manager->root());
+	Q_ASSERT(project);
+
+	auto nodeItemMap = Visualization::Item::nodeItemsMap();
+
+	// Export the project first if we need to
+	std::shared_ptr<Export::TextToNodeMap> map;
+	if (JavaExport::JavaExporter::exportMaps().storedRevision(project) == project->revision())
 	{
-		Q_ASSERT(file);
-		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + file->path());
+		map = JavaExport::JavaExporter::exportMaps().map(project);
+	}
+	else
+	{
+		auto exportErrors = JavaExport::JavaExporter::exportTree(manager, pathToProjectContainerDirectory);
+
+		// Handle export errors.
+		for (auto& error : exportErrors)
+		{
+			auto node = error.node();
+			auto it = nodeItemMap.find(node);
+			while (it != nodeItemMap.end() && it.key() == node)
+			{
+				visualizeMessage(it.value(), node, error.message());
+				++it;
+			}
+		}
+		map = JavaExport::JavaExporter::exportMaps().map(project);
+	}
+	Q_ASSERT(map);
+
+	// Create a build folder and setup the compiler
+	static const QString buildFolder("build");
+	QDir buildDir(pathToProjectContainerDirectory + QDir::separator() + buildFolder);
+	if (!buildDir.exists())
+	{
+		QDir projectDir(pathToProjectContainerDirectory);
+		Q_ASSERT(projectDir.exists());
+		Q_ASSERT(projectDir.mkdir(buildFolder));
+	}
+	const QStringList buildFolderArgs = {"-d", QString("..") + QDir::separator() + buildFolder};
+	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
+
+	QSet<uint> seenMessages;
+
+	// Compile each file and show the messages received from it
+	for (auto file : map->files())
+	{
+		// remove the src prefix
+		if (file.startsWith(QString("src") + QDir::separator()))
+			file.replace(0, 4, "");
+		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + "src",
+														 file, buildFolderArgs);
 		for (auto& message : feedback.messages())
 		{
-			// In the map we don't have the pathToProjectContainerDirectory prefix
-			auto fileName = message->getFileName().remove(pathToProjectContainerDirectory + QDir::separator());
+			// In the map we have the src prefix
+			auto fileName = message->fileName();
+			if (fileName.startsWith(QString(".") + QDir::separator()))
+				fileName.replace(0, 1, "src");
+			else
+				fileName.prepend(QString("src") + QDir::separator());
+
+			// check if we already mapped this message
+			uint hash = qHash(QString("%1%2%3%4").arg(fileName).
+									arg(message->lineNumber(), message->columnNumber()).arg(message->message()));
+			if (seenMessages.contains(hash))
+				continue;
+			seenMessages.insert(hash);
+
 			// lines and columns -1 because javac begins at 1 and TextToNodeMap at 0
 			Model::Node* node = nullptr;
-			if (auto rootMsg = message->getRootMessage())
-				node = map->node(fileName, rootMsg->getLineNumber() - 1, rootMsg->getColumnNumber() - 1);
+			if (auto rootMsg = message->rootMessage())
+				node = map->node(fileName, rootMsg->lineNumber() - 1, rootMsg->columnNumber() - 1);
 			else
-				node = map->node(fileName, message->getLineNumber() - 1, message->getColumnNumber() - 1);
+				node = map->node(fileName, message->lineNumber() - 1, message->columnNumber() - 1);
 			Q_ASSERT(node);
 
 			auto it = nodeItemMap.find(node);
 			while (it != nodeItemMap.end() && it.key() == node)
 			{
+				auto type = message->type();
+				QString typeString = type == CompilerMessage::Error ? "error" :
+														(type == CompilerMessage::Warning ? "warning" : "default");
 				// TODO for notes which have a rootMessage add a link to the message location.
-				visualizeMessage(it.value(), node, message->getMessage());
+				visualizeMessage(it.value(), node, message->message(), typeString);
 				++it;
 			}
 		}
 	}
 }
 
-void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node, const QString& message)
+void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node,
+												const QString& message, const QString& type)
 {
-	static const QString overlayGroupName("CompilerMessages");
-
 	auto scene = item->scene();
 	auto overlayGroup = scene->overlayGroup(overlayGroupName);
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
 
-	overlayGroup->addOverlay(makeOverlay( new Visualization::BoxOverlay(item,
-		[node, message](Visualization::BoxOverlay *){
+	overlayGroup->addOverlay(makeOverlay( new Visualization::MessageOverlay(item,
+		[node, message](Visualization::MessageOverlay *){
 		return message;
-	})));
+	}, Visualization::MessageOverlay::itemStyles().get(type))));
 }
 
 } /* namespace OODebug */

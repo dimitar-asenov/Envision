@@ -28,38 +28,29 @@
 
 #include "../oodebug_api.h"
 
-#include "CompilerFeedback.h"
-
 namespace OODebug {
 
 /**
- * A wrapper class for command line compilers.
+ * A wrapper class for a QProcess pointer. This way we can use a static \a RunProcess and
+ * make sure the managed QProcess is killed in the end.
+ *
+ * An example use case can be found in the \a JavaRunner class.
  */
-class OODEBUG_API CommandLineCompiler
-{
+class OODEBUG_API RunProcess {
 	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
+		~RunProcess();
 
 		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
+		 * Kills the current process and creates a new process.
 		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
+		QProcess* replaceProcess();
+
+		QProcess* process() const;
 
 	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
+		QProcess* managedProcess_{};
 };
+
+inline QProcess* RunProcess::process() const { return managedProcess_; }
 
 } /* namespace OODebug */

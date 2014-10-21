@@ -26,40 +26,30 @@
 
 #pragma once
 
-#include "../oodebug_api.h"
+#include "../../oodebug_api.h"
 
-#include "CompilerFeedback.h"
+namespace Model {
+	class TreeManager;
+	class Node;
+}
 
 namespace OODebug {
 
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+class RunProcess;
+
+class OODEBUG_API JavaRunner
 {
 	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
-
-		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
-		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
+		static void runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
 
 	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
+		static void noMainMethodWarning(Model::Node* node);
+		static void handleOutput();
+		static void handleErrorOutput();
+
+		static void addConsole(Model::Node* node);
+
+		static RunProcess& runProcess();
 };
 
 } /* namespace OODebug */

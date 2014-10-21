@@ -24,42 +24,41 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ExportMapContainer.h"
 
-#include "../oodebug_api.h"
+#include "ModelBase/src/nodes/Node.h"
 
-#include "CompilerFeedback.h"
+namespace Export {
 
-namespace OODebug {
-
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+int ExportMapContainer::storedRevision(Model::Node* node) const
 {
-	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
+	auto search = map_.find(node);
+	if (search != map_.end())
+		return search->first;
+	return -1;
+}
 
-		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
-		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
+std::shared_ptr<TextToNodeMap> ExportMapContainer::map(Model::Node* node) const
+{
+	auto search = map_.find(node);
+	if (search != map_.end())
+		return search->second;
+	return nullptr;
+}
 
-	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
-};
+bool ExportMapContainer::insert(Model::Node* node, std::shared_ptr<TextToNodeMap> map)
+{
+	auto search = map_.find(node);
+	if (search != map_.end())
+		if (search->first > node->revision())
+			return false;
+	map_.insert(node, {node->revision(), map});
+	return true;
+}
 
-} /* namespace OODebug */
+void ExportMapContainer::remove(Model::Node* node)
+{
+	map_.remove(node);
+}
+
+} /* namespace Export */

@@ -43,7 +43,7 @@ CompilerFeedback CompilerOutputParser::parseJavacErrorFormat(const QString& outp
 	 *
 	 * To edit you may want to use this: http://regex101.com/r/cX9lM8/2
 	 */
-	QRegularExpression feedbackReg("(^[a-zA-Z0-9_\\/]+\\.java):([0-9]+): ([a-z]+): ([^\\n]+)\\n[^\\n]+([^\\^]+)",
+	QRegularExpression feedbackReg("(^[a-zA-Z0-9_\\/.]+\\.java):([0-9]+): ([a-z]+): ([^\\n]+)\\n[^\\n]+([^\\^]+)",
 				QRegularExpression::MultilineOption);
 
 	QList<std::shared_ptr<CompilerMessage> > messages;

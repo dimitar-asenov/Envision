@@ -1,0 +1,32 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerRadius>2</cornerRadius>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
+		</backgroundBrush>
+	</shape>
+	
+	<message prototypes="item/Text/default" />
+	
+	<closeIcon prototypes="icon/SVGIcon/default">
+		<ignoreMouseEvents>true</ignoreMouseEvents>
+		<filename>styles/icon/mono_close.svg</filename>
+		<width>16</width>
+		<height>16</height>
+	</closeIcon>
+	
+	<messageIcon prototypes="icon/SVGIcon/default">
+		<ignoreMouseEvents>true</ignoreMouseEvents>
+		<filename>styles/icon/warning.svg</filename>
+		<width>16</width>
+		<height>16</height>
+	</messageIcon>
+</style>

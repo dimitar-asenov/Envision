@@ -27,39 +27,38 @@
 #pragma once
 
 #include "../oodebug_api.h"
+#include "ConsoleOverlayStyle.h"
 
-#include "CompilerFeedback.h"
+#include "VisualizationBase/src/overlays/Overlay.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+
+namespace Visualization {
+	class Static;
+	class Text;
+}
 
 namespace OODebug {
 
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+class OODEBUG_API ConsoleOverlay : public Super<Visualization::Overlay<Visualization::DeclarativeItem<ConsoleOverlay>>>
 {
-	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
+	ITEM_COMMON(ConsoleOverlay)
 
-		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
-		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
+	public:
+		ConsoleOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get());
+
+		static void initializeForms();
+
+		Visualization::Item*& content();
+
+		void appendText(const QString& text);
+		void appendError(const QString& errorText);
 
 	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
+		Visualization::Static* closeIcon_{};
+		Visualization::Text* output_{};
+		Visualization::Item* content_{};
 };
+
+inline Visualization::Item*& ConsoleOverlay::content() { return content_; }
 
 } /* namespace OODebug */

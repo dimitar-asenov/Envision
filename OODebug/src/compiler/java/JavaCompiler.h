@@ -52,7 +52,8 @@ class OODEBUG_API JavaCompiler
 		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
 
 	private:
-		static void visualizeMessage(Visualization::Item* item, Model::Node* node, const QString& message);
+		static void visualizeMessage(Visualization::Item* item, Model::Node* node,
+											  const QString& message, const QString& type = "default");
 };
 
 } /* namespace OODebug */

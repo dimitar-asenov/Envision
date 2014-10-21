@@ -24,42 +24,25 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "CJavaRun.h"
 
-#include "../oodebug_api.h"
-
-#include "CompilerFeedback.h"
+#include "../run_support/java/JavaRunner.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace OODebug {
 
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+CJavaRun::CJavaRun() : CommandWithNameAndFlags{"run", {}, false}
+{}
+
+Interaction::CommandResult*CJavaRun::executeNamed(Visualization::Item* source, Visualization::Item*,
+	const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
 {
-	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
+	while (source && !source->node()) source = source->parent();
+	if (source)
+		if (auto manager = source->node()->manager())
+			JavaRunner::runTree(manager, "exported/" + manager->root()->symbolName());
 
-		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
-		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
-
-	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
-};
+	return new Interaction::CommandResult();
+}
 
 } /* namespace OODebug */

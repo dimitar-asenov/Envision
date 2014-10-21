@@ -30,9 +30,11 @@
 
 namespace OODebug {
 
-CompilerFeedback CommandLineCompiler::compileFile(const QString& fileName, const QStringList& args)
+CompilerFeedback CommandLineCompiler::compileFile(const QString& workingDirectory, const QString& fileName,
+																  const QStringList& args)
 {
 	QProcess compilerProcess;
+	compilerProcess.setWorkingDirectory(workingDirectory);
 	compilerProcess.setProcessChannelMode(QProcess::MergedChannels);
 	compilerProcess.start(command_, QStringList() << args << fileName);
 	// block until finished

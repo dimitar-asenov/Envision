@@ -26,40 +26,34 @@
 
 #pragma once
 
-#include "../oodebug_api.h"
+#include "export_api.h"
 
-#include "CompilerFeedback.h"
+namespace Model {
+	class Node;
+}
 
-namespace OODebug {
+namespace Export {
 
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+class SourceDir;
+class TextToNodeMap;
+
+class EXPORT_API ExportMapContainer
 {
 	public:
 		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
+		 * Returns the stored revision for \a node, if none is stored -1 is returned
 		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
-
+		int storedRevision(Model::Node* node) const;
+		std::shared_ptr<TextToNodeMap> map(Model::Node* node) const;
 		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
+		 * Replaces the \a map for the \a node, if \a node has a newer revision, and returns true on success.
+		 * If there is already a newer revision stored the map will not be inserted and false is returned.
 		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
+		bool insert(Model::Node* node, std::shared_ptr<TextToNodeMap> map);
+		void remove(Model::Node* node);
 
 	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
+		QHash<Model::Node*, QPair<int, std::shared_ptr<TextToNodeMap>>> map_;
 };
 
-} /* namespace OODebug */
+} /* Export */

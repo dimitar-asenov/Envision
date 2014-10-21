@@ -24,42 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "HConsoleOverlay.h"
 
-#include "../oodebug_api.h"
-
-#include "CompilerFeedback.h"
+#include "../overlays/ConsoleOverlay.h"
 
 namespace OODebug {
 
-/**
- * A wrapper class for command line compilers.
- */
-class OODEBUG_API CommandLineCompiler
+HConsoleOverlay::HConsoleOverlay()
+{}
+
+HConsoleOverlay* HConsoleOverlay::instance()
 {
-	public:
-		/**
-		 * Creates a new \a CommandLineCompiler which will use the command \a compilerCommand
-		 * and \a parseFunction for parsing the output.
-		 */
-		CommandLineCompiler(const QString& compilerCommand,
-								  std::function<CompilerFeedback(const QString&)> parseFunction)
-			: command_{compilerCommand}, parseFunction_{parseFunction} { Q_ASSERT(parseFunction); }
+	static HConsoleOverlay inst;
+	return &inst;
+}
 
-		/**
-		 * Starts the compile command in the directory \a workingDirectory and
-		 * compiles the file with name \a fileName using the arguments as in \a args.
-		 *
-		 * If there are problems (like e.g. missing command) this method throws an OODebugException.
-		 *
-		 * Note: This call is blocking, it blocks until the command is finished.
-		 */
-		CompilerFeedback compileFile(const QString& workingDirectory, const QString& fileName,
-											  const QStringList& args = QStringList());
+void HConsoleOverlay::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		if (auto console = DCast<ConsoleOverlay>(target))
+			consolePosition_ = console->pos();
+}
 
-	private:
-		QString command_;
-		std::function<CompilerFeedback(const QString&)> parseFunction_;
-};
+void HConsoleOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->buttons() & Qt::LeftButton)
+	{
+		if (auto console = DCast<ConsoleOverlay>(target))
+		{
+			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
+			move(console, diff);
+		}
+	}
+}
 
-} /* namespace OODebug */
+void HConsoleOverlay::move(ConsoleOverlay* console, const QPointF& to)
+{
+	QPointF dest(consolePosition_ + to);
+	if (dest.x() < 0) dest.setX(0);
+	if (dest.y() < 0) dest.setY(0);
+
+	console->setPos(dest);
+}
+
+}
