@@ -32,7 +32,9 @@
 #include "exporter/AlloyExporter.h"
 
 namespace Alloy {
-
+/**
+ * The CAlloy class offers the command line interaction to execute the Alloy generation.
+ */
 class ALLOYINTEGRATION_API CAlloy : public Interaction::CreateNamedObjectWithAttributes
 {
 	public:

@@ -36,7 +36,9 @@
 #include "../nodes/CommentText.h"
 
 namespace Comments {
-
+/**
+ * The VCommentText class provides the visualization of the CommentText class.
+ */
 class COMMENTS_API VCommentText :
 		public Super<Visualization::ItemWithNode<VCommentText, Visualization::TextRenderer, CommentText>>
 {

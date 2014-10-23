@@ -29,7 +29,11 @@
 #include "comments_api.h"
 
 namespace Comments {
-
+/**
+ * The OutlineTypePicker class provides a Button which shows a list of possible outlines when clicked.
+ * The outlines are clickable and can be used to select the desired outline.
+ * The possible outlines are defined by the Qt::PenStyle.
+ */
 class COMMENTS_API OutlineTypePicker : public QToolButton
 {
 		Q_OBJECT

@@ -36,7 +36,10 @@
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentFreeNode)
 
 namespace Comments {
-
+/**
+ * The CommentFreeNode class provides a documentation element which can hold nodes of any type.
+ * It is mainly used to display code blocks inside comments and as a building block for tables.
+ */
 class COMMENTS_API CommentFreeNode : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentFreeNode)

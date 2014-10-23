@@ -36,7 +36,10 @@
 #include "../nodes/CommentFreeNode.h"
 
 namespace Comments {
-
+/**
+ * The VCommentFreeNode class offers the visualization of the CommentFreeNode class.
+ * It basically just visualizes the node holded by the CommentFreeNode, but adds a fading effect.
+ */
 class COMMENTS_API VCommentFreeNode : public Super<Visualization::ItemWithNode<VCommentFreeNode,
 						Visualization::Item, CommentFreeNode> >
 {

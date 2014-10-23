@@ -31,7 +31,10 @@
 #include "Export/src/tree/CompositeFragment.h"
 
 namespace Alloy {
-
+/**
+ * The AlloyVisitor class transforms a class into Alloy compatible code.
+ * It uses the code contracts specified in a class to generate spefifications of the Alloy models.
+ */
 class AlloyVisitor : public Model::Visitor<AlloyVisitor, Export::SourceFragment*>{
 	public:
 		static void init();

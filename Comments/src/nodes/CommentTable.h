@@ -38,7 +38,10 @@
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentTable)
 
 namespace Comments {
-
+/**
+ * The CommentTable class offers a comment element to display tables.
+ * These tables are represented as a grid of nodes of type CommentFreeNode.
+ */
 class COMMENTS_API CommentTable : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommentTable)

@@ -33,7 +33,10 @@
 
 
 namespace Comments {
-
+/**
+ * The HCommentText class provides the functionality to interact with the CommentText class.
+ * It offers the keyboard interaction to replace the textfield with another node.
+ */
 class COMMENTS_API HCommentText : public Interaction::HText
 {
 	public:

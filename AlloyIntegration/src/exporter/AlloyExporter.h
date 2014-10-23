@@ -30,7 +30,10 @@
 #include "ModelBase/src/nodes/Node.h"
 
 namespace Alloy {
-
+/**
+ * The AlloyExporter class saves the generated Alloy code to disk.
+ * It also defines some layout rules used in the export.
+ */
 class ALLOYINTEGRATION_API AlloyExporter {
 	public:
 		static void exportTree(Model::Node* aNode, const QString& path);
