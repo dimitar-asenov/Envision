@@ -10,8 +10,8 @@ Dimitar Asenov - https://github.com/dimitar-asenov
 		- %Core Envision framework and MVC implementation
 		- Extensions for object-oriented programming
 		- Code contracts, custom method call, and control flow examples
-		- Java importer
-		- Documentation
+		- Java importer/exporter
+		- On-line documentation
 
 <br>
 Sascha Dinkel - https://github.com/Sashixi
@@ -27,6 +27,11 @@ Patrick Lüthi - https://github.com/patrick-luethi
 		- Initial work on semantic zoom
 
 <br>
+Martin Otth - https://github.com/motth
+		- Initial work on version control
+		- Improvements to the persistence framework
+		
+<br>
 Jonas Trappenberg - https://github.com/teeberg
 		- Comments and Diagrams infrastructure
 
@@ -36,6 +41,8 @@ Lukas Vogel - https://github.com/lukedirtwalker
 		- Enhancements to the object-oriented model
 		- Improvements to the build process and style guides
 		- Java debugging support
+<br>
+<br>
 
 \section special Special Thanks
 	- Peter Müller - for advising the PhD studies of Dimitar and guiding the work on Envision.
