@@ -196,6 +196,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1MainView.html">MainView</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1MessageOverlay.html">MessageOverlay</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1MessageOverlayStyle.html">MessageOverlayStyle</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1MiniMap.html">MiniMap</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Mipmap.html">Mipmap</a></td></tr>
@@ -376,6 +380,8 @@ Functions</h2></td></tr>
 <tr class="separator:a02cb7c597f867c6021edb40c329ae785"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f4d7c02fc0212cb4781dbb445901cf8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVisualization.html#a0f4d7c02fc0212cb4781dbb445901cf8">DEFINE_TYPE_ID_DERIVED</a> (<a class="el" href="classVisualization_1_1DeclarativeTest.html">DeclarativeTest</a>,&quot;DeclarativeTest&quot;,) void <a class="el" href="classVisualization_1_1DeclarativeTest.html">DeclarativeTest</a></td></tr>
 <tr class="separator:a0f4d7c02fc0212cb4781dbb445901cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0072bfb0864645a507a691ba4efae757"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVisualization.html#a0072bfb0864645a507a691ba4efae757">DEFINE_TYPE_ID_DERIVED</a> (<a class="el" href="classVisualization_1_1MessageOverlay.html">MessageOverlay</a>,&quot;MessageOverlay&quot;,) void <a class="el" href="classVisualization_1_1MessageOverlay.html">MessageOverlay</a></td></tr>
+<tr class="separator:a0072bfb0864645a507a691ba4efae757"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98b0b233c3ae6c86cf84e42f17d05270"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVisualization.html#a98b0b233c3ae6c86cf84e42f17d05270">DEFINE_TYPE_ID_DERIVED</a> (<a class="el" href="classVisualization_1_1ZoomLabelOverlay.html">ZoomLabelOverlay</a>,&quot;ZoomLabelOverlay&quot;,) void <a class="el" href="classVisualization_1_1ZoomLabelOverlay.html">ZoomLabelOverlay</a></td></tr>
 <tr class="separator:a98b0b233c3ae6c86cf84e42f17d05270"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01557e15954c530300dd43f95b72fbbf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceVisualization.html#a01557e15954c530300dd43f95b72fbbf">itemToOverlay</a> ().insert(itemWithLabel</td></tr>
@@ -907,6 +913,32 @@ template&lt;class VIS , class NODE &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a0072bfb0864645a507a691ba4efae757"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Visualization::DEFINE_TYPE_ID_DERIVED </td>
+          <td>(</td>
+          <td class="paramtype">MessageOverlay&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;MessageOverlay&quot;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a98b0b233c3ae6c86cf84e42f17d05270"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1172,12 +1204,9 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{}</div>
-<div class="line"></div>
-<div class="line">BoxOverlay::BoxOverlay(Item* associatedItem, SyncFunction syncFunction, <span class="keyword">const</span> StyleType* style)</div>
-<div class="line">   : <a class="code" href="classCore_1_1Reflect.html">Super</a>({associatedItem}, <a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>)</div>
-<div class="ttc" id="namespaceVisualization_html_afae3419fd4744b06c73748aacad1ef3b"><div class="ttname"><a href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">Visualization::style</a></div><div class="ttdeci">style</div><div class="ttdef"><b>Definition:</b> BoxOverlay.cpp:39</div></div>
-<div class="ttc" id="classCore_1_1Reflect_html"><div class="ttname"><a href="classCore_1_1Reflect.html">Core::Reflect</a></div><div class="ttdef"><b>Definition:</b> Reflect.h:33</div></div>
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">   <a class="code" href="namespaceVisualization.html#a599f5bd56468c02f19c3ff2c650e1585">Q_ASSERT</a>(itemWithLabel-&gt;node())</div>
+<div class="ttc" id="namespaceVisualization_html_a599f5bd56468c02f19c3ff2c650e1585"><div class="ttname"><a href="namespaceVisualization.html#a599f5bd56468c02f19c3ff2c650e1585">Visualization::Q_ASSERT</a></div><div class="ttdeci">Q_ASSERT(itemWithLabel-&gt;node() -&gt;definesSymbol())</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1190,7 +1219,7 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">style</a>}</div>
+<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="namespaceOODebug.html#a7905ec8613fc38e1e6f773e928094e17">style</a>}</div>
 <div class="line">{}</div>
 <div class="line"></div>
 <div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> ParentType, <span class="keyword">class</span> VisualizationType, <span class="keywordtype">bool</span> externalSynchronization&gt;</div>
@@ -1216,7 +1245,7 @@ template&lt;class T &gt; </div>
 <div class="line">   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> sync(Item* item, ChildItem child, <span class="keywordtype">bool</span> enabled, Style style)</div>
 <div class="line">   { item-&gt;synchronizeItem(child, enabled, style); }</div>
 <div class="line">}</div>
-<div class="ttc" id="namespaceVisualization_html_afae3419fd4744b06c73748aacad1ef3b"><div class="ttname"><a href="namespaceVisualization.html#afae3419fd4744b06c73748aacad1ef3b">Visualization::style</a></div><div class="ttdeci">style</div><div class="ttdef"><b>Definition:</b> BoxOverlay.cpp:39</div></div>
+<div class="ttc" id="namespaceOODebug_html_a7905ec8613fc38e1e6f773e928094e17"><div class="ttname"><a href="namespaceOODebug.html#a7905ec8613fc38e1e6f773e928094e17">OODebug::style</a></div><div class="ttdeci">style</div><div class="ttdef"><b>Definition:</b> ConsoleOverlay.cpp:41</div></div>
 </div><!-- fragment -->
 </div>
 </div>

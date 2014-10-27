@@ -7,6 +7,7 @@ var searchData=
   ['lastcursorposition_5f',['lastCursorPosition_',['../classInteraction_1_1GenericHandler.html#a181ffd275f9aaa6196986a322e73a001',1,'Interaction::GenericHandler']]],
   ['lastmousepresstimer_5f',['lastMousePressTimer_',['../classVisualization_1_1Scene.html#abd8a613abb0646b1e2511288bfb57e69',1,'Visualization::Scene']]],
   ['lastnodeindexinlastchunk_5f',['lastNodeIndexInLastChunk_',['../classFilePersistence_1_1GenericPersistentUnit.html#a5fd6a06e2e9dca50771667e28a9f1440',1,'FilePersistence::GenericPersistentUnit']]],
+  ['lastproject_5f',['lastProject_',['../namespaceOODebug.html#a922dffc295684b16a239c52a14f34311',1,'OODebug']]],
   ['lastrevisionforconnectors_5f',['lastRevisionForConnectors_',['../classComments_1_1CommentDiagramShape.html#a51fb12174f4dda34ddbbcfac9a6d71cf',1,'Comments::CommentDiagramShape']]],
   ['lastrightclick_5f',['lastRightClick_',['../classComments_1_1VCommentDiagram.html#a944ed61182577e7c3a9ef39e9fc47547',1,'Comments::VCommentDiagram']]],
   ['lasttranslatedtypearg_5f',['lastTranslatedTypeArg_',['../classCppImport_1_1TemplateArgumentVisitor.html#afcd5b1e3fcddd78636ee4b9a27282ecf',1,'CppImport::TemplateArgumentVisitor']]],

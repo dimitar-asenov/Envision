@@ -124,7 +124,6 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Parses the <em>output</em>, which should be in the Javac Error format: "sourcefile:lineno: type: message ^", where ^ is the column identifier and is at the same time the end of one message. </p>
-<p>You can get the parsed feedback with the corresponding getters, e.g. <em>getErrors()</em>, etc. </p>
 <p>Javac Error format:</p>
 <p>The first group matches the filename The second group matches the lineNumber The third group matches the type (e.g. error, warning, etc.) The fourth group matches the message The fifth group matches the spaces before the ^ which gives the column.</p>
 <p>To edit you may want to use this: <a href="http://regex101.com/r/cX9lM8/2">http://regex101.com/r/cX9lM8/2</a></p>

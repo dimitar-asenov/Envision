@@ -103,9 +103,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac7cda07c8f8db6c7c1e34633acb9e5c8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1CommandLineCompiler.html#ac7cda07c8f8db6c7c1e34633acb9e5c8">CommandLineCompiler</a> (const QString &amp;compilerCommand, std::function&lt; <a class="el" href="classOODebug_1_1CompilerFeedback.html">CompilerFeedback</a>(const QString &amp;)&gt; parseFunction)</td></tr>
 <tr class="memdesc:ac7cda07c8f8db6c7c1e34633acb9e5c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <em><a class="el" href="classOODebug_1_1CommandLineCompiler.html" title="A wrapper class for command line compilers. ">CommandLineCompiler</a></em> which will use the command <em>compilerCommand</em> and <em>parseFunction</em> for parsing the output.  <a href="#ac7cda07c8f8db6c7c1e34633acb9e5c8">More...</a><br/></td></tr>
 <tr class="separator:ac7cda07c8f8db6c7c1e34633acb9e5c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6eaf592556ad28946b63aabe7e749d20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1CompilerFeedback.html">CompilerFeedback</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1CommandLineCompiler.html#a6eaf592556ad28946b63aabe7e749d20">compileFile</a> (const QString &amp;fileName, const QStringList &amp;args=QStringList())</td></tr>
-<tr class="memdesc:a6eaf592556ad28946b63aabe7e749d20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compiles the file with name <em>fileName</em> using the arguments as in <em>args</em>.  <a href="#a6eaf592556ad28946b63aabe7e749d20">More...</a><br/></td></tr>
-<tr class="separator:a6eaf592556ad28946b63aabe7e749d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbaaf29ed0ec4200baa7f948ccdd6784"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOODebug_1_1CompilerFeedback.html">CompilerFeedback</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1CommandLineCompiler.html#acbaaf29ed0ec4200baa7f948ccdd6784">compileFile</a> (const QString &amp;workingDirectory, const QString &amp;fileName, const QStringList &amp;args=QStringList())</td></tr>
+<tr class="memdesc:acbaaf29ed0ec4200baa7f948ccdd6784"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the compile command in the directory <em>workingDirectory</em> and compiles the file with name <em>fileName</em> using the arguments as in <em>args</em>.  <a href="#acbaaf29ed0ec4200baa7f948ccdd6784">More...</a><br/></td></tr>
+<tr class="separator:acbaaf29ed0ec4200baa7f948ccdd6784"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -156,13 +156,19 @@ QString &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6eaf592556ad28946b63aabe7e749d20"></a>
+<a class="anchor" id="acbaaf29ed0ec4200baa7f948ccdd6784"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classOODebug_1_1CompilerFeedback.html">CompilerFeedback</a> OODebug::CommandLineCompiler::compileFile </td>
           <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>workingDirectory</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>fileName</em>, </td>
         </tr>
@@ -180,7 +186,7 @@ QString &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="
       </table>
 </div><div class="memdoc">
 
-<p>Compiles the file with name <em>fileName</em> using the arguments as in <em>args</em>. </p>
+<p>Starts the compile command in the directory <em>workingDirectory</em> and compiles the file with name <em>fileName</em> using the arguments as in <em>args</em>. </p>
 <p>If there are problems (like e.g. missing command) this method throws an <a class="el" href="classOODebug_1_1OODebugException.html">OODebugException</a>.</p>
 <p>Note: This call is blocking, it blocks until the command is finished. </p>
 

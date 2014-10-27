@@ -101,6 +101,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae0005979fbd1faffc1be30b7c6960d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0312946445031d5e8b2aa0d95ac90d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1TextToNodeMap.html#ab0312946445031d5e8b2aa0d95ac90d7">add</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classExport_1_1TextToNodeMap.html#a18e0e110b35274d33312b7b1fc35dd97">node</a>, <a class="el" href="structExport_1_1SourceLocation.html">SourceLocation</a> location)</td></tr>
 <tr class="separator:ab0312946445031d5e8b2aa0d95ac90d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab02779f68bc50380715ee7d51ee9e0eb"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1TextToNodeMap.html#ab02779f68bc50380715ee7d51ee9e0eb">files</a> () const </td></tr>
+<tr class="separator:ab02779f68bc50380715ee7d51ee9e0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10b33446c87b56e7802b2d9602fb8f51"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structExport_1_1SourceLocation.html">SourceLocation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1TextToNodeMap.html#a10b33446c87b56e7802b2d9602fb8f51">locations</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classExport_1_1TextToNodeMap.html#a18e0e110b35274d33312b7b1fc35dd97">node</a>) const </td></tr>
 <tr class="separator:a10b33446c87b56e7802b2d9602fb8f51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18e0e110b35274d33312b7b1fc35dd97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1TextToNodeMap.html#a18e0e110b35274d33312b7b1fc35dd97">node</a> (const QString &amp;fileName, int line, int column) const </td></tr>
@@ -111,6 +113,8 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:acc2b2bf405f37d26153a21460e6f8baf"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, QList&lt; QPair<br class="typebreak"/>
 &lt; <a class="el" href="structExport_1_1Span.html">Span</a>, <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1TextToNodeMap.html#acc2b2bf405f37d26153a21460e6f8baf">filenameToSpans</a></td></tr>
 <tr class="separator:acc2b2bf405f37d26153a21460e6f8baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e90440871c3d394d123b2aff6f16bc3"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1TextToNodeMap.html#a4e90440871c3d394d123b2aff6f16bc3">mappedFiles_</a></td></tr>
+<tr class="separator:a4e90440871c3d394d123b2aff6f16bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac709dce524f91dffe512181862440243"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> <br class="typebreak"/>
 *, <a class="el" href="structExport_1_1SourceLocation.html">SourceLocation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classExport_1_1TextToNodeMap.html#ac709dce524f91dffe512181862440243">nodeToLocation_</a></td></tr>
 <tr class="separator:ac709dce524f91dffe512181862440243"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,6 +158,29 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab02779f68bc50380715ee7d51ee9e0eb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Export::TextToNodeMap::files </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -216,6 +243,26 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">QHash&lt;QString, QList&lt;QPair&lt;<a class="el" href="structExport_1_1Span.html">Span</a>, <a class="el" href="classModel_1_1Node.html">Model::Node</a>*&gt; &gt; &gt; Export::TextToNodeMap::filenameToSpans</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4e90440871c3d394d123b2aff6f16bc3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QStringList Export::TextToNodeMap::mappedFiles_</td>
         </tr>
       </table>
   </td>

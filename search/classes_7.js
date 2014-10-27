@@ -14,6 +14,7 @@ var searchData=
   ['hcommentimage',['HCommentImage',['../classComments_1_1HCommentImage.html',1,'Comments']]],
   ['hcommenttext',['HCommentText',['../classComments_1_1HCommentText.html',1,'Comments']]],
   ['hcomposite',['HComposite',['../classInteraction_1_1HComposite.html',1,'Interaction']]],
+  ['hconsoleoverlay',['HConsoleOverlay',['../classOODebug_1_1HConsoleOverlay.html',1,'OODebug']]],
   ['helloworldplugin',['HelloWorldPlugin',['../classHello_1_1HelloWorldPlugin.html',1,'Hello']]],
   ['helloworldprinter',['HelloWorldPrinter',['../classHello_1_1HelloWorldPrinter.html',1,'Hello']]],
   ['hexpression',['HExpression',['../classOOInteraction_1_1HExpression.html',1,'OOInteraction']]],

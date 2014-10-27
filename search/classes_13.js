@@ -97,6 +97,7 @@ var searchData=
   ['visitor_3c_20customizationvisitor_2c_20model_3a_3anode_20_2a_20_3e',['Visitor&lt; CustomizationVisitor, Model::Node * &gt;',['../classModel_1_1Visitor.html',1,'Model']]],
   ['visitor_3c_20doxygencommentsonlyvisitor_2c_20qstring_20_3e',['Visitor&lt; DoxygenCommentsOnlyVisitor, QString &gt;',['../classModel_1_1Visitor.html',1,'Model']]],
   ['visitor_3c_20doxygenwholetreevisitor_2c_20qstring_20_3e',['Visitor&lt; DoxygenWholeTreeVisitor, QString &gt;',['../classModel_1_1Visitor.html',1,'Model']]],
+  ['visitor_3c_20mainmethodfinder_2c_20oomodel_3a_3amethod_20_2a_20_3e',['Visitor&lt; MainMethodFinder, OOModel::Method * &gt;',['../classModel_1_1Visitor.html',1,'Model']]],
   ['visitor_3c_20valueatreturnvisitor_2c_20model_3a_3anode_20_2a_20_3e',['Visitor&lt; ValueAtReturnVisitor, Model::Node * &gt;',['../classModel_1_1Visitor.html',1,'Model']]],
   ['visitor_3c_20visitora_2c_20qstring_20_3e',['Visitor&lt; VisitorA, QString &gt;',['../classModel_1_1Visitor.html',1,'Model']]],
   ['visitor_3c_20visitorc_20_3e',['Visitor&lt; VisitorC &gt;',['../classModel_1_1Visitor.html',1,'Model']]],
