@@ -30,6 +30,9 @@
 #include "commands/CCreateMethod.h"
 #include "commands/CCreateField.h"
 
+#include "InteractionBase/src/commands/CDiff.h"
+#include "InteractionBase/src/commands/CHistory.h"
+
 namespace OOInteraction {
 
 HClass::HClass()
@@ -38,6 +41,9 @@ HClass::HClass()
 	addCommand(new CCreateClass());
 	addCommand(new CCreateMethod());
 	addCommand(new CCreateField());
+
+	addCommand(new Interaction::CDiff());
+	addCommand(new Interaction::CHistory());
 }
 
 HClass* HClass::instance()

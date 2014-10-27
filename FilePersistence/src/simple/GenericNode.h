@@ -48,6 +48,8 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(double value);
 		void setValue(long value);
 
+		void resetValue(ValueType type, const QString& value);
+
 		void setId(Model::NodeIdType id);
 
 		void setParent(GenericNode* parent);
@@ -71,11 +73,16 @@ class FILEPERSISTENCE_API GenericNode {
 		bool hasIntValue() const;
 		bool hasDoubleValue() const;
 
+		void remove();
+		void detach();
+
 		GenericNode* find(Model::NodeIdType id);
 
 		Model::NodeIdType id() const;
 
 		GenericPersistentUnit* persistentUnit() const;
+
+		static const QString persistentUnitType;
 
 	private:
 		friend class GenericTree;

@@ -32,6 +32,10 @@
 #include "commands/CCreateMethod.h"
 #include "commands/CCreateField.h"
 
+#include "InteractionBase/src/commands/CDiff.h"
+#include "InteractionBase/src/commands/CHistory.h"
+#include "InteractionBase/src/commands/CMerge.h"
+
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
 #include "FilePersistence/src/SystemClipboard.h"
@@ -46,6 +50,10 @@ HProject::HProject()
 	addCommand(new CCreateClass());
 	addCommand(new CCreateMethod());
 	addCommand(new CCreateField());
+
+	addCommand(new Interaction::CDiff());
+	addCommand(new Interaction::CHistory());
+	addCommand(new Interaction::CMerge());
 }
 
 HProject* HProject::instance()

@@ -116,6 +116,13 @@ void GenericNode::setValue(ValueType type, const QString& value)
 	value_ = value;
 }
 
+void GenericNode::resetValue(ValueType type, const QString& value)
+{
+	Q_ASSERT(children_.isEmpty());
+
+	valueType_ = type;
+	value_ = value;
+}
 
 void GenericNode::setParent(GenericNode* parent)
 {
@@ -143,6 +150,8 @@ GenericNode* GenericNode::find(Model::NodeIdType id)
 
 	return nullptr;
 }
+
+const QString GenericNode::persistentUnitType = "persistencenewunit";
 
 void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 {
@@ -199,6 +208,21 @@ void GenericNode::ensureDataRead() const
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine_, dataLineLength_);
 		// Don't delete the line, we don't own it.
 		const_cast<GenericNode*>(this)->dataLine_ = nullptr;
+	}
+}
+
+void GenericNode::remove()
+{
+	detach();
+	reset(persistentUnit_);
+}
+
+void GenericNode::detach()
+{
+	if (parent_)
+	{
+		parent_->children_.removeOne(this);
+		parent_ = nullptr;
 	}
 }
 

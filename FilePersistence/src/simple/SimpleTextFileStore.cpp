@@ -40,7 +40,6 @@
 
 namespace FilePersistence {
 
-const char* PERSISTENT_UNIT_NODE_TYPE = "persistencenewunit";
 const QString SimpleTextFileStore::NULL_STRING = "____NULL____";
 
 // TODO the Envision folder should be taken from the environment not hardcoded.
@@ -159,7 +158,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	{
 		auto child = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
 		child->setName(name);
-		child->setType(PERSISTENT_UNIT_NODE_TYPE);
+		child->setType(GenericNode::persistentUnitType);
 		child->setId(treeManager_->nodeIdMap().id(node));
 	}
 
@@ -306,7 +305,7 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 		genericNode_ = c;
 
 		Model::LoadedNode ln;
-		if ( genericNode_->type() == PERSISTENT_UNIT_NODE_TYPE )
+		if ( genericNode_->type() == GenericNode::persistentUnitType )
 			ln = loadNewPersistenceUnit(
 					genericNode_->id().toString(), parent, loadPartially.contains(genericNode_->name()));
 		else ln = loadNode(parent, loadPartially.contains(genericNode_->name()));
@@ -338,7 +337,7 @@ Model::Node* SimpleTextFileStore::loadSubNode(Model::Node* parent, const QString
 	genericNode_ = child;
 
 	Model::LoadedNode ln;
-	if ( child->type() == PERSISTENT_UNIT_NODE_TYPE )
+	if ( child->type() == GenericNode::persistentUnitType )
 		ln = loadNewPersistenceUnit(genericNode_->id().toString(), parent, loadPartially);
 	else ln = loadNode(parent, loadPartially);
 

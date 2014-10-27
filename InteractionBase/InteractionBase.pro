@@ -70,7 +70,10 @@ HEADERS += src/commands/CommandWithNameAndFlags.h \
     src/vis/CommandPromptStyle.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
-    src/InteractionBasePlugin.h
+    src/InteractionBasePlugin.h \
+    src/commands/CDiff.h \
+    src/commands/CHistory.h \
+    src/commands/CMerge.h
 SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -134,4 +137,7 @@ SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/commands/CommandResult.cpp \
     src/commands/Command.cpp \
     test/SimpleTest.cpp \
-    src/InteractionBasePlugin.cpp
+    src/InteractionBasePlugin.cpp \
+    src/commands/CDiff.cpp \
+    src/commands/CHistory.cpp \
+    src/commands/CMerge.cpp

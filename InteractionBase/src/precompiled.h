@@ -48,6 +48,8 @@
 #include <QtWidgets/QGraphicsColorizeEffect>
 
 #include <QtGui/QClipboard>
+
+#include <iostream>
 #endif
 
 #endif
