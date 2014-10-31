@@ -1,0 +1,102 @@
+<html>
+<head>
+	<title>Alloy</title>
+
+	<script src=pictureArray.js></script>
+
+	<script>
+
+		var currentPictureNumber = 0;
+		var numberOfPictures = pictureArray.length;
+
+		document.onreadystatechange = function ()
+		{
+			if (document.readyState == "interactive") 
+			{
+				initialize();
+			}
+		}
+
+		function initialize() 
+		{
+			document.onkeydown = handler;
+			showCurrentPicture();
+		}
+
+		function showCurrentPicture()
+		{	
+			document.images.slide.src = pictureArray[currentPictureNumber].src;
+			document.getElementById("pictureNumber").innerHTML = "Alloy Model: " + (currentPictureNumber+1) + "/" + numberOfPictures;
+		}
+
+		function setNextPicture()
+		{
+			if(currentPictureNumber+1 < numberOfPictures)
+			{
+				currentPictureNumber++;
+			}
+			showCurrentPicture();
+		}
+
+		function setPreviousPicture()
+		{
+			if(currentPictureNumber-1 > -1)
+			{
+				currentPictureNumber--;
+			}
+			showCurrentPicture();
+		}
+
+		function setFirstPicture()
+		{
+			currentPictureNumber = 0;
+			showCurrentPicture();
+		}
+
+		function setLastPicture()
+		{
+			currentPictureNumber = numberOfPictures-1;
+			showCurrentPicture();
+		}
+
+		function handler(e) 
+		{
+			switch (e.keyCode) 
+			{
+				case 33: // pageup
+					setPreviousPicture();
+					break;
+				case 34: // pagedown
+					setNextPicture();
+					break;
+				case 35: // end
+					setLastPicture();
+					break;
+				case 36: // home
+					setFirstPicture();
+					break;
+				case 37: // left
+					setPreviousPicture();
+					break;
+				case 38: // up
+					setPreviousPicture();
+					break;
+				case 39: // right
+					setNextPicture();
+					break;
+				case 40: // down
+					setNextPicture();
+					break;
+			}
+		}
+
+	</script>
+
+</head>
+<body>
+	<center>
+		<p id="pictureNumber"></p>
+		<img name="slide">
+	</center>
+</body>
+</html>

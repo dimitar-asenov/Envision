@@ -26,22 +26,27 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "../alloyintegration_api.h"
 
-#include "ModelBase/src/nodes/Text.h"
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
+#include "exporter/AlloyExporter.h"
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
-
-namespace Comments {
+namespace Alloy {
 /**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
+ * The CAlloy class offers the command line interaction to execute the Alloy generation.
  */
-class COMMENTS_API CommentText: public Super<Model::Text>
+class ALLOYINTEGRATION_API CAlloy : public Interaction::CreateNamedObjectWithAttributes
 {
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
-
 	public:
-		CommentText(const QString& text);
+		CAlloy();
+
+	protected:
+		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
+				const std::unique_ptr<Visualization::Cursor>& cursor,
+				const QString& name, const QStringList& attributes) override;
+
+	private:
+		const int MAX_IMAGES = 100;
 };
 
-} /* namespace Model */
+}

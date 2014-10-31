@@ -26,22 +26,11 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "precompiled.h"
 
-#include "ModelBase/src/nodes/Text.h"
-
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
-
-namespace Comments {
-/**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
- */
-class COMMENTS_API CommentText: public Super<Model::Text>
-{
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
-
-	public:
-		CommentText(const QString& text);
-};
-
-} /* namespace Model */
+// This should be defined in the project file of the plug-in that exports symbols
+#if defined(ALLOYINTEGRATION_LIBRARY)
+	#define ALLOYINTEGRATION_API Q_DECL_EXPORT
+#else
+	#define ALLOYINTEGRATION_API Q_DECL_IMPORT
+#endif

@@ -24,24 +24,30 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#ifndef PRECOMPILED_ALLOYINTEGRATION_H_
+#define PRECOMPILED_ALLOYINTEGRATION_H_
 
-#include "../comments_api.h"
+// TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
+// hose headers will be included here
+#include "ContractsLibrary/src/precompiled.h"
+#include "ModelBase/src/precompiled.h"
+#include "Logger/src/precompiled.h"
+#include "SelfTest/src/precompiled.h"
+#include "Core/src/precompiled.h"
 
-#include "ModelBase/src/nodes/Text.h"
+#if defined __cplusplus
+// Add C++ includes here
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
+// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
+// and will be included in their precompiled headers
 
-namespace Comments {
-/**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
- */
-class COMMENTS_API CommentText: public Super<Model::Text>
-{
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
 
-	public:
-		CommentText(const QString& text);
-};
+#if defined(ALLOYINTEGRATION_LIBRARY)
+// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
+// plug-ins which depend on this one will not include these headers.
+#include <QtWebKitWidgets/QGraphicsWebView>
+#endif
 
-} /* namespace Model */
+#endif
+
+#endif /* PRECOMPILED_ALLOYINTEGRATION_H_ */

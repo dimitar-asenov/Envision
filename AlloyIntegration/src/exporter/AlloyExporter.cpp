@@ -23,25 +23,41 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "AlloyExporter.h"
 
-#pragma once
+#include "Export/src/writer/Exporter.h"
+#include "Export/src/writer/FragmentLayouter.h"
+#include "Export/src/tree/SourceDir.h"
+#include "Export/src/tree/SourceFragment.h"
+#include "visitors/AlloyVisitor.h"
 
-#include "../comments_api.h"
+namespace Alloy {
 
-#include "ModelBase/src/nodes/Text.h"
-
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
-
-namespace Comments {
-/**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
- */
-class COMMENTS_API CommentText: public Super<Model::Text>
+void AlloyExporter::exportTree(Model::Node* aNode, const QString& path)
 {
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
+	auto dir = new Export::SourceDir(nullptr, path);
+	dir->subDir("output");
 
-	public:
-		CommentText(const QString& text);
-};
+	auto file = &dir->file("model.als");
+	auto anAlloyVisitor = new AlloyVisitor();
+	file->append(anAlloyVisitor->visit(aNode));
+	delete anAlloyVisitor;
 
-} /* namespace Model */
+	file->append(aNode, "pred show() {}\n");
+	file->append(aNode, "run show for 3");
+
+	auto layouter = Export::FragmentLayouter{"\t"};
+	layouter.addRule("fieldList", Export::FragmentLayouter::SpaceAfterSeparator |
+						  Export::FragmentLayouter::NewLineAfterPostfix, "{", ",", "}");
+	layouter.addRule("argsDefinitionList", Export::FragmentLayouter::SpaceAfterSeparator |
+						  Export::FragmentLayouter::NewLineAfterPostfix, "(", ",", ")");
+	layouter.addRule("argsCallList", Export::FragmentLayouter::SpaceAfterSeparator, "[", ",", "]");
+	layouter.addRule("methodBody", Export::FragmentLayouter::NewLineAfterPrefix |
+						  Export::FragmentLayouter::NewLineBefore |
+						  Export::FragmentLayouter::NewLineAfterPostfix |
+						  Export::FragmentLayouter::NewLineBeforePostfix, "{", "\n", "}");
+
+	Export::Exporter::exportToFileSystem(path, dir, &layouter);
+}
+
+} /* namespace Alloy */

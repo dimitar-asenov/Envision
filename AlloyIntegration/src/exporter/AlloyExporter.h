@@ -26,22 +26,17 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "../alloyintegration_api.h"
+#include "ModelBase/src/nodes/Node.h"
 
-#include "ModelBase/src/nodes/Text.h"
-
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
-
-namespace Comments {
+namespace Alloy {
 /**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
+ * The AlloyExporter class saves the generated Alloy code to disk.
+ * It also defines some layout rules used in the export.
  */
-class COMMENTS_API CommentText: public Super<Model::Text>
-{
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
-
+class ALLOYINTEGRATION_API AlloyExporter {
 	public:
-		CommentText(const QString& text);
+		static void exportTree(Model::Node* aNode, const QString& path);
 };
 
-} /* namespace Model */
+} /* namespace JavaExport */

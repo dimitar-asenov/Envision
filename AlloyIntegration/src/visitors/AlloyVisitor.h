@@ -24,23 +24,29 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
 #include "ModelBase/src/visitor/VisitorDefinition.h"
+#include "VisualizationBase/src/items/Item.h"
 
-namespace OOInteraction {
+#include "ModelBase/src/nodes/TypedList.h"
+#include "Export/src/tree/CompositeFragment.h"
+
+namespace Alloy {
 /**
- * The DoxygenCommentsOnlyVisitor class transforms the documentation of a node to Doxygen compatible text.
- * It also saves an image of appropriate comment elements to the Doxygen output directory.
+ * The AlloyVisitor class transforms a class into Alloy compatible code.
+ * It uses the code contracts specified in a class to generate spefifications of the Alloy models.
  */
-class DoxygenCommentsOnlyVisitor : public Model::Visitor<DoxygenCommentsOnlyVisitor, QString>{
+class AlloyVisitor : public Model::Visitor<AlloyVisitor, Export::SourceFragment*>{
 	public:
 		static void init();
+
 	private:
-		static const QString DOXY_START;
-		static const QString DOXY_END;
-		static const bool USE_SVG = true;
-		static QString replaceMarkdown(QString str);
+		static QString currentClass_;
+		static bool inFact_;
+		static bool inContract_;
+
+		template<class ListElement>
+		static Export::SourceFragment* list(Model::TypedList<ListElement>* aList, AlloyVisitor* v,
+											  const QString& fragmentType = QString());
 };
 
 }

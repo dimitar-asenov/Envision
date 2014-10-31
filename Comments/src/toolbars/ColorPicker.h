@@ -29,7 +29,10 @@
 #include "comments_api.h"
 
 namespace Comments {
-
+/**
+ * The ColorPicker class provides a button which shows a grid of colors when clicked.
+ * This colors are also clickable and can be used to select the desired color.
+ */
 class COMMENTS_API ColorPicker : public QToolButton
 {
 		Q_OBJECT
@@ -38,8 +41,17 @@ class COMMENTS_API ColorPicker : public QToolButton
 
 		ColorPicker(QWidget *parent = 0);
 		void setColors(QVector<QColor> colors, int colorsPerRow);
+		/**
+		 * For text Envision uses some predefined colors.
+		 * This method sets the colors displayed in the grid to these specific colors.
+		 */
 		void setEnvisionTextColors();
 		void setselectedColor(QString aColor);
+		/**
+		 * This sets the type of the colorpicker to \a type.
+		 * The possible types are ColorPicker::background, ColorPicker::shape and ColorPicker::text.
+		 * This information is then used to visualize the button of the colorpicker according to that type.
+		 */
 		void setColorPickerType(enum ColorPickerType type);
 
 	signals:

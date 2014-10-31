@@ -18,7 +18,8 @@ SUBDIRS= Core \
 	SelfTest \
 	VisualizationBase \
 	CppImport \
-        Comments \
+	Comments \
+	AlloyIntegration \
         OODebug
 CONFIG+=debug_and_release
 CONFIG+=ordered

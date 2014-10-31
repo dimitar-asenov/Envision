@@ -26,22 +26,16 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "alloyintegration_api.h"
+#include "Core/src/EnvisionException.h"
 
-#include "ModelBase/src/nodes/Text.h"
+namespace Alloy {
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
-
-namespace Comments {
-/**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
- */
-class COMMENTS_API CommentText: public Super<Model::Text>
+class ALLOYINTEGRATION_API AlloyIntegrationException : public Core::EnvisionException
 {
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
-
-	public:
-		CommentText(const QString& text);
+		public:
+			AlloyIntegrationException(const QString& message);
+			const QString& name() const;
 };
 
-} /* namespace Model */
+}

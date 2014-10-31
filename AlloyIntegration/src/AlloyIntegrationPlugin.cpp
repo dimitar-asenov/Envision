@@ -24,24 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "AlloyIntegrationPlugin.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
-#include "../comments_api.h"
+#include "commands/CAlloy.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
-#include "ModelBase/src/nodes/Text.h"
+#include "visitors/AlloyVisitor.h"
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
+namespace Alloy {
 
-namespace Comments {
-/**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
- */
-class COMMENTS_API CommentText: public Super<Model::Text>
+bool AlloyIntegrationPlugin::initialize(Core::EnvisionManager&)
 {
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
+    Interaction::HSceneHandlerItem::instance()->addCommand(new CAlloy());
 
-	public:
-		CommentText(const QString& text);
-};
+    Alloy::AlloyVisitor::init();
 
-} /* namespace Model */
+	return true;
+}
+
+void AlloyIntegrationPlugin::unload()
+{
+}
+
+void AlloyIntegrationPlugin::selfTest(QString testid)
+{
+	if (testid.isEmpty()) SelfTest::TestManager<AlloyIntegrationPlugin>::runAllTests().printResultStatistics();
+	else SelfTest::TestManager<AlloyIntegrationPlugin>::runTest(testid).printResultStatistics();
+}
+
+}

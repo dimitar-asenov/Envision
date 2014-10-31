@@ -26,22 +26,29 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "alloyintegration_api.h"
 
-#include "ModelBase/src/nodes/Text.h"
+namespace Alloy {
 
-DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
-
-namespace Comments {
 /**
- * The CommentText class provides a textfield which is used in the CommentFreeNode.
+ * Implements the interface between the AlloyIntegration plug-in and Envision.
+ *
+ * The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before
+ * any other operations are performed.
+ *
+ * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class COMMENTS_API CommentText: public Super<Model::Text>
+class AlloyIntegrationPlugin : public QObject, public Core::EnvisionPlugin
 {
-	NODE_DECLARE_STANDARD_METHODS(CommentText)
+	Q_OBJECT
+	Q_PLUGIN_METADATA(IID "EnvisionPlugin/1.0")
+	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		CommentText(const QString& text);
+		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual void unload() override;
+		virtual void selfTest(QString testid) override;
 };
 
-} /* namespace Model */
+}

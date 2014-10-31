@@ -32,7 +32,10 @@
 #include "VisualizationBase/src/layouts/GridLayoutStyle.h"
 
 namespace Comments {
-
+/**
+ * The VCommentTableStyle class provides a style for the VCommentTable.
+ * It specifies the needed parameters to display the gridlines in the table.
+ */
 class COMMENTS_API VCommentTableStyle : public Super<Visualization::ItemStyle> {
 	public:
 		virtual ~VCommentTableStyle() override;
