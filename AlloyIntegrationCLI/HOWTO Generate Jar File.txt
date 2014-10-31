@@ -1,0 +1,4 @@
+- In Eclipse, right click on the project: Export > Java > Runnable JAR
+- Choose the AlloyIntegrationCLI run configuration
+- Export to AlloyIntegrationCLI/AlloyIntegrationCLI.jar
+- Choose "Package required libraries into generated jar"
