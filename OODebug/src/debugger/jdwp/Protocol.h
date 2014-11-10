@@ -64,7 +64,7 @@ class OODEBUG_API Protocol
 			Event = 64
 		};
 
-		// Following values can be generated with regex:
+		// The following values can be generated with regex:
 		// Copy the sublist of a command set from:
 		// http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
 		// to a text editor (e.g. Kate) search for "(^[^ ]+) \(([0-9]+)\)\n" and replace with "\1 = \2,\n"
@@ -337,7 +337,7 @@ class OODEBUG_API Protocol
 			INVALID_COUNT = 512
 		};
 
-		// Following values can be generated with regex:
+		// The following values can be generated with regex:
 		// Copy the table (e.g. http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_EventKind)
 		// to a text editor (e.g. Kate) search for "(^[^\t]+)\t([^\t]+)[^\n]+\n" and replace with: "\1 = \2,\n"
 		// minimal manual interaction might be needed
