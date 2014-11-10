@@ -29,7 +29,8 @@ HEADERS += src/precompiled.h \
     src/run_support/RunProcess.h \
     src/overlays/ConsoleOverlay.h \
     src/overlays/ConsoleOverlayStyle.h \
-    src/handlers/HConsoleOverlay.h
+    src/handlers/HConsoleOverlay.h \
+    src/debugger/jdwp/Protocol.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -43,4 +44,5 @@ SOURCES += src/OODebugException.cpp \
     src/overlays/ConsoleOverlay.cpp \
     src/overlays/ConsoleOverlayStyle.cpp \
     src/run_support/RunProcess.cpp \
-    src/handlers/HConsoleOverlay.cpp
+    src/handlers/HConsoleOverlay.cpp \
+    src/debugger/jdwp/Protocol.cpp
