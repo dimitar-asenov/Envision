@@ -30,7 +30,9 @@ HEADERS += src/precompiled.h \
     src/overlays/ConsoleOverlay.h \
     src/overlays/ConsoleOverlayStyle.h \
     src/handlers/HConsoleOverlay.h \
-    src/debugger/jdwp/Protocol.h
+    src/debugger/jdwp/Protocol.h \
+    src/debugger/jdwp/Message.h \
+    src/debugger/jdwp/MessageItem.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -45,4 +47,5 @@ SOURCES += src/OODebugException.cpp \
     src/overlays/ConsoleOverlayStyle.cpp \
     src/run_support/RunProcess.cpp \
     src/handlers/HConsoleOverlay.cpp \
-    src/debugger/jdwp/Protocol.cpp
+    src/debugger/jdwp/Protocol.cpp \
+    src/debugger/jdwp/Message.cpp
