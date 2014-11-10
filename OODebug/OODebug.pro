@@ -32,7 +32,8 @@ HEADERS += src/precompiled.h \
     src/handlers/HConsoleOverlay.h \
     src/debugger/jdwp/Protocol.h \
     src/debugger/jdwp/Message.h \
-    src/debugger/jdwp/MessageItem.h
+    src/debugger/jdwp/MessageItem.h \
+    src/debugger/jdwp/messages/MessageHeader.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
