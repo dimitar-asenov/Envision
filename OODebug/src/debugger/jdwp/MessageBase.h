@@ -24,22 +24,50 @@
 **
 ***********************************************************************************************************************/
 
-#include "Message.h"
+#pragma once
+
+#include "../../oodebug_api.h"
 
 namespace OODebug {
 
-QDataStream& Message::operator>>(QDataStream& stream)
+/**
+ * The base class for the Message class, it defines the stream reading and writing operators.
+ * This class should only be used by the class Message. Clients should implement the Message class.
+ *
+ * We use separate MessageBase and Message mainly due to a compiling problem: Message includes MessageField
+ * and MessageField includes MessageBase, so if MessageBase and Message would be the same we would have a cyclic
+ * redundancy.
+ */
+class OODEBUG_API MessageBase
 {
-	for (auto reader : readers_)
-		reader(stream);
-	return stream;
-}
+	public:
+		/**
+		 * The direction of a MessageField.
+		 *
+		 * In means the MessageField will only be set when using the >> operator.
+		 * Out mean the MessageField will only be used when using the << operator.
+		 * We allow to use both simultaniously (In | Out).
+		 */
+		enum Directions {In = 0x1, Out = 0x2};
+		Q_DECLARE_FLAGS(Direction, Directions)
 
-QDataStream& Message::operator<<(QDataStream& stream)
-{
-	for (auto writer : writers_)
-		writer(stream);
-	return stream;
-}
+		using ReadOperator = std::function<void (QDataStream&)>;
+		void addReadOperator(ReadOperator reader);
+
+		using WriteOperator = std::function<void (QDataStream&)>;
+		void addWriteOperator(WriteOperator writer);
+
+		friend QDataStream& operator>>(QDataStream& stream, MessageBase& message);
+		friend QDataStream& operator<<(QDataStream& stream, MessageBase& message);
+
+	private:
+		QList<ReadOperator> readers_;
+		QList<WriteOperator> writers_;
+};
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(MessageBase::Direction)
+
+inline void MessageBase::addReadOperator(MessageBase::ReadOperator reader) { readers_.append(reader); }
+inline void MessageBase::addWriteOperator(MessageBase::WriteOperator writer) { writers_.append(writer); }
 
 } /* namespace OODebug */

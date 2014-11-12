@@ -24,26 +24,80 @@
 **
 ***********************************************************************************************************************/
 
-#include "../Message.h"
-#include "../MessageItem.h"
+#pragma once
 
-#include "../Protocol.h"
+#include "MessageBase.h"
 
 namespace OODebug {
 
-/**
- * A MessageHeader is an incomplete Message, it is needed to decide how to handle and incoming Message.
- */
-class MessageHeader : public Message
+template <class T>
+class MessageField
 {
 	public:
-		MessageItem<qint32> length{this, MessageItem::Direction::InOut};
-		MessageItem<qint32> id{this, MessageItem::Direction::InOut};
-		MessageItem<qint8> flags{this, MessageItem::Direction::InOut};
-		MessageItem<Protocol::Error> error{this};
+		inline MessageField(MessageBase* containingMessage, MessageBase::Direction dir = MessageBase::In) {
+			if (dir & MessageBase::In)
+			{
+				containingMessage->addReadOperator([=] (QDataStream& stream)
+				{
+					stream >> value_;
+				});
+			}
+			if (dir & MessageBase::Out)
+			{
+				containingMessage->addWriteOperator([=] (QDataStream& stream)
+				{
+					stream << value_;
+				});
+			}
+		}
 
-		MessageItem<Protocol::CommandSet> commandSet{this, MessageItem::Direction::Out};
-		MessageItem<qint8> command{this, MessageItem::Direction::Out};
+		inline T operator()() const { return value_; }
+		inline T operator=(const T rhs) { return value_ = rhs; }
+
+	private:
+		T value_{};
 };
+
+QDataStream& operator>>(QDataStream& stream, QString& read)
+{
+	qint32 len;
+	stream >> len;
+	std::vector<char> data(len + 1);
+	stream.readRawData(&data[0], len);
+	data[len] = '\0';
+	read = QString(&data[0]);
+	return stream;
+}
+
+QDataStream& operator<<(QDataStream& stream, QString& write)
+{
+	// We know that value is of type QString so this is fine.
+	qint32 len = write.length();
+	// ignore the null terminator
+	len = len - 1;
+	QByteArray data = write.toLocal8Bit();
+	stream.writeBytes(data.constData(), len);
+	return stream;
+}
+
+template <class T>
+typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
+operator>>(QDataStream& stream, T& val)
+{
+	using Type = typename std::underlying_type<T>::type;
+	Type rawValue;
+	stream >> rawValue;
+	val = static_cast<T>(rawValue);
+	return stream;
+}
+
+template <class T>
+typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
+operator<<(QDataStream& stream, T& val)
+{
+	using Type = typename std::underlying_type<T>::type;
+	Type rawValue = static_cast<Type>(val);
+	return stream << rawValue;
+}
 
 } /* namespace OODebug */

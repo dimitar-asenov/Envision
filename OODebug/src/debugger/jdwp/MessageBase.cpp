@@ -24,27 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../oodebug_api.h"
-
-#include "MessageField.h"
-#include "Protocol.h"
+#include "MessageBase.h"
 
 namespace OODebug {
 
-class MessageBase;
+QDataStream& operator>>(QDataStream& stream, MessageBase& message)
+{
+	for (auto reader : message.readers_)
+		reader(stream);
+	return stream;
+}
 
-class OODEBUG_API Message : public MessageBase {
-	public:
-		// Message header data:
-		MessageField<qint32> length{this, In | Out};
-		MessageField<qint32> id{this, In | Out};
-		MessageField<qint8> flags{this, In | Out};
-		MessageField<Protocol::Error> error{this};
-
-		MessageField<Protocol::CommandSet> commandSet{this, Out};
-		MessageField<qint8> command{this, Out};
-};
+QDataStream& operator<<(QDataStream& stream, MessageBase& message)
+{
+	for (auto writer : message.writers_)
+		writer(stream);
+	return stream;
+}
 
 } /* namespace OODebug */
