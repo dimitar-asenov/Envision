@@ -33,8 +33,10 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/Protocol.h \
     src/debugger/jdwp/MessageField.h \
     src/debugger/jdwp/MessageBase.h \
+    src/debugger/jdwp/DebugConnector.h \
     src/debugger/jdwp/Reply.h \
-    src/debugger/jdwp/Command.h
+    src/debugger/jdwp/Command.h \
+    src/debugger/jdwp/reply/VersionInfo.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -50,4 +52,5 @@ SOURCES += src/OODebugException.cpp \
     src/run_support/RunProcess.cpp \
     src/handlers/HConsoleOverlay.cpp \
     src/debugger/jdwp/Protocol.cpp \
-    src/debugger/jdwp/MessageBase.cpp
+    src/debugger/jdwp/MessageBase.cpp \
+    src/debugger/jdwp/DebugConnector.cpp

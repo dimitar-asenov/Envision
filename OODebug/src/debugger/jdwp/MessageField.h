@@ -57,7 +57,7 @@ inline void read(QDataStream& stream, QString& read)
 }
 
 template <>
-inline void write(QDataStream& stream, QString& write)
+inline void write(QDataStream& stream, const QString& write)
 {
 	// We know that value is of type QString so this is fine.
 	qint32 len = write.length();
