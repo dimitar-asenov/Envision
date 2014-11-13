@@ -6,19 +6,25 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>224</red>
-				<green>200</green>
-				<blue>200</blue>
+				<red>113</red>
+				<green>126</green>
+				<blue>53</blue>
 			</color>
 		</outline>
 		<backgroundBrush>
-			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>224</green>
-				<blue>224</blue>
-			</color>
+			<gradient>
+				<stopPoints>
+					<e1>
+						<first>1.0</first>
+						<second>
+							<alpha>255</alpha>
+							<red>222</red>
+							<green>228</green>
+							<blue>190</blue>
+						</second>
+					</e1>
+				</stopPoints>
+			</gradient>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>

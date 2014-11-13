@@ -40,6 +40,11 @@ ITEM_COMMON_DEFINITIONS(VTryCatchFinally, "item")
 VTryCatchFinally::VTryCatchFinally(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style){}
 
 
+int VTryCatchFinally::determineForm()
+{
+	return node()->finallyBody()->isEmpty() ? 0 : 1;
+}
+
 void VTryCatchFinally::initializeForms()
 {
 	auto tryIcon = grid({{item<Static>(&I::tryIcon_, [](I* v){return &v->style()->tryIcon();})}})
@@ -48,6 +53,20 @@ void VTryCatchFinally::initializeForms()
 	auto tryBody = item(&I::tryBody_, [](I* v){return v->node()->tryBody();});
 	auto catchClauses = item<VList>(&I::catchClauses_, [](I* v){return v->node()->catchClauses();},
 			[](I* v){return &v->style()->catchClauses();});
+
+	auto contentElement = grid({{tryBody}, {catchClauses}})
+				->setColumnStretchFactor(1, 1);
+
+	auto shapeElement = new ShapeFormElement();
+
+	addForm((new AnchorLayoutFormElement())
+			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)
+			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
+			->put(TheRightOf, tryIcon, AtRightOf, contentElement)
+			->put(TheRightOf, shapeElement, 10, FromRightOf, contentElement)
+			->put(TheBottomOf, tryIcon, 3, FromTopOf, contentElement)
+			->put(TheTopOf, shapeElement, AtCenterOf, tryIcon)
+			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
 
 	auto finallyIcon = grid({{item<Static>(&I::finallyIcon_, [](I* v){return &v->style()->finallyIcon();})}})
 		->setColumnStretchFactor(1, 1);
@@ -64,10 +83,8 @@ void VTryCatchFinally::initializeForms()
 		->put(TheTopOf, finallyOutline, AtCenterOf, finallyIcon)
 		->put(TheBottomOf, finallyOutline, 2, FromBottomOf, finallyBody);
 
-	auto contentElement = grid({{tryBody}, {catchClauses}, {finallyCombined}})
+	contentElement = grid({{tryBody}, {catchClauses}, {finallyCombined}})
 				->setColumnStretchFactor(1, 1);
-
-	auto shapeElement = new ShapeFormElement();
 
 	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)

@@ -4,7 +4,7 @@
 	<itemsStyle prototypes="layout/SequentialLayout/default">
 		<alignment>1</alignment>
 		<direction>2</direction>
-		<spaceBetweenElements>0</spaceBetweenElements>
+		<spaceBetweenElements>1</spaceBetweenElements>
 		<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		<hasCursorWhenEmpty>false</hasCursorWhenEmpty>
 	</itemsStyle>

@@ -54,6 +54,7 @@ class OOVISUALIZATION_API VTryCatchFinally
 		VTryCatchFinally(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
+		virtual int determineForm() override;
 
 	private:
 		Visualization::Static* tryIcon_{};
