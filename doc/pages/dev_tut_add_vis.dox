@@ -228,7 +228,7 @@ Given that we set \c horizontal_ in \c updateGeometry(), the \c determineForm() 
 \skip VIfStatement::determineForm()
 \until }
 OOVisualization::VIfStatement is a bit special in that you need to work with several methods in order to arrive at a
-decision on which layout form to use. Normally, it is sufficient to perform some checks directly in the
+decision on which layout form to use. Normally, it is sufficient to perform some checks only in the
 \c determineForm() method to decide which is the most appropriate form. In particular this is the case if the
 decision is based only on the node that is represented, and not on any visual information.
 
@@ -246,6 +246,7 @@ Andrea Helfenstein's Bachelor Thesis Report</a> for the various ways to use Visu
 	- There are two forms:
 		- Form \e 0 puts the two branches next to each other
 		- Form \e 1 puts the \e true branch on top of the \e false branch.
+		- Form \e 2 is for nested else if statements. Else branches are put under the then branch and they are no indented.
 
 This is all there is to it - now we have a visualization for if statements that will be automatically used when needed.
 In simpler cases, all you need to do is define the \c initializeForms() method and you can create a visual item in no

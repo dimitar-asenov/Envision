@@ -57,6 +57,8 @@ void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 
 int VIfStatement::determineForm()
 {
+	if (node()->elseBranch() && node()->elseBranch()->size() == 1 && DCast<IfStatement>(node()->elseBranch()->first()))
+		return 2;
 	return horizontal_ ? 0 : 1;
 }
 
@@ -104,6 +106,30 @@ void VIfStatement::initializeForms()
 			->put(TheRightOf, header, AtRightOf, contentElement)
 			->put(TheRightOf, shapeElement, 10, FromRightOf, header)
 			->put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));
+
+	// Form 3: then branch and then a following if else statement
+	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
+			->put(0, 0, thenBranch)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
+
+	auto elseIfBranch = item<VStatementItemList>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
+																[](I* v){return &v->style()->elseIfBranch();});
+
+	auto elseContentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
+			->put(0, 0, elseIfBranch)
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
+
+	addForm((new AnchorLayoutFormElement())
+			->put(TheTopOf, contentElement, 3, FromBottomOf, header)
+			->put(TheTopOf, shapeElement, AtCenterOf, header)
+			->put(TheLeftOf, shapeElement, AtLeftOf, header)
+			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
+			->put(TheRightOf, header, AtRightOf, contentElement)
+			->put(TheRightOf, shapeElement, 10, FromRightOf, header)
+			->put(TheBottomOf, shapeElement, AtBottomOf, elseContentElement)
+			->put(TheTopOf, elseContentElement, 2, FromBottomOf, contentElement)
+			->put(TheLeftOf, elseContentElement, AtLeftOf, shapeElement)
+			->put(TheRightOf, elseContentElement, AtRightOf, shapeElement));
 }
 
 } /* namespace OOVisualization */

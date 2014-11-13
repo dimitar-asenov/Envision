@@ -49,6 +49,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::Declar
 
 		Property<Visualization::VListStyle> thenBranch{this, "thenBranch"};
 		Property<Visualization::VListStyle> elseBranch{this, "elseBranch"};
+		Property<Visualization::VListStyle> elseIfBranch{this, "elseIfBranch"};
 };
 
 } /* namespace OOVisualization */

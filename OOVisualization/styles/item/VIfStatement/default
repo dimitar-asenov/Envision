@@ -102,4 +102,6 @@
 			<cornerType>1</cornerType>
 		</shape>
 	</elseBranch>
+	
+	<elseIfBranch prototypes="item/VStatementItemList/default" />
 </style>
