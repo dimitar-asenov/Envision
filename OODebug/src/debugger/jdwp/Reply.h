@@ -43,4 +43,13 @@ class OODEBUG_API Reply : public MessageBase {
 		MessageField<Protocol::Error> error{&Reply::error, this};
 };
 
+template <class T>
+static T makeReply(QByteArray data)
+{
+	T r;
+	QDataStream stream(data);
+	stream >> r;
+	return r;
+}
+
 } /* namespace OODebug */
