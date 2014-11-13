@@ -36,7 +36,7 @@ namespace OODebug {
  *
  * We use separate MessageBase and Message mainly due to a compiling problem: Message includes MessageField
  * and MessageField includes MessageBase, so if MessageBase and Message would be the same we would have a cyclic
- * redundancy.
+ * dependency.
  */
 class OODEBUG_API MessageBase
 {
@@ -44,8 +44,8 @@ class OODEBUG_API MessageBase
 		/**
 		 * The direction of a MessageField.
 		 *
-		 * In means the MessageField will only be set when using the >> operator.
-		 * Out mean the MessageField will only be used when using the << operator.
+		 * In means the MessageField will be set when using the >> operator.
+		 * Out mean the MessageField will be used when using the << operator.
 		 * We allow to use both simultaniously (In | Out).
 		 */
 		enum Directions {In = 0x1, Out = 0x2};

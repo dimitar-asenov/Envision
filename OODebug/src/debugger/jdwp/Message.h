@@ -28,12 +28,11 @@
 
 #include "../../oodebug_api.h"
 
+#include "MessageBase.h"
 #include "MessageField.h"
 #include "Protocol.h"
 
 namespace OODebug {
-
-class MessageBase;
 
 class OODEBUG_API Message : public MessageBase {
 	public:
