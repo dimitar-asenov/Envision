@@ -23,6 +23,7 @@ var searchData=
   ['max_5farrow_5fwidth',['MAX_ARROW_WIDTH',['../classComments_1_1VCommentDiagramConnector.html#a86a25fc46d0899f0869a057def43ed76',1,'Comments::VCommentDiagramConnector']]],
   ['max_5fcursor_5fjump_5fdistance',['MAX_CURSOR_JUMP_DISTANCE',['../namespaceVisualization.html#a9f11a0b9f6d9ea3130c79fbe0d15a565',1,'Visualization']]],
   ['max_5fdouble_5fprecision',['MAX_DOUBLE_PRECISION',['../namespaceFilePersistence.html#ae30af4b3e5ad1cc83d4c6fa725f3ae27',1,'FilePersistence::MAX_DOUBLE_PRECISION()'],['../namespaceFilePersistence.html#ae30af4b3e5ad1cc83d4c6fa725f3ae27',1,'FilePersistence::MAX_DOUBLE_PRECISION()']]],
+  ['max_5fimages',['MAX_IMAGES',['../classAlloy_1_1CAlloy.html#a76febabaaaa725902d22ce366f1d192f',1,'Alloy::CAlloy']]],
   ['max_5fmilliseconds_5ffor_5fa_5fclick',['MAX_MILLISECONDS_FOR_A_CLICK',['../classVisualization_1_1Scene.html#a4d17344617d24f6a3a55fa13807fc017',1,'Visualization::Scene']]],
   ['member_5f',['member_',['../classOOVisualization_1_1VMemberInitializer.html#af2c623cfae82eb2d903bccd9e1c255cc',1,'OOVisualization::VMemberInitializer']]],
   ['memberinitializers',['memberInitializers',['../classOOVisualization_1_1VMethodStyle.html#ab31733df18901ebe8bfd3cd2fd84a9c4',1,'OOVisualization::VMethodStyle']]],

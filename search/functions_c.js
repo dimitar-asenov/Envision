@@ -2,7 +2,7 @@ var searchData=
 [
   ['maincursor',['mainCursor',['../classVisualization_1_1Scene.html#a8cb114ab6af758a8e3a5ad36911d496f',1,'Visualization::Scene']]],
   ['mainscene',['mainScene',['../classVisualization_1_1VisualizationManager.html#af2a776f1f8c5ea59f9973c545a5eb570',1,'Visualization::VisualizationManager']]],
-  ['mainview',['mainView',['../classVisualization_1_1VisualizationManager.html#a18b5663dc11d3bbdf09e14a6e7866acc',1,'Visualization::VisualizationManager::mainView()'],['../classVisualization_1_1MainView.html#a8ea7dd65ebebf2b7dd369ba6da2fd08d',1,'Visualization::MainView::MainView()']]],
+  ['mainview',['MainView',['../classVisualization_1_1MainView.html#a8ea7dd65ebebf2b7dd369ba6da2fd08d',1,'Visualization::MainView::MainView()'],['../classVisualization_1_1VisualizationManager.html#a18b5663dc11d3bbdf09e14a6e7866acc',1,'Visualization::VisualizationManager::mainView()']]],
   ['mainviewscalingfactor',['mainViewScalingFactor',['../classVisualization_1_1Item.html#aeb5182b37eac642f8964cc7fae9377d7',1,'Visualization::Item::mainViewScalingFactor()'],['../classVisualization_1_1Scene.html#abd43b7c06d245ced8787cce1624d2fd6',1,'Visualization::Scene::mainViewScalingFactor()']]],
   ['makedefaultshape',['makeDefaultShape',['../classVisualization_1_1Shape.html#a9a6dce3c23b26c5f96611a4cb2121c3b',1,'Visualization::Shape']]],
   ['makedefaultstyle',['makeDefaultStyle',['../classVisualization_1_1Shape.html#afc3f658b46daa5724360290c409a9214',1,'Visualization::Shape']]],

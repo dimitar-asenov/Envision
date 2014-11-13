@@ -86,6 +86,7 @@ var searchData=
   ['cppfilter_5f',['cppFilter_',['../classCppImport_1_1CppImportManager.html#ad5951f9260410692e4dae885b3e6123f',1,'CppImport::CppImportManager']]],
   ['createfunction_5f',['createFunction_',['../classOOInteraction_1_1OOOperatorDescriptor.html#a45fea52dca369edfb79eefc59aaaf93e',1,'OOInteraction::OOOperatorDescriptor']]],
   ['currentactionreceiver_5f',['currentActionReceiver_',['../classInteraction_1_1ActionPrompt.html#a7ca67d35bf5925794b2e3a3fb00ee7ed',1,'Interaction::ActionPrompt']]],
+  ['currentclass_5f',['currentClass_',['../classAlloy_1_1AlloyVisitor.html#a7736695b72e9b1362571ee2a41e7f8db',1,'Alloy::AlloyVisitor']]],
   ['currentcolumn_5f',['currentColumn_',['../classExport_1_1FileWriter.html#ad8e7d85cb036fdc5330f9639763b47b5',1,'Export::FileWriter']]],
   ['currentformindex_5f',['currentFormIndex_',['../classVisualization_1_1DeclarativeItemBase.html#a2f9f5af22eca1b52d7aa6f89ee19fae3',1,'Visualization::DeclarativeItemBase']]],
   ['currentitem',['currentItem',['../classInteraction_1_1HPositionLayout.html#aaeac6f44146fa01036d56a1ce751ec46',1,'Interaction::HPositionLayout']]],

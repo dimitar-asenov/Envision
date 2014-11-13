@@ -13,6 +13,7 @@ var searchData=
   ['elemstack',['elemStack',['../classFilePersistence_1_1XMLModel.html#ac3f86de347111178830f81e84a492a15',1,'FilePersistence::XMLModel']]],
   ['elsebranch',['elseBranch',['../classControlFlowVisualization_1_1VIfStatementCF.html#a5e2a5d682993d81fe8dd532dd54bd048',1,'ControlFlowVisualization::VIfStatementCF::elseBranch()'],['../classControlFlowVisualization_1_1VIfStatementCFStyle.html#ade2c04d3bd1e257662899b9aef652ad0',1,'ControlFlowVisualization::VIfStatementCFStyle::elseBranch()'],['../classOOVisualization_1_1VIfStatementStyle.html#a36f9587dabaf12aa0a6d1fba78c58dc8',1,'OOVisualization::VIfStatementStyle::elseBranch()']]],
   ['elsebranch_5f',['elseBranch_',['../classOOVisualization_1_1VIfStatement.html#a386896ed5bb3b0a0a3954da7e3cad110',1,'OOVisualization::VIfStatement']]],
+  ['elseifbranch',['elseIfBranch',['../classOOVisualization_1_1VIfStatementStyle.html#afb31c05a0456ab8614956c0ff2c50d65',1,'OOVisualization::VIfStatementStyle']]],
   ['emptychunks_5f',['emptyChunks_',['../classFilePersistence_1_1GenericTree.html#a919134e2b1b6cfdcade9181626ab79a6',1,'FilePersistence::GenericTree']]],
   ['emptyexpressions',['emptyExpressions',['../classInteraction_1_1ParseResult.html#a760600cc2b7413406fb10cc8652f4651',1,'Interaction::ParseResult']]],
   ['emptyline_5f',['emptyLine_',['../classOOVisualization_1_1VEmptyExpressionStyle.html#a24384a54c921a3fc7067a376ac42d209',1,'OOVisualization::VEmptyExpressionStyle']]],
