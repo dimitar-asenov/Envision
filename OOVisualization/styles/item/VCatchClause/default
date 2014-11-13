@@ -23,8 +23,10 @@
 		<cornerRadius>4</cornerRadius>
 	</shape>
 	
-	<icon prototypes="item/Symbol/keyword">
-		<symbol>catch</symbol>
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/catch.svg</filename>
+		<width>22</width>
+		<height>22</height>
 	</icon>
 	
 	<expressionToCatch prototypes="item/Item/default">

@@ -70,10 +70,10 @@ void VTryCatchFinally::initializeForms()
 	auto shapeElement = new ShapeFormElement();
 
 	addForm((new AnchorLayoutFormElement())
-			->put(TheLeftOf, tryIcon, AtLeftOf, contentElement)
-			->put(TheLeftOf, shapeElement, 2, FromLeftOf, contentElement)
+			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)
+			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
 			->put(TheRightOf, tryIcon, AtRightOf, contentElement)
-			->put(TheRightOf, shapeElement, 2, FromRightOf, contentElement)
+			->put(TheRightOf, shapeElement, 10, FromRightOf, contentElement)
 			->put(TheBottomOf, tryIcon, 3, FromTopOf, contentElement)
 			->put(TheTopOf, shapeElement, AtCenterOf, tryIcon)
 			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));

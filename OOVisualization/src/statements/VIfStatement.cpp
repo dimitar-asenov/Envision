@@ -83,13 +83,13 @@ void VIfStatement::initializeForms()
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	addForm((new AnchorLayoutFormElement())
-			->put(TheLeftOf, header, AtLeftOf, contentElement)
-			->put(TheLeftOf, shapeElement, 2, FromLeftOf, contentElement)
-			->put(TheRightOf, header, AtRightOf, contentElement)
-			->put(TheRightOf, shapeElement, 2, FromRightOf, contentElement)
-			->put(TheBottomOf, header, 3, FromTopOf, contentElement)
+			->put(TheTopOf, contentElement, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
-			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
+			->put(TheLeftOf, shapeElement, AtLeftOf, header)
+			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
+			->put(TheRightOf, header, AtRightOf, contentElement)
+			->put(TheRightOf, shapeElement, 10, FromRightOf, header)
+			->put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));
 
 	// Form 1: then and else branch arranged vertically
 	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
@@ -97,13 +97,13 @@ void VIfStatement::initializeForms()
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	addForm((new AnchorLayoutFormElement())
-			->put(TheLeftOf, header, AtLeftOf, contentElement)
-			->put(TheLeftOf, shapeElement, 2, FromLeftOf, contentElement)
-			->put(TheRightOf, header, AtRightOf, contentElement)
-			->put(TheRightOf, shapeElement, 2, FromRightOf, contentElement)
-			->put(TheBottomOf, header, 3, FromTopOf, contentElement)
+			->put(TheTopOf, contentElement, 3, FromBottomOf, header)
 			->put(TheTopOf, shapeElement, AtCenterOf, header)
-			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
+			->put(TheLeftOf, shapeElement, AtLeftOf, header)
+			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
+			->put(TheRightOf, header, AtRightOf, contentElement)
+			->put(TheRightOf, shapeElement, 10, FromRightOf, header)
+			->put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));
 }
 
 } /* namespace OOVisualization */

@@ -65,13 +65,13 @@ void VLoopStatement::initializeForms()
 	auto shapeElement = new ShapeFormElement();
 
 	addForm((new AnchorLayoutFormElement())
-		->put(TheTopOf, body, 10, FromBottomOf, header)
+		->put(TheTopOf, body, 3, FromBottomOf, header)
 		->put(TheTopOf, shapeElement, AtCenterOf, header)
 		->put(TheLeftOf, shapeElement, AtLeftOf, header)
 		->put(TheLeftOf, shapeElement, 10, FromLeftOf, body)
 		->put(TheRightOf, header, AtRightOf, body)
 		->put(TheRightOf, shapeElement, 10, FromRightOf, header)
-		->put(TheBottomOf, shapeElement, 10, FromBottomOf, body));
+		->put(TheBottomOf, shapeElement, 3, FromBottomOf, body));
 
 	// Now add the second form for a DO loop
 	auto icon = grid({{item<Static>(&I::icon_, [](I* v){return &v->style()->icon();})}})->setColumnStretchFactor(0, 1);
@@ -79,7 +79,7 @@ void VLoopStatement::initializeForms()
 			[](I* v){return &v->style()->condition();})}})->setColumnStretchFactor(0, 1);
 
 	addForm((new AnchorLayoutFormElement())
-		->put(TheTopOf, body, 10, FromBottomOf, icon)
+		->put(TheTopOf, body, 3, FromBottomOf, icon)
 		->put(TheTopOf, shapeElement, AtCenterOf, icon)
 		->put(TheLeftOf, shapeElement, AtLeftOf, icon)
 		->put(TheLeftOf, shapeElement, 5, FromLeftOf, footer)

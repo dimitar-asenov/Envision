@@ -23,8 +23,10 @@
 		<cornerRadius>4</cornerRadius>
 	</shape>
 	
-	<tryIcon prototypes="item/Symbol/keyword">
-		<symbol>try</symbol>
+	<tryIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/try.svg</filename>
+		<width>22</width>
+		<height>22</height>
 	</tryIcon>
 	
 	<catchClauses prototypes="item/VList/default">
@@ -63,7 +65,9 @@
 		</shape>
 	</finallyOutline>
 	
-	<finallyIcon prototypes="item/Symbol/keyword">
-		<symbol>finally</symbol>
+	<finallyIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/finally.svg</filename>
+		<width>22</width>
+		<height>22</height>
 	</finallyIcon>
 </style>
