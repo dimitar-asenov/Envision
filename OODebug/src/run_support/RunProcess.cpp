@@ -28,7 +28,7 @@
 
 namespace OODebug {
 
-OODebug::RunProcess::~RunProcess()
+RunProcess::~RunProcess()
 {
 	if (managedProcess_) managedProcess_->kill();
 }

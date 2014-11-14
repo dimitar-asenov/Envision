@@ -31,6 +31,7 @@
 
 #include "commands/CJavaCompile.h"
 #include "commands/CJavaRun.h"
+#include "commands/CJavaDebug.h"
 #include "run_support/MainMethodFinder.h"
 #include "overlays/ConsoleOverlay.h"
 #include "handlers/HConsoleOverlay.h"
@@ -49,6 +50,7 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 {
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaRun());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug());
 
 	ConsoleOverlay::setDefaultClassHandler(HConsoleOverlay::instance());
 

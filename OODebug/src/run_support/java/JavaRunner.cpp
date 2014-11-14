@@ -82,10 +82,14 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	QObject::connect(process, &QProcess::readyReadStandardError, qApp, &handleErrorOutput, Qt::QueuedConnection);
 
 	QStringList args{"-cp", pathToProjectContainerDirectory + QDir::separator() + "build"};
+
+	// TODO: the address here should rather be stored somewhere as it depends on what the DebugConnector uses.
 	if (debug)
 		args << QStringList{"-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=4000"};
 	args << fileName;
 	process->start("java", args);
+	if (debug) // Wait for the listening on port signal
+		process->waitForReadyRead();
 }
 
 void JavaRunner::noMainMethodWarning(Model::Node* node)

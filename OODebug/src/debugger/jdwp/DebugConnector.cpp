@@ -34,10 +34,22 @@
 
 namespace OODebug {
 
-DebugConnector::DebugConnector(QString vmHostName, int vmHostPort)
+DebugConnector::DebugConnector()
 {
 	QObject::connect(tcpSocket_, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error),
 						  this, &DebugConnector::handleSocketError);
+}
+
+DebugConnector::~DebugConnector()
+{
+	tcpSocket_->abort();
+	delete tcpSocket_;
+}
+
+void DebugConnector::connect(QString vmHostName, int vmHostPort)
+{
+	if (tcpSocket_->isOpen())
+		tcpSocket_->close();
 	// The connection setup is handled here:
 	// First when we are connected we have to send the handshake. For receiving the hanshake reply,
 	// we use a dedicated function which disconnects itself and connects the actual read function
@@ -45,12 +57,6 @@ DebugConnector::DebugConnector(QString vmHostName, int vmHostPort)
 	QObject::connect(tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
 	QObject::connect(tcpSocket_, &QTcpSocket::connected, this, &DebugConnector::sendHandshake);
 	tcpSocket_->connectToHost(vmHostName, vmHostPort);
-}
-
-DebugConnector::~DebugConnector()
-{
-	tcpSocket_->abort();
-	delete tcpSocket_;
 }
 
 void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)

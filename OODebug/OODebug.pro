@@ -36,7 +36,9 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/DebugConnector.h \
     src/debugger/jdwp/Reply.h \
     src/debugger/jdwp/Command.h \
-    src/debugger/jdwp/reply/VersionInfo.h
+    src/debugger/jdwp/reply/VersionInfo.h \
+    src/commands/CJavaDebug.h \
+    src/debugger/JavaDebugger.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -53,4 +55,6 @@ SOURCES += src/OODebugException.cpp \
     src/handlers/HConsoleOverlay.cpp \
     src/debugger/jdwp/Protocol.cpp \
     src/debugger/jdwp/MessageBase.cpp \
-    src/debugger/jdwp/DebugConnector.cpp
+    src/debugger/jdwp/DebugConnector.cpp \
+    src/commands/CJavaDebug.cpp \
+    src/debugger/JavaDebugger.cpp

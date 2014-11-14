@@ -24,55 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "JavaDebugger.h"
 
-#include "../../oodebug_api.h"
+#include "../run_support/java/JavaRunner.h"
+
+#include "jdwp/DebugConnector.h"
 
 namespace OODebug {
 
-class Command;
 
-class OODEBUG_API DebugConnector : public QObject
+void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
-	Q_OBJECT
+	JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
 
-	public:
-		DebugConnector();
-		~DebugConnector();
+	debugConnector().connect();
+}
 
-		void connect(QString vmHostName = "localhost", int vmHostPort = 4000);
-
-	private:
-		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&)>;
-
-		static void handleSocketError(QAbstractSocket::SocketError socketError);
-		void read();
-
-		void sendCommand(Command& c, HandleFunction handler);
-
-		void readHandshake();
-		void sendHandshake();
-		/**
-		 * Parses and handles the \a data of a complete read packet.
-		 */
-		void handlePacket(qint32 id, QByteArray data);
-
-
-		void sendVersionRequest();
-		void handleVersion(QByteArray data);
-
-
-		inline qint32 nextId();
-
-		QHash<int, HandleFunction> handlingMap_;
-
-		QTcpSocket* tcpSocket_{new QTcpSocket()};
-
-		QByteArray incompleteData_;
-
-		qint32 id_{};
-};
-
-qint32 DebugConnector::nextId() { return ++id_; }
+DebugConnector& JavaDebugger::debugConnector()
+{
+	static DebugConnector debugConnector;
+	return debugConnector;
+}
 
 } /* namespace OODebug */
