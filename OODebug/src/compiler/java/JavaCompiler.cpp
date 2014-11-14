@@ -45,7 +45,7 @@ namespace OODebug {
 
 static const QString overlayGroupName("CompilerMessages");
 
-void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
+void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory, bool debug)
 {
 	// Remove previous error messages
 	for (auto scene : Visualization::Scene::allScenes())
@@ -93,7 +93,9 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		Q_ASSERT(projectDir.exists());
 		Q_ASSERT(projectDir.mkdir(buildFolder));
 	}
-	const QStringList buildFolderArgs = {"-d", QString("..") + QDir::separator() + buildFolder};
+	QStringList args = {"-d", QString("..") + QDir::separator() + buildFolder};
+	if (debug)
+		args << "-g";
 	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
 
 	QSet<uint> seenMessages;
@@ -105,7 +107,7 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		if (file.startsWith(QString("src") + QDir::separator()))
 			file.replace(0, 4, "");
 		auto feedback = compiler.compileFile(pathToProjectContainerDirectory + QDir::separator() + "src",
-														 file, buildFolderArgs);
+														 file, args);
 		for (auto& message : feedback.messages())
 		{
 			// In the map we have the src prefix

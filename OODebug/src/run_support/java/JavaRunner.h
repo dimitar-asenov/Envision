@@ -40,7 +40,8 @@ class RunProcess;
 class OODEBUG_API JavaRunner
 {
 	public:
-		static void runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
+		static void runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+								  bool debug = false);
 
 	private:
 		static void noMainMethodWarning(Model::Node* node);

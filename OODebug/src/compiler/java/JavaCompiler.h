@@ -49,7 +49,8 @@ class CompilerMessage;
 class OODEBUG_API JavaCompiler
 {
 	public:
-		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
+		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+										bool debug = false);
 
 	private:
 		static void visualizeMessage(Visualization::Item* item, Model::Node* node,

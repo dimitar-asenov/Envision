@@ -53,7 +53,7 @@ static OOModel::Project* lastProject_{};
 
 // TODO: this Runner can be improved by allowing multiple main methods if there are multiple packages.
 // Then we can have Maps: Package->LIST[Process], Process->Console and thus allow multiple processes to run.
-void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
+void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory, bool debug)
 {
 	lastProject_ = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(lastProject_);
@@ -63,7 +63,7 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	if (!mainMethod)
 		return noMainMethodWarning(lastProject_);
 
-	JavaCompiler::compileTree(manager, pathToProjectContainerDirectory);
+	JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug);
 	auto map = JavaExport::JavaExporter::exportMaps().map(lastProject_);
 
 	// find the file of the main method:
@@ -81,7 +81,11 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	QObject::connect(process, &QProcess::readyReadStandardOutput, qApp, &handleOutput, Qt::QueuedConnection);
 	QObject::connect(process, &QProcess::readyReadStandardError, qApp, &handleErrorOutput, Qt::QueuedConnection);
 
-	process->start("java", {"-cp", pathToProjectContainerDirectory + QDir::separator() + "build", fileName});
+	QStringList args{"-cp", pathToProjectContainerDirectory + QDir::separator() + "build"};
+	if (debug)
+		args << QStringList{"-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=4000"};
+	args << fileName;
+	process->start("java", args);
 }
 
 void JavaRunner::noMainMethodWarning(Model::Node* node)
