@@ -26,32 +26,50 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../../../oodebug_api.h"
 
-#include "MessagePart.h"
-#include "MessageField.h"
-#include "Protocol.h"
+#include "../Command.h"
+#include "../MessagePart.h"
+#include "../Reply.h"
 
+// https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_Event_Composite
 
 namespace OODebug {
 
-class OODEBUG_API Command : public MessagePart {
-	public:
-		Command() {}
-		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
-		Command(qint32 cmdId, Protocol::CommandSet cmdSet, T cmd)
-		{
-			id = cmdId;
-			commandSet = cmdSet;
-			command = static_cast<typename std::underlying_type<T>::type>(cmd);
-		}
-
-		// Message header data:
-		MessageField<qint32> length{&Command::length, this};
-		MessageField<qint32> id{&Command::id, this};
-		MessageField<qint8> flags{&Command::flags, this};
-		MessageField<Protocol::CommandSet> commandSet{&Command::commandSet, this};
-		MessageField<qint8> command{&Command::command, this};
+struct VMStart : public MessagePart
+{
+		MessageField<qint32> requestId{&VMStart::requestId, this};
+		MessageField<qint64> threadId{&VMStart::threadId, this};
 };
+
+struct ClassPrepare : public MessagePart
+{
+		MessageField<qint32> requestId{&ClassPrepare::requestId, this};
+		MessageField<qint64> threadId{&ClassPrepare::threadId, this};
+		MessageField<Protocol::TypeTagKind> refTypeTag{&ClassPrepare::refTypeTag, this};
+		MessageField<qint64> typeID{&ClassPrepare::typeID, this};
+		MessageField<QString> signature{&ClassPrepare::signature, this};
+		MessageField<qint32> status{&ClassPrepare::status, this};
+};
+
+class Event : public MessagePart
+{
+	public:
+		MessageField<Protocol::EventKind> eventKind{&Event::eventKind, this};
+
+		MessageField<VMStart, cast(Protocol::EventKind::VM_START)> vmStart{&Event::vmStart, this};
+		MessageField<ClassPrepare, cast(Protocol::EventKind::CLASS_PREPARE)> classPrepare{&Event::classPrepare, this};
+
+		virtual int kind() const override;
+};
+
+int Event::kind() const { return static_cast<int>(eventKind()); }
+
+class CompositeCommand : public Command {
+	public:
+		MessageField<Protocol::SuspendPolicy> suspendPolicy{&CompositeCommand::suspendPolicy, this};
+		MessageField<QList<Event>> events{&CompositeCommand::events, this};
+};
+
 
 } /* namespace OODebug */

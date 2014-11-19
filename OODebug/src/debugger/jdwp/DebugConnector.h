@@ -72,6 +72,8 @@ class OODEBUG_API DebugConnector : public QObject
 
 		void handleDefaultReply(QByteArray data);
 
+		void handleComposite(QByteArray data);
+
 		inline qint32 nextId();
 
 		QHash<int, HandleFunction> handlingMap_;

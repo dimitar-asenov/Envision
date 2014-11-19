@@ -32,6 +32,7 @@
 
 #include "reply/VersionInfo.h"
 #include "command/SetCommand.h"
+#include "command/CompositeCommand.h"
 
 namespace OODebug {
 
@@ -149,8 +150,7 @@ void DebugConnector::handlePacket(qint32 id, QByteArray data)
 	}
 	else // We received a command
 	{
-		// TODO: handle commands
-		qWarning() << "Command received" << data.toHex();
+		handleComposite(data);
 	}
 }
 
@@ -190,6 +190,22 @@ void DebugConnector::handleDefaultReply(QByteArray data)
 {
 	auto r = makeReply<Reply>(data);
 	qDebug() << "No Error in" << r.id();
+}
+
+void DebugConnector::handleComposite(QByteArray data)
+{
+	auto c = makeReply<CompositeCommand>(data);
+	// If we receive a non composite event, we have an implementation error.
+	Q_ASSERT(c.commandSet() == Protocol::CommandSet::Event);
+	Q_ASSERT(c.command() == MessagePart::cast(Protocol::EventCommands::Composite));
+
+	for (auto& event : c.events())
+	{
+		if (event.eventKind() == Protocol::EventKind::CLASS_PREPARE)
+			qDebug() << "Preparing class:" <<event.classPrepare().signature();
+		else
+			qDebug() << "EVENT" << static_cast<int>(event.eventKind());
+	}
 }
 
 } /* namespace OODebug */
