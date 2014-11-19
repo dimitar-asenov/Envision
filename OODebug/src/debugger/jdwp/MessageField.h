@@ -34,6 +34,38 @@ class Reply;
 class Command;
 
 template <class T>
+void read(QDataStream& stream, T& val)
+{
+	stream >> val;
+}
+
+template <class T>
+void write(QDataStream& stream, T& val)
+{
+	stream << val;
+}
+
+template <>
+inline void read(QDataStream& stream, QString& read)
+{
+	qint32 len;
+	stream >> len;
+	std::vector<char> data(len + 1);
+	stream.readRawData(&data[0], len);
+	data[len] = '\0';
+	read = QString(&data[0]);
+}
+
+template <>
+inline void write(QDataStream& stream, QString& write)
+{
+	// We know that value is of type QString so this is fine.
+	qint32 len = write.length();
+	QByteArray data = write.toLocal8Bit();
+	stream.writeBytes(data.constData(), len);
+}
+
+template <class T>
 class MessageField
 {
 	public:
@@ -44,11 +76,11 @@ class MessageField
 		inline MessageField(MessageBase* containingMessage) {
 			containingMessage->addReadOperator([=] (QDataStream& stream)
 			{
-				stream >> value_;
+				read(stream, value_);
 			});
 			containingMessage->addWriteOperator([=] (QDataStream& stream)
 			{
-				stream << value_;
+				write(stream, value_);
 			});
 		}
 
@@ -58,28 +90,6 @@ class MessageField
 	private:
 		T value_{};
 };
-
-QDataStream& operator>>(QDataStream& stream, QString& read)
-{
-	qint32 len;
-	stream >> len;
-	std::vector<char> data(len + 1);
-	stream.readRawData(&data[0], len);
-	data[len] = '\0';
-	read = QString(&data[0]);
-	return stream;
-}
-
-QDataStream& operator<<(QDataStream& stream, QString& write)
-{
-	// We know that value is of type QString so this is fine.
-	qint32 len = write.length();
-	// ignore the null terminator
-	len = len - 1;
-	QByteArray data = write.toLocal8Bit();
-	stream.writeBytes(data.constData(), len);
-	return stream;
-}
 
 template <class T>
 typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
