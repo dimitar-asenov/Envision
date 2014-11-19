@@ -37,21 +37,17 @@ namespace OODebug {
 class OODEBUG_API MessageBase
 {
 	public:
-		using ReadOperator = std::function<void (QDataStream&)>;
-		void addReadOperator(ReadOperator reader);
+		using ReadOperator = std::function<void (MessageBase*, QDataStream&)>;
+		using WriteOperator = std::function<void (const MessageBase*, QDataStream&)>;
 
-		using WriteOperator = std::function<void (QDataStream&)>;
-		void addWriteOperator(WriteOperator writer);
+		void addMessageField(ReadOperator reader, WriteOperator writer = nullptr);
 
 		friend QDataStream& operator>>(QDataStream& stream, MessageBase& message);
-		friend QDataStream& operator<<(QDataStream& stream, MessageBase& message);
+		friend QDataStream& operator<<(QDataStream& stream, const MessageBase& message);
 
 	private:
 		QList<ReadOperator> readers_;
 		QList<WriteOperator> writers_;
 };
-
-inline void MessageBase::addReadOperator(MessageBase::ReadOperator reader) { readers_.append(reader); }
-inline void MessageBase::addWriteOperator(MessageBase::WriteOperator writer) { writers_.append(writer); }
 
 } /* namespace OODebug */

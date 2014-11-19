@@ -38,11 +38,11 @@ namespace OODebug {
 class OODEBUG_API Command : public MessageBase {
 	public:
 		// Message header data:
-		MessageField<qint32> length{this};
-		MessageField<qint32> id{this};
-		MessageField<qint8> flags{this};
-		MessageField<Protocol::CommandSet> commandSet{this};
-		MessageField<qint8> command{this};
+		MessageField<qint32> length{&Command::length, this};
+		MessageField<qint32> id{&Command::id, this};
+		MessageField<qint8> flags{&Command::flags, this};
+		MessageField<Protocol::CommandSet> commandSet{&Command::commandSet, this};
+		MessageField<qint8> command{&Command::command, this};
 };
 
 } /* namespace OODebug */

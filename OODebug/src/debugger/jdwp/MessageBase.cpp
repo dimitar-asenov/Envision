@@ -31,15 +31,21 @@ namespace OODebug {
 QDataStream& operator>>(QDataStream& stream, MessageBase& message)
 {
 	for (auto reader : message.readers_)
-		reader(stream);
+		reader(&message, stream);
 	return stream;
 }
 
-QDataStream& operator<<(QDataStream& stream, MessageBase& message)
+QDataStream& operator<<(QDataStream& stream, const MessageBase& message)
 {
 	for (auto writer : message.writers_)
-		writer(stream);
+		writer(&message, stream);
 	return stream;
+}
+
+void MessageBase::addMessageField(ReadOperator reader, WriteOperator writer)
+{
+	if (reader) readers_ << reader;
+	if (writer) writers_ << writer;
 }
 
 } /* namespace OODebug */

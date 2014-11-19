@@ -37,10 +37,10 @@ namespace OODebug {
 class OODEBUG_API Reply : public MessageBase {
 	public:
 		// Message header data:
-		MessageField<qint32> length{this};
-		MessageField<qint32> id{this};
-		MessageField<qint8> flags{this};
-		MessageField<Protocol::Error> error{this};
+		MessageField<qint32> length{&Reply::length, this};
+		MessageField<qint32> id{&Reply::id, this};
+		MessageField<qint8> flags{&Reply::flags, this};
+		MessageField<Protocol::Error> error{&Reply::error, this};
 };
 
 } /* namespace OODebug */

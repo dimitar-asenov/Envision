@@ -40,7 +40,7 @@ void read(QDataStream& stream, T& val)
 }
 
 template <class T>
-void write(QDataStream& stream, T& val)
+void write(QDataStream& stream, const T& val)
 {
 	stream << val;
 }
@@ -73,15 +73,17 @@ class MessageField
 		 * Creates a messagefield. If inout is true then the field is both used for writing and reading,
 		 * otherwise its used only for reading.
 		 */
-		inline MessageField(MessageBase* containingMessage) {
-			containingMessage->addReadOperator([=] (QDataStream& stream)
+		template <class Container>
+		inline MessageField(MessageField<T> Container::*field, MessageBase* containingMessage) {
+			auto reader = [field] (MessageBase* container, QDataStream& stream)
 			{
-				read(stream, value_);
-			});
-			containingMessage->addWriteOperator([=] (QDataStream& stream)
+				read(stream, (static_cast<Container*>(container)->*field).value_);
+			};
+			auto writer = [field] (const MessageBase* container, QDataStream& stream)
 			{
-				write(stream, value_);
-			});
+				write(stream, (static_cast<const Container*>(container)->*field).value_);
+			};
+			containingMessage->addMessageField(reader, writer);
 		}
 
 		inline T operator()() const { return value_; }
