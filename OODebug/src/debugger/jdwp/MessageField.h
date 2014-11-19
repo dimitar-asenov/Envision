@@ -65,7 +65,7 @@ inline void write(QDataStream& stream, const QString& write)
 	stream.writeBytes(data.constData(), len);
 }
 
-template <class T, int Kind = -1>
+template <class T, int Kind = MessagePart::noKind>
 class MessageField
 {
 	public:

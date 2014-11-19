@@ -37,7 +37,10 @@ namespace OODebug {
 class OODEBUG_API MessagePart
 {
 	public:
-		static const int noKind = -1;
+		// Do not change this value: Clients often implement kind() with "return kindField();"
+		// and before the kindField is set it returns the default value of int,
+		// thus the kindField can only be set if noKind is also the default value.
+		static const int noKind{};
 		using ReadOperator = std::function<void (MessagePart*, QDataStream&)>;
 		using WriteOperator = std::function<void (const MessagePart*, QDataStream&)>;
 
