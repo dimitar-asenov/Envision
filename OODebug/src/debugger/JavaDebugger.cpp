@@ -31,6 +31,7 @@
 
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/Module.h"
 
 namespace OODebug {
 
@@ -47,9 +48,20 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 		mainContainer = parent;
 		if (!mainContainer) break;
 	}
+	OOModel::Module* module = nullptr;
+	while (!module)
+	{
+		auto parent = mainContainer->parent();
+		module = DCast<OOModel::Module>(parent);
+		mainContainer = parent;
+		if (!mainContainer) break;
+	}
 
 	Q_ASSERT(mainClass);
 	QString mainClassName = mainClass->name();
+	// TODO properly support nested packages
+	if (module)
+		mainClassName.prepend(".").prepend(module->name());
 	debugConnector().connect(mainClassName);
 }
 
