@@ -30,6 +30,7 @@
 
 #include "../Command.h"
 #include "../MessagePart.h"
+#include "../Reply.h"
 
 // https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_EventRequest_Set
 
@@ -85,6 +86,10 @@ struct BreakClassLoad : public EventSetCommand
 			suspendPolicy = Protocol::SuspendPolicy::ALL;
 			modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
 		}
+};
+
+struct EventSetReply : public Reply {
+		MessageField<qint32> requestId{&EventSetReply::requestId, this};
 };
 
 } /* namespace OODebug */

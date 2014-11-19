@@ -27,17 +27,30 @@
 #include "JavaDebugger.h"
 
 #include "../run_support/java/JavaRunner.h"
-
 #include "jdwp/DebugConnector.h"
+
+#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Class.h"
 
 namespace OODebug {
 
 
 void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
-	JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
+	Model::Node* mainContainer = JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
+	// Find the class name where the main method is in.
+	OOModel::Class* mainClass = nullptr;
+	while (!mainClass)
+	{
+		auto parent = mainContainer->parent();
+		mainClass = DCast<OOModel::Class>(parent);
+		mainContainer = parent;
+		if (!mainContainer) break;
+	}
 
-	debugConnector().connect();
+	Q_ASSERT(mainClass);
+	QString mainClassName = mainClass->name();
+	debugConnector().connect(mainClassName);
 }
 
 DebugConnector& JavaDebugger::debugConnector()

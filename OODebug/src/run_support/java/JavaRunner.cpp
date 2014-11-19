@@ -53,7 +53,8 @@ static OOModel::Project* lastProject_{};
 
 // TODO: this Runner can be improved by allowing multiple main methods if there are multiple packages.
 // Then we can have Maps: Package->LIST[Process], Process->Console and thus allow multiple processes to run.
-void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory, bool debug)
+OOModel::Method* JavaRunner::runTree(Model::TreeManager* manager,
+												 const QString& pathToProjectContainerDirectory, bool debug)
 {
 	lastProject_ = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(lastProject_);
@@ -61,7 +62,10 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	MainMethodFinder finder;
 	auto mainMethod = finder.visit(lastProject_);
 	if (!mainMethod)
-		return noMainMethodWarning(lastProject_);
+	{
+		noMainMethodWarning(lastProject_);
+		return nullptr;
+	}
 
 	JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug);
 	auto map = JavaExport::JavaExporter::exportMaps().map(lastProject_);
@@ -90,6 +94,7 @@ void JavaRunner::runTree(Model::TreeManager* manager, const QString& pathToProje
 	process->start("java", args);
 	if (debug) // Wait for the listening on port signal
 		process->waitForReadyRead();
+	return mainMethod;
 }
 
 void JavaRunner::noMainMethodWarning(Model::Node* node)

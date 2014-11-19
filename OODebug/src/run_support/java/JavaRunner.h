@@ -33,6 +33,10 @@ namespace Model {
 	class Node;
 }
 
+namespace OOModel {
+	class Method;
+}
+
 namespace OODebug {
 
 class RunProcess;
@@ -40,7 +44,11 @@ class RunProcess;
 class OODEBUG_API JavaRunner
 {
 	public:
-		static void runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+		/**
+		 * Finds a main method in the tree and runs the Programm from this main method.
+		 * If there is a valid main method the pointer to this method is returned.
+		 */
+		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
 								  bool debug = false);
 
 	private:

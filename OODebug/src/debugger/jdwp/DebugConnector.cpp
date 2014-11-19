@@ -47,8 +47,9 @@ DebugConnector::~DebugConnector()
 	delete tcpSocket_;
 }
 
-void DebugConnector::connect(QString vmHostName, int vmHostPort)
+void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHostPort)
 {
+	mainClassName_ = mainClassName;
 	if (tcpSocket_->isOpen())
 		tcpSocket_->close();
 	// The connection setup is handled here:
@@ -168,9 +169,27 @@ void DebugConnector::handleVersion(QByteArray data)
 
 void DebugConnector::sendBreakAtStart()
 {
-	QString pattern{"Test"};
-	BreakClassLoad	load(nextId(), pattern);
-	sendCommand(load, nullptr);
+	BreakClassLoad	load(nextId(), mainClassName_);
+	sendCommand(load, &DebugConnector::handleBreakAtStart);
+}
+
+void DebugConnector::handleBreakAtStart(QByteArray data)
+{
+	auto reply = makeReply<EventSetReply>(data);
+	qDebug() << "Break at start succesful " << reply.requestId();
+	sendResume();
+}
+
+void DebugConnector::sendResume()
+{
+	Command c(nextId(), Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume);
+	sendCommand(c, &DebugConnector::handleDefaultReply);
+}
+
+void DebugConnector::handleDefaultReply(QByteArray data)
+{
+	auto r = makeReply<Reply>(data);
+	qDebug() << "No Error in" << r.id();
 }
 
 } /* namespace OODebug */
