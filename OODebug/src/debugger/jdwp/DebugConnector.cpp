@@ -98,6 +98,12 @@ void DebugConnector::sendCommand(Command& c, HandleFunction handler)
 	QByteArray raw;
 	QDataStream stream(&raw, QIODevice::ReadWrite);
 	stream << c;
+	// Insert the length, it is always at position 0
+	QByteArray len;
+	qint32 dataLen = raw.length();
+	QDataStream lenStream(&len, QIODevice::ReadWrite);
+	lenStream << dataLen;
+	raw.replace(0, len.length(), len);
 	tcpSocket_->write(raw);
 }
 
@@ -142,7 +148,7 @@ void DebugConnector::handlePacket(qint32 id, QByteArray data)
 	else // We received a command
 	{
 		// TODO: handle commands
-		qWarning() << "Command received ";
+		qWarning() << "Command received" << data.toHex();
 	}
 }
 
