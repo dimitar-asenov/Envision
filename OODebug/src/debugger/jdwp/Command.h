@@ -26,79 +26,23 @@
 
 #pragma once
 
+#include "../../oodebug_api.h"
+
 #include "MessageBase.h"
+#include "MessageField.h"
+#include "Protocol.h"
+
 
 namespace OODebug {
 
-class Reply;
-class Command;
-
-template <class T>
-class MessageField
-{
+class OODEBUG_API Command : public MessageBase {
 	public:
-		/**
-		 * Creates a messagefield. If inout is true then the field is both used for writing and reading,
-		 * otherwise its used only for reading.
-		 */
-		inline MessageField(MessageBase* containingMessage) {
-			containingMessage->addReadOperator([=] (QDataStream& stream)
-			{
-				stream >> value_;
-			});
-			containingMessage->addWriteOperator([=] (QDataStream& stream)
-			{
-				stream << value_;
-			});
-		}
-
-		inline T operator()() const { return value_; }
-		inline T operator=(const T rhs) { return value_ = rhs; }
-
-	private:
-		T value_{};
+		// Message header data:
+		MessageField<qint32> length{this};
+		MessageField<qint32> id{this};
+		MessageField<qint8> flags{this};
+		MessageField<Protocol::CommandSet> commandSet{this};
+		MessageField<qint8> command{this};
 };
-
-QDataStream& operator>>(QDataStream& stream, QString& read)
-{
-	qint32 len;
-	stream >> len;
-	std::vector<char> data(len + 1);
-	stream.readRawData(&data[0], len);
-	data[len] = '\0';
-	read = QString(&data[0]);
-	return stream;
-}
-
-QDataStream& operator<<(QDataStream& stream, QString& write)
-{
-	// We know that value is of type QString so this is fine.
-	qint32 len = write.length();
-	// ignore the null terminator
-	len = len - 1;
-	QByteArray data = write.toLocal8Bit();
-	stream.writeBytes(data.constData(), len);
-	return stream;
-}
-
-template <class T>
-typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
-operator>>(QDataStream& stream, T& val)
-{
-	using Type = typename std::underlying_type<T>::type;
-	Type rawValue;
-	stream >> rawValue;
-	val = static_cast<T>(rawValue);
-	return stream;
-}
-
-template <class T>
-typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type
-operator<<(QDataStream& stream, T& val)
-{
-	using Type = typename std::underlying_type<T>::type;
-	Type rawValue = static_cast<Type>(val);
-	return stream << rawValue;
-}
 
 } /* namespace OODebug */

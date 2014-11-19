@@ -31,26 +31,12 @@
 namespace OODebug {
 
 /**
- * The base class for the Message class, it defines the stream reading and writing operators.
- * This class should only be used by the class Message. Clients should implement the Message class.
- *
- * We use separate MessageBase and Message mainly due to a compiling problem: Message includes MessageField
- * and MessageField includes MessageBase, so if MessageBase and Message would be the same we would have a cyclic
- * dependency.
+ * The base class for the Command and Reply class, it defines the stream reading and writing operators.
+ * This class should only be used by the Command and Reply class, i.e. clients should implement those classes.
  */
 class OODEBUG_API MessageBase
 {
 	public:
-		/**
-		 * The direction of a MessageField.
-		 *
-		 * In means the MessageField will be set when using the >> operator.
-		 * Out mean the MessageField will be used when using the << operator.
-		 * We allow to use both simultaniously (In | Out).
-		 */
-		enum Directions {In = 0x1, Out = 0x2};
-		Q_DECLARE_FLAGS(Direction, Directions)
-
 		using ReadOperator = std::function<void (QDataStream&)>;
 		void addReadOperator(ReadOperator reader);
 
@@ -64,8 +50,6 @@ class OODEBUG_API MessageBase
 		QList<ReadOperator> readers_;
 		QList<WriteOperator> writers_;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(MessageBase::Direction)
 
 inline void MessageBase::addReadOperator(MessageBase::ReadOperator reader) { readers_.append(reader); }
 inline void MessageBase::addWriteOperator(MessageBase::WriteOperator writer) { writers_.append(writer); }

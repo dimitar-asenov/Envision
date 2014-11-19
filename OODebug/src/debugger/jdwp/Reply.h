@@ -34,16 +34,13 @@
 
 namespace OODebug {
 
-class OODEBUG_API Message : public MessageBase {
+class OODEBUG_API Reply : public MessageBase {
 	public:
 		// Message header data:
-		MessageField<qint32> length{this, In | Out};
-		MessageField<qint32> id{this, In | Out};
-		MessageField<qint8> flags{this, In | Out};
+		MessageField<qint32> length{this};
+		MessageField<qint32> id{this};
+		MessageField<qint8> flags{this};
 		MessageField<Protocol::Error> error{this};
-
-		MessageField<Protocol::CommandSet> commandSet{this, Out};
-		MessageField<qint8> command{this, Out};
 };
 
 } /* namespace OODebug */
