@@ -37,6 +37,14 @@ namespace OODebug {
 
 class OODEBUG_API Command : public MessageBase {
 	public:
+		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
+		Command(qint32 cmdId, Protocol::CommandSet cmdSet, T cmd)
+		{
+			id = cmdId;
+			commandSet = cmdSet;
+			command = static_cast<typename std::underlying_type<T>::type>(cmd);
+		}
+
 		// Message header data:
 		MessageField<qint32> length{&Command::length, this};
 		MessageField<qint32> id{&Command::id, this};
