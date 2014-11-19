@@ -48,6 +48,15 @@ class OODEBUG_API MessagePart
 
 		virtual int kind() const;
 
+		/**
+		 * Casts an enum value to its underlying type.
+		 */
+		template<class Enum>
+		static constexpr typename
+		std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
+		cast(Enum enumValue) { return static_cast<typename std::underlying_type<Enum>::type>(enumValue); }
+
+
 	private:
 		QList<ReadOperator> readers_;
 		QList<WriteOperator> writers_;
