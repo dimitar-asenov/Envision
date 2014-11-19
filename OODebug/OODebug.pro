@@ -38,7 +38,8 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/Command.h \
     src/debugger/jdwp/reply/VersionInfo.h \
     src/commands/CJavaDebug.h \
-    src/debugger/JavaDebugger.h
+    src/debugger/JavaDebugger.h \
+    src/debugger/jdwp/command/SetCommand.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \

@@ -31,6 +31,7 @@
 #include "Command.h"
 
 #include "reply/VersionInfo.h"
+#include "command/SetCommand.h"
 
 namespace OODebug {
 
@@ -162,6 +163,14 @@ void DebugConnector::handleVersion(QByteArray data)
 {
 	auto info = makeReply<VersionInfo>(data);
 	qDebug() << "VM-INFO: " << info.jdwpMajor() << info.jdwpMinor();
+	sendBreakAtStart();
+}
+
+void DebugConnector::sendBreakAtStart()
+{
+	QString pattern{"Test"};
+	BreakClassLoad	load(nextId(), pattern);
+	sendCommand(load, nullptr);
 }
 
 } /* namespace OODebug */

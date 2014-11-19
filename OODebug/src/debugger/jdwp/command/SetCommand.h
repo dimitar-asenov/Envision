@@ -26,54 +26,66 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../../../oodebug_api.h"
+
+#include "../Command.h"
+
+// https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_EventRequest_Set
 
 namespace OODebug {
 
-class Command;
-
-class OODEBUG_API DebugConnector : public QObject
+class Modifier : public MessageBase
 {
-	Q_OBJECT
-
 	public:
-		DebugConnector();
-		~DebugConnector();
+		static const int eventOff = 1;
+		static const int classMatch = 5;
 
-		void connect(QString vmHostName = "localhost", int vmHostPort = 4000);
+		Modifier() {} // needed for in stream
+		MessageField<qint8> modKind{&Modifier::modKind, this};
+		MessageField<qint32, eventOff> count{&Modifier::count, this};
+		MessageField<QString, classMatch> classPattern{&Modifier::classPattern, this};
+
+		virtual int kind() const override;
+
+		static Modifier makeEventOff(qint32 count) {
+			Modifier off(eventOff);
+			off.count = count;
+			return off;
+		}
+
+		static Modifier makeMatchClass(QString classPattern) {
+			Modifier match(classMatch);
+			match.classPattern = classPattern;
+			return match;
+		}
+
 
 	private:
-		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&)>;
-
-		static void handleSocketError(QAbstractSocket::SocketError socketError);
-		void read();
-
-		void sendCommand(Command& c, HandleFunction handler);
-
-		void readHandshake();
-		void sendHandshake();
-		/**
-		 * Parses and handles the \a data of a complete read packet.
-		 */
-		void handlePacket(qint32 id, QByteArray data);
-
-
-		void sendVersionRequest();
-		void handleVersion(QByteArray data);
-
-		void sendBreakAtStart();
-
-		inline qint32 nextId();
-
-		QHash<int, HandleFunction> handlingMap_;
-
-		QTcpSocket* tcpSocket_{new QTcpSocket()};
-
-		QByteArray incompleteData_;
-
-		qint32 id_{};
+		Modifier(int kind) {
+			modKind = kind;
+		}
 };
 
-qint32 DebugConnector::nextId() { return ++id_; }
+int Modifier::kind() const { return modKind(); }
+
+
+struct EventSetCommand : public Command {
+		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
+		EventSetCommand(int id, T command) : Command(id, Protocol::CommandSet::EventRequest, command) {}
+
+		MessageField<Protocol::EventKind> kind{&EventSetCommand::kind, this};
+		MessageField<Protocol::SuspendPolicy> suspendPolicy{&EventSetCommand::suspendPolicy, this};
+
+		MessageField<QList<Modifier>> modifiers{&EventSetCommand::modifiers, this};
+};
+
+struct BreakClassLoad : public EventSetCommand
+{
+		BreakClassLoad(int id, QString classToBreak) : EventSetCommand(id, Protocol::EventRequestCommands::Set) {
+			kind = Protocol::EventKind::CLASS_PREPARE;
+			suspendPolicy = Protocol::SuspendPolicy::ALL;
+			modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
+		}
+};
 
 } /* namespace OODebug */

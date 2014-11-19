@@ -65,7 +65,7 @@ inline void write(QDataStream& stream, const QString& write)
 	stream.writeBytes(data.constData(), len);
 }
 
-template <class T>
+template <class T, int Kind = -1>
 class MessageField
 {
 	public:
@@ -74,14 +74,16 @@ class MessageField
 		 * otherwise its used only for reading.
 		 */
 		template <class Container>
-		inline MessageField(MessageField<T> Container::*field, MessageBase* containingMessage) {
+		inline MessageField(MessageField<T, Kind> Container::*field, MessageBase* containingMessage) {
 			auto reader = [field] (MessageBase* container, QDataStream& stream)
 			{
-				read(stream, (static_cast<Container*>(container)->*field).value_);
+				if (Kind == MessageBase::noKind || Kind == container->kind())
+					read(stream, (static_cast<Container*>(container)->*field).value_);
 			};
 			auto writer = [field] (const MessageBase* container, QDataStream& stream)
 			{
-				write(stream, (static_cast<const Container*>(container)->*field).value_);
+				if (Kind == MessageBase::noKind || Kind == container->kind())
+					write(stream, (static_cast<const Container*>(container)->*field).value_);
 			};
 			containingMessage->addMessageField(reader, writer);
 		}

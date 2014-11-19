@@ -37,6 +37,7 @@ namespace OODebug {
 class OODEBUG_API MessageBase
 {
 	public:
+		static const int noKind = -1;
 		using ReadOperator = std::function<void (MessageBase*, QDataStream&)>;
 		using WriteOperator = std::function<void (const MessageBase*, QDataStream&)>;
 
@@ -45,9 +46,13 @@ class OODEBUG_API MessageBase
 		friend QDataStream& operator>>(QDataStream& stream, MessageBase& message);
 		friend QDataStream& operator<<(QDataStream& stream, const MessageBase& message);
 
+		virtual int kind() const;
+
 	private:
 		QList<ReadOperator> readers_;
 		QList<WriteOperator> writers_;
 };
+
+inline int MessageBase::kind() const { return noKind; }
 
 } /* namespace OODebug */
