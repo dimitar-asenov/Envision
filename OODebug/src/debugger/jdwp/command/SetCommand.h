@@ -29,12 +29,13 @@
 #include "../../../oodebug_api.h"
 
 #include "../Command.h"
+#include "../MessagePart.h"
 
 // https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_EventRequest_Set
 
 namespace OODebug {
 
-class Modifier : public MessageBase
+class Modifier : public MessagePart
 {
 	public:
 		static const int eventOff = 1;
@@ -59,7 +60,6 @@ class Modifier : public MessageBase
 			return match;
 		}
 
-
 	private:
 		Modifier(int kind) {
 			modKind = kind;
@@ -67,7 +67,6 @@ class Modifier : public MessageBase
 };
 
 int Modifier::kind() const { return modKind(); }
-
 
 struct EventSetCommand : public Command {
 		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>

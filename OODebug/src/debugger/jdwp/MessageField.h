@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "MessageBase.h"
+#include "MessagePart.h"
 
 namespace OODebug {
 
@@ -74,15 +74,15 @@ class MessageField
 		 * otherwise its used only for reading.
 		 */
 		template <class Container>
-		inline MessageField(MessageField<T, Kind> Container::*field, MessageBase* containingMessage) {
-			auto reader = [field] (MessageBase* container, QDataStream& stream)
+		inline MessageField(MessageField<T, Kind> Container::*field, MessagePart* containingMessage) {
+			auto reader = [field] (MessagePart* container, QDataStream& stream)
 			{
-				if (Kind == MessageBase::noKind || Kind == container->kind())
+				if (Kind == MessagePart::noKind || Kind == container->kind())
 					read(stream, (static_cast<Container*>(container)->*field).value_);
 			};
-			auto writer = [field] (const MessageBase* container, QDataStream& stream)
+			auto writer = [field] (const MessagePart* container, QDataStream& stream)
 			{
-				if (Kind == MessageBase::noKind || Kind == container->kind())
+				if (Kind == MessagePart::noKind || Kind == container->kind())
 					write(stream, (static_cast<const Container*>(container)->*field).value_);
 			};
 			containingMessage->addMessageField(reader, writer);

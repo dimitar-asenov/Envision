@@ -24,25 +24,25 @@
 **
 ***********************************************************************************************************************/
 
-#include "MessageBase.h"
+#include "MessagePart.h"
 
 namespace OODebug {
 
-QDataStream& operator>>(QDataStream& stream, MessageBase& message)
+QDataStream& operator>>(QDataStream& stream, MessagePart& message)
 {
 	for (auto reader : message.readers_)
 		reader(&message, stream);
 	return stream;
 }
 
-QDataStream& operator<<(QDataStream& stream, const MessageBase& message)
+QDataStream& operator<<(QDataStream& stream, const MessagePart& message)
 {
 	for (auto writer : message.writers_)
 		writer(&message, stream);
 	return stream;
 }
 
-void MessageBase::addMessageField(ReadOperator reader, WriteOperator writer)
+void MessagePart::addMessageField(ReadOperator reader, WriteOperator writer)
 {
 	if (reader) readers_ << reader;
 	if (writer) writers_ << writer;

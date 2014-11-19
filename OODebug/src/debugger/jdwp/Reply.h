@@ -28,13 +28,13 @@
 
 #include "../../oodebug_api.h"
 
-#include "MessageBase.h"
+#include "MessagePart.h"
 #include "MessageField.h"
 #include "Protocol.h"
 
 namespace OODebug {
 
-class OODEBUG_API Reply : public MessageBase {
+class OODEBUG_API Reply : public MessagePart {
 	public:
 		// Message header data:
 		MessageField<qint32> length{&Reply::length, this};

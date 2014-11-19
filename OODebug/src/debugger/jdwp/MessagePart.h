@@ -34,17 +34,17 @@ namespace OODebug {
  * The base class for the Command and Reply class, it defines the stream reading and writing operators.
  * This class should only be used by the Command and Reply class, i.e. clients should implement those classes.
  */
-class OODEBUG_API MessageBase
+class OODEBUG_API MessagePart
 {
 	public:
 		static const int noKind = -1;
-		using ReadOperator = std::function<void (MessageBase*, QDataStream&)>;
-		using WriteOperator = std::function<void (const MessageBase*, QDataStream&)>;
+		using ReadOperator = std::function<void (MessagePart*, QDataStream&)>;
+		using WriteOperator = std::function<void (const MessagePart*, QDataStream&)>;
 
 		void addMessageField(ReadOperator reader, WriteOperator writer = nullptr);
 
-		friend QDataStream& operator>>(QDataStream& stream, MessageBase& message);
-		friend QDataStream& operator<<(QDataStream& stream, const MessageBase& message);
+		friend QDataStream& operator>>(QDataStream& stream, MessagePart& message);
+		friend QDataStream& operator<<(QDataStream& stream, const MessagePart& message);
 
 		virtual int kind() const;
 
@@ -53,6 +53,6 @@ class OODEBUG_API MessageBase
 		QList<WriteOperator> writers_;
 };
 
-inline int MessageBase::kind() const { return noKind; }
+inline int MessagePart::kind() const { return noKind; }
 
 } /* namespace OODebug */

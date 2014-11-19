@@ -28,14 +28,14 @@
 
 #include "../../oodebug_api.h"
 
-#include "MessageBase.h"
+#include "MessagePart.h"
 #include "MessageField.h"
 #include "Protocol.h"
 
 
 namespace OODebug {
 
-class OODEBUG_API Command : public MessageBase {
+class OODEBUG_API Command : public MessagePart {
 	public:
 		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
 		Command(qint32 cmdId, Protocol::CommandSet cmdSet, T cmd)
