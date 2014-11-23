@@ -46,20 +46,40 @@ Modifier Modifier::makeMatchClass(QString classPattern) {
 	return match;
 }
 
+Modifier Modifier::makeLocation(Location loc)
+{
+	Modifier mod(locationOnly);
+	mod.location = loc;
+	return mod;
+}
+
 Modifier::Modifier(int kind) {
 	modKind = kind;
 }
 
+EventSetCommand::EventSetCommand(Protocol::EventKind kind)
+	: Command(Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Set)
+{ this->kind = kind; }
+
 EventSetCommand::~EventSetCommand() {}
 
 BreakClassLoad::BreakClassLoad(QString classToBreak)
-	: EventSetCommand(Protocol::EventRequestCommands::Set) {
-	kind = Protocol::EventKind::CLASS_PREPARE;
+	: EventSetCommand(Protocol::EventKind::CLASS_PREPARE)
+{
 	suspendPolicy = Protocol::SuspendPolicy::ALL;
 	modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
 }
 
 BreakClassLoad::~BreakClassLoad() {}
+
+
+BreakPointCommand::BreakPointCommand(Location breakLocation) : EventSetCommand(Protocol::EventKind::BREAKPOINT)
+{
+	suspendPolicy = Protocol::SuspendPolicy::ALL;
+	modifiers = {Modifier::makeLocation(breakLocation)};
+}
+
+BreakPointCommand::~BreakPointCommand() {}
 
 EventSetReply::~EventSetReply() {}
 

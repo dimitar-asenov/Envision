@@ -29,6 +29,7 @@
 #include "../../../oodebug_api.h"
 
 #include "../Command.h"
+#include "../Location.h"
 #include "../MessagePart.h"
 #include "../Reply.h"
 
@@ -41,9 +42,11 @@ class Modifier : public MessagePart
 	public:
 		static const int eventOff = 1;
 		static const int classMatch = 5;
+		static const int locationOnly = 7;
 
 		static Modifier makeEventOff(qint32 count);
 		static Modifier makeMatchClass(QString classPattern);
+		static Modifier makeLocation(Location loc);
 
 		Modifier(); // needed for in stream
 		virtual ~Modifier() override;
@@ -51,6 +54,7 @@ class Modifier : public MessagePart
 		MessageField<qint8> modKind{&Modifier::modKind, this};
 		MessageField<qint32, eventOff> count{&Modifier::count, this};
 		MessageField<QString, classMatch> classPattern{&Modifier::classPattern, this};
+		MessageField<Location, locationOnly> location{&Modifier::location, this};
 
 		virtual int kind() const override;
 	private:
@@ -58,20 +62,25 @@ class Modifier : public MessagePart
 };
 
 struct EventSetCommand : public Command {
-		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
-		EventSetCommand(T command) : Command(Protocol::CommandSet::EventRequest, command) {}
 		virtual ~EventSetCommand() override;
-
 		MessageField<Protocol::EventKind> kind{&EventSetCommand::kind, this};
 		MessageField<Protocol::SuspendPolicy> suspendPolicy{&EventSetCommand::suspendPolicy, this};
 
 		MessageField<QList<Modifier>> modifiers{&EventSetCommand::modifiers, this};
+
+	protected:
+		EventSetCommand(Protocol::EventKind kind);
 };
 
 struct BreakClassLoad : public EventSetCommand
 {
 		BreakClassLoad(QString classToBreak);
 		virtual ~BreakClassLoad() override;
+};
+
+struct BreakPointCommand : public EventSetCommand {
+		BreakPointCommand(Location breakLocation);
+		virtual ~BreakPointCommand() override;
 };
 
 struct EventSetReply : public Reply {
