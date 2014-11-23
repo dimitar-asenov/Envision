@@ -28,6 +28,6 @@
 
 namespace OODebug {
 
-const QString Protocol::handshake{"JDWP-Handshake"};
+const QByteArray Protocol::handshake{"JDWP-Handshake"};
 
 } /* namespace OODebug */

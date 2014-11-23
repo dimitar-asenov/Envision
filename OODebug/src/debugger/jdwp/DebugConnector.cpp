@@ -49,14 +49,17 @@ void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHo
 {
 	mainClassName_ = mainClassName;
 	if (tcpSocket_.isOpen())
-		tcpSocket_.close();
+		tcpSocket_.abort();
+	QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::read);
+	Command::resetIds();
 	// The connection setup is handled here:
 	// First when we are connected we have to send the handshake. For receiving the hanshake reply,
 	// we use a dedicated function which disconnects itself and connects the actual read function
 	// to the readyRead slot. In this way we don't have the handshake handling in the normal read function.
 	QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
-	QObject::connect(&tcpSocket_, &QTcpSocket::connected, this, &DebugConnector::sendHandshake);
 	tcpSocket_.connectToHost(vmHostName, vmHostPort);
+	tcpSocket_.waitForConnected();
+	sendHandshake();
 }
 
 void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
@@ -80,9 +83,10 @@ void DebugConnector::read()
 	}
 	// check if the packet is complete
 	QDataStream inStream(read);
-	qint32 len;
-	inStream >> len;
-	if (len > read.length()) {
+	qint32 packetLen;
+	inStream >> packetLen;
+	if (packetLen > read.length())
+	{
 		incompleteData_ = read;
 		return;
 	}
@@ -90,6 +94,15 @@ void DebugConnector::read()
 	qint32 id;
 	inStream >> id;
 	handlePacket(id, read);
+
+	// It might be that we received more than one packet, if so we have to recursively call this function.
+	if (packetLen < read.length())
+	{
+		incompleteData_ = read;
+		incompleteData_.remove(0, packetLen);
+		// trigger reads such that we handle the additional data
+		this->read();
+	}
 }
 
 void DebugConnector::sendCommand(const Command& c, HandleFunction handler)
@@ -105,27 +118,39 @@ void DebugConnector::sendCommand(const Command& c, HandleFunction handler)
 	lenStream << dataLen;
 	raw.replace(0, len.length(), len);
 	tcpSocket_.write(raw);
+	tcpSocket_.waitForBytesWritten();
 }
 
 void DebugConnector::readHandshake()
 {
 	QByteArray read = tcpSocket_.readAll();
-	if (read == Protocol::handshake)
+	Q_ASSERT(read.length() >= Protocol::handshake.length());
+	if (read.startsWith(Protocol::handshake))
 	{
 		QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
 		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::read);
-		// TODO: This is just for testing now
+		if (read.length() > Protocol::handshake.length())
+		{
+			// remove the handshake
+			read.remove(0, Protocol::handshake.length());
+			incompleteData_ = read;
+			// trigger reads such that we handle the additional data
+			this->read();
+		}
 		sendVersionRequest();
+		sendIdSizes();
+		sendBreakAtStart();
 	}
 	else
 	{
-		qWarning() << "Handshake not received: " << read;
+		qWarning() << "Handshake not received: " << read.toHex() << Protocol::handshake.toHex();
 	}
 }
 
 void DebugConnector::sendHandshake()
 {
-	tcpSocket_.write(Protocol::handshake.toLatin1());
+	tcpSocket_.write(Protocol::handshake);
+	tcpSocket_.waitForBytesWritten();
 }
 
 void DebugConnector::handlePacket(qint32 id, QByteArray data)
@@ -160,8 +185,6 @@ void DebugConnector::handleVersion(QByteArray data)
 {
 	auto info = makeReply<VersionInfo>(data);
 	qDebug() << "VM-INFO: " << info.jdwpMajor() << info.jdwpMinor();
-	sendIdSizes();
-	sendBreakAtStart();
 }
 
 void DebugConnector::sendIdSizes()

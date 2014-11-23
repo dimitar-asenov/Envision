@@ -32,6 +32,11 @@ Command::Command() {}
 
 Command::~Command() {}
 
+void Command::resetIds()
+{
+	nextId_ = 0;
+}
+
 int Command::nextId_ = 0;
 
 } /* namespace OODebug */

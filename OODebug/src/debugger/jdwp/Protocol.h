@@ -40,7 +40,7 @@ namespace OODebug {
 class OODEBUG_API Protocol
 {
 	public:
-		static const QString handshake;
+		static const QByteArray handshake;
 
 		// http://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.html
 		// http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html

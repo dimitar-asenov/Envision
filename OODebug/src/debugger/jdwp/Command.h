@@ -47,6 +47,8 @@ class OODEBUG_API Command : public MessagePart {
 		MessageField<Protocol::CommandSet> commandSet{&Command::commandSet, this};
 		MessageField<qint8> command{&Command::command, this};
 
+		static void resetIds();
+
 	protected:
 		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
 		Command(Protocol::CommandSet cmdSet, T cmd)
