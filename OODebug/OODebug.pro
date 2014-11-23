@@ -40,7 +40,8 @@ HEADERS += src/precompiled.h \
     src/debugger/JavaDebugger.h \
     src/debugger/jdwp/command/SetCommand.h \
     src/debugger/jdwp/MessagePart.h \
-    src/debugger/jdwp/command/CompositeCommand.h
+    src/debugger/jdwp/command/CompositeCommand.h \
+    src/debugger/jdwp/Location.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -64,4 +65,5 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/jdwp/Reply.cpp \
     src/debugger/jdwp/command/SetCommand.cpp \
     src/debugger/jdwp/Command.cpp \
-    src/debugger/jdwp/command/CompositeCommand.cpp
+    src/debugger/jdwp/command/CompositeCommand.cpp \
+    src/debugger/jdwp/Location.cpp
