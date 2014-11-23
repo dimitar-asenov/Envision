@@ -143,7 +143,7 @@ void DebugConnector::readHandshake()
 	}
 	else
 	{
-		qWarning() << "Handshake not received: " << read.toHex() << Protocol::handshake.toHex();
+		qDebug() << "Handshake not received: " << read.toHex() << Protocol::handshake.toHex();
 	}
 }
 
@@ -167,7 +167,7 @@ void DebugConnector::handlePacket(qint32 id, QByteArray data)
 		else
 		{
 			// TODO: handle this better
-			qWarning() << "Error received: " << static_cast<int>(r.error());
+			qDebug() << "Error received: " << static_cast<int>(r.error());
 		}
 	}
 	else // We received a command

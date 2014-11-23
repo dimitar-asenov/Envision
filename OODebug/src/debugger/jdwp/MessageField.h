@@ -34,13 +34,13 @@ class Reply;
 class Command;
 
 template <class T>
-void read(QDataStream& stream, T& val)
+inline void read(QDataStream& stream, T& val)
 {
 	stream >> val;
 }
 
 template <class T>
-void write(QDataStream& stream, const T& val)
+inline void write(QDataStream& stream, const T& val)
 {
 	stream << val;
 }
