@@ -26,23 +26,7 @@
 
 #pragma once
 
-#include "../../../oodebug_api.h"
-
-#include "../Reply.h"
-
-namespace OODebug {
-
-// Replace ([^\t]+)\t([^\t]+)\t[^\n]*\n with MessageField<\1> \2{this};\n
-
-class OODEBUG_API VersionInfo : public Reply {
-	public:
-		virtual ~VersionInfo() override;
-
-		MessageField<QString> description{&VersionInfo::description, this};
-		MessageField<qint32> jdwpMajor{&VersionInfo::jdwpMajor, this};
-		MessageField<qint32> jdwpMinor{&VersionInfo::jdwpMinor, this};
-		MessageField<QString> vmVersion{&VersionInfo::vmVersion, this};
-		MessageField<QString> vmName{&VersionInfo::vmName, this};
-};
-
-} /* namespace OODebug */
+// This file is used to include all implemented Messages in the jdwp Protocol.
+#include "VMSet.h"
+#include "EventRequestSet.h"
+#include "EventSet.h"

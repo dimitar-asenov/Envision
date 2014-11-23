@@ -24,18 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "CompositeCommand.h"
+#include "VMSet.h"
 
 namespace OODebug {
 
-VMStart::~VMStart() {}
-
-ClassPrepare::~ClassPrepare() {}
-
-Event::~Event() {}
-
-int Event::kind() const { return static_cast<int>(eventKind()); }
-
-CompositeCommand::~CompositeCommand() {}
+VersionInfo::~VersionInfo() {}
 
 } /* namespace OODebug */

@@ -35,13 +35,14 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/DebugConnector.h \
     src/debugger/jdwp/Reply.h \
     src/debugger/jdwp/Command.h \
-    src/debugger/jdwp/reply/VersionInfo.h \
     src/commands/CJavaDebug.h \
     src/debugger/JavaDebugger.h \
-    src/debugger/jdwp/command/SetCommand.h \
     src/debugger/jdwp/MessagePart.h \
-    src/debugger/jdwp/command/CompositeCommand.h \
-    src/debugger/jdwp/Location.h
+    src/debugger/jdwp/Location.h \
+    src/debugger/jdwp/messages/EventSet.h \
+    src/debugger/jdwp/messages/EventRequestSet.h \
+    src/debugger/jdwp/messages/VMSet.h \
+    src/debugger/jdwp/messages/AllMessages.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -61,9 +62,9 @@ SOURCES += src/OODebugException.cpp \
     src/commands/CJavaDebug.cpp \
     src/debugger/JavaDebugger.cpp \
     src/debugger/jdwp/MessagePart.cpp \
-    src/debugger/jdwp/reply/VersionInfo.cpp \
     src/debugger/jdwp/Reply.cpp \
-    src/debugger/jdwp/command/SetCommand.cpp \
     src/debugger/jdwp/Command.cpp \
-    src/debugger/jdwp/command/CompositeCommand.cpp \
-    src/debugger/jdwp/Location.cpp
+    src/debugger/jdwp/Location.cpp \
+    src/debugger/jdwp/messages/EventSet.cpp \
+    src/debugger/jdwp/messages/EventRequestSet.cpp \
+    src/debugger/jdwp/messages/VMSet.cpp

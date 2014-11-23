@@ -24,43 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "SetCommand.h"
+#pragma once
+
+#include "../../../oodebug_api.h"
+
+#include "../Reply.h"
 
 namespace OODebug {
 
-Modifier::Modifier() {}
+// Replace ([^\t]+)\t([^\t]+)\t[^\n]*\n with MessageField<\1> \2{this};\n
 
-Modifier::~Modifier() {}
+struct OODEBUG_API VersionInfo : public Reply {
+		virtual ~VersionInfo() override;
 
-int Modifier::kind() const { return modKind(); }
-
-Modifier Modifier::makeEventOff(qint32 count) {
-	Modifier off(eventOff);
-	off.count = count;
-	return off;
-}
-
-Modifier Modifier::makeMatchClass(QString classPattern) {
-	Modifier match(classMatch);
-	match.classPattern = classPattern;
-	return match;
-}
-
-Modifier::Modifier(int kind) {
-	modKind = kind;
-}
-
-EventSetCommand::~EventSetCommand() {}
-
-BreakClassLoad::BreakClassLoad(int id, QString classToBreak)
-	: EventSetCommand(id, Protocol::EventRequestCommands::Set) {
-	kind = Protocol::EventKind::CLASS_PREPARE;
-	suspendPolicy = Protocol::SuspendPolicy::ALL;
-	modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
-}
-
-BreakClassLoad::~BreakClassLoad() {}
-
-EventSetReply::~EventSetReply() {}
+		MessageField<QString> description{&VersionInfo::description, this};
+		MessageField<qint32> jdwpMajor{&VersionInfo::jdwpMajor, this};
+		MessageField<qint32> jdwpMinor{&VersionInfo::jdwpMinor, this};
+		MessageField<QString> vmVersion{&VersionInfo::vmVersion, this};
+		MessageField<QString> vmName{&VersionInfo::vmName, this};
+};
 
 } /* namespace OODebug */

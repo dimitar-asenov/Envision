@@ -30,9 +30,7 @@
 #include "Reply.h"
 #include "Command.h"
 
-#include "reply/VersionInfo.h"
-#include "command/SetCommand.h"
-#include "command/CompositeCommand.h"
+#include "messages/AllMessages.h"
 
 namespace OODebug {
 

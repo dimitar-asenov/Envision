@@ -24,10 +24,43 @@
 **
 ***********************************************************************************************************************/
 
-#include "VersionInfo.h"
+#include "EventRequestSet.h"
 
 namespace OODebug {
 
-VersionInfo::~VersionInfo() {}
+Modifier::Modifier() {}
+
+Modifier::~Modifier() {}
+
+int Modifier::kind() const { return modKind(); }
+
+Modifier Modifier::makeEventOff(qint32 count) {
+	Modifier off(eventOff);
+	off.count = count;
+	return off;
+}
+
+Modifier Modifier::makeMatchClass(QString classPattern) {
+	Modifier match(classMatch);
+	match.classPattern = classPattern;
+	return match;
+}
+
+Modifier::Modifier(int kind) {
+	modKind = kind;
+}
+
+EventSetCommand::~EventSetCommand() {}
+
+BreakClassLoad::BreakClassLoad(int id, QString classToBreak)
+	: EventSetCommand(id, Protocol::EventRequestCommands::Set) {
+	kind = Protocol::EventKind::CLASS_PREPARE;
+	suspendPolicy = Protocol::SuspendPolicy::ALL;
+	modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
+}
+
+BreakClassLoad::~BreakClassLoad() {}
+
+EventSetReply::~EventSetReply() {}
 
 } /* namespace OODebug */
