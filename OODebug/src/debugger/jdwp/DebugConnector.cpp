@@ -160,7 +160,24 @@ void DebugConnector::handleVersion(QByteArray data)
 {
 	auto info = makeReply<VersionInfo>(data);
 	qDebug() << "VM-INFO: " << info.jdwpMajor() << info.jdwpMinor();
+	sendIdSizes();
 	sendBreakAtStart();
+}
+
+void DebugConnector::sendIdSizes()
+{
+	sendCommand(IDSizeCommand(), &DebugConnector::handleIdSizes);
+}
+
+void DebugConnector::handleIdSizes(QByteArray data)
+{
+	// Our protocol is only designed for 64 bit machine make sure that this is the case:
+	auto idSizes = makeReply<IDSizes>(data);
+	Q_ASSERT(sizeof(qint64) == idSizes.fieldIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.methodIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.objectIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.referenceTypeIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.frameIDSize());
 }
 
 void DebugConnector::sendBreakAtStart()

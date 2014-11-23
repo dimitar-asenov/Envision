@@ -41,5 +41,13 @@ ResumeCommand::ResumeCommand() : Command(Protocol::CommandSet::VirtualMachine, P
 
 ResumeCommand::~ResumeCommand() {}
 
+IDSizeCommand::IDSizeCommand()
+	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::IDSizes)
+{}
+
+IDSizeCommand::~IDSizeCommand() {}
+
+IDSizes::~IDSizes() {}
+
 
 } /* namespace OODebug */

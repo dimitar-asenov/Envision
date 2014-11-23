@@ -51,6 +51,21 @@ struct OODEBUG_API VersionInfo : public Reply {
 		MessageField<QString> vmName{&VersionInfo::vmName, this};
 };
 
+struct IDSizeCommand : public Command {
+		IDSizeCommand();
+		virtual ~IDSizeCommand() override;
+};
+
+struct IDSizes : public Reply {
+		virtual ~IDSizes() override;
+
+		MessageField<int> fieldIDSize{&IDSizes::fieldIDSize, this};
+		MessageField<int> methodIDSize{&IDSizes::methodIDSize, this};
+		MessageField<int> objectIDSize{&IDSizes::objectIDSize, this};
+		MessageField<int> referenceTypeIDSize{&IDSizes::referenceTypeIDSize, this};
+		MessageField<int> frameIDSize{&IDSizes::frameIDSize, this};
+};
+
 struct ResumeCommand : public Command {
 		ResumeCommand();
 		virtual ~ResumeCommand() override;

@@ -65,6 +65,9 @@ class OODEBUG_API DebugConnector : public QObject
 		void sendVersionRequest();
 		void handleVersion(QByteArray data);
 
+		void sendIdSizes();
+		void handleIdSizes(QByteArray data);
+
 		void sendBreakAtStart();
 		void handleBreakAtStart(QByteArray data);
 
