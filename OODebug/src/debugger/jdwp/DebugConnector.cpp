@@ -92,7 +92,7 @@ void DebugConnector::read()
 	handlePacket(id, read);
 }
 
-void DebugConnector::sendCommand(Command& c, HandleFunction handler)
+void DebugConnector::sendCommand(const Command& c, HandleFunction handler)
 {
 	handlingMap_[c.id()] = handler;
 	QByteArray raw;
@@ -153,8 +153,7 @@ void DebugConnector::handlePacket(qint32 id, QByteArray data)
 
 void DebugConnector::sendVersionRequest()
 {
-	Command c(nextId(), Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Version);
-	sendCommand(c, &DebugConnector::handleVersion);
+	sendCommand(VersionCommand(), &DebugConnector::handleVersion);
 }
 
 void DebugConnector::handleVersion(QByteArray data)
@@ -166,8 +165,7 @@ void DebugConnector::handleVersion(QByteArray data)
 
 void DebugConnector::sendBreakAtStart()
 {
-	BreakClassLoad	load(nextId(), mainClassName_);
-	sendCommand(load, &DebugConnector::handleBreakAtStart);
+	sendCommand(BreakClassLoad(mainClassName_), &DebugConnector::handleBreakAtStart);
 }
 
 void DebugConnector::handleBreakAtStart(QByteArray data)
@@ -179,8 +177,7 @@ void DebugConnector::handleBreakAtStart(QByteArray data)
 
 void DebugConnector::sendResume()
 {
-	Command c(nextId(), Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume);
-	sendCommand(c, &DebugConnector::handleDefaultReply);
+	sendCommand(ResumeCommand(), &DebugConnector::handleDefaultReply);
 }
 
 void DebugConnector::handleDefaultReply(QByteArray data)

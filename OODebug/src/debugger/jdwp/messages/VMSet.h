@@ -28,9 +28,16 @@
 
 #include "../../../oodebug_api.h"
 
+#include "../Command.h"
+#include "../Protocol.h"
 #include "../Reply.h"
 
 namespace OODebug {
+
+struct VersionCommand : public Command {
+	VersionCommand();
+	virtual ~VersionCommand() override;
+};
 
 // Replace ([^\t]+)\t([^\t]+)\t[^\n]*\n with MessageField<\1> \2{this};\n
 
@@ -42,6 +49,11 @@ struct OODEBUG_API VersionInfo : public Reply {
 		MessageField<qint32> jdwpMinor{&VersionInfo::jdwpMinor, this};
 		MessageField<QString> vmVersion{&VersionInfo::vmVersion, this};
 		MessageField<QString> vmName{&VersionInfo::vmName, this};
+};
+
+struct ResumeCommand : public Command {
+		ResumeCommand();
+		virtual ~ResumeCommand() override;
 };
 
 } /* namespace OODebug */

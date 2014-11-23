@@ -52,8 +52,8 @@ Modifier::Modifier(int kind) {
 
 EventSetCommand::~EventSetCommand() {}
 
-BreakClassLoad::BreakClassLoad(int id, QString classToBreak)
-	: EventSetCommand(id, Protocol::EventRequestCommands::Set) {
+BreakClassLoad::BreakClassLoad(QString classToBreak)
+	: EventSetCommand(Protocol::EventRequestCommands::Set) {
 	kind = Protocol::EventKind::CLASS_PREPARE;
 	suspendPolicy = Protocol::SuspendPolicy::ALL;
 	modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};

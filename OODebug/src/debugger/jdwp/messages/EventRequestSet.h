@@ -59,7 +59,7 @@ class Modifier : public MessagePart
 
 struct EventSetCommand : public Command {
 		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
-		EventSetCommand(int id, T command) : Command(id, Protocol::CommandSet::EventRequest, command) {}
+		EventSetCommand(T command) : Command(Protocol::CommandSet::EventRequest, command) {}
 		virtual ~EventSetCommand() override;
 
 		MessageField<Protocol::EventKind> kind{&EventSetCommand::kind, this};
@@ -70,7 +70,7 @@ struct EventSetCommand : public Command {
 
 struct BreakClassLoad : public EventSetCommand
 {
-		BreakClassLoad(int id, QString classToBreak);
+		BreakClassLoad(QString classToBreak);
 		virtual ~BreakClassLoad() override;
 };
 

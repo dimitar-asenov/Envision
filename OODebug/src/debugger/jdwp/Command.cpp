@@ -32,4 +32,6 @@ Command::Command() {}
 
 Command::~Command() {}
 
+int Command::nextId_ = 0;
+
 } /* namespace OODebug */

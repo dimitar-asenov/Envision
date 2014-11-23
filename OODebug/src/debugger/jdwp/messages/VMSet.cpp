@@ -28,6 +28,18 @@
 
 namespace OODebug {
 
+VersionCommand::VersionCommand()
+	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Version)
+{}
+
+VersionCommand::~VersionCommand() {}
+
 VersionInfo::~VersionInfo() {}
+
+ResumeCommand::ResumeCommand() : Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume)
+{}
+
+ResumeCommand::~ResumeCommand() {}
+
 
 } /* namespace OODebug */

@@ -52,7 +52,7 @@ class OODEBUG_API DebugConnector : public QObject
 		static void handleSocketError(QAbstractSocket::SocketError socketError);
 		void read();
 
-		void sendCommand(Command& c, HandleFunction handler);
+		void sendCommand(const Command& c, HandleFunction handler);
 
 		void readHandshake();
 		void sendHandshake();
@@ -82,11 +82,7 @@ class OODEBUG_API DebugConnector : public QObject
 
 		QByteArray incompleteData_;
 
-		qint32 id_{};
-
 		QString mainClassName_;
 };
-
-qint32 DebugConnector::nextId() { return ++id_; }
 
 } /* namespace OODebug */
