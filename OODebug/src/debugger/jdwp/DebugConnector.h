@@ -78,7 +78,7 @@ class OODEBUG_API DebugConnector : public QObject
 
 		QHash<int, HandleFunction> handlingMap_;
 
-		QTcpSocket* tcpSocket_{new QTcpSocket()};
+		QTcpSocket tcpSocket_;
 
 		QByteArray incompleteData_;
 

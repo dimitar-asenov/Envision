@@ -45,7 +45,8 @@ namespace OODebug {
 
 static const QString overlayGroupName("CompilerMessages");
 
-void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory, bool debug)
+void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+										 bool includeDebugSymbols)
 {
 	// Remove previous error messages
 	for (auto scene : Visualization::Scene::allScenes())
@@ -94,8 +95,7 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		Q_ASSERT(projectDir.mkdir(buildFolder));
 	}
 	QStringList args = {"-d", QString("..") + QDir::separator() + buildFolder};
-	if (debug)
-		args << "-g";
+	if (includeDebugSymbols) args << "-g";
 	CommandLineCompiler compiler("javac", &CompilerOutputParser::parseJavacErrorFormat);
 
 	QSet<uint> seenMessages;

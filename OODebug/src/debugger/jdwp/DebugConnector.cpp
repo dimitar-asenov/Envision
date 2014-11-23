@@ -38,39 +38,38 @@ namespace OODebug {
 
 DebugConnector::DebugConnector()
 {
-	QObject::connect(tcpSocket_, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error),
+	QObject::connect(&tcpSocket_, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error),
 						  this, &DebugConnector::handleSocketError);
 }
 
 DebugConnector::~DebugConnector()
 {
-	tcpSocket_->abort();
-	delete tcpSocket_;
+	tcpSocket_.abort();
 }
 
 void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHostPort)
 {
 	mainClassName_ = mainClassName;
-	if (tcpSocket_->isOpen())
-		tcpSocket_->close();
+	if (tcpSocket_.isOpen())
+		tcpSocket_.close();
 	// The connection setup is handled here:
 	// First when we are connected we have to send the handshake. For receiving the hanshake reply,
 	// we use a dedicated function which disconnects itself and connects the actual read function
 	// to the readyRead slot. In this way we don't have the handshake handling in the normal read function.
-	QObject::connect(tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
-	QObject::connect(tcpSocket_, &QTcpSocket::connected, this, &DebugConnector::sendHandshake);
-	tcpSocket_->connectToHost(vmHostName, vmHostPort);
+	QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
+	QObject::connect(&tcpSocket_, &QTcpSocket::connected, this, &DebugConnector::sendHandshake);
+	tcpSocket_.connectToHost(vmHostName, vmHostPort);
 }
 
 void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 {
 	qDebug() << "ERROR: " << socketError;
-	qWarning() << socketError;
+	qDebug() << socketError;
 }
 
 void DebugConnector::read()
 {
-	QByteArray read =	tcpSocket_->readAll();
+	QByteArray read = tcpSocket_.readAll();
 	// If we still have a part of a packet add it here.
 	if (!incompleteData_.isEmpty()) {
 		read.prepend(incompleteData_);
@@ -107,16 +106,16 @@ void DebugConnector::sendCommand(Command& c, HandleFunction handler)
 	QDataStream lenStream(&len, QIODevice::ReadWrite);
 	lenStream << dataLen;
 	raw.replace(0, len.length(), len);
-	tcpSocket_->write(raw);
+	tcpSocket_.write(raw);
 }
 
 void DebugConnector::readHandshake()
 {
-	QByteArray read =	tcpSocket_->readAll();
+	QByteArray read = tcpSocket_.readAll();
 	if (read == Protocol::handshake)
 	{
-		QObject::disconnect(tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
-		QObject::connect(tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::read);
+		QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
+		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::read);
 		// TODO: This is just for testing now
 		sendVersionRequest();
 	}
@@ -128,7 +127,7 @@ void DebugConnector::readHandshake()
 
 void DebugConnector::sendHandshake()
 {
-	tcpSocket_->write(Protocol::handshake.toLatin1());
+	tcpSocket_.write(Protocol::handshake.toLatin1());
 }
 
 void DebugConnector::handlePacket(qint32 id, QByteArray data)

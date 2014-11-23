@@ -50,7 +50,7 @@ class OODEBUG_API JavaCompiler
 {
 	public:
 		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-										bool debug = false);
+										bool includeDebugSymbols = false);
 
 	private:
 		static void visualizeMessage(Visualization::Item* item, Model::Node* node,
