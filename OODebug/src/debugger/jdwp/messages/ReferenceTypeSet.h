@@ -26,8 +26,30 @@
 
 #pragma once
 
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
-#include "EventRequestSet.h"
-#include "EventSet.h"
+#include "../../../oodebug_api.h"
+
+#include "../Command.h"
+#include "../Reply.h"
+
+namespace OODebug {
+
+struct JVMMethod : public MessagePart {
+		virtual ~JVMMethod() override;
+		MessageField<qint64> methodID{&JVMMethod::methodID, this};
+		MessageField<QString> name{&JVMMethod::name, this};
+		MessageField<QString> signature{&JVMMethod::signature, this};
+		MessageField<qint32> modBits{&JVMMethod::modBits, this};
+};
+
+struct MethodsCommand : public Command {
+		MethodsCommand();
+		virtual ~MethodsCommand() override;
+		MessageField<qint64> refType{&MethodsCommand::refType, this};
+};
+
+struct MethodsReply : public Reply {
+		virtual ~MethodsReply() override;
+		MessageField<QList<JVMMethod>> methods{&MethodsReply::methods, this};
+};
+
+} /* namespace OODebug */

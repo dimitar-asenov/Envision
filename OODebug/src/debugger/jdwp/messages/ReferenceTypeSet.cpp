@@ -24,10 +24,19 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
 #include "ReferenceTypeSet.h"
-#include "EventRequestSet.h"
-#include "EventSet.h"
+
+namespace OODebug {
+
+JVMMethod::~JVMMethod() {}
+
+MethodsCommand::MethodsCommand()
+	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::Methods)
+{}
+
+MethodsCommand::~MethodsCommand() {}
+
+MethodsReply::~MethodsReply() {}
+
+
+} /* namespace OODebug */
