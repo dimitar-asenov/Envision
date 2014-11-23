@@ -36,6 +36,8 @@ namespace OODebug {
 
 class OODEBUG_API VersionInfo : public Reply {
 	public:
+		virtual ~VersionInfo() override;
+
 		MessageField<QString> description{&VersionInfo::description, this};
 		MessageField<qint32> jdwpMajor{&VersionInfo::jdwpMajor, this};
 		MessageField<qint32> jdwpMinor{&VersionInfo::jdwpMinor, this};
@@ -43,4 +45,4 @@ class OODEBUG_API VersionInfo : public Reply {
 		MessageField<QString> vmName{&VersionInfo::vmName, this};
 };
 
-}
+} /* namespace OODebug */

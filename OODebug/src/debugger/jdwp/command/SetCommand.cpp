@@ -24,59 +24,43 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../../oodebug_api.h"
-
-#include "../Command.h"
-#include "../MessagePart.h"
-#include "../Reply.h"
-
-// https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_EventRequest_Set
+#include "SetCommand.h"
 
 namespace OODebug {
 
-class Modifier : public MessagePart
-{
-	public:
-		static const int eventOff = 1;
-		static const int classMatch = 5;
+Modifier::Modifier() {}
 
-		static Modifier makeEventOff(qint32 count);
-		static Modifier makeMatchClass(QString classPattern);
+Modifier::~Modifier() {}
 
-		Modifier(); // needed for in stream
-		virtual ~Modifier() override;
+int Modifier::kind() const { return modKind(); }
 
-		MessageField<qint8> modKind{&Modifier::modKind, this};
-		MessageField<qint32, eventOff> count{&Modifier::count, this};
-		MessageField<QString, classMatch> classPattern{&Modifier::classPattern, this};
+Modifier Modifier::makeEventOff(qint32 count) {
+	Modifier off(eventOff);
+	off.count = count;
+	return off;
+}
 
-		virtual int kind() const override;
-	private:
-		Modifier(int kind);
-};
+Modifier Modifier::makeMatchClass(QString classPattern) {
+	Modifier match(classMatch);
+	match.classPattern = classPattern;
+	return match;
+}
 
-struct EventSetCommand : public Command {
-		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
-		EventSetCommand(int id, T command) : Command(id, Protocol::CommandSet::EventRequest, command) {}
-		virtual ~EventSetCommand() override;
+Modifier::Modifier(int kind) {
+	modKind = kind;
+}
 
-		MessageField<Protocol::EventKind> kind{&EventSetCommand::kind, this};
-		MessageField<Protocol::SuspendPolicy> suspendPolicy{&EventSetCommand::suspendPolicy, this};
+EventSetCommand::~EventSetCommand() {}
 
-		MessageField<QList<Modifier>> modifiers{&EventSetCommand::modifiers, this};
-};
+BreakClassLoad::BreakClassLoad(int id, QString classToBreak)
+	: EventSetCommand(id, Protocol::EventRequestCommands::Set) {
+	kind = Protocol::EventKind::CLASS_PREPARE;
+	suspendPolicy = Protocol::SuspendPolicy::ALL;
+	modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
+}
 
-struct BreakClassLoad : public EventSetCommand
-{
-		BreakClassLoad(int id, QString classToBreak);
-		virtual ~BreakClassLoad() override;
-};
+BreakClassLoad::~BreakClassLoad() {}
 
-struct EventSetReply : public Reply {
-		virtual ~EventSetReply() override;
-		MessageField<qint32> requestId{&EventSetReply::requestId, this};
-};
+EventSetReply::~EventSetReply() {}
 
 } /* namespace OODebug */

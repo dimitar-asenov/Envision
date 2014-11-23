@@ -41,6 +41,8 @@ class OODEBUG_API MessagePart
 		// and before the kindField is set it returns the default value of int,
 		// thus the kindField can only be set if noKind is also the default value.
 		static const int noKind{};
+		// Needed for vtable placement
+		virtual ~MessagePart();
 		using ReadOperator = std::function<void (MessagePart*, QDataStream&)>;
 		using WriteOperator = std::function<void (const MessagePart*, QDataStream&)>;
 
@@ -64,7 +66,5 @@ class OODEBUG_API MessagePart
 		QList<ReadOperator> readers_;
 		QList<WriteOperator> writers_;
 };
-
-inline int MessagePart::kind() const { return noKind; }
 
 } /* namespace OODebug */

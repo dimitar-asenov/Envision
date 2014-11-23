@@ -59,4 +59,9 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/jdwp/DebugConnector.cpp \
     src/commands/CJavaDebug.cpp \
     src/debugger/JavaDebugger.cpp \
-    src/debugger/jdwp/MessagePart.cpp
+    src/debugger/jdwp/MessagePart.cpp \
+    src/debugger/jdwp/reply/VersionInfo.cpp \
+    src/debugger/jdwp/Reply.cpp \
+    src/debugger/jdwp/command/SetCommand.cpp \
+    src/debugger/jdwp/Command.cpp \
+    src/debugger/jdwp/command/CompositeCommand.cpp

@@ -37,7 +37,7 @@ namespace OODebug {
 
 class OODEBUG_API Command : public MessagePart {
 	public:
-		Command() {}
+		Command();
 		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
 		Command(qint32 cmdId, Protocol::CommandSet cmdSet, T cmd)
 		{
@@ -45,6 +45,7 @@ class OODEBUG_API Command : public MessagePart {
 			commandSet = cmdSet;
 			command = static_cast<typename std::underlying_type<T>::type>(cmd);
 		}
+		virtual ~Command() override;
 
 		// Message header data:
 		MessageField<qint32> length{&Command::length, this};

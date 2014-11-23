@@ -28,6 +28,8 @@
 
 namespace OODebug {
 
+MessagePart::~MessagePart() {}
+
 QDataStream& operator>>(QDataStream& stream, MessagePart& message)
 {
 	for (auto reader : message.readers_)
@@ -47,5 +49,7 @@ void MessagePart::addMessageField(ReadOperator reader, WriteOperator writer)
 	if (reader) readers_ << reader;
 	if (writer) writers_ << writer;
 }
+
+int MessagePart::kind() const { return noKind; }
 
 } /* namespace OODebug */

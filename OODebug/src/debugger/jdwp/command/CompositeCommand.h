@@ -38,12 +38,14 @@ namespace OODebug {
 
 struct VMStart : public MessagePart
 {
+		virtual ~VMStart() override;
 		MessageField<qint32> requestId{&VMStart::requestId, this};
 		MessageField<qint64> threadId{&VMStart::threadId, this};
 };
 
 struct ClassPrepare : public MessagePart
 {
+		virtual ~ClassPrepare() override;
 		MessageField<qint32> requestId{&ClassPrepare::requestId, this};
 		MessageField<qint64> threadId{&ClassPrepare::threadId, this};
 		MessageField<Protocol::TypeTagKind> refTypeTag{&ClassPrepare::refTypeTag, this};
@@ -52,9 +54,9 @@ struct ClassPrepare : public MessagePart
 		MessageField<qint32> status{&ClassPrepare::status, this};
 };
 
-class Event : public MessagePart
+struct Event : public MessagePart
 {
-	public:
+		virtual ~Event() override;
 		MessageField<Protocol::EventKind> eventKind{&Event::eventKind, this};
 
 		MessageField<VMStart, cast(Protocol::EventKind::VM_START)> vmStart{&Event::vmStart, this};
@@ -63,10 +65,8 @@ class Event : public MessagePart
 		virtual int kind() const override;
 };
 
-int Event::kind() const { return static_cast<int>(eventKind()); }
-
-class CompositeCommand : public Command {
-	public:
+struct CompositeCommand : public Command {
+		virtual ~CompositeCommand() override;
 		MessageField<Protocol::SuspendPolicy> suspendPolicy{&CompositeCommand::suspendPolicy, this};
 		MessageField<QList<Event>> events{&CompositeCommand::events, this};
 };

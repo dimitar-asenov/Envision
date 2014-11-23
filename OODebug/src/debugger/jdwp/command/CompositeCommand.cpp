@@ -24,59 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../../oodebug_api.h"
-
-#include "../Command.h"
-#include "../MessagePart.h"
-#include "../Reply.h"
-
-// https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_EventRequest_Set
+#include "CompositeCommand.h"
 
 namespace OODebug {
 
-class Modifier : public MessagePart
-{
-	public:
-		static const int eventOff = 1;
-		static const int classMatch = 5;
+VMStart::~VMStart() {}
 
-		static Modifier makeEventOff(qint32 count);
-		static Modifier makeMatchClass(QString classPattern);
+ClassPrepare::~ClassPrepare() {}
 
-		Modifier(); // needed for in stream
-		virtual ~Modifier() override;
+Event::~Event() {}
 
-		MessageField<qint8> modKind{&Modifier::modKind, this};
-		MessageField<qint32, eventOff> count{&Modifier::count, this};
-		MessageField<QString, classMatch> classPattern{&Modifier::classPattern, this};
+int Event::kind() const { return static_cast<int>(eventKind()); }
 
-		virtual int kind() const override;
-	private:
-		Modifier(int kind);
-};
-
-struct EventSetCommand : public Command {
-		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
-		EventSetCommand(int id, T command) : Command(id, Protocol::CommandSet::EventRequest, command) {}
-		virtual ~EventSetCommand() override;
-
-		MessageField<Protocol::EventKind> kind{&EventSetCommand::kind, this};
-		MessageField<Protocol::SuspendPolicy> suspendPolicy{&EventSetCommand::suspendPolicy, this};
-
-		MessageField<QList<Modifier>> modifiers{&EventSetCommand::modifiers, this};
-};
-
-struct BreakClassLoad : public EventSetCommand
-{
-		BreakClassLoad(int id, QString classToBreak);
-		virtual ~BreakClassLoad() override;
-};
-
-struct EventSetReply : public Reply {
-		virtual ~EventSetReply() override;
-		MessageField<qint32> requestId{&EventSetReply::requestId, this};
-};
+CompositeCommand::~CompositeCommand() {}
 
 } /* namespace OODebug */

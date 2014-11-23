@@ -36,6 +36,7 @@ namespace OODebug {
 
 class OODEBUG_API Reply : public MessagePart {
 	public:
+		virtual ~Reply() override;
 		// Message header data:
 		MessageField<qint32> length{&Reply::length, this};
 		MessageField<qint32> id{&Reply::id, this};
