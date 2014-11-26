@@ -123,7 +123,7 @@ public class Main {
 			String suffix =  classFiles ? ".class" : ".java";
 			for(File file : FileUtils.listFiles(dir, new SuffixFileFilter(suffix), TrueFileFilter.INSTANCE))
 			{
-				System.out.print("Processing file: " + file.getPath() + "...");
+				if (!PRINT_METHODS) System.out.print("Processing file: " + file.getPath() + "...");
 				ASTParser parser = ASTParser.newParser(AST.JLS4);
 				
 				String source;
@@ -143,13 +143,13 @@ public class Main {
 				
 				if ( unit.getMessages().length > 0)
 				{
-					System.err.println("Errors encountered while parsing.");
+					if (!PRINT_METHODS) System.err.println("Errors encountered while parsing.");
 					for(Message m : unit.getMessages()) System.err.println(m.getMessage());
 				}
 				
 				ASTConverter tl = new ASTConverter(root, source);
 				tl.visit(unit);
-				System.out.println("Done");
+				if (!PRINT_METHODS) System.out.println("Done");
 			}
 			
 			System.out.print("Estimating size and arrangement...");
@@ -174,6 +174,8 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
+	
+	public static final boolean PRINT_METHODS = false;
 	
 	private static String usageInfo =
 			  "Usage: JavaImportTool project-name input-directory output-directory [--classFiles] [--libs:...]\n"

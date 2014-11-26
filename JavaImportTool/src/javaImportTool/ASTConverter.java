@@ -26,6 +26,7 @@
 package javaImportTool;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -217,6 +218,8 @@ public class ASTConverter {
 	{
 		Node me = containers.peek().addSymbolNodeInList("methods", "Method", node.getName().getIdentifier());
 		containers.push(me);
+		
+		if (Main.PRINT_METHODS) printMethodData(node);
 		
 		me.child("mthKind").setLongValue(node.isConstructor() ? 1 : 0);
 		
@@ -1052,5 +1055,91 @@ public class ASTConverter {
 		}
     	
     	return variableDeclarations;
+	}
+	
+	void printMethodData(MethodDeclaration method)
+	{
+		String nodeText = method.toString();
+		int signatureBegin = nodeText.indexOf("*/");
+		if (signatureBegin < 0) signatureBegin = 0;
+		else signatureBegin += 3;
+		int signatureEnd = nodeText.indexOf('\n', signatureBegin);
+		if (signatureEnd < 0 || signatureEnd < signatureBegin + 3)
+			throw new RuntimeException("Invalid method: " + nodeText);
+		if (nodeText.charAt(signatureEnd-1) != ';') // skip interfaces
+		{
+			String body = nodeText.substring(signatureEnd+1);
+			int bodyLength = body.length() - body.replace("\n", "").length() - 1;
+			
+			System.out.print(String.format("lines=%" + 3 + "d\t", bodyLength)); // Print body length
+			System.out.print(String.format("args=%" + 2 + "d\t", method.parameters().size())); // Print num arguments
+			
+			NodeMetrics ifMetrics = computeMetrics(method, new int[]{ASTNode.IF_STATEMENT});
+			System.out.print("if="+ifMetrics.count + "," + ifMetrics.nesting + "\t");
+			NodeMetrics loopMetrics = computeMetrics(method, new int[]
+					{ASTNode.FOR_STATEMENT, ASTNode.WHILE_STATEMENT, ASTNode.DO_STATEMENT});
+			System.out.print("loop="+loopMetrics.count + "," + loopMetrics.nesting + "\t");
+					
+			// Print path
+			Node pathNode = containers.peek().parent();
+			String path = "\t >>>\t ";
+			while (pathNode != null)
+			{	
+				if (pathNode.symbol() != null && !pathNode.symbol().isEmpty())
+					path = "." + pathNode.symbol() +  path;
+				pathNode = pathNode.parent();
+			}
+			System.out.print(path);
+			
+			// Print signature
+			String signature = nodeText.substring(signatureBegin, signatureEnd-1);
+			int throwsIndex = signature.indexOf(") throws");
+			if (throwsIndex >= 0) signature = signature.substring(0,throwsIndex+1);
+			System.out.println(signature);
+		}		
+	}
+	
+	static class NodeMetrics
+	{
+		public int count;
+		public int nesting;
+		public NodeMetrics(int c, int n) {count = c; nesting = n;}
+	}
+	
+	NodeMetrics computeMetrics(ASTNode startingNode, int[] nodeTypes)
+	{
+		int count = 0;
+		int nesting = 0;
+		
+		for (ASTNode child : childrenOfASTNode(startingNode))
+			if (child != null)
+			{
+				NodeMetrics m = computeMetrics(child, nodeTypes);
+				count += m.count;
+				nesting = Math.max(nesting, m.nesting);
+			}
+		
+		for(int type : nodeTypes)
+			if (startingNode.getNodeType() == type)
+			{
+				count++;
+				nesting++;
+			}
+
+		return new NodeMetrics(count, nesting);
+	}
+	
+	List<ASTNode> childrenOfASTNode(ASTNode node)
+	{
+		List<ASTNode> result = new ArrayList<ASTNode>();
+		for ( Object property : node.structuralPropertiesForType())
+		{
+			if (property instanceof ChildPropertyDescriptor)
+				result.add((ASTNode)node.getStructuralProperty((ChildPropertyDescriptor) property ));
+			else if (property instanceof ChildListPropertyDescriptor)
+				result.addAll((List<ASTNode>)node.getStructuralProperty((ChildListPropertyDescriptor) property ));
+		}
+		
+		return result;
 	}
 }
