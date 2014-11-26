@@ -65,6 +65,7 @@ public class Node {
 	public Node parent() { return parent_; }
 	public String tag() { return tag_; }
 	public String name() { return name_; }
+	public String symbol() { return symbol_; }
 	public int numChildren() { return children_.size(); }
 	public List<Node> children() { return children_;}
 	public SizeEstimator.Size estimatedSize() throws ConversionException
