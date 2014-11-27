@@ -28,8 +28,6 @@
 
 namespace OODebug {
 
-Command::Command() {}
-
 Command::~Command() {}
 
 void Command::resetIds()

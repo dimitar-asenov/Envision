@@ -48,7 +48,7 @@ class Modifier : public MessagePart
 		static Modifier makeMatchClass(QString classPattern);
 		static Modifier makeLocation(Location loc);
 
-		Modifier(); // needed for in stream
+		Modifier() = default; // needed for in stream
 		virtual ~Modifier() override;
 
 		MessageField<qint8> modKind{&Modifier::modKind, this};

@@ -37,7 +37,7 @@ namespace OODebug {
 
 class OODEBUG_API Command : public MessagePart {
 	public:
-		Command();
+		Command() = default;
 		virtual ~Command() override;
 
 		// Message header data:

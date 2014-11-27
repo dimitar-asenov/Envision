@@ -28,8 +28,6 @@
 
 namespace OODebug {
 
-Modifier::Modifier() {}
-
 Modifier::~Modifier() {}
 
 int Modifier::kind() const { return modKind(); }
