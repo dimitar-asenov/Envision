@@ -74,26 +74,36 @@ class MessageField
 		 * otherwise its used only for reading.
 		 */
 		template <class Container>
-		inline MessageField(MessageField<T, Kind> Container::*field, MessagePart* containingMessage) {
-			auto reader = [field] (MessagePart* container, QDataStream& stream)
-			{
-				if (Kind == MessagePart::noKind || Kind == container->kind())
-					read(stream, (static_cast<Container*>(container)->*field).value_);
-			};
-			auto writer = [field] (const MessagePart* container, QDataStream& stream)
-			{
-				if (Kind == MessagePart::noKind || Kind == container->kind())
-					write(stream, (static_cast<const Container*>(container)->*field).value_);
-			};
-			containingMessage->addMessageField(reader, writer);
-		}
+		inline MessageField(MessageField<T, Kind> Container::*field, MessagePart* containingMessage);
 
-		inline T operator()() const { return value_; }
-		inline T operator=(const T rhs) { return value_ = rhs; }
+		inline T operator()() const;
+		inline T operator=(const T rhs);
 
 	private:
 		T value_{};
 };
+
+template <class T, int Kind>
+template <class Container>
+inline MessageField<T, Kind>::MessageField(MessageField<T, Kind> Container::*field, MessagePart* containingMessage) {
+	auto reader = [field] (MessagePart* container, QDataStream& stream)
+	{
+		if (Kind == MessagePart::noKind || Kind == container->kind())
+			read(stream, (static_cast<Container*>(container)->*field).value_);
+	};
+	auto writer = [field] (const MessagePart* container, QDataStream& stream)
+	{
+		if (Kind == MessagePart::noKind || Kind == container->kind())
+			write(stream, (static_cast<const Container*>(container)->*field).value_);
+	};
+	containingMessage->addMessageField(reader, writer);
+}
+
+template <class T, int Kind>
+T MessageField<T, Kind>::operator()() const { return value_; }
+
+template <class T, int Kind>
+T MessageField<T, Kind>::operator=(const T rhs) { return value_ = rhs; }
 
 template <class T>
 typename std::enable_if<std::is_enum<T>::value, QDataStream&>::type

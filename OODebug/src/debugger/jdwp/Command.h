@@ -51,15 +51,18 @@ class OODEBUG_API Command : public MessagePart {
 
 	protected:
 		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
-		Command(Protocol::CommandSet cmdSet, T cmd)
-		{
-			id = ++nextId_;
-			commandSet = cmdSet;
-			command = static_cast<typename std::underlying_type<T>::type>(cmd);
-		}
+		Command(Protocol::CommandSet cmdSet, T cmd);
 
 	private:
 		static int nextId_;
 };
+
+template <class T, typename>
+Command::Command(Protocol::CommandSet cmdSet, T cmd)
+{
+	id = ++nextId_;
+	commandSet = cmdSet;
+	command = static_cast<typename std::underlying_type<T>::type>(cmd);
+}
 
 } /* namespace OODebug */

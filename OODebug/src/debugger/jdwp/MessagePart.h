@@ -59,12 +59,16 @@ class OODEBUG_API MessagePart
 		template<class Enum>
 		static constexpr typename
 		std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
-		cast(Enum enumValue) { return static_cast<typename std::underlying_type<Enum>::type>(enumValue); }
+		cast(Enum enumValue);
 
 
 	private:
 		QList<ReadOperator> readers_;
 		QList<WriteOperator> writers_;
 };
+
+template<class Enum> constexpr typename
+std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
+MessagePart::cast(Enum enumValue) { return static_cast<typename std::underlying_type<Enum>::type>(enumValue); }
 
 } /* namespace OODebug */
