@@ -36,10 +36,20 @@ class OOINTERACTION_API HStatement : public Interaction::GenericHandler {
 	public:
 		static HStatement* instance();
 
+		using KeyPressHandler = std::function<bool (Visualization::Item*, QKeyEvent*)>;
+
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+
+		// TODO: While this works for now maybe a more general solution should be found for all handlers.
+		void registerKeyPressHandler(KeyPressHandler handler);
 
 	protected:
 		HStatement();
+
+	private:
+		QList<KeyPressHandler> keyPressHandlers_;
 };
+
+inline void HStatement::registerKeyPressHandler(HStatement::KeyPressHandler handler) { keyPressHandlers_ << handler; }
 
 }
