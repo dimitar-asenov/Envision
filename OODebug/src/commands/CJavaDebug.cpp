@@ -40,7 +40,7 @@ Interaction::CommandResult* CJavaDebug::executeNamed(Visualization::Item* source
 	while (source && !source->node()) source = source->parent();
 	if (source)
 		if (auto manager = source->node()->manager())
-			JavaDebugger::debugTree(manager, "exported/" + manager->root()->symbolName());
+			JavaDebugger::instance().debugTree(manager, "exported/" + manager->root()->symbolName());
 
 	return new Interaction::CommandResult();
 }

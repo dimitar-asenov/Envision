@@ -28,22 +28,23 @@
 
 #include "../oodebug_api.h"
 
+#include "jdwp/DebugConnector.h"
+
 namespace Model {
 	class TreeManager;
 }
 
 namespace OODebug {
 
-class DebugConnector;
-
 class OODEBUG_API JavaDebugger
 {
 	public:
-		static void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
+		static JavaDebugger& instance();
+		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
 
 
 	private:
-		static DebugConnector& debugConnector();
+		DebugConnector debugConnector_;
 };
 
 } /* namespace OODebug */

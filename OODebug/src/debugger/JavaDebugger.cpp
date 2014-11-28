@@ -36,6 +36,12 @@
 namespace OODebug {
 
 
+JavaDebugger& JavaDebugger::instance()
+{
+	static JavaDebugger instance;
+	return instance;
+}
+
 void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
 	Model::Node* mainContainer = JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
@@ -48,13 +54,7 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	// TODO properly support nested packages
 	if (module)
 		mainClassName.prepend(".").prepend(module->name());
-	debugConnector().connect(mainClassName);
-}
-
-DebugConnector& JavaDebugger::debugConnector()
-{
-	static DebugConnector debugConnector;
-	return debugConnector;
+	debugConnector_.connect(mainClassName);
 }
 
 } /* namespace OODebug */
