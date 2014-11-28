@@ -40,24 +40,10 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 {
 	Model::Node* mainContainer = JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
 	// Find the class name where the main method is in.
-	OOModel::Class* mainClass = nullptr;
-	while (!mainClass)
-	{
-		auto parent = mainContainer->parent();
-		mainClass = DCast<OOModel::Class>(parent);
-		mainContainer = parent;
-		if (!mainContainer) break;
-	}
-	OOModel::Module* module = nullptr;
-	while (!module)
-	{
-		auto parent = mainContainer->parent();
-		module = DCast<OOModel::Module>(parent);
-		mainContainer = parent;
-		if (!mainContainer) break;
-	}
-
+	auto mainClass = mainContainer->firstAncestorOfType<OOModel::Class>();
 	Q_ASSERT(mainClass);
+	auto module = mainClass->firstAncestorOfType<OOModel::Module>();
+
 	QString mainClassName = mainClass->name();
 	// TODO properly support nested packages
 	if (module)
