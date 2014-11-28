@@ -34,6 +34,10 @@ namespace Model {
 	class TreeManager;
 }
 
+namespace Visualization {
+	class Item;
+}
+
 namespace OODebug {
 
 class OODEBUG_API JavaDebugger
@@ -41,9 +45,12 @@ class OODEBUG_API JavaDebugger
 	public:
 		static JavaDebugger& instance();
 		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
-
+		bool addBreakPoint(Visualization::Item* target, QKeyEvent* event);
 
 	private:
+		void init();
+		void addBreakPointOverlay(Visualization::Item* target);
+		bool isInitialized_{};
 		DebugConnector debugConnector_;
 };
 

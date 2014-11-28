@@ -35,6 +35,7 @@
 #include "run_support/MainMethodFinder.h"
 #include "overlays/ConsoleOverlay.h"
 #include "handlers/HConsoleOverlay.h"
+#include "debugger/JavaDebugger.h"
 
 namespace OODebug {
 
@@ -55,6 +56,9 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	ConsoleOverlay::setDefaultClassHandler(HConsoleOverlay::instance());
 
 	MainMethodFinder::init();
+
+	// init the debugger with calling instance this will trigger initialization
+	JavaDebugger::instance();
 
 	return true;
 }

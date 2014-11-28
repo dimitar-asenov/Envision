@@ -33,12 +33,19 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Module.h"
 
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/overlays/OverlayAccessor.h"
+#include "VisualizationBase/src/overlays/MessageOverlay.h"
+
+#include "OOInteraction/src/handlers/HStatement.h"
+
 namespace OODebug {
 
 
 JavaDebugger& JavaDebugger::instance()
 {
 	static JavaDebugger instance;
+	if (!instance.isInitialized_) instance.init();
 	return instance;
 }
 
@@ -55,6 +62,40 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	if (module)
 		mainClassName.prepend(".").prepend(module->name());
 	debugConnector_.connect(mainClassName);
+}
+
+bool JavaDebugger::addBreakPoint(Visualization::Item* target, QKeyEvent* event)
+{
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
+	{
+		addBreakPointOverlay(target);
+		return true;
+	}
+	return false;
+}
+
+void JavaDebugger::init()
+{
+	// We can not directly add a member function as this would need a reference to the instance,
+	// using a lambda wrapper we can capture the instance in the lambda.
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[this] (Visualization::Item *target, QKeyEvent *event) { return addBreakPoint(target, event); });
+}
+
+void JavaDebugger::addBreakPointOverlay(Visualization::Item* target)
+{
+	// TODO: Use a custom overlay for breakpoints.
+	// TODO: Add possibility to remove breakpoint again.
+	static const QString overlayGroupName("Breakpoint overlay");
+	auto scene = target->scene();
+	// TODO: QUESTION: overlayGroup could just create a group if there is none?
+	auto overlayGroup = scene->overlayGroup(overlayGroupName);
+
+	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
+	overlayGroup->addOverlay(makeOverlay(new Visualization::MessageOverlay(target,
+													[](Visualization::MessageOverlay *){
+														 return QString("BP");
+													 })));
 }
 
 } /* namespace OODebug */
