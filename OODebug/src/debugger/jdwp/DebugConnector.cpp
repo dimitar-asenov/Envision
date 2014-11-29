@@ -72,12 +72,14 @@ void DebugConnector::read()
 {
 	QByteArray read = tcpSocket_.readAll();
 	// If we still have a part of a packet add it here.
-	if (!incompleteData_.isEmpty()) {
+	if (!incompleteData_.isEmpty())
+	{
 		read.prepend(incompleteData_);
 		incompleteData_ = QByteArray();
 	}
 	// If we haven't read enough retry later
-	if (read.size() < int(sizeof(qint32))) {
+	if (read.size() < int(sizeof(qint32)))
+	{
 		incompleteData_ = read;
 		return;
 	}
