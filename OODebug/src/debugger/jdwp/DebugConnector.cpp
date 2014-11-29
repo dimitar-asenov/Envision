@@ -26,7 +26,6 @@
 
 #include "DebugConnector.h"
 
-#include "Protocol.h"
 #include "Reply.h"
 #include "Command.h"
 
@@ -237,8 +236,8 @@ void DebugConnector::handleComposite(QByteArray data)
 
 	for (auto& event : c.events())
 	{
-		if (event.eventKind() == Protocol::EventKind::CLASS_PREPARE)
-			qDebug() << "Preparing class:" <<event.classPrepare().signature();
+		if (auto listener = eventListeners_[event.eventKind()])
+			listener(event);
 		else
 			qDebug() << "EVENT" << static_cast<int>(event.eventKind());
 	}

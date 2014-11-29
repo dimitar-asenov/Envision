@@ -28,9 +28,13 @@
 
 #include "../../oodebug_api.h"
 
+#include "Protocol.h"
+
 namespace OODebug {
 
 class Command;
+
+class Event;
 
 class OODEBUG_API DebugConnector : public QObject
 {
@@ -40,11 +44,15 @@ class OODEBUG_API DebugConnector : public QObject
 		DebugConnector();
 		~DebugConnector();
 
+		using EventListener = std::function<void (Event)>;
+
 		/**
 		 * As certain info is only available when we load the class where the main method resides
 		 * you need to pass the name of the class where the main method is in, in \a mainClassName.
 		 */
 		void connect(QString mainClassName, QString vmHostName = "localhost", int vmHostPort = 4000);
+
+		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
 	private:
 		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&)>;
@@ -86,6 +94,15 @@ class OODEBUG_API DebugConnector : public QObject
 		QByteArray incompleteData_;
 
 		QString mainClassName_;
+
+		QHash<Protocol::EventKind, EventListener> eventListeners_;
 };
+
+/**
+ * Adds a new event listener for the \a kind of event.
+ * If there is already a listener for this kind the previous one is replaced!
+ */
+inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
+{ eventListeners_[kind] = listener; }
 
 } /* namespace OODebug */
