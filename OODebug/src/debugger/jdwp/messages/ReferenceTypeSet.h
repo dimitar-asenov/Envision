@@ -44,7 +44,7 @@ struct JVMMethod : public MessagePart {
 struct MethodsCommand : public Command {
 		MethodsCommand();
 		virtual ~MethodsCommand() override;
-		MessageField<qint64> refType{&MethodsCommand::refType, this};
+		MessageField<qint64> refTypeId{&MethodsCommand::refTypeId, this};
 };
 
 struct MethodsReply : public Reply {
