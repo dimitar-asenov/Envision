@@ -39,6 +39,16 @@ VersionInfo::~VersionInfo() {}
 ResumeCommand::ResumeCommand() : Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume)
 {}
 
+ClassesBySignatureCommand::ClassesBySignatureCommand(QString signature)
+	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::ClassesBySignature)
+{ this->signature = signature; }
+
+ClassesBySignatureCommand::~ClassesBySignatureCommand() {}
+
+ClassBySignature::~ClassBySignature() {}
+
+ClassesBySignature::~ClassesBySignature() {}
+
 ResumeCommand::~ResumeCommand() {}
 
 IDSizeCommand::IDSizeCommand()
@@ -48,6 +58,5 @@ IDSizeCommand::IDSizeCommand()
 IDSizeCommand::~IDSizeCommand() {}
 
 IDSizes::~IDSizes() {}
-
 
 } /* namespace OODebug */

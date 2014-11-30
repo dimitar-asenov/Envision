@@ -51,6 +51,25 @@ struct OODEBUG_API VersionInfo : public Reply {
 		MessageField<QString> vmName{&VersionInfo::vmName, this};
 };
 
+struct ClassesBySignatureCommand : public Command {
+		ClassesBySignatureCommand(QString signature);
+		virtual ~ClassesBySignatureCommand() override;
+
+		MessageField<QString> signature{&ClassesBySignatureCommand::signature, this};
+};
+
+struct ClassBySignature : public MessagePart {
+		virtual ~ClassBySignature() override;
+		MessageField<Protocol::TypeTagKind> refTypeTag{&ClassBySignature::refTypeTag, this};
+		MessageField<qint64> typeID{&ClassBySignature::typeID, this};
+		MessageField<Protocol::ClassStatus> status{&ClassBySignature::status, this};
+};
+
+struct ClassesBySignature : public Reply {
+		virtual ~ClassesBySignature() override;
+		MessageField<QList<ClassBySignature>> classes{&ClassesBySignature::classes, this};
+};
+
 struct IDSizeCommand : public Command {
 		IDSizeCommand();
 		virtual ~IDSizeCommand() override;
