@@ -27,7 +27,7 @@
 #include "JavaDebugger.h"
 
 #include "../run_support/java/JavaRunner.h"
-#include "jdwp/DebugConnector.h"
+#include "jdwp/messages/EventSet.h"
 
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
@@ -40,7 +40,6 @@
 #include "OOInteraction/src/handlers/HStatement.h"
 
 namespace OODebug {
-
 
 JavaDebugger& JavaDebugger::instance()
 {
@@ -68,7 +67,18 @@ bool JavaDebugger::addBreakPoint(Visualization::Item* target, QKeyEvent* event)
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
 	{
-		addBreakPointOverlay(target);
+		auto it = breakpoints_.find(target);
+		if (it != breakpoints_.end())
+		{
+			target->scene()->removeOverlay(it->overlay);
+			// TODO send clear
+			breakpoints_.erase(it);
+		}
+		else
+		{
+			breakpoints_[target] = BreakPoint(addBreakPointOverlay(target));
+			// TODO send request
+		}
 		return true;
 	}
 	return false;
@@ -80,22 +90,30 @@ void JavaDebugger::init()
 	// using a lambda wrapper we can capture the instance in the lambda.
 	OOInteraction::HStatement::instance()->registerKeyPressHandler(
 				[this] (Visualization::Item *target, QKeyEvent *event) { return addBreakPoint(target, event); });
+
+	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});
 }
 
-void JavaDebugger::addBreakPointOverlay(Visualization::Item* target)
+Visualization::MessageOverlay* JavaDebugger::addBreakPointOverlay(Visualization::Item* target)
 {
 	// TODO: Use a custom overlay for breakpoints.
-	// TODO: Add possibility to remove breakpoint again.
 	static const QString overlayGroupName("Breakpoint overlay");
 	auto scene = target->scene();
 	// TODO: QUESTION: overlayGroup could just create a group if there is none?
 	auto overlayGroup = scene->overlayGroup(overlayGroupName);
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
-	overlayGroup->addOverlay(makeOverlay(new Visualization::MessageOverlay(target,
-													[](Visualization::MessageOverlay *){
-														 return QString("BP");
-													 })));
+	auto overlay = new Visualization::MessageOverlay(target,
+																	 [](Visualization::MessageOverlay *){
+																		  return QString("BP");
+																	  });
+	overlayGroup->addOverlay(makeOverlay(overlay));
+	return overlay;
+}
+
+void JavaDebugger::handleClassPrepare(Event e)
+{
+	qDebug() << "Prepare" << e.classPrepare().signature();
 }
 
 } /* namespace OODebug */

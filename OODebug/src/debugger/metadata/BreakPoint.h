@@ -26,38 +26,27 @@
 
 #pragma once
 
-#include "../oodebug_api.h"
-#include "jdwp/DebugConnector.h"
-#include "metadata/BreakPoint.h"
-
-namespace Model {
-	class TreeManager;
-}
+#include "../../oodebug_api.h"
 
 namespace Visualization {
-	class Item;
 	class MessageOverlay;
 }
 
 namespace OODebug {
 
-class OODEBUG_API JavaDebugger
-{
-	public:
-		static JavaDebugger& instance();
-		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
-		bool addBreakPoint(Visualization::Item* target, QKeyEvent* event);
+/**
+ * Represents information to set & clear a breakpoint.
+ */
+struct OODEBUG_API BreakPoint {
+		BreakPoint() = default;
+		BreakPoint(Visualization::MessageOverlay* overlay);
 
-	private:
-		void init();
-		Visualization::MessageOverlay* addBreakPointOverlay(Visualization::Item* target);
-
-		void handleClassPrepare(Event e);
-
-		bool isInitialized_{};
-		DebugConnector debugConnector_;
-
-		QHash<Visualization::Item*, BreakPoint> breakpoints_;
+		qint32 requestId{}; // Will be set when the break point request is sent, and is used to clear the breakpoint.
+		Visualization::MessageOverlay* overlay{};
 };
+
+inline BreakPoint::BreakPoint(Visualization::MessageOverlay* overlay) {
+	this->overlay = overlay;
+}
 
 } /* namespace OODebug */

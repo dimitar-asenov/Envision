@@ -43,7 +43,8 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/messages/EventRequestSet.h \
     src/debugger/jdwp/messages/VMSet.h \
     src/debugger/jdwp/messages/AllMessages.h \
-    src/debugger/jdwp/messages/ReferenceTypeSet.h
+    src/debugger/jdwp/messages/ReferenceTypeSet.h \
+    src/debugger/metadata/BreakPoint.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
