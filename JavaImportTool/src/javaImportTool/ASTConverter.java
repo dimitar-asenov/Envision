@@ -46,17 +46,82 @@ public class ASTConverter {
 		this.source = source;
 	}
 	
-	private int emptyLinesBetweenNodes(ASTNode a, ASTNode b)
+	private Node startComment() throws ConversionException
 	{
-		if (a == null || b == null) return 0;
-		int empty = -1;
-		for(int i = a.getStartPosition()+a.getLength(); i<b.getStartPosition(); ++i)
-		{
-			if (source.charAt(i) == '\n') ++empty;
-		}
+		Node statementItem = containers.peek().add(new Node(null, "CommentStatementItem",
+				Integer.toString(containers.peek().numChildren())));
+		return statementItem.child("commentNode").child("lines");
+	}
+	
+	private void addToComment(Node lines, String line) throws ConversionException
+	{
+		Node commentLineNode = new Node(null, "Text", Integer.toString(lines.numChildren()));
+		lines.add(commentLineNode);
+		commentLineNode.setStringValue(line);
+	}
+	
+	private void addEmptyLinesAndCommentsBetweenNodes(ASTNode a, ASTNode b) throws ConversionException
+	{
+		if (a == null || b == null) return;
 		
-		if (empty < 0) return 0;
-		else return empty;
+		int rangeStart = a.getStartPosition()+a.getLength();
+		int lineStart = rangeStart;
+		Node currentBlockCommentLines = null;
+		Node lastLineComment = null;
+		boolean hasText = false;
+		
+		for(int i = lineStart; i<b.getStartPosition(); ++i)
+		{
+			char c = source.charAt(i);
+			if (c == '\n')
+			{
+
+				if (!hasText && currentBlockCommentLines == null)
+				{
+					if (lineStart > rangeStart) // otherwise, we skip the first '\n' that we find
+					{
+						//Add empty line
+						Node empty =
+							new Node(null, "ExpressionStatement", Integer.toString(containers.peek().numChildren()));
+				    	empty.setChild("expression", new Node(null, "EmptyExpression", "expression"));
+				    	containers.peek().add(empty);
+				    	
+				    	lastLineComment = null;
+					}
+				}
+				else
+				{
+					String commentText = source.substring(lineStart, i).trim();
+					String prefix = lineStart == rangeStart ? "^^^ " : ""; // this comment was on the previous line
+					
+					if (currentBlockCommentLines == null && commentText.startsWith("//"))
+					{
+						if (lastLineComment == null) lastLineComment = startComment();
+						addToComment(lastLineComment, prefix + commentText.substring(2));
+					}
+					else
+					{
+						if (currentBlockCommentLines == null && commentText.startsWith("/*"))
+						{
+							// Start new block
+							currentBlockCommentLines = startComment();
+							commentText = commentText.substring(2);
+							lastLineComment = null;
+						}
+						
+						// We could end the block in the same line
+						boolean finish = commentText.endsWith("*/");
+						if (finish) commentText = commentText.substring(0, commentText.length()-2);
+						addToComment(currentBlockCommentLines, prefix + commentText);
+						if (finish) currentBlockCommentLines = null;
+					}
+				}
+				
+				lineStart = i+1;
+				hasText = false;
+			}
+			else hasText = hasText || (c != ' ' && c != '\t');
+		}
 	}
 	
 	public void visit(CompilationUnit node) throws ConversionException
@@ -283,12 +348,7 @@ public class ASTConverter {
 		for(Statement s : statements)
 		{
 			// Insert empty lines
-			for(int i = 0; i<emptyLinesBetweenNodes(prevStatement, s); ++i)
-			{
-		    	Node empty = new Node(null, "ExpressionStatement", Integer.toString(containers.peek().numChildren()));
-		    	empty.setChild("expression", new Node(null, "EmptyExpression", "expression"));
-		    	containers.peek().add(empty);
-		    }
+			addEmptyLinesAndCommentsBetweenNodes(prevStatement, s);
 		    prevStatement = s;
 			    
 		    List<Node> nodeList = statement(s, Integer.toString(containers.peek().numChildren()));

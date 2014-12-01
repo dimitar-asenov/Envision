@@ -260,5 +260,16 @@ public class NodeDescriptors {
 		add( new NodeInitializer("UsedLibrary", new String[][]{
 				{"Text","name"}
 		}));
+		
+		// Comments
+		add( new NodeInitializer("CommentStatementItem", new String[][]{
+				{"CommentNode","commentNode"}
+		}));
+		add( new NodeInitializer("CommentNode", new String[][]{
+				{"TypedListOfText","lines"},
+				{"TypedListOfCommentDiagram","diagrams"},
+				{"TypedListOfCommentFreeNode","codes"},
+				{"TypedListOfCommentTable","tables"}
+		}));
 	}
 }
