@@ -34,6 +34,10 @@ namespace Model {
 	class TreeManager;
 }
 
+namespace OOModel {
+	class Class;
+}
+
 namespace Visualization {
 	class Item;
 	class MessageOverlay;
@@ -51,6 +55,11 @@ class OODEBUG_API JavaDebugger
 	private:
 		void init();
 		Visualization::MessageOverlay* addBreakPointOverlay(Visualization::Item* target);
+		QString jvmSignatureFor(OOModel::Class* clazz);
+		/**
+		 * Returns a String with all containing module names split by \a delim in front of the \a clazz name.
+		 */
+		QString fullNameFor(OOModel::Class* clazz, QChar delim);
 
 		void handleClassPrepare(Event e);
 

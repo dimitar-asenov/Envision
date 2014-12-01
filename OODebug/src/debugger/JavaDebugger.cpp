@@ -54,12 +54,8 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	// Find the class name where the main method is in.
 	auto mainClass = mainContainer->firstAncestorOfType<OOModel::Class>();
 	Q_ASSERT(mainClass);
-	auto module = mainClass->firstAncestorOfType<OOModel::Module>();
 
-	QString mainClassName = mainClass->name();
-	// TODO properly support nested packages
-	if (module)
-		mainClassName.prepend(".").prepend(module->name());
+	QString mainClassName = fullNameFor(mainClass, '.');
 	debugConnector_.connect(mainClassName);
 }
 
@@ -111,9 +107,37 @@ Visualization::MessageOverlay* JavaDebugger::addBreakPointOverlay(Visualization:
 	return overlay;
 }
 
+QString JavaDebugger::jvmSignatureFor(OOModel::Class* clazz)
+{
+	// from JNI spec fully qualified class: http://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp16432
+	QString signature = fullNameFor(clazz, '/');
+	signature.prepend("L").append(";");
+	return signature;
+}
+
+QString JavaDebugger::fullNameFor(OOModel::Class* clazz, QChar delim)
+{
+	QString fullName = clazz->name();
+	auto mod = clazz->firstAncestorOfType<OOModel::Module>();
+	while (mod)
+	{
+		fullName.prepend(mod->name() + delim);
+		mod = mod->firstAncestorOfType<OOModel::Module>();
+	}
+	return fullName;
+}
+
 void JavaDebugger::handleClassPrepare(Event e)
 {
 	qDebug() << "Prepare" << e.classPrepare().signature();
+	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
+	{
+		auto target = it.key();
+		auto targetNode = target->node();
+		auto method = targetNode->firstAncestorOfType<OOModel::Method>();
+		auto clazz = method->firstAncestorOfType<OOModel::Class>();
+		qDebug() << jvmSignatureFor(clazz);
+	}
 }
 
 } /* namespace OODebug */
