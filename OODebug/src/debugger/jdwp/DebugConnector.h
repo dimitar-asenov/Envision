@@ -55,6 +55,8 @@ class OODEBUG_API DebugConnector : public QObject
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
 		void resume();
+
+		qint64 getClassId(const QString& signature);
 	private:
 		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&, std::shared_ptr<Command>)>;
 
@@ -83,7 +85,7 @@ class OODEBUG_API DebugConnector : public QObject
 
 		void handleComposite(QByteArray data);
 
-		inline qint32 nextId();
+		void handleClassIds(QByteArray data, std::shared_ptr<Command> command);
 
 		QHash<int, QPair<HandleFunction, std::shared_ptr<Command>>> handlingMap_;
 
@@ -94,6 +96,8 @@ class OODEBUG_API DebugConnector : public QObject
 		QString mainClassName_;
 
 		QHash<Protocol::EventKind, EventListener> eventListeners_;
+
+		QHash<QString, qint64> classIdMap_;
 };
 
 /**

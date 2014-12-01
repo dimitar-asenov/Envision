@@ -221,6 +221,20 @@ void DebugConnector::resume()
 	sendCommand(std::make_shared<ResumeCommand>(), &DebugConnector::handleDefaultReply);
 }
 
+qint64 DebugConnector::getClassId(const QString& signature)
+{
+	auto it = classIdMap_.find(signature);
+	if (it == classIdMap_.end())
+	{
+		sendCommand(std::make_shared<ClassesBySignatureCommand>(signature), &DebugConnector::handleClassIds);
+		return -1;
+	}
+	else
+	{
+		return it.value();
+	}
+}
+
 void DebugConnector::handleDefaultReply(QByteArray data, std::shared_ptr<Command>)
 {
 	auto r = makeReply<Reply>(data);
@@ -241,6 +255,15 @@ void DebugConnector::handleComposite(QByteArray data)
 		else
 			qDebug() << "EVENT" << static_cast<int>(event.eventKind());
 	}
+}
+
+void DebugConnector::handleClassIds(QByteArray data, std::shared_ptr<Command> command)
+{
+	auto classIdCmd = std::dynamic_pointer_cast<ClassesBySignatureCommand>(command);
+	Q_ASSERT(classIdCmd);
+	auto r = makeReply<ClassesBySignature>(data);
+	Q_ASSERT(r.classes().size() == 1);
+	classIdMap_[classIdCmd->signature()] = r.classes()[0].typeID();
 }
 
 } /* namespace OODebug */
