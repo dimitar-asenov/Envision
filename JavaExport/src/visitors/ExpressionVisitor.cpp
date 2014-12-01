@@ -164,6 +164,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 	else if (auto e = DCast<CastExpression>(expression))
 		*fragment << "(" << visit(e->castType()) << ") " << visit(e->expr());
+	else if (auto e = DCast<InstanceOfExpression>(expression))
+		*fragment << visit(e->expr()) << " instanceof " << visit(e->typeExpression());
 	else if (auto e = DCast<CommaExpression>(expression)) *fragment << visit(e->left()) << ", " << visit(e->right());
 	else if (auto e = DCast<ConditionalExpression>(expression))
 		*fragment << visit(e->condition()) << " ? " << visit(e->trueExpression()) << " : " << visit(e->falseExpression());

@@ -893,7 +893,13 @@ public class ASTConverter {
 			
 			activeNode.setChild("right", lastOperand);
 		} else if (e instanceof InstanceofExpression)
-			node = new Node(null, "EmptyExpression", name); //TODO: Implement this
+		{
+			InstanceofExpression instaceOfExpression = (InstanceofExpression) e;
+			node = new Node(null, "InstanceOfExpression", name);
+			
+			node.setChild("expr", expression(instaceOfExpression.getLeftOperand(),"left"));	
+			node.setChild("typeExpression", typeExpression(instaceOfExpression.getRightOperand(),"right"));
+		}
 		else if (e instanceof MethodInvocation)
 		{
 			// TODO: This code is almost identical to SuperMethodInvocation

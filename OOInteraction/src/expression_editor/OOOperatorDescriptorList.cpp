@@ -271,6 +271,14 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
+	add(new OD( "instanceof", "expr SPACE instanceof SPACE type", 6, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new InstanceOfExpression();
+		opr->setExpr(operands.first());
+		opr->setTypeExpression(operands.last());
+		return opr;
+	}));
+
 	add(new OD( "comma", "typeOrExpr , typeOrExpr", 50, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new CommaExpression();

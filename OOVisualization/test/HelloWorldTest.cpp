@@ -512,6 +512,14 @@ Method* addLongMethod(Class* parent)
 	cast->setType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	cast->setExpr(new ReferenceExpression("epsilon"));
 
+	VariableDeclarationExpression* var10_1 = new VariableDeclarationExpression("var10_1");
+	longMethod->items()->append(new ExpressionStatement(var10_1));
+	var10_1->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	auto instanceOfOp = new InstanceOfExpression();
+	var10_1->decl()->setInitialValue(instanceOfOp);
+	instanceOfOp->setExpr(new ReferenceExpression("var10"));
+	instanceOfOp->setTypeExpression(new ReferenceExpression("String"));
+
 	VariableDeclarationExpression* var11 = new VariableDeclarationExpression("var11");
 	longMethod->items()->append(new ExpressionStatement(var11));
 	var11->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));

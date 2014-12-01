@@ -66,6 +66,7 @@
 #include "expressions/UnaryOperation.h"
 #include "expressions/BinaryOperation.h"
 #include "expressions/CastExpression.h"
+#include "expressions/InstanceOfExpression.h"
 #include "expressions/ReferenceExpression.h"
 #include "expressions/ArrayInitializer.h"
 #include "expressions/EmptyExpression.h"

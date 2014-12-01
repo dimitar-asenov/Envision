@@ -206,6 +206,10 @@ public class NodeDescriptors {
 				{"Expression","expr"},
 				{"Integer","cKind"}
 		}));
+		add( new NodeInitializer("InstanceOfExpression", new String[][]{
+				{"Expression","expr"},
+				{"Expression","typeExpression"}
+		}));
 		add( new NodeInitializer("MethodCallExpression", new String[][]{
 				{"Expression","callee"},
 				{"TypedListOfExpression","arguments"}
