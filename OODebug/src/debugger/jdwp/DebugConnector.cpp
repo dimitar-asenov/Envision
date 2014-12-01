@@ -213,10 +213,10 @@ void DebugConnector::handleBreakAtStart(QByteArray data)
 {
 	auto reply = makeReply<EventSetReply>(data);
 	qDebug() << "Break at start succesful " << reply.requestId();
-	sendResume();
+	resume();
 }
 
-void DebugConnector::sendResume()
+void DebugConnector::resume()
 {
 	sendCommand(ResumeCommand(), &DebugConnector::handleDefaultReply);
 }

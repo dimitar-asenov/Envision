@@ -54,6 +54,7 @@ class OODEBUG_API DebugConnector : public QObject
 
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
+		void resume();
 	private:
 		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&)>;
 
@@ -69,7 +70,6 @@ class OODEBUG_API DebugConnector : public QObject
 		 */
 		void handlePacket(qint32 id, QByteArray data);
 
-
 		void sendVersionRequest();
 		void handleVersion(QByteArray data);
 
@@ -78,8 +78,6 @@ class OODEBUG_API DebugConnector : public QObject
 
 		void sendBreakAtStart();
 		void handleBreakAtStart(QByteArray data);
-
-		void sendResume();
 
 		void handleDefaultReply(QByteArray data);
 
