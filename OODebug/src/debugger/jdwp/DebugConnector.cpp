@@ -106,12 +106,12 @@ void DebugConnector::read()
 	}
 }
 
-void DebugConnector::sendCommand(const Command& c, HandleFunction handler)
+void DebugConnector::sendCommand(std::shared_ptr<Command> command, HandleFunction handler)
 {
-	handlingMap_[c.id()] = handler;
+	handlingMap_[command->id()] = {handler, command};
 	QByteArray raw;
 	QDataStream stream(&raw, QIODevice::ReadWrite);
-	stream << c;
+	stream << *command;
 	// Insert the length, it is always at position 0
 	QByteArray len;
 	qint32 dataLen = raw.length();
@@ -156,14 +156,14 @@ void DebugConnector::sendHandshake()
 
 void DebugConnector::handlePacket(qint32 id, QByteArray data)
 {
-	auto handlingFun = handlingMap_.take(id);
-	if (handlingFun) // We received a reply
+	auto handler = handlingMap_.take(id);
+	if (auto handlingFun = handler.first) // We received a reply
 	{
 		// check for an error
 		auto r = makeReply<Reply>(data);
 		if (Protocol::Error::NONE == r.error())
 		{
-			handlingFun(*this, data);
+			handlingFun(*this, data, handler.second);
 		}
 		else
 		{
@@ -179,10 +179,10 @@ void DebugConnector::handlePacket(qint32 id, QByteArray data)
 
 void DebugConnector::sendVersionRequest()
 {
-	sendCommand(VersionCommand(), &DebugConnector::handleVersion);
+	sendCommand(std::make_shared<VersionCommand>(), &DebugConnector::handleVersion);
 }
 
-void DebugConnector::handleVersion(QByteArray data)
+void DebugConnector::handleVersion(QByteArray data, std::shared_ptr<Command>)
 {
 	auto info = makeReply<VersionInfo>(data);
 	qDebug() << "VM-INFO: " << info.jdwpMajor() << info.jdwpMinor();
@@ -190,10 +190,10 @@ void DebugConnector::handleVersion(QByteArray data)
 
 void DebugConnector::sendIdSizes()
 {
-	sendCommand(IDSizeCommand(), &DebugConnector::handleIdSizes);
+	sendCommand(std::make_shared<IDSizeCommand>(), &DebugConnector::handleIdSizes);
 }
 
-void DebugConnector::handleIdSizes(QByteArray data)
+void DebugConnector::handleIdSizes(QByteArray data, std::shared_ptr<Command>)
 {
 	// Our protocol is only designed for 64 bit machine make sure that this is the case:
 	auto idSizes = makeReply<IDSizes>(data);
@@ -206,10 +206,10 @@ void DebugConnector::handleIdSizes(QByteArray data)
 
 void DebugConnector::sendBreakAtStart()
 {
-	sendCommand(BreakClassLoad(mainClassName_), &DebugConnector::handleBreakAtStart);
+	sendCommand(std::make_shared<BreakClassLoad>(mainClassName_), &DebugConnector::handleBreakAtStart);
 }
 
-void DebugConnector::handleBreakAtStart(QByteArray data)
+void DebugConnector::handleBreakAtStart(QByteArray data, std::shared_ptr<Command>)
 {
 	auto reply = makeReply<EventSetReply>(data);
 	qDebug() << "Break at start succesful " << reply.requestId();
@@ -218,10 +218,10 @@ void DebugConnector::handleBreakAtStart(QByteArray data)
 
 void DebugConnector::resume()
 {
-	sendCommand(ResumeCommand(), &DebugConnector::handleDefaultReply);
+	sendCommand(std::make_shared<ResumeCommand>(), &DebugConnector::handleDefaultReply);
 }
 
-void DebugConnector::handleDefaultReply(QByteArray data)
+void DebugConnector::handleDefaultReply(QByteArray data, std::shared_ptr<Command>)
 {
 	auto r = makeReply<Reply>(data);
 	qDebug() << "No Error in" << r.id();

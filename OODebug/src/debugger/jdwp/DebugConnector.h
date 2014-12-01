@@ -56,12 +56,12 @@ class OODEBUG_API DebugConnector : public QObject
 
 		void resume();
 	private:
-		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&)>;
+		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&, std::shared_ptr<Command>)>;
 
 		static void handleSocketError(QAbstractSocket::SocketError socketError);
 		void read();
 
-		void sendCommand(const Command& c, HandleFunction handler);
+		void sendCommand(std::shared_ptr<Command> command, HandleFunction handler);
 
 		void readHandshake();
 		void sendHandshake();
@@ -71,21 +71,21 @@ class OODEBUG_API DebugConnector : public QObject
 		void handlePacket(qint32 id, QByteArray data);
 
 		void sendVersionRequest();
-		void handleVersion(QByteArray data);
+		void handleVersion(QByteArray data, std::shared_ptr<Command> command);
 
 		void sendIdSizes();
-		void handleIdSizes(QByteArray data);
+		void handleIdSizes(QByteArray data, std::shared_ptr<Command> command);
 
 		void sendBreakAtStart();
-		void handleBreakAtStart(QByteArray data);
+		void handleBreakAtStart(QByteArray data, std::shared_ptr<Command> command);
 
-		void handleDefaultReply(QByteArray data);
+		void handleDefaultReply(QByteArray data, std::shared_ptr<Command> command);
 
 		void handleComposite(QByteArray data);
 
 		inline qint32 nextId();
 
-		QHash<int, HandleFunction> handlingMap_;
+		QHash<int, QPair<HandleFunction, std::shared_ptr<Command>>> handlingMap_;
 
 		QTcpSocket tcpSocket_;
 
