@@ -77,7 +77,7 @@ public class ASTConverter {
 		Node cl = containers.peek().addSymbolNodeInList("classes", "Class", type.getName().getIdentifier());
 		containers.push(cl);
 		
-		setModifiers(type);
+		setModifiersAndAnnotations(type);
 		//TODO: Handle JavaDoc
 		
 		if (topLevel)
@@ -109,7 +109,7 @@ public class ASTConverter {
 		for (IExtendedModifier em : modifiersAndAnnotations)
 		{
 			if (!em.isAnnotation()) continue;
-			
+
 			Node ann = getAnnotation((Annotation) em);
 			ann.setName(annotations.numChildren());
 			annotations.add(ann);
@@ -223,7 +223,7 @@ public class ASTConverter {
 		
 		me.child("mthKind").setLongValue(node.isConstructor() ? 1 : 0);
 		
-		setModifiers(node);
+		setModifiersAndAnnotations(node);
 		processTypeParameters(node.typeParameters());
 		processParameters(node.parameters());
 		
@@ -251,7 +251,7 @@ public class ASTConverter {
 			Node field = containers.peek().addSymbolNodeInList("fields", "Field", vdf.getName().getIdentifier());
 			containers.push(field);
 			
-			setModifiers(node);
+			setModifiersAndAnnotations(node);
 			Node type = typeExpression(node.getType(), "typeExpression");
 			field.setChild("typeExpression", addExtraDimensions(type, vdf.getExtraDimensions()));
 
@@ -267,7 +267,7 @@ public class ASTConverter {
 		Node field = containers.peek().addSymbolNodeInList("fields", "Field", node.getName().getIdentifier());
 		containers.push(field);
 			
-		setModifiers(node);
+		setModifiersAndAnnotations(node);
 		field.setChild("typeExpression", typeExpression(node.getType(), "typeExpression"));
 
 		if (node.getDefault() != null)
@@ -571,7 +571,7 @@ public class ASTConverter {
 		}
 	}
 
-	void setModifiers(BodyDeclaration body) throws ConversionException
+	void setModifiersAndAnnotations(BodyDeclaration body) throws ConversionException
 	{
 		Node n = containers.peek();	
 
@@ -593,6 +593,8 @@ public class ASTConverter {
 		// strictfp
 		
 		n.child("modifiers").setLongValue(modifiersToSet);
+		
+		processAnnotations(n, (List<IExtendedModifier>) body.getStructuralProperty(body.getModifiersProperty()));
 	}
 	
 	Node typeExpression(Type type, String name) throws ConversionException
