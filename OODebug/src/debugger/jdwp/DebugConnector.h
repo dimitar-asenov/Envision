@@ -36,6 +36,8 @@ class Command;
 
 class Event;
 
+class VersionInfo;
+
 class OODEBUG_API DebugConnector : public QObject
 {
 	Q_OBJECT
@@ -54,40 +56,25 @@ class OODEBUG_API DebugConnector : public QObject
 
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
-		void resume();
+		bool resume();
 
 		qint64 getClassId(const QString& signature);
 	private:
-		using HandleFunction = std::function<void(DebugConnector&, const QByteArray&, std::shared_ptr<Command>)>;
-
 		static void handleSocketError(QAbstractSocket::SocketError socketError);
 		void read();
+		int read(qint32 requestId);
 
-		void sendCommand(std::shared_ptr<Command> command, HandleFunction handler);
+		QByteArray sendCommand(const Command& command);
 
 		void readHandshake();
 		void sendHandshake();
-		/**
-		 * Parses and handles the \a data of a complete read packet.
-		 */
-		void handlePacket(qint32 id, QByteArray data);
 
-		void sendVersionRequest();
-		void handleVersion(QByteArray data, std::shared_ptr<Command> command);
-
-		void sendIdSizes();
-		void handleIdSizes(QByteArray data, std::shared_ptr<Command> command);
+		void checkVersion();
+		void checkIdSizes();
 
 		void sendBreakAtStart();
-		void handleBreakAtStart(QByteArray data, std::shared_ptr<Command> command);
-
-		void handleDefaultReply(QByteArray data, std::shared_ptr<Command> command);
 
 		void handleComposite(QByteArray data);
-
-		void handleClassIds(QByteArray data, std::shared_ptr<Command> command);
-
-		QHash<int, QPair<HandleFunction, std::shared_ptr<Command>>> handlingMap_;
 
 		QTcpSocket tcpSocket_;
 
@@ -98,6 +85,9 @@ class OODEBUG_API DebugConnector : public QObject
 		QHash<Protocol::EventKind, EventListener> eventListeners_;
 
 		QHash<QString, qint64> classIdMap_;
+
+		// Each entry is a full Message which is ready to be parsed & handled
+		QList<QByteArray> readyData_;
 };
 
 /**

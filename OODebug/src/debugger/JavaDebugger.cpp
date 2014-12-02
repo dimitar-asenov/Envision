@@ -128,7 +128,7 @@ void JavaDebugger::handleClassPrepare(Event e)
 		auto targetNode = target->node();
 		auto method = targetNode->firstAncestorOfType<OOModel::Method>();
 		auto clazz = method->firstAncestorOfType<OOModel::Class>();
-		qDebug() << jvmSignatureFor(clazz);
+		qDebug() << debugConnector_.getClassId(jvmSignatureFor(clazz));
 	}
 }
 

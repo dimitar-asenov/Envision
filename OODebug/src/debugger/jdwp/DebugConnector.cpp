@@ -49,7 +49,8 @@ void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHo
 	mainClassName_ = mainClassName;
 	if (tcpSocket_.isOpen())
 		tcpSocket_.abort();
-	QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::read);
+	QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this,
+							  static_cast<void (DebugConnector::*)()>(&DebugConnector::read));
 	Command::resetIds();
 	// The connection setup is handled here:
 	// First when we are connected we have to send the handshake. For receiving the hanshake reply,
@@ -69,6 +70,11 @@ void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 
 void DebugConnector::read()
 {
+	read(-1);
+}
+
+int DebugConnector::read(qint32 requestId)
+{
 	QByteArray read = tcpSocket_.readAll();
 	// If we still have a part of a packet add it here.
 	if (!incompleteData_.isEmpty())
@@ -80,7 +86,7 @@ void DebugConnector::read()
 	if (read.size() < int(sizeof(qint32)))
 	{
 		incompleteData_ = read;
-		return;
+		return -1;
 	}
 	// check if the packet is complete
 	QDataStream inStream(read);
@@ -89,12 +95,11 @@ void DebugConnector::read()
 	if (packetLen > read.length())
 	{
 		incompleteData_ = read;
-		return;
+		return -1;
 	}
 	// We have read the whole data for this message so handle it.
 	qint32 id;
 	inStream >> id;
-	handlePacket(id, read);
 
 	// It might be that we received more than one packet, if so we have to recursively call this function.
 	if (packetLen < read.length())
@@ -102,16 +107,26 @@ void DebugConnector::read()
 		incompleteData_ = read;
 		incompleteData_.remove(0, packetLen);
 		// trigger reads such that we handle the additional data
-		this->read();
+		if (-1 == id) this->read();
 	}
+	read.remove(packetLen + 1, read.length());
+
+	if (-1 == requestId)
+	{
+		handleComposite(read);
+		return 0;
+	}
+	auto nextInd = readyData_.length();
+	readyData_ << read;
+	if (requestId == id) return nextInd;
+	return -1;
 }
 
-void DebugConnector::sendCommand(std::shared_ptr<Command> command, HandleFunction handler)
+QByteArray DebugConnector::sendCommand(const Command& command)
 {
-	handlingMap_[command->id()] = {handler, command};
 	QByteArray raw;
 	QDataStream stream(&raw, QIODevice::ReadWrite);
-	stream << *command;
+	stream << command;
 	// Insert the length, it is always at position 0
 	QByteArray len;
 	qint32 dataLen = raw.length();
@@ -120,6 +135,14 @@ void DebugConnector::sendCommand(std::shared_ptr<Command> command, HandleFunctio
 	raw.replace(0, len.length(), len);
 	tcpSocket_.write(raw);
 	tcpSocket_.waitForBytesWritten();
+
+	int responseIndex = -1;
+	while (-1 == responseIndex)
+	{
+		tcpSocket_.waitForReadyRead();
+		responseIndex = read(command.id());
+	}
+	return readyData_.takeAt(responseIndex);
 }
 
 void DebugConnector::readHandshake()
@@ -129,7 +152,8 @@ void DebugConnector::readHandshake()
 	if (read.startsWith(Protocol::handshake))
 	{
 		QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
-		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::read);
+		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this,
+							  static_cast<void (DebugConnector::*)()>(&DebugConnector::read));
 		if (read.length() > Protocol::handshake.length())
 		{
 			// remove the handshake
@@ -138,8 +162,8 @@ void DebugConnector::readHandshake()
 			// trigger reads such that we handle the additional data
 			this->read();
 		}
-		sendVersionRequest();
-		sendIdSizes();
+		checkVersion();
+		checkIdSizes();
 		sendBreakAtStart();
 	}
 	else
@@ -154,49 +178,16 @@ void DebugConnector::sendHandshake()
 	tcpSocket_.waitForBytesWritten();
 }
 
-void DebugConnector::handlePacket(qint32 id, QByteArray data)
+void DebugConnector::checkVersion()
 {
-	auto handler = handlingMap_.take(id);
-	if (auto handlingFun = handler.first) // We received a reply
-	{
-		// check for an error
-		auto r = makeReply<Reply>(data);
-		if (Protocol::Error::NONE == r.error())
-		{
-			handlingFun(*this, data, handler.second);
-		}
-		else
-		{
-			// TODO: handle this better
-			qDebug() << "Error received: " << static_cast<int>(r.error());
-		}
-	}
-	else // We received a command
-	{
-		handleComposite(data);
-	}
-}
-
-void DebugConnector::sendVersionRequest()
-{
-	sendCommand(std::make_shared<VersionCommand>(), &DebugConnector::handleVersion);
-}
-
-void DebugConnector::handleVersion(QByteArray data, std::shared_ptr<Command>)
-{
-	auto info = makeReply<VersionInfo>(data);
+	auto info = makeReply<VersionInfo>(sendCommand(VersionCommand()));
 	qDebug() << "VM-INFO: " << info.jdwpMajor() << info.jdwpMinor();
 }
 
-void DebugConnector::sendIdSizes()
-{
-	sendCommand(std::make_shared<IDSizeCommand>(), &DebugConnector::handleIdSizes);
-}
-
-void DebugConnector::handleIdSizes(QByteArray data, std::shared_ptr<Command>)
+void DebugConnector::checkIdSizes()
 {
 	// Our protocol is only designed for 64 bit machine make sure that this is the case:
-	auto idSizes = makeReply<IDSizes>(data);
+	auto idSizes = makeReply<IDSizes>(sendCommand(IDSizeCommand()));
 	Q_ASSERT(sizeof(qint64) == idSizes.fieldIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.methodIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.objectIDSize());
@@ -206,19 +197,15 @@ void DebugConnector::handleIdSizes(QByteArray data, std::shared_ptr<Command>)
 
 void DebugConnector::sendBreakAtStart()
 {
-	sendCommand(std::make_shared<BreakClassLoad>(mainClassName_), &DebugConnector::handleBreakAtStart);
-}
-
-void DebugConnector::handleBreakAtStart(QByteArray data, std::shared_ptr<Command>)
-{
-	auto reply = makeReply<EventSetReply>(data);
-	qDebug() << "Break at start succesful " << reply.requestId();
+	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(mainClassName_)));
+	Q_ASSERT(Protocol::Error::NONE == r.error());
 	resume();
 }
 
-void DebugConnector::resume()
+bool DebugConnector::resume()
 {
-	sendCommand(std::make_shared<ResumeCommand>(), &DebugConnector::handleDefaultReply);
+	auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
+	return Protocol::Error::NONE == r.error();
 }
 
 qint64 DebugConnector::getClassId(const QString& signature)
@@ -226,19 +213,14 @@ qint64 DebugConnector::getClassId(const QString& signature)
 	auto it = classIdMap_.find(signature);
 	if (it == classIdMap_.end())
 	{
-		sendCommand(std::make_shared<ClassesBySignatureCommand>(signature), &DebugConnector::handleClassIds);
-		return -1;
+		auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
+		Q_ASSERT(classesBySignature.classes().size() == 1);
+		return classIdMap_[signature] = classesBySignature.classes()[0].typeID();
 	}
 	else
 	{
 		return it.value();
 	}
-}
-
-void DebugConnector::handleDefaultReply(QByteArray data, std::shared_ptr<Command>)
-{
-	auto r = makeReply<Reply>(data);
-	qDebug() << "No Error in" << r.id();
 }
 
 void DebugConnector::handleComposite(QByteArray data)
@@ -255,15 +237,6 @@ void DebugConnector::handleComposite(QByteArray data)
 		else
 			qDebug() << "EVENT" << static_cast<int>(event.eventKind());
 	}
-}
-
-void DebugConnector::handleClassIds(QByteArray data, std::shared_ptr<Command> command)
-{
-	auto classIdCmd = std::dynamic_pointer_cast<ClassesBySignatureCommand>(command);
-	Q_ASSERT(classIdCmd);
-	auto r = makeReply<ClassesBySignature>(data);
-	Q_ASSERT(r.classes().size() == 1);
-	classIdMap_[classIdCmd->signature()] = r.classes()[0].typeID();
 }
 
 } /* namespace OODebug */
