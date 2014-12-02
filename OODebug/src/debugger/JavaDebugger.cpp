@@ -37,14 +37,11 @@
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
 #include "VisualizationBase/src/overlays/MessageOverlay.h"
 
-#include "OOInteraction/src/handlers/HStatement.h"
-
 namespace OODebug {
 
 JavaDebugger& JavaDebugger::instance()
 {
 	static JavaDebugger instance;
-	if (!instance.isInitialized_) instance.init();
 	return instance;
 }
 
@@ -80,13 +77,8 @@ bool JavaDebugger::addBreakPoint(Visualization::Item* target, QKeyEvent* event)
 	return false;
 }
 
-void JavaDebugger::init()
+JavaDebugger::JavaDebugger()
 {
-	// We can not directly add a member function as this would need a reference to the instance,
-	// using a lambda wrapper we can capture the instance in the lambda.
-	OOInteraction::HStatement::instance()->registerKeyPressHandler(
-				[this] (Visualization::Item *target, QKeyEvent *event) { return addBreakPoint(target, event); });
-
 	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});
 }
 

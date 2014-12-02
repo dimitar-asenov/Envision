@@ -53,7 +53,7 @@ class OODEBUG_API JavaDebugger
 		bool addBreakPoint(Visualization::Item* target, QKeyEvent* event);
 
 	private:
-		void init();
+		JavaDebugger();
 		Visualization::MessageOverlay* addBreakPointOverlay(Visualization::Item* target);
 		QString jvmSignatureFor(OOModel::Class* clazz);
 		/**
@@ -63,7 +63,6 @@ class OODEBUG_API JavaDebugger
 
 		void handleClassPrepare(Event e);
 
-		bool isInitialized_{};
 		DebugConnector debugConnector_;
 
 		QHash<Visualization::Item*, BreakPoint> breakpoints_;

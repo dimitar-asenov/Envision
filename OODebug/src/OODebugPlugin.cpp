@@ -29,6 +29,8 @@
 
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
+#include "OOInteraction/src/handlers/HStatement.h"
+
 #include "commands/CJavaCompile.h"
 #include "commands/CJavaRun.h"
 #include "commands/CJavaDebug.h"
@@ -57,8 +59,12 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 
 	MainMethodFinder::init();
 
-	// init the debugger with calling instance this will trigger initialization
-	JavaDebugger::instance();
+	// Register our breakpoint key handler
+	// TODO: once we have a better mechanism update this.
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item *target, QKeyEvent *event) {
+		return JavaDebugger::instance().addBreakPoint(target, event);
+	});
 
 	return true;
 }
