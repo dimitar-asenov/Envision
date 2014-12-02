@@ -56,20 +56,20 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	debugConnector_.connect(mainClassName);
 }
 
-bool JavaDebugger::addBreakPoint(Visualization::Item* target, QKeyEvent* event)
+bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
 	{
 		auto it = breakpoints_.find(target);
 		if (it != breakpoints_.end())
 		{
-			target->scene()->removeOverlay(it->overlay);
+			target->scene()->removeOverlay(it->overlay_);
 			// TODO send clear
 			breakpoints_.erase(it);
 		}
 		else
 		{
-			breakpoints_[target] = BreakPoint(addBreakPointOverlay(target));
+			breakpoints_[target] = Breakpoint(addBreakpointOverlay(target));
 			// TODO send request
 		}
 		return true;
@@ -82,7 +82,7 @@ JavaDebugger::JavaDebugger()
 	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});
 }
 
-Visualization::MessageOverlay* JavaDebugger::addBreakPointOverlay(Visualization::Item* target)
+Visualization::MessageOverlay* JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
 {
 	// TODO: Use a custom overlay for breakpoints.
 	static const QString overlayGroupName("Breakpoint overlay");
@@ -99,22 +99,22 @@ Visualization::MessageOverlay* JavaDebugger::addBreakPointOverlay(Visualization:
 	return overlay;
 }
 
-QString JavaDebugger::jvmSignatureFor(OOModel::Class* clazz)
+QString JavaDebugger::jvmSignatureFor(OOModel::Class* theClass)
 {
 	// from JNI spec fully qualified class: http://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp16432
-	QString signature = fullNameFor(clazz, '/');
+	QString signature = fullNameFor(theClass, '/');
 	signature.prepend("L").append(";");
 	return signature;
 }
 
-QString JavaDebugger::fullNameFor(OOModel::Class* clazz, QChar delim)
+QString JavaDebugger::fullNameFor(OOModel::Class* theClass, QChar delimiter)
 {
-	QString fullName = clazz->name();
-	auto mod = clazz->firstAncestorOfType<OOModel::Module>();
-	while (mod)
+	QString fullName = theClass->name();
+	auto module = theClass->firstAncestorOfType<OOModel::Module>();
+	while (module)
 	{
-		fullName.prepend(mod->name() + delim);
-		mod = mod->firstAncestorOfType<OOModel::Module>();
+		fullName.prepend(module->name() + delimiter);
+		module = module->firstAncestorOfType<OOModel::Module>();
 	}
 	return fullName;
 }

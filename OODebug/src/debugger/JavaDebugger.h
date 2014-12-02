@@ -28,7 +28,7 @@
 
 #include "../oodebug_api.h"
 #include "jdwp/DebugConnector.h"
-#include "metadata/BreakPoint.h"
+#include "metadata/Breakpoint.h"
 
 namespace Model {
 	class TreeManager;
@@ -50,22 +50,22 @@ class OODEBUG_API JavaDebugger
 	public:
 		static JavaDebugger& instance();
 		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
-		bool addBreakPoint(Visualization::Item* target, QKeyEvent* event);
+		bool addBreakpoint(Visualization::Item* target, QKeyEvent* event);
 
 	private:
 		JavaDebugger();
-		Visualization::MessageOverlay* addBreakPointOverlay(Visualization::Item* target);
-		QString jvmSignatureFor(OOModel::Class* clazz);
+		Visualization::MessageOverlay* addBreakpointOverlay(Visualization::Item* target);
+		QString jvmSignatureFor(OOModel::Class* theClass);
 		/**
 		 * Returns a String with all containing module names split by \a delim in front of the \a clazz name.
 		 */
-		QString fullNameFor(OOModel::Class* clazz, QChar delim);
+		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
 
 		void handleClassPrepare(Event e);
 
 		DebugConnector debugConnector_;
 
-		QHash<Visualization::Item*, BreakPoint> breakpoints_;
+		QHash<Visualization::Item*, Breakpoint> breakpoints_;
 };
 
 } /* namespace OODebug */

@@ -37,16 +37,14 @@ namespace OODebug {
 /**
  * Represents information to set & clear a breakpoint.
  */
-struct OODEBUG_API BreakPoint {
-		BreakPoint() = default;
-		BreakPoint(Visualization::MessageOverlay* overlay);
+struct OODEBUG_API Breakpoint {
+		Breakpoint() = default;
+		Breakpoint(Visualization::MessageOverlay* overlay);
 
-		qint32 requestId{}; // Will be set when the break point request is sent, and is used to clear the breakpoint.
-		Visualization::MessageOverlay* overlay{};
+		qint32 requestId_{}; // Will be set when the break point request is sent, and is used to clear the breakpoint.
+		Visualization::MessageOverlay* overlay_{};
 };
 
-inline BreakPoint::BreakPoint(Visualization::MessageOverlay* overlay) {
-	this->overlay = overlay;
-}
+inline Breakpoint::Breakpoint(Visualization::MessageOverlay* overlay) : overlay_{overlay} {}
 
 } /* namespace OODebug */
