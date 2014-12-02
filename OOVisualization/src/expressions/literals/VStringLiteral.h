@@ -42,6 +42,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
+//TODO: This class is identical to VCharacterLiteral
 class OOVISUALIZATION_API VStringLiteral
 	: public Super<VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>>
 {
@@ -55,9 +56,9 @@ class OOVISUALIZATION_API VStringLiteral
 		virtual void determineChildren();
 
 	private:
-		Visualization::Static* pre_;
-		Visualization::Static* post_;
-		Visualization::VText* vis_;
+		Visualization::Static* pre_{};
+		Visualization::Static* post_{};
+		Visualization::VText* vis_{};
 };
 
 }

@@ -50,6 +50,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 	QString token;
 	bool escaped = false;
 	bool inString = false;
+	QChar stringStartChar;
 
 	for (int i = 0; i<input.size(); ++i )
 	{
@@ -62,7 +63,11 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		if (token.size() == 1)
 		{
 			first = ch;
-			if (first == '"') inString = true;
+			if (first == '"' || first == '\'')
+			{
+				inString = true;
+				stringStartChar = ch;
+			}
 		}
 
 		// Determine whether to finalize the current token
@@ -71,7 +76,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		bool stringFinished = false;
 		if (inString)
 		{
-			stringFinished = token.size()>1 && !escaped && ch == '"';
+			stringFinished = token.size()>1 && !escaped && (ch == stringStartChar);
 			finalizeToken = stringFinished || next.isNull();
 			escaped = !escaped && ch == '\\';
 		}

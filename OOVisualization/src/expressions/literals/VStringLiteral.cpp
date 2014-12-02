@@ -27,7 +27,6 @@
 #include "VStringLiteral.h"
 
 #include "VisualizationBase/src/items/Static.h"
-#include "ModelBase/src/model/TreeManager.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -36,13 +35,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VStringLiteral, "item")
 
-VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style) :
-	Super(parent, literal, style),
-	pre_(nullptr),
-	post_(nullptr),
-	vis_(nullptr)
-{
-}
+VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style)
+: Super{parent, literal, style} {}
 
 VStringLiteral::~VStringLiteral()
 {
