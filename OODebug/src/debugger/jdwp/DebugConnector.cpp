@@ -71,10 +71,40 @@ void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 void DebugConnector::read()
 {
 	read(-1);
+	auto it = readyData_.begin();
+	while (it != readyData_.end())
+	{
+		auto data = *it;
+		auto command = makeReply<Command>(data);
+		if (command.commandSet() == Protocol::CommandSet::Event
+			 && command.command() == MessagePart::cast(Protocol::EventCommands::Composite))
+		{
+			readyData_.erase(it);
+			handleComposite(data);
+			// The handling of one event might mess with our iterator so just emit the signal that we get called again
+			// once the handling is done
+			emit tcpSocket_.readyRead();
+			break;
+		}
+		else
+		{
+			++it;
+		}
+	}
 }
 
 int DebugConnector::read(qint32 requestId)
 {
+	// First check if the data is already here
+	if (requestId != -1)
+	{
+		for (int i = 0; i < readyData_.length(); ++i)
+		{
+			auto r = makeReply<Reply>(readyData_[i]);
+			if (r.id() == requestId) return i;
+		}
+	}
+
 	QByteArray read = tcpSocket_.readAll();
 	// If we still have a part of a packet add it here.
 	if (!incompleteData_.isEmpty())
@@ -106,16 +136,9 @@ int DebugConnector::read(qint32 requestId)
 	{
 		incompleteData_ = read;
 		incompleteData_.remove(0, packetLen);
-		// trigger reads such that we handle the additional data
-		if (-1 == id) this->read();
 	}
 	read.remove(packetLen + 1, read.length());
 
-	if (-1 == requestId)
-	{
-		handleComposite(read);
-		return 0;
-	}
 	auto nextInd = readyData_.length();
 	readyData_ << read;
 	if (requestId == id) return nextInd;
@@ -160,7 +183,7 @@ void DebugConnector::readHandshake()
 			read.remove(0, Protocol::handshake.length());
 			incompleteData_ = read;
 			// trigger reads such that we handle the additional data
-			this->read();
+			this->read(-1);
 		}
 		checkVersion();
 		checkIdSizes();
