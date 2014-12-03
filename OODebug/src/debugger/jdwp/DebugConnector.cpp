@@ -64,8 +64,9 @@ void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHo
 
 void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 {
-	qDebug() << "ERROR: " << socketError;
-	qDebug() << socketError;
+	// If the VM just went off we will receive a remote closed error this expected:
+	if (socketError == QAbstractSocket::RemoteHostClosedError && !vmAlive_) return;
+	qDebug() << "Socket ERROR: " << socketError;
 }
 
 void DebugConnector::read()
@@ -191,7 +192,9 @@ void DebugConnector::readHandshake()
 	}
 	else
 	{
-		qDebug() << "Handshake not received: " << read.toHex() << Protocol::handshake.toHex();
+		// We didn't receive the handshake, this should never happen, so we just stop here.
+		// In the future we should handle this somehow nicer.
+		Q_ASSERT(0);
 	}
 }
 
@@ -272,7 +275,11 @@ void DebugConnector::handleComposite(QByteArray data)
 
 	for (auto& event : c.events())
 	{
-		if (auto listener = eventListeners_[event.eventKind()])
+		if (Protocol::EventKind::VM_START == event.eventKind())
+			vmAlive_ = true;
+		else if (Protocol::EventKind::VM_DEATH == event.eventKind())
+			vmAlive_ = false;
+		else if (auto listener = eventListeners_[event.eventKind()])
 			listener(event);
 		else
 			qDebug() << "EVENT" << static_cast<int>(event.eventKind());

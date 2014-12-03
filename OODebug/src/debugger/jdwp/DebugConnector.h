@@ -63,7 +63,7 @@ class OODEBUG_API DebugConnector : public QObject
 		qint64 getMethodId(qint64 classId, const QString& signature);
 		int sendBreakpoint(Location breakLocation);
 	private:
-		static void handleSocketError(QAbstractSocket::SocketError socketError);
+		void handleSocketError(QAbstractSocket::SocketError socketError);
 		void read();
 		int read(qint32 requestId);
 
@@ -91,6 +91,8 @@ class OODEBUG_API DebugConnector : public QObject
 
 		// Each entry is a full Message which is ready to be parsed & handled
 		QList<QByteArray> readyData_;
+
+		bool vmAlive_{};
 };
 
 /**
