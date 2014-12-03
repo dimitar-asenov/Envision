@@ -71,13 +71,13 @@ BreakClassLoad::BreakClassLoad(QString classToBreak)
 BreakClassLoad::~BreakClassLoad() {}
 
 
-BreakPointCommand::BreakPointCommand(Location breakLocation) : EventSetCommand(Protocol::EventKind::BREAKPOINT)
+BreakpointCommand::BreakpointCommand(Location breakLocation) : EventSetCommand(Protocol::EventKind::BREAKPOINT)
 {
 	suspendPolicy = Protocol::SuspendPolicy::ALL;
 	modifiers = {Modifier::makeLocation(breakLocation)};
 }
 
-BreakPointCommand::~BreakPointCommand() {}
+BreakpointCommand::~BreakpointCommand() {}
 
 EventSetReply::~EventSetReply() {}
 

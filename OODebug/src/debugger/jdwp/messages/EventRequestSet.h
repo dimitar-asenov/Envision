@@ -78,9 +78,9 @@ struct BreakClassLoad : public EventSetCommand
 		virtual ~BreakClassLoad() override;
 };
 
-struct BreakPointCommand : public EventSetCommand {
-		BreakPointCommand(Location breakLocation);
-		virtual ~BreakPointCommand() override;
+struct BreakpointCommand : public EventSetCommand {
+		BreakpointCommand(Location breakLocation);
+		virtual ~BreakpointCommand() override;
 };
 
 struct EventSetReply : public Reply {
