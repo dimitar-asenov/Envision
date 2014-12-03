@@ -31,6 +31,7 @@
 #include "../Command.h"
 #include "../MessagePart.h"
 #include "../Reply.h"
+#include "../Location.h"
 
 // https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_Event_Composite
 
@@ -54,12 +55,20 @@ struct ClassPrepare : public MessagePart
 		MessageField<qint32> status{&ClassPrepare::status, this};
 };
 
+struct BreakpointEvent : public MessagePart
+{
+		MessageField<qint32> requestID{&BreakpointEvent::requestID, this};
+		MessageField<qint64> thread{&BreakpointEvent::thread, this};
+		MessageField<Location> location{&BreakpointEvent::location, this};
+};
+
 struct Event : public MessagePart
 {
 		virtual ~Event() override;
 		MessageField<Protocol::EventKind> eventKind{&Event::eventKind, this};
 
 		MessageField<VMStart, cast(Protocol::EventKind::VM_START)> vmStart{&Event::vmStart, this};
+		MessageField<BreakpointEvent, cast(Protocol::EventKind::BREAKPOINT)> breakpoint{&Event::breakpoint, this};
 		MessageField<ClassPrepare, cast(Protocol::EventKind::CLASS_PREPARE)> classPrepare{&Event::classPrepare, this};
 
 		virtual int kind() const override;
