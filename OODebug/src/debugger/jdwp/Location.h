@@ -40,6 +40,8 @@ namespace OODebug {
  */
 struct Location : public MessagePart
 {
+		Location() = default;
+		Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex);
 		virtual ~Location() override;
 		MessageField<Protocol::TypeTagKind> typeTag{&Location::typeTag, this};
 		MessageField<qint64> classId{&Location::classId, this};

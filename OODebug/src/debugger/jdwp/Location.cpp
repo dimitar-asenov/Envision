@@ -28,6 +28,14 @@
 
 namespace OODebug {
 
+Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex)
+{
+	this->typeTag = typeTag;
+	this->classId = classId;
+	this->methodId = methodId;
+	this->methodIndex = methodIndex;
+}
+
 Location::~Location() {}
 
 } /* namespace OODebug */
