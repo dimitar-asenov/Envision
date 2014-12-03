@@ -223,6 +223,23 @@ qint64 DebugConnector::getClassId(const QString& signature)
 	}
 }
 
+qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
+{
+	auto methods = makeReply<MethodsReply>(sendCommand(MethodsCommand(classId)));
+	for (auto method : methods.methods())
+	{
+		// TODO: check for signature
+		if (method.name() == signature) return method.methodID();
+	}
+	return -1;
+}
+
+int DebugConnector::sendBreakpoint(Location breakLocation)
+{
+	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));
+	return r.requestId();
+}
+
 void DebugConnector::handleComposite(QByteArray data)
 {
 	auto c = makeReply<CompositeCommand>(data);

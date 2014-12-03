@@ -37,6 +37,7 @@ class Command;
 class Event;
 
 class VersionInfo;
+class Location;
 
 class OODEBUG_API DebugConnector : public QObject
 {
@@ -59,6 +60,8 @@ class OODEBUG_API DebugConnector : public QObject
 		bool resume();
 
 		qint64 getClassId(const QString& signature);
+		qint64 getMethodId(qint64 classId, const QString& signature);
+		int sendBreakpoint(Location breakLocation);
 	private:
 		static void handleSocketError(QAbstractSocket::SocketError socketError);
 		void read();

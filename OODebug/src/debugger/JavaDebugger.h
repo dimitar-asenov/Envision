@@ -31,6 +31,7 @@
 #include "metadata/Breakpoint.h"
 
 namespace Model {
+	class Node;
 	class TreeManager;
 }
 
@@ -44,6 +45,8 @@ namespace Visualization {
 }
 
 namespace OODebug {
+
+class Location;
 
 class OODEBUG_API JavaDebugger
 {
@@ -60,6 +63,8 @@ class OODEBUG_API JavaDebugger
 		 * Returns a String with all containing module names split by \a delim in front of the \a clazz name.
 		 */
 		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
+
+		Location nodeToLocation(Model::Node* node);
 
 		void handleClassPrepare(Event e);
 

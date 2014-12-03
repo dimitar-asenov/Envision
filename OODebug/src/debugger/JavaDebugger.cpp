@@ -28,6 +28,9 @@
 
 #include "../run_support/java/JavaRunner.h"
 #include "jdwp/messages/EventSet.h"
+#include "jdwp/Location.h"
+
+#include "ModelBase/src/nodes/Node.h"
 
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
@@ -119,6 +122,26 @@ QString JavaDebugger::fullNameFor(OOModel::Class* theClass, QChar delimiter)
 	return fullName;
 }
 
+Location JavaDebugger::nodeToLocation(Model::Node* node)
+{
+	auto method = node->firstAncestorOfType<OOModel::Method>();
+	auto containerClass = method->firstAncestorOfType<OOModel::Class>();
+	qint64 classId =  debugConnector_.getClassId(jvmSignatureFor(containerClass));
+	// TODO: function to get signature of a method: for Java classes we would need the full java library.
+	// Once fixed also fix the implementation of getMethodId().
+	qint64 methodId = debugConnector_.getMethodId(classId, method->name());
+	Q_ASSERT(methodId != -1);
+
+	auto tagKind = Protocol::TypeTagKind::CLASS;
+	if (containerClass->constructKind() == OOModel::Class::ConstructKind::Interface)
+		tagKind = Protocol::TypeTagKind::INTERFACE;
+	else if (containerClass->constructKind() != OOModel::Class::ConstructKind::Class)
+		Q_ASSERT(0); // This should not happen for a Java project!
+
+	// TODO: fix method index
+	return Location(tagKind, classId, methodId, 0);
+}
+
 void JavaDebugger::handleClassPrepare(Event e)
 {
 	qDebug() << "Prepare" << e.classPrepare().signature();
@@ -126,10 +149,9 @@ void JavaDebugger::handleClassPrepare(Event e)
 	{
 		auto target = it.key();
 		auto targetNode = target->node();
-		auto method = targetNode->firstAncestorOfType<OOModel::Method>();
-		auto clazz = method->firstAncestorOfType<OOModel::Class>();
-		qDebug() << debugConnector_.getClassId(jvmSignatureFor(clazz));
+		debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
 	}
+	debugConnector_.resume();
 }
 
 } /* namespace OODebug */
