@@ -30,9 +30,11 @@ namespace OODebug {
 
 JVMMethod::~JVMMethod() {}
 
-MethodsCommand::MethodsCommand()
+MethodsCommand::MethodsCommand(qint64 classId)
 	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::Methods)
-{}
+{
+	refTypeId = classId;
+}
 
 MethodsCommand::~MethodsCommand() {}
 

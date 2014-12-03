@@ -42,7 +42,7 @@ struct JVMMethod : public MessagePart {
 };
 
 struct MethodsCommand : public Command {
-		MethodsCommand();
+		MethodsCommand(qint64 classId);
 		virtual ~MethodsCommand() override;
 		MessageField<qint64> refTypeId{&MethodsCommand::refTypeId, this};
 };
