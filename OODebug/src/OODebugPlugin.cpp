@@ -62,8 +62,13 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	// Register our breakpoint key handler
 	// TODO: once we have a better mechanism update this.
 	OOInteraction::HStatement::instance()->registerKeyPressHandler(
-				[] (Visualization::Item *target, QKeyEvent *event) {
+				[] (Visualization::Item* target, QKeyEvent* event) {
 		return JavaDebugger::instance().addBreakpoint(target, event);
+	});
+	// TODO: this should be a general interaction not only on statements.
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().resume(target, event);
 	});
 
 	return true;

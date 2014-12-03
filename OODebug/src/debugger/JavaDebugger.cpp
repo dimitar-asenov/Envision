@@ -80,6 +80,16 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 	return false;
 }
 
+bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
+{
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F6))
+	{
+		debugConnector_.resume();
+		return true;
+	}
+	return false;
+}
+
 JavaDebugger::JavaDebugger()
 {
 	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});

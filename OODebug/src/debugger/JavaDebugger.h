@@ -54,6 +54,7 @@ class OODEBUG_API JavaDebugger
 		static JavaDebugger& instance();
 		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
 		bool addBreakpoint(Visualization::Item* target, QKeyEvent* event);
+		bool resume(Visualization::Item* target, QKeyEvent* event);
 
 	private:
 		JavaDebugger();
