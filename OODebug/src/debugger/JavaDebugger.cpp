@@ -103,7 +103,6 @@ Visualization::MessageOverlay* JavaDebugger::addBreakpointOverlay(Visualization:
 	// TODO: Use a custom overlay for breakpoints.
 	static const QString overlayGroupName("Breakpoint overlay");
 	auto scene = target->scene();
-	// TODO: QUESTION: overlayGroup could just create a group if there is none?
 	auto overlayGroup = scene->overlayGroup(overlayGroupName);
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
