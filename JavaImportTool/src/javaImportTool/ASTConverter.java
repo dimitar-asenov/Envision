@@ -386,7 +386,12 @@ public class ASTConverter {
 		Node node = null;
 		List<Node> multipleNodes = null;
 		
-		if ( s instanceof AssertStatement); // TODO: Implement this
+		if ( s instanceof AssertStatement)
+		{
+	    	node = new Node(null, "AssertStatement", name);
+	    	AssertStatement as = (AssertStatement) s;
+	    	node.setChild("expression", expression(as.getExpression(), "expression"));
+	    }
 	    else if ( s instanceof Block)
 	    {
 	    	node = new Node(null, "Block", name);
@@ -1142,11 +1147,22 @@ public class ASTConverter {
 			System.out.print(String.format("lines=%" + 3 + "d\t", bodyLength)); // Print body length
 			System.out.print(String.format("args=%" + 2 + "d\t", method.parameters().size())); // Print num arguments
 			
+			// If statements
 			NodeMetrics ifMetrics = computeMetrics(method, new int[]{ASTNode.IF_STATEMENT});
 			System.out.print("if="+ifMetrics.count + "," + ifMetrics.nesting + "\t");
+			
+			// Loops
 			NodeMetrics loopMetrics = computeMetrics(method, new int[]
 					{ASTNode.FOR_STATEMENT, ASTNode.WHILE_STATEMENT, ASTNode.DO_STATEMENT});
 			System.out.print("loop="+loopMetrics.count + "," + loopMetrics.nesting + "\t");
+			
+			// Try blocks
+			NodeMetrics tryMetrics = computeMetrics(method, new int[]{ASTNode.TRY_STATEMENT});
+			System.out.print("try="+tryMetrics.count + "," + tryMetrics.nesting + "\t");
+			
+			// Catch blocks
+			NodeMetrics catchMetrics = computeMetrics(method, new int[] {ASTNode.CATCH_CLAUSE});
+			System.out.print("catch="+catchMetrics.count + "," + catchMetrics.nesting + "\t");
 					
 			// Print path
 			Node pathNode = containers.peek().parent();

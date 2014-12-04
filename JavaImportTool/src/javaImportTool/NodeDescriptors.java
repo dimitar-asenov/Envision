@@ -164,6 +164,9 @@ public class NodeDescriptors {
 		add( new NodeInitializer("CatchClause", new String[][]{
 				{"StatementItemList","body"}
 		}));
+		add( new NodeInitializer("AssertStatement", new String[][]{
+				{"Expression","expression"}
+		}));
 		
 		// Expressions
 		add( new NodeInitializer("ReferenceExpression", new String[][]{

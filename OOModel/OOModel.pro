@@ -5,7 +5,8 @@ win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
     -lcomments
-HEADERS += src/expressions/InstanceOfExpression.h \
+HEADERS += src/statements/AssertStatement.h \
+    src/expressions/InstanceOfExpression.h \
     src/expressions/SuperExpression.h \
     src/typesystem/JavaTypeSystem.h \
     src/typesystem/TypeSystem.h \
@@ -98,7 +99,8 @@ HEADERS += src/expressions/InstanceOfExpression.h \
     src/expressions/GlobalScopeExpression.h \
     src/declarations/ExplicitTemplateInstantiation.h \
     src/OOModelPlugin.h
-SOURCES += src/expressions/InstanceOfExpression.cpp \
+SOURCES += src/statements/AssertStatement.cpp \
+    src/expressions/InstanceOfExpression.cpp \
     src/expressions/SuperExpression.cpp \
     src/typesystem/JavaTypeSystem.cpp \
     src/typesystem/TypeSystem.cpp \

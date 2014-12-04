@@ -50,6 +50,7 @@
 #include "statements/ExpressionStatement.h"
 #include "statements/DeclarationStatement.h"
 #include "statements/TryCatchFinallyStatement.h"
+#include "statements/AssertStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"

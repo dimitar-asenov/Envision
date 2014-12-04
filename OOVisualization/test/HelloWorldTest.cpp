@@ -446,6 +446,10 @@ Method* addLongMethod(Class* parent)
 	auto argumentCommentNode3 = new CommentNode("[image#styles/icon/gurica_tree.svg]");
 	arg3->setComment(argumentCommentNode3);
 
+	auto assertSt = new AssertStatement();
+	longMethod->items()->append(assertSt);
+	assertSt->setExpression(new ReferenceExpression("someValue"));
+
 	auto var0 = new VariableDeclarationExpression("pSystem");
 	var0->decl()->setTypeExpression(new PointerTypeExpression(new ClassTypeExpression(
 			new ReferenceExpression("System", new ReferenceExpression("Java")))));

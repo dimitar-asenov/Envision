@@ -255,7 +255,8 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 		if ( (enterPressed || spacePressed)
 				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if" || trimmedText == "class"
 						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return" ||
-						trimmedText == "do" || trimmedText == "//"))
+						trimmedText == "do" || trimmedText == "//" || trimmedText == "switch" || trimmedText == "case"
+						|| trimmedText == "try" || trimmedText == "assert"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
@@ -326,6 +327,39 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				comment->commentNode()->lines()->append(line);
 				toFocus = line;
 				st = comment;
+			}
+			else if (trimmedText == "switch")
+			{
+				auto switchs =  new SwitchStatement();
+				switchs->setSwitchExpression(new EmptyExpression());
+
+				toFocus = switchs->switchExpression();
+				st = switchs;
+			}
+			else if (trimmedText == "case")
+			{
+				auto cases =  new CaseStatement();
+				cases->setCaseExpression(new EmptyExpression());
+
+				toFocus = cases->caseExpression();
+				st = cases;
+			}
+			else if (trimmedText == "try")
+			{
+				auto trys =  new TryCatchFinallyStatement();
+				auto empty = new EmptyExpression();
+				trys->tryBody()->append(new ExpressionStatement(empty));
+
+				toFocus = empty;
+				st = trys;
+			}
+			else if (trimmedText == "assert")
+			{
+				auto asserts =  new AssertStatement();
+				asserts->setExpression(new EmptyExpression());
+
+				toFocus = asserts->expression();
+				st = asserts;
 			}
 
 			Model::Node* containerNode = replaceStatement->parent();
@@ -520,7 +554,8 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	// Try to match built in keywords and types
 	{
 		auto matcher = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
-		for (QString str : {"int", "bool", "long", "float", "double", "short", "byte", "char", "for", "if", "while"})
+		for (QString str : {"int", "bool", "long", "float", "double", "short", "byte", "char", "for", "if", "while",
+									"do", "switch", "case", "try", "assert", "foreach", "continue", "break", "return"})
 			if (matcher.exactMatch(str))
 				autoCompleteCandidates.append(str);
 	}
