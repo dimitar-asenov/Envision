@@ -47,6 +47,7 @@ namespace Visualization {
 namespace OODebug {
 
 class Location;
+class BreakpointEvent;
 
 class OODEBUG_API JavaDebugger
 {
@@ -68,10 +69,12 @@ class OODEBUG_API JavaDebugger
 		Location nodeToLocation(Model::Node* node);
 
 		void handleClassPrepare(Event e);
+		void handleBreakpoint(BreakpointEvent breakpointEvent);
 
 		DebugConnector debugConnector_;
 
 		QHash<Visualization::Item*, Breakpoint> breakpoints_;
+		Visualization::Item* currentBreakpointKey_{};
 };
 
 } /* namespace OODebug */

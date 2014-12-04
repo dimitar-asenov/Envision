@@ -88,6 +88,12 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F6))
 	{
 		debugConnector_.resume();
+		if (currentBreakpointKey_)
+		{
+			// unset the breakpoint
+			breakpoints_[currentBreakpointKey_].overlay_->setStyle(
+						Visualization::MessageOverlay::itemStyles().get("default"));
+		}
 		return true;
 	}
 	return false;
@@ -96,6 +102,8 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 JavaDebugger::JavaDebugger()
 {
 	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});
+	debugConnector_.addEventListener(Protocol::EventKind::BREAKPOINT,
+												[this] (Event e) { handleBreakpoint(e.breakpoint()); });
 }
 
 Visualization::MessageOverlay* JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
@@ -163,6 +171,18 @@ void JavaDebugger::handleClassPrepare(Event)
 		it.value().requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
 	}
 	debugConnector_.resume();
+}
+
+void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
+{
+	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
+	{
+		if (it->requestId_ == breakpointEvent.requestID())
+		{
+			currentBreakpointKey_ = it.key();
+			it->overlay_->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
+		}
+	}
 }
 
 } /* namespace OODebug */
