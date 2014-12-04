@@ -225,13 +225,19 @@ void DebugConnector::sendBreakAtStart()
 {
 	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(mainClassName_)));
 	Q_ASSERT(Protocol::Error::NONE == r.error());
+	// trigger event handling such that we get the VM start event before we resume
+	read();
 	resume();
 }
 
 bool DebugConnector::resume()
 {
-	auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
-	return Protocol::Error::NONE == r.error();
+	if (vmAlive_)
+	{
+		auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
+		return Protocol::Error::NONE == r.error();
+	}
+	return false;
 }
 
 qint64 DebugConnector::getClassId(const QString& signature)
