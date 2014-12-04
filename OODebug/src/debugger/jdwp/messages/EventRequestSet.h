@@ -88,4 +88,11 @@ struct EventSetReply : public Reply {
 		MessageField<qint32> requestId{&EventSetReply::requestId, this};
 };
 
+struct EventClearCommand : public Command {
+		EventClearCommand(Protocol::EventKind kind, qint32 requestId);
+		virtual ~EventClearCommand();
+		MessageField<Protocol::EventKind> eventKind{&EventClearCommand::eventKind, this};
+		MessageField<qint32> requestID{&EventClearCommand::requestID, this};
+};
+
 } /* namespace OODebug */

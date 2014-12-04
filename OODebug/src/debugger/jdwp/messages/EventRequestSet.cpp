@@ -81,4 +81,13 @@ BreakpointCommand::~BreakpointCommand() {}
 
 EventSetReply::~EventSetReply() {}
 
+EventClearCommand::EventClearCommand(Protocol::EventKind kind, qint32 requestId)
+	: Command(Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Clear)
+{
+	eventKind = kind;
+	requestID = requestId;
+}
+
+EventClearCommand::~EventClearCommand() {}
+
 } /* namespace OODebug */

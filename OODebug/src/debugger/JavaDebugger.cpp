@@ -67,13 +67,16 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		if (it != breakpoints_.end())
 		{
 			target->scene()->removeOverlay(it->overlay_);
-			// TODO send clear
+			if (debugConnector_.vmRunning() && it->requestId_ > 0)
+				debugConnector_.clearBreakpoint(it->requestId_);
 			breakpoints_.erase(it);
 		}
 		else
 		{
-			breakpoints_[target] = Breakpoint(addBreakpointOverlay(target));
-			// TODO send request
+			auto breakpoint = Breakpoint(addBreakpointOverlay(target));
+			if (debugConnector_.vmRunning())
+				breakpoint.requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(target->node()));
+			breakpoints_[target] = breakpoint;
 		}
 		return true;
 	}
@@ -152,14 +155,13 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	return Location(tagKind, classId, methodId, 0);
 }
 
-void JavaDebugger::handleClassPrepare(Event e)
+void JavaDebugger::handleClassPrepare(Event)
 {
-	qDebug() << "Prepare" << e.classPrepare().signature();
 	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
 	{
 		auto target = it.key();
 		auto targetNode = target->node();
-		debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
+		it.value().requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
 	}
 	debugConnector_.resume();
 }

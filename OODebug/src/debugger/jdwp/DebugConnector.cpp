@@ -266,6 +266,12 @@ int DebugConnector::sendBreakpoint(Location breakLocation)
 	return r.requestId();
 }
 
+bool DebugConnector::clearBreakpoint(qint32 requestId)
+{
+	auto r = makeReply<Reply>(sendCommand(EventClearCommand(Protocol::EventKind::BREAKPOINT, requestId)));
+	return r.error() == Protocol::Error::NONE;
+}
+
 void DebugConnector::handleComposite(QByteArray data)
 {
 	auto c = makeReply<CompositeCommand>(data);
