@@ -24,11 +24,30 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
 #include "MethodSet.h"
-#include "EventRequestSet.h"
-#include "EventSet.h"
+
+namespace OODebug {
+
+LineTableCommand::LineTableCommand(qint64 classId, qint64 methodId)
+	: Command(Protocol::CommandSet::Method, Protocol::MethodCommands::LineTable)
+{
+	refTypeId = classId;
+	methodID = methodId;
+}
+
+LineTableCommand::~LineTableCommand() {}
+CodeIndexLine::~CodeIndexLine() {}
+LineTable::~LineTable() {}
+
+VariableTableCommand::VariableTableCommand(qint64 classId, qint64 methodId)
+	: Command(Protocol::CommandSet::Method, Protocol::MethodCommands::VariableTable)
+{
+	refTypeId = classId;
+	methodID = methodId;
+}
+
+VariableTableCommand::~VariableTableCommand() {}
+VariableDetails::~VariableDetails() {}
+VariableTable::~VariableTable() {}
+
+}
