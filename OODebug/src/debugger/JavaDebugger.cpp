@@ -74,6 +74,7 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		auto it = breakpoints_.find(target);
 		if (it != breakpoints_.end())
 		{
+			if (currentBreakpointKey_ == target) currentBreakpointKey_ = nullptr;
 			target->scene()->removeOverlay(it->overlay_);
 			if (debugConnector_.vmRunning() && it->requestId_ > 0)
 				debugConnector_.clearBreakpoint(it->requestId_);
@@ -98,9 +99,17 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 		debugConnector_.resume();
 		if (currentBreakpointKey_)
 		{
-			// unset the breakpoint
-			breakpoints_[currentBreakpointKey_].overlay_->setStyle(
-						Visualization::MessageOverlay::itemStyles().get("default"));
+			auto it = breakpoints_.find(currentBreakpointKey_);
+			if (it != breakpoints_.end())
+			{
+				// unset the breakpoint
+				it->overlay_->setStyle(Visualization::MessageOverlay::itemStyles().get("default"));
+			}
+			else
+			{
+				// there is no current breakpoint no more
+				currentBreakpointKey_ = nullptr;
+			}
 		}
 		return true;
 	}
