@@ -28,85 +28,21 @@
 
 #include "../../oodebug_api.h"
 
-#include "Protocol.h"
+#include "../jdwp/messages/MethodSet.h"
 
 namespace OODebug {
 
-class Command;
-
-class Event;
-
-class VersionInfo;
-class Location;
-class LineTable;
-
-class OODEBUG_API DebugConnector : public QObject
-{
-	Q_OBJECT
-
+class JavaMethod {
 	public:
-		DebugConnector();
-		~DebugConnector();
+		JavaMethod(LineTable lineTable);
 
-		using EventListener = std::function<void (Event)>;
-
-		/**
-		 * As certain info is only available when we load the class where the main method resides
-		 * you need to pass the name of the class where the main method is in, in \a mainClassName.
-		 */
-		void connect(QString mainClassName, QString vmHostName = "localhost", int vmHostPort = 4000);
-
-		void addEventListener(Protocol::EventKind kind, EventListener listener);
-
-		bool resume();
-
-		qint64 getClassId(const QString& signature);
-		qint64 getMethodId(qint64 classId, const QString& signature);
-		LineTable getLineTable(qint64 classId, qint64 methodId);
-
-		int sendBreakpoint(Location breakLocation);
-		bool clearBreakpoint(qint32 requestId);
-
-		bool vmRunning();
+		qint64 indexForLine(qint32 line);
 	private:
-		void handleSocketError(QAbstractSocket::SocketError socketError);
-		void read();
-		int read(qint32 requestId);
+		QMultiHash<qint32, qint64> lineToCode_;
 
-		QByteArray sendCommand(const Command& command);
-
-		void readHandshake();
-		void sendHandshake();
-
-		void checkVersion();
-		void checkIdSizes();
-
-		void sendBreakAtStart();
-
-		void handleComposite(QByteArray data);
-
-		QTcpSocket tcpSocket_;
-
-		QByteArray incompleteData_;
-
-		QString mainClassName_;
-
-		QHash<Protocol::EventKind, EventListener> eventListeners_;
-
-		QHash<QString, qint64> classIdMap_;
-
-		// Each entry is a full Message which is ready to be parsed & handled
-		QList<QByteArray> readyData_;
-
-		bool vmAlive_{};
 };
 
-/**
- * Adds a new event listener for the \a kind of event.
- * If there is already a listener for this kind the previous one is replaced!
- */
-inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
-{ eventListeners_[kind] = listener; }
-inline bool DebugConnector::vmRunning() { return vmAlive_; }
+// Just return the first index.
+inline qint64 JavaMethod::indexForLine(qint32 line) { return lineToCode_.find(line).value(); }
 
 } /* namespace OODebug */

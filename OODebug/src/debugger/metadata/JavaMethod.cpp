@@ -24,66 +24,14 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../oodebug_api.h"
-#include "jdwp/DebugConnector.h"
-#include "metadata/Breakpoint.h"
-#include "metadata/JavaMethod.h"
-
-namespace Export {
-	class TextToNodeMap;
-}
-
-namespace Model {
-	class Node;
-	class TreeManager;
-}
-
-namespace OOModel {
-	class Class;
-}
-
-namespace Visualization {
-	class Item;
-	class MessageOverlay;
-}
+#include "JavaMethod.h"
 
 namespace OODebug {
 
-class Location;
-class BreakpointEvent;
-
-class OODEBUG_API JavaDebugger
+JavaMethod::JavaMethod(LineTable lineTable)
 {
-	public:
-		static JavaDebugger& instance();
-		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
-		bool addBreakpoint(Visualization::Item* target, QKeyEvent* event);
-		bool resume(Visualization::Item* target, QKeyEvent* event);
-
-	private:
-		JavaDebugger();
-		Visualization::MessageOverlay* addBreakpointOverlay(Visualization::Item* target);
-		QString jvmSignatureFor(OOModel::Class* theClass);
-		/**
-		 * Returns a String with all containing module names split by \a delim in front of the \a clazz name.
-		 */
-		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
-
-		Location nodeToLocation(Model::Node* node);
-
-		void handleClassPrepare(Event e);
-		void handleBreakpoint(BreakpointEvent breakpointEvent);
-
-		DebugConnector debugConnector_;
-
-		QHash<Visualization::Item*, Breakpoint> breakpoints_;
-		Visualization::Item* currentBreakpointKey_{};
-
-		QHash<QPair<qint64, qint64>, JavaMethod> methodInfos_;
-
-		std::shared_ptr<Export::TextToNodeMap> exportMap_;
-};
+	for (auto val : lineTable.mappings())
+		lineToCode_.insert(val.lineNumber(), val.lineCodeIndex());
+}
 
 } /* namespace OODebug */

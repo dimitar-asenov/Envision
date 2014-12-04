@@ -266,6 +266,11 @@ qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
 	return -1;
 }
 
+LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
+{
+	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
+}
+
 int DebugConnector::sendBreakpoint(Location breakLocation)
 {
 	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));

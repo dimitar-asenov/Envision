@@ -30,11 +30,14 @@
 #include "jdwp/messages/EventSet.h"
 #include "jdwp/Location.h"
 
+#include "JavaExport/src/exporter/JavaExporter.h"
+
 #include "ModelBase/src/nodes/Node.h"
 
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Module.h"
+#include "OOModel/src/declarations/Project.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
@@ -50,10 +53,15 @@ JavaDebugger& JavaDebugger::instance()
 
 void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
 {
+	auto project = DCast<OOModel::Project>(manager->root());
+	Q_ASSERT(project);
+
 	Model::Node* mainContainer = JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
 	// Find the class name where the main method is in.
 	auto mainClass = mainContainer->firstAncestorOfType<OOModel::Class>();
 	Q_ASSERT(mainClass);
+
+	exportMap_ = JavaExport::JavaExporter::exportMaps().map(project);
 
 	QString mainClassName = fullNameFor(mainClass, '.');
 	debugConnector_.connect(mainClassName);
@@ -158,8 +166,17 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	else if (containerClass->constructKind() != OOModel::Class::ConstructKind::Class)
 		Q_ASSERT(0); // This should not happen for a Java project!
 
-	// TODO: fix method index
-	return Location(tagKind, classId, methodId, 0);
+	auto locations = exportMap_->locations(node);
+	int line = locations.at(0).span_.startLine_ + 1;
+
+	// Check if we have line info for this method
+	auto key = qMakePair(classId, methodId);
+	auto it = methodInfos_.find(key);
+	if (it == methodInfos_.end())
+		it = methodInfos_.insert(key, JavaMethod(debugConnector_.getLineTable(classId, methodId)));
+	qint64 methodIndex = it->indexForLine(line);
+
+	return Location(tagKind, classId, methodId, methodIndex);
 }
 
 void JavaDebugger::handleClassPrepare(Event)
