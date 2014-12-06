@@ -27,7 +27,7 @@
 #include "JavaDebugger.h"
 
 #include "../run_support/java/JavaRunner.h"
-#include "jdwp/messages/EventSet.h"
+#include "jdwp/messages/AllMessages.h"
 #include "jdwp/Location.h"
 
 #include "JavaExport/src/exporter/JavaExporter.h"
@@ -207,6 +207,30 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		{
 			currentBreakpointKey_ = it.key();
 			it->overlay_->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
+			// Get frames
+			auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
+			auto location = breakpointEvent.location();
+			auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
+			auto currentFrame = frames.frames()[0];
+			int currentIndex = currentFrame.location().methodIndex();
+
+			QList<StackVariable> varsToGet;
+			for (auto variableDetails : variableTable.variables())
+			{
+				if (variableDetails.slot() < currentIndex)
+				{
+					qDebug() << "**" << variableDetails.slot() << variableDetails.name();
+					// TODO: use actual type
+					varsToGet << StackVariable(variableDetails.slot(), Protocol::Tag::INT);
+				}
+			}
+
+			auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+			for (auto val : values.values())
+			{
+				// TODO: know the variable a value belongs to
+				qDebug() << "##" << val.intValue();
+			}
 		}
 	}
 }

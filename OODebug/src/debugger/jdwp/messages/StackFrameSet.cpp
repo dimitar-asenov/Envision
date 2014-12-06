@@ -24,13 +24,29 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
-#include "MethodSet.h"
-#include "ThreadSet.h"
-#include "EventRequestSet.h"
 #include "StackFrameSet.h"
-#include "EventSet.h"
+
+namespace OODebug {
+
+OODebug::StackVariable::StackVariable(qint32 slot, OODebug::Protocol::Tag type)
+{
+	this->slot = slot;
+	sigbyte = type;
+}
+
+StackVariable::~StackVariable() {}
+
+GetValuesCommand::GetValuesCommand(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
+	: Command(Protocol::CommandSet::StackFrame, Protocol::StackFrameCommands::GetValues)
+{
+	thread = threadId;
+	frame = frameId;
+	this->variables = variables;
+}
+
+GetValuesCommand::~GetValuesCommand() {}
+Value::~Value() {}
+
+int Value::kind() const { return cast(type()); }
+
+} /* namespace OODebug */

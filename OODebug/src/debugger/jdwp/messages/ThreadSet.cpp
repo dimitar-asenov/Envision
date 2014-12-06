@@ -24,13 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
-#include "MethodSet.h"
 #include "ThreadSet.h"
-#include "EventRequestSet.h"
-#include "StackFrameSet.h"
-#include "EventSet.h"
+
+namespace OODebug {
+
+FramesCommand::FramesCommand(qint64 threadId, qint32 startFrame, qint32 numberOfFrames)
+	: Command(Protocol::CommandSet::ThreadReference, Protocol::ThreadReferenceCommands::Frames)
+{
+	thread = threadId;
+	this->startFrame = startFrame;
+	length = numberOfFrames;
+}
+
+FramesCommand::~FramesCommand() {}
+Frame::~Frame() {}
+Frames::~Frames() {}
+
+} /* namespace OODebug */

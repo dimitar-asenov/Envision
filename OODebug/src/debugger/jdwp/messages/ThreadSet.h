@@ -26,11 +26,39 @@
 
 #pragma once
 
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
-#include "MethodSet.h"
-#include "ThreadSet.h"
-#include "EventRequestSet.h"
-#include "StackFrameSet.h"
-#include "EventSet.h"
+#include "../../../oodebug_api.h"
+
+#include "../Command.h"
+#include "../MessagePart.h"
+#include "../Reply.h"
+#include "../Location.h"
+
+namespace OODebug {
+
+// https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_ThreadReference
+
+struct FramesCommand : public Command {
+		FramesCommand(qint64 threadId, qint32 startFrame, qint32 numberOfFrames);
+		virtual ~FramesCommand() override;
+		/** The thread object ID.  */
+		MessageField<qint64> thread{&FramesCommand::thread, this};
+		/** The index of the first frame to retrieve. */
+		MessageField<qint32> startFrame{&FramesCommand::startFrame, this};
+		/** The count of frames to retrieve (-1 means all remaining).  */
+		MessageField<qint32> length{&FramesCommand::length, this};
+};
+
+struct Frame : public MessagePart {
+		virtual ~Frame() override;
+		/** The ID of this frame.  */
+		MessageField<qint64> frameID{&Frame::frameID, this};
+		/** The current location of this frame */
+		MessageField<Location> location{&Frame::location, this};
+};
+
+struct Frames : public Reply {
+		virtual ~Frames() override;
+		MessageField<QList<Frame>> frames{&Frames::frames, this};
+};
+
+} /* namespace OODebug */

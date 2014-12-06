@@ -271,6 +271,21 @@ LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
 	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
 }
 
+Frames DebugConnector::getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame)
+{
+	return makeReply<Frames>(sendCommand(FramesCommand(threadId, startFrame, numFrames)));
+}
+
+VariableTable DebugConnector::getVariableTable(qint64 classId, qint64 methodId)
+{
+	return makeReply<VariableTable>(sendCommand(VariableTableCommand(classId, methodId)));
+}
+
+Values DebugConnector::getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
+{
+	return makeReply<Values>(sendCommand(GetValuesCommand(threadId, frameId, variables)));
+}
+
 int DebugConnector::sendBreakpoint(Location breakLocation)
 {
 	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));

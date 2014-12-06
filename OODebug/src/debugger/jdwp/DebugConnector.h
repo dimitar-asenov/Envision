@@ -39,6 +39,10 @@ class Event;
 class VersionInfo;
 class Location;
 class LineTable;
+class Frames;
+class VariableTable;
+class Values;
+class StackVariable;
 
 class OODEBUG_API DebugConnector : public QObject
 {
@@ -63,6 +67,11 @@ class OODEBUG_API DebugConnector : public QObject
 		qint64 getClassId(const QString& signature);
 		qint64 getMethodId(qint64 classId, const QString& signature);
 		LineTable getLineTable(qint64 classId, qint64 methodId);
+
+		Frames getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
+		VariableTable getVariableTable(qint64 classId, qint64 methodId);
+		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
+
 
 		int sendBreakpoint(Location breakLocation);
 		bool clearBreakpoint(qint32 requestId);
