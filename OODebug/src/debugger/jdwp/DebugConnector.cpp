@@ -106,26 +106,26 @@ int DebugConnector::read(qint32 requestId)
 		}
 	}
 
-	QByteArray read = tcpSocket_.readAll();
+	QByteArray dataRead = tcpSocket_.readAll();
 	// If we still have a part of a packet add it here.
 	if (!incompleteData_.isEmpty())
 	{
-		read.prepend(incompleteData_);
+		dataRead.prepend(incompleteData_);
 		incompleteData_ = QByteArray();
 	}
 	// If we haven't read enough retry later
-	if (read.size() < int(sizeof(qint32)))
+	if (dataRead.size() < int(sizeof(qint32)))
 	{
-		incompleteData_ = read;
+		incompleteData_ = dataRead;
 		return -1;
 	}
 	// check if the packet is complete
-	QDataStream inStream(read);
+	QDataStream inStream(dataRead);
 	qint32 packetLen;
 	inStream >> packetLen;
-	if (packetLen > read.length())
+	if (packetLen > dataRead.length())
 	{
-		incompleteData_ = read;
+		incompleteData_ = dataRead;
 		return -1;
 	}
 	// We have read the whole data for this message so handle it.
@@ -133,15 +133,15 @@ int DebugConnector::read(qint32 requestId)
 	inStream >> id;
 
 	// It might be that we received more than one packet, if so we have to recursively call this function.
-	if (packetLen < read.length())
+	if (packetLen < dataRead.length())
 	{
-		incompleteData_ = read;
+		incompleteData_ = dataRead;
 		incompleteData_.remove(0, packetLen);
 	}
-	read.remove(packetLen + 1, read.length());
+	dataRead.remove(packetLen + 1, dataRead.length());
 
 	auto nextInd = readyData_.length();
-	readyData_ << read;
+	readyData_ << dataRead;
 	if (requestId == id) return nextInd;
 	return -1;
 }
@@ -171,20 +171,20 @@ QByteArray DebugConnector::sendCommand(const Command& command)
 
 void DebugConnector::readHandshake()
 {
-	QByteArray read = tcpSocket_.readAll();
-	Q_ASSERT(read.length() >= Protocol::handshake.length());
-	if (read.startsWith(Protocol::handshake))
+	QByteArray dataRead = tcpSocket_.readAll();
+	Q_ASSERT(dataRead.length() >= Protocol::handshake.length());
+	if (dataRead.startsWith(Protocol::handshake))
 	{
 		QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
 		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this,
 							  static_cast<void (DebugConnector::*)()>(&DebugConnector::read));
-		if (read.length() > Protocol::handshake.length())
+		if (dataRead.length() > Protocol::handshake.length())
 		{
 			// remove the handshake
-			read.remove(0, Protocol::handshake.length());
-			incompleteData_ = read;
+			dataRead.remove(0, Protocol::handshake.length());
+			incompleteData_ = dataRead;
 			// trigger reads such that we handle the additional data
-			this->read(-1);
+			read(-1);
 		}
 		checkVersion();
 		checkIdSizes();
