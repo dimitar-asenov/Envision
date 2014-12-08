@@ -71,7 +71,7 @@ void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 
 void DebugConnector::read()
 {
-	read(-1);
+	read(noRequest_);
 	auto it = readyData_.begin();
 	while (it != readyData_.end())
 	{
@@ -97,7 +97,7 @@ void DebugConnector::read()
 int DebugConnector::read(qint32 requestId)
 {
 	// First check if the data is already here
-	if (requestId != -1)
+	if (requestId != noRequest_)
 	{
 		for (int i = 0; i < readyData_.length(); ++i)
 		{
@@ -117,7 +117,7 @@ int DebugConnector::read(qint32 requestId)
 	if (dataRead.size() < int(sizeof(qint32)))
 	{
 		incompleteData_ = dataRead;
-		return -1;
+		return notFound_;
 	}
 	// check if the packet is complete
 	QDataStream inStream(dataRead);
@@ -126,7 +126,7 @@ int DebugConnector::read(qint32 requestId)
 	if (packetLen > dataRead.length())
 	{
 		incompleteData_ = dataRead;
-		return -1;
+		return notFound_;
 	}
 	// We have read the whole data for this message so handle it.
 	qint32 id;
@@ -143,7 +143,7 @@ int DebugConnector::read(qint32 requestId)
 	auto nextInd = readyData_.length();
 	readyData_ << dataRead;
 	if (requestId == id) return nextInd;
-	return -1;
+	return notFound_;
 }
 
 QByteArray DebugConnector::sendCommand(const Command& command)
@@ -160,8 +160,8 @@ QByteArray DebugConnector::sendCommand(const Command& command)
 	tcpSocket_.write(raw);
 	tcpSocket_.waitForBytesWritten();
 
-	int responseIndex = -1;
-	while (-1 == responseIndex)
+	int responseIndex = notFound_;
+	while (notFound_ == responseIndex)
 	{
 		tcpSocket_.waitForReadyRead();
 		responseIndex = read(command.id());
@@ -184,7 +184,7 @@ void DebugConnector::readHandshake()
 			dataRead.remove(0, Protocol::handshake.length());
 			incompleteData_ = dataRead;
 			// trigger reads such that we handle the additional data
-			read(-1);
+			read(noRequest_);
 		}
 		checkVersion();
 		checkIdSizes();

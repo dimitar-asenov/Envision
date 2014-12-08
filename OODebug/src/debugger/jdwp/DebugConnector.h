@@ -109,6 +109,9 @@ class OODEBUG_API DebugConnector : public QObject
 		QList<QByteArray> readyData_;
 
 		bool vmAlive_{};
+
+		static const int notFound_{-1};
+		static const int noRequest_{-1};
 };
 
 /**
