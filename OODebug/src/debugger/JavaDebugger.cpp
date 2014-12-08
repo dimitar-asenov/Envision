@@ -38,6 +38,15 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/expressions/Expression.h"
+#include "OOModel/src/expressions/types/TypeExpression.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
+#include "OOModel/src/expressions/types/ClassTypeExpression.h"
+#include "OOModel/src/expressions/VariableDeclarationExpression.h"
+#include "OOModel/src/types/PrimitiveType.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
+#include "OOModel/src/statements/DeclarationStatement.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
@@ -133,8 +142,8 @@ Visualization::MessageOverlay* JavaDebugger::addBreakpointOverlay(Visualization:
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
 	auto overlay = new Visualization::MessageOverlay(target,
 																	 [](Visualization::MessageOverlay *){
-																		  return QString("BP");
-																	  });
+			return QString("BP");
+});
 	overlayGroup->addOverlay(makeOverlay(overlay));
 	return overlay;
 }
@@ -207,6 +216,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		{
 			currentBreakpointKey_ = it.key();
 			it->overlay_->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
+			auto containingMethod = it.key()->node()->firstAncestorOfType<OOModel::Method>();
 			// Get frames
 			auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
 			auto location = breakpointEvent.location();
@@ -220,20 +230,110 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 				if (variableDetails.codeIndex() <= currentIndex &&
 					 currentIndex < variableDetails.codeIndex() + variableDetails.length())
 				{
-					qDebug() << "**" << variableDetails.slot() << variableDetails.name();
-					// TODO: use actual type
-					varsToGet << StackVariable(variableDetails.slot(), Protocol::Tag::INT);
+					varsToGet << StackVariable(variableDetails.slot(), typeOfVariable(containingMethod, variableDetails));
 				}
 			}
 
 			auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+			Q_ASSERT(values.values().length() == varsToGet.length());
 			for (auto val : values.values())
 			{
-				// TODO: know the variable a value belongs to
-				qDebug() << "##" << val.intValue();
+				// TODO: for now this is just to demonstrate that we can fetch values, we should probably do something
+				// more useful here.
+				if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
+					qDebug() << "#INT\t#" << val.intValue();
+				else if (val.kind() == MessagePart::cast(Protocol::Tag::BOOLEAN))
+					qDebug() << "#BOOL\t#" << val.boolean();
+				else if (val.kind() == MessagePart::cast(Protocol::Tag::STRING))
+					qDebug() << "#STRING\t#" << debugConnector_.getString(val.stringId());
 			}
 		}
 	}
+}
+
+Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable)
+{
+	int numArgs = containingMethod->arguments()->size();
+	if (variable.slot() < numArgs)
+	{
+		auto typeExpression = containingMethod->arguments()->at(variable.slot())->typeExpression();
+		return typeExpressionToTag(typeExpression);
+	}
+	else
+	{
+		int neededIndex = variable.slot() - numArgs;
+		int currentIndex = 0;
+		for (auto item : *containingMethod->items())
+		{
+			if (item->symbolType() == Model::Node::VARIABLE)
+			{
+				if (currentIndex == neededIndex)
+				{
+					OOModel::VariableDeclaration* variableDeclaration = nullptr;
+					if (auto exprStmt = DCast<OOModel::ExpressionStatement>(item))
+					{
+						if (auto varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression()))
+							variableDeclaration = varDeclarationExpr->decl();
+					}
+					else if (auto declStmt = DCast<OOModel::DeclarationStatement>(item))
+					{
+						variableDeclaration = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
+					}
+					Q_ASSERT(variableDeclaration);
+					if (variableDeclaration->name() != variable.name())
+						qDebug() << "Name differs, Decl:" << variableDeclaration->name() << "var" << variable.name();
+					return typeExpressionToTag(variableDeclaration->typeExpression());
+				}
+				++currentIndex;
+			}
+		}
+	}
+	// If we don't find the declration something is wrong
+	Q_ASSERT(false);
+}
+
+Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
+{
+	if (auto typeExpression = DCast<OOModel::TypeExpression>(e))
+	{
+		if (auto primitiveType = DCast<OOModel::PrimitiveTypeExpression>(typeExpression))
+		{
+			switch (primitiveType->typeValue())
+			{
+				case OOModel::PrimitiveType::INT:
+					return Protocol::Tag::INT;
+				case OOModel::PrimitiveType::LONG:
+					return Protocol::Tag::LONG;
+				case OOModel::PrimitiveType::UNSIGNED_INT:
+					return Protocol::Tag::INT;
+				case OOModel::PrimitiveType::UNSIGNED_LONG:
+					return Protocol::Tag::LONG;
+				case OOModel::PrimitiveType::FLOAT:
+					return Protocol::Tag::FLOAT;
+				case OOModel::PrimitiveType::DOUBLE:
+					return Protocol::Tag::DOUBLE;
+				case OOModel::PrimitiveType::BOOLEAN:
+					return Protocol::Tag::BOOLEAN;
+				case OOModel::PrimitiveType::CHAR:
+					return Protocol::Tag::CHAR;
+				case OOModel::PrimitiveType::VOID:
+					return Protocol::Tag::VOID;
+			}
+		}
+		if (DCast<OOModel::ArrayTypeExpression>(typeExpression)) return Protocol::Tag::ARRAY;
+		if (auto classTypeExpression = DCast<OOModel::ClassTypeExpression>(typeExpression))
+		{
+			auto referenceExpression = classTypeExpression->typeExpression();
+			if (referenceExpression->name().contains("String")) return Protocol::Tag::STRING;
+			return Protocol::Tag::CLASS_OBJECT;
+		}
+	}
+	else if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(e))
+	{
+		if (referenceExpression->name().contains("String")) return Protocol::Tag::STRING;
+	}
+	// No other types possible, or we have to implement it!
+	Q_ASSERT(false);
 }
 
 } /* namespace OODebug */

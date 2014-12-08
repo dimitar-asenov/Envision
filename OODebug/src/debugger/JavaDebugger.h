@@ -42,6 +42,8 @@ namespace Model {
 
 namespace OOModel {
 	class Class;
+	class Expression;
+	class Method;
 }
 
 namespace Visualization {
@@ -53,6 +55,7 @@ namespace OODebug {
 
 class Location;
 class BreakpointEvent;
+class VariableDetails;
 
 class OODEBUG_API JavaDebugger
 {
@@ -75,6 +78,9 @@ class OODEBUG_API JavaDebugger
 
 		void handleClassPrepare(Event e);
 		void handleBreakpoint(BreakpointEvent breakpointEvent);
+
+		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
+		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
 
 		DebugConnector debugConnector_;
 
