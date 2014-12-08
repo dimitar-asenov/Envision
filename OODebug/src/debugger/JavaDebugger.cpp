@@ -217,7 +217,8 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 			QList<StackVariable> varsToGet;
 			for (auto variableDetails : variableTable.variables())
 			{
-				if (variableDetails.slot() < currentIndex)
+				if (variableDetails.codeIndex() <= currentIndex &&
+					 currentIndex < variableDetails.codeIndex() + variableDetails.length())
 				{
 					qDebug() << "**" << variableDetails.slot() << variableDetails.name();
 					// TODO: use actual type
