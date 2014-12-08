@@ -85,14 +85,14 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		{
 			if (currentBreakpointKey_ == target) currentBreakpointKey_ = nullptr;
 			target->scene()->removeOverlay(it->overlay_);
-			if (debugConnector_.vmRunning() && it->requestId_ > 0)
+			if (debugConnector_.vmAlive() && it->requestId_ > 0)
 				debugConnector_.clearBreakpoint(it->requestId_);
 			breakpoints_.erase(it);
 		}
 		else
 		{
 			auto breakpoint = Breakpoint(addBreakpointOverlay(target));
-			if (debugConnector_.vmRunning())
+			if (debugConnector_.vmAlive())
 				breakpoint.requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(target->node()));
 			breakpoints_[target] = breakpoint;
 		}

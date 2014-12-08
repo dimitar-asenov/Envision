@@ -77,7 +77,7 @@ class OODEBUG_API DebugConnector : public QObject
 		int sendBreakpoint(Location breakLocation);
 		bool clearBreakpoint(qint32 requestId);
 
-		bool vmRunning();
+		bool vmAlive();
 	private:
 		void handleSocketError(QAbstractSocket::SocketError socketError);
 		void read();
@@ -120,6 +120,6 @@ class OODEBUG_API DebugConnector : public QObject
  */
 inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
 { eventListeners_[kind] = listener; }
-inline bool DebugConnector::vmRunning() { return vmAlive_; }
+inline bool DebugConnector::vmAlive() { return vmAlive_; }
 
 } /* namespace OODebug */
