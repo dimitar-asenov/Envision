@@ -194,7 +194,7 @@ void DebugConnector::readHandshake()
 	{
 		// We didn't receive the handshake, this should never happen, so we just stop here.
 		// In the future we should handle this somehow nicer.
-		Q_ASSERT(0);
+		Q_ASSERT(false);
 	}
 }
 

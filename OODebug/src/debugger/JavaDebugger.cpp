@@ -182,7 +182,7 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	if (containerClass->constructKind() == OOModel::Class::ConstructKind::Interface)
 		tagKind = Protocol::TypeTagKind::INTERFACE;
 	else if (containerClass->constructKind() != OOModel::Class::ConstructKind::Class)
-		Q_ASSERT(0); // This should not happen for a Java project!
+		Q_ASSERT(false); // This should not happen for a Java project!
 
 	auto locations = exportMap_->locations(node);
 	int line = locations.at(0).span_.startLine_ + 1;
