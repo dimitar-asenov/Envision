@@ -71,6 +71,7 @@ class OODEBUG_API DebugConnector : public QObject
 		Frames getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
 		VariableTable getVariableTable(qint64 classId, qint64 methodId);
 		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
+		QString getString(qint64 stringId);
 
 
 		int sendBreakpoint(Location breakLocation);

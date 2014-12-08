@@ -26,12 +26,25 @@
 
 #pragma once
 
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
-#include "MethodSet.h"
-#include "StringSet.h"
-#include "ThreadSet.h"
-#include "EventRequestSet.h"
-#include "StackFrameSet.h"
-#include "EventSet.h"
+#include "../../../oodebug_api.h"
+
+#include "../Command.h"
+#include "../Reply.h"
+#include "../Protocol.h"
+
+// https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_StringReference
+
+namespace OODebug {
+
+struct StringValueCommand : public Command {
+		StringValueCommand(qint64 stringId);
+		virtual ~StringValueCommand() override;
+		MessageField<qint64> objectID{&StringValueCommand::objectID, this};
+};
+
+struct StringValue : public Reply {
+		virtual ~StringValue() override;
+		MessageField<QString> stringValue{&StringValue::stringValue, this};
+};
+
+} /* namespace OODebug */

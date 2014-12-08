@@ -24,14 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
-#include "MethodSet.h"
 #include "StringSet.h"
-#include "ThreadSet.h"
-#include "EventRequestSet.h"
-#include "StackFrameSet.h"
-#include "EventSet.h"
+
+namespace OODebug {
+
+StringValueCommand::StringValueCommand(qint64 stringId)
+	: Command(Protocol::CommandSet::StringReference, Protocol::StringReferenceCommands::Value)
+{
+	objectID = stringId;
+}
+
+StringValueCommand::~StringValueCommand() {}
+StringValue::~StringValue() {}
+
+} /* namespace OODebug */

@@ -286,6 +286,12 @@ Values DebugConnector::getValues(qint64 threadId, qint64 frameId, QList<StackVar
 	return makeReply<Values>(sendCommand(GetValuesCommand(threadId, frameId, variables)));
 }
 
+QString DebugConnector::getString(qint64 stringId)
+{
+	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand(stringId)));
+	return reply.stringValue();
+}
+
 int DebugConnector::sendBreakpoint(Location breakLocation)
 {
 	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));
