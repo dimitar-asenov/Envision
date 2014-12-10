@@ -80,8 +80,8 @@ class OODEBUG_API DebugConnector : public QObject
 		bool vmAlive();
 	private:
 		void handleSocketError(QAbstractSocket::SocketError socketError);
-		void readSlot();
-		void read();
+		void dispatchEvents();
+		void readFromSocket();
 
 		QByteArray sendCommand(const Command& command);
 		QByteArray waitForReply(qint32 requestId);
@@ -107,7 +107,7 @@ class OODEBUG_API DebugConnector : public QObject
 		QHash<QString, qint64> classIdMap_;
 
 		// Each entry is a full message which is ready to be parsed & handled
-		QList<QByteArray> readyData_;
+		QList<QByteArray> messageReadyForProcessing_;
 
 		bool vmAlive_{};
 };
