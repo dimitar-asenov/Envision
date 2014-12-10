@@ -49,8 +49,7 @@ void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHo
 	mainClassName_ = mainClassName;
 	if (tcpSocket_.isOpen())
 		tcpSocket_.abort();
-	QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this,
-							  static_cast<void (DebugConnector::*)()>(&DebugConnector::read));
+	QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readSlot);
 	Command::resetIds();
 	// The connection setup is handled here:
 	// First when we are connected we have to send the handshake. For receiving the hanshake reply,
@@ -69,9 +68,9 @@ void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 	qDebug() << "Socket ERROR: " << socketError;
 }
 
-void DebugConnector::read()
+void DebugConnector::readSlot()
 {
-	read(noRequest_);
+	read();
 	auto it = readyData_.begin();
 	while (it != readyData_.end())
 	{
@@ -94,18 +93,8 @@ void DebugConnector::read()
 	}
 }
 
-int DebugConnector::read(qint32 requestId)
+void DebugConnector::read()
 {
-	// First check if the data is already here
-	if (requestId != noRequest_)
-	{
-		for (int i = 0; i < readyData_.length(); ++i)
-		{
-			auto r = makeReply<Reply>(readyData_[i]);
-			if (r.id() == requestId) return i;
-		}
-	}
-
 	QByteArray dataRead = tcpSocket_.readAll();
 	// If we still have a part of a packet add it here.
 	if (!incompleteData_.isEmpty())
@@ -113,11 +102,11 @@ int DebugConnector::read(qint32 requestId)
 		dataRead.prepend(incompleteData_);
 		incompleteData_ = QByteArray();
 	}
-	// If we haven't read enough retry later
+	// If we haven't read enough retry later.
 	if (dataRead.size() < int(sizeof(qint32)))
 	{
 		incompleteData_ = dataRead;
-		return notFound_;
+		return;
 	}
 	// check if the packet is complete
 	QDataStream inStream(dataRead);
@@ -125,25 +114,18 @@ int DebugConnector::read(qint32 requestId)
 	inStream >> packetLen;
 	if (packetLen > dataRead.length())
 	{
+		// We don't have a complete packet yet, try later.
 		incompleteData_ = dataRead;
-		return notFound_;
+		return;
 	}
-	// We have read the whole data for this message so handle it.
-	qint32 id;
-	inStream >> id;
-
-	// It might be that we received more than one packet, if so we have to recursively call this function.
+	// It might be that we received more than one message, so we store the additional data.
 	if (packetLen < dataRead.length())
 	{
 		incompleteData_ = dataRead;
 		incompleteData_.remove(0, packetLen);
+		dataRead.remove(packetLen + 1, dataRead.length());
 	}
-	dataRead.remove(packetLen + 1, dataRead.length());
-
-	auto nextInd = readyData_.length();
 	readyData_ << dataRead;
-	if (requestId == id) return nextInd;
-	return notFound_;
 }
 
 QByteArray DebugConnector::sendCommand(const Command& command)
@@ -160,13 +142,22 @@ QByteArray DebugConnector::sendCommand(const Command& command)
 	tcpSocket_.write(raw);
 	tcpSocket_.waitForBytesWritten();
 
-	int responseIndex = notFound_;
-	while (notFound_ == responseIndex)
+	return waitForReply(command.id());
+}
+
+QByteArray DebugConnector::waitForReply(qint32 requestId)
+{
+	while (true)
 	{
+		// First check if the data is already here
+		for (int i = 0; i < readyData_.length(); ++i)
+		{
+			auto r = makeReply<Reply>(readyData_[i]);
+			if (r.id() == requestId) return readyData_.takeAt(i);
+		}
 		tcpSocket_.waitForReadyRead();
-		responseIndex = read(command.id());
+		read();
 	}
-	return readyData_.takeAt(responseIndex);
 }
 
 void DebugConnector::readHandshake()
@@ -176,15 +167,14 @@ void DebugConnector::readHandshake()
 	if (dataRead.startsWith(Protocol::handshake))
 	{
 		QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
-		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this,
-							  static_cast<void (DebugConnector::*)()>(&DebugConnector::read));
+		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readSlot);
 		if (dataRead.length() > Protocol::handshake.length())
 		{
 			// remove the handshake
 			dataRead.remove(0, Protocol::handshake.length());
 			incompleteData_ = dataRead;
 			// trigger reads such that we handle the additional data
-			read(noRequest_);
+			read();
 		}
 		checkVersion();
 		checkIdSizes();
@@ -226,7 +216,7 @@ void DebugConnector::sendBreakAtStart()
 	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(mainClassName_)));
 	Q_ASSERT(Protocol::Error::NONE == r.error());
 	// trigger event handling such that we get the VM start event before we resume
-	read();
+	readSlot();
 	resume();
 }
 
