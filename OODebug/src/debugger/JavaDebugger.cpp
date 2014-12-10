@@ -85,7 +85,7 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		{
 			if (currentBreakpointKey_ == target) currentBreakpointKey_ = nullptr;
 			target->scene()->removeOverlay(it->overlay_);
-			if (debugConnector_.vmAlive() && it->requestId_ > 0)
+			if (debugConnector_.vmAlive() && it->requestId_ > Breakpoint::NOT_SET)
 				debugConnector_.clearBreakpoint(it->requestId_);
 			breakpoints_.erase(it);
 		}
@@ -93,7 +93,11 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		{
 			auto breakpoint = Breakpoint(addBreakpointOverlay(target));
 			if (debugConnector_.vmAlive())
-				breakpoint.requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(target->node()));
+			{
+				Location bpLocation;
+				if (nodeToLocation(target->node(), bpLocation))
+					breakpoint.requestId_ = debugConnector_.sendBreakpoint(bpLocation);
+			}
 			breakpoints_[target] = breakpoint;
 		}
 		return true;
@@ -168,15 +172,20 @@ QString JavaDebugger::fullNameFor(OOModel::Class* theClass, QChar delimiter)
 	return fullName;
 }
 
-Location JavaDebugger::nodeToLocation(Model::Node* node)
+bool JavaDebugger::nodeToLocation(Model::Node* node, Location& resolvedLocation)
 {
 	auto method = node->firstAncestorOfType<OOModel::Method>();
 	auto containerClass = method->firstAncestorOfType<OOModel::Class>();
 	qint64 classId =  debugConnector_.getClassId(jvmSignatureFor(containerClass));
+	if (classId == debugConnector_.NO_RESULT)
+	{
+		debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
+		return false;
+	}
 	// TODO: function to get signature of a method: for Java classes we would need the full java library.
 	// Once fixed also fix the implementation of getMethodId().
 	qint64 methodId = debugConnector_.getMethodId(classId, method->name());
-	Q_ASSERT(methodId != -1);
+	Q_ASSERT(methodId != debugConnector_.NO_RESULT);
 
 	auto tagKind = Protocol::TypeTagKind::CLASS;
 	if (containerClass->constructKind() == OOModel::Class::ConstructKind::Interface)
@@ -194,16 +203,22 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 		it = methodInfos_.insert(key, JavaMethod(debugConnector_.getLineTable(classId, methodId)));
 	qint64 methodIndex = it->indexForLine(line);
 
-	return Location(tagKind, classId, methodId, methodIndex);
+	resolvedLocation = Location(tagKind, classId, methodId, methodIndex);
+	return true;
 }
 
 void JavaDebugger::handleClassPrepare(Event)
 {
 	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
 	{
-		auto target = it.key();
-		auto targetNode = target->node();
-		it.value().requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
+		auto breakpoint = it.value();
+		if (breakpoint.requestId_ == Breakpoint::NOT_SET)
+		{
+			auto target = it.key();
+			auto targetNode = target->node();
+			Location bpLocation;
+			if (nodeToLocation(targetNode, bpLocation)) it.value().requestId_ = debugConnector_.sendBreakpoint(bpLocation);
+		}
 	}
 	debugConnector_.resume();
 }

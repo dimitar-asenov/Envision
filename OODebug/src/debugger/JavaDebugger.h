@@ -70,11 +70,15 @@ class OODEBUG_API JavaDebugger
 		Visualization::MessageOverlay* addBreakpointOverlay(Visualization::Item* target);
 		QString jvmSignatureFor(OOModel::Class* theClass);
 		/**
-		 * Returns a String with all containing module names split by \a delim in front of the \a clazz name.
+		 * Returns a String with all containing module names split by \a delimiter in front of the \a theClass name.
 		 */
 		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
 
-		Location nodeToLocation(Model::Node* node);
+		/**
+		 * Tries to translate the \a node into a \a Location and stores the result in \a resolvedLocation.
+		 * If it succeeds true is returned and the \a resolvedLocation is set, otherwise false is returned.
+		 */
+		bool nodeToLocation(Model::Node* node, Location& resolvedLocation);
 
 		void handleClassPrepare(Event e);
 		void handleBreakpoint(BreakpointEvent breakpointEvent);

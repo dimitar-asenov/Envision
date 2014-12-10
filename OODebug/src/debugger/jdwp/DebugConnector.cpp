@@ -213,8 +213,7 @@ void DebugConnector::checkIdSizes()
 
 void DebugConnector::sendBreakAtStart()
 {
-	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(mainClassName_)));
-	Q_ASSERT(Protocol::Error::NONE == r.error());
+	Q_ASSERT(breakAtClassLoad(mainClassName_));
 	// trigger event handling such that we get the VM start event before we resume
 	dispatchEvents();
 	resume();
@@ -236,6 +235,10 @@ qint64 DebugConnector::getClassId(const QString& signature)
 	if (it == classIdMap_.end())
 	{
 		auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
+		if (classesBySignature.classes().size() < 1)
+			return NO_RESULT;
+		// If we have more than one class id for one signature, we should check what the situation is and
+		// adapt the following code to handle this situation correctly.
 		Q_ASSERT(classesBySignature.classes().size() == 1);
 		return classIdMap_[signature] = classesBySignature.classes()[0].typeID();
 	}
@@ -253,7 +256,7 @@ qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
 		// TODO: check for signature
 		if (method.name() == signature) return method.methodID();
 	}
-	return -1;
+	return NO_RESULT;
 }
 
 LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
@@ -280,6 +283,12 @@ QString DebugConnector::getString(qint64 stringId)
 {
 	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand(stringId)));
 	return reply.stringValue();
+}
+
+bool DebugConnector::breakAtClassLoad(QString className)
+{
+	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(className)));
+	return Protocol::Error::NONE == r.error();
 }
 
 int DebugConnector::sendBreakpoint(Location breakLocation)
