@@ -28,37 +28,23 @@
 
 #include "../../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
+namespace Visualization {
+	class MessageOverlay;
 }
 
 namespace OODebug {
 
-class RunProcess;
+/**
+ * Represents information to set & clear a breakpoint.
+ */
+struct OODEBUG_API Breakpoint {
+		Breakpoint() = default;
+		Breakpoint(Visualization::MessageOverlay* overlay);
 
-class OODEBUG_API JavaRunner
-{
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
-
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+		qint32 requestId_{}; // Will be set when the break point request is sent, and is used to clear the breakpoint.
+		Visualization::MessageOverlay* overlay_{};
 };
+
+inline Breakpoint::Breakpoint(Visualization::MessageOverlay* overlay) : overlay_{overlay} {}
 
 } /* namespace OODebug */

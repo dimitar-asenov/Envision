@@ -24,41 +24,70 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../oodebug_api.h"
-
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
+#include "EventRequestSet.h"
 
 namespace OODebug {
 
-class RunProcess;
+Modifier::~Modifier() {}
 
-class OODEBUG_API JavaRunner
+int Modifier::kind() const { return modKind(); }
+
+Modifier Modifier::makeEventOff(qint32 count) {
+	Modifier off(eventOff);
+	off.count = count;
+	return off;
+}
+
+Modifier Modifier::makeMatchClass(QString classPattern) {
+	Modifier match(classMatch);
+	match.classPattern = classPattern;
+	return match;
+}
+
+Modifier Modifier::makeLocation(Location loc)
 {
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+	Modifier mod(locationOnly);
+	mod.location = loc;
+	return mod;
+}
 
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
+Modifier::Modifier(int kind) {
+	modKind = kind;
+}
 
-		static void addConsole(Model::Node* node);
+EventSetCommand::EventSetCommand(Protocol::EventKind kind)
+	: Command(Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Set)
+{ this->kind = kind; }
 
-		static RunProcess& runProcess();
-};
+EventSetCommand::~EventSetCommand() {}
+
+BreakClassLoad::BreakClassLoad(QString classToBreak)
+	: EventSetCommand(Protocol::EventKind::CLASS_PREPARE)
+{
+	suspendPolicy = Protocol::SuspendPolicy::ALL;
+	modifiers = {Modifier::makeMatchClass(classToBreak), Modifier::makeEventOff(1)};
+}
+
+BreakClassLoad::~BreakClassLoad() {}
+
+
+BreakpointCommand::BreakpointCommand(Location breakLocation) : EventSetCommand(Protocol::EventKind::BREAKPOINT)
+{
+	suspendPolicy = Protocol::SuspendPolicy::ALL;
+	modifiers = {Modifier::makeLocation(breakLocation)};
+}
+
+BreakpointCommand::~BreakpointCommand() {}
+
+EventSetReply::~EventSetReply() {}
+
+EventClearCommand::EventClearCommand(Protocol::EventKind kind, qint32 requestId)
+	: Command(Protocol::CommandSet::EventRequest, Protocol::EventRequestCommands::Clear)
+{
+	eventKind = kind;
+	requestID = requestId;
+}
+
+EventClearCommand::~EventClearCommand() {}
 
 } /* namespace OODebug */

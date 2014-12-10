@@ -28,37 +28,47 @@
 
 #include "../../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
-
 namespace OODebug {
 
-class RunProcess;
-
-class OODEBUG_API JavaRunner
+/**
+ * The base class for the Command and Reply class, it defines the stream reading and writing operators.
+ * This class should only be used by the Command and Reply class, i.e. clients should implement those classes.
+ */
+class OODEBUG_API MessagePart
 {
 	public:
+		// Do not change this value: Clients often implement kind() with "return kindField();"
+		// and before the kindField is set it returns the default value of int,
+		// thus the kindField can only be set if noKind is also the default value.
+		static const int noKind{};
+		// Needed for vtable placement
+		virtual ~MessagePart();
+		using ReadOperator = std::function<void (MessagePart*, QDataStream&)>;
+		using WriteOperator = std::function<void (const MessagePart*, QDataStream&)>;
+
+		void addMessageField(ReadOperator reader, WriteOperator writer = nullptr);
+
+		friend QDataStream& operator>>(QDataStream& stream, MessagePart& message);
+		friend QDataStream& operator<<(QDataStream& stream, const MessagePart& message);
+
+		virtual int kind() const;
+
 		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
+		 * Casts an enum value to its underlying type.
 		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+		template<class Enum>
+		static constexpr typename
+		std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
+		cast(Enum enumValue);
+
 
 	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+		QList<ReadOperator> readers_;
+		QList<WriteOperator> writers_;
 };
+
+template<class Enum> constexpr typename
+std::enable_if<std::is_enum<Enum>::value, typename std::underlying_type<Enum>::type>::type
+MessagePart::cast(Enum enumValue) { return static_cast<typename std::underlying_type<Enum>::type>(enumValue); }
 
 } /* namespace OODebug */

@@ -28,37 +28,29 @@
 
 #include "../../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
+#include "MessagePart.h"
+#include "MessageField.h"
+#include "Protocol.h"
 
 namespace OODebug {
 
-class RunProcess;
-
-class OODEBUG_API JavaRunner
-{
+class OODEBUG_API Reply : public MessagePart {
 	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
-
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+		virtual ~Reply() override;
+		// Message header data:
+		MessageField<qint32> length{&Reply::length, this};
+		MessageField<qint32> id{&Reply::id, this};
+		MessageField<qint8> flags{&Reply::flags, this};
+		MessageField<Protocol::Error> error{&Reply::error, this};
 };
+
+template <class T>
+static T makeReply(QByteArray data)
+{
+	T r;
+	QDataStream stream(data);
+	stream >> r;
+	return r;
+}
 
 } /* namespace OODebug */

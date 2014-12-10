@@ -28,37 +28,41 @@
 
 #include "../../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
+#include "MessagePart.h"
+#include "MessageField.h"
+#include "Protocol.h"
 
-namespace OOModel {
-	class Method;
-}
 
 namespace OODebug {
 
-class RunProcess;
-
-class OODEBUG_API JavaRunner
-{
+class OODEBUG_API Command : public MessagePart {
 	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+		Command() = default;
+		virtual ~Command() override;
+
+		// Message header data:
+		MessageField<qint32> length{&Command::length, this};
+		MessageField<qint32> id{&Command::id, this};
+		MessageField<qint8> flags{&Command::flags, this};
+		MessageField<Protocol::CommandSet> commandSet{&Command::commandSet, this};
+		MessageField<qint8> command{&Command::command, this};
+
+		static void resetIds();
+
+	protected:
+		template <class T, typename = typename std::enable_if<std::is_enum<T>::value>::type>
+		Command(Protocol::CommandSet cmdSet, T cmd);
 
 	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+		static int nextId_;
 };
+
+template <class T, typename>
+Command::Command(Protocol::CommandSet cmdSet, T cmd)
+{
+	id = ++nextId_;
+	commandSet = cmdSet;
+	command = static_cast<typename std::underlying_type<T>::type>(cmd);
+}
 
 } /* namespace OODebug */

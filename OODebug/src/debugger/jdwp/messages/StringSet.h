@@ -26,39 +26,25 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../../../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
+#include "../Command.h"
+#include "../Reply.h"
+#include "../Protocol.h"
 
-namespace OOModel {
-	class Method;
-}
+// https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_StringReference
 
 namespace OODebug {
 
-class RunProcess;
+struct StringValueCommand : public Command {
+		StringValueCommand(qint64 stringId);
+		virtual ~StringValueCommand() override;
+		MessageField<qint64> objectID{&StringValueCommand::objectID, this};
+};
 
-class OODEBUG_API JavaRunner
-{
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
-
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+struct StringValue : public Reply {
+		virtual ~StringValue() override;
+		MessageField<QString> stringValue{&StringValue::stringValue, this};
 };
 
 } /* namespace OODebug */

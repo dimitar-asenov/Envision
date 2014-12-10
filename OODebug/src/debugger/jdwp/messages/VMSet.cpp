@@ -24,41 +24,39 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../oodebug_api.h"
-
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
+#include "VMSet.h"
 
 namespace OODebug {
 
-class RunProcess;
+VersionCommand::VersionCommand()
+	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Version)
+{}
 
-class OODEBUG_API JavaRunner
-{
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+VersionCommand::~VersionCommand() {}
 
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
+VersionInfo::~VersionInfo() {}
 
-		static void addConsole(Model::Node* node);
+ResumeCommand::ResumeCommand() : Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume)
+{}
 
-		static RunProcess& runProcess();
-};
+ClassesBySignatureCommand::ClassesBySignatureCommand(QString signature)
+	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::ClassesBySignature)
+{ this->signature = signature; }
+
+ClassesBySignatureCommand::~ClassesBySignatureCommand() {}
+
+ClassBySignature::~ClassBySignature() {}
+
+ClassesBySignature::~ClassesBySignature() {}
+
+ResumeCommand::~ResumeCommand() {}
+
+IDSizeCommand::IDSizeCommand()
+	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::IDSizes)
+{}
+
+IDSizeCommand::~IDSizeCommand() {}
+
+IDSizes::~IDSizes() {}
 
 } /* namespace OODebug */

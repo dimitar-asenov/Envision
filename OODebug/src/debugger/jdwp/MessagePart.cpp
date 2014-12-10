@@ -24,41 +24,32 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../oodebug_api.h"
-
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
+#include "MessagePart.h"
 
 namespace OODebug {
 
-class RunProcess;
+MessagePart::~MessagePart() {}
 
-class OODEBUG_API JavaRunner
+QDataStream& operator>>(QDataStream& stream, MessagePart& message)
 {
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+	for (auto reader : message.readers_)
+		reader(&message, stream);
+	return stream;
+}
 
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
+QDataStream& operator<<(QDataStream& stream, const MessagePart& message)
+{
+	for (auto writer : message.writers_)
+		writer(&message, stream);
+	return stream;
+}
 
-		static void addConsole(Model::Node* node);
+void MessagePart::addMessageField(ReadOperator reader, WriteOperator writer)
+{
+	if (reader) readers_ << reader;
+	if (writer) writers_ << writer;
+}
 
-		static RunProcess& runProcess();
-};
+int MessagePart::kind() const { return noKind; }
 
 } /* namespace OODebug */

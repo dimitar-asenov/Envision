@@ -24,41 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../oodebug_api.h"
-
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
+#include "Location.h"
 
 namespace OODebug {
 
-class RunProcess;
-
-class OODEBUG_API JavaRunner
+Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex)
 {
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+	this->typeTag = typeTag;
+	this->classId = classId;
+	this->methodId = methodId;
+	this->methodIndex = methodIndex;
+}
 
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
-};
+Location::~Location() {}
 
 } /* namespace OODebug */

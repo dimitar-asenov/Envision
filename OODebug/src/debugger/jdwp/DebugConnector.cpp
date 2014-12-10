@@ -1,0 +1,317 @@
+/***********************************************************************************************************************
+**
+** Copyright (c) 2011, 2014 ETH Zurich
+** All rights reserved.
+**
+** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+** following conditions are met:
+**
+**    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+**      disclaimer.
+**    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+**      following disclaimer in the documentation and/or other materials provided with the distribution.
+**    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
+**      derived from this software without specific prior written permission.
+**
+**
+** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+** INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+** DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+** SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**
+***********************************************************************************************************************/
+
+#include "DebugConnector.h"
+
+#include "Reply.h"
+#include "Command.h"
+
+#include "messages/AllMessages.h"
+
+namespace OODebug {
+
+DebugConnector::DebugConnector()
+{
+	QObject::connect(&tcpSocket_, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error),
+						  this, &DebugConnector::handleSocketError);
+}
+
+DebugConnector::~DebugConnector()
+{
+	tcpSocket_.abort();
+}
+
+void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHostPort)
+{
+	mainClassName_ = mainClassName;
+	if (tcpSocket_.isOpen())
+		tcpSocket_.abort();
+	QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readSlot);
+	Command::resetIds();
+	// The connection setup is handled here:
+	// First when we are connected we have to send the handshake. For receiving the hanshake reply,
+	// we use a dedicated function which disconnects itself and connects the actual read function
+	// to the readyRead slot. In this way we don't have the handshake handling in the normal read function.
+	QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
+	tcpSocket_.connectToHost(vmHostName, vmHostPort);
+	tcpSocket_.waitForConnected();
+	sendHandshake();
+}
+
+void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
+{
+	// If the VM just went off we will receive a remote closed error this expected:
+	if (socketError == QAbstractSocket::RemoteHostClosedError && !vmAlive_) return;
+	qDebug() << "Socket ERROR: " << socketError;
+}
+
+void DebugConnector::readSlot()
+{
+	read();
+	auto it = readyData_.begin();
+	while (it != readyData_.end())
+	{
+		auto data = *it;
+		auto command = makeReply<Command>(data);
+		if (command.commandSet() == Protocol::CommandSet::Event
+			 && command.command() == MessagePart::cast(Protocol::EventCommands::Composite))
+		{
+			readyData_.erase(it);
+			handleComposite(data);
+			// The handling of one event might mess with our iterator so just emit the signal that we get called again
+			// once the handling is done
+			emit tcpSocket_.readyRead();
+			break;
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
+void DebugConnector::read()
+{
+	QByteArray dataRead = tcpSocket_.readAll();
+	// If we still have a part of a packet add it here.
+	if (!incompleteData_.isEmpty())
+	{
+		dataRead.prepend(incompleteData_);
+		incompleteData_ = QByteArray();
+	}
+	// If we haven't read enough retry later.
+	if (dataRead.size() < int(sizeof(qint32)))
+	{
+		incompleteData_ = dataRead;
+		return;
+	}
+	// check if the packet is complete
+	QDataStream inStream(dataRead);
+	qint32 packetLen;
+	inStream >> packetLen;
+	if (packetLen > dataRead.length())
+	{
+		// We don't have a complete packet yet, try later.
+		incompleteData_ = dataRead;
+		return;
+	}
+	// It might be that we received more than one message, so we store the additional data.
+	if (packetLen < dataRead.length())
+	{
+		incompleteData_ = dataRead;
+		incompleteData_.remove(0, packetLen);
+		dataRead.remove(packetLen + 1, dataRead.length());
+	}
+	readyData_ << dataRead;
+}
+
+QByteArray DebugConnector::sendCommand(const Command& command)
+{
+	QByteArray raw;
+	QDataStream stream(&raw, QIODevice::ReadWrite);
+	stream << command;
+	// Insert the length, it is always at position 0
+	QByteArray len;
+	qint32 dataLen = raw.length();
+	QDataStream lenStream(&len, QIODevice::ReadWrite);
+	lenStream << dataLen;
+	raw.replace(0, len.length(), len);
+	tcpSocket_.write(raw);
+	tcpSocket_.waitForBytesWritten();
+
+	return waitForReply(command.id());
+}
+
+QByteArray DebugConnector::waitForReply(qint32 requestId)
+{
+	while (true)
+	{
+		// First check if the data is already here
+		for (int i = 0; i < readyData_.length(); ++i)
+		{
+			auto r = makeReply<Reply>(readyData_[i]);
+			if (r.id() == requestId) return readyData_.takeAt(i);
+		}
+		tcpSocket_.waitForReadyRead();
+		read();
+	}
+}
+
+void DebugConnector::readHandshake()
+{
+	QByteArray dataRead = tcpSocket_.readAll();
+	Q_ASSERT(dataRead.length() >= Protocol::handshake.length());
+	if (dataRead.startsWith(Protocol::handshake))
+	{
+		QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readHandshake);
+		QObject::connect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::readSlot);
+		if (dataRead.length() > Protocol::handshake.length())
+		{
+			// remove the handshake
+			dataRead.remove(0, Protocol::handshake.length());
+			incompleteData_ = dataRead;
+			// trigger reads such that we handle the additional data
+			read();
+		}
+		checkVersion();
+		checkIdSizes();
+		sendBreakAtStart();
+	}
+	else
+	{
+		// We didn't receive the handshake, this should never happen, so we just stop here.
+		// In the future we should handle this somehow nicer.
+		Q_ASSERT(false);
+	}
+}
+
+void DebugConnector::sendHandshake()
+{
+	tcpSocket_.write(Protocol::handshake);
+	tcpSocket_.waitForBytesWritten();
+}
+
+void DebugConnector::checkVersion()
+{
+	auto info = makeReply<VersionInfo>(sendCommand(VersionCommand()));
+	qDebug() << "VM-INFO: " << info.jdwpMajor() << info.jdwpMinor();
+}
+
+void DebugConnector::checkIdSizes()
+{
+	// Our protocol is only designed for 64 bit machine make sure that this is the case:
+	auto idSizes = makeReply<IDSizes>(sendCommand(IDSizeCommand()));
+	Q_ASSERT(sizeof(qint64) == idSizes.fieldIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.methodIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.objectIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.referenceTypeIDSize());
+	Q_ASSERT(sizeof(qint64) == idSizes.frameIDSize());
+}
+
+void DebugConnector::sendBreakAtStart()
+{
+	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(mainClassName_)));
+	Q_ASSERT(Protocol::Error::NONE == r.error());
+	// trigger event handling such that we get the VM start event before we resume
+	readSlot();
+	resume();
+}
+
+bool DebugConnector::resume()
+{
+	if (vmAlive_)
+	{
+		auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
+		return Protocol::Error::NONE == r.error();
+	}
+	return false;
+}
+
+qint64 DebugConnector::getClassId(const QString& signature)
+{
+	auto it = classIdMap_.find(signature);
+	if (it == classIdMap_.end())
+	{
+		auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
+		Q_ASSERT(classesBySignature.classes().size() == 1);
+		return classIdMap_[signature] = classesBySignature.classes()[0].typeID();
+	}
+	else
+	{
+		return it.value();
+	}
+}
+
+qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
+{
+	auto methods = makeReply<MethodsReply>(sendCommand(MethodsCommand(classId)));
+	for (auto method : methods.methods())
+	{
+		// TODO: check for signature
+		if (method.name() == signature) return method.methodID();
+	}
+	return -1;
+}
+
+LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
+{
+	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
+}
+
+Frames DebugConnector::getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame)
+{
+	return makeReply<Frames>(sendCommand(FramesCommand(threadId, startFrame, numFrames)));
+}
+
+VariableTable DebugConnector::getVariableTable(qint64 classId, qint64 methodId)
+{
+	return makeReply<VariableTable>(sendCommand(VariableTableCommand(classId, methodId)));
+}
+
+Values DebugConnector::getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
+{
+	return makeReply<Values>(sendCommand(GetValuesCommand(threadId, frameId, variables)));
+}
+
+QString DebugConnector::getString(qint64 stringId)
+{
+	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand(stringId)));
+	return reply.stringValue();
+}
+
+int DebugConnector::sendBreakpoint(Location breakLocation)
+{
+	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));
+	return r.requestId();
+}
+
+bool DebugConnector::clearBreakpoint(qint32 requestId)
+{
+	auto r = makeReply<Reply>(sendCommand(EventClearCommand(Protocol::EventKind::BREAKPOINT, requestId)));
+	return r.error() == Protocol::Error::NONE;
+}
+
+void DebugConnector::handleComposite(QByteArray data)
+{
+	auto c = makeReply<CompositeCommand>(data);
+	// If we receive a non composite event, we have an implementation error.
+	Q_ASSERT(c.commandSet() == Protocol::CommandSet::Event);
+	Q_ASSERT(c.command() == MessagePart::cast(Protocol::EventCommands::Composite));
+
+	for (auto& event : c.events())
+	{
+		if (Protocol::EventKind::VM_START == event.eventKind())
+			vmAlive_ = true;
+		else if (Protocol::EventKind::VM_DEATH == event.eventKind())
+			vmAlive_ = false;
+		else if (auto listener = eventListeners_[event.eventKind()])
+			listener(event);
+		else
+			qDebug() << "EVENT" << static_cast<int>(event.eventKind());
+	}
+}
+
+} /* namespace OODebug */

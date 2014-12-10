@@ -26,39 +26,70 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
+#include "jdwp/DebugConnector.h"
+#include "metadata/Breakpoint.h"
+#include "metadata/JavaMethod.h"
+
+namespace Export {
+	class TextToNodeMap;
+}
 
 namespace Model {
-	class TreeManager;
 	class Node;
+	class TreeManager;
 }
 
 namespace OOModel {
+	class Class;
+	class Expression;
 	class Method;
+}
+
+namespace Visualization {
+	class Item;
+	class MessageOverlay;
 }
 
 namespace OODebug {
 
-class RunProcess;
+class Location;
+class BreakpointEvent;
+class VariableDetails;
 
-class OODEBUG_API JavaRunner
+class OODEBUG_API JavaDebugger
 {
 	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+		static JavaDebugger& instance();
+		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
+		bool addBreakpoint(Visualization::Item* target, QKeyEvent* event);
+		bool resume(Visualization::Item* target, QKeyEvent* event);
 
 	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
+		JavaDebugger();
+		Visualization::MessageOverlay* addBreakpointOverlay(Visualization::Item* target);
+		QString jvmSignatureFor(OOModel::Class* theClass);
+		/**
+		 * Returns a String with all containing module names split by \a delim in front of the \a clazz name.
+		 */
+		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
 
-		static void addConsole(Model::Node* node);
+		Location nodeToLocation(Model::Node* node);
 
-		static RunProcess& runProcess();
+		void handleClassPrepare(Event e);
+		void handleBreakpoint(BreakpointEvent breakpointEvent);
+
+		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
+		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
+
+		DebugConnector debugConnector_;
+
+		QHash<Visualization::Item*, Breakpoint> breakpoints_;
+		Visualization::Item* currentBreakpointKey_{};
+
+		QHash<QPair<qint64, qint64>, JavaMethod> methodInfos_;
+
+		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 };
 
 } /* namespace OODebug */

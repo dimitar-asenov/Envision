@@ -28,37 +28,21 @@
 
 #include "../../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
+#include "../jdwp/messages/MethodSet.h"
 
 namespace OODebug {
 
-class RunProcess;
-
-class OODEBUG_API JavaRunner
-{
+class JavaMethod {
 	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+		JavaMethod(LineTable lineTable);
 
+		qint64 indexForLine(qint32 line);
 	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
+		QMultiHash<qint32, qint64> lineToCode_;
 
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
 };
+
+// Just return the first index.
+inline qint64 JavaMethod::indexForLine(qint32 line) { return lineToCode_.find(line).value(); }
 
 } /* namespace OODebug */

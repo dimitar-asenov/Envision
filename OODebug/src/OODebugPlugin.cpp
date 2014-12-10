@@ -29,11 +29,15 @@
 
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
+#include "OOInteraction/src/handlers/HStatement.h"
+
 #include "commands/CJavaCompile.h"
 #include "commands/CJavaRun.h"
+#include "commands/CJavaDebug.h"
 #include "run_support/MainMethodFinder.h"
 #include "overlays/ConsoleOverlay.h"
 #include "handlers/HConsoleOverlay.h"
+#include "debugger/JavaDebugger.h"
 
 namespace OODebug {
 
@@ -49,10 +53,23 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 {
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaRun());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug());
 
 	ConsoleOverlay::setDefaultClassHandler(HConsoleOverlay::instance());
 
 	MainMethodFinder::init();
+
+	// Register our breakpoint key handler
+	// TODO: once we have a better mechanism update this.
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().addBreakpoint(target, event);
+	});
+	// TODO: this should be a general interaction not only on statements.
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().resume(target, event);
+	});
 
 	return true;
 }

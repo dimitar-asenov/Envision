@@ -26,39 +26,30 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../../../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
+#include "../Command.h"
+#include "../Reply.h"
 
 namespace OODebug {
 
-class RunProcess;
+struct JVMMethod : public MessagePart {
+		virtual ~JVMMethod() override;
+		MessageField<qint64> methodID{&JVMMethod::methodID, this};
+		MessageField<QString> name{&JVMMethod::name, this};
+		MessageField<QString> signature{&JVMMethod::signature, this};
+		MessageField<qint32> modBits{&JVMMethod::modBits, this};
+};
 
-class OODEBUG_API JavaRunner
-{
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+struct MethodsCommand : public Command {
+		MethodsCommand(qint64 classId);
+		virtual ~MethodsCommand() override;
+		MessageField<qint64> refTypeId{&MethodsCommand::refTypeId, this};
+};
 
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+struct MethodsReply : public Reply {
+		virtual ~MethodsReply() override;
+		MessageField<QList<JVMMethod>> methods{&MethodsReply::methods, this};
 };
 
 } /* namespace OODebug */
