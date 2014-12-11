@@ -242,6 +242,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 			QList<StackVariable> varsToGet;
 			for (auto variableDetails : variableTable.variables())
 			{
+				if (variableDetails.name().contains("this")) continue;
 				if (variableDetails.codeIndex() <= currentIndex &&
 					 currentIndex < variableDetails.codeIndex() + variableDetails.length())
 				{
@@ -269,14 +270,16 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable)
 {
 	int numArgs = containingMethod->arguments()->size();
-	if (variable.slot() < numArgs)
+	// Member functions have the this pointer as first argument
+	int varSlot = containingMethod->isStatic() ? variable.slot() : variable.slot() - 1;
+	if (varSlot < numArgs)
 	{
-		auto typeExpression = containingMethod->arguments()->at(variable.slot())->typeExpression();
+		auto typeExpression = containingMethod->arguments()->at(varSlot)->typeExpression();
 		return typeExpressionToTag(typeExpression);
 	}
 	else
 	{
-		int neededIndex = variable.slot() - numArgs;
+		int neededIndex = varSlot - numArgs;
 		int currentIndex = 0;
 		for (auto item : *containingMethod->items())
 		{
