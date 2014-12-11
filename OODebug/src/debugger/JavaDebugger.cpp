@@ -182,9 +182,12 @@ bool JavaDebugger::nodeToLocation(Model::Node* node, Location& resolvedLocation)
 		debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
 		return false;
 	}
+	QString methodName = method->name();
+	if (method->methodKind() == OOModel::Method::MethodKind::Constructor)
+		methodName = "<init>";
 	// TODO: function to get signature of a method: for Java classes we would need the full java library.
 	// Once fixed also fix the implementation of getMethodId().
-	qint64 methodId = debugConnector_.getMethodId(classId, method->name());
+	qint64 methodId = debugConnector_.getMethodId(classId, methodName);
 	Q_ASSERT(methodId != debugConnector_.NO_RESULT);
 
 	auto tagKind = Protocol::TypeTagKind::CLASS;
