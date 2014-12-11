@@ -71,15 +71,15 @@ void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 void DebugConnector::dispatchEvents()
 {
 	readFromSocket();
-	auto it = messageReadyForProcessing_.begin();
-	while (it != messageReadyForProcessing_.end())
+	auto it = messagesReadyForProcessing_.begin();
+	while (it != messagesReadyForProcessing_.end())
 	{
 		auto data = *it;
 		auto command = makeReply<Command>(data);
 		if (command.commandSet() == Protocol::CommandSet::Event
 			 && command.command() == MessagePart::cast(Protocol::EventCommands::Composite))
 		{
-			messageReadyForProcessing_.erase(it);
+			messagesReadyForProcessing_.erase(it);
 			handleComposite(data);
 			// The handling of one event might mess with our iterator so just emit the signal that we get called again
 			// once the handling is done
@@ -125,7 +125,7 @@ void DebugConnector::readFromSocket()
 		incompleteData_.remove(0, packetLen);
 		dataRead.remove(packetLen + 1, dataRead.length());
 	}
-	messageReadyForProcessing_ << dataRead;
+	messagesReadyForProcessing_ << dataRead;
 }
 
 QByteArray DebugConnector::sendCommand(const Command& command)
@@ -150,10 +150,10 @@ QByteArray DebugConnector::waitForReply(qint32 requestId)
 	while (true)
 	{
 		// First check if the data is already here
-		for (int i = 0; i < messageReadyForProcessing_.length(); ++i)
+		for (int i = 0; i < messagesReadyForProcessing_.length(); ++i)
 		{
-			auto r = makeReply<Reply>(messageReadyForProcessing_[i]);
-			if (r.id() == requestId) return messageReadyForProcessing_.takeAt(i);
+			auto r = makeReply<Reply>(messagesReadyForProcessing_[i]);
+			if (r.id() == requestId) return messagesReadyForProcessing_.takeAt(i);
 		}
 		tcpSocket_.waitForReadyRead();
 		readFromSocket();

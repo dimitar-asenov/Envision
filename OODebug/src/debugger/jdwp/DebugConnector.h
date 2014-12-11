@@ -110,7 +110,7 @@ class OODEBUG_API DebugConnector : public QObject
 		QHash<QString, qint64> classIdMap_;
 
 		// Each entry is a full message which is ready to be parsed & handled
-		QList<QByteArray> messageReadyForProcessing_;
+		QList<QByteArray> messagesReadyForProcessing_;
 
 		bool vmAlive_{};
 };
