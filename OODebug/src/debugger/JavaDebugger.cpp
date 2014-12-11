@@ -347,10 +347,15 @@ Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
 	{
 		if (referenceExpression->name().contains("String")) return Protocol::Tag::STRING;
 		if (DCast<OOModel::Class>(referenceExpression->target())) return Protocol::Tag::CLASS_OBJECT;
+		// TODO: Handle this properly
 		// Here we hit if we don't know what the target points to, thus we don't know if we deal with a class object.
 		// This will probably catch us if we debug in a method with variables of Type of any "in-built" Java class
 		// (except String, which is handled above)
-		Q_ASSERT(false);
+		// Q_ASSERT(false);
+
+		// The assertion is disabled for testing purposes.
+		qDebug() << "JAVADEBUGGER: WARNING: Reference expression where target type is uknown.";
+		return Protocol::Tag::CLASS_OBJECT;
 	}
 	// No other types possible, or we have to implement it!
 	Q_ASSERT(false);
