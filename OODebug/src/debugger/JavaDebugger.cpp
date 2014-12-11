@@ -85,7 +85,7 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		{
 			if (currentBreakpointKey_ == target) currentBreakpointKey_ = nullptr;
 			target->scene()->removeOverlay(it->overlay_);
-			if (debugConnector_.vmAlive() && it->requestId_ > 0)
+			if (debugConnector_.vmAlive() && it->requestId_ > Breakpoint::NOT_SET)
 				debugConnector_.clearBreakpoint(it->requestId_);
 			breakpoints_.erase(it);
 		}
@@ -93,7 +93,11 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		{
 			auto breakpoint = Breakpoint(addBreakpointOverlay(target));
 			if (debugConnector_.vmAlive())
-				breakpoint.requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(target->node()));
+			{
+				Location bpLocation;
+				if (nodeToLocation(target->node(), bpLocation))
+					breakpoint.requestId_ = debugConnector_.sendBreakpoint(bpLocation);
+			}
 			breakpoints_[target] = breakpoint;
 		}
 		return true;
@@ -168,15 +172,23 @@ QString JavaDebugger::fullNameFor(OOModel::Class* theClass, QChar delimiter)
 	return fullName;
 }
 
-Location JavaDebugger::nodeToLocation(Model::Node* node)
+bool JavaDebugger::nodeToLocation(Model::Node* node, Location& resolvedLocation)
 {
 	auto method = node->firstAncestorOfType<OOModel::Method>();
 	auto containerClass = method->firstAncestorOfType<OOModel::Class>();
 	qint64 classId =  debugConnector_.getClassId(jvmSignatureFor(containerClass));
+	if (classId == debugConnector_.NO_RESULT)
+	{
+		debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
+		return false;
+	}
+	QString methodName = method->name();
+	if (method->methodKind() == OOModel::Method::MethodKind::Constructor)
+		methodName = "<init>";
 	// TODO: function to get signature of a method: for Java classes we would need the full java library.
 	// Once fixed also fix the implementation of getMethodId().
-	qint64 methodId = debugConnector_.getMethodId(classId, method->name());
-	Q_ASSERT(methodId != -1);
+	qint64 methodId = debugConnector_.getMethodId(classId, methodName);
+	Q_ASSERT(methodId != debugConnector_.NO_RESULT);
 
 	auto tagKind = Protocol::TypeTagKind::CLASS;
 	if (containerClass->constructKind() == OOModel::Class::ConstructKind::Interface)
@@ -194,16 +206,22 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 		it = methodInfos_.insert(key, JavaMethod(debugConnector_.getLineTable(classId, methodId)));
 	qint64 methodIndex = it->indexForLine(line);
 
-	return Location(tagKind, classId, methodId, methodIndex);
+	resolvedLocation = Location(tagKind, classId, methodId, methodIndex);
+	return true;
 }
 
 void JavaDebugger::handleClassPrepare(Event)
 {
 	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
 	{
-		auto target = it.key();
-		auto targetNode = target->node();
-		it.value().requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
+		auto breakpoint = it.value();
+		if (breakpoint.requestId_ == Breakpoint::NOT_SET)
+		{
+			auto target = it.key();
+			auto targetNode = target->node();
+			Location bpLocation;
+			if (nodeToLocation(targetNode, bpLocation)) it.value().requestId_ = debugConnector_.sendBreakpoint(bpLocation);
+		}
 	}
 	debugConnector_.resume();
 }
@@ -227,6 +245,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 			QList<StackVariable> varsToGet;
 			for (auto variableDetails : variableTable.variables())
 			{
+				if (variableDetails.name().contains("this")) continue;
 				if (variableDetails.codeIndex() <= currentIndex &&
 					 currentIndex < variableDetails.codeIndex() + variableDetails.length())
 				{
@@ -254,14 +273,16 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable)
 {
 	int numArgs = containingMethod->arguments()->size();
-	if (variable.slot() < numArgs)
+	// Member functions have the this pointer as first argument
+	int varSlot = containingMethod->isStatic() ? variable.slot() : variable.slot() - 1;
+	if (varSlot < numArgs)
 	{
-		auto typeExpression = containingMethod->arguments()->at(variable.slot())->typeExpression();
+		auto typeExpression = containingMethod->arguments()->at(varSlot)->typeExpression();
 		return typeExpressionToTag(typeExpression);
 	}
 	else
 	{
-		int neededIndex = variable.slot() - numArgs;
+		int neededIndex = varSlot - numArgs;
 		int currentIndex = 0;
 		for (auto item : *containingMethod->items())
 		{
@@ -331,6 +352,16 @@ Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
 	else if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(e))
 	{
 		if (referenceExpression->name().contains("String")) return Protocol::Tag::STRING;
+		if (DCast<OOModel::Class>(referenceExpression->target())) return Protocol::Tag::CLASS_OBJECT;
+		// TODO: Handle this properly
+		// Here we hit if we don't know what the target points to, thus we don't know if we deal with a class object.
+		// This will probably catch us if we debug in a method with variables of Type of any "in-built" Java class
+		// (except String, which is handled above)
+		// Q_ASSERT(false);
+
+		// The assertion is disabled for testing purposes.
+		qDebug() << "JAVADEBUGGER: WARNING: Reference expression where target type is uknown.";
+		return Protocol::Tag::CLASS_OBJECT;
 	}
 	// No other types possible, or we have to implement it!
 	Q_ASSERT(false);

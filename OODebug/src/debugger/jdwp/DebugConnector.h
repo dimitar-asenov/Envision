@@ -73,15 +73,18 @@ class OODEBUG_API DebugConnector : public QObject
 		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
 		QString getString(qint64 stringId);
 
+		bool breakAtClassLoad(QString className);
 
 		int sendBreakpoint(Location breakLocation);
 		bool clearBreakpoint(qint32 requestId);
 
 		bool vmAlive();
+
+		static constexpr int NO_RESULT{-1};
 	private:
 		void handleSocketError(QAbstractSocket::SocketError socketError);
-		void readSlot();
-		void read();
+		void dispatchEvents();
+		void readFromSocket();
 
 		QByteArray sendCommand(const Command& command);
 		QByteArray waitForReply(qint32 requestId);
@@ -107,7 +110,7 @@ class OODEBUG_API DebugConnector : public QObject
 		QHash<QString, qint64> classIdMap_;
 
 		// Each entry is a full message which is ready to be parsed & handled
-		QList<QByteArray> readyData_;
+		QList<QByteArray> messageReadyForProcessing_;
 
 		bool vmAlive_{};
 };

@@ -41,8 +41,11 @@ struct OODEBUG_API Breakpoint {
 		Breakpoint() = default;
 		Breakpoint(Visualization::MessageOverlay* overlay);
 
-		qint32 requestId_{}; // Will be set when the break point request is sent, and is used to clear the breakpoint.
+		// Will be set when the break point request is sent, and is used to clear the breakpoint.
+		qint32 requestId_{NOT_SET};
 		Visualization::MessageOverlay* overlay_{};
+
+		static constexpr qint32 NOT_SET{-1};
 };
 
 inline Breakpoint::Breakpoint(Visualization::MessageOverlay* overlay) : overlay_{overlay} {}
