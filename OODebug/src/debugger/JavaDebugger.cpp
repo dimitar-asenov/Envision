@@ -345,13 +345,13 @@ Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
 		if (auto classTypeExpression = DCast<OOModel::ClassTypeExpression>(typeExpression))
 		{
 			auto referenceExpression = classTypeExpression->typeExpression();
-			if (referenceExpression->name().contains("String")) return Protocol::Tag::STRING;
+			if (referenceExpression->name() == "String") return Protocol::Tag::STRING;
 			return Protocol::Tag::CLASS_OBJECT;
 		}
 	}
 	else if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(e))
 	{
-		if (referenceExpression->name().contains("String")) return Protocol::Tag::STRING;
+		if (referenceExpression->name() == "String") return Protocol::Tag::STRING;
 		if (DCast<OOModel::Class>(referenceExpression->target())) return Protocol::Tag::CLASS_OBJECT;
 		// TODO: Handle this properly
 		// Here we hit if we don't know what the target points to, thus we don't know if we deal with a class object.
