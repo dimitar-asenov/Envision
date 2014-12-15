@@ -49,7 +49,8 @@ HEADERS += src/precompiled.h \
     src/debugger/metadata/JavaMethod.h \
     src/debugger/jdwp/messages/ThreadSet.h \
     src/debugger/jdwp/messages/StackFrameSet.h \
-    src/debugger/jdwp/messages/StringSet.h
+    src/debugger/jdwp/messages/StringSet.h \
+    src/debugger/ReferenceFinder.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -80,4 +81,5 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/metadata/JavaMethod.cpp \
     src/debugger/jdwp/messages/ThreadSet.cpp \
     src/debugger/jdwp/messages/StackFrameSet.cpp \
-    src/debugger/jdwp/messages/StringSet.cpp
+    src/debugger/jdwp/messages/StringSet.cpp \
+    src/debugger/ReferenceFinder.cpp
