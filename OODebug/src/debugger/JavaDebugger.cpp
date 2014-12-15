@@ -26,6 +26,7 @@
 
 #include "JavaDebugger.h"
 
+#include "ReferenceFinder.h"
 #include "../run_support/java/JavaRunner.h"
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/Location.h"
@@ -124,6 +125,35 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 				currentBreakpointKey_ = nullptr;
 			}
 		}
+		return true;
+	}
+	return false;
+}
+
+bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
+{
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F12))
+	{
+		auto node = target->node();
+		Q_ASSERT(node);
+		OOModel::VariableDeclaration* variableDeclaration = nullptr;
+		if (auto exprStmt = DCast<OOModel::ExpressionStatement>(node))
+		{
+			if (auto varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression()))
+				variableDeclaration = varDeclarationExpr->decl();
+		}
+		else if (auto declStmt = DCast<OOModel::DeclarationStatement>(node))
+		{
+			variableDeclaration = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
+		}
+		if (!variableDeclaration) return false;
+
+		ReferenceFinder refFinder;
+		refFinder.setSearchName(variableDeclaration->name());
+		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
+		refFinder.visit(containingMethod);
+		// TODO: use the references to track values!
+		qDebug() << refFinder.references().length();
 		return true;
 	}
 	return false;

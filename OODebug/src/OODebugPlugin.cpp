@@ -38,6 +38,7 @@
 #include "overlays/ConsoleOverlay.h"
 #include "handlers/HConsoleOverlay.h"
 #include "debugger/JavaDebugger.h"
+#include "debugger/ReferenceFinder.h"
 
 namespace OODebug {
 
@@ -58,6 +59,7 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	ConsoleOverlay::setDefaultClassHandler(HConsoleOverlay::instance());
 
 	MainMethodFinder::init();
+	ReferenceFinder::init();
 
 	// Register our breakpoint key handler
 	// TODO: once we have a better mechanism update this.
@@ -69,6 +71,11 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	OOInteraction::HStatement::instance()->registerKeyPressHandler(
 				[] (Visualization::Item* target, QKeyEvent* event) {
 		return JavaDebugger::instance().resume(target, event);
+	});
+	// TODO: see above
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().trackVariable(target, event);
 	});
 
 	return true;
