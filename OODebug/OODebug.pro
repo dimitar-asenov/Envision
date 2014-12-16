@@ -42,7 +42,6 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/messages/VMSet.h \
     src/debugger/jdwp/messages/AllMessages.h \
     src/debugger/jdwp/messages/ReferenceTypeSet.h \
-    src/debugger/metadata/Breakpoint.h \
     src/debugger/jdwp/messages/MethodSet.h \
     src/debugger/jdwp/messages/ThreadSet.h \
     src/debugger/jdwp/messages/StackFrameSet.h \

@@ -28,7 +28,6 @@
 
 #include "../oodebug_api.h"
 #include "jdwp/DebugConnector.h"
-#include "metadata/Breakpoint.h"
 
 namespace Export {
 	class TextToNodeMap;
@@ -67,7 +66,7 @@ class OODEBUG_API JavaDebugger
 
 	private:
 		JavaDebugger();
-		Visualization::MessageOverlay* addBreakpointOverlay(Visualization::Item* target);
+		void addBreakpointOverlay(Visualization::Item* target);
 		QString jvmSignatureFor(OOModel::Class* theClass);
 		/**
 		 * Returns a String with all containing module names split by \a delimiter in front of the \a theClass name.
@@ -86,12 +85,17 @@ class OODEBUG_API JavaDebugger
 		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
 		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
 
+		Visualization::MessageOverlay* breakpointOverlayOf(Visualization::Item* item);
+
 		DebugConnector debugConnector_;
 
-		QHash<Visualization::Item*, Breakpoint> breakpoints_;
+		QList<Visualization::Item*> unsetBreakpoints_;
+		QHash<qint32, Visualization::Item*> setBreakpoints_;
 		Visualization::Item* currentBreakpointItem_{};
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
+
+		static const QString BREAKPOINT_OVERLAY_GROUP;
 };
 
 } /* namespace OODebug */

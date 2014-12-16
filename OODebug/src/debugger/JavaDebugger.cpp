@@ -55,6 +55,8 @@
 
 namespace OODebug {
 
+const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
+
 JavaDebugger& JavaDebugger::instance()
 {
 	static JavaDebugger instance;
@@ -68,6 +70,10 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 
 	JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
 
+	// All previously set breakpoints have to be unset again.
+	unsetBreakpoints_ << setBreakpoints_.values();
+	setBreakpoints_.clear();
+
 	exportMap_ = JavaExport::JavaExporter::exportMaps().map(project);
 	debugConnector_.connect();
 }
@@ -76,27 +82,46 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
 	{
-		auto it = breakpoints_.find(target);
-		if (it != breakpoints_.end())
+		if (auto overlay = breakpointOverlayOf(target))
 		{
 			if (currentBreakpointItem_ == target) currentBreakpointItem_ = nullptr;
-			target->scene()->removeOverlay(it->overlay_);
-			if (debugConnector_.vmAlive() && it->requestId_ > Breakpoint::NOT_SET)
-				debugConnector_.clearBreakpoint(it->requestId_);
-			breakpoints_.erase(it);
+			target->scene()->removeOverlay(overlay);
+			if (debugConnector_.vmAlive())
+			{
+				int index = unsetBreakpoints_.indexOf(target);
+				if (index > 0)
+				{
+					unsetBreakpoints_.removeAt(index);
+				}
+				else
+				{
+					qint32 breakpointId = setBreakpoints_.key(target);
+					debugConnector_.clearBreakpoint(breakpointId);
+					setBreakpoints_.remove(breakpointId);
+				}
+			}
 		}
 		else
 		{
-			auto breakpoint = Breakpoint(addBreakpointOverlay(target));
+			addBreakpointOverlay(target);
 			if (debugConnector_.vmAlive())
 			{
 				auto node = target->node();
 				if (isParentClassLoaded(node))
-					breakpoint.requestId_ = debugConnector_.setBreakpoint(nodeToLocation(node));
+				{
+					qint32 requestId = debugConnector_.setBreakpoint(nodeToLocation(node));
+					setBreakpoints_[requestId] = target;
+				}
 				else
+				{
+					unsetBreakpoints_ << target;
 					breaktAtParentClassLoad(node);
+				}
 			}
-			breakpoints_[target] = breakpoint;
+			else
+			{
+				unsetBreakpoints_ << target;
+			}
 		}
 		return true;
 	}
@@ -110,11 +135,10 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 		debugConnector_.resume();
 		if (currentBreakpointItem_)
 		{
-			auto it = breakpoints_.find(currentBreakpointItem_);
-			if (it != breakpoints_.end())
+			if (auto overlay = breakpointOverlayOf(currentBreakpointItem_))
 			{
 				// unset the breakpoint
-				it->overlay_->setStyle(Visualization::MessageOverlay::itemStyles().get("default"));
+				overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("default"));
 			}
 			else
 			{
@@ -164,20 +188,18 @@ JavaDebugger::JavaDebugger()
 	debugConnector_.addEventListener(Protocol::EventKind::VM_START, [this] (Event e) { handleVMStart(e); });
 }
 
-Visualization::MessageOverlay* JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
+void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
 {
 	// TODO: Use a custom overlay for breakpoints.
-	static const QString overlayGroupName("Breakpoint overlay");
 	auto scene = target->scene();
-	auto overlayGroup = scene->overlayGroup(overlayGroupName);
+	auto overlayGroup = scene->overlayGroup(BREAKPOINT_OVERLAY_GROUP);
 
-	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
+	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(BREAKPOINT_OVERLAY_GROUP);
 	auto overlay = new Visualization::MessageOverlay(target,
 																	 [](Visualization::MessageOverlay *){
 			return QString("BP");
 });
 	overlayGroup->addOverlay(makeOverlay(overlay));
-	return overlay;
 }
 
 QString JavaDebugger::jvmSignatureFor(OOModel::Class* theClass)
@@ -249,17 +271,21 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 
 void JavaDebugger::trySetBreakpoints()
 {
-	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
+	auto it = unsetBreakpoints_.begin();
+	while (it != unsetBreakpoints_.end())
 	{
-		auto breakpoint = it.value();
-		if (breakpoint.requestId_ == Breakpoint::NOT_SET)
+		auto target = *it;
+		auto targetNode = target->node();
+		if (isParentClassLoaded(targetNode))
 		{
-			auto target = it.key();
-			auto targetNode = target->node();
-			if (isParentClassLoaded(targetNode))
-				it.value().requestId_ = debugConnector_.setBreakpoint(nodeToLocation(targetNode));
-			else
-				breaktAtParentClassLoad(targetNode);
+			qint32 requestId = debugConnector_.setBreakpoint(nodeToLocation(targetNode));
+			setBreakpoints_[requestId] = *it;
+			it = unsetBreakpoints_.erase(it);
+		}
+		else
+		{
+			breaktAtParentClassLoad(targetNode);
+			++it;
 		}
 	}
 }
@@ -278,44 +304,42 @@ void JavaDebugger::handleClassPrepare(Event)
 
 void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 {
-	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
+	if (auto breakpointItem = setBreakpoints_[breakpointEvent.requestID()])
 	{
-		if (it->requestId_ == breakpointEvent.requestID())
+		currentBreakpointItem_ = breakpointItem;
+		if (auto overlay = breakpointOverlayOf(breakpointItem))
+			overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
+		auto containingMethod = breakpointItem->node()->firstAncestorOfType<OOModel::Method>();
+		// Get frames
+		auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
+		auto location = breakpointEvent.location();
+		auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
+		auto currentFrame = frames.frames()[0];
+		int currentIndex = currentFrame.location().methodIndex();
+
+		QList<StackVariable> varsToGet;
+		for (auto variableDetails : variableTable.variables())
 		{
-			currentBreakpointItem_ = it.key();
-			it->overlay_->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
-			auto containingMethod = it.key()->node()->firstAncestorOfType<OOModel::Method>();
-			// Get frames
-			auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
-			auto location = breakpointEvent.location();
-			auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
-			auto currentFrame = frames.frames()[0];
-			int currentIndex = currentFrame.location().methodIndex();
-
-			QList<StackVariable> varsToGet;
-			for (auto variableDetails : variableTable.variables())
+			if (variableDetails.name().contains("this")) continue;
+			if (variableDetails.codeIndex() <= currentIndex &&
+				 currentIndex < variableDetails.codeIndex() + variableDetails.length())
 			{
-				if (variableDetails.name().contains("this")) continue;
-				if (variableDetails.codeIndex() <= currentIndex &&
-					 currentIndex < variableDetails.codeIndex() + variableDetails.length())
-				{
-					varsToGet << StackVariable(variableDetails.slot(), typeOfVariable(containingMethod, variableDetails));
-				}
+				varsToGet << StackVariable(variableDetails.slot(), typeOfVariable(containingMethod, variableDetails));
 			}
+		}
 
-			auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
-			Q_ASSERT(values.values().length() == varsToGet.length());
-			for (auto val : values.values())
-			{
-				// TODO: for now this is just to demonstrate that we can fetch values, we should probably do something
-				// more useful here.
-				if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
-					qDebug() << "#INT\t#" << val.intValue();
-				else if (val.kind() == MessagePart::cast(Protocol::Tag::BOOLEAN))
-					qDebug() << "#BOOL\t#" << val.boolean();
-				else if (val.kind() == MessagePart::cast(Protocol::Tag::STRING))
-					qDebug() << "#STRING\t#" << debugConnector_.getString(val.stringId());
-			}
+		auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+		Q_ASSERT(values.values().length() == varsToGet.length());
+		for (auto val : values.values())
+		{
+			// TODO: for now this is just to demonstrate that we can fetch values, we should probably do something
+			// more useful here.
+			if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
+				qDebug() << "#INT\t#" << val.intValue();
+			else if (val.kind() == MessagePart::cast(Protocol::Tag::BOOLEAN))
+				qDebug() << "#BOOL\t#" << val.boolean();
+			else if (val.kind() == MessagePart::cast(Protocol::Tag::STRING))
+				qDebug() << "#STRING\t#" << debugConnector_.getString(val.stringId());
 		}
 	}
 }
@@ -415,6 +439,21 @@ Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
 	}
 	// No other types possible, or we have to implement it!
 	Q_ASSERT(false);
+}
+
+Visualization::MessageOverlay* JavaDebugger::breakpointOverlayOf(Visualization::Item* item)
+{
+	// TODO: for this we could have a more general mechanism in Item
+	auto overlayGroup = item->scene()->overlayGroup(BREAKPOINT_OVERLAY_GROUP);
+	if (!overlayGroup) return nullptr;
+
+	for (auto overlayAccessor : overlayGroup->overlays())
+	{
+		auto overlayItem = overlayAccessor->overlayItem();
+		if (auto breakpointOverlay = DCast<Visualization::MessageOverlay>(overlayItem))
+			if (breakpointOverlay->associatedItem() == item) return breakpointOverlay;
+	}
+	return nullptr;
 }
 
 } /* namespace OODebug */
