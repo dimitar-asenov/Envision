@@ -78,7 +78,7 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	debugConnector_.connect();
 }
 
-bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
+bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* event)
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
 	{
