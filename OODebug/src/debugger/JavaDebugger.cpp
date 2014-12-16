@@ -66,10 +66,7 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
 
-	Model::Node* mainContainer = JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
-	// Find the class name where the main method is in.
-	auto mainClass = mainContainer->firstAncestorOfType<OOModel::Class>();
-	Q_ASSERT(mainClass);
+	JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
 
 	exportMap_ = JavaExport::JavaExporter::exportMaps().map(project);
 	debugConnector_.connect();
