@@ -170,7 +170,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		if (!variableDeclaration) return false;
 
 		ReferenceFinder refFinder;
-		refFinder.setSearchName(variableDeclaration->name());
+		refFinder.setSearchNode(node);
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
 		// TODO: use the references to track values!

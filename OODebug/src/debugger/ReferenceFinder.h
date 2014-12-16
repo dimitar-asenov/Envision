@@ -34,6 +34,10 @@ namespace OOModel {
 	class ReferenceExpression;
 }
 
+namespace Model {
+	class Node;
+}
+
 namespace OODebug {
 
 /**
@@ -43,7 +47,7 @@ class OODEBUG_API ReferenceFinder : public Model::Visitor<ReferenceFinder, OOMod
 {
 	public:
 		static void init();
-		void setSearchName(QString symbolName);
+		void setSearchNode(Model::Node* searchNode);
 
 		QList<OOModel::ReferenceExpression*> references() const;
 		void clearReferences();
@@ -51,11 +55,11 @@ class OODEBUG_API ReferenceFinder : public Model::Visitor<ReferenceFinder, OOMod
 	private:
 		static OOModel::ReferenceExpression* visitReferenceExpression(ReferenceFinder* self,
 																						  OOModel::ReferenceExpression* m);
-		QString searchName_;
+		Model::Node* searchNode_;
 		QList<OOModel::ReferenceExpression*> references_;
 };
 
-inline void ReferenceFinder::setSearchName(QString symbolName) { searchName_ = symbolName; }
+inline void ReferenceFinder::setSearchNode(Model::Node* searchNode) { searchNode_ = searchNode; }
 inline QList<OOModel::ReferenceExpression*> ReferenceFinder::references() const { return references_; }
 inline void ReferenceFinder::clearReferences() { references_.clear(); }
 

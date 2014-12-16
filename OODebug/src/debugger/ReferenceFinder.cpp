@@ -35,10 +35,10 @@ void ReferenceFinder::init()
 	addType<OOModel::ReferenceExpression>(visitReferenceExpression);
 }
 
-OOModel::ReferenceExpression* ReferenceFinder::visitReferenceExpression(ReferenceFinder*self,
+OOModel::ReferenceExpression* ReferenceFinder::visitReferenceExpression(ReferenceFinder* self,
 																								OOModel::ReferenceExpression* m)
 {
-	if (m->name() == self->searchName_)	self->references_ << m;
+	if (m->target() == self->searchNode_)	self->references_ << m;
 	return m;
 }
 
