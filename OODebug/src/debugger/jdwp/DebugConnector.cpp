@@ -44,9 +44,8 @@ DebugConnector::~DebugConnector()
 	tcpSocket_.abort();
 }
 
-void DebugConnector::connect(QString mainClassName, QString vmHostName, int vmHostPort)
+void DebugConnector::connect(QString vmHostName, int vmHostPort)
 {
-	mainClassName_ = mainClassName;
 	if (tcpSocket_.isOpen())
 		tcpSocket_.abort();
 	QObject::disconnect(&tcpSocket_, &QTcpSocket::readyRead, this, &DebugConnector::dispatchEvents);
@@ -178,7 +177,7 @@ void DebugConnector::readHandshake()
 		}
 		checkVersion();
 		checkIdSizes();
-		sendBreakAtStart();
+		dispatchEvents();
 	}
 	else
 	{
@@ -209,14 +208,6 @@ void DebugConnector::checkIdSizes()
 	Q_ASSERT(sizeof(qint64) == idSizes.objectIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.referenceTypeIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.frameIDSize());
-}
-
-void DebugConnector::sendBreakAtStart()
-{
-	Q_ASSERT(breakAtClassLoad(mainClassName_));
-	// trigger event handling such that we get the VM start event before we resume
-	dispatchEvents();
-	resume();
 }
 
 bool DebugConnector::resume()
@@ -312,11 +303,13 @@ void DebugConnector::handleComposite(QByteArray data)
 
 	for (auto& event : c.events())
 	{
+		// We always want to know the VM state
 		if (Protocol::EventKind::VM_START == event.eventKind())
 			vmAlive_ = true;
 		else if (Protocol::EventKind::VM_DEATH == event.eventKind())
 			vmAlive_ = false;
-		else if (auto listener = eventListeners_[event.eventKind()])
+		// Dispatch event to listeners
+		if (auto listener = eventListeners_[event.eventKind()])
 			listener(event);
 		else
 			qDebug() << "EVENT" << static_cast<int>(event.eventKind());

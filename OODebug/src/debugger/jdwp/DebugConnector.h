@@ -58,7 +58,7 @@ class OODEBUG_API DebugConnector : public QObject
 		 * As certain info is only available when we load the class where the main method resides
 		 * you need to pass the name of the class where the main method is in, in \a mainClassName.
 		 */
-		void connect(QString mainClassName, QString vmHostName = "localhost", int vmHostPort = 4000);
+		void connect(QString vmHostName = "localhost", int vmHostPort = 4000);
 
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
@@ -95,15 +95,11 @@ class OODEBUG_API DebugConnector : public QObject
 		void checkVersion();
 		void checkIdSizes();
 
-		void sendBreakAtStart();
-
 		void handleComposite(QByteArray data);
 
 		QTcpSocket tcpSocket_;
 
 		QByteArray incompleteData_;
-
-		QString mainClassName_;
 
 		QHash<Protocol::EventKind, EventListener> eventListeners_;
 

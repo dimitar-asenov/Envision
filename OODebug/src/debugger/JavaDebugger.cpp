@@ -72,9 +72,7 @@ void JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	Q_ASSERT(mainClass);
 
 	exportMap_ = JavaExport::JavaExporter::exportMaps().map(project);
-
-	QString mainClassName = fullNameFor(mainClass, '.');
-	debugConnector_.connect(mainClassName);
+	debugConnector_.connect();
 }
 
 bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
@@ -166,6 +164,7 @@ JavaDebugger::JavaDebugger()
 	debugConnector_.addEventListener(Protocol::EventKind::CLASS_PREPARE, [this] (Event e) { handleClassPrepare(e);});
 	debugConnector_.addEventListener(Protocol::EventKind::BREAKPOINT,
 												[this] (Event e) { handleBreakpoint(e.breakpoint()); });
+	debugConnector_.addEventListener(Protocol::EventKind::VM_START, [this] (Event e) { handleVMStart(e); });
 }
 
 Visualization::MessageOverlay* JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
@@ -250,7 +249,7 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	return Location(tagKind, classId, methodId, methodIndex);
 }
 
-void JavaDebugger::handleClassPrepare(Event)
+void JavaDebugger::trySetBreakpoints()
 {
 	for (auto it = breakpoints_.begin(); it != breakpoints_.end(); ++it)
 	{
@@ -265,6 +264,17 @@ void JavaDebugger::handleClassPrepare(Event)
 				breaktAtParentClassLoad(targetNode);
 		}
 	}
+}
+
+void JavaDebugger::handleVMStart(Event)
+{
+	trySetBreakpoints();
+	debugConnector_.resume();
+}
+
+void JavaDebugger::handleClassPrepare(Event)
+{
+	trySetBreakpoints();
 	debugConnector_.resume();
 }
 
