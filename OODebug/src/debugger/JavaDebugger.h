@@ -89,7 +89,7 @@ class OODEBUG_API JavaDebugger
 		DebugConnector debugConnector_;
 
 		QHash<Visualization::Item*, Breakpoint> breakpoints_;
-		Visualization::Item* currentBreakpointKey_{};
+		Visualization::Item* currentBreakpointItem_{};
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 };

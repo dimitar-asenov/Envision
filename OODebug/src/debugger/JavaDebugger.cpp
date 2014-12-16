@@ -82,7 +82,7 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 		auto it = breakpoints_.find(target);
 		if (it != breakpoints_.end())
 		{
-			if (currentBreakpointKey_ == target) currentBreakpointKey_ = nullptr;
+			if (currentBreakpointItem_ == target) currentBreakpointItem_ = nullptr;
 			target->scene()->removeOverlay(it->overlay_);
 			if (debugConnector_.vmAlive() && it->requestId_ > Breakpoint::NOT_SET)
 				debugConnector_.clearBreakpoint(it->requestId_);
@@ -111,9 +111,9 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F6))
 	{
 		debugConnector_.resume();
-		if (currentBreakpointKey_)
+		if (currentBreakpointItem_)
 		{
-			auto it = breakpoints_.find(currentBreakpointKey_);
+			auto it = breakpoints_.find(currentBreakpointItem_);
 			if (it != breakpoints_.end())
 			{
 				// unset the breakpoint
@@ -122,7 +122,7 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 			else
 			{
 				// there is no current breakpoint no more
-				currentBreakpointKey_ = nullptr;
+				currentBreakpointItem_ = nullptr;
 			}
 		}
 		return true;
@@ -285,7 +285,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 	{
 		if (it->requestId_ == breakpointEvent.requestID())
 		{
-			currentBreakpointKey_ = it.key();
+			currentBreakpointItem_ = it.key();
 			it->overlay_->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
 			auto containingMethod = it.key()->node()->firstAncestorOfType<OOModel::Method>();
 			// Get frames
