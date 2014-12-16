@@ -21,10 +21,8 @@ HEADERS += src/precompiled.h \
     src/compiler/CompilerOutputParser.h \
     src/compiler/CommandLineCompiler.h \
     src/compiler/CompilerMessage.h \
-    src/compiler/java/JavaCompiler.h \
     src/commands/CJavaCompile.h \
     src/run_support/MainMethodFinder.h \
-    src/run_support/java/JavaRunner.h \
     src/commands/CJavaRun.h \
     src/run_support/RunProcess.h \
     src/overlays/ConsoleOverlay.h \
@@ -50,16 +48,16 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/messages/ThreadSet.h \
     src/debugger/jdwp/messages/StackFrameSet.h \
     src/debugger/jdwp/messages/StringSet.h \
-    src/debugger/ReferenceFinder.h
+    src/debugger/ReferenceFinder.h \
+    src/compiler/JavaCompiler.h \
+    src/run_support/JavaRunner.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
     src/compiler/CompilerOutputParser.cpp \
     src/compiler/CommandLineCompiler.cpp \
-    src/compiler/java/JavaCompiler.cpp \
     src/commands/CJavaCompile.cpp \
     src/run_support/MainMethodFinder.cpp \
-    src/run_support/java/JavaRunner.cpp \
     src/commands/CJavaRun.cpp \
     src/overlays/ConsoleOverlay.cpp \
     src/overlays/ConsoleOverlayStyle.cpp \
@@ -82,4 +80,6 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/jdwp/messages/ThreadSet.cpp \
     src/debugger/jdwp/messages/StackFrameSet.cpp \
     src/debugger/jdwp/messages/StringSet.cpp \
-    src/debugger/ReferenceFinder.cpp
+    src/debugger/ReferenceFinder.cpp \
+    src/compiler/JavaCompiler.cpp \
+    src/run_support/JavaRunner.cpp

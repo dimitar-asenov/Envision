@@ -38,8 +38,8 @@
 
 #include "JavaExport/src/exporter/JavaExporter.h"
 
-#include "../CommandLineCompiler.h"
-#include "../CompilerOutputParser.h"
+#include "CommandLineCompiler.h"
+#include "CompilerOutputParser.h"
 
 namespace OODebug {
 

@@ -40,11 +40,11 @@
 #include "Export/src/writer/TextToNodeMap.h"
 #include "JavaExport/src/exporter/JavaExporter.h"
 
-#include "../../overlays/ConsoleOverlay.h"
-#include "../../compiler/java/JavaCompiler.h"
-#include "../MainMethodFinder.h"
-#include "../../OODebugException.h"
-#include "../RunProcess.h"
+#include "../overlays/ConsoleOverlay.h"
+#include "../compiler/JavaCompiler.h"
+#include "MainMethodFinder.h"
+#include "../OODebugException.h"
+#include "RunProcess.h"
 
 namespace OODebug {
 

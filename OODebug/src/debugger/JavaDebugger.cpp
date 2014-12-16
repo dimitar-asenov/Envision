@@ -27,7 +27,7 @@
 #include "JavaDebugger.h"
 
 #include "ReferenceFinder.h"
-#include "../run_support/java/JavaRunner.h"
+#include "../run_support/JavaRunner.h"
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/Location.h"
 

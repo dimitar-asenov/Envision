@@ -26,7 +26,7 @@
 
 #include "CJavaRun.h"
 
-#include "../run_support/java/JavaRunner.h"
+#include "../run_support/JavaRunner.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace OODebug {
