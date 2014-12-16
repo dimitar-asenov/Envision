@@ -239,13 +239,14 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	auto locations = exportMap_->locations(node);
 	int line = locations.at(0).span_.startLine_ + 1;
 
-	// Check if we have line info for this method
-	auto key = qMakePair(classId, methodId);
-	auto it = methodInfos_.find(key);
-	if (it == methodInfos_.end())
-		it = methodInfos_.insert(key, JavaMethod(debugConnector_.getLineTable(classId, methodId)));
-	qint64 methodIndex = it->indexForLine(line);
+	// get line info for this method.
+	static constexpr qint64 NO_INDEX = -2;
+	qint64 methodIndex = NO_INDEX;
+	auto lineTable = debugConnector_.getLineTable(classId, methodId);
+	for (auto val : lineTable.mappings())
+		if (line == val.lineNumber()) methodIndex = val.lineCodeIndex();
 
+	Q_ASSERT(methodIndex != NO_INDEX);
 	return Location(tagKind, classId, methodId, methodIndex);
 }
 

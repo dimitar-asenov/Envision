@@ -44,7 +44,6 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/messages/ReferenceTypeSet.h \
     src/debugger/metadata/Breakpoint.h \
     src/debugger/jdwp/messages/MethodSet.h \
-    src/debugger/metadata/JavaMethod.h \
     src/debugger/jdwp/messages/ThreadSet.h \
     src/debugger/jdwp/messages/StackFrameSet.h \
     src/debugger/jdwp/messages/StringSet.h \
@@ -76,7 +75,6 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/jdwp/messages/VMSet.cpp \
     src/debugger/jdwp/messages/ReferenceTypeSet.cpp \
     src/debugger/jdwp/messages/MethodSet.cpp \
-    src/debugger/metadata/JavaMethod.cpp \
     src/debugger/jdwp/messages/ThreadSet.cpp \
     src/debugger/jdwp/messages/StackFrameSet.cpp \
     src/debugger/jdwp/messages/StringSet.cpp \

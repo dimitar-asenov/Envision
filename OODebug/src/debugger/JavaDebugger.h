@@ -29,7 +29,6 @@
 #include "../oodebug_api.h"
 #include "jdwp/DebugConnector.h"
 #include "metadata/Breakpoint.h"
-#include "metadata/JavaMethod.h"
 
 namespace Export {
 	class TextToNodeMap;
@@ -91,8 +90,6 @@ class OODEBUG_API JavaDebugger
 
 		QHash<Visualization::Item*, Breakpoint> breakpoints_;
 		Visualization::Item* currentBreakpointKey_{};
-
-		QHash<QPair<qint64, qint64>, JavaMethod> methodInfos_;
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 };
