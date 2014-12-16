@@ -222,21 +222,13 @@ bool DebugConnector::resume()
 
 qint64 DebugConnector::getClassId(const QString& signature)
 {
-	auto it = classIdMap_.find(signature);
-	if (it == classIdMap_.end())
-	{
-		auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
-		if (classesBySignature.classes().size() < 1)
-			return NO_RESULT;
-		// If we have more than one class id for one signature, we should check what the situation is and
-		// adapt the following code to handle this situation correctly.
-		Q_ASSERT(classesBySignature.classes().size() == 1);
-		return classIdMap_[signature] = classesBySignature.classes()[0].typeID();
-	}
-	else
-	{
-		return it.value();
-	}
+	auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
+	if (classesBySignature.classes().size() < 1)
+		return NO_RESULT;
+	// If we have more than one class id for one signature, we should check what the situation is and
+	// adapt the following code to handle this situation correctly.
+	Q_ASSERT(classesBySignature.classes().size() == 1);
+	return classesBySignature.classes()[0].typeID();
 }
 
 qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)

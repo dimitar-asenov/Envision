@@ -103,8 +103,6 @@ class OODEBUG_API DebugConnector : public QObject
 
 		QHash<Protocol::EventKind, EventListener> eventListeners_;
 
-		QHash<QString, qint64> classIdMap_;
-
 		// Each entry is a full message which is ready to be parsed & handled
 		QList<QByteArray> messagesReadyForProcessing_;
 
