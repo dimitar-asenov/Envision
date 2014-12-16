@@ -95,7 +95,7 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 			{
 				auto node = target->node();
 				if (isParentClassLoaded(node))
-					breakpoint.requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(node));
+					breakpoint.requestId_ = debugConnector_.setBreakpoint(nodeToLocation(node));
 				else
 					breaktAtParentClassLoad(node);
 			}
@@ -259,7 +259,7 @@ void JavaDebugger::trySetBreakpoints()
 			auto target = it.key();
 			auto targetNode = target->node();
 			if (isParentClassLoaded(targetNode))
-				it.value().requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
+				it.value().requestId_ = debugConnector_.setBreakpoint(nodeToLocation(targetNode));
 			else
 				breaktAtParentClassLoad(targetNode);
 		}

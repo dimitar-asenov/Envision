@@ -274,7 +274,7 @@ bool DebugConnector::breakAtClassLoad(QString className)
 	return Protocol::Error::NONE == r.error();
 }
 
-int DebugConnector::sendBreakpoint(Location breakLocation)
+int DebugConnector::setBreakpoint(Location breakLocation)
 {
 	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));
 	return r.requestId();

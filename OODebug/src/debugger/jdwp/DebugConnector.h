@@ -75,7 +75,7 @@ class OODEBUG_API DebugConnector : public QObject
 
 		bool breakAtClassLoad(QString className);
 
-		int sendBreakpoint(Location breakLocation);
+		int setBreakpoint(Location breakLocation);
 		bool clearBreakpoint(qint32 requestId);
 
 		bool vmAlive();
