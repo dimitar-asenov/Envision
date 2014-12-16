@@ -75,13 +75,11 @@ class OODEBUG_API JavaDebugger
 		 */
 		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
 
-		/**
-		 * Tries to translate the \a node into a \a Location and stores the result in \a resolvedLocation.
-		 * If it succeeds true is returned and the \a resolvedLocation is set, otherwise false is returned.
-		 */
-		bool nodeToLocation(Model::Node* node, Location& resolvedLocation);
+		bool isParentClassLoaded(Model::Node* node);
+		void breaktAtParentClassLoad(Model::Node* node);
+		Location nodeToLocation(Model::Node* node);
 
-		void handleClassPrepare(Event e);
+		void handleClassPrepare(Event);
 		void handleBreakpoint(BreakpointEvent breakpointEvent);
 
 		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);

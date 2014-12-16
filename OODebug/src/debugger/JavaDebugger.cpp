@@ -95,9 +95,11 @@ bool JavaDebugger::addBreakpoint(Visualization::Item* target, QKeyEvent* event)
 			auto breakpoint = Breakpoint(addBreakpointOverlay(target));
 			if (debugConnector_.vmAlive())
 			{
-				Location bpLocation;
-				if (nodeToLocation(target->node(), bpLocation))
-					breakpoint.requestId_ = debugConnector_.sendBreakpoint(bpLocation);
+				auto node = target->node();
+				if (isParentClassLoaded(node))
+					breakpoint.requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(node));
+				else
+					breaktAtParentClassLoad(node);
 			}
 			breakpoints_[target] = breakpoint;
 		}
@@ -202,16 +204,25 @@ QString JavaDebugger::fullNameFor(OOModel::Class* theClass, QChar delimiter)
 	return fullName;
 }
 
-bool JavaDebugger::nodeToLocation(Model::Node* node, Location& resolvedLocation)
+bool JavaDebugger::isParentClassLoaded(Model::Node* node)
+{
+	auto containerClass = node->firstAncestorOfType<OOModel::Class>();
+	qint64 id = debugConnector_.getClassId(jvmSignatureFor(containerClass));
+	return id != DebugConnector::NO_RESULT;
+}
+
+void JavaDebugger::breaktAtParentClassLoad(Model::Node* node)
+{
+	auto containerClass = node->firstAncestorOfType<OOModel::Class>();
+	debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
+}
+
+Location JavaDebugger::nodeToLocation(Model::Node* node)
 {
 	auto method = node->firstAncestorOfType<OOModel::Method>();
 	auto containerClass = method->firstAncestorOfType<OOModel::Class>();
 	qint64 classId =  debugConnector_.getClassId(jvmSignatureFor(containerClass));
-	if (classId == debugConnector_.NO_RESULT)
-	{
-		debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
-		return false;
-	}
+	Q_ASSERT(classId != debugConnector_.NO_RESULT);
 	QString methodName = method->name();
 	if (method->methodKind() == OOModel::Method::MethodKind::Constructor)
 		methodName = "<init>";
@@ -236,8 +247,7 @@ bool JavaDebugger::nodeToLocation(Model::Node* node, Location& resolvedLocation)
 		it = methodInfos_.insert(key, JavaMethod(debugConnector_.getLineTable(classId, methodId)));
 	qint64 methodIndex = it->indexForLine(line);
 
-	resolvedLocation = Location(tagKind, classId, methodId, methodIndex);
-	return true;
+	return Location(tagKind, classId, methodId, methodIndex);
 }
 
 void JavaDebugger::handleClassPrepare(Event)
@@ -249,8 +259,10 @@ void JavaDebugger::handleClassPrepare(Event)
 		{
 			auto target = it.key();
 			auto targetNode = target->node();
-			Location bpLocation;
-			if (nodeToLocation(targetNode, bpLocation)) it.value().requestId_ = debugConnector_.sendBreakpoint(bpLocation);
+			if (isParentClassLoaded(targetNode))
+				it.value().requestId_ = debugConnector_.sendBreakpoint(nodeToLocation(targetNode));
+			else
+				breaktAtParentClassLoad(targetNode);
 		}
 	}
 	debugConnector_.resume();
