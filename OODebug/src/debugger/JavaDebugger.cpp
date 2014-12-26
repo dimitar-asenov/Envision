@@ -82,20 +82,21 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
 	{
+		auto node = target->node();
 		if (auto overlay = breakpointOverlayOf(target))
 		{
 			if (currentBreakpointItem_ == target) currentBreakpointItem_ = nullptr;
 			target->scene()->removeOverlay(overlay);
 			if (debugConnector_.vmAlive())
 			{
-				int index = unsetBreakpoints_.indexOf(target);
+				int index = unsetBreakpoints_.indexOf(node);
 				if (index > 0)
 				{
 					unsetBreakpoints_.removeAt(index);
 				}
 				else
 				{
-					qint32 breakpointId = setBreakpoints_.key(target);
+					qint32 breakpointId = setBreakpoints_.key(node);
 					debugConnector_.clearBreakpoint(breakpointId);
 					setBreakpoints_.remove(breakpointId);
 				}
@@ -106,21 +107,20 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 			addBreakpointOverlay(target);
 			if (debugConnector_.vmAlive())
 			{
-				auto node = target->node();
 				if (isParentClassLoaded(node))
 				{
 					qint32 requestId = debugConnector_.setBreakpoint(nodeToLocation(node));
-					setBreakpoints_[requestId] = target;
+					setBreakpoints_[requestId] = node;
 				}
 				else
 				{
-					unsetBreakpoints_ << target;
+					unsetBreakpoints_ << node;
 					breaktAtParentClassLoad(node);
 				}
 			}
 			else
 			{
-				unsetBreakpoints_ << target;
+				unsetBreakpoints_ << node;
 			}
 		}
 		return true;
@@ -274,17 +274,15 @@ void JavaDebugger::trySetBreakpoints()
 	auto it = unsetBreakpoints_.begin();
 	while (it != unsetBreakpoints_.end())
 	{
-		auto target = *it;
-		auto targetNode = target->node();
-		if (isParentClassLoaded(targetNode))
+		if (isParentClassLoaded(*it))
 		{
-			qint32 requestId = debugConnector_.setBreakpoint(nodeToLocation(targetNode));
+			qint32 requestId = debugConnector_.setBreakpoint(nodeToLocation(*it));
 			setBreakpoints_[requestId] = *it;
 			it = unsetBreakpoints_.erase(it);
 		}
 		else
 		{
-			breaktAtParentClassLoad(targetNode);
+			breaktAtParentClassLoad(*it);
 			++it;
 		}
 	}
@@ -304,12 +302,13 @@ void JavaDebugger::handleClassPrepare(Event)
 
 void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 {
-	if (auto breakpointItem = setBreakpoints_[breakpointEvent.requestID()])
+	if (auto breakpointNode = setBreakpoints_[breakpointEvent.requestID()])
 	{
-		currentBreakpointItem_ = breakpointItem;
-		if (auto overlay = breakpointOverlayOf(breakpointItem))
+		auto visualization = *Visualization::Item::nodeItemsMap().find(breakpointNode);
+		currentBreakpointItem_ = visualization;
+		if (auto overlay = breakpointOverlayOf(visualization))
 			overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
-		auto containingMethod = breakpointItem->node()->firstAncestorOfType<OOModel::Method>();
+		auto containingMethod = breakpointNode->firstAncestorOfType<OOModel::Method>();
 		// Get frames
 		auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
 		auto location = breakpointEvent.location();

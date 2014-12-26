@@ -89,8 +89,8 @@ class OODEBUG_API JavaDebugger
 
 		DebugConnector debugConnector_;
 
-		QList<Visualization::Item*> unsetBreakpoints_;
-		QHash<qint32, Visualization::Item*> setBreakpoints_;
+		QList<Model::Node*> unsetBreakpoints_;
+		QHash<qint32, Model::Node*> setBreakpoints_;
 		Visualization::Item* currentBreakpointItem_{};
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
