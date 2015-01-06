@@ -879,6 +879,24 @@ qreal Item::totalScale() const
 	return s;
 }
 
+QList<OverlayAccessor*> Item::overlays(QString overlayGroup) const
+{
+	QList<OverlayAccessor*> result;
+
+	if (!overlayGroup.isEmpty())
+	{
+		auto group = scene()->overlayGroup(overlayGroup);
+		if (group) result << group->overlaysForItem(this);
+	}
+	else
+	{
+		for (auto group : scene()->allOverlayGroups())
+			result << result << group->overlaysForItem(this);
+	}
+
+	return result;
+}
+
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.

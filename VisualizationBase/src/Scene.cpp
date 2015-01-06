@@ -507,6 +507,14 @@ OverlayGroup* Scene::overlayGroup(const QString& name)
 	else return &h.value();
 }
 
+QList<OverlayGroup*> Scene::allOverlayGroups() const
+{
+	QList<OverlayGroup*> res;
+	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
+		res.append( const_cast<OverlayGroup*>(&it.value()) );
+	return res;
+}
+
 void Scene::removeOverlayGroup(const QString& name)
 {
 	if ( overlayGroups_.remove(name) ) scheduleUpdate();
