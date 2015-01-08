@@ -47,6 +47,9 @@ struct Location : public MessagePart
 		MessageField<qint64> classId{&Location::classId, this};
 		MessageField<qint64> methodId{&Location::methodId, this};
 		MessageField<qint64> methodIndex{&Location::methodIndex, this};
+		bool operator==(const Location& other) const;
 };
+
+uint qHash(const Location& location);
 
 } /* namespace OODebug */

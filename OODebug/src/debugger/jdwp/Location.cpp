@@ -38,4 +38,17 @@ Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodI
 
 Location::~Location() {}
 
+bool Location::operator==(const Location &other) const
+{
+	return typeTag() == other.typeTag() && classId() == other.classId()
+			&& methodId() == other.methodId() && methodIndex() == other.methodIndex();
+}
+
+uint qHash(const Location &location) {
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::ReadWrite);
+	stream << location;
+	return qHash(QString(data));
+}
+
 } /* namespace OODebug */
