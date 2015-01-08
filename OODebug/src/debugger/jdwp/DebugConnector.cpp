@@ -122,7 +122,7 @@ void DebugConnector::readFromSocket()
 	{
 		incompleteData_ = dataRead;
 		incompleteData_.remove(0, packetLen);
-		dataRead.remove(packetLen + 1, dataRead.length());
+		dataRead.truncate(packetLen);
 	}
 	messagesReadyForProcessing_ << dataRead;
 }
