@@ -173,8 +173,11 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		refFinder.setSearchNode(node);
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
-		// TODO: use the references to track values!
-		qDebug() << refFinder.references().length();
+		for (auto ref : refFinder.references())
+		{
+			trackedVariables_[ref] = variableDeclaration;
+			unsetBreakpoints_ << ref;
+		}
 		return true;
 	}
 	return false;
@@ -190,7 +193,7 @@ JavaDebugger::JavaDebugger()
 
 void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
 {
-	// TODO: Use a custom overlay for breakpoints.
+	 // TODO: Use a custom overlay for breakpoints.
 	auto scene = target->scene();
 	auto overlayGroup = scene->overlayGroup(BREAKPOINT_OVERLAY_GROUP);
 
@@ -232,7 +235,11 @@ bool JavaDebugger::isParentClassLoaded(Model::Node* node)
 void JavaDebugger::breaktAtParentClassLoad(Model::Node* node)
 {
 	auto containerClass = node->firstAncestorOfType<OOModel::Class>();
-	debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
+	if (!breakClasses_.contains(containerClass))
+	{
+		debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
+		breakClasses_.insert(containerClass);
+	}
 }
 
 Location JavaDebugger::nodeToLocation(Model::Node* node)
@@ -271,13 +278,21 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 
 void JavaDebugger::trySetBreakpoints()
 {
+	// TODO: Multiple breakpoints show weird behavior. If we auto resume (from tracked variable)
+	// and the event is received twice the VM assumes that we resume both events (as they are the same location).
+	//
+	// This is a workaround that we don't have multiple breakpoints at one location.
+	//
+	// We should implement it more general, if the user places a breakpoint and that is already
+	// sent and then decides to track a variable which has a reference at this location we still have a double
+	// breakpoint!
+	QHash<Location, Model::Node*> breakLocations;
 	auto it = unsetBreakpoints_.begin();
 	while (it != unsetBreakpoints_.end())
 	{
 		if (isParentClassLoaded(*it))
 		{
-			qint32 requestId = debugConnector_.setBreakpoint(nodeToLocation(*it));
-			setBreakpoints_[requestId] = *it;
+			breakLocations[nodeToLocation(*it)] = *it;
 			it = unsetBreakpoints_.erase(it);
 		}
 		else
@@ -285,6 +300,11 @@ void JavaDebugger::trySetBreakpoints()
 			breaktAtParentClassLoad(*it);
 			++it;
 		}
+	}
+	for (auto it = breakLocations.begin(); it != breakLocations.end(); ++it)
+	{
+		qint32 requestId = debugConnector_.setBreakpoint(it.key());
+		setBreakpoints_[requestId] = it.value();
 	}
 }
 
@@ -304,42 +324,60 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 {
 	if (auto breakpointNode = setBreakpoints_[breakpointEvent.requestID()])
 	{
-		auto visualization = *Visualization::Item::nodeItemsMap().find(breakpointNode);
-		currentBreakpointItem_ = visualization;
-		if (auto overlay = breakpointOverlayOf(visualization))
-			overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
-		auto containingMethod = breakpointNode->firstAncestorOfType<OOModel::Method>();
-		// Get frames
-		auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
-		auto location = breakpointEvent.location();
-		auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
-		auto currentFrame = frames.frames()[0];
-		int currentIndex = currentFrame.location().methodIndex();
-
-		QList<StackVariable> varsToGet;
-		for (auto variableDetails : variableTable.variables())
+		if (trackedVariables_.contains(breakpointNode))
 		{
-			if (variableDetails.name().contains("this")) continue;
-			if (variableDetails.codeIndex() <= currentIndex &&
-				 currentIndex < variableDetails.codeIndex() + variableDetails.length())
+			// Get frames
+			auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
+			auto location = breakpointEvent.location();
+			auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
+			if (frames.frames().size() == 0)
 			{
-				varsToGet << StackVariable(variableDetails.slot(), typeOfVariable(containingMethod, variableDetails));
+				qDebug() << "No frames received, error:" << static_cast<qint8>(frames.error());
+				return;
+			}
+			auto currentFrame = frames.frames()[0];
+			int currentIndex = currentFrame.location().methodIndex();
+
+			auto trackedVariable = trackedVariables_[breakpointNode];
+			Q_ASSERT(trackedVariable);
+
+			QList<StackVariable> varsToGet;
+			for (auto variableDetails : variableTable.variables())
+			{
+				if (variableDetails.name() == trackedVariable->name())
+				{
+					// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
+					//                    #JDWP_Method_VariableTable
+					Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
+								currentIndex < variableDetails.codeIndex() + variableDetails.length());
+					varsToGet << StackVariable(variableDetails.slot(),
+														typeExpressionToTag(trackedVariable->typeExpression()));
+				}
+			}
+
+			auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+			Q_ASSERT(values.values().length() == varsToGet.length());
+			for (auto val : values.values())
+			{
+				if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
+					qDebug() << trackedVariable->name() << ":\t" << val.intValue();
+				else if (val.kind() == MessagePart::cast(Protocol::Tag::BOOLEAN))
+					qDebug() << trackedVariable->name() << ":\t" << val.boolean();
+				else if (val.kind() == MessagePart::cast(Protocol::Tag::STRING))
+					qDebug() << trackedVariable->name() << ":\t" << debugConnector_.getString(val.stringId());
 			}
 		}
-
-		auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
-		Q_ASSERT(values.values().length() == varsToGet.length());
-		for (auto val : values.values())
-		{
-			// TODO: for now this is just to demonstrate that we can fetch values, we should probably do something
-			// more useful here.
-			if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
-				qDebug() << "#INT\t#" << val.intValue();
-			else if (val.kind() == MessagePart::cast(Protocol::Tag::BOOLEAN))
-				qDebug() << "#BOOL\t#" << val.boolean();
-			else if (val.kind() == MessagePart::cast(Protocol::Tag::STRING))
-				qDebug() << "#STRING\t#" << debugConnector_.getString(val.stringId());
-		}
+		auto visualization = *Visualization::Item::nodeItemsMap().find(breakpointNode);
+		currentBreakpointItem_ = visualization;
+		// If we have an overlay, the user wants to stop here, otherwise it is a tracked variable and we can resume.
+		if (auto overlay = breakpointOverlayOf(visualization))
+			overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
+		else
+			debugConnector_.resume();
+	}
+	else
+	{
+		qDebug() << "Uknown breakpoint?"; // Why did we get a breakpoint event when we don't know about the breakpoint?
 	}
 }
 

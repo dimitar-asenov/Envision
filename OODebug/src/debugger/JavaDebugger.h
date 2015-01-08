@@ -42,6 +42,7 @@ namespace OOModel {
 	class Class;
 	class Expression;
 	class Method;
+	class VariableDeclaration;
 }
 
 namespace Visualization {
@@ -89,9 +90,14 @@ class OODEBUG_API JavaDebugger
 
 		DebugConnector debugConnector_;
 
+		// For each class we should only break at loading once, otherwise we get multiple events.
+		QSet<Model::Node*> breakClasses_;
+
 		QList<Model::Node*> unsetBreakpoints_;
 		QHash<qint32, Model::Node*> setBreakpoints_;
 		Visualization::Item* currentBreakpointItem_{};
+
+		QHash<Model::Node*, OOModel::VariableDeclaration*> trackedVariables_;
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 
