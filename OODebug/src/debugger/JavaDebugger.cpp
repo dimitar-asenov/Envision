@@ -137,7 +137,7 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 		{
 			if (auto overlay = breakpointOverlayOf(currentBreakpointItem_))
 			{
-				// unset the breakpoint
+				// unset highlight of overlay
 				overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("default"));
 			}
 			else
@@ -266,6 +266,8 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	int line = locations.at(0).span_.startLine_ + 1;
 
 	// get line info for this method.
+	// -2 because -1 is a valid code index for native methods, see:
+	// http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_Method_VariableTable
 	static constexpr qint64 NO_INDEX = -2;
 	qint64 methodIndex = NO_INDEX;
 	auto lineTable = debugConnector_.getLineTable(classId, methodId);
