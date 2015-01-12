@@ -91,7 +91,7 @@ class OODEBUG_API JavaDebugger
 		DebugConnector debugConnector_;
 
 		// For each class we should only break at loading once, otherwise we get multiple events.
-		QSet<Model::Node*> breakClasses_;
+		QSet<Model::Node*> breakOnLoadClasses_;
 
 		QList<Model::Node*> unsetBreakpoints_;
 		QHash<qint32, Model::Node*> setBreakpoints_;
