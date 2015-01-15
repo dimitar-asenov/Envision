@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['debugconnector',['DebugConnector',['../classOODebug_1_1DebugConnector.html',1,'OODebug']]],
   ['declaration',['Declaration',['../classOOModel_1_1Declaration.html',1,'OOModel']]],
   ['declarationstatement',['DeclarationStatement',['../classOOModel_1_1DeclarationStatement.html',1,'OOModel']]],
   ['declarationvisitor',['DeclarationVisitor',['../classJavaExport_1_1DeclarationVisitor.html',1,'JavaExport']]],

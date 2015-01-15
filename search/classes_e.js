@@ -19,5 +19,6 @@ var searchData=
   ['primitivetypeexpression',['PrimitiveTypeExpression',['../classOOModel_1_1PrimitiveTypeExpression.html',1,'OOModel']]],
   ['profilejob',['ProfileJob',['../structCore_1_1ProfileJob.html',1,'Core']]],
   ['profiler',['Profiler',['../classCore_1_1Profiler.html',1,'Core']]],
-  ['project',['Project',['../classOOModel_1_1Project.html',1,'OOModel']]]
+  ['project',['Project',['../classOOModel_1_1Project.html',1,'OOModel']]],
+  ['protocol',['Protocol',['../classOODebug_1_1Protocol.html',1,'OODebug']]]
 ];

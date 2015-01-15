@@ -18,6 +18,9 @@ var searchData=
   ['formelement',['FormElement',['../classVisualization_1_1FormElement.html',1,'Visualization']]],
   ['fragmentdecoration',['FragmentDecoration',['../structExport_1_1FragmentDecoration.html',1,'Export']]],
   ['fragmentlayouter',['FragmentLayouter',['../classExport_1_1FragmentLayouter.html',1,'Export']]],
+  ['frame',['Frame',['../structOODebug_1_1Frame.html',1,'OODebug']]],
+  ['frames',['Frames',['../structOODebug_1_1Frames.html',1,'OODebug']]],
+  ['framescommand',['FramesCommand',['../structOODebug_1_1FramesCommand.html',1,'OODebug']]],
   ['fulldetailsize',['FullDetailSize',['../classVisualization_1_1FullDetailSize.html',1,'Visualization']]],
   ['functiontype',['FunctionType',['../classOOModel_1_1FunctionType.html',1,'OOModel']]],
   ['functiontypeexpression',['FunctionTypeExpression',['../classOOModel_1_1FunctionTypeExpression.html',1,'OOModel']]]

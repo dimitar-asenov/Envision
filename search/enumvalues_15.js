@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zero',['ZERO',['../classCasts.html#a760889120bb57e723e69f3fcf6401a99a06082a2914e83318ba720c53168a75c5',1,'Casts']]]
+  ['zombie',['ZOMBIE',['../classOODebug_1_1Protocol.html#aa2d0eddd888a1c7ffc717bccfdcf22cca81596a5a9c2174b0a286cbf3ccf3528b',1,'OODebug::Protocol']]]
 ];

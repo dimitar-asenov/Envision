@@ -1,11 +1,16 @@
 var searchData=
 [
   ['icon',['Icon',['../classVisualization_1_1Icon.html',1,'Visualization']]],
+  ['iconoverlay',['IconOverlay',['../classVisualization_1_1IconOverlay.html',1,'Visualization']]],
+  ['iconoverlaystyle',['IconOverlayStyle',['../classVisualization_1_1IconOverlayStyle.html',1,'Visualization']]],
   ['iconstyle',['IconStyle',['../classVisualization_1_1IconStyle.html',1,'Visualization']]],
+  ['idsizecommand',['IDSizeCommand',['../structOODebug_1_1IDSizeCommand.html',1,'OODebug']]],
+  ['idsizes',['IDSizes',['../structOODebug_1_1IDSizes.html',1,'OODebug']]],
   ['ifstatement',['IfStatement',['../classOOModel_1_1IfStatement.html',1,'OOModel']]],
   ['initializerstringoffsetprovider',['InitializerStringOffsetProvider',['../classOOInteraction_1_1InitializerStringOffsetProvider.html',1,'OOInteraction']]],
   ['insertmethodvis',['InsertMethodVis',['../classCustomMethodCall_1_1InsertMethodVis.html',1,'CustomMethodCall']]],
   ['insertmethodvisstyle',['InsertMethodVisStyle',['../classCustomMethodCall_1_1InsertMethodVisStyle.html',1,'CustomMethodCall']]],
+  ['instanceofexpression',['InstanceOfExpression',['../classOOModel_1_1InstanceOfExpression.html',1,'OOModel']]],
   ['integer',['Integer',['../classModel_1_1Integer.html',1,'Model']]],
   ['integerliteral',['IntegerLiteral',['../classOOModel_1_1IntegerLiteral.html',1,'OOModel']]],
   ['interactionbaseexception',['InteractionBaseException',['../classInteraction_1_1InteractionBaseException.html',1,'Interaction']]],

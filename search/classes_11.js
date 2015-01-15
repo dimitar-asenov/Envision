@@ -5,7 +5,7 @@ var searchData=
   ['testbox',['TestBox',['../classVisualization_1_1TestBox.html',1,'Visualization']]],
   ['testboxnode',['TestBoxNode',['../classVisualization_1_1TestBoxNode.html',1,'Visualization']]],
   ['testevent',['TestEvent',['../classCore_1_1TestEvent.html',1,'Core']]],
-  ['testmanager',['TestManager',['../classSelfTest_1_1TestManager.html',1,'SelfTest']]],
+  ['testmanager',['TestManager',['../singletonSelfTest_1_1TestManager.html',1,'SelfTest']]],
   ['testresult',['TestResult',['../classSelfTest_1_1TestResult.html',1,'SelfTest']]],
   ['testresults',['TestResults',['../classSelfTest_1_1TestResults.html',1,'SelfTest']]],
   ['testrunner',['TestRunner',['../classCore_1_1TestRunner.html',1,'Core']]],

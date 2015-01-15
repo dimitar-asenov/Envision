@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['mainclassname_5f',['mainClassName_',['../classOODebug_1_1DebugConnector.html#a87970ef3075faaa1043014e571e5a039',1,'OODebug::DebugConnector']]],
   ['maincursor_5f',['mainCursor_',['../classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f',1,'Visualization::Scene']]],
   ['maincursorsjustset_5f',['mainCursorsJustSet_',['../classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a',1,'Visualization::Scene']]],
   ['mainscene_5f',['mainScene_',['../classVisualization_1_1VisualizationManager.html#acb08c827f69ea40d043e4385c81e5a61',1,'Visualization::VisualizationManager']]],
@@ -15,6 +16,7 @@ var searchData=
   ['map_5f',['map_',['../classExport_1_1ExportMapContainer.html#aa10e047d9cdb0276f46363f20358093d',1,'Export::ExportMapContainer::map_()'],['../classExport_1_1FileWriter.html#a3e80a54b44d21f416f2836165f5ffb1f',1,'Export::FileWriter::map_()']]],
   ['mapenvisiontextcolors_5f',['mapEnvisionTextColors_',['../classComments_1_1ColorPicker.html#a8f431ebf3caf8da9d4dd6179c5672a22',1,'Comments::ColorPicker']]],
   ['mappedfiles_5f',['mappedFiles_',['../classExport_1_1TextToNodeMap.html#a4e90440871c3d394d123b2aff6f16bc3',1,'Export::TextToNodeMap']]],
+  ['mappings',['mappings',['../structOODebug_1_1LineTable.html#a500196e2a55635aa0eacf604b1b20839',1,'OODebug::LineTable']]],
   ['margin',['margin',['../classVisualization_1_1MiniMap.html#a107b71190fa70e0bc5d56d738651d463',1,'Visualization::MiniMap']]],
   ['marginbottom_5f',['marginBottom_',['../classVisualization_1_1FormElement.html#a83bdd64434e7172839f19b4ef0924515',1,'Visualization::FormElement']]],
   ['marginleft_5f',['marginLeft_',['../classVisualization_1_1FormElement.html#ac1502dd2e939f6577c897028d9df5909',1,'Visualization::FormElement']]],
@@ -33,8 +35,14 @@ var searchData=
   ['messageicon',['messageIcon',['../classVisualization_1_1MessageOverlayStyle.html#afdd17f7d15459d1fda99c813df9c1a28',1,'Visualization::MessageOverlayStyle']]],
   ['messageicon_5f',['messageIcon_',['../classVisualization_1_1MessageOverlay.html#ae57db91360c01cad236e29d69f3dc1fd',1,'Visualization::MessageOverlay']]],
   ['messages_5f',['messages_',['../classOODebug_1_1CompilerFeedback.html#a11071d2ba4eb664655ee4c0289adfdb5',1,'OODebug::CompilerFeedback']]],
+  ['messagesreadyforprocessing_5f',['messagesReadyForProcessing_',['../classOODebug_1_1DebugConnector.html#afe8284bfec48ee52b53c5a0ac788711a',1,'OODebug::DebugConnector']]],
   ['meta_5f',['meta_',['../classModel_1_1CompositeNode.html#af6d5480db996ab1fe8590494000aa020',1,'Model::CompositeNode']]],
+  ['methodid',['methodId',['../structOODebug_1_1Location.html#abfee43b308006c183851268ff39f7c3b',1,'OODebug::Location::methodId()'],['../structOODebug_1_1LineTableCommand.html#a0580a838405c780c8d5b2cba557cdfec',1,'OODebug::LineTableCommand::methodID()'],['../structOODebug_1_1VariableTableCommand.html#abb8e6d5585b8dd73ad99703e77bc209f',1,'OODebug::VariableTableCommand::methodID()'],['../structOODebug_1_1JVMMethod.html#a60e8ec16751e78c03288ec386465ae21',1,'OODebug::JVMMethod::methodID()']]],
+  ['methodidsize',['methodIDSize',['../structOODebug_1_1IDSizes.html#a3f4f5b4d52fac998801a70e7ec1ec197',1,'OODebug::IDSizes']]],
+  ['methodindex',['methodIndex',['../structOODebug_1_1Location.html#a9858057aa66773dfa4f303c375e7fb56',1,'OODebug::Location']]],
+  ['methodinfos_5f',['methodInfos_',['../classOODebug_1_1JavaDebugger.html#a94619b679cdd01d6f625c5bb47758fd6',1,'OODebug::JavaDebugger']]],
   ['methodmap_5f',['methodMap_',['../classCppImport_1_1TranslateManager.html#a16df743a1f2a433248ed19e91ab3cd8c',1,'CppImport::TranslateManager']]],
+  ['methods',['methods',['../structOODebug_1_1MethodsReply.html#abc24e0f6b7a23f4858db967fbff57594',1,'OODebug::MethodsReply']]],
   ['methodtocreate_5f',['methodToCreate_',['../classOOInteraction_1_1CreateMethodCall.html#a2c142da1c9862a5d0745c1c2164fdc3d',1,'OOInteraction::CreateMethodCall']]],
   ['min_5ftext_5fwidth',['MIN_TEXT_WIDTH',['../classVisualization_1_1TextRenderer.html#a3394699786b381b0683f5ed949f0c535',1,'Visualization::TextRenderer']]],
   ['minheight',['minHeight',['../classVisualization_1_1SequentialLayoutStyle.html#af4e313e8dde3b23318ac89b0ddc8972a',1,'Visualization::SequentialLayoutStyle::minHeight()'],['../classVisualization_1_1BracesStyle.html#a441bb8362ae23d3ae13ab20e80855947',1,'Visualization::BracesStyle::minHeight()']]],
@@ -48,10 +56,13 @@ var searchData=
   ['mipmap_5f',['mipmap_',['../classVisualization_1_1SVGIconStyle.html#afb2b4b8920937f2a4fded8c805d94e75',1,'Visualization::SVGIconStyle']]],
   ['missinginnertokens',['missingInnerTokens',['../classInteraction_1_1ParseResult.html#a799257fcacbf14c71bdb178c1c182e27',1,'Interaction::ParseResult']]],
   ['missingtrailingtokens',['missingTrailingTokens',['../classInteraction_1_1ParseResult.html#acd76cf0d2745d8d97c76b183ab5b6ba4',1,'Interaction::ParseResult']]],
+  ['modbits',['modBits',['../structOODebug_1_1JVMMethod.html#abed6905d16532b8ad464dec9013a27db',1,'OODebug::JVMMethod']]],
   ['modificationinprogress',['modificationInProgress',['../classModel_1_1TreeManager.html#a6487047f413f10030f40da709814e8c9',1,'Model::TreeManager']]],
   ['modificationtext',['modificationText',['../classModel_1_1TreeManager.html#a85fee1c9bb0d3da43999996fa6760150',1,'Model::TreeManager']]],
   ['modifiednodes',['modifiedNodes',['../classModel_1_1NotificationListener.html#a24793fa3ecc6212d9f4330fbdbb72c8c',1,'Model::NotificationListener']]],
   ['modifiedtargets',['modifiedTargets',['../classModel_1_1AddModifiedNode.html#a19c22ce528fd569410925c0d85a29d08',1,'Model::AddModifiedNode::modifiedTargets()'],['../classModel_1_1SetModificationTarget.html#afdeeb35efc2a1420616c2c6e06bf3a4f',1,'Model::SetModificationTarget::modifiedTargets()'],['../classModel_1_1TreeManager.html#a5b15b5d2cc58cadc8a76caf9658c41e6',1,'Model::TreeManager::modifiedTargets()']]],
+  ['modifiers',['modifiers',['../structOODebug_1_1EventSetCommand.html#a9d9573e151b06e7f43e4193c386c7aa2',1,'OODebug::EventSetCommand']]],
   ['modifiers_5f',['modifiers_',['../classOOModel_1_1Modifier.html#ad49ee09f7335597e462c0c846fb97161',1,'OOModel::Modifier']]],
+  ['modkind',['modKind',['../classOODebug_1_1Modifier.html#a4e37db1fe992604092af9de76dd4c3bd',1,'OODebug::Modifier']]],
   ['msg_5f',['msg_',['../classCore_1_1EnvisionException.html#a8dbde5412f49cf1a3f162e4828efcacd',1,'Core::EnvisionException']]]
 ];

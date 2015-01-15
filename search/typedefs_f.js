@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['visitfunctioninstance',['VisitFunctionInstance',['../classModel_1_1Visitor.html#a7369fbcc4dc4bfe322abe2cab8df0da3',1,'Model::Visitor']]],
-  ['visitorresulttype',['VisitorResultType',['../classModel_1_1Visitor.html#a217a90b2bdc2eae6fb08ac96251682ec',1,'Model::Visitor']]]
+  ['testconstructor',['TestConstructor',['../classSelfTest_1_1Test.html#af3979142f943c0713ba389dca9e5b379',1,'SelfTest::Test']]],
+  ['typeidtype',['TypeIdType',['../classCore_1_1AdapterManager.html#ac8cef5e857a992a2e5f7997334751039',1,'Core::AdapterManager']]]
 ];
