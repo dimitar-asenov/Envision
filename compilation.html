@@ -94,7 +94,7 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
  Used for profiling.</li>
 </ul>
 <p>To install the dependencies on Ubuntu 14.04, do the following:</p><ol type="1">
-<li>Install the Qt SDK: <pre class="fragment">sudo apt-get install qt-sdk </pre> In some cases you might need to install additional packages for SVG compatibility: <pre class="fragment">sudo apt-get install libqt5svg5 libqt5svg5-dev </pre></li>
+<li>Install the Qt SDK: <pre class="fragment">sudo apt-get install qt-sdk </pre> You will also need to install additional packages for SVG compatibility and WebKit: <pre class="fragment">sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev </pre></li>
 <li>Install the lp_solve development library version 5.5:<ol type="a">
 <li>Install the packages <code>lp-solve</code> (for the shared library) and <code>liblpsolve55-dev</code> (for the header files): <pre class="fragment">sudo apt-get install lp-solve liblpsolve55-dev </pre></li>
 <li>Make the following symbolic link: <pre class="fragment">sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so </pre></li>
