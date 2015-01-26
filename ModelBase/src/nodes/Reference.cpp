@@ -83,8 +83,7 @@ bool Reference::resolveHelper(bool indirect)
 	if (state_ != ReferenceNeedsToBeResolved) return isResolved();
 	state_ = ReferenceIsBeingResolved;
 
-	//auto newTarget = computeTarget();
-	Node* newTarget = nullptr;
+	auto newTarget = computeTarget();
 
 	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
 
