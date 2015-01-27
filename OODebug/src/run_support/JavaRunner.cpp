@@ -67,7 +67,7 @@ OOModel::Method* JavaRunner::runTree(Model::TreeManager* manager,
 		return nullptr;
 	}
 
-	JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug);
+	if (!JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug)) return nullptr;
 	auto map = JavaExport::JavaExporter::exportMaps().map(lastProject_);
 
 	// find the file of the main method:

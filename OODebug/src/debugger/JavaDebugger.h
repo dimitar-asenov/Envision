@@ -60,7 +60,10 @@ class OODEBUG_API JavaDebugger
 {
 	public:
 		static JavaDebugger& instance();
-		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
+		/**
+		 * Starts a debug session for the current project. If it started succesfully true is returned otherwise false.
+		 */
+		bool debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
 		bool toggleBreakpoint(Visualization::Item* target, QKeyEvent* event);
 		bool resume(Visualization::Item* target, QKeyEvent* event);
 		bool trackVariable(Visualization::Item* target, QKeyEvent* event);

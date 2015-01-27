@@ -47,6 +47,7 @@ class OODEBUG_API JavaRunner
 		/**
 		 * Finds a main method in the tree and runs the Programm from this main method.
 		 * If there is a valid main method the pointer to this method is returned.
+		 * If there was a problem during exporting or compilation a nullptr is returned.
 		 */
 		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
 								  bool debug = false);

@@ -45,9 +45,10 @@ namespace OODebug {
 
 static const QString overlayGroupName("CompilerMessages");
 
-void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
 										 bool includeDebugSymbols)
 {
+	bool compilationOk = true;
 	// Remove previous error messages
 	for (auto scene : Visualization::Scene::allScenes())
 	{
@@ -69,6 +70,8 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 	else
 	{
 		auto exportErrors = JavaExport::JavaExporter::exportTree(manager, pathToProjectContainerDirectory);
+		// If we have export errors compilation is not okay:
+		if (exportErrors.size()) compilationOk = false;
 
 		// Handle export errors.
 		for (auto& error : exportErrors)
@@ -84,6 +87,8 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 		map = JavaExport::JavaExporter::exportMaps().map(project);
 	}
 	Q_ASSERT(map);
+
+	if (!compilationOk) return false; // If export failed we can exit here.
 
 	// Create a build folder and setup the compiler
 	static const QString buildFolder("build");
@@ -142,8 +147,11 @@ void JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 				visualizeMessage(it.value(), node, message->message(), typeString);
 				++it;
 			}
+
+			if (compilationOk && CompilerMessage::Error == message->type()) compilationOk = false;
 		}
 	}
+	return compilationOk;
 }
 
 void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node,

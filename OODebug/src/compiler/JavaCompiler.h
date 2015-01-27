@@ -49,7 +49,10 @@ class CompilerMessage;
 class OODEBUG_API JavaCompiler
 {
 	public:
-		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+		/**
+		 * Exports and compiles the program and returns true if this action was succesful.
+		 */
+		static bool compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
 										bool includeDebugSymbols = false);
 
 	private:
