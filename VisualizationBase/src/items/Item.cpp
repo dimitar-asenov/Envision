@@ -402,6 +402,9 @@ void Item::removeFromScene()
 		if (mc && (mc->owner() == this || isAncestorOf(mc->owner())))
 			scene()->setMainCursor(nullptr);
 
+		// Remove associated overlays
+		scene()->removeOverlayOf(this);
+
 		// Mark this item as not needing updates
 		scene()->setItemIsSensitiveToScale(this, false);
 
