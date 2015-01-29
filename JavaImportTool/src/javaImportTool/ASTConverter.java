@@ -1144,25 +1144,24 @@ public class ASTConverter {
 			String body = nodeText.substring(signatureEnd+1);
 			int bodyLength = body.length() - body.replace("\n", "").length() - 1;
 			
-			System.out.print(String.format("lines=%" + 3 + "d\t", bodyLength)); // Print body length
-			System.out.print(String.format("args=%" + 2 + "d\t", method.parameters().size())); // Print num arguments
+			System.out.print("loc=\t"+ bodyLength + "\t" );
+			System.out.print("args=\t" + method.parameters().size() + "\t" );
 			
-			// If statements
-			NodeMetrics ifMetrics = computeMetrics(method, new int[]{ASTNode.IF_STATEMENT});
-			System.out.print("if="+ifMetrics.count + "," + ifMetrics.nesting + "\t");
-			
-			// Loops
-			NodeMetrics loopMetrics = computeMetrics(method, new int[]
-					{ASTNode.FOR_STATEMENT, ASTNode.WHILE_STATEMENT, ASTNode.DO_STATEMENT});
-			System.out.print("loop="+loopMetrics.count + "," + loopMetrics.nesting + "\t");
-			
-			// Try blocks
-			NodeMetrics tryMetrics = computeMetrics(method, new int[]{ASTNode.TRY_STATEMENT});
-			System.out.print("try="+tryMetrics.count + "," + tryMetrics.nesting + "\t");
-			
-			// Catch blocks
-			NodeMetrics catchMetrics = computeMetrics(method, new int[] {ASTNode.CATCH_CLAUSE});
-			System.out.print("catch="+catchMetrics.count + "," + catchMetrics.nesting + "\t");
+			// Various other counters
+			showMetric(method, "locals", false, new int[]{ASTNode.VARIABLE_DECLARATION_STATEMENT,
+					ASTNode.VARIABLE_DECLARATION_EXPRESSION});
+			showMetric(method, "null", false, new int[]{ASTNode.NULL_LITERAL});
+			showMetric(method, "assert", false, new int[]{ASTNode.ASSERT_STATEMENT});
+			showMetric(method, "return", false, new int[]{ASTNode.RETURN_STATEMENT});
+			showMetric(method, "this", false, new int[]{ASTNode.THIS_EXPRESSION});
+			showMetric(method, "throw", false, new int[]{ASTNode.THROW_STATEMENT});
+			showMetric(method, "cast", true, new int[]{ASTNode.CAST_EXPRESSION});
+			showMetric(method, "new", true, new int[]{ASTNode.CLASS_INSTANCE_CREATION, ASTNode.ARRAY_CREATION});
+			showMetric(method, "if", true, new int[]{ASTNode.IF_STATEMENT});
+			showMetric(method, "loop", true, new int[]{ASTNode.FOR_STATEMENT, ASTNode.WHILE_STATEMENT,
+					ASTNode.DO_STATEMENT});
+			showMetric(method, "try", true, new int[]{ASTNode.TRY_STATEMENT});
+			showMetric(method, "catch", true, new int[] {ASTNode.CATCH_CLAUSE});
 					
 			// Print path
 			Node pathNode = containers.peek().parent();
@@ -1188,6 +1187,15 @@ public class ASTConverter {
 		public int count;
 		public int nesting;
 		public NodeMetrics(int c, int n) {count = c; nesting = n;}
+	}
+	
+	void showMetric(ASTNode startingNode, String name, boolean includeNesting, int[] nodeTypes)
+	{
+		NodeMetrics metrics = computeMetrics(startingNode, nodeTypes);
+		if (includeNesting)
+			System.out.print(name + "=\t" + metrics.count + "\t" + metrics.nesting + "\t");
+		else
+			System.out.print(name + "=\t" + metrics.count + "\t");
 	}
 	
 	NodeMetrics computeMetrics(ASTNode startingNode, int[] nodeTypes)
