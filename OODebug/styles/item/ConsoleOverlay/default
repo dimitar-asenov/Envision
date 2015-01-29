@@ -2,7 +2,7 @@
 <style prototypes="item/DeclarativeItemBase/default">
 	<shape prototypes="shape/Box/default">
 		Box
-		<cornerRadius>2</cornerRadius>
+		<cornerRadius>10</cornerRadius>
 		<backgroundBrush>
 			<style>1</style>
 			<color>
