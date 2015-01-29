@@ -1159,9 +1159,15 @@ public class ASTConverter {
 			showMetric(method, "new", true, new int[]{ASTNode.CLASS_INSTANCE_CREATION, ASTNode.ARRAY_CREATION});
 			showMetric(method, "if", true, new int[]{ASTNode.IF_STATEMENT});
 			showMetric(method, "loop", true, new int[]{ASTNode.FOR_STATEMENT, ASTNode.WHILE_STATEMENT,
-					ASTNode.DO_STATEMENT});
+					ASTNode.DO_STATEMENT, ASTNode.ENHANCED_FOR_STATEMENT});
 			showMetric(method, "try", true, new int[]{ASTNode.TRY_STATEMENT});
 			showMetric(method, "catch", true, new int[] {ASTNode.CATCH_CLAUSE});
+			showMetric(method, "type_decl", true, new int[] {ASTNode.TYPE_DECLARATION_STATEMENT});
+			showMetric(method, "block", true, new int[] {ASTNode.BLOCK});
+			showMetric(method, "switch", true, new int[] {ASTNode.SWITCH_STATEMENT});
+			showMetric(method, "case", false, new int[] {ASTNode.SWITCH_CASE});
+			showMetric(method, "super", false, new int[] {ASTNode.SUPER_METHOD_INVOCATION,
+					ASTNode.SUPER_CONSTRUCTOR_INVOCATION});
 					
 			// Print path
 			Node pathNode = containers.peek().parent();
