@@ -22,8 +22,8 @@ Other dependencies are:
 To install the dependencies on Ubuntu 14.04, do the following:
 	-# Install the Qt SDK:
 		\verbatim sudo apt-get install qt-sdk \endverbatim
-		In some cases you might need to install additional packages for SVG compatibility:
-		\verbatim sudo apt-get install libqt5svg5 libqt5svg5-dev \endverbatim
+		You will also need to install additional packages for SVG compatibility and WebKit:
+		\verbatim sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev \endverbatim
 	-# Install the lp_solve development library version 5.5:
 		-# Install the packages \c lp-solve (for the shared library) and \c liblpsolve55-dev (for the header files):
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
