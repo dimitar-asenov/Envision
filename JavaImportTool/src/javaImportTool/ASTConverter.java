@@ -1168,6 +1168,10 @@ public class ASTConverter {
 			showMetric(method, "case", false, new int[] {ASTNode.SWITCH_CASE});
 			showMetric(method, "super", false, new int[] {ASTNode.SUPER_METHOD_INVOCATION,
 					ASTNode.SUPER_CONSTRUCTOR_INVOCATION});
+			showMetric(method, "anonymous", false, new int[] {ASTNode.ANONYMOUS_CLASS_DECLARATION});
+			
+			// Print placeholders that will be used in later stages
+			System.out.print("use\tcomment\t");
 					
 			// Print path
 			Node pathNode = containers.peek().parent();
