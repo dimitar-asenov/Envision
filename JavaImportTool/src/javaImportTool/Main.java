@@ -175,7 +175,7 @@ public class Main {
 		}
 	}
 	
-	public static final boolean PRINT_METHODS = false;
+	public static final boolean PRINT_METHODS = true;
 	
 	private static String usageInfo =
 			  "Usage: JavaImportTool project-name input-directory output-directory [--classFiles] [--libs:...]\n"
