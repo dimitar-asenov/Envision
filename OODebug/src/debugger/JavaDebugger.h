@@ -47,7 +47,7 @@ namespace OOModel {
 
 namespace Visualization {
 	class Item;
-	class MessageOverlay;
+	class IconOverlay;
 }
 
 namespace OODebug {
@@ -90,7 +90,8 @@ class OODEBUG_API JavaDebugger
 		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
 		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
 
-		Visualization::MessageOverlay* breakpointOverlayOf(Visualization::Item* item);
+		void toggleLineHighlight(Visualization::Item* item, bool highlight);
+		Visualization::IconOverlay* breakpointOverlayOf(Visualization::Item* item);
 		PlotOverlay* plotOverlayOf(Visualization::Item* item);
 
 		DebugConnector debugConnector_;
@@ -108,6 +109,7 @@ class OODEBUG_API JavaDebugger
 
 		static const QString BREAKPOINT_OVERLAY_GROUP;
 		static const QString PLOT_OVERLAY_GROUP;
+		static const QString CURRENT_LINE_OVERLAY_GROUP;
 };
 
 } /* namespace OODebug */

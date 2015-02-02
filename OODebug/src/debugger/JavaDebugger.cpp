@@ -53,12 +53,14 @@
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
-#include "VisualizationBase/src/overlays/MessageOverlay.h"
+#include "VisualizationBase/src/overlays/IconOverlay.h"
+#include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
 namespace OODebug {
 
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
 const QString JavaDebugger::PLOT_OVERLAY_GROUP{"PlotOverlay"};
+const QString JavaDebugger::CURRENT_LINE_OVERLAY_GROUP{"CurrentLine"};
 
 JavaDebugger& JavaDebugger::instance()
 {
@@ -140,16 +142,8 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 		debugConnector_.resume();
 		if (currentBreakpointItem_)
 		{
-			if (auto overlay = breakpointOverlayOf(currentBreakpointItem_))
-			{
-				// unset highlight of overlay
-				overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("default"));
-			}
-			else
-			{
-				// there is no current breakpoint no more
-				currentBreakpointItem_ = nullptr;
-			}
+			toggleLineHighlight(currentBreakpointItem_, false);
+			currentBreakpointItem_ = nullptr;
 		}
 		return true;
 	}
@@ -206,15 +200,11 @@ JavaDebugger::JavaDebugger()
 
 void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
 {
-	// TODO: Use a custom overlay for breakpoints.
 	auto scene = target->scene();
 	auto overlayGroup = scene->overlayGroup(BREAKPOINT_OVERLAY_GROUP);
 
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(BREAKPOINT_OVERLAY_GROUP);
-	auto overlay = new Visualization::MessageOverlay(target,
-																	 [](Visualization::MessageOverlay *){
-			return QString("BP");
-});
+	auto overlay = new Visualization::IconOverlay(target, Visualization::IconOverlay::itemStyles().get("breakpoint"));
 	overlayGroup->addOverlay(makeOverlay(overlay));
 }
 
@@ -395,8 +385,8 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
 	currentBreakpointItem_ = visualization;
 	// If we have an overlay, the user wants to stop here, otherwise it is a tracked variable and we can resume.
-	if (auto overlay = breakpointOverlayOf(visualization))
-		overlay->setStyle(Visualization::MessageOverlay::itemStyles().get("error"));
+	if (breakpointOverlayOf(visualization))
+		toggleLineHighlight(visualization, true);
 	else
 		debugConnector_.resume();
 }
@@ -498,12 +488,35 @@ Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
 	Q_ASSERT(false);
 }
 
-Visualization::MessageOverlay* JavaDebugger::breakpointOverlayOf(Visualization::Item* item)
+void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight)
+{
+	if (highlight)
+	{
+		auto scene = item->scene();
+		auto overlayGroup = scene->overlayGroup(CURRENT_LINE_OVERLAY_GROUP);
+
+		if (!overlayGroup) overlayGroup = scene->addOverlayGroup(CURRENT_LINE_OVERLAY_GROUP);
+		auto overlay = new Visualization::SelectionOverlay(item,
+																			Visualization::SelectionOverlay::itemStyles().get("blue"));
+		overlayGroup->addOverlay(makeOverlay(overlay));
+	}
+	else
+	{
+		for (auto overlayAccessor : item->overlays(CURRENT_LINE_OVERLAY_GROUP))
+		{
+			auto overlayItem = overlayAccessor->overlayItem();
+			if (auto highlightOverlay = DCast<Visualization::SelectionOverlay>(overlayItem))
+				if (highlightOverlay->associatedItem() == item) item->scene()->removeOverlay(highlightOverlay);
+		}
+	}
+}
+
+Visualization::IconOverlay* JavaDebugger::breakpointOverlayOf(Visualization::Item* item)
 {
 	for (auto overlayAccessor : item->overlays(BREAKPOINT_OVERLAY_GROUP))
 	{
 		auto overlayItem = overlayAccessor->overlayItem();
-		if (auto breakpointOverlay = DCast<Visualization::MessageOverlay>(overlayItem))
+		if (auto breakpointOverlay = DCast<Visualization::IconOverlay>(overlayItem))
 			if (breakpointOverlay->associatedItem() == item) return breakpointOverlay;
 	}
 	return nullptr;
