@@ -31,6 +31,8 @@
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/Location.h"
 
+#include "overlays/PlotOverlay.h"
+
 #include "JavaExport/src/exporter/JavaExporter.h"
 
 #include "ModelBase/src/nodes/Node.h"
@@ -56,6 +58,7 @@
 namespace OODebug {
 
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
+const QString JavaDebugger::PLOT_OVERLAY_GROUP{"PlotOverlay"};
 
 JavaDebugger& JavaDebugger::instance()
 {
@@ -170,6 +173,14 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 			variableDeclaration = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
 		}
 		if (!variableDeclaration) return false;
+
+		// add the plot overlay
+		auto scene = target->scene();
+		auto overlayGroup = scene->overlayGroup(PLOT_OVERLAY_GROUP);
+
+		if (!overlayGroup) overlayGroup = scene->addOverlayGroup(PLOT_OVERLAY_GROUP);
+		auto overlay = new PlotOverlay(target);
+		overlayGroup->addOverlay(makeOverlay(overlay));
 
 		ReferenceFinder refFinder;
 		refFinder.setSearchNode(node);
@@ -362,10 +373,19 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 
 		auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
 		Q_ASSERT(values.values().length() == varsToGet.length());
+		// The variable declaration itself doesn't have a visualization but its statement parent:
+		auto variableStatement = trackedVariable->firstAncestorOfType<OOModel::Statement>();
+		auto visualizationIt = Visualization::Item::nodeItemsMap().find(variableStatement);
+		Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
 		for (auto val : values.values())
 		{
 			if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
+			{
+				auto overlay = plotOverlayOf(*visualizationIt);
+				Q_ASSERT(overlay);
+				overlay->addValue(val.intValue());
 				qDebug() << trackedVariable->name() << ":\t" << val.intValue();
+			}
 			else if (val.kind() == MessagePart::cast(Protocol::Tag::BOOLEAN))
 				qDebug() << trackedVariable->name() << ":\t" << val.boolean();
 			else if (val.kind() == MessagePart::cast(Protocol::Tag::STRING))
@@ -489,6 +509,20 @@ Visualization::MessageOverlay* JavaDebugger::breakpointOverlayOf(Visualization::
 		auto overlayItem = overlayAccessor->overlayItem();
 		if (auto breakpointOverlay = DCast<Visualization::MessageOverlay>(overlayItem))
 			if (breakpointOverlay->associatedItem() == item) return breakpointOverlay;
+	}
+	return nullptr;
+}
+
+PlotOverlay*JavaDebugger::plotOverlayOf(Visualization::Item* item)
+{
+	auto overlayGroup = item->scene()->overlayGroup(PLOT_OVERLAY_GROUP);
+	if (!overlayGroup) return nullptr;
+
+	for (auto overlayAccessor : overlayGroup->overlays())
+	{
+		auto overlayItem = overlayAccessor->overlayItem();
+		if (auto plotOverlay = DCast<PlotOverlay>(overlayItem))
+			if (plotOverlay->associatedItem() == item) return plotOverlay;
 	}
 	return nullptr;
 }

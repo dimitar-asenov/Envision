@@ -48,7 +48,9 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/messages/StringSet.h \
     src/debugger/ReferenceFinder.h \
     src/compiler/JavaCompiler.h \
-    src/run_support/JavaRunner.h
+    src/run_support/JavaRunner.h \
+    src/overlays/PlotOverlay.h \
+    src/overlays/PlotOverlayStyle.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -79,4 +81,6 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/jdwp/messages/StringSet.cpp \
     src/debugger/ReferenceFinder.cpp \
     src/compiler/JavaCompiler.cpp \
-    src/run_support/JavaRunner.cpp
+    src/run_support/JavaRunner.cpp \
+    src/overlays/PlotOverlay.cpp \
+    src/overlays/PlotOverlayStyle.cpp

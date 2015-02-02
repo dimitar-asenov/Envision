@@ -55,6 +55,7 @@ namespace OODebug {
 class Location;
 class BreakpointEvent;
 class VariableDetails;
+class PlotOverlay;
 
 class OODEBUG_API JavaDebugger
 {
@@ -90,6 +91,7 @@ class OODEBUG_API JavaDebugger
 		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
 
 		Visualization::MessageOverlay* breakpointOverlayOf(Visualization::Item* item);
+		PlotOverlay* plotOverlayOf(Visualization::Item* item);
 
 		DebugConnector debugConnector_;
 
@@ -105,6 +107,7 @@ class OODEBUG_API JavaDebugger
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 
 		static const QString BREAKPOINT_OVERLAY_GROUP;
+		static const QString PLOT_OVERLAY_GROUP;
 };
 
 } /* namespace OODebug */
