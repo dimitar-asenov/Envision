@@ -9,7 +9,9 @@ LIBS += -llpsolve55
 QT += xml \
     svg \
     printsupport
-HEADERS += src/overlays/BoxOverlayStyle.h \
+HEADERS += src/overlays/IconOverlayStyle.h \
+    src/overlays/IconOverlay.h \
+    src/overlays/BoxOverlayStyle.h \
     src/overlays/BoxOverlay.h \
     src/overlays/OverlayAccessor.h \
     src/overlays/ZoomLabelOverlay.h \
@@ -126,7 +128,9 @@ HEADERS += src/overlays/BoxOverlayStyle.h \
     src/declarative/DynamicGridFormElement.h \
     src/overlays/MessageOverlay.h \
     src/overlays/MessageOverlayStyle.h
-SOURCES += src/overlays/BoxOverlayStyle.cpp \
+SOURCES += src/overlays/IconOverlayStyle.cpp \
+    src/overlays/IconOverlay.cpp \
+    src/overlays/BoxOverlayStyle.cpp \
     src/overlays/BoxOverlay.cpp \
     src/overlays/ZoomLabelOverlay.cpp \
     src/overlays/SelectionOverlay.cpp \

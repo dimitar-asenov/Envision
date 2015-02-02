@@ -402,6 +402,9 @@ void Item::removeFromScene()
 		if (mc && (mc->owner() == this || isAncestorOf(mc->owner())))
 			scene()->setMainCursor(nullptr);
 
+		// Remove associated overlays
+		scene()->removeOverlayOf(this);
+
 		// Mark this item as not needing updates
 		scene()->setItemIsSensitiveToScale(this, false);
 
@@ -877,6 +880,24 @@ qreal Item::totalScale() const
 	}
 
 	return s;
+}
+
+QList<OverlayAccessor*> Item::overlays(QString overlayGroup) const
+{
+	QList<OverlayAccessor*> result;
+
+	if (!overlayGroup.isEmpty())
+	{
+		auto group = scene()->overlayGroup(overlayGroup);
+		if (group) result << group->overlaysForItem(this);
+	}
+	else
+	{
+		for (auto group : scene()->allOverlayGroups())
+			result << result << group->overlaysForItem(this);
+	}
+
+	return result;
 }
 
 /***********************************************************************************************************************

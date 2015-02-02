@@ -43,6 +43,7 @@ class ShapeStyle;
 class ItemStyle;
 class VisualizationAddOn;
 class SequentialLayout;
+class OverlayAccessor;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
@@ -368,6 +369,12 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		template <class Definition, class Store, class CompareFunction, class CreateFunction, class SyncFunction>
 		static bool synchronizeCollections(Item* parent, const Definition& def, Store& store, CompareFunction compare,
 											 CreateFunction create, SyncFunction sync);
+
+		/**
+		 * Returns all the overlays of this item for the specified group. If no group is specified returns the overlays
+		 * in all groups.
+		 */
+		QList<OverlayAccessor*> overlays(QString overlayGroup = QString::null) const;
 
 	protected:
 

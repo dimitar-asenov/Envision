@@ -31,6 +31,7 @@
 #include "commands/CCreateClass.h"
 #include "commands/CCreateMethod.h"
 #include "commands/CCreateField.h"
+#include "commands/CDumpMethodRenderings.h"
 
 #include "OOVisualization/src/declarations/VProject.h"
 #include "OOModel/src/declarations/Project.h"
@@ -46,6 +47,7 @@ HProject::HProject()
 	addCommand(new CCreateClass());
 	addCommand(new CCreateMethod());
 	addCommand(new CCreateField());
+	addCommand(new CDumpMethodRenderings());
 }
 
 HProject* HProject::instance()
