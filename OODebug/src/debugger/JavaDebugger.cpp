@@ -500,11 +500,7 @@ Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
 
 Visualization::MessageOverlay* JavaDebugger::breakpointOverlayOf(Visualization::Item* item)
 {
-	// TODO: for this we could have a more general mechanism in Item
-	auto overlayGroup = item->scene()->overlayGroup(BREAKPOINT_OVERLAY_GROUP);
-	if (!overlayGroup) return nullptr;
-
-	for (auto overlayAccessor : overlayGroup->overlays())
+	for (auto overlayAccessor : item->overlays(BREAKPOINT_OVERLAY_GROUP))
 	{
 		auto overlayItem = overlayAccessor->overlayItem();
 		if (auto breakpointOverlay = DCast<Visualization::MessageOverlay>(overlayItem))
@@ -513,12 +509,9 @@ Visualization::MessageOverlay* JavaDebugger::breakpointOverlayOf(Visualization::
 	return nullptr;
 }
 
-PlotOverlay*JavaDebugger::plotOverlayOf(Visualization::Item* item)
+PlotOverlay* JavaDebugger::plotOverlayOf(Visualization::Item* item)
 {
-	auto overlayGroup = item->scene()->overlayGroup(PLOT_OVERLAY_GROUP);
-	if (!overlayGroup) return nullptr;
-
-	for (auto overlayAccessor : overlayGroup->overlays())
+	for (auto overlayAccessor : item->overlays(PLOT_OVERLAY_GROUP))
 	{
 		auto overlayItem = overlayAccessor->overlayItem();
 		if (auto plotOverlay = DCast<PlotOverlay>(overlayItem))
