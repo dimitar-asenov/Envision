@@ -36,6 +36,9 @@ class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
 {
 	public:
 		virtual ~PlotOverlayStyle() override;
+
+		Property<int> width{this, "width"};
+		Property<int> height{this, "height"};
 };
 
 } /* namespace OODebug */

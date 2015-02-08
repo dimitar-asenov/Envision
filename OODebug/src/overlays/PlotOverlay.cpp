@@ -39,15 +39,15 @@ void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	Super::paint(painter, option, widget);
 
 	double barWidth = 10.0;
-	if (values_.size()) barWidth = width_ / values_.size();
+	if (values_.size()) barWidth = style()->width() / values_.size();
 	double maxHeight = *std::max_element(values_.begin(), values_.end());
 	double heightScale = 1.0;
-	if (maxHeight > 0.0) heightScale = height_ / maxHeight;
+	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
 
 	for (int i = 0; i < values_.size(); ++i)
 	{
 		double scaledValue = heightScale * values_[i];
-		QRectF bar(i * barWidth, getShape()->contentTop() + height_ - scaledValue, barWidth, scaledValue);
+		QRectF bar(i * barWidth, getShape()->contentTop() + style()->height() - scaledValue, barWidth, scaledValue);
 		painter->drawRect(bar);
 		painter->fillRect(bar, QColor((i % 2 ? "red" : "black")));
 	}
@@ -56,7 +56,7 @@ void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsIt
 void OODebug::PlotOverlay::addValue(double value)
 {
 	values_ << value;
-	update();
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void PlotOverlay::determineChildren() {}
@@ -64,7 +64,7 @@ void PlotOverlay::determineChildren() {}
 void PlotOverlay::updateGeometry(int, int)
 {
 	if (hasShape())
-		getShape()->setInnerSize(width_, height_);
+		getShape()->setInnerSize(style()->width(), style()->height());
 	setPos(associatedItem()->mapToScene(associatedItem()->widthInLocal() + 10, 0));
 }
 

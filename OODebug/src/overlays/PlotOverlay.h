@@ -27,15 +27,15 @@
 #pragma once
 
 #include "../oodebug_api.h"
+#include "PlotOverlayStyle.h"
 
-#include "VisualizationBase/src/items/ItemStyle.h"
 #include "VisualizationBase/src/overlays/Overlay.h"
 
 namespace OODebug {
 
 class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualization::Item>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(PlotOverlay, Visualization::ItemStyle)
+	ITEM_COMMON(PlotOverlay)
 
 	public:
 		PlotOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get());
@@ -47,9 +47,6 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		int height_{200};
-		int width_{200};
-
 		QList<double> values_;
 };
 
