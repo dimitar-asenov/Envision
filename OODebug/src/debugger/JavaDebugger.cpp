@@ -496,8 +496,8 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 		auto overlayGroup = scene->overlayGroup(CURRENT_LINE_OVERLAY_GROUP);
 
 		if (!overlayGroup) overlayGroup = scene->addOverlayGroup(CURRENT_LINE_OVERLAY_GROUP);
-		auto overlay = new Visualization::SelectionOverlay(item,
-																			Visualization::SelectionOverlay::itemStyles().get("blue"));
+		auto overlay = new Visualization::SelectionOverlay(
+					item, Visualization::SelectionOverlay::itemStyles().get("currentStatement"));
 		overlayGroup->addOverlay(makeOverlay(overlay));
 	}
 	else
