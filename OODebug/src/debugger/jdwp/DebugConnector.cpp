@@ -233,7 +233,7 @@ qint64 DebugConnector::getClassId(const QString& signature)
 
 qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
 {
-	auto methods = makeReply<MethodsReply>(sendCommand(MethodsCommand(classId)));
+	auto methods = makeReply<Methods>(sendCommand(MethodsCommand(classId)));
 	for (auto method : methods.methods())
 	{
 		// TODO: check for signature

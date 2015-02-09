@@ -47,9 +47,9 @@ struct MethodsCommand : public Command {
 		MessageField<qint64> refTypeId{&MethodsCommand::refTypeId, this};
 };
 
-struct MethodsReply : public Reply {
-		virtual ~MethodsReply() override;
-		MessageField<QList<JVMMethod>> methods{&MethodsReply::methods, this};
+struct Methods : public Reply {
+		virtual ~Methods() override;
+		MessageField<QList<JVMMethod>> methods{&Methods::methods, this};
 };
 
 } /* namespace OODebug */

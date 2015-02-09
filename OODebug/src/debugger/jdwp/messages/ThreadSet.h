@@ -31,7 +31,7 @@
 #include "../Command.h"
 #include "../MessagePart.h"
 #include "../Reply.h"
-#include "../Location.h"
+#include "../DataTypes.h"
 
 namespace OODebug {
 

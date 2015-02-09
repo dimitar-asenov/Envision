@@ -29,7 +29,7 @@
 #include "../../../oodebug_api.h"
 
 #include "../Command.h"
-#include "../Location.h"
+#include "../DataTypes.h"
 #include "../MessagePart.h"
 #include "../Reply.h"
 

@@ -31,7 +31,7 @@
 #include "../Command.h"
 #include "../MessagePart.h"
 #include "../Reply.h"
-#include "../Location.h"
+#include "../DataTypes.h"
 
 namespace OODebug {
 
@@ -56,24 +56,6 @@ struct GetValuesCommand : public Command {
 		MessageField<qint64> frame{&GetValuesCommand::frame, this};
 		/** The number of values to get. */
 		MessageField<QList<StackVariable>> variables{&GetValuesCommand::variables, this};
-};
-
-struct Value : public MessagePart {
-		virtual ~Value() override;
-		MessageField<Protocol::Tag> type{&Value::type, this};
-		MessageField<qint64, cast(Protocol::Tag::ARRAY)> array{&Value::array, this};
-		MessageField<qint8, cast(Protocol::Tag::BYTE)> byte{&Value::byte, this};
-		MessageField<qint16, cast(Protocol::Tag::CHAR)> charValue{&Value::charValue, this};
-		MessageField<qint64, cast(Protocol::Tag::OBJECT)> objectId{&Value::objectId, this};
-		MessageField<qint32, cast(Protocol::Tag::FLOAT)> floatValue{&Value::floatValue, this};
-		MessageField<qint64, cast(Protocol::Tag::DOUBLE)> doubleValue{&Value::doubleValue, this};
-		MessageField<qint32, cast(Protocol::Tag::INT)> intValue{&Value::intValue, this};
-		MessageField<qint64, cast(Protocol::Tag::LONG)> longValue{&Value::longValue, this};
-		MessageField<qint16, cast(Protocol::Tag::SHORT)> shortValue{&Value::shortValue, this};
-		MessageField<qint8, cast(Protocol::Tag::BOOLEAN)> boolean{&Value::boolean, this};
-		MessageField<qint64, cast(Protocol::Tag::STRING)> stringId{&Value::stringId, this};
-
-		virtual int kind() const override;
 };
 
 struct Values : public Reply {

@@ -24,32 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../oodebug_api.h"
-
-#include "MessagePart.h"
-#include "MessageField.h"
-#include "Protocol.h"
+#include "DataTypes.h"
 
 namespace OODebug {
 
-/**
- * Describes a Location as in:
- * https://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.htmls
- */
-struct Location : public MessagePart
+Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex)
 {
-		Location() = default;
-		Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex);
-		virtual ~Location() override;
-		MessageField<Protocol::TypeTagKind> typeTag{&Location::typeTag, this};
-		MessageField<qint64> classId{&Location::classId, this};
-		MessageField<qint64> methodId{&Location::methodId, this};
-		MessageField<qint64> methodIndex{&Location::methodIndex, this};
-		bool operator==(const Location& other) const;
-};
+	this->typeTag = typeTag;
+	this->classId = classId;
+	this->methodId = methodId;
+	this->methodIndex = methodIndex;
+}
 
-uint qHash(const Location& location);
+Location::~Location() {}
+
+bool Location::operator==(const Location &other) const
+{
+	return typeTag() == other.typeTag() && classId() == other.classId()
+			&& methodId() == other.methodId() && methodIndex() == other.methodIndex();
+}
+
+uint qHash(const Location &location) {
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::ReadWrite);
+	stream << location;
+	return qHash(QString(data));
+}
+
+Value::~Value() {}
+
+int Value::kind() const { return cast(type()); }
+
+TaggedObjectId::~TaggedObjectId() {}
 
 } /* namespace OODebug */

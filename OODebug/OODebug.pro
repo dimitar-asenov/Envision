@@ -36,7 +36,6 @@ HEADERS += src/precompiled.h \
     src/commands/CJavaDebug.h \
     src/debugger/JavaDebugger.h \
     src/debugger/jdwp/MessagePart.h \
-    src/debugger/jdwp/Location.h \
     src/debugger/jdwp/messages/EventSet.h \
     src/debugger/jdwp/messages/EventRequestSet.h \
     src/debugger/jdwp/messages/VMSet.h \
@@ -50,7 +49,8 @@ HEADERS += src/precompiled.h \
     src/compiler/JavaCompiler.h \
     src/run_support/JavaRunner.h \
     src/overlays/PlotOverlay.h \
-    src/overlays/PlotOverlayStyle.h
+    src/overlays/PlotOverlayStyle.h \
+    src/debugger/jdwp/DataTypes.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -70,7 +70,6 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/jdwp/MessagePart.cpp \
     src/debugger/jdwp/Reply.cpp \
     src/debugger/jdwp/Command.cpp \
-    src/debugger/jdwp/Location.cpp \
     src/debugger/jdwp/messages/EventSet.cpp \
     src/debugger/jdwp/messages/EventRequestSet.cpp \
     src/debugger/jdwp/messages/VMSet.cpp \
@@ -83,4 +82,5 @@ SOURCES += src/OODebugException.cpp \
     src/compiler/JavaCompiler.cpp \
     src/run_support/JavaRunner.cpp \
     src/overlays/PlotOverlay.cpp \
-    src/overlays/PlotOverlayStyle.cpp
+    src/overlays/PlotOverlayStyle.cpp \
+    src/debugger/jdwp/DataTypes.cpp

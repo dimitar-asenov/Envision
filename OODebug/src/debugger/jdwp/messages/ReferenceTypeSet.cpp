@@ -38,7 +38,7 @@ MethodsCommand::MethodsCommand(qint64 classId)
 
 MethodsCommand::~MethodsCommand() {}
 
-MethodsReply::~MethodsReply() {}
+Methods::~Methods() {}
 
 
 } /* namespace OODebug */

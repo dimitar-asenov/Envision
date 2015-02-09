@@ -29,7 +29,7 @@
 #include "ReferenceFinder.h"
 #include "../run_support/JavaRunner.h"
 #include "jdwp/messages/AllMessages.h"
-#include "jdwp/Location.h"
+#include "jdwp/DataTypes.h"
 
 #include "overlays/PlotOverlay.h"
 
