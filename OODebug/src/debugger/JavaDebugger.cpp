@@ -196,6 +196,8 @@ JavaDebugger::JavaDebugger()
 	debugConnector_.addEventListener(Protocol::EventKind::BREAKPOINT,
 												[this] (Event e) { handleBreakpoint(e.breakpoint()); });
 	debugConnector_.addEventListener(Protocol::EventKind::VM_START, [this] (Event e) { handleVMStart(e); });
+	debugConnector_.addEventListener(Protocol::EventKind::SINGLE_STEP,
+												[this] (Event e) { handleSingleStep(e.singleStep()); });
 }
 
 void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
@@ -389,6 +391,12 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		toggleLineHighlight(visualization, true);
 	else
 		debugConnector_.resume();
+}
+
+void JavaDebugger::handleSingleStep(SingleStepEvent)
+{
+	// TODO implement
+	qDebug() << "SingleStep";
 }
 
 Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable)

@@ -286,6 +286,12 @@ bool DebugConnector::clearBreakpoint(qint32 requestId)
 	return r.error() == Protocol::Error::NONE;
 }
 
+int DebugConnector::singleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
+{
+	auto r = makeReply<EventSetReply>(sendCommand(StepCommand(threadId, stepSize, stepDepth)));
+	return r.requestId();
+}
+
 void DebugConnector::handleComposite(QByteArray data)
 {
 	auto c = makeReply<CompositeCommand>(data);

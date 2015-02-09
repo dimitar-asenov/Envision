@@ -54,6 +54,7 @@ namespace OODebug {
 
 class Location;
 class BreakpointEvent;
+class SingleStepEvent;
 class VariableDetails;
 class PlotOverlay;
 
@@ -86,6 +87,7 @@ class OODEBUG_API JavaDebugger
 		void handleVMStart(Event);
 		void handleClassPrepare(Event);
 		void handleBreakpoint(BreakpointEvent breakpointEvent);
+		void handleSingleStep(SingleStepEvent singleStep);
 
 		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
 		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);

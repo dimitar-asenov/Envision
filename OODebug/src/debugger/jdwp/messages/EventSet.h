@@ -44,6 +44,14 @@ struct VMStart : public MessagePart
 		MessageField<qint64> threadId{&VMStart::threadId, this};
 };
 
+struct SingleStepEvent : public MessagePart
+{
+		virtual ~SingleStepEvent() override;
+		MessageField<qint32> requestID{&SingleStepEvent::requestID, this};
+		MessageField<qint64> thread{&SingleStepEvent::thread, this};
+		MessageField<Location> location{&SingleStepEvent::location, this};
+};
+
 struct ClassPrepare : public MessagePart
 {
 		virtual ~ClassPrepare() override;
@@ -68,6 +76,7 @@ struct Event : public MessagePart
 		MessageField<Protocol::EventKind> eventKind{&Event::eventKind, this};
 
 		MessageField<VMStart, cast(Protocol::EventKind::VM_START)> vmStart{&Event::vmStart, this};
+		MessageField<SingleStepEvent, cast(Protocol::EventKind::SINGLE_STEP)> singleStep{&Event::singleStep, this};
 		MessageField<BreakpointEvent, cast(Protocol::EventKind::BREAKPOINT)> breakpoint{&Event::breakpoint, this};
 		MessageField<ClassPrepare, cast(Protocol::EventKind::CLASS_PREPARE)> classPrepare{&Event::classPrepare, this};
 

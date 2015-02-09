@@ -78,6 +78,8 @@ class OODEBUG_API DebugConnector : public QObject
 		int setBreakpoint(Location breakLocation);
 		bool clearBreakpoint(qint32 requestId);
 
+		int singleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth);
+
 		bool vmAlive();
 
 		static constexpr int NO_RESULT{-1};
