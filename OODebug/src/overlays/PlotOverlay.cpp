@@ -39,7 +39,7 @@ void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	Super::paint(painter, option, widget);
 
 	double barWidth = 10.0;
-	if (values_.size()) barWidth = style()->width() / values_.size();
+	if (values_.size()) barWidth = (double) style()->width() / values_.size();
 	double maxHeight = *std::max_element(values_.begin(), values_.end());
 	double heightScale = 1.0;
 	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
