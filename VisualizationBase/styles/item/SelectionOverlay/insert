@@ -1,0 +1,29 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>60</alpha>
+				<red>192</red>
+				<green>255</green>
+				<blue>192</blue>
+			</color>
+		</backgroundBrush>
+		<cornerType>0</cornerType>
+		<cornerRadius>3</cornerRadius>
+		<outline>
+			<width>3.0</width>
+			<style>2</style>
+			<color>
+				<alpha>255</alpha>
+				<red>0</red>
+				<green>192</green>
+				<blue>0</blue>
+			</color>
+			<capStyle>0</capStyle>
+			<joinStyle>0</joinStyle>
+		</outline>
+	</shape>
+</style>
