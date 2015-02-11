@@ -50,6 +50,10 @@ namespace Visualization {
 	class IconOverlay;
 }
 
+namespace OOVisualization {
+	class VStatementItemList;
+}
+
 namespace OODebug {
 
 class Location;
@@ -69,6 +73,8 @@ class OODEBUG_API JavaDebugger
 		bool toggleBreakpoint(Visualization::Item* target, QKeyEvent* event);
 		bool resume(Visualization::Item* target, QKeyEvent* event);
 		bool trackVariable(Visualization::Item* target, QKeyEvent* event);
+
+		void probe(OOVisualization::VStatementItemList* itemList, const QStringList& arguments, int itemIndex);
 
 	private:
 		JavaDebugger();
@@ -112,6 +118,7 @@ class OODEBUG_API JavaDebugger
 		static const QString BREAKPOINT_OVERLAY_GROUP;
 		static const QString PLOT_OVERLAY_GROUP;
 		static const QString CURRENT_LINE_OVERLAY_GROUP;
+		static const QString MONITOR_OVERLAY_GROUP;
 };
 
 } /* namespace OODebug */

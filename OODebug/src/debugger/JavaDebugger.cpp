@@ -50,6 +50,9 @@
 #include "OOModel/src/types/PrimitiveType.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 #include "OOModel/src/statements/DeclarationStatement.h"
+#include "OOModel/src/elements/StatementItemList.h"
+
+#include "OOVisualization/src/elements/VStatementItemList.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/OverlayAccessor.h"
@@ -61,6 +64,7 @@ namespace OODebug {
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
 const QString JavaDebugger::PLOT_OVERLAY_GROUP{"PlotOverlay"};
 const QString JavaDebugger::CURRENT_LINE_OVERLAY_GROUP{"CurrentLine"};
+const QString JavaDebugger::MONITOR_OVERLAY_GROUP{"MonitorOverlay"};
 
 JavaDebugger& JavaDebugger::instance()
 {
@@ -188,6 +192,20 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		return true;
 	}
 	return false;
+}
+
+void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QStringList&, int itemIndex)
+{
+	if (itemIndex == itemList->rangeEnd()) --itemIndex; // TODO handle this properly
+	auto vItem = itemList->itemAt<Visualization::Item>(itemIndex);
+	Q_ASSERT(vItem);
+
+	auto scene = vItem->scene();
+	auto overlayGroup = scene->overlayGroup(MONITOR_OVERLAY_GROUP);
+
+	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(MONITOR_OVERLAY_GROUP);
+	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
+	overlayGroup->addOverlay(makeOverlay(overlay));
 }
 
 JavaDebugger::JavaDebugger()

@@ -30,10 +30,12 @@
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
 #include "OOInteraction/src/handlers/HStatement.h"
+#include "OOInteraction/src/handlers/HStatementItemList.h"
 
 #include "commands/CJavaCompile.h"
 #include "commands/CJavaRun.h"
 #include "commands/CJavaDebug.h"
+#include "commands/CProbe.h"
 #include "run_support/MainMethodFinder.h"
 #include "overlays/ConsoleOverlay.h"
 #include "handlers/HConsoleOverlay.h"
@@ -55,6 +57,7 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaRun());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug());
+	OOInteraction::HStatementItemList::instance()->addCommand(new CProbe());
 
 	ConsoleOverlay::setDefaultClassHandler(HConsoleOverlay::instance());
 

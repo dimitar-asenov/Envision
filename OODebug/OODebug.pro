@@ -50,7 +50,8 @@ HEADERS += src/precompiled.h \
     src/run_support/JavaRunner.h \
     src/overlays/PlotOverlay.h \
     src/overlays/PlotOverlayStyle.h \
-    src/debugger/jdwp/DataTypes.h
+    src/debugger/jdwp/DataTypes.h \
+    src/commands/CProbe.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -83,4 +84,5 @@ SOURCES += src/OODebugException.cpp \
     src/run_support/JavaRunner.cpp \
     src/overlays/PlotOverlay.cpp \
     src/overlays/PlotOverlayStyle.cpp \
-    src/debugger/jdwp/DataTypes.cpp
+    src/debugger/jdwp/DataTypes.cpp \
+    src/commands/CProbe.cpp
