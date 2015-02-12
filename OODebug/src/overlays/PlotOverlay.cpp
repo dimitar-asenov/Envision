@@ -38,25 +38,20 @@ void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsIt
 {
 	Super::paint(painter, option, widget);
 
-	double barWidth = 10.0;
-	if (values_.size()) barWidth = (double) style()->width() / values_.size();
-	double maxHeight = *std::max_element(values_.begin(), values_.end());
-	double heightScale = 1.0;
-	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
-
-	for (int i = 0; i < values_.size(); ++i)
-	{
-		double scaledValue = heightScale * values_[i];
-		QRectF bar(i * barWidth, getShape()->contentTop() + style()->height() - scaledValue, barWidth, scaledValue);
-		painter->drawRect(bar);
-		painter->fillRect(bar, QColor((i % 2 ? "red" : "black")));
-	}
+	if (yValues_.empty()) plotBars(painter);
+	else plotScatter(painter);
 }
 
 void OODebug::PlotOverlay::addValue(double value)
 {
-	values_ << value;
+	xValues_ << value;
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
+}
+
+void OODebug::PlotOverlay::addValue(double xValue, double yValue)
+{
+	xValues_ << xValue;
+	yValues_ << yValue;
 }
 
 void PlotOverlay::determineChildren() {}
@@ -66,6 +61,47 @@ void PlotOverlay::updateGeometry(int, int)
 	if (hasShape())
 		getShape()->setInnerSize(style()->width(), style()->height());
 	setPos(associatedItem()->mapToScene(associatedItem()->widthInLocal() + 10, 0));
+}
+
+void PlotOverlay::plotBars(QPainter* painter)
+{
+	double barWidth = 10.0;
+	if (xValues_.size()) barWidth = (double) style()->width() / xValues_.size();
+	double maxHeight = *std::max_element(xValues_.begin(), xValues_.end());
+	double heightScale = 1.0;
+	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
+
+	for (int i = 0; i < xValues_.size(); ++i)
+	{
+		double scaledValue = heightScale * xValues_[i];
+		QRectF bar(i * barWidth, getShape()->contentTop() + style()->height() - scaledValue, barWidth, scaledValue);
+		painter->drawRect(bar);
+		painter->fillRect(bar, QColor((i % 2 ? "red" : "black")));
+	}
+}
+
+void PlotOverlay::plotScatter(QPainter* painter)
+{
+	double radius = 10.0;
+	if (xValues_.size()) radius = (double) style()->width() / xValues_.size();
+	if (yValues_.size()) radius = std::min(radius, (double) style()->height() / yValues_.size());
+	double maxHeight = *std::max_element(xValues_.begin(), xValues_.end());
+	double heightScale = 1.0;
+	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
+
+	double maxY = *std::max_element(yValues_.begin(), yValues_.end());
+	double widthScale = 1.0;
+	if (maxY > 0.0) widthScale = style()->width() / maxY;
+
+	for (int i = 0; i < xValues_.size(); ++i)
+	{
+		double scaledX = heightScale * xValues_[i];
+		double scaledY = widthScale * yValues_[i];
+		QRectF bar(scaledY, getShape()->contentTop() + style()->height() - scaledX, radius, radius);
+		QBrush brush(QColor("red"));
+		painter->setBrush(brush);
+		painter->drawEllipse(bar);
+	}
 }
 
 } /* namespace OODebug */

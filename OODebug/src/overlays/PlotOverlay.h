@@ -41,13 +41,18 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		PlotOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get());
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 		void addValue(double value);
+		void addValue(double xValue, double yValue);
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		QList<double> values_;
+		QList<double> xValues_;
+		QList<double> yValues_;
+
+		void plotBars(QPainter* painter);
+		void plotScatter(QPainter* painter);
 };
 
 } /* namespace OODebug */
