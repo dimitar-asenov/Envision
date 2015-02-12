@@ -160,25 +160,11 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 	{
 		auto node = target->node();
 		Q_ASSERT(node);
-		OOModel::VariableDeclaration* variableDeclaration = nullptr;
-		if (auto exprStmt = DCast<OOModel::ExpressionStatement>(node))
-		{
-			if (auto varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression()))
-				variableDeclaration = varDeclarationExpr->decl();
-		}
-		else if (auto declStmt = DCast<OOModel::DeclarationStatement>(node))
-		{
-			variableDeclaration = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
-		}
+		auto variableDeclaration = variableDeclarationFromStatement(DCast<OOModel::StatementItem>(node));
 		if (!variableDeclaration) return false;
 
-		// add the plot overlay
-		auto scene = target->scene();
-		auto overlayGroup = scene->overlayGroup(PLOT_OVERLAY_GROUP);
-
-		if (!overlayGroup) overlayGroup = scene->addOverlayGroup(PLOT_OVERLAY_GROUP);
 		auto overlay = new PlotOverlay(target);
-		overlayGroup->addOverlay(makeOverlay(overlay));
+		addOverlayTo(target, overlay, PLOT_OVERLAY_GROUP);
 
 		ReferenceFinder refFinder;
 		refFinder.setSearchNode(node);
@@ -219,19 +205,11 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	probes_[vItem->node()] = {xDeclaration, yDeclaration};
 	unsetBreakpoints_ << vItem->node();
 
-	auto scene = vItem->scene();
-	auto overlayGroup = scene->overlayGroup(MONITOR_OVERLAY_GROUP);
-
-	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(MONITOR_OVERLAY_GROUP);
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
-	overlayGroup->addOverlay(makeOverlay(overlay));
+	addOverlayTo(vItem, overlay, MONITOR_OVERLAY_GROUP);
 
-	// add the plot overlay
-	overlayGroup = scene->overlayGroup(PLOT_OVERLAY_GROUP);
-
-	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(PLOT_OVERLAY_GROUP);
 	auto plotOverlay = new PlotOverlay(vItem);
-	overlayGroup->addOverlay(makeOverlay(plotOverlay));
+	addOverlayTo(vItem, plotOverlay, PLOT_OVERLAY_GROUP);
 }
 
 JavaDebugger::JavaDebugger()
@@ -246,12 +224,8 @@ JavaDebugger::JavaDebugger()
 
 void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
 {
-	auto scene = target->scene();
-	auto overlayGroup = scene->overlayGroup(BREAKPOINT_OVERLAY_GROUP);
-
-	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(BREAKPOINT_OVERLAY_GROUP);
 	auto overlay = new Visualization::IconOverlay(target, Visualization::IconOverlay::itemStyles().get("breakpoint"));
-	overlayGroup->addOverlay(makeOverlay(overlay));
+	addOverlayTo(target, overlay, BREAKPOINT_OVERLAY_GROUP);
 }
 
 QString JavaDebugger::jvmSignatureFor(OOModel::Class* theClass)
@@ -518,16 +492,7 @@ Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, Va
 			{
 				if (currentIndex == neededIndex)
 				{
-					OOModel::VariableDeclaration* variableDeclaration = nullptr;
-					if (auto exprStmt = DCast<OOModel::ExpressionStatement>(item))
-					{
-						if (auto varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression()))
-							variableDeclaration = varDeclarationExpr->decl();
-					}
-					else if (auto declStmt = DCast<OOModel::DeclarationStatement>(item))
-					{
-						variableDeclaration = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
-					}
+					auto variableDeclaration = variableDeclarationFromStatement(item);
 					Q_ASSERT(variableDeclaration);
 					if (variableDeclaration->name() != variable.name())
 						qDebug() << "Name differs, Decl:" << variableDeclaration->name() << "var" << variable.name();
@@ -604,14 +569,14 @@ OOModel::VariableDeclaration* JavaDebugger::variableDeclarationFromStatement(OOM
 		if (auto varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression()))
 		{
 			auto decl = varDeclarationExpr->decl();
-			if (decl && decl->name() == variableName)
+			if (decl && (variableName.isEmpty() || decl->name() == variableName))
 				variableDeclaration = decl;
 		}
 	}
 	else if (auto declStmt = DCast<OOModel::DeclarationStatement>(statement))
 	{
 		auto decl = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
-		if (decl && decl->name() == variableName)
+		if (decl && (variableName.isEmpty() || decl->name() == variableName))
 			variableDeclaration = decl;
 	}
 	return variableDeclaration;
@@ -621,45 +586,48 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 {
 	if (highlight)
 	{
-		auto scene = item->scene();
-		auto overlayGroup = scene->overlayGroup(CURRENT_LINE_OVERLAY_GROUP);
-
-		if (!overlayGroup) overlayGroup = scene->addOverlayGroup(CURRENT_LINE_OVERLAY_GROUP);
 		auto overlay = new Visualization::SelectionOverlay(
 					item, Visualization::SelectionOverlay::itemStyles().get("currentStatement"));
-		overlayGroup->addOverlay(makeOverlay(overlay));
+		addOverlayTo(item, overlay, CURRENT_LINE_OVERLAY_GROUP);
 	}
 	else
 	{
-		for (auto overlayAccessor : item->overlays(CURRENT_LINE_OVERLAY_GROUP))
-		{
-			auto overlayItem = overlayAccessor->overlayItem();
-			if (auto highlightOverlay = DCast<Visualization::SelectionOverlay>(overlayItem))
-				if (highlightOverlay->associatedItem() == item) item->scene()->removeOverlay(highlightOverlay);
-		}
+		if (auto overlay = overlayOf<Visualization::SelectionOverlay>(item, CURRENT_LINE_OVERLAY_GROUP))
+			 item->scene()->removeOverlay(overlay);
 	}
 }
 
 Visualization::IconOverlay* JavaDebugger::breakpointOverlayOf(Visualization::Item* item)
 {
-	for (auto overlayAccessor : item->overlays(BREAKPOINT_OVERLAY_GROUP))
-	{
-		auto overlayItem = overlayAccessor->overlayItem();
-		if (auto breakpointOverlay = DCast<Visualization::IconOverlay>(overlayItem))
-			if (breakpointOverlay->associatedItem() == item) return breakpointOverlay;
-	}
-	return nullptr;
+	return overlayOf<Visualization::IconOverlay>(item, BREAKPOINT_OVERLAY_GROUP);
 }
 
 PlotOverlay* JavaDebugger::plotOverlayOf(Visualization::Item* item)
 {
-	for (auto overlayAccessor : item->overlays(PLOT_OVERLAY_GROUP))
+	return overlayOf<PlotOverlay>(item, PLOT_OVERLAY_GROUP);
+}
+
+template <class OverlayType>
+OverlayType* JavaDebugger::overlayOf(Visualization::Item* item, QString groupName)
+{
+	for (auto overlayAccessor : item->overlays(groupName))
 	{
 		auto overlayItem = overlayAccessor->overlayItem();
-		if (auto plotOverlay = DCast<PlotOverlay>(overlayItem))
-			if (plotOverlay->associatedItem() == item) return plotOverlay;
+		if (auto overlay = DCast<OverlayType>(overlayItem))
+			if (overlay->associatedItem() == item) return overlay;
 	}
 	return nullptr;
+}
+
+template <class OverlayType>
+void JavaDebugger::addOverlayTo(Visualization::Item* item, OverlayType* overlay, QString groupName)
+{
+	Q_ASSERT(item);
+	auto scene = item->scene();
+	auto overlayGroup = scene->overlayGroup(groupName);
+
+	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(groupName);
+	overlayGroup->addOverlay(makeOverlay(overlay));
 }
 
 } /* namespace OODebug */
