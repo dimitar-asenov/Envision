@@ -136,8 +136,8 @@ void Diff::findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& 
 		{
 			GenericNode* nodeInFile = root->find(id);
 			GenericNode* parentInFile = nodeInFile->parent();
-			Q_ASSERT(nodes.contains(id));
 			iter = nodes.find(id);
+			Q_ASSERT(iter != nodes.end());
 			GenericNode* node = iter.value();
 			iter = nodes.find(parentInFile->id());
 			GenericNode* parent = nullptr;
