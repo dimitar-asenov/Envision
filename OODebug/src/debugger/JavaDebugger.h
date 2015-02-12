@@ -43,6 +43,7 @@ namespace OOModel {
 	class Expression;
 	class Method;
 	class VariableDeclaration;
+	class StatementItem;
 }
 
 namespace Visualization {
@@ -98,6 +99,9 @@ class OODEBUG_API JavaDebugger
 		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
 		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
 
+		static OOModel::VariableDeclaration* variableDeclarationFromStatement(OOModel::StatementItem* statement,
+																							QString variableName);
+
 		void toggleLineHighlight(Visualization::Item* item, bool highlight);
 		Visualization::IconOverlay* breakpointOverlayOf(Visualization::Item* item);
 		PlotOverlay* plotOverlayOf(Visualization::Item* item);
@@ -112,6 +116,8 @@ class OODEBUG_API JavaDebugger
 		Visualization::Item* currentBreakpointItem_{};
 
 		QHash<Model::Node*, OOModel::VariableDeclaration*> trackedVariables_;
+
+		QHash<Model::Node*, QPair<OOModel::VariableDeclaration*, OOModel::VariableDeclaration*>> probes_;
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 

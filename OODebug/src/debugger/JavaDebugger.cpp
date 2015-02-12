@@ -194,11 +194,30 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 	return false;
 }
 
-void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QStringList&, int itemIndex)
+void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QStringList& arguments, int itemIndex)
 {
+	Q_ASSERT(!arguments.empty());
 	if (itemIndex == itemList->rangeEnd()) --itemIndex; // TODO handle this properly
 	auto vItem = itemList->itemAt<Visualization::Item>(itemIndex);
 	Q_ASSERT(vItem);
+
+	QString xName = arguments[0];
+	QString yName{};
+	if (arguments.size() > 1) yName = arguments[1];
+
+	OOModel::VariableDeclaration* xDeclaration = nullptr;
+	OOModel::VariableDeclaration* yDeclaration = nullptr;
+	auto statementList = DCast<OOModel::StatementItemList>(itemList->node());
+	for (int idx = itemIndex; idx >= 0; --idx)
+	{
+		if (!xDeclaration) xDeclaration = variableDeclarationFromStatement(statementList->at(idx), xName);
+		if (!yDeclaration && !yName.isEmpty())
+			yDeclaration = variableDeclarationFromStatement(statementList->at(idx), yName);
+	}
+	Q_ASSERT(xDeclaration);	Q_ASSERT(xDeclaration->name() == xName);
+
+	probes_[vItem->node()] = {xDeclaration, yDeclaration};
+	unsetBreakpoints_ << vItem->node();
 
 	auto scene = vItem->scene();
 	auto overlayGroup = scene->overlayGroup(MONITOR_OVERLAY_GROUP);
@@ -206,6 +225,13 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(MONITOR_OVERLAY_GROUP);
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
 	overlayGroup->addOverlay(makeOverlay(overlay));
+
+	// add the plot overlay
+	overlayGroup = scene->overlayGroup(PLOT_OVERLAY_GROUP);
+
+	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(PLOT_OVERLAY_GROUP);
+	auto plotOverlay = new PlotOverlay(vItem);
+	overlayGroup->addOverlay(makeOverlay(plotOverlay));
 }
 
 JavaDebugger::JavaDebugger()
@@ -402,6 +428,61 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 				qDebug() << trackedVariable->name() << ":\t" << debugConnector_.getString(val.stringId());
 		}
 	}
+	else if (probes_.contains(*it))
+	{
+		// Get frames
+		auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
+		auto location = breakpointEvent.location();
+		auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
+		if (frames.frames().size() == 0)
+		{
+			qDebug() << "No frames received, error:" << static_cast<qint8>(frames.error());
+			return;
+		}
+		auto currentFrame = frames.frames()[0];
+		int currentIndex = currentFrame.location().methodIndex();
+
+		auto xVariable = probes_[*it].first;
+		Q_ASSERT(xVariable);
+		auto yVariable = probes_[*it].second;
+
+		bool xFirst = true;
+
+		QList<StackVariable> varsToGet;
+		for (auto variableDetails : variableTable.variables())
+		{
+			if (variableDetails.name() == xVariable->name())
+			{
+				// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
+				//                    #JDWP_Method_VariableTable
+				Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
+							currentIndex < variableDetails.codeIndex() + variableDetails.length());
+				varsToGet << StackVariable(variableDetails.slot(),
+													typeExpressionToTag(xVariable->typeExpression()));
+				xFirst = true;
+			}
+			else if (yVariable && variableDetails.name() == yVariable->name())
+			{
+				Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
+							currentIndex < variableDetails.codeIndex() + variableDetails.length());
+				varsToGet << StackVariable(variableDetails.slot(),
+													typeExpressionToTag(yVariable->typeExpression()));
+				xFirst = false;
+			}
+		}
+
+		auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+		Q_ASSERT(values.values().length() == varsToGet.length());
+		auto nodeVisualization = Visualization::Item::nodeItemsMap().find(*it);
+		Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
+		auto overlay = plotOverlayOf(*nodeVisualization);
+		Q_ASSERT(overlay);
+		auto vals = values.values();
+		if (vals.size() == 1)
+			overlay->addValue(vals[0].intValue());
+		else if (vals.size() == 2)
+			overlay->addValue(vals[!xFirst].intValue(), vals[xFirst].intValue());
+	}
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
 	currentBreakpointItem_ = visualization;
 	// If we have an overlay, the user wants to stop here, otherwise it is a tracked variable and we can resume.
@@ -512,6 +593,28 @@ Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
 	}
 	// No other types possible, or we have to implement it!
 	Q_ASSERT(false);
+}
+
+OOModel::VariableDeclaration* JavaDebugger::variableDeclarationFromStatement(OOModel::StatementItem* statement,
+																									 QString variableName)
+{
+	OOModel::VariableDeclaration* variableDeclaration = nullptr;
+	if (auto exprStmt = DCast<OOModel::ExpressionStatement>(statement))
+	{
+		if (auto varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression()))
+		{
+			auto decl = varDeclarationExpr->decl();
+			if (decl && decl->name() == variableName)
+				variableDeclaration = decl;
+		}
+	}
+	else if (auto declStmt = DCast<OOModel::DeclarationStatement>(statement))
+	{
+		auto decl = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
+		if (decl && decl->name() == variableName)
+			variableDeclaration = decl;
+	}
+	return variableDeclaration;
 }
 
 void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight)
