@@ -194,11 +194,27 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	OOModel::VariableDeclaration* xDeclaration = nullptr;
 	OOModel::VariableDeclaration* yDeclaration = nullptr;
 	auto statementList = DCast<OOModel::StatementItemList>(itemList->node());
-	for (int idx = itemIndex; idx >= 0; --idx)
+	while (statementList)
 	{
-		if (!xDeclaration) xDeclaration = variableDeclarationFromStatement(statementList->at(idx), xName);
-		if (!yDeclaration && !yName.isEmpty())
-			yDeclaration = variableDeclarationFromStatement(statementList->at(idx), yName);
+		for (int idx = itemIndex; idx >= 0; --idx)
+		{
+			if (!xDeclaration) xDeclaration = variableDeclarationFromStatement(statementList->at(idx), xName);
+			if (!yDeclaration && !yName.isEmpty())
+				yDeclaration = variableDeclarationFromStatement(statementList->at(idx), yName);
+		}
+		auto itemInParentList = statementList->firstAncestorOfType<OOModel::StatementItem>();
+		statementList = nullptr; // we finished with this list
+		if (itemInParentList && (!xDeclaration || (!yName.isEmpty() && !yDeclaration)))
+		{
+			// search in parent lists
+			statementList = itemInParentList->firstAncestorOfType<OOModel::StatementItemList>();
+			itemIndex = 0;
+			for (auto it : *statementList)
+			{
+				if (it == itemInParentList) break;
+				++itemIndex;
+			}
+		}
 	}
 	Q_ASSERT(xDeclaration);	Q_ASSERT(xDeclaration->name() == xName);
 
@@ -420,11 +436,11 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		Q_ASSERT(xVariable);
 		auto yVariable = probes_[*it].second;
 
-		bool xFirst = true;
-
 		QList<StackVariable> varsToGet;
-		for (auto variableDetails : variableTable.variables())
+		int xInd = 0, yInd = 0;
+		for (int i = 0; i < variableTable.variables().size(); ++i)
 		{
+			auto variableDetails = variableTable.variables()[i];
 			if (variableDetails.name() == xVariable->name())
 			{
 				// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
@@ -433,7 +449,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 							currentIndex < variableDetails.codeIndex() + variableDetails.length());
 				varsToGet << StackVariable(variableDetails.slot(),
 													typeExpressionToTag(xVariable->typeExpression()));
-				xFirst = true;
+				xInd = i;
 			}
 			else if (yVariable && variableDetails.name() == yVariable->name())
 			{
@@ -441,9 +457,10 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 							currentIndex < variableDetails.codeIndex() + variableDetails.length());
 				varsToGet << StackVariable(variableDetails.slot(),
 													typeExpressionToTag(yVariable->typeExpression()));
-				xFirst = false;
+				yInd = i;
 			}
 		}
+		bool xFirst = xInd < yInd;
 
 		auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
 		Q_ASSERT(values.values().length() == varsToGet.length());
