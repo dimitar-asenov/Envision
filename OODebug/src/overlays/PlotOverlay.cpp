@@ -52,6 +52,7 @@ void OODebug::PlotOverlay::addValue(double xValue, double yValue)
 {
 	xValues_ << xValue;
 	yValues_ << yValue;
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void PlotOverlay::determineChildren() {}
@@ -82,22 +83,20 @@ void PlotOverlay::plotBars(QPainter* painter)
 
 void PlotOverlay::plotScatter(QPainter* painter)
 {
-	double radius = 10.0;
-	if (xValues_.size()) radius = (double) style()->width() / xValues_.size();
-	if (yValues_.size()) radius = std::min(radius, (double) style()->height() / yValues_.size());
-	double maxHeight = *std::max_element(xValues_.begin(), xValues_.end());
+	double radius = 5.0;
+	double maxHeight = *std::max_element(yValues_.begin(), yValues_.end());
 	double heightScale = 1.0;
 	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
 
-	double maxY = *std::max_element(yValues_.begin(), yValues_.end());
+	double maxX = *std::max_element(xValues_.begin(), xValues_.end());
 	double widthScale = 1.0;
-	if (maxY > 0.0) widthScale = style()->width() / maxY;
+	if (maxX > 0.0) widthScale = style()->width() / maxX;
 
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
-		double scaledX = heightScale * xValues_[i];
-		double scaledY = widthScale * yValues_[i];
-		QRectF bar(scaledY, getShape()->contentTop() + style()->height() - scaledX, radius, radius);
+		double scaledX = widthScale * xValues_[i];
+		double scaledY = heightScale * yValues_[i];
+		QRectF bar(scaledX, getShape()->contentTop() + style()->height() - scaledY, radius, radius);
 		QBrush brush(QColor("red"));
 		painter->setBrush(brush);
 		painter->drawEllipse(bar);
