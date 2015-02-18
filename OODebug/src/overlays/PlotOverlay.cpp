@@ -42,6 +42,12 @@ void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	else plotScatter(painter);
 }
 
+void OODebug::PlotOverlay::clearValues()
+{
+	xValues_.clear();
+	yValues_.clear();
+}
+
 void OODebug::PlotOverlay::addValue(double value)
 {
 	xValues_ << value;

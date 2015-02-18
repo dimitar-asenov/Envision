@@ -40,6 +40,9 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 	public:
 		PlotOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get());
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
+
+		void clearValues();
+
 		void addValue(double value);
 		void addValue(double xValue, double yValue);
 

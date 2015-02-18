@@ -84,6 +84,17 @@ bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	setBreakpoints_.clear();
 	breakOnLoadClasses_.clear();
 
+	// Reset probes
+	for (auto probeIt = probes_.cbegin(); probeIt != probes_.cend(); ++probeIt)
+	{
+		auto probeNode = probeIt.key();
+		auto visualizationIt = Visualization::Item::nodeItemsMap().find(probeNode);
+		Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
+		auto overlay = plotOverlayOf(*visualizationIt);
+		Q_ASSERT(overlay);
+		overlay->clearValues();
+	}
+
 	exportMap_ = JavaExport::JavaExporter::exportMaps().map(project);
 	debugConnector_.connect();
 	return true;
