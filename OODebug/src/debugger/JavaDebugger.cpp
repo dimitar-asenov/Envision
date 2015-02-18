@@ -235,7 +235,10 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
 	addOverlayTo(vItem, overlay, MONITOR_OVERLAY_GROUP);
 
-	auto plotOverlay = new PlotOverlay(vItem);
+	auto plotType = PlotOverlay::PlotType::Bars;
+	if (yDeclaration) plotType = PlotOverlay::PlotType::Scatter;
+
+	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"), plotType);
 	addOverlayTo(vItem, plotOverlay, PLOT_OVERLAY_GROUP);
 }
 

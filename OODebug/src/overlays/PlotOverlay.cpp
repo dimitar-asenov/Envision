@@ -32,32 +32,47 @@ namespace OODebug {
 
 ITEM_COMMON_DEFINITIONS(PlotOverlay, "item")
 
-PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* style) : Super{{associatedItem}, style}{}
+PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* style, PlotType type)
+	: Super{{associatedItem}, style}
+{
+	int plotOffset = 20;
+	QSize size = {style->width() - 3 * plotOffset, style->height() - 2 * plotOffset};
+	plotRegion_ = {{2 * plotOffset, plotOffset}, size};
+
+	if (PlotType::Bars == type) plotFunction_ = &PlotOverlay::plotBars;
+	else if (PlotType::Scatter == type) plotFunction_ = &PlotOverlay::plotScatter;
+}
 
 void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	Super::paint(painter, option, widget);
 
-	if (yValues_.empty()) plotBars(painter);
-	else plotScatter(painter);
+	drawAxes(painter);
+	drawTics(painter);
+
+	plotFunction_(this, painter);
 }
 
 void OODebug::PlotOverlay::clearValues()
 {
 	xValues_.clear();
 	yValues_.clear();
+	xMin_ = xMax_ = yMin_ = yMax_ = 0;
 }
 
 void OODebug::PlotOverlay::addValue(double value)
 {
-	xValues_ << value;
+	addValue(value, yValues_, yMin_, yMax_);
+	addValue(xValues_.size(), xValues_, xMin_, xMax_);
+
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void OODebug::PlotOverlay::addValue(double xValue, double yValue)
 {
-	xValues_ << xValue;
-	yValues_ << yValue;
+	addValue(xValue, xValues_, xMin_, xMax_);
+	addValue(yValue, yValues_, yMin_, yMax_);
+
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
@@ -70,18 +85,89 @@ void PlotOverlay::updateGeometry(int, int)
 	setPos(associatedItem()->mapToScene(associatedItem()->widthInLocal() + 10, 0));
 }
 
+void OODebug::PlotOverlay::addValue(double value, QList<double>& valueList, double& minVal, double& maxVal)
+{
+	valueList << value;
+	minVal = std::min(value, minVal);
+	maxVal = std::max(value, maxVal);
+}
+
+void OODebug::PlotOverlay::drawXTic(QPainter* painter, const QPointF& pos, QString label)
+{
+	painter->drawLine(pos, {pos.x(), pos.y() + 5});
+	auto fontMetrics = painter->fontMetrics();
+	int height = fontMetrics.height();
+	int xOffset = -(fontMetrics.averageCharWidth() * label.length()) / 2;
+	painter->drawText(pos.x() + xOffset, pos.y() + height, label);
+}
+
+void OODebug::PlotOverlay::drawYTic(QPainter* painter, const QPointF& pos, QString label)
+{
+	painter->drawLine({pos.x() - 5, pos.y()}, pos);
+	auto fontMetrics = painter->fontMetrics();
+	int height = fontMetrics.height();
+	int xOffset = -(fontMetrics.averageCharWidth() * (label.length() + 1));
+	painter->drawText(pos.x() + xOffset, pos.y() + height / 3.0, label);
+}
+
+double OODebug::PlotOverlay::valueRange(int dimension)
+{
+	double min = 0, max = 0;
+	if (dimension == 0)
+	{
+		min = xMin_;
+		max = xMax_;
+	}
+	else
+	{
+		min = yMin_;
+		max = yMax_;
+	}
+	if (max - min > 0) return max - min;
+	else return 1.0; // To prevent division by zero
+}
+
+QPointF OODebug::PlotOverlay::toPlotCoordinates(QPointF position)
+{
+	double xRange = valueRange(0);
+	double yRange = valueRange(1);
+	double xScale = plotRegion_.width() / xRange;
+	double yScale = plotRegion_.height() / yRange;
+	return {plotRegion_.x() + position.x() * xScale, plotRegion_.bottomLeft().y() - position.y() * yScale};
+}
+
+void OODebug::PlotOverlay::drawTics(QPainter* painter)
+{
+	if (xValues_.size() < 2) return;
+	int nTics = std::min(5, xValues_.size());
+	double xStep = valueRange(0) / nTics;
+	double yStep = valueRange(1) / nTics;
+	for (int i = 0; i <= nTics; ++i)
+	{
+		double xVal = int(xMin_ + i * xStep); // We want int tics, int xVal = .. would cause narrowing warning.
+		drawXTic(painter, toPlotCoordinates({xVal, 0}), QString("%1").arg(xVal));
+		double yVal = int(yMin_ + i * yStep);
+		drawYTic(painter, toPlotCoordinates({0, yVal}), QString("%1").arg(yVal));
+	}
+}
+
+void OODebug::PlotOverlay::drawAxes(QPainter* painter)
+{
+	painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.topLeft()); // y axis
+	painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.bottomRight()); // x axis
+}
+
 void PlotOverlay::plotBars(QPainter* painter)
 {
-	double barWidth = 10.0;
-	if (xValues_.size()) barWidth = (double) style()->width() / xValues_.size();
-	double maxHeight = *std::max_element(xValues_.begin(), xValues_.end());
-	double heightScale = 1.0;
-	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
+	double barWidth = 1.0;
+	if (xValues_.size()) barWidth = (double) plotRegion_.width() / xValues_.size();
+	double heightScale = plotRegion_.height() / valueRange(1);
 
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
-		double scaledValue = heightScale * xValues_[i];
-		QRectF bar(i * barWidth, getShape()->contentTop() + style()->height() - scaledValue, barWidth, scaledValue);
+		double scaledValue = heightScale * yValues_[i];
+		auto startPoint = toPlotCoordinates({xValues_[i], yValues_[i]});
+		QRectF bar(startPoint.x() - barWidth / 2.0, startPoint.y(), barWidth, scaledValue);
 		painter->drawRect(bar);
 		painter->fillRect(bar, QColor((i % 2 ? "red" : "black")));
 	}
@@ -89,24 +175,12 @@ void PlotOverlay::plotBars(QPainter* painter)
 
 void PlotOverlay::plotScatter(QPainter* painter)
 {
-	double radius = 5.0;
-	double maxHeight = *std::max_element(yValues_.begin(), yValues_.end());
-	double heightScale = 1.0;
-	if (maxHeight > 0.0) heightScale = style()->height() / maxHeight;
+	double radius = 1.0;
 
-	double maxX = *std::max_element(xValues_.begin(), xValues_.end());
-	double widthScale = 1.0;
-	if (maxX > 0.0) widthScale = style()->width() / maxX;
-
+	QBrush brush(QColor("red"));
+	painter->setBrush(brush);
 	for (int i = 0; i < xValues_.size(); ++i)
-	{
-		double scaledX = widthScale * xValues_[i];
-		double scaledY = heightScale * yValues_[i];
-		QRectF bar(scaledX, getShape()->contentTop() + style()->height() - scaledY, radius, radius);
-		QBrush brush(QColor("red"));
-		painter->setBrush(brush);
-		painter->drawEllipse(bar);
-	}
+		painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[i]}), radius, radius);
 }
 
 } /* namespace OODebug */

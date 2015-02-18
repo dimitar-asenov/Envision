@@ -38,7 +38,9 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 	ITEM_COMMON(PlotOverlay)
 
 	public:
-		PlotOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get());
+		enum class PlotType : int {Bars, Scatter};
+		PlotOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get(),
+						PlotType type = PlotType::Bars);
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
 		void clearValues();
@@ -53,6 +55,23 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 	private:
 		QList<double> xValues_;
 		QList<double> yValues_;
+		double xMin_{}, xMax_{};
+		double yMin_{}, yMax_{};
+
+		QRect plotRegion_;
+
+		std::function<void(PlotOverlay*, QPainter*)> plotFunction_{};
+
+		void addValue(double value, QList<double>& valueList, double& minVal, double& maxVal);
+
+		void drawXTic(QPainter* painter, const QPointF& pos, QString label);
+		void drawYTic(QPainter* painter, const QPointF& pos, QString label);
+
+		double valueRange(int dimension);
+		QPointF toPlotCoordinates(QPointF position);
+
+		void drawTics(QPainter* painter);
+		void drawAxes(QPainter* painter);
 
 		void plotBars(QPainter* painter);
 		void plotScatter(QPainter* painter);

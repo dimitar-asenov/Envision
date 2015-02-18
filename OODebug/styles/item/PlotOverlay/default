@@ -11,6 +11,7 @@
 				<blue>255</blue>
 			</color>
 		</backgroundBrush>
+		<cornerType>0</cornerType>
 	</shape>
 	<width>300</width>
 	<height>200</height>
