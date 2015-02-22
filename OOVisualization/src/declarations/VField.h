@@ -50,6 +50,7 @@ class OOVISUALIZATION_API VField
 		VField(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
+		virtual int determineForm() override;
 
 	private:
 		Visualization::VText* name_{};

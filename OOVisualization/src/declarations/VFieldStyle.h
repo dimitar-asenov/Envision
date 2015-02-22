@@ -40,7 +40,6 @@ class OOVISUALIZATION_API VFieldStyle : public Super<Visualization::DeclarativeI
 	public:
 		virtual ~VFieldStyle() override;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
 		Property<Visualization::TextStyle> nameDefault{this, "nameDefault"};
 		Property<Visualization::TextStyle> namePublic{this, "namePublic"};
 		Property<Visualization::TextStyle> namePrivate{this, "namePrivate"};

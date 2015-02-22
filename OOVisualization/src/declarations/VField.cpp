@@ -42,11 +42,17 @@ ITEM_COMMON_DEFINITIONS(VField, "item")
 VField::VField(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {}
 
+int VField::determineForm()
+{
+	return node()->initialValue() ? 1 : 0;
+}
+
 void VField::initializeForms()
 {
-	addForm((new GridLayoutFormElement())
-		->setHorizontalSpacing(3)->setColumnStretchFactors(1)
-		->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+	auto typeAndName = (new GridLayoutFormElement())
+		->setHorizontalSpacing(3)
+		->setNoBoundaryCursors([](Item*){return true;})
+		->setNoInnerCursors([](Item*){return true;})
 		->put(0, 0, item(&I::type_, [](I* v){return v->node()->typeExpression();}))
 		->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
 			{
@@ -66,11 +72,16 @@ void VField::initializeForms()
 					else return &v->style()->nameDefault();
 				}
 
-			}))
-	->put(2, 0, item<Static>(&I::assignmentSymbol_, [](I* v)
-		{ return v->node()->initialValue() ? &v->style()->assignmentSymbol() : nullptr; }))
-	->put(3, 0, item(&I::initialValue_, [](I* v) {return v->node()->initialValue();}))
-	);
+			}));
+
+	addForm(typeAndName);
+
+	auto alsoInitialization = typeAndName->clone();
+	alsoInitialization
+			->put(2, 0, item<Static>(&I::assignmentSymbol_, [](I* v){ return &v->style()->assignmentSymbol();}))
+			->put(3, 0, item(&I::initialValue_, [](I* v) {return v->node()->initialValue();}));
+
+	addForm(alsoInitialization);
 }
 
 }
