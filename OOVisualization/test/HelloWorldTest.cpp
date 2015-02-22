@@ -824,6 +824,11 @@ Method* addLongMethod(Class* parent)
 	trycatch->finallyBody()->append(new ExpressionStatement(new ReferenceExpression("var4")));
 	longMethod->items()->append(trycatch);
 
+	auto sync = new SynchronizedStatement();
+	sync->setExpression(new ReferenceExpression("someMonitor"));
+	sync->body()->append(new ExpressionStatement(new ReferenceExpression("var22")));
+	longMethod->items()->append(sync);
+
 	ReturnStatement* longMethodReturn = new ReturnStatement();
 	longMethod->items()->append(longMethodReturn);
 	longMethodReturn->values()->append(new IntegerLiteral(42));

@@ -51,6 +51,7 @@
 #include "statements/DeclarationStatement.h"
 #include "statements/TryCatchFinallyStatement.h"
 #include "statements/AssertStatement.h"
+#include "statements/SynchronizedStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"

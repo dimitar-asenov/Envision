@@ -24,43 +24,50 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "declarations/VProject.h"
-#include "declarations/VModule.h"
-#include "declarations/VClass.h"
-#include "declarations/VMethod.h"
-#include "declarations/VField.h"
-#include "declarations/VNameImport.h"
-
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
-#include "elements/VCommentStatementItem.h"
-
-#include "expressions/allOOExpressionVisualizations.h"
-
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
-#include "statements/VSwitchStatement.h"
-#include "statements/VCaseStatement.h"
-#include "statements/VAssertStatement.h"
 #include "statements/VSynchronizedStatement.h"
 
-#include "alternative/VKeywordMethodCall.h"
+#include "../elements/VStatementItemList.h"
 
-#include "semantic_zoom/VClassSzPublic.h"
-#include "semantic_zoom/VDeclarationConstantSz.h"
-#include "semantic_zoom/VDeclarationSz.h"
-#include "semantic_zoom/VMethodSzPublic.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
+
+using namespace Visualization;
+using namespace OOModel;
+
+namespace OOVisualization {
+
+ITEM_COMMON_DEFINITIONS(VSynchronizedStatement, "item")
+
+VSynchronizedStatement::VSynchronizedStatement(Item* parent, NodeType* node, const StyleType* style) :
+	Super(parent, node, style)
+{}
+
+void VSynchronizedStatement::initializeForms()
+{
+	auto header = (new GridLayoutFormElement())
+					->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
+					->setVerticalAlignment(LayoutStyle::Alignment::Center)
+					->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+					->put(1, 0, item<NodeWrapper>(&I::expression_, [](I* v){return v->node()->expression();},
+																					[](I* v){return &v->style()->expression();}));
+
+	auto body = (new GridLayoutFormElement())
+			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
+			->setColumnStretchFactor(0, 1)
+			->put(0, 0, item<VStatementItemList>(&I::body_, [](I* v){return v->node()->body();},
+							[](I* v){return &v->style()->body();}));
+
+	auto shapeElement = new ShapeFormElement();
+
+	addForm((new AnchorLayoutFormElement())
+		->put(TheTopOf, body, 3, FromBottomOf, header)
+		->put(TheTopOf, shapeElement, AtCenterOf, header)
+		->put(TheLeftOf, shapeElement, AtLeftOf, header)
+		->put(TheLeftOf, shapeElement, 10, FromLeftOf, body)
+		->put(TheRightOf, header, AtRightOf, body)
+		->put(TheRightOf, shapeElement, 10, FromRightOf, header)
+		->put(TheBottomOf, shapeElement, 3, FromBottomOf, body));
+}
+
+}

@@ -168,6 +168,10 @@ public class NodeDescriptors {
 		add( new NodeInitializer("AssertStatement", new String[][]{
 				{"Expression","expression"}
 		}));
+		add( new NodeInitializer("SynchronizedStatement", new String[][]{
+				{"Expression","expression"},
+				{"StatementItemList","body"}
+		}));
 		
 		// Expressions
 		add( new NodeInitializer("ReferenceExpression", new String[][]{

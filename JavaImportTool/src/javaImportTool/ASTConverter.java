@@ -526,7 +526,14 @@ public class ASTConverter {
 	    		}
 	    	}
 	    } else if ( s instanceof SwitchCase); //Handled above
-	    else if ( s instanceof SynchronizedStatement); // TODO: Implement this
+	    else if ( s instanceof SynchronizedStatement)
+	    {
+	    	node = new Node(null, "SynchronizedStatement", name);
+	    	SynchronizedStatement syncs = (SynchronizedStatement) s;
+	    	
+	    	visitStatementBody(syncs.getBody(), node, "body");
+	    	node.setChild("expression", expression(syncs.getExpression(), "expression"));
+	    }
 	    else if ( s instanceof ThrowStatement)
 	    {
 	    	node = new Node(null, "ExpressionStatement", name);
