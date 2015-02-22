@@ -96,6 +96,9 @@ void VMethod::initializeForms()
 											{return v->node()->memberInitializers()->size() > 0 ?
 													v->node()->memberInitializers() : nullptr;},
 											[](I* v){return &v->style()->memberInitializers();});
+	auto throwsElement = item<VList>(&I::throws_,
+												[](I* v){return v->node()->throws()->size() > 0 ? v->node()->throws() : nullptr;},
+												[](I* v){return &v->style()->throws();});
 
 	auto comment = item(&I::comment_, [](I* v){return v->node()->comment();});
 
@@ -108,10 +111,11 @@ void VMethod::initializeForms()
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->put(0, 0, addonsElement)
 			->put(0, 1, annotationsElement)
-			->put(0, 2, comment)
-			->put(0, 3, signatureLineElement)
-			->put(0, 4, memberInitializersElement)
-			->put(0, 5, bodyElement);
+			->put(0, 2, throwsElement)
+			->put(0, 3, comment)
+			->put(0, 4, signatureLineElement)
+			->put(0, 5, memberInitializersElement)
+			->put(0, 6, bodyElement);
 
 	auto shapeElement = new ShapeFormElement();
 

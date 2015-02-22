@@ -41,6 +41,7 @@ REGISTER_ATTRIBUTE(Method, typeArguments, TypedListOfFormalTypeArgument, false, 
 REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
 REGISTER_ATTRIBUTE(Method, memberInitializers, TypedListOfMemberInitializer, false, false, true)
+REGISTER_ATTRIBUTE(Method, throws, TypedListOfExpression, false, false, true)
 REGISTER_ATTRIBUTE(Method, mthKind, Integer, false, false, true)
 
 Method::Method(const QString& name) : Super(nullptr, Method::getMetaData())

@@ -96,6 +96,7 @@ public class NodeDescriptors {
 				{"TypedListOfFormalArgument","arguments"},
 				{"TypedListOfFormalResult","results"},
 				{"TypedListOfMemberInitializer","memberInitializers"},
+				{"TypedListOfExpression","throws"},
 				{"Integer","mthKind"}
 		}));
 		add( new NodeInitializer("VariableDeclaration", "Declaration", new String[][]{

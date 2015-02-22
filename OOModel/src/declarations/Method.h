@@ -54,6 +54,7 @@ class OOMODEL_API Method : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE(Model::TypedList<MemberInitializer>, memberInitializers, setMemberInitializers)
+	ATTRIBUTE(Model::TypedList<Expression>, throws, setThrows)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, mthKind, setMthKind, int)
 
 	public:

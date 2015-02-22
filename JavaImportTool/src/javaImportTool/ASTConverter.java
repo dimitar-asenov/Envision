@@ -302,7 +302,13 @@ public class ASTConverter {
 			result.setChild("typeExpression", addExtraDimensions(type, node.getExtraDimensions()));
 		}
 		
-		// TODO: Implement support for throws specifier
+		if (node.thrownExceptions() != null)
+		{
+			int i = 0;
+			for(Name exception : (List<Name>)node.thrownExceptions())
+				me.child("throws").add(expression(exception, Integer.toString(i++)));
+		}
+		
 		if (node.getBody() != null)
 			visitBody(node.getBody().statements(), "items");
 		

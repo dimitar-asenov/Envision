@@ -439,6 +439,8 @@ Method* addLongMethod(Class* parent)
 	arg3->setName("epsilon");
 	longMethod->arguments()->append(arg3);
 
+	longMethod->throws()->append(new ReferenceExpression("MyException"));
+
 	auto argumentCommentNode1 = new CommentNode("[image#styles/icon/globe.svg]");
 	arg1->setComment(argumentCommentNode1);
 	auto argumentCommentNode2 = new CommentNode("[image#styles/icon/pencil.svg]");
