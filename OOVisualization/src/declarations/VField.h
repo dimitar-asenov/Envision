@@ -32,7 +32,7 @@
 #include "OOModel/src/declarations/Field.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class VText;
@@ -41,17 +41,15 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VField : public Super<Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>,
-	OOModel::Field >>
+class OOVISUALIZATION_API VField
+: public Super<Visualization::ItemWithNode<VField, Visualization::DeclarativeItem<VField>, OOModel::Field>>
 {
 	ITEM_COMMON(VField)
 
 	public:
 		VField(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VField();
 
-	protected:
-		void determineChildren();
+		static void initializeForms();
 
 	private:
 		Visualization::VText* name_{};
