@@ -376,6 +376,17 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		QList<OverlayAccessor*> overlays(QString overlayGroup = QString::null) const;
 
+		/**
+		 * Adds \a overlay to this item.
+		 *
+		 * The overlay becomes part of the \a groupName overlay group.
+		 *
+		 * Returns the added overlay.
+		 */
+		template <class OverlayType>
+		OverlayType* addOverlayTo(OverlayType* overlay, QString groupName);
+
+
 	protected:
 
 		void setWidth(int width);
@@ -718,5 +729,15 @@ inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCatego
 
 inline void Item::setDefaultClassHandler(InteractionHandler* handler) {defaultClassHandler_ = handler;}
 inline InteractionHandler* Item::defaultClassHandler() {return defaultClassHandler_;}
+
+template <class OverlayType> OverlayType* Item::addOverlayTo(OverlayType* overlay, QString groupName)
+{
+	Q_ASSERT(overlay);
+	auto overlayGroup = scene()->overlayGroup(groupName);
+	if (!overlayGroup) overlayGroup = scene()->addOverlayGroup(groupName);
+	overlayGroup->addOverlay(makeOverlay(overlay));
+
+	return overlay;
+}
 
 }
