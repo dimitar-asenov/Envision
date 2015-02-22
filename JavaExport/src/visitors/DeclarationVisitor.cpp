@@ -194,6 +194,13 @@ SourceFragment* DeclarationVisitor::visit(Method* method)
 		*fragment << list(method->typeArguments(), ElementVisitor(data()), "typeArgsList");
 
 	*fragment << list(method->arguments(), ElementVisitor(data()), "argsList");
+
+	if (!method->throws()->isEmpty())
+	{
+		*fragment << " throws ";
+		*fragment << list(method->throws(), ExpressionVisitor(data()), "comma");
+	}
+
 	*fragment << list(method->items(), StatementVisitor(data()), "body");
 
 	notAllowed(method->subDeclarations());
