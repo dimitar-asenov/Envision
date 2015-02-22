@@ -399,7 +399,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * Returns the added overlay.
 		 */
-		template <class OverlayType> OverlayType* addOverlayTo(OverlayType* overlay, QString groupName);
+		template <class OverlayType> OverlayType* addOverlay(OverlayType* overlay, QString groupName);
 
 
 	protected:
@@ -756,7 +756,7 @@ template <class OverlayType> OverlayType* Item::overlay(QString overlayGroup)
 	return nullptr;
 }
 
-template <class OverlayType> OverlayType* Item::addOverlayTo(OverlayType* overlay, QString groupName)
+template <class OverlayType> OverlayType* Item::addOverlay(OverlayType* overlay, QString groupName)
 {
 	Q_ASSERT(overlay);
 	auto overlayGroup = scene()->overlayGroup(groupName);
