@@ -33,6 +33,17 @@
 
 namespace OODebug {
 
+struct SignatureCommand : public Command {
+		SignatureCommand(qint64 referenceId);
+		virtual ~SignatureCommand() override;
+		MessageField<qint64> refType{&SignatureCommand::refType, this};
+};
+
+struct Signature : public Reply {
+		virtual ~Signature() override;
+		MessageField<QString> signature{&Signature::signature, this};
+};
+
 struct JVMMethod : public MessagePart {
 		virtual ~JVMMethod() override;
 		MessageField<qint64> methodID{&JVMMethod::methodID, this};
@@ -50,6 +61,17 @@ struct MethodsCommand : public Command {
 struct Methods : public Reply {
 		virtual ~Methods() override;
 		MessageField<QList<JVMMethod>> methods{&Methods::methods, this};
+};
+
+struct SourceFileCommand : public Command {
+		SourceFileCommand(qint64 referenceId);
+		virtual ~SourceFileCommand() override;
+		MessageField<qint64> refType{&SourceFileCommand::refType, this};
+};
+
+struct SourceFile : public Reply {
+		virtual ~SourceFile() override;
+		MessageField<QString> sourceFile{&SourceFile::sourceFile, this};
 };
 
 } /* namespace OODebug */

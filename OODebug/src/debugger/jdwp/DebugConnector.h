@@ -64,6 +64,8 @@ class OODEBUG_API DebugConnector : public QObject
 
 		bool resume();
 
+		QString getFileName(qint64 referenceId);
+		QString getSignature(qint64 referenceId);
 		qint64 getClassId(const QString& signature);
 		qint64 getMethodId(qint64 classId, const QString& signature);
 		LineTable getLineTable(qint64 classId, qint64 methodId);

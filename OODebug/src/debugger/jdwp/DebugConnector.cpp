@@ -220,6 +220,18 @@ bool DebugConnector::resume()
 	return false;
 }
 
+QString DebugConnector::getFileName(qint64 referenceId)
+{
+	auto reply = makeReply<SourceFile>(sendCommand(SourceFileCommand(referenceId)));
+	return reply.sourceFile();
+}
+
+QString DebugConnector::getSignature(qint64 referenceId)
+{
+	auto reply = makeReply<Signature>(sendCommand(SignatureCommand(referenceId)));
+	return reply.signature();
+}
+
 qint64 DebugConnector::getClassId(const QString& signature)
 {
 	auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
