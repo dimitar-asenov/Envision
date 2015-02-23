@@ -89,6 +89,7 @@ class OODEBUG_API JavaDebugger
 		bool isParentClassLoaded(Model::Node* node);
 		void breaktAtParentClassLoad(Model::Node* node);
 		Location nodeToLocation(Model::Node* node);
+		Model::Node* locationToNode(Location location);
 
 		void trySetBreakpoints();
 		void handleVMStart(Event);

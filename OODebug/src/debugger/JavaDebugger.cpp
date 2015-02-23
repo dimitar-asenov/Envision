@@ -331,6 +331,27 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	return Location(tagKind, classId, methodId, methodIndex);
 }
 
+Model::Node* JavaDebugger::locationToNode(Location location)
+{
+	QString signature = debugConnector_.getSignature(location.classId());
+	signature = signature.mid(1, signature.size() - 2); // remove symbol at start and ; at end.
+	QString fileName = QString("src/%1.java").arg(signature);
+
+	int line = -1;
+	auto lineTable = debugConnector_.getLineTable(location.classId(), location.methodId());
+	for (auto val : lineTable.mappings())
+	{
+		if (val.lineCodeIndex() == location.methodIndex())
+		{
+			line = val.lineNumber();
+			break;
+		}
+	}
+	if (auto node = exportMap_->node(fileName, line - 1, 0))
+		return node->firstAncestorOfType<OOModel::ExpressionStatement>();
+	return nullptr;
+}
+
 void JavaDebugger::trySetBreakpoints()
 {
 	// TODO: Multiple breakpoints show weird behavior. If we auto resume (from tracked variable)
