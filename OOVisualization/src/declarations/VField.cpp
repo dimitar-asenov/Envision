@@ -27,8 +27,10 @@
 #include "VField.h"
 #include "OOVisualizationException.h"
 
+#include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -37,53 +39,49 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VField, "item")
 
-VField::VField(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	name_(new VText(layout(), node->nameNode(), &style->nameDefault()) )
+VField::VField(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
+
+int VField::determineForm()
 {
-	layout()->append(name_);
+	return node()->initialValue() ? 1 : 0;
 }
 
-VField::~VField()
+void VField::initializeForms()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	name_ = nullptr;
-	type_ = nullptr;
-	assignmentSymbol_ = nullptr;
-	initialValue_ = nullptr;
-}
+	auto typeAndName = (new GridLayoutFormElement())
+		->setHorizontalSpacing(3)
+		->setNoBoundaryCursors([](Item*){return true;})
+		->setNoInnerCursors([](Item*){return true;})
+		->put(0, 0, item(&I::type_, [](I* v){return v->node()->typeExpression();}))
+		->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
+			{
+				auto modifiers = v->node()->modifiers();
+				if (modifiers->isSet(Modifier::Static))
+				{
+					if (modifiers->isSet(Modifier::Private)) return &v->style()->nameStaticPrivate();
+					else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameStaticProtected();
+					else if (modifiers->isSet(Modifier::Public)) return &v->style()->nameStaticPublic();
+					else return &v->style()->nameStaticDefault();
+				}
+				else
+				{
+					if (modifiers->isSet(Modifier::Private)) return &v->style()->namePrivate();
+					else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameProtected();
+					else if (modifiers->isSet(Modifier::Public)) return &v->style()->namePublic();
+					else return &v->style()->nameDefault();
+				}
 
-void VField::determineChildren()
-{
-	const TextStyle* nameStyle = nullptr;
-	auto modifiers = node()->modifiers();
-	if (modifiers->isSet(Modifier::Static))
-	{
-		if (modifiers->isSet(Modifier::Private)) nameStyle = &style()->nameStaticPrivate();
-		else if (modifiers->isSet(Modifier::Protected)) nameStyle = &style()->nameStaticProtected();
-		else if (modifiers->isSet(Modifier::Public)) nameStyle = &style()->nameStaticPublic();
-		else nameStyle = &style()->nameStaticDefault();
-	}
-	else
-	{
-		if (modifiers->isSet(Modifier::Private)) nameStyle = &style()->namePrivate();
-		else if (modifiers->isSet(Modifier::Protected)) nameStyle = &style()->nameProtected();
-		else if (modifiers->isSet(Modifier::Public)) nameStyle = &style()->namePublic();
-		else nameStyle = &style()->nameDefault();
-	}
+			}));
 
-	layout()->synchronizeFirst(type_, node()->typeExpression());
-	layout()->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
-	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);
-	layout()->synchronizeLast(initialValue_, node()->initialValue());
+	addForm(typeAndName);
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout() );
-	name_->setStyle(nameStyle);
-	if (assignmentSymbol_) assignmentSymbol_->setStyle( &style()->assignmentSymbol() );
+	auto alsoInitialization = typeAndName->clone();
+	alsoInitialization
+			->put(2, 0, item<Static>(&I::assignmentSymbol_, [](I* v){ return &v->style()->assignmentSymbol();}))
+			->put(3, 0, item(&I::initialValue_, [](I* v) {return v->node()->initialValue();}));
+
+	addForm(alsoInitialization);
 }
 
 }

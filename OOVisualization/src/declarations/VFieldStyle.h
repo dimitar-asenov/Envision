@@ -31,48 +31,25 @@
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFieldStyle : public Super<Visualization::ItemStyle>
+class OOVISUALIZATION_API VFieldStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::TextStyle nameDefault_;
-		Visualization::TextStyle namePublic_;
-		Visualization::TextStyle namePrivate_;
-		Visualization::TextStyle nameProtected_;
-		Visualization::TextStyle nameStaticDefault_;
-		Visualization::TextStyle nameStaticPublic_;
-		Visualization::TextStyle nameStaticPrivate_;
-		Visualization::TextStyle nameStaticProtected_;
-		Visualization::StaticStyle assignmentSymbol_;
-
 	public:
-		VFieldStyle();
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VFieldStyle() override;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::TextStyle& nameDefault() const;
-		const Visualization::TextStyle& namePublic() const;
-		const Visualization::TextStyle& namePrivate() const;
-		const Visualization::TextStyle& nameProtected() const;
-		const Visualization::TextStyle& nameStaticDefault() const;
-		const Visualization::TextStyle& nameStaticPublic() const;
-		const Visualization::TextStyle& nameStaticPrivate() const;
-		const Visualization::TextStyle& nameStaticProtected() const;
-		const Visualization::StaticStyle& assignmentSymbol() const;
+		Property<Visualization::TextStyle> nameDefault{this, "nameDefault"};
+		Property<Visualization::TextStyle> namePublic{this, "namePublic"};
+		Property<Visualization::TextStyle> namePrivate{this, "namePrivate"};
+		Property<Visualization::TextStyle> nameProtected{this, "nameProtected"};
+		Property<Visualization::TextStyle> nameStaticDefault{this, "nameStaticDefault"};
+		Property<Visualization::TextStyle> nameStaticPublic{this, "nameStaticPublic"};
+		Property<Visualization::TextStyle> nameStaticPrivate{this, "nameStaticPrivate"};
+		Property<Visualization::TextStyle> nameStaticProtected{this, "nameStaticProtected"};
+		Property<Visualization::StaticStyle> assignmentSymbol{this, "assignmentSymbol"};
+
 };
-
-inline const Visualization::SequentialLayoutStyle& VFieldStyle::layout() const { return layout_; }
-inline const Visualization::TextStyle& VFieldStyle::nameDefault() const { return nameDefault_; }
-inline const Visualization::TextStyle& VFieldStyle::namePublic() const { return namePublic_; }
-inline const Visualization::TextStyle& VFieldStyle::namePrivate() const { return namePrivate_; }
-inline const Visualization::TextStyle& VFieldStyle::nameProtected() const { return nameProtected_; }
-inline const Visualization::TextStyle& VFieldStyle::nameStaticDefault() const { return nameStaticDefault_; }
-inline const Visualization::TextStyle& VFieldStyle::nameStaticPublic() const { return nameStaticPublic_; }
-inline const Visualization::TextStyle& VFieldStyle::nameStaticPrivate() const { return nameStaticPrivate_; }
-inline const Visualization::TextStyle& VFieldStyle::nameStaticProtected() const { return nameStaticProtected_; }
-inline const Visualization::StaticStyle& VFieldStyle::assignmentSymbol() const { return assignmentSymbol_; }
 
 }

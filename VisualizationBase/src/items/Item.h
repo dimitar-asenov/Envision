@@ -33,6 +33,7 @@
 #include "../Scene.h"
 #include "../cursor/Cursor.h"
 #include "../renderer/ModelRenderer.h"
+#include "../overlays/OverlayAccessor.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -373,8 +374,33 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		/**
 		 * Returns all the overlays of this item for the specified group. If no group is specified returns the overlays
 		 * in all groups.
+		 *
+		 * All associated overlays are returned, regardless of the position of this item in the association.
 		 */
 		QList<OverlayAccessor*> overlays(QString overlayGroup = QString::null) const;
+
+		/**
+		 * Returns the overlay of the specified \a OverlayType that is associated with this item.
+		 *
+		 * If \a overlayGroup is specified only overlays in that group will be searched, otherwise all overlay groups
+		 * are searched. All overlays are searched, regardless of the position of this item in the association.
+		 *
+		 * Returns null if no overlay is found.
+		 *
+		 * This method will return the first found overlay, in case there are more than one overlays that match
+		 * \a OverlayType and \a overlayGroup.
+		 */
+		template <class OverlayType> OverlayType* overlay(QString overlayGroup = QString::null);
+
+		/**
+		 * Adds \a overlay to this item.
+		 *
+		 * The overlay becomes part of the \a groupName overlay group.
+		 *
+		 * Returns the added overlay.
+		 */
+		template <class OverlayType> OverlayType* addOverlay(OverlayType* overlay, QString groupName);
+
 
 	protected:
 
@@ -718,5 +744,26 @@ inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCatego
 
 inline void Item::setDefaultClassHandler(InteractionHandler* handler) {defaultClassHandler_ = handler;}
 inline InteractionHandler* Item::defaultClassHandler() {return defaultClassHandler_;}
+
+template <class OverlayType> OverlayType* Item::overlay(QString overlayGroup)
+{
+	for (auto accessor : overlays(overlayGroup))
+	{
+		if (auto item = DCast<OverlayType>(accessor->overlayItem()))
+			return item;
+	}
+
+	return nullptr;
+}
+
+template <class OverlayType> OverlayType* Item::addOverlay(OverlayType* overlay, QString groupName)
+{
+	Q_ASSERT(overlay);
+	auto overlayGroup = scene()->overlayGroup(groupName);
+	if (!overlayGroup) overlayGroup = scene()->addOverlayGroup(groupName);
+	overlayGroup->addOverlay(makeOverlay(overlay));
+
+	return overlay;
+}
 
 }

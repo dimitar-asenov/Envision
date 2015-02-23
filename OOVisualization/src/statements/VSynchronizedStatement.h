@@ -26,41 +26,45 @@
 
 #pragma once
 
-#include "declarations/VProject.h"
-#include "declarations/VModule.h"
-#include "declarations/VClass.h"
-#include "declarations/VMethod.h"
-#include "declarations/VField.h"
-#include "declarations/VNameImport.h"
+#include "../oovisualization_api.h"
+#include "VSynchronizedStatementStyle.h"
+#include "VStatementItem.h"
 
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
-#include "elements/VCommentStatementItem.h"
+#include "OOModel/src/statements/SynchronizedStatement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-#include "expressions/allOOExpressionVisualizations.h"
+namespace Visualization {
+	class NodeWrapper;
+	class Static;
+}
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
-#include "statements/VSwitchStatement.h"
-#include "statements/VCaseStatement.h"
-#include "statements/VAssertStatement.h"
-#include "statements/VSynchronizedStatement.h"
+namespace OOVisualization {
 
-#include "alternative/VKeywordMethodCall.h"
+class VStatementItemList;
 
-#include "semantic_zoom/VClassSzPublic.h"
-#include "semantic_zoom/VDeclarationConstantSz.h"
-#include "semantic_zoom/VDeclarationSz.h"
-#include "semantic_zoom/VMethodSzPublic.h"
+class OOVISUALIZATION_API VSynchronizedStatement
+	: public Super<VStatementItem<VSynchronizedStatement, Visualization::DeclarativeItem<VSynchronizedStatement>,
+	  OOModel::SynchronizedStatement>>
+{
+	ITEM_COMMON(VSynchronizedStatement)
+
+	public:
+		VSynchronizedStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+
+		Visualization::NodeWrapper* expression() const;
+		VStatementItemList* body() const;
+		Visualization::Static* icon() const;
+
+		static void initializeForms();
+
+	private:
+		Visualization::NodeWrapper* expression_{};
+		VStatementItemList* body_{};
+		Visualization::Static* icon_{};
+};
+
+inline Visualization::NodeWrapper* VSynchronizedStatement::expression() const { return expression_; }
+inline VStatementItemList* VSynchronizedStatement::body() const { return body_; }
+inline Visualization::Static* VSynchronizedStatement::icon() const {return icon_;}
+
+}

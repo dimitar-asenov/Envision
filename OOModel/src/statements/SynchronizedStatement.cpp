@@ -24,43 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "statements/SynchronizedStatement.h"
 
-#include "declarations/VProject.h"
-#include "declarations/VModule.h"
-#include "declarations/VClass.h"
-#include "declarations/VMethod.h"
-#include "declarations/VField.h"
-#include "declarations/VNameImport.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::SynchronizedStatement)
 
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
-#include "elements/VCommentStatementItem.h"
+namespace OOModel {
 
-#include "expressions/allOOExpressionVisualizations.h"
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SynchronizedStatement)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SynchronizedStatement)
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
-#include "statements/VSwitchStatement.h"
-#include "statements/VCaseStatement.h"
-#include "statements/VAssertStatement.h"
-#include "statements/VSynchronizedStatement.h"
+REGISTER_ATTRIBUTE(SynchronizedStatement, expression, Expression, false, false, true)
+REGISTER_ATTRIBUTE(SynchronizedStatement, body, StatementItemList, false, false, true)
 
-#include "alternative/VKeywordMethodCall.h"
-
-#include "semantic_zoom/VClassSzPublic.h"
-#include "semantic_zoom/VDeclarationConstantSz.h"
-#include "semantic_zoom/VDeclarationSz.h"
-#include "semantic_zoom/VMethodSzPublic.h"
+} /* namespace OOModel */

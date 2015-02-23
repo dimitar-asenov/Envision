@@ -115,7 +115,9 @@ HEADERS += src/statements/VAssertStatementStyle.h \
     src/semantic_zoom/VDeclarationSzStyle.h \
     src/semantic_zoom/VDeclarationConstantSzStyle.h \
     src/semantic_zoom/VDeclarationConstantSz.h \
-    src/OOVisualizationPlugin.h
+    src/OOVisualizationPlugin.h \
+    src/statements/VSynchronizedStatement.h \
+    src/statements/VSynchronizedStatementStyle.h
 SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/statements/VAssertStatement.cpp \
     src/expressions/VSuperExpression.cpp \
@@ -220,4 +222,6 @@ SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/semantic_zoom/VDeclarationSzStyle.cpp \
     src/semantic_zoom/VDeclarationConstantSzStyle.cpp \
     src/semantic_zoom/VDeclarationConstantSz.cpp \
-    src/OOVisualizationPlugin.cpp
+    src/OOVisualizationPlugin.cpp \
+    src/statements/VSynchronizedStatement.cpp \
+    src/statements/VSynchronizedStatementStyle.cpp

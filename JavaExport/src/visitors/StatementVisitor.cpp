@@ -201,4 +201,12 @@ SourceFragment* StatementVisitor::visit(AssertStatement* statement)
 	return fragment;
 }
 
+SourceFragment* StatementVisitor::visit(OOModel::SynchronizedStatement* statement)
+{
+	auto fragment = new CompositeFragment(statement);
+	*fragment << "synchronized (" << expression(statement->expression()) << ")";
+	*fragment << list(statement->body(), StatementVisitor(data()), "body");
+	return fragment;
+}
+
 } // namespace JavaExport

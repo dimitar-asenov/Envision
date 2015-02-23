@@ -96,6 +96,7 @@ public class NodeDescriptors {
 				{"TypedListOfFormalArgument","arguments"},
 				{"TypedListOfFormalResult","results"},
 				{"TypedListOfMemberInitializer","memberInitializers"},
+				{"TypedListOfExpression","throws"},
 				{"Integer","mthKind"}
 		}));
 		add( new NodeInitializer("VariableDeclaration", "Declaration", new String[][]{
@@ -166,6 +167,10 @@ public class NodeDescriptors {
 		}));
 		add( new NodeInitializer("AssertStatement", new String[][]{
 				{"Expression","expression"}
+		}));
+		add( new NodeInitializer("SynchronizedStatement", new String[][]{
+				{"Expression","expression"},
+				{"StatementItemList","body"}
 		}));
 		
 		// Expressions
