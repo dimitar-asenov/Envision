@@ -90,7 +90,7 @@ bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 		auto probeNode = probeIt.key();
 		auto visualizationIt = Visualization::Item::nodeItemsMap().find(probeNode);
 		Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
-		auto overlay = plotOverlayOf(*visualizationIt);
+		auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
 		Q_ASSERT(overlay);
 		overlay->clearValues();
 	}
@@ -105,7 +105,7 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F8))
 	{
 		auto node = target->node();
-		if (auto overlay = breakpointOverlayOf(target))
+		if (auto overlay = target->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
 		{
 			if (currentBreakpointItem_ == target) currentBreakpointItem_ = nullptr;
 			target->scene()->removeOverlay(overlay);
@@ -175,7 +175,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		if (!variableDeclaration) return false;
 
 		auto overlay = new PlotOverlay(target);
-		addOverlayTo(target, overlay, PLOT_OVERLAY_GROUP);
+		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 
 		ReferenceFinder refFinder;
 		refFinder.setSearchNode(node);
@@ -233,13 +233,13 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	unsetBreakpoints_ << vItem->node();
 
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
-	addOverlayTo(vItem, overlay, MONITOR_OVERLAY_GROUP);
+	vItem->addOverlay(overlay, MONITOR_OVERLAY_GROUP);
 
 	auto plotType = PlotOverlay::PlotType::Bars;
 	if (yDeclaration) plotType = PlotOverlay::PlotType::Scatter;
 
 	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"), plotType);
-	addOverlayTo(vItem, plotOverlay, PLOT_OVERLAY_GROUP);
+	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
 }
 
 JavaDebugger::JavaDebugger()
@@ -255,7 +255,7 @@ JavaDebugger::JavaDebugger()
 void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
 {
 	auto overlay = new Visualization::IconOverlay(target, Visualization::IconOverlay::itemStyles().get("breakpoint"));
-	addOverlayTo(target, overlay, BREAKPOINT_OVERLAY_GROUP);
+	target->addOverlay(overlay, BREAKPOINT_OVERLAY_GROUP);
 }
 
 QString JavaDebugger::jvmSignatureFor(OOModel::Class* theClass)
@@ -421,7 +421,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		{
 			if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
 			{
-				auto overlay = plotOverlayOf(*visualizationIt);
+				auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
 				Q_ASSERT(overlay);
 				overlay->addValue(val.intValue());
 				qDebug() << trackedVariable->name() << ":\t" << val.intValue();
@@ -480,7 +480,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		Q_ASSERT(values.values().length() == varsToGet.length());
 		auto nodeVisualization = Visualization::Item::nodeItemsMap().find(*it);
 		Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
-		auto overlay = plotOverlayOf(*nodeVisualization);
+		auto overlay = (*nodeVisualization)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
 		Q_ASSERT(overlay);
 		auto vals = values.values();
 		if (vals.size() == 1)
@@ -491,7 +491,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
 	currentBreakpointItem_ = visualization;
 	// If we have an overlay, the user wants to stop here, otherwise it is a tracked variable and we can resume.
-	if (breakpointOverlayOf(visualization))
+	if (visualization->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
 		toggleLineHighlight(visualization, true);
 	else
 		debugConnector_.resume();
@@ -619,46 +619,13 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 	{
 		auto overlay = new Visualization::SelectionOverlay(
 					item, Visualization::SelectionOverlay::itemStyles().get("currentStatement"));
-		addOverlayTo(item, overlay, CURRENT_LINE_OVERLAY_GROUP);
+		item->addOverlay(overlay, CURRENT_LINE_OVERLAY_GROUP);
 	}
 	else
 	{
-		if (auto overlay = overlayOf<Visualization::SelectionOverlay>(item, CURRENT_LINE_OVERLAY_GROUP))
+		if (auto overlay = item->overlay<Visualization::SelectionOverlay>(CURRENT_LINE_OVERLAY_GROUP))
 			 item->scene()->removeOverlay(overlay);
 	}
-}
-
-Visualization::IconOverlay* JavaDebugger::breakpointOverlayOf(Visualization::Item* item)
-{
-	return overlayOf<Visualization::IconOverlay>(item, BREAKPOINT_OVERLAY_GROUP);
-}
-
-PlotOverlay* JavaDebugger::plotOverlayOf(Visualization::Item* item)
-{
-	return overlayOf<PlotOverlay>(item, PLOT_OVERLAY_GROUP);
-}
-
-template <class OverlayType>
-OverlayType* JavaDebugger::overlayOf(Visualization::Item* item, QString groupName)
-{
-	for (auto overlayAccessor : item->overlays(groupName))
-	{
-		auto overlayItem = overlayAccessor->overlayItem();
-		if (auto overlay = DCast<OverlayType>(overlayItem))
-			if (overlay->associatedItem() == item) return overlay;
-	}
-	return nullptr;
-}
-
-template <class OverlayType>
-void JavaDebugger::addOverlayTo(Visualization::Item* item, OverlayType* overlay, QString groupName)
-{
-	Q_ASSERT(item);
-	auto scene = item->scene();
-	auto overlayGroup = scene->overlayGroup(groupName);
-
-	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(groupName);
-	overlayGroup->addOverlay(makeOverlay(overlay));
 }
 
 } /* namespace OODebug */

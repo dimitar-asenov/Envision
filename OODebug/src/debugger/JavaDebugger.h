@@ -103,14 +103,6 @@ class OODEBUG_API JavaDebugger
 																									 QString variableName = "");
 
 		void toggleLineHighlight(Visualization::Item* item, bool highlight);
-		Visualization::IconOverlay* breakpointOverlayOf(Visualization::Item* item);
-		PlotOverlay* plotOverlayOf(Visualization::Item* item);
-
-		template <class OverlayType>
-		OverlayType* overlayOf(Visualization::Item* item, QString groupName);
-
-		template <class OverlayType>
-		void addOverlayTo(Visualization::Item* item, OverlayType* overlay, QString groupName);
 
 		DebugConnector debugConnector_;
 
