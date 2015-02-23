@@ -27,27 +27,31 @@
 #include "CProbe.h"
 
 #include "OOVisualization/src/elements/VStatementItemList.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 #include "../debugger/JavaDebugger.h"
 
 namespace OODebug {
 
-bool CProbe::canInterpret(Visualization::Item*, Visualization::Item* target, const QStringList& commandTokens,
+bool CProbe::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 								  const std::unique_ptr<Visualization::Cursor>&)
 {
-	return DCast<OOVisualization::VStatementItemList>(target) && commandTokens.size() >= 1 &&
-			commandTokens.first() == "probe";
+	return commandTokens.size() >= 1 && commandTokens.first() == "probe";
 }
 
 Interaction::CommandResult* CProbe::execute(Visualization::Item*, Visualization::Item* target,
 	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-	auto itemList = DCast<OOVisualization::VStatementItemList>(target);
+	auto itemList = static_cast<OOVisualization::VStatementItemList*>(target);
 	Q_ASSERT(itemList);
 	// find the statement item corresponding to the cursor:
-	int cursorPos = cursor->position().y();
-	int itemIndex = itemList->rangeBegin();
-	for (; itemIndex < itemList->rangeEnd() && itemList->regions()[itemIndex].region().y() <= cursorPos; ++itemIndex);
+	auto cursorP = cursor.get();
+	int itemIndex = -1;
+	if (auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursorP))
+		itemIndex = layoutCursor->index(); // this corresponds to the statement below
+	else
+		itemIndex = itemList->indexOfChildOrSubChild(cursor->owner()) + 1; // we want the next item
+	Q_ASSERT(itemIndex > -1);
 	QStringList arguments = commandTokens;
 	arguments.removeFirst(); // Remove the probe command
 	JavaDebugger::instance().probe(itemList, arguments, itemIndex);
