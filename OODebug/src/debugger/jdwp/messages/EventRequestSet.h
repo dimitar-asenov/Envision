@@ -52,11 +52,13 @@ class Modifier : public MessagePart
 	public:
 		static const int eventOff = 1;
 		static const int classMatch = 5;
+		static const int classExclude = 6;
 		static const int locationOnly = 7;
 		static const int stepOnly = 10;
 
 		static Modifier makeEventOff(qint32 count);
 		static Modifier makeMatchClass(QString classPattern);
+		static Modifier makeClassExclude(QString classPattern);
 		static Modifier makeLocation(Location loc);
 		static Modifier makeSingleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth);
 
@@ -66,6 +68,7 @@ class Modifier : public MessagePart
 		MessageField<qint8> modKind{&Modifier::modKind, this};
 		MessageField<qint32, eventOff> count{&Modifier::count, this};
 		MessageField<QString, classMatch> classPattern{&Modifier::classPattern, this};
+		MessageField<QString, classExclude> classExcludePatterm{&Modifier::classExcludePatterm, this};
 		MessageField<Location, locationOnly> location{&Modifier::location, this};
 		MessageField<StepData, stepOnly> step{&Modifier::step, this};
 

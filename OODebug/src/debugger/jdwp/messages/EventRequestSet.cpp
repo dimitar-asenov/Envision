@@ -53,6 +53,13 @@ Modifier Modifier::makeMatchClass(QString classPattern) {
 	return match;
 }
 
+Modifier Modifier::makeClassExclude(QString classPattern)
+{
+	Modifier exclude(classExclude);
+	exclude.classExcludePatterm = classPattern;
+	return exclude;
+}
+
 Modifier Modifier::makeLocation(Location loc)
 {
 	Modifier mod(locationOnly);
@@ -99,7 +106,9 @@ StepCommand::StepCommand(qint64 threadId, Protocol::StepSize stepSize, Protocol:
 	: EventSetCommand(Protocol::EventKind::SINGLE_STEP)
 {
 	suspendPolicy = Protocol::SuspendPolicy::ALL;
-	modifiers = {Modifier::makeSingleStep(threadId, stepSize, stepDepth), Modifier::makeEventOff(1)};
+	modifiers = {Modifier::makeSingleStep(threadId, stepSize, stepDepth), Modifier::makeClassExclude("java.*"),
+					 Modifier::makeClassExclude("javax.*"), Modifier::makeClassExclude("sun.*"),
+					 Modifier::makeClassExclude("com.sun.*"), Modifier::makeEventOff(1)};
 }
 
 StepCommand::~StepCommand() {}

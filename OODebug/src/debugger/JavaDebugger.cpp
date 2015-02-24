@@ -200,7 +200,7 @@ bool JavaDebugger::step(Visualization::Item*, QKeyEvent* event)
 {
 	if (event->modifiers() == Qt::ControlModifier && (event->key() == Qt::Key_1))
 	{
-		debugConnector_.singleStep(currentThreadId_, Protocol::StepSize::LINE, Protocol::StepDepth::OVER);
+		debugConnector_.singleStep(currentThreadId_);
 		resume();
 		return true;
 	}
@@ -376,9 +376,7 @@ Model::Node* JavaDebugger::locationToNode(Location location)
 		// TODO: if we could highlight somehow the end of the method this would be the better solution.
 		if (auto stmtList = DCast<OOModel::StatementItemList>(node)) return stmtList->at(stmtList->size() -1);
 	}
-	if (!fileName.contains("java/lang"))
-		Q_ASSERT(false); // for locations which are in "our" code we should find a node!
-	return nullptr;
+	Q_ASSERT(false); // We should find a node!
 }
 
 void JavaDebugger::resume()
@@ -577,14 +575,6 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 {
 	auto node = locationToNode(singleStep.location());
-	if (!node)
-	{
-		// TODO: This might not always be what we want:
-		// The step location is in a java file, so just do another step
-		debugConnector_.singleStep(singleStep.thread(), Protocol::StepSize::LINE, Protocol::StepDepth::OUT);
-		resume();
-		return;
-	}
 
 	currentThreadId_ = singleStep.thread();
 	auto visualization = *Visualization::Item::nodeItemsMap().find(node);
