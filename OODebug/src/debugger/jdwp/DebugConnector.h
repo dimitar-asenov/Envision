@@ -43,6 +43,7 @@ class Frames;
 class VariableTable;
 class Values;
 class StackVariable;
+class ArrayValues;
 
 class OODEBUG_API DebugConnector : public QObject
 {
@@ -75,6 +76,8 @@ class OODEBUG_API DebugConnector : public QObject
 		VariableTable getVariableTable(qint64 classId, qint64 methodId);
 		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
 		QString getString(qint64 stringId);
+		int getArrayLength(qint64 arrayId);
+		ArrayValues getArrayValues(qint64 arrayId, qint32 firstIndex, qint32 length);
 
 		bool breakAtClassLoad(QString className);
 

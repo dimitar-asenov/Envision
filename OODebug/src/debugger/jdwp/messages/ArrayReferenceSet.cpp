@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,15 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-// This file is used to include all implemented Messages in the jdwp Protocol.
-#include "VMSet.h"
-#include "ReferenceTypeSet.h"
-#include "MethodSet.h"
-#include "StringSet.h"
-#include "ThreadSet.h"
 #include "ArrayReferenceSet.h"
-#include "EventRequestSet.h"
-#include "StackFrameSet.h"
-#include "EventSet.h"
+
+
+namespace OODebug {
+
+LengthCommand::LengthCommand(qint64 arrayId)
+: Command(Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::Length)
+{
+	arrayID = arrayId;
+}
+
+LengthCommand::~LengthCommand() {}
+Length::~Length() {}
+
+GetArrayValuesCommand::GetArrayValuesCommand(qint64 arrayId, qint32 firstIndex, qint32 length)
+: Command(Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::GetValues)
+{
+	arrayObject = arrayId;
+	this->firstIndex = firstIndex;
+	this->length = length;
+}
+
+GetArrayValuesCommand::~GetArrayValuesCommand() {}
+ArrayValues::~ArrayValues() {}
+
+int ArrayValues::kind() const
+{
+	// check if type is object value then return 0, otherwise return casted value
+	if (type() == Protocol::Tag::ARRAY || type() == Protocol::Tag::OBJECT || type() == Protocol::Tag::STRING)
+		return 0;
+	return cast(type());
+}
+
+} /* namespace OODebug */

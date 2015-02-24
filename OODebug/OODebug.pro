@@ -51,7 +51,8 @@ HEADERS += src/precompiled.h \
     src/overlays/PlotOverlay.h \
     src/overlays/PlotOverlayStyle.h \
     src/debugger/jdwp/DataTypes.h \
-    src/commands/CProbe.h
+    src/commands/CProbe.h \
+    src/debugger/jdwp/messages/ArrayReferenceSet.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -85,4 +86,5 @@ SOURCES += src/OODebugException.cpp \
     src/overlays/PlotOverlay.cpp \
     src/overlays/PlotOverlayStyle.cpp \
     src/debugger/jdwp/DataTypes.cpp \
-    src/commands/CProbe.cpp
+    src/commands/CProbe.cpp \
+    src/debugger/jdwp/messages/ArrayReferenceSet.cpp

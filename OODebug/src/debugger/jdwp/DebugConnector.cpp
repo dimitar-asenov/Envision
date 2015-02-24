@@ -140,6 +140,17 @@ QString DebugConnector::getString(qint64 stringId)
 	return reply.stringValue();
 }
 
+int DebugConnector::getArrayLength(qint64 arrayId)
+{
+	auto r = makeReply<Length>(sendCommand(LengthCommand(arrayId)));
+	return r.arrayLength();
+}
+
+ArrayValues DebugConnector::getArrayValues(qint64 arrayId, qint32 firstIndex, qint32 length)
+{
+	return makeReply<ArrayValues>(sendCommand(GetArrayValuesCommand(arrayId, firstIndex, length)));
+}
+
 bool DebugConnector::breakAtClassLoad(QString className)
 {
 	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(className)));
