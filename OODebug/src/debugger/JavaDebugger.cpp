@@ -107,7 +107,7 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 		auto node = target->node();
 		if (auto overlay = target->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
 		{
-			if (currentBreakpointItem_ == target) currentBreakpointItem_ = nullptr;
+			if (currentLineItem_ == target) currentLineItem_ = nullptr;
 			target->scene()->removeOverlay(overlay);
 			if (debugConnector_.vmAlive())
 			{
@@ -154,12 +154,7 @@ bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F6))
 	{
-		debugConnector_.resume();
-		if (currentBreakpointItem_)
-		{
-			toggleLineHighlight(currentBreakpointItem_, false);
-			currentBreakpointItem_ = nullptr;
-		}
+		resume();
 		return true;
 	}
 	return false;
@@ -186,6 +181,17 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 			trackedVariables_[ref] = variableDeclaration;
 			unsetBreakpoints_ << ref;
 		}
+		return true;
+	}
+	return false;
+}
+
+bool JavaDebugger::step(Visualization::Item*, QKeyEvent* event)
+{
+	if (event->modifiers() == Qt::ControlModifier && (event->key() == Qt::Key_1))
+	{
+		debugConnector_.singleStep(currentThreadId_, Protocol::StepSize::LINE, Protocol::StepDepth::OVER);
+		resume();
 		return true;
 	}
 	return false;
@@ -341,15 +347,37 @@ Model::Node* JavaDebugger::locationToNode(Location location)
 	auto lineTable = debugConnector_.getLineTable(location.classId(), location.methodId());
 	for (auto val : lineTable.mappings())
 	{
-		if (val.lineCodeIndex() == location.methodIndex())
+		if (location.methodIndex() <= val.lineCodeIndex())
 		{
 			line = val.lineNumber();
 			break;
 		}
 	}
+	Q_ASSERT(line >= 0);
+
 	if (auto node = exportMap_->node(fileName, line - 1, 0))
-		return node->firstAncestorOfType<OOModel::ExpressionStatement>();
+	{
+		if (auto casted = DCast<OOModel::StatementItem>(node)) return casted;
+		if (auto stmt = node->firstAncestorOfType<OOModel::StatementItem>()) return stmt;
+		// If we are at the closing bracket of a method, the node will be a StatementItemList, thus we just highlight
+		// the last item in this list.
+		// TODO: if we could highlight somehow the end of the method this would be the better solution.
+		if (auto stmtList = DCast<OOModel::StatementItemList>(node)) return stmtList->at(stmtList->size() -1);
+	}
+	if (!fileName.contains("java/lang"))
+		Q_ASSERT(false); // for locations which are in "our" code we should find a node!
 	return nullptr;
+}
+
+void JavaDebugger::resume()
+{
+	debugConnector_.resume();
+	if (currentLineItem_)
+	{
+		toggleLineHighlight(currentLineItem_, false);
+		currentLineItem_ = nullptr;
+	}
+	currentThreadId_ = 0;
 }
 
 void JavaDebugger::trySetBreakpoints()
@@ -510,18 +538,35 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 			overlay->addValue(vals[!xFirst].intValue(), vals[xFirst].intValue());
 	}
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
-	currentBreakpointItem_ = visualization;
+	currentLineItem_ = visualization;
 	// If we have an overlay, the user wants to stop here, otherwise it is a tracked variable and we can resume.
 	if (visualization->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
+	{
+		currentThreadId_ = breakpointEvent.thread();
 		toggleLineHighlight(visualization, true);
+	}
 	else
+	{
 		debugConnector_.resume();
+	}
 }
 
-void JavaDebugger::handleSingleStep(SingleStepEvent)
+void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 {
-	// TODO implement
-	qDebug() << "SingleStep";
+	auto node = locationToNode(singleStep.location());
+	if (!node)
+	{
+		// TODO: This might not always be what we want:
+		// The step location is in a java file, so just do another step
+		debugConnector_.singleStep(singleStep.thread(), Protocol::StepSize::LINE, Protocol::StepDepth::OUT);
+		resume();
+		return;
+	}
+
+	currentThreadId_ = singleStep.thread();
+	auto visualization = *Visualization::Item::nodeItemsMap().find(node);
+	currentLineItem_ = visualization;
+	toggleLineHighlight(currentLineItem_, true);
 }
 
 Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable)

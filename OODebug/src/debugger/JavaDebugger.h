@@ -74,6 +74,7 @@ class OODEBUG_API JavaDebugger
 		bool toggleBreakpoint(Visualization::Item* target, QKeyEvent* event);
 		bool resume(Visualization::Item* target, QKeyEvent* event);
 		bool trackVariable(Visualization::Item* target, QKeyEvent* event);
+		bool step(Visualization::Item* target, QKeyEvent* event);
 
 		void probe(OOVisualization::VStatementItemList* itemList, const QStringList& arguments, int itemIndex);
 
@@ -91,6 +92,7 @@ class OODEBUG_API JavaDebugger
 		Location nodeToLocation(Model::Node* node);
 		Model::Node* locationToNode(Location location);
 
+		void resume();
 		void trySetBreakpoints();
 		void handleVMStart(Event);
 		void handleClassPrepare(Event);
@@ -112,7 +114,8 @@ class OODEBUG_API JavaDebugger
 
 		QList<Model::Node*> unsetBreakpoints_;
 		QHash<qint32, Model::Node*> setBreakpoints_;
-		Visualization::Item* currentBreakpointItem_{};
+		Visualization::Item* currentLineItem_{};
+		qint64 currentThreadId_{};
 
 		QHash<Model::Node*, OOModel::VariableDeclaration*> trackedVariables_;
 

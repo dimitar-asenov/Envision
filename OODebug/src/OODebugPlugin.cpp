@@ -80,6 +80,11 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 				[] (Visualization::Item* target, QKeyEvent* event) {
 		return JavaDebugger::instance().trackVariable(target, event);
 	});
+	// TODO: see above
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().step(target, event);
+	});
 
 	return true;
 }
