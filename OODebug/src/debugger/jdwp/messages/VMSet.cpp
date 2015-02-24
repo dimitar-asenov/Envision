@@ -33,30 +33,31 @@ VersionCommand::VersionCommand()
 {}
 
 VersionCommand::~VersionCommand() {}
-
 VersionInfo::~VersionInfo() {}
-
-ResumeCommand::ResumeCommand() : Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume)
-{}
 
 ClassesBySignatureCommand::ClassesBySignatureCommand(QString signature)
 	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::ClassesBySignature)
 { this->signature = signature; }
 
 ClassesBySignatureCommand::~ClassesBySignatureCommand() {}
-
 ClassBySignature::~ClassBySignature() {}
-
 ClassesBySignature::~ClassesBySignature() {}
-
-ResumeCommand::~ResumeCommand() {}
 
 IDSizeCommand::IDSizeCommand()
 	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::IDSizes)
 {}
 
 IDSizeCommand::~IDSizeCommand() {}
-
 IDSizes::~IDSizes() {}
+
+SuspendCommand::SuspendCommand()
+: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Suspend) {}
+
+SuspendCommand::~SuspendCommand() {}
+
+ResumeCommand::ResumeCommand() : Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::Resume)
+{}
+
+ResumeCommand::~ResumeCommand() {}
 
 } /* namespace OODebug */

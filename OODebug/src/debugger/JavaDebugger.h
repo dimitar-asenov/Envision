@@ -72,6 +72,7 @@ class OODEBUG_API JavaDebugger
 		 */
 		bool debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
 		bool toggleBreakpoint(Visualization::Item* target, QKeyEvent* event);
+		bool suspend(Visualization::Item* target, QKeyEvent* event);
 		bool resume(Visualization::Item* target, QKeyEvent* event);
 		bool trackVariable(Visualization::Item* target, QKeyEvent* event);
 		bool step(Visualization::Item* target, QKeyEvent* event);

@@ -150,6 +150,16 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 	return false;
 }
 
+bool JavaDebugger::suspend(Visualization::Item*, QKeyEvent* event)
+{
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Pause))
+	{
+		debugConnector_.suspend();
+		return true;
+	}
+	return false;
+}
+
 bool JavaDebugger::resume(Visualization::Item*, QKeyEvent* event)
 {
 	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_F6))

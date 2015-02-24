@@ -85,6 +85,11 @@ struct IDSizes : public Reply {
 		MessageField<int> frameIDSize{&IDSizes::frameIDSize, this};
 };
 
+struct SuspendCommand : public Command {
+		SuspendCommand();
+		virtual ~SuspendCommand() override;
+};
+
 struct ResumeCommand : public Command {
 		ResumeCommand();
 		virtual ~ResumeCommand() override;

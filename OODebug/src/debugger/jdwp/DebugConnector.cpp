@@ -60,6 +60,110 @@ void DebugConnector::connect(QString vmHostName, int vmHostPort)
 	sendHandshake();
 }
 
+bool DebugConnector::suspend()
+{
+	if (vmAlive_)
+	{
+		auto r = makeReply<Reply>(sendCommand(SuspendCommand()));
+		return Protocol::Error::NONE == r.error();
+	}
+	return false;
+}
+
+bool DebugConnector::resume()
+{
+	if (vmAlive_)
+	{
+		auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
+		return Protocol::Error::NONE == r.error();
+	}
+	return false;
+}
+
+QString DebugConnector::getFileName(qint64 referenceId)
+{
+	auto reply = makeReply<SourceFile>(sendCommand(SourceFileCommand(referenceId)));
+	return reply.sourceFile();
+}
+
+QString DebugConnector::getSignature(qint64 referenceId)
+{
+	auto reply = makeReply<Signature>(sendCommand(SignatureCommand(referenceId)));
+	return reply.signature();
+}
+
+qint64 DebugConnector::getClassId(const QString& signature)
+{
+	auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
+	if (classesBySignature.classes().size() < 1)
+		return NO_RESULT;
+	// If we have more than one class id for one signature, we should check what the situation is and
+	// adapt the following code to handle this situation correctly.
+	Q_ASSERT(classesBySignature.classes().size() == 1);
+	return classesBySignature.classes()[0].typeID();
+}
+
+qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
+{
+	auto methods = makeReply<Methods>(sendCommand(MethodsCommand(classId)));
+	for (auto method : methods.methods())
+	{
+		// TODO: check for signature
+		if (method.name() == signature) return method.methodID();
+	}
+	return NO_RESULT;
+}
+
+LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
+{
+	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
+}
+
+Frames DebugConnector::getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame)
+{
+	return makeReply<Frames>(sendCommand(FramesCommand(threadId, startFrame, numFrames)));
+}
+
+VariableTable DebugConnector::getVariableTable(qint64 classId, qint64 methodId)
+{
+	return makeReply<VariableTable>(sendCommand(VariableTableCommand(classId, methodId)));
+}
+
+Values DebugConnector::getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
+{
+	return makeReply<Values>(sendCommand(GetValuesCommand(threadId, frameId, variables)));
+}
+
+QString DebugConnector::getString(qint64 stringId)
+{
+	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand(stringId)));
+	return reply.stringValue();
+}
+
+bool DebugConnector::breakAtClassLoad(QString className)
+{
+	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(className)));
+	return Protocol::Error::NONE == r.error();
+}
+
+int DebugConnector::setBreakpoint(Location breakLocation)
+{
+	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));
+	return r.requestId();
+}
+
+bool DebugConnector::clearBreakpoint(qint32 requestId)
+{
+	auto r = makeReply<Reply>(sendCommand(EventClearCommand(Protocol::EventKind::BREAKPOINT, requestId)));
+	return r.error() == Protocol::Error::NONE;
+}
+
+int DebugConnector::singleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
+{
+	auto r = makeReply<EventSetReply>(sendCommand(StepCommand(threadId, stepSize, stepDepth)));
+	return r.requestId();
+}
+
 void DebugConnector::handleSocketError(QAbstractSocket::SocketError socketError)
 {
 	// If the VM just went off we will receive a remote closed error this expected:
@@ -208,100 +312,6 @@ void DebugConnector::checkIdSizes()
 	Q_ASSERT(sizeof(qint64) == idSizes.objectIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.referenceTypeIDSize());
 	Q_ASSERT(sizeof(qint64) == idSizes.frameIDSize());
-}
-
-bool DebugConnector::resume()
-{
-	if (vmAlive_)
-	{
-		auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
-		return Protocol::Error::NONE == r.error();
-	}
-	return false;
-}
-
-QString DebugConnector::getFileName(qint64 referenceId)
-{
-	auto reply = makeReply<SourceFile>(sendCommand(SourceFileCommand(referenceId)));
-	return reply.sourceFile();
-}
-
-QString DebugConnector::getSignature(qint64 referenceId)
-{
-	auto reply = makeReply<Signature>(sendCommand(SignatureCommand(referenceId)));
-	return reply.signature();
-}
-
-qint64 DebugConnector::getClassId(const QString& signature)
-{
-	auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
-	if (classesBySignature.classes().size() < 1)
-		return NO_RESULT;
-	// If we have more than one class id for one signature, we should check what the situation is and
-	// adapt the following code to handle this situation correctly.
-	Q_ASSERT(classesBySignature.classes().size() == 1);
-	return classesBySignature.classes()[0].typeID();
-}
-
-qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
-{
-	auto methods = makeReply<Methods>(sendCommand(MethodsCommand(classId)));
-	for (auto method : methods.methods())
-	{
-		// TODO: check for signature
-		if (method.name() == signature) return method.methodID();
-	}
-	return NO_RESULT;
-}
-
-LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
-{
-	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
-}
-
-Frames DebugConnector::getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame)
-{
-	return makeReply<Frames>(sendCommand(FramesCommand(threadId, startFrame, numFrames)));
-}
-
-VariableTable DebugConnector::getVariableTable(qint64 classId, qint64 methodId)
-{
-	return makeReply<VariableTable>(sendCommand(VariableTableCommand(classId, methodId)));
-}
-
-Values DebugConnector::getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
-{
-	return makeReply<Values>(sendCommand(GetValuesCommand(threadId, frameId, variables)));
-}
-
-QString DebugConnector::getString(qint64 stringId)
-{
-	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand(stringId)));
-	return reply.stringValue();
-}
-
-bool DebugConnector::breakAtClassLoad(QString className)
-{
-	auto r = makeReply<Reply>(sendCommand(BreakClassLoad(className)));
-	return Protocol::Error::NONE == r.error();
-}
-
-int DebugConnector::setBreakpoint(Location breakLocation)
-{
-	auto r = makeReply<EventSetReply>(sendCommand(BreakpointCommand(breakLocation)));
-	return r.requestId();
-}
-
-bool DebugConnector::clearBreakpoint(qint32 requestId)
-{
-	auto r = makeReply<Reply>(sendCommand(EventClearCommand(Protocol::EventKind::BREAKPOINT, requestId)));
-	return r.error() == Protocol::Error::NONE;
-}
-
-int DebugConnector::singleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
-{
-	auto r = makeReply<EventSetReply>(sendCommand(StepCommand(threadId, stepSize, stepDepth)));
-	return r.requestId();
 }
 
 void DebugConnector::handleComposite(QByteArray data)

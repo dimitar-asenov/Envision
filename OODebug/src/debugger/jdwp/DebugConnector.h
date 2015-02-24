@@ -62,6 +62,7 @@ class OODEBUG_API DebugConnector : public QObject
 
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
+		bool suspend();
 		bool resume();
 
 		QString getFileName(qint64 referenceId);

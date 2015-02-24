@@ -73,6 +73,11 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	// TODO: this should be a general interaction not only on statements.
 	OOInteraction::HStatement::instance()->registerKeyPressHandler(
 				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().suspend(target, event);
+	});
+	// TODO: see above
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
 		return JavaDebugger::instance().resume(target, event);
 	});
 	// TODO: see above
