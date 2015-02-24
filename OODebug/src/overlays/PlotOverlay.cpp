@@ -36,19 +36,19 @@ PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* s
 	: Super{{associatedItem}, style}
 {
 	int plotOffset = 20;
+	if (PlotType::Array == type) plotOffset = 10;
 	QSize size = {style->width() - 3 * plotOffset, style->height() - 2 * plotOffset};
 	plotRegion_ = {{2 * plotOffset, plotOffset}, size};
 
 	if (PlotType::Bars == type) plotFunction_ = &PlotOverlay::plotBars;
 	else if (PlotType::Scatter == type) plotFunction_ = &PlotOverlay::plotScatter;
+	else if (PlotType::Array == type) plotFunction_ = &PlotOverlay::plotArray;
+	else Q_ASSERT(false);
 }
 
 void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	Super::paint(painter, option, widget);
-
-	drawAxes(painter);
-	drawTics(painter);
 
 	plotFunction_(this, painter);
 }
@@ -159,6 +159,9 @@ void OODebug::PlotOverlay::drawAxes(QPainter* painter)
 
 void PlotOverlay::plotBars(QPainter* painter)
 {
+	drawAxes(painter);
+	drawTics(painter);
+
 	double barWidth = 1.0;
 	if (xValues_.size()) barWidth = (double) plotRegion_.width() / xValues_.size();
 	double heightScale = plotRegion_.height() / valueRange(1);
@@ -175,12 +178,44 @@ void PlotOverlay::plotBars(QPainter* painter)
 
 void PlotOverlay::plotScatter(QPainter* painter)
 {
+	drawAxes(painter);
+	drawTics(painter);
+
 	double radius = 1.0;
 
 	QBrush brush(QColor("red"));
 	painter->setBrush(brush);
 	for (int i = 0; i < xValues_.size(); ++i)
 		painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[i]}), radius, radius);
+}
+
+void OODebug::PlotOverlay::plotArray(QPainter* painter)
+{
+	double fieldSize = valueRange(0);
+	if (xValues_.size())
+	{
+		plotRegion_.setHeight(plotRegion_.width() / fieldSize);
+		fieldSize /= xValues_.size();
+	}
+	// first draw the array box:
+	painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.bottomRight()); // bottom line
+	painter->drawLine(plotRegion_.topLeft(), plotRegion_.topRight()); // top line
+	painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.topLeft()); // left border
+	painter->drawLine(plotRegion_.bottomRight(), plotRegion_.topRight()); // right border
+	// draw the separators
+	for (int i = 0; i < xValues_.size(); ++i)
+	{
+		QPointF pos = {i * fieldSize, 0};
+		pos = toPlotCoordinates(pos);
+		painter->drawLine(pos, {pos.x(), pos.y() - plotRegion_.height()});
+
+		auto fontMetrics = painter->fontMetrics();
+		int fontHeight = fontMetrics.height();
+
+		QPointF xOff = toPlotCoordinates({(i+1)*fieldSize, 0});
+		QPointF textPos = {pos.x() + (xOff.x() - pos.x()) / 3, pos.y() - plotRegion_.height() / 2 + fontHeight / 3.0};
+		painter->drawText(textPos, QString("%1").arg(yValues_[i]));
+	}
 }
 
 } /* namespace OODebug */

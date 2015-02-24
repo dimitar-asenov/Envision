@@ -253,6 +253,8 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 
 	auto plotType = PlotOverlay::PlotType::Bars;
 	if (yDeclaration) plotType = PlotOverlay::PlotType::Scatter;
+	if (typeExpressionToTag(xDeclaration->typeExpression()) == Protocol::Tag::ARRAY)
+		plotType = PlotOverlay::PlotType::Array;
 
 	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"), plotType);
 	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
@@ -543,7 +545,18 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		Q_ASSERT(overlay);
 		auto vals = values.values();
 		if (vals.size() == 1)
-			overlay->addValue(vals[0].intValue());
+		{
+			if (vals[0].type() == Protocol::Tag::ARRAY)
+			{
+				int arrayLen = debugConnector_.getArrayLength(vals[0].array());
+				auto arrayVals = debugConnector_.getArrayValues(vals[0].array(), 0, arrayLen).ints();
+				overlay->updateArrayValues(arrayVals);
+			}
+			else
+			{
+				overlay->addValue(vals[0].intValue());
+			}
+		}
 		else if (vals.size() == 2)
 			overlay->addValue(vals[!xFirst].intValue(), vals[xFirst].intValue());
 	}

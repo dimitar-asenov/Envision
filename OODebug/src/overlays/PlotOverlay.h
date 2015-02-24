@@ -38,7 +38,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 	ITEM_COMMON(PlotOverlay)
 
 	public:
-		enum class PlotType : int {Bars, Scatter};
+		enum class PlotType : int {Bars, Scatter, Array};
 		PlotOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get(),
 						PlotType type = PlotType::Bars);
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
@@ -47,6 +47,9 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 
 		void addValue(double value);
 		void addValue(double xValue, double yValue);
+
+		template <class ValueType>
+		void updateArrayValues(const QList<ValueType>& values);
 
 	protected:
 		virtual void determineChildren() override;
@@ -75,6 +78,14 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 
 		void plotBars(QPainter* painter);
 		void plotScatter(QPainter* painter);
+		void plotArray(QPainter* painter);
 };
+
+template <class ValueType>
+void PlotOverlay::updateArrayValues(const QList<ValueType>& values)
+{
+	clearValues();
+	for (auto val : values) addValue(val);
+}
 
 } /* namespace OODebug */
