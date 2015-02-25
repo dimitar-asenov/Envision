@@ -62,6 +62,11 @@ class BreakpointEvent;
 class SingleStepEvent;
 class VariableDetails;
 class PlotOverlay;
+class Value;
+
+class JavaDebugger;
+
+struct VariableObserver;
 
 class OODEBUG_API JavaDebugger
 {
@@ -78,6 +83,8 @@ class OODEBUG_API JavaDebugger
 		bool step(Visualization::Item* target, QKeyEvent* event);
 
 		void probe(OOVisualization::VStatementItemList* itemList, const QStringList& arguments, int itemIndex);
+
+		using ValueHandler = std::function<void(JavaDebugger*, Values, QStringList, Model::Node*)>;
 
 	private:
 		JavaDebugger();
@@ -108,6 +115,16 @@ class OODEBUG_API JavaDebugger
 
 		void toggleLineHighlight(Visualization::Item* item, bool highlight);
 
+		ValueHandler defaultValueHandlerFor(QList<OOModel::VariableDeclaration*> variableDeclarations);
+		void handleSingleValue(Values values, QStringList args, Model::Node* target);
+		void handleMultipleValues(Values values, QStringList args, Model::Node* target);
+		void handleArray(Values values, QStringList args, Model::Node* target);
+		double doubleFromValue(Value v);
+		PlotOverlay* plotOverlayOfNode(Model::Node* node);
+
+		bool hasPrimitiveValueType(OOModel::VariableDeclaration* decl);
+		bool hasArrayType(OOModel::VariableDeclaration* decl);
+
 		DebugConnector debugConnector_;
 
 		// For each class we should only break at loading once, otherwise we get multiple events.
@@ -118,9 +135,8 @@ class OODEBUG_API JavaDebugger
 		Visualization::Item* currentLineItem_{};
 		qint64 currentThreadId_{};
 
-		QHash<Model::Node*, OOModel::VariableDeclaration*> trackedVariables_;
-
-		QHash<Model::Node*, QPair<OOModel::VariableDeclaration*, OOModel::VariableDeclaration*>> probes_;
+		QMultiHash<Model::Node*, QString> nodeObservedBy_;
+		QHash<QString, VariableObserver> observers_;
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 

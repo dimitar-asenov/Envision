@@ -61,6 +61,30 @@
 
 namespace OODebug {
 
+struct VariableObserver {
+		VariableObserver() = default;
+		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
+							  QList<OOModel::VariableDeclaration*> observedVariables, Model::Node* observerLocation,
+							  QStringList handlerArguments = {})
+			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
+			  observerLocation_{observerLocation}, handlerArguments_{handlerArguments}{}
+
+		// The function which handles new value(s).
+		JavaDebugger::ValueHandler handlerFunc_;
+		// The declarations of the variables we are observing.
+		QList<OOModel::VariableDeclaration*> observedVariables_;
+		// The location of the observer, this might be useful if it has an attached overlay.
+		Model::Node* observerLocation_;
+		// Arguments which will be passes to the handler function
+		QStringList handlerArguments_;
+
+		// Type: "p" for probes, "v" for variable tracking.
+		static QString observerIdFor(Model::Node* node, QChar type)
+		{
+			return QString("%1%2").arg(type).arg(qint64(node));
+		}
+};
+
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
 const QString JavaDebugger::PLOT_OVERLAY_GROUP{"PlotOverlay"};
 const QString JavaDebugger::CURRENT_LINE_OVERLAY_GROUP{"CurrentLine"};
@@ -84,15 +108,17 @@ bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	setBreakpoints_.clear();
 	breakOnLoadClasses_.clear();
 
-	// Reset probes
-	for (auto probeIt = probes_.cbegin(); probeIt != probes_.cend(); ++probeIt)
+	// Reset observers
+	for (auto observerIt = observers_.cbegin(); observerIt != observers_.cend(); ++observerIt)
 	{
-		auto probeNode = probeIt.key();
-		auto visualizationIt = Visualization::Item::nodeItemsMap().find(probeNode);
-		Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
-		auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
-		Q_ASSERT(overlay);
-		overlay->clearValues();
+		if (auto observedNode = observerIt.value().observerLocation_)
+		{
+			auto visualizationIt = Visualization::Item::nodeItemsMap().find(observedNode);
+			Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
+			auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
+			Q_ASSERT(overlay);
+			overlay->clearValues();
+		}
 	}
 
 	exportMap_ = JavaExport::JavaExporter::exportMaps().map(project);
@@ -186,9 +212,13 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		refFinder.setSearchNode(node);
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
+
+		QString observerId = VariableObserver::observerIdFor(variableDeclaration, 'v');
+		QList<OOModel::VariableDeclaration*> vars{variableDeclaration};
+		observers_[observerId] = {defaultValueHandlerFor(vars), vars, node};
 		for (auto ref : refFinder.references())
 		{
-			trackedVariables_[ref] = variableDeclaration;
+			nodeObservedBy_.insertMulti(ref, observerId);
 			unsetBreakpoints_ << ref;
 		}
 		return true;
@@ -245,8 +275,13 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	}
 	Q_ASSERT(xDeclaration);	Q_ASSERT(xDeclaration->name() == xName);
 
-	probes_[vItem->node()] = {xDeclaration, yDeclaration};
-	unsetBreakpoints_ << vItem->node();
+	auto observedNode = vItem->node();
+	QString observerId = VariableObserver::observerIdFor(observedNode, 'p');
+	QList<OOModel::VariableDeclaration*> vars{xDeclaration};
+	if (yDeclaration) vars << yDeclaration;
+	observers_[observerId] = {defaultValueHandlerFor(vars), vars, observedNode};
+	nodeObservedBy_.insertMulti(observedNode, observerId);
+	unsetBreakpoints_ << observedNode;
 
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
 	vItem->addOverlay(overlay, MONITOR_OVERLAY_GROUP);
@@ -439,7 +474,9 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 	auto it = setBreakpoints_.find(breakpointEvent.requestID());
 	// If we get a event for a breakpoint we don't know we have an implementation error.
 	Q_ASSERT(it != setBreakpoints_.end() && *it);
-	if (trackedVariables_.contains(*it))
+
+	auto observersIt = nodeObservedBy_.find(*it);
+	if (observersIt != nodeObservedBy_.end())
 	{
 		// Get frames
 		auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
@@ -453,110 +490,29 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		auto currentFrame = frames.frames()[0];
 		int currentIndex = currentFrame.location().methodIndex();
 
-		auto trackedVariable = trackedVariables_[*it];
-		Q_ASSERT(trackedVariable);
-
-		QList<StackVariable> varsToGet;
-		for (auto variableDetails : variableTable.variables())
+		for (auto observerId : nodeObservedBy_.values(*it))
 		{
-			if (variableDetails.name() == trackedVariable->name())
+			auto observer = observers_[observerId];
+			QList<StackVariable> varsToGet;
+			for (auto variableDecl : observer.observedVariables_)
 			{
-				// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
-				//                    #JDWP_Method_VariableTable
-				Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
-							currentIndex < variableDetails.codeIndex() + variableDetails.length());
-				varsToGet << StackVariable(variableDetails.slot(),
-													typeExpressionToTag(trackedVariable->typeExpression()));
+				for (auto variableDetails : variableTable.variables())
+				{
+					if (variableDetails.name() == variableDecl->name())
+					{
+						// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
+						//                    #JDWP_Method_VariableTable
+						Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
+									currentIndex < variableDetails.codeIndex() + variableDetails.length());
+						varsToGet << StackVariable(variableDetails.slot(),
+															typeExpressionToTag(variableDecl->typeExpression()));
+					}
+				}
 			}
+			auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+			Q_ASSERT(observer.handlerFunc_);
+			observer.handlerFunc_(this, values, observer.handlerArguments_, observer.observerLocation_);
 		}
-
-		auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
-		Q_ASSERT(values.values().length() == varsToGet.length());
-		// The variable declaration itself doesn't have a visualization but its statement parent:
-		auto variableStatement = trackedVariable->firstAncestorOfType<OOModel::Statement>();
-		auto visualizationIt = Visualization::Item::nodeItemsMap().find(variableStatement);
-		Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
-		for (auto val : values.values())
-		{
-			if (val.kind() == MessagePart::cast(Protocol::Tag::INT))
-			{
-				auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
-				Q_ASSERT(overlay);
-				overlay->addValue(val.intValue());
-				qDebug() << trackedVariable->name() << ":\t" << val.intValue();
-			}
-			else if (val.kind() == MessagePart::cast(Protocol::Tag::BOOLEAN))
-				qDebug() << trackedVariable->name() << ":\t" << val.boolean();
-			else if (val.kind() == MessagePart::cast(Protocol::Tag::STRING))
-				qDebug() << trackedVariable->name() << ":\t" << debugConnector_.getString(val.stringId());
-		}
-	}
-	else if (probes_.contains(*it))
-	{
-		// Get frames
-		auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
-		auto location = breakpointEvent.location();
-		auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
-		if (frames.frames().size() == 0)
-		{
-			qDebug() << "No frames received, error:" << static_cast<qint8>(frames.error());
-			return;
-		}
-		auto currentFrame = frames.frames()[0];
-		int currentIndex = currentFrame.location().methodIndex();
-
-		auto xVariable = probes_[*it].first;
-		Q_ASSERT(xVariable);
-		auto yVariable = probes_[*it].second;
-
-		QList<StackVariable> varsToGet;
-		int xInd = 0, yInd = 0;
-		for (int i = 0; i < variableTable.variables().size(); ++i)
-		{
-			auto variableDetails = variableTable.variables()[i];
-			if (variableDetails.name() == xVariable->name())
-			{
-				// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
-				//                    #JDWP_Method_VariableTable
-				Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
-							currentIndex < variableDetails.codeIndex() + variableDetails.length());
-				varsToGet << StackVariable(variableDetails.slot(),
-													typeExpressionToTag(xVariable->typeExpression()));
-				xInd = i;
-			}
-			else if (yVariable && variableDetails.name() == yVariable->name())
-			{
-				Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
-							currentIndex < variableDetails.codeIndex() + variableDetails.length());
-				varsToGet << StackVariable(variableDetails.slot(),
-													typeExpressionToTag(yVariable->typeExpression()));
-				yInd = i;
-			}
-		}
-		bool xFirst = xInd < yInd;
-
-		auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
-		Q_ASSERT(values.values().length() == varsToGet.length());
-		auto nodeVisualization = Visualization::Item::nodeItemsMap().find(*it);
-		Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
-		auto overlay = (*nodeVisualization)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
-		Q_ASSERT(overlay);
-		auto vals = values.values();
-		if (vals.size() == 1)
-		{
-			if (vals[0].type() == Protocol::Tag::ARRAY)
-			{
-				int arrayLen = debugConnector_.getArrayLength(vals[0].array());
-				auto arrayVals = debugConnector_.getArrayValues(vals[0].array(), 0, arrayLen).ints();
-				overlay->updateArrayValues(arrayVals);
-			}
-			else
-			{
-				overlay->addValue(vals[0].intValue());
-			}
-		}
-		else if (vals.size() == 2)
-			overlay->addValue(vals[!xFirst].intValue(), vals[xFirst].intValue());
 	}
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
 	currentLineItem_ = visualization;
@@ -705,6 +661,101 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 		if (auto overlay = item->overlay<Visualization::SelectionOverlay>(CURRENT_LINE_OVERLAY_GROUP))
 			 item->scene()->removeOverlay(overlay);
 	}
+}
+
+JavaDebugger::ValueHandler JavaDebugger::defaultValueHandlerFor(
+		QList<OOModel::VariableDeclaration*> variableDeclarations)
+{
+	Q_ASSERT(!variableDeclarations.empty());
+
+	if (hasPrimitiveValueType(variableDeclarations[0]))
+	{
+		bool allPrimitive = true;
+		for (auto decl : variableDeclarations)
+			if (!hasPrimitiveValueType(decl)) allPrimitive = false;
+		if (allPrimitive)
+		{
+			if (variableDeclarations.size() > 1) return &JavaDebugger::handleMultipleValues;
+			else return &JavaDebugger::handleSingleValue;
+		}
+	}
+	else if (hasArrayType(variableDeclarations[0]))
+	{
+		return &JavaDebugger::handleArray;
+	}
+
+	Q_ASSERT(false); // We should implement something for this combination
+}
+
+void JavaDebugger::handleSingleValue(Values values, QStringList, Model::Node* target)
+{
+	plotOverlayOfNode(target)->addValue(doubleFromValue(values.values()[0]));
+}
+
+void JavaDebugger::handleMultipleValues(Values values, QStringList, Model::Node* target)
+{
+	auto vals = values.values();
+	plotOverlayOfNode(target)->addValue(doubleFromValue(vals[0]), doubleFromValue(vals[1]));
+}
+
+void JavaDebugger::handleArray(Values values, QStringList, Model::Node* target)
+{
+	auto vals = values.values();
+	int arrayLen = debugConnector_.getArrayLength(vals[0].array());
+	auto arrayVals = debugConnector_.getArrayValues(vals[0].array(), 0, arrayLen).ints();
+	plotOverlayOfNode(target)->updateArrayValues(arrayVals);
+}
+
+double JavaDebugger::doubleFromValue(Value v)
+{
+	switch (v.type())
+	{
+		case Protocol::Tag::FLOAT: return v.floatValue();
+		case Protocol::Tag::DOUBLE: return v.doubleValue();
+		case Protocol::Tag::INT: return v.intValue();
+		case Protocol::Tag::LONG: return v.longValue();
+		case Protocol::Tag::SHORT: return v.shortValue();
+		default: Q_ASSERT(false); // you shouldn't try to convert any non numeric values to double.
+	}
+}
+
+PlotOverlay* JavaDebugger::plotOverlayOfNode(Model::Node* node)
+{
+	auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
+	Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
+	auto overlay = (*nodeVisualization)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
+	Q_ASSERT(overlay);
+	return overlay;
+}
+
+bool JavaDebugger::hasPrimitiveValueType(OOModel::VariableDeclaration* decl)
+{
+	if (auto typeExpression = DCast<OOModel::TypeExpression>(decl->typeExpression()))
+	{
+		if (auto primitiveType = DCast<OOModel::PrimitiveTypeExpression>(typeExpression))
+		{
+			switch (primitiveType->typeValue())
+			{
+				case OOModel::PrimitiveType::INT: return true;
+				case OOModel::PrimitiveType::LONG: return true;
+				case OOModel::PrimitiveType::UNSIGNED_INT: return true;
+				case OOModel::PrimitiveType::UNSIGNED_LONG: return true;
+				case OOModel::PrimitiveType::FLOAT: return true;
+				case OOModel::PrimitiveType::DOUBLE: return true;
+				case OOModel::PrimitiveType::BOOLEAN: return true;
+				case OOModel::PrimitiveType::CHAR: return true;
+				default: break;
+			}
+		}
+	}
+	return false;
+}
+
+bool JavaDebugger::hasArrayType(OOModel::VariableDeclaration* decl)
+{
+	if (auto typeExpression = DCast<OOModel::TypeExpression>(decl->typeExpression()))
+		if (DCast<OOModel::ArrayTypeExpression>(typeExpression)) return true;
+	return false;
 }
 
 } /* namespace OODebug */
