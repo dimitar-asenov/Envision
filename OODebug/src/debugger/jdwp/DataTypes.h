@@ -59,8 +59,8 @@ struct Value : public MessagePart {
 		MessageField<qint8, cast(Protocol::Tag::BYTE)> byte{&Value::byte, this};
 		MessageField<qint16, cast(Protocol::Tag::CHAR)> charValue{&Value::charValue, this};
 		MessageField<qint64, cast(Protocol::Tag::OBJECT)> objectId{&Value::objectId, this};
-		MessageField<qint32, cast(Protocol::Tag::FLOAT)> floatValue{&Value::floatValue, this};
-		MessageField<qint64, cast(Protocol::Tag::DOUBLE)> doubleValue{&Value::doubleValue, this};
+		MessageField<float, cast(Protocol::Tag::FLOAT)> floatValue{&Value::floatValue, this};
+		MessageField<double, cast(Protocol::Tag::DOUBLE)> doubleValue{&Value::doubleValue, this};
 		MessageField<qint32, cast(Protocol::Tag::INT)> intValue{&Value::intValue, this};
 		MessageField<qint64, cast(Protocol::Tag::LONG)> longValue{&Value::longValue, this};
 		MessageField<qint16, cast(Protocol::Tag::SHORT)> shortValue{&Value::shortValue, this};

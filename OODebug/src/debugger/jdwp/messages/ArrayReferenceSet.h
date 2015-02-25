@@ -67,8 +67,8 @@ struct ArrayValues : public Reply {
 		MessageField<Protocol::Tag> type{&ArrayValues::type, this};
 		MessageField<QList<qint8>, cast(Protocol::Tag::BYTE)> bytes{&ArrayValues::bytes, this};
 		MessageField<QList<qint16>, cast(Protocol::Tag::CHAR)> chars{&ArrayValues::chars, this};
-		MessageField<QList<qint32>, cast(Protocol::Tag::FLOAT)> floats{&ArrayValues::floats, this};
-		MessageField<QList<qint64>, cast(Protocol::Tag::DOUBLE)> doubles{&ArrayValues::doubles, this};
+		MessageField<QList<float>, cast(Protocol::Tag::FLOAT)> floats{&ArrayValues::floats, this};
+		MessageField<QList<double>, cast(Protocol::Tag::DOUBLE)> doubles{&ArrayValues::doubles, this};
 		MessageField<QList<qint32>, cast(Protocol::Tag::INT)> ints{&ArrayValues::ints, this};
 		MessageField<QList<qint64>, cast(Protocol::Tag::LONG)> longs{&ArrayValues::longs, this};
 		MessageField<QList<qint16>, cast(Protocol::Tag::SHORT)> shorts{&ArrayValues::shorts, this};
