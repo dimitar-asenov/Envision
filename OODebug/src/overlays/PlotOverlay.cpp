@@ -53,7 +53,7 @@ void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	plotFunction_(this, painter);
 }
 
-void OODebug::PlotOverlay::clearValues()
+void OODebug::PlotOverlay::clear()
 {
 	xValues_.clear();
 	yValues_.clear();

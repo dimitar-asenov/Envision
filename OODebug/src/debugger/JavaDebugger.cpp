@@ -117,7 +117,7 @@ bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 			Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
 			auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
 			Q_ASSERT(overlay);
-			overlay->clearValues();
+			overlay->clear();
 		}
 	}
 
@@ -214,8 +214,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		refFinder.visit(containingMethod);
 
 		QString observerId = VariableObserver::observerIdFor(variableDeclaration, 'v');
-		QList<OOModel::VariableDeclaration*> vars{variableDeclaration};
-		observers_[observerId] = {defaultValueHandlerFor(vars), vars, node};
+		observers_[observerId] = {defaultValueHandlerFor({variableDeclaration}), {variableDeclaration}, node};
 		for (auto ref : refFinder.references())
 		{
 			nodeObservedBy_.insertMulti(ref, observerId);
@@ -273,7 +272,8 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 			}
 		}
 	}
-	Q_ASSERT(xDeclaration);	Q_ASSERT(xDeclaration->name() == xName);
+	Q_ASSERT(xDeclaration);
+	Q_ASSERT(xDeclaration->name() == xName);
 
 	auto observedNode = vItem->node();
 	QString observerId = VariableObserver::observerIdFor(observedNode, 'p');
@@ -404,7 +404,7 @@ Model::Node* JavaDebugger::locationToNode(Location location)
 
 	if (auto node = exportMap_->node(fileName, line - 1, 0))
 	{
-		if (auto casted = DCast<OOModel::StatementItem>(node)) return casted;
+		if (auto stmtItem = DCast<OOModel::StatementItem>(node)) return stmtItem;
 		if (auto stmt = node->firstAncestorOfType<OOModel::StatementItem>()) return stmt;
 		// If we are at the closing bracket of a method, the node will be a StatementItemList, thus we just highlight
 		// the last item in this list.

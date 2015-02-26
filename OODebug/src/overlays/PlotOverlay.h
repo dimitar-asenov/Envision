@@ -43,13 +43,13 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 						PlotType type = PlotType::Bars);
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
-		void clearValues();
+		void clear();
 
 		void addValue(double value);
 		void addValue(double xValue, double yValue);
 
 		template <class ValueType>
-		void updateArrayValues(const QList<ValueType>& values);
+		inline void updateArrayValues(const QList<ValueType>& values);
 
 	protected:
 		virtual void determineChildren() override;
@@ -84,7 +84,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 template <class ValueType>
 void PlotOverlay::updateArrayValues(const QList<ValueType>& values)
 {
-	clearValues();
+	clear();
 	for (auto val : values) addValue(val);
 }
 
