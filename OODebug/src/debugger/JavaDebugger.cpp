@@ -379,7 +379,7 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	return Location(tagKind, classId, methodId, methodIndex);
 }
 
-Model::Node* JavaDebugger::locationToNode(Location location)
+Model::Node* JavaDebugger::locationToNode(Location location, bool& isClosingBracket)
 {
 	QString signature = debugConnector_.signatureOf(location.classId());
 	signature = signature.mid(1, signature.size() - 2); // remove symbol at start and ; at end.
@@ -404,7 +404,11 @@ Model::Node* JavaDebugger::locationToNode(Location location)
 		// If we are at the closing bracket of a method, the node will be a StatementItemList, thus we just highlight
 		// the last item in this list.
 		// TODO: if we could highlight somehow the end of the method this would be the better solution.
-		if (auto stmtList = DCast<OOModel::StatementItemList>(node)) return stmtList->at(stmtList->size() -1);
+		if (auto stmtList = DCast<OOModel::StatementItemList>(node))
+		{
+			isClosingBracket = true;
+			return stmtList->at(stmtList->size() -1);
+		}
 	}
 	Q_ASSERT(false); // We should find a node!
 }
@@ -540,7 +544,8 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 
 void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 {
-	auto node = locationToNode(singleStep.location());
+	bool closingBracket = false;
+	auto node = locationToNode(singleStep.location(), closingBracket);
 
 	// It might be that we have a breakpoint on the same location so cancel its resume.
 	debugConnector_.cancelResume();
@@ -548,7 +553,7 @@ void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 	currentThreadId_ = singleStep.thread();
 	auto visualization = *Visualization::Item::nodeItemsMap().find(node);
 	currentLineItem_ = visualization;
-	toggleLineHighlight(currentLineItem_, true);
+	toggleLineHighlight(currentLineItem_, true, closingBracket);
 }
 
 Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable)
@@ -661,19 +666,32 @@ OOModel::VariableDeclaration* JavaDebugger::variableDeclarationFromStatement(OOM
 	return variableDeclaration;
 }
 
-void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight)
+void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight, bool closingBracket)
 {
-	auto existingOverlay = item->overlay<Visualization::SelectionOverlay>(CURRENT_LINE_OVERLAY_GROUP);
+	auto existingLineOverlay = item->overlay<Visualization::SelectionOverlay>(CURRENT_LINE_OVERLAY_GROUP);
+	auto existingBracketOverlay = item->overlay<Visualization::IconOverlay>(CURRENT_LINE_OVERLAY_GROUP);
 	if (highlight)
 	{
-		if (existingOverlay) return;
-		auto overlay = new Visualization::SelectionOverlay(
-					item, Visualization::SelectionOverlay::itemStyles().get("currentStatement"));
-		item->addOverlay(overlay, CURRENT_LINE_OVERLAY_GROUP);
+		if (closingBracket)
+		{
+			if (existingBracketOverlay) return;
+			auto overlay = new Visualization::IconOverlay(
+						item, Visualization::IconOverlay::itemStyles().get("endOfMethod"));
+			item->addOverlay(overlay, CURRENT_LINE_OVERLAY_GROUP);
+		}
+		else
+		{
+			if (existingLineOverlay) return;
+			auto overlay = new Visualization::SelectionOverlay(
+						item, Visualization::SelectionOverlay::itemStyles().get("currentStatement"));
+			item->addOverlay(overlay, CURRENT_LINE_OVERLAY_GROUP);
+		}
+
 	}
-	else if (existingOverlay)
+	else
 	{
-			 item->scene()->removeOverlay(existingOverlay);
+		if (existingLineOverlay) item->scene()->removeOverlay(existingLineOverlay);
+		if (existingBracketOverlay) item->scene()->removeOverlay(existingBracketOverlay);
 	}
 }
 

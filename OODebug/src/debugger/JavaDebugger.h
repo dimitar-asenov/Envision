@@ -98,7 +98,7 @@ class OODEBUG_API JavaDebugger
 		bool isParentClassLoaded(Model::Node* node);
 		void breaktAtParentClassLoad(Model::Node* node);
 		Location nodeToLocation(Model::Node* node);
-		Model::Node* locationToNode(Location location);
+		Model::Node* locationToNode(Location location, bool& isClosingBracket);
 
 		void resume();
 		void trySetBreakpoints();
@@ -114,7 +114,7 @@ class OODEBUG_API JavaDebugger
 		static OOModel::VariableDeclaration* variableDeclarationFromStatement(OOModel::StatementItem* statement,
 																									 QString variableName = "");
 
-		void toggleLineHighlight(Visualization::Item* item, bool highlight);
+		void toggleLineHighlight(Visualization::Item* item, bool highlight, bool closingBracket = false);
 
 		QPair<PlotOverlay::PlotType, ValueHandler> defaultPlotTypeAndValueHandlerFor
 			(QList<OOModel::VariableDeclaration*> variableDeclarations);
