@@ -135,8 +135,7 @@ class OODEBUG_API JavaDebugger
 		Visualization::Item* currentLineItem_{};
 		qint64 currentThreadId_{};
 
-		QMultiHash<Model::Node*, QString> nodeObservedBy_;
-		QHash<QString, VariableObserver> observers_;
+		QMultiHash<Model::Node*, std::shared_ptr<VariableObserver>> nodeObservedBy_;
 
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 

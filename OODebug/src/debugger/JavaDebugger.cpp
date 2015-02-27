@@ -62,7 +62,6 @@
 namespace OODebug {
 
 struct VariableObserver {
-		VariableObserver() = default;
 		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
 							  QList<OOModel::VariableDeclaration*> observedVariables, Model::Node* observerLocation,
 							  QStringList handlerArguments = {})
@@ -77,12 +76,6 @@ struct VariableObserver {
 		Model::Node* observerLocation_;
 		// Arguments which will be passes to the handler function
 		QStringList handlerArguments_;
-
-		// Type: "p" for probes, "v" for variable tracking.
-		static QString observerIdFor(Model::Node* node, QChar type)
-		{
-			return QString("%1%2").arg(type).arg(qint64(node));
-		}
 };
 
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
@@ -109,15 +102,13 @@ bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 	breakOnLoadClasses_.clear();
 
 	// Reset observers
-	for (auto observerIt = observers_.cbegin(); observerIt != observers_.cend(); ++observerIt)
+	for (auto observerIt = nodeObservedBy_.cbegin(); observerIt != nodeObservedBy_.cend(); ++observerIt)
 	{
-		if (auto observedNode = observerIt.value().observerLocation_)
+		if (auto observedNode = observerIt.value()->observerLocation_)
 		{
 			auto visualizationIt = Visualization::Item::nodeItemsMap().find(observedNode);
 			Q_ASSERT(visualizationIt != Visualization::Item::nodeItemsMap().end());
-			auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
-			Q_ASSERT(overlay);
-			overlay->clear();
+			if (auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP)) overlay->clear();
 		}
 	}
 
@@ -212,11 +203,12 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
 
-		QString observerId = VariableObserver::observerIdFor(variableDeclaration, 'v');
-		observers_[observerId] = {defaultValueHandlerFor({variableDeclaration}), {variableDeclaration}, node};
+		auto observer = std::make_shared<VariableObserver>
+				(VariableObserver(defaultValueHandlerFor({variableDeclaration}), {variableDeclaration}, node));
+		nodeObservedBy_.insertMulti(node, observer);
 		for (auto ref : refFinder.references())
 		{
-			nodeObservedBy_.insertMulti(ref, observerId);
+			nodeObservedBy_.insertMulti(ref, observer);
 			unsetBreakpoints_ << ref;
 		}
 		return true;
@@ -275,11 +267,11 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	Q_ASSERT(xDeclaration->name() == xName);
 
 	auto observedNode = vItem->node();
-	QString observerId = VariableObserver::observerIdFor(observedNode, 'p');
 	QList<OOModel::VariableDeclaration*> vars{xDeclaration};
 	if (yDeclaration) vars << yDeclaration;
-	observers_[observerId] = {defaultValueHandlerFor(vars), vars, observedNode};
-	nodeObservedBy_.insertMulti(observedNode, observerId);
+	auto observer = std::make_shared<VariableObserver>
+			(VariableObserver(defaultValueHandlerFor(vars), vars, observedNode));
+	nodeObservedBy_.insertMulti(observedNode, observer);
 	unsetBreakpoints_ << observedNode;
 
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
@@ -489,11 +481,10 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		auto currentFrame = frames.frames()[0];
 		int currentIndex = currentFrame.location().methodIndex();
 
-		for (auto observerId : nodeObservedBy_.values(*it))
+		for (auto observer : nodeObservedBy_.values(*it))
 		{
-			auto observer = observers_[observerId];
 			QList<StackVariable> varsToGet;
-			for (auto variableDecl : observer.observedVariables_)
+			for (auto variableDecl : observer->observedVariables_)
 			{
 				for (auto variableDetails : variableTable.variables())
 				{
@@ -509,8 +500,8 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 				}
 			}
 			auto values = debugConnector_.values(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
-			Q_ASSERT(observer.handlerFunc_);
-			observer.handlerFunc_(this, values, observer.handlerArguments_, observer.observerLocation_);
+			Q_ASSERT(observer->handlerFunc_);
+			observer->handlerFunc_(this, values, observer->handlerArguments_, observer->observerLocation_);
 		}
 	}
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
