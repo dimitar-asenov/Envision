@@ -102,6 +102,7 @@ class OODEBUG_API JavaDebugger
 
 		void resume();
 		void trySetBreakpoints();
+		void removeBreakpointAt(Model::Node* node);
 		void handleVMStart(Event);
 		void handleClassPrepare(Event);
 		void handleBreakpoint(BreakpointEvent breakpointEvent);
@@ -124,6 +125,8 @@ class OODEBUG_API JavaDebugger
 
 		bool hasPrimitiveValueType(OOModel::VariableDeclaration* decl);
 		bool hasArrayType(OOModel::VariableDeclaration* decl);
+
+		void removeObserverOverlaysAt(Model::Node* node, Visualization::Item* nodeVisualization);
 
 		DebugConnector debugConnector_;
 

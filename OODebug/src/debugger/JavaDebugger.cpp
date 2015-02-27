@@ -127,18 +127,7 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 			if (currentLineItem_ == target) currentLineItem_ = nullptr;
 			target->scene()->removeOverlay(overlay);
 
-			int index = unsetBreakpoints_.indexOf(node);
-			if (index > 0) unsetBreakpoints_.removeAt(index);
-
-			for (auto it = setBreakpoints_.begin(); it != setBreakpoints_.end(); ++it)
-			{
-				if (it.value() == node)
-				{
-					if (debugConnector_.vmAlive()) debugConnector_.clearBreakpoint(it.key());
-					setBreakpoints_.erase(it);
-					break; // There should only be one breakpoint
-				}
-			}
+			removeBreakpointAt(node);
 		}
 		else
 		{
@@ -195,6 +184,23 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto variableDeclaration = variableDeclarationFromStatement(DCast<OOModel::StatementItem>(node));
 		if (!variableDeclaration) return false;
 
+		// Check if this is tracked and if so remove it.
+		// TODO if there is a probe on the same line this is wrong.
+		auto it = nodeObservedBy_.find(node);
+		if (it != nodeObservedBy_.end())
+		{
+			auto ptr = it.value();
+			removeObserverOverlaysAt(node, target);
+			// remove all observers at the references:
+			it = nodeObservedBy_.begin();
+			while (it != nodeObservedBy_.end())
+			{
+				if (it.value() == ptr) it = nodeObservedBy_.erase(it);
+				else ++it;
+			}
+			return true;
+		}
+
 		auto overlay = new PlotOverlay(target);
 		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 
@@ -233,8 +239,15 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	if (itemIndex == itemList->rangeEnd()) --itemIndex; // TODO handle this properly
 	auto vItem = itemList->itemAt<Visualization::Item>(itemIndex);
 	Q_ASSERT(vItem);
+	auto observedNode = vItem->node();
 
 	QString xName = arguments[0];
+	if (xName == "-")
+	{
+		removeObserverOverlaysAt(observedNode, vItem);
+		removeBreakpointAt(observedNode);
+		return;
+	}
 	QString yName{};
 	if (arguments.size() > 1) yName = arguments[1];
 
@@ -266,7 +279,6 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	Q_ASSERT(xDeclaration);
 	Q_ASSERT(xDeclaration->name() == xName);
 
-	auto observedNode = vItem->node();
 	QList<OOModel::VariableDeclaration*> vars{xDeclaration};
 	if (yDeclaration) vars << yDeclaration;
 	auto observer = std::make_shared<VariableObserver>
@@ -445,6 +457,22 @@ void JavaDebugger::trySetBreakpoints()
 	{
 		qint32 requestId = debugConnector_.setBreakpoint(it.key());
 		setBreakpoints_[requestId] = it.value();
+	}
+}
+
+void JavaDebugger::removeBreakpointAt(Model::Node* node)
+{
+	int index = unsetBreakpoints_.indexOf(node);
+	if (index > 0) unsetBreakpoints_.removeAt(index);
+
+	for (auto it = setBreakpoints_.begin(); it != setBreakpoints_.end(); ++it)
+	{
+		if (it.value() == node)
+		{
+			if (debugConnector_.vmAlive()) debugConnector_.clearBreakpoint(it.key());
+			setBreakpoints_.erase(it);
+			break; // There should only be one breakpoint
+		}
 	}
 }
 
@@ -750,6 +778,25 @@ bool JavaDebugger::hasArrayType(OOModel::VariableDeclaration* decl)
 	if (auto typeExpression = DCast<OOModel::TypeExpression>(decl->typeExpression()))
 		if (DCast<OOModel::ArrayTypeExpression>(typeExpression)) return true;
 	return false;
+}
+
+void JavaDebugger::removeObserverOverlaysAt(Model::Node* node, Visualization::Item* nodeVisualization)
+{
+	auto it = nodeObservedBy_.find(node);
+	while (it != nodeObservedBy_.end() && it.key() == node)
+	{
+		// it might be that there is also an observer for a tracked variable, so only remove the correct one.
+		// TODO: this might is wrong if a tracked variable is declared here, but we ignore this for now.
+		if (it.value()->observerLocation_ == node)
+		{
+			nodeObservedBy_.erase(it);
+			if (auto plotOverlay = nodeVisualization->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP))
+				nodeVisualization->scene()->removeOverlay(plotOverlay);
+			if (auto monitorOverlay = nodeVisualization->overlay<Visualization::IconOverlay>(MONITOR_OVERLAY_GROUP))
+				nodeVisualization->scene()->removeOverlay(monitorOverlay);
+			break;
+		}
+	}
 }
 
 } /* namespace OODebug */
