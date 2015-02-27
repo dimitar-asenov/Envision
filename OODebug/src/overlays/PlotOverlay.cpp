@@ -35,10 +35,11 @@ ITEM_COMMON_DEFINITIONS(PlotOverlay, "item")
 PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* style, PlotType type)
 	: Super{{associatedItem}, style}
 {
-	int plotOffset = 20;
-	if (PlotType::Array == type) plotOffset = 10;
-	QSize size = {style->width() - 3 * plotOffset, style->height() - 2 * plotOffset};
-	plotRegion_ = {{2 * plotOffset, plotOffset}, size};
+	// margins around the plot region:
+	const int LEFT_MARGIN = (type == PlotType::Array ? 20 : 40);
+	const int DEFAULT_MARGIN = (type == PlotType::Array ? 10 : 20);
+	QSize size = {style->width() - (LEFT_MARGIN + DEFAULT_MARGIN), style->height() - 2 * DEFAULT_MARGIN};
+	plotRegion_ = {{LEFT_MARGIN, DEFAULT_MARGIN}, size};
 
 	if (PlotType::Bars == type) plotFunction_ = &PlotOverlay::plotBars;
 	else if (PlotType::Scatter == type) plotFunction_ = &PlotOverlay::plotScatter;
@@ -57,7 +58,10 @@ void OODebug::PlotOverlay::clear()
 {
 	xValues_.clear();
 	yValues_.clear();
-	xMin_ = xMax_ = yMin_ = yMax_ = 0;
+	xMin_ = 0;
+	xMax_ = 0;
+	yMin_ = 0;
+	yMax_ = 0;
 }
 
 void OODebug::PlotOverlay::addValue(double value)
@@ -185,6 +189,8 @@ void PlotOverlay::plotScatter(QPainter* painter)
 
 	QBrush brush(QColor("red"));
 	painter->setBrush(brush);
+	QPen pen(Qt::NoPen);
+	painter->setPen(pen);
 	for (int i = 0; i < xValues_.size(); ++i)
 		painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[i]}), radius, radius);
 }
