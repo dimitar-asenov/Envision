@@ -72,6 +72,7 @@ bool DebugConnector::suspend()
 
 bool DebugConnector::resume()
 {
+	if (delayResume_)	return false;
 	if (vmAlive_)
 	{
 		auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
@@ -344,6 +345,11 @@ void DebugConnector::handleComposite(QByteArray data)
 	Q_ASSERT(c.commandSet() == Protocol::CommandSet::Event);
 	Q_ASSERT(c.command() == MessagePart::cast(Protocol::EventCommands::Composite));
 
+	// If we have multiple events, we might have a breakpoint from a probe which would be auto resumed
+	// and also a single step event for which we don't want to resume. So we delay the resume and allow
+	// the resume to be canceled.
+	delayResume_ = c.events().size() > 1;
+
 	for (auto& event : c.events())
 	{
 		// We always want to know the VM state
@@ -357,6 +363,13 @@ void DebugConnector::handleComposite(QByteArray data)
 		else
 			qDebug() << "EVENT" << static_cast<int>(event.eventKind());
 	}
+
+	if (delayResume_)
+	{
+		delayResume_ = false;
+		if (!cancelResume_) resume();
+	}
+	cancelResume_ = false;
 }
 
 } /* namespace OODebug */

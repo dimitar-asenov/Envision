@@ -135,18 +135,17 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 		{
 			if (currentLineItem_ == target) currentLineItem_ = nullptr;
 			target->scene()->removeOverlay(overlay);
-			if (debugConnector_.vmAlive())
+
+			int index = unsetBreakpoints_.indexOf(node);
+			if (index > 0) unsetBreakpoints_.removeAt(index);
+
+			for (auto it = setBreakpoints_.begin(); it != setBreakpoints_.end(); ++it)
 			{
-				int index = unsetBreakpoints_.indexOf(node);
-				if (index > 0)
+				if (it.value() == node)
 				{
-					unsetBreakpoints_.removeAt(index);
-				}
-				else
-				{
-					qint32 breakpointId = setBreakpoints_.key(node);
-					debugConnector_.clearBreakpoint(breakpointId);
-					setBreakpoints_.remove(breakpointId);
+					if (debugConnector_.vmAlive()) debugConnector_.clearBreakpoint(it.key());
+					setBreakpoints_.erase(it);
+					break; // There should only be one breakpoint
 				}
 			}
 		}
@@ -532,6 +531,9 @@ void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 {
 	auto node = locationToNode(singleStep.location());
 
+	// It might be that we have a breakpoint on the same location so cancel its resume.
+	debugConnector_.cancelResume();
+
 	currentThreadId_ = singleStep.thread();
 	auto visualization = *Visualization::Item::nodeItemsMap().find(node);
 	currentLineItem_ = visualization;
@@ -650,16 +652,17 @@ OOModel::VariableDeclaration* JavaDebugger::variableDeclarationFromStatement(OOM
 
 void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight)
 {
+	auto existingOverlay = item->overlay<Visualization::SelectionOverlay>(CURRENT_LINE_OVERLAY_GROUP);
 	if (highlight)
 	{
+		if (existingOverlay) return;
 		auto overlay = new Visualization::SelectionOverlay(
 					item, Visualization::SelectionOverlay::itemStyles().get("currentStatement"));
 		item->addOverlay(overlay, CURRENT_LINE_OVERLAY_GROUP);
 	}
-	else
+	else if (existingOverlay)
 	{
-		if (auto overlay = item->overlay<Visualization::SelectionOverlay>(CURRENT_LINE_OVERLAY_GROUP))
-			 item->scene()->removeOverlay(overlay);
+			 item->scene()->removeOverlay(existingOverlay);
 	}
 }
 

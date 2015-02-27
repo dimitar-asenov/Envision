@@ -91,6 +91,7 @@ class OODEBUG_API DebugConnector : public QObject
 							Protocol::StepDepth stepDepth = Protocol::StepDepth::OVER);
 
 		bool vmAlive();
+		inline void cancelResume();
 
 		static constexpr int NO_RESULT{-1};
 	private:
@@ -119,6 +120,9 @@ class OODEBUG_API DebugConnector : public QObject
 		QList<QByteArray> messagesReadyForProcessing_;
 
 		bool vmAlive_{};
+
+		bool delayResume_{};
+		bool cancelResume_{};
 };
 
 /**
@@ -128,5 +132,9 @@ class OODEBUG_API DebugConnector : public QObject
 inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
 { eventListeners_[kind] = listener; }
 inline bool DebugConnector::vmAlive() { return vmAlive_; }
+/**
+ * Cancel a delayed resume command.
+ */
+void DebugConnector::cancelResume() { cancelResume_ = true; }
 
 } /* namespace OODebug */
