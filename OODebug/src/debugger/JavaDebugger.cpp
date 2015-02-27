@@ -31,8 +31,6 @@
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/DataTypes.h"
 
-#include "overlays/PlotOverlay.h"
-
 #include "JavaExport/src/exporter/JavaExporter.h"
 
 #include "ModelBase/src/nodes/Node.h"
@@ -199,16 +197,16 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 			return true;
 		}
 
-		auto overlay = new PlotOverlay(target);
-		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
-
 		ReferenceFinder refFinder;
 		refFinder.setSearchNode(node);
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
 
+		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({variableDeclaration});
+		auto overlay = new PlotOverlay(target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first);
+		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 		auto observer = std::make_shared<VariableObserver>
-				(VariableObserver(defaultValueHandlerFor({variableDeclaration}), {variableDeclaration}, node));
+				(VariableObserver(defaultTypeAndHandler.second, {variableDeclaration}, node));
 		nodeObservedBy_.insertMulti(node, observer);
 		for (auto ref : refFinder.references())
 		{
@@ -279,20 +277,16 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 
 	QList<OOModel::VariableDeclaration*> vars{xDeclaration};
 	if (yDeclaration) vars << yDeclaration;
+	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
 	auto observer = std::make_shared<VariableObserver>
-			(VariableObserver(defaultValueHandlerFor(vars), vars, observedNode));
+			(VariableObserver(defaultTypeAndHandler.second, vars, observedNode));
 	nodeObservedBy_.insertMulti(observedNode, observer);
 	unsetBreakpoints_ << observedNode;
 
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
 	vItem->addOverlay(overlay, MONITOR_OVERLAY_GROUP);
 
-	auto plotType = PlotOverlay::PlotType::Bars;
-	if (yDeclaration) plotType = PlotOverlay::PlotType::Scatter;
-	if (typeExpressionToTag(xDeclaration->typeExpression()) == Protocol::Tag::ARRAY)
-		plotType = PlotOverlay::PlotType::Array;
-
-	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"), plotType);
+	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first);
 	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
 }
 
@@ -683,7 +677,7 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 	}
 }
 
-JavaDebugger::ValueHandler JavaDebugger::defaultValueHandlerFor(
+QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPlotTypeAndValueHandlerFor(
 		QList<OOModel::VariableDeclaration*> variableDeclarations)
 {
 	Q_ASSERT(!variableDeclarations.empty());
@@ -695,13 +689,15 @@ JavaDebugger::ValueHandler JavaDebugger::defaultValueHandlerFor(
 			if (!hasPrimitiveValueType(decl)) allPrimitive = false;
 		if (allPrimitive)
 		{
-			if (variableDeclarations.size() > 1) return &JavaDebugger::handleMultipleValues;
-			else return &JavaDebugger::handleSingleValue;
+			if (variableDeclarations.size() > 1)
+				return {PlotOverlay::PlotType::Scatter, &JavaDebugger::handleMultipleValues};
+			else
+				return {PlotOverlay::PlotType::Bars, &JavaDebugger::handleSingleValue};
 		}
 	}
 	else if (hasArrayType(variableDeclarations[0]))
 	{
-		return &JavaDebugger::handleArray;
+		return {PlotOverlay::PlotType::Array, &JavaDebugger::handleArray};
 	}
 
 	Q_ASSERT(false); // We should implement something for this combination

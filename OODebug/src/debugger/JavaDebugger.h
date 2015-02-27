@@ -28,6 +28,7 @@
 
 #include "../oodebug_api.h"
 #include "jdwp/DebugConnector.h"
+#include "../overlays/PlotOverlay.h"
 
 namespace Export {
 	class TextToNodeMap;
@@ -61,7 +62,6 @@ class Location;
 class BreakpointEvent;
 class SingleStepEvent;
 class VariableDetails;
-class PlotOverlay;
 class Value;
 
 class JavaDebugger;
@@ -116,7 +116,8 @@ class OODEBUG_API JavaDebugger
 
 		void toggleLineHighlight(Visualization::Item* item, bool highlight);
 
-		ValueHandler defaultValueHandlerFor(QList<OOModel::VariableDeclaration*> variableDeclarations);
+		QPair<PlotOverlay::PlotType, ValueHandler> defaultPlotTypeAndValueHandlerFor
+			(QList<OOModel::VariableDeclaration*> variableDeclarations);
 		void handleSingleValue(Values values, QStringList args, Model::Node* target);
 		void handleMultipleValues(Values values, QStringList args, Model::Node* target);
 		void handleArray(Values values, QStringList args, Model::Node* target);
