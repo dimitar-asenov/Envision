@@ -81,19 +81,19 @@ bool DebugConnector::resume()
 	return false;
 }
 
-QString DebugConnector::getFileName(qint64 referenceId)
+QString DebugConnector::fileNameForReference(qint64 referenceId)
 {
 	auto reply = makeReply<SourceFile>(sendCommand(SourceFileCommand(referenceId)));
 	return reply.sourceFile();
 }
 
-QString DebugConnector::getSignature(qint64 referenceId)
+QString DebugConnector::signatureOf(qint64 referenceId)
 {
 	auto reply = makeReply<Signature>(sendCommand(SignatureCommand(referenceId)));
 	return reply.signature();
 }
 
-qint64 DebugConnector::getClassId(const QString& signature)
+qint64 DebugConnector::classIdOf(const QString& signature)
 {
 	auto classesBySignature = makeReply<ClassesBySignature>(sendCommand(ClassesBySignatureCommand(signature)));
 	if (classesBySignature.classes().size() < 1)
@@ -104,7 +104,7 @@ qint64 DebugConnector::getClassId(const QString& signature)
 	return classesBySignature.classes()[0].typeID();
 }
 
-qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
+qint64 DebugConnector::methodIdOf(qint64 classId, const QString& signature)
 {
 	auto methods = makeReply<Methods>(sendCommand(MethodsCommand(classId)));
 	for (auto method : methods.methods())
@@ -115,51 +115,51 @@ qint64 DebugConnector::getMethodId(qint64 classId, const QString& signature)
 	return NO_RESULT;
 }
 
-LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
+LineTable DebugConnector::lineTable(qint64 classId, qint64 methodId)
 {
 	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
 }
 
-QList<qint64> DebugConnector::getAllThreadIds()
+QList<qint64> DebugConnector::allThreadIds()
 {
 	auto reply = makeReply<AllThreads>(sendCommand(AllThreadsCommand()));
 	return reply.threadIds();
 }
 
-QString DebugConnector::getThreadName(qint64 threadId)
+QString DebugConnector::threadName(qint64 threadId)
 {
 	auto reply = makeReply<ThreadName>(sendCommand(ThreadNameCommand(threadId)));
 	return reply.threadName();
 }
 
-Frames DebugConnector::getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame)
+Frames DebugConnector::frames(qint64 threadId, qint32 numFrames, qint32 startFrame)
 {
 	return makeReply<Frames>(sendCommand(FramesCommand(threadId, startFrame, numFrames)));
 }
 
-VariableTable DebugConnector::getVariableTable(qint64 classId, qint64 methodId)
+VariableTable DebugConnector::variableTableForMethod(qint64 classId, qint64 methodId)
 {
 	return makeReply<VariableTable>(sendCommand(VariableTableCommand(classId, methodId)));
 }
 
-Values DebugConnector::getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
+Values DebugConnector::values(qint64 threadId, qint64 frameId, QList<StackVariable> variables)
 {
 	return makeReply<Values>(sendCommand(GetValuesCommand(threadId, frameId, variables)));
 }
 
-QString DebugConnector::getString(qint64 stringId)
+QString DebugConnector::stringFromId(qint64 stringId)
 {
 	auto reply = makeReply<StringValue>(sendCommand(StringValueCommand(stringId)));
 	return reply.stringValue();
 }
 
-int DebugConnector::getArrayLength(qint64 arrayId)
+int DebugConnector::arrayLength(qint64 arrayId)
 {
 	auto r = makeReply<Length>(sendCommand(LengthCommand(arrayId)));
 	return r.arrayLength();
 }
 
-ArrayValues DebugConnector::getArrayValues(qint64 arrayId, qint32 firstIndex, qint32 length)
+ArrayValues DebugConnector::arrayValues(qint64 arrayId, qint32 firstIndex, qint32 length)
 {
 	return makeReply<ArrayValues>(sendCommand(GetArrayValuesCommand(arrayId, firstIndex, length)));
 }

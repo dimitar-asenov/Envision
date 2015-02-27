@@ -66,21 +66,21 @@ class OODEBUG_API DebugConnector : public QObject
 		bool suspend();
 		bool resume();
 
-		QString getFileName(qint64 referenceId);
-		QString getSignature(qint64 referenceId);
-		qint64 getClassId(const QString& signature);
-		qint64 getMethodId(qint64 classId, const QString& signature);
-		LineTable getLineTable(qint64 classId, qint64 methodId);
+		QString fileNameForReference(qint64 referenceId);
+		QString signatureOf(qint64 referenceId);
+		qint64 classIdOf(const QString& signature);
+		qint64 methodIdOf(qint64 classId, const QString& signature);
+		LineTable lineTable(qint64 classId, qint64 methodId);
 
-		QList<qint64> getAllThreadIds();
-		QString getThreadName(qint64 threadId);
+		QList<qint64> allThreadIds();
+		QString threadName(qint64 threadId);
 
-		Frames getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
-		VariableTable getVariableTable(qint64 classId, qint64 methodId);
-		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
-		QString getString(qint64 stringId);
-		int getArrayLength(qint64 arrayId);
-		ArrayValues getArrayValues(qint64 arrayId, qint32 firstIndex, qint32 length);
+		Frames frames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
+		VariableTable variableTableForMethod(qint64 classId, qint64 methodId);
+		Values values(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
+		QString stringFromId(qint64 stringId);
+		int arrayLength(qint64 arrayId);
+		ArrayValues arrayValues(qint64 arrayId, qint32 firstIndex, qint32 length);
 
 		bool breakAtClassLoad(QString className);
 

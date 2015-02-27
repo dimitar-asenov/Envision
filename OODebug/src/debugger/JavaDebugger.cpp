@@ -333,7 +333,7 @@ QString JavaDebugger::fullNameFor(OOModel::Class* theClass, QChar delimiter)
 bool JavaDebugger::isParentClassLoaded(Model::Node* node)
 {
 	auto containerClass = node->firstAncestorOfType<OOModel::Class>();
-	qint64 id = debugConnector_.getClassId(jvmSignatureFor(containerClass));
+	qint64 id = debugConnector_.classIdOf(jvmSignatureFor(containerClass));
 	return id != DebugConnector::NO_RESULT;
 }
 
@@ -351,14 +351,14 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 {
 	auto method = node->firstAncestorOfType<OOModel::Method>();
 	auto containerClass = method->firstAncestorOfType<OOModel::Class>();
-	qint64 classId =  debugConnector_.getClassId(jvmSignatureFor(containerClass));
+	qint64 classId =  debugConnector_.classIdOf(jvmSignatureFor(containerClass));
 	Q_ASSERT(classId != debugConnector_.NO_RESULT);
 	QString methodName = method->name();
 	if (method->methodKind() == OOModel::Method::MethodKind::Constructor)
 		methodName = "<init>";
 	// TODO: function to get signature of a method: for Java classes we would need the full java library.
 	// Once fixed also fix the implementation of getMethodId().
-	qint64 methodId = debugConnector_.getMethodId(classId, methodName);
+	qint64 methodId = debugConnector_.methodIdOf(classId, methodName);
 	Q_ASSERT(methodId != debugConnector_.NO_RESULT);
 
 	auto tagKind = Protocol::TypeTagKind::CLASS;
@@ -375,7 +375,7 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 	// http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_Method_VariableTable
 	static constexpr qint64 NO_INDEX = -2;
 	qint64 methodIndex = NO_INDEX;
-	auto lineTable = debugConnector_.getLineTable(classId, methodId);
+	auto lineTable = debugConnector_.lineTable(classId, methodId);
 	for (auto val : lineTable.mappings())
 		if (line == val.lineNumber()) methodIndex = val.lineCodeIndex();
 
@@ -385,12 +385,12 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 
 Model::Node* JavaDebugger::locationToNode(Location location)
 {
-	QString signature = debugConnector_.getSignature(location.classId());
+	QString signature = debugConnector_.signatureOf(location.classId());
 	signature = signature.mid(1, signature.size() - 2); // remove symbol at start and ; at end.
 	QString fileName = QString("src/%1.java").arg(signature);
 
 	int line = -1;
-	auto lineTable = debugConnector_.getLineTable(location.classId(), location.methodId());
+	auto lineTable = debugConnector_.lineTable(location.classId(), location.methodId());
 	for (auto val : lineTable.mappings())
 	{
 		if (location.methodIndex() <= val.lineCodeIndex())
@@ -478,9 +478,9 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 	if (observersIt != nodeObservedBy_.end())
 	{
 		// Get frames
-		auto frames = debugConnector_.getFrames(breakpointEvent.thread(), 1);
+		auto frames = debugConnector_.frames(breakpointEvent.thread(), 1);
 		auto location = breakpointEvent.location();
-		auto variableTable = debugConnector_.getVariableTable(location.classId(), location.methodId());
+		auto variableTable = debugConnector_.variableTableForMethod(location.classId(), location.methodId());
 		if (frames.frames().size() == 0)
 		{
 			qDebug() << "No frames received, error:" << static_cast<qint8>(frames.error());
@@ -508,7 +508,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 					}
 				}
 			}
-			auto values = debugConnector_.getValues(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
+			auto values = debugConnector_.values(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
 			Q_ASSERT(observer.handlerFunc_);
 			observer.handlerFunc_(this, values, observer.handlerArguments_, observer.observerLocation_);
 		}
@@ -704,8 +704,8 @@ void JavaDebugger::handleMultipleValues(Values values, QStringList, Model::Node*
 void JavaDebugger::handleArray(Values values, QStringList, Model::Node* target)
 {
 	auto vals = values.values();
-	int arrayLen = debugConnector_.getArrayLength(vals[0].array());
-	auto arrayVals = debugConnector_.getArrayValues(vals[0].array(), 0, arrayLen).ints();
+	int arrayLen = debugConnector_.arrayLength(vals[0].array());
+	auto arrayVals = debugConnector_.arrayValues(vals[0].array(), 0, arrayLen).ints();
 	plotOverlayOfNode(target)->updateArrayValues(arrayVals);
 }
 
