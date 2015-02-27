@@ -124,9 +124,7 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 		auto node = target->node();
 		if (auto overlay = target->overlay<Visualization::IconOverlay>(BREAKPOINT_OVERLAY_GROUP))
 		{
-			if (currentLineItem_ == target) currentLineItem_ = nullptr;
 			target->scene()->removeOverlay(overlay);
-
 			removeBreakpointAt(node);
 		}
 		else
