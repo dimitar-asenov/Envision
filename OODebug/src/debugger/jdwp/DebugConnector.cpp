@@ -119,6 +119,18 @@ LineTable DebugConnector::getLineTable(qint64 classId, qint64 methodId)
 	return makeReply<LineTable>(sendCommand(LineTableCommand(classId, methodId)));
 }
 
+QList<qint64> DebugConnector::getAllThreadIds()
+{
+	auto reply = makeReply<AllThreads>(sendCommand(AllThreadsCommand()));
+	return reply.threadIds();
+}
+
+QString DebugConnector::getThreadName(qint64 threadId)
+{
+	auto reply = makeReply<ThreadName>(sendCommand(ThreadNameCommand(threadId)));
+	return reply.threadName();
+}
+
 Frames DebugConnector::getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame)
 {
 	return makeReply<Frames>(sendCommand(FramesCommand(threadId, startFrame, numFrames)));

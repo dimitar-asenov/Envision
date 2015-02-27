@@ -72,6 +72,9 @@ class OODEBUG_API DebugConnector : public QObject
 		qint64 getMethodId(qint64 classId, const QString& signature);
 		LineTable getLineTable(qint64 classId, qint64 methodId);
 
+		QList<qint64> getAllThreadIds();
+		QString getThreadName(qint64 threadId);
+
 		Frames getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
 		VariableTable getVariableTable(qint64 classId, qint64 methodId);
 		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);

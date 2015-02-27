@@ -43,6 +43,13 @@ ClassesBySignatureCommand::~ClassesBySignatureCommand() {}
 ClassBySignature::~ClassBySignature() {}
 ClassesBySignature::~ClassesBySignature() {}
 
+AllThreadsCommand::AllThreadsCommand()
+: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::AllThreads)
+{}
+
+AllThreadsCommand::~AllThreadsCommand() {}
+AllThreads::~AllThreads() {}
+
 IDSizeCommand::IDSizeCommand()
 	: Command(Protocol::CommandSet::VirtualMachine, Protocol::VirtualMachineCommands::IDSizes)
 {}
