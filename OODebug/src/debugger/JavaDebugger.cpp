@@ -743,8 +743,16 @@ void JavaDebugger::handleArray(Values values, QStringList, Model::Node* target)
 {
 	auto vals = values.values();
 	int arrayLen = debugConnector_.arrayLength(vals[0].array());
-	auto arrayVals = debugConnector_.arrayValues(vals[0].array(), 0, arrayLen).ints();
-	plotOverlayOfNode(target)->updateArrayValues(arrayVals);
+	auto arrayVals = debugConnector_.arrayValues(vals[0].array(), 0, arrayLen);
+	switch (arrayVals.type())
+	{
+		case Protocol::Tag::FLOAT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.floats());
+		case Protocol::Tag::DOUBLE: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.doubles());
+		case Protocol::Tag::INT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.ints());
+		case Protocol::Tag::LONG: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.longs());
+		case Protocol::Tag::SHORT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.shorts());
+		default: Q_ASSERT(false); // you shouldn't try to convert any non numeric values to double.
+	}
 }
 
 double JavaDebugger::doubleFromValue(Value v)
