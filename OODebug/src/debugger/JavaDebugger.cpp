@@ -48,6 +48,7 @@
 #include "OOModel/src/types/PrimitiveType.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 #include "OOModel/src/statements/DeclarationStatement.h"
+#include "OOModel/src/statements/LoopStatement.h"
 #include "OOModel/src/elements/StatementItemList.h"
 
 #include "OOVisualization/src/elements/VStatementItemList.h"
@@ -648,18 +649,24 @@ OOModel::VariableDeclaration* JavaDebugger::variableDeclarationFromStatement(OOM
 																									 QString variableName)
 {
 	OOModel::VariableDeclaration* variableDeclaration = nullptr;
+	OOModel::VariableDeclarationExpression* varDeclarationExpr = nullptr;
 	if (auto exprStmt = DCast<OOModel::ExpressionStatement>(statement))
 	{
-		if (auto varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression()))
-		{
-			auto decl = varDeclarationExpr->decl();
-			if (decl && (variableName.isEmpty() || decl->name() == variableName))
-				variableDeclaration = decl;
-		}
+		varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression());
 	}
 	else if (auto declStmt = DCast<OOModel::DeclarationStatement>(statement))
 	{
 		auto decl = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
+		if (decl && (variableName.isEmpty() || decl->name() == variableName))
+			variableDeclaration = decl;
+	}
+	else if (auto loopStmt = DCast<OOModel::LoopStatement>(statement))
+	{
+		varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(loopStmt->initStep());
+	}
+	if (!variableDeclaration && varDeclarationExpr)
+	{
+		auto decl = varDeclarationExpr->decl();
 		if (decl && (variableName.isEmpty() || decl->name() == variableName))
 			variableDeclaration = decl;
 	}
