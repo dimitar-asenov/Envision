@@ -197,29 +197,28 @@ void PlotOverlay::plotScatter(QPainter* painter)
 
 void OODebug::PlotOverlay::plotArray(QPainter* painter)
 {
-	double fieldSize = valueRange(0);
-	if (xValues_.size())
+	double fieldSize = plotRegion_.width();
+	if (yValues_.size())
 	{
-		plotRegion_.setHeight(plotRegion_.width() / fieldSize);
-		fieldSize /= xValues_.size();
+		plotRegion_.setHeight(plotRegion_.width() / yValues_.size());
+		fieldSize /= yValues_.size();
+
+		// first draw the array box:
+		painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.bottomRight()); // bottom line
+		painter->drawLine(plotRegion_.topLeft(), plotRegion_.topRight()); // top line
+		painter->drawLine(plotRegion_.bottomRight(), plotRegion_.topRight()); // right border
 	}
-	// first draw the array box:
-	painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.bottomRight()); // bottom line
-	painter->drawLine(plotRegion_.topLeft(), plotRegion_.topRight()); // top line
-	painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.topLeft()); // left border
-	painter->drawLine(plotRegion_.bottomRight(), plotRegion_.topRight()); // right border
 	// draw the separators
-	for (int i = 0; i < xValues_.size(); ++i)
+	double plotY = plotRegion_.bottomLeft().y();
+	for (int i = 0; i < yValues_.size(); ++i)
 	{
-		QPointF pos = {i * fieldSize, 0};
-		pos = toPlotCoordinates(pos);
-		painter->drawLine(pos, {pos.x(), pos.y() - plotRegion_.height()});
+		QPointF pos = {plotRegion_.x() + i * fieldSize, plotY};
+		painter->drawLine(QPointF(pos.x(), pos.y()), {pos.x(), pos.y() - plotRegion_.height()});
 
 		auto fontMetrics = painter->fontMetrics();
 		int fontHeight = fontMetrics.height();
 
-		QPointF xOff = toPlotCoordinates({(i+1)*fieldSize, 0});
-		QPointF textPos = {pos.x() + (xOff.x() - pos.x()) / 3, pos.y() - plotRegion_.height() / 2 + fontHeight / 3.0};
+		QPointF textPos = {pos.x() + fieldSize / 3, pos.y() - plotRegion_.height() / 2 + fontHeight / 3.0};
 		painter->drawText(textPos, QString("%1").arg(yValues_[i]));
 	}
 }
