@@ -238,30 +238,27 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	Q_ASSERT(vItem);
 	auto observedNode = vItem->node();
 
-	QString xName = arguments[0];
-	if (xName == "-")
+	if (arguments[0] == "-")
 	{
 		removeObserverOverlaysAt(observedNode, vItem);
 		removeBreakpointAt(observedNode);
 		return;
 	}
-	QString yName{};
-	if (arguments.size() > 1) yName = arguments[1];
 
-	OOModel::VariableDeclaration* xDeclaration = nullptr;
-	OOModel::VariableDeclaration* yDeclaration = nullptr;
+	QHash<QString, OOModel::VariableDeclaration*> declarationMap;
 	auto statementList = DCast<OOModel::StatementItemList>(itemList->node());
 	while (statementList)
 	{
 		for (int idx = itemIndex; idx >= 0; --idx)
 		{
-			if (!xDeclaration) xDeclaration = variableDeclarationFromStatement(statementList->at(idx), xName);
-			if (!yDeclaration && !yName.isEmpty())
-				yDeclaration = variableDeclarationFromStatement(statementList->at(idx), yName);
+			for (auto varName : arguments)
+				if (!declarationMap.contains(varName))
+					if (auto decl = variableDeclarationFromStatement(statementList->at(idx), varName))
+						 declarationMap[varName] = decl;
 		}
 		auto itemInParentList = statementList->firstAncestorOfType<OOModel::StatementItem>();
 		statementList = nullptr; // we finished with this list
-		if (itemInParentList && (!xDeclaration || (!yName.isEmpty() && !yDeclaration)))
+		if (itemInParentList && declarationMap.size() < arguments.size())
 		{
 			// search in parent lists
 			statementList = itemInParentList->firstAncestorOfType<OOModel::StatementItemList>();
@@ -273,11 +270,16 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 			}
 		}
 	}
-	Q_ASSERT(xDeclaration);
-	Q_ASSERT(xDeclaration->name() == xName);
+	if (declarationMap.size() < arguments.size())
+	{
+		// Here we should probably notify the user
+		qDebug() << "Not all declrations found for probe: " << arguments;
+		return;
+	}
 
-	QList<OOModel::VariableDeclaration*> vars{xDeclaration};
-	if (yDeclaration) vars << yDeclaration;
+	QList<OOModel::VariableDeclaration*> vars;
+	for (auto varName : arguments) vars << declarationMap[varName];
+
 	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
 	auto observer = std::make_shared<VariableObserver>
 			(VariableObserver(defaultTypeAndHandler.second, vars, observedNode));
