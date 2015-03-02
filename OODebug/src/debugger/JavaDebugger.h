@@ -84,9 +84,11 @@ class OODEBUG_API JavaDebugger
 
 		void probe(OOVisualization::VStatementItemList* itemList, const QStringList& arguments, int itemIndex);
 
-		using ValueHandler = std::function<void(JavaDebugger*, Values, QStringList, Model::Node*)>;
+		using ValueCalculator = std::function<double(QList<double>)>;
+		using ValueHandler = std::function<void(JavaDebugger*, Values, QList<ValueCalculator>, Model::Node*)>;
 
 	private:
+		using ValueOperator = std::function<double(double, double)>;
 		JavaDebugger();
 		void addBreakpointOverlay(Visualization::Item* target);
 		QString jvmSignatureFor(OOModel::Class* theClass);
@@ -118,9 +120,10 @@ class OODEBUG_API JavaDebugger
 
 		QPair<PlotOverlay::PlotType, ValueHandler> defaultPlotTypeAndValueHandlerFor
 			(QList<OOModel::VariableDeclaration*> variableDeclarations);
-		void handleSingleValue(Values values, QStringList args, Model::Node* target);
-		void handleMultipleValues(Values values, QStringList args, Model::Node* target);
-		void handleArray(Values values, QStringList args, Model::Node* target);
+		QPair<QList<ValueCalculator>, QStringList> parseProbeArguments(QStringList arguments);
+		ValueOperator operatorFromString(QString operatorString);
+		void handleValues(Values values, QList<ValueCalculator> valueCalculators, Model::Node* target);
+		void handleArray(Values values, QList<ValueCalculator> valueCalculators, Model::Node* target);
 		double doubleFromValue(Value v);
 		PlotOverlay* plotOverlayOfNode(Model::Node* node);
 

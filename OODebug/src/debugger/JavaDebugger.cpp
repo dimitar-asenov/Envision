@@ -63,9 +63,9 @@ namespace OODebug {
 struct VariableObserver {
 		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
 							  QList<OOModel::VariableDeclaration*> observedVariables, Model::Node* observerLocation,
-							  QStringList handlerArguments = {})
+							  QList<JavaDebugger::ValueCalculator> valueCalculators = {})
 			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
-			  observerLocation_{observerLocation}, handlerArguments_{handlerArguments}{}
+			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators}{}
 
 		// The function which handles new value(s).
 		JavaDebugger::ValueHandler handlerFunc_;
@@ -73,8 +73,8 @@ struct VariableObserver {
 		QList<OOModel::VariableDeclaration*> observedVariables_;
 		// The location of the observer, this might be useful if it has an attached overlay.
 		Model::Node* observerLocation_;
-		// Arguments which will be passes to the handler function
-		QStringList handlerArguments_;
+		// Value calculator functions
+		QList<JavaDebugger::ValueCalculator> valueCalculators_;
 };
 
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
@@ -245,20 +245,23 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 		return;
 	}
 
+	auto parsedArgs = parseProbeArguments(arguments);
+	QStringList variableNames = parsedArgs.second;
+
 	QHash<QString, OOModel::VariableDeclaration*> declarationMap;
 	auto statementList = DCast<OOModel::StatementItemList>(itemList->node());
 	while (statementList)
 	{
 		for (int idx = itemIndex; idx >= 0; --idx)
 		{
-			for (auto varName : arguments)
+			for (auto varName : variableNames)
 				if (!declarationMap.contains(varName))
 					if (auto decl = variableDeclarationFromStatement(statementList->at(idx), varName))
 						 declarationMap[varName] = decl;
 		}
 		auto itemInParentList = statementList->firstAncestorOfType<OOModel::StatementItem>();
 		statementList = nullptr; // we finished with this list
-		if (itemInParentList && declarationMap.size() < arguments.size())
+		if (itemInParentList && declarationMap.size() < variableNames.size())
 		{
 			// search in parent lists
 			statementList = itemInParentList->firstAncestorOfType<OOModel::StatementItemList>();
@@ -270,19 +273,19 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 			}
 		}
 	}
-	if (declarationMap.size() < arguments.size())
+	if (declarationMap.size() < variableNames.size())
 	{
 		// Here we should probably notify the user
-		qDebug() << "Not all declrations found for probe: " << arguments;
+		qDebug() << "Not all declarations found for probe: " << arguments;
 		return;
 	}
 
 	QList<OOModel::VariableDeclaration*> vars;
-	for (auto varName : arguments) vars << declarationMap[varName];
+	for (auto varName : variableNames) vars << declarationMap[varName];
 
 	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
 	auto observer = std::make_shared<VariableObserver>
-			(VariableObserver(defaultTypeAndHandler.second, vars, observedNode));
+			(VariableObserver(defaultTypeAndHandler.second, vars, observedNode, parsedArgs.first));
 	nodeObservedBy_.insertMulti(observedNode, observer);
 	unsetBreakpoints_ << observedNode;
 
@@ -528,7 +531,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 			}
 			auto values = debugConnector_.values(breakpointEvent.thread(), currentFrame.frameID(), varsToGet);
 			Q_ASSERT(observer->handlerFunc_);
-			observer->handlerFunc_(this, values, observer->handlerArguments_, observer->observerLocation_);
+			observer->handlerFunc_(this, values, observer->valueCalculators_, observer->observerLocation_);
 		}
 	}
 	auto visualization = *Visualization::Item::nodeItemsMap().find(*it);
@@ -717,9 +720,9 @@ QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPl
 		if (allPrimitive)
 		{
 			if (variableDeclarations.size() > 1)
-				return {PlotOverlay::PlotType::Scatter, &JavaDebugger::handleMultipleValues};
+				return {PlotOverlay::PlotType::Scatter, &JavaDebugger::handleValues};
 			else
-				return {PlotOverlay::PlotType::Bars, &JavaDebugger::handleSingleValue};
+				return {PlotOverlay::PlotType::Bars, &JavaDebugger::handleValues};
 		}
 	}
 	else if (hasArrayType(variableDeclarations[0]))
@@ -730,18 +733,94 @@ QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPl
 	Q_ASSERT(false); // We should implement something for this combination
 }
 
-void JavaDebugger::handleSingleValue(Values values, QStringList, Model::Node* target)
+QPair<QList<JavaDebugger::ValueCalculator>, QStringList> JavaDebugger::parseProbeArguments(QStringList arguments)
 {
-	plotOverlayOfNode(target)->addValue(doubleFromValue(values.values()[0]));
+
+	static const QRegularExpression NUMBER_REGEX{"^(\\d+)$"};
+	static const QRegularExpression OPERATOR_REGEX{"^([+\\-*/]?)$"};
+
+	QList<ValueCalculator> calculators;
+	QStringList variableNames;
+	for (int i = 0; i < arguments.size(); ++i)
+	{
+		QString arg = arguments[i];
+		if (!OPERATOR_REGEX.match(arg).hasMatch())
+		{
+			bool isNumber = NUMBER_REGEX.match(arg).hasMatch();
+			double value = 0;
+			if (isNumber) value = arg.toDouble();
+			int index = variableNames.indexOf(arg);
+			if (!isNumber && -1 == index)
+			{
+				index = variableNames.size();
+				variableNames << arg;
+			}
+			// lookahead
+			if (i + 1 < arguments.size() && OPERATOR_REGEX.match(arguments[i+1]).hasMatch())
+			{
+				// TODO: If after a operator we do not have anything we just fail here:
+				if (i + 2 >= arguments.size()) Q_ASSERT(false);
+
+				auto opFunc = operatorFromString(arguments[i+1]);
+
+				bool isNumber2 = NUMBER_REGEX.match(arguments[i+2]).hasMatch();
+				double value2 = 0;
+				if (isNumber2) value2 = arguments[i+2].toDouble();
+				int index2 = variableNames.indexOf(arguments[i+2]);
+				if (!isNumber2 && -1 == index2)
+				{
+					index2 = variableNames.size();
+					variableNames << arguments[i+2];
+				}
+				if (isNumber && isNumber2)
+					calculators << [value, value2, opFunc](QList<double>)
+						{return opFunc(value, value2);};
+				else if (isNumber)
+					calculators <<  [value, index2, opFunc](QList<double> values)
+						{return opFunc(value, values[index2]);};
+				else if (isNumber2)
+					calculators <<  [index, value2, opFunc](QList<double> values)
+						{return opFunc(values[index], value2);};
+				else
+					calculators << [index, index2, opFunc](QList<double> values)
+						{return opFunc(values[index], values[index2]);};
+				i += 2;
+			}
+			else
+			{
+				// only single argument
+				if (isNumber)
+					calculators << [value](QList<double>) { return value; };
+				else
+					calculators << ([index](QList<double> values) { return values[index];});
+			}
+		}
+	}
+	return {calculators, variableNames};
 }
 
-void JavaDebugger::handleMultipleValues(Values values, QStringList, Model::Node* target)
+JavaDebugger::ValueOperator JavaDebugger::operatorFromString(QString operatorString)
 {
-	auto vals = values.values();
-	plotOverlayOfNode(target)->addValue(doubleFromValue(vals[0]), doubleFromValue(vals[1]));
+	if (operatorString == "+") return [](double a, double b) { return a + b; };
+	else if (operatorString == "-") return [](double a, double b) { return a - b; };
+	else if (operatorString == "*") return [](double a, double b) { return a * b; };
+	else if (operatorString == "/") return [](double a, double b) { return a / b; };
+	Q_ASSERT(false);
 }
 
-void JavaDebugger::handleArray(Values values, QStringList, Model::Node* target)
+void JavaDebugger::handleValues(Values values, QList<ValueCalculator> valueCalculators, Model::Node* target)
+{
+	QList<double> doubleValues;
+	for (auto val : values.values()) doubleValues << doubleFromValue(val);
+	QList<double> plotValues;
+	for (auto extractor : valueCalculators) plotValues << extractor(doubleValues);
+	if (plotValues.size() > 1)
+		plotOverlayOfNode(target)->addValue(plotValues[0], plotValues[1]);
+	else if (plotValues.size() == 1)
+		plotOverlayOfNode(target)->addValue(plotValues[0]);
+}
+
+void JavaDebugger::handleArray(Values values, QList<ValueCalculator>, Model::Node* target)
 {
 	auto vals = values.values();
 	int arrayLen = debugConnector_.arrayLength(vals[0].array());
