@@ -68,6 +68,8 @@ class JavaDebugger;
 
 struct VariableObserver;
 
+struct EnvisionVariable;
+
 class OODEBUG_API JavaDebugger
 {
 	public:
@@ -119,7 +121,7 @@ class OODEBUG_API JavaDebugger
 		void toggleLineHighlight(Visualization::Item* item, bool highlight, bool closingBracket = false);
 
 		QPair<PlotOverlay::PlotType, ValueHandler> defaultPlotTypeAndValueHandlerFor
-			(QList<OOModel::VariableDeclaration*> variableDeclarations);
+			(QList<EnvisionVariable> variableInfos);
 		QPair<QList<ValueCalculator>, QStringList> parseProbeArguments(QStringList arguments);
 		ValueOperator operatorFromString(QString operatorString);
 		void handleValues(Values values, QList<ValueCalculator> valueCalculators, Model::Node* target);
@@ -127,8 +129,7 @@ class OODEBUG_API JavaDebugger
 		double doubleFromValue(Value v);
 		PlotOverlay* plotOverlayOfNode(Model::Node* node);
 
-		bool hasPrimitiveValueType(OOModel::VariableDeclaration* decl);
-		bool hasArrayType(OOModel::VariableDeclaration* decl);
+		bool hasPrimitiveValueType(Protocol::Tag tag);
 
 		void removeObserverOverlaysAt(Model::Node* node, Visualization::Item* nodeVisualization);
 

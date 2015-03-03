@@ -60,17 +60,25 @@
 
 namespace OODebug {
 
+// This mainly exists because arguments (unlike fields) are orthogonal to variable declarations in Envision.
+struct EnvisionVariable {
+		EnvisionVariable() = default;
+		EnvisionVariable(QString name, Protocol::Tag typeTag) : name_{name}, typeTag_{typeTag} {}
+		QString name_;
+		Protocol::Tag typeTag_;
+};
+
 struct VariableObserver {
 		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
-							  QList<OOModel::VariableDeclaration*> observedVariables, Model::Node* observerLocation,
+							  QList<EnvisionVariable> observedVariables, Model::Node* observerLocation,
 							  QList<JavaDebugger::ValueCalculator> valueCalculators = {})
 			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
-			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators}{}
+			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators} {}
 
 		// The function which handles new value(s).
 		JavaDebugger::ValueHandler handlerFunc_;
 		// The declarations of the variables we are observing.
-		QList<OOModel::VariableDeclaration*> observedVariables_;
+		QList<EnvisionVariable> observedVariables_;
 		// The location of the observer, this might be useful if it has an attached overlay.
 		Model::Node* observerLocation_;
 		// Value calculator functions
@@ -203,11 +211,13 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
 
-		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({variableDeclaration});
+		EnvisionVariable observedVar(variableDeclaration->name(),
+											  typeExpressionToTag(variableDeclaration->typeExpression()));
+		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({observedVar});
 		auto overlay = new PlotOverlay(target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first);
 		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 		auto observer = std::make_shared<VariableObserver>
-				(VariableObserver(defaultTypeAndHandler.second, {variableDeclaration}, node));
+				(VariableObserver(defaultTypeAndHandler.second, {observedVar}, node));
 		nodeObservedBy_.insertMulti(node, observer);
 		for (auto ref : refFinder.references())
 		{
@@ -248,7 +258,7 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	auto parsedArgs = parseProbeArguments(arguments);
 	QStringList variableNames = parsedArgs.second;
 
-	QHash<QString, OOModel::VariableDeclaration*> declarationMap;
+	QHash<QString, EnvisionVariable> declarationMap;
 	auto statementList = DCast<OOModel::StatementItemList>(itemList->node());
 	while (statementList)
 	{
@@ -257,7 +267,7 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 			for (auto varName : variableNames)
 				if (!declarationMap.contains(varName))
 					if (auto decl = variableDeclarationFromStatement(statementList->at(idx), varName))
-						 declarationMap[varName] = decl;
+						 declarationMap[varName] = {decl->name(), typeExpressionToTag(decl->typeExpression())};
 		}
 		auto itemInParentList = statementList->firstAncestorOfType<OOModel::StatementItem>();
 		statementList = nullptr; // we finished with this list
@@ -275,12 +285,22 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	}
 	if (declarationMap.size() < variableNames.size())
 	{
+		// Try to look in the method arguments for the variable
+		auto method = observedNode->firstAncestorOfType<OOModel::Method>();
+		for (auto arg : *method->arguments())
+			for (auto varName : variableNames)
+				if (!declarationMap.contains(varName) && arg->name() == varName)
+					declarationMap[varName] = {arg->name(), typeExpressionToTag(arg->typeExpression())};
+	}
+
+	if (declarationMap.size() < variableNames.size())
+	{
 		// Here we should probably notify the user
 		qDebug() << "Not all declarations found for probe: " << arguments;
 		return;
 	}
 
-	QList<OOModel::VariableDeclaration*> vars;
+	QList<EnvisionVariable> vars;
 	for (auto varName : variableNames) vars << declarationMap[varName];
 
 	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
@@ -517,18 +537,17 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 		for (auto observer : nodeObservedBy_.values(*it))
 		{
 			QList<StackVariable> varsToGet;
-			for (auto variableDecl : observer->observedVariables_)
+			for (auto variable : observer->observedVariables_)
 			{
 				for (auto variableDetails : variableTable.variables())
 				{
-					if (variableDetails.name() == variableDecl->name())
+					if (variableDetails.name() == variable.name_)
 					{
 						// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
 						//                    #JDWP_Method_VariableTable
 						Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
 									currentIndex < variableDetails.codeIndex() + variableDetails.length());
-						varsToGet << StackVariable(variableDetails.slot(),
-															typeExpressionToTag(variableDecl->typeExpression()));
+						varsToGet << StackVariable(variableDetails.slot(), variable.typeTag_);
 					}
 				}
 			}
@@ -711,24 +730,24 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 }
 
 QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPlotTypeAndValueHandlerFor(
-		QList<OOModel::VariableDeclaration*> variableDeclarations)
+		QList<EnvisionVariable> variableInfos)
 {
-	Q_ASSERT(!variableDeclarations.empty());
+	Q_ASSERT(!variableInfos.empty());
 
-	if (hasPrimitiveValueType(variableDeclarations[0]))
+	if (hasPrimitiveValueType(variableInfos[0].typeTag_))
 	{
 		bool allPrimitive = true;
-		for (auto decl : variableDeclarations)
-			if (!hasPrimitiveValueType(decl)) allPrimitive = false;
+		for (auto varInfo : variableInfos)
+			if (!hasPrimitiveValueType(varInfo.typeTag_)) allPrimitive = false;
 		if (allPrimitive)
 		{
-			if (variableDeclarations.size() > 1)
+			if (variableInfos.size() > 1)
 				return {PlotOverlay::PlotType::Scatter, &JavaDebugger::handleValues};
 			else
 				return {PlotOverlay::PlotType::Bars, &JavaDebugger::handleValues};
 		}
 	}
-	else if (hasArrayType(variableDeclarations[0]))
+	else if (variableInfos[0].typeTag_ == Protocol::Tag::ARRAY)
 	{
 		return {PlotOverlay::PlotType::Array, &JavaDebugger::handleArray};
 	}
@@ -863,33 +882,17 @@ PlotOverlay* JavaDebugger::plotOverlayOfNode(Model::Node* node)
 	return overlay;
 }
 
-bool JavaDebugger::hasPrimitiveValueType(OOModel::VariableDeclaration* decl)
+bool JavaDebugger::hasPrimitiveValueType(Protocol::Tag tag)
 {
-	if (auto typeExpression = DCast<OOModel::TypeExpression>(decl->typeExpression()))
+	switch (tag)
 	{
-		if (auto primitiveType = DCast<OOModel::PrimitiveTypeExpression>(typeExpression))
-		{
-			switch (primitiveType->typeValue())
-			{
-				case OOModel::PrimitiveType::INT: return true;
-				case OOModel::PrimitiveType::LONG: return true;
-				case OOModel::PrimitiveType::UNSIGNED_INT: return true;
-				case OOModel::PrimitiveType::UNSIGNED_LONG: return true;
-				case OOModel::PrimitiveType::FLOAT: return true;
-				case OOModel::PrimitiveType::DOUBLE: return true;
-				case OOModel::PrimitiveType::BOOLEAN: return true;
-				case OOModel::PrimitiveType::CHAR: return true;
-				default: break;
-			}
-		}
+		case Protocol::Tag::INT: return true;
+		case Protocol::Tag::LONG: return true;
+		case Protocol::Tag::FLOAT: return true;
+		case Protocol::Tag::DOUBLE: return true;
+		case Protocol::Tag::SHORT: return true;
+		default: break;
 	}
-	return false;
-}
-
-bool JavaDebugger::hasArrayType(OOModel::VariableDeclaration* decl)
-{
-	if (auto typeExpression = DCast<OOModel::TypeExpression>(decl->typeExpression()))
-		if (DCast<OOModel::ArrayTypeExpression>(typeExpression)) return true;
 	return false;
 }
 
