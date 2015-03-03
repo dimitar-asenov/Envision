@@ -370,7 +370,9 @@ Location JavaDebugger::nodeToLocation(Model::Node* node)
 		Q_ASSERT(false); // This should not happen for a Java project!
 
 	auto locations = exportMap_->locations(node);
-	int line = locations.at(0).span_.startLine_ + 1;
+	int line = locations.at(0).span_.startLine_;
+	for (auto loc : locations) line = std::min(line, loc.span_.startLine_);
+	++line; // Envision is 0 indexed and java 1 indexed
 
 	// get line info for this method.
 	// -2 because -1 is a valid code index for native methods, see:
