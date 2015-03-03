@@ -121,6 +121,28 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		}
 	}
 
+	// Remove all spaces, except for trailing ones
+	// Only do this if quotes are matched. Otherwise we might end up in a situatio  where some spaces inside of
+	// strings are accidentally removed while the expression is being modified.
+	if (!result.empty() && result.last().type() != PartialLiteral)
+	{
+		bool trailing = true;
+		QRegExp space{" +"};
+		for (int i = result.length() - 1; i>=0;)
+		{
+			if (!space.exactMatch(result[i].text()))
+			{
+				trailing = false;
+				--i;
+				continue;
+			}
+
+			// We have a space
+			if (trailing) --i;
+			else result.removeAt(i);
+		}
+	}
+
 	return result;
 }
 

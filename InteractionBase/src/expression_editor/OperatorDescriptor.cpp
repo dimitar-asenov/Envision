@@ -69,15 +69,18 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 
 	auto addNonDelimiter = [this, &preInPostFixTokens] (ExpectedToken::ExpectedType type)
 	{
-		Q_ASSERT(expectedTokens_.isEmpty() || expectedTokens_.last().type == ExpectedToken::FIRST_DELIM
-				  || expectedTokens_.last().type == ExpectedToken::FOLLOWING_DELIM);
 	  expectedTokens_ <<  ExpectedToken(type);
 	  ++num_operands_;
 	  preInPostFixTokens.append( QStringList{} ); // Begin a new infix/postfix
 	};
 
-	for (auto s : signature_)
+	int sigIndex = 0;
+	bool lastDelimiter = true;
+	while (sigIndex < signature_.length())
 	{
+		auto s = signature_[sigIndex];
+
+		bool delimiter = false;
 		if ( s == "id" ) addNonDelimiter(ExpectedToken::ID);
 		else if ( s == "type" ) addNonDelimiter(ExpectedToken::TYPE);
 		else if ( s == "expr" ) addNonDelimiter(ExpectedToken::VALUE);
@@ -94,11 +97,22 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 			else expectedTokens_ << ExpectedToken(ExpectedToken::FOLLOWING_DELIM, s);
 			QStringList& last = preInPostFixTokens.last();
 			last.append(s);
+
+			delimiter = true;
 		}
+
+		if (!lastDelimiter && !delimiter)
+		{
+			//There are two consecutive non-delimiter tokens. Insert an empty signature entry.
+			signature_.insert(sigIndex, "");
+			++sigIndex; // Jump over the signature part that we just inserted.
+		}
+
+		++sigIndex;
+		lastDelimiter = delimiter;
 	}
 	expectedTokens_ << ExpectedToken(ExpectedToken::END);
 
-	Q_ASSERT(num_operands_ == preInPostFixTokens.size() - 1);
 	prefixTokens_ = preInPostFixTokens.takeFirst();
 	if (!preInPostFixTokens.isEmpty()) postfixTokens_ = preInPostFixTokens.takeLast();
 	if (!preInPostFixTokens.isEmpty()) infixesTokens_ = preInPostFixTokens;

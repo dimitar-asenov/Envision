@@ -58,14 +58,13 @@ void VUnfinishedOperator::determineChildren()
 	int delimIndex = 0;
 	int operandIndex = 0;
 	QList<Model::Node*> nodes;
-	bool prefixEmpty = false;
+
 	while (delimIndex < node()->delimiters()->size() || operandIndex < node()->operands()->size())
 	{
 		if (delimIndex == operandIndex)
 		{
 			Model::Text* delim = node()->delimiters()->at(delimIndex);
 			if (!delim->get().isEmpty()) nodes.append(delim);
-			else if (delimIndex == 0) prefixEmpty = true;
 
 			delimIndex++;
 		}
@@ -75,13 +74,18 @@ void VUnfinishedOperator::determineChildren()
 			operandIndex++;
 		}
 	}
+
 	layout()->synchronizeWithNodes(nodes);
-	for (int i = prefixEmpty ? 1 : 0; i < layout()->length(); i+=2 )
+
+	for (int i =  0; i < layout()->length(); ++i )
 	{
-		layout()->at<VText>(i)->setStyle(&style()->delimiters());
-		// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-		// by the expression handler.
-		layout()->at<VText>(i)->setEditable(false);
+		if (auto vText = DCast<VText>(layout()->at<Item>(i)))
+		{
+			vText->setStyle(&style()->delimiters());
+			// We set these to read-only since that will make keyboard events pass though and allow these events to be
+			// handled by the expression handler.
+			vText->setEditable(false);
+		}
 	}
 }
 
