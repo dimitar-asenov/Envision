@@ -32,7 +32,8 @@ namespace OODebug {
 
 ITEM_COMMON_DEFINITIONS(PlotOverlay, "item")
 
-PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* style, PlotType type)
+PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* style,
+								 PlotType type, QStringList variableNames)
 	: Super{{associatedItem}, style}
 {
 	// margins around the plot region:
@@ -45,6 +46,8 @@ PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* s
 	else if (PlotType::Scatter == type) plotFunction_ = &PlotOverlay::plotScatter;
 	else if (PlotType::Array == type) plotFunction_ = &PlotOverlay::plotArray;
 	else Q_ASSERT(false);
+
+	variableNames_ = variableNames;
 }
 
 void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -234,6 +237,9 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 		painter->setFont(newFont);
 		painter->drawText(pos, QString("\uA71B")); // Arrow up unicode
 		painter->setFont(font);
+
+		if (i + 1 < variableNames_.size())
+			painter->drawText(QPointF(pos.x() + fieldSize / 3, pos.y()), variableNames_[i + 1]);
 	}
 }
 

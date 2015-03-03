@@ -40,7 +40,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 	public:
 		enum class PlotType : int {Bars, Scatter, Array};
 		PlotOverlay(Visualization::Item* associatedItem, const StyleType* style = itemStyles().get(),
-						PlotType type = PlotType::Bars);
+						PlotType type = PlotType::Bars, QStringList variableNames = {});
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
 
 		void clear();
@@ -60,6 +60,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		QList<double> yValues_;
 		double xMin_{}, xMax_{};
 		double yMin_{}, yMax_{};
+		QStringList variableNames_;
 
 		QRect plotRegion_;
 
