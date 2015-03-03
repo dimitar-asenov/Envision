@@ -148,10 +148,10 @@ void OODebug::PlotOverlay::drawTics(QPainter* painter)
 	double yStep = valueRange(1) / nTics;
 	for (int i = 0; i <= nTics; ++i)
 	{
-		double xVal = int(xMin_ + i * xStep); // We want int tics, int xVal = .. would cause narrowing warning.
-		drawXTic(painter, toPlotCoordinates({xVal, 0}), QString("%1").arg(xVal));
-		double yVal = int(yMin_ + i * yStep);
-		drawYTic(painter, toPlotCoordinates({0, yVal}), QString("%1").arg(yVal));
+		double xVal = int(xMin_ + i * xStep); // We want int xtics, int xVal = .. would cause narrowing warning.
+		drawXTic(painter, toPlotCoordinates({xVal, 0}), QString::number(xVal));
+		double yVal = yMin_ + i * yStep;
+		drawYTic(painter, toPlotCoordinates({0, yVal}), QString::number(yVal));
 	}
 }
 
@@ -210,16 +210,30 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 	}
 	// draw the separators
 	double plotY = plotRegion_.bottomLeft().y();
+	auto fontMetrics = painter->fontMetrics();
+	int fontHeight = fontMetrics.height();
+
 	for (int i = 0; i < yValues_.size(); ++i)
 	{
 		QPointF pos = {plotRegion_.x() + i * fieldSize, plotY};
 		painter->drawLine(QPointF(pos.x(), pos.y()), {pos.x(), pos.y() - plotRegion_.height()});
 
-		auto fontMetrics = painter->fontMetrics();
-		int fontHeight = fontMetrics.height();
-
 		QPointF textPos = {pos.x() + fieldSize / 3, pos.y() - plotRegion_.height() / 2 + fontHeight / 3.0};
-		painter->drawText(textPos, QString("%1").arg(yValues_[i]));
+		painter->drawText(textPos, QString::number(yValues_[i]));
+	}
+	// draw the pointers
+	const int ARROW_HEIGHT = 30;
+	for (int i = 0; i < xValues_.size(); ++i)
+	{
+		int index = xValues_[i];
+		QPointF pos = {plotRegion_.x() + index * fieldSize, plotY + ARROW_HEIGHT};
+		auto font = painter->font();
+		auto newFont = font;
+		newFont.setPointSize(ARROW_HEIGHT);
+		newFont.setBold(true);
+		painter->setFont(newFont);
+		painter->drawText(pos, QString("\uA71B")); // Arrow up unicode
+		painter->setFont(font);
 	}
 }
 

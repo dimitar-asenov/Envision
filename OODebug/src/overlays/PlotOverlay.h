@@ -49,7 +49,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		void addValue(double xValue, double yValue);
 
 		template <class ValueType>
-		inline void updateArrayValues(const QList<ValueType>& values);
+		inline void updateArrayValues(const QList<ValueType>& values, const QList<int>& indices);
 
 	protected:
 		virtual void determineChildren() override;
@@ -82,10 +82,13 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 };
 
 template <class ValueType>
-void PlotOverlay::updateArrayValues(const QList<ValueType>& values)
+void PlotOverlay::updateArrayValues(const QList<ValueType>& values, const QList<int>& indices)
 {
 	clear();
-	for (auto val : values) addValue(val);
+	for (auto val : values) yValues_ << val;
+	for (int idx : indices) xValues_ << idx;
+
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 } /* namespace OODebug */

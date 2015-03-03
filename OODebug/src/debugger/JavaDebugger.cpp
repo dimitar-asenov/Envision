@@ -825,15 +825,17 @@ void JavaDebugger::handleValues(Values values, QList<ValueCalculator> valueCalcu
 void JavaDebugger::handleArray(Values values, QList<ValueCalculator>, Model::Node* target)
 {
 	auto vals = values.values();
+	QList<int> indices;
+	for (int i = 1; i < vals.size(); ++i) indices << doubleFromValue(vals[i]);
 	int arrayLen = debugConnector_.arrayLength(vals[0].array());
 	auto arrayVals = debugConnector_.arrayValues(vals[0].array(), 0, arrayLen);
 	switch (arrayVals.type())
 	{
-		case Protocol::Tag::FLOAT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.floats());
-		case Protocol::Tag::DOUBLE: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.doubles());
-		case Protocol::Tag::INT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.ints());
-		case Protocol::Tag::LONG: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.longs());
-		case Protocol::Tag::SHORT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.shorts());
+		case Protocol::Tag::FLOAT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.floats(), indices);
+		case Protocol::Tag::DOUBLE: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.doubles(), indices);
+		case Protocol::Tag::INT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.ints(), indices);
+		case Protocol::Tag::LONG: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.longs(), indices);
+		case Protocol::Tag::SHORT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.shorts(), indices);
 		default: Q_ASSERT(false); // you shouldn't try to convert any non numeric values to double.
 	}
 }
