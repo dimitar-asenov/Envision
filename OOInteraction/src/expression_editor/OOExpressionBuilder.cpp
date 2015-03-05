@@ -155,6 +155,9 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 
 			if (!Interaction::OperatorDescriptor::isDelimiter(current))
 			{
+				// If there are two expressions next to each other without an operator in between, put a space.
+				if (lastDelimiter.isEmpty() && operand_index > 0) lastDelimiter = ' ';
+
 				unf->delimiters()->append(new Model::Text(lastDelimiter));
 				lastDelimiter.clear();
 				unfinished->at(operand_index)->accept(this);
