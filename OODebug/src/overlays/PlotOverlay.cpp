@@ -237,9 +237,11 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 	}
 	// draw the pointers
 	const int ARROW_HEIGHT = 30;
+	QHash<int, int> valuesAt; // store how many values we have at each value for text offset
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
 		int index = xValues_[i];
+		++valuesAt[index];
 		QPointF pos = {plotRegion_.x() + index * fieldSize, plotY + ARROW_HEIGHT};
 		auto font = painter->font();
 		auto newFont = font;
@@ -250,7 +252,10 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 		painter->setFont(font);
 
 		if (i + 1 < variableNames_.size())
-			painter->drawText(QPointF(pos.x() + fieldSize / 3, pos.y()), variableNames_[i + 1]);
+		{
+			double yOffset = (valuesAt[index] - 1) * fontHeight;
+			painter->drawText(QPointF(pos.x() + fieldSize / 3, pos.y() + yOffset), variableNames_[i + 1]);
+		}
 	}
 }
 
