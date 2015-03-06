@@ -152,6 +152,14 @@ void OODebug::PlotOverlay::drawTics(QPainter* painter)
 	int nTics = std::min(5, xValues_.size());
 	double xStep = valueRange(0) / nTics;
 	double yStep = valueRange(1) / nTics;
+	// If the tics text is large adapt our plot pane:
+	int maxTextLength = QString::number(yMin_).length();
+	for (int i = 0; i <= nTics; ++i)
+		maxTextLength = std::max(maxTextLength, QString::number(yMin_ + i * yStep).length());
+	auto fontMetrics = painter->fontMetrics();
+	int negativeX = plotRegion_.x() - fontMetrics.averageCharWidth() * maxTextLength;
+	if (negativeX < 0) plotRegion_.setX(plotRegion_.x() - negativeX);
+
 	for (int i = 0; i <= nTics; ++i)
 	{
 		double xVal = int(xMin_ + i * xStep); // We want int xtics, int xVal = .. would cause narrowing warning.
@@ -169,8 +177,8 @@ void OODebug::PlotOverlay::drawAxes(QPainter* painter)
 
 void PlotOverlay::plotBars(QPainter* painter)
 {
-	drawAxes(painter);
 	drawTics(painter);
+	drawAxes(painter);
 
 	double barWidth = 1.0;
 	if (xValues_.size()) barWidth = (double) plotRegion_.width() / xValues_.size();
@@ -188,8 +196,8 @@ void PlotOverlay::plotBars(QPainter* painter)
 
 void PlotOverlay::plotScatter(QPainter* painter)
 {
-	drawAxes(painter);
 	drawTics(painter);
+	drawAxes(painter);
 
 	double radius = 1.0;
 
