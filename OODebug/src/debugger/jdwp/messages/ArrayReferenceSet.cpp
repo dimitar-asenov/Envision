@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,18 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#include "Location.h"
+#include "ArrayReferenceSet.h"
+
 
 namespace OODebug {
 
-Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex)
+LengthCommand::LengthCommand(qint64 arrayId)
+: Command(Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::Length)
 {
-	this->typeTag = typeTag;
-	this->classId = classId;
-	this->methodId = methodId;
-	this->methodIndex = methodIndex;
+	arrayID = arrayId;
 }
 
-Location::~Location() {}
+LengthCommand::~LengthCommand() {}
+Length::~Length() {}
+
+GetArrayValuesCommand::GetArrayValuesCommand(qint64 arrayId, qint32 firstIndex, qint32 length)
+: Command(Protocol::CommandSet::ArrayReference, Protocol::ArrayReferenceCommands::GetValues)
+{
+	arrayObject = arrayId;
+	this->firstIndex = firstIndex;
+	this->length = length;
+}
+
+GetArrayValuesCommand::~GetArrayValuesCommand() {}
+ArrayValues::~ArrayValues() {}
+
+int ArrayValues::kind() const
+{
+	// check if type is object value then return 0, otherwise return casted value
+	if (type() == Protocol::Tag::ARRAY || type() == Protocol::Tag::OBJECT || type() == Protocol::Tag::STRING)
+		return 0;
+	return cast(type());
+}
 
 } /* namespace OODebug */

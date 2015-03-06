@@ -43,6 +43,7 @@ class Frames;
 class VariableTable;
 class Values;
 class StackVariable;
+class ArrayValues;
 
 class OODEBUG_API DebugConnector : public QObject
 {
@@ -58,27 +59,39 @@ class OODEBUG_API DebugConnector : public QObject
 		 * As certain info is only available when we load the class where the main method resides
 		 * you need to pass the name of the class where the main method is in, in \a mainClassName.
 		 */
-		void connect(QString mainClassName, QString vmHostName = "localhost", int vmHostPort = 4000);
+		void connect(QString vmHostName = "localhost", int vmHostPort = 4000);
 
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
+		bool suspend();
 		bool resume();
 
-		qint64 getClassId(const QString& signature);
-		qint64 getMethodId(qint64 classId, const QString& signature);
-		LineTable getLineTable(qint64 classId, qint64 methodId);
+		QString fileNameForReference(qint64 referenceId);
+		QString signatureOf(qint64 referenceId);
+		qint64 classIdOf(const QString& signature);
+		qint64 methodIdOf(qint64 classId, const QString& signature);
+		LineTable lineTable(qint64 classId, qint64 methodId);
 
-		Frames getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
-		VariableTable getVariableTable(qint64 classId, qint64 methodId);
-		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
-		QString getString(qint64 stringId);
+		QList<qint64> allThreadIds();
+		QString threadName(qint64 threadId);
+
+		Frames frames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
+		VariableTable variableTableForMethod(qint64 classId, qint64 methodId);
+		Values values(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
+		QString stringFromId(qint64 stringId);
+		int arrayLength(qint64 arrayId);
+		ArrayValues arrayValues(qint64 arrayId, qint32 firstIndex, qint32 length);
 
 		bool breakAtClassLoad(QString className);
 
-		int sendBreakpoint(Location breakLocation);
+		int setBreakpoint(Location breakLocation);
 		bool clearBreakpoint(qint32 requestId);
 
+		int singleStep(qint64 threadId, Protocol::StepSize stepSize = Protocol::StepSize::LINE,
+							Protocol::StepDepth stepDepth = Protocol::StepDepth::OVER);
+
 		bool vmAlive();
+		inline void cancelResume();
 
 		static constexpr int NO_RESULT{-1};
 	private:
@@ -95,24 +108,21 @@ class OODEBUG_API DebugConnector : public QObject
 		void checkVersion();
 		void checkIdSizes();
 
-		void sendBreakAtStart();
-
 		void handleComposite(QByteArray data);
 
 		QTcpSocket tcpSocket_;
 
 		QByteArray incompleteData_;
 
-		QString mainClassName_;
-
 		QHash<Protocol::EventKind, EventListener> eventListeners_;
-
-		QHash<QString, qint64> classIdMap_;
 
 		// Each entry is a full message which is ready to be parsed & handled
 		QList<QByteArray> messagesReadyForProcessing_;
 
 		bool vmAlive_{};
+
+		bool delayResume_{};
+		bool cancelResume_{};
 };
 
 /**
@@ -122,5 +132,9 @@ class OODEBUG_API DebugConnector : public QObject
 inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
 { eventListeners_[kind] = listener; }
 inline bool DebugConnector::vmAlive() { return vmAlive_; }
+/**
+ * Cancel a delayed resume command.
+ */
+void DebugConnector::cancelResume() { cancelResume_ = true; }
 
 } /* namespace OODebug */

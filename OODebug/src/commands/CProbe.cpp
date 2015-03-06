@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,31 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "CProbe.h"
 
-#include "../oodebug_api.h"
+#include "OOVisualization/src/elements/VStatementItemList.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "../debugger/JavaDebugger.h"
 
 namespace OODebug {
 
-class ConsoleOverlay;
-
-class OODEBUG_API HConsoleOverlay : public Interaction::GenericHandler
+bool CProbe::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
+								  const std::unique_ptr<Visualization::Cursor>&)
 {
-	public:
-		static HConsoleOverlay* instance();
+	return commandTokens.size() >= 1 && commandTokens.first() == "probe";
+}
 
-		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+Interaction::CommandResult* CProbe::execute(Visualization::Item*, Visualization::Item* target,
+	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+{
+	auto itemList = static_cast<OOVisualization::VStatementItemList*>(target);
+	Q_ASSERT(itemList);
+	// find the statement item corresponding to the cursor:
+	auto cursorP = cursor.get();
+	int itemIndex = -1;
+	if (auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursorP))
+		itemIndex = layoutCursor->index(); // this corresponds to the statement below
+	else
+		itemIndex = itemList->indexOfChildOrSubChild(cursor->owner()) + 1; // we want the next item
+	Q_ASSERT(itemIndex > -1);
+	QStringList arguments = commandTokens;
+	arguments.removeFirst(); // Remove the probe command
+	JavaDebugger::instance().probe(itemList, arguments, itemIndex);
+	return new Interaction::CommandResult();
+}
 
-	protected:
-		HConsoleOverlay();
-
-	private:
-		QPointF consolePosition_;
-
-		void move(ConsoleOverlay* console, const QPointF& to);
-};
+QStringList CProbe::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
+											const std::unique_ptr<Visualization::Cursor>&)
+{
+	QStringList forms;
+	if (textSoFar.isEmpty() || QString("probe").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
+		forms.append("probe");
+	return forms;
+}
 
 } /* namespace OODebug */

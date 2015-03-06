@@ -26,39 +26,41 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
+#include "ModelBase/src/visitor/VisitorDefinition.h"
 
 namespace OOModel {
-	class Method;
+	class ReferenceExpression;
+}
+
+namespace Model {
+	class Node;
 }
 
 namespace OODebug {
 
-class RunProcess;
-
-class OODEBUG_API JavaRunner
+/**
+ * Implements a visitor to find all references to some symbolName.
+ */
+class OODEBUG_API ReferenceFinder : public Model::Visitor<ReferenceFinder, OOModel::ReferenceExpression*>
 {
 	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+		static void init();
+		void setSearchNode(Model::Node* searchNode);
+
+		QList<OOModel::ReferenceExpression*> references() const;
+		void clearReferences();
 
 	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+		static OOModel::ReferenceExpression* visitReferenceExpression(ReferenceFinder* self,
+																						  OOModel::ReferenceExpression* m);
+		Model::Node* searchNode_;
+		QList<OOModel::ReferenceExpression*> references_;
 };
+
+inline void ReferenceFinder::setSearchNode(Model::Node* searchNode) { searchNode_ = searchNode; }
+inline QList<OOModel::ReferenceExpression*> ReferenceFinder::references() const { return references_; }
+inline void ReferenceFinder::clearReferences() { references_.clear(); }
 
 } /* namespace OODebug */

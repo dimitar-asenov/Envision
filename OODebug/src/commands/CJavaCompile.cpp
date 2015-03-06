@@ -26,7 +26,7 @@
 
 #include "CJavaCompile.h"
 
-#include "../compiler/java/JavaCompiler.h"
+#include "../compiler/JavaCompiler.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace OODebug {

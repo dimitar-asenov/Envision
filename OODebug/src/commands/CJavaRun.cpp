@@ -26,7 +26,7 @@
 
 #include "CJavaRun.h"
 
-#include "../run_support/java/JavaRunner.h"
+#include "../run_support/JavaRunner.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace OODebug {
@@ -34,7 +34,7 @@ namespace OODebug {
 CJavaRun::CJavaRun() : CommandWithNameAndFlags{"run", {}, false}
 {}
 
-Interaction::CommandResult*CJavaRun::executeNamed(Visualization::Item* source, Visualization::Item*,
+Interaction::CommandResult* CJavaRun::executeNamed(Visualization::Item* source, Visualization::Item*,
 	const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
 {
 	while (source && !source->node()) source = source->parent();

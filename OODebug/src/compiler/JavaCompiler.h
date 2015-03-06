@@ -24,36 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#include "ReferenceTypeSet.h"
+#pragma once
+
+#include "../oodebug_api.h"
+
+namespace Model {
+	class TreeManager;
+	class Node;
+}
+
+namespace Visualization {
+	class Item;
+}
+
+namespace Export {
+	class SourceFile;
+	class TextToNodeMap;
+}
 
 namespace OODebug {
 
-SignatureCommand::SignatureCommand(qint64 referenceId)
-	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::Signature)
+class CompilerMessage;
+
+class OODEBUG_API JavaCompiler
 {
-	refType = referenceId;
-}
+	public:
+		/**
+		 * Exports and compiles the program and returns true if this action was succesful.
+		 */
+		static bool compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
+										bool includeDebugSymbols = false);
 
-SignatureCommand::~SignatureCommand() {}
-Signature::~Signature() {}
-JVMMethod::~JVMMethod() {}
-
-MethodsCommand::MethodsCommand(qint64 classId)
-	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::Methods)
-{
-	refTypeId = classId;
-}
-
-MethodsCommand::~MethodsCommand() {}
-Methods::~Methods() {}
-
-SourceFileCommand::SourceFileCommand(qint64 referenceId)
-	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::SourceFile)
-{
-	refType = referenceId;
-}
-
-SourceFileCommand::~SourceFileCommand() {}
-SourceFile::~SourceFile() {}
+	private:
+		static void visualizeMessage(Visualization::Item* item, Model::Node* node,
+											  const QString& message, const QString& type = "default");
+};
 
 } /* namespace OODebug */

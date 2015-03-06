@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,23 +26,19 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
 
-#include "../jdwp/messages/MethodSet.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
 
 namespace OODebug {
 
-class JavaMethod {
+class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
+{
 	public:
-		JavaMethod(LineTable lineTable);
+		virtual ~PlotOverlayStyle() override;
 
-		qint64 indexForLine(qint32 line);
-	private:
-		QMultiHash<qint32, qint64> lineToCode_;
-
+		Property<int> width{this, "width"};
+		Property<int> height{this, "height"};
 };
-
-// Just return the first index.
-inline qint64 JavaMethod::indexForLine(qint32 line) { return lineToCode_.find(line).value(); }
 
 } /* namespace OODebug */

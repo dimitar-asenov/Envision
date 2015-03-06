@@ -24,36 +24,67 @@
 **
 ***********************************************************************************************************************/
 
-#include "ReferenceTypeSet.h"
+#pragma once
+
+#include "../oodebug_api.h"
+
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace OODebug {
 
-SignatureCommand::SignatureCommand(qint64 referenceId)
-	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::Signature)
+class ConsoleOverlay;
+
+template <class OverlayType>
+class OODEBUG_API HMoveableOverlay : public Interaction::GenericHandler
 {
-	refType = referenceId;
+	public:
+		static HMoveableOverlay* instance();
+
+		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+
+	private:
+		QPointF consolePosition_;
+
+		void move(OverlayType* overlay, const QPointF& to);
+};
+
+template <class OverlayType>
+HMoveableOverlay<OverlayType>* HMoveableOverlay<OverlayType>::instance()
+{
+	static HMoveableOverlay inst;
+	return &inst;
 }
 
-SignatureCommand::~SignatureCommand() {}
-Signature::~Signature() {}
-JVMMethod::~JVMMethod() {}
-
-MethodsCommand::MethodsCommand(qint64 classId)
-	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::Methods)
+template <class OverlayType>
+void HMoveableOverlay<OverlayType>::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
 {
-	refTypeId = classId;
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		if (auto overlay = DCast<OverlayType>(target))
+			consolePosition_ = overlay->pos();
 }
 
-MethodsCommand::~MethodsCommand() {}
-Methods::~Methods() {}
-
-SourceFileCommand::SourceFileCommand(qint64 referenceId)
-	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::SourceFile)
+template <class OverlayType>
+void HMoveableOverlay<OverlayType>::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
 {
-	refType = referenceId;
+	if (event->buttons() & Qt::LeftButton)
+	{
+		if (auto overlay = DCast<OverlayType>(target))
+		{
+			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
+			move(overlay, diff);
+		}
+	}
 }
 
-SourceFileCommand::~SourceFileCommand() {}
-SourceFile::~SourceFile() {}
+template <class OverlayType>
+void HMoveableOverlay<OverlayType>::move(OverlayType* overlay, const QPointF& to)
+{
+	QPointF dest(consolePosition_ + to);
+	if (dest.x() < 0) dest.setX(0);
+	if (dest.y() < 0) dest.setY(0);
+
+	overlay->setPos(dest);
+}
 
 } /* namespace OODebug */

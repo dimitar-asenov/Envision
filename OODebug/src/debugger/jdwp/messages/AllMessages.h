@@ -32,6 +32,7 @@
 #include "MethodSet.h"
 #include "StringSet.h"
 #include "ThreadSet.h"
+#include "ArrayReferenceSet.h"
 #include "EventRequestSet.h"
 #include "StackFrameSet.h"
 #include "EventSet.h"

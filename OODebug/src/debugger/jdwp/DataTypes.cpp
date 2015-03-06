@@ -24,37 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../../oodebug_api.h"
-
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace Visualization {
-	class Item;
-}
-
-namespace Export {
-	class SourceFile;
-	class TextToNodeMap;
-}
+#include "DataTypes.h"
 
 namespace OODebug {
 
-class CompilerMessage;
-
-class OODEBUG_API JavaCompiler
+Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex)
 {
-	public:
-		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-										bool includeDebugSymbols = false);
+	this->typeTag = typeTag;
+	this->classId = classId;
+	this->methodId = methodId;
+	this->methodIndex = methodIndex;
+}
 
-	private:
-		static void visualizeMessage(Visualization::Item* item, Model::Node* node,
-											  const QString& message, const QString& type = "default");
-};
+Location::~Location() {}
+
+bool Location::operator==(const Location &other) const
+{
+	return typeTag() == other.typeTag() && classId() == other.classId()
+			&& methodId() == other.methodId() && methodIndex() == other.methodIndex();
+}
+
+uint qHash(const Location &location) {
+	QByteArray data;
+	QDataStream stream(&data, QIODevice::ReadWrite);
+	stream << location;
+	return qHash(QString(data));
+}
+
+Value::~Value() {}
+
+int Value::kind() const { return cast(type()); }
+
+TaggedObjectId::~TaggedObjectId() {}
 
 } /* namespace OODebug */

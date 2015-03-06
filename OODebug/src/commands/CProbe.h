@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,27 +26,22 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
 
-#include "MessagePart.h"
-#include "MessageField.h"
-#include "Protocol.h"
+#include "InteractionBase/src/commands/Command.h"
 
 namespace OODebug {
 
-/**
- * Describes a Location as in:
- * https://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.htmls
- */
-struct Location : public MessagePart
+class OODEBUG_API CProbe : public Interaction::Command
 {
-		Location() = default;
-		Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex);
-		virtual ~Location() override;
-		MessageField<Protocol::TypeTagKind> typeTag{&Location::typeTag, this};
-		MessageField<qint64> classId{&Location::classId, this};
-		MessageField<qint64> methodId{&Location::methodId, this};
-		MessageField<qint64> methodIndex{&Location::methodIndex, this};
+	public:
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+
+		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
 } /* namespace OODebug */

@@ -40,11 +40,11 @@
 #include "Export/src/writer/TextToNodeMap.h"
 #include "JavaExport/src/exporter/JavaExporter.h"
 
-#include "../../overlays/ConsoleOverlay.h"
-#include "../../compiler/java/JavaCompiler.h"
-#include "../MainMethodFinder.h"
-#include "../../OODebugException.h"
-#include "../RunProcess.h"
+#include "../overlays/ConsoleOverlay.h"
+#include "../compiler/JavaCompiler.h"
+#include "MainMethodFinder.h"
+#include "../OODebugException.h"
+#include "RunProcess.h"
 
 namespace OODebug {
 
@@ -67,7 +67,7 @@ OOModel::Method* JavaRunner::runTree(Model::TreeManager* manager,
 		return nullptr;
 	}
 
-	JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug);
+	if (!JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug)) return nullptr;
 	auto map = JavaExport::JavaExporter::exportMaps().map(lastProject_);
 
 	// find the file of the main method:

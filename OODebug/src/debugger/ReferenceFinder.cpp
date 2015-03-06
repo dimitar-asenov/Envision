@@ -24,14 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "JavaMethod.h"
+#include "ReferenceFinder.h"
+
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace OODebug {
 
-JavaMethod::JavaMethod(LineTable lineTable)
+void ReferenceFinder::init()
 {
-	for (auto val : lineTable.mappings())
-		lineToCode_.insert(val.lineNumber(), val.lineCodeIndex());
+	addType<OOModel::ReferenceExpression>(visitReferenceExpression);
+}
+
+OOModel::ReferenceExpression* ReferenceFinder::visitReferenceExpression(ReferenceFinder* self,
+																								OOModel::ReferenceExpression* m)
+{
+	if (m->target() == self->searchNode_)	self->references_ << m;
+	return m;
 }
 
 } /* namespace OODebug */

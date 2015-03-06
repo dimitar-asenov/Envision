@@ -24,47 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "HConsoleOverlay.h"
-
-#include "../overlays/ConsoleOverlay.h"
+#include "PlotOverlayStyle.h"
 
 namespace OODebug {
 
-HConsoleOverlay::HConsoleOverlay()
-{}
+PlotOverlayStyle::~PlotOverlayStyle() {}
 
-HConsoleOverlay* HConsoleOverlay::instance()
-{
-	static HConsoleOverlay inst;
-	return &inst;
-}
-
-void HConsoleOverlay::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
-{
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
-		if (auto console = DCast<ConsoleOverlay>(target))
-			consolePosition_ = console->pos();
-}
-
-void HConsoleOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
-{
-	if (event->buttons() & Qt::LeftButton)
-	{
-		if (auto console = DCast<ConsoleOverlay>(target))
-		{
-			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
-			move(console, diff);
-		}
-	}
-}
-
-void HConsoleOverlay::move(ConsoleOverlay* console, const QPointF& to)
-{
-	QPointF dest(consolePosition_ + to);
-	if (dest.x() < 0) dest.setX(0);
-	if (dest.y() < 0) dest.setY(0);
-
-	console->setPos(dest);
-}
-
-}
+} /* namespace OODebug */

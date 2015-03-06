@@ -70,6 +70,16 @@ struct ClassesBySignature : public Reply {
 		MessageField<QList<ClassBySignature>> classes{&ClassesBySignature::classes, this};
 };
 
+struct AllThreadsCommand : public Command {
+		AllThreadsCommand();
+		virtual ~AllThreadsCommand() override;
+};
+
+struct AllThreads : public Reply {
+		virtual ~AllThreads() override;
+		MessageField<QList<qint64>> threadIds{&AllThreads::threadIds, this};
+};
+
 struct IDSizeCommand : public Command {
 		IDSizeCommand();
 		virtual ~IDSizeCommand() override;
@@ -83,6 +93,11 @@ struct IDSizes : public Reply {
 		MessageField<int> objectIDSize{&IDSizes::objectIDSize, this};
 		MessageField<int> referenceTypeIDSize{&IDSizes::referenceTypeIDSize, this};
 		MessageField<int> frameIDSize{&IDSizes::frameIDSize, this};
+};
+
+struct SuspendCommand : public Command {
+		SuspendCommand();
+		virtual ~SuspendCommand() override;
 };
 
 struct ResumeCommand : public Command {

@@ -154,7 +154,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 	else if (auto e = DCast<BooleanLiteral>(expression)) *fragment << (e->value() ? "true" : "false");
 	else if (auto e = DCast<IntegerLiteral>(expression)) *fragment << QString::number( e->value());
-	else if (auto e = DCast<FloatLiteral>(expression)) *fragment << QString::number( e->value());
+	else if (auto e = DCast<FloatLiteral>(expression)) *fragment << QString::number( e->value(), 'f');
 	else if (DCast<NullLiteral>(expression)) *fragment << "null";
 	else if (auto e = DCast<StringLiteral>(expression))
 		*fragment << "\"" << QString(e->value()).replace(QRegExp("\\n"), "\\n") << "\""; // TODO: also consider \r
