@@ -837,7 +837,7 @@ void JavaDebugger::handleValues(Values values, QList<ValueCalculator> valueCalcu
 	QList<double> plotValues;
 	for (auto extractor : valueCalculators) plotValues << extractor(doubleValues);
 	if (plotValues.size() > 1)
-		plotOverlayOfNode(target)->addValue(plotValues[0], plotValues[1]);
+		plotOverlayOfNode(target)->addValues(plotValues[0], plotValues.mid(1));
 	else if (plotValues.size() == 1)
 		plotOverlayOfNode(target)->addValue(plotValues[0]);
 }

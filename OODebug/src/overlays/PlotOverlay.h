@@ -47,6 +47,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 
 		void addValue(double value);
 		void addValue(double xValue, double yValue);
+		void addValues(double xValue, QList<double> yValues);
 
 		template <class ValueType>
 		inline void updateArrayValues(const QList<ValueType>& values, const QList<int>& indices);
@@ -57,7 +58,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 
 	private:
 		QList<double> xValues_;
-		QList<double> yValues_;
+		QList<QList<double>> yValues_;
 		double xMin_{}, xMax_{};
 		double yMin_{}, yMax_{};
 		QStringList variableNames_;
@@ -86,7 +87,8 @@ template <class ValueType>
 void PlotOverlay::updateArrayValues(const QList<ValueType>& values, const QList<int>& indices)
 {
 	clear();
-	for (auto val : values) yValues_ << val;
+	yValues_ << QList<double>();
+	for (auto val : values) yValues_[0] << val;
 	for (int idx : indices) xValues_ << idx;
 
 	setUpdateNeeded(Visualization::Item::StandardUpdate);

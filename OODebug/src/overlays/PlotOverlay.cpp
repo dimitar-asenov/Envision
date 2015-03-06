@@ -73,17 +73,22 @@ void OODebug::PlotOverlay::clear()
 
 void OODebug::PlotOverlay::addValue(double value)
 {
-	addValue(value, yValues_, yMin_, yMax_);
-	addValue(xValues_.size(), xValues_, xMin_, xMax_);
-
-	setUpdateNeeded(Visualization::Item::StandardUpdate);
+	addValues(xValues_.size(), {value});
 }
 
 void OODebug::PlotOverlay::addValue(double xValue, double yValue)
 {
-	addValue(xValue, xValues_, xMin_, xMax_);
-	addValue(yValue, yValues_, yMin_, yMax_);
+	addValues(xValue, {yValue});
+}
 
+void OODebug::PlotOverlay::addValues(double xValue, QList<double> yValues)
+{
+	addValue(xValue, xValues_, xMin_, xMax_);
+	for (int i = 0; i < yValues.size(); ++i)
+	{
+		if (yValues_.size() <= i) yValues_ << QList<double>();
+		addValue(yValues[i], yValues_[i], yMin_, yMax_);
+	}
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
@@ -186,8 +191,8 @@ void PlotOverlay::plotBars(QPainter* painter)
 
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
-		double scaledValue = heightScale * yValues_[i];
-		auto startPoint = toPlotCoordinates({xValues_[i], yValues_[i]});
+		double scaledValue = heightScale * yValues_[0][i];
+		auto startPoint = toPlotCoordinates({xValues_[i], yValues_[0][i]});
 		QRectF bar(startPoint.x() - barWidth / 2.0, startPoint.y(), barWidth, scaledValue);
 		painter->drawRect(bar);
 		painter->fillRect(bar, QColor((i % 2 ? "red" : "black")));
@@ -201,21 +206,30 @@ void PlotOverlay::plotScatter(QPainter* painter)
 
 	double radius = 1.0;
 
-	QBrush brush(QColor("red"));
-	painter->setBrush(brush);
+	static const QList<Qt::GlobalColor> colors = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};
+
 	QPen pen(Qt::NoPen);
 	painter->setPen(pen);
 	for (int i = 0; i < xValues_.size(); ++i)
-		painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[i]}), radius, radius);
+	{
+		for (int y = 0; y < yValues_.size(); ++y)
+		{
+			auto brush = painter->brush();
+			brush.setColor(colors[y < colors.size() ? y : 0]);
+			painter->setBrush(brush);
+			painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[y][i]}), radius, radius);
+		}
+	}
 }
 
 void OODebug::PlotOverlay::plotArray(QPainter* painter)
 {
 	double fieldSize = plotRegion_.width();
-	if (yValues_.size())
+	if (!yValues_.size()) yValues_ << QList<double>();
+	if (yValues_[0].size())
 	{
-		plotRegion_.setHeight(plotRegion_.width() / yValues_.size());
-		fieldSize /= yValues_.size();
+		plotRegion_.setHeight(plotRegion_.width() / yValues_[0].size());
+		fieldSize /= yValues_[0].size();
 
 		// first draw the array box:
 		painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.bottomRight()); // bottom line
@@ -227,13 +241,13 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 	auto fontMetrics = painter->fontMetrics();
 	int fontHeight = fontMetrics.height();
 
-	for (int i = 0; i < yValues_.size(); ++i)
+	for (int i = 0; i < yValues_[0].size(); ++i)
 	{
 		QPointF pos = {plotRegion_.x() + i * fieldSize, plotY};
 		painter->drawLine(QPointF(pos.x(), pos.y()), {pos.x(), pos.y() - plotRegion_.height()});
 
 		QPointF textPos = {pos.x() + fieldSize / 3, pos.y() - plotRegion_.height() / 2 + fontHeight / 3.0};
-		painter->drawText(textPos, QString::number(yValues_[i]));
+		painter->drawText(textPos, QString::number(yValues_[0][i]));
 	}
 	// draw the pointers
 	const int ARROW_HEIGHT = 30;
