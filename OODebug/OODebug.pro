@@ -27,7 +27,6 @@ HEADERS += src/precompiled.h \
     src/run_support/RunProcess.h \
     src/overlays/ConsoleOverlay.h \
     src/overlays/ConsoleOverlayStyle.h \
-    src/handlers/HConsoleOverlay.h \
     src/debugger/jdwp/Protocol.h \
     src/debugger/jdwp/MessageField.h \
     src/debugger/jdwp/DebugConnector.h \
@@ -52,7 +51,8 @@ HEADERS += src/precompiled.h \
     src/overlays/PlotOverlayStyle.h \
     src/debugger/jdwp/DataTypes.h \
     src/commands/CProbe.h \
-    src/debugger/jdwp/messages/ArrayReferenceSet.h
+    src/debugger/jdwp/messages/ArrayReferenceSet.h \
+    src/handlers/HMoveableOverlay.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -64,7 +64,6 @@ SOURCES += src/OODebugException.cpp \
     src/overlays/ConsoleOverlay.cpp \
     src/overlays/ConsoleOverlayStyle.cpp \
     src/run_support/RunProcess.cpp \
-    src/handlers/HConsoleOverlay.cpp \
     src/debugger/jdwp/Protocol.cpp \
     src/debugger/jdwp/DebugConnector.cpp \
     src/commands/CJavaDebug.cpp \

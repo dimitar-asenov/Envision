@@ -34,21 +34,57 @@ namespace OODebug {
 
 class ConsoleOverlay;
 
-class OODEBUG_API HConsoleOverlay : public Interaction::GenericHandler
+template <class OverlayType>
+class OODEBUG_API HMoveableOverlay : public Interaction::GenericHandler
 {
 	public:
-		static HConsoleOverlay* instance();
+		static HMoveableOverlay* instance();
 
 		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
-	protected:
-		HConsoleOverlay();
-
 	private:
 		QPointF consolePosition_;
 
-		void move(ConsoleOverlay* console, const QPointF& to);
+		void move(OverlayType* overlay, const QPointF& to);
 };
+
+template <class OverlayType>
+HMoveableOverlay<OverlayType>* HMoveableOverlay<OverlayType>::instance()
+{
+	static HMoveableOverlay inst;
+	return &inst;
+}
+
+template <class OverlayType>
+void HMoveableOverlay<OverlayType>::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		if (auto overlay = DCast<OverlayType>(target))
+			consolePosition_ = overlay->pos();
+}
+
+template <class OverlayType>
+void HMoveableOverlay<OverlayType>::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->buttons() & Qt::LeftButton)
+	{
+		if (auto overlay = DCast<OverlayType>(target))
+		{
+			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
+			move(overlay, diff);
+		}
+	}
+}
+
+template <class OverlayType>
+void HMoveableOverlay<OverlayType>::move(OverlayType* overlay, const QPointF& to)
+{
+	QPointF dest(consolePosition_ + to);
+	if (dest.x() < 0) dest.setX(0);
+	if (dest.y() < 0) dest.setY(0);
+
+	overlay->setPos(dest);
+}
 
 } /* namespace OODebug */

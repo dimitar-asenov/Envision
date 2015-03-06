@@ -36,6 +36,8 @@ PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* s
 								 PlotType type, QStringList variableNames)
 	: Super{{associatedItem}, style}
 {
+	setAcceptedMouseButtons(Qt::AllButtons);
+	setFlags(QGraphicsItem::ItemIsMovable);
 	// margins around the plot region:
 	const int LEFT_MARGIN = (type == PlotType::Array ? 20 : 40);
 	const int DEFAULT_MARGIN = (type == PlotType::Array ? 10 : 20);
@@ -48,6 +50,8 @@ PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* s
 	else Q_ASSERT(false);
 
 	variableNames_ = variableNames;
+
+	setPos(associatedItem->mapToScene(associatedItem->widthInLocal() + 10, 0));
 }
 
 void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -89,7 +93,6 @@ void PlotOverlay::updateGeometry(int, int)
 {
 	if (hasShape())
 		getShape()->setInnerSize(style()->width(), style()->height());
-	setPos(associatedItem()->mapToScene(associatedItem()->widthInLocal() + 10, 0));
 }
 
 void OODebug::PlotOverlay::addValue(double value, QList<double>& valueList, double& minVal, double& maxVal)

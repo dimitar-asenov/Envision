@@ -38,7 +38,7 @@
 #include "commands/CProbe.h"
 #include "run_support/MainMethodFinder.h"
 #include "overlays/ConsoleOverlay.h"
-#include "handlers/HConsoleOverlay.h"
+#include "handlers/HMoveableOverlay.h"
 #include "debugger/JavaDebugger.h"
 #include "debugger/ReferenceFinder.h"
 
@@ -59,7 +59,9 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug());
 	OOInteraction::HStatementItemList::instance()->addCommand(new CProbe());
 
-	ConsoleOverlay::setDefaultClassHandler(HConsoleOverlay::instance());
+	ConsoleOverlay::setDefaultClassHandler(HMoveableOverlay<ConsoleOverlay>::instance());
+	PlotOverlay::setDefaultClassHandler(HMoveableOverlay<PlotOverlay>::instance());
+
 
 	MainMethodFinder::init();
 	ReferenceFinder::init();
