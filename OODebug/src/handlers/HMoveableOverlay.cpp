@@ -24,28 +24,41 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../oodebug_api.h"
-
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "HMoveableOverlay.h"
 
 namespace OODebug {
 
-class ConsoleOverlay;
-
-class OODEBUG_API HMoveableOverlay : public Interaction::GenericHandler
+HMoveableOverlay* HMoveableOverlay::instance()
 {
-	public:
-		static HMoveableOverlay* instance();
+	static HMoveableOverlay inst;
+	return &inst;
+}
 
-		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+void HMoveableOverlay::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		if (target) itemPosition_ = target->pos();
+}
 
-	private:
-		QPointF itemPosition_;
+void HMoveableOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
+{
+	if (event->buttons() & Qt::LeftButton)
+	{
+		if (target)
+		{
+			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
+			move(target, diff);
+		}
+	}
+}
 
-		void move(Visualization::Item* overlay, const QPointF& to);
-};
+void HMoveableOverlay::move(Visualization::Item* overlay, const QPointF& to)
+{
+	QPointF dest(itemPosition_ + to);
+	if (dest.x() < 0) dest.setX(0);
+	if (dest.y() < 0) dest.setY(0);
+
+	overlay->setPos(dest);
+}
 
 } /* namespace OODebug */

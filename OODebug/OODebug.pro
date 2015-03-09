@@ -86,4 +86,5 @@ SOURCES += src/OODebugException.cpp \
     src/overlays/PlotOverlayStyle.cpp \
     src/debugger/jdwp/DataTypes.cpp \
     src/commands/CProbe.cpp \
-    src/debugger/jdwp/messages/ArrayReferenceSet.cpp
+    src/debugger/jdwp/messages/ArrayReferenceSet.cpp \
+    src/handlers/HMoveableOverlay.cpp
