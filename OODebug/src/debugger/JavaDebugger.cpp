@@ -432,7 +432,6 @@ Model::Node* JavaDebugger::locationToNode(Location location, bool& isClosingBrac
 		if (auto stmt = node->firstAncestorOfType<OOModel::StatementItem>()) return stmt;
 		// If we are at the closing bracket of a method, the node will be a StatementItemList, thus we just highlight
 		// the last item in this list.
-		// TODO: if we could highlight somehow the end of the method this would be the better solution.
 		if (auto stmtList = DCast<OOModel::StatementItemList>(node))
 		{
 			isClosingBracket = true;
