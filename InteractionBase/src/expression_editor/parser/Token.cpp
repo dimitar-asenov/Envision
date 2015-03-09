@@ -122,7 +122,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 	}
 
 	// Remove all spaces, except for trailing ones
-	// Only do this if quotes are matched. Otherwise we might end up in a situatio  where some spaces inside of
+	// Only do this if quotes are matched. Otherwise we might end up in a situation where some spaces inside of
 	// strings are accidentally removed while the expression is being modified.
 	if (!result.empty() && result.last().type() != PartialLiteral)
 	{
