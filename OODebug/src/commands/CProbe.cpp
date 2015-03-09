@@ -54,8 +54,7 @@ Interaction::CommandResult* CProbe::execute(Visualization::Item*, Visualization:
 	Q_ASSERT(itemIndex > -1);
 	QStringList arguments = commandTokens;
 	arguments.removeFirst(); // Remove the probe command
-	JavaDebugger::instance().probe(itemList, arguments, itemIndex);
-	return new Interaction::CommandResult();
+	return JavaDebugger::instance().probe(itemList, arguments, itemIndex);
 }
 
 QStringList CProbe::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
