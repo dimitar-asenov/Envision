@@ -45,6 +45,9 @@ class Values;
 class StackVariable;
 class ArrayValues;
 
+/**
+ * A Connector to a Java VM via the JDWP protocol.
+ */
 class OODEBUG_API DebugConnector : public QObject
 {
 	Q_OBJECT
@@ -56,13 +59,21 @@ class OODEBUG_API DebugConnector : public QObject
 		using EventListener = std::function<void (Event)>;
 
 		/**
-		 * As certain info is only available when we load the class where the main method resides
-		 * you need to pass the name of the class where the main method is in, in \a mainClassName.
+		 * Connects to the JVM at \a vmHostName on port \a vmHostPort.
 		 */
 		void connect(QString vmHostName = "localhost", int vmHostPort = 4000);
 
+		/**
+		 * Add the \a listener callback to the connector. The \a listener is called whenever and Event of type \a kind
+		 * is received.
+		 *
+		 * If there is already a \a listener for this kind the previous one is replaced!
+		 */
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
+		/**
+		 * Suspends the execution on the VM and returns true on succes.
+		 */
 		bool suspend();
 		bool resume();
 
@@ -90,7 +101,14 @@ class OODEBUG_API DebugConnector : public QObject
 		int singleStep(qint64 threadId, Protocol::StepSize stepSize = Protocol::StepSize::LINE,
 							Protocol::StepDepth stepDepth = Protocol::StepDepth::OVER);
 
+		/**
+		 * Returns if the program on the target VM is running.
+		 */
 		bool vmAlive();
+
+		/**
+		 * Cancel a delayed resume command.
+		 */
 		inline void cancelResume();
 
 		static constexpr int NO_RESULT{-1};
@@ -99,7 +117,13 @@ class OODEBUG_API DebugConnector : public QObject
 		void dispatchEvents();
 		void readFromSocket();
 
+		/**
+		 * Sends the \a command to the VM and returns the corresponding reply as a QByteArray.
+		 */
 		QByteArray sendCommand(const Command& command);
+		/**
+		 * Waits until the Reply for the request with id \a requestId is received.
+		 */
 		QByteArray waitForReply(qint32 requestId);
 
 		void readHandshake();
@@ -125,16 +149,10 @@ class OODEBUG_API DebugConnector : public QObject
 		bool cancelResume_{};
 };
 
-/**
- * Adds a new event listener for the \a kind of event.
- * If there is already a listener for this kind the previous one is replaced!
- */
 inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
 { eventListeners_[kind] = listener; }
 inline bool DebugConnector::vmAlive() { return vmAlive_; }
-/**
- * Cancel a delayed resume command.
- */
+
 void DebugConnector::cancelResume() { cancelResume_ = true; }
 
 } /* namespace OODebug */

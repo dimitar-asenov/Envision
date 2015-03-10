@@ -41,7 +41,7 @@ namespace Model {
 namespace OODebug {
 
 /**
- * Implements a visitor to find all references to some symbolName.
+ * Implements a visitor to find all references to some node.
  */
 class OODEBUG_API ReferenceFinder : public Model::Visitor<ReferenceFinder, OOModel::ReferenceExpression*>
 {

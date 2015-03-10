@@ -56,8 +56,11 @@ class OODEBUG_API JavaCompiler
 										bool includeDebugSymbols = false);
 
 	private:
-		static void visualizeMessage(Visualization::Item* item, Model::Node* node,
-											  const QString& message, const QString& type = "default");
+		static const QString COMPILER_MESSAGE_GROUP;
+		/**
+		 * Adds an overlay to the \a item which represents the \a message in the style defined by \a type.
+		 */
+		static void visualizeMessage(Visualization::Item* item, const QString& message, const QString& type = "default");
 };
 
 } /* namespace OODebug */

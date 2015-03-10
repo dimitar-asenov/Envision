@@ -104,8 +104,7 @@ class MessageField
 {
 	public:
 		/**
-		 * Creates a messagefield. If inout is true then the field is both used for writing and reading,
-		 * otherwise its used only for reading.
+		 * Creates a messagefield and adds the corresponding reader and writer functions to the \a containingMessage.
 		 */
 		template <class Container>
 		inline MessageField(MessageField<T, Kind> Container::*field, MessagePart* containingMessage);

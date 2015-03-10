@@ -43,7 +43,7 @@
 
 namespace OODebug {
 
-static const QString overlayGroupName("CompilerMessages");
+const QString JavaCompiler::COMPILER_MESSAGE_GROUP{"CompilerMessages"};
 
 bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
 										 bool includeDebugSymbols)
@@ -53,7 +53,7 @@ bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 	for (auto scene : Visualization::Scene::allScenes())
 	{
 		Q_ASSERT(scene);
-		scene->removeOverlayGroup(overlayGroupName);
+		scene->removeOverlayGroup(COMPILER_MESSAGE_GROUP);
 	}
 
 	auto project = DCast<OOModel::Project>(manager->root());
@@ -80,7 +80,7 @@ bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 			auto it = nodeItemMap.find(node);
 			while (it != nodeItemMap.end() && it.key() == node)
 			{
-				visualizeMessage(it.value(), node, error.message());
+				visualizeMessage(it.value(), error.message());
 				++it;
 			}
 		}
@@ -144,7 +144,7 @@ bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 				QString typeString = type == CompilerMessage::Error ? "error" :
 														(type == CompilerMessage::Warning ? "warning" : "default");
 				// TODO for notes which have a rootMessage add a link to the message location.
-				visualizeMessage(it.value(), node, message->message(), typeString);
+				visualizeMessage(it.value(), message->message(), typeString);
 				++it;
 			}
 
@@ -154,18 +154,14 @@ bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 	return compilationOk;
 }
 
-void JavaCompiler::visualizeMessage(Visualization::Item* item, Model::Node* node,
-												const QString& message, const QString& type)
+void JavaCompiler::visualizeMessage(Visualization::Item* item, const QString& message, const QString& type)
 {
-	auto scene = item->scene();
-	auto overlayGroup = scene->overlayGroup(overlayGroupName);
-
-	if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
-
-	overlayGroup->addOverlay(makeOverlay( new Visualization::MessageOverlay(item,
-		[node, message](Visualization::MessageOverlay *){
+	auto overlay = new Visualization::MessageOverlay(item,
+		[message](Visualization::MessageOverlay *){
 		return message;
-	}, Visualization::MessageOverlay::itemStyles().get(type))));
+	}, Visualization::MessageOverlay::itemStyles().get(type));
+
+	item->addOverlay(overlay, COMPILER_MESSAGE_GROUP);
 }
 
 } /* namespace OODebug */
