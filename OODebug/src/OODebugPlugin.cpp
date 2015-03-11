@@ -59,8 +59,8 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug());
 	OOInteraction::HStatementItemList::instance()->addCommand(new CProbe());
 
-	ConsoleOverlay::setDefaultClassHandler(HMoveableOverlay<ConsoleOverlay>::instance());
-	PlotOverlay::setDefaultClassHandler(HMoveableOverlay<PlotOverlay>::instance());
+	ConsoleOverlay::setDefaultClassHandler(HMoveableOverlay::instance());
+	PlotOverlay::setDefaultClassHandler(HMoveableOverlay::instance());
 
 
 	MainMethodFinder::init();

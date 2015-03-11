@@ -32,12 +32,13 @@
 #include "MessageField.h"
 #include "Protocol.h"
 
-namespace OODebug {
-
-/**
- * Describes a Location as in:
+/*! \file
+ * Describes datatypes from JDWP, which are relevant for us. You can find the spec under "Detailed Command Information":
  * https://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.htmls
  */
+
+namespace OODebug {
+
 struct Location : public MessagePart
 {
 		Location() = default;

@@ -56,6 +56,10 @@ namespace OOVisualization {
 	class VStatementItemList;
 }
 
+namespace Interaction {
+	class CommandResult;
+}
+
 namespace OODebug {
 
 class Location;
@@ -84,7 +88,8 @@ class OODEBUG_API JavaDebugger
 		bool trackVariable(Visualization::Item* target, QKeyEvent* event);
 		bool step(Visualization::Item* target, QKeyEvent* event);
 
-		void probe(OOVisualization::VStatementItemList* itemList, const QStringList& arguments, int itemIndex);
+		Interaction::CommandResult* probe(OOVisualization::VStatementItemList* itemList,
+													 const QStringList& arguments, int itemIndex);
 
 		using ValueCalculator = std::function<double(QList<double>)>;
 		using ValueHandler = std::function<void(JavaDebugger*, Values, QList<ValueCalculator>, Model::Node*)>;

@@ -58,6 +58,8 @@
 #include "VisualizationBase/src/overlays/IconOverlay.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
+#include "InteractionBase/src/commands/CommandResult.h"
+
 namespace OODebug {
 
 // This mainly exists because arguments (unlike fields) are orthogonal to variable declarations in Envision.
@@ -240,7 +242,8 @@ bool JavaDebugger::step(Visualization::Item*, QKeyEvent* event)
 	return false;
 }
 
-void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QStringList& arguments, int itemIndex)
+Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemList* itemList,
+																const QStringList& arguments, int itemIndex)
 {
 	Q_ASSERT(!arguments.empty());
 	if (itemIndex == itemList->rangeEnd()) --itemIndex; // TODO handle this properly
@@ -252,7 +255,7 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	{
 		removeObserverOverlaysAt(observedNode, vItem);
 		removeBreakpointAt(observedNode);
-		return;
+		return new Interaction::CommandResult();
 	}
 
 	auto parsedArgs = parseProbeArguments(arguments);
@@ -294,11 +297,7 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	}
 
 	if (declarationMap.size() < variableNames.size())
-	{
-		// Here we should probably notify the user
-		qDebug() << "Not all declarations found for probe: " << arguments;
-		return;
-	}
+		return new Interaction::CommandResult(new Interaction::CommandError("Not all declarations found for probe"));
 
 	QList<EnvisionVariable> vars;
 	for (auto varName : variableNames) vars << declarationMap[varName];
@@ -315,6 +314,7 @@ void JavaDebugger::probe(OOVisualization::VStatementItemList* itemList, const QS
 	auto plotOverlay = new PlotOverlay(vItem, PlotOverlay::itemStyles().get("default"),
 												  defaultTypeAndHandler.first, variableNames);
 	vItem->addOverlay(plotOverlay, PLOT_OVERLAY_GROUP);
+	return new Interaction::CommandResult();
 }
 
 JavaDebugger::JavaDebugger()
@@ -432,7 +432,6 @@ Model::Node* JavaDebugger::locationToNode(Location location, bool& isClosingBrac
 		if (auto stmt = node->firstAncestorOfType<OOModel::StatementItem>()) return stmt;
 		// If we are at the closing bracket of a method, the node will be a StatementItemList, thus we just highlight
 		// the last item in this list.
-		// TODO: if we could highlight somehow the end of the method this would be the better solution.
 		if (auto stmtList = DCast<OOModel::StatementItemList>(node))
 		{
 			isClosingBracket = true;
