@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,18 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "Location.h"
+#pragma once
+
+#include "../oodebug_api.h"
+
+#include "VisualizationBase/src/items/ItemStyle.h"
 
 namespace OODebug {
 
-Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex)
+class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
 {
-	this->typeTag = typeTag;
-	this->classId = classId;
-	this->methodId = methodId;
-	this->methodIndex = methodIndex;
-}
+	public:
+		virtual ~PlotOverlayStyle() override;
 
-Location::~Location() {}
+		Property<int> width{this, "width"};
+		Property<int> height{this, "height"};
+};
 
 } /* namespace OODebug */

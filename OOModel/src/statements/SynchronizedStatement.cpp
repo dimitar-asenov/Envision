@@ -24,31 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "statements/SynchronizedStatement.h"
 
-#include "../oodebug_api.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::SynchronizedStatement)
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
+namespace OOModel {
 
-namespace OODebug {
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SynchronizedStatement)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SynchronizedStatement)
 
-class ConsoleOverlay;
+REGISTER_ATTRIBUTE(SynchronizedStatement, expression, Expression, false, false, true)
+REGISTER_ATTRIBUTE(SynchronizedStatement, body, StatementItemList, false, false, true)
 
-class OODEBUG_API HConsoleOverlay : public Interaction::GenericHandler
-{
-	public:
-		static HConsoleOverlay* instance();
-
-		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-
-	protected:
-		HConsoleOverlay();
-
-	private:
-		QPointF consolePosition_;
-
-		void move(ConsoleOverlay* console, const QPointF& to);
-};
-
-} /* namespace OODebug */
+} /* namespace OOModel */

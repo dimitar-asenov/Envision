@@ -256,7 +256,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if" || trimmedText == "class"
 						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return" ||
 						trimmedText == "do" || trimmedText == "//" || trimmedText == "switch" || trimmedText == "case"
-						|| trimmedText == "try" || trimmedText == "assert"))
+						|| trimmedText == "try" || trimmedText == "assert"|| trimmedText == "synchronized"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
@@ -360,6 +360,14 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 
 				toFocus = asserts->expression();
 				st = asserts;
+			}
+			else if (trimmedText == "synchronized")
+			{
+				auto sync =  new SynchronizedStatement();
+				sync->setExpression(new EmptyExpression());
+
+				toFocus = sync->expression();
+				st = sync;
 			}
 
 			Model::Node* containerNode = replaceStatement->parent();
@@ -555,7 +563,8 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	{
 		auto matcher = QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard);
 		for (QString str : {"int", "bool", "long", "float", "double", "short", "byte", "char", "for", "if", "while",
-									"do", "switch", "case", "try", "assert", "foreach", "continue", "break", "return"})
+									"do", "switch", "case", "try", "assert", "foreach", "continue", "break", "return",
+									"synchronized"})
 			if (matcher.exactMatch(str))
 				autoCompleteCandidates.append(str);
 	}

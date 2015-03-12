@@ -24,37 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ReferenceFinder.h"
 
-#include "../../oodebug_api.h"
-
-namespace Model {
-	class TreeManager;
-	class Node;
-}
-
-namespace Visualization {
-	class Item;
-}
-
-namespace Export {
-	class SourceFile;
-	class TextToNodeMap;
-}
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace OODebug {
 
-class CompilerMessage;
-
-class OODEBUG_API JavaCompiler
+void ReferenceFinder::init()
 {
-	public:
-		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-										bool includeDebugSymbols = false);
+	addType<OOModel::ReferenceExpression>(visitReferenceExpression);
+}
 
-	private:
-		static void visualizeMessage(Visualization::Item* item, Model::Node* node,
-											  const QString& message, const QString& type = "default");
-};
+OOModel::ReferenceExpression* ReferenceFinder::visitReferenceExpression(ReferenceFinder* self,
+																								OOModel::ReferenceExpression* m)
+{
+	if (m->target() == self->searchNode_)	self->references_ << m;
+	return m;
+}
 
 } /* namespace OODebug */

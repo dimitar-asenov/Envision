@@ -98,7 +98,8 @@ HEADERS += src/statements/AssertStatement.h \
     src/expressions/TypeNameOperator.h \
     src/expressions/GlobalScopeExpression.h \
     src/declarations/ExplicitTemplateInstantiation.h \
-    src/OOModelPlugin.h
+    src/OOModelPlugin.h \
+    src/statements/SynchronizedStatement.h
 SOURCES += src/statements/AssertStatement.cpp \
     src/expressions/InstanceOfExpression.cpp \
     src/expressions/SuperExpression.cpp \
@@ -190,4 +191,5 @@ SOURCES += src/statements/AssertStatement.cpp \
     src/expressions/TypeNameOperator.cpp \
     src/expressions/GlobalScopeExpression.cpp \
     src/declarations/ExplicitTemplateInstantiation.cpp \
-    src/OOModelPlugin.cpp
+    src/OOModelPlugin.cpp \
+    src/statements/SynchronizedStatement.cpp

@@ -26,39 +26,21 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "Statement.h"
 
-namespace Model {
-	class TreeManager;
-	class Node;
-}
+#include "../expressions/Expression.h"
+#include "../elements/StatementItemList.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SynchronizedStatement)
 
 namespace OOModel {
-	class Method;
-}
 
-namespace OODebug {
-
-class RunProcess;
-
-class OODEBUG_API JavaRunner
+class OOMODEL_API SynchronizedStatement: public Super<Statement>
 {
-	public:
-		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(SynchronizedStatement)
 
-	private:
-		static void noMainMethodWarning(Model::Node* node);
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+	ATTRIBUTE(Expression, expression, setExpression)
+	ATTRIBUTE(StatementItemList, body, setBody)
 };
 
-} /* namespace OODebug */
+} /* namespace OOModel */

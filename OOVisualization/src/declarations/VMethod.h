@@ -71,6 +71,7 @@ class OOVISUALIZATION_API VMethod
 		Visualization::SequentialLayout* addons_{};
 		Visualization::VList* results_{};
 		Visualization::VList* memberInitializers_{};
+		Visualization::VList* throws_{};
 		Item* comment_{};
 };
 

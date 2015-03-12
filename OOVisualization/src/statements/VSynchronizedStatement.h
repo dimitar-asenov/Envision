@@ -24,47 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#include "HConsoleOverlay.h"
+#pragma once
 
-#include "../overlays/ConsoleOverlay.h"
+#include "../oovisualization_api.h"
+#include "VSynchronizedStatementStyle.h"
+#include "VStatementItem.h"
 
-namespace OODebug {
+#include "OOModel/src/statements/SynchronizedStatement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-HConsoleOverlay::HConsoleOverlay()
-{}
-
-HConsoleOverlay* HConsoleOverlay::instance()
-{
-	static HConsoleOverlay inst;
-	return &inst;
+namespace Visualization {
+	class NodeWrapper;
+	class Static;
 }
 
-void HConsoleOverlay::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
-{
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
-		if (auto console = DCast<ConsoleOverlay>(target))
-			consolePosition_ = console->pos();
-}
+namespace OOVisualization {
 
-void HConsoleOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
-{
-	if (event->buttons() & Qt::LeftButton)
-	{
-		if (auto console = DCast<ConsoleOverlay>(target))
-		{
-			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
-			move(console, diff);
-		}
-	}
-}
+class VStatementItemList;
 
-void HConsoleOverlay::move(ConsoleOverlay* console, const QPointF& to)
+class OOVISUALIZATION_API VSynchronizedStatement
+	: public Super<VStatementItem<VSynchronizedStatement, Visualization::DeclarativeItem<VSynchronizedStatement>,
+	  OOModel::SynchronizedStatement>>
 {
-	QPointF dest(consolePosition_ + to);
-	if (dest.x() < 0) dest.setX(0);
-	if (dest.y() < 0) dest.setY(0);
+	ITEM_COMMON(VSynchronizedStatement)
 
-	console->setPos(dest);
-}
+	public:
+		VSynchronizedStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+
+		Visualization::NodeWrapper* expression() const;
+		VStatementItemList* body() const;
+		Visualization::Static* icon() const;
+
+		static void initializeForms();
+
+	private:
+		Visualization::NodeWrapper* expression_{};
+		VStatementItemList* body_{};
+		Visualization::Static* icon_{};
+};
+
+inline Visualization::NodeWrapper* VSynchronizedStatement::expression() const { return expression_; }
+inline VStatementItemList* VSynchronizedStatement::body() const { return body_; }
+inline Visualization::Static* VSynchronizedStatement::icon() const {return icon_;}
 
 }

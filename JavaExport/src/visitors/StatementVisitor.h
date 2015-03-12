@@ -49,6 +49,7 @@ class StatementVisitor : public Visitor
 		Export::SourceFragment* visit(OOModel::SwitchStatement* statement);
 		Export::SourceFragment* visit(OOModel::TryCatchFinallyStatement* statement);
 		Export::SourceFragment* visit(OOModel::AssertStatement* statement);
+		Export::SourceFragment* visit(OOModel::SynchronizedStatement* statement);
 
 		Export::SourceFragment* visit(OOModel::StatementItem* statementItem);
 };

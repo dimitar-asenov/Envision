@@ -30,6 +30,8 @@ namespace OODebug {
 
 VMStart::~VMStart() {}
 
+SingleStepEvent::~SingleStepEvent() {}
+
 ClassPrepare::~ClassPrepare() {}
 
 Event::~Event() {}

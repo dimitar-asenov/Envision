@@ -271,7 +271,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
-	add(new OD( "instanceof", "expr SPACE instanceof SPACE type", 6, OD::LeftAssociative,
+	add(new OD( "instanceof", "expr instanceof type", 6, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new InstanceOfExpression();
 		opr->setExpr(operands.first());
@@ -296,7 +296,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
-	add(new OD( "new object", "new SPACE expr", 2, OD::RightAssociative,
+	add(new OD( "new object", "new expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression();
 		//TODO: not quite right, we need to set the operand as the initializer expression and the new type as the
@@ -305,7 +305,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
-	add(new OD( "new array", "new SPACE expr [ expr ]", 2, OD::RightAssociative,
+	add(new OD( "new array", "new expr [ expr ]", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression();
 		opr->setNewType( operands.first());
@@ -313,7 +313,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
-	add(new OD( "new array with init", "new SPACE expr [ expr ] expr", 2, OD::RightAssociative,
+	add(new OD( "new array with init", "new expr [ expr ] expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new NewExpression();
 		opr->setNewType( operands.first());
@@ -322,14 +322,14 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
-	add(new OD( "delete object", "delete SPACE expr", 2, OD::RightAssociative,
+	add(new OD( "delete object", "delete expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new DeleteExpression();
 		expr->setExpr( operands.first());
 		return expr;
 	}));
 
-	add(new OD( "delete array", "delete [] SPACE expr", 2, OD::RightAssociative,
+	add(new OD( "delete array", "delete [] expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new DeleteExpression();
 		expr->setIsArray(true);
@@ -406,7 +406,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return at;
 	}));
 
-	add(new OD( "const qualifier", "const SPACE type", 1, OD::RightAssociative,
+	add(new OD( "const qualifier", "const type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new TypeQualifierExpression();
 		at->setQualifier(Type::CONST);
@@ -414,7 +414,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return at;
 	}));
 
-	add(new OD( "volatile qualifier", "volatile SPACE type", 1, OD::RightAssociative,
+	add(new OD( "volatile qualifier", "volatile type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new TypeQualifierExpression();
 		at->setQualifier(Type::VOLATILE);
@@ -422,14 +422,14 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return at;
 	}));
 
-	add(new OD( "throw", "throw SPACE expr", 30, OD::RightAssociative,
+	add(new OD( "throw", "throw expr", 30, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new ThrowExpression();
 		expr->setExpr( operands.first());
 		return expr;
 	}));
 
-	add(new OD( "typename", "typename SPACE type", 1, OD::RightAssociative,
+	add(new OD( "typename", "typename type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new TypeNameOperator();
 		expr->setTypeExpression( operands.first());
@@ -464,8 +464,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		if (operands.size() > 2) vd->decl()->setInitialValue(operands[2]);
 		return vd;
 	};
-	add(new OD( "variable decl", "type SPACE id", 40, OD::RightAssociative, varDeclFunction));
-	add(new OD( "variable decl and initialization", "type SPACE id = expr", 40,
+	add(new OD( "variable decl", "type id", 40, OD::RightAssociative, varDeclFunction));
+	add(new OD( "variable decl and initialization", "type id = expr", 40,
 			OD::RightAssociative, varDeclFunction));
 
 

@@ -26,23 +26,41 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
 
-#include "../jdwp/messages/MethodSet.h"
+#include "ModelBase/src/visitor/VisitorDefinition.h"
+
+namespace OOModel {
+	class ReferenceExpression;
+}
+
+namespace Model {
+	class Node;
+}
 
 namespace OODebug {
 
-class JavaMethod {
+/**
+ * Implements a visitor to find all references to some node.
+ */
+class OODEBUG_API ReferenceFinder : public Model::Visitor<ReferenceFinder, OOModel::ReferenceExpression*>
+{
 	public:
-		JavaMethod(LineTable lineTable);
+		static void init();
+		void setSearchNode(Model::Node* searchNode);
 
-		qint64 indexForLine(qint32 line);
+		QList<OOModel::ReferenceExpression*> references() const;
+		void clearReferences();
+
 	private:
-		QMultiHash<qint32, qint64> lineToCode_;
-
+		static OOModel::ReferenceExpression* visitReferenceExpression(ReferenceFinder* self,
+																						  OOModel::ReferenceExpression* m);
+		Model::Node* searchNode_;
+		QList<OOModel::ReferenceExpression*> references_;
 };
 
-// Just return the first index.
-inline qint64 JavaMethod::indexForLine(qint32 line) { return lineToCode_.find(line).value(); }
+inline void ReferenceFinder::setSearchNode(Model::Node* searchNode) { searchNode_ = searchNode; }
+inline QList<OOModel::ReferenceExpression*> ReferenceFinder::references() const { return references_; }
+inline void ReferenceFinder::clearReferences() { references_.clear(); }
 
 } /* namespace OODebug */

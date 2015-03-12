@@ -56,6 +56,7 @@
 #include "statements/VSwitchStatement.h"
 #include "statements/VCaseStatement.h"
 #include "statements/VAssertStatement.h"
+#include "statements/VSynchronizedStatement.h"
 
 #include "alternative/VKeywordMethodCall.h"
 

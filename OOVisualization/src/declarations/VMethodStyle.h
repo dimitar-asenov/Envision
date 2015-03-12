@@ -62,6 +62,7 @@ class OOVISUALIZATION_API VMethodStyle : public Super<Visualization::Declarative
 		Property<Visualization::VListStyle> arguments{this, "arguments"};
 		Property<Visualization::VListStyle> results{this, "results"};
 		Property<Visualization::VListStyle> memberInitializers{this, "memberInitializers"};
+		Property<Visualization::VListStyle> throws{this, "throws"};
 };
 
 }

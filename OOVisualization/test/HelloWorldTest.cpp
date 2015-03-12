@@ -439,6 +439,8 @@ Method* addLongMethod(Class* parent)
 	arg3->setName("epsilon");
 	longMethod->arguments()->append(arg3);
 
+	longMethod->throws()->append(new ReferenceExpression("MyException"));
+
 	auto argumentCommentNode1 = new CommentNode("[image#styles/icon/globe.svg]");
 	arg1->setComment(argumentCommentNode1);
 	auto argumentCommentNode2 = new CommentNode("[image#styles/icon/pencil.svg]");
@@ -821,6 +823,11 @@ Method* addLongMethod(Class* parent)
 	catch2->body()->append(new ExpressionStatement(new ReferenceExpression("var3")));
 	trycatch->finallyBody()->append(new ExpressionStatement(new ReferenceExpression("var4")));
 	longMethod->items()->append(trycatch);
+
+	auto sync = new SynchronizedStatement();
+	sync->setExpression(new ReferenceExpression("someMonitor"));
+	sync->body()->append(new ExpressionStatement(new ReferenceExpression("var22")));
+	longMethod->items()->append(sync);
 
 	ReturnStatement* longMethodReturn = new ReturnStatement();
 	longMethod->items()->append(longMethodReturn);
