@@ -252,7 +252,7 @@ bool Token::findSplit(QVector<Token>::const_iterator& splitStart, QVector<Token>
 				QChar openParen, QChar closeParen)
 {
 	// Find open paren
-	while (splitStart != splitEnd && (splitStart->type_ != OperatorDelimiter || splitStart->text_.at(0) != openParen))
+	while (splitStart != splitEnd && (splitStart->type_ != OperatorDelimiter || splitStart->text_ != openParen))
 		++splitStart;
 
 	if (splitStart == splitEnd) return false;
@@ -269,11 +269,11 @@ bool Token::findSplit(QVector<Token>::const_iterator& splitStart, QVector<Token>
 	{
 		if (splitMid->type_ == OperatorDelimiter)
 		{
-			if (splitMid->text_.at(0) == openParen)
+			if (splitMid->text_ == openParen)
 			{
 				++leftBalance;
 			}
-			else if (splitMid->text_.at(0) == closeParen)
+			else if (splitMid->text_ == closeParen)
 			{
 				//Try using this as a closing paren for splitStart
 
