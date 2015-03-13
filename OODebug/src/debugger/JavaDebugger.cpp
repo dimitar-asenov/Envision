@@ -39,16 +39,6 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Module.h"
 #include "OOModel/src/declarations/Project.h"
-#include "OOModel/src/expressions/Expression.h"
-#include "OOModel/src/expressions/types/TypeExpression.h"
-#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
-#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
-#include "OOModel/src/expressions/types/ClassTypeExpression.h"
-#include "OOModel/src/expressions/VariableDeclarationExpression.h"
-#include "OOModel/src/types/PrimitiveType.h"
-#include "OOModel/src/statements/ExpressionStatement.h"
-#include "OOModel/src/statements/DeclarationStatement.h"
-#include "OOModel/src/statements/LoopStatement.h"
 #include "OOModel/src/elements/StatementItemList.h"
 
 #include "OOVisualization/src/elements/VStatementItemList.h"
@@ -73,7 +63,7 @@ struct EnvisionVariable {
 struct VariableObserver {
 		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
 							  QList<EnvisionVariable> observedVariables, Model::Node* observerLocation,
-							  QList<JavaDebugger::ValueCalculator> valueCalculators = {})
+							  QList<Probes::ValueCalculator> valueCalculators = {})
 			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
 			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators} {}
 
@@ -84,7 +74,7 @@ struct VariableObserver {
 		// The location of the observer, this might be useful if it has an attached overlay.
 		Model::Node* observerLocation_;
 		// Value calculator functions
-		QList<JavaDebugger::ValueCalculator> valueCalculators_;
+		QList<Probes::ValueCalculator> valueCalculators_;
 };
 
 const QString JavaDebugger::BREAKPOINT_OVERLAY_GROUP{"Breakpoint overlay"};
@@ -121,7 +111,7 @@ bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 		}
 	}
 
-	exportMap_ = JavaExport::JavaExporter::exportMaps().map(project);
+	utils_.setExportMap(JavaExport::JavaExporter::exportMaps().map(project));
 	debugConnector_.connect();
 	return true;
 }
@@ -143,7 +133,7 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 			{
 				if (isParentClassLoaded(node))
 				{
-					qint32 requestId = debugConnector_.setBreakpoint(nodeToLocation(node));
+					qint32 requestId = debugConnector_.setBreakpoint(utils_.nodeToLocation(node));
 					setBreakpoints_[requestId] = node;
 				}
 				else
@@ -188,7 +178,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 	{
 		auto node = target->node();
 		Q_ASSERT(node);
-		auto variableDeclaration = variableDeclarationFromStatement(DCast<OOModel::StatementItem>(node));
+		auto variableDeclaration = utils_.variableDeclarationFromStatement(DCast<OOModel::StatementItem>(node));
 		if (!variableDeclaration) return false;
 
 		// Check if this is tracked and if so remove it.
@@ -214,7 +204,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		refFinder.visit(containingMethod);
 
 		EnvisionVariable observedVar(variableDeclaration->name(),
-											  typeExpressionToTag(variableDeclaration->typeExpression()));
+											  utils_.typeExpressionToTag(variableDeclaration->typeExpression()));
 		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({observedVar});
 		auto overlay = new PlotOverlay(target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first);
 		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
@@ -258,7 +248,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 		return new Interaction::CommandResult();
 	}
 
-	auto parsedArgs = parseProbeArguments(arguments);
+	auto parsedArgs = Probes::parseProbeArguments(arguments);
 	QStringList variableNames = parsedArgs.second;
 
 	QHash<QString, EnvisionVariable> declarationMap;
@@ -269,8 +259,8 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 		{
 			for (auto varName : variableNames)
 				if (!declarationMap.contains(varName))
-					if (auto decl = variableDeclarationFromStatement(statementList->at(idx), varName))
-						 declarationMap[varName] = {decl->name(), typeExpressionToTag(decl->typeExpression())};
+					if (auto decl = utils_.variableDeclarationFromStatement(statementList->at(idx), varName))
+						 declarationMap[varName] = {decl->name(), utils_.typeExpressionToTag(decl->typeExpression())};
 		}
 		auto itemInParentList = statementList->firstAncestorOfType<OOModel::StatementItem>();
 		statementList = nullptr; // we finished with this list
@@ -293,7 +283,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 		for (auto arg : *method->arguments())
 			for (auto varName : variableNames)
 				if (!declarationMap.contains(varName) && arg->name() == varName)
-					declarationMap[varName] = {arg->name(), typeExpressionToTag(arg->typeExpression())};
+					declarationMap[varName] = {arg->name(), utils_.typeExpressionToTag(arg->typeExpression())};
 	}
 
 	if (declarationMap.size() < variableNames.size())
@@ -327,36 +317,10 @@ JavaDebugger::JavaDebugger()
 												[this] (Event e) { handleSingleStep(e.singleStep()); });
 }
 
-void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
-{
-	auto overlay = new Visualization::IconOverlay(target, Visualization::IconOverlay::itemStyles().get("breakpoint"));
-	target->addOverlay(overlay, BREAKPOINT_OVERLAY_GROUP);
-}
-
-QString JavaDebugger::jvmSignatureFor(OOModel::Class* theClass)
-{
-	// from JNI spec fully qualified class: http://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp16432
-	QString signature = fullNameFor(theClass, '/');
-	signature.prepend("L").append(";");
-	return signature;
-}
-
-QString JavaDebugger::fullNameFor(OOModel::Class* theClass, QChar delimiter)
-{
-	QString fullName = theClass->name();
-	auto module = theClass->firstAncestorOfType<OOModel::Module>();
-	while (module)
-	{
-		fullName.prepend(module->name() + delimiter);
-		module = module->firstAncestorOfType<OOModel::Module>();
-	}
-	return fullName;
-}
-
 bool JavaDebugger::isParentClassLoaded(Model::Node* node)
 {
 	auto containerClass = node->firstAncestorOfType<OOModel::Class>();
-	qint64 id = debugConnector_.classIdOf(jvmSignatureFor(containerClass));
+	qint64 id = debugConnector_.classIdOf(utils_.jvmSignatureFor(containerClass));
 	return id != DebugConnector::NO_RESULT;
 }
 
@@ -365,91 +329,9 @@ void JavaDebugger::breaktAtParentClassLoad(Model::Node* node)
 	auto containerClass = node->firstAncestorOfType<OOModel::Class>();
 	if (!breakOnLoadClasses_.contains(containerClass))
 	{
-		debugConnector_.breakAtClassLoad(fullNameFor(containerClass, '.'));
+		debugConnector_.breakAtClassLoad(utils_.fullNameFor(containerClass, '.'));
 		breakOnLoadClasses_.insert(containerClass);
 	}
-}
-
-Location JavaDebugger::nodeToLocation(Model::Node* node)
-{
-	auto method = node->firstAncestorOfType<OOModel::Method>();
-	auto containerClass = method->firstAncestorOfType<OOModel::Class>();
-	qint64 classId =  debugConnector_.classIdOf(jvmSignatureFor(containerClass));
-	Q_ASSERT(classId != debugConnector_.NO_RESULT);
-	QString methodName = method->name();
-	if (method->methodKind() == OOModel::Method::MethodKind::Constructor)
-		methodName = "<init>";
-	// TODO: function to get signature of a method: for Java classes we would need the full java library.
-	// Once fixed also fix the implementation of getMethodId().
-	qint64 methodId = debugConnector_.methodIdOf(classId, methodName);
-	Q_ASSERT(methodId != debugConnector_.NO_RESULT);
-
-	auto tagKind = Protocol::TypeTagKind::CLASS;
-	if (containerClass->constructKind() == OOModel::Class::ConstructKind::Interface)
-		tagKind = Protocol::TypeTagKind::INTERFACE;
-	else if (containerClass->constructKind() != OOModel::Class::ConstructKind::Class)
-		Q_ASSERT(false); // This should not happen for a Java project!
-
-	auto locations = exportMap_->locations(node);
-	int line = locations.at(0).span_.startLine_;
-	for (auto loc : locations) line = std::min(line, loc.span_.startLine_);
-	++line; // Envision is 0 indexed and java 1 indexed
-
-	// get line info for this method.
-	// -2 because -1 is a valid code index for native methods, see:
-	// http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_Method_VariableTable
-	static constexpr qint64 NO_INDEX = -2;
-	qint64 methodIndex = NO_INDEX;
-	auto lineTable = debugConnector_.lineTable(classId, methodId);
-	for (auto val : lineTable.mappings())
-		if (line == val.lineNumber()) methodIndex = val.lineCodeIndex();
-
-	Q_ASSERT(methodIndex != NO_INDEX);
-	return Location(tagKind, classId, methodId, methodIndex);
-}
-
-Model::Node* JavaDebugger::locationToNode(Location location, bool& isClosingBracket)
-{
-	QString signature = debugConnector_.signatureOf(location.classId());
-	signature = signature.mid(1, signature.size() - 2); // remove symbol at start and ; at end.
-	QString fileName = QString("src/%1.java").arg(signature);
-
-	int line = -1;
-	auto lineTable = debugConnector_.lineTable(location.classId(), location.methodId());
-	for (auto val : lineTable.mappings())
-	{
-		if (location.methodIndex() <= val.lineCodeIndex())
-		{
-			line = val.lineNumber();
-			break;
-		}
-	}
-	Q_ASSERT(line >= 0);
-
-	if (auto node = exportMap_->node(fileName, line - 1, 0))
-	{
-		if (auto stmtItem = DCast<OOModel::StatementItem>(node)) return stmtItem;
-		if (auto stmt = node->firstAncestorOfType<OOModel::StatementItem>()) return stmt;
-		// If we are at the closing bracket of a method, the node will be a StatementItemList, thus we just highlight
-		// the last item in this list.
-		if (auto stmtList = DCast<OOModel::StatementItemList>(node))
-		{
-			isClosingBracket = true;
-			return stmtList->at(stmtList->size() -1);
-		}
-	}
-	Q_ASSERT(false); // We should find a node!
-}
-
-void JavaDebugger::resume()
-{
-	debugConnector_.resume();
-	if (currentLineItem_)
-	{
-		toggleLineHighlight(currentLineItem_, false);
-		currentLineItem_ = nullptr;
-	}
-	currentThreadId_ = 0;
 }
 
 void JavaDebugger::trySetBreakpoints()
@@ -468,7 +350,7 @@ void JavaDebugger::trySetBreakpoints()
 	{
 		if (isParentClassLoaded(*it))
 		{
-			breakpointLocations[nodeToLocation(*it)] = *it;
+			breakpointLocations[utils_.nodeToLocation(*it)] = *it;
 			it = unsetBreakpoints_.erase(it);
 		}
 		else
@@ -498,6 +380,17 @@ void JavaDebugger::removeBreakpointAt(Model::Node* node)
 			break; // There should only be one breakpoint
 		}
 	}
+}
+
+void JavaDebugger::resume()
+{
+	debugConnector_.resume();
+	if (currentLineItem_)
+	{
+		toggleLineHighlight(currentLineItem_, false);
+		currentLineItem_ = nullptr;
+	}
+	currentThreadId_ = 0;
 }
 
 void JavaDebugger::handleVMStart(Event)
@@ -572,7 +465,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 {
 	bool closingBracket = false;
-	auto node = locationToNode(singleStep.location(), closingBracket);
+	auto node = utils_.locationToNode(singleStep.location(), closingBracket);
 
 	// It might be that we have a breakpoint on the same location so cancel its resume.
 	debugConnector_.cancelResume();
@@ -583,121 +476,68 @@ void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 	toggleLineHighlight(currentLineItem_, true, closingBracket);
 }
 
-Protocol::Tag JavaDebugger::typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable)
+QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPlotTypeAndValueHandlerFor(
+		QList<EnvisionVariable> variableInfos)
 {
-	int numArgs = containingMethod->arguments()->size();
-	// Member functions have the this pointer as first argument
-	int varSlot = containingMethod->isStatic() ? variable.slot() : variable.slot() - 1;
-	if (varSlot < numArgs)
+	Q_ASSERT(!variableInfos.empty());
+
+	if (utils_.isPrimitiveValueType(variableInfos[0].typeTag_))
 	{
-		auto typeExpression = containingMethod->arguments()->at(varSlot)->typeExpression();
-		return typeExpressionToTag(typeExpression);
-	}
-	else
-	{
-		int neededIndex = varSlot - numArgs;
-		int currentIndex = 0;
-		for (auto item : *containingMethod->items())
+		bool allPrimitive = true;
+		for (auto varInfo : variableInfos)
+			if (!utils_.isPrimitiveValueType(varInfo.typeTag_)) allPrimitive = false;
+		if (allPrimitive)
 		{
-			if (item->symbolType() == Model::Node::VARIABLE)
-			{
-				if (currentIndex == neededIndex)
-				{
-					auto variableDeclaration = variableDeclarationFromStatement(item);
-					Q_ASSERT(variableDeclaration);
-					if (variableDeclaration->name() != variable.name())
-						qDebug() << "Name differs, Decl:" << variableDeclaration->name() << "var" << variable.name();
-					return typeExpressionToTag(variableDeclaration->typeExpression());
-				}
-				++currentIndex;
-			}
+			if (variableInfos.size() > 1)
+				return {PlotOverlay::PlotType::Scatter, &JavaDebugger::handleValues};
+			else
+				return {PlotOverlay::PlotType::Bars, &JavaDebugger::handleValues};
 		}
 	}
-	// If we don't find the declration something is wrong
-	Q_ASSERT(false);
+	else if (variableInfos[0].typeTag_ == Protocol::Tag::ARRAY)
+	{
+		return {PlotOverlay::PlotType::Array, &JavaDebugger::handleArray};
+	}
+
+	Q_ASSERT(false); // We should implement something for this combination
 }
 
-Protocol::Tag JavaDebugger::typeExpressionToTag(OOModel::Expression* e)
+void JavaDebugger::handleValues(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target)
 {
-	if (auto typeExpression = DCast<OOModel::TypeExpression>(e))
-	{
-		if (auto primitiveType = DCast<OOModel::PrimitiveTypeExpression>(typeExpression))
-		{
-			switch (primitiveType->typeValue())
-			{
-				case OOModel::PrimitiveType::INT:
-					return Protocol::Tag::INT;
-				case OOModel::PrimitiveType::LONG:
-					return Protocol::Tag::LONG;
-				case OOModel::PrimitiveType::UNSIGNED_INT:
-					return Protocol::Tag::INT;
-				case OOModel::PrimitiveType::UNSIGNED_LONG:
-					return Protocol::Tag::LONG;
-				case OOModel::PrimitiveType::FLOAT:
-					return Protocol::Tag::FLOAT;
-				case OOModel::PrimitiveType::DOUBLE:
-					return Protocol::Tag::DOUBLE;
-				case OOModel::PrimitiveType::BOOLEAN:
-					return Protocol::Tag::BOOLEAN;
-				case OOModel::PrimitiveType::CHAR:
-					return Protocol::Tag::CHAR;
-				case OOModel::PrimitiveType::VOID:
-					return Protocol::Tag::VOID;
-			}
-		}
-		if (DCast<OOModel::ArrayTypeExpression>(typeExpression)) return Protocol::Tag::ARRAY;
-		if (auto classTypeExpression = DCast<OOModel::ClassTypeExpression>(typeExpression))
-		{
-			auto referenceExpression = classTypeExpression->typeExpression();
-			if (referenceExpression->name() == "String") return Protocol::Tag::STRING;
-			return Protocol::Tag::CLASS_OBJECT;
-		}
-	}
-	else if (auto referenceExpression = DCast<OOModel::ReferenceExpression>(e))
-	{
-		if (referenceExpression->name() == "String") return Protocol::Tag::STRING;
-		if (DCast<OOModel::Class>(referenceExpression->target())) return Protocol::Tag::CLASS_OBJECT;
-		// TODO: Handle this properly
-		// Here we hit if we don't know what the target points to, thus we don't know if we deal with a class object.
-		// This will probably catch us if we debug in a method with variables of Type of any "in-built" Java class
-		// (except String, which is handled above)
-		// Q_ASSERT(false);
-
-		// The assertion is disabled for testing purposes.
-		qDebug() << "JAVADEBUGGER: WARNING: Reference expression where target type is uknown.";
-		return Protocol::Tag::CLASS_OBJECT;
-	}
-	// No other types possible, or we have to implement it!
-	Q_ASSERT(false);
+	QList<double> doubleValues;
+	for (auto val : values.values()) doubleValues << utils_.doubleFromValue(val);
+	QList<double> plotValues;
+	for (auto extractor : valueCalculators) plotValues << extractor(doubleValues);
+	if (plotValues.size() > 1)
+		plotOverlayOfNode(target)->addValues(plotValues[0], plotValues.mid(1));
+	else if (plotValues.size() == 1)
+		plotOverlayOfNode(target)->addValue(plotValues[0]);
 }
 
-OOModel::VariableDeclaration* JavaDebugger::variableDeclarationFromStatement(OOModel::StatementItem* statement,
-																									 QString variableName)
+void JavaDebugger::handleArray(Values values, QList<Probes::ValueCalculator>, Model::Node* target)
 {
-	OOModel::VariableDeclaration* variableDeclaration = nullptr;
-	OOModel::VariableDeclarationExpression* varDeclarationExpr = nullptr;
-	if (auto exprStmt = DCast<OOModel::ExpressionStatement>(statement))
+	auto vals = values.values();
+	QList<int> indices;
+	for (int i = 1; i < vals.size(); ++i) indices << utils_.doubleFromValue(vals[i]);
+	int arrayLen = debugConnector_.arrayLength(vals[0].array());
+	auto arrayVals = debugConnector_.arrayValues(vals[0].array(), 0, arrayLen);
+	switch (arrayVals.type())
 	{
-		varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression());
+		case Protocol::Tag::FLOAT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.floats(), indices);
+		case Protocol::Tag::DOUBLE: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.doubles(), indices);
+		case Protocol::Tag::INT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.ints(), indices);
+		case Protocol::Tag::LONG: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.longs(), indices);
+		case Protocol::Tag::SHORT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.shorts(), indices);
+		default: Q_ASSERT(false); // you shouldn't try to convert any non numeric values to double.
 	}
-	else if (auto declStmt = DCast<OOModel::DeclarationStatement>(statement))
-	{
-		auto decl = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
-		if (decl && (variableName.isEmpty() || decl->name() == variableName))
-			variableDeclaration = decl;
-	}
-	else if (auto loopStmt = DCast<OOModel::LoopStatement>(statement))
-	{
-		varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(loopStmt->initStep());
-	}
-	if (!variableDeclaration && varDeclarationExpr)
-	{
-		auto decl = varDeclarationExpr->decl();
-		if (decl && (variableName.isEmpty() || decl->name() == variableName))
-			variableDeclaration = decl;
-	}
-	return variableDeclaration;
 }
+
+void JavaDebugger::addBreakpointOverlay(Visualization::Item* target)
+{
+	auto overlay = new Visualization::IconOverlay(target, Visualization::IconOverlay::itemStyles().get("breakpoint"));
+	target->addOverlay(overlay, BREAKPOINT_OVERLAY_GROUP);
+}
+
 
 void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight, bool closingBracket)
 {
@@ -728,150 +568,6 @@ void JavaDebugger::toggleLineHighlight(Visualization::Item* item, bool highlight
 	}
 }
 
-QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPlotTypeAndValueHandlerFor(
-		QList<EnvisionVariable> variableInfos)
-{
-	Q_ASSERT(!variableInfos.empty());
-
-	if (hasPrimitiveValueType(variableInfos[0].typeTag_))
-	{
-		bool allPrimitive = true;
-		for (auto varInfo : variableInfos)
-			if (!hasPrimitiveValueType(varInfo.typeTag_)) allPrimitive = false;
-		if (allPrimitive)
-		{
-			if (variableInfos.size() > 1)
-				return {PlotOverlay::PlotType::Scatter, &JavaDebugger::handleValues};
-			else
-				return {PlotOverlay::PlotType::Bars, &JavaDebugger::handleValues};
-		}
-	}
-	else if (variableInfos[0].typeTag_ == Protocol::Tag::ARRAY)
-	{
-		return {PlotOverlay::PlotType::Array, &JavaDebugger::handleArray};
-	}
-
-	Q_ASSERT(false); // We should implement something for this combination
-}
-
-QPair<QList<JavaDebugger::ValueCalculator>, QStringList> JavaDebugger::parseProbeArguments(QStringList arguments)
-{
-
-	static const QRegularExpression NUMBER_REGEX{"^(\\d+)$"};
-	static const QRegularExpression OPERATOR_REGEX{"^([+\\-*/]?)$"};
-
-	QList<ValueCalculator> calculators;
-	QStringList variableNames;
-	for (int i = 0; i < arguments.size(); ++i)
-	{
-		QString arg = arguments[i];
-		if (!OPERATOR_REGEX.match(arg).hasMatch())
-		{
-			bool isNumber = NUMBER_REGEX.match(arg).hasMatch();
-			double value = 0;
-			if (isNumber) value = arg.toDouble();
-			int index = variableNames.indexOf(arg);
-			if (!isNumber && -1 == index)
-			{
-				index = variableNames.size();
-				variableNames << arg;
-			}
-			// lookahead
-			if (i + 1 < arguments.size() && OPERATOR_REGEX.match(arguments[i+1]).hasMatch())
-			{
-				// TODO: If after a operator we do not have anything we just fail here:
-				if (i + 2 >= arguments.size()) Q_ASSERT(false);
-
-				auto opFunc = operatorFromString(arguments[i+1]);
-
-				bool isNumber2 = NUMBER_REGEX.match(arguments[i+2]).hasMatch();
-				double value2 = 0;
-				if (isNumber2) value2 = arguments[i+2].toDouble();
-				int index2 = variableNames.indexOf(arguments[i+2]);
-				if (!isNumber2 && -1 == index2)
-				{
-					index2 = variableNames.size();
-					variableNames << arguments[i+2];
-				}
-				if (isNumber && isNumber2)
-					calculators << [value, value2, opFunc](QList<double>)
-						{return opFunc(value, value2);};
-				else if (isNumber)
-					calculators <<  [value, index2, opFunc](QList<double> values)
-						{return opFunc(value, values[index2]);};
-				else if (isNumber2)
-					calculators <<  [index, value2, opFunc](QList<double> values)
-						{return opFunc(values[index], value2);};
-				else
-					calculators << [index, index2, opFunc](QList<double> values)
-						{return opFunc(values[index], values[index2]);};
-				i += 2;
-			}
-			else
-			{
-				// only single argument
-				if (isNumber)
-					calculators << [value](QList<double>) { return value; };
-				else
-					calculators << ([index](QList<double> values) { return values[index];});
-			}
-		}
-	}
-	return {calculators, variableNames};
-}
-
-JavaDebugger::ValueOperator JavaDebugger::operatorFromString(QString operatorString)
-{
-	if (operatorString == "+") return [](double a, double b) { return a + b; };
-	else if (operatorString == "-") return [](double a, double b) { return a - b; };
-	else if (operatorString == "*") return [](double a, double b) { return a * b; };
-	else if (operatorString == "/") return [](double a, double b) { return a / b; };
-	Q_ASSERT(false);
-}
-
-void JavaDebugger::handleValues(Values values, QList<ValueCalculator> valueCalculators, Model::Node* target)
-{
-	QList<double> doubleValues;
-	for (auto val : values.values()) doubleValues << doubleFromValue(val);
-	QList<double> plotValues;
-	for (auto extractor : valueCalculators) plotValues << extractor(doubleValues);
-	if (plotValues.size() > 1)
-		plotOverlayOfNode(target)->addValues(plotValues[0], plotValues.mid(1));
-	else if (plotValues.size() == 1)
-		plotOverlayOfNode(target)->addValue(plotValues[0]);
-}
-
-void JavaDebugger::handleArray(Values values, QList<ValueCalculator>, Model::Node* target)
-{
-	auto vals = values.values();
-	QList<int> indices;
-	for (int i = 1; i < vals.size(); ++i) indices << doubleFromValue(vals[i]);
-	int arrayLen = debugConnector_.arrayLength(vals[0].array());
-	auto arrayVals = debugConnector_.arrayValues(vals[0].array(), 0, arrayLen);
-	switch (arrayVals.type())
-	{
-		case Protocol::Tag::FLOAT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.floats(), indices);
-		case Protocol::Tag::DOUBLE: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.doubles(), indices);
-		case Protocol::Tag::INT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.ints(), indices);
-		case Protocol::Tag::LONG: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.longs(), indices);
-		case Protocol::Tag::SHORT: return plotOverlayOfNode(target)->updateArrayValues(arrayVals.shorts(), indices);
-		default: Q_ASSERT(false); // you shouldn't try to convert any non numeric values to double.
-	}
-}
-
-double JavaDebugger::doubleFromValue(Value v)
-{
-	switch (v.type())
-	{
-		case Protocol::Tag::FLOAT: return v.floatValue();
-		case Protocol::Tag::DOUBLE: return v.doubleValue();
-		case Protocol::Tag::INT: return v.intValue();
-		case Protocol::Tag::LONG: return v.longValue();
-		case Protocol::Tag::SHORT: return v.shortValue();
-		default: Q_ASSERT(false); // you shouldn't try to convert any non numeric values to double.
-	}
-}
-
 PlotOverlay* JavaDebugger::plotOverlayOfNode(Model::Node* node)
 {
 	auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
@@ -879,20 +575,6 @@ PlotOverlay* JavaDebugger::plotOverlayOfNode(Model::Node* node)
 	auto overlay = (*nodeVisualization)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP);
 	Q_ASSERT(overlay);
 	return overlay;
-}
-
-bool JavaDebugger::hasPrimitiveValueType(Protocol::Tag tag)
-{
-	switch (tag)
-	{
-		case Protocol::Tag::INT: return true;
-		case Protocol::Tag::LONG: return true;
-		case Protocol::Tag::FLOAT: return true;
-		case Protocol::Tag::DOUBLE: return true;
-		case Protocol::Tag::SHORT: return true;
-		default: break;
-	}
-	return false;
 }
 
 void JavaDebugger::removeObserverOverlaysAt(Model::Node* node, Visualization::Item* nodeVisualization)
