@@ -72,13 +72,17 @@ bool DebugConnector::suspend()
 
 bool DebugConnector::resume()
 {
-	if (delayResume_)	return false;
 	if (vmAlive_)
 	{
 		auto r = makeReply<Reply>(sendCommand(ResumeCommand()));
 		return Protocol::Error::NONE == r.error();
 	}
 	return false;
+}
+
+void DebugConnector::wantResume(bool resume)
+{
+	resumeRequests_ << resume;
 }
 
 QString DebugConnector::fileNameForReference(qint64 referenceId)
@@ -345,10 +349,7 @@ void DebugConnector::handleComposite(QByteArray data)
 	Q_ASSERT(c.commandSet() == Protocol::CommandSet::Event);
 	Q_ASSERT(c.command() == MessagePart::cast(Protocol::EventCommands::Composite));
 
-	// If we have multiple events, we might have a breakpoint from a probe which would be auto resumed
-	// and also a single step event for which we don't want to resume. So we delay the resume and allow
-	// the resume to be canceled.
-	delayResume_ = c.events().size() > 1;
+	resumeRequests_.clear();
 
 	for (auto& event : c.events())
 	{
@@ -364,12 +365,12 @@ void DebugConnector::handleComposite(QByteArray data)
 			qDebug() << "EVENT" << static_cast<int>(event.eventKind());
 	}
 
-	if (delayResume_)
-	{
-		delayResume_ = false;
-		if (!cancelResume_) resume();
-	}
-	cancelResume_ = false;
+	// If we have multiple events, we might have a breakpoint from a probe which would be auto resumed
+	// and also a single step event for which we don't want to resume. So check if all agree on resuming.
+	if (resumeRequests_.size() &&
+		 std::count(resumeRequests_.begin(), resumeRequests_.end(), true) == resumeRequests_.size())
+		resume();
+
 }
 
 } /* namespace OODebug */

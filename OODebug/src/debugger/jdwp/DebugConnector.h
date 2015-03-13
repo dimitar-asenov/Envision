@@ -75,7 +75,16 @@ class OODEBUG_API DebugConnector : public QObject
 		 * Suspends the execution on the VM and returns true on succes.
 		 */
 		bool suspend();
+		/**
+		 * Resumes the VM, do not use this function inside event handlers, use \a wantResume instead.
+		 */
 		bool resume();
+		/**
+		 * Specify that you want to resume, if there are multiple events all should agree otherwise we don't resume.
+		 *
+		 * Note that this function should only be used in event handlers.
+		 */
+		void wantResume(bool resume);
 
 		QString fileNameForReference(qint64 referenceId);
 		QString signatureOf(qint64 referenceId);
@@ -105,11 +114,6 @@ class OODEBUG_API DebugConnector : public QObject
 		 * Returns if the program on the target VM is running.
 		 */
 		bool vmAlive();
-
-		/**
-		 * Cancel a delayed resume command.
-		 */
-		inline void cancelResume();
 
 		static constexpr int NO_RESULT{-1};
 	private:
@@ -145,14 +149,12 @@ class OODEBUG_API DebugConnector : public QObject
 
 		bool vmAlive_{};
 
-		bool delayResume_{};
-		bool cancelResume_{};
+		// Stores if all events agree to resume
+		QList<bool> resumeRequests_;
 };
 
 inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
 { eventListeners_[kind] = listener; }
 inline bool DebugConnector::vmAlive() { return vmAlive_; }
-
-void DebugConnector::cancelResume() { cancelResume_ = true; }
 
 } /* namespace OODebug */

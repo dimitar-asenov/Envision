@@ -396,13 +396,13 @@ void JavaDebugger::resume()
 void JavaDebugger::handleVMStart(Event)
 {
 	trySetBreakpoints();
-	debugConnector_.resume();
+	debugConnector_.wantResume(true);
 }
 
 void JavaDebugger::handleClassPrepare(Event)
 {
 	trySetBreakpoints();
-	debugConnector_.resume();
+	debugConnector_.wantResume(true);
 }
 
 void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
@@ -458,7 +458,7 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 	}
 	else
 	{
-		debugConnector_.resume();
+		debugConnector_.wantResume(true);
 	}
 }
 
@@ -468,7 +468,7 @@ void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 	auto node = utils_.locationToNode(singleStep.location(), closingBracket);
 
 	// It might be that we have a breakpoint on the same location so cancel its resume.
-	debugConnector_.cancelResume();
+	debugConnector_.wantResume(false);
 
 	currentThreadId_ = singleStep.thread();
 	auto visualization = *Visualization::Item::nodeItemsMap().find(node);
