@@ -26,6 +26,7 @@
 #include "CDumpMethodRenderings.h"
 
 #include "CommandHelper.h"
+#include "OOVisualization/src/declarations/VMethod.h"
 
 using namespace Interaction;
 using namespace Visualization;
@@ -53,7 +54,7 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 
 		QTextStream textStream(&methodSpecificationFile);
 
-		const int MAX_NUM_METHODS = 150;
+		const int MAX_NUM_METHODS = 500;
 
 		for (int i = 0; i<MAX_NUM_METHODS; ++i)
 		{
@@ -63,7 +64,7 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 		}
 	}
 
-	QRegExp reg{"^.+(\\.\\S+)\\s+>>>.*\\s(\\S+)\\(.*\\).*$"};
+	QRegExp reg{"^.+\\t(use|skip)\\t[^\\t]*\\t([^\\t]*)\\s*>>>.*\\s(\\S+)\\(.*\\).*$"};
 	int itemNumber = 1;
 	for (auto methodSig : methods)
 	{
@@ -71,8 +72,9 @@ Interaction::CommandResult* CDumpMethodRenderings::executeNamed(Visualization::I
 		if (!matched)
 			return new CommandResult( new CommandError("Format mismatch on line: " + methodSig));
 
-		QStringList path {reg.capturedTexts()[1].split(".", QString::SkipEmptyParts)};
-		path += reg.capturedTexts()[2];
+		QStringList path {reg.capturedTexts()[2].split(".", QString::SkipEmptyParts)};
+		path.prepend(target->node()->symbolName());
+		path += reg.capturedTexts()[3];
 
 		int numPrinted = 0;
 		printPath(target, path, itemNumber, numPrinted);
@@ -92,7 +94,11 @@ void CDumpMethodRenderings::printPath(Visualization::Item* item, QStringList pat
 
 	if (item->node()->symbolName() != path.takeFirst()) return;
 
-	if (path.isEmpty()) printItem(item, itemNumber, numPrinted);
+	if (path.isEmpty()) {
+		if (auto vMethod = DCast<OOVisualization::VMethod>(item))
+			if (vMethod->node()->arguments()->size() >= 2)
+				printItem(item, itemNumber, numPrinted);
+	}
 	else
 	{
 		QSet<Node*> nextInPath;
@@ -114,7 +120,12 @@ void CDumpMethodRenderings::printItem(Visualization::Item* item, int itemNumber,
 	pmapPainter.setRenderHint(QPainter::Antialiasing);
 	item->scene()->render(&pmapPainter, QRect(0, 0, itemSize.width(), itemSize.height()),
 								 item->sceneBoundingRect().toRect());
-	image.save("item_dump/" + QString::number(itemNumber) + "_" + QString::number(numPrinted) + ".png");
+
+	auto zeroPadded = QString("%1").arg(itemNumber, 3, 10, QChar('0'));
+	if (numPrinted == 1)
+		image.save("item_dump/" + zeroPadded + ".png");
+	else
+		image.save("item_dump/" + zeroPadded + "_" + QString::number(numPrinted) + ".png");
 }
 
 } /* namespace OOInteraction */
