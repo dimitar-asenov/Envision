@@ -38,6 +38,7 @@
 #include "VArrayInitializer.h"
 #include "VVariableDeclarationExpression.h"
 #include "VLambdaExpression.h"
+#include "VCastExpression.h"
 
 #include "VEmptyExpression.h"
 #include "VErrorExpression.h"
