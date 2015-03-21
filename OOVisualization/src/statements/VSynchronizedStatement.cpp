@@ -46,7 +46,7 @@ VSynchronizedStatement::VSynchronizedStatement(Item* parent, NodeType* node, con
 void VSynchronizedStatement::initializeForms()
 {
 	auto header = (new GridLayoutFormElement())
-					->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
+					->setHorizontalSpacing(5)->setColumnStretchFactor(3, 1)
 					->setVerticalAlignment(LayoutStyle::Alignment::Center)
 					->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
 					->put(1, 0, item<NodeWrapper>(&I::expression_, [](I* v){return v->node()->expression();},
