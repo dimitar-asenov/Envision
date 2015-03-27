@@ -56,7 +56,7 @@ namespace OODebug {
 struct VariableObserver {
 		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
 							  QList<EnvisionVariable> observedVariables, Model::Node* observerLocation,
-							  QList<Probes::ValueCalculator> valueCalculators = {})
+							  QList<Probes::ValueCalculator> valueCalculators)
 			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
 			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators} {}
 
@@ -202,12 +202,15 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto overlay = new PlotOverlay(target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first);
 		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 		auto observer = std::make_shared<VariableObserver>
-				(VariableObserver(defaultTypeAndHandler.second, {observedVar}, node));
+				(VariableObserver(defaultTypeAndHandler.second, {observedVar}, node,
+				{[](QList<double> arg) { return arg[0];}}));
 		nodeObservedBy_.insertMulti(node, observer);
 		for (auto ref : refFinder.references())
 		{
-			nodeObservedBy_.insertMulti(ref, observer);
-			unsetBreakpoints_ << ref;
+			// Breakpoints are always on StatementItems so do it here the same.
+			auto item = ref->firstAncestorOfType<OOModel::StatementItem>();
+			nodeObservedBy_.insertMulti(item, observer);
+			unsetBreakpoints_ << item;
 		}
 		return true;
 	}
