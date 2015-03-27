@@ -27,6 +27,7 @@
 #include "JavaDebugger.h"
 
 #include "ReferenceFinder.h"
+#include "EnvisionVariable.h"
 #include "../run_support/JavaRunner.h"
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/DataTypes.h"
@@ -51,14 +52,6 @@
 #include "InteractionBase/src/commands/CommandResult.h"
 
 namespace OODebug {
-
-// This mainly exists because arguments (unlike fields) are orthogonal to variable declarations in Envision.
-struct EnvisionVariable {
-		EnvisionVariable() = default;
-		EnvisionVariable(QString name, Protocol::Tag typeTag) : name_{name}, typeTag_{typeTag} {}
-		QString name_;
-		Protocol::Tag typeTag_;
-};
 
 struct VariableObserver {
 		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
@@ -251,40 +244,8 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	auto parsedArgs = Probes::parseProbeArguments(arguments);
 	QStringList variableNames = parsedArgs.second;
 
-	QHash<QString, EnvisionVariable> declarationMap;
-	auto statementList = DCast<OOModel::StatementItemList>(itemList->node());
-	while (statementList)
-	{
-		for (int idx = itemIndex; idx >= 0; --idx)
-		{
-			for (auto varName : variableNames)
-				if (!declarationMap.contains(varName))
-					if (auto decl = utils_.variableDeclarationFromStatement(statementList->at(idx), varName))
-						 declarationMap[varName] = {decl->name(), utils_.typeExpressionToTag(decl->typeExpression())};
-		}
-		auto itemInParentList = statementList->firstAncestorOfType<OOModel::StatementItem>();
-		statementList = nullptr; // we finished with this list
-		if (itemInParentList && declarationMap.size() < variableNames.size())
-		{
-			// search in parent lists
-			statementList = itemInParentList->firstAncestorOfType<OOModel::StatementItemList>();
-			itemIndex = 0;
-			for (auto it : *statementList)
-			{
-				if (it == itemInParentList) break;
-				++itemIndex;
-			}
-		}
-	}
-	if (declarationMap.size() < variableNames.size())
-	{
-		// Try to look in the method arguments for the variable
-		auto method = observedNode->firstAncestorOfType<OOModel::Method>();
-		for (auto arg : *method->arguments())
-			for (auto varName : variableNames)
-				if (!declarationMap.contains(varName) && arg->name() == varName)
-					declarationMap[varName] = {arg->name(), utils_.typeExpressionToTag(arg->typeExpression())};
-	}
+	auto declarationMap = utils_.findVariableDetailsIn(DCast<OOModel::StatementItemList>(itemList->node()),
+																		variableNames, itemIndex);
 
 	if (declarationMap.size() < variableNames.size())
 		return new Interaction::CommandResult(new Interaction::CommandError("Not all declarations found for probe"));

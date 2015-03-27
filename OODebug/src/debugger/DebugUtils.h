@@ -42,6 +42,7 @@ namespace OOModel {
 	class Expression;
 	class Method;
 	class StatementItem;
+	class StatementItemList;
 	class VariableDeclaration;
 }
 
@@ -51,6 +52,7 @@ class DebugConnector;
 class Location;
 class Value;
 class VariableDetails;
+struct EnvisionVariable;
 
 class OODEBUG_API DebugUtils
 {
@@ -76,6 +78,17 @@ class OODEBUG_API DebugUtils
 
 		OOModel::VariableDeclaration* variableDeclarationFromStatement(OOModel::StatementItem* statement,
 																							QString variableName = "");
+
+		/**
+		 * Tries to find information about the variables with names \a variableNames in the \a statementList.
+		 * If a variable is not found in the \a statementList its parent list is searched until we have no more parent
+		 * list then we try to find the name in the arguments of the containing Method. The \a indexFrom is the starting
+		 * position from where we search, not that we search in the negative direction (upwards).
+		 *
+		 * The results are returned in a map variable name -> details.
+		 */
+		QHash<QString, EnvisionVariable> findVariableDetailsIn(OOModel::StatementItemList* statementList,
+																				 QStringList variableNames, int indexFrom);
 
 	private:
 		DebugConnector* debugConnector_;

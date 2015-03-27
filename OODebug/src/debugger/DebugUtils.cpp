@@ -26,6 +26,7 @@
 
 #include "DebugUtils.h"
 
+#include "EnvisionVariable.h"
 #include "jdwp/DataTypes.h"
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/DebugConnector.h"
@@ -46,6 +47,7 @@
 #include "OOModel/src/statements/DeclarationStatement.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 #include "OOModel/src/statements/LoopStatement.h"
+#include "OOModel/src/elements/StatementItemList.h"
 #include "OOModel/src/types/PrimitiveType.h"
 
 
@@ -290,6 +292,51 @@ OOModel::VariableDeclaration* DebugUtils::variableDeclarationFromStatement(OOMod
 			variableDeclaration = decl;
 	}
 	return variableDeclaration;
+}
+
+QHash<QString, EnvisionVariable> DebugUtils::findVariableDetailsIn(OOModel::StatementItemList* statementList,
+																						 QStringList variableNames, int indexFrom)
+{
+	QHash<QString, EnvisionVariable> declarationMap;
+	int itemIndex = indexFrom;
+	auto stmtList = statementList; // working copy
+
+	if (!stmtList || variableNames.empty()) return {};
+
+	while (stmtList)
+	{
+		for (int idx = itemIndex; idx >= 0; --idx)
+		{
+			for (auto varName : variableNames)
+				if (!declarationMap.contains(varName))
+					if (auto decl = variableDeclarationFromStatement(stmtList->at(idx), varName))
+						 declarationMap[varName] = {decl->name(), typeExpressionToTag(decl->typeExpression())};
+		}
+		auto itemInParentList = stmtList->firstAncestorOfType<OOModel::StatementItem>();
+		stmtList = nullptr; // we finished with this list
+		if (itemInParentList && declarationMap.size() < variableNames.size())
+		{
+			// search in parent lists
+			stmtList = itemInParentList->firstAncestorOfType<OOModel::StatementItemList>();
+			itemIndex = 0;
+			for (auto it : *stmtList)
+			{
+				if (it == itemInParentList) break;
+				++itemIndex;
+			}
+		}
+	}
+	if (declarationMap.size() < variableNames.size())
+	{
+		// Try to look in the method arguments for the variable
+		auto method = statementList->firstAncestorOfType<OOModel::Method>();
+		Q_ASSERT(method); // SatementItemList outside method ??
+		for (auto arg : *method->arguments())
+			for (auto varName : variableNames)
+				if (!declarationMap.contains(varName) && arg->name() == varName)
+					declarationMap[varName] = {arg->name(), typeExpressionToTag(arg->typeExpression())};
+	}
+	return declarationMap;
 }
 
 } /* namespace OODebug */
