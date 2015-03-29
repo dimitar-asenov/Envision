@@ -69,16 +69,23 @@ public class ASTConverter {
 		Node currentBlockCommentLines = null;
 		Node lastLineComment = null;
 		boolean hasText = false;
+		boolean prevCharWasCR = false;
 		
 		for(int i = lineStart; i<b.getStartPosition(); ++i)
 		{
 			char c = source.charAt(i);
-			if (c == '\n')
+			if (c == '\n' || c == '\r')
 			{
-
+				if (prevCharWasCR && c=='\n') {
+					prevCharWasCR = false;
+					lineStart++;
+					continue;
+				}
+				prevCharWasCR = c == '\r';
+				
 				if (!hasText && currentBlockCommentLines == null)
 				{
-					if (lineStart > rangeStart) // otherwise, we skip the first '\n' that we find
+					if (lineStart > rangeStart) // otherwise, we skip the first new line that we find
 					{
 						//Add empty line
 						Node empty =
