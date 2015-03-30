@@ -81,12 +81,14 @@ JavaDebugger& JavaDebugger::instance()
 	return instance;
 }
 
-bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory)
+Interaction::CommandResult* JavaDebugger::debugTree(Model::TreeManager* manager,
+																	 const QString& pathToProjectContainerDirectory)
 {
 	auto project = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(project);
 
-	if (!JavaRunner::runTree(manager, pathToProjectContainerDirectory, true)) return false;
+	auto runResult = JavaRunner::runTree(manager, pathToProjectContainerDirectory, true);
+	if (runResult->code() != Interaction::CommandResult::OK) return runResult;
 
 	// All previously set breakpoints have to be unset again.
 	unsetBreakpoints_ << setBreakpoints_.values();
@@ -106,7 +108,7 @@ bool JavaDebugger::debugTree(Model::TreeManager* manager, const QString& pathToP
 
 	utils_.setExportMap(JavaExport::JavaExporter::exportMaps().map(project));
 	debugConnector_.connect();
-	return true;
+	return new Interaction::CommandResult();
 }
 
 bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* event)

@@ -26,6 +26,9 @@
 
 #include "JavaRunner.h"
 
+#include "InteractionBase/src/commands/CommandResult.h"
+#include "InteractionBase/src/commands/CommandError.h"
+
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
 
@@ -53,8 +56,8 @@ static OOModel::Project* lastProject_{};
 
 // TODO: this Runner can be improved by allowing multiple main methods if there are multiple packages.
 // Then we can have Maps: Package->LIST[Process], Process->Console and thus allow multiple processes to run.
-OOModel::Method* JavaRunner::runTree(Model::TreeManager* manager,
-												 const QString& pathToProjectContainerDirectory, bool debug)
+Interaction::CommandResult* JavaRunner::runTree(Model::TreeManager* manager,
+																const QString& pathToProjectContainerDirectory, bool debug)
 {
 	lastProject_ = DCast<OOModel::Project>(manager->root());
 	Q_ASSERT(lastProject_);
@@ -62,12 +65,11 @@ OOModel::Method* JavaRunner::runTree(Model::TreeManager* manager,
 	MainMethodFinder finder;
 	auto mainMethod = finder.visit(lastProject_);
 	if (!mainMethod)
-	{
-		noMainMethodWarning(lastProject_);
-		return nullptr;
-	}
+		return new Interaction::CommandResult(new Interaction::CommandError("No main method found to run!"));
 
-	if (!JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug)) return nullptr;
+	auto compileResult = JavaCompiler::compileTree(manager, pathToProjectContainerDirectory, debug);
+	if (compileResult->code() != Interaction::CommandResult::OK) return compileResult;
+
 	auto map = JavaExport::JavaExporter::exportMaps().map(lastProject_);
 
 	// find the file of the main method:
@@ -94,31 +96,7 @@ OOModel::Method* JavaRunner::runTree(Model::TreeManager* manager,
 	process->start("java", args);
 	if (debug) // Wait for the listening on port signal
 		process->waitForReadyRead();
-	return mainMethod;
-}
-
-void JavaRunner::noMainMethodWarning(Model::Node* node)
-{
-	Q_ASSERT(node);
-
-	static const QString overlayGroupName("RunErrors");
-	auto nodeItemMap = Visualization::Item::nodeItemsMap();
-	auto it = nodeItemMap.find(node);
-	while (it != nodeItemMap.end() && it.key() == node)
-	{
-		auto item = it.value();
-		auto scene = item->scene();
-		auto overlayGroup = scene->overlayGroup(overlayGroupName);
-
-		if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
-
-		overlayGroup->addOverlay(makeOverlay( new Visualization::MessageOverlay(item,
-			[node](Visualization::MessageOverlay *){
-			return QString("No main method found");
-		}, Visualization::MessageOverlay::itemStyles().get("warning"))));
-
-		++it;
-	}
+	return new Interaction::CommandResult();
 }
 
 void JavaRunner::handleOutput()

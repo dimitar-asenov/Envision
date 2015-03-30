@@ -34,15 +34,17 @@ namespace OODebug {
 CJavaCompile::CJavaCompile() : CommandWithNameAndFlags{"compile", {}, false}
 {}
 
-Interaction::CommandResult*CJavaCompile::executeNamed(Visualization::Item* source, Visualization::Item*,
+Interaction::CommandResult* CJavaCompile::executeNamed(Visualization::Item* source, Visualization::Item*,
 	const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
 {
+	Interaction::CommandResult* result = nullptr;
 	while (source && !source->node()) source = source->parent();
 	if (source)
 		if (auto manager = source->node()->manager())
-			JavaCompiler::compileTree(manager, "exported/" + manager->root()->symbolName());
+			result = JavaCompiler::compileTree(manager, "exported/" + manager->root()->symbolName());
 
-	return new Interaction::CommandResult();
+	if (result) return result;
+	else return new Interaction::CommandResult(new Interaction::CommandError("Tree manager not found!"));
 }
 
 } /* namespace OODebug */
