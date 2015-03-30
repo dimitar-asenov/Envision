@@ -67,7 +67,15 @@ void VIfStatement::initializeForms()
 	auto header = (new GridLayoutFormElement())
 			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
 			->setHorizontalSpacing(3)
-			->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+			->put(0, 0, item<Static>(&I::icon_, [](I* v){
+						if (v->node()->parent() && v->node()->parent()->parent() )
+						{
+							if (auto ifs = DCast<IfStatement>(v->node()->parent()->parent()))
+								if ( ifs->elseBranch() == v->node()->parent())
+									return &v->style()->elificon();
+						}
+						return &v->style()->icon();
+					}))
 			->put(1, 0, item<NodeWrapper>(&I::condition_, [](I* v){return v->node()->condition();},
 																[](I* v){return &v->style()->condition();}));
 

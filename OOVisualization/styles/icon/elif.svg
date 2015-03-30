@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="if.svg">
+   sodipodi:docname="elif.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -78,7 +78,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="18.75"
-     inkscape:cx="-4.64"
+     inkscape:cx="24.213333"
      inkscape:cy="24"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -113,6 +113,13 @@
        x="-726.1012"
        y="728.22253"
        transform="matrix(0.70710677,-0.7071068,0.70710677,0.7071068,0,0)" />
+    <path
+       style="fill:#ffa3a3;stroke:none;fill-opacity:1"
+       d="M 24,2.9 24,45.1 45.1,24 z"
+       id="path2996"
+       inkscape:connector-curvature="0"
+       transform="translate(0,1004.3622)"
+       sodipodi:nodetypes="cccc" />
     <text
        xml:space="preserve"
        style="font-size:28px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#666666;fill-opacity:1;stroke:none;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Medium"

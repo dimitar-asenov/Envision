@@ -41,6 +41,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::Declar
 
 		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
 		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::StaticStyle> elificon{this, "elificon"};
 		Property<Visualization::SequentialLayoutStyle> condition{this, "condition"};
 
 		Property<Visualization::SequentialLayoutStyle> contentVertical{this, "contentVertical"};
