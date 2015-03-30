@@ -62,7 +62,7 @@ int VIfStatement::determineForm()
 
 	if (node()->elseBranch() && node()->elseBranch()->size() == 1 && DCast<IfStatement>(node()->elseBranch()->first()))
 		return 3;
-	return horizontal_ ? 1 : 2;
+	return 2;//horizontal_ ? 1 : 2;
 }
 
 void VIfStatement::initializeForms()
