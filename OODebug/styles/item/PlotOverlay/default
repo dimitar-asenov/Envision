@@ -15,4 +15,5 @@
 	</shape>
 	<width>400</width>
 	<height>300</height>
+	<scatterDotRadius>2.0</scatterDotRadius>
 </style>

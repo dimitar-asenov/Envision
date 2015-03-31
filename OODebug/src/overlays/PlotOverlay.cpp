@@ -204,7 +204,7 @@ void PlotOverlay::plotScatter(QPainter* painter)
 	drawTics(painter);
 	drawAxes(painter);
 
-	double radius = 1.0;
+	const double radius = style()->scatterDotRadius();
 
 	static const QList<Qt::GlobalColor> colors = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};
 
