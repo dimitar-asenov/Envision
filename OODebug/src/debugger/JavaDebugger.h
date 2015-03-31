@@ -87,6 +87,8 @@ class OODEBUG_API JavaDebugger
 
 		void resume();
 
+		void removeHighlightFromCurrentLine();
+
 		// Event handlers
 		void handleVMStart(Event);
 		void handleClassPrepare(Event);

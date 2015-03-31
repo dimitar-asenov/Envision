@@ -105,6 +105,7 @@ Interaction::CommandResult* JavaDebugger::debugTree(Model::TreeManager* manager,
 			if (auto overlay = (*visualizationIt)->overlay<PlotOverlay>(PLOT_OVERLAY_GROUP)) overlay->clear();
 		}
 	}
+	removeHighlightFromCurrentLine();
 
 	utils_.setExportMap(JavaExport::JavaExporter::exportMaps().map(project));
 	debugConnector_.connect();
@@ -351,12 +352,17 @@ void JavaDebugger::removeBreakpointAt(Model::Node* node)
 void JavaDebugger::resume()
 {
 	debugConnector_.resume();
+	removeHighlightFromCurrentLine();
+	currentThreadId_ = 0;
+}
+
+void JavaDebugger::removeHighlightFromCurrentLine()
+{
 	if (currentLineItem_)
 	{
 		toggleLineHighlight(currentLineItem_, false);
 		currentLineItem_ = nullptr;
 	}
-	currentThreadId_ = 0;
 }
 
 void JavaDebugger::handleVMStart(Event)
