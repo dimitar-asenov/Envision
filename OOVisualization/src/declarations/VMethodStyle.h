@@ -56,12 +56,14 @@ class OOVISUALIZATION_API VMethodStyle : public Super<Visualization::Declarative
 		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
 		Property<Visualization::LineStyle> signatureLine{this, "signatureLine"};
 		Property<Visualization::VListStyle> annotations{this, "annotations"};
+		Property<Visualization::StaticStyle> annotationsIcon{this, "annotationsIcon"};
 		Property<Visualization::SequentialLayoutStyle> addons{this, "addons"};
 		Property<Visualization::SequentialLayoutStyle> content{this, "content"};
 		Property<Visualization::VListStyle> typeArguments{this, "typeArguments"};
 		Property<Visualization::VListStyle> arguments{this, "arguments"};
 		Property<Visualization::VListStyle> results{this, "results"};
 		Property<Visualization::VListStyle> memberInitializers{this, "memberInitializers"};
+		Property<Visualization::StaticStyle> throwsIcon{this, "throwsIcon"};
 		Property<Visualization::VListStyle> throws{this, "throws"};
 };
 

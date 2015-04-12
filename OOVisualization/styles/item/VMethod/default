@@ -59,6 +59,8 @@
 	<signatureLine prototypes="item/Line/default">
 		<pen><style>2</style></pen>
 	</signatureLine>
+	
+	<annotationsIcon prototypes="item/Symbol/keyword"><symbol>@</symbol></annotationsIcon>
 	<annotations prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -200,6 +202,12 @@
 			<symbol>add initializer</symbol>
 		</selectedTip>
 	</memberInitializers>
+	
+	<throwsIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/try.svg</filename>
+		<width>20</width>
+		<height>20</height>
+	</throwsIcon>
 	<throws prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
