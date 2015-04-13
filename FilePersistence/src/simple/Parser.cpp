@@ -235,7 +235,10 @@ void Parser::save(QTextStream& stream, GenericNode* node, int tabLevel)
 {
 	for (int i = 0; i<tabLevel; ++i) stream << '\t';
 	stream << node->name() << ' ' << node->type();
-	if (!node->id().isNull()) stream << ' ' << node->id().toString();
+	if (!node->id().isNull())
+	{
+		stream << ' ' << node->id().toString() << ' ' << node->parentId().toString();
+	}
 	if (node->hasValue())
 	{
 		if (node->valueType() == GenericNode::STRING_VALUE) stream << ". " << PREFIX_STRING << escape(node->rawValue());
@@ -275,6 +278,7 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 	int start = 0;
 	int lineEnd = -1; // This is must be initialized to -1 for the first call to nextLine.
 
+	// TODO: Do not rely on indentation, instead use the parentID (will this work in the clipboard?)
 	while ( nextNonEmptyLine(dataCopy, dataLength, start, lineEnd) )
 	{
 		auto tabLevel = countTabs(dataCopy, start, lineEnd);
@@ -330,7 +334,7 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 	Q_ASSERT(moreHeaderParts);
 	node->setType( QString::fromLatin1(line + start, headerPartEnd-start+1) );
 
-	// Id (optional)
+	// Id and parent (optional)
 	start = headerPartEnd+1;
 	moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
 	if (moreHeaderParts)
@@ -339,7 +343,15 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 		Model::NodeIdType id = toId(line, start, headerPartEnd, isId);
 
 		if ( isId ) node->setId( id );
-		else throw FilePersistenceException("Unknown node header element "
+		else throw FilePersistenceException("Unknown node header element (should be id) "
+				+ QString::fromLatin1(line+start, headerPartEnd-start+1));
+
+		// parent ID
+		start = headerPartEnd+1;
+		moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
+		id = toId(line, start, headerPartEnd, isId);
+		if ( isId ) node->setParentId( id );
+		else throw FilePersistenceException("Unknown node header element (should be parent id)"
 				+ QString::fromLatin1(line+start, headerPartEnd-start+1));
 	}
 
