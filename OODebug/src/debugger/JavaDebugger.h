@@ -84,6 +84,7 @@ class OODEBUG_API JavaDebugger
 
 		void trySetBreakpoints();
 		void removeBreakpointAt(Model::Node* node);
+		void addBreakpointAt(Model::Node* node);
 
 		void resume();
 

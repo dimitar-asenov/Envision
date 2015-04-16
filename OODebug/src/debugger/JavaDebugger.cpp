@@ -125,23 +125,7 @@ bool JavaDebugger::toggleBreakpoint(Visualization::Item* target, QKeyEvent* even
 		else
 		{
 			addBreakpointOverlay(target);
-			if (debugConnector_.vmAlive())
-			{
-				if (isParentClassLoaded(node))
-				{
-					qint32 requestId = debugConnector_.setBreakpoint(utils_.nodeToLocation(node));
-					setBreakpoints_[requestId] = node;
-				}
-				else
-				{
-					unsetBreakpoints_ << node;
-					breaktAtParentClassLoad(node);
-				}
-			}
-			else
-			{
-				unsetBreakpoints_ << node;
-			}
+			addBreakpointAt(node);
 		}
 		return true;
 	}
@@ -188,8 +172,15 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 			it = nodeObservedBy_.begin();
 			while (it != nodeObservedBy_.end())
 			{
-				if (it.value() == ptr) it = nodeObservedBy_.erase(it);
-				else ++it;
+				if (it.value() == ptr)
+				{
+					removeBreakpointAt(it.key());
+					it = nodeObservedBy_.erase(it);
+				}
+				else
+				{
+					++it;
+				}
 			}
 			return true;
 		}
@@ -213,7 +204,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 			// Breakpoints are always on StatementItems so do it here the same.
 			auto item = ref->firstAncestorOfType<OOModel::StatementItem>();
 			nodeObservedBy_.insertMulti(item, observer);
-			unsetBreakpoints_ << item;
+			addBreakpointAt(item);
 		}
 		return true;
 	}
@@ -263,7 +254,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	auto observer = std::make_shared<VariableObserver>
 			(VariableObserver(defaultTypeAndHandler.second, vars, observedNode, parsedArgs.first));
 	nodeObservedBy_.insertMulti(observedNode, observer);
-	unsetBreakpoints_ << observedNode;
+	addBreakpointAt(observedNode);
 
 	auto overlay = new Visualization::IconOverlay(vItem, Visualization::IconOverlay::itemStyles().get("monitor"));
 	vItem->addOverlay(overlay, MONITOR_OVERLAY_GROUP);
@@ -346,6 +337,27 @@ void JavaDebugger::removeBreakpointAt(Model::Node* node)
 			setBreakpoints_.erase(it);
 			break; // There should only be one breakpoint
 		}
+	}
+}
+
+void JavaDebugger::addBreakpointAt(Model::Node* node)
+{
+	if (debugConnector_.vmAlive())
+	{
+		if (isParentClassLoaded(node))
+		{
+			qint32 requestId = debugConnector_.setBreakpoint(utils_.nodeToLocation(node));
+			setBreakpoints_[requestId] = node;
+		}
+		else
+		{
+			unsetBreakpoints_ << node;
+			breaktAtParentClassLoad(node);
+		}
+	}
+	else
+	{
+		unsetBreakpoints_ << node;
 	}
 }
 
