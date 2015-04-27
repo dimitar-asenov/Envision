@@ -439,12 +439,18 @@ Method* addLongMethod(Class* parent)
 	arg3->setName("epsilon");
 	longMethod->arguments()->append(arg3);
 
+	longMethod->throws()->append(new ReferenceExpression("MyException"));
+
 	auto argumentCommentNode1 = new CommentNode("[image#styles/icon/globe.svg]");
 	arg1->setComment(argumentCommentNode1);
 	auto argumentCommentNode2 = new CommentNode("[image#styles/icon/pencil.svg]");
 	arg2->setComment(argumentCommentNode2);
 	auto argumentCommentNode3 = new CommentNode("[image#styles/icon/gurica_tree.svg]");
 	arg3->setComment(argumentCommentNode3);
+
+	auto assertSt = new AssertStatement();
+	longMethod->items()->append(assertSt);
+	assertSt->setExpression(new ReferenceExpression("someValue"));
 
 	auto var0 = new VariableDeclarationExpression("pSystem");
 	var0->decl()->setTypeExpression(new PointerTypeExpression(new ClassTypeExpression(
@@ -511,6 +517,14 @@ Method* addLongMethod(Class* parent)
 	var10->decl()->setInitialValue(cast);
 	cast->setType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	cast->setExpr(new ReferenceExpression("epsilon"));
+
+	VariableDeclarationExpression* var10_1 = new VariableDeclarationExpression("var10_1");
+	longMethod->items()->append(new ExpressionStatement(var10_1));
+	var10_1->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	auto instanceOfOp = new InstanceOfExpression();
+	var10_1->decl()->setInitialValue(instanceOfOp);
+	instanceOfOp->setExpr(new ReferenceExpression("var10"));
+	instanceOfOp->setTypeExpression(new ReferenceExpression("String"));
 
 	VariableDeclarationExpression* var11 = new VariableDeclarationExpression("var11");
 	longMethod->items()->append(new ExpressionStatement(var11));
@@ -725,6 +739,29 @@ Method* addLongMethod(Class* parent)
 	elseBranch->setOp(UnaryOperation::POSTDECREMENT);
 	elseBranch->setOperand(new ReferenceExpression("var14"));
 
+	ifs = new IfStatement();
+	longMethod->items()->append(ifs);
+	ifCond = new BinaryOperation();
+	ifs->setCondition(ifCond);
+	ifCond->setLeft(new ReferenceExpression("var14"));
+	ifCond->setOp(BinaryOperation::NOT_EQUALS);
+	ifCond->setRight(new IntegerLiteral(10));
+	thenBranch = new UnaryOperation();
+	ifs->thenBranch()->append(new ExpressionStatement(thenBranch));
+	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
+	thenBranch->setOperand(new ReferenceExpression("var14"));
+	IfStatement* ifs2 = new IfStatement();
+	ifs->elseBranch()->append(ifs2);
+	ifCond = new BinaryOperation();
+	ifs2->setCondition(ifCond);
+	ifCond->setLeft(new ReferenceExpression("var14"));
+	ifCond->setOp(BinaryOperation::NOT_EQUALS);
+	ifCond->setRight(new IntegerLiteral(10));
+	thenBranch = new UnaryOperation();
+	ifs2->thenBranch()->append(new ExpressionStatement(thenBranch));
+	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
+	thenBranch->setOperand(new ReferenceExpression("var14"));
+
 	auto swi = new SwitchStatement();
 	swi->setSwitchExpression(new ReferenceExpression("someVar"));
 	longMethod->items()->append(swi);
@@ -809,6 +846,11 @@ Method* addLongMethod(Class* parent)
 	catch2->body()->append(new ExpressionStatement(new ReferenceExpression("var3")));
 	trycatch->finallyBody()->append(new ExpressionStatement(new ReferenceExpression("var4")));
 	longMethod->items()->append(trycatch);
+
+	auto sync = new SynchronizedStatement();
+	sync->setExpression(new ReferenceExpression("someMonitor"));
+	sync->body()->append(new ExpressionStatement(new ReferenceExpression("var22")));
+	longMethod->items()->append(sync);
 
 	ReturnStatement* longMethodReturn = new ReturnStatement();
 	longMethod->items()->append(longMethodReturn);

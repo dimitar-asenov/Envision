@@ -134,6 +134,16 @@ void OverlayGroup::addOverlayFor(Item* item1, Item* item2)
 	addOverlay(constructorFunction2_(item1, item2));
 }
 
+QList<OverlayAccessor*> OverlayGroup::overlaysForItem(const Item* item) const
+{
+	Q_ASSERT(item);
+	QList<OverlayAccessor*> result;
+	for (auto accessor: overlays_)
+		if (accessor->associatedItems().contains(const_cast<Item* const>(item))) // TODO: is this really the best way?
+			result << accessor;
+	return result;
+}
+
 void OverlayGroup::update()
 {
 	if (!hidden_)

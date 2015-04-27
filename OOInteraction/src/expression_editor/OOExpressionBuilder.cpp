@@ -66,14 +66,61 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 	if (val->text().isEmpty()) throw OOInteractionException("Trying to create an expression from an empty Value");
 
 	bool isInt = false;
-	int value = val->text().toInt(&isInt);
+	int intValue = val->text().toInt(&isInt);
+	bool isChar = false;
+	QChar charValue = toChar(val->text(), isChar);
 
 	if (isInt)
-		expression = new OOModel::IntegerLiteral(value);
+		expression = new OOModel::IntegerLiteral(intValue);
 	else if (val->text().startsWith('"'))
 		expression = new OOModel::StringLiteral(val->text().mid(1, val->text().size()-2));
+	else if (isChar)
+		expression = new OOModel::CharacterLiteral(charValue);
 	else
 		expression = new OOModel::ReferenceExpression(val->text());
+}
+
+QChar OOExpressionBuilder::toChar(QString charLiteral, bool& ok)
+{
+	ok = false;
+	if (charLiteral.length() < 3 || !charLiteral.startsWith('\'') || !charLiteral.endsWith('\'')) return {};
+
+	if (charLiteral.length() == 3)
+	{
+		ok = true;
+		return charLiteral.at(1);
+	}
+
+	if (charLiteral.at(1) != '\\') return {};
+
+
+	if (charLiteral.length() == 4)
+	{
+		//Assume ok
+		ok = true;
+		if (charLiteral.at(2) == '\'') return '\'';
+		if (charLiteral.at(2) == '\"') return '\"';
+		if (charLiteral.at(2) == '\?') return '\?';
+		if (charLiteral.at(2) == '\\') return '\\';
+		if (charLiteral.at(2) == 'a')  return '\a';
+		if (charLiteral.at(2) == 'b')  return '\b';
+		if (charLiteral.at(2) == 'f')  return '\f';
+		if (charLiteral.at(2) == 'n')  return '\n';
+		if (charLiteral.at(2) == 'r')  return '\r';
+		if (charLiteral.at(2) == 't')  return '\t';
+		if (charLiteral.at(2) == 'v')  return '\v';
+		if (charLiteral.at(2) == '0')  return '\0';
+		ok = false;
+	}
+
+	Q_ASSERT(charLiteral.length() >= 4);
+	if ((charLiteral.at(2) == 'x' || charLiteral.at(2) == 'u' || charLiteral.at(2) == 'U') && charLiteral.length() > 4)
+	{
+		return charLiteral.mid(3, charLiteral.length() - 1 - 3).toInt(&ok, 16);
+	}
+
+	// Finally try octal
+	return charLiteral.mid(2, charLiteral.length() - 1 - 2).toInt(&ok, 8);
 }
 
 void OOExpressionBuilder::visit(Interaction::Operator* op)
@@ -108,6 +155,9 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 
 			if (!Interaction::OperatorDescriptor::isDelimiter(current))
 			{
+				// If there are two expressions next to each other without an operator in between, put a space.
+				if (lastDelimiter.isEmpty() && operand_index > 0) lastDelimiter = ' ';
+
 				unf->delimiters()->append(new Model::Text(lastDelimiter));
 				lastDelimiter.clear();
 				unfinished->at(operand_index)->accept(this);

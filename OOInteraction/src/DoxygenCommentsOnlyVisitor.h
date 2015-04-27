@@ -29,7 +29,10 @@
 #include "ModelBase/src/visitor/VisitorDefinition.h"
 
 namespace OOInteraction {
-
+/**
+ * The DoxygenCommentsOnlyVisitor class transforms the documentation of a node to Doxygen compatible text.
+ * It also saves an image of appropriate comment elements to the Doxygen output directory.
+ */
 class DoxygenCommentsOnlyVisitor : public Model::Visitor<DoxygenCommentsOnlyVisitor, QString>{
 	public:
 		static void init();

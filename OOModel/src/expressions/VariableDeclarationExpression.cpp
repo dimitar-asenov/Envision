@@ -65,15 +65,14 @@ bool VariableDeclarationExpression::definesSymbol() const
 const QString& VariableDeclarationExpression::symbolName() const
 {
 	static QString nullString;
-	// TODO: Is there a better way of doing this
-	auto decl = (const_cast<VariableDeclarationExpression*>(this))->decl();
-	return decl ? decl->symbolName() : nullString;
+	auto d = decl();
+	return d ? d->symbolName() : nullString;
 }
 
 VariableDeclarationExpression::SymbolTypes VariableDeclarationExpression::symbolType() const
 {
-	auto decl = (const_cast<VariableDeclarationExpression*>(this))->decl();
-	return decl ? decl->symbolType() : UNSPECIFIED;
+	auto d = decl();
+	return d ? d->symbolType() : UNSPECIFIED;
 }
 
 Type* VariableDeclarationExpression::type()

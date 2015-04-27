@@ -51,6 +51,7 @@ class FILEPERSISTENCE_API GenericNode {
 		void resetValue(ValueType type, const QString& value);
 
 		void setId(Model::NodeIdType id);
+		void setParentId(Model::NodeIdType parentId);
 
 		void setParent(GenericNode* parent);
 		GenericNode* addChild(GenericNode* child);
@@ -79,6 +80,7 @@ class FILEPERSISTENCE_API GenericNode {
 		GenericNode* find(Model::NodeIdType id);
 
 		Model::NodeIdType id() const;
+		Model::NodeIdType parentId() const;
 
 		GenericPersistentUnit* persistentUnit() const;
 
@@ -90,7 +92,7 @@ class FILEPERSISTENCE_API GenericNode {
 
 		// //////////////////////////////////////////////////////////////////////////////////////////
 		// !!!
-		// When adding new members, make sure to reset them in the reset() method
+		// When adding new members, make sure to reset them in the various reset() methods
 		// !!!
 
 		QString name_;
@@ -99,6 +101,7 @@ class FILEPERSISTENCE_API GenericNode {
 		ValueType valueType_{};
 
 		Model::NodeIdType id_{};
+		Model::NodeIdType parentId_{};
 		GenericNode* parent_{};
 		QList<GenericNode*> children_;
 
@@ -135,6 +138,8 @@ class FILEPERSISTENCE_API GenericNode {
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
+inline void GenericNode::setParentId(Model::NodeIdType parentId) { parentId_ = parentId; }
+
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
@@ -142,6 +147,7 @@ inline bool GenericNode::hasValue() const { ensureDataRead(); return valueType_ 
 inline GenericNode::ValueType GenericNode::valueType() const { ensureDataRead(); return valueType_; }
 inline const QString& GenericNode::rawValue() const { ensureDataRead(); return value_; }
 inline Model::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
+inline Model::NodeIdType GenericNode::parentId() const { ensureDataRead(); return parentId_; }
 inline const QList<GenericNode*>& GenericNode::children() const { ensureDataRead(); return children_; }
 inline GenericNode* GenericNode::parent() const {ensureDataRead(); return parent_;} // Parent must be explicitly set
 

@@ -6,25 +6,33 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>200</red>
-				<green>200</green>
-				<blue>200</blue>
+				<red>228</red>
+				<green>147</green>
+				<blue>57</blue>
 			</color>
 		</outline>
 		<backgroundBrush>
-			<style>12</style>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>224</green>
-				<blue>224</blue>
-			</color>
+			<gradient>
+				<stopPoints>
+					<e1>
+						<first>1.0</first>
+						<second>
+							<alpha>255</alpha>
+							<red>255</red>
+							<green>236</green>
+							<blue>217</blue>
+						</second>
+					</e1>
+				</stopPoints>
+			</gradient>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
 	
-	<tryIcon prototypes="item/Symbol/keyword">
-		<symbol>try</symbol>
+	<tryIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/try.svg</filename>
+		<width>22</width>
+		<height>22</height>
 	</tryIcon>
 	
 	<catchClauses prototypes="item/VList/default">
@@ -32,7 +40,7 @@
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<alignment>1</alignment>
 			<direction>2</direction>
-			<spaceBetweenElements>0</spaceBetweenElements>
+			<spaceBetweenElements>1</spaceBetweenElements>
 			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 			<hasCursorWhenEmpty>false</hasCursorWhenEmpty>
 		</itemsStyle>
@@ -45,25 +53,33 @@
 				<width>1</width>
 				<color>
 					<alpha>255</alpha>
-					<red>200</red>
-					<green>224</green>
-					<blue>200</blue>
+					<red>160</red>
+					<green>160</green>
+					<blue>160</blue>
 				</color>
 			</outline>
 			<backgroundBrush>
-				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>224</red>
-					<green>255</green>
-					<blue>224</blue>
-				</color>
+				<gradient>
+					<stopPoints>
+						<e1>
+							<first>1.0</first>
+							<second>
+								<alpha>255</alpha>
+								<red>224</red>
+								<green>224</green>
+								<blue>224</blue>
+							</second>
+						</e1>
+					</stopPoints>
+				</gradient>
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>
 		</shape>
 	</finallyOutline>
 	
-	<finallyIcon prototypes="item/Symbol/keyword">
-		<symbol>finally</symbol>
+	<finallyIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/finally.svg</filename>
+		<width>22</width>
+		<height>22</height>
 	</finallyIcon>
 </style>

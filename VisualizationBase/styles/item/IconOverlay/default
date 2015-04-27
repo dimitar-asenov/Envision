@@ -1,0 +1,8 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape/>
+	<placement>left-outside</placement>
+	<icon prototypes="item/Symbol/default">
+		<symbol>someIcon</symbol>
+	</icon>
+</style>

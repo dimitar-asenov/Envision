@@ -70,7 +70,16 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty));
 	}
 
-	if (!processed) GenericHandler::keyPressEvent(target, event);
+	if (!processed)
+	{
+		// check if any of the register handlers, handles the event.
+		// TODO: for now only the first handler gets respected,
+		// maybe we should add a warning if there are multiple for the same event.
+		for (auto handler : keyPressHandlers_)
+			if ((processed = handler(target, event))) break;
+	}
+	if (!processed)
+		GenericHandler::keyPressEvent(target, event);
 }
 
 } /* namespace OOInteraction */

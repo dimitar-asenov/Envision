@@ -7,7 +7,9 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/expressions/VSuperExpression.h \
+HEADERS += src/statements/VAssertStatementStyle.h \
+    src/statements/VAssertStatement.h \
+    src/expressions/VSuperExpression.h \
     src/elements/VOOReference.h \
     src/expressions/VNewExpressionStyle.h \
     src/expressions/VNewExpression.h \
@@ -113,8 +115,14 @@ HEADERS += src/expressions/VSuperExpression.h \
     src/semantic_zoom/VDeclarationSzStyle.h \
     src/semantic_zoom/VDeclarationConstantSzStyle.h \
     src/semantic_zoom/VDeclarationConstantSz.h \
-    src/OOVisualizationPlugin.h
-SOURCES += src/expressions/VSuperExpression.cpp \
+    src/OOVisualizationPlugin.h \
+    src/statements/VSynchronizedStatement.h \
+    src/statements/VSynchronizedStatementStyle.h \
+    src/expressions/VCastExpression.h \
+    src/expressions/VCastExpressionStyle.h
+SOURCES += src/statements/VAssertStatementStyle.cpp \
+    src/statements/VAssertStatement.cpp \
+    src/expressions/VSuperExpression.cpp \
     src/elements/VOOReference.cpp \
     src/expressions/VNewExpressionStyle.cpp \
     src/expressions/VNewExpression.cpp \
@@ -216,4 +224,8 @@ SOURCES += src/expressions/VSuperExpression.cpp \
     src/semantic_zoom/VDeclarationSzStyle.cpp \
     src/semantic_zoom/VDeclarationConstantSzStyle.cpp \
     src/semantic_zoom/VDeclarationConstantSz.cpp \
-    src/OOVisualizationPlugin.cpp
+    src/OOVisualizationPlugin.cpp \
+    src/statements/VSynchronizedStatement.cpp \
+    src/statements/VSynchronizedStatementStyle.cpp \
+    src/expressions/VCastExpression.cpp \
+    src/expressions/VCastExpressionStyle.cpp

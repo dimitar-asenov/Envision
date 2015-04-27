@@ -56,7 +56,7 @@ void VCaseStatement::initializeForms()
 				}
 			}
 
-		)
+		) ->setHorizontalSpacing(5)
 	);
 
 }

@@ -26,7 +26,7 @@
 
 #include "VCharacterLiteral.h"
 
-#include "ModelBase/src/model/TreeManager.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -35,26 +35,37 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VCharacterLiteral, "item")
 
-VCharacterLiteral::VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style) :
-	Super(parent, literal, style),
-	vis_(nullptr)
-{
-}
+VCharacterLiteral::VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style)
+: Super{parent, literal, style} {}
 
 VCharacterLiteral::~VCharacterLiteral()
 {
-	SAFE_DELETE_ITEM(vis_);
+	// These were automatically deleted by LayoutProvider's destructor
+	pre_ = nullptr;
+	post_ = nullptr;
+	vis_ = nullptr;
 }
 
 void VCharacterLiteral::determineChildren()
 {
-	synchronizeItem(vis_, node()->valueNode(), style());
-	vis_->setStyle( style() );
-}
+	int index = 0;
+	layout()->synchronizeFirst(pre_, !style()->preSymbol().isEmpty(), &style()->preSymbol());
+	index += pre_?1:0;
 
-void VCharacterLiteral::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(vis_, availableWidth, availableHeight);
+	layout()->synchronizeMid(vis_, node()->valueNode(), &style()->string(), index);
+	index += vis_?1:0;
+
+	layout()->synchronizeLast(post_, !style()->postSymbol().isEmpty(), &style()->postSymbol());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	vis_->setStyle( &style()->string() );
+	vis_->setEditable(false);
+	if (pre_) pre_->setStyle( &style()->preSymbol());
+	if (post_) post_->setStyle( &style()->postSymbol());
 }
 
 }

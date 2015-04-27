@@ -28,18 +28,25 @@
 
 #include "../../oovisualization_api.h"
 #include "../VExpression.h"
+#include "VStringLiteralStyle.h"
 
+#include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/VCharacter.h"
 
 #include "OOModel/src/expressions/CharacterLiteral.h"
 
+namespace Visualization {
+	class Static;
+}
+
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCharacterLiteral : public Super<VExpression<VCharacterLiteral, Visualization::Item,
-OOModel::CharacterLiteral>>
+//TODO: This class is identical to VStringLiteral
+class OOVISUALIZATION_API VCharacterLiteral
+	: public Super<VExpression<VCharacterLiteral, Visualization::LayoutProvider<>, OOModel::CharacterLiteral>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCharacterLiteral, Visualization::TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VCharacterLiteral, VStringLiteralStyle)
 
 	public:
 		VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
@@ -47,10 +54,11 @@ OOModel::CharacterLiteral>>
 
 	protected:
 		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::VCharacter* vis_;
+		Visualization::Static* pre_{};
+		Visualization::Static* post_{};
+		Visualization::VCharacter* vis_{};
 };
 
 }

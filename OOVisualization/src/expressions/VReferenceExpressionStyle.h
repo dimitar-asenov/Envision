@@ -43,6 +43,8 @@ class OOVISUALIZATION_API VReferenceExpressionStyle : public Super<Visualization
 		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
 		Property<Visualization::TextStyle> resolvedName{this, "resolvedName"};
 		Property<Visualization::TextStyle> unresolvedName{this, "unresolvedName"};
+		Property<Visualization::TextStyle> thisIdentifier{this, "thisIdentifier"};
+		Property<Visualization::TextStyle> classIdentifier{this, "classIdentifier"};
 		Property<Visualization::StaticStyle> nonPointerSeparator{this, "nonPointerSeparator"};
 		Property<Visualization::StaticStyle> pointerSeparator{this, "pointerSeparator"};
 		Property<Visualization::VListStyle> typeArguments{this, "typeArguments"};

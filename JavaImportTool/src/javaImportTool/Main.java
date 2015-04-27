@@ -70,10 +70,10 @@ public class Main {
 		String[] extraLibraries = null;
 		for (int i = 3; i < args.length; ++i)
 		{
-			if (args[i].equals("--classFiles")) classFiles = true;
-			else if (args[i].startsWith("--libs:"))
+			if (args[i].equals("-classFiles")) classFiles = true;
+			else if (args[i].startsWith("-libs:"))
 			{
-				extraLibraries = args[i].substring("--libs:".length()).split(",");
+				extraLibraries = args[i].substring("-libs:".length()).split(",");
 			}
 			else
 			{
@@ -123,7 +123,7 @@ public class Main {
 			String suffix =  classFiles ? ".class" : ".java";
 			for(File file : FileUtils.listFiles(dir, new SuffixFileFilter(suffix), TrueFileFilter.INSTANCE))
 			{
-				System.out.print("Processing file: " + file.getPath() + "...");
+				if (!PRINT_METHODS) System.out.print("Processing file: " + file.getPath() + "...");
 				ASTParser parser = ASTParser.newParser(AST.JLS4);
 				
 				String source;
@@ -143,13 +143,13 @@ public class Main {
 				
 				if ( unit.getMessages().length > 0)
 				{
-					System.err.println("Errors encountered while parsing.");
+					if (!PRINT_METHODS) System.err.println("Errors encountered while parsing.");
 					for(Message m : unit.getMessages()) System.err.println(m.getMessage());
 				}
 				
 				ASTConverter tl = new ASTConverter(root, source);
 				tl.visit(unit);
-				System.out.println("Done");
+				if (!PRINT_METHODS) System.out.println("Done");
 			}
 			
 			System.out.print("Estimating size and arrangement...");
@@ -175,8 +175,10 @@ public class Main {
 		}
 	}
 	
+	public static final boolean PRINT_METHODS = false;
+	
 	private static String usageInfo =
-			  "Usage: JavaImportTool project-name input-directory output-directory [--classFiles] [--libs:...]\n"
+			  "Usage: JavaImportTool project-name input-directory output-directory [-classFiles] [-libs:...]\n"
 		  	+ "\n"
 			+ "   project-name\n"
 			+ "      This is the name of the project being converted. This will be used as a directory and file names\n"
@@ -192,10 +194,10 @@ public class Main {
 			+ "      specified by the project-name is crated. It will contain the generated text files to be imported\n"
 			+ "      in Envision.\n"
 			+ "\n"
-			+ "   --classFiles\n"
+			+ "   -classFiles\n"
 			+ "      Parse .class fiels instead of .java files.\n"
 			+ "\n"
-			+ "   --libs:...\n"
+			+ "   -libs:...\n"
 			+ "      Include the specified comma separeted list of library dependencies in the output project.\n"
-			+ "      E.g. --libs:java or --libs:java,fancyMath,OpenGl\n";
+			+ "      E.g. -libs:java or -libs:java,fancyMath,OpenGl\n";
 }

@@ -96,6 +96,7 @@ public class NodeDescriptors {
 				{"TypedListOfFormalArgument","arguments"},
 				{"TypedListOfFormalResult","results"},
 				{"TypedListOfMemberInitializer","memberInitializers"},
+				{"TypedListOfExpression","throws"},
 				{"Integer","mthKind"}
 		}));
 		add( new NodeInitializer("VariableDeclaration", "Declaration", new String[][]{
@@ -164,6 +165,13 @@ public class NodeDescriptors {
 		add( new NodeInitializer("CatchClause", new String[][]{
 				{"StatementItemList","body"}
 		}));
+		add( new NodeInitializer("AssertStatement", new String[][]{
+				{"Expression","expression"}
+		}));
+		add( new NodeInitializer("SynchronizedStatement", new String[][]{
+				{"Expression","expression"},
+				{"StatementItemList","body"}
+		}));
 		
 		// Expressions
 		add( new NodeInitializer("ReferenceExpression", new String[][]{
@@ -205,6 +213,10 @@ public class NodeDescriptors {
 				{"Expression","castType"},
 				{"Expression","expr"},
 				{"Integer","cKind"}
+		}));
+		add( new NodeInitializer("InstanceOfExpression", new String[][]{
+				{"Expression","expr"},
+				{"Expression","typeExpression"}
 		}));
 		add( new NodeInitializer("MethodCallExpression", new String[][]{
 				{"Expression","callee"},
@@ -255,6 +267,17 @@ public class NodeDescriptors {
 		// Misc
 		add( new NodeInitializer("UsedLibrary", new String[][]{
 				{"Text","name"}
+		}));
+		
+		// Comments
+		add( new NodeInitializer("CommentStatementItem", new String[][]{
+				{"CommentNode","commentNode"}
+		}));
+		add( new NodeInitializer("CommentNode", new String[][]{
+				{"TypedListOfText","lines"},
+				{"TypedListOfCommentDiagram","diagrams"},
+				{"TypedListOfCommentFreeNode","codes"},
+				{"TypedListOfCommentTable","tables"}
 		}));
 	}
 }

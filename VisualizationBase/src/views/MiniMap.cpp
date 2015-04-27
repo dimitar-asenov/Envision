@@ -80,13 +80,28 @@ void MiniMap::paintEvent(QPaintEvent *event)
 	if (drawnRect.width() <= 2 || drawnRect.height() <= 2)
 		painter.drawEllipse(drawnRect.center(), 5, 5);
 
+	constexpr double SMALL_RECT = 10;
 	// Indicate clearly selected items
 	for (auto sel : scene()->selectedItems())
 	{
 		auto rect = mapFromScene(sel->sceneBoundingRect()).boundingRect();
+
+		// TODO: The stuff below is a bit of a hack to make sure the selection of an entire project is properly
+		// shown and updated. Without those two lines, the right & bottom parts of the rectangle are outside of the
+		// area that is updated and are not drawn (or not cleared). The numbers are "empirical" and should be inferred
+		// somehow
+		if (rect.width() >= viewport()->width() - 10) rect.setWidth( rect.width() - 2);
+		if (rect.height() >= viewport()->height() - 10) rect.setHeight( rect.height() - 2);
+
+		// Make sure that no matter how small a selection is, it's always visible on the minimap
 		if (rect.width() < 1) rect.setWidth(1);
 		if (rect.height() < 1) rect.setHeight(1);
-		painter.setBrush(Qt::red);
+		painter.setBrush(Qt::NoBrush);
+
+		if (rect.width() < SMALL_RECT && rect.height() < SMALL_RECT)
+			painter.setPen(Qt::red);
+		else
+			painter.setPen(QPen(Qt::red, 1, Qt::DashLine));
 		painter.drawRect(rect);
 	}
 

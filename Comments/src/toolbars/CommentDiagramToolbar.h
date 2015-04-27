@@ -34,7 +34,17 @@
 #include "items/VComment.h"
 
 namespace Comments {
-
+/**
+ * The CommentDiagramToolbar class provides a toolbar for the diagram editor.
+ * It shows multiple menu items which can be used to modify diagrams.
+ *
+ * It offers the following functionality:
+ * - Create new shapes
+ * - Change color of the background, the outline and the text of shapes
+ * - Change outline type and outline size
+ * - Change the arrows of connectors
+ * - Show the connection points to establish connectors
+ */
 class COMMENTS_API CommentDiagramToolbar : public QToolBar
 {
 		Q_OBJECT
@@ -43,6 +53,10 @@ class COMMENTS_API CommentDiagramToolbar : public QToolBar
 		void setDiagram(VCommentDiagram* diagram);
 		void setCurrentShape(Visualization::Item *currentShape);
 		void setCurrentConnector(Visualization::Item *currentConnector);
+		/**
+		 * The clearCurrentItem method resets the toolbar.
+		 * After executing this method no shape or connector is selected and most toolbar items are not available.
+		 */
 		void clearCurrentItem();
 		void setSelectionMode(bool sel);
 		bool selectionMode();

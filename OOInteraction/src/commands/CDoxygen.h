@@ -31,7 +31,9 @@
 #include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
 namespace OOInteraction {
-
+/**
+ * The CDoxygen class offers the command line interaction to execute the Alloy generation.
+ */
 class OOINTERACTION_API CDoxygen : public Interaction::CreateNamedObjectWithAttributes
 {
 	public:

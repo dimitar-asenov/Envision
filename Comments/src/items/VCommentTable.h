@@ -38,7 +38,10 @@
 #include "VCommentTableStyle.h"
 
 namespace Comments {
-
+/**
+ * The VCommentTable class offers the visualization of the CommentTable class.
+ * It uses the Visualization::GridLayout to display the items in a grid.
+ */
 class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCommentTable,
 						Visualization::Item, CommentTable> >
 {

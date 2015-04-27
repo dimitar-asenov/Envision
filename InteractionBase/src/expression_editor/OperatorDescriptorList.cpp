@@ -77,6 +77,16 @@ QList<OperatorDescriptor*> OperatorDescriptorList::findByInfixWithoutPrefix(cons
 	return list;
 }
 
+QList<OperatorDescriptor*> OperatorDescriptorList::findByEmptyInfixWithoutPrefix() const
+{
+	QList<OperatorDescriptor*> list;
+	for (OperatorDescriptor* d : ops_)
+		if (d->prefix().isEmpty() && !d->infixes().isEmpty() && d->infixes().first().isEmpty())
+			list.append(d);
+
+	return list;
+}
+
 QList<OperatorDescriptor*> OperatorDescriptorList::findByPostfixWithoutPreInfix(const QStringList&  postfixTokens) const
 {
 	QList<OperatorDescriptor*> list;

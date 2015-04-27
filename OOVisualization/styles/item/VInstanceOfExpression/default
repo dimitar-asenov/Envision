@@ -1,0 +1,7 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/OperatorStyle/default">
+	<layout prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</layout>
+	<inSymbol prototypes="item/Symbol/keyword"><symbol>instanceof</symbol></inSymbol>
+</style>

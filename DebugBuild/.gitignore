@@ -13,3 +13,6 @@
 /*.prof
 /exported
 /doxygen/**
+/alloy/**
+/AlloyIntegrationCLI.jar
+/item_dump/**

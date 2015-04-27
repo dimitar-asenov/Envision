@@ -66,6 +66,7 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		void setPostUpdateFunction(PostUpdateFunction function);
 
 		const QList<OverlayAccessor*>& overlays() const;
+		QList<OverlayAccessor*> overlaysForItem(const Item* item) const;
 
 	private:
 		friend class Scene;

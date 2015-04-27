@@ -54,6 +54,7 @@ class OOMODEL_API Method : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE(Model::TypedList<MemberInitializer>, memberInitializers, setMemberInitializers)
+	ATTRIBUTE(Model::TypedList<Expression>, throws, setThrows)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, mthKind, setMthKind, int)
 
 	public:
@@ -71,6 +72,8 @@ class OOMODEL_API Method : public Super<Declaration>
 		QString fullyQualifiedName() const;
 		bool isGeneric();
 
+		bool isStatic() const;
+
 		virtual SymbolTypes symbolType() const override;
 
 		virtual bool findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher, const Node* source,
@@ -82,6 +85,7 @@ class OOMODEL_API Method : public Super<Declaration>
 
 inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }
 inline void Method::setMethodKind(const MethodKind &kind) { setMthKind(static_cast<int> (kind)); }
+inline bool Method::isStatic() const { return modifiers()->isSet(Modifier::Static); }
 inline bool Method::isOverridenBy(Method* other) {return other->overrides(this);}
 
 }

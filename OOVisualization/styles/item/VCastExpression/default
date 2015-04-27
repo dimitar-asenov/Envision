@@ -7,9 +7,9 @@
 				<style>1</style>
 				<color>
 					<alpha>255</alpha>
-					<red>255</red>
-					<green>200</green>
-					<blue>200</blue>
+					<red>204</red>
+					<green>179</green>
+					<blue>153</blue>
 				</color>
 			</backgroundBrush>
 			<outline>
@@ -18,8 +18,14 @@
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
 		</shape>
-		<direction>2</direction>
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
+	<typeWrapper prototypes="item/Item/default">
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>(</leftBrace>
+			<rightBrace>)</rightBrace>
+		</shape>
+	</typeWrapper>
 </style>

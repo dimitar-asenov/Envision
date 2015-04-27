@@ -31,6 +31,7 @@
 #include "commands/CCreateClass.h"
 #include "commands/CCreateMethod.h"
 #include "commands/CCreateField.h"
+#include "commands/CDumpMethodRenderings.h"
 
 #include "InteractionBase/src/commands/CDiff.h"
 #include "InteractionBase/src/commands/CHistory.h"
@@ -50,6 +51,8 @@ HProject::HProject()
 	addCommand(new CCreateClass());
 	addCommand(new CCreateMethod());
 	addCommand(new CCreateField());
+	
+	addCommand(new CDumpMethodRenderings());
 
 	addCommand(new Interaction::CDiff());
 	addCommand(new Interaction::CHistory());
