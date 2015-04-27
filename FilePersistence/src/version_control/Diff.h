@@ -42,22 +42,20 @@ class FILEPERSISTENCE_API Diff
 	public:
 		Diff();
 		Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
-			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB,
-			  const GitRepository* repository);
+			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB, const GitRepository*);
 
 		IdToChangeDescriptionHash changes() const;
 		IdToChangeDescriptionHash changes(ChangeType type) const;
 		IdToChangeDescriptionHash changes(ChangeType type, ChangeDescription::UpdateFlags flags) const;
 
 	private:
-		void idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB, IdToGenericNodeHash& createdParents);
-		void findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& createdParents,
-										 std::shared_ptr<GenericTree> tree, const GitRepository* repository);
+		void idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB);
 
 		void setAllChildStructureUpdates();
-		void setChildStructureUpdateForNode(const GenericNode* node);
 
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
+
+		bool trueChange(const ChangeDescription* change);
 
 		IdToChangeDescriptionHash changeDescriptions_{};
 
@@ -66,5 +64,13 @@ class FILEPERSISTENCE_API Diff
 };
 
 inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}
+
+/**
+ * filters false changes that are stationary and have no flags set.
+ */
+inline bool Diff::trueChange(const ChangeDescription* change)
+{
+	return !(change->type() == ChangeType::Stationary && change->flags() == 0);
+}
 
 } /* namespace FilePersistence */

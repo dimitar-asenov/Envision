@@ -36,10 +36,11 @@ class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
 		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
+		ChangeDescription(ChangeType type);
 
 		enum UpdateType
 		{
-			Order = 1,
+			Label = 1,
 			Value = 2,
 			Type = 4,
 			Children = 8

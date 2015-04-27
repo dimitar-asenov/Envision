@@ -128,6 +128,7 @@ void GenericNode::setParent(GenericNode* parent)
 {
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
+	parentId_ = parent->id();
 }
 
 GenericNode* GenericNode::addChild(GenericNode* child)
@@ -225,6 +226,7 @@ void GenericNode::detach()
 	{
 		parent_->children_.removeOne(this);
 		parent_ = nullptr;
+		parentId_ = {};
 	}
 }
 

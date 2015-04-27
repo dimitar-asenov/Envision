@@ -212,7 +212,7 @@ void Merge::buildConflictUnitMap(QMultiHash<Model::NodeIdType, ChangeDescription
 				break;
 
 			case ChangeType::Stationary:
-				if (change->flags().testFlag(ChangeDescription::Order))
+				if (change->flags().testFlag(ChangeDescription::Label))
 				{
 					// Reordering occured
 					// find CU in treeA
@@ -819,7 +819,7 @@ bool Merge::applyStationaryChangeToTree(const std::unique_ptr<GenericTree>& tree
 		node->setType(type);
 	}
 
-	if (flags.testFlag(ChangeDescription::Order))
+	if (flags.testFlag(ChangeDescription::Label))
 	{
 		GenericNode* parent = stationaryOp->nodeB()->parent();
 		if (parent)

@@ -37,6 +37,10 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB)
 
 	fundamentalChangeClassification();
 }
+ChangeDescription::ChangeDescription(ChangeType type)
+{
+	type_ = type;
+}
 
 void ChangeDescription::fundamentalChangeClassification()
 {
@@ -77,9 +81,9 @@ void ChangeDescription::detectReorder()
 {
 	// check for same name -> reordering detection
 	if (nodeA_->name() != nodeB_->name())
-		updateFlags_ |= Order;
+		updateFlags_ |= Label;
 	else
-		updateFlags_ &= ~Order;
+		updateFlags_ &= ~Label;
 }
 
 void ChangeDescription::detectValueUpdate()
@@ -129,7 +133,7 @@ void ChangeDescription::print() const
 			Q_ASSERT(false);
 	}
 
-	if (updateFlags_.testFlag(Order))
+	if (updateFlags_.testFlag(Label))
 		std::cout << " Location";
 	if (updateFlags_.testFlag(Type))
 		std::cout << " Type";
