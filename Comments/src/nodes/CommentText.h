@@ -33,7 +33,9 @@
 DECLARE_TYPED_LIST(COMMENTS_API, Comments, CommentText)
 
 namespace Comments {
-
+/**
+ * The CommentText class provides a textfield which is used in the CommentFreeNode.
+ */
 class COMMENTS_API CommentText: public Super<Model::Text>
 {
 	NODE_DECLARE_STANDARD_METHODS(CommentText)

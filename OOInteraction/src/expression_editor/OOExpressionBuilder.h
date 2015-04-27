@@ -56,6 +56,8 @@ class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisi
 		OOModel::Expression* expression;
 
 		void createErrorExpression(Interaction::Operator* op);
+
+		QChar toChar(QString charLiteral, bool& ok);
 };
 
 }

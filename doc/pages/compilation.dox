@@ -22,6 +22,8 @@ Other dependencies are:
 To install the dependencies on Ubuntu 14.04, do the following:
 	-# Install the Qt SDK:
 		\verbatim sudo apt-get install qt-sdk \endverbatim
+		You will also need to install additional packages for SVG compatibility and WebKit:
+		\verbatim sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev \endverbatim
 	-# Install the lp_solve development library version 5.5:
 		-# Install the packages \c lp-solve (for the shared library) and \c liblpsolve55-dev (for the header files):
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
@@ -48,7 +50,11 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
 	-# Open the \c envision.pro file with Qt Creator.
-	-# In the Projects view, change the arguments of make to specify parallel compilation and the *install* target:
+	-# In the Projects view, under *build* make sure that:
+		- Shadow build is enabled
+		- The build directory points to a directory that is a peer of Envision's directory. e.g.
+			\verbatim../build-envision-Desktop-Debug\endverbatim
+	-# Also in the Projects view, change the arguments of make to specify parallel compilation and the *install* target:
 		\verbatim-j8 install\endverbatim
 		The *install* target is needed in order to copy all necessary files to the DebugBuild directory.
 		Substitute 8 for the number of threads your hardware supports.

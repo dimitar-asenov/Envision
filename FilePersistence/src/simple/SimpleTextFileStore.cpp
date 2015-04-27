@@ -160,6 +160,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 		child->setName(name);
 		child->setType(GenericNode::persistentUnitType);
 		child->setId(treeManager_->nodeIdMap().id(node));
+		if (node->parent()) child->setParentId(treeManager_->nodeIdMap().id(node->parent()));
 	}
 
 	genericNode_ = genericTree_->newPersistentUnit(name).newNode();
@@ -202,6 +203,7 @@ void SimpleTextFileStore::saveNodeDirectly(const Model::Node *node, const QStrin
 	genericNode_->setName(name);
 	genericNode_->setType(node->typeName());
 	genericNode_->setId(treeManager_->nodeIdMap().id(node));
+	if (node->parent()) genericNode_->setParentId(treeManager_->nodeIdMap().id(node->parent()));
 
 	node->save(*this);
 }

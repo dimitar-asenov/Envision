@@ -41,6 +41,7 @@ class INTERACTIONBASE_API OperatorDescriptorList {
 		OperatorDescriptor* findByName(QString name) const;
 		QList<OperatorDescriptor*> findByPrefix(const QStringList& prefixTokens) const;
 		QList<OperatorDescriptor*> findByInfixWithoutPrefix(const QStringList&  infixTokens) const;
+		QList<OperatorDescriptor*> findByEmptyInfixWithoutPrefix() const;
 		QList<OperatorDescriptor*> findByPostfixWithoutPreInfix(const QStringList&  postfixTokens) const;
 		int size() const;
 		OperatorDescriptor* at(int i) const;

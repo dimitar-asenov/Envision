@@ -154,7 +154,7 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 	else if (auto e = DCast<BooleanLiteral>(expression)) *fragment << (e->value() ? "true" : "false");
 	else if (auto e = DCast<IntegerLiteral>(expression)) *fragment << QString::number( e->value());
-	else if (auto e = DCast<FloatLiteral>(expression)) *fragment << QString::number( e->value());
+	else if (auto e = DCast<FloatLiteral>(expression)) *fragment << QString::number( e->value(), 'f');
 	else if (DCast<NullLiteral>(expression)) *fragment << "null";
 	else if (auto e = DCast<StringLiteral>(expression))
 		*fragment << "\"" << QString(e->value()).replace(QRegExp("\\n"), "\\n") << "\""; // TODO: also consider \r
@@ -164,6 +164,8 @@ SourceFragment* ExpressionVisitor::visit(Expression* expression)
 
 	else if (auto e = DCast<CastExpression>(expression))
 		*fragment << "(" << visit(e->castType()) << ") " << visit(e->expr());
+	else if (auto e = DCast<InstanceOfExpression>(expression))
+		*fragment << visit(e->expr()) << " instanceof " << visit(e->typeExpression());
 	else if (auto e = DCast<CommaExpression>(expression)) *fragment << visit(e->left()) << ", " << visit(e->right());
 	else if (auto e = DCast<ConditionalExpression>(expression))
 		*fragment << visit(e->condition()) << " ? " << visit(e->trueExpression()) << " : " << visit(e->falseExpression());

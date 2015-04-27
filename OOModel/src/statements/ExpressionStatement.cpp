@@ -44,8 +44,7 @@ ExpressionStatement::ExpressionStatement(Expression* e)
 
 bool ExpressionStatement::definesSymbol() const
 {
-	//TODO What should the const usage be here?
-	auto e = (const_cast<ExpressionStatement*>(this))->expression();
+	auto e = expression();
 	return e ?e->definesSymbol() : false;
 }
 
@@ -53,15 +52,13 @@ const QString& ExpressionStatement::symbolName() const
 {
 	static QString nullString;
 
-	//TODO What should the const usage be here?
-	auto e = (const_cast<ExpressionStatement*>(this))->expression();
+	auto e = expression();
 	return e ? e->symbolName() : nullString;
 }
 
 ExpressionStatement::SymbolTypes ExpressionStatement::symbolType() const
 {
-	//TODO What should the const usage be here?
-	auto e = (const_cast<ExpressionStatement*>(this))->expression();
+	auto e = expression();
 	return e ? e->symbolType() : UNSPECIFIED;
 }
 

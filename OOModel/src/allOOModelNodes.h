@@ -50,6 +50,8 @@
 #include "statements/ExpressionStatement.h"
 #include "statements/DeclarationStatement.h"
 #include "statements/TryCatchFinallyStatement.h"
+#include "statements/AssertStatement.h"
+#include "statements/SynchronizedStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -66,6 +68,7 @@
 #include "expressions/UnaryOperation.h"
 #include "expressions/BinaryOperation.h"
 #include "expressions/CastExpression.h"
+#include "expressions/InstanceOfExpression.h"
 #include "expressions/ReferenceExpression.h"
 #include "expressions/ArrayInitializer.h"
 #include "expressions/EmptyExpression.h"

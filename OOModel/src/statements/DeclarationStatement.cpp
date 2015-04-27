@@ -50,16 +50,14 @@ bool DeclarationStatement::definesSymbol() const
 const QString& DeclarationStatement::symbolName() const
 {
 	static QString nullString;
-
-	//TODO What should the const usage be here?
-	auto d = (const_cast<DeclarationStatement*>(this))->declaration();
+	auto d = declaration();
 	return d ? d->symbolName() : nullString;
 }
 
 DeclarationStatement::SymbolTypes DeclarationStatement::symbolType() const
 {
-	auto decl = (const_cast<DeclarationStatement*>(this))->declaration();
-		return decl ? decl->symbolType() : UNSPECIFIED;
+	auto decl = declaration();
+	return decl ? decl->symbolType() : UNSPECIFIED;
 }
 
 } /* namespace OOModel */

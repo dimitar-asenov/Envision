@@ -143,6 +143,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		OverlayGroup* addOverlayGroup(const QString& name);
 		OverlayGroup* overlayGroup(const QString& name);
+		QList<OverlayGroup*> allOverlayGroups() const;
 		void removeOverlayGroup(const QString& name);
 		void removeOverlayGroup(OverlayGroup* group);
 		void removeOverlayOf(Item* itemWithOverlay, const QString& groupName = QString());

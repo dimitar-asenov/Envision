@@ -31,7 +31,10 @@
 #include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace Comments {
-
+/**
+ * The HCommentFreeNode class provides the functionality to interact with the CommentFreeNode class.
+ * It offers the keyboard interaction to reset the current node of the CommentFreeNode to the default CommentText.
+ */
 class COMMENTS_API HCommentFreeNode : public Interaction::GenericHandler
 {
 	public:

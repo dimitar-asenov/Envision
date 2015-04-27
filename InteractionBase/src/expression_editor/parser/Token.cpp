@@ -50,6 +50,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 	QString token;
 	bool escaped = false;
 	bool inString = false;
+	QChar stringStartChar;
 
 	for (int i = 0; i<input.size(); ++i )
 	{
@@ -62,7 +63,11 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		if (token.size() == 1)
 		{
 			first = ch;
-			if (first == '"') inString = true;
+			if (first == '"' || first == '\'')
+			{
+				inString = true;
+				stringStartChar = ch;
+			}
 		}
 
 		// Determine whether to finalize the current token
@@ -71,7 +76,7 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		bool stringFinished = false;
 		if (inString)
 		{
-			stringFinished = token.size()>1 && !escaped && ch == '"';
+			stringFinished = token.size()>1 && !escaped && (ch == stringStartChar);
 			finalizeToken = stringFinished || next.isNull();
 			escaped = !escaped && ch == '\\';
 		}
@@ -113,6 +118,28 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 
 			token = "";
 			inString = false;
+		}
+	}
+
+	// Remove all spaces, except for trailing ones
+	// Only do this if quotes are matched. Otherwise we might end up in a situation where some spaces inside of
+	// strings are accidentally removed while the expression is being modified.
+	if (!result.empty() && result.last().type() != PartialLiteral)
+	{
+		bool trailing = true;
+		QRegExp space{" +"};
+		for (int i = result.length() - 1; i>=0;)
+		{
+			if (!space.exactMatch(result[i].text()))
+			{
+				trailing = false;
+				--i;
+				continue;
+			}
+
+			// We have a space
+			if (trailing) --i;
+			else result.removeAt(i);
 		}
 	}
 
@@ -225,7 +252,7 @@ bool Token::findSplit(QVector<Token>::const_iterator& splitStart, QVector<Token>
 				QChar openParen, QChar closeParen)
 {
 	// Find open paren
-	while (splitStart != splitEnd && (splitStart->type_ != OperatorDelimiter || splitStart->text_.at(0) != openParen))
+	while (splitStart != splitEnd && (splitStart->type_ != OperatorDelimiter || splitStart->text_ != openParen))
 		++splitStart;
 
 	if (splitStart == splitEnd) return false;
@@ -242,11 +269,11 @@ bool Token::findSplit(QVector<Token>::const_iterator& splitStart, QVector<Token>
 	{
 		if (splitMid->type_ == OperatorDelimiter)
 		{
-			if (splitMid->text_.at(0) == openParen)
+			if (splitMid->text_ == openParen)
 			{
 				++leftBalance;
 			}
-			else if (splitMid->text_.at(0) == closeParen)
+			else if (splitMid->text_ == closeParen)
 			{
 				//Try using this as a closing paren for splitStart
 

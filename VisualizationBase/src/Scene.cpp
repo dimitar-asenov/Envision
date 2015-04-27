@@ -26,6 +26,7 @@
 
 #include "Scene.h"
 #include "VisualizationManager.h"
+#include "views/View.h"
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
 #include "items/RootItem.h"
@@ -307,12 +308,16 @@ bool Scene::event(QEvent *event)
 		if (mainCursorsJustSet_ && mainCursor_ && mainCursor_->visualization()
 				&& mainCursor_->visualization()->boundingRect().isValid() )
 		{
-			for (auto view : views())
-				if (view->isActiveWindow())
+			for (auto qtView : views())
+				if (qtView->isActiveWindow())
 				{
+					auto view = static_cast<View*>(qtView);
 					mainCursorsJustSet_ = false;
-					auto vis = mainCursor_->visualization();
-					view->ensureVisible( vis->sceneBoundingRect(), 5, 5);
+					auto cursorRect = mainCursor_->visualization()->sceneBoundingRect();
+
+					if ((cursorRect.width() < view->viewport()->width() && cursorRect.height() < view->viewport()->height())
+						 || !view->visibleRect().intersects(cursorRect)) // No action on partially shown, huge cursors
+					view->ensureVisible( cursorRect, 5, 5);
 				}
 		}
 	}
@@ -500,6 +505,14 @@ OverlayGroup* Scene::overlayGroup(const QString& name)
 	auto h = overlayGroups_.find(name);
 	if (h == overlayGroups_.end()) return nullptr;
 	else return &h.value();
+}
+
+QList<OverlayGroup*> Scene::allOverlayGroups() const
+{
+	QList<OverlayGroup*> res;
+	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
+		res.append( const_cast<OverlayGroup*>(&it.value()) );
+	return res;
 }
 
 void Scene::removeOverlayGroup(const QString& name)

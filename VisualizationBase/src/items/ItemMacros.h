@@ -85,9 +85,11 @@ Visualization::InteractionHandler* ItemClass::defaultClassHandler_ =	 nullptr;		
 																																							\
 void ItemClass::setStyle(const Visualization::ItemStyle* style_)																		\
 {																																							\
+	Q_ASSERT(style_);																																	\
 	if (style_ == style()) return;																												\
 	const StyleType* s = dynamic_cast<const StyleType*> (style_);																		\
-	if (!s) throw Visualization::VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");	\
+	if (!s) throw Visualization::VisualizationException("Invalid style (" + QString(typeid(*style_).name())				\
+		+ ") type when calling " #ItemClass "::setStyle");																					\
 	Item::setStyle(s);																																\
 }																																							\
 																																							\

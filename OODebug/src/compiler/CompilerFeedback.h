@@ -33,7 +33,7 @@
 namespace OODebug {
 
 /**
- * \a CompilerFeedback contains all parsed messaged from one compile run.
+ * \a CompilerFeedback contains all parsed messaged from one compilation.
  */
 class OODEBUG_API CompilerFeedback
 {

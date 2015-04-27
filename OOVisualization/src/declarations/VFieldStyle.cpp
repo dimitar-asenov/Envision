@@ -28,24 +28,6 @@
 
 namespace OOVisualization {
 
-VFieldStyle::VFieldStyle()
-{
-}
-
-void VFieldStyle::load(Visualization::StyleLoader& sl)
-{
-	Super::load(sl);
-
-	sl.load("layout", layout_);
-	sl.load("nameDefault", nameDefault_);
-	sl.load("namePublic", namePublic_);
-	sl.load("namePrivate", namePrivate_);
-	sl.load("nameProtected", nameProtected_);
-	sl.load("nameStaticDefault", nameStaticDefault_);
-	sl.load("nameStaticPublic", nameStaticPublic_);
-	sl.load("nameStaticPrivate", nameStaticPrivate_);
-	sl.load("nameStaticProtected", nameStaticProtected_);
-	sl.load("assignmentSymbol", assignmentSymbol_);
-}
+VFieldStyle::~VFieldStyle() {}
 
 }

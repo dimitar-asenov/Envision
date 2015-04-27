@@ -119,52 +119,46 @@ ParseResult Parser::parse(QVector<Token>::iterator token, ParseResult result, QL
 	}
 
 	bool error = false;
-	switch (token->type())
+
+	bool identifierOrLiteral = token->type() == Token::Identifier || token->type() == Token::Literal;
+	bool unexpectedIdentifierOrLiteral = identifierOrLiteral &&
+			(expected.isEmpty() || expected.first().type == ExpectedToken::FIRST_DELIM
+			 || expected.first().type == ExpectedToken::FOLLOWING_DELIM);
+
+	if (identifierOrLiteral && !unexpectedIdentifierOrLiteral )
+		processIdentifiersAndLiterals(error, expected, token, hasLeft, instructions);
+	else if (token->type() == Token::PartialLiteral)
+		error = true;
+	else if (token->type() == Token::SubExpression)
+		processSubExpression(error, expected, token, hasLeft, result, instructions);
+	else if (token->type() == Token::OperatorDelimiter || unexpectedIdentifierOrLiteral)
 	{
-		case Token::Identifier:
-		case Token::Literal:
-		{
-			processIdentifiersAndLiterals(error, expected, token, hasLeft, instructions);
-			break;
-		}
-		case Token::OperatorDelimiter:
-		{
-			// Try two things: interpret this delimiter as part of an existing operator or as introducing a new one
-			// Return whichever produces a better result.
+		// Try two things: interpret this delimiter as part of an existing operator or as introducing a new one
+		// Return whichever produces a better result.
 
-			// If the current token is the same as any of the next expected delimiters try to complete the parsing assuming
-			// missing expressions in between and finishing the intermediate operators.
-			bool processedByExpectedDelimiters = false;
-			auto pr_expected_delim = processExpectedOperatorDelimiters(processedByExpectedDelimiters, expected, token,
-						result, instructions, bestParseSoFar);
+		// If the current token is the same as any of the next expected delimiters try to complete the parsing assuming
+		// missing expressions in between and finishing the intermediate operators.
+		bool processedByExpectedDelimiters = false;
 
-			// Try to complete the parsing assuming that a new operator is being introduced by the current token.
-			bool processedByNewDelimiters = false;
-			processNewOperatorDelimiters(processedByNewDelimiters, error, expected, token, hasLeft, result, instructions,
-												  bestParseSoFar);
+		ParseResult pr_expected_delim;
+		if (!unexpectedIdentifierOrLiteral)
+			pr_expected_delim = processExpectedOperatorDelimiters(processedByExpectedDelimiters, expected, token,
+					result, instructions, bestParseSoFar);
 
-			// Return the better result if any.
-			if (processedByExpectedDelimiters && !processedByNewDelimiters) return pr_expected_delim;
-			if (!processedByExpectedDelimiters && processedByNewDelimiters) return result;
-			if (processedByExpectedDelimiters && processedByNewDelimiters)
-				return result < pr_expected_delim ? result : pr_expected_delim;
+		// Try to complete the parsing assuming that a new operator is being introduced by the current token.
+		bool processedByNewDelimiters = false;
+		processNewOperatorDelimiters(processedByNewDelimiters, error, expected, token, hasLeft, result, instructions,
+											  bestParseSoFar, unexpectedIdentifierOrLiteral);
 
-			error = true;
-			break;
-		}
-		case Token::PartialLiteral:
-		{
-			error = true;
-			break;
-		}
-		case Token::SubExpression:
-		{
-			processSubExpression(error, expected, token, hasLeft, result, instructions);
-			break;
-		}
-		default:
-			Q_ASSERT(false); // Unknown token type
+		// Return the better result if any.
+		if (processedByExpectedDelimiters && !processedByNewDelimiters) return pr_expected_delim;
+		if (!processedByExpectedDelimiters && processedByNewDelimiters) return result;
+		if (processedByExpectedDelimiters && processedByNewDelimiters)
+			return result < pr_expected_delim ? result : pr_expected_delim;
+
+		error = true;
 	}
+	else Q_ASSERT(false); // Unknown token type
 
 	// We do not get here if this is an OperatorDelimiter which has been processed.
 	// That case returns early.
@@ -315,45 +309,53 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 
 void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<ExpectedToken>& expected,
 		QVector<Token>::iterator& token, bool& hasLeft, ParseResult& result,
-		QVector<ExpressionTreeBuildInstruction*>& instructions, ParseResult& bestParseSoFar)
+		QVector<ExpressionTreeBuildInstruction*>& instructions, ParseResult& bestParseSoFar,
+		bool unexpectedIdentifierOrLiteral)
 {
-	if (!expected.isEmpty() &&
+	if (!unexpectedIdentifierOrLiteral && !expected.isEmpty() &&
 		 ( expected.first().type == ExpectedToken::ID || expected.first().type == ExpectedToken::FOLLOWING_DELIM))
 	{
 		error = true;
 	}
 	else
 	{
-		bool prefix = !expected.isEmpty() &&
+		bool prefix = !unexpectedIdentifierOrLiteral && !expected.isEmpty() &&
 				( 	expected.first().type == ExpectedToken::VALUE
 					|| expected.first().type == ExpectedToken::TYPE
 					|| expected.first().type == ExpectedToken::ANY);
 
-		QStringList allConsecutiveOperatorTokens = {token->text()};
-		QVector<Token>::iterator nextToken = token + 1;
-		while (nextToken != endTokens_ && nextToken->type() == Token::OperatorDelimiter)
-		{
-			allConsecutiveOperatorTokens.append(nextToken->text());
-			++nextToken;
-		}
-
-
 		QList<OperatorDescriptor*> matching_ops;
-		if (prefix) {
-			matching_ops.append( ops_->findByPrefix(allConsecutiveOperatorTokens) );
+		if (unexpectedIdentifierOrLiteral)
+		{
+			matching_ops.append( ops_->findByEmptyInfixWithoutPrefix());
 		}
-		else {
-			if (hasLeft)
+		else
+		{
+			QStringList allConsecutiveOperatorTokens = {token->text()};
+			QVector<Token>::iterator nextToken = token + 1;
+			while (nextToken != endTokens_ && nextToken->type() == Token::OperatorDelimiter)
 			{
-				matching_ops.append( ops_->findByInfixWithoutPrefix(allConsecutiveOperatorTokens) );
-				matching_ops.append( ops_->findByPostfixWithoutPreInfix(allConsecutiveOperatorTokens) );
-			}
-			else
-			{
-				// This situation arises for example in the 'delete []' operator where two different operator tokens follow
-				// one another. It is handled by processExpectedOperatorDelimiters()
+				allConsecutiveOperatorTokens.append(nextToken->text());
+				++nextToken;
 			}
 
+
+			if (prefix) {
+				matching_ops.append( ops_->findByPrefix(allConsecutiveOperatorTokens) );
+			}
+			else {
+				if (hasLeft)
+				{
+					matching_ops.append( ops_->findByInfixWithoutPrefix(allConsecutiveOperatorTokens) );
+					matching_ops.append( ops_->findByPostfixWithoutPreInfix(allConsecutiveOperatorTokens) );
+				}
+				else
+				{
+					// This situation arises for example in the 'delete []' operator where two different operator tokens
+					// follow one another. It is handled by processExpectedOperatorDelimiters()
+				}
+
+			}
 		}
 
 		if (matching_ops.isEmpty())
@@ -372,13 +374,15 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<Ex
 		{
 			auto new_expected = oi->expectedTokens();
 			new_expected.removeFirst(); // Remove the prefix/expr token from the signature
-			if (!prefix) new_expected.removeFirst(); // Remove the in/postfix token from the signature
+			if (!prefix && !unexpectedIdentifierOrLiteral)
+				new_expected.removeFirst(); // Remove the in/postfix token from the signature
 			new_expected.append( expected );
 
 
 			QVector<ExpressionTreeBuildInstruction*> new_instructions = instructions;
 			new_instructions.append( new AddOperator(oi) );
-			ParseResult pr = parse(token + 1, result, new_expected, false, new_instructions, bestParseSoFar);
+			ParseResult pr = parse(token + (unexpectedIdentifierOrLiteral ? 0 : 1), result, new_expected,
+										  false, new_instructions, bestParseSoFar);
 
 			if (best_oi == nullptr || pr < best_pr)
 			{

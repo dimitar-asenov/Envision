@@ -163,6 +163,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 	value_.clear();
 	valueType_ = NO_VALUE;
 	id_ = {};
+	parentId_ = {};
 	children_.clear();
 	parent_ = nullptr;
 	dataLine_ = nullptr;
@@ -198,6 +199,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode
 		value_ = nodeToCopy->value_;
 		valueType_ = nodeToCopy->valueType_;
 		id_ = nodeToCopy->id_;
+		parentId_ = nodeToCopy->parentId_;
 	}
 }
 

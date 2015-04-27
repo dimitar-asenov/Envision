@@ -97,16 +97,16 @@ void VClass::initializeForms()
 				->put(1, 2, item<VList>(&I::enumerators_, [](I* v)
 											{return v->node()->enumerators()->size() > 0 ? v->node()->enumerators() : nullptr;},
 								[](I* v){return &v->style()->enumerators();}))
-				->put(0, 2, item<Static>(&I::friendsSymbol_,
+				->put(0, 3, item<Static>(&I::friendsSymbol_,
 						[](I* v){return &v->style()->friendsSymbol();})->setEnabled(
 								[](I* v){return v->node()->friends()->size() > 0;}))
-				->put(1, 2, item<VList>(&I::friends_,
+				->put(1, 3, item<VList>(&I::friends_,
 						[](I* v) {return v->node()->friends()->size() > 0 ? v->node()->friends() : nullptr;},
 						[](I* v){return &v->style()->friends();}))
-				->put(1, 3, item<VList>(&I::declarations_,
+				->put(1, 4, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
-				->put(1, 4, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+				->put(1, 5, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 						[](Item* v)->QVector<QVector<Model::Node*>>{

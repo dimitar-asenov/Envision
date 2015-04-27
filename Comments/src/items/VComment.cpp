@@ -70,6 +70,7 @@ void VComment::parseLines()
 	int lineNumber = -1;
 	QSize htmlSize;
 
+	bool previousWasAPlainLine = false;
 	for (auto nodeLine : *node()->lines())
 	{
 		QString line = nodeLine->get();
@@ -286,7 +287,9 @@ void VComment::parseLines()
 		//************************************************************************
 		// Plain lines
 		//************************************************************************
+		if (previousWasAPlainLine) linesOfCurrentElement << "<br />";
 		linesOfCurrentElement << line;
+		previousWasAPlainLine = true;
 	}
 
 	createTextualCommentElement(linesOfCurrentElement);

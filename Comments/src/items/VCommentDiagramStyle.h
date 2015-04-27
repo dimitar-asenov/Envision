@@ -31,7 +31,10 @@
 #include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
 namespace Comments {
-
+/**
+ * The VCommentDiagramStyle class provides a style for the VCommentDiagram.
+ * It specifies the colors used for the shapes in a diagram.
+ */
 class COMMENTS_API VCommentDiagramStyle : public Super<Visualization::ItemStyle> {
 	public:
 		virtual ~VCommentDiagramStyle() override;

@@ -26,6 +26,7 @@
 package javaImportTool;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -45,17 +46,89 @@ public class ASTConverter {
 		this.source = source;
 	}
 	
-	private int emptyLinesBetweenNodes(ASTNode a, ASTNode b)
+	private Node startComment() throws ConversionException
 	{
-		if (a == null || b == null) return 0;
-		int empty = -1;
-		for(int i = a.getStartPosition()+a.getLength(); i<b.getStartPosition(); ++i)
-		{
-			if (source.charAt(i) == '\n') ++empty;
-		}
+		Node statementItem = containers.peek().add(new Node(null, "CommentStatementItem",
+				Integer.toString(containers.peek().numChildren())));
+		return statementItem.child("commentNode").child("lines");
+	}
+	
+	private void addToComment(Node lines, String line) throws ConversionException
+	{
+		Node commentLineNode = new Node(null, "Text", Integer.toString(lines.numChildren()));
+		lines.add(commentLineNode);
+		commentLineNode.setStringValue(line);
+	}
+	
+	private void addEmptyLinesAndCommentsBetweenNodes(ASTNode a, ASTNode b) throws ConversionException
+	{
+		if (a == null || b == null) return;
 		
-		if (empty < 0) return 0;
-		else return empty;
+		int rangeStart = a.getStartPosition()+a.getLength();
+		int lineStart = rangeStart;
+		Node currentBlockCommentLines = null;
+		Node lastLineComment = null;
+		boolean hasText = false;
+		boolean prevCharWasCR = false;
+		
+		for(int i = lineStart; i<b.getStartPosition(); ++i)
+		{
+			char c = source.charAt(i);
+			if (c == '\n' || c == '\r')
+			{
+				if (prevCharWasCR && c=='\n') {
+					prevCharWasCR = false;
+					lineStart++;
+					continue;
+				}
+				prevCharWasCR = c == '\r';
+				
+				if (!hasText && currentBlockCommentLines == null)
+				{
+					if (lineStart > rangeStart) // otherwise, we skip the first new line that we find
+					{
+						//Add empty line
+						Node empty =
+							new Node(null, "ExpressionStatement", Integer.toString(containers.peek().numChildren()));
+				    	empty.setChild("expression", new Node(null, "EmptyExpression", "expression"));
+				    	containers.peek().add(empty);
+				    	
+				    	lastLineComment = null;
+					}
+				}
+				else
+				{
+					String commentText = source.substring(lineStart, i).trim();
+					String prefix = lineStart == rangeStart ? "^^^ " : ""; // this comment was on the previous line
+					
+					if (currentBlockCommentLines == null && commentText.startsWith("//"))
+					{
+						if (lastLineComment == null) lastLineComment = startComment();
+						addToComment(lastLineComment, prefix + commentText.substring(2));
+					}
+					else
+					{
+						if (currentBlockCommentLines == null && commentText.startsWith("/*"))
+						{
+							// Start new block
+							currentBlockCommentLines = startComment();
+							commentText = commentText.substring(2);
+							lastLineComment = null;
+						}
+						
+						// We could end the block in the same line
+						boolean finish = commentText.endsWith("*/");
+						if (finish) commentText = commentText.substring(0, commentText.length()-2);
+						addToComment(currentBlockCommentLines, prefix + commentText);
+						if (finish) currentBlockCommentLines = null;
+					}
+				}
+				
+				lineStart = i+1;
+				hasText = false;
+			}
+			else hasText = hasText || (c != ' ' && c != '\t');
+		}
 	}
 	
 	public void visit(CompilationUnit node) throws ConversionException
@@ -76,7 +149,7 @@ public class ASTConverter {
 		Node cl = containers.peek().addSymbolNodeInList("classes", "Class", type.getName().getIdentifier());
 		containers.push(cl);
 		
-		setModifiers(type);
+		setBodyModifiersAndAnnotations(type);
 		//TODO: Handle JavaDoc
 		
 		if (topLevel)
@@ -108,7 +181,7 @@ public class ASTConverter {
 		for (IExtendedModifier em : modifiersAndAnnotations)
 		{
 			if (!em.isAnnotation()) continue;
-			
+
 			Node ann = getAnnotation((Annotation) em);
 			ann.setName(annotations.numChildren());
 			annotations.add(ann);
@@ -218,9 +291,11 @@ public class ASTConverter {
 		Node me = containers.peek().addSymbolNodeInList("methods", "Method", node.getName().getIdentifier());
 		containers.push(me);
 		
+		if (Main.PRINT_METHODS) printMethodData(node);
+		
 		me.child("mthKind").setLongValue(node.isConstructor() ? 1 : 0);
 		
-		setModifiers(node);
+		setBodyModifiersAndAnnotations(node);
 		processTypeParameters(node.typeParameters());
 		processParameters(node.parameters());
 		
@@ -234,7 +309,13 @@ public class ASTConverter {
 			result.setChild("typeExpression", addExtraDimensions(type, node.getExtraDimensions()));
 		}
 		
-		// TODO: Implement support for throws specifier
+		if (node.thrownExceptions() != null)
+		{
+			int i = 0;
+			for(Name exception : (List<Name>)node.thrownExceptions())
+				me.child("throws").add(expression(exception, Integer.toString(i++)));
+		}
+		
 		if (node.getBody() != null)
 			visitBody(node.getBody().statements(), "items");
 		
@@ -248,7 +329,7 @@ public class ASTConverter {
 			Node field = containers.peek().addSymbolNodeInList("fields", "Field", vdf.getName().getIdentifier());
 			containers.push(field);
 			
-			setModifiers(node);
+			setBodyModifiersAndAnnotations(node);
 			Node type = typeExpression(node.getType(), "typeExpression");
 			field.setChild("typeExpression", addExtraDimensions(type, vdf.getExtraDimensions()));
 
@@ -264,7 +345,7 @@ public class ASTConverter {
 		Node field = containers.peek().addSymbolNodeInList("fields", "Field", node.getName().getIdentifier());
 		containers.push(field);
 			
-		setModifiers(node);
+		setBodyModifiersAndAnnotations(node);
 		field.setChild("typeExpression", typeExpression(node.getType(), "typeExpression"));
 
 		if (node.getDefault() != null)
@@ -280,12 +361,7 @@ public class ASTConverter {
 		for(Statement s : statements)
 		{
 			// Insert empty lines
-			for(int i = 0; i<emptyLinesBetweenNodes(prevStatement, s); ++i)
-			{
-		    	Node empty = new Node(null, "ExpressionStatement", Integer.toString(containers.peek().numChildren()));
-		    	empty.setChild("expression", new Node(null, "EmptyExpression", "expression"));
-		    	containers.peek().add(empty);
-		    }
+			addEmptyLinesAndCommentsBetweenNodes(prevStatement, s);
 		    prevStatement = s;
 			    
 		    List<Node> nodeList = statement(s, Integer.toString(containers.peek().numChildren()));
@@ -323,7 +399,12 @@ public class ASTConverter {
 		Node node = null;
 		List<Node> multipleNodes = null;
 		
-		if ( s instanceof AssertStatement); // TODO: Implement this
+		if ( s instanceof AssertStatement)
+		{
+	    	node = new Node(null, "AssertStatement", name);
+	    	AssertStatement as = (AssertStatement) s;
+	    	node.setChild("expression", expression(as.getExpression(), "expression"));
+	    }
 	    else if ( s instanceof Block)
 	    {
 	    	node = new Node(null, "Block", name);
@@ -452,7 +533,14 @@ public class ASTConverter {
 	    		}
 	    	}
 	    } else if ( s instanceof SwitchCase); //Handled above
-	    else if ( s instanceof SynchronizedStatement); // TODO: Implement this
+	    else if ( s instanceof SynchronizedStatement)
+	    {
+	    	node = new Node(null, "SynchronizedStatement", name);
+	    	SynchronizedStatement syncs = (SynchronizedStatement) s;
+	    	
+	    	visitStatementBody(syncs.getBody(), node, "body");
+	    	node.setChild("expression", expression(syncs.getExpression(), "expression"));
+	    }
 	    else if ( s instanceof ThrowStatement)
 	    {
 	    	node = new Node(null, "ExpressionStatement", name);
@@ -480,7 +568,7 @@ public class ASTConverter {
 	    		Node varDeclExpression = catchNode.add(
 	    				new Node(null,"VariableDeclarationExpression", "exceptionToCatch"));
 	    		Node varDecl = varDeclExpression.child("decl");
-	    		//TODO: handle modifiers
+	    		setModifiersAndAnnotations(varDecl, cc.getException());
 	    		varDecl.setChild("typeExpression", addExtraDimensions(typeExpression(cc.getException().getType(),
 	    				"typeExpression"), cc.getException().getExtraDimensions()) );
 	    		varDecl.setSymbol(cc.getException().getName().getIdentifier());
@@ -494,7 +582,8 @@ public class ASTConverter {
 	    	VariableDeclarationStatement vds = (VariableDeclarationStatement) s;
 	    	
 	    	multipleNodes = new LinkedList<Node>();
-	    	for(Node varDecl: variableDeclarationExpressions(name, vds.getType(), vds.fragments()))
+	    	for(Node varDecl: variableDeclarationExpressions(name, vds.getType(), vds.getModifiers(),
+	    			(List<IExtendedModifier>)vds.modifiers(), vds.fragments()))
 	    	{
 	    		// It's ok to reuse the same name for all generated variables, since this will be fixed later.   
 	    		Node exprStat = new Node(null,"ExpressionStatement",name);
@@ -568,11 +657,19 @@ public class ASTConverter {
 		}
 	}
 
-	void setModifiers(BodyDeclaration body) throws ConversionException
+	void setBodyModifiersAndAnnotations(BodyDeclaration body) throws ConversionException
 	{
-		Node n = containers.peek();	
-
-		int modifiers = body.getModifiers();
+		setModifiersAndAnnotations(containers.peek(), body.getModifiers(),
+				(List<IExtendedModifier>) body.getStructuralProperty(body.getModifiersProperty()));
+	}
+	
+	void setModifiersAndAnnotations(Node nodeToSet, SingleVariableDeclaration vd) throws ConversionException
+	{
+		setModifiersAndAnnotations(nodeToSet, vd.getModifiers(), (List<IExtendedModifier>) vd.modifiers());
+	}
+	
+	void setModifiersAndAnnotations(Node nodeToSet, int modifiers, List<IExtendedModifier> annotations) throws ConversionException
+	{
 		int modifiersToSet = 0;
 		
 		if ((modifiers & Modifier.PUBLIC) != 0) modifiersToSet |= 0x00000001;
@@ -589,7 +686,10 @@ public class ASTConverter {
 		// volatile
 		// strictfp
 		
-		n.child("modifiers").setLongValue(modifiersToSet);
+		nodeToSet.child("modifiers").setLongValue(modifiersToSet);
+		
+		if (annotations != null)
+			processAnnotations(nodeToSet, annotations);
 	}
 	
 	Node typeExpression(Type type, String name) throws ConversionException
@@ -890,7 +990,13 @@ public class ASTConverter {
 			
 			activeNode.setChild("right", lastOperand);
 		} else if (e instanceof InstanceofExpression)
-			node = new Node(null, "EmptyExpression", name); //TODO: Implement this
+		{
+			InstanceofExpression instaceOfExpression = (InstanceofExpression) e;
+			node = new Node(null, "InstanceOfExpression", name);
+			
+			node.setChild("expr", expression(instaceOfExpression.getLeftOperand(),"left"));	
+			node.setChild("typeExpression", typeExpression(instaceOfExpression.getRightOperand(),"right"));
+		}
 		else if (e instanceof MethodInvocation)
 		{
 			// TODO: This code is almost identical to SuperMethodInvocation
@@ -1016,13 +1122,27 @@ public class ASTConverter {
 				node.child("arguments").add(expression(arg, Integer.toString(node.child("arguments").numChildren())));
 		}
 		else if (e instanceof ThisExpression)
-			node = new Node(null, "ThisExpression", name);
-		else if (e instanceof TypeLiteral)
-			node = new Node(null, "EmptyExpression", name); //TODO: Implement this
+		{
+			ThisExpression te = (ThisExpression) e;
+			if (te.getQualifier() == null)
+				node = new Node(null, "ThisExpression", name);
+			else {
+				node = new Node(null, "ReferenceExpression", name);
+				node.add(expression(te.getQualifier(),"prefix"));
+				node.child("ref").setStringValue("____NULL____:this");
+			}
+		}
+		else if (e instanceof TypeLiteral) {
+			TypeLiteral tl = (TypeLiteral) e;
+			node = new Node(null, "ReferenceExpression", name);
+			node.add(typeExpression(tl.getType(),"prefix"));
+			node.child("ref").setStringValue("____NULL____:class");
+		}
 		else if (e instanceof VariableDeclarationExpression)
 		{
 			VariableDeclarationExpression vde = (VariableDeclarationExpression) e;
-			List<Node> varDecls = variableDeclarationExpressions(name, vde.getType(), vde.fragments());
+			List<Node> varDecls = variableDeclarationExpressions(name, vde.getType(), vde.getModifiers(),
+					(List<IExtendedModifier>) vde.modifiers(), vde.fragments());
 			node = combineNodesWithComma(varDecls, name);
 			
 		} else throw new UnknownFeatureException("Unknown expression type: " + e.getClass().getSimpleName());
@@ -1030,7 +1150,8 @@ public class ASTConverter {
 		return node;
 	}
 	
-	List<Node> variableDeclarationExpressions(String name, Type type, List<VariableDeclarationFragment> fragments)
+	List<Node> variableDeclarationExpressions(String name, Type type, int modifiers, List<IExtendedModifier> annotations
+			, List<VariableDeclarationFragment> fragments)
 			throws ConversionException
 	{
 		List<Node> variableDeclarations =  new LinkedList<Node>();
@@ -1041,7 +1162,7 @@ public class ASTConverter {
 			Node varDecl = varDeclExpression.child("decl");
 			
 			varDecl.setSymbol(vdf.getName().getIdentifier());
-			//TODO: handle modifiers
+			setModifiersAndAnnotations(varDecl, modifiers, annotations);
 			Node variableType = typeExpression(type, "typeExpression");
 			varDecl.setChild("typeExpression", addExtraDimensions(variableType, vdf.getExtraDimensions()));
 			
@@ -1052,5 +1173,120 @@ public class ASTConverter {
 		}
     	
     	return variableDeclarations;
+	}
+	
+	void printMethodData(MethodDeclaration method)
+	{
+		String nodeText = method.toString();
+		int signatureBegin = nodeText.indexOf("*/");
+		if (signatureBegin < 0) signatureBegin = 0;
+		else signatureBegin += 3;
+		int signatureEnd = nodeText.indexOf('\n', signatureBegin);
+		if (signatureEnd < 0 || signatureEnd < signatureBegin + 3)
+			throw new RuntimeException("Invalid method: " + nodeText);
+		if (nodeText.charAt(signatureEnd-1) != ';') // skip interfaces
+		{
+			String body = nodeText.substring(signatureEnd+1);
+			int bodyLength = body.length() - body.replace("\n", "").length() - 1;
+			
+			System.out.print("loc=\t"+ bodyLength + "\t" );
+			System.out.print("args=\t" + method.parameters().size() + "\t" );
+			
+			// Various other counters
+			showMetric(method, "locals", false, new int[]{ASTNode.VARIABLE_DECLARATION_STATEMENT,
+					ASTNode.VARIABLE_DECLARATION_EXPRESSION});
+			showMetric(method, "null", false, new int[]{ASTNode.NULL_LITERAL});
+			showMetric(method, "assert", false, new int[]{ASTNode.ASSERT_STATEMENT});
+			showMetric(method, "return", false, new int[]{ASTNode.RETURN_STATEMENT});
+			showMetric(method, "this", false, new int[]{ASTNode.THIS_EXPRESSION});
+			showMetric(method, "throw", false, new int[]{ASTNode.THROW_STATEMENT});
+			showMetric(method, "cast", true, new int[]{ASTNode.CAST_EXPRESSION});
+			showMetric(method, "new", true, new int[]{ASTNode.CLASS_INSTANCE_CREATION, ASTNode.ARRAY_CREATION});
+			showMetric(method, "if", true, new int[]{ASTNode.IF_STATEMENT});
+			showMetric(method, "loop", true, new int[]{ASTNode.FOR_STATEMENT, ASTNode.WHILE_STATEMENT,
+					ASTNode.DO_STATEMENT, ASTNode.ENHANCED_FOR_STATEMENT});
+			showMetric(method, "try", true, new int[]{ASTNode.TRY_STATEMENT});
+			showMetric(method, "catch", true, new int[] {ASTNode.CATCH_CLAUSE});
+			showMetric(method, "type_decl", true, new int[] {ASTNode.TYPE_DECLARATION_STATEMENT});
+			showMetric(method, "block", true, new int[] {ASTNode.BLOCK});
+			showMetric(method, "switch", true, new int[] {ASTNode.SWITCH_STATEMENT});
+			showMetric(method, "case", false, new int[] {ASTNode.SWITCH_CASE});
+			showMetric(method, "super", false, new int[] {ASTNode.SUPER_METHOD_INVOCATION,
+					ASTNode.SUPER_CONSTRUCTOR_INVOCATION});
+			showMetric(method, "anonymous", false, new int[] {ASTNode.ANONYMOUS_CLASS_DECLARATION});
+			
+			// Print placeholders that will be used in later stages
+			System.out.print("use\tcomment\t");
+					
+			// Print path
+			Node pathNode = containers.peek().parent();
+			String path = "\t >>>\t ";
+			while (pathNode != null)
+			{	
+				if (pathNode.symbol() != null && !pathNode.symbol().isEmpty())
+					path = "." + pathNode.symbol() +  path;
+				pathNode = pathNode.parent();
+			}
+			System.out.print(path);
+			
+			// Print signature
+			String signature = nodeText.substring(signatureBegin, signatureEnd-1);
+			int throwsIndex = signature.indexOf(") throws");
+			if (throwsIndex >= 0) signature = signature.substring(0,throwsIndex+1);
+			System.out.println(signature);
+		}		
+	}
+	
+	static class NodeMetrics
+	{
+		public int count;
+		public int nesting;
+		public NodeMetrics(int c, int n) {count = c; nesting = n;}
+	}
+	
+	void showMetric(ASTNode startingNode, String name, boolean includeNesting, int[] nodeTypes)
+	{
+		NodeMetrics metrics = computeMetrics(startingNode, nodeTypes);
+		if (includeNesting)
+			System.out.print(name + "=\t" + metrics.count + "\t" + metrics.nesting + "\t");
+		else
+			System.out.print(name + "=\t" + metrics.count + "\t");
+	}
+	
+	NodeMetrics computeMetrics(ASTNode startingNode, int[] nodeTypes)
+	{
+		int count = 0;
+		int nesting = 0;
+		
+		for (ASTNode child : childrenOfASTNode(startingNode))
+			if (child != null)
+			{
+				NodeMetrics m = computeMetrics(child, nodeTypes);
+				count += m.count;
+				nesting = Math.max(nesting, m.nesting);
+			}
+		
+		for(int type : nodeTypes)
+			if (startingNode.getNodeType() == type)
+			{
+				count++;
+				nesting++;
+			}
+
+		return new NodeMetrics(count, nesting);
+	}
+	
+	List<ASTNode> childrenOfASTNode(ASTNode node)
+	{
+		List<ASTNode> result = new ArrayList<ASTNode>();
+		for ( Object property : node.structuralPropertiesForType())
+		{
+			if (property instanceof ChildPropertyDescriptor)
+				result.add((ASTNode)node.getStructuralProperty((ChildPropertyDescriptor) property ));
+			else if (property instanceof ChildListPropertyDescriptor)
+				result.addAll((List<ASTNode>)node.getStructuralProperty((ChildListPropertyDescriptor) property ));
+		}
+		
+		return result;
 	}
 }

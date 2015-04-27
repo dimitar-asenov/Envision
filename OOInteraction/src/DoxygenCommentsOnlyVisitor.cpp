@@ -91,7 +91,6 @@ void DoxygenCommentsOnlyVisitor::init()
 		QString res = "";
 		int listCount = -1;
 		QString inlineHTML = "";
-		QRegExp rx;
 		for (auto line : *t->lines())
 		{
 			if (line->get().startsWith(" * "))
@@ -114,16 +113,16 @@ void DoxygenCommentsOnlyVisitor::init()
 				listCount = -1;
 				res += "</li>\n</ul>\n";
 			}
-			rx.setPattern("^(#+)([^#].*)");
-			if (rx.exactMatch(line->get()) && rx.cap(1).length() <= 6)
+			static QRegExp headerRegexp{"^(#+)([^#].*)"};
+			if (headerRegexp.exactMatch(line->get()) && headerRegexp.cap(1).length() <= 6)
 			{
-				QString len = QString::number(rx.cap(1).length());
-				res += "<h" + len + ">" + rx.cap(2).simplified() + "</h" + len + ">\n";
+				QString len = QString::number(headerRegexp.cap(1).length());
+				res += "<h" + len + ">" + headerRegexp.cap(2).simplified() + "</h" + len + ">\n";
 
 				continue;
 			}
-			rx.setPattern("^={3,}|-{3,}|\\.{3,}$");
-			if (rx.exactMatch(line->get()))
+			static QRegExp lineRegexp{"^={3,}|-{3,}|\\.{3,}$"};
+			if (lineRegexp.exactMatch(line->get()))
 			{
 				res += "\\htmlonly\n";
 				res += "<hr style=\"";
@@ -274,18 +273,15 @@ void DoxygenCommentsOnlyVisitor::init()
 		res += "</table>";
 		return res;
 	});
-
 }
 
 QString DoxygenCommentsOnlyVisitor::replaceMarkdown(QString str)
 {
-	QRegExp rx;
+	static QRegExp boldRegexp {"\\*\\*([^\\*]+)\\*\\*"};
+	str.replace(boldRegexp, "<b>\\1</b>");
 
-	rx.setPattern("\\*\\*([^\\*]+)\\*\\*");
-	str.replace(rx, "<b>\\1</b>");
-
-	rx.setPattern("\\*([^\\*]+)\\*");
-	str.replace(rx, "<i>\\1</i>");
+	static QRegExp italicRegexp {"\\*([^\\*]+)\\*"};
+	str.replace(italicRegexp, "<i>\\1</i>");
 
 	return str;
 }

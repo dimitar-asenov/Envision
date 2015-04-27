@@ -228,7 +228,7 @@ Given that we set \c horizontal_ in \c updateGeometry(), the \c determineForm() 
 \skip VIfStatement::determineForm()
 \until }
 OOVisualization::VIfStatement is a bit special in that you need to work with several methods in order to arrive at a
-decision on which layout form to use. Normally, it is sufficient to perform some checks directly in the
+decision on which layout form to use. Normally, it is sufficient to perform some checks only in the
 \c determineForm() method to decide which is the most appropriate form. In particular this is the case if the
 decision is based only on the node that is represented, and not on any visual information.
 
@@ -246,6 +246,7 @@ Andrea Helfenstein's Bachelor Thesis Report</a> for the various ways to use Visu
 	- There are two forms:
 		- Form \e 0 puts the two branches next to each other
 		- Form \e 1 puts the \e true branch on top of the \e false branch.
+		- Form \e 2 is for nested else if statements. Else branches are put under the then branch and they are no indented.
 
 This is all there is to it - now we have a visualization for if statements that will be automatically used when needed.
 In simpler cases, all you need to do is define the \c initializeForms() method and you can create a visual item in no
@@ -280,7 +281,7 @@ There are three things to notice here:
 	only thing we put in the \c .cpp file. Nevertheless, this should still be done. The reason is that this is a hint
 	to gcc, where to generate the virtual table for the class and other related data structures. If we don't do this,
 	then this information will be generated in multiple plug-ins which will cause problems at run-time on Windows.
-	- There is a list of properties that we want out style to include. Each property is defined by providing the
+	- There is a list of properties that we want our style to include. Each property is defined by providing the
 	type of information it should store. Additionally we need to provide \e this and a string to the property's
 	constructor. The string is name of the tag in the XML file that will be used to read this property. By convention
 	this should be the same as the name of the property.

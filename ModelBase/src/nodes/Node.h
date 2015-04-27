@@ -192,14 +192,14 @@ class MODELBASE_API Node
 		enum FindSymbolDirection {
 			SEARCH_UP,		/**< Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
 									symbols in the current scope which come after the source will not be considered. This is the
-			 	 	 	 	 	 	case e.g. with searches for local variable declarations in a method: only variables before
-			 	 	 	 	 	 	the source node should be considered. */
+									case e.g. with searches for local variable declarations in a method: only variables before
+									the source node should be considered. */
 			SEARCH_DOWN,	/**< Looks for symbols inside the specified scope or subscopes. This is used for symbols that
 									are requested in a specific context (typically after a '.') e.g. "list.sort()"*/
 			SEARCH_HERE		/**< Looks for symbols defined by the current node. This happens when findSymbols has been
-			 	 	 	 	 	 	 called on the parent with SEARCH_DOWN and the parent must therefore find a precise match
-			 	 	 	 	 	 	 in its scope. findSymbols() will be called for each potential match from the parents
-			 	 	 	 	 	 	 children with the SEACH_HERE flag */
+									 called on the parent with SEARCH_DOWN and the parent must therefore find a precise match
+									 in its scope. findSymbols() will be called for each potential match from the parents
+									 children with the SEACH_HERE flag */
 		};
 
 		/**
@@ -295,6 +295,12 @@ class MODELBASE_API Node
 		 * Returns true of this node is an Ancestor of other and false otherwise.
 		 */
 		bool isAncestorOf(const Node* other) const;
+
+		/**
+		 * Returns the first Ancestor which has the type \a NodeType if there is one, otherwise null.
+		 */
+		template <class NodeType>
+		NodeType* firstAncestorOfType();
 
 		/**
 		 * Returns the direct child node that is equal to \a other or is an ancestor of \a other.
@@ -481,6 +487,19 @@ class MODELBASE_API Node
 
 		static QSet<const Node*>& partiallyLoadedNodes();
 };
+
+template <class NodeType>
+NodeType* Node::firstAncestorOfType()
+{
+	NodeType* ancestor = nullptr;
+	auto p = parent();
+	while (p && !ancestor)
+	{
+		ancestor = DCast<NodeType>(p);
+		p = p->parent();
+	}
+	return ancestor;
+}
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Node::SymbolTypes)
 

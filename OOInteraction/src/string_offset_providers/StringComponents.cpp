@@ -222,6 +222,8 @@ void StringComponents::initConversions()
 
 	// Misc
 	add<CastExpression>([](CastExpression* e){ return c( "(", e->castType(), ")", e->expr() ); });
+	add<InstanceOfExpression>(
+			[](InstanceOfExpression* e){ return c( e->expr(), " ", "instanceof", " ", e->typeExpression() ); });
 	add<CommaExpression>([](CommaExpression* e){ return c( QString(), e->left(), ",", e->right(), QString() ); });
 	add<ConditionalExpression>([](ConditionalExpression* e){ return c(
 		QString(), e->condition(), "?", e->trueExpression(), ":", e->falseExpression(), QString() ); });

@@ -59,6 +59,8 @@
 	<signatureLine prototypes="item/Line/default">
 		<pen><style>2</style></pen>
 	</signatureLine>
+	
+	<annotationsIcon prototypes="item/Symbol/keyword"><symbol>@</symbol></annotationsIcon>
 	<annotations prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -200,4 +202,37 @@
 			<symbol>add initializer</symbol>
 		</selectedTip>
 	</memberInitializers>
+	
+	<throwsIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/try.svg</filename>
+		<width>20</width>
+		<height>20</height>
+	</throwsIcon>
+	<throws prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerRadius>3</cornerRadius>
+			<cornerType>1</cornerType>
+			<outline>
+				<style>0</style>
+			</outline>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>224</green>
+					<blue>224</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>10</spaceBetweenElements>
+			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
+		</itemsStyle>
+		<selectedTip>
+			<symbol>add exceptions</symbol>
+		</selectedTip>
+	</throws>
 </style>

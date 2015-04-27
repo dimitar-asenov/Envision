@@ -1,0 +1,9 @@
+The AlloyIntegrationCLI application uses Alloy. To avoid licensing
+issues, the dependencies are not included with Envision. They are available for download on-line and you must agree
+to their License and Copyright Agreements before using them:
+- http://alloy.mit.edu/alloy/download.html
+
+The .classpath file (typically used by Eclipse) lists all dependencies:
+- You will need to manually download the alloy4.2.jar into the lib directory. Newer
+versions might work too, as long as they provide the same interface. If you use a different version you need to adjust
+the .classpath file accordingly.

@@ -1,0 +1,10 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape/>
+	<placement>left-outside</placement>
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/monitor.svg</filename>
+		<width>20</width>
+		<height>20</height>
+	</icon>
+</style>

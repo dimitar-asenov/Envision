@@ -9,7 +9,8 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -lfilepersistence
-HEADERS += src/commands/CommandHelper.h \
+HEADERS += src/commands/CDumpMethodRenderings.h \
+    src/commands/CommandHelper.h \
     src/handlers/HModule.h \
     src/commands/CCreateModule.h \
     src/handlers/HArrayInitializer.h \
@@ -57,7 +58,8 @@ HEADERS += src/commands/CommandHelper.h \
     src/commands/CDoxygen.h \
     src/DoxygenCommentsOnlyVisitor.h \
     src/DoxygenWholeTreeVisitor.h
-SOURCES += src/handlers/HModule.cpp \
+SOURCES += src/commands/CDumpMethodRenderings.cpp \
+    src/handlers/HModule.cpp \
     src/commands/CCreateModule.cpp \
     src/handlers/HArrayInitializer.cpp \
     src/expression_editor/CommandDescriptor.cpp \
@@ -102,8 +104,6 @@ SOURCES += src/handlers/HModule.cpp \
     src/commands/CDoxygen.cpp \
     src/DoxygenCommentsOnlyVisitor.cpp \
     src/DoxygenWholeTreeVisitor.cpp
-
 doxy.path = $${BUILD_DIR}/doxygen
 doxy.files = doxy_data/*
-
 INSTALLS += doxy

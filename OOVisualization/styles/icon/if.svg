@@ -14,7 +14,7 @@
    height="48"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.5 r10040"
    sodipodi:docname="if.svg">
   <defs
      id="defs4">
@@ -78,7 +78,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="18.75"
-     inkscape:cx="4.9066667"
+     inkscape:cx="-4.64"
      inkscape:cy="24"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -105,22 +105,14 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1004.3622)">
-    <path
-       sodipodi:type="star"
-       style="fill:#ffff00;fill-opacity:1;stroke:#c88c00;stroke-width:0.44121211999999999;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path3772"
-       sodipodi:sides="4"
-       sodipodi:cx="17.386667"
-       sodipodi:cy="3.04"
-       sodipodi:r1="4.8559699"
-       sodipodi:r2="2.427985"
-       sodipodi:arg1="1.5378412"
-       sodipodi:arg2="2.3232394"
-       inkscape:flatsided="true"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 17.546667,7.8933332 -5.013333,-4.6933331 4.693333,-5.0133334 5.013334,4.6933331 z"
-       transform="matrix(0,-4.5329671,4.5329671,0,10.21978,1107.1754)" />
+    <rect
+       style="fill:#ffff00;fill-opacity:1;stroke:#c88c00;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2996"
+       width="31.819805"
+       height="31.819805"
+       x="-726.1012"
+       y="728.22253"
+       transform="matrix(0.70710677,-0.7071068,0.70710677,0.7071068,0,0)" />
     <text
        xml:space="preserve"
        style="font-size:28px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#666666;fill-opacity:1;stroke:none;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Medium"
