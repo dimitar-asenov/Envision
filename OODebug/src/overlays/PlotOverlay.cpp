@@ -232,21 +232,21 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 		fieldSize /= yValues_[0].size();
 
 		// first draw the array box:
-		painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.bottomRight()); // bottom line
-		painter->drawLine(plotRegion_.topLeft(), plotRegion_.topRight()); // top line
-		painter->drawLine(plotRegion_.bottomRight(), plotRegion_.topRight()); // right border
+		painter->drawPolygon(QPolygon({plotRegion_.topLeft(), plotRegion_.topRight(),
+												 plotRegion_.bottomRight(), plotRegion_.bottomLeft()}));
 	}
 	// draw the separators
 	double plotY = plotRegion_.bottomLeft().y();
+	double penHalfWidth = painter->pen().width() / 2.0;
 	auto fontMetrics = painter->fontMetrics();
 	int fontHeight = fontMetrics.height();
 
 	for (int i = 0; i < yValues_[0].size(); ++i)
 	{
-		QPointF pos = {plotRegion_.x() + i * fieldSize, plotY};
-		painter->drawLine(QPointF(pos.x(), pos.y()), {pos.x(), pos.y() - plotRegion_.height()});
+		double plotX = plotRegion_.x() + i * fieldSize;
+		painter->drawLine(QPointF(plotX, plotY - penHalfWidth), {plotX, plotY - plotRegion_.height() + penHalfWidth});
 
-		QPointF textPos = {pos.x() + fieldSize / 3, pos.y() - plotRegion_.height() / 2 + fontHeight / 3.0};
+		QPointF textPos = {plotX + fieldSize / 3, plotY - plotRegion_.height() / 2 + fontHeight / 3.0};
 		painter->drawText(textPos, QString::number(yValues_[0][i]));
 	}
 	// draw the pointers
