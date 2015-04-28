@@ -57,8 +57,15 @@ PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* s
 void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	Super::paint(painter, option, widget);
+	// manually adapt the font as it could be wrong when creating a pdf screenshot:
+	auto painterFont = painter->font();
+	QFont fixedFont(painterFont);
+	fixedFont.setPixelSize(15); // 15 is the default font size in Envision. (VisualizationBase/style/item/Text/default)
+	painter->setFont(fixedFont);
 
 	plotFunction_(this, painter);
+	// restore previous font
+	painter->setFont(painterFont);
 }
 
 void OODebug::PlotOverlay::clear()
