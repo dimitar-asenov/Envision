@@ -250,25 +250,29 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 		painter->drawText(textPos, QString::number(yValues_[0][i]));
 	}
 	// draw the pointers
-	const int ARROW_HEIGHT = 30;
+	const int ARROW_HEIGHT = 8;
 	QHash<int, int> valuesAt; // store how many values we have at each value for text offset
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
 		int index = xValues_[i];
-		++valuesAt[index];
-		QPointF pos = {plotRegion_.x() + index * fieldSize, plotY + ARROW_HEIGHT};
-		auto font = painter->font();
-		auto newFont = font;
-		newFont.setPointSize(ARROW_HEIGHT);
-		newFont.setBold(true);
-		painter->setFont(newFont);
-		painter->drawText(pos, QString("\uA71B")); // Arrow up unicode
-		painter->setFont(font);
-
+		if (!valuesAt[index]++)
+		{
+			// Draw a triangle arrow which points to the cell
+			QPointF midPoint = {plotRegion_.x() + index * fieldSize + fieldSize / 2, plotY + 2};
+			QPointF leftPoint = {plotRegion_.x() + index * fieldSize + fieldSize / 4, plotY + 2 + ARROW_HEIGHT};
+			QPointF rightPoint = {plotRegion_.x() + index * fieldSize + 3*fieldSize / 4, plotY + 2 + ARROW_HEIGHT};
+			auto brush = painter->brush();
+			QBrush newBrush(brush);
+			newBrush.setColor(Qt::red);
+			painter->setBrush(newBrush);
+			painter->drawPolygon(QPolygonF({midPoint, leftPoint, rightPoint}));
+			painter->setBrush(brush);
+		}
 		if (i + 1 < variableNames_.size())
 		{
-			double yOffset = (valuesAt[index] - 1) * fontHeight;
-			painter->drawText(QPointF(pos.x() + fieldSize / 3, pos.y() + yOffset), variableNames_[i + 1]);
+			double x = plotRegion_.x() + index * fieldSize + fieldSize / 6; // A slight offset from the start of a field.
+			double y = plotY + ARROW_HEIGHT + valuesAt[index] * fontHeight; // Text is always below arrow and other text.
+			painter->drawText(QPointF(x, y), variableNames_[i + 1]);
 		}
 	}
 }
