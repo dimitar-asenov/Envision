@@ -169,7 +169,7 @@ void OODebug::PlotOverlay::drawTics(QPainter* painter)
 	for (int i = 0; i <= nTics; ++i)
 		maxTextLength = std::max(maxTextLength, QString::number(yMin_ + i * yStep).length());
 	auto fontMetrics = painter->fontMetrics();
-	int negativeX = plotRegion_.x() - fontMetrics.averageCharWidth() * maxTextLength;
+	int negativeX = plotRegion_.x() - fontMetrics.averageCharWidth() * (maxTextLength + 1.5); //+ 1.5 experimental value.
 	if (negativeX < 0) plotRegion_.setX(plotRegion_.x() - negativeX);
 
 	for (int i = 0; i <= nTics; ++i)
