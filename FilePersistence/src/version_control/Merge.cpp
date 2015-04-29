@@ -130,6 +130,11 @@ void Merge::performMerge()
 			baseHeadDiff_ = repository_->diff(mergeBase_, head_);
 			baseRevisionDiff_ = repository_->diff(mergeBase_, revision_);
 
+			buildCdg(cdgA_, baseHeadDiff_);
+			buildCdg(cdgB_, baseRevisionDiff_);
+			conflictingChanges_ = QSet<ChangeDescription*>();
+			conflictPairs_ = QMultiHash<ChangeDescription*, ChangeDescription*>();
+
 			mergeBaseTree_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", mergeBase_));
 			repository_->loadGenericTree(mergeBaseTree_, mergeBase_);
 
@@ -139,6 +144,25 @@ void Merge::performMerge()
 			headTree_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", head_));
 			repository_->loadGenericTree(headTree_, head_);
 
+			foreach (PipelineComponent* component, pipeline_)
+			{
+				component->run(mergeBaseTree_, revisionTree_, headTree_, cdgA_, cdgB_, conflictingChanges_, conflictPairs_);
+			}
+
+			IdToChangeDescriptionHash applicableChanges;
+			foreach (ChangeDescription* change, cdgA_.keys())
+				if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
+			foreach (ChangeDescription* change, cdgB_.keys())
+				if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
+
+			mergeTree_ = std::unique_ptr<GenericTree>(new GenericTree("Merge"));
+			repository_->loadGenericTree(mergeTree_, mergeBase_);
+
+			applyChangesToTree(mergeTree_, applicableChanges);
+
+			break;
+
+			/* This will go into pipeline component
 			buildConflictUnitMap(revisionCUToChangeMap_, revisionChangeToCUMap_, baseRevisionDiff_, revisionTree_,
 										mergeBaseTree_);
 			buildConflictUnitMap(headCUToChangeMap_, headChangeToCUMap_, baseHeadDiff_, headTree_, mergeBaseTree_);
@@ -152,17 +176,24 @@ void Merge::performMerge()
 
 
 			computeMergeForLists(headTree_, revisionTree_, mergeBaseTree_, baseHeadDiff_.changes(), baseRevisionDiff_.changes());
-
-			mergeTree_ = std::unique_ptr<GenericTree>(new GenericTree("Merge"));
-			repository_->loadGenericTree(mergeTree_, head_);
-
-			mergeChangesIntoTree(mergeTree_, baseRevisionDiff_.changes(), conflictRegions_);
-
-			break;
+			*/
 		}
 
 		default:
 			Q_ASSERT(false);
+	}
+}
+
+/**
+ * Initializes a change dependency graph \a cdg with the changes in \a diff.
+ */
+void Merge::buildCdg(ChangeToChangeHash& cdg, Diff& diff)
+{
+	cdg = ChangeToChangeHash();
+	foreach (auto change, diff.changes().values())
+	{
+		cdg.insert(change, nullptr);
+		// TODO: find dependencies
 	}
 }
 

@@ -23,7 +23,8 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/version_control/Diff.h \
     src/version_control/GitRepository.h \
     src/version_control/History.h \
-    src/version_control/Merge.h
+    src/version_control/Merge.h \
+    src/version_control/PipelineComponent.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
