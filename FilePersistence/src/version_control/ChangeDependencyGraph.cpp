@@ -24,23 +24,52 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
 
-#include "ChangeDescription.h"
 #include "ChangeDependencyGraph.h"
 
 namespace FilePersistence {
 
-class PipelineComponent
+ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff)
 {
-	public:
-		virtual ~PipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& mergeBaseTree,
-						const std::unique_ptr<GenericTree>& revisionTree_, const std::unique_ptr<GenericTree>& headTree,
-						ChangeDependencyGraph& cdgA,
-						ChangeDependencyGraph& cdgB,
-						QSet<ChangeDescription*>& conflictingChanges,
-						QMultiHash<ChangeDescription*, ChangeDescription*>& conflictPairs) = 0;
-};
+	changes_ = {};
+	map_ = {};
+	foreach (ChangeDescription* change, diff.changes().values())
+	{
+		changes_.insert(change);
+		if (change->type() == ChangeType::Added || change->type() == ChangeType::Moved)
+		{
+			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeB()->parentId());
+			while (it != diff.changes().end() && it.key() == change->nodeB()->parentId())
+			{
+				if (it.value()->type() == ChangeType::Added) map_.insert(change, it.value());
+				it++;
+			}
+		}
+		if (change->type() == ChangeType::Deleted || change->type() == ChangeType::Moved)
+		{
+			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeA()->parentId());
+			while (it != diff.changes().end() && it.key() == change->nodeA()->parentId())
+			{
+				if (it.value()->type() == ChangeType::Deleted) map_.insert(it.value(), change);
+				it++;
+			}
+		}
+	}
+}
+
+ChangeDependencyGraph::~ChangeDependencyGraph() {}
+
+void ChangeDependencyGraph::addDependency(ChangeDescription* changeA, ChangeDescription* changeB)
+{
+	Q_ASSERT(changes_.contains(changeA));
+	Q_ASSERT(changes_.contains(changeB));
+	map_.insert(changeA, changeB);
+}
+
+void ChangeDependencyGraph::removeDependecy(ChangeDescription* changeA, ChangeDescription* changeB)
+{
+	Q_ASSERT(map_.contains(changeA, changeB));
+	map_.remove(changeA, changeB);
+}
 
 } /* namespace FilePersistence */

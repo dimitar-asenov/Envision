@@ -27,20 +27,25 @@
 #pragma once
 
 #include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
+#include "Diff.h"
 
 namespace FilePersistence {
 
-class PipelineComponent
+class ChangeDependencyGraph
 {
 	public:
-		virtual ~PipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& mergeBaseTree,
-						const std::unique_ptr<GenericTree>& revisionTree_, const std::unique_ptr<GenericTree>& headTree,
-						ChangeDependencyGraph& cdgA,
-						ChangeDependencyGraph& cdgB,
-						QSet<ChangeDescription*>& conflictingChanges,
-						QMultiHash<ChangeDescription*, ChangeDescription*>& conflictPairs) = 0;
+		ChangeDependencyGraph(Diff& diff);
+		ChangeDependencyGraph() {}
+		~ChangeDependencyGraph();
+		const QSet<ChangeDescription*> changes();
+		void addDependency(ChangeDescription* changeA, ChangeDescription* changeB);
+		void removeDependecy(ChangeDescription* changeA, ChangeDescription* changeB);
+	private:
+		QSet<ChangeDescription*> changes_;
+		QMultiHash<ChangeDescription*, ChangeDescription*> map_;
+
 };
+
+inline const QSet<ChangeDescription*> ChangeDependencyGraph::changes() { return changes_; }
 
 } /* namespace FilePersistence */

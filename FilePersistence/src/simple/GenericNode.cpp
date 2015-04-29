@@ -128,7 +128,7 @@ void GenericNode::setParent(GenericNode* parent)
 {
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
-	parentId_ = parent->id();
+	Q_ASSERT(parentId_.isNull() || parent->id().isNull() || parentId_ == parent->id());
 }
 
 GenericNode* GenericNode::addChild(GenericNode* child)

@@ -24,7 +24,8 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/version_control/GitRepository.h \
     src/version_control/History.h \
     src/version_control/Merge.h \
-    src/version_control/PipelineComponent.h
+    src/version_control/PipelineComponent.h \
+    src/version_control/ChangeDependencyGraph.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
@@ -46,7 +47,9 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/version_control/CommitGraph.cpp \
     src/version_control/History.cpp \
     src/version_control/Commit.cpp \
-    src/version_control/Merge.cpp
+    src/version_control/Merge.cpp \
+    src/version_control/PipelineComponent.cpp \
+    src/version_control/ChangeDependencyGraph.cpp
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2

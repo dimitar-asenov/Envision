@@ -29,12 +29,11 @@
 #include "Diff.h"
 #include "Commit.h"
 #include "PipelineComponent.h"
+#include "ChangeDependencyGraph.h"
 
 namespace FilePersistence {
 
-using Pipeline = QList<PipelineComponent*>;
 using ChangeToChangeHash = QMultiHash<ChangeDescription*, ChangeDescription*>;
-using ChangeSet = QSet<ChangeDescription*>;
 
 class GitRepository;
 
@@ -192,21 +191,13 @@ class FILEPERSISTENCE_API Merge
 		/**
 		 * Components are executed in the order they appear in this list.
 		 */
-		Pipeline pipeline_;
-		/**
-		 * change1 is mapped to change2 iff applying change1 requires applying change2.
-		 * They key set must be the set of changes branch A makes. Values must be changes in branch A.
-		 */
-		ChangeToChangeHash cdgA_;
-		/**
-		 * change1 is mapped to change2 iff applying change1 requires applying change2.
-		 * They key set must be the set of changes branch B makes. Values must be changes in branch B.
-		 */
-		ChangeToChangeHash cdgB_;
+		QList<PipelineComponent*> pipeline_;
+		ChangeDependencyGraph cdgA_;
+		ChangeDependencyGraph cdgB_;
 		/**
 		 * changes in this set cannot be applied safely.
 		 */
-		ChangeSet conflictingChanges_;
+		QSet<ChangeDescription*> conflictingChanges_;
 		/**
 		 * change1 is mapped to change2 iff change1 and change2 cannot both be applied safely.
 		 */

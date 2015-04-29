@@ -24,23 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "PipelineComponent.h"
 
-#include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
-
-namespace FilePersistence {
-
-class PipelineComponent
+namespace FilePersistence
 {
-	public:
-		virtual ~PipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& mergeBaseTree,
-						const std::unique_ptr<GenericTree>& revisionTree_, const std::unique_ptr<GenericTree>& headTree,
-						ChangeDependencyGraph& cdgA,
-						ChangeDependencyGraph& cdgB,
-						QSet<ChangeDescription*>& conflictingChanges,
-						QMultiHash<ChangeDescription*, ChangeDescription*>& conflictPairs) = 0;
-};
 
-} /* namespace FilePersistence */
+PipelineComponent::~PipelineComponent() {}
+
+}

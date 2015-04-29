@@ -130,10 +130,10 @@ void Merge::performMerge()
 			baseHeadDiff_ = repository_->diff(mergeBase_, head_);
 			baseRevisionDiff_ = repository_->diff(mergeBase_, revision_);
 
-			buildCdg(cdgA_, baseHeadDiff_);
-			buildCdg(cdgB_, baseRevisionDiff_);
-			conflictingChanges_ = QSet<ChangeDescription*>();
-			conflictPairs_ = QMultiHash<ChangeDescription*, ChangeDescription*>();
+			cdgA_ = ChangeDependencyGraph(baseHeadDiff_);
+			cdgB_ = ChangeDependencyGraph(baseRevisionDiff_);
+			conflictingChanges_ = {};
+			conflictPairs_ = {};
 
 			mergeBaseTree_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", mergeBase_));
 			repository_->loadGenericTree(mergeBaseTree_, mergeBase_);
@@ -150,9 +150,9 @@ void Merge::performMerge()
 			}
 
 			IdToChangeDescriptionHash applicableChanges;
-			foreach (ChangeDescription* change, cdgA_.keys())
+			foreach (ChangeDescription* change, cdgA_.changes())
 				if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
-			foreach (ChangeDescription* change, cdgB_.keys())
+			foreach (ChangeDescription* change, cdgB_.changes())
 				if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
 
 			mergeTree_ = std::unique_ptr<GenericTree>(new GenericTree("Merge"));
