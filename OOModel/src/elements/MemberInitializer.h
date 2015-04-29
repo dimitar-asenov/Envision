@@ -39,7 +39,7 @@ namespace OOModel {
  * It may be a call to a super constructor then \a memberReference will denote
  * the callee of the super constructor and \a initializedValue will denote the arguments.
  * In case of delegating constructors the \a memberRef will be empty,
- * as the \a \initializedValue will contain a method call.
+ * as the \a initializedValue will contain a method call.
  * For simple member field initializers the \a memberReference will contain a reference to the field
  * and \a initializedValue the valued it should be initialized to
  */
