@@ -26,22 +26,33 @@
 
 #pragma once
 
-#include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
-#include "ConflictPairs.h"
+#include "PipelineComponent.h"
 
 namespace FilePersistence {
 
-class PipelineComponent
+using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, ChangeDescription*>;
+
+class ConflictUnitComp : public PipelineComponent
 {
 	public:
-		virtual ~PipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& treeBase,
-							  const std::unique_ptr<GenericTree>& treeA,
-							  const std::unique_ptr<GenericTree>& treeB,
-							  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-							  QSet<ChangeDescription*>& conflictingChanges,
-							  ConflictPairs& conflictPairs) = 0;
+		ConflictUnitComp(QSet<QString>& conflictTypes);
+		~ConflictUnitComp();
+		void run(const std::unique_ptr<GenericTree>& treeBase,
+					const std::unique_ptr<GenericTree>&,
+					const std::unique_ptr<GenericTree>&,
+					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+					QSet<ChangeDescription*>& conflictingChanges,
+					ConflictPairs& conflictPairs);
+	private:
+		void computeAffectedCUs(IdToChangeMultiHash& cuSet,
+										const std::unique_ptr<GenericTree>& treeBase,
+										ChangeDependencyGraph cdg);
+		Model::NodeIdType findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
+													  const GenericNode* node);
+
+		QSet<QString> conflictTypes_;
+		IdToChangeMultiHash affectedCUsA_;
+		IdToChangeMultiHash affectedCUsB_;
 };
 
 } /* namespace FilePersistence */

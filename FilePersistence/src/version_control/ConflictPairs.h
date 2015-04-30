@@ -27,21 +27,24 @@
 #pragma once
 
 #include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
-#include "ConflictPairs.h"
 
 namespace FilePersistence {
 
-class PipelineComponent
+class ConflictPairs
 {
 	public:
-		virtual ~PipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& treeBase,
-							  const std::unique_ptr<GenericTree>& treeA,
-							  const std::unique_ptr<GenericTree>& treeB,
-							  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-							  QSet<ChangeDescription*>& conflictingChanges,
-							  ConflictPairs& conflictPairs) = 0;
+		ConflictPairs();
+		~ConflictPairs();
+		QHash<ChangeDescription*, ChangeDescription*>::iterator find(ChangeDescription* change);
+		void insert(ChangeDescription* changeA, ChangeDescription* changeB);
+		void remove(ChangeDescription* changeA, ChangeDescription* changeB);
+	private:
+		QMultiHash<ChangeDescription*, ChangeDescription*> map_;
 };
+
+inline QHash<ChangeDescription*, ChangeDescription*>::iterator ConflictPairs::find(ChangeDescription* change)
+{
+	return map_.find(change);
+}
 
 } /* namespace FilePersistence */

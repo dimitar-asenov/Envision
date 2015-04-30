@@ -161,39 +161,10 @@ void Merge::performMerge()
 			applyChangesToTree(mergeTree_, applicableChanges);
 
 			break;
-
-			/* This will go into pipeline component
-			buildConflictUnitMap(revisionCUToChangeMap_, revisionChangeToCUMap_, baseRevisionDiff_, revisionTree_,
-										mergeBaseTree_);
-			buildConflictUnitMap(headCUToChangeMap_, headChangeToCUMap_, baseHeadDiff_, headTree_, mergeBaseTree_);
-
-			QList<Model::NodeIdType> conflicts = detectConflictingConflictUnits();
-			stage_ = Stage::ConflictsDetected;
-
-			if (!conflicts.isEmpty())
-				markConflictRegions(conflicts);
-				// TODO: MARK CONFLICT REGIONS
-
-
-			computeMergeForLists(headTree_, revisionTree_, mergeBaseTree_, baseHeadDiff_.changes(), baseRevisionDiff_.changes());
-			*/
 		}
 
 		default:
 			Q_ASSERT(false);
-	}
-}
-
-/**
- * Initializes a change dependency graph \a cdg with the changes in \a diff.
- */
-void Merge::buildCdg(ChangeToChangeHash& cdg, Diff& diff)
-{
-	cdg = ChangeToChangeHash();
-	foreach (auto change, diff.changes().values())
-	{
-		cdg.insert(change, nullptr);
-		// TODO: find dependencies
 	}
 }
 

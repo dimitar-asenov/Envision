@@ -139,8 +139,6 @@ class FILEPERSISTENCE_API Merge
 		void performInsertIntoList(GenericNode* parent, GenericNode* node);
 		void performReorderInList(GenericNode* parent, GenericNode* node);
 
-		void buildCdg(ChangeToChangeHash& cdg, Diff& diff);
-
 		static const QStringList ORDERED_LISTS;
 		static const QStringList UNORDERED_LISTS;
 
@@ -201,7 +199,7 @@ class FILEPERSISTENCE_API Merge
 		/**
 		 * change1 is mapped to change2 iff change1 and change2 cannot both be applied safely.
 		 */
-		ChangeToChangeHash conflictPairs_;
+		ConflictPairs conflictPairs_;
 };
 
 inline Merge::Kind Merge::kind() const { return kind_; }

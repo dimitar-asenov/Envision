@@ -24,24 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
 #include "ConflictPairs.h"
 
 namespace FilePersistence {
 
-class PipelineComponent
+void ConflictPairs::insert(ChangeDescription* changeA, ChangeDescription* changeB)
 {
-	public:
-		virtual ~PipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& treeBase,
-							  const std::unique_ptr<GenericTree>& treeA,
-							  const std::unique_ptr<GenericTree>& treeB,
-							  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-							  QSet<ChangeDescription*>& conflictingChanges,
-							  ConflictPairs& conflictPairs) = 0;
-};
+	map_.insert(changeA, changeB);
+	map_.insert(changeB, changeA);
+}
+
+void ConflictPairs::remove(ChangeDescription* changeA, ChangeDescription* changeB)
+{
+	map_.remove(changeA, changeB);
+	map_.remove(changeB, changeA);
+}
 
 } /* namespace FilePersistence */
