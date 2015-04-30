@@ -213,7 +213,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 
 bool JavaDebugger::step(Visualization::Item*, QKeyEvent* event)
 {
-	if (event->modifiers() == Qt::ControlModifier && (event->key() == Qt::Key_1))
+	if (event->modifiers() == Qt::ControlModifier && (event->key() == Qt::Key_F6))
 	{
 		debugConnector_.singleStep(currentThreadId_);
 		resume();
