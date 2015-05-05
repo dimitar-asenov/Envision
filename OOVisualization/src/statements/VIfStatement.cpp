@@ -28,6 +28,7 @@
 #include "../elements/VStatementItemList.h"
 
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
@@ -88,9 +89,12 @@ void VIfStatement::initializeForms()
 	auto shapeElement = new ShapeFormElement();
 
 	// Form 0: then and else branch arranged horizontally
+	auto elseVerticalLineElement = item<Line>(&I::elseLine_, [](I* v){return &v->style()->elseVerticalLine();})
+		->setEnabled([](I* v) {return v->node()->elseBranch()->size() > 0; });
+
 	auto contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
-			->setHorizontalSpacing(10)
-			->put(0, 0, thenBranch)->put(1, 0, elseBranch)
+			->setHorizontalSpacing(5)
+			->put(0, 0, thenBranch)->put(1, 0, elseVerticalLineElement)->put(2, 0, elseBranch)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	addForm((new AnchorLayoutFormElement())
@@ -103,9 +107,12 @@ void VIfStatement::initializeForms()
 			->put(TheBottomOf, shapeElement, 3, FromBottomOf, contentElement));
 
 	// Form 1: then and else branch arranged vertically
+	auto elseHorizontalLineElement = item<Line>(&I::elseLine_, [](I* v){return &v->style()->elseHorizontalLine();})
+		->setEnabled([](I* v) {return v->node()->elseBranch()->size() > 0; });
+
 	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
-			->setVerticalSpacing(10)
-			->put(0, 0, thenBranch)->put(0, 1, elseBranch)
+			->setVerticalSpacing(5)
+			->put(0, 0, thenBranch)->put(0, 1, elseHorizontalLineElement)->put(0, 2, elseBranch)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;});
 
 	addForm((new AnchorLayoutFormElement())
