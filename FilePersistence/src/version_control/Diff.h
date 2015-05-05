@@ -49,13 +49,14 @@ class FILEPERSISTENCE_API Diff
 		IdToChangeDescriptionHash changes(ChangeType type, ChangeDescription::UpdateFlags flags) const;
 
 	private:
-		void idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB);
+		void computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB);
 
-		void setAllChildStructureUpdates();
+		void computeStructChanges();
+		void setStructFlagForId(const Model::NodeIdType);
 
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
 
-		bool trueChange(const ChangeDescription* change);
+		bool isModifying(const ChangeDescription* change);
 
 		IdToChangeDescriptionHash changeDescriptions_{};
 
@@ -68,7 +69,7 @@ inline IdToChangeDescriptionHash Diff::changes() const {return changeDescription
 /**
  * filters false changes that are stationary and have no flags set.
  */
-inline bool Diff::trueChange(const ChangeDescription* change)
+inline bool Diff::isModifying(const ChangeDescription* change)
 {
 	return !(change->type() == ChangeType::Stationary && change->flags() == 0);
 }

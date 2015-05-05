@@ -52,9 +52,8 @@ Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 	filterPersistenceUnits(nodesAHash);
 	filterPersistenceUnits(nodesBHash);
 
-	idMatching(nodesAHash, nodesBHash);
-
-	// setAllChildStructureUpdates();
+	computeChanges(nodesAHash, nodesBHash);
+	computeStructChanges();
 }
 
 IdToChangeDescriptionHash Diff::changes(ChangeType type) const
@@ -80,11 +79,9 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 }
 
 // Private methods
-void Diff::idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB)
+void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB)
 {
 	QSet<Model::NodeIdType> onlyInNodesB = QSet<Model::NodeIdType>::fromList(nodesB.keys());
-	QSet<Model::NodeIdType> changedParents{};
-
 	IdToGenericNodeHash::iterator iter;
 	for (auto nodeA : nodesA.values())
 	{
@@ -96,76 +93,57 @@ void Diff::idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB)
 		}
 		else
 		{
-			// found id
-			ChangeDescription* change = new ChangeDescription(nodeA, iter.value());
-			if (Diff::trueChange(change))
-			{
-				changeDescriptions_.insert(nodeA->id(), change);
-				if (change->type() == ChangeType::Moved)
-				{
-					changedParents.insert(nodeA->parentId());
-					changedParents.insert(iter.value()->parentId());
-				}
-				else if (change->type() == ChangeType::Deleted || change->hasFlags(ChangeDescription::UpdateType::Label))
-					changedParents.insert(nodeA->parentId());
-			}
-			// id is also present in nodesA
+			// found id in nodesB
+			changeDescriptions_.insert(nodeA->id(), new ChangeDescription(nodeA, iter.value()));
 			onlyInNodesB.remove(iter.key());
 		}
 	}
-
+	// Intermediate state 2
 	for (auto id : onlyInNodesB)
 	{
 		iter = nodesB.find(id);
 		changeDescriptions_.insert(id, new ChangeDescription(nullptr, iter.value()));
-		changedParents.insert(iter.value()->parentId());
 	}
+	// Intermediate state 3
+	for (ChangeDescription* change : changeDescriptions_)
+	if (!isModifying(change)) changeDescriptions_.remove(change->id());
+}
 
-	for (auto parentId : changedParents.values())
+/**
+ * Sets \a structFlag for appropriate changes and may create new changes.
+ */
+void Diff::computeStructChanges()
+{
+	for (ChangeDescription* change : changeDescriptions_.values())
 	{
-		ChangeDescription* change;
-		auto iter = changeDescriptions_.find(parentId);
-		if (iter == changeDescriptions_.end())
-		{
-			change = new ChangeDescription(ChangeType::Stationary);
-			changeDescriptions_.insert(parentId, change);
-		}
-		else
-			change = iter.value();
-		change->setChildrenUpdate(true);
+		if (change->type() == ChangeType::Added || change->type() == ChangeType::Moved)
+			setStructFlagForId(change->nodeB()->parentId());
+		if (change->type() == ChangeType::Deleted || change->type() == ChangeType::Moved)
+			setStructFlagForId(change->nodeA()->parentId());
+		if (change->hasFlags(ChangeDescription::Label))
+			setStructFlagForId(change->nodeA()->parentId());
 	}
 }
 
 /**
- * This method is only needed for one variant of idMatching
+ * If a change for \a id already exists, its \a structFlag is set,
+ * otherwise a new change with that flag is created.
  */
-void Diff::setAllChildStructureUpdates()
+void Diff::setStructFlagForId(const Model::NodeIdType id)
 {
-	for (ChangeDescription* change : changeDescriptions_.values())
+	IdToChangeDescriptionHash::iterator changeIt = changeDescriptions_.find(id);
+	ChangeDescription* change;
+	if (changeIt == changeDescriptions_.end())
 	{
-		if (change->type() == ChangeType::Added ||
-			 change->type() == ChangeType::Deleted ||
-			 change->type() == ChangeType::Moved ||
-			 change->hasFlags(ChangeDescription::UpdateType::Label))
-		{
-			Model::NodeIdType parentId;
-			if (change->nodeA())
-				parentId = change->nodeA()->parentId();
-			else
-				parentId = change->nodeB()->parentId();
-
-			ChangeDescription* parentChange;
-			auto iter = changeDescriptions_.find(parentId);
-			if (iter == changeDescriptions_.end())
-			{
-				parentChange = new ChangeDescription(ChangeType::Stationary);
-				changeDescriptions_.insert(parentId, parentChange);
-			}
-			else
-				parentChange = iter.value();
-			parentChange->setChildrenUpdate(true);
-		}
+		change = new ChangeDescription(ChangeType::Stationary);
+		changeDescriptions_.insert(id, change);
+		// TODO Problem? These changes have no node, just an id.
 	}
+	else
+		change = changeIt.value();
+	change->setChildrenUpdate(true);
+
+	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Children));
 }
 
 /**
