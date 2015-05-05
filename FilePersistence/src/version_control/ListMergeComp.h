@@ -35,7 +35,9 @@ class ListMergeComp : public PipelineComponent
 	public:
 		ListMergeComp(QSet<QString>& listTypes);
 		~ListMergeComp();
-		void run(const std::unique_ptr<GenericTree>&, const std::unique_ptr<GenericTree>&, const std::unique_ptr<GenericTree>&,
+		void run(const std::unique_ptr<GenericTree>&,
+					const std::unique_ptr<GenericTree>&,
+					const std::unique_ptr<GenericTree>&,
 					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 					QSet<ChangeDescription*>& conflictingChanges,
 					ConflictPairs& conflictPairs);
@@ -47,7 +49,7 @@ class ListMergeComp : public PipelineComponent
 		bool onlyChildStructure(ChangeDescription* change);
 		bool onlyLabel(ChangeDescription* change);
 		QSet<QString> listTypes_;
-		QSet<GenericNode*> listsToMerge_;
+		QSet<GenericNode const*> listsToMerge_;
 };
 
 inline bool ListMergeComp::onlyChildStructure(ChangeDescription* change) {
