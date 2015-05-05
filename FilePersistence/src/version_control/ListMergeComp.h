@@ -24,49 +24,42 @@
 **
 ***********************************************************************************************************************/
 
+#pragma once
 
-#include "ChangeDependencyGraph.h"
+#include "PipelineComponent.h"
 
 namespace FilePersistence {
 
-ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff)
+class ListMergeComp : public PipelineComponent
 {
-	changes_ = IdToChangeDescriptionHash(diff.changes());
-	foreach (ChangeDescription* change, diff.changes().values())
-	{
-		if (change->type() == ChangeType::Added || change->type() == ChangeType::Moved)
-		{
-			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeB()->parentId());
-			while (it != diff.changes().end() && it.key() == change->nodeB()->parentId())
-			{
-				if (it.value()->type() == ChangeType::Added) map_.insert(change, it.value());
-				it++;
-			}
-		}
-		if (change->type() == ChangeType::Deleted || change->type() == ChangeType::Moved)
-		{
-			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeA()->parentId());
-			while (it != diff.changes().end() && it.key() == change->nodeA()->parentId())
-			{
-				if (it.value()->type() == ChangeType::Deleted) map_.insert(it.value(), change);
-				it++;
-			}
-		}
-	}
+	public:
+		ListMergeComp(QSet<QString>& listTypes);
+		~ListMergeComp();
+		void run(const std::unique_ptr<GenericTree>&, const std::unique_ptr<GenericTree>&, const std::unique_ptr<GenericTree>&,
+					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+					QSet<ChangeDescription*>& conflictingChanges,
+					ConflictPairs& conflictPairs);
+	private:
+		void computeListsToMerge(ChangeDependencyGraph& cdgA,
+												  ChangeDependencyGraph& cdgB,
+												  QSet<ChangeDescription*>& conflictingChanges,
+												  ConflictPairs& conflictPairs);
+		bool onlyChildStructure(ChangeDescription* change);
+		bool onlyLabel(ChangeDescription* change);
+		QSet<QString> listTypes_;
+		QSet<GenericNode*> listsToMerge_;
+};
+
+inline bool ListMergeComp::onlyChildStructure(ChangeDescription* change) {
+	return (change->type() == ChangeType::Stationary &&
+			  (change->flags() == ChangeDescription::Children ||
+			  change->flags() == ChangeDescription::NoFlags));
 }
 
-ChangeDependencyGraph::~ChangeDependencyGraph() {}
-
-void ChangeDependencyGraph::addDependency(ChangeDescription* changeA, ChangeDescription* changeB)
-{
-	Q_ASSERT(changes_.values().contains(changeA));
-	Q_ASSERT(changes_.values().contains(changeB));
-	map_.insert(changeA, changeB);
-}
-
-void ChangeDependencyGraph::removeDependency(ChangeDescription* changeA, ChangeDescription* changeB)
-{
-	map_.remove(changeA, changeB);
+inline bool ListMergeComp::onlyLabel(ChangeDescription* change) {
+	return (change->type() == ChangeType::Stationary &&
+			  (change->flags() == ChangeDescription::Label ||
+			  change->flags() == ChangeDescription::NoFlags));
 }
 
 } /* namespace FilePersistence */

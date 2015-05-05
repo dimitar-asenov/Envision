@@ -40,6 +40,7 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		enum UpdateType
 		{
+			NoFlags = 0,
 			Label = 1,
 			Value = 2,
 			Type = 4,

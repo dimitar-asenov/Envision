@@ -37,15 +37,15 @@ class ChangeDependencyGraph
 		ChangeDependencyGraph(Diff& diff);
 		ChangeDependencyGraph() {}
 		~ChangeDependencyGraph();
-		const QSet<ChangeDescription*> changes();
+		const IdToChangeDescriptionHash changes();
 		void addDependency(ChangeDescription* changeA, ChangeDescription* changeB);
-		void removeDependecy(ChangeDescription* changeA, ChangeDescription* changeB);
+		void removeDependency(ChangeDescription* changeA, ChangeDescription* changeB);
 	private:
-		QSet<ChangeDescription*> changes_;
+		IdToChangeDescriptionHash changes_;
 		QMultiHash<ChangeDescription*, ChangeDescription*> map_;
 
 };
 
-inline const QSet<ChangeDescription*> ChangeDependencyGraph::changes() { return changes_; }
+inline const IdToChangeDescriptionHash ChangeDependencyGraph::changes() { return changes_; }
 
 } /* namespace FilePersistence */

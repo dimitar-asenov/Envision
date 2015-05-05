@@ -35,16 +35,23 @@ class ConflictPairs
 	public:
 		ConflictPairs();
 		~ConflictPairs();
-		QHash<ChangeDescription*, ChangeDescription*>::iterator find(ChangeDescription* change);
+		using iterator = QHash<ChangeDescription*, ChangeDescription*>::iterator;
+		iterator find(ChangeDescription* change);
+		iterator end();
 		void insert(ChangeDescription* changeA, ChangeDescription* changeB);
 		void remove(ChangeDescription* changeA, ChangeDescription* changeB);
 	private:
 		QMultiHash<ChangeDescription*, ChangeDescription*> map_;
 };
 
-inline QHash<ChangeDescription*, ChangeDescription*>::iterator ConflictPairs::find(ChangeDescription* change)
+inline ConflictPairs::iterator ConflictPairs::find(ChangeDescription* change)
 {
 	return map_.find(change);
+}
+
+inline ConflictPairs::iterator ConflictPairs::end()
+{
+	return map_.end();
 }
 
 } /* namespace FilePersistence */
