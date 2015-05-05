@@ -250,6 +250,10 @@ const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifi
 		case clang::NestedNameSpecifier::Global:
 			hash = "_";
 			break;
+		default:
+			// In version 3.6 this is only NestedNameSpecifier::Super, which is a Microsoft specific extension (_super).
+			throw new CppImportException("Unsupported nested name specifier kind: " + nestedName->getKind());
+			break;
 	}
 	if (auto p = nestedName->getPrefix())
 		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
