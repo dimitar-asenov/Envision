@@ -308,7 +308,7 @@ TEST(FilePersistencePlugin, insertDetection)
 	ChangeDescription* nodeChange = iter.value();
 
 	ChangeType changeType = nodeChange->type();
-	CHECK_CONDITION(changeType == ChangeType::Added);
+	CHECK_CONDITION(changeType == ChangeType::Insertion);
 
 	ChangeDescription::UpdateFlags flags = nodeChange->flags();
 	CHECK_CONDITION(!flags.testFlag(ChangeDescription::Order));
@@ -365,7 +365,7 @@ TEST(FilePersistencePlugin, deleteDetection)
 	ChangeDescription* nodeChange = iter.value();
 
 	ChangeType changeType = nodeChange->type();
-	CHECK_CONDITION(changeType == ChangeType::Deleted);
+	CHECK_CONDITION(changeType == ChangeType::Deletion);
 
 	ChangeDescription::UpdateFlags flags = nodeChange->flags();
 	CHECK_CONDITION(!flags.testFlag(ChangeDescription::Order));
@@ -438,7 +438,7 @@ TEST(FilePersistencePlugin, moveDetection)
 	ChangeDescription* nodeChange = iter.value();
 
 	ChangeType changeType = nodeChange->type();
-	CHECK_CONDITION(changeType == ChangeType::Moved);
+	CHECK_CONDITION(changeType == ChangeType::Move);
 
 	ChangeDescription::UpdateFlags flags = nodeChange->flags();
 	CHECK_CONDITION(!flags.testFlag(ChangeDescription::Order));

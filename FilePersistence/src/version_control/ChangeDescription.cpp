@@ -35,49 +35,36 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB)
 	nodeA_ = nodeA;
 	nodeB_ = nodeB;
 
-	fundamentalChangeClassification();
+	if (nodeA_)
+	{
+		id_ = nodeA_->id();
+		if (nodeB_)
+		{
+			if (nodeA_->parentId() == nodeB_->parentId())
+				type_ = ChangeType::Stationary;
+			else
+				type_ = ChangeType::Move;
+		}
+		else
+			type_ = ChangeType::Deletion;
+	}
+	else
+	{
+		id_ = nodeB_->id();
+		type_ = ChangeType::Insertion;
+	}
+	detectLabelChange();
+	detectTypeChange();
+	detectValueChange();
 }
-ChangeDescription::ChangeDescription(ChangeType type)
+
+ChangeDescription::ChangeDescription(Model::NodeIdType id, ChangeType type)
 {
+	id_ = id;
 	type_ = type;
 }
 
-void ChangeDescription::fundamentalChangeClassification()
-{
-	if (nodeA_ == nullptr)
-		type_ = ChangeType::Added;
-	else
-	{
-		if (nodeB_ == nullptr)
-			type_ = ChangeType::Deleted;
-		else
-		{
-			if (nodeA_->parent() == nullptr || nodeB_->parent() == nullptr)
-			{
-				if (nodeA_->parent() == nullptr && nodeB_->parent() == nullptr)
-					type_ = ChangeType::Stationary;
-				else
-					type_ = ChangeType::Moved;
-			}
-			else
-			{
-				if (nodeA_->parent()->id() == nodeB_->parent()->id())
-					type_ = ChangeType::Stationary;
-				else
-					type_ = ChangeType::Moved;
-			}
-		}
-	}
-
-	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
-	{
-		detectReorder();
-		detectTypeUpdate();
-		detectValueUpdate();
-	}
-}
-
-void ChangeDescription::detectReorder()
+void ChangeDescription::detectLabelChange()
 {
 	// check for same name -> reordering detection
 	if (nodeA_->name() != nodeB_->name())
@@ -86,7 +73,7 @@ void ChangeDescription::detectReorder()
 		updateFlags_ &= ~Label;
 }
 
-void ChangeDescription::detectValueUpdate()
+void ChangeDescription::detectValueChange()
 {
 	// check for same type -> type change
 	if (nodeA_->rawValue() != nodeB_->rawValue())
@@ -95,7 +82,7 @@ void ChangeDescription::detectValueUpdate()
 		updateFlags_ &= ~Value;
 }
 
-void ChangeDescription::detectTypeUpdate()
+void ChangeDescription::detectTypeChange()
 {
 	// check for same value -> update
 	if (nodeA_->type() != nodeB_->type())
@@ -109,16 +96,16 @@ void ChangeDescription::print() const
 	std::cout << id().toString().toStdString().c_str() << "\t";
 	switch (type_)
 	{
-		case ChangeType::Added:
-			std::cout << "Added" << std::endl;
+		case ChangeType::Insertion:
+			std::cout << "Insertion" << std::endl;
 			break;
 
-		case ChangeType::Deleted:
-			std::cout << "Deleted" << std::endl;
+		case ChangeType::Deletion:
+			std::cout << "Deletion" << std::endl;
 			break;
 
-		case ChangeType::Moved:
-			std::cout << "Moved" << std::endl;
+		case ChangeType::Move:
+			std::cout << "Move" << std::endl;
 			break;
 
 		case ChangeType::Stationary:
@@ -139,28 +126,20 @@ void ChangeDescription::print() const
 		std::cout << " Type";
 	if (updateFlags_.testFlag(Value))
 		std::cout << " Value";
-	if (updateFlags_.testFlag(Children))
+	if (updateFlags_.testFlag(Structure))
 		std::cout << " Children";
 	std::cout << std::endl;
 }
 
-void ChangeDescription::setChildrenUpdate(bool isUpdate)
+void ChangeDescription::setStructureFlag(bool value)
 {
-	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
+	if (type_ == ChangeType::Move || type_ == ChangeType::Stationary)
 	{
-		if (isUpdate)
-			updateFlags_ |= Children;
+		if (value)
+			updateFlags_ |= Structure;
 		else
-			updateFlags_ &= ~Children;
+			updateFlags_ &= ~Structure;
 	}
-}
-
-Model::NodeIdType ChangeDescription::id() const
-{
-	if (type_ == ChangeType::Added)
-		return nodeB_->id();
-	else
-		return nodeA_->id();
 }
 
 } /* namespace FilePersistence */

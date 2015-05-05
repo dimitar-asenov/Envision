@@ -30,13 +30,13 @@
 
 namespace FilePersistence {
 
-enum class ChangeType {Unclassified, Added, Deleted, Moved, Stationary};
+enum class ChangeType {Unclassified, Insertion, Deletion, Move, Stationary};
 
 class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
 		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
-		ChangeDescription(ChangeType type);
+		ChangeDescription(Model::NodeIdType id, ChangeType type);
 
 		enum UpdateType
 		{
@@ -44,7 +44,7 @@ class FILEPERSISTENCE_API ChangeDescription
 			Label = 1,
 			Value = 2,
 			Type = 4,
-			Children = 8
+			Structure = 8
 		};
 		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
 
@@ -52,7 +52,7 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		void print() const;
 
-		void setChildrenUpdate(bool isUpdate);
+		void setStructureFlag(bool value);
 
 		Model::NodeIdType id() const;
 
@@ -64,11 +64,11 @@ class FILEPERSISTENCE_API ChangeDescription
 		const GenericNode* nodeA() const;
 
 	private:
-		void fundamentalChangeClassification();
+		void detectLabelChange();
+		void detectValueChange();
+		void detectTypeChange();
 
-		void detectReorder();
-		void detectValueUpdate();
-		void detectTypeUpdate();
+		Model::NodeIdType id_;
 
 		ChangeType type_{};
 
@@ -79,6 +79,8 @@ class FILEPERSISTENCE_API ChangeDescription
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
+
+inline Model::NodeIdType ChangeDescription::id() const { return id_; }
 
 inline bool ChangeDescription::hasFlags(const UpdateFlags flags) const { return (updateFlags_ & flags) == flags; }
 

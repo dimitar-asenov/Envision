@@ -159,7 +159,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 					ChangeDescription* change = iter.value();
 					switch (change->type())
 					{
-						case ChangeType::Added:
+						case ChangeType::Insertion:
 							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
 							parent = node->parent();
 							if (auto item = headRoot->findVisualizationOf(node))
@@ -171,7 +171,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									if (iter != changes.end())
 									{
 										ChangeDescription* parentChange = iter.value();
-										if (parentChange->type() != ChangeType::Added)
+										if (parentChange->type() != ChangeType::Insertion)
 											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
 												Visualization::SelectionOverlay::itemStyles().get("insert"))));
 									}
@@ -185,7 +185,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 							}
 							break;
 
-						case ChangeType::Deleted:
+						case ChangeType::Deletion:
 							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
 							parent = node->parent();
 							if (auto item = revisionRoot->findVisualizationOf(node))
@@ -197,7 +197,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									if (iter != changes.end())
 									{
 										ChangeDescription* parentChange = iter.value();
-										if (parentChange->type() != ChangeType::Deleted)
+										if (parentChange->type() != ChangeType::Deletion)
 											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
 												Visualization::SelectionOverlay::itemStyles().get("delete"))));
 									}
@@ -211,7 +211,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 							}
 							break;
 
-						case ChangeType::Moved:
+						case ChangeType::Move:
 							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
 							if (auto item = headRoot->findVisualizationOf(node))
 								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,

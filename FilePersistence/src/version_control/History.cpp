@@ -169,7 +169,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	// check if rootNode is in other PU (affected by move)
 	QSet<QString> alreadyChecked;
 	alreadyChecked.insert(currentPath);
-	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Moved);
+	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Move);
 	for (auto move : moves)
 	{
 		if (currentPath.compare(move->nodeB()->persistentUnit()->name()) == 0)

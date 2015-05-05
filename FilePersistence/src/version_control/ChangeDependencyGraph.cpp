@@ -34,21 +34,21 @@ ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff)
 	changes_ = IdToChangeDescriptionHash(diff.changes());
 	foreach (ChangeDescription* change, diff.changes().values())
 	{
-		if (change->type() == ChangeType::Added || change->type() == ChangeType::Moved)
+		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
 		{
 			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeB()->parentId());
 			while (it != diff.changes().end() && it.key() == change->nodeB()->parentId())
 			{
-				if (it.value()->type() == ChangeType::Added) map_.insert(change, it.value());
+				if (it.value()->type() == ChangeType::Insertion) map_.insert(change, it.value());
 				it++;
 			}
 		}
-		if (change->type() == ChangeType::Deleted || change->type() == ChangeType::Moved)
+		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
 		{
 			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeA()->parentId());
 			while (it != diff.changes().end() && it.key() == change->nodeA()->parentId())
 			{
-				if (it.value()->type() == ChangeType::Deleted) map_.insert(it.value(), change);
+				if (it.value()->type() == ChangeType::Deletion) map_.insert(it.value(), change);
 				it++;
 			}
 		}

@@ -52,7 +52,7 @@ class FILEPERSISTENCE_API Diff
 		void computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB);
 
 		void computeStructChanges();
-		void setStructFlagForId(const Model::NodeIdType);
+		void setStructureFlagForId(const Model::NodeIdType);
 
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
 

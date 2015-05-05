@@ -116,12 +116,12 @@ void Diff::computeStructChanges()
 {
 	for (ChangeDescription* change : changeDescriptions_.values())
 	{
-		if (change->type() == ChangeType::Added || change->type() == ChangeType::Moved)
-			setStructFlagForId(change->nodeB()->parentId());
-		if (change->type() == ChangeType::Deleted || change->type() == ChangeType::Moved)
-			setStructFlagForId(change->nodeA()->parentId());
+		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
+			setStructureFlagForId(change->nodeB()->parentId());
+		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
+			setStructureFlagForId(change->nodeA()->parentId());
 		if (change->hasFlags(ChangeDescription::Label))
-			setStructFlagForId(change->nodeA()->parentId());
+			setStructureFlagForId(change->nodeA()->parentId());
 	}
 }
 
@@ -129,21 +129,21 @@ void Diff::computeStructChanges()
  * If a change for \a id already exists, its \a structFlag is set,
  * otherwise a new change with that flag is created.
  */
-void Diff::setStructFlagForId(const Model::NodeIdType id)
+void Diff::setStructureFlagForId(const Model::NodeIdType id)
 {
 	IdToChangeDescriptionHash::iterator changeIt = changeDescriptions_.find(id);
 	ChangeDescription* change;
 	if (changeIt == changeDescriptions_.end())
 	{
-		change = new ChangeDescription(ChangeType::Stationary);
+		change = new ChangeDescription(id, ChangeType::Stationary);
 		changeDescriptions_.insert(id, change);
 		// TODO Problem? These changes have no node, just an id.
 	}
 	else
 		change = changeIt.value();
-	change->setChildrenUpdate(true);
+	change->setStructureFlag(true);
 
-	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Children));
+	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
 }
 
 /**

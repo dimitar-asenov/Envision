@@ -188,19 +188,19 @@ void Merge::buildConflictUnitMap(QMultiHash<Model::NodeIdType, ChangeDescription
 		Model::NodeIdType conflictUnit;
 		switch (change->type())
 		{
-			case ChangeType::Added:
+			case ChangeType::Insertion:
 				// find CU in treeB
 				conflictUnit = findConflictUnit(change->nodeB(), versionTree, false, diff);
 				insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
 				break;
 
-			case ChangeType::Deleted:
+			case ChangeType::Deletion:
 				// find CU in treeA
 				conflictUnit = findConflictUnit(change->nodeA(), baseTree, true, diff);
 				insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
 				break;
 
-			case ChangeType::Moved:
+			case ChangeType::Move:
 				// find CU in treeA
 				conflictUnit = findConflictUnit(change->nodeA(), baseTree, true, diff);
 				insertIntoConflictUnitMaps(change, conflictUnit, cuToChange, changeToCU);
@@ -384,10 +384,10 @@ void Merge::computeMergeForLists(const std::unique_ptr<GenericTree>& head, const
 	for (ChangeDescription* change : baseToRevision)
 	{
 		ChangeType type = change->type();
-		if (type == ChangeType::Moved || type == ChangeType::Stationary)
+		if (type == ChangeType::Move || type == ChangeType::Stationary)
 		{
 			ChangeDescription::UpdateFlags flags = change->flags();
-			if (flags.testFlag(ChangeDescription::Children))
+			if (flags.testFlag(ChangeDescription::Structure))
 			{
 				if (!nodeToRegionMap_.contains(change->id()))
 				{
@@ -661,15 +661,15 @@ void Merge::applyChangesToTree(const std::unique_ptr<GenericTree>& tree, const I
 
 		switch (change->type())
 		{
-			case ChangeType::Added:
+			case ChangeType::Insertion:
 				success = applyAddToTree(tree, unappliedChanges, change);
 				break;
 
-			case ChangeType::Deleted:
+			case ChangeType::Deletion:
 				success = applyDeleteToTree(tree, unappliedChanges, change);
 				break;
 
-			case ChangeType::Moved:
+			case ChangeType::Move:
 				success = applyMoveToTree(tree, unappliedChanges, change);
 				break;
 

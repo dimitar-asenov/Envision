@@ -54,7 +54,7 @@ class ListMergeComp : public PipelineComponent
 
 inline bool ListMergeComp::onlyChildStructure(ChangeDescription* change) {
 	return (change->type() == ChangeType::Stationary &&
-			  (change->flags() == ChangeDescription::Children ||
+			  (change->flags() == ChangeDescription::Structure ||
 			  change->flags() == ChangeDescription::NoFlags));
 }
 

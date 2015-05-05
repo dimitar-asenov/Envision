@@ -78,15 +78,15 @@ void ConflictUnitComp::computeAffectedCUs(IdToChangeMultiHash& cuSet,
 		Model::NodeIdType conflictRootB;
 		switch (change->type()) {
 			case ChangeType::Stationary:
-			case ChangeType::Deleted:
+			case ChangeType::Deletion:
 				conflictRootA = findConflictUnit(treeBase, change->nodeA());
 				cuSet.insert(conflictRootA, change);
 				break;
-			case ChangeType::Added:
+			case ChangeType::Insertion:
 				conflictRootB = findConflictUnit(treeBase, change->nodeB());
 				cuSet.insert(conflictRootB, change);
 				break;
-			case ChangeType::Moved:
+			case ChangeType::Move:
 				conflictRootA = findConflictUnit(treeBase, change->nodeA());
 				conflictRootB = findConflictUnit(treeBase, change->nodeB());
 				cuSet.insert(conflictRootA, change);
