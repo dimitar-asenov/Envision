@@ -57,6 +57,8 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
+		static const QList<Qt::GlobalColor> PLOT_COLORS;
+
 		QList<double> xValues_;
 		QList<QList<double>> yValues_;
 		double xMin_{}, xMax_{};
@@ -81,6 +83,8 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		void plotBars(QPainter* painter);
 		void plotScatter(QPainter* painter);
 		void plotArray(QPainter* painter);
+
+		void drawLegend(QPainter* painter);
 
 		/**
 		 * Changes the pen on \a painter to \a newPen and returns the previous pen.

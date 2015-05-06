@@ -32,6 +32,9 @@ namespace OODebug {
 
 ITEM_COMMON_DEFINITIONS(PlotOverlay, "item")
 
+
+const QList<Qt::GlobalColor> PlotOverlay::PLOT_COLORS = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};
+
 PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* style,
 								 PlotType type, QStringList variableNames)
 	: Super{{associatedItem}, style}
@@ -210,17 +213,16 @@ void PlotOverlay::plotScatter(QPainter* painter)
 {
 	drawTics(painter);
 	drawAxes(painter);
+	drawLegend(painter);
 
 	const double radius = style()->scatterDotRadius();
-
-	static const QList<Qt::GlobalColor> colors = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};
 
 	QPen pen = exchangePen(painter, Qt::NoPen);
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
 		for (int y = 0; y < yValues_.size(); ++y)
 		{
-			auto brush = exchangeBrushColor(painter, colors[y < colors.size() ? y : 0]);
+			auto brush = exchangeBrushColor(painter, PLOT_COLORS[y < PLOT_COLORS.size() ? y : 0]);
 			painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[y][i]}), radius, radius);
 			painter->setBrush(brush);
 		}
@@ -278,6 +280,38 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 			painter->drawText(QPointF(x, y), variableNames_[i + 1]);
 		}
 	}
+}
+
+void PlotOverlay::drawLegend(QPainter* painter)
+{
+	const double radius = style()->scatterDotRadius();
+	// first variable name is always x variable.
+	int maxTextLength = 0;
+	for (int i = 1; i < variableNames_.size(); ++i) maxTextLength = std::max(maxTextLength, variableNames_[i].length());
+	auto fontMetrics = painter->fontMetrics();
+	int legendWidth = fontMetrics.averageCharWidth() * (maxTextLength);
+	int fontHeight = fontMetrics.height();
+	int legendHeight = (variableNames_.size() - 1) * fontHeight;
+
+	auto brush = exchangeBrushColor(painter, QColor(240, 240, 255)); // Very light gray
+
+	QRect legendRegion(QPoint(style()->width() - legendWidth - radius, fontHeight), QSize(legendWidth, legendHeight));
+	auto pen = exchangePen(painter, Qt::NoPen);
+	painter->drawRect(legendRegion);
+	painter->setPen(pen);
+
+	for (int i = 0; i < variableNames_.size() - 1; ++i)
+	{
+		exchangeBrushColor(painter, PLOT_COLORS[i < PLOT_COLORS.size() ? i : 0]);
+		auto pen = exchangePen(painter, Qt::NoPen);
+		painter->drawEllipse(QPointF(legendRegion.x() + radius, legendRegion.y() + (i * fontHeight) + fontHeight / 2.0),
+									radius, radius);
+		painter->setPen(pen);
+		painter->drawText(legendRegion.x() + 2 * radius, legendRegion.y() + (i * fontHeight) + 3.0 * fontHeight / 4.0,
+								variableNames_[i + 1]);
+	}
+	// restore old brush
+	painter->setBrush(brush);
 }
 
 QPen PlotOverlay::exchangePen(QPainter* painter, QPen newPen)
