@@ -215,18 +215,17 @@ void PlotOverlay::plotScatter(QPainter* painter)
 
 	static const QList<Qt::GlobalColor> colors = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};
 
-	QPen pen(Qt::NoPen);
-	painter->setPen(pen);
+	QPen pen = exchangePen(painter, Qt::NoPen);
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
 		for (int y = 0; y < yValues_.size(); ++y)
 		{
-			auto brush = painter->brush();
-			brush.setColor(colors[y < colors.size() ? y : 0]);
-			painter->setBrush(brush);
+			auto brush = exchangeBrushColor(painter, colors[y < colors.size() ? y : 0]);
 			painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[y][i]}), radius, radius);
+			painter->setBrush(brush);
 		}
 	}
+	painter->setPen(pen);
 }
 
 void OODebug::PlotOverlay::plotArray(QPainter* painter)
@@ -268,10 +267,7 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 			QPointF midPoint = {plotRegion_.x() + index * fieldSize + fieldSize / 2, plotY + 2};
 			QPointF leftPoint = {plotRegion_.x() + index * fieldSize + fieldSize / 4, plotY + 2 + ARROW_HEIGHT};
 			QPointF rightPoint = {plotRegion_.x() + index * fieldSize + 3*fieldSize / 4, plotY + 2 + ARROW_HEIGHT};
-			auto brush = painter->brush();
-			QBrush newBrush(brush);
-			newBrush.setColor(Qt::red);
-			painter->setBrush(newBrush);
+			auto brush = exchangeBrushColor(painter, Qt::red);
 			painter->drawPolygon(QPolygonF({midPoint, leftPoint, rightPoint}));
 			painter->setBrush(brush);
 		}
@@ -282,6 +278,22 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 			painter->drawText(QPointF(x, y), variableNames_[i + 1]);
 		}
 	}
+}
+
+QPen PlotOverlay::exchangePen(QPainter* painter, QPen newPen)
+{
+	QPen pen = painter->pen();
+	painter->setPen(newPen);
+	return pen;
+}
+
+QBrush PlotOverlay::exchangeBrushColor(QPainter* painter, QColor color)
+{
+	QBrush oldBrush = painter->brush();
+	QBrush newBrush(oldBrush);
+	newBrush.setColor(color);
+	painter->setBrush(newBrush);
+	return oldBrush;
 }
 
 } /* namespace OODebug */

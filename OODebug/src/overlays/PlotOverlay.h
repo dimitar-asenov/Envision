@@ -81,6 +81,16 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		void plotBars(QPainter* painter);
 		void plotScatter(QPainter* painter);
 		void plotArray(QPainter* painter);
+
+		/**
+		 * Changes the pen on \a painter to \a newPen and returns the previous pen.
+		 */
+		QPen exchangePen(QPainter *painter, QPen newPen);
+
+		/**
+		 * Changes the brush on \a painter to a brush with the \a color. Returns the previous brush.
+		 */
+		QBrush exchangeBrushColor(QPainter *painter, QColor color);
 };
 
 template <class ValueType>
