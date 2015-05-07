@@ -91,7 +91,7 @@ class OODEBUG_API DebugUtils
 																				 QStringList variableNames, int indexFrom);
 
 	private:
-		DebugConnector* debugConnector_;
+		DebugConnector* debugConnector_{};
 		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 };
 

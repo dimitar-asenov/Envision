@@ -201,10 +201,10 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		nodeObservedBy_.insertMulti(node, observer);
 		for (auto ref : refFinder.references())
 		{
-			// Breakpoints are always on StatementItems so do it here the same.
-			auto item = ref->firstAncestorOfType<OOModel::StatementItem>();
-			nodeObservedBy_.insertMulti(item, observer);
-			addBreakpointAt(item);
+			// Breakpoints are always on StatementItems so get the first StatementItem parent node.
+			auto statementNode = ref->firstAncestorOfType<OOModel::StatementItem>();
+			nodeObservedBy_.insertMulti(statementNode, observer);
+			addBreakpointAt(statementNode);
 		}
 		return true;
 	}
