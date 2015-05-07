@@ -36,4 +36,6 @@
 		<style>0</style>
 		<underline>false</underline>
 	</font>
+	<ticSize>5</ticSize>
+	<margin>2</margin>
 </style>
