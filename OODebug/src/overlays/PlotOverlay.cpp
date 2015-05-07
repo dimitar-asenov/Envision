@@ -60,15 +60,8 @@ PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* s
 void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	Super::paint(painter, option, widget);
-	// manually adapt the font as it could be wrong when creating a pdf screenshot:
-	auto painterFont = painter->font();
-	QFont fixedFont(painterFont);
-	fixedFont.setPixelSize(15); // 15 is the default font size in Envision. (VisualizationBase/style/item/Text/default)
-	painter->setFont(fixedFont);
-
+	painter->setFont(style()->font());
 	plotFunction_(this, painter);
-	// restore previous font
-	painter->setFont(painterFont);
 }
 
 void OODebug::PlotOverlay::clear()
@@ -217,17 +210,15 @@ void PlotOverlay::plotScatter(QPainter* painter)
 
 	const double radius = style()->scatterDotRadius();
 
-	QPen pen = exchangePen(painter, Qt::NoPen);
+	painter->setPen(Qt::NoPen);
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
 		for (int y = 0; y < yValues_.size(); ++y)
 		{
-			auto brush = exchangeBrushColor(painter, PLOT_COLORS[y < PLOT_COLORS.size() ? y : 0]);
+			setBrushColor(painter, PLOT_COLORS[y < PLOT_COLORS.size() ? y : 0]);
 			painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[y][i]}), radius, radius);
-			painter->setBrush(brush);
 		}
 	}
-	painter->setPen(pen);
 }
 
 void OODebug::PlotOverlay::plotArray(QPainter* painter)
@@ -269,9 +260,8 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 			QPointF midPoint = {plotRegion_.x() + index * fieldSize + fieldSize / 2, plotY + 2};
 			QPointF leftPoint = {plotRegion_.x() + index * fieldSize + fieldSize / 4, plotY + 2 + ARROW_HEIGHT};
 			QPointF rightPoint = {plotRegion_.x() + index * fieldSize + 3*fieldSize / 4, plotY + 2 + ARROW_HEIGHT};
-			auto brush = exchangeBrushColor(painter, Qt::red);
+			setBrushColor(painter, Qt::red);
 			painter->drawPolygon(QPolygonF({midPoint, leftPoint, rightPoint}));
-			painter->setBrush(brush);
 		}
 		if (i + 1 < variableNames_.size())
 		{
@@ -293,41 +283,29 @@ void PlotOverlay::drawLegend(QPainter* painter)
 	int fontHeight = fontMetrics.height();
 	int legendHeight = (variableNames_.size() - 1) * fontHeight;
 
-	auto brush = exchangeBrushColor(painter, QColor(240, 240, 255)); // Very light gray
+	setBrushColor(painter, QColor(240, 240, 255)); // Very light gray
 
 	QRect legendRegion(QPoint(style()->width() - legendWidth - radius, fontHeight), QSize(legendWidth, legendHeight));
-	auto pen = exchangePen(painter, Qt::NoPen);
+	painter->setPen(Qt::NoPen);
 	painter->drawRect(legendRegion);
-	painter->setPen(pen);
 
 	for (int i = 0; i < variableNames_.size() - 1; ++i)
 	{
-		exchangeBrushColor(painter, PLOT_COLORS[i < PLOT_COLORS.size() ? i : 0]);
-		auto pen = exchangePen(painter, Qt::NoPen);
+		setBrushColor(painter, PLOT_COLORS[i < PLOT_COLORS.size() ? i : 0]);
+		painter->setPen(Qt::NoPen); // For the dot we want no pen to have no border
 		painter->drawEllipse(QPointF(legendRegion.x() + radius, legendRegion.y() + (i * fontHeight) + fontHeight / 2.0),
 									radius, radius);
-		painter->setPen(pen);
+		painter->setPen(style()->pen());
 		painter->drawText(legendRegion.x() + 2 * radius, legendRegion.y() + (i * fontHeight) + 3.0 * fontHeight / 4.0,
 								variableNames_[i + 1]);
 	}
-	// restore old brush
+}
+
+void PlotOverlay::setBrushColor(QPainter* painter, QColor color)
+{
+	auto brush = painter->brush();
+	brush.setColor(color);
 	painter->setBrush(brush);
-}
-
-QPen PlotOverlay::exchangePen(QPainter* painter, QPen newPen)
-{
-	QPen pen = painter->pen();
-	painter->setPen(newPen);
-	return pen;
-}
-
-QBrush PlotOverlay::exchangeBrushColor(QPainter* painter, QColor color)
-{
-	QBrush oldBrush = painter->brush();
-	QBrush newBrush(oldBrush);
-	newBrush.setColor(color);
-	painter->setBrush(newBrush);
-	return oldBrush;
 }
 
 } /* namespace OODebug */

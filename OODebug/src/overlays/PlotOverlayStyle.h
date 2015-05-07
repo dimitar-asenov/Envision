@@ -40,6 +40,8 @@ class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
 		Property<int> width{this, "width"};
 		Property<int> height{this, "height"};
 		Property<double> scatterDotRadius{this, "scatterDotRadius"};
+		Property<QPen> pen{this, "pen"};
+		Property<QFont> font{this, "font"};
 };
 
 } /* namespace OODebug */
