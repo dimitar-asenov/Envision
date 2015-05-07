@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,33 +26,22 @@
 
 #pragma once
 
-#include "PipelineComponent.h"
+#include "ChangeDescription.h"
+#include "ChangeDependencyGraph.h"
+#include "ConflictPairs.h"
 
 namespace FilePersistence {
 
-using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, ChangeDescription*>;
-
-class ConflictUnitComp : public PipelineComponent
+class ConflictPipelineComponent
 {
 	public:
-		ConflictUnitComp(QSet<QString>& conflictTypes);
-		~ConflictUnitComp();
-		void run(const std::unique_ptr<GenericTree>& treeBase,
-					const std::unique_ptr<GenericTree>&,
-					const std::unique_ptr<GenericTree>&,
-					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-					QSet<ChangeDescription*>& conflictingChanges,
-					ConflictPairs& conflictPairs);
-	private:
-		void computeAffectedCUs(IdToChangeMultiHash& cuSet,
-										const std::unique_ptr<GenericTree>& treeBase,
-										ChangeDependencyGraph cdg);
-		Model::NodeIdType findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
-													  const GenericNode* node);
-
-		QSet<QString> conflictTypes_;
-		IdToChangeMultiHash affectedCUsA_;
-		IdToChangeMultiHash affectedCUsB_;
+		virtual ~ConflictPipelineComponent();
+		virtual void run(const std::unique_ptr<GenericTree>& treeBase,
+							  const std::unique_ptr<GenericTree>& treeA,
+							  const std::unique_ptr<GenericTree>& treeB,
+							  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+							  QSet<ChangeDescription*>& conflictingChanges,
+							  ConflictPairs& conflictPairs) = 0;
 };
 
 } /* namespace FilePersistence */

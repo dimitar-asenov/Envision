@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,9 +35,9 @@ class ChangeDependencyGraph
 {
 	public:
 		ChangeDependencyGraph(Diff& diff);
-		ChangeDependencyGraph() {}
+		ChangeDependencyGraph();
 		~ChangeDependencyGraph();
-		const IdToChangeDescriptionHash changes();
+		const IdToChangeDescriptionHash changes() const;
 		void addDependency(ChangeDescription* changeA, ChangeDescription* changeB);
 		void removeDependency(ChangeDescription* changeA, ChangeDescription* changeB);
 	private:
@@ -46,6 +46,6 @@ class ChangeDependencyGraph
 
 };
 
-inline const IdToChangeDescriptionHash ChangeDependencyGraph::changes() { return changes_; }
+inline const IdToChangeDescriptionHash ChangeDependencyGraph::changes() const { return changes_; }
 
 } /* namespace FilePersistence */

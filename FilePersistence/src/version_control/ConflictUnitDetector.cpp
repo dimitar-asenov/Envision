@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,17 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#include "ConflictUnitComp.h"
+#include "ConflictUnitDetector.h"
 #include "ConflictPairs.h"
 
 namespace FilePersistence {
 
-ConflictUnitComp::ConflictUnitComp(QSet<QString>& conflictTypes)
+ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes)
 {
 	conflictTypes_ = QSet<QString>(conflictTypes);
 }
 
-void ConflictUnitComp::run(const std::unique_ptr<GenericTree>& treeBase,
+void ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
 									const std::unique_ptr<GenericTree>&,
 									const std::unique_ptr<GenericTree>&,
 									ChangeDependencyGraph& cdgA,
@@ -42,23 +42,23 @@ void ConflictUnitComp::run(const std::unique_ptr<GenericTree>& treeBase,
 									QSet<ChangeDescription*>& conflictingChanges,
 									ConflictPairs& conflictPairs)
 {
-	computeAffectedCUs(affectedCUsA_, treeBase, cdgA);
-	computeAffectedCUs(affectedCUsB_, treeBase, cdgB);
+	affectedCUsA_ = computeAffectedCUs(treeBase, cdgA);
+	affectedCUsB_ = computeAffectedCUs(treeBase, cdgB);
 	// In all conflict units...
-	foreach (Model::NodeIdType conflictRootId, affectedCUsA_.keys())
+	for (auto conflictRootId : affectedCUsA_->keys())
 	{
 		// ...that are modified by both branches...
-		if (affectedCUsB_.keys().contains(conflictRootId))
+		if (affectedCUsB_->keys().contains(conflictRootId))
 		{
 			// ...we take every change from A...
-			IdToChangeMultiHash::iterator changeItA = affectedCUsA_.find(conflictRootId);
-			while (changeItA != affectedCUsA_.end() && changeItA.key() == conflictRootId)
+			IdToChangeMultiHash::iterator changeItA = affectedCUsA_->find(conflictRootId);
+			while (changeItA != affectedCUsA_->end() && changeItA.key() == conflictRootId)
 			{
 				// ...mark it as conflicting...
 				conflictingChanges.insert(changeItA.value());
 				// ...and take every change from B...
-				IdToChangeMultiHash::iterator changeItB = affectedCUsB_.find(conflictRootId);
-				while (changeItB != affectedCUsB_.end() && changeItB.key() == conflictRootId)
+				IdToChangeMultiHash::iterator changeItB = affectedCUsB_->find(conflictRootId);
+				while (changeItB != affectedCUsB_->end() && changeItB.key() == conflictRootId)
 				{
 					// ...mark it conflictinging and record the conflict pair.
 					conflictingChanges.insert(changeItB.value());
@@ -69,47 +69,56 @@ void ConflictUnitComp::run(const std::unique_ptr<GenericTree>& treeBase,
 	}
 }
 
-void ConflictUnitComp::computeAffectedCUs(IdToChangeMultiHash& cuSet,
-								const std::unique_ptr<GenericTree>& treeBase,
-								ChangeDependencyGraph cdg)
+IdToChangeMultiHash* ConflictUnitDetector::computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
+																				 ChangeDependencyGraph cdg)
 {
-	foreach (ChangeDescription* change, cdg.changes()) {
+	IdToChangeMultiHash* affectedCUs = new IdToChangeMultiHash;
+	for (auto change : cdg.changes()) {
 		Model::NodeIdType conflictRootA;
 		Model::NodeIdType conflictRootB;
 		switch (change->type()) {
 			case ChangeType::Stationary:
 			case ChangeType::Deletion:
 				conflictRootA = findConflictUnit(treeBase, change->nodeA());
-				cuSet.insert(conflictRootA, change);
+				affectedCUs->insert(conflictRootA, change);
 				break;
 			case ChangeType::Insertion:
 				conflictRootB = findConflictUnit(treeBase, change->nodeB());
-				cuSet.insert(conflictRootB, change);
+				affectedCUs->insert(conflictRootB, change);
 				break;
 			case ChangeType::Move:
 				conflictRootA = findConflictUnit(treeBase, change->nodeA());
 				conflictRootB = findConflictUnit(treeBase, change->nodeB());
-				cuSet.insert(conflictRootA, change);
-				cuSet.insert(conflictRootB, change);
+				affectedCUs->insert(conflictRootA, change);
+				affectedCUs->insert(conflictRootB, change);
 				break;
 			default:
 				Q_ASSERT(false);
 		}
 	}
+	return affectedCUs;
 }
 
-Model::NodeIdType ConflictUnitComp::findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
+Model::NodeIdType ConflictUnitDetector::findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
 											  const GenericNode* node)
 {
 	GenericNode* inBase = treeBase->find(node);
-	// TODO: think about root node
-	while (inBase == nullptr)
+	// TODO: need to make 0 a conflict root for cases where both branches create a new root
+	while (inBase == nullptr || !node->parentId().isNull())
 	{
 		node = node->parent();
 		inBase = treeBase->find(node);
 	}
-	while (!conflictTypes_.contains(inBase->type())) inBase = inBase->parent();
-	return inBase->id();
+	if (inBase)
+	{
+		while (!conflictTypes_.contains(inBase->type())) inBase = inBase->parent();
+		return inBase->id();
+	}
+	else
+	{
+		// no ancestor in base. branch created new root. return 0.
+		return 0;
+	}
 }
 
 } /* namespace FilePersistence */

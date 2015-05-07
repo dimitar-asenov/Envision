@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -52,7 +52,7 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		void print() const;
 
-		void setStructureFlag(bool value);
+		void setStructureChangeFlag(bool value);
 
 		Model::NodeIdType id() const;
 

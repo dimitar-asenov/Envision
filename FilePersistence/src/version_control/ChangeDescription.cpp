@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -131,7 +131,7 @@ void ChangeDescription::print() const
 	std::cout << std::endl;
 }
 
-void ChangeDescription::setStructureFlag(bool value)
+void ChangeDescription::setStructureChangeFlag(bool value)
 {
 	if (type_ == ChangeType::Move || type_ == ChangeType::Stationary)
 	{

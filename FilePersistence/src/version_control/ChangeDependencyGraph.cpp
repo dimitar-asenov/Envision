@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,7 +32,7 @@ namespace FilePersistence {
 ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff)
 {
 	changes_ = IdToChangeDescriptionHash(diff.changes());
-	foreach (ChangeDescription* change, diff.changes().values())
+	for (auto change : diff.changes().values())
 	{
 		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
 		{

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -98,7 +98,10 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 			onlyInNodesB.remove(iter.key());
 		}
 	}
-	// Intermediate state 2
+	/* Intermediate state 2
+	 * See report for details.
+	 * TODO: add link to report
+	 */
 	for (auto id : onlyInNodesB)
 	{
 		iter = nodesB.find(id);
@@ -141,7 +144,7 @@ void Diff::setStructureFlagForId(const Model::NodeIdType id)
 	}
 	else
 		change = changeIt.value();
-	change->setStructureFlag(true);
+	change->setStructureChangeFlag(true);
 
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
 }
@@ -149,9 +152,13 @@ void Diff::setStructureFlagForId(const Model::NodeIdType id)
 /**
  * removes the nodes that link PersistentUnits from \a nodes.
  */
-void Diff::filterPersistenceUnits(IdToGenericNodeHash&)
+void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
-	// TODO: implement
+	for (auto node : nodes)
+	{
+		if (node->type() == GenericNode::persistentUnitType)
+			nodes.remove(node->id(), node);
+	}
 }
 
 } /* namespace FilePersistence */

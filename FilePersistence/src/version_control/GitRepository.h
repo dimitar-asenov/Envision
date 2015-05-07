@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -89,7 +89,7 @@ class FILEPERSISTENCE_API GitRepository
 		QString  writeIndexToTree();
 
 		void newCommit(QString  tree, QString message, Signature author, Signature committer, QStringList parents);
-		QString  findMergeBase(QString  revision) const;
+		QString  findMergeBase(QString  branchA, QString branchB) const;
 
 		git_signature* createGitSignature(Signature& signature);
 

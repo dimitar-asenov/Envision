@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,24 +24,11 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ConflictPipelineComponent.h"
 
-#include "ChangeDescription.h"
-#include "ChangeDependencyGraph.h"
-#include "ConflictPairs.h"
-
-namespace FilePersistence {
-
-class PipelineComponent
+namespace FilePersistence
 {
-	public:
-		virtual ~PipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& treeBase,
-							  const std::unique_ptr<GenericTree>& treeA,
-							  const std::unique_ptr<GenericTree>& treeB,
-							  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-							  QSet<ChangeDescription*>& conflictingChanges,
-							  ConflictPairs& conflictPairs) = 0;
-};
 
-} /* namespace FilePersistence */
+ConflictPipelineComponent::~ConflictPipelineComponent() {}
+
+}

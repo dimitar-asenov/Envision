@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,11 +24,34 @@
 **
 ***********************************************************************************************************************/
 
-#include "PipelineComponent.h"
+#pragma once
 
-namespace FilePersistence
+#include "ConflictPipelineComponent.h"
+
+namespace FilePersistence {
+
+using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, ChangeDescription*>;
+
+class ConflictUnitDetector : public ConflictPipelineComponent
 {
+	public:
+		ConflictUnitDetector(QSet<QString>& conflictTypes);
+		~ConflictUnitDetector();
+		void run(const std::unique_ptr<GenericTree>& treeBase,
+					const std::unique_ptr<GenericTree>&,
+					const std::unique_ptr<GenericTree>&,
+					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+					QSet<ChangeDescription*>& conflictingChanges,
+					ConflictPairs& conflictPairs);
+	private:
+		IdToChangeMultiHash* computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
+															ChangeDependencyGraph cdg);
+		Model::NodeIdType findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
+													  const GenericNode* node);
 
-PipelineComponent::~PipelineComponent() {}
+		QSet<QString> conflictTypes_;
+		IdToChangeMultiHash* affectedCUsA_;
+		IdToChangeMultiHash* affectedCUsB_;
+};
 
-}
+} /* namespace FilePersistence */
