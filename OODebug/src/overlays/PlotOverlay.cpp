@@ -302,10 +302,14 @@ void PlotOverlay::drawLegend(QPainter* painter)
 	int legendWidth = maxTextLength + radius + 2 * style()->margin();
 	int legendHeight = (variableNames_.size() - 1) * drawnTextHeight();
 
+	const int LEGEND_MARGIN = 10;
+	// Adapt plot region to make sure legend and plot do not overlap
+	if (style()->width() - legendWidth - LEGEND_MARGIN < plotRegion_.right())
+		plotRegion_.setRight(style()->width() - legendWidth - LEGEND_MARGIN);
+
 	setBrushColor(painter, QColor(240, 240, 255)); // Very light gray
 
-	QRect legendRegion(QPoint(style()->width() - legendWidth - radius, drawnTextHeight()),
-							 QSize(legendWidth, legendHeight));
+	QRect legendRegion(QPoint(style()->width() - legendWidth, drawnTextHeight()), QSize(legendWidth, legendHeight));
 	painter->setPen(Qt::NoPen);
 	painter->drawRect(legendRegion);
 
