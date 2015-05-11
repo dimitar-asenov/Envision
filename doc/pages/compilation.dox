@@ -1,25 +1,26 @@
 /*! \page compilation Compiling Envision from source
 
-Envision is written in C++14. You will need GCC version 4.9 or newer to compile the sources.
+Envision is written in C++14. You will need GCC version 5.1 or newer to compile the sources.
 You can check your current compiler version with:
 \verbatim
 g++ --version
 \endverbatim
-In Ubuntu, you can easily get compiler updates by adding the following PPA (necessary for 14.04):
+In Ubuntu, you can easily get compiler updates by adding the following PPA:
 \verbatim
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt-get update && sudo apt-get upgrade
 \endverbatim
 Other dependencies are:
-	- <b>Qt 5</b>: http://qt-project.org/ <br/> This is the underlying framework that we use to build Envision's
+	- <b>Qt 5</b>: http://qt.io <br/> This is the underlying framework that we use to build Envision's
 	visualizations and cross-platform support.
 	- <b>lp_solve 5.5</b>: http://lpsolve.sourceforge.net/ <br /> Lp Solve is used for calculating some of the more
 	complex visualization layouts.
-	- <b>Clang 3.5</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
+	- <b>Clang 3.6</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
 	importing C++ is preliminary and incomplete.
 	- <b>On Linux: Google Performance Tools</b>: http://code.google.com/p/gperftools/ <br /> Used for profiling.
+	- <b>For development only: Vera ++ </b>: https://bitbucket.org/verateam/vera <br /> Used for checking the code formatting style.
 
-To install the dependencies on Ubuntu 14.04, do the following:
+To install the dependencies on Ubuntu 15.04, do the following:
 	-# Install the Qt SDK:
 		\verbatim sudo apt-get install qt-sdk \endverbatim
 		You will also need to install additional packages for SVG compatibility and WebKit:
@@ -29,8 +30,8 @@ To install the dependencies on Ubuntu 14.04, do the following:
 		\verbatim sudo apt-get install lp-solve liblpsolve55-dev \endverbatim
 		-# Make the following symbolic link:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
-	-# Install Clang 3.5:
-		\verbatim sudo apt-get install libclang-3.5-dev clang-3.5 llvm-3.5 \endverbatim
+	-# Install Clang 3.6:
+		\verbatim sudo apt-get install libclang-dev clang llvm\endverbatim
 	-# Install the Google Performance Tools:
 		\verbatim sudo apt-get install google-perftools libgoogle-perftools-dev \endverbatim
 	-# Install the Vera++ tool which performs style checks for the code:
@@ -45,8 +46,7 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 	-# Start Qt Creator and configure the version of Qt that you want to use:
 		- Go to: Tools > Options > Build & Run > Qt Versions. Make sure that you are using Qt 5.
 			This could be either Qt in PATH, or a Qt version that
-			you compiled yourself. Compiling the latest version of Qt is required if you want to use Envision with projects
-			that have more than a few tens of classes. See below for Qt compilation instructions.
+			you compiled yourself. Qt 5.4 or later is required. See below for manual Qt compilation instructions.
 		- Go to: Tools > Options > Build & Run > Kits. Make sure that the default desktop kit uses the appropriate version
 			of Qt.
 	-# Open the \c envision.pro file with Qt Creator.
@@ -97,7 +97,7 @@ to use but we recommend Qt Creator. The instructions below show you how to set-u
 
 In order to make Envision's visualizations scale to very large projects, we made several enhancements to the Graphics
 View framework. If you want to use Envision with a large amount of visual objects displayed at once you must use
-Qt 5.4 (once it comes out in late 2014) or compile the latest development version.
+Qt 5.4 (released in December 2014) or compile the latest development version.
 
 If you want to compile and use the latest development version of Qt, you can simply run the \c misc/use-qt5-dev.sh
 script. It is designed for and tested with Ubuntu 14.04. Running the script will:
