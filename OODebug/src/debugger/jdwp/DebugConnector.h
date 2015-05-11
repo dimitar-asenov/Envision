@@ -150,7 +150,7 @@ class OODEBUG_API DebugConnector : public QObject
 		bool vmAlive_{};
 
 		// Stores if all events agree to resume
-		QList<bool> resumeRequests_;
+		enum class ResumeRequest : int  {NEUTRAL, RESUME, DONTRESUME} resumeRequest_{};
 };
 
 inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)

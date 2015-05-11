@@ -82,7 +82,14 @@ bool DebugConnector::resume()
 
 void DebugConnector::wantResume(bool resume)
 {
-	resumeRequests_ << resume;
+	if (resume)
+	{
+		if (resumeRequest_ != ResumeRequest::DONTRESUME) resumeRequest_ = ResumeRequest::RESUME;
+	}
+	else
+	{
+		resumeRequest_ = ResumeRequest::DONTRESUME;
+	}
 }
 
 QString DebugConnector::fileNameForReference(qint64 referenceId)
@@ -349,7 +356,7 @@ void DebugConnector::handleComposite(QByteArray data)
 	Q_ASSERT(c.commandSet() == Protocol::CommandSet::Event);
 	Q_ASSERT(c.command() == MessagePart::cast(Protocol::EventCommands::Composite));
 
-	resumeRequests_.clear();
+	resumeRequest_ = ResumeRequest::NEUTRAL;
 
 	for (auto& event : c.events())
 	{
@@ -367,10 +374,7 @@ void DebugConnector::handleComposite(QByteArray data)
 
 	// If we have multiple events, we might have a breakpoint from a probe which would be auto resumed
 	// and also a single step event for which we don't want to resume. So check if all agree on resuming.
-	if (resumeRequests_.size() &&
-		 std::count(resumeRequests_.begin(), resumeRequests_.end(), true) == resumeRequests_.size())
-		resume();
-
+	if (resumeRequest_ == ResumeRequest::RESUME) resume();
 }
 
 } /* namespace OODebug */
