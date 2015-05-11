@@ -1,11 +1,12 @@
 var searchData=
 [
+  ['taggedobjectid',['TaggedObjectId',['../structOODebug_1_1TaggedObjectId.html',1,'OODebug']]],
   ['templateargumentvisitor',['TemplateArgumentVisitor',['../classCppImport_1_1TemplateArgumentVisitor.html',1,'CppImport']]],
   ['test',['Test',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
   ['testbox',['TestBox',['../classVisualization_1_1TestBox.html',1,'Visualization']]],
   ['testboxnode',['TestBoxNode',['../classVisualization_1_1TestBoxNode.html',1,'Visualization']]],
   ['testevent',['TestEvent',['../classCore_1_1TestEvent.html',1,'Core']]],
-  ['testmanager',['TestManager',['../singletonSelfTest_1_1TestManager.html',1,'SelfTest']]],
+  ['testmanager',['TestManager',['../classSelfTest_1_1TestManager.html',1,'SelfTest']]],
   ['testresult',['TestResult',['../classSelfTest_1_1TestResult.html',1,'SelfTest']]],
   ['testresults',['TestResults',['../classSelfTest_1_1TestResults.html',1,'SelfTest']]],
   ['testrunner',['TestRunner',['../classCore_1_1TestRunner.html',1,'Core']]],
@@ -20,6 +21,8 @@ var searchData=
   ['textstyle',['TextStyle',['../classVisualization_1_1TextStyle.html',1,'Visualization']]],
   ['texttonodemap',['TextToNodeMap',['../classExport_1_1TextToNodeMap.html',1,'Export']]],
   ['thisexpression',['ThisExpression',['../classOOModel_1_1ThisExpression.html',1,'OOModel']]],
+  ['threadname',['ThreadName',['../structOODebug_1_1ThreadName.html',1,'OODebug']]],
+  ['threadnamecommand',['ThreadNameCommand',['../structOODebug_1_1ThreadNameCommand.html',1,'OODebug']]],
   ['throwexpression',['ThrowExpression',['../classOOModel_1_1ThrowExpression.html',1,'OOModel']]],
   ['thrownexceptiontype',['ThrownExceptionType',['../classOOModel_1_1ThrownExceptionType.html',1,'OOModel']]],
   ['timer',['Timer',['../classLogger_1_1Timer.html',1,'Logger']]],

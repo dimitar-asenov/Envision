@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['objectid',['objectId',['../structOODebug_1_1Value.html#a88847f060bbbe28e3cc9a8f24620613f',1,'OODebug::Value::objectId()'],['../structOODebug_1_1StringValueCommand.html#ab63f772b6b353bb495a79f0312f25e3b',1,'OODebug::StringValueCommand::objectID()']]],
+  ['objectid',['objectID',['../structOODebug_1_1StringValueCommand.html#ab63f772b6b353bb495a79f0312f25e3b',1,'OODebug::StringValueCommand::objectID()'],['../structOODebug_1_1Value.html#a88847f060bbbe28e3cc9a8f24620613f',1,'OODebug::Value::objectId()'],['../structOODebug_1_1TaggedObjectId.html#ad66ebf9bb4da5ae9426e2d9ff1327139',1,'OODebug::TaggedObjectId::objectId()']]],
   ['objectidsize',['objectIDSize',['../structOODebug_1_1IDSizes.html#a0fa86355f5706a93146b84b436634e40',1,'OODebug::IDSizes']]],
+  ['observedvariables_5f',['observedVariables_',['../structOODebug_1_1VariableObserver.html#a326d0bf27bba2e5271978da54aeadc81',1,'OODebug::VariableObserver']]],
+  ['observerlocation_5f',['observerLocation_',['../structOODebug_1_1VariableObserver.html#a1759cb82638b137486d1d3add88859f4',1,'OODebug::VariableObserver']]],
   ['offset',['offset',['../classInteraction_1_1HRootItem.html#a4cdf7238307acad81409ba3616e05ea4',1,'Interaction::HRootItem']]],
   ['offset_5f',['offset_',['../classOOInteraction_1_1SetExpressionCursorEvent.html#a55f9ca8db5ee056aa93410500222336f',1,'OOInteraction::SetExpressionCursorEvent::offset_()'],['../classVisualization_1_1AnchorLayoutAnchor.html#a0133dc272cbdca56a047569d8063f6be',1,'Visualization::AnchorLayoutAnchor::offset_()']]],
   ['oldsize',['oldSize',['../classModel_1_1ListPut.html#a7dfff061d0118b4cc40d04a9d5f9820c',1,'Model::ListPut']]],
@@ -39,7 +41,6 @@ var searchData=
   ['outreference_5f',['outReference_',['../classContractsLibrary_1_1ValueAtReturnVisitor.html#a6f88747b7b3af757053240db026063af',1,'ContractsLibrary::ValueAtReturnVisitor']]],
   ['overallcolumnstretchfactor_5f',['overallColumnStretchFactor_',['../classVisualization_1_1GridLayoutFormElement.html#ac648e936c5702fa593e1bc481dcf633d',1,'Visualization::GridLayoutFormElement']]],
   ['overallrowstretchfactor_5f',['overallRowStretchFactor_',['../classVisualization_1_1GridLayoutFormElement.html#afc085e6d1e15a7a5b75fb012b0a10cc3',1,'Visualization::GridLayoutFormElement']]],
-  ['overlay_5f',['overlay_',['../structOODebug_1_1Breakpoint.html#a3f5e239dd69cd4fe952b1ef2b188cb4a',1,'OODebug::Breakpoint']]],
   ['overlay_5fmin_5fheight',['OVERLAY_MIN_HEIGHT',['../classVisualization_1_1ZoomLabelOverlay.html#a0b21ecf1e028b32fdbdd3d88432f83e0',1,'Visualization::ZoomLabelOverlay']]],
   ['overlay_5fmin_5fwidth',['OVERLAY_MIN_WIDTH',['../classVisualization_1_1ZoomLabelOverlay.html#ada5db43195c73f14005d6637d5a83049',1,'Visualization::ZoomLabelOverlay']]],
   ['overlaygroups_5f',['overlayGroups_',['../classVisualization_1_1Scene.html#a00c06e5f64a324a20cabe69e72ef3d04',1,'Visualization::Scene']]],

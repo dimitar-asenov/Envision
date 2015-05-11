@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['scatter',['Scatter',['../classOODebug_1_1PlotOverlay.html#a9621a48a550d082eb75ab3289577eb6ba09870720ca8134284e4e305ac6ce5f19',1,'OODebug::PlotOverlay']]],
   ['schema_5fchange_5fnot_5fimplemented',['SCHEMA_CHANGE_NOT_IMPLEMENTED',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daaa5434f8c2dedcc858e7e998d52368391',1,'OODebug::Protocol']]],
   ['search_5fdown',['SEARCH_DOWN',['../classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ad32cc9e783e89ba6ffb83011a55abe97',1,'Model::Node']]],
   ['search_5fhere',['SEARCH_HERE',['../classModel_1_1Node.html#a0e2e9bad8ff0ccde3c945aa359f81a79ac0232fa9373d329c1b413b8058db0209',1,'Model::Node']]],

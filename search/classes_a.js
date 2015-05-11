@@ -8,6 +8,8 @@ var searchData=
   ['layoutproviderbase',['LayoutProviderBase',['../classVisualization_1_1LayoutProviderBase.html',1,'Visualization']]],
   ['layoutstyle',['LayoutStyle',['../classVisualization_1_1LayoutStyle.html',1,'Visualization']]],
   ['leaveunfinished',['LeaveUnfinished',['../classInteraction_1_1LeaveUnfinished.html',1,'Interaction']]],
+  ['length',['Length',['../structOODebug_1_1Length.html',1,'OODebug']]],
+  ['lengthcommand',['LengthCommand',['../structOODebug_1_1LengthCommand.html',1,'OODebug']]],
   ['line',['Line',['../classVisualization_1_1Line.html',1,'Visualization']]],
   ['linestyle',['LineStyle',['../classVisualization_1_1LineStyle.html',1,'Visualization']]],
   ['linetable',['LineTable',['../structOODebug_1_1LineTable.html',1,'OODebug']]],

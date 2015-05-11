@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['handlerfunc_5f',['handlerFunc_',['../structOODebug_1_1VariableObserver.html#ac5a1a2d9cddd9397d474522ab15fabf6',1,'OODebug::VariableObserver']]],
   ['handshake',['handshake',['../classOODebug_1_1Protocol.html#a89686b254130573d66e2587d7025a004',1,'OODebug::Protocol']]],
   ['hascursorwhenempty',['hasCursorWhenEmpty',['../classVisualization_1_1SequentialLayoutStyle.html#a40d753f232ef78a1756ee4b9c99a4e95',1,'Visualization::SequentialLayoutStyle']]],
   ['hascursorwhenemptygetter_5f',['hasCursorWhenEmptyGetter_',['../classVisualization_1_1LayoutFormElement.html#acb8050458175ccdbecb79b6d88258b3f',1,'Visualization::LayoutFormElement']]],
@@ -8,7 +9,7 @@ var searchData=
   ['header_5f',['header_',['../classOOVisualization_1_1VLoopStatementStyle.html#a24ccd4ecb98bb6331d3777cc6ffdfc16',1,'OOVisualization::VLoopStatementStyle']]],
   ['headerbackground',['headerBackground',['../classVisualization_1_1VCompositeStyle.html#af85d31fd8f654b013c60b00478d0994f',1,'Visualization::VCompositeStyle']]],
   ['headerbackground_5f',['headerBackground_',['../classVisualization_1_1VComposite.html#a7688f35dbd485278f31e11e3da6ab7a6',1,'Visualization::VComposite']]],
-  ['height',['height',['../classVisualization_1_1SVGIconStyle.html#abc3d4ed28d9cf1849d5796385af087c2',1,'Visualization::SVGIconStyle::height()'],['../classVisualization_1_1LineStyle.html#a52a429e09a32020d47b92054a1b4b97e',1,'Visualization::LineStyle::height()']]],
+  ['height',['height',['../classOODebug_1_1PlotOverlayStyle.html#a74ff705716d0620e7c219cd3e2df9eca',1,'OODebug::PlotOverlayStyle::height()'],['../classVisualization_1_1SVGIconStyle.html#abc3d4ed28d9cf1849d5796385af087c2',1,'Visualization::SVGIconStyle::height()'],['../classVisualization_1_1LineStyle.html#a52a429e09a32020d47b92054a1b4b97e',1,'Visualization::LineStyle::height()']]],
   ['height_5f',['height_',['../classVisualization_1_1Shape.html#a3d936657991425378bca940b8e30bfb2',1,'Visualization::Shape']]],
   ['heightlimit',['heightLimit',['../classInteraction_1_1AutoCompleteVisStyle.html#aa6d757ecfafdcd929c6742b70024ec0d',1,'Interaction::AutoCompleteVisStyle']]],
   ['heightwithoutshadow',['heightWithoutShadow',['../classVisualization_1_1Diamond.html#acb3e05774ad3defce2702cfd3f4fd070',1,'Visualization::Diamond']]],

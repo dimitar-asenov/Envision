@@ -15,7 +15,6 @@ var searchData=
   ['braces',['Braces',['../classVisualization_1_1Braces.html',1,'Visualization']]],
   ['bracesstyle',['BracesStyle',['../classVisualization_1_1BracesStyle.html',1,'Visualization']]],
   ['breakclassload',['BreakClassLoad',['../structOODebug_1_1BreakClassLoad.html',1,'OODebug']]],
-  ['breakpoint',['Breakpoint',['../structOODebug_1_1Breakpoint.html',1,'OODebug']]],
   ['breakpointcommand',['BreakpointCommand',['../structOODebug_1_1BreakpointCommand.html',1,'OODebug']]],
   ['breakpointevent',['BreakpointEvent',['../structOODebug_1_1BreakpointEvent.html',1,'OODebug']]],
   ['breakstatement',['BreakStatement',['../classOOModel_1_1BreakStatement.html',1,'OOModel']]]

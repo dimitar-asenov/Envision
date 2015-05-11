@@ -8,14 +8,17 @@ var searchData=
   ['xend_5f',['xEnd_',['../classVisualization_1_1TextCursor.html#a768630fedae67af4595896525a2570cc',1,'Visualization::TextCursor']]],
   ['xendinparent',['xEndInParent',['../classVisualization_1_1Item.html#a60ab885ab41427cfd34317359311920e',1,'Visualization::Item']]],
   ['xindex',['xIndex',['../classTestNodes_1_1PositionExtension.html#a0dd956e16e9a26aac9bb51d4293ee88b',1,'TestNodes::PositionExtension']]],
+  ['xmax_5f',['xMax_',['../classOODebug_1_1PlotOverlay.html#a01ff9db6bb69826caac0ff363866dab4',1,'OODebug::PlotOverlay']]],
+  ['xmin_5f',['xMin_',['../classOODebug_1_1PlotOverlay.html#aac5fc4973c8f24c2f39f6be4d66de486',1,'OODebug::PlotOverlay']]],
   ['xml',['xml',['../classFilePersistence_1_1SystemClipboard.html#abbdd9d566ee3b92e5446b499978dde64',1,'FilePersistence::SystemClipboard']]],
   ['xml_5fdom_5ftype',['XML_DOM_TYPE',['../namespaceFilePersistence.html#af973e52ea392ad7c8ebfbfceaade8887',1,'FilePersistence::XML_DOM_TYPE()'],['../namespaceVisualization.html#ab5fe2ed2e1f07eb2a93217d4d7f20af6',1,'Visualization::XML_DOM_TYPE()']]],
-  ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html',1,'FilePersistence']]],
   ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html#a551c3ea11ac089c0e5b2962c3ddd05f0',1,'FilePersistence::XMLModel::XMLModel()'],['../classFilePersistence_1_1XMLModel.html#aedc66313f6a7e1e964c7cace7902f224',1,'FilePersistence::XMLModel::XMLModel(const QString &amp;filename)']]],
+  ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html',1,'FilePersistence']]],
   ['xnode',['xNode',['../classTestNodes_1_1PositionExtension.html#a561635397834b49a5ac1df12112c26a2',1,'TestNodes::PositionExtension']]],
   ['xoffset',['xOffset',['../classVisualization_1_1Icon.html#af439bd0e9c3593473db8ee29ce3f58a8',1,'Visualization::Icon::xOffset()'],['../classVisualization_1_1Layout.html#a7d5b9828841ac365dcf8bb528951d43a',1,'Visualization::Layout::xOffset()'],['../classVisualization_1_1Shape.html#a2b126e7ac14b2bccb11e82fd93b555a0',1,'Visualization::Shape::xOffset()']]],
   ['xoffset_5f',['xOffset_',['../classVisualization_1_1Shape.html#a341a2a8b57b87e153004eaab1d7a1c09',1,'Visualization::Shape']]],
   ['xor',['XOR',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a3270011030b6f7c46b3c9aaeb619ba73',1,'OOModel::BinaryOperation']]],
   ['xshadowoffset',['xShadowOffset',['../classVisualization_1_1DiamondStyle.html#af1f21b91c4173d3d3975abcfc497729d',1,'Visualization::DiamondStyle']]],
-  ['xspan',['xSpan',['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html#a0288b0d30dcbb5bf47c2fbfe7ded11dd',1,'Visualization::DeclarativeItemBase::Merge']]]
+  ['xspan',['xSpan',['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html#a0288b0d30dcbb5bf47c2fbfe7ded11dd',1,'Visualization::DeclarativeItemBase::Merge']]],
+  ['xvalues_5f',['xValues_',['../classOODebug_1_1PlotOverlay.html#aa9421bd6879e2ad7ed4720cea1625402',1,'OODebug::PlotOverlay']]]
 ];

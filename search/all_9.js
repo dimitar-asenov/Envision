@@ -8,8 +8,6 @@ var searchData=
   ['javaexportexception',['JavaExportException',['../classJavaExport_1_1JavaExportException.html',1,'JavaExport']]],
   ['javaexportexception',['JavaExportException',['../classJavaExport_1_1JavaExportException.html#a009768479594e9b0b03e54d9c7fd2a31',1,'JavaExport::JavaExportException']]],
   ['javaexportplugin',['JavaExportPlugin',['../classJavaExport_1_1JavaExportPlugin.html',1,'JavaExport']]],
-  ['javamethod',['JavaMethod',['../classOODebug_1_1JavaMethod.html',1,'OODebug']]],
-  ['javamethod',['JavaMethod',['../classOODebug_1_1JavaMethod.html#a8a6be0c2e3c9a71015270b209a07747d',1,'OODebug::JavaMethod']]],
   ['javarunner',['JavaRunner',['../classOODebug_1_1JavaRunner.html',1,'OODebug']]],
   ['javatypesystem',['JavaTypeSystem',['../classOOModel_1_1JavaTypeSystem.html',1,'OOModel']]],
   ['jdwpmajor',['jdwpMajor',['../structOODebug_1_1VersionInfo.html#a336f7c00ff62f84347e20e32cf160fb4',1,'OODebug::VersionInfo']]],

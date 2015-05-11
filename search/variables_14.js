@@ -9,6 +9,7 @@ var searchData=
   ['unmatchedbeforeend',['unmatchedBeforeEnd',['../structInteraction_1_1TokenSplitData.html#acad7ac294c36c7e0dbdfd2e9d5fd7f7b',1,'Interaction::TokenSplitData']]],
   ['unresolutionsteps_5f',['unresolutionSteps_',['../classModel_1_1Reference.html#a1ba75803b726d89f41ceb1892741bfa1',1,'Model::Reference']]],
   ['unresolvedname',['unresolvedName',['../classOOVisualization_1_1VReferenceExpressionStyle.html#af84010304b9eb0da1b76d0eddb48e5cb',1,'OOVisualization::VReferenceExpressionStyle']]],
+  ['unsetbreakpoints_5f',['unsetBreakpoints_',['../classOODebug_1_1JavaDebugger.html#a027185c0f4fe4eb2bad0cea78286a93c',1,'OODebug::JavaDebugger']]],
   ['updatestep',['updateStep',['../classControlFlowVisualization_1_1VLoopStatementCF.html#a4a5274ce167ddfde1e8df9c22ac6bc01',1,'ControlFlowVisualization::VLoopStatementCF::updateStep()'],['../classControlFlowVisualization_1_1VLoopStatementCFStyle.html#a225d4e906b18132e35cedca290f0b7be',1,'ControlFlowVisualization::VLoopStatementCFStyle::updateStep()']]],
   ['updatestep_5f',['updateStep_',['../classOOVisualization_1_1VLoopStatement.html#aa9c6fc84009390e9707a8f0931be1a00',1,'OOVisualization::VLoopStatement::updateStep_()'],['../classOOVisualization_1_1VLoopStatementStyle.html#aea621a7e5d0798a13ab1ff2bf53ff66e',1,'OOVisualization::VLoopStatementStyle::updateStep_()']]],
   ['updatestepbackground',['updateStepBackground',['../classControlFlowVisualization_1_1VLoopStatementCF.html#afab338522a8c00853ec5987b898e8899',1,'ControlFlowVisualization::VLoopStatementCF']]],
