@@ -451,7 +451,6 @@ void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 	bool closingBracket = false;
 	auto node = utils_.locationToNode(singleStep.location(), closingBracket);
 
-	// It might be that we have a breakpoint on the same location so cancel its resume.
 	debugConnector_.wantResume(false);
 
 	currentThreadId_ = singleStep.thread();
