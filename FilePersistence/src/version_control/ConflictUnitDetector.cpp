@@ -34,6 +34,8 @@ ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes)
 	conflictTypes_ = QSet<QString>(conflictTypes);
 }
 
+ConflictUnitDetector::~ConflictUnitDetector() {}
+
 void ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
 									const std::unique_ptr<GenericTree>&,
 									const std::unique_ptr<GenericTree>&,

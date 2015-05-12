@@ -33,32 +33,47 @@ namespace FilePersistence {
 class ListMergeComponent : public ConflictPipelineComponent
 {
 	public:
-		ListMergeComponent(QSet<QString>& listTypes);
+		ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes);
 		~ListMergeComponent();
 		void run(const std::unique_ptr<GenericTree>&,
 					const std::unique_ptr<GenericTree>&,
-					const std::unique_ptr<GenericTree>&,
-					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+					const std::unique_ptr<GenericTree>&, ChangeDependencyGraph&cdgA, ChangeDependencyGraph&cdgB,
 					QSet<ChangeDescription*>& conflictingChanges,
 					ConflictPairs& conflictPairs);
 	private:
+
+		struct Position
+		{
+				bool valid_;
+				Model::NodeIdType predecessor_;
+
+				Position(bool valid, Model::NodeIdType predecessor);
+				bool operator ==(const Position &other) const;
+				bool operator !=(const Position &other) const;
+		};
+
+		Position findPosition(Model::NodeIdType element, QList<Model::NodeIdType> from, QList<Model::NodeIdType> into);
 		bool onlyChildStructure(ChangeDescription* change);
 		bool onlyLabel(ChangeDescription* change);
+		QSet<QString> conflictTypes_;
 		QSet<QString> listTypes_;
-		QSet<const GenericNode *> listsToMerge_;
-
-		// Below are things taken over from the old merge because they might still be useful.
+		QSet<const GenericNode*> listsToMerge_;
 
 		struct Chunk
 		{
 				bool stable_;
-				QList<Model::NodeIdType> head_;
-				QList<Model::NodeIdType> revision_;
-				QList<Model::NodeIdType> base_;
+				QList<Model::NodeIdType> spanA_;
+				QList<Model::NodeIdType> spanB_;
+				QList<Model::NodeIdType> spanBase_;
 
-				Chunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
-					  QList<Model::NodeIdType> baseList);
+				Chunk(bool stable, QList<Model::NodeIdType> idListA, QList<Model::NodeIdType> idListB,
+					  QList<Model::NodeIdType> idListBase);
 		};
+
+		void insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk);
+
+		// Below are things taken over from the old merge because they might still be useful.
+
 		void computeMergeForLists(const std::unique_ptr<GenericTree>& head, const std::unique_ptr<GenericTree>& revision,
 										  const std::unique_ptr<GenericTree>& base, const IdToChangeDescriptionHash& baseToHead,
 										  const IdToChangeDescriptionHash& baseToRevision);
@@ -75,7 +90,7 @@ class ListMergeComponent : public ConflictPipelineComponent
 
 		bool applyListMerge(QList<Model::NodeIdType>& mergedList, const QList<Chunk>& chunkList, bool resolveOrder) const;
 
-		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> list,
+		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> elementIds,
 																				 const QList<Model::NodeIdType> stableIDs);
 
 		static QList<Model::NodeIdType> longestCommonSubsequence(const QList<Model::NodeIdType> listA,
@@ -84,7 +99,6 @@ class ListMergeComponent : public ConflictPipelineComponent
 		void performInsertIntoList(GenericNode* parent, GenericNode* node);
 		void performReorderInList(GenericNode* parent, GenericNode* node);
 
-		// List handling
 		QHash<Model::NodeIdType, QList<Chunk>> mergedLists_;
 		QSet<Model::NodeIdType> reorderedLists_;
 };
@@ -100,5 +114,12 @@ inline bool ListMergeComponent::onlyLabel(ChangeDescription* change) {
 			  (change->flags() == ChangeDescription::Label ||
 			  change->flags() == ChangeDescription::NoFlags));
 }
+
+inline bool ListMergeComponent::Position::operator ==(const Position &other) const
+{
+	return this->valid_ && other.valid_ && this->predecessor_ == other.predecessor_;
+}
+
+inline bool ListMergeComponent::Position::operator !=(const Position &other) const { return !(*this == other); }
 
 } /* namespace FilePersistence */

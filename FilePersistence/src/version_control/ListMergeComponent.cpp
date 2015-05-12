@@ -29,10 +29,13 @@
 
 namespace FilePersistence {
 
-ListMergeComponent::ListMergeComponent(QSet<QString>& listTypes)
+ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes)
 {
+	conflictTypes_ = QSet<QString>(conflictTypes);
 	listTypes_ = QSet<QString>(listTypes);
 }
+
+ListMergeComponent::~ListMergeComponent() {}
 
 void ListMergeComponent::run(const std::unique_ptr<GenericTree>&,
 								const std::unique_ptr<GenericTree>&,
@@ -54,83 +57,177 @@ void ListMergeComponent::run(const std::unique_ptr<GenericTree>&,
 			if (other != conflictPairs.end() && onlyChildStructure(other.value()))
 			{
 				// other branch only changes child structure
-				// now gather all element ids
-				QSet<Model::NodeIdType> idsToCheck;
-				for (auto child : change->nodeA()->children()) {
-					idsToCheck.insert(child->id());
+				bool allElementsConflictRoots = true;
+				for (auto element : change->nodeA()->children()) {
+					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
+						break;
 				}
-				for (auto child : change->nodeB()->children()) {
-					idsToCheck.insert(child->id());
+				for (auto element : change->nodeB()->children()) {
+					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
+						break;
 				}
-				for (auto child : other.value()->nodeB()->children()) {
-					idsToCheck.insert(child->id());
+				for (auto element : other.value()->nodeB()->children()) {
+					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
+						break;
 				}
-				// for all elements, check that conflicts are on label only
-				bool mergeOk = true;
-				for (Model::NodeIdType id : idsToCheck)
+				if (allElementsConflictRoots)
 				{
-					auto check = [this, conflictPairs, id](ChangeDependencyGraph& cdg) mutable -> bool
+					// all elements are conflict roots
+					listsToMerge_.insert(change->nodeA());
+				}
+			}
+		}
+	}
+
+	for (auto node : listsToMerge_)
+	{
+		QList<Model::NodeIdType> idListA;
+		QList<Model::NodeIdType> idListB;
+		QList<Model::NodeIdType> idListBase;
+		QList<Chunk> chunks = computeMergeChunks(idListA, idListB, idListBase, node->id());
+		for (auto chunk : chunks)
+		{
+			if (chunk.stable_)
+			{
+				// accept chunk
+			}
+			else
+			{
+				QList<Model::NodeIdType> mergedChunk;
+				for (auto elem : chunk.spanA_)
+				{
+					Position posA = findPosition(elem, chunk.spanA_, mergedChunk);
+					Position posB = findPosition(elem, chunk.spanB_, mergedChunk);
+					Position posBase = findPosition(elem, chunk.spanBase_, mergedChunk);
+					auto changeA = cdgA.changes().find(elem);
+					bool elemInTreeBase = !(changeA != cdgA.changes().end() && changeA.value()->type() == ChangeType::Insertion);
+					auto changeB = cdgB.changes().find(elem);
+					bool elemInTreeB = elemInTreeBase &&
+							!(changeB != cdgB.changes().end() && changeB.value()->type() == ChangeType::Deletion);
+
+					if (chunk.spanBase_.contains(elem))
 					{
-						bool mergeOk = true;
-						IdToChangeDescriptionHash::const_iterator elemChange1 = cdg.changes().find(id);
-						if (elemChange1 != cdg.changes().end() && elemChange1.key() == id &&
-							 !onlyLabel(elemChange1.value()))
+						if (chunk.spanB_.contains(elem))
 						{
-							// branch A changes more than label
-							ConflictPairs::iterator elemChange2 = conflictPairs.find(elemChange1.value());
-							while (elemChange2 != conflictPairs.end() && elemChange2.key() == elemChange1.value())
+							if (posA == posB)
 							{
-								if (!(elemChange2.value()->id() == id && onlyLabel(elemChange2.value())))
+								if (!mergedChunk.contains(elem)) insertAfter(elem, posA, mergedChunk);
+							}
+							else
+							{
+								if (posA != posBase)
 								{
-									// unresolvable
-									mergeOk = false;
-									break;
+									if (posB == posBase) insertAfter(elem, posA, mergedChunk);
+									else break; //conflict
 								}
 							}
 						}
-						return mergeOk;
-					};
-					mergeOk = check(cdgA) && check(cdgB);
-					if (!mergeOk) break;
+					}
+					else // elem not in base chunk
+					{
+						if (elemInTreeB)
+						{
+							if (idListB.contains(elem))
+							{
+								if (chunk.spanB_.contains(elem))
+								{
+									if (posA == posB)
+									{
+										if (!mergedChunk.contains(elem)) insertAfter(elem, posA, mergedChunk);
+									}
+									else break; // conflict
+								}
+								else break; //conflict
+							}
+							else
+							{
+								if (idListBase.contains(elem)) break; //conflict
+								else insertAfter(elem, posA, mergedChunk);
+							}
+						}
+						else
+						{
+							if (elemInTreeBase) break; //conflict
+							else insertAfter(elem, posA, mergedChunk);
+						}
+					}
 				}
-				if (mergeOk) listsToMerge_.insert(change->nodeA());
 			}
 		}
 	}
 }
 
-ListMergeComponent::Chunk::Chunk(bool stable, QList<Model::NodeIdType> headList, QList<Model::NodeIdType> revisionList,
-						QList<Model::NodeIdType> baseList)
-	: stable_{stable}, head_{headList}, revision_{revisionList}, base_{baseList} {}
+/**
+ * Tries to find a unique position for \a elem in \a into that is similar to the position of \a elem in \a from.
+ * Returns a Position \a pos where \a pos.valid = true iff such a position could be found and pos.predecessor is the
+ * element after which \a elem should be inserted or 0 if elem should be inserted at the beginning.
+ * Such a position can be found if the nearest predecessor and successor of \elem in \a from that are common in \a into
+ * are next to each other and in order in \a into.
+ */
+ListMergeComponent::Position ListMergeComponent::findPosition(Model::NodeIdType element,
+																				  QList<Model::NodeIdType> from, QList<Model::NodeIdType> into)
+{
+	// positon in empty list is unique
+	if (into.isEmpty()) return Position(true, 0);
+
+	int elemIdx = from.indexOf(element) - 1;
+	while (elemIdx >= 0 && !into.contains(from.at(elemIdx))) --elemIdx;
+	Model::NodeIdType commonPredecessor = (elemIdx != -1) ? from.at(elemIdx) : 0;
+	elemIdx = from.indexOf(element) + 1;
+	while (elemIdx < from.size() && !into.contains(from.at(elemIdx))) ++elemIdx;
+	Model::NodeIdType commonSuccessor = (elemIdx < from.size()) ? from.at(elemIdx) : 0;
+	int commonPredIdx = into.indexOf(commonPredecessor);
+	int commonSuccIdx = into.indexOf(commonSuccessor);
+
+	if (commonPredIdx + 1 == commonSuccIdx) return Position(true, commonPredecessor);
+	else return Position(false, 0);
+}
+
+
+void ListMergeComponent::insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk)
+{
+	if (pos.predecessor_ == 0) chunk.prepend(elem);
+	else
+	{
+		int idx = chunk.indexOf(pos.predecessor_);
+		chunk.insert(idx + 1, elem);
+	}
+}
+
+ListMergeComponent::Chunk::Chunk(bool stable, QList<Model::NodeIdType> idListA, QList<Model::NodeIdType> idListB,
+						QList<Model::NodeIdType> idListBase)
+	: stable_{stable}, spanA_{idListA}, spanB_{idListB}, spanBase_{idListBase} {}
+
+ListMergeComponent::Position::Position(bool valid, Model::NodeIdType predecessor) :
+	valid_{valid}, predecessor_{predecessor} {}
 
 QList<ListMergeComponent::Chunk>& ListMergeComponent::computeMergeChunks(const QList<Model::NodeIdType> idListA,
 																								 const QList<Model::NodeIdType> idListB,
 																								 const QList<Model::NodeIdType> idListBase,
 																								 Model::NodeIdType containerId)
 {
-	QList<Model::NodeIdType> lcsBaseToHead = longestCommonSubsequence(idListBase, idListA);
-	QList<Model::NodeIdType> lcsBaseToRevision = longestCommonSubsequence(idListBase, idListB);
+	QList<Model::NodeIdType> lcsA = longestCommonSubsequence(idListBase, idListA);
+	QList<Model::NodeIdType> lcsB = longestCommonSubsequence(idListBase, idListB);
 
-	QSet<Model::NodeIdType> baseHead = QSet<Model::NodeIdType>::fromList(lcsBaseToHead);
-	QSet<Model::NodeIdType> baseRevision = QSet<Model::NodeIdType>::fromList(lcsBaseToRevision);
+	QSet<Model::NodeIdType> stableA = QSet<Model::NodeIdType>::fromList(lcsA);
+	QSet<Model::NodeIdType> stableB = QSet<Model::NodeIdType>::fromList(lcsB);
 
 	QList<Model::NodeIdType> stableIDs;
-	for (Model::NodeIdType id : idListBase)
-		if (baseHead.contains(id) && baseRevision.contains(id))
-			stableIDs.append(id);
+	for (Model::NodeIdType id : stableA)
+		if (stableB.contains(id)) stableIDs.append(id);
 
-	QList<QList<Model::NodeIdType>> sublistHead = computeSublists(idListA, stableIDs);
-	QList<QList<Model::NodeIdType>> sublistRevision = computeSublists(idListB, stableIDs);
-	QList<QList<Model::NodeIdType>> sublistBase = computeSublists(idListBase, stableIDs);
+	QList<QList<Model::NodeIdType>> sublistsA = computeSublists(idListA, stableIDs);
+	QList<QList<Model::NodeIdType>> sublistsB = computeSublists(idListB, stableIDs);
+	QList<QList<Model::NodeIdType>> sublistsBase = computeSublists(idListBase, stableIDs);
 
 	QList<Chunk> chunks;
 
-	QList<QList<Model::NodeIdType>>::const_iterator iterA = sublistHead.constBegin();
-	QList<QList<Model::NodeIdType>>::const_iterator iterB = sublistRevision.constBegin();
+	QList<QList<Model::NodeIdType>>::const_iterator iterA = sublistsA.constBegin();
+	QList<QList<Model::NodeIdType>>::const_iterator iterB = sublistsB.constBegin();
 	QList<QList<Model::NodeIdType>>::const_iterator iterBase;
 
 	bool isStable = false;
-	for (iterBase = sublistBase.constBegin(); iterBase != sublistBase.constEnd(); ++iterBase)
+	for (iterBase = sublistsBase.constBegin(); iterBase != sublistsBase.constEnd(); ++iterBase)
 	{
 		if (!iterBase->isEmpty() || !iterA->isEmpty() || !iterB->isEmpty())
 			chunks.append(Chunk(isStable, *iterA, *iterB, *iterBase));
@@ -145,14 +242,14 @@ QList<ListMergeComponent::Chunk>& ListMergeComponent::computeMergeChunks(const Q
 	return iterator.value();
 }
 
-QList<QList<Model::NodeIdType>> ListMergeComponent::computeSublists(const QList<Model::NodeIdType> list,
-																		 const QList<Model::NodeIdType> stableIDs)
+QList<QList<Model::NodeIdType>> ListMergeComponent::computeSublists(const QList<Model::NodeIdType> elementIds,
+																						  const QList<Model::NodeIdType> stableIDs)
 {
 	QList<QList<Model::NodeIdType>> chunks;
 	QList<Model::NodeIdType> chunk;
 
 	QList<Model::NodeIdType>::const_iterator stableId = stableIDs.begin();
-	for (Model::NodeIdType id : list)
+	for (Model::NodeIdType id : elementIds)
 	{
 		if (stableId != stableIDs.constEnd() && id == *stableId)
 		{
