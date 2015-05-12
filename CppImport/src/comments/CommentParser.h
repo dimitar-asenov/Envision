@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,39 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#pragma once
+
+#include "../cppimport_api.h"
+#include "Comments/src/nodes/CommentNode.h"
+#include "clang/AST/Comment.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+class CPPIMPORT_API CommentParser
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
-}
+	public:
+		CommentParser() { }
+		/**
+		 * Translates the \a comment to a CommentNode.
+		 */
+		Comments::CommentNode* parseComment(clang::comments::Comment* comment);
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
-}
+	private:
+		QString collectedText_{};
+
+		/**
+		 * Dispatches the \a comment to the correct method for handling.
+		 */
+		void processComment(clang::comments::Comment* comment);
+
+		/**
+		 * If there is text in \a textComment this will get added to the \a currentNode_ comment.
+		 */
+		void processTextComment(clang::comments::TextComment* textComment);
+
+		void processFullComment(clang::comments::FullComment* fullComment);
+
+		void processParagraphComment(clang::comments::ParagraphComment* paragraphComment);
+};
 
 }

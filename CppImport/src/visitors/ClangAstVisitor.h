@@ -29,6 +29,7 @@
 #include "../cppimport_api.h"
 #include "../manager/TranslateManager.h"
 #include "../CppImportLogger.h"
+#include "../comments/CommentParser.h"
 
 namespace CppImport {
 
@@ -46,6 +47,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
 		~ClangAstVisitor();
 		void setSourceManager(const clang::SourceManager* sourceManager);
+
+		void setPreprocessor(const clang::Preprocessor* preprocessor);
 
 		// helper functions to interact with the stack from other classes
 		Model::Node* ooStackTop();
@@ -120,7 +123,9 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		CppImportUtilities* utils_{};
 		ExpressionVisitor* exprVisitor_{};
 		TemplateArgumentVisitor* templArgVisitor_{};
+		CommentParser* commentParser_{};
 		const clang::SourceManager* sourceManager_{};
+		const clang::Preprocessor* preprocessor_{};
 		bool importSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};

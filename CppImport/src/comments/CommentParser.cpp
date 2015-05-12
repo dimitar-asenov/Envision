@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,46 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangAstConsumer.h"
+#include "CommentParser.h"
+
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(ClangAstVisitor* visitor)
-: clang::ASTConsumer(), astVisitor_(visitor)
-{}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
+Comments::CommentNode* CommentParser::parseComment(clang::comments::Comment* comment)
 {
-	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
+	// empty old text
+	collectedText_.clear();
+	// handle the current comment
+	processComment(comment);
+	return new Comments::CommentNode(collectedText_);
 }
 
-void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
+void CommentParser::processComment(clang::comments::Comment* comment)
 {
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	astVisitor_->setSourceManager(mngr);
-	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
+	if (auto tc = llvm::dyn_cast<clang::comments::TextComment>(comment))
+		processTextComment(tc);
+	else if (auto fc = llvm::dyn_cast<clang::comments::FullComment>(comment))
+		processFullComment(fc);
+	else if (auto pc = llvm::dyn_cast<clang::comments::ParagraphComment>(comment))
+		processParagraphComment(pc);
+	else
+		qDebug() << "Unsupported comment type: " << comment->getCommentKindName();
+}
+
+void CommentParser::processTextComment(clang::comments::TextComment* textComment)
+{
+	if (!textComment->isWhitespace())
+		collectedText_.append(QString::fromStdString(textComment->getText().str()));
+}
+
+void CommentParser::processFullComment(clang::comments::FullComment* fullComment)
+{
+	for (auto it = fullComment->child_begin(); it != fullComment->child_end(); ++it) processComment(*it);
+}
+
+void CommentParser::processParagraphComment(clang::comments::ParagraphComment* paragraphComment)
+{
+	for (auto it = paragraphComment->child_begin(); it != paragraphComment->child_end(); ++it) processComment(*it);
 }
 
 }
