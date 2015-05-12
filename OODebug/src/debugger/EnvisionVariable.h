@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,38 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#include "CJavaCompile.h"
+#pragma once
 
-#include "../compiler/JavaCompiler.h"
-#include "ModelBase/src/model/TreeManager.h"
+#include "../oodebug_api.h"
+
+#include "jdwp/Protocol.h"
 
 namespace OODebug {
 
-CJavaCompile::CJavaCompile() : CommandWithNameAndFlags{"compile", {}, false}
-{}
-
-Interaction::CommandResult* CJavaCompile::executeNamed(Visualization::Item* source, Visualization::Item*,
-	const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
-{
-	while (source && !source->node()) source = source->parent();
-	Q_ASSERT(source);
-	auto manager = source->node()->manager();
-	Q_ASSERT(manager);
-	auto result = JavaCompiler::compileTree(manager, "exported/" + manager->root()->symbolName());
-	Q_ASSERT(result);
-	return result;
-}
-
-bool CJavaCompile::canInterpret(Visualization::Item* source, Visualization::Item* target,
-										  const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
-{
-	if (CommandWithNameAndFlags::canInterpret(source, target, commandTokens, cursor))
-	{
-		// Check if there is a tree manager
-		while (source && !source->node()) source = source->parent();
-		return source->node()->manager();
-	}
-	return false;
-}
+// This mainly exists because arguments (unlike fields) are orthogonal to variable declarations in Envision.
+struct EnvisionVariable {
+		EnvisionVariable() = default;
+		EnvisionVariable(QString name, Protocol::Tag typeTag) : name_{name}, typeTag_{typeTag} {}
+		QString name_;
+		Protocol::Tag typeTag_;
+};
 
 } /* namespace OODebug */

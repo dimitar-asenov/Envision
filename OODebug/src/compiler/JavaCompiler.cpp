@@ -26,6 +26,9 @@
 
 #include "JavaCompiler.h"
 
+#include "InteractionBase/src/commands/CommandResult.h"
+#include "InteractionBase/src/commands/CommandError.h"
+
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/Node.h"
 
@@ -45,8 +48,9 @@ namespace OODebug {
 
 const QString JavaCompiler::COMPILER_MESSAGE_GROUP{"CompilerMessages"};
 
-bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-										 bool includeDebugSymbols)
+Interaction::CommandResult* JavaCompiler::compileTree(Model::TreeManager* manager,
+																		const QString& pathToProjectContainerDirectory,
+																		bool includeDebugSymbols)
 {
 	bool compilationOk = true;
 	// Remove previous error messages
@@ -88,7 +92,8 @@ bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 	}
 	Q_ASSERT(map);
 
-	if (!compilationOk) return false; // If export failed we can exit here.
+	if (!compilationOk) // If export failed we can exit here.
+		return new Interaction::CommandResult(new Interaction::CommandError("Export failed, check error messages!"));
 
 	// Create a build folder and setup the compiler
 	static const QString buildFolder("build");
@@ -151,7 +156,10 @@ bool JavaCompiler::compileTree(Model::TreeManager* manager, const QString& pathT
 			if (compilationOk && CompilerMessage::Error == message->type()) compilationOk = false;
 		}
 	}
-	return compilationOk;
+	if (compilationOk)
+		return new Interaction::CommandResult();
+	else
+		return new Interaction::CommandResult(new Interaction::CommandError("Compilation failed, check error messages!"));
 }
 
 void JavaCompiler::visualizeMessage(Visualization::Item* item, const QString& message, const QString& type)

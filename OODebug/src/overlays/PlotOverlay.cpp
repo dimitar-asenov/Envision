@@ -32,6 +32,9 @@ namespace OODebug {
 
 ITEM_COMMON_DEFINITIONS(PlotOverlay, "item")
 
+
+const QList<Qt::GlobalColor> PlotOverlay::PLOT_COLORS = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};
+
 PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* style,
 								 PlotType type, QStringList variableNames)
 	: Super{{associatedItem}, style}
@@ -57,7 +60,7 @@ PlotOverlay::PlotOverlay(Visualization::Item* associatedItem, const StyleType* s
 void OODebug::PlotOverlay::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
 	Super::paint(painter, option, widget);
-
+	painter->setFont(style()->font());
 	plotFunction_(this, painter);
 }
 
@@ -109,20 +112,28 @@ void OODebug::PlotOverlay::addValue(double value, QList<double>& valueList, doub
 
 void OODebug::PlotOverlay::drawXTic(QPainter* painter, const QPointF& pos, QString label)
 {
-	painter->drawLine(pos, {pos.x(), pos.y() + 5});
-	auto fontMetrics = painter->fontMetrics();
-	int height = fontMetrics.height();
-	int xOffset = -(fontMetrics.averageCharWidth() * label.length()) / 2;
-	painter->drawText(pos.x() + xOffset, pos.y() + height, label);
+	painter->drawLine(pos, {pos.x(), pos.y() + style()->ticSize()});
+	int xOffset = -drawnTextWidth(label) / 2; // text middle should be at tic
+	painter->drawText(pos.x() + xOffset, pos.y() + drawnTextHeight(), label);
 }
 
 void OODebug::PlotOverlay::drawYTic(QPainter* painter, const QPointF& pos, QString label)
 {
-	painter->drawLine({pos.x() - 5, pos.y()}, pos);
-	auto fontMetrics = painter->fontMetrics();
-	int height = fontMetrics.height();
-	int xOffset = -(fontMetrics.averageCharWidth() * (label.length() + 1));
-	painter->drawText(pos.x() + xOffset, pos.y() + height / 3.0, label);
+	painter->drawLine({pos.x() - style()->ticSize(), pos.y()}, pos);
+	double xOffset = -drawnTextWidth(label) - style()->ticSize() - style()->margin();
+	drawTextVerticalCenteredAt(painter, {pos.x() + xOffset, pos.y()}, label);
+}
+
+void PlotOverlay::drawTextVerticalCenteredAt(QPainter* painter, const QPointF& pos, QString label)
+{
+	// This is a workaround to draw text vertically aligned at position pos.
+	// Drawing the text at y position: pos.y() + textHeight / 2.0 leads to wrong results.
+	// The code is adapted from:
+	// http://stackoverflow.com/questions/24831484/how-to-align-qpainter-drawtext-around-a-point-not-a-rectangle
+	const qreal size = 32767.0;
+	QPointF corner(pos.x(), pos.y() - size / 2.0);
+	QRectF rect(corner, QSizeF(size, size));
+	painter->drawText(rect, Qt::AlignVCenter, label, nullptr);
 }
 
 double OODebug::PlotOverlay::valueRange(int dimension)
@@ -157,12 +168,12 @@ void OODebug::PlotOverlay::drawTics(QPainter* painter)
 	int nTics = std::min(5, xValues_.size());
 	double xStep = valueRange(0) / nTics;
 	double yStep = valueRange(1) / nTics;
+
 	// If the tics text is large adapt our plot pane:
-	int maxTextLength = QString::number(yMin_).length();
+	int maxTextLength = drawnTextWidth(QString::number(yMin_));
 	for (int i = 0; i <= nTics; ++i)
-		maxTextLength = std::max(maxTextLength, QString::number(yMin_ + i * yStep).length());
-	auto fontMetrics = painter->fontMetrics();
-	int negativeX = plotRegion_.x() - fontMetrics.averageCharWidth() * maxTextLength;
+		maxTextLength = std::max(maxTextLength, drawnTextWidth(QString::number(yMin_ + i * yStep)));
+	int negativeX = plotRegion_.x() - maxTextLength - style()->ticSize() - 2 * style()->margin();
 	if (negativeX < 0) plotRegion_.setX(plotRegion_.x() - negativeX);
 
 	for (int i = 0; i <= nTics; ++i)
@@ -203,20 +214,16 @@ void PlotOverlay::plotScatter(QPainter* painter)
 {
 	drawTics(painter);
 	drawAxes(painter);
+	drawLegend(painter);
 
-	double radius = 1.0;
+	const double radius = style()->scatterDotRadius();
 
-	static const QList<Qt::GlobalColor> colors = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta};
-
-	QPen pen(Qt::NoPen);
-	painter->setPen(pen);
+	painter->setPen(Qt::NoPen);
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
 		for (int y = 0; y < yValues_.size(); ++y)
 		{
-			auto brush = painter->brush();
-			brush.setColor(colors[y < colors.size() ? y : 0]);
-			painter->setBrush(brush);
+			setBrushColor(painter, PLOT_COLORS[y < PLOT_COLORS.size() ? y : 0]);
 			painter->drawEllipse(toPlotCoordinates({xValues_[i], yValues_[y][i]}), radius, radius);
 		}
 	}
@@ -232,45 +239,109 @@ void OODebug::PlotOverlay::plotArray(QPainter* painter)
 		fieldSize /= yValues_[0].size();
 
 		// first draw the array box:
-		painter->drawLine(plotRegion_.bottomLeft(), plotRegion_.bottomRight()); // bottom line
-		painter->drawLine(plotRegion_.topLeft(), plotRegion_.topRight()); // top line
-		painter->drawLine(plotRegion_.bottomRight(), plotRegion_.topRight()); // right border
+		painter->drawPolygon(QPolygon({plotRegion_.topLeft(), plotRegion_.topRight(),
+												 plotRegion_.bottomRight(), plotRegion_.bottomLeft()}));
 	}
-	// draw the separators
+	// draw the separators and contents
 	double plotY = plotRegion_.bottomLeft().y();
-	auto fontMetrics = painter->fontMetrics();
-	int fontHeight = fontMetrics.height();
+	double penHalfWidth = painter->pen().width() / 2.0;
+	const int fontHeight = drawnTextHeight();
 
 	for (int i = 0; i < yValues_[0].size(); ++i)
 	{
-		QPointF pos = {plotRegion_.x() + i * fieldSize, plotY};
-		painter->drawLine(QPointF(pos.x(), pos.y()), {pos.x(), pos.y() - plotRegion_.height()});
-
-		QPointF textPos = {pos.x() + fieldSize / 3, pos.y() - plotRegion_.height() / 2 + fontHeight / 3.0};
-		painter->drawText(textPos, QString::number(yValues_[0][i]));
+		double plotX = plotRegion_.x() + i * fieldSize;
+		painter->drawLine(QPointF(plotX, plotY - penHalfWidth), {plotX, plotY - plotRegion_.height() + penHalfWidth});
+		painter->drawText(QRectF(QPointF(plotX, plotRegion_.y()), QSize(fieldSize, fieldSize)),
+								Qt::AlignVCenter | Qt::AlignHCenter, QString::number(yValues_[0][i]));
 	}
-	// draw the pointers
-	const int ARROW_HEIGHT = 30;
+	// draw the pointers into the array
+	const int ARROW_HEIGHT = 8;
+
+	// Lambda to create an isosceles triangle below an array field.
+	// The bottom line is half the width of a fieldsize, center it in the field
+	// the bottom line starts at + fieldSize / 4 and ends at + 3 * fieldSize / 4
+	auto pointerTriangle = [=](int index) {
+		double xOffset = index * fieldSize;
+		double bottomWidth = fieldSize / 2;
+		double padding = (fieldSize - bottomWidth) / 2;
+		double topY = plotY + style()->margin();
+		double bottomY = topY + ARROW_HEIGHT;
+		QPointF midPoint = {plotRegion_.x() + xOffset + fieldSize / 2, topY};
+		QPointF leftPoint = {plotRegion_.x() + xOffset + padding, bottomY};
+		QPointF rightPoint = {plotRegion_.x() + xOffset + padding + bottomWidth, bottomY};
+		return QPolygonF({midPoint, leftPoint, rightPoint});
+	};
+
+	setBrushColor(painter, Qt::red); // Triangle color
+
 	QHash<int, int> valuesAt; // store how many values we have at each value for text offset
 	for (int i = 0; i < xValues_.size(); ++i)
 	{
 		int index = xValues_[i];
-		++valuesAt[index];
-		QPointF pos = {plotRegion_.x() + index * fieldSize, plotY + ARROW_HEIGHT};
-		auto font = painter->font();
-		auto newFont = font;
-		newFont.setPointSize(ARROW_HEIGHT);
-		newFont.setBold(true);
-		painter->setFont(newFont);
-		painter->drawText(pos, QString("\uA71B")); // Arrow up unicode
-		painter->setFont(font);
+		if (!valuesAt[index]++) painter->drawPolygon(pointerTriangle(index));
 
 		if (i + 1 < variableNames_.size())
 		{
-			double yOffset = (valuesAt[index] - 1) * fontHeight;
-			painter->drawText(QPointF(pos.x() + fieldSize / 3, pos.y() + yOffset), variableNames_[i + 1]);
+			double x = plotRegion_.x() + index * fieldSize;
+			// Text is below arrow and below other text. (We paint with rectangle so we have to specify top y)
+			double y = plotY + ARROW_HEIGHT + 2 * style()->margin() + (valuesAt[index] - 1) * fontHeight;
+			painter->drawText(QRectF(QPointF(x, y), QSize(fieldSize, fontHeight)),
+									Qt::AlignVCenter | Qt::AlignHCenter, variableNames_[i + 1]);
 		}
 	}
+}
+
+void PlotOverlay::drawLegend(QPainter* painter)
+{
+	const double radius = style()->scatterDotRadius();
+	Q_ASSERT(variableNames_.size() > 1); // Only draw legends when we have y dimensions.
+	// first variable name is always x variable.
+	int maxTextLength = drawnTextWidth(variableNames_[1]);
+	for (int i = 2; i < variableNames_.size(); ++i)
+		maxTextLength = std::max(maxTextLength, drawnTextWidth(variableNames_[i]));
+	int legendWidth = maxTextLength + radius + 2 * style()->margin();
+	int legendHeight = (variableNames_.size() - 1) * drawnTextHeight();
+
+	const int LEGEND_MARGIN = 10;
+	// Adapt plot region to make sure legend and plot do not overlap
+	if (style()->width() - legendWidth - LEGEND_MARGIN < plotRegion_.right())
+		plotRegion_.setRight(style()->width() - legendWidth - LEGEND_MARGIN);
+
+	setBrushColor(painter, QColor(240, 240, 255)); // Very light gray
+
+	QRect legendRegion(QPoint(style()->width() - legendWidth, drawnTextHeight()), QSize(legendWidth, legendHeight));
+	painter->setPen(Qt::NoPen);
+	painter->drawRect(legendRegion);
+
+	for (int i = 0; i < variableNames_.size() - 1; ++i)
+	{
+		setBrushColor(painter, PLOT_COLORS[i < PLOT_COLORS.size() ? i : 0]);
+		painter->setPen(Qt::NoPen); // For the dot we want no pen to have no border
+		QPointF dotPosition(legendRegion.x() + style()->margin(),
+								  legendRegion.y() + (i * drawnTextHeight()) + drawnTextHeight() / 2.0);
+		painter->drawEllipse(dotPosition, radius, radius);
+		painter->setPen(style()->pen());
+		drawTextVerticalCenteredAt(painter, {dotPosition.x() + radius, dotPosition.y()}, variableNames_[i + 1]);
+	}
+}
+
+void PlotOverlay::setBrushColor(QPainter* painter, QColor color)
+{
+	auto brush = painter->brush();
+	brush.setColor(color);
+	painter->setBrush(brush);
+}
+
+int PlotOverlay::drawnTextWidth(const QString& text)
+{
+	QFontMetrics qfm(style()->font());
+	return qfm.width(text);
+}
+
+int PlotOverlay::drawnTextHeight()
+{
+	QFontMetrics qfm(style()->font());
+	return qfm.height();
 }
 
 } /* namespace OODebug */

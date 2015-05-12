@@ -28,6 +28,10 @@
 
 #include "../oodebug_api.h"
 
+namespace Interaction {
+	class CommandResult;
+}
+
 namespace Model {
 	class TreeManager;
 	class Node;
@@ -50,10 +54,12 @@ class OODEBUG_API JavaCompiler
 {
 	public:
 		/**
-		 * Exports and compiles the program and returns true if this action was succesful.
+		 * Exports and compiles the program and returns a CommandResult,
+		 *  which contains an error string if something went wrong.
 		 */
-		static bool compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-										bool includeDebugSymbols = false);
+		static Interaction::CommandResult* compileTree(Model::TreeManager* manager,
+																	  const QString& pathToProjectContainerDirectory,
+																	  bool includeDebugSymbols = false);
 
 	private:
 		static const QString COMPILER_MESSAGE_GROUP;
