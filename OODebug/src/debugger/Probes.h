@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,38 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "CJavaCompile.h"
+#pragma once
 
-#include "../compiler/JavaCompiler.h"
-#include "ModelBase/src/model/TreeManager.h"
+#include "../oodebug_api.h"
 
 namespace OODebug {
 
-CJavaCompile::CJavaCompile() : CommandWithNameAndFlags{"compile", {}, false}
-{}
+class OODEBUG_API Probes {
+	public:
+		using ValueCalculator = std::function<double(QList<double>)>;
+		using ValueOperator = std::function<double(double, double)>;
 
-Interaction::CommandResult* CJavaCompile::executeNamed(Visualization::Item* source, Visualization::Item*,
-	const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
-{
-	while (source && !source->node()) source = source->parent();
-	Q_ASSERT(source);
-	auto manager = source->node()->manager();
-	Q_ASSERT(manager);
-	auto result = JavaCompiler::compileTree(manager, "exported/" + manager->root()->symbolName());
-	Q_ASSERT(result);
-	return result;
-}
+		static QPair<QList<ValueCalculator>, QStringList> parseProbeArguments(QStringList arguments);
 
-bool CJavaCompile::canInterpret(Visualization::Item* source, Visualization::Item* target,
-										  const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
-{
-	if (CommandWithNameAndFlags::canInterpret(source, target, commandTokens, cursor))
-	{
-		// Check if there is a tree manager
-		while (source && !source->node()) source = source->parent();
-		return source->node()->manager();
-	}
-	return false;
-}
+	private:
+		static ValueOperator operatorFromString(QString operatorString);
+};
 
 } /* namespace OODebug */

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -27,42 +27,72 @@
 #pragma once
 
 #include "../oodebug_api.h"
+#include "jdwp/Protocol.h"
 
-namespace Interaction {
-	class CommandResult;
+namespace Export {
+	class TextToNodeMap;
 }
 
 namespace Model {
-	class TreeManager;
 	class Node;
 }
 
 namespace OOModel {
+	class Class;
+	class Expression;
 	class Method;
+	class StatementItem;
+	class StatementItemList;
+	class VariableDeclaration;
 }
 
 namespace OODebug {
 
-class RunProcess;
+class DebugConnector;
+class Location;
+class Value;
+class VariableDetails;
+struct EnvisionVariable;
 
-class OODEBUG_API JavaRunner
+class OODEBUG_API DebugUtils
 {
 	public:
+		DebugUtils(DebugConnector* connector);
+
+		void setExportMap(std::shared_ptr<Export::TextToNodeMap> map);
+
+		QString jvmSignatureFor(OOModel::Class* theClass);
 		/**
-		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * Returns a CommandResult which contains an error if there was one.
+		 * Returns a String with all containing module names split by \a delimiter in front of the \a theClass name.
 		 */
-		static Interaction::CommandResult* runTree(Model::TreeManager* manager,
-																 const QString& pathToProjectContainerDirectory,
-																 bool debug = false);
+		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
+
+		Location nodeToLocation(Model::Node* node);
+		Model::Node* locationToNode(Location location, bool& isClosingBracket);
+
+		double doubleFromValue(Value v);
+
+		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
+		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
+		bool isPrimitiveValueType(Protocol::Tag tag);
+
+		OOModel::VariableDeclaration* variableDeclarationFromStatement(OOModel::StatementItem* statement,
+																							QString variableName = "");
+
+		/**
+		 * Tries to find information about the variables with names \a variableNames in the \a statementList.
+		 * If a variable is not found in the \a statementList its parent list is searched until we have no more parent
+		 * list then we try to find the name in the arguments of the containing Method. The \a indexFrom is the starting
+		 * position from where we search, not that we search in the negative direction (upwards).
+		 *
+		 * The results are returned in a map variable name -> details.
+		 */
+		QHash<QString, EnvisionVariable> findVariableDetailsIn(OOModel::StatementItemList* statementList,
+																				 QStringList variableNames, int indexFrom);
 
 	private:
-		static void handleOutput();
-		static void handleErrorOutput();
-
-		static void addConsole(Model::Node* node);
-
-		static RunProcess& runProcess();
+		DebugConnector* debugConnector_{};
+		std::shared_ptr<Export::TextToNodeMap> exportMap_;
 };
 
 } /* namespace OODebug */
