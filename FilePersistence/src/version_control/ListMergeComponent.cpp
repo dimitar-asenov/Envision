@@ -81,9 +81,9 @@ void ListMergeComponent::run(const std::unique_ptr<GenericTree>&,
 
 	for (auto node : listsToMerge_)
 	{
-		QList<Model::NodeIdType> idListA;
-		QList<Model::NodeIdType> idListB;
-		QList<Model::NodeIdType> idListBase;
+		QList<Model::NodeIdType> idListA = nodeListToIdList(cdgA.changes().find(node->id()).value()->nodeB()->children());
+		QList<Model::NodeIdType> idListB = nodeListToIdList(cdgB.changes().find(node->id()).value()->nodeB()->children());
+		QList<Model::NodeIdType> idListBase = nodeListToIdList(node->children());
 		QList<Chunk> chunks = computeMergeChunks(idListA, idListB, idListBase, node->id());
 		for (auto chunk : chunks)
 		{
@@ -313,6 +313,18 @@ QList<Model::NodeIdType> ListMergeComponent::backtrackLCS(int** data, const QLis
 			return backtrackLCS(data, listA, listB, posA, posB-1);
 		else
 			return backtrackLCS(data, listA, listB, posA-1, posB);
+}
+
+QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<GenericNode*>& list)
+{
+	QVector<Model::NodeIdType> idList(list.size());
+	for (GenericNode* node : list)
+	{
+		int index = node->name().toInt();
+		Q_ASSERT(index >= 0 && index < list.size());
+		idList[index] = node->id();
+	}
+	return QList<Model::NodeIdType>::fromVector(idList);
 }
 
 

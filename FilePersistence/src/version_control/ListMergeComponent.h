@@ -71,6 +71,7 @@ class ListMergeComponent : public ConflictPipelineComponent
 		};
 
 		void insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk);
+		QList<Model::NodeIdType> nodeListToIdList(const QList<GenericNode*>& list);
 
 		// Below are things taken over from the old merge because they might still be useful.
 
