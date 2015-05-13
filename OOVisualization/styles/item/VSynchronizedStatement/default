@@ -6,32 +6,39 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>153</red>
-				<green>0</green>
-				<blue>153</blue>
+				<red>200</red>
+				<green>200</green>
+				<blue>200</blue>
 			</color>
 		</outline>
 		<backgroundBrush>
 			<style>1</style>
 			<color>
 				<alpha>255</alpha>
-				<red>245</red>
-				<green>224</green>
-				<blue>245</blue>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
 			</color>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
 	
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/synchronized.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon prototypes="item/Symbol/boxed-keyword">
+		<symbol>synchronized</symbol>
 	</icon>
 	
 	<expression prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>

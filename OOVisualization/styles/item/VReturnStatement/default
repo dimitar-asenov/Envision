@@ -1,10 +1,8 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
 	<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
-	<symbol prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/icon-exit.svg</filename>
-		<width>22</width>
-		<height>15</height>
+	<symbol prototypes="item/Symbol/keyword">
+		<symbol>return</symbol>
 	</symbol>
 	<values prototypes="item/VList/default">
 		<shape/>

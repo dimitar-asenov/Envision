@@ -6,8 +6,8 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>160</red>
-				<green>160</green>
+				<red>200</red>
+				<green>200</green>
 				<blue>200</blue>
 			</color>
 		</outline>
@@ -18,8 +18,8 @@
 						<first>1.0</first>
 						<second>
 							<alpha>255</alpha>
-							<red>224</red>
-							<green>224</green>
+							<red>255</red>
+							<green>255</green>
 							<blue>255</blue>
 						</second>
 					</e1>
@@ -31,21 +31,28 @@
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/loop.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon prototypes="item/Symbol/boxed-keyword">
+		<symbol>loop</symbol>
 	</icon>
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
 					<green>255</green>
-					<blue>128</blue>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
@@ -55,6 +62,15 @@
 	<initStep prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
@@ -71,13 +87,22 @@
 	<updateStep prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
-			<backgroundBrush>
-				<style>1</style>
+			<outline>
+				<width>1</width>
 				<color>
 					<alpha>255</alpha>
 					<red>200</red>
 					<green>200</green>
 					<blue>200</blue>
+				</color>
+			</outline>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>

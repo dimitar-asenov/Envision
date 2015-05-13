@@ -6,36 +6,37 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>160</red>
-				<green>160</green>
+				<red>200</red>
+				<green>200</green>
 				<blue>200</blue>
 			</color>
 		</outline>
 		<backgroundBrush>
-			<gradient>
-				<stopPoints>
-					<e1>
-						<first>1.0</first>
-						<second>
-							<alpha>255</alpha>
-							<red>224</red>
-							<green>224</green>
-							<blue>255</blue>
-						</second>
-					</e1>	
-				</stopPoints>
-			</gradient>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/loop.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon prototypes="item/Symbol/boxed-keyword">
+		<symbol>loop</symbol>
 	</icon>
 	<varType prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
@@ -52,6 +53,15 @@
 	<varName prototypes="item/Text/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
@@ -68,13 +78,22 @@
 	<collection prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
-			<backgroundBrush>
-				<style>1</style>
+			<outline>
+				<width>1</width>
 				<color>
 					<alpha>255</alpha>
 					<red>200</red>
 					<green>200</green>
 					<blue>200</blue>
+				</color>
+			</outline>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>

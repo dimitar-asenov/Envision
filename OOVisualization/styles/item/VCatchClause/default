@@ -6,45 +6,46 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>113</red>
-				<green>126</green>
-				<blue>53</blue>
+				<red>200</red>
+				<green>200</green>
+				<blue>200</blue>
 			</color>
 		</outline>
 		<backgroundBrush>
-			<gradient>
-				<stopPoints>
-					<e1>
-						<first>1.0</first>
-						<second>
-							<alpha>255</alpha>
-							<red>222</red>
-							<green>228</green>
-							<blue>190</blue>
-						</second>
-					</e1>
-				</stopPoints>
-			</gradient>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
 	
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/catch.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon prototypes="item/Symbol/boxed-keyword">
+		<symbol>catch</symbol>
 	</icon>
 	
 	<expressionToCatch prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
 					<green>255</green>
-					<blue>128</blue>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>

@@ -6,9 +6,9 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>228</red>
-				<green>147</green>
-				<blue>57</blue>
+				<red>200</red>
+				<green>200</green>
+				<blue>200</blue>
 			</color>
 		</outline>
 		<backgroundBrush>
@@ -19,8 +19,8 @@
 						<second>
 							<alpha>255</alpha>
 							<red>255</red>
-							<green>236</green>
-							<blue>217</blue>
+							<green>255</green>
+							<blue>255</blue>
 						</second>
 					</e1>
 				</stopPoints>
@@ -29,10 +29,8 @@
 		<cornerRadius>4</cornerRadius>
 	</shape>
 	
-	<tryIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/try.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<tryIcon prototypes="item/Symbol/boxed-keyword">
+		<symbol>try</symbol>
 	</tryIcon>
 	
 	<catchClauses prototypes="item/VList/default">
@@ -53,9 +51,9 @@
 				<width>1</width>
 				<color>
 					<alpha>255</alpha>
-					<red>160</red>
-					<green>160</green>
-					<blue>160</blue>
+					<red>128</red>
+					<green>128</green>
+					<blue>128</blue>
 				</color>
 			</outline>
 			<backgroundBrush>
@@ -65,9 +63,9 @@
 							<first>1.0</first>
 							<second>
 								<alpha>255</alpha>
-								<red>224</red>
-								<green>224</green>
-								<blue>224</blue>
+								<red>255</red>
+								<green>255</green>
+								<blue>255</blue>
 							</second>
 						</e1>
 					</stopPoints>
@@ -77,9 +75,7 @@
 		</shape>
 	</finallyOutline>
 	
-	<finallyIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/finally.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<finallyIcon prototypes="item/Symbol/boxed-keyword">
+		<symbol>finally</symbol>
 	</finallyIcon>
 </style>

@@ -1,14 +1,10 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/switchCase.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon prototypes="item/Symbol/keyword">
+		<symbol>case</symbol>
 	</icon>
-	<defaultCaseIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/switchDefaultCase.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<defaultCaseIcon prototypes="item/Symbol/keyword">
+		<symbol>default</symbol>
 	</defaultCaseIcon>
 	<caseExpression prototypes="item/Item/default">
 		<shape prototypes="shape/Box/default">
@@ -19,7 +15,7 @@
 					<alpha>255</alpha>
 					<red>255</red>
 					<green>255</green>
-					<blue>128</blue>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>

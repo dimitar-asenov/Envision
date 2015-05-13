@@ -1,8 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/DeclarativeItemBase/default">
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/assert.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon  prototypes="item/Symbol/keyword">
+		<symbol>assert</symbol>
 	</icon>
 </style>

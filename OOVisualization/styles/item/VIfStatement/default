@@ -6,8 +6,8 @@
 			<width>1</width>
 			<color>
 				<alpha>255</alpha>
-				<red>224</red>
-				<green>224</green>
+				<red>200</red>
+				<green>200</green>
 				<blue>200</blue>
 			</color>
 		</outline>
@@ -17,7 +17,7 @@
 				<alpha>255</alpha>
 				<red>255</red>
 				<green>255</green>
-				<blue>224</blue>
+				<blue>255</blue>
 			</color>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
@@ -27,28 +27,33 @@
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>
 	
-	<icon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/if.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<icon prototypes="item/Symbol/boxed-keyword">
+		<symbol>if</symbol>
 	</icon>
 	
-	<elificon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/elif.svg</filename>
-		<width>22</width>
-		<height>22</height>
+	<elificon prototypes="item/Symbol/boxed-keyword">
+		<symbol>else if</symbol>
 	</elificon>
 	
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</outline>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
 					<green>255</green>
-					<blue>128</blue>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
@@ -81,9 +86,9 @@
 				<style>1</style>
 				<color>
 					<alpha>255</alpha>
-					<red>200</red>
+					<red>255</red>
 					<green>255</green>
-					<blue>200</blue>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>
@@ -100,8 +105,8 @@
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
-					<green>224</green>
-					<blue>224</blue>
+					<green>255</green>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>

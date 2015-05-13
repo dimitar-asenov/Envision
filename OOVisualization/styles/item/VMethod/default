@@ -22,25 +22,17 @@
 	<nameStaticPrivate prototypes="default.nameStatic,default.namePrivate" />
 	<nameStaticProtected prototypes="default.nameStatic,default.nameProtected" />
 	
-	<defaultIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/gears.svg</filename>
-		<width>30</width>
-		<height>30</height>
+	<defaultIcon prototypes="item/Symbol/boxed-keyword">
+		<symbol>method</symbol>
 	</defaultIcon>
-	<constructorIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/methodConstructor.svg</filename>
-		<width>30</width>
-		<height>30</height>
+	<constructorIcon prototypes="item/Symbol/boxed-keyword">
+		<symbol>method</symbol>
 	</constructorIcon>
-	<destructorIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/methodDestructor.svg</filename>
-		<width>30</width>
-		<height>30</height>
+	<destructorIcon prototypes="item/Symbol/boxed-keyword">
+		<symbol>method</symbol>
 	</destructorIcon>
-	<conversionIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/gears.svg</filename>
-		<width>30</width>
-		<height>30</height>
+	<conversionIcon prototypes="item/Symbol/boxed-keyword">
+		<symbol>method</symbol>
 	</conversionIcon>
 	
 	<header prototypes="layout/SequentialLayout/default">
@@ -72,8 +64,8 @@
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
-					<green>248</green>
-					<blue>220</blue>
+					<green>255</green>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 		</shape>
@@ -95,8 +87,8 @@
 				<style>1</style>
 				<color>
 					<alpha>255</alpha>
-					<red>240</red>
-					<green>240</green>
+					<red>255</red>
+					<green>255</green>
 					<blue>255</blue>
 				</color>
 			</backgroundBrush>
@@ -106,7 +98,7 @@
 					<alpha>255</alpha>
 					<red>128</red>
 					<green>128</green>
-					<blue>255</blue>
+					<blue>128</blue>
 				</color>
 			</outline>
 		</shape>
@@ -209,8 +201,8 @@
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
-					<green>224</green>
-					<blue>224</blue>
+					<green>255</green>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
 		</shape>

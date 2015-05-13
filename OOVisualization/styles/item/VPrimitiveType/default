@@ -28,12 +28,12 @@
 		<e8 prototypes="default.type">
 			<symbol>void</symbol>
 			<pen>
-				<color>
-					<alpha>255</alpha>
-					<red>164</red>
-					<green>228</green>
-					<blue>164</blue>
-				</color>
+			<color>
+				<alpha>255</alpha>
+				<red>127</red>
+				<green>0</green>
+				<blue>85</blue>
+			</color>
 			</pen>
 		</e8>
 	</statics>
