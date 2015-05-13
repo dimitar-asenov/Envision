@@ -29,10 +29,7 @@
 
 namespace FilePersistence {
 
-ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes)
-{
-	conflictTypes_ = QSet<QString>(conflictTypes);
-}
+ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes) : conflictTypes_{conflictTypes} {}
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
@@ -47,20 +44,20 @@ void ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
 	affectedCUsA_ = computeAffectedCUs(treeBase, cdgA);
 	affectedCUsB_ = computeAffectedCUs(treeBase, cdgB);
 	// In all conflict units...
-	for (auto conflictRootId : affectedCUsA_->keys())
+	for (auto conflictRootId : affectedCUsA_.keys())
 	{
 		// ...that are modified by both branches...
-		if (affectedCUsB_->keys().contains(conflictRootId))
+		if (affectedCUsB_.keys().contains(conflictRootId))
 		{
 			// ...we take every change from A...
-			IdToChangeMultiHash::iterator changeItA = affectedCUsA_->find(conflictRootId);
-			while (changeItA != affectedCUsA_->end() && changeItA.key() == conflictRootId)
+			IdToChangeMultiHash::iterator changeItA = affectedCUsA_.find(conflictRootId);
+			while (changeItA != affectedCUsA_.end() && changeItA.key() == conflictRootId)
 			{
 				// ...mark it as conflicting...
 				conflictingChanges.insert(changeItA.value());
 				// ...and take every change from B...
-				IdToChangeMultiHash::iterator changeItB = affectedCUsB_->find(conflictRootId);
-				while (changeItB != affectedCUsB_->end() && changeItB.key() == conflictRootId)
+				IdToChangeMultiHash::iterator changeItB = affectedCUsB_.find(conflictRootId);
+				while (changeItB != affectedCUsB_.end() && changeItB.key() == conflictRootId)
 				{
 					// ...mark it conflictinging and record the conflict pair.
 					conflictingChanges.insert(changeItB.value());
@@ -71,10 +68,10 @@ void ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
 	}
 }
 
-IdToChangeMultiHash* ConflictUnitDetector::computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
+IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
 																				 ChangeDependencyGraph cdg)
 {
-	IdToChangeMultiHash* affectedCUs = new IdToChangeMultiHash;
+	IdToChangeMultiHash affectedCUs;
 	for (auto change : cdg.changes()) {
 		Model::NodeIdType conflictRootA;
 		Model::NodeIdType conflictRootB;
@@ -82,17 +79,17 @@ IdToChangeMultiHash* ConflictUnitDetector::computeAffectedCUs(const std::unique_
 			case ChangeType::Stationary:
 			case ChangeType::Deletion:
 				conflictRootA = findConflictUnit(treeBase, change->nodeA());
-				affectedCUs->insert(conflictRootA, change);
+				affectedCUs.insert(conflictRootA, change);
 				break;
 			case ChangeType::Insertion:
 				conflictRootB = findConflictUnit(treeBase, change->nodeB());
-				affectedCUs->insert(conflictRootB, change);
+				affectedCUs.insert(conflictRootB, change);
 				break;
 			case ChangeType::Move:
 				conflictRootA = findConflictUnit(treeBase, change->nodeA());
 				conflictRootB = findConflictUnit(treeBase, change->nodeB());
-				affectedCUs->insert(conflictRootA, change);
-				affectedCUs->insert(conflictRootB, change);
+				affectedCUs.insert(conflictRootA, change);
+				affectedCUs.insert(conflictRootB, change);
 				break;
 			default:
 				Q_ASSERT(false);

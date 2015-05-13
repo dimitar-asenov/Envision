@@ -37,20 +37,23 @@ class ListMergeComponent : public ConflictPipelineComponent
 		~ListMergeComponent();
 		void run(const std::unique_ptr<GenericTree>&,
 					const std::unique_ptr<GenericTree>&,
-					const std::unique_ptr<GenericTree>&, ChangeDependencyGraph&cdgA, ChangeDependencyGraph&cdgB,
+					const std::unique_ptr<GenericTree>&, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 					QSet<ChangeDescription*>& conflictingChanges,
 					ConflictPairs& conflictPairs);
 	private:
 
 		struct Position
 		{
-				bool valid_;
+				bool valid_{};
 				Model::NodeIdType predecessor_;
 
 				Position(bool valid, Model::NodeIdType predecessor);
 				bool operator ==(const Position &other) const;
 				bool operator !=(const Position &other) const;
 		};
+
+		void computeListsToMerge(QSet<ChangeDescription*>& conflictingChanges,
+										 ConflictPairs& conflictPairs);
 
 		Position findPosition(Model::NodeIdType element, QList<Model::NodeIdType> from, QList<Model::NodeIdType> into);
 		bool onlyChildStructure(ChangeDescription* change);
@@ -61,7 +64,7 @@ class ListMergeComponent : public ConflictPipelineComponent
 
 		struct Chunk
 		{
-				bool stable_;
+				bool stable_{};
 				QList<Model::NodeIdType> spanA_;
 				QList<Model::NodeIdType> spanB_;
 				QList<Model::NodeIdType> spanBase_;

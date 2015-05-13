@@ -38,8 +38,8 @@ bool Merge::abort()
 	{
 		QString branch = repository_->currentBranch();
 
-		repository_->checkout(treeACommitId_, true);
-		repository_->setReferenceTarget(branch, treeACommitId_);
+		repository_->checkout(headCommitId, true);
+		repository_->setReferenceTarget(branch, headCommitId);
 
 		stage_ = Stage::NoMerge;
 		return true;
@@ -55,8 +55,8 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 		QString treeSHA1 = repository_->writeIndexToTree();
 
 		QStringList parents;
-		parents.append(treeACommitId_);
-		parents.append(treeBCommitId_);
+		parents.append(headCommitId);
+		parents.append(revisionCommitId_);
 
 		repository_->newCommit(treeSHA1, message, author, committer, parents);
 
@@ -73,31 +73,22 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: fastForward_{fastForward}, repository_{repository}
 {
-	treeACommitId_ = repository_->getSHA1("HEAD");
-	treeBCommitId_ = repository_->getSHA1(revision);
-	treeBaseCommitId_ = repository_->findMergeBase("HEAD", revision);
+	headCommitId = repository_->getSHA1("HEAD");
+	revisionCommitId_ = repository_->getSHA1(revision);
+	baseCommitId_ = repository_->findMergeBase("HEAD", revision);
 
-	if (treeBaseCommitId_.isNull())
+	if (baseCommitId_.isNull())
 		error_ = Error::NoMergeBase;
 
 	stage_ = Stage::Initialized;
 
-	if (treeBaseCommitId_.compare(treeBCommitId_) == 0)
+	if (baseCommitId_.compare(revisionCommitId_) == 0)
 	{
 		kind_ = Kind::AlreadyUpToDate;
-		stage_ = Merge::Stage::Complete;
 	}
-	else if (treeBaseCommitId_.compare(treeACommitId_) == 0)
+	else if (baseCommitId_.compare(headCommitId) == 0)
 	{
 		kind_ = Kind::FastForward;
-		if (fastForward_)
-			performFastForward();
-		else
-		{
-			repository_->checkout(treeBCommitId_, true);
-			repository_->writeRevisionIntoIndex(treeBCommitId_);
-			stage_ = Stage::ReadyToCommit;
-		}
 	}
 	else
 		kind_ = Kind::TrueMerge;
@@ -114,14 +105,14 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 			if (fastForward_)
 			{
 				QString branch = repository_->currentBranch();
-				repository_->setReferenceTarget(branch, treeBCommitId_);
-				repository_->checkout(treeBCommitId_, true);
+				repository_->setReferenceTarget(branch, revisionCommitId_);
+				repository_->checkout(revisionCommitId_, true);
 				stage_ = Stage::Complete;
 			}
 			else
 			{
-				repository_->checkout(treeBCommitId_, true);
-				repository_->writeRevisionIntoIndex(treeBCommitId_);
+				repository_->checkout(revisionCommitId_, true);
+				repository_->writeRevisionIntoIndex(revisionCommitId_);
 				stage_ = Stage::ReadyToCommit;
 			}
 			break;
@@ -137,22 +128,22 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 
 void Merge::performTrueMerge()
 {
-		Diff diffA = repository_->diff(treeBaseCommitId_, treeACommitId_);
-		Diff diffB = repository_->diff(treeBaseCommitId_, treeBCommitId_);
+		Diff diffA = repository_->diff(baseCommitId_, headCommitId);
+		Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_);
 
 		ChangeDependencyGraph cdgA = ChangeDependencyGraph(diffA);
 		ChangeDependencyGraph cdgB = ChangeDependencyGraph(diffB);
 		conflictingChanges_ = {};
 		conflictPairs_ = {};
 
-		treeA_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", treeACommitId_));
-		repository_->loadGenericTree(treeA_, treeACommitId_);
+		treeA_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", headCommitId));
+		repository_->loadGenericTree(treeA_, headCommitId);
 
-		treeB_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", treeBCommitId_));
-		repository_->loadGenericTree(treeB_, treeBCommitId_);
+		treeB_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", revisionCommitId_));
+		repository_->loadGenericTree(treeB_, revisionCommitId_);
 
-		treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", treeBaseCommitId_));
-		repository_->loadGenericTree(treeBase_, treeBaseCommitId_);
+		treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", baseCommitId_));
+		repository_->loadGenericTree(treeBase_, baseCommitId_);
 
 		for (auto component : conflictPipeline_)
 		{

@@ -29,15 +29,14 @@
 
 namespace FilePersistence {
 
-ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff)
+ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff) : changes_{diff.changes()}
 {
-	changes_ = IdToChangeDescriptionHash(diff.changes());
-	for (auto change : diff.changes().values())
+	for (auto change : changes_.values())
 	{
 		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
 		{
-			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeB()->parentId());
-			while (it != diff.changes().end() && it.key() == change->nodeB()->parentId())
+			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = changes_.find(change->nodeB()->parentId());
+			while (it != changes_.end() && it.key() == change->nodeB()->parentId())
 			{
 				if (it.value()->type() == ChangeType::Insertion) map_.insert(change, it.value());
 				it++;
@@ -45,8 +44,8 @@ ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff)
 		}
 		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
 		{
-			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = diff.changes().find(change->nodeA()->parentId());
-			while (it != diff.changes().end() && it.key() == change->nodeA()->parentId())
+			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = changes_.find(change->nodeA()->parentId());
+			while (it != changes_.end() && it.key() == change->nodeA()->parentId())
 			{
 				if (it.value()->type() == ChangeType::Deletion) map_.insert(it.value(), change);
 				it++;

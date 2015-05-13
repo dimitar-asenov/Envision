@@ -66,7 +66,6 @@ class FILEPERSISTENCE_API Merge
 
 		void performTrueMerge();
 
-		void performFastForward();
 		static QList<Model::NodeIdType> genericNodeListToNodeIdList(const QList<GenericNode*>& list);
 
 		enum class ListType {NoList, OrderedList, UnorderedList};
@@ -85,16 +84,16 @@ class FILEPERSISTENCE_API Merge
 		bool fastForward_{};
 
 		// Revisions
-		QString treeACommitId_;
-		QString treeBCommitId_;
-		QString treeBaseCommitId_;
+		QString headCommitId;
+		QString revisionCommitId_;
+		QString baseCommitId_;
 
 		GitRepository* repository_{};
 
 		/**
 		 * Components are executed in the order they appear in this list.
 		 */
-		QList<ConflictPipelineComponent*> conflictPipeline_;
+		QList<std::shared_ptr<ConflictPipelineComponent>> conflictPipeline_;
 
 		/**
 		 * changes in this set cannot be applied safely.

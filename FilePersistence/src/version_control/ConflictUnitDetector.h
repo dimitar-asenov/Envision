@@ -44,14 +44,14 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 					QSet<ChangeDescription*>& conflictingChanges,
 					ConflictPairs& conflictPairs);
 	private:
-		IdToChangeMultiHash* computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
+		IdToChangeMultiHash computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
 															ChangeDependencyGraph cdg);
 		Model::NodeIdType findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
 													  const GenericNode* node);
 
 		QSet<QString> conflictTypes_;
-		IdToChangeMultiHash* affectedCUsA_;
-		IdToChangeMultiHash* affectedCUsB_;
+		IdToChangeMultiHash affectedCUsA_;
+		IdToChangeMultiHash affectedCUsB_;
 };
 
 } /* namespace FilePersistence */

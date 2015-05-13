@@ -28,12 +28,9 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB)
+ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) : nodeA_{nodeA}, nodeB_{nodeB}
 {
-	Q_ASSERT(nodeA != nullptr || nodeB != nullptr);
-
-	nodeA_ = nodeA;
-	nodeB_ = nodeB;
+	Q_ASSERT(nodeA_ != nullptr || nodeB_ != nullptr);
 
 	if (nodeA_)
 	{
@@ -58,11 +55,7 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB)
 	detectValueChange();
 }
 
-ChangeDescription::ChangeDescription(Model::NodeIdType id, ChangeType type)
-{
-	id_ = id;
-	type_ = type;
-}
+ChangeDescription::ChangeDescription(Model::NodeIdType id, ChangeType type) : id_{id}, type_{type} {}
 
 void ChangeDescription::detectLabelChange()
 {

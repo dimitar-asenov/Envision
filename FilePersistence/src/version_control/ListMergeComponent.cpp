@@ -29,11 +29,8 @@
 
 namespace FilePersistence {
 
-ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes)
-{
-	conflictTypes_ = QSet<QString>(conflictTypes);
-	listTypes_ = QSet<QString>(listTypes);
-}
+ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes) :
+	conflictTypes_{conflictTypes}, listTypes_{listTypes} {}
 
 ListMergeComponent::~ListMergeComponent() {}
 
@@ -45,46 +42,14 @@ void ListMergeComponent::run(const std::unique_ptr<GenericTree>&,
 								QSet<ChangeDescription*>& conflictingChanges,
 								ConflictPairs& conflictPairs)
 {
-	// Compute lists  to merge
-	for (auto change : conflictingChanges)
-	{
-		if (onlyChildStructure(change) && listTypes_.contains(change->nodeA()->type()))
-		{
-			// node of list type and one branch only changes child structure
-			ConflictPairs::iterator other = conflictPairs.find(change);
-			while (other != conflictPairs.end() &&	other.key() == change &&
-					 other.value()->id() != change->id()) other++;
-			if (other != conflictPairs.end() && onlyChildStructure(other.value()))
-			{
-				// other branch only changes child structure
-				bool allElementsConflictRoots = true;
-				for (auto element : change->nodeA()->children()) {
-					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
-						break;
-				}
-				for (auto element : change->nodeB()->children()) {
-					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
-						break;
-				}
-				for (auto element : other.value()->nodeB()->children()) {
-					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
-						break;
-				}
-				if (allElementsConflictRoots)
-				{
-					// all elements are conflict roots
-					listsToMerge_.insert(change->nodeA());
-				}
-			}
-		}
-	}
+	computeListsToMerge(conflictingChanges, conflictPairs);
 
 	for (auto node : listsToMerge_)
 	{
-		QList<Model::NodeIdType> idListA = nodeListToIdList(cdgA.changes().find(node->id()).value()->nodeB()->children());
-		QList<Model::NodeIdType> idListB = nodeListToIdList(cdgB.changes().find(node->id()).value()->nodeB()->children());
-		QList<Model::NodeIdType> idListBase = nodeListToIdList(node->children());
-		QList<Chunk> chunks = computeMergeChunks(idListA, idListB, idListBase, node->id());
+		auto idListA = nodeListToIdList(cdgA.changes().find(node->id()).value()->nodeB()->children());
+		auto idListB = nodeListToIdList(cdgB.changes().find(node->id()).value()->nodeB()->children());
+		auto idListBase = nodeListToIdList(node->children());
+		auto chunks = computeMergeChunks(idListA, idListB, idListBase, node->id());
 		for (auto chunk : chunks)
 		{
 			if (chunk.stable_)
@@ -157,10 +122,46 @@ void ListMergeComponent::run(const std::unique_ptr<GenericTree>&,
 	}
 }
 
+void ListMergeComponent::computeListsToMerge(QSet<ChangeDescription*>& conflictingChanges, ConflictPairs& conflictPairs)
+{
+	for (auto change : conflictingChanges)
+	{
+		if (onlyChildStructure(change) && listTypes_.contains(change->nodeA()->type()))
+		{
+			// node of list type and one branch only changes child structure
+			auto conflictingChangeIt = conflictPairs.find(change);
+			while (conflictingChangeIt != conflictPairs.end() &&	conflictingChangeIt.key() == change &&
+					 conflictingChangeIt.value()->id() != change->id()) conflictingChangeIt++;
+			if (conflictingChangeIt != conflictPairs.end() && onlyChildStructure(conflictingChangeIt.value()))
+			{
+				// other branch only changes child structure
+				bool allElementsConflictRoots = true;
+				for (auto element : change->nodeA()->children()) {
+					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
+						break;
+				}
+				for (auto element : change->nodeB()->children()) {
+					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
+						break;
+				}
+				for (auto element : conflictingChangeIt.value()->nodeB()->children()) {
+					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
+						break;
+				}
+				if (allElementsConflictRoots)
+				{
+					// all elements are conflict roots
+					listsToMerge_.insert(change->nodeA());
+				}
+			}
+		}
+	}
+}
+
 /**
  * Tries to find a unique position for \a elem in \a into that is similar to the position of \a elem in \a from.
- * Returns a Position \a pos where \a pos.valid = true iff such a position could be found and pos.predecessor is the
- * element after which \a elem should be inserted or 0 if elem should be inserted at the beginning.
+ * Returns a Position \a pos where \a pos.valid = true if and only if such a position could be found and pos.predecessor
+ * is the element after which \a elem should be inserted or 0 if elem should be inserted at the beginning.
  * Such a position can be found if the nearest predecessor and successor of \elem in \a from that are common in \a into
  * are next to each other and in order in \a into.
  */
