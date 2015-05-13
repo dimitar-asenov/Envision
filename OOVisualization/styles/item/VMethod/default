@@ -195,11 +195,7 @@
 		</selectedTip>
 	</memberInitializers>
 	
-	<throwsIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/try.svg</filename>
-		<width>20</width>
-		<height>20</height>
-	</throwsIcon>
+	<throwsIcon prototypes="item/Symbol/keyword"><symbol>throws</symbol></throwsIcon>
 	<throws prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
