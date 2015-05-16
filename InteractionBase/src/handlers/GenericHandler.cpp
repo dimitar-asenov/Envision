@@ -52,10 +52,6 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
-#include "commands/CTest.h"
-#include "commands/ChangeViewCommand.h"
-#include "commands/RemoveItemCommand.h"
-
 namespace Interaction {
 
 void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>)
@@ -120,9 +116,6 @@ GenericHandlerManagerListener& GenericHandler::managerListener()
 
 GenericHandler::GenericHandler()
 {
-    supportedCommands.append(new CTest());
-    supportedCommands.append(new ChangeViewCommand());
-    supportedCommands.append(new RemoveItemCommand());
 }
 
 GenericHandler* GenericHandler::instance()
