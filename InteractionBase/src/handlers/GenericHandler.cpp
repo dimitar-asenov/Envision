@@ -32,6 +32,7 @@
 #include "vis/CommandPrompt.h"
 #include "actions/Action.h"
 #include "actions/ActionPrompt.h"
+#include "commands/Command.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
@@ -153,13 +154,52 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 {
 	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 	{
-		commandPrompt_->showPrompt(initialCommandText);
+        commandPrompt_->showPrompt(initialCommandText);
+        this->showCommandMenu(commandReceiver);
 	}
 	else
 	{
-		removeCommandPrompt();
-		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
+        removeCommandPrompt();
+        commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
+        this->showCommandMenu(commandReceiver);
 	}
+}
+
+void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
+{
+    QList<AutoCompleteEntry*> entries;
+    for (auto* command : commands())
+    {
+        if (command->canBeUsedInMenu())
+        {
+            //We find the first parent where it can be interpreted
+            auto target = commandReceiver;
+            while (target && !command->canInterpret(commandReceiver, target, QStringList(command->name()),
+                                                    commandPrompt_->commandReceiverCursor()))
+                target = target->parent();
+            //If we have a target != null, then we can interpret the command on it
+            //We then create the command with its default arguments essentially when it is selected
+            if (target)
+                entries.append(new AutoCompleteEntry(command->name(),
+                                                     command->suggest(commandReceiver, target, command->name(),
+                                                                      commandPrompt_->commandReceiverCursor())
+                                                     .first()->description(),
+                                                     nullptr,
+                                                     [commandReceiver, this, command](AutoCompleteEntry*)
+                                                     { this->command(commandReceiver,
+                                                                     command->name(),
+                                                                     commandPrompt_->commandReceiverCursor());
+                                                       AutoComplete::hide();
+                                                       commandPrompt_->hidePrompt(); }));
+        }
+    }
+
+    //We only show the menu if we have at least one menu item
+    if (entries.size() > 0)
+    {
+        AutoComplete::hide();
+        AutoComplete::show(entries, true);
+    }
 }
 
 void GenericHandler::toggleComment(Visualization::Item *itemWithComment, Model::Node *aNode, bool hideOnly)
