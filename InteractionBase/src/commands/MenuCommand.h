@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,11 +23,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-
-#pragma once
-
-#include "../interactionbase_api.h"
-
+#include "Command.h"
 #include "CommandResult.h"
 #include "CommandSuggestion.h"
 #include "CommandHelp.h"
@@ -36,33 +32,42 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API Command
+class INTERACTIONBASE_API MenuCommand : public Command
 {
-	public:
-        Command(bool canBeUsedInMenu = false, QString name = "");
-		virtual ~Command();
+    public:
+        MenuCommand(QString name, const QStringList &defaultArguments);
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) = 0;
+        virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+                const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) = 0;
-		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target,
-				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& commandForm = QString());
-        bool canBeUsedInMenu() const;
-        const QString name() const;
+        virtual CommandResult* execute(Visualization::Item *source, Visualization::Item *target,
+                const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+        virtual QList<CommandSuggestion*> suggest(Visualization::Item *source, Visualization::Item *target,
+                const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+        virtual QStringList commandForms(Visualization::Item *source, Visualization::Item *target,
+                const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+   protected:
+        virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+                const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+
+        virtual QString description(Visualization::Item *source, Visualization::Item *target,
+                const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+
+        virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
+                const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+
+        QStringList *defaultArguments();
+
+        QStringList getParameters(const QStringList &commandTokens, bool removeFirst);
 
     private:
-        bool canBeUsedInMenu_;
-        QString name_;
+        QStringList defaultArguments_;
 
 };
 
-inline bool Command::canBeUsedInMenu() const { return canBeUsedInMenu_; }
-inline const QString Command::name() const { return name_; }
+inline QStringList *MenuCommand::defaultArguments() { return &defaultArguments_; }
 
 }
