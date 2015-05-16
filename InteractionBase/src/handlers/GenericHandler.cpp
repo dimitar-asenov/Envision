@@ -52,6 +52,10 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
+#include "commands/CTest.h"
+#include "commands/ChangeViewCommand.h"
+#include "commands/RemoveItemCommand.h"
+
 namespace Interaction {
 
 void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>)
@@ -116,6 +120,9 @@ GenericHandlerManagerListener& GenericHandler::managerListener()
 
 GenericHandler::GenericHandler()
 {
+    supportedCommands.append(new CTest());
+    supportedCommands.append(new ChangeViewCommand());
+    supportedCommands.append(new RemoveItemCommand());
 }
 
 GenericHandler* GenericHandler::instance()
@@ -180,7 +187,21 @@ void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
             //If we have a target != null, then we can interpret the command on it
             //We then create the command with its default arguments essentially when it is selected
             if (target)
-                entries.append(new AutoCompleteEntry(command->name(),
+            {
+                auto suggestions = command->suggest(commandReceiver, target, command->name(),
+                                                    commandPrompt_->commandReceiverCursor());
+                for (auto* suggestion : suggestions)
+                    entries.append(new AutoCompleteEntry(suggestion->text(),
+                                                         suggestion->description(),
+                                                         nullptr,
+                                                         [commandReceiver, this, suggestion](AutoCompleteEntry*)
+                                                         { this->command(commandReceiver,
+                                                                         suggestion->text(),
+                                                                         commandPrompt_->commandReceiverCursor());
+                                                           AutoComplete::hide();
+                                                           commandPrompt_->hidePrompt(); }));
+            }
+                /*entries.append(new AutoCompleteEntry(command->name(),
                                                      command->suggest(commandReceiver, target, command->name(),
                                                                       commandPrompt_->commandReceiverCursor())
                                                      .first()->description(),
@@ -190,7 +211,7 @@ void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
                                                                      command->name(),
                                                                      commandPrompt_->commandReceiverCursor());
                                                        AutoComplete::hide();
-                                                       commandPrompt_->hidePrompt(); }));
+                                                       commandPrompt_->hidePrompt(); }));*/
         }
     }
 
