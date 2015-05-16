@@ -194,17 +194,6 @@ void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
                                                            AutoComplete::hide();
                                                            commandPrompt_->hidePrompt(); }));
             }
-                /*entries.append(new AutoCompleteEntry(command->name(),
-                                                     command->suggest(commandReceiver, target, command->name(),
-                                                                      commandPrompt_->commandReceiverCursor())
-                                                     .first()->description(),
-                                                     nullptr,
-                                                     [commandReceiver, this, command](AutoCompleteEntry*)
-                                                     { this->command(commandReceiver,
-                                                                     command->name(),
-                                                                     commandPrompt_->commandReceiverCursor());
-                                                       AutoComplete::hide();
-                                                       commandPrompt_->hidePrompt(); }));*/
         }
     }
 
