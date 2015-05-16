@@ -28,6 +28,14 @@
 
 namespace OODebug {
 
+SignatureCommand::SignatureCommand(qint64 referenceId)
+	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::Signature)
+{
+	refType = referenceId;
+}
+
+SignatureCommand::~SignatureCommand() {}
+Signature::~Signature() {}
 JVMMethod::~JVMMethod() {}
 
 MethodsCommand::MethodsCommand(qint64 classId)
@@ -37,8 +45,15 @@ MethodsCommand::MethodsCommand(qint64 classId)
 }
 
 MethodsCommand::~MethodsCommand() {}
+Methods::~Methods() {}
 
-MethodsReply::~MethodsReply() {}
+SourceFileCommand::SourceFileCommand(qint64 referenceId)
+	: Command(Protocol::CommandSet::ReferenceType, Protocol::ReferenceTypeCommands::SourceFile)
+{
+	refType = referenceId;
+}
 
+SourceFileCommand::~SourceFileCommand() {}
+SourceFile::~SourceFile() {}
 
 } /* namespace OODebug */

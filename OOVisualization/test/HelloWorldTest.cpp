@@ -739,6 +739,29 @@ Method* addLongMethod(Class* parent)
 	elseBranch->setOp(UnaryOperation::POSTDECREMENT);
 	elseBranch->setOperand(new ReferenceExpression("var14"));
 
+	ifs = new IfStatement();
+	longMethod->items()->append(ifs);
+	ifCond = new BinaryOperation();
+	ifs->setCondition(ifCond);
+	ifCond->setLeft(new ReferenceExpression("var14"));
+	ifCond->setOp(BinaryOperation::NOT_EQUALS);
+	ifCond->setRight(new IntegerLiteral(10));
+	thenBranch = new UnaryOperation();
+	ifs->thenBranch()->append(new ExpressionStatement(thenBranch));
+	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
+	thenBranch->setOperand(new ReferenceExpression("var14"));
+	IfStatement* ifs2 = new IfStatement();
+	ifs->elseBranch()->append(ifs2);
+	ifCond = new BinaryOperation();
+	ifs2->setCondition(ifCond);
+	ifCond->setLeft(new ReferenceExpression("var14"));
+	ifCond->setOp(BinaryOperation::NOT_EQUALS);
+	ifCond->setRight(new IntegerLiteral(10));
+	thenBranch = new UnaryOperation();
+	ifs2->thenBranch()->append(new ExpressionStatement(thenBranch));
+	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
+	thenBranch->setOperand(new ReferenceExpression("var14"));
+
 	auto swi = new SwitchStatement();
 	swi->setSwitchExpression(new ReferenceExpression("someVar"));
 	longMethod->items()->append(swi);

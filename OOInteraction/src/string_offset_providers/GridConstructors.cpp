@@ -47,8 +47,8 @@ void GridConstructors::initializeAll()
 
 	GridBasedOffsetProvider::addGridConstructor<VCastExpression>(
 	[](GridBasedOffsetProvider* grid, VCastExpression* vis){
-		grid->add(new Cell(0, 0, vis->layout()->at<Visualization::Item>(0), 3));
-		grid->add(new Cell(0, 1, vis->layout()->at<Visualization::Item>(1), 1));
+		grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 1));
+		grid->add(new Cell(1, vis->layout()->at<Visualization::Item>(1), 3));
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VClassType>(

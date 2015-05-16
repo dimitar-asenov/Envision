@@ -26,28 +26,26 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
 
-namespace Visualization {
-	class MessageOverlay;
-}
+#include "InteractionBase/src/handlers/GenericHandler.h"
 
 namespace OODebug {
 
-/**
- * Represents information to set & clear a breakpoint.
- */
-struct OODEBUG_API Breakpoint {
-		Breakpoint() = default;
-		Breakpoint(Visualization::MessageOverlay* overlay);
+class ConsoleOverlay;
 
-		// Will be set when the break point request is sent, and is used to clear the breakpoint.
-		qint32 requestId_{NOT_SET};
-		Visualization::MessageOverlay* overlay_{};
+class OODEBUG_API HMoveableOverlay : public Interaction::GenericHandler
+{
+	public:
+		static HMoveableOverlay* instance();
 
-		static constexpr qint32 NOT_SET{-1};
+		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+
+	private:
+		QPointF itemPosition_;
+
+		void move(Visualization::Item* overlay, const QPointF& to);
 };
-
-inline Breakpoint::Breakpoint(Visualization::MessageOverlay* overlay) : overlay_{overlay} {}
 
 } /* namespace OODebug */

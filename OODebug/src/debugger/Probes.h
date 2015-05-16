@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,18 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "Location.h"
+#pragma once
+
+#include "../oodebug_api.h"
 
 namespace OODebug {
 
-Location::Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex)
-{
-	this->typeTag = typeTag;
-	this->classId = classId;
-	this->methodId = methodId;
-	this->methodIndex = methodIndex;
-}
+class OODEBUG_API Probes {
+	public:
+		using ValueCalculator = std::function<double(QList<double>)>;
+		using ValueOperator = std::function<double(double, double)>;
 
-Location::~Location() {}
+		static QPair<QList<ValueCalculator>, QStringList> parseProbeArguments(QStringList arguments);
+
+	private:
+		static ValueOperator operatorFromString(QString operatorString);
+};
 
 } /* namespace OODebug */

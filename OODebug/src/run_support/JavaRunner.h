@@ -26,35 +26,43 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
+
+namespace Interaction {
+	class CommandResult;
+}
 
 namespace Model {
 	class TreeManager;
 	class Node;
 }
 
-namespace Visualization {
-	class Item;
-}
-
-namespace Export {
-	class SourceFile;
-	class TextToNodeMap;
+namespace OOModel {
+	class Method;
 }
 
 namespace OODebug {
 
-class CompilerMessage;
+class RunProcess;
 
-class OODEBUG_API JavaCompiler
+class OODEBUG_API JavaRunner
 {
 	public:
-		static void compileTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-										bool includeDebugSymbols = false);
+		/**
+		 * Finds a main method in the tree and runs the Programm from this main method.
+		 * Returns a CommandResult which contains an error if there was one.
+		 */
+		static Interaction::CommandResult* runTree(Model::TreeManager* manager,
+																 const QString& pathToProjectContainerDirectory,
+																 bool debug = false);
 
 	private:
-		static void visualizeMessage(Visualization::Item* item, Model::Node* node,
-											  const QString& message, const QString& type = "default");
+		static void handleOutput();
+		static void handleErrorOutput();
+
+		static void addConsole(Model::Node* node);
+
+		static RunProcess& runProcess();
 };
 
 } /* namespace OODebug */

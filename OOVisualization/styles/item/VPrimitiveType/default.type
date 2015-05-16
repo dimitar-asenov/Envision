@@ -1,11 +1,2 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Symbol/keyword">
-	<pen>
-		<color>
-			<alpha>255</alpha>
-			<red>127</red>
-			<green>0</green>
-			<blue>85</blue>
-		</color>
-	</pen>
-</style>
+<style prototypes="item/Symbol/keyword"/>

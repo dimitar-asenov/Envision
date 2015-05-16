@@ -31,6 +31,7 @@
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/LineStyle.h"
 
 namespace OOVisualization {
 
@@ -41,6 +42,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::Declar
 
 		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
 		Property<Visualization::StaticStyle> icon{this, "icon"};
+		Property<Visualization::StaticStyle> elificon{this, "elificon"};
 		Property<Visualization::SequentialLayoutStyle> condition{this, "condition"};
 
 		Property<Visualization::SequentialLayoutStyle> contentVertical{this, "contentVertical"};
@@ -50,6 +52,9 @@ class OOVISUALIZATION_API VIfStatementStyle : public Super<Visualization::Declar
 		Property<Visualization::VListStyle> thenBranch{this, "thenBranch"};
 		Property<Visualization::VListStyle> elseBranch{this, "elseBranch"};
 		Property<Visualization::VListStyle> elseIfBranch{this, "elseIfBranch"};
+
+		Property<Visualization::LineStyle> elseHorizontalLine{this, "elseHorizontalLine"};
+		Property<Visualization::LineStyle> elseVerticalLine{this, "elseVerticalLine"};
 };
 
 } /* namespace OOVisualization */

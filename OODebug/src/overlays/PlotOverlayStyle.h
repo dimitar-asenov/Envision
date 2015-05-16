@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,27 +28,22 @@
 
 #include "../oodebug_api.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
 
 namespace OODebug {
 
-class ConsoleOverlay;
-
-class OODEBUG_API HConsoleOverlay : public Interaction::GenericHandler
+class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
 {
 	public:
-		static HConsoleOverlay* instance();
+		virtual ~PlotOverlayStyle() override;
 
-		virtual void mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent *event) override;
-		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
-
-	protected:
-		HConsoleOverlay();
-
-	private:
-		QPointF consolePosition_;
-
-		void move(ConsoleOverlay* console, const QPointF& to);
+		Property<int> width{this, "width"};
+		Property<int> height{this, "height"};
+		Property<double> scatterDotRadius{this, "scatterDotRadius"};
+		Property<QPen> pen{this, "pen"};
+		Property<QFont> font{this, "font"};
+		Property<int> ticSize{this, "ticSize"};
+		Property<int> margin{this, "margin"};
 };
 
 } /* namespace OODebug */

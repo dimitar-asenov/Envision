@@ -110,8 +110,15 @@ void VMethod::initializeForms()
 			->setVerticalSpacing(3)->setColumnStretchFactors(1)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 			->put(0, 0, addonsElement)
-			->put(0, 1, annotationsElement)
-			->put(0, 2, throwsElement)
+			->put(0, 1, (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)->setHorizontalSpacing(3)
+					->put(0, 0, item<Static>(&I::annotationsIcon_,
+							 [](I* v){return &v->style()->annotationsIcon();})->setEnabled(
+									 [](I* v){return v->node()->annotations()->size() > 0;}))
+					->put(1, 0, annotationsElement)
+					->put(0, 1, item<Static>(&I::throwsIcon_,
+							[](I* v){return &v->style()->throwsIcon();})->setEnabled(
+									 [](I* v){return v->node()->throws()->size() > 0;}))
+					->put(1, 1, throwsElement))
 			->put(0, 3, comment)
 			->put(0, 4, signatureLineElement)
 			->put(0, 5, memberInitializersElement)

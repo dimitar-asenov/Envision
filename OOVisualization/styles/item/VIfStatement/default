@@ -33,6 +33,12 @@
 		<height>22</height>
 	</icon>
 	
+	<elificon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/elif.svg</filename>
+		<width>22</width>
+		<height>22</height>
+	</elificon>
+	
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -104,4 +110,30 @@
 	</elseBranch>
 	
 	<elseIfBranch prototypes="item/VStatementItemList/default" />
+	
+	<elseHorizontalLine prototypes="item/Line/default">
+		<pen>
+			<style>2</style>
+			<color>
+				<alpha>255</alpha>
+				<red>128</red>
+				<green>128</green>
+				<blue>128</blue>
+			</color>
+		</pen>
+	</elseHorizontalLine>
+	
+	<elseVerticalLine prototypes="item/Line/default">
+		<width>1</width>
+		<height>0</height>
+		<pen>
+			<style>2</style>
+			<color>
+				<alpha>255</alpha>
+				<red>128</red>
+				<green>128</green>
+				<blue>128</blue>
+			</color>
+		</pen>
+	</elseVerticalLine>
 </style>

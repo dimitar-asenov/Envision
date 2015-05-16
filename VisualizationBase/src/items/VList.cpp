@@ -36,6 +36,23 @@ ITEM_COMMON_DEFINITIONS(VList, "item")
 VList::VList(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {}
 
+int VList::indexOfChildOrSubChild(const Item* item) const
+{
+	if (!item) return -1;
+	auto currentItem = item;
+	auto parent = item->parent();
+	while (parent)
+	{
+		if (parent == this) break;
+		currentItem = parent;
+		parent = parent->parent();
+	}
+	if (!parent) return -1;
+	for (int i = 0; i < length(); ++i)
+		if (currentItem == itemAt<Item>(i)) return i;
+	return -1;
+}
+
 void VList::determineRange()
 {
 	setRange(0, node()->size());
@@ -96,7 +113,12 @@ int VList::determineForm()
 {
 	determineRange();
 
-	if (itemOrChildHasFocus() && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty()) return 2;
+	bool showTip = itemOrChildHasFocus() && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty();
+	if (!showTip && node()->isEmpty() && !style()->drawShapeWhenEmpty() ) removeShape();
+	else useShape();
+
+
+	if (showTip) return 2;
 
 	if (style()->itemsStyle().isHorizontal()) return 0;
 	else return 1;

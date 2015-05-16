@@ -43,7 +43,8 @@ class OOINTERACTION_API CDumpMethodRenderings : public Interaction::CommandWithN
 				const QString& name, const QStringList& attributes) override;
 
 	private:
-		static void printPath(Visualization::Item* item, QStringList path, int itemNumber, int& numPrinted);
+		static void printPath(Visualization::Item* item, QStringList path, int itemNumber, int& numPrinted,
+									 QStringList argumentNames);
 		static void printItem(Visualization::Item* item, int itemNumber, int& numPrinted);
 };
 

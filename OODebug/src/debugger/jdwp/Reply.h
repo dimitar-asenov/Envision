@@ -34,6 +34,9 @@
 
 namespace OODebug {
 
+/**
+ * A Reply Packet as in http://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.html
+ */
 class OODEBUG_API Reply : public MessagePart {
 	public:
 		virtual ~Reply() override;
@@ -44,10 +47,13 @@ class OODEBUG_API Reply : public MessagePart {
 		MessageField<Protocol::Error> error{&Reply::error, this};
 };
 
-template <class T>
-static T makeReply(QByteArray data)
+/**
+ * Reads from \a data into a message of type \a MessageType, where \a MessageType is a subtype of MessagePart.
+ */
+template <class MessageType>
+static MessageType makeReply(QByteArray data)
 {
-	T r;
+	MessageType r;
 	QDataStream stream(data);
 	stream >> r;
 	return r;

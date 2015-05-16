@@ -6,9 +6,9 @@
 	<pen>
 		<color>
 			<alpha>255</alpha>
-			<red>0</red>
+			<red>127</red>
 			<green>0</green>
-			<blue>255</blue>
+			<blue>85</blue>
 		</color>
 	</pen>
 </style>

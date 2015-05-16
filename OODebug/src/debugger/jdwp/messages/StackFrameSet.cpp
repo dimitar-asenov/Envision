@@ -45,8 +45,5 @@ GetValuesCommand::GetValuesCommand(qint64 threadId, qint64 frameId, QList<StackV
 }
 
 GetValuesCommand::~GetValuesCommand() {}
-Value::~Value() {}
-
-int Value::kind() const { return cast(type()); }
 
 } /* namespace OODebug */

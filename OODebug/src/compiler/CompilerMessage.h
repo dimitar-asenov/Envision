@@ -31,7 +31,8 @@
 namespace OODebug {
 
 /**
- * Represents a single message from the compiler. This may be an error, a warning, a note, or something other.
+ * Represents a single message from the compiler. This may be an \a Error, a \a Warning, a \a Note,
+ * or something \a Other.
  *
  * A note might have a \a rootMessage, which represents the error or warning this note is connected to.
  */

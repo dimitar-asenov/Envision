@@ -28,72 +28,103 @@
 
 #include "../oodebug_api.h"
 #include "jdwp/DebugConnector.h"
-#include "metadata/Breakpoint.h"
-#include "metadata/JavaMethod.h"
-
-namespace Export {
-	class TextToNodeMap;
-}
+#include "../overlays/PlotOverlay.h"
+#include "Probes.h"
+#include "DebugUtils.h"
 
 namespace Model {
 	class Node;
 	class TreeManager;
 }
 
-namespace OOModel {
-	class Class;
-	class Expression;
-	class Method;
-}
-
 namespace Visualization {
 	class Item;
-	class MessageOverlay;
+}
+
+namespace OOVisualization {
+	class VStatementItemList;
+}
+
+namespace Interaction {
+	class CommandResult;
 }
 
 namespace OODebug {
 
-class Location;
 class BreakpointEvent;
-class VariableDetails;
+class SingleStepEvent;
+struct VariableObserver;
+struct EnvisionVariable;
 
 class OODEBUG_API JavaDebugger
 {
 	public:
 		static JavaDebugger& instance();
-		void debugTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory);
-		bool addBreakpoint(Visualization::Item* target, QKeyEvent* event);
+		/**
+		 * Starts a debug session for the current project. Returns if everything was okay in a CommandResult.
+		 */
+		Interaction::CommandResult* debugTree(Model::TreeManager* manager,
+														  const QString& pathToProjectContainerDirectory);
+		bool toggleBreakpoint(Visualization::Item* target, QKeyEvent* event);
+		bool suspend(Visualization::Item* target, QKeyEvent* event);
 		bool resume(Visualization::Item* target, QKeyEvent* event);
+		bool trackVariable(Visualization::Item* target, QKeyEvent* event);
+		bool step(Visualization::Item* target, QKeyEvent* event);
+
+		Interaction::CommandResult* probe(OOVisualization::VStatementItemList* itemList,
+													 const QStringList& arguments, int itemIndex);
+
+		using ValueHandler = std::function<void(JavaDebugger*, Values, QList<Probes::ValueCalculator>, Model::Node*)>;
 
 	private:
 		JavaDebugger();
-		Visualization::MessageOverlay* addBreakpointOverlay(Visualization::Item* target);
-		QString jvmSignatureFor(OOModel::Class* theClass);
-		/**
-		 * Returns a String with all containing module names split by \a delimiter in front of the \a theClass name.
-		 */
-		QString fullNameFor(OOModel::Class* theClass, QChar delimiter);
 
-		/**
-		 * Tries to translate the \a node into a \a Location and stores the result in \a resolvedLocation.
-		 * If it succeeds true is returned and the \a resolvedLocation is set, otherwise false is returned.
-		 */
-		bool nodeToLocation(Model::Node* node, Location& resolvedLocation);
+		bool isParentClassLoaded(Model::Node* node);
+		void breaktAtParentClassLoad(Model::Node* node);
 
-		void handleClassPrepare(Event e);
+		void trySetBreakpoints();
+		void removeBreakpointAt(Model::Node* node);
+		void addBreakpointAt(Model::Node* node);
+
+		void resume();
+
+		void removeHighlightFromCurrentLine();
+
+		// Event handlers
+		void handleVMStart(Event);
+		void handleClassPrepare(Event);
 		void handleBreakpoint(BreakpointEvent breakpointEvent);
+		void handleSingleStep(SingleStepEvent singleStep);
 
-		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
-		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
+		// Probe helpers
+		QPair<PlotOverlay::PlotType, ValueHandler> defaultPlotTypeAndValueHandlerFor
+			(QList<EnvisionVariable> variableInfos);
+		void handleValues(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target);
+		void handleArray(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target);
+
+		// Overlay functions
+		void addBreakpointOverlay(Visualization::Item* target);
+		void toggleLineHighlight(Visualization::Item* item, bool highlight, bool closingBracket = false);
+		PlotOverlay* plotOverlayOfNode(Model::Node* node);
+		void removeObserverOverlaysAt(Model::Node* node, Visualization::Item* nodeVisualization);
 
 		DebugConnector debugConnector_;
+		DebugUtils utils_{&debugConnector_};
 
-		QHash<Visualization::Item*, Breakpoint> breakpoints_;
-		Visualization::Item* currentBreakpointKey_{};
+		// For each class we should only break at loading once, otherwise we get multiple events.
+		QSet<Model::Node*> breakOnLoadClasses_;
 
-		QHash<QPair<qint64, qint64>, JavaMethod> methodInfos_;
+		QList<Model::Node*> unsetBreakpoints_;
+		QHash<qint32, Model::Node*> setBreakpoints_;
+		Visualization::Item* currentLineItem_{};
+		qint64 currentThreadId_{};
 
-		std::shared_ptr<Export::TextToNodeMap> exportMap_;
+		QMultiHash<Model::Node*, std::shared_ptr<VariableObserver>> nodeObservedBy_;
+
+		static const QString BREAKPOINT_OVERLAY_GROUP;
+		static const QString PLOT_OVERLAY_GROUP;
+		static const QString CURRENT_LINE_OVERLAY_GROUP;
+		static const QString MONITOR_OVERLAY_GROUP;
 };
 
 } /* namespace OODebug */

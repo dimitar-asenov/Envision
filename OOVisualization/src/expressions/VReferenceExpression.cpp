@@ -83,8 +83,11 @@ void VReferenceExpression::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
 
-	name_->setStyle( (!style()->showUnresolved() || node()->ref()->isResolved())
-			? &style()->resolvedName() : &style()->unresolvedName() );
+	auto nameStyle = &style()->resolvedName();
+	if (name_->node()->name() == "this") nameStyle = &style()->thisIdentifier();
+	else if (name_->node()->name() == "class") nameStyle = &style()->classIdentifier();
+	else if (style()->showUnresolved() && !node()->ref()->isResolved()) nameStyle = &style()->unresolvedName();
+	name_->setStyle( nameStyle );
 	if (prefix_) separator_->setStyle( separatorStyle );
 	if (typeArguments_)
 	{

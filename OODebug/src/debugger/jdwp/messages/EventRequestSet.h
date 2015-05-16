@@ -29,7 +29,7 @@
 #include "../../../oodebug_api.h"
 
 #include "../Command.h"
-#include "../Location.h"
+#include "../DataTypes.h"
 #include "../MessagePart.h"
 #include "../Reply.h"
 
@@ -37,16 +37,30 @@
 
 namespace OODebug {
 
+struct StepData : public MessagePart {
+		StepData() = default;
+		StepData(qint64 threadId, Protocol::StepSize size, Protocol::StepDepth depth);
+		virtual ~StepData() override;
+
+		MessageField<qint64> threadID{&StepData::threadID, this};
+		MessageField<Protocol::StepSize> stepSize{&StepData::stepSize, this};
+		MessageField<Protocol::StepDepth> stepDepth{&StepData::stepDepth, this};
+};
+
 class Modifier : public MessagePart
 {
 	public:
 		static const int eventOff = 1;
 		static const int classMatch = 5;
+		static const int classExclude = 6;
 		static const int locationOnly = 7;
+		static const int stepOnly = 10;
 
 		static Modifier makeEventOff(qint32 count);
 		static Modifier makeMatchClass(QString classPattern);
+		static Modifier makeClassExclude(QString classPattern);
 		static Modifier makeLocation(Location loc);
+		static Modifier makeSingleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth);
 
 		Modifier() = default; // needed for in stream
 		virtual ~Modifier() override;
@@ -54,7 +68,9 @@ class Modifier : public MessagePart
 		MessageField<qint8> modKind{&Modifier::modKind, this};
 		MessageField<qint32, eventOff> count{&Modifier::count, this};
 		MessageField<QString, classMatch> classPattern{&Modifier::classPattern, this};
+		MessageField<QString, classExclude> classExcludePatterm{&Modifier::classExcludePatterm, this};
 		MessageField<Location, locationOnly> location{&Modifier::location, this};
+		MessageField<StepData, stepOnly> step{&Modifier::step, this};
 
 		virtual int kind() const override;
 	private:
@@ -81,6 +97,11 @@ struct BreakClassLoad : public EventSetCommand
 struct BreakpointCommand : public EventSetCommand {
 		BreakpointCommand(Location breakLocation);
 		virtual ~BreakpointCommand() override;
+};
+
+struct StepCommand : public EventSetCommand {
+		StepCommand(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth);
+		virtual ~StepCommand() override;
 };
 
 struct EventSetReply : public Reply {

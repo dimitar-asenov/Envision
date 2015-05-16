@@ -162,7 +162,7 @@ void CppImportManager::setCompilationDbPath(const QString& sourcePath)
 	auto compDB = clang::tooling::CompilationDatabase::loadFromDirectory(sourcePath.toLatin1().data(), Error);
 	if (!compDB)
 		throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
-	compilationDbMap_.insert(sourcePath, compDB);
+	compilationDbMap_.insert(sourcePath, compDB.release());
 }
 
 void CppImportManager::createCompilationDbForTest(const QString& testPath)

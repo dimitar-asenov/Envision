@@ -84,7 +84,7 @@ void VTryCatchFinally::initializeForms()
 		->put(TheBottomOf, finallyOutline, 2, FromBottomOf, finallyBody);
 
 	contentElement = grid({{tryBody}, {catchClauses}, {finallyCombined}})
-				->setColumnStretchFactor(1, 1);
+				->setColumnStretchFactor(1, 1)->setVerticalSpacing(3);
 
 	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, tryIcon, 8, FromLeftOf, contentElement)

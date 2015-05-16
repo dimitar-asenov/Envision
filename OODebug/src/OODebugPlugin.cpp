@@ -30,14 +30,17 @@
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
 #include "OOInteraction/src/handlers/HStatement.h"
+#include "OOInteraction/src/handlers/HStatementItemList.h"
 
 #include "commands/CJavaCompile.h"
 #include "commands/CJavaRun.h"
 #include "commands/CJavaDebug.h"
+#include "commands/CProbe.h"
 #include "run_support/MainMethodFinder.h"
 #include "overlays/ConsoleOverlay.h"
-#include "handlers/HConsoleOverlay.h"
+#include "handlers/HMoveableOverlay.h"
 #include "debugger/JavaDebugger.h"
+#include "debugger/ReferenceFinder.h"
 
 namespace OODebug {
 
@@ -54,21 +57,40 @@ bool OODebugPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaCompile());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaRun());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CJavaDebug());
+	OOInteraction::HStatementItemList::instance()->addCommand(new CProbe());
 
-	ConsoleOverlay::setDefaultClassHandler(HConsoleOverlay::instance());
+	ConsoleOverlay::setDefaultClassHandler(HMoveableOverlay::instance());
+	PlotOverlay::setDefaultClassHandler(HMoveableOverlay::instance());
+
 
 	MainMethodFinder::init();
+	ReferenceFinder::init();
 
 	// Register our breakpoint key handler
 	// TODO: once we have a better mechanism update this.
 	OOInteraction::HStatement::instance()->registerKeyPressHandler(
 				[] (Visualization::Item* target, QKeyEvent* event) {
-		return JavaDebugger::instance().addBreakpoint(target, event);
+		return JavaDebugger::instance().toggleBreakpoint(target, event);
 	});
 	// TODO: this should be a general interaction not only on statements.
 	OOInteraction::HStatement::instance()->registerKeyPressHandler(
 				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().suspend(target, event);
+	});
+	// TODO: see above
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
 		return JavaDebugger::instance().resume(target, event);
+	});
+	// TODO: see above
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().trackVariable(target, event);
+	});
+	// TODO: see above
+	OOInteraction::HStatement::instance()->registerKeyPressHandler(
+				[] (Visualization::Item* target, QKeyEvent* event) {
+		return JavaDebugger::instance().step(target, event);
 	});
 
 	return true;

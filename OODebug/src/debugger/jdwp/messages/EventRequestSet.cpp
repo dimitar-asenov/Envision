@@ -28,6 +28,15 @@
 
 namespace OODebug {
 
+StepData::StepData(qint64 threadId, Protocol::StepSize size, Protocol::StepDepth depth)
+{
+	threadID = threadId;
+	stepSize = size;
+	stepDepth = depth;
+}
+
+StepData::~StepData() {}
+
 Modifier::~Modifier() {}
 
 int Modifier::kind() const { return modKind(); }
@@ -44,10 +53,24 @@ Modifier Modifier::makeMatchClass(QString classPattern) {
 	return match;
 }
 
+Modifier Modifier::makeClassExclude(QString classPattern)
+{
+	Modifier exclude(classExclude);
+	exclude.classExcludePatterm = classPattern;
+	return exclude;
+}
+
 Modifier Modifier::makeLocation(Location loc)
 {
 	Modifier mod(locationOnly);
 	mod.location = loc;
+	return mod;
+}
+
+Modifier Modifier::makeSingleStep(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
+{
+	Modifier mod(stepOnly);
+	mod.step = StepData(threadId, stepSize, stepDepth);
 	return mod;
 }
 
@@ -78,6 +101,17 @@ BreakpointCommand::BreakpointCommand(Location breakLocation) : EventSetCommand(P
 }
 
 BreakpointCommand::~BreakpointCommand() {}
+
+StepCommand::StepCommand(qint64 threadId, Protocol::StepSize stepSize, Protocol::StepDepth stepDepth)
+	: EventSetCommand(Protocol::EventKind::SINGLE_STEP)
+{
+	suspendPolicy = Protocol::SuspendPolicy::ALL;
+	modifiers = {Modifier::makeSingleStep(threadId, stepSize, stepDepth), Modifier::makeClassExclude("java.*"),
+					 Modifier::makeClassExclude("javax.*"), Modifier::makeClassExclude("sun.*"),
+					 Modifier::makeClassExclude("com.sun.*"), Modifier::makeEventOff(1)};
+}
+
+StepCommand::~StepCommand() {}
 
 EventSetReply::~EventSetReply() {}
 

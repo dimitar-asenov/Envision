@@ -31,11 +31,24 @@
 #include "../Command.h"
 #include "../MessagePart.h"
 #include "../Reply.h"
-#include "../Location.h"
+#include "../DataTypes.h"
 
 namespace OODebug {
 
 // https://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html#JDWP_ThreadReference
+
+struct ThreadNameCommand : public Command {
+		ThreadNameCommand(qint64 threadId);
+		virtual ~ThreadNameCommand() override;
+
+		MessageField<qint64> threadID{&ThreadNameCommand::threadID, this};
+};
+
+struct ThreadName : public Reply {
+		virtual ~ThreadName() override;
+
+		MessageField<QString> threadName{&ThreadName::threadName, this};
+};
 
 struct FramesCommand : public Command {
 		FramesCommand(qint64 threadId, qint32 startFrame, qint32 numberOfFrames);

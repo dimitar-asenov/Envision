@@ -35,6 +35,9 @@
 
 namespace OODebug {
 
+/**
+ * A Command Packet as in http://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.html
+ */
 class OODEBUG_API Command : public MessagePart {
 	public:
 		Command() = default;

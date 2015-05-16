@@ -26,27 +26,41 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
 
-#include "MessagePart.h"
-#include "MessageField.h"
-#include "Protocol.h"
+#include "ModelBase/src/visitor/VisitorDefinition.h"
+
+namespace OOModel {
+	class ReferenceExpression;
+}
+
+namespace Model {
+	class Node;
+}
 
 namespace OODebug {
 
 /**
- * Describes a Location as in:
- * https://docs.oracle.com/javase/7/docs/technotes/guides/jpda/jdwp-spec.htmls
+ * Implements a visitor to find all references to some node.
  */
-struct Location : public MessagePart
+class OODEBUG_API ReferenceFinder : public Model::Visitor<ReferenceFinder, OOModel::ReferenceExpression*>
 {
-		Location() = default;
-		Location(Protocol::TypeTagKind typeTag, qint64 classId, qint64 methodId, qint64 methodIndex);
-		virtual ~Location() override;
-		MessageField<Protocol::TypeTagKind> typeTag{&Location::typeTag, this};
-		MessageField<qint64> classId{&Location::classId, this};
-		MessageField<qint64> methodId{&Location::methodId, this};
-		MessageField<qint64> methodIndex{&Location::methodIndex, this};
+	public:
+		static void init();
+		void setSearchNode(Model::Node* searchNode);
+
+		QList<OOModel::ReferenceExpression*> references() const;
+		void clearReferences();
+
+	private:
+		static OOModel::ReferenceExpression* visitReferenceExpression(ReferenceFinder* self,
+																						  OOModel::ReferenceExpression* m);
+		Model::Node* searchNode_;
+		QList<OOModel::ReferenceExpression*> references_;
 };
+
+inline void ReferenceFinder::setSearchNode(Model::Node* searchNode) { searchNode_ = searchNode; }
+inline QList<OOModel::ReferenceExpression*> ReferenceFinder::references() const { return references_; }
+inline void ReferenceFinder::clearReferences() { references_.clear(); }
 
 } /* namespace OODebug */

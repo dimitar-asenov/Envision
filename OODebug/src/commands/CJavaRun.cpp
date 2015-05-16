@@ -26,7 +26,7 @@
 
 #include "CJavaRun.h"
 
-#include "../run_support/java/JavaRunner.h"
+#include "../run_support/JavaRunner.h"
 #include "ModelBase/src/model/TreeManager.h"
 
 namespace OODebug {
@@ -34,15 +34,28 @@ namespace OODebug {
 CJavaRun::CJavaRun() : CommandWithNameAndFlags{"run", {}, false}
 {}
 
-Interaction::CommandResult*CJavaRun::executeNamed(Visualization::Item* source, Visualization::Item*,
+Interaction::CommandResult* CJavaRun::executeNamed(Visualization::Item* source, Visualization::Item*,
 	const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
 {
 	while (source && !source->node()) source = source->parent();
-	if (source)
-		if (auto manager = source->node()->manager())
-			JavaRunner::runTree(manager, "exported/" + manager->root()->symbolName());
+	Q_ASSERT(source);
+	auto manager = source->node()->manager();
+	Q_ASSERT(manager);
+	auto result = JavaRunner::runTree(manager, "exported/" + manager->root()->symbolName());
+	Q_ASSERT(result);
+	return result;
+}
 
-	return new Interaction::CommandResult();
+bool CJavaRun::canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens,
+									 const std::unique_ptr<Visualization::Cursor>& cursor)
+{
+	if (CommandWithNameAndFlags::canInterpret(source, target, commandTokens, cursor))
+	{
+		// Check if there is a tree manager
+		while (source && !source->node()) source = source->parent();
+		return source->node()->manager();
+	}
+	return false;
 }
 
 } /* namespace OODebug */

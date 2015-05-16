@@ -228,11 +228,15 @@ public class Node {
 			// Create a new file for this persistence unit
 			if (format_ == OutputFormat.XML)
 			{
-				out_.peek().println(indentation + "<persistencenewunit name=\""
-						+ name_ + "\">S_{" + id_ + "}</persistencenewunit>");
+				assert false; // "This code is actually invalid at this point, due to parent id handling");
+				out_.peek().print(indentation + "<persistencenewunit name=\"" + name_ + "\">S_{" + id_ + "}");
+				out_.peek().println("</persistencenewunit>");
 			}
 			else if (format_ == OutputFormat.SIMPLE)
-				out_.peek().println(indentation + name_ + " persistencenewunit {" + id_ +"}");
+			{
+				out_.peek().print(indentation + name_ + " persistencenewunit {" + id_ +"}");
+				out_.peek().println(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
+			}
 			
 			out_.push( new PrintStream(new File(outputDir_ + "{" + id_ + "}"), "UTF-8") );
 			if (format_ == OutputFormat.XML) out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
@@ -248,7 +252,12 @@ public class Node {
 			if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
 			{
 				out_.peek().print(indentation + "<" + tag_);
-				if (format_ == OutputFormat.XML) out_.peek().print(" id=\"{" + id_ + "}\"");
+				if (format_ == OutputFormat.XML)
+				{
+					out_.peek().print(" id=\"{" + id_ + "}\" parentId=\"");
+					assert parent_ != null || !considerPersistenceUnits;
+					out_.peek().print(parent_ == null ? "{00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}\"");
+				}
 				out_.peek().print(" name=\"" + name_ + "\"");
 				
 				if (text_ != null) out_.peek().println(">" + StringEscapeUtils.escapeXml(text_) + "</" + tag_ + ">");
@@ -264,6 +273,8 @@ public class Node {
 			else if (format_ == OutputFormat.SIMPLE)
 			{
 				out_.peek().print(indentation + name_ + " " + tag_ + " {" + id_+"}");
+				assert parent_ != null || !considerPersistenceUnits;
+				out_.peek().print(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
 				if (text_ != null) out_.peek().print(". " + escape(text_));
 				out_.peek().println();
 				for(Node child : children_) child.renderTree(indentation + "\t", true);

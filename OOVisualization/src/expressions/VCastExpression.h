@@ -24,47 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#include "HConsoleOverlay.h"
+#pragma once
 
-#include "../overlays/ConsoleOverlay.h"
+#include "../oovisualization_api.h"
+#include "VCastExpressionStyle.h"
+#include "VExpression.h"
 
-namespace OODebug {
+#include "OOModel/src/expressions/CastExpression.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
-HConsoleOverlay::HConsoleOverlay()
-{}
+namespace OOVisualization {
 
-HConsoleOverlay* HConsoleOverlay::instance()
+class OOVISUALIZATION_API VCastExpression : public Super<VExpression<VCastExpression,
+	Visualization::LayoutProvider<>,	OOModel::CastExpression>>
 {
-	static HConsoleOverlay inst;
-	return &inst;
-}
+	ITEM_COMMON(VCastExpression)
 
-void HConsoleOverlay::mousePressEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
-{
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
-		if (auto console = DCast<ConsoleOverlay>(target))
-			consolePosition_ = console->pos();
-}
+	public:
+		VCastExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VCastExpression();
 
-void HConsoleOverlay::mouseMoveEvent(Visualization::Item* target, QGraphicsSceneMouseEvent* event)
-{
-	if (event->buttons() & Qt::LeftButton)
-	{
-		if (auto console = DCast<ConsoleOverlay>(target))
-		{
-			QPointF diff((event->scenePos() - event->buttonDownScenePos(Qt::LeftButton)));
-			move(console, diff);
-		}
-	}
-}
+	protected:
+		void determineChildren();
 
-void HConsoleOverlay::move(ConsoleOverlay* console, const QPointF& to)
-{
-	QPointF dest(consolePosition_ + to);
-	if (dest.x() < 0) dest.setX(0);
-	if (dest.y() < 0) dest.setY(0);
-
-	console->setPos(dest);
-}
+	private:
+		Visualization::NodeWrapper* castType_{};
+		Visualization::Item* expr_{};
+};
 
 }

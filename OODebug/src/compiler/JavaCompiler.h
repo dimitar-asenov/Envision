@@ -26,23 +26,47 @@
 
 #pragma once
 
-#include "../../oodebug_api.h"
+#include "../oodebug_api.h"
 
-#include "../jdwp/messages/MethodSet.h"
+namespace Interaction {
+	class CommandResult;
+}
+
+namespace Model {
+	class TreeManager;
+	class Node;
+}
+
+namespace Visualization {
+	class Item;
+}
+
+namespace Export {
+	class SourceFile;
+	class TextToNodeMap;
+}
 
 namespace OODebug {
 
-class JavaMethod {
+class CompilerMessage;
+
+class OODEBUG_API JavaCompiler
+{
 	public:
-		JavaMethod(LineTable lineTable);
+		/**
+		 * Exports and compiles the program and returns a CommandResult,
+		 *  which contains an error string if something went wrong.
+		 */
+		static Interaction::CommandResult* compileTree(Model::TreeManager* manager,
+																	  const QString& pathToProjectContainerDirectory,
+																	  bool includeDebugSymbols = false);
 
-		qint64 indexForLine(qint32 line);
 	private:
-		QMultiHash<qint32, qint64> lineToCode_;
-
+		static const QString COMPILER_MESSAGE_GROUP;
+		/**
+		 * Adds an overlay to the \a item which represents the \a message in the style defined by \a type.
+		 */
+		static void visualizeMessage(Visualization::Item* item, const QString& message, const QString& type = "default");
 };
-
-// Just return the first index.
-inline qint64 JavaMethod::indexForLine(qint32 line) { return lineToCode_.find(line).value(); }
 
 } /* namespace OODebug */

@@ -43,7 +43,11 @@ class Frames;
 class VariableTable;
 class Values;
 class StackVariable;
+class ArrayValues;
 
+/**
+ * A Connector to a Java VM via the JDWP protocol.
+ */
 class OODEBUG_API DebugConnector : public QObject
 {
 	Q_OBJECT
@@ -55,29 +59,60 @@ class OODEBUG_API DebugConnector : public QObject
 		using EventListener = std::function<void (Event)>;
 
 		/**
-		 * As certain info is only available when we load the class where the main method resides
-		 * you need to pass the name of the class where the main method is in, in \a mainClassName.
+		 * Connects to the JVM at \a vmHostName on port \a vmHostPort.
 		 */
-		void connect(QString mainClassName, QString vmHostName = "localhost", int vmHostPort = 4000);
+		void connect(QString vmHostName = "localhost", int vmHostPort = 4000);
 
+		/**
+		 * Add the \a listener callback to the connector. The \a listener is called whenever and Event of type \a kind
+		 * is received.
+		 *
+		 * If there is already a \a listener for this kind the previous one is replaced!
+		 */
 		void addEventListener(Protocol::EventKind kind, EventListener listener);
 
+		/**
+		 * Suspends the execution on the VM and returns true on succes.
+		 */
+		bool suspend();
+		/**
+		 * Resumes the VM, do not use this function inside event handlers, use \a wantResume instead.
+		 */
 		bool resume();
+		/**
+		 * Specify that you want to resume, if there are multiple events all should agree otherwise we don't resume.
+		 *
+		 * Note that this function should only be used in event handlers.
+		 */
+		void wantResume(bool resume);
 
-		qint64 getClassId(const QString& signature);
-		qint64 getMethodId(qint64 classId, const QString& signature);
-		LineTable getLineTable(qint64 classId, qint64 methodId);
+		QString fileNameForReference(qint64 referenceId);
+		QString signatureOf(qint64 referenceId);
+		qint64 classIdOf(const QString& signature);
+		qint64 methodIdOf(qint64 classId, const QString& signature);
+		LineTable lineTable(qint64 classId, qint64 methodId);
 
-		Frames getFrames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
-		VariableTable getVariableTable(qint64 classId, qint64 methodId);
-		Values getValues(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
-		QString getString(qint64 stringId);
+		QList<qint64> allThreadIds();
+		QString threadName(qint64 threadId);
+
+		Frames frames(qint64 threadId, qint32 numFrames, qint32 startFrame = 0);
+		VariableTable variableTableForMethod(qint64 classId, qint64 methodId);
+		Values values(qint64 threadId, qint64 frameId, QList<StackVariable> variables);
+		QString stringFromId(qint64 stringId);
+		int arrayLength(qint64 arrayId);
+		ArrayValues arrayValues(qint64 arrayId, qint32 firstIndex, qint32 length);
 
 		bool breakAtClassLoad(QString className);
 
-		int sendBreakpoint(Location breakLocation);
+		int setBreakpoint(Location breakLocation);
 		bool clearBreakpoint(qint32 requestId);
 
+		int singleStep(qint64 threadId, Protocol::StepSize stepSize = Protocol::StepSize::LINE,
+							Protocol::StepDepth stepDepth = Protocol::StepDepth::OVER);
+
+		/**
+		 * Returns if the program on the target VM is running.
+		 */
 		bool vmAlive();
 
 		static constexpr int NO_RESULT{-1};
@@ -86,7 +121,13 @@ class OODEBUG_API DebugConnector : public QObject
 		void dispatchEvents();
 		void readFromSocket();
 
+		/**
+		 * Sends the \a command to the VM and returns the corresponding reply as a QByteArray.
+		 */
 		QByteArray sendCommand(const Command& command);
+		/**
+		 * Waits until the Reply for the request with id \a requestId is received.
+		 */
 		QByteArray waitForReply(qint32 requestId);
 
 		void readHandshake();
@@ -95,30 +136,23 @@ class OODEBUG_API DebugConnector : public QObject
 		void checkVersion();
 		void checkIdSizes();
 
-		void sendBreakAtStart();
-
 		void handleComposite(QByteArray data);
 
 		QTcpSocket tcpSocket_;
 
 		QByteArray incompleteData_;
 
-		QString mainClassName_;
-
 		QHash<Protocol::EventKind, EventListener> eventListeners_;
-
-		QHash<QString, qint64> classIdMap_;
 
 		// Each entry is a full message which is ready to be parsed & handled
 		QList<QByteArray> messagesReadyForProcessing_;
 
 		bool vmAlive_{};
+
+		// Stores if all events agree to resume
+		enum class ResumeRequest : int  {NEUTRAL, RESUME, DONTRESUME} resumeRequest_{};
 };
 
-/**
- * Adds a new event listener for the \a kind of event.
- * If there is already a listener for this kind the previous one is replaced!
- */
 inline void DebugConnector::addEventListener(Protocol::EventKind kind, DebugConnector::EventListener listener)
 { eventListeners_[kind] = listener; }
 inline bool DebugConnector::vmAlive() { return vmAlive_; }
