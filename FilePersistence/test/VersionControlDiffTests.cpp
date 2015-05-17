@@ -31,9 +31,25 @@
 
 #include "version_control/ChangeDescription.h"
 #include "version_control/Diff.h"
+#include "version_control/GitRepository.h"
 
 
 namespace FilePersistence {
+
+TEST(FilePersistencePlugin, addAndRename)
+{
+	if (int err = std::system("tar -xf projects/Foo.tar -C projects")) throw err;
+	GitRepository repo("projects/Foo");
+	Diff diff = repo.diff("391e629f60ad57dfb1847afb2c3e21c040d47de4", "HEAD");
+	ChangeDescription* renameChange = diff.changes().find(QUuid("ec98da71-76d5-4371-a491-18826bce2a35")).value();
+	ChangeDescription* insertChange = diff.changes().find(QUuid("b32af2db-f0d0-4d36-ba00-96f27595248e")).value();
+	ChangeDescription* structChange = diff.changes().find(QUuid("ee53ebac-d6a9-420f-b729-68ca160ee94e")).value();
+	CHECK_CONDITION(renameChange->hasFlags(ChangeDescription::Value));
+	CHECK_CONDITION(insertChange->type() == ChangeType::Insertion);
+	CHECK_CONDITION(structChange->hasFlags(ChangeDescription::Structure));
+	if (int err = std::system("rm -r projects/Foo")) throw err;
+}
+
 /*
 TEST(FilePersistencePlugin, noChangeDetection)
 {
