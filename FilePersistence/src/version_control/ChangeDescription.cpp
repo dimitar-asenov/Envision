@@ -50,38 +50,30 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) : n
 		id_ = nodeB_->id();
 		type_ = ChangeType::Insertion;
 	}
-	detectLabelChange();
-	detectTypeChange();
-	detectValueChange();
+	setFlags();
 }
 
 ChangeDescription::ChangeDescription(Model::NodeIdType id, ChangeType type) : id_{id}, type_{type} {}
 
-void ChangeDescription::detectLabelChange()
+void ChangeDescription::setFlags()
 {
-	// check for same name -> reordering detection
-	if (nodeA_->name() != nodeB_->name())
-		updateFlags_ |= Label;
-	else
-		updateFlags_ &= ~Label;
-}
+	if (nodeA_ != nullptr && nodeB_ != nullptr)
+	{
+		if (nodeA_->name() != nodeB_->name())
+			updateFlags_ |= Label;
+		else
+			updateFlags_ &= ~Label;
 
-void ChangeDescription::detectValueChange()
-{
-	// check for same type -> type change
-	if (nodeA_->rawValue() != nodeB_->rawValue())
-		updateFlags_ |= Value;
-	else
-		updateFlags_ &= ~Value;
-}
+		if (nodeA_->rawValue() != nodeB_->rawValue())
+			updateFlags_ |= Value;
+		else
+			updateFlags_ &= ~Value;
 
-void ChangeDescription::detectTypeChange()
-{
-	// check for same value -> update
-	if (nodeA_->type() != nodeB_->type())
-		updateFlags_ |= Type;
-	else
-		updateFlags_ &= ~Type;
+		if (nodeA_->type() != nodeB_->type())
+			updateFlags_ |= Type;
+		else
+			updateFlags_ &= ~Type;
+	}
 }
 
 void ChangeDescription::print() const
@@ -114,25 +106,22 @@ void ChangeDescription::print() const
 	}
 
 	if (updateFlags_.testFlag(Label))
-		std::cout << " Location";
+		std::cout << " Label";
 	if (updateFlags_.testFlag(Type))
 		std::cout << " Type";
 	if (updateFlags_.testFlag(Value))
 		std::cout << " Value";
 	if (updateFlags_.testFlag(Structure))
-		std::cout << " Children";
+		std::cout << " Structure";
 	std::cout << std::endl;
 }
 
 void ChangeDescription::setStructureChangeFlag(bool value)
 {
-	if (type_ == ChangeType::Move || type_ == ChangeType::Stationary)
-	{
-		if (value)
-			updateFlags_ |= Structure;
-		else
-			updateFlags_ &= ~Structure;
-	}
+	if (value)
+		updateFlags_ |= Structure;
+	else
+		updateFlags_ &= ~Structure;
 }
 
 } /* namespace FilePersistence */

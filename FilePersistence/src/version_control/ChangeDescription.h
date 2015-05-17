@@ -64,9 +64,7 @@ class FILEPERSISTENCE_API ChangeDescription
 		const GenericNode* nodeA() const;
 
 	private:
-		void detectLabelChange();
-		void detectValueChange();
-		void detectTypeChange();
+		void setFlags();
 
 		Model::NodeIdType id_;
 
