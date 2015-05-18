@@ -38,7 +38,7 @@ namespace FilePersistence {
 
 TEST(FilePersistencePlugin, addAndRename)
 {
-	if (int err = std::system("tar -xf projects/Foo.tar -C projects")) throw err;
+	if (int err = std::system("tar -xf TestProject2.tar -C projects")) throw err;
 	GitRepository repo("projects/Foo");
 	Diff diff = repo.diff("391e629f60ad57dfb1847afb2c3e21c040d47de4", "HEAD");
 	ChangeDescription* renameChange = diff.changes().find(QUuid("ec98da71-76d5-4371-a491-18826bce2a35")).value();
@@ -48,6 +48,19 @@ TEST(FilePersistencePlugin, addAndRename)
 	CHECK_CONDITION(insertChange->type() == ChangeType::Insertion);
 	CHECK_CONDITION(structChange->hasFlags(ChangeDescription::Structure));
 	if (int err = std::system("rm -r projects/Foo")) throw err;
+}
+
+TEST(FilePersistencePlugin, stmtEdit)
+{
+	if (int err = std::system("tar -xf TestProject1.tar -C projects")) throw err;
+	GitRepository repo("projects/TestProject1");
+	Diff diff = repo.diff("594a1d5c7b14bdf51114b2cfec2ca7e1c4bf111e", "HEAD");
+	for (auto change : diff.changes())
+	{
+		change->print();
+	}
+	CHECK_CONDITION(diff.changes().size() > 0);
+	if (int err = std::system("rm -r projects/TestProject1")) throw err;
 }
 
 /*

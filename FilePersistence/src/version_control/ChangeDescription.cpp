@@ -78,6 +78,8 @@ void ChangeDescription::setFlags()
 
 void ChangeDescription::print() const
 {
+	if (nodeA_ || nodeB_)
+		std::cout << (nodeA_ ? nodeA_->type() : nodeB_->type()).toStdString().c_str() << "\t";
 	std::cout << id().toString().toStdString().c_str() << "\t";
 	switch (type_)
 	{
@@ -106,13 +108,13 @@ void ChangeDescription::print() const
 	}
 
 	if (updateFlags_.testFlag(Label))
-		std::cout << " Label";
+		std::cout << "\tLabel";
 	if (updateFlags_.testFlag(Type))
-		std::cout << " Type";
+		std::cout << "\tType";
 	if (updateFlags_.testFlag(Value))
-		std::cout << " Value";
+		std::cout << "\tValue";
 	if (updateFlags_.testFlag(Structure))
-		std::cout << " Structure";
+		std::cout << "\tStructure";
 	std::cout << std::endl;
 }
 
