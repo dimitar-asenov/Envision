@@ -54,8 +54,7 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/messages/ArrayReferenceSet.h \
     src/handlers/HMoveableOverlay.h \
     src/debugger/Probes.h \
-    src/debugger/DebugUtils.h \
-    src/debugger/EnvisionVariable.h
+    src/debugger/DebugUtils.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \

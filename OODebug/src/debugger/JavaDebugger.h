@@ -54,7 +54,6 @@ namespace OODebug {
 class BreakpointEvent;
 class SingleStepEvent;
 struct VariableObserver;
-struct EnvisionVariable;
 
 class OODEBUG_API JavaDebugger
 {
@@ -98,7 +97,7 @@ class OODEBUG_API JavaDebugger
 
 		// Probe helpers
 		QPair<PlotOverlay::PlotType, ValueHandler> defaultPlotTypeAndValueHandlerFor
-			(QList<EnvisionVariable> variableInfos);
+			(QList<OOModel::VariableDeclaration*> variables);
 		void handleValues(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target);
 		void handleArray(Values values, QList<Probes::ValueCalculator> valueCalculators, Model::Node* target);
 

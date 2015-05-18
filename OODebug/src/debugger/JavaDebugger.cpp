@@ -27,7 +27,6 @@
 #include "JavaDebugger.h"
 
 #include "ReferenceFinder.h"
-#include "EnvisionVariable.h"
 #include "../run_support/JavaRunner.h"
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/DataTypes.h"
@@ -55,7 +54,7 @@ namespace OODebug {
 
 struct VariableObserver {
 		VariableObserver(JavaDebugger::ValueHandler handlerFunction,
-							  QList<EnvisionVariable> observedVariables, Model::Node* observerLocation,
+							  QList<OOModel::VariableDeclaration*> observedVariables, Model::Node* observerLocation,
 							  QList<Probes::ValueCalculator> valueCalculators)
 			: handlerFunc_{handlerFunction}, observedVariables_{observedVariables},
 			  observerLocation_{observerLocation}, valueCalculators_{valueCalculators} {}
@@ -63,7 +62,7 @@ struct VariableObserver {
 		// The function which handles new value(s).
 		JavaDebugger::ValueHandler handlerFunc_;
 		// The declarations of the variables we are observing.
-		QList<EnvisionVariable> observedVariables_;
+		QList<OOModel::VariableDeclaration*> observedVariables_;
 		// The location of the observer, this might be useful if it has an attached overlay.
 		Model::Node* observerLocation_;
 		// Value calculator functions
@@ -190,13 +189,11 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 		auto containingMethod = node->firstAncestorOfType<OOModel::Method>();
 		refFinder.visit(containingMethod);
 
-		EnvisionVariable observedVar(variableDeclaration->name(),
-											  utils_.typeExpressionToTag(variableDeclaration->typeExpression()));
-		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({observedVar});
+		auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor({variableDeclaration});
 		auto overlay = new PlotOverlay(target, PlotOverlay::itemStyles().get("default"), defaultTypeAndHandler.first);
 		target->addOverlay(overlay, PLOT_OVERLAY_GROUP);
 		auto observer = std::make_shared<VariableObserver>
-				(VariableObserver(defaultTypeAndHandler.second, {observedVar}, node,
+				(VariableObserver(defaultTypeAndHandler.second, {variableDeclaration}, node,
 				{[](QList<double> arg) { return arg[0];}}));
 		nodeObservedBy_.insertMulti(node, observer);
 		for (auto ref : refFinder.references())
@@ -247,7 +244,7 @@ Interaction::CommandResult* JavaDebugger::probe(OOVisualization::VStatementItemL
 	if (declarationMap.size() < variableNames.size())
 		return new Interaction::CommandResult(new Interaction::CommandError("Not all declarations found for probe"));
 
-	QList<EnvisionVariable> vars;
+	QList<OOModel::VariableDeclaration*> vars;
 	for (auto varName : variableNames) vars << declarationMap[varName];
 
 	auto defaultTypeAndHandler = defaultPlotTypeAndValueHandlerFor(vars);
@@ -417,13 +414,14 @@ void JavaDebugger::handleBreakpoint(BreakpointEvent breakpointEvent)
 			{
 				for (auto variableDetails : variableTable.variables())
 				{
-					if (variableDetails.name() == variable.name_)
+					if (variableDetails.name() == variable->name())
 					{
 						// Condition as in: http://docs.oracle.com/javase/7/docs/platform/jpda/jdwp/jdwp-protocol.html
 						//                    #JDWP_Method_VariableTable
 						Q_ASSERT(variableDetails.codeIndex() <= currentIndex &&
 									currentIndex < variableDetails.codeIndex() + variableDetails.length());
-						varsToGet << StackVariable(variableDetails.slot(), variable.typeTag_);
+						varsToGet << StackVariable(variableDetails.slot(), utils_.typeExpressionToTag(
+																variable->typeExpression()));
 					}
 				}
 			}
@@ -460,24 +458,24 @@ void JavaDebugger::handleSingleStep(SingleStepEvent singleStep)
 }
 
 QPair<PlotOverlay::PlotType, JavaDebugger::ValueHandler> JavaDebugger::defaultPlotTypeAndValueHandlerFor(
-		QList<EnvisionVariable> variableInfos)
+		QList<OOModel::VariableDeclaration*> variables)
 {
-	Q_ASSERT(!variableInfos.empty());
+	Q_ASSERT(!variables.empty());
 
-	if (utils_.isPrimitiveValueType(variableInfos[0].typeTag_))
+	if (utils_.hasPrimitiveValueType(variables[0]))
 	{
 		bool allPrimitive = true;
-		for (auto varInfo : variableInfos)
-			if (!utils_.isPrimitiveValueType(varInfo.typeTag_)) allPrimitive = false;
+		for (auto variable : variables)
+			if (!utils_.hasPrimitiveValueType(variable)) allPrimitive = false;
 		if (allPrimitive)
 		{
-			if (variableInfos.size() > 1)
+			if (variables.size() > 1)
 				return {PlotOverlay::PlotType::Scatter, &JavaDebugger::handleValues};
 			else
 				return {PlotOverlay::PlotType::Bars, &JavaDebugger::handleValues};
 		}
 	}
-	else if (variableInfos[0].typeTag_ == Protocol::Tag::ARRAY)
+	else if (utils_.typeExpressionToTag(variables[0]->typeExpression()) == Protocol::Tag::ARRAY)
 	{
 		return {PlotOverlay::PlotType::Array, &JavaDebugger::handleArray};
 	}
