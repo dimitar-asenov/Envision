@@ -14,7 +14,7 @@
 			<inSymbol prototypes="item/Symbol/default"><symbol>+</symbol></inSymbol>
 		</e3>
 		<e4 prototypes="item/OperatorStyle/default">
-			<inSymbol prototypes="item/Symbol/default"><symbol>-</symbol></inSymbol>
+			<inSymbol prototypes="item/Symbol/default"><symbol>−</symbol></inSymbol>
 		</e4>
 		<e5 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>&lt;&lt;</symbol></inSymbol>
