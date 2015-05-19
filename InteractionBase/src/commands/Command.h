@@ -39,8 +39,7 @@ namespace Interaction {
 class INTERACTIONBASE_API Command
 {
 	public:
-        Command(bool canBeUsedInMenu = false, QString name = "");
-		virtual ~Command();
+		Command(QString name = "", bool canBeUsedInMenu = false);
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
@@ -53,12 +52,12 @@ class INTERACTIONBASE_API Command
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) = 0;
 		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& commandForm = QString());
-        bool canBeUsedInMenu() const;
-        const QString name() const;
+		bool canBeUsedInMenu() const;
+		const QString name() const;
 
-    private:
-        bool canBeUsedInMenu_;
-        QString name_;
+	private:
+		bool canBeUsedInMenu_{};
+		QString name_;
 
 };
 

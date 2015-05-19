@@ -29,56 +29,56 @@
 namespace Interaction {
 
 MenuCommand::MenuCommand(QString name, const QStringList &defaultArguments)
-    :Command(true, name), defaultArguments_(defaultArguments)
+	:Command(name, true), defaultArguments_{defaultArguments}
 {
 }
 
 bool MenuCommand::canInterpret(Visualization::Item *source, Visualization::Item *target,
-        const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+		const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
 {
-    return (commandTokens.first() == this->name() && canUseTarget(source, target, cursor));
+	return (commandTokens.first() == this->name() && canUseTarget(source, target, cursor));
 }
 
 CommandResult* MenuCommand::execute(Visualization::Item *source, Visualization::Item *target,
-        const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+		const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
 {
-    return this->executeWithArguments(source, target, getParameters(commandTokens, true), cursor);
+	return this->executeWithArguments(source, target, getParameters(commandTokens, true), cursor);
 }
 
 QList<CommandSuggestion*> MenuCommand::suggest(Visualization::Item *source, Visualization::Item *target,
-        const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor)
+		const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor)
 {
-    QList<CommandSuggestion*> result;
+	QList<CommandSuggestion*> result;
 
-    if (textSoFar.trimmed().startsWith(this->name() + " ")
-            || this->name().startsWith(textSoFar.trimmed()))
-    {
-        auto parts = textSoFar.split(" ");
-        auto first = parts.at(0);
-        //Remove the first part (the command itself -> we know it is the name)
-        parts.removeAt(0);
-        result.append(new CommandSuggestion(first,
-                                this->description(source, target, getParameters(parts, false), cursor)));
-    }
-    return result;
+	if (textSoFar.trimmed().startsWith(this->name() + " ")
+			|| this->name().startsWith(textSoFar.trimmed()))
+	{
+		auto parts = textSoFar.split(" ");
+		auto first = parts.at(0);
+		//Remove the first part (the command itself -> we know it is the name)
+		parts.removeAt(0);
+		result.append(new CommandSuggestion(first,
+						this->description(source, target, getParameters(parts, false), cursor)));
+	}
+	return result;
 }
 
 QStringList MenuCommand::commandForms(Visualization::Item *, Visualization::Item *,
-        const QString &, const std::unique_ptr<Visualization::Cursor> &)
+		const QString &, const std::unique_ptr<Visualization::Cursor> &)
 {
-    return QStringList();
+	return QStringList();
 }
 
 QStringList MenuCommand::getParameters(const QStringList &commandTokens, bool removeFirst)
 {
-    QStringList parameters(commandTokens);
-    //Remove the command name itself
-    if (removeFirst)
-        parameters.removeAt(0);
-    //Fill up with default arguments
-    for (int i = parameters.size(); i < defaultArguments()->size(); i++)
-        parameters.append(defaultArguments()->at(i));
-    return parameters;
+	QStringList parameters(commandTokens);
+	//Remove the command name itself
+	if (removeFirst)
+		parameters.removeAt(0);
+	//Fill up with default arguments
+	for (int i = parameters.size(); i < defaultArguments().size(); i++)
+		parameters.append(defaultArguments().at(i));
+	return parameters;
 }
 
 }

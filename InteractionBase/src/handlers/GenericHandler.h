@@ -85,7 +85,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		void removeCommandPrompt();
 		void showCommandPrompt(Visualization::Item* commandRecevier, QString initialCommandText = QString());
 
-        void showCommandMenu(Visualization::Item* commandReceiver);
+		void showCommandMenu(Visualization::Item* commandReceiver);
 
         void toggleComment(Visualization::Item* itemWithComment, Model::Node* aNode, bool hideOnly);
 
@@ -132,7 +132,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		bool moveCursor(Visualization::Item *target, int key);
 
 	private:
-        QList<Command*> supportedCommands;
+		QList<Command*> supportedCommands;
 
 		static CommandExecutionEngine* executionEngine_;
 		static CommandPrompt* commandPrompt_;
