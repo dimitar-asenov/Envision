@@ -46,17 +46,28 @@ Interaction::CommandResult* AddNodeCommand::executeWithArguments(Visualization::
 {
 	auto method = dynamic_cast<OOModel::Method*>(target->node());
 	auto name = arguments.at(0);
+	auto colOk = true;
+	auto rowOk = true;
+	auto column = arguments.at(1).toInt(&colOk);
+	auto row = arguments.at(2).toInt(&rowOk);
 	if (name == "current")
 		name = target->scene()->currentViewItem()->name();
 	auto view = target->scene()->getViewItem(name);
-	if (view)
+	if (view && rowOk && colOk)
 	{
-		view->insertNode(method);
+		view->insertNode(method, column, row);
 		return new Interaction::CommandResult();
 	}
-	else
+	else if (!view)
 		return new Interaction::CommandResult(new Interaction::CommandError(
 											"The view with name " + name + " does not exist"));
+	else if (!colOk)
+		return new Interaction::CommandResult(new Interaction::CommandError(
+												"Could not parse " + arguments.at(1) + " to integer"));
+	else
+		return new Interaction::CommandResult(new Interaction::CommandError(
+												  "Could not parse " + arguments.at(2) + " to integer"));
+
 }
 
 QString AddNodeCommand::description(Visualization::Item *, Visualization::Item *,
