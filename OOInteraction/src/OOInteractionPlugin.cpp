@@ -49,6 +49,7 @@
 #include "commands/CCreateMethod.h"
 #include "commands/CSceneHandlerItemTest.h"
 #include "commands/CDoxygen.h"
+#include "commands/AddNodeCommand.h"
 
 #include "string_offset_providers/StringComponents.h"
 
@@ -161,6 +162,8 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 
 	OOInteraction::DoxygenWholeTreeVisitor::init();
 	OOInteraction::DoxygenCommentsOnlyVisitor::init();
+
+	Interaction::GenericHandler::instance()->addCommand(new AddNodeCommand());
 
 	return true;
 }

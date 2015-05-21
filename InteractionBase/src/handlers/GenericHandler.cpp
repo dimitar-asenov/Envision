@@ -52,6 +52,9 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
+#include "commands/NewViewCommand.h"
+#include "commands/SwitchViewCommand.h"
+
 namespace Interaction {
 
 void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>)
@@ -116,6 +119,8 @@ GenericHandlerManagerListener& GenericHandler::managerListener()
 
 GenericHandler::GenericHandler()
 {
+	supportedCommands.append(new NewViewCommand());
+	supportedCommands.append(new SwitchViewCommand());
 }
 
 GenericHandler* GenericHandler::instance()
@@ -177,6 +182,7 @@ void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
 			while (target && !command->canInterpret(commandReceiver, target, QStringList(command->name()),
 													commandPrompt_->commandReceiverCursor()))
 				target = target->parent();
+
 			//If we have a target != null, then we can interpret the command on it
 			//We then create the command with its default arguments essentially when it is selected
 			if (target)
@@ -190,9 +196,9 @@ void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
 														[this, commandReceiver, suggestion](AutoCompleteEntry*)
 														{this->command(commandReceiver,
 																	 suggestion->text(),
-																	 commandPrompt_->commandReceiverCursor());
+																	 commandPrompt_->commandReceiverCursor());}));
 														//AutoComplete::hide();
-														/*commandPrompt_->hidePrompt();*/ }));
+														//commandPrompt_->hidePrompt();
 			}
 		}
 	}

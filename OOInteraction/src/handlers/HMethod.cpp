@@ -37,10 +37,14 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
+#include "commands/AddNodeCommand.h"
+
 namespace OOInteraction {
 
 HMethod::HMethod()
-{}
+{
+	addCommand(new AddNodeCommand());
+}
 
 HMethod* HMethod::instance()
 {
