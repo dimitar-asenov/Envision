@@ -57,10 +57,12 @@ void ViewItem::insertNode(Model::Node* node, int column, int row)
 
 void ViewItem::removeNode(Model::Node* node)
 {
-	for (auto column : nodes_)
-		for (int i = 0; i < column.size(); i++)
-			if (column.at(i) && column.at(i) == node)
-				column.removeAt(i);
+	for (int i = 0; i < nodes_.size(); i++)
+	{
+		auto index = nodes_.at(i).indexOf(node);
+		if (index != -1)
+			nodes_[i].remove(index);
+	}
 	scene()->scheduleUpdate();
 }
 
