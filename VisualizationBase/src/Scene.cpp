@@ -44,6 +44,8 @@
 #include "Core/src/Profiler.h"
 #include "Core/src/EnvisionApplication.h"
 
+#include "items/ViewItem.h"
+
 namespace Visualization {
 
 class UpdateSceneEvent : public QEvent
@@ -71,6 +73,7 @@ Scene::Scene()
 #if QT_VERSION >= 0x050400
 	setMinimumRenderSize(1.0);
 #endif
+
 
 	initialized_ = true;
 	allScenes().append(this);
@@ -109,11 +112,24 @@ ModelRenderer* Scene::defaultRenderer()
 	return &defaultRenderer_;
 }
 
-void Scene::addTopLevelItem(Item* item)
+void Scene::addTopLevelNode(Node *node, int column, int row)
+{
+	currentViewItem()->insertNode(node, column, row);
+}
+
+void Scene::addTopLevelItem(Item* item, bool show)
 {
 	Q_ASSERT(!inAnUpdate_);
+	//If we have a ViewItem, we must add it to all ViewItems
+	if (auto view = dynamic_cast<ViewItem*>(item))
+	{
+		if (viewItems_.size() == 0)
+			currentViewItem_ = view;
+		viewItems_.append(view);
+	}
 	topLevelItems_.append(item);
 	addItem(item);
+	item->setVisible(show);
 	scheduleUpdate();
 }
 
@@ -123,6 +139,38 @@ void Scene::removeTopLevelItem(Item* item)
 	Q_ASSERT(!inAnUpdate_ || removed == 0);
 
 	removeItem(item);
+	scheduleUpdate();
+}
+
+
+ViewItem* Scene::currentViewItem()
+{
+	if (!currentViewItem_)
+	{
+		if (viewItems_.size() == 0)
+			addTopLevelItem(new ViewItem(nullptr, "ProjectView"));
+		else
+			currentViewItem_ = viewItems_.first();
+	}
+	Q_ASSERT(currentViewItem_);
+	return currentViewItem_;
+}
+
+ViewItem* Scene::getViewItem(QString name)
+{
+	for (auto item : viewItems_)
+		if (item->name() == name)
+			return item;
+	return nullptr;
+}
+
+void Scene::switchToView(ViewItem *view)
+{
+	Q_ASSERT(!inAnUpdate_);
+	Q_ASSERT(viewItems_.contains(view));
+	currentViewItem_->hide();
+	currentViewItem_ = view;
+	currentViewItem_->show();
 	scheduleUpdate();
 }
 
