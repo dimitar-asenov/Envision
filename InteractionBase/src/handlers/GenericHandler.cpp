@@ -54,6 +54,7 @@
 
 #include "commands/NewViewCommand.h"
 #include "commands/SwitchViewCommand.h"
+#include "commands/RemoveNodeCommand.h"
 
 namespace Interaction {
 
@@ -121,6 +122,7 @@ GenericHandler::GenericHandler()
 {
 	supportedCommands.append(new NewViewCommand());
 	supportedCommands.append(new SwitchViewCommand());
+	supportedCommands.append(new RemoveNodeCommand());
 }
 
 GenericHandler* GenericHandler::instance()
