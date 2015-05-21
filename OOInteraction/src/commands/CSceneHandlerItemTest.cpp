@@ -26,7 +26,7 @@
 
 #include "CSceneHandlerItemTest.h"
 
-#include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
 #include "OOModel/src/declarations/Project.h"
@@ -59,7 +59,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 	auto prj = dynamic_cast<OOModel::Project*> (manager->root());
 	Model::Reference::resolvePending();
 
-	Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem( new Visualization::RootItem(prj));
+	Visualization::VisualizationManager::instance().mainScene()->addTopLevelNode(prj);
 	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	return new Interaction::CommandResult();

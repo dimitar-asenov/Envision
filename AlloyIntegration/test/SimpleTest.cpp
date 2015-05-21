@@ -32,9 +32,10 @@
 #include "OOModel/src/allOOModelNodes.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
-#include "VisualizationBase/src/items/RootItem.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
+
+#include "VisualizationBase/src/Scene.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -178,7 +179,7 @@ TEST(AlloyIntegrationPlugin, AlloyTest)
 
 	auto manager = new Model::TreeManager(aLinkedList);
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem(new RootItem(aLinkedList));
+	VisualizationManager::instance().mainScene()->addTopLevelNode(aLinkedList);
 
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 }

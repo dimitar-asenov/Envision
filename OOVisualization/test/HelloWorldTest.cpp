@@ -41,7 +41,6 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
-#include "VisualizationBase/src/items/RootItem.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
@@ -1063,7 +1062,7 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 
 	auto manager = new Model::TreeManager(top_level);
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->addTopLevelNode(top_level);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(top_level != nullptr);
