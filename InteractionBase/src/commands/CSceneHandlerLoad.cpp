@@ -26,10 +26,10 @@
 
 #include "CSceneHandlerLoad.h"
 
-#include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
 #include "ModelBase/src/model/TreeManager.h"
+#include "VisualizationBase/src/Scene.h"
 
 using namespace Visualization;
 
@@ -48,7 +48,7 @@ CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualizati
 	if (attributes.first() != "library")
 	{
 
-		VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(manager->root()));
+		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
 		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 	}
 
