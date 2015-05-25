@@ -108,8 +108,10 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 		changeDescriptions_.insert(id, new ChangeDescription(nullptr, iter.value()));
 	}
 	// Intermediate state 3
+	QSet<Model::NodeIdType> nonModifyingChanges;
 	for (ChangeDescription* change : changeDescriptions_)
-	if (!isModifying(change)) changeDescriptions_.remove(change->id());
+	if (!isModifying(change)) nonModifyingChanges.insert(change->id());
+	for (auto id : nonModifyingChanges) changeDescriptions_.remove(id);
 }
 
 /**

@@ -37,13 +37,10 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) : n
 		id_ = nodeA_->id();
 		if (nodeB_)
 		{
-			if (nodeA_->parentId() == nodeB_->parentId())
-				type_ = ChangeType::Stationary;
-			else
-				type_ = ChangeType::Move;
+			if (nodeA_->parentId() == nodeB_->parentId()) type_ = ChangeType::Stationary;
+			else type_ = ChangeType::Move;
 		}
-		else
-			type_ = ChangeType::Deletion;
+		else type_ = ChangeType::Deletion;
 	}
 	else
 	{
@@ -59,71 +56,59 @@ void ChangeDescription::setFlags()
 {
 	if (nodeA_ != nullptr && nodeB_ != nullptr)
 	{
-		if (nodeA_->name() != nodeB_->name())
-			updateFlags_ |= Label;
-		else
-			updateFlags_ &= ~Label;
+		if (nodeA_->name() != nodeB_->name()) updateFlags_ |= Label;
+		else updateFlags_ &= ~Label;
 
-		if (nodeA_->rawValue() != nodeB_->rawValue())
-			updateFlags_ |= Value;
-		else
-			updateFlags_ &= ~Value;
+		if (nodeA_->rawValue() != nodeB_->rawValue()) updateFlags_ |= Value;
+		else updateFlags_ &= ~Value;
 
-		if (nodeA_->type() != nodeB_->type())
-			updateFlags_ |= Type;
-		else
-			updateFlags_ &= ~Type;
+		if (nodeA_->type() != nodeB_->type()) updateFlags_ |= Type;
+		else updateFlags_ &= ~Type;
 	}
 }
 
 void ChangeDescription::print() const
 {
 	if (nodeA_ || nodeB_)
-		std::cout << (nodeA_ ? nodeA_->type() : nodeB_->type()).toStdString().c_str() << "\t";
-	std::cout << id().toString().toStdString().c_str() << "\t";
+		qDebug() << (nodeA_ ? nodeA_->type() : nodeB_->type()) << "\t";
+	qDebug() << id().toString() << "\t";
 	switch (type_)
 	{
 		case ChangeType::Insertion:
-			std::cout << "Insertion" << std::endl;
+			qDebug() << "Insertion" << endl;
 			break;
 
 		case ChangeType::Deletion:
-			std::cout << "Deletion" << std::endl;
+			qDebug() << "Deletion" << endl;
 			break;
 
 		case ChangeType::Move:
-			std::cout << "Move" << std::endl;
+			qDebug() << "Move" << endl;
 			break;
 
 		case ChangeType::Stationary:
-			std::cout << "Stationary" << std::endl;
+			qDebug() << "Stationary" << endl;
 			break;
 
 		case ChangeType::Unclassified:
-			std::cout << "Unclassified" << std::endl;
+			qDebug() << "Unclassified" << endl;
 			break;
 
 		default:
 			Q_ASSERT(false);
 	}
 
-	if (updateFlags_.testFlag(Label))
-		std::cout << "\tLabel";
-	if (updateFlags_.testFlag(Type))
-		std::cout << "\tType";
-	if (updateFlags_.testFlag(Value))
-		std::cout << "\tValue";
-	if (updateFlags_.testFlag(Structure))
-		std::cout << "\tStructure";
-	std::cout << std::endl;
+	if (updateFlags_.testFlag(Label)) qDebug() << "\tLabel";
+	if (updateFlags_.testFlag(Type)) qDebug() << "\tType";
+	if (updateFlags_.testFlag(Value)) qDebug() << "\tValue";
+	if (updateFlags_.testFlag(Structure)) qDebug() << "\tStructure";
+	qDebug() << endl;
 }
 
 void ChangeDescription::setStructureChangeFlag(bool value)
 {
-	if (value)
-		updateFlags_ |= Structure;
-	else
-		updateFlags_ &= ~Structure;
+	if (value) updateFlags_ |= Structure;
+	else updateFlags_ &= ~Structure;
 }
 
 } /* namespace FilePersistence */
