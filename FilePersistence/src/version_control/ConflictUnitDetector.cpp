@@ -26,6 +26,7 @@
 
 #include "ConflictUnitDetector.h"
 #include "ConflictPairs.h"
+#include "ChangeDescription.h"
 
 namespace FilePersistence {
 
@@ -33,39 +34,69 @@ ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes) : confl
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
-void ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
+RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
 									const std::unique_ptr<GenericTree>&,
 									const std::unique_ptr<GenericTree>&,
 									ChangeDependencyGraph& cdgA,
 									ChangeDependencyGraph& cdgB,
-									QSet<ChangeDescription*>& conflictingChanges,
-									ConflictPairs& conflictPairs)
+									QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
+									ConflictPairs& conflictPairs, RelationAssignment& oldRelationAssignment)
 {
 	affectedCUsA_ = computeAffectedCUs(treeBase, cdgA);
 	affectedCUsB_ = computeAffectedCUs(treeBase, cdgB);
+	RelationAssignmentTransition transition = createIdentityTransition(oldRelationAssignment);
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
 	{
+		RelationSet relationSet;
 		// ...that are modified by both branches...
 		if (affectedCUsB_.keys().contains(conflictRootId))
 		{
 			// ...we take every change from A...
-			IdToChangeMultiHash::iterator changeItA = affectedCUsA_.find(conflictRootId);
-			while (changeItA != affectedCUsA_.end() && changeItA.key() == conflictRootId)
+			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
 				// ...mark it as conflicting...
-				conflictingChanges.insert(changeItA.value());
+				conflictingChanges.insert(changeA);
+				// ...and related to the other changes in this CU
+				relationSet->insert(changeA);
+				transition.insert(findRelationSet(changeA, oldRelationAssignment), relationSet);
 				// ...and take every change from B...
-				IdToChangeMultiHash::iterator changeItB = affectedCUsB_.find(conflictRootId);
-				while (changeItB != affectedCUsB_.end() && changeItB.key() == conflictRootId)
+				for (auto changeB : affectedCUsB_.values(conflictRootId))
 				{
-					// ...mark it conflictinging and record the conflict pair.
-					conflictingChanges.insert(changeItB.value());
-					conflictPairs.insert(changeItA.value(), changeItB.value());
+					// ...mark it conflicting and record the conflict pair.
+					conflictingChanges.insert(changeB);
+					conflictPairs.insert(changeA, changeB);
+					// also record it as being related
+					relationSet->insert(changeA);
+					transition.insert(findRelationSet(changeB, oldRelationAssignment), relationSet);
 				}
 			}
 		}
+		else
+		{
+			// CU is not in conflict, just record change relations.
+			for (auto changeA : affectedCUsA_.values(conflictRootId))
+			{
+				relationSet->insert(changeA);
+				transition.insert(findRelationSet(changeA, oldRelationAssignment), relationSet);
+			}
+		}
 	}
+	// also mark changes of same CU as related in B if the CU is not in conflict
+	for (auto conflictRootId : affectedCUsB_.keys())
+	{
+		if (!affectedCUsA_.keys().contains(conflictRootId))
+		{
+			RelationSet relationSet;
+			auto changeItB = affectedCUsB_.find(conflictRootId);
+			while (changeItB != affectedCUsB_.end() && changeItB.key() == conflictRootId)
+			{
+				relationSet->insert(changeItB.value());
+				transition.insert(findRelationSet(changeItB.value(), oldRelationAssignment), relationSet);
+			}
+		}
+	}
+	return transition;
 }
 
 IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,

@@ -41,9 +41,9 @@ TEST(FilePersistencePlugin, addAndRename)
 	Q_ASSERT(std::system("tar -xf TestProject2.tar -C projects") == 0);
 	GitRepository repo("projects/Foo");
 	Diff diff = repo.diff("HEAD~1", "HEAD");
-	ChangeDescription* renameChange = diff.changes().find(QUuid("ec98da71-76d5-4371-a491-18826bce2a35")).value();
-	ChangeDescription* insertChange = diff.changes().find(QUuid("b32af2db-f0d0-4d36-ba00-96f27595248e")).value();
-	ChangeDescription* structChange = diff.changes().find(QUuid("ee53ebac-d6a9-420f-b729-68ca160ee94e")).value();
+	auto renameChange = diff.changes().find(QUuid("ec98da71-76d5-4371-a491-18826bce2a35")).value();
+	auto insertChange = diff.changes().find(QUuid("b32af2db-f0d0-4d36-ba00-96f27595248e")).value();
+	auto structChange = diff.changes().find(QUuid("ee53ebac-d6a9-420f-b729-68ca160ee94e")).value();
 	CHECK_CONDITION(renameChange->hasFlags(ChangeDescription::Value));
 	CHECK_CONDITION(insertChange->type() == ChangeType::Insertion);
 	CHECK_CONDITION(structChange->hasFlags(ChangeDescription::Structure));
@@ -70,8 +70,8 @@ TEST(FilePersistencePlugin, deletion)
 	Q_ASSERT(std::system("tar -xf TestDiff_Delete.tar -C projects") == 0);
 	GitRepository repo("projects/TestDiff");
 	Diff diff = repo.diff("HEAD~1", "HEAD");
-	ChangeDescription* change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000017")).value();
-	ChangeDescription* change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000016")).value();
+	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000017")).value();
+	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000016")).value();
 	CHECK_CONDITION(change1->type() == ChangeType::Deletion);
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Structure));
 	CHECK_CONDITION(diff.changes().size() == 2);
@@ -83,8 +83,8 @@ TEST(FilePersistencePlugin, insert)
 	Q_ASSERT(std::system("tar -xf TestDiff_Insert.tar -C projects") == 0);
 	GitRepository repo("projects/TestDiff");
 	Diff diff = repo.diff("HEAD~1", "HEAD");
-	ChangeDescription* change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000020")).value();
-	ChangeDescription* change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000001")).value();
+	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000020")).value();
+	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000001")).value();
 	CHECK_CONDITION(change1->type() == ChangeType::Insertion);
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Structure));
 	CHECK_CONDITION(diff.changes().size() == 2);
@@ -96,7 +96,7 @@ TEST(FilePersistencePlugin, intValueChange)
 	Q_ASSERT(std::system("tar -xf TestDiff_IntValueChange.tar -C projects") == 0);
 	GitRepository repo("projects/TestDiff");
 	Diff diff = repo.diff("HEAD~1", "HEAD");
-	ChangeDescription* change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000014")).value();
+	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000014")).value();
 	CHECK_CONDITION(change1->hasFlags(ChangeDescription::Value));
 	CHECK_CONDITION(diff.changes().size() == 1);
 	Q_ASSERT(std::system("rm -r projects/TestDiff") == 0);
@@ -107,9 +107,9 @@ TEST(FilePersistencePlugin, listReorder)
 	Q_ASSERT(std::system("tar -xf TestDiff_ListReorder.tar -C projects") == 0);
 	GitRepository repo("projects/TestDiff");
 	Diff diff = repo.diff("HEAD~1", "HEAD");
-	ChangeDescription* change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000008")).value();
-	ChangeDescription* change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000009")).value();
-	ChangeDescription* change3 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000002")).value();
+	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000008")).value();
+	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000009")).value();
+	auto change3 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000002")).value();
 	CHECK_CONDITION(change1->hasFlags(ChangeDescription::Label));
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Label));
 	CHECK_CONDITION(change3->hasFlags(ChangeDescription::Structure));
@@ -131,9 +131,9 @@ TEST(FilePersistencePlugin, parentChange)
 	Q_ASSERT(std::system("tar -xf TestDiff_ParentChange.tar -C projects") == 0);
 	GitRepository repo("projects/TestDiff");
 	Diff diff = repo.diff("HEAD~1", "HEAD");
-	ChangeDescription* change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000017")).value();
-	ChangeDescription* change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000016")).value();
-	ChangeDescription* change3 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000018")).value();
+	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000017")).value();
+	auto change2 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000016")).value();
+	auto change3 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000018")).value();
 	CHECK_CONDITION(change1->type() == ChangeType::Move);
 	CHECK_CONDITION(change2->hasFlags(ChangeDescription::Structure));
 	CHECK_CONDITION(change3->hasFlags(ChangeDescription::Structure));
@@ -146,7 +146,7 @@ TEST(FilePersistencePlugin, typeChange)
 	Q_ASSERT(std::system("tar -xf TestDiff_TypeChange.tar -C projects") == 0);
 	GitRepository repo("projects/TestDiff");
 	Diff diff = repo.diff("HEAD~1", "HEAD");
-	ChangeDescription* change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000015")).value();
+	auto change1 = diff.changes().find(QUuid("00000000-0000-0000-0000-000000000015")).value();
 	CHECK_CONDITION(change1->hasFlags(ChangeDescription::Type));
 	CHECK_CONDITION(diff.changes().size() == 1);
 	Q_ASSERT(std::system("rm -r projects/TestDiff") == 0);

@@ -35,7 +35,7 @@ enum class ChangeType {Unclassified, Insertion, Deletion, Move, Stationary};
 class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
-		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
+		ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB);
 		ChangeDescription(Model::NodeIdType id, ChangeType type);
 
 		enum UpdateType
@@ -63,6 +63,10 @@ class FILEPERSISTENCE_API ChangeDescription
 		const GenericNode* nodeB() const;
 		const GenericNode* nodeA() const;
 
+		bool isModifying() const;
+		bool onlyStructureChange() const;
+		bool onlyLabelChange() const;
+
 	private:
 		void setFlags();
 
@@ -72,8 +76,8 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		UpdateFlags updateFlags_;
 
-		GenericNode* nodeA_{};
-		GenericNode* nodeB_{};
+		const GenericNode* nodeA_{};
+		const GenericNode* nodeB_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
@@ -88,5 +92,30 @@ inline const ChangeDescription::UpdateFlags ChangeDescription::flags() const { r
 
 inline const GenericNode* ChangeDescription::nodeB() const { return nodeB_; }
 inline const GenericNode* ChangeDescription::nodeA() const { return nodeA_; }
+
+/**
+ * filters false changes that are stationary and have no flags set.
+ */
+inline bool ChangeDescription::isModifying() const
+{
+	return !(type_ == ChangeType::Stationary && updateFlags_ == ChangeDescription::NoFlags);
+}
+
+inline bool ChangeDescription::onlyStructureChange() const {
+	return (type_ == ChangeType::Stationary &&
+			  (updateFlags_ == ChangeDescription::Structure ||
+			  updateFlags_ == ChangeDescription::NoFlags));
+}
+
+inline bool ChangeDescription::onlyLabelChange() const {
+	return (type_ == ChangeType::Stationary &&
+			  (updateFlags_ == ChangeDescription::Label ||
+			  updateFlags_ == ChangeDescription::NoFlags));
+}
+
+inline uint qHash(const std::shared_ptr<const ChangeDescription> change, uint seed = 0)
+{
+	return ::qHash(change.get(), seed);
+}
 
 } /* namespace FilePersistence */

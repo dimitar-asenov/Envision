@@ -144,10 +144,9 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	IdToChangeDescriptionHash changes = diff->changes();
 
 	// check if rootNode is affected by changes directly
-	IdToChangeDescriptionHash::iterator iter = changes.find(rootNodeId_);
-	if (iter != changes.end())
+	if (changes.contains(rootNodeId_))
 	{
-		ChangeDescription* change = iter.value();
+		auto change = changes.value(rootNodeId_);
 		const GenericNode* rootNode = change->nodeA();
 		if (rootNode)
 			return rootNode->persistentUnit()->name();

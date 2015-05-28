@@ -28,16 +28,16 @@
 
 namespace FilePersistence {
 
-void ConflictPairs::insert(ChangeDescription* changeA, ChangeDescription* changeB)
+void ConflictPairs::insert(std::shared_ptr<ChangeDescription>& changeA, std::shared_ptr<ChangeDescription>& changeB)
 {
-	map_.insert(changeA, changeB);
-	map_.insert(changeB, changeA);
+	pairs_.insert(changeA, changeB);
+	pairs_.insert(changeB, changeA);
 }
 
-void ConflictPairs::remove(ChangeDescription* changeA, ChangeDescription* changeB)
+void ConflictPairs::remove(std::shared_ptr<ChangeDescription>& changeA, std::shared_ptr<ChangeDescription>& changeB)
 {
-	map_.remove(changeA, changeB);
-	map_.remove(changeB, changeA);
+	pairs_.remove(changeA, changeB);
+	pairs_.remove(changeB, changeA);
 }
 
 } /* namespace FilePersistence */

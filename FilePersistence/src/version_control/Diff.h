@@ -35,7 +35,7 @@ namespace FilePersistence {
 class GitRepository;
 
 using IdToGenericNodeHash = QMultiHash<Model::NodeIdType, GenericNode*>;
-using IdToChangeDescriptionHash = QHash<Model::NodeIdType, ChangeDescription*>;
+using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 
 class FILEPERSISTENCE_API Diff
 {
@@ -56,8 +56,6 @@ class FILEPERSISTENCE_API Diff
 
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
 
-		bool isModifying(const ChangeDescription* change);
-
 		IdToChangeDescriptionHash changeDescriptions_{};
 
 		std::shared_ptr<GenericTree> treeA_{};
@@ -65,13 +63,5 @@ class FILEPERSISTENCE_API Diff
 };
 
 inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}
-
-/**
- * filters false changes that are stationary and have no flags set.
- */
-inline bool Diff::isModifying(const ChangeDescription* change)
-{
-	return !(change->type() == ChangeType::Stationary && change->flags() == 0);
-}
 
 } /* namespace FilePersistence */

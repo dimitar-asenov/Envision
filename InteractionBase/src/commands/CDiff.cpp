@@ -156,7 +156,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 				iter = changes.find(id);
 				if (iter != changes.end())
 				{
-					ChangeDescription* change = iter.value();
+					auto change = iter.value();
 					switch (change->type())
 					{
 						case ChangeType::Insertion:
@@ -170,7 +170,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									iter = changes.find(parentID);
 									if (iter != changes.end())
 									{
-										ChangeDescription* parentChange = iter.value();
+										auto parentChange = iter.value();
 										if (parentChange->type() != ChangeType::Insertion)
 											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
 												Visualization::SelectionOverlay::itemStyles().get("insert"))));
@@ -196,7 +196,7 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									iter = changes.find(parentID);
 									if (iter != changes.end())
 									{
-										ChangeDescription* parentChange = iter.value();
+										auto parentChange = iter.value();
 										if (parentChange->type() != ChangeType::Deletion)
 											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
 												Visualization::SelectionOverlay::itemStyles().get("delete"))));

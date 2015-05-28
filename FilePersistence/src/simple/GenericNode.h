@@ -47,6 +47,7 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
+		void setFieldsLike(const GenericNode* other);
 
 		void resetValue(ValueType type, const QString& value);
 

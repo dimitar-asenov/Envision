@@ -32,16 +32,28 @@
 
 namespace FilePersistence {
 
+using RelationSet = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
+using RelationAssignment = QSet<RelationSet>;
+using RelationAssignmentTransition = QHash<RelationSet, RelationSet>;
+
 class ConflictPipelineComponent
 {
 	public:
 		virtual ~ConflictPipelineComponent();
-		virtual void run(const std::unique_ptr<GenericTree>& treeBase,
-							  const std::unique_ptr<GenericTree>& treeA,
-							  const std::unique_ptr<GenericTree>& treeB,
-							  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-							  QSet<ChangeDescription*>& conflictingChanges,
-							  ConflictPairs& conflictPairs) = 0;
+		virtual RelationAssignmentTransition run(const std::unique_ptr<GenericTree>& treeBase,
+															  const std::unique_ptr<GenericTree>& treeA,
+															  const std::unique_ptr<GenericTree>& treeB,
+															  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+															  QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
+															  ConflictPairs& conflictPairs, RelationAssignment& relationAssignment) = 0;
+	protected:
+		RelationAssignmentTransition createIdentityTransition(RelationAssignment& relationAssignment);
+		RelationSet findRelationSet(std::shared_ptr<const ChangeDescription> change, RelationAssignment& relationAssignment);
 };
+
+inline uint qHash(const RelationSet& relationSet, uint seed = 0)
+{
+	return ::qHash(relationSet.get(), seed);
+}
 
 } /* namespace FilePersistence */

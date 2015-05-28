@@ -145,10 +145,19 @@ void Merge::performTrueMerge()
 		treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", baseCommitId_));
 		repository_->loadGenericTree(treeBase_, baseCommitId_);
 
+		RelationAssignmentTrace trace;
+		RelationAssignment relationAssignment; // TODO initialize
+		RelationAssignmentTransition transition = pipelineInitializer_->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
+																								  conflictingChanges_, conflictPairs_, relationAssignment);
+		trace.append(transition);
 		for (auto component : conflictPipeline_)
 		{
-			component->run(treeBase_, treeB_, treeA_, cdgA, cdgB, conflictingChanges_, conflictPairs_);
+			// compute new RA from transition
+			transition = component->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
+												 conflictingChanges_, conflictPairs_, relationAssignment);
+			trace.append(transition);
 		}
+		// compute final RA?
 
 		IdToChangeDescriptionHash applicableChanges;
 		for (auto change : cdgA.changes())

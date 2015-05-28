@@ -89,12 +89,14 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 		if (iter == nodesB.end())
 		{
 			// no such id in nodesB
-			changeDescriptions_.insert(nodeA->id(), new ChangeDescription(nodeA, nullptr));
+			auto change = std::make_shared<ChangeDescription>(nodeA, nullptr);
+			changeDescriptions_.insert(nodeA->id(), change);
 		}
 		else
 		{
 			// found id in nodesB
-			changeDescriptions_.insert(nodeA->id(), new ChangeDescription(nodeA, iter.value()));
+			auto change = std::make_shared<ChangeDescription>(nodeA, iter.value());
+			changeDescriptions_.insert(nodeA->id(), change);
 			onlyInNodesB.remove(iter.key());
 		}
 	}
@@ -105,12 +107,13 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 	for (auto id : onlyInNodesB)
 	{
 		iter = nodesB.find(id);
-		changeDescriptions_.insert(id, new ChangeDescription(nullptr, iter.value()));
+		auto change = std::make_shared<ChangeDescription>(nullptr, iter.value());
+		changeDescriptions_.insert(id, change);
 	}
 	// Intermediate state 3
 	QSet<Model::NodeIdType> nonModifyingChanges;
-	for (ChangeDescription* change : changeDescriptions_)
-	if (!isModifying(change)) nonModifyingChanges.insert(change->id());
+	for (auto change : changeDescriptions_)
+	if (!change->isModifying()) nonModifyingChanges.insert(change->id());
 	for (auto id : nonModifyingChanges) changeDescriptions_.remove(id);
 }
 
@@ -119,7 +122,7 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
  */
 void Diff::computeStructChanges()
 {
-	for (ChangeDescription* change : changeDescriptions_.values())
+	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
 			setStructureFlagForId(change->nodeB()->parentId());
@@ -137,10 +140,10 @@ void Diff::computeStructChanges()
 void Diff::setStructureFlagForId(const Model::NodeIdType id)
 {
 	IdToChangeDescriptionHash::iterator changeIt = changeDescriptions_.find(id);
-	ChangeDescription* change;
+	std::shared_ptr<ChangeDescription> change;
 	if (changeIt == changeDescriptions_.end())
 	{
-		change = new ChangeDescription(id, ChangeType::Stationary);
+		change = std::make_shared<ChangeDescription>(id, ChangeType::Stationary);
 		changeDescriptions_.insert(id, change);
 		// TODO Problem? These changes have no node, just an id.
 	}
@@ -156,7 +159,7 @@ void Diff::setStructureFlagForId(const Model::NodeIdType id)
  */
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
-	for (auto node : nodes)
+	for (auto node : nodes.values())
 	{
 		if (node->type() == GenericNode::persistentUnitType)
 			nodes.remove(node->id(), node);

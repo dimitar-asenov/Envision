@@ -31,4 +31,24 @@ namespace FilePersistence
 
 ConflictPipelineComponent::~ConflictPipelineComponent() {}
 
+RelationAssignmentTransition ConflictPipelineComponent::createIdentityTransition(RelationAssignment& relationAssignment)
+{
+	RelationAssignmentTransition transition;
+	for (auto relationSet : relationAssignment)
+	{
+		transition.insert(relationSet, RelationSet(relationSet));
+	}
+	return transition;
+}
+
+RelationSet ConflictPipelineComponent::findRelationSet(std::shared_ptr<const ChangeDescription> change,
+																		 RelationAssignment& relationAssignment)
+{
+	for (auto relationSet : relationAssignment)
+	{
+		if (relationSet->contains(change)) return relationSet;
+	}
+	Q_ASSERT(false);
+}
+
 }

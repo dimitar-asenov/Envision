@@ -38,11 +38,23 @@ class ChangeDependencyGraph
 		ChangeDependencyGraph();
 		~ChangeDependencyGraph();
 		const IdToChangeDescriptionHash changes() const;
-		void addDependency(ChangeDescription* changeA, ChangeDescription* changeB);
-		void removeDependency(ChangeDescription* changeA, ChangeDescription* changeB);
+		void insert(std::shared_ptr<ChangeDescription>& change);
+		void remove(std::shared_ptr<ChangeDescription>& change);
+		void replace(std::shared_ptr<ChangeDescription>& oldChange, std::shared_ptr<ChangeDescription>& newChange);
+		/**
+		 * Records the fact that \a changeA depends on changeB.
+		 */
+		void addDependency(std::shared_ptr<ChangeDescription>& changeA, std::shared_ptr<ChangeDescription>& changeB);
+		/**
+		 * Records the fact that \a changeA no longer depends on changeB.
+		 */
+		void removeDependency(std::shared_ptr<ChangeDescription>& changeA, std::shared_ptr<ChangeDescription>& changeB);
 	private:
 		IdToChangeDescriptionHash changes_;
-		QMultiHash<ChangeDescription*, ChangeDescription*> map_;
+		/**
+		 * A mapping of changeA to changeB means changeA depends on changeB.
+		 */
+		QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>> dependencies_;
 
 };
 

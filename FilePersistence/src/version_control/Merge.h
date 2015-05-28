@@ -33,7 +33,8 @@
 
 namespace FilePersistence {
 
-using ChangeToChangeHash = QMultiHash<ChangeDescription*, ChangeDescription*>;
+using ChangeToChangeHash = QMultiHash<const ChangeDescription*, const ChangeDescription*>;
+using RelationAssignmentTrace = QList<RelationAssignmentTransition>;
 
 class GitRepository;
 
@@ -91,6 +92,11 @@ class FILEPERSISTENCE_API Merge
 		GitRepository* repository_{};
 
 		/**
+		 * This component is executed first, before any pipeline component.
+		 * It establishes the pipeline invariant but may not depend on it holding beforehand.
+		 */
+		std::shared_ptr<ConflictPipelineComponent> pipelineInitializer_;
+		/**
 		 * Components are executed in the order they appear in this list.
 		 */
 		QList<std::shared_ptr<ConflictPipelineComponent>> conflictPipeline_;
@@ -98,7 +104,7 @@ class FILEPERSISTENCE_API Merge
 		/**
 		 * changes in this set cannot be applied safely.
 		 */
-		QSet<ChangeDescription*> conflictingChanges_;
+		QSet<std::shared_ptr<ChangeDescription>> conflictingChanges_;
 
 		/**
 		 * change1 is mapped to change2 iff change1 and change2 cannot both be applied safely.

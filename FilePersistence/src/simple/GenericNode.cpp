@@ -116,6 +116,16 @@ void GenericNode::setValue(ValueType type, const QString& value)
 	value_ = value;
 }
 
+void GenericNode::setFieldsLike(const GenericNode* other)
+{
+	setId(other->id());
+	setName(other->name());
+	setParent(other->parent());
+	setParentId(other->parentId());
+	setType(other->type());
+	setValue(other->valueType(), other->valueAsString());
+}
+
 void GenericNode::resetValue(ValueType type, const QString& value)
 {
 	Q_ASSERT(children_.isEmpty());

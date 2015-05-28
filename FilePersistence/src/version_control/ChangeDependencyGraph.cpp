@@ -35,19 +35,19 @@ ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff) : changes_{diff.changes
 	{
 		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
 		{
-			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = changes_.find(change->nodeB()->parentId());
+			auto it = changes_.find(change->nodeB()->parentId());
 			while (it != changes_.end() && it.key() == change->nodeB()->parentId())
 			{
-				if (it.value()->type() == ChangeType::Insertion) map_.insert(change, it.value());
+				if (it.value()->type() == ChangeType::Insertion) addDependency(change, it.value());
 				it++;
 			}
 		}
 		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
 		{
-			QHash<Model::NodeIdType, ChangeDescription*>::iterator it = changes_.find(change->nodeA()->parentId());
+			auto it = changes_.find(change->nodeA()->parentId());
 			while (it != changes_.end() && it.key() == change->nodeA()->parentId())
 			{
-				if (it.value()->type() == ChangeType::Deletion) map_.insert(it.value(), change);
+				if (it.value()->type() == ChangeType::Deletion) addDependency(change, it.value());
 				it++;
 			}
 		}
@@ -56,16 +56,35 @@ ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff) : changes_{diff.changes
 
 ChangeDependencyGraph::~ChangeDependencyGraph() {}
 
-void ChangeDependencyGraph::addDependency(ChangeDescription* changeA, ChangeDescription* changeB)
+void ChangeDependencyGraph::insert(std::shared_ptr<ChangeDescription>& change)
+{
+	Q_ASSERT(!changes_.contains(change->id()));
+	changes_.insert(change->id(), change);
+}
+
+void ChangeDependencyGraph::remove(std::shared_ptr<ChangeDescription>& change)
+{
+	Q_ASSERT(changes_.values().contains(change));
+	changes_.remove(change->id());
+	for (auto dependingOnChange : dependencies_.keys(change))
+	{
+		dependencies_.remove(dependingOnChange, change);
+	}
+	dependencies_.remove(change);
+}
+
+void ChangeDependencyGraph::addDependency(std::shared_ptr<ChangeDescription>& changeA,
+														std::shared_ptr<ChangeDescription>& changeB)
 {
 	Q_ASSERT(changes_.values().contains(changeA));
 	Q_ASSERT(changes_.values().contains(changeB));
-	map_.insert(changeA, changeB);
+	dependencies_.insert(changeA, changeB);
 }
 
-void ChangeDependencyGraph::removeDependency(ChangeDescription* changeA, ChangeDescription* changeB)
+void ChangeDependencyGraph::removeDependency(std::shared_ptr<ChangeDescription>& changeA,
+															std::shared_ptr<ChangeDescription>& changeB)
 {
-	map_.remove(changeA, changeB);
+	dependencies_.remove(changeA, changeB);
 }
 
 } /* namespace FilePersistence */

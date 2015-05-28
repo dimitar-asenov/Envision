@@ -28,9 +28,10 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) : nodeA_{nodeA}, nodeB_{nodeB}
+ChangeDescription::ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB) : nodeA_{nodeA}, nodeB_{nodeB}
 {
-	Q_ASSERT(nodeA_ != nullptr || nodeB_ != nullptr);
+	Q_ASSERT(nodeA_ || nodeB_);
+	if (nodeA_ && nodeB_) Q_ASSERT(nodeA_->id() == nodeB->id());
 
 	if (nodeA_)
 	{
