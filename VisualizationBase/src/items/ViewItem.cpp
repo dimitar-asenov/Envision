@@ -49,8 +49,12 @@ void ViewItem::initializeForms()
 
 void ViewItem::insertNode(Model::Node* node, int column, int row)
 {
+	if (nodes_.size() < column)
+		nodes_.resize(column);
 	if (nodes_.size() <= column)
 		nodes_.insert(column, {});
+	if (nodes_[column].size() < row)
+		nodes_[column].resize(row);
 	nodes_[column].insert(row, node);
 	setUpdateNeeded(StandardUpdate);
 }
