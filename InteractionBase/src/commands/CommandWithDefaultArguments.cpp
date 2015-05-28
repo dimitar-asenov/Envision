@@ -58,12 +58,6 @@ QList<CommandSuggestion*> CommandWithDefaultArguments::suggest(Visualization::It
 	return result;
 }
 
-QStringList CommandWithDefaultArguments::commandForms(Visualization::Item *, Visualization::Item *,
-	const QString &, const std::unique_ptr<Visualization::Cursor> &)
-{
-	return QStringList();
-}
-
 QStringList CommandWithDefaultArguments::getParameters(const QStringList &commandTokens)
 {
 	QStringList parameters = commandTokens;

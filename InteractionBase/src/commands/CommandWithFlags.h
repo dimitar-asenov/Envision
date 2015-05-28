@@ -45,8 +45,6 @@ class INTERACTIONBASE_API CommandWithFlags : public Command
 
 		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	protected:
 		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,

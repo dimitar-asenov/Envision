@@ -194,13 +194,6 @@ void CommandPrompt::removeResult()
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
-void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
-{
-	suggestions_.append(suggestion);
-	showAutocompleteBasedOnSuggestions();
-	setUpdateNeeded(Visualization::Item::StandardUpdate);
-}
-
 void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions)
 {
 	suggestions_.append( suggestions );

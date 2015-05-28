@@ -48,10 +48,4 @@ QList<CommandSuggestion*> Command::suggest(Visualization::Item*, Visualization::
 	return QList<CommandSuggestion*>();
 }
 
-QList<CommandHelp*> Command::extendedHelp(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString&)
-{
-	return QList<CommandHelp*>();
-}
-
 }

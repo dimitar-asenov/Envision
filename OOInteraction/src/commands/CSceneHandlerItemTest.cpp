@@ -74,13 +74,4 @@ QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualizat
 	return s;
 }
 
-QStringList CSceneHandlerItemTest::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	if (textSoFar.isEmpty() || QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("test");
-	return forms;
-}
-
 } /* namespace OOInteraction */

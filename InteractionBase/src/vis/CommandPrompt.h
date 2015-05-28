@@ -47,7 +47,6 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		virtual ~CommandPrompt();
 
 		void setResult(QSharedPointer<CommandResult> result);
-		void addSuggestion(CommandSuggestion* suggestion);
 		void addSuggestions(const QList<CommandSuggestion*>& suggestions);
 
 		void removeResult();

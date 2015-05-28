@@ -73,11 +73,4 @@ QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization:
 	return s;
 }
 
-QStringList CShapeSetProperty::commandForms(Visualization::Item*, Visualization::Item*, const QString&,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	return forms;
-}
-
 }

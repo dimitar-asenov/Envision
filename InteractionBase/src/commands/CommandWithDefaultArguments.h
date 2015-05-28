@@ -46,9 +46,6 @@ class INTERACTIONBASE_API CommandWithDefaultArguments : public Command
 		virtual QList<CommandSuggestion*> suggest(Visualization::Item *source, Visualization::Item *target,
 			const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		virtual QStringList commandForms(Visualization::Item *source, Visualization::Item *target,
-			const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
-
 		const QStringList& defaultArguments();
 
 	protected:

@@ -117,14 +117,6 @@ QList<CommandSuggestion*> CommandWithFlags::suggestNamed(Visualization::Item* so
 	return s;
 }
 
-QStringList CommandWithFlags::commandForms(Visualization::Item* /*source*/,
-		Visualization::Item* /*target*/, const QString& /*textSoFar*/,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	//TODO: Implement this
-	return QStringList();
-}
-
 void CommandWithFlags::findParts(const QStringList& tokens, QString& name, QStringList& attributes,
 				bool& commandFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute)
 {

@@ -95,13 +95,4 @@ QList<CommandSuggestion*> CSceneHandlerSave::suggest(Item*, Item*, const QString
 	return {new CommandSuggestion(commandString, text)};
 }
 
-QStringList CSceneHandlerSave::commandForms(Item*, Item*, const QString& textSoFar,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	if (textSoFar.isEmpty() || QString("save").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("save");
-	return forms;
-}
-
 } /* namespace Interaction */
