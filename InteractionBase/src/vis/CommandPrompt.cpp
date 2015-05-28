@@ -240,9 +240,11 @@ void CommandPrompt::showAutocompleteBasedOnSuggestions()
 {
 	auto executeFunction = [](AutoCompleteEntry* e){
 		if (auto prompt = GenericHandler::instance()->commandPrompt())
+		{
 			prompt->takeSuggestion(static_cast<CommandSuggestion*>(e));
+			prompt->executeCurrentText();
+		}
 	};
-
 
 	QList<AutoCompleteEntry*> entries;
 		for (auto s : suggestions_) entries.append(new AutoCompleteEntry(s->text(), s->description(),
@@ -252,6 +254,16 @@ void CommandPrompt::showAutocompleteBasedOnSuggestions()
 		AutoComplete::hide();
 	else
 		AutoComplete::show(entries, true);
+}
+
+void CommandPrompt::executeCurrentText()
+{
+	commandReceiver_->execute( command_->text(), commandReceiverCursor_);
+
+	auto result = dynamic_cast<GenericHandler*> (handler())->executionEngine()->result();
+
+	if ( result->code() == CommandResult::OK) hidePrompt();
+	else setResult(result);
 }
 
 }

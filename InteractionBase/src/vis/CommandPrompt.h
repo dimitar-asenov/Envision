@@ -59,6 +59,7 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 
 		QString text() const;
 		void takeSuggestion(CommandSuggestion* suggestion);
+		void executeCurrentText();
 		const std::unique_ptr<Visualization::Cursor>& commandReceiverCursor();
 
 		void showPrompt(QString initialCommandText = QString());

@@ -56,12 +56,7 @@ void HCommandPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	}
 	else if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 	{
-		prompt->commandReceiver()->execute(prompt->text(), prompt->commandReceiverCursor());
-
-		auto result = executionEngine()->result();
-
-		if ( result->code() == CommandResult::OK) prompt->hidePrompt();
-		else prompt->setResult(result);
+		prompt->executeCurrentText();
 	}
 	else if (event->key() == Qt::Key_Tab)
 	{
