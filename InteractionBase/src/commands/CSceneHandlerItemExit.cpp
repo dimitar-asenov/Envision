@@ -30,6 +30,8 @@
 
 namespace Interaction {
 
+CSceneHandlerItemExit::CSceneHandlerItemExit() : Command{"exit"}{}
+
 bool CSceneHandlerItemExit::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {

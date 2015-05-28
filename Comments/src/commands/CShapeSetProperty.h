@@ -35,6 +35,8 @@ namespace Comments {
 class COMMENTS_API CShapeSetProperty : public Interaction::Command
 {
 	public:
+		CShapeSetProperty();
+
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,

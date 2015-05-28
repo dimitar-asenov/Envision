@@ -32,42 +32,38 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API MenuCommand : public Command
+class INTERACTIONBASE_API CommandWithDefaultArguments : public Command
 {
-    public:
-        MenuCommand(QString name, const QStringList &defaultArguments);
+	public:
+		CommandWithDefaultArguments(QString name, const QStringList &defaultArguments);
 
-        virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
-                const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-        virtual CommandResult* execute(Visualization::Item *source, Visualization::Item *target,
-                const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual CommandResult* execute(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-        virtual QList<CommandSuggestion*> suggest(Visualization::Item *source, Visualization::Item *target,
-                const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item *source, Visualization::Item *target,
+			const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-        virtual QStringList commandForms(Visualization::Item *source, Visualization::Item *target,
-                const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual QStringList commandForms(Visualization::Item *source, Visualization::Item *target,
+			const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-   protected:
-        virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-                const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+		const QStringList& defaultArguments();
 
-        virtual QString description(Visualization::Item *source, Visualization::Item *target,
-                const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+	protected:
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
 
-        virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
-                const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
 
-        QStringList *defaultArguments();
+		QStringList getParameters(const QStringList &commandTokens);
 
-        QStringList getParameters(const QStringList &commandTokens, bool removeFirst);
-
-    private:
-        QStringList defaultArguments_;
-
+	private:
+		QStringList defaultArguments_;
 };
 
-inline QStringList *MenuCommand::defaultArguments() { return &defaultArguments_; }
+inline const QStringList& CommandWithDefaultArguments::defaultArguments() { return defaultArguments_; }
 
 }

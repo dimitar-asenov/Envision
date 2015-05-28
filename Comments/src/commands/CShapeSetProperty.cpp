@@ -31,6 +31,8 @@
 
 namespace Comments {
 
+CShapeSetProperty::CShapeSetProperty() : Command{"setShapeProperty"}{}
+
 bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {

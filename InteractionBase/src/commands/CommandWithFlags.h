@@ -32,10 +32,10 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
+class INTERACTIONBASE_API CommandWithFlags : public Command
 {
 	public:
-		CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes,
+		CommandWithFlags(const QString& name, const QList<QStringList>& attributes,
 				bool usePossibleNames, bool limitToMatchingNames = true);
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
@@ -60,8 +60,6 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 		virtual QStringList possibleNames(Visualization::Item* source, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor);
 
-		const QString& commandName();
-
 	private:
 		void findParts(const QStringList& tokens, QString& name, QStringList& attributes,
 			bool& methodFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
@@ -69,12 +67,9 @@ class INTERACTIONBASE_API CommandWithNameAndFlags : public Command
 		QStringList matchingNames(Visualization::Item* source, Visualization::Item* target,
 				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& nameToLookFor);
 
-		const QString commandName_;
 		const QList<QStringList> attributes_;
 		const bool usePossibleNames_{};
 		const bool limitToMatchingNames_{};
 };
-
-inline const QString& CommandWithNameAndFlags::commandName() { return commandName_;}
 
 }

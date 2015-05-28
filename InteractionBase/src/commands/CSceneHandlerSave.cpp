@@ -34,6 +34,8 @@ using namespace Visualization;
 
 namespace Interaction {
 
+CSceneHandlerSave::CSceneHandlerSave() : Command{"save"}{}
+
 bool CSceneHandlerSave::canInterpret(Item*, Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {

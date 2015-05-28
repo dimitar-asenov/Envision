@@ -26,11 +26,11 @@
 
 #pragma once
 
-#include "CommandWithNameAndFlags.h"
+#include "CommandWithFlags.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CSceneHandlerLoad : public CommandWithNameAndFlags
+class INTERACTIONBASE_API CSceneHandlerLoad : public CommandWithFlags
 {
 	public:
 		CSceneHandlerLoad();

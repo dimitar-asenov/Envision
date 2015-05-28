@@ -36,6 +36,8 @@
 
 namespace OOInteraction {
 
+CSceneHandlerItemTest::CSceneHandlerItemTest() : Command{"test"}{}
+
 bool CSceneHandlerItemTest::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {

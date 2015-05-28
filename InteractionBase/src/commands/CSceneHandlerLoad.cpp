@@ -36,7 +36,7 @@ using namespace Visualization;
 namespace Interaction {
 
 
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithNameAndFlags{"load", {{"library"}}, true}
+CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}}, true}
 {}
 
 CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,

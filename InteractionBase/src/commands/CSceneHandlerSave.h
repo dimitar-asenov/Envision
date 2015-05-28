@@ -33,6 +33,8 @@ namespace Interaction {
 class INTERACTIONBASE_API CSceneHandlerSave : public Command
 {
 	public:
+		CSceneHandlerSave();
+
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,

@@ -31,6 +31,8 @@
 
 namespace Interaction {
 
+CFind::CFind() : Command{"find"}{}
+
 bool CFind::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {

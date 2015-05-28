@@ -28,11 +28,11 @@
 
 #include "../oodebug_api.h"
 
-#include "InteractionBase/src/commands/CommandWithNameAndFlags.h"
+#include "InteractionBase/src/commands/CommandWithFlags.h"
 
 namespace OODebug {
 
-class OODEBUG_API CJavaRun : public Interaction::CommandWithNameAndFlags
+class OODEBUG_API CJavaRun : public Interaction::CommandWithFlags
 {
 	public:
 		CJavaRun();

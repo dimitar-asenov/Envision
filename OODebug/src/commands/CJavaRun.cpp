@@ -31,7 +31,7 @@
 
 namespace OODebug {
 
-CJavaRun::CJavaRun() : CommandWithNameAndFlags{"run", {}, false}
+CJavaRun::CJavaRun() : CommandWithFlags{"run", {}, false}
 {}
 
 Interaction::CommandResult* CJavaRun::executeNamed(Visualization::Item* source, Visualization::Item*,
@@ -49,7 +49,7 @@ Interaction::CommandResult* CJavaRun::executeNamed(Visualization::Item* source, 
 bool CJavaRun::canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens,
 									 const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-	if (CommandWithNameAndFlags::canInterpret(source, target, commandTokens, cursor))
+	if (CommandWithFlags::canInterpret(source, target, commandTokens, cursor))
 	{
 		// Check if there is a tree manager
 		while (source && !source->node()) source = source->parent();

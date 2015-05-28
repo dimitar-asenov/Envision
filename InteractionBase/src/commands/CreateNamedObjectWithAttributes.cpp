@@ -29,7 +29,7 @@
 namespace Interaction {
 
 CreateNamedObjectWithAttributes::CreateNamedObjectWithAttributes(const QString& commandName,
-		const QList<QStringList>& attributes) : CommandWithNameAndFlags{commandName, attributes, false}
+		const QList<QStringList>& attributes) : CommandWithFlags{commandName, attributes, false}
 {
 }
 
@@ -38,11 +38,11 @@ QList<CommandSuggestion*> CreateNamedObjectWithAttributes::suggestNamed(Visualiz
 		const std::unique_ptr<Visualization::Cursor>&, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {
-	QString commandText = textSoFar + (commandFound?"":" " + commandName());
+	QString commandText = textSoFar + (commandFound?"":" " + this->name());
 	QString explanation = "Create a ";
 	for (auto attr : attributes)
 		if (!attr.isEmpty()) explanation += attr + " ";
-	explanation += commandName() + (name.isEmpty() ? "" : " called '" + name + "'");
+	explanation += this->name() + (name.isEmpty() ? "" : " called '" + name + "'");
 	return {new CommandSuggestion(commandText, explanation)};
 }
 

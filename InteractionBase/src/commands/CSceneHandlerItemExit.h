@@ -35,6 +35,8 @@ namespace Interaction {
 class INTERACTIONBASE_API CSceneHandlerItemExit : public Command
 {
 	public:
+		CSceneHandlerItemExit();
+
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 										  const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
 		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,

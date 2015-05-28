@@ -31,7 +31,7 @@
 
 namespace OODebug {
 
-CJavaCompile::CJavaCompile() : CommandWithNameAndFlags{"compile", {}, false}
+CJavaCompile::CJavaCompile() : CommandWithFlags{"compile", {}, false}
 {}
 
 Interaction::CommandResult* CJavaCompile::executeNamed(Visualization::Item* source, Visualization::Item*,
@@ -49,7 +49,7 @@ Interaction::CommandResult* CJavaCompile::executeNamed(Visualization::Item* sour
 bool CJavaCompile::canInterpret(Visualization::Item* source, Visualization::Item* target,
 										  const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-	if (CommandWithNameAndFlags::canInterpret(source, target, commandTokens, cursor))
+	if (CommandWithFlags::canInterpret(source, target, commandTokens, cursor))
 	{
 		// Check if there is a tree manager
 		while (source && !source->node()) source = source->parent();

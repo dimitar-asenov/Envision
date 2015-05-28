@@ -29,15 +29,12 @@
 
 namespace Interaction {
 
-Command::Command(bool canBeUsedInMenu, QString name)
-    :canBeUsedInMenu_(canBeUsedInMenu), name_(name)
+Command::Command(QString name, bool appearsInMenus)
+	:name_{name}, appearsInMenus_{appearsInMenus}
 {
 }
 
-Command::~Command()
-{
-    SAFE_DELETE(&name_);
-}
+Command::~Command() {}
 
 bool Command::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList&,
 		const std::unique_ptr<Visualization::Cursor>&)

@@ -33,6 +33,8 @@
 
 namespace OODebug {
 
+CProbe::CProbe() : Command{"probe"} {}
+
 bool CProbe::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 								  const std::unique_ptr<Visualization::Cursor>&)
 {

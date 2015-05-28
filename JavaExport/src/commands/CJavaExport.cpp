@@ -30,7 +30,7 @@
 
 namespace JavaExport {
 
-CJavaExport::CJavaExport() : CommandWithNameAndFlags{"export-as-java", {}, false}
+CJavaExport::CJavaExport() : CommandWithFlags{"export-as-java", {}, false}
 {}
 
 Interaction::CommandResult* CJavaExport::executeNamed(Visualization::Item* source, Visualization::Item*,

@@ -23,19 +23,19 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "CommandWithNameAndFlags.h"
+#include "CommandWithFlags.h"
 #include "CommandError.h"
 
 namespace Interaction {
 
-CommandWithNameAndFlags::CommandWithNameAndFlags(const QString& commandName, const QList<QStringList>& attributes,
+CommandWithFlags::CommandWithFlags(const QString& name, const QList<QStringList>& attributes,
 	bool usePossibleNames, bool limitToMatchingNames)
-: commandName_(commandName), attributes_(attributes), usePossibleNames_{usePossibleNames},
+: Command{name}, attributes_(attributes), usePossibleNames_{usePossibleNames},
   limitToMatchingNames_{limitToMatchingNames}
 {
 }
 
-bool CommandWithNameAndFlags::canInterpret(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
+bool CommandWithFlags::canInterpret(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QString name;
@@ -48,7 +48,7 @@ bool CommandWithNameAndFlags::canInterpret(Visualization::Item* /*source*/, Visu
 	return commandFound && !unknownFormat;
 }
 
-CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
+CommandResult* CommandWithFlags::execute(Visualization::Item* source,
 		Visualization::Item* target, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>& cursor)
 {
@@ -63,9 +63,9 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 	{
 		auto matching = matchingNames(source, target, cursor, name);
 		if (matching.isEmpty())
-			return new CommandResult(new CommandError(name + " is not a valid name for " + commandName()));
+			return new CommandResult(new CommandError(name + " is not a valid name for " + this->name()));
 		if (matching.size() > 1 && !matching.contains(name)) // No exact match, but multiple options => ambigious
-			return new CommandResult(new CommandError(name + " is ambiguous for " + commandName()));
+			return new CommandResult(new CommandError(name + " is ambiguous for " + this->name()));
 
 		name = matching.first();
 	}
@@ -73,7 +73,7 @@ CommandResult* CommandWithNameAndFlags::execute(Visualization::Item* source,
 	return executeNamed(source, target, cursor, name, attributes);
 }
 
-QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* source,
+QList<CommandSuggestion*> CommandWithFlags::suggest(Visualization::Item* source,
 		Visualization::Item* target, const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QString name;
@@ -87,13 +87,13 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggest(Visualization::Item* 
 	return suggestNamed(source, target, textSoFar, cursor, name, attributes, commandFound);
 }
 
-QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(Visualization::Item* source,
+QList<CommandSuggestion*> CommandWithFlags::suggestNamed(Visualization::Item* source,
 		Visualization::Item* target, const QString& textSoFar,
 		const std::unique_ptr<Visualization::Cursor>& cursor, const QString& name,
 		const QStringList& attributes, bool commandFound)
 {
-	QString commandText = textSoFar + (commandFound?"":" " + commandName_);
-	QString explanation = commandName_;
+	QString commandText = textSoFar + (commandFound?"":" " + this->name());
+	QString explanation = this->name();
 	bool atLeastOneAttribute = false;
 	for (auto attr : attributes)
 		if (!attr.isEmpty())
@@ -117,7 +117,7 @@ QList<CommandSuggestion*> CommandWithNameAndFlags::suggestNamed(Visualization::I
 	return s;
 }
 
-QStringList CommandWithNameAndFlags::commandForms(Visualization::Item* /*source*/,
+QStringList CommandWithFlags::commandForms(Visualization::Item* /*source*/,
 		Visualization::Item* /*target*/, const QString& /*textSoFar*/,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
@@ -125,7 +125,7 @@ QStringList CommandWithNameAndFlags::commandForms(Visualization::Item* /*source*
 	return QStringList();
 }
 
-void CommandWithNameAndFlags::findParts(const QStringList& tokens, QString& name, QStringList& attributes,
+void CommandWithFlags::findParts(const QStringList& tokens, QString& name, QStringList& attributes,
 				bool& commandFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute)
 {
 	name = QString();
@@ -174,7 +174,7 @@ void CommandWithNameAndFlags::findParts(const QStringList& tokens, QString& name
 			// If this token was not recognized as an attribute try the command name
 			if (!found)
 			{
-				if (commandName_.startsWith(t)) commandFound = true;
+				if (this->name().startsWith(t)) commandFound = true;
 				else
 				{
 					unknownFormat = true;
@@ -186,13 +186,13 @@ void CommandWithNameAndFlags::findParts(const QStringList& tokens, QString& name
 	else unknownFormat = true;
 }
 
-QStringList CommandWithNameAndFlags::possibleNames(Visualization::Item*, Visualization::Item*,
+QStringList CommandWithFlags::possibleNames(Visualization::Item*, Visualization::Item*,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return {};
 }
 
-QStringList CommandWithNameAndFlags::matchingNames(Visualization::Item* source, Visualization::Item* target,
+QStringList CommandWithFlags::matchingNames(Visualization::Item* source, Visualization::Item* target,
 		const std::unique_ptr<Visualization::Cursor>& cursor, const QString& nameToLookFor)
 {
 	if (nameToLookFor.isNull()) return possibleNames(source, target, cursor);

@@ -35,6 +35,8 @@ namespace OOInteraction {
 class OOINTERACTION_API CSceneHandlerItemTest  : public Interaction::Command {
 
 	public:
+		CSceneHandlerItemTest();
+
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
