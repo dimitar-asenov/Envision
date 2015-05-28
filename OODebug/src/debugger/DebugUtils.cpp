@@ -26,7 +26,6 @@
 
 #include "DebugUtils.h"
 
-#include "EnvisionVariable.h"
 #include "jdwp/DataTypes.h"
 #include "jdwp/messages/AllMessages.h"
 #include "jdwp/DebugConnector.h"
@@ -38,6 +37,7 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Module.h"
+#include "OOModel/src/declarations/VariableDeclaration.h"
 #include "OOModel/src/expressions/Expression.h"
 #include "OOModel/src/expressions/types/TypeExpression.h"
 #include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
@@ -252,8 +252,9 @@ Protocol::Tag DebugUtils::typeExpressionToTag(OOModel::Expression* e)
 	Q_ASSERT(false);
 }
 
-bool DebugUtils::isPrimitiveValueType(Protocol::Tag tag)
+bool DebugUtils::hasPrimitiveValueType(OOModel::VariableDeclaration* variableDeclaration)
 {
+	Protocol::Tag tag = typeExpressionToTag(variableDeclaration->typeExpression());
 	switch (tag)
 	{
 		case Protocol::Tag::INT: return true;
@@ -294,10 +295,10 @@ OOModel::VariableDeclaration* DebugUtils::variableDeclarationFromStatement(OOMod
 	return variableDeclaration;
 }
 
-QHash<QString, EnvisionVariable> DebugUtils::findVariableDetailsIn(OOModel::StatementItemList* statementList,
-																						 QStringList variableNames, int indexFrom)
+QHash<QString, OOModel::VariableDeclaration*> DebugUtils::findVariableDetailsIn(
+		OOModel::StatementItemList* statementList, QStringList variableNames, int indexFrom)
 {
-	QHash<QString, EnvisionVariable> declarationMap;
+	QHash<QString, OOModel::VariableDeclaration*> declarationMap;
 	int itemIndex = indexFrom;
 	auto stmtList = statementList; // working copy
 
@@ -310,7 +311,7 @@ QHash<QString, EnvisionVariable> DebugUtils::findVariableDetailsIn(OOModel::Stat
 			for (auto varName : variableNames)
 				if (!declarationMap.contains(varName))
 					if (auto decl = variableDeclarationFromStatement(stmtList->at(idx), varName))
-						 declarationMap[varName] = {decl->name(), typeExpressionToTag(decl->typeExpression())};
+						 declarationMap[varName] = decl;
 		}
 		auto itemInParentList = stmtList->firstAncestorOfType<OOModel::StatementItem>();
 		stmtList = nullptr; // we finished with this list
@@ -333,8 +334,7 @@ QHash<QString, EnvisionVariable> DebugUtils::findVariableDetailsIn(OOModel::Stat
 		Q_ASSERT(method); // SatementItemList outside method ??
 		for (auto arg : *method->arguments())
 			for (auto varName : variableNames)
-				if (!declarationMap.contains(varName) && arg->name() == varName)
-					declarationMap[varName] = {arg->name(), typeExpressionToTag(arg->typeExpression())};
+				if (!declarationMap.contains(varName) && arg->name() == varName) declarationMap[varName] = arg;
 	}
 	return declarationMap;
 }

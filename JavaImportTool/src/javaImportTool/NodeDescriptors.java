@@ -112,9 +112,7 @@ public class NodeDescriptors {
 		add( new NodeInitializer("FormalTypeArgument", new String[][]{
 				{"NameText","name"}
 		}));
-		add( new NodeInitializer("FormalArgument", new String[][]{
-				{"NameText","name"},
-				{"Expression","typeExpression"},
+		add( new NodeInitializer("FormalArgument", "VariableDeclaration", new String[][]{
 				{"Integer","directionInt"}
 		}));
 		add( new NodeInitializer("FormalResult", new String[][]{

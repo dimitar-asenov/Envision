@@ -52,7 +52,6 @@ class DebugConnector;
 class Location;
 class Value;
 class VariableDetails;
-struct EnvisionVariable;
 
 class OODEBUG_API DebugUtils
 {
@@ -74,7 +73,7 @@ class OODEBUG_API DebugUtils
 
 		Protocol::Tag typeOfVariable(OOModel::Method* containingMethod, VariableDetails variable);
 		Protocol::Tag typeExpressionToTag(OOModel::Expression* e);
-		bool isPrimitiveValueType(Protocol::Tag tag);
+		bool hasPrimitiveValueType(OOModel::VariableDeclaration* variableDeclaration);
 
 		OOModel::VariableDeclaration* variableDeclarationFromStatement(OOModel::StatementItem* statement,
 																							QString variableName = "");
@@ -87,7 +86,7 @@ class OODEBUG_API DebugUtils
 		 *
 		 * The results are returned in a map variable name -> details.
 		 */
-		QHash<QString, EnvisionVariable> findVariableDetailsIn(OOModel::StatementItemList* statementList,
+		QHash<QString, OOModel::VariableDeclaration*> findVariableDetailsIn(OOModel::StatementItemList* statementList,
 																				 QStringList variableNames, int indexFrom);
 
 	private:
