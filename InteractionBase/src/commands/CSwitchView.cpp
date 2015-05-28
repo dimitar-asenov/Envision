@@ -43,15 +43,11 @@ bool CSwitchView::canUseTarget(Visualization::Item *, Visualization::Item *,
 CommandResult* CSwitchView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	QString name = arguments.at(0);
-	auto view = target->scene()->viewItem(name);
-	if (view)
-	{
-		target->scene()->switchToView(view);
+	bool ok = target->scene()->switchToView(arguments.at(0));
+	if (ok)
 		return new CommandResult();
-	}
 	else
-		return new CommandResult(new CommandError("The view with name " + name + " does not exist"));
+		return new CommandResult(new CommandError("The view with name " + arguments.at(0) + " does not exist"));
 }
 
 QString CSwitchView::description(Visualization::Item *, Visualization::Item *,
