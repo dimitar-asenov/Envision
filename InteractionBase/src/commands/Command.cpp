@@ -28,6 +28,11 @@
 
 namespace Interaction {
 
+Command::Command(QString name, bool canBeUsedInMenu)
+	:canBeUsedInMenu_{canBeUsedInMenu}, name_{name}
+{
+}
+
 Command::~Command()
 {
 }

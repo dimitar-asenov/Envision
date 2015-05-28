@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,48 +23,61 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "ViewItem.h"
 
-#include "CSceneHandlerLoad.h"
+#include "../src/declarative/DeclarativeItemDef.h"
+#include "declarative/DynamicGridFormElement.h"
 
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "VisualizationBase/src/Scene.h"
+namespace Visualization {
 
-using namespace Visualization;
+ITEM_COMMON_DEFINITIONS(ViewItem, "item")
 
-namespace Interaction {
-
-
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithNameAndFlags{"load", {{"library"}}, true}
-{}
-
-CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
+ViewItem::ViewItem(Item* parent, QString name, StyleType* style) :
+		Super(parent, style), name_{name}
 {
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+}
 
-	if (attributes.first() != "library")
+void ViewItem::initializeForms()
+{
+	addForm((new DynamicGridFormElement())
+			->setSpacing(10, 10)->setMargins(10)
+			->setMajorAxis(GridLayouter::ColumnMajor)
+			->setNodesGetter([](Item* v)
+				{ auto self = static_cast<I*>(v);
+				  return self->nodesGetter(); }));
+}
+
+void ViewItem::insertNode(Model::Node* node, int column, int row)
+{
+	if (nodes_.size() <= column)
+		nodes_.insert(column, {});
+	nodes_[column].insert(row, node);
+	setUpdateNeeded(StandardUpdate);
+}
+
+void ViewItem::removeNode(Model::Node* node)
+{
+	for (int i = 0; i < nodes_.size(); i++)
 	{
-
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+		auto index = nodes_.at(i).indexOf(node);
+		if (index != -1)
+			nodes_[i].remove(index);
 	}
-
-	return new CommandResult();
+	setUpdateNeeded(StandardUpdate);
 }
 
-QStringList CSceneHandlerLoad::availableProjectsOnDisk()
+const QList<Model::Node*> ViewItem::allNodes() const
 {
-	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
+	QList<Model::Node*> result;
+	for (auto column : nodes_)
+		for (auto item : column)
+			result.append(item);
+	return result;
 }
 
-QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
-															const std::unique_ptr<Visualization::Cursor>&)
+QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 {
-	return availableProjectsOnDisk();
+	qDebug() << name() << " has " << allNodes().size() << " items";
+	return nodes_;
 }
-
-} /* namespace Interaction */
+}

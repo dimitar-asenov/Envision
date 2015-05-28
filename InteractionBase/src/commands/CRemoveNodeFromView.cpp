@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,47 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#include "CSceneHandlerLoad.h"
-
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "VisualizationBase/src/Scene.h"
-
-using namespace Visualization;
+#include "CRemoveNodeFromView.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithNameAndFlags{"load", {{"library"}}, true}
-{}
-
-CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
+CRemoveNodeFromView::CRemoveNodeFromView()
+	:MenuCommand("removeNode", QStringList())
 {
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+}
 
-	if (attributes.first() != "library")
-	{
+bool CRemoveNodeFromView::canUseTarget(Visualization::Item *, Visualization::Item *target,
+		const std::unique_ptr<Visualization::Cursor>&)
+{
+	return target->hasNode() && target->scene()->
+			currentViewItem()->allNodes().contains(target->node());
+}
 
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-	}
-
+CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
+{
+	target->scene()->currentViewItem()->removeNode(target->node());
 	return new CommandResult();
 }
 
-QStringList CSceneHandlerLoad::availableProjectsOnDisk()
+QString CRemoveNodeFromView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &, const std::unique_ptr<Visualization::Cursor> &)
 {
-	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
+	return "Remove the current top-level node from the current view";
 }
-
-QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
-															const std::unique_ptr<Visualization::Cursor>&)
-{
-	return availableProjectsOnDisk();
 }
-
-} /* namespace Interaction */

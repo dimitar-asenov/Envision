@@ -32,6 +32,7 @@
 #include "vis/CommandPrompt.h"
 #include "actions/Action.h"
 #include "actions/ActionPrompt.h"
+#include "commands/Command.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
@@ -50,6 +51,10 @@
 #include "ModelBase/src/nodes/Text.h"
 
 #include "Comments/src/nodes/CommentNode.h"
+
+#include "commands/CNewView.h"
+#include "commands/CSwitchView.h"
+#include "commands/CRemoveNodeFromView.h"
 
 namespace Interaction {
 
@@ -115,6 +120,9 @@ GenericHandlerManagerListener& GenericHandler::managerListener()
 
 GenericHandler::GenericHandler()
 {
+	supportedCommands.append(new CNewView());
+	supportedCommands.append(new CSwitchView());
+	supportedCommands.append(new CRemoveNodeFromView());
 }
 
 GenericHandler* GenericHandler::instance()
@@ -154,11 +162,53 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 	{
 		commandPrompt_->showPrompt(initialCommandText);
+		showCommandMenu(commandReceiver);
 	}
 	else
 	{
 		removeCommandPrompt();
 		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
+		showCommandMenu(commandReceiver);
+	}
+}
+
+void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
+{
+	QList<AutoCompleteEntry*> entries;
+	for (auto command : commands())
+	{
+		if (command->canBeUsedInMenu())
+		{
+			//We find the first parent where it can be interpreted
+			auto target = commandReceiver;
+			while (target && !command->canInterpret(commandReceiver, target, QStringList(command->name()),
+													commandPrompt_->commandReceiverCursor()))
+				target = target->parent();
+
+			//If we have a target != null, then we can interpret the command on it
+			//We then create the command with its default arguments essentially when it is selected
+			if (target)
+			{
+				auto suggestions = command->suggest(commandReceiver, target, command->name(),
+													commandPrompt_->commandReceiverCursor());
+				for (auto suggestion : suggestions)
+					entries.append(new AutoCompleteEntry(suggestion->text(),
+														suggestion->description(),
+														nullptr,
+														[this, commandReceiver, suggestion](AutoCompleteEntry*)
+														{this->command(commandReceiver,
+																	 suggestion->text(),
+																	 commandPrompt_->commandReceiverCursor());}));
+														//commandPrompt_->hidePrompt();}));
+			}
+		}
+	}
+
+	//We only show the menu if we have at least one menu item
+	if (entries.size() > 0)
+	{
+		AutoComplete::hide();
+		AutoComplete::show(entries, true);
 	}
 }
 

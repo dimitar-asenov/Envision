@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,47 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#include "CSceneHandlerLoad.h"
+#pragma once
 
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "VisualizationBase/src/Scene.h"
+#include "../oointeraction_api.h"
+#include "InteractionBase/src/commands/MenuCommand.h"
 
-using namespace Visualization;
-
-namespace Interaction {
-
-
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithNameAndFlags{"load", {{"library"}}, true}
-{}
-
-CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
-{
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
-
-	if (attributes.first() != "library")
-	{
-
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-	}
-
-	return new CommandResult();
+namespace Visualization {
+	class Item;
 }
 
-QStringList CSceneHandlerLoad::availableProjectsOnDisk()
-{
-	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
-}
+namespace OOInteraction {
 
-QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
-															const std::unique_ptr<Visualization::Cursor>&)
+class OOINTERACTION_API CAddNodeToView : public Interaction::MenuCommand
 {
-	return availableProjectsOnDisk();
-}
+	public:
+		CAddNodeToView();
 
-} /* namespace Interaction */
+	protected:
+		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+		virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
+				const std::unique_ptr<Visualization::Cursor> &cursor);
+
+};
+
+}

@@ -24,47 +24,39 @@
  **
  **********************************************************************************************************************/
 
-#include "CSceneHandlerLoad.h"
-
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "VisualizationBase/src/Scene.h"
-
-using namespace Visualization;
+#include "CSwitchView.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithNameAndFlags{"load", {{"library"}}, true}
-{}
-
-CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
+CSwitchView::CSwitchView()
+	:MenuCommand("switch", {"name"})
 {
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+}
 
-	if (attributes.first() != "library")
+bool CSwitchView::canUseTarget(Visualization::Item *, Visualization::Item *,
+		const std::unique_ptr<Visualization::Cursor>&)
+{
+	return true;
+}
+
+CommandResult* CSwitchView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+{
+	QString name = arguments.at(0);
+	auto view = target->scene()->viewItem(name);
+	if (view)
 	{
-
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+		target->scene()->switchToView(view);
+		return new CommandResult();
 	}
-
-	return new CommandResult();
+	else
+		return new CommandResult(new CommandError("The view with name " + name + " does not exist"));
 }
 
-QStringList CSceneHandlerLoad::availableProjectsOnDisk()
+QString CSwitchView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
 {
-	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
+	return "Switch to the view with name " + arguments.at(0);
 }
-
-QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
-															const std::unique_ptr<Visualization::Cursor>&)
-{
-	return availableProjectsOnDisk();
 }
-
-} /* namespace Interaction */
