@@ -143,54 +143,57 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	QList<CommandSuggestion*> result;
-
 	QString trimmed = textSoFar.trimmed();
 	QString navigation = extractNavigationString(trimmed);
 
-	if (!trimmed.isEmpty())
+	// This is the node where we begin trying to process the command
+	Visualization::Item* source = originator;
+	// Alter the source node according to the requested navigation location.
+	if (!navigation.isEmpty()) source = navigate(originator, navigation);
+	// This is the node (source or one of its ancestors) where we manage to process the command.
+	Visualization::Item* target = source;
+
+	// This set keeps a list of commands that have already contributed some suggestions. If a command contributes
+	// suggestions at a more specific context, then we ignore it in less specific contexts, even if it could
+	// contribute more suggestions. The stored value is the hash code of a type_info structure
+	QSet<std::size_t> alreadySuggested;
+
+	// Get suggestion from item and parents
+	while (target != nullptr)
 	{
-		// This is the node where we begin trying to process the command
-		Visualization::Item* source = originator;
-		// Alter the source node according to the requested navigation location.
-		if (!navigation.isEmpty()) source = navigate(originator, navigation);
-		// This is the node (source or one of its ancestors) where we manage to process the command.
-		Visualization::Item* target = source;
-
-		// This set keeps a list of commands that have already contributed some suggestions. If a command contributes
-		// suggestions at a more specific context, then we ignore it in less specific contexts, even if it could
-		// contribute more suggestions. The stored value is the hash code of a type_info structure
-		QSet<std::size_t> alreadySuggested;
-
-		// Get suggestion from item and parents
-		while (target != nullptr)
-		{
-			GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
-			if (handler)
-				for (auto command : handler->commands())
-				{
-					if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
-					auto suggestions = command->suggest(source, target, trimmed, cursor);
-					result.append( suggestions );
-					if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
-				}
-
-			target = target->parent();
-		}
-
-		// Get suggestions from the scene handler item
-		if (originator != originator->scene()->sceneHandlerItem())
-		{
-			GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
-			if ( handler )
-				for (auto command : handler->commands())
-				{
-					if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
-					auto suggestions = command->suggest(source, target, trimmed, cursor);
-					result.append( suggestions );
-					if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
-				}
-		}
+		GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
+		result.append( suggestionsForHandler(handler, alreadySuggested, trimmed, source, target, cursor));
+		target = target->parent();
 	}
+
+	// Get suggestions from the scene handler item
+	if (originator != originator->scene()->sceneHandlerItem())
+	{
+		GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
+		result.append( suggestionsForHandler(handler, alreadySuggested, trimmed, source, target, cursor) );
+	}
+
+	return result;
+}
+
+QList<CommandSuggestion*> CommandExecutionEngine::suggestionsForHandler(GenericHandler* handler,
+	QSet<std::size_t>& alreadySuggested, QString trimmedCommandText,  Visualization::Item* source,
+	Visualization::Item* target, const std::unique_ptr<Visualization::Cursor>& cursor)
+{
+	QList<CommandSuggestion*> result;
+
+	if (handler)
+		for (auto command : handler->commands())
+		{
+			if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
+
+			QList<CommandSuggestion*> suggestions;
+			if (!trimmedCommandText.isEmpty() || command->appearsInMenus())
+				suggestions = command->suggest(source, target, trimmedCommandText, cursor);
+
+			result.append( suggestions );
+			if (!suggestions.isEmpty()) alreadySuggested.insert(typeid(*command).hash_code());
+		}
 
 	return result;
 }

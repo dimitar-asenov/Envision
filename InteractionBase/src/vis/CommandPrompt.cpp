@@ -53,6 +53,8 @@ const int COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT = 50;
  */
 const int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
+const QString CommandPrompt::TYPE_HINT = "Type a command";
+
 ITEM_COMMON_DEFINITIONS(CommandPrompt, "item")
 
 CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, const StyleType* style) :
@@ -74,7 +76,7 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, 
 
 	commandReceiver->scene()->addTopLevelItem(this);
 
-	if (initialCommandText.isNull()) command_->setText("Type a command");
+	if (initialCommandText.isNull()) command_->setText(TYPE_HINT);
 	else command_->setText(initialCommandText);
 	saveReceiverCursor();
 	setPromptPosition();
@@ -144,7 +146,8 @@ void CommandPrompt::determineChildren()
 	if (h)
 	{
 		removeSuggestions();
-		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command_->text(), commandReceiverCursor_));
+		QString text = command_->text() == TYPE_HINT ? "" : command_->text();
+		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, text, commandReceiverCursor_));
 	}
 }
 

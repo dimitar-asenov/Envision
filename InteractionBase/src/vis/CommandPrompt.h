@@ -86,6 +86,8 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		void setPromptPosition();
 		void showAutocompleteBasedOnSuggestions();
 		QPoint receiverCursorPosition();
+
+		static const QString TYPE_HINT;
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }
