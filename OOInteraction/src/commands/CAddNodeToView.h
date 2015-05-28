@@ -26,29 +26,29 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
-#include "MenuCommand.h"
+#include "../oointeraction_api.h"
+#include "InteractionBase/src/commands/MenuCommand.h"
 
 namespace Visualization {
-    class Item;
+	class Item;
 }
 
-namespace Interaction {
+namespace OOInteraction {
 
-class INTERACTIONBASE_API NewViewCommand : public MenuCommand
+class OOINTERACTION_API CAddNodeToView : public Interaction::MenuCommand
 {
-    public:
-		NewViewCommand();
+	public:
+		CAddNodeToView();
 
-    protected:
-        virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-                const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+	protected:
+		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-        virtual QString description(Visualization::Item *source, Visualization::Item *target,
-                const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-        virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
-                const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
+				const std::unique_ptr<Visualization::Cursor> &cursor);
 
 };
 

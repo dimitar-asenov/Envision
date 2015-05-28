@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,39 +24,41 @@
  **
  **********************************************************************************************************************/
 
-#include "SwitchViewCommand.h"
+#include "CNewView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-SwitchViewCommand::SwitchViewCommand()
-	:MenuCommand("switch", QStringList({"name"}))
+CNewView::CNewView()
+	:MenuCommand("newView", {"name", ""})
 {
 }
 
-bool SwitchViewCommand::canUseTarget(Visualization::Item *, Visualization::Item *,
+bool CNewView::canUseTarget(Visualization::Item *, Visualization::Item *,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return true;
 }
 
-CommandResult* SwitchViewCommand::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+CommandResult* CNewView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
 	QString name = arguments.at(0);
-	auto view = target->scene()->getViewItem(name);
-	if (view)
-	{
+	bool open = arguments.at(1).compare("open", Qt::CaseInsensitive) == 0;
+	auto view = new Visualization::ViewItem(nullptr, name);
+	target->scene()->addTopLevelItem(view, false);
+	if (open)
 		target->scene()->switchToView(view);
-		return new CommandResult();
-	}
-	else
-		return new CommandResult(new CommandError("The view with name " + name + " does not exist"));
+	return new CommandResult();
 }
 
-QString SwitchViewCommand::description(Visualization::Item *, Visualization::Item *,
+QString CNewView::description(Visualization::Item *, Visualization::Item *,
 		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
 {
-	return "Switch to the view with name " + arguments.at(0);
+	QString name = arguments.at(0);
+	if (arguments.at(1).compare("open", Qt::CaseInsensitive) == 0)
+		return "Create a new view named " + name + " and open it";
+	else
+		return "Create a new view named " + name + " without opening";
 }
 }

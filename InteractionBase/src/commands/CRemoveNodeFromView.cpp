@@ -24,32 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "interactionbase_api.h"
-#include "commands/MenuCommand.h"
-
-namespace Visualization {
-	class Item;
-}
+#include "CRemoveNodeFromView.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API RemoveNodeCommand : public Interaction::MenuCommand
+CRemoveNodeFromView::CRemoveNodeFromView()
+	:MenuCommand("removeNode", QStringList())
 {
-	public:
-		RemoveNodeCommand();
+}
 
-	protected:
-		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+bool CRemoveNodeFromView::canUseTarget(Visualization::Item *, Visualization::Item *target,
+		const std::unique_ptr<Visualization::Cursor>&)
+{
+	return target->hasNode() && target->scene()->
+			currentViewItem()->allNodes().contains(target->node());
+}
 
-		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
+{
+	target->scene()->currentViewItem()->removeNode(target->node());
+	return new CommandResult();
+}
 
-		virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
-				const std::unique_ptr<Visualization::Cursor> &cursor);
-
-};
-
+QString CRemoveNodeFromView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &, const std::unique_ptr<Visualization::Cursor> &)
+{
+	return "Remove the current top-level node from the current view";
+}
 }

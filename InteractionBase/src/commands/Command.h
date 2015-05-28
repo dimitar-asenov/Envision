@@ -40,6 +40,7 @@ class INTERACTIONBASE_API Command
 {
 	public:
 		Command(QString name = "", bool canBeUsedInMenu = false);
+		virtual ~Command();
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);

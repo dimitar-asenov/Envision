@@ -52,7 +52,7 @@ void ViewItem::insertNode(Model::Node* node, int column, int row)
 	if (nodes_.size() <= column)
 		nodes_.insert(column, {});
 	nodes_[column].insert(row, node);
-	scene()->scheduleUpdate();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void ViewItem::removeNode(Model::Node* node)
@@ -63,7 +63,7 @@ void ViewItem::removeNode(Model::Node* node)
 		if (index != -1)
 			nodes_[i].remove(index);
 	}
-	scene()->scheduleUpdate();
+	setUpdateNeeded(StandardUpdate);
 }
 
 const QList<Model::Node*> ViewItem::allNodes() const
@@ -77,6 +77,7 @@ const QList<Model::Node*> ViewItem::allNodes() const
 
 QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 {
+	qDebug() << name() << " has " << allNodes().size() << " items";
 	return nodes_;
 }
 }

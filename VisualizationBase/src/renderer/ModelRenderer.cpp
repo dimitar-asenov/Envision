@@ -272,10 +272,9 @@ int ModelRenderer::getFinerSemanticZoomLevel(int currentSemanticZoomLevel)
 QImage ModelRenderer::renderToImage(Model::Node* aNode)
 {
 	auto aScene = new Scene();
-	auto anItem = new Visualization::RootItem(aNode);
-	aScene->addTopLevelItem(anItem);
-
+	aScene->addTopLevelNode(aNode);
 	aScene->updateNow();
+	auto anItem = aScene->currentViewItem()->findVisualizationOf(aNode);
 
 	QRectF r = anItem->boundingRect();
 	QImage image(r.width(), r.height(), QImage::Format_ARGB32);
@@ -290,10 +289,9 @@ QImage ModelRenderer::renderToImage(Model::Node* aNode)
 void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
 {
 	auto aScene = new Scene();
-	auto anItem = new Visualization::RootItem(aNode);
-	aScene->addTopLevelItem(anItem);
-
+	aScene->addTopLevelNode(aNode);
 	aScene->updateNow();
+	auto anItem = aScene->currentViewItem()->findVisualizationOf(aNode);
 
 	QSvgGenerator* svggen = new QSvgGenerator;
 	svggen->setFileName(path);

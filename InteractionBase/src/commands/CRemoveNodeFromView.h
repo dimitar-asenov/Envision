@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
-#include "MenuCommand.h"
+#include "interactionbase_api.h"
+#include "commands/MenuCommand.h"
 
 namespace Visualization {
 	class Item;
@@ -35,10 +35,10 @@ namespace Visualization {
 
 namespace Interaction {
 
-class INTERACTIONBASE_API SwitchViewCommand : public MenuCommand
+class INTERACTIONBASE_API CRemoveNodeFromView : public Interaction::MenuCommand
 {
 	public:
-		SwitchViewCommand();
+		CRemoveNodeFromView();
 
 	protected:
 		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,

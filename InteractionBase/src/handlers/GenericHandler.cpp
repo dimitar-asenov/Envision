@@ -52,9 +52,9 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
-#include "commands/NewViewCommand.h"
-#include "commands/SwitchViewCommand.h"
-#include "commands/RemoveNodeCommand.h"
+#include "commands/CNewView.h"
+#include "commands/CSwitchView.h"
+#include "commands/CRemoveNodeFromView.h"
 
 namespace Interaction {
 
@@ -120,9 +120,9 @@ GenericHandlerManagerListener& GenericHandler::managerListener()
 
 GenericHandler::GenericHandler()
 {
-	supportedCommands.append(new NewViewCommand());
-	supportedCommands.append(new SwitchViewCommand());
-	supportedCommands.append(new RemoveNodeCommand());
+	supportedCommands.append(new CNewView());
+	supportedCommands.append(new CSwitchView());
+	supportedCommands.append(new CRemoveNodeFromView());
 }
 
 GenericHandler* GenericHandler::instance()
@@ -161,13 +161,13 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QSt
 {
 	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 	{
-        commandPrompt_->showPrompt(initialCommandText);
+		commandPrompt_->showPrompt(initialCommandText);
 		showCommandMenu(commandReceiver);
 	}
 	else
 	{
-        removeCommandPrompt();
-        commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
+		removeCommandPrompt();
+		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
 		showCommandMenu(commandReceiver);
 	}
 }
@@ -199,8 +199,7 @@ void GenericHandler::showCommandMenu(Visualization::Item* commandReceiver)
 														{this->command(commandReceiver,
 																	 suggestion->text(),
 																	 commandPrompt_->commandReceiverCursor());}));
-														//AutoComplete::hide();
-														//commandPrompt_->hidePrompt();
+														//commandPrompt_->hidePrompt();}));
 			}
 		}
 	}

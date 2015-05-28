@@ -24,24 +24,24 @@
  **
  **********************************************************************************************************************/
 
-#include "AddNodeCommand.h"
+#include "CAddNodeToView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "OOModel/src/declarations/Project.h"
 
 namespace OOInteraction {
 
-AddNodeCommand::AddNodeCommand()
-	:MenuCommand("addNode", QStringList({"current", "0", "0"}))
+CAddNodeToView::CAddNodeToView()
+	:MenuCommand("addNode", {"current", "0", "0"})
 {
 }
 
-bool AddNodeCommand::canUseTarget(Visualization::Item *, Visualization::Item *target,
+bool CAddNodeToView::canUseTarget(Visualization::Item *, Visualization::Item *target,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return target->hasNode() && dynamic_cast<OOModel::Method*>(target->node());
 }
 
-Interaction::CommandResult* AddNodeCommand::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
 	auto method = dynamic_cast<OOModel::Method*>(target->node());
@@ -52,7 +52,7 @@ Interaction::CommandResult* AddNodeCommand::executeWithArguments(Visualization::
 	auto row = arguments.at(2).toInt(&rowOk);
 	if (name == "current")
 		name = target->scene()->currentViewItem()->name();
-	auto view = target->scene()->getViewItem(name);
+	auto view = target->scene()->viewItem(name);
 	if (view && rowOk && colOk)
 	{
 		view->insertNode(method, column, row);
@@ -63,14 +63,14 @@ Interaction::CommandResult* AddNodeCommand::executeWithArguments(Visualization::
 											"The view with name " + name + " does not exist"));
 	else if (!colOk)
 		return new Interaction::CommandResult(new Interaction::CommandError(
-												"Could not parse " + arguments.at(1) + " to integer"));
+												arguments.at(1) + " is not an integer"));
 	else
 		return new Interaction::CommandResult(new Interaction::CommandError(
-												  "Could not parse " + arguments.at(2) + " to integer"));
+												arguments.at(2) + " is not an integer"));
 
 }
 
-QString AddNodeCommand::description(Visualization::Item *, Visualization::Item *,
+QString CAddNodeToView::description(Visualization::Item *, Visualization::Item *,
 		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
 {
 	auto name = arguments.at(0);

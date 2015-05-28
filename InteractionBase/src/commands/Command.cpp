@@ -25,7 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "commands/Command.h"
-#include "precompiled.h"
 
 namespace Interaction {
 
@@ -33,6 +32,11 @@ Command::Command(QString name, bool canBeUsedInMenu)
 	:canBeUsedInMenu_{canBeUsedInMenu}, name_{name}
 {
 }
+
+Command::~Command()
+{
+}
+
 bool Command::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList&,
 		const std::unique_ptr<Visualization::Cursor>&)
 {

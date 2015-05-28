@@ -87,7 +87,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		void showCommandMenu(Visualization::Item* commandReceiver);
 
-        void toggleComment(Visualization::Item* itemWithComment, Model::Node* aNode, bool hideOnly);
+		void toggleComment(Visualization::Item* itemWithComment, Model::Node* aNode, bool hideOnly);
 
 		virtual void beforeEvent(Visualization::Item *target, QEvent* event) override;
 
