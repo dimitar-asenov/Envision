@@ -120,9 +120,6 @@ GenericHandlerManagerListener& GenericHandler::managerListener()
 
 GenericHandler::GenericHandler()
 {
-	supportedCommands.append(new CNewView());
-	supportedCommands.append(new CSwitchView());
-	supportedCommands.append(new CRemoveNodeFromView());
 }
 
 GenericHandler* GenericHandler::instance()

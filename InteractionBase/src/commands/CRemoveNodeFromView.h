@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
-#include "commands/MenuCommand.h"
+#include "InteractionBase/src/interactionbase_api.h"
+#include "InteractionBase/src/commands/MenuCommand.h"
 
 namespace Visualization {
 	class Item;

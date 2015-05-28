@@ -36,6 +36,7 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "InteractionBase/src/commands/CRemoveNodeFromView.h"
 
 #include "commands/CAddNodeToView.h"
 
@@ -44,6 +45,7 @@ namespace OOInteraction {
 HMethod::HMethod()
 {
 	addCommand(new CAddNodeToView());
+	addCommand(new Interaction::CRemoveNodeFromView());
 }
 
 HMethod* HMethod::instance()

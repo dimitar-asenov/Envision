@@ -163,7 +163,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	OOInteraction::DoxygenWholeTreeVisitor::init();
 	OOInteraction::DoxygenCommentsOnlyVisitor::init();
 
-	Interaction::GenericHandler::instance()->addCommand(new CAddNodeToView());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddNodeToView());
 
 	return true;
 }
