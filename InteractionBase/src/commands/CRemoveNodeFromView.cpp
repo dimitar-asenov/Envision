@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,53 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#include "CSceneHandlerItemTest.h"
+#include "CRemoveNodeFromView.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
-#include "VisualizationBase/src/VisualizationManager.h"
+namespace Interaction {
 
-#include "OOModel/src/declarations/Project.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "ModelBase/src/nodes/Reference.h"
-
-namespace OOInteraction {
-
-CSceneHandlerItemTest::CSceneHandlerItemTest() : Command{"test"}{}
-
-bool CSceneHandlerItemTest::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
-		const std::unique_ptr<Visualization::Cursor>&)
+CRemoveNodeFromView::CRemoveNodeFromView()
+	:CommandWithDefaultArguments("removeNode", QStringList())
 {
-	return commandTokens.size() == 1 && commandTokens.first() == "test";
 }
 
-Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*, Visualization::Item*,
+bool CRemoveNodeFromView::canInterpret(Visualization::Item *source, Visualization::Item *target,
+	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+{
+	 return CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor)
+			 && target->hasNode() && target->scene()->currentViewItem()->allNodes().contains(target->node());
+}
+
+CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	//Test code goes here
-
-	QString testDir = "projects/";
-	Model::TreeManager* manager = new Model::TreeManager();
-	FilePersistence::SimpleTextFileStore store;
-	store.setBaseFolder(testDir);
-
-	//manager->load(&store, "tetris");
-	manager->load(&store, "large", false);
-	auto prj = dynamic_cast<OOModel::Project*> (manager->root());
-	Model::Reference::resolvePending();
-
-	Visualization::VisualizationManager::instance().mainScene()->addTopLevelNode(prj);
-	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-
-	return new Interaction::CommandResult();
+	target->scene()->currentViewItem()->removeNode(target->node());
+	return new CommandResult();
 }
 
-QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualization::Item*, Visualization::Item*,
-		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
+QString CRemoveNodeFromView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &, const std::unique_ptr<Visualization::Cursor> &)
 {
-	QList<Interaction::CommandSuggestion*> s;
-	if (QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-			s.append(new Interaction::CommandSuggestion("test", "Loads and visualizes a large project"));
-	return s;
+	return "Remove the current top-level node from the current view";
 }
-
-} /* namespace OOInteraction */
+}

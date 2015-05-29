@@ -40,7 +40,6 @@
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
-#include "VisualizationBase/src/items/RootItem.h"
 
 #include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
@@ -484,12 +483,12 @@ TEST(ContractsLibraryPlugin, ContractsLibraryTest)
 
 	auto manager = new Model::TreeManager(prj);
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
-//	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client));
-//	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client->classes()->at(0)));
-//	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client->methods()->at(0)));
-//	VisualizationManager::instance().mainScene()->addTopLevelItem(
-//			new RootItem(contracts->classes()->at(0)->methods()->at(0)));
+	VisualizationManager::instance().mainScene()->addTopLevelNode(prj);
+//	VisualizationManager::instance().mainScene()->addTopLevelNode(client);
+//	VisualizationManager::instance().mainScene()->addTopLevelNode(client->classes()->at(0));
+//	VisualizationManager::instance().mainScene()->addTopLevelNode(client->methods()->at(0));
+//	VisualizationManager::instance().mainScene()->addTopLevelNode(
+//			contracts->classes()->at(0)->methods()->at(0));
 
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 

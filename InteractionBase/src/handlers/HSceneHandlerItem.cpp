@@ -30,6 +30,9 @@
 #include "commands/CFind.h"
 #include "commands/CSceneHandlerLoad.h"
 #include "commands/CSceneHandlerSave.h"
+#include "commands/CNewView.h"
+#include "commands/CSwitchView.h"
+#include "commands/CRemoveNodeFromView.h"
 
 namespace Interaction {
 
@@ -40,6 +43,9 @@ HSceneHandlerItem::HSceneHandlerItem()
 	addCommand(new CFind());
 	addCommand(new CSceneHandlerLoad());
 	addCommand(new CSceneHandlerSave());
+	addCommand(new CNewView());
+	addCommand(new CSwitchView());
+	addCommand(new CRemoveNodeFromView());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()

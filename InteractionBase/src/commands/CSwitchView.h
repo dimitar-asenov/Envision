@@ -24,53 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#include "CSceneHandlerItemTest.h"
+#pragma once
 
-#include "VisualizationBase/src/VisualizationManager.h"
+#include "../interactionbase_api.h"
+#include "CommandWithDefaultArguments.h"
 
-#include "OOModel/src/declarations/Project.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "ModelBase/src/nodes/Reference.h"
-
-namespace OOInteraction {
-
-CSceneHandlerItemTest::CSceneHandlerItemTest() : Command{"test"}{}
-
-bool CSceneHandlerItemTest::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	return commandTokens.size() == 1 && commandTokens.first() == "test";
+namespace Visualization {
+	class Item;
 }
 
-Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*, Visualization::Item*,
-		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
+namespace Interaction {
+
+class INTERACTIONBASE_API CSwitchView : public CommandWithDefaultArguments
 {
-	//Test code goes here
+	public:
+		CSwitchView();
 
-	QString testDir = "projects/";
-	Model::TreeManager* manager = new Model::TreeManager();
-	FilePersistence::SimpleTextFileStore store;
-	store.setBaseFolder(testDir);
+	protected:
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-	//manager->load(&store, "tetris");
-	manager->load(&store, "large", false);
-	auto prj = dynamic_cast<OOModel::Project*> (manager->root());
-	Model::Reference::resolvePending();
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-	Visualization::VisualizationManager::instance().mainScene()->addTopLevelNode(prj);
-	Visualization::VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+};
 
-	return new Interaction::CommandResult();
 }
-
-QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualization::Item*, Visualization::Item*,
-		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
-{
-	QList<Interaction::CommandSuggestion*> s;
-	if (QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-			s.append(new Interaction::CommandSuggestion("test", "Loads and visualizes a large project"));
-	return s;
-}
-
-} /* namespace OOInteraction */

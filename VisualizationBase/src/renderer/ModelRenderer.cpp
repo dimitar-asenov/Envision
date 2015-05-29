@@ -32,6 +32,7 @@
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Visualization {
 
@@ -101,6 +102,13 @@ bool ModelRenderer::sync(Item*& item, Item* parent, Model::Node* node)
 QPair<int, VisualizationGroup::ItemConstructor> ModelRenderer::bestVisualizationForContext
 (Item* parent, Model::Node* node, int purpose, int semanticZoomLevel)
 {
+	//Always render as RootItem in a view
+	if (parent && DCast<ViewItem>(parent))
+		return qMakePair(RootItem::typeIdStatic(),
+						 [=](Item* parent, Model::Node* n) { auto root = new RootItem(n, purpose, semanticZoomLevel);
+															root->setParentItem(parent);
+															return root; });
+
 	switch (visualizationChoiceStrategy_)
 	{
 	case VISUALIZATION_CHOICE_STRATEGY_TYPE_OVER_SEMANTIC_ZOOM_LEVEL_OVER_PURPOSE:
@@ -264,10 +272,9 @@ int ModelRenderer::getFinerSemanticZoomLevel(int currentSemanticZoomLevel)
 QImage ModelRenderer::renderToImage(Model::Node* aNode)
 {
 	auto aScene = new Scene();
-	auto anItem = new Visualization::RootItem(aNode);
-	aScene->addTopLevelItem(anItem);
-
+	aScene->addTopLevelNode(aNode);
 	aScene->updateNow();
+	auto anItem = aScene->currentViewItem()->findVisualizationOf(aNode);
 
 	QRectF r = anItem->boundingRect();
 	QImage image(r.width(), r.height(), QImage::Format_ARGB32);
@@ -282,10 +289,9 @@ QImage ModelRenderer::renderToImage(Model::Node* aNode)
 void ModelRenderer::renderToSVG(Model::Node* aNode, QString path)
 {
 	auto aScene = new Scene();
-	auto anItem = new Visualization::RootItem(aNode);
-	aScene->addTopLevelItem(anItem);
-
+	aScene->addTopLevelNode(aNode);
 	aScene->updateNow();
+	auto anItem = aScene->currentViewItem()->findVisualizationOf(aNode);
 
 	QSvgGenerator* svggen = new QSvgGenerator;
 	svggen->setFileName(path);

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,48 +23,42 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#pragma once
 
-#include "CSceneHandlerLoad.h"
+#include "../visualizationbase_api.h"
+#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
 
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "VisualizationBase/src/Scene.h"
+namespace Visualization {
 
-using namespace Visualization;
+/**
+ * The ViewItem class represents the visualization of an entire view within a single item.
+ *
+ * All items in a view should be added and removed via this ViewItem class. Each Scene object contains
+ * a list of ViewItem objects which can be used for that. Using this, it is possible to control what
+ * is shown on the screen.
+ */
+class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
-namespace Interaction {
+	ITEM_COMMON_CUSTOM_STYLENAME(ViewItem, DeclarativeItemBaseStyle)
 
+	public:
+		ViewItem(Item* parent, QString name = QString(), StyleType* style = itemStyles().get());
 
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}}, true}
-{}
+		static void initializeForms();
 
-CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
-{
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+		void insertNode(Model::Node* node, int column = 0, int row = 0);
+		void removeNode(Model::Node* node);
+		const QList<Model::Node*> allNodes() const;
 
-	if (attributes.first() != "library")
-	{
+		const QString name() const;
 
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-	}
+	private:
+		QVector<QVector<Model::Node*>> nodes_;
+		QString name_;
 
-	return new CommandResult();
+		QVector<QVector<Model::Node*>> nodesGetter();
+};
+
+inline const QString ViewItem::name() const { return name_; }
+
 }
-
-QStringList CSceneHandlerLoad::availableProjectsOnDisk()
-{
-	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
-}
-
-QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
-															const std::unique_ptr<Visualization::Cursor>&)
-{
-	return availableProjectsOnDisk();
-}
-
-} /* namespace Interaction */

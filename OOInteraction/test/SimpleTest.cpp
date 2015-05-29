@@ -38,7 +38,6 @@
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
-#include "VisualizationBase/src/items/RootItem.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -287,7 +286,7 @@ TEST(OOInteractionPlugin, SimpleTest)
 	auto manager = new Model::TreeManager(top_level);
 
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->addTopLevelNode(top_level);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(top_level != nullptr);

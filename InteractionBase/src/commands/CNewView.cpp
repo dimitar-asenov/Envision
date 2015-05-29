@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,47 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#include "CSceneHandlerLoad.h"
-
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "VisualizationBase/src/Scene.h"
-
-using namespace Visualization;
+#include "CNewView.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}}, true}
-{}
-
-CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
+CNewView::CNewView()
+	:CommandWithDefaultArguments("newView", {"name", ""})
 {
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+}
 
-	if (attributes.first() != "library")
-	{
-
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-	}
-
+CommandResult* CNewView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+{
+	bool open = arguments.at(1).compare("open", Qt::CaseInsensitive) == 0;
+	auto view = target->scene()->newViewItem(arguments.at(0));
+	if (open)
+		target->scene()->switchToView(view);
 	return new CommandResult();
 }
 
-QStringList CSceneHandlerLoad::availableProjectsOnDisk()
+QString CNewView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
 {
-	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
+	QString name = arguments.at(0);
+	if (arguments.at(1).compare("open", Qt::CaseInsensitive) == 0)
+		return "Create a new view named " + name + " and open it";
+	else
+		return "Create a new view named " + name + " without opening";
 }
-
-QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
-															const std::unique_ptr<Visualization::Cursor>&)
-{
-	return availableProjectsOnDisk();
 }
-
-} /* namespace Interaction */

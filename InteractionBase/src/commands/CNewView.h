@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,47 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#include "CSceneHandlerLoad.h"
+#pragma once
 
-#include "VisualizationBase/src/VisualizationManager.h"
-#include "FilePersistence/src/simple/SimpleTextFileStore.h"
-#include "ModelBase/src/model/TreeManager.h"
-#include "VisualizationBase/src/Scene.h"
+#include "../interactionbase_api.h"
+#include "CommandWithDefaultArguments.h"
 
-using namespace Visualization;
+namespace Visualization {
+	class Item;
+}
 
 namespace Interaction {
 
-
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}}, true}
-{}
-
-CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
+class INTERACTIONBASE_API CNewView : public CommandWithDefaultArguments
 {
-	auto manager = new Model::TreeManager();
-	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
+	public:
+		CNewView();
 
-	if (attributes.first() != "library")
-	{
+	protected:
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
-		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
-	}
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-	return new CommandResult();
+};
+
 }
-
-QStringList CSceneHandlerLoad::availableProjectsOnDisk()
-{
-	auto dir = QDir( "projects/" );
-	return dir.entryList( QDir::AllDirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
-}
-
-QStringList CSceneHandlerLoad::possibleNames(Visualization::Item*, Visualization::Item*,
-															const std::unique_ptr<Visualization::Cursor>&)
-{
-	return availableProjectsOnDisk();
-}
-
-} /* namespace Interaction */
