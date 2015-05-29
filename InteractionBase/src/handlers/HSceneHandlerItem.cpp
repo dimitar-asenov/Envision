@@ -39,8 +39,6 @@ namespace Interaction {
 HSceneHandlerItem::HSceneHandlerItem()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-
-	//TODO@cyril register commands here -> need to change canUseTarget method, clean up GenericHandler
 	addCommand(new CSceneHandlerItemExit());
 	addCommand(new CFind());
 	addCommand(new CSceneHandlerLoad());
