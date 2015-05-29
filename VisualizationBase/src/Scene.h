@@ -73,9 +73,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void updateNow();
 		void listenToTreeManager(Model::TreeManager* manager);
 
-		ViewItem* viewItem(QString name);
+		void addViewItem(ViewItem* view);
+		ViewItem* newViewItem(const QString name = QString());
+		ViewItem* viewItem(const QString name);
 		void switchToView(ViewItem* view);
-		bool switchToView(QString viewName);
+		bool switchToView(const QString viewName);
 		ViewItem* currentViewItem();
 
 		Cursor* mainCursor();

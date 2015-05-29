@@ -120,13 +120,7 @@ void Scene::addTopLevelNode(Node *node, int column, int row)
 void Scene::addTopLevelItem(Item* item, bool show)
 {
 	Q_ASSERT(!inAnUpdate_);
-	//If we have a ViewItem, we must add it to all ViewItems
-	if (auto view = dynamic_cast<ViewItem*>(item))
-	{
-		if (viewItems_.size() == 0)
-			currentViewItem_ = view;
-		viewItems_.append(view);
-	}
+
 	topLevelItems_.append(item);
 	addItem(item);
 	item->setVisible(show);
@@ -145,18 +139,16 @@ void Scene::removeTopLevelItem(Item* item)
 
 ViewItem* Scene::currentViewItem()
 {
-	if (!currentViewItem_)
+	if (viewItems_.size() == 0)
 	{
-		if (viewItems_.size() == 0)
-			addTopLevelItem(new ViewItem(nullptr, "ProjectView"));
-		else
-			currentViewItem_ = viewItems_.first();
+		currentViewItem_ = newViewItem("ProjectView");
+		currentViewItem_->show();
 	}
 	Q_ASSERT(currentViewItem_);
 	return currentViewItem_;
 }
 
-ViewItem* Scene::viewItem(QString name)
+ViewItem* Scene::viewItem(const QString name)
 {
 	for (auto item : viewItems_)
 		if (item->name() == name)
@@ -174,12 +166,26 @@ void Scene::switchToView(ViewItem *view)
 	scheduleUpdate();
 }
 
-bool Scene::switchToView(QString viewName)
+bool Scene::switchToView(const QString viewName)
 {
 	auto view = viewItem(viewName);
 	if (view)
 		switchToView(view);
 	return view != nullptr;
+}
+
+void Scene::addViewItem(ViewItem *view)
+{
+	Q_ASSERT(!inAnUpdate_);
+	viewItems_.append(view);
+	addTopLevelItem(view, false);
+}
+
+ViewItem* Scene::newViewItem(const QString name)
+{
+	auto result = new ViewItem(nullptr, name);
+	addViewItem(result);
+	return result;
 }
 
 void Scene::scheduleUpdate()
