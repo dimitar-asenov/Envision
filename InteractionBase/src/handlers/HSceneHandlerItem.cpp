@@ -30,16 +30,24 @@
 #include "commands/CFind.h"
 #include "commands/CSceneHandlerLoad.h"
 #include "commands/CSceneHandlerSave.h"
+#include "commands/CNewView.h"
+#include "commands/CSwitchView.h"
+#include "commands/CRemoveNodeFromView.h"
 
 namespace Interaction {
 
 HSceneHandlerItem::HSceneHandlerItem()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
+
+	//TODO@cyril register commands here -> need to change canUseTarget method, clean up GenericHandler
 	addCommand(new CSceneHandlerItemExit());
 	addCommand(new CFind());
 	addCommand(new CSceneHandlerLoad());
 	addCommand(new CSceneHandlerSave());
+	addCommand(new CNewView());
+	addCommand(new CSwitchView());
+	addCommand(new CRemoveNodeFromView());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()
