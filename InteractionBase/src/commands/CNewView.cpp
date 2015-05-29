@@ -34,19 +34,11 @@ CNewView::CNewView()
 {
 }
 
-bool CNewView::canUseTarget(Visualization::Item *, Visualization::Item *,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	return true;
-}
-
 CommandResult* CNewView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	QString name = arguments.at(0);
 	bool open = arguments.at(1).compare("open", Qt::CaseInsensitive) == 0;
-	auto view = new Visualization::ViewItem(nullptr, name);
-	target->scene()->addTopLevelItem(view, false);
+	auto view = target->scene()->newViewItem(arguments.at(0));
 	if (open)
 		target->scene()->switchToView(view);
 	return new CommandResult();

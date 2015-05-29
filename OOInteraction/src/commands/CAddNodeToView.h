@@ -40,15 +40,15 @@ class OOINTERACTION_API CAddNodeToView : public Interaction::CommandWithDefaultA
 	public:
 		CAddNodeToView();
 
+		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+
 	protected:
 		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
 				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
 		virtual QString description(Visualization::Item *source, Visualization::Item *target,
 				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
-		virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
-				const std::unique_ptr<Visualization::Cursor> &cursor);
 
 };
 

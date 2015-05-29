@@ -34,12 +34,6 @@ CSwitchView::CSwitchView()
 {
 }
 
-bool CSwitchView::canUseTarget(Visualization::Item *, Visualization::Item *,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	return true;
-}
-
 CommandResult* CSwitchView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {

@@ -34,11 +34,11 @@ CRemoveNodeFromView::CRemoveNodeFromView()
 {
 }
 
-bool CRemoveNodeFromView::canUseTarget(Visualization::Item *, Visualization::Item *target,
-		const std::unique_ptr<Visualization::Cursor>&)
+bool CRemoveNodeFromView::canInterpret(Visualization::Item *source, Visualization::Item *target,
+	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
 {
-	return target->hasNode() && target->scene()->
-			currentViewItem()->allNodes().contains(target->node());
+	 return CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor)
+			 && target->hasNode() && target->scene()->currentViewItem()->allNodes().contains(target->node());
 }
 
 CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *, Visualization::Item *target,

@@ -35,10 +35,11 @@ CAddNodeToView::CAddNodeToView()
 {
 }
 
-bool CAddNodeToView::canUseTarget(Visualization::Item *, Visualization::Item *target,
-		const std::unique_ptr<Visualization::Cursor>&)
+bool CAddNodeToView::canInterpret(Visualization::Item *source, Visualization::Item *target,
+	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
 {
-	return target->hasNode() && dynamic_cast<OOModel::Method*>(target->node());
+	 return Interaction::CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor)
+			 && target->hasNode() && dynamic_cast<OOModel::Method*>(target->node());
 }
 
 Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item *, Visualization::Item *target,

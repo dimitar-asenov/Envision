@@ -47,9 +47,6 @@ class INTERACTIONBASE_API CNewView : public CommandWithDefaultArguments
 		virtual QString description(Visualization::Item *source, Visualization::Item *target,
 				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
-				const std::unique_ptr<Visualization::Cursor> &cursor);
-
 };
 
 }
