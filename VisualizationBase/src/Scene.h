@@ -73,10 +73,9 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void updateNow();
 		void listenToTreeManager(Model::TreeManager* manager);
 
-		ViewItem* getViewItem(QString name);
-
+		ViewItem* viewItem(QString name);
 		void switchToView(ViewItem* view);
-
+		bool switchToView(QString viewName);
 		ViewItem* currentViewItem();
 
 		Cursor* mainCursor();

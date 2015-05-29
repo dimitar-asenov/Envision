@@ -24,41 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#include "NewViewCommand.h"
-#include "VisualizationBase/src/items/ViewItem.h"
+#pragma once
+
+#include "../interactionbase_api.h"
+#include "MenuCommand.h"
+
+namespace Visualization {
+	class Item;
+}
 
 namespace Interaction {
 
-NewViewCommand::NewViewCommand()
-	:MenuCommand("newView", QStringList({"name", ""}))
+class INTERACTIONBASE_API CNewView : public MenuCommand
 {
-}
+	public:
+		CNewView();
 
-bool NewViewCommand::canUseTarget(Visualization::Item *, Visualization::Item *,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	return true;
-}
+	protected:
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-CommandResult* NewViewCommand::executeWithArguments(Visualization::Item *, Visualization::Item *target,
-		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
-{
-	QString name = arguments.at(0);
-	bool open = arguments.at(1).compare("open", Qt::CaseInsensitive) == 0;
-	auto view = new Visualization::ViewItem(nullptr, name);
-	target->scene()->addTopLevelItem(view, false);
-	if (open)
-		target->scene()->switchToView(view);
-	return new CommandResult();
-}
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-QString NewViewCommand::description(Visualization::Item *, Visualization::Item *,
-		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
-{
-	QString name = arguments.at(0);
-	if (arguments.at(1).compare("open", Qt::CaseInsensitive) == 0)
-		return "Create a new view named " + name + " and open it";
-	else
-		return "Create a new view named " + name + " without opening";
-}
+		virtual bool canUseTarget(Visualization::Item *source, Visualization::Item *target,
+				const std::unique_ptr<Visualization::Cursor> &cursor);
+
+};
+
 }

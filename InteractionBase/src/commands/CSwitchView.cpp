@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2015 ETH Zurich
+ ** Copyright (c) 2011, 2014 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,35 +24,39 @@
  **
  **********************************************************************************************************************/
 
-#include "RemoveNodeCommand.h"
+#include "CSwitchView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-RemoveNodeCommand::RemoveNodeCommand()
-	:MenuCommand("removeNode", QStringList())
+CSwitchView::CSwitchView()
+	:MenuCommand("switch", {"name"})
 {
 }
 
-bool RemoveNodeCommand::canUseTarget(Visualization::Item *, Visualization::Item *target,
+bool CSwitchView::canUseTarget(Visualization::Item *, Visualization::Item *,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
-	return target->hasNode() && target->scene()->
-			currentViewItem()->allNodes().contains(target->node());
+	return true;
 }
 
-CommandResult* RemoveNodeCommand::executeWithArguments(Visualization::Item *, Visualization::Item *target,
-		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
+CommandResult* CSwitchView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	target->scene()->currentViewItem()->removeNode(target->node());
-	return new CommandResult();
-
+	QString name = arguments.at(0);
+	auto view = target->scene()->viewItem(name);
+	if (view)
+	{
+		target->scene()->switchToView(view);
+		return new CommandResult();
+	}
+	else
+		return new CommandResult(new CommandError("The view with name " + name + " does not exist"));
 }
 
-QString RemoveNodeCommand::description(Visualization::Item *, Visualization::Item *,
-		const QStringList &, const std::unique_ptr<Visualization::Cursor> &)
+QString CSwitchView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
 {
-	return "Remove the current top-level node from the current view";
-
+	return "Switch to the view with name " + arguments.at(0);
 }
 }

@@ -26,7 +26,6 @@
 
 #include "CSceneHandlerItemTest.h"
 
-#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
 #include "OOModel/src/declarations/Project.h"

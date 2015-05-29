@@ -156,7 +156,7 @@ ViewItem* Scene::currentViewItem()
 	return currentViewItem_;
 }
 
-ViewItem* Scene::getViewItem(QString name)
+ViewItem* Scene::viewItem(QString name)
 {
 	for (auto item : viewItems_)
 		if (item->name() == name)
@@ -172,6 +172,14 @@ void Scene::switchToView(ViewItem *view)
 	currentViewItem_ = view;
 	currentViewItem_->show();
 	scheduleUpdate();
+}
+
+bool Scene::switchToView(QString viewName)
+{
+	auto view = viewItem(viewName);
+	if (view)
+		switchToView(view);
+	return view != nullptr;
 }
 
 void Scene::scheduleUpdate()
@@ -206,7 +214,7 @@ void Scene::updateNow()
 		for (auto item : itemsSensitiveToScale_)
 				item->setUpdateNeeded(Item::StandardUpdate);
 	}
-	
+
 	// Update Top level items
 	for (auto item : topLevelItems_)
 		item->updateSubtree();
