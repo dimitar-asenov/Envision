@@ -30,7 +30,7 @@
 namespace Interaction {
 
 CSwitchView::CSwitchView()
-	:MenuCommand("switch", {"name"})
+	:CommandWithDefaultArguments("switch", {"name"})
 {
 }
 

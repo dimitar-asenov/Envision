@@ -41,7 +41,7 @@ bool CommandWithDefaultArguments::canInterpret(Visualization::Item *, Visualizat
 CommandResult* CommandWithDefaultArguments::execute(Visualization::Item *source, Visualization::Item *target,
 	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
 {
-	 return this->execute(source, target, getParameters(commandTokens), cursor);
+	 return this->executeWithArguments(source, target, getParameters(commandTokens), cursor);
 }
 
 QList<CommandSuggestion*> CommandWithDefaultArguments::suggest(Visualization::Item *source, Visualization::Item *target,

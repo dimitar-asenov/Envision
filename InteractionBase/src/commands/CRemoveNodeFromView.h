@@ -27,7 +27,7 @@
 #pragma once
 
 #include "InteractionBase/src/interactionbase_api.h"
-#include "InteractionBase/src/commands/MenuCommand.h"
+#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
 
 namespace Visualization {
 	class Item;
@@ -35,7 +35,7 @@ namespace Visualization {
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CRemoveNodeFromView : public Interaction::MenuCommand
+class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArguments
 {
 	public:
 		CRemoveNodeFromView();

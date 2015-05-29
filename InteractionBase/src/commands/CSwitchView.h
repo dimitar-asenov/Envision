@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../interactionbase_api.h"
-#include "MenuCommand.h"
+#include "CommandWithDefaultArguments.h"
 
 namespace Visualization {
 	class Item;
@@ -35,7 +35,7 @@ namespace Visualization {
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CSwitchView : public MenuCommand
+class INTERACTIONBASE_API CSwitchView : public CommandWithDefaultArguments
 {
 	public:
 		CSwitchView();

@@ -30,7 +30,7 @@
 namespace Interaction {
 
 CRemoveNodeFromView::CRemoveNodeFromView()
-	:MenuCommand("removeNode", QStringList())
+	:CommandWithDefaultArguments("removeNode", QStringList())
 {
 }
 

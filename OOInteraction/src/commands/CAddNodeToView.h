@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../oointeraction_api.h"
-#include "InteractionBase/src/commands/MenuCommand.h"
+#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
 
 namespace Visualization {
 	class Item;
@@ -35,7 +35,7 @@ namespace Visualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CAddNodeToView : public Interaction::MenuCommand
+class OOINTERACTION_API CAddNodeToView : public Interaction::CommandWithDefaultArguments
 {
 	public:
 		CAddNodeToView();
