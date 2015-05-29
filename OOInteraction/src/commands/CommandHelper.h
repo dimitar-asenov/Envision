@@ -72,6 +72,7 @@ class CommandHelper
 			manager->setRoot(child);
 
 			target->scene()->currentViewItem()->insertNode(child);
+			target->scene()->listenToTreeManager(manager);
 
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), child,
