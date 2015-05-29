@@ -71,10 +71,7 @@ class CommandHelper
 			auto manager = new Model::TreeManager();
 			manager->setRoot(child);
 
-			auto vis = target->scene()->currentViewItem();
-			vis->setPos(target->pos());
-			vis->insertNode(child);
-			target->scene()->listenToTreeManager(manager);
+			target->scene()->currentViewItem()->insertNode(child);
 
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), child,
