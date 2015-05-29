@@ -47,12 +47,10 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		static void initializeForms();
 
 		void insertNode(Model::Node* node, int column = 0, int row = 0);
-
 		void removeNode(Model::Node* node);
+		const QList<Model::Node*> allNodes() const;
 
 		const QString name() const;
-
-		const QList<Model::Node*> allNodes() const;
 
 	private:
 		QVector<QVector<Model::Node*>> nodes_;
