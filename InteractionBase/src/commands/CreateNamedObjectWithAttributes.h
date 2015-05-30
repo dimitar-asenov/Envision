@@ -28,11 +28,11 @@
 
 #include "../interactionbase_api.h"
 
-#include "CommandWithNameAndFlags.h"
+#include "CommandWithFlags.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithNameAndFlags
+class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public CommandWithFlags
 {
 	public:
 		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);

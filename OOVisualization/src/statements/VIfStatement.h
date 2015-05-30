@@ -39,6 +39,7 @@ namespace Visualization {
 	class SequentialLayout;
 	class Static;
 	class NodeWrapper;
+	class Line;
 }
 
 namespace OOVisualization {
@@ -71,6 +72,7 @@ class OOVISUALIZATION_API VIfStatement
 		VStatementItemList* thenBranch_{};
 		VStatementItemList* elseBranch_{};
 		Visualization::Static* icon_{};
+		Visualization::Line* elseLine_{};
 };
 
 inline Visualization::NodeWrapper* VIfStatement::condition() const { return condition_; }

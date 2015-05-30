@@ -28,11 +28,11 @@
 
 #include "../oointeraction_api.h"
 
-#include "InteractionBase/src/commands/CommandWithNameAndFlags.h"
+#include "InteractionBase/src/commands/CommandWithFlags.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CDumpMethodRenderings : public Interaction::CommandWithNameAndFlags
+class OOINTERACTION_API CDumpMethodRenderings : public Interaction::CommandWithFlags
 {
 	public:
 		CDumpMethodRenderings();

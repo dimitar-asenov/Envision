@@ -31,6 +31,8 @@
 
 namespace Comments {
 
+CShapeSetProperty::CShapeSetProperty() : Command{"setShapeProperty"}{}
+
 bool CShapeSetProperty::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
@@ -69,13 +71,6 @@ QList<Interaction::CommandSuggestion*> CShapeSetProperty::suggest(Visualization:
 	if (QString("bordercolor").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 		s.append(new Interaction::CommandSuggestion("bordercolor", "Set shape's border color"));
 	return s;
-}
-
-QStringList CShapeSetProperty::commandForms(Visualization::Item*, Visualization::Item*, const QString&,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	return forms;
 }
 
 }

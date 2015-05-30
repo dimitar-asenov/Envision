@@ -29,10 +29,9 @@
 #include "../oomodel_api.h"
 
 #include "../attributeMacros.h"
+#include "../declarations/VariableDeclaration.h"
 #include "../expressions/Expression.h"
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/Integer.h"
 
@@ -40,11 +39,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalArgument)
 
 namespace OOModel {
 
-class OOMODEL_API FormalArgument : public Super<Model::CompositeNode>
+class OOMODEL_API FormalArgument : public Super<VariableDeclaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(FormalArgument)
-	ATTRIBUTE_OOP_NAME_SYMBOL
-	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, directionInt, setDirectionInt, int)
 
 	public:

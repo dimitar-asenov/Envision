@@ -31,6 +31,8 @@
 
 namespace Interaction {
 
+CFind::CFind() : Command{"find"}{}
+
 bool CFind::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
@@ -82,15 +84,6 @@ QList<CommandSuggestion*> CFind::suggest(Visualization::Item*, Visualization::It
 			s.append(new CommandSuggestion("find ", "Search for text"));
 
 	return s;
-}
-
-QStringList CFind::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	if (textSoFar.isEmpty() || QString("find").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("find");
-	return forms;
 }
 
 } /* namespace Interaction */

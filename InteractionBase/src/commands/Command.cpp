@@ -25,12 +25,16 @@
 ***********************************************************************************************************************/
 
 #include "commands/Command.h"
+#include "precompiled.h"
 
 namespace Interaction {
 
-Command::~Command()
+Command::Command(QString name, bool appearsInMenus)
+	:name_{name}, appearsInMenus_{appearsInMenus}
 {
 }
+
+Command::~Command() {}
 
 bool Command::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList&,
 		const std::unique_ptr<Visualization::Cursor>&)
@@ -42,12 +46,6 @@ QList<CommandSuggestion*> Command::suggest(Visualization::Item*, Visualization::
 		const std::unique_ptr<Visualization::Cursor>&)
 {
 	return QList<CommandSuggestion*>();
-}
-
-QList<CommandHelp*> Command::extendedHelp(Visualization::Item*, Visualization::Item*,
-		const std::unique_ptr<Visualization::Cursor>&, const QString&)
-{
-	return QList<CommandHelp*>();
 }
 
 }

@@ -33,6 +33,8 @@
 
 namespace OODebug {
 
+CProbe::CProbe() : Command{"probe"} {}
+
 bool CProbe::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 								  const std::unique_ptr<Visualization::Cursor>&)
 {
@@ -55,15 +57,6 @@ Interaction::CommandResult* CProbe::execute(Visualization::Item*, Visualization:
 	QStringList arguments = commandTokens;
 	arguments.removeFirst(); // Remove the probe command
 	return JavaDebugger::instance().probe(itemList, arguments, itemIndex);
-}
-
-QStringList CProbe::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
-											const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	if (textSoFar.isEmpty() || QString("probe").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("probe");
-	return forms;
 }
 
 } /* namespace OODebug */

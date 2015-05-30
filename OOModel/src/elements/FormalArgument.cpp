@@ -34,8 +34,6 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalArgument)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument)
 
-REGISTER_OONAME_SYMBOL_ATTRIBUTE(FormalArgument, VARIABLE)
-REGISTER_ATTRIBUTE(FormalArgument, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(FormalArgument, directionInt, Integer, false, false, true)
 
 FormalArgument::FormalArgument(const QString& name, Expression* type, const Direction& direction)

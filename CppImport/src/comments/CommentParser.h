@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,24 +26,37 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
+#include "../cppimport_api.h"
+#include "Comments/src/nodes/CommentNode.h"
+#include "clang/AST/Comment.h"
 
-#include "InteractionBase/src/commands/Command.h"
+namespace CppImport {
 
-namespace OOInteraction {
-
-class OOINTERACTION_API CSceneHandlerItemTest  : public Interaction::Command {
-
+class CPPIMPORT_API CommentParser
+{
 	public:
-		CSceneHandlerItemTest();
+		CommentParser() { }
+		/**
+		 * Translates the \a comment to a CommentNode.
+		 */
+		Comments::CommentNode* parseComment(clang::comments::Comment* comment);
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+	private:
+		QString collectedText_{};
 
-		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		/**
+		 * Dispatches the \a comment to the correct method for handling.
+		 */
+		void processComment(clang::comments::Comment* comment);
+
+		/**
+		 * If there is text in \a textComment this will get added to the \a currentNode_ comment.
+		 */
+		void processTextComment(clang::comments::TextComment* textComment);
+
+		void processFullComment(clang::comments::FullComment* fullComment);
+
+		void processParagraphComment(clang::comments::ParagraphComment* paragraphComment);
 };
 
 }

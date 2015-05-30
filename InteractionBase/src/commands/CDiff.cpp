@@ -45,7 +45,7 @@ namespace Interaction {
 
 static const QString overlayGroupName("DiffHighlights");
 
-CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"project"}}, true, false}
+CDiff::CDiff() : CommandWithFlags{"diff", {{"project"}}, true, false}
 {}
 
 CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,

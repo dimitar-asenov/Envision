@@ -43,6 +43,7 @@ void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compil
 	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
 	Q_ASSERT(mngr);
 	astVisitor_->setSourceManager(mngr);
+	astVisitor_->setPreprocessor(&compilerInstance->getPreprocessor());
 }
 
 }

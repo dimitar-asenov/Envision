@@ -35,7 +35,7 @@ using namespace FilePersistence;
 
 namespace Interaction {
 
-CHistory::CHistory() : CommandWithNameAndFlags{"history", {{"project"}}, true, false}
+CHistory::CHistory() : CommandWithFlags{"history", {{"project"}}, true, false}
 {
 }
 

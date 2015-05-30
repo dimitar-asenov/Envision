@@ -113,7 +113,12 @@ int VList::determineForm()
 {
 	determineRange();
 
-	if (itemOrChildHasFocus() && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty()) return 2;
+	bool showTip = itemOrChildHasFocus() && node()->isEmpty() && style()->showTipWhenSelectedAndEmpty();
+	if (!showTip && node()->isEmpty() && !style()->drawShapeWhenEmpty() ) removeShape();
+	else useShape();
+
+
+	if (showTip) return 2;
 
 	if (style()->itemsStyle().isHorizontal()) return 0;
 	else return 1;

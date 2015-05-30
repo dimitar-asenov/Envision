@@ -1,17 +1,17 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
 ** following conditions are met:
 **
-** * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
-** disclaimer.
-** * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
-** following disclaimer in the documentation and/or other materials provided with the distribution.
-** * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
-** derived from this software without specific prior written permission.
+**    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+**      disclaimer.
+**    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+**      following disclaimer in the documentation and/or other materials provided with the distribution.
+**    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
+**      derived from this software without specific prior written permission.
 **
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
@@ -26,27 +26,19 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
+#include "../oodebug_api.h"
 
-#include "CommandWithFlags.h"
+namespace OODebug {
 
-#include "FilePersistence/src/version_control/GitRepository.h"
-
-namespace Interaction {
-
-class INTERACTIONBASE_API CMerge : public CommandWithFlags
-{
+class OODEBUG_API Probes {
 	public:
-		CMerge();
+		using ValueCalculator = std::function<double(QList<double>)>;
+		using ValueOperator = std::function<double(double, double)>;
 
-	protected:
-		virtual CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
-				const std::unique_ptr<Visualization::Cursor>& cursor,
-				const QString& name, const QStringList& attributes) override;
+		static QPair<QList<ValueCalculator>, QStringList> parseProbeArguments(QStringList arguments);
 
-		virtual QStringList possibleNames(Visualization::Item* source, Visualization::Item* target,
-													 const std::unique_ptr<Visualization::Cursor>& cursor) override;
-
+	private:
+		static ValueOperator operatorFromString(QString operatorString);
 };
 
-} /* namespace Interaction */
+} /* namespace OODebug */

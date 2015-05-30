@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,46 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "CommentParser.h"
 
-#include "../oointeraction_api.h"
 
-#include "InteractionBase/src/commands/Command.h"
+namespace CppImport {
 
-namespace OOInteraction {
+Comments::CommentNode* CommentParser::parseComment(clang::comments::Comment* comment)
+{
+	// empty old text
+	collectedText_.clear();
+	// handle the current comment
+	processComment(comment);
+	return new Comments::CommentNode(collectedText_);
+}
 
-class OOINTERACTION_API CSceneHandlerItemTest  : public Interaction::Command {
+void CommentParser::processComment(clang::comments::Comment* comment)
+{
+	if (auto tc = llvm::dyn_cast<clang::comments::TextComment>(comment))
+		processTextComment(tc);
+	else if (auto fc = llvm::dyn_cast<clang::comments::FullComment>(comment))
+		processFullComment(fc);
+	else if (auto pc = llvm::dyn_cast<clang::comments::ParagraphComment>(comment))
+		processParagraphComment(pc);
+	else
+		qDebug() << "Unsupported comment type: " << comment->getCommentKindName();
+}
 
-	public:
-		CSceneHandlerItemTest();
+void CommentParser::processTextComment(clang::comments::TextComment* textComment)
+{
+	if (!textComment->isWhitespace())
+		collectedText_.append(QString::fromStdString(textComment->getText().str()));
+}
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+void CommentParser::processFullComment(clang::comments::FullComment* fullComment)
+{
+	for (auto it = fullComment->child_begin(); it != fullComment->child_end(); ++it) processComment(*it);
+}
 
-		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-};
+void CommentParser::processParagraphComment(clang::comments::ParagraphComment* paragraphComment)
+{
+	for (auto it = paragraphComment->child_begin(); it != paragraphComment->child_end(); ++it) processComment(*it);
+}
 
 }

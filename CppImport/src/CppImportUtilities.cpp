@@ -191,6 +191,11 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 			// if we have the Global specifier there can not be a prefix() other wise it is invalid C++
 			Q_ASSERT(!nestedName->getPrefix());
 			returnExpr = new OOModel::GlobalScopeExpression();
+			break;
+		default:
+			// In version 3.6 this is only NestedNameSpecifier::Super, which is a Microsoft specific extension (_super).
+			throw new CppImportException("Unsupported nested name specifier kind: " + nestedName->getKind());
+			break;
 	}
 	if (auto prefix = nestedName->getPrefix())
 		currentRef->setPrefix(translateNestedNameSpecifier(prefix, location, base));

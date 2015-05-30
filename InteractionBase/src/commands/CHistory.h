@@ -28,13 +28,13 @@
 
 #include "../interactionbase_api.h"
 
-#include "CommandWithNameAndFlags.h"
+#include "CommandWithFlags.h"
 
 #include "FilePersistence/src/version_control/GitRepository.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CHistory : public CommandWithNameAndFlags
+class INTERACTIONBASE_API CHistory : public CommandWithFlags
 {
 	public:
 		CHistory();

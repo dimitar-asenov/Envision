@@ -57,6 +57,8 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
+		static const QList<Qt::GlobalColor> PLOT_COLORS;
+
 		QList<double> xValues_;
 		QList<QList<double>> yValues_;
 		double xMin_{}, xMax_{};
@@ -71,6 +73,7 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 
 		void drawXTic(QPainter* painter, const QPointF& pos, QString label);
 		void drawYTic(QPainter* painter, const QPointF& pos, QString label);
+		void drawTextVerticalCenteredAt(QPainter* painter, const QPointF& pos, QString label);
 
 		double valueRange(int dimension);
 		QPointF toPlotCoordinates(QPointF position);
@@ -81,6 +84,16 @@ class OODEBUG_API PlotOverlay : public Super<Visualization::Overlay<Visualizatio
 		void plotBars(QPainter* painter);
 		void plotScatter(QPainter* painter);
 		void plotArray(QPainter* painter);
+
+		void drawLegend(QPainter* painter);
+
+		/**
+		 * Changes the brush on \a painter to a brush with the \a color.
+		 */
+		void setBrushColor(QPainter *painter, QColor color);
+
+		int drawnTextWidth(const QString& text);
+		int drawnTextHeight();
 };
 
 template <class ValueType>

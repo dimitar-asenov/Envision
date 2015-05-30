@@ -52,7 +52,9 @@ HEADERS += src/precompiled.h \
     src/debugger/jdwp/DataTypes.h \
     src/commands/CProbe.h \
     src/debugger/jdwp/messages/ArrayReferenceSet.h \
-    src/handlers/HMoveableOverlay.h
+    src/handlers/HMoveableOverlay.h \
+    src/debugger/Probes.h \
+    src/debugger/DebugUtils.h
 SOURCES += src/OODebugException.cpp \
 	src/OODebugPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -87,4 +89,6 @@ SOURCES += src/OODebugException.cpp \
     src/debugger/jdwp/DataTypes.cpp \
     src/commands/CProbe.cpp \
     src/debugger/jdwp/messages/ArrayReferenceSet.cpp \
-    src/handlers/HMoveableOverlay.cpp
+    src/handlers/HMoveableOverlay.cpp \
+    src/debugger/Probes.cpp \
+    src/debugger/DebugUtils.cpp

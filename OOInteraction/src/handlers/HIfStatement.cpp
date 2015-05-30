@@ -58,7 +58,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	bool tab = event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab;
 
 	if ( ( vif->condition()->itemOrChildHasFocus() && enter)
-			|| (vif->elseBranch()->itemOrChildHasFocus() && tab))
+			|| (vif->elseBranch() && vif->elseBranch()->itemOrChildHasFocus() && tab))
 	{
 		event->accept();
 		if (vif->node()->thenBranch()->size() > 0)
@@ -97,7 +97,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vif->node()->elseBranch()->append(es);
 			vif->node()->endModification();
 
-			vif->elseBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			vif->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}

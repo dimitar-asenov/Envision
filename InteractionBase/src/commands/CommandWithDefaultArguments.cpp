@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,26 +24,51 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "CommandWithDefaultArguments.h"
 
-#include "../oodebug_api.h"
+namespace Interaction {
 
-#include "VisualizationBase/src/items/ItemStyle.h"
+CommandWithDefaultArguments::CommandWithDefaultArguments(QString name, const QStringList &defaultArguments)
+	 :Command{name, true}, defaultArguments_{defaultArguments}
+{}
 
-namespace OODebug {
-
-class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
+bool CommandWithDefaultArguments::canInterpret(Visualization::Item *, Visualization::Item *,
+	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &)
 {
-	public:
-		virtual ~PlotOverlayStyle() override;
+	 return !commandTokens.isEmpty() && commandTokens.first() == this->name();
+}
 
-		Property<int> width{this, "width"};
-		Property<int> height{this, "height"};
-		Property<double> scatterDotRadius{this, "scatterDotRadius"};
-		Property<QPen> pen{this, "pen"};
-		Property<QFont> font{this, "font"};
-		Property<int> ticSize{this, "ticSize"};
-		Property<int> margin{this, "margin"};
-};
+CommandResult* CommandWithDefaultArguments::execute(Visualization::Item *source, Visualization::Item *target,
+	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+{
+	 return this->execute(source, target, getParameters(commandTokens), cursor);
+}
 
-} /* namespace OODebug */
+QList<CommandSuggestion*> CommandWithDefaultArguments::suggest(Visualization::Item *source, Visualization::Item *target,
+	const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor)
+{
+	QList<CommandSuggestion*> result;
+
+	if (textSoFar.trimmed().startsWith(this->name() + " ") || this->name().startsWith(textSoFar.trimmed()))
+	{
+		result.append(new CommandSuggestion(this->name(),
+			this->description(source, target, getParameters(textSoFar.split(" ")), cursor)));
+	}
+
+	return result;
+}
+
+QStringList CommandWithDefaultArguments::getParameters(const QStringList &commandTokens)
+{
+	QStringList parameters = commandTokens;
+
+	// Remove the command name itself
+	parameters.removeAt(0);
+
+	// Fill up with default arguments
+	for (int i = parameters.size(); i < defaultArguments_.size(); i++)
+		parameters.append(defaultArguments_[i]);
+	return parameters;
+}
+
+}

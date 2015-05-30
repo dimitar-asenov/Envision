@@ -647,6 +647,7 @@ public class ASTConverter {
 		{
 			Node a = containers.peek().child("arguments").add(new Node(null,"FormalArgument", i++));
 			a.setSymbol(arg.getName().getIdentifier());
+			setModifiersAndAnnotations(a, Modifier.PUBLIC, null);
 			
 			Node type = typeExpression(arg.getType(), "typeExpression");
 			a.setChild("typeExpression", addExtraDimensions(type,arg.getExtraDimensions()));

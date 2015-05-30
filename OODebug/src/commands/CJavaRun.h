@@ -28,11 +28,11 @@
 
 #include "../oodebug_api.h"
 
-#include "InteractionBase/src/commands/CommandWithNameAndFlags.h"
+#include "InteractionBase/src/commands/CommandWithFlags.h"
 
 namespace OODebug {
 
-class OODEBUG_API CJavaRun : public Interaction::CommandWithNameAndFlags
+class OODEBUG_API CJavaRun : public Interaction::CommandWithFlags
 {
 	public:
 		CJavaRun();
@@ -41,6 +41,9 @@ class OODEBUG_API CJavaRun : public Interaction::CommandWithNameAndFlags
 		virtual Interaction::CommandResult* executeNamed(Visualization::Item* source, Visualization::Item* target,
 																		 const std::unique_ptr<Visualization::Cursor>& cursor,
 																		 const QString& name, const QStringList& attributes) override;
+		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+										  const QStringList &commandTokens,
+										  const std::unique_ptr<Visualization::Cursor> &cursor) override;
 };
 
 } /* namespace OODebug */

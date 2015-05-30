@@ -31,18 +31,31 @@
 
 namespace OODebug {
 
-CJavaDebug::CJavaDebug() : CommandWithNameAndFlags{"debug", {}, false}
+CJavaDebug::CJavaDebug() : CommandWithFlags{"debug", {}, false}
 {}
 
 Interaction::CommandResult* CJavaDebug::executeNamed(Visualization::Item* source, Visualization::Item*,
 	const std::unique_ptr<Visualization::Cursor>&, const QString&, const QStringList&)
 {
 	while (source && !source->node()) source = source->parent();
-	if (source)
-		if (auto manager = source->node()->manager())
-			JavaDebugger::instance().debugTree(manager, "exported/" + manager->root()->symbolName());
+	Q_ASSERT(source);
+	auto manager = source->node()->manager();
+	Q_ASSERT(manager);
+	auto result = JavaDebugger::instance().debugTree(manager, "exported/" + manager->root()->symbolName());
+	Q_ASSERT(result);
+	return result;
+}
 
-	return new Interaction::CommandResult();
+bool CJavaDebug::canInterpret(Visualization::Item* source, Visualization::Item* target,
+										const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+{
+	if (CommandWithFlags::canInterpret(source, target, commandTokens, cursor))
+	{
+		// Check if there is a tree manager
+		while (source && !source->node()) source = source->parent();
+		return source->node()->manager();
+	}
+	return false;
 }
 
 } /* namespace OODebug */

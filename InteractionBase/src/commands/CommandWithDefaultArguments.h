@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,27 +23,44 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#include "Command.h"
+#include "CommandResult.h"
+#include "CommandSuggestion.h"
+#include "CommandHelp.h"
 
-#pragma once
+#include "VisualizationBase/src/items/Item.h"
 
-#include "../oodebug_api.h"
+namespace Interaction {
 
-#include "VisualizationBase/src/items/ItemStyle.h"
-
-namespace OODebug {
-
-class OODEBUG_API PlotOverlayStyle : public Super<Visualization::ItemStyle>
+class INTERACTIONBASE_API CommandWithDefaultArguments : public Command
 {
 	public:
-		virtual ~PlotOverlayStyle() override;
+		CommandWithDefaultArguments(QString name, const QStringList &defaultArguments);
 
-		Property<int> width{this, "width"};
-		Property<int> height{this, "height"};
-		Property<double> scatterDotRadius{this, "scatterDotRadius"};
-		Property<QPen> pen{this, "pen"};
-		Property<QFont> font{this, "font"};
-		Property<int> ticSize{this, "ticSize"};
-		Property<int> margin{this, "margin"};
+		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+		virtual CommandResult* execute(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item *source, Visualization::Item *target,
+			const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+		const QStringList& defaultArguments();
+
+	protected:
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+			const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) = 0;
+
+		QStringList getParameters(const QStringList &commandTokens);
+
+	private:
+		QStringList defaultArguments_;
 };
 
-} /* namespace OODebug */
+inline const QStringList& CommandWithDefaultArguments::defaultArguments() { return defaultArguments_; }
+
+}

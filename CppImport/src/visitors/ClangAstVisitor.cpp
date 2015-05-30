@@ -29,6 +29,8 @@
 #include "../CppImportUtilities.h"
 #include "TemplateArgumentVisitor.h"
 
+#include <clang/AST/Comment.h>
+
 namespace CppImport {
 
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
@@ -41,6 +43,8 @@ ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* log
 	trMngr_->setUtils(utils_);
 	templArgVisitor_ = new TemplateArgumentVisitor(exprVisitor_, utils_, log_);
 	ooStack_.push(project);
+
+	commentParser_ = new CommentParser();
 }
 
 ClangAstVisitor::~ClangAstVisitor()
@@ -48,6 +52,8 @@ ClangAstVisitor::~ClangAstVisitor()
 	SAFE_DELETE(utils_);
 	SAFE_DELETE(exprVisitor_);
 	SAFE_DELETE(trMngr_);
+
+	SAFE_DELETE(commentParser_);
 }
 
 void ClangAstVisitor::setSourceManager(const clang::SourceManager* sourceManager)
@@ -55,6 +61,12 @@ void ClangAstVisitor::setSourceManager(const clang::SourceManager* sourceManager
 	Q_ASSERT(sourceManager);
 	sourceManager_ = sourceManager;
 	trMngr_->setSourceManager(sourceManager);
+}
+
+void ClangAstVisitor::setPreprocessor(const clang::Preprocessor* preprocessor)
+{
+	Q_ASSERT(preprocessor);
+	preprocessor_ = preprocessor;
 }
 
 Model::Node*ClangAstVisitor::ooStackTop()
@@ -237,6 +249,11 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			// only visit the body if we have not yet visited it
 			// handle body, typeargs and storage specifier
 			TraverseFunction(functionDecl, ooFunction);
+
+		// Check for comments
+		if (auto comment = commentParser_->parseComment(
+				 functionDecl->getASTContext().getCommentForDecl(functionDecl, preprocessor_)))
+			ooFunction->setComment(comment);
 	}
 	else
 		log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);

@@ -28,11 +28,11 @@
 
 #include "../javaexport_api.h"
 
-#include "InteractionBase/src/commands/CommandWithNameAndFlags.h"
+#include "InteractionBase/src/commands/CommandWithFlags.h"
 
 namespace JavaExport {
 
-class JAVAEXPORT_API CJavaExport : public Interaction::CommandWithNameAndFlags
+class JAVAEXPORT_API CJavaExport : public Interaction::CommandWithFlags
 {
 	public:
 		CJavaExport();
