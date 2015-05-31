@@ -144,7 +144,7 @@ GitRepository::GitRepository(QString path)
 {
 	// Bugfix: initialize git threads is usually done automatically
 	// but there seem to be a bug related to libgit2 and Qtf
-	git_threads_init();
+	git_libgit2_init();
 
 	path_ = path;
 	repository_ = nullptr;
@@ -162,7 +162,7 @@ GitRepository::~GitRepository()
 
 	// Bugfix: shutdown git threads is usually done automatically
 	// but there seem to be a bug related to libgit2 and Qt
-	git_threads_shutdown();
+	git_libgit2_shutdown();
 }
 
 std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
