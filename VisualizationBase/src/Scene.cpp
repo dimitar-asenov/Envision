@@ -44,6 +44,8 @@
 #include "Core/src/Profiler.h"
 #include "Core/src/EnvisionApplication.h"
 
+#include "items/ViewItem.h"
+
 namespace Visualization {
 
 class UpdateSceneEvent : public QEvent
@@ -71,6 +73,7 @@ Scene::Scene()
 #if QT_VERSION >= 0x050400
 	setMinimumRenderSize(1.0);
 #endif
+
 
 	initialized_ = true;
 	allScenes().append(this);
@@ -109,11 +112,18 @@ ModelRenderer* Scene::defaultRenderer()
 	return &defaultRenderer_;
 }
 
-void Scene::addTopLevelItem(Item* item)
+void Scene::addTopLevelNode(Node *node, int column, int row)
+{
+	currentViewItem()->insertNode(node, column, row);
+}
+
+void Scene::addTopLevelItem(Item* item, bool show)
 {
 	Q_ASSERT(!inAnUpdate_);
+
 	topLevelItems_.append(item);
 	addItem(item);
+	item->setVisible(show);
 	scheduleUpdate();
 }
 
@@ -124,6 +134,58 @@ void Scene::removeTopLevelItem(Item* item)
 
 	removeItem(item);
 	scheduleUpdate();
+}
+
+
+ViewItem* Scene::currentViewItem()
+{
+	if (viewItems_.size() == 0)
+	{
+		currentViewItem_ = newViewItem("ProjectView");
+		currentViewItem_->show();
+	}
+	Q_ASSERT(currentViewItem_);
+	return currentViewItem_;
+}
+
+ViewItem* Scene::viewItem(const QString name)
+{
+	for (auto item : viewItems_)
+		if (item->name() == name)
+			return item;
+	return nullptr;
+}
+
+void Scene::switchToView(ViewItem *view)
+{
+	Q_ASSERT(!inAnUpdate_);
+	Q_ASSERT(viewItems_.contains(view));
+	currentViewItem_->hide();
+	currentViewItem_ = view;
+	currentViewItem_->show();
+	scheduleUpdate();
+}
+
+bool Scene::switchToView(const QString viewName)
+{
+	auto view = viewItem(viewName);
+	if (view)
+		switchToView(view);
+	return view != nullptr;
+}
+
+void Scene::addViewItem(ViewItem *view)
+{
+	Q_ASSERT(!inAnUpdate_);
+	viewItems_.append(view);
+	addTopLevelItem(view, false);
+}
+
+ViewItem* Scene::newViewItem(const QString name)
+{
+	auto result = new ViewItem(nullptr, name);
+	addViewItem(result);
+	return result;
 }
 
 void Scene::scheduleUpdate()
@@ -158,7 +220,7 @@ void Scene::updateNow()
 		for (auto item : itemsSensitiveToScale_)
 				item->setUpdateNeeded(Item::StandardUpdate);
 	}
-	
+
 	// Update Top level items
 	for (auto item : topLevelItems_)
 		item->updateSubtree();

@@ -24,62 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "CSwitchView.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
-#include "../filepersistence_api.h"
+namespace Interaction {
 
-#include "ModelBase/src/persistence/PersistentStore.h"
+CSwitchView::CSwitchView()
+	:CommandWithDefaultArguments("switch", {"name"})
+{
+}
 
-namespace FilePersistence {
+CommandResult* CSwitchView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+{
+	bool ok = target->scene()->switchToView(arguments.at(0));
+	if (ok)
+		return new CommandResult();
+	else
+		return new CommandResult(new CommandError("The view with name " + arguments.at(0) + " does not exist"));
+}
 
-class GenericTree;
-class GenericNode;
-
-class FILEPERSISTENCE_API GenericPersistentUnit {
-	public:
-		~GenericPersistentUnit();
-
-		const QString& name() const;
-		GenericTree* tree() const;
-
-		GenericNode* newNode();
-		GenericNode* newNode(int lineStart, int lineEndEnclusive);
-		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-		GenericNode* newNode(const QString& fromString);
-
-		/**
-		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
-		 * destroyed with the object.
-		 *
-		 * Returns a pointer to the copied data.
-		 */
-		const char* setData(const char* data, int dataSize);
-
-		GenericNode* find(Model::NodeIdType id) const;
-
-		/**
-		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
-		 * loaded.
-		 */
-		GenericNode* unitRootNode() const;
-
-	private:
-		friend class GenericTree;
-		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
-
-		GenericTree* tree_{};
-		QString name_;
-		char* data_{};
-		int dataSize_{};
-
-		QList<GenericNode*> chunks_;
-		int lastNodeIndexInLastChunk_{};
-
-		GenericNode* nextNode();
-};
-
-inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }
-inline const QString& GenericPersistentUnit::name() const { return name_; }
-
-} /* namespace FilePersistence */
+QString CSwitchView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
+{
+	return "Switch to the view with name " + arguments.at(0);
+}
+}

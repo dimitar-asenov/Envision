@@ -58,3 +58,29 @@ class OnScopeExit
 	private:
 		std::function<void ()> functionToCall_;
 };
+
+class SystemCommandResult {
+	public:
+		int exitCode() const;
+		QStringList stdout() const;
+		QString stdoutOneLine() const;
+		QStringList stderr() const;
+
+		operator QString() const;
+		operator QStringList() const;
+
+	private:
+		friend SystemCommandResult runSystemCommand(const QString& command, const QStringList& arguments,
+																  const QString& workingDirectory);
+
+		int exitCode_{};
+		QStringList stdout_;
+		QStringList stderr_;
+};
+
+inline int SystemCommandResult::exitCode() const { return exitCode_; }
+inline QStringList SystemCommandResult::stdout() const { return stdout_; }
+inline QStringList SystemCommandResult::stderr() const { return stderr_; }
+
+SystemCommandResult runSystemCommand(const QString& program, const QStringList& arguments = {},
+									  const QString& workingDirectory = QString{});
