@@ -38,6 +38,7 @@ namespace Model {
 namespace Visualization {
 
 class Item;
+class ViewItem;
 class ModelRenderer;
 class SceneHandlerItem;
 class Cursor;
@@ -65,11 +66,19 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer();
 		static ModelRenderer* defaultRenderer();
 
-		void addTopLevelItem(Item* item);
+		void addTopLevelNode(Node* node, int column = 0, int row = 0);
+		void addTopLevelItem(Item* item, bool show = true);
 		void removeTopLevelItem(Item* item);
 		void scheduleUpdate();
 		void updateNow();
 		void listenToTreeManager(Model::TreeManager* manager);
+
+		void addViewItem(ViewItem* view);
+		ViewItem* newViewItem(const QString name = QString());
+		ViewItem* viewItem(const QString name);
+		void switchToView(ViewItem* view);
+		bool switchToView(const QString viewName);
+		ViewItem* currentViewItem();
 
 		Cursor* mainCursor();
 		void setMainCursor(Cursor* cursor);
@@ -99,6 +108,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool isHiddenCategory(ItemCategory cat);
 
 		const QList<Item*>& topLevelItems() const;
+		const QList<ViewItem*>& viewItems() const;
 
 		void addRefreshActionFunction(RefreshActionFunction func);
 
@@ -169,6 +179,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
+		QList<ViewItem*> viewItems_;
+		ViewItem* currentViewItem_{};
 		QHash<QString, OverlayGroup> overlayGroups_;
 
 		Cursor* mainCursor_{};
@@ -210,6 +222,7 @@ inline ModelRenderer* Scene::renderer() { return renderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return mainCursor_; }
 inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
+inline const QList<ViewItem*>& Scene::viewItems() const { return viewItems_; }
 inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
 
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }

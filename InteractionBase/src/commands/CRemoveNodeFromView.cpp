@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,62 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "CRemoveNodeFromView.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
-#include "../filepersistence_api.h"
+namespace Interaction {
 
-#include "ModelBase/src/persistence/PersistentStore.h"
+CRemoveNodeFromView::CRemoveNodeFromView()
+	:CommandWithDefaultArguments("removeNode", QStringList())
+{
+}
 
-namespace FilePersistence {
+bool CRemoveNodeFromView::canInterpret(Visualization::Item *source, Visualization::Item *target,
+	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+{
+	 return CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor)
+			 && target->hasNode() && target->scene()->currentViewItem()->allNodes().contains(target->node());
+}
 
-class GenericTree;
-class GenericNode;
+CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
+{
+	target->scene()->currentViewItem()->removeNode(target->node());
+	return new CommandResult();
+}
 
-class FILEPERSISTENCE_API GenericPersistentUnit {
-	public:
-		~GenericPersistentUnit();
-
-		const QString& name() const;
-		GenericTree* tree() const;
-
-		GenericNode* newNode();
-		GenericNode* newNode(int lineStart, int lineEndEnclusive);
-		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-		GenericNode* newNode(const QString& fromString);
-
-		/**
-		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
-		 * destroyed with the object.
-		 *
-		 * Returns a pointer to the copied data.
-		 */
-		const char* setData(const char* data, int dataSize);
-
-		GenericNode* find(Model::NodeIdType id) const;
-
-		/**
-		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
-		 * loaded.
-		 */
-		GenericNode* unitRootNode() const;
-
-	private:
-		friend class GenericTree;
-		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
-
-		GenericTree* tree_{};
-		QString name_;
-		char* data_{};
-		int dataSize_{};
-
-		QList<GenericNode*> chunks_;
-		int lastNodeIndexInLastChunk_{};
-
-		GenericNode* nextNode();
-};
-
-inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }
-inline const QString& GenericPersistentUnit::name() const { return name_; }
-
-} /* namespace FilePersistence */
+QString CRemoveNodeFromView::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &, const std::unique_ptr<Visualization::Cursor> &)
+{
+	return "Remove the current top-level node from the current view";
+}
+}

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,63 +23,64 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "ViewItem.h"
 
-#pragma once
+#include "../src/declarative/DeclarativeItemDef.h"
+#include "declarative/DynamicGridFormElement.h"
 
-#include "../filepersistence_api.h"
+namespace Visualization {
 
-#include "ModelBase/src/persistence/PersistentStore.h"
+ITEM_COMMON_DEFINITIONS(ViewItem, "item")
 
-namespace FilePersistence {
+ViewItem::ViewItem(Item* parent, QString name, StyleType* style) :
+		Super(parent, style), name_{name}
+{
+}
 
-class GenericTree;
-class GenericNode;
+void ViewItem::initializeForms()
+{
+	addForm((new DynamicGridFormElement())
+			->setSpacing(10, 10)->setMargins(10)
+			->setMajorAxis(GridLayouter::ColumnMajor)
+			->setNodesGetter([](Item* v)
+				{ auto self = static_cast<I*>(v);
+				  return self->nodesGetter(); }));
+}
 
-class FILEPERSISTENCE_API GenericPersistentUnit {
-	public:
-		~GenericPersistentUnit();
+void ViewItem::insertNode(Model::Node* node, int column, int row)
+{
+	if (nodes_.size() < column)
+		nodes_.resize(column);
+	if (nodes_.size() <= column)
+		nodes_.insert(column, {});
+	if (nodes_[column].size() < row)
+		nodes_[column].resize(row);
+	nodes_[column].insert(row, node);
+	setUpdateNeeded(StandardUpdate);
+}
 
-		const QString& name() const;
-		GenericTree* tree() const;
+void ViewItem::removeNode(Model::Node* node)
+{
+	for (int i = 0; i < nodes_.size(); i++)
+	{
+		auto index = nodes_.at(i).indexOf(node);
+		if (index != -1)
+			nodes_[i].remove(index);
+	}
+	setUpdateNeeded(StandardUpdate);
+}
 
-		GenericNode* newNode();
-		GenericNode* newNode(int lineStart, int lineEndEnclusive);
-		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-		GenericNode* newNode(const QString& fromString);
+const QList<Model::Node*> ViewItem::allNodes() const
+{
+	QList<Model::Node*> result;
+	for (auto column : nodes_)
+		for (auto item : column)
+			result.append(item);
+	return result;
+}
 
-		/**
-		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
-		 * destroyed with the object.
-		 *
-		 * Returns a pointer to the copied data.
-		 */
-		const char* setData(const char* data, int dataSize);
-
-		GenericNode* find(Model::NodeIdType id) const;
-
-		/**
-		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
-		 * loaded.
-		 */
-		GenericNode* unitRootNode() const;
-
-	private:
-		friend class GenericTree;
-		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
-
-		GenericTree* tree_{};
-		QString name_;
-		char* data_{};
-		int dataSize_{};
-
-		QList<GenericNode*> chunks_;
-		int lastNodeIndexInLastChunk_{};
-
-		GenericNode* nextNode();
-};
-
-inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }
-inline const QString& GenericPersistentUnit::name() const { return name_; }
-
-} /* namespace FilePersistence */
+QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
+{
+	return nodes_;
+}
+}

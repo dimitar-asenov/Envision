@@ -33,7 +33,7 @@
 #include "OOModel/src/declarations/Field.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
-#include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/declarative/GridLayouter.h"
 
@@ -71,9 +71,7 @@ class CommandHelper
 			auto manager = new Model::TreeManager();
 			manager->setRoot(child);
 
-			auto vis = new Visualization::RootItem(child);
-			vis->setPos(target->pos());
-			target->scene()->addTopLevelItem( vis );
+			target->scene()->currentViewItem()->insertNode(child);
 			target->scene()->listenToTreeManager(manager);
 
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);

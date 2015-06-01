@@ -71,10 +71,13 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h \
-	src/commands/CommandWithDefaultArguments.h \
+    src/commands/CommandWithDefaultArguments.h \
     src/commands/CDiff.h \
     src/commands/CHistory.h \
-    src/commands/CMerge.h
+    src/commands/CMerge.h \
+    src/commands/CNewView.h \
+    src/commands/CSwitchView.h \
+    src/commands/CRemoveNodeFromView.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -142,4 +145,7 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CommandWithDefaultArguments.cpp \
     src/commands/CDiff.cpp \
     src/commands/CHistory.cpp \
-    src/commands/CMerge.cpp
+    src/commands/CMerge.cpp \
+    src/commands/CNewView.cpp \
+    src/commands/CSwitchView.cpp \
+    src/commands/CRemoveNodeFromView.cpp

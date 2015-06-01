@@ -101,6 +101,14 @@ GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool 
 	return node;
 }
 
+GenericNode* GenericPersistentUnit::newNode(const QString& fromString)
+{
+	auto data = fromString.toUtf8();
+	auto node = newNode(data.constData(), data.length());
+	node->ensureDataRead(); // We must eagerly load the node as data will disappear at the end of this method.
+	return node;
+}
+
 const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 {
 	Q_ASSERT(!data_);

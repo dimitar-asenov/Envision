@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,60 +26,31 @@
 
 #pragma once
 
-#include "../filepersistence_api.h"
+#include "InteractionBase/src/interactionbase_api.h"
+#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
 
-#include "ModelBase/src/persistence/PersistentStore.h"
+namespace Visualization {
+	class Item;
+}
 
-namespace FilePersistence {
+namespace Interaction {
 
-class GenericTree;
-class GenericNode;
-
-class FILEPERSISTENCE_API GenericPersistentUnit {
+class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArguments
+{
 	public:
-		~GenericPersistentUnit();
+		CRemoveNodeFromView();
 
-		const QString& name() const;
-		GenericTree* tree() const;
+		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		GenericNode* newNode();
-		GenericNode* newNode(int lineStart, int lineEndEnclusive);
-		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-		GenericNode* newNode(const QString& fromString);
 
-		/**
-		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
-		 * destroyed with the object.
-		 *
-		 * Returns a pointer to the copied data.
-		 */
-		const char* setData(const char* data, int dataSize);
+	protected:
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		GenericNode* find(Model::NodeIdType id) const;
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		/**
-		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
-		 * loaded.
-		 */
-		GenericNode* unitRootNode() const;
-
-	private:
-		friend class GenericTree;
-		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
-
-		GenericTree* tree_{};
-		QString name_;
-		char* data_{};
-		int dataSize_{};
-
-		QList<GenericNode*> chunks_;
-		int lastNodeIndexInLastChunk_{};
-
-		GenericNode* nextNode();
 };
 
-inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }
-inline const QString& GenericPersistentUnit::name() const { return name_; }
-
-} /* namespace FilePersistence */
+}

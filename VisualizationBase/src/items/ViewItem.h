@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,63 +23,42 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
 #pragma once
 
-#include "../filepersistence_api.h"
+#include "../visualizationbase_api.h"
+#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
 
-#include "ModelBase/src/persistence/PersistentStore.h"
+namespace Visualization {
 
-namespace FilePersistence {
+/**
+ * The ViewItem class represents the visualization of an entire view within a single item.
+ *
+ * All items in a view should be added and removed via this ViewItem class. Each Scene object contains
+ * a list of ViewItem objects which can be used for that. Using this, it is possible to control what
+ * is shown on the screen.
+ */
+class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
-class GenericTree;
-class GenericNode;
+	ITEM_COMMON_CUSTOM_STYLENAME(ViewItem, DeclarativeItemBaseStyle)
 
-class FILEPERSISTENCE_API GenericPersistentUnit {
 	public:
-		~GenericPersistentUnit();
+		ViewItem(Item* parent, QString name = QString(), StyleType* style = itemStyles().get());
 
-		const QString& name() const;
-		GenericTree* tree() const;
+		static void initializeForms();
 
-		GenericNode* newNode();
-		GenericNode* newNode(int lineStart, int lineEndEnclusive);
-		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-		GenericNode* newNode(const QString& fromString);
+		void insertNode(Model::Node* node, int column = 0, int row = 0);
+		void removeNode(Model::Node* node);
+		const QList<Model::Node*> allNodes() const;
 
-		/**
-		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
-		 * destroyed with the object.
-		 *
-		 * Returns a pointer to the copied data.
-		 */
-		const char* setData(const char* data, int dataSize);
-
-		GenericNode* find(Model::NodeIdType id) const;
-
-		/**
-		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
-		 * loaded.
-		 */
-		GenericNode* unitRootNode() const;
+		const QString name() const;
 
 	private:
-		friend class GenericTree;
-		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
-
-		GenericTree* tree_{};
+		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
-		char* data_{};
-		int dataSize_{};
 
-		QList<GenericNode*> chunks_;
-		int lastNodeIndexInLastChunk_{};
-
-		GenericNode* nextNode();
+		QVector<QVector<Model::Node*>> nodesGetter();
 };
 
-inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }
-inline const QString& GenericPersistentUnit::name() const { return name_; }
+inline const QString ViewItem::name() const { return name_; }
 
-} /* namespace FilePersistence */
+}

@@ -33,7 +33,6 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/VComposite.h"
 #include "VisualizationBase/src/items/VList.h"
-#include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/nodes/TestBoxNode.h"
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -140,9 +139,8 @@ TEST(CommentsPlugin, SimpleTest)
 
 	manager->endModification();
 
-	auto top = new RootItem(list);
 	auto scene = VisualizationManager::instance().mainScene();
-	scene->addTopLevelItem(top);
+	scene->addTopLevelNode(list);
 	QApplication::processEvents();
 
 	scene->scheduleUpdate();

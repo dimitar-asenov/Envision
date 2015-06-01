@@ -51,12 +51,12 @@ HProject::HProject()
 	addCommand(new CCreateClass());
 	addCommand(new CCreateMethod());
 	addCommand(new CCreateField());
-	
-	addCommand(new CDumpMethodRenderings());
 
 	addCommand(new Interaction::CDiff());
 	addCommand(new Interaction::CHistory());
 	addCommand(new Interaction::CMerge());
+
+	addCommand(new CDumpMethodRenderings());
 }
 
 HProject* HProject::instance()

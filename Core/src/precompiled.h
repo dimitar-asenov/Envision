@@ -86,6 +86,9 @@
 #include <QtCore/QDir>
 #include <QtCore/QEvent>
 
+#include <QtCore/QProcess>
+#include <QtCore/QRegularExpression>
+
 #endif
 #endif
 

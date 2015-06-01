@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,51 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandWithDefaultArguments.h"
+#include "precompiled.h"
+#include "core.h"
 
-namespace Interaction {
-
-CommandWithDefaultArguments::CommandWithDefaultArguments(QString name, const QStringList &defaultArguments)
-	 :Command{name, true}, defaultArguments_{defaultArguments}
-{}
-
-bool CommandWithDefaultArguments::canInterpret(Visualization::Item *, Visualization::Item *,
-	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &)
-{
-	 return !commandTokens.isEmpty() && commandTokens.first() == this->name();
+QString SystemCommandResult::stdoutOneLine() const {
+	Q_ASSERT(stdout_.size() == 1);
+	return stdout_.first();
 }
 
-CommandResult* CommandWithDefaultArguments::execute(Visualization::Item *source, Visualization::Item *target,
-	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+SystemCommandResult::operator QString() const
 {
-	 return this->executeWithArguments(source, target, getParameters(commandTokens), cursor);
+	Q_ASSERT(exitCode() == 0);
+	Q_ASSERT(stderr_.size() == 0);
+	return stdoutOneLine();
 }
 
-QList<CommandSuggestion*> CommandWithDefaultArguments::suggest(Visualization::Item *source, Visualization::Item *target,
-	const QString &textSoFar, const std::unique_ptr<Visualization::Cursor> &cursor)
+SystemCommandResult::operator QStringList() const
 {
-	QList<CommandSuggestion*> result;
+	Q_ASSERT(exitCode() == 0);
+	Q_ASSERT(stderr_.size() == 0);
+	return stdout_;
+}
 
-	if (textSoFar.trimmed().startsWith(this->name() + " ") || this->name().startsWith(textSoFar.trimmed()))
-	{
-		result.append(new CommandSuggestion(this->name(),
-			this->description(source, target, getParameters(textSoFar.split(" ")), cursor)));
-	}
+SystemCommandResult runSystemCommand(const QString& program, const QStringList& arguments,
+												 const QString& workingDirectory)
+{
+	QProcess process;
+	process.setProgram(program);
+	if (!arguments.isEmpty()) process.setArguments(arguments);
+	if (!workingDirectory.isNull()) process.setWorkingDirectory(workingDirectory);
+
+	process.start();
+	process.waitForFinished();
+
+	SystemCommandResult result;
+	result.exitCode_ = process.exitCode();
+
+	auto EOLRegex = QRegularExpression("(\\r\\n|\\r|\\n)");
+	result.stdout_ = QString(process.readAllStandardOutput()).split(EOLRegex);
+	if (!result.stdout_.isEmpty() && result.stdout_.last().isEmpty())  result.stdout_.removeLast();
+	result.stderr_ = QString(process.readAllStandardError()).split(EOLRegex);
+	if (!result.stderr_.isEmpty() && result.stderr_.last().isEmpty())  result.stderr_.removeLast();
 
 	return result;
-}
-
-QStringList CommandWithDefaultArguments::getParameters(const QStringList &commandTokens)
-{
-	QStringList parameters = commandTokens;
-
-	// Remove the command name itself
-	parameters.removeAt(0);
-
-	// Fill up with default arguments
-	for (int i = parameters.size(); i < defaultArguments_.size(); i++)
-		parameters.append(defaultArguments_[i]);
-	return parameters;
-}
-
 }

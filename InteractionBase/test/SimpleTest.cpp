@@ -34,12 +34,12 @@
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/VComposite.h"
-#include "VisualizationBase/src/items/RootItem.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/model/TreeManager.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
@@ -73,12 +73,12 @@ TEST(InteractionBasePlugin, TextSelect)
 	third->set("Some independent text");
 	manager->endModification();
 
-	auto top = new RootItem(list);
 	auto scene = VisualizationManager::instance().mainScene();
-	scene->addTopLevelItem( top );
+	scene->addTopLevelNode( list );
 	QApplication::processEvents();
 
-	VList* list2 = dynamic_cast<VList*> (top->wrappedItem());
+	VList* list2 = dynamic_cast<VList*> (scene->currentViewItem()->findVisualizationOf(list));
+	Q_ASSERT(list2);
 	list2->itemAt<VComposite>(0)->setExpanded();
 	scene->scheduleUpdate();
 	scene->listenToTreeManager(manager);

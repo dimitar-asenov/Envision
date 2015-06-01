@@ -34,7 +34,6 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
-#include "VisualizationBase/src/items/RootItem.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -237,7 +236,7 @@ TEST(ControlFlowVisualizationPlugin, SimpleTest)
 
 	auto manager = new Model::TreeManager(cl);
 
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(cl));
+	VisualizationManager::instance().mainScene()->addTopLevelNode(cl);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
 	CHECK_CONDITION(cl != nullptr);
