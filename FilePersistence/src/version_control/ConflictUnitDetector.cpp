@@ -44,7 +44,7 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 {
 	affectedCUsA_ = computeAffectedCUs(treeBase, cdgA);
 	affectedCUsB_ = computeAffectedCUs(treeBase, cdgB);
-	RelationAssignmentTransition transition = createIdentityTransition(oldRelationAssignment);
+	RelationAssignmentTransition transition(oldRelationAssignment);
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
 	{

@@ -29,8 +29,9 @@
 
 namespace FilePersistence {
 
-ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes) :
-	conflictTypes_{conflictTypes}, listTypes_{listTypes} {}
+ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes,
+													QSet<QString>& unorderedTypes) :
+	conflictTypes_{conflictTypes}, listTypes_{listTypes}, unorderedTypes_{unorderedTypes} {}
 
 ListMergeComponent::~ListMergeComponent() {}
 
@@ -42,27 +43,40 @@ RelationAssignmentTransition ListMergeComponent::run(const std::unique_ptr<Gener
 								QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 								ConflictPairs& conflictPairs, RelationAssignment& relationAssignment)
 {
-	listsToMerge_ = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
-	RelationAssignmentTransition transition;
+	RelationAssignmentTransition transition(relationAssignment);
 
-	for (auto listContainer : listsToMerge_)
+	auto listsToMerge = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
+
+	for (auto listContainer : listsToMerge)
 	{
+		// TODO load from revision
 		auto idListA = nodeListToIdList(cdgA.changes().find(listContainer->id()).value()->nodeB()->children());
 		auto idListB = nodeListToIdList(cdgB.changes().find(listContainer->id()).value()->nodeB()->children());
 		auto idListBase = nodeListToIdList(listContainer->children());
 		QList<Model::NodeIdType> mergedList;
-		auto chunks = computeMergeChunks(idListA, idListB, idListBase);
-		for (auto chunk : chunks)
+		if (listTypes_.contains(listContainer->type()))
 		{
-			if (chunk.stable_)
+			auto chunks = computeChunks(idListA, idListB, idListBase);
+			for (auto chunk : chunks)
 			{
-				mergedList.append(chunk.spanBase_);
+				if (chunk.stable_)
+				{
+					mergedList.append(chunk.spanBase_);
+				}
+				else
+				{
+					auto mergedChunk = computeMergedChunk(chunk, cdgA, cdgB, idListA, idListB, idListBase);
+					if (mergedChunk.valid_) mergedList.append(mergedChunk.chunk_);
+					// else mergedChunks.append(chunk.spanBase_); TODO not sure if this is the best thing to do, maybe keep empty
+				}
 			}
-			else
+		}
+		else // list is unordered
+		{
+			mergedList.append(idListA);
+			for (auto id : idListB)
 			{
-				auto mergedChunk = computeMergedChunk(chunk);
-				if (mergedChunk.valid_) mergedList.append(mergedChunk.chunk_);
-				// else mergedChunks.append(chunk.spanBase_); not sure if this is the best thing to do, maybe keep empty
+				if (!mergedList.contains(id)) mergedList.append(id);
 			}
 		}
 
@@ -73,6 +87,7 @@ RelationAssignmentTransition ListMergeComponent::run(const std::unique_ptr<Gener
 		transition = translateListIntoChanges(listContainer->id(), mergedList, treeA, treeB,
 														  treeBase, cdgA, cdgB, relationAssignment);
 	}
+
 	return transition;
 }
 
@@ -165,6 +180,101 @@ QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 	return listsToMerge;
 }
 
+ListMergeComponent::ChunkMergeResult ListMergeComponent::computeMergedChunk(Chunk chunk,
+																									 ChangeDependencyGraph& cdgA,
+																									 ChangeDependencyGraph& cdgB,
+																									 QList<Model::NodeIdType>&,
+																									 QList<Model::NodeIdType>& idListB,
+																									 QList<Model::NodeIdType>& idListBase)
+{
+	QList<Model::NodeIdType> mergedChunk;
+	bool noConflict = true;
+	for (auto elem : chunk.spanA_)
+	{
+		Position posA = findPosition(elem, chunk.spanA_, mergedChunk);
+		Position posB = findPosition(elem, chunk.spanB_, mergedChunk);
+		Position posBase = findPosition(elem, chunk.spanBase_, mergedChunk);
+		auto changeA = cdgA.changes().find(elem);
+		bool elemInTreeBase = !(changeA != cdgA.changes().end() && changeA.value()->type() == ChangeType::Insertion);
+		auto changeB = cdgB.changes().find(elem);
+		bool elemInTreeB = elemInTreeBase &&
+				!(changeB != cdgB.changes().end() && changeB.value()->type() == ChangeType::Deletion);
+
+		if (chunk.spanBase_.contains(elem))
+		{
+			if (chunk.spanB_.contains(elem))
+			{
+				if (posA == posB)
+				{
+					if (!mergedChunk.contains(elem)) insertAfter(elem, posA, mergedChunk);
+				}
+				else
+				{
+					if (posA != posBase)
+					{
+						if (posB == posBase) insertAfter(elem, posA, mergedChunk);
+						else
+						{
+							// conflict
+							noConflict = false;
+							break;
+						}
+					}
+				}
+			}
+		}
+		else // elem not in base chunk
+		{
+			if (elemInTreeB)
+			{
+				if (idListB.contains(elem))
+				{
+					if (chunk.spanB_.contains(elem))
+					{
+						if (posA == posB)
+						{
+							if (!mergedChunk.contains(elem)) insertAfter(elem, posA, mergedChunk);
+						}
+						else
+						{
+							// conflict
+							noConflict = false;
+							break;
+						}
+					}
+					else
+					{
+						// conflict
+						noConflict = false;
+						break;
+					}
+				}
+				else
+				{
+					if (idListBase.contains(elem))
+					{
+						// conflict
+						noConflict = false;
+						break;
+					}
+					else insertAfter(elem, posA, mergedChunk);
+				}
+			}
+			else
+			{
+				if (elemInTreeBase)
+				{
+					// conflict
+					noConflict = false;
+					break;
+				}
+				else insertAfter(elem, posA, mergedChunk);
+			}
+		}
+	}
+	return ChunkMergeResult(noConflict, mergedChunk);
+}
+
 /**
  * Tries to find a unique position for \a elem in \a into that is similar to the position of \a elem in \a from.
  * Returns a Position \a pos where \a pos.valid = true if and only if such a position could be found and pos.predecessor
@@ -175,7 +285,7 @@ QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 ListMergeComponent::Position ListMergeComponent::findPosition(Model::NodeIdType element,
 																				  QList<Model::NodeIdType> from, QList<Model::NodeIdType> into)
 {
-	// positon in empty list is unique
+	// position in empty list is unique
 	if (into.isEmpty()) return Position(true, 0);
 
 	int elemIdx = from.indexOf(element) - 1;
@@ -202,7 +312,7 @@ void ListMergeComponent::insertAfter(Model::NodeIdType elem, Position pos, QList
 	}
 }
 
-QList<ListMergeComponent::Chunk> ListMergeComponent::computeMergeChunks(const QList<Model::NodeIdType> idListA,
+QList<ListMergeComponent::Chunk> ListMergeComponent::computeChunks(const QList<Model::NodeIdType> idListA,
 																								 const QList<Model::NodeIdType> idListB,
 																								 const QList<Model::NodeIdType> idListBase)
 {
@@ -313,7 +423,7 @@ QList<Model::NodeIdType> ListMergeComponent::backtrackLCS(int** data, const QLis
 			return backtrackLCS(data, listA, listB, posA-1, posB);
 }
 
-QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<GenericNode*>& list)
+QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<GenericNode*>& list) const
 {
 	QVector<Model::NodeIdType> idList(list.size());
 	for (GenericNode* node : list)
@@ -325,6 +435,10 @@ QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<Generi
 	return QList<Model::NodeIdType>::fromVector(idList);
 }
 
+/**
+ * Takes the merged version of a list and generates all changes needed to bring the base version to the merged version.
+ * New changes are created in \a cdgA.
+ */
 RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model::NodeIdType,
 																								  QList<Model::NodeIdType>& mergedList,
 																								  const std::unique_ptr<GenericTree>&,

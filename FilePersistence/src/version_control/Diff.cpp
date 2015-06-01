@@ -149,7 +149,7 @@ void Diff::setStructureFlagForId(const Model::NodeIdType id)
 	else
 	{
 		// ugly but otherwise, we would have to remove the change, clone it, set flag and reinsert it.
-		((ChangeDescription*) changeDescriptions_.value(id).get())->setStructureChangeFlag(true);
+		const_cast<ChangeDescription*>(changeDescriptions_.value(id).get())->setStructureChangeFlag(true);
 	}
 
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));

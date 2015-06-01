@@ -29,12 +29,9 @@
 #include "ChangeDescription.h"
 #include "ChangeDependencyGraph.h"
 #include "ConflictPairs.h"
+#include "RelationAssignmentTransition.h"
 
 namespace FilePersistence {
-
-using RelationSet = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
-using RelationAssignment = QSet<RelationSet>;
-using RelationAssignmentTransition = QHash<RelationSet, RelationSet>;
 
 class ConflictPipelineComponent
 {
@@ -47,13 +44,7 @@ class ConflictPipelineComponent
 															  QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 															  ConflictPairs& conflictPairs, RelationAssignment& relationAssignment) = 0;
 	protected:
-		RelationAssignmentTransition createIdentityTransition(RelationAssignment& relationAssignment);
 		RelationSet findRelationSet(std::shared_ptr<const ChangeDescription> change, RelationAssignment& relationAssignment);
 };
-
-inline uint qHash(const RelationSet& relationSet, uint seed = 0)
-{
-	return ::qHash(relationSet.get(), seed);
-}
 
 } /* namespace FilePersistence */

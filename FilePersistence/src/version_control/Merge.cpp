@@ -32,25 +32,10 @@
 
 namespace FilePersistence {
 
-bool Merge::abort()
-{
-	if (stage_ != Stage::NoMerge && stage_ != Stage::Complete)
-	{
-		QString branch = repository_->currentBranch();
-
-		repository_->checkout(headCommitId, true);
-		repository_->setReferenceTarget(branch, headCommitId);
-
-		stage_ = Stage::NoMerge;
-		return true;
-	}
-	else
-		return false;
-}
-
 bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
 {
-	if (stage_ == Stage::ReadyToCommit)
+	// TODO construct merged tree from changes and write to disk
+	if (stage_ == Stage::WroteToIndex)
 	{
 		QString treeSHA1 = repository_->writeIndexToTree();
 
@@ -60,7 +45,7 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 
 		repository_->newCommit(treeSHA1, message, author, committer, parents);
 
-		stage_ = Stage::Complete;
+		stage_ = Stage::Commited;
 
 		return true;
 	}
@@ -71,49 +56,42 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 // ======== private ========
 
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
-	: fastForward_{fastForward}, repository_{repository}
+	: repository_{repository}
 {
 	headCommitId = repository_->getSHA1("HEAD");
 	revisionCommitId_ = repository_->getSHA1(revision);
 	baseCommitId_ = repository_->findMergeBase("HEAD", revision);
 
-	if (baseCommitId_.isNull())
-		error_ = Error::NoMergeBase;
+	Q_ASSERT(!baseCommitId_.isNull());
 
-	stage_ = Stage::Initialized;
+	stage_ = Stage::FoundMergeBase;
 
-	if (baseCommitId_.compare(revisionCommitId_) == 0)
-	{
-		kind_ = Kind::AlreadyUpToDate;
-	}
-	else if (baseCommitId_.compare(headCommitId) == 0)
-	{
-		kind_ = Kind::FastForward;
-	}
-	else
-		kind_ = Kind::TrueMerge;
+	Kind kind;
+	if (baseCommitId_.compare(revisionCommitId_) == 0) kind = Kind::AlreadyUpToDate;
+	else if (baseCommitId_.compare(headCommitId) == 0) kind = Kind::FastForward;
+	else kind = Kind::TrueMerge;
 
 	stage_ = Stage::Classified;
 
-	switch (kind_)
+	switch (kind)
 	{
 		case Kind::AlreadyUpToDate:
-			stage_ = Merge::Stage::Complete;
+			stage_ = Merge::Stage::Commited;
 			break;
 
 		case Kind::FastForward:
-			if (fastForward_)
+			if (fastForward)
 			{
 				QString branch = repository_->currentBranch();
 				repository_->setReferenceTarget(branch, revisionCommitId_);
 				repository_->checkout(revisionCommitId_, true);
-				stage_ = Stage::Complete;
+				stage_ = Stage::Commited;
 			}
 			else
 			{
 				repository_->checkout(revisionCommitId_, true);
 				repository_->writeRevisionIntoIndex(revisionCommitId_);
-				stage_ = Stage::ReadyToCommit;
+				stage_ = Stage::WroteToIndex;
 			}
 			break;
 
@@ -146,18 +124,25 @@ void Merge::performTrueMerge()
 		repository_->loadGenericTree(treeBase_, baseCommitId_);
 
 		RelationAssignmentTrace trace;
-		RelationAssignment relationAssignment; // TODO initialize
+		RelationAssignment relationAssignment;
+		// initialize with single-member sets (no relations)
+		for (auto change : cdgA.changes().values())
+		{
+			RelationSet relationSet;
+			relationSet->insert(change);
+			relationAssignment.insert(relationSet);
+		}
 		RelationAssignmentTransition transition = pipelineInitializer_->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
 																								  conflictingChanges_, conflictPairs_, relationAssignment);
 		trace.append(transition);
 		for (auto component : conflictPipeline_)
 		{
-			// compute new RA from transition
+			relationAssignment = transition.values();
 			transition = component->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
 												 conflictingChanges_, conflictPairs_, relationAssignment);
 			trace.append(transition);
 		}
-		// compute final RA?
+		// TODO compute final RA?
 
 		IdToChangeDescriptionHash applicableChanges;
 		for (auto change : cdgA.changes())
@@ -165,7 +150,19 @@ void Merge::performTrueMerge()
 		for (auto change : cdgB.changes())
 			if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
 
-		//And then do manual merge
+		stage_ = Stage::AutoMerged;
+		// TODO And then do manual merge?
+		if (!conflictingChanges_.isEmpty())
+		{
+			performManualMerge();
+			stage_ = Stage::ManualMerged;
+		}
+
+		// TODO apply all changes
+		stage_ = Stage::BuiltMergedTree;
+		// TODO write to index / work dir
+		stage_ = Stage::WroteToIndex;
+		// await commit
 }
 
 } /* namespace FilePersistence */

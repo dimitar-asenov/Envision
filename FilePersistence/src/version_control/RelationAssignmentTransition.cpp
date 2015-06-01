@@ -24,21 +24,56 @@
 **
 ***********************************************************************************************************************/
 
-#include "ConflictPipelineComponent.h"
+#include "RelationAssignmentTransition.h"
 
-namespace FilePersistence
-{
+namespace FilePersistence {
 
-ConflictPipelineComponent::~ConflictPipelineComponent() {}
+RelationAssignmentTransition::RelationAssignmentTransition() {}
 
-RelationSet ConflictPipelineComponent::findRelationSet(std::shared_ptr<const ChangeDescription> change,
-																		 RelationAssignment& relationAssignment)
+RelationAssignmentTransition::RelationAssignmentTransition(RelationAssignment& relationAssignment)
 {
 	for (auto relationSet : relationAssignment)
 	{
-		if (relationSet->contains(change)) return relationSet;
+		transition_.insert(relationSet, RelationSet(relationSet));
 	}
-	Q_ASSERT(false);
+}
+
+void RelationAssignmentTransition::insert(RelationSet keySet, std::shared_ptr<const ChangeDescription>& change)
+{
+	// TODO could probably be optimized
+	if (transition_.contains(keySet) && transition_.value(keySet)->contains(change)) return; // already mapped
+
+	RelationSet setContainingChange;
+	bool changeIsMappedTo = false;
+	for (auto relationSet : transition_.values())
+	{
+		if (relationSet->contains(change))
+		{
+			setContainingChange = relationSet;
+			changeIsMappedTo = true;
+			break;
+		}
+	}
+
+	if (changeIsMappedTo)
+	{
+		if (transition_.contains(keySet))
+		{
+			auto currentlyMappedSet = transition_.value(keySet);
+			setContainingChange->unite(*currentlyMappedSet);
+		}
+		transition_.insert(keySet, setContainingChange);
+	}
+	else
+	{
+		if (transition_.contains(keySet)) transition_.value(keySet)->insert(change);
+		else
+		{
+			RelationSet newSet;
+			newSet->insert(change);
+			transition_.insert(keySet, newSet);
+		}
+	}
 }
 
 }

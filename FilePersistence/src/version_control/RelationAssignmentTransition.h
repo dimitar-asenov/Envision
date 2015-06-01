@@ -24,21 +24,43 @@
 **
 ***********************************************************************************************************************/
 
-#include "ConflictPipelineComponent.h"
+#pragma once
 
-namespace FilePersistence
+#include "ChangeDescription.h"
+
+namespace FilePersistence {
+
+using RelationSet = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
+using RelationAssignment = QSet<RelationSet>;
+
+/**
+ * The main purpose of this class is to enforce the consistency of the relation set mappings.
+ */
+class RelationAssignmentTransition
 {
+	public:
+		RelationAssignmentTransition();
 
-ConflictPipelineComponent::~ConflictPipelineComponent() {}
+		/**
+		 *	Creates a one-to-one transition.
+		 */
+		RelationAssignmentTransition(RelationAssignment& relationAssignment);
 
-RelationSet ConflictPipelineComponent::findRelationSet(std::shared_ptr<const ChangeDescription> change,
-																		 RelationAssignment& relationAssignment)
+		void insert(RelationSet keySet, std::shared_ptr<const ChangeDescription>& change);
+		RelationAssignment values() const;
+
+	private:
+		QHash<RelationSet, RelationSet> transition_;
+};
+
+inline RelationAssignment RelationAssignmentTransition::values() const
 {
-	for (auto relationSet : relationAssignment)
-	{
-		if (relationSet->contains(change)) return relationSet;
-	}
-	Q_ASSERT(false);
+	return RelationAssignment::fromList(transition_.values());
 }
 
+inline uint qHash(const RelationSet& relationSet, uint seed = 0)
+{
+	return ::qHash(relationSet.get(), seed);
 }
+
+} /* namespace FilePersistence */

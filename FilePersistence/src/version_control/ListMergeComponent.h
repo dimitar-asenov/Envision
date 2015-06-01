@@ -33,7 +33,7 @@ namespace FilePersistence {
 class ListMergeComponent : public ConflictPipelineComponent
 {
 	public:
-		ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes);
+		ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes, QSet<QString>& unorderedTypes);
 		~ListMergeComponent();
 		RelationAssignmentTransition run(const std::unique_ptr<GenericTree>&treeA,
 					const std::unique_ptr<GenericTree>&treeB,
@@ -76,7 +76,9 @@ class ListMergeComponent : public ConflictPipelineComponent
 				ChangeDependencyGraph& cdgB,
 				QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 				ConflictPairs& conflictPairs);
-		ChunkMergeResult computeMergedChunk(Chunk chunk);
+		ChunkMergeResult computeMergedChunk(Chunk chunk, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+														QList<Model::NodeIdType>& idListA, QList<Model::NodeIdType>& idListB,
+														QList<Model::NodeIdType>& idListBase);
 		Position findPosition(Model::NodeIdType element, QList<Model::NodeIdType> from, QList<Model::NodeIdType> into);
 		RelationAssignmentTransition translateListIntoChanges(Model::NodeIdType listContainerId,
 																				QList<Model::NodeIdType>& mergedList,
@@ -88,13 +90,13 @@ class ListMergeComponent : public ConflictPipelineComponent
 
 		QSet<QString> conflictTypes_;
 		QSet<QString> listTypes_;
-		QSet<const GenericNode*> listsToMerge_;
+		QSet<QString> unorderedTypes_;
 
 		void insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk);
 
-		QList<Model::NodeIdType> nodeListToIdList(const QList<GenericNode*>& list);
+		QList<Model::NodeIdType> nodeListToIdList(const QList<GenericNode*>& list) const;
 
-		QList<Chunk> computeMergeChunks(const QList<Model::NodeIdType> idListA, const QList<Model::NodeIdType> idListB,
+		QList<Chunk> computeChunks(const QList<Model::NodeIdType> idListA, const QList<Model::NodeIdType> idListB,
 													const QList<Model::NodeIdType> idListBase);
 
 		static QList<Model::NodeIdType> backtrackLCS(int** data, const QList<Model::NodeIdType> x,

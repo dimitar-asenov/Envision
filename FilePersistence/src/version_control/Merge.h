@@ -45,18 +45,11 @@ class FILEPERSISTENCE_API Merge
 		~Merge();
 
 		enum class Kind {Unclassified, AlreadyUpToDate, FastForward, TrueMerge};
-		Kind kind() const;
+		enum class Stage {NotInitialized, FoundMergeBase, Classified, AutoMerged,
+								ManualMerged, BuiltMergedTree, WroteToIndex, Commited};
 
-		enum class Stage {NoMerge, Initialized, Classified, ConflictsDetected, ReadyToCommit, Complete};
-		Stage stage() const;
-
-		enum class Error {NoError, NoMergeBase};
-		Error error() const;
-
-		bool abort();
+		// TODO depending on how far the responsibilities of the Merge class go, these might be removed.
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
-
-		// deprecated, will be removed
 		const std::unique_ptr<GenericTree> mergeTree();
 
 	private:
@@ -64,26 +57,16 @@ class FILEPERSISTENCE_API Merge
 
 		Merge(QString revision, bool fastForward, GitRepository* repository);
 
-		void classifyKind();
-
 		void performTrueMerge();
+		void performManualMerge(); // TODO implement here or some other place.
+		RelationAssignment assignmentFromTransition(const RelationAssignmentTransition& transition);
 
-		static QList<Model::NodeIdType> genericNodeListToNodeIdList(const QList<GenericNode*>& list);
-
-		enum class ListType {NoList, OrderedList, UnorderedList};
-		static ListType getListType(const GenericNode* node);
-		static bool isListType(const GenericNode* node);
-
-		Kind kind_{};
-		Stage stage_{};
-		Error error_{};
+		Stage stage_ = Stage::NotInitialized;
 
 		// GenericTrees
-		std::unique_ptr<GenericTree> treeBase_;
-		std::unique_ptr<GenericTree> treeB_;
 		std::unique_ptr<GenericTree> treeA_;
-
-		bool fastForward_{};
+		std::unique_ptr<GenericTree> treeB_;
+		std::unique_ptr<GenericTree> treeBase_;
 
 		// Revisions
 		QString headCommitId;
@@ -94,27 +77,26 @@ class FILEPERSISTENCE_API Merge
 
 		/**
 		 * This component is executed first, before any pipeline component.
-		 * It establishes the pipeline invariant but may not depend on it holding beforehand.
+		 * It establishes the pipeline invariant but must not depend on it holding beforehand.
 		 */
 		std::shared_ptr<ConflictPipelineComponent> pipelineInitializer_;
+
 		/**
 		 * Components are executed in the order they appear in this list.
 		 */
 		QList<std::shared_ptr<ConflictPipelineComponent>> conflictPipeline_;
 
 		/**
-		 * changes in this set cannot be applied safely.
+		 * Changes in this set cannot be applied safely.
+		 * Every change in the set should either be matched with a conflicting change in \a conflictingChanges_
+		 * or be depending on a change that is in conflict. This is not enforced, however.
 		 */
 		QSet<std::shared_ptr<const ChangeDescription>> conflictingChanges_;
 
 		/**
-		 * change1 is mapped to change2 iff change1 and change2 cannot both be applied safely.
+		 * change1 is mapped to change2 exactly if change1 and change2 cannot both be applied safely.
 		 */
 		ConflictPairs conflictPairs_;
 };
-
-inline Merge::Kind Merge::kind() const { return kind_; }
-inline Merge::Stage Merge::stage() const { return stage_; }
-inline Merge::Error Merge::error() const { return error_; }
 
 } /* namespace FilePersistence */
