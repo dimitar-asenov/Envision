@@ -38,7 +38,7 @@ class ListMergeComponent : public ConflictPipelineComponent
 		RelationAssignmentTransition run(const std::unique_ptr<GenericTree>&treeA,
 					const std::unique_ptr<GenericTree>&treeB,
 					const std::unique_ptr<GenericTree>&treeBase, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-					QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, RelationAssignment&relationAssignment);
 	private:
 
@@ -71,8 +71,11 @@ class ListMergeComponent : public ConflictPipelineComponent
 				ChunkMergeResult(bool valid, QList<Model::NodeIdType> chunk);
 		};
 
-		QSet<const GenericNode*> computeListsToMerge(QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
-																	ConflictPairs& conflictPairs);
+		QSet<const GenericNode*> computeListsToMerge(
+				ChangeDependencyGraph& cdgA,
+				ChangeDependencyGraph& cdgB,
+				QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
+				ConflictPairs& conflictPairs);
 		ChunkMergeResult computeMergedChunk(Chunk chunk);
 		Position findPosition(Model::NodeIdType element, QList<Model::NodeIdType> from, QList<Model::NodeIdType> into);
 		RelationAssignmentTransition translateListIntoChanges(Model::NodeIdType listContainerId,

@@ -44,7 +44,7 @@ class ConflictPipelineComponent
 															  const std::unique_ptr<GenericTree>& treeA,
 															  const std::unique_ptr<GenericTree>& treeB,
 															  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-															  QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
+															  QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 															  ConflictPairs& conflictPairs, RelationAssignment& relationAssignment) = 0;
 	protected:
 		RelationAssignmentTransition createIdentityTransition(RelationAssignment& relationAssignment);

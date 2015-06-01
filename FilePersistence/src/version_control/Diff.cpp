@@ -139,17 +139,18 @@ void Diff::computeStructChanges()
  */
 void Diff::setStructureFlagForId(const Model::NodeIdType id)
 {
-	IdToChangeDescriptionHash::iterator changeIt = changeDescriptions_.find(id);
-	std::shared_ptr<ChangeDescription> change;
-	if (changeIt == changeDescriptions_.end())
+	if (!changeDescriptions_.contains(id))
 	{
-		change = std::make_shared<ChangeDescription>(id, ChangeType::Stationary);
+		auto change = std::make_shared<ChangeDescription>(id, ChangeType::Stationary);
 		changeDescriptions_.insert(id, change);
+		change->setStructureChangeFlag(true);
 		// TODO Problem? These changes have no node, just an id.
 	}
 	else
-		change = changeIt.value();
-	change->setStructureChangeFlag(true);
+	{
+		// ugly but otherwise, we would have to remove the change, clone it, set flag and reinsert it.
+		((ChangeDescription*) changeDescriptions_.value(id).get())->setStructureChangeFlag(true);
+	}
 
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
 }

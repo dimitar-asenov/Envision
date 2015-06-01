@@ -35,7 +35,7 @@ namespace FilePersistence {
 class GitRepository;
 
 using IdToGenericNodeHash = QMultiHash<Model::NodeIdType, GenericNode*>;
-using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
+using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<const ChangeDescription>>;
 
 class FILEPERSISTENCE_API Diff
 {

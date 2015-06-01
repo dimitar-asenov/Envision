@@ -33,7 +33,8 @@
 
 namespace FilePersistence {
 
-using ChangeToChangeHash = QMultiHash<const ChangeDescription*, const ChangeDescription*>;
+using ChangeToChangeHash = QMultiHash<const std::shared_ptr<ChangeDescription>,
+												  const std::shared_ptr<ChangeDescription>>;
 using RelationAssignmentTrace = QList<RelationAssignmentTransition>;
 
 class GitRepository;
@@ -104,7 +105,7 @@ class FILEPERSISTENCE_API Merge
 		/**
 		 * changes in this set cannot be applied safely.
 		 */
-		QSet<std::shared_ptr<ChangeDescription>> conflictingChanges_;
+		QSet<std::shared_ptr<const ChangeDescription>> conflictingChanges_;
 
 		/**
 		 * change1 is mapped to change2 iff change1 and change2 cannot both be applied safely.

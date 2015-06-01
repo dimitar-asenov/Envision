@@ -30,7 +30,7 @@
 
 namespace FilePersistence {
 
-using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
+using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, std::shared_ptr<const ChangeDescription>>;
 
 class ConflictUnitDetector : public ConflictPipelineComponent
 {
@@ -41,8 +41,8 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 					const std::unique_ptr<GenericTree>&,
 					const std::unique_ptr<GenericTree>&,
 					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-					QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
-					ConflictPairs& conflictPairs, RelationAssignment&relationAssignment);
+					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
+					ConflictPairs& conflictPairs, RelationAssignment& relationAssignment);
 	private:
 		IdToChangeMultiHash computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
 															ChangeDependencyGraph cdg);

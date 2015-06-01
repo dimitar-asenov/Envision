@@ -39,10 +39,10 @@ RelationAssignmentTransition ListMergeComponent::run(const std::unique_ptr<Gener
 								const std::unique_ptr<GenericTree>& treeBase,
 								ChangeDependencyGraph& cdgA,
 								ChangeDependencyGraph& cdgB,
-								QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
+								QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 								ConflictPairs& conflictPairs, RelationAssignment& relationAssignment)
 {
-	listsToMerge_ = computeListsToMerge(conflictingChanges, conflictPairs);
+	listsToMerge_ = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
 	RelationAssignmentTransition transition;
 
 	for (auto listContainer : listsToMerge_)
@@ -66,7 +66,7 @@ RelationAssignmentTransition ListMergeComponent::run(const std::unique_ptr<Gener
 			}
 		}
 
-		// ASSERTION TIME!
+		// assert that each element occurs only once in the merged list.
 		for (auto elemId : mergedList) Q_ASSERT(mergedList.indexOf(elemId) == mergedList.lastIndexOf(elemId));
 
 		// TODO update transition instead of overwrite
@@ -80,50 +80,87 @@ RelationAssignmentTransition ListMergeComponent::run(const std::unique_ptr<Gener
  * Finds all lists with a conflict that may be resolved by the component.
  */
 QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
-		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+		ChangeDependencyGraph& cdgA,
+		ChangeDependencyGraph& cdgB,
+		QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 		ConflictPairs& conflictPairs)
 {
 	QSet<const GenericNode*> listsToMerge;
 	for (auto change : conflictingChanges)
 	{
-		if (change->onlyStructureChange() && listTypes_.contains(change->nodeA()->type()))
+		if (!change->onlyStructureChange()) continue;
+		if (!listTypes_.contains(change->nodeA()->type())) continue;
+
+		// node of list type and one branch only changes child structure
+		// look for change of other branch of same node
+		std::shared_ptr<const ChangeDescription> conflictingChange;
+		bool conflictingChangeFound = false;
+		for (auto other : conflictPairs.values(change))
 		{
-			// node of list type and one branch only changes child structure
-			// look for change of other branch of same node
-			std::shared_ptr<ChangeDescription> conflictingChange;
-			bool found = false;
-			for (auto other : conflictPairs.values(change))
+			if (other->id() == change->id())
 			{
-				if (other->id() == change->id())
-				{
-					conflictingChange = other;
-					found = true;
-					break;
-				}
-			}
-			if (found && conflictingChange->onlyStructureChange())
-			{
-				// other branch only changes child structure
-				bool allElementsConflictRoots = true;
-				for (auto element : change->nodeA()->children()) {
-					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
-						break;
-				}
-				for (auto element : change->nodeB()->children()) {
-					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
-						break;
-				}
-				for (auto element : conflictingChange->nodeB()->children()) {
-					if (!(allElementsConflictRoots &= conflictTypes_.contains(element->type())))
-						break;
-				}
-				if (allElementsConflictRoots)
-				{
-					// all elements are conflict roots
-					listsToMerge.insert(change->nodeA());
-				}
+				conflictingChange = other;
+				conflictingChangeFound = true;
+				break;
 			}
 		}
+
+		if (conflictingChangeFound && !conflictingChange->onlyStructureChange()) continue;
+
+		// other branch only changes child structure
+		// TODO load from revisions
+		QSet<Model::NodeIdType> allElementIds;
+		bool allElementsConflictRoots = true;
+		for (auto element : change->nodeA()->children()) {
+			allElementIds.insert(element->id());
+			allElementsConflictRoots &= conflictTypes_.contains(element->type());
+			if (!allElementsConflictRoots) break;
+		}
+		for (auto element : change->nodeB()->children()) {
+			allElementIds.insert(element->id());
+			allElementsConflictRoots &= conflictTypes_.contains(element->type());
+			if (!allElementsConflictRoots) break;
+		}
+		for (auto element : conflictingChange->nodeB()->children()) {
+			allElementIds.insert(element->id());
+			allElementsConflictRoots &= conflictTypes_.contains(element->type());
+			if (!allElementsConflictRoots) break;
+		}
+
+		if (!allElementsConflictRoots) continue;
+
+		// for all elements, check that conflicts are on label only
+		auto check = [&](Model::NodeIdType id, ChangeDependencyGraph& cdg) -> bool
+		{
+			bool notBothBranchesModify = true;
+			if (cdg.changes().contains(id))
+			{
+				std::shared_ptr<const ChangeDescription> elemChange1 = cdg.changes().value(id);
+				if (!elemChange1->onlyLabelChange())
+				{
+					// branch A changes more than label
+					for (auto elemChange2 : conflictPairs.values(elemChange1))
+					{
+						if (elemChange2->id() == elemChange1->id() && !elemChange2->onlyLabelChange())
+						{
+							notBothBranchesModify = false;
+							break;
+						}
+					}
+				}
+			}
+			return notBothBranchesModify;
+		};
+		bool allElementsMergable = true;
+		for (auto id : allElementIds)
+		{
+			allElementsMergable &= check(id, cdgA) && check(id, cdgB);
+			if (!allElementsMergable) break;
+		}
+
+		if (!allElementsMergable) continue;
+
+		listsToMerge.insert(change->nodeA());
 	}
 	return listsToMerge;
 }
@@ -310,7 +347,7 @@ RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model:
 			GenericNode* newNode = changeA->nodeB()->persistentUnit()->newNode();
 			newNode->setFieldsLike(changeA->nodeB());
 			newNode->setName(QString(mergedList.indexOf(elemId)));
-			auto newChange = std::make_shared<ChangeDescription>(changeA->nodeA(), newNode);
+			auto newChange = std::make_shared<const ChangeDescription>(changeA->nodeA(), newNode);
 			Q_ASSERT(changeA->type() == newChange->type());
 			cdgA.replace(changeA, newChange);
 		}
@@ -321,7 +358,7 @@ RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model:
 			GenericNode* newNode = changeB->nodeB()->persistentUnit()->newNode();
 			newNode->setFieldsLike(changeB->nodeB());
 			newNode->setName(QString(mergedList.indexOf(elemId)));
-			auto newChange = std::make_shared<ChangeDescription>(changeB->nodeA(), newNode);
+			auto newChange = std::make_shared<const ChangeDescription>(changeB->nodeA(), newNode);
 			Q_ASSERT(changeB->type() == newChange->type());
 			cdgB.replace(changeB, newChange);
 		}
@@ -332,7 +369,7 @@ RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model:
 			GenericNode* newNode = oldNode->persistentUnit()->newNode();
 			newNode->setFieldsLike(oldNode);
 			newNode->setName(QString(mergedList.indexOf(elemId)));
-			auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
+			auto newChange = std::make_shared<const ChangeDescription>(oldNode, newNode);
 			if (changeA) cdgA.replace(changeA, newChange);
 			else cdgA.insert(newChange);
 			// TODO add dependencies.

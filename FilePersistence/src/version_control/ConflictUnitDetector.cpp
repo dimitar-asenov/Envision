@@ -39,7 +39,7 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 									const std::unique_ptr<GenericTree>&,
 									ChangeDependencyGraph& cdgA,
 									ChangeDependencyGraph& cdgB,
-									QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
+									QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 									ConflictPairs& conflictPairs, RelationAssignment& oldRelationAssignment)
 {
 	affectedCUsA_ = computeAffectedCUs(treeBase, cdgA);
@@ -48,10 +48,10 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
 	{
-		RelationSet relationSet;
 		// ...that are modified by both branches...
 		if (affectedCUsB_.keys().contains(conflictRootId))
 		{
+			RelationSet relationSet;
 			// ...we take every change from A...
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
@@ -74,6 +74,7 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 		}
 		else
 		{
+			RelationSet relationSet;
 			// CU is not in conflict, just record change relations.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
@@ -88,11 +89,10 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 		if (!affectedCUsA_.keys().contains(conflictRootId))
 		{
 			RelationSet relationSet;
-			auto changeItB = affectedCUsB_.find(conflictRootId);
-			while (changeItB != affectedCUsB_.end() && changeItB.key() == conflictRootId)
+			for (auto changeB : affectedCUsB_.values(conflictRootId))
 			{
-				relationSet->insert(changeItB.value());
-				transition.insert(findRelationSet(changeItB.value(), oldRelationAssignment), relationSet);
+				relationSet->insert(changeB);
+				transition.insert(findRelationSet(changeB, oldRelationAssignment), relationSet);
 			}
 		}
 	}
@@ -132,22 +132,22 @@ IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_p
 Model::NodeIdType ConflictUnitDetector::findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
 											  const GenericNode* node)
 {
-	GenericNode* inBase = treeBase->find(node);
-	// TODO: need to make 0 a conflict root for cases where both branches create a new root
+	// TODO load node, need new functionality from Mitko
+	GenericNode* inBase = nullptr; // = find in Base
 	while (inBase == nullptr || !node->parentId().isNull())
 	{
-		node = node->parent();
+		node = node->parent(); // TODO load node from HEAD
 		inBase = treeBase->find(node);
 	}
 	if (inBase)
 	{
-		while (!conflictTypes_.contains(inBase->type())) inBase = inBase->parent();
+		while (!conflictTypes_.contains(inBase->type())) inBase = inBase->parent(); // TODO load from Base
 		return inBase->id();
 	}
 	else
 	{
 		// no ancestor in base. branch created new root. return 0.
-		return 0;
+		return QUuid(0);
 	}
 }
 
