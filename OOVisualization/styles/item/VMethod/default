@@ -64,15 +64,7 @@
 	<annotations prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
-			<outline>
-				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>244</red>
-					<green>164</green>
-					<blue>96</blue>
-				</color>
-			</outline>
+			<outline><style>0</style></outline>
 			<cornerRadius>1</cornerRadius>
 			<cornerType>0</cornerType>
 			<backgroundBrush>
@@ -203,11 +195,7 @@
 		</selectedTip>
 	</memberInitializers>
 	
-	<throwsIcon prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/try.svg</filename>
-		<width>20</width>
-		<height>20</height>
-	</throwsIcon>
+	<throwsIcon prototypes="item/Symbol/keyword"><symbol>throws</symbol></throwsIcon>
 	<throws prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box

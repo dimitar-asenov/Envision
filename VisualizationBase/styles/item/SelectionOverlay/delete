@@ -1,0 +1,22 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/SelectionOverlay/default">
+	<shape>
+		Box
+		<backgroundBrush>
+			<color>
+				<alpha>60</alpha>
+				<red>255</red>
+				<green>192</green>
+				<blue>192</blue>
+			</color>
+		</backgroundBrush>
+		<outline>
+			<color>
+				<alpha>255</alpha>
+				<red>192</red>
+				<green>0</green>
+				<blue>0</blue>
+			</color>
+		</outline>
+	</shape>
+</style>

@@ -221,9 +221,12 @@ void Item::useShape()
 
 void Item::removeShape()
 {
-	SAFE_DELETE(shape_);
-	if (!style_ || style_->drawsOnlyShape()) setFlag(QGraphicsItem::ItemHasNoContents);
-	setUpdateNeeded(StandardUpdate);
+	if (shape_)
+	{
+		SAFE_DELETE(shape_);
+		if (!style_ || style_->drawsOnlyShape()) setFlag(QGraphicsItem::ItemHasNoContents);
+		setUpdateNeeded(StandardUpdate);
+	}
 }
 
 QColor Item::customShapeColor() const

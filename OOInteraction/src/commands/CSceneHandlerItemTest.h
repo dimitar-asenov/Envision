@@ -35,14 +35,14 @@ namespace OOInteraction {
 class OOINTERACTION_API CSceneHandlerItemTest  : public Interaction::Command {
 
 	public:
+		CSceneHandlerItemTest();
+
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 

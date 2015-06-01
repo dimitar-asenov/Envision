@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -30,19 +30,21 @@
 
 namespace FilePersistence {
 
-enum class ChangeType {Unclassified, Added, Deleted, Moved, Stationary};
+enum class ChangeType {Unclassified, Insertion, Deletion, Move, Stationary};
 
 class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
-		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
+		ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB);
+		ChangeDescription(Model::NodeIdType id, ChangeType type);
 
 		enum UpdateType
 		{
-			Order = 1,
+			NoFlags = 0,
+			Label = 1,
 			Value = 2,
 			Type = 4,
-			Children = 8
+			Structure = 8
 		};
 		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
 
@@ -50,7 +52,7 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		void print() const;
 
-		void setChildrenUpdate(bool isUpdate);
+		void setStructureChangeFlag(bool value);
 
 		Model::NodeIdType id() const;
 
@@ -61,22 +63,26 @@ class FILEPERSISTENCE_API ChangeDescription
 		const GenericNode* nodeB() const;
 		const GenericNode* nodeA() const;
 
-	private:
-		void fundamentalChangeClassification();
+		bool isModifying() const;
+		bool onlyStructureChange() const;
+		bool onlyLabelChange() const;
 
-		void detectReorder();
-		void detectValueUpdate();
-		void detectTypeUpdate();
+	private:
+		void setFlags();
+
+		Model::NodeIdType id_;
 
 		ChangeType type_{};
 
 		UpdateFlags updateFlags_;
 
-		GenericNode* nodeA_{};
-		GenericNode* nodeB_{};
+		const GenericNode* nodeA_{};
+		const GenericNode* nodeB_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
+
+inline Model::NodeIdType ChangeDescription::id() const { return id_; }
 
 inline bool ChangeDescription::hasFlags(const UpdateFlags flags) const { return (updateFlags_ & flags) == flags; }
 
@@ -86,5 +92,30 @@ inline const ChangeDescription::UpdateFlags ChangeDescription::flags() const { r
 
 inline const GenericNode* ChangeDescription::nodeB() const { return nodeB_; }
 inline const GenericNode* ChangeDescription::nodeA() const { return nodeA_; }
+
+/**
+ * filters false changes that are stationary and have no flags set.
+ */
+inline bool ChangeDescription::isModifying() const
+{
+	return !(type_ == ChangeType::Stationary && updateFlags_ == ChangeDescription::NoFlags);
+}
+
+inline bool ChangeDescription::onlyStructureChange() const {
+	return (type_ == ChangeType::Stationary &&
+			  (updateFlags_ == ChangeDescription::Structure ||
+			  updateFlags_ == ChangeDescription::NoFlags));
+}
+
+inline bool ChangeDescription::onlyLabelChange() const {
+	return (type_ == ChangeType::Stationary &&
+			  (updateFlags_ == ChangeDescription::Label ||
+			  updateFlags_ == ChangeDescription::NoFlags));
+}
+
+inline uint qHash(const std::shared_ptr<const ChangeDescription> change, uint seed = 0)
+{
+	return ::qHash(change.get(), seed);
+}
 
 } /* namespace FilePersistence */

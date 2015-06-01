@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,27 +35,24 @@ namespace FilePersistence {
 class GitRepository;
 
 using IdToGenericNodeHash = QMultiHash<Model::NodeIdType, GenericNode*>;
-using IdToChangeDescriptionHash = QHash<Model::NodeIdType, ChangeDescription*>;
+using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<const ChangeDescription>>;
 
 class FILEPERSISTENCE_API Diff
 {
 	public:
 		Diff();
 		Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
-			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB,
-			  const GitRepository* repository);
+			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB, const GitRepository*);
 
 		IdToChangeDescriptionHash changes() const;
 		IdToChangeDescriptionHash changes(ChangeType type) const;
 		IdToChangeDescriptionHash changes(ChangeType type, ChangeDescription::UpdateFlags flags) const;
 
 	private:
-		void idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB, IdToGenericNodeHash& createdParents);
-		void findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& createdParents,
-										 std::shared_ptr<GenericTree> tree, const GitRepository* repository);
+		void computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB);
 
-		void setAllChildStructureUpdates();
-		void setChildStructureUpdateForNode(const GenericNode* node);
+		void computeStructChanges();
+		void setStructureFlagForId(const Model::NodeIdType);
 
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
 

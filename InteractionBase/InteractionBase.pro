@@ -6,7 +6,7 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/commands/CommandWithNameAndFlags.h \
+HEADERS += src/commands/CommandWithFlags.h \
     src/expression_editor/tree_builder/AddSubExpression.h \
     src/commands/CSceneHandlerSave.h \
     src/commands/CSceneHandlerLoad.h \
@@ -71,10 +71,11 @@ HEADERS += src/commands/CommandWithNameAndFlags.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h \
+	src/commands/CommandWithDefaultArguments.h \
     src/commands/CDiff.h \
     src/commands/CHistory.h \
     src/commands/CMerge.h
-SOURCES += src/commands/CommandWithNameAndFlags.cpp \
+SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
     src/commands/CSceneHandlerLoad.cpp \
@@ -138,6 +139,7 @@ SOURCES += src/commands/CommandWithNameAndFlags.cpp \
     src/commands/Command.cpp \
     test/SimpleTest.cpp \
     src/InteractionBasePlugin.cpp \
+    src/commands/CommandWithDefaultArguments.cpp \
     src/commands/CDiff.cpp \
     src/commands/CHistory.cpp \
     src/commands/CMerge.cpp

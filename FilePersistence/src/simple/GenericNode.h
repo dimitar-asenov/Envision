@@ -47,6 +47,7 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
+		void setFieldsLike(const GenericNode* other);
 
 		void resetValue(ValueType type, const QString& value);
 
@@ -138,7 +139,7 @@ class FILEPERSISTENCE_API GenericNode {
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
-inline void GenericNode::setParentId(Model::NodeIdType parentId) { parentId_ = parentId; }
+inline void GenericNode::setParentId(Model::NodeIdType parentId) { parent_ = nullptr; parentId_ = parentId; }
 
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }

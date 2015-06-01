@@ -69,9 +69,9 @@ class LOGGER_API Log : public QObject
 		 *
 		 * The plug-in id that will be associated with the message is determined by the Log object instance.
 		 *
-		 * @param l
+		 * @param level
 		 * 				The log level of the message
-		 * @oaram message
+		 * @param message
 		 * 				The message to add
 		 */
 		virtual void add(Level level, QString message) = 0;

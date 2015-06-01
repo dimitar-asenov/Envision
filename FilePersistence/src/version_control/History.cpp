@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -144,10 +144,9 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	IdToChangeDescriptionHash changes = diff->changes();
 
 	// check if rootNode is affected by changes directly
-	IdToChangeDescriptionHash::iterator iter = changes.find(rootNodeId_);
-	if (iter != changes.end())
+	if (changes.contains(rootNodeId_))
 	{
-		ChangeDescription* change = iter.value();
+		auto change = changes.value(rootNodeId_);
 		const GenericNode* rootNode = change->nodeA();
 		if (rootNode)
 			return rootNode->persistentUnit()->name();
@@ -169,7 +168,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 	// check if rootNode is in other PU (affected by move)
 	QSet<QString> alreadyChecked;
 	alreadyChecked.insert(currentPath);
-	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Moved);
+	IdToChangeDescriptionHash moves = diff->changes(ChangeType::Move);
 	for (auto move : moves)
 	{
 		if (currentPath.compare(move->nodeB()->persistentUnit()->name()) == 0)

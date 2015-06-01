@@ -450,9 +450,9 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 		}
 	}
 	catch (Core::EnvisionException &e)
-   {
+	{
 		e.printError();
-   }
+	}
 
 	GenericHandler::keyPressEvent(target, event);
 }

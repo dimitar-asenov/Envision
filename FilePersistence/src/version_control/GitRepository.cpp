@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -144,7 +144,7 @@ GitRepository::GitRepository(QString path)
 {
 	// Bugfix: initialize git threads is usually done automatically
 	// but there seem to be a bug related to libgit2 and Qtf
-	git_threads_init();
+	git_libgit2_init();
 
 	path_ = path;
 	repository_ = nullptr;
@@ -162,7 +162,7 @@ GitRepository::~GitRepository()
 
 	// Bugfix: shutdown git threads is usually done automatically
 	// but there seem to be a bug related to libgit2 and Qt
-	git_threads_shutdown();
+	git_libgit2_shutdown();
 }
 
 std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
@@ -710,26 +710,26 @@ void GitRepository::newCommit(QString tree, QString message, Signature author, S
 	SAFE_DELETE(gitMessage);
 }
 
-QString GitRepository::findMergeBase(QString revision) const
+QString GitRepository::findMergeBase(QString branchA, QString branchB) const
 {
 	int errorCode = 0;
 
-	git_commit* gitHead = parseCommit("HEAD");
-	const git_oid* headOid = git_commit_id(gitHead);
+	git_commit* commitA = parseCommit(branchA);
+	const git_oid* oidA = git_commit_id(commitA);
 
-	git_commit* gitRevision = parseCommit(revision);
-	const git_oid* revisionOid = git_commit_id(gitRevision);
+	git_commit* commitB = parseCommit(branchB);
+	const git_oid* oidB = git_commit_id(commitB);
 
-	git_oid mergeBaseOid;
-	errorCode = git_merge_base(&mergeBaseOid, repository_, headOid, revisionOid);
-	if (errorCode == GIT_ENOTFOUND)
-		return QString();
+	git_oid oidBase;
+	errorCode = git_merge_base(&oidBase, repository_, oidA, oidB);
+	// TODO proper error handling?
+	return QString();
 	checkError(errorCode);
 
-	QString mergeBase = oidToQString(&mergeBaseOid);
+	QString mergeBase = oidToQString(&oidBase);
 
-	git_commit_free(gitHead);
-	git_commit_free(gitRevision);
+	git_commit_free(commitA);
+	git_commit_free(commitB);
 
 	return mergeBase;
 }

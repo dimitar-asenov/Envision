@@ -47,7 +47,6 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		virtual ~CommandPrompt();
 
 		void setResult(QSharedPointer<CommandResult> result);
-		void addSuggestion(CommandSuggestion* suggestion);
 		void addSuggestions(const QList<CommandSuggestion*>& suggestions);
 
 		void removeResult();
@@ -60,6 +59,7 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 
 		QString text() const;
 		void takeSuggestion(CommandSuggestion* suggestion);
+		void executeCurrentText();
 		const std::unique_ptr<Visualization::Cursor>& commandReceiverCursor();
 
 		void showPrompt(QString initialCommandText = QString());
@@ -87,6 +87,8 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		void setPromptPosition();
 		void showAutocompleteBasedOnSuggestions();
 		QPoint receiverCursorPosition();
+
+		static const QString TYPE_HINT;
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }

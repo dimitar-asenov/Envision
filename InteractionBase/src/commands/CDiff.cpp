@@ -31,6 +31,8 @@
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/overlays/SelectionOverlay.h"
+#include "VisualizationBase/src/overlays/OverlayAccessor.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
 
 #include "FilePersistence/src/simple/SimpleTextFileStore.h"
@@ -41,7 +43,9 @@ using namespace FilePersistence;
 
 namespace Interaction {
 
-CDiff::CDiff() : CommandWithNameAndFlags{"diff", {{"project"}}, true, false}
+static const QString overlayGroupName("DiffHighlights");
+
+CDiff::CDiff() : CommandWithFlags{"diff", {{"project"}}, true, false}
 {}
 
 CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,
@@ -94,10 +98,9 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 			Diff diff = repository->diff(name, GitRepository::WORKDIR);
 			IdToChangeDescriptionHash changes = diff.changes();
 
-			auto insertHighlight = VisualizationManager::instance().mainScene()->addHighlight("Insert", "green");
-			auto deleteHighlight = VisualizationManager::instance().mainScene()->addHighlight("Delete", "red");
-			auto moveHighlight = VisualizationManager::instance().mainScene()->addHighlight("Move", "yellow");
-			auto valueHighlight = VisualizationManager::instance().mainScene()->addHighlight("ValueUpdate", "blue");
+			auto scene = VisualizationManager::instance().mainScene();
+			auto overlayGroup = scene->overlayGroup(overlayGroupName);
+			if (!overlayGroup) overlayGroup = scene->addOverlayGroup(overlayGroupName);
 
 			IdToChangeDescriptionHash::iterator iter;
 
@@ -153,10 +156,10 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 				iter = changes.find(id);
 				if (iter != changes.end())
 				{
-					ChangeDescription* change = iter.value();
+					auto change = iter.value();
 					switch (change->type())
 					{
-						case ChangeType::Added:
+						case ChangeType::Insertion:
 							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
 							parent = node->parent();
 							if (auto item = headRoot->findVisualizationOf(node))
@@ -167,19 +170,22 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									iter = changes.find(parentID);
 									if (iter != changes.end())
 									{
-										ChangeDescription* parentChange = iter.value();
-										if (parentChange->type() != ChangeType::Added)
-											insertHighlight->addHighlightedItem(item);
+										auto parentChange = iter.value();
+										if (parentChange->type() != ChangeType::Insertion)
+											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+												Visualization::SelectionOverlay::itemStyles().get("insert"))));
 									}
 									else
-										insertHighlight->addHighlightedItem(item);
+										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+											Visualization::SelectionOverlay::itemStyles().get("insert"))));
 								}
 								else
-									insertHighlight->addHighlightedItem(item);
+									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+										Visualization::SelectionOverlay::itemStyles().get("insert"))));
 							}
 							break;
 
-						case ChangeType::Deleted:
+						case ChangeType::Deletion:
 							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
 							parent = node->parent();
 							if (auto item = revisionRoot->findVisualizationOf(node))
@@ -190,26 +196,31 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 									iter = changes.find(parentID);
 									if (iter != changes.end())
 									{
-										ChangeDescription* parentChange = iter.value();
-										if (parentChange->type() != ChangeType::Deleted)
-											deleteHighlight->addHighlightedItem(item);
+										auto parentChange = iter.value();
+										if (parentChange->type() != ChangeType::Deletion)
+											overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+												Visualization::SelectionOverlay::itemStyles().get("delete"))));
 									}
 									else
-										deleteHighlight->addHighlightedItem(item);
+										overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+											Visualization::SelectionOverlay::itemStyles().get("delete"))));
 								}
 								else
-									deleteHighlight->addHighlightedItem(item);
+									overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+										Visualization::SelectionOverlay::itemStyles().get("delete"))));
 							}
 							break;
 
-						case ChangeType::Moved:
+						case ChangeType::Move:
 							node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
 							if (auto item = headRoot->findVisualizationOf(node))
-								moveHighlight->addHighlightedItem(item);
+								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+									Visualization::SelectionOverlay::itemStyles().get("move"))));
 
 							node = const_cast<Model::Node*>(revisionManager->nodeIdMap().node(id));
 							if (auto item = revisionRoot->findVisualizationOf(node))
-								moveHighlight->addHighlightedItem(item);
+								overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+									Visualization::SelectionOverlay::itemStyles().get("move"))));
 							break;
 
 						default:
@@ -220,7 +231,8 @@ CommandResult* CDiff::executeNamed(Visualization::Item* /*source*/, Visualizatio
 					node = const_cast<Model::Node*>(headManager->nodeIdMap().node(id));
 					if (auto item = headRoot->findVisualizationOf(node))
 						if (change->flags().testFlag(ChangeDescription::UpdateType::Value))
-							valueHighlight->addHighlightedItem(item);
+							overlayGroup->addOverlay(makeOverlay(new Visualization::SelectionOverlay(item,
+								Visualization::SelectionOverlay::itemStyles().get("update"))));
 
 
 				}

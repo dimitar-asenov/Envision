@@ -311,7 +311,7 @@ class MODELBASE_API TreeManager: public QObject
 		 *
 		 * @param node
 		 * 				The node that represents the name that has changed
-		 * @param oldNmae
+		 * @param oldName
 		 * 				What was the old name of the node
 		 */
 		void emitNameModified(NameText* node, const QString &oldName);

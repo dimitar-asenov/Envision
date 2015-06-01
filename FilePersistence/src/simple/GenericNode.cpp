@@ -116,6 +116,16 @@ void GenericNode::setValue(ValueType type, const QString& value)
 	value_ = value;
 }
 
+void GenericNode::setFieldsLike(const GenericNode* other)
+{
+	setId(other->id());
+	setName(other->name());
+	setParent(other->parent());
+	setParentId(other->parentId());
+	setType(other->type());
+	setValue(other->valueType(), other->valueAsString());
+}
+
 void GenericNode::resetValue(ValueType type, const QString& value)
 {
 	Q_ASSERT(children_.isEmpty());
@@ -128,6 +138,7 @@ void GenericNode::setParent(GenericNode* parent)
 {
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
+	Q_ASSERT(parentId_.isNull() || parent->id().isNull() || parentId_ == parent->id());
 }
 
 GenericNode* GenericNode::addChild(GenericNode* child)
@@ -225,6 +236,7 @@ void GenericNode::detach()
 	{
 		parent_->children_.removeOne(this);
 		parent_ = nullptr;
+		parentId_ = {};
 	}
 }
 

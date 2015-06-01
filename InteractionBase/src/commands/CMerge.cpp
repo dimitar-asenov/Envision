@@ -41,7 +41,7 @@ using namespace FilePersistence;
 
 namespace Interaction {
 
-CMerge::CMerge() : CommandWithNameAndFlags{"merge", {{"project"}, {"NoFastForward"}}, false}
+CMerge::CMerge() : CommandWithFlags{"merge", {{"project"}, {"NoFastForward"}}, false}
 {}
 
 CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualization::Item* target,

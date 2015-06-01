@@ -35,13 +35,12 @@ namespace OODebug {
 class OODEBUG_API CProbe : public Interaction::Command
 {
 	public:
+		CProbe();
+
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
 } /* namespace OODebug */

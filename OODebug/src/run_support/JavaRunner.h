@@ -28,6 +28,10 @@
 
 #include "../oodebug_api.h"
 
+namespace Interaction {
+	class CommandResult;
+}
+
 namespace Model {
 	class TreeManager;
 	class Node;
@@ -46,14 +50,13 @@ class OODEBUG_API JavaRunner
 	public:
 		/**
 		 * Finds a main method in the tree and runs the Programm from this main method.
-		 * If there is a valid main method the pointer to this method is returned.
-		 * If there was a problem during exporting or compilation a nullptr is returned.
+		 * Returns a CommandResult which contains an error if there was one.
 		 */
-		static OOModel::Method* runTree(Model::TreeManager* manager, const QString& pathToProjectContainerDirectory,
-								  bool debug = false);
+		static Interaction::CommandResult* runTree(Model::TreeManager* manager,
+																 const QString& pathToProjectContainerDirectory,
+																 bool debug = false);
 
 	private:
-		static void noMainMethodWarning(Model::Node* node);
 		static void handleOutput();
 		static void handleErrorOutput();
 

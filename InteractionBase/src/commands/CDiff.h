@@ -28,11 +28,11 @@
 
 #include "../interactionbase_api.h"
 
-#include "CommandWithNameAndFlags.h"
+#include "CommandWithFlags.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CDiff : public CommandWithNameAndFlags
+class INTERACTIONBASE_API CDiff : public CommandWithFlags
 {
 	public:
 		CDiff();

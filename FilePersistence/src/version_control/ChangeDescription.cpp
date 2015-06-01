@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -28,135 +28,88 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB)
+ChangeDescription::ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB) : nodeA_{nodeA}, nodeB_{nodeB}
 {
-	Q_ASSERT(nodeA != nullptr || nodeB != nullptr);
+	Q_ASSERT(nodeA_ || nodeB_);
+	if (nodeA_ && nodeB_) Q_ASSERT(nodeA_->id() == nodeB->id());
 
-	nodeA_ = nodeA;
-	nodeB_ = nodeB;
-
-	fundamentalChangeClassification();
-}
-
-void ChangeDescription::fundamentalChangeClassification()
-{
-	if (nodeA_ == nullptr)
-		type_ = ChangeType::Added;
-	else
+	if (nodeA_)
 	{
-		if (nodeB_ == nullptr)
-			type_ = ChangeType::Deleted;
-		else
+		id_ = nodeA_->id();
+		if (nodeB_)
 		{
-			if (nodeA_->parent() == nullptr || nodeB_->parent() == nullptr)
-			{
-				if (nodeA_->parent() == nullptr && nodeB_->parent() == nullptr)
-					type_ = ChangeType::Stationary;
-				else
-					type_ = ChangeType::Moved;
-			}
-			else
-			{
-				if (nodeA_->parent()->id() == nodeB_->parent()->id())
-					type_ = ChangeType::Stationary;
-				else
-					type_ = ChangeType::Moved;
-			}
+			if (nodeA_->parentId() == nodeB_->parentId()) type_ = ChangeType::Stationary;
+			else type_ = ChangeType::Move;
 		}
+		else type_ = ChangeType::Deletion;
 	}
-
-	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
+	else
 	{
-		detectReorder();
-		detectTypeUpdate();
-		detectValueUpdate();
+		id_ = nodeB_->id();
+		type_ = ChangeType::Insertion;
 	}
+	setFlags();
 }
 
-void ChangeDescription::detectReorder()
-{
-	// check for same name -> reordering detection
-	if (nodeA_->name() != nodeB_->name())
-		updateFlags_ |= Order;
-	else
-		updateFlags_ &= ~Order;
-}
+ChangeDescription::ChangeDescription(Model::NodeIdType id, ChangeType type) : id_{id}, type_{type} {}
 
-void ChangeDescription::detectValueUpdate()
+void ChangeDescription::setFlags()
 {
-	// check for same type -> type change
-	if (nodeA_->rawValue() != nodeB_->rawValue())
-		updateFlags_ |= Value;
-	else
-		updateFlags_ &= ~Value;
-}
+	if (nodeA_ != nullptr && nodeB_ != nullptr)
+	{
+		if (nodeA_->name() != nodeB_->name()) updateFlags_ |= Label;
+		else updateFlags_ &= ~Label;
 
-void ChangeDescription::detectTypeUpdate()
-{
-	// check for same value -> update
-	if (nodeA_->type() != nodeB_->type())
-		updateFlags_ |= Type;
-	else
-		updateFlags_ &= ~Type;
+		if (nodeA_->rawValue() != nodeB_->rawValue()) updateFlags_ |= Value;
+		else updateFlags_ &= ~Value;
+
+		if (nodeA_->type() != nodeB_->type()) updateFlags_ |= Type;
+		else updateFlags_ &= ~Type;
+	}
 }
 
 void ChangeDescription::print() const
 {
-	std::cout << id().toString().toStdString().c_str() << "\t";
+	if (nodeA_ || nodeB_)
+		qDebug() << (nodeA_ ? nodeA_->type() : nodeB_->type()) << "\t";
+	qDebug() << id().toString() << "\t";
 	switch (type_)
 	{
-		case ChangeType::Added:
-			std::cout << "Added" << std::endl;
+		case ChangeType::Insertion:
+			qDebug() << "Insertion" << endl;
 			break;
 
-		case ChangeType::Deleted:
-			std::cout << "Deleted" << std::endl;
+		case ChangeType::Deletion:
+			qDebug() << "Deletion" << endl;
 			break;
 
-		case ChangeType::Moved:
-			std::cout << "Moved" << std::endl;
+		case ChangeType::Move:
+			qDebug() << "Move" << endl;
 			break;
 
 		case ChangeType::Stationary:
-			std::cout << "Stationary" << std::endl;
+			qDebug() << "Stationary" << endl;
 			break;
 
 		case ChangeType::Unclassified:
-			std::cout << "Unclassified" << std::endl;
+			qDebug() << "Unclassified" << endl;
 			break;
 
 		default:
 			Q_ASSERT(false);
 	}
 
-	if (updateFlags_.testFlag(Order))
-		std::cout << " Location";
-	if (updateFlags_.testFlag(Type))
-		std::cout << " Type";
-	if (updateFlags_.testFlag(Value))
-		std::cout << " Value";
-	if (updateFlags_.testFlag(Children))
-		std::cout << " Children";
-	std::cout << std::endl;
+	if (updateFlags_.testFlag(Label)) qDebug() << "\tLabel";
+	if (updateFlags_.testFlag(Type)) qDebug() << "\tType";
+	if (updateFlags_.testFlag(Value)) qDebug() << "\tValue";
+	if (updateFlags_.testFlag(Structure)) qDebug() << "\tStructure";
+	qDebug() << endl;
 }
 
-void ChangeDescription::setChildrenUpdate(bool isUpdate)
+void ChangeDescription::setStructureChangeFlag(bool value)
 {
-	if (type_ == ChangeType::Moved || type_ == ChangeType::Stationary)
-	{
-		if (isUpdate)
-			updateFlags_ |= Children;
-		else
-			updateFlags_ &= ~Children;
-	}
-}
-
-Model::NodeIdType ChangeDescription::id() const
-{
-	if (type_ == ChangeType::Added)
-		return nodeB_->id();
-	else
-		return nodeA_->id();
+	if (value) updateFlags_ |= Structure;
+	else updateFlags_ &= ~Structure;
 }
 
 } /* namespace FilePersistence */

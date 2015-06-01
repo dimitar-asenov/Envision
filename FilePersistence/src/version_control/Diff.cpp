@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@ Diff::Diff(){}
 
 Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB,
-			  const GitRepository* repository)
+			  const GitRepository*)
 {
 	treeA_ = treeA;
 	treeB_ = treeB;
@@ -49,16 +49,11 @@ Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 	for (auto node : nodesB)
 		nodesBHash.insertMulti(node->id(), node);
 
-	IdToGenericNodeHash newlyCreatedParents;
-	findParentsInCommit(nodesAHash, newlyCreatedParents, treeA_, repository);
-	findParentsInCommit(nodesBHash, newlyCreatedParents, treeB_, repository);
-
 	filterPersistenceUnits(nodesAHash);
 	filterPersistenceUnits(nodesBHash);
 
-	idMatching(nodesAHash, nodesBHash, newlyCreatedParents);
-
-	setAllChildStructureUpdates();
+	computeChanges(nodesAHash, nodesBHash);
+	computeStructChanges();
 }
 
 IdToChangeDescriptionHash Diff::changes(ChangeType type) const
@@ -84,11 +79,9 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 }
 
 // Private methods
-void Diff::idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB,
-							 IdToGenericNodeHash& createdParents)
+void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB)
 {
 	QSet<Model::NodeIdType> onlyInNodesB = QSet<Model::NodeIdType>::fromList(nodesB.keys());
-
 	IdToGenericNodeHash::iterator iter;
 	for (auto nodeA : nodesA.values())
 	{
@@ -96,138 +89,81 @@ void Diff::idMatching(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB,
 		if (iter == nodesB.end())
 		{
 			// no such id in nodesB
-			changeDescriptions_.insert(nodeA->id(), new ChangeDescription(nodeA, nullptr));
+			auto change = std::make_shared<ChangeDescription>(nodeA, nullptr);
+			changeDescriptions_.insert(nodeA->id(), change);
 		}
 		else
 		{
-			// found id
-			changeDescriptions_.insert(nodeA->id(), new ChangeDescription(nodeA, iter.value()));
-			// id is also present in nodesA
+			// found id in nodesB
+			auto change = std::make_shared<ChangeDescription>(nodeA, iter.value());
+			changeDescriptions_.insert(nodeA->id(), change);
 			onlyInNodesB.remove(iter.key());
 		}
 	}
-
+	/* Intermediate state 2
+	 * See report for details.
+	 * TODO: add link to report
+	 */
 	for (auto id : onlyInNodesB)
 	{
 		iter = nodesB.find(id);
-		changeDescriptions_.insert(id, new ChangeDescription(nullptr, iter.value()));
+		auto change = std::make_shared<ChangeDescription>(nullptr, iter.value());
+		changeDescriptions_.insert(id, change);
 	}
-
-	for (auto parent : createdParents.values())
-		changeDescriptions_.insert(parent->id(), new ChangeDescription(parent, parent));
+	// Intermediate state 3
+	QSet<Model::NodeIdType> nonModifyingChanges;
+	for (auto change : changeDescriptions_)
+	if (!change->isModifying()) nonModifyingChanges.insert(change->id());
+	for (auto id : nonModifyingChanges) changeDescriptions_.remove(id);
 }
 
-void Diff::findParentsInCommit(IdToGenericNodeHash& nodes, IdToGenericNodeHash& createdParents,
-										 std::shared_ptr<GenericTree> tree, const GitRepository* repository)
+/**
+ * Sets \a structFlag for appropriate changes and may create new changes.
+ */
+void Diff::computeStructChanges()
 {
-	QMultiHash<QString, Model::NodeIdType> fileToNodeIDs;
-	for (auto node : nodes.values())
-		fileToNodeIDs.insertMulti(node->persistentUnit()->name(), node->id());
-
-	const QString fullFile("Diff::findParentsInCommit");
-
-	IdToGenericNodeHash::iterator iter = nodes.end();
-	for (auto path : fileToNodeIDs.uniqueKeys())
+	for (auto change : changeDescriptions_.values())
 	{
-		GenericPersistentUnit* unit = tree->persistentUnit(path);
-		const CommitFile* file = repository->getCommitFile(tree->commitName(), path);
-		GenericNode* root = Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(fullFile));
-		for (auto id : fileToNodeIDs.values(path))
-		{
-			GenericNode* nodeInFile = root->find(id);
-			GenericNode* parentInFile = nodeInFile->parent();
-			Q_ASSERT(nodes.contains(id));
-			iter = nodes.find(id);
-			GenericNode* node = iter.value();
-			iter = nodes.find(parentInFile->id());
-			GenericNode* parent = nullptr;
-			if (iter == nodes.end())
-			{
-				parent = unit->newNode(parentInFile);
-				createdParents.insert(parent->id(), parent);
-			}
-			else
-				parent = iter.value();
-			node->setParent(parent);
-			parent->addChild(node);
-		}
-		tree->remove(fullFile);
+		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
+			setStructureFlagForId(change->nodeB()->parentId());
+		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
+			setStructureFlagForId(change->nodeA()->parentId());
+		if (change->hasFlags(ChangeDescription::Label))
+			setStructureFlagForId(change->nodeA()->parentId());
 	}
 }
 
-void Diff::setAllChildStructureUpdates()
+/**
+ * If a change for \a id already exists, its \a structFlag is set,
+ * otherwise a new change with that flag is created.
+ */
+void Diff::setStructureFlagForId(const Model::NodeIdType id)
 {
-	for (ChangeDescription* change : changeDescriptions_.values())
+	if (!changeDescriptions_.contains(id))
 	{
-		switch (change->type())
-		{
-			case ChangeType::Added:
-				setChildStructureUpdateForNode(change->nodeB()->parent());
-				break;
-
-			case ChangeType::Deleted:
-				setChildStructureUpdateForNode(change->nodeA()->parent());
-				break;
-
-			case ChangeType::Moved:
-				setChildStructureUpdateForNode(change->nodeA()->parent());
-				setChildStructureUpdateForNode(change->nodeB()->parent());
-				break;
-
-			case ChangeType::Stationary:
-				if (change->flags().testFlag(ChangeDescription::Order))
-					setChildStructureUpdateForNode(change->nodeA()->parent());
-				break;
-
-			default:
-				Q_ASSERT(false);
-		}
+		auto change = std::make_shared<ChangeDescription>(id, ChangeType::Stationary);
+		changeDescriptions_.insert(id, change);
+		change->setStructureChangeFlag(true);
+		// TODO Problem? These changes have no node, just an id.
 	}
+	else
+	{
+		// ugly but otherwise, we would have to remove the change, clone it, set flag and reinsert it.
+		((ChangeDescription*) changeDescriptions_.value(id).get())->setStructureChangeFlag(true);
+	}
+
+	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
 }
 
-void Diff::setChildStructureUpdateForNode(const GenericNode* node)
-{
-	if (node)
-	{
-		auto changeDescription = changeDescriptions_.value(node->id());
-		Q_ASSERT(changeDescription);
-		changeDescription->setChildrenUpdate(true);
-	}
-}
-
+/**
+ * removes the nodes that link PersistentUnits from \a nodes.
+ */
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
-	IdToGenericNodeHash::iterator i;
-	GenericNode* previous = nullptr;
-	for (i = nodes.begin(); i != nodes.end(); ++i)
+	for (auto node : nodes.values())
 	{
-		if (previous && (previous->id() == i.value()->id()))
-		{
-			GenericNode* persistenceUnitDefinition = nullptr;
-			GenericNode* persistenceUnitRoot = nullptr;
-
-			if (previous->type() == GenericNode::persistentUnitType)
-			{
-				persistenceUnitDefinition = previous;
-				persistenceUnitRoot = i.value();
-			}
-			else
-			{
-				Q_ASSERT(i.value()->type() == GenericNode::persistentUnitType);
-				persistenceUnitDefinition = i.value();
-				persistenceUnitRoot = previous;
-			}
-
-			// reset child / parent references correctly and remove PU definition
-			persistenceUnitRoot->setParent(persistenceUnitDefinition->parent());
-			persistenceUnitDefinition->remove();
-			if (persistenceUnitRoot->parent())
-				persistenceUnitRoot->parent()->addChild(persistenceUnitRoot);
-
-			nodes.remove(previous->id());
-			nodes.insert(previous->id(), persistenceUnitRoot);
-		}
-		previous = i.value();
+		if (node->type() == GenericNode::persistentUnitType)
+			nodes.remove(node->id(), node);
 	}
 }
 

@@ -39,6 +39,8 @@ namespace Interaction {
 class INTERACTIONBASE_API Command
 {
 	public:
+
+		Command(QString name, bool appearsInMenus = false);
 		virtual ~Command();
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
@@ -48,10 +50,16 @@ class INTERACTIONBASE_API Command
 
 		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) = 0;
-		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target,
-				const std::unique_ptr<Visualization::Cursor>& cursor, const QString& commandForm = QString());
+
+			bool appearsInMenus() const;
+			const QString name() const;
+
+	private:
+		QString name_;
+		bool appearsInMenus_{};
 };
+
+inline bool Command::appearsInMenus() const { return appearsInMenus_; }
+inline const QString Command::name() const { return name_; }
 
 }

@@ -34,6 +34,7 @@ namespace Interaction {
 
 class CommandResult;
 class CommandSuggestion;
+class GenericHandler;
 
 class INTERACTIONBASE_API CommandExecutionEngine
 {
@@ -61,6 +62,11 @@ class INTERACTIONBASE_API CommandExecutionEngine
 
 	private:
 		QSharedPointer<CommandResult> lastCommandResult_;
+
+		QList<CommandSuggestion*> suggestionsForHandler(GenericHandler* handler, QSet<std::size_t>& alreadySuggested,
+																		QString trimmedCommandText, Visualization::Item* source,
+																		Visualization::Item* target,
+																		const std::unique_ptr<Visualization::Cursor>& cursor);
 };
 
 inline QSharedPointer<CommandResult> CommandExecutionEngine::result() { return lastCommandResult_; }

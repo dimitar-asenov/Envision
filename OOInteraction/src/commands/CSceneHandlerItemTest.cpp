@@ -36,6 +36,8 @@
 
 namespace OOInteraction {
 
+CSceneHandlerItemTest::CSceneHandlerItemTest() : Command{"test"}{}
+
 bool CSceneHandlerItemTest::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
@@ -70,15 +72,6 @@ QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualizat
 	if (QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
 			s.append(new Interaction::CommandSuggestion("test", "Loads and visualizes a large project"));
 	return s;
-}
-
-QStringList CSceneHandlerItemTest::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	if (textSoFar.isEmpty() || QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("test");
-	return forms;
 }
 
 } /* namespace OOInteraction */

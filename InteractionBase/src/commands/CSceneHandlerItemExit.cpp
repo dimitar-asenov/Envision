@@ -30,6 +30,8 @@
 
 namespace Interaction {
 
+CSceneHandlerItemExit::CSceneHandlerItemExit() : Command{"exit"}{}
+
 bool CSceneHandlerItemExit::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
 		const std::unique_ptr<Visualization::Cursor>&)
 {
@@ -51,15 +53,6 @@ QList<CommandSuggestion*> CSceneHandlerItemExit::suggest(Visualization::Item*, V
 	if (QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
 			s.append(new CommandSuggestion("exit", "Closes Envision"));
 	return s;
-}
-
-QStringList CSceneHandlerItemExit::commandForms(Visualization::Item*, Visualization::Item*, const QString& textSoFar,
-		const std::unique_ptr<Visualization::Cursor>&)
-{
-	QStringList forms;
-	if (textSoFar.isEmpty() || QString("exit").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-		forms.append("exit");
-	return forms;
 }
 
 }
