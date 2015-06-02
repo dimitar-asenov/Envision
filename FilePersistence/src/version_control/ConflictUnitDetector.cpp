@@ -27,14 +27,17 @@
 #include "ConflictUnitDetector.h"
 #include "ConflictPairs.h"
 #include "ChangeDescription.h"
+#include "Utils.h"
 
 namespace FilePersistence {
 
-ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes) : conflictTypes_{conflictTypes} {}
+ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, QString revisionIdA,
+														 QString revisionIdB, QString revisionIdBase) :
+	conflictTypes_{conflictTypes}, revisionIdA_{revisionIdA}, revisionIdB_{revisionIdB}, revisionIdBase_{revisionIdBase} {}
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
-RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
+RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<GenericTree>&,
 									const std::unique_ptr<GenericTree>&,
 									const std::unique_ptr<GenericTree>&,
 									ChangeDependencyGraph& cdgA,
@@ -42,8 +45,8 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 									QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 									ConflictPairs& conflictPairs, RelationAssignment& oldRelationAssignment)
 {
-	affectedCUsA_ = computeAffectedCUs(treeBase, cdgA);
-	affectedCUsB_ = computeAffectedCUs(treeBase, cdgB);
+	affectedCUsA_ = computeAffectedCUs(revisionIdA_, cdgA);
+	affectedCUsB_ = computeAffectedCUs(revisionIdB_, cdgB);
 	RelationAssignmentTransition transition(oldRelationAssignment);
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
@@ -51,15 +54,13 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 		// ...that are modified by both branches...
 		if (affectedCUsB_.keys().contains(conflictRootId))
 		{
-			RelationSet relationSet;
 			// ...we take every change from A...
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
 				// ...mark it as conflicting...
 				conflictingChanges.insert(changeA);
 				// ...and related to the other changes in this CU
-				relationSet->insert(changeA);
-				transition.insert(findRelationSet(changeA, oldRelationAssignment), relationSet);
+				transition.insert(findRelationSet(changeA, oldRelationAssignment), changeA);
 				// ...and take every change from B...
 				for (auto changeB : affectedCUsB_.values(conflictRootId))
 				{
@@ -67,19 +68,16 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 					conflictingChanges.insert(changeB);
 					conflictPairs.insert(changeA, changeB);
 					// also record it as being related
-					relationSet->insert(changeA);
-					transition.insert(findRelationSet(changeB, oldRelationAssignment), relationSet);
+					transition.insert(findRelationSet(changeB, oldRelationAssignment), changeB);
 				}
 			}
 		}
 		else
 		{
-			RelationSet relationSet;
 			// CU is not in conflict, just record change relations.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
-				relationSet->insert(changeA);
-				transition.insert(findRelationSet(changeA, oldRelationAssignment), relationSet);
+				transition.insert(findRelationSet(changeA, oldRelationAssignment), changeA);
 			}
 		}
 	}
@@ -88,19 +86,16 @@ RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<Gen
 	{
 		if (!affectedCUsA_.keys().contains(conflictRootId))
 		{
-			RelationSet relationSet;
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
 			{
-				relationSet->insert(changeB);
-				transition.insert(findRelationSet(changeB, oldRelationAssignment), relationSet);
+				transition.insert(findRelationSet(changeB, oldRelationAssignment), changeB);
 			}
 		}
 	}
 	return transition;
 }
 
-IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
-																				 ChangeDependencyGraph cdg)
+IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const QString revision, ChangeDependencyGraph cdg)
 {
 	IdToChangeMultiHash affectedCUs;
 	for (auto change : cdg.changes()) {
@@ -109,16 +104,16 @@ IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_p
 		switch (change->type()) {
 			case ChangeType::Stationary:
 			case ChangeType::Deletion:
-				conflictRootA = findConflictUnit(treeBase, change->nodeA());
+				conflictRootA = findConflictUnit(change->nodeA(), revision, cdg);
 				affectedCUs.insert(conflictRootA, change);
 				break;
 			case ChangeType::Insertion:
-				conflictRootB = findConflictUnit(treeBase, change->nodeB());
+				conflictRootB = findConflictUnit(change->nodeB(), revision, cdg);
 				affectedCUs.insert(conflictRootB, change);
 				break;
 			case ChangeType::Move:
-				conflictRootA = findConflictUnit(treeBase, change->nodeA());
-				conflictRootB = findConflictUnit(treeBase, change->nodeB());
+				conflictRootA = findConflictUnit(change->nodeA(), revision, cdg);
+				conflictRootB = findConflictUnit(change->nodeB(), revision, cdg);
 				affectedCUs.insert(conflictRootA, change);
 				affectedCUs.insert(conflictRootB, change);
 				break;
@@ -129,25 +124,57 @@ IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_p
 	return affectedCUs;
 }
 
-Model::NodeIdType ConflictUnitDetector::findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
-											  const GenericNode* node)
+Model::NodeIdType ConflictUnitDetector::findConflictUnit(const GenericNode* node, const QString revision,
+																			const ChangeDependencyGraph& cdg)
 {
-	// TODO load node, need new functionality from Mitko
-	GenericNode* inBase = nullptr; // = find in Base
+	// find closest ancestor of node that exists in base
+	const GenericNode* inBase = getInBase(node, cdg);
 	while (inBase == nullptr || !node->parentId().isNull())
 	{
-		node = node->parent(); // TODO load node from HEAD
-		inBase = treeBase->find(node);
+		node = getParent(node, false, revision, cdg);
+		inBase = getInBase(node, cdg);
 	}
 	if (inBase)
 	{
-		while (!conflictTypes_.contains(inBase->type())) inBase = inBase->parent(); // TODO load from Base
+		while (!conflictTypes_.contains(inBase->type())) inBase = getParent(inBase, true, revisionIdBase_, cdg);
 		return inBase->id();
 	}
 	else
 	{
 		// no ancestor in base. branch created new root. return 0.
 		return QUuid(0);
+	}
+}
+
+const GenericNode* ConflictUnitDetector::getParent(const GenericNode* node, bool base, const QString revision,
+																	const ChangeDependencyGraph& cdg)
+{
+	// this method tries to load the parent node from the changes instead of searching the repo. This is purely for speed.
+	const GenericNode* parent;
+	if (node->parent()) parent = node->parent();
+	else if (cdg.changes().contains(node->parentId()))
+	{
+		auto change = cdg.changes().value(node->parentId());
+		parent = (base) ? change->nodeA() : change->nodeB();
+	}
+	else
+		parent = Utils::loadNode(node->parentId(), revision, node->persistentUnit());
+	Q_ASSERT(parent && parent->id() == node->parentId());
+	// TODO set node.parent to newly found parent to avoid looking it up again. This is complicated because of const.
+	return parent;
+}
+
+/**
+ * Returns the node as existing in base or \a nullptr if the node doesn't exist in base.
+ */
+const GenericNode* ConflictUnitDetector::getInBase(const GenericNode* node, const ChangeDependencyGraph& cdg)
+{
+	if (cdg.changes().contains(node->id()))
+		return cdg.changes().value(node->id())->nodeA();
+	else
+	{
+		// node is not changed, thus not inserted, so it must exist in base. load it.
+		return Utils::loadNode(node->id(), revisionIdBase_, node->persistentUnit()); // TODO maybe allocate in different unit
 	}
 }
 

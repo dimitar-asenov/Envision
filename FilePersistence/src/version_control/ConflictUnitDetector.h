@@ -35,7 +35,7 @@ using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, std::shared_ptr<const 
 class ConflictUnitDetector : public ConflictPipelineComponent
 {
 	public:
-		ConflictUnitDetector(QSet<QString>& conflictTypes);
+		ConflictUnitDetector(QSet<QString>& conflictTypes, QString revisionIdA, QString revisionIdB, QString revisionIdBase);
 		~ConflictUnitDetector();
 		RelationAssignmentTransition run(const std::unique_ptr<GenericTree>& treeBase,
 					const std::unique_ptr<GenericTree>&,
@@ -44,14 +44,22 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, RelationAssignment& relationAssignment);
 	private:
-		IdToChangeMultiHash computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
+		IdToChangeMultiHash computeAffectedCUs(const QString revision,
 															ChangeDependencyGraph cdg);
-		Model::NodeIdType findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
-													  const GenericNode* node);
+		Model::NodeIdType findConflictUnit(const GenericNode* node, const QString nodeRevision,
+													  const ChangeDependencyGraph& cdg);
+		const GenericNode* getParent(const GenericNode* node, bool base, const QString revision,
+											  const ChangeDependencyGraph& cdg);
+		const GenericNode* getInBase(const GenericNode* node, const ChangeDependencyGraph& cdg);
+
 
 		QSet<QString> conflictTypes_;
 		IdToChangeMultiHash affectedCUsA_;
 		IdToChangeMultiHash affectedCUsB_;
+
+		QString revisionIdA_;
+		QString revisionIdB_;
+		QString revisionIdBase_;
 };
 
 } /* namespace FilePersistence */

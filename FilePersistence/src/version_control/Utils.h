@@ -35,6 +35,7 @@ class Utils
 {
 	public:
 		static GenericNode* loadNode(Model::NodeIdType id, QString revision, GenericPersistentUnit* nodeContainer);
+		static QList<GenericNode*> loadChildren(const GenericNode* node, QString revision);
 		static QList<GenericNode*> loadChildren(Model::NodeIdType id, QString revision,
 															 GenericPersistentUnit* nodeContainer);
 

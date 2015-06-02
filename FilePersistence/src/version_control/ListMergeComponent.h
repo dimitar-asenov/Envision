@@ -92,6 +92,10 @@ class ListMergeComponent : public ConflictPipelineComponent
 		QSet<QString> listTypes_;
 		QSet<QString> unorderedTypes_;
 
+		QString revisionIdA_;
+		QString revisionIdB_;
+		QString revisionIdBase_;
+
 		void insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk);
 
 		QList<Model::NodeIdType> nodeListToIdList(const QList<GenericNode*>& list) const;

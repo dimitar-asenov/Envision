@@ -64,13 +64,29 @@ void ChangeDependencyGraph::insert(std::shared_ptr<const ChangeDescription>& cha
 
 void ChangeDependencyGraph::remove(std::shared_ptr<const ChangeDescription>& change)
 {
-	Q_ASSERT(changes_.values().contains(change));
+	Q_ASSERT(changes_.value(change->id()) == change);
 	changes_.remove(change->id());
 	for (auto dependingOnChange : dependencies_.keys(change))
 	{
 		dependencies_.remove(dependingOnChange, change);
 	}
 	dependencies_.remove(change);
+}
+
+void ChangeDependencyGraph::replace(std::shared_ptr<const ChangeDescription>& oldChange,
+				 std::shared_ptr<const ChangeDescription>& newChange)
+{
+	Q_ASSERT(changes_.value(oldChange->id()) == oldChange);
+	auto dependsOn = dependencies_.values(oldChange);
+	auto dependingOnChange = dependencies_.keys(oldChange);
+	for (auto change : dependingOnChange)
+	{
+		dependencies_.remove(change, oldChange);
+		dependencies_.insert(change, newChange);
+	}
+	dependencies_.remove(oldChange);
+	for (auto change : dependsOn)
+		dependencies_.insert(newChange, change);
 }
 
 void ChangeDependencyGraph::addDependency(std::shared_ptr<const ChangeDescription>& changeA,

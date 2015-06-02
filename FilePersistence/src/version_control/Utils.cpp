@@ -53,6 +53,15 @@ GenericNode* Utils::loadNode(Model::NodeIdType id, QString revision, GenericPers
 	return newNode;
 }
 
+QList<GenericNode*> Utils::loadChildren(const GenericNode* node, QString revision)
+{
+	if (!node->childrenLoaded())
+	{
+		const_cast<GenericNode*>(node)->setChildren(loadChildren(node->id(), revision, node->persistentUnit()));
+	}
+	return node->children();
+}
+
 QList<GenericNode*> Utils::loadChildren(Model::NodeIdType id, QString revision, GenericPersistentUnit* nodeContainer)
 {
 	Q_ASSERT(nodeContainer);

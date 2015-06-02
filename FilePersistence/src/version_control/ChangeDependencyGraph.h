@@ -58,7 +58,7 @@ class ChangeDependencyGraph
 		 * A mapping of changeA to changeB means changeA depends on changeB.
 		 */
 		QMultiHash<std::shared_ptr<const ChangeDescription>, std::shared_ptr<const ChangeDescription>> dependencies_;
-
+		// NOTE if this were a "two-way" hash, we could gain some speed.
 };
 
 inline const IdToChangeDescriptionHash ChangeDependencyGraph::changes() const { return changes_; }

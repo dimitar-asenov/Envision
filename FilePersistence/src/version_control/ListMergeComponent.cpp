@@ -26,6 +26,7 @@
 
 #include "ListMergeComponent.h"
 #include "ConflictPairs.h"
+#include "Utils.h"
 
 namespace FilePersistence {
 
@@ -123,20 +124,23 @@ QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 		if (conflictingChangeFound && !conflictingChange->onlyStructureChange()) continue;
 
 		// other branch only changes child structure
-		// TODO load from revisions
+		// FIXME make clear which change comes from which branch
 		QSet<Model::NodeIdType> allElementIds;
 		bool allElementsConflictRoots = true;
-		for (auto element : change->nodeA()->children()) {
+		for (auto element : Utils::loadChildren(change->nodeA(), revisionIdBase_))
+		{
 			allElementIds.insert(element->id());
 			allElementsConflictRoots &= conflictTypes_.contains(element->type());
 			if (!allElementsConflictRoots) break;
 		}
-		for (auto element : change->nodeB()->children()) {
+		for (auto element : Utils::loadChildren(change->nodeB(), revisionIdA_))
+		{
 			allElementIds.insert(element->id());
 			allElementsConflictRoots &= conflictTypes_.contains(element->type());
 			if (!allElementsConflictRoots) break;
 		}
-		for (auto element : conflictingChange->nodeB()->children()) {
+		for (auto element : Utils::loadChildren(conflictingChange->nodeB(), revisionIdB_))
+		{
 			allElementIds.insert(element->id());
 			allElementsConflictRoots &= conflictTypes_.contains(element->type());
 			if (!allElementsConflictRoots) break;
