@@ -57,6 +57,7 @@ class FILEPERSISTENCE_API Merge
 
 		Merge(QString revision, bool fastForward, GitRepository* repository);
 
+		void initializeComponents();
 		void performTrueMerge();
 		void performManualMerge(); // TODO implement here or some other place.
 		RelationAssignment assignmentFromTransition(const RelationAssignmentTransition& transition);

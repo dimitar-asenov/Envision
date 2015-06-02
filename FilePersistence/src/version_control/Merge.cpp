@@ -25,10 +25,10 @@
 ***********************************************************************************************************************/
 
 #include "Merge.h"
-
 #include "GitRepository.h"
 
-#include "ModelBase/src/model/TreeManager.h"
+#include "ConflictUnitDetector.h"
+#include "ListMergeComponent.h"
 
 namespace FilePersistence {
 
@@ -104,65 +104,86 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	}
 }
 
+void Merge::initializeComponents()
+{
+	// TODO replace with correct types
+	QSet<QString> conflictTypes = QSet<QString>::fromList(QList<QString>{
+																				"TestConflictType",
+																				"TestListType",
+																				"TestUnorderedType",
+																				"ListElement"
+																			});
+	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{"TestListType", "TestNoConflictList"});
+	QSet<QString> unorderedTypes = QSet<QString>::fromList(QList<QString>{"TestUnorderedType"});
+
+	pipelineInitializer_ = std::make_shared<ConflictUnitDetector>(conflictTypes, headCommitId,
+																					  revisionCommitId_, baseCommitId_);
+
+	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes, listTypes, unorderedTypes);
+	conflictPipeline_.append(listMergeComponent);
+}
+
 void Merge::performTrueMerge()
 {
-		Diff diffA = repository_->diff(baseCommitId_, headCommitId);
-		Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_);
+	initializeComponents();
 
-		ChangeDependencyGraph cdgA = ChangeDependencyGraph(diffA);
-		ChangeDependencyGraph cdgB = ChangeDependencyGraph(diffB);
-		conflictingChanges_ = {};
-		conflictPairs_ = {};
+	Diff diffA = repository_->diff(baseCommitId_, headCommitId);
+	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_);
 
-		treeA_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", headCommitId));
-		repository_->loadGenericTree(treeA_, headCommitId);
+	ChangeDependencyGraph cdgA = ChangeDependencyGraph(diffA);
+	ChangeDependencyGraph cdgB = ChangeDependencyGraph(diffB);
+	conflictingChanges_ = {};
+	conflictPairs_ = {};
 
-		treeB_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", revisionCommitId_));
-		repository_->loadGenericTree(treeB_, revisionCommitId_);
+	treeA_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", headCommitId));
+	repository_->loadGenericTree(treeA_, headCommitId);
 
-		treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", baseCommitId_));
-		repository_->loadGenericTree(treeBase_, baseCommitId_);
+	treeB_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", revisionCommitId_));
+	repository_->loadGenericTree(treeB_, revisionCommitId_);
 
-		RelationAssignmentTrace trace;
-		RelationAssignment relationAssignment;
-		// initialize with single-member sets (no relations)
-		for (auto change : cdgA.changes().values())
-		{
-			RelationSet relationSet;
-			relationSet->insert(change);
-			relationAssignment.insert(relationSet);
-		}
-		RelationAssignmentTransition transition = pipelineInitializer_->run(cdgA, cdgB,
-																								  conflictingChanges_, conflictPairs_, relationAssignment);
+	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", baseCommitId_));
+	repository_->loadGenericTree(treeBase_, baseCommitId_);
+
+	RelationAssignmentTrace trace;
+	RelationAssignment relationAssignment;
+	// initialize with single-member sets (no relations)
+	for (auto change : cdgA.changes().values())
+	{
+		RelationSet relationSet;
+		relationSet->insert(change);
+		relationAssignment.insert(relationSet);
+	}
+	RelationAssignmentTransition transition = pipelineInitializer_->run(cdgA, cdgB,
+																							  conflictingChanges_, conflictPairs_, relationAssignment);
+	trace.append(transition);
+	for (auto component : conflictPipeline_)
+	{
+		relationAssignment = transition.values();
+		transition = component->run(cdgA, cdgB,
+											 conflictingChanges_, conflictPairs_, relationAssignment);
 		trace.append(transition);
-		for (auto component : conflictPipeline_)
-		{
-			relationAssignment = transition.values();
-			transition = component->run(cdgA, cdgB,
-												 conflictingChanges_, conflictPairs_, relationAssignment);
-			trace.append(transition);
-		}
-		// TODO compute final RA?
+	}
+	// TODO compute final RA?
 
-		IdToChangeDescriptionHash applicableChanges;
-		for (auto change : cdgA.changes())
-			if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
-		for (auto change : cdgB.changes())
-			if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
+	IdToChangeDescriptionHash applicableChanges;
+	for (auto change : cdgA.changes())
+		if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
+	for (auto change : cdgB.changes())
+		if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
 
-		stage_ = Stage::AutoMerged;
-		// TODO And then do manual merge?
-		if (!conflictingChanges_.isEmpty())
-		{
-			performManualMerge();
-			stage_ = Stage::ManualMerged;
-		}
+	stage_ = Stage::AutoMerged;
+	// TODO And then do manual merge?
+	if (!conflictingChanges_.isEmpty())
+	{
+		performManualMerge();
+		stage_ = Stage::ManualMerged;
+	}
 
-		// TODO apply all changes
-		stage_ = Stage::BuiltMergedTree;
-		// TODO write to index / work dir
-		stage_ = Stage::WroteToIndex;
-		// await commit
+	// TODO apply all changes
+	stage_ = Stage::BuiltMergedTree;
+	// TODO write to index / work dir
+	stage_ = Stage::WroteToIndex;
+	// await commit
 }
 
 } /* namespace FilePersistence */
