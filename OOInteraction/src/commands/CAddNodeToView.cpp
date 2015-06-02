@@ -26,7 +26,7 @@
 
 #include "CAddNodeToView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
-#include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/Declaration.h"
 
 namespace OOInteraction {
 
@@ -35,28 +35,35 @@ CAddNodeToView::CAddNodeToView()
 {
 }
 
-bool CAddNodeToView::canInterpret(Visualization::Item *source, Visualization::Item *target,
-	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+bool CAddNodeToView::canInterpret(Visualization::Item* source, Visualization::Item* target,
+	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-	 return Interaction::CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor)
-			 && target->hasNode() && dynamic_cast<OOModel::Method*>(target->node());
+	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
+	//The first parent with a node should be a declaration (these can be added to the view here)
+	while (source && !source->hasNode())
+		source = source->parent();
+	if (!source)
+		return false;
+	else
+		return canInterpret && dynamic_cast<OOModel::Declaration*>(source->node());
 }
 
-Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto method = dynamic_cast<OOModel::Method*>(target->node());
+	while (source && !source->hasNode())
+		source = source->parent();
 	auto name = arguments.at(0);
 	auto colOk = true;
 	auto rowOk = true;
 	auto column = arguments.at(1).toInt(&colOk);
 	auto row = arguments.at(2).toInt(&rowOk);
 	if (name == "current")
-		name = target->scene()->currentViewItem()->name();
-	auto view = target->scene()->viewItem(name);
+		name = source->scene()->currentViewItem()->name();
+	auto view = source->scene()->viewItem(name);
 	if (view && rowOk && colOk)
 	{
-		view->insertNode(method, column, row);
+		view->insertNode(source->node(), column, row);
 		return new Interaction::CommandResult();
 	}
 	else if (!view)
