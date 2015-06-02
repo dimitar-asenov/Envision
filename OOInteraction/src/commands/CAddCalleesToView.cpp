@@ -64,9 +64,13 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 	//TODO@cyril What if it is in the view, but not as a top-level item?
 	auto pos = view->positionOfNode(source->node());
 
-	//TODO@cyril Insert the nodes in a good order
-	for (auto callee : callees)
-		view->insertNode(callee, pos.x() + 1);
+	if (callees.size() > 0)
+	{
+		//TODO@cyril Insert the nodes in a good order
+		view->insertColumn(pos.x() + 1);
+		for (auto callee : callees)
+			view->insertNode(callee, pos.x() + 1);
+	}
 
 
 	return new Interaction::CommandResult();
