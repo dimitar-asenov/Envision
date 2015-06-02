@@ -50,6 +50,7 @@
 #include "commands/CSceneHandlerItemTest.h"
 #include "commands/CDoxygen.h"
 #include "commands/CAddNodeToView.h"
+#include "commands/CAddCalleesToView.h"
 
 #include "string_offset_providers/StringComponents.h"
 
@@ -164,6 +165,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	OOInteraction::DoxygenCommentsOnlyVisitor::init();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddNodeToView());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCalleesToView());
 
 	return true;
 }
