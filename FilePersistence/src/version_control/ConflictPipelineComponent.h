@@ -37,10 +37,7 @@ class ConflictPipelineComponent
 {
 	public:
 		virtual ~ConflictPipelineComponent();
-		virtual RelationAssignmentTransition run(const std::unique_ptr<GenericTree>& treeBase,
-															  const std::unique_ptr<GenericTree>& treeA,
-															  const std::unique_ptr<GenericTree>& treeB,
-															  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+		virtual RelationAssignmentTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 															  QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 															  ConflictPairs& conflictPairs, RelationAssignment& relationAssignment) = 0;
 	protected:

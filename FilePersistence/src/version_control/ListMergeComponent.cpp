@@ -36,9 +36,7 @@ ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QStrin
 
 ListMergeComponent::~ListMergeComponent() {}
 
-RelationAssignmentTransition ListMergeComponent::run(const std::unique_ptr<GenericTree>& treeA,
-								const std::unique_ptr<GenericTree>& treeB,
-								const std::unique_ptr<GenericTree>& treeBase,
+RelationAssignmentTransition ListMergeComponent::run(
 								ChangeDependencyGraph& cdgA,
 								ChangeDependencyGraph& cdgB,
 								QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
@@ -85,8 +83,7 @@ RelationAssignmentTransition ListMergeComponent::run(const std::unique_ptr<Gener
 		for (auto elemId : mergedList) Q_ASSERT(mergedList.indexOf(elemId) == mergedList.lastIndexOf(elemId));
 
 		// TODO update transition instead of overwrite
-		transition = translateListIntoChanges(listContainer->id(), mergedList, treeA, treeB,
-														  treeBase, cdgA, cdgB, relationAssignment);
+		transition = translateListIntoChanges(listContainer->id(), mergedList, cdgA, cdgB, relationAssignment);
 	}
 
 	return transition;
@@ -445,9 +442,6 @@ QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<Generi
  */
 RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model::NodeIdType,
 																								  QList<Model::NodeIdType>& mergedList,
-																								  const std::unique_ptr<GenericTree>&,
-																								  const std::unique_ptr<GenericTree>&,
-																								  const std::unique_ptr<GenericTree>&,
 																								  ChangeDependencyGraph& cdgA,
 																								  ChangeDependencyGraph& cdgB,
 																								  RelationAssignment&)

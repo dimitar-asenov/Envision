@@ -37,10 +37,7 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 	public:
 		ConflictUnitDetector(QSet<QString>& conflictTypes, QString revisionIdA, QString revisionIdB, QString revisionIdBase);
 		~ConflictUnitDetector();
-		RelationAssignmentTransition run(const std::unique_ptr<GenericTree>& treeBase,
-					const std::unique_ptr<GenericTree>&,
-					const std::unique_ptr<GenericTree>&,
-					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+		RelationAssignmentTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, RelationAssignment& relationAssignment);
 	private:

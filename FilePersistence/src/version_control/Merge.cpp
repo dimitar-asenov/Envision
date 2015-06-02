@@ -132,13 +132,13 @@ void Merge::performTrueMerge()
 			relationSet->insert(change);
 			relationAssignment.insert(relationSet);
 		}
-		RelationAssignmentTransition transition = pipelineInitializer_->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
+		RelationAssignmentTransition transition = pipelineInitializer_->run(cdgA, cdgB,
 																								  conflictingChanges_, conflictPairs_, relationAssignment);
 		trace.append(transition);
 		for (auto component : conflictPipeline_)
 		{
 			relationAssignment = transition.values();
-			transition = component->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
+			transition = component->run(cdgA, cdgB,
 												 conflictingChanges_, conflictPairs_, relationAssignment);
 			trace.append(transition);
 		}

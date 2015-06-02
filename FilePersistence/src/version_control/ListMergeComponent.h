@@ -35,9 +35,7 @@ class ListMergeComponent : public ConflictPipelineComponent
 	public:
 		ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes, QSet<QString>& unorderedTypes);
 		~ListMergeComponent();
-		RelationAssignmentTransition run(const std::unique_ptr<GenericTree>&treeA,
-					const std::unique_ptr<GenericTree>&treeB,
-					const std::unique_ptr<GenericTree>&treeBase, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+		RelationAssignmentTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, RelationAssignment&relationAssignment);
 	private:
@@ -82,9 +80,6 @@ class ListMergeComponent : public ConflictPipelineComponent
 		Position findPosition(Model::NodeIdType element, QList<Model::NodeIdType> from, QList<Model::NodeIdType> into);
 		RelationAssignmentTransition translateListIntoChanges(Model::NodeIdType listContainerId,
 																				QList<Model::NodeIdType>& mergedList,
-																				const std::unique_ptr<GenericTree>&,
-																				const std::unique_ptr<GenericTree>& treeB,
-																				const std::unique_ptr<GenericTree>& treeBase,
 																				ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 																				RelationAssignment& relationAssignment);
 		static std::shared_ptr<const ChangeDescription> copyWithNewIndex(

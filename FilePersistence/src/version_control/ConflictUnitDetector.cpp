@@ -37,10 +37,7 @@ ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, QString
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
-RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<GenericTree>&,
-									const std::unique_ptr<GenericTree>&,
-									const std::unique_ptr<GenericTree>&,
-									ChangeDependencyGraph& cdgA,
+RelationAssignmentTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 									ChangeDependencyGraph& cdgB,
 									QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 									ConflictPairs& conflictPairs, RelationAssignment& oldRelationAssignment)
