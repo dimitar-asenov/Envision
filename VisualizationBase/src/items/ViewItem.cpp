@@ -61,12 +61,9 @@ void ViewItem::insertNode(Model::Node* node, int column, int row)
 
 void ViewItem::removeNode(Model::Node* node)
 {
-	for (int i = 0; i < nodes_.size(); i++)
-	{
-		auto index = nodes_.at(i).indexOf(node);
-		if (index != -1)
-			nodes_[i].remove(index);
-	}
+	auto point = positionOfNode(node);
+	if (point.x() != -1)
+		nodes_[point.x()].remove(point.y());
 	setUpdateNeeded(StandardUpdate);
 }
 
@@ -77,6 +74,17 @@ const QList<Model::Node*> ViewItem::allNodes() const
 		for (auto item : column)
 			result.append(item);
 	return result;
+}
+
+const QPoint ViewItem::positionOfNode(Model::Node *node) const
+{
+	for (int i = 0; i < nodes_.size(); i++)
+	{
+		auto index = nodes_.at(i).indexOf(node);
+		if (index != -1)
+			return QPoint(i, index);
+	}
+	return QPoint(-1, -1);
 }
 
 QVector<QVector<Model::Node*>> ViewItem::nodesGetter()

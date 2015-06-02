@@ -49,6 +49,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void insertNode(Model::Node* node, int column = 0, int row = 0);
 		void removeNode(Model::Node* node);
 		const QList<Model::Node*> allNodes() const;
+		const QPoint positionOfNode(Model::Node* node) const;
 
 		const QString name() const;
 
