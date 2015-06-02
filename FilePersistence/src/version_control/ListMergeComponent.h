@@ -87,6 +87,8 @@ class ListMergeComponent : public ConflictPipelineComponent
 																				const std::unique_ptr<GenericTree>& treeBase,
 																				ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 																				RelationAssignment& relationAssignment);
+		static std::shared_ptr<const ChangeDescription> copyWithNewIndex(
+				std::shared_ptr<const ChangeDescription>& change, int index);
 
 		QSet<QString> conflictTypes_;
 		QSet<QString> listTypes_;

@@ -454,34 +454,25 @@ RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model:
 {
 	for (auto elemId : mergedList)
 	{
-		auto changeAIt = cdgA.changes().find(elemId);
-		auto changeBIt = cdgB.changes().find(elemId);
-		auto changeA = changeAIt == cdgA.changes().end() ? nullptr : changeAIt.value();
-		auto changeB = changeBIt == cdgB.changes().end() ? nullptr : changeBIt.value();
+		auto changeA = cdgA.changes().contains(elemId) ? cdgA.changes().value(elemId) : nullptr;
+		auto changeB = cdgB.changes().contains(elemId) ? cdgB.changes().value(elemId) : nullptr;
 		if (changeA && !changeA->onlyLabelChange())
 		{
 			// branch A changes node beyond label
 			if (changeB) Q_ASSERT(changeB->onlyLabelChange());
-			GenericNode* newNode = changeA->nodeB()->persistentUnit()->newNode();
-			newNode->setFieldsLike(changeA->nodeB());
-			newNode->setName(QString(mergedList.indexOf(elemId)));
-			auto newChange = std::make_shared<const ChangeDescription>(changeA->nodeA(), newNode);
-			Q_ASSERT(changeA->type() == newChange->type());
+			auto newChange = copyWithNewIndex(changeA, mergedList.indexOf(elemId));
 			cdgA.replace(changeA, newChange);
 		}
 		else if (changeB && !changeB->onlyLabelChange())
 		{
-			// branch A changes node beyond label
+			// branch B changes node beyond label
 			if (changeA) Q_ASSERT(changeA->onlyLabelChange());
-			GenericNode* newNode = changeB->nodeB()->persistentUnit()->newNode();
-			newNode->setFieldsLike(changeB->nodeB());
-			newNode->setName(QString(mergedList.indexOf(elemId)));
-			auto newChange = std::make_shared<const ChangeDescription>(changeB->nodeA(), newNode);
-			Q_ASSERT(changeB->type() == newChange->type());
+			auto newChange = copyWithNewIndex(changeB, mergedList.indexOf(elemId));
 			cdgB.replace(changeB, newChange);
 		}
 		else
 		{
+			// no branch changes node beyond label so we must construct a new change
 			// TODO load node from base or A
 			const GenericNode* oldNode = nullptr;
 			GenericNode* newNode = oldNode->persistentUnit()->newNode();
@@ -492,12 +483,24 @@ RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model:
 			else cdgA.insert(newChange);
 			// TODO add dependencies.
 		}
-
-		// if no branch changes node beyond label, we must construct a new change
 		// remove conflicts (here or later?)
 	}
 	// TODO fill properly
 	return RelationAssignmentTransition();
+}
+
+std::shared_ptr<const ChangeDescription> ListMergeComponent::copyWithNewIndex(
+		std::shared_ptr<const ChangeDescription>& change, int index)
+{
+	GenericNode* newNode = change->nodeB()->persistentUnit()->newNode();
+	newNode->setFieldsLike(change->nodeB());
+	newNode->setName(QString(index));
+	auto newChange = std::make_shared<const ChangeDescription>(change->nodeA(), newNode);
+
+	// change is the same except maybe label flag
+	Q_ASSERT(change->type() == newChange->type());
+	Q_ASSERT((change->flags() | ChangeDescription::Label) == (newChange->flags() | ChangeDescription::Label));
+	return newChange;
 }
 
 } /* namespace FilePersistence */
