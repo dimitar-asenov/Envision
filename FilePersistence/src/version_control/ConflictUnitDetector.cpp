@@ -37,14 +37,14 @@ ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, QString
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
-RelationAssignmentTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
+LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 									ChangeDependencyGraph& cdgB,
 									QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
-									ConflictPairs& conflictPairs, RelationAssignment& oldRelationAssignment)
+									ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
 {
 	affectedCUsA_ = computeAffectedCUs(revisionIdA_, cdgA);
 	affectedCUsB_ = computeAffectedCUs(revisionIdB_, cdgB);
-	RelationAssignmentTransition transition(oldRelationAssignment);
+	LinkedChangesTransition transition(linkedChangesSet);
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
 	{
@@ -57,7 +57,7 @@ RelationAssignmentTransition ConflictUnitDetector::run(ChangeDependencyGraph& cd
 				// ...mark it as conflicting...
 				conflictingChanges.insert(changeA);
 				// ...and related to the other changes in this CU
-				transition.insert(findRelationSet(changeA, oldRelationAssignment), changeA);
+				transition.insert(findLinkedChanges(changeA, linkedChangesSet), changeA);
 				// ...and take every change from B...
 				for (auto changeB : affectedCUsB_.values(conflictRootId))
 				{
@@ -65,16 +65,16 @@ RelationAssignmentTransition ConflictUnitDetector::run(ChangeDependencyGraph& cd
 					conflictingChanges.insert(changeB);
 					conflictPairs.insert(changeA, changeB);
 					// also record it as being related
-					transition.insert(findRelationSet(changeB, oldRelationAssignment), changeB);
+					transition.insert(findLinkedChanges(changeB, linkedChangesSet), changeB);
 				}
 			}
 		}
 		else
 		{
-			// CU is not in conflict, just record change relations.
+			// CU is not in conflict, just record change links.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
-				transition.insert(findRelationSet(changeA, oldRelationAssignment), changeA);
+				transition.insert(findLinkedChanges(changeA, linkedChangesSet), changeA);
 			}
 		}
 	}
@@ -85,7 +85,7 @@ RelationAssignmentTransition ConflictUnitDetector::run(ChangeDependencyGraph& cd
 		{
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
 			{
-				transition.insert(findRelationSet(changeB, oldRelationAssignment), changeB);
+				transition.insert(findLinkedChanges(changeB, linkedChangesSet), changeB);
 			}
 		}
 	}

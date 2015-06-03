@@ -35,7 +35,6 @@ class ChangeDependencyGraph
 {
 	public:
 		ChangeDependencyGraph(Diff& diff);
-		ChangeDependencyGraph();
 		~ChangeDependencyGraph();
 		const IdToChangeDescriptionHash changes() const;
 		void insert(std::shared_ptr<const ChangeDescription>& change);
@@ -53,6 +52,7 @@ class ChangeDependencyGraph
 		void removeDependency(std::shared_ptr<const ChangeDescription>& changeA,
 									 std::shared_ptr<const ChangeDescription>& changeB);
 	private:
+		void recordDependencies(std::shared_ptr<const ChangeDescription> change, bool incoming);
 		IdToChangeDescriptionHash changes_;
 		/**
 		 * A mapping of changeA to changeB means changeA depends on changeB.

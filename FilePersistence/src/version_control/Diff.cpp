@@ -42,6 +42,7 @@ Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 	treeB_ = treeB;
 
 	IdToGenericNodeHash nodesAHash;
+
 	for (auto node : nodesA)
 		nodesAHash.insertMulti(node->id(), node);
 
@@ -111,10 +112,10 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 		changeDescriptions_.insert(id, change);
 	}
 	// Intermediate state 3
-	QSet<Model::NodeIdType> nonModifyingChanges;
+	QSet<Model::NodeIdType> fakeChanges;
 	for (auto change : changeDescriptions_.values())
-		if (!change->isModifying()) nonModifyingChanges.insert(change->id());
-	for (auto id : nonModifyingChanges) changeDescriptions_.remove(id);
+		if (change->isFake()) fakeChanges.insert(change->id());
+	for (auto id : fakeChanges) changeDescriptions_.remove(id);
 }
 
 /**

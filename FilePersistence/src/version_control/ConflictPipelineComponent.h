@@ -29,7 +29,7 @@
 #include "ChangeDescription.h"
 #include "ChangeDependencyGraph.h"
 #include "ConflictPairs.h"
-#include "RelationAssignmentTransition.h"
+#include "LinkedChangesTransition.h"
 
 namespace FilePersistence {
 
@@ -37,11 +37,12 @@ class ConflictPipelineComponent
 {
 	public:
 		virtual ~ConflictPipelineComponent();
-		virtual RelationAssignmentTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+		virtual LinkedChangesTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 															  QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
-															  ConflictPairs& conflictPairs, RelationAssignment& relationAssignment) = 0;
+															  ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet) = 0;
 	protected:
-		RelationSet findRelationSet(std::shared_ptr<const ChangeDescription> change, RelationAssignment& relationAssignment);
+		static LinkedChanges findLinkedChanges(std::shared_ptr<const ChangeDescription> change,
+													  LinkedChangesSet& linkedChangesSet);
 };
 
 } /* namespace FilePersistence */

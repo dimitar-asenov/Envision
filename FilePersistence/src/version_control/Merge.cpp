@@ -130,8 +130,8 @@ void Merge::performTrueMerge()
 	Diff diffA = repository_->diff(baseCommitId_, headCommitId);
 	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_);
 
-	ChangeDependencyGraph cdgA = ChangeDependencyGraph(diffA);
-	ChangeDependencyGraph cdgB = ChangeDependencyGraph(diffB);
+	auto cdgA = ChangeDependencyGraph(diffA);
+	auto cdgB = ChangeDependencyGraph(diffB);
 	conflictingChanges_ = {};
 	conflictPairs_ = {};
 
@@ -146,23 +146,23 @@ void Merge::performTrueMerge()
 	repository_->loadGenericTree(treeBase_, baseCommitId_);
 	*/
 
-	RelationAssignmentTrace trace;
-	RelationAssignment relationAssignment;
-	// initialize with single-member sets (no relations)
+	LinkedChangesTransitionTrace trace;
+	LinkedChangesSet linkedChangesSet;
+	// initialize with single-member sets (no links)
 	for (auto change : cdgA.changes().values())
 	{
-		RelationSet relationSet;
-		relationSet->insert(change);
-		relationAssignment.insert(relationSet);
+		LinkedChanges linkedChanges;
+		linkedChanges->insert(change);
+		linkedChangesSet.insert(linkedChanges);
 	}
-	RelationAssignmentTransition transition = pipelineInitializer_->run(cdgA, cdgB,
-																							  conflictingChanges_, conflictPairs_, relationAssignment);
+	LinkedChangesTransition transition = pipelineInitializer_->run(cdgA, cdgB,
+																							  conflictingChanges_, conflictPairs_, linkedChangesSet);
 	trace.append(transition);
 	for (auto component : conflictPipeline_)
 	{
-		relationAssignment = transition.values();
+		linkedChangesSet = transition.values();
 		transition = component->run(cdgA, cdgB,
-											 conflictingChanges_, conflictPairs_, relationAssignment);
+											 conflictingChanges_, conflictPairs_, linkedChangesSet);
 		trace.append(transition);
 	}
 	// TODO compute final RA?
@@ -173,11 +173,14 @@ void Merge::performTrueMerge()
 	for (auto change : cdgB.changes())
 		if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
 
+	// TODO apply applicable
+
 	stage_ = Stage::AutoMerged;
+
+
 	// TODO And then do manual merge?
 	if (!conflictingChanges_.isEmpty())
 	{
-		performManualMerge();
 		stage_ = Stage::ManualMerged;
 	}
 

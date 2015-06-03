@@ -24,43 +24,56 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "ChangeDescription.h"
+#include "LinkedChangesTransition.h"
 
 namespace FilePersistence {
 
-using RelationSet = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
-using RelationAssignment = QSet<RelationSet>;
+LinkedChangesTransition::LinkedChangesTransition() {}
 
-/**
- * The main purpose of this class is to enforce the consistency of the relation set mappings.
- */
-class RelationAssignmentTransition
+LinkedChangesTransition::LinkedChangesTransition(LinkedChangesSet& linkedChangesSet)
 {
-	public:
-		RelationAssignmentTransition();
-
-		/**
-		 *	Creates a one-to-one transition.
-		 */
-		RelationAssignmentTransition(RelationAssignment& relationAssignment);
-
-		void insert(RelationSet keySet, std::shared_ptr<const ChangeDescription>& change);
-		RelationAssignment values() const;
-
-	private:
-		QHash<RelationSet, RelationSet> transition_;
-};
-
-inline RelationAssignment RelationAssignmentTransition::values() const
-{
-	return RelationAssignment::fromList(transition_.values());
+	for (auto linkedChanges : linkedChangesSet)
+	{
+		transition_.insert(linkedChanges, LinkedChanges(linkedChanges));
+	}
 }
 
-inline uint qHash(const RelationSet& relationSet, uint seed = 0)
+void LinkedChangesTransition::insert(LinkedChanges keySet, std::shared_ptr<const ChangeDescription>& change)
 {
-	return ::qHash(relationSet.get(), seed);
+	// TODO could probably be optimized
+	if (transition_.contains(keySet) && transition_.value(keySet)->contains(change)) return; // already mapped
+
+	LinkedChanges setContainingChange;
+	bool changeIsMappedTo = false;
+	for (auto linkedChanges : transition_.values())
+	{
+		if (linkedChanges->contains(change))
+		{
+			setContainingChange = linkedChanges;
+			changeIsMappedTo = true;
+			break;
+		}
+	}
+
+	if (changeIsMappedTo)
+	{
+		if (transition_.contains(keySet))
+		{
+			auto currentlyMappedSet = transition_.value(keySet);
+			setContainingChange->unite(*currentlyMappedSet);
+		}
+		transition_.insert(keySet, setContainingChange);
+	}
+	else
+	{
+		if (transition_.contains(keySet)) transition_.value(keySet)->insert(change);
+		else
+		{
+			LinkedChanges newSet;
+			newSet->insert(change);
+			transition_.insert(keySet, newSet);
+		}
+	}
 }
 
-} /* namespace FilePersistence */
+}

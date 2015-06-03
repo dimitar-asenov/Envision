@@ -65,6 +65,20 @@ int gitDiffExtractFileCallBack(
 
 	return 0;
 }
+// NOTE not sure if this should be static
+void createNodeAndAppend(const git_diff_line* line, const char* filePath, GenericTree* tree, QList<GenericNode*>& list)
+{
+	size_t lineLength = line->content_len;
+	// TODO @Martin why do we remove tabs?
+	while (line->content[lineLength] == '\t')
+		lineLength--;
+
+	QString relativePath(filePath);
+	GenericPersistentUnit* unit = tree->persistentUnit(relativePath);
+	Q_ASSERT(unit != nullptr);
+	GenericNode* node = unit->newNode(line->content, lineLength);
+	list.append(node);
+}
 
 int gitDiffExtractLineCallBack(
 				 const git_diff_delta* delta,
@@ -74,29 +88,17 @@ int gitDiffExtractLineCallBack(
 {
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
 
-	size_t lineLength = line->content_len;
-	while (line->content[lineLength] == '\t')
-		lineLength--;
-
 	if ((!data->reverseAB_ && line->origin == GIT_DIFF_LINE_ADDITION) ||
 		 (data->reverseAB_ && line->origin == GIT_DIFF_LINE_DELETION))
 	{
 		// appear on side B
-		QString relativePath(delta->new_file.path);
-		GenericPersistentUnit* unit = data->treeB_->persistentUnit(relativePath);
-		Q_ASSERT(unit != nullptr);
-		GenericNode* node = unit->newNode(line->content, lineLength);
-		data->nodesB_.append(node);
+		createNodeAndAppend(line, delta->new_file.path, data->treeB_, data->nodesB_);
 	}
 	else if ((!data->reverseAB_ && line->origin == GIT_DIFF_LINE_DELETION) ||
 				(data->reverseAB_ && line->origin == GIT_DIFF_LINE_ADDITION))
 	{
 		// appear on side A
-		QString relativePath(delta->old_file.path);
-		GenericPersistentUnit* unit = data->treeA_->persistentUnit(relativePath);
-		Q_ASSERT(unit != nullptr);
-		GenericNode* node = unit->newNode(line->content, lineLength);
-		data->nodesA_.append(node);
+		createNodeAndAppend(line, delta->old_file.path, data->treeA_, data->nodesA_);
 	}
 	else
 		Q_ASSERT(false);
@@ -170,7 +172,7 @@ std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 	if (merge_.expired())
 		return std::shared_ptr<Merge>(new Merge(revision, fastForward, this));
 	else
-		return std::shared_ptr<Merge>();
+		return std::shared_ptr<Merge>(); // TODO is this the right thing to do?
 }
 
 Diff GitRepository::diff(QString revisionA, QString revisionB) const
@@ -208,9 +210,7 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 	}
 	else if (diffKind.first == SourceKind::Commit)
 	{
-		gitCommitA = parseCommit(revisionA);
-		errorCode = git_commit_tree(&gitTreeA, gitCommitA);
-		checkError(errorCode);
+		gitTreeA = getCommitTree(revisionA);
 
 		if (diffKind.second == SourceKind::Workdir)
 			errorCode = git_diff_tree_to_workdir_with_index(&gitDiff, repository_, gitTreeA, &diffOptions);
@@ -219,23 +219,16 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 		else
 		{
 			Q_ASSERT(diffKind.second == SourceKind::Commit);
-
-			gitCommitB = parseCommit(revisionB);
-			errorCode = git_commit_tree(&gitTreeB, gitCommitB);
-			checkError(errorCode);
-
+			gitTreeB = getCommitTree(revisionB);
 			errorCode = git_diff_tree_to_tree(&gitDiff, repository_, gitTreeA, gitTreeB, &diffOptions);
 		}
+
 		checkError(errorCode);
 	}
 	else
 	{
 		Q_ASSERT(diffKind.second == SourceKind::Commit);
-
-		gitCommitB = parseCommit(revisionB);
-		errorCode = git_commit_tree(&gitTreeB, gitCommitB);
-		checkError(errorCode);
-
+		gitTreeB = getCommitTree(revisionB);
 		reverseAB = true;
 
 		if (diffKind.first == SourceKind::Workdir)
@@ -245,6 +238,7 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 			Q_ASSERT(diffKind.first == SourceKind::Index);
 			errorCode = git_diff_tree_to_index(&gitDiff, repository_, gitTreeB, nullptr, &diffOptions);
 		}
+
 		checkError(errorCode);
 	}
 
@@ -272,6 +266,15 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 	return Diff(carryAlongData.nodesA_, treeA,
 					carryAlongData.nodesB_, treeB,
 					this);
+}
+
+git_tree* GitRepository::getCommitTree(QString revision) const
+{
+	git_tree* gitTree = nullptr;
+	auto gitCommit = parseCommit(revision);
+	auto errorCode = git_commit_tree(&gitTree, gitCommit);
+	checkError(errorCode);
+	return gitTree;
 }
 
 CommitGraph GitRepository::commitGraph(QString startRevision, QString endRevision) const

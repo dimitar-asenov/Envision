@@ -37,9 +37,9 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 	public:
 		ConflictUnitDetector(QSet<QString>& conflictTypes, QString revisionIdA, QString revisionIdB, QString revisionIdBase);
 		~ConflictUnitDetector();
-		RelationAssignmentTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+		LinkedChangesTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
-					ConflictPairs& conflictPairs, RelationAssignment& relationAssignment);
+					ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet);
 	private:
 		IdToChangeMultiHash computeAffectedCUs(const QString revision,
 															ChangeDependencyGraph cdg);

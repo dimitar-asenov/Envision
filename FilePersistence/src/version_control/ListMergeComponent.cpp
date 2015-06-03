@@ -36,13 +36,13 @@ ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QStrin
 
 ListMergeComponent::~ListMergeComponent() {}
 
-RelationAssignmentTransition ListMergeComponent::run(
+LinkedChangesTransition ListMergeComponent::run(
 								ChangeDependencyGraph& cdgA,
 								ChangeDependencyGraph& cdgB,
 								QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
-								ConflictPairs& conflictPairs, RelationAssignment& relationAssignment)
+								ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
 {
-	RelationAssignmentTransition transition(relationAssignment);
+	LinkedChangesTransition transition(linkedChangesSet);
 
 	auto listsToMerge = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
 
@@ -83,7 +83,7 @@ RelationAssignmentTransition ListMergeComponent::run(
 		for (auto elemId : mergedList) Q_ASSERT(mergedList.indexOf(elemId) == mergedList.lastIndexOf(elemId));
 
 		// TODO update transition instead of overwrite
-		transition = translateListIntoChanges(listContainer->id(), mergedList, cdgA, cdgB, relationAssignment);
+		transition = translateListIntoChanges(listContainer->id(), mergedList, cdgA, cdgB, linkedChangesSet);
 	}
 
 	return transition;
@@ -440,11 +440,11 @@ QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<Generi
  * Takes the merged version of a list and generates all changes needed to bring the base version to the merged version.
  * New changes are created in \a cdgA.
  */
-RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model::NodeIdType,
+LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::NodeIdType,
 																								  QList<Model::NodeIdType>& mergedList,
 																								  ChangeDependencyGraph& cdgA,
 																								  ChangeDependencyGraph& cdgB,
-																								  RelationAssignment&)
+																								  LinkedChangesSet&)
 {
 	for (auto elemId : mergedList)
 	{
@@ -480,7 +480,7 @@ RelationAssignmentTransition ListMergeComponent::translateListIntoChanges(Model:
 		// remove conflicts (here or later?)
 	}
 	// TODO fill properly
-	return RelationAssignmentTransition();
+	return LinkedChangesTransition();
 }
 
 std::shared_ptr<const ChangeDescription> ListMergeComponent::copyWithNewIndex(

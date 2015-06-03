@@ -35,7 +35,7 @@ namespace FilePersistence {
 
 using ChangeToChangeHash = QMultiHash<const std::shared_ptr<ChangeDescription>,
 												  const std::shared_ptr<ChangeDescription>>;
-using RelationAssignmentTrace = QList<RelationAssignmentTransition>;
+using LinkedChangesTransitionTrace = QList<LinkedChangesTransition>;
 
 class GitRepository;
 
@@ -50,7 +50,8 @@ class FILEPERSISTENCE_API Merge
 
 		// TODO depending on how far the responsibilities of the Merge class go, these might be removed.
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
-		const std::unique_ptr<GenericTree> mergeTree();
+		const std::unique_ptr<GenericTree> mergeTree(); // TODO build with as many changes as possible
+		// TOOD output conflicts
 
 	private:
 		friend class GitRepository;
@@ -59,8 +60,7 @@ class FILEPERSISTENCE_API Merge
 
 		void initializeComponents();
 		void performTrueMerge();
-		void performManualMerge(); // TODO implement here or some other place.
-		RelationAssignment assignmentFromTransition(const RelationAssignmentTransition& transition);
+		LinkedChangesSet assignmentFromTransition(const LinkedChangesTransition& transition);
 
 		Stage stage_ = Stage::NotInitialized;
 

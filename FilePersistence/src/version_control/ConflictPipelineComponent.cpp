@@ -31,14 +31,11 @@ namespace FilePersistence
 
 ConflictPipelineComponent::~ConflictPipelineComponent() {}
 
-RelationSet ConflictPipelineComponent::findRelationSet(std::shared_ptr<const ChangeDescription> change,
-																		 RelationAssignment& relationAssignment)
+LinkedChanges ConflictPipelineComponent::findLinkedChanges(std::shared_ptr<const ChangeDescription> change,
+																		 LinkedChangesSet& linkedChangesSet)
 {
-	for (auto relationSet : relationAssignment)
-	{
-		if (relationSet->contains(change)) return relationSet;
-	}
-	Q_ASSERT(false);
+	for (auto linkedChanges : linkedChangesSet)
+		if (linkedChanges->contains(change)) return linkedChanges; Q_ASSERT(false);
 }
 
 }

@@ -119,6 +119,7 @@ class FILEPERSISTENCE_API GitRepository
 		enum class SourceKind {Unspecified, Commit, Index, Workdir};
 		static SourceKind sourceKind(QString revision);
 		static QPair<SourceKind, SourceKind> kind(QString revisionA, QString revisionB);
+		git_tree* getCommitTree(QString revision) const;
 
 		static void checkError(int errorCode);
 
