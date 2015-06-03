@@ -135,6 +135,7 @@ void Merge::performTrueMerge()
 	conflictingChanges_ = {};
 	conflictPairs_ = {};
 
+	/*
 	treeA_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", headCommitId));
 	repository_->loadGenericTree(treeA_, headCommitId);
 
@@ -143,6 +144,7 @@ void Merge::performTrueMerge()
 
 	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", baseCommitId_));
 	repository_->loadGenericTree(treeBase_, baseCommitId_);
+	*/
 
 	RelationAssignmentTrace trace;
 	RelationAssignment relationAssignment;

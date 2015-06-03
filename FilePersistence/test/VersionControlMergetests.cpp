@@ -24,25 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#include "ConflictPairs.h"
+#include "FilePersistencePlugin.h"
+#include "SelfTest/src/SelfTestSuite.h"
+
+#include "version_control/Diff.h"
+#include "version_control/Merge.h"
+#include "version_control/GitRepository.h"
+
 
 namespace FilePersistence {
 
-ConflictPairs::ConflictPairs() {}
-ConflictPairs::~ConflictPairs() {}
-
-void ConflictPairs::insert(std::shared_ptr<const ChangeDescription>& changeA,
-									std::shared_ptr<const ChangeDescription>& changeB)
+TEST(FilePersistencePlugin, twoDeletesNoConflict)
 {
-	pairs_.insert(changeA, changeB);
-	pairs_.insert(changeB, changeA);
-}
-
-void ConflictPairs::remove(std::shared_ptr<const ChangeDescription>& changeA,
-									std::shared_ptr<const ChangeDescription>& changeB)
-{
-	pairs_.remove(changeA, changeB);
-	pairs_.remove(changeB, changeA);
+	Q_ASSERT(std::system("tar -xf TestMerge_TwoDeletesNoConflict.tar -C projects") == 0);
+	GitRepository repo("projects/TestMerge");
+	repo.merge("dev");
+	CHECK_CONDITION(true);
+	Q_ASSERT(std::system("rm -r projects/TestMerge") == 0);
 }
 
 } /* namespace FilePersistence */

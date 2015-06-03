@@ -723,7 +723,6 @@ QString GitRepository::findMergeBase(QString branchA, QString branchB) const
 	git_oid oidBase;
 	errorCode = git_merge_base(&oidBase, repository_, oidA, oidB);
 	// TODO proper error handling?
-	return QString();
 	checkError(errorCode);
 
 	QString mergeBase = oidToQString(&oidBase);

@@ -59,7 +59,8 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/version_control/ListMergeComponent.cpp \
     src/version_control/ConflictPipelineComponent.cpp \
     src/version_control/RelationAssignmentTransition.cpp \
-    src/version_control/Utils.cpp
+    src/version_control/Utils.cpp \
+    test/VersionControlMergetests.cpp
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2
