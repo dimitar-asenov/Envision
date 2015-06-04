@@ -34,7 +34,8 @@ GenericNode* Utils::loadNode(Model::NodeIdType id, QString revision, GenericPers
 	Q_ASSERT(nodeContainer);
 
 	auto idString = id.toString();
-	auto result = runSystemCommand("git", {"grep", "-h", "'" + idString +"'", revision});
+	auto result = runSystemCommand("git", {"grep", "-h", idString, revision},
+											 "/home/guenatb/Envision/DebugBuild/projects/TestMerge");
 
 	Q_ASSERT(result.exitCode() == 0);
 	Q_ASSERT(!result.stdout().isEmpty());
@@ -67,7 +68,7 @@ QList<GenericNode*> Utils::loadChildren(Model::NodeIdType id, QString revision, 
 	Q_ASSERT(nodeContainer);
 
 	auto idString = id.toString();
-	auto result = runSystemCommand("git", {"grep", "-h", "'" + idString +"'", revision});
+	auto result = runSystemCommand("git", {"grep", "-h", idString, revision});
 
 	Q_ASSERT(result.exitCode() == 0);
 	Q_ASSERT(!result.stdout().isEmpty());
@@ -108,7 +109,7 @@ bool Utils::idIsNode(const QString& id, const QString& nodeLine)
 	return nodeLine.midRef(brace).startsWith(id);
 }
 
-bool isPersistenceUnit(const QString& nodeLine)
+bool Utils::isPersistenceUnit(const QString& nodeLine)
 {
 	auto space = nodeLine.indexOf(' ');
 	Q_ASSERT(space > 0);

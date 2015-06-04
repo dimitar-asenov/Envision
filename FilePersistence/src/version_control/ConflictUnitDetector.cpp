@@ -174,7 +174,7 @@ const GenericNode* ConflictUnitDetector::getParent(const GenericNode* node, bool
 	{
 		auto change = cdg.changes().value(node->parentId());
 		parent = base ? change->nodeA() : change->nodeB();
-		if (!parent) Utils::loadNode(node->parentId(), revision, node->persistentUnit());
+		if (!parent) parent = Utils::loadNode(node->parentId(), revision, node->persistentUnit());
 	}
 	else
 		parent = Utils::loadNode(node->parentId(), revision, node->persistentUnit());
