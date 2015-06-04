@@ -50,8 +50,7 @@ void ViewItem::initializeForms()
 void ViewItem::insertColumn(int column)
 {
 	//Make sure we actually have enough columns
-	if (nodes_.size() <= column)
-		nodes_.resize(column + 1);
+	ensureColumnExists(column);
 	//Only insert the column, if the current one at index is not empty
 	auto isEmpty = true;
 	for (auto item : nodes_.at(column))
@@ -64,10 +63,7 @@ void ViewItem::insertColumn(int column)
 void ViewItem::insertNode(Model::Node* node, int column, int row)
 {
 	//First, make sure the current grid is big enough to fit the node
-	if (nodes_.size() < column)
-		nodes_.resize(column);
-	if (nodes_.size() <= column)
-		nodes_.insert(column, {});
+	ensureColumnExists(column);
 	if (nodes_[column].size() <= row)
 		nodes_[column].resize(row + 1);
 	//We can either put the node at a free space if exists, or insert otherwise
@@ -109,6 +105,12 @@ const QPoint ViewItem::positionOfNode(Model::Node *node) const
 QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 {
 	return nodes_;
+}
+
+void ViewItem::ensureColumnExists(int column)
+{
+	if (nodes_.size() <= column)
+		nodes_.resize(column + 1);
 }
 
 QString ViewItem::debugNodes()

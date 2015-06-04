@@ -41,43 +41,40 @@ bool CAddCalleesToView::canInterpret(Visualization::Item* source, Visualization:
 	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	while (source && !source->hasNode())
-		source = source->parent();
-	if (!source)
-		return false;
+	auto ancestor = source->findAncestorWithNode();
+	if (!ancestor) return false;
 	else
-		return canInterpret && dynamic_cast<OOModel::Method*>(source->node());
+		return canInterpret && dynamic_cast<OOModel::Method*>(ancestor->node());
 }
 
 Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	while (source && !source->hasNode())
-		source = source->parent();
+	auto ancestor = source->findAncestorWithNode();
 	auto name = arguments.at(0);
 
 	if (name == "current")
-		name = source->scene()->currentViewItem()->name();
-	auto view = source->scene()->viewItem(name);
+		name = ancestor->scene()->currentViewItem()->name();
+	auto view = ancestor->scene()->viewItem(name);
 
 	if (view)
 	{
-		auto callees = getCallees(source->node());
-		auto pos = view->positionOfNode(source->node());
+		auto callees_ = callees(ancestor->node());
+		auto pos = view->positionOfNode(ancestor->node());
 
-		if (callees.size() > 0)
+		if (callees_.size() > 0)
 		{
 			//TODO@cyril What if it is in the view, but not as a top-level item?
 			if (pos.x() == -1)
 			{
 				view->insertColumn(0);
-				view->insertNode(source->node(), 0, 0);
-				pos = view->positionOfNode(source->node());
+				view->insertNode(ancestor->node(), 0, 0);
+				pos = view->positionOfNode(ancestor->node());
 			}
 			//TODO@cyril Insert the nodes in a good order
 			view->insertColumn(pos.x() + 1);
-			auto row = callees.size() - 1;
-			for (auto callee : callees)
+			auto row = callees_.size() - 1;
+			for (auto callee : callees_)
 				view->insertNode(callee, pos.x() + 1, row--);
 		}
 		return new Interaction::CommandResult();
@@ -86,7 +83,7 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 		return new Interaction::CommandResult(new Interaction::CommandError("View " + name + " does not exist"));
 }
 
-QSet<OOModel::Method*> CAddCalleesToView::getCallees(Model::Node* parent)
+QSet<OOModel::Method*> CAddCalleesToView::callees(Model::Node* parent)
 {
 	QSet<OOModel::Method*> result;
 	for (auto child : parent->children())
@@ -94,7 +91,7 @@ QSet<OOModel::Method*> CAddCalleesToView::getCallees(Model::Node* parent)
 		if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(child))
 			if (call->methodDefinition())
 				result.insert(call->methodDefinition());
-		result.unite(getCallees(child));
+		result.unite(callees(child));
 	}
 	return result;
 }

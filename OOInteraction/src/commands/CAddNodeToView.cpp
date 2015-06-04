@@ -40,30 +40,27 @@ bool CAddNodeToView::canInterpret(Visualization::Item* source, Visualization::It
 {
 	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
 	//The first parent with a node should be a declaration (these can be added to the view here)
-	while (source && !source->hasNode())
-		source = source->parent();
-	if (!source)
-		return false;
+	auto ancestor = source->findAncestorWithNode();
+	if (!ancestor) return false;
 	else
-		return canInterpret && dynamic_cast<OOModel::Declaration*>(source->node());
+		return canInterpret && dynamic_cast<OOModel::Declaration*>(ancestor->node());
 }
 
 Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	while (source && !source->hasNode())
-		source = source->parent();
+	auto ancestor = source->findAncestorWithNode();
 	auto name = arguments.at(0);
 	auto colOk = true;
 	auto rowOk = true;
 	auto column = arguments.at(1).toInt(&colOk);
 	auto row = arguments.at(2).toInt(&rowOk);
 	if (name == "current")
-		name = source->scene()->currentViewItem()->name();
-	auto view = source->scene()->viewItem(name);
+		name = ancestor->scene()->currentViewItem()->name();
+	auto view = ancestor->scene()->viewItem(name);
 	if (view && rowOk && colOk)
 	{
-		view->insertNode(source->node(), column, row);
+		view->insertNode(ancestor->node(), column, row);
 		return new Interaction::CommandResult();
 	}
 	else if (!view)

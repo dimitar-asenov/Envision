@@ -58,6 +58,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
 
+		void ensureColumnExists(int column);
+
 		QVector<QVector<Model::Node*>> nodesGetter();
 
 		QString debugNodes();
