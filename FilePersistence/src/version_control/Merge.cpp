@@ -151,7 +151,7 @@ void Merge::performTrueMerge()
 	// initialize with single-member sets (no links)
 	for (auto change : cdgA.changes().values())
 	{
-		LinkedChanges linkedChanges;
+		auto linkedChanges = newLinkedChanges();
 		linkedChanges->insert(change);
 		linkedChangesSet.insert(linkedChanges);
 	}

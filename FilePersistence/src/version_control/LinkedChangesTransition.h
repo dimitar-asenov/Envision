@@ -31,6 +31,10 @@
 namespace FilePersistence {
 
 using LinkedChanges = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
+inline LinkedChanges newLinkedChanges() { return std::make_shared<QSet<std::shared_ptr<const ChangeDescription>>>(); }
+inline LinkedChanges newLinkedChanges(LinkedChanges changesToCopy) // TODO is there a better way to do this?
+{ return std::make_shared<QSet<std::shared_ptr<const ChangeDescription>>>(*changesToCopy); }
+
 using LinkedChangesSet = QSet<LinkedChanges>;
 
 class LinkedChangesTransition

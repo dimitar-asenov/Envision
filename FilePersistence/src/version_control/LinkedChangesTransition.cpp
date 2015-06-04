@@ -34,7 +34,7 @@ LinkedChangesTransition::LinkedChangesTransition(LinkedChangesSet& linkedChanges
 {
 	for (auto linkedChanges : linkedChangesSet)
 	{
-		transition_.insert(linkedChanges, LinkedChanges(linkedChanges));
+		transition_.insert(linkedChanges, newLinkedChanges(linkedChanges));
 	}
 }
 
@@ -69,7 +69,7 @@ void LinkedChangesTransition::insert(LinkedChanges keySet, std::shared_ptr<const
 		if (transition_.contains(keySet)) transition_.value(keySet)->insert(change);
 		else
 		{
-			LinkedChanges newSet;
+			auto newSet = newLinkedChanges();
 			newSet->insert(change);
 			transition_.insert(keySet, newSet);
 		}

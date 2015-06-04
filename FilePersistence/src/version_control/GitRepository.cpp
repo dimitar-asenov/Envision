@@ -167,7 +167,7 @@ std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 	if (merge_.expired())
 		return std::shared_ptr<Merge>(new Merge(revision, fastForward, this));
 	else
-		return std::shared_ptr<Merge>(); // TODO is this the right thing to do?
+		Q_ASSERT(false); // TODO is this the right thing to do?
 }
 
 Diff GitRepository::diff(QString revisionA, QString revisionB) const

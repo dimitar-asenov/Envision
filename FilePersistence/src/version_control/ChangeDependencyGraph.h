@@ -54,11 +54,13 @@ class ChangeDependencyGraph
 		 */
 		void removeDependency(std::shared_ptr<const ChangeDescription>& changeA,
 									 std::shared_ptr<const ChangeDescription>& changeB);
-	private:
 		/**
 		 * Depending on \a incoming, this either records all incoming or outgoing edges for \a change.
+		 *
+		 * \a change must already be inserted in this CDG.
 		 */
 		void recordDependencies(std::shared_ptr<const ChangeDescription> change, bool incoming);
+	private:
 		IdToChangeDescriptionHash changes_;
 		/**
 		 * A mapping of changeA to changeB means changeA depends on changeB.

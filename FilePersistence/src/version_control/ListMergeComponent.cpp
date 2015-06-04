@@ -460,10 +460,14 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::Node
 			newNode->setName(QString(mergedList.indexOf(elemId)));
 			auto newChange = std::make_shared<const ChangeDescription>(oldNode, newNode);
 			if (changeA) cdgA.replace(changeA, newChange);
-			else cdgA.insert(newChange);
-			// TODO add dependencies.
+			else if (changeB) cdgB.replace(changeB, newChange);
+			else
+			{
+				cdgA.insert(newChange);
+				cdgA.recordDependencies(newChange, true);
+				cdgA.recordDependencies(newChange, false);
+			}
 		}
-		// remove conflicts (here or later?)
 	}
 	// TODO fill properly
 	return LinkedChangesTransition();

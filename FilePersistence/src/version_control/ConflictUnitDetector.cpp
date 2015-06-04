@@ -92,14 +92,36 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 	return transition;
 }
 
+/**
+ * Looks for a change in cdg ot get a node to get a PersistentUnit and returns it.
+ * FIXME This is really ugly and I hate to do it like this. I hope we find a good solution for this.
+ */
+GenericPersistentUnit* getPersUnit(ChangeDependencyGraph& cdg)
+{
+	for (auto change : cdg.changes().values())
+	{
+		if (change->nodeA()) return change->nodeA()->persistentUnit();
+		else if (change->nodeB()) return change->nodeB()->persistentUnit();
+	}
+	Q_ASSERT(false);
+}
+
 IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const QString revision, ChangeDependencyGraph cdg)
 {
 	IdToChangeMultiHash affectedCUs;
 	for (auto change : cdg.changes()) {
 		Model::NodeIdType conflictRootA;
 		Model::NodeIdType conflictRootB;
+		const GenericNode* inBase; // belongs to the ugly hack
 		switch (change->type()) {
 			case ChangeType::Stationary:
+				/* FIXME this is an ugly hack because the diff doesn't attach any nodes to changes where only the
+				 * structure flag is set. */
+				inBase = Utils::loadNode(change->id(), revisionIdBase_, getPersUnit(cdg));
+				while (!conflictTypes_.contains(inBase->type()))
+					inBase = Utils::loadNode(inBase->parentId(), revisionIdBase_, getPersUnit(cdg));
+				affectedCUs.insert(inBase->id(), change);
+				break;
 			case ChangeType::Deletion:
 				conflictRootA = findConflictUnit(change->nodeA(), revision, cdg);
 				affectedCUs.insert(conflictRootA, change);
@@ -151,7 +173,8 @@ const GenericNode* ConflictUnitDetector::getParent(const GenericNode* node, bool
 	else if (cdg.changes().contains(node->parentId()))
 	{
 		auto change = cdg.changes().value(node->parentId());
-		parent = (base) ? change->nodeA() : change->nodeB();
+		parent = base ? change->nodeA() : change->nodeB();
+		if (!parent) Utils::loadNode(node->parentId(), revision, node->persistentUnit());
 	}
 	else
 		parent = Utils::loadNode(node->parentId(), revision, node->persistentUnit());
@@ -163,7 +186,12 @@ const GenericNode* ConflictUnitDetector::getParent(const GenericNode* node, bool
 const GenericNode* ConflictUnitDetector::getInBase(const GenericNode* node, const ChangeDependencyGraph& cdg)
 {
 	if (cdg.changes().contains(node->id()))
-		return cdg.changes().value(node->id())->nodeA();
+	{
+		auto change = cdg.changes().value(node->id());
+		if (change->onlyStructureChange() && change->nodeA() == nullptr)
+			return Utils::loadNode(node->id(), revisionIdBase_, node->persistentUnit());
+		else return change->nodeA();
+	}
 	else
 	{
 		// node is not changed, thus not inserted, so it must exist in base. load it.

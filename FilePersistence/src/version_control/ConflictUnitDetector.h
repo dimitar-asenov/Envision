@@ -58,6 +58,8 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		/**
 		 * This is a helper function for \a findConflictUnit(). It should become obsolete if node loading is implemented
 		 * transparently.
+		 *
+		 * \a base should be true when \a revision is the base revision.
 		 */
 		const GenericNode* getParent(const GenericNode* node, bool base, const QString revision,
 											  const ChangeDependencyGraph& cdg);
