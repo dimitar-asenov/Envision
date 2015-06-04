@@ -119,8 +119,19 @@ class FILEPERSISTENCE_API GitRepository
 		enum class SourceKind {Unspecified, Commit, Index, Workdir};
 		static SourceKind sourceKind(QString revision);
 		static QPair<SourceKind, SourceKind> kind(QString revisionA, QString revisionB);
+
+		/**
+		 * This is a wrapper around \a git_commit_tree().
+		 *
+		 * Returns the \a git_tree at \a revision.
+		 */
 		git_tree* getCommitTree(QString revision) const;
 
+		/**
+		 * \a errorCode is the last error code returned from libgit2.
+		 *
+		 * Throws an exception with a descriptive error description if \a errorCode indicates that an error occurred.
+		 */
 		static void checkError(int errorCode);
 
 		static const char* HEAD;

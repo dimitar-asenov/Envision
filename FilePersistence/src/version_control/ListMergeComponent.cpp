@@ -89,9 +89,6 @@ LinkedChangesTransition ListMergeComponent::run(
 	return transition;
 }
 
-/**
- * Finds all lists with a conflict that may be resolved by the component.
- */
 QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 		ChangeDependencyGraph& cdgA,
 		ChangeDependencyGraph& cdgB,
@@ -276,13 +273,6 @@ ListMergeComponent::ChunkMergeResult ListMergeComponent::computeMergedChunk(Chun
 	return ChunkMergeResult(noConflict, mergedChunk);
 }
 
-/**
- * Tries to find a unique position for \a elem in \a into that is similar to the position of \a elem in \a from.
- * Returns a Position \a pos where \a pos.valid = true if and only if such a position could be found and pos.predecessor
- * is the element after which \a elem should be inserted or 0 if elem should be inserted at the beginning.
- * Such a position can be found if the nearest predecessor and successor of \elem in \a from that are common in \a into
- * are next to each other and in order in \a into.
- */
 ListMergeComponent::Position ListMergeComponent::findPosition(Model::NodeIdType element,
 																				  QList<Model::NodeIdType> from, QList<Model::NodeIdType> into)
 {
@@ -424,7 +414,7 @@ QList<Model::NodeIdType> ListMergeComponent::backtrackLCS(int** data, const QLis
 			return backtrackLCS(data, listA, listB, posA-1, posB);
 }
 
-QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<GenericNode*>& list) const
+QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<GenericNode*>& list)
 {
 	QVector<Model::NodeIdType> idList(list.size());
 	for (GenericNode* node : list)
@@ -436,10 +426,6 @@ QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<Generi
 	return QList<Model::NodeIdType>::fromVector(idList);
 }
 
-/**
- * Takes the merged version of a list and generates all changes needed to bring the base version to the merged version.
- * New changes are created in \a cdgA.
- */
 LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::NodeIdType,
 																								  QList<Model::NodeIdType>& mergedList,
 																								  ChangeDependencyGraph& cdgA,
@@ -470,7 +456,7 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::Node
 			// TODO load node from base or A
 			const GenericNode* oldNode = nullptr;
 			GenericNode* newNode = oldNode->persistentUnit()->newNode();
-			newNode->setFieldsLike(oldNode);
+			newNode->reset(oldNode);
 			newNode->setName(QString(mergedList.indexOf(elemId)));
 			auto newChange = std::make_shared<const ChangeDescription>(oldNode, newNode);
 			if (changeA) cdgA.replace(changeA, newChange);
@@ -487,7 +473,7 @@ std::shared_ptr<const ChangeDescription> ListMergeComponent::copyWithNewIndex(
 		std::shared_ptr<const ChangeDescription>& change, int index)
 {
 	GenericNode* newNode = change->nodeB()->persistentUnit()->newNode();
-	newNode->setFieldsLike(change->nodeB());
+	newNode->reset(change->nodeB());
 	newNode->setName(QString(index));
 	auto newChange = std::make_shared<const ChangeDescription>(change->nodeA(), newNode);
 

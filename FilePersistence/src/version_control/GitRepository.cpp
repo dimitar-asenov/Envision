@@ -144,8 +144,6 @@ const QString GitRepository::INDEX = "GitRepositoryIndex";
 
 GitRepository::GitRepository(QString path)
 {
-	// Bugfix: initialize git threads is usually done automatically
-	// but there seem to be a bug related to libgit2 and Qtf
 	git_libgit2_init();
 
 	path_ = path;
@@ -161,9 +159,6 @@ GitRepository::GitRepository(QString path)
 GitRepository::~GitRepository()
 {
 	git_repository_free(repository_);
-
-	// Bugfix: shutdown git threads is usually done automatically
-	// but there seem to be a bug related to libgit2 and Qt
 	git_libgit2_shutdown();
 }
 

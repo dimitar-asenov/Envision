@@ -118,9 +118,6 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 	for (auto id : fakeChanges) changeDescriptions_.remove(id);
 }
 
-/**
- * Sets \a structFlag for appropriate changes and may create new changes.
- */
 void Diff::computeStructChanges()
 {
 	for (auto change : changeDescriptions_.values())
@@ -134,10 +131,6 @@ void Diff::computeStructChanges()
 	}
 }
 
-/**
- * If a change for \a id already exists, its \a structFlag is set,
- * otherwise a new change with that flag is created.
- */
 void Diff::setStructureFlagForId(const Model::NodeIdType id)
 {
 	if (!changeDescriptions_.contains(id))
@@ -156,9 +149,6 @@ void Diff::setStructureFlagForId(const Model::NodeIdType id)
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
 }
 
-/**
- * removes the nodes that link PersistentUnits from \a nodes.
- */
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
 	for (auto node : nodes.values())

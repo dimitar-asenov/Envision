@@ -33,19 +33,35 @@ namespace FilePersistence {
 using LinkedChanges = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
 using LinkedChangesSet = QSet<LinkedChanges>;
 
-/**
- * The main purpose of this class is to enforce the consistency of the linked changes mappings.
- */
 class LinkedChangesTransition
 {
 	public:
+		/**
+		 * Creates an empty transition.
+		 */
 		LinkedChangesTransition();
 
 		/**
-		 *	Creates a one-to-one transition.
+		 *	Creates the identity transition, representing no modifications of the change linking.
 		 */
 		LinkedChangesTransition(LinkedChangesSet& linkedChangesSet);
 
+		/**
+		 * When this method returns, \a keySet will be mapped to a LinkedChanges object containing \a change. All preexisting
+		 * mappings persist. Details follow.
+		 *
+		 * If \a keySet is already mapped to a LinkedChanges containing \a change, this is a no-op.
+		 * If \a change is not already mapped to by some LinkedChanges and \a keySet is not already mapped to a LinkedChanges
+		 * then \a keySet is mapped to a new LinkedChanges containing only \a change.
+		 * If \a change is not already mapped to and \a keySet is already mapped to a LinkedChanges object, \a change is
+		 * added to that object.
+		 * If \a change is already mapped to by some LinkedChanges and \a keySet is not yet mapped to any LinkedChanges,
+		 * \a keySet is
+		 * mapped to the LinkedChanges containing \a change.
+		 * If \a keySet is already mapped to a LinkedChanges \a current and a different LinkedChanges \a other already
+		 * contains \a change, \a keySet and all LinkedChanges mapped to \a other are mapped to the union of \a other and
+		 * \a current.
+		 */
 		void insert(LinkedChanges keySet, std::shared_ptr<const ChangeDescription>& change);
 		LinkedChangesSet values() const;
 
@@ -53,6 +69,9 @@ class LinkedChangesTransition
 		QHash<LinkedChanges, LinkedChanges> transition_;
 };
 
+/**
+ * Returns the new LinkedChangesSet a.k.a. the new state after the transition.
+ */
 inline LinkedChangesSet LinkedChangesTransition::values() const
 {
 	return LinkedChangesSet::fromList(transition_.values());

@@ -39,6 +39,9 @@ class ChangeDependencyGraph
 		const IdToChangeDescriptionHash changes() const;
 		void insert(std::shared_ptr<const ChangeDescription>& change);
 		void remove(std::shared_ptr<const ChangeDescription>& change);
+		/**
+		 * Replaces \a oldChange with \a newChange in the CDG. \a newChange will have the same edges as \a oldChange.
+		 */
 		void replace(std::shared_ptr<const ChangeDescription>& oldChange,
 						 std::shared_ptr<const ChangeDescription>& newChange);
 		/**
@@ -52,6 +55,9 @@ class ChangeDependencyGraph
 		void removeDependency(std::shared_ptr<const ChangeDescription>& changeA,
 									 std::shared_ptr<const ChangeDescription>& changeB);
 	private:
+		/**
+		 * Depending on \a incoming, this either records all incoming or outgoing edges for \a change.
+		 */
 		void recordDependencies(std::shared_ptr<const ChangeDescription> change, bool incoming);
 		IdToChangeDescriptionHash changes_;
 		/**

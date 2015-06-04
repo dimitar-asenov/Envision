@@ -41,6 +41,9 @@ class ConflictPipelineComponent
 															  QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 															  ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet) = 0;
 	protected:
+		/**
+		 * Given \a change and a set of LinkedChanges, this returns that linkedChanges which contains \a change.
+		 */
 		static LinkedChanges findLinkedChanges(std::shared_ptr<const ChangeDescription> change,
 													  LinkedChangesSet& linkedChangesSet);
 };

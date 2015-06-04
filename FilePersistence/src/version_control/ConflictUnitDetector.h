@@ -41,12 +41,32 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet);
 	private:
+		/**
+		 * Returns a MultiHash where the key set contains an ID if and only if it is the ID of a conflict unit root node
+		 * and that conflict unit is affected by some change in \a cdg. The \a revision argument is only used to load nodes
+		 * that are not yet loaded. It would be prefered if this wasn't necessary.
+		 */
 		IdToChangeMultiHash computeAffectedCUs(const QString revision,
 															ChangeDependencyGraph cdg);
+		/**
+		 * Returns the ID of the root of the conflict unit \a node belongs to. \a nodeRevision is the revision \a node comes
+		 * from (one of the branches, not the base). Both the \a nodeRevision and \a cdg arguments are only used to load nodes
+		 * and could be removed if node loading is implemented transparently.
+		 */
 		Model::NodeIdType findConflictUnit(const GenericNode* node, const QString nodeRevision,
 													  const ChangeDependencyGraph& cdg);
+		/**
+		 * This is a helper function for \a findConflictUnit(). It should become obsolete if node loading is implemented
+		 * transparently.
+		 */
 		const GenericNode* getParent(const GenericNode* node, bool base, const QString revision,
 											  const ChangeDependencyGraph& cdg);
+		/**
+		 * This is a helper function for \a findConflictUnit(). It should become obsolete if node loading is implemented
+		 * transparently.
+		 *
+		 * Returns \a nullptr if the node does not exist in base.
+		 */
 		const GenericNode* getInBase(const GenericNode* node, const ChangeDependencyGraph& cdg);
 
 

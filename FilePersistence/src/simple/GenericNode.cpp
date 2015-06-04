@@ -116,16 +116,6 @@ void GenericNode::setValue(ValueType type, const QString& value)
 	value_ = value;
 }
 
-void GenericNode::setFieldsLike(const GenericNode* other)
-{
-	setId(other->id());
-	setName(other->name());
-	setParent(other->parent());
-	setParentId(other->parentId());
-	setType(other->type());
-	setValue(other->valueType(), other->valueAsString());
-}
-
 void GenericNode::resetValue(ValueType type, const QString& value)
 {
 	Q_ASSERT(children_.isEmpty());
@@ -196,6 +186,11 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataL
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine, dataLineLength);
 }
 
+void GenericNode::reset(const GenericNode* nodeToCopy)
+{
+	reset(nodeToCopy->persistentUnit(), nodeToCopy);
+}
+
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy)
 {
 	Q_ASSERT(nodeToCopy);
@@ -210,6 +205,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode
 		value_ = nodeToCopy->value_;
 		valueType_ = nodeToCopy->valueType_;
 		id_ = nodeToCopy->id_;
+		parent_ = nodeToCopy->parent_;
 		parentId_ = nodeToCopy->parentId_;
 	}
 }

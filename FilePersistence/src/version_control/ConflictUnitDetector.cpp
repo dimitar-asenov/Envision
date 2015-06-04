@@ -146,7 +146,6 @@ Model::NodeIdType ConflictUnitDetector::findConflictUnit(const GenericNode* node
 const GenericNode* ConflictUnitDetector::getParent(const GenericNode* node, bool base, const QString revision,
 																	const ChangeDependencyGraph& cdg)
 {
-	// this method tries to load the parent node from the changes instead of searching the repo. This is purely for speed.
 	const GenericNode* parent;
 	if (node->parent()) parent = node->parent();
 	else if (cdg.changes().contains(node->parentId()))
@@ -161,9 +160,6 @@ const GenericNode* ConflictUnitDetector::getParent(const GenericNode* node, bool
 	return parent;
 }
 
-/**
- * Returns the node as existing in base or \a nullptr if the node doesn't exist in base.
- */
 const GenericNode* ConflictUnitDetector::getInBase(const GenericNode* node, const ChangeDependencyGraph& cdg)
 {
 	if (cdg.changes().contains(node->id()))

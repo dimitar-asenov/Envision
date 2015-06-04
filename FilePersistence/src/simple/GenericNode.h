@@ -47,10 +47,10 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
-		void setFieldsLike(const GenericNode* other);
 		void setChildren(QList<GenericNode*>);
 
 		void resetValue(ValueType type, const QString& value);
+		void reset(const GenericNode* nodeToCopy);
 
 		void setId(Model::NodeIdType id);
 		void setParentId(Model::NodeIdType parentId);
@@ -144,6 +144,10 @@ inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
 inline void GenericNode::setParentId(Model::NodeIdType parentId) { parent_ = nullptr; parentId_ = parentId; }
 inline void GenericNode::setChildren(QList<GenericNode*> children) { children_ = children; childrenLoaded_ = true; }
+
+/**
+ * Returns true if the return value of \a this.children() is valid.
+ */
 inline bool GenericNode::childrenLoaded() const { return childrenLoaded_; }
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }

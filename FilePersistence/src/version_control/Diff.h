@@ -51,9 +51,20 @@ class FILEPERSISTENCE_API Diff
 	private:
 		void computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB);
 
+		/**
+		 * Sets \a structFlag for appropriate changes and may create new changes.
+		 */
 		void computeStructChanges();
+
+		/**
+		 * If a change for \a id already exists, its \a structFlag is set,
+		 * otherwise a new change with that flag is created.
+		 */
 		void setStructureFlagForId(const Model::NodeIdType);
 
+		/**
+		 * Removes all nodes that are used for persistent unit linking from \a nodes.
+		 */
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
 
 		IdToChangeDescriptionHash changeDescriptions_{};

@@ -63,6 +63,9 @@ class FILEPERSISTENCE_API ChangeDescription
 		const GenericNode* nodeB() const;
 		const GenericNode* nodeA() const;
 
+		/**
+		 * Returns \a true for changes that are stationary and have no flags set.
+		 */
 		bool isFake() const;
 		bool onlyStructureChange() const;
 		bool onlyLabelChange() const;
@@ -93,9 +96,6 @@ inline const ChangeDescription::UpdateFlags ChangeDescription::flags() const { r
 inline const GenericNode* ChangeDescription::nodeB() const { return nodeB_; }
 inline const GenericNode* ChangeDescription::nodeA() const { return nodeA_; }
 
-/**
- * filters false changes that are stationary and have no flags set.
- */
 inline bool ChangeDescription::isFake() const
 {
 	return type_ == ChangeType::Stationary && updateFlags_ == ChangeDescription::NoFlags;

@@ -56,11 +56,21 @@ class FILEPERSISTENCE_API Merge
 	private:
 		friend class GitRepository;
 
+		/**
+		 * Merges \a revision into current HEAD.
+		 */
 		Merge(QString revision, bool fastForward, GitRepository* repository);
 
+		/**
+		 * Constructs components and sets special node types. This will eventually be replaced by a mechanism
+		 * that loads these from plugins and the model.
+		 */
 		void initializeComponents();
+
+		/**
+		 * If the merge is non-trivial, this is where the magic starts.
+		 */
 		void performTrueMerge();
-		LinkedChangesSet assignmentFromTransition(const LinkedChangesTransition& transition);
 
 		Stage stage_ = Stage::NotInitialized;
 
@@ -95,7 +105,7 @@ class FILEPERSISTENCE_API Merge
 		QSet<std::shared_ptr<const ChangeDescription>> conflictingChanges_;
 
 		/**
-		 * change1 is mapped to change2 exactly if change1 and change2 cannot both be applied safely.
+		 * \a change1 is mapped to \a change2 exactly if \a change1 and \a change2 cannot both be applied safely.
 		 */
 		ConflictPairs conflictPairs_;
 };
