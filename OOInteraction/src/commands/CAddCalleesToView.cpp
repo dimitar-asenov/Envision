@@ -60,31 +60,41 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 		name = source->scene()->currentViewItem()->name();
 	auto view = source->scene()->viewItem(name);
 
-	auto callees = getCallees(source->node());
-	//TODO@cyril What if it is in the view, but not as a top-level item?
-	auto pos = view->positionOfNode(source->node());
-
-	if (callees.size() > 0)
+	if (view)
 	{
-		//TODO@cyril Insert the nodes in a good order
-		view->insertColumn(pos.x() + 1);
-		for (auto callee : callees)
-			view->insertNode(callee, pos.x() + 1);
+		auto callees = getCallees(source->node());
+		auto pos = view->positionOfNode(source->node());
+
+		if (callees.size() > 0)
+		{
+			//TODO@cyril What if it is in the view, but not as a top-level item?
+			if (pos.x() == -1)
+			{
+				view->insertColumn(0);
+				view->insertNode(source->node(), 0, 0);
+				pos = view->positionOfNode(source->node());
+			}
+			//TODO@cyril Insert the nodes in a good order
+			view->insertColumn(pos.x() + 1);
+			auto row = callees.size() - 1;
+			for (auto callee : callees)
+				view->insertNode(callee, pos.x() + 1, row--);
+		}
+		return new Interaction::CommandResult();
 	}
-
-
-	return new Interaction::CommandResult();
+	else
+		return new Interaction::CommandResult(new Interaction::CommandError("View " + name + " does not exist"));
 }
 
-QList<OOModel::Method*> CAddCalleesToView::getCallees(Model::Node* parent)
+QSet<OOModel::Method*> CAddCalleesToView::getCallees(Model::Node* parent)
 {
-	QList<OOModel::Method*> result;
+	QSet<OOModel::Method*> result;
 	for (auto child : parent->children())
 	{
 		if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(child))
 			if (call->methodDefinition())
-				result.append(call->methodDefinition());
-		result.append(getCallees(child));
+				result.insert(call->methodDefinition());
+		result.unite(getCallees(child));
 	}
 	return result;
 }

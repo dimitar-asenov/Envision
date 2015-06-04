@@ -56,7 +56,7 @@ class OOINTERACTION_API CAddCalleesToView : public Interaction::CommandWithDefau
 				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
 
 	private:
-		QList<OOModel::Method*> getCallees(Model::Node* parent);
+		QSet<OOModel::Method*> getCallees(Model::Node* parent);
 };
 
 }
