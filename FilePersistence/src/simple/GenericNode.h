@@ -29,11 +29,9 @@
 #include "../filepersistence_api.h"
 #include "../FilePersistenceException.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
+#include "GenericTree.h"
 
 namespace FilePersistence {
-
-class GenericTree;
-class GenericPersistentUnit;
 
 class FILEPERSISTENCE_API GenericNode {
 
@@ -80,8 +78,6 @@ class FILEPERSISTENCE_API GenericNode {
 		void remove();
 		void detach();
 
-		GenericNode* find(Model::NodeIdType id);
-
 		Model::NodeIdType id() const;
 		Model::NodeIdType parentId() const;
 
@@ -92,6 +88,7 @@ class FILEPERSISTENCE_API GenericNode {
 	private:
 		friend class GenericTree;
 		friend class GenericPersistentUnit;
+		friend class PiecewiseLoader;
 
 		// //////////////////////////////////////////////////////////////////////////////////////////
 		// !!!
@@ -136,14 +133,18 @@ class FILEPERSISTENCE_API GenericNode {
 
 		void ensureDataRead() const;
 
+		GenericTree* tree() const;
 		bool sameTree(const GenericNode* other);
+
+		void linkNode();
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
 inline void GenericNode::setParentId(Model::NodeIdType parentId) { parent_ = nullptr; parentId_ = parentId; }
-inline void GenericNode::setChildren(QList<GenericNode*> children) { children_ = children; areChildrenLoaded_ = true; }
+inline void GenericNode::setChildren(QList<GenericNode*> children)
+{ Q_ASSERT(tree()->isWritable()); children_ = children; areChildrenLoaded_ = true; }
 
 /**
  * Returns true if the return value of \a this.children() is valid.
@@ -157,13 +158,16 @@ inline GenericNode::ValueType GenericNode::valueType() const { ensureDataRead();
 inline const QString& GenericNode::rawValue() const { ensureDataRead(); return value_; }
 inline Model::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
 inline Model::NodeIdType GenericNode::parentId() const { ensureDataRead(); return parentId_; }
-inline const QList<GenericNode*>& GenericNode::children() const { ensureDataRead(); return children_; }
-inline GenericNode* GenericNode::parent() const {ensureDataRead(); return parent_;} // Parent must be explicitly set
 
 inline bool GenericNode::hasStringValue() const { ensureDataRead(); return valueType_ == STRING_VALUE; }
 inline bool GenericNode::hasIntValue() const { ensureDataRead(); return valueType_ == INT_VALUE; }
 inline bool GenericNode::hasDoubleValue() const { ensureDataRead(); return valueType_ == DOUBLE_VALUE; }
 
 inline GenericPersistentUnit* GenericNode::persistentUnit() const {return persistentUnit_;}
+
+inline GenericTree* GenericNode::tree() const { return persistentUnit_->tree();}
+inline bool GenericNode::sameTree(const GenericNode* other)
+	{return persistentUnit_->tree() == other->persistentUnit_->tree();}
+
 
 } /* namespace FilePersistence */

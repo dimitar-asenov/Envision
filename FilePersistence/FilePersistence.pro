@@ -16,7 +16,8 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/XMLModel.h \
     src/filepersistence_api.h \
     src/precompiled.h \
-    src/FilePersistencePlugin.h
+    src/FilePersistencePlugin.h \
+    src/simple/PiecewiseLoader.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
@@ -30,5 +31,6 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/FilePersistenceException.cpp \
     test/LoadTests.cpp \
     test/SaveTests.cpp \
-    src/FilePersistencePlugin.cpp
+    src/FilePersistencePlugin.cpp \
+    src/simple/PiecewiseLoader.cpp
 RESOURCES = FilePersistence.qrc

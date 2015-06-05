@@ -59,9 +59,22 @@ GenericNode* GenericPersistentUnit::nextNode()
 	return chunks_.last() + lastNodeIndexInLastChunk_;
 }
 
+void GenericPersistentUnit::releaseLastNode()
+{
+	--lastNodeIndexInLastChunk_;
+	if (!chunks_.isEmpty() && lastNodeIndexInLastChunk_ < 0)
+	{
+		// We must reseale the last chunk
+		tree_->releaseChunk(chunks_.takeLast());
+		lastNodeIndexInLastChunk_ = GenericTree::ALLOCATION_CHUNK_SIZE - 1;
+	}
+}
+
 GenericNode* GenericPersistentUnit::newNode()
 {
 	Q_ASSERT(!data_);
+	Q_ASSERT(!tree_->piecewiseLoader());
+
 	auto node = nextNode();
 	node->reset(this);
 	return node;
@@ -71,6 +84,7 @@ GenericNode* GenericPersistentUnit::newNode(int lineStart, int lineEndEnclusive)
 {
 	Q_ASSERT(data_);
 	Q_ASSERT(lineEndEnclusive < dataSize_);
+	Q_ASSERT(!tree_->piecewiseLoader());
 
 	auto node = nextNode();
 	node->reset(this, data_+lineStart, lineEndEnclusive - lineStart + 1, true);
@@ -101,16 +115,9 @@ GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool 
 	return node;
 }
 
-GenericNode* GenericPersistentUnit::newNode(const QString& fromString)
-{
-	auto data = fromString.toUtf8();
-	auto node = newNode(data.constData(), data.length());
-	node->ensureDataRead(); // We must eagerly load the node as data will disappear at the end of this method.
-	return node;
-}
-
 const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 {
+	Q_ASSERT(!tree_->piecewiseLoader());
 	Q_ASSERT(!data_);
 	Q_ASSERT(data);
 	Q_ASSERT(dataSize > 0);
@@ -118,22 +125,6 @@ const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 	dataSize_ = dataSize;
 	memcpy(data_, data, dataSize);
 	return data_;
-}
-
-GenericNode* GenericPersistentUnit::find(Model::NodeIdType id) const
-{
-	int numElementsInCurrentChunk = GenericTree::ALLOCATION_CHUNK_SIZE;
-	int currentChunk = 0;
-	for (auto chunk : chunks_)
-	{
-		if (currentChunk == chunks_.size() - 1)
-			numElementsInCurrentChunk = lastNodeIndexInLastChunk_;
-		for (int j = 0; j < numElementsInCurrentChunk; ++j)
-			if (chunk[j].id() == id)
-				return &chunk[j];
-		++currentChunk;
-	}
-	return nullptr;
 }
 
 GenericNode* GenericPersistentUnit::unitRootNode() const
