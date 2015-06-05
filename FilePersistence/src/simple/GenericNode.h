@@ -47,6 +47,10 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
+		void setChildren(QList<GenericNode*>);
+
+		void resetValue(ValueType type, const QString& value);
+		void reset(const GenericNode* nodeToCopy);
 
 		void setId(Model::NodeIdType id);
 		void setParentId(Model::NodeIdType parentId);
@@ -55,6 +59,7 @@ class FILEPERSISTENCE_API GenericNode {
 		GenericNode* addChild(GenericNode* child);
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
+		bool areChildrenLoaded() const;
 		GenericNode* parent() const;
 
 		const QString& name() const;
@@ -72,12 +77,17 @@ class FILEPERSISTENCE_API GenericNode {
 		bool hasIntValue() const;
 		bool hasDoubleValue() const;
 
+		void remove();
+		void detach();
+
 		GenericNode* find(Model::NodeIdType id);
 
 		Model::NodeIdType id() const;
 		Model::NodeIdType parentId() const;
 
 		GenericPersistentUnit* persistentUnit() const;
+
+		static const QString PERSISTENT_UNIT_TYPE;
 
 	private:
 		friend class GenericTree;
@@ -97,6 +107,7 @@ class FILEPERSISTENCE_API GenericNode {
 		Model::NodeIdType parentId_{};
 		GenericNode* parent_{};
 		QList<GenericNode*> children_;
+		bool areChildrenLoaded_{};
 
 		/**
 		 * The text line from which this node should be created.
@@ -131,8 +142,13 @@ class FILEPERSISTENCE_API GenericNode {
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
-inline void GenericNode::setParentId(Model::NodeIdType parentId) { parentId_ = parentId; }
+inline void GenericNode::setParentId(Model::NodeIdType parentId) { parent_ = nullptr; parentId_ = parentId; }
+inline void GenericNode::setChildren(QList<GenericNode*> children) { children_ = children; areChildrenLoaded_ = true; }
 
+/**
+ * Returns true if the return value of \a this.children() is valid.
+ */
+inline bool GenericNode::areChildrenLoaded() const { return areChildrenLoaded_; }
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }

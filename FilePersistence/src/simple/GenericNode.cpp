@@ -30,6 +30,8 @@
 
 namespace FilePersistence {
 
+const QString GenericNode::PERSISTENT_UNIT_TYPE = "persistencenewunit";
+
 static const int MAX_DOUBLE_PRECISION = 15;
 
 GenericNode::GenericNode(){}
@@ -116,11 +118,19 @@ void GenericNode::setValue(ValueType type, const QString& value)
 	value_ = value;
 }
 
+void GenericNode::resetValue(ValueType type, const QString& value)
+{
+	Q_ASSERT(children_.isEmpty());
+
+	valueType_ = type;
+	value_ = value;
+}
 
 void GenericNode::setParent(GenericNode* parent)
 {
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
+	Q_ASSERT(parentId_.isNull() || parent->id().isNull() || parentId_ == parent->id());
 }
 
 GenericNode* GenericNode::addChild(GenericNode* child)
@@ -176,6 +186,11 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataL
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine, dataLineLength);
 }
 
+void GenericNode::reset(const GenericNode* nodeToCopy)
+{
+	reset(nodeToCopy->persistentUnit(), nodeToCopy);
+}
+
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy)
 {
 	Q_ASSERT(nodeToCopy);
@@ -190,6 +205,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode
 		value_ = nodeToCopy->value_;
 		valueType_ = nodeToCopy->valueType_;
 		id_ = nodeToCopy->id_;
+		parent_ = nodeToCopy->parent_;
 		parentId_ = nodeToCopy->parentId_;
 	}
 }
@@ -201,6 +217,22 @@ void GenericNode::ensureDataRead() const
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine_, dataLineLength_);
 		// Don't delete the line, we don't own it.
 		const_cast<GenericNode*>(this)->dataLine_ = nullptr;
+	}
+}
+
+void GenericNode::remove()
+{
+	detach();
+	reset(persistentUnit_);
+}
+
+void GenericNode::detach()
+{
+	if (parent_)
+	{
+		parent_->children_.removeOne(this);
+		parent_ = nullptr;
+		parentId_ = {};
 	}
 }
 
