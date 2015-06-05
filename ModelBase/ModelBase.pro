@@ -50,7 +50,8 @@ HEADERS += src/persistence/NodeIdMap.h \
     test/PersistentStoreMock.h \
     src/ModelBasePlugin.h \
     src/model/TreeManager.h \
-    src/model/AllTreeManagers.h
+    src/model/AllTreeManagers.h \
+    src/nodes/NodeReference.h
 SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/NameText.cpp \
     src/nodes/UsedLibrary.cpp \
@@ -97,4 +98,5 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/Text.cpp \
     src/ModelBasePlugin.cpp \
     src/model/TreeManager.cpp \
-    src/model/AllTreeManagers.cpp
+    src/model/AllTreeManagers.cpp \
+    src/nodes/NodeReference.cpp
