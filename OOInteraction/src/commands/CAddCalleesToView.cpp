@@ -44,7 +44,7 @@ bool CAddCalleesToView::canInterpret(Visualization::Item* source, Visualization:
 	auto ancestor = source->findAncestorWithNode();
 	if (!ancestor) return false;
 	else
-		return canInterpret && dynamic_cast<OOModel::Method*>(ancestor->node());
+		return canInterpret && DCast<OOModel::Method>(ancestor->node());
 }
 
 Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
@@ -88,7 +88,7 @@ QSet<OOModel::Method*> CAddCalleesToView::callees(Model::Node* parent)
 	QSet<OOModel::Method*> result;
 	for (auto child : parent->children())
 	{
-		if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(child))
+		if (auto call = DCast<OOModel::MethodCallExpression>(child))
 			if (call->methodDefinition())
 				result.insert(call->methodDefinition());
 		result.unite(callees(child));

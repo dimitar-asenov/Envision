@@ -43,7 +43,7 @@ bool CAddNodeToView::canInterpret(Visualization::Item* source, Visualization::It
 	auto ancestor = source->findAncestorWithNode();
 	if (!ancestor) return false;
 	else
-		return canInterpret && dynamic_cast<OOModel::Declaration*>(ancestor->node());
+		return canInterpret && DCast<OOModel::Declaration>(ancestor->node());
 }
 
 Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,

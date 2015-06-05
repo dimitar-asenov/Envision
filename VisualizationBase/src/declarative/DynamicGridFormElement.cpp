@@ -153,6 +153,7 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 				bool found = false;
 
 				for (int n = 0; n < nodes.size(); ++n)
+				{
 					for (int j = 0; j < nodes[n].size(); ++j)
 						//We must make sure not to visualize one node with the same item twice
 						if (nodes[n][j] == data.itemGrid_[x][y]->node() && !usedPositions.contains(QPoint(n, j)))
@@ -165,6 +166,9 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 							found = true;
 							break;
 						}
+					if (found)
+						break;
+				}
 
 				if (!found) SAFE_DELETE_ITEM(data.itemGrid_[x][y]);
 				data.itemGrid_[x][y] = nullptr;
