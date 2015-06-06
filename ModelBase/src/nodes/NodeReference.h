@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "nodes/Reference.h"
+#include "../../ModelBase/src/nodes/Reference.h"
 #include "TypedList.h"
 #include "nodeMacros.h"
 
