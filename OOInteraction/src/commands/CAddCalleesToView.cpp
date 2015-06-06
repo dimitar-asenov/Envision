@@ -60,7 +60,7 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 	if (view)
 	{
 		auto callees_ = callees(ancestor->node());
-		auto pos = view->positionOfNode(ancestor->node());
+		auto pos = view->positionOfItem(ancestor->parent());
 
 		if (callees_.size() > 0)
 		{
