@@ -27,7 +27,7 @@
 #include "CFind.h"
 
 #include "VisualizationBase/src/items/TextRenderer.h"
-#include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
@@ -50,9 +50,7 @@ CommandResult* CFind::execute(Visualization::Item*, Visualization::Item* target,
 	scene->setMainCursor(nullptr);
 
 	QList<Visualization::Item*> stack;
-	for (auto item : scene->topLevelItems())
-		if (DCast<Visualization::RootItem>(item))
-			stack.append(item);
+	stack.append(scene->currentViewItem());
 
 	while (!stack.isEmpty())
 	{
