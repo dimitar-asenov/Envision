@@ -51,6 +51,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void removeNode(Model::Node* node);
 		const QList<Model::Node*> allNodes() const;
 		const QPoint positionOfNode(Model::Node* node) const;
+		const QPoint positionOfItem(Item* item) const;
 
 		const QString name() const;
 
@@ -61,8 +62,6 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void ensureColumnExists(int column);
 
 		QVector<QVector<Model::Node*>> nodesGetter();
-
-		QString debugNodes();
 };
 
 inline const QString ViewItem::name() const { return name_; }

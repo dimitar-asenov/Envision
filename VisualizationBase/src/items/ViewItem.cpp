@@ -26,7 +26,9 @@
 #include "ViewItem.h"
 
 #include "../src/declarative/DeclarativeItemDef.h"
+#include "ModelBase/src/nodes/NodeReference.h"
 #include "declarative/DynamicGridFormElement.h"
+#include "items/VNodeReference.h"
 
 namespace Visualization {
 
@@ -62,15 +64,17 @@ void ViewItem::insertColumn(int column)
 
 void ViewItem::insertNode(Model::Node* node, int column, int row)
 {
+	auto ref = new Model::NodeReference();
+	ref->setTarget(node);
 	//First, make sure the current grid is big enough to fit the node
 	ensureColumnExists(column);
 	if (nodes_[column].size() <= row)
 		nodes_[column].resize(row + 1);
 	//We can either put the node at a free space if exists, or insert otherwise
 	if (nodes_.at(column).at(row) == nullptr)
-		nodes_[column][row] = node;
+		nodes_[column][row] = ref;
 	else
-		nodes_[column].insert(row, node);
+		nodes_[column].insert(row, ref);
 	setUpdateNeeded(StandardUpdate);
 }
 
@@ -102,6 +106,14 @@ const QPoint ViewItem::positionOfNode(Model::Node *node) const
 	return QPoint(-1, -1);
 }
 
+const QPoint ViewItem::positionOfItem(Item *item) const
+{
+	auto vref = DCast<VNodeReference>(item);
+	if (vref)
+		return positionOfNode(vref->node());
+	else return QPoint(-1, -1);
+}
+
 QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 {
 	return nodes_;
@@ -111,29 +123,6 @@ void ViewItem::ensureColumnExists(int column)
 {
 	if (nodes_.size() <= column)
 		nodes_.resize(column + 1);
-}
-
-QString ViewItem::debugNodes()
-{
-	//Prints the node grid as a debug string
-	QString result;
-	int maxHeight = 0;
-	for (int i = 0; i < nodes_.size(); i++)
-		if (nodes_.at(i).size() > maxHeight)
-			maxHeight = nodes_.at(i).size();
-
-	for (int row = 0; row < maxHeight; row++)
-	{
-		for (int col = 0; col < nodes_.size(); col++)
-		{
-			if (nodes_.at(col).size() > row)
-				result += nodes_.at(col).at(row) ? (nodes_.at(col).at(row)->typeName() + " ") : "null ";
-			else
-				result += "null ";
-		}
-		result += "\n";
-	}
-	return result;
 }
 
 }
