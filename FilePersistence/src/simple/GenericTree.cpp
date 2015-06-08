@@ -32,13 +32,19 @@ namespace FilePersistence {
 GenericTree::GenericTree(QString name)
 	: name_{name}{}
 
-GenericTree::GenericTree(QString name, std::unique_ptr<PiecewiseLoader> loader)
-	: name_{name}, piecewiseLoader_{std::move(loader)}{}
-
 GenericTree::~GenericTree()
 {
 	persistentUnits_.clear();
 	for (auto c : emptyChunks_) delete [] c;
+}
+
+void GenericTree::setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader)
+{
+	Q_ASSERT(!piecewiseLoader_);
+	Q_ASSERT(persistentUnits_.isEmpty());
+	Q_ASSERT(quickLookupHash_.isEmpty());
+
+	piecewiseLoader_ = loader;
 }
 
 GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, int dataSize)
