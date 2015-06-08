@@ -48,8 +48,8 @@ following elements:
 	\li \b (optional) \b value - leaf nodes have a value and no children. Leaf nodes have a '.' immediately after the
 		uuid which is followed by a single space and a value type specifier. Specifiers are 'S_', 'I_' or 'D_' for
 		String, Integer and Double respectively. The value follows immediately after the specifier. Integers and Doubles
-		are encoded in decimal notation, Doubles use a decimal dot. Strings are encoded in unicode. Back slash '\',
-		carriage return '\r' and new line feed '\n' are escaped with a single back slash character. Strings last until
+                are encoded in decimal notation, Doubles use a decimal dot. Strings are encoded in unicode. Back slash '\\',
+                carriage return '\\r' and new line feed '\\n' are escaped with a single back slash character. Strings last until
 		the end of the line.
 
 \b persistencenewunit is a special node which indicates that its content is defined in a

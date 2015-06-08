@@ -29,11 +29,9 @@
 #include "../filepersistence_api.h"
 #include "../FilePersistenceException.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
+#include "GenericTree.h"
 
 namespace FilePersistence {
-
-class GenericTree;
-class GenericPersistentUnit;
 
 class FILEPERSISTENCE_API GenericNode {
 
@@ -47,6 +45,10 @@ class FILEPERSISTENCE_API GenericNode {
 		void setValue(const QString& value);
 		void setValue(double value);
 		void setValue(long value);
+		void setChildren(QList<GenericNode*>);
+
+		void resetValue(ValueType type, const QString& value);
+		void reset(const GenericNode* nodeToCopy);
 
 		void setId(Model::NodeIdType id);
 		void setParentId(Model::NodeIdType parentId);
@@ -55,6 +57,7 @@ class FILEPERSISTENCE_API GenericNode {
 		GenericNode* addChild(GenericNode* child);
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
+		bool areChildrenLoaded() const;
 		GenericNode* parent() const;
 
 		const QString& name() const;
@@ -72,16 +75,20 @@ class FILEPERSISTENCE_API GenericNode {
 		bool hasIntValue() const;
 		bool hasDoubleValue() const;
 
-		GenericNode* find(Model::NodeIdType id);
+		void remove();
+		void detach();
 
 		Model::NodeIdType id() const;
 		Model::NodeIdType parentId() const;
 
 		GenericPersistentUnit* persistentUnit() const;
 
+		static const QString PERSISTENT_UNIT_TYPE;
+
 	private:
 		friend class GenericTree;
 		friend class GenericPersistentUnit;
+		friend class PiecewiseLoader;
 
 		// //////////////////////////////////////////////////////////////////////////////////////////
 		// !!!
@@ -97,6 +104,7 @@ class FILEPERSISTENCE_API GenericNode {
 		Model::NodeIdType parentId_{};
 		GenericNode* parent_{};
 		QList<GenericNode*> children_;
+		bool areChildrenLoaded_{};
 
 		/**
 		 * The text line from which this node should be created.
@@ -125,14 +133,23 @@ class FILEPERSISTENCE_API GenericNode {
 
 		void ensureDataRead() const;
 
+		GenericTree* tree() const;
 		bool sameTree(const GenericNode* other);
+
+		void linkNode();
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
-inline void GenericNode::setParentId(Model::NodeIdType parentId) { parentId_ = parentId; }
+inline void GenericNode::setParentId(Model::NodeIdType parentId) { parent_ = nullptr; parentId_ = parentId; }
+inline void GenericNode::setChildren(QList<GenericNode*> children)
+{ Q_ASSERT(tree()->isWritable()); children_ = children; areChildrenLoaded_ = true; }
 
+/**
+ * Returns true if the return value of \a this.children() is valid.
+ */
+inline bool GenericNode::areChildrenLoaded() const { return areChildrenLoaded_; }
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
@@ -141,13 +158,16 @@ inline GenericNode::ValueType GenericNode::valueType() const { ensureDataRead();
 inline const QString& GenericNode::rawValue() const { ensureDataRead(); return value_; }
 inline Model::NodeIdType GenericNode::id() const { ensureDataRead(); return id_; }
 inline Model::NodeIdType GenericNode::parentId() const { ensureDataRead(); return parentId_; }
-inline const QList<GenericNode*>& GenericNode::children() const { ensureDataRead(); return children_; }
-inline GenericNode* GenericNode::parent() const {ensureDataRead(); return parent_;} // Parent must be explicitly set
 
 inline bool GenericNode::hasStringValue() const { ensureDataRead(); return valueType_ == STRING_VALUE; }
 inline bool GenericNode::hasIntValue() const { ensureDataRead(); return valueType_ == INT_VALUE; }
 inline bool GenericNode::hasDoubleValue() const { ensureDataRead(); return valueType_ == DOUBLE_VALUE; }
 
 inline GenericPersistentUnit* GenericNode::persistentUnit() const {return persistentUnit_;}
+
+inline GenericTree* GenericNode::tree() const { return persistentUnit_->tree();}
+inline bool GenericNode::sameTree(const GenericNode* other)
+	{return persistentUnit_->tree() == other->persistentUnit_->tree();}
+
 
 } /* namespace FilePersistence */

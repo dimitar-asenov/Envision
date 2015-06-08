@@ -71,7 +71,7 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h \
-	src/commands/CommandWithDefaultArguments.h \
+    src/commands/CommandWithDefaultArguments.h \
     src/commands/CNewView.h \
     src/commands/CSwitchView.h \
     src/commands/CRemoveNodeFromView.h

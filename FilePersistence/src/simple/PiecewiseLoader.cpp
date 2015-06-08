@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,36 +24,62 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "PiecewiseLoader.h"
+#include "GenericTree.h"
+#include "GenericNode.h"
 
-#include "../oomodel_api.h"
+namespace FilePersistence {
 
-#include "../expressions/Expression.h"
-#include "../expressions/ReferenceExpression.h"
+PiecewiseLoader::PiecewiseLoader(GenericTree* tree) : tree_{tree}{}
+PiecewiseLoader::~PiecewiseLoader(){}
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MemberInitializer)
-
-namespace OOModel {
-/**
- *	This class represent various forms of member initializers.
- * It may be a call to a super constructor then \a memberReference will denote
- * the callee of the super constructor and \a initializedValue will denote the arguments.
- * In case of delegating constructors the \a memberRef will be empty,
- * as the \a initializedValue will contain a method call.
- * For simple member field initializers the \a memberReference will contain a reference to the field
- * and \a initializedValue the valued it should be initialized to
- */
-class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
+void PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(MemberInitializer)
+	Q_ASSERT(tree_->piecewiseLoader().get() == this);
+	Q_ASSERT(!id.isNull());
 
-	ATTRIBUTE(Expression, initializedValue, setInitializedValue)
-	ATTRIBUTE(ReferenceExpression, memberReference, setMemberReference)
+	auto newNode = loadNewNode(loadNodeData(id));
+	Q_ASSERT(newNode);
 
-	public:
-		MemberInitializer(ReferenceExpression* memberRef, Expression* initValue);
-		MemberInitializer(Expression* initValue);
+	newNode->linkNode();
+}
 
-};
+void PiecewiseLoader::loadAndLinkNodeChildren(Model::NodeIdType id)
+{
+	Q_ASSERT(tree_->piecewiseLoader().get() == this);
+	Q_ASSERT(!id.isNull());
+
+	auto childrenData = loadNodeChildrenData(id);
+	for (auto& childData : childrenData)
+	{
+		auto newNode = loadNewNode(childData);
+		if (newNode) newNode->linkNode();
+	}
+}
+
+GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
+{
+	Q_ASSERT(!nodeData.persistentUnit_.isEmpty());
+	Q_ASSERT(!nodeData.nodeLine_.isEmpty());
+
+	auto pu = tree_->persistentUnit(nodeData.persistentUnit_);
+	if (!pu) pu = &tree_->newPersistentUnit(nodeData.persistentUnit_);
+	Q_ASSERT(pu);
+
+	auto data = nodeData.nodeLine_.toUtf8();
+	auto node = pu->newNode(data.constData(), data.length()); // Will eagerly load the node's contents
+
+	auto alreadyExistingNode = tree_->find(node->id());
+	Q_ASSERT(alreadyExistingNode != node);
+
+	if (alreadyExistingNode)
+	{
+		Q_ASSERT(alreadyExistingNode->persistentUnit() == pu);
+		pu->releaseLastNode(); // Remove the node that we just created as it already exists
+		node = nullptr; // There was no new node loaded
+	}
+
+	return node;
+}
 
 }

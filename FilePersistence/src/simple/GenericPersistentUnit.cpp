@@ -59,9 +59,22 @@ GenericNode* GenericPersistentUnit::nextNode()
 	return chunks_.last() + lastNodeIndexInLastChunk_;
 }
 
+void GenericPersistentUnit::releaseLastNode()
+{
+	--lastNodeIndexInLastChunk_;
+	if (!chunks_.isEmpty() && lastNodeIndexInLastChunk_ < 0)
+	{
+		// We must release the last chunk
+		tree_->releaseChunk(chunks_.takeLast());
+		lastNodeIndexInLastChunk_ = GenericTree::ALLOCATION_CHUNK_SIZE - 1;
+	}
+}
+
 GenericNode* GenericPersistentUnit::newNode()
 {
 	Q_ASSERT(!data_);
+	Q_ASSERT(!tree_->piecewiseLoader());
+
 	auto node = nextNode();
 	node->reset(this);
 	return node;
@@ -71,6 +84,7 @@ GenericNode* GenericPersistentUnit::newNode(int lineStart, int lineEndEnclusive)
 {
 	Q_ASSERT(data_);
 	Q_ASSERT(lineEndEnclusive < dataSize_);
+	Q_ASSERT(!tree_->piecewiseLoader());
 
 	auto node = nextNode();
 	node->reset(this, data_+lineStart, lineEndEnclusive - lineStart + 1, true);
@@ -85,24 +99,25 @@ GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
 	return node;
 }
 
-GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy)
+GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool deepCopy)
 {
-	Q_ASSERT(!data_);
 	auto node = nextNode();
 	node->reset(this, nodeToCopy);
-	return node;
-}
-
-GenericNode* GenericPersistentUnit::newNode(const QString& fromString)
-{
-	auto data = fromString.toUtf8();
-	auto node = newNode(data.constData(), data.length());
-	node->ensureDataRead(); // We must eagerly load the node as data will disappear at the end of this method.
+	if (deepCopy)
+	{
+		for (auto childToCopy : nodeToCopy->children())
+		{
+			auto child = newNode(childToCopy, true);
+			child->setParent(node);
+			node->addChild(child);
+		}
+	}
 	return node;
 }
 
 const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 {
+	Q_ASSERT(!tree_->piecewiseLoader());
 	Q_ASSERT(!data_);
 	Q_ASSERT(data);
 	Q_ASSERT(dataSize > 0);
@@ -112,32 +127,12 @@ const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 	return data_;
 }
 
-GenericNode* GenericPersistentUnit::find(Model::NodeIdType id) const
-{
-	int numElementsInCurrentChunk = GenericTree::ALLOCATION_CHUNK_SIZE;
-	int currentChunk = 0;
-	for (auto chunk : chunks_)
-	{
-		if (currentChunk == chunks_.size() - 1)
-			numElementsInCurrentChunk = lastNodeIndexInLastChunk_;
-		for (int j = 0; j < numElementsInCurrentChunk; ++j)
-			if (chunk[j].id() == id)
-				return &chunk[j];
-		++currentChunk;
-	}
-	return nullptr;
-}
-
 GenericNode* GenericPersistentUnit::unitRootNode() const
 {
-	if (chunks_.isEmpty()) return nullptr;
+	if (chunks_.isEmpty())
+		return nullptr;
 	else
-	{
-		GenericNode* current = &(chunks_.first()[0]);
-		while (current->parent() && current->parent()->persistentUnit() == this)
-			current = current->parent();
-		return current;
-	}
+		return &(chunks_.first()[0]);
 }
 
 } /* namespace FilePersistence */

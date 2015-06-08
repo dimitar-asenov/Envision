@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,34 +26,35 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "../filepersistence_api.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
 
-#include "../expressions/Expression.h"
-#include "../expressions/ReferenceExpression.h"
+namespace FilePersistence {
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MemberInitializer)
+struct NodeData {
+	QString persistentUnit_;
+	QString nodeLine_;
+};
 
-namespace OOModel {
-/**
- *	This class represent various forms of member initializers.
- * It may be a call to a super constructor then \a memberReference will denote
- * the callee of the super constructor and \a initializedValue will denote the arguments.
- * In case of delegating constructors the \a memberRef will be empty,
- * as the \a initializedValue will contain a method call.
- * For simple member field initializers the \a memberReference will contain a reference to the field
- * and \a initializedValue the valued it should be initialized to
- */
-class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
+class GenericTree;
+class GenericNode;
+
+class PiecewiseLoader
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(MemberInitializer)
-
-	ATTRIBUTE(Expression, initializedValue, setInitializedValue)
-	ATTRIBUTE(ReferenceExpression, memberReference, setMemberReference)
-
 	public:
-		MemberInitializer(ReferenceExpression* memberRef, Expression* initValue);
-		MemberInitializer(Expression* initValue);
+		PiecewiseLoader(GenericTree* tree);
+		virtual ~PiecewiseLoader();
 
+		void loadAndLinkNode(Model::NodeIdType id);
+		void loadAndLinkNodeChildren(Model::NodeIdType id);
+
+	protected:
+		virtual NodeData loadNodeData(Model::NodeIdType id) = 0;
+		virtual QList<NodeData> loadNodeChildrenData(Model::NodeIdType id) = 0;
+
+	private:
+		GenericNode* loadNewNode(const NodeData& nodeData);
+		GenericTree* tree_{};
 };
 
 }
