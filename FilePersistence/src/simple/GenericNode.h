@@ -57,7 +57,7 @@ class FILEPERSISTENCE_API GenericNode {
 		GenericNode* addChild(GenericNode* child);
 		GenericNode* child(const QString& name);
 		const QList<GenericNode*>& children() const;
-		bool areChildrenLoaded() const;
+		bool areAllChildrenLoaded() const;
 		GenericNode* parent() const;
 
 		const QString& name() const;
@@ -85,6 +85,7 @@ class FILEPERSISTENCE_API GenericNode {
 
 		static const QString PERSISTENT_UNIT_TYPE;
 
+		void linkNode(bool recursiveLink = false);
 	private:
 		friend class GenericTree;
 		friend class GenericPersistentUnit;
@@ -104,7 +105,7 @@ class FILEPERSISTENCE_API GenericNode {
 		Model::NodeIdType parentId_{};
 		GenericNode* parent_{};
 		QList<GenericNode*> children_;
-		bool areChildrenLoaded_{};
+		bool areAllChildrenLoaded_{};
 
 		/**
 		 * The text line from which this node should be created.
@@ -135,21 +136,20 @@ class FILEPERSISTENCE_API GenericNode {
 
 		GenericTree* tree() const;
 		bool sameTree(const GenericNode* other);
-
-		void linkNode();
 };
 
 inline void GenericNode::setName(const QString& name) { name_ = name; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
-inline void GenericNode::setParentId(Model::NodeIdType parentId) { parent_ = nullptr; parentId_ = parentId; }
+inline void GenericNode::setParentId(Model::NodeIdType parentId)
+{ Q_ASSERT(!parent_ || !tree()->piecewiseLoader()); parentId_ = parentId; }
 inline void GenericNode::setChildren(QList<GenericNode*> children)
-{ Q_ASSERT(tree()->isWritable()); children_ = children; areChildrenLoaded_ = true; }
+{ children_ = children; areAllChildrenLoaded_ = true; }
 
 /**
  * Returns true if the return value of \a this.children() is valid.
  */
-inline bool GenericNode::areChildrenLoaded() const { return areChildrenLoaded_; }
+inline bool GenericNode::areAllChildrenLoaded() const { return areAllChildrenLoaded_; }
 
 inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }

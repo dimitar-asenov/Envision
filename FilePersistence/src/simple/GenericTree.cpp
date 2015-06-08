@@ -29,16 +29,11 @@
 
 namespace FilePersistence {
 
-GenericTree::GenericTree(QString name, QString commitName)
-	: name_{name}, commitName_{commitName}{}
-GenericTree::GenericTree(bool enableQuickLookup)
-	:enableQuickLookup_{enableQuickLookup}{}
-GenericTree::GenericTree(std::unique_ptr<PiecewiseLoader> loader)
-	: enableQuickLookup_{true}, piecewiseLoader_{std::move(loader)}{}
-GenericTree::GenericTree(QString name, bool enableQuickLookup)
-	: name_{name}, enableQuickLookup_{enableQuickLookup}{}
+GenericTree::GenericTree(QString name)
+	: name_{name}{}
+
 GenericTree::GenericTree(QString name, std::unique_ptr<PiecewiseLoader> loader)
-	: name_{name}, enableQuickLookup_{true}, piecewiseLoader_{std::move(loader)}{}
+	: name_{name}, piecewiseLoader_{std::move(loader)}{}
 
 GenericTree::~GenericTree()
 {
@@ -68,7 +63,7 @@ GenericPersistentUnit* GenericTree::persistentUnit(const QString& name)
 
 GenericNode* GenericTree::find(Model::NodeIdType id)
 {
-	Q_ASSERT(enableQuickLookup_);
+	Q_ASSERT(piecewiseLoader_);
 	return quickLookupHash_.value(id);
 }
 
