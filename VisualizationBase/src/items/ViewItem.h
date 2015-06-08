@@ -52,12 +52,29 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		const QList<Model::Node*> allNodes() const;
 		const QPoint positionOfNode(Model::Node* node) const;
 		const QPoint positionOfItem(Item* item) const;
+		Model::Node* nodeAt(int column, int row);
+
+		void addEmptyNode(int column, int row, int desiredYPosOfNextItem);
+
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 		const QString name() const;
 
 	private:
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
+
+		struct EmptyNodeParameters
+		{
+				EmptyNodeParameters(int column, int row, int desiredYPosOfNextItem)
+					:column{column}, row{row}, desiredYPosOfNextItem{desiredYPosOfNextItem} {}
+
+				int column{};
+				int row{};
+				int desiredYPosOfNextItem{};
+		};
+		QList<EmptyNodeParameters> emptyNodesToBuild_;
+		int emptyAfter(int column, int searchFromRow);
 
 		void ensureColumnExists(int column);
 
