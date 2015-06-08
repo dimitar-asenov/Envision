@@ -188,7 +188,9 @@ QList<CommandSuggestion*> CommandExecutionEngine::suggestionsForHandler(GenericH
 			if (alreadySuggested.contains(typeid(*command).hash_code())) continue;
 
 			QList<CommandSuggestion*> suggestions;
-			if (!trimmedCommandText.isEmpty() || command->appearsInMenus())
+			//If it is a menu command, we must make sure it can be interpreted on the current item in its current state
+			if (!trimmedCommandText.isEmpty() ||
+					(command->appearsInMenus() && command->canInterpret(source, target, QStringList(command->name()), cursor)))
 				suggestions = command->suggest(source, target, trimmedCommandText, cursor);
 
 			result.append( suggestions );

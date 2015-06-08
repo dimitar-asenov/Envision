@@ -37,14 +37,20 @@ CRemoveNodeFromView::CRemoveNodeFromView()
 bool CRemoveNodeFromView::canInterpret(Visualization::Item *source, Visualization::Item *target,
 	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
 {
-	 return CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor)
-			 && target->hasNode() && target->scene()->currentViewItem()->allNodes().contains(target->node());
+	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
+	//The first parent with a node should be in the current view
+	auto ancestor = source->findAncestorWithNode();
+	if (!ancestor) return false;
+	else
+		return canInterpret && ancestor->scene()->currentViewItem()->allNodes().contains(ancestor->node());
 }
 
-CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *source, Visualization::Item *,
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	target->scene()->currentViewItem()->removeNode(target->node());
+	//Go to the first parent of the source which has a node, which is a top-level item (as canInterpret checks)
+	auto ancestor = source->findAncestorWithNode();
+	ancestor->scene()->currentViewItem()->removeNode(ancestor->node());
 	return new CommandResult();
 }
 

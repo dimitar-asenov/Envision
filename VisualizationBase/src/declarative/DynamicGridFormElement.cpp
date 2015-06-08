@@ -140,7 +140,11 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 
 	// Remove all elements from the current grid that do not match a node
 	// If a node exists record it's location
-	QHash<Model::Node*, Item*> existingItems;
+	// One node might be visualized multiple times
+	QHash<Model::Node*, QList<Item*>> existingItems;
+
+	//Keep track of the positions at which we already found visualizations for nodes
+	QList<QPoint> usedPositions;
 
 	for (int x = 0; x < data.numColumns_; ++x)
 		for (int y = 0; y < data.numRows_; ++y)
@@ -149,13 +153,22 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 				bool found = false;
 
 				for (int n = 0; n < nodes.size(); ++n)
-					if (nodes[n].contains(data.itemGrid_[x][y]->node()))
-					{
-						found = true;
-						item->synchronizeItem(data.itemGrid_[x][y], data.itemGrid_[x][y]->node());
-						existingItems.insert(data.itemGrid_[x][y]->node(), data.itemGrid_[x][y]);
+				{
+					for (int j = 0; j < nodes[n].size(); ++j)
+						//We must make sure not to visualize one node with the same item twice
+						if (nodes[n][j] == data.itemGrid_[x][y]->node() && !usedPositions.contains(QPoint(n, j)))
+						{
+							item->synchronizeItem(data.itemGrid_[x][y], nodes[n][j]);
+							if (!existingItems.contains(nodes[n][j]))
+								existingItems.insert(nodes[n][j], {});
+							existingItems[nodes[n][j]].append(data.itemGrid_[x][y]);
+							usedPositions.append(QPoint(n, j));
+							found = true;
+							break;
+						}
+					if (found)
 						break;
-					}
+				}
 
 				if (!found) SAFE_DELETE_ITEM(data.itemGrid_[x][y]);
 				data.itemGrid_[x][y] = nullptr;
@@ -184,10 +197,13 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 		{
 			if (nodes[major][minor])
 			{
+				//We try to find an existing visualization of our current node, and create a new one if we don't
 				auto existingIterator = existingItems.find(nodes[major][minor]);
-				auto value = existingIterator != existingItems.end()
-						? existingIterator.value()
-						: item->renderer()->render(item, nodes[major][minor]);
+				Item* value;
+				if (existingIterator != existingItems.end() && !existingIterator.value().isEmpty())
+					value = existingIterator.value().takeFirst();
+				else
+					value = item->renderer()->render(item, nodes[major][minor]);
 
 				if (majorAxis_ == GridLayouter::ColumnMajor) data.itemGrid_[major][minor] = value;
 				else data.itemGrid_[minor][major] = value;
