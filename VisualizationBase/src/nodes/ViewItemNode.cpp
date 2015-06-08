@@ -24,14 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/NodeReference.h"
+#include "ViewItemNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::NodeReference)
+DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 
-namespace Model {
+namespace Visualization {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(NodeReference)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(NodeReference)
+NODE_DEFINE_EMPTY_CONSTRUCTORS(ViewItemNode)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
+
+ViewItemNode::ViewItemNode(Model::Node* target, Model::Node* parent)
+	:ViewItemNode(parent)
+{
+	setTarget(target);
+}
 
 }

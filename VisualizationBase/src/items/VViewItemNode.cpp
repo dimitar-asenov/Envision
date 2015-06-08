@@ -23,31 +23,25 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#pragma once
+#include "VViewItemNode.h"
 
-#include "../visualizationbase_api.h"
-#include "../../VisualizationBase/src/items/ItemWithNode.h"
-#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "ModelBase/src/nodes/NodeReference.h"
-
+#include "../src/declarative/DeclarativeItemDef.h"
+#include "nodes/ViewItemNode.h"
+#include "declarative/GridLayoutFormElement.h"
 
 namespace Visualization {
 
-/**
- * The VNodeReference class visualizes a NodeReference, simply by visualizing only its target
- */
-class VISUALIZATIONBASE_API VNodeReference :
-		public Super<ItemWithNode<VNodeReference, DeclarativeItem<VNodeReference>, Model::NodeReference>> {
+ITEM_COMMON_DEFINITIONS(VViewItemNode, "item")
 
-	ITEM_COMMON_CUSTOM_STYLENAME(VNodeReference, DeclarativeItemBaseStyle)
+VViewItemNode::VViewItemNode(Item* parent, NodeType* node, const StyleType* style) :
+		Super(parent, node, style)
+{
+}
 
-	public:
-		VNodeReference(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-
-		static void initializeForms();
-
-	private:
-		Item* target_{};
-};
+void VViewItemNode::initializeForms()
+{
+	//We only need to visualize the target node
+	addForm(item(&I::target_, [](I* v) { return v->node()->target(); }));
+}
 
 }

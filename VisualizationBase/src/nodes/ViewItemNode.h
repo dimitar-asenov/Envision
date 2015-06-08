@@ -26,34 +26,36 @@
 
 #pragma once
 
-#include "../../ModelBase/src/nodes/Reference.h"
-#include "TypedList.h"
-#include "nodeMacros.h"
+#include "visualizationbase_api.h"
+#include "ModelBase/src/nodes/Reference.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(MODELBASE_API, Model, NodeReference)
+DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
 
-namespace Model {
+namespace Visualization {
 
 /**
  * The NodeReference class is used in the ViewItem class and simply wraps a top level node
  * to give another level of indirection. This helps with distinguishing different items when
  * the same node is added to a ViewItem multiple times, as is possible.
  */
-class MODELBASE_API NodeReference: public Super<Reference>
+class VISUALIZATIONBASE_API ViewItemNode: public Super<Model::Reference>
 {
 
-	NODE_DECLARE_STANDARD_METHODS(NodeReference)
+	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
 
 	public:
-		void setTarget(Node* target);
-		virtual Node* computeTarget() const override;
+		ViewItemNode(Model::Node* target, Model::Node* parent);
+		void setTarget(Model::Node* target);
+		virtual Model::Node* computeTarget() const override;
 
 	private:
-		Node* target_;
+		Model::Node* target_;
 
 };
 
-inline void NodeReference::setTarget(Node *target) { target_ = target; }
-inline Node* NodeReference::computeTarget() const { return target_; }
+inline void ViewItemNode::setTarget(Model::Node *target) { target_ = target; }
+inline Model::Node* ViewItemNode::computeTarget() const { return target_; }
 
 }

@@ -82,5 +82,6 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 };
 
 inline const QString ViewItem::name() const { return name_; }
+inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
 
 }

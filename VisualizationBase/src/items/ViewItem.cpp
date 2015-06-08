@@ -27,9 +27,9 @@
 
 #include "../src/declarative/DeclarativeItemDef.h"
 #include "declarative/DynamicGridFormElement.h"
-#include "items/VNodeReference.h"
+#include "items/VViewItemNode.h"
 #include "ModelBase/src/nodes/EmptyNode.h"
-#include "ModelBase/src/nodes/NodeReference.h"
+#include "nodes/ViewItemNode.h"
 
 namespace Visualization {
 
@@ -65,8 +65,7 @@ void ViewItem::insertColumn(int column)
 
 void ViewItem::insertNode(Model::Node* node, int column, int row)
 {
-	auto ref = new Model::NodeReference();
-	ref->setTarget(node);
+	auto ref = new ViewItemNode(node, nullptr);
 	//First, make sure the current grid is big enough to fit the node
 	ensureColumnExists(column);
 	if (nodes_[column].size() <= row)
@@ -118,7 +117,7 @@ const QPoint ViewItem::positionOfNode(Model::Node *node) const
 
 const QPoint ViewItem::positionOfItem(Item *item) const
 {
-	auto vref = DCast<VNodeReference>(item);
+	auto vref = DCast<VViewItemNode>(item);
 	if (vref)
 		return positionOfNode(vref->node());
 	else return QPoint(-1, -1);
@@ -156,8 +155,7 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		auto empty = new Model::EmptyNode(nullptr);
 		empty->setCustomSize(0, nodeHeight);
 		ensureColumnExists(node.column);
-		auto ref = new Model::NodeReference();
-		ref->setTarget(empty);
+		auto ref = new ViewItemNode(empty, nullptr);
 		nodes_[node.column].insert(node.row, ref);
 		setUpdateNeeded(RepeatUpdate);
 	}
@@ -167,14 +165,9 @@ int ViewItem::emptyAfter(int column, int searchFromRow)
 {
 	for (int r = searchFromRow; r < nodes_[column].size(); r++)
 		if (nodes_[column][r] && DCast<Model::EmptyNode>(
-								DCast<Model::NodeReference>(nodes_[column][r])->target()))
+								DCast<ViewItemNode>(nodes_[column][r])->target()))
 			return r;
 	return -1;
-}
-
-QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
-{
-	return nodes_;
 }
 
 void ViewItem::ensureColumnExists(int column)
