@@ -23,18 +23,29 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "VEmptyNode.h"
 
-#include "../shapes/Shape.h"
+#pragma once
+
+#include "../visualizationbase_api.h"
+
+#include "EmptyItem.h"
+#include "ItemWithNode.h"
+#include "ItemMacros.h"
+#include "ItemStyle.h"
+#include "nodes/SpacingNode.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VEmptyNode, "item")
-
-VEmptyNode::VEmptyNode(Item *parent, NodeType *node, const StyleType *style)
-	:Super(parent, node, style)
+/**
+ * A stretchable item which is empty and can be used to draw a shape. Contains an empty
+ * node so it can be used in ViewItems.
+ */
+class VISUALIZATIONBASE_API VSpacingNode : public Super<ItemWithNode<VSpacingNode, EmptyItem, SpacingNode>>
 {
-	setCustomSize(node->customSize().x(), node->customSize().y());
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(VSpacingNode, ItemStyle)
+
+	public:
+		VSpacingNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+};
 
 } /* namespace Visualization */

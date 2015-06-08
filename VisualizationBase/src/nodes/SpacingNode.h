@@ -26,34 +26,35 @@
 
 #pragma once
 
-#include "TypedList.h"
-#include "nodeMacros.h"
+#include "visualizationbase_api.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(MODELBASE_API, Model, EmptyNode)
+DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, SpacingNode)
 
-namespace Model {
+namespace Visualization {
 
 /**
- * EmptyNode can be used to create an empty visualization in a view, where
- * it is required for the visualization to contain a node. This node should not
- * actually be included in an AST.
+ * The NodeReference class is used in the ViewItem class and simply wraps a top level node
+ * to give another level of indirection. This helps with distinguishing different items when
+ * the same node is added to a ViewItem multiple times, as is possible.
  */
-class MODELBASE_API EmptyNode: public Super<Node>
+class VISUALIZATIONBASE_API SpacingNode: public Super<Model::CompositeNode>
 {
-	NODE_DECLARE_STANDARD_METHODS(EmptyNode)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(SpacingNode)
+
+	ATTRIBUTE_VALUE(::Model::Integer, height, setHeight, int)
+	ATTRIBUTE_VALUE(::Model::Integer, width, setWidth, int)
 
 	public:
-		void setCustomSize(int width, int height);
-		QPoint customSize() const;
+		SpacingNode(int width, int height, Model::Node* parent = nullptr);
+		QPoint size() const;
 
-		virtual void save(PersistentStore& store) const;
-		virtual void load(PersistentStore& store);
-
-	private:
-		QPoint size_;
 };
 
-inline void EmptyNode::setCustomSize(int width, int height) { size_ = QPoint(width, height); }
-inline QPoint EmptyNode::customSize() const { return size_; }
+inline QPoint SpacingNode::size() const { return QPoint(width(), height()); }
+
 
 }

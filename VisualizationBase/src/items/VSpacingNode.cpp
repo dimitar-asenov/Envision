@@ -23,30 +23,16 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#pragma once
-
-#include "../visualizationbase_api.h"
-
-#include "EmptyItem.h"
-#include "ItemWithNode.h"
-#include "ItemMacros.h"
-#include "ItemStyle.h"
-
-#include "ModelBase/src/nodes/EmptyNode.h"
+#include "VSpacingNode.h"
 
 namespace Visualization {
 
-/**
- * A stretchable item which is empty and can be used to draw a shape. Contains an empty
- * node so it can be used in ViewItems.
- */
-class VISUALIZATIONBASE_API VEmptyNode : public Super<ItemWithNode<VEmptyNode, EmptyItem, Model::EmptyNode>>
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VEmptyNode, ItemStyle)
+ITEM_COMMON_DEFINITIONS(VSpacingNode, "item")
 
-	public:
-		VEmptyNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-};
+VSpacingNode::VSpacingNode(Item *parent, NodeType *node, const StyleType *style)
+	:Super(parent, node, style)
+{
+	setCustomSize(node->width(), node->height());
+}
 
 } /* namespace Visualization */

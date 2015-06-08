@@ -28,7 +28,7 @@
 #include "../src/declarative/DeclarativeItemDef.h"
 #include "declarative/DynamicGridFormElement.h"
 #include "items/VViewItemNode.h"
-#include "ModelBase/src/nodes/EmptyNode.h"
+#include "nodes/SpacingNode.h"
 #include "nodes/ViewItemNode.h"
 
 namespace Visualization {
@@ -152,8 +152,7 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		}
 		//TODO@cyril Would be nice not to hardcode the "-20", it takes the margin of the grid into account
 		auto nodeHeight = node.desiredYPosOfNextItem - 20 - curHeight;
-		auto empty = new Model::EmptyNode(nullptr);
-		empty->setCustomSize(0, nodeHeight);
+		auto empty = new SpacingNode(30, nodeHeight);
 		ensureColumnExists(node.column);
 		auto ref = new ViewItemNode(empty, nullptr);
 		nodes_[node.column].insert(node.row, ref);
@@ -164,7 +163,7 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 int ViewItem::emptyAfter(int column, int searchFromRow)
 {
 	for (int r = searchFromRow; r < nodes_[column].size(); r++)
-		if (nodes_[column][r] && DCast<Model::EmptyNode>(
+		if (nodes_[column][r] && DCast<SpacingNode>(
 								DCast<ViewItemNode>(nodes_[column][r])->target()))
 			return r;
 	return -1;

@@ -24,38 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "EmptyNode.h"
+#include "SpacingNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Model::EmptyNode)
+DEFINE_TYPED_LIST(Visualization::SpacingNode)
 
-namespace Model {
+namespace Visualization {
 
-EmptyNode::EmptyNode(Node* parent) : Super(parent)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SpacingNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SpacingNode)
+
+REGISTER_ATTRIBUTE(SpacingNode, height, Integer, false, false, true)
+REGISTER_ATTRIBUTE(SpacingNode, width, Integer, false, false, true)
+
+SpacingNode::SpacingNode(int width, int height, Model::Node *parent)
+	:SpacingNode(parent)
 {
-}
-
-EmptyNode::EmptyNode(Node* parent, PersistentStore& store, bool)
-	:Super(parent)
-{
-	load(store);
-}
-
-
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(EmptyNode)
-
-void EmptyNode::save(PersistentStore& store) const
-{
-	store.saveStringValue(size_.x() + "," + size_.y());
-}
-
-void EmptyNode::load(PersistentStore& store)
-{
-	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load an EmptyNode node from an incompatible node type " + store.currentNodeType());
-	auto val = store.loadStringValue();
-	auto parts = val.split(",");
-	size_ = QPoint(parts.at(0).toInt(), parts.at(1).toInt());
+	setHeight(height);
+	setWidth(width);
 }
 
 }
