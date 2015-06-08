@@ -64,7 +64,7 @@ void GenericPersistentUnit::releaseLastNode()
 	--lastNodeIndexInLastChunk_;
 	if (!chunks_.isEmpty() && lastNodeIndexInLastChunk_ < 0)
 	{
-		// We must reseale the last chunk
+		// We must release the last chunk
 		tree_->releaseChunk(chunks_.takeLast());
 		lastNodeIndexInLastChunk_ = GenericTree::ALLOCATION_CHUNK_SIZE - 1;
 	}

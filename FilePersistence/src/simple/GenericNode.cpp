@@ -244,7 +244,7 @@ void GenericNode::linkNode()
 
 		// Link to children
 		auto childIt = tree()->nodesWithoutParents().find(id_);
-		while (childIt != tree()->nodesWithoutParents().end())
+		while (childIt != tree()->nodesWithoutParents().end() && childIt.key() == id_)
 		{
 			auto child = childIt.value();
 			child->setParent(this);
