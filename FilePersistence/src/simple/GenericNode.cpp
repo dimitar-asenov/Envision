@@ -27,17 +27,15 @@
 #include "GenericNode.h"
 #include "GenericPersistentUnit.h"
 #include "Parser.h"
+#include "PiecewiseLoader.h"
 
 namespace FilePersistence {
+
+const QString GenericNode::PERSISTENT_UNIT_TYPE = "persistencenewunit";
 
 static const int MAX_DOUBLE_PRECISION = 15;
 
 GenericNode::GenericNode(){}
-
-inline bool GenericNode::sameTree(const GenericNode* other)
-{
-	return persistentUnit_->tree() == other->persistentUnit_->tree();
-}
 
 const QString& GenericNode::valueAsString() const
 {
@@ -70,9 +68,34 @@ double GenericNode::valueAsDouble() const
 	return res;
 }
 
+GenericNode* GenericNode::parent() const
+{
+	ensureDataRead();
+	if (!parent_ && tree()->piecewiseLoader())
+		tree()->piecewiseLoader()->loadAndLinkNode(parentId_);
+	return parent_;
+}
+
+const QList<GenericNode*>& GenericNode::children() const
+{
+	ensureDataRead();
+	if (!areAllChildrenLoaded_ && tree()->piecewiseLoader())
+	{
+		tree()->piecewiseLoader()->loadAndLinkNodeChildren(id_);
+		const_cast<GenericNode*>(this)->areAllChildrenLoaded_ = true;
+	}
+	return children_;
+}
+
 GenericNode* GenericNode::child(const QString& name)
 {
 	ensureDataRead();
+	if (!areAllChildrenLoaded_ && tree()->piecewiseLoader())
+	{
+		tree()->piecewiseLoader()->loadAndLinkNodeChildren(id_);
+		areAllChildrenLoaded_ = true;
+	}
+
 	for (auto c : children_)
 		if (c->name() == name) return c;
 
@@ -126,6 +149,7 @@ void GenericNode::resetValue(ValueType type, const QString& value)
 
 void GenericNode::setParent(GenericNode* parent)
 {
+	Q_ASSERT(!tree()->piecewiseLoader());
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
 	Q_ASSERT(parentId_.isNull() || parent->id().isNull() || parentId_ == parent->id());
@@ -133,6 +157,7 @@ void GenericNode::setParent(GenericNode* parent)
 
 GenericNode* GenericNode::addChild(GenericNode* child)
 {
+	Q_ASSERT(!tree()->piecewiseLoader());
 	Q_ASSERT(child);
 	Q_ASSERT(sameTree(child));
 	Q_ASSERT(value_.isEmpty());
@@ -141,18 +166,6 @@ GenericNode* GenericNode::addChild(GenericNode* child)
 	children_.append(child);
 	return child;
 }
-
-GenericNode* GenericNode::find(Model::NodeIdType id)
-{
-	ensureDataRead();
-	if (id_ == id) return this;
-	for (auto c : children_)
-		if (auto found = c->find(id)) return found;
-
-	return nullptr;
-}
-
-const QString GenericNode::persistentUnitType = "persistencenewunit";
 
 void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 {
@@ -194,6 +207,8 @@ void GenericNode::reset(const GenericNode* nodeToCopy)
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy)
 {
 	Q_ASSERT(nodeToCopy);
+	Q_ASSERT(tree()->piecewiseLoader() != nullptr);
+	Q_ASSERT(!sameTree(nodeToCopy));
 	reset(persistentUnit);
 
 	if (nodeToCopy->dataLine_)
@@ -205,7 +220,6 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode
 		value_ = nodeToCopy->value_;
 		valueType_ = nodeToCopy->valueType_;
 		id_ = nodeToCopy->id_;
-		parent_ = nodeToCopy->parent_;
 		parentId_ = nodeToCopy->parentId_;
 	}
 }
@@ -217,6 +231,44 @@ void GenericNode::ensureDataRead() const
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine_, dataLineLength_);
 		// Don't delete the line, we don't own it.
 		const_cast<GenericNode*>(this)->dataLine_ = nullptr;
+	}
+}
+
+void GenericNode::linkNode(bool recursiveLink)
+{
+	if (tree()->piecewiseLoader())
+	{
+		// Link to parent
+		if (auto parentNode = tree()->find(parentId_))
+		{
+			setParent(parentNode);
+			parentNode->addChild(this);
+		}
+		else tree()->nodesWithoutParents().insert(parentId_, this);
+
+		// Link to children
+		auto childIt = tree()->nodesWithoutParents().find(id_);
+		while (childIt != tree()->nodesWithoutParents().end() && childIt.key() == id_)
+		{
+			auto child = childIt.value();
+			child->setParent(this);
+			addChild(child);
+			childIt = tree()->nodesWithoutParents().erase(childIt);
+		}
+
+		// Add to lookup
+		QList<GenericNode*> stack = {this};
+		while (!stack.isEmpty())
+		{
+			auto currentNode = stack.takeLast();
+			auto found = tree()->find(currentNode->id_);
+			Q_ASSERT(!found || found == currentNode);
+			if (!found) tree()->quickLookupHash_.insert(currentNode->id_, currentNode);
+
+			if (!recursiveLink) break;
+
+			stack.append(currentNode->children());
+		}
 	}
 }
 

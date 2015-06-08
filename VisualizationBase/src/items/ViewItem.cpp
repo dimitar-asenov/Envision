@@ -47,26 +47,38 @@ void ViewItem::initializeForms()
 				  return self->nodesGetter(); }));
 }
 
+void ViewItem::insertColumn(int column)
+{
+	//Make sure we actually have enough columns
+	ensureColumnExists(column);
+	//Only insert the column, if the current one at index is not empty
+	auto isEmpty = true;
+	for (auto item : nodes_.at(column))
+		isEmpty = isEmpty && item == nullptr;
+	//If we have elements, insert a new column (else we can use the empty column)
+	if (!isEmpty)
+		nodes_.insert(column, {});
+}
+
 void ViewItem::insertNode(Model::Node* node, int column, int row)
 {
-	if (nodes_.size() < column)
-		nodes_.resize(column);
-	if (nodes_.size() <= column)
-		nodes_.insert(column, {});
-	if (nodes_[column].size() < row)
-		nodes_[column].resize(row);
-	nodes_[column].insert(row, node);
+	//First, make sure the current grid is big enough to fit the node
+	ensureColumnExists(column);
+	if (nodes_[column].size() <= row)
+		nodes_[column].resize(row + 1);
+	//We can either put the node at a free space if exists, or insert otherwise
+	if (nodes_.at(column).at(row) == nullptr)
+		nodes_[column][row] = node;
+	else
+		nodes_[column].insert(row, node);
 	setUpdateNeeded(StandardUpdate);
 }
 
 void ViewItem::removeNode(Model::Node* node)
 {
-	for (int i = 0; i < nodes_.size(); i++)
-	{
-		auto index = nodes_.at(i).indexOf(node);
-		if (index != -1)
-			nodes_[i].remove(index);
-	}
+	auto point = positionOfNode(node);
+	if (point.x() != -1)
+		nodes_[point.x()].remove(point.y());
 	setUpdateNeeded(StandardUpdate);
 }
 
@@ -79,8 +91,49 @@ const QList<Model::Node*> ViewItem::allNodes() const
 	return result;
 }
 
+const QPoint ViewItem::positionOfNode(Model::Node *node) const
+{
+	for (int i = 0; i < nodes_.size(); i++)
+	{
+		auto index = nodes_.at(i).indexOf(node);
+		if (index != -1)
+			return QPoint(i, index);
+	}
+	return QPoint(-1, -1);
+}
+
 QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
 {
 	return nodes_;
 }
+
+void ViewItem::ensureColumnExists(int column)
+{
+	if (nodes_.size() <= column)
+		nodes_.resize(column + 1);
+}
+
+QString ViewItem::debugNodes()
+{
+	//Prints the node grid as a debug string
+	QString result;
+	int maxHeight = 0;
+	for (int i = 0; i < nodes_.size(); i++)
+		if (nodes_.at(i).size() > maxHeight)
+			maxHeight = nodes_.at(i).size();
+
+	for (int row = 0; row < maxHeight; row++)
+	{
+		for (int col = 0; col < nodes_.size(); col++)
+		{
+			if (nodes_.at(col).size() > row)
+				result += nodes_.at(col).at(row) ? (nodes_.at(col).at(row)->typeName() + " ") : "null ";
+			else
+				result += "null ";
+		}
+		result += "\n";
+	}
+	return result;
+}
+
 }

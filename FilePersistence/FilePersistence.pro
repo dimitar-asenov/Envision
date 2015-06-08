@@ -17,20 +17,7 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/filepersistence_api.h \
     src/precompiled.h \
     src/FilePersistencePlugin.h \
-    src/version_control/ChangeDescription.h \
-    src/version_control/Commit.h \
-    src/version_control/CommitGraph.h \
-    src/version_control/Diff.h \
-    src/version_control/GitRepository.h \
-    src/version_control/History.h \
-    src/version_control/Merge.h \
-    src/version_control/ChangeDependencyGraph.h \
-    src/version_control/ConflictPairs.h \
-    src/version_control/ConflictUnitDetector.h \
-    src/version_control/ListMergeComponent.h \
-    src/version_control/ConflictPipelineComponent.h \
-    src/version_control/Utils.h \
-    src/version_control/LinkedChangesTransition.h
+    src/simple/PiecewiseLoader.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
@@ -45,23 +32,5 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     test/LoadTests.cpp \
     test/SaveTests.cpp \
     src/FilePersistencePlugin.cpp \
-    src/version_control/ChangeDescription.cpp \
-    src/version_control/Diff.cpp \
-    src/version_control/GitRepository.cpp \
-    test/VersionControlDiffTests.cpp \
-    src/version_control/CommitGraph.cpp \
-    src/version_control/History.cpp \
-    src/version_control/Commit.cpp \
-    src/version_control/Merge.cpp \
-    src/version_control/ChangeDependencyGraph.cpp \
-    src/version_control/ConflictPairs.cpp \
-    src/version_control/ConflictUnitDetector.cpp \
-    src/version_control/ListMergeComponent.cpp \
-    src/version_control/ConflictPipelineComponent.cpp \
-    src/version_control/Utils.cpp \
-    test/VersionControlMergetests.cpp \
-    src/version_control/LinkedChangesTransition.cpp
+    src/simple/PiecewiseLoader.cpp
 RESOURCES = FilePersistence.qrc
-
-unix:LIBS += -lgit2
-INCLUDEPATH += /usr/local/lib/libgit2-0.21.0/include/

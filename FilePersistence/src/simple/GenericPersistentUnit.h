@@ -34,6 +34,7 @@ namespace FilePersistence {
 
 class GenericTree;
 class GenericNode;
+class PiecewiseLoader;
 
 class FILEPERSISTENCE_API GenericPersistentUnit {
 	public:
@@ -46,7 +47,6 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		GenericNode* newNode(int lineStart, int lineEndEnclusive);
 		GenericNode* newNode(const char* data, int dataLength);
 		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-		GenericNode* newNode(const QString& fromString);
 
 		/**
 		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
@@ -56,8 +56,6 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		 */
 		const char* setData(const char* data, int dataSize);
 
-		GenericNode* find(Model::NodeIdType id) const;
-
 		/**
 		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
 		 * loaded.
@@ -66,6 +64,7 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 
 	private:
 		friend class GenericTree;
+		friend class PiecewiseLoader;
 		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
 
 		GenericTree* tree_{};
@@ -77,6 +76,7 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		int lastNodeIndexInLastChunk_{};
 
 		GenericNode* nextNode();
+		void releaseLastNode();
 };
 
 inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }

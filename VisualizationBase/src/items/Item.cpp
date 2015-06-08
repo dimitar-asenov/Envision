@@ -382,6 +382,14 @@ void Item::setRevision(int)
 {
 }
 
+Item* Item::findAncestorWithNode()
+{
+	auto result = this;
+	while (result && !result->hasNode())
+		result = result->parent();
+	return result;
+}
+
 bool Item::itemOrChildHasFocus() const
 {
 	return QGraphicsItem::scene()->focusItem() == this

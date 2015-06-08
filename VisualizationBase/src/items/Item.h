@@ -70,6 +70,12 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual int revision() const;
 		virtual void setRevision(int newRevision);
 
+		/**
+		 * Returns the first ancestor with a node, or nullptr if none such exists. If the item itself contains a node,
+		 * returns this.
+		 */
+		Item* findAncestorWithNode();
+
 		bool itemOrChildHasFocus() const;
 		bool hasSceneCursor() const;
 

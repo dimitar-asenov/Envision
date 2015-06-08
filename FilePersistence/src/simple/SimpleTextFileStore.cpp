@@ -158,7 +158,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	{
 		auto child = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
 		child->setName(name);
-		child->setType(GenericNode::persistentUnitType);
+		child->setType(GenericNode::PERSISTENT_UNIT_TYPE);
 		child->setId(treeManager_->nodeIdMap().id(node));
 		if (node->parent()) child->setParentId(treeManager_->nodeIdMap().id(node->parent()));
 	}
@@ -307,7 +307,7 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 		genericNode_ = c;
 
 		Model::LoadedNode ln;
-		if ( genericNode_->type() == GenericNode::persistentUnitType )
+		if ( genericNode_->type() == GenericNode::PERSISTENT_UNIT_TYPE )
 			ln = loadNewPersistenceUnit(
 					genericNode_->id().toString(), parent, loadPartially.contains(genericNode_->name()));
 		else ln = loadNode(parent, loadPartially.contains(genericNode_->name()));
@@ -339,7 +339,7 @@ Model::Node* SimpleTextFileStore::loadSubNode(Model::Node* parent, const QString
 	genericNode_ = child;
 
 	Model::LoadedNode ln;
-	if ( child->type() == GenericNode::persistentUnitType )
+	if ( child->type() == GenericNode::PERSISTENT_UNIT_TYPE )
 		ln = loadNewPersistenceUnit(genericNode_->id().toString(), parent, loadPartially);
 	else ln = loadNode(parent, loadPartially);
 

@@ -23,48 +23,40 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+
 #pragma once
 
-#include "../visualizationbase_api.h"
-#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../oointeraction_api.h"
+#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
+
 
 namespace Visualization {
+	class Item;
+}
 
-/**
- * The ViewItem class represents the visualization of an entire view within a single item.
- *
- * All items in a view should be added and removed via this ViewItem class. Each Scene object contains
- * a list of ViewItem objects which can be used for that. Using this, it is possible to control what
- * is shown on the screen.
- */
-class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
+namespace OOModel {
+	class Method;
+}
 
-	ITEM_COMMON_CUSTOM_STYLENAME(ViewItem, DeclarativeItemBaseStyle)
+namespace OOInteraction {
 
+class OOINTERACTION_API CAddCalleesToView : public Interaction::CommandWithDefaultArguments
+{
 	public:
-		ViewItem(Item* parent, QString name = QString(), StyleType* style = itemStyles().get());
+		CAddCalleesToView();
 
-		static void initializeForms();
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
 
-		void insertColumn(int column);
-		void insertNode(Model::Node* node, int column = 0, int row = 0);
-		void removeNode(Model::Node* node);
-		const QList<Model::Node*> allNodes() const;
-		const QPoint positionOfNode(Model::Node* node) const;
+	protected:
+		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
 
-		const QString name() const;
+		virtual QString description(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
 
 	private:
-		QVector<QVector<Model::Node*>> nodes_;
-		QString name_;
-
-		void ensureColumnExists(int column);
-
-		QVector<QVector<Model::Node*>> nodesGetter();
-
-		QString debugNodes();
+		QSet<OOModel::Method*> callees(Model::Node* parent);
 };
-
-inline const QString ViewItem::name() const { return name_; }
 
 }

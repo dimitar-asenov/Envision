@@ -80,6 +80,8 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		int commandSelectedFirst_{};
 		int commandSelectedLast_{};
 
+		bool hideRequested_{};
+
 		QSharedPointer<CommandResult> result_;
 		QList<CommandSuggestion*> suggestions_;
 
