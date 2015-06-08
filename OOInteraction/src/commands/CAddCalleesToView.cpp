@@ -33,7 +33,7 @@
 namespace OOInteraction {
 
 CAddCalleesToView::CAddCalleesToView()
-	:CommandWithDefaultArguments("addCallees", {"current"})
+	:CommandWithDefaultArguments("addCallees", {""})
 {
 }
 
@@ -53,9 +53,7 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 	auto ancestor = source->findAncestorWithNode();
 	auto name = arguments.at(0);
 
-	if (name == "current")
-		name = ancestor->scene()->currentViewItem()->name();
-	auto view = ancestor->scene()->viewItem(name);
+	auto view = ancestor->scene()->currentViewItem();
 
 	if (view)
 	{
@@ -64,6 +62,7 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 
 		if (callees_.size() > 0)
 		{
+			auto height = pos.x() == -1 ? 0 : ancestor->scenePos().y();
 			//TODO@cyril What if it is in the view, but not as a top-level item?
 			if (pos.x() == -1)
 			{
@@ -71,11 +70,15 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 				view->insertNode(ancestor->node(), 0, 0);
 				pos = view->positionOfNode(ancestor->node());
 			}
-			//TODO@cyril Insert the nodes in a good order
 			view->insertColumn(pos.x() + 1);
-			auto row = callees_.size() - 1;
+			auto row = 0;
+			//Make the first callee appear at the same height as the method
+			if (height > 10) //Higher than margin?
+			{
+				view->addEmptyNode(pos.x() + 1, 0, height);
+			}
 			for (auto callee : callees_)
-				view->insertNode(callee, pos.x() + 1, row--);
+				view->insertNode(callee, pos.x() + 1, row++);
 		}
 		return new Interaction::CommandResult();
 	}
@@ -98,13 +101,9 @@ QSet<OOModel::Method*> CAddCalleesToView::callees(Model::Node* parent)
 
 
 QString CAddCalleesToView::description(Visualization::Item*, Visualization::Item*,
-		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto name = arguments.at(0);
-	if (name == "current")
-		return "Add the callees of the current method to the current view";
-	else
-		return "Add the callees of the current method to the view " + name;
+	return "Add the callees of the current method to the current view";
 
 }
 
