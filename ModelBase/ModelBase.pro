@@ -51,7 +51,8 @@ HEADERS += src/persistence/NodeIdMap.h \
     src/ModelBasePlugin.h \
     src/model/TreeManager.h \
     src/model/AllTreeManagers.h \
-    src/nodes/NodeReference.h
+    src/nodes/NodeReference.h \
+    src/nodes/EmptyNode.h
 SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/NameText.cpp \
     src/nodes/UsedLibrary.cpp \
@@ -99,4 +100,5 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     src/ModelBasePlugin.cpp \
     src/model/TreeManager.cpp \
     src/model/AllTreeManagers.cpp \
-    src/nodes/NodeReference.cpp
+    src/nodes/NodeReference.cpp \
+    src/nodes/EmptyNode.cpp
