@@ -39,7 +39,6 @@ class FILEPERSISTENCE_API GenericTree {
 	public:
 
 		GenericTree(QString name = QString());
-		GenericTree(QString name, std::unique_ptr<PiecewiseLoader> loader);
 		~GenericTree();
 
 		const QString& name() const;
@@ -52,6 +51,8 @@ class FILEPERSISTENCE_API GenericTree {
 
 		GenericNode* find(Model::NodeIdType id);
 
+		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);
+
 	private:
 		friend class GenericPersistentUnit;
 		friend class GenericNode;
@@ -61,7 +62,7 @@ class FILEPERSISTENCE_API GenericTree {
 
 		QHash<Model::NodeIdType, GenericNode*> quickLookupHash_;
 		QMultiHash<Model::NodeIdType, GenericNode*> nodesWithoutParents_;
-		std::unique_ptr<PiecewiseLoader> piecewiseLoader_;
+		std::shared_ptr<PiecewiseLoader> piecewiseLoader_;
 
 		QHash<QString, GenericPersistentUnit> persistentUnits_;
 
@@ -71,7 +72,7 @@ class FILEPERSISTENCE_API GenericTree {
 		GenericNode* emptyChunk();
 		void releaseChunk(GenericNode* unusedChunk);
 
-		const std::unique_ptr<PiecewiseLoader>& piecewiseLoader() const;
+		const std::shared_ptr<PiecewiseLoader>& piecewiseLoader() const;
 		QMultiHash<Model::NodeIdType, GenericNode*>& nodesWithoutParents();
 };
 
@@ -80,7 +81,7 @@ inline const QString& GenericTree::name() const { return name_; }
 inline void GenericTree::remove(const QString& persistentUnitName) { persistentUnits_.remove(persistentUnitName); }
 inline void GenericTree::remove(const GenericPersistentUnit& unit) { remove(unit.name()); }
 
-inline const std::unique_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() const { return piecewiseLoader_;}
+inline const std::shared_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() const { return piecewiseLoader_;}
 inline QMultiHash<Model::NodeIdType, GenericNode*>& GenericTree::nodesWithoutParents() { return nodesWithoutParents_;}
 
 } /* namespace FilePersistence */
