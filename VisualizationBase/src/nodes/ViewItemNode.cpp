@@ -31,8 +31,17 @@ DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 
 namespace Visualization {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(ViewItemNode)
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
+
+ViewItemNode::ViewItemNode(Model::Node* parent)
+	:Super(parent)
+{
+}
+
+ViewItemNode::ViewItemNode(Model::Node* parent, Model::PersistentStore&, bool)
+	:Super(parent)
+{
+}
 
 ViewItemNode::ViewItemNode(Model::Node* target, Model::Node* parent)
 	:ViewItemNode(parent)

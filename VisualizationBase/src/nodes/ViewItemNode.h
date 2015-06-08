@@ -27,7 +27,7 @@
 #pragma once
 
 #include "visualizationbase_api.h"
-#include "ModelBase/src/nodes/Reference.h"
+#include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -36,11 +36,11 @@ DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
 namespace Visualization {
 
 /**
- * The NodeReference class is used in the ViewItem class and simply wraps a top level node
+ * The ViewItemNode class is used in the ViewItem class and simply wraps a top level node
  * to give another level of indirection. This helps with distinguishing different items when
  * the same node is added to a ViewItem multiple times, as is possible.
  */
-class VISUALIZATIONBASE_API ViewItemNode: public Super<Model::Reference>
+class VISUALIZATIONBASE_API ViewItemNode: public Super<Model::Node>
 {
 
 	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
@@ -48,7 +48,10 @@ class VISUALIZATIONBASE_API ViewItemNode: public Super<Model::Reference>
 	public:
 		ViewItemNode(Model::Node* target, Model::Node* parent);
 		void setTarget(Model::Node* target);
-		virtual Model::Node* computeTarget() const override;
+		Model::Node* target() const;
+
+		virtual void save(Model::PersistentStore& store) const;
+		virtual void load(Model::PersistentStore& store);
 
 	private:
 		Model::Node* target_;
@@ -56,6 +59,8 @@ class VISUALIZATIONBASE_API ViewItemNode: public Super<Model::Reference>
 };
 
 inline void ViewItemNode::setTarget(Model::Node *target) { target_ = target; }
-inline Model::Node* ViewItemNode::computeTarget() const { return target_; }
+inline Model::Node* ViewItemNode::target() const { return target_; }
+inline void ViewItemNode::save(Model::PersistentStore &) const { return; }
+inline void ViewItemNode::load(Model::PersistentStore &) { return; }
 
 }
