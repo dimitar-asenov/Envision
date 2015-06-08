@@ -26,6 +26,7 @@
 
 #include "Merge.h"
 #include "GitRepository.h"
+#include "GitPiecewiseLoader.h"
 
 #include "ConflictUnitDetector.h"
 #include "ListMergeComponent.h"
@@ -40,7 +41,7 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 		QString treeSHA1 = repository_->writeIndexToTree();
 
 		QStringList parents;
-		parents.append(headCommitId);
+		parents.append(headCommitId_);
 		parents.append(revisionCommitId_);
 
 		repository_->newCommit(treeSHA1, message, author, committer, parents);
@@ -58,7 +59,7 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
-	headCommitId = repository_->getSHA1("HEAD");
+	headCommitId_ = repository_->getSHA1("HEAD");
 	revisionCommitId_ = repository_->getSHA1(revision);
 	baseCommitId_ = repository_->findMergeBase("HEAD", revision);
 
@@ -68,7 +69,7 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 
 	Kind kind;
 	if (baseCommitId_.compare(revisionCommitId_) == 0) kind = Kind::AlreadyUpToDate;
-	else if (baseCommitId_.compare(headCommitId) == 0) kind = Kind::FastForward;
+	else if (baseCommitId_.compare(headCommitId_) == 0) kind = Kind::FastForward;
 	else kind = Kind::TrueMerge;
 
 	stage_ = Stage::Classified;
@@ -116,7 +117,7 @@ void Merge::initializeComponents()
 	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{"TestListType", "TestNoConflictList"});
 	QSet<QString> unorderedTypes = QSet<QString>::fromList(QList<QString>{"TestUnorderedType"});
 
-	pipelineInitializer_ = std::make_shared<ConflictUnitDetector>(conflictTypes, headCommitId,
+	pipelineInitializer_ = std::make_shared<ConflictUnitDetector>(conflictTypes, headCommitId_,
 																					  revisionCommitId_, baseCommitId_);
 
 	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes, listTypes, unorderedTypes);
@@ -127,24 +128,20 @@ void Merge::performTrueMerge()
 {
 	initializeComponents();
 
-	Diff diffA = repository_->diff(baseCommitId_, headCommitId);
-	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_);
+	treeA_ = std::shared_ptr<GenericTree>(new GenericTree("TreeA"));
+	new GitPiecewiseLoader(treeA_, repository_, headCommitId_);
+	treeB_ = std::unique_ptr<GenericTree>(new GenericTree("TreeB"));
+	new GitPiecewiseLoader(treeB_, repository_, revisionCommitId_);
+	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("TreeBase"));
+	new GitPiecewiseLoader(treeBase_, repository_, baseCommitId_);
+
+	Diff diffA = repository_->diff(baseCommitId_, headCommitId_, treeBase_, treeA_);
+	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_, treeBase_, treeB_);
 
 	auto cdgA = ChangeDependencyGraph(diffA);
 	auto cdgB = ChangeDependencyGraph(diffB);
 	conflictingChanges_ = {};
 	conflictPairs_ = {};
-
-	/*
-	treeA_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", headCommitId));
-	repository_->loadGenericTree(treeA_, headCommitId);
-
-	treeB_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", revisionCommitId_));
-	repository_->loadGenericTree(treeB_, revisionCommitId_);
-
-	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", baseCommitId_));
-	repository_->loadGenericTree(treeBase_, baseCommitId_);
-	*/
 
 	LinkedChangesTransitionTrace trace;
 	LinkedChangesSet linkedChangesSet;

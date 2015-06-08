@@ -75,12 +75,12 @@ class FILEPERSISTENCE_API Merge
 		Stage stage_ = Stage::NotInitialized;
 
 		// GenericTrees
-		std::unique_ptr<GenericTree> treeA_;
-		std::unique_ptr<GenericTree> treeB_;
-		std::unique_ptr<GenericTree> treeBase_;
+		std::shared_ptr<GenericTree> treeA_;
+		std::shared_ptr<GenericTree> treeB_;
+		std::shared_ptr<GenericTree> treeBase_;
 
 		// Revisions
-		QString headCommitId;
+		QString headCommitId_;
 		QString revisionCommitId_;
 		QString baseCommitId_;
 

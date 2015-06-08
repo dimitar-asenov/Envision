@@ -37,35 +37,35 @@ class ChangeDependencyGraph
 		ChangeDependencyGraph(Diff& diff);
 		~ChangeDependencyGraph();
 		const IdToChangeDescriptionHash changes() const;
-		void insert(std::shared_ptr<const ChangeDescription>& change);
-		void remove(std::shared_ptr<const ChangeDescription>& change);
+		void insert(std::shared_ptr<ChangeDescription>& change);
+		void remove(std::shared_ptr<ChangeDescription>& change);
 		/**
 		 * Replaces \a oldChange with \a newChange in the CDG. \a newChange will have the same edges as \a oldChange.
 		 */
-		void replace(std::shared_ptr<const ChangeDescription>& oldChange,
-						 std::shared_ptr<const ChangeDescription>& newChange);
+		void replace(std::shared_ptr<ChangeDescription>& oldChange,
+						 std::shared_ptr<ChangeDescription>& newChange);
 		/**
 		 * Records the fact that \a changeA depends on changeB.
 		 */
-		void addDependency(std::shared_ptr<const ChangeDescription>& changeA,
-								 std::shared_ptr<const ChangeDescription>& changeB);
+		void addDependency(std::shared_ptr<ChangeDescription>& changeA,
+								 std::shared_ptr<ChangeDescription>& changeB);
 		/**
 		 * Records the fact that \a changeA no longer depends on changeB.
 		 */
-		void removeDependency(std::shared_ptr<const ChangeDescription>& changeA,
-									 std::shared_ptr<const ChangeDescription>& changeB);
+		void removeDependency(std::shared_ptr<ChangeDescription>& changeA,
+									 std::shared_ptr<ChangeDescription>& changeB);
 		/**
 		 * Depending on \a incoming, this either records all incoming or outgoing edges for \a change.
 		 *
 		 * \a change must already be inserted in this CDG.
 		 */
-		void recordDependencies(std::shared_ptr<const ChangeDescription> change, bool incoming);
+		void recordDependencies(std::shared_ptr<ChangeDescription> change, bool incoming);
 	private:
 		IdToChangeDescriptionHash changes_;
 		/**
 		 * A mapping of changeA to changeB means changeA depends on changeB.
 		 */
-		QMultiHash<std::shared_ptr<const ChangeDescription>, std::shared_ptr<const ChangeDescription>> dependencies_;
+		QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>> dependencies_;
 		// NOTE if this were a "two-way" hash, we could gain some speed.
 };
 

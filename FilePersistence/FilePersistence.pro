@@ -29,8 +29,8 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/version_control/ConflictUnitDetector.h \
     src/version_control/ListMergeComponent.h \
     src/version_control/ConflictPipelineComponent.h \
-    src/version_control/Utils.h \
-    src/version_control/LinkedChangesTransition.h
+    src/version_control/LinkedChangesTransition.h \
+    src/version_control/GitPiecewiseLoader.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
@@ -58,9 +58,9 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/version_control/ConflictUnitDetector.cpp \
     src/version_control/ListMergeComponent.cpp \
     src/version_control/ConflictPipelineComponent.cpp \
-    src/version_control/Utils.cpp \
     test/VersionControlMergetests.cpp \
-    src/version_control/LinkedChangesTransition.cpp
+    src/version_control/LinkedChangesTransition.cpp \
+    src/version_control/GitPiecewiseLoader.cpp
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2

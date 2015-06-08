@@ -26,7 +26,6 @@
 
 #include "ListMergeComponent.h"
 #include "ConflictPairs.h"
-#include "Utils.h"
 
 namespace FilePersistence {
 
@@ -121,19 +120,19 @@ QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 		// FIXME make clear which change comes from which branch
 		QSet<Model::NodeIdType> allElementIds;
 		bool allElementsConflictRoots = true;
-		for (auto element : Utils::loadChildren(change->nodeA(), revisionIdBase_))
+		for (auto element : change->nodeA()->children())
 		{
 			allElementIds.insert(element->id());
 			allElementsConflictRoots &= conflictTypes_.contains(element->type());
 			if (!allElementsConflictRoots) break;
 		}
-		for (auto element : Utils::loadChildren(change->nodeB(), revisionIdA_))
+		for (auto element : change->nodeB()->children())
 		{
 			allElementIds.insert(element->id());
 			allElementsConflictRoots &= conflictTypes_.contains(element->type());
 			if (!allElementsConflictRoots) break;
 		}
-		for (auto element : Utils::loadChildren(conflictingChange->nodeB(), revisionIdB_))
+		for (auto element : conflictingChange->nodeB()->children())
 		{
 			allElementIds.insert(element->id());
 			allElementsConflictRoots &= conflictTypes_.contains(element->type());
@@ -440,37 +439,41 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::Node
 		{
 			// branch A changes node beyond label
 			if (changeB) Q_ASSERT(changeB->onlyLabelChange());
-			auto newChange = copyWithNewIndex(changeA, mergedList.indexOf(elemId));
-			cdgA.replace(changeA, newChange);
+			changeA->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeA->computeFlags();
 		}
 		else if (changeB && !changeB->onlyLabelChange())
 		{
 			// branch B changes node beyond label
 			if (changeA) Q_ASSERT(changeA->onlyLabelChange());
-			auto newChange = copyWithNewIndex(changeB, mergedList.indexOf(elemId));
-			cdgB.replace(changeB, newChange);
+			changeB->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeB->computeFlags();
+		}
+		else if (changeA)
+		{
+			changeA->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeA->computeFlags();
+		}
+		else if (changeB)
+		{
+			changeB->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeB->computeFlags();
 		}
 		else
 		{
 			// no branch changes node beyond label so we must construct a new change
-			// TODO load node from base or A
-			const GenericNode* oldNode = nullptr;
-			GenericNode* newNode = oldNode->persistentUnit()->newNode();
-			newNode->reset(oldNode);
+			auto oldNode = treeBase_->find(elemId);
+			auto newNode = treeA_->find(elemId);
+			Q_ASSERT(oldNode);
+			Q_ASSERT(newNode);
 			newNode->setName(QString(mergedList.indexOf(elemId)));
-			auto newChange = std::make_shared<const ChangeDescription>(oldNode, newNode);
-			if (changeA) cdgA.replace(changeA, newChange);
-			else if (changeB) cdgB.replace(changeB, newChange);
-			else
-			{
-				cdgA.insert(newChange);
-				cdgA.recordDependencies(newChange, true);
-				cdgA.recordDependencies(newChange, false);
-			}
+			auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
+			cdgA.insert(newChange);
+			cdgA.recordDependencies(newChange, true);
+			cdgA.recordDependencies(newChange, false);
 		}
 	}
-	// TODO fill properly
-	return LinkedChangesTransition();
+	return LinkedChangesTransition(); // TODO fill properly
 }
 
 std::shared_ptr<const ChangeDescription> ListMergeComponent::copyWithNewIndex(

@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "GitRepository.h"
+#include "GitPiecewiseLoader.h"
 
 #include "../simple/GenericTree.h"
 #include "../simple/Parser.h"
@@ -170,7 +171,9 @@ std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 		Q_ASSERT(false); // TODO is this the right thing to do?
 }
 
-Diff GitRepository::diff(QString revisionA, QString revisionB) const
+Diff GitRepository::diff(QString revisionA, QString revisionB,
+								 std::shared_ptr<GenericTree> treeA,
+								 std::shared_ptr<GenericTree> treeB) const
 {
 	int errorCode = 0;
 
@@ -237,18 +240,25 @@ Diff GitRepository::diff(QString revisionA, QString revisionB) const
 		checkError(errorCode);
 	}
 
+	if (!treeA)
+	{
+		QString sha1A = getSHA1(revisionA);
+		auto treeA = std::shared_ptr<GenericTree>(new GenericTree("TreeA"));
+		new GitPiecewiseLoader(treeA, this, sha1A);
+	}
+	if (!treeB)
+	{
+		QString sha1B = getSHA1(revisionB);
+		auto treeB = std::shared_ptr<GenericTree>(new GenericTree("TreeB"));
+		new GitPiecewiseLoader(treeB, this, sha1B);
+	}
+
 	// Use callback on diff to extract node information
 	GitDiffExtract carryAlongData;
-
-	QString sha1A = getSHA1(revisionA);
-	std::shared_ptr<GenericTree> treeA = std::make_shared<GenericTree>(sha1A, sha1A);
 	carryAlongData.treeA_ = treeA.get();
-
-	QString sha1B = getSHA1(revisionB);
-	std::shared_ptr<GenericTree> treeB = std::make_shared<GenericTree>(sha1B, sha1B);
 	carryAlongData.treeB_ = treeB.get();
-
 	carryAlongData.reverseAB_ = reverseAB;
+
 	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, NULL, gitDiffExtractLineCallBack, &(carryAlongData));
 
 	// clean up
@@ -582,7 +592,7 @@ bool GitRepository::isValidRevisionString(QString revision) const
 	return isValid;
 }
 
-void GitRepository::loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version)
+void GitRepository::loadGenericTree(const std::shared_ptr<GenericTree>& tree, const QString version)
 {
 	IdToGenericNodeHash persistentUnitRoots;
 
@@ -1038,7 +1048,7 @@ QString GitRepository::oidToQString(const git_oid* oid) const
 
 void GitRepository::findPersistentUnitDeclarations(GenericNode* node, IdToGenericNodeHash& declarations)
 {
-	if (node->type().compare(GenericNode::persistentUnitType) == 0)
+	if (node->type().compare(GenericNode::PERSISTENT_UNIT_TYPE) == 0)
 		declarations.insert(node->id(), node);
 	else
 		for (GenericNode* child : node->children())

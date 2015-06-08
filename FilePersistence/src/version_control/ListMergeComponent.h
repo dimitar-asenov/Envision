@@ -120,6 +120,10 @@ class ListMergeComponent : public ConflictPipelineComponent
 		QString revisionIdB_;
 		QString revisionIdBase_;
 
+		std::shared_ptr<GenericTree> treeA_;
+		std::shared_ptr<GenericTree> treeB_;
+		std::shared_ptr<GenericTree> treeBase_;
+
 		/**
 		 * Inserts \a elem into \a chunk according to \a pos.
 		 */

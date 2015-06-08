@@ -47,7 +47,9 @@ class FILEPERSISTENCE_API GitRepository
 
 		std::shared_ptr<Merge> merge(QString revision, bool fastForward = true);
 
-		Diff diff(QString revisionA, QString revisionB) const;
+		Diff diff(QString revisionA, QString revisionB,
+					 std::shared_ptr<GenericTree> treeA = nullptr,
+					 std::shared_ptr<GenericTree> treeB = nullptr) const;
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
 
 		const Commit* getCommit(QString revision) const;
@@ -78,7 +80,7 @@ class FILEPERSISTENCE_API GitRepository
 		static const QString WORKDIR;
 		static const QString INDEX;
 
-		void loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version);
+		void loadGenericTree(const std::shared_ptr<GenericTree>& tree, const QString version);
 
 	private:
 		friend class Merge;

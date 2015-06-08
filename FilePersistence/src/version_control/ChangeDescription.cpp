@@ -28,7 +28,8 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB) : nodeA_{nodeA}, nodeB_{nodeB}
+ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) :
+	pointsToChildA_{false}, pointsToChildB_{false}, nodeA_{nodeA}, nodeB_{nodeB}
 {
 	Q_ASSERT(nodeA_ || nodeB_);
 	if (nodeA_ && nodeB_) Q_ASSERT(nodeA_->id() == nodeB->id());
@@ -48,12 +49,25 @@ ChangeDescription::ChangeDescription(const GenericNode* nodeA, const GenericNode
 		id_ = nodeB_->id();
 		type_ = ChangeType::Insertion;
 	}
-	setFlags();
+	computeFlags();
 }
 
-ChangeDescription::ChangeDescription(Model::NodeIdType id, ChangeType type) : id_{id}, type_{type} {}
+std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(Model::NodeIdType id,
+																	GenericNode* nodeA,
+																	GenericNode* nodeB)
+{
+	std::shared_ptr<ChangeDescription> change = std::shared_ptr<ChangeDescription>(new ChangeDescription());
+	change->id_ = id;
+	change->type_ = ChangeType::Stationary;
+	change->updateFlags_ = UpdateType::Structure;
+	change->nodeA_ = nodeA;
+	change->pointsToChildA_ = nodeA && nodeA->id() != id;
+	change->nodeB_ = nodeB;
+	change->pointsToChildB_ = nodeB && nodeB->id() != id;
+	return change;
+}
 
-void ChangeDescription::setFlags()
+void ChangeDescription::computeFlags()
 {
 	if (nodeA_ != nullptr && nodeB_ != nullptr)
 	{
@@ -110,6 +124,26 @@ void ChangeDescription::setStructureChangeFlag(bool value)
 {
 	if (value) updateFlags_ |= Structure;
 	else updateFlags_ &= ~Structure;
+}
+
+GenericNode* ChangeDescription::nodeA() const
+{
+	if (pointsToChildA_)
+	{
+		const_cast<ChangeDescription*>(this)->nodeA_ = nodeA_->parent();
+		const_cast<ChangeDescription*>(this)->pointsToChildA_ = false;
+	}
+	return nodeA_;
+}
+
+GenericNode* ChangeDescription::nodeB() const
+{
+	if (pointsToChildB_)
+	{
+		const_cast<ChangeDescription*>(this)->nodeB_ = nodeB_->parent();
+		const_cast<ChangeDescription*>(this)->pointsToChildB_ = false;
+	}
+	return nodeB_;
 }
 
 } /* namespace FilePersistence */

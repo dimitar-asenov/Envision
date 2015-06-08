@@ -27,7 +27,6 @@
 #include "ConflictUnitDetector.h"
 #include "ConflictPairs.h"
 #include "ChangeDescription.h"
-#include "Utils.h"
 
 namespace FilePersistence {
 
@@ -42,8 +41,8 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 									QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
 									ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
 {
-	affectedCUsA_ = computeAffectedCUs(revisionIdA_, cdgA);
-	affectedCUsB_ = computeAffectedCUs(revisionIdB_, cdgB);
+	affectedCUsA_ = computeAffectedCUs(cdgA);
+	affectedCUsB_ = computeAffectedCUs(cdgB);
 	LinkedChangesTransition transition(linkedChangesSet);
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
@@ -106,33 +105,25 @@ GenericPersistentUnit* getPersUnit(ChangeDependencyGraph& cdg)
 	Q_ASSERT(false);
 }
 
-IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const QString revision, ChangeDependencyGraph cdg)
+IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
 {
 	IdToChangeMultiHash affectedCUs;
 	for (auto change : cdg.changes()) {
 		Model::NodeIdType conflictRootA;
 		Model::NodeIdType conflictRootB;
-		const GenericNode* inBase; // belongs to the ugly hack
 		switch (change->type()) {
 			case ChangeType::Stationary:
-				/* FIXME this is an ugly hack because the diff doesn't attach any nodes to changes where only the
-				 * structure flag is set. */
-				inBase = Utils::loadNode(change->id(), revisionIdBase_, getPersUnit(cdg));
-				while (!conflictTypes_.contains(inBase->type()))
-					inBase = Utils::loadNode(inBase->parentId(), revisionIdBase_, getPersUnit(cdg));
-				affectedCUs.insert(inBase->id(), change);
-				break;
 			case ChangeType::Deletion:
-				conflictRootA = findConflictUnit(change->nodeA(), revision, cdg);
+				conflictRootA = findConflictUnit(change);
 				affectedCUs.insert(conflictRootA, change);
 				break;
 			case ChangeType::Insertion:
-				conflictRootB = findConflictUnit(change->nodeB(), revision, cdg);
+				conflictRootB = findConflictUnit(change);
 				affectedCUs.insert(conflictRootB, change);
 				break;
 			case ChangeType::Move:
-				conflictRootA = findConflictUnit(change->nodeA(), revision, cdg);
-				conflictRootB = findConflictUnit(change->nodeB(), revision, cdg);
+				conflictRootA = findConflictUnit(change);
+				conflictRootB = findConflictUnit(change);
 				affectedCUs.insert(conflictRootA, change);
 				affectedCUs.insert(conflictRootB, change);
 				break;
@@ -143,59 +134,26 @@ IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const QString revis
 	return affectedCUs;
 }
 
-Model::NodeIdType ConflictUnitDetector::findConflictUnit(const GenericNode* node, const QString revision,
-																			const ChangeDependencyGraph& cdg)
+Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeDescription>& change)
 {
 	// find closest ancestor of node that exists in base
-	const GenericNode* inBase = getInBase(node, cdg);
+	GenericNode* inBase = change->nodeA();
+	GenericNode* node = change->nodeB();
 	while (inBase == nullptr || !node->parentId().isNull())
 	{
-		node = getParent(node, false, revision, cdg);
-		inBase = getInBase(node, cdg);
+		node = node->parent();
+		// FIXME load in base
 	}
 	if (inBase)
 	{
-		while (!conflictTypes_.contains(inBase->type())) inBase = getParent(inBase, true, revisionIdBase_, cdg);
+		while (!conflictTypes_.contains(inBase->type()))
+			inBase = inBase->parent();
 		return inBase->id();
 	}
 	else
 	{
 		// no ancestor in base. branch created new root. return 0.
 		return QUuid(0);
-	}
-}
-
-const GenericNode* ConflictUnitDetector::getParent(const GenericNode* node, bool base, const QString revision,
-																	const ChangeDependencyGraph& cdg)
-{
-	const GenericNode* parent;
-	if (node->parent()) parent = node->parent();
-	else if (cdg.changes().contains(node->parentId()))
-	{
-		auto change = cdg.changes().value(node->parentId());
-		parent = base ? change->nodeA() : change->nodeB();
-		if (!parent) parent = Utils::loadNode(node->parentId(), revision, node->persistentUnit());
-	}
-	else
-		parent = Utils::loadNode(node->parentId(), revision, node->persistentUnit());
-	Q_ASSERT(parent && parent->id() == node->parentId());
-	// TODO set node.parent to newly found parent to avoid looking it up again. This is complicated because of const.
-	return parent;
-}
-
-const GenericNode* ConflictUnitDetector::getInBase(const GenericNode* node, const ChangeDependencyGraph& cdg)
-{
-	if (cdg.changes().contains(node->id()))
-	{
-		auto change = cdg.changes().value(node->id());
-		if (change->onlyStructureChange() && change->nodeA() == nullptr)
-			return Utils::loadNode(node->id(), revisionIdBase_, node->persistentUnit());
-		else return change->nodeA();
-	}
-	else
-	{
-		// node is not changed, thus not inserted, so it must exist in base. load it.
-		return Utils::loadNode(node->id(), revisionIdBase_, node->persistentUnit()); // TODO maybe allocate in different unit
 	}
 }
 

@@ -123,27 +123,24 @@ void Diff::computeStructChanges()
 	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
-			setStructureFlagForId(change->nodeB()->parentId());
-		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
-			setStructureFlagForId(change->nodeA()->parentId());
-		if (change->hasFlags(ChangeDescription::Label))
-			setStructureFlagForId(change->nodeA()->parentId());
+			setStructureFlagForId(change->nodeB()->parentId(), change);
+		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move
+			 || change->hasFlags(ChangeDescription::Label))
+			setStructureFlagForId(change->nodeA()->parentId(), change);
 	}
 }
 
-void Diff::setStructureFlagForId(const Model::NodeIdType id)
+void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDescription> causingChange)
 {
 	if (!changeDescriptions_.contains(id))
 	{
-		auto change = std::make_shared<ChangeDescription>(id, ChangeType::Stationary);
+		auto change = ChangeDescription::newStructChange(id, causingChange->nodeA(), causingChange->nodeB());
 		changeDescriptions_.insert(id, change);
 		change->setStructureChangeFlag(true);
-		// TODO Problem? These changes have no node, just an id.
 	}
 	else
 	{
-		// ugly but otherwise, we would have to remove the change, clone it, set flag and reinsert it.
-		const_cast<ChangeDescription*>(changeDescriptions_.value(id).get())->setStructureChangeFlag(true);
+		changeDescriptions_.value(id).get()->setStructureChangeFlag(true);
 	}
 
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
@@ -153,7 +150,7 @@ void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
 	for (auto node : nodes.values())
 	{
-		if (node->type() == GenericNode::persistentUnitType)
+		if (node->type() == GenericNode::PERSISTENT_UNIT_TYPE)
 			nodes.remove(node->id(), node);
 	}
 }

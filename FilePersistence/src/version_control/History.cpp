@@ -62,7 +62,7 @@ History::History(QString relativePath, Model::NodeIdType rootNodeId,
 	QSet<const CommitGraphItem*> visited;
 	QString end = endItem.commitSHA1_;
 
-	GenericTree initialTree("History", end);
+	GenericTree initialTree("History");
 	QSet<Model::NodeIdType> trackedIDs = trackSubtree(end, relativePath, &initialTree, repository);
 
 	detectRelevantCommits(&endItem, visited, relativePath, trackedIDs, repository);
@@ -115,7 +115,7 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const C
 			if (!subtreeIsAffected)
 				isRelevant = false;
 
-			GenericTree tree("History", parent->commitSHA1_);
+			GenericTree tree("History");
 			QString parentRelativeRootPath =findRootPath(parent->commitSHA1_, relativePathRootNode, &diff,
 																		&tree, repository);
 
@@ -161,7 +161,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 		SAFE_DELETE(file);
 	}
 
-	GenericNode* rootNode = tree->persistentUnit(currentPath)->find(rootNodeId_);
+	GenericNode* rootNode = tree->find(rootNodeId_);
 	if (rootNode)
 		return currentPath;
 
@@ -182,7 +182,7 @@ QString History::findRootPath(QString revision, QString currentPath, const Diff*
 					Parser::load(file->content(), file->size_, false, tree->newPersistentUnit(unitName));
 					SAFE_DELETE(file);
 				}
-				GenericNode* rootNode = tree->persistentUnit(unitName)->find(rootNodeId_);
+				GenericNode* rootNode = tree->find(rootNodeId_);
 				if (rootNode)
 					return unitName;
 			}
@@ -209,7 +209,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 		Parser::load(startFile->content(), startFile->size_, false, tree->newPersistentUnit(relativePath));
 	}
 
-	GenericNode* subtreeRoot = tree->persistentUnit(relativePath)->find(rootNodeId_);
+	GenericNode* subtreeRoot = tree->find(rootNodeId_);
 	if (!subtreeRoot)
 		return QSet<Model::NodeIdType>();
 
@@ -224,7 +224,7 @@ QSet<Model::NodeIdType> History::trackSubtree(QString revision, QString relative
 
 		trackedIDs.insert(current->id());
 
-		if (current->type() == GenericNode::persistentUnitType)
+		if (current->type() == GenericNode::PERSISTENT_UNIT_TYPE)
 		{
 			QString subUnitrelativePath = current->id().toString();
 

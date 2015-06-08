@@ -35,8 +35,10 @@ enum class ChangeType {Unclassified, Insertion, Deletion, Move, Stationary};
 class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
-		ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB);
-		ChangeDescription(Model::NodeIdType id, ChangeType type);
+		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
+		static std::shared_ptr<ChangeDescription> newStructChange(Model::NodeIdType id,
+																			GenericNode* nodeA,
+																			GenericNode* nodeB);
 
 		enum UpdateType
 		{
@@ -48,6 +50,8 @@ class FILEPERSISTENCE_API ChangeDescription
 		};
 		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
 
+
+		void computeFlags();
 		bool hasFlags(const UpdateFlags flags) const;
 
 		void print() const;
@@ -60,8 +64,8 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		const UpdateFlags flags() const;
 
-		const GenericNode* nodeB() const;
-		const GenericNode* nodeA() const;
+		GenericNode* nodeB() const;
+		GenericNode* nodeA() const;
 
 		/**
 		 * Returns \a true for changes that are stationary and have no flags set.
@@ -71,7 +75,7 @@ class FILEPERSISTENCE_API ChangeDescription
 		bool onlyLabelChange() const;
 
 	private:
-		void setFlags();
+		ChangeDescription();
 
 		Model::NodeIdType id_;
 
@@ -79,8 +83,11 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		UpdateFlags updateFlags_;
 
-		const GenericNode* nodeA_{};
-		const GenericNode* nodeB_{};
+		bool pointsToChildA_;
+		bool pointsToChildB_;
+
+		GenericNode* nodeA_{};
+		GenericNode* nodeB_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
@@ -92,9 +99,6 @@ inline bool ChangeDescription::hasFlags(const UpdateFlags flags) const { return 
 inline const ChangeType& ChangeDescription::type() const { return type_; }
 
 inline const ChangeDescription::UpdateFlags ChangeDescription::flags() const { return updateFlags_; }
-
-inline const GenericNode* ChangeDescription::nodeB() const { return nodeB_; }
-inline const GenericNode* ChangeDescription::nodeA() const { return nodeA_; }
 
 inline bool ChangeDescription::isFake() const
 {

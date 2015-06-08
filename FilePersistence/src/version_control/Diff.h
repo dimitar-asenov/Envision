@@ -35,7 +35,7 @@ namespace FilePersistence {
 class GitRepository;
 
 using IdToGenericNodeHash = QMultiHash<Model::NodeIdType, GenericNode*>;
-using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<const ChangeDescription>>;
+using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 
 class FILEPERSISTENCE_API Diff
 {
@@ -43,6 +43,9 @@ class FILEPERSISTENCE_API Diff
 		Diff();
 		Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB, const GitRepository*);
+
+		std::shared_ptr<GenericTree> treeA() const;
+		std::shared_ptr<GenericTree> treeB() const;
 
 		IdToChangeDescriptionHash changes() const;
 		IdToChangeDescriptionHash changes(ChangeType type) const;
@@ -60,7 +63,7 @@ class FILEPERSISTENCE_API Diff
 		 * If a change for \a id already exists, its \a structFlag is set,
 		 * otherwise a new change with that flag is created.
 		 */
-		void setStructureFlagForId(const Model::NodeIdType);
+		void setStructureFlagForId(Model::NodeIdType, std::shared_ptr<ChangeDescription> causingChange);
 
 		/**
 		 * Removes all nodes that are used for persistent unit linking from \a nodes.
@@ -73,6 +76,8 @@ class FILEPERSISTENCE_API Diff
 		std::shared_ptr<GenericTree> treeB_{};
 };
 
+inline std::shared_ptr<GenericTree> Diff::treeA() const { return treeA_; }
+inline std::shared_ptr<GenericTree> Diff::treeB() const { return treeB_; }
 inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}
 
 } /* namespace FilePersistence */
