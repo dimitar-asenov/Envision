@@ -62,21 +62,19 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 
 		if (callees_.size() > 0)
 		{
-			auto height = pos.x() == -1 ? 0 : ancestor->scenePos().y();
+			Model::Node* actualNode;
 			//TODO@cyril What if it is in the view, but not as a top-level item?
 			if (pos.x() == -1)
 			{
 				view->insertColumn(0);
-				view->insertNode(ancestor->node(), 0, 0);
-				pos = view->positionOfNode(ancestor->node());
+				actualNode = view->insertNode(ancestor->node(), 0, 0);
+				pos = view->positionOfNode(actualNode);
 			}
+			else actualNode = ancestor->parent()->node();
 			view->insertColumn(pos.x() + 1);
 			auto row = 0;
 			//Make the first callee appear at the same height as the method
-			if (height > 10) //Higher than margin?
-			{
-				view->addEmptyNode(pos.x() + 1, 0, height);
-			}
+			view->addSpacing(pos.x() + 1, row++, actualNode);
 			for (auto callee : callees_)
 				view->insertNode(callee, pos.x() + 1, row++);
 		}
