@@ -110,8 +110,7 @@ const QPoint ViewItem::positionOfNode(Model::Node *node) const
 const QPoint ViewItem::positionOfItem(Item *item) const
 {
 	auto vref = DCast<VViewItemNode>(item);
-	if (vref)
-		return positionOfNode(vref->node());
+	if (vref) return positionOfNode(vref->node());
 	else return QPoint(-1, -1);
 }
 
