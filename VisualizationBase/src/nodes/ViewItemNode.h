@@ -23,7 +23,6 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-
 #pragma once
 
 #include "visualizationbase_api.h"
@@ -42,25 +41,32 @@ namespace Visualization {
  */
 class VISUALIZATIONBASE_API ViewItemNode: public Super<Model::Node>
 {
-
 	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
 
 	public:
-		ViewItemNode(Model::Node* target, Model::Node* parent);
-		void setTarget(Model::Node* target);
-		Model::Node* target() const;
+		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget);
+		static ViewItemNode* withReference(Model::Node* reference);
+
+		void setReference(Model::Node* reference);
+		Model::Node* reference() const;
+
+		void setSpacingTarget(Model::Node* spacingTarget);
+		Model::Node* spacingTarget() const;
 
 		virtual void save(Model::PersistentStore& store) const;
 		virtual void load(Model::PersistentStore& store);
 
 	private:
-		Model::Node* target_;
+		Model::Node* spacingTarget_{};
+		Model::Node* reference_{};
 
 };
 
-inline void ViewItemNode::setTarget(Model::Node *target) { target_ = target; }
-inline Model::Node* ViewItemNode::target() const { return target_; }
-inline void ViewItemNode::save(Model::PersistentStore &) const { return; }
-inline void ViewItemNode::load(Model::PersistentStore &) { return; }
+inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacingTarget_ = spacingTarget; }
+inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
+inline void ViewItemNode::setReference(Model::Node *reference) { reference_ = reference; }
+inline Model::Node* ViewItemNode::reference() const { return reference_; }
+inline void ViewItemNode::save(Model::PersistentStore &) const { Q_ASSERT(false); }
+inline void ViewItemNode::load(Model::PersistentStore &) { Q_ASSERT(false); }
 
 }

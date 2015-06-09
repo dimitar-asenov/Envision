@@ -33,6 +33,20 @@ namespace Visualization {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
 
+ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget)
+{
+	auto result = new ViewItemNode(nullptr);
+	result->setSpacingTarget(spacingTarget);
+	return result;
+}
+
+ViewItemNode* ViewItemNode::withReference(Model::Node *reference)
+{
+	auto result = new ViewItemNode(nullptr);
+	result->setReference(reference);
+	return result;
+}
+
 ViewItemNode::ViewItemNode(Model::Node* parent)
 	:Super(parent)
 {
@@ -41,12 +55,6 @@ ViewItemNode::ViewItemNode(Model::Node* parent)
 ViewItemNode::ViewItemNode(Model::Node* parent, Model::PersistentStore&, bool)
 	:Super(parent)
 {
+	Q_ASSERT(false);
 }
-
-ViewItemNode::ViewItemNode(Model::Node* target, Model::Node* parent)
-	:ViewItemNode(parent)
-{
-	setTarget(target);
-}
-
 }

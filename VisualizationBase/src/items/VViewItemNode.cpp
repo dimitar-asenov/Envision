@@ -28,6 +28,7 @@
 #include "../src/declarative/DeclarativeItemDef.h"
 #include "nodes/ViewItemNode.h"
 #include "declarative/GridLayoutFormElement.h"
+#include "ViewItem.h"
 
 namespace Visualization {
 
@@ -40,8 +41,34 @@ VViewItemNode::VViewItemNode(Item* parent, NodeType* node, const StyleType* styl
 
 void VViewItemNode::initializeForms()
 {
-	//We only need to visualize the target node
-	addForm(item(&I::target_, [](I* v) { return v->node()->target(); }));
+	//We either visualize the target form, or have only spacing
+	addForm(item(&I::reference_, [](I* v) { return v->node()->reference(); }));
+	addForm(item(&I::spacing_, [](I* v) { return v->style(); }));
+}
+
+int VViewItemNode::determineForm()
+{
+	if (node()->reference()) return 0;
+	else return 1;
+}
+
+void VViewItemNode::determineSpacing()
+{
+	Q_ASSERT(node()->reference() == nullptr);
+	if (auto target = node()->spacingTarget())
+	{
+		//TODO@cyril What if it is in another view item?
+		auto targetItem = scene()->currentViewItem()->findVisualizationOf(target);
+		if (targetItem)
+		{
+			auto curYPos = scenePos().y();
+			auto curTargetYPos = targetItem->scenePos().y();
+			auto height = curTargetYPos - curYPos - 10;
+			height = height > 0 ? height : 0;
+			spacing_->setCustomSize(50, height);
+			spacing_->setUpdateNeeded(StandardUpdate);
+		}
+	}
 }
 
 }

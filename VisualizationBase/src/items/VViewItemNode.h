@@ -28,13 +28,15 @@
 #include "../visualizationbase_api.h"
 #include "../../VisualizationBase/src/items/ItemWithNode.h"
 #include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../../VisualizationBase/src/items/EmptyItem.h"
 #include "nodes/ViewItemNode.h"
 
 
 namespace Visualization {
 
 /**
- * The VNodeReference class visualizes a NodeReference, simply by visualizing only its target
+ * The VVIewItemNode class visualizes a ViewItemNode, either by visualizing its
+ * reference if it exists, or else rendering an empty item for spacing
  */
 class VISUALIZATIONBASE_API VViewItemNode :
 		public Super<ItemWithNode<VViewItemNode, DeclarativeItem<VViewItemNode>, ViewItemNode>> {
@@ -45,9 +47,13 @@ class VISUALIZATIONBASE_API VViewItemNode :
 		VViewItemNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
+		virtual int determineForm() override;
+
+		void determineSpacing();
 
 	private:
-		Item* target_{};
+		Item* reference_{};
+		EmptyItem* spacing_{};
 };
 
 }
