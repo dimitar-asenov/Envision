@@ -251,6 +251,7 @@ QStringList CommandExecutionEngine::tokenize(const QString& string, const QStrin
 				quote = QChar();
 				str = QString();
 			}
+			else str.append(string[i]);
 		}
 	}
 
