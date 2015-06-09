@@ -30,6 +30,8 @@
 
 namespace Visualization {
 
+class ViewItemNode;
+
 /**
  * The ViewItem class represents the visualization of an entire view within a single item.
  *
@@ -47,34 +49,23 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		static void initializeForms();
 
 		void insertColumn(int column);
-		void insertNode(Model::Node* node, int column = 0, int row = 0);
+		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0);
 		void removeNode(Model::Node* node);
 		const QList<Model::Node*> allNodes() const;
 		const QPoint positionOfNode(Model::Node* node) const;
 		const QPoint positionOfItem(Item* item) const;
 		Model::Node* nodeAt(int column, int row);
 
-		void addEmptyNode(int column, int row, int desiredYPosOfNextItem);
-
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		void addSpacing(int column, int row, Model::Node* spacingTarget);
 
 		const QString name() const;
 
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 	private:
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
 
-		struct EmptyNodeParameters
-		{
-				EmptyNodeParameters(int column, int row, int desiredYPosOfNextItem)
-					:column{column}, row{row}, desiredYPosOfNextItem{desiredYPosOfNextItem} {}
-
-				int column{};
-				int row{};
-				int desiredYPosOfNextItem{};
-		};
-		QList<EmptyNodeParameters> emptyNodesToBuild_;
-		int emptyAfter(int column, int searchFromRow);
+		void insertViewItemNode(ViewItemNode* node, int column, int row);
 
 		void ensureColumnExists(int column);
 
