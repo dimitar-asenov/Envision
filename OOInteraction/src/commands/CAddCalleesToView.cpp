@@ -62,7 +62,7 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 
 		if (callees_.size() > 0)
 		{
-			Model::Node* actualNode;
+			Model::Node* actualNode{};
 			//TODO@cyril What if it is in the view, but not as a top-level item?
 			if (pos.x() == -1)
 			{
