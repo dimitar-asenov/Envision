@@ -52,23 +52,28 @@ int VViewItemNode::determineForm()
 	else return 1;
 }
 
-void VViewItemNode::determineSpacing()
+bool VViewItemNode::determineSpacing()
 {
 	Q_ASSERT(node()->reference() == nullptr);
 	if (auto target = node()->spacingTarget())
 	{
-		//TODO@cyril What if it is in another view item?
-		auto targetItem = scene()->currentViewItem()->findVisualizationOf(target);
-		if (targetItem)
+		//The spacing could be in another view item (if we add an item to a not open view item)
+		//Then the spacing will be updated, when the view item is opened
+		if (auto targetItem = scene()->currentViewItem()->findVisualizationOf(target))
 		{
 			auto curYPos = scenePos().y();
 			auto curTargetYPos = targetItem->scenePos().y();
 			auto height = curTargetYPos - curYPos - 10;
 			height = height > 0 ? height : 0;
-			spacing_->setCustomSize(50, height);
-			spacing_->setUpdateNeeded(StandardUpdate);
+			if (height != spacing_->heightInParent())
+			{
+				spacing_->setCustomSize(50, height);
+				setUpdateNeeded(RepeatUpdate);
+				return true;
+			}
 		}
 	}
+	return false;
 }
 
 }

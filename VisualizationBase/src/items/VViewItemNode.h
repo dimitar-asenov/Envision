@@ -49,7 +49,7 @@ class VISUALIZATIONBASE_API VViewItemNode :
 		static void initializeForms();
 		virtual int determineForm() override;
 
-		void determineSpacing();
+		bool determineSpacing();
 
 	private:
 		Item* reference_{};
