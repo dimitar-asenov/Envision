@@ -85,8 +85,7 @@ bool Reference::resolveHelper(bool indirect)
 
 	auto newTarget = computeTarget();
 
-	//TODO@cyril What is this for?
-//	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
+	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
 
 	auto oldTarget = target_;
 	target_ = newTarget;
