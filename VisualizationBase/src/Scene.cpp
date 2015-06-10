@@ -163,6 +163,7 @@ void Scene::switchToView(ViewItem *view)
 	currentViewItem_->hide();
 	currentViewItem_ = view;
 	currentViewItem_->show();
+	currentViewItem_->setUpdateNeeded(Item::StandardUpdate);
 	scheduleUpdate();
 }
 
