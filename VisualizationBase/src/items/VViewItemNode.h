@@ -26,54 +26,34 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
+#include "../../VisualizationBase/src/items/ItemWithNode.h"
 #include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../../VisualizationBase/src/items/EmptyItem.h"
+#include "nodes/ViewItemNode.h"
+
 
 namespace Visualization {
 
-class ViewItemNode;
-
 /**
- * The ViewItem class represents the visualization of an entire view within a single item.
- *
- * All items in a view should be added and removed via this ViewItem class. Each Scene object contains
- * a list of ViewItem objects which can be used for that. Using this, it is possible to control what
- * is shown on the screen.
+ * The VVIewItemNode class visualizes a ViewItemNode, either by visualizing its
+ * reference if it exists, or else rendering an empty item for spacing
  */
-class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
+class VISUALIZATIONBASE_API VViewItemNode :
+		public Super<ItemWithNode<VViewItemNode, DeclarativeItem<VViewItemNode>, ViewItemNode>> {
 
-	ITEM_COMMON_CUSTOM_STYLENAME(ViewItem, DeclarativeItemBaseStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VViewItemNode, DeclarativeItemBaseStyle)
 
 	public:
-		ViewItem(Item* parent, QString name = QString(), StyleType* style = itemStyles().get());
+		VViewItemNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
+		virtual int determineForm() override;
 
-		void insertColumn(int column);
-		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0);
-		void removeNode(Model::Node* node);
-		const QList<Model::Node*> allNodes() const;
-		const QPoint positionOfNode(Model::Node* node) const;
-		const QPoint positionOfItem(Item* item) const;
-		Model::Node* nodeAt(int column, int row);
+		bool determineSpacing();
 
-		void addSpacing(int column, int row, Model::Node* spacingTarget);
-
-		const QString name() const;
-
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 	private:
-		QVector<QVector<Model::Node*>> nodes_;
-		QString name_;
-
-		void insertViewItemNode(ViewItemNode* node, int column, int row);
-
-		void ensurePositionExists(int column, int row);
-		void ensureColumnExists(int column);
-
-		QVector<QVector<Model::Node*>> nodesGetter();
+		Item* reference_{};
+		EmptyItem* spacing_{};
 };
-
-inline const QString ViewItem::name() const { return name_; }
-inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
 
 }

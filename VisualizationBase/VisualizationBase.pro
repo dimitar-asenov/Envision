@@ -128,7 +128,9 @@ HEADERS += src/overlays/IconOverlayStyle.h \
     src/declarative/DynamicGridFormElement.h \
     src/overlays/MessageOverlay.h \
     src/overlays/MessageOverlayStyle.h \
-    src/items/ViewItem.h
+    src/items/ViewItem.h \
+    src/nodes/ViewItemNode.h \
+    src/items/VViewItemNode.h
 SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/overlays/IconOverlay.cpp \
     src/overlays/BoxOverlayStyle.cpp \
@@ -231,4 +233,6 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/declarative/GridLayouter.cpp \
     src/overlays/MessageOverlay.cpp \
     src/overlays/MessageOverlayStyle.cpp \
-    src/items/ViewItem.cpp
+    src/items/ViewItem.cpp \
+    src/nodes/ViewItemNode.cpp \
+    src/items/VViewItemNode.cpp

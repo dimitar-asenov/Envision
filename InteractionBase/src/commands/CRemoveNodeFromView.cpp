@@ -42,7 +42,8 @@ bool CRemoveNodeFromView::canInterpret(Visualization::Item *source, Visualizatio
 	auto ancestor = source->findAncestorWithNode();
 	if (!ancestor) return false;
 	else
-		return canInterpret && ancestor->scene()->currentViewItem()->allNodes().contains(ancestor->node());
+		return canInterpret &&
+				ancestor->scene()->currentViewItem()->positionOfItem(ancestor->parent()) != QPoint(-1, -1);
 }
 
 CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *source, Visualization::Item *,
@@ -50,6 +51,7 @@ CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *so
 {
 	//Go to the first parent of the source which has a node, which is a top-level item (as canInterpret checks)
 	auto ancestor = source->findAncestorWithNode();
+	ancestor = ancestor->parent();
 	ancestor->scene()->currentViewItem()->removeNode(ancestor->node());
 	return new CommandResult();
 }

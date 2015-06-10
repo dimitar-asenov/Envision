@@ -27,6 +27,8 @@
 
 #include "../src/declarative/DeclarativeItemDef.h"
 #include "declarative/DynamicGridFormElement.h"
+#include "nodes/ViewItemNode.h"
+#include "VViewItemNode.h"
 
 namespace Visualization {
 
@@ -60,25 +62,27 @@ void ViewItem::insertColumn(int column)
 		nodes_.insert(column, {});
 }
 
-void ViewItem::insertNode(Model::Node* node, int column, int row)
+Model::Node* ViewItem::insertNode(Model::Node* node, int column, int row)
 {
-	//First, make sure the current grid is big enough to fit the node
-	ensureColumnExists(column);
-	if (nodes_[column].size() <= row)
-		nodes_[column].resize(row + 1);
-	//We can either put the node at a free space if exists, or insert otherwise
-	if (nodes_.at(column).at(row) == nullptr)
-		nodes_[column][row] = node;
-	else
-		nodes_[column].insert(row, node);
-	setUpdateNeeded(StandardUpdate);
+	auto ref = ViewItemNode::withReference(node);
+	insertViewItemNode(ref, column, row);
+	return ref;
 }
 
 void ViewItem::removeNode(Model::Node* node)
 {
 	auto point = positionOfNode(node);
 	if (point.x() != -1)
+	{
+		//If somebody's spacing depends on the node, change it
+		for (auto node : allNodes())
+		{
+			auto viewNode = DCast<ViewItemNode>(node);
+			if (viewNode->spacingTarget() == nodes_[point.x()][point.y()])
+				viewNode->setSpacingTarget(nullptr);
+		}
 		nodes_[point.x()].remove(point.y());
+	}
 	setUpdateNeeded(StandardUpdate);
 }
 
@@ -87,7 +91,8 @@ const QList<Model::Node*> ViewItem::allNodes() const
 	QList<Model::Node*> result;
 	for (auto column : nodes_)
 		for (auto item : column)
-			result.append(item);
+			if (item)
+				result.append(item);
 	return result;
 }
 
@@ -102,38 +107,67 @@ const QPoint ViewItem::positionOfNode(Model::Node *node) const
 	return QPoint(-1, -1);
 }
 
-QVector<QVector<Model::Node*>> ViewItem::nodesGetter()
+const QPoint ViewItem::positionOfItem(Item *item) const
 {
-	return nodes_;
+	auto vref = DCast<VViewItemNode>(item);
+	if (vref) return positionOfNode(vref->node());
+	else return QPoint(-1, -1);
+}
+
+Model::Node* ViewItem::nodeAt(int column, int row)
+{
+	if (column < 0 || column >= nodes_.size())
+		return nullptr;
+	if (row < 0 || row >= nodes_[column].size())
+		return nullptr;
+	return nodes_[column][row];
+}
+
+void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget)
+{
+	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget), column, row);
+}
+
+void ViewItem::updateGeometry(int availableWidth, int availableHeight)
+{
+	Super::updateGeometry(availableWidth, availableHeight);
+	bool anyChanges = false;
+	for (auto node : allNodes())
+	{
+		auto asViewItemNode = DCast<ViewItemNode>(node);
+		Q_ASSERT(asViewItemNode);
+		auto item = DCast<VViewItemNode>(findVisualizationOf(asViewItemNode));
+		Q_ASSERT(item);
+		if (item->currentFormIndex() == 1)
+			anyChanges = item->determineSpacing() || anyChanges;
+	}
+	if (anyChanges)
+		setUpdateNeeded(RepeatUpdate);
+}
+
+void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)
+{
+	//First, make sure the current grid is big enough to fit the node
+	ensurePositionExists(column, row);
+	//We can either put the node at a free space if exists, or insert otherwise
+	if (nodes_[column][row] == nullptr)
+		nodes_[column][row] = node;
+	else
+		nodes_[column].insert(row, node);
+	setUpdateNeeded(StandardUpdate);
+}
+
+void ViewItem::ensurePositionExists(int column, int row)
+{
+	ensureColumnExists(column);
+	if (nodes_[column].size() <= row)
+		nodes_[column].resize(row + 1);
 }
 
 void ViewItem::ensureColumnExists(int column)
 {
 	if (nodes_.size() <= column)
 		nodes_.resize(column + 1);
-}
-
-QString ViewItem::debugNodes()
-{
-	//Prints the node grid as a debug string
-	QString result;
-	int maxHeight = 0;
-	for (int i = 0; i < nodes_.size(); i++)
-		if (nodes_.at(i).size() > maxHeight)
-			maxHeight = nodes_.at(i).size();
-
-	for (int row = 0; row < maxHeight; row++)
-	{
-		for (int col = 0; col < nodes_.size(); col++)
-		{
-			if (nodes_.at(col).size() > row)
-				result += nodes_.at(col).at(row) ? (nodes_.at(col).at(row)->typeName() + " ") : "null ";
-			else
-				result += "null ";
-		}
-		result += "\n";
-	}
-	return result;
 }
 
 }

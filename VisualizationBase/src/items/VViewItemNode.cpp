@@ -23,57 +23,57 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#pragma once
+#include "VViewItemNode.h"
 
-#include "../visualizationbase_api.h"
-#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../src/declarative/DeclarativeItemDef.h"
+#include "nodes/ViewItemNode.h"
+#include "declarative/GridLayoutFormElement.h"
+#include "ViewItem.h"
 
 namespace Visualization {
 
-class ViewItemNode;
+ITEM_COMMON_DEFINITIONS(VViewItemNode, "item")
 
-/**
- * The ViewItem class represents the visualization of an entire view within a single item.
- *
- * All items in a view should be added and removed via this ViewItem class. Each Scene object contains
- * a list of ViewItem objects which can be used for that. Using this, it is possible to control what
- * is shown on the screen.
- */
-class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
+VViewItemNode::VViewItemNode(Item* parent, NodeType* node, const StyleType* style) :
+		Super(parent, node, style)
+{
+}
 
-	ITEM_COMMON_CUSTOM_STYLENAME(ViewItem, DeclarativeItemBaseStyle)
+void VViewItemNode::initializeForms()
+{
+	//We either visualize the target form, or have only spacing
+	addForm(item(&I::reference_, [](I* v) { return v->node()->reference(); }));
+	addForm(item(&I::spacing_, [](I* v) { return v->style(); }));
+}
 
-	public:
-		ViewItem(Item* parent, QString name = QString(), StyleType* style = itemStyles().get());
+int VViewItemNode::determineForm()
+{
+	if (node()->reference()) return 0;
+	else return 1;
+}
 
-		static void initializeForms();
-
-		void insertColumn(int column);
-		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0);
-		void removeNode(Model::Node* node);
-		const QList<Model::Node*> allNodes() const;
-		const QPoint positionOfNode(Model::Node* node) const;
-		const QPoint positionOfItem(Item* item) const;
-		Model::Node* nodeAt(int column, int row);
-
-		void addSpacing(int column, int row, Model::Node* spacingTarget);
-
-		const QString name() const;
-
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-	private:
-		QVector<QVector<Model::Node*>> nodes_;
-		QString name_;
-
-		void insertViewItemNode(ViewItemNode* node, int column, int row);
-
-		void ensurePositionExists(int column, int row);
-		void ensureColumnExists(int column);
-
-		QVector<QVector<Model::Node*>> nodesGetter();
-};
-
-inline const QString ViewItem::name() const { return name_; }
-inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
+bool VViewItemNode::determineSpacing()
+{
+	Q_ASSERT(node()->reference() == nullptr);
+	if (auto target = node()->spacingTarget())
+	{
+		//The spacing could be in another view item (if we add an item to a not open view item)
+		//Then the spacing will be updated, when the view item is opened
+		if (auto targetItem = scene()->currentViewItem()->findVisualizationOf(target))
+		{
+			auto curYPos = scenePos().y();
+			auto curTargetYPos = targetItem->scenePos().y();
+			auto height = curTargetYPos - curYPos - 10;
+			height = height > 0 ? height : 0;
+			if (height != spacing_->heightInParent())
+			{
+				spacing_->setCustomSize(50, height);
+				setUpdateNeeded(RepeatUpdate);
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 }
