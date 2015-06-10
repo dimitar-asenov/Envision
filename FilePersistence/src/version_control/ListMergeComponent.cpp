@@ -41,7 +41,7 @@ LinkedChangesTransition ListMergeComponent::run(
 								QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
 								ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
 {
-	LinkedChangesTransition transition(linkedChangesSet);
+	LinkedChangesTransition transition(linkedChangesSet, cdgA, cdgB);
 
 	auto listsToMerge = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
 
@@ -429,7 +429,7 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::Node
 																								  QList<Model::NodeIdType>& mergedList,
 																								  ChangeDependencyGraph& cdgA,
 																								  ChangeDependencyGraph& cdgB,
-																								  LinkedChangesSet&)
+																								  LinkedChangesSet& linkedChangesSet)
 {
 	for (auto elemId : mergedList)
 	{
@@ -473,7 +473,7 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::Node
 			cdgA.recordDependencies(newChange, false);
 		}
 	}
-	return LinkedChangesTransition(); // TODO fill properly
+	return LinkedChangesTransition(linkedChangesSet); // TODO fill properly
 }
 
 std::shared_ptr<const ChangeDescription> ListMergeComponent::copyWithNewIndex(

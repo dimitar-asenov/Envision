@@ -31,11 +31,4 @@ namespace FilePersistence
 
 ConflictPipelineComponent::~ConflictPipelineComponent() {}
 
-LinkedChanges ConflictPipelineComponent::findLinkedChanges(std::shared_ptr<const ChangeDescription> change,
-																		 LinkedChangesSet& linkedChangesSet)
-{
-	for (auto linkedChanges : linkedChangesSet)
-		if (linkedChanges->contains(change)) return linkedChanges; Q_ASSERT(false);
-}
-
 }

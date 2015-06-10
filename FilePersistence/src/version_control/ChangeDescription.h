@@ -39,6 +39,7 @@ class FILEPERSISTENCE_API ChangeDescription
 		static std::shared_ptr<ChangeDescription> newStructChange(Model::NodeIdType id,
 																			GenericNode* nodeA,
 																			GenericNode* nodeB);
+		std::shared_ptr<ChangeDescription> copy(GenericPersistentUnit* persistentUnit) const;
 
 		enum UpdateType
 		{

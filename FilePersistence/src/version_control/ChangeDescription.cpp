@@ -146,4 +146,21 @@ GenericNode* ChangeDescription::nodeB() const
 	return nodeB_;
 }
 
+std::shared_ptr<ChangeDescription> ChangeDescription::copy(GenericPersistentUnit* persistentUnit) const
+{
+	std::shared_ptr<ChangeDescription> copy(new ChangeDescription);
+	copy->id_ = id_;
+	auto newNodeA = persistentUnit->newNode();
+	newNodeA->reset(persistentUnit, nodeA_);
+	auto newNodeB = persistentUnit->newNode();
+	newNodeB->reset(persistentUnit, nodeB_);
+	copy->nodeA_ = newNodeA;
+	copy->nodeB_ = newNodeB;
+	copy->pointsToChildA_ = pointsToChildA_;
+	copy->pointsToChildB_ = pointsToChildB_;
+	copy->type_ = type_;
+	copy->updateFlags_ = updateFlags_;
+	return copy;
+}
+
 } /* namespace FilePersistence */

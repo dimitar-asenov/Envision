@@ -43,7 +43,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 {
 	affectedCUsA_ = computeAffectedCUs(cdgA);
 	affectedCUsB_ = computeAffectedCUs(cdgB);
-	LinkedChangesTransition transition(linkedChangesSet);
+	LinkedChangesTransition transition(linkedChangesSet, cdgA, cdgB);
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
 	{
@@ -56,7 +56,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 				// ...mark it as conflicting...
 				conflictingChanges.insert(changeA);
 				// ...and related to the other changes in this CU
-				transition.insert(findLinkedChanges(changeA, linkedChangesSet), changeA);
+				transition.insert(changeA->id(), true, changeA);
 				// ...and take every change from B...
 				for (auto changeB : affectedCUsB_.values(conflictRootId))
 				{
@@ -64,7 +64,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 					conflictingChanges.insert(changeB);
 					conflictPairs.insert(changeA, changeB);
 					// also record it as being related
-					transition.insert(findLinkedChanges(changeB, linkedChangesSet), changeB);
+					transition.insert(changeB->id(), false, changeB);
 				}
 			}
 		}
@@ -73,7 +73,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 			// CU is not in conflict, just record change links.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
-				transition.insert(findLinkedChanges(changeA, linkedChangesSet), changeA);
+				transition.insert(changeA->id(), true, changeA);
 			}
 		}
 	}
@@ -84,7 +84,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 		{
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
 			{
-				transition.insert(findLinkedChanges(changeB, linkedChangesSet), changeB);
+				transition.insert(changeB->id(), false, changeB);
 			}
 		}
 	}

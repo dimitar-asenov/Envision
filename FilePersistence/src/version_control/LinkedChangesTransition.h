@@ -27,15 +27,40 @@
 #pragma once
 
 #include "ChangeDescription.h"
+#include "ChangeDependencyGraph.h"
 
 namespace FilePersistence {
 
 using LinkedChanges = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
+/**
+ * Creates and returns a new empty LinkedChanges object.
+ */
 inline LinkedChanges newLinkedChanges() { return std::make_shared<QSet<std::shared_ptr<const ChangeDescription>>>(); }
-inline LinkedChanges newLinkedChanges(LinkedChanges changesToCopy) // TODO is there a better way to do this?
-{ return std::make_shared<QSet<std::shared_ptr<const ChangeDescription>>>(*changesToCopy); }
+/**
+ * Creates and returns a new LinkedChanges object that is a deep copy of \a changesToCopy.
+ * Nodes pointed to by changes in the returned object are allocated in \a persistentUnit.
+ */
+LinkedChanges newLinkedChanges(LinkedChanges changesToCopy, GenericPersistentUnit* persistentUnit);
 
-using LinkedChangesSet = QSet<LinkedChanges>;
+class LinkedChangesSet : public QSet<LinkedChanges>
+{
+	public:
+		LinkedChangesSet();
+		/**
+		 * Creates and returns a new LinkedChangesSet object that is a deep copy of \a changesSetToCopy.
+		 * Nodes pointed to by changes in the returned object are allocated in a new GenericTree.
+		 */
+		LinkedChangesSet(const LinkedChangesSet& changesSetToCopy);
+		/**
+		 * This returns the linkedChanges which contains the change with
+		 * \a changeId which is in branch A if and only if \a inBranchA is true.
+		 * NOTE The \a inBranchA argument is necessary because IDs are not unique within LinkedChangesSet objects.
+		 * Pointer comparison does not work because we made a deep copy.
+		 */
+		LinkedChanges findLinkedChanges(Model::NodeIdType oldChangeId, bool inBranchA);
+
+		QSet<std::shared_ptr<const ChangeDescription>> changesOfBranchA_;
+};
 
 class LinkedChangesTransition
 {
@@ -43,14 +68,15 @@ class LinkedChangesTransition
 		/**
 		 * Creates an empty transition.
 		 */
-		LinkedChangesTransition();
+		LinkedChangesTransition(LinkedChangesSet& linkedChangesSet);
 
 		/**
 		 *	Creates the identity transition, representing no modifications of the change linking.
 		 */
-		LinkedChangesTransition(LinkedChangesSet& linkedChangesSet);
+		LinkedChangesTransition(LinkedChangesSet& linkedChangesSet, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB);
 
 		/**
+		 * Let \a keySet be the return value of \a this.findLinkedChanges(changeId,inBranchA).
 		 * When this method returns, \a keySet will be mapped to a LinkedChanges object containing \a change. All preexisting
 		 * mappings persist. Details follow.
 		 *
@@ -66,20 +92,18 @@ class LinkedChangesTransition
 		 * contains \a change, \a keySet and all LinkedChanges mapped to \a other are mapped to the union of \a other and
 		 * \a current.
 		 */
-		void insert(LinkedChanges keySet, std::shared_ptr<const ChangeDescription>& change);
+		void insert(Model::NodeIdType oldChangeId, bool inBranchA,
+						std::shared_ptr<const ChangeDescription>& change);
+
+		/**
+		 * Returns the new LinkedChangesSet a.k.a. the new state after the transition.
+		 */
 		LinkedChangesSet values() const;
 
 	private:
+		LinkedChangesSet oldLinkedChangesSet_;
 		QHash<LinkedChanges, LinkedChanges> transition_;
 };
-
-/**
- * Returns the new LinkedChangesSet a.k.a. the new state after the transition.
- */
-inline LinkedChangesSet LinkedChangesTransition::values() const
-{
-	return LinkedChangesSet::fromList(transition_.values());
-}
 
 inline uint qHash(const LinkedChanges& linkedChanges, uint seed = 0)
 {

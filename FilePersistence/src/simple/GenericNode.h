@@ -49,6 +49,7 @@ class FILEPERSISTENCE_API GenericNode {
 
 		void resetValue(ValueType type, const QString& value);
 		void reset(const GenericNode* nodeToCopy);
+		void reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy);
 
 		void setId(Model::NodeIdType id);
 		void setParentId(Model::NodeIdType parentId);
@@ -130,7 +131,6 @@ class FILEPERSISTENCE_API GenericNode {
 		 */
 		void reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy);
 		void reset(GenericPersistentUnit* persistentUnit);
-		void reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy);
 
 		void ensureDataRead() const;
 

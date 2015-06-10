@@ -143,26 +143,38 @@ void Merge::performTrueMerge()
 	conflictingChanges_ = {};
 	conflictPairs_ = {};
 
-	LinkedChangesTransitionTrace trace;
+	/* We create the initial LinkedChangesSet and initialize it with single-member sets of
+	 * changes (no links).
+	 */
 	LinkedChangesSet linkedChangesSet;
-	// initialize with single-member sets (no links)
+	std::shared_ptr<GenericTree> tree = std::shared_ptr<GenericTree>(new GenericTree("AllocatorForChanges"));
+	GenericPersistentUnit* pUnit = &tree->newPersistentUnit("Allocator");
 	for (auto change : cdgA.changes().values())
 	{
 		auto linkedChanges = newLinkedChanges();
-		linkedChanges->insert(change);
+		linkedChanges->insert(change->copy(pUnit));
 		linkedChangesSet.insert(linkedChanges);
 	}
-	LinkedChangesTransition transition = pipelineInitializer_->run(cdgA, cdgB,
-																							  conflictingChanges_, conflictPairs_, linkedChangesSet);
-	trace.append(transition);
+	for (auto change : cdgB.changes().values())
+	{
+		auto linkedChanges = newLinkedChanges();
+		linkedChanges->insert(change->copy(pUnit));
+		linkedChangesSet.insert(linkedChanges);
+	}
+
+	// ### PIPELINE INITIALIZER ###
+	LinkedChangesTransition transition = pipelineInitializer_->run(cdgA, cdgB, conflictingChanges_,
+																						conflictPairs_, linkedChangesSet);
+	// NOTE this is where one would check the transition of the initializer.
+
+	// ### THE PIPLELINE ###
 	for (auto component : conflictPipeline_)
 	{
-		linkedChangesSet = transition.values();
+		linkedChangesSet = LinkedChangesSet(transition.values()); // deep copy current state
 		transition = component->run(cdgA, cdgB,
 											 conflictingChanges_, conflictPairs_, linkedChangesSet);
-		trace.append(transition);
+		// NOTE this is where one would check the transition of a component.
 	}
-	// TODO compute final RA?
 
 	IdToChangeDescriptionHash applicableChanges;
 	for (auto change : cdgA.changes())

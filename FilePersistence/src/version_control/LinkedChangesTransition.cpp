@@ -28,18 +28,68 @@
 
 namespace FilePersistence {
 
-LinkedChangesTransition::LinkedChangesTransition() {}
-
-LinkedChangesTransition::LinkedChangesTransition(LinkedChangesSet& linkedChangesSet)
+LinkedChanges LinkedChangesSet::findLinkedChanges(Model::NodeIdType oldChangeId, bool inBranchA)
 {
-	for (auto linkedChanges : linkedChangesSet)
+	for (auto linkedChanges : this->values())
 	{
-		transition_.insert(linkedChanges, newLinkedChanges(linkedChanges));
+		for (auto change : *linkedChanges)
+		{
+			if (change->id() == oldChangeId && (changesOfBranchA_.contains(change) == inBranchA))
+				return linkedChanges;
+		}
+	}
+	Q_ASSERT(false);
+}
+
+LinkedChangesTransition::LinkedChangesTransition(LinkedChangesSet& linkedChangesSet) :
+	oldLinkedChangesSet_{linkedChangesSet} {}
+
+LinkedChangesTransition::LinkedChangesTransition(LinkedChangesSet& linkedChangesSet,
+																 ChangeDependencyGraph& cdgA,
+																 ChangeDependencyGraph& cdgB) :
+	oldLinkedChangesSet_{linkedChangesSet}
+{
+	for (auto linkedChanges : linkedChangesSet.values())
+	{
+		auto nLinkedChanges = newLinkedChanges();
+		for (auto oldChange : linkedChanges->values())
+		{
+			bool inA = linkedChangesSet.changesOfBranchA_.contains(oldChange);
+			std::shared_ptr<const ChangeDescription> newChange = inA ? cdgA.changes().value(oldChange->id())
+																						: cdgB.changes().value(oldChange->id());
+			nLinkedChanges->insert(newChange);
+		}
+		transition_.insert(linkedChanges, nLinkedChanges);
 	}
 }
 
-void LinkedChangesTransition::insert(LinkedChanges keySet, std::shared_ptr<const ChangeDescription>& change)
+LinkedChanges newLinkedChanges(LinkedChanges changesToCopy, GenericPersistentUnit* persistentUnit)
 {
+	auto linkedChanges = newLinkedChanges();
+	for (std::shared_ptr<const ChangeDescription> change : *changesToCopy)
+	{
+		linkedChanges->insert(change->copy(persistentUnit));
+	}
+	return linkedChanges;
+}
+
+LinkedChangesSet newLinkedChangesSet(LinkedChangesSet changesSetToCopy)
+{
+	std::shared_ptr<GenericTree> tree = std::shared_ptr<GenericTree>(new GenericTree("AllocatorForChanges"));
+	auto pUnit = tree->newPersistentUnit("Allocator");
+	LinkedChangesSet newLinkedChangesSet;
+	for (auto changesToCopy : changesSetToCopy)
+	{
+		newLinkedChangesSet.insert(newLinkedChanges(changesToCopy, &pUnit));
+		// TODO check if pUnit is still the object of the tree
+	}
+	return newLinkedChangesSet;
+}
+
+void LinkedChangesTransition::insert(Model::NodeIdType oldChangeId, bool inBranchA,
+												 std::shared_ptr<const ChangeDescription>& change)
+{
+	auto keySet = oldLinkedChangesSet_.findLinkedChanges(oldChangeId, inBranchA);
 	// TODO could probably be optimized
 	if (transition_.contains(keySet) && transition_.value(keySet)->contains(change)) return; // already mapped
 
@@ -57,11 +107,8 @@ void LinkedChangesTransition::insert(LinkedChanges keySet, std::shared_ptr<const
 
 	if (changeIsMappedTo)
 	{
-		if (transition_.contains(keySet))
-		{
-			auto currentlyMappedSet = transition_.value(keySet);
-			setContainingChange->unite(*currentlyMappedSet);
-		}
+		auto currentlyMappedSet = transition_.value(keySet);
+		setContainingChange->unite(*currentlyMappedSet);
 		transition_.insert(keySet, setContainingChange);
 	}
 	else
