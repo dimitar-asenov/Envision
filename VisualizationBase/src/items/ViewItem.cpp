@@ -130,29 +130,38 @@ void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget)
 
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 {
+	Super::updateGeometry(availableWidth, availableHeight);
+	bool anyChanges = false;
 	for (auto node : allNodes())
 	{
 		auto asViewItemNode = DCast<ViewItemNode>(node);
 		Q_ASSERT(asViewItemNode);
 		auto item = DCast<VViewItemNode>(findVisualizationOf(asViewItemNode));
 		Q_ASSERT(item);
-		if (item->currentFormIndex() == 1) item->determineSpacing();
+		if (item->currentFormIndex() == 1)
+			anyChanges = item->determineSpacing() || anyChanges;
 	}
-	Super::updateGeometry(availableWidth, availableHeight);
+	if (anyChanges)
+		setUpdateNeeded(RepeatUpdate);
 }
 
 void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)
 {
 	//First, make sure the current grid is big enough to fit the node
-	ensureColumnExists(column);
-	if (nodes_[column].size() <= row)
-		nodes_[column].resize(row + 1);
+	ensurePositionExists(column, row);
 	//We can either put the node at a free space if exists, or insert otherwise
 	if (nodes_[column][row] == nullptr)
 		nodes_[column][row] = node;
 	else
 		nodes_[column].insert(row, node);
 	setUpdateNeeded(StandardUpdate);
+}
+
+void ViewItem::ensurePositionExists(int column, int row)
+{
+	ensureColumnExists(column);
+	if (nodes_[column].size() <= row)
+		nodes_[column].resize(row + 1);
 }
 
 void ViewItem::ensureColumnExists(int column)

@@ -67,6 +67,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
 
+		void ensurePositionExists(int column, int row);
 		void ensureColumnExists(int column);
 
 		QVector<QVector<Model::Node*>> nodesGetter();
