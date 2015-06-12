@@ -1,4 +1,2 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="../Item/default">
-	<extraCursorsOutsideShape>false</extraCursorsOutsideShape>
-</style>
+<style prototypes="../DeclarativeItemBase/default"/>
