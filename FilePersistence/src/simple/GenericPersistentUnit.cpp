@@ -73,7 +73,6 @@ void GenericPersistentUnit::releaseLastNode()
 GenericNode* GenericPersistentUnit::newNode()
 {
 	Q_ASSERT(!data_);
-	Q_ASSERT(!tree_->piecewiseLoader());
 
 	auto node = nextNode();
 	node->reset(this);
@@ -101,6 +100,10 @@ GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
 
 GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool deepCopy)
 {
+	Q_ASSERT(!data_);
+	Q_ASSERT(tree()->piecewiseLoader());
+	Q_ASSERT(nodeToCopy->tree() != tree());
+
 	auto node = nextNode();
 	node->reset(this, nodeToCopy);
 	if (deepCopy)
@@ -112,6 +115,7 @@ GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool 
 			node->addChild(child);
 		}
 	}
+
 	return node;
 }
 
