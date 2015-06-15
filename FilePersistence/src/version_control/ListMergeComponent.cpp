@@ -538,18 +538,4 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(std::shared
 	return LinkedChangesTransition(linkedChangesSet); // TODO fill properly
 }
 
-std::shared_ptr<const ChangeDescription> ListMergeComponent::copyWithNewIndex(
-		std::shared_ptr<const ChangeDescription>& change, int index)
-{
-	GenericNode* newNode = change->nodeB()->persistentUnit()->newNode();
-	newNode->reset(change->nodeB());
-	newNode->setLabel(QString(index));
-	auto newChange = std::make_shared<const ChangeDescription>(change->nodeA(), newNode);
-
-	// change is the same except maybe label flag
-	Q_ASSERT(change->type() == newChange->type());
-	Q_ASSERT((change->flags() | ChangeDescription::Label) == (newChange->flags() | ChangeDescription::Label));
-	return newChange;
-}
-
 } /* namespace FilePersistence */

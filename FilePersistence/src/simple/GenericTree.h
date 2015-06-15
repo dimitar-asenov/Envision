@@ -35,6 +35,7 @@ class GenericNode;
 class PiecewiseLoader;
 class NodeData;
 
+// TODO It might be good to separate trees with piecewise loaders and other "kinds" of trees into subclasses.
 class FILEPERSISTENCE_API GenericTree {
 	public:
 
@@ -49,7 +50,11 @@ class FILEPERSISTENCE_API GenericTree {
 		GenericPersistentUnit& newPersistentUnit(QString name, char* data = nullptr, int dataSize = 0);
 		GenericPersistentUnit* persistentUnit(const QString& name);
 
-		GenericNode* find(Model::NodeIdType id);
+		/**
+		 * Returns the node in this tree with the ID \a id or \a nullptr if no such node exists.
+		 * If \a lazyLoad is true, this attempts to lazy-load the node if it does not exist yet.
+		 */
+		GenericNode* find(Model::NodeIdType id, bool lazyLoad = false);
 
 		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);
 
@@ -60,7 +65,15 @@ class FILEPERSISTENCE_API GenericTree {
 
 		QString name_;
 
+		/**
+		 * If this tree has a piecewise loader, this hash contains all loaded nodes of this tree.
+		 * If this tree does not have a piecewise loader, this is empty.
+		 */
 		QHash<Model::NodeIdType, GenericNode*> quickLookupHash_;
+		/**
+		 * If this tree has a piecewise loader, this hash maps IDs of unloaded nodes to all nodes whose parentId = ID.
+		 * If this tree does not have a piecewise loader, this is empty.
+		 */
 		QMultiHash<Model::NodeIdType, GenericNode*> nodesWithoutParents_;
 		std::shared_ptr<PiecewiseLoader> piecewiseLoader_;
 

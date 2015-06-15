@@ -251,8 +251,8 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 				// TODO currently assuming no change of persistent unit
 				auto node = tree->find(change->nodeA()->id());
 				node->detachFromParent();
-				node->reset(change->nodeB());
-				node->linkNode(); // TODO only attach new parent
+				node->copy(change->nodeB());
+				node->attachToParent();
 				break;
 			}
 
@@ -260,7 +260,7 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 			{
 				// TODO currently assuming no change of persistent unit
 				auto node = tree->find(change->nodeA()->id());
-				node->reset(change->nodeB()); // FIXME should not unlink
+				node->copy(change->nodeB());
 				break;
 			}
 

@@ -106,13 +106,15 @@ GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool 
 
 	auto node = nextNode();
 	node->reset(this, nodeToCopy);
+	// TODO maybe here but somewhere: insert node into quicklookup before returning
+
 	if (deepCopy)
 	{
 		for (auto childToCopy : nodeToCopy->children())
 		{
 			auto child = newNode(childToCopy, true);
 			child->setParent(node);
-			node->addChild(child);
+			node->attachChild(child);
 		}
 	}
 

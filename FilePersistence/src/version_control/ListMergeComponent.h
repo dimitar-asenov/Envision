@@ -125,12 +125,6 @@ class ListMergeComponent : public ConflictPipelineComponent
 																				QList<Model::NodeIdType>& mergedList,
 																				ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 																				LinkedChangesSet& linkedChangesSet);
-		/**
-		 * Returns a new ChangeDescription that is identical to the argument \a change with the exception that \a nodeB
-		 * of the new ChangeDescription has the label \a index.
-		 */
-		static std::shared_ptr<const ChangeDescription> copyWithNewIndex(
-				std::shared_ptr<const ChangeDescription>& change, int index);
 
 		QSet<QString> conflictTypes_;
 		QSet<QString> listTypes_;

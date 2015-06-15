@@ -38,9 +38,18 @@ class FILEPERSISTENCE_API GenericNode {
 	public:
 		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 
+		/**
+		 * Sets id, parentId, label, value and type equal to \a other. If the parent changes, this node must first be
+		 * detached from its parent.
+		 */
+		void copy(const GenericNode* other);
+
 		void setLabel(const QString& label);
 		void setType(const QString& type);
 
+		/**
+		 * This method must only be called if no value has been set yet.
+		 */
 		void setValue(ValueType type, const QString& value);
 		void setValue(const QString& value);
 		void setValue(double value);
@@ -48,14 +57,12 @@ class FILEPERSISTENCE_API GenericNode {
 		void setChildren(QList<GenericNode*>);
 
 		void resetValue(ValueType type, const QString& value);
-		void reset(const GenericNode* nodeToCopy); // FIXME make sure only PersistentUnit can set PU pointer
-		void reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy);
 
 		void setId(Model::NodeIdType id);
 		void setParentId(Model::NodeIdType parentId);
 
 		void setParent(GenericNode* parent);
-		GenericNode* addChild(GenericNode* child);
+		GenericNode* attachChild(GenericNode* child);
 		GenericNode* child(const QString& label);
 		const QList<GenericNode*>& children() const;
 		bool areAllChildrenLoaded() const;
@@ -76,7 +83,16 @@ class FILEPERSISTENCE_API GenericNode {
 		bool hasIntValue() const;
 		bool hasDoubleValue() const;
 
-		void remove();
+		/**
+		 * Removes the node from the tree. If \a recursive is false, this node must not have any children.
+		 * If \a recursive is true, all children of this node are also removed.
+		 */
+		void remove(bool recursive = false);
+
+		/**
+		 * Links this node to the parent according to the parentId if the parent is loaded.
+		 */
+		void attachToParent();
 		void detachFromParent();
 
 		Model::NodeIdType id() const;
@@ -106,7 +122,7 @@ class FILEPERSISTENCE_API GenericNode {
 		Model::NodeIdType parentId_{};
 		GenericNode* parent_{};
 		QList<GenericNode*> children_;
-		bool areAllChildrenLoaded_{};
+		bool areAllChildrenLoaded_ = false;
 
 		/**
 		 * The text line from which this node should be created.
@@ -128,8 +144,12 @@ class FILEPERSISTENCE_API GenericNode {
 		 *
 		 * Set \a lazy to true when loading with an allocator. In this case \a dataLine will be saved and only parsed
 		 * on demand. If \a lazy is false, then the node will be immediately initialized with the provided data.
+		 *
+		 * Balz writes: This method should only be called from a persistent unit and that persistent unit should pass itself
+		 * as the \a persistenUnit argument. Before it is called, the values of the members of \a this are undefined.
 		 */
 		void reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy);
+		void reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy);
 		void reset(GenericPersistentUnit* persistentUnit);
 
 		void ensureDataRead() const;

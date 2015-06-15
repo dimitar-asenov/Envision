@@ -129,7 +129,7 @@ Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeD
 	while (inBase == nullptr || !node->parentId().isNull())
 	{
 		node = node->parent();
-		// FIXME load in base
+		inBase = treeBase_->find(node->id(), true);
 	}
 	if (inBase)
 	{
@@ -139,8 +139,8 @@ Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeD
 	}
 	else
 	{
-		// no ancestor in base. branch created new root. return 0.
-		return QUuid(0);
+		// no ancestor in base. branch created new root.
+		return Model::NodeIdType();
 	}
 }
 

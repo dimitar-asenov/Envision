@@ -67,10 +67,14 @@ GenericPersistentUnit* GenericTree::persistentUnit(const QString& name)
 		return nullptr;
 }
 
-GenericNode* GenericTree::find(Model::NodeIdType id)
+GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad)
 {
 	Q_ASSERT(piecewiseLoader_);
-	return quickLookupHash_.value(id);
+
+	auto node = quickLookupHash_.value(id);
+	if (lazyLoad && !node)
+		piecewiseLoader_->loadAndLinkNode(id);
+	return node;
 }
 
 GenericNode* GenericTree::emptyChunk()

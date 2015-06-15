@@ -152,10 +152,10 @@ void GenericNode::setParent(GenericNode* parent)
 	Q_ASSERT(!tree()->piecewiseLoader());
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
-	Q_ASSERT(parentId_.isNull() || parent->id().isNull() || parentId_ == parent->id());
+	Q_ASSERT(parentId_.isNull() || parentId_ == parent->id());
 }
 
-GenericNode* GenericNode::addChild(GenericNode* child)
+GenericNode* GenericNode::attachChild(GenericNode* child)
 {
 	Q_ASSERT(!tree()->piecewiseLoader());
 	Q_ASSERT(child);
@@ -165,6 +165,23 @@ GenericNode* GenericNode::addChild(GenericNode* child)
 
 	children_.append(child);
 	return child;
+}
+
+void GenericNode::copy(const GenericNode* other)
+{
+	Q_ASSERT(!sameTree(other));
+	Q_ASSERT(this->parent_ == nullptr || this->parentId_ == other->parentId_);
+
+	if (other->dataLine_)
+		Parser::parseLine(const_cast<GenericNode*>(this), other->dataLine_, other->dataLineLength_);
+	else
+	{
+		setLabel(other->label());
+		setType(other->type());
+		resetValue(other->valueType(), other->value_);
+		setId(other->id());
+		setParentId(other->parentId());
+	}
 }
 
 void GenericNode::reset(GenericPersistentUnit* persistentUnit)
@@ -186,6 +203,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy)
 {
+	Q_ASSERT(!tree()->piecewiseLoader());
 	reset(persistentUnit);
 	Q_ASSERT(dataLine);
 	Q_ASSERT(dataLineLength > 0);
@@ -199,15 +217,10 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataL
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine, dataLineLength);
 }
 
-void GenericNode::reset(const GenericNode* nodeToCopy)
-{
-	reset(nodeToCopy->persistentUnit(), nodeToCopy);
-}
-
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy)
 {
 	Q_ASSERT(nodeToCopy);
-	Q_ASSERT(tree()->piecewiseLoader() != nullptr);
+	// Q_ASSERT(tree()->piecewiseLoader() != nullptr);
 	Q_ASSERT(!sameTree(nodeToCopy));
 	reset(persistentUnit);
 
@@ -242,7 +255,7 @@ void GenericNode::linkNode(bool recursiveLink)
 		if (auto parentNode = tree()->find(parentId_))
 		{
 			setParent(parentNode);
-			parentNode->addChild(this);
+			parentNode->attachChild(this);
 		}
 		else tree()->nodesWithoutParents().insert(parentId_, this);
 
@@ -252,7 +265,7 @@ void GenericNode::linkNode(bool recursiveLink)
 		{
 			auto child = childIt.value();
 			child->setParent(this);
-			addChild(child);
+			attachChild(child);
 			childIt = tree()->nodesWithoutParents().erase(childIt);
 		}
 
@@ -272,10 +285,24 @@ void GenericNode::linkNode(bool recursiveLink)
 	}
 }
 
-void GenericNode::remove()
+void GenericNode::remove(bool recursive)
 {
+	if (recursive)
+		for (auto child : children())
+			child->remove(true); // NOTE This will modify the list we are iterating over, might cause bugs.
+	Q_ASSERT(children().isEmpty());
 	detachFromParent();
 	reset(persistentUnit_);
+}
+
+void GenericNode::attachToParent()
+{
+	Q_ASSERT(!parentId().isNull());
+	setParent(tree()->find(parentId()));
+	if (parent_)
+		parent_->children_.append(this);
+	else
+		tree()->nodesWithoutParents().insert(parentId(), this);
 }
 
 void GenericNode::detachFromParent()
@@ -284,8 +311,10 @@ void GenericNode::detachFromParent()
 	{
 		parent_->children_.removeOne(this);
 		parent_ = nullptr;
-		parentId_ = {};
 	}
+	else
+		tree()->nodesWithoutParents().remove(parentId(), this);
+	setParentId({});
 }
 
 } /* namespace FilePersistence */

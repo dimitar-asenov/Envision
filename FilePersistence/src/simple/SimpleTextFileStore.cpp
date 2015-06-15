@@ -156,7 +156,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 
 	if ( node->parent() ) // If this is not the root node, then we should put a reference to this node
 	{
-		auto child = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
+		auto child = genericNode_->attachChild(genericNode_->persistentUnit()->newNode());
 		child->setLabel(name);
 		child->setType(GenericNode::PERSISTENT_UNIT_TYPE);
 		child->setId(treeManager_->nodeIdMap().id(node));
@@ -191,7 +191,7 @@ void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name)
 	else
 	{
 		auto parent = genericNode_;
-		genericNode_ = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
+		genericNode_ = genericNode_->attachChild(genericNode_->persistentUnit()->newNode());
 		saveNodeDirectly(node, name);
 		genericNode_ = parent;
 	}

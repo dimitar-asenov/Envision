@@ -300,7 +300,7 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 
 			while (nodeStack.size() > tabLevel) nodeStack.removeLast();
 
-			nodeStack.last()->addChild(child);
+			nodeStack.last()->attachChild(child);
 			child->setParent(nodeStack.last());
 			nodeStack.append(child);
 		}

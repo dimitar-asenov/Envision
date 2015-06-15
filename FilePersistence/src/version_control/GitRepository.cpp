@@ -621,8 +621,9 @@ void GitRepository::loadGenericTree(const std::shared_ptr<GenericTree>& tree, co
 		if (declaration)
 		{
 			GenericNode* parent = declaration->parent();
+			root->detachFromParent();
 			root->setParent(parent);
-			parent->addChild(root);
+			parent->attachChild(root);
 
 			declaration->remove();
 		}
