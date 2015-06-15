@@ -157,7 +157,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	if ( node->parent() ) // If this is not the root node, then we should put a reference to this node
 	{
 		auto child = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
-		child->setName(name);
+		child->setLabel(name);
 		child->setType(GenericNode::PERSISTENT_UNIT_TYPE);
 		child->setId(treeManager_->nodeIdMap().id(node));
 		if (node->parent()) child->setParentId(treeManager_->nodeIdMap().id(node->parent()));
@@ -200,7 +200,7 @@ void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name)
 void SimpleTextFileStore::saveNodeDirectly(const Model::Node *node, const QString &name)
 {
 	Q_ASSERT(!node->isPartiallyLoaded());
-	genericNode_->setName(name);
+	genericNode_->setLabel(name);
 	genericNode_->setType(node->typeName());
 	genericNode_->setId(treeManager_->nodeIdMap().id(node));
 	if (node->parent()) genericNode_->setParentId(treeManager_->nodeIdMap().id(node->parent()));
@@ -309,8 +309,8 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 		Model::LoadedNode ln;
 		if ( genericNode_->type() == GenericNode::PERSISTENT_UNIT_TYPE )
 			ln = loadNewPersistenceUnit(
-					genericNode_->id().toString(), parent, loadPartially.contains(genericNode_->name()));
-		else ln = loadNode(parent, loadPartially.contains(genericNode_->name()));
+					genericNode_->id().toString(), parent, loadPartially.contains(genericNode_->label()));
+		else ln = loadNode(parent, loadPartially.contains(genericNode_->label()));
 
 		result.append(ln);
 	}
@@ -322,7 +322,7 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 Model::LoadedNode SimpleTextFileStore::loadNode(Model::Node* parent, bool loadPartially)
 {
 	Model::LoadedNode node;
-	node.name = genericNode_->name();
+	node.name = genericNode_->label();
 	node.node = Model::Node::createNewNode(genericNode_->type(), parent, *this, partiallyLoadingATree_ && loadPartially);
 	treeManager_->nodeIdMap().setId( node.node, genericNode_->id() ); // Record id
 	return node;

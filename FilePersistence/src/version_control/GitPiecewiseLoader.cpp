@@ -26,8 +26,6 @@
 
 #include "GitPiecewiseLoader.h"
 
-// TODO implement more robust parsing
-
 namespace FilePersistence {
 
 GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
@@ -47,17 +45,11 @@ NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 
 	for (auto line : result.stdout())
 	{
-		auto lineParts = line.split(":");
-		// first element is revision
-		QString persistentUnit = lineParts[1];
-		QString nodeLine = lineParts[2];
-
-		// Is it better to do this check here, or already as part of the grep pattern?
-		if (idIsNode(idString, nodeLine)) {
+		auto nodeData = parseGrepLine(line);
+		// NOTE Is it better to do this check here, or already as part of the grep pattern?
+		if (idIsNode(idString, nodeData.nodeLine_)) {
 			Q_ASSERT(!found); // Check that there is no more than one such node
 			found = true;
-			nodeData.persistentUnit_ = persistentUnit;
-			nodeData.nodeLine_ = nodeLine;
 		}
 	}
 
@@ -77,20 +69,21 @@ QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 
 	for (auto line : result.stdout())
 	{
-		auto lineParts = line.split(":");
-		// first element is revision
-		QString persistentUnit = lineParts[1];
-		QString nodeLine = lineParts[2];
-
-		if (idIsParent(idString, nodeLine)) {
-			NodeData nodeData;
-			nodeData.persistentUnit_ = persistentUnit;
-			nodeData.nodeLine_ = nodeLine;
+		auto nodeData = parseGrepLine(line);
+		if (idIsParent(idString, nodeData.nodeLine_))
 			children.append(nodeData);
-		}
 	}
 
 	return children;
+}
+
+NodeData GitPiecewiseLoader::parseGrepLine(const QString& line)
+{
+	NodeData nodeData;
+	// first element is revision
+	nodeData.persistentUnit_ = line.section(':', 1, 1);
+	nodeData.nodeLine_ = line.section(':', 2);
+	return nodeData;
 }
 
 bool GitPiecewiseLoader::idIsParent(const QString& id, const QString& nodeLine)

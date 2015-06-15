@@ -35,78 +35,90 @@ ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QStrin
 
 ListMergeComponent::~ListMergeComponent() {}
 
-LinkedChangesTransition ListMergeComponent::run(
-								ChangeDependencyGraph& cdgA,
-								ChangeDependencyGraph& cdgB,
-								QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
-								ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
+LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> treeA,
+																std::shared_ptr<GenericTree> treeB,
+																std::shared_ptr<GenericTree> treeBase,
+																ChangeDependencyGraph& cdgA,
+																ChangeDependencyGraph& cdgB,
+																QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+																ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
 {
 	LinkedChangesTransition transition(linkedChangesSet, cdgA, cdgB);
 
 	auto listsToMerge = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
 
-	for (auto listContainer : listsToMerge)
+	for (auto listContainerId : listsToMerge)
 	{
-		// TODO load from revision
-		auto idListA = nodeListToIdList(cdgA.changes().find(listContainer->id()).value()->nodeB()->children());
-		auto idListB = nodeListToIdList(cdgB.changes().find(listContainer->id()).value()->nodeB()->children());
-		auto idListBase = nodeListToIdList(listContainer->children());
+		auto listContainerBase = treeBase->find(listContainerId);
+		auto idListBase = nodeListToSortedIdList(listContainerBase->children());
+		auto idListA = nodeListToSortedIdList(treeA->find(listContainerId)->children());
+		auto idListB = nodeListToSortedIdList(treeB->find(listContainerId)->children());
 		QList<Model::NodeIdType> mergedList;
-		if (listTypes_.contains(listContainer->type()))
+		if (listTypes_.contains(listContainerBase->type()))
 		{
+			// list is ordered
 			auto chunks = computeChunks(idListA, idListB, idListBase);
 			for (auto chunk : chunks)
 			{
 				if (chunk.stable_)
-				{
 					mergedList.append(chunk.spanBase_);
-				}
 				else
 				{
 					auto mergedChunk = computeMergedChunk(chunk, cdgA, cdgB, idListA, idListB, idListBase);
-					if (mergedChunk.valid_) mergedList.append(mergedChunk.chunk_);
+					if (mergedChunk.noConflicts_) mergedList.append(mergedChunk.chunk_);
 					// else mergedChunks.append(chunk.spanBase_); TODO not sure if this is the best thing to do, maybe keep empty
+					// flag right changes as unresolved
 				}
 			}
 		}
 		else // list is unordered
 		{
 			mergedList.append(idListA);
-			for (auto id : idListB)
-			{
-				if (!mergedList.contains(id)) mergedList.append(id);
-			}
+			for (auto elem : idListB)
+				if (!mergedList.contains(elem))
+				{
+					auto pos = findPosition(elem, idListB, mergedList);
+					if (!pos.valid_) mergedList.append(elem); // if no valid position is found, we just append.
+					else if (pos.predecessor_.isNull()) mergedList.prepend(elem);
+					else
+					{
+						int idx = mergedList.indexOf(pos.predecessor_);
+						mergedList.insert(idx + 1, elem);
+					}
+				}
 		}
 
 		// assert that each element occurs only once in the merged list.
 		for (auto elemId : mergedList) Q_ASSERT(mergedList.indexOf(elemId) == mergedList.lastIndexOf(elemId));
 
 		// TODO update transition instead of overwrite
-		transition = translateListIntoChanges(listContainer->id(), mergedList, cdgA, cdgB, linkedChangesSet);
+		transition = translateListIntoChanges(treeA, treeB, treeBase, listContainerId,
+														  mergedList, cdgA, cdgB, linkedChangesSet);
 	}
 
 	return transition;
 }
 
-QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
+QSet<Model::NodeIdType> ListMergeComponent::computeListsToMerge(
 		ChangeDependencyGraph& cdgA,
 		ChangeDependencyGraph& cdgB,
-		QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
+		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 		ConflictPairs& conflictPairs)
 {
-	QSet<const GenericNode*> listsToMerge;
+	QSet<Model::NodeIdType> listsToMerge;
 	for (auto change : conflictingChanges)
 	{
 		if (!change->onlyStructureChange()) continue;
-		if (!listTypes_.contains(change->nodeA()->type())) continue;
+		if (!listTypes_.contains(change->nodeA()->type()) &&
+			 !unorderedTypes_.contains(change->nodeA()->type())) continue;
 
 		// node of list type and one branch only changes child structure
 		// look for change of other branch of same node
-		std::shared_ptr<const ChangeDescription> conflictingChange;
+		std::shared_ptr<ChangeDescription> conflictingChange;
 		bool conflictingChangeFound = false;
 		for (auto other : conflictPairs.values(change))
 		{
-			if (other->id() == change->id())
+			if (other->nodeId() == change->nodeId())
 			{
 				conflictingChange = other;
 				conflictingChangeFound = true;
@@ -115,53 +127,67 @@ QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 		}
 
 		if (conflictingChangeFound && !conflictingChange->onlyStructureChange()) continue;
-
 		// other branch only changes child structure
-		// FIXME make clear which change comes from which branch
+
+		// Now we have change on list container and conflicting change on the same node.
+
+		std::shared_ptr<ChangeDescription> changeA;
+		std::shared_ptr<ChangeDescription> changeB;
+		if (cdgA.changes().value(change->nodeId()) == change)
+		{
+			changeA = change;
+			changeB = conflictingChange;
+		}
+		else
+		{
+			changeA = conflictingChange;
+			changeB = change;
+		}
+
+		Q_ASSERT(changeA->nodeA() == changeB->nodeA()); // both changes point to the same base node object.
+
 		QSet<Model::NodeIdType> allElementIds;
+		// returns true iff all elements are conflict roots
+		auto gatherAndCheckElems = [&](const GenericNode* container) -> bool
+		{
+			bool allElementsConflictRoots = true;
+			for (auto element : container->children())
+			{
+				allElementIds.insert(element->id());
+				allElementsConflictRoots &= conflictTypes_.contains(element->type());
+				if (!allElementsConflictRoots) break;
+			}
+			return allElementsConflictRoots;
+		};
+
 		bool allElementsConflictRoots = true;
-		for (auto element : change->nodeA()->children())
-		{
-			allElementIds.insert(element->id());
-			allElementsConflictRoots &= conflictTypes_.contains(element->type());
-			if (!allElementsConflictRoots) break;
-		}
-		for (auto element : change->nodeB()->children())
-		{
-			allElementIds.insert(element->id());
-			allElementsConflictRoots &= conflictTypes_.contains(element->type());
-			if (!allElementsConflictRoots) break;
-		}
-		for (auto element : conflictingChange->nodeB()->children())
-		{
-			allElementIds.insert(element->id());
-			allElementsConflictRoots &= conflictTypes_.contains(element->type());
-			if (!allElementsConflictRoots) break;
-		}
+		allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeA());
+		allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeB());
+		allElementsConflictRoots &= gatherAndCheckElems(changeB->nodeB());
 
 		if (!allElementsConflictRoots) continue;
 
 		// for all elements, check that conflicts are on label only
 		auto check = [&](Model::NodeIdType id, ChangeDependencyGraph& cdg) -> bool
 		{
-			bool notBothBranchesModify = true;
+			bool atMostOneBranchModifiesBeyondLabel = true;
 			if (cdg.changes().contains(id))
 			{
-				std::shared_ptr<const ChangeDescription> elemChange1 = cdg.changes().value(id);
+				auto elemChange1 = cdg.changes().value(id);
 				if (!elemChange1->onlyLabelChange())
 				{
-					// branch A changes more than label
+					// branch of CDG changes more than label
 					for (auto elemChange2 : conflictPairs.values(elemChange1))
 					{
-						if (elemChange2->id() == elemChange1->id() && !elemChange2->onlyLabelChange())
+						if (elemChange2->nodeId() == elemChange1->nodeId() && !elemChange2->onlyLabelChange())
 						{
-							notBothBranchesModify = false;
+							atMostOneBranchModifiesBeyondLabel = false;
 							break;
 						}
 					}
 				}
 			}
-			return notBothBranchesModify;
+			return atMostOneBranchModifiesBeyondLabel;
 		};
 		bool allElementsMergable = true;
 		for (auto id : allElementIds)
@@ -172,7 +198,9 @@ QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 
 		if (!allElementsMergable) continue;
 
-		listsToMerge.insert(change->nodeA());
+		listsToMerge.insert(changeA->nodeId());
+
+		// TODO extract each check into its own method
 	}
 	return listsToMerge;
 }
@@ -180,40 +208,64 @@ QSet<const GenericNode*> ListMergeComponent::computeListsToMerge(
 ListMergeComponent::ChunkMergeResult ListMergeComponent::computeMergedChunk(Chunk chunk,
 																									 ChangeDependencyGraph& cdgA,
 																									 ChangeDependencyGraph& cdgB,
-																									 QList<Model::NodeIdType>&,
+																									 QList<Model::NodeIdType>& idListA,
 																									 QList<Model::NodeIdType>& idListB,
 																									 QList<Model::NodeIdType>& idListBase)
 {
 	QList<Model::NodeIdType> mergedChunk;
-	bool noConflict = true;
-	for (auto elem : chunk.spanA_)
+	bool valid = true;
+	valid &= insertElemsIntoChunk(mergedChunk, idListBase, chunk.spanBase_,
+											cdgA, cdgB, idListB, chunk.spanA_, chunk.spanB_);
+	if (valid)
+		valid &= insertElemsIntoChunk(mergedChunk, idListBase, chunk.spanBase_,
+												cdgB, cdgA, idListA, chunk.spanB_, chunk.spanA_);
+	return ChunkMergeResult(valid, mergedChunk);
+}
+
+bool ListMergeComponent::insertElemsIntoChunk(QList<Model::NodeIdType>& mergedChunk,
+															 const QList<Model::NodeIdType>& idListBase,
+															 const QList<Model::NodeIdType>& spanBase,
+															 const ChangeDependencyGraph& cdgA,
+															 const ChangeDependencyGraph& cdgB,
+															 const QList<Model::NodeIdType>& idListB,
+															 const QList<Model::NodeIdType>& spanA,
+															 const QList<Model::NodeIdType>& spanB)
+{
+	bool conflict = false;
+	for (auto elem : spanA)
 	{
-		Position posA = findPosition(elem, chunk.spanA_, mergedChunk);
-		Position posB = findPosition(elem, chunk.spanB_, mergedChunk);
-		Position posBase = findPosition(elem, chunk.spanBase_, mergedChunk);
+		Position posA = findPosition(elem, spanA, mergedChunk);
+		Position posB = spanB.contains(elem) ? findPosition(elem, spanB, mergedChunk) : Position(false, {});
+		Position posBase = spanBase.contains(elem) ? findPosition(elem, spanBase, mergedChunk) : Position(false, {});
+
 		auto changeA = cdgA.changes().find(elem);
 		bool elemInTreeBase = !(changeA != cdgA.changes().end() && changeA.value()->type() == ChangeType::Insertion);
 		auto changeB = cdgB.changes().find(elem);
 		bool elemInTreeB = elemInTreeBase &&
 				!(changeB != cdgB.changes().end() && changeB.value()->type() == ChangeType::Deletion);
 
-		if (chunk.spanBase_.contains(elem))
+		/* If true and the positions are valid, we should insert.
+		 * This is false if other branch deletes or element has already been inserted by other branch.
+		 */
+		bool shouldInsert = false;
+
+		if (spanBase.contains(elem))
 		{
-			if (chunk.spanB_.contains(elem))
+			if (spanB.contains(elem))
 			{
 				if (posA == posB)
 				{
-					if (!mergedChunk.contains(elem)) insertAfter(elem, posA, mergedChunk);
+					if (!mergedChunk.contains(elem)) shouldInsert = true;
 				}
 				else
 				{
+					// NOTE Is this correct, considering how the != operator works for unvalid positions?
 					if (posA != posBase)
 					{
-						if (posB == posBase) insertAfter(elem, posA, mergedChunk);
+						if (posB == posBase) shouldInsert = true;
 						else
 						{
-							// conflict
-							noConflict = false;
+							conflict = true;
 							break;
 						}
 					}
@@ -226,23 +278,21 @@ ListMergeComponent::ChunkMergeResult ListMergeComponent::computeMergedChunk(Chun
 			{
 				if (idListB.contains(elem))
 				{
-					if (chunk.spanB_.contains(elem))
+					if (spanB.contains(elem))
 					{
 						if (posA == posB)
 						{
-							if (!mergedChunk.contains(elem)) insertAfter(elem, posA, mergedChunk);
+							if (!mergedChunk.contains(elem)) shouldInsert = true;
 						}
 						else
 						{
-							// conflict
-							noConflict = false;
+							conflict = true;
 							break;
 						}
 					}
 					else
 					{
-						// conflict
-						noConflict = false;
+						conflict = true;
 						break;
 					}
 				}
@@ -250,51 +300,61 @@ ListMergeComponent::ChunkMergeResult ListMergeComponent::computeMergedChunk(Chun
 				{
 					if (idListBase.contains(elem))
 					{
-						// conflict
-						noConflict = false;
+						conflict = true;
 						break;
 					}
-					else insertAfter(elem, posA, mergedChunk);
+					else shouldInsert = true;
 				}
 			}
 			else
 			{
 				if (elemInTreeBase)
 				{
-					// conflict
-					noConflict = false;
+					conflict = true;
 					break;
 				}
-				else insertAfter(elem, posA, mergedChunk);
+				else shouldInsert = true;
 			}
 		}
+		// End decision tree
+
+		if (shouldInsert)
+		{
+			if (posA.valid_)
+				insertAfter(elem, posA, mergedChunk);
+			else
+				conflict = true;
+		}
+
+		if (conflict) break;
 	}
-	return ChunkMergeResult(noConflict, mergedChunk);
+	return !conflict;
 }
 
-ListMergeComponent::Position ListMergeComponent::findPosition(Model::NodeIdType element,
-																				  QList<Model::NodeIdType> from, QList<Model::NodeIdType> into)
+ListMergeComponent::Position ListMergeComponent::findPosition(const Model::NodeIdType& element,
+																				  const QList<Model::NodeIdType>& from, const QList<Model::NodeIdType>& into)
 {
 	// position in empty list is unique
-	if (into.isEmpty()) return Position(true, 0);
+	if (into.isEmpty()) return Position(true, {});
 
 	int elemIdx = from.indexOf(element) - 1;
 	while (elemIdx >= 0 && !into.contains(from.at(elemIdx))) --elemIdx;
-	Model::NodeIdType commonPredecessor = (elemIdx != -1) ? from.at(elemIdx) : 0;
+	auto commonPredecessor = (elemIdx >= 0) ? from.at(elemIdx) : Model::NodeIdType();
 	elemIdx = from.indexOf(element) + 1;
 	while (elemIdx < from.size() && !into.contains(from.at(elemIdx))) ++elemIdx;
-	Model::NodeIdType commonSuccessor = (elemIdx < from.size()) ? from.at(elemIdx) : 0;
+	auto commonSuccessor = (elemIdx < from.size()) ? from.at(elemIdx) : Model::NodeIdType();
 	int commonPredIdx = into.indexOf(commonPredecessor);
 	int commonSuccIdx = into.indexOf(commonSuccessor);
 
 	if (commonPredIdx + 1 == commonSuccIdx) return Position(true, commonPredecessor);
-	else return Position(false, 0);
+	else return Position(false, commonPredecessor);
 }
 
 
 void ListMergeComponent::insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk)
 {
-	if (pos.predecessor_ == 0) chunk.prepend(elem);
+	Q_ASSERT(pos.valid_);
+	if (pos.predecessor_.isNull()) chunk.prepend(elem);
 	else
 	{
 		int idx = chunk.indexOf(pos.predecessor_);
@@ -306,28 +366,27 @@ QList<ListMergeComponent::Chunk> ListMergeComponent::computeChunks(const QList<M
 																								 const QList<Model::NodeIdType> idListB,
 																								 const QList<Model::NodeIdType> idListBase)
 {
-	QList<Model::NodeIdType> lcsA = longestCommonSubsequence(idListBase, idListA);
-	QList<Model::NodeIdType> lcsB = longestCommonSubsequence(idListBase, idListB);
+	auto lcsA = longestCommonSubsequence(idListBase, idListA);
+	auto lcsB = longestCommonSubsequence(idListBase, idListB);
 
-	QSet<Model::NodeIdType> stableA = QSet<Model::NodeIdType>::fromList(lcsA);
-	QSet<Model::NodeIdType> stableB = QSet<Model::NodeIdType>::fromList(lcsB);
+	auto stableA = QSet<Model::NodeIdType>::fromList(lcsA);
+	auto stableB = QSet<Model::NodeIdType>::fromList(lcsB);
 
 	QList<Model::NodeIdType> stableIDs;
-	for (Model::NodeIdType id : stableA)
+	for (auto id : stableA)
 		if (stableB.contains(id)) stableIDs.append(id);
 
-	QList<QList<Model::NodeIdType>> sublistsA = computeSublists(idListA, stableIDs);
-	QList<QList<Model::NodeIdType>> sublistsB = computeSublists(idListB, stableIDs);
-	QList<QList<Model::NodeIdType>> sublistsBase = computeSublists(idListBase, stableIDs);
+	auto sublistsA = computeSublists(idListA, stableIDs);
+	auto sublistsB = computeSublists(idListB, stableIDs);
+	auto sublistsBase = computeSublists(idListBase, stableIDs);
 
 	QList<Chunk> chunks;
 
-	QList<QList<Model::NodeIdType>>::const_iterator iterA = sublistsA.constBegin();
-	QList<QList<Model::NodeIdType>>::const_iterator iterB = sublistsB.constBegin();
-	QList<QList<Model::NodeIdType>>::const_iterator iterBase;
+	auto iterA = sublistsA.constBegin();
+	auto iterB = sublistsB.constBegin();
 
 	bool isStable = false;
-	for (iterBase = sublistsBase.constBegin(); iterBase != sublistsBase.constEnd(); ++iterBase)
+	for (auto iterBase = sublistsBase.constBegin(); iterBase != sublistsBase.constEnd(); ++iterBase)
 	{
 		if (!iterBase->isEmpty() || !iterA->isEmpty() || !iterB->isEmpty())
 			chunks.append(Chunk(isStable, *iterA, *iterB, *iterBase));
@@ -413,23 +472,26 @@ QList<Model::NodeIdType> ListMergeComponent::backtrackLCS(int** data, const QLis
 			return backtrackLCS(data, listA, listB, posA-1, posB);
 }
 
-QList<Model::NodeIdType> ListMergeComponent::nodeListToIdList(const QList<GenericNode*>& list)
+QList<Model::NodeIdType> ListMergeComponent::nodeListToSortedIdList(const QList<GenericNode*>& list)
 {
 	QVector<Model::NodeIdType> idList(list.size());
 	for (GenericNode* node : list)
 	{
-		int index = node->name().toInt();
+		int index = node->label().toInt();
 		Q_ASSERT(index >= 0 && index < list.size());
 		idList[index] = node->id();
 	}
 	return QList<Model::NodeIdType>::fromVector(idList);
 }
 
-LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::NodeIdType,
-																								  QList<Model::NodeIdType>& mergedList,
-																								  ChangeDependencyGraph& cdgA,
-																								  ChangeDependencyGraph& cdgB,
-																								  LinkedChangesSet& linkedChangesSet)
+LinkedChangesTransition ListMergeComponent::translateListIntoChanges(std::shared_ptr<GenericTree> treeA,
+																							std::shared_ptr<GenericTree>,
+																							std::shared_ptr<GenericTree> treeBase,
+																							Model::NodeIdType,
+																							QList<Model::NodeIdType>& mergedList,
+																							ChangeDependencyGraph& cdgA,
+																							ChangeDependencyGraph& cdgB,
+																							LinkedChangesSet& linkedChangesSet)
 {
 	for (auto elemId : mergedList)
 	{
@@ -439,34 +501,34 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(Model::Node
 		{
 			// branch A changes node beyond label
 			if (changeB) Q_ASSERT(changeB->onlyLabelChange());
-			changeA->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeA->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
 			changeA->computeFlags();
 		}
 		else if (changeB && !changeB->onlyLabelChange())
 		{
 			// branch B changes node beyond label
 			if (changeA) Q_ASSERT(changeA->onlyLabelChange());
-			changeB->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeB->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
 			changeB->computeFlags();
 		}
 		else if (changeA)
 		{
-			changeA->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeA->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
 			changeA->computeFlags();
 		}
 		else if (changeB)
 		{
-			changeB->nodeB()->setName(QString(mergedList.indexOf(elemId)));
+			changeB->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
 			changeB->computeFlags();
 		}
 		else
 		{
 			// no branch changes node beyond label so we must construct a new change
-			auto oldNode = treeBase_->find(elemId);
-			auto newNode = treeA_->find(elemId);
+			auto oldNode = treeBase->find(elemId);
+			auto newNode = treeA->find(elemId);
 			Q_ASSERT(oldNode);
 			Q_ASSERT(newNode);
-			newNode->setName(QString(mergedList.indexOf(elemId)));
+			newNode->setLabel(QString(mergedList.indexOf(elemId)));
 			auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
 			cdgA.insert(newChange);
 			cdgA.recordDependencies(newChange, true);
@@ -481,7 +543,7 @@ std::shared_ptr<const ChangeDescription> ListMergeComponent::copyWithNewIndex(
 {
 	GenericNode* newNode = change->nodeB()->persistentUnit()->newNode();
 	newNode->reset(change->nodeB());
-	newNode->setName(QString(index));
+	newNode->setLabel(QString(index));
 	auto newChange = std::make_shared<const ChangeDescription>(change->nodeA(), newNode);
 
 	// change is the same except maybe label flag

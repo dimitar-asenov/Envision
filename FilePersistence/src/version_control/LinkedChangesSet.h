@@ -24,25 +24,53 @@
 **
 ***********************************************************************************************************************/
 
-#include "ConflictPairs.h"
+#pragma once
+
+#include "ChangeDescription.h"
+#include "ChangeDependencyGraph.h"
 
 namespace FilePersistence {
 
-ConflictPairs::ConflictPairs() {}
-ConflictPairs::~ConflictPairs() {}
+using LinkedChanges = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
 
-void ConflictPairs::insert(std::shared_ptr<ChangeDescription>& changeA,
-									std::shared_ptr<ChangeDescription>& changeB)
+class LinkedChangesSet : public QSet<LinkedChanges>
 {
-	pairs_.insert(changeA, changeB);
-	pairs_.insert(changeB, changeA);
-}
+	public:
+		LinkedChangesSet();
 
-void ConflictPairs::remove(std::shared_ptr<ChangeDescription>& changeA,
-									std::shared_ptr<ChangeDescription>& changeB)
+		/**
+		 * Initialize with single-member sets of changes (no links).
+		 */
+		LinkedChangesSet(const ChangeDependencyGraph& cdgA, const ChangeDependencyGraph& cdgB);
+
+		/**
+		 * This returns the linkedChanges which contains the change with
+		 * \a changeId which is in branch A if and only if \a inBranchA is true.
+		 * NOTE The \a inBranchA argument is necessary because IDs are not unique within LinkedChangesSet objects.
+		 * Pointer comparison does not work because we made a deep copy.
+		 */
+		LinkedChanges findLinkedChanges(Model::NodeIdType oldChangeId, bool inBranchA);
+
+		QSet<const std::shared_ptr<const ChangeDescription>> changesOfBranchA_;
+};
+
+/**
+ * Creates and returns a new empty LinkedChanges object.
+ */
+inline LinkedChanges newLinkedChanges() { return std::make_shared<QSet<std::shared_ptr<const ChangeDescription>>>(); }
+
+/**
+ * Creates and returns a new LinkedChanges object that is a deep copy of \a changesToCopy.
+ * Nodes pointed to by changes in the returned object are allocated in \a tree.
+ */
+LinkedChanges copyLinkedChanges(const LinkedChanges& changesToCopy,
+										  const QSet<const std::shared_ptr<const ChangeDescription>>& oldChangesOfA,
+										  QSet<const std::shared_ptr<const ChangeDescription>>& newChangesOfA,
+										  std::shared_ptr<GenericTree>& tree);
+
+inline uint qHash(const LinkedChanges& linkedChanges, uint seed = 0)
 {
-	pairs_.remove(changeA, changeB);
-	pairs_.remove(changeB, changeA);
+	return ::qHash(linkedChanges.get(), seed);
 }
 
 } /* namespace FilePersistence */

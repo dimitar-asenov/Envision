@@ -44,6 +44,9 @@ class ChangeDependencyGraph
 		 */
 		void replace(std::shared_ptr<ChangeDescription>& oldChange,
 						 std::shared_ptr<ChangeDescription>& newChange);
+
+		QList<std::shared_ptr<ChangeDescription>> getDependencies(std::shared_ptr<ChangeDescription> change) const;
+
 		/**
 		 * Records the fact that \a changeA depends on changeB.
 		 */
@@ -70,5 +73,8 @@ class ChangeDependencyGraph
 };
 
 inline const IdToChangeDescriptionHash ChangeDependencyGraph::changes() const { return changes_; }
+
+inline QList<std::shared_ptr<ChangeDescription>> ChangeDependencyGraph::getDependencies(
+		std::shared_ptr<ChangeDescription> change) const { return dependencies_.values(change); }
 
 } /* namespace FilePersistence */

@@ -97,7 +97,7 @@ GenericNode* GenericNode::child(const QString& name)
 	}
 
 	for (auto c : children_)
-		if (c->name() == name) return c;
+		if (c->label() == name) return c;
 
 	return nullptr;
 }
@@ -172,7 +172,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 	Q_ASSERT(persistentUnit);
 	persistentUnit_ = persistentUnit;
 
-	name_.clear();
+	label_.clear();
 	type_.clear();
 	value_.clear();
 	valueType_ = NO_VALUE;
@@ -215,7 +215,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode
 		Parser::parseLine(const_cast<GenericNode*>(this), nodeToCopy->dataLine_, nodeToCopy->dataLineLength_);
 	else
 	{
-		name_ = nodeToCopy->name_;
+		label_ = nodeToCopy->label_;
 		type_ = nodeToCopy->type_;
 		value_ = nodeToCopy->value_;
 		valueType_ = nodeToCopy->valueType_;
@@ -274,11 +274,11 @@ void GenericNode::linkNode(bool recursiveLink)
 
 void GenericNode::remove()
 {
-	detach();
+	detachFromParent();
 	reset(persistentUnit_);
 }
 
-void GenericNode::detach()
+void GenericNode::detachFromParent()
 {
 	if (parent_)
 	{

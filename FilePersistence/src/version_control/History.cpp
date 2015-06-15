@@ -105,7 +105,7 @@ void History::detectRelevantCommits(const CommitGraphItem* current, QSet<const C
 			bool subtreeIsAffected = false;
 			for (auto change : changes.values())
 			{
-				if (trackedIDs.contains(change->id()))
+				if (trackedIDs.contains(change->nodeId()))
 				{
 					subtreeIsAffected = true;
 					break;

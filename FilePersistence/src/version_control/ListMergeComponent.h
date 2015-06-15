@@ -35,8 +35,11 @@ class ListMergeComponent : public ConflictPipelineComponent
 	public:
 		ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes, QSet<QString>& unorderedTypes);
 		~ListMergeComponent();
-		LinkedChangesTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
+		LinkedChangesTransition run(std::shared_ptr<GenericTree> treeA,
+											 std::shared_ptr<GenericTree> treeB,
+											 std::shared_ptr<GenericTree> treeBase,
+											 ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+					QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, LinkedChangesSet&linkedChangesSet);
 	private:
 
@@ -63,19 +66,19 @@ class ListMergeComponent : public ConflictPipelineComponent
 
 		struct ChunkMergeResult
 		{
-				bool valid_{};
+				bool noConflicts_{};
 				QList<Model::NodeIdType> chunk_;
 
 				ChunkMergeResult(bool valid, QList<Model::NodeIdType> chunk);
 		};
 
 		/**
-		 * Returns all lists that shall be attempted to be merged by the component.
+		 * Returns the IDs of all lists that shall be attempted to be merged by the component.
 		 */
-		QSet<const GenericNode*> computeListsToMerge(
+		QSet<Model::NodeIdType> computeListsToMerge(
 				ChangeDependencyGraph& cdgA,
 				ChangeDependencyGraph& cdgB,
-				QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
+				QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 				ConflictPairs& conflictPairs);
 		/**
 		 * Given an unstable \a chunk, this method tries to construct the merged version of it.
@@ -89,19 +92,36 @@ class ListMergeComponent : public ConflictPipelineComponent
 														QList<Model::NodeIdType>& idListBase);
 
 		/**
+		 * Returns false if there was a conflict.
+		 */
+		static bool insertElemsIntoChunk(QList<Model::NodeIdType>& mergedChunk,
+													const QList<Model::NodeIdType>& idListBase,
+													const QList<Model::NodeIdType>& spanBase,
+													const ChangeDependencyGraph& cdgA,
+													const ChangeDependencyGraph& cdgB,
+													const QList<Model::NodeIdType>& idListB,
+													const QList<Model::NodeIdType>& spanA,
+													const QList<Model::NodeIdType>& spanB);
+
+		/**
 		 * Tries to find a unique position for \a elem in \a into that is similar to the position of \a elem in \a from.
 		 * Returns a Position \a pos where \a pos.valid = true if and only if such a position could be found and
 		 * \a pos.predecessor is the element after which \a elem should be inserted or 0 if elem should be inserted at
 		 * the beginning. Such a position can be found if the nearest predecessor and successor of \elem in \a from that
 		 * are common in \a into are next to each other and in order in \a into.
 		 */
-		static Position findPosition(Model::NodeIdType element, QList<Model::NodeIdType> from, QList<Model::NodeIdType> into);
+		static Position findPosition(const Model::NodeIdType& element,
+											  const QList<Model::NodeIdType>& from,
+											  const QList<Model::NodeIdType>& into);
 
 		/**
 		 * Takes the merged version of a list and generates all changes needed to bring the base version to the merged
 		 * version. New changes are created in \a cdgA.
 		 */
-		LinkedChangesTransition translateListIntoChanges(Model::NodeIdType listContainerId,
+		LinkedChangesTransition translateListIntoChanges(std::shared_ptr<GenericTree> treeA,
+																		 std::shared_ptr<GenericTree> treeB,
+																		 std::shared_ptr<GenericTree> treeBase,
+																		 Model::NodeIdType listContainerId,
 																				QList<Model::NodeIdType>& mergedList,
 																				ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 																				LinkedChangesSet& linkedChangesSet);
@@ -120,16 +140,12 @@ class ListMergeComponent : public ConflictPipelineComponent
 		QString revisionIdB_;
 		QString revisionIdBase_;
 
-		std::shared_ptr<GenericTree> treeA_;
-		std::shared_ptr<GenericTree> treeB_;
-		std::shared_ptr<GenericTree> treeBase_;
-
 		/**
 		 * Inserts \a elem into \a chunk according to \a pos.
 		 */
 		static void insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk);
 
-		static QList<Model::NodeIdType> nodeListToIdList(const QList<GenericNode*>& list);
+		static QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
 
 		/**
 		 * Computes stable and unstable chunks. This is what's called a diff3 parse in the paper by Khanna, Kunal,
@@ -156,7 +172,7 @@ inline bool ListMergeComponent::Position::operator ==(const Position &other) con
 inline bool ListMergeComponent::Position::operator !=(const Position &other) const { return !(*this == other); }
 
 inline ListMergeComponent::ChunkMergeResult::ChunkMergeResult(bool valid, QList<Model::NodeIdType> chunk) :
-	valid_{valid}, chunk_{chunk} {}
+	noConflicts_{valid}, chunk_{chunk} {}
 
 inline ListMergeComponent::Chunk::Chunk(bool stable, QList<Model::NodeIdType> idListA, QList<Model::NodeIdType> idListB,
 						QList<Model::NodeIdType> idListBase) :

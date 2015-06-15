@@ -36,7 +36,7 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) :
 
 	if (nodeA_)
 	{
-		id_ = nodeA_->id();
+		nodeId_ = nodeA_->id();
 		if (nodeB_)
 		{
 			if (nodeA_->parentId() == nodeB_->parentId()) type_ = ChangeType::Stationary;
@@ -46,7 +46,7 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) :
 	}
 	else
 	{
-		id_ = nodeB_->id();
+		nodeId_ = nodeB_->id();
 		type_ = ChangeType::Insertion;
 	}
 	computeFlags();
@@ -57,7 +57,7 @@ std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(Model::Nod
 																	GenericNode* nodeB)
 {
 	std::shared_ptr<ChangeDescription> change = std::shared_ptr<ChangeDescription>(new ChangeDescription());
-	change->id_ = id;
+	change->nodeId_ = id;
 	change->type_ = ChangeType::Stationary;
 	change->updateFlags_ = UpdateType::Structure;
 	change->nodeA_ = nodeA;
@@ -71,7 +71,7 @@ void ChangeDescription::computeFlags()
 {
 	if (nodeA_ != nullptr && nodeB_ != nullptr)
 	{
-		if (nodeA_->name() != nodeB_->name()) updateFlags_ |= Label;
+		if (nodeA_->label() != nodeB_->label()) updateFlags_ |= Label;
 		else updateFlags_ &= ~Label;
 
 		if (nodeA_->rawValue() != nodeB_->rawValue()) updateFlags_ |= Value;
@@ -86,7 +86,7 @@ void ChangeDescription::print() const
 {
 	if (nodeA_ || nodeB_)
 		qDebug() << (nodeA_ ? nodeA_->type() : nodeB_->type()) << "\t";
-	qDebug() << id().toString() << "\t";
+	qDebug() << nodeId().toString() << "\t";
 	switch (type_)
 	{
 		case ChangeType::Insertion:
@@ -146,21 +146,37 @@ GenericNode* ChangeDescription::nodeB() const
 	return nodeB_;
 }
 
-std::shared_ptr<ChangeDescription> ChangeDescription::copy(GenericPersistentUnit* persistentUnit) const
+std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<GenericTree>& tree) const
 {
-	std::shared_ptr<ChangeDescription> copy(new ChangeDescription);
-	copy->id_ = id_;
-	auto newNodeA = persistentUnit->newNode();
-	newNodeA->reset(persistentUnit, nodeA_);
-	auto newNodeB = persistentUnit->newNode();
-	newNodeB->reset(persistentUnit, nodeB_);
-	copy->nodeA_ = newNodeA;
-	copy->nodeB_ = newNodeB;
-	copy->pointsToChildA_ = pointsToChildA_;
-	copy->pointsToChildB_ = pointsToChildB_;
-	copy->type_ = type_;
-	copy->updateFlags_ = updateFlags_;
-	return copy;
+	// This method lazy-loads nodeA and nodeB. This is necessary because deep-copy trees can't lazy-load.
+	GenericNode* newNodeA = nullptr;
+	if (nodeA())
+	{
+		// NOTE This might be unnecessary because we never change nodeA, so why create a new one?
+		auto persistentUnit = tree->persistentUnit(nodeA()->persistentUnit()->name());
+		if (persistentUnit == nullptr)
+			persistentUnit = &tree->newPersistentUnit(nodeA()->persistentUnit()->name());
+		newNodeA = persistentUnit->newNode(nodeA());
+	}
+
+	GenericNode* newNodeB = nullptr;
+	if (nodeB())
+	{
+		auto persistentUnit = tree->persistentUnit(nodeB()->persistentUnit()->name());
+		if (persistentUnit == nullptr)
+			persistentUnit = &tree->newPersistentUnit(nodeB()->persistentUnit()->name());
+		newNodeA = persistentUnit->newNode(nodeB());
+	}
+
+	std::shared_ptr<ChangeDescription> newChange(new ChangeDescription);
+	newChange->nodeId_ = nodeId_;
+	newChange->nodeA_ = newNodeA;
+	newChange->nodeB_ = newNodeB;
+	newChange->pointsToChildA_ = false;
+	newChange->pointsToChildB_ = false;
+	newChange->type_ = type_;
+	newChange->updateFlags_ = updateFlags_;
+	return newChange;
 }
 
 } /* namespace FilePersistence */

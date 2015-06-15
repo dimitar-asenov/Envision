@@ -36,10 +36,10 @@ class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
 		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
-		static std::shared_ptr<ChangeDescription> newStructChange(Model::NodeIdType id,
+		static std::shared_ptr<ChangeDescription> newStructChange(Model::NodeIdType nodeId,
 																			GenericNode* nodeA,
 																			GenericNode* nodeB);
-		std::shared_ptr<ChangeDescription> copy(GenericPersistentUnit* persistentUnit) const;
+		std::shared_ptr<ChangeDescription> copy(std::shared_ptr<GenericTree>& tree) const;
 
 		enum UpdateType
 		{
@@ -59,7 +59,7 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		void setStructureChangeFlag(bool value);
 
-		Model::NodeIdType id() const;
+		Model::NodeIdType nodeId() const;
 
 		const ChangeType& type() const;
 
@@ -78,7 +78,7 @@ class FILEPERSISTENCE_API ChangeDescription
 	private:
 		ChangeDescription();
 
-		Model::NodeIdType id_;
+		Model::NodeIdType nodeId_;
 
 		ChangeType type_{};
 
@@ -87,13 +87,15 @@ class FILEPERSISTENCE_API ChangeDescription
 		bool pointsToChildA_;
 		bool pointsToChildB_;
 
+		// If pointsToChildA_ is true, this is a pointer to a node with parent whose ID is nodeId_.
+		// Otherwise, this points to a node with ID = nodeId_. This is a lazy loading mechanic.
 		GenericNode* nodeA_{};
 		GenericNode* nodeB_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
 
-inline Model::NodeIdType ChangeDescription::id() const { return id_; }
+inline Model::NodeIdType ChangeDescription::nodeId() const { return nodeId_; }
 
 inline bool ChangeDescription::hasFlags(const UpdateFlags flags) const { return (updateFlags_ & flags) == flags; }
 

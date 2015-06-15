@@ -38,7 +38,7 @@ class FILEPERSISTENCE_API GenericNode {
 	public:
 		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 
-		void setName(const QString& name);
+		void setLabel(const QString& label);
 		void setType(const QString& type);
 
 		void setValue(ValueType type, const QString& value);
@@ -48,7 +48,7 @@ class FILEPERSISTENCE_API GenericNode {
 		void setChildren(QList<GenericNode*>);
 
 		void resetValue(ValueType type, const QString& value);
-		void reset(const GenericNode* nodeToCopy);
+		void reset(const GenericNode* nodeToCopy); // FIXME make sure only PersistentUnit can set PU pointer
 		void reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy);
 
 		void setId(Model::NodeIdType id);
@@ -56,12 +56,12 @@ class FILEPERSISTENCE_API GenericNode {
 
 		void setParent(GenericNode* parent);
 		GenericNode* addChild(GenericNode* child);
-		GenericNode* child(const QString& name);
+		GenericNode* child(const QString& label);
 		const QList<GenericNode*>& children() const;
 		bool areAllChildrenLoaded() const;
 		GenericNode* parent() const;
 
-		const QString& name() const;
+		const QString& label() const;
 		const QString& type() const;
 
 		bool hasValue() const;
@@ -77,7 +77,7 @@ class FILEPERSISTENCE_API GenericNode {
 		bool hasDoubleValue() const;
 
 		void remove();
-		void detach();
+		void detachFromParent();
 
 		Model::NodeIdType id() const;
 		Model::NodeIdType parentId() const;
@@ -97,7 +97,7 @@ class FILEPERSISTENCE_API GenericNode {
 		// When adding new members, make sure to reset them in the various reset() methods
 		// !!!
 
-		QString name_;
+		QString label_;
 		QString type_;
 		QString value_;
 		ValueType valueType_{};
@@ -138,7 +138,7 @@ class FILEPERSISTENCE_API GenericNode {
 		bool sameTree(const GenericNode* other);
 };
 
-inline void GenericNode::setName(const QString& name) { name_ = name; }
+inline void GenericNode::setLabel(const QString& label) { label_ = label; }
 inline void GenericNode::setType(const QString& type) { type_ = type; }
 inline void GenericNode::setId(Model::NodeIdType id) { id_ = id; }
 inline void GenericNode::setParentId(Model::NodeIdType parentId)
@@ -151,7 +151,7 @@ inline void GenericNode::setChildren(QList<GenericNode*> children)
  */
 inline bool GenericNode::areAllChildrenLoaded() const { return areAllChildrenLoaded_; }
 
-inline const QString& GenericNode::name() const { ensureDataRead(); return name_; }
+inline const QString& GenericNode::label() const { ensureDataRead(); return label_; }
 inline const QString& GenericNode::type() const { ensureDataRead(); return type_; }
 inline bool GenericNode::hasValue() const { ensureDataRead(); return valueType_ != NO_VALUE; }
 inline GenericNode::ValueType GenericNode::valueType() const { ensureDataRead(); return valueType_; }

@@ -46,11 +46,10 @@ class FILEPERSISTENCE_API Merge
 
 		enum class Kind {Unclassified, AlreadyUpToDate, FastForward, TrueMerge};
 		enum class Stage {NotInitialized, FoundMergeBase, Classified, AutoMerged,
-								ManualMerged, BuiltMergedTree, WroteToIndex, Commited};
+								ManualMerged, BuiltMergedTree, WroteToWorkDir, WroteToIndex, Committed};
 
-		// TODO depending on how far the responsibilities of the Merge class go, these might be removed.
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
-		const std::unique_ptr<GenericTree> mergeTree(); // TODO build with as many changes as possible
+		const std::shared_ptr<GenericTree> mergeTree();
 		// TOOD output conflicts
 
 	private:
@@ -72,12 +71,20 @@ class FILEPERSISTENCE_API Merge
 		 */
 		void performTrueMerge();
 
+		void applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
+										const ChangeDependencyGraph& cdg);
+
+		void addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
+									const std::shared_ptr<ChangeDescription>& change,
+									const ChangeDependencyGraph& cdg);
+
 		Stage stage_ = Stage::NotInitialized;
 
 		// GenericTrees
 		std::shared_ptr<GenericTree> treeA_;
 		std::shared_ptr<GenericTree> treeB_;
 		std::shared_ptr<GenericTree> treeBase_;
+		std::shared_ptr<GenericTree> treeMerged_;
 
 		// Revisions
 		QString headCommitId_;
@@ -102,12 +109,14 @@ class FILEPERSISTENCE_API Merge
 		 * Every change in the set should either be matched with a conflicting change in \a conflictingChanges_
 		 * or be depending on a change that is in conflict. This is not enforced, however.
 		 */
-		QSet<std::shared_ptr<const ChangeDescription>> conflictingChanges_;
+		QSet<std::shared_ptr<ChangeDescription>> conflictingChanges_;
 
 		/**
 		 * \a change1 is mapped to \a change2 exactly if \a change1 and \a change2 cannot both be applied safely.
 		 */
 		ConflictPairs conflictPairs_;
 };
+
+inline const std::shared_ptr<GenericTree> Merge::mergeTree() { return treeMerged_; }
 
 } /* namespace FilePersistence */

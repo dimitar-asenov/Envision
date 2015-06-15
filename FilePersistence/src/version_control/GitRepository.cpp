@@ -66,7 +66,7 @@ int gitDiffExtractFileCallBack(
 
 	return 0;
 }
-// NOTE not sure if this should be static
+
 void createNodeAndAppend(const git_diff_line* line, const char* filePath, GenericTree* tree, QList<GenericNode*>& list)
 {
 	size_t lineLength = line->content_len;
@@ -166,9 +166,13 @@ GitRepository::~GitRepository()
 std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 {
 	if (merge_.expired())
-		return std::shared_ptr<Merge>(new Merge(revision, fastForward, this));
+	{
+		auto merge = std::shared_ptr<Merge>(new Merge(revision, fastForward, this));
+		merge_ = merge;
+		return merge;
+	}
 	else
-		Q_ASSERT(false); // TODO is this the right thing to do?
+		Q_ASSERT(false); // NOTE is this the right thing to do?
 }
 
 Diff GitRepository::diff(QString revisionA, QString revisionB,

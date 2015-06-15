@@ -63,7 +63,7 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type) const
 	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == type)
-			changesOfType.insert(change->id(), change);
+			changesOfType.insert(change->nodeId(), change);
 	}
 	return changesOfType;
 }
@@ -74,7 +74,7 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == type && change->hasFlags(flags))
-			changesOfType.insert(change->id(), change);
+			changesOfType.insert(change->nodeId(), change);
 	}
 	return changesOfType;
 }
@@ -114,7 +114,7 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 	// Intermediate state 3
 	QSet<Model::NodeIdType> fakeChanges;
 	for (auto change : changeDescriptions_.values())
-		if (change->isFake()) fakeChanges.insert(change->id());
+		if (change->isFake()) fakeChanges.insert(change->nodeId());
 	for (auto id : fakeChanges) changeDescriptions_.remove(id);
 }
 

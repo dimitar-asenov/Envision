@@ -36,9 +36,10 @@ ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, QString
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
-LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
+LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>, std::shared_ptr<GenericTree>,
+																  std::shared_ptr<GenericTree>, ChangeDependencyGraph& cdgA,
 									ChangeDependencyGraph& cdgB,
-									QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
+									QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
 									ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
 {
 	affectedCUsA_ = computeAffectedCUs(cdgA);
@@ -56,7 +57,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 				// ...mark it as conflicting...
 				conflictingChanges.insert(changeA);
 				// ...and related to the other changes in this CU
-				transition.insert(changeA->id(), true, changeA);
+				transition.insert(changeA->nodeId(), true, changeA);
 				// ...and take every change from B...
 				for (auto changeB : affectedCUsB_.values(conflictRootId))
 				{
@@ -64,7 +65,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 					conflictingChanges.insert(changeB);
 					conflictPairs.insert(changeA, changeB);
 					// also record it as being related
-					transition.insert(changeB->id(), false, changeB);
+					transition.insert(changeB->nodeId(), false, changeB);
 				}
 			}
 		}
@@ -73,7 +74,7 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 			// CU is not in conflict, just record change links.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
-				transition.insert(changeA->id(), true, changeA);
+				transition.insert(changeA->nodeId(), true, changeA);
 			}
 		}
 	}
@@ -84,30 +85,16 @@ LinkedChangesTransition ConflictUnitDetector::run(ChangeDependencyGraph& cdgA,
 		{
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
 			{
-				transition.insert(changeB->id(), false, changeB);
+				transition.insert(changeB->nodeId(), false, changeB);
 			}
 		}
 	}
 	return transition;
 }
 
-/**
- * Looks for a change in cdg ot get a node to get a PersistentUnit and returns it.
- * FIXME This is really ugly and I hate to do it like this. I hope we find a good solution for this.
- */
-GenericPersistentUnit* getPersUnit(ChangeDependencyGraph& cdg)
+ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
 {
-	for (auto change : cdg.changes().values())
-	{
-		if (change->nodeA()) return change->nodeA()->persistentUnit();
-		else if (change->nodeB()) return change->nodeB()->persistentUnit();
-	}
-	Q_ASSERT(false);
-}
-
-IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
-{
-	IdToChangeMultiHash affectedCUs;
+	ConflictUnitSet affectedCUs;
 	for (auto change : cdg.changes()) {
 		Model::NodeIdType conflictRootA;
 		Model::NodeIdType conflictRootB;

@@ -62,14 +62,14 @@ ChangeDependencyGraph::~ChangeDependencyGraph() {}
 
 void ChangeDependencyGraph::insert(std::shared_ptr<ChangeDescription>& change)
 {
-	Q_ASSERT(!changes_.contains(change->id()));
-	changes_.insert(change->id(), change);
+	Q_ASSERT(!changes_.contains(change->nodeId()));
+	changes_.insert(change->nodeId(), change);
 }
 
 void ChangeDependencyGraph::remove(std::shared_ptr<ChangeDescription>& change)
 {
-	Q_ASSERT(changes_.value(change->id()) == change);
-	changes_.remove(change->id());
+	Q_ASSERT(changes_.value(change->nodeId()) == change);
+	changes_.remove(change->nodeId());
 	for (auto dependingOnChange : dependencies_.keys(change))
 		dependencies_.remove(dependingOnChange, change);
 	dependencies_.remove(change);
@@ -78,7 +78,7 @@ void ChangeDependencyGraph::remove(std::shared_ptr<ChangeDescription>& change)
 void ChangeDependencyGraph::replace(std::shared_ptr<ChangeDescription>& oldChange,
 				 std::shared_ptr<ChangeDescription>& newChange)
 {
-	Q_ASSERT(changes_.value(oldChange->id()) == oldChange);
+	Q_ASSERT(changes_.value(oldChange->nodeId()) == oldChange);
 	auto dependsOn = dependencies_.values(oldChange);
 	auto dependingOnChange = dependencies_.keys(oldChange);
 	for (auto change : dependingOnChange)

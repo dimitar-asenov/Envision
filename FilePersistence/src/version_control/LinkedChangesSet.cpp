@@ -24,25 +24,58 @@
 **
 ***********************************************************************************************************************/
 
-#include "ConflictPairs.h"
+#include "LinkedChangesSet.h"
 
 namespace FilePersistence {
 
-ConflictPairs::ConflictPairs() {}
-ConflictPairs::~ConflictPairs() {}
+LinkedChangesSet::LinkedChangesSet() : QSet<LinkedChanges>() {}
 
-void ConflictPairs::insert(std::shared_ptr<ChangeDescription>& changeA,
-									std::shared_ptr<ChangeDescription>& changeB)
+LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const ChangeDependencyGraph &cdgB)
 {
-	pairs_.insert(changeA, changeB);
-	pairs_.insert(changeB, changeA);
+	std::shared_ptr<GenericTree> tree = std::shared_ptr<GenericTree>(new GenericTree("AllocatorForChanges"));
+	for (auto change : cdgA.changes().values())
+	{
+		auto linkedChanges = newLinkedChanges();
+		auto copy = change->copy(tree);
+		linkedChanges->insert(copy);
+		this->insert(linkedChanges);
+		changesOfBranchA_.insert(change);
+	}
+	for (auto change : cdgB.changes().values())
+	{
+		auto linkedChanges = newLinkedChanges();
+		linkedChanges->insert(change->copy(tree));
+		this->insert(linkedChanges);
+	}
 }
 
-void ConflictPairs::remove(std::shared_ptr<ChangeDescription>& changeA,
-									std::shared_ptr<ChangeDescription>& changeB)
+LinkedChanges LinkedChangesSet::findLinkedChanges(Model::NodeIdType oldChangeId, bool inBranchA)
 {
-	pairs_.remove(changeA, changeB);
-	pairs_.remove(changeB, changeA);
+	for (auto linkedChanges : *this)
+	{
+		for (auto change : *linkedChanges)
+		{
+			if (change->nodeId() == oldChangeId && (changesOfBranchA_.contains(change) == inBranchA))
+				return linkedChanges;
+		}
+	}
+	Q_ASSERT(false);
+}
+
+LinkedChanges copyLinkedChanges(const LinkedChanges& changesToCopy,
+										  const QSet<const std::shared_ptr<const ChangeDescription>>& oldChangesOfA,
+										  QSet<const std::shared_ptr<const ChangeDescription>>& newChangesOfA,
+										  std::shared_ptr<GenericTree>& tree)
+{
+	auto linkedChanges = newLinkedChanges();
+	for (auto change : *changesToCopy)
+	{
+		auto newChange = change->copy(tree);
+		linkedChanges->insert(newChange);
+		if (oldChangesOfA.contains(change))
+			newChangesOfA.insert(newChange);
+	}
+	return linkedChanges;
 }
 
 } /* namespace FilePersistence */

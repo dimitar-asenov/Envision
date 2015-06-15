@@ -35,7 +35,6 @@ namespace FilePersistence {
 
 bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
 {
-	// TODO construct merged tree from changes and write to disk
 	if (stage_ == Stage::WroteToIndex)
 	{
 		QString treeSHA1 = repository_->writeIndexToTree();
@@ -46,7 +45,7 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 
 		repository_->newCommit(treeSHA1, message, author, committer, parents);
 
-		stage_ = Stage::Commited;
+		stage_ = Stage::Committed;
 
 		return true;
 	}
@@ -77,7 +76,7 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	switch (kind)
 	{
 		case Kind::AlreadyUpToDate:
-			stage_ = Merge::Stage::Commited;
+			stage_ = Merge::Stage::Committed;
 			break;
 
 		case Kind::FastForward:
@@ -86,7 +85,7 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 				QString branch = repository_->currentBranch();
 				repository_->setReferenceTarget(branch, revisionCommitId_);
 				repository_->checkout(revisionCommitId_, true);
-				stage_ = Stage::Commited;
+				stage_ = Stage::Committed;
 			}
 			else
 			{
@@ -143,61 +142,132 @@ void Merge::performTrueMerge()
 	conflictingChanges_ = {};
 	conflictPairs_ = {};
 
-	/* We create the initial LinkedChangesSet and initialize it with single-member sets of
-	 * changes (no links).
-	 */
-	LinkedChangesSet linkedChangesSet;
-	std::shared_ptr<GenericTree> tree = std::shared_ptr<GenericTree>(new GenericTree("AllocatorForChanges"));
-	GenericPersistentUnit* pUnit = &tree->newPersistentUnit("Allocator");
-	for (auto change : cdgA.changes().values())
-	{
-		auto linkedChanges = newLinkedChanges();
-		linkedChanges->insert(change->copy(pUnit));
-		linkedChangesSet.insert(linkedChanges);
-	}
-	for (auto change : cdgB.changes().values())
-	{
-		auto linkedChanges = newLinkedChanges();
-		linkedChanges->insert(change->copy(pUnit));
-		linkedChangesSet.insert(linkedChanges);
-	}
+	LinkedChangesSet linkedChangesSet(cdgA, cdgB);
 
 	// ### PIPELINE INITIALIZER ###
-	LinkedChangesTransition transition = pipelineInitializer_->run(cdgA, cdgB, conflictingChanges_,
+	LinkedChangesTransition transition = pipelineInitializer_->run(treeA_, treeB_, treeBase_,
+																						cdgA, cdgB, conflictingChanges_,
 																						conflictPairs_, linkedChangesSet);
 	// NOTE this is where one would check the transition of the initializer.
 
 	// ### THE PIPLELINE ###
 	for (auto component : conflictPipeline_)
 	{
-		linkedChangesSet = LinkedChangesSet(transition.values()); // deep copy current state
-		transition = component->run(cdgA, cdgB,
+		linkedChangesSet = LinkedChangesSet(transition.getNewState()); // deep copy current state
+		transition = component->run(treeA_, treeB_, treeBase_, cdgA, cdgB,
 											 conflictingChanges_, conflictPairs_, linkedChangesSet);
 		// NOTE this is where one would check the transition of a component.
 	}
 
 	IdToChangeDescriptionHash applicableChanges;
 	for (auto change : cdgA.changes())
-		if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
+		if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->nodeId(), change);
 	for (auto change : cdgB.changes())
-		if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
-
-	// TODO apply applicable
+		if (!conflictingChanges_.contains(change))
+		{
+			Q_ASSERT(!applicableChanges.contains(change->nodeId())); // no change for that ID exists
+			applicableChanges.insert(change->nodeId(), change);
+		}
 
 	stage_ = Stage::AutoMerged;
 
-
-	// TODO And then do manual merge?
-	if (!conflictingChanges_.isEmpty())
+	if (conflictingChanges_.isEmpty())
 	{
+		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree("Merged"));
+		repository_->loadGenericTree(treeMerged_, baseCommitId_);
+		applyChangesToTree(treeMerged_, cdgA);
+		applyChangesToTree(treeMerged_, cdgB);
+
+		stage_ = Stage::BuiltMergedTree;
+
+		// TODO encode and write tree to working directory
+		stage_ = Stage::WroteToWorkDir;
+		// await commit
+	}
+	else
+	{
+		// TODO prepare for manual merge
 		stage_ = Stage::ManualMerged;
 	}
+}
 
-	// TODO apply all changes
-	stage_ = Stage::BuiltMergedTree;
-	// TODO write to index / work dir
-	stage_ = Stage::WroteToIndex;
-	// await commit
+void Merge::addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
+									 const std::shared_ptr<ChangeDescription>& change,
+									 const ChangeDependencyGraph& cdg)
+{
+	for (auto dependency : cdg.getDependencies(change))
+	{
+		if (!queue.contains(dependency))
+		{
+			Q_ASSERT(!conflictingChanges_.contains(dependency));
+			addDependencies(queue, dependency, cdg);
+			queue.append(dependency);
+		}
+	}
+}
+
+
+void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
+										 const ChangeDependencyGraph& cdg)
+{
+	// sort changes topologically before applying
+	QList<std::shared_ptr<ChangeDescription>> queue;
+	for (auto change : cdg.changes())
+	{
+		if (!conflictingChanges_.contains(change) && !queue.contains(change))
+		{
+			addDependencies(queue, change, cdg);
+			queue.append(change);
+		}
+	}
+
+
+	for (auto change : queue)
+	{
+		switch (change->type())
+		{
+			case ChangeType::Insertion:
+			{
+				auto persistentUnitName = change->nodeB()->persistentUnit()->name();
+				auto persistentUnit = tree->persistentUnit(persistentUnitName);
+				if (!persistentUnit)
+					persistentUnit = &tree->newPersistentUnit(persistentUnitName);
+				auto node = persistentUnit->newNode(change->nodeB());
+				node->linkNode();
+				Q_ASSERT(node->parent()->id() == change->nodeB()->parentId());
+				break;
+			}
+
+			case ChangeType::Deletion:
+			{
+				auto node = tree->find(change->nodeA()->id());
+				Q_ASSERT(node->children().empty());
+				node->remove();
+				break;
+			}
+
+			case ChangeType::Move:
+			{
+				// TODO currently assuming no change of persistent unit
+				auto node = tree->find(change->nodeA()->id());
+				node->detachFromParent();
+				node->reset(change->nodeB());
+				node->linkNode(); // TODO only attach new parent
+				break;
+			}
+
+			case ChangeType::Stationary:
+			{
+				// TODO currently assuming no change of persistent unit
+				auto node = tree->find(change->nodeA()->id());
+				node->reset(change->nodeB()); // FIXME should not unlink
+				break;
+			}
+
+			default:
+				Q_ASSERT(false);
+		}
+	}
 }
 
 } /* namespace FilePersistence */

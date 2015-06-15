@@ -30,15 +30,18 @@
 
 namespace FilePersistence {
 
-using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, std::shared_ptr<const ChangeDescription>>;
+using ConflictUnitSet = QMultiHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 
 class ConflictUnitDetector : public ConflictPipelineComponent
 {
 	public:
 		ConflictUnitDetector(QSet<QString>& conflictTypes, QString revisionIdA, QString revisionIdB, QString revisionIdBase);
 		~ConflictUnitDetector();
-		LinkedChangesTransition run(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
+		LinkedChangesTransition run(std::shared_ptr<GenericTree> treeA,
+											 std::shared_ptr<GenericTree> treeB,
+											 std::shared_ptr<GenericTree> treeBase,
+											 ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+					QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet);
 	private:
 		/**
@@ -46,7 +49,7 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		 * and that conflict unit is affected by some change in \a cdg. The \a revision argument is only used to load nodes
 		 * that are not yet loaded. It would be prefered if this wasn't necessary.
 		 */
-		IdToChangeMultiHash computeAffectedCUs(ChangeDependencyGraph cdg);
+		ConflictUnitSet computeAffectedCUs(ChangeDependencyGraph cdg);
 		/**
 		 * Returns the ID of the root of the conflict unit \a change belongs to.
 		 */
@@ -54,8 +57,8 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 
 
 		QSet<QString> conflictTypes_;
-		IdToChangeMultiHash affectedCUsA_;
-		IdToChangeMultiHash affectedCUsB_;
+		ConflictUnitSet affectedCUsA_;
+		ConflictUnitSet affectedCUsB_;
 
 		QString revisionIdA_;
 		QString revisionIdB_;
