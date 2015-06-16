@@ -130,7 +130,8 @@ HEADERS += src/overlays/IconOverlayStyle.h \
     src/overlays/MessageOverlayStyle.h \
     src/items/ViewItem.h \
     src/nodes/ViewItemNode.h \
-    src/items/VViewItemNode.h
+    src/items/VViewItemNode.h \
+    src/overlays/ArrowOverlay.h
 SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/overlays/IconOverlay.cpp \
     src/overlays/BoxOverlayStyle.cpp \
@@ -235,4 +236,5 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/overlays/MessageOverlayStyle.cpp \
     src/items/ViewItem.cpp \
     src/nodes/ViewItemNode.cpp \
-    src/items/VViewItemNode.cpp
+    src/items/VViewItemNode.cpp \
+    src/overlays/ArrowOverlay.cpp

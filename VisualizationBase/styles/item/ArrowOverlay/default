@@ -1,0 +1,9 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style>
+	<shape />
+	<drawsOnlyShape>true</drawsOnlyShape>
+	<drawShapeWhenEmpty>false</drawShapeWhenEmpty>
+	<wholeItemCursor>false</wholeItemCursor>
+	<noItemRegions>false</noItemRegions>
+	<allowEquivalentCursorsThroughBoundary>true</allowEquivalentCursorsThroughBoundary>
+</style>
