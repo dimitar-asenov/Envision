@@ -29,6 +29,7 @@
 #include "declarative/DynamicGridFormElement.h"
 #include "nodes/ViewItemNode.h"
 #include "VViewItemNode.h"
+#include "overlays/ArrowOverlay.h"
 
 namespace Visualization {
 
@@ -140,6 +141,23 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		Q_ASSERT(item);
 		if (item->currentFormIndex() == 1)
 			anyChanges = item->determineSpacing() || anyChanges;
+	}
+	//This is supposed to add the lines to the view. It works, but adding items in
+	//updateGeometry is not very nice..
+	auto copy = linesToAdd_;
+	linesToAdd_.clear();
+	for (auto line : copy)
+	{
+		auto item1 = findVisualizationOf(line.from_);
+		auto item2 = findVisualizationOf(line.to_);
+		if (item1 && item2)
+		{
+			anyChanges = true;
+			auto group = scene()->overlayGroup(line.layer_);
+			if (!group) group = scene()->addOverlayGroup(line.layer_);
+			group->addOverlay(makeOverlay(new ArrowOverlay(item1, item2)));
+		}
+		else linesToAdd_.append(line);
 	}
 	if (anyChanges)
 		setUpdateNeeded(RepeatUpdate);

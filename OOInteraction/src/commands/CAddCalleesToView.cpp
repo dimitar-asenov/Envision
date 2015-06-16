@@ -76,7 +76,10 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 			//Make the first callee appear at the same height as the method
 			view->addSpacing(pos.x() + 1, row++, actualNode);
 			for (auto callee : callees_)
+			{
+				view->addLine(ancestor->node(), callee, "callees");
 				view->insertNode(callee, pos.x() + 1, row++);
+			}
 		}
 		return new Interaction::CommandResult();
 	}

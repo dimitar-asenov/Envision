@@ -58,12 +58,23 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		void addSpacing(int column, int row, Model::Node* spacingTarget);
 
+		void addLine(Model::Node* from, Model::Node* to, QString layer);
+
 		const QString name() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 	private:
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
+
+		struct LineToAdd {
+			Model::Node* from_;
+			Model::Node* to_;
+			QString layer_;
+			LineToAdd(Model::Node* from, Model::Node* to, QString layer)
+				: from_(from), to_(to), layer_(layer) {}
+		};
+		QList<LineToAdd> linesToAdd_;
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
 
@@ -75,5 +86,9 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 inline const QString ViewItem::name() const { return name_; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
+inline void ViewItem::addLine(Model::Node *from, Model::Node *to, QString layer)
+{
+	linesToAdd_.append(LineToAdd(from, to, layer));
+}
 
 }
