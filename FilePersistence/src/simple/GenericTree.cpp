@@ -84,4 +84,10 @@ void GenericTree::releaseChunk(GenericNode* unusedChunk)
 	emptyChunks_.append(unusedChunk);
 }
 
+void GenericTree::loadNode(Model::NodeIdType id)
+{
+	Q_ASSERT(piecewiseLoader_);
+	piecewiseLoader_->loadAndLinkNode(id);
+}
+
 } /* namespace FilePersistence */
