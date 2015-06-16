@@ -52,6 +52,7 @@ class FILEPERSISTENCE_API GenericTree {
 		GenericNode* find(Model::NodeIdType id);
 
 		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);
+		void loadNode(Model::NodeIdType id);
 
 	private:
 		friend class GenericPersistentUnit;
