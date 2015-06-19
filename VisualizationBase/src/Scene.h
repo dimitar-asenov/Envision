@@ -79,6 +79,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void switchToView(ViewItem* view);
 		bool switchToView(const QString viewName);
 		ViewItem* currentViewItem();
+		void removeAllViewItems();
 
 		Cursor* mainCursor();
 		void setMainCursor(Cursor* cursor);

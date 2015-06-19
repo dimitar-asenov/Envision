@@ -235,4 +235,5 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/overlays/MessageOverlayStyle.cpp \
     src/items/ViewItem.cpp \
     src/nodes/ViewItemNode.cpp \
-    src/items/VViewItemNode.cpp
+    src/items/VViewItemNode.cpp \
+    src/styles/StyleSet.cpp

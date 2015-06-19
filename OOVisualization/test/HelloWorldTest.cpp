@@ -1065,6 +1065,14 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 	VisualizationManager::instance().mainScene()->addTopLevelNode(top_level);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 
+	VisualizationManager::instance().mainScene()->addRefreshActionFunction(
+		[top_level](Scene* scene){
+			scene->removeAllViewItems();
+			scene->setMainCursor(nullptr);
+			clearAllStyleSets();
+			scene->addTopLevelNode(top_level);
+	});
+
 	CHECK_CONDITION(top_level != nullptr);
 }
 
