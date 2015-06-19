@@ -3,22 +3,12 @@
 	<pen>
 		<width>1.0</width>
 		<style>1</style>
-		<color>
-			<alpha>255</alpha>
-			<red>128</red>
-			<green>128</green>
-			<blue>0</blue>
-		</color>
+		<color>#808000</color>
 	</pen>
 	<caretPen>
 		<width>2.0</width>
 		<style>1</style>
-		<color>
-			<alpha>255</alpha>
-			<red>128</red>
-			<green>128</green>
-			<blue>0</blue>
-		</color>
+		<color>#808000</color>
 		<capStyle>0</capStyle>
 		<joinStyle>0</joinStyle>
 	</caretPen>

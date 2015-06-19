@@ -4,21 +4,11 @@
 		Box
 		<outline>
 			<width>2</width>
-			<color>
-				<alpha>255</alpha>
-				<red>0</red>
-				<green>0</green>
-				<blue>100</blue>
-			</color>
+			<color>#000064</color>
 		</outline>
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>200</red>
-				<green>200</green>
-				<blue>255</blue>
-			</color>
+			<color>#c8c8ff</color>
 		</backgroundBrush>
 		<cornerRadius>10</cornerRadius>
 	</shape>
@@ -35,12 +25,7 @@
 					<stopPoints>
 						<e1>
 							<first>1.0</first>
-							<second>
-								<alpha>255</alpha>
-								<red>0</red>
-								<green>0</green>
-								<blue>100</blue>
-							</second>
+							<second>#000064</second>
 						</e1>	
 					</stopPoints>
 				</gradient>
@@ -51,12 +36,7 @@
 		<pen>
 			<width>1.0</width>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>255</green>
-				<blue>255</blue>
-			</color>
+			<color>#ffffff</color>
 			<capStyle>0</capStyle>
 			<joinStyle>0</joinStyle>
 		</pen>
@@ -90,23 +70,13 @@
 			Box
 			<outline>
 				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>160</red>
-					<green>160</green>
-					<blue>160</blue>
-				</color>
+				<color>#a0a0a0</color>
 			</outline>
 			<cornerRadius>1</cornerRadius>
 			<cornerType>0</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
-				</color>
+				<color>#ffffff</color>
 			</backgroundBrush>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">

@@ -55,6 +55,7 @@ class VISUALIZATIONBASE_API StyleLoader
 		void load(const QString& propertyName, bool& value);
 		void load(const QString& propertyName, QString& value);
 		void load(const QString& propertyName, double& value);
+		void load(const QString& propertyName, QColor& value);
 		template <class T> void load(const QString& propertyName, T& value);
 
 	private:
@@ -66,7 +67,6 @@ class VISUALIZATIONBASE_API StyleLoader
 		template <class T> void loadComposite(T& value);
 
 		void loadComposite(QPointF& value);
-		void loadComposite(QColor& value);
 		void loadComposite(QPen& value);
 		void loadComposite(QFont& value);
 		void loadComposite(QBrush& value);

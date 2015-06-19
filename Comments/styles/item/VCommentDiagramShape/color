@@ -1,10 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="../Item/default">
 	<name>black</name>
-	<color>
-		<red>0</red>
-		<green>0</green>
-		<blue>0</blue>
-		<alpha>255</alpha>
-	</color>
+	<color>#000000</color>
 </style>

@@ -3,12 +3,7 @@
 	<shape prototypes="shape/Box/default">Box
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>255</green>
-				<blue>255</blue>
-			</color>
+			<color>#ffffff</color>
 		</backgroundBrush>
 		<cornerType>1</cornerType>
 		<cornerRadius>3</cornerRadius>
@@ -19,12 +14,7 @@
 		<borderPen>
 			<width>1</width>
 			<style>2</style>
-			<color>
-				<red>192</red>
-				<green>192</green>
-				<blue>192</blue>
-				<alpha>255</alpha>
-			</color>
+			<color>#c0c0c0</color>
 		</borderPen>
 		<drawsOnlyShape>false</drawsOnlyShape>
 	</grid>

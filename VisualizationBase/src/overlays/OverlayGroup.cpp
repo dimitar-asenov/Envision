@@ -190,6 +190,12 @@ void OverlayGroup::update()
 
 		for (auto& overlay : overlays_)
 		{
+			// Hide/show overlays depending on whether their associated items are visible (e.g. when changing views)
+			bool allVisible = std::all_of(overlay->associatedItems().begin(), overlay->associatedItems().end(),
+													[](Item* item) {return item->isVisible();});
+			if (allVisible != overlay->overlayItem()->isVisible())
+				overlay->overlayItem()->setVisible(allVisible);
+
 			overlay->overlayItem()->setUpdateNeeded(Item::StandardUpdate);
 			overlay->overlayItem()->updateSubtree();
 		}

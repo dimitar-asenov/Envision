@@ -4,35 +4,23 @@
 	<colors>
 		<e0 prototypes="color">
 			<name>red</name>
-			<color>
-				<red>255</red>
-			</color>
+			<color>#ff0000</color>
 		</e0>
 		<e1 prototypes="color">
 			<name>green</name>
-			<color>
-				<green>255</green>
-			</color>
+			<color>#00ff00</color>
 		</e1>
 		<e2 prototypes="color">
 			<name>blue</name>
-			<color>
-				<blue>255</blue>
-			</color>
+			<color>#0000ff</color>
 		</e2>
 		<e3 prototypes="color">
 			<name>yellow</name>
-			<color>
-				<red>255</red>
-				<green>255</green>
-			</color>
+			<color>#ffff00</color>
 		</e3>
 		<e4 prototypes="color">
 			<name>teal</name>
-			<color>
-				<green>255</green>
-				<blue>255</blue>
-			</color>
+			<color>#00ffff</color>
 		</e4>
 	</colors>
 </style>

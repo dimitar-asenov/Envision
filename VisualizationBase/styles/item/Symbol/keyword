@@ -4,11 +4,6 @@
 		<weight>99</weight>
 	</font>
 	<pen>
-		<color>
-			<alpha>255</alpha>
-			<red>127</red>
-			<green>0</green>
-			<blue>85</blue>
-		</color>
+		<color>#7f0055</color>
 	</pen>
 </style>

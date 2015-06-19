@@ -7,12 +7,7 @@
 		</outline>
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>0</red>
-				<green>0</green>
-				<blue>0</blue>
-			</color>
+			<color>#000000</color>
 		</backgroundBrush>
 		<cornerType>0</cornerType>
 		<cornerRadius>0</cornerRadius>

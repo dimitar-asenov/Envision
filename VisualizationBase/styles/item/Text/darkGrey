@@ -1,11 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="default">
 	<pen>
-		<color>
-			<alpha>255</alpha>
-			<red>96</red>
-			<green>96</green>
-			<blue>96</blue>
-		</color>
+		<color>#606060</color>
 	</pen>
 </style>
