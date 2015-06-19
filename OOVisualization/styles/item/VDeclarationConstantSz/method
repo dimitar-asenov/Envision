@@ -6,12 +6,7 @@
 				<gradient>
 					<stopPoints>
 						<e1>
-							<second>
-								<alpha>255</alpha>
-								<red>255</red>
-								<green>209</green>
-								<blue>139</blue>
-							</second>
+							<second>#ffd18b</second>
 						</e1>	
 					</stopPoints>
 				</gradient>
@@ -30,12 +25,7 @@
 				<gradient>
 					<stopPoints>
 						<e1>
-							<second>
-								<alpha>255</alpha>
-								<red>255</red>
-								<green>255</green>
-								<blue>190</blue>
-							</second>
+							<second>#ffffbe</second>
 						</e1>	
 					</stopPoints>
 				</gradient>

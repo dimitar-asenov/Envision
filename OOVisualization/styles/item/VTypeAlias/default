@@ -16,21 +16,11 @@
 			<cornerType>0</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>240</red>
-					<green>240</green>
-					<blue>255</blue>
-				</color>
+				<color>#f0f0ff</color>
 			</backgroundBrush>
 			<outline>
 				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>128</red>
-					<green>128</green>
-					<blue>255</blue>
-				</color>
+				<color>#8080ff</color>
 			</outline>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">

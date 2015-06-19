@@ -5,12 +5,7 @@
 	<name prototypes="item/VReferenceExpression/default">
 		<resolvedName prototypes="item/Text/default">
 			<pen>
-				<color>
-					<alpha>255</alpha>
-					<red>185</red>
-					<green>120</green>
-					<blue>0</blue>
-				</color>
+				<color>#b97800</color>
 			</pen>
 			<font>
 				<family></family>
