@@ -87,7 +87,7 @@ void ViewItem::removeNode(Model::Node* node)
 	setUpdateNeeded(StandardUpdate);
 }
 
-const QList<Model::Node*> ViewItem::allNodes() const
+QList<Model::Node*> ViewItem::allNodes() const
 {
 	QList<Model::Node*> result;
 	for (auto column : nodes_)
@@ -97,7 +97,7 @@ const QList<Model::Node*> ViewItem::allNodes() const
 	return result;
 }
 
-const QPoint ViewItem::positionOfNode(Model::Node *node) const
+QPoint ViewItem::positionOfNode(Model::Node *node) const
 {
 	for (int i = 0; i < nodes_.size(); i++)
 	{
@@ -108,7 +108,7 @@ const QPoint ViewItem::positionOfNode(Model::Node *node) const
 	return QPoint(-1, -1);
 }
 
-const QPoint ViewItem::positionOfItem(Item *item) const
+QPoint ViewItem::positionOfItem(Item *item) const
 {
 	auto vref = DCast<VViewItemNode>(item);
 	if (vref) return positionOfNode(vref->node());

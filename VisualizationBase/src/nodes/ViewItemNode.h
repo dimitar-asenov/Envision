@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 #pragma once
 
-#include "visualizationbase_api.h"
+#include "../VisualizationBase/src/visualizationbase_api.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
@@ -39,7 +39,7 @@ namespace Visualization {
  * to give another level of indirection. This helps with distinguishing different items when
  * the same node is added to a ViewItem multiple times, as is possible.
  */
-class VISUALIZATIONBASE_API ViewItemNode: public Super<Model::Node>
+class VISUALIZATIONBASE_API ViewItemNode : public Super<Model::Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
 

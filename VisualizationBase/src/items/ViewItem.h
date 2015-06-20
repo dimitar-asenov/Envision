@@ -51,9 +51,9 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void insertColumn(int column);
 		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0);
 		void removeNode(Model::Node* node);
-		const QList<Model::Node*> allNodes() const;
-		const QPoint positionOfNode(Model::Node* node) const;
-		const QPoint positionOfItem(Item* item) const;
+		QList<Model::Node*> allNodes() const;
+		QPoint positionOfNode(Model::Node* node) const;
+		QPoint positionOfItem(Item* item) const;
 		Model::Node* nodeAt(int column, int row);
 
 		void addSpacing(int column, int row, Model::Node* spacingTarget);
@@ -68,8 +68,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QString name_;
 
 		struct LineToAdd {
-			Model::Node* from_;
-			Model::Node* to_;
+			Model::Node* from_{};
+			Model::Node* to_{};
 			QString layer_;
 			LineToAdd(Model::Node* from, Model::Node* to, QString layer)
 				: from_(from), to_(to), layer_(layer) {}
