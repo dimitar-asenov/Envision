@@ -51,6 +51,9 @@ class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArgumen
 		virtual QString description(Visualization::Item *source, Visualization::Item *target,
 				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
+	private:
+		Visualization::Item* correctParentItem(Visualization::Item* child);
+
 };
 
 }
