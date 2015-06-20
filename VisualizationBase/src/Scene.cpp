@@ -189,6 +189,15 @@ ViewItem* Scene::newViewItem(const QString name)
 	return result;
 }
 
+void Scene::removeAllViewItems()
+{
+	for (auto item : viewItems_)
+		removeTopLevelItem(item);
+
+	viewItems_.clear();
+	currentViewItem_ = nullptr;
+}
+
 void Scene::scheduleUpdate()
 {
 	if (!needsUpdate_)
@@ -413,7 +422,7 @@ void Scene::keyPressEvent (QKeyEvent *event)
 			auto parent = top;
 			while (parent->parent()) parent = parent->parent();
 
-			auto rootItem = dynamic_cast<Visualization::RootItem*>(parent);
+			auto rootItem = dynamic_cast<Visualization::ViewItem*>(parent);
 			if (rootItem) rootItem->setUpdateNeeded(Visualization::Item::FullUpdate);
 		}
 	}
