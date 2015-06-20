@@ -43,6 +43,7 @@ class VISUALIZATIONBASE_API OverlayGroup {
 
 		void hide();
 		void show();
+		void toggle();
 
 		// Methods for manually adding overlays
 		void addOverlay(OverlayAccessor* overlay);

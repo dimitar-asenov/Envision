@@ -54,6 +54,12 @@ void OverlayGroup::show()
 	for (auto& o : overlays_) o->overlayItem()->show();
 }
 
+void OverlayGroup::toggle()
+{
+	if (hidden_) show();
+	else hide();
+}
+
 void OverlayGroup::addOverlay(OverlayAccessor* overlay)
 {
 	overlays_.append(overlay);
