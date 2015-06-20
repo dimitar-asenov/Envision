@@ -59,7 +59,8 @@ HEADERS += src/commands/CDumpMethodRenderings.h \
     src/DoxygenCommentsOnlyVisitor.h \
     src/DoxygenWholeTreeVisitor.h \
     src/commands/CAddNodeToView.h \
-    src/commands/CAddCalleesToView.h
+    src/commands/CAddCalleesToView.h \
+    src/commands/CAddBaseClassesToView.h
 SOURCES += src/commands/CDumpMethodRenderings.cpp \
     src/handlers/HModule.cpp \
     src/commands/CCreateModule.cpp \
@@ -107,7 +108,8 @@ SOURCES += src/commands/CDumpMethodRenderings.cpp \
     src/DoxygenCommentsOnlyVisitor.cpp \
     src/DoxygenWholeTreeVisitor.cpp \
     src/commands/CAddNodeToView.cpp \
-    src/commands/CAddCalleesToView.cpp
+    src/commands/CAddCalleesToView.cpp \
+    src/commands/CAddBaseClassesToView.cpp
 doxy.path = $${BUILD_DIR}/doxygen
 doxy.files = doxy_data/*
 INSTALLS += doxy
