@@ -78,7 +78,7 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 			for (auto callee : callees_)
 			{
 				auto actualCallee = view->insertNode(callee, pos.x() + 1, row++);
-				view->addLine(actualNode, actualCallee, "callees");
+				view->addArrow(actualNode, actualCallee, "callees");
 			}
 		}
 		return new Interaction::CommandResult();

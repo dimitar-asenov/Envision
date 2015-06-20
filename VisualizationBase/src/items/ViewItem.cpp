@@ -83,8 +83,19 @@ void ViewItem::removeNode(Model::Node* node)
 				viewNode->setSpacingTarget(nullptr);
 		}
 		nodes_[point.x()].remove(point.y());
+		//Need to remove any arrows depending on it
+		if (auto vis = findVisualizationOf(node))
+		{
+			for (auto key : arrows_.keys())
+			{
+				auto copy = arrows_[key];
+				for (auto pair : copy)
+					if (pair.first == vis || pair.second == vis)
+						arrows_[key].removeAll(pair);
+			}\
+		}
+		setUpdateNeeded(StandardUpdate);
 	}
-	setUpdateNeeded(StandardUpdate);
 }
 
 QList<Model::Node*> ViewItem::allNodes() const
@@ -142,10 +153,9 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		if (item->currentFormIndex() == 1)
 			anyChanges = item->determineSpacing() || anyChanges;
 	}
-	//This is supposed to add the lines to the view. It works, but adding items in
-	//updateGeometry is not very nice..
-	auto copy = linesToAdd_;
-	linesToAdd_.clear();
+
+	auto copy = arrowsToAdd_;
+	arrowsToAdd_.clear();
 	for (auto line : copy)
 	{
 		auto item1 = findVisualizationOf(line.from_);
@@ -153,14 +163,23 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		if (item1 && item2)
 		{
 			anyChanges = true;
-			auto group = scene()->overlayGroup(line.layer_);
-			if (!group) group = scene()->addOverlayGroup(line.layer_);
-			group->addOverlay(makeOverlay(new ArrowOverlay(item1, item2)));
+			if (!arrows_.contains(line.layer_))
+				addArrowOverlay(line.layer_);
+			arrows_[line.layer_].append(QPair<Item*, Item*>(item1, item2));
 		}
-		else linesToAdd_.append(line);
+		else arrowsToAdd_.append(line);
 	}
 	if (anyChanges)
 		setUpdateNeeded(RepeatUpdate);
+}
+
+void ViewItem::addArrowOverlay(QString layer)
+{
+	auto layerName = fullLayerName(layer);
+	auto arrowLayer = scene()->overlayGroup(layerName);
+	if (!arrowLayer) arrowLayer = scene()->addOverlayGroup(layerName);
+	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay(from, to));});
+	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
 }
 
 void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)

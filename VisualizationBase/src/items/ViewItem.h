@@ -58,7 +58,9 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		void addSpacing(int column, int row, Model::Node* spacingTarget);
 
-		void addLine(Model::Node* from, Model::Node* to, QString layer);
+		void addArrow(Model::Node* from, Model::Node* to, QString layer);
+		QList<QPair<Item*, Item*>> arrowsForLayer(QString layer);
+		QString fullLayerName(QString localLayer);
 
 		const QString name() const;
 
@@ -67,14 +69,16 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
 
-		struct LineToAdd {
+		struct ArrowToAdd {
 			Model::Node* from_{};
 			Model::Node* to_{};
 			QString layer_;
-			LineToAdd(Model::Node* from, Model::Node* to, QString layer)
+			ArrowToAdd(Model::Node* from, Model::Node* to, QString layer)
 				: from_(from), to_(to), layer_(layer) {}
 		};
-		QList<LineToAdd> linesToAdd_;
+		QList<ArrowToAdd> arrowsToAdd_;
+		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
+		void addArrowOverlay(QString layer);
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
 
@@ -86,9 +90,11 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 inline const QString ViewItem::name() const { return name_; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
-inline void ViewItem::addLine(Model::Node *from, Model::Node *to, QString layer)
+inline void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer)
 {
-	linesToAdd_.append(LineToAdd(from, to, layer));
+	arrowsToAdd_.append(ArrowToAdd(from, to, layer));
 }
+inline QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer) { return arrows_[layer]; }
+inline QString ViewItem::fullLayerName(QString localLayer) { return name() + "_" + localLayer; }
 
 }
