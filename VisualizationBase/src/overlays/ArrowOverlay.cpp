@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ArrowOverlay.h"
+#include "utils/Drawing.h"
 
 namespace Visualization {
 
@@ -37,33 +38,41 @@ ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* styl
 
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	painter->drawLine(lineFrom_, lineTo_);
+	Drawing::drawArrow(painter, lineFrom_, lineTo_, painter->pen(), painter->pen(),
+					   invertArrow_, !invertArrow_, 1);
 }
 
 void ArrowOverlay::determineChildren(){}
 
 void ArrowOverlay::updateGeometry(int, int)
 {
-	Item* left{};
-	Item* right{};
-	if (firstAssociatedItem()->scenePos().x() < secondAssociatedItem()->scenePos().x())
-	{
-		left = firstAssociatedItem();
-		right = secondAssociatedItem();
-	}
-	else
-	{
-		left = secondAssociatedItem();
-		right = firstAssociatedItem();
-	}
-	lineFrom_ = QPoint(left->scenePos().x() + left->widthInLocal(),
-					   left->scenePos().y() + left->heightInLocal() / 2);
-	lineTo_ = QPoint(right->scenePos().x(),
-					 right->scenePos().y() + right->heightInLocal() / 2);
+	invertArrow_ = false;
+	//Find the space the line will occupy in the scene
+	auto first = firstAssociatedItem();
+	auto second = secondAssociatedItem();
+	auto leftTopCorner = QPoint(
+				std::min(first->scenePos().x() + first->widthInLocal(), second->scenePos().x() + second->widthInLocal()),
+				std::min(first->scenePos().y() + first->heightInLocal() / 2, second->scenePos().y() + second->heightInLocal() / 2));
+	auto rightBottomCorner = QPoint(
+				std::max(first->scenePos().x(), second->scenePos().x()),
+				std::max(first->scenePos().y() + first->heightInLocal() / 2, second->scenePos().y() + second->heightInLocal() / 2));
 
-	setPos(0, 0);
-	setSize(std::max(lineFrom_.x(), lineTo_.x()),
-			 std::max(lineFrom_.y(), lineTo_.y()));
+	setPos(leftTopCorner.x(), leftTopCorner.y());
+	setSize(rightBottomCorner.x() - leftTopCorner.x(),
+			rightBottomCorner.y() - leftTopCorner.y());
+
+	//Find the actual starting and end points of the line in local coordinates
+	if (first->scenePos().x() > second->scenePos().x())
+	{
+		auto temp = second;
+		second = first;
+		first = temp;
+		invertArrow_ = true;
+	}
+	lineFrom_ = QPoint(first->scenePos().x() + first->widthInLocal() - leftTopCorner.x(),
+					   first->scenePos().y() + first->heightInLocal() / 2 - leftTopCorner.y());
+	lineTo_ = QPoint(second->scenePos().x() - leftTopCorner.x(),
+					 second->scenePos().y() + second->heightInLocal() / 2 - leftTopCorner.y());
 }
 
 }

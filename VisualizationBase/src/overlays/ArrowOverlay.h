@@ -50,6 +50,7 @@ class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
 	private:
 		QPoint lineFrom_{};
 		QPoint lineTo_{};
+		bool invertArrow_{};
 };
 
 }

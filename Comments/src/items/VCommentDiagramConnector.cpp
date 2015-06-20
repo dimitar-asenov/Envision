@@ -28,6 +28,7 @@
 #include "VCommentDiagramShape.h"
 #include "VCommentDiagram.h"
 
+#include "VisualizationBase/src/utils/Drawing.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 
 using namespace Visualization;
@@ -78,50 +79,19 @@ void VCommentDiagramConnector::updateGeometry(int, int)
 
 void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget *)
 {
-	QPen pen;
-	pen.setWidth(1);
-	pen.setStyle(Qt::SolidLine);
-	painter->setPen(pen);
+	QPen arrowPen;
+	arrowPen.setWidth(1);
+	arrowPen.setStyle(Qt::SolidLine);
+
+	QPen linePen;
+	linePen.setColor(Qt::black);
+	linePen.setStyle(outlineType_);
+	linePen.setWidth(outlineSize_);
+
 	painter->setBrush(QBrush(Qt::black));
 
-	double angle = -QLineF(startPoint_, endPoint_).angle();
-
-	QPointF newStart = startPoint_;
-	QPointF newEnd = endPoint_;
-
-	if (node()->startArrow() || node()->endArrow())
-	{
-		QPolygonF anArrowhead, arrow;
-		const int arrowTipLength = 10, arrowTipHalfWidth = 2;
-		anArrowhead << QPointF(0, 0)
-						<< QPointF(arrowTipLength+outlineSize_, -arrowTipHalfWidth-outlineSize_)
-						<< QPointF(arrowTipLength+outlineSize_, arrowTipHalfWidth+outlineSize_);
-		QMatrix matrix;
-		if (node()->startArrow())
-		{
-			matrix.rotate(angle);
-			arrow = matrix.map(anArrowhead);
-			arrow.translate(startPoint_);
-			painter->drawPolygon(arrow);
-			newStart = QPointF((arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2);
-		}
-		if (node()->endArrow())
-		{
-			matrix.reset();
-			matrix.rotate(angle + 180);
-			arrow = matrix.map(anArrowhead);
-			arrow.translate(endPoint_);
-			painter->drawPolygon(arrow);
-			newEnd = QPointF((arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2);
-		}
-	}
-
-	pen.setColor(Qt::black);
-	pen.setStyle(outlineType_);
-	pen.setWidth(outlineSize_);
-	painter->setPen(pen);
-
-	painter->drawLine(newStart, newEnd);
+	Drawing::drawArrow(painter, startPoint_, endPoint_, arrowPen, linePen,
+					   node()->startArrow(), node()->endArrow(), outlineSize_);
 }
 
 } /* namespace Comments */
