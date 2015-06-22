@@ -52,7 +52,7 @@ class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArgumen
 				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
 	private:
-		Visualization::Item* correctParentItem(Visualization::Item* child);
+		Visualization::Item* potentialTopLevelParent(Visualization::Item* child);
 
 };
 

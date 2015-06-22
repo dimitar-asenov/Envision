@@ -40,7 +40,7 @@ bool CRemoveNodeFromView::canInterpret(Visualization::Item *source, Visualizatio
 {
 	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
 	//The first parent with a node should be in the current view
-	auto ancestor = correctParentItem(source);
+	auto ancestor = potentialTopLevelParent(source);
 	if (!ancestor) return false;
 	else
 		return canInterpret &&
@@ -51,7 +51,7 @@ CommandResult* CRemoveNodeFromView::executeWithArguments(Visualization::Item *so
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
 	//Go to the first parent of the source which has a node, which is a top-level item (as canInterpret checks)
-	auto ancestor = correctParentItem(source);
+	auto ancestor = potentialTopLevelParent(source);
 	ancestor->scene()->currentViewItem()->removeNode(ancestor->node());
 	return new CommandResult();
 }
@@ -62,8 +62,12 @@ QString CRemoveNodeFromView::description(Visualization::Item *, Visualization::I
 	return "Remove the current top-level node from the current view";
 }
 
-Visualization::Item* CRemoveNodeFromView::correctParentItem(Visualization::Item *child)
+Visualization::Item* CRemoveNodeFromView::potentialTopLevelParent(Visualization::Item *child)
 {
+	//The parent item to be used for an item can be deduced as follows:
+	//Either the item is a spacing node -> then the first ancestor with a node will be a VViewItemNode
+	//Else the item is a real AST node -> then the AST node's visualization will be found,
+	//									  and the potential top level item in the view is its parent
 	auto ancestor = child->findAncestorWithNode();
 	if (DCast<Visualization::VViewItemNode>(ancestor)) return ancestor;
 	else if (ancestor) return ancestor->parent();
