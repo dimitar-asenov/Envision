@@ -84,16 +84,7 @@ void ViewItem::removeNode(Model::Node* node)
 		}
 		nodes_[point.x()].remove(point.y());
 		//Need to remove any arrows depending on it
-		if (auto vis = findVisualizationOf(node))
-		{
-			for (auto key : arrows_.keys())
-			{
-				auto copy = arrows_[key];
-				for (auto pair : copy)
-					if (pair.first == vis || pair.second == vis)
-						arrows_[key].removeAll(pair);
-			}\
-		}
+		removeArrowsForNode(node);
 		setUpdateNeeded(StandardUpdate);
 	}
 }
@@ -140,6 +131,33 @@ void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget)
 	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget), column, row);
 }
 
+void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer)
+{
+	if (!arrows_.contains(layer))
+		addArrowLayer(layer);
+	arrowsToAdd_.append(ArrowToAdd(from, to, layer));
+}
+
+QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
+{
+	//First, adds all the pending arrows if any exist
+	if (arrowsToAdd_.size() > 0)
+	{
+		auto copy = arrowsToAdd_;
+		arrowsToAdd_.clear();
+		for (auto line : copy)
+		{
+			auto item1 = findVisualizationOf(line.from_);
+			auto item2 = findVisualizationOf(line.to_);
+			if (item1 && item2)
+				arrows_[line.layer_].append(QPair<Item*, Item*>(item1, item2));
+			else arrowsToAdd_.append(line);
+		}
+	}
+	//And then return the arrows in the layer
+	return arrows_[layer];
+}
+
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
@@ -153,33 +171,31 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		if (item->currentFormIndex() == 1)
 			anyChanges = item->determineSpacing() || anyChanges;
 	}
-
-	auto copy = arrowsToAdd_;
-	arrowsToAdd_.clear();
-	for (auto line : copy)
-	{
-		auto item1 = findVisualizationOf(line.from_);
-		auto item2 = findVisualizationOf(line.to_);
-		if (item1 && item2)
-		{
-			anyChanges = true;
-			if (!arrows_.contains(line.layer_))
-				addArrowOverlay(line.layer_);
-			arrows_[line.layer_].append(QPair<Item*, Item*>(item1, item2));
-		}
-		else arrowsToAdd_.append(line);
-	}
 	if (anyChanges)
 		setUpdateNeeded(RepeatUpdate);
 }
 
-void ViewItem::addArrowOverlay(QString layer)
+void ViewItem::addArrowLayer(QString layer)
 {
 	auto layerName = fullLayerName(layer);
 	auto arrowLayer = scene()->overlayGroup(layerName);
 	if (!arrowLayer) arrowLayer = scene()->addOverlayGroup(layerName);
 	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay(from, to));});
 	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
+}
+
+void ViewItem::removeArrowsForNode(Model::Node *node)
+{
+	if (auto vis = findVisualizationOf(node))
+	{
+		for (auto key : arrows_.keys())
+		{
+			auto copy = arrows_[key];
+			for (auto pair : copy)
+				if (pair.first == vis || pair.second == vis)
+					arrows_[key].removeAll(pair);
+		}\
+	}
 }
 
 void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)

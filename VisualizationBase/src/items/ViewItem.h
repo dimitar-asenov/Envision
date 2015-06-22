@@ -78,7 +78,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		};
 		QList<ArrowToAdd> arrowsToAdd_;
 		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
-		void addArrowOverlay(QString layer);
+		void addArrowLayer(QString layer);
+		void removeArrowsForNode(Model::Node* node);
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
 
@@ -90,11 +91,6 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 inline const QString ViewItem::name() const { return name_; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
-inline void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer)
-{
-	arrowsToAdd_.append(ArrowToAdd(from, to, layer));
-}
-inline QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer) { return arrows_[layer]; }
 inline QString ViewItem::fullLayerName(QString localLayer) { return name() + "_" + localLayer; }
 
 }
