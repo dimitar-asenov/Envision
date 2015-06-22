@@ -88,8 +88,6 @@ void VCommentDiagramConnector::paint(QPainter* painter, const QStyleOptionGraphi
 	linePen.setStyle(outlineType_);
 	linePen.setWidth(outlineSize_);
 
-	painter->setBrush(QBrush(Qt::black));
-
 	Drawing::drawArrow(painter, startPoint_, endPoint_, arrowPen, linePen,
 					   node()->startArrow(), node()->endArrow(), outlineSize_);
 }
