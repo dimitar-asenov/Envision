@@ -34,6 +34,7 @@
 #include "commands/CSwitchView.h"
 #include "commands/CRemoveNodeFromView.h"
 #include "commands/CToggleArrowLayer.h"
+#include "commands/CAddInfoNode.h"
 
 namespace Interaction {
 
@@ -48,6 +49,7 @@ HSceneHandlerItem::HSceneHandlerItem()
 	addCommand(new CSwitchView());
 	addCommand(new CRemoveNodeFromView());
 	addCommand(new CToggleArrowLayer());
+	addCommand(new CAddInfoNode());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()
