@@ -57,7 +57,7 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 
 	if (view)
 	{
-		auto callees_ = callees(ancestor->node());
+		auto callees_ = (DCast<OOModel::Method>(ancestor->node()))->callees();
 		auto pos = view->positionOfItem(ancestor->parent());
 
 		if (callees_.size() > 0)
@@ -86,20 +86,6 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 	else
 		return new Interaction::CommandResult(new Interaction::CommandError("View " + name + " does not exist"));
 }
-
-QSet<OOModel::Method*> CAddCalleesToView::callees(Model::Node* parent)
-{
-	QSet<OOModel::Method*> result;
-	for (auto child : parent->children())
-	{
-		if (auto call = DCast<OOModel::MethodCallExpression>(child))
-			if (call->methodDefinition())
-				result.insert(call->methodDefinition());
-		result.unite(callees(child));
-	}
-	return result;
-}
-
 
 QString CAddCalleesToView::description(Visualization::Item*, Visualization::Item*,
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
