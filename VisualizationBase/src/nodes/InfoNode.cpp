@@ -65,15 +65,14 @@ void InfoNode::updateInfo(bool isAutoUpdate)
 	QString infoHtml;
 	for (auto name : enabledInfoGetters_)
 	{
-		QString result;
 		auto getter = allInfoGetters[name];
+		//If necessary, compute the value
 		if (!isAutoUpdate || getter.updatesAutomatically_
 				|| !cachedInfoStrings_.contains(name))
-			result = getter.getter_(target_);
-		else
-			result = cachedInfoStrings_[name];
-		if (!result.isEmpty())
-			infoHtml += result + "<br>";
+			cachedInfoStrings_[name] = getter.getter_(target_);
+		//Use the computed value to extend the info
+		if (!cachedInfoStrings_[name].isEmpty())
+			infoHtml += cachedInfoStrings_[name] + "<br>";
 	}
 	setInfoHtml(infoHtml);
 }

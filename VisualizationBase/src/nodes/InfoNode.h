@@ -66,6 +66,13 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		virtual void save(Model::PersistentStore& store) const;
 		virtual void load(Model::PersistentStore& store);
 
+		/**
+		 * Registers a new method to get information.
+		 * @param name The name of the getter.
+		 * @param getter The getter method itself, taking a node and returning a string.
+		 * @param updatesAutomatically Whether this info should always update.
+		 * @param enabledByDefault Whether this info is visible by default.
+		 */
 		static void registerInfoGetter(const QString& name, const InfoGetter getter,
 									   bool updatesAutomatically, bool enabledByDefault);
 
