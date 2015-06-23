@@ -99,108 +99,119 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 	return transition;
 }
 
+std::shared_ptr<ChangeDescription> ListMergeComponent::getConflictingChange(
+		ConflictPairs& conflictPairs,
+		std::shared_ptr<ChangeDescription>& change)
+{
+	for (auto other : conflictPairs.values(change))
+	{
+		if (other->nodeId() == change->nodeId())
+			return other;
+	}
+	return nullptr;
+}
+
+QPair<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>> ListMergeComponent::findBranches(
+		ChangeDependencyGraph& cdgA,
+		std::shared_ptr<ChangeDescription> first,
+		std::shared_ptr<ChangeDescription> second)
+{
+	if (cdgA.changes().value(first->nodeId()) == first)
+		return {first, second};
+	else
+		return {second, first};
+}
+
+QPair<bool, QSet<Model::NodeIdType>> ListMergeComponent::checkAndGetAllElementIds(
+		std::shared_ptr<ChangeDescription> changeA,
+		std::shared_ptr<ChangeDescription> changeB)
+{
+	QSet<Model::NodeIdType> allElementIds;
+	// returns true iff all elements are conflict roots
+	auto gatherAndCheckElems = [&](const GenericNode* container) -> bool
+	{
+		for (auto element : container->children())
+		{
+			if (!conflictTypes_.contains(element->type()))
+				 return false;
+			else
+				 allElementIds.insert(element->id());
+		}
+		return true;
+	};
+
+	bool allElementsConflictRoots = true;
+	allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeA());
+	allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeB());
+	allElementsConflictRoots &= gatherAndCheckElems(changeB->nodeB());
+	return {allElementsConflictRoots, allElementIds};
+}
+
+bool onlyConflictsOnLabel(ConflictPairs& conflictPairs, QSet<Model::NodeIdType>& allElementIds,
+								  ChangeDependencyGraph& cdgA)
+{
+	for (auto elem : allElementIds)
+	{
+		auto changeA = cdgA.changes().value(elem);
+		if (changeA)
+			for (auto changeB : conflictPairs.values(changeA))
+			{
+				if (!((changeA->onlyLabelChange() && conflictPairs.values(changeB).size() == 1) ||
+						(changeB->onlyLabelChange() && conflictPairs.values(changeA).size() == 1)))
+					return false;
+			}
+	}
+	return true;
+}
+
 QSet<Model::NodeIdType> ListMergeComponent::computeListsToMerge(
 		ChangeDependencyGraph& cdgA,
-		ChangeDependencyGraph& cdgB,
+		ChangeDependencyGraph&,
 		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 		ConflictPairs& conflictPairs)
 {
 	QSet<Model::NodeIdType> listsToMerge;
 	for (auto change : conflictingChanges)
 	{
+		if (listsToMerge.contains(change->nodeId())) continue;
+
 		if (!change->onlyStructureChange()) continue;
+
+		// At this point we know:
+		// - One branch only changes child structure
+
 		if (!listTypes_.contains(change->nodeA()->type()) &&
 			 !unorderedTypes_.contains(change->nodeA()->type())) continue;
 
-		// node of list type and one branch only changes child structure
-		// look for change of other branch of same node
-		std::shared_ptr<ChangeDescription> conflictingChange;
-		bool conflictingChangeFound = false;
-		for (auto other : conflictPairs.values(change))
-		{
-			if (other->nodeId() == change->nodeId())
-			{
-				conflictingChange = other;
-				conflictingChangeFound = true;
-				break;
-			}
-		}
+		// - The node is of list type
 
-		if (conflictingChangeFound && !conflictingChange->onlyStructureChange()) continue;
-		// other branch only changes child structure
+		auto conflictingChange = getConflictingChange(conflictPairs, change);
+		if (conflictingChange && !conflictingChange->onlyStructureChange()) continue;
 
-		// Now we have change on list container and conflicting change on the same node.
+		Q_ASSERT(change->nodeA() == conflictingChange->nodeA());
 
-		std::shared_ptr<ChangeDescription> changeA;
-		std::shared_ptr<ChangeDescription> changeB;
-		if (cdgA.changes().value(change->nodeId()) == change)
-		{
-			changeA = change;
-			changeB = conflictingChange;
-		}
-		else
-		{
-			changeA = conflictingChange;
-			changeB = change;
-		}
+		// - change and conflictingChange affect the same node
+		// - Both branches only change child structure
 
-		Q_ASSERT(changeA->nodeA() == changeB->nodeA()); // both changes point to the same base node object.
+		auto pair = findBranches(cdgA, change, conflictingChange);
+		auto changeA = pair.first;
+		auto changeB = pair.second;
 
-		QSet<Model::NodeIdType> allElementIds;
-		// returns true iff all elements are conflict roots
-		auto gatherAndCheckElems = [&](const GenericNode* container) -> bool
-		{
-			bool allElementsConflictRoots = true;
-			for (auto element : container->children())
-			{
-				allElementIds.insert(element->id());
-				allElementsConflictRoots &= conflictTypes_.contains(element->type());
-				if (!allElementsConflictRoots) break;
-			}
-			return allElementsConflictRoots;
-		};
+		// - We know what branches the changes are in
 
-		bool allElementsConflictRoots = true;
-		allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeA());
-		allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeB());
-		allElementsConflictRoots &= gatherAndCheckElems(changeB->nodeB());
+		auto pair2 = checkAndGetAllElementIds(changeA, changeB);
+		bool allElementsConflictRoots = pair2.first;
+		auto allElementIds = pair2.second;
 
 		if (!allElementsConflictRoots) continue;
 
-		// for all elements, check that conflicts are on label only
-		auto check = [&](Model::NodeIdType id, ChangeDependencyGraph& cdg) -> bool
-		{
-			bool atMostOneBranchModifiesBeyondLabel = true;
-			if (cdg.changes().contains(id))
-			{
-				auto elemChange1 = cdg.changes().value(id);
-				if (!elemChange1->onlyLabelChange())
-				{
-					// branch of CDG changes more than label
-					for (auto elemChange2 : conflictPairs.values(elemChange1))
-					{
-						if (elemChange2->nodeId() == elemChange1->nodeId() && !elemChange2->onlyLabelChange())
-						{
-							atMostOneBranchModifiesBeyondLabel = false;
-							break;
-						}
-					}
-				}
-			}
-			return atMostOneBranchModifiesBeyondLabel;
-		};
-		bool allElementsMergable = true;
-		for (auto id : allElementIds)
-		{
-			allElementsMergable &= check(id, cdgA) && check(id, cdgB);
-			if (!allElementsMergable) break;
-		}
+		// - All elements of the list are conflict roots
 
-		if (!allElementsMergable) continue;
+		if (!onlyConflictsOnLabel(conflictPairs, allElementIds, cdgA)) continue;
+
+		// - All conflicts are on label changes only.
 
 		listsToMerge.insert(changeA->nodeId());
-
-		// TODO extract each check into its own method
 	}
 	return listsToMerge;
 }

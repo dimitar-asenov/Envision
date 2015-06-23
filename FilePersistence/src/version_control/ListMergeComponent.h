@@ -80,6 +80,20 @@ class ListMergeComponent : public ConflictPipelineComponent
 				ChangeDependencyGraph& cdgB,
 				QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 				ConflictPairs& conflictPairs);
+
+		std::shared_ptr<ChangeDescription> getConflictingChange(
+				ConflictPairs& conflictPairs,
+				std::shared_ptr<ChangeDescription>& change);
+
+		QPair<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>> findBranches(
+				ChangeDependencyGraph& cdgA,
+				std::shared_ptr<ChangeDescription> first,
+				std::shared_ptr<ChangeDescription> second);
+
+		QPair<bool, QSet<Model::NodeIdType>> checkAndGetAllElementIds(
+				std::shared_ptr<ChangeDescription> changeA,
+				std::shared_ptr<ChangeDescription> changeB);
+
 		/**
 		 * Given an unstable \a chunk, this method tries to construct the merged version of it.
 		 *
