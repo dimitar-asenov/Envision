@@ -76,7 +76,8 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CSwitchView.h \
     src/commands/CRemoveNodeFromView.h \
     src/commands/CToggleArrowLayer.h \
-    src/commands/CAddInfoNode.h
+    src/commands/CAddInfoNode.h \
+    src/commands/CUpdateInfoNode.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -146,4 +147,5 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CSwitchView.cpp \
     src/commands/CRemoveNodeFromView.cpp \
     src/commands/CToggleArrowLayer.cpp \
-    src/commands/CAddInfoNode.cpp
+    src/commands/CAddInfoNode.cpp \
+    src/commands/CUpdateInfoNode.cpp
