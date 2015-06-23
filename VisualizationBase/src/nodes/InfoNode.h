@@ -68,20 +68,6 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		static void registerInfoGetter(const QString& name, const InfoGetter getter,
 									   bool updatesAutomatically, bool enabledByDefault);
 
-		/**
-		 * Registers a new statistics node constructor.
-		 * @param type The type name of the node to register.
-		 * @param constructor The constructor of the node, taking a single target node.
-		 */
-		//static void registerStatisticsNodeType(const QString& type, const InfoNodeConstructor constructor);
-		//static bool isTypeRegistered(const QString& type);
-		/**
-		 * Creates a new node from the registry of statistics node constructors.
-		 * @param type The name of the node type to create.
-		 * @param target The target of the statistics node.
-		 */
-		//static StatisticsNode* createNewNode(const QString& type, Model::Node* target);
-
 	protected:
 		void setInfoHtml(QString content);
 
