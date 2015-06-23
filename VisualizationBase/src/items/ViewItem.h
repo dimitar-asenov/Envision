@@ -64,6 +64,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		const QString name() const;
 
+		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 	private:
 		QVector<QVector<Model::Node*>> nodes_;

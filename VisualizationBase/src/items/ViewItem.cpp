@@ -30,6 +30,7 @@
 #include "nodes/ViewItemNode.h"
 #include "VViewItemNode.h"
 #include "overlays/ArrowOverlay.h"
+#include "nodes/InfoNode.h"
 
 namespace Visualization {
 
@@ -156,6 +157,25 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 	}
 	//And then return the arrows in the layer
 	return arrows_[layer];
+}
+
+void ViewItem::determineChildren()
+{
+	Super::determineChildren();
+	//Update all the info nodes in the view
+	for (auto node : allNodes())
+	{
+		auto asViewItemNode = DCast<ViewItemNode>(node);
+		Q_ASSERT(asViewItemNode);
+		if (auto info = DCast<InfoNode>(asViewItemNode->reference()))
+		{
+			//Update only if we don't already do so by default
+			if (auto vis = findVisualizationOf(info))
+				//determineChildren is protected in Item, but not in DeclarativeItemBase
+				if (vis->needsUpdate() == Item::NoUpdate)
+					DCast<DeclarativeItemBase>(vis)->determineChildren();
+		}
+	}
 }
 
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
