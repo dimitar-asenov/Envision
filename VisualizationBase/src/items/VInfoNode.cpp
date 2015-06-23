@@ -37,6 +37,7 @@ VInfoNode::VInfoNode(Item* parent, NodeType* node, const StyleType* style) :
 		Super(parent, node, style)
 {
 	node->updateInfo(false);
+	browser_ = new Comments::VCommentBrowser(this, QString());
 }
 
 void VInfoNode::initializeForms()
@@ -48,7 +49,10 @@ void VInfoNode::initializeForms()
 void VInfoNode::determineChildren()
 {
 	Super::determineChildren();
-	browser_ = new Comments::VCommentBrowser(this, node()->infoHtml());
+	//Update the node fully, iff an update on the item was requested
+	if (needsUpdate() != Item::NoUpdate) node()->updateInfo(false);
+	else node()->updateInfo(true);
+	browser_->setContent(node()->infoHtml());
 }
 
 }

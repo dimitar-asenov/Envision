@@ -48,9 +48,7 @@ VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QUrl& url, Q
 VCommentBrowser::VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style)
 	: Super(parent, style), browser_{new QGraphicsWebView(this)}, size_{defaultSize}
 {
-	browser_->setResizesToContents(true);
-	browser_->setHtml(content);
-	browser_->resize(size_);
+	setContent(content);
 }
 
 VCommentBrowser::~VCommentBrowser()
@@ -96,6 +94,13 @@ void VCommentBrowser::updateSize(QSize size)
 	if (size.width() > 0 && size.height() > 0)
 		size_ = size;
 	setUpdateNeeded(StandardUpdate);
+}
+
+void VCommentBrowser::setContent(const QString &content)
+{
+	browser_->setResizesToContents(true);
+	browser_->setHtml(content);
+	browser_->resize(size_);
 }
 
 }
