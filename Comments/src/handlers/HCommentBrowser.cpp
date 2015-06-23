@@ -39,6 +39,7 @@ HCommentBrowser* HCommentBrowser::instance()
 
 void HCommentBrowser::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
 {
+	Interaction::GenericHandler::keyPressEvent(item, event);
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F11)
 		if (auto scene = item->scene())
 			for (auto view : scene->views())
