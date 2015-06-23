@@ -72,7 +72,7 @@ void InfoNode::updateInfo(bool isAutoUpdate)
 			cachedInfoStrings_[name] = getter.getter_(target_);
 		//Use the computed value to extend the info
 		if (!cachedInfoStrings_[name].isEmpty())
-			infoHtml += cachedInfoStrings_[name] + "<br>";
+			infoHtml += cachedInfoStrings_[name] + "<small>" + "  (Layer " + name + ")</small>" + "<br>";
 	}
 	setInfoHtml(infoHtml);
 }
@@ -88,7 +88,7 @@ void InfoNode::registerInfoGetter(const QString &name, const InfoGetter getter,
 
 void InfoNode::setEnabled(const QString name, bool isEnabled)
 {
-	if (isEnabled && !enabledInfoGetters_.contains(name))
+	if (isEnabled && !enabledInfoGetters_.contains(name) && allInfoGetters.contains(name))
 		enabledInfoGetters_.append(name);
 	else enabledInfoGetters_.removeAll(name);
 }

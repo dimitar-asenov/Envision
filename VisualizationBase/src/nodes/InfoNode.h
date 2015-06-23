@@ -58,6 +58,11 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		 * can be used for multiple statistics nodes.
 		 */
 		QString infoHtml() const;
+		/**
+		 * Updates the node's stored information.
+		 * @param isAutoUpdate Is this an automatic update, or a forced update?
+		 *					   A forced update will update everything.
+		 */
 		virtual void updateInfo(bool isAutoUpdate);
 
 		void setEnabled(const QString name, bool isEnabled);
