@@ -35,8 +35,9 @@ DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, InfoNode)
 namespace Visualization {
 
 /**
- * A StatisticsNode is the base class of all nodes which display some sort of statistics
- * on a target node. There is a register which keeps track of all these nodes.
+ * An InfoNode is the base class of all nodes which display some sort of statistics
+ * on a target node. There is a register which keeps track of all possible informations
+ * to be displayed.
  */
 class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 {

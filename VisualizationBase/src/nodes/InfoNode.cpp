@@ -94,28 +94,6 @@ void InfoNode::setEnabled(const QString name, bool isEnabled)
 	else enabledInfoGetters_.removeAll(name);
 }
 
-//Static methods
-/*void StatisticsNode::registerStatisticsNodeType(const QString &type, const InfoNodeConstructor constructor)
-{
-	if (isTypeRegistered(type))
-		throw Model::ModelException("Trying to register a node type that already has been registered: " + type);
-
-	statisticsNodeConstructorRegister.insert(type, constructor);
-}
-
-bool StatisticsNode::isTypeRegistered(const QString& type)
-{
-	return statisticsNodeConstructorRegister.contains(type);
-}
-
-StatisticsNode* StatisticsNode::createNewNode(const QString& type, Model::Node* target)
-{
-	if (statisticsNodeConstructorRegister.contains(type))
-		return statisticsNodeConstructorRegister[type](target);
-	else return nullptr;
-}*/
-
-
 //Class methods
 void InfoNode::initType()
 {
