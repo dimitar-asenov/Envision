@@ -55,6 +55,11 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		 */
 		Model::NodeIdType findConflictUnit(std::shared_ptr<ChangeDescription>& change);
 
+		/**
+		 * Adds all changes that depend on \a change according to \a cdg to \a conflictingChanges.
+		 */
+		void markDependingAsConflicting(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+												  std::shared_ptr<ChangeDescription>& change, ChangeDependencyGraph& cdg);
 
 		QSet<QString> conflictTypes_;
 		ConflictUnitSet affectedCUsA_;

@@ -45,50 +45,51 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>, 
 	affectedCUsA_ = computeAffectedCUs(cdgA);
 	affectedCUsB_ = computeAffectedCUs(cdgB);
 	LinkedChangesTransition transition(linkedChangesSet, cdgA, cdgB);
+
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
 	{
+		auto representative = affectedCUsA_.value(conflictRootId);
 		// ...that are modified by both branches...
 		if (affectedCUsB_.keys().contains(conflictRootId))
 		{
 			// ...we take every change from A...
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
-				// ...mark it as conflicting...
+				// ...mark it and depending changes as conflicting...
 				conflictingChanges.insert(changeA);
-				// ...and related to the other changes in this CU
-				transition.insert(changeA->nodeId(), true, changeA);
-				// ...and take every change from B...
-				for (auto changeB : affectedCUsB_.values(conflictRootId))
-				{
-					// ...mark it conflicting and record the conflict pair.
-					conflictingChanges.insert(changeB);
-					conflictPairs.insert(changeA, changeB);
-					// also record it as being related
-					transition.insert(changeB->nodeId(), false, changeB);
-				}
+				markDependingAsConflicting(conflictingChanges, changeA, cdgA);
+				transition.insert(changeA->nodeId(), true, representative, true);
 			}
+			// ...same with every change from B...
+			for (auto changeB : affectedCUsB_.values(conflictRootId))
+			{
+				conflictingChanges.insert(changeB);
+				markDependingAsConflicting(conflictingChanges, changeB, cdgB);
+				transition.insert(changeB->nodeId(), false, representative, true);
+			}
+			// ...and add the cross product of the CUs to the conflict pairs...
+			for (auto changeA : affectedCUsA_.values(conflictRootId))
+				for (auto changeB : affectedCUsB_.values(conflictRootId))
+					conflictPairs.insert(changeA, changeB);
 		}
 		else
 		{
 			// CU is not in conflict, just record change links.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
-			{
-				transition.insert(changeA->nodeId(), true, changeA);
-			}
+				transition.insert(changeA->nodeId(), true, representative);
 		}
 	}
+
 	// also mark changes of same CU as related in B if the CU is not in conflict
 	for (auto conflictRootId : affectedCUsB_.keys())
-	{
 		if (!affectedCUsA_.keys().contains(conflictRootId))
 		{
+			auto representative = affectedCUsB_.value(conflictRootId);
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
-			{
-				transition.insert(changeB->nodeId(), false, changeB);
-			}
+				transition.insert(changeB->nodeId(), false, representative);
 		}
-	}
+
 	return transition;
 }
 
@@ -141,6 +142,16 @@ Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeD
 	{
 		// no ancestor in base. branch created new root.
 		return Model::NodeIdType();
+	}
+}
+
+void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+										  std::shared_ptr<ChangeDescription>& change, ChangeDependencyGraph& cdg)
+{
+	for (auto depending : cdg.getDependendingChanges(change))
+	{
+		conflictingChanges.insert(depending);
+		markDependingAsConflicting(conflictingChanges, depending, cdg);
 	}
 }
 
