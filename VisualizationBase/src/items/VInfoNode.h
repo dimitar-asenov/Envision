@@ -25,10 +25,11 @@
  **********************************************************************************************************************/
 #pragma once
 
-#include "visualizationbase_api.h"
+#include "../VisualizationBase/src/visualizationbase_api.h"
 #include "ItemWithNode.h"
-#include "declarative/DeclarativeItem.h"
-#include "nodes/InfoNode.h"
+#include "../VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../VisualizationBase/src/nodes/InfoNode.h"
+#include "VInfoNodeStyle.h"
 
 namespace Comments {
 	class VCommentBrowser;
@@ -39,7 +40,7 @@ namespace Visualization {
 class VISUALIZATIONBASE_API VInfoNode :
 		public Super<ItemWithNode<VInfoNode, DeclarativeItem<VInfoNode>, InfoNode>> {
 
-	ITEM_COMMON_CUSTOM_STYLENAME(VInfoNode, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON(VInfoNode)
 
 	public:
 		VInfoNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
