@@ -104,6 +104,7 @@ void AutoCompleteVis::updateEntries()
 		filteredItem_ = scene()->mainCursor()->owner();
 		filteredItem_->installSceneEventFilter(this);
 	}
+	setFiltersChildEvents(true);
 }
 
 void AutoCompleteVis::determineChildren()
@@ -165,6 +166,8 @@ Visualization::Item::UpdateType AutoCompleteVis::needsUpdate()
 
 bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 {
+	if (!scene()) return false;
+
 	Visualization::Item* cursorOwner = nullptr;
 
 	if (scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
@@ -173,43 +176,53 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 	if (event->type() == QEvent::FocusOut)
 		AutoComplete::hide();
 
-	if (cursorOwner != watched)
+	if (cursorOwner == watched)
 	{
-		return false;
-	}
-
-	if (event->type() == QEvent::KeyPress && !entries_.isEmpty())
-	{
-		auto e = dynamic_cast<QKeyEvent*>(event);
-		switch (e->key())
+		if (event->type() == QEvent::KeyPress && !entries_.isEmpty())
 		{
-			case Qt::Key_Down:
-				{
-					selectDown();
-					return true;
-				}
-				break;
-			case Qt::Key_Up:
-				{
-					selectUp();
-					return true;
-				}
-				break;
-			case Qt::Key_Return:
-			case Qt::Key_Enter:
-				{
-					auto executed = false;
-
-					if (selectionIndex_>=0 && selectionIndex_ < entries_.size())
+			auto e = dynamic_cast<QKeyEvent*>(event);
+			switch (e->key())
+			{
+				case Qt::Key_Down:
 					{
-						executed = true;
-						entries_.at(selectionIndex_)->execute();
+						selectDown();
+						return true;
 					}
-					scene()->addPostEventAction(new Visualization::CustomSceneEvent( AutoComplete::hide ));
-					return executed || !explicitSelection_;
-				}
-				break;
+					break;
+				case Qt::Key_Up:
+					{
+						selectUp();
+						return true;
+					}
+					break;
+				case Qt::Key_Return:
+				case Qt::Key_Enter:
+					{
+						auto executed = false;
+
+						if (selectionIndex_>=0 && selectionIndex_ < entries_.size())
+						{
+							executed = true;
+							entries_.at(selectionIndex_)->execute();
+						}
+						scene()->addPostEventAction(new Visualization::CustomSceneEvent( AutoComplete::hide ));
+						return executed || !explicitSelection_;
+					}
+					break;
+			}
 		}
+	}
+	// Check if we're getting a mouse event for one of the menu items
+	else if (event->type() == QEvent::GraphicsSceneMousePress && isAncestorOf(watched))
+	{
+		for (auto entry : entries_)
+			if (entry->visualization()->isAncestorOf(watched))
+			{
+				entry->execute();
+				scene()->addPostEventAction(new Visualization::CustomSceneEvent( AutoComplete::hide ));
+				break;
+			}
+		return true;
 	}
 
 	return false;
