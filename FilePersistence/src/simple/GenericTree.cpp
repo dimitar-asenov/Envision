@@ -53,16 +53,17 @@ GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, 
 	Q_ASSERT(!persistentUnits_.contains(name));
 	Q_ASSERT(!data || !piecewiseLoader_);
 
-	return persistentUnits_.insert(name, GenericPersistentUnit(this, name, data, dataSize)).value();
+	return *persistentUnits_.insert(name, std::shared_ptr<GenericPersistentUnit>
+		{new GenericPersistentUnit(this, name, data, dataSize)}).value();
 }
 
-GenericPersistentUnit* GenericTree::persistentUnit(const QString& name)
+GenericPersistentUnit* GenericTree::persistentUnit(const QString& name) const
 {
 	Q_ASSERT(!name.isEmpty());
 
-	QHash<QString, GenericPersistentUnit>::iterator iter = persistentUnits_.find(name);
+	auto iter = persistentUnits_.find(name);
 	if (iter != persistentUnits_.end())
-		return &iter.value();
+		return iter.value().get();
 	else
 		return nullptr;
 }
@@ -88,6 +89,15 @@ void GenericTree::loadNode(Model::NodeIdType id)
 {
 	Q_ASSERT(piecewiseLoader_);
 	piecewiseLoader_->loadAndLinkNode(id);
+}
+
+GenericNode* GenericTree::root() const
+{
+	auto rootPU = persistentUnit(name_);
+	Q_ASSERT(rootPU);
+	auto root = rootPU->nodeWithNullParent();
+	Q_ASSERT(root);
+	return root;
 }
 
 } /* namespace FilePersistence */
