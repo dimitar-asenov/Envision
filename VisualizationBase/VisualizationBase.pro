@@ -239,5 +239,5 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/nodes/ViewItemNode.cpp \
     src/items/VViewItemNode.cpp \
     src/overlays/ArrowOverlay.cpp \
-    src/utils/Drawing.cpp
+	 src/utils/Drawing.cpp \
     src/styles/StyleSet.cpp
