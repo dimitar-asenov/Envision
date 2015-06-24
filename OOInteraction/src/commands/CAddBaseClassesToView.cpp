@@ -24,31 +24,31 @@
  **
  **********************************************************************************************************************/
 
-#include "CAddCalleesToView.h"
+#include "CAddBaseClassesToView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
-#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 
 
 namespace OOInteraction {
 
-CAddCalleesToView::CAddCalleesToView()
-	:CommandWithDefaultArguments("addCallees", {""})
+CAddBaseClassesToView::CAddBaseClassesToView()
+	:CommandWithDefaultArguments("addSuperclasses", {""})
 {
 }
 
-bool CAddCalleesToView::canInterpret(Visualization::Item* source, Visualization::Item* target,
+bool CAddBaseClassesToView::canInterpret(Visualization::Item* source, Visualization::Item* target,
 	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
 	auto ancestor = source->findAncestorWithNode();
 	if (!ancestor) return false;
 	else
-		return canInterpret && DCast<OOModel::Method>(ancestor->node());
+		return canInterpret && DCast<OOModel::Class>(ancestor->node());
 }
 
-Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
-		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+Interaction::CommandResult* CAddBaseClassesToView::executeWithArguments(Visualization::Item* source,
+		Visualization::Item*, const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
 	auto ancestor = source->findAncestorWithNode();
 	auto name = arguments.at(0);
@@ -57,10 +57,10 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 
 	if (view)
 	{
-		auto callees_ = callees(ancestor->node());
+		auto baseCl = baseClasses(DCast<OOModel::Class>(ancestor->node()));
 		auto pos = view->positionOfItem(ancestor->parent());
 
-		if (callees_.size() > 0)
+		if (baseCl.size() > 0)
 		{
 			Model::Node* actualNode{};
 			//TODO@cyril What if it is in the view, but not as a top-level item?
@@ -71,14 +71,14 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 				pos = view->positionOfNode(actualNode);
 			}
 			else actualNode = ancestor->parent()->node();
-			view->insertColumn(pos.x() + 1);
+			view->insertColumn(pos.x());
 			auto row = 0;
-			//Make the first callee appear at the same height as the method
-			view->addSpacing(pos.x() + 1, row++, actualNode);
-			for (auto callee : callees_)
+			//Make the first superclass appear at the same height as the class
+			view->addSpacing(pos.x(), row++, actualNode);
+			for (auto baseClass : baseCl)
 			{
-				auto actualCallee = view->insertNode(callee, pos.x() + 1, row++);
-				view->addArrow(actualNode, actualCallee, "callees");
+				auto actualBaseClass = view->insertNode(baseClass, pos.x(), row++);
+				view->addArrow(actualNode, actualBaseClass, "inheritance");
 			}
 		}
 		return new Interaction::CommandResult();
@@ -87,25 +87,20 @@ Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualizatio
 		return new Interaction::CommandResult(new Interaction::CommandError("View " + name + " does not exist"));
 }
 
-QSet<OOModel::Method*> CAddCalleesToView::callees(Model::Node* parent)
-{
-	QSet<OOModel::Method*> result;
-	for (auto child : parent->children())
-	{
-		if (auto call = DCast<OOModel::MethodCallExpression>(child))
-			if (call->methodDefinition())
-				result.insert(call->methodDefinition());
-		result.unite(callees(child));
-	}
-	return result;
-}
-
-
-QString CAddCalleesToView::description(Visualization::Item*, Visualization::Item*,
+QString CAddBaseClassesToView::description(Visualization::Item*, Visualization::Item*,
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	return "Add the callees of the current method to the current view";
+	return "Add the base classes of the current class to the current view";
 
+}
+
+QList<OOModel::Class*> CAddBaseClassesToView::baseClasses(OOModel::Class *parent)
+{
+	QList<OOModel::Class*> result;
+	for (auto baseClass : *(parent->baseClasses()))
+		if (auto asClass = OOModel::Class::expressionToClass(baseClass))
+			result.append(asClass);
+	return result;
 }
 
 }

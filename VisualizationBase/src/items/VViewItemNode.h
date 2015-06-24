@@ -29,7 +29,7 @@
 #include "../../VisualizationBase/src/items/ItemWithNode.h"
 #include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "../../VisualizationBase/src/items/EmptyItem.h"
-#include "nodes/ViewItemNode.h"
+#include "../VisualizationBase/src/nodes/ViewItemNode.h"
 
 
 namespace Visualization {

@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "InteractionBase/src/interactionbase_api.h"
-#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
+#include "../interactionbase_api.h"
+#include "CommandWithDefaultArguments.h"
 
 namespace Visualization {
 	class Item;
@@ -35,14 +35,10 @@ namespace Visualization {
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArguments
+class INTERACTIONBASE_API CToggleArrowLayer : public CommandWithDefaultArguments
 {
 	public:
-		CRemoveNodeFromView();
-
-		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
-
+		CToggleArrowLayer();
 
 	protected:
 		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
@@ -50,9 +46,6 @@ class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArgumen
 
 		virtual QString description(Visualization::Item *source, Visualization::Item *target,
 				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
-	private:
-		Visualization::Item* potentialTopLevelParent(Visualization::Item* child);
 
 };
 

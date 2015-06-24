@@ -23,50 +23,28 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+
 #pragma once
 
 #include "../VisualizationBase/src/visualizationbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
-
-namespace Visualization {
-
-/**
- * The ViewItemNode class is used in the ViewItem class and simply wraps a top level node
- * to give another level of indirection. This helps with distinguishing different items when
- * the same node is added to a ViewItem multiple times, as is possible.
- */
-class VISUALIZATIONBASE_API ViewItemNode : public Super<Model::Node>
+class VISUALIZATIONBASE_API Drawing
 {
-	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
-
 	public:
-		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget);
-		static ViewItemNode* withReference(Model::Node* reference);
-
-		void setReference(Model::Node* reference);
-		Model::Node* reference() const;
-
-		void setSpacingTarget(Model::Node* spacingTarget);
-		Model::Node* spacingTarget() const;
-
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
+		/**
+		 * @brief Draws an arrow on screen.
+		 * @param painter The QPainter to use for the drawing
+		 * @param begin The start point of the arrow
+		 * @param end The end point of the arrow
+		 * @param arrowPen The pen to use for drawing the arrow head
+		 * @param linePen The pen to use for drawing the line
+		 * @param startArrow Is there an arrow to the start point?
+		 * @param endArrow Is there an arrow to the end point?
+		 * @param outlineSize The size of the arrow head
+		 */
+		static void drawArrow(QPainter* painter, QPointF begin, QPointF end, const QPen& arrowPen, const QPen& linePen,
+							  bool startArrow, bool endArrow, int outlineSize);
 
 	private:
-		Model::Node* spacingTarget_{};
-		Model::Node* reference_{};
-
+		static QPointF drawHead(QPainter* painter, QMatrix matrix, QPolygonF arrowHead, QPointF beginOrEnd, double angle);
 };
-
-inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacingTarget_ = spacingTarget; }
-inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
-inline void ViewItemNode::setReference(Model::Node *reference) { reference_ = reference; }
-inline Model::Node* ViewItemNode::reference() const { return reference_; }
-inline void ViewItemNode::save(Model::PersistentStore &) const { Q_ASSERT(false); }
-inline void ViewItemNode::load(Model::PersistentStore &) { Q_ASSERT(false); }
-
-}

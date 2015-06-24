@@ -23,50 +23,42 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#pragma once
+#include "Drawing.h"
 
-#include "../VisualizationBase/src/visualizationbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
-
-namespace Visualization {
-
-/**
- * The ViewItemNode class is used in the ViewItem class and simply wraps a top level node
- * to give another level of indirection. This helps with distinguishing different items when
- * the same node is added to a ViewItem multiple times, as is possible.
- */
-class VISUALIZATIONBASE_API ViewItemNode : public Super<Model::Node>
+void Drawing::drawArrow(QPainter* painter, QPointF begin, QPointF end, const QPen& arrowPen, const QPen& linePen,
+						bool startArrow, bool endArrow, int outlineSize)
 {
-	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
+	painter->setBrush(QBrush(Qt::black));
+	painter->setPen(arrowPen);
 
-	public:
-		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget);
-		static ViewItemNode* withReference(Model::Node* reference);
+	double angle = -QLineF(begin, end).angle();
 
-		void setReference(Model::Node* reference);
-		Model::Node* reference() const;
+	if (startArrow || endArrow)
+	{
+		QPolygonF anArrowhead;
+		const int arrowTipLength = 10, arrowTipHalfWidth = 2;
+		anArrowhead << QPointF(0, 0)
+						<< QPointF(arrowTipLength+outlineSize, -arrowTipHalfWidth-outlineSize)
+						<< QPointF(arrowTipLength+outlineSize, arrowTipHalfWidth+outlineSize);
+		QMatrix matrix;
+		if (startArrow)
+			begin = drawHead(painter, matrix, anArrowhead, begin, angle);
+		if (endArrow)
+		{
+			matrix.reset();
+			end = drawHead(painter, matrix, anArrowhead, end, angle + 180);
+		}
+	}
 
-		void setSpacingTarget(Model::Node* spacingTarget);
-		Model::Node* spacingTarget() const;
+	painter->setPen(linePen);
+	painter->drawLine(begin, end);
+}
 
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
-
-	private:
-		Model::Node* spacingTarget_{};
-		Model::Node* reference_{};
-
-};
-
-inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacingTarget_ = spacingTarget; }
-inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
-inline void ViewItemNode::setReference(Model::Node *reference) { reference_ = reference; }
-inline Model::Node* ViewItemNode::reference() const { return reference_; }
-inline void ViewItemNode::save(Model::PersistentStore &) const { Q_ASSERT(false); }
-inline void ViewItemNode::load(Model::PersistentStore &) { Q_ASSERT(false); }
-
+QPointF Drawing::drawHead(QPainter *painter, QMatrix matrix, QPolygonF arrowHead, QPointF beginOrEnd, double angle)
+{
+	matrix.rotate(angle);
+	auto arrow = matrix.map(arrowHead);
+	arrow.translate(beginOrEnd);
+	painter->drawPolygon(arrow);
+	return QPointF((arrow[1].x() + arrow[2].x())/2, (arrow[1].y() + arrow[2].y())/2);
 }

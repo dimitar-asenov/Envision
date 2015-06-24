@@ -26,34 +26,37 @@
 
 #pragma once
 
-#include "InteractionBase/src/interactionbase_api.h"
+#include "../oointeraction_api.h"
 #include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
+
 
 namespace Visualization {
 	class Item;
 }
 
-namespace Interaction {
+namespace OOModel {
+	class Class;
+}
 
-class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArguments
+namespace OOInteraction {
+
+class OOINTERACTION_API CAddBaseClassesToView : public Interaction::CommandWithDefaultArguments
 {
 	public:
-		CRemoveNodeFromView();
+		CAddBaseClassesToView();
 
-		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
-
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
 
 	protected:
-		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
 
-		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual QString description(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
 
 	private:
-		Visualization::Item* potentialTopLevelParent(Visualization::Item* child);
-
+		QList<OOModel::Class*> baseClasses(OOModel::Class* parent);
 };
 
 }

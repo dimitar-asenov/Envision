@@ -24,36 +24,28 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "InteractionBase/src/interactionbase_api.h"
-#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
-
-namespace Visualization {
-	class Item;
-}
+#include "CToggleArrowLayer.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CRemoveNodeFromView : public CommandWithDefaultArguments
+CToggleArrowLayer::CToggleArrowLayer()
+	:CommandWithDefaultArguments("toggleLayer", {""})
 {
-	public:
-		CRemoveNodeFromView();
+}
 
-		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+CommandResult* CToggleArrowLayer::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+{
+	auto fullName = target->scene()->currentViewItem()->fullLayerName(arguments.at(0));
+	if (auto overlay = target->scene()->overlayGroup(fullName))
+		overlay->toggle();
+	return new CommandResult();
+}
 
-
-	protected:
-		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
-		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
-	private:
-		Visualization::Item* potentialTopLevelParent(Visualization::Item* child);
-
-};
-
+QString CToggleArrowLayer::description(Visualization::Item *, Visualization::Item *,
+		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
+{
+	return "Toggle the " + arguments.at(0) + " arrow layer";
+}
 }

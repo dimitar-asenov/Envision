@@ -29,6 +29,7 @@
 #include "declarative/DynamicGridFormElement.h"
 #include "nodes/ViewItemNode.h"
 #include "VViewItemNode.h"
+#include "overlays/ArrowOverlay.h"
 
 namespace Visualization {
 
@@ -82,11 +83,13 @@ void ViewItem::removeNode(Model::Node* node)
 				viewNode->setSpacingTarget(nullptr);
 		}
 		nodes_[point.x()].remove(point.y());
+		//Need to remove any arrows depending on it
+		removeArrowsForNode(node);
+		setUpdateNeeded(StandardUpdate);
 	}
-	setUpdateNeeded(StandardUpdate);
 }
 
-const QList<Model::Node*> ViewItem::allNodes() const
+QList<Model::Node*> ViewItem::allNodes() const
 {
 	QList<Model::Node*> result;
 	for (auto column : nodes_)
@@ -96,7 +99,7 @@ const QList<Model::Node*> ViewItem::allNodes() const
 	return result;
 }
 
-const QPoint ViewItem::positionOfNode(Model::Node *node) const
+QPoint ViewItem::positionOfNode(Model::Node *node) const
 {
 	for (int i = 0; i < nodes_.size(); i++)
 	{
@@ -107,7 +110,7 @@ const QPoint ViewItem::positionOfNode(Model::Node *node) const
 	return QPoint(-1, -1);
 }
 
-const QPoint ViewItem::positionOfItem(Item *item) const
+QPoint ViewItem::positionOfItem(Item *item) const
 {
 	auto vref = DCast<VViewItemNode>(item);
 	if (vref) return positionOfNode(vref->node());
@@ -128,6 +131,33 @@ void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget)
 	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget), column, row);
 }
 
+void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer)
+{
+	if (!arrows_.contains(layer))
+		addArrowLayer(layer);
+	arrowsToAdd_.append(ArrowToAdd(from, to, layer));
+}
+
+QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
+{
+	//First, adds all the pending arrows if any exist
+	if (arrowsToAdd_.size() > 0)
+	{
+		auto copy = arrowsToAdd_;
+		arrowsToAdd_.clear();
+		for (auto line : copy)
+		{
+			auto item1 = findVisualizationOf(line.from_);
+			auto item2 = findVisualizationOf(line.to_);
+			if (item1 && item2)
+				arrows_[line.layer_].append(QPair<Item*, Item*>(item1, item2));
+			else arrowsToAdd_.append(line);
+		}
+	}
+	//And then return the arrows in the layer
+	return arrows_[layer];
+}
+
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
@@ -143,6 +173,29 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 	}
 	if (anyChanges)
 		setUpdateNeeded(RepeatUpdate);
+}
+
+void ViewItem::addArrowLayer(QString layer)
+{
+	auto layerName = fullLayerName(layer);
+	auto arrowLayer = scene()->overlayGroup(layerName);
+	if (!arrowLayer) arrowLayer = scene()->addOverlayGroup(layerName);
+	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay(from, to));});
+	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
+}
+
+void ViewItem::removeArrowsForNode(Model::Node *node)
+{
+	if (auto vis = findVisualizationOf(node))
+	{
+		for (auto key : arrows_.keys())
+		{
+			auto copy = arrows_[key];
+			for (auto pair : copy)
+				if (pair.first == vis || pair.second == vis)
+					arrows_[key].removeAll(pair);
+		}\
+	}
 }
 
 void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)

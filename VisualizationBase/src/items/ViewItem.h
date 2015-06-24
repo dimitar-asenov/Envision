@@ -51,12 +51,16 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void insertColumn(int column);
 		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0);
 		void removeNode(Model::Node* node);
-		const QList<Model::Node*> allNodes() const;
-		const QPoint positionOfNode(Model::Node* node) const;
-		const QPoint positionOfItem(Item* item) const;
+		QList<Model::Node*> allNodes() const;
+		QPoint positionOfNode(Model::Node* node) const;
+		QPoint positionOfItem(Item* item) const;
 		Model::Node* nodeAt(int column, int row);
 
 		void addSpacing(int column, int row, Model::Node* spacingTarget);
+
+		void addArrow(Model::Node* from, Model::Node* to, QString layer);
+		QList<QPair<Item*, Item*>> arrowsForLayer(QString layer);
+		QString fullLayerName(QString localLayer);
 
 		const QString name() const;
 
@@ -64,6 +68,18 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 	private:
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
+
+		struct ArrowToAdd {
+			Model::Node* from_{};
+			Model::Node* to_{};
+			QString layer_;
+			ArrowToAdd(Model::Node* from, Model::Node* to, QString layer)
+				: from_(from), to_(to), layer_(layer) {}
+		};
+		QList<ArrowToAdd> arrowsToAdd_;
+		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
+		void addArrowLayer(QString layer);
+		void removeArrowsForNode(Model::Node* node);
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
 
@@ -75,5 +91,6 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 inline const QString ViewItem::name() const { return name_; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
+inline QString ViewItem::fullLayerName(QString localLayer) { return name() + "_" + localLayer; }
 
 }
