@@ -28,12 +28,13 @@
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
+#include "VisualizationBase/src/items/VViewItemNode.h"
 
 
 namespace OOInteraction {
 
 CAddBaseClassesToView::CAddBaseClassesToView()
-	:CommandWithDefaultArguments("addSuperclasses", {""})
+	:CommandWithDefaultArguments("addSuperclasses", QStringList())
 {
 }
 
@@ -41,50 +42,37 @@ bool CAddBaseClassesToView::canInterpret(Visualization::Item* source, Visualizat
 	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestor = source->findAncestorWithNode();
-	if (!ancestor) return false;
+	auto ancestorWithNode = source->findAncestorWithNode();
+	auto topLevelAncestor = source->findAncestorOfType<Visualization::VViewItemNode>();
+	if (!ancestorWithNode || !topLevelAncestor) return false;
 	else
-		return canInterpret && DCast<OOModel::Class>(ancestor->node());
+		return canInterpret && DCast<OOModel::Class>(ancestorWithNode->node());
 }
 
 Interaction::CommandResult* CAddBaseClassesToView::executeWithArguments(Visualization::Item* source,
-		Visualization::Item*, const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+		Visualization::Item*, const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto ancestor = source->findAncestorWithNode();
-	auto name = arguments.at(0);
+	auto ancestorWithNode = source->findAncestorWithNode();
+	auto topLevelAncestor = source->findAncestorOfType<Visualization::VViewItemNode>();
 
-	auto view = ancestor->scene()->currentViewItem();
+	auto view = ancestorWithNode->scene()->currentViewItem();
 
-	if (view)
+	auto baseCl = baseClasses(DCast<OOModel::Class>(ancestorWithNode->node()));
+	if (baseCl.size() > 0)
 	{
-		auto baseCl = baseClasses(DCast<OOModel::Class>(ancestor->node()));
-		auto pos = view->positionOfItem(ancestor->parent());
 
-		if (baseCl.size() > 0)
+		auto pos = view->positionOfItem(topLevelAncestor);
+		view->insertColumn(pos.x());
+		auto row = 0;
+		//Make the first superclass appear at the same height as the class
+		view->addSpacing(pos.x(), row++, ancestorWithNode->node(), topLevelAncestor->node());
+		for (auto baseClass : baseCl)
 		{
-			Model::Node* actualNode{};
-			//TODO@cyril What if it is in the view, but not as a top-level item?
-			if (pos.x() == -1)
-			{
-				view->insertColumn(0);
-				actualNode = view->insertNode(ancestor->node(), 0, 0);
-				pos = view->positionOfNode(actualNode);
-			}
-			else actualNode = ancestor->parent()->node();
-			view->insertColumn(pos.x());
-			auto row = 0;
-			//Make the first superclass appear at the same height as the class
-			view->addSpacing(pos.x(), row++, actualNode);
-			for (auto baseClass : baseCl)
-			{
-				auto actualBaseClass = view->insertNode(baseClass, pos.x(), row++);
-				view->addArrow(actualNode, actualBaseClass, "inheritance");
-			}
+			auto actualBaseClass = view->insertNode(baseClass, pos.x(), row++);
+			view->addArrow(ancestorWithNode->node(), actualBaseClass, "inheritance", topLevelAncestor->node());
 		}
-		return new Interaction::CommandResult();
 	}
-	else
-		return new Interaction::CommandResult(new Interaction::CommandError("View " + name + " does not exist"));
+	return new Interaction::CommandResult();
 }
 
 QString CAddBaseClassesToView::description(Visualization::Item*, Visualization::Item*,

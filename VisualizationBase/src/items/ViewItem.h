@@ -31,6 +31,7 @@
 namespace Visualization {
 
 class ViewItemNode;
+class VViewItemNode;
 
 /**
  * The ViewItem class represents the visualization of an entire view within a single item.
@@ -56,9 +57,11 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QPoint positionOfItem(Item* item) const;
 		Model::Node* nodeAt(int column, int row);
 
-		void addSpacing(int column, int row, Model::Node* spacingTarget);
+		void addSpacing(int column, int row, Model::Node* spacingTarget,
+						ViewItemNode* spacingParent = nullptr);
 
-		void addArrow(Model::Node* from, Model::Node* to, QString layer);
+		void addArrow(Model::Node* from, Model::Node* to, QString layer,
+					  ViewItemNode* fromParent = nullptr, ViewItemNode* toParent = nullptr);
 		QList<QPair<Item*, Item*>> arrowsForLayer(QString layer);
 		QString fullLayerName(QString localLayer);
 
@@ -71,16 +74,16 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QString name_;
 
 		struct ArrowToAdd {
+			ViewItemNode* fromParent_{};
 			Model::Node* from_{};
+			ViewItemNode* toParent_{};
 			Model::Node* to_{};
 			QString layer_;
-			ArrowToAdd(Model::Node* from, Model::Node* to, QString layer)
-				: from_(from), to_(to), layer_(layer) {}
 		};
 		QList<ArrowToAdd> arrowsToAdd_;
 		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
 		void addArrowLayer(QString layer);
-		void removeArrowsForNode(Model::Node* node);
+		void removeArrowsForItem(Item* parent);
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
 

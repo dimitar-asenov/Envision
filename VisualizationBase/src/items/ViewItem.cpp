@@ -31,6 +31,7 @@
 #include "VViewItemNode.h"
 #include "overlays/ArrowOverlay.h"
 #include "nodes/InfoNode.h"
+#include "VInfoNode.h"
 
 namespace Visualization {
 
@@ -85,7 +86,7 @@ void ViewItem::removeNode(Model::Node* node)
 		}
 		nodes_[point.x()].remove(point.y());
 		//Need to remove any arrows depending on it
-		removeArrowsForNode(node);
+		removeArrowsForItem(findVisualizationOf(node));
 		setUpdateNeeded(StandardUpdate);
 	}
 }
@@ -127,16 +128,18 @@ Model::Node* ViewItem::nodeAt(int column, int row)
 	return nodes_[column][row];
 }
 
-void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget)
+void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
+						  ViewItemNode* spacingParent)
 {
-	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget), column, row);
+	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget, spacingParent), column, row);
 }
 
-void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer)
+void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer,
+						ViewItemNode *fromParent, ViewItemNode *toParent)
 {
 	if (!arrows_.contains(layer))
 		addArrowLayer(layer);
-	arrowsToAdd_.append(ArrowToAdd(from, to, layer));
+	arrowsToAdd_.append(ArrowToAdd{fromParent, from, toParent, to, layer});
 }
 
 QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
@@ -148,10 +151,14 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 		arrowsToAdd_.clear();
 		for (auto line : copy)
 		{
-			auto item1 = findVisualizationOf(line.from_);
-			auto item2 = findVisualizationOf(line.to_);
-			if (item1 && item2)
-				arrows_[line.layer_].append(QPair<Item*, Item*>(item1, item2));
+			auto fromParent = line.fromParent_ ? findVisualizationOf(line.fromParent_) : this;
+			auto allFrom = fromParent->findAllVisualizationsOf(line.from_);
+			auto toParent = line.toParent_ ? findVisualizationOf(line.toParent_) : this;
+			auto allTo = toParent->findAllVisualizationsOf(line.to_);
+			if (allFrom.size() > 0 && allTo.size() > 0)
+				for (auto from : allFrom)
+					for (auto to : allTo)
+						arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
 			else arrowsToAdd_.append(line);
 		}
 	}
@@ -169,11 +176,13 @@ void ViewItem::determineChildren()
 		Q_ASSERT(asViewItemNode);
 		if (auto info = DCast<InfoNode>(asViewItemNode->reference()))
 		{
-			//Update only if we don't already do so by default
+			//If an info node is not being updated, update it
 			if (auto vis = findVisualizationOf(info))
-				//determineChildren is protected in Item, but not in DeclarativeItemBase
 				if (vis->needsUpdate() == Item::NoUpdate)
-					DCast<DeclarativeItemBase>(vis)->determineChildren();
+				{
+					DCast<VInfoNode>(vis)->node()->automaticUpdate();
+					vis->setUpdateNeeded(StandardUpdate);
+				}
 		}
 	}
 }
@@ -204,17 +213,21 @@ void ViewItem::addArrowLayer(QString layer)
 	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
 }
 
-void ViewItem::removeArrowsForNode(Model::Node *node)
+void ViewItem::removeArrowsForItem(Item *parent)
 {
-	if (auto vis = findVisualizationOf(node))
+	//Remove all arrows depending on any child item of the parent
+	QList<Item*> allChildren{parent};
+	while (!allChildren.isEmpty())
 	{
+		auto current = allChildren.takeLast();
 		for (auto key : arrows_.keys())
 		{
 			auto copy = arrows_[key];
 			for (auto pair : copy)
-				if (pair.first == vis || pair.second == vis)
+				if (pair.first == current || pair.second == current)
 					arrows_[key].removeAll(pair);
-		}\
+		}
+		allChildren.append(current->childItems());
 	}
 }
 
