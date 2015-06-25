@@ -78,7 +78,7 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CToggleArrowLayer.h \
     src/commands/CAddInfoNode.h \
     src/handlers/HInfoNode.h \
-    src/commands/CToggleInfoLayer.h
+    src/commands/CToggleInfoEntry.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -150,4 +150,4 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CToggleArrowLayer.cpp \
     src/commands/CAddInfoNode.cpp \
     src/handlers/HInfoNode.cpp \
-    src/commands/CToggleInfoLayer.cpp
+    src/commands/CToggleInfoEntry.cpp

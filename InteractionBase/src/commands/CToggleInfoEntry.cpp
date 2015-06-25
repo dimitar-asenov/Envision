@@ -24,32 +24,38 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../interactionbase_api.h"
-#include "CommandWithDefaultArguments.h"
-
-namespace Visualization {
-	class Item;
-}
+#include "CToggleInfoEntry.h"
+#include "VisualizationBase/src/nodes/InfoNode.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CToggleInfoLayer : public CommandWithDefaultArguments
+CToggleInfoEntry::CToggleInfoEntry()
+	:CommandWithDefaultArguments("toggleInfo", {""})
 {
-	public:
-		CToggleInfoLayer();
+}
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
+bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item* target,
+	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+{
+	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
+	auto ancestor = source->findAncestorWithNode();
+	if (!ancestor) return false;
+	else
+		return canInterpret && DCast<Visualization::InfoNode>(ancestor->node());
+}
 
-	protected:
-		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+CommandResult* CToggleInfoEntry::executeWithArguments(Visualization::Item* source, Visualization::Item*,
+	const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+{
+	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
+	info->setEnabled(arguments.at(0), !(info->isEnabled(arguments.at(0))));
+	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	return new CommandResult();
+}
 
-		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
-};
-
+QString CToggleInfoEntry::description(Visualization::Item *, Visualization::Item *,
+	const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
+{
+	return "Toggle the " + arguments.at(0) + " info layer";
+}
 }
