@@ -34,7 +34,7 @@
 namespace OOInteraction {
 
 CAddBaseClassesToView::CAddBaseClassesToView()
-	:CommandWithDefaultArguments("addSuperclasses", QStringList())
+	:CommandWithDefaultArguments("addSuperclasses", {})
 {
 }
 

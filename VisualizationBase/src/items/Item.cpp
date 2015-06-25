@@ -708,6 +708,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 
 Item* Item::findVisualizationOf(Model::Node* node)
 {
+	if (this->node() == node) return this;
 	auto allVis = findAllVisualizationsOf(node);
 	if (allVis.size() > 0) return allVis[0];
 	else return nullptr;
