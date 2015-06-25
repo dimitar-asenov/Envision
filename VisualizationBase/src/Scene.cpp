@@ -532,7 +532,7 @@ void Scene::setMainViewScalingFactor(qreal factor)
 // Reimplemented in order to detect mouse clicks
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
-	lastMousePosition_ = mouseEvent->scenePos();
+	lastMouseHoverPosition_ = mouseEvent->scenePos();
 	isCurrentMousePressAClick_ = isCurrentMousePressAClick_
 				&& lastMousePressTimer_.elapsed() <= MAX_MILLISECONDS_FOR_A_CLICK;
 	QGraphicsScene::mouseMoveEvent(mouseEvent);
