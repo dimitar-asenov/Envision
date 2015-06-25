@@ -29,7 +29,6 @@
 #include "ItemWithNode.h"
 #include "../VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "../VisualizationBase/src/nodes/InfoNode.h"
-#include "VInfoNodeStyle.h"
 
 namespace Comments {
 	class VCommentBrowser;
@@ -40,14 +39,14 @@ namespace Visualization {
 class VISUALIZATIONBASE_API VInfoNode :
 		public Super<ItemWithNode<VInfoNode, DeclarativeItem<VInfoNode>, InfoNode>> {
 
-	ITEM_COMMON(VInfoNode)
+	ITEM_COMMON_CUSTOM_STYLENAME(VInfoNode, DeclarativeItemBaseStyle)
 
 	public:
 		VInfoNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
 
-		virtual void determineChildren() override;
+		virtual void determineChildren() override;\
 
 	private:
 		Comments::VCommentBrowser* browser_{};
