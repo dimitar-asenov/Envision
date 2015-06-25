@@ -37,6 +37,9 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/node_extensions/FullDetailSize.h"
 
+#include "info/InfoMethods.h"
+#include "VisualizationBase/src/nodes/InfoNode.h"
+
 using namespace OOModel;
 using namespace Visualization;
 
@@ -122,6 +125,9 @@ bool OOVisualizationPlugin::initialize(Core::EnvisionManager&)
 		"test", createVisualization<VDeclarationConstantSz, Module>, VDeclarationConstantSz::typeIdStatic());
 	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), "default_purpose",
 		"test", createVisualization<VDeclarationConstantSz, Project>, VDeclarationConstantSz::typeIdStatic());
+
+	Visualization::InfoNode::registerInfoGetter("callees", InfoMethods::numberOfCallees, true, true);
+	Visualization::InfoNode::registerInfoGetter("name", InfoMethods::fullName, false, true);
 
 	return true;
 }

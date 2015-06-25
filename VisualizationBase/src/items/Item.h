@@ -76,6 +76,12 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		Item* findAncestorWithNode();
 
+		/**
+		 * Returns the first ancestor which is of the given template type, or nullptr if none exists.
+		 */
+		template <class ItemType>
+		ItemType* findAncestorOfType();
+
 		bool itemOrChildHasFocus() const;
 		bool hasSceneCursor() const;
 
@@ -272,6 +278,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * Depth-first search is used.
 		 */
 		virtual Item* findVisualizationOf(Model::Node* node);
+		virtual QList<Item*> findAllVisualizationsOf(Model::Node* node);
 
 		/**
 		 * Returns what purpose should the children of this item be chosen for when deciding what visualizations to use.
@@ -770,6 +777,14 @@ template <class OverlayType> OverlayType* Item::addOverlay(OverlayType* overlay,
 	overlayGroup->addOverlay(makeOverlay(overlay));
 
 	return overlay;
+}
+
+template <class ItemType> ItemType* Item::findAncestorOfType()
+{
+	auto result = this;
+	while (result && !DCast<ItemType>(result))
+		result = result->parent();
+	return DCast<ItemType>(result);
 }
 
 }

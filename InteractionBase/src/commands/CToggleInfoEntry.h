@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,44 +26,30 @@
 
 #pragma once
 
-#include "../comments_api.h"
+#include "../interactionbase_api.h"
+#include "CommandWithDefaultArguments.h"
 
-#include "VisualizationBase/src/items/Item.h"
+namespace Visualization {
+	class Item;
+}
 
-#include "../nodes/CommentNode.h"
+namespace Interaction {
 
-class QGraphicsWebView;
-
-namespace Comments {
-
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
+class INTERACTIONBASE_API CToggleInfoEntry : public CommandWithDefaultArguments
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
-
 	public:
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size,
-				const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void updateSize(QSize size);
+		CToggleInfoEntry();
 
-		void setContent(const QString& content);
-
-		QGraphicsWebView* browser() const;
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
 
 	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-	private:
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
-		static const QSize defaultSize;
-		QGraphicsWebView* browser_{};
-		QSize size_;
 };
 
-inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}
-
-} /* namespace Comments */
+}

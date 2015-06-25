@@ -131,6 +131,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		QList<Item*> selectedItems() const;
 
 		bool isCurrentMousePressAClick() const;
+		QPointF lastMouseHoverPosition() const;
 
 		View* currentPaintView() const;
 
@@ -199,6 +200,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		bool isCurrentMousePressAClick_{};
 		QElapsedTimer lastMousePressTimer_{};
+		QPointF lastMouseHoverPosition_;
 		const int MAX_MILLISECONDS_FOR_A_CLICK = 500;
 
 		QList<RefreshActionFunction> refreshActionFunctions_;
@@ -227,6 +229,7 @@ inline const QList<ViewItem*>& Scene::viewItems() const { return viewItems_; }
 inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
 
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }
+inline QPointF Scene::lastMouseHoverPosition() const { return lastMouseHoverPosition_; }
 inline View* Scene::currentPaintView() const { return currentPaintView_; }
 
 inline qreal Scene::mainViewScalingFactor() const { return mainViewScalingFactor_; }

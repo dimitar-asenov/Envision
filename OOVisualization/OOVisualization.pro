@@ -119,7 +119,8 @@ HEADERS += src/statements/VAssertStatementStyle.h \
     src/statements/VSynchronizedStatement.h \
     src/statements/VSynchronizedStatementStyle.h \
     src/expressions/VCastExpression.h \
-    src/expressions/VCastExpressionStyle.h
+    src/expressions/VCastExpressionStyle.h \
+    src/info/InfoMethods.h
 SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/statements/VAssertStatement.cpp \
     src/expressions/VSuperExpression.cpp \
@@ -228,4 +229,5 @@ SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/statements/VSynchronizedStatement.cpp \
     src/statements/VSynchronizedStatementStyle.cpp \
     src/expressions/VCastExpression.cpp \
-    src/expressions/VCastExpressionStyle.cpp
+    src/expressions/VCastExpressionStyle.cpp \
+    src/info/InfoMethods.cpp
