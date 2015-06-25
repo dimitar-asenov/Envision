@@ -47,6 +47,8 @@ void HCommentBrowser::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
 					view->centerOn(item);
 	}
 	else GenericHandler::keyPressEvent(item, event);
+	// TODO: Is it OK to propagate events to parents or should we just accept all events?
+	//Propagating at least some events is necessary for updating an InfoNode
 }
 
 } /* namespace Comments */
