@@ -44,10 +44,11 @@ ViewItemNode::ViewItemNode(Model::Node* parent, Model::PersistentStore&, bool)
 	Q_ASSERT(false);
 }
 
-ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget)
+ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
 {
 	auto result = new ViewItemNode(nullptr);
 	result->setSpacingTarget(spacingTarget);
+	result->setSpacingParent(spacingParent);
 	return result;
 }
 
