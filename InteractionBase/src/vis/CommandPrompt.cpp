@@ -122,9 +122,19 @@ void CommandPrompt::showPrompt(QString initialCommandText)
 	setPromptPosition();
 	show();
 	if (! initialCommandText.isNull()) command_->setText(initialCommandText);
+	else if (!wasCancelled_) command_->setText(TYPE_HINT);
 	command_->moveCursor();
-	command_->correspondingSceneCursor<Visualization::TextCursor>()
+
+	if (wasCancelled_)
+		command_->correspondingSceneCursor<Visualization::TextCursor>()
 			->setSelectedCharacters(commandSelectedFirst_, commandSelectedLast_);
+	else if (!initialCommandText.isNull())
+		command_->correspondingSceneCursor<Visualization::TextCursor>()->
+				setCaretPosition(initialCommandText.length());
+	else
+		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+
+	wasCancelled_ = false;
 }
 
 void CommandPrompt::hidePrompt()

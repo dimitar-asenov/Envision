@@ -5,12 +5,7 @@
 		<cornerRadius>2</cornerRadius>
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>125</alpha>
-				<red>255</red>
-				<green>0</green>
-				<blue>0</blue>
-			</color>
+			<color>#7dff0000</color>
 		</backgroundBrush>
 	</shape>
 	

@@ -3,12 +3,7 @@
 	<shape prototypes="shape/Box/default">
 		Box
 		<outline>
-			<color>
-				<alpha>255</alpha>
-				<red>128</red>
-				<green>128</green>
-				<blue>128</blue>
-			</color>
+			<color>#808080</color>
 		</outline>
 		<cornerRadius>3</cornerRadius>
 		<backgroundBrush>

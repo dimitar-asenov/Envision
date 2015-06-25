@@ -5,12 +5,7 @@
 	<pin>
 		<width>1.0</width>
 		<style>1</style>
-		<color>
-			<alpha>255</alpha>
-			<red>64</red>
-			<green>128</green>
-			<blue>64</blue>
-		</color>
+		<color>#408040</color>
 		<capStyle>0</capStyle>
 		<joinStyle>0</joinStyle>
 	</pin>

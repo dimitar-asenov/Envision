@@ -6,12 +6,7 @@
 	<showUnresolved>true</showUnresolved>
 	<unresolvedName prototypes="item/Text/default">
 		<pen>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>0</green>
-				<blue>0</blue>
-			</color>
+			<color>#ff0000</color>
 		</pen>
 	</unresolvedName>
 	<thisIdentifier prototypes="item/Symbol/keyword" />

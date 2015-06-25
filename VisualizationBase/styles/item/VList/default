@@ -7,12 +7,7 @@
 				<stopPoints>
 					<e1>
 						<first>1.0</first>
-						<second>
-							<alpha>255</alpha>
-							<red>192</red>
-							<green>192</green>
-							<blue>192</blue>
-						</second>
+						<second>#c0c0c0</second>
 					</e1>	
 				</stopPoints>
 			</gradient>
@@ -28,32 +23,12 @@
 	<drawsOnlyShape>false</drawsOnlyShape>
 	<useBackgroundColors>true</useBackgroundColors>
 	<backgroundColors>
-		<e0>
-			<alpha>0</alpha>
-			<red>255</red>
-			<green>255</green>
-			<blue>255</blue>
-		</e0>
-		<e1>
-			<alpha>30</alpha>
-			<red>130</red>
-			<green>130</green>
-			<blue>130</blue>
-		</e1>
+		<e0>#00ffffff</e0>
+		<e1>#1e828282</e1>
 		
 		<!-- Use these if you also want the initial color to be visible.
-		<e0>
-			<alpha>30</alpha>
-			<red>130</red>
-			<green>130</green>
-			<blue>130</blue>
-		</e0>
-		<e1>
-			<alpha>30</alpha>
-			<red>0</red>
-			<green>0</green>
-			<blue>0</blue>
-		</e1>
+		<e0>#1e828282</e0>
+		<e1>#1e000000</e1>
 		-->
 	</backgroundColors>
 	
@@ -64,12 +39,7 @@
 				<size>11</size>
 			</font>
 		<pen>
-			<color>
-				<alpha>255</alpha>
-				<red>128</red>
-				<green>128</green>
-				<blue>128</blue>
-			</color>
+			<color>#808080</color>
 		</pen>
 	</selectedTip>
 </style>

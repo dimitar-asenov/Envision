@@ -170,17 +170,49 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	if ( oldPersisted == nullptr ) filename = name; // This is the root of the tree, save the file name
 	else filename = treeManager_->nodeIdMap().id(node).toString(); // This is not the root, so save by id
 
-	QFile file(treeDir_.absoluteFilePath(filename));
+	writeGenericNodeToFile(genericNode_, treeDir_.absolutePath(), filename, {});
+
+	genericTree_->remove(name);
+	genericNode_ = oldPersisted;
+}
+
+void SimpleTextFileStore::saveGenericTree(GenericTree* tree, const QString& name, const QString& destDir,
+														const QStringList& persistentUnitTypes)
+{
+	// Put all existing PersistentUnits (except for the root) on the stack
+	auto rootNode = tree->root();
+	QList<GenericNode*> stack = {};
+	for ( auto pu : tree->persistentUnits() )
+	{
+		auto puRoot = pu->unitRootNode();
+		if (puRoot != rootNode) stack << rootNode;
+	}
+
+	// Write the root and generate possibly other PUs, that were not in the original structure
+	stack << writeGenericNodeToFile(rootNode, destDir, name, persistentUnitTypes);
+
+	// For each pu write and clean up
+	while (!stack.isEmpty())
+	{
+		auto pu = stack.takeLast();
+		stack.removeAll(pu); // Make sure to remove all occurences of PUs as soon as we see one of them.
+		stack << writeGenericNodeToFile(pu, destDir, pu->id().toString(), persistentUnitTypes);
+	}
+}
+
+QList<GenericNode*> SimpleTextFileStore::writeGenericNodeToFile(GenericNode* node, const QString& destDir,
+	const QString& fileName, const QStringList& persistentUnitTypes)
+{
+	QFile file(destDir + '/' + fileName);
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
 		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
 
 	QTextStream ts(&file);
 	ts.setCodec("UTF-8");
-	Parser::save(ts, genericNode_);
+	auto persistentUnits = Parser::save(ts, node, persistentUnitTypes);
 	file.close();
 
-	genericTree_->remove(name);
-	genericNode_ = oldPersisted;
+	return persistentUnits;
 }
 
 void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name)

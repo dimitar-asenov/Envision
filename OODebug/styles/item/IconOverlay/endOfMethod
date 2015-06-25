@@ -4,12 +4,7 @@
 	<placement>left-outside</placement>
 	<icon prototypes="item/Symbol/default">
 	<pen>
-		<color>
-			<alpha>255</alpha>
-			<red>0</red>
-			<green>0</green>
-			<blue>255</blue>
-		</color>
+		<color>#0000ff</color>
 	</pen>
 	<font>
 		<size>30</size>

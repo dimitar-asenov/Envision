@@ -10,21 +10,11 @@
 			<stopPoints>
 				<e0>
 					<first>0.0</first>
-					<second>
-						<alpha>255</alpha>
-						<red>255</red>
-						<green>255</green>
-						<blue>255</blue>
-					</second>
+					<second>#ffffff</second>
 				</e0>
 				<e1>
 					<first>1.0</first>
-					<second>
-						<alpha>255</alpha>
-						<red>170</red>
-						<green>255</green>
-						<blue>204</blue>
-					</second>
+					<second>#aaffcc</second>
 				</e1>	
 			</stopPoints>
 		</gradient>

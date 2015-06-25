@@ -51,7 +51,7 @@ void HCommandPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 	if (event->key() == Qt::Key_Escape)
 	{
-		prompt->hidePrompt();
+		prompt->cancelPrompt();
 		AutoComplete::hide();
 	}
 	else if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)

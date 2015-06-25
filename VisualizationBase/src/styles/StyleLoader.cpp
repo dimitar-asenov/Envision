@@ -71,6 +71,15 @@ void StyleLoader::load(const QString& propertyName, QString& value)
 	value = getProperty(propertyName);
 }
 
+
+void StyleLoader::load(const QString& propertyName, QColor& value)
+{
+	auto colorName = getProperty(propertyName);
+	value.setNamedColor(colorName);
+	if (!value.isValid())
+		throw VisualizationException("Invalid color ("+ colorName +") of property '" + propertyName + "'");
+}
+
 void StyleLoader::load(const QString& propertyName, double& value)
 {
 	bool ok = true;
@@ -86,17 +95,6 @@ void StyleLoader::loadComposite(QPointF& value)
 	load("y", y);
 	value.setX(x);
 	value.setY(y);
-}
-
-void StyleLoader::loadComposite(QColor& value)
-{
-	int a, r, g, b;
-	load("alpha", a);
-	load("red", r);
-	load("green", g);
-	load("blue", b);
-
-	value = QColor(r, g, b, a);
 }
 
 void StyleLoader::loadComposite(QPen& value)

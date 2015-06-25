@@ -8,23 +8,13 @@
 			<outline>
 				<width>1</width>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>0</green>
-					<blue>0</blue>
-				</color>
+				<color>#ff0000</color>
 			</outline>
 			<cornerType>0</cornerType>
 			<cornerRadius>0</cornerRadius>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>128</alpha>
-					<red>255</red>
-					<green>0</green>
-					<blue>0</blue>
-				</color>
+				<color>#80ff0000</color>
 			</backgroundBrush>
 		</shape>
 	</prefix>
@@ -34,23 +24,13 @@
 			<outline>
 				<width>1</width>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>0</green>
-					<blue>0</blue>
-				</color>
+				<color>#ff0000</color>
 			</outline>
 			<cornerType>0</cornerType>
 			<cornerRadius>0</cornerRadius>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>128</alpha>
-					<red>255</red>
-					<green>0</green>
-					<blue>0</blue>
-				</color>
+				<color>#80ff0000</color>
 			</backgroundBrush>
 		</shape>
 	</postfix>

@@ -40,14 +40,19 @@ CompilerFeedback CommandLineCompiler::compileFile(const QString& workingDirector
 	// block until finished
 	compilerProcess.waitForFinished(-1);
 	// check if everything went fine
-	if (compilerProcess.exitStatus() != QProcess::NormalExit)
+	auto error = compilerProcess.error();
+	// If the process failed to start the exitStatus is still QProcess::NormalExit.
+	// Thus we have to check here if the process failed to start.
+	// Uknown error is the default return value of error() -> if the process exited correctly unknown error is returned.
+	if (error != QProcess::UnknownError)
 	{
-		auto error = compilerProcess.error();
 		if (error == QProcess::FailedToStart)
 			throw new OODebugException(QString("It seems like %1 is not installed on your system!").arg(command_));
 		else
-			throw new OODebugException(QString("Uknown error while executing %1: %2").arg(command_, error));
+			throw new OODebugException(QString("Error while executing %1: %2").arg(command_, error));
 	}
+	if (compilerProcess.exitStatus() != QProcess::NormalExit)
+		throw new OODebugException(QString("Compiler crash, command: %1").arg(command_));
 	return parseFunction_(QString(compilerProcess.readAllStandardOutput()));
 }
 

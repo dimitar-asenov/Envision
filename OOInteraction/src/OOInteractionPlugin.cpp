@@ -51,6 +51,7 @@
 #include "commands/CDoxygen.h"
 #include "commands/CAddNodeToView.h"
 #include "commands/CAddCalleesToView.h"
+#include "commands/CAddBaseClassesToView.h"
 
 #include "string_offset_providers/StringComponents.h"
 
@@ -145,6 +146,9 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateMethod());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CDoxygen());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddNodeToView());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCalleesToView());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddBaseClassesToView());
 
 	// Initialize customization support
 	auto customizationGroup = new Visualization::VisualizationGroup();
@@ -163,9 +167,6 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 
 	OOInteraction::DoxygenWholeTreeVisitor::init();
 	OOInteraction::DoxygenCommentsOnlyVisitor::init();
-
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddNodeToView());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCalleesToView());
 
 	return true;
 }

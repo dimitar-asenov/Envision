@@ -5,12 +5,7 @@
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>161</red>
-					<green>224</green>
-					<blue>224</blue>
-				</color>
+				<color>#a1e0e0</color>
 			</backgroundBrush>
 			<outline>
 				<style>0</style>

@@ -5,12 +5,7 @@
 		<cornerRadius>10</cornerRadius>
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>255</green>
-				<blue>255</blue>
-			</color>
+			<color>#ffffff</color>
 		</backgroundBrush>
 	</shape>
 	<namePublic prototypes="default.namePublic" />
@@ -57,21 +52,11 @@
 			<cornerType>0</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>240</red>
-					<green>240</green>
-					<blue>255</blue>
-				</color>
+				<color>#f0f0ff</color>
 			</backgroundBrush>
 			<outline>
 				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>128</red>
-					<green>128</green>
-					<blue>255</blue>
-				</color>
+				<color>#8080ff</color>
 			</outline>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
@@ -90,12 +75,7 @@
 			<cornerType>2</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
-				</color>
+				<color>#ffffff</color>
 			</backgroundBrush>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
@@ -114,12 +94,7 @@
 				<cornerType>2</cornerType>
 				<backgroundBrush>
 					<style>1</style>
-					<color>
-						<alpha>255</alpha>
-						<red>255</red>
-						<green>255</green>
-						<blue>255</blue>
-					</color>
+					<color>#ffffff</color>
 				</backgroundBrush>
 			</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
