@@ -64,6 +64,9 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 
 		void showPrompt(QString initialCommandText = QString());
 		void hidePrompt();
+		void cancelPrompt();
+
+		bool wasCancelled() const;
 
 	protected:
 		virtual void determineChildren();
@@ -81,6 +84,7 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		int commandSelectedLast_{};
 
 		bool hideRequested_{};
+		bool wasCancelled_{}; // Set to true when the prompt was hidden manually by the user
 
 		QSharedPointer<CommandResult> result_;
 		QList<CommandSuggestion*> suggestions_;
@@ -100,5 +104,7 @@ inline const std::unique_ptr<Visualization::Cursor>& CommandPrompt::commandRecei
 
 inline QSharedPointer<CommandResult> CommandPrompt::result() { return result_; }
 inline QList<CommandSuggestion*>& CommandPrompt::suggestions() { return suggestions_; }
+inline bool CommandPrompt::wasCancelled() const { return wasCancelled_; }
+inline void CommandPrompt::cancelPrompt() {wasCancelled_ = true; hidePrompt();}
 
 }

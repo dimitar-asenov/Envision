@@ -71,7 +71,7 @@ inline Overlay<Super>::Overlay(QList<Item*> associatedItems, const typename Supe
 
 	Super::setFlags(0);
 	Super::setAcceptedMouseButtons(0);
-	Super::setZValue(Super::LAYER_SELECTION_Z);
+	Super::setZValue(Super::LAYER_OVERLAY_Z);
 	Super::setItemCategory(Scene::SelectionItemCategory);
 }
 

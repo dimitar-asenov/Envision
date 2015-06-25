@@ -40,6 +40,8 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 	public:
 		~GenericPersistentUnit();
 
+		GenericPersistentUnit(const GenericPersistentUnit& other) = delete;
+
 		const QString& name() const;
 		GenericTree* tree() const;
 
@@ -61,6 +63,11 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		 * loaded.
 		 */
 		GenericNode* unitRootNode() const;
+
+		/**
+		 * Returns the node that has no parent (parent is {000...}). This is typically the root node of the tree.
+		 */
+		GenericNode* nodeWithNullParent() const;
 
 	private:
 		friend class GenericTree;

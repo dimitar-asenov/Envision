@@ -139,4 +139,17 @@ GenericNode* GenericPersistentUnit::unitRootNode() const
 		return &(chunks_.first()[0]);
 }
 
+GenericNode* GenericPersistentUnit::nodeWithNullParent() const
+{
+	for (auto& chunk : chunks_)
+	{
+		int maxIndex = (chunk == chunks_.last() ? lastNodeIndexInLastChunk_ : GenericTree::ALLOCATION_CHUNK_SIZE-1);
+		for (int i = 0; i<= maxIndex; ++i)
+			if (chunk[i].parentId().isNull())
+				return &chunk[i];
+	}
+
+	return nullptr;
+}
+
 } /* namespace FilePersistence */

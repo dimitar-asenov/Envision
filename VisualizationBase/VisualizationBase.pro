@@ -243,5 +243,5 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/overlays/ArrowOverlay.cpp \
     src/utils/Drawing.cpp \
     src/nodes/InfoNode.cpp \
-    src/items/VInfoNode.cpp
+    src/items/VInfoNode.cpp \
     src/styles/StyleSet.cpp

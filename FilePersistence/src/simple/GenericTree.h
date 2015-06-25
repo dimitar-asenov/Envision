@@ -47,12 +47,15 @@ class FILEPERSISTENCE_API GenericTree {
 		void remove(const GenericPersistentUnit& unit);
 
 		GenericPersistentUnit& newPersistentUnit(QString name, char* data = nullptr, int dataSize = 0);
-		GenericPersistentUnit* persistentUnit(const QString& name);
+		GenericPersistentUnit* persistentUnit(const QString& name) const;
+		QList<std::shared_ptr<GenericPersistentUnit>> persistentUnits() const;
 
 		GenericNode* find(Model::NodeIdType id);
 
 		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);
 		void loadNode(Model::NodeIdType id);
+
+		GenericNode* root() const;
 
 	private:
 		friend class GenericPersistentUnit;
@@ -65,7 +68,7 @@ class FILEPERSISTENCE_API GenericTree {
 		QMultiHash<Model::NodeIdType, GenericNode*> nodesWithoutParents_;
 		std::shared_ptr<PiecewiseLoader> piecewiseLoader_;
 
-		QHash<QString, GenericPersistentUnit> persistentUnits_;
+		QHash<QString, std::shared_ptr<GenericPersistentUnit>> persistentUnits_;
 
 		constexpr static int ALLOCATION_CHUNK_SIZE = 1000; // num elements to allocate at once
 		QList<GenericNode*> emptyChunks_;
@@ -84,5 +87,6 @@ inline void GenericTree::remove(const GenericPersistentUnit& unit) { remove(unit
 
 inline const std::shared_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() const { return piecewiseLoader_;}
 inline QMultiHash<Model::NodeIdType, GenericNode*>& GenericTree::nodesWithoutParents() { return nodesWithoutParents_;}
-
+inline QList<std::shared_ptr<GenericPersistentUnit>> GenericTree::persistentUnits() const
+	{return persistentUnits_.values();}
 } /* namespace FilePersistence */
