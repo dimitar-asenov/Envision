@@ -35,8 +35,8 @@ DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, InfoNode)
 namespace Visualization {
 
 /**
- * An InfoNode is the base class of all nodes which display some sort of statistics
- * on a target node. There is a register which keeps track of all possible informations
+ * An InfoNode is the base class of all nodes which display some sort of information
+ * on a target node. There is a registry which keeps track of all possible informations
  * to be displayed.
  */
 class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
@@ -44,7 +44,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 	DECLARE_TYPE_ID
 
 	public:
-		typedef QString (*InfoGetter) (Model::Node* target);
+		using InfoGetter = QString (*) (Model::Node* target);
 
 		InfoNode(Model::Node* target);
 		InfoNode(Model::Node *target, QList<QString> enabledInfos);
@@ -53,17 +53,13 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		const Model::Node* target() const;
 
 		/**
-		 * If the statistics can be represented as a string, use
+		 * If the infos can be represented as a string, use
 		 * this to represent them as HTML text. Then the same visualization
 		 * can be used for multiple statistics nodes.
 		 */
 		QString infoHtml() const;
-		/**
-		 * Updates the node's stored information.
-		 * @param isAutoUpdate Is this an automatic update, or a forced update?
-		 *					   A forced update will update everything.
-		 */
-		virtual void updateInfo(bool isAutoUpdate);
+		virtual void fullUpdate();
+		virtual void automaticUpdate();
 
 		void setEnabled(const QString name, bool isEnabled);
 		bool isEnabled(const QString name) const;
@@ -83,6 +79,12 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 
 	protected:
 		void setInfoHtml(QString content);
+		/**
+		 * Updates the node's stored information.
+		 * @param isAutoUpdate Is this an automatic update, or a forced update?
+		 *					   A forced update will update everything.
+		 */
+		virtual void updateInfo(bool isAutoUpdate);
 
 	private:
 		QString infoHtml_;
@@ -91,25 +93,21 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		Model::Node* target_{};
 
 		struct InfoGetterStruct {
-				InfoGetter getter_;
+				InfoGetter getter_{};
 				bool updatesAutomatically_{};
 				bool enabledByDefault_{};
-				InfoGetterStruct(InfoGetter getter, bool updatesAutomatically, bool enabledByDefault)
-						: getter_(getter), updatesAutomatically_(updatesAutomatically), enabledByDefault_(enabledByDefault)
-				{ }
-				InfoGetterStruct() {}
 		};
 		static QList<InfoNode*> allInfoNodes;
 		static QHash<QString, InfoGetterStruct> allInfoGetters;
 
 };
 
-inline void InfoNode::save(Model::PersistentStore &) const { Q_ASSERT(false); }
-inline void InfoNode::load(Model::PersistentStore &) { Q_ASSERT(false); }
-
 inline QString InfoNode::infoHtml() const { return infoHtml_; }
 inline void InfoNode::setInfoHtml(QString content) { infoHtml_ = content; }
 inline const Model::Node* InfoNode::target() const { return target_; }
+
+inline void InfoNode::fullUpdate() { updateInfo(false); }
+inline void InfoNode::automaticUpdate() { updateInfo(true); }
 
 inline bool InfoNode::isEnabled(const QString name) const { return enabledInfoGetters_.contains(name); }
 

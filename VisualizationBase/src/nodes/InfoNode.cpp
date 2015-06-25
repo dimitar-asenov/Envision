@@ -60,6 +60,16 @@ InfoNode::~InfoNode()
 	target_ = nullptr;
 }
 
+void InfoNode::save(Model::PersistentStore &) const
+{
+	Q_ASSERT(false);
+}
+
+void InfoNode::load(Model::PersistentStore &)
+{
+	Q_ASSERT(false);
+}
+
 void InfoNode::updateInfo(bool isAutoUpdate)
 {
 	QString infoHtml;
@@ -81,7 +91,7 @@ void InfoNode::registerInfoGetter(const QString &name, const InfoGetter getter,
 								  bool updatesAutomatically, bool enabledByDefault)
 {
 	if (!allInfoGetters.contains(name))
-		allInfoGetters[name] = InfoGetterStruct(getter, updatesAutomatically, enabledByDefault);
+		allInfoGetters[name] = InfoGetterStruct{getter, updatesAutomatically, enabledByDefault};
 	for (auto node : allInfoNodes)
 		node->setEnabled(name, enabledByDefault);
 }

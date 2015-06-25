@@ -27,6 +27,7 @@
 #include "CAddInfoNode.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/nodes/InfoNode.h"
+#include "VisualizationBase/src/items/VViewItemNode.h"
 
 
 namespace Interaction {
@@ -40,8 +41,7 @@ bool CAddInfoNode::canInterpret(Visualization::Item* source, Visualization::Item
 	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestor = source->findAncestorWithNode();
-	ancestor = ancestor->parent();
+	auto ancestor = source->findAncestorOfType<Visualization::VViewItemNode>();
 	if (!ancestor) return false;
 	else
 		return canInterpret && source->scene()->currentViewItem()->positionOfItem(ancestor).x() != -1;
@@ -51,7 +51,8 @@ Interaction::CommandResult* CAddInfoNode::executeWithArguments(Visualization::It
 	Visualization::Item*, const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
 	auto ancestor = source->findAncestorWithNode();
-	auto pos = source->scene()->currentViewItem()->positionOfItem(ancestor->parent());
+	auto pos = source->scene()->currentViewItem()->positionOfItem(
+				source->findAncestorOfType<Visualization::VViewItemNode>());
 	source->scene()->currentViewItem()->insertNode(
 			new Visualization::InfoNode(ancestor->node()), pos.x(), pos.y());
 	return new Interaction::CommandResult();

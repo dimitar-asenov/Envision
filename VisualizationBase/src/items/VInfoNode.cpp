@@ -36,22 +36,18 @@ ITEM_COMMON_DEFINITIONS(VInfoNode, "item")
 VInfoNode::VInfoNode(Item* parent, NodeType* node, const StyleType* style) :
 		Super(parent, node, style)
 {
-	node->updateInfo(false);
+	node->fullUpdate();
 	browser_ = new Comments::VCommentBrowser(this, QString());
 }
 
 void VInfoNode::initializeForms()
 {
-	//We either visualize the target form, or have only spacing
 	addForm(item(&I::browser_));
 }
 
 void VInfoNode::determineChildren()
 {
 	Super::determineChildren();
-	//Update the node fully, iff an update on the item was requested
-	if (needsUpdate() != Item::NoUpdate) node()->updateInfo(false);
-	else node()->updateInfo(true);
 	browser_->setContent(node()->infoHtml());
 }
 

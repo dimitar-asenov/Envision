@@ -27,6 +27,7 @@
 #include "HInfoNode.h"
 
 #include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/VInfoNode.h"
 
 namespace Interaction {
 
@@ -42,6 +43,7 @@ void HInfoNode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F5)
 	{
 		event->accept();
+		DCast<Visualization::VInfoNode>(target)->node()->fullUpdate();
 		target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	}
 	else GenericHandler::keyPressEvent(target, event);

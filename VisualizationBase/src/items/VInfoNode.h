@@ -46,7 +46,7 @@ class VISUALIZATIONBASE_API VInfoNode :
 
 		static void initializeForms();
 
-		virtual void determineChildren() override;\
+		virtual void determineChildren() override;
 
 	private:
 		Comments::VCommentBrowser* browser_{};
