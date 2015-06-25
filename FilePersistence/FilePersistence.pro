@@ -31,7 +31,8 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/version_control/ConflictPipelineComponent.h \
     src/version_control/LinkedChangesTransition.h \
     src/version_control/GitPiecewiseLoader.h \
-    src/version_control/LinkedChangesSet.h
+    src/version_control/LinkedChangesSet.h \
+    src/version_control/Diff3Parse.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
@@ -62,7 +63,8 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     test/VersionControlMergetests.cpp \
     src/version_control/LinkedChangesTransition.cpp \
     src/version_control/GitPiecewiseLoader.cpp \
-    src/version_control/LinkedChangesSet.cpp
+    src/version_control/LinkedChangesSet.cpp \
+    src/version_control/Diff3Parse.cpp
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2

@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "Diff3Parse.h"
 #include "ConflictPipelineComponent.h"
 
 namespace FilePersistence {
@@ -42,18 +43,6 @@ class ListMergeComponent : public ConflictPipelineComponent
 					QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, LinkedChangesSet&linkedChangesSet);
 	private:
-
-		struct Chunk
-		{
-				bool stable_{};
-				QList<Model::NodeIdType> spanA_;
-				QList<Model::NodeIdType> spanB_;
-				QList<Model::NodeIdType> spanBase_;
-
-				Chunk(bool stable, QList<Model::NodeIdType> idListA, QList<Model::NodeIdType> idListB,
-					  QList<Model::NodeIdType> idListBase);
-		};
-
 		struct Position
 		{
 				bool valid_{};
@@ -62,14 +51,6 @@ class ListMergeComponent : public ConflictPipelineComponent
 				Position(bool valid, Model::NodeIdType predecessor);
 				bool operator ==(const Position &other) const;
 				bool operator !=(const Position &other) const;
-		};
-
-		struct ChunkMergeResult
-		{
-				bool noConflicts_{};
-				QList<Model::NodeIdType> chunk_;
-
-				ChunkMergeResult(bool valid, QList<Model::NodeIdType> chunk);
 		};
 
 		/**
@@ -101,32 +82,28 @@ class ListMergeComponent : public ConflictPipelineComponent
 		 *
 		 * The returned chunk has \a valid_ set to \a false if the chunk could not be merged.
 		 */
-		static ChunkMergeResult computeMergedChunk(Chunk chunk, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-														QList<Model::NodeIdType>& idListA, QList<Model::NodeIdType>& idListB,
-														QList<Model::NodeIdType>& idListBase);
+		void computeMergedChunk(Chunk* chunk, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB);
 
 		/**
 		 * Returns false if there was a conflict.
 		 */
-		static bool insertElemsIntoChunk(QList<Model::NodeIdType>& mergedChunk,
-													const QList<Model::NodeIdType>& idListBase,
+		bool insertElemsIntoChunk(Chunk* chunk,
 													const QList<Model::NodeIdType>& spanBase,
 													const ChangeDependencyGraph& cdgA,
 													const ChangeDependencyGraph& cdgB,
-													const QList<Model::NodeIdType>& idListB,
 													const QList<Model::NodeIdType>& spanA,
-													const QList<Model::NodeIdType>& spanB);
+													const QList<Model::NodeIdType>& spanB, bool branchIsA);
 
 		/**
-		 * Tries to find a unique position for \a elem in \a into that is similar to the position of \a elem in \a from.
+		 * Tries to find a unique position for \a elem in \a chunk that is similar to the position of \a elem in \a origin.
 		 * Returns a Position \a pos where \a pos.valid = true if and only if such a position could be found and
 		 * \a pos.predecessor is the element after which \a elem should be inserted or 0 if elem should be inserted at
-		 * the beginning. Such a position can be found if the nearest predecessor and successor of \elem in \a from that
-		 * are common in \a into are next to each other and in order in \a into.
+		 * the beginning. Such a position can be found if the nearest predecessor and successor of \elem in \a origin that
+		 * are common in \a chunk are next to each other and in order in \a chunk.
 		 */
 		static Position findPosition(const Model::NodeIdType& element,
-											  const QList<Model::NodeIdType>& from,
-											  const QList<Model::NodeIdType>& into);
+											  const QList<Model::NodeIdType>& origin,
+											  const Chunk* chunk);
 
 		/**
 		 * Takes the merged version of a list and generates all changes needed to bring the base version to the merged
@@ -140,53 +117,47 @@ class ListMergeComponent : public ConflictPipelineComponent
 																				ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 																				LinkedChangesSet& linkedChangesSet);
 
+		void markElementAsReordered(QSet<Model::NodeIdType>& reorderedNodesByMe,
+											 QHash<Model::NodeIdType, Chunk*>& mustBeUnchangedByMe, Model::NodeIdType elem);
+
+		bool doesOtherBranchReorder(QSet<Model::NodeIdType>& reorderedNodesByOther,
+											 QHash<Model::NodeIdType, Chunk*>& mustBeUnchangedByOther,
+											 Chunk* chunk, Model::NodeIdType elem);
+
+		/**
+		 * These nodes have been reordered.
+		 */
+		QSet<Model::NodeIdType> reorderedNodesA_;
+		QSet<Model::NodeIdType> reorderedNodesB_;
+		/**
+		 * These nodes must not be reordered. If they are, the mapped chunk must be marked as conflicting.
+		 */
+		QHash<Model::NodeIdType, Chunk*> mustBeUnchangedByA_;
+		QHash<Model::NodeIdType, Chunk*> mustBeUnchangedByB_;
+		/**
+		 * If the key chunk is conflicting, all mapped chunks are conflicting as well.
+		 */
+		QMultiHash<Chunk*, Chunk*> chunkDependencies_;
+
 		QSet<QString> conflictTypes_;
 		QSet<QString> listTypes_;
 		QSet<QString> unorderedTypes_;
 
-		QString revisionIdA_;
-		QString revisionIdB_;
-		QString revisionIdBase_;
-
 		/**
 		 * Inserts \a elem into \a chunk according to \a pos.
 		 */
-		static void insertAfter(Model::NodeIdType elem, Position pos, QList<Model::NodeIdType>& chunk);
+		static void insertAfter(Model::NodeIdType elem, Position pos, Chunk* chunk);
 
 		static QList<Model::NodeIdType> nodeListToSortedIdList(const QList<GenericNode*>& list);
-
-		/**
-		 * Computes stable and unstable chunks. This is what's called a diff3 parse in the paper by Khanna, Kunal,
-		 * Pierce: A Formal Investigation of Diff3 available at http://www.cis.upenn.edu/~bcpierce/papers/diff3-short.pdf.
-		 */
-		static QList<Chunk> computeChunks(const QList<Model::NodeIdType> idListA, const QList<Model::NodeIdType> idListB,
-													const QList<Model::NodeIdType> idListBase);
-
-		static QList<Model::NodeIdType> backtrackLCS(int** data, const QList<Model::NodeIdType> x,
-																	const QList<Model::NodeIdType> y, int posX, int posY);
-
-		static QList<QList<Model::NodeIdType>> computeSublists(const QList<Model::NodeIdType> elementIds,
-																				 const QList<Model::NodeIdType> stableIDs);
-
-		static QList<Model::NodeIdType> longestCommonSubsequence(const QList<Model::NodeIdType> listA,
-																					const QList<Model::NodeIdType> listB);
 };
-
-inline bool ListMergeComponent::Position::operator ==(const Position &other) const
-{
-	return this->valid_ && other.valid_ && this->predecessor_ == other.predecessor_;
-}
-
-inline bool ListMergeComponent::Position::operator !=(const Position &other) const { return !(*this == other); }
-
-inline ListMergeComponent::ChunkMergeResult::ChunkMergeResult(bool valid, QList<Model::NodeIdType> chunk) :
-	noConflicts_{valid}, chunk_{chunk} {}
-
-inline ListMergeComponent::Chunk::Chunk(bool stable, QList<Model::NodeIdType> idListA, QList<Model::NodeIdType> idListB,
-						QList<Model::NodeIdType> idListBase) :
-	stable_{stable}, spanA_{idListA}, spanB_{idListB}, spanBase_{idListBase} {}
 
 inline ListMergeComponent::Position::Position(bool valid, Model::NodeIdType predecessor) :
 	valid_{valid}, predecessor_{predecessor} {}
+
+inline bool ListMergeComponent::Position::operator ==(const Position &other) const
+	{ return this->valid_ && other.valid_ && this->predecessor_ == other.predecessor_; }
+
+inline bool ListMergeComponent::Position::operator !=(const Position &other) const
+	{ return !(*this == other); }
 
 } /* namespace FilePersistence */
