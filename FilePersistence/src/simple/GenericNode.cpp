@@ -203,8 +203,8 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy)
 {
-	Q_ASSERT(!tree()->piecewiseLoader());
 	reset(persistentUnit);
+	// Q_ASSERT(!tree()->piecewiseLoader()); This is actually called by the diff for each node line.
 	Q_ASSERT(dataLine);
 	Q_ASSERT(dataLineLength > 0);
 

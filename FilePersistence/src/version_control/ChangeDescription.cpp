@@ -56,7 +56,7 @@ std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(Model::Nod
 																	GenericNode* nodeA,
 																	GenericNode* nodeB)
 {
-	std::shared_ptr<ChangeDescription> change = std::shared_ptr<ChangeDescription>(new ChangeDescription());
+	std::shared_ptr<ChangeDescription> change = std::shared_ptr<ChangeDescription>(new ChangeDescription);
 	change->nodeId_ = id;
 	change->type_ = ChangeType::Stationary;
 	change->updateFlags_ = UpdateType::Structure;

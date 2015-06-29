@@ -78,11 +78,11 @@ class FILEPERSISTENCE_API ChangeDescription
 	private:
 		ChangeDescription();
 
-		Model::NodeIdType nodeId_;
+		Model::NodeIdType nodeId_{};
 
 		ChangeType type_{};
 
-		UpdateFlags updateFlags_;
+		UpdateFlags updateFlags_{};
 
 		bool pointsToChildA_;
 		bool pointsToChildB_;
@@ -94,6 +94,8 @@ class FILEPERSISTENCE_API ChangeDescription
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
+
+inline ChangeDescription::ChangeDescription() {}
 
 inline Model::NodeIdType ChangeDescription::nodeId() const { return nodeId_; }
 

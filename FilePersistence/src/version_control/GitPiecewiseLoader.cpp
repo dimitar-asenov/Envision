@@ -32,6 +32,8 @@ GitPiecewiseLoader::GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree,
 													const GitRepository* repo, QString revision) :
 	PiecewiseLoader(tree), repo_{repo}, revision_{revision}, workDir_{repo->workdirPath()} {}
 
+GitPiecewiseLoader::~GitPiecewiseLoader() {}
+
 NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 {
 	auto idString = id.toString();

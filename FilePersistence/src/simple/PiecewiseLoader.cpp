@@ -25,8 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "PiecewiseLoader.h"
-#include "GenericTree.h"
-#include "GenericNode.h"
 
 namespace FilePersistence {
 
@@ -34,7 +32,8 @@ PiecewiseLoader::PiecewiseLoader(std::shared_ptr<GenericTree>& tree) : tree_{tre
 {
     tree_->setPiecewiseLoader(std::shared_ptr<PiecewiseLoader>(this));
 }
-PiecewiseLoader::~PiecewiseLoader(){}
+
+PiecewiseLoader::~PiecewiseLoader() {}
 
 void PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
 {

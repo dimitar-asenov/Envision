@@ -59,6 +59,7 @@ int gitDiffExtractFileCallBack(
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
 
 	QString relativePathA(delta->old_file.path);
+	// TODO only create new unit if not existent.
 	data->treeA_->newPersistentUnit(relativePathA);
 
 	QString relativePathB(delta->new_file.path);
@@ -247,13 +248,13 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	if (!treeA)
 	{
 		QString sha1A = getSHA1(revisionA);
-		auto treeA = std::shared_ptr<GenericTree>(new GenericTree("TreeA"));
+		treeA = std::shared_ptr<GenericTree>(new GenericTree("TreeA"));
 		new GitPiecewiseLoader(treeA, this, sha1A);
 	}
 	if (!treeB)
 	{
 		QString sha1B = getSHA1(revisionB);
-		auto treeB = std::shared_ptr<GenericTree>(new GenericTree("TreeB"));
+		treeB = std::shared_ptr<GenericTree>(new GenericTree("TreeB"));
 		new GitPiecewiseLoader(treeB, this, sha1B);
 	}
 

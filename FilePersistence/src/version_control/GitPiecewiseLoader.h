@@ -46,7 +46,7 @@ class GitPiecewiseLoader : public PiecewiseLoader
 
 		static bool idIsParent(const QString& id, const QString& nodeLine);
 		static bool idIsNode(const QString& id, const QString& nodeLine);
-		static bool isPersistenceUnit( const QString& nodeLine);
+		static bool isPersistenceUnit(const QString& nodeLine);
 
 		const GitRepository* repo_;
 		QString revision_;

@@ -36,7 +36,7 @@ namespace FilePersistence {
 class ConflictPipelineComponent
 {
 	public:
-		virtual ~ConflictPipelineComponent();
+		virtual ~ConflictPipelineComponent() = 0;
 		virtual LinkedChangesTransition run(std::shared_ptr<GenericTree> treeA,
 														std::shared_ptr<GenericTree> treeB,
 														std::shared_ptr<GenericTree> treeBase,
@@ -44,5 +44,7 @@ class ConflictPipelineComponent
 															  QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
 															  ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet) = 0;
 };
+
+inline ConflictPipelineComponent::~ConflictPipelineComponent() {}
 
 } /* namespace FilePersistence */
