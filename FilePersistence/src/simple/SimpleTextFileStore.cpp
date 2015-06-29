@@ -176,8 +176,8 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	genericNode_ = oldPersisted;
 }
 
-void SimpleTextFileStore::saveGenericTree(GenericTree* tree, const QString& name, const QString& destDir,
-														const QStringList& persistentUnitTypes)
+void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, const QString& name,
+														const QString& destDir, const QStringList& persistentUnitTypes)
 {
 	// Put all existing PersistentUnits (except for the root) on the stack
 	auto rootNode = tree->root();

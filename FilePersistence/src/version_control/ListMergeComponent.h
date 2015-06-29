@@ -82,13 +82,14 @@ class ListMergeComponent : public ConflictPipelineComponent
 		 *
 		 * The returned chunk has \a valid_ set to \a false if the chunk could not be merged.
 		 */
-		void computeMergedChunk(Chunk* chunk, ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB);
+		void computeMergedChunk(Chunk* chunk, const Model::NodeIdType containerId,
+										ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB);
 
 		/**
 		 * Returns false if there was a conflict.
 		 */
 		bool insertElemsIntoChunk(Chunk* chunk,
-													const QList<Model::NodeIdType>& spanBase,
+													const QList<Model::NodeIdType>& spanBase, const Model::NodeIdType containerId,
 													const ChangeDependencyGraph& cdgA,
 													const ChangeDependencyGraph& cdgB,
 													const QList<Model::NodeIdType>& spanA,
@@ -117,12 +118,37 @@ class ListMergeComponent : public ConflictPipelineComponent
 																				ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 																				LinkedChangesSet& linkedChangesSet);
 
+		/**
+		 * Marks all chunks that transitively depend on \a chunk as conflicting. \a chunk itself is not explicitly marked but
+		 * implicitly if it transitively depends on itself.
+		 */
+		void markDependingAsConflicting(Chunk* chunk);
+
+		/**
+		 * Records the fact that a branch has reordered \a elem. If there are any chunks that depend on \a elem not being
+		 * reordered, they are marked as conflicting.
+		 */
 		void markElementAsReordered(QSet<Model::NodeIdType>& reorderedNodesByMe,
 											 QHash<Model::NodeIdType, Chunk*>& mustBeUnchangedByMe, Model::NodeIdType elem);
 
+		/**
+		 * Returns true if it has been detected that the other branch reorders \a elem; returns false otherwise.
+		 * \a chunk is marked such that if in the future it is detected that the other branch reorders \a elem,
+		 *  \a chunk is retroactively marked as conflicting.
+		 */
 		bool doesOtherBranchReorder(QSet<Model::NodeIdType>& reorderedNodesByOther,
 											 QHash<Model::NodeIdType, Chunk*>& mustBeUnchangedByOther,
 											 Chunk* chunk, Model::NodeIdType elem);
+
+		/**
+		 * Returns the chunk of the list of \a listContainer that contains \a element in the base version.
+		 */
+		Chunk* findOriginalChunk(Model::NodeIdType element, Model::NodeIdType listContainer, Chunk* guess = nullptr);
+
+		/**
+		 * This maps list container IDs to their lists, partitioned into chunks.
+		 */
+		QHash<Model::NodeIdType, QList<Chunk*>> preparedLists_;
 
 		/**
 		 * These nodes have been reordered.
@@ -130,12 +156,13 @@ class ListMergeComponent : public ConflictPipelineComponent
 		QSet<Model::NodeIdType> reorderedNodesA_;
 		QSet<Model::NodeIdType> reorderedNodesB_;
 		/**
-		 * These nodes must not be reordered. If they are, the mapped chunk must be marked as conflicting.
+		 * These nodes must not be reordered by the respective branch.
+		 * If they are, the mapped chunk must be marked as conflicting.
 		 */
 		QHash<Model::NodeIdType, Chunk*> mustBeUnchangedByA_;
 		QHash<Model::NodeIdType, Chunk*> mustBeUnchangedByB_;
 		/**
-		 * If the key chunk is conflicting, all mapped chunks are conflicting as well.
+		 * If the key chunk gets marked as conflicting, all mapped chunks must be marked as conflicting as well.
 		 */
 		QMultiHash<Chunk*, Chunk*> chunkDependencies_;
 

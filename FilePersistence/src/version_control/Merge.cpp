@@ -30,6 +30,7 @@
 
 #include "ConflictUnitDetector.h"
 #include "ListMergeComponent.h"
+#include "../simple/SimpleTextFileStore.h"
 
 namespace FilePersistence {
 
@@ -50,7 +51,7 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 		return true;
 	}
 	else
-		return false;
+		Q_ASSERT(false);
 }
 
 // ======== private ========
@@ -180,9 +181,13 @@ void Merge::performTrueMerge()
 
 		stage_ = Stage::BuiltMergedTree;
 
-		// TODO encode and write tree to working directory
+		SimpleTextFileStore::saveGenericTree(treeMerged_, "Merged", repository_->workdirPath(), {"Project", "Module"});
+
 		stage_ = Stage::WroteToWorkDir;
-		// await commit
+
+		repository_->writeRevisionIntoIndex(revisionCommitId_);
+
+		stage_ = Stage::WroteToIndex;
 	}
 	else
 	{

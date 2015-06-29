@@ -47,7 +47,7 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 
 	auto listsToMerge = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
 
-	QHash<Model::NodeIdType, QList<Chunk*>> preparedLists;
+	preparedLists_ = {};
 
 	for (auto listContainerId : listsToMerge)
 	{
@@ -60,7 +60,7 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 		{
 			// list is ordered
 			auto chunks = Diff3Parse::computeChunks(idListA, idListB, idListBase);
-			preparedLists.insert(listContainerId, chunks);
+			preparedLists_.insert(listContainerId, chunks);
 		}
 		else // list is unordered
 		{
@@ -84,14 +84,14 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 		}
 	}
 
-	for (auto preparedListIt = preparedLists.begin(); preparedListIt != preparedLists.end(); ++preparedListIt)
+	for (auto preparedListIt = preparedLists_.begin(); preparedListIt != preparedLists_.end(); ++preparedListIt)
 	{
 		for (auto chunk : preparedListIt.value())
 			if (!chunk->stable_)
-				computeMergedChunk(chunk, cdgA, cdgB);
+				computeMergedChunk(chunk, preparedListIt.key(), cdgA, cdgB);
 	}
 
-	for (auto preparedListIt = preparedLists.begin(); preparedListIt != preparedLists.end(); ++preparedListIt)
+	for (auto preparedListIt = preparedLists_.begin(); preparedListIt != preparedLists_.end(); ++preparedListIt)
 	{
 		QList<Model::NodeIdType> mergedList;
 		for (auto chunk : preparedListIt.value())
@@ -109,6 +109,21 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 	}
 
 	return transition;
+}
+
+Chunk* ListMergeComponent::findOriginalChunk(Model::NodeIdType element, Model::NodeIdType listContainer, Chunk* guess)
+{
+	if (guess && guess->spanBase_.contains(element))
+			return guess;
+	else
+	{
+		for (auto chunk : preparedLists_.value(listContainer))
+		{
+			if (chunk->spanBase_.contains(element))
+				return chunk;
+		}
+	}
+	Q_ASSERT(false);
 }
 
 std::shared_ptr<ChangeDescription> ListMergeComponent::getConflictingChange(
@@ -229,14 +244,15 @@ QSet<Model::NodeIdType> ListMergeComponent::computeListsToMerge(
 }
 
 void ListMergeComponent::computeMergedChunk(Chunk* chunk,
+														  const Model::NodeIdType containerId,
 														  ChangeDependencyGraph& cdgA,
 														  ChangeDependencyGraph& cdgB)
 {
 	bool valid = true;
-	valid &= insertElemsIntoChunk(chunk, chunk->spanBase_,
+	valid &= insertElemsIntoChunk(chunk, chunk->spanBase_, containerId,
 											cdgA, cdgB, chunk->spanA_, chunk->spanB_, true);
 	if (valid)
-		valid &= insertElemsIntoChunk(chunk, chunk->spanBase_,
+		valid &= insertElemsIntoChunk(chunk, chunk->spanBase_, containerId,
 												cdgB, cdgA, chunk->spanB_, chunk->spanA_, false);
 	Q_ASSERT(chunk->noConflicts_ == valid);
 	// mergedChunk->noConflicts_ = valid;
@@ -244,6 +260,7 @@ void ListMergeComponent::computeMergedChunk(Chunk* chunk,
 
 bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 															 const QList<Model::NodeIdType>& spanBase,
+															 const Model::NodeIdType containerId,
 															 const ChangeDependencyGraph& cdgA,
 															 const ChangeDependencyGraph& cdgB,
 															 const QList<Model::NodeIdType>& spanA,
@@ -263,7 +280,10 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		bool elemInTreeBase = !changeA || changeA->type() != ChangeType::Insertion;
 		bool elemInListBase = !changeA || changeA->type() == ChangeType::Stationary;
 		bool elemInTreeB = elemInTreeBase && (!changeB || changeB->type() != ChangeType::Deletion);
-		bool elemInListB = false; // FIXME find a way to find this.
+		bool elemInListB = (changeA && changeA->type() == ChangeType::Move) ?
+					changeB && changeB->nodeB()->parentId() == changeA->nodeB()->parentId() :
+					!changeB || changeB->type() != ChangeType::Move;
+		// If A moves, B must move to same list, otherwise B must not move.
 
 		auto reorderedNodesByMe = branchIsA ? reorderedNodesA_ : reorderedNodesB_;
 		auto reorderedNodesByOther = branchIsA ? reorderedNodesB_ : reorderedNodesA_;
@@ -323,7 +343,19 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 					{
 						if (posA == posB)
 						{
-							if (!chunk->spanMerged_.contains(elem)) shouldInsert = true; // 011110
+							if (!chunk->spanMerged_.contains(elem))
+							{
+
+								auto origin = findOriginalChunk(elem, containerId);
+								if (!origin->noConflicts_)
+									conflict = true;
+								else
+								{
+									chunkDependencies_.insert(chunk, origin);
+									chunkDependencies_.insert(origin, chunk);
+								}
+								shouldInsert = true; // 011110
+							}
 						}
 						else
 						{
@@ -337,7 +369,17 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 						// NOTE the following condition could be evaluated immediately.
 						// all original chunks of the current list are required.
 						if (!doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
+						{
+							auto origin = findOriginalChunk(elem, containerId);
+							if (!origin->noConflicts_)
+								conflict = true;
+							else
+							{
+								chunkDependencies_.insert(chunk, origin);
+								chunkDependencies_.insert(origin, chunk);
+							}
 							shouldInsert = true; // 011011
+						}
 						else
 						{
 							conflict = true;
@@ -362,6 +404,14 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 						}
 						else
 						{
+							auto origin = findOriginalChunk(elem, containerId);
+							if (!origin->noConflicts_)
+								conflict = true;
+							else
+							{
+								chunkDependencies_.insert(chunk, origin);
+								chunkDependencies_.insert(origin, chunk);
+							}
 							shouldInsert = true; // 01000
 						}
 					}
@@ -379,6 +429,8 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		}
 		// End decision tree
 
+		if (conflict) break;
+
 		if (shouldInsert)
 		{
 			if (posA.valid_)
@@ -386,10 +438,27 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 			else
 				conflict = true;
 		}
-
-		if (conflict) break;
 	}
+
+	if (conflict)
+		markDependingAsConflicting(chunk);
+
 	return !conflict;
+}
+
+void ListMergeComponent::markDependingAsConflicting(Chunk* chunk)
+{
+	QList<Chunk*> queue;
+	queue.append(chunk);
+	for (auto chunk = queue.takeFirst(); !queue.isEmpty(); chunk = queue.takeFirst())
+	{
+		chunk->noConflicts_ = false;
+		for (auto depending : chunkDependencies_.values(chunk))
+		{
+			if (depending->noConflicts_)
+				queue.append(depending);
+		}
+	}
 }
 
 void ListMergeComponent::markElementAsReordered(QSet<Model::NodeIdType>& reorderedNodesByMe,
@@ -397,7 +466,10 @@ void ListMergeComponent::markElementAsReordered(QSet<Model::NodeIdType>& reorder
 																Model::NodeIdType elem)
 {
 	for (auto chunk : mustBeUnchangedByMe.values(elem))
-		chunk->noConflicts_ = false; // TODO do this recursively
+	{
+		chunk->noConflicts_ = false;
+		markDependingAsConflicting(chunk);
+	}
 	reorderedNodesByMe.insert(elem);
 }
 
