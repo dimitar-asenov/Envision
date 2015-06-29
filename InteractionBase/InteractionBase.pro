@@ -78,7 +78,12 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CToggleArrowLayer.h \
     src/commands/CAddInfoNode.h \
     src/handlers/HInfoNode.h \
-    src/commands/CToggleInfoEntry.h
+    src/commands/CToggleInfoEntry.h \
+    src/nodes/ViewSelectionNode.h \
+    src/vis/VViewSelectionNode.h \
+    src/vis/SelectionAtCursorItem.h \
+    src/vis/SelectionAtCursorItemStyle.h \
+    src/handlers/HSelectionAtCursorItem.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -150,4 +155,9 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CToggleArrowLayer.cpp \
     src/commands/CAddInfoNode.cpp \
     src/handlers/HInfoNode.cpp \
-    src/commands/CToggleInfoEntry.cpp
+    src/commands/CToggleInfoEntry.cpp \
+    src/nodes/ViewSelectionNode.cpp \
+    src/vis/VViewSelectionNode.cpp \
+    src/vis/SelectionAtCursorItem.cpp \
+    src/vis/SelectionAtCursorItemStyle.cpp \
+    src/handlers/HSelectionAtCursorItem.cpp
