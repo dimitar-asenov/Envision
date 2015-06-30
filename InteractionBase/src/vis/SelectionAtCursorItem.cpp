@@ -38,41 +38,6 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(SelectionAtCursorItem, "item")
 
-SelectionAtCursorItem* SelectionAtCursorItem::instance{};
-
-void SelectionAtCursorItem::show(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
-{
-	QApplication::postEvent(target->scene(),
-							new Visualization::CustomSceneEvent( [=]() { showNow(selectableNodes, target); }));
-}
-
-void SelectionAtCursorItem::hide()
-{
-	if (instance)
-		QApplication::postEvent(instance->scene(),
-								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
-}
-
-void SelectionAtCursorItem::showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
-{
-	SelectionAtCursorItem::hideNow();
-	instance = new SelectionAtCursorItem(selectableNodes, target);
-	target->scene()->addTopLevelItem(instance);
-	instance->installSceneEventFilter(instance);
-	instance->setFiltersChildEvents(true);
-}
-
-void SelectionAtCursorItem::hideNow()
-{
-	if (instance)
-	{
-		instance->removeSceneEventFilter(instance);
-		instance->scene()->removeTopLevelItem(instance);
-	}
-	SAFE_DELETE_ITEM(instance);
-	instance = nullptr;
-}
-
 SelectionAtCursorItem::SelectionAtCursorItem(QVector<Model::Node*> selectableNodes,
 											 Visualization::Item* target, StyleType* style)
 	: Super(nullptr, style), target_(target)
@@ -95,7 +60,7 @@ SelectionAtCursorItem::~SelectionAtCursorItem()
 	target_ = nullptr;
 	//Destroyed by DeclarativeItem
 	focusedItem_ = nullptr;
-	textField_ = nullptr;
+	SAFE_DELETE_ITEM(textField_);
 	//Destroyed when the focused item is destroyed
 	if (!focusedItem() || focusedItem()->graphicsEffect() != selectedEffect_)
 		SAFE_DELETE(selectedEffect_);
@@ -149,24 +114,13 @@ void SelectionAtCursorItem::selectItem(Visualization::Item *item)
 	focusedItem_ = item;
 }
 
-void SelectionAtCursorItem::executeFocused()
+bool SelectionAtCursorItem::executeFocused()
 {
 	if (hasTextField() && focusedItem() == textField())
-		onSelectText(textField()->text());
+		return onSelectText(textField()->text());
 	else if (focusedItem())
-		onSelectNode(focusedItem()->node());
-}
-
-void SelectionAtCursorItem::onSelectNode(Model::Node *node)
-{
-	if (auto asSwitcher = DCast<ViewSwitcherNode>(node))
-		scene()->switchToView(asSwitcher->viewName());
-}
-
-void SelectionAtCursorItem::onSelectText(QString text)
-{
-	auto newView = scene()->newViewItem(text);
-	scene()->switchToView(newView);
+		return onSelectNode(focusedItem()->node());
+	return false;
 }
 
 QPoint SelectionAtCursorItem::indexOf(Model::Node *node) const
@@ -215,10 +169,11 @@ bool SelectionAtCursorItem::sceneEventFilter(QGraphicsItem* watched, QEvent* eve
 {
 	if (event->type() == QEvent::KeyPress)
 	{
-		auto keyEvent = static_cast<QKeyEvent*>(event);event->accept();
+		auto keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Up
 			|| keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
 		{
+			event->accept();
 			//If currently the name is selected, and down key is pressed -> select the item below
 			if (focusedItem() == textField() && keyEvent->key() == Qt::Key_Down)
 				selectItem(findVisualizationOf(currentNodes()[0][0]));
@@ -245,9 +200,12 @@ bool SelectionAtCursorItem::sceneEventFilter(QGraphicsItem* watched, QEvent* eve
 		}
 		else if (keyEvent->key() == Qt::Key_Return)
 		{
-			executeFocused();
-			SelectionAtCursorItem::hide();
-			return true;
+			event->accept();
+			if (executeFocused())
+			{
+				hideSelection();
+				return true;
+			}
 		}
 	}
 	else if (event->type() == QEvent::GraphicsSceneMousePress)
@@ -257,9 +215,11 @@ bool SelectionAtCursorItem::sceneEventFilter(QGraphicsItem* watched, QEvent* eve
 		if (asItem && isAncestorOf(watched))
 		{
 			selectItem(asItem);
-			executeFocused();
-			SelectionAtCursorItem::hide();
-			return true;
+			if (executeFocused())
+			{
+				hideSelection();
+				return true;
+			}
 		}
 	}
 	return false;

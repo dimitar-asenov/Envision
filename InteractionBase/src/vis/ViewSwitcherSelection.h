@@ -27,63 +27,39 @@
 
 #include "interactionbase_api.h"
 #include "ModelBase/src/nodes/Node.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "SelectionAtCursorItem.h"
 #include "SelectionAtCursorItemStyle.h"
 
-namespace Visualization {
-	class Text;
-}
 namespace Interaction {
 
-class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::DeclarativeItem<SelectionAtCursorItem>> {
+class INTERACTIONBASE_API ViewSwitcherSelection : public Super<SelectionAtCursorItem>
+{
 
-	ITEM_COMMON(SelectionAtCursorItem)
+		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherSelection, SelectionAtCursorItemStyle)
 
 	public:
-		virtual ~SelectionAtCursorItem();
-
-		Visualization::Item* focusedItem() const;
-		virtual bool hasTextField() const;
-		Visualization::Text* textField() const;
-		void selectItem(Visualization::Item* item);
-		bool executeFocused();
-
-		QPoint indexOf(Model::Node* node) const;
-		QPoint correctCoordinates(QPoint point) const;
-		QVector<QVector<Model::Node*>> currentNodes() const;
-
-		static void initializeForms();
-		virtual int determineForm();
-
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		static void show(QVector<Model::Node*> selectableNodes, Visualization::Item* target);
+		static void hide();
+		static bool isVisible();
 
 	protected:
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
-		virtual bool onSelectNode(Model::Node* node) = 0;
-		virtual bool onSelectText(QString text) = 0;
-		virtual void hideSelection() = 0;
-		Visualization::Item* target() const;
-
-		SelectionAtCursorItem(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
-							  StyleType* style = itemStyles().get());
+		virtual bool onSelectNode(Model::Node* node);
+		virtual bool onSelectText(QString text);
+		virtual void hideSelection();
 
 	private:
-		Visualization::Item* target_{};
-		QPointF mousePosition_;
-		QVector<QVector<Model::Node*>> currentNodes_;
+		static void showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target);
+		static void hideNow();
 
-		Visualization::Item* focusedItem_{};
-		Visualization::Text* textField_{};
+		bool inEditMode_{};
 
-		QGraphicsEffect* selectedEffect_{};
+		ViewSwitcherSelection(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
+							  StyleType* style = itemStyles().get());
 
-		QVector<QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes);
+		static ViewSwitcherSelection* instance;
 };
 
-inline QVector<QVector<Model::Node*>> SelectionAtCursorItem::currentNodes() const { return currentNodes_; }
-inline Visualization::Item* SelectionAtCursorItem::focusedItem() const { return focusedItem_; }
-inline Visualization::Text* SelectionAtCursorItem::textField() const { return textField_; }
-inline Visualization::Item* SelectionAtCursorItem::target() const { return target_; }
+inline bool ViewSwitcherSelection::isVisible() { return instance; }
 
 }

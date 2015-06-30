@@ -51,7 +51,7 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
-#include "vis/SelectionAtCursorItem.h"
+#include "vis/ViewSwitcherSelection.h"
 #include "nodes/ViewSwitcherNode.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
@@ -517,14 +517,14 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
 	{
 		event->accept();
-		if (SelectionAtCursorItem::isVisible())
-			SelectionAtCursorItem::hide();
+		if (ViewSwitcherSelection::isVisible())
+			ViewSwitcherSelection::hide();
 		else
 		{
 			QVector<Model::Node*> nodes;
 			for (auto view : target->scene()->viewItems())
 				nodes.append(new Interaction::ViewSwitcherNode(view->name()));
-			SelectionAtCursorItem::show(nodes, target);
+			ViewSwitcherSelection::show(nodes, target);
 		}
 	}
 	else InteractionHandler::keyPressEvent(target, event);
