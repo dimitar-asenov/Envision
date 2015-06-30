@@ -79,11 +79,11 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CAddInfoNode.h \
     src/handlers/HInfoNode.h \
     src/commands/CToggleInfoEntry.h \
-    src/vis/SelectionAtCursorItem.h \
-    src/vis/SelectionAtCursorItemStyle.h \
     src/vis/ViewSwitcherSelection.h \
     src/nodes/ViewSwitcherEntry.h \
-    src/vis/VViewSwitcherEntry.h
+    src/vis/VViewSwitcherEntry.h \
+    src/vis/Menu.h \
+    src/vis/MenuStyle.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -156,8 +156,8 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CAddInfoNode.cpp \
     src/handlers/HInfoNode.cpp \
     src/commands/CToggleInfoEntry.cpp \
-    src/vis/SelectionAtCursorItem.cpp \
-    src/vis/SelectionAtCursorItemStyle.cpp \
     src/vis/ViewSwitcherSelection.cpp \
     src/nodes/ViewSwitcherEntry.cpp \
-    src/vis/VViewSwitcherEntry.cpp
+    src/vis/VViewSwitcherEntry.cpp \
+    src/vis/Menu.cpp \
+    src/vis/MenuStyle.cpp

@@ -40,7 +40,7 @@
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
 #include "vis/VViewSwitcherEntry.h"
-#include "vis/SelectionAtCursorItem.h"
+#include "vis/Menu.h"
 #include "actions/ActionPrompt.h"
 
 #include "events/DetectMainSceneActivated.h"

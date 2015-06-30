@@ -27,15 +27,15 @@
 
 #include "interactionbase_api.h"
 #include "ModelBase/src/nodes/Node.h"
-#include "SelectionAtCursorItem.h"
-#include "SelectionAtCursorItemStyle.h"
+#include "Menu.h"
+#include "MenuStyle.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API ViewSwitcherSelection : public Super<SelectionAtCursorItem>
+class INTERACTIONBASE_API ViewSwitcherSelection : public Super<Menu>
 {
 
-		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherSelection, SelectionAtCursorItemStyle)
+		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherSelection, MenuStyle)
 
 	public:
 		static void show(QVector<Model::Node*> selectableNodes, Visualization::Item* target);

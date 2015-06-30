@@ -32,10 +32,10 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API SelectionAtCursorItemStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+class INTERACTIONBASE_API MenuStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
 	public:
-		virtual ~SelectionAtCursorItemStyle() override;
+		virtual ~MenuStyle() override;
 
 		Property<Visualization::TextStyle> nameField{this, "nameField"};
 };

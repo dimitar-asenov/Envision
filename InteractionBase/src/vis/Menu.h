@@ -28,7 +28,7 @@
 #include "interactionbase_api.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "SelectionAtCursorItemStyle.h"
+#include "MenuStyle.h"
 
 namespace Visualization {
 	class Text;
@@ -41,12 +41,12 @@ namespace Interaction {
  * associated with the nodes. The interface can also optionally contain a text field
  * which is located above the normal items, where any text can be entered.
  */
-class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::DeclarativeItem<SelectionAtCursorItem>> {
+class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Menu>> {
 
-	ITEM_COMMON(SelectionAtCursorItem)
+	ITEM_COMMON(Menu)
 
 	public:
-		virtual ~SelectionAtCursorItem();
+		virtual ~Menu();
 
 		/**
 		 * Whether this interface has a text field. Reimplement where necessary.
@@ -89,7 +89,7 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 		 */
 		virtual void hideSelection() = 0;
 
-		SelectionAtCursorItem(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
+		Menu(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
 							  StyleType* style = itemStyles().get(), int nrOfColumns = 3);
 
 	private:
@@ -111,8 +111,8 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 
 };
 
-inline QVector<QVector<Model::Node*>> SelectionAtCursorItem::currentNodes() const { return currentNodes_; }
-inline Visualization::Item* SelectionAtCursorItem::focusedItem() const { return focusedItem_; }
-inline Visualization::Text* SelectionAtCursorItem::textField() const { return textField_; }
+inline QVector<QVector<Model::Node*>> Menu::currentNodes() const { return currentNodes_; }
+inline Visualization::Item* Menu::focusedItem() const { return focusedItem_; }
+inline Visualization::Text* Menu::textField() const { return textField_; }
 
 }

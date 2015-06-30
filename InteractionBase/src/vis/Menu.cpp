@@ -23,7 +23,7 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "SelectionAtCursorItem.h"
+#include "Menu.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
@@ -36,9 +36,9 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(SelectionAtCursorItem, "item")
+ITEM_COMMON_DEFINITIONS(Menu, "item")
 
-SelectionAtCursorItem::SelectionAtCursorItem(QVector<Model::Node*> selectableNodes,
+Menu::Menu(QVector<Model::Node*> selectableNodes,
 											 Visualization::Item* target, StyleType* style, int nrOfColumns)
 	: Super(nullptr, style), target_(target), nrOfColumns_(nrOfColumns)
 {
@@ -52,7 +52,7 @@ SelectionAtCursorItem::SelectionAtCursorItem(QVector<Model::Node*> selectableNod
 	}
 }
 
-SelectionAtCursorItem::~SelectionAtCursorItem()
+Menu::~Menu()
 {
 	//Move the cursor to original owner
 	target_->moveCursor();
@@ -67,7 +67,7 @@ SelectionAtCursorItem::~SelectionAtCursorItem()
 	selectedEffect_ = nullptr;
 }
 
-void SelectionAtCursorItem::initializeForms()
+void Menu::initializeForms()
 {
 	auto nodeGrid = (new Visualization::DynamicGridFormElement())
 			->setSpacing(5, 5)
@@ -86,17 +86,17 @@ void SelectionAtCursorItem::initializeForms()
 			->put(0, 1, nodeGrid));
 }
 
-int SelectionAtCursorItem::determineForm()
+int Menu::determineForm()
 {
 	return hasTextField() ? 1 : 0;
 }
 
-bool SelectionAtCursorItem::hasTextField() const
+bool Menu::hasTextField() const
 {
 	return true;
 }
 
-void SelectionAtCursorItem::selectItem(Visualization::Item *item)
+void Menu::selectItem(Visualization::Item *item)
 {
 	if (focusedItem() && focusedItem() != textField())
 	{
@@ -114,7 +114,7 @@ void SelectionAtCursorItem::selectItem(Visualization::Item *item)
 	focusedItem_ = item;
 }
 
-bool SelectionAtCursorItem::executeFocused()
+bool Menu::executeFocused()
 {
 	if (hasTextField() && focusedItem() == textField())
 		return onSelectText(textField()->text());
@@ -123,7 +123,7 @@ bool SelectionAtCursorItem::executeFocused()
 	return false;
 }
 
-QPoint SelectionAtCursorItem::indexOf(Model::Node *node) const
+QPoint Menu::indexOf(Model::Node *node) const
 {
 	for (int col = 0; col < currentNodes_.size(); col++)
 		for (int row = 0; row < currentNodes_[col].size(); row++)
@@ -132,7 +132,7 @@ QPoint SelectionAtCursorItem::indexOf(Model::Node *node) const
 	return QPoint(-1, -1);
 }
 
-QPoint SelectionAtCursorItem::correctCoordinates(QPoint point) const
+QPoint Menu::correctCoordinates(QPoint point) const
 {
 	QPoint result = point;
 	if (point.x() < 0)
@@ -146,7 +146,7 @@ QPoint SelectionAtCursorItem::correctCoordinates(QPoint point) const
 	return result;
 }
 
-void SelectionAtCursorItem::determineChildren()
+void Menu::determineChildren()
 {
 	Super::determineChildren();
 	Item* defaultProxy{};
@@ -159,13 +159,13 @@ void SelectionAtCursorItem::determineChildren()
 		selectItem(defaultProxy);
 }
 
-void SelectionAtCursorItem::updateGeometry(int availableWidth, int availableHeight)
+void Menu::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
 	setPos(mousePosition_.x() - widthInScene() / 2, mousePosition_.y() - heightInScene() / 2);
 }
 
-bool SelectionAtCursorItem::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
+bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 {
 	if (event->type() == QEvent::KeyPress)
 	{
@@ -225,7 +225,7 @@ bool SelectionAtCursorItem::sceneEventFilter(QGraphicsItem* watched, QEvent* eve
 	return false;
 }
 
-QVector<QVector<Model::Node*>> SelectionAtCursorItem::arrange(QVector<Model::Node*> nodes)
+QVector<QVector<Model::Node*>> Menu::arrange(QVector<Model::Node*> nodes)
 {
 	QVector<QVector<Model::Node*>> result;
 	result.resize(std::min(nrOfColumns_, nodes.size()));

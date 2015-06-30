@@ -24,10 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "SelectionAtCursorItemStyle.h"
+#include "MenuStyle.h"
 
 namespace Interaction {
 
-SelectionAtCursorItemStyle::~SelectionAtCursorItemStyle(){}
+MenuStyle::~MenuStyle(){}
 
 }
