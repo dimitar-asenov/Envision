@@ -39,10 +39,15 @@ namespace Interaction {
 ITEM_COMMON_DEFINITIONS(Menu, "item")
 
 Menu::Menu(QVector<Model::Node*> selectableNodes,
-											 Visualization::Item* target, StyleType* style, int nrOfColumns)
-	: Super(nullptr, style), target_(target), nrOfColumns_(nrOfColumns)
+			Visualization::Item* target, StyleType* style, int nrOfColumns)
+	: Menu(arrange(selectableNodes, nrOfColumns), target, style)
 {
-	currentNodes_ = arrange(selectableNodes);
+}
+
+Menu::Menu(QVector<QVector<Model::Node *> > selectableNodes,
+			Visualization::Item *target, StyleType *style)
+	: Super(nullptr, style), target_(target), currentNodes_(selectableNodes)
+{
 	mousePosition_ = target->scene()->lastMouseHoverPosition();
 	selectedEffect_ = new QGraphicsColorizeEffect();
 	if (hasTextField())
@@ -225,13 +230,13 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 	return false;
 }
 
-QVector<QVector<Model::Node*>> Menu::arrange(QVector<Model::Node*> nodes)
+QVector<QVector<Model::Node*>> Menu::arrange(QVector<Model::Node*> nodes, int nrOfColumns)
 {
 	QVector<QVector<Model::Node*>> result;
-	result.resize(std::min(nrOfColumns_, nodes.size()));
+	result.resize(std::min(nrOfColumns, nodes.size()));
 	for (int index = 0; index < nodes.size(); index++)
 	{
-		int column = index % nrOfColumns_;
+		int column = index % nrOfColumns;
 		result[column].append(nodes[index]);
 	}
 	return result;

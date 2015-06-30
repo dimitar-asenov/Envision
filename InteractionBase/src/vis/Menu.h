@@ -93,11 +93,13 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 
 		Menu(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
 							  StyleType* style = itemStyles().get(), int nrOfColumns = 3);
+		Menu(QVector<QVector<Model::Node*>> selectableNodes, Visualization::Item* target,
+							  StyleType* style = itemStyles().get());
 
 	private:
 		QPoint correctCoordinates(QPoint point) const;
 		QVector<QVector<Model::Node*>> currentNodes() const;
-		QVector<QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes);
+		static QVector<QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes, int nrOfColumns);
 
 		Visualization::Item* target_{};
 		QPointF mousePosition_;
@@ -107,8 +109,6 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		Visualization::Text* textField_{};
 
 		QGraphicsEffect* selectedEffect_{};
-
-		int nrOfColumns_{};
 
 };
 
