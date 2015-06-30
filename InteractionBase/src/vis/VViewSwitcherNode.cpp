@@ -27,6 +27,8 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "vis/TextAndDescription.h"
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
@@ -35,13 +37,45 @@ ITEM_COMMON_DEFINITIONS(VViewSwitcherNode, "item")
 VViewSwitcherNode::VViewSwitcherNode(Visualization::Item* parent, NodeType* node, const StyleType* style) :
 		Super(parent, node, style)
 {
-	text_ = new TextAndDescription(this);
-	text_->setContents(node->viewName(), QString());
+	initNonEditable();
 }
 
 void VViewSwitcherNode::initializeForms()
 {
-	addForm(item(&I::text_));
+	addForm(item(&I::nonEditable_));
+	addForm(item(&I::editable_));
+}
+
+void VViewSwitcherNode::setNameEditable(bool editable)
+{
+	if (!editable)
+	{
+		scene()->viewItem(node()->viewName())->setName(editable_->text());
+		node()->setViewName(editable_->text());
+	}
+	//TODO@cyril Is there a way to make this initialization automatic? Or not always destroy the items?
+	if (editable && editable != nameEditable_)
+		initEditable();
+	else if (editable != nameEditable_)
+		initNonEditable();
+	nameEditable_ = editable;
+}
+
+int VViewSwitcherNode::determineForm()
+{
+	return nameEditable_ ? 1 : 0;
+}
+
+void VViewSwitcherNode::initNonEditable()
+{
+	nonEditable_ = new TextAndDescription(this);
+	nonEditable_->setContents(node()->viewName(), QString());
+}
+
+void VViewSwitcherNode::initEditable()
+{
+	editable_ = new Visualization::Text(this, node()->viewName());
+	editable_->setEditable(true);
 }
 
 }

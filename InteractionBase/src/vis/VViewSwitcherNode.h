@@ -29,7 +29,7 @@
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "nodes/ViewSwitcherNode.h"
-
+#include "VisualizationBase/src/items/Text.h"
 
 namespace Interaction {
 
@@ -46,9 +46,22 @@ class INTERACTIONBASE_API VViewSwitcherNode :
 						   const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
+		virtual int determineForm() override;
+
+		bool isNameEditable() const;
+		void setNameEditable(bool editable);
+		Visualization::Item* editableName() const;
 
 	private:
-		TextAndDescription* text_{};
+		TextAndDescription* nonEditable_{};
+		Visualization::Text* editable_{};
+		void initNonEditable();
+		void initEditable();
+
+		bool nameEditable_{};
 };
+
+inline Visualization::Item* VViewSwitcherNode::editableName() const { return editable_; }
+inline bool VViewSwitcherNode::isNameEditable() const { return nameEditable_; }
 
 }
