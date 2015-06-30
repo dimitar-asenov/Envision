@@ -20,6 +20,7 @@ SUBDIRS= Core \
 	CppImport \
 	Comments \
 	AlloyIntegration \
-        OODebug
+        OODebug \
+        InformationScripting
 CONFIG+=debug_and_release
 CONFIG+=ordered
