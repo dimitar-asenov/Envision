@@ -52,6 +52,8 @@ class INTERACTIONBASE_API VViewSwitcherNode :
 		void setNameEditable(bool editable);
 		Visualization::Item* editableName() const;
 
+		virtual void determineChildren() override;
+
 	private:
 		TextAndDescription* nonEditable_{};
 		Visualization::Text* editable_{};
@@ -59,6 +61,7 @@ class INTERACTIONBASE_API VViewSwitcherNode :
 		void initEditable();
 
 		bool nameEditable_{};
+		bool recentlyChanged_{};
 };
 
 inline Visualization::Item* VViewSwitcherNode::editableName() const { return editable_; }

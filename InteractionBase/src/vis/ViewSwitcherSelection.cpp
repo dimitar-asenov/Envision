@@ -91,16 +91,16 @@ bool ViewSwitcherSelection::sceneEventFilter(QGraphicsItem *watched, QEvent *eve
 	else if (event->type() == QEvent::KeyPress)
 	{
 		auto keyEvent = static_cast<QKeyEvent*>(event);
-		if (keyEvent->key() == Qt::Key_F2)
+		auto asSwitcher = DCast<VViewSwitcherNode>(focusedItem());
+		if (asSwitcher && (keyEvent->key() == Qt::Key_F2
+				|| (keyEvent->key() == Qt::Key_Return && inEditMode_)))
 		{
-			if (auto asSwitcher = DCast<VViewSwitcherNode>(focusedItem()))
-			{
-				asSwitcher->setNameEditable(!(asSwitcher->isNameEditable()));
-				inEditMode_ = asSwitcher->isNameEditable();
-				if (!inEditMode_)	selectItem(asSwitcher);
-				asSwitcher->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				return true;
-			}
+			asSwitcher->setNameEditable(!(asSwitcher->isNameEditable()));
+			inEditMode_ = asSwitcher->isNameEditable();
+			if (!inEditMode_)	selectItem(asSwitcher);
+			else focusedItem()->setGraphicsEffect(nullptr);
+			asSwitcher->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			return true;
 		}
 	}
 	return false;

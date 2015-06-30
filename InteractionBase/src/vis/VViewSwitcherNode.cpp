@@ -30,6 +30,8 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
+#include "VisualizationBase/src/cursor/TextCursor.h"
+
 namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(VViewSwitcherNode, "item")
@@ -59,11 +61,24 @@ void VViewSwitcherNode::setNameEditable(bool editable)
 	else if (editable != nameEditable_)
 		initNonEditable();
 	nameEditable_ = editable;
+	recentlyChanged_ = true;
 }
 
 int VViewSwitcherNode::determineForm()
 {
 	return nameEditable_ ? 1 : 0;
+}
+
+void VViewSwitcherNode::determineChildren()
+{
+	Super::determineChildren();
+	//If we recently made this editable, just select the entire text
+	if (nameEditable_ && recentlyChanged_)
+	{
+		editable_->moveCursor();
+		editable_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+	}
+	recentlyChanged_ = false;
 }
 
 void VViewSwitcherNode::initNonEditable()
