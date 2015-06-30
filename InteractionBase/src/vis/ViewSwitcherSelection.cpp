@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 #include "ViewSwitcherSelection.h"
 
-#include "nodes/ViewSwitcherNode.h"
+#include "nodes/ViewSwitcherEntry.h"
 #include "vis/VViewSwitcherNode.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
@@ -115,7 +115,7 @@ bool ViewSwitcherSelection::sceneEventFilter(QGraphicsItem *watched, QEvent *eve
 bool ViewSwitcherSelection::onSelectNode(Model::Node *node)
 {
 	if (inEditMode_) return false;
-	if (auto asSwitcher = DCast<ViewSwitcherNode>(node))
+	if (auto asSwitcher = DCast<ViewSwitcherEntry>(node))
 	{
 		auto view = scene()->viewItem(asSwitcher->viewName());
 		if (!view)

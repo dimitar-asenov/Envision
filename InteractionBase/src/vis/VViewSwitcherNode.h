@@ -28,7 +28,7 @@
 #include "interactionbase_api.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "nodes/ViewSwitcherNode.h"
+#include "nodes/ViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/Text.h"
 
 namespace Interaction {
@@ -37,7 +37,7 @@ class TextAndDescription;
 
 class INTERACTIONBASE_API VViewSwitcherNode :
 		public Super<Visualization::ItemWithNode<VViewSwitcherNode,
-			Visualization::DeclarativeItem<VViewSwitcherNode>, ViewSwitcherNode>>
+			Visualization::DeclarativeItem<VViewSwitcherNode>, ViewSwitcherEntry>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherNode, Visualization::DeclarativeItemBaseStyle)
 

@@ -32,7 +32,7 @@
 #include "VisualizationBase/src/cursor/TextCursor.h"
 #include "QGraphicsColorizeEffect"
 #include "VisualizationBase/src/items/Item.h"
-#include "nodes/ViewSwitcherNode.h"
+#include "nodes/ViewSwitcherEntry.h"
 
 namespace Interaction {
 
