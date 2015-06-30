@@ -39,8 +39,8 @@ namespace Interaction {
 ITEM_COMMON_DEFINITIONS(SelectionAtCursorItem, "item")
 
 SelectionAtCursorItem::SelectionAtCursorItem(QVector<Model::Node*> selectableNodes,
-											 Visualization::Item* target, StyleType* style)
-	: Super(nullptr, style), target_(target)
+											 Visualization::Item* target, StyleType* style, int nrOfColumns)
+	: Super(nullptr, style), target_(target), nrOfColumns_(nrOfColumns)
 {
 	currentNodes_ = arrange(selectableNodes);
 	mousePosition_ = target->scene()->lastMouseHoverPosition();
@@ -228,10 +228,10 @@ bool SelectionAtCursorItem::sceneEventFilter(QGraphicsItem* watched, QEvent* eve
 QVector<QVector<Model::Node*>> SelectionAtCursorItem::arrange(QVector<Model::Node*> nodes)
 {
 	QVector<QVector<Model::Node*>> result;
-	result.resize(std::min(3, nodes.size()));
+	result.resize(std::min(nrOfColumns_, nodes.size()));
 	for (int index = 0; index < nodes.size(); index++)
 	{
-		int column = index % 3;
+		int column = index % nrOfColumns_;
 		result[column].append(nodes[index]);
 	}
 	return result;

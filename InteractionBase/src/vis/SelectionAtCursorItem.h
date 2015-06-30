@@ -90,7 +90,7 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 		virtual void hideSelection() = 0;
 
 		SelectionAtCursorItem(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
-							  StyleType* style = itemStyles().get());
+							  StyleType* style = itemStyles().get(), int nrOfColumns = 3);
 
 	private:
 		QPoint indexOf(Model::Node* node) const;
@@ -106,6 +106,8 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 		Visualization::Text* textField_{};
 
 		QGraphicsEffect* selectedEffect_{};
+
+		int nrOfColumns_{};
 
 };
 
