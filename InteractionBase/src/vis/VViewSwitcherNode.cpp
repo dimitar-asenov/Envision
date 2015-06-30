@@ -26,6 +26,7 @@
 #include "VViewSwitcherNode.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "vis/TextAndDescription.h"
 
 namespace Interaction {
 
@@ -34,7 +35,13 @@ ITEM_COMMON_DEFINITIONS(VViewSwitcherNode, "item")
 VViewSwitcherNode::VViewSwitcherNode(Visualization::Item* parent, NodeType* node, const StyleType* style) :
 		Super(parent, node, style)
 {
-	Super::setContents(node->viewName(), QString());
+	text_ = new TextAndDescription(this);
+	text_->setContents(node->viewName(), QString());
+}
+
+void VViewSwitcherNode::initializeForms()
+{
+	addForm(item(&I::text_));
 }
 
 }

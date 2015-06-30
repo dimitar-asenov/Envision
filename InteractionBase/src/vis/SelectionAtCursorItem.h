@@ -40,16 +40,14 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 	ITEM_COMMON(SelectionAtCursorItem)
 
 	public:
-		using OnSelectAction = void (*) (Model::Node* selected, Visualization::Item* target);
-		using OnTextAction = void (*) (QString text, Visualization::Item* target);
-
-		static void show(QVector<Model::Node*> selectableNodes, const OnSelectAction onSelect, Visualization::Item* target,
-						 bool hasTextField = false, const OnTextAction onText = nullptr);
+		static void show(QVector<Model::Node*> selectableNodes, Visualization::Item* target);
 		static void hide();
 		static bool isVisible();
 
+		virtual ~SelectionAtCursorItem();
+
 		Visualization::Item* focusedItem() const;
-		bool hasTextField() const;
+		virtual bool hasTextField() const;
 		Visualization::Text* textField() const;
 		void selectItem(Visualization::Item* item);
 		void executeFocused();
@@ -61,23 +59,28 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 		static void initializeForms();
 		virtual int determineForm();
 
+		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
+	protected:
+		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
+		virtual void onSelectNode(Model::Node* node);
+		virtual void onSelectText(QString text);
+
 	private:
-		SelectionAtCursorItem(Visualization::Item* target, QVector<Model::Node*> selectableNodes,
-							  const OnSelectAction onSelect, bool hasTextField, const OnTextAction onText,
+		static void showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target);
+		static void hideNow();
+
+		SelectionAtCursorItem(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 
 		static SelectionAtCursorItem* instance;
 
 		Visualization::Item* target_{};
-		OnSelectAction onSelect_{};
-		OnTextAction onText_{};
 		QPointF mousePosition_;
 		QVector<QVector<Model::Node*>> currentNodes_;
 
 		Visualization::Item* focusedItem_{};
-		bool hasTextField_{};
 		Visualization::Text* textField_{};
 
 		QGraphicsEffect* selectedEffect_{};
@@ -89,6 +92,5 @@ inline QVector<QVector<Model::Node*>> SelectionAtCursorItem::currentNodes() cons
 inline bool SelectionAtCursorItem::isVisible() { return instance; }
 inline Visualization::Item* SelectionAtCursorItem::focusedItem() const { return focusedItem_; }
 inline Visualization::Text* SelectionAtCursorItem::textField() const { return textField_; }
-inline bool SelectionAtCursorItem::hasTextField() const { return hasTextField_; }
 
 }

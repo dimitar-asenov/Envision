@@ -26,7 +26,6 @@
 #pragma once
 
 #include "interactionbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 

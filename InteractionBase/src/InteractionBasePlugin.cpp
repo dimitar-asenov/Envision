@@ -36,7 +36,6 @@
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
 #include "handlers/HInfoNode.h"
-#include "handlers/HSelectionAtCursorItem.h"
 
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
@@ -93,7 +92,6 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::VInfoNode::setDefaultClassHandler(HInfoNode::instance());
 	CommandPrompt::setDefaultClassHandler(HCommandPrompt::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
-	SelectionAtCursorItem::setDefaultClassHandler(HSelectionAtCursorItem::instance());
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.
 	if (!envisionManager.areSelfTestsPending())

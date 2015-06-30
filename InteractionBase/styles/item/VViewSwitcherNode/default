@@ -1,2 +1,2 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/TextAndDescription/default" />
+<style prototypes="item/DeclarativeItemBase/default" />

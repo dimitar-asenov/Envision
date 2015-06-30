@@ -29,18 +29,26 @@
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "nodes/ViewSwitcherNode.h"
-#include "vis/TextAndDescription.h"
+
 
 namespace Interaction {
 
+class TextAndDescription;
+
 class INTERACTIONBASE_API VViewSwitcherNode :
-		public Super<Visualization::ItemWithNode<VViewSwitcherNode, TextAndDescription, ViewSwitcherNode>>
+		public Super<Visualization::ItemWithNode<VViewSwitcherNode,
+			Visualization::DeclarativeItem<VViewSwitcherNode>, ViewSwitcherNode>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherNode, TextAndDescriptionStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherNode, Visualization::DeclarativeItemBaseStyle)
 
 	public:
 		VViewSwitcherNode(Visualization::Item* parent, NodeType* node,
 						   const StyleType* style = itemStyles().get());
+
+		static void initializeForms();
+
+	private:
+		TextAndDescription* text_{};
 };
 
 }

@@ -81,7 +81,6 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CToggleInfoEntry.h \
     src/vis/SelectionAtCursorItem.h \
     src/vis/SelectionAtCursorItemStyle.h \
-    src/handlers/HSelectionAtCursorItem.h \
     src/nodes/ViewSwitcherNode.h \
     src/vis/VViewSwitcherNode.h
 SOURCES += src/commands/CommandWithFlags.cpp \
@@ -158,6 +157,5 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CToggleInfoEntry.cpp \
     src/vis/SelectionAtCursorItem.cpp \
     src/vis/SelectionAtCursorItemStyle.cpp \
-    src/handlers/HSelectionAtCursorItem.cpp \
     src/nodes/ViewSwitcherNode.cpp \
     src/vis/VViewSwitcherNode.cpp

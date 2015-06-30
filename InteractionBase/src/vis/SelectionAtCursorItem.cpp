@@ -31,6 +31,8 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
 #include "QGraphicsColorizeEffect"
+#include "VisualizationBase/src/items/Item.h"
+#include "nodes/ViewSwitcherNode.h"
 
 namespace Interaction {
 
@@ -38,35 +40,66 @@ ITEM_COMMON_DEFINITIONS(SelectionAtCursorItem, "item")
 
 SelectionAtCursorItem* SelectionAtCursorItem::instance{};
 
-void SelectionAtCursorItem::show(QVector<Model::Node*> selectableNodes, const OnSelectAction onSelect, Item *target,
-								 bool hasTextField, const OnTextAction onText)
+void SelectionAtCursorItem::show(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
 {
-	if (instance)
-		instance->scene()->removeTopLevelItem(instance);
-	instance = new SelectionAtCursorItem(target, selectableNodes, onSelect, hasTextField, onText);
+	QApplication::postEvent(target->scene(),
+							new Visualization::CustomSceneEvent( [=]() { showNow(selectableNodes, target); }));
 }
 
 void SelectionAtCursorItem::hide()
 {
 	if (instance)
+		QApplication::postEvent(instance->scene(),
+								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
+}
+
+void SelectionAtCursorItem::showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
+{
+	SelectionAtCursorItem::hideNow();
+	instance = new SelectionAtCursorItem(selectableNodes, target);
+	target->scene()->addTopLevelItem(instance);
+	instance->installSceneEventFilter(instance);
+	instance->setFiltersChildEvents(true);
+}
+
+void SelectionAtCursorItem::hideNow()
+{
+	if (instance)
+	{
+		instance->removeSceneEventFilter(instance);
 		instance->scene()->removeTopLevelItem(instance);
+	}
+	SAFE_DELETE_ITEM(instance);
 	instance = nullptr;
 }
 
-SelectionAtCursorItem::SelectionAtCursorItem(Visualization::Item* target, QVector<Model::Node*> selectableNodes,
-		const OnSelectAction onSelect, bool hasTextField, const OnTextAction onText, StyleType* style)
-	: Super(nullptr, style), target_(target), onSelect_(onSelect), onText_(onText), hasTextField_(hasTextField)
+SelectionAtCursorItem::SelectionAtCursorItem(QVector<Model::Node*> selectableNodes,
+											 Visualization::Item* target, StyleType* style)
+	: Super(nullptr, style), target_(target)
 {
 	currentNodes_ = arrange(selectableNodes);
-	target->scene()->addTopLevelItem(this);
 	mousePosition_ = target->scene()->lastMouseHoverPosition();
 	selectedEffect_ = new QGraphicsColorizeEffect();
-	if (hasTextField)
+	if (hasTextField())
 	{
 		textField_ = new Visualization::Text(this, &style->nameField(), "Enter name here");
 		textField_->setEditable(true);
-		selectItem(textField_);
 	}
+}
+
+SelectionAtCursorItem::~SelectionAtCursorItem()
+{
+	//Move the cursor to original owner
+	target_->moveCursor();
+	//Shouldn't be destroyed
+	target_ = nullptr;
+	//Destroyed by DeclarativeItem
+	focusedItem_ = nullptr;
+	textField_ = nullptr;
+	//Destroyed when the focused item is destroyed
+	if (!focusedItem() || focusedItem()->graphicsEffect() != selectedEffect_)
+		SAFE_DELETE(selectedEffect_);
+	selectedEffect_ = nullptr;
 }
 
 void SelectionAtCursorItem::initializeForms()
@@ -93,6 +126,11 @@ int SelectionAtCursorItem::determineForm()
 	return hasTextField() ? 1 : 0;
 }
 
+bool SelectionAtCursorItem::hasTextField() const
+{
+	return true;
+}
+
 void SelectionAtCursorItem::selectItem(Visualization::Item *item)
 {
 	if (focusedItem() && focusedItem() != textField())
@@ -113,10 +151,22 @@ void SelectionAtCursorItem::selectItem(Visualization::Item *item)
 
 void SelectionAtCursorItem::executeFocused()
 {
-	if (hasTextField() && focusedItem() == textField() && onText_)
-		onText_(textField()->text(), target_);
-	else if (focusedItem() && onSelect_)
-		onSelect_(focusedItem()->node(), target_);
+	if (hasTextField() && focusedItem() == textField())
+		onSelectText(textField()->text());
+	else if (focusedItem())
+		onSelectNode(focusedItem()->node());
+}
+
+void SelectionAtCursorItem::onSelectNode(Model::Node *node)
+{
+	if (auto asSwitcher = DCast<ViewSwitcherNode>(node))
+		scene()->switchToView(asSwitcher->viewName());
+}
+
+void SelectionAtCursorItem::onSelectText(QString text)
+{
+	auto newView = scene()->newViewItem(text);
+	scene()->switchToView(newView);
 }
 
 QPoint SelectionAtCursorItem::indexOf(Model::Node *node) const
@@ -132,25 +182,90 @@ QPoint SelectionAtCursorItem::correctCoordinates(QPoint point) const
 {
 	QPoint result = point;
 	if (point.x() < 0)
-		result.setX(0);
-	if (point.x() >= currentNodes_.size())
 		result.setX(currentNodes_.size() - 1);
+	if (point.x() >= currentNodes_.size())
+		result.setX(0);
 	if (point.y() < 0)
-		result.setY(0);
+		result.setY(currentNodes_[point.x()].size() - 1);
 	if (point.y() >= currentNodes_[result.x()].size())
-		result.setY(currentNodes_[result.x()].size() - 1);
+		result.setY(0);
 	return result;
+}
+
+void SelectionAtCursorItem::determineChildren()
+{
+	Super::determineChildren();
+	Item* defaultProxy{};
+	if (hasTextField())
+		setDefaultMoveCursorProxy(defaultProxy = textField_);
+	else
+		setDefaultMoveCursorProxy(defaultProxy = findVisualizationOf(currentNodes()[0][0]));
+	//TODO@cyril doing this in show doesn't work -> the grid does not have items yet
+	if (!focusedItem_)
+		selectItem(defaultProxy);
 }
 
 void SelectionAtCursorItem::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
 	setPos(mousePosition_.x() - widthInScene() / 2, mousePosition_.y() - heightInScene() / 2);
-	if (!focusedItem())
-		selectItem(findVisualizationOf(currentNodes()[0][0]));
 }
 
-QVector<QVector<Model::Node*>> SelectionAtCursorItem::arrange(QVector<Model::Node *> nodes)
+bool SelectionAtCursorItem::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
+{
+	if (event->type() == QEvent::KeyPress)
+	{
+		auto keyEvent = static_cast<QKeyEvent*>(event);event->accept();
+		if (keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Up
+			|| keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
+		{
+			//If currently the name is selected, and down key is pressed -> select the item below
+			if (focusedItem() == textField() && keyEvent->key() == Qt::Key_Down)
+				selectItem(findVisualizationOf(currentNodes()[0][0]));
+			//If an item in the top row is selected, and up key is pressed -> select the name
+			else if (focusedItem() != textField() && indexOf(focusedItem()->node()).y() == 0
+					 && keyEvent->key() == Qt::Key_Up && hasTextField())
+				selectItem(textField());
+			//Otherwise just switch between the normal items
+			else if (focusedItem() != textField() || !hasTextField())
+			{
+				auto pos = indexOf(focusedItem()->node());
+				if (keyEvent->key() == Qt::Key_Down)
+					pos.setY(pos.y() + 1);
+				else if (keyEvent->key() == Qt::Key_Up)
+					pos.setY(pos.y() - 1);
+				else if (keyEvent->key() == Qt::Key_Left)
+					pos.setX(pos.x() - 1);
+				else
+					pos.setX(pos.x() + 1);
+				pos = correctCoordinates(pos);
+				selectItem(findVisualizationOf(currentNodes()[pos.x()][pos.y()]));
+			}
+			return true;
+		}
+		else if (keyEvent->key() == Qt::Key_Return)
+		{
+			executeFocused();
+			SelectionAtCursorItem::hide();
+			return true;
+		}
+	}
+	else if (event->type() == QEvent::GraphicsSceneMousePress)
+	{
+		auto asItem = Visualization::Item::envisionItem(watched);
+		asItem = asItem ? asItem->findAncestorWithNode() : asItem;
+		if (asItem && isAncestorOf(watched))
+		{
+			selectItem(asItem);
+			executeFocused();
+			SelectionAtCursorItem::hide();
+			return true;
+		}
+	}
+	return false;
+}
+
+QVector<QVector<Model::Node*>> SelectionAtCursorItem::arrange(QVector<Model::Node*> nodes)
 {
 	QVector<QVector<Model::Node*>> result;
 	result.resize(std::min(3, nodes.size()));

@@ -51,7 +51,7 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
-#include "vis//SelectionAtCursorItem.h"
+#include "vis/SelectionAtCursorItem.h"
 #include "nodes/ViewSwitcherNode.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
@@ -514,7 +514,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		scene->scheduleUpdate();
 	}
-	else if (event->key() == Qt::Key_F12)
+	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
 	{
 		event->accept();
 		if (SelectionAtCursorItem::isVisible())
@@ -524,21 +524,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			QVector<Model::Node*> nodes;
 			for (auto view : target->scene()->viewItems())
 				nodes.append(new Interaction::ViewSwitcherNode(view->name()));
-
-			SelectionAtCursorItem::OnSelectAction onSelect =
-					[](Model::Node* node, Visualization::Item* target)
-					{
-						auto asSelect = DCast<Interaction::ViewSwitcherNode>(node);
-						target->scene()->switchToView(asSelect->viewName());
-					};
-			SelectionAtCursorItem::OnTextAction onText =
-					[](QString text, Visualization::Item* target)
-					{
-						auto newView = target->scene()->newViewItem(text);
-						target->scene()->switchToView(newView);
-					};
-
-			SelectionAtCursorItem::show(nodes, onSelect, target, true, onText);
+			SelectionAtCursorItem::show(nodes, target);
 		}
 	}
 	else InteractionHandler::keyPressEvent(target, event);
@@ -652,10 +638,7 @@ void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsScene
 	}
 
 	if (event->modifiers() == Qt::NoModifier)
-	{
 		target->moveCursor(Visualization::Item::MoveOnPosition, event->pos().toPoint());
-		event->ignore();
-	}
 	else if (event->button() == Qt::RightButton) {} // Accept the event
 	else event->ignore();
 }
