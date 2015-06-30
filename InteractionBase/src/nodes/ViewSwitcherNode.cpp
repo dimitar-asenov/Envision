@@ -23,33 +23,33 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#pragma once
 
-#include "interactionbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ViewSwitcherNode.h"
 
-DECLARE_TYPED_LIST(INTERACTIONBASE_API, Interaction, ViewSelectionNode)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(Interaction::ViewSwitcherNode)
 
 namespace Interaction {
 
-class INTERACTIONBASE_API ViewSelectionNode : public Super<Model::Node>
+DEFINE_TYPE_ID_DERIVED(ViewSwitcherNode, "ViewSwitcherNode", )
+
+ViewSwitcherNode::ViewSwitcherNode(QString viewName)
+	:Super(nullptr), viewName_(viewName)
 {
-	DECLARE_TYPE_ID
+}
 
-	public:
-		ViewSelectionNode(QString viewName);
+void ViewSwitcherNode::save(Model::PersistentStore &) const
+{
+	Q_ASSERT(false);
+}
 
-		QString viewName() const;
-
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
-	private:
-		QString viewName_;
-
-};
-
-inline QString ViewSelectionNode::viewName() const { return viewName_; }
+void ViewSwitcherNode::load(Model::PersistentStore &)
+{
+	Q_ASSERT(false);
+}
+//Class methods
+void ViewSwitcherNode::initType()
+{
+}
 
 }

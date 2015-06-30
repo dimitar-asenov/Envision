@@ -23,24 +23,18 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#pragma once
+#include "VViewSwitcherNode.h"
 
-#include "interactionbase_api.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "nodes/ViewSelectionNode.h"
-#include "vis/TextAndDescription.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API VViewSelectionNode :
-		public Super<Visualization::ItemWithNode<VViewSelectionNode, TextAndDescription, ViewSelectionNode>>
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VViewSelectionNode, TextAndDescriptionStyle)
+ITEM_COMMON_DEFINITIONS(VViewSwitcherNode, "item")
 
-	public:
-		VViewSelectionNode(Visualization::Item* parent, NodeType* node,
-						   const StyleType* style = itemStyles().get());
-};
+VViewSwitcherNode::VViewSwitcherNode(Visualization::Item* parent, NodeType* node, const StyleType* style) :
+		Super(parent, node, style)
+{
+	Super::setContents(node->viewName(), QString());
+}
 
 }

@@ -52,7 +52,7 @@
 #include "Comments/src/nodes/CommentNode.h"
 
 #include "vis//SelectionAtCursorItem.h"
-#include "nodes/ViewSelectionNode.h"
+#include "nodes/ViewSwitcherNode.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
@@ -523,12 +523,12 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		{
 			QVector<Model::Node*> nodes;
 			for (auto view : target->scene()->viewItems())
-				nodes.append(new Interaction::ViewSelectionNode(view->name()));
+				nodes.append(new Interaction::ViewSwitcherNode(view->name()));
 
 			SelectionAtCursorItem::OnSelectAction onSelect =
 					[](Model::Node* node, Visualization::Item* target)
 					{
-						auto asSelect = DCast<Interaction::ViewSelectionNode>(node);
+						auto asSelect = DCast<Interaction::ViewSwitcherNode>(node);
 						target->scene()->switchToView(asSelect->viewName());
 					};
 			SelectionAtCursorItem::OnTextAction onText =

@@ -23,33 +23,33 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#pragma once
 
-#include "ViewSelectionNode.h"
+#include "interactionbase_api.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Interaction::ViewSelectionNode)
+DECLARE_TYPED_LIST(INTERACTIONBASE_API, Interaction, ViewSwitcherNode)
 
 namespace Interaction {
 
-DEFINE_TYPE_ID_DERIVED(ViewSelectionNode, "ViewSelectionNode", )
+class INTERACTIONBASE_API ViewSwitcherNode : public Super<Model::Node>
+{
+	DECLARE_TYPE_ID
 
-ViewSelectionNode::ViewSelectionNode(QString viewName)
-	:Super(nullptr), viewName_(viewName)
-{
-}
+	public:
+		ViewSwitcherNode(QString viewName);
 
-void ViewSelectionNode::save(Model::PersistentStore &) const
-{
-	Q_ASSERT(false);
-}
+		QString viewName() const;
 
-void ViewSelectionNode::load(Model::PersistentStore &)
-{
-	Q_ASSERT(false);
-}
-//Class methods
-void ViewSelectionNode::initType()
-{
-}
+		virtual void save(Model::PersistentStore& store) const;
+		virtual void load(Model::PersistentStore& store);
+	private:
+		QString viewName_;
+
+};
+
+inline QString ViewSwitcherNode::viewName() const { return viewName_; }
 
 }
