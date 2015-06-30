@@ -50,6 +50,8 @@
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 
+#include <iostream>
+
 #ifdef slots
 #undef slots
 #define PYTHONQT_RESTORE_KEYWORDS

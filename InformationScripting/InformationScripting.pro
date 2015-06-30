@@ -22,11 +22,20 @@ HEADERS += src/precompiled.h \
     src/InformationScriptingException.h \
 	src/informationscripting_api.h \
     src/InformationScriptingPlugin.h \
-    src/commands/CScript.h
+    src/commands/CScript.h \
+    src/helpers/BoostPythonHelpers.h \
+    src/wrappers/AstApi.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
-    src/commands/CScript.cpp
+    src/commands/CScript.cpp \
+    src/helpers/BoostPythonHelpers.cpp \
+    src/wrappers/AstApi.cpp
+
+# HACK to only include the AstApi_Generated file if it exists.
+exists(src/wrappers/AstApi_Generated.cpp): {
+    DEFINES+=AST_API_GENERATED
+}
 
 
 QT += qml

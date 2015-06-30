@@ -24,64 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "CScript.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Method.h"
-
-#include "../wrappers/AstApi.h"
-#include "../helpers/BoostPythonHelpers.h"
+#include "../informationscripting_api.h"
 
 namespace InformationScripting {
 
-CScript::CScript() : Command{"script"} {}
-
-bool CScript::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
-									const std::unique_ptr<Visualization::Cursor>&)
+class BoostPythonHelpers
 {
-	return commandTokens.size() > 1 && commandTokens.first() == "script";
-}
+	public:
+		static QString parsePythonException();
+		static void initializeQStringConverters();
 
-Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization::Item* target,
-															const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
-{
-	using namespace boost::python;
-
-	QStringList args = commandTokens.mid(1);
-	if (args[0] == "methods")
-	{
-		auto node = target->node();
-		Q_ASSERT(node);
-
-		auto parentClass = node->firstAncestorOfType<OOModel::Class>();
-
-		try {
-			PyImport_AppendInittab((char*)"AstApi", PyInit_AstApi);
-			Py_Initialize();
-
-			BoostPythonHelpers::initializeQStringConverters();
-
-			object main_module = import("__main__");
-			dict main_namespace = extract<dict>(main_module.attr("__dict__"));
-
-			object nodeApi = import("AstApi");
-			object sys = import("sys");
-
-			list methods;
-			for (auto method : *parentClass->methods())
-				methods.append(ptr(method));
-
-			main_namespace["methods"] = methods;
-
-			exec_file("scripts/methods.py", main_namespace, main_namespace);
-			// Workaround to get output
-			sys.attr("stdout").attr("flush")();
-		} catch (error_already_set ) {
-			qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
-		}
-	}
-	return new Interaction::CommandResult();
-}
+};
 
 } /* namespace InformationScripting */
