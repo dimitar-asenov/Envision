@@ -101,7 +101,6 @@ GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
 GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool deepCopy)
 {
 	Q_ASSERT(!data_);
-	Q_ASSERT(tree()->piecewiseLoader());
 	Q_ASSERT(nodeToCopy->tree() != tree());
 
 	auto node = nextNode();

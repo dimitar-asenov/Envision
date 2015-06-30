@@ -127,7 +127,8 @@ Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeD
 	// find closest ancestor of node that exists in base
 	GenericNode* inBase = change->nodeA();
 	GenericNode* node = change->nodeB();
-	while (inBase == nullptr || !node->parentId().isNull())
+	Q_ASSERT(inBase || node);
+	while (inBase == nullptr && !node->parentId().isNull())
 	{
 		node = node->parent();
 		inBase = treeBase_->find(node->id(), true);

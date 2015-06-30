@@ -119,9 +119,10 @@ void Merge::initializeComponents()
 
 	pipelineInitializer_ = std::make_shared<ConflictUnitDetector>(conflictTypes, headCommitId_,
 																					  revisionCommitId_, baseCommitId_);
-
+/* TODO remove comment. test without lists first.
 	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes, listTypes, unorderedTypes);
 	conflictPipeline_.append(listMergeComponent);
+*/
 }
 
 void Merge::performTrueMerge()

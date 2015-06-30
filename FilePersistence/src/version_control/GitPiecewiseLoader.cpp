@@ -47,11 +47,12 @@ NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 
 	for (auto line : result.stdout())
 	{
-		auto nodeData = parseGrepLine(line);
+		auto data = parseGrepLine(line);
 		// NOTE Is it better to do this check here, or already as part of the grep pattern?
-		if (idIsNode(idString, nodeData.nodeLine_)) {
+		if (idIsNode(idString, data.nodeLine_)) {
 			Q_ASSERT(!found); // Check that there is no more than one such node
 			found = true;
+			nodeData = data;
 		}
 	}
 

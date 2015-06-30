@@ -71,7 +71,7 @@ GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
 	auto data = nodeData.nodeLine_.toUtf8();
 	auto node = pu->newNode(data.constData(), data.length()); // Will eagerly load the node's contents
 
-	auto alreadyExistingNode = tree_->find(node->id());
+	auto alreadyExistingNode = tree_->find(node->id()); // TODO find this before creating new one
 	Q_ASSERT(alreadyExistingNode != node);
 
 	if (alreadyExistingNode)

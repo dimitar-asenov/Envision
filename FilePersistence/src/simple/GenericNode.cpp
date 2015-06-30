@@ -221,7 +221,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode
 {
 	Q_ASSERT(nodeToCopy);
 	// Q_ASSERT(tree()->piecewiseLoader() != nullptr);
-	Q_ASSERT(!sameTree(nodeToCopy));
+	Q_ASSERT(persistentUnit->tree() != nodeToCopy->tree());
 	reset(persistentUnit);
 
 	if (nodeToCopy->dataLine_)

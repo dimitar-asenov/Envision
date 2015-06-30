@@ -1,5 +1,6 @@
 TARGET = filepersistence
 include(../Core/common_plugin.pri)
+#QMAKE_CXXFLAGS += -Wshadow
 QMAKE_RESOURCE_FLAGS += -no-compress
 DEFINES += FILEPERSISTENCE_LIBRARY
 win32:LIBS += -llogger \

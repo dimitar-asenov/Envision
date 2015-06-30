@@ -59,8 +59,8 @@ int gitDiffExtractFileCallBack(
 	GitDiffExtract* data = (GitDiffExtract*) carryAlongData;
 
 	QString relativePathA(delta->old_file.path);
-	// TODO only create new unit if not existent.
-	data->treeA_->newPersistentUnit(relativePathA);
+	if (!data->treeA_->persistentUnit(relativePathA))
+		data->treeA_->newPersistentUnit(relativePathA);
 
 	QString relativePathB(delta->new_file.path);
 	data->treeB_->newPersistentUnit(relativePathB);
