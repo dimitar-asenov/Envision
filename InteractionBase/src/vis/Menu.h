@@ -89,11 +89,12 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		 */
 		virtual void hideSelection() = 0;
 
+		QPoint indexOf(Model::Node* node) const;
+
 		Menu(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
 							  StyleType* style = itemStyles().get(), int nrOfColumns = 3);
 
 	private:
-		QPoint indexOf(Model::Node* node) const;
 		QPoint correctCoordinates(QPoint point) const;
 		QVector<QVector<Model::Node*>> currentNodes() const;
 		QVector<QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes);

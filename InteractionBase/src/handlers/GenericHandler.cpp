@@ -51,7 +51,7 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
-#include "vis/ViewSwitcherSelection.h"
+#include "vis/ViewSwitcherMenu.h"
 #include "nodes/ViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
@@ -517,8 +517,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
 	{
 		event->accept();
-		if (ViewSwitcherSelection::isVisible())
-			ViewSwitcherSelection::hide();
+		if (ViewSwitcherMenu::isVisible())
+			ViewSwitcherMenu::hide();
 		else
 		{
 			QVector<Model::Node*> nodes;
@@ -526,7 +526,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				nodes.append(new Interaction::ViewSwitcherEntry(view->name()));
 			for (int i = nodes.size(); i < 9; i++)
 				nodes.append(new Interaction::ViewSwitcherEntry("Empty slot " + QString::number(i)));
-			ViewSwitcherSelection::show(nodes, target);
+			ViewSwitcherMenu::show(nodes, target);
 		}
 	}
 	else InteractionHandler::keyPressEvent(target, event);

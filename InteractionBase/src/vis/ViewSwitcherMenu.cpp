@@ -23,7 +23,7 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "ViewSwitcherSelection.h"
+#include "ViewSwitcherMenu.h"
 
 #include "nodes/ViewSwitcherEntry.h"
 #include "vis/VViewSwitcherEntry.h"
@@ -32,33 +32,33 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(ViewSwitcherSelection, "item")
+ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 
-ViewSwitcherSelection* ViewSwitcherSelection::instance{};
+ViewSwitcherMenu* ViewSwitcherMenu::instance{};
 
-void ViewSwitcherSelection::show(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
+void ViewSwitcherMenu::show(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
 {
 	QApplication::postEvent(target->scene(),
 							new Visualization::CustomSceneEvent( [=]() { showNow(selectableNodes, target); }));
 }
 
-void ViewSwitcherSelection::hide()
+void ViewSwitcherMenu::hide()
 {
 	if (instance)
 		QApplication::postEvent(instance->scene(),
 								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
 }
 
-void ViewSwitcherSelection::showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
+void ViewSwitcherMenu::showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
 {
-	ViewSwitcherSelection::hideNow();
-	instance = new ViewSwitcherSelection(selectableNodes, target);
+	ViewSwitcherMenu::hideNow();
+	instance = new ViewSwitcherMenu(selectableNodes, target);
 	target->scene()->addTopLevelItem(instance);
 	instance->installSceneEventFilter(instance);
 	instance->setFiltersChildEvents(true);
 }
 
-void ViewSwitcherSelection::hideNow()
+void ViewSwitcherMenu::hideNow()
 {
 	if (instance)
 	{
@@ -69,13 +69,13 @@ void ViewSwitcherSelection::hideNow()
 	instance = nullptr;
 }
 
-ViewSwitcherSelection::ViewSwitcherSelection(QVector<Model::Node*> selectableNodes,
+ViewSwitcherMenu::ViewSwitcherMenu(QVector<Model::Node*> selectableNodes,
 											 Visualization::Item* target, StyleType* style)
 	: Super(selectableNodes, target, style)
 {
 }
 
-bool ViewSwitcherSelection::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+bool ViewSwitcherMenu::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 {
 	if (inEditMode_ && event->type() == QEvent::KeyPress)
 	{
@@ -112,7 +112,7 @@ bool ViewSwitcherSelection::sceneEventFilter(QGraphicsItem *watched, QEvent *eve
 	return false;
 }
 
-bool ViewSwitcherSelection::onSelectNode(Model::Node *node)
+bool ViewSwitcherMenu::onSelectNode(Model::Node *node)
 {
 	if (inEditMode_) return false;
 	if (auto asSwitcher = DCast<ViewSwitcherEntry>(node))
@@ -125,7 +125,7 @@ bool ViewSwitcherSelection::onSelectNode(Model::Node *node)
 	return true;
 }
 
-bool ViewSwitcherSelection::onSelectText(QString text)
+bool ViewSwitcherMenu::onSelectText(QString text)
 {
 	if (inEditMode_) return false;
 	auto newView = scene()->newViewItem(text);
@@ -133,9 +133,9 @@ bool ViewSwitcherSelection::onSelectText(QString text)
 	return true;
 }
 
-void ViewSwitcherSelection::hideSelection()
+void ViewSwitcherMenu::hideSelection()
 {
-	ViewSwitcherSelection::hide();
+	ViewSwitcherMenu::hide();
 }
 
 }

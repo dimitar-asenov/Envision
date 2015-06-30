@@ -1,4 +1,0 @@
-<!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/DeclarativeItemBase/default">
-	<nameField prototypes="item/Text/default" />
-</style>

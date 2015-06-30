@@ -32,10 +32,10 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API ViewSwitcherSelection : public Super<Menu>
+class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 {
 
-		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherSelection, MenuStyle)
+		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherMenu, MenuStyle)
 
 	public:
 		static void show(QVector<Model::Node*> selectableNodes, Visualization::Item* target);
@@ -54,12 +54,12 @@ class INTERACTIONBASE_API ViewSwitcherSelection : public Super<Menu>
 
 		bool inEditMode_{};
 
-		ViewSwitcherSelection(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
+		ViewSwitcherMenu(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 
-		static ViewSwitcherSelection* instance;
+		static ViewSwitcherMenu* instance;
 };
 
-inline bool ViewSwitcherSelection::isVisible() { return instance; }
+inline bool ViewSwitcherMenu::isVisible() { return instance; }
 
 }
