@@ -16,4 +16,11 @@ def qdump__QUuid(d, value):
     stringValue = gdb.parse_and_eval("%s.toString()" % this)
     
     d.putStringValue(stringValue)
-    d.putNumChild(0)
+    
+    d.putNumChild(4)
+    if d.isExpanded():
+        with Children(d):
+            d.putSubItem("data1", value["data1"])
+            d.putSubItem("data2", value["data2"])
+            d.putSubItem("data3", value["data3"])
+            d.putSubItem("data4", value["data4"])
