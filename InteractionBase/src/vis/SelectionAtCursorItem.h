@@ -35,6 +35,12 @@ namespace Visualization {
 }
 namespace Interaction {
 
+/**
+ * This class provides a standard interface for creating a menu which is opened
+ * at the last cursor position. Any kind of node can be used and actions may be
+ * associated with the nodes. The interface can also optionally contain a text field
+ * which is located above the normal items, where any text can be entered.
+ */
 class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::DeclarativeItem<SelectionAtCursorItem>> {
 
 	ITEM_COMMON(SelectionAtCursorItem)
@@ -42,15 +48,25 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 	public:
 		virtual ~SelectionAtCursorItem();
 
-		Visualization::Item* focusedItem() const;
+		/**
+		 * Whether this interface has a text field. Reimplement where necessary.
+		 */
 		virtual bool hasTextField() const;
 		Visualization::Text* textField() const;
+		/**
+		 * The currently focused item. Either the text field,
+		 * or a visualization of one of the nodes.
+		 */
+		Visualization::Item* focusedItem() const;
+		/**
+		 * Selects the given item as the focused item.
+		 */
 		void selectItem(Visualization::Item* item);
+		/**
+		 * Executes the currently focused item's function.
+		 * Returns whether it was successfully executed.
+		 */
 		bool executeFocused();
-
-		QPoint indexOf(Model::Node* node) const;
-		QPoint correctCoordinates(QPoint point) const;
-		QVector<QVector<Model::Node*>> currentNodes() const;
 
 		static void initializeForms();
 		virtual int determineForm();
@@ -60,15 +76,28 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 
 	protected:
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
+		/**
+		 * The function to execute when selecting the given node.
+		 */
 		virtual bool onSelectNode(Model::Node* node) = 0;
+		/**
+		 * The function to execute when selecting the given text from the text field.
+		 */
 		virtual bool onSelectText(QString text) = 0;
+		/**
+		 * The function to hide the selection menu after successful execution
+		 */
 		virtual void hideSelection() = 0;
-		Visualization::Item* target() const;
 
 		SelectionAtCursorItem(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 
 	private:
+		QPoint indexOf(Model::Node* node) const;
+		QPoint correctCoordinates(QPoint point) const;
+		QVector<QVector<Model::Node*>> currentNodes() const;
+		QVector<QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes);
+
 		Visualization::Item* target_{};
 		QPointF mousePosition_;
 		QVector<QVector<Model::Node*>> currentNodes_;
@@ -78,12 +107,10 @@ class INTERACTIONBASE_API SelectionAtCursorItem : public Super<Visualization::De
 
 		QGraphicsEffect* selectedEffect_{};
 
-		QVector<QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes);
 };
 
 inline QVector<QVector<Model::Node*>> SelectionAtCursorItem::currentNodes() const { return currentNodes_; }
 inline Visualization::Item* SelectionAtCursorItem::focusedItem() const { return focusedItem_; }
 inline Visualization::Text* SelectionAtCursorItem::textField() const { return textField_; }
-inline Visualization::Item* SelectionAtCursorItem::target() const { return target_; }
 
 }

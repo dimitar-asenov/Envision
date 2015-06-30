@@ -90,6 +90,9 @@ bool ViewSwitcherSelection::sceneEventFilter(QGraphicsItem *watched, QEvent *eve
 		return true;
 	else if (event->type() == QEvent::KeyPress)
 	{
+		//F2 can trigger a rename of the view item,
+		//also makes sure left click and enter then don't actually
+		//execute the existing item to make editing easier
 		auto keyEvent = static_cast<QKeyEvent*>(event);
 		auto asSwitcher = DCast<VViewSwitcherNode>(focusedItem());
 		if (asSwitcher && (keyEvent->key() == Qt::Key_F2
