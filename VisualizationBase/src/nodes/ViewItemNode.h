@@ -44,7 +44,7 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<Model::Node>
 	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
 
 	public:
-		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget);
+		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget, ViewItemNode* spacingParent);
 		static ViewItemNode* withReference(Model::Node* reference);
 
 		void setReference(Model::Node* reference);
@@ -52,20 +52,26 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<Model::Node>
 
 		void setSpacingTarget(Model::Node* spacingTarget);
 		Model::Node* spacingTarget() const;
+		void setSpacingParent(ViewItemNode* spacingParent);
+		ViewItemNode* spacingParent() const;
 
 		virtual void save(Model::PersistentStore& store) const;
 		virtual void load(Model::PersistentStore& store);
 
 	private:
-		Model::Node* spacingTarget_{};
 		Model::Node* reference_{};
+		Model::Node* spacingTarget_{};
+		ViewItemNode* spacingParent_{};
 
 };
 
-inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacingTarget_ = spacingTarget; }
-inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
 inline void ViewItemNode::setReference(Model::Node *reference) { reference_ = reference; }
 inline Model::Node* ViewItemNode::reference() const { return reference_; }
+inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacingTarget_ = spacingTarget; }
+inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
+inline void ViewItemNode::setSpacingParent(ViewItemNode *spacingParent) { spacingParent_ = spacingParent; }
+inline ViewItemNode* ViewItemNode::spacingParent() const { return spacingParent_; }
+
 inline void ViewItemNode::save(Model::PersistentStore &) const { Q_ASSERT(false); }
 inline void ViewItemNode::load(Model::PersistentStore &) { Q_ASSERT(false); }
 

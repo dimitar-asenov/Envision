@@ -58,20 +58,24 @@ bool VViewItemNode::determineSpacing()
 	if (auto target = node()->spacingTarget())
 	{
 		//The spacing could be in another view item (if we add an item to a not open view item)
-		//Then the spacing will be updated, when the view item is opened
-		if (auto targetItem = scene()->currentViewItem()->findVisualizationOf(target))
-		{
-			auto curYPos = scenePos().y();
-			auto curTargetYPos = targetItem->scenePos().y();
-			auto height = curTargetYPos - curYPos - 10;
-			height = height > 0 ? height : 0;
-			if (height != spacing_->heightInParent())
+		//Then the spacing will be updated when the view item is opened
+		auto parentItem = node()->spacingParent()
+				  ? scene()->currentViewItem()->findVisualizationOf(node()->spacingParent())
+				  : scene()->currentViewItem();
+		if (parentItem)
+			if (auto targetItem = parentItem->findVisualizationOf(target))
 			{
-				spacing_->setCustomSize(50, height);
-				setUpdateNeeded(RepeatUpdate);
-				return true;
+				auto curYPos = scenePos().y();
+				auto curTargetYPos = targetItem->scenePos().y();
+				auto height = curTargetYPos - curYPos - 10;
+				height = height > 0 ? height : 0;
+				if (height != spacing_->heightInParent())
+				{
+					spacing_->setCustomSize(50, height);
+					setUpdateNeeded(RepeatUpdate);
+					return true;
+				}
 			}
-		}
 	}
 	return false;
 }

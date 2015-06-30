@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,46 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../comments_api.h"
+#include "HInfoNode.h"
 
 #include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/VInfoNode.h"
 
-#include "../nodes/CommentNode.h"
+namespace Interaction {
 
-class QGraphicsWebView;
-
-namespace Comments {
-
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
+HInfoNode* HInfoNode::instance()
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
+	static HInfoNode h;
+	return &h;
+}
 
-	public:
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size,
-				const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void updateSize(QSize size);
+void HInfoNode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	//Use Ctrl + F5 to refresh, so as not to clash with the scene refresh on F5
+	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F5)
+	{
+		event->accept();
+		DCast<Visualization::VInfoNode>(target)->node()->fullUpdate();
+		target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	}
+	else GenericHandler::keyPressEvent(target, event);
+}
 
-		void setContent(const QString& content);
-
-		QGraphicsWebView* browser() const;
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-
-		static const QSize defaultSize;
-		QGraphicsWebView* browser_{};
-		QSize size_;
-};
-
-inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}
-
-} /* namespace Comments */
+}

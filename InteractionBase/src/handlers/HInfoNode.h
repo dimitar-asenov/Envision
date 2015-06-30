@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,47 +23,19 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
 #pragma once
 
-#include "../comments_api.h"
+#include "interactionbase_api.h"
+#include "GenericHandler.h"
 
-#include "VisualizationBase/src/items/Item.h"
+namespace Interaction {
 
-#include "../nodes/CommentNode.h"
-
-class QGraphicsWebView;
-
-namespace Comments {
-
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
+class INTERACTIONBASE_API HInfoNode : public Interaction::GenericHandler {
+	protected:
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 
 	public:
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QUrl& url, QSize size,
-				const StyleType* style = itemStyles().get());
-		VCommentBrowser(Visualization::Item* parent, const QString& content, const StyleType* style = itemStyles().get());
-		virtual ~VCommentBrowser();
-		virtual QList<Visualization::Item*> childItems() const override;
-		void updateSize(QSize size);
-
-		void setContent(const QString& content);
-
-		QGraphicsWebView* browser() const;
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-
-		static const QSize defaultSize;
-		QGraphicsWebView* browser_{};
-		QSize size_;
+		static HInfoNode* instance();
 };
 
-inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}
-
-} /* namespace Comments */
+}

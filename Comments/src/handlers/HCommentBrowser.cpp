@@ -40,13 +40,15 @@ HCommentBrowser* HCommentBrowser::instance()
 void HCommentBrowser::keyPressEvent(Visualization::Item* item, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F11)
+	{
 		if (auto scene = item->scene())
 			for (auto view : scene->views())
 				if (dynamic_cast<Visualization::MainView*>(view))
 					view->centerOn(item);
-
-
-	// Accept all events and prevent them from being propagated to parents.
+	}
+	else GenericHandler::keyPressEvent(item, event);
+	// TODO: Is it OK to propagate events to parents or should we just accept all events?
+	//Propagating at least some events is necessary for updating an InfoNode
 }
 
 } /* namespace Comments */

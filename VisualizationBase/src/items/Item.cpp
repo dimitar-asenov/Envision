@@ -709,17 +709,26 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 Item* Item::findVisualizationOf(Model::Node* node)
 {
 	if (this->node() == node) return this;
+	auto allVis = findAllVisualizationsOf(node);
+	if (allVis.size() > 0) return allVis[0];
+	else return nullptr;
+}
+
+QList<Item*> Item::findAllVisualizationsOf(Model::Node* node)
+{
+	QList<Item*> result;
+	if (this->node() == node) result.append(this);
 
 	auto it = nodeItemsMap().find(node);
 	auto end = Item::nodeItemsMap().end();
 	while (it != end && it.key() == node)
 	{
 		auto item = it.value();
-		if (isAncestorOf(item)) return item;
+		if (isAncestorOf(item)) result.append(item);
 		++it;
 	}
 
-	return nullptr;
+	return result;
 }
 
 bool Item::sceneEvent(QEvent *event)

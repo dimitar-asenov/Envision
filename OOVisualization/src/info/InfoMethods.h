@@ -23,39 +23,22 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#pragma once
 
-#include "ViewItemNode.h"
+#include "oovisualization_api.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Visualization::ViewItemNode)
-
-namespace Visualization {
-
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
-
-ViewItemNode::ViewItemNode(Model::Node* parent)
-	:Super(parent)
-{
+namespace Model {
+	class Node;
 }
 
-ViewItemNode::ViewItemNode(Model::Node* parent, Model::PersistentStore&, bool)
-	:Super(parent)
-{
-	Q_ASSERT(false);
-}
+namespace OOVisualization {
 
-ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
+class OOVISUALIZATION_API InfoMethods
 {
-	auto result = new ViewItemNode(nullptr);
-	result->setSpacingTarget(spacingTarget);
-	result->setSpacingParent(spacingParent);
-	return result;
-}
+	public:
+		static QString numberOfCallees(Model::Node* node);
 
-ViewItemNode* ViewItemNode::withReference(Model::Node *reference)
-{
-	auto result = new ViewItemNode(nullptr);
-	result->setReference(reference);
-	return result;
-}
+		static QString fullName(Model::Node* node);
+};
+
 }

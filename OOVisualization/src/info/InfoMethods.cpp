@@ -23,39 +23,27 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#include "InfoMethods.h"
 
-#include "ViewItemNode.h"
+#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Class.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Visualization::ViewItemNode)
+namespace OOVisualization {
 
-namespace Visualization {
-
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
-
-ViewItemNode::ViewItemNode(Model::Node* parent)
-	:Super(parent)
+QString InfoMethods::numberOfCallees(Model::Node *node)
 {
+	if (auto method = DCast<OOModel::Method>(node))
+		return "Number of called methods: " + QString::number(method->callees().size());
+	else return QString();
 }
 
-ViewItemNode::ViewItemNode(Model::Node* parent, Model::PersistentStore&, bool)
-	:Super(parent)
+QString InfoMethods::fullName(Model::Node *node)
 {
-	Q_ASSERT(false);
+	if (auto method = DCast<OOModel::Method>(node))
+		return "Method name: " + method->fullyQualifiedName();
+	else if (auto clazz = DCast<OOModel::Class>(node))
+		return "Class name: " + clazz->name();
+	else return QString();
 }
 
-ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
-{
-	auto result = new ViewItemNode(nullptr);
-	result->setSpacingTarget(spacingTarget);
-	result->setSpacingParent(spacingParent);
-	return result;
-}
-
-ViewItemNode* ViewItemNode::withReference(Model::Node *reference)
-{
-	auto result = new ViewItemNode(nullptr);
-	result->setReference(reference);
-	return result;
-}
 }
