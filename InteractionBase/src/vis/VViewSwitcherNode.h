@@ -46,25 +46,15 @@ class INTERACTIONBASE_API VViewSwitcherNode :
 						   const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
-		virtual int determineForm() override;
 
-		bool isNameEditable() const;
-		void setNameEditable(bool editable);
-		Visualization::Item* editableName() const;
+		Visualization::Item* nameField() const;
 
 		virtual void determineChildren() override;
 
 	private:
-		TextAndDescription* nonEditable_{};
-		Visualization::Text* editable_{};
-		void initNonEditable();
-		void initEditable();
-
-		bool nameEditable_{};
-		bool recentlyChanged_{};
+		Visualization::Text* nameField_{};
 };
 
-inline Visualization::Item* VViewSwitcherNode::editableName() const { return editable_; }
-inline bool VViewSwitcherNode::isNameEditable() const { return nameEditable_; }
+inline Visualization::Item* VViewSwitcherNode::nameField() const { return nameField_; }
 
 }

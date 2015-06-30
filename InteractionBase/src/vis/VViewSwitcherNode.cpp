@@ -39,58 +39,21 @@ ITEM_COMMON_DEFINITIONS(VViewSwitcherNode, "item")
 VViewSwitcherNode::VViewSwitcherNode(Visualization::Item* parent, NodeType* node, const StyleType* style) :
 		Super(parent, node, style)
 {
-	initNonEditable();
+	nameField_ = new Visualization::Text(this, node->viewName());
+	nameField_->setEditable(true);
 }
 
 void VViewSwitcherNode::initializeForms()
 {
-	addForm(item(&I::nonEditable_));
-	addForm(item(&I::editable_));
-}
-
-void VViewSwitcherNode::setNameEditable(bool editable)
-{
-	if (!editable)
-	{
-		scene()->viewItem(node()->viewName())->setName(editable_->text());
-		node()->setViewName(editable_->text());
-	}
-	//TODO@cyril Is there a way to make this initialization automatic? Or not always destroy the items?
-	if (editable && editable != nameEditable_)
-		initEditable();
-	else if (editable != nameEditable_)
-		initNonEditable();
-	nameEditable_ = editable;
-	recentlyChanged_ = true;
-}
-
-int VViewSwitcherNode::determineForm()
-{
-	return nameEditable_ ? 1 : 0;
+	addForm(item(&I::nameField_));
 }
 
 void VViewSwitcherNode::determineChildren()
 {
 	Super::determineChildren();
 	//If we recently made this editable, just select the entire text
-	if (nameEditable_ && recentlyChanged_)
-	{
-		editable_->moveCursor();
-		editable_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
-	}
-	recentlyChanged_ = false;
+	if (auto view = scene()->viewItem(node()->viewName()))
+		view->setName(nameField_->text());
+	node()->setViewName(nameField_->text());
 }
-
-void VViewSwitcherNode::initNonEditable()
-{
-	nonEditable_ = new TextAndDescription(this);
-	nonEditable_->setContents(node()->viewName(), QString());
-}
-
-void VViewSwitcherNode::initEditable()
-{
-	editable_ = new Visualization::Text(this, node()->viewName());
-	editable_->setEditable(true);
-}
-
 }

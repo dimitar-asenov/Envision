@@ -98,11 +98,14 @@ bool ViewSwitcherSelection::sceneEventFilter(QGraphicsItem *watched, QEvent *eve
 		if (asSwitcher && (keyEvent->key() == Qt::Key_F2
 				|| (keyEvent->key() == Qt::Key_Return && inEditMode_)))
 		{
-			asSwitcher->setNameEditable(!(asSwitcher->isNameEditable()));
-			inEditMode_ = asSwitcher->isNameEditable();
+			inEditMode_ = !inEditMode_;
 			if (!inEditMode_)	selectItem(asSwitcher);
-			else focusedItem()->setGraphicsEffect(nullptr);
-			asSwitcher->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			else
+			{
+				asSwitcher->setGraphicsEffect(nullptr);
+				asSwitcher->nameField()->moveCursor();
+				asSwitcher->nameField()->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+			}
 			return true;
 		}
 	}
@@ -113,7 +116,12 @@ bool ViewSwitcherSelection::onSelectNode(Model::Node *node)
 {
 	if (inEditMode_) return false;
 	if (auto asSwitcher = DCast<ViewSwitcherNode>(node))
-		scene()->switchToView(asSwitcher->viewName());
+	{
+		auto view = scene()->viewItem(asSwitcher->viewName());
+		if (!view)
+			view = scene()->newViewItem(asSwitcher->viewName());
+		scene()->switchToView(view);
+	}
 	return true;
 }
 
