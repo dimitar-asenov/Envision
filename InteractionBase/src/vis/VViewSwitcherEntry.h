@@ -23,37 +23,38 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#include "VViewSwitcherNode.h"
+#pragma once
 
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
-#include "vis/TextAndDescription.h"
+#include "interactionbase_api.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "nodes/ViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/items/ViewItem.h"
-
-#include "VisualizationBase/src/cursor/TextCursor.h"
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(VViewSwitcherNode, "item")
+class TextAndDescription;
 
-VViewSwitcherNode::VViewSwitcherNode(Visualization::Item* parent, NodeType* node, const StyleType* style) :
-		Super(parent, node, style)
+class INTERACTIONBASE_API VViewSwitcherEntry :
+		public Super<Visualization::ItemWithNode<VViewSwitcherEntry,
+			Visualization::DeclarativeItem<VViewSwitcherEntry>, ViewSwitcherEntry>>
 {
-	nameField_ = new Visualization::Text(this, node->viewName());
-	nameField_->setEditable(true);
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherEntry, Visualization::DeclarativeItemBaseStyle)
 
-void VViewSwitcherNode::initializeForms()
-{
-	addForm(item(&I::nameField_));
-}
+	public:
+		VViewSwitcherEntry(Visualization::Item* parent, NodeType* node,
+						   const StyleType* style = itemStyles().get());
 
-void VViewSwitcherNode::determineChildren()
-{
-	Super::determineChildren();
-	//If we recently made this editable, just select the entire text
-	if (auto view = scene()->viewItem(node()->viewName()))
-		view->setName(nameField_->text());
-	node()->setViewName(nameField_->text());
-}
+		static void initializeForms();
+
+		Visualization::Item* nameField() const;
+
+		virtual void determineChildren() override;
+
+	private:
+		Visualization::Text* nameField_{};
+};
+
+inline Visualization::Item* VViewSwitcherEntry::nameField() const { return nameField_; }
+
 }

@@ -26,7 +26,7 @@
 #include "ViewSwitcherSelection.h"
 
 #include "nodes/ViewSwitcherEntry.h"
-#include "vis/VViewSwitcherNode.h"
+#include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
 
@@ -94,7 +94,7 @@ bool ViewSwitcherSelection::sceneEventFilter(QGraphicsItem *watched, QEvent *eve
 		//also makes sure left click and enter then don't actually
 		//execute the existing item to make editing easier
 		auto keyEvent = static_cast<QKeyEvent*>(event);
-		auto asSwitcher = DCast<VViewSwitcherNode>(focusedItem());
+		auto asSwitcher = DCast<VViewSwitcherEntry>(focusedItem());
 		if (asSwitcher && (keyEvent->key() == Qt::Key_F2
 				|| (keyEvent->key() == Qt::Key_Return && inEditMode_)))
 		{

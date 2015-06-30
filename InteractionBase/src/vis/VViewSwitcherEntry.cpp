@@ -23,38 +23,37 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-#pragma once
+#include "VViewSwitcherEntry.h"
 
-#include "interactionbase_api.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "nodes/ViewSwitcherEntry.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "vis/TextAndDescription.h"
 #include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/ViewItem.h"
+
+#include "VisualizationBase/src/cursor/TextCursor.h"
 
 namespace Interaction {
 
-class TextAndDescription;
+ITEM_COMMON_DEFINITIONS(VViewSwitcherEntry, "item")
 
-class INTERACTIONBASE_API VViewSwitcherNode :
-		public Super<Visualization::ItemWithNode<VViewSwitcherNode,
-			Visualization::DeclarativeItem<VViewSwitcherNode>, ViewSwitcherEntry>>
+VViewSwitcherEntry::VViewSwitcherEntry(Visualization::Item* parent, NodeType* node, const StyleType* style) :
+		Super(parent, node, style)
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherNode, Visualization::DeclarativeItemBaseStyle)
+	nameField_ = new Visualization::Text(this, node->viewName());
+	nameField_->setEditable(true);
+}
 
-	public:
-		VViewSwitcherNode(Visualization::Item* parent, NodeType* node,
-						   const StyleType* style = itemStyles().get());
+void VViewSwitcherEntry::initializeForms()
+{
+	addForm(item(&I::nameField_));
+}
 
-		static void initializeForms();
-
-		Visualization::Item* nameField() const;
-
-		virtual void determineChildren() override;
-
-	private:
-		Visualization::Text* nameField_{};
-};
-
-inline Visualization::Item* VViewSwitcherNode::nameField() const { return nameField_; }
-
+void VViewSwitcherEntry::determineChildren()
+{
+	Super::determineChildren();
+	//If we recently made this editable, just select the entire text
+	if (auto view = scene()->viewItem(node()->viewName()))
+		view->setName(nameField_->text());
+	node()->setViewName(nameField_->text());
+}
 }
