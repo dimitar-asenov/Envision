@@ -41,6 +41,7 @@ class INTERACTIONBASE_API ViewSwitcherNode : public Super<Model::Node>
 		ViewSwitcherNode(QString viewName);
 
 		QString viewName() const;
+		void setViewName(QString name);
 
 		virtual void save(Model::PersistentStore& store) const;
 		virtual void load(Model::PersistentStore& store);
@@ -50,5 +51,6 @@ class INTERACTIONBASE_API ViewSwitcherNode : public Super<Model::Node>
 };
 
 inline QString ViewSwitcherNode::viewName() const { return viewName_; }
+inline void ViewSwitcherNode::setViewName(QString name) { viewName_ = name; }
 
 }
