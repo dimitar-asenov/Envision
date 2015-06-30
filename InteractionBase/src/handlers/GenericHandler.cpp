@@ -524,6 +524,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			QVector<Model::Node*> nodes;
 			for (auto view : target->scene()->viewItems())
 				nodes.append(new Interaction::ViewSwitcherNode(view->name()));
+			for (int i = nodes.size(); i < 9; i++)
+				nodes.append(new Interaction::ViewSwitcherNode("Empty slot"));
 			ViewSwitcherSelection::show(nodes, target);
 		}
 	}
