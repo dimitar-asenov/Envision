@@ -96,6 +96,10 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 				InfoGetter getter_{};
 				bool updatesAutomatically_{};
 				bool enabledByDefault_{};
+				InfoGetterStruct();
+				InfoGetterStruct(InfoGetter getter,
+									  bool updatesAutomatically,
+									  bool enabledByDefault);
 		};
 		static QList<InfoNode*> allInfoNodes;
 		static QHash<QString, InfoGetterStruct> allInfoGetters;
@@ -110,5 +114,10 @@ inline void InfoNode::fullUpdate() { updateInfo(false); }
 inline void InfoNode::automaticUpdate() { updateInfo(true); }
 
 inline bool InfoNode::isEnabled(const QString name) const { return enabledInfoGetters_.contains(name); }
+
+inline InfoNode::InfoGetterStruct::InfoGetterStruct() {}
+inline InfoNode::InfoGetterStruct::InfoGetterStruct(InfoGetter getter,
+																	 bool updatesAutomatically, bool enabledByDefault) :
+	getter_{getter}, updatesAutomatically_{updatesAutomatically}, enabledByDefault_{enabledByDefault} {}
 
 }

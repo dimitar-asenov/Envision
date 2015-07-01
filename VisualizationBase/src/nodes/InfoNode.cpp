@@ -91,7 +91,7 @@ void InfoNode::registerInfoGetter(const QString &name, const InfoGetter getter,
 								  bool updatesAutomatically, bool enabledByDefault)
 {
 	if (!allInfoGetters.contains(name))
-		allInfoGetters[name] = InfoGetterStruct{getter, updatesAutomatically, enabledByDefault};
+		allInfoGetters[name] = InfoGetterStruct(getter, updatesAutomatically, enabledByDefault);
 	for (auto node : allInfoNodes)
 		node->setEnabled(name, enabledByDefault);
 }
