@@ -35,7 +35,8 @@ using ConflictUnitSet = QMultiHash<Model::NodeIdType, std::shared_ptr<ChangeDesc
 class ConflictUnitDetector : public ConflictPipelineComponent
 {
 	public:
-		ConflictUnitDetector(QSet<QString>& conflictTypes, QString revisionIdA, QString revisionIdB, QString revisionIdBase);
+		ConflictUnitDetector(QSet<QString>& conflictTypes,
+									bool useLinkedChanges);
 		~ConflictUnitDetector();
 		LinkedChangesTransition run(std::shared_ptr<GenericTree> treeA,
 											 std::shared_ptr<GenericTree> treeB,
@@ -64,10 +65,7 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		QSet<QString> conflictTypes_;
 		ConflictUnitSet affectedCUsA_;
 		ConflictUnitSet affectedCUsB_;
-
-		QString revisionIdA_;
-		QString revisionIdB_;
-		QString revisionIdBase_;
+		bool useLinkedChanges_;
 
 		std::shared_ptr<GenericTree> treeBase_;
 };

@@ -79,6 +79,7 @@ void createNodeAndAppend(const git_diff_line* line, const char* filePath, Generi
 	GenericPersistentUnit* unit = tree->persistentUnit(relativePath);
 	Q_ASSERT(unit != nullptr);
 	GenericNode* node = unit->newNode(line->content, lineLength);
+	node->linkNode();
 	list.append(node);
 }
 
@@ -657,6 +658,26 @@ void GitRepository::writeRevisionIntoIndex(QString revision)
 
 	git_commit_free(gitRevision);
 	git_tree_free(revisionTree);
+	git_index_free(index);
+}
+
+void GitRepository::writeWorkdirToIndex()
+{
+	int errorCode = 0;
+
+	// load index from disk
+	git_index* index = nullptr;
+	errorCode = git_repository_index(&index, repository_);
+	checkError(errorCode);
+
+	// read workdir from disk into in-memory index
+	errorCode = git_index_update_all(index, NULL, NULL, NULL);
+	checkError(errorCode);
+
+	// write index from memory to disk
+	errorCode = git_index_write(index);
+	checkError(errorCode);
+
 	git_index_free(index);
 }
 

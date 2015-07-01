@@ -35,15 +35,15 @@ PiecewiseLoader::PiecewiseLoader(std::shared_ptr<GenericTree>& tree) : tree_{tre
 
 PiecewiseLoader::~PiecewiseLoader() {}
 
-void PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
+GenericNode* PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
 {
 	Q_ASSERT(tree_->piecewiseLoader().get() == this);
 	Q_ASSERT(!id.isNull());
 
 	auto newNode = loadNewNode(loadNodeData(id));
-	Q_ASSERT(newNode);
-
 	newNode->linkNode();
+
+	return newNode;
 }
 
 void PiecewiseLoader::loadAndLinkNodeChildren(Model::NodeIdType id)
@@ -70,16 +70,6 @@ GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
 
 	auto data = nodeData.nodeLine_.toUtf8();
 	auto node = pu->newNode(data.constData(), data.length()); // Will eagerly load the node's contents
-
-	auto alreadyExistingNode = tree_->find(node->id()); // TODO find this before creating new one
-	Q_ASSERT(alreadyExistingNode != node);
-
-	if (alreadyExistingNode)
-	{
-		Q_ASSERT(alreadyExistingNode->persistentUnit() == pu);
-		pu->releaseLastNode(); // Remove the node that we just created as it already exists
-		node = nullptr; // There was no new node loaded
-	}
 
 	return node;
 }

@@ -36,9 +36,11 @@ class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
 		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
-		static std::shared_ptr<ChangeDescription> newStructChange(Model::NodeIdType nodeId,
-																			GenericNode* nodeA,
-																			GenericNode* nodeB);
+
+		static std::shared_ptr<ChangeDescription> newStructChange(
+				Model::NodeIdType nodeId, std::shared_ptr<ChangeDescription> causingChange,
+				std::shared_ptr<GenericTree> treeA, std::shared_ptr<GenericTree> treeB);
+
 		std::shared_ptr<ChangeDescription> copy(std::shared_ptr<GenericTree>& tree) const;
 
 		enum UpdateType
@@ -67,6 +69,11 @@ class FILEPERSISTENCE_API ChangeDescription
 
 		GenericNode* nodeB() const;
 		GenericNode* nodeA() const;
+
+		/**
+		 * This is only used for debugging. Do NOT use for other things.
+		 */
+		bool debugHasNodes();
 
 		/**
 		 * Returns \a true for changes that are stationary and have no flags set.
@@ -126,5 +133,7 @@ inline uint qHash(const std::shared_ptr<const ChangeDescription> change, uint se
 {
 	return ::qHash(change.get(), seed);
 }
+
+inline bool ChangeDescription::debugHasNodes() { return nodeA_ || nodeB_; }
 
 } /* namespace FilePersistence */

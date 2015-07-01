@@ -38,7 +38,11 @@ TEST(FilePersistencePlugin, twoDeletesNoConflict)
 {
 	Q_ASSERT(std::system("tar -xf TestMerge_TwoDeletesNoConflict.tar -C projects") == 0);
 	GitRepository repo("projects/TestMerge");
-	repo.merge("dev");
+	auto merge = repo.merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	merge->commit(sig, sig, "This is the result of merge test \"twodeletesNoConflict\"");
 	CHECK_CONDITION(true);
 	Q_ASSERT(std::system("rm -r projects/TestMerge") == 0);
 }

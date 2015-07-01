@@ -36,22 +36,19 @@ namespace FilePersistence {
 
 bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
 {
-	if (stage_ == Stage::WroteToIndex)
-	{
-		QString treeSHA1 = repository_->writeIndexToTree();
+	Q_ASSERT(stage_ == Stage::WroteToIndex);
 
-		QStringList parents;
-		parents.append(headCommitId_);
-		parents.append(revisionCommitId_);
+	QString treeSHA1 = repository_->writeIndexToTree();
 
-		repository_->newCommit(treeSHA1, message, author, committer, parents);
+	QStringList parents;
+	parents.append(headCommitId_);
+	parents.append(revisionCommitId_);
 
-		stage_ = Stage::Committed;
+	repository_->newCommit(treeSHA1, message, author, committer, parents);
 
-		return true;
-	}
-	else
-		Q_ASSERT(false);
+	stage_ = Stage::Committed;
+
+	return true;
 }
 
 // ======== private ========
@@ -105,6 +102,14 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	}
 }
 
+Merge::~Merge()
+{
+	treeA_ = nullptr;
+	treeB_ = nullptr;
+	treeBase_ = nullptr;
+	treeMerged_ = nullptr;
+}
+
 void Merge::initializeComponents()
 {
 	// TODO replace with correct types
@@ -117,8 +122,9 @@ void Merge::initializeComponents()
 	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{"TestListType", "TestNoConflictList"});
 	QSet<QString> unorderedTypes = QSet<QString>::fromList(QList<QString>{"TestUnorderedType"});
 
-	pipelineInitializer_ = std::make_shared<ConflictUnitDetector>(conflictTypes, headCommitId_,
-																					  revisionCommitId_, baseCommitId_);
+	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(
+				new ConflictUnitDetector(conflictTypes, USE_LINKED_SETS));
+
 /* TODO remove comment. test without lists first.
 	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes, listTypes, unorderedTypes);
 	conflictPipeline_.append(listMergeComponent);
@@ -144,7 +150,9 @@ void Merge::performTrueMerge()
 	conflictingChanges_ = {};
 	conflictPairs_ = {};
 
-	LinkedChangesSet linkedChangesSet(cdgA, cdgB);
+	LinkedChangesSet linkedChangesSet;
+	if (USE_LINKED_SETS)
+		linkedChangesSet = LinkedChangesSet(cdgA, cdgB);
 
 	// ### PIPELINE INITIALIZER ###
 	LinkedChangesTransition transition = pipelineInitializer_->run(treeA_, treeB_, treeBase_,
@@ -175,18 +183,18 @@ void Merge::performTrueMerge()
 
 	if (conflictingChanges_.isEmpty())
 	{
-		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree("Merged"));
+		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree("TestMerge")); // FIXME name has to mach file
 		repository_->loadGenericTree(treeMerged_, baseCommitId_);
 		applyChangesToTree(treeMerged_, cdgA);
 		applyChangesToTree(treeMerged_, cdgB);
 
 		stage_ = Stage::BuiltMergedTree;
 
-		SimpleTextFileStore::saveGenericTree(treeMerged_, "Merged", repository_->workdirPath(), {"Project", "Module"});
+		SimpleTextFileStore::saveGenericTree(treeMerged_, "TestMerge", repository_->workdirPath(), {"Project", "Module"});
 
 		stage_ = Stage::WroteToWorkDir;
 
-		repository_->writeRevisionIntoIndex(revisionCommitId_);
+		repository_->writeWorkdirToIndex();
 
 		stage_ = Stage::WroteToIndex;
 	}
@@ -254,19 +262,30 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 
 			case ChangeType::Move:
 			{
-				// TODO currently assuming no change of persistent unit
 				auto node = tree->find(change->nodeA()->id());
 				node->detachFromParent();
-				node->copy(change->nodeB());
+				node->setParentId(change->nodeB()->parentId());
 				node->attachToParent();
-				break;
+				// no break, need to do the same stuff as for stationary.
 			}
 
 			case ChangeType::Stationary:
 			{
-				// TODO currently assuming no change of persistent unit
 				auto node = tree->find(change->nodeA()->id());
-				node->copy(change->nodeB());
+
+				if (change->hasFlags(ChangeDescription::Value))
+				{
+					auto valueType = change->nodeB()->valueType();
+					auto value = change->nodeB()->rawValue();
+					node->resetValue(valueType, value);
+				}
+
+				if (change->hasFlags(ChangeDescription::Type))
+					node->setType(change->nodeB()->type());
+
+				if (change->hasFlags(ChangeDescription::Label))
+					node->setLabel(change->nodeB()->label());
+
 				break;
 			}
 

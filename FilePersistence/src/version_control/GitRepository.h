@@ -89,6 +89,7 @@ class FILEPERSISTENCE_API GitRepository
 
 		void writeRevisionIntoIndex(QString  revision);
 		QString  writeIndexToTree();
+		void writeWorkdirToIndex();
 
 		void newCommit(QString  tree, QString message, Signature author, Signature committer, QStringList parents);
 		QString  findMergeBase(QString  branchA, QString branchB) const;

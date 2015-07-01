@@ -50,6 +50,7 @@ class FILEPERSISTENCE_API Merge
 
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
 		const std::shared_ptr<GenericTree> mergeTree();
+		const bool USE_LINKED_SETS = false;
 		// TOOD output conflicts
 
 	private:

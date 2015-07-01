@@ -54,11 +54,14 @@ class FILEPERSISTENCE_API GenericTree {
 		/**
 		 * Returns the node in this tree with the ID \a id or \a nullptr if no such node exists.
 		 * If \a lazyLoad is true, this attempts to lazy-load the node if it does not exist yet.
+		 *
+		 * For trees without a piecewise loader, this will perform a depth first search for the node
+		 * from the root recursively in all linked nodes. This means on such trees, this method is slow and
+		 * might not return the node if it's not linked, even if it is loaded in the tree.
 		 */
 		GenericNode* find(Model::NodeIdType id, bool lazyLoad = false);
 
 		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);
-		void loadNode(Model::NodeIdType id);
 
 		GenericNode* root() const;
 
@@ -85,6 +88,11 @@ class FILEPERSISTENCE_API GenericTree {
 
 		constexpr static int ALLOCATION_CHUNK_SIZE = 1000; // num elements to allocate at once
 		QList<GenericNode*> emptyChunks_;
+
+		/**
+		 * Searches recursively for the node with \a id in the subtree rooted by \a node.
+		 */
+		GenericNode* recursiveFind(Model::NodeIdType id, GenericNode* node);
 
 		GenericNode* emptyChunk();
 		void releaseChunk(GenericNode* unusedChunk);

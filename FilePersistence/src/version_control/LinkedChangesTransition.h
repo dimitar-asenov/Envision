@@ -35,6 +35,7 @@ namespace FilePersistence {
 class LinkedChangesTransition
 {
 	public:
+		LinkedChangesTransition();
 		/**
 		 * Creates an empty transition.
 		 */

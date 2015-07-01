@@ -134,7 +134,7 @@ void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDes
 {
 	if (!changeDescriptions_.contains(id))
 	{
-		auto change = ChangeDescription::newStructChange(id, causingChange->nodeA(), causingChange->nodeB());
+		auto change = ChangeDescription::newStructChange(id, causingChange, treeA_, treeB_);
 		changeDescriptions_.insert(id, change);
 		change->setStructureChangeFlag(true);
 	}
@@ -144,6 +144,7 @@ void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDes
 	}
 
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
+	Q_ASSERT(changeDescriptions_.value(id)->debugHasNodes());
 }
 
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)

@@ -28,6 +28,8 @@
 
 namespace FilePersistence {
 
+LinkedChangesTransition::LinkedChangesTransition() {}
+
 LinkedChangesTransition::LinkedChangesTransition(const LinkedChangesSet& linkedChangesSet) :
 	oldLinkedChangesSet_{linkedChangesSet} {}
 

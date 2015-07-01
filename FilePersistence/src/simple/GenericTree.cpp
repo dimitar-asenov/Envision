@@ -70,12 +70,31 @@ GenericPersistentUnit* GenericTree::persistentUnit(const QString& name) const
 
 GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad)
 {
-	Q_ASSERT(piecewiseLoader_);
+	if (piecewiseLoader_)
+	{
+		auto node = quickLookupHash_.value(id);
+		if (lazyLoad && !node)
+			node = piecewiseLoader_->loadAndLinkNode(id);
+		return node;
+	}
+	else
+		return recursiveFind(id, root());
+}
 
-	auto node = quickLookupHash_.value(id);
-	if (lazyLoad && !node)
-		piecewiseLoader_->loadAndLinkNode(id);
-	return node;
+GenericNode* GenericTree::recursiveFind(Model::NodeIdType id, GenericNode *node)
+{
+	if (node->id() == id)
+		return node;
+	else
+	{
+		GenericNode* result = nullptr;
+		for (auto child : node->children())
+		{
+			result = recursiveFind(id, child);
+			if (result) break;
+		}
+		return result;
+	}
 }
 
 GenericNode* GenericTree::emptyChunk()
@@ -87,12 +106,6 @@ GenericNode* GenericTree::emptyChunk()
 void GenericTree::releaseChunk(GenericNode* unusedChunk)
 {
 	emptyChunks_.append(unusedChunk);
-}
-
-void GenericTree::loadNode(Model::NodeIdType id)
-{
-	Q_ASSERT(piecewiseLoader_);
-	piecewiseLoader_->loadAndLinkNode(id);
 }
 
 GenericNode* GenericTree::root() const

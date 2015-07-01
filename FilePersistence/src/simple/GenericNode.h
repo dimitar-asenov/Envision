@@ -39,8 +39,8 @@ class FILEPERSISTENCE_API GenericNode {
 		enum ValueType {NO_VALUE, STRING_VALUE, INT_VALUE, DOUBLE_VALUE};
 
 		/**
-		 * Sets id, parentId, label, value and type equal to \a other. If the parent changes, this node must first be
-		 * detached from its parent.
+		 * Sets id, parentId, label, value and type of this node equal to \a other.
+		 * If the parent changes, this node must first be detached from its parent.
 		 */
 		void copy(const GenericNode* other);
 

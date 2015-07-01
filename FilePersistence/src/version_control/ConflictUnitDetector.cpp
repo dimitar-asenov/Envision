@@ -30,9 +30,8 @@
 
 namespace FilePersistence {
 
-ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, QString revisionIdA,
-														 QString revisionIdB, QString revisionIdBase) :
-	conflictTypes_{conflictTypes}, revisionIdA_{revisionIdA}, revisionIdB_{revisionIdB}, revisionIdBase_{revisionIdBase} {}
+ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, bool useLinkedChanges) :
+	conflictTypes_{conflictTypes}, useLinkedChanges_{useLinkedChanges} {}
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
@@ -44,7 +43,9 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>, 
 {
 	affectedCUsA_ = computeAffectedCUs(cdgA);
 	affectedCUsB_ = computeAffectedCUs(cdgB);
-	LinkedChangesTransition transition(linkedChangesSet, cdgA, cdgB);
+	LinkedChangesTransition transition;
+	if (useLinkedChanges_)
+		transition = LinkedChangesTransition(linkedChangesSet, cdgA, cdgB);
 
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
@@ -59,14 +60,16 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>, 
 				// ...mark it and depending changes as conflicting...
 				conflictingChanges.insert(changeA);
 				markDependingAsConflicting(conflictingChanges, changeA, cdgA);
-				transition.insert(changeA->nodeId(), true, representative, true);
+				if (useLinkedChanges_)
+					transition.insert(changeA->nodeId(), true, representative, true);
 			}
 			// ...same with every change from B...
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
 			{
 				conflictingChanges.insert(changeB);
 				markDependingAsConflicting(conflictingChanges, changeB, cdgB);
-				transition.insert(changeB->nodeId(), false, representative, true);
+				if (useLinkedChanges_)
+					transition.insert(changeB->nodeId(), false, representative, true);
 			}
 			// ...and add the cross product of the CUs to the conflict pairs...
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
@@ -77,7 +80,10 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>, 
 		{
 			// CU is not in conflict, just record change links.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
-				transition.insert(changeA->nodeId(), true, representative);
+			{
+				if (useLinkedChanges_)
+					transition.insert(changeA->nodeId(), true, representative);
+			}
 		}
 	}
 
@@ -87,7 +93,10 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>, 
 		{
 			auto representative = affectedCUsB_.value(conflictRootId);
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
-				transition.insert(changeB->nodeId(), false, representative);
+			{
+				if (useLinkedChanges_)
+					transition.insert(changeB->nodeId(), false, representative);
+			}
 		}
 
 	return transition;
@@ -125,6 +134,7 @@ ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph c
 Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeDescription>& change)
 {
 	// find closest ancestor of node that exists in base
+	Q_ASSERT(change->debugHasNodes());
 	GenericNode* inBase = change->nodeA();
 	GenericNode* node = change->nodeB();
 	Q_ASSERT(inBase || node);

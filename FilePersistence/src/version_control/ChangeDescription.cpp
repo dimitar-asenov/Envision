@@ -52,11 +52,15 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) :
 	computeFlags();
 }
 
-std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(Model::NodeIdType id,
-																	GenericNode* nodeA,
-																	GenericNode* nodeB)
+std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
+		Model::NodeIdType id,
+		std::shared_ptr<ChangeDescription> causingChange,
+		std::shared_ptr<GenericTree> treeA,
+		std::shared_ptr<GenericTree> treeB)
 {
-	Q_ASSERT(nodeA || nodeB);
+	Q_ASSERT(causingChange->debugHasNodes());
+	auto nodeA = causingChange->nodeA();
+	auto nodeB = causingChange->nodeB();
 	std::shared_ptr<ChangeDescription> change(new ChangeDescription);
 	change->nodeId_ = id;
 	change->type_ = ChangeType::Stationary;
@@ -65,6 +69,13 @@ std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(Model::Nod
 	change->pointsToChildA_ = nodeA && nodeA->id() != id;
 	change->nodeB_ = nodeB;
 	change->pointsToChildB_ = nodeB && nodeB->id() != id;
+
+	// is there a better way to do this? maybe if all trees had quick lookup?
+	if (causingChange->type() == ChangeType::Insertion)
+		change->nodeA_ = treeA->find(id, true);
+	else if (causingChange->type() == ChangeType::Deletion)
+		change->nodeB_ = treeB->find(id, true);
+
 	return change;
 }
 

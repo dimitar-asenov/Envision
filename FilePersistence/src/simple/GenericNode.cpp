@@ -72,7 +72,10 @@ GenericNode* GenericNode::parent() const
 {
 	ensureDataRead();
 	if (!parent_ && tree()->piecewiseLoader())
-		tree()->piecewiseLoader()->loadAndLinkNode(parentId_);
+	{
+		tree()->find(parentId_, true); // this should also link this node to the parent.
+		Q_ASSERT(parent_->id() == parentId_);
+	}
 	return parent_;
 }
 
@@ -149,7 +152,6 @@ void GenericNode::resetValue(ValueType type, const QString& value)
 
 void GenericNode::setParent(GenericNode* parent)
 {
-	Q_ASSERT(!tree()->piecewiseLoader());
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
 	Q_ASSERT(parentId_.isNull() || parentId_ == parent->id());
@@ -157,7 +159,6 @@ void GenericNode::setParent(GenericNode* parent)
 
 GenericNode* GenericNode::attachChild(GenericNode* child)
 {
-	Q_ASSERT(!tree()->piecewiseLoader());
 	Q_ASSERT(child);
 	Q_ASSERT(sameTree(child));
 	Q_ASSERT(value_.isEmpty());
@@ -178,7 +179,8 @@ void GenericNode::copy(const GenericNode* other)
 	{
 		setLabel(other->label());
 		setType(other->type());
-		resetValue(other->valueType(), other->value_);
+		if (other->hasValue())
+			resetValue(other->valueType(), other->value_);
 		setId(other->id());
 		setParentId(other->parentId());
 	}
@@ -251,6 +253,9 @@ void GenericNode::linkNode(bool recursiveLink)
 {
 	if (tree()->piecewiseLoader())
 	{
+		// Check that no node with this id exists in the tree.
+		Q_ASSERT(!tree()->find(id_, false));
+
 		// Link to parent
 		if (auto parentNode = tree()->find(parentId_))
 		{

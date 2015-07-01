@@ -44,7 +44,7 @@ class PiecewiseLoader
 		PiecewiseLoader(std::shared_ptr<GenericTree>& tree);
 		virtual ~PiecewiseLoader() = 0;
 
-		void loadAndLinkNode(Model::NodeIdType id);
+		GenericNode* loadAndLinkNode(Model::NodeIdType id);
 		void loadAndLinkNodeChildren(Model::NodeIdType id);
 
 	protected:
