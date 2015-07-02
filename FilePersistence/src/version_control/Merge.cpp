@@ -133,11 +133,11 @@ void Merge::performTrueMerge()
 {
 	initializeComponents();
 
-	treeA_ = std::shared_ptr<GenericTree>(new GenericTree("TreeA"));
+	treeA_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
 	new GitPiecewiseLoader(treeA_, repository_, headCommitId_);
-	treeB_ = std::unique_ptr<GenericTree>(new GenericTree("TreeB"));
+	treeB_ = std::unique_ptr<GenericTree>(new GenericTree(repository_->projectName()));
 	new GitPiecewiseLoader(treeB_, repository_, revisionCommitId_);
-	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("TreeBase"));
+	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree(repository_->projectName()));
 	new GitPiecewiseLoader(treeBase_, repository_, baseCommitId_);
 
 	Diff diffA = repository_->diff(baseCommitId_, headCommitId_, treeBase_, treeA_);

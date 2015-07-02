@@ -251,13 +251,13 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	if (!treeA)
 	{
 		QString sha1A = getSHA1(revisionA);
-		treeA = std::shared_ptr<GenericTree>(new GenericTree("TreeA"));
+		treeA = std::shared_ptr<GenericTree>(new GenericTree(projectName()));
 		new GitPiecewiseLoader(treeA, this, sha1A);
 	}
 	if (!treeB)
 	{
 		QString sha1B = getSHA1(revisionB);
-		treeB = std::shared_ptr<GenericTree>(new GenericTree("TreeB"));
+		treeB = std::shared_ptr<GenericTree>(new GenericTree(projectName()));
 		new GitPiecewiseLoader(treeB, this, sha1B);
 	}
 

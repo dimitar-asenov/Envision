@@ -113,7 +113,7 @@ GenericNode* GenericTree::root() const
 	auto rootPU = persistentUnit(name_);
 	Q_ASSERT(rootPU);
 	auto root = rootPU->nodeWithNullParent();
-	Q_ASSERT(root);
+	Q_ASSERT(root && root->parentId().isNull());
 	return root;
 }
 
