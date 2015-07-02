@@ -51,6 +51,12 @@ bool Merge::commit(const Signature& author, const Signature& committer, const QS
 	return true;
 }
 
+std::shared_ptr<GenericTree> Merge::mergedTree()
+{
+	Q_ASSERT(stage_ >= Stage::BuiltMergedTree);
+	return treeMerged_;
+}
+
 // ======== private ========
 
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)

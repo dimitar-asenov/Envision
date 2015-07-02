@@ -69,9 +69,8 @@ void ChangeDependencyGraph::insert(std::shared_ptr<ChangeDescription>& change)
 void ChangeDependencyGraph::remove(std::shared_ptr<ChangeDescription>& change)
 {
 	Q_ASSERT(changes_.value(change->nodeId()) == change);
+	Q_ASSERT(dependencies_.keys(change).isEmpty()); // no other change depends on this change
 	changes_.remove(change->nodeId());
-	for (auto dependingOnChange : dependencies_.keys(change))
-		dependencies_.remove(dependingOnChange, change);
 	dependencies_.remove(change);
 }
 

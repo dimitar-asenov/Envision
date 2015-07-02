@@ -59,7 +59,7 @@ class FILEPERSISTENCE_API GenericTree {
 		 * from the root recursively in all linked nodes. This means on such trees, this method is slow and
 		 * might not return the node if it's not linked, even if it is loaded in the tree.
 		 */
-		GenericNode* find(Model::NodeIdType id, bool lazyLoad = false);
+		GenericNode* find(Model::NodeIdType id, bool lazyLoad = false) const;
 
 		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);
 
@@ -92,7 +92,7 @@ class FILEPERSISTENCE_API GenericTree {
 		/**
 		 * Searches recursively for the node with \a id in the subtree rooted by \a node.
 		 */
-		GenericNode* recursiveFind(Model::NodeIdType id, GenericNode* node);
+		GenericNode* recursiveFind(Model::NodeIdType id, GenericNode* node) const;
 
 		GenericNode* emptyChunk();
 		void releaseChunk(GenericNode* unusedChunk);

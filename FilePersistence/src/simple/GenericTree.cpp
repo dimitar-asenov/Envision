@@ -68,7 +68,7 @@ GenericPersistentUnit* GenericTree::persistentUnit(const QString& name) const
 		return nullptr;
 }
 
-GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad)
+GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad) const
 {
 	if (piecewiseLoader_)
 	{
@@ -81,7 +81,7 @@ GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad)
 		return recursiveFind(id, root());
 }
 
-GenericNode* GenericTree::recursiveFind(Model::NodeIdType id, GenericNode *node)
+GenericNode* GenericTree::recursiveFind(Model::NodeIdType id, GenericNode *node) const
 {
 	if (node->id() == id)
 		return node;

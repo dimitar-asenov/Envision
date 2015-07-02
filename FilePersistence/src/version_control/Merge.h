@@ -48,8 +48,8 @@ class FILEPERSISTENCE_API Merge
 		enum class Stage {NotInitialized, FoundMergeBase, Classified, AutoMerged,
 								ManualMerged, BuiltMergedTree, WroteToWorkDir, WroteToIndex, Committed};
 
+		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
-		const std::shared_ptr<GenericTree> mergeTree();
 		const bool USE_LINKED_SETS = true;
 		// TOOD output conflicts
 
@@ -117,7 +117,5 @@ class FILEPERSISTENCE_API Merge
 		 */
 		ConflictPairs conflictPairs_;
 };
-
-inline const std::shared_ptr<GenericTree> Merge::mergeTree() { return treeMerged_; }
 
 } /* namespace FilePersistence */
