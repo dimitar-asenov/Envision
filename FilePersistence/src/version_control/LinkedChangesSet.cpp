@@ -39,7 +39,7 @@ LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const Chan
 		auto copy = change->copy(tree);
 		linkedChanges->insert(copy);
 		this->insert(linkedChanges);
-		changesOfBranchA_.insert(change);
+		changesOfBranchA_.insert(copy);
 	}
 	for (auto change : cdgB.changes().values())
 	{

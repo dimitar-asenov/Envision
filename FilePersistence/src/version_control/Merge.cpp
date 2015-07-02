@@ -125,10 +125,8 @@ void Merge::initializeComponents()
 	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(
 				new ConflictUnitDetector(conflictTypes, USE_LINKED_SETS));
 
-/* TODO remove comment. test without lists first.
 	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes, listTypes, unorderedTypes);
 	conflictPipeline_.append(listMergeComponent);
-*/
 }
 
 void Merge::performTrueMerge()
