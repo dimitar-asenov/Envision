@@ -98,7 +98,22 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 		for (auto chunk : preparedListIt.value())
 		{
 			if (chunk->noConflicts_)
+			{
 				mergedList.append(chunk->spanMerged_);
+				// find deletions
+				for (auto elem : chunk->spanBase_)
+				{
+					if (!chunk->spanMerged_.contains(elem))
+					{
+						auto changeA = cdgA.changes().value(elem);
+						auto changeB = cdgB.changes().value(elem);
+						if (changeA->type() == ChangeType::Deletion)
+							markAsResolved(conflictingChanges, conflictPairs, changeA, cdgA, cdgB);
+						else if (changeB->type() == ChangeType::Deletion)
+							markAsResolved(conflictingChanges, conflictPairs, changeB, cdgB, cdgA);
+					}
+				}
+			}
 			else
 				allResolved = false;
 		}
@@ -113,7 +128,7 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 		if (allResolved)
 		{
 			auto containerChange = cdgA.changes().value(preparedListIt.key());
-			markPairAsResolved(conflictingChanges, conflictPairs, containerChange, cdgA, cdgB);
+			markAsResolved(conflictingChanges, conflictPairs, containerChange, cdgA, cdgB);
 		}
 	}
 
@@ -562,30 +577,33 @@ void ListMergeComponent::markDependingAsResolved(ChangeDependencyGraph& cdg,
 	}
 }
 
-void ListMergeComponent::markPairAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+void ListMergeComponent::markAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 														  ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
 														  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB)
 {
 	std::shared_ptr<ChangeDescription> conflictingSameId;
+	// remove all conflict pairs and find pair change.
 	for (auto other : conflictPairs.values(change))
 	{
 		conflictPairs.remove(change, other);
 		if (other->nodeId() == change->nodeId())
 			conflictingSameId = other;
 	}
-	for (auto other : conflictPairs.values(conflictingSameId))
-		conflictPairs.remove(conflictingSameId, other);
-
-	if (conflictPairs.values(change).size() == 0 && noConflictingDependencies(cdgA, conflictingChanges, change))
+	// check if applicable and if yes, mark dependending changes as resolved.
+	if (noConflictingDependencies(cdgA, conflictingChanges, change))
 	{
 		conflictingChanges.remove(change);
 		markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
 	}
-	if (conflictPairs.values(conflictingSameId).size() == 0 &&
-		 noConflictingDependencies(cdgB, conflictingChanges, conflictingSameId))
+
+	// if pair change exists, remove it
+	if (conflictingSameId)
 	{
+		Q_ASSERT(cdgB.changes().value(change->nodeId()) == conflictingSameId);
+		for (auto other : conflictPairs.values(conflictingSameId))
+			conflictPairs.remove(conflictingSameId, other);
 		conflictingChanges.remove(conflictingSameId);
-		markDependingAsResolved(cdgB, conflictingChanges, conflictPairs, conflictingSameId);
+		cdgB.remove(conflictingSameId);
 	}
 }
 
@@ -600,9 +618,10 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(
 	// FIXME also mark deletions as resolved!
 	for (auto elemId : mergedList)
 	{
-		auto changeA = cdgA.changes().contains(elemId) ? cdgA.changes().value(elemId) : nullptr;
-		auto changeB = cdgB.changes().contains(elemId) ? cdgB.changes().value(elemId) : nullptr;
-		auto updateChange = [&](std::shared_ptr<ChangeDescription>& change,
+		auto changeA = cdgA.changes().value(elemId);
+		auto changeB = cdgB.changes().value(elemId);
+		auto updateChange = [&](
+				std::shared_ptr<ChangeDescription>& change,
 				ChangeDependencyGraph& cdgA,
 				ChangeDependencyGraph& cdgB)
 		{
@@ -615,7 +634,7 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(
 				node->attachToParent();
 			}
 			change->computeFlags();
-			markPairAsResolved(conflictingChanges, conflictPairs, change, cdgA, cdgB);
+			markAsResolved(conflictingChanges, conflictPairs, change, cdgA, cdgB);
 		};
 
 		if (changeA && !changeA->onlyLabelChange())

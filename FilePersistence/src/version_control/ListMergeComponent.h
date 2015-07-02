@@ -121,7 +121,7 @@ class ListMergeComponent : public ConflictPipelineComponent
 				QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 				ConflictPairs& conflictPairs);
 
-		void markPairAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+		void markAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 										ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
 										ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB);
 		bool noConflictingDependencies(ChangeDependencyGraph& cdg,

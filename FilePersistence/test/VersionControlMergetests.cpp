@@ -53,8 +53,10 @@ TEST(FilePersistencePlugin, TwoDeletesNoConflict)
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
+	auto tree = merge->mergedTree();
 	merge->commit(sig, sig, "This is the result of merge test \"twodeletesNoConflict\"");
-	CHECK_CONDITION(true);
+	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000032}")));
+	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000042}")));
 	cleanup();
 }
 
@@ -66,8 +68,14 @@ TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
+	auto tree = merge->mergedTree();
 	merge->commit(sig, sig, "This is the result of merge test \"" + this->getName() + "\"");
-	CHECK_CONDITION(true);
+	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000013}")));
+	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000042}")));
+	// check that the list is continuous.
+	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000002}"));
+	for (int idx = 0; idx < listContainer->children().size(); ++idx)
+		CHECK_CONDITION(listContainer->child({idx}));
 	cleanup();
 }
 
