@@ -139,7 +139,7 @@ void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer,
 {
 	if (!arrows_.contains(layer))
 		addArrowLayer(layer);
-	arrowsToAdd_.append(ArrowToAdd(fromParent, from, toParent, to, layer));
+	arrowsToAdd_.append(ArrowToAdd{fromParent, from, toParent, to, layer});
 }
 
 QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
