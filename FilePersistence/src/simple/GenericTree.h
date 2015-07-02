@@ -65,6 +65,8 @@ class FILEPERSISTENCE_API GenericTree {
 
 		GenericNode* root() const;
 
+		void buildLookupHash();
+
 	private:
 		friend class GenericPersistentUnit;
 		friend class GenericNode;
@@ -72,10 +74,7 @@ class FILEPERSISTENCE_API GenericTree {
 
 		QString name_;
 
-		/**
-		 * If this tree has a piecewise loader, this hash contains all loaded nodes of this tree.
-		 * If this tree does not have a piecewise loader, this is empty.
-		 */
+		bool hasQuickLookupHash_{};
 		QHash<Model::NodeIdType, GenericNode*> quickLookupHash_;
 		/**
 		 * If this tree has a piecewise loader, this hash maps IDs of unloaded nodes to all nodes whose parentId = ID.
@@ -88,11 +87,6 @@ class FILEPERSISTENCE_API GenericTree {
 
 		constexpr static int ALLOCATION_CHUNK_SIZE = 1000; // num elements to allocate at once
 		QList<GenericNode*> emptyChunks_;
-
-		/**
-		 * Searches recursively for the node with \a id in the subtree rooted by \a node.
-		 */
-		GenericNode* recursiveFind(Model::NodeIdType id, GenericNode* node) const;
 
 		GenericNode* emptyChunk();
 		void releaseChunk(GenericNode* unusedChunk);

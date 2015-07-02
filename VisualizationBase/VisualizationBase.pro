@@ -119,6 +119,7 @@ HEADERS += src/overlays/IconOverlayStyle.h \
     src/views/MiniMap.h \
     src/views/View.h \
     src/visualizationbase_api.h \
+    src/nodes/UINode.h \
     test/BoxTest.h \
     src/renderer/VisualizationGroupsManager.h \
     src/renderer/SzLevelOrderingManager.h \
@@ -219,6 +220,7 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/items/Text.cpp \
     src/shapes/BoxStyle.cpp \
     src/shapes/ShapeStyle.cpp \
+    src/nodes/UINode.cpp \
     test/BoxTest.cpp \
     src/shapes/Box.cpp \
     src/shapes/Shape.cpp \
