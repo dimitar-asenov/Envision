@@ -34,9 +34,20 @@
 
 namespace FilePersistence {
 
-TEST(FilePersistencePlugin, twoDeletesNoConflict)
+static void unpack(QString testName)
 {
-	Q_ASSERT(std::system("tar -xf TestMerge_TwoDeletesNoConflict.tar -C projects") == 0);
+	auto command = "tar -xf TestMerge_" + testName + ".tar -C projects";
+	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
+}
+
+static void cleanup()
+{
+	Q_ASSERT(std::system("rm -r projects/TestMerge") == 0);
+}
+
+TEST(FilePersistencePlugin, TwoDeletesNoConflict)
+{
+	unpack(this->getName());
 	GitRepository repo("projects/TestMerge");
 	auto merge = repo.merge("dev");
 	Signature sig;
@@ -44,7 +55,20 @@ TEST(FilePersistencePlugin, twoDeletesNoConflict)
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "This is the result of merge test \"twodeletesNoConflict\"");
 	CHECK_CONDITION(true);
-	Q_ASSERT(std::system("rm -r projects/TestMerge") == 0);
+	cleanup();
+}
+
+TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
+{
+	unpack(this->getName());
+	GitRepository repo("projects/TestMerge");
+	auto merge = repo.merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	merge->commit(sig, sig, "This is the result of merge test \"" + this->getName() + "\"");
+	CHECK_CONDITION(true);
+	cleanup();
 }
 
 } /* namespace FilePersistence */
