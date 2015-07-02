@@ -78,8 +78,10 @@ void createNodeAndAppend(const git_diff_line* line, const char* filePath, Generi
 	QString relativePath(filePath);
 	GenericPersistentUnit* unit = tree->persistentUnit(relativePath);
 	Q_ASSERT(unit != nullptr);
-	GenericNode* node = unit->newNode(line->content, lineLength);
-	node->linkNode();
+	auto pair = unit->newOrExistingNode(line->content, lineLength);
+	auto node = pair.second;
+	if (pair.first)
+		node->linkNode();
 	list.append(node);
 }
 

@@ -40,10 +40,7 @@ GenericNode* PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
 	Q_ASSERT(tree_->piecewiseLoader().get() == this);
 	Q_ASSERT(!id.isNull());
 
-	auto newNode = loadNewNode(loadNodeData(id));
-	newNode->linkNode();
-
-	return newNode;
+	return loadNewNode(loadNodeData(id));
 }
 
 void PiecewiseLoader::loadAndLinkNodeChildren(Model::NodeIdType id)
@@ -53,10 +50,7 @@ void PiecewiseLoader::loadAndLinkNodeChildren(Model::NodeIdType id)
 
 	auto childrenData = loadNodeChildrenData(id);
 	for (auto& childData : childrenData)
-	{
-		auto newNode = loadNewNode(childData);
-		if (newNode) newNode->linkNode();
-	}
+		loadNewNode(childData);
 }
 
 GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
@@ -69,7 +63,10 @@ GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
 	Q_ASSERT(pu);
 
 	auto data = nodeData.nodeLine_.toUtf8();
-	auto node = pu->newNode(data.constData(), data.length()); // Will eagerly load the node's contents
+	auto pair = pu->newOrExistingNode(data.constData(), data.length()); // Will eagerly load the node's contents
+	auto node = pair.second;
+	if (pair.first)
+		node->linkNode();
 
 	return node;
 }

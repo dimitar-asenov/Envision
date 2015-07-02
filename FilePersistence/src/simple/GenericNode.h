@@ -103,6 +103,7 @@ class FILEPERSISTENCE_API GenericNode {
 		static const QString PERSISTENT_UNIT_TYPE;
 
 		void linkNode(bool recursiveLink = false);
+
 	private:
 		friend class GenericTree;
 		friend class GenericPersistentUnit;

@@ -251,42 +251,40 @@ void GenericNode::ensureDataRead() const
 
 void GenericNode::linkNode(bool recursiveLink)
 {
-	if (tree()->piecewiseLoader())
+	Q_ASSERT(tree()->piecewiseLoader());
+	// Check that no node with this id exists in the tree.
+	Q_ASSERT(!tree()->find(id_, false));
+
+	// Link to parent
+	if (auto parentNode = tree()->find(parentId_))
 	{
-		// Check that no node with this id exists in the tree.
-		Q_ASSERT(!tree()->find(id_, false));
+		setParent(parentNode);
+		parentNode->attachChild(this);
+	}
+	else tree()->nodesWithoutParents().insert(parentId_, this);
 
-		// Link to parent
-		if (auto parentNode = tree()->find(parentId_))
-		{
-			setParent(parentNode);
-			parentNode->attachChild(this);
-		}
-		else tree()->nodesWithoutParents().insert(parentId_, this);
+	// Link to children
+	auto childIt = tree()->nodesWithoutParents().find(id_);
+	while (childIt != tree()->nodesWithoutParents().end() && childIt.key() == id_)
+	{
+		auto child = childIt.value();
+		child->setParent(this);
+		attachChild(child);
+		childIt = tree()->nodesWithoutParents().erase(childIt);
+	}
 
-		// Link to children
-		auto childIt = tree()->nodesWithoutParents().find(id_);
-		while (childIt != tree()->nodesWithoutParents().end() && childIt.key() == id_)
-		{
-			auto child = childIt.value();
-			child->setParent(this);
-			attachChild(child);
-			childIt = tree()->nodesWithoutParents().erase(childIt);
-		}
+	// Add to lookup
+	QList<GenericNode*> stack = {this};
+	while (!stack.isEmpty())
+	{
+		auto currentNode = stack.takeLast();
+		auto found = tree()->find(currentNode->id_);
+		Q_ASSERT(!found || found == currentNode);
+		if (!found) tree()->quickLookupHash_.insert(currentNode->id_, currentNode);
 
-		// Add to lookup
-		QList<GenericNode*> stack = {this};
-		while (!stack.isEmpty())
-		{
-			auto currentNode = stack.takeLast();
-			auto found = tree()->find(currentNode->id_);
-			Q_ASSERT(!found || found == currentNode);
-			if (!found) tree()->quickLookupHash_.insert(currentNode->id_, currentNode);
+		if (!recursiveLink) break;
 
-			if (!recursiveLink) break;
-
-			stack.append(currentNode->children());
-		}
+		stack.append(currentNode->children());
 	}
 }
 

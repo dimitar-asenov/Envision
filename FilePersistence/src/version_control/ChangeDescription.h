@@ -41,7 +41,10 @@ class FILEPERSISTENCE_API ChangeDescription
 				Model::NodeIdType nodeId, std::shared_ptr<ChangeDescription> causingChange,
 				std::shared_ptr<GenericTree> treeA, std::shared_ptr<GenericTree> treeB);
 
-		std::shared_ptr<ChangeDescription> copy(std::shared_ptr<GenericTree>& tree) const;
+		/**
+		 * If \a force is true then no check for ID uniqueness is performed.
+		 */
+		std::shared_ptr<ChangeDescription> copy(std::shared_ptr<GenericTree>& tree, bool force = false) const;
 
 		enum UpdateType
 		{

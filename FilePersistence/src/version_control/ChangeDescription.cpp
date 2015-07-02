@@ -158,7 +158,7 @@ GenericNode* ChangeDescription::nodeB() const
 	return nodeB_;
 }
 
-std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<GenericTree>& tree) const
+std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<GenericTree>& tree, bool force) const
 {
 	// This method lazy-loads nodeA and nodeB. This is necessary because deep-copy trees can't lazy-load.
 	GenericNode* newNodeA = nullptr;
@@ -168,7 +168,7 @@ std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<Gener
 		auto persistentUnit = tree->persistentUnit(nodeA()->persistentUnit()->name());
 		if (persistentUnit == nullptr)
 			persistentUnit = &tree->newPersistentUnit(nodeA()->persistentUnit()->name());
-		newNodeA = persistentUnit->newNode(nodeA());
+		newNodeA = persistentUnit->newNode(nodeA(), force);
 	}
 
 	GenericNode* newNodeB = nullptr;
@@ -177,7 +177,7 @@ std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<Gener
 		auto persistentUnit = tree->persistentUnit(nodeB()->persistentUnit()->name());
 		if (persistentUnit == nullptr)
 			persistentUnit = &tree->newPersistentUnit(nodeB()->persistentUnit()->name());
-		newNodeA = persistentUnit->newNode(nodeB());
+		newNodeA = persistentUnit->newNode(nodeB(), force);
 	}
 
 	std::shared_ptr<ChangeDescription> newChange(new ChangeDescription);

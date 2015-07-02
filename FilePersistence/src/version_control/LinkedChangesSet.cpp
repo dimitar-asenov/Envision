@@ -36,7 +36,7 @@ LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const Chan
 	for (auto change : cdgA.changes().values())
 	{
 		auto linkedChanges = newLinkedChanges();
-		auto copy = change->copy(tree);
+		auto copy = change->copy(tree, true);
 		linkedChanges->insert(copy);
 		this->insert(linkedChanges);
 		changesOfBranchA_.insert(copy);
@@ -44,7 +44,7 @@ LinkedChangesSet::LinkedChangesSet(const ChangeDependencyGraph &cdgA, const Chan
 	for (auto change : cdgB.changes().values())
 	{
 		auto linkedChanges = newLinkedChanges();
-		linkedChanges->insert(change->copy(tree));
+		linkedChanges->insert(change->copy(tree, true));
 		this->insert(linkedChanges);
 	}
 }
@@ -70,7 +70,7 @@ LinkedChanges copyLinkedChanges(const LinkedChanges& changesToCopy,
 	auto linkedChanges = newLinkedChanges();
 	for (auto change : *changesToCopy)
 	{
-		auto newChange = change->copy(tree);
+		auto newChange = change->copy(tree, true);
 		linkedChanges->insert(newChange);
 		if (oldChangesOfA.contains(change))
 			newChangesOfA.insert(newChange);
