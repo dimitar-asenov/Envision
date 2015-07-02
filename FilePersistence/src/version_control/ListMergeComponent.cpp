@@ -64,7 +64,7 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 		}
 		else // list is unordered
 		{
-			/*
+			/* TODO uncomment
 			QList<Model::NodeIdType> listInChunk;
 			listInChunk.append(idListA);
 			for (auto elem : idListB)
@@ -94,10 +94,13 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 	for (auto preparedListIt = preparedLists_.begin(); preparedListIt != preparedLists_.end(); ++preparedListIt)
 	{
 		QList<Model::NodeIdType> mergedList;
+		bool allResolved = true;
 		for (auto chunk : preparedListIt.value())
 		{
 			if (chunk->noConflicts_)
 				mergedList.append(chunk->spanMerged_);
+			else
+				allResolved = false;
 		}
 
 		// assert that each element occurs only once in the merged list.
@@ -105,7 +108,13 @@ LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> tre
 
 		// TODO update transition instead of overwrite
 		transition = translateListIntoChanges(treeA, treeB, treeBase, preparedListIt.key(),
-														  mergedList, cdgA, cdgB, linkedChangesSet);
+														  mergedList, cdgA, cdgB, linkedChangesSet,
+														  conflictingChanges, conflictPairs);
+		if (allResolved)
+		{
+			auto containerChange = cdgA.changes().value(preparedListIt.key());
+			markPairAsResolved(conflictingChanges, conflictPairs, containerChange, cdgA, cdgB);
+		}
 	}
 
 	return transition;
@@ -525,43 +534,106 @@ QList<Model::NodeIdType> ListMergeComponent::nodeListToSortedIdList(const QList<
 	return QList<Model::NodeIdType>::fromVector(idList);
 }
 
-LinkedChangesTransition ListMergeComponent::translateListIntoChanges(std::shared_ptr<GenericTree> treeA,
-																							std::shared_ptr<GenericTree>,
-																							std::shared_ptr<GenericTree> treeBase,
-																							Model::NodeIdType,
-																							QList<Model::NodeIdType>& mergedList,
-																							ChangeDependencyGraph& cdgA,
-																							ChangeDependencyGraph& cdgB,
-																							LinkedChangesSet& linkedChangesSet)
+
+bool ListMergeComponent::noConflictingDependencies(ChangeDependencyGraph& cdg,
+																	QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+																	std::shared_ptr<ChangeDescription>& change)
 {
+	for (auto dependency : cdg.getDependencies(change))
+	{
+		if (conflictingChanges.contains(dependency))
+			return false;
+	}
+	return true;
+}
+
+void ListMergeComponent::markDependingAsResolved(ChangeDependencyGraph& cdg,
+																 QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+																 ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription>& change)
+{
+	for (auto depending : cdg.getDependendingChanges(change))
+	{
+		if (conflictPairs.values(depending).isEmpty())
+		{
+			conflictingChanges.remove(depending);
+			if (noConflictingDependencies(cdg, conflictingChanges, depending))
+				markDependingAsResolved(cdg, conflictingChanges, conflictPairs, depending);
+		}
+	}
+}
+
+void ListMergeComponent::markPairAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+														  ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
+														  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB)
+{
+	std::shared_ptr<ChangeDescription> conflictingSameId;
+	for (auto other : conflictPairs.values(change))
+	{
+		conflictPairs.remove(change, other);
+		if (other->nodeId() == change->nodeId())
+			conflictingSameId = other;
+	}
+	for (auto other : conflictPairs.values(conflictingSameId))
+		conflictPairs.remove(conflictingSameId, other);
+
+	if (conflictPairs.values(change).size() == 0 && noConflictingDependencies(cdgA, conflictingChanges, change))
+	{
+		conflictingChanges.remove(change);
+		markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
+	}
+	if (conflictPairs.values(conflictingSameId).size() == 0 &&
+		 noConflictingDependencies(cdgB, conflictingChanges, conflictingSameId))
+	{
+		conflictingChanges.remove(conflictingSameId);
+		markDependingAsResolved(cdgB, conflictingChanges, conflictPairs, conflictingSameId);
+	}
+}
+
+LinkedChangesTransition ListMergeComponent::translateListIntoChanges(
+		std::shared_ptr<GenericTree> treeA, std::shared_ptr<GenericTree>,
+		std::shared_ptr<GenericTree> treeBase, Model::NodeIdType containerId,
+		QList<Model::NodeIdType>& mergedList, ChangeDependencyGraph& cdgA,
+		ChangeDependencyGraph& cdgB, LinkedChangesSet& linkedChangesSet,
+		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+		ConflictPairs& conflictPairs)
+{
+	// FIXME also mark deletions as resolved!
 	for (auto elemId : mergedList)
 	{
 		auto changeA = cdgA.changes().contains(elemId) ? cdgA.changes().value(elemId) : nullptr;
 		auto changeB = cdgB.changes().contains(elemId) ? cdgB.changes().value(elemId) : nullptr;
+		auto updateChange = [&](std::shared_ptr<ChangeDescription>& change,
+				ChangeDependencyGraph& cdgA,
+				ChangeDependencyGraph& cdgB)
+		{
+			auto node = change->nodeB();
+			node->setLabel(QString(mergedList.indexOf(elemId)));
+			if (node->parentId() != containerId)
+			{
+				node->detachFromParent();
+				node->setParentId(containerId);
+				node->attachToParent();
+			}
+			change->computeFlags();
+			markPairAsResolved(conflictingChanges, conflictPairs, change, cdgA, cdgB);
+		};
+
 		if (changeA && !changeA->onlyLabelChange())
 		{
 			// branch A changes node beyond label
 			if (changeB) Q_ASSERT(changeB->onlyLabelChange());
-			changeA->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
-			changeA->computeFlags();
+			updateChange(changeA, cdgA, cdgB);
 		}
 		else if (changeB && !changeB->onlyLabelChange())
 		{
 			// branch B changes node beyond label
 			if (changeA) Q_ASSERT(changeA->onlyLabelChange());
-			changeB->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
-			changeB->computeFlags();
+			updateChange(changeB, cdgB, cdgA);
 		}
 		else if (changeA)
-		{
-			changeA->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
-			changeA->computeFlags();
-		}
+			updateChange(changeA, cdgA, cdgB);
 		else if (changeB)
-		{
-			changeB->nodeB()->setLabel(QString(mergedList.indexOf(elemId)));
-			changeB->computeFlags();
-		}
+			updateChange(changeB, cdgB, cdgA);
 		else
 		{
 			// no branch changes node beyond label so we must construct a new change
@@ -569,8 +641,8 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(std::shared
 			auto newNode = treeA->find(elemId);
 			Q_ASSERT(oldNode);
 			Q_ASSERT(newNode);
-			newNode->setLabel(QString(mergedList.indexOf(elemId)));
 			auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
+			updateChange(newChange, cdgA, cdgB);
 			cdgA.insert(newChange);
 			cdgA.recordDependencies(newChange, true);
 			cdgA.recordDependencies(newChange, false);

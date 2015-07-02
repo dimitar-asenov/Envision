@@ -48,11 +48,12 @@ QList<Chunk*> Diff3Parse::computeChunks(const QList<Model::NodeIdType> idListA,
 	auto lcsA = longestCommonSubsequence(idListBase, idListA);
 	auto lcsB = longestCommonSubsequence(idListBase, idListB);
 
-	auto stableA = QSet<Model::NodeIdType>::fromList(lcsA);
+	// auto stableA = QSet<Model::NodeIdType>::fromList(lcsA);
 	auto stableB = QSet<Model::NodeIdType>::fromList(lcsB);
 
+	// stableIDs are the sable elements of the diff3 parse
 	QList<Model::NodeIdType> stableIDs;
-	for (auto id : stableA)
+	for (auto id : lcsA)
 		if (stableB.contains(id)) stableIDs.append(id);
 
 	auto sublistsA = computeSublists(idListA, stableIDs);
@@ -65,10 +66,27 @@ QList<Chunk*> Diff3Parse::computeChunks(const QList<Model::NodeIdType> idListA,
 	auto iterB = sublistsB.constBegin();
 
 	bool isStable = false;
+	bool lastWasEmpty = false;
 	for (auto iterBase = sublistsBase.constBegin(); iterBase != sublistsBase.constEnd(); ++iterBase)
 	{
 		if (!iterBase->isEmpty() || !iterA->isEmpty() || !iterB->isEmpty())
-			chunks.append(new Chunk(isStable, *iterA, *iterB, *iterBase));
+		{
+			if (lastWasEmpty && !chunks.isEmpty())
+			{
+				auto chunk = chunks.last();
+				chunk->spanA_.append(*iterA);
+				chunk->spanB_.append(*iterB);
+				chunk->spanBase_.append(*iterBase);
+				chunk->spanMerged_.append(*iterBase);
+			}
+			else
+			{
+				chunks.append(new Chunk(isStable, *iterA, *iterB, *iterBase));
+			}
+			lastWasEmpty = false;
+		}
+		else
+			lastWasEmpty = true;
 		isStable = !isStable;
 		++iterA;
 		++iterB;
@@ -84,20 +102,32 @@ QList<QList<Model::NodeIdType>> Diff3Parse::computeSublists(const QList<Model::N
 	QList<QList<Model::NodeIdType>> chunks;
 	QList<Model::NodeIdType> chunk;
 
-	QList<Model::NodeIdType>::const_iterator stableId = stableIDs.begin();
-	for (Model::NodeIdType id : elementIds)
+	auto elemId = elementIds.constBegin();
+	auto stableId = stableIDs.constBegin();
+	while (stableId != stableIDs.constEnd())
 	{
-		if (stableId != stableIDs.constEnd() && id == *stableId)
+		// iterate until end of unstable chunk
+		while (elemId != elementIds.constEnd() && *elemId != *stableId)
 		{
-			chunks.append(chunk);
-			chunk = QList<Model::NodeIdType>();
-			chunk.append(id);
-			chunks.append(chunk);
-			chunk = QList<Model::NodeIdType>();
-			stableId++;
+			chunk.append(*elemId);
+			++elemId;
 		}
-		else
-			chunk.append(id);
+		Q_ASSERT(*elemId == *stableId);
+		chunks.append(chunk);
+		// create chunk with one stable element.
+		// We don't know if in other versions there are unstable elements between this stable
+		// element and the next.
+		chunk = {*stableId};
+		++elemId;
+		++stableId;
+		chunks.append(chunk);
+		chunk = {};
+	}
+	// iterate until end of last unstable chunk
+	while (elemId != elementIds.constEnd())
+	{
+		chunk.append(*elemId);
+		++elemId;
 	}
 	chunks.append(chunk);
 

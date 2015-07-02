@@ -173,7 +173,7 @@ void Merge::performTrueMerge()
 	for (auto change : cdgB.changes())
 		if (!conflictingChanges_.contains(change))
 		{
-			Q_ASSERT(!applicableChanges.contains(change->nodeId())); // no change for that ID exists
+			// Q_ASSERT(!applicableChanges.contains(change->nodeId())); // no change for that ID exists
 			applicableChanges.insert(change->nodeId(), change);
 		}
 

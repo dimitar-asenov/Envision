@@ -45,7 +45,14 @@ class ChangeDependencyGraph
 		void replace(std::shared_ptr<ChangeDescription>& oldChange,
 						 std::shared_ptr<ChangeDescription>& newChange);
 
+		/**
+		 * This is not recursive.
+		 */
 		QList<std::shared_ptr<ChangeDescription>> getDependencies(std::shared_ptr<ChangeDescription> change) const;
+
+		/**
+		 * This is not recursive.
+		 */
 		QList<std::shared_ptr<ChangeDescription>> getDependendingChanges(std::shared_ptr<ChangeDescription> change) const;
 
 		/**
