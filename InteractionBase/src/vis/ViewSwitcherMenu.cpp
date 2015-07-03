@@ -35,10 +35,10 @@ ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 
 ViewSwitcherMenu* ViewSwitcherMenu::instance{};
 
-void ViewSwitcherMenu::show(QVector<Visualization::Item*> items, Visualization::Item* target)
+void ViewSwitcherMenu::show(Visualization::Item* target)
 {
 	QApplication::postEvent(target->scene(),
-							new Visualization::CustomSceneEvent( [=]() { showNow(items, target); }));
+							new Visualization::CustomSceneEvent( [=]() { showNow(target); }));
 }
 
 void ViewSwitcherMenu::hide()
@@ -48,8 +48,13 @@ void ViewSwitcherMenu::hide()
 								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
 }
 
-void ViewSwitcherMenu::showNow(QVector<Visualization::Item*> items, Visualization::Item* target)
+void ViewSwitcherMenu::showNow(Visualization::Item* target)
 {
+	QVector<Visualization::Item*> items;
+	for (auto view : target->scene()->viewItems())
+		items.append(new VViewSwitcherEntry(nullptr, view->name()));
+	for (int i = items.size(); i < 9; i++)
+		items.append(new VViewSwitcherEntry(nullptr, "Empty slot " + QString::number(i)));
 	ViewSwitcherMenu::hideNow();
 	instance = new ViewSwitcherMenu(items, target);
 	target->scene()->addTopLevelItem(instance);
@@ -61,11 +66,6 @@ void ViewSwitcherMenu::showNow(QVector<Visualization::Item*> items, Visualizatio
 
 void ViewSwitcherMenu::hideNow()
 {
-	if (instance)
-	{
-		instance->removeSceneEventFilter(instance);
-		instance->scene()->removeTopLevelItem(instance);
-	}
 	SAFE_DELETE_ITEM(instance);
 	instance = nullptr;
 }

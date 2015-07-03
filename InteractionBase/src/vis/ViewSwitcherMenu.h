@@ -38,7 +38,7 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherMenu, MenuStyle)
 
 	public:
-		static void show(QVector<Visualization::Item*> items, Visualization::Item* target);
+		static void show(Visualization::Item* target);
 		static void hide();
 		static bool isVisible();
 
@@ -48,7 +48,7 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		virtual void hideSelection();
 
 	private:
-		static void showNow(QVector<Visualization::Item*> items, Visualization::Item* target);
+		static void showNow(Visualization::Item* target);
 		static void hideNow();
 
 		bool inEditMode_{};

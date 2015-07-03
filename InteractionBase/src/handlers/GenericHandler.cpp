@@ -517,17 +517,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
 	{
 		event->accept();
-		if (ViewSwitcherMenu::isVisible())
-			ViewSwitcherMenu::hide();
-		else
-		{
-			QVector<Visualization::Item*> items;
-			for (auto view : target->scene()->viewItems())
-				items.append(new VViewSwitcherEntry(nullptr, view->name()));
-			for (int i = items.size(); i < 9; i++)
-				items.append(new VViewSwitcherEntry(nullptr, "Empty slot " + QString::number(i)));
-			ViewSwitcherMenu::show(items, target);
-		}
+		if (ViewSwitcherMenu::isVisible()) ViewSwitcherMenu::hide();
+		else	ViewSwitcherMenu::show(target);
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
