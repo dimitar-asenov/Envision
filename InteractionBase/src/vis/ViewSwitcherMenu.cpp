@@ -49,7 +49,6 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 	Menu::hideNow();
 	Menu::instance = new ViewSwitcherMenu(items, target);
 	target->scene()->addTopLevelItem(Menu::instance);
-	//Menu::instance->installSceneEventFilter(Menu::instance);
 	target->scene()->addPostEventAction( [=]()
 					{ Menu::instance->selectItem(Menu::instance->currentItems()[0][0]); });
 }
@@ -60,41 +59,14 @@ ViewSwitcherMenu::ViewSwitcherMenu(QVector<Visualization::Item*> items,
 {
 }
 
-bool ViewSwitcherMenu::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+void ViewSwitcherMenu::startFocusMode(Visualization::Item *target)
 {
-	if (inEditMode_ && event->type() == QEvent::KeyPress)
+	if (auto asSwitcher = DCast<VViewSwitcherEntry>(target))
 	{
-		//If editing, let the mover use the cursor keys to move within the item itself,
-		//rather than between items
-		auto keyEvent = static_cast<QKeyEvent*>(event);
-		if (keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
-			return false;
+		asSwitcher->setGraphicsEffect(nullptr);
+		asSwitcher->nameField()->moveCursor();
+		asSwitcher->nameField()->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
 	}
-	auto result = Super::sceneEventFilter(watched, event);
-	if (result)
-		return true;
-	else if (event->type() == QEvent::KeyPress)
-	{
-		//F2 can trigger a rename of the view item,
-		//also makes sure left click and enter then don't actually
-		//execute the existing item to make editing easier
-		auto keyEvent = static_cast<QKeyEvent*>(event);
-		auto asSwitcher = DCast<VViewSwitcherEntry>(focusedItem());
-		if (asSwitcher && (keyEvent->key() == Qt::Key_F2
-				|| (keyEvent->key() == Qt::Key_Return && inEditMode_)))
-		{
-			inEditMode_ = !inEditMode_;
-			if (!inEditMode_)	selectItem(asSwitcher);
-			else
-			{
-				asSwitcher->setGraphicsEffect(nullptr);
-				asSwitcher->nameField()->moveCursor();
-				asSwitcher->nameField()->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
-			}
-			return true;
-		}
-	}
-	return false;
 }
 
 bool ViewSwitcherMenu::onSelectItem(Visualization::Item* item)

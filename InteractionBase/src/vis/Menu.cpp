@@ -139,11 +139,22 @@ void Menu::updateGeometry(int availableWidth, int availableHeight)
 
 bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 {
+	//If we are in focus mode, and not F2 is pressed, we don't handle any events here.
+	if (inFocusMode_)
+	{
+		bool isFocusModeKey = false;
+		if (event->type() == QEvent::KeyPress)
+			if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_F2)
+				isFocusModeKey = true;
+		if (!isFocusModeKey) return false;
+	}
 	if (event->type() == QEvent::KeyPress)
 	{
 		auto keyEvent = static_cast<QKeyEvent*>(event);
-		if (keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Up
+		//Only switch between when in focus mode
+		if ((keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Up
 			|| keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
+			&& !inFocusMode_)
 		{
 			event->accept();
 			//Switch between the normal items depending on the input key direction
@@ -158,6 +169,16 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 				pos.setX(pos.x() + 1);
 			pos = correctCoordinates(pos);
 			selectItem(currentItems()[pos.x()][pos.y()]);
+			return true;
+		}
+		else if (keyEvent->key() == Qt::Key_F2)
+		{
+			qDebug() << "Starting focus mode";
+			inFocusMode_ = !inFocusMode_;
+			if (inFocusMode_)
+				startFocusMode(focusedItem_);
+			else
+				selectItem(focusedItem_);
 			return true;
 		}
 		else if (keyEvent->key() == Qt::Key_Return)

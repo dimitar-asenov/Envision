@@ -79,7 +79,11 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		/**
 		 * The function to execute when selecting the given visualization.
 		 */
-		virtual bool onSelectItem(Visualization::Item* node) = 0;
+		virtual bool onSelectItem(Visualization::Item* item) = 0;
+		/**
+		 * Start focus mode with the given target to be focused.
+		 */
+		virtual void startFocusMode(Visualization::Item* target) = 0;
 
 		QPoint indexOf(Visualization::Item* node) const;
 
@@ -98,6 +102,7 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		QPointF mousePosition_;
 		QVector<QVector<Visualization::Item*>> currentItems_;
 
+		bool inFocusMode_{};
 		Visualization::Item* focusedItem_{};
 
 };

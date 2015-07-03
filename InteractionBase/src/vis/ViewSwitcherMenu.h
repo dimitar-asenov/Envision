@@ -41,8 +41,8 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		static void show(Visualization::Item* target);
 
 	protected:
-		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
-		virtual bool onSelectItem(Visualization::Item* node);
+		virtual bool onSelectItem(Visualization::Item* item);
+		virtual void startFocusMode(Visualization::Item* target);
 
 	private:
 		static void showNow(Visualization::Item* target);
