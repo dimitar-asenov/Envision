@@ -37,6 +37,8 @@ class FILEPERSISTENCE_API ChangeDescription
 	public:
 		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
 
+		QString summary() const;
+
 		static std::shared_ptr<ChangeDescription> newStructChange(
 				Model::NodeIdType nodeId, std::shared_ptr<ChangeDescription> causingChange,
 				std::shared_ptr<GenericTree> treeA, std::shared_ptr<GenericTree> treeB);

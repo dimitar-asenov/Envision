@@ -52,6 +52,55 @@ ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) :
 	computeFlags();
 }
 
+QString ChangeDescription::summary() const
+{
+	QString typeStr;
+	switch (type_)
+	{
+		case ChangeType::Deletion:
+			typeStr = "Deletion";
+			break;
+		case ChangeType::Insertion:
+			typeStr = "Insertion";
+			break;
+		case ChangeType::Move:
+			typeStr = "Move";
+			break;
+		case ChangeType::Stationary:
+			typeStr = "Stationary";
+			break;
+		default:
+			Q_ASSERT(false);
+	}
+
+	QString flagStr;
+	if (updateFlags_.testFlag(Label))
+		flagStr += "Label";
+	if (updateFlags_.testFlag(Value))
+	{
+		if (!flagStr.isEmpty())
+			flagStr += ", ";
+		flagStr += "Value";
+	}
+	if (updateFlags_.testFlag(Type))
+	{
+		if (!flagStr.isEmpty())
+			flagStr += ", ";
+		flagStr += "Type";
+	}
+	if (updateFlags_.testFlag(Structure))
+	{
+		if (!flagStr.isEmpty())
+			flagStr += ", ";
+		flagStr += "Struct";
+	}
+
+	auto summary = "{..." + nodeId_.toString().right(7) + ":" + typeStr;
+	if (updateFlags_ != NoFlags)
+		summary += " (" + flagStr + ")";
+	return summary;
+}
+
 std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
 		Model::NodeIdType id,
 		std::shared_ptr<ChangeDescription> causingChange,

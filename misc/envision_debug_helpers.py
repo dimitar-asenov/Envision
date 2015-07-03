@@ -24,3 +24,20 @@ def qdump__QUuid(d, value):
             d.putSubItem("data2", value["data2"])
             d.putSubItem("data3", value["data3"])
             d.putSubItem("data4", value["data4"])
+            
+def qdump__FilePersistence__ChangeDescription(d, value):
+    this = d.makeExpression(value)
+    stringValue = gdb.parse_and_eval("%s.summary()" % this)
+    
+    d.putStringValue(stringValue)
+    
+    d.putNumChild(7)
+    if d.isExpanded():
+        with Children(d):
+            d.putSubItem("nodeId_", value["nodeId_"])
+            d.putSubItem("type_", value["type_"])
+            d.putSubItem("updateFlags_", value["updateFlags_"])
+            d.putSubItem("pointsToChildA_", value["pointsToChildA_"])
+            d.putSubItem("pointsToChildB_", value["pointsToChildB_"])
+            d.putSubItem("nodeA_", value["nodeA_"])
+            d.putSubItem("nodeB_", value["nodeB_"])
