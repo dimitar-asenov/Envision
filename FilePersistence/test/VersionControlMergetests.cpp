@@ -79,4 +79,13 @@ TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
 	cleanup();
 }
 
+TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
+{
+	unpack(this->getName());
+	GitRepository repo("projects/TestMerge");
+	auto merge = repo.merge("dev");
+	CHECK_CONDITION(merge->hasConflicts());
+	cleanup();
+}
+
 } /* namespace FilePersistence */

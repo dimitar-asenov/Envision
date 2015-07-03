@@ -48,6 +48,8 @@ class FILEPERSISTENCE_API Merge
 		enum class Stage {NotInitialized, FoundMergeBase, Classified, AutoMerged,
 								ManualMerged, BuiltMergedTree, WroteToWorkDir, WroteToIndex, Committed};
 
+		bool hasConflicts() const;
+		const QSet<std::shared_ptr<ChangeDescription>> getConflicts() const;
 		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
 		const bool USE_LINKED_SETS = true;
@@ -117,5 +119,9 @@ class FILEPERSISTENCE_API Merge
 		 */
 		ConflictPairs conflictPairs_;
 };
+
+inline bool Merge::hasConflicts() const { Q_ASSERT(stage_ == Stage::ManualMerged); return !conflictingChanges_.isEmpty(); }
+
+inline const QSet<std::shared_ptr<ChangeDescription>> Merge::getConflicts() const { Q_ASSERT(stage_ == Stage::ManualMerged); return conflictingChanges_; }
 
 } /* namespace FilePersistence */
