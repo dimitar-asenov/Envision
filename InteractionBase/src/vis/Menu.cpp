@@ -48,7 +48,6 @@ Menu::Menu(QVector<QVector<Visualization::Item*> > items,
 {
 	mousePosition_ = target->scene()->lastMouseHoverPosition();
 	setFiltersChildEvents(true);
-	setDefaultMoveCursorProxy(items[0][0]);
 }
 
 Menu::~Menu()
@@ -95,8 +94,9 @@ void Menu::selectItem(Visualization::Item* item)
 			focusedItem()->setGraphicsEffect(nullptr);
 		if (item)
 			item->setGraphicsEffect(new QGraphicsColorizeEffect());
-		//Focus the entire menu
-		moveCursor();
+		//Focus the entire menu (somehow just item->moveCursor() doesn't always work)
+		scene()->setMainCursor(nullptr);
+		item->moveCursor();
 		focusedItem_ = item;
 	}
 }
@@ -173,7 +173,6 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 		}
 		else if (keyEvent->key() == Qt::Key_F2)
 		{
-			qDebug() << "Starting focus mode";
 			inFocusMode_ = !inFocusMode_;
 			if (inFocusMode_)
 				startFocusMode(focusedItem_);
