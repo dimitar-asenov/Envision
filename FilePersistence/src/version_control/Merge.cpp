@@ -189,6 +189,7 @@ void Merge::performTrueMerge()
 	{
 		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree("TestMerge")); // FIXME name has to mach file
 		repository_->loadGenericTree(treeMerged_, baseCommitId_);
+		treeMerged_->buildLookupHash();
 		applyChangesToTree(treeMerged_, cdgA);
 		applyChangesToTree(treeMerged_, cdgB);
 
