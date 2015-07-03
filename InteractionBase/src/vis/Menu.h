@@ -48,6 +48,9 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 	public:
 		virtual ~Menu();
 
+		static void hide();
+		static bool isVisible();
+
 		/**
 		 * The currently focused item. Either the text field,
 		 * or a visualization of one of the nodes.
@@ -57,6 +60,7 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		 * Selects the given item as the focused item.
 		 */
 		void selectItem(Visualization::Item* item);
+		QVector<QVector<Visualization::Item*>> currentItems() const;
 		/**
 		 * Executes the currently focused item's function.
 		 * Returns whether it was successfully executed.
@@ -68,17 +72,15 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	protected:
+		static Menu* instance;
+		static void hideNow();
+
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
 		/**
 		 * The function to execute when selecting the given visualization.
 		 */
 		virtual bool onSelectItem(Visualization::Item* node) = 0;
-		/**
-		 * The function to hide the selection menu after successful execution
-		 */
-		virtual void hideSelection() = 0;
 
-		QVector<QVector<Visualization::Item*>> currentItems() const;
 		QPoint indexOf(Visualization::Item* node) const;
 
 		Menu(QVector<Visualization::Item*> items, Visualization::Item* target,
@@ -87,6 +89,7 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 							  StyleType* style = itemStyles().get());
 
 	private:
+
 		QPoint correctCoordinates(QPoint point) const;
 		static QVector<QVector<Visualization::Item*>> arrange(
 				QVector<Visualization::Item*> items, int nrOfColumns);
@@ -101,5 +104,6 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 
 inline QVector<QVector<Visualization::Item*>> Menu::currentItems() const { return currentItems_; }
 inline Visualization::Item* Menu::focusedItem() const { return focusedItem_; }
+inline bool Menu::isVisible() { return instance; }
 
 }

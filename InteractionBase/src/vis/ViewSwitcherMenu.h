@@ -39,26 +39,18 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 
 	public:
 		static void show(Visualization::Item* target);
-		static void hide();
-		static bool isVisible();
 
 	protected:
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
 		virtual bool onSelectItem(Visualization::Item* node);
-		virtual void hideSelection();
 
 	private:
 		static void showNow(Visualization::Item* target);
-		static void hideNow();
 
 		bool inEditMode_{};
 
 		ViewSwitcherMenu(QVector<Visualization::Item*> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
-
-		static ViewSwitcherMenu* instance;
 };
-
-inline bool ViewSwitcherMenu::isVisible() { return instance; }
 
 }

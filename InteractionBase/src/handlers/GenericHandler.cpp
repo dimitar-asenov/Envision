@@ -517,7 +517,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
 	{
 		event->accept();
-		if (ViewSwitcherMenu::isVisible()) ViewSwitcherMenu::hide();
+		if (Menu::isVisible()) Menu::hide();
 		else	ViewSwitcherMenu::show(target);
 	}
 	else InteractionHandler::keyPressEvent(target, event);

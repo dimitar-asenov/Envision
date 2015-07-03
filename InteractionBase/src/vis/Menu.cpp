@@ -38,6 +38,8 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(Menu, "item")
 
+Menu* Menu::instance{};
+
 Menu::Menu(QVector<Visualization::Item*> items,
 			Visualization::Item* target, StyleType* style, int nrOfColumns)
 	: Menu(arrange(items, nrOfColumns), target, style)
@@ -61,6 +63,19 @@ Menu::~Menu()
 	target_ = nullptr;
 	//Destroyed by DeclarativeItem
 	focusedItem_ = nullptr;
+}
+
+void Menu::hide()
+{
+	if (instance)
+		QApplication::postEvent(instance->scene(),
+								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
+}
+
+void Menu::hideNow()
+{
+	SAFE_DELETE_ITEM(instance);
+	instance = nullptr;
 }
 
 void Menu::initializeForms()
@@ -150,7 +165,7 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			event->accept();
 			if (executeFocused())
 			{
-				hideSelection();
+				hide();
 				return true;
 			}
 		}
@@ -165,7 +180,7 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			selectItem(asItem);
 			if (executeFocused())
 			{
-				hideSelection();
+				hide();
 				return true;
 			}
 		}

@@ -33,19 +33,10 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 
-ViewSwitcherMenu* ViewSwitcherMenu::instance{};
-
 void ViewSwitcherMenu::show(Visualization::Item* target)
 {
 	QApplication::postEvent(target->scene(),
 							new Visualization::CustomSceneEvent( [=]() { showNow(target); }));
-}
-
-void ViewSwitcherMenu::hide()
-{
-	if (instance)
-		QApplication::postEvent(instance->scene(),
-								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
 }
 
 void ViewSwitcherMenu::showNow(Visualization::Item* target)
@@ -55,19 +46,12 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 		items.append(new VViewSwitcherEntry(nullptr, view->name()));
 	for (int i = items.size(); i < 9; i++)
 		items.append(new VViewSwitcherEntry(nullptr, "Empty slot " + QString::number(i)));
-	ViewSwitcherMenu::hideNow();
-	instance = new ViewSwitcherMenu(items, target);
-	target->scene()->addTopLevelItem(instance);
-	instance->installSceneEventFilter(instance);
+	Menu::hideNow();
+	Menu::instance = new ViewSwitcherMenu(items, target);
+	target->scene()->addTopLevelItem(Menu::instance);
+	Menu::instance->installSceneEventFilter(Menu::instance);
 	target->scene()->addPostEventAction( [=]()
-					{ instance->selectItem(instance->currentItems()[0][0]); });
-
-}
-
-void ViewSwitcherMenu::hideNow()
-{
-	SAFE_DELETE_ITEM(instance);
-	instance = nullptr;
+					{ Menu::instance->selectItem(Menu::instance->currentItems()[0][0]); });
 }
 
 ViewSwitcherMenu::ViewSwitcherMenu(QVector<Visualization::Item*> items,
@@ -124,11 +108,6 @@ bool ViewSwitcherMenu::onSelectItem(Visualization::Item* item)
 		scene()->switchToView(view);
 	}
 	return true;
-}
-
-void ViewSwitcherMenu::hideSelection()
-{
-	ViewSwitcherMenu::hide();
 }
 
 }
