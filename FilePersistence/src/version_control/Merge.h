@@ -120,8 +120,10 @@ class FILEPERSISTENCE_API Merge
 		ConflictPairs conflictPairs_;
 };
 
-inline bool Merge::hasConflicts() const { Q_ASSERT(stage_ == Stage::ManualMerged); return !conflictingChanges_.isEmpty(); }
+inline bool Merge::hasConflicts() const
+	{ Q_ASSERT(stage_ == Stage::ManualMerged); return !conflictingChanges_.isEmpty(); }
 
-inline const QSet<std::shared_ptr<ChangeDescription>> Merge::getConflicts() const { Q_ASSERT(stage_ == Stage::ManualMerged); return conflictingChanges_; }
+inline const QSet<std::shared_ptr<ChangeDescription>> Merge::getConflicts() const
+	{ Q_ASSERT(stage_ == Stage::ManualMerged); return conflictingChanges_; }
 
 } /* namespace FilePersistence */
