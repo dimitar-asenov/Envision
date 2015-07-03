@@ -49,11 +49,6 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		virtual ~Menu();
 
 		/**
-		 * Whether this interface has a text field. Reimplement where necessary.
-		 */
-		virtual bool hasTextField() const;
-		Visualization::Text* textField() const;
-		/**
 		 * The currently focused item. Either the text field,
 		 * or a visualization of one of the nodes.
 		 */
@@ -69,51 +64,42 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		bool executeFocused();
 
 		static void initializeForms();
-		virtual int determineForm();
 
-		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	protected:
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
 		/**
-		 * The function to execute when selecting the given node.
+		 * The function to execute when selecting the given visualization.
 		 */
-		virtual bool onSelectNode(Model::Node* node) = 0;
-		/**
-		 * The function to execute when selecting the given text from the text field.
-		 */
-		virtual bool onSelectText(QString text) = 0;
+		virtual bool onSelectItem(Visualization::Item* node) = 0;
 		/**
 		 * The function to hide the selection menu after successful execution
 		 */
 		virtual void hideSelection() = 0;
 
-		QPoint indexOf(Model::Node* node) const;
+		QVector<QVector<Visualization::Item*>> currentItems() const;
+		QPoint indexOf(Visualization::Item* node) const;
 
-		Menu(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
+		Menu(QVector<Visualization::Item*> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get(), int nrOfColumns = 3);
-		Menu(QVector<QVector<Model::Node*>> selectableNodes, Visualization::Item* target,
+		Menu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 
 	private:
 		QPoint correctCoordinates(QPoint point) const;
-		QVector<QVector<Model::Node*>> currentNodes() const;
-		static QVector<QVector<Model::Node*>> arrange(QVector<Model::Node*> nodes, int nrOfColumns);
+		static QVector<QVector<Visualization::Item*>> arrange(
+				QVector<Visualization::Item*> items, int nrOfColumns);
 
 		Visualization::Item* target_{};
 		QPointF mousePosition_;
-		QVector<QVector<Model::Node*>> currentNodes_;
+		QVector<QVector<Visualization::Item*>> currentItems_;
 
 		Visualization::Item* focusedItem_{};
-		Visualization::Text* textField_{};
-
-		QGraphicsEffect* selectedEffect_{};
 
 };
 
-inline QVector<QVector<Model::Node*>> Menu::currentNodes() const { return currentNodes_; }
+inline QVector<QVector<Visualization::Item*>> Menu::currentItems() const { return currentItems_; }
 inline Visualization::Item* Menu::focusedItem() const { return focusedItem_; }
-inline Visualization::Text* Menu::textField() const { return textField_; }
 
 }

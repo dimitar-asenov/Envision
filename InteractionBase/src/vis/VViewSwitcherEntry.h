@@ -26,9 +26,7 @@
 #pragma once
 
 #include "interactionbase_api.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "nodes/ViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/Text.h"
 
 namespace Interaction {
@@ -36,25 +34,26 @@ namespace Interaction {
 class TextAndDescription;
 
 class INTERACTIONBASE_API VViewSwitcherEntry :
-		public Super<Visualization::ItemWithNode<VViewSwitcherEntry,
-			Visualization::DeclarativeItem<VViewSwitcherEntry>, ViewSwitcherEntry>>
+		public Super<Visualization::DeclarativeItem<VViewSwitcherEntry>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherEntry, Visualization::DeclarativeItemBaseStyle)
 
 	public:
-		VViewSwitcherEntry(Visualization::Item* parent, NodeType* node,
+		VViewSwitcherEntry(Visualization::Item* parent, QString viewName,
 						   const StyleType* style = itemStyles().get());
 
 		static void initializeForms();
 
-		Visualization::Item* nameField() const;
+		Visualization::Text* nameField() const;
 
 		virtual void determineChildren() override;
 
 	private:
 		Visualization::Text* nameField_{};
+
+		QString oldName_;
 };
 
-inline Visualization::Item* VViewSwitcherEntry::nameField() const { return nameField_; }
+inline Visualization::Text* VViewSwitcherEntry::nameField() const { return nameField_; }
 
 }

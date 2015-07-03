@@ -25,7 +25,6 @@
  **********************************************************************************************************************/
 #include "ViewSwitcherMenu.h"
 
-#include "nodes/ViewSwitcherEntry.h"
 #include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
@@ -36,10 +35,10 @@ ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 
 ViewSwitcherMenu* ViewSwitcherMenu::instance{};
 
-void ViewSwitcherMenu::show(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
+void ViewSwitcherMenu::show(QVector<Visualization::Item*> items, Visualization::Item* target)
 {
 	QApplication::postEvent(target->scene(),
-							new Visualization::CustomSceneEvent( [=]() { showNow(selectableNodes, target); }));
+							new Visualization::CustomSceneEvent( [=]() { showNow(items, target); }));
 }
 
 void ViewSwitcherMenu::hide()
@@ -49,13 +48,15 @@ void ViewSwitcherMenu::hide()
 								new Visualization::CustomSceneEvent( [&]() { hideNow(); }));
 }
 
-void ViewSwitcherMenu::showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target)
+void ViewSwitcherMenu::showNow(QVector<Visualization::Item*> items, Visualization::Item* target)
 {
 	ViewSwitcherMenu::hideNow();
-	instance = new ViewSwitcherMenu(selectableNodes, target);
+	instance = new ViewSwitcherMenu(items, target);
 	target->scene()->addTopLevelItem(instance);
 	instance->installSceneEventFilter(instance);
-	instance->setFiltersChildEvents(true);
+	target->scene()->addPostEventAction( [=]()
+					{ instance->selectItem(instance->currentItems()[0][0]); });
+
 }
 
 void ViewSwitcherMenu::hideNow()
@@ -69,9 +70,9 @@ void ViewSwitcherMenu::hideNow()
 	instance = nullptr;
 }
 
-ViewSwitcherMenu::ViewSwitcherMenu(QVector<Model::Node*> selectableNodes,
+ViewSwitcherMenu::ViewSwitcherMenu(QVector<Visualization::Item*> items,
 											 Visualization::Item* target, StyleType* style)
-	: Super(selectableNodes, target, style)
+	: Super(items, target, style)
 {
 }
 
@@ -112,24 +113,16 @@ bool ViewSwitcherMenu::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 	return false;
 }
 
-bool ViewSwitcherMenu::onSelectNode(Model::Node *node)
+bool ViewSwitcherMenu::onSelectItem(Visualization::Item* item)
 {
 	if (inEditMode_) return false;
-	if (auto asSwitcher = DCast<ViewSwitcherEntry>(node))
+	if (auto asSwitcher = DCast<VViewSwitcherEntry>(item))
 	{
-		auto view = scene()->viewItem(asSwitcher->viewName());
+		auto view = scene()->viewItem(asSwitcher->nameField()->text());
 		if (!view)
-			view = scene()->newViewItem(asSwitcher->viewName());
+			view = scene()->newViewItem(asSwitcher->nameField()->text());
 		scene()->switchToView(view);
 	}
-	return true;
-}
-
-bool ViewSwitcherMenu::onSelectText(QString text)
-{
-	if (inEditMode_) return false;
-	auto newView = scene()->newViewItem(text);
-	scene()->switchToView(newView);
 	return true;
 }
 

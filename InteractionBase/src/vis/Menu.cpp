@@ -38,23 +38,19 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(Menu, "item")
 
-Menu::Menu(QVector<Model::Node*> selectableNodes,
+Menu::Menu(QVector<Visualization::Item*> items,
 			Visualization::Item* target, StyleType* style, int nrOfColumns)
-	: Menu(arrange(selectableNodes, nrOfColumns), target, style)
+	: Menu(arrange(items, nrOfColumns), target, style)
 {
 }
 
-Menu::Menu(QVector<QVector<Model::Node *> > selectableNodes,
+Menu::Menu(QVector<QVector<Visualization::Item*> > items,
 			Visualization::Item *target, StyleType *style)
-	: Super(nullptr, style), target_(target), currentNodes_(selectableNodes)
+	: Super(nullptr, style), target_(target), currentItems_(items)
 {
 	mousePosition_ = target->scene()->lastMouseHoverPosition();
-	selectedEffect_ = new QGraphicsColorizeEffect();
-	if (hasTextField())
-	{
-		textField_ = new Visualization::Text(this, &style->nameField(), "Enter name here");
-		textField_->setEditable(true);
-	}
+	setFiltersChildEvents(true);
+	setDefaultMoveCursorProxy(items[0][0]);
 }
 
 Menu::~Menu()
@@ -65,11 +61,6 @@ Menu::~Menu()
 	target_ = nullptr;
 	//Destroyed by DeclarativeItem
 	focusedItem_ = nullptr;
-	SAFE_DELETE_ITEM(textField_);
-	//Destroyed when the focused item is destroyed
-	if (!focusedItem() || focusedItem()->graphicsEffect() != selectedEffect_)
-		SAFE_DELETE(selectedEffect_);
-	selectedEffect_ = nullptr;
 }
 
 void Menu::initializeForms()
@@ -77,62 +68,36 @@ void Menu::initializeForms()
 	auto nodeGrid = (new Visualization::DynamicGridFormElement())
 			->setSpacing(5, 5)
 			->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
-			->setNodesGetter([](Visualization::Item* v)
+			->setItemsGetter([](Visualization::Item* v)
 				{ auto self = static_cast<I*>(v);
-				  return self->currentNodes(); });
-	//First form: only the nodes
+				  return self->currentItems(); });
+	//Just have a grid of nodes
 	addForm(nodeGrid);
-	//Second form: the nodes and a text field
-	addForm((new Visualization::GridLayoutFormElement())
-			->setSpacing(5, 5)->setMargins(10)
-			->put(0, 0, item<Visualization::Text>(&I::textField_,
-									[](I* v) -> const Visualization::TextStyle* { return &v->style()->nameField(); }))
-									//[](I* v) { return v->style()->nameField(); }))
-			->put(0, 1, nodeGrid));
 }
 
-int Menu::determineForm()
+void Menu::selectItem(Visualization::Item* item)
 {
-	return hasTextField() ? 1 : 0;
-}
-
-bool Menu::hasTextField() const
-{
-	return true;
-}
-
-void Menu::selectItem(Visualization::Item *item)
-{
-	if (focusedItem() && focusedItem() != textField())
-	{
+	if (focusedItem())
 		focusedItem()->setGraphicsEffect(nullptr);
-		selectedEffect_ = new QGraphicsColorizeEffect();
-	}
-	if (item && item != textField())
-		item->setGraphicsEffect(selectedEffect_);
-	if (item == textField())
-	{
-		item->moveCursor();
-		item->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
-	}
-	else moveCursor(Visualization::Item::MoveOnPosition, QPoint(0, 0));
+	if (item)
+		item->setGraphicsEffect(new QGraphicsColorizeEffect());
+	//Focus the entire menu
+	moveCursor();
 	focusedItem_ = item;
 }
 
 bool Menu::executeFocused()
 {
-	if (hasTextField() && focusedItem() == textField())
-		return onSelectText(textField()->text());
-	else if (focusedItem())
-		return onSelectNode(focusedItem()->node());
+	if (focusedItem())
+		return onSelectItem(focusedItem());
 	return false;
 }
 
-QPoint Menu::indexOf(Model::Node *node) const
+QPoint Menu::indexOf(Visualization::Item *item) const
 {
-	for (int col = 0; col < currentNodes_.size(); col++)
-		for (int row = 0; row < currentNodes_[col].size(); row++)
-			if (currentNodes_[col][row] == node)
+	for (int col = 0; col < currentItems_.size(); col++)
+		for (int row = 0; row < currentItems_[col].size(); row++)
+			if (currentItems_[col][row] == item)
 				return QPoint(col, row);
 	return QPoint(-1, -1);
 }
@@ -141,27 +106,14 @@ QPoint Menu::correctCoordinates(QPoint point) const
 {
 	QPoint result = point;
 	if (point.x() < 0)
-		result.setX(currentNodes_.size() - 1);
-	if (point.x() >= currentNodes_.size())
+		result.setX(currentItems_.size() - 1);
+	if (point.x() >= currentItems_.size())
 		result.setX(0);
 	if (point.y() < 0)
-		result.setY(currentNodes_[point.x()].size() - 1);
-	if (point.y() >= currentNodes_[result.x()].size())
+		result.setY(currentItems_[point.x()].size() - 1);
+	if (point.y() >= currentItems_[result.x()].size())
 		result.setY(0);
 	return result;
-}
-
-void Menu::determineChildren()
-{
-	Super::determineChildren();
-	Item* defaultProxy{};
-	if (hasTextField())
-		setDefaultMoveCursorProxy(defaultProxy = textField_);
-	else
-		setDefaultMoveCursorProxy(defaultProxy = findVisualizationOf(currentNodes()[0][0]));
-	//TODO@cyril doing this in show doesn't work -> the grid does not have items yet
-	if (!focusedItem_)
-		selectItem(defaultProxy);
 }
 
 void Menu::updateGeometry(int availableWidth, int availableHeight)
@@ -179,28 +131,18 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			|| keyEvent->key() == Qt::Key_Left || keyEvent->key() == Qt::Key_Right)
 		{
 			event->accept();
-			//If currently the name is selected, and down key is pressed -> select the item below
-			if (focusedItem() == textField() && keyEvent->key() == Qt::Key_Down)
-				selectItem(findVisualizationOf(currentNodes()[0][0]));
-			//If an item in the top row is selected, and up key is pressed -> select the name
-			else if (focusedItem() != textField() && indexOf(focusedItem()->node()).y() == 0
-					 && keyEvent->key() == Qt::Key_Up && hasTextField())
-				selectItem(textField());
-			//Otherwise just switch between the normal items
-			else if (focusedItem() != textField() || !hasTextField())
-			{
-				auto pos = indexOf(focusedItem()->node());
-				if (keyEvent->key() == Qt::Key_Down)
-					pos.setY(pos.y() + 1);
-				else if (keyEvent->key() == Qt::Key_Up)
-					pos.setY(pos.y() - 1);
-				else if (keyEvent->key() == Qt::Key_Left)
-					pos.setX(pos.x() - 1);
-				else
-					pos.setX(pos.x() + 1);
-				pos = correctCoordinates(pos);
-				selectItem(findVisualizationOf(currentNodes()[pos.x()][pos.y()]));
-			}
+			//Switch between the normal items depending on the input key direction
+			auto pos = indexOf(focusedItem());
+			if (keyEvent->key() == Qt::Key_Down)
+				pos.setY(pos.y() + 1);
+			else if (keyEvent->key() == Qt::Key_Up)
+				pos.setY(pos.y() - 1);
+			else if (keyEvent->key() == Qt::Key_Left)
+				pos.setX(pos.x() - 1);
+			else
+				pos.setX(pos.x() + 1);
+			pos = correctCoordinates(pos);
+			selectItem(currentItems()[pos.x()][pos.y()]);
 			return true;
 		}
 		else if (keyEvent->key() == Qt::Key_Return)
@@ -216,8 +158,9 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 	else if (event->type() == QEvent::GraphicsSceneMousePress)
 	{
 		auto asItem = Visualization::Item::envisionItem(watched);
-		asItem = asItem ? asItem->findAncestorWithNode() : asItem;
-		if (asItem && isAncestorOf(watched))
+		while (asItem && indexOf(asItem).x() == -1)
+			asItem = asItem->parent();
+		if (asItem)
 		{
 			selectItem(asItem);
 			if (executeFocused())
@@ -230,9 +173,10 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 	return false;
 }
 
-QVector<QVector<Model::Node*>> Menu::arrange(QVector<Model::Node*> nodes, int nrOfColumns)
+QVector<QVector<Visualization::Item*>> Menu::arrange(
+		QVector<Visualization::Item*> nodes, int nrOfColumns)
 {
-	QVector<QVector<Model::Node*>> result;
+	QVector<QVector<Visualization::Item*>> result;
 	result.resize(std::min(nrOfColumns, nodes.size()));
 	for (int index = 0; index < nodes.size(); index++)
 	{

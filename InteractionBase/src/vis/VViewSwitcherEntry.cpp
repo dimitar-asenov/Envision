@@ -36,11 +36,12 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(VViewSwitcherEntry, "item")
 
-VViewSwitcherEntry::VViewSwitcherEntry(Visualization::Item* parent, NodeType* node, const StyleType* style) :
-		Super(parent, node, style)
+VViewSwitcherEntry::VViewSwitcherEntry(Visualization::Item* parent, QString viewName, const StyleType* style) :
+		Super(parent, style)
 {
-	nameField_ = new Visualization::Text(this, node->viewName());
+	nameField_ = new Visualization::Text(this, viewName);
 	nameField_->setEditable(true);
+	oldName_ = viewName;
 }
 
 void VViewSwitcherEntry::initializeForms()
@@ -52,8 +53,8 @@ void VViewSwitcherEntry::determineChildren()
 {
 	Super::determineChildren();
 	//If we recently made this editable, just select the entire text
-	if (auto view = scene()->viewItem(node()->viewName()))
+	if (auto view = scene()->viewItem(oldName_))
 		view->setName(nameField_->text());
-	node()->setViewName(nameField_->text());
+	oldName_ = nameField_->text();
 }
 }

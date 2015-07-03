@@ -38,23 +38,22 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherMenu, MenuStyle)
 
 	public:
-		static void show(QVector<Model::Node*> selectableNodes, Visualization::Item* target);
+		static void show(QVector<Visualization::Item*> items, Visualization::Item* target);
 		static void hide();
 		static bool isVisible();
 
 	protected:
 		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
-		virtual bool onSelectNode(Model::Node* node);
-		virtual bool onSelectText(QString text);
+		virtual bool onSelectItem(Visualization::Item* node);
 		virtual void hideSelection();
 
 	private:
-		static void showNow(QVector<Model::Node*> selectableNodes, Visualization::Item* target);
+		static void showNow(QVector<Visualization::Item*> items, Visualization::Item* target);
 		static void hideNow();
 
 		bool inEditMode_{};
 
-		ViewSwitcherMenu(QVector<Model::Node*> selectableNodes, Visualization::Item* target,
+		ViewSwitcherMenu(QVector<Visualization::Item*> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 
 		static ViewSwitcherMenu* instance;

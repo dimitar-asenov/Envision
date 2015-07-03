@@ -52,7 +52,7 @@
 #include "Comments/src/nodes/CommentNode.h"
 
 #include "vis/ViewSwitcherMenu.h"
-#include "nodes/ViewSwitcherEntry.h"
+#include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
@@ -521,12 +521,12 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			ViewSwitcherMenu::hide();
 		else
 		{
-			QVector<Model::Node*> nodes;
+			QVector<Visualization::Item*> items;
 			for (auto view : target->scene()->viewItems())
-				nodes.append(new Interaction::ViewSwitcherEntry(view->name()));
-			for (int i = nodes.size(); i < 9; i++)
-				nodes.append(new Interaction::ViewSwitcherEntry("Empty slot " + QString::number(i)));
-			ViewSwitcherMenu::show(nodes, target);
+				items.append(new VViewSwitcherEntry(nullptr, view->name()));
+			for (int i = items.size(); i < 9; i++)
+				items.append(new VViewSwitcherEntry(nullptr, "Empty slot " + QString::number(i)));
+			ViewSwitcherMenu::show(items, target);
 		}
 	}
 	else InteractionHandler::keyPressEvent(target, event);
