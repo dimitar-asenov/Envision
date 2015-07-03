@@ -239,7 +239,8 @@ QSet<Model::NodeIdType> ListMergeComponent::computeListsToMerge(
 		auto conflictingChange = getConflictingChange(conflictPairs, change);
 		if (conflictingChange && !conflictingChange->onlyStructureChange()) continue;
 
-		Q_ASSERT(change->nodeA() == conflictingChange->nodeA());
+		if (conflictingChange)
+			Q_ASSERT(change->nodeA() == conflictingChange->nodeA());
 
 		// - change and conflictingChange affect the same node
 		// - Both branches only change child structure
