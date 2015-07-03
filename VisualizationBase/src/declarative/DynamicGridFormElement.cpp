@@ -33,7 +33,8 @@ namespace Visualization {
 
 
 DynamicGridFormElement::DynamicGridFormElement(const DynamicGridFormElement& other) : LayoutFormElement{other},
-	nodesGetterFunction_{other.nodesGetterFunction_}, spanGetterFunction_{other.spanGetterFunction_},
+	nodesGetterFunction_{other.nodesGetterFunction_}, itemsGetterFunction_{other.itemsGetterFunction_},
+	spanGetterFunction_{other.spanGetterFunction_},
 	spaceBetweenColumns_{other.spaceBetweenColumns_}, spaceBetweenRows_{other.spaceBetweenRows_},
 	majorAxis_{other.majorAxis_},
 	horizontalAlignment_{other.horizontalAlignment_}, verticalAlignment_{other.verticalAlignment_}
@@ -135,15 +136,53 @@ void DynamicGridFormElement::computeSize(Item* item, int availableWidth, int ava
 
 void DynamicGridFormElement::synchronizeWithItem(Item* item)
 {
-	auto nodes = nodesGetterFunction_(item);
 	auto& data = dataForItem(item);
 
-	// Remove all elements from the current grid that do not match a node
-	// If a node exists record it's location
-	// One node might be visualized multiple times
-	QHash<Model::Node*, QList<Item*>> existingItems;
+	if (nodesGetterFunction_)
+	{
+		Q_ASSERT(!itemsGetterFunction_);
 
-	//Keep track of the positions at which we already found visualizations for nodes
+		auto nodes = nodesGetterFunction_(item);
+		synchronizeGrids(data, nodes,
+								[](Model::Node* def, Item* vis){ return def == vis->node();}, // compare
+								[item](Model::Node* def) {return item->renderer()->render(item, def);}, // create
+								[item](Model::Node* def, Item*& store) {item->synchronizeItem(store, def);} // sync
+			);
+	}
+	else
+	{
+		Q_ASSERT(itemsGetterFunction_);
+
+		auto items = itemsGetterFunction_(item);
+		synchronizeGrids(data, items,
+								[](Item* def, Item* vis){ return def == vis;}, // compare
+								[item](Item* def) {def->setParentItem(item); return def;}, // create
+								[item](Item* def, Item*& store) {Q_ASSERT(def->parent() == item); store = def;} // sync
+			);
+	}
+
+	// Set the span if any
+	if (spanGetterFunction_) data.itemSpan_ = spanGetterFunction_(item);
+	else
+	{
+		data.itemSpan_.clear();
+		data.itemSpan_.resize(data.numColumns_);
+		for (int x = 0; x < data.numColumns_; ++x)
+			data.itemSpan_[x] = QVector<QPair<int, int>>(data.numRows_, {1, 1});
+	}
+}
+
+template <class Definition, class CompareFunction, class CreateFunction, class SyncFunction>
+void DynamicGridFormElement::synchronizeGrids(ItemData& data, const Definition& def,
+															 CompareFunction compare, CreateFunction create, SyncFunction sync)
+{
+	// Remove all elements from the current grid that do not match an entry
+
+	// If an entry exists record it's location
+	// One entry might be visualized multiple times
+	QHash<decltype(def[0][0]), QList<Item*>> existingItems;
+
+	//Keep track of the positions at which we already found visualizations for the entries
 	QList<QPoint> usedPositions;
 
 	for (int x = 0; x < data.numColumns_; ++x)
@@ -152,16 +191,16 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 			{
 				bool found = false;
 
-				for (int n = 0; n < nodes.size(); ++n)
+				for (int n = 0; n < def.size(); ++n)
 				{
-					for (int j = 0; j < nodes[n].size(); ++j)
+					for (int j = 0; j < def[n].size(); ++j)
 						//We must make sure not to visualize one node with the same item twice
-						if (nodes[n][j] == data.itemGrid_[x][y]->node() && !usedPositions.contains(QPoint(n, j)))
+						if (compare(def[n][j], data.itemGrid_[x][y]) && !usedPositions.contains(QPoint(n, j)))
 						{
-							item->synchronizeItem(data.itemGrid_[x][y], nodes[n][j]);
-							if (!existingItems.contains(nodes[n][j]))
-								existingItems.insert(nodes[n][j], {});
-							existingItems[nodes[n][j]].append(data.itemGrid_[x][y]);
+							sync(def[n][j], data.itemGrid_[x][y]);
+							if (!existingItems.contains(def[n][j]))
+								existingItems.insert(def[n][j], {});
+							existingItems[def[n][j]].append(data.itemGrid_[x][y]);
 							usedPositions.append(QPoint(n, j));
 							found = true;
 							break;
@@ -175,13 +214,13 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 			}
 
 	// Get the new size.
-	auto resizeAxes = [](const QVector<QVector<Model::Node*>>& nodes, int& sizeMajor, int& sizeMinor){
-		sizeMajor = nodes.size();
-		sizeMinor = nodes.isEmpty() ? 0 : std::max_element(nodes.begin(), nodes.end(),
-				[](const QVector<Model::Node*>& a, const QVector<Model::Node*>& b){return a.size() < b.size();})->size();
+	auto resizeAxes = [](const Definition& entries, int& sizeMajor, int& sizeMinor){
+		sizeMajor = entries.size();
+		sizeMinor = entries.isEmpty() ? 0 : std::max_element(entries.begin(), entries.end(),
+				[](const decltype(def[0]) & a, const decltype(def[0]) & b){return a.size() < b.size();})->size();
 	};
-	if (majorAxis_ == GridLayouter::ColumnMajor) resizeAxes(nodes, data.numColumns_, data.numRows_);
-	else resizeAxes(nodes, data.numRows_, data.numColumns_);
+	if (majorAxis_ == GridLayouter::ColumnMajor) resizeAxes(def, data.numColumns_, data.numRows_);
+	else resizeAxes(def, data.numRows_, data.numColumns_);
 
 	// Set new grid size
 	data.itemGrid_.resize(data.numColumns_);
@@ -192,18 +231,18 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 		data.itemPositionWithinLayout_[x].resize(data.numRows_);
 	}
 
-	for (int major = 0; major<nodes.size(); ++major)
-		for (int minor = 0; minor<nodes[major].size(); ++minor)
+	for (int major = 0; major<def.size(); ++major)
+		for (int minor = 0; minor<def[major].size(); ++minor)
 		{
-			if (nodes[major][minor])
+			if (def[major][minor])
 			{
 				//We try to find an existing visualization of our current node, and create a new one if we don't
-				auto existingIterator = existingItems.find(nodes[major][minor]);
+				auto existingIterator = existingItems.find(def[major][minor]);
 				Item* value;
 				if (existingIterator != existingItems.end() && !existingIterator.value().isEmpty())
 					value = existingIterator.value().takeFirst();
 				else
-					value = item->renderer()->render(item, nodes[major][minor]);
+					value = create(def[major][minor]);
 
 				if (majorAxis_ == GridLayouter::ColumnMajor) data.itemGrid_[major][minor] = value;
 				else data.itemGrid_[minor][major] = value;
@@ -212,16 +251,6 @@ void DynamicGridFormElement::synchronizeWithItem(Item* item)
 				// computeSize()
 			}
 		}
-
-	// Set the span if any
-	if (spanGetterFunction_) data.itemSpan_ = spanGetterFunction_(item);
-	else
-	{
-		data.itemSpan_.clear();
-		data.itemSpan_.resize(data.numColumns_);
-		for (int x = 0; x < data.numColumns_; ++x)
-			data.itemSpan_[x] = QVector<QPair<int, int>>(data.numRows_, {1, 1});
-	}
 }
 
 void DynamicGridFormElement::setItemPositions(Item* item, int parentX, int parentY)

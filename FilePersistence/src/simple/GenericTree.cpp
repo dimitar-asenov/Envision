@@ -41,10 +41,12 @@ GenericTree::~GenericTree()
 void GenericTree::setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader)
 {
 	Q_ASSERT(!piecewiseLoader_);
+	Q_ASSERT(!hasQuickLookupHash_);
 	Q_ASSERT(persistentUnits_.isEmpty());
 	Q_ASSERT(quickLookupHash_.isEmpty());
 
 	piecewiseLoader_ = loader;
+	hasQuickLookupHash_ = true;
 }
 
 GenericPersistentUnit& GenericTree::newPersistentUnit(QString name, char* data, int dataSize)
@@ -70,7 +72,7 @@ GenericPersistentUnit* GenericTree::persistentUnit(const QString& name) const
 
 GenericNode* GenericTree::find(Model::NodeIdType id)
 {
-	Q_ASSERT(piecewiseLoader_);
+	Q_ASSERT(hasQuickLookupHash_);
 	return quickLookupHash_.value(id);
 }
 
@@ -98,6 +100,29 @@ GenericNode* GenericTree::root() const
 	auto root = rootPU->nodeWithNullParent();
 	Q_ASSERT(root);
 	return root;
+}
+
+void GenericTree::buildLookupHash()
+{
+	Q_ASSERT(!piecewiseLoader_);
+	if (!hasQuickLookupHash_)
+	{
+		hasQuickLookupHash_ = true;
+
+		for (auto pu : persistentUnits())
+		{
+			QList<GenericNode*> stack = {pu->unitRootNode()};
+			while (!stack.isEmpty())
+			{
+				auto node = stack.takeLast();
+				if (node->type() != GenericNode::PERSISTENT_UNIT_TYPE)
+				{
+					quickLookupHash_.insert(node->id(), node);
+					stack << node->children();
+				}
+			}
+		}
+	}
 }
 
 } /* namespace FilePersistence */

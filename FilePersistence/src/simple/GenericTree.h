@@ -57,6 +57,8 @@ class FILEPERSISTENCE_API GenericTree {
 
 		GenericNode* root() const;
 
+		void buildLookupHash();
+
 	private:
 		friend class GenericPersistentUnit;
 		friend class GenericNode;
@@ -64,6 +66,7 @@ class FILEPERSISTENCE_API GenericTree {
 
 		QString name_;
 
+		bool hasQuickLookupHash_{};
 		QHash<Model::NodeIdType, GenericNode*> quickLookupHash_;
 		QMultiHash<Model::NodeIdType, GenericNode*> nodesWithoutParents_;
 		std::shared_ptr<PiecewiseLoader> piecewiseLoader_;

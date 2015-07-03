@@ -43,6 +43,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 
 	public:
 		using NodesGetterFunction = std::function<QVector<QVector<Model::Node*>>(Item* item)>;
+		using ItemsGetterFunction = std::function<QVector<QVector<Item*>>(Item* item)>;
 		using SpanGetterFunction = std::function<QVector<QVector<QPair<int, int>>>(Item* item)>;
 
 		DynamicGridFormElement() = default;
@@ -53,6 +54,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 		virtual DynamicGridFormElement* clone() const override;
 
 		DynamicGridFormElement* setNodesGetter(NodesGetterFunction nodeGetter);
+		DynamicGridFormElement* setItemsGetter(ItemsGetterFunction itemGetter);
 		DynamicGridFormElement* setSpanGetter(SpanGetterFunction spanGetter);
 
 		// Methods executable on element definition
@@ -102,6 +104,7 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 
 		// Do not forget to update the copy constructor if adding new members.
 		NodesGetterFunction nodesGetterFunction_{}; // Expects a list of ROWS (result[y][x])
+		ItemsGetterFunction itemsGetterFunction_{}; // Expects a list of ROWS (result[y][x])
 		SpanGetterFunction spanGetterFunction_{}; // Expects a list of ROWS (result[y][x])
 
 		int spaceBetweenColumns_{};
@@ -123,11 +126,23 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 		mutable QHash<const Item*, ItemData*> itemData_{};
 
 		ItemData& dataForItem(const Item* item) const;
+
+		template <class Definition, class CompareFunction, class CreateFunction, class SyncFunction>
+		void synchronizeGrids(ItemData& data, const Definition& def, CompareFunction compare,
+										 CreateFunction create, SyncFunction sync);
 };
 
 inline DynamicGridFormElement* DynamicGridFormElement::setNodesGetter(NodesGetterFunction nodeGetter)
 {
+	Q_ASSERT(!itemsGetterFunction_);
 	nodesGetterFunction_ = nodeGetter;
+	return this;
+}
+
+inline DynamicGridFormElement* DynamicGridFormElement::setItemsGetter(ItemsGetterFunction itemGetter)
+{
+	Q_ASSERT(!nodesGetterFunction_);
+	itemsGetterFunction_ = itemGetter;
 	return this;
 }
 
