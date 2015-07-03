@@ -49,7 +49,7 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 	Menu::hideNow();
 	Menu::instance = new ViewSwitcherMenu(items, target);
 	target->scene()->addTopLevelItem(Menu::instance);
-	Menu::instance->installSceneEventFilter(Menu::instance);
+	//Menu::instance->installSceneEventFilter(Menu::instance);
 	target->scene()->addPostEventAction( [=]()
 					{ Menu::instance->selectItem(Menu::instance->currentItems()[0][0]); });
 }

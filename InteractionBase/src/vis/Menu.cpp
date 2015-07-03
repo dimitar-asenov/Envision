@@ -27,12 +27,8 @@
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
-#include "VisualizationBase/src/declarative/GridLayouter.h"
-#include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/cursor/TextCursor.h"
 #include "QGraphicsColorizeEffect"
 #include "VisualizationBase/src/items/Item.h"
-#include "nodes/ViewSwitcherEntry.h"
 
 namespace Interaction {
 
@@ -92,13 +88,17 @@ void Menu::initializeForms()
 
 void Menu::selectItem(Visualization::Item* item)
 {
-	if (focusedItem())
-		focusedItem()->setGraphicsEffect(nullptr);
-	if (item)
-		item->setGraphicsEffect(new QGraphicsColorizeEffect());
-	//Focus the entire menu
-	moveCursor();
-	focusedItem_ = item;
+	//Make sure the item is part of the menu
+	if (indexOf(item).x() != - 1)
+	{
+		if (focusedItem())
+			focusedItem()->setGraphicsEffect(nullptr);
+		if (item)
+			item->setGraphicsEffect(new QGraphicsColorizeEffect());
+		//Focus the entire menu
+		moveCursor();
+		focusedItem_ = item;
+	}
 }
 
 bool Menu::executeFocused()

@@ -26,11 +26,8 @@
 #include "VViewSwitcherEntry.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
-#include "vis/TextAndDescription.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/ViewItem.h"
-
-#include "VisualizationBase/src/cursor/TextCursor.h"
 
 namespace Interaction {
 

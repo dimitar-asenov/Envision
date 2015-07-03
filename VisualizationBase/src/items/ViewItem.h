@@ -65,8 +65,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QList<QPair<Item*, Item*>> arrowsForLayer(QString layer);
 		QString fullLayerName(QString localLayer);
 
-		QString name() const;
-		void setName(QString name);
+		const QString& name() const;
+		void setName(const QString& name);
 
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -94,8 +94,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QVector<QVector<Model::Node*>> nodesGetter();
 };
 
-inline QString ViewItem::name() const { return name_; }
-inline void ViewItem::setName(QString name) { name_ = name; }
+inline const QString& ViewItem::name() const { return name_; }
+inline void ViewItem::setName(const QString& name) { name_ = name; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
 inline QString ViewItem::fullLayerName(QString localLayer) { return name() + "_" + localLayer; }
 

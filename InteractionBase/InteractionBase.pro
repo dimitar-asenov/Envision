@@ -79,7 +79,6 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CAddInfoNode.h \
     src/handlers/HInfoNode.h \
     src/commands/CToggleInfoEntry.h \
-    src/nodes/ViewSwitcherEntry.h \
     src/vis/VViewSwitcherEntry.h \
     src/vis/Menu.h \
     src/vis/MenuStyle.h \
@@ -156,7 +155,6 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CAddInfoNode.cpp \
     src/handlers/HInfoNode.cpp \
     src/commands/CToggleInfoEntry.cpp \
-    src/nodes/ViewSwitcherEntry.cpp \
     src/vis/VViewSwitcherEntry.cpp \
     src/vis/Menu.cpp \
     src/vis/MenuStyle.cpp \
