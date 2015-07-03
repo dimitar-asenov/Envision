@@ -26,11 +26,7 @@
 #pragma once
 
 #include "../VisualizationBase/src/visualizationbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
+#include "../VisualizationBase/src/nodes/UINode.h"
 
 namespace Visualization {
 
@@ -39,10 +35,8 @@ namespace Visualization {
  * to give another level of indirection. This helps with distinguishing different items when
  * the same node is added to a ViewItem multiple times, as is possible.
  */
-class VISUALIZATIONBASE_API ViewItemNode : public Super<Model::Node>
+class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 {
-	NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
-
 	public:
 		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget, ViewItemNode* spacingParent);
 		static ViewItemNode* withReference(Model::Node* reference);
@@ -54,9 +48,6 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<Model::Node>
 		Model::Node* spacingTarget() const;
 		void setSpacingParent(ViewItemNode* spacingParent);
 		ViewItemNode* spacingParent() const;
-
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
 
 	private:
 		Model::Node* reference_{};
@@ -71,8 +62,5 @@ inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacing
 inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
 inline void ViewItemNode::setSpacingParent(ViewItemNode *spacingParent) { spacingParent_ = spacingParent; }
 inline ViewItemNode* ViewItemNode::spacingParent() const { return spacingParent_; }
-
-inline void ViewItemNode::save(Model::PersistentStore &) const { Q_ASSERT(false); }
-inline void ViewItemNode::load(Model::PersistentStore &) { Q_ASSERT(false); }
 
 }

@@ -27,26 +27,13 @@
 #include "ViewItemNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 
 namespace Visualization {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
-
-ViewItemNode::ViewItemNode(Model::Node* parent)
-	:Super(parent)
-{
-}
-
-ViewItemNode::ViewItemNode(Model::Node* parent, Model::PersistentStore&, bool)
-	:Super(parent)
-{
-	Q_ASSERT(false);
-}
 
 ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
 {
-	auto result = new ViewItemNode(nullptr);
+	auto result = new ViewItemNode();
 	result->setSpacingTarget(spacingTarget);
 	result->setSpacingParent(spacingParent);
 	return result;
@@ -54,7 +41,7 @@ ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewIt
 
 ViewItemNode* ViewItemNode::withReference(Model::Node *reference)
 {
-	auto result = new ViewItemNode(nullptr);
+	auto result = new ViewItemNode();
 	result->setReference(reference);
 	return result;
 }
