@@ -53,7 +53,7 @@ void VViewSwitcherEntry::determineChildren()
 	//If we recently made this editable, just select the entire text
 	if (view)
 		view->setName(nameField_->text());
-	nameField_->setStyle(view ? &style()->existingView() : &style()->newView());
+	setStyle(view ? itemStyles().get("existingView") : itemStyles().get("newView"));
 	oldName_ = nameField_->text();
 }
 }

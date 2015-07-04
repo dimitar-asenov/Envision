@@ -28,7 +28,6 @@
 #include "interactionbase_api.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "VisualizationBase/src/items/Text.h"
-#include "VViewSwitcherEntryStyle.h"
 
 namespace Interaction {
 
@@ -37,7 +36,7 @@ class TextAndDescription;
 class INTERACTIONBASE_API VViewSwitcherEntry :
 		public Super<Visualization::DeclarativeItem<VViewSwitcherEntry>>
 {
-	ITEM_COMMON(VViewSwitcherEntry)
+	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherEntry, Visualization::DeclarativeItemBaseStyle)
 
 	public:
 		VViewSwitcherEntry(Visualization::Item* parent, QString viewName,

@@ -1,0 +1,8 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerType>2</cornerType>
+		<cornerRadius>2</cornerRadius>
+	</shape>
+</style>
