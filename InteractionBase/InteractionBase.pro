@@ -82,7 +82,8 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/vis/VViewSwitcherEntry.h \
     src/vis/Menu.h \
     src/vis/MenuStyle.h \
-    src/vis/ViewSwitcherMenu.h
+    src/vis/ViewSwitcherMenu.h \
+    src/vis/VViewSwitcherEntryStyle.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -158,4 +159,5 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/vis/VViewSwitcherEntry.cpp \
     src/vis/Menu.cpp \
     src/vis/MenuStyle.cpp \
-    src/vis/ViewSwitcherMenu.cpp
+    src/vis/ViewSwitcherMenu.cpp \
+    src/vis/VViewSwitcherEntryStyle.cpp

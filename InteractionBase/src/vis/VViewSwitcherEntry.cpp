@@ -49,9 +49,11 @@ void VViewSwitcherEntry::initializeForms()
 void VViewSwitcherEntry::determineChildren()
 {
 	Super::determineChildren();
+	auto view = scene()->viewItem(oldName_);
 	//If we recently made this editable, just select the entire text
-	if (auto view = scene()->viewItem(oldName_))
+	if (view)
 		view->setName(nameField_->text());
+	nameField_->setStyle(view ? &style()->existingView() : &style()->newView());
 	oldName_ = nameField_->text();
 }
 }
