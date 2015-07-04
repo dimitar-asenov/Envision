@@ -50,7 +50,6 @@ void VViewSwitcherEntry::determineChildren()
 {
 	Super::determineChildren();
 	auto view = scene()->viewItem(oldName_);
-	//If we recently made this editable, just select the entire text
 	if (view)
 		view->setName(nameField_->text());
 	setStyle(view ? itemStyles().get("existingView") : itemStyles().get("newView"));
