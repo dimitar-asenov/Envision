@@ -195,13 +195,10 @@ QSet<Method*> Method::callees()
 	while (!toCheck.isEmpty())
 	{
 		auto current = toCheck.takeLast();
-		for (auto child : current->children())
-		{
-			if (auto call = DCast<MethodCallExpression>(child))
-				if (call->methodDefinition())
-					result << call->methodDefinition();
-			toCheck.append(child);
-		}
+		if (auto call = DCast<MethodCallExpression>(current))
+			if (call->methodDefinition())
+				result << call->methodDefinition();
+		toCheck.append(current->children());
 	}
 	return result;
 }
@@ -209,7 +206,7 @@ QSet<Method*> Method::callees()
 QSet<Method*> Method::callers()
 {
 	auto top = root();
-	//Then, find all the places where this method is called
+	//Find all the places where this method is called
 	QSet<Method*> result;
 	Method* current{};
 	QList<Model::Node*> toCheck;
@@ -220,17 +217,10 @@ QSet<Method*> Method::callers()
 		//Set the current method whenever we enter a new method
 		if (auto method = DCast<Method>(check))
 			current = method;
-		for (auto child : check->children())
-		{
-			//If it is a method call, and calling this method -> add the containing method
-			if (auto call = DCast<MethodCallExpression>(child))
-				if (call->methodDefinition() == this && current)
-				{
-					result << current;
-					qDebug() << current->fullyQualifiedName();
-				}
-			toCheck.append(child);
-		}
+		if (auto call = DCast<MethodCallExpression>(check))
+			if (call->methodDefinition() == this && current)
+				result << current;
+		toCheck.append(check->children());
 	}
 	return result;
 }
