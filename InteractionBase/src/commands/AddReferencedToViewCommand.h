@@ -40,8 +40,14 @@ template <class ReferenceTarget, class ReferenceResult>
 class INTERACTIONBASE_API AddReferencedToViewCommand : public CommandWithDefaultArguments
 {
 	public:
+		enum ArrowDirection {
+			ArrowToReference,
+			ArrowFromReference
+		};
+
 		AddReferencedToViewCommand(QString name, const QStringList& defaultArguments,
-								   int rightOffset, QString arrowLayer, int purpose = -1);
+								   int rightOffset, QString arrowLayer,
+								   ArrowDirection direction = ArrowToReference, int purpose = -1);
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
@@ -55,15 +61,16 @@ class INTERACTIONBASE_API AddReferencedToViewCommand : public CommandWithDefault
 	private:
 		int rightOffset_{};
 		QString arrowLayer_{};
+		ArrowDirection direction_{};
 		int purpose_{};
 };
 
 template <class ReferenceTarget, class ReferenceResult>
 inline AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	AddReferencedToViewCommand(QString name, const QStringList &defaultArguments,
-												int rightOffset, QString arrowLayer, int purpose)
+							int rightOffset, QString arrowLayer, ArrowDirection direction, int purpose)
 	: CommandWithDefaultArguments(name, defaultArguments),
-		rightOffset_(rightOffset), arrowLayer_(arrowLayer), purpose_(purpose) {}
+		rightOffset_(rightOffset), arrowLayer_(arrowLayer), direction_(direction), purpose_(purpose) {}
 
 template <class ReferenceTarget, class ReferenceResult>
 inline bool AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
@@ -100,7 +107,10 @@ CommandResult* AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 		for (auto ref : refs)
 		{
 			auto actualRef = view->insertNode(ref, pos.x() + rightOffset_, row++, purpose_);
-			view->addArrow(ancestorWithNode->node(), actualRef, arrowLayer_, topLevelAncestor->node());
+			if (direction_ == ArrowToReference)
+				view->addArrow(ancestorWithNode->node(), actualRef, arrowLayer_, topLevelAncestor->node());
+			else
+				view->addArrow(actualRef, ancestorWithNode->node(), arrowLayer_, nullptr, topLevelAncestor->node());
 		}
 	}
 	return new Interaction::CommandResult();

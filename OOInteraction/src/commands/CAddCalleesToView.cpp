@@ -31,6 +31,7 @@ namespace OOInteraction {
 
 CAddCalleesToView::CAddCalleesToView()
 	:AddReferencedToViewCommand("addCallees", QStringList(), 1, "callees",
+								AddReferencedToViewCommand::ArrowToReference,
 								Visualization::ViewItem::publicInterfacePurpose())
 {
 }

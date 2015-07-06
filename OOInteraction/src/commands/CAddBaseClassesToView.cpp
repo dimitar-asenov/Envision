@@ -31,6 +31,7 @@ namespace OOInteraction {
 
 CAddBaseClassesToView::CAddBaseClassesToView()
 	:AddReferencedToViewCommand("addSuperclasses", {}, 0, "inheritance",
+								AddReferencedToViewCommand::ArrowToReference,
 								Visualization::ViewItem::publicInterfacePurpose())
 {
 }
