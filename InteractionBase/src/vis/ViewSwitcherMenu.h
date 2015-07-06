@@ -43,11 +43,13 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 	protected:
 		virtual bool onSelectItem(Visualization::Item* item);
 		virtual void startFocusMode(Visualization::Item* target);
+		virtual void endFocusMode(Visualization::Item* target);
 
 	private:
 		static void showNow(Visualization::Item* target);
 
 		bool inEditMode_{};
+		QString nameBefore_;
 
 		ViewSwitcherMenu(QVector<Visualization::Item*> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());

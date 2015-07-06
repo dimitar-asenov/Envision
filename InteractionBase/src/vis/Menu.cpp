@@ -174,10 +174,12 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 		else if (keyEvent->key() == Qt::Key_F2)
 		{
 			inFocusMode_ = !inFocusMode_;
-			if (inFocusMode_)
-				startFocusMode(focusedItem_);
+			if (inFocusMode_) startFocusMode(focusedItem_);
 			else
+			{
+				endFocusMode(focusedItem_);
 				selectItem(focusedItem_);
+			}
 			return true;
 		}
 		else if (keyEvent->key() == Qt::Key_Return)

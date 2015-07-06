@@ -84,6 +84,10 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		 * Start focus mode with the given target to be focused.
 		 */
 		virtual void startFocusMode(Visualization::Item* target) = 0;
+		/**
+		 * End focus mode on the given target.
+		 */
+		virtual void endFocusMode(Visualization::Item* target) = 0;
 
 		QPoint indexOf(Visualization::Item* node) const;
 

@@ -63,9 +63,22 @@ void ViewSwitcherMenu::startFocusMode(Visualization::Item *target)
 {
 	if (auto asSwitcher = DCast<VViewSwitcherEntry>(target))
 	{
+		nameBefore_ = asSwitcher->nameField()->text();
 		asSwitcher->setGraphicsEffect(nullptr);
 		asSwitcher->nameField()->moveCursor();
 		asSwitcher->nameField()->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+	}
+}
+
+void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
+{
+	if (auto asSwitcher = DCast<VViewSwitcherEntry>(target))
+	{
+		//If the view item didn't exist and the user changed the name,
+		//create a new item with that name
+		auto nameAfter = asSwitcher->nameField()->text();
+		if (scene()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
+			scene()->newViewItem(nameAfter);
 	}
 }
 
