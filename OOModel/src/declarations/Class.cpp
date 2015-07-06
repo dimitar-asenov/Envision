@@ -207,6 +207,17 @@ QSet<Class*> Class::allBaseClasses()
 	return bases;
 }
 
+QSet<Class*> Class::directBaseClasses()
+{
+	QSet<Class*> result;
+	for (auto baseClass : *baseClasses())
+		if (auto asClass = expressionToClass(baseClass))
+			result << asClass;
+	if (implicitBaseFromProject())
+		result << implicitBaseFromProject();
+	return result;
+}
+
 Class* Class::implicitBaseFromProject() const
 {
 	if (auto classDef = expressionToClass(defaultImplicitBaseFromProject()))

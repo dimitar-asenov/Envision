@@ -74,8 +74,11 @@ class OOMODEL_API Class : public Super<Declaration>
 		 * base classes.
 		 */
 		QSet<Class*> allBaseClasses();
+		QSet<Class*> directBaseClasses();
 		Class* implicitBaseFromProject() const;
 		static Class* expressionToClass(Expression* expr);
+
+		QSet<Class*> directSubClasses();
 
 	private:
 		Expression* defaultImplicitBaseFromProject() const;
