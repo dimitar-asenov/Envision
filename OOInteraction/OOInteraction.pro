@@ -60,7 +60,8 @@ HEADERS += src/commands/CDumpMethodRenderings.h \
     src/DoxygenWholeTreeVisitor.h \
     src/commands/CAddNodeToView.h \
     src/commands/CAddCalleesToView.h \
-    src/commands/CAddBaseClassesToView.h
+    src/commands/CAddBaseClassesToView.h \
+    src/commands/CAddCallersToView.h
 SOURCES += src/commands/CDumpMethodRenderings.cpp \
     src/handlers/HModule.cpp \
     src/commands/CCreateModule.cpp \
@@ -109,7 +110,8 @@ SOURCES += src/commands/CDumpMethodRenderings.cpp \
     src/DoxygenWholeTreeVisitor.cpp \
     src/commands/CAddNodeToView.cpp \
     src/commands/CAddCalleesToView.cpp \
-    src/commands/CAddBaseClassesToView.cpp
+    src/commands/CAddBaseClassesToView.cpp \
+    src/commands/CAddCallersToView.cpp
 doxy.path = $${BUILD_DIR}/doxygen
 doxy.files = doxy_data/*
 INSTALLS += doxy
