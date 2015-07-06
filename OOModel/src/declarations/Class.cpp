@@ -239,4 +239,22 @@ Class* Class::expressionToClass(Expression* expr)
 	return nullptr;
 }
 
+QSet<Class*> Class::directSubClasses()
+{
+	auto top = root();
+	//Find all the classes where this method is subclasses
+	QSet<Class*> result;
+	QList<Model::Node*> toCheck;
+	toCheck.append(top);
+	while (!toCheck.isEmpty())
+	{
+		auto check = toCheck.takeLast();
+		if (auto clazz = DCast<Class>(check))
+			if (clazz->directBaseClasses().contains(this))
+				result << clazz;
+		toCheck.append(check->children());
+	}
+	return result;
+}
+
 }
