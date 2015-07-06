@@ -192,9 +192,16 @@ QPair<bool, QSet<Model::NodeIdType>> ListMergeComponent::checkAndGetAllElementId
 	};
 
 	bool allElementsConflictRoots = true;
-	allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeA());
-	allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeB());
-	allElementsConflictRoots &= gatherAndCheckElems(changeB->nodeB());
+	if (changeA)
+		allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeA());
+	else
+		allElementsConflictRoots &= gatherAndCheckElems(changeB->nodeA());
+
+	if (changeA)
+		allElementsConflictRoots &= gatherAndCheckElems(changeA->nodeB());
+	if (changeB)
+		allElementsConflictRoots &= gatherAndCheckElems(changeB->nodeB());
+
 	return {allElementsConflictRoots, allElementIds};
 }
 
@@ -627,7 +634,7 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(
 				ChangeDependencyGraph& cdgB)
 		{
 			auto node = change->nodeB();
-			node->setLabel(QString(mergedList.indexOf(elemId)));
+			node->setLabel(QString::number(mergedList.indexOf(elemId)));
 			if (node->parentId() != containerId)
 			{
 				node->detachFromParent();

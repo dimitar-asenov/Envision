@@ -175,13 +175,11 @@ void Merge::performTrueMerge()
 
 	IdToChangeDescriptionHash applicableChanges;
 	for (auto change : cdgA.changes())
-		if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->nodeId(), change);
-	for (auto change : cdgB.changes())
-		if (!conflictingChanges_.contains(change))
-		{
-			// Q_ASSERT(!applicableChanges.contains(change->nodeId())); // no change for that ID exists
+		if (!conflictingChanges_.contains(change) && !change->onlyStructureChange())
 			applicableChanges.insert(change->nodeId(), change);
-		}
+	for (auto change : cdgB.changes())
+		if (!conflictingChanges_.contains(change) && !change->onlyStructureChange())
+			applicableChanges.insert(change->nodeId(), change);
 
 	stage_ = Stage::AutoMerged;
 
@@ -205,6 +203,16 @@ void Merge::performTrueMerge()
 	}
 	else
 	{
+		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree("TestMerge")); // FIXME name has to mach file
+		repository_->loadGenericTree(treeMerged_, baseCommitId_);
+		treeMerged_->buildLookupHash();
+		applyChangesToTree(treeMerged_, cdgA);
+		applyChangesToTree(treeMerged_, cdgB);
+
+		stage_ = Stage::BuiltMergedTree;
+
+		SimpleTextFileStore::saveGenericTree(treeMerged_, "TestMerge", repository_->workdirPath(), {"Project", "Module"});
+
 		// TODO prepare for manual merge
 		stage_ = Stage::ManualMerged;
 	}

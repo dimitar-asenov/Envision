@@ -85,6 +85,20 @@ TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
 	GitRepository repo("projects/TestMerge");
 	auto merge = repo.merge("dev");
 	CHECK_CONDITION(merge->hasConflicts());
+	QSet<Model::NodeIdType> expected = {
+		QUuid("{00000000-0000-0000-0000-000000000047}"),
+		QUuid("{00000000-0000-0000-0000-000000000048}"),
+		QUuid("{00000000-0000-0000-0000-000000000031}"),
+		QUuid("{00000000-0000-0000-0000-000000000051}"),
+		QUuid("{00000000-0000-0000-0000-000000000052}")
+	};
+	for (auto change : merge->getConflicts())
+	{
+		CHECK_CONDITION(expected.contains(change->nodeId()));
+		expected.remove(change->nodeId());
+	}
+	CHECK_CONDITION(expected.isEmpty());
+
 	cleanup();
 }
 

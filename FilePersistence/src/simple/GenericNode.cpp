@@ -251,7 +251,6 @@ void GenericNode::ensureDataRead() const
 
 void GenericNode::linkNode(bool recursiveLink)
 {
-	Q_ASSERT(tree()->piecewiseLoader());
 	// Check that no node with this id exists in the tree.
 	Q_ASSERT(!tree()->find(id_, false));
 
