@@ -208,9 +208,7 @@ QSet<Method*> Method::callees()
 
 QSet<Method*> Method::callers()
 {
-	//First, find the top-level node
-	Model::Node* top = this;
-	while (top->parent()) top = top->parent();
+	auto top = root();
 	//Then, find all the places where this method is called
 	QSet<Method*> result;
 	Method* current{};
@@ -219,15 +217,18 @@ QSet<Method*> Method::callers()
 	while (!toCheck.isEmpty())
 	{
 		auto check = toCheck.takeLast();
+		//Set the current method whenever we enter a new method
+		if (auto method = DCast<Method>(check))
+			current = method;
 		for (auto child : check->children())
 		{
 			//If it is a method call, and calling this method -> add the containing method
 			if (auto call = DCast<MethodCallExpression>(child))
 				if (call->methodDefinition() == this && current)
+				{
 					result << current;
-			//Set the current method whenever we enter a new method
-			if (auto method = DCast<Method>(child))
-				current = method;
+					qDebug() << current->fullyQualifiedName();
+				}
 			toCheck.append(child);
 		}
 	}
