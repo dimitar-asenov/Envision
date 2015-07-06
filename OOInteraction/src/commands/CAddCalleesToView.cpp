@@ -25,59 +25,25 @@
  **********************************************************************************************************************/
 
 #include "CAddCalleesToView.h"
-#include "VisualizationBase/src/items/ViewItem.h"
-#include "VisualizationBase/src/items/VViewItemNode.h"
 #include "OOModel/src/declarations/Method.h"
-#include "OOModel/src/expressions/MethodCallExpression.h"
-
 
 namespace OOInteraction {
 
 CAddCalleesToView::CAddCalleesToView()
-	:CommandWithDefaultArguments("addCallees", QStringList())
+	:AddReferencedToViewCommand("addCallees", QStringList(), 1, "callees",
+								Visualization::ViewItem::publicInterfacePurpose())
 {
-}
-
-bool CAddCalleesToView::canInterpret(Visualization::Item* source, Visualization::Item* target,
-	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
-{
-	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestorWithNode = source->findAncestorWithNode();
-	auto topLevelAncestor = source->findAncestorOfType<Visualization::VViewItemNode>();
-	if (!ancestorWithNode || !topLevelAncestor) return false;
-	else
-		return canInterpret && DCast<OOModel::Method>(ancestorWithNode->node());
-}
-
-Interaction::CommandResult* CAddCalleesToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
-		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
-{
-	auto ancestorWithNode = source->findAncestorWithNode();
-	auto topLevelAncestor = source->findAncestorOfType<Visualization::VViewItemNode>();
-
-	auto view = ancestorWithNode->scene()->currentViewItem();
-
-	auto callees_ = (DCast<OOModel::Method>(ancestorWithNode->node()))->callees();
-	if (callees_.size() > 0)
-	{
-		auto pos = view->positionOfItem(topLevelAncestor);
-		view->insertColumn(pos.x() + 1);
-		auto row = 0;
-		//Make the first callee appear at the same height as the method
-		view->addSpacing(pos.x() + 1, row++, ancestorWithNode->node(), topLevelAncestor->node());
-		for (auto callee : callees_)
-		{
-			auto actualCallee = view->insertNode(callee, pos.x() + 1, row++);
-			view->addArrow(ancestorWithNode->node(), actualCallee, "callees", topLevelAncestor->node());
-		}
-	}
-	return new Interaction::CommandResult();
 }
 
 QString CAddCalleesToView::description(Visualization::Item*, Visualization::Item*,
 		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	return "Add the callees of the current method to the current view";
+	return "Add the callees of the current method to the view";
+}
+
+QSet<OOModel::Method*> CAddCalleesToView::references(OOModel::Method *target)
+{
+	return target->callees();
 }
 
 }
