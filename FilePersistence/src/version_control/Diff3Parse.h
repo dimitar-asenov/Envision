@@ -39,6 +39,7 @@ struct Chunk
 		QList<Model::NodeIdType> spanBase_;
 		QList<Model::NodeIdType> spanMerged_;
 
+		Chunk();
 		Chunk(bool stable, QList<Model::NodeIdType> idListA, QList<Model::NodeIdType> idListB,
 			  QList<Model::NodeIdType> idListBase);
 };
@@ -66,5 +67,7 @@ class Diff3Parse
 																					const QList<Model::NodeIdType> listB);
 
 };
+
+inline Chunk::Chunk() : noConflicts_{true} {}
 
 } /* namespace FilePersistence */
