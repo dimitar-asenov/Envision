@@ -103,7 +103,7 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&,
 	return transition;
 }
 
-ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
+ConflictUnitSet __attribute__((optimize("O0"))) ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
 {
 	ConflictUnitSet affectedCUs;
 	for (auto change : cdg.changes()) {
@@ -112,16 +112,16 @@ ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph c
 		switch (change->type()) {
 			case ChangeType::Stationary:
 			case ChangeType::Deletion:
-				conflictRootA = findConflictUnit(change);
+				conflictRootA = findConflictUnit(change->nodeA());
 				affectedCUs.insert(conflictRootA, change);
 				break;
 			case ChangeType::Insertion:
-				conflictRootB = findConflictUnit(change);
+				conflictRootB = findConflictUnit(change->nodeB());
 				affectedCUs.insert(conflictRootB, change);
 				break;
 			case ChangeType::Move:
-				conflictRootA = findConflictUnit(change);
-				conflictRootB = findConflictUnit(change);
+				conflictRootA = findConflictUnit(change->nodeA());
+				conflictRootB = findConflictUnit(change->nodeB());
 				affectedCUs.insert(conflictRootA, change);
 				affectedCUs.insert(conflictRootB, change);
 				break;
@@ -131,8 +131,9 @@ ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph c
 	}
 	return affectedCUs;
 }
-
-Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeDescription>& change)
+/* #### This is the old method that finds conflict roots only in base. ####
+Model::NodeIdType __attribute__((optimize("O0")))
+	ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeDescription>& change)
 {
 	// find closest ancestor of node that exists in base
 	Q_ASSERT(change->debugHasNodes());
@@ -155,6 +156,25 @@ Model::NodeIdType ConflictUnitDetector::findConflictUnit(std::shared_ptr<ChangeD
 		// no ancestor in base. branch created new root.
 		return Model::NodeIdType();
 	}
+}
+*/
+Model::NodeIdType __attribute__((optimize("O0")))
+	ConflictUnitDetector::findConflictUnit(const GenericNode* node)
+{
+	// find closest ancestor of node that exists in base
+	Q_ASSERT(node);
+	if (node->parentId().isNull())
+	{
+		// no ancestor in base. branch created new root.
+		return Model::NodeIdType();
+	}
+
+	while (!conflictTypes_.contains(node->type()) && !node->parentId().isNull())
+	{
+		Q_ASSERT(!node->parentId().isNull());
+		node = node->parent();
+	}
+	return node->id();
 }
 
 void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,

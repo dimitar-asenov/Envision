@@ -202,24 +202,27 @@ QPair<bool, QSet<Model::NodeIdType>> ListMergeComponent::checkAndGetAllElementId
 	return {allElementsConflictRoots, allElementIds};
 }
 
-bool onlyConflictsOnLabel(ConflictPairs& conflictPairs, QSet<Model::NodeIdType>& allElementIds,
-								  ChangeDependencyGraph& cdgA)
+bool __attribute__((optimize("O0"))) onlyConflictsOnLabel(ConflictPairs& conflictPairs,
+																			 QSet<Model::NodeIdType>& allElementIds,
+																			 ChangeDependencyGraph& cdgA)
 {
 	for (auto elem : allElementIds)
 	{
 		auto changeA = cdgA.changes().value(elem);
 		if (changeA)
+		{
 			for (auto changeB : conflictPairs.values(changeA))
 			{
 				if (!((changeA->onlyLabelChange() && conflictPairs.values(changeB).size() == 1) ||
 						(changeB->onlyLabelChange() && conflictPairs.values(changeA).size() == 1)))
 					return false;
 			}
+		}
 	}
 	return true;
 }
 
-QSet<Model::NodeIdType> ListMergeComponent::computeListsToMerge(
+QSet<Model::NodeIdType> __attribute__((optimize("O0"))) ListMergeComponent::computeListsToMerge(
 		ChangeDependencyGraph& cdgA,
 		ChangeDependencyGraph&,
 		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
@@ -267,7 +270,7 @@ QSet<Model::NodeIdType> ListMergeComponent::computeListsToMerge(
 
 		// - All conflicts are on label changes only.
 
-		listsToMerge.insert(changeA->nodeId());
+		listsToMerge.insert(change->nodeId());
 	}
 	return listsToMerge;
 }

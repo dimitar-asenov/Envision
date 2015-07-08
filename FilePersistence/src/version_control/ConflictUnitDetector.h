@@ -54,7 +54,7 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		/**
 		 * Returns the ID of the root of the conflict unit \a change belongs to.
 		 */
-		Model::NodeIdType findConflictUnit(std::shared_ptr<ChangeDescription>& change);
+		Model::NodeIdType findConflictUnit(const GenericNode* node);
 
 		/**
 		 * Adds all changes that depend on \a change according to \a cdg to \a conflictingChanges.
