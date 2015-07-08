@@ -81,6 +81,18 @@ GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad) const
 	return node;
 }
 
+bool GenericTree::remove(Model::NodeIdType id, bool recursive)
+{
+	Q_ASSERT(hasQuickLookupHash_);
+	// if we have a piecewise loader, load lazily
+	auto node = find(id, piecewiseLoader_ != nullptr);
+	Q_ASSERT(node);
+	node->remove(recursive);
+	Q_ASSERT(!nodesWithoutParents_.contains(node->parentId(), node));
+	quickLookupHash_.remove(id);
+	return true;
+}
+
 GenericNode* GenericTree::emptyChunk()
 {
 	if (emptyChunks_.isEmpty()) return new GenericNode[ALLOCATION_CHUNK_SIZE];

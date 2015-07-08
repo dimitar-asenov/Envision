@@ -291,7 +291,7 @@ void GenericNode::remove(bool recursive)
 {
 	if (recursive)
 		for (auto child : children())
-			child->remove(true); // NOTE This will modify the list we are iterating over, might cause bugs.
+			tree()->remove(child->id(), true); // NOTE This will modify the list we are iterating over, might cause bugs.
 	Q_ASSERT(children().isEmpty());
 	detachFromParent();
 	reset(persistentUnit_);

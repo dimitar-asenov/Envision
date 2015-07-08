@@ -172,7 +172,7 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 
 	writeGenericNodeToFile(genericNode_, treeDir_.absolutePath(), filename, {});
 
-	genericTree_->remove(name);
+	genericTree_->removePersistentUnit(name);
 	genericNode_ = oldPersisted;
 }
 
@@ -321,7 +321,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
-	if (!externalTree_) genericTree_->remove(name);
+	if (!externalTree_) genericTree_->removePersistentUnit(name);
 	genericNode_ = oldPersisted;
 
 	return ln;

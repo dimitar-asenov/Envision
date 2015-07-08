@@ -267,9 +267,9 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 
 			case ChangeType::Deletion:
 			{
-				auto node = tree->find(change->nodeA()->id());
-				Q_ASSERT(node->children().empty());
-				node->remove();
+				Q_ASSERT(tree->find(change->nodeA()->id())->children().empty());
+				tree->remove(change->nodeId());
+				Q_ASSERT(!tree->find(change->nodeA()->id()));
 				break;
 			}
 
