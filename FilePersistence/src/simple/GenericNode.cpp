@@ -290,8 +290,12 @@ void GenericNode::linkNode(bool recursiveLink)
 void GenericNode::remove(bool recursive)
 {
 	if (recursive)
-		for (auto child : children())
-			tree()->remove(child->id(), true); // NOTE This will modify the list we are iterating over, might cause bugs.
+	{
+		// need to get list beforehand, otherwise we modify it while iterating over it.
+		auto myChildren = children();
+		for (auto child : myChildren)
+			tree()->remove(child->id(), true);
+	}
 	Q_ASSERT(children().isEmpty());
 	detachFromParent();
 	reset(persistentUnit_);

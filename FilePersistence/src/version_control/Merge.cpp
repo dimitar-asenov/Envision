@@ -185,7 +185,7 @@ void Merge::performTrueMerge()
 
 	if (conflictingChanges_.isEmpty())
 	{
-		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree("TestMerge")); // FIXME name has to mach file
+		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
 		repository_->loadGenericTree(treeMerged_, baseCommitId_);
 		treeMerged_->buildLookupHash();
 		applyChangesToTree(treeMerged_, cdgA);
@@ -193,7 +193,8 @@ void Merge::performTrueMerge()
 
 		stage_ = Stage::BuiltMergedTree;
 
-		SimpleTextFileStore::saveGenericTree(treeMerged_, "TestMerge", repository_->workdirPath(), {"Project", "Module"});
+		SimpleTextFileStore::saveGenericTree(treeMerged_, repository_->projectName(),
+														 repository_->workdirPath(), {"Project", "Module"});
 
 		stage_ = Stage::WroteToWorkDir;
 
@@ -203,7 +204,7 @@ void Merge::performTrueMerge()
 	}
 	else
 	{
-		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree("TestMerge")); // FIXME name has to mach file
+		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
 		repository_->loadGenericTree(treeMerged_, baseCommitId_);
 		treeMerged_->buildLookupHash();
 		applyChangesToTree(treeMerged_, cdgA);
@@ -211,10 +212,10 @@ void Merge::performTrueMerge()
 
 		stage_ = Stage::BuiltMergedTree;
 
-		SimpleTextFileStore::saveGenericTree(treeMerged_, "TestMerge", repository_->workdirPath(), {"Project", "Module"});
-
+		SimpleTextFileStore::saveGenericTree(treeMerged_, repository_->projectName(),
+														 repository_->workdirPath(), {"Project", "Module"});
 		// TODO prepare for manual merge
-		stage_ = Stage::ManualMerged;
+		// TODO write conflicts to file maybe.
 	}
 }
 

@@ -176,7 +176,7 @@ std::shared_ptr<Merge> GitRepository::merge(QString revision, bool fastForward)
 		return merge;
 	}
 	else
-		Q_ASSERT(false); // NOTE is this the right thing to do?
+		Q_ASSERT(false);
 }
 
 Diff GitRepository::diff(QString revisionA, QString revisionB,
@@ -1024,22 +1024,19 @@ git_commit* GitRepository::parseCommit(QString revision) const
 
 	switch (errorCode)
 	{
-		// FIXME pass errors to the next level
 		case GIT_ENOTFOUND:
 			std::cout << "Error: " << revision.toStdString().c_str() << " not found!" << std::endl;
-			Q_ASSERT(false);
+			break;
 
 		case GIT_EAMBIGUOUS:
 			std::cout << "Error: " << revision.toStdString().c_str() << " is ambiguous!" << std::endl;
-			Q_ASSERT(false);
+			break;
 
 		case GIT_EINVALIDSPEC:
 			std::cout << "Error: " << revision.toStdString().c_str() << " is invalid!" << std::endl;
-			Q_ASSERT(false);
-
-		default:
-			checkError(errorCode);
+			break;
 	}
+	checkError(errorCode);
 
 	if (git_object_type(obj) == GIT_OBJ_TAG)
 	{

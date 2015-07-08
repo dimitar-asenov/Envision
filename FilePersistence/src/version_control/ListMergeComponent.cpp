@@ -339,7 +339,7 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 				}
 				else
 				{
-					// NOTE Is this correct, considering how the != operator works for unvalid positions?
+					// NOTE Is this correct, considering how the != operator works for invalid positions?
 					if (posA != posBase)
 					{
 						markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
@@ -623,7 +623,6 @@ LinkedChangesTransition ListMergeComponent::translateListIntoChanges(
 		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 		ConflictPairs& conflictPairs)
 {
-	// FIXME also mark deletions as resolved!
 	for (auto elemId : mergedList)
 	{
 		auto changeA = cdgA.changes().value(elemId);

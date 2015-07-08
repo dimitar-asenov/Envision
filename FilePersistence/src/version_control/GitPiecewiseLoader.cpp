@@ -36,34 +36,27 @@ GitPiecewiseLoader::~GitPiecewiseLoader() {}
 
 NodeData GitPiecewiseLoader::loadNodeData(Model::NodeIdType id)
 {
-	auto idString = id.toString();
-	auto result = runSystemCommand("git", {"grep", idString, revision_}, workDir_);
+	auto regEx = id.toString() + " {.*}";
+	auto result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
 
 	Q_ASSERT(result.exitCode() == 0);
 	Q_ASSERT(!result.stdout().isEmpty());
 
-	NodeData nodeData;
-	bool found = false;
+	Q_ASSERT(result.stdout().size() == 1 ||
+				result.stdout().size() == 2);
 
 	for (auto line : result.stdout())
 	{
-		auto data = parseGrepLine(line);
-		// NOTE Is it better to do this check here, or already as part of the grep pattern?
-		if (idIsNode(idString, data.nodeLine_)) {
-			Q_ASSERT(!found); // Check that there is no more than one such node
-			found = true;
-			nodeData = data;
-		}
+		if (!isPersistenceUnit(line))
+			return parseGrepLine(line);
 	}
-
-	Q_ASSERT(found);
-	return nodeData;
+	Q_ASSERT(false);
 }
 
 QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 {
-	auto idString = id.toString();
-	auto result = runSystemCommand("git", {"grep", idString, revision_}, workDir_);
+	auto regEx = "{.*} " + id.toString();
+	auto result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
 
 	Q_ASSERT(result.exitCode() == 0);
 	Q_ASSERT(!result.stdout().isEmpty());
@@ -72,9 +65,11 @@ QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 
 	for (auto line : result.stdout())
 	{
-		auto nodeData = parseGrepLine(line);
-		if (idIsParent(idString, nodeData.nodeLine_))
+		if (!isPersistenceUnit(line))
+		{
+			auto nodeData = parseGrepLine(line);
 			children.append(nodeData);
+		}
 	}
 
 	return children;
@@ -87,30 +82,6 @@ NodeData GitPiecewiseLoader::parseGrepLine(const QString& line)
 	nodeData.persistentUnit_ = line.section(':', 1, 1);
 	nodeData.nodeLine_ = line.section(':', 2);
 	return nodeData;
-}
-
-bool GitPiecewiseLoader::idIsParent(const QString& id, const QString& nodeLine)
-{
-	Q_ASSERT(!id.isEmpty());
-	if (isPersistenceUnit(nodeLine)) return false;
-
-	auto brace = nodeLine.indexOf('{');
-	Q_ASSERT(brace > 0);
-
-	brace = nodeLine.indexOf('{', brace+id.size());
-	Q_ASSERT(brace > 0);
-
-	return nodeLine.midRef(brace).startsWith(id);
-}
-
-bool GitPiecewiseLoader::idIsNode(const QString& id, const QString& nodeLine)
-{
-	Q_ASSERT(!id.isEmpty());
-	if (isPersistenceUnit(nodeLine)) return false;
-
-	auto brace = nodeLine.indexOf('{');
-	Q_ASSERT(brace > 0);
-	return nodeLine.midRef(brace).startsWith(id);
 }
 
 bool GitPiecewiseLoader::isPersistenceUnit(const QString& nodeLine)

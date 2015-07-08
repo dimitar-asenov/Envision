@@ -52,7 +52,7 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		 */
 		ConflictUnitSet computeAffectedCUs(ChangeDependencyGraph cdg);
 		/**
-		 * Returns the ID of the root of the conflict unit \a change belongs to.
+		 * Returns the ID of the root of the conflict unit \a node belongs to.
 		 */
 		Model::NodeIdType findConflictUnit(const GenericNode* node);
 
