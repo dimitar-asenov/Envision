@@ -75,7 +75,7 @@ TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
 	// check that the list is continuous.
 	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000002}"));
 	for (int idx = 0; idx < listContainer->children().size(); ++idx)
-		CHECK_CONDITION(listContainer->child({idx}));
+		CHECK_CONDITION(listContainer->child(QString::number(idx)));
 	cleanup();
 }
 
@@ -89,6 +89,7 @@ TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
 		QUuid("{00000000-0000-0000-0000-000000000047}"),
 		QUuid("{00000000-0000-0000-0000-000000000048}"),
 		QUuid("{00000000-0000-0000-0000-000000000031}"),
+		QUuid("{00000000-0000-0000-0000-000000000030}"),
 		QUuid("{00000000-0000-0000-0000-000000000051}"),
 		QUuid("{00000000-0000-0000-0000-000000000052}")
 	};
