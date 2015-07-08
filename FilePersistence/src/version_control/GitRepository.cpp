@@ -70,10 +70,8 @@ int gitDiffExtractFileCallBack(
 
 void createNodeAndAppend(const git_diff_line* line, const char* filePath, GenericTree* tree, QList<GenericNode*>& list)
 {
-	size_t lineLength = line->content_len;
-	// TODO @Martin why do we remove tabs?
-	while (line->content[lineLength] == '\t')
-		lineLength--;
+	// lineLength is number of chars on line EXCLUDING '\n'
+	size_t lineLength = line->content_len - 1;
 
 	QString relativePath(filePath);
 	GenericPersistentUnit* unit = tree->persistentUnit(relativePath);
