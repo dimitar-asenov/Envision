@@ -36,6 +36,7 @@ class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
 		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
+		~ChangeDescription();
 
 		QString summary() const;
 
@@ -108,6 +109,7 @@ class FILEPERSISTENCE_API ChangeDescription
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
 
 inline ChangeDescription::ChangeDescription() {}
+inline ChangeDescription::~ChangeDescription() {}
 
 inline Model::NodeIdType ChangeDescription::nodeId() const { return nodeId_; }
 
