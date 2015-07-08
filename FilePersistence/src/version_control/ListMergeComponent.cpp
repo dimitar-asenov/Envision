@@ -51,10 +51,10 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 
 	for (auto listContainerId : listsToMerge)
 	{
-		auto listContainerBase = treeBase->find(listContainerId);
+		auto listContainerBase = treeBase->find(listContainerId, true);
 		auto idListBase = nodeListToSortedIdList(listContainerBase->children());
-		auto idListA = nodeListToSortedIdList(treeA->find(listContainerId)->children());
-		auto idListB = nodeListToSortedIdList(treeB->find(listContainerId)->children());
+		auto idListA = nodeListToSortedIdList(treeA->find(listContainerId, true)->children());
+		auto idListB = nodeListToSortedIdList(treeB->find(listContainerId, true)->children());
 
 		if (listTypes_.contains(listContainerBase->type()))
 		{
@@ -64,23 +64,20 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 		}
 		else // list is unordered
 		{
-			/* TODO uncomment
-			QList<Model::NodeIdType> listInChunk;
-			listInChunk.append(idListA);
+			auto unorderedChunk = new Chunk();
+			unorderedChunk->spanMerged_ = idListA;
 			for (auto elem : idListB)
-				if (!listInChunk.contains(elem))
+				if (!unorderedChunk->spanMerged_.contains(elem))
 				{
-					auto pos = findPosition(elem, idListB, listInChunk);
-					if (pos.predecessor_.isNull()) listInChunk.prepend(elem);
+					auto pos = findPosition(elem, idListB, unorderedChunk);
+					if (pos.predecessor_.isNull()) unorderedChunk->spanMerged_.prepend(elem);
 					else
 					{
-						int idx = listInChunk.indexOf(pos.predecessor_);
-						listInChunk.insert(idx + 1, elem);
+						int idx = unorderedChunk->spanMerged_.indexOf(pos.predecessor_);
+						unorderedChunk->spanMerged_.insert(idx + 1, elem);
 					}
 				}
-			auto unorderedChunk = new Chunk(true, listInChunk);
-			mergedList->append(unorderedChunk);
-			*/
+			preparedLists_.insert(listContainerId, {unorderedChunk});
 		}
 	}
 
