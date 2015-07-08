@@ -34,8 +34,11 @@ ConflictPairs::~ConflictPairs() {}
 void ConflictPairs::insert(std::shared_ptr<ChangeDescription>& changeA,
 									std::shared_ptr<ChangeDescription>& changeB)
 {
-	pairs_.insert(changeA, changeB);
-	pairs_.insert(changeB, changeA);
+	if (!pairs_.contains(changeA, changeB))
+	{
+		pairs_.insert(changeA, changeB);
+		pairs_.insert(changeB, changeA);
+	}
 }
 
 void ConflictPairs::remove(std::shared_ptr<ChangeDescription>& changeA,
