@@ -35,9 +35,9 @@ ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QStrin
 
 ListMergeComponent::~ListMergeComponent() {}
 
-LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree> treeA,
-																std::shared_ptr<GenericTree> treeB,
-																std::shared_ptr<GenericTree> treeBase,
+LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(std::shared_ptr<GenericTree>& treeA,
+																std::shared_ptr<GenericTree>& treeB,
+																std::shared_ptr<GenericTree>& treeBase,
 																ChangeDependencyGraph& cdgA,
 																ChangeDependencyGraph& cdgB,
 																QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,

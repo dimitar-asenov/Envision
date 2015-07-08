@@ -36,9 +36,9 @@ class ListMergeComponent : public ConflictPipelineComponent
 	public:
 		ListMergeComponent(QSet<QString>& conflictTypes, QSet<QString>& listTypes, QSet<QString>& unorderedTypes);
 		~ListMergeComponent();
-		LinkedChangesTransition run(std::shared_ptr<GenericTree> treeA,
-											 std::shared_ptr<GenericTree> treeB,
-											 std::shared_ptr<GenericTree> treeBase,
+		LinkedChangesTransition run(std::shared_ptr<GenericTree>& treeA,
+											 std::shared_ptr<GenericTree>& treeB,
+											 std::shared_ptr<GenericTree>& treeBase,
 											 ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
 					QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 					ConflictPairs& conflictPairs, LinkedChangesSet&linkedChangesSet);

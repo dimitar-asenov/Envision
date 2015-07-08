@@ -35,8 +35,8 @@ ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, bool us
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
-LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>, std::shared_ptr<GenericTree>,
-																  std::shared_ptr<GenericTree> treeBase, ChangeDependencyGraph& cdgA,
+LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&, std::shared_ptr<GenericTree>&,
+																  std::shared_ptr<GenericTree>& treeBase, ChangeDependencyGraph& cdgA,
 									ChangeDependencyGraph& cdgB,
 									QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
 									ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
