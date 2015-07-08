@@ -103,4 +103,29 @@ TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
 	cleanup();
 }
 
+TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
+{
+	unpack(this->getName());
+	GitRepository repo("projects/TestMerge");
+	auto merge = repo.merge("dev");
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	auto tree = merge->mergedTree();
+	merge->commit(sig, sig, "This is the result of merge test \"" + this->getName() + "\"");
+	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000506}")));
+	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000001507}")));
+	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000200}"));
+	for (int idx = 0; idx < listContainer->children().size(); ++idx)
+		CHECK_CONDITION(listContainer->child(QString::number(idx)));
+	CHECK_CONDITION(listContainer->child(QString::number(1))->id().toString().endsWith("207}"));
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000211}"))
+						 ->parentId().toString().endsWith("300}"));
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000212}")));
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000202}")));
+	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000204}")));
+
+	cleanup();
+}
+
 } /* namespace FilePersistence */
