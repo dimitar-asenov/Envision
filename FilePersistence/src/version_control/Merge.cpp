@@ -262,6 +262,7 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 				auto node = persistentUnit->newNode(change->nodeB());
 				node->linkNode();
 				Q_ASSERT(node->parent()->id() == change->nodeB()->parentId());
+				Q_ASSERT(tree->find(change->nodeId()));
 				break;
 			}
 
@@ -279,6 +280,7 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 				node->detachFromParent();
 				node->setParentId(change->nodeB()->parentId());
 				node->attachToParent();
+				Q_ASSERT(node->parent()->id() == change->nodeB()->parentId());
 				// no break, need to do the same stuff as for stationary.
 			}
 

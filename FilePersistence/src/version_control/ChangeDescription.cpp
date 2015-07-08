@@ -108,22 +108,38 @@ std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
 		std::shared_ptr<GenericTree> treeB)
 {
 	Q_ASSERT(causingChange->debugHasNodes());
-	auto nodeA = causingChange->nodeA();
-	auto nodeB = causingChange->nodeB();
+	auto childA = causingChange->nodeA();
+	auto childB = causingChange->nodeB();
 	std::shared_ptr<ChangeDescription> change(new ChangeDescription);
 	change->nodeId_ = id;
 	change->type_ = ChangeType::Stationary;
 	change->updateFlags_ = UpdateType::Structure;
-	change->nodeA_ = nodeA;
-	change->pointsToChildA_ = nodeA && nodeA->id() != id;
-	change->nodeB_ = nodeB;
-	change->pointsToChildB_ = nodeB && nodeB->id() != id;
 
-	// is there a better way to do this? maybe if all trees had quick lookup?
-	if (causingChange->type() == ChangeType::Insertion)
-		change->nodeA_ = treeA->find(id, true);
-	else if (causingChange->type() == ChangeType::Deletion)
+	if (causingChange->type() == ChangeType::Stationary)
+	{
+		change->nodeA_ = childA;
+		change->nodeB_ = childB;
+		change->pointsToChildA_ = true;
+		change->pointsToChildB_ = true;
+	}
+	else if (causingChange->type() == ChangeType::Deletion ||
+				(causingChange->type() == ChangeType::Move && childA->parentId() == id))
+	{
+		change->nodeA_ = childA;
+		change->pointsToChildA_ = true;
 		change->nodeB_ = treeB->find(id, true);
+		change->pointsToChildB_ = false;
+	}
+	else if (causingChange->type() == ChangeType::Insertion ||
+			  (causingChange->type() == ChangeType::Move && childB->parentId() == id))
+	{
+		change->nodeA_ = treeA->find(id, true);
+		change->pointsToChildA_ = false;
+		change->nodeB_ = childB;
+		change->pointsToChildB_ = true;
+	}
+	else
+		Q_ASSERT(false);
 
 	return change;
 }
