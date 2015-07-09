@@ -27,6 +27,11 @@
 
 #include "../VisualizationBase/src/visualizationbase_api.h"
 #include "../VisualizationBase/src/nodes/UINode.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/Node.h"
+
+DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
 
 namespace Visualization {
 
@@ -37,6 +42,8 @@ namespace Visualization {
  */
 class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 {
+		NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
+
 	public:
 		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget, ViewItemNode* spacingParent);
 		static ViewItemNode* withReference(Model::Node* reference, int purpose);

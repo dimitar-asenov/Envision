@@ -29,8 +29,22 @@
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 #include "nodes/InfoNode.h"
 
+DEFINE_TYPED_LIST(Visualization::ViewItemNode)
+
 namespace Visualization {
 
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
+
+ViewItemNode::ViewItemNode(Model::Node *)
+	:Super()
+{
+}
+
+ViewItemNode::ViewItemNode(Model::Node *, Model::PersistentStore &, bool)
+	:Super()
+{
+	Q_ASSERT(false);
+}
 
 ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
 {
