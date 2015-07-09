@@ -51,6 +51,7 @@ class VISUALIZATIONBASE_API VViewItemNode :
 
 		bool determineSpacing();
 
+		virtual void determineChildren() override;
 	private:
 		Item* reference_{};
 		EmptyItem* spacing_{};

@@ -27,6 +27,7 @@
 #include "ViewItemNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "nodes/InfoNode.h"
 
 namespace Visualization {
 
@@ -39,10 +40,12 @@ ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewIt
 	return result;
 }
 
-ViewItemNode* ViewItemNode::withReference(Model::Node *reference)
+ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
 {
 	auto result = new ViewItemNode();
 	result->setReference(reference);
+	result->setPurpose(purpose);
 	return result;
 }
+
 }

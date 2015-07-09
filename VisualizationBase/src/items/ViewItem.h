@@ -49,16 +49,22 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		static void initializeForms();
 
+		/**
+		 * The purpose to use when rendering only the public interface
+		 * of an item.
+		 */
+		static int publicInterfacePurpose();
+
 		void insertColumn(int column);
-		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0);
+		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0, int purpose = -1);
 		void removeNode(Model::Node* node);
 		QList<Model::Node*> allNodes() const;
 		QPoint positionOfNode(Model::Node* node) const;
 		QPoint positionOfItem(Item* item) const;
-		Model::Node* nodeAt(int column, int row);
+		Model::Node* nodeAt(int column, int row) const;
 
 		void addSpacing(int column, int row, Model::Node* spacingTarget,
-						ViewItemNode* spacingParent = nullptr);
+						ViewItemNode* spacingParent);
 
 		void addArrow(Model::Node* from, Model::Node* to, QString layer,
 					  ViewItemNode* fromParent = nullptr, ViewItemNode* toParent = nullptr);

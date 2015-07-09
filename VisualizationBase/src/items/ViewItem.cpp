@@ -32,6 +32,9 @@
 #include "overlays/ArrowOverlay.h"
 #include "nodes/InfoNode.h"
 #include "VInfoNode.h"
+#include "Scene.h"
+#include "RootItem.h"
+#include "renderer/ModelRenderer.h"
 
 namespace Visualization {
 
@@ -52,6 +55,13 @@ void ViewItem::initializeForms()
 				  return self->nodesGetter(); }));
 }
 
+int ViewItem::publicInterfacePurpose()
+{
+	int purpose = Scene::defaultRenderer()->purposeId("public_interface");
+	return purpose >= 0 ? purpose
+		: Scene::defaultRenderer()->registerVisualizationPurpose("public_interface");
+}
+
 void ViewItem::insertColumn(int column)
 {
 	//Make sure we actually have enough columns
@@ -65,9 +75,9 @@ void ViewItem::insertColumn(int column)
 		nodes_.insert(column, {});
 }
 
-Model::Node* ViewItem::insertNode(Model::Node* node, int column, int row)
+Model::Node* ViewItem::insertNode(Model::Node* node, int column, int row, int purpose)
 {
-	auto ref = ViewItemNode::withReference(node);
+	auto ref = ViewItemNode::withReference(node, purpose);
 	insertViewItemNode(ref, column, row);
 	return ref;
 }
@@ -81,8 +91,11 @@ void ViewItem::removeNode(Model::Node* node)
 		for (auto node : allNodes())
 		{
 			auto viewNode = DCast<ViewItemNode>(node);
-			if (viewNode->spacingTarget() == nodes_[point.x()][point.y()])
+			if (viewNode->spacingParent() == nodes_[point.x()][point.y()])
+			{
 				viewNode->setSpacingTarget(nullptr);
+				viewNode->setSpacingParent(nullptr);
+			}
 		}
 		nodes_[point.x()].remove(point.y());
 		//Need to remove any arrows depending on it
@@ -106,7 +119,7 @@ QPoint ViewItem::positionOfNode(Model::Node *node) const
 	for (int i = 0; i < nodes_.size(); i++)
 	{
 		auto index = nodes_.at(i).indexOf(node);
-		if (index != -1)
+		if (index != -1 && node)
 			return QPoint(i, index);
 	}
 	return QPoint(-1, -1);
@@ -119,7 +132,7 @@ QPoint ViewItem::positionOfItem(Item *item) const
 	else return QPoint(-1, -1);
 }
 
-Model::Node* ViewItem::nodeAt(int column, int row)
+Model::Node* ViewItem::nodeAt(int column, int row) const
 {
 	if (column < 0 || column >= nodes_.size())
 		return nullptr;
@@ -156,9 +169,14 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 			auto toParent = line.toParent_ ? findVisualizationOf(line.toParent_) : this;
 			auto allTo = toParent->findAllVisualizationsOf(line.to_);
 			if (allFrom.size() > 0 && allTo.size() > 0)
+			{
 				for (auto from : allFrom)
 					for (auto to : allTo)
-						arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
+						//TODO@cyril The node is rendered as a RootItem -> needs a hack here
+						//or removing a ViewItemNode with arrows doesn't work correctly
+						if (!DCast<RootItem>(from) && !DCast<RootItem>(to))
+							arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
+			}
 			else arrowsToAdd_.append(line);
 		}
 	}

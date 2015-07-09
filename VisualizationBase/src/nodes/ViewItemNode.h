@@ -39,10 +39,12 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 {
 	public:
 		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget, ViewItemNode* spacingParent);
-		static ViewItemNode* withReference(Model::Node* reference);
+		static ViewItemNode* withReference(Model::Node* reference, int purpose);
 
 		void setReference(Model::Node* reference);
 		Model::Node* reference() const;
+		void setPurpose(int purpose);
+		int purpose() const;
 
 		void setSpacingTarget(Model::Node* spacingTarget);
 		Model::Node* spacingTarget() const;
@@ -51,6 +53,7 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 
 	private:
 		Model::Node* reference_{};
+		int purpose_{-1};
 		Model::Node* spacingTarget_{};
 		ViewItemNode* spacingParent_{};
 
@@ -58,6 +61,8 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 
 inline void ViewItemNode::setReference(Model::Node *reference) { reference_ = reference; }
 inline Model::Node* ViewItemNode::reference() const { return reference_; }
+inline void ViewItemNode::setPurpose(int purpose) { purpose_ = purpose; }
+inline int ViewItemNode::purpose() const { return purpose_; }
 inline void ViewItemNode::setSpacingTarget(Model::Node* spacingTarget) { spacingTarget_ = spacingTarget; }
 inline Model::Node* ViewItemNode::spacingTarget() const { return spacingTarget_; }
 inline void ViewItemNode::setSpacingParent(ViewItemNode *spacingParent) { spacingParent_ = spacingParent; }
