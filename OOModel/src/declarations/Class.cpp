@@ -213,7 +213,7 @@ QSet<Class*> Class::directBaseClasses()
 	for (auto baseClass : *baseClasses())
 		if (auto asClass = expressionToClass(baseClass))
 			result << asClass;
-	if (implicitBaseFromProject() && result.isEmpty())
+	if (result.isEmpty() && implicitBaseFromProject())
 		result << implicitBaseFromProject();
 	return result;
 }
