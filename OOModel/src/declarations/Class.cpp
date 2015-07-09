@@ -213,7 +213,7 @@ QSet<Class*> Class::directBaseClasses()
 	for (auto baseClass : *baseClasses())
 		if (auto asClass = expressionToClass(baseClass))
 			result << asClass;
-	if (implicitBaseFromProject())
+	if (implicitBaseFromProject() && result.isEmpty())
 		result << implicitBaseFromProject();
 	return result;
 }
@@ -249,9 +249,9 @@ QSet<Class*> Class::directSubClasses()
 	while (!toCheck.isEmpty())
 	{
 		auto check = toCheck.takeLast();
-		if (auto clazz = DCast<Class>(check))
-			if (clazz->directBaseClasses().contains(this))
-				result << clazz;
+		if (auto someClass = DCast<Class>(check))
+			if (someClass->directBaseClasses().contains(this))
+				result << someClass;
 		toCheck.append(check->children());
 	}
 	return result;
