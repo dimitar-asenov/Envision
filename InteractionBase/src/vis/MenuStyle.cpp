@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,42 +24,10 @@
 **
 ***********************************************************************************************************************/
 
-#include "ViewItemNode.h"
+#include "MenuStyle.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-#include "nodes/InfoNode.h"
+namespace Interaction {
 
-DEFINE_TYPED_LIST(Visualization::ViewItemNode)
-
-namespace Visualization {
-
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
-
-ViewItemNode::ViewItemNode(Model::Node *)
-	:Super()
-{
-}
-
-ViewItemNode::ViewItemNode(Model::Node *, Model::PersistentStore &, bool)
-	:Super()
-{
-	Q_ASSERT(false);
-}
-
-ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
-{
-	auto result = new ViewItemNode();
-	result->setSpacingTarget(spacingTarget);
-	result->setSpacingParent(spacingParent);
-	return result;
-}
-
-ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
-{
-	auto result = new ViewItemNode();
-	result->setReference(reference);
-	result->setPurpose(purpose);
-	return result;
-}
+MenuStyle::~MenuStyle(){}
 
 }

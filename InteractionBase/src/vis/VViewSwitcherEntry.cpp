@@ -23,40 +23,36 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "VViewSwitcherEntry.h"
 
-#include "CToggleInfoEntry.h"
-#include "VisualizationBase/src/nodes/InfoNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 namespace Interaction {
 
-CToggleInfoEntry::CToggleInfoEntry()
-	:CommandWithDefaultArguments("toggleInfo", {""})
+ITEM_COMMON_DEFINITIONS(VViewSwitcherEntry, "item")
+
+VViewSwitcherEntry::VViewSwitcherEntry(Visualization::Item* parent, QString viewName, const StyleType* style) :
+		Super(parent, style)
 {
+	nameField_ = new Visualization::Text(this, viewName);
+	nameField_->setEditable(true);
+	oldName_ = viewName;
 }
 
-bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item* target,
-	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+void VViewSwitcherEntry::initializeForms()
 {
-	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestor = source->findAncestorWithNode();
-	if (!ancestor) return false;
-	else
-		return canInterpret && DCast<Visualization::InfoNode>(ancestor->node());
+	addForm(item(&I::nameField_));
 }
 
-CommandResult* CToggleInfoEntry::executeWithArguments(Visualization::Item* source, Visualization::Item*,
-	const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+void VViewSwitcherEntry::determineChildren()
 {
-	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
-	info->setEnabled(arguments.at(0), !(info->isEnabled(arguments.at(0))));
-	info->automaticUpdate();
-	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
-}
-
-QString CToggleInfoEntry::description(Visualization::Item *, Visualization::Item *,
-	const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
-{
-	return "Toggle the " + arguments.at(0) + " info layer";
+	Super::determineChildren();
+	auto view = scene()->viewItem(oldName_);
+	if (view)
+		view->setName(nameField_->text());
+	setStyle(view ? itemStyles().get("existingView") : itemStyles().get("newView"));
+	oldName_ = nameField_->text();
 }
 }

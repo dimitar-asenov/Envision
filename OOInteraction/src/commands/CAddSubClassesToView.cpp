@@ -24,39 +24,27 @@
  **
  **********************************************************************************************************************/
 
-#include "CToggleInfoEntry.h"
-#include "VisualizationBase/src/nodes/InfoNode.h"
+#include "CAddSubClassesToView.h"
+#include "OOModel/src/declarations/Class.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-CToggleInfoEntry::CToggleInfoEntry()
-	:CommandWithDefaultArguments("toggleInfo", {""})
+CAddSubClassesToView::CAddSubClassesToView()
+	:AddReferencedToViewCommand("addSubClasses", {}, 1, "inheritance",
+								AddReferencedToViewCommand::ArrowFromReference,
+								Visualization::ViewItem::publicInterfacePurpose())
 {
 }
 
-bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item* target,
-	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+QString CAddSubClassesToView::description(Visualization::Item*, Visualization::Item*,
+		const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestor = source->findAncestorWithNode();
-	if (!ancestor) return false;
-	else
-		return canInterpret && DCast<Visualization::InfoNode>(ancestor->node());
+	return "Add the sub classes of the current class to the view";
 }
 
-CommandResult* CToggleInfoEntry::executeWithArguments(Visualization::Item* source, Visualization::Item*,
-	const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+QSet<OOModel::Class*> CAddSubClassesToView::references(OOModel::Class *target)
 {
-	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
-	info->setEnabled(arguments.at(0), !(info->isEnabled(arguments.at(0))));
-	info->automaticUpdate();
-	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
+	return target->directSubClasses();
 }
 
-QString CToggleInfoEntry::description(Visualization::Item *, Visualization::Item *,
-	const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
-{
-	return "Toggle the " + arguments.at(0) + " info layer";
-}
 }

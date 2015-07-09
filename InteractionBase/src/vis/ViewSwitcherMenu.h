@@ -23,40 +23,36 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#pragma once
 
-#include "CToggleInfoEntry.h"
-#include "VisualizationBase/src/nodes/InfoNode.h"
+#include "interactionbase_api.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "Menu.h"
+#include "MenuStyle.h"
 
 namespace Interaction {
 
-CToggleInfoEntry::CToggleInfoEntry()
-	:CommandWithDefaultArguments("toggleInfo", {""})
+class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 {
-}
 
-bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item* target,
-	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
-{
-	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestor = source->findAncestorWithNode();
-	if (!ancestor) return false;
-	else
-		return canInterpret && DCast<Visualization::InfoNode>(ancestor->node());
-}
+		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherMenu, MenuStyle)
 
-CommandResult* CToggleInfoEntry::executeWithArguments(Visualization::Item* source, Visualization::Item*,
-	const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
-{
-	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
-	info->setEnabled(arguments.at(0), !(info->isEnabled(arguments.at(0))));
-	info->automaticUpdate();
-	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
-}
+	public:
+		static void show(Visualization::Item* target);
 
-QString CToggleInfoEntry::description(Visualization::Item *, Visualization::Item *,
-	const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
-{
-	return "Toggle the " + arguments.at(0) + " info layer";
-}
+	protected:
+		virtual bool executeEntry(Visualization::Item* item);
+		virtual void startFocusMode(Visualization::Item* target);
+		virtual void endFocusMode(Visualization::Item* target);
+
+	private:
+		static void showNow(Visualization::Item* target);
+
+		bool inEditMode_{};
+		QString nameBefore_;
+
+		ViewSwitcherMenu(QVector<Visualization::Item*> items, Visualization::Item* target,
+							  StyleType* style = itemStyles().get());
+};
+
 }

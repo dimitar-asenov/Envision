@@ -23,40 +23,37 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#pragma once
 
-#include "CToggleInfoEntry.h"
-#include "VisualizationBase/src/nodes/InfoNode.h"
+#include "interactionbase_api.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/Text.h"
 
 namespace Interaction {
 
-CToggleInfoEntry::CToggleInfoEntry()
-	:CommandWithDefaultArguments("toggleInfo", {""})
-{
-}
+class TextAndDescription;
 
-bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item* target,
-	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
+class INTERACTIONBASE_API VViewSwitcherEntry :
+		public Super<Visualization::DeclarativeItem<VViewSwitcherEntry>>
 {
-	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestor = source->findAncestorWithNode();
-	if (!ancestor) return false;
-	else
-		return canInterpret && DCast<Visualization::InfoNode>(ancestor->node());
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(VViewSwitcherEntry, Visualization::DeclarativeItemBaseStyle)
 
-CommandResult* CToggleInfoEntry::executeWithArguments(Visualization::Item* source, Visualization::Item*,
-	const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
-{
-	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
-	info->setEnabled(arguments.at(0), !(info->isEnabled(arguments.at(0))));
-	info->automaticUpdate();
-	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
-}
+	public:
+		VViewSwitcherEntry(Visualization::Item* parent, QString viewName,
+						   const StyleType* style = itemStyles().get());
 
-QString CToggleInfoEntry::description(Visualization::Item *, Visualization::Item *,
-	const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
-{
-	return "Toggle the " + arguments.at(0) + " info layer";
-}
+		static void initializeForms();
+
+		Visualization::Text* nameField() const;
+
+		virtual void determineChildren() override;
+
+	private:
+		Visualization::Text* nameField_{};
+
+		QString oldName_;
+};
+
+inline Visualization::Text* VViewSwitcherEntry::nameField() const { return nameField_; }
+
 }

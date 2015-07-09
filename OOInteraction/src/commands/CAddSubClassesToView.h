@@ -24,39 +24,32 @@
  **
  **********************************************************************************************************************/
 
-#include "CToggleInfoEntry.h"
-#include "VisualizationBase/src/nodes/InfoNode.h"
+#pragma once
 
-namespace Interaction {
+#include "../oointeraction_api.h"
+#include "InteractionBase/src/commands/AddReferencedToViewCommand.h"
 
-CToggleInfoEntry::CToggleInfoEntry()
-	:CommandWithDefaultArguments("toggleInfo", {""})
-{
+
+namespace Visualization {
+	class Item;
 }
 
-bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item* target,
-	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
-{
-	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
-	auto ancestor = source->findAncestorWithNode();
-	if (!ancestor) return false;
-	else
-		return canInterpret && DCast<Visualization::InfoNode>(ancestor->node());
+namespace OOModel {
+	class Class;
 }
 
-CommandResult* CToggleInfoEntry::executeWithArguments(Visualization::Item* source, Visualization::Item*,
-	const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
-{
-	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
-	info->setEnabled(arguments.at(0), !(info->isEnabled(arguments.at(0))));
-	info->automaticUpdate();
-	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
-}
+namespace OOInteraction {
 
-QString CToggleInfoEntry::description(Visualization::Item *, Visualization::Item *,
-	const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
+class OOINTERACTION_API CAddSubClassesToView :
+		public Interaction::AddReferencedToViewCommand<OOModel::Class, OOModel::Class>
 {
-	return "Toggle the " + arguments.at(0) + " info layer";
-}
+	public:
+		CAddSubClassesToView();
+
+		virtual QString description(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
+
+		QSet<OOModel::Class*> references(OOModel::Class* target);
+};
+
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,42 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#include "ViewItemNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-#include "nodes/InfoNode.h"
+#include "interactionbase_api.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
 
-DEFINE_TYPED_LIST(Visualization::ViewItemNode)
+namespace Interaction {
 
-namespace Visualization {
-
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
-
-ViewItemNode::ViewItemNode(Model::Node *)
-	:Super()
+class INTERACTIONBASE_API MenuStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-}
+	public:
+		virtual ~MenuStyle() override;
 
-ViewItemNode::ViewItemNode(Model::Node *, Model::PersistentStore &, bool)
-	:Super()
-{
-	Q_ASSERT(false);
-}
-
-ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
-{
-	auto result = new ViewItemNode();
-	result->setSpacingTarget(spacingTarget);
-	result->setSpacingParent(spacingParent);
-	return result;
-}
-
-ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
-{
-	auto result = new ViewItemNode();
-	result->setReference(reference);
-	result->setPurpose(purpose);
-	return result;
-}
+		Property<Visualization::TextStyle> nameField{this, "nameField"};
+};
 
 }
