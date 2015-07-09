@@ -59,7 +59,7 @@ class OOVISUALIZATION_API VArrayInitializer
 		Visualization::GridLayout* grid() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::VList* list_{};

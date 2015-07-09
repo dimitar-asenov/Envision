@@ -48,15 +48,15 @@ class VISUALIZATIONBASE_API Diamond: public Super<Shape>
 	public:
 		Diamond(Item *parent, StyleType *style = itemStyles().get());
 
-		virtual void update();
-		virtual int contentLeft();
-		virtual int contentTop();
+		virtual void update() override;
+		virtual int contentLeft() override;
+		virtual int contentTop() override;
 		virtual QRect contentRect() override;
 
-		virtual QSize innerSize(QSize outterSize) const;
-		virtual QSize outterSize(QSize innerSize) const;
+		virtual QSize innerSize(QSize outterSize) const override;
+		virtual QSize outterSize(QSize innerSize) const override;
 
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 }

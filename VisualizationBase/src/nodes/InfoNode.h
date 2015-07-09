@@ -64,8 +64,8 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		void setEnabled(const QString name, bool isEnabled);
 		bool isEnabled(const QString name) const;
 
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
+		virtual void save(Model::PersistentStore& store) const override;
+		virtual void load(Model::PersistentStore& store) override;
 
 		/**
 		 * Registers a new method to get information.

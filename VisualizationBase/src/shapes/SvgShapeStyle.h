@@ -36,7 +36,7 @@ class VISUALIZATIONBASE_API SvgShapeStyle : public Super<ShapeStyle>
 {
 	public:
 		virtual ~SvgShapeStyle() override;
-		virtual void load(StyleLoader& sl);
+		virtual void load(StyleLoader& sl) override;
 		void paint(QPainter* painter, int x, int y, int width, int height) const;
 
 		Property<QString> filename{this, "filename"};

@@ -43,8 +43,8 @@ class CONTROLFLOWVISUALIZATION_API VBreakStatementCF
 		virtual ~VBreakStatementCF();
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		OOVisualization::VBreakStatement* vis_;

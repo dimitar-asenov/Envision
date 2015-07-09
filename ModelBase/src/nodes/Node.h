@@ -71,7 +71,7 @@ class UsedLibrary;
  */
 class MODELBASE_API Node
 {
-	DECLARE_TYPE_ID
+	DECLARE_TYPE_ID_BASE
 	public:
 
 		/**

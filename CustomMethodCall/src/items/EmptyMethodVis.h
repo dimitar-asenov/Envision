@@ -51,7 +51,7 @@ class CUSTOMMETHODCALL_API EmptyMethodVis
 		virtual ~EmptyMethodVis();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::Static* icon_;

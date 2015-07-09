@@ -48,8 +48,8 @@ OOModel::BooleanLiteral>>
 		Visualization::VBoolean* item() const;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::VBoolean* vis_;

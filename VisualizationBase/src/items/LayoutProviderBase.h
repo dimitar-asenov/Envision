@@ -42,8 +42,8 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Super<Item>
 		LayoutProviderBase(Item* parent, const StyleType *style, Layout* layout);
 		virtual ~LayoutProviderBase();
 
-		virtual bool sizeDependsOnParent() const;
-		virtual bool isEmpty() const;
+		virtual bool sizeDependsOnParent() const override;
+		virtual bool isEmpty() const override;
 
 		Layout* layout() const;
 
@@ -51,7 +51,7 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Super<Item>
 			const override;
 
 	protected:
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Layout* layout_;

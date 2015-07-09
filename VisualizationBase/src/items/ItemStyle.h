@@ -46,7 +46,7 @@ class VISUALIZATIONBASE_API ItemStyle : public Super<Style>
 		Shape* createShape(Item* parent) const;
 		bool hasShape() const;
 
-		virtual void load(StyleLoader& sl);
+		virtual void load(StyleLoader& sl) override;
 
 		Property<bool> drawsOnlyShape{this, "drawsOnlyShape"};
 		Property<bool> drawShapeWhenEmpty{this, "drawShapeWhenEmpty"};

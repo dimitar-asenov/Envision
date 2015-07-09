@@ -47,8 +47,8 @@ class OOVISUALIZATION_API VBlock : public Super<VStatementItem<VBlock, Visualiza
 		virtual ~VBlock();
 
 	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
+		void determineChildren() override;
+		void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		VStatementItemList* items_;

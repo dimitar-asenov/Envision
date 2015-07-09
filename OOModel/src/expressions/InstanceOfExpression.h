@@ -40,7 +40,7 @@ class OOMODEL_API InstanceOfExpression: public Super<Expression>
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 
 };
 

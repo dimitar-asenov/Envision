@@ -43,7 +43,7 @@ class MODELBASE_API BinaryNodeAccessUnit: public Super<BinaryNode>
 		Model::NodeReadWriteLock accessLock_;
 
 	public:
-		virtual Model::NodeReadWriteLock* accessLock() const;
+		virtual Model::NodeReadWriteLock* accessLock() const override;
 };
 
 }

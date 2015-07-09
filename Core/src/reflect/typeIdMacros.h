@@ -27,6 +27,27 @@
 #pragma once
 
 /***********************************************************************************************************************
+ * Same as DECLARE_TYPE_ID below but for base classes that don't need the override keyword for virtual methods.
+ */
+#define DECLARE_TYPE_ID_BASE																														\
+	public:																																				\
+		virtual const QString& typeName() const;																								\
+		virtual int typeId() const;																												\
+																																							\
+		/*  Returns an ordered list of all ids in the type hierarchy of this class. */											\
+		/* The most derived id appears at the front of the list. */																		\
+		virtual QList<int> hierarchyTypeIds() const;																							\
+		virtual bool isSubtypeOf(int type) const;																								\
+		virtual bool isSubtypeOf(const QString& type) const;																				\
+																																							\
+		static const QString& typeNameStatic();																								\
+		static int typeIdStatic() { return typeId_; }																						\
+		static void initType();																														\
+																																							\
+	private:																																				\
+		static int typeId_;																															\
+
+/***********************************************************************************************************************
  * Declares standard methods for querying a classes's type statically or at run-time.
  *
  * This macro declares a static method initType which should be called during the initialization of the a plug-in where
@@ -41,14 +62,14 @@
  */
 #define DECLARE_TYPE_ID																																\
 	public:																																				\
-		virtual const QString& typeName() const;																								\
-		virtual int typeId() const;																												\
+		virtual const QString& typeName() const override;																					\
+		virtual int typeId() const override;																									\
 																																							\
 		/*  Returns an ordered list of all ids in the type hierarchy of this class. */											\
 		/* The most derived id appears at the front of the list. */																		\
-		virtual QList<int> hierarchyTypeIds() const;																							\
-		virtual bool isSubtypeOf(int type) const;																								\
-		virtual bool isSubtypeOf(const QString& type) const;																				\
+		virtual QList<int> hierarchyTypeIds() const override;																				\
+		virtual bool isSubtypeOf(int type) const override;																					\
+		virtual bool isSubtypeOf(const QString& type) const override;																	\
 																																							\
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic() { return typeId_; }																						\

@@ -53,7 +53,7 @@ class OOVISUALIZATION_API VCharacterLiteral
 		virtual ~VCharacterLiteral();
 
 	protected:
-		virtual void determineChildren();
+		virtual void determineChildren() override;
 
 	private:
 		Visualization::Static* pre_{};

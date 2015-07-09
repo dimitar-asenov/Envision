@@ -42,8 +42,8 @@ class VISUALIZATIONBASE_API SceneHandlerItem : public Super<Item>
 		SceneHandlerItem(Scene* scene);
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 };
 
 }

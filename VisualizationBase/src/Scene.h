@@ -84,7 +84,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		Cursor* mainCursor();
 		void setMainCursor(Cursor* cursor);
 
-		virtual void customEvent(QEvent *event);
+		virtual void customEvent(QEvent *event) override;
 
 		virtual SceneHandlerItem* sceneHandlerItem();
 

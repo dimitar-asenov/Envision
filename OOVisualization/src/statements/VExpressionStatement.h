@@ -44,8 +44,8 @@ class OOVISUALIZATION_API VExpressionStatement
 		virtual ~VExpressionStatement();
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Item* expr_;
