@@ -29,6 +29,7 @@
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
+#include "UINode.h"
 
 DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, InfoNode)
 
@@ -39,7 +40,7 @@ namespace Visualization {
  * on a target node. There is a registry which keeps track of all possible informations
  * to be displayed.
  */
-class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
+class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 {
 	DECLARE_TYPE_ID
 
@@ -63,9 +64,6 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 
 		void setEnabled(const QString name, bool isEnabled);
 		bool isEnabled(const QString name) const;
-
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
 
 		/**
 		 * Registers a new method to get information.

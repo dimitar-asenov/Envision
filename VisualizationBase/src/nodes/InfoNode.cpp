@@ -37,7 +37,7 @@ QList<InfoNode*> InfoNode::allInfoNodes;
 QHash<QString, InfoNode::InfoGetterStruct> InfoNode::allInfoGetters;
 
 InfoNode::InfoNode(Model::Node *target)
-	:Super(nullptr), target_(target)
+	:Super(), target_(target)
 {
 	Q_ASSERT(target);
 	for (auto key : allInfoGetters.keys())
@@ -46,7 +46,7 @@ InfoNode::InfoNode(Model::Node *target)
 }
 
 InfoNode::InfoNode(Model::Node *target, QList<QString> enabledInfos)
-	:Super(nullptr), target_(target)
+	:Super(), target_(target)
 {
 	Q_ASSERT(target);
 	for (auto key : enabledInfos)
@@ -58,16 +58,6 @@ InfoNode::~InfoNode()
 {
 	allInfoNodes.removeAll(this);
 	target_ = nullptr;
-}
-
-void InfoNode::save(Model::PersistentStore &) const
-{
-	Q_ASSERT(false);
-}
-
-void InfoNode::load(Model::PersistentStore &)
-{
-	Q_ASSERT(false);
 }
 
 void InfoNode::updateInfo(bool isAutoUpdate)
