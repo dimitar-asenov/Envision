@@ -73,8 +73,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void updateNow();
 		void listenToTreeManager(Model::TreeManager* manager);
 
-		void addViewItem(ViewItem* view);
-		ViewItem* newViewItem(const QString name = QString());
+		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
+		ViewItem* newViewItem(const QString name = QString(), QPoint position = QPoint(-1, -1));
 		ViewItem* viewItem(const QString name);
 		void switchToView(ViewItem* view);
 		bool switchToView(const QString viewName);
@@ -109,7 +109,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool isHiddenCategory(ItemCategory cat);
 
 		const QList<Item*>& topLevelItems() const;
-		const QList<ViewItem*>& viewItems() const;
+		const QVector<QVector<ViewItem*>>& viewItems() const;
 
 		void addRefreshActionFunction(RefreshActionFunction func);
 
@@ -181,7 +181,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
-		QList<ViewItem*> viewItems_;
+		QVector<QVector<ViewItem*>> viewItems_;
 		ViewItem* currentViewItem_{};
 		QHash<QString, OverlayGroup> overlayGroups_;
 
@@ -213,6 +213,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		void computeSceneRect();
 
+		QPoint nextEmptyPosition();
+
 		QList<Item*> itemsThatShouldHaveASelection();
 };
 
@@ -225,7 +227,7 @@ inline ModelRenderer* Scene::renderer() { return renderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return mainCursor_; }
 inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
-inline const QList<ViewItem*>& Scene::viewItems() const { return viewItems_; }
+inline const QVector<QVector<ViewItem*>>& Scene::viewItems() const { return viewItems_; }
 inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
 
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }

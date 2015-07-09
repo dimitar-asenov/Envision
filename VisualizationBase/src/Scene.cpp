@@ -74,9 +74,10 @@ Scene::Scene()
 	setMinimumRenderSize(1.0);
 #endif
 
-
 	initialized_ = true;
 	allScenes().append(this);
+
+	viewItems_.resize(3);
 
 	auto selectionGroup = addOverlayGroup("User Selected Items");
 	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay(item));});
@@ -139,7 +140,7 @@ void Scene::removeTopLevelItem(Item* item)
 
 ViewItem* Scene::currentViewItem()
 {
-	if (viewItems_.size() == 0)
+	if (viewItems_[0].size() + viewItems_[1].size() + viewItems_[2].size() == 0)
 	{
 		currentViewItem_ = newViewItem("ProjectView");
 		currentViewItem_->show();
@@ -150,16 +151,17 @@ ViewItem* Scene::currentViewItem()
 
 ViewItem* Scene::viewItem(const QString name)
 {
-	for (auto item : viewItems_)
-		if (item->name() == name)
-			return item;
+	for (auto vector : viewItems_)
+		for (auto item : vector)
+			if (item && item->name() == name)
+				return item;
 	return nullptr;
 }
 
 void Scene::switchToView(ViewItem *view)
 {
 	Q_ASSERT(!inAnUpdate_);
-	Q_ASSERT(viewItems_.contains(view));
+	Q_ASSERT(viewItems_[0].contains(view) || viewItems_[1].contains(view) || viewItems_[2].contains(view));
 	currentViewItem_->hide();
 	currentViewItem_ = view;
 	currentViewItem_->show();
@@ -175,24 +177,48 @@ bool Scene::switchToView(const QString viewName)
 	return view != nullptr;
 }
 
-void Scene::addViewItem(ViewItem *view)
+void Scene::addViewItem(ViewItem *view, QPoint position)
 {
 	Q_ASSERT(!inAnUpdate_);
-	viewItems_.append(view);
+	if (position.x() <= 0 || position.y() <= 0)
+		position = nextEmptyPosition();
+	if (viewItems_[position.x()].size() <= position.y())
+		viewItems_[position.x()].resize(position.y() + 1);
+	//If there already is an item -> use insert
+	if (viewItems_[position.x()][position.y()])
+		viewItems_[position.x()].insert(position.y(), view);
+	//Else just overwrite the nullptr
+	else viewItems_[position.x()][position.y()] = view;
 	addTopLevelItem(view, false);
 }
 
-ViewItem* Scene::newViewItem(const QString name)
+ViewItem* Scene::newViewItem(const QString name, QPoint position)
 {
 	auto result = new ViewItem(nullptr, name);
-	addViewItem(result);
+	addViewItem(result, position);
 	return result;
+}
+
+QPoint Scene::nextEmptyPosition()
+{
+	//Take the first empty position, if one exists
+	for (int col = 0; col < viewItems_.size(); col++)
+		for (int row = 0; row < viewItems_[col].size(); row++)
+			if (!viewItems_[row][col])
+				return QPoint(row, col);
+	//Else just use the column with the least rows
+	int colToInsert = 0;
+	for (int col = 1; col < viewItems_.size(); col++)
+		if (viewItems_[col].size() < viewItems_[colToInsert].size())
+			colToInsert = col;
+	return QPoint(colToInsert, viewItems_[colToInsert].size());
 }
 
 void Scene::removeAllViewItems()
 {
-	for (auto item : viewItems_)
-		removeTopLevelItem(item);
+	for (auto vector : viewItems_)
+		for (auto item : vector)
+			removeTopLevelItem(item);
 
 	viewItems_.clear();
 	currentViewItem_ = nullptr;
