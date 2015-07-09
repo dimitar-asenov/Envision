@@ -79,7 +79,7 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		/**
 		 * The function to execute when selecting the given visualization.
 		 */
-		virtual bool onSelectItem(Visualization::Item* item) = 0;
+		virtual bool executeEntry(Visualization::Item* item) = 0;
 		/**
 		 * Start focus mode with the given target to be focused.
 		 */

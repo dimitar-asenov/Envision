@@ -72,17 +72,17 @@ void ViewSwitcherMenu::startFocusMode(Visualization::Item *target)
 
 void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 {
-	if (auto asSwitcher = DCast<VViewSwitcherEntry>(target))
+	if (auto entry = DCast<VViewSwitcherEntry>(target))
 	{
 		//If the view item didn't exist and the user changed the name,
 		//create a new item with that name
-		auto nameAfter = asSwitcher->nameField()->text();
+		auto nameAfter = entry->nameField()->text();
 		if (scene()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
 			scene()->newViewItem(nameAfter);
 	}
 }
 
-bool ViewSwitcherMenu::onSelectItem(Visualization::Item* item)
+bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 {
 	if (inEditMode_) return false;
 	if (auto asSwitcher = DCast<VViewSwitcherEntry>(item))

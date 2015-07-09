@@ -104,7 +104,7 @@ void Menu::selectItem(Visualization::Item* item)
 bool Menu::executeFocused()
 {
 	if (focusedItem())
-		return onSelectItem(focusedItem());
+		return executeEntry(focusedItem());
 	return false;
 }
 
