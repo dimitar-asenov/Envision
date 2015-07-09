@@ -28,6 +28,8 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 #include "nodes/InfoNode.h"
+#include "items/ViewItem.h"
+#include "QJsonArray"
 
 DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 
@@ -60,6 +62,75 @@ ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
 	result->setReference(reference);
 	result->setPurpose(purpose);
 	return result;
+}
+
+ViewItemNode* ViewItemNode::withJson(QJsonObject json, const ViewItem *parent)
+{
+	auto result = new ViewItemNode();
+	result->fromJson(json, parent);
+	return result;
+}
+
+QJsonObject ViewItemNode::toJson(const ViewItem* parent) const
+{
+	QJsonObject result;
+	result.insert("purpose", purpose());
+	result.insert("col", parent->positionOfNode(const_cast<ViewItemNode*>(this)).x());
+	result.insert("row", parent->positionOfNode(const_cast<ViewItemNode*>(this)).y());
+	//If it stores a normal, separately persisted node
+	if (reference() && reference()->manager())
+	{
+		result.insert("reference", reference()->manager()->
+					nodeIdMap().id(reference()).toString());
+		result.insert("type", "NODE");
+	}
+	//If the node handles spacing only
+	else if (!reference() && spacingTarget())
+	{
+		result.insert("target", spacingTarget()->manager()->
+								nodeIdMap().id(spacingTarget()).toString());
+		result.insert("parentCol", parent->positionOfNode(spacingParent()).x());
+		result.insert("parentRow", parent->positionOfNode(spacingParent()).y());
+		result.insert("type", "SPACING");
+	}
+	//If it stores an InfoNode, which is not separately persisted
+	else if (auto infoNode = DCast<InfoNode>(reference()))
+	{
+		result.insert("content", infoNode->toJson());
+		result.insert("target", infoNode->target()->manager()->
+					   nodeIdMap().id(infoNode->target()).toString());
+		result.insert("type", "INFO");
+	}
+	return result;
+}
+
+void ViewItemNode::fromJson(QJsonObject json, const ViewItem* parent)
+{
+	if (!json.contains("type"))
+		return;
+	setPurpose(json["purpose"].toInt());
+	//TODO@cyril Does this way to get a manager for the IDs always work?
+	auto idMap = Model::AllTreeManagers::instance().
+			loadedManagers().first()->nodeIdMap();
+	if (json["type"] == "NODE")
+	{
+		if (auto ref = idMap.node(QUuid(json["reference"].toString())))
+			setReference(const_cast<Model::Node*>(ref));
+	}
+	else if (json["type"] == "SPACING")
+	{
+		if (auto target = idMap.node(QUuid(json["target"].toString())))
+			setSpacingTarget(const_cast<Model::Node*>(target));
+		if (json["parentRow"].toInt() != -1)
+			setSpacingParent(DCast<ViewItemNode>(parent->nodeAt(json["parentCol"].toInt(),
+																json["parentRow"].toInt())));
+	}
+	else if (json["type"] == "INFO")
+	{
+		if (auto target = idMap.node(QUuid(json["target"].toString())))
+			setReference(new InfoNode(const_cast<Model::Node*>(target),
+									  json["content"].toArray()));
+	}
 }
 
 }

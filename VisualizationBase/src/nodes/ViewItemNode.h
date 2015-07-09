@@ -35,6 +35,8 @@ DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, ViewItemNode)
 
 namespace Visualization {
 
+class ViewItem;
+
 /**
  * The ViewItemNode class is used in the ViewItem class and simply wraps a top level node
  * to give another level of indirection. This helps with distinguishing different items when
@@ -47,6 +49,7 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 	public:
 		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget, ViewItemNode* spacingParent);
 		static ViewItemNode* withReference(Model::Node* reference, int purpose);
+		static ViewItemNode* withJson(QJsonObject json, const ViewItem* parent);
 
 		void setReference(Model::Node* reference);
 		Model::Node* reference() const;
@@ -57,6 +60,9 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 		Model::Node* spacingTarget() const;
 		void setSpacingParent(ViewItemNode* spacingParent);
 		ViewItemNode* spacingParent() const;
+
+		QJsonObject toJson(const ViewItem* parent) const;
+		void fromJson(QJsonObject json, const ViewItem* parent);
 
 	private:
 		Model::Node* reference_{};
