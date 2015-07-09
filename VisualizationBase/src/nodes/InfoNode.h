@@ -48,7 +48,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		using InfoGetter = QString (*) (Model::Node* target);
 
 		InfoNode(Model::Node* target);
-		InfoNode(Model::Node *target, QList<QString> enabledInfos);
+		InfoNode(Model::Node *target, QJsonArray enabledInfos);
 		virtual ~InfoNode();
 
 		const Model::Node* target() const;
@@ -64,6 +64,8 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 
 		void setEnabled(const QString name, bool isEnabled);
 		bool isEnabled(const QString name) const;
+
+		QJsonValue toJson() const;
 
 		/**
 		 * Registers a new method to get information.

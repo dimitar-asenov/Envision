@@ -27,6 +27,9 @@
 #include "InfoNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "QJsonArray"
+#include "QJsonValue"
+
 DEFINE_TYPED_LIST(Visualization::InfoNode)
 
 namespace Visualization {
@@ -45,12 +48,12 @@ InfoNode::InfoNode(Model::Node *target)
 	allInfoNodes.append(this);
 }
 
-InfoNode::InfoNode(Model::Node *target, QList<QString> enabledInfos)
+InfoNode::InfoNode(Model::Node *target, QJsonArray enabledInfos)
 	:Super(), target_(target)
 {
 	Q_ASSERT(target);
-	for (auto key : enabledInfos)
-		setEnabled(key, true);
+	for (auto item : enabledInfos)
+		setEnabled(item.toString(), true);
 	allInfoNodes.append(this);
 }
 
@@ -91,6 +94,14 @@ void InfoNode::setEnabled(const QString name, bool isEnabled)
 	if (isEnabled && !enabledInfoGetters_.contains(name) && allInfoGetters.contains(name))
 		enabledInfoGetters_.append(name);
 	else enabledInfoGetters_.removeAll(name);
+}
+
+QJsonValue InfoNode::toJson() const
+{
+	QJsonArray result;
+	for (auto item : enabledInfoGetters_)
+		result.append(item);
+	return result;
 }
 
 //Class methods
