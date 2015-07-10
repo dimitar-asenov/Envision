@@ -46,11 +46,11 @@ class CONTROLFLOWVISUALIZATION_API VListCF : public Super<Visualization::ItemWit
 		VListCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VListCF();
 
-		virtual bool isEmpty() const;
+		virtual bool isEmpty() const override;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		QVector< Visualization::Item* > items_;

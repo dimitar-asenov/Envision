@@ -85,7 +85,7 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		CompositeIndex indexOf(const QString& nodeName) const;
 
 		virtual QList<Node*> children() const override;
-		virtual bool replaceChild(Node* child, Node* replacement);
+		virtual bool replaceChild(Node* child, Node* replacement) override;
 
 		void set(const CompositeIndex &attributeIndex, Node* node);
 
@@ -119,8 +119,8 @@ class MODELBASE_API CompositeNode: public Super<Node>
 		 */
 		Node* setDefault(QString nodeName);
 
-		virtual void save(PersistentStore &store) const;
-		virtual void load(PersistentStore &store);
+		virtual void save(PersistentStore &store) const override;
+		virtual void load(PersistentStore &store) override;
 
 		bool hasAttribute(const QString& attributeName);
 

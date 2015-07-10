@@ -46,7 +46,7 @@ class OOVISUALIZATION_API VCastExpression : public Super<VExpression<VCastExpres
 		virtual ~VCastExpression();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::NodeWrapper* castType_{};

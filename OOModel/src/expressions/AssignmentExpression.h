@@ -52,7 +52,7 @@ class OOMODEL_API AssignmentExpression: public Super<Expression>
 		AssignmentTypes op() const;
 		void setOp(const AssignmentTypes& oper);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 inline AssignmentExpression::AssignmentTypes AssignmentExpression::op() const

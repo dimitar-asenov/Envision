@@ -42,7 +42,7 @@ class OOMODEL_API StringLiteral: public Super<Expression>
 
 	public:
 		StringLiteral(const QString& value);
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

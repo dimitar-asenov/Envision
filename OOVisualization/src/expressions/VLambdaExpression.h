@@ -56,7 +56,7 @@ class OOVISUALIZATION_API VLambdaExpression : public Super<VExpression<VLambdaEx
 		VStatementItemList* body() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::VList* arguments_{};

@@ -39,7 +39,7 @@ class OOMODEL_API ArrayInitializer: public Super<Expression>
 	ATTRIBUTE(Model::TypedList<Expression>, values, setValues)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

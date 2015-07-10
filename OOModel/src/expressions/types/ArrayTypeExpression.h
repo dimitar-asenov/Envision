@@ -40,7 +40,7 @@ class OOMODEL_API ArrayTypeExpression : public Super<TypeExpression>
 	ATTRIBUTE(Expression, fixedSize, setFixedSize)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

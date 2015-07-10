@@ -38,7 +38,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Shape
 {
-	DECLARE_TYPE_ID
+	DECLARE_TYPE_ID_BASE
 
 	public:
 		typedef ShapeStyle StyleType;

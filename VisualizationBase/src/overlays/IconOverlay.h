@@ -42,8 +42,8 @@ class VISUALIZATIONBASE_API IconOverlay : public Super<Overlay<Item>>
 		IconOverlay(Item* associatedItem, const StyleType* style = itemStyles().get());
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Static* icon_{};

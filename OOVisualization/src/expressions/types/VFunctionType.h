@@ -56,7 +56,7 @@ class OOVISUALIZATION_API VFunctionType : public Super<VExpression<VFunctionType
 		Visualization::VList* results() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 

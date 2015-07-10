@@ -69,7 +69,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes);
 
-		virtual bool isEmpty() const;
+		virtual bool isEmpty() const override;
 		virtual bool isSensitiveToScale() const override;
 
 		int focusedElementIndex() const;

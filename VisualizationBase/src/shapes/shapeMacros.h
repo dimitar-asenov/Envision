@@ -43,7 +43,7 @@ public:																																					\
 	typedef StyleTypeName StyleType;																												\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Shape::style()); }									\
-	virtual void setStyle(const Visualization::ShapeStyle* style);																		\
+	virtual void setStyle(const Visualization::ShapeStyle* style) override;															\
 	static StyleSet<ShapeClass>& itemStyles();																								\
 																																							\
 private:

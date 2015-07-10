@@ -43,14 +43,14 @@ public:																																					\
 	typedef StyleTypeName StyleType;																												\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Item::style()); }									\
-	virtual void setStyle(const Visualization::ItemStyle* style);																		\
+	virtual void setStyle(const Visualization::ItemStyle* style) override;															\
 	static Visualization::StyleSet<ItemClass>& itemStyles();																				\
 																																							\
-	virtual Visualization::InteractionHandler* handler() const;																			\
+	virtual Visualization::InteractionHandler* handler() const override;																\
 	static void setDefaultClassHandler(Visualization::InteractionHandler* handler) {defaultClassHandler_ = handler;}	\
 	static Visualization::InteractionHandler* defaultClassHandler() {return defaultClassHandler_;}							\
 																																							\
-	virtual QList<Visualization::VisualizationAddOn*> addOns();																			\
+	virtual QList<Visualization::VisualizationAddOn*> addOns() override;																\
 	static void addAddOn(Visualization::VisualizationAddOn* addOn);																	\
 	static bool removeAddOn(Visualization::VisualizationAddOn* addOn);																\
 private:																																					\

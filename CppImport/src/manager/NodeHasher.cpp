@@ -252,7 +252,7 @@ const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifi
 			break;
 		default:
 			// In version 3.6 this is only NestedNameSpecifier::Super, which is a Microsoft specific extension (_super).
-			throw new CppImportException("Unsupported nested name specifier kind: " + nestedName->getKind());
+			throw new CppImportException(QString("Unsupported nested name specifier kind: %1").arg(nestedName->getKind()));
 			break;
 	}
 	if (auto p = nestedName->getPrefix())

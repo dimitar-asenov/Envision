@@ -42,7 +42,7 @@ class OOMODEL_API UnfinishedOperator : public Super<Expression>
 	ATTRIBUTE(Model::TypedList<Expression>, operands, setOperands)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 
 };
 

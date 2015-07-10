@@ -52,7 +52,7 @@ class COMMENTS_API VCommentTable : public Super<Visualization::ItemWithNode<VCom
 
 	protected:
 		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		QVector< QVector<Visualization::Item*> > items_;

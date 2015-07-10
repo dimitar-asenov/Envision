@@ -48,8 +48,8 @@ class OOVISUALIZATION_API VIntegerLiteral
 		Visualization::VInteger* item() const;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::VInteger* vis_;

@@ -55,7 +55,7 @@ class OOVISUALIZATION_API VEnumerator : public Super<Visualization::ItemWithNode
 		Visualization::Item* value() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::VText* name_{};

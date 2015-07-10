@@ -49,7 +49,7 @@ class ControlFlowItem : public Super<Visualization::Item>
 		void setPreferredContinueExit(PreferedExitDirection preference);
 		void setPreferredBreakExit(PreferedExitDirection preference);
 
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	protected:
 

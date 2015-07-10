@@ -37,7 +37,7 @@ class OOMODEL_API AutoTypeExpression : public Super<TypeExpression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(AutoTypeExpression)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

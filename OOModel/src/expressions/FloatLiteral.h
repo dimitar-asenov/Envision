@@ -43,7 +43,7 @@ class OOMODEL_API FloatLiteral: public Super<Expression>
 	public:
 		FloatLiteral(double value);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

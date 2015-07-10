@@ -47,8 +47,8 @@ class MODELBASE_API Reference: public Super<Node>
 
 		Node* target();
 
-		virtual void save(PersistentStore &store) const;
-		virtual void load(PersistentStore &store);
+		virtual void save(PersistentStore &store) const override;
+		virtual void load(PersistentStore &store) override;
 
 		bool resolve();
 		bool isResolved() const;

@@ -43,12 +43,12 @@ class CONTROLFLOWVISUALIZATION_API VBlockCF : public Super<Visualization::ItemWi
 		VBlockCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VBlockCF();
 
-		virtual bool sizeDependsOnParent() const;
-		virtual bool isEmpty() const;
+		virtual bool sizeDependsOnParent() const override;
+		virtual bool isEmpty() const override;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		VListCF* statements;

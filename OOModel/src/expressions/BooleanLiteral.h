@@ -43,7 +43,7 @@ class OOMODEL_API BooleanLiteral: public Super<Expression>
 	public:
 		BooleanLiteral(bool value);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 

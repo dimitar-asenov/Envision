@@ -41,7 +41,7 @@ class VISUALIZATIONBASE_API Icon: public Super<Item>
 		Icon(Item* parent, const IconStyle* style);
 
 	protected:
-		virtual void determineChildren();
+		virtual void determineChildren() override;
 
 		int xOffset() const;
 		int yOffset() const;

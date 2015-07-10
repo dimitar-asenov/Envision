@@ -49,7 +49,7 @@ class OOMODEL_API OOReference : public Super<Model::Reference>
 
 	private:
 
-		virtual void targetChanged(Node* oldTarget);
+		virtual void targetChanged(Node* oldTarget) override;
 
 		enum class ReferenceTargetKind {Unknown, Container, Type, Callable, Assignable, Variable};
 		ReferenceTargetKind referenceTargetKind() const;

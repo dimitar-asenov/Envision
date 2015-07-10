@@ -50,7 +50,7 @@ class OOVISUALIZATION_API VErrorExpression : public Super<VExpression<VErrorExpr
 		virtual ~VErrorExpression();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::VText* prefix_;

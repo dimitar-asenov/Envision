@@ -52,7 +52,7 @@ class CUSTOMMETHODCALL_API InsertMethodVis
 		virtual ~InsertMethodVis();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::Static* icon_;

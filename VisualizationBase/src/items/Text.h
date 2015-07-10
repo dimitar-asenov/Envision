@@ -41,7 +41,7 @@ class VISUALIZATIONBASE_API Text : public Super<TextRenderer>
 		Text(Item* parent, const StyleType *style, const QString& text = QString());
 
 	protected:
-		virtual QString currentText();
+		virtual QString currentText() override;
 };
 
 }
