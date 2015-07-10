@@ -110,7 +110,6 @@ ConflictUnitSet __attribute__((optimize("O0"))) ConflictUnitDetector::computeAff
 		Model::NodeIdType conflictRootA;
 		Model::NodeIdType conflictRootB;
 		switch (change->type()) {
-			case ChangeType::Stationary:
 			case ChangeType::Deletion:
 				conflictRootA = findConflictUnit(change->nodeA());
 				affectedCUs.insert(conflictRootA, change);
@@ -120,6 +119,7 @@ ConflictUnitSet __attribute__((optimize("O0"))) ConflictUnitDetector::computeAff
 				affectedCUs.insert(conflictRootB, change);
 				break;
 			case ChangeType::Move:
+			case ChangeType::Stationary:
 				conflictRootA = findConflictUnit(change->nodeA());
 				conflictRootB = findConflictUnit(change->nodeB());
 				affectedCUs.insert(conflictRootA, change);
