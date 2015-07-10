@@ -111,11 +111,9 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 		auto change = std::make_shared<ChangeDescription>(nullptr, iter.value());
 		changeDescriptions_.insert(id, change);
 	}
-	// Intermediate state 3
-	QSet<Model::NodeIdType> fakeChanges;
 	for (auto change : changeDescriptions_.values())
-		if (change->isFake()) fakeChanges.insert(change->nodeId());
-	for (auto id : fakeChanges) changeDescriptions_.remove(id);
+		if (change->isFake())
+			changeDescriptions_.remove(change->nodeId());
 }
 
 void Diff::computeStructChanges()
