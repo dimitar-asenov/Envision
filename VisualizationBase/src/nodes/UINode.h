@@ -42,6 +42,8 @@ class VISUALIZATIONBASE_API UINode : public Super<Model::Node>
 	public:
 		UINode();
 
+		virtual QJsonValue toJson() const = 0;
+
 		virtual void save(Model::PersistentStore& store) const override;
 		virtual void load(Model::PersistentStore& store) override;
 };

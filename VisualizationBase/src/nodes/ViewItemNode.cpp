@@ -70,14 +70,34 @@ ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose, c
 	return result;
 }
 
-ViewItemNode* ViewItemNode::withJson(QJsonObject json, const ViewItem *parent)
+ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *parent)
 {
 	auto result = new ViewItemNode(parent);
-	result->fromJson(json);
+	if (!json.contains("type"))
+		return result;
+	result->setPurpose(json["purpose"].toInt());
+	if (json["type"] == "NODE")
+	{
+		if (auto ref = JsonUtil::nodeForId(QUuid(json["reference"].toString())))
+			result->setReference(ref);
+	}
+	else if (json["type"] == "SPACING")
+	{
+		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
+			result->setSpacingTarget(target);
+		if (json["parentRow"].toInt() != -1)
+			result->setSpacingParent(DCast<ViewItemNode>(parent->nodeAt(json["parentCol"].toInt(),
+																		json["parentRow"].toInt())));
+	}
+	else if (json["type"] == "INFO")
+	{
+		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
+			result->setReference(new InfoNode(target, json["content"].toArray()));
+	}
 	return result;
 }
 
-QJsonObject ViewItemNode::toJson() const
+QJsonValue ViewItemNode::toJson() const
 {
 	QJsonObject result;
 	result.insert("purpose", purpose());
@@ -109,30 +129,4 @@ QJsonObject ViewItemNode::toJson() const
 	}
 	return result;
 }
-
-void ViewItemNode::fromJson(QJsonObject json)
-{
-	if (!json.contains("type"))
-		return;
-	setPurpose(json["purpose"].toInt());
-	if (json["type"] == "NODE")
-	{
-		if (auto ref = JsonUtil::nodeForId(QUuid(json["reference"].toString())))
-			setReference(ref);
-	}
-	else if (json["type"] == "SPACING")
-	{
-		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
-			setSpacingTarget(target);
-		if (json["parentRow"].toInt() != -1)
-			setSpacingParent(DCast<ViewItemNode>(parent_->nodeAt(json["parentCol"].toInt(),
-																 json["parentRow"].toInt())));
-	}
-	else if (json["type"] == "INFO")
-	{
-		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
-			setReference(new InfoNode(target, json["content"].toArray()));
-	}
-}
-
 }

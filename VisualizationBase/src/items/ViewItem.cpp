@@ -313,7 +313,7 @@ void ViewItem::fromJson(QJsonDocument json)
 		{
 			auto current = objArray[i].toObject();
 			if (current["type"] == steps[step])
-				insertViewItemNode(ViewItemNode::withJson(current, this),
+				insertViewItemNode(ViewItemNode::fromJson(current, this),
 								   current["col"].toInt(), current["row"].toInt());
 		}
 	//Load the arrows
