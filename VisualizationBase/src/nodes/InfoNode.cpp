@@ -27,8 +27,6 @@
 #include "InfoNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-#include "QJsonArray"
-#include "QJsonValue"
 
 DEFINE_TYPED_LIST(Visualization::InfoNode)
 

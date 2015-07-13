@@ -36,10 +36,6 @@
 #include "RootItem.h"
 #include "renderer/ModelRenderer.h"
 
-#include "QJsonDocument"
-#include "QJsonArray"
-#include "QJsonObject"
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(ViewItem, "item")

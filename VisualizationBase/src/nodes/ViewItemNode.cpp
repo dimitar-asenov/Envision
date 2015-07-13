@@ -29,7 +29,6 @@
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 #include "nodes/InfoNode.h"
 #include "items/ViewItem.h"
-#include "QJsonArray"
 
 DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 

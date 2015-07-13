@@ -91,6 +91,11 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 
+#include "QJsonDocument"
+#include "QJsonArray"
+#include "QJsonValue"
+#include "QJsonObject"
+
 #include <cmath>
 
 #endif
