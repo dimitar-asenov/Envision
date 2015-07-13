@@ -45,7 +45,7 @@ class OOMODEL_API LambdaExpression: public Super<Expression>
 	ATTRIBUTE(StatementItemList, body, setBody)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 } /* namespace OOModel */

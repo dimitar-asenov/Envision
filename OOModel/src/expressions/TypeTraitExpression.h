@@ -49,7 +49,7 @@ class OOMODEL_API TypeTraitExpression : public Super<Expression>
 		TypeTraitKind typeTraitKind() const;
 		void setTypeTraitKind(const TypeTraitKind& kind);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 inline TypeTraitExpression::TypeTraitKind TypeTraitExpression::typeTraitKind() const

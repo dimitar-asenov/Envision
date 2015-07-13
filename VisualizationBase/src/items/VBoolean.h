@@ -41,10 +41,10 @@ class VISUALIZATIONBASE_API VBoolean : public Super<ItemWithNode<VBoolean, TextR
 
 	public:
 		VBoolean(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
-		virtual bool setText(const QString& newText);
+		virtual bool setText(const QString& newText) override;
 
 	protected:
-		virtual QString currentText();
+		virtual QString currentText() override;
 };
 
 }

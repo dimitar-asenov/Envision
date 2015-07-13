@@ -54,7 +54,7 @@ Visualization::LayoutProvider<>,	OOModel::NewExpression>>
 		Visualization::VList* dimensions() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 

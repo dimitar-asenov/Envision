@@ -42,7 +42,7 @@ class OOMODEL_API CastExpression: public Super<Expression>
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 
 		enum class CastKind : int
 		{Default, ConstCast, DynamicCast, ReinterpretCast, StaticCast, FunctionalCast};

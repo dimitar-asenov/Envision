@@ -37,7 +37,7 @@ class VISUALIZATIONBASE_API SVGIconStyle : public Super<IconStyle>
 {
 	public:
 		virtual ~SVGIconStyle() override;
-		virtual void load(StyleLoader& sl);
+		virtual void load(StyleLoader& sl) override;
 
 		void paint(QPainter* painter, int x, int y) const;
 

@@ -44,8 +44,8 @@ class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
 		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		QPoint lineFrom_{};

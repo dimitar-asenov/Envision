@@ -43,7 +43,7 @@ class OOMODEL_API IntegerLiteral: public Super<Expression>
 	public:
 		IntegerLiteral(int value);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

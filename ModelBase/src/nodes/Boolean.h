@@ -45,8 +45,8 @@ class MODELBASE_API Boolean: public Super<Node>
 		bool get() const;
 		void set(const bool& newval);
 
-		virtual void save(PersistentStore &store) const;
-		virtual void load(PersistentStore &store);
+		virtual void save(PersistentStore &store) const override;
+		virtual void load(PersistentStore &store) override;
 };
 
 inline bool Boolean::get() const { return value; }

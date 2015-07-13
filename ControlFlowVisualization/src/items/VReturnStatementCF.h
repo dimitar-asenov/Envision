@@ -43,8 +43,8 @@ class CONTROLFLOWVISUALIZATION_API VReturnStatementCF
 		virtual ~VReturnStatementCF();
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		OOVisualization::VReturnStatement* vis_;

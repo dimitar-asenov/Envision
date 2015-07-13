@@ -55,7 +55,7 @@ class OOVISUALIZATION_API VKeywordMethodCall
 		Visualization::VList* arguments() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::Static* keyword_;

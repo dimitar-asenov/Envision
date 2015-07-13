@@ -45,8 +45,8 @@ class MODELBASE_API Character: public Super<Node>
 		QChar get() const;
 		void set(const QChar& newval);
 
-		virtual void save(PersistentStore &store) const;
-		virtual void load(PersistentStore &store);
+		virtual void save(PersistentStore &store) const override;
+		virtual void load(PersistentStore &store) override;
 };
 
 inline QChar Character::get() const { return value; }

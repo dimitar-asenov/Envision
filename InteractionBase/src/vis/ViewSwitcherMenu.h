@@ -41,9 +41,9 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		static void show(Visualization::Item* target);
 
 	protected:
-		virtual bool executeEntry(Visualization::Item* item);
-		virtual void startFocusMode(Visualization::Item* target);
-		virtual void endFocusMode(Visualization::Item* target);
+		virtual bool executeEntry(Visualization::Item* item) override;
+		virtual void startFocusMode(Visualization::Item* target) override;
+		virtual void endFocusMode(Visualization::Item* target) override;
 
 	private:
 		static void showNow(Visualization::Item* target);

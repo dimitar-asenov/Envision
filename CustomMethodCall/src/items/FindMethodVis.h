@@ -53,7 +53,7 @@ class CUSTOMMETHODCALL_API FindMethodVis
 		virtual ~FindMethodVis();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::Text* name_;

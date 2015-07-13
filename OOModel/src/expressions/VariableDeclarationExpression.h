@@ -53,7 +53,7 @@ class OOMODEL_API VariableDeclarationExpression: public Super<Expression>
 		virtual const QString& symbolName() const override;
 		virtual SymbolTypes symbolType() const override;
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

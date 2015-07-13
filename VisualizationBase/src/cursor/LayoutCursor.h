@@ -55,8 +55,8 @@ class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 
 		void setIsAtBoundary(bool isAtBoundary);
 
-		virtual bool isSame(Cursor* c);
-		virtual bool isAtBoundary() const;
+		virtual bool isSame(Cursor* c) override;
+		virtual bool isAtBoundary() const override;
 
 	private:
 		int x_;

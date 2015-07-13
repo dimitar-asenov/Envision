@@ -94,7 +94,7 @@
 		}																																					\
 																																							\
 	protected:																																			\
-		virtual ::Model::AttributeChain& topLevelMeta();																					\
+		virtual ::Model::AttributeChain& topLevelMeta() override;																		\
 																																							\
 	private:																																				\
 		static QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& attributesToRegisterAtInitialization_();	\

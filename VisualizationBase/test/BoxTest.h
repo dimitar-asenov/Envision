@@ -40,8 +40,8 @@ class BoxTest : public Super<Item>
 	public:
 		BoxTest(Item* parent, int sub);
 
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
+		void determineChildren() override;
+		void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		SequentialLayout items;

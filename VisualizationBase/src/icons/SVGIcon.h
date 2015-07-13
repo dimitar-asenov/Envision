@@ -39,8 +39,8 @@ class VISUALIZATIONBASE_API SVGIcon : public Super<Icon>
 		SVGIcon(Item* parent, const SVGIconStyle *style = itemStyles().get());
 		SVGIcon(Item* parent, const QString& iconStyleName);
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 }

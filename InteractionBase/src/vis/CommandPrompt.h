@@ -69,8 +69,8 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		bool wasCancelled() const;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Item* commandReceiver_{};

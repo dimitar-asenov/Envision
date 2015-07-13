@@ -55,7 +55,7 @@ class COMMENTS_API VCommentDiagramShape
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	private:
 

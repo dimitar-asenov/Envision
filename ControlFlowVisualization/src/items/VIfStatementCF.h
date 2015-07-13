@@ -43,12 +43,12 @@ class CONTROLFLOWVISUALIZATION_API VIfStatementCF
 		VIfStatementCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VIfStatementCF();
 
-		virtual bool sizeDependsOnParent() const;
-		virtual bool isEmpty() const;
+		virtual bool sizeDependsOnParent() const override;
+		virtual bool isEmpty() const override;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::SequentialLayout* conditionBackground;

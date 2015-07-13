@@ -42,8 +42,8 @@ class VISUALIZATIONBASE_API UINode : public Super<Model::Node>
 	public:
 		UINode();
 
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
+		virtual void save(Model::PersistentStore& store) const override;
+		virtual void load(Model::PersistentStore& store) override;
 };
 
 }

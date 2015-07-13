@@ -42,7 +42,7 @@ class OOMODEL_API ReferenceTypeExpression : public Super<TypeExpression>
 
 		ReferenceTypeExpression(Expression* ref);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

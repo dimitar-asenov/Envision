@@ -46,8 +46,8 @@ class OOVISUALIZATION_API VNullLiteral
 		Visualization::Static* item() const;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Static* vis_;

@@ -37,7 +37,7 @@ class OOMODEL_API EmptyExpression : public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 } /* namespace InteractionBase */

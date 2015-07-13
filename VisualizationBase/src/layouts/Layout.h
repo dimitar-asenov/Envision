@@ -43,7 +43,7 @@ class VISUALIZATIONBASE_API Layout: public Super<Item>
 
 		void setInnerSize(int width, int height);
 
-		virtual void determineChildren();
+		virtual void determineChildren() override;
 
 	protected:
 		int xOffset() const;

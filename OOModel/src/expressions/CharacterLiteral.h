@@ -43,7 +43,7 @@ class OOMODEL_API CharacterLiteral: public Super<Expression>
 	public:
 		CharacterLiteral(const QChar& value);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 

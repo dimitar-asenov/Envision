@@ -45,8 +45,8 @@ class OOVISUALIZATION_API VClassType
 		VReferenceExpression* reference() const;
 
 	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
+		void determineChildren() override;
+		void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		VReferenceExpression* vis_;

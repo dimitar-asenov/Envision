@@ -52,7 +52,7 @@ class OOMODEL_API MethodCallExpression: public Super<Expression>
 		 */
 		Method* methodDefinition();
 
-		virtual Type* type();
+		virtual Type* type() override;
 
 	private:
 		Method* methodDefinition(Type*& calleeType);

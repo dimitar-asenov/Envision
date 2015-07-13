@@ -40,7 +40,7 @@ class OOMODEL_API PointerTypeExpression : public Super<TypeExpression>
 
 	public:
 		PointerTypeExpression(Expression* expr);
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

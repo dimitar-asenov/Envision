@@ -55,7 +55,7 @@ class OOVISUALIZATION_API VVariableDeclarationExpression : public Super<VExpress
 		Visualization::Item* initialValue() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::VText* name_;

@@ -44,8 +44,8 @@ class MODELBASE_API List: public Super<Node>
 	public:
 		virtual ~List();
 
-		virtual void save(PersistentStore &store) const;
-		virtual void load(PersistentStore &store);
+		virtual void save(PersistentStore &store) const override;
+		virtual void load(PersistentStore &store) override;
 
 		virtual QList<Node*> children() const override;
 
@@ -90,7 +90,7 @@ class MODELBASE_API List: public Super<Node>
 		virtual bool findSymbols(QSet<Node*>& result, const SymbolMatcher& matcher, const Node* source,
 				FindSymbolDirection direction, SymbolTypes symbolTypes, bool exhaustAllScopes) const override;
 
-		virtual bool replaceChild(Node* child, Node* replacement);
+		virtual bool replaceChild(Node* child, Node* replacement) override;
 
 		/**
 		 * Creates a new Node that is suitable for inserting in the list. The newly created node is not directly inserted

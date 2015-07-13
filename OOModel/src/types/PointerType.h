@@ -37,7 +37,7 @@ class OOMODEL_API PointerType : public Type {
 		PointerType(const PointerType& other);
 		virtual ~PointerType();
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
 		virtual PointerType* clone() const override;
 
 		const Type* baseType() const;

@@ -49,9 +49,9 @@ namespace OOModel {
 namespace OODebug {
 
 class DebugConnector;
-class Location;
-class Value;
-class VariableDetails;
+struct Location;
+struct Value;
+struct VariableDetails;
 
 class OODEBUG_API DebugUtils
 {
