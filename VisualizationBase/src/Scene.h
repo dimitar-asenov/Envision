@@ -181,9 +181,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
+		QHash<QString, OverlayGroup> overlayGroups_;
+
+		const int VIEW_ITEM_COLUMNS = 3;
 		QVector<QVector<ViewItem*>> viewItems_;
 		ViewItem* currentViewItem_{};
-		QHash<QString, OverlayGroup> overlayGroups_;
 
 		Cursor* mainCursor_{};
 		bool mainCursorsJustSet_{};

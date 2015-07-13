@@ -77,7 +77,7 @@ Scene::Scene()
 	initialized_ = true;
 	allScenes().append(this);
 
-	viewItems_.resize(3);
+	viewItems_.resize(VIEW_ITEM_COLUMNS);
 
 	auto selectionGroup = addOverlayGroup("User Selected Items");
 	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay(item));});
@@ -140,7 +140,8 @@ void Scene::removeTopLevelItem(Item* item)
 
 ViewItem* Scene::currentViewItem()
 {
-	if (viewItems_[0].size() + viewItems_[1].size() + viewItems_[2].size() == 0)
+	if (std::all_of(viewItems_.begin(), viewItems_.end(),
+					[](QVector<ViewItem*> v) { return v.isEmpty(); }))
 	{
 		currentViewItem_ = newViewItem("ProjectView");
 		currentViewItem_->show();
@@ -161,7 +162,8 @@ ViewItem* Scene::viewItem(const QString name)
 void Scene::switchToView(ViewItem *view)
 {
 	Q_ASSERT(!inAnUpdate_);
-	Q_ASSERT(viewItems_[0].contains(view) || viewItems_[1].contains(view) || viewItems_[2].contains(view));
+	Q_ASSERT(std::any_of(viewItems_.begin(), viewItems_.end(),
+						 [view](QVector<ViewItem*> v) { return v.contains(view); }));
 	currentViewItem_->hide();
 	currentViewItem_ = view;
 	currentViewItem_->show();
@@ -182,6 +184,8 @@ void Scene::addViewItem(ViewItem *view, QPoint position)
 	Q_ASSERT(!inAnUpdate_);
 	if (position.x() <= 0 || position.y() <= 0)
 		position = nextEmptyPosition();
+	Q_ASSERT(position.x() >= 0 && position.x() < VIEW_ITEM_COLUMNS
+			 && position.y() >= 0);
 	if (viewItems_[position.x()].size() <= position.y())
 		viewItems_[position.x()].resize(position.y() + 1);
 	//If there already is an item -> use insert
