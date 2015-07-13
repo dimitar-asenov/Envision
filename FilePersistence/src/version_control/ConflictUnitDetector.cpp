@@ -185,6 +185,29 @@ void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<Chang
 		conflictingChanges.insert(depending);
 		markDependingAsConflicting(conflictingChanges, depending, cdg);
 	}
+
+	// Handle label dependencies
+	if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
+	{
+		auto parentId = change->nodeA()->parentId();
+		auto parentChange = cdg.changes().value(parentId); // must exist because structFlag
+		if (parentChange->type() != ChangeType::Deletion)
+		{
+			auto oldParentInBranchVersion = parentChange->nodeB();
+			for (auto child : oldParentInBranchVersion->children()) // must load children, I see no way around it
+			{
+				auto childChange = cdg.changes().value(child->id());
+				if (childChange && !conflictingChanges.contains(childChange) && childChange->type() != ChangeType::Deletion &&
+					 childChange->nodeB()->label() == change->nodeA()->label())
+				{
+					Q_ASSERT(change->nodeA()->parentId() == childChange->nodeB()->parentId());
+					conflictingChanges.insert(childChange);
+					// TODO also create conflict pairs
+					markDependingAsConflicting(conflictingChanges, childChange, cdg);
+				}
+			}
+		}
+	}
 }
 
 } /* namespace FilePersistence */

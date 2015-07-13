@@ -547,14 +547,24 @@ void ListMergeComponent::insertAfter(Model::NodeIdType elem, Position pos, Chunk
 
 QList<Model::NodeIdType> ListMergeComponent::nodeListToSortedIdList(const QList<GenericNode*>& list)
 {
-	QVector<Model::NodeIdType> idList(list.size());
-	for (GenericNode* node : list)
+	auto comparator = [](GenericNode* const node1, GenericNode* const node2) -> bool
 	{
-		int index = node->label().toInt();
-		Q_ASSERT(index >= 0 && index < list.size());
-		idList[index] = node->id();
+		return node1->label().toInt() < node2->label().toInt();
+	};
+
+	auto localList = list;
+	std::sort(localList.begin(), localList.end(), comparator);
+
+	QList<Model::NodeIdType> idList;
+	int lastIdx = -1;
+	for (auto node : localList)
+	{
+		auto curIdx = node->label().toInt();
+		Q_ASSERT(lastIdx < curIdx);
+		lastIdx = curIdx;
+		idList.append(node->id());
 	}
-	return QList<Model::NodeIdType>::fromVector(idList);
+	return idList;
 }
 
 
