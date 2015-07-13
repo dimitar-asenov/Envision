@@ -36,12 +36,6 @@ ITEM_COMMON_DEFINITIONS(Menu, "item")
 
 Menu* Menu::instance{};
 
-Menu::Menu(QVector<Visualization::Item*> items,
-			Visualization::Item* target, StyleType* style, int nrOfColumns)
-	: Menu(arrange(items, nrOfColumns), target, style)
-{
-}
-
 Menu::Menu(QVector<QVector<Visualization::Item*> > items,
 			Visualization::Item *target, StyleType *style)
 	: Super(nullptr, style), target_(target), currentItems_(items)
@@ -208,19 +202,6 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 		}
 	}
 	return false;
-}
-
-QVector<QVector<Visualization::Item*>> Menu::arrange(
-		QVector<Visualization::Item*> nodes, int nrOfColumns)
-{
-	QVector<QVector<Visualization::Item*>> result;
-	result.resize(std::min(nrOfColumns, nodes.size()));
-	for (int index = 0; index < nodes.size(); index++)
-	{
-		int column = index % nrOfColumns;
-		result[column].append(nodes[index]);
-	}
-	return result;
 }
 
 }

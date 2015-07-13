@@ -91,16 +91,12 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 
 		QPoint indexOf(Visualization::Item* node) const;
 
-		Menu(QVector<Visualization::Item*> items, Visualization::Item* target,
-							  StyleType* style = itemStyles().get(), int nrOfColumns = 3);
 		Menu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 
 	private:
 
 		QPoint correctCoordinates(QPoint point) const;
-		static QVector<QVector<Visualization::Item*>> arrange(
-				QVector<Visualization::Item*> items, int nrOfColumns);
 
 		Visualization::Item* target_{};
 		QPointF mousePosition_;
