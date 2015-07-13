@@ -29,6 +29,7 @@
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 #include "nodes/InfoNode.h"
 #include "items/ViewItem.h"
+#include "utils/JsonUtil.h"
 
 DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 
@@ -108,27 +109,23 @@ void ViewItemNode::fromJson(QJsonObject json, const ViewItem* parent)
 	if (!json.contains("type"))
 		return;
 	setPurpose(json["purpose"].toInt());
-	//TODO@cyril Does this way to get a manager for the IDs always work?
-	auto idMap = Model::AllTreeManagers::instance().
-			loadedManagers().first()->nodeIdMap();
 	if (json["type"] == "NODE")
 	{
-		if (auto ref = idMap.node(QUuid(json["reference"].toString())))
-			setReference(const_cast<Model::Node*>(ref));
+		if (auto ref = JsonUtil::nodeForId(QUuid(json["reference"].toString())))
+			setReference(ref);
 	}
 	else if (json["type"] == "SPACING")
 	{
-		if (auto target = idMap.node(QUuid(json["target"].toString())))
-			setSpacingTarget(const_cast<Model::Node*>(target));
+		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
+			setSpacingTarget(target);
 		if (json["parentRow"].toInt() != -1)
 			setSpacingParent(DCast<ViewItemNode>(parent->nodeAt(json["parentCol"].toInt(),
 																json["parentRow"].toInt())));
 	}
 	else if (json["type"] == "INFO")
 	{
-		if (auto target = idMap.node(QUuid(json["target"].toString())))
-			setReference(new InfoNode(const_cast<Model::Node*>(target),
-									  json["content"].toArray()));
+		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
+			setReference(new InfoNode(target, json["content"].toArray()));
 	}
 }
 

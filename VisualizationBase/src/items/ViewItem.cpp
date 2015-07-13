@@ -35,6 +35,7 @@
 #include "Scene.h"
 #include "RootItem.h"
 #include "renderer/ModelRenderer.h"
+#include "utils/JsonUtil.h"
 
 namespace Visualization {
 
@@ -343,15 +344,14 @@ QJsonObject ViewItem::arrowToJson(QPair<Item*, Item*> arrow, QString layer) cons
 
 void ViewItem::arrowFromJson(QJsonObject json)
 {
-	auto idMap = Model::AllTreeManagers::instance().loadedManagers().first()->nodeIdMap();
 	auto parent1 = DCast<ViewItemNode>(nodeAt(json["parent1col"].toInt(), json["parent1row"].toInt()));
 	auto parent2 = DCast<ViewItemNode>(nodeAt(json["parent2col"].toInt(), json["parent2row"].toInt()));
 	Model::Node* node1{}, *node2{};
 	if (json.contains("node1"))
-		node1 = const_cast<Model::Node*>(idMap.node(QUuid(json["node1"].toString())));
+		node1 = JsonUtil::nodeForId(QUuid(json["node1"].toString()));
 	else node1 = parent1;
 	if (json.contains("node2"))
-		node2 = const_cast<Model::Node*>(idMap.node(QUuid(json["node2"].toString())));
+		node2 = JsonUtil::nodeForId(QUuid(json["node2"].toString()));
 	else node2 = parent2;
 	if (node1 && node2)
 		arrowsToAdd_.append(ArrowToAdd{parent1, node1, parent2, node2, json["layer"].toString()});
