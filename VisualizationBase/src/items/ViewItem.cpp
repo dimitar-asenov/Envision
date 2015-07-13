@@ -78,7 +78,7 @@ void ViewItem::insertColumn(int column)
 
 Model::Node* ViewItem::insertNode(Model::Node* node, int column, int row, int purpose)
 {
-	auto ref = ViewItemNode::withReference(node, purpose);
+	auto ref = ViewItemNode::withReference(node, purpose, this);
 	insertViewItemNode(ref, column, row);
 	return ref;
 }
@@ -145,7 +145,7 @@ Model::Node* ViewItem::nodeAt(int column, int row) const
 void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
 						  ViewItemNode* spacingParent)
 {
-	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget, spacingParent), column, row);
+	insertViewItemNode(ViewItemNode::withSpacingTarget(spacingTarget, spacingParent, this), column, row);
 }
 
 void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer,
@@ -283,7 +283,7 @@ QJsonDocument ViewItem::toJson() const
 	for (int col = 0; col < nodes_.size(); col++)
 		for (int row = 0; row < nodes_[col].size(); row++)
 			if (auto node = DCast<ViewItemNode>(nodes_[col][row]))
-				nodes.append(node->toJson(this));
+				nodes.append(node->toJson());
 	//Store all the arrows
 	QJsonArray arrows;
 	for (auto key : arrows_.keys())

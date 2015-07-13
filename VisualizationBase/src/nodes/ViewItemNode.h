@@ -47,8 +47,9 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 		NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
 
 	public:
-		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget, ViewItemNode* spacingParent);
-		static ViewItemNode* withReference(Model::Node* reference, int purpose);
+		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget,
+											   ViewItemNode* spacingParent, const ViewItem* parent);
+		static ViewItemNode* withReference(Model::Node* reference, int purpose, const ViewItem* parent);
 		static ViewItemNode* withJson(QJsonObject json, const ViewItem* parent);
 
 		void setReference(Model::Node* reference);
@@ -61,10 +62,14 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 		void setSpacingParent(ViewItemNode* spacingParent);
 		ViewItemNode* spacingParent() const;
 
-		QJsonObject toJson(const ViewItem* parent) const;
-		void fromJson(QJsonObject json, const ViewItem* parent);
+		QJsonObject toJson() const;
+		void fromJson(QJsonObject json);
 
 	private:
+		ViewItemNode(const ViewItem* parent);
+
+		const ViewItem* parent_{};
+
 		Model::Node* reference_{};
 		int purpose_{-1};
 		Model::Node* spacingTarget_{};
