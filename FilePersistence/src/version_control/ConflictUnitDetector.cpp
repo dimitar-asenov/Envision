@@ -194,12 +194,14 @@ void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<Chang
 		if (parentChange->type() != ChangeType::Deletion)
 		{
 			auto oldParentInBranchVersion = parentChange->nodeB();
-			for (auto child : oldParentInBranchVersion->children()) // must load children, I see no way around it
+			// child is in the branch tree and has the same label the changed node had in the base tree.
+			auto child = oldParentInBranchVersion->child(change->nodeA()->label());
+			if (child)
 			{
 				auto childChange = cdg.changes().value(child->id());
-				if (childChange && !conflictingChanges.contains(childChange) && childChange->type() != ChangeType::Deletion &&
-					 childChange->nodeB()->label() == change->nodeA()->label())
+				if (childChange && !conflictingChanges.contains(childChange) && childChange->type() != ChangeType::Deletion)
 				{
+					Q_ASSERT(childChange->nodeB()->label() == change->nodeA()->label());
 					Q_ASSERT(change->nodeA()->parentId() == childChange->nodeB()->parentId());
 					conflictingChanges.insert(childChange);
 					// TODO also create conflict pairs

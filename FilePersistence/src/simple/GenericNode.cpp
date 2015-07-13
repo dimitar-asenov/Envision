@@ -90,17 +90,22 @@ const QList<GenericNode*>& GenericNode::children() const
 	return children_;
 }
 
-GenericNode* GenericNode::child(const QString& name)
+GenericNode* GenericNode::child(const QString& label)
 {
 	ensureDataRead();
+
+	// try without loading first.
+	for (auto c : children_)
+		if (c->label() == label) return c;
+
 	if (!areAllChildrenLoaded_ && tree()->piecewiseLoader())
 	{
 		tree()->piecewiseLoader()->loadAndLinkNodeChildren(id_);
 		areAllChildrenLoaded_ = true;
-	}
 
-	for (auto c : children_)
-		if (c->label() == name) return c;
+		for (auto c : children_)
+			if (c->label() == label) return c;
+	}
 
 	return nullptr;
 }
