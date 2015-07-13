@@ -41,6 +41,7 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
@@ -1067,7 +1068,7 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 
 	VisualizationManager::instance().mainScene()->addRefreshActionFunction(
 		[top_level](Scene* scene){
-			scene->removeAllViewItems();
+			scene->viewItemManager()->removeAllViewItems();
 			scene->setMainCursor(nullptr);
 			clearAllStyleSets();
 			scene->addTopLevelNode(top_level);

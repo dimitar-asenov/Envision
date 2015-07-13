@@ -28,6 +28,7 @@
 #include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 namespace Interaction {
 
@@ -41,12 +42,13 @@ void ViewSwitcherMenu::show(Visualization::Item* target)
 
 void ViewSwitcherMenu::showNow(Visualization::Item* target)
 {
+	auto viewItems = target->scene()->viewItemManager()->viewItems();
 	QVector<QVector<Visualization::Item*>> items;
-	items.resize(target->scene()->viewItems().size());
-	for (int col = 0; col < target->scene()->viewItems().size(); col++)
-		for (int row = 0; row < target->scene()->viewItems()[col].size(); row++)
-			if (target->scene()->viewItems()[col][row])
-				items[col].append(new VViewSwitcherEntry(nullptr, target->scene()->viewItems()[col][row]->name()));
+	items.resize(viewItems.size());
+	for (int col = 0; col < viewItems.size(); col++)
+		for (int row = 0; row < viewItems[col].size(); row++)
+			if (viewItems[col][row])
+				items[col].append(new VViewSwitcherEntry(nullptr, viewItems[col][row]->name()));
 			else
 				items[col].append(new VViewSwitcherEntry(nullptr, "Empty slot"));
 	for (int col = 0; col < items.size(); col++)
@@ -84,8 +86,8 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 		//create a new item with that name
 		QPoint pos = indexOf(entry);
 		auto nameAfter = entry->nameField()->text();
-		if (scene()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
-			scene()->newViewItem(nameAfter, pos);
+		if (scene()->viewItemManager()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
+			scene()->viewItemManager()->newViewItem(nameAfter, pos);
 	}
 }
 
@@ -95,10 +97,10 @@ bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 	if (auto entry = DCast<VViewSwitcherEntry>(item))
 	{
 		QPoint pos = indexOf(item);
-		auto view = scene()->viewItem(entry->nameField()->text());
+		auto view = scene()->viewItemManager()->viewItem(entry->nameField()->text());
 		if (!view)
-			view = scene()->newViewItem(entry->nameField()->text(), pos);
-		scene()->switchToView(view);
+			view = scene()->viewItemManager()->newViewItem(entry->nameField()->text(), pos);
+		scene()->viewItemManager()->switchToView(view);
 	}
 	return true;
 }
