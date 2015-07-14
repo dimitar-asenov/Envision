@@ -48,31 +48,25 @@ ViewItemNode::ViewItemNode(Model::Node *, Model::PersistentStore &, bool)
 	Q_ASSERT(false);
 }
 
-ViewItemNode::ViewItemNode(const ViewItem *parent)
-	: Super(), parent_(parent)
+ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
 {
-}
-
-ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget,
-											  ViewItemNode* spacingParent, const ViewItem* parent)
-{
-	auto result = new ViewItemNode(parent);
+	auto result = new ViewItemNode();
 	result->setSpacingTarget(spacingTarget);
 	result->setSpacingParent(spacingParent);
 	return result;
 }
 
-ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose, const ViewItem* parent)
+ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
 {
-	auto result = new ViewItemNode(parent);
+	auto result = new ViewItemNode();
 	result->setReference(reference);
 	result->setPurpose(purpose);
 	return result;
 }
 
-ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *parent)
+ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *view)
 {
-	auto result = new ViewItemNode(parent);
+	auto result = new ViewItemNode();
 	if (!json.contains("type"))
 		return result;
 	result->setPurpose(json["purpose"].toInt());
@@ -86,7 +80,7 @@ ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *parent)
 		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
 			result->setSpacingTarget(target);
 		if (json["parentRow"].toInt() != -1)
-			result->setSpacingParent(DCast<ViewItemNode>(parent->nodeAt(json["parentCol"].toInt(),
+			result->setSpacingParent(DCast<ViewItemNode>(view->nodeAt(json["parentCol"].toInt(),
 																		json["parentRow"].toInt())));
 	}
 	else if (json["type"] == "INFO")
@@ -101,8 +95,8 @@ QJsonValue ViewItemNode::toJson() const
 {
 	QJsonObject result;
 	result.insert("purpose", purpose());
-	result.insert("col", parent_->positionOfNode(const_cast<ViewItemNode*>(this)).x());
-	result.insert("row", parent_->positionOfNode(const_cast<ViewItemNode*>(this)).y());
+	result.insert("col", position_.x());
+	result.insert("row", position_.y());
 	//If it stores a normal, separately persisted node
 	if (reference() && reference()->manager())
 	{
@@ -115,8 +109,8 @@ QJsonValue ViewItemNode::toJson() const
 	{
 		result.insert("target", spacingTarget()->manager()->
 								nodeIdMap().id(spacingTarget()).toString());
-		result.insert("parentCol", parent_->positionOfNode(spacingParent()).x());
-		result.insert("parentRow", parent_->positionOfNode(spacingParent()).y());
+		result.insert("parentCol", spacingParentPosition_.x());
+		result.insert("parentRow", spacingParentPosition_.y());
 		result.insert("type", "SPACING");
 	}
 	//If it stores an InfoNode, which is not separately persisted
