@@ -54,6 +54,13 @@ void EnvisionAstConsumer::Initialize(clang::ASTContext&)
 
 void EnvisionAstConsumer::HandleTagDeclDefinition(clang::TagDecl* tagDecl)
 {
+	// FIXME: workaround for Plugin and Exception classes of a Plugin
+	QString name = QString::fromStdString(tagDecl->getNameAsString());
+	QStringList blacklist;
+	blacklist << QString("%1%2").arg(outData_.includePrefix_, "Exception")
+				 << QString("%1%2").arg(outData_.includePrefix_, "Plugin");
+	if (blacklist.contains(name)) return;
+
 	// We only care about stuff in the header file of the current translation unit source file.
 	auto &sourceManager = compilerInstance_.getSourceManager();
 	auto sourceLocation = tagDecl->getSourceRange().getBegin();
