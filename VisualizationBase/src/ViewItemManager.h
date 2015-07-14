@@ -41,7 +41,7 @@ class ViewItem;
 class VISUALIZATIONBASE_API ViewItemManager
 {
 	public:
-		ViewItemManager(Scene* parent);
+		ViewItemManager(Scene* scene);
 		~ViewItemManager();
 
 		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
@@ -60,7 +60,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 		const int VIEW_ITEM_COLUMNS = 3;
 		QVector<QVector<ViewItem*>> viewItems_;
 		ViewItem* currentViewItem_{};
-		Scene* parent_{};
+		Scene* scene_{};
 };
 
 inline QVector<QVector<ViewItem*>> ViewItemManager::viewItems() const { return viewItems_; }

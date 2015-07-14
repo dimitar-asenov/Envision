@@ -42,7 +42,7 @@ void ViewSwitcherMenu::show(Visualization::Item* target)
 
 void ViewSwitcherMenu::showNow(Visualization::Item* target)
 {
-	auto viewItems = target->scene()->viewItemManager()->viewItems();
+	auto viewItems = target->scene()->viewItems()->viewItems();
 	QVector<QVector<Visualization::Item*>> items;
 	items.resize(viewItems.size());
 	for (int col = 0; col < viewItems.size(); col++)
@@ -86,8 +86,8 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 		//create a new item with that name
 		QPoint pos = indexOf(entry);
 		auto nameAfter = entry->nameField()->text();
-		if (scene()->viewItemManager()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
-			scene()->viewItemManager()->newViewItem(nameAfter, pos);
+		if (scene()->viewItems()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
+			scene()->viewItems()->newViewItem(nameAfter, pos);
 	}
 }
 
@@ -97,10 +97,10 @@ bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 	if (auto entry = DCast<VViewSwitcherEntry>(item))
 	{
 		QPoint pos = indexOf(item);
-		auto view = scene()->viewItemManager()->viewItem(entry->nameField()->text());
+		auto view = scene()->viewItems()->viewItem(entry->nameField()->text());
 		if (!view)
-			view = scene()->viewItemManager()->newViewItem(entry->nameField()->text(), pos);
-		scene()->viewItemManager()->switchToView(view);
+			view = scene()->viewItems()->newViewItem(entry->nameField()->text(), pos);
+		scene()->viewItems()->switchToView(view);
 	}
 	return true;
 }

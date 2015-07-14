@@ -31,8 +31,8 @@
 
 namespace Visualization {
 
-ViewItemManager::ViewItemManager(Scene* parent)
-	: parent_(parent)
+ViewItemManager::ViewItemManager(Scene* scene)
+	: scene_(scene)
 {
 	viewItems_.resize(VIEW_ITEM_COLUMNS);
 }
@@ -43,7 +43,7 @@ ViewItemManager::~ViewItemManager()
 		for (auto view : vector)
 			SAFE_DELETE_ITEM(view);
 	currentViewItem_ = nullptr;
-	parent_ = nullptr;
+	scene_ = nullptr;
 }
 
 ViewItem* ViewItemManager::currentViewItem()
@@ -69,14 +69,14 @@ ViewItem* ViewItemManager::viewItem(const QString name)
 
 void ViewItemManager::switchToView(ViewItem *view)
 {
-	Q_ASSERT(!parent_->inAnUpdate_);
+	Q_ASSERT(!scene_->inAnUpdate_);
 	Q_ASSERT(std::any_of(viewItems_.begin(), viewItems_.end(),
 						 [view](QVector<ViewItem*> v) { return v.contains(view); }));
 	currentViewItem_->hide();
 	currentViewItem_ = view;
 	currentViewItem_->show();
 	currentViewItem_->setUpdateNeeded(Item::StandardUpdate);
-	parent_->scheduleUpdate();
+	scene_->scheduleUpdate();
 }
 
 bool ViewItemManager::switchToView(const QString viewName)
@@ -89,8 +89,8 @@ bool ViewItemManager::switchToView(const QString viewName)
 
 void ViewItemManager::addViewItem(ViewItem *view, QPoint position)
 {
-	Q_ASSERT(!parent_->inAnUpdate_);
-	if (position.x() <= 0 || position.y() <= 0)
+	Q_ASSERT(!scene_->inAnUpdate_);
+	if (position.x() < 0 || position.y() < 0)
 		position = nextEmptyPosition();
 	Q_ASSERT(position.x() >= 0 && position.x() < VIEW_ITEM_COLUMNS
 			 && position.y() >= 0);
@@ -101,7 +101,7 @@ void ViewItemManager::addViewItem(ViewItem *view, QPoint position)
 		viewItems_[position.x()].insert(position.y(), view);
 	//Else just overwrite the nullptr
 	else viewItems_[position.x()][position.y()] = view;
-	parent_->addTopLevelItem(view, false);
+	scene_->addTopLevelItem(view, false);
 }
 
 ViewItem* ViewItemManager::newViewItem(const QString name, QPoint position)
@@ -115,7 +115,7 @@ void ViewItemManager::removeAllViewItems()
 {
 	for (auto vector : viewItems_)
 		for (auto item : vector)
-			parent_->removeTopLevelItem(item);
+			scene_->removeTopLevelItem(item);
 
 	viewItems_.clear();
 	currentViewItem_ = nullptr;
@@ -126,8 +126,8 @@ QPoint ViewItemManager::nextEmptyPosition() const
 	//Take the first empty position, if one exists
 	for (int col = 0; col < viewItems_.size(); col++)
 		for (int row = 0; row < viewItems_[col].size(); row++)
-			if (!viewItems_[row][col])
-				return QPoint(row, col);
+			if (!viewItems_[col][row])
+				return QPoint(col, row);
 	//Else just use the column with the least rows
 	int colToInsert = 0;
 	for (int col = 1; col < viewItems_.size(); col++)

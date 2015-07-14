@@ -30,7 +30,7 @@
 #include "ModelBase/src/model/AllTreeManagers.h"
 #include "ModelBase/src/persistence/NodeIdMap.h"
 
-Model::Node* JsonUtil::nodeForId(QUuid id)
+Model::Node* JsonUtil::nodeForId(Model::NodeIdType id)
 {
 	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
 		if (auto node = manager->nodeIdMap().node(id))

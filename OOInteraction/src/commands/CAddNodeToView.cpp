@@ -58,7 +58,7 @@ Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::
 	auto row = arguments.at(2).toInt(&rowOk);
 	if (name == "current")
 		name = ancestor->scene()->currentViewItem()->name();
-	auto view = ancestor->scene()->viewItemManager()->viewItem(name);
+	auto view = ancestor->scene()->viewItems()->viewItem(name);
 	if (view && rowOk && colOk)
 	{
 		view->insertNode(ancestor->node(), column, row);

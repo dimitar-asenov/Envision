@@ -39,9 +39,9 @@ CommandResult* CNewView::executeWithArguments(Visualization::Item *, Visualizati
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
 	bool open = arguments.at(1).compare("open", Qt::CaseInsensitive) == 0;
-	auto view = target->scene()->viewItemManager()->newViewItem(arguments.at(0));
+	auto view = target->scene()->viewItems()->newViewItem(arguments.at(0));
 	if (open)
-		target->scene()->viewItemManager()->switchToView(view);
+		target->scene()->viewItems()->switchToView(view);
 	return new CommandResult();
 }
 

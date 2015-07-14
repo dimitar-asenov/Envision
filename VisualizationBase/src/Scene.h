@@ -81,7 +81,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		virtual SceneHandlerItem* sceneHandlerItem();
 
-		ViewItemManager* viewItemManager() const;
+		ViewItemManager* viewItems() const;
 		/**
 		 * Convenience method to get the manager's current view item.
 		 */
@@ -173,6 +173,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
 
 	private:
+		friend class ViewItemManager;
+
 		bool needsUpdate_{};
 		bool initialized_{};
 
@@ -189,7 +191,6 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		bool inEventHandler_{};
 		bool inAnUpdate_{};
-		friend class ViewItemManager;
 
 		qreal mainViewScalingFactor_{1.0};
 		qreal previousMainViewScalingFactor_{mainViewScalingFactor_};
@@ -233,6 +234,6 @@ inline View* Scene::currentPaintView() const { return currentPaintView_; }
 inline qreal Scene::mainViewScalingFactor() const { return mainViewScalingFactor_; }
 inline qreal Scene::previousMainViewScalingFactor() const { return previousMainViewScalingFactor_; }
 
-inline ViewItemManager* Scene::viewItemManager() const { return viewItemManager_; }
+inline ViewItemManager* Scene::viewItems() const { return viewItemManager_; }
 
 }

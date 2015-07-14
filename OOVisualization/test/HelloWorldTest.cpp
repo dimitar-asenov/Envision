@@ -1068,7 +1068,7 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 
 	VisualizationManager::instance().mainScene()->addRefreshActionFunction(
 		[top_level](Scene* scene){
-			scene->viewItemManager()->removeAllViewItems();
+			scene->viewItems()->removeAllViewItems();
 			scene->setMainCursor(nullptr);
 			clearAllStyleSets();
 			scene->addTopLevelNode(top_level);

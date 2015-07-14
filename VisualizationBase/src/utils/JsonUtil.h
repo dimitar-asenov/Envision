@@ -30,10 +30,11 @@
 
 namespace Model {
 class Node;
+using NodeIdType = QUuid;
 }
 
 class VISUALIZATIONBASE_API JsonUtil
 {
 	public:
-		static Model::Node* nodeForId(QUuid id);
+		static Model::Node* nodeForId(Model::NodeIdType id);
 };
