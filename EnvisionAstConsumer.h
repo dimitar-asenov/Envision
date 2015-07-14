@@ -62,4 +62,7 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		QSet<clang::TagDecl*> seenDecls_;
 		APIData& outData_;
 		QList<EnumData> processedEnums_;
+
+		ClassAttribute attribute(const QString& attributeName, const QString& attributeSetterName,
+								const QString& qualifiedClassName, const clang::CXXMethodDecl* method);
 };

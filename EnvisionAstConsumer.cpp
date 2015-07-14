@@ -129,24 +129,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 				auto it = attributes_.find(methodName);
 				if (it != attributes_.end())
 				{
-					QString attributeName = it.key();
-					QString getter = QString("&%1::%2").arg(cData.qualifiedName_, attributeName);
-					auto returnTypePtr = method->getReturnType().getTypePtr();
-					if (returnTypePtr->isReferenceType())
-					{
-						auto refType = llvm::dyn_cast<clang::ReferenceType>(returnTypePtr);
-						auto pointeeType = refType->getPointeeType();
-						if (pointeeType.isConstQualified())
-						{
-							QString pointeeTypeString = TypeUtilities::typePtrToString(pointeeType.getTypePtr());
-							QString newGetter = QString("make_function((const %1& (%2::*)())%3,"
-																 " return_value_policy<copy_const_reference>())")
-									.arg(pointeeTypeString, cData.qualifiedName_, getter);
-							getter = newGetter;
-						}
-					}
-					QString setter = QString("&%1::%2").arg(cData.qualifiedName_, it.value());
-					cData.attributes_.append({attributeName, getter, setter});
+					cData.attributes_.append(attribute(it.key(), it.value(), cData.qualifiedName_, method));
 					seenMethods << it.key() << it.value();
 				}
 				else
@@ -177,10 +160,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 					if (methodName == possibleGetterName)
 					{
 						// Found another attribute:
-						QString attributeName = methodName;
-						QString getter = QString("%1::%2").arg(cData.qualifiedName_, attributeName);
-						QString setter = QString("%1::%2").arg(cData.qualifiedName_, setterName);
-						cData.attributes_.append({attributeName, getter, setter});
+						cData.attributes_.append(attribute(methodName, setterName, cData.qualifiedName_, method));
 						seenMethods << setterName << methodName;
 						break;
 					}
@@ -194,4 +174,30 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			outData_.classes_ << cData;
 		}
 	}
+}
+
+ClassAttribute EnvisionAstConsumer::attribute(const QString& attributeName, const QString& attributeSetterName,
+													const QString& qualifiedClassName, const clang::CXXMethodDecl* method)
+{
+	QString getter = QString("&%1::%2").arg(qualifiedClassName, attributeName);
+	auto returnTypePtr = method->getReturnType().getTypePtr();
+	if (returnTypePtr->isReferenceType())
+	{
+		auto refType = llvm::dyn_cast<clang::ReferenceType>(returnTypePtr);
+		auto pointeeType = refType->getPointeeType();
+		if (pointeeType.isConstQualified())
+		{
+			QString pointeeTypeString = TypeUtilities::typePtrToString(pointeeType.getTypePtr());
+			QString newGetter = QString("make_function((const %1& (%2::*)())%3,"
+												 " return_value_policy<copy_const_reference>())")
+					.arg(pointeeTypeString, qualifiedClassName, getter);
+			getter = newGetter;
+		}
+	}
+	else if (returnTypePtr->isPointerType())
+	{
+		getter = QString("make_function(%1, return_internal_reference<>())").arg(getter);
+	}
+	QString setter = QString("&%1::%2").arg(qualifiedClassName, attributeSetterName);
+	return {attributeName, getter, setter};
 }
