@@ -29,6 +29,7 @@
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
+#include "UINode.h"
 
 DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, InfoNode)
 
@@ -39,7 +40,7 @@ namespace Visualization {
  * on a target node. There is a registry which keeps track of all possible informations
  * to be displayed.
  */
-class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
+class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 {
 	DECLARE_TYPE_ID
 
@@ -47,7 +48,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		using InfoGetter = QString (*) (Model::Node* target);
 
 		InfoNode(Model::Node* target);
-		InfoNode(Model::Node *target, QList<QString> enabledInfos);
+		InfoNode(Model::Node *target, QJsonArray enabledInfos);
 		virtual ~InfoNode();
 
 		const Model::Node* target() const;
@@ -64,8 +65,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<Model::Node>
 		void setEnabled(const QString name, bool isEnabled);
 		bool isEnabled(const QString name) const;
 
-		virtual void save(Model::PersistentStore& store) const override;
-		virtual void load(Model::PersistentStore& store) override;
+		virtual QJsonValue toJson() const;
 
 		/**
 		 * Registers a new method to get information.

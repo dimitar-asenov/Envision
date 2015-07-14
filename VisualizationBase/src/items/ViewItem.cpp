@@ -35,6 +35,7 @@
 #include "Scene.h"
 #include "RootItem.h"
 #include "renderer/ModelRenderer.h"
+#include "utils/JsonUtil.h"
 
 namespace Visualization {
 
@@ -272,6 +273,93 @@ void ViewItem::ensureColumnExists(int column)
 {
 	if (nodes_.size() <= column)
 		nodes_.resize(column + 1);
+}
+
+//JSON storing/loading
+QJsonDocument ViewItem::toJson() const
+{
+	//Store all the nodes
+	QJsonArray nodes;
+	for (int col = 0; col < nodes_.size(); col++)
+		for (int row = 0; row < nodes_[col].size(); row++)
+			if (auto node = DCast<ViewItemNode>(nodes_[col][row]))
+			{
+				node->setPosition(QPoint(col, row));
+				if (node->spacingParent())
+					node->setSpacingParentPosition(positionOfNode(node->spacingParent()));
+				nodes.append(node->toJson());
+			}
+	//Store all the arrows
+	QJsonArray arrows;
+	for (auto key : arrows_.keys())
+		for (auto pair : arrows_[key])
+			arrows.append(arrowToJson(pair, key));
+	QJsonObject main;
+	main.insert("nodes", nodes);
+	main.insert("arrows", arrows);
+	main.insert("name", name());
+	QJsonDocument result;
+	result.setObject(main);
+	return result;
+}
+
+void ViewItem::fromJson(QJsonDocument json)
+{
+	nodes_.clear();
+	arrows_.clear();
+	QJsonObject obj = json.object();
+	setName(obj["name"].toString());
+	QStringList steps{"NODE", "SPACING", "INFO"};
+	int step = 0;
+	auto objArray = obj["nodes"].toArray();
+	//Load the nodes: First normal nodes, then spacing nodes, and lastly info nodes
+	for (step = 0; step < steps.size(); step++)
+		for (int i = 0; i < objArray.size(); i++)
+		{
+			auto current = objArray[i].toObject();
+			if (current["type"] == steps[step])
+				insertViewItemNode(ViewItemNode::fromJson(current, this),
+								   current["col"].toInt(), current["row"].toInt());
+		}
+	//Load the arrows
+	auto arrowArray = obj["arrows"].toArray();
+	for (auto arrow : arrowArray)
+		arrowFromJson(arrow.toObject());
+}
+
+QJsonObject ViewItem::arrowToJson(QPair<Item*, Item*> arrow, QString layer) const
+{
+	QJsonObject json;
+	json.insert("layer", layer);
+	//The first/second nodes might be a ViewItemNode -> in that case handled by the parent
+	if (arrow.first->node()->manager())
+		json.insert("node1", arrow.first->node()->manager()->
+								 nodeIdMap().id(arrow.first->node()).toString());
+	if (arrow.second->node()->manager())
+		json.insert("node2", arrow.second->node()->manager()->
+								 nodeIdMap().id(arrow.second->node()).toString());
+	auto parent1 = arrow.first->findAncestorOfType<VViewItemNode>();
+	json.insert("parent1col", positionOfItem(parent1).x());
+	json.insert("parent1row", positionOfItem(parent1).y());
+	auto parent2 = arrow.second->findAncestorOfType<VViewItemNode>();
+	json.insert("parent2col", positionOfItem(parent2).x());
+	json.insert("parent2row", positionOfItem(parent2).y());
+	return json;
+}
+
+void ViewItem::arrowFromJson(QJsonObject json)
+{
+	auto parent1 = DCast<ViewItemNode>(nodeAt(json["parent1col"].toInt(), json["parent1row"].toInt()));
+	auto parent2 = DCast<ViewItemNode>(nodeAt(json["parent2col"].toInt(), json["parent2row"].toInt()));
+	Model::Node* node1{}, *node2{};
+	if (json.contains("node1"))
+		node1 = JsonUtil::nodeForId(QUuid(json["node1"].toString()));
+	else node1 = parent1;
+	if (json.contains("node2"))
+		node2 = JsonUtil::nodeForId(QUuid(json["node2"].toString()));
+	else node2 = parent2;
+	if (node1 && node2)
+		arrowsToAdd_.append(ArrowToAdd{parent1, node1, parent2, node2, json["layer"].toString()});
 }
 
 }

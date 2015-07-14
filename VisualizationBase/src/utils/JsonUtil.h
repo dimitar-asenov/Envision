@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -27,25 +27,14 @@
 #pragma once
 
 #include "../VisualizationBase/src/visualizationbase_api.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, UINode)
-
-namespace Visualization
-{
-
-class VISUALIZATIONBASE_API UINode : public Super<Model::Node>
-{
-	DECLARE_TYPE_ID
-
-	public:
-		UINode();
-
-		virtual QJsonValue toJson() const = 0;
-
-		virtual void save(Model::PersistentStore& store) const override;
-		virtual void load(Model::PersistentStore& store) override;
-};
-
+namespace Model {
+class Node;
+using NodeIdType = QUuid;
 }
+
+class VISUALIZATIONBASE_API JsonUtil
+{
+	public:
+		static Model::Node* nodeForId(Model::NodeIdType id);
+};

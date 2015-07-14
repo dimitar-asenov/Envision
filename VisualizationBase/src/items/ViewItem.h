@@ -74,6 +74,9 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		const QString& name() const;
 		void setName(const QString& name);
 
+		QJsonDocument toJson() const;
+		void fromJson(QJsonDocument json);
+
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 	private:
@@ -89,6 +92,8 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		};
 		QList<ArrowToAdd> arrowsToAdd_;
 		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
+		QJsonObject arrowToJson(QPair<Item*, Item*> arrow, QString layer) const;
+		void arrowFromJson(QJsonObject json);
 		void addArrowLayer(QString layer);
 		void removeArrowsForItem(Item* parent);
 

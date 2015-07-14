@@ -51,7 +51,7 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		bool inEditMode_{};
 		QString nameBefore_;
 
-		ViewSwitcherMenu(QVector<Visualization::Item*> items, Visualization::Item* target,
+		ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 };
 

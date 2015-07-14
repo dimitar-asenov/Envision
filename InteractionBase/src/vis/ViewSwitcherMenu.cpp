@@ -28,6 +28,7 @@
 #include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 namespace Interaction {
 
@@ -41,11 +42,18 @@ void ViewSwitcherMenu::show(Visualization::Item* target)
 
 void ViewSwitcherMenu::showNow(Visualization::Item* target)
 {
-	QVector<Visualization::Item*> items;
-	for (auto view : target->scene()->viewItems())
-		items.append(new VViewSwitcherEntry(nullptr, view->name()));
-	for (int i = items.size(); i < 9; i++)
-		items.append(new VViewSwitcherEntry(nullptr, "Empty slot " + QString::number(i)));
+	auto viewItems = target->scene()->viewItems()->viewItems();
+	QVector<QVector<Visualization::Item*>> items;
+	items.resize(viewItems.size());
+	for (int col = 0; col < viewItems.size(); col++)
+		for (int row = 0; row < viewItems[col].size(); row++)
+			if (viewItems[col][row])
+				items[col].append(new VViewSwitcherEntry(nullptr, viewItems[col][row]->name()));
+			else
+				items[col].append(new VViewSwitcherEntry(nullptr, "Empty slot"));
+	for (int col = 0; col < items.size(); col++)
+		for (int row = items[col].size(); row < 3; row++)
+			items[col].append(new VViewSwitcherEntry(nullptr, "Empty slot"));
 	Menu::hideNow();
 	Menu::instance = new ViewSwitcherMenu(items, target);
 	target->scene()->addTopLevelItem(Menu::instance);
@@ -53,7 +61,7 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 					{ Menu::instance->selectItem(Menu::instance->currentItems()[0][0]); });
 }
 
-ViewSwitcherMenu::ViewSwitcherMenu(QVector<Visualization::Item*> items,
+ViewSwitcherMenu::ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items,
 											 Visualization::Item* target, StyleType* style)
 	: Super(items, target, style)
 {
@@ -76,21 +84,23 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 	{
 		//If the view item didn't exist and the user changed the name,
 		//create a new item with that name
+		QPoint pos = indexOf(entry);
 		auto nameAfter = entry->nameField()->text();
-		if (scene()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
-			scene()->newViewItem(nameAfter);
+		if (scene()->viewItems()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
+			scene()->viewItems()->newViewItem(nameAfter, pos);
 	}
 }
 
 bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 {
 	if (inEditMode_) return false;
-	if (auto asSwitcher = DCast<VViewSwitcherEntry>(item))
+	if (auto entry = DCast<VViewSwitcherEntry>(item))
 	{
-		auto view = scene()->viewItem(asSwitcher->nameField()->text());
+		QPoint pos = indexOf(item);
+		auto view = scene()->viewItems()->viewItem(entry->nameField()->text());
 		if (!view)
-			view = scene()->newViewItem(asSwitcher->nameField()->text());
-		scene()->switchToView(view);
+			view = scene()->viewItems()->newViewItem(entry->nameField()->text(), pos);
+		scene()->viewItems()->switchToView(view);
 	}
 	return true;
 }

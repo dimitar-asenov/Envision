@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,29 +23,17 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
+#include "JsonUtil.h"
 
-#pragma once
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/model/TreeManager.h"
+#include "ModelBase/src/model/AllTreeManagers.h"
+#include "ModelBase/src/persistence/NodeIdMap.h"
 
-#include "../VisualizationBase/src/visualizationbase_api.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, UINode)
-
-namespace Visualization
+Model::Node* JsonUtil::nodeForId(Model::NodeIdType id)
 {
-
-class VISUALIZATIONBASE_API UINode : public Super<Model::Node>
-{
-	DECLARE_TYPE_ID
-
-	public:
-		UINode();
-
-		virtual QJsonValue toJson() const = 0;
-
-		virtual void save(Model::PersistentStore& store) const override;
-		virtual void load(Model::PersistentStore& store) override;
-};
-
+	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+		if (auto node = manager->nodeIdMap().node(id))
+			return const_cast<Model::Node*>(node);
+	return nullptr;
 }

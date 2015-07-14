@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2015 ETH Zurich
+** Copyright (c) 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,26 +26,43 @@
 
 #pragma once
 
-#include "../VisualizationBase/src/visualizationbase_api.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+#include "visualizationbase_api.h"
 
-DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, UINode)
+namespace Visualization {
 
-namespace Visualization
+class Scene;
+class ViewItem;
+
+/**
+ * The ViewItemManager manages all the different ViewItems which are part
+ * of a given scene. It is responsible for adding and removing views to and from
+ * the scene, as well as switching between the different views.
+ */
+class VISUALIZATIONBASE_API ViewItemManager
 {
-
-class VISUALIZATIONBASE_API UINode : public Super<Model::Node>
-{
-	DECLARE_TYPE_ID
-
 	public:
-		UINode();
+		ViewItemManager(Scene* scene);
+		~ViewItemManager();
 
-		virtual QJsonValue toJson() const = 0;
+		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
+		ViewItem* newViewItem(const QString name = QString(), QPoint position = QPoint(-1, -1));
+		ViewItem* viewItem(const QString name);
+		void switchToView(ViewItem* view);
+		bool switchToView(const QString viewName);
+		ViewItem* currentViewItem();
+		void removeAllViewItems();
 
-		virtual void save(Model::PersistentStore& store) const override;
-		virtual void load(Model::PersistentStore& store) override;
+		QVector<QVector<ViewItem*>> viewItems() const;
+
+	private:
+		QPoint nextEmptyPosition() const;
+
+		const int VIEW_ITEM_COLUMNS = 3;
+		QVector<QVector<ViewItem*>> viewItems_;
+		ViewItem* currentViewItem_{};
+		Scene* scene_{};
 };
+
+inline QVector<QVector<ViewItem*>> ViewItemManager::viewItems() const { return viewItems_; }
 
 }
