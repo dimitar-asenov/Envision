@@ -65,5 +65,9 @@ void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const c
 	{
 		attributes_.insert("name", "setName");
 	}
+	else if (MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_OOP_ANNOTATIONS")
+	{
+		attributes_.insert("annotations", "setAnnotations");
+	}
 }
 
