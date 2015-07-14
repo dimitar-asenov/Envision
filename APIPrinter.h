@@ -24,15 +24,29 @@
 **
 ***********************************************************************************************************************/
 
-#include "GeneratorAction.h"
+#include <QtCore/QTextStream>
 
-#include <QtCore/QDebug>
+#include "APIData.h"
 
-#include "EnvisionAstConsumer.h"
-
-std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,
-																							  llvm::StringRef currentFile)
+class APIPrinter
 {
-	auto filepath = QString::fromStdString(currentFile.str());
-	return std::make_unique<EnvisionAstConsumer>(ci, filepath, outData_);
-}
+	public:
+		APIPrinter(QTextStream& outStream, const APIData& data) : out_{outStream}, data_{data} {}
+		void print();
+
+	private:
+		QTextStream& out_;
+		const APIData& data_;
+		QString indent_{};
+
+		void printHeaders();
+		void printClasses();
+		void printClass(const ClassData& cData);
+		void printEnumsOfClass(const ClassData& cData);
+		void printEnum(const EnumData& eData);
+		void printAttribute(const ClassAttribute& attr);
+
+
+		void indent();
+		void unIndent();
+};

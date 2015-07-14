@@ -27,19 +27,38 @@
 #pragma once
 
 #include <QtCore/QSet>
+#include <QtCore/QString>
+#include <QtCore/QTextStream>
+#include <QtCore/QHash>
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ASTConsumer.h>
 
+#include "APIData.h"
+
+namespace clang {
+	class EnumDecl;
+}
+
 class EnvisionAstConsumer : public clang::ASTConsumer
 {
 	public:
-		EnvisionAstConsumer(clang::CompilerInstance &ci) : compilerInstance_{ci} {}
+		EnvisionAstConsumer(clang::CompilerInstance& ci, QString currentFile, APIData& outData);
 
-		void HandleTagDeclDefinition(clang::TagDecl* tagDecl) override;
+		virtual void Initialize(clang::ASTContext& Context) override;
+		virtual void HandleTagDeclDefinition(clang::TagDecl* tagDecl) override;
+
+		void HandleEnumDecl(clang::EnumDecl* enumDecl);
+		void HandleClassDecl(clang::CXXRecordDecl* classDecl);
 
 	private:
 		clang::CompilerInstance &compilerInstance_;
+		QString currentClassName_;
+		std::string currentFile_;
+
+		QHash<QString,QString> attributes_;
 
 		QSet<clang::TagDecl*> seenDecls_;
+		APIData& outData_;
+		QList<EnumData> processedEnums_;
 };

@@ -24,15 +24,39 @@
 **
 ***********************************************************************************************************************/
 
-#include "GeneratorAction.h"
+#include "EnvisionPPCallbacks.h"
+
+#include <algorithm>
 
 #include <QtCore/QDebug>
 
-#include "EnvisionAstConsumer.h"
+#include <clang/Lex/MacroArgs.h>
 
-std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,
-																							  llvm::StringRef currentFile)
+EnvisionPPCallbacks::EnvisionPPCallbacks(clang::SourceManager& srcManager, std::string fileName,
+													  QHash<QString, QString>& attributes)
+	: sourceManager_{srcManager}, fileName_{fileName}, attributes_{attributes}  {}
+
+void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const clang::MacroDirective *,
+													clang::SourceRange range, const clang::MacroArgs *Args)
 {
-	auto filepath = QString::fromStdString(currentFile.str());
-	return std::make_unique<EnvisionAstConsumer>(ci, filepath, outData_);
+	// We only care about ATTRIBUTE macros:
+	if (MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE" ||
+		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_VALUE_CUSTOM_RETURN")
+	{
+		// We only care about ATTRIBUTES in the currentFile:
+		if (sourceManager_.getFilename(range.getBegin()) != fileName_) return;
+		unsigned numArguments = Args->getNumArguments();
+		Q_ASSERT(numArguments >= 3); // ATTRIBUTE macros have 3 arguments
+
+		auto attributeName = QString::fromStdString(Args->getUnexpArgument(1u)->getIdentifierInfo()->getName().str());
+		auto attributeSetter = QString::fromStdString(Args->getUnexpArgument(2u)->getIdentifierInfo()->getName().str());
+
+		attributes_.insert(attributeName, attributeSetter);
+	}
+	else if (MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_OOP_NAME_SYMBOL")
+	{
+		attributes_.insert("name", "setName");
+	}
+
 }
+

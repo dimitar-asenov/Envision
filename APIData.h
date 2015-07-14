@@ -24,15 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#include "GeneratorAction.h"
+#pragma once
 
-#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QList>
+#include <QtCore/QDir>
 
-#include "EnvisionAstConsumer.h"
-
-std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,
-																							  llvm::StringRef currentFile)
+struct EnumData
 {
-	auto filepath = QString::fromStdString(currentFile.str());
-	return std::make_unique<EnvisionAstConsumer>(ci, filepath, outData_);
-}
+		EnumData(QString name) : enumName_{name} {}
+		QString enumName_;
+		QString qualifiedName_;
+		QList<QPair<QString, QString>> values_;
+};
+
+struct ClassAttribute
+{
+		QString name_;
+		QString getterQualified_;
+		QString setterQualified_;
+};
+
+struct ClassData
+{
+		ClassData(QString name) : className_{name} {}
+		QString className_;
+		QString qualifiedName_;
+		QStringList baseClasses_;
+		QList<ClassAttribute> attributes_;
+		QList<EnumData> enums_;
+};
+
+struct APIData
+{
+		QString includePrefix_;
+		QStringList includePaths_;
+		QList<ClassData> classes_;
+
+		void addIncludeFile(QString filePath)
+		{
+			if (!includePrefix_.isEmpty()) filePath.prepend(QDir::separator()).prepend(includePrefix_);
+			includePaths_ << filePath;
+		}
+};

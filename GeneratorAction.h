@@ -26,13 +26,21 @@
 
 #pragma once
 
+#include <QtCore/QTextStream>
+#include <QtCore/QDebug>
+
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Frontend/FrontendActions.h>
+
+#include "APIData.h"
 
 class GeneratorAction : public clang::ASTFrontendAction
 {
 	public:
+		GeneratorAction(APIData& outData) : outData_{outData} {}
 		virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer
 			(clang::CompilerInstance& compilerInstance, llvm::StringRef currentFile) override;
-};
 
+	private:
+		APIData& outData_;
+};

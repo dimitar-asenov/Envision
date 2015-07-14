@@ -6,7 +6,20 @@ CONFIG -= app_bundle
 SOURCES += main.cpp \
     GenTool.cpp \
     EnvisionAstConsumer.cpp \
-    GeneratorAction.cpp
+    GeneratorAction.cpp \
+    EnvisionPPCallbacks.cpp \
+    TypeUtilities.cpp \
+    APIData.cpp \
+    APIPrinter.cpp
+
+HEADERS += \
+    GenTool.h \
+    EnvisionAstConsumer.h \
+    GeneratorAction.h \
+    EnvisionPPCallbacks.h \
+    TypeUtilities.h \
+    APIData.h \
+    APIPrinter.h
 
 # Use this instead of the line under it to avoid warnings
 QMAKE_CXXFLAGS += -std=c++1y -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)"" -Wall -fno-rtti
@@ -32,8 +45,3 @@ LIBS += -lclangTooling\
                                 -lz \
                                 -ldl \
                                 -lncurses
-
-HEADERS += \
-    GenTool.h \
-    EnvisionAstConsumer.h \
-    GeneratorAction.h

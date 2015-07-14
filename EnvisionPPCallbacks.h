@@ -24,15 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "GeneratorAction.h"
+#pragma once
 
-#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtCore/QHash>
 
-#include "EnvisionAstConsumer.h"
+#include <clang/Lex/Preprocessor.h>
+#include <clang/Lex/MacroInfo.h>
 
-std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,
-																							  llvm::StringRef currentFile)
+class EnvisionPPCallbacks : public clang::PPCallbacks
 {
-	auto filepath = QString::fromStdString(currentFile.str());
-	return std::make_unique<EnvisionAstConsumer>(ci, filepath, outData_);
-}
+	public:
+		EnvisionPPCallbacks(clang::SourceManager& srcManager, std::string fileName,
+								  QHash<QString, QString>& attributes);
+		virtual void MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDirective* MD,
+										  clang::SourceRange range, const clang::MacroArgs* Args) override;
+
+	private:
+		clang::SourceManager& sourceManager_;
+		std::string fileName_;
+		QHash<QString, QString>& attributes_;
+};

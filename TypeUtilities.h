@@ -24,15 +24,16 @@
 **
 ***********************************************************************************************************************/
 
-#include "GeneratorAction.h"
+#pragma once
 
-#include <QtCore/QDebug>
+#include <QtCore/QString>
 
-#include "EnvisionAstConsumer.h"
+#include <clang/AST/Type.h>
 
-std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,
-																							  llvm::StringRef currentFile)
+class TypeUtilities
 {
-	auto filepath = QString::fromStdString(currentFile.str());
-	return std::make_unique<EnvisionAstConsumer>(ci, filepath, outData_);
-}
+	public:
+		static QString nestedNameSpecifierToString(const clang::NestedNameSpecifier* nestedName);
+		static QString templateArgToString(const clang::TemplateArgument& templateArg);
+		static QString typePtrToString(const clang::Type* type);
+};

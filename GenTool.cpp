@@ -30,30 +30,49 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QDirIterator>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 
 #include <QtCore/QDebug>
 
 #include <clang/Tooling/Tooling.h>
 
 #include "GeneratorAction.h"
+#include "APIData.h"
+#include "APIPrinter.h"
 
 class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 {
+	public:
+		ClangFrontEndActionFactory(APIData& outData) : outData_{outData} {}
 		virtual clang::FrontendAction* create() override {
-			return new GeneratorAction();
+			return new GeneratorAction(outData_);
 		}
+	private:
+		APIData& outData_;
 };
 
 void GenTool::run()
 {
+	APIData api;
+
 	for (auto project : projects_)
 	{
+		api.includePrefix_ = project.split(QDir::separator(), QString::SplitBehavior::SkipEmptyParts).last();
 		qDebug() << "Start processing project :" << project;
 		auto tool = std::make_unique<clang::tooling::ClangTool>
 				(*compilationDbMap_.value(project), *sourcesMap_.value(project));
-		auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>();
+		auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>(api);
 		tool->run(frontendActionFactory.get());
 	}
+
+	// Create out file
+	QFile file("nodeAPI.cpp");
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) Q_ASSERT(false);
+	QTextStream stream(&file);
+	APIPrinter printer(stream, api);
+	printer.print();
+	file.close();
 }
 
 void GenTool::initPath(const QString& sourcePath)
@@ -87,4 +106,3 @@ void GenTool::setCompilationDbPath(const QString& sourcePath)
 	Q_ASSERT(compDB);
 	compilationDbMap_.insert(sourcePath, move(compDB));
 }
-

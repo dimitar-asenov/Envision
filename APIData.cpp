@@ -24,15 +24,4 @@
 **
 ***********************************************************************************************************************/
 
-#include "GeneratorAction.h"
-
-#include <QtCore/QDebug>
-
-#include "EnvisionAstConsumer.h"
-
-std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,
-																							  llvm::StringRef currentFile)
-{
-	auto filepath = QString::fromStdString(currentFile.str());
-	return std::make_unique<EnvisionAstConsumer>(ci, filepath, outData_);
-}
+#include "APIData.h"
