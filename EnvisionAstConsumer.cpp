@@ -130,8 +130,22 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 				if (it != attributes_.end())
 				{
 					QString attributeName = it.key();
-					QString getter = QString("%1::%2").arg(cData.qualifiedName_, attributeName);
-					QString setter = QString("%1::%2").arg(cData.qualifiedName_, it.value());
+					QString getter = QString("&%1::%2").arg(cData.qualifiedName_, attributeName);
+					auto returnTypePtr = method->getReturnType().getTypePtr();
+					if (returnTypePtr->isReferenceType())
+					{
+						auto refType = llvm::dyn_cast<clang::ReferenceType>(returnTypePtr);
+						auto pointeeType = refType->getPointeeType();
+						if (pointeeType.isConstQualified())
+						{
+							QString pointeeTypeString = TypeUtilities::typePtrToString(pointeeType.getTypePtr());
+							QString newGetter = QString("make_function((const %1& (%2::*)())%3,"
+																 " return_value_policy<copy_const_reference>())")
+									.arg(pointeeTypeString, cData.qualifiedName_, getter);
+							getter = newGetter;
+						}
+					}
+					QString setter = QString("&%1::%2").arg(cData.qualifiedName_, it.value());
 					cData.attributes_.append({attributeName, getter, setter});
 					seenMethods << it.key() << it.value();
 				}

@@ -116,8 +116,8 @@ void APIPrinter::printAttribute(const ClassAttribute& attr)
 {
 	out_ << indent_ << ".add_property(\"" << attr.name_ << "\", " << endl;
 	indent();
-	out_ << indent_ << "&" << attr.getterQualified_ << "," << endl;
-	out_ << indent_ << "&" << attr.setterQualified_ << ")";
+	out_ << indent_ << attr.getterQualified_ << "," << endl;
+	out_ << indent_ << attr.setterQualified_ << ")";
 	unIndent();
 }
 
