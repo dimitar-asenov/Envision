@@ -57,6 +57,7 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		std::string currentFile_;
 
 		QHash<QString,QString> attributes_;
+		QHash<QString,QString> privateAttributes_;
 
 		QSet<clang::TagDecl*> seenDecls_;
 		APIData& outData_;

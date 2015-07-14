@@ -47,7 +47,8 @@ EnvisionAstConsumer::EnvisionAstConsumer(clang::CompilerInstance& ci, QString cu
 void EnvisionAstConsumer::Initialize(clang::ASTContext&)
 {
 	compilerInstance_.getPreprocessor().addPPCallbacks(
-				std::make_unique<EnvisionPPCallbacks>(compilerInstance_.getSourceManager(), currentFile_, attributes_));
+				std::make_unique<EnvisionPPCallbacks>(compilerInstance_.getSourceManager(),
+																  currentFile_, attributes_, privateAttributes_));
 	compilerInstance_.getPreprocessor().enableIncrementalProcessing();
 }
 
@@ -118,9 +119,13 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 						cData.baseClasses_ << baseString;
 				}
 			}
+			QSet<QString> seenMethods;
+			QSet<QString> possibleAttributeSetters;
 			for (auto method : classDecl->methods())
 			{
 				QString methodName = QString::fromStdString(method->getNameAsString());
+				if (seenMethods.contains(methodName)) continue;
+
 				auto it = attributes_.find(methodName);
 				if (it != attributes_.end())
 				{
@@ -128,6 +133,43 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 					QString getter = QString("%1::%2").arg(cData.qualifiedName_, attributeName);
 					QString setter = QString("%1::%2").arg(cData.qualifiedName_, it.value());
 					cData.attributes_.append({attributeName, getter, setter});
+					seenMethods << it.key() << it.value();
+				}
+				else
+				{
+					// ignore private attributes:
+					auto privateIt = privateAttributes_.find(methodName);
+					if (privateIt != privateAttributes_.end())
+					{
+						seenMethods << methodName << privateIt.value();
+					}
+					else if (methodName.startsWith("set"))
+					{
+						possibleAttributeSetters << methodName;
+					}
+				}
+			}
+			// check if we have some more attributes which don't have an attribute macro:
+			for (auto method : classDecl->methods())
+			{
+				QString methodName = QString::fromStdString(method->getNameAsString());
+				if (seenMethods.contains(methodName)) continue;
+
+				if (possibleAttributeSetters.contains(methodName)) continue;
+				for (QString setterName : possibleAttributeSetters)
+				{
+					QString possibleGetterName = setterName.mid(4); // drop set and first letter
+					possibleGetterName.prepend(setterName[3].toLower());
+					if (methodName == possibleGetterName)
+					{
+						// Found another attribute:
+						QString attributeName = methodName;
+						QString getter = QString("%1::%2").arg(cData.qualifiedName_, attributeName);
+						QString setter = QString("%1::%2").arg(cData.qualifiedName_, setterName);
+						cData.attributes_.append({attributeName, getter, setter});
+						seenMethods << setterName << methodName;
+						break;
+					}
 				}
 			}
 			// Add enums

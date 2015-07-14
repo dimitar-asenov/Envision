@@ -36,7 +36,7 @@ class EnvisionPPCallbacks : public clang::PPCallbacks
 {
 	public:
 		EnvisionPPCallbacks(clang::SourceManager& srcManager, std::string fileName,
-								  QHash<QString, QString>& attributes);
+								  QHash<QString, QString>& attributes, QHash<QString, QString>& privateAttributes);
 		virtual void MacroExpands(const clang::Token& MacroNameTok, const clang::MacroDirective* MD,
 										  clang::SourceRange range, const clang::MacroArgs* Args) override;
 
@@ -44,4 +44,5 @@ class EnvisionPPCallbacks : public clang::PPCallbacks
 		clang::SourceManager& sourceManager_;
 		std::string fileName_;
 		QHash<QString, QString>& attributes_;
+		QHash<QString, QString>& privateAttributes_;
 };
