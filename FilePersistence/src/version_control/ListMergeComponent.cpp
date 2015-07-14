@@ -56,29 +56,8 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 		auto idListA = nodeListToSortedIdList(treeA->find(listContainerId, true)->children());
 		auto idListB = nodeListToSortedIdList(treeB->find(listContainerId, true)->children());
 
-		if (listTypes_.contains(listContainerBase->type()))
-		{
-			// list is ordered
-			auto chunks = Diff3Parse::computeChunks(idListA, idListB, idListBase);
-			preparedLists_.insert(listContainerId, chunks);
-		}
-		else // list is unordered
-		{
-			auto unorderedChunk = new Chunk();
-			unorderedChunk->spanMerged_ = idListA;
-			for (auto elem : idListB)
-				if (!unorderedChunk->spanMerged_.contains(elem))
-				{
-					auto pos = findPosition(elem, idListB, unorderedChunk);
-					if (pos.predecessor_.isNull()) unorderedChunk->spanMerged_.prepend(elem);
-					else
-					{
-						int idx = unorderedChunk->spanMerged_.indexOf(pos.predecessor_);
-						unorderedChunk->spanMerged_.insert(idx + 1, elem);
-					}
-				}
-			preparedLists_.insert(listContainerId, {unorderedChunk});
-		}
+		auto chunks = Diff3Parse::computeChunks(idListA, idListB, idListBase);
+		preparedLists_.insert(listContainerId, chunks);
 	}
 
 	for (auto preparedListIt = preparedLists_.begin(); preparedListIt != preparedLists_.end(); ++preparedListIt)
@@ -104,9 +83,9 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 					{
 						auto changeA = cdgA.changes().value(elem);
 						auto changeB = cdgB.changes().value(elem);
-						if (changeA->type() == ChangeType::Deletion)
+						if (changeA && changeA->type() == ChangeType::Deletion)
 							markAsResolved(conflictingChanges, conflictPairs, changeA, cdgA, cdgB);
-						else if (changeB->type() == ChangeType::Deletion)
+						else if (changeB && changeB->type() == ChangeType::Deletion)
 							markAsResolved(conflictingChanges, conflictPairs, changeB, cdgB, cdgA);
 					}
 				}
@@ -144,7 +123,7 @@ Chunk* ListMergeComponent::findOriginalChunk(Model::NodeIdType element, Model::N
 				return chunk;
 		}
 	}
-	Q_ASSERT(false);
+	return nullptr;
 }
 
 std::shared_ptr<ChangeDescription> ListMergeComponent::getConflictingChange(
@@ -317,6 +296,8 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 					!changeB || changeB->type() != ChangeType::Move;
 		// If A moves, B must move to same list, otherwise B must not move.
 
+		bool listIsOrdered = listTypes_.contains(cdgA.changes().value(containerId)->nodeA()->type());
+
 		auto reorderedNodesByMe = branchIsA ? reorderedNodesA_ : reorderedNodesB_;
 		auto reorderedNodesByOther = branchIsA ? reorderedNodesB_ : reorderedNodesA_;
 		auto mustBeUnchangedByMe = branchIsA ? mustBeUnchangedByA_ : mustBeUnchangedByB_;
@@ -333,35 +314,51 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		{
 			if (spanB.contains(elem))
 			{
-				if (posA == posB)
+				if (listIsOrdered)
 				{
-					if (!chunk->spanMerged_.contains(elem)) shouldInsert = true; // 1110
+					if (posA == posB)
+					{
+						if (!chunk->spanMerged_.contains(elem))
+							shouldInsert = true; // 1110
+					}
+					else
+					{
+						// NOTE Is this correct, considering how the != operator works for invalid positions?
+						if (posA != posBase)
+						{
+							markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
+							// NOTE the following condition could be evaluated immediately.
+							// all original chunks of the current list are required.
+							if (doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
+								shouldInsert = true; // 11001
+							else
+							{
+								conflict = true;
+								break; // 11000
+							}
+						}
+					}
 				}
 				else
 				{
-					// NOTE Is this correct, considering how the != operator works for invalid positions?
-					if (posA != posBase)
-					{
-						markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-						// NOTE the following condition could be evaluated immediately.
-						// all original chunks of the current list are required.
-						if (doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
-							shouldInsert = true; // 11001
-						else
-						{
-							conflict = true;
-							break; // 11000
-						}
-					}
+					// list is unordered and both braches have elem in same chunk.
+					// just insert at good-enough position.
+					// This is for the whole 11 subtree.
+					if (!chunk->spanMerged_.contains(elem))
+						shouldInsert = true;
 				}
 			}
 			else
 			{
 				if (posA != posBase)
 				{
-					markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-					conflict = true;
-					break; // 100
+					if (listIsOrdered)
+					{
+						markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
+						conflict = true;
+						break; // 100
+					}
+					// else B reorders across chunk in unordered list. Let B handle it.
 				}
 			}
 		}
@@ -371,80 +368,134 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 			{
 				if (elemInListB)
 				{
-					if (spanB.contains(elem))
+					if (listIsOrdered)
 					{
-						if (posA == posB)
+						if (spanB.contains(elem))
 						{
-							if (!chunk->spanMerged_.contains(elem))
+							if (posA == posB)
 							{
-
-								auto origin = findOriginalChunk(elem, containerId);
-								if (!origin->noConflicts_)
-									conflict = true;
-								else
+								if (!chunk->spanMerged_.contains(elem))
 								{
-									chunkDependencies_.insert(chunk, origin);
-									chunkDependencies_.insert(origin, chunk);
+									// 011110
+									auto origin = findOriginalChunk(elem, containerId);
+									if (!origin)
+										shouldInsert = true;
+									else if (origin->noConflicts_)
+									{
+										chunkDependencies_.insert(chunk, origin);
+										chunkDependencies_.insert(origin, chunk);
+										shouldInsert = true;
+									}
+									else
+									{
+										conflict = true;
+										break; // the chunk this chunk depends on is conflicting
+									}
 								}
-								shouldInsert = true; // 011110
+							}
+							else
+							{
+								conflict = true;
+								break; // 01110
 							}
 						}
 						else
 						{
-							conflict = true;
-							break; // 01110
+							markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
+							// NOTE the following condition could be evaluated immediately.
+							// all original chunks of the current list are required.
+							if (!doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
+							{
+								// 011011
+								auto origin = findOriginalChunk(elem, containerId);
+								if (!origin)
+									shouldInsert = true;
+								else if (origin->noConflicts_)
+								{
+									chunkDependencies_.insert(chunk, origin);
+									chunkDependencies_.insert(origin, chunk);
+									shouldInsert = true;
+								}
+								else
+								{
+									conflict = true;
+									break; // the chunk this chunk depends on is conflicting
+								}
+							}
+							else
+							{
+								conflict = true;
+								break; // 01100 and 011010
+							}
 						}
 					}
 					else
 					{
-						markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-						// NOTE the following condition could be evaluated immediately.
-						// all original chunks of the current list are required.
-						if (!doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
-						{
-							auto origin = findOriginalChunk(elem, containerId);
-							if (!origin->noConflicts_)
-								conflict = true;
-							else
-							{
-								chunkDependencies_.insert(chunk, origin);
-								chunkDependencies_.insert(origin, chunk);
-							}
-							shouldInsert = true; // 011011
-						}
-						else
-						{
-							conflict = true;
-							break; // 01100 and 011010
-						}
+						// list is unordered and both braches have elem in the list.
+						// this branch has elem in a different chunk than base.
+						// just insert at good-enough position.
+						// This is for the whole 011 subtree.
+						if (!chunk->spanMerged_.contains(elem))
+							shouldInsert = true;
 					}
 				}
 				else
 				{
 					if (elemInListBase)
 					{
-						markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-						conflict = true;
-						break; // 0101
+						if (listIsOrdered)
+						{
+							markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
+							conflict = true;
+							break; // 0101
+						}
+						// else A reorders in unordered list, B moves out. Move takes precedence.
 					}
 					else
 					{
 						if (doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
 						{
-							conflict = true;
-							break; // 01001
+							if (listIsOrdered)
+							{
+								conflict = true;
+								break; // 01001
+							}
+							else
+							{
+								auto origin = findOriginalChunk(elem, containerId);
+								if (!origin)
+									shouldInsert = true;
+								else if (origin->noConflicts_)
+								{
+									chunkDependencies_.insert(chunk, origin);
+									chunkDependencies_.insert(origin, chunk);
+									shouldInsert = true;
+									// A moves into unordered lists, B reorders. Move takes precedence.
+								}
+								else
+								{
+									conflict = true;
+									break; // the chunk this chunk depends on is conflicting
+								}
+							}
 						}
 						else
 						{
+							// 01000
 							auto origin = findOriginalChunk(elem, containerId);
-							if (!origin->noConflicts_)
-								conflict = true;
-							else
+							if (!origin)
+								shouldInsert = true;
+							else if (origin->noConflicts_)
 							{
 								chunkDependencies_.insert(chunk, origin);
 								chunkDependencies_.insert(origin, chunk);
+								shouldInsert = true;
 							}
-							shouldInsert = true; // 01000
+							else
+							{
+								conflict = true;
+								break; // the chunk this chunk depends on is conflicting
+							}
 						}
 					}
 				}
@@ -453,8 +504,20 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 			{
 				if (elemInTreeBase)
 				{
-					conflict = true;
-					break; // 001
+					if (listIsOrdered)
+					{
+						conflict = true;
+						break; // 001
+					}
+					else
+					{
+						if (changeA->type() == ChangeType::Move)
+						{
+							conflict = true;
+							break; // A moves, B deletes
+						}
+						// else A reorders in unordered lists, B deletes. Delete takes precedence.
+					}
 				}
 				else shouldInsert = true; // 000
 			}
@@ -465,10 +528,13 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 
 		if (shouldInsert)
 		{
-			if (posA.valid_)
+			if (!listIsOrdered || posA.valid_)
 				insertAfter(elem, posA, chunk);
 			else
+			{
 				conflict = true;
+				break;
+			}
 		}
 	}
 
@@ -480,10 +546,10 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 
 void ListMergeComponent::markDependingAsConflicting(Chunk* chunk)
 {
-	QList<Chunk*> queue;
-	queue.append(chunk);
-	for (auto chunk = queue.takeFirst(); !queue.isEmpty(); chunk = queue.takeFirst())
+	QList<Chunk*> queue = {chunk};
+	while (!queue.isEmpty())
 	{
+		auto chunk = queue.takeFirst();
 		chunk->noConflicts_ = false;
 		for (auto depending : chunkDependencies_.values(chunk))
 		{
@@ -520,27 +586,32 @@ ListMergeComponent::Position ListMergeComponent::findPosition(const Model::NodeI
 	// position in empty list is unique
 	if (chunk->spanMerged_.isEmpty()) return Position(true, {});
 
-	int elemIdx = origin.indexOf(element) - 1;
-	while (elemIdx >= 0 && !chunk->spanMerged_.contains(origin.at(elemIdx))) --elemIdx;
+	int elemIdx = origin.indexOf(element) - 1; // set index to predecessor
+	while (elemIdx >= 0 && !chunk->spanMerged_.contains(origin.at(elemIdx)))
+		--elemIdx; // go backward until common element is found
 	auto commonPredecessor = (elemIdx >= 0) ? origin.at(elemIdx) : Model::NodeIdType();
-	elemIdx = origin.indexOf(element) + 1;
-	while (elemIdx < origin.size() && !chunk->spanMerged_.contains(origin.at(elemIdx))) ++elemIdx;
+	elemIdx = origin.indexOf(element) + 1; // set index to successor
+	while (elemIdx < origin.size() && !chunk->spanMerged_.contains(origin.at(elemIdx)))
+		++elemIdx; // go forward until common element is found
 	auto commonSuccessor = (elemIdx < origin.size()) ? origin.at(elemIdx) : Model::NodeIdType();
 	int commonPredIdx = chunk->spanMerged_.indexOf(commonPredecessor);
 	int commonSuccIdx = chunk->spanMerged_.indexOf(commonSuccessor);
 
-	if (commonPredIdx + 1 == commonSuccIdx) return Position(true, commonPredecessor);
-	else return Position(false, commonPredecessor);
+	if ((commonPredIdx + 1 == commonSuccIdx) || //below condition is to append at end
+		 (commonPredIdx == chunk->spanMerged_.size() - 1 && commonSuccIdx == -1))
+		return Position(true, commonPredecessor);
+	else
+		return Position(false, commonPredecessor);
 }
 
 
 void ListMergeComponent::insertAfter(Model::NodeIdType elem, Position pos, Chunk* chunk)
 {
-	Q_ASSERT(pos.valid_);
 	if (pos.predecessor_.isNull()) chunk->spanMerged_.prepend(elem);
 	else
 	{
 		int idx = chunk->spanMerged_.indexOf(pos.predecessor_);
+		Q_ASSERT(idx >= 0);
 		chunk->spanMerged_.insert(idx + 1, elem);
 	}
 }

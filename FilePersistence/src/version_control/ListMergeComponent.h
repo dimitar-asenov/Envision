@@ -154,7 +154,10 @@ class ListMergeComponent : public ConflictPipelineComponent
 											 Chunk* chunk, Model::NodeIdType elem);
 
 		/**
-		 * Returns the chunk of the list of \a listContainer that contains \a element in the base version.
+		 * Returns the chunk of the list of \a listContainer that contains \a element in the base version if
+		 * \a listContainer is the id of a prepared list and \a nullptr otherwise.
+		 *
+		 * We treat a return value of \a nullptr like a chunk that is conflict free.
 		 */
 		Chunk* findOriginalChunk(Model::NodeIdType element, Model::NodeIdType listContainer, Chunk* guess = nullptr);
 
