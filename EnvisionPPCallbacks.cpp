@@ -41,7 +41,8 @@ void EnvisionPPCallbacks::MacroExpands(const clang::Token &MacroNameTok, const c
 {
 	// We only care about ATTRIBUTE macros:
 	if (MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE" ||
-		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_VALUE_CUSTOM_RETURN")
+		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_VALUE_CUSTOM_RETURN" ||
+		 MacroNameTok.getIdentifierInfo()->getName() == "ATTRIBUTE_VALUE")
 	{
 		// We only care about ATTRIBUTES in the currentFile:
 		if (sourceManager_.getFilename(range.getBegin()) != fileName_) return;
