@@ -120,7 +120,6 @@ void Merge::initializeComponents()
 {
 	// TODO replace with correct types
 	QSet<QString> conflictTypes = QSet<QString>::fromList(QList<QString>{
-
 																				"TestConflictType",
 																				"TestListType",
 																				"TestUnorderedType",
@@ -131,7 +130,8 @@ void Merge::initializeComponents()
 																				"fieldList",
 																				"methodList",
 																				"field",
-																				"method"});
+																				"method",
+																			"loop"});
 	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{
 																		  "TestListType",
 																		  "TestNoConflictList",
