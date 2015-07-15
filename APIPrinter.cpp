@@ -54,16 +54,17 @@ void APIPrinter::printClass(const ClassData& cData)
 	// each class gets it's own scope:
 	out_ << "{" << endl;
 	indent();
-	out_ << indent_;
+	QString classString;
 	if (cData.enums_.size()) // We only need a scope variable if we have enums
-		out_ << "scope " << cData.className_ << "scope = ";
-	out_ << "class_<" << cData.qualifiedName_ << ", ";
+		classString = QString("scope %1scope = ").arg(cData.className_);
+	classString += "class_<" + cData.qualifiedName_ + ", ";
 	// print bases:
-	out_ << "bases<" << cData.baseClasses_.join(", ") << ">>";
+	classString += "bases<" + cData.baseClasses_.join(", ") + ">>";
 	// print name:
-	out_ << "(\"" << cData.className_ << "\"";
+	classString += "(\"" + cData.className_ + "\"";
 	// print constructors: // TODO
-	out_ << ")";
+	classString += ")";
+	printPossiblyLongString(classString);
 
 	// printProperties
 	indent();
@@ -103,10 +104,13 @@ void APIPrinter::printEnum(const EnumData& eData)
 		for (int i = 0; i < valueCount - 1; ++i)
 		{
 			auto enumConstant = eData.values_[i];
-			out_ << indent_ << ".value(\"" << enumConstant.first << "\", " << enumConstant.second << ")" << endl;
+			QString enumValue = ".value(\"" + enumConstant.first + "\", " + enumConstant.second + ")";
+			printPossiblyLongString(enumValue);
+			out_ << endl;
 		}
 		auto enumConstant = eData.values_[valueCount-1];
-		out_ << indent_ << ".value(\"" << enumConstant.first << "\", " << enumConstant.second << ")";
+		QString enumValue = ".value(\"" + enumConstant.first + "\", " + enumConstant.second + ")";
+		printPossiblyLongString(enumValue, 1);
 	}
 	out_ << ";" << endl;
 	unIndent();
@@ -116,9 +120,28 @@ void APIPrinter::printAttribute(const ClassAttribute& attr)
 {
 	out_ << indent_ << ".add_property(\"" << attr.name_ << "\", " << endl;
 	indent();
-	out_ << indent_ << attr.getterQualified_ << "," << endl;
+	printPossiblyLongString(attr.getterQualified_ + ",");
+	out_ << endl;
 	out_ << indent_ << attr.setterQualified_ << ")";
 	unIndent();
+}
+
+void APIPrinter::printPossiblyLongString(const QString& data, int additionalLength)
+{
+	if (data.length() + indent_.length() + additionalLength > maxLineLength_)
+	{
+		int commaIndex = data.indexOf(',');
+		QString firstPart = data.mid(0, commaIndex + 1);
+		QString secondPart = data.mid(commaIndex + 1);
+		out_ << indent_ << firstPart << endl;
+		indent();
+		out_ << indent_ << secondPart;
+		unIndent();
+	}
+	else
+	{
+		out_ << indent_ << data;
+	}
 }
 
 void APIPrinter::indent()

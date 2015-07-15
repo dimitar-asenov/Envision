@@ -39,6 +39,8 @@ class APIPrinter
 		const APIData& data_;
 		QString indent_{};
 
+		int maxLineLength_{120};
+
 		void printHeaders();
 		void printClasses();
 		void printClass(const ClassData& cData);
@@ -46,6 +48,7 @@ class APIPrinter
 		void printEnum(const EnumData& eData);
 		void printAttribute(const ClassAttribute& attr);
 
+		void printPossiblyLongString(const QString& data, int additionalLength = 0);
 
 		void indent();
 		void unIndent();
