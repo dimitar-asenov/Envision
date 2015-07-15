@@ -144,4 +144,14 @@ TEST(FilePersistencePlugin, EvalClassMove)
 	cleanup();
 }
 
+TEST(FilePersistencePlugin, EvalLoopFix)
+{
+	QString command = "tar -xf Eval_LoopFix.tar -C projects";
+	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
+	GitRepository repo("projects/TestMerge");
+	auto merge = repo.merge("dev");
+	CHECK_CONDITION(merge->hasConflicts());
+	cleanup();
+}
+
 } /* namespace FilePersistence */
