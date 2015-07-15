@@ -25,3 +25,104 @@
 ***********************************************************************************************************************/
 
 #include "APIData.h"
+
+#include <queue>
+
+#include <QtCore/QDebug>
+
+struct ClassDataNode
+{
+		ClassDataNode(QString name) : name_{name} {}
+		ClassDataNode(ClassData data) : data_{data}, placeholder_{false}
+		{
+			name_ = data.qualifiedName_;
+		}
+
+		void setData(ClassData data)
+		{
+			Q_ASSERT(placeholder_);
+			data_ = data;
+			placeholder_ = false;
+		}
+
+		QList<ClassDataNode*> children_;
+		ClassData data_;
+		QString name_;
+		bool placeholder_{true};
+};
+
+void APIData::addIncludeFile(QString filePath)
+{
+	if (!includePrefix_.isEmpty()) filePath.prepend(QDir::separator()).prepend(includePrefix_);
+	includePaths_ << filePath;
+}
+
+void APIData::insertClassData(ClassData data, QStringList classHierarchy)
+{
+	// FIXME: this whole function will break for multiple inheritance
+	ClassDataNode* insertNode = nullptr;
+	if (!classRoot_)
+	{
+		// No root so we just insert the new hierarchy
+		classRoot_ = new ClassDataNode(classHierarchy[0]);
+		insertNode = classRoot_;
+		for (int i = 1; i < classHierarchy.size(); ++i)
+		{
+			ClassDataNode* nextNode = new ClassDataNode(classHierarchy[i]);
+			insertNode->children_ << nextNode;
+			insertNode = nextNode;
+		}
+	}
+	else
+	{
+		auto currentNode = classRoot_;
+		if (currentNode->name_ == classHierarchy[0])
+		{
+			// The root matches the current hierarchy just insert the missing nodes from the hierarchy.
+			for (int i = 1; i < classHierarchy.size(); ++i)
+			{
+				QString childName = classHierarchy[i];
+				ClassDataNode* nextNode = nullptr;
+				for (auto child : currentNode->children_)
+				{
+					if (child->name_ == childName)
+					{
+						nextNode = child;
+						break;
+					}
+				}
+				if (!nextNode)
+				{
+					nextNode = new ClassDataNode{childName};
+					currentNode->children_ << nextNode;
+				}
+				currentNode = nextNode;
+			}
+			insertNode = currentNode;
+		}
+		else
+		{
+			// The root does not match
+			Q_ASSERT(false);
+			// That should currently not happen
+		}
+	}
+	insertNode->setData(data);
+}
+
+QList<ClassData> APIData::classes() const
+{
+	QList<ClassData> result;
+	std::queue<ClassDataNode*> q;
+	q.push(classRoot_);
+	while (!q.empty())
+	{
+		auto node = q.front();
+		q.pop();
+		if (!node) continue;
+		if (!node->placeholder_) result << node->data_;
+		for (auto child : node->children_)
+			q.push(child);
+	}
+	return result;
+}

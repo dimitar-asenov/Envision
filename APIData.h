@@ -48,6 +48,7 @@ struct ClassAttribute
 
 struct ClassData
 {
+		ClassData() = default;
 		ClassData(QString name) : className_{name} {}
 		QString className_;
 		QString qualifiedName_;
@@ -56,15 +57,18 @@ struct ClassData
 		QList<EnumData> enums_;
 };
 
+struct ClassDataNode;
+
 struct APIData
 {
 		QString includePrefix_;
 		QStringList includePaths_;
-		QList<ClassData> classes_;
 
-		void addIncludeFile(QString filePath)
-		{
-			if (!includePrefix_.isEmpty()) filePath.prepend(QDir::separator()).prepend(includePrefix_);
-			includePaths_ << filePath;
-		}
+		void addIncludeFile(QString filePath);
+
+		void insertClassData(ClassData data, QStringList classHierarchy);
+
+		QList<ClassData> classes() const;
+	private:
+		ClassDataNode* classRoot_{};
 };

@@ -46,7 +46,7 @@ void APIPrinter::printHeaders()
 
 void APIPrinter::printClasses()
 {
-	for (const auto& cData : data_.classes_) printClass(cData);
+	for (const auto& cData : data_.classes()) printClass(cData);
 }
 
 void APIPrinter::printClass(const ClassData& cData)
