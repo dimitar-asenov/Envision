@@ -63,6 +63,11 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		APIData& outData_;
 		QList<EnumData> processedEnums_;
 
+		// TODO: make this more configurable
+		QStringList allowedBases_{"Model::Node"};
+
 		ClassAttribute attribute(const QString& attributeName, const QString& attributeSetterName,
 								const QString& qualifiedClassName, const clang::CXXMethodDecl* method);
+
+		QStringList baseClasses(clang::CXXRecordDecl* classDecl);
 };

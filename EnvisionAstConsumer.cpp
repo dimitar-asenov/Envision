@@ -54,13 +54,6 @@ void EnvisionAstConsumer::Initialize(clang::ASTContext&)
 
 void EnvisionAstConsumer::HandleTagDeclDefinition(clang::TagDecl* tagDecl)
 {
-	// FIXME: workaround for Plugin and Exception classes of a Plugin
-	QString name = QString::fromStdString(tagDecl->getNameAsString());
-	QStringList blacklist;
-	blacklist << QString("%1%2").arg(outData_.includePrefix_, "Exception")
-				 << QString("%1%2").arg(outData_.includePrefix_, "Plugin");
-	if (blacklist.contains(name)) return;
-
 	// We only care about stuff in the header file of the current translation unit source file.
 	auto &sourceManager = compilerInstance_.getSourceManager();
 	auto sourceLocation = tagDecl->getSourceRange().getBegin();
@@ -113,6 +106,9 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 		auto className = QString::fromStdString(classDecl->getNameAsString());
 		if (namespaceName == outData_.includePrefix_ && className == currentClassName_)
 		{
+			QStringList bases = baseClasses(classDecl);
+			if (!allowedBases_.contains(bases[0])) return; // We only consider classes which have a base that we allow.
+
 			ClassData cData(className);
 			cData.qualifiedName_ = QString("%1::%2").arg(namespaceName, className);
 			for (auto base : classDecl->bases())
@@ -207,4 +203,16 @@ ClassAttribute EnvisionAstConsumer::attribute(const QString& attributeName, cons
 	}
 	QString setter = QString("&%1::%2").arg(qualifiedClassName, attributeSetterName);
 	return {attributeName, getter, setter};
+}
+
+QStringList EnvisionAstConsumer::baseClasses(clang::CXXRecordDecl* classDecl)
+{
+	QStringList result {};
+	for (auto base : classDecl->bases())
+	{
+		result << baseClasses(base.getType()->getAsCXXRecordDecl());
+	}
+	result << QString::fromStdString(classDecl->getQualifiedNameAsString());
+	result.removeAll("Core::Reflect");
+	return result;
 }
