@@ -123,9 +123,22 @@ void Merge::initializeComponents()
 																				"TestConflictType",
 																				"TestListType",
 																				"TestUnorderedType",
-																				"ListElement"
+																				"ListElement",
+																				"project",
+																				"package",
+																				"class",
+																				"fieldList",
+																				"methodList",
+																				"field",
+																				"method"
 																			});
-	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{"TestListType", "TestNoConflictList"});
+	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{
+																		  "TestListType",
+																		  "TestNoConflictList",
+																		  "project",
+																		  "package",
+																		  "fieldList",
+																		  "methodList"});
 	QSet<QString> unorderedTypes = QSet<QString>::fromList(QList<QString>{"TestUnorderedType"});
 
 	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(

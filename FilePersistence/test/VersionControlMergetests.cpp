@@ -112,6 +112,7 @@ TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	auto tree = merge->mergedTree();
+	/*
 	merge->commit(sig, sig, "This is the result of merge test \"" + this->getName() + "\"");
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000506}")));
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000001507}")));
@@ -124,7 +125,22 @@ TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
 	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000212}")));
 	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000202}")));
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000204}")));
+	*/
+	CHECK_CONDITION(merge->hasConflicts());
+	cleanup();
+}
 
+TEST(FilePersistencePlugin, EvalClassMove)
+{
+	QString command = "tar -xf Eval_ClassMove.tar -C projects";
+	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
+	GitRepository repo("projects/TestMerge");
+	auto merge = repo.merge("dev");
+	CHECK_CONDITION(!merge->hasConflicts());
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	merge->commit(sig, sig, "Merged master and dev");
 	cleanup();
 }
 
