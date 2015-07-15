@@ -69,6 +69,9 @@ void EnvisionAstConsumer::HandleTagDeclDefinition(clang::TagDecl* tagDecl)
 
 void EnvisionAstConsumer::HandleEnumDecl(clang::EnumDecl* enumDecl)
 {
+	// Ignore private enums:
+	if (enumDecl->getAccess() == clang::AccessSpecifier::AS_private) return;
+
 	QString enumName = QString::fromStdString(enumDecl->getNameAsString());
 	QString fullEnumName = enumName;
 	auto context = enumDecl->getDeclContext();
@@ -152,6 +155,9 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			// check if we have some more attributes which don't have an attribute macro:
 			for (auto method : classDecl->methods())
 			{
+				// Ignore private methods:
+				if (method->getAccess() == clang::AccessSpecifier::AS_private) continue;
+
 				QString methodName = QString::fromStdString(method->getNameAsString());
 				if (seenMethods.contains(methodName)) continue;
 
