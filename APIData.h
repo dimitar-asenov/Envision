@@ -62,6 +62,7 @@ struct ClassDataNode;
 struct APIData
 {
 		QString includePrefix_;
+		QString namespaceName_;
 		QStringList includePaths_;
 
 		void addIncludeFile(QString filePath);

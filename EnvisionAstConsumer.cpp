@@ -104,7 +104,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 		auto namespaceDecl = llvm::dyn_cast<clang::NamespaceDecl>(context);
 		auto namespaceName = QString::fromStdString(namespaceDecl->getNameAsString());
 		auto className = QString::fromStdString(classDecl->getNameAsString());
-		if (namespaceName == outData_.includePrefix_ && className == currentClassName_)
+		if (namespaceName == outData_.namespaceName_ && className == currentClassName_)
 		{
 			QStringList bases = baseClasses(classDecl);
 			if (!allowedBases_.contains(bases[0])) return; // We only consider classes which have a base that we allow.

@@ -37,7 +37,13 @@
 class GenTool
 {
 	public:
+		GenTool();
 		void run();
+
+		/**
+		 * Prepares importing a project which is structured in subdirectories.
+		 */
+		void setSubDirPath(const QString& path);
 
 		/**
 		 * Prepares everything for the project in \a sourcePath to get imported
@@ -66,5 +72,7 @@ class GenTool
 		QStringList projects_;
 		QHash<QString, std::shared_ptr<std::vector<std::string>>> sourcesMap_;
 		QHash<QString, std::shared_ptr<clang::tooling::CompilationDatabase>> compilationDbMap_;
+
+		QHash<QString, QString> pathToNamespaceMap_;
 };
 

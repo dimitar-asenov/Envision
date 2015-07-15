@@ -52,6 +52,12 @@ class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 		APIData& outData_;
 };
 
+GenTool::GenTool()
+{
+	pathToNamespaceMap_.insert("OOModel", "OOModel");
+	pathToNamespaceMap_.insert("ModelBase", "Model");
+}
+
 void GenTool::run()
 {
 	APIData api;
@@ -59,11 +65,20 @@ void GenTool::run()
 	for (auto project : projects_)
 	{
 		api.includePrefix_ = project.split(QDir::separator(), QString::SplitBehavior::SkipEmptyParts).last();
-		qDebug() << "Start processing project :" << project;
-		auto tool = std::make_unique<clang::tooling::ClangTool>
-				(*compilationDbMap_.value(project), *sourcesMap_.value(project));
-		auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>(api);
-		tool->run(frontendActionFactory.get());
+		auto it = pathToNamespaceMap_.find(api.includePrefix_);
+		if (it != pathToNamespaceMap_.end())
+		{
+			api.namespaceName_ = it.value();
+			qDebug() << "Start processing project :" << project;
+			auto tool = std::make_unique<clang::tooling::ClangTool>
+					(*compilationDbMap_.value(project), *sourcesMap_.value(project));
+			auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>(api);
+			tool->run(frontendActionFactory.get());
+		}
+		else
+		{
+			qWarning() << "Ignored:" << project << "Because it is not whitelisted";
+		}
 	}
 
 	// Create out file
@@ -73,6 +88,12 @@ void GenTool::run()
 	APIPrinter printer(stream, api);
 	printer.print();
 	file.close();
+}
+
+void GenTool::setSubDirPath(const QString& path)
+{
+	QDirIterator dirIterator(path, QDir::Dirs | QDir::NoDot | QDir::NoDotDot);
+	while (dirIterator.hasNext()) initPath(dirIterator.next());
 }
 
 void GenTool::initPath(const QString& sourcePath)

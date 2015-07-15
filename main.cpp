@@ -7,7 +7,7 @@
 int main()
 {
 	GenTool t;
-	t.initPath("/home/luke/Playground/Envision/OOModel/");
+	t.setSubDirPath("/home/luke/Playground/Envision/");
 	t.run();
 	qDebug() << "Done!";
 	return 0;
