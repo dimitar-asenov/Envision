@@ -39,10 +39,10 @@ QString TypeUtilities::nestedNameSpecifierToString(const clang::NestedNameSpecif
 			translated = QString(nestedName->getAsIdentifier()->getNameStart());
 			break;
 		case clang::NestedNameSpecifier::Namespace:
-			translated = QString::fromStdString(nestedName->getAsNamespace()->getNameAsString());
+			translated = QString::fromStdString(nestedName->getAsNamespace()->getQualifiedNameAsString());
 			break;
 		case clang::NestedNameSpecifier::NamespaceAlias:
-			translated = QString::fromStdString(nestedName->getAsNamespaceAlias()->getNameAsString());
+			translated = QString::fromStdString(nestedName->getAsNamespaceAlias()->getQualifiedNameAsString());
 			break;
 		case clang::NestedNameSpecifier::TypeSpec:
 			// TODO: handle the case where this cast is not a reference
@@ -78,8 +78,6 @@ QString TypeUtilities::nestedNameSpecifierToString(const clang::NestedNameSpecif
 			Q_ASSERT(false);
 			break;
 	}
-	if (auto prefix = nestedName->getPrefix())
-		translated.prepend(nestedNameSpecifierToString(prefix));
 	return translated;
 }
 
@@ -92,7 +90,7 @@ QString TypeUtilities::templateArgToString(const clang::TemplateArgument& templa
 		case clang::TemplateArgument::ArgKind::Type:
 			return typePtrToString(templateArg.getAsType().getTypePtr());
 		case clang::TemplateArgument::ArgKind::Declaration:
-			return QString::fromStdString(templateArg.getAsDecl()->getNameAsString());
+			return QString::fromStdString(templateArg.getAsDecl()->getQualifiedNameAsString());
 		case clang::TemplateArgument::ArgKind::NullPtr:
 			return {}; //new OOModel::NullLiteral();
 		case clang::TemplateArgument::ArgKind::Integral:
@@ -122,23 +120,17 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 {
 	if (auto recordType = llvm::dyn_cast<clang::RecordType>(type))
 	{
-		QString name = QString::fromStdString(recordType->getDecl()->getNameAsString());
-		if (auto qualifier = recordType->getDecl()->getQualifier())
-			name.prepend("::").prepend(nestedNameSpecifierToString(qualifier));
-		return name;
+		return QString::fromStdString(recordType->getDecl()->getQualifiedNameAsString());
 	}
 	else if (auto elaboratedType = llvm::dyn_cast<clang::ElaboratedType>(type))
 	{
 		// TODO: this might also have a keyword in front (like e.g. class, typename)
-		QString name = typePtrToString(elaboratedType->getNamedType().getTypePtr());
-		if (auto qualifier = elaboratedType->getQualifier())
-			name.prepend("::").prepend(nestedNameSpecifierToString(qualifier));
-		return name;
+		return typePtrToString(elaboratedType->getNamedType().getTypePtr());
 	}
 	else if (auto templateSpecialization = llvm::dyn_cast<clang::TemplateSpecializationType>(type))
 	{
 		QString baseName = QString::fromStdString(
-					templateSpecialization->getTemplateName().getAsTemplateDecl()->getNameAsString());
+					templateSpecialization->getTemplateName().getAsTemplateDecl()->getQualifiedNameAsString());
 		if (baseName == "Super")
 		{
 			// We "unwrap" the Super baseclass
@@ -153,10 +145,7 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 		else
 		{
 			QStringList stringifiedTemplateArgs;
-			for (auto arg : *templateSpecialization)
-			{
-				stringifiedTemplateArgs << templateArgToString(arg);
-			}
+			for (auto arg : *templateSpecialization) stringifiedTemplateArgs << templateArgToString(arg);
 			return QString("%1<%2>").arg(baseName, stringifiedTemplateArgs.join(", "));
 		}
 	} else qDebug() << "Other type" << type->getTypeClassName();
