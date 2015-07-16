@@ -54,11 +54,6 @@ void EnvisionAstConsumer::Initialize(clang::ASTContext&)
 
 void EnvisionAstConsumer::HandleTagDeclDefinition(clang::TagDecl* tagDecl)
 {
-	// We only care about stuff in the header file of the current translation unit source file.
-	auto &sourceManager = compilerInstance_.getSourceManager();
-	auto sourceLocation = tagDecl->getSourceRange().getBegin();
-	if (sourceManager.getFilename(sourceLocation) != currentFile_) return;
-
 	if (auto classDecl = llvm::dyn_cast<clang::CXXRecordDecl>(tagDecl))
 		HandleClassDecl(classDecl);
 	else if (auto enumDecl = llvm::dyn_cast<clang::EnumDecl>(tagDecl))
@@ -153,8 +148,13 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 					}
 				}
 			}
-			// Add enums
-			cData.enums_ << processedEnums_;
+			// Add enums which are declared in this class:
+			for (auto pEnum : processedEnums_)
+			{
+				QStringList names = pEnum.qualifiedName_.split("::");
+				if (names[names.size()-2] == className)
+					cData.enums_ << pEnum;
+			}
 			processedEnums_.clear();
 			// Add class to api structure
 			outData_.addIncludeFile(QString::fromStdString(currentFile_));
