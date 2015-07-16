@@ -33,7 +33,7 @@
 
 struct EnumData
 {
-		EnumData(QString name) : enumName_{name} {}
+		EnumData(QString name, QString qualifiedName) : enumName_{name}, qualifiedName_{qualifiedName} {}
 		QString enumName_;
 		QString qualifiedName_;
 		QList<QPair<QString, QString>> values_;
@@ -49,7 +49,7 @@ struct ClassAttribute
 struct ClassData
 {
 		ClassData() = default;
-		ClassData(QString name) : className_{name} {}
+		ClassData(QString name, QString qualifiedName) : className_{name}, qualifiedName_{qualifiedName} {}
 		QString className_;
 		QString qualifiedName_;
 		QStringList baseClasses_;

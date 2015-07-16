@@ -73,22 +73,8 @@ void EnvisionAstConsumer::HandleEnumDecl(clang::EnumDecl* enumDecl)
 	if (enumDecl->getAccess() == clang::AccessSpecifier::AS_private) return;
 
 	QString enumName = QString::fromStdString(enumDecl->getNameAsString());
-	QString fullEnumName = enumName;
-	auto context = enumDecl->getDeclContext();
-	if (auto recordDecl = llvm::dyn_cast<clang::CXXRecordDecl>(context))
-	{
-		QString recordName = QString::fromStdString(recordDecl->getNameAsString());
-		fullEnumName.prepend("::").prepend(recordName);
-
-		auto recordContext = recordDecl->getDeclContext();
-		if (auto namespaceDecl = llvm::dyn_cast<clang::NamespaceDecl>(recordContext))
-		{
-			QString namespaceName = QString::fromStdString(namespaceDecl->getNameAsString());
-			fullEnumName.prepend("::").prepend(namespaceName);
-		}
-	}
-	EnumData eData(enumName);
-	eData.qualifiedName_ = fullEnumName;
+	QString qualifiedName = QString::fromStdString(enumDecl->getQualifiedNameAsString());;
+	EnumData eData{enumName, qualifiedName};
 
 	for (auto enumConstant : enumDecl->enumerators())
 	{
@@ -112,19 +98,11 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			QStringList bases = baseClasses(classDecl);
 			if (!allowedBases_.contains(bases[0])) return; // We only consider classes which have a base that we allow.
 
-			ClassData cData(className);
-			cData.qualifiedName_ = QString("%1::%2").arg(namespaceName, className);
+			ClassData cData{className, QString::fromStdString(classDecl->getQualifiedNameAsString())};
+
 			for (auto base : classDecl->bases())
-			{
-				auto baseString = TypeUtilities::typePtrToString(base.getType().getTypePtr());
-				if (!baseString.isEmpty())
-				{
-					if (!baseString.contains("::"))
-						cData.baseClasses_ << QString("%1::%2").arg(namespaceName, baseString);
-					else
-						cData.baseClasses_ << baseString;
-				}
-			}
+				cData.baseClasses_ << TypeUtilities::typePtrToString(base.getType().getTypePtr());
+
 			QSet<QString> seenMethods;
 			QSet<QString> possibleAttributeSetters;
 			for (auto method : classDecl->methods())

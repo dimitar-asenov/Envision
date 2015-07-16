@@ -149,5 +149,5 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 			return QString("%1<%2>").arg(baseName, stringifiedTemplateArgs.join(", "));
 		}
 	} else qDebug() << "Other type" << type->getTypeClassName();
-	return {};
+	Q_ASSERT(false);
 }
