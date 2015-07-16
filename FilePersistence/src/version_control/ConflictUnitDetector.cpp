@@ -187,7 +187,9 @@ void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<Chang
 	}
 
 	// Handle label dependencies
-	if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
+	if (change->type() == ChangeType::Deletion ||
+		 change->type() == ChangeType::Move ||
+		 change->hasFlags(ChangeDescription::Label))
 	{
 		auto parentId = change->nodeA()->parentId();
 		auto parentChange = cdg.changes().value(parentId); // must exist because structFlag

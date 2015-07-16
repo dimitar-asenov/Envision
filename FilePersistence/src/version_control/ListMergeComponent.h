@@ -106,21 +106,6 @@ class ListMergeComponent : public ConflictPipelineComponent
 											  const QList<Model::NodeIdType>& origin,
 											  const Chunk* chunk);
 
-		/**
-		 * Takes the merged version of a list and generates all changes needed to bring the base version to the merged
-		 * version. New changes are created in \a cdgA.
-		 */
-		LinkedChangesTransition translateListIntoChanges(
-				std::shared_ptr<GenericTree> treeA,
-				std::shared_ptr<GenericTree> treeB,
-				std::shared_ptr<GenericTree> treeBase,
-				Model::NodeIdType containerId,
-				QList<Model::NodeIdType>& mergedList,
-				ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-				LinkedChangesSet& linkedChangesSet,
-				QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
-				ConflictPairs& conflictPairs);
-
 		void markAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 										ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
 										ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB);

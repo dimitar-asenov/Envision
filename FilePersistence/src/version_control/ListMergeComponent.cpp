@@ -69,38 +69,113 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 
 	for (auto preparedListIt = preparedLists_.begin(); preparedListIt != preparedLists_.end(); ++preparedListIt)
 	{
+		// mergedList is only used to check stuff
 		QList<Model::NodeIdType> mergedList;
+		int index = 0; // this is the index of the next element to be inserted
 		bool allResolved = true;
 		for (auto chunk : preparedListIt.value())
 		{
-			if (chunk->noConflicts_)
+			if (chunk->stable_)
+			{
+				Q_ASSERT(chunk->noConflicts_);
+				mergedList.append(chunk->spanBase_);
+				index += chunk->spanBase_.size();
+			}
+			else if (chunk->noConflicts_)
 			{
 				mergedList.append(chunk->spanMerged_);
-				// find deletions
-				for (auto elem : chunk->spanBase_)
+
+				// modify the CDGs and mark the relevant conflicts as resolved
+
+				// find deletions first
+				for (auto elemId : chunk->spanBase_)
 				{
-					if (!chunk->spanMerged_.contains(elem))
+					if (!chunk->spanMerged_.contains(elemId))
 					{
-						auto changeA = cdgA.changes().value(elem);
-						auto changeB = cdgB.changes().value(elem);
+						auto changeA = cdgA.changes().value(elemId);
+						auto changeB = cdgB.changes().value(elemId);
 						if (changeA && changeA->type() == ChangeType::Deletion)
 							markAsResolved(conflictingChanges, conflictPairs, changeA, cdgA, cdgB);
 						else if (changeB && changeB->type() == ChangeType::Deletion)
 							markAsResolved(conflictingChanges, conflictPairs, changeB, cdgB, cdgA);
 					}
 				}
+
+				for (auto elemId : chunk->spanMerged_)
+				{
+					auto changeA = cdgA.changes().value(elemId);
+					auto changeB = cdgB.changes().value(elemId);
+					auto updateChange = [&](
+							std::shared_ptr<ChangeDescription>& change,
+							ChangeDependencyGraph& cdgA,
+							ChangeDependencyGraph& cdgB)
+					{
+						auto node = change->nodeB();
+						node->setLabel(QString::number(index++));
+						if (node->parentId() != preparedListIt.key())
+						{
+							node->detachFromParent();
+							node->setParentId(preparedListIt.key());
+							node->attachToParent();
+						}
+						change->computeFlags();
+						markAsResolved(conflictingChanges, conflictPairs, change, cdgA, cdgB);
+					};
+
+					if (changeA && !changeA->onlyLabelChange())
+					{
+						// branch A changes node beyond label
+						if (changeB) Q_ASSERT(changeB->onlyLabelChange());
+						updateChange(changeA, cdgA, cdgB);
+					}
+					else if (changeB && !changeB->onlyLabelChange())
+					{
+						// branch B changes node beyond label
+						if (changeA) Q_ASSERT(changeA->onlyLabelChange());
+						updateChange(changeB, cdgB, cdgA);
+					}
+					else if (changeA)
+						updateChange(changeA, cdgA, cdgB);
+					else if (changeB)
+						updateChange(changeB, cdgB, cdgA);
+					else
+					{
+						// no branch changes node beyond label so we must construct a new change
+						auto oldNode = treeBase->find(elemId);
+						auto newNode = treeA->find(elemId);
+						Q_ASSERT(oldNode);
+						Q_ASSERT(newNode);
+						auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
+						updateChange(newChange, cdgA, cdgB);
+						cdgA.insert(newChange);
+						cdgA.recordDependencies(newChange, true);
+						cdgA.recordDependencies(newChange, false);
+					}
+				}
+
 			}
 			else
+			{
 				allResolved = false;
+				mergedList.append(chunk->spanBase_);
+				index += chunk->spanBase_.size();
+			}
 		}
 
 		// assert that each element occurs only once in the merged list.
-		for (auto elemId : mergedList) Q_ASSERT(mergedList.indexOf(elemId) == mergedList.lastIndexOf(elemId));
+		for (int elemIdx = 0; elemIdx < mergedList.size(); ++elemIdx)
+		{
+			auto elemId = mergedList[elemIdx];
+			auto changeA = cdgA.changes().value(elemId);
+			auto changeB = cdgB.changes().value(elemId);
+			if (changeA && !conflictingChanges.contains(changeA))
+				Q_ASSERT(changeA->nodeB()->label().toInt() == elemIdx);
+			else if (changeB && !conflictingChanges.contains(changeB))
+				Q_ASSERT(changeB->nodeB()->label().toInt() == elemIdx);
+			else
+				Q_ASSERT(treeBase->find(elemId)->label().toInt() == elemIdx);
+		}
 
-		// TODO update transition instead of overwrite
-		transition = translateListIntoChanges(treeA, treeB, treeBase, preparedListIt.key(),
-														  mergedList, cdgA, cdgB, linkedChangesSet,
-														  conflictingChanges, conflictPairs);
 		if (allResolved)
 		{
 			auto containerChange = cdgA.changes().value(preparedListIt.key());
@@ -108,6 +183,7 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 		}
 	}
 
+	// TODO implement transitions for this component
 	return transition;
 }
 
@@ -694,68 +770,6 @@ void ListMergeComponent::markAsResolved(QSet<std::shared_ptr<ChangeDescription> 
 		conflictingChanges.remove(conflictingSameId);
 		cdgB.remove(conflictingSameId);
 	}
-}
-
-LinkedChangesTransition ListMergeComponent::translateListIntoChanges(
-		std::shared_ptr<GenericTree> treeA, std::shared_ptr<GenericTree>,
-		std::shared_ptr<GenericTree> treeBase, Model::NodeIdType containerId,
-		QList<Model::NodeIdType>& mergedList, ChangeDependencyGraph& cdgA,
-		ChangeDependencyGraph& cdgB, LinkedChangesSet& linkedChangesSet,
-		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
-		ConflictPairs& conflictPairs)
-{
-	for (auto elemId : mergedList)
-	{
-		auto changeA = cdgA.changes().value(elemId);
-		auto changeB = cdgB.changes().value(elemId);
-		auto updateChange = [&](
-				std::shared_ptr<ChangeDescription>& change,
-				ChangeDependencyGraph& cdgA,
-				ChangeDependencyGraph& cdgB)
-		{
-			auto node = change->nodeB();
-			node->setLabel(QString::number(mergedList.indexOf(elemId)));
-			if (node->parentId() != containerId)
-			{
-				node->detachFromParent();
-				node->setParentId(containerId);
-				node->attachToParent();
-			}
-			change->computeFlags();
-			markAsResolved(conflictingChanges, conflictPairs, change, cdgA, cdgB);
-		};
-
-		if (changeA && !changeA->onlyLabelChange())
-		{
-			// branch A changes node beyond label
-			if (changeB) Q_ASSERT(changeB->onlyLabelChange());
-			updateChange(changeA, cdgA, cdgB);
-		}
-		else if (changeB && !changeB->onlyLabelChange())
-		{
-			// branch B changes node beyond label
-			if (changeA) Q_ASSERT(changeA->onlyLabelChange());
-			updateChange(changeB, cdgB, cdgA);
-		}
-		else if (changeA)
-			updateChange(changeA, cdgA, cdgB);
-		else if (changeB)
-			updateChange(changeB, cdgB, cdgA);
-		else
-		{
-			// no branch changes node beyond label so we must construct a new change
-			auto oldNode = treeBase->find(elemId);
-			auto newNode = treeA->find(elemId);
-			Q_ASSERT(oldNode);
-			Q_ASSERT(newNode);
-			auto newChange = std::make_shared<ChangeDescription>(oldNode, newNode);
-			updateChange(newChange, cdgA, cdgB);
-			cdgA.insert(newChange);
-			cdgA.recordDependencies(newChange, true);
-			cdgA.recordDependencies(newChange, false);
-		}
-	}
-	return LinkedChangesTransition(linkedChangesSet); // TODO fill properly
 }
 
 } /* namespace FilePersistence */
