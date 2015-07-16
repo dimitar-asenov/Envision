@@ -29,6 +29,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QStringList>
+#include <QtCore/QRegularExpression>
 
 #include <clang/AST/DeclCXX.h>
 
@@ -185,6 +186,7 @@ ClassAttribute EnvisionAstConsumer::attribute(const QString& attributeName, cons
 	else if (returnTypePtr->isPointerType())
 	{
 		getter = QString("make_function(%1, return_internal_reference<>())").arg(getter);
+		checkForTypedList(returnTypePtr);
 	}
 	QString setter = QString("&%1::%2").arg(qualifiedClassName, attributeSetterName);
 	return {attributeName, getter, setter};
@@ -200,4 +202,18 @@ QStringList EnvisionAstConsumer::baseClasses(clang::CXXRecordDecl* classDecl)
 	result << QString::fromStdString(classDecl->getQualifiedNameAsString());
 	result.removeAll("Core::Reflect");
 	return result;
+}
+
+void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)
+{
+	QString fullName = TypeUtilities::typePtrToString(type);
+	if (fullName.contains("TypedList"))
+	{
+		static QRegularExpression typedListMatcher("([^<]+)<([\\w<>:]+)>");
+		auto match = typedListMatcher.match(fullName);
+		Q_ASSERT(match.hasMatch());
+		QString itemType = match.captured(2);
+		qDebug() << itemType;
+		outData_.insertTypeList(itemType);
+	}
 }

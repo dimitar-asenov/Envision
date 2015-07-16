@@ -47,6 +47,7 @@ class APIPrinter
 		void printEnumsOfClass(const ClassData& cData);
 		void printEnum(const EnumData& eData);
 		void printAttribute(const ClassAttribute& attr);
+		void printTypedListWrappers();
 
 		void printPossiblyLongString(const QString& data, int additionalLength = 0);
 

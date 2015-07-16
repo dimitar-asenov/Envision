@@ -33,6 +33,7 @@ void APIPrinter::print()
 	out_ << "using namespace boost::python;" << endl << endl;
 	out_ << "BOOST_PYTHON_MODULE(AstApi) {" << endl << endl;
 	printClasses();
+	printTypedListWrappers();
 	out_ << endl << "}" << endl;
 	out_ << endl << "} /* namespace InformationScripting */" << endl;
 }
@@ -130,6 +131,27 @@ void APIPrinter::printAttribute(const ClassAttribute& attr)
 	out_ << endl;
 	out_ << indent_ << attr.setterQualified_ << ")";
 	unIndent();
+}
+
+void APIPrinter::printTypedListWrappers()
+{
+	auto typedLists = data_.typedLists();
+	if (typedLists.empty()) return;
+
+	out_ << "{" << endl;
+	indent();
+	for (auto it = typedLists.begin(); it != typedLists.end(); ++it)
+	{
+		out_ << indent_ << "using " << it.value() << " = " << it.key() << ";" << endl;
+		out_ << indent_ << "class_<" << it.key() << ">" << "(\"" << it.value() << "\")" << endl;
+		indent();
+		out_ << indent_ << ".def(\"__len__\", &" << it.value() << "::size)" << endl;
+		out_ << indent_ << ".def(\"__iter__\", iterator<" << it.value() << ", return_internal_reference<>>())";
+		out_ << ";" << endl << endl;
+		unIndent();
+	}
+	unIndent();
+	out_ << "}" << endl;
 }
 
 void APIPrinter::printPossiblyLongString(const QString& data, int additionalLength)

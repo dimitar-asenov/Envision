@@ -110,6 +110,14 @@ void APIData::insertClassData(ClassData data, QStringList classHierarchy)
 	insertNode->setData(data);
 }
 
+void APIData::insertTypeList(QString itemType)
+{
+	QString unqualified = itemType;
+	if (unqualified.contains("::")) unqualified = unqualified.split("::").last();
+	unqualified.append("s"); // Plural
+	typedLists_.insert(QString("Model::TypedList<%1>").arg(itemType), unqualified);
+}
+
 QList<ClassData> APIData::classes() const
 {
 	QList<ClassData> result;
@@ -125,4 +133,9 @@ QList<ClassData> APIData::classes() const
 			q.push(child);
 	}
 	return result;
+}
+
+QHash<QString, QString> APIData::typedLists() const
+{
+	return typedLists_;
 }

@@ -70,7 +70,13 @@ struct APIData
 
 		void insertClassData(ClassData data, QStringList classHierarchy);
 
+		void insertTypeList(QString itemType);
+
 		QList<ClassData> classes() const;
+
+		QHash<QString, QString> typedLists() const;
 	private:
 		ClassDataNode* classRoot_{};
+
+		QHash<QString, QString> typedLists_;
 };

@@ -148,6 +148,10 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 			for (auto arg : *templateSpecialization) stringifiedTemplateArgs << templateArgToString(arg);
 			return QString("%1<%2>").arg(baseName, stringifiedTemplateArgs.join(", "));
 		}
+	}
+	else if (auto ptrType = llvm::dyn_cast<clang::PointerType>(type))
+	{
+		return typePtrToString(ptrType->getPointeeType().getTypePtr());
 	} else qDebug() << "Other type" << type->getTypeClassName();
 	Q_ASSERT(false);
 }

@@ -38,6 +38,7 @@
 
 namespace clang {
 	class EnumDecl;
+	class Type;
 }
 
 class EnvisionAstConsumer : public clang::ASTConsumer
@@ -70,4 +71,6 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 								const QString& qualifiedClassName, const clang::CXXMethodDecl* method);
 
 		QStringList baseClasses(clang::CXXRecordDecl* classDecl);
+
+		void checkForTypedList(const clang::Type* type);
 };
