@@ -62,6 +62,32 @@ std::shared_ptr<GenericTree> Merge::mergedTree()
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
+	// TODO replace with correct types
+	conflictTypes_ = QSet<QString>::fromList(QList<QString>{"TestConflictType",
+																			  "TestListType",
+																			  "TestUnorderedType",
+																			  "ListElement",
+																			  "project",
+																			  "package",
+																			  "class",
+																			  "fieldList",
+																			  "methodList",
+																			  "field",
+																			  "method",
+																			  "Method",
+																			  "loop",
+																			  "TypedListOfMethod"});
+	listTypes_ = QSet<QString>::fromList(QList<QString>{"TestListType",
+																		 "TestNoConflictList",
+																		 "project",
+																		 "package",
+																		 "fieldList",
+																		 "methodList",
+																		 "method"});
+	unorderedTypes_ = QSet<QString>::fromList(QList<QString>{"TestUnorderedType",
+																				"TypedListOfMethod"});
+
+
 	headCommitId_ = repository_->getSHA1("HEAD");
 	revisionCommitId_ = repository_->getSHA1(revision);
 	baseCommitId_ = repository_->findMergeBase("HEAD", revision);
@@ -118,37 +144,10 @@ Merge::~Merge()
 
 void Merge::initializeComponents()
 {
-	// TODO replace with correct types
-	QSet<QString> conflictTypes = QSet<QString>::fromList(QList<QString>{
-																				"TestConflictType",
-																				"TestListType",
-																				"TestUnorderedType",
-																				"ListElement",
-																				"project",
-																				"package",
-																				"class",
-																				"fieldList",
-																				"methodList",
-																				"field",
-																				"method",
-																				"Method",
-																			"loop",
-																			"TypedListOfMethod"});
-	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{
-																		  "TestListType",
-																		  "TestNoConflictList",
-																		  "project",
-																		  "package",
-																		  "fieldList",
-																		  "methodList",
-																		  "method"});
-	QSet<QString> unorderedTypes = QSet<QString>::fromList(QList<QString>{"TestUnorderedType",
-																			 "TypedListOfMethod"});
-
 	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(
-				new ConflictUnitDetector(conflictTypes, USE_LINKED_SETS));
+				new ConflictUnitDetector(conflictTypes_, USE_LINKED_SETS));
 
-	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes, listTypes, unorderedTypes);
+	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes_, listTypes_, unorderedTypes_);
 	conflictPipeline_.append(listMergeComponent);
 }
 
@@ -200,19 +199,55 @@ void Merge::performTrueMerge()
 
 	stage_ = Stage::AutoMerged;
 
+	treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
+	repository_->loadGenericTree(treeMerged_, baseCommitId_);
+	treeMerged_->buildLookupHash();
+	applyChangesToTree(treeMerged_, cdgA);
+	applyChangesToTree(treeMerged_, cdgB);
+
 	if (conflictingChanges_.isEmpty())
 	{
-		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
-		repository_->loadGenericTree(treeMerged_, baseCommitId_);
-		treeMerged_->buildLookupHash();
-		applyChangesToTree(treeMerged_, cdgA);
-		applyChangesToTree(treeMerged_, cdgB);
+		// remove holes in lists
+		QSet<Model::NodeIdType> checkedLists;
+		for (auto changeIt = cdgA.changes().constBegin(); changeIt != cdgA.changes().constEnd(); ++changeIt)
+		{
+			const auto& change = changeIt.value();
+			if (!checkedLists.contains(change->nodeId()) &&
+				 (
+					 (change->nodeA() &&
+					  (listTypes_.contains(change->nodeA()->type()) ||
+						unorderedTypes_.contains(change->nodeA()->type()))
+					  )
+					 ||
+					 (change->nodeA() &&
+						(listTypes_.contains(change->nodeA()->type()) ||
+						 unorderedTypes_.contains(change->nodeA()->type()))
+					  )
+				  )
+				 )
+			{
+				// list is a list container that has changed
+				auto list = treeMerged_->find(change->nodeId());
+				int gapSize = 0;
+				for (int curIdx = 0; curIdx < list->children().size(); ++curIdx)
+				{
+					GenericNode* elem;
+					while (!(elem = list->child(QString::number(curIdx + gapSize))))
+						++gapSize;
+					elem->setLabel(QString::number(curIdx));
+				}
+				checkedLists.insert(change->nodeId());
+			}
+		}
+	}
 
-		stage_ = Stage::BuiltMergedTree;
+	stage_ = Stage::BuiltMergedTree;
 
-		SimpleTextFileStore::saveGenericTree(treeMerged_, repository_->projectName(),
-														 repository_->workdirPath(), {"Project", "Module"});
+	SimpleTextFileStore::saveGenericTree(treeMerged_, repository_->projectName(),
+													 repository_->workdirPath(), {"Project", "Module"});
 
+	if (conflictingChanges_.isEmpty())
+	{
 		stage_ = Stage::WroteToWorkDir;
 
 		repository_->writeWorkdirToIndex();
@@ -221,16 +256,6 @@ void Merge::performTrueMerge()
 	}
 	else
 	{
-		treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
-		repository_->loadGenericTree(treeMerged_, baseCommitId_);
-		treeMerged_->buildLookupHash();
-		applyChangesToTree(treeMerged_, cdgA);
-		applyChangesToTree(treeMerged_, cdgB);
-
-		stage_ = Stage::BuiltMergedTree;
-
-		SimpleTextFileStore::saveGenericTree(treeMerged_, repository_->projectName(),
-														 repository_->workdirPath(), {"Project", "Module"});
 		// TODO prepare for manual merge
 		// TODO write conflicts to file maybe.
 	}

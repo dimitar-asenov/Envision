@@ -118,6 +118,11 @@ class FILEPERSISTENCE_API Merge
 		 * \a change1 is mapped to \a change2 exactly if \a change1 and \a change2 cannot both be applied safely.
 		 */
 		ConflictPairs conflictPairs_;
+
+
+		QSet<QString> conflictTypes_;
+		QSet<QString> listTypes_;
+		QSet<QString> unorderedTypes_;
 };
 
 inline bool Merge::hasConflicts() const { return !conflictingChanges_.isEmpty(); }
