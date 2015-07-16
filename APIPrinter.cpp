@@ -125,7 +125,7 @@ void APIPrinter::printEnum(const EnumData& eData)
 
 void APIPrinter::printAttribute(const ClassAttribute& attr)
 {
-	out_ << indent_ << ".add_property(\"" << attr.name_ << "\", " << endl;
+	out_ << indent_ << ".add_property(\"" << attr.name_ << "\"," << endl;
 	indent();
 	printPossiblyLongString(attr.getterQualified_ + ",");
 	out_ << endl;
