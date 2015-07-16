@@ -158,6 +158,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			processedEnums_.clear();
 			// Add class to api structure
 			outData_.addIncludeFile(QString::fromStdString(currentFile_));
+			cData.abstract_ = classDecl->isAbstract();
 			outData_.insertClassData(cData, bases);
 		}
 	}

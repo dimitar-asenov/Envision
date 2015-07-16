@@ -55,6 +55,7 @@ struct ClassData
 		QStringList baseClasses_;
 		QList<ClassAttribute> attributes_;
 		QList<EnumData> enums_;
+		bool abstract_{false};
 };
 
 struct ClassDataNode;

@@ -57,12 +57,18 @@ void APIPrinter::printClass(const ClassData& cData)
 	QString classString;
 	if (cData.enums_.size()) // We only need a scope variable if we have enums
 		classString = QString("scope %1scope = ").arg(cData.className_);
-	classString += "class_<" + cData.qualifiedName_ + ", ";
+	classString += "class_<" + cData.qualifiedName_;
 	// print bases:
-	classString += "bases<" + cData.baseClasses_.join(", ") + ">>";
+	if (cData.baseClasses_.size())
+		classString += ", bases<" + cData.baseClasses_.join(", ") + ">";
+	else if (cData.abstract_)
+		classString += ", boost::noncopyable";
+	classString += ">";
 	// print name:
 	classString += "(\"" + cData.className_ + "\"";
 	// print constructors: // TODO
+	if (cData.abstract_) // abstract classes have no constructor
+		classString += ", no_init";
 	classString += ")";
 	printPossiblyLongString(classString);
 
