@@ -131,7 +131,9 @@ void Merge::initializeComponents()
 																				"methodList",
 																				"field",
 																				"method",
-																			"loop"});
+																				"Method",
+																			"loop",
+																			"TypedListOfMethod"});
 	QSet<QString> listTypes = QSet<QString>::fromList(QList<QString>{
 																		  "TestListType",
 																		  "TestNoConflictList",
@@ -140,7 +142,8 @@ void Merge::initializeComponents()
 																		  "fieldList",
 																		  "methodList",
 																		  "method"});
-	QSet<QString> unorderedTypes = QSet<QString>::fromList(QList<QString>{"TestUnorderedType"});
+	QSet<QString> unorderedTypes = QSet<QString>::fromList(QList<QString>{"TestUnorderedType",
+																			 "TypedListOfMethod"});
 
 	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(
 				new ConflictUnitDetector(conflictTypes, USE_LINKED_SETS));

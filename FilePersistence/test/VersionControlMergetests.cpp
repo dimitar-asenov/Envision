@@ -154,4 +154,18 @@ TEST(FilePersistencePlugin, EvalLoopFix)
 	cleanup();
 }
 
+TEST(FilePersistencePlugin, EvalMethodInsert)
+{
+	QString command = "tar -xf Eval_MethodInsert.tar -C projects";
+	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
+	GitRepository repo("projects/TestMerge");
+	auto merge = repo.merge("dev");
+	CHECK_CONDITION(!merge->hasConflicts());
+	Signature sig;
+	sig.name_ = "Chuck TESTa";
+	sig.eMail_ = "chuck@mergetest.com";
+	merge->commit(sig, sig, "Merged master and dev");
+	cleanup();
+}
+
 } /* namespace FilePersistence */
