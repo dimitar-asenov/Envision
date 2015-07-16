@@ -205,39 +205,36 @@ void Merge::performTrueMerge()
 	applyChangesToTree(treeMerged_, cdgA);
 	applyChangesToTree(treeMerged_, cdgB);
 
-	if (conflictingChanges_.isEmpty())
+	// remove holes in lists
+	QSet<Model::NodeIdType> checkedLists;
+	for (auto changeIt = cdgA.changes().constBegin(); changeIt != cdgA.changes().constEnd(); ++changeIt)
 	{
-		// remove holes in lists
-		QSet<Model::NodeIdType> checkedLists;
-		for (auto changeIt = cdgA.changes().constBegin(); changeIt != cdgA.changes().constEnd(); ++changeIt)
-		{
-			const auto& change = changeIt.value();
-			if (!checkedLists.contains(change->nodeId()) &&
-				 (
-					 (change->nodeA() &&
-					  (listTypes_.contains(change->nodeA()->type()) ||
-						unorderedTypes_.contains(change->nodeA()->type()))
-					  )
-					 ||
-					 (change->nodeA() &&
-						(listTypes_.contains(change->nodeA()->type()) ||
-						 unorderedTypes_.contains(change->nodeA()->type()))
-					  )
+		const auto& change = changeIt.value();
+		if (!checkedLists.contains(change->nodeId()) &&
+			 (
+				 (change->nodeA() &&
+				  (listTypes_.contains(change->nodeA()->type()) ||
+					unorderedTypes_.contains(change->nodeA()->type()))
 				  )
-				 )
+				 ||
+				 (change->nodeA() &&
+					(listTypes_.contains(change->nodeA()->type()) ||
+					 unorderedTypes_.contains(change->nodeA()->type()))
+				  )
+			  )
+			 )
+		{
+			// list is a list container that has changed
+			auto list = treeMerged_->find(change->nodeId());
+			int gapSize = 0;
+			for (int curIdx = 0; curIdx < list->children().size(); ++curIdx)
 			{
-				// list is a list container that has changed
-				auto list = treeMerged_->find(change->nodeId());
-				int gapSize = 0;
-				for (int curIdx = 0; curIdx < list->children().size(); ++curIdx)
-				{
-					GenericNode* elem;
-					while (!(elem = list->child(QString::number(curIdx + gapSize))))
-						++gapSize;
-					elem->setLabel(QString::number(curIdx));
-				}
-				checkedLists.insert(change->nodeId());
+				GenericNode* elem;
+				while (!(elem = list->child(QString::number(curIdx + gapSize))))
+					++gapSize;
+				elem->setLabel(QString::number(curIdx));
 			}
+			checkedLists.insert(change->nodeId());
 		}
 	}
 
