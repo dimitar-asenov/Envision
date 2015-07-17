@@ -35,6 +35,7 @@ APIPrinter::APIPrinter(QTextStream& outStream, const APIData& data) : out_{outSt
 
 void APIPrinter::print()
 {
+	printLicense();
 	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl;
 	out_ << endl;
 	printHeaders();
@@ -45,6 +46,15 @@ void APIPrinter::print()
 	printTypedListWrappers();
 	out_ << endl << "}" << endl;
 	out_ << endl << "} /* namespace InformationScripting */" << endl;
+}
+
+void APIPrinter::printLicense()
+{
+	auto licensePath = Config::instance().envisionReadPath() + "LICENSE";
+	QFile licenseFile(licensePath);
+	bool open = licenseFile.open(QIODevice::ReadOnly);
+	Q_ASSERT(open);
+	out_ << licenseFile.readAll() << endl;
 }
 
 void APIPrinter::printHeaders()

@@ -41,6 +41,7 @@ class APIPrinter
 
 		int maxLineLength_{120};
 
+		void printLicense();
 		void printHeaders();
 		void printClasses();
 		void printClass(const ClassData& cData);
