@@ -43,6 +43,10 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 																QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 																ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
 {
+	treeA_ = treeA;
+	treeB_ = treeB;
+	treeBase_ = treeBase;
+
 	LinkedChangesTransition transition(linkedChangesSet, cdgA, cdgB);
 
 	auto listsToMerge = computeListsToMerge(cdgA, cdgB, conflictingChanges, conflictPairs);
@@ -342,275 +346,134 @@ void ListMergeComponent::computeMergedChunk(Chunk* chunk,
 		valid &= insertElemsIntoChunk(chunk, chunk->spanBase_, containerId,
 												cdgB, cdgA, chunk->spanB_, chunk->spanA_, false);
 	Q_ASSERT(chunk->noConflicts_ == valid);
-	// mergedChunk->noConflicts_ = valid;
 }
 
-bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
+bool __attribute__((optimize("O0"))) ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 															 const QList<Model::NodeIdType>& spanBase,
 															 const Model::NodeIdType containerId,
-															 const ChangeDependencyGraph& cdgA,
-															 const ChangeDependencyGraph& cdgB,
-															 const QList<Model::NodeIdType>& spanA,
-															 const QList<Model::NodeIdType>& spanB,
+															 const ChangeDependencyGraph& cdgThis,
+															 const ChangeDependencyGraph& cdgOther,
+															 const QList<Model::NodeIdType>& spanThis,
+															 const QList<Model::NodeIdType>& spanOther,
 															 bool branchIsA)
 {
-	bool conflict = false;
-	for (auto elem : spanA)
+	auto elementIsStable = [](
+			const Model::NodeIdType& elem,
+			const QList<Model::NodeIdType>& listA,
+			const QList<Model::NodeIdType>& listB) -> bool
 	{
-		Position posA = findPosition(elem, spanA, chunk);
-		Position posB = spanB.contains(elem) ? findPosition(elem, spanB, chunk) : Position(false, {});
-		Position posBase = spanBase.contains(elem) ? findPosition(elem, spanBase, chunk) : Position(false, {});
+		int idxB = listB.indexOf(elem);
+		int i = 0;
+		while (listA[i] != elem)
+			if (listB.indexOf(listA[i++], idxB + 1) > 0)
+				return false;
+		if (idxB > 0)
+		{
+			++i;
+			while (i < listA.size())
+				if (listB.lastIndexOf(listA[i++], idxB - 1) > 0)
+					return false;
+		}
+		return true;
+	};
 
-		auto changeA = cdgA.changes().value(elem);
-		auto changeB = cdgB.changes().value(elem);
+	bool conflict = false;
 
-		bool elemInTreeBase = !changeA || changeA->type() != ChangeType::Insertion;
-		bool elemInListBase = !changeA || changeA->type() == ChangeType::Stationary;
-		bool elemInTreeB = elemInTreeBase && (!changeB || changeB->type() != ChangeType::Deletion);
-		bool elemInListB = (changeA && changeA->type() == ChangeType::Move) ?
-					changeB && changeB->nodeB()->parentId() == changeA->nodeB()->parentId() :
-					!changeB || changeB->type() != ChangeType::Move;
-		// If A moves, B must move to same list, otherwise B must not move.
+	for (auto elem : spanThis)
+	{
+		Position posA = findPosition(elem, spanThis, chunk);
+		Position posB = spanOther.contains(elem) ? findPosition(elem, spanOther, chunk) : Position(false, {});
 
-		bool listIsOrdered = listTypes_.contains(cdgA.changes().value(containerId)->nodeA()->type());
+		auto changeThis = cdgThis.changes().value(elem);
+		auto changeOther = cdgOther.changes().value(elem);
 
-		auto reorderedNodesByMe = branchIsA ? reorderedNodesA_ : reorderedNodesB_;
-		auto reorderedNodesByOther = branchIsA ? reorderedNodesB_ : reorderedNodesA_;
-		auto mustBeUnchangedByMe = branchIsA ? mustBeUnchangedByA_ : mustBeUnchangedByB_;
-		auto mustBeUnchangedByOther = branchIsA ? mustBeUnchangedByB_ : mustBeUnchangedByA_;
+		bool thisReorders = ((changeThis && changeThis->type() != ChangeType::Stationary) ||
+									!spanBase.contains(elem) ||
+									!elementIsStable(elem, spanThis, spanBase));
 
-		/**
-		 * If true and the positions are valid, we should insert.
-		 * This is false if other branch deletes or element has already been inserted by other branch.
-		 */
+		bool otherReorders = (changeOther && changeOther->type() != ChangeType::Stationary);
+		if (!otherReorders && !(changeThis && changeThis->type() == ChangeType::Insertion))
+		{
+			Chunk* otherChunk = nullptr;
+			auto parentId = (changeOther ? changeOther->nodeB() : treeBase_->find(elem))->parentId();
+			auto otherSpan = branchIsA ? &Chunk::spanB_ : &Chunk::spanA_;
+			for (auto chunk : preparedLists_.value(parentId))
+				if ((chunk->*otherSpan).contains(elem))
+				{
+					otherChunk = chunk;
+					break;
+				}
+
+			otherReorders = (otherChunk && (!otherChunk->spanBase_.contains(elem) ||
+								  !elementIsStable(elem, (otherChunk->*otherSpan), otherChunk->spanBase_)));
+		}
+
+		bool branchesAgreeOnParent;
+		if (changeThis && changeThis->type() == ChangeType::Move)
+			branchesAgreeOnParent = changeOther &&
+					changeOther->nodeB()->parentId() == changeThis->nodeB()->parentId();
+		else
+			branchesAgreeOnParent = !changeOther || changeOther->type() != ChangeType::Move;
+
+		bool branchesAgreeOnPosition = branchesAgreeOnParent && posA == posB;
+		bool listIsOrdered = listTypes_.contains(cdgThis.changes().value(containerId)->nodeA()->type());
+
+
 		bool shouldInsert = false;
 
-		// This is the decision tree. The bit digits describe the path. TODO link to report.
-		if (spanBase.contains(elem))
+		if (changeThis && changeThis->type() == ChangeType::Insertion)
+			shouldInsert = true;
+
+		else if (chunk->spanMerged_.contains(elem))
+			continue;
+
+		else if (thisReorders && otherReorders)
 		{
-			if (spanB.contains(elem))
-			{
-				if (listIsOrdered)
-				{
-					if (posA == posB)
-					{
-						if (!chunk->spanMerged_.contains(elem))
-							shouldInsert = true; // 1110
-					}
-					else
-					{
-						// NOTE Is this correct, considering how the != operator works for invalid positions?
-						if (posA != posBase)
-						{
-							markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-							// NOTE the following condition could be evaluated immediately.
-							// all original chunks of the current list are required.
-							if (doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
-								shouldInsert = true; // 11001
-							else
-							{
-								conflict = true;
-								break; // 11000
-							}
-						}
-					}
-				}
-				else
-				{
-					// list is unordered and both braches have elem in same chunk.
-					// just insert at good-enough position.
-					// This is for the whole 11 subtree.
-					if (!chunk->spanMerged_.contains(elem))
-						shouldInsert = true;
-				}
-			}
+			if (branchesAgreeOnPosition ||
+				 (!listIsOrdered && branchesAgreeOnPosition))
+				shouldInsert = true;
 			else
-			{
-				if (posA != posBase)
-				{
-					if (listIsOrdered)
-					{
-						markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-						conflict = true;
-						break; // 100
-					}
-					// else B reorders across chunk in unordered list. Let B handle it.
-				}
-			}
+				conflict = true;
 		}
+		else if (otherReorders)
+			continue;
 		else
-		{
-			if (elemInTreeB)
-			{
-				if (elemInListB)
-				{
-					if (listIsOrdered)
-					{
-						if (spanB.contains(elem))
-						{
-							if (posA == posB)
-							{
-								if (!chunk->spanMerged_.contains(elem))
-								{
-									// 011110
-									auto origin = findOriginalChunk(elem, containerId);
-									if (!origin)
-										shouldInsert = true;
-									else if (origin->noConflicts_)
-									{
-										chunkDependencies_.insert(chunk, origin);
-										chunkDependencies_.insert(origin, chunk);
-										shouldInsert = true;
-									}
-									else
-									{
-										conflict = true;
-										break; // the chunk this chunk depends on is conflicting
-									}
-								}
-							}
-							else
-							{
-								conflict = true;
-								break; // 01110
-							}
-						}
-						else
-						{
-							markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-							// NOTE the following condition could be evaluated immediately.
-							// all original chunks of the current list are required.
-							if (!doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
-							{
-								// 011011
-								auto origin = findOriginalChunk(elem, containerId);
-								if (!origin)
-									shouldInsert = true;
-								else if (origin->noConflicts_)
-								{
-									chunkDependencies_.insert(chunk, origin);
-									chunkDependencies_.insert(origin, chunk);
-									shouldInsert = true;
-								}
-								else
-								{
-									conflict = true;
-									break; // the chunk this chunk depends on is conflicting
-								}
-							}
-							else
-							{
-								conflict = true;
-								break; // 01100 and 011010
-							}
-						}
-					}
-					else
-					{
-						// list is unordered and both braches have elem in the list.
-						// this branch has elem in a different chunk than base.
-						// just insert at good-enough position.
-						// This is for the whole 011 subtree.
-						if (!chunk->spanMerged_.contains(elem))
-							shouldInsert = true;
-					}
-				}
-				else
-				{
-					if (elemInListBase)
-					{
-						if (listIsOrdered)
-						{
-							markElementAsReordered(reorderedNodesByMe, mustBeUnchangedByMe, elem);
-							conflict = true;
-							break; // 0101
-						}
-						// else A reorders in unordered list, B moves out. Move takes precedence.
-					}
-					else
-					{
-						if (doesOtherBranchReorder(reorderedNodesByOther, mustBeUnchangedByOther, chunk, elem))
-						{
-							if (listIsOrdered)
-							{
-								conflict = true;
-								break; // 01001
-							}
-							else
-							{
-								auto origin = findOriginalChunk(elem, containerId);
-								if (!origin)
-									shouldInsert = true;
-								else if (origin->noConflicts_)
-								{
-									chunkDependencies_.insert(chunk, origin);
-									chunkDependencies_.insert(origin, chunk);
-									shouldInsert = true;
-									// A moves into unordered lists, B reorders. Move takes precedence.
-								}
-								else
-								{
-									conflict = true;
-									break; // the chunk this chunk depends on is conflicting
-								}
-							}
-						}
-						else
-						{
-							// 01000
-							auto origin = findOriginalChunk(elem, containerId);
-							if (!origin)
-								shouldInsert = true;
-							else if (origin->noConflicts_)
-							{
-								chunkDependencies_.insert(chunk, origin);
-								chunkDependencies_.insert(origin, chunk);
-								shouldInsert = true;
-							}
-							else
-							{
-								conflict = true;
-								break; // the chunk this chunk depends on is conflicting
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				if (elemInTreeBase)
-				{
-					if (listIsOrdered)
-					{
-						conflict = true;
-						break; // 001
-					}
-					else
-					{
-						if (changeA->type() == ChangeType::Move)
-						{
-							conflict = true;
-							break; // A moves, B deletes
-						}
-						// else A reorders in unordered lists, B deletes. Delete takes precedence.
-					}
-				}
-				else shouldInsert = true; // 000
-			}
-		}
-		// End decision tree
+			shouldInsert = true; // this or neither reorders
+
 
 		if (conflict) break;
 
 		if (shouldInsert)
 		{
-			if (!listIsOrdered || posA.valid_)
-				insertAfter(elem, posA, chunk);
-			else
+			if (listIsOrdered && !posA.valid_)
 			{
 				conflict = true;
 				break;
 			}
+
+			if (thisReorders)
+			{
+				// if a chunk dependency is introduced, check that it is conflict free and record it
+				auto originChunk = findOriginalChunk(elem, containerId); // TODO do this better
+				if (originChunk && originChunk != chunk)
+				{
+					if (originChunk->noConflicts_)
+					{
+						if (!chunkDependencies_.contains(chunk, originChunk))
+						{
+							chunkDependencies_.insert(chunk, originChunk);
+							chunkDependencies_.insert(originChunk, chunk);
+						}
+					}
+					else
+					{
+						conflict = true;
+						break;
+					}
+				}
+			}
+
+			insertAfter(elem, posA, chunk);
 		}
 	}
 

@@ -90,10 +90,10 @@ class ListMergeComponent : public ConflictPipelineComponent
 		 */
 		bool insertElemsIntoChunk(Chunk* chunk,
 													const QList<Model::NodeIdType>& spanBase, const Model::NodeIdType containerId,
-													const ChangeDependencyGraph& cdgA,
-													const ChangeDependencyGraph& cdgB,
-													const QList<Model::NodeIdType>& spanA,
-													const QList<Model::NodeIdType>& spanB, bool branchIsA);
+													const ChangeDependencyGraph& cdgThis,
+													const ChangeDependencyGraph& cdgOther,
+													const QList<Model::NodeIdType>& spanThis,
+													const QList<Model::NodeIdType>& spanOther, bool branchIsA);
 
 		/**
 		 * Tries to find a unique position for \a elem in \a chunk that is similar to the position of \a elem in \a origin.
@@ -120,7 +120,7 @@ class ListMergeComponent : public ConflictPipelineComponent
 		 * Marks all chunks that transitively depend on \a chunk as conflicting. \a chunk itself is not explicitly marked but
 		 * implicitly if it transitively depends on itself.
 		 */
-		void markDependingAsConflicting(Chunk* chunk);
+		void markDependingAsConflicting(Chunk* chunk); // TODO rename to reflect that chunk is also marked
 
 		/**
 		 * Records the fact that a branch has reordered \a elem. If there are any chunks that depend on \a elem not being
@@ -170,6 +170,10 @@ class ListMergeComponent : public ConflictPipelineComponent
 		QSet<QString> conflictTypes_;
 		QSet<QString> listTypes_;
 		QSet<QString> unorderedTypes_;
+
+		std::shared_ptr<GenericTree> treeA_;
+		std::shared_ptr<GenericTree> treeB_;
+		std::shared_ptr<GenericTree> treeBase_;
 
 		/**
 		 * Inserts \a elem into \a chunk according to \a pos.
