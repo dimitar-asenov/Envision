@@ -65,7 +65,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		void setEnabled(const QString name, bool isEnabled);
 		bool isEnabled(const QString name) const;
 
-		virtual QJsonValue toJson() const;
+		virtual QJsonValue toJson() const override;
 
 		/**
 		 * Registers a new method to get information.
