@@ -26,8 +26,17 @@
 
 #include "APIPrinter.h"
 
+#include "Config.h"
+
+APIPrinter::APIPrinter(QTextStream& outStream, const APIData& data) : out_{outStream}, data_{data}
+{
+	maxLineLength_ = Config::instance().maxLineLength();
+}
+
 void APIPrinter::print()
 {
+	out_ << "// GENERATED FILE: CHANGES WILL BE LOST!" << endl;
+	out_ << endl;
 	printHeaders();
 	out_ << "namespace InformationScripting {" << endl << endl;
 	out_ << "using namespace boost::python;" << endl << endl;

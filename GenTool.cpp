@@ -40,6 +40,7 @@
 #include "GeneratorAction.h"
 #include "APIData.h"
 #include "APIPrinter.h"
+#include "Config.h"
 
 class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 {
@@ -52,21 +53,17 @@ class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 		APIData& outData_;
 };
 
-GenTool::GenTool()
-{
-	pathToNamespaceMap_.insert("OOModel", "OOModel");
-	pathToNamespaceMap_.insert("ModelBase", "Model");
-}
-
 void GenTool::run()
 {
 	APIData api;
 
+	auto pathToNamespaceMap = Config::instance().subdirsToNamespaceMap();
+
 	for (auto project : projects_)
 	{
 		api.includePrefix_ = project.split(QDir::separator(), QString::SplitBehavior::SkipEmptyParts).last();
-		auto it = pathToNamespaceMap_.find(api.includePrefix_);
-		if (it != pathToNamespaceMap_.end())
+		auto it = pathToNamespaceMap.find(api.includePrefix_);
+		if (it != pathToNamespaceMap.end())
 		{
 			api.namespaceName_ = it.value();
 			qDebug() << "Start processing project :" << project;
@@ -75,14 +72,10 @@ void GenTool::run()
 			auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>(api);
 			tool->run(frontendActionFactory.get());
 		}
-		else
-		{
-			qWarning() << "Ignored:" << project << "Because it is not whitelisted";
-		}
 	}
 
 	// Create out file
-	QFile file("nodeAPI.cpp");
+	QFile file(Config::instance().exportFileName());
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) Q_ASSERT(false);
 	QTextStream stream(&file);
 	APIPrinter printer(stream, api);

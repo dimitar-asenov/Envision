@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     EnvisionPPCallbacks.cpp \
     TypeUtilities.cpp \
     APIData.cpp \
-    APIPrinter.cpp
+    APIPrinter.cpp \
+    Config.cpp
 
 HEADERS += \
     GenTool.h \
@@ -19,7 +20,11 @@ HEADERS += \
     EnvisionPPCallbacks.h \
     TypeUtilities.h \
     APIData.h \
-    APIPrinter.h
+    APIPrinter.h \
+    Config.h
+
+# Move the config file to the build dir:
+QMAKE_POST_LINK= cp $$PWD/config.json $$OUT_PWD/config.json
 
 # Use this instead of the line under it to avoid warnings
 QMAKE_CXXFLAGS += -std=c++1y -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)"" -Wall -fno-rtti

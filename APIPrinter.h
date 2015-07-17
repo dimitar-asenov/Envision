@@ -31,7 +31,7 @@
 class APIPrinter
 {
 	public:
-		APIPrinter(QTextStream& outStream, const APIData& data) : out_{outStream}, data_{data} {}
+		APIPrinter(QTextStream& outStream, const APIData& data);
 		void print();
 
 	private:

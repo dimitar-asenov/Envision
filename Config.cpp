@@ -24,52 +24,55 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "Config.h"
 
-#include <memory>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonParseError>
+#include <QtCore/QCoreApplication>
 
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-
-#include <clang/Tooling/Tooling.h>
-
-class GenTool
+const Config& Config::instance()
 {
-	public:
-		void run();
+	static Config conf;
+	return conf;
+}
 
-		/**
-		 * Prepares importing a project which is structured in subdirectories.
-		 */
-		void setSubDirPath(const QString& path);
+QString Config::exportFileName() const
+{
+	auto path = config_["ExportPath"].toString();
+	auto fileName = config_["ExportFile"].toString();
+	if (!path.endsWith(QDir::separator())) path.append(QDir::separator());
+	return path + fileName;
+}
 
-		/**
-		 * Prepares everything for the project in \a sourcePath to get imported
-		 */
-		void initPath(const QString& sourcePath);
+QString Config::envisionReadPath() const
+{
+	return config_["EnvisionPath"].toString();
+}
 
+int Config::maxLineLength() const
+{
+	return config_["MaxLineLength"].toInt();
+}
 
-	private:
-		/**
-		 * Collects all source files in \a sourcPath and sub directories and stores them in the sourcesMap_.
-		 */
-		void readInFiles(const QString& sourcePath);
+QHash<QString, QString> Config::subdirsToNamespaceMap() const
+{
+	QHash<QString, QString> result;
+	auto obj = config_["SubDirs"].toObject();
+	for (auto it = obj.begin(); it != obj.end(); ++it)
+		result.insert(it.key(), it.value().toString());
+	return result;
+}
 
-		/**
-		 * Adds the compilation database to compilationDbMap_.
-		 */
-		void setCompilationDbPath(const QString& sourcePath);
-
-		// File endings filter
-		QStringList cppFilter_ = {"*.cpp", "*.cc", "*.cxx"};
-
-		// the project name which is shown in Envision
-		// we set this to the innermost directory of the sourcepath
-		QString projectName_;
-		// projects we have to import. For single project this list will only contain one entry
-		QStringList projects_;
-		QHash<QString, std::shared_ptr<std::vector<std::string>>> sourcesMap_;
-		QHash<QString, std::shared_ptr<clang::tooling::CompilationDatabase>> compilationDbMap_;
-};
+Config::Config()
+{
+	QFile configFile(QCoreApplication::applicationDirPath() + QDir::separator() + "config.json");
+	bool open = configFile.open(QIODevice::ReadOnly);
+	Q_ASSERT(open);
+	QJsonParseError err;
+	auto doc = QJsonDocument::fromJson(configFile.readAll(), &err);
+	Q_ASSERT(err.error == QJsonParseError::NoError);
+	config_ = doc.object();
+}
 

@@ -26,50 +26,47 @@
 
 #pragma once
 
-#include <memory>
+#include <QtCore/QJsonObject>
 
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-
-#include <clang/Tooling/Tooling.h>
-
-class GenTool
+class Config
 {
 	public:
-		void run();
+		static const Config& instance();
 
 		/**
-		 * Prepares importing a project which is structured in subdirectories.
+		 * Returns the export file name with full specified path.
+		 *
+		 * ConfigKeys: "ExportFile" and "ExportPath"
 		 */
-		void setSubDirPath(const QString& path);
+		QString exportFileName() const;
 
 		/**
-		 * Prepares everything for the project in \a sourcePath to get imported
+		 * Path to Envision to create a wrapper.
+		 *
+		 * ConfigKey: "EnvisionPath"
 		 */
-		void initPath(const QString& sourcePath);
+		QString envisionReadPath() const;
 
+		/**
+		 * Returns the maximum line length in the exported file.
+		 *
+		 * ConfigKey: "MaxLineLength"
+		 */
+		int maxLineLength() const;
+
+		/**
+		 * Returns a map of subdirs which should be looked at when wrapping.
+		 * The key represents the subdir path name and the value the corresponding namespace name.
+		 *
+		 * Example key: "ModelBase", value: "Model"
+		 *
+		 * ConfigKey: "SubDirs"
+		 */
+		QHash<QString, QString> subdirsToNamespaceMap() const;
 
 	private:
-		/**
-		 * Collects all source files in \a sourcPath and sub directories and stores them in the sourcesMap_.
-		 */
-		void readInFiles(const QString& sourcePath);
+		Config();
 
-		/**
-		 * Adds the compilation database to compilationDbMap_.
-		 */
-		void setCompilationDbPath(const QString& sourcePath);
-
-		// File endings filter
-		QStringList cppFilter_ = {"*.cpp", "*.cc", "*.cxx"};
-
-		// the project name which is shown in Envision
-		// we set this to the innermost directory of the sourcepath
-		QString projectName_;
-		// projects we have to import. For single project this list will only contain one entry
-		QStringList projects_;
-		QHash<QString, std::shared_ptr<std::vector<std::string>>> sourcesMap_;
-		QHash<QString, std::shared_ptr<clang::tooling::CompilationDatabase>> compilationDbMap_;
+		QJsonObject config_;
 };
 

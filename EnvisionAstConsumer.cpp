@@ -117,13 +117,9 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 					// ignore private attributes:
 					auto privateIt = privateAttributes_.find(methodName);
 					if (privateIt != privateAttributes_.end())
-					{
 						seenMethods << methodName << privateIt.value();
-					}
 					else if (methodName.startsWith("set"))
-					{
 						possibleAttributeSetters << methodName;
-					}
 				}
 			}
 			// check if we have some more attributes which don't have an attribute macro:
@@ -196,9 +192,7 @@ QStringList EnvisionAstConsumer::baseClasses(clang::CXXRecordDecl* classDecl)
 {
 	QStringList result {};
 	for (auto base : classDecl->bases())
-	{
 		result << baseClasses(base.getType()->getAsCXXRecordDecl());
-	}
 	result << QString::fromStdString(classDecl->getQualifiedNameAsString());
 	result.removeAll("Core::Reflect");
 	return result;
@@ -213,7 +207,6 @@ void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)
 		auto match = typedListMatcher.match(fullName);
 		Q_ASSERT(match.hasMatch());
 		QString itemType = match.captured(2);
-		qDebug() << itemType;
 		outData_.insertTypeList(itemType);
 	}
 }
