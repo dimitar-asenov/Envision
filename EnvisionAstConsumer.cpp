@@ -91,6 +91,9 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 		auto className = QString::fromStdString(classDecl->getNameAsString());
 		if (namespaceName == outData_.namespaceName_ && className == currentClassName_)
 		{
+			// FIXME: find a better solution for statementitemlist, currently ignore it (because we don't wrap TypedList).
+			if (className == "StatementItemList") return;
+
 			QStringList bases = baseClasses(classDecl);
 			if (!allowedBases_.contains(bases[0])) return; // We only consider classes which have a base that we allow.
 
