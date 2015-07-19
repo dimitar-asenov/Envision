@@ -34,16 +34,16 @@ namespace OODebug {
 
 class Command;
 
-class Event;
+struct Event;
 
-class VersionInfo;
-class Location;
-class LineTable;
-class Frames;
-class VariableTable;
-class Values;
-class StackVariable;
-class ArrayValues;
+struct VersionInfo;
+struct Location;
+struct LineTable;
+struct Frames;
+struct VariableTable;
+struct Values;
+struct StackVariable;
+struct ArrayValues;
 
 /**
  * A Connector to a Java VM via the JDWP protocol.

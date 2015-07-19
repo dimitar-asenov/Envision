@@ -111,18 +111,18 @@ template <class ChildItemVisualizationType>
 
 template <class VisualizationType>
 template <class ChildItemVisualizationType>
-	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 										std::function<const
 											typename ChildItemVisualizationType::StyleType* (VisualizationType* v)> styleGetter)
 {
-	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>(itemStorage,
+	return new VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>(itemStorage,
 																																 styleGetter);
 }
 
 template <class VisualizationType>
 template <class ChildItemVisualizationType, class ParentStyleType>
-	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType>*
+	VisualizationItemWrapperFormElement<VisualizationType, ChildItemVisualizationType, false>*
 	DeclarativeItem<VisualizationType>::item(ChildItemVisualizationType* VisualizationType::* itemStorage,
 			Style::Property<typename ChildItemVisualizationType::StyleType> ParentStyleType::* stylePointer)
 {

@@ -39,11 +39,11 @@ class VISUALIZATIONBASE_API Symbol : public Super<TextRenderer>
 
 	public:
 		Symbol(Item* parent, const StyleType *style = itemStyles().get());
-		virtual bool setText(const QString& newText);
-		virtual bool isEmpty() const;
+		virtual bool setText(const QString& newText) override;
+		virtual bool isEmpty() const override;
 
 	protected:
-		virtual QString currentText();
+		virtual QString currentText() override;
 };
 
 }

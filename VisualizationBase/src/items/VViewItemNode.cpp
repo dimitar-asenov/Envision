@@ -52,6 +52,12 @@ int VViewItemNode::determineForm()
 	else return 1;
 }
 
+void VViewItemNode::determineChildren()
+{
+	setPurpose(node()->purpose());
+	Super::determineChildren();
+}
+
 bool VViewItemNode::determineSpacing()
 {
 	Q_ASSERT(node()->reference() == nullptr);

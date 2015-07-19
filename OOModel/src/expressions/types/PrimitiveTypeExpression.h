@@ -47,7 +47,7 @@ class OOMODEL_API PrimitiveTypeExpression : public Super<TypeExpression>
 		PrimitiveTypes typeValue() const;
 		void setTypeValue(const PrimitiveTypes& type);
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 inline PrimitiveTypeExpression::PrimitiveTypes PrimitiveTypeExpression::typeValue()

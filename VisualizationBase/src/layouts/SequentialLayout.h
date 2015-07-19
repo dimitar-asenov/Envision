@@ -45,14 +45,14 @@ class VISUALIZATIONBASE_API SequentialLayout: public Super<Layout>
 		SequentialLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~SequentialLayout();
 
-		virtual bool isEmpty() const;
+		virtual bool isEmpty() const override;
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		virtual bool sizeDependsOnParent() const override;
 
 		int focusedElementIndex() const;
 
-		virtual QList<ItemRegion> regions();
+		virtual QList<ItemRegion> regions() override;
 
 		bool isHorizontal() const;
 		bool isForward() const;

@@ -50,7 +50,7 @@ class OOVISUALIZATION_API VFormalResult
 		virtual ~VFormalResult();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::VText* name_;

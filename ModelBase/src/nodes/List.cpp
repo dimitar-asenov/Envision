@@ -50,11 +50,22 @@ List::List(Node *parent, PersistentStore &store, bool loadPartially) : Super(par
 
 }
 
+List::List(const List& other) : Super{other}, nodes_{other.nodes_.size(), nullptr}
+{
+	for (int i = 0; i<other.nodes_.size(); ++i)
+	{
+		nodes_[i] = other.nodes_[i]->clone();
+		nodes_[i]->setParent(this);
+	}
+}
+
 List::~List()
 {
 	for (int i = 0; i < nodes_.size(); ++i)
 		SAFE_DELETE( nodes_[i] );
 }
+
+List* List::clone() const { return new List(*this); }
 
 void List::loadSubNodes(QList<LoadedNode>& nodeList)
 {

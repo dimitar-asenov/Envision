@@ -55,6 +55,13 @@ Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 		pendingResolution_.insert(this);
 }
 
+Reference::Reference(const Reference& other) : Super{other}
+{
+	setName(other.name());
+}
+
+Reference* Reference::clone() const { return new Reference{*this}; }
+
 Reference::~Reference()
 {
 	pendingResolution_.remove(this);

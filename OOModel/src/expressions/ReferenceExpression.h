@@ -47,7 +47,7 @@ class OOMODEL_API ReferenceExpression: public Super<Expression>
 		ReferenceExpression(const QString& name, Expression* prefix = nullptr);
 
 		Model::Node* target();
-		virtual Type* type();
+		virtual Type* type() override;
 
 		void setName(const QString& name);
 		const QString& name();

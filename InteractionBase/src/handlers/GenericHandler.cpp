@@ -51,6 +51,10 @@
 
 #include "Comments/src/nodes/CommentNode.h"
 
+#include "vis/ViewSwitcherMenu.h"
+#include "vis/VViewSwitcherEntry.h"
+#include "VisualizationBase/src/items/ViewItem.h"
+
 namespace Interaction {
 
 void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>)
@@ -509,6 +513,12 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		}
 
 		scene->scheduleUpdate();
+	}
+	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
+	{
+		event->accept();
+		if (Menu::isVisible()) Menu::hide();
+		else	ViewSwitcherMenu::show(target);
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }

@@ -53,7 +53,7 @@ class OOVISUALIZATION_API VMethodCallExpression : public Super<VExpression<VMeth
 		Visualization::VList* arguments() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Item* callee_{};

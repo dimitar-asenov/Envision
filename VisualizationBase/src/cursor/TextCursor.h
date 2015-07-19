@@ -61,14 +61,14 @@ class VISUALIZATIONBASE_API TextCursor : public Cursor {
 
 		int cursorAtX(int x) const;
 
-		TextRenderer* owner() const;
+		TextRenderer* owner() const override;
 
 		bool isCursorBeforeSelection();
 
 		void update(const QFontMetrics& qfm);
 
-		virtual bool isSame(Cursor* c);
-		virtual bool isAtBoundary() const;
+		virtual bool isSame(Cursor* c) override;
+		virtual bool isAtBoundary() const override;
 
 	private:
 		/**

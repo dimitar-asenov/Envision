@@ -63,7 +63,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 		bool isEditable();
 		void setEditable(bool editable);
 
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
 
@@ -75,8 +75,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 		bool isHtml() const;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 		/**
 		 * Returns the text of that is represented by the current item.

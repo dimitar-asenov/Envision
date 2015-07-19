@@ -45,8 +45,8 @@ class MODELBASE_API Integer: public Super<Node>
 		int  get() const;
 		void set(const int& newval);
 
-		virtual void save(PersistentStore &store) const;
-		virtual void load(PersistentStore &store);
+		virtual void save(PersistentStore &store) const override;
+		virtual void load(PersistentStore &store) override;
 };
 
 inline int Integer::get() const { return integer; }

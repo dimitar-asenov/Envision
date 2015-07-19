@@ -30,7 +30,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API HInfoNode : public Interaction::GenericHandler {
+class INTERACTIONBASE_API HInfoNode : public GenericHandler {
 	protected:
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 

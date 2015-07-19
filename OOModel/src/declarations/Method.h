@@ -83,6 +83,7 @@ class OOMODEL_API Method : public Super<Declaration>
 		bool isOverridenBy(Method* other);
 
 		QSet<Method*> callees();
+		QSet<Method*> callers();
 };
 
 inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }

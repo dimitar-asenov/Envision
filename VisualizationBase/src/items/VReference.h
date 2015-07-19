@@ -41,10 +41,10 @@ class VISUALIZATIONBASE_API VReference : public Super<ItemWithNode<VReference, T
 
 	public:
 		VReference(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
-		virtual bool setText(const QString& newText);
+		virtual bool setText(const QString& newText) override;
 
 	protected:
-		virtual QString currentText();
+		virtual QString currentText() override;
 };
 
 }

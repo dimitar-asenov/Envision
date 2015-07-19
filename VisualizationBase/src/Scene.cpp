@@ -44,6 +44,7 @@
 #include "Core/src/Profiler.h"
 #include "Core/src/EnvisionApplication.h"
 
+#include "ViewItemManager.h"
 #include "items/ViewItem.h"
 
 namespace Visualization {
@@ -74,9 +75,10 @@ Scene::Scene()
 	setMinimumRenderSize(1.0);
 #endif
 
-
 	initialized_ = true;
 	allScenes().append(this);
+
+	viewItemManager_ = new ViewItemManager(this);
 
 	auto selectionGroup = addOverlayGroup("User Selected Items");
 	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay(item));});
@@ -95,6 +97,8 @@ Scene::~Scene()
 	Core::EnvisionApplication::removeOnUserInputIdleAction(this);
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
+
+	SAFE_DELETE(viewItemManager_);
 
 	overlayGroups_.clear();
 	while (!topLevelItems_.isEmpty())
@@ -136,66 +140,9 @@ void Scene::removeTopLevelItem(Item* item)
 	scheduleUpdate();
 }
 
-
 ViewItem* Scene::currentViewItem()
 {
-	if (viewItems_.size() == 0)
-	{
-		currentViewItem_ = newViewItem("ProjectView");
-		currentViewItem_->show();
-	}
-	Q_ASSERT(currentViewItem_);
-	return currentViewItem_;
-}
-
-ViewItem* Scene::viewItem(const QString name)
-{
-	for (auto item : viewItems_)
-		if (item->name() == name)
-			return item;
-	return nullptr;
-}
-
-void Scene::switchToView(ViewItem *view)
-{
-	Q_ASSERT(!inAnUpdate_);
-	Q_ASSERT(viewItems_.contains(view));
-	currentViewItem_->hide();
-	currentViewItem_ = view;
-	currentViewItem_->show();
-	currentViewItem_->setUpdateNeeded(Item::StandardUpdate);
-	scheduleUpdate();
-}
-
-bool Scene::switchToView(const QString viewName)
-{
-	auto view = viewItem(viewName);
-	if (view)
-		switchToView(view);
-	return view != nullptr;
-}
-
-void Scene::addViewItem(ViewItem *view)
-{
-	Q_ASSERT(!inAnUpdate_);
-	viewItems_.append(view);
-	addTopLevelItem(view, false);
-}
-
-ViewItem* Scene::newViewItem(const QString name)
-{
-	auto result = new ViewItem(nullptr, name);
-	addViewItem(result);
-	return result;
-}
-
-void Scene::removeAllViewItems()
-{
-	for (auto item : viewItems_)
-		removeTopLevelItem(item);
-
-	viewItems_.clear();
-	currentViewItem_ = nullptr;
+	return viewItemManager_->currentViewItem();
 }
 
 void Scene::scheduleUpdate()

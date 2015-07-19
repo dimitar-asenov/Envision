@@ -40,8 +40,8 @@ class VISUALIZATIONBASE_API SelectionOverlay: public Super<Overlay<Item>>
 		SelectionOverlay(Item* selectedItem, const StyleType* style = itemStyles().get());
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 };
 
 }

@@ -42,7 +42,7 @@ class OOMODEL_API FunctionTypeExpression : public Super<TypeExpression>
 	public:
 		FunctionTypeExpression(const QList<Expression*>& arguments, const QList<Expression*>& results = {});
 
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

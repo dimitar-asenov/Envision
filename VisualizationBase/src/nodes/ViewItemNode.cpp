@@ -27,35 +27,102 @@
 #include "ViewItemNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "nodes/InfoNode.h"
+#include "items/ViewItem.h"
+#include "utils/JsonUtil.h"
+
 DEFINE_TYPED_LIST(Visualization::ViewItemNode)
 
 namespace Visualization {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(ViewItemNode)
 
-ViewItemNode::ViewItemNode(Model::Node* parent)
-	:Super(parent)
+ViewItemNode::ViewItemNode(Model::Node *)
+	:Super()
 {
 }
 
-ViewItemNode::ViewItemNode(Model::Node* parent, Model::PersistentStore&, bool)
-	:Super(parent)
+ViewItemNode::ViewItemNode(Model::Node *, Model::PersistentStore &, bool)
+	:Super()
 {
 	Q_ASSERT(false);
 }
 
+ViewItemNode* ViewItemNode::clone() const { return new ViewItemNode{*this}; }
+
 ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
 {
-	auto result = new ViewItemNode(nullptr);
+	auto result = new ViewItemNode();
 	result->setSpacingTarget(spacingTarget);
 	result->setSpacingParent(spacingParent);
 	return result;
 }
 
-ViewItemNode* ViewItemNode::withReference(Model::Node *reference)
+ViewItemNode* ViewItemNode::withReference(Model::Node *reference, int purpose)
 {
-	auto result = new ViewItemNode(nullptr);
+	auto result = new ViewItemNode();
 	result->setReference(reference);
+	result->setPurpose(purpose);
+	return result;
+}
+
+ViewItemNode* ViewItemNode::fromJson(QJsonObject json, const ViewItem *view)
+{
+	auto result = new ViewItemNode();
+	if (!json.contains("type"))
+		return result;
+	result->setPurpose(json["purpose"].toInt());
+	if (json["type"] == "NODE")
+	{
+		if (auto ref = JsonUtil::nodeForId(QUuid(json["reference"].toString())))
+			result->setReference(ref);
+	}
+	else if (json["type"] == "SPACING")
+	{
+		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
+			result->setSpacingTarget(target);
+		if (json["parentRow"].toInt() != -1)
+			result->setSpacingParent(DCast<ViewItemNode>(view->nodeAt(json["parentCol"].toInt(),
+																		json["parentRow"].toInt())));
+	}
+	else if (json["type"] == "INFO")
+	{
+		if (auto target = JsonUtil::nodeForId(QUuid(json["target"].toString())))
+			result->setReference(new InfoNode(target, json["content"].toArray()));
+	}
+	return result;
+}
+
+QJsonValue ViewItemNode::toJson() const
+{
+	QJsonObject result;
+	result.insert("purpose", purpose());
+	result.insert("col", position_.x());
+	result.insert("row", position_.y());
+	//If it stores a normal, separately persisted node
+	if (reference() && reference()->manager())
+	{
+		result.insert("reference", reference()->manager()->
+					nodeIdMap().id(reference()).toString());
+		result.insert("type", "NODE");
+	}
+	//If the node handles spacing only
+	else if (!reference() && spacingTarget())
+	{
+		result.insert("target", spacingTarget()->manager()->
+								nodeIdMap().id(spacingTarget()).toString());
+		result.insert("parentCol", spacingParentPosition_.x());
+		result.insert("parentRow", spacingParentPosition_.y());
+		result.insert("type", "SPACING");
+	}
+	//If it stores an InfoNode, which is not separately persisted
+	else if (auto infoNode = DCast<InfoNode>(reference()))
+	{
+		result.insert("content", infoNode->toJson());
+		result.insert("target", infoNode->target()->manager()->
+					   nodeIdMap().id(infoNode->target()).toString());
+		result.insert("type", "INFO");
+	}
 	return result;
 }
 }

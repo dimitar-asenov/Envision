@@ -37,7 +37,7 @@ class OOMODEL_API GlobalScopeExpression : public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(GlobalScopeExpression)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 } /* namespace OOModel */

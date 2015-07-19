@@ -69,6 +69,27 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &, bool) :
 	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
 }
 
+CompositeNode::CompositeNode(const CompositeNode& other)
+	: Super{other}, meta_{other.meta_}, subnodes_(meta_.numLevels())
+{
+	Q_ASSERT(subnodes_.size() == other.subnodes_.size());
+
+	for (int level = 0; level < meta_.numLevels(); ++level)
+	{
+		AttributeChain* currentLevel = meta_.level(level);
+		subnodes_[level] = QVector<Node*> (currentLevel->size(), nullptr);
+
+		for (int i = 0; i < currentLevel->size(); ++i)
+			if ( auto node = other.subnodes_[level][i] )
+			{
+				subnodes_[level][i] = node->clone();
+				node->setParent(this);
+			}
+	}
+}
+
+CompositeNode* CompositeNode::clone() const { return new CompositeNode(*this); }
+
 CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
 	Super(parent), meta_(metaData), subnodes_(meta_.numLevels())
 {

@@ -57,7 +57,7 @@ class OOVISUALIZATION_API VReferenceExpression : public Super<VExpression<VRefer
 		Visualization::VList* typeArguments() const;
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		VOOReference* name_;

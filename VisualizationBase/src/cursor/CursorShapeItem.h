@@ -53,8 +53,8 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Super<Item>
 		bool useCenter() const;
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Cursor* cursor_;

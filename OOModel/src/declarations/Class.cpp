@@ -207,6 +207,17 @@ QSet<Class*> Class::allBaseClasses()
 	return bases;
 }
 
+QSet<Class*> Class::directBaseClasses()
+{
+	QSet<Class*> result;
+	for (auto baseClass : *baseClasses())
+		if (auto asClass = expressionToClass(baseClass))
+			result << asClass;
+	if (result.isEmpty() && implicitBaseFromProject())
+		result << implicitBaseFromProject();
+	return result;
+}
+
 Class* Class::implicitBaseFromProject() const
 {
 	if (auto classDef = expressionToClass(defaultImplicitBaseFromProject()))
@@ -226,6 +237,24 @@ Class* Class::expressionToClass(Expression* expr)
 			return ct->classDefinition();
 	}
 	return nullptr;
+}
+
+QSet<Class*> Class::directSubClasses()
+{
+	auto top = root();
+	//Find all the classes where this method is subclasses
+	QSet<Class*> result;
+	QList<Model::Node*> toCheck;
+	toCheck.append(top);
+	while (!toCheck.isEmpty())
+	{
+		auto check = toCheck.takeLast();
+		if (auto someClass = DCast<Class>(check))
+			if (someClass->directBaseClasses().contains(this))
+				result << someClass;
+		toCheck.append(check->children());
+	}
+	return result;
 }
 
 }

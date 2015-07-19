@@ -40,7 +40,7 @@ class TypedList: public Super<List>
 		T* last() const;
 		T* at(int i) const;
 
-		virtual bool replaceChild(Node* child, Node* replacement);
+		virtual bool replaceChild(Node* child, Node* replacement) override;
 
 		virtual Node* createDefaultElement() override;
 

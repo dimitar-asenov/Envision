@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "visualizationbase_api.h"
+#include "../VisualizationBase/src/visualizationbase_api.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -42,8 +42,11 @@ class VISUALIZATIONBASE_API UINode : public Super<Model::Node>
 	public:
 		UINode();
 
-		virtual void save(Model::PersistentStore& store) const;
-		virtual void load(Model::PersistentStore& store);
+		virtual QJsonValue toJson() const = 0;
+
+		virtual UINode* clone() const override;
+		virtual void save(Model::PersistentStore& store) const override;
+		virtual void load(Model::PersistentStore& store) override;
 };
 
 }

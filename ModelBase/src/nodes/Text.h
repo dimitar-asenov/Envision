@@ -47,8 +47,8 @@ class MODELBASE_API Text: public Super<Node>
 
 		void set(const QString &newText);
 
-		virtual void save(PersistentStore &store) const;
-		virtual void load(PersistentStore &store);
+		virtual void save(PersistentStore &store) const override;
+		virtual void load(PersistentStore &store) override;
 
 	private:
 		QString text_;

@@ -32,6 +32,10 @@
 #include "overlays/ArrowOverlay.h"
 #include "nodes/InfoNode.h"
 #include "VInfoNode.h"
+#include "Scene.h"
+#include "RootItem.h"
+#include "renderer/ModelRenderer.h"
+#include "utils/JsonUtil.h"
 
 namespace Visualization {
 
@@ -52,6 +56,13 @@ void ViewItem::initializeForms()
 				  return self->nodesGetter(); }));
 }
 
+int ViewItem::publicInterfacePurpose()
+{
+	int purpose = Scene::defaultRenderer()->purposeId("public_interface");
+	return purpose >= 0 ? purpose
+		: Scene::defaultRenderer()->registerVisualizationPurpose("public_interface");
+}
+
 void ViewItem::insertColumn(int column)
 {
 	//Make sure we actually have enough columns
@@ -65,9 +76,9 @@ void ViewItem::insertColumn(int column)
 		nodes_.insert(column, {});
 }
 
-Model::Node* ViewItem::insertNode(Model::Node* node, int column, int row)
+Model::Node* ViewItem::insertNode(Model::Node* node, int column, int row, int purpose)
 {
-	auto ref = ViewItemNode::withReference(node);
+	auto ref = ViewItemNode::withReference(node, purpose);
 	insertViewItemNode(ref, column, row);
 	return ref;
 }
@@ -81,8 +92,11 @@ void ViewItem::removeNode(Model::Node* node)
 		for (auto node : allNodes())
 		{
 			auto viewNode = DCast<ViewItemNode>(node);
-			if (viewNode->spacingTarget() == nodes_[point.x()][point.y()])
+			if (viewNode->spacingParent() == nodes_[point.x()][point.y()])
+			{
 				viewNode->setSpacingTarget(nullptr);
+				viewNode->setSpacingParent(nullptr);
+			}
 		}
 		nodes_[point.x()].remove(point.y());
 		//Need to remove any arrows depending on it
@@ -106,7 +120,7 @@ QPoint ViewItem::positionOfNode(Model::Node *node) const
 	for (int i = 0; i < nodes_.size(); i++)
 	{
 		auto index = nodes_.at(i).indexOf(node);
-		if (index != -1)
+		if (index != -1 && node)
 			return QPoint(i, index);
 	}
 	return QPoint(-1, -1);
@@ -119,7 +133,7 @@ QPoint ViewItem::positionOfItem(Item *item) const
 	else return QPoint(-1, -1);
 }
 
-Model::Node* ViewItem::nodeAt(int column, int row)
+Model::Node* ViewItem::nodeAt(int column, int row) const
 {
 	if (column < 0 || column >= nodes_.size())
 		return nullptr;
@@ -156,9 +170,14 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 			auto toParent = line.toParent_ ? findVisualizationOf(line.toParent_) : this;
 			auto allTo = toParent->findAllVisualizationsOf(line.to_);
 			if (allFrom.size() > 0 && allTo.size() > 0)
+			{
 				for (auto from : allFrom)
 					for (auto to : allTo)
-						arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
+						//TODO@cyril The node is rendered as a RootItem -> needs a hack here
+						//or removing a ViewItemNode with arrows doesn't work correctly
+						if (!DCast<RootItem>(from) && !DCast<RootItem>(to))
+							arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
+			}
 			else arrowsToAdd_.append(line);
 		}
 	}
@@ -254,6 +273,93 @@ void ViewItem::ensureColumnExists(int column)
 {
 	if (nodes_.size() <= column)
 		nodes_.resize(column + 1);
+}
+
+//JSON storing/loading
+QJsonDocument ViewItem::toJson() const
+{
+	//Store all the nodes
+	QJsonArray nodes;
+	for (int col = 0; col < nodes_.size(); col++)
+		for (int row = 0; row < nodes_[col].size(); row++)
+			if (auto node = DCast<ViewItemNode>(nodes_[col][row]))
+			{
+				node->setPosition(QPoint(col, row));
+				if (node->spacingParent())
+					node->setSpacingParentPosition(positionOfNode(node->spacingParent()));
+				nodes.append(node->toJson());
+			}
+	//Store all the arrows
+	QJsonArray arrows;
+	for (auto key : arrows_.keys())
+		for (auto pair : arrows_[key])
+			arrows.append(arrowToJson(pair, key));
+	QJsonObject main;
+	main.insert("nodes", nodes);
+	main.insert("arrows", arrows);
+	main.insert("name", name());
+	QJsonDocument result;
+	result.setObject(main);
+	return result;
+}
+
+void ViewItem::fromJson(QJsonDocument json)
+{
+	nodes_.clear();
+	arrows_.clear();
+	QJsonObject obj = json.object();
+	setName(obj["name"].toString());
+	QStringList steps{"NODE", "SPACING", "INFO"};
+	int step = 0;
+	auto objArray = obj["nodes"].toArray();
+	//Load the nodes: First normal nodes, then spacing nodes, and lastly info nodes
+	for (step = 0; step < steps.size(); step++)
+		for (int i = 0; i < objArray.size(); i++)
+		{
+			auto current = objArray[i].toObject();
+			if (current["type"] == steps[step])
+				insertViewItemNode(ViewItemNode::fromJson(current, this),
+								   current["col"].toInt(), current["row"].toInt());
+		}
+	//Load the arrows
+	auto arrowArray = obj["arrows"].toArray();
+	for (auto arrow : arrowArray)
+		arrowFromJson(arrow.toObject());
+}
+
+QJsonObject ViewItem::arrowToJson(QPair<Item*, Item*> arrow, QString layer) const
+{
+	QJsonObject json;
+	json.insert("layer", layer);
+	//The first/second nodes might be a ViewItemNode -> in that case handled by the parent
+	if (arrow.first->node()->manager())
+		json.insert("node1", arrow.first->node()->manager()->
+								 nodeIdMap().id(arrow.first->node()).toString());
+	if (arrow.second->node()->manager())
+		json.insert("node2", arrow.second->node()->manager()->
+								 nodeIdMap().id(arrow.second->node()).toString());
+	auto parent1 = arrow.first->findAncestorOfType<VViewItemNode>();
+	json.insert("parent1col", positionOfItem(parent1).x());
+	json.insert("parent1row", positionOfItem(parent1).y());
+	auto parent2 = arrow.second->findAncestorOfType<VViewItemNode>();
+	json.insert("parent2col", positionOfItem(parent2).x());
+	json.insert("parent2row", positionOfItem(parent2).y());
+	return json;
+}
+
+void ViewItem::arrowFromJson(QJsonObject json)
+{
+	auto parent1 = DCast<ViewItemNode>(nodeAt(json["parent1col"].toInt(), json["parent1row"].toInt()));
+	auto parent2 = DCast<ViewItemNode>(nodeAt(json["parent2col"].toInt(), json["parent2row"].toInt()));
+	Model::Node* node1{}, *node2{};
+	if (json.contains("node1"))
+		node1 = JsonUtil::nodeForId(QUuid(json["node1"].toString()));
+	else node1 = parent1;
+	if (json.contains("node2"))
+		node2 = JsonUtil::nodeForId(QUuid(json["node2"].toString()));
+	else node2 = parent2;
+	if (node1 && node2)
+		arrowsToAdd_.append(ArrowToAdd{parent1, node1, parent2, node2, json["layer"].toString()});
 }
 
 }

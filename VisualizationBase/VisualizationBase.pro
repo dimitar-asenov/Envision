@@ -135,7 +135,9 @@ HEADERS += src/overlays/IconOverlayStyle.h \
     src/overlays/ArrowOverlay.h \
     src/utils/Drawing.h \
     src/nodes/InfoNode.h \
-    src/items/VInfoNode.h
+    src/items/VInfoNode.h \
+    src/ViewItemManager.h \
+    src/utils/JsonUtil.h
 SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/overlays/IconOverlay.cpp \
     src/overlays/BoxOverlayStyle.cpp \
@@ -246,4 +248,6 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/utils/Drawing.cpp \
     src/nodes/InfoNode.cpp \
     src/items/VInfoNode.cpp \
-    src/styles/StyleSet.cpp
+    src/styles/StyleSet.cpp \
+    src/ViewItemManager.cpp \
+    src/utils/JsonUtil.cpp

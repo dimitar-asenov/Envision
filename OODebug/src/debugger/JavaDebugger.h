@@ -51,8 +51,8 @@ namespace Interaction {
 
 namespace OODebug {
 
-class BreakpointEvent;
-class SingleStepEvent;
+struct BreakpointEvent;
+struct SingleStepEvent;
 struct VariableObserver;
 
 class OODEBUG_API JavaDebugger

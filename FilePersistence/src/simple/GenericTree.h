@@ -33,7 +33,7 @@ namespace FilePersistence {
 
 class GenericNode;
 class PiecewiseLoader;
-class NodeData;
+struct NodeData;
 
 // TODO It might be good to separate trees with piecewise loaders and other "kinds" of trees into subclasses.
 class FILEPERSISTENCE_API GenericTree {

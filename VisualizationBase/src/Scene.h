@@ -43,6 +43,7 @@ class ModelRenderer;
 class SceneHandlerItem;
 class Cursor;
 class View;
+class ViewItemManager;
 
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
@@ -73,20 +74,18 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void updateNow();
 		void listenToTreeManager(Model::TreeManager* manager);
 
-		void addViewItem(ViewItem* view);
-		ViewItem* newViewItem(const QString name = QString());
-		ViewItem* viewItem(const QString name);
-		void switchToView(ViewItem* view);
-		bool switchToView(const QString viewName);
-		ViewItem* currentViewItem();
-		void removeAllViewItems();
-
 		Cursor* mainCursor();
 		void setMainCursor(Cursor* cursor);
 
-		virtual void customEvent(QEvent *event);
+		virtual void customEvent(QEvent *event) override;
 
 		virtual SceneHandlerItem* sceneHandlerItem();
+
+		ViewItemManager* viewItems() const;
+		/**
+		 * Convenience method to get the manager's current view item.
+		 */
+		ViewItem* currentViewItem();
 
 		/**
 		 * Adds an action to be executed after the current event.
@@ -109,7 +108,6 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool isHiddenCategory(ItemCategory cat);
 
 		const QList<Item*>& topLevelItems() const;
-		const QList<ViewItem*>& viewItems() const;
 
 		void addRefreshActionFunction(RefreshActionFunction func);
 
@@ -175,15 +173,17 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
 
 	private:
+		friend class ViewItemManager;
+
 		bool needsUpdate_{};
 		bool initialized_{};
 
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
-		QList<ViewItem*> viewItems_;
-		ViewItem* currentViewItem_{};
 		QHash<QString, OverlayGroup> overlayGroups_;
+
+		ViewItemManager* viewItemManager_{};
 
 		Cursor* mainCursor_{};
 		bool mainCursorsJustSet_{};
@@ -225,7 +225,6 @@ inline ModelRenderer* Scene::renderer() { return renderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return mainCursor_; }
 inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
-inline const QList<ViewItem*>& Scene::viewItems() const { return viewItems_; }
 inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
 
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }
@@ -234,5 +233,7 @@ inline View* Scene::currentPaintView() const { return currentPaintView_; }
 
 inline qreal Scene::mainViewScalingFactor() const { return mainViewScalingFactor_; }
 inline qreal Scene::previousMainViewScalingFactor() const { return previousMainViewScalingFactor_; }
+
+inline ViewItemManager* Scene::viewItems() const { return viewItemManager_; }
 
 }

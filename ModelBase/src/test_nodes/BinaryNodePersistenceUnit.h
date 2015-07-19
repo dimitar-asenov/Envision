@@ -39,7 +39,7 @@ class MODELBASE_API BinaryNodePersistenceUnit: public Super<BinaryNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryNodePersistenceUnit)
 
 	public:
-		virtual bool isNewPersistenceUnit() const;
+		virtual bool isNewPersistenceUnit() const override;
 };
 
 }

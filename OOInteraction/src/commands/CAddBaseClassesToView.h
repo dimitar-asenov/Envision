@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../oointeraction_api.h"
-#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
+#include "InteractionBase/src/commands/AddReferencedToViewCommand.h"
 
 
 namespace Visualization {
@@ -40,23 +40,16 @@ namespace OOModel {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CAddBaseClassesToView : public Interaction::CommandWithDefaultArguments
+class OOINTERACTION_API CAddBaseClassesToView :
+		public Interaction::AddReferencedToViewCommand<OOModel::Class, OOModel::Class>
 {
 	public:
 		CAddBaseClassesToView();
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor);
-
-	protected:
-		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
-
 		virtual QString description(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>& cursor);
 
-	private:
-		QList<OOModel::Class*> baseClasses(OOModel::Class* parent);
+		QSet<OOModel::Class*> references(OOModel::Class* target);
 };
 
 }

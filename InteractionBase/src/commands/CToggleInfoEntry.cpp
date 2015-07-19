@@ -49,6 +49,7 @@ CommandResult* CToggleInfoEntry::executeWithArguments(Visualization::Item* sourc
 {
 	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
 	info->setEnabled(arguments.at(0), !(info->isEnabled(arguments.at(0))));
+	info->automaticUpdate();
 	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	return new CommandResult();
 }
