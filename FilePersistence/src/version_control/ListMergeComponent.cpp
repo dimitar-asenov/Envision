@@ -430,7 +430,7 @@ bool __attribute__((optimize("O0"))) ListMergeComponent::insertElemsIntoChunk(Ch
 		else if (thisReorders && otherReorders)
 		{
 			if (branchesAgreeOnPosition ||
-				 (!listIsOrdered && branchesAgreeOnPosition))
+				 (!listIsOrdered && branchesAgreeOnParent))
 				shouldInsert = true;
 			else
 				conflict = true;
