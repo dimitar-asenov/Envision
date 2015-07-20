@@ -1,3 +1,5 @@
+TARGET = pythonwrappergen
+
 TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
@@ -23,9 +25,6 @@ HEADERS += \
     APIPrinter.h \
     Config.h
 
-# Move the config file to the build dir:
-QMAKE_POST_LINK= cp $$PWD/config.json $$OUT_PWD/config.json
-
 # Use this instead of the line under it to avoid warnings
 QMAKE_CXXFLAGS += -std=c++1y -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)"" -Wall -fno-rtti
 #INCLUDEPATH +=  /usr/lib/llvm/include
@@ -50,3 +49,14 @@ LIBS += -lclangTooling\
                                 -lz \
                                 -ldl \
                                 -lncurses
+
+## INSTALLING SPECIFICS:
+ENVISION_ROOT_DIR = $$PWD/..
+CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
+CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
+
+config.files=config.json
+config.path=$${BUILD_DIR}/tools
+
+target.path = $${BUILD_DIR}/tools
+INSTALLS += target config
