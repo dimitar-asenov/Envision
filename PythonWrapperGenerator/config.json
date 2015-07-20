@@ -1,0 +1,11 @@
+{
+    "ExportFile": "AstApi_Generated.cpp",
+    "ExportPath": "/home/luke/BachelorThesis/Envision/InformationScripting/src/wrappers/",
+    "EnvisionPath": "/home/luke/Playground/Envision/",
+    "MaxLineLength": 120,
+    "SubDirs": 
+    {
+        "OOModel": "OOModel",
+        "ModelBase": "Model"
+    }
+}
