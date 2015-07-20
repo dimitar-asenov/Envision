@@ -41,6 +41,8 @@ const Config& Config::instance()
 QString Config::exportFileName() const
 {
 	auto path = config_["ExportPath"].toString();
+	QDir dir(path);
+	path = dir.absolutePath();
 	auto fileName = config_["ExportFile"].toString();
 	if (!path.endsWith(QDir::separator())) path.append(QDir::separator());
 	return path + fileName;
@@ -48,7 +50,10 @@ QString Config::exportFileName() const
 
 QString Config::envisionReadPath() const
 {
-	return config_["EnvisionPath"].toString();
+	QDir dir(config_["EnvisionPath"].toString());
+	auto path = dir.absolutePath();
+	if (!path.endsWith(QDir::separator())) path.append(QDir::separator());
+	return path;
 }
 
 int Config::maxLineLength() const

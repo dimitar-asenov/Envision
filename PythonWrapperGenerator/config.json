@@ -1,7 +1,7 @@
 {
     "ExportFile": "AstApi_Generated.cpp",
-    "ExportPath": "/home/luke/Programming/Envision/InformationScripting/src/wrappers/",
-    "EnvisionPath": "/home/luke/Playground/Envision/",
+    "ExportPath": "../../InformationScripting/src/wrappers/",
+    "EnvisionPath": "../..",
     "MaxLineLength": 120,
     "SubDirs": 
     {
