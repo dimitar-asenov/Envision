@@ -6,9 +6,9 @@ print(Method.MethodKind.values)
 #m = Method('foo')
 
 for method in methods:
-    print(method.name)
-    print(method.methodKind)
-    if method.name == "bubbleSort":
+    print(method.ast.name)
+    print(method.ast.methodKind)
+    if method.ast.name == "bubbleSort":
         #res = method.results
-        for arg in method.arguments:
+        for arg in method.ast.arguments:
             print(arg.name)

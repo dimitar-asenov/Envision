@@ -24,13 +24,18 @@ HEADERS += src/precompiled.h \
     src/InformationScriptingPlugin.h \
     src/commands/CScript.h \
     src/helpers/BoostPythonHelpers.h \
-    src/wrappers/AstApi.h
+    src/wrappers/AstApi.h \
+    src/graph/InformationNode.h \
+    src/graph/Property.h \
+    src/wrappers/NodeApi.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
     src/commands/CScript.cpp \
     src/helpers/BoostPythonHelpers.cpp \
-    src/wrappers/AstApi.cpp
+    src/wrappers/AstApi.cpp \
+    src/graph/InformationNode.cpp \
+    src/wrappers/NodeApi.cpp
 
 # HACK to only include the AstApi_Generated file if it exists.
 exists(src/wrappers/AstApi_Generated.cpp): {

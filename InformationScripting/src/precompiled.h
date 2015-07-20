@@ -64,6 +64,8 @@
 #undef PYTHONQT_RESTORE_KEYWORDS
 #endif
 
+#include <boost/any.hpp>
+
 #endif
 
 #endif

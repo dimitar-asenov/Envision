@@ -31,7 +31,9 @@
 #include "OOModel/src/declarations/Method.h"
 
 #include "../wrappers/AstApi.h"
+#include "../wrappers/NodeApi.h"
 #include "../helpers/BoostPythonHelpers.h"
+#include "../graph/InformationNode.h"
 
 namespace InformationScripting {
 
@@ -57,7 +59,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		auto parentClass = node->firstAncestorOfType<OOModel::Class>();
 
 		try {
-			PyImport_AppendInittab((char*)"AstApi", PyInit_AstApi);
+			PyImport_AppendInittab("AstApi", PyInit_AstApi);
+			PyImport_AppendInittab("NodeApi", PyInit_NodeApi);
 			Py_Initialize();
 
 			BoostPythonHelpers::initializeQStringConverters();
@@ -65,12 +68,18 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			object main_module = import("__main__");
 			dict main_namespace = extract<dict>(main_module.attr("__dict__"));
 
-			object nodeApi = import("AstApi");
+			object astApi = import("AstApi");
+			object nodeApi = import("NodeApi");
 			object sys = import("sys");
 
 			list methods;
 			for (auto method : *parentClass->methods())
-				methods.append(ptr(method));
+			{
+				// TODO: this leaks currently
+				auto infoNode = new InformationNode();
+				infoNode->insert("ast", method);
+				methods.append(ptr(infoNode));
+			}
 
 			main_namespace["methods"] = methods;
 
