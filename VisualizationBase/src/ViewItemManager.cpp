@@ -28,6 +28,7 @@
 
 #include "items/ViewItem.h"
 #include "Scene.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -121,6 +122,31 @@ void ViewItemManager::removeAllViewItems()
 	currentViewItem_ = nullptr;
 }
 
+void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
+{
+	auto json = view->toJson().toJson();
+	QFile file(fileName(view->name(), manager->name()));
+	file.open(QIODevice::WriteOnly);
+	QTextStream write(&file);
+	write << json;
+	file.close();
+}
+
+ViewItem* ViewItemManager::loadView(QString name, Model::TreeManager* manager)
+{
+	QFile file(fileName(name, manager->name()));
+	if (!file.exists())
+		return nullptr;
+	file.open(QIODevice::ReadOnly);
+	QTextStream read(&file);
+	QString json;
+	while (!read.atEnd())
+		json = json + read.readLine();
+	ViewItem* view = new ViewItem(nullptr);
+	view->fromJson(QJsonDocument::fromJson(json.toUtf8()));
+	return view;
+}
+
 QList<ViewItem*> ViewItemManager::viewItemsAsList() const
 {
 	QList<ViewItem*> result;
@@ -144,6 +170,11 @@ QPoint ViewItemManager::nextEmptyPosition() const
 		if (viewItems_[col].size() < viewItems_[colToInsert].size())
 			colToInsert = col;
 	return QPoint(colToInsert, viewItems_[colToInsert].size());
+}
+
+QString ViewItemManager::fileName(QString viewName, QString managerName) const
+{
+	return QDir::toNativeSeparators("views/" + managerName + "__" + viewName + ".json");
 }
 
 }

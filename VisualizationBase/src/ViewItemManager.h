@@ -28,6 +28,10 @@
 
 #include "visualizationbase_api.h"
 
+namespace Model {
+class TreeManager;
+}
+
 namespace Visualization {
 
 class Scene;
@@ -52,11 +56,16 @@ class VISUALIZATIONBASE_API ViewItemManager
 		ViewItem* currentViewItem();
 		void removeAllViewItems();
 
+		void saveView(ViewItem* view, Model::TreeManager* manager) const;
+		ViewItem* loadView(QString name, Model::TreeManager* manager);
+
 		QVector<QVector<ViewItem*>> viewItems() const;
 		QList<ViewItem*> viewItemsAsList() const;
 
 	private:
 		QPoint nextEmptyPosition() const;
+
+		QString fileName(QString viewName, QString managerName) const;
 
 		const int VIEW_ITEM_COLUMNS = 3;
 		QVector<QVector<ViewItem*>> viewItems_;
