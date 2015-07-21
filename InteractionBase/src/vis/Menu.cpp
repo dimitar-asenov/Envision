@@ -42,6 +42,14 @@ Menu::Menu(QVector<QVector<Visualization::Item*> > items,
 {
 	mousePosition_ = target->scene()->lastMouseHoverPosition();
 	setFiltersChildEvents(true);
+
+	// Select the middle item
+	QApplication::postEvent(target_->scene(),
+		new Visualization::CustomSceneEvent( [this]()
+			{
+				auto & midCol = currentItems_[currentItems_.size()/2];
+				selectItem(midCol[midCol.size()/2]);
+			}));
 }
 
 Menu::~Menu()
