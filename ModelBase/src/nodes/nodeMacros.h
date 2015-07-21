@@ -53,6 +53,7 @@
 	public:																																				\
 		className(::Model::Node* parent = nullptr);																							\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially);									\
+		className* clone() const override;																										\
 		static className* createDefaultInstance(Node* parent = nullptr);																\
 
 /*********************************************************************************************************************/
@@ -161,7 +162,9 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node* parent) : Super(parent) {}																		\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
-		: Super (parent, store, loadPartially) {}
+		: Super (parent, store, loadPartially) {}																								\
+																																							\
+	className* className::clone() const { return new className(*this); }
 /*********************************************************************************************************************/
 
 /**
@@ -180,6 +183,8 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
 		: Super (parent, store, loadPartially, className::getMetaData()) {}															\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
+	className* className::clone() const { return new className(*this); }																\
+																																							\
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
 		: Super (parent, metaData) {}																												\
 																																							\

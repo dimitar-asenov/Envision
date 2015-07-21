@@ -44,6 +44,8 @@ Float::Float(Node *parent, PersistentStore &store, bool) : Super(parent)
 	value = store.loadDoubleValue();
 }
 
+Float* Float::clone() const { return new Float{*this}; }
+
 void Float::set(const double& newValue)
 {
 	execute(new FieldSet<double> (this, value, newValue));

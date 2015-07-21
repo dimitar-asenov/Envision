@@ -37,6 +37,7 @@ DEFINE_TYPE_ID_DERIVED(UINode, "UINode", )
 UINode::UINode() : Super(nullptr) {}
 
 void UINode::initType(){}
+UINode* UINode::clone() const { Q_ASSERT(false); return nullptr;}
 void UINode::save(Model::PersistentStore &) const { Q_ASSERT(false); }
 void UINode::load(Model::PersistentStore &) { Q_ASSERT(false); }
 

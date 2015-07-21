@@ -48,6 +48,8 @@ ViewItemNode::ViewItemNode(Model::Node *, Model::PersistentStore &, bool)
 	Q_ASSERT(false);
 }
 
+ViewItemNode* ViewItemNode::clone() const { return new ViewItemNode{*this}; }
+
 ViewItemNode* ViewItemNode::withSpacingTarget(Model::Node *spacingTarget, ViewItemNode* spacingParent)
 {
 	auto result = new ViewItemNode();

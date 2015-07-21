@@ -113,6 +113,14 @@ class MODELBASE_API Node
 		 */
 		Node(Node* parent = nullptr);
 
+		/**
+		 * Copy constructor.
+		 *
+		 * Note that \a other is ignored and a copy will have no parent or manager and will have a revision of 0.
+		 */
+		Node(const Node& other);
+		virtual Node* clone() const = 0;
+
 		virtual ~Node();
 
 		/**

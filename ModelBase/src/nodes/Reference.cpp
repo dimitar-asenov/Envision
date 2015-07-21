@@ -55,6 +55,13 @@ Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent)
 		pendingResolution_.insert(this);
 }
 
+Reference::Reference(const Reference& other) : Super{other}
+{
+	setName(other.name());
+}
+
+Reference* Reference::clone() const { return new Reference{*this}; }
+
 Reference::~Reference()
 {
 	pendingResolution_.remove(this);
@@ -83,7 +90,8 @@ bool Reference::resolveHelper(bool indirect)
 	if (state_ != ReferenceNeedsToBeResolved) return isResolved();
 	state_ = ReferenceIsBeingResolved;
 
-	auto newTarget = computeTarget();
+	//auto newTarget = computeTarget();
+	Node* newTarget = nullptr;
 
 	Q_ASSERT(!newTarget || (newTarget->definesSymbol() && newTarget->symbolName() == name_));
 

@@ -63,7 +63,7 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 
 		void setPosition(QPoint pos);
 		void setSpacingParentPosition(QPoint pos);
-		virtual QJsonValue toJson() const;
+		virtual QJsonValue toJson() const override;
 
 	private:
 		Model::Node* reference_{};

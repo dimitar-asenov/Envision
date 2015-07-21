@@ -42,6 +42,7 @@ class MODELBASE_API List: public Super<Node>
 	NODE_DECLARE_STANDARD_METHODS(List)
 
 	public:
+		List(const List& other);
 		virtual ~List();
 
 		virtual void save(PersistentStore &store) const override;

@@ -40,6 +40,7 @@ class MODELBASE_API Reference: public Super<Node>
 	NODE_DECLARE_STANDARD_METHODS( Reference )
 
 	public:
+		Reference(const Reference& other);
 		virtual ~Reference() override;
 
 		const QString& name() const;

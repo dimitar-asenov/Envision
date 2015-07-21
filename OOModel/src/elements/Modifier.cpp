@@ -51,6 +51,7 @@ Modifier::Modifier(Modifiers m)
 : Super(nullptr), modifiers_(m)
 {}
 
+Modifier* Modifier::clone() const { return new Modifier{*this}; }
 
 void Modifier::set(Modifiers modifiers, bool enable)
 {
