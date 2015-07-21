@@ -88,8 +88,7 @@ void Menu::selectItem(Visualization::Item* item)
 			focusedItem()->setGraphicsEffect(nullptr);
 		if (item)
 			item->setGraphicsEffect(new QGraphicsColorizeEffect());
-		//Focus the entire menu (somehow just item->moveCursor() doesn't always work)
-		scene()->setMainCursor(nullptr);
+
 		item->moveCursor();
 		focusedItem_ = item;
 	}
