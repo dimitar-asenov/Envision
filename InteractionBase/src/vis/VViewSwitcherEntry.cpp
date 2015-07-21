@@ -51,9 +51,8 @@ void VViewSwitcherEntry::determineChildren()
 {
 	Super::determineChildren();
 	auto view = scene()->viewItems()->viewItem(oldName_);
-	if (view)
-		view->setName(nameField_->text());
-	setStyle(view ? itemStyles().get("existingView") : itemStyles().get("newView"));
+	if (view) view->setName(nameField_->text());
+	setStyle(view ? itemStyles().get("existingView") : itemStyles().get("default"));
 	oldName_ = nameField_->text();
 }
 }
