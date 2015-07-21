@@ -49,6 +49,8 @@ Text::Text(const QString& text) :
 	set(text);
 }
 
+Text* Text::clone() const { return new Text{*this}; }
+
 void Text::set(const QString &newText)
 {
 	execute(getSetCommand(text_, newText));

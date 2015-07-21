@@ -74,6 +74,8 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		CompositeNode(Node *parent = nullptr);
 		CompositeNode(Node *parent, PersistentStore &store, bool partialHint);
+		CompositeNode(const CompositeNode& other);
+		virtual CompositeNode* clone() const override;
 
 		virtual ~CompositeNode();
 

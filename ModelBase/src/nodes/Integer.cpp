@@ -44,6 +44,8 @@ Integer::Integer(Node *parent, PersistentStore &store, bool) : Super(parent)
 	integer = store.loadIntValue();
 }
 
+Integer* Integer::clone() const { return new Integer{*this}; }
+
 void Integer::set(const int& value)
 {
 	execute(new FieldSet<int> (this, integer, value));
