@@ -54,6 +54,7 @@
 #include "vis/ViewSwitcherMenu.h"
 #include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 namespace Interaction {
 
@@ -424,6 +425,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			// Check if the parent of the node is a list and if so, delete this node
 			if (auto list = DCast<Model::List>(node->parent()))
 			{
+				for (auto view : target->scene()->viewItems()->viewItemsAsList())
+					view->notifyAboutRemoval(node);
 				list->beginModification("removeChild");
 				list->remove(node);
 				list->endModification();

@@ -121,6 +121,16 @@ void ViewItemManager::removeAllViewItems()
 	currentViewItem_ = nullptr;
 }
 
+QList<ViewItem*> ViewItemManager::viewItemsAsList() const
+{
+	QList<ViewItem*> result;
+	for (auto vector : viewItems_)
+		for (auto item : vector)
+			if (item)
+				result.append(item);
+	return result;
+}
+
 QPoint ViewItemManager::nextEmptyPosition() const
 {
 	//Take the first empty position, if one exists

@@ -53,6 +53,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 		void removeAllViewItems();
 
 		QVector<QVector<ViewItem*>> viewItems() const;
+		QList<ViewItem*> viewItemsAsList() const;
 
 	private:
 		QPoint nextEmptyPosition() const;

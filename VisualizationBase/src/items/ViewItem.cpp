@@ -88,19 +88,8 @@ void ViewItem::removeNode(Model::Node* node)
 	auto point = positionOfNode(node);
 	if (point.x() != -1)
 	{
-		//If somebody's spacing depends on the node, change it
-		for (auto node : allNodes())
-		{
-			auto viewNode = DCast<ViewItemNode>(node);
-			if (viewNode->spacingParent() == nodes_[point.x()][point.y()])
-			{
-				viewNode->setSpacingTarget(nullptr);
-				viewNode->setSpacingParent(nullptr);
-			}
-		}
+		notifyAboutRemoval(nodes_[point.x()][point.y()]);
 		nodes_[point.x()].remove(point.y());
-		//Need to remove any arrows depending on it
-		removeArrowsForItem(findVisualizationOf(node));
 		setUpdateNeeded(StandardUpdate);
 	}
 }
@@ -128,8 +117,7 @@ QPoint ViewItem::positionOfNode(Model::Node *node) const
 
 QPoint ViewItem::positionOfItem(Item *item) const
 {
-	auto vref = DCast<VViewItemNode>(item);
-	if (vref) return positionOfNode(vref->node());
+	if (item->node()) return positionOfNode(item->node());
 	else return QPoint(-1, -1);
 }
 
@@ -140,6 +128,63 @@ Model::Node* ViewItem::nodeAt(int column, int row) const
 	if (row < 0 || row >= nodes_[column].size())
 		return nullptr;
 	return nodes_[column][row];
+}
+
+void ViewItem::notifyAboutRemoval(Item *item)
+{
+	Q_ASSERT(item);
+	removeArrowsForItem(item);
+}
+
+void ViewItem::notifyAboutRemoval(Model::Node *node)
+{
+	Q_ASSERT(node);
+	//If somebody's spacing depends on the node or a child, remove
+	//the node's spacing target
+	QList<ViewItemNode*> spacingNodes;
+	for (auto node : allNodes())
+		if (auto viewNode = DCast<ViewItemNode>(node))
+			if (!viewNode->reference())
+				spacingNodes.append(viewNode);
+
+	QList<Model::Node*> toCheck{node};
+	while (!toCheck.isEmpty())
+	{
+		auto current = toCheck.takeFirst();
+		toCheck.append(current->children());
+		for (auto spacing : spacingNodes)
+			if (spacing->spacingParent() == current
+					|| spacing->spacingTarget() == current)
+			{
+				spacing->setSpacingTarget(nullptr);
+				spacing->setSpacingParent(nullptr);
+			}
+	}
+	//Remove all the info nodes depending on the node
+	QList<ViewItemNode*> infoNodeParents;
+	for (auto node : allNodes())
+	{
+		auto viewNode = DCast<ViewItemNode>(node);
+		if (DCast<InfoNode>(viewNode->reference()))
+			infoNodeParents.append(viewNode);
+	}
+
+	toCheck.append(node);
+	while (!toCheck.isEmpty())
+	{
+		auto current = toCheck.takeFirst();
+		toCheck.append(current->children());
+		for (auto parent : infoNodeParents)
+		{
+			auto infoNode = DCast<InfoNode>(parent->reference());
+			if (infoNode->target() == current)
+				removeNode(parent);
+		}
+	}
+
+	//Need to remove any arrows depending on it, if exists
+	if (auto item = findVisualizationOf(node))
+		notifyAboutRemoval(item);
 }
 
 void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
@@ -183,6 +228,16 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 	}
 	//And then return the arrows in the layer
 	return arrows_[layer];
+}
+
+void ViewItem::setName(const QString &name)
+{
+	//The arrow overlay names depend on the name -> redo them
+	for (auto layer : arrows_.keys())
+		scene()->removeOverlayGroup(fullLayerName(layer));
+	name_ = name;
+	for (auto layer : arrows_.keys())
+		addArrowLayer(layer);
 }
 
 void ViewItem::determineChildren()
