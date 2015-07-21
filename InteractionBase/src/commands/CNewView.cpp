@@ -40,9 +40,10 @@ CommandResult* CNewView::executeWithArguments(Visualization::Item *, Visualizati
 {
 	bool open = arguments.at(1).compare("open", Qt::CaseInsensitive) == 0;
 	auto view = target->scene()->viewItems()->newViewItem(arguments.at(0));
-	if (open)
+	if (open && view)
 		target->scene()->viewItems()->switchToView(view);
-	return new CommandResult();
+	if (view) return new CommandResult();
+	else return new CommandResult(new CommandError("Could not create view"));
 }
 
 QString CNewView::description(Visualization::Item *, Visualization::Item *,

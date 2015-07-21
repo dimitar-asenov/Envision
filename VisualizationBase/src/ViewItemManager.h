@@ -48,13 +48,15 @@ class VISUALIZATIONBASE_API ViewItemManager
 		ViewItemManager(Scene* scene);
 		~ViewItemManager();
 
-		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
 		ViewItem* newViewItem(const QString name = QString(), QPoint position = QPoint(-1, -1));
 		ViewItem* viewItem(const QString name);
+		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
 		void switchToView(ViewItem* view);
 		bool switchToView(const QString viewName);
 		ViewItem* currentViewItem();
 		void removeAllViewItems();
+
+		ViewItem* createIfNotExists(const QString name, QPoint position = QPoint(-1, -1));
 
 		void saveView(ViewItem* view, Model::TreeManager* manager) const;
 		ViewItem* loadView(QString name, Model::TreeManager* manager);

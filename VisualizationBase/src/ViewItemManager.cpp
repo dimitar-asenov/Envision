@@ -68,6 +68,23 @@ ViewItem* ViewItemManager::viewItem(const QString name)
 	return nullptr;
 }
 
+void ViewItemManager::addViewItem(ViewItem *view, QPoint position)
+{
+	Q_ASSERT(!scene_->inAnUpdate_);
+	if (position.x() < 0 || position.y() < 0)
+		position = nextEmptyPosition();
+	Q_ASSERT(position.x() >= 0 && position.x() < VIEW_ITEM_COLUMNS
+			 && position.y() >= 0);
+	if (viewItems_[position.x()].size() <= position.y())
+		viewItems_[position.x()].resize(position.y() + 1);
+	//If there already is an item -> use insert
+	if (viewItems_[position.x()][position.y()])
+		viewItems_[position.x()].insert(position.y(), view);
+	//Else just overwrite the nullptr
+	else viewItems_[position.x()][position.y()] = view;
+	scene_->addTopLevelItem(view, false);
+}
+
 void ViewItemManager::switchToView(ViewItem *view)
 {
 	Q_ASSERT(!scene_->inAnUpdate_);
@@ -87,26 +104,11 @@ bool ViewItemManager::switchToView(const QString viewName)
 		switchToView(view);
 	return view != nullptr;
 }
-
-void ViewItemManager::addViewItem(ViewItem *view, QPoint position)
-{
-	Q_ASSERT(!scene_->inAnUpdate_);
-	if (position.x() < 0 || position.y() < 0)
-		position = nextEmptyPosition();
-	Q_ASSERT(position.x() >= 0 && position.x() < VIEW_ITEM_COLUMNS
-			 && position.y() >= 0);
-	if (viewItems_[position.x()].size() <= position.y())
-		viewItems_[position.x()].resize(position.y() + 1);
-	//If there already is an item -> use insert
-	if (viewItems_[position.x()][position.y()])
-		viewItems_[position.x()].insert(position.y(), view);
-	//Else just overwrite the nullptr
-	else viewItems_[position.x()][position.y()] = view;
-	scene_->addTopLevelItem(view, false);
-}
-
 ViewItem* ViewItemManager::newViewItem(const QString name, QPoint position)
 {
+	//If a view item with the name already exists, we don't create a new one
+	if (viewItem(name))
+		return nullptr;
 	auto result = new ViewItem(nullptr, name);
 	addViewItem(result, position);
 	return result;
@@ -120,6 +122,22 @@ void ViewItemManager::removeAllViewItems()
 
 	viewItems_.clear();
 	currentViewItem_ = nullptr;
+}
+
+ViewItem* ViewItemManager::createIfNotExists(const QString name, QPoint position)
+{
+	//Try seeing if it is opened already
+	if (auto view = viewItem(name))
+		return view;
+	//Else check if we have it persisted somewhere
+	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+		if (auto view = loadView(name, manager))
+		{
+			addViewItem(view, position);
+			return view;
+		}
+	//If it doesn't exist, create a new view item
+	return newViewItem(name, position);
 }
 
 void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
