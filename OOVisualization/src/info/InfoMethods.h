@@ -37,6 +37,7 @@ class OOVISUALIZATION_API InfoMethods
 {
 	public:
 		static QString numberOfCallees(Model::Node* node);
+		static QString numberOfUsages(Model::Node* node);
 
 		static QString fullName(Model::Node* node);
 };

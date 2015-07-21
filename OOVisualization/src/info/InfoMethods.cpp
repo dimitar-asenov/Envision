@@ -25,8 +25,7 @@
 ***********************************************************************************************************************/
 #include "InfoMethods.h"
 
-#include "OOModel/src/declarations/Method.h"
-#include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/allOOModelNodes.h"
 
 namespace OOVisualization {
 
@@ -37,12 +36,35 @@ QString InfoMethods::numberOfCallees(Model::Node *node)
 	else return QString();
 }
 
+QString InfoMethods::numberOfUsages(Model::Node *node)
+{
+	if (auto method = DCast<OOModel::Method>(node))
+		return "Number of callers " + QString::number(method->callers().size());
+	else if (auto clazz = DCast<OOModel::Class>(node))
+	{
+		QSet<Model::Node*> result;
+		auto top = clazz->root();
+		//Find all the places where this class is referenced
+		QList<Model::Node*> toCheck{top};
+		while (!toCheck.isEmpty())
+		{
+			auto check = toCheck.takeLast();
+			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
+				if (OOModel::Class::expressionToClass(expr) == clazz)
+					result << expr->topMostExpressionParent();
+			toCheck.append(check->children());
+		}
+		return "Number of usages: " + QString::number(result.size());
+	}
+	else return QString();
+}
+
 QString InfoMethods::fullName(Model::Node *node)
 {
 	if (auto method = DCast<OOModel::Method>(node))
-		return "Method name: " + method->fullyQualifiedName();
+		return "<b>" + method->fullyQualifiedName() + "</b>";
 	else if (auto clazz = DCast<OOModel::Class>(node))
-		return "Class name: " + clazz->name();
+		return "<b>" + clazz->name() + "</b>";
 	else return QString();
 }
 
