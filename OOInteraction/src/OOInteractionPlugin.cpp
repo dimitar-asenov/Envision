@@ -50,6 +50,7 @@
 #include "commands/CSceneHandlerItemTest.h"
 #include "commands/CDoxygen.h"
 #include "commands/CAddNodeToView.h"
+#include "commands/CAddNodeToViewByName.h"
 #include "commands/CAddCalleesToView.h"
 #include "commands/CAddBaseClassesToView.h"
 #include "commands/CAddCallersToView.h"
@@ -153,6 +154,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddBaseClassesToView());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCallersToView());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddSubClassesToView());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddNodeToViewByName());
 
 	// Initialize customization support
 	auto customizationGroup = new Visualization::VisualizationGroup();
