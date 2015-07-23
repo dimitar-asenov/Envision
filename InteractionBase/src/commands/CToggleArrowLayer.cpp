@@ -27,8 +27,6 @@
 #include "CToggleArrowLayer.h"
 
 #include "VisualizationBase/src/items/ViewItem.h"
-#include "ModelBase/src/model/TreeManager.h"
-
 
 namespace Interaction {
 
