@@ -48,14 +48,13 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization
 
 	auto tokens = commandTokens.mid(1);
 	tokens.removeAll(".");
-	if (auto node = findNode(tokens,
-			Model::AllTreeManagers::instance().loadedManagers().first()->root()))
-	{
-		target->scene()->currentViewItem()->insertNode(node);
-		return new CommandResult();
-	}
-	else
-		return new CommandResult(new CommandError("Could not find node with name " + commandTokens[1]));
+	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+		if (auto node = findNode(tokens, manager->root()))
+		{
+			target->scene()->currentViewItem()->insertNode(node);
+			return new CommandResult();
+		}
+	return new CommandResult(new CommandError("Could not find node with name " + commandTokens[1]));
 }
 
 QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Visualization::Item*,
@@ -66,8 +65,10 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 	if (textSoFar.trimmed().startsWith("add ", Qt::CaseInsensitive))
 	{
 		auto nodeName = textSoFar.trimmed().mid(4);
-		auto names = findNames(nodeName.split("."),
-						Model::AllTreeManagers::instance().loadedManagers().first()->root());
+		QStringList names;
+		for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+			names.append(findNames(nodeName.split("."), manager->root()));
+
 		//Shorter names usually have less parts to the fully qualified name -> suggest them first
 		std::sort(names.begin(), names.end(), [](QString first, QString second)
 											{ return first.length() < second.length(); });
