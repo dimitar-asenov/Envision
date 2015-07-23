@@ -40,17 +40,17 @@ QString InfoMethods::numberOfUsages(Model::Node *node)
 {
 	if (auto method = DCast<OOModel::Method>(node))
 		return "Number of callers " + QString::number(method->callers().size());
-	else if (auto clazz = DCast<OOModel::Class>(node))
+	else if (auto someClass = DCast<OOModel::Class>(node))
 	{
 		QSet<Model::Node*> result;
-		auto top = clazz->root();
+		auto top = someClass->root();
 		//Find all the places where this class is referenced
 		QList<Model::Node*> toCheck{top};
 		while (!toCheck.isEmpty())
 		{
 			auto check = toCheck.takeLast();
 			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (OOModel::Class::expressionToClass(expr) == clazz)
+				if (OOModel::Class::expressionToClass(expr) == someClass)
 					result << expr->topMostExpressionParent();
 			toCheck.append(check->children());
 		}
