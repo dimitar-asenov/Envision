@@ -125,6 +125,8 @@ void ViewItemManager::removeAllViewItems()
 void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
 {
 	auto json = view->toJson().toJson();
+	if (!QDir(DIRECTORY_NAME).exists())
+		QDir().mkdir(DIRECTORY_NAME);
 	QFile file(fileName(view->name(), manager->name()));
 	file.open(QIODevice::WriteOnly);
 	QTextStream write(&file);
@@ -187,7 +189,7 @@ QPoint ViewItemManager::nextEmptyPosition() const
 
 QString ViewItemManager::fileName(QString viewName, QString managerName) const
 {
-	return QDir::toNativeSeparators("views/" + managerName + "__" + viewName + ".json");
+	return QDir::toNativeSeparators(DIRECTORY_NAME + "/" + managerName + "__" + viewName + ".json");
 }
 
 }

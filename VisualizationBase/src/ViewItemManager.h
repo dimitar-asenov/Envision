@@ -67,6 +67,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 	private:
 		QPoint nextEmptyPosition() const;
 
+		const QString DIRECTORY_NAME = "views";
 		QString fileName(QString viewName, QString managerName) const;
 		ViewItem* loadView(QString name, Model::TreeManager* manager);
 		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
