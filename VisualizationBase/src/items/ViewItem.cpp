@@ -257,7 +257,7 @@ void ViewItem::determineChildren()
 	//before the view is added to the scene
 	for (auto arrow : arrowsToAdd_)
 		if (!arrows_.contains(arrow.layer_) && scene())
-			addArrowLayer(arrow.layer_);
+			addArrowLayer(arrow.layer_, !disabledArrowLayers_.contains(arrow.layer_));
 }
 
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
@@ -277,13 +277,15 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		setUpdateNeeded(RepeatUpdate);
 }
 
-void ViewItem::addArrowLayer(QString layer)
+void ViewItem::addArrowLayer(QString layer, bool enabled)
 {
 	auto layerName = fullLayerName(layer);
 	auto arrowLayer = scene()->overlayGroup(layerName);
 	if (!arrowLayer) arrowLayer = scene()->addOverlayGroup(layerName);
 	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay(from, to));});
 	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
+	if (enabled) arrowLayer->show();
+	else arrowLayer->hide();
 }
 
 void ViewItem::removeArrowsForItem(Item *parent)
@@ -343,14 +345,24 @@ QJsonDocument ViewItem::toJson() const
 					node->setSpacingParentPosition(positionOfNode(node->spacingParent()));
 				nodes.append(node->toJson());
 			}
+
 	//Store all the arrows
 	QJsonArray arrows;
 	for (auto key : arrows_.keys())
 		for (auto pair : arrows_[key])
 			arrows.append(arrowToJson(pair, key));
+
+	//Remember which arrow layers were disabled
+	QJsonArray disabledLayers;
+	for (auto name : arrows_.keys())
+		if (scene()->overlayGroup(fullLayerName(name))
+			&& !scene()->overlayGroup(fullLayerName(name))->isVisible())
+			disabledLayers.append(name);
+
 	QJsonObject main;
 	main.insert("nodes", nodes);
 	main.insert("arrows", arrows);
+	main.insert("disabledLayers", disabledLayers);
 	main.insert("name", name());
 	QJsonDocument result;
 	result.setObject(main);
@@ -379,6 +391,9 @@ void ViewItem::fromJson(QJsonDocument json)
 	auto arrowArray = obj["arrows"].toArray();
 	for (auto arrow : arrowArray)
 		arrowFromJson(arrow.toObject());
+	//Load which arrow layers were disabled
+	for (auto name : obj["disabledLayers"].toArray())
+		disabledArrowLayers_.append(name.toString());
 }
 
 QJsonObject ViewItem::arrowToJson(QPair<Item*, Item*> arrow, QString layer) const

@@ -117,7 +117,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		 * Returns the full layer name of the local arrow layer, as used in the overlay which
 		 * exists in the scene itself.
 		 */
-		QString fullLayerName(QString localLayer);
+		QString fullLayerName(const QString& localLayer) const;
 
 		const QString& name() const;
 		void setName(const QString& name);
@@ -140,9 +140,10 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		};
 		QList<ArrowToAdd> arrowsToAdd_;
 		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
+		QStringList disabledArrowLayers_;
 		QJsonObject arrowToJson(QPair<Item*, Item*> arrow, QString layer) const;
 		void arrowFromJson(QJsonObject json);
-		void addArrowLayer(QString layer);
+		void addArrowLayer(QString layer, bool enabled = true);
 		void removeArrowsForItem(Item* parent);
 
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
@@ -155,6 +156,6 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 inline const QString& ViewItem::name() const { return name_; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
-inline QString ViewItem::fullLayerName(QString localLayer) { return name() + "_" + localLayer; }
+inline QString ViewItem::fullLayerName(const QString& localLayer) const { return name() + "_" + localLayer; }
 
 }

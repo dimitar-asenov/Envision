@@ -44,6 +44,7 @@ class VISUALIZATIONBASE_API OverlayGroup {
 		void hide();
 		void show();
 		void toggle();
+		bool isVisible() const;
 
 		// Methods for manually adding overlays
 		void addOverlay(OverlayAccessor* overlay);
@@ -96,5 +97,6 @@ class VISUALIZATIONBASE_API OverlayGroup {
 inline const QString& OverlayGroup::name() const {return name_;}
 inline Scene* OverlayGroup::scene() const {return scene_;}
 inline const QList<OverlayAccessor*>& OverlayGroup::overlays() const { return overlays_; }
+inline bool OverlayGroup::isVisible() const { return !hidden_; }
 
 } /* namespace Visualization */
