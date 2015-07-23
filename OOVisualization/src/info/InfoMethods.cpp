@@ -50,7 +50,7 @@ QString InfoMethods::numberOfUsages(Model::Node *node)
 		{
 			auto check = toCheck.takeLast();
 			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (OOModel::Class::expressionToClass(expr) == someClass)
+				if (expr->target() == someClass)
 					result << expr->topMostExpressionParent();
 			toCheck.append(check->children());
 		}

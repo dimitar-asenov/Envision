@@ -85,11 +85,13 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 QStringList CAddNodeToViewByName::findNames(QStringList nameParts, Model::Node* root)
 {
 	QStringList result;
-	//If it isn't a declaration, just pass it on
+
+	//If it doesn't define a symbol, just pass it on
 	if (!root->definesSymbol())
 		for (auto child : root->children())
 			result.append(findNames(nameParts, child));
-	//If it is a declaration, and the name matches, take the part of name it matches and search for the rest
+
+	//If it defines a symbol, and the name matches, take the part of name it matches and search for the rest
 	else if (nameParts.size() > 0 && root->symbolName().startsWith(nameParts[0])
 			 && isSuggestable(root->symbolType()))
 	{
@@ -99,7 +101,7 @@ QStringList CAddNodeToViewByName::findNames(QStringList nameParts, Model::Node* 
 		if (nameParts.size() == 1)
 			result.append(root->symbolName());
 	}
-	//If we don't have any name, accept any declarations for suggestions
+	//If we don't have any name left, accept anything which defines a suggestable symbol
 	else if (nameParts.size() == 0 && isSuggestable(root->symbolType()))
 	{
 		for (auto child : root->children())
@@ -120,7 +122,8 @@ Model::Node* CAddNodeToViewByName::findNode(QStringList fullyQualifiedName, Mode
 		if (current->definesSymbol() && current->symbolName() == fullyQualifiedName[currentPart]
 				&& currentPart == fullyQualifiedName.size() - 1)
 			return current;
-		//If it is not a declaration -> search in children.
+
+		//If it doesn't define a symbol, check in the children
 		//Else only continue the path if the name fits
 		if (!current->definesSymbol())
 			toSearch.append(current->children());
