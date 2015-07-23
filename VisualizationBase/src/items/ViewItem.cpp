@@ -190,8 +190,6 @@ void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
 void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer,
 						ViewItemNode *fromParent, ViewItemNode *toParent)
 {
-	if (!arrows_.contains(layer))
-		addArrowLayer(layer);
 	arrowsToAdd_.append(ArrowToAdd{fromParent, from, toParent, to, layer});
 }
 
@@ -208,16 +206,18 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 			auto allFrom = fromParent->findAllVisualizationsOf(line.from_);
 			auto toParent = line.toParent_ ? findVisualizationOf(line.toParent_) : this;
 			auto allTo = toParent->findAllVisualizationsOf(line.to_);
-			if (allFrom.size() > 0 && allTo.size() > 0)
-			{
-				for (auto from : allFrom)
-					for (auto to : allTo)
-						//TODO@cyril The node is rendered as a RootItem -> needs a hack here
-						//or removing a ViewItemNode with arrows doesn't work correctly
-						if (!DCast<RootItem>(from) && !DCast<RootItem>(to))
-							arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
-			}
-			else arrowsToAdd_.append(line);
+
+			bool addedArrow = false;
+			for (auto from : allFrom)
+				for (auto to : allTo)
+					//TODO@cyril The node is rendered as a RootItem -> needs a hack here
+					//or removing a ViewItemNode with arrows doesn't work correctly
+					if (!DCast<RootItem>(from) && !DCast<RootItem>(to))
+					{
+						arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
+						addedArrow = true;
+					}
+			if (!addedArrow) arrowsToAdd_.append(line);
 		}
 	}
 	//And then return the arrows in the layer
@@ -253,6 +253,11 @@ void ViewItem::determineChildren()
 				}
 		}
 	}
+	//Must make sure to add the necessary arrow layers here, as sometimes they are added
+	//before the view is added to the scene
+	for (auto arrow : arrowsToAdd_)
+		if (!arrows_.contains(arrow.layer_) && scene())
+			addArrowLayer(arrow.layer_);
 }
 
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
@@ -408,7 +413,7 @@ void ViewItem::arrowFromJson(QJsonObject json)
 		node2 = JsonUtil::nodeForId(QUuid(json["node2"].toString()));
 	else node2 = parent2;
 	if (node1 && node2)
-		arrowsToAdd_.append(ArrowToAdd{parent1, node1, parent2, node2, json["layer"].toString()});
+		addArrow(node1, node2, json["layer"].toString(), parent1, parent2);
 }
 
 }
