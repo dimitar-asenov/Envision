@@ -426,7 +426,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			if (auto list = DCast<Model::List>(node->parent()))
 			{
 				for (auto view : target->scene()->viewItems()->viewItemsAsList())
-					view->notifyAboutRemoval(node);
+					view->cleanupRemovedNode(node);
 				list->beginModification("removeChild");
 				list->remove(node);
 				list->endModification();

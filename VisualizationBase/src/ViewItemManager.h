@@ -36,6 +36,7 @@ namespace Visualization {
 
 class Scene;
 class ViewItem;
+class Item;
 
 /**
  * The ViewItemManager manages all the different ViewItems which are part
@@ -50,24 +51,25 @@ class VISUALIZATIONBASE_API ViewItemManager
 
 		ViewItem* newViewItem(const QString name = QString(), QPoint position = QPoint(-1, -1));
 		ViewItem* viewItem(const QString name);
-		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
 		void switchToView(ViewItem* view);
 		bool switchToView(const QString viewName);
 		ViewItem* currentViewItem();
 		void removeAllViewItems();
 
-		ViewItem* createOrOpen(const QString name, QPoint position = QPoint(-1, -1));
-
 		void saveView(ViewItem* view, Model::TreeManager* manager) const;
-		ViewItem* loadView(QString name, Model::TreeManager* manager);
+		ViewItem* loadView(QString name, QPoint position = QPoint(-1, -1));
 
 		QVector<QVector<ViewItem*>> viewItems() const;
 		QList<ViewItem*> viewItemsAsList() const;
+
+		void cleanupRemovedItem(Visualization::Item* removedItem);
 
 	private:
 		QPoint nextEmptyPosition() const;
 
 		QString fileName(QString viewName, QString managerName) const;
+		ViewItem* loadView(QString name, Model::TreeManager* manager);
+		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
 
 		const int VIEW_ITEM_COLUMNS = 3;
 		QVector<QVector<ViewItem*>> viewItems_;

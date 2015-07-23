@@ -88,7 +88,7 @@ void ViewItem::removeNode(Model::Node* node)
 	auto point = positionOfNode(node);
 	if (point.x() != -1)
 	{
-		notifyAboutRemoval(nodes_[point.x()][point.y()]);
+		cleanupRemovedNode(nodes_[point.x()][point.y()]);
 		nodes_[point.x()].remove(point.y());
 		setUpdateNeeded(StandardUpdate);
 	}
@@ -130,27 +130,36 @@ Model::Node* ViewItem::nodeAt(int column, int row) const
 	return nodes_[column][row];
 }
 
-void ViewItem::notifyAboutRemoval(Item *item)
+void ViewItem::cleanupRemovedItem(Item *item)
 {
 	Q_ASSERT(item);
 	removeArrowsForItem(item);
 }
 
-void ViewItem::notifyAboutRemoval(Model::Node *node)
+void ViewItem::cleanupRemovedNode(Model::Node *node)
 {
 	Q_ASSERT(node);
 	//If somebody's spacing depends on the node or a child, remove
 	//the node's spacing target
 	QList<ViewItemNode*> spacingNodes;
-	for (auto node : allNodes())
-		if (auto viewNode = DCast<ViewItemNode>(node))
+	for (auto current : allNodes())
+		if (auto viewNode = DCast<ViewItemNode>(current))
 			if (!viewNode->reference())
 				spacingNodes.append(viewNode);
+
+	//Remove all the info nodes depending on the node
+	QList<ViewItemNode*> infoNodeParents;
+	for (auto current : allNodes())
+	{
+		auto viewNode = DCast<ViewItemNode>(current);
+		if (DCast<InfoNode>(viewNode->reference()))
+			infoNodeParents.append(viewNode);
+	}
 
 	QList<Model::Node*> toCheck{node};
 	while (!toCheck.isEmpty())
 	{
-		auto current = toCheck.takeFirst();
+		auto current = toCheck.takeLast();
 		toCheck.append(current->children());
 		for (auto spacing : spacingNodes)
 			if (spacing->spacingParent() == current
@@ -159,21 +168,6 @@ void ViewItem::notifyAboutRemoval(Model::Node *node)
 				spacing->setSpacingTarget(nullptr);
 				spacing->setSpacingParent(nullptr);
 			}
-	}
-	//Remove all the info nodes depending on the node
-	QList<ViewItemNode*> infoNodeParents;
-	for (auto node : allNodes())
-	{
-		auto viewNode = DCast<ViewItemNode>(node);
-		if (DCast<InfoNode>(viewNode->reference()))
-			infoNodeParents.append(viewNode);
-	}
-
-	toCheck.append(node);
-	while (!toCheck.isEmpty())
-	{
-		auto current = toCheck.takeFirst();
-		toCheck.append(current->children());
 		for (auto parent : infoNodeParents)
 		{
 			auto infoNode = DCast<InfoNode>(parent->reference());
@@ -184,7 +178,7 @@ void ViewItem::notifyAboutRemoval(Model::Node *node)
 
 	//Need to remove any arrows depending on it, if exists
 	if (auto item = findVisualizationOf(node))
-		notifyAboutRemoval(item);
+		cleanupRemovedItem(item);
 }
 
 void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,

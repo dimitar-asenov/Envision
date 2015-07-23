@@ -100,15 +100,13 @@ void ViewItemManager::switchToView(ViewItem *view)
 bool ViewItemManager::switchToView(const QString viewName)
 {
 	auto view = viewItem(viewName);
-	if (view)
-		switchToView(view);
+	if (view) switchToView(view);
 	return view != nullptr;
 }
 ViewItem* ViewItemManager::newViewItem(const QString name, QPoint position)
 {
 	//If a view item with the name already exists, we don't create a new one
-	if (viewItem(name))
-		return nullptr;
+	if (viewItem(name)) return nullptr;
 	auto result = new ViewItem(nullptr, name);
 	addViewItem(result, position);
 	return result;
@@ -124,43 +122,34 @@ void ViewItemManager::removeAllViewItems()
 	currentViewItem_ = nullptr;
 }
 
-ViewItem* ViewItemManager::createOrOpen(const QString name, QPoint position)
+void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
 {
-	//Try seeing if it is opened already
-	if (auto view = viewItem(name))
-		return view;
-	//Else check if we have it persisted somewhere
+	auto json = view->toJson().toJson();
+	QFile file(fileName(view->name(), manager->name()));
+	file.open(QIODevice::WriteOnly);
+	QTextStream write(&file);
+	write << json;
+}
+
+ViewItem* ViewItemManager::loadView(QString name, QPoint position)
+{
 	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
 		if (auto view = loadView(name, manager))
 		{
 			addViewItem(view, position);
 			return view;
 		}
-	//If it doesn't exist, create a new view item
-	return newViewItem(name, position);
-}
-
-void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
-{
-	qDebug() << "Saving a view";
-	auto json = view->toJson().toJson();
-	QFile file(fileName(view->name(), manager->name()));
-	file.open(QIODevice::WriteOnly);
-	QTextStream write(&file);
-	write << json;
-	file.close();
+	return nullptr;
 }
 
 ViewItem* ViewItemManager::loadView(QString name, Model::TreeManager* manager)
 {
 	QFile file(fileName(name, manager->name()));
-	if (!file.exists())
-		return nullptr;
+	if (!file.exists()) return nullptr;
 	file.open(QIODevice::ReadOnly);
 	QTextStream read(&file);
 	QString json;
-	while (!read.atEnd())
-		json = json + read.readLine();
+	while (!read.atEnd()) json = json + read.readLine();
 	ViewItem* view = new ViewItem(nullptr);
 	view->fromJson(QJsonDocument::fromJson(json.toUtf8()));
 	return view;
@@ -171,9 +160,15 @@ QList<ViewItem*> ViewItemManager::viewItemsAsList() const
 	QList<ViewItem*> result;
 	for (auto vector : viewItems_)
 		for (auto item : vector)
-			if (item)
-				result.append(item);
+			if (item) result.append(item);
 	return result;
+}
+
+void ViewItemManager::cleanupRemovedItem(Item *removedItem)
+{
+	for (auto vector : viewItems_)
+		for (auto item : vector)
+			if (item) item->cleanupRemovedItem(removedItem);
 }
 
 QPoint ViewItemManager::nextEmptyPosition() const
@@ -181,8 +176,7 @@ QPoint ViewItemManager::nextEmptyPosition() const
 	//Take the first empty position, if one exists
 	for (int col = 0; col < viewItems_.size(); col++)
 		for (int row = 0; row < viewItems_[col].size(); row++)
-			if (!viewItems_[col][row])
-				return QPoint(col, row);
+			if (!viewItems_[col][row]) return QPoint(col, row);
 	//Else just use the column with the least rows
 	int colToInsert = 0;
 	for (int col = 1; col < viewItems_.size(); col++)

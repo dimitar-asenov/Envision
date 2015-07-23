@@ -87,7 +87,10 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 		QPoint pos = indexOf(entry);
 		auto nameAfter = entry->nameField()->text();
 		if (scene()->viewItems()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
-			scene()->viewItems()->createOrOpen(nameAfter, pos);
+		{
+			if (scene()->viewItems()->loadView(nameAfter, pos)) {}
+			else scene()->viewItems()->newViewItem(nameAfter, pos);
+		}
 	}
 }
 

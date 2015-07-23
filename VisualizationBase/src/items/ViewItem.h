@@ -89,11 +89,11 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		/**
 		 * Notify the view about an item being removed externally (e.g. by deleting its node).
 		 */
-		void notifyAboutRemoval(Item* item);
+		void cleanupRemovedItem(Item* item);
 		/**
 		 * Notify the view about a node being removed externally (e.g. by deleting it from the tree).
 		 */
-		void notifyAboutRemoval(Model::Node* node);
+		void cleanupRemovedNode(Model::Node* node);
 
 		/**
 		 * Adds a spacing node at the given position, using the given target and parent
