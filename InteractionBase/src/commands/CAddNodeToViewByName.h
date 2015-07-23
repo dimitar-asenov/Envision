@@ -26,33 +26,29 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
+#include "interactionbase_api.h"
 
-#include "InteractionBase/src/commands/Command.h"
+#include "commands/Command.h"
 
-namespace OOModel {
-class Declaration;
-}
+namespace Interaction {
 
-namespace OOInteraction {
-
-class OOINTERACTION_API CAddNodeToViewByName : public Interaction::Command
+class INTERACTIONBASE_API CAddNodeToViewByName : public Command
 {
 	public:
 		CAddNodeToViewByName();
 
 		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
 		QStringList findNames(QStringList nameParts, Model::Node* root);
-		OOModel::Declaration* findNode(QString fullyQualifiedName, Model::Node* root);
-		bool isSuggestable(OOModel::Declaration* declaration);
+		Model::Node* findNode(QStringList fullyQualifiedName, Model::Node* root);
+		bool isSuggestable(Model::Node::SymbolTypes symbolType);
 };
 
 }

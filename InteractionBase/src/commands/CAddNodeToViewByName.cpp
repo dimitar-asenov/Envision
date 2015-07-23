@@ -26,18 +26,11 @@
 
 #include "CAddNodeToViewByName.h"
 
-#include "OOModel/src/declarations/Declaration.h"
 #include "VisualizationBase/src/items/ViewItem.h"
-#include "OOModel/src/declarations/Declaration.h"
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Method.h"
-#include "OOModel/src/declarations/Module.h"
-#include "OOModel/src/declarations/Project.h"
-
 #include "ModelBase/src/model/TreeManager.h"
 
 
-namespace OOInteraction {
+namespace Interaction {
 
 CAddNodeToViewByName::CAddNodeToViewByName() : Command{"add"}{}
 
@@ -47,32 +40,33 @@ bool CAddNodeToViewByName::canInterpret(Visualization::Item*, Visualization::Ite
 	return commandTokens.size() >= 1 && commandTokens.first() == name();
 }
 
-Interaction::CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visualization::Item*,
+CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization::Item* target,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
 	if (commandTokens.size() < 2)
-		return new Interaction::CommandResult(new Interaction::CommandError("Please specify a node to add"));
+		return new CommandResult(new CommandError("Please specify a node to add"));
 
-	if (auto node = findNode(commandTokens[1],
+	auto tokens = commandTokens.mid(1);
+	tokens.removeAll(".");
+	if (auto node = findNode(tokens,
 			Model::AllTreeManagers::instance().loadedManagers().first()->root()))
 	{
-		source->scene()->currentViewItem()->insertNode(node);
-		return new Interaction::CommandResult();
+		target->scene()->currentViewItem()->insertNode(node);
+		return new CommandResult();
 	}
 	else
-		return new Interaction::CommandResult(new Interaction::CommandError(
-					"Could not find node with name " + commandTokens[1]));
+		return new CommandResult(new CommandError("Could not find node with name " + commandTokens[1]));
 }
 
-QList<Interaction::CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Visualization::Item*,
+QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Visualization::Item*,
 		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
-	QList<Interaction::CommandSuggestion*> suggestions;
+	QList<CommandSuggestion*> suggestions;
 
 	if (textSoFar.trimmed().startsWith("add ", Qt::CaseInsensitive))
 	{
 		auto nodeName = textSoFar.trimmed().mid(4);
-		auto names = findNames(nodeName.split("_"),
+		auto names = findNames(nodeName.split("."),
 						Model::AllTreeManagers::instance().loadedManagers().first()->root());
 		//Shorter names usually have less parts to the fully qualified name -> suggest them first
 		std::sort(names.begin(), names.end(), [](QString first, QString second)
@@ -80,61 +74,57 @@ QList<Interaction::CommandSuggestion*> CAddNodeToViewByName::suggest(Visualizati
 		//Limit the number of suggestions
 		names = names.mid(0, 10);
 		for (auto name : names)
-			suggestions.append(new Interaction::CommandSuggestion("add " + name,
-									"Add node " + name + " to the view"));
+			suggestions.append(new CommandSuggestion("add " + name, "Add node " + name + " to the view"));
 	}
 	else if (QString("add ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-			suggestions.append(new Interaction::CommandSuggestion("add ", "Add nodes to the current view"));
+			suggestions.append(new CommandSuggestion("add ", "Add nodes to the current view"));
 
 	return suggestions;
 }
 
 QStringList CAddNodeToViewByName::findNames(QStringList nameParts, Model::Node* root)
 {
-	auto declaration = DCast<OOModel::Declaration>(root);
 	QStringList result;
 	//If it isn't a declaration, just pass it on
-	if (!declaration)
+	if (!root->definesSymbol())
 		for (auto child : root->children())
 			result.append(findNames(nameParts, child));
 	//If it is a declaration, and the name matches, take the part of name it matches and search for the rest
-	else if (nameParts.size() > 0 && declaration->name().startsWith(nameParts[0]))
+	else if (nameParts.size() > 0 && root->symbolName().startsWith(nameParts[0])
+			 && isSuggestable(root->symbolType()))
 	{
 		for (auto child : root->children())
 			for (auto name : findNames(nameParts.mid(1), child))
-				result.append(declaration->name() + "_" + name);
+				result.append(root->symbolName() + "." + name);
 		if (nameParts.size() == 1)
-			result.append(declaration->name());
+			result.append(root->symbolName());
 	}
 	//If we don't have any name, accept any declarations for suggestions
-	else if (nameParts.size() == 0 && isSuggestable(declaration))
+	else if (nameParts.size() == 0 && isSuggestable(root->symbolType()))
 	{
 		for (auto child : root->children())
 			for (auto name : findNames(nameParts, child))
-				result.append(declaration->name() + "_" + name);
-		result.append(declaration->name());
+				result.append(root->symbolName() + "." + name);
+		result.append(root->symbolName());
 	}
 	return result;
 }
 
-OOModel::Declaration* CAddNodeToViewByName::findNode(QString fullyQualifiedName, Model::Node* root)
+Model::Node* CAddNodeToViewByName::findNode(QStringList fullyQualifiedName, Model::Node* root)
 {
-	//TODO can't use "." for some reason (command unknown..)
-	auto nameParts = fullyQualifiedName.split("_");
 	QList<Model::Node*> toSearch{root};
 	int currentPart = 0;
-	while (!toSearch.isEmpty() && currentPart < nameParts.size())
+	while (!toSearch.isEmpty() && currentPart < fullyQualifiedName.size())
 	{
 		auto current = toSearch.takeLast();
-		auto declaration = DCast<OOModel::Declaration>(current);
-		if (declaration && declaration->name() == nameParts[currentPart]
-				&& currentPart == nameParts.size() - 1)
-			return declaration;
+		if (current->definesSymbol() && current->symbolName() == fullyQualifiedName[currentPart]
+				&& currentPart == fullyQualifiedName.size() - 1)
+			return current;
 		//If it is not a declaration -> search in children.
 		//Else only continue the path if the name fits
-		if (!declaration)
+		if (!current->definesSymbol())
 			toSearch.append(current->children());
-		else if (declaration->name() == nameParts[currentPart])
+		else if (current->symbolName() == fullyQualifiedName[currentPart])
 		{
 			toSearch.clear();
 			toSearch.append(current->children());
@@ -144,12 +134,9 @@ OOModel::Declaration* CAddNodeToViewByName::findNode(QString fullyQualifiedName,
 	return nullptr;
 }
 
-bool CAddNodeToViewByName::isSuggestable(OOModel::Declaration *declaration)
+bool CAddNodeToViewByName::isSuggestable(Model::Node::SymbolTypes symbolType)
 {
-	//We don't want to return all declarations in the suggestions, as many of them will be almost
-	//never used (e.g. local variable declarations -> they can still be added, but not with a suggestion)
-	return DCast<OOModel::Method>(declaration) || DCast<OOModel::Class>(declaration)
-			|| DCast<OOModel::Project>(declaration) || DCast<OOModel::Module>(declaration);
+	return symbolType == Model::Node::METHOD || symbolType == Model::Node::CONTAINER;
 }
 
 }

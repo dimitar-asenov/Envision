@@ -37,6 +37,7 @@
 #include "commands/CAddInfoNode.h"
 #include "commands/CToggleInfoEntry.h"
 #include "commands/CSaveView.h"
+#include "commands/CAddNodeToViewByName.h"
 
 namespace Interaction {
 
@@ -54,6 +55,7 @@ HSceneHandlerItem::HSceneHandlerItem()
 	addCommand(new CAddInfoNode());
 	addCommand(new CToggleInfoEntry());
 	addCommand(new CSaveView());
+	addCommand(new CAddNodeToViewByName());
 }
 
 HSceneHandlerItem* HSceneHandlerItem::instance()
