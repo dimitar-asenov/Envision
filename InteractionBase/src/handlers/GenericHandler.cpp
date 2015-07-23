@@ -425,8 +425,6 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			// Check if the parent of the node is a list and if so, delete this node
 			if (auto list = DCast<Model::List>(node->parent()))
 			{
-				for (auto view : target->scene()->viewItems()->viewItemsAsList())
-					view->cleanupRemovedNode(node);
 				list->beginModification("removeChild");
 				list->remove(node);
 				list->endModification();

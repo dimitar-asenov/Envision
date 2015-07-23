@@ -30,6 +30,7 @@
 
 namespace Model {
 class TreeManager;
+class Node;
 }
 
 namespace Visualization {
@@ -60,11 +61,12 @@ class VISUALIZATIONBASE_API ViewItemManager
 		ViewItem* loadView(QString name, QPoint position = QPoint(-1, -1));
 
 		QVector<QVector<ViewItem*>> viewItems() const;
-		QList<ViewItem*> viewItemsAsList() const;
+
+	private:
+		friend class Item;
 
 		void cleanupRemovedItem(Visualization::Item* removedItem);
 
-	private:
 		QPoint nextEmptyPosition() const;
 
 		const QString DIRECTORY_NAME = "views";

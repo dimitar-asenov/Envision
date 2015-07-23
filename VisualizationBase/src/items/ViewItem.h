@@ -27,10 +27,10 @@
 
 #include "../visualizationbase_api.h"
 #include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "../../VisualizationBase/src/nodes/ViewItemNode.h"
 
 namespace Visualization {
 
-class ViewItemNode;
 class VViewItemNode;
 
 /**
@@ -87,15 +87,6 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		Model::Node* nodeAt(int column, int row) const;
 
 		/**
-		 * Notify the view about an item being removed externally (e.g. by deleting its node).
-		 */
-		void cleanupRemovedItem(Item* item);
-		/**
-		 * Notify the view about a node being removed externally (e.g. by deleting it from the tree).
-		 */
-		void cleanupRemovedNode(Model::Node* node);
-
-		/**
 		 * Adds a spacing node at the given position, using the given target and parent
 		 * to determine the spacing.
 		 */
@@ -132,6 +123,13 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 	private:
+		friend class ViewItemManager;
+		/**
+		 * Notify the view about an item being removed externally (e.g. by deleting its node).
+		 */
+		void cleanupRemovedItem(Item* item);
+		void cleanupRemovedNode(Model::Node* node);
+
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
 
@@ -150,6 +148,9 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void addArrowLayer(QString layer, bool enabled = true);
 		void removeArrowsForItem(Item* parent);
 
+		template <class NodeType>
+		QList<NodeType*> referencesOfType() const;
+
 		void insertViewItemNode(ViewItemNode* node, int column, int row);
 
 		void ensurePositionExists(int column, int row);
@@ -161,5 +162,16 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 inline const QString& ViewItem::name() const { return name_; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
 inline QString ViewItem::fullLayerName(const QString& localLayer) const { return name() + "_" + localLayer; }
+
+template <class NodeType>
+inline QList<NodeType*> ViewItem::referencesOfType() const
+{
+	QList<NodeType*> result;
+	for (auto node : allNodes())
+		if (auto viewNode = DCast<ViewItemNode>(node))
+			if (auto reference = DCast<NodeType>(viewNode->reference()))
+				result.append(reference);
+	return result;
+}
 
 }

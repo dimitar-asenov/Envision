@@ -157,15 +157,6 @@ ViewItem* ViewItemManager::loadView(QString name, Model::TreeManager* manager)
 	return view;
 }
 
-QList<ViewItem*> ViewItemManager::viewItemsAsList() const
-{
-	QList<ViewItem*> result;
-	for (auto vector : viewItems_)
-		for (auto item : vector)
-			if (item) result.append(item);
-	return result;
-}
-
 void ViewItemManager::cleanupRemovedItem(Item *removedItem)
 {
 	for (auto vector : viewItems_)

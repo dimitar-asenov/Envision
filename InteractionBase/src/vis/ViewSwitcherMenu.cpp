@@ -88,8 +88,8 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 		auto nameAfter = entry->nameField()->text();
 		if (scene()->viewItems()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
 		{
-			if (scene()->viewItems()->loadView(nameAfter, pos)) {}
-			else scene()->viewItems()->newViewItem(nameAfter, pos);
+			if (!scene()->viewItems()->loadView(nameAfter, pos))
+				scene()->viewItems()->newViewItem(nameAfter, pos);
 		}
 	}
 }
