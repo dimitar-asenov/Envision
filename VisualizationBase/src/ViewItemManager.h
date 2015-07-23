@@ -56,7 +56,7 @@ class VISUALIZATIONBASE_API ViewItemManager
 		ViewItem* currentViewItem();
 		void removeAllViewItems();
 
-		ViewItem* createIfNotExists(const QString name, QPoint position = QPoint(-1, -1));
+		ViewItem* createOrOpen(const QString name, QPoint position = QPoint(-1, -1));
 
 		void saveView(ViewItem* view, Model::TreeManager* manager) const;
 		ViewItem* loadView(QString name, Model::TreeManager* manager);

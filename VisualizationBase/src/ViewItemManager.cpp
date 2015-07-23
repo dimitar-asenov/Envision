@@ -124,7 +124,7 @@ void ViewItemManager::removeAllViewItems()
 	currentViewItem_ = nullptr;
 }
 
-ViewItem* ViewItemManager::createIfNotExists(const QString name, QPoint position)
+ViewItem* ViewItemManager::createOrOpen(const QString name, QPoint position)
 {
 	//Try seeing if it is opened already
 	if (auto view = viewItem(name))
@@ -142,6 +142,7 @@ ViewItem* ViewItemManager::createIfNotExists(const QString name, QPoint position
 
 void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
 {
+	qDebug() << "Saving a view";
 	auto json = view->toJson().toJson();
 	QFile file(fileName(view->name(), manager->name()));
 	file.open(QIODevice::WriteOnly);
