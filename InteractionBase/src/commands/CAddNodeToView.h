@@ -26,16 +26,12 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
-#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
+#include "interactionbase_api.h"
+#include "commands/CommandWithDefaultArguments.h"
 
-namespace Visualization {
-	class Item;
-}
+namespace Interaction {
 
-namespace OOInteraction {
-
-class OOINTERACTION_API CAddNodeToView : public Interaction::CommandWithDefaultArguments
+class INTERACTIONBASE_API CAddNodeToView : public CommandWithDefaultArguments
 {
 	public:
 		CAddNodeToView();
@@ -44,7 +40,7 @@ class OOINTERACTION_API CAddNodeToView : public Interaction::CommandWithDefaultA
 				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
 
 	protected:
-		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
 				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
 
 		virtual QString description(Visualization::Item *source, Visualization::Item *target,
