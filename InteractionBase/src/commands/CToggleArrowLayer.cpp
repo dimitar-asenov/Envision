@@ -25,27 +25,43 @@
  **********************************************************************************************************************/
 
 #include "CToggleArrowLayer.h"
+
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "ModelBase/src/model/TreeManager.h"
+
 
 namespace Interaction {
 
-CToggleArrowLayer::CToggleArrowLayer()
-	:CommandWithDefaultArguments("toggleLayer", {""})
+CToggleArrowLayer::CToggleArrowLayer() : Command{"toggleLayer"}{}
+
+bool CToggleArrowLayer::canInterpret(Visualization::Item*, Visualization::Item*,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
+	return commandTokens.size() > 1 && commandTokens.first() == name();
 }
 
-CommandResult* CToggleArrowLayer::executeWithArguments(Visualization::Item *, Visualization::Item *target,
-		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+CommandResult* CToggleArrowLayer::execute(Visualization::Item*, Visualization::Item* target,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto fullName = target->scene()->currentViewItem()->fullLayerName(arguments.at(0));
+	auto fullName = target->scene()->currentViewItem()->fullLayerName(commandTokens[1]);
 	if (auto overlay = target->scene()->overlayGroup(fullName))
 		overlay->toggle();
 	return new CommandResult();
 }
 
-QString CToggleArrowLayer::description(Visualization::Item *, Visualization::Item *,
-		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
+QList<CommandSuggestion*> CToggleArrowLayer::suggest(Visualization::Item* source, Visualization::Item*,
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
-	return "Toggle the " + arguments.at(0) + " arrow layer";
+	QList<CommandSuggestion*> suggestions;
+	if (textSoFar.startsWith(name() + " ") || name().startsWith(textSoFar))
+	{
+		auto parts = textSoFar.split(" ");
+		auto nameSoFar = parts.size() > 1 ? parts[1] : "";
+		for (auto layerName : source->scene()->currentViewItem()->arrowLayers())
+			if (layerName.startsWith(nameSoFar))
+				suggestions.append(new CommandSuggestion(name() + " " + layerName,
+										"Toggle the arrow layer " + layerName));
+	}
+	return suggestions;
 }
 }

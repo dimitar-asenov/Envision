@@ -118,6 +118,10 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		 * exists in the scene itself.
 		 */
 		QString fullLayerName(const QString& localLayer) const;
+		/**
+		 * Returns the names of all the available arrow layers.
+		 */
+		QStringList arrowLayers() const;
 
 		const QString& name() const;
 		void setName(const QString& name);

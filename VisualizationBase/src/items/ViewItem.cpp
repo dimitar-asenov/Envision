@@ -224,6 +224,15 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 	return arrows_[layer];
 }
 
+QStringList ViewItem::arrowLayers() const
+{
+	auto result = arrows_.keys();
+	for (auto name : disabledArrowLayers_)
+		if (!result.contains(name))
+			result.append(name);
+	return result;
+}
+
 void ViewItem::setName(const QString &name)
 {
 	//The arrow overlay names depend on the name -> redo them
