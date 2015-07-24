@@ -30,13 +30,13 @@ namespace InformationScripting {
 
 namespace PythonConverters {
 
-using namespace boost::python;
+using namespace boost;
 
 struct QString_to_python_str
 {
 		static PyObject* convert(QString const& s)
 		{
-			return incref(object(s.toLatin1().constData()).ptr());
+			return python::incref(python::object(s.toLatin1().constData()).ptr());
 		}
 };
 
@@ -44,7 +44,7 @@ struct QString_from_python_str
 {
 		QString_from_python_str()
 		{
-			converter::registry::push_back(&convertible, &construct, type_id<QString>());
+			python::converter::registry::push_back(&convertible, &construct, python::type_id<QString>());
 		}
 
 		// Determine if objPtr can be converted in a QString
@@ -55,14 +55,14 @@ struct QString_from_python_str
 		}
 
 		// Convert objPtr into a QString
-		static void construct(PyObject* objPtr, converter::rvalue_from_python_stage1_data* data)
+		static void construct(PyObject* objPtr, python::converter::rvalue_from_python_stage1_data* data)
 		{
 			// Extract the character data from the python string
-			handle<> rawBytesHandle(PyUnicode_AsUTF8String(objPtr));
+			python::handle<> rawBytesHandle(PyUnicode_AsUTF8String(objPtr));
 			Q_ASSERT(rawBytesHandle);
 
 			// Grab pointer to memory into which to construct the new QString
-			void* storageBytes = ((converter::rvalue_from_python_storage<QString>*) data)->storage.bytes;
+			void* storageBytes = ((python::converter::rvalue_from_python_storage<QString>*) data)->storage.bytes;
 
 			// in-place construct the new QString using the character data extraced from the python object
 			new (storageBytes) QString(PyBytes_AsString(rawBytesHandle.get()));
@@ -76,7 +76,7 @@ struct QString_from_python_str
 // Parses the value of the active python exception
 QString BoostPythonHelpers::parsePythonException()
 {
-	using namespace boost::python;
+	using namespace boost;
 
 	PyObject *typePtr = nullptr, *valuePtr = nullptr, *tracebackPtr = nullptr;
 	// Fetch the exception info from the Python C API
@@ -85,30 +85,30 @@ QString BoostPythonHelpers::parsePythonException()
 	QString errorMessage{"Unfetchable Python error"};
 	if (typePtr != nullptr)
 	{
-		handle<> typePtrHandle(typePtr);
-		extract<QString> typePtrString(str{typePtrHandle});
+		python::handle<> typePtrHandle(typePtr);
+		python::extract<QString> typePtrString(python::str{typePtrHandle});
 		if (typePtrString.check()) errorMessage = typePtrString();
 		else errorMessage = "Unknown exception type";
 	}
 	if (valuePtr != nullptr)
 	{
-		handle<> valuePtrHandle(valuePtr);
-		extract<QString> valuePtrString(str{valuePtrHandle});
+		python::handle<> valuePtrHandle(valuePtr);
+		python::extract<QString> valuePtrString(python::str{valuePtrHandle});
 		if (valuePtrString.check()) errorMessage += ": " + valuePtrString();
 		else errorMessage += ": Unparseable Python error: ";
 	}
 	// Parse lines from the traceback using the Python traceback module
 	if (tracebackPtr != nullptr)
 	{
-		handle<> tracebackPtrHandle(tracebackPtr);
+		python::handle<> tracebackPtrHandle(tracebackPtr);
 		// Load the traceback module and the format_tb function
-		object tb(import("traceback"));
-		object formatTraceback(tb.attr("format_tb"));
+		python::object tb(python::import("traceback"));
+		python::object formatTraceback(tb.attr("format_tb"));
 		// Call the format_tb function to get the traceback strings.
-		object tracebakList(formatTraceback(tracebackPtrHandle));
-		object tracebackString(str("\n").join(tracebakList));
+		python::object tracebakList(formatTraceback(tracebackPtrHandle));
+		python::object tracebackString(python::str("\n").join(tracebakList));
 
-		extract<QString> tracebackErrorString(tracebackString);
+		python::extract<QString> tracebackErrorString(tracebackString);
 		if (tracebackErrorString.check()) errorMessage += ": " + tracebackErrorString();
 		else errorMessage += ": Unparseable Python traceback";
 	}
@@ -117,10 +117,10 @@ QString BoostPythonHelpers::parsePythonException()
 
 void BoostPythonHelpers::initializeQStringConverters()
 {
-	using namespace boost::python;
+	using namespace boost;
 
 	// register the to-python converter
-	to_python_converter<QString, PythonConverters::QString_to_python_str>();
+	python::to_python_converter<QString, PythonConverters::QString_to_python_str>();
 
 	// register the from-python converter
 	PythonConverters::QString_from_python_str();

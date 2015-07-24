@@ -48,7 +48,7 @@ bool CScript::canInterpret(Visualization::Item*, Visualization::Item*, const QSt
 Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization::Item* target,
 															const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
-	using namespace boost::python;
+	using namespace boost;
 
 	QStringList args = commandTokens.mid(1);
 	if (args[0] == "methods")
@@ -65,20 +65,20 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 
 			BoostPythonHelpers::initializeQStringConverters();
 
-			object main_module = import("__main__");
-			dict main_namespace = extract<dict>(main_module.attr("__dict__"));
+			python::object main_module = python::import("__main__");
+			python::dict main_namespace = python::extract<python::dict>(main_module.attr("__dict__"));
 
-			object astApi = import("AstApi");
-			object nodeApi = import("NodeApi");
-			object sys = import("sys");
+			python::object astApi = python::import("AstApi");
+			python::object nodeApi = python::import("NodeApi");
+			python::object sys = python::import("sys");
 
-			list methods;
+			python::list methods;
 			for (auto method : *parentClass->methods())
 			{
 				// TODO: this leaks currently
 				auto infoNode = new InformationNode();
 				infoNode->insert("ast", method);
-				methods.append(ptr(infoNode));
+				methods.append(python::ptr(infoNode));
 			}
 
 			main_namespace["methods"] = methods;
@@ -86,7 +86,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			exec_file("../InformationScripting/test/scripts/methods.py", main_namespace, main_namespace);
 			// Workaround to get output
 			sys.attr("stdout").attr("flush")();
-		} catch (error_already_set ) {
+		} catch (python::error_already_set ) {
 			qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
 		}
 	}
