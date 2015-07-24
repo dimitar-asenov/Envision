@@ -1,29 +1,32 @@
-TARGET = pythonwrappergen
-
 TEMPLATE = app
-CONFIG += console
+CONFIG += console precompile_header
 CONFIG -= app_bundle
 
+#Workaround: https://bugreports.qt.io/browse/QTBUG-27018
+CONFIG -= clang_pch_style
 
-SOURCES += main.cpp \
-    GenTool.cpp \
-    EnvisionAstConsumer.cpp \
-    GeneratorAction.cpp \
-    EnvisionPPCallbacks.cpp \
-    TypeUtilities.cpp \
-    APIData.cpp \
-    APIPrinter.cpp \
-    Config.cpp
+SOURCES += src/main.cpp \
+    src/GenTool.cpp \
+    src/EnvisionAstConsumer.cpp \
+    src/GeneratorAction.cpp \
+    src/EnvisionPPCallbacks.cpp \
+    src/TypeUtilities.cpp \
+    src/APIData.cpp \
+    src/APIPrinter.cpp \
+    src/Config.cpp
 
 HEADERS += \
-    GenTool.h \
-    EnvisionAstConsumer.h \
-    GeneratorAction.h \
-    EnvisionPPCallbacks.h \
-    TypeUtilities.h \
-    APIData.h \
-    APIPrinter.h \
-    Config.h
+    src/GenTool.h \
+    src/EnvisionAstConsumer.h \
+    src/GeneratorAction.h \
+    src/EnvisionPPCallbacks.h \
+    src/TypeUtilities.h \
+    src/APIData.h \
+    src/APIPrinter.h \
+    src/Config.h \
+    src/precompiled.h
+
+PRECOMPILED_HEADER = src/precompiled.h
 
 # Use this instead of the line under it to avoid warnings
 QMAKE_CXXFLAGS += -std=c++1y -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)"" -Wall -fno-rtti
