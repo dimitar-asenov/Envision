@@ -11,12 +11,18 @@ win32:LIBS += -llogger \
     -loovisualization \
     -loointeraction \
 
+# UNIX PYTHON
 unix:PYTHON_VERSION=3.4
-
 unix:QMAKE_CXXFLAGS += $$system(python$${PYTHON_VERSION}-config --includes)
+unix:LIBS += $$system(python$${PYTHON_VERSION}-config --libs)
+# WIN PYTHON, NOTE UNTESTED: (adapted from: http://stackoverflow.com/a/1017194)
+win32: PYTHON_VERSION=34
+win32: INCLUDEPATH += Python$${PYTHON_VERSION}/include
+win32: LIBS += -L/Python$${PYTHON_VERSION}/libs -lpython$${PYTHON_VERSION}
+
 
 INCLUDEPATH += /usr/lib/boost
-LIBS += $$system(python$${PYTHON_VERSION}-config --libs) -lboost_python3
+LIBS += -lboost_python3
 
 HEADERS += src/precompiled.h \
     src/InformationScriptingException.h \
