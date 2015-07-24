@@ -147,6 +147,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		void arrowFromJson(QJsonObject json);
 		void addArrowLayer(QString layer, bool enabled = true);
 		void removeArrowsForItem(Item* parent);
+		bool hasParent(Item* item, Item* parent);
 
 		template <class NodeType>
 		QList<NodeType*> referencesOfType() const;

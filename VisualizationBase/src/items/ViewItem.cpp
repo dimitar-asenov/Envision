@@ -284,20 +284,21 @@ void ViewItem::addArrowLayer(QString layer, bool enabled)
 
 void ViewItem::removeArrowsForItem(Item *parent)
 {
-	//Remove all arrows depending on any child item of the parent or the parent itself
-	QList<Item*> allChildren{parent};
-	while (!allChildren.isEmpty())
+	//Remove all arrows where the arrow's item is a child of the removed item
+	for (auto key : arrows_.keys())
 	{
-		auto current = allChildren.takeLast();
-		for (auto key : arrows_.keys())
-		{
-			auto copy = arrows_[key];
-			for (auto pair : copy)
-				if (pair.first == current || pair.second == current)
-					arrows_[key].removeAll(pair);
-		}
-		allChildren.append(current->childItems());
+		auto copy = arrows_[key];
+		for (auto pair : copy)
+			if (hasParent(pair.first, parent) || hasParent(pair.second, parent))
+				arrows_[key].removeAll(pair);
 	}
+}
+
+bool ViewItem::hasParent(Item* item, Item* parent)
+{
+	while (item && item != parent)
+		item = item->parent();
+	return item;
 }
 
 void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)
