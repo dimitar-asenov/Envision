@@ -100,6 +100,56 @@ LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&,
 			}
 		}
 
+	// down-propagation of child-structure conflicts
+	for (auto changeA : cdgA.changes())
+	{
+		if (changeA->hasFlags(ChangeDescription::Structure))
+		{
+			auto changeB = cdgB.changes().value(changeA->nodeId());
+			if (changeB && changeB->hasFlags(ChangeDescription::Structure))
+			{
+				auto structureChanges = [](ChangeDependencyGraph& cdg, std::shared_ptr<ChangeDescription> parentChange)
+						-> QSet<std::shared_ptr<ChangeDescription>>
+				{
+					QSet<Model::NodeIdType> childrenIds;
+					for (auto child : parentChange->nodeA()->children())
+						childrenIds.insert(child->id());
+					for (auto child : parentChange->nodeB()->children())
+						childrenIds.insert(child->id());
+					QSet<std::shared_ptr<ChangeDescription>> changes;
+					for (auto childId : childrenIds)
+					{
+						auto change = cdg.changes().value(childId);
+						if (change && (change->type() != ChangeType::Stationary || change->hasFlags(ChangeDescription::Label)))
+							changes.insert(cdg.changes().value(childId));
+					}
+					return changes;
+				};
+
+				auto structChangesA = structureChanges(cdgA, changeA);
+				auto structChangesB = structureChanges(cdgB, changeB);
+
+				for (auto childChangeA : structChangesA)
+				{
+					conflictingChanges.insert(childChangeA);
+					markDependingAsConflicting(conflictingChanges, childChangeA, cdgA);
+					if (useLinkedChanges_)
+						transition.insert(childChangeA->nodeId(), true, changeA, true);
+				}
+				for (auto childChangeB : structChangesB)
+				{
+					conflictingChanges.insert(childChangeB);
+					markDependingAsConflicting(conflictingChanges, childChangeB, cdgB);
+					if (useLinkedChanges_)
+						transition.insert(childChangeB->nodeId(), false, changeA, true);
+				}
+				for (auto childChangeA : structChangesA)
+					for (auto childChangeB : structChangesB)
+						conflictPairs.insert(childChangeA, childChangeB);
+			}
+		}
+	}
+
 	return transition;
 }
 

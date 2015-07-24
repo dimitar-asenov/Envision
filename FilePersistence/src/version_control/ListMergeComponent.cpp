@@ -79,28 +79,26 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 		bool allResolved = true;
 		for (auto chunk : preparedListIt.value())
 		{
-			if (chunk->stable_)
-			{
-				Q_ASSERT(chunk->noConflicts_);
-				mergedList.append(chunk->spanBase_);
-				index += chunk->spanBase_.size();
-			}
-			else if (chunk->noConflicts_)
+			if (chunk->noConflicts_)
 			{
 				mergedList.append(chunk->spanMerged_);
 
 				// modify the CDGs and mark the relevant conflicts as resolved
 
-				// find deletions first
+				// find deletions and move-outs first
 				for (auto elemId : chunk->spanBase_)
 				{
 					if (!chunk->spanMerged_.contains(elemId))
 					{
 						auto changeA = cdgA.changes().value(elemId);
 						auto changeB = cdgB.changes().value(elemId);
-						if (changeA && changeA->type() == ChangeType::Deletion)
+						if (changeA && (changeA->type() == ChangeType::Deletion ||
+											 (changeA->type() == ChangeType::Move &&
+											  !preparedLists_.contains(changeA->nodeB()->parentId()))))
 							markAsResolved(conflictingChanges, conflictPairs, changeA, cdgA, cdgB);
-						else if (changeB && changeB->type() == ChangeType::Deletion)
+						else if (changeB && (changeB->type() == ChangeType::Deletion ||
+													(changeB->type() == ChangeType::Move &&
+													 !preparedLists_.contains(changeB->nodeB()->parentId()))))
 							markAsResolved(conflictingChanges, conflictPairs, changeB, cdgB, cdgA);
 					}
 				}
@@ -156,7 +154,6 @@ LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(
 						cdgA.recordDependencies(newChange, false);
 					}
 				}
-
 			}
 			else
 			{
@@ -263,18 +260,51 @@ QPair<bool, QSet<Model::NodeIdType>> ListMergeComponent::checkAndGetAllElementId
 
 bool __attribute__((optimize("O0"))) onlyConflictsOnLabel(ConflictPairs& conflictPairs,
 																			 QSet<Model::NodeIdType>& allElementIds,
-																			 ChangeDependencyGraph& cdgA)
+																			 ChangeDependencyGraph& cdgA,
+																			 Model::NodeIdType containerId)
 {
 	for (auto elem : allElementIds)
 	{
 		auto changeA = cdgA.changes().value(elem);
-		if (changeA)
-		{
-			for (auto changeB : conflictPairs.values(changeA))
+		std::shared_ptr<ChangeDescription> changeB = nullptr;
+		for (auto change : conflictPairs.values(changeA))
+			if (change->nodeId() == elem)
 			{
-				if (!((changeA->onlyLabelChange() && conflictPairs.values(changeB).size() == 1) ||
-						(changeB->onlyLabelChange() && conflictPairs.values(changeA).size() == 1)))
+				changeB = change;
+				break;
+			}
+
+		if (changeA && changeB)
+		{
+			if (!changeB->onlyLabelChange())
+			{
+				if (!changeA->onlyLabelChange())
 					return false;
+				else
+				{
+					// changeA is only label change, check conflict pairs for changeB
+					for (auto pairedChangeA : conflictPairs.values(changeB))
+					{
+						if (!((pairedChangeA->nodeA() && pairedChangeA->nodeA()->parentId() == containerId) ||
+								(pairedChangeA->nodeB() && pairedChangeA->nodeB()->parentId() == containerId)))
+							return false;
+					}
+				}
+			}
+			else
+			{
+				if (!changeB->onlyLabelChange())
+					return false;
+				else
+				{
+					// changeB is only label change, check conflict pairs for changeA
+					for (auto pairedChangeB : conflictPairs.values(changeA))
+					{
+						if (!((pairedChangeB->nodeA() && pairedChangeB->nodeA()->parentId() == containerId) ||
+								(pairedChangeB->nodeB() && pairedChangeB->nodeB()->parentId() == containerId)))
+							return false;
+					}
+				}
 			}
 		}
 	}
@@ -325,7 +355,7 @@ QSet<Model::NodeIdType> __attribute__((optimize("O0"))) ListMergeComponent::comp
 
 		// - All elements of the list are conflict roots
 
-		if (!onlyConflictsOnLabel(conflictPairs, allElementIds, cdgA)) continue;
+		if (!onlyConflictsOnLabel(conflictPairs, allElementIds, cdgA, change->nodeId())) continue;
 
 		// - All conflicts are on label changes only.
 

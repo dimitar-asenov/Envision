@@ -206,21 +206,18 @@ void Merge::performTrueMerge()
 	applyChangesToTree(treeMerged_, cdgB);
 
 	// remove holes in lists
-	QSet<Model::NodeIdType> checkedLists;
 	for (auto changeIt = cdgA.changes().constBegin(); changeIt != cdgA.changes().constEnd(); ++changeIt)
 	{
 		const auto& change = changeIt.value();
-		if (!checkedLists.contains(change->nodeId()) &&
-			 (
-				 (change->nodeA() &&
-				  (listTypes_.contains(change->nodeA()->type()) ||
-					unorderedTypes_.contains(change->nodeA()->type()))
-				  )
-				 ||
-				 (change->nodeA() &&
-					(listTypes_.contains(change->nodeA()->type()) ||
-					 unorderedTypes_.contains(change->nodeA()->type()))
-				  )
+		if (
+			 (change->nodeA() &&
+			  (listTypes_.contains(change->nodeA()->type()) ||
+				unorderedTypes_.contains(change->nodeA()->type()))
+			  )
+			 ||
+			 (change->nodeA() &&
+			  (listTypes_.contains(change->nodeA()->type()) ||
+				unorderedTypes_.contains(change->nodeA()->type()))
 			  )
 			 )
 		{
@@ -234,7 +231,6 @@ void Merge::performTrueMerge()
 					++gapSize;
 				elem->setLabel(QString::number(curIdx));
 			}
-			checkedLists.insert(change->nodeId());
 		}
 	}
 
