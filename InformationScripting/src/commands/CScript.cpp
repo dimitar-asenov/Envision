@@ -83,7 +83,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 
 			main_namespace["methods"] = methods;
 
-			exec_file("scripts/methods.py", main_namespace, main_namespace);
+			exec_file("../InformationScripting/test/scripts/methods.py", main_namespace, main_namespace);
 			// Workaround to get output
 			sys.attr("stdout").attr("flush")();
 		} catch (error_already_set ) {
