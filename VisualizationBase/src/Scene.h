@@ -160,7 +160,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void removeOverlay(Item* overlay, const QString& groupName = QString());
 
 	public slots:
-		void nodesUpdated(QSet<Node*> nodes);
+		void nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 
 	protected:
 		virtual bool event(QEvent* event) override;

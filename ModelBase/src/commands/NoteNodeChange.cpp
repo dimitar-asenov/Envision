@@ -24,22 +24,54 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "commands/UndoCommand.h"
+#include "NoteNodeChange.h"
+#include "nodes/Node.h"
 
 namespace Model {
 
-class AddModifiedNode: public UndoCommand
+NoteNodeChange::NoteNodeChange(QSet<Node*>& modifiedTargets, QSet<Node*>& removedTargets, const UndoCommand* command)
+	: UndoCommand(nullptr, "Note node changes"), modifiedTargets_(modifiedTargets), removedTargets_(removedTargets),
+	  target_(command->target()), insertedNode_{command->insertedNode()}, removedNode_{command->removedNode()}
 {
-	private:
-		QSet<Node*>& modifiedTargets;
-		Node* target;
+}
 
-	public:
-		AddModifiedNode(QSet<Node*>& modifiedTargets, Node* target);
-		virtual void redo();
-		virtual void undo();
-};
+void NoteNodeChange::redo()
+{
+	if ( target_ ) modifiedTargets_.insert(target_);
+	if ( insertedNode_ ) unmarkRemovals(insertedNode_);
+	if ( removedNode_  ) markNodeAndChildrenAsRemoved( removedNode_ );
+	UndoCommand::redo();
+}
+
+void NoteNodeChange::undo()
+{
+	if ( target_ ) modifiedTargets_.insert(target_);
+	if ( removedNode_ ) unmarkRemovals(removedNode_);
+	if ( insertedNode_ ) markNodeAndChildrenAsRemoved( insertedNode_ );
+	UndoCommand::undo();
+}
+
+void NoteNodeChange::markNodeAndChildrenAsRemoved(Node* node) const
+{
+	QList<Node*> stack {node};
+	while (!stack.isEmpty())
+	{
+		auto child = stack.takeLast();
+		removedTargets_.insert(child);
+		stack.append( child->children() );
+	}
+}
+
+/**
+ * It could happen than a subtree which is removed earlier in the undostack, is reinserted at a later time in the
+ * command stack. In such cases we should not report these nodes as removed. (MAYBE)
+ */
+void NoteNodeChange::unmarkRemovals(Node* /*insertedNode*/) const
+{
+	//TODO: Think about whether we:
+	// - should not report nodes which have been essentially moved in any way
+	// - should report moved nodes in some special way
+	// - should report mvoed nodes as a pair of deletion/insertion
+}
 
 }

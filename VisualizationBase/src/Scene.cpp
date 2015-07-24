@@ -228,12 +228,13 @@ QList<Item*> Scene::itemsThatShouldHaveASelection()
 
 void Scene::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
+			  SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
 }
 
-void Scene::nodesUpdated(QSet<Node*> nodes)
+void Scene::nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*>)
 {
-	for (auto node : nodes)
+	for (auto node : modifiedNodes)
 	{
 		auto nodeToFind = node;
 		bool found = false;

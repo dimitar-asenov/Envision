@@ -44,7 +44,7 @@ HEADERS += src/persistence/NodeIdMap.h \
     src/test_nodes/BinaryNodePersistenceUnit.h \
     src/test_nodes/PartialList.h \
     src/test_nodes/PositionExtension.h \
-    src/commands/AddModifiedNode.h \
+    src/commands/NoteNodeChange.h \
     test/NotificationListener.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
@@ -65,7 +65,7 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     src/concurrent/NodeReadWriteLock.cpp \
     test/VisitorTests.cpp \
     src/persistence/PersistentStore.cpp \
-    src/commands/AddModifiedNode.cpp \
+    src/commands/NoteNodeChange.cpp \
     src/test_nodes/PositionExtension.cpp \
     src/nodes/Character.cpp \
     src/nodes/Boolean.cpp \

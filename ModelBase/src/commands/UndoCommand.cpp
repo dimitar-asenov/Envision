@@ -74,4 +74,14 @@ Node* UndoCommand::owned() const
 	return nullptr;
 }
 
+Node* UndoCommand::insertedNode() const
+{
+	return nullptr;
+}
+
+Node* UndoCommand::removedNode() const
+{
+	return nullptr;
+}
+
 }

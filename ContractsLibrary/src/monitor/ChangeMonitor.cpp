@@ -41,13 +41,14 @@ ChangeMonitor::~ChangeMonitor()
 
 void ChangeMonitor::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesModified(QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
+			  SLOT(nodesModified(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
 }
 
-void ChangeMonitor::nodesModified(QSet<Node*> nodes)
+void ChangeMonitor::nodesModified(QSet<Node*> modifiedNodes, QSet<Node*>)
 {
 	ValueAtReturnVisitor v;
-	for (auto n : nodes) v.visit(n);
+	for (auto n : modifiedNodes) v.visit(n);
 }
 
 void ChangeMonitor::expressionModified(OOModel::Expression*& exp, int& cursorIndex)
