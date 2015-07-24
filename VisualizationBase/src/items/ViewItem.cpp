@@ -136,44 +136,34 @@ Model::Node* ViewItem::nodeAt(int column, int row) const
 void ViewItem::cleanupRemovedItem(Item *item)
 {
 	Q_ASSERT(item);
-	//Remove all no-longer relevant info nodes
-	auto infoNodes = referencesOfType<InfoNode>();
-	for (auto infoNode : infoNodes)
-	{
-		bool targetExists = infoNode->target()->parent();
-		if (!targetExists)
-			for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-				targetExists = targetExists || manager->root() == infoNode->target();
-		if (!targetExists)
-			removeNode(infoNode);
-	}
+
+	//Handle all the spacing nodes depending on the item
+	for (auto current : allNodes())
+		if (auto topLevelItem = item->findAncestorOfType<VViewItemNode>())
+			if (auto viewNode = DCast<ViewItemNode>(current))
+				if (topLevelItem->node() == viewNode->spacingParent())
+				{
+					viewNode->setSpacingParent(nullptr);
+					viewNode->setSpacingTarget(nullptr);
+				}
+
 	removeArrowsForItem(item);
 }
 
 void ViewItem::cleanupRemovedNode(Model::Node *node)
 {
 	Q_ASSERT(node);
-	//If somebody's spacing depends on the node or a child, remove
-	//the node's spacing target
-	QList<Model::Node*> toCheck{node};
-	while (!toCheck.isEmpty())
-	{
-		auto current = toCheck.takeLast();
-		toCheck.append(current->children());
-		for (auto topLevelNode : allNodes())
-		{
-			auto viewNode = DCast<ViewItemNode>(topLevelNode);
-			if (viewNode->spacingParent() == node
-					|| viewNode->spacingTarget() == current)
-			{
-				viewNode->setSpacingTarget(nullptr);
-				viewNode->setSpacingParent(nullptr);
-			}
-		}
-	}
-	//Must also clean up for the item itself which it visualizes
-	if (auto item = findVisualizationOf(node))
-		cleanupRemovedItem(item);
+
+	//Remove all the nodes referencing the deleted node
+	for (auto current : allNodes())
+		if (auto viewNode = DCast<ViewItemNode>(current))
+			if (viewNode->reference() == node)
+				removeNode(viewNode);
+
+	//Remove all the info nodes that reference the deleted node
+	for (auto infoNode : referencesOfType<InfoNode>())
+		if (infoNode->target() == node)
+			removeNode(infoNode);
 }
 
 void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
@@ -294,7 +284,7 @@ void ViewItem::addArrowLayer(QString layer, bool enabled)
 
 void ViewItem::removeArrowsForItem(Item *parent)
 {
-	//Remove all arrows depending on any child item of the parent
+	//Remove all arrows depending on any child item of the parent or the parent itself
 	QList<Item*> allChildren{parent};
 	while (!allChildren.isEmpty())
 	{
@@ -433,6 +423,17 @@ void ViewItem::arrowFromJson(QJsonObject json)
 	else node2 = parent2;
 	if (node1 && node2)
 		addArrow(node1, node2, json["layer"].toString(), parent1, parent2);
+}
+
+template <class NodeType>
+inline QList<NodeType*> ViewItem::referencesOfType() const
+{
+	QList<NodeType*> result;
+	for (auto node : allNodes())
+		if (auto viewNode = DCast<ViewItemNode>(node))
+			if (auto reference = DCast<NodeType>(viewNode->reference()))
+				result.append(reference);
+	return result;
 }
 
 }

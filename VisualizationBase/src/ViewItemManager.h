@@ -30,7 +30,6 @@
 
 namespace Model {
 class TreeManager;
-class Node;
 }
 
 namespace Visualization {

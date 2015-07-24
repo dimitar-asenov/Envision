@@ -27,10 +27,10 @@
 
 #include "../visualizationbase_api.h"
 #include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "../../VisualizationBase/src/nodes/ViewItemNode.h"
 
 namespace Visualization {
 
+class ViewItemNode;
 class VViewItemNode;
 
 /**
@@ -162,16 +162,5 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 inline const QString& ViewItem::name() const { return name_; }
 inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
 inline QString ViewItem::fullLayerName(const QString& localLayer) const { return name() + "_" + localLayer; }
-
-template <class NodeType>
-inline QList<NodeType*> ViewItem::referencesOfType() const
-{
-	QList<NodeType*> result;
-	for (auto node : allNodes())
-		if (auto viewNode = DCast<ViewItemNode>(node))
-			if (auto reference = DCast<NodeType>(viewNode->reference()))
-				result.append(reference);
-	return result;
-}
 
 }
