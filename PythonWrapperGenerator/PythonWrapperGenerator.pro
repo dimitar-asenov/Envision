@@ -2,6 +2,10 @@ TEMPLATE = app
 CONFIG += console precompile_header
 CONFIG -= app_bundle
 
+ENVISION_ROOT_DIR = $$PWD/..
+CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
+CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
+
 #Workaround: https://bugreports.qt.io/browse/QTBUG-27018
 CONFIG -= clang_pch_style
 
@@ -29,8 +33,8 @@ HEADERS += \
 PRECOMPILED_HEADER = src/precompiled.h
 
 # Use this instead of the line under it to avoid warnings
-QMAKE_CXXFLAGS += -std=c++1y -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)"" -Wall -fno-rtti
-#INCLUDEPATH +=  /usr/lib/llvm/include
+QMAKE_CXXFLAGS += -std=c++1y -isystem ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --includedir)"" \
+                  -Wall -fno-rtti
 
 DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS
 
@@ -47,17 +51,13 @@ LIBS += -lclangTooling\
                                 -lclangAST\
                                 -lclangLex\
                                 -lclangBasic\
-                                ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --libs)"" \
-                                $$system( $$_PRO_FILE_PWD_/llvm-config-envision.sh --ldflags --libs cppbackend) \
+                                ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs)"" \
+                                $$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags --libs cppbackend) \
                                 -lz \
                                 -ldl \
                                 -lncurses
 
 ## INSTALLING SPECIFICS:
-ENVISION_ROOT_DIR = $$PWD/..
-CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
-CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
-
 config.files=config.json
 config.path=$${BUILD_DIR}/tools
 
