@@ -62,4 +62,14 @@ Node* NodeOwningCommand::owned() const
 	return isUndone() ? ownedIfUndone_ : ownedIfDone_;
 }
 
+Node* NodeOwningCommand::insertedNode() const
+{
+	return ownedIfUndone_;
+}
+
+Node* NodeOwningCommand::removedNode() const
+{
+	return ownedIfDone_;
+}
+
 } /* namespace Model */

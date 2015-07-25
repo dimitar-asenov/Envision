@@ -354,10 +354,15 @@ class MODELBASE_API TreeManager: public QObject
 		/**
 		 * Emitted at the end of a modification block.
 		 *
-		 * @param nodes
-		 * 				A set of all nodes modified within this block.
+		 * @param modifiedNodes
+		 * 				A set of all nodes modified within this block. These nodes might include nodes in \a removedNodes
+		 *
+		 * @param removedNodes
+		 * 				A set of all nodes that have been removed within this block. These nodes might include nodes in
+		 *					\a modifiedNodes. The set of reported nodes is all nodes that have been removed, including children
+		 *					of removed nodes.
 		 */
-		void nodesModified(QSet<Node*> nodes);
+		void nodesModified(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 
 		/**
 		 * Emitted when the name of a node has changed
@@ -426,10 +431,16 @@ class MODELBASE_API TreeManager: public QObject
 		NodeReadWriteLock* currentModificationLock{};
 
 		/**
-		 * A set of all top-level nodes which were modified as part of the last modification operation. This is only used
-		 * to signal to anyone who is interested in monitoring changes.
+		 * A set of all nodes which might have been modified as part of the last modification operation. This is only
+		 * used to signal to anyone who is interested in monitoring changes.
 		 */
 		QSet<Node*> modifiedTargets;
+
+		/**
+		 * A set of all nodes which have been removed from the tree as part of the last modification operation. This is
+		 * only used to signal to anyone who is interested in monitoring changes.
+		 */
+		QSet<Node*> removedTargets_;
 
 		/**
 		 * Indicates if the last modification operation pushed commands on stack.

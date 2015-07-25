@@ -38,6 +38,8 @@ class MODELBASE_API NodeOwningCommand : public UndoCommand {
 		virtual ~NodeOwningCommand();
 
 		virtual Node* owned() const override;
+		virtual Node* insertedNode() const override;
+		virtual Node* removedNode() const override;
 
 	private:
 		Node* ownedIfDone_{};

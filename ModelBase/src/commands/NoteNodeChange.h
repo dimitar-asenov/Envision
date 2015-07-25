@@ -24,26 +24,28 @@
 **
 ***********************************************************************************************************************/
 
-#include "AddModifiedNode.h"
-#include "nodes/Node.h"
+#pragma once
+
+#include "commands/UndoCommand.h"
 
 namespace Model {
 
-AddModifiedNode::AddModifiedNode(QSet<Node*>& modifiedTargets_, Node* target_) :
-	UndoCommand(nullptr, "Add a modification target"), modifiedTargets(modifiedTargets_), target(target_)
+class NoteNodeChange: public UndoCommand
 {
-}
+	public:
+		NoteNodeChange(QSet<Node*>& modifiedTargets, QSet<Node*>& removedTargets, const UndoCommand* command);
+		virtual void redo();
+		virtual void undo();
 
-void AddModifiedNode::redo()
-{
-	if ( target ) modifiedTargets.insert(target);
-	UndoCommand::redo();
-}
+	private:
+		QSet<Node*>& modifiedTargets_;
+		QSet<Node*>& removedTargets_;
+		Node* target_{};
+		Node* insertedNode_{};
+		Node* removedNode_{};
 
-void AddModifiedNode::undo()
-{
-	if ( target ) modifiedTargets.insert(target);
-	UndoCommand::undo();
-}
+		void markNodeAndChildrenAsRemoved(Node* node) const;
+		void unmarkRemovals(Node* insertedNode) const;
+};
 
 }
