@@ -27,7 +27,6 @@
 #pragma once
 
 #include <QtCore/QTextStream>
-#include <QtCore/QDebug>
 
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Frontend/FrontendActions.h>

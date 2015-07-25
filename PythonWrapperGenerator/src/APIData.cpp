@@ -28,8 +28,6 @@
 
 #include <queue>
 
-#include <QtCore/QDebug>
-
 struct ClassDataNode
 {
 		ClassDataNode(QString name) : name_{name} {}

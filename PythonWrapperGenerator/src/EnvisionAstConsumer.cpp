@@ -26,7 +26,6 @@
 
 #include "EnvisionAstConsumer.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QStringList>
 #include <QtCore/QRegularExpression>
@@ -60,7 +59,7 @@ void EnvisionAstConsumer::HandleTagDeclDefinition(clang::TagDecl* tagDecl)
 	else if (auto enumDecl = llvm::dyn_cast<clang::EnumDecl>(tagDecl))
 		HandleEnumDecl(enumDecl);
 	else
-		qDebug() << "Uknown Decl";
+		Q_ASSERT(false); // There should not be any other decl here, check clang documentation.
 }
 
 void EnvisionAstConsumer::HandleEnumDecl(clang::EnumDecl* enumDecl)

@@ -26,14 +26,13 @@
 
 #include "GenTool.h"
 
+#include <iostream>
 #include <memory>
 
 #include <QtCore/QDir>
 #include <QtCore/QDirIterator>
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
-
-#include <QtCore/QDebug>
 
 #include <clang/Tooling/Tooling.h>
 
@@ -66,7 +65,7 @@ void GenTool::run()
 		if (it != pathToNamespaceMap.end())
 		{
 			api.namespaceName_ = it.value();
-			qDebug() << "Start processing project :" << project;
+			std::cout << "Start processing project :" << project.toStdString() << std::endl;
 			auto tool = std::make_unique<clang::tooling::ClangTool>
 					(*compilationDbMap_.value(project), *sourcesMap_.value(project));
 			auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>(api);
@@ -95,7 +94,8 @@ void GenTool::initPath(const QString& sourcePath)
 	QDir curDir(sourcePath);
 	if (!curDir.exists("compile_commands.json"))
 	{
-		qDebug() << "Ignoring directory" << sourcePath << "because there is no compile_commands.json file";
+		std::cout << "Ignoring directory" << sourcePath.toStdString()
+					 << "because there is no compile_commands.json file" << std::endl;
 		return;
 	}
 	// append to the projects

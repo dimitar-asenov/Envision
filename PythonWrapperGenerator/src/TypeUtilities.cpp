@@ -26,59 +26,25 @@
 
 #include "TypeUtilities.h"
 
-#include <QtCore/QDebug>
-
 #include <clang/AST/DeclTemplate.h>
 
 QString TypeUtilities::nestedNameSpecifierToString(const clang::NestedNameSpecifier* nestedName)
 {
-	QString translated;
 	switch (nestedName->getKind())
 	{
 		case clang::NestedNameSpecifier::Identifier:
-			translated = QString(nestedName->getAsIdentifier()->getNameStart());
-			break;
+			return QString(nestedName->getAsIdentifier()->getNameStart());
 		case clang::NestedNameSpecifier::Namespace:
-			translated = QString::fromStdString(nestedName->getAsNamespace()->getQualifiedNameAsString());
-			break;
+			return QString::fromStdString(nestedName->getAsNamespace()->getQualifiedNameAsString());
 		case clang::NestedNameSpecifier::NamespaceAlias:
-			translated = QString::fromStdString(nestedName->getAsNamespaceAlias()->getQualifiedNameAsString());
-			break;
-		case clang::NestedNameSpecifier::TypeSpec:
-			// TODO: handle the case where this cast is not a reference
-//			if (auto typeRef = DCast<OOModel::ReferenceExpression>
-//					(translateTypePtr(nestedName->getAsType(), location)))
-//				currentRef = typeRef;
-//			else
-//			{
-//				log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
-//									  "Unsupported NestedNameSpecifier TypeSpecNameSpecifier");
-//				returnExpr = createErrorExpression("TypeSpecNameSpecifier");
-//			}
-			break;
-		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
-			// TODO: handle the case where this cast is not a reference
-//			if (auto typeRef = DCast<OOModel::ReferenceExpression>
-//					(translateTypePtr(nestedName->getAsType(), location)))
-//				currentRef = typeRef;
-//			else
-//			{
-//				log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
-//									  "Unsupported NestedNameSpecifier TypeSpecWithTemplate");
-//				returnExpr = createErrorExpression("Could not translate TypeSpecWithTemplate");
-//			}
-			break;
+			return QString::fromStdString(nestedName->getAsNamespaceAlias()->getQualifiedNameAsString());
 		case clang::NestedNameSpecifier::Global:
 			// if we have the Global specifier there can not be a prefix() other wise it is invalid C++
 			Q_ASSERT(!nestedName->getPrefix());
-			translated = "::";
-			break;
+			return "::";
 		default:
-			// In version 3.6 this is only NestedNameSpecifier::Super, which is a Microsoft specific extension (_super).
-			Q_ASSERT(false);
-			break;
+			Q_ASSERT(false);// Implement support for more cases if needed.
 	}
-	return translated;
 }
 
 QString TypeUtilities::templateArgToString(const clang::TemplateArgument& templateArg)
@@ -91,28 +57,8 @@ QString TypeUtilities::templateArgToString(const clang::TemplateArgument& templa
 			return typePtrToString(templateArg.getAsType().getTypePtr());
 		case clang::TemplateArgument::ArgKind::Declaration:
 			return QString::fromStdString(templateArg.getAsDecl()->getQualifiedNameAsString());
-		case clang::TemplateArgument::ArgKind::NullPtr:
-			return {}; //new OOModel::NullLiteral();
-		case clang::TemplateArgument::ArgKind::Integral:
-			return {}; //new OOModel::IntegerLiteral(templateArg.getAsIntegral().getLimitedValue());
-//		case clang::TemplateArgument::ArgKind::Template:
-//			return new OOModel::ReferenceExpression(
-//						QString::fromStdString(templateArg.getAsTemplate().getAsTemplateDecl()->getNameAsString()));
-//		case clang::TemplateArgument::ArgKind::TemplateExpansion:
-//			// TODO: add support
-//			log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
-//								  "Unsupported TemplateArgument EXPANSION");
-//			return createErrorExpression("Unsupported TemplateArgument EXPANSION");
-//		case clang::TemplateArgument::ArgKind::Expression:
-//			return exprVisitor_->translateExpression(templateArg.getAsExpr());
-//		case clang::TemplateArgument::ArgKind::Pack:
-//			// TODO: add support
-//			log_->writeError(className_, location, CppImportLogger::Reason::OTHER,
-//								  "Unsupported TemplateArgument PACK");
-//			return createErrorExpression("Unsupported TemplateArgument PACK");
 		default:
-			qDebug() << "Unsupported template arg" << templateArg.getKind();
-			return {};
+			Q_ASSERT(false); // Implement support for more cases if needed.
 	}
 }
 
@@ -134,13 +80,8 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 		if (baseName == "Super")
 		{
 			// We "unwrap" the Super baseclass
-			unsigned int numArgs = templateSpecialization->getNumArgs();
-			if (numArgs == 1)
-			{
-				auto argument = templateSpecialization->getArg(0);
-				return templateArgToString(argument);
-			}
-			else qDebug() << "Not 1 argument in super template";
+			Q_ASSERT(templateSpecialization->getNumArgs() == 1u); // Super should only have one template argument!
+			return templateArgToString(templateSpecialization->getArg(0));
 		}
 		else
 		{
@@ -152,6 +93,6 @@ QString TypeUtilities::typePtrToString(const clang::Type* type)
 	else if (auto ptrType = llvm::dyn_cast<clang::PointerType>(type))
 	{
 		return typePtrToString(ptrType->getPointeeType().getTypePtr());
-	} else qDebug() << "Other type" << type->getTypeClassName();
-	Q_ASSERT(false);
+	}
+	Q_ASSERT(false); // Implement support for more cases if needed.
 }

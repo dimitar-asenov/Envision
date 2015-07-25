@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include <QtCore/QDebug>
 #include <QtCore/QCoreApplication>
 
 #include "GenTool.h"
@@ -12,7 +11,8 @@ int main(int argc, char *argv[])
 	GenTool t;
 	t.setSubDirPath(Config::instance().envisionReadPath());
 	t.run();
-	qDebug() << "Done!";
-	return a.exec();
+	std::cout << "Done!" << std::endl;
+	a.quit();
+	return 0;
 }
 

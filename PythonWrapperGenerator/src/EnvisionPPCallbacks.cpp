@@ -28,8 +28,6 @@
 
 #include <algorithm>
 
-#include <QtCore/QDebug>
-
 #include <clang/Lex/MacroArgs.h>
 
 EnvisionPPCallbacks::EnvisionPPCallbacks(clang::SourceManager& srcManager, std::string fileName,

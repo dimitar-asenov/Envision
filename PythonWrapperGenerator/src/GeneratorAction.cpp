@@ -26,8 +26,6 @@
 
 #include "GeneratorAction.h"
 
-#include <QtCore/QDebug>
-
 #include "EnvisionAstConsumer.h"
 
 std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::CompilerInstance& ci,
