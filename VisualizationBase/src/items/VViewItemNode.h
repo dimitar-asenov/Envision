@@ -55,6 +55,8 @@ class VISUALIZATIONBASE_API VViewItemNode :
 	private:
 		Item* reference_{};
 		EmptyItem* spacing_{};
+
+		const int DEFAULT_SPACING_HEIGHT = 50;
 };
 
 }
