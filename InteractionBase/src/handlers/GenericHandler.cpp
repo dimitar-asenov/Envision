@@ -54,6 +54,7 @@
 #include "vis/ViewSwitcherMenu.h"
 #include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 namespace Interaction {
 

@@ -49,7 +49,6 @@
 #include "commands/CCreateMethod.h"
 #include "commands/CSceneHandlerItemTest.h"
 #include "commands/CDoxygen.h"
-#include "commands/CAddNodeToView.h"
 #include "commands/CAddCalleesToView.h"
 #include "commands/CAddBaseClassesToView.h"
 #include "commands/CAddCallersToView.h"
@@ -148,7 +147,6 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateMethod());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CDoxygen());
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddNodeToView());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCalleesToView());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddBaseClassesToView());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCallersToView());

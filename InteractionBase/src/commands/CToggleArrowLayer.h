@@ -26,27 +26,24 @@
 
 #pragma once
 
-#include "../interactionbase_api.h"
-#include "CommandWithDefaultArguments.h"
+#include "interactionbase_api.h"
 
-namespace Visualization {
-	class Item;
-}
+#include "commands/Command.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CToggleArrowLayer : public CommandWithDefaultArguments
+class INTERACTIONBASE_API CToggleArrowLayer : public Command
 {
 	public:
 		CToggleArrowLayer();
 
-	protected:
-		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
 }

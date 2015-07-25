@@ -24,47 +24,31 @@
  **
  **********************************************************************************************************************/
 
-#include "CToggleInfoEntry.h"
+#pragma once
 
-#include "VisualizationBase/src/items/ViewItem.h"
-#include "VisualizationBase/src/nodes/InfoNode.h"
+#include "interactionbase_api.h"
+
+#include "commands/Command.h"
 
 namespace Interaction {
 
-CToggleInfoEntry::CToggleInfoEntry() : Command{"toggleInfo"}{}
-
-bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item*,
-		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
+class INTERACTIONBASE_API CAddNodeToViewByName : public Command
 {
-	auto ancestor = source->findAncestorWithNode();
-	return commandTokens.size() > 1 && commandTokens.first() == name()
-			&& ancestor && DCast<Visualization::InfoNode>(ancestor->node());
+	public:
+		CAddNodeToViewByName();
 
-}
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-CommandResult* CToggleInfoEntry::execute(Visualization::Item* source, Visualization::Item*,
-		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
-{
-	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
-	info->setEnabled(commandTokens[1], !(info->isEnabled(commandTokens[1])));
-	info->automaticUpdate();
-	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
-}
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-QList<CommandSuggestion*> CToggleInfoEntry::suggest(Visualization::Item*, Visualization::Item*,
-		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
-{
-	QList<CommandSuggestion*> suggestions;
-	if (textSoFar.startsWith(name() + " ") || name().startsWith(textSoFar))
-	{
-		auto parts = textSoFar.split(" ");
-		auto nameSoFar = parts.size() > 1 ? parts[1] : "";
-		for (auto layerName : Visualization::InfoNode::registeredInfoGetters())
-			if (layerName.startsWith(nameSoFar))
-				suggestions.append(new CommandSuggestion(name() + " " + layerName,
-														"Toggle info layer " + layerName));
-	}
-	return suggestions;
-}
+	private:
+		QStringList findNames(QStringList nameParts, Model::Node* root);
+		Model::Node* findNode(QStringList fullyQualifiedName, Model::Node* root);
+		bool isSuggestable(Model::Node::SymbolTypes symbolType);
+};
+
 }

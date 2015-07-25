@@ -28,10 +28,16 @@
 
 #include "visualizationbase_api.h"
 
+namespace Model {
+class TreeManager;
+class Node;
+}
+
 namespace Visualization {
 
 class Scene;
 class ViewItem;
+class Item;
 
 /**
  * The ViewItemManager manages all the different ViewItems which are part
@@ -44,7 +50,6 @@ class VISUALIZATIONBASE_API ViewItemManager
 		ViewItemManager(Scene* scene);
 		~ViewItemManager();
 
-		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
 		ViewItem* newViewItem(const QString name = QString(), QPoint position = QPoint(-1, -1));
 		ViewItem* viewItem(const QString name);
 		void switchToView(ViewItem* view);
@@ -52,10 +57,24 @@ class VISUALIZATIONBASE_API ViewItemManager
 		ViewItem* currentViewItem();
 		void removeAllViewItems();
 
+		void saveView(ViewItem* view, Model::TreeManager* manager) const;
+		ViewItem* loadView(QString name, QPoint position = QPoint(-1, -1));
+
 		QVector<QVector<ViewItem*>> viewItems() const;
 
 	private:
+		friend class Item;
+		friend class Scene;
+
+		void cleanupRemovedItem(Visualization::Item* removedItem);
+		void cleanupRemovedNode(Model::Node* removedNodee);
+
 		QPoint nextEmptyPosition() const;
+
+		const QString DIRECTORY_NAME = "views";
+		QString fileName(QString viewName, QString managerName) const;
+		ViewItem* loadView(QString name, Model::TreeManager* manager);
+		void addViewItem(ViewItem* view, QPoint position = QPoint(-1, -1));
 
 		const int VIEW_ITEM_COLUMNS = 3;
 		QVector<QVector<ViewItem*>> viewItems_;

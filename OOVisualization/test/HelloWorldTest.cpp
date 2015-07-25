@@ -1062,6 +1062,7 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 	else top_level = factorial;
 
 	auto manager = new Model::TreeManager(top_level);
+	manager->setName("HelloWorld");
 
 	VisualizationManager::instance().mainScene()->addTopLevelNode(top_level);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);

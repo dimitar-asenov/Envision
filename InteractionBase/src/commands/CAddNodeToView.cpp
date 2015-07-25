@@ -26,10 +26,9 @@
 
 #include "CAddNodeToView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
-#include "OOModel/src/declarations/Declaration.h"
 #include "VisualizationBase/src/ViewItemManager.h"
 
-namespace OOInteraction {
+namespace Interaction {
 
 CAddNodeToView::CAddNodeToView()
 	:CommandWithDefaultArguments("addNode", {"current", "0", "0"})
@@ -44,10 +43,12 @@ bool CAddNodeToView::canInterpret(Visualization::Item* source, Visualization::It
 	auto ancestor = source->findAncestorWithNode();
 	if (!ancestor) return false;
 	else
-		return canInterpret && DCast<OOModel::Declaration>(ancestor->node());
+		return canInterpret && ancestor->node()->definesSymbol()
+				&& (ancestor->node()->symbolType() == Model::Node::METHOD
+					|| ancestor->node()->symbolType() == Model::Node::CONTAINER);
 }
 
-Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
+CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
 	auto ancestor = source->findAncestorWithNode();
@@ -62,17 +63,14 @@ Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::
 	if (view && rowOk && colOk)
 	{
 		view->insertNode(ancestor->node(), column, row);
-		return new Interaction::CommandResult();
+		return new CommandResult();
 	}
 	else if (!view)
-		return new Interaction::CommandResult(new Interaction::CommandError(
-											"The view with name " + name + " does not exist"));
+		return new CommandResult(new CommandError("The view with name " + name + " does not exist"));
 	else if (!colOk)
-		return new Interaction::CommandResult(new Interaction::CommandError(
-												arguments.at(1) + " is not an integer"));
+		return new CommandResult(new CommandError(arguments.at(1) + " is not an integer"));
 	else
-		return new Interaction::CommandResult(new Interaction::CommandError(
-												arguments.at(2) + " is not an integer"));
+		return new CommandResult(new CommandError(arguments.at(2) + " is not an integer"));
 
 }
 

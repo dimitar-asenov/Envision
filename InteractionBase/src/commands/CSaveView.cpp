@@ -23,48 +23,41 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "CSaveView.h"
 
-#include "CToggleInfoEntry.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
-#include "VisualizationBase/src/items/ViewItem.h"
-#include "VisualizationBase/src/nodes/InfoNode.h"
+using namespace Visualization;
 
 namespace Interaction {
 
-CToggleInfoEntry::CToggleInfoEntry() : Command{"toggleInfo"}{}
+CSaveView::CSaveView() : Command{"saveView"}{}
 
-bool CToggleInfoEntry::canInterpret(Visualization::Item* source, Visualization::Item*,
-		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
+bool CSaveView::canInterpret(Item*, Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto ancestor = source->findAncestorWithNode();
-	return commandTokens.size() > 1 && commandTokens.first() == name()
-			&& ancestor && DCast<Visualization::InfoNode>(ancestor->node());
-
+	return (commandTokens.size() <= 2) && QString("saveView").startsWith(commandTokens.first());
 }
 
-CommandResult* CToggleInfoEntry::execute(Visualization::Item* source, Visualization::Item*,
-		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
+CommandResult* CSaveView::execute(Item* source, Item*, const QStringList&,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto info = DCast<Visualization::InfoNode>(source->findAncestorWithNode()->node());
-	info->setEnabled(commandTokens[1], !(info->isEnabled(commandTokens[1])));
-	info->automaticUpdate();
-	source->findAncestorWithNode()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	return new CommandResult();
-}
-
-QList<CommandSuggestion*> CToggleInfoEntry::suggest(Visualization::Item*, Visualization::Item*,
-		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
-{
-	QList<CommandSuggestion*> suggestions;
-	if (textSoFar.startsWith(name() + " ") || name().startsWith(textSoFar))
+	//Try to use an existing manager if possible
+	if (source->findAncestorWithNode() && source->findAncestorWithNode()->node()->manager())
 	{
-		auto parts = textSoFar.split(" ");
-		auto nameSoFar = parts.size() > 1 ? parts[1] : "";
-		for (auto layerName : Visualization::InfoNode::registeredInfoGetters())
-			if (layerName.startsWith(nameSoFar))
-				suggestions.append(new CommandSuggestion(name() + " " + layerName,
-														"Toggle info layer " + layerName));
+		source->scene()->viewItems()->saveView(source->scene()->currentViewItem(),
+					source->findAncestorWithNode()->node()->manager());
+		return new CommandResult();
 	}
-	return suggestions;
+	else return new CommandResult(new CommandError("Could not save view"));
 }
+
+QList<CommandSuggestion*> CSaveView::suggest(Item*, Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
+{
+	if (textSoFar.startsWith(name()) || name().startsWith(textSoFar))
+		return {new CommandSuggestion(name(), "Save the current view")};
+	else return {};
+}
+
 }
