@@ -289,16 +289,10 @@ void ViewItem::removeArrowsForItem(Item *parent)
 	{
 		auto copy = arrows_[key];
 		for (auto pair : copy)
-			if (hasParent(pair.first, parent) || hasParent(pair.second, parent))
+			if (parent == pair.first || parent == pair.second ||
+				parent->isAncestorOf(pair.first) || parent->isAncestorOf(pair.second))
 				arrows_[key].removeAll(pair);
 	}
-}
-
-bool ViewItem::hasParent(Item* item, Item* parent)
-{
-	while (item && item != parent)
-		item = item->parent();
-	return item;
 }
 
 void ViewItem::insertViewItemNode(ViewItemNode *node, int column, int row)

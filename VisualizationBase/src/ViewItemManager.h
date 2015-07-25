@@ -30,6 +30,7 @@
 
 namespace Model {
 class TreeManager;
+class Node;
 }
 
 namespace Visualization {
@@ -63,8 +64,10 @@ class VISUALIZATIONBASE_API ViewItemManager
 
 	private:
 		friend class Item;
+		friend class Scene;
 
 		void cleanupRemovedItem(Visualization::Item* removedItem);
+		void cleanupRemovedNode(Model::Node* removedNodee);
 
 		QPoint nextEmptyPosition() const;
 

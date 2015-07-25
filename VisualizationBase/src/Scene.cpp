@@ -232,7 +232,7 @@ void Scene::listenToTreeManager(Model::TreeManager* manager)
 			  SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
 }
 
-void Scene::nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*>)
+void Scene::nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes)
 {
 	for (auto node : modifiedNodes)
 	{
@@ -255,6 +255,8 @@ void Scene::nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*>)
 			if (!found) nodeToFind = nodeToFind->parent();
 		}
 	}
+	for (auto node : removedNodes)
+		viewItems()->cleanupRemovedNode(node);
 
 	scheduleUpdate();
 }

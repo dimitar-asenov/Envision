@@ -164,6 +164,13 @@ void ViewItemManager::cleanupRemovedItem(Item *removedItem)
 			if (item) item->cleanupRemovedItem(removedItem);
 }
 
+void ViewItemManager::cleanupRemovedNode(Model::Node* removedNode)
+{
+	for (auto vector : viewItems_)
+		for (auto item : vector)
+			if (item) item->cleanupRemovedNode(removedNode);
+}
+
 QPoint ViewItemManager::nextEmptyPosition() const
 {
 	//Take the first empty position, if one exists
