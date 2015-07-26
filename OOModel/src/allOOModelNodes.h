@@ -106,3 +106,4 @@
 #include "elements/Modifier.h"
 #include "elements/CommentStatementItem.h"
 #include "elements/MetaCallMapping.h"
+#include "elements/MetaCallArgumentTransformation.h"
