@@ -105,3 +105,4 @@
 #include "elements/MemberInitializer.h"
 #include "elements/Modifier.h"
 #include "elements/CommentStatementItem.h"
+#include "elements/MetaCallMapping.h"
