@@ -44,7 +44,7 @@ MetaCallMapping::MetaCallMapping(const QString& name) : Super(nullptr, MetaCallM
 
 MetaCallMapping::SymbolTypes MetaCallMapping::symbolType() const
 {
-	return UNSPECIFIED;
+	return VARIABLE;
 }
 
 }
