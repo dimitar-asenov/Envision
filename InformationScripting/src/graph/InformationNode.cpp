@@ -28,12 +28,4 @@
 
 namespace InformationScripting {
 
-boost::python::api::object InformationNode::attr(const QString& name) const {
-	auto it = properties_.find(name);
-	if (it != properties_.end())
-		return pythonObject(it.value());
-	qDebug() << "No object with name" << name;
-	Q_ASSERT(false);
-}
-
 } /* namespace InformationScripting */

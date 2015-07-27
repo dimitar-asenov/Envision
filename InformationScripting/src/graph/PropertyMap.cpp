@@ -24,19 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "Property.h"
 #include "PropertyMap.h"
 
 namespace InformationScripting {
 
-class InformationNode : public PropertyMap
+boost::python::object PropertyMap::attr(const QString& key) const
 {
-	public:
-		void mergeInformation(const std::shared_ptr<InformationNode> other);
-};
+	auto it = properties_.find(key);
+	if (it != properties_.end())
+		return pythonObject(it.value());
+	qDebug() << "No object with name" << key;
+	Q_ASSERT(false);
+}
 
 } /* namespace InformationScripting */

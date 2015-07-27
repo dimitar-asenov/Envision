@@ -26,6 +26,7 @@
 
 #include "NodeApi.h"
 
+#include "../graph/PropertyMap.h"
 #include "../graph/InformationNode.h"
 
 namespace InformationScripting {
@@ -33,8 +34,9 @@ namespace InformationScripting {
 using namespace boost::python;
 
 BOOST_PYTHON_MODULE(NodeApi) {
-		class_<InformationNode>("InformationNode")
-				.def("__getattr__", &InformationNode::attr);
+		class_<PropertyMap>("PropertyMap", no_init)
+				.def("__getattr__", &PropertyMap::attr);
+		class_<InformationNode, bases<PropertyMap>>("InformationNode");
 }
 
 } /* namespace InformationScripting */
