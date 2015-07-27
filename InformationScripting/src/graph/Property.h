@@ -30,50 +30,51 @@
 
 namespace InformationScripting {
 
-	// Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
-	class Property {
-		public:
-			Property() = default;
-			template <class DataType>
-			Property(DataType propertyData) : data_{std::make_shared<PropertyData<DataType>>(std::move(propertyData))} {}
+// Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
+class INFORMATIONSCRIPTING_API Property {
+	public:
+		Property() = default;
+		template <class DataType>
+		Property(DataType propertyData) : data_{std::make_shared<PropertyData<DataType>>(std::move(propertyData))} {}
 
-			friend boost::python::object pythonObject(const Property& p) {
-				return p.data_->pythonObject();
-			}
+		friend boost::python::object pythonObject(const Property& p) {
+			return p.data_->pythonObject();
+		}
 
-			template <class ConvertTo>
-			operator ConvertTo() const {
-				if (auto propertyData = std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_))
-					return propertyData->data_;
-				throw new std::bad_cast;
-			}
+		template <class ConvertTo>
+		operator ConvertTo() const {
+			if (auto propertyData = std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_))
+				return propertyData->data_;
+			throw new std::bad_cast;
+		}
 
-		private:
-			struct PropertyDataConcept {
-					virtual ~PropertyDataConcept() = default;
-					virtual boost::python::object pythonObject() const = 0;
-			};
+	private:
+		struct PropertyDataConcept {
+				virtual ~PropertyDataConcept() = default;
+				virtual boost::python::object pythonObject() const = 0;
+		};
 
-			template <class DataType, class = void>
-			struct PropertyData : PropertyDataConcept {
-					PropertyData(DataType data) : data_{std::move(data)} {}
+		template <class DataType, class = void>
+		struct PropertyData : PropertyDataConcept {
+				PropertyData(DataType data) : data_{std::move(data)} {}
 
-					virtual boost::python::object pythonObject() const override {
-						return boost::python::object(data_);
-					}
-					DataType data_;
-			};
-			template <class DataType>
-			struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value>::type>
-					: PropertyDataConcept {
-					PropertyData(DataType data) : data_{data} {}
+				virtual boost::python::object pythonObject() const override {
+					return boost::python::object(data_);
+				}
+				DataType data_;
+		};
+		template <class DataType>
+		struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value>::type>
+				: PropertyDataConcept {
+				PropertyData(DataType data) : data_{data} {}
 
-					virtual boost::python::object pythonObject() const override {
-						return boost::python::object(boost::python::ptr(data_));
-					}
-					DataType data_;
-			};
+				virtual boost::python::object pythonObject() const override {
+					return boost::python::object(boost::python::ptr(data_));
+				}
+				DataType data_;
+		};
 
-			std::shared_ptr<PropertyDataConcept> data_;
-	};
+		std::shared_ptr<PropertyDataConcept> data_;
+};
+
 } /* namespace InformationScripting */

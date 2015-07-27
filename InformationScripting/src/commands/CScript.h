@@ -32,7 +32,7 @@
 
 namespace InformationScripting {
 
-class INTERACTIONBASE_API CScript : public Interaction::Command
+class INFORMATIONSCRIPTING_API CScript : public Interaction::Command
 {
 	public:
 		CScript();

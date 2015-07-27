@@ -30,7 +30,7 @@
 
 namespace InformationScripting {
 
-class BoostPythonHelpers
+class INFORMATIONSCRIPTING_API BoostPythonHelpers
 {
 	public:
 		static QString parsePythonException();

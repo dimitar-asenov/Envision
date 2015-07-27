@@ -32,7 +32,7 @@
 
 namespace InformationScripting {
 
-class PropertyMap
+class INFORMATIONSCRIPTING_API PropertyMap
 {
 	public:
 		template <class DataType>
