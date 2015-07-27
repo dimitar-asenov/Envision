@@ -37,6 +37,8 @@
 #include "declarations/NameImport.h"
 #include "declarations/ExplicitTemplateInstantiation.h"
 #include "declarations/MetaDefinition.h"
+#include "declarations/MetaCallMapping.h"
+#include "declarations/MetaBinding.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -106,5 +108,3 @@
 #include "elements/MemberInitializer.h"
 #include "elements/Modifier.h"
 #include "elements/CommentStatementItem.h"
-#include "elements/MetaCallMapping.h"
-#include "elements/MetaBinding.h"

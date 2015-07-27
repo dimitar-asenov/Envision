@@ -29,7 +29,7 @@
 #include "../oomodel_api.h"
 
 #include "Declaration.h"
-#include "OOModel/src/elements/MetaBinding.h"
+#include "MetaBinding.h"
 
 #include "ModelBase/src/nodes/TypedList.h"
 
