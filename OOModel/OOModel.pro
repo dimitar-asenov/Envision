@@ -101,8 +101,8 @@ HEADERS += src/statements/AssertStatement.h \
     src/OOModelPlugin.h \
     src/statements/SynchronizedStatement.h \
     src/elements/MetaCallMapping.h \
-    src/elements/MetaCallArgumentTransformation.h \
-    src/declarations/MetaDefinition.h
+    src/declarations/MetaDefinition.h \
+    src/elements/MetaBinding.h
 SOURCES += src/statements/AssertStatement.cpp \
     src/expressions/InstanceOfExpression.cpp \
     src/expressions/SuperExpression.cpp \
@@ -197,5 +197,5 @@ SOURCES += src/statements/AssertStatement.cpp \
     src/OOModelPlugin.cpp \
     src/statements/SynchronizedStatement.cpp \
     src/elements/MetaCallMapping.cpp \
-    src/elements/MetaCallArgumentTransformation.cpp \
-    src/declarations/MetaDefinition.cpp
+    src/declarations/MetaDefinition.cpp \
+    src/elements/MetaBinding.cpp

@@ -36,14 +36,18 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaDefinition)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaDefinition)
 
-REGISTER_ATTRIBUTE(MetaDefinition, metaCallArgumentTransformations,
-						 TypedListOfMetaCallArgumentTransformation, false, false, true)
+REGISTER_ATTRIBUTE(MetaDefinition, MetaBindings, TypedListOfMetaBinding, false, false, true)
 REGISTER_ATTRIBUTE(MetaDefinition, context, Declaration, false, false, true)
 
 MetaDefinition::MetaDefinition(const QString& name) : Super(nullptr, MetaDefinition::getMetaData())
 {
 	setName(name);
 	setContext(new OOModel::Class("Context"));
+}
+
+MetaDefinition::SymbolTypes MetaDefinition::symbolType() const
+{
+	return CONTAINER;
 }
 
 }

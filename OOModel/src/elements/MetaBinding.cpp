@@ -24,22 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "MetaCallArgumentTransformation.h"
+#include "MetaBinding.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-DEFINE_TYPED_LIST(OOModel::MetaCallArgumentTransformation)
+DEFINE_TYPED_LIST(OOModel::MetaBinding)
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallArgumentTransformation)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallArgumentTransformation)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaBinding)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaBinding)
 
-REGISTER_ATTRIBUTE(MetaCallArgumentTransformation, input, ReferenceExpression, false, false, true)
-REGISTER_ATTRIBUTE(MetaCallArgumentTransformation, mappings, TypedListOfMetaCallMapping, false, false, true)
+REGISTER_ATTRIBUTE(MetaBinding, input, ReferenceExpression, false, false, true)
+REGISTER_ATTRIBUTE(MetaBinding, mappings, TypedListOfMetaCallMapping, false, false, true)
 
-MetaCallArgumentTransformation::MetaCallArgumentTransformation(const QString& name)
-: Super(nullptr, MetaCallArgumentTransformation::getMetaData())
+MetaBinding::MetaBinding(const QString& name)
+: Super(nullptr, MetaBinding::getMetaData())
 {
 	setName(name);
 }

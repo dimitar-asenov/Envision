@@ -29,7 +29,7 @@
 #include "../oomodel_api.h"
 
 #include "Declaration.h"
-#include "OOModel/src/elements/MetaCallArgumentTransformation.h"
+#include "OOModel/src/elements/MetaBinding.h"
 
 #include "ModelBase/src/nodes/TypedList.h"
 
@@ -41,12 +41,13 @@ class OOMODEL_API MetaDefinition : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaDefinition)
 
-	ATTRIBUTE(Model::TypedList<MetaCallArgumentTransformation>,
-				 metaCallArgumentTransformations, setMetaCallArgumentTransformations)
+	ATTRIBUTE(Model::TypedList<MetaBinding>, MetaBindings, setMetaBindings)
 	ATTRIBUTE(OOModel::Declaration, context, setContext)
 
 	public:
 		MetaDefinition(const QString& name);
+
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

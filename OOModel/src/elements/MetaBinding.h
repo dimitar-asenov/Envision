@@ -31,19 +31,19 @@
 #include "../declarations/Declaration.h"
 #include "MetaCallMapping.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaCallArgumentTransformation)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaBinding)
 
 namespace OOModel {
 
-class OOMODEL_API MetaCallArgumentTransformation : public Super<Declaration>
+class OOMODEL_API MetaBinding : public Super<Declaration>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallArgumentTransformation)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaBinding)
 
 	ATTRIBUTE(OOModel::ReferenceExpression, input, setInput)
 	ATTRIBUTE(Model::TypedList<MetaCallMapping>, mappings, setMappings)
 
 	public:
-		MetaCallArgumentTransformation(const QString& name);
+		MetaBinding(const QString& name);
 };
 
 }
