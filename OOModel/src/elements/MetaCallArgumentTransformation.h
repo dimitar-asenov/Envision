@@ -39,7 +39,7 @@ class OOMODEL_API MetaCallArgumentTransformation : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallArgumentTransformation)
 
-	ATTRIBUTE(OOModel::OOReference, input, setInput)
+	ATTRIBUTE(OOModel::ReferenceExpression, input, setInput)
 	ATTRIBUTE(Model::TypedList<MetaCallMapping>, mappings, setMappings)
 
 	public:

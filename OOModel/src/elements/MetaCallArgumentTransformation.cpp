@@ -35,9 +35,8 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallArgumentTransformation)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallArgumentTransformation)
 
-REGISTER_ATTRIBUTE(MetaCallArgumentTransformation, input, OOReference, false, false, true)
-REGISTER_ATTRIBUTE(MetaCallArgumentTransformation, mappings,
-						 TypedListOfMetaCallMapping, false, false, true)
+REGISTER_ATTRIBUTE(MetaCallArgumentTransformation, input, ReferenceExpression, false, false, true)
+REGISTER_ATTRIBUTE(MetaCallArgumentTransformation, mappings, TypedListOfMetaCallMapping, false, false, true)
 
 MetaCallArgumentTransformation::MetaCallArgumentTransformation(const QString& name)
 : Super(nullptr, MetaCallArgumentTransformation::getMetaData())
