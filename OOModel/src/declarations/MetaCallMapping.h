@@ -43,6 +43,8 @@ class OOMODEL_API MetaCallMapping : public Super<Declaration>
 
 	public:
 		MetaCallMapping(const QString& name);
+
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

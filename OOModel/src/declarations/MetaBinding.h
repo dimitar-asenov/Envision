@@ -44,6 +44,8 @@ class OOMODEL_API MetaBinding : public Super<Declaration>
 
 	public:
 		MetaBinding(const QString& name);
+
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

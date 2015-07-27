@@ -44,4 +44,10 @@ MetaBinding::MetaBinding(const QString& name)
 	setName(name);
 }
 
+MetaBinding::SymbolTypes MetaBinding::symbolType() const
+{
+	return CONTAINER;
+}
+
+
 }
