@@ -41,6 +41,13 @@ namespace InformationScripting {
 				return p.data_->pythonObject();
 			}
 
+			template <class ConvertTo>
+			operator ConvertTo() const {
+				if (auto propertyData = std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_))
+					return propertyData->data_;
+				throw new std::bad_cast;
+			}
+
 		private:
 			struct PropertyDataConcept {
 					virtual ~PropertyDataConcept() = default;
