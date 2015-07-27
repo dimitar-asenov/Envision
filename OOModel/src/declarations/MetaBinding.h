@@ -28,21 +28,22 @@
 
 #include "../oomodel_api.h"
 
-#include "../declarations/Declaration.h"
-#include "../expressions/ReferenceExpression.h"
+#include "Declaration.h"
+#include "MetaCallMapping.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaCallMapping)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaBinding)
 
 namespace OOModel {
 
-class OOMODEL_API MetaCallMapping : public Super<Declaration>
+class OOMODEL_API MetaBinding : public Super<Declaration>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallMapping)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaBinding)
 
-	ATTRIBUTE(OOModel::ReferenceExpression, value, setValue)
+	ATTRIBUTE(OOModel::ReferenceExpression, input, setInput)
+	ATTRIBUTE(Model::TypedList<MetaCallMapping>, mappings, setMappings)
 
 	public:
-		MetaCallMapping(const QString& name);
+		MetaBinding(const QString& name);
 };
 
 }

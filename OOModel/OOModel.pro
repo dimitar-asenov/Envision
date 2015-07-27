@@ -100,9 +100,9 @@ HEADERS += src/statements/AssertStatement.h \
     src/declarations/ExplicitTemplateInstantiation.h \
     src/OOModelPlugin.h \
     src/statements/SynchronizedStatement.h \
-    src/elements/MetaCallMapping.h \
     src/declarations/MetaDefinition.h \
-    src/elements/MetaBinding.h
+    src/declarations/MetaBinding.h \
+    src/declarations/MetaCallMapping.h
 SOURCES += src/statements/AssertStatement.cpp \
     src/expressions/InstanceOfExpression.cpp \
     src/expressions/SuperExpression.cpp \
@@ -196,6 +196,6 @@ SOURCES += src/statements/AssertStatement.cpp \
     src/declarations/ExplicitTemplateInstantiation.cpp \
     src/OOModelPlugin.cpp \
     src/statements/SynchronizedStatement.cpp \
-    src/elements/MetaCallMapping.cpp \
     src/declarations/MetaDefinition.cpp \
-    src/elements/MetaBinding.cpp
+    src/declarations/MetaBinding.cpp \
+    src/declarations/MetaCallMapping.cpp
