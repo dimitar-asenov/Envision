@@ -34,8 +34,9 @@ HEADERS += src/precompiled.h \
     src/graph/InformationNode.h \
     src/graph/Property.h \
     src/wrappers/NodeApi.h \
-    src/graph/PropertyMap.h
-
+    src/graph/PropertyMap.h \
+    src/graph/Graph.h \
+    src/graph/InformationEdge.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -45,7 +46,9 @@ SOURCES += src/InformationScriptingException.cpp \
     src/graph/InformationNode.cpp \
     src/wrappers/NodeApi.cpp \
     src/graph/PropertyMap.cpp \
-    src/graph/Property.cpp
+    src/graph/Property.cpp \
+    src/graph/Graph.cpp \
+    src/graph/InformationEdge.cpp
 
 
 # HACK to only include the AstApi_Generated file if it exists.

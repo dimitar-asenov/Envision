@@ -24,24 +24,67 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "Graph.h"
 
-#include "../informationscripting_api.h"
-
-#include "Property.h"
-#include "PropertyMap.h"
+#include "InformationNode.h"
+#include "InformationEdge.h"
 
 namespace InformationScripting {
 
-class InformationEdge;
-class Graph;
-
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+void Graph::add(InformationNode*& node)
 {
-	private:
-		friend class Graph;
+	InformationNode* existingNode = nullptr;
+	for (auto graphNode : nodes_)
+	{
+		for (auto checker : sameCheckers_)
+		{
+			if (checker(graphNode, node))
+			{
+				existingNode = graphNode;
+				break;
+			}
+		}
+		if (existingNode) break;
+	}
+	if (existingNode) node = existingNode;
+	else nodes_.push_back(node);
+}
 
-		QList<QPair<QString, InformationEdge*>> incidentEdges_;
-};
+InformationEdge* Graph::addDirectedEdge(InformationNode*, InformationNode*, const QString&)
+{
+	// TODO
+	return nullptr;
+}
+
+InformationEdge* Graph::addEdge(InformationNode*, InformationNode*, const QString&)
+{
+	// TODO
+	return nullptr;
+}
+
+void Graph::remove(InformationNode*)
+{
+	// TODO
+}
+
+void Graph::remove(QList<InformationNode*> nodes)
+{
+	for (auto node : nodes) remove(node);
+}
+
+QList<InformationNode*> Graph::nodesForWhich(Graph::NodeCondition holds) const
+{
+	Q_ASSERT(holds);
+
+	QList<InformationNode*> result;
+	for (auto node : nodes_) if (holds(node)) result.push_back(node);
+	return result;
+}
+
+QList<InformationNode*> Graph::edgesFowWhich(Graph::EdgeCondition) const
+{
+	// TODO
+	return {};
+}
 
 } /* namespace InformationScripting */

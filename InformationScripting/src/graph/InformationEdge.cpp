@@ -24,24 +24,20 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "Property.h"
-#include "PropertyMap.h"
+#include "InformationEdge.h"
 
 namespace InformationScripting {
 
-class InformationEdge;
-class Graph;
+const QString InformationEdge::COUNT_PROPERTY_{"count"};
 
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+InformationEdge::InformationEdge()
 {
-	private:
-		friend class Graph;
+	insert(COUNT_PROPERTY_, 1);
+}
 
-		QList<QPair<QString, InformationEdge*>> incidentEdges_;
-};
+int InformationEdge::count() const
+{
+	return operator[](COUNT_PROPERTY_);
+}
 
 } /* namespace InformationScripting */
