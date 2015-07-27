@@ -28,20 +28,21 @@
 
 #include "../oomodel_api.h"
 
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
+#include "../declarations/Declaration.h"
 #include "../expressions/ReferenceExpression.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaCallMapping)
 
 namespace OOModel {
 
-class OOMODEL_API MetaCallMapping : public Super<Model::CompositeNode>
+class OOMODEL_API MetaCallMapping : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallMapping)
 
-	ATTRIBUTE(Model::Text, key, setKey)
 	ATTRIBUTE(OOModel::ReferenceExpression, value, setValue)
+
+	public:
+		MetaCallMapping(const QString& name);
 };
 
 }
