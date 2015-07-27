@@ -102,7 +102,8 @@ HEADERS += src/statements/AssertStatement.h \
     src/statements/SynchronizedStatement.h \
     src/declarations/MetaDefinition.h \
     src/declarations/MetaBinding.h \
-    src/declarations/MetaCallMapping.h
+    src/declarations/MetaCallMapping.h \
+    src/expressions/MetaCallExpression.h
 SOURCES += src/statements/AssertStatement.cpp \
     src/expressions/InstanceOfExpression.cpp \
     src/expressions/SuperExpression.cpp \
@@ -198,4 +199,5 @@ SOURCES += src/statements/AssertStatement.cpp \
     src/statements/SynchronizedStatement.cpp \
     src/declarations/MetaDefinition.cpp \
     src/declarations/MetaBinding.cpp \
-    src/declarations/MetaCallMapping.cpp
+    src/declarations/MetaCallMapping.cpp \
+    src/expressions/MetaCallExpression.cpp
