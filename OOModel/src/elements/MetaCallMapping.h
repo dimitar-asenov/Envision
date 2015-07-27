@@ -30,7 +30,7 @@
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
-#include "OOModel/src/elements/OOReference.h"
+#include "../expressions/ReferenceExpression.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaCallMapping)
 
@@ -41,7 +41,7 @@ class OOMODEL_API MetaCallMapping : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallMapping)
 
 	ATTRIBUTE(Model::Text, key, setKey)
-	ATTRIBUTE(OOModel::OOReference, value, setValue)
+	ATTRIBUTE(OOModel::ReferenceExpression, value, setValue)
 };
 
 }

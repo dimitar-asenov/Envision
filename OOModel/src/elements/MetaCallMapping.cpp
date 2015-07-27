@@ -36,6 +36,6 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallMapping)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallMapping)
 
 REGISTER_ATTRIBUTE(MetaCallMapping, key, Text, false, false, true)
-REGISTER_ATTRIBUTE(MetaCallMapping, value, OOReference, false, false, true)
+REGISTER_ATTRIBUTE(MetaCallMapping, value, ReferenceExpression, false, false, true)
 
 }
