@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -30,17 +30,19 @@
 
 #include "VReferenceExpressionStyle.h"
 
+#include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VMethodCallExpressionStyle : public Super<Visualization::ItemStyle>
+class OOVISUALIZATION_API VMetaCallExpressionStyle : public Super<Visualization::ItemStyle>
 {
 	public:
-		virtual ~VMethodCallExpressionStyle();
+		virtual ~VMetaCallExpressionStyle();
 
 		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::StaticStyle> prefix{this, "prefix"};
 		Property<VReferenceExpressionStyle> name{this, "name"};
 		Property<Visualization::VListStyle> arguments{this, "arguments"};
 };

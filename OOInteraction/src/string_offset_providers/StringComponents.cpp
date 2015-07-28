@@ -243,6 +243,9 @@ void StringComponents::initConversions()
 	add<MethodCallExpression>([](MethodCallExpression* e){ return c(
 		e->callee(), list(e->arguments(), "(", ",", ")", false, true) ); });
 
+	add<MetaCallExpression>([](MetaCallExpression* e){ return c( "#",
+		e->callee(), list(e->arguments(), "(", ",", ")", false, true) ); });
+
 	add<NewExpression>([](NewExpression* e){ return c( "new", " ",
 			Optional( (e->dimensions()->size() > 0 || !e->initializer()) ? e->newType() : nullptr, AUTO),
 			list(e->dimensions(), "[", ",", "]", true, true), Optional(e->initializer(), AUTO) ); });

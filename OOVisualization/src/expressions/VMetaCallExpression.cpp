@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,25 +24,54 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VMetaCallExpression.h"
+#include "VReferenceExpression.h"
 
-#include "../oovisualization_api.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
 
-#include "VReferenceExpressionStyle.h"
-
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
+using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VMethodCallExpressionStyle : public Super<Visualization::ItemStyle>
-{
-	public:
-		virtual ~VMethodCallExpressionStyle();
+ITEM_COMMON_DEFINITIONS(VMetaCallExpression, "item")
 
-		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
-		Property<VReferenceExpressionStyle> name{this, "name"};
-		Property<Visualization::VListStyle> arguments{this, "arguments"};
-};
+VMetaCallExpression::VMetaCallExpression(Item* parent, NodeType* node, const StyleType* style) :
+	Super(parent, node, style)
+{}
+
+VMetaCallExpression::~VMetaCallExpression()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	prefix_ = nullptr;
+	callee_ = nullptr;
+	arguments_ = nullptr;
+}
+
+void VMetaCallExpression::determineChildren()
+{
+	layout()->synchronizeFirst(prefix_, true, &style()->prefix());
+
+	if (auto ref = dynamic_cast<ReferenceExpression*>(node()->callee()))
+	{
+		// TODO: Find a way around that ugly hack. It might eve
+		layout()->synchronizeMid<Item, VReferenceExpression>(callee_, ref, &style()->name(), 1);
+
+		if (callee_) static_cast<VReferenceExpression*>(callee_)->setStyle( &style()->name());
+	}
+	else
+		layout()->synchronizeMid(callee_, node()->callee(), 1);
+	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	prefix_->setStyle( &style()->prefix());
+	arguments_->setStyle( &style()->arguments() );
+	arguments_->setSuppressDefaultRemovalHandler(true);
+}
 
 }

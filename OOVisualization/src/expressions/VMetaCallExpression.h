@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -27,22 +27,40 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "VMetaCallExpressionStyle.h"
+#include "VExpression.h"
 
-#include "VReferenceExpressionStyle.h"
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
+namespace Visualization {
+	class VList;
+	class Static;
+}
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VMethodCallExpressionStyle : public Super<Visualization::ItemStyle>
-{
-	public:
-		virtual ~VMethodCallExpressionStyle();
+class VReferenceExpression;
 
-		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
-		Property<VReferenceExpressionStyle> name{this, "name"};
-		Property<Visualization::VListStyle> arguments{this, "arguments"};
+class OOVISUALIZATION_API VMetaCallExpression : public Super<VExpression<VMetaCallExpression,
+	Visualization::LayoutProvider<>,	OOModel::MetaCallExpression>>
+{
+	ITEM_COMMON(VMetaCallExpression)
+
+	public:
+		VMetaCallExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VMetaCallExpression();
+
+		Visualization::VList* arguments() const;
+
+	protected:
+		void determineChildren() override;
+
+	private:
+		Visualization::Static* prefix_{};
+		Item* callee_{};
+		Visualization::VList* arguments_{};
 };
 
+inline Visualization::VList* VMetaCallExpression::arguments() const { return arguments_; }
 }

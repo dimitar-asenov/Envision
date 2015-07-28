@@ -26,23 +26,29 @@
 
 #pragma once
 
-#include "../oovisualization_api.h"
+#include "Expression.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
-#include "VReferenceExpressionStyle.h"
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaCallExpression)
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
+namespace OOModel {
 
-namespace OOVisualization {
+class MetaDefinition;
 
-class OOVISUALIZATION_API VMethodCallExpressionStyle : public Super<Visualization::ItemStyle>
+class OOMODEL_API MetaCallExpression: public Super<Expression>
 {
-	public:
-		virtual ~VMethodCallExpressionStyle();
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallExpression)
 
-		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
-		Property<VReferenceExpressionStyle> name{this, "name"};
-		Property<Visualization::VListStyle> arguments{this, "arguments"};
+	ATTRIBUTE(Expression, callee, setCallee)
+	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
+
+	public:
+		MetaCallExpression(const QString& name, Expression* referencePrefix = nullptr);
+
+		/**
+		 * Returns the meta definition used in this meta call if one exists.
+		 */
+		MetaDefinition* metaDefinition();
 };
 
 }
