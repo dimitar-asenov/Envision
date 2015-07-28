@@ -35,8 +35,6 @@ namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
 {
-	public:
-		void mergeInformation(const std::shared_ptr<InformationNode> other);
 };
 
 } /* namespace InformationScripting */

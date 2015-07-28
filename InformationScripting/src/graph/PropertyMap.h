@@ -39,7 +39,7 @@ class INFORMATIONSCRIPTING_API PropertyMap
 		inline void insert(const QString& key, const DataType& value);
 		boost::python::object pythonAttribute(const QString& key) const;
 
-		inline Property operator[](const QString& key) const;
+		Property operator[](const QString& key) const;
 
 	private:
 		QList<QPair<QString, Property>> properties_{};
