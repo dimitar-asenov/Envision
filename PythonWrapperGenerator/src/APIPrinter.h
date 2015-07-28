@@ -31,12 +31,11 @@
 class APIPrinter
 {
 	public:
-		APIPrinter(QTextStream& outStream, const APIData& data);
+		APIPrinter(QTextStream& outStream);
 		void print();
 
 	private:
 		QTextStream& out_;
-		const APIData& data_;
 		QString indent_{};
 
 		int maxLineLength_{120};

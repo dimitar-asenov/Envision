@@ -28,7 +28,7 @@
 
 #include "Config.h"
 
-APIPrinter::APIPrinter(QTextStream& outStream, const APIData& data) : out_{outStream}, data_{data}
+APIPrinter::APIPrinter(QTextStream& outStream) : out_{outStream}
 {
 	maxLineLength_ = Config::instance().maxLineLength();
 }
@@ -59,14 +59,14 @@ void APIPrinter::printLicense()
 
 void APIPrinter::printHeaders()
 {
-	for (QString includePath : data_.includePaths_)
+	for (QString includePath : APIData::instance().includePaths_)
 		out_ << "#include \"" << includePath << "\"" << endl;
 	out_ << endl;
 }
 
 void APIPrinter::printClasses()
 {
-	for (const auto& cData : data_.classes()) printClass(cData);
+	for (const auto& cData : APIData::instance().classes()) printClass(cData);
 }
 
 void APIPrinter::printClass(const ClassData& cData)
@@ -86,7 +86,7 @@ void APIPrinter::printClass(const ClassData& cData)
 	classString += ">";
 	// print name:
 	classString += "(\"" + cData.className_ + "\"";
-	// print constructors: // TODO
+	// TODO print constructors:
 	if (cData.abstract_) // abstract classes have no constructor
 		classString += ", no_init";
 	classString += ")";
@@ -154,7 +154,7 @@ void APIPrinter::printAttribute(const ClassAttribute& attr)
 
 void APIPrinter::printTypedListWrappers()
 {
-	auto typedLists = data_.typedLists();
+	auto typedLists = APIData::instance().typedLists();
 	if (typedLists.empty()) return;
 
 	out_ << "{" << endl;

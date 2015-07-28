@@ -44,31 +44,27 @@
 class ClangFrontEndActionFactory : public clang::tooling::FrontendActionFactory
 {
 	public:
-		ClangFrontEndActionFactory(APIData& outData) : outData_{outData} {}
 		virtual clang::FrontendAction* create() override {
-			return new GeneratorAction(outData_);
+			return new GeneratorAction();
 		}
-	private:
-		APIData& outData_;
 };
 
 void GenTool::run()
 {
-	APIData api;
-
 	auto pathToNamespaceMap = Config::instance().subdirsToNamespaceMap();
 
 	for (auto project : projects_)
 	{
-		api.includePrefix_ = project.split(QDir::separator(), QString::SplitBehavior::SkipEmptyParts).last();
-		auto it = pathToNamespaceMap.find(api.includePrefix_);
+		APIData::instance().includePrefix_ = project.split(QDir::separator(),
+																			QString::SplitBehavior::SkipEmptyParts).last();
+		auto it = pathToNamespaceMap.find(APIData::instance().includePrefix_);
 		if (it != pathToNamespaceMap.end())
 		{
-			api.namespaceName_ = it.value();
+			APIData::instance().namespaceName_ = it.value();
 			std::cout << "Start processing project :" << project.toStdString() << std::endl;
 			auto tool = std::make_unique<clang::tooling::ClangTool>
 					(*compilationDbMap_.value(project), *sourcesMap_.value(project));
-			auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>(api);
+			auto frontendActionFactory = std::make_unique<ClangFrontEndActionFactory>();
 			tool->run(frontendActionFactory.get());
 		}
 	}
@@ -77,7 +73,7 @@ void GenTool::run()
 	QFile file(Config::instance().exportFileName());
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) Q_ASSERT(false);
 	QTextStream stream(&file);
-	APIPrinter printer(stream, api);
+	APIPrinter printer(stream);
 	printer.print();
 	file.close();
 }

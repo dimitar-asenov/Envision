@@ -34,17 +34,18 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/AST/ASTConsumer.h>
 
-#include "APIData.h"
-
 namespace clang {
 	class EnumDecl;
 	class Type;
 }
 
+struct EnumData;
+struct ClassAttribute;
+
 class EnvisionAstConsumer : public clang::ASTConsumer
 {
 	public:
-		EnvisionAstConsumer(clang::CompilerInstance& ci, QString currentFile, APIData& outData);
+		EnvisionAstConsumer(clang::CompilerInstance& ci, QString currentFile);
 
 		virtual void Initialize(clang::ASTContext& Context) override;
 		virtual void HandleTagDeclDefinition(clang::TagDecl* tagDecl) override;
@@ -53,7 +54,7 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		void HandleClassDecl(clang::CXXRecordDecl* classDecl);
 
 	private:
-		clang::CompilerInstance &compilerInstance_;
+		clang::CompilerInstance& compilerInstance_;
 		QString currentClassName_;
 		std::string currentFile_;
 
@@ -61,10 +62,9 @@ class EnvisionAstConsumer : public clang::ASTConsumer
 		QHash<QString,QString> privateAttributes_;
 
 		QSet<clang::TagDecl*> seenDecls_;
-		APIData& outData_;
 		QList<EnumData> processedEnums_;
 
-		// TODO: make this more configurable
+		// All imported nodes have to inherit from Model::Node
 		QStringList allowedBases_{"Model::Node"};
 
 		ClassAttribute attribute(const QString& attributeName, const QString& attributeSetterName,

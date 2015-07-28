@@ -66,6 +66,8 @@ struct APIData
 		QString namespaceName_;
 		QStringList includePaths_;
 
+		static APIData& instance();
+
 		void addIncludeFile(QString filePath);
 
 		void insertClassData(ClassData data, QStringList classHierarchy);
@@ -76,7 +78,8 @@ struct APIData
 
 		QHash<QString, QString> typedLists() const;
 	private:
-		ClassDataNode* classRoot_{};
+		APIData() = default;
 
+		ClassDataNode* classRoot_{};
 		QHash<QString, QString> typedLists_;
 };

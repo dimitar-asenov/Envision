@@ -36,10 +36,6 @@
 class GeneratorAction : public clang::ASTFrontendAction
 {
 	public:
-		GeneratorAction(APIData& outData) : outData_{outData} {}
 		virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer
 			(clang::CompilerInstance& compilerInstance, llvm::StringRef currentFile) override;
-
-	private:
-		APIData& outData_;
 };

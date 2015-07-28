@@ -49,6 +49,12 @@ struct ClassDataNode
 		bool placeholder_{true};
 };
 
+APIData& APIData::instance()
+{
+	static APIData instance;
+	return instance;
+}
+
 void APIData::addIncludeFile(QString filePath)
 {
 	if (!includePrefix_.isEmpty()) filePath.prepend(QDir::separator()).prepend(includePrefix_);
@@ -57,7 +63,7 @@ void APIData::addIncludeFile(QString filePath)
 
 void APIData::insertClassData(ClassData data, QStringList classHierarchy)
 {
-	// FIXME: this whole function will break for multiple inheritance
+	// NOTE: this whole function will break for multiple inheritance, but we don't intend to have this in Envision.
 	ClassDataNode* insertNode = nullptr;
 	if (!classRoot_)
 	{

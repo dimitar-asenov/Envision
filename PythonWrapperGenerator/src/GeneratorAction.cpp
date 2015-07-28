@@ -32,5 +32,5 @@ std::unique_ptr<clang::ASTConsumer> GeneratorAction::CreateASTConsumer(clang::Co
 																							  llvm::StringRef currentFile)
 {
 	auto filepath = QString::fromStdString(currentFile.str());
-	return std::make_unique<EnvisionAstConsumer>(ci, filepath, outData_);
+	return std::make_unique<EnvisionAstConsumer>(ci, filepath);
 }

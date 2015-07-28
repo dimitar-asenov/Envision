@@ -32,11 +32,12 @@
 
 #include <clang/AST/DeclCXX.h>
 
+#include "APIData.h"
 #include "EnvisionPPCallbacks.h"
 #include "TypeUtilities.h"
 
-EnvisionAstConsumer::EnvisionAstConsumer(clang::CompilerInstance& ci, QString currentFile, APIData& outData)
-	: compilerInstance_{ci}, outData_{outData}
+EnvisionAstConsumer::EnvisionAstConsumer(clang::CompilerInstance& ci, QString currentFile)
+	: compilerInstance_{ci}
 {
 	currentFile.replace(".cpp", ".h");
 	currentFile_ = currentFile.toStdString();
@@ -88,7 +89,7 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 		auto namespaceDecl = llvm::dyn_cast<clang::NamespaceDecl>(context);
 		auto namespaceName = QString::fromStdString(namespaceDecl->getNameAsString());
 		auto className = QString::fromStdString(classDecl->getNameAsString());
-		if (namespaceName == outData_.namespaceName_ && className == currentClassName_)
+		if (namespaceName == APIData::instance().namespaceName_ && className == currentClassName_)
 		{
 			// FIXME: find a better solution for statementitemlist, currently ignore it (because we don't wrap TypedList).
 			if (className == "StatementItemList") return;
@@ -156,9 +157,9 @@ void EnvisionAstConsumer::HandleClassDecl(clang::CXXRecordDecl* classDecl)
 			}
 			processedEnums_.clear();
 			// Add class to api structure
-			outData_.addIncludeFile(QString::fromStdString(currentFile_));
+			APIData::instance().addIncludeFile(QString::fromStdString(currentFile_));
 			cData.abstract_ = classDecl->isAbstract();
-			outData_.insertClassData(cData, bases);
+			APIData::instance().insertClassData(cData, bases);
 		}
 	}
 }
@@ -209,6 +210,6 @@ void EnvisionAstConsumer::checkForTypedList(const clang::Type* type)
 		auto match = typedListMatcher.match(fullName);
 		Q_ASSERT(match.hasMatch());
 		QString itemType = match.captured(2);
-		outData_.insertTypeList(itemType);
+		APIData::instance().insertTypeList(itemType);
 	}
 }
