@@ -38,24 +38,13 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VMetaCallExpressionStyle : public Super<Visualization::ItemStyle>
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::StaticStyle prefix_;
-		VReferenceExpressionStyle name_;
-		Visualization::VListStyle arguments_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VMetaCallExpressionStyle();
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::StaticStyle& prefix() const;
-		const VReferenceExpressionStyle& name() const;
-		const Visualization::VListStyle& arguments() const;
+		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
+		Property<Visualization::StaticStyle> prefix{this, "prefix"};
+		Property<VReferenceExpressionStyle> name{this, "name"};
+		Property<Visualization::VListStyle> arguments{this, "arguments"};
 };
-
-inline const Visualization::SequentialLayoutStyle& VMetaCallExpressionStyle::layout() const { return layout_; }
-inline const Visualization::StaticStyle& VMetaCallExpressionStyle::prefix() const { return prefix_; }
-inline const VReferenceExpressionStyle& VMetaCallExpressionStyle::name() const { return name_; }
-inline const Visualization::VListStyle& VMetaCallExpressionStyle::arguments() const { return arguments_; }
 
 }

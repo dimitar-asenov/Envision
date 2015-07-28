@@ -28,14 +28,6 @@
 
 namespace OOVisualization {
 
-void VMetaCallExpressionStyle::load(Visualization::StyleLoader& sl)
-{
-	Super::load(sl);
+VMetaCallExpressionStyle::~VMetaCallExpressionStyle() {}
 
-	sl.load("layout", layout_);
-	sl.load("prefix", prefix_);
-	sl.load("name", name_);
-	sl.load("arguments", arguments_);
-}
-
-}
+} /* namespace OOVisualization */
