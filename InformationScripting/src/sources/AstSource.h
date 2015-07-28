@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "../queries/AstQuery.h"
+
 namespace Model {
 	class Node;
 }
@@ -39,11 +41,9 @@ class Graph;
 class AstSource
 {
 	public:
-		enum class Scope : int {Local, Global};
-
 		static AstSource& instance();
 
-		Graph methods(Model::Node* target, Scope scope = Scope::Local);
+		AstQuery* createMethodQuery(Model::Node* target, AstQuery::Scope scope = AstQuery::Scope::Local);
 
 	private:
 		AstSource() = default;

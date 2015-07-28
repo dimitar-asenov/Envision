@@ -37,7 +37,10 @@ HEADERS += src/precompiled.h \
     src/graph/PropertyMap.h \
     src/graph/Graph.h \
     src/graph/InformationEdge.h \
-    src/sources/AstSource.h
+    src/sources/AstSource.h \
+    src/queries/Query.h \
+    src/queries/AstQuery.h \
+    src/queries/QueryExecutor.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -50,7 +53,9 @@ SOURCES += src/InformationScriptingException.cpp \
     src/graph/Property.cpp \
     src/graph/Graph.cpp \
     src/graph/InformationEdge.cpp \
-    src/sources/AstSource.cpp
+    src/sources/AstSource.cpp \
+    src/queries/AstQuery.cpp \
+    src/queries/QueryExecutor.cpp
 
 
 # HACK to only include the AstApi_Generated file if it exists.

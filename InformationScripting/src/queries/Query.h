@@ -24,26 +24,19 @@
 **
 ***********************************************************************************************************************/
 
-#include "AstSource.h"
+#pragma once
 
-#include "OOModel/src/declarations/Class.h"
-
-#include "ModelBase/src/nodes/Node.h"
-
-#include "../graph/Graph.h"
-#include "../graph/InformationNode.h"
+#include "../informationscripting_api.h"
 
 namespace InformationScripting {
 
-AstSource& AstSource::instance()
-{
-	static AstSource instance;
-	return instance;
-}
+class Graph;
 
-AstQuery* AstSource::createMethodQuery(Model::Node* target, AstQuery::Scope scope)
+class INFORMATIONSCRIPTING_API Query
 {
-	return new AstQuery(target, scope);
-}
+	public:
+		virtual ~Query() = default;
+		virtual Graph* execute(QList<Graph*>) = 0;
+};
 
 } /* namespace InformationScripting */

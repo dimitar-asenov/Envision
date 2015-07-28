@@ -24,26 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#include "AstSource.h"
+#include "AstQuery.h"
 
 #include "OOModel/src/declarations/Class.h"
-
-#include "ModelBase/src/nodes/Node.h"
 
 #include "../graph/Graph.h"
 #include "../graph/InformationNode.h"
 
 namespace InformationScripting {
 
-AstSource& AstSource::instance()
-{
-	static AstSource instance;
-	return instance;
-}
+AstQuery::AstQuery(Model::Node* target, AstQuery::Scope scope)
+	: target_{target}, scope_{scope}
+{}
 
-AstQuery* AstSource::createMethodQuery(Model::Node* target, AstQuery::Scope scope)
+Graph* AstQuery::execute(QList<Graph*>)
 {
-	return new AstQuery(target, scope);
+	auto g = new Graph();
+	if (scope_ == AstQuery::Scope::Local)
+	{
+		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
+		for (auto method : *parentClass->methods())
+		{
+			auto node = new InformationNode();
+			node->insert("ast", method);
+			g->add(node);
+		}
+	}
+	else if (scope_ == AstQuery::Scope::Global)
+	{
+		// TODO
+	}
+	return g;
 }
 
 } /* namespace InformationScripting */

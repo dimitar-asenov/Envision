@@ -24,26 +24,34 @@
 **
 ***********************************************************************************************************************/
 
-#include "AstSource.h"
+#pragma once
 
-#include "OOModel/src/declarations/Class.h"
+#include "../informationscripting_api.h"
 
-#include "ModelBase/src/nodes/Node.h"
+#include "Query.h"
 
-#include "../graph/Graph.h"
-#include "../graph/InformationNode.h"
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
-AstSource& AstSource::instance()
-{
-	static AstSource instance;
-	return instance;
-}
+class Graph;
 
-AstQuery* AstSource::createMethodQuery(Model::Node* target, AstQuery::Scope scope)
+class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
-	return new AstQuery(target, scope);
-}
+	public:
+		enum class Scope : int {Local, Global};
+
+		AstQuery(Model::Node* target, Scope scope);
+
+		// TODO for now this is just for methods. We have to figure out how to make this more generic.
+		// Maybe use a function pointer, but where should the function be defined?
+		virtual Graph* execute(QList<Graph*> input) override;
+
+	private:
+		Model::Node* target_{};
+		Scope scope_{};
+};
 
 } /* namespace InformationScripting */

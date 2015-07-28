@@ -34,6 +34,8 @@
 #include "../wrappers/NodeApi.h"
 #include "../helpers/BoostPythonHelpers.h"
 #include "../graph/InformationNode.h"
+#include "../queries/QueryExecutor.h"
+#include "../sources/AstSource.h"
 
 namespace InformationScripting {
 
@@ -50,11 +52,12 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 {
 	using namespace boost;
 
+	auto node = target->node();
+	Q_ASSERT(node);
+
 	QStringList args = commandTokens.mid(1);
-	if (args[0] == "methods")
+	if (args[0] == "script")
 	{
-		auto node = target->node();
-		Q_ASSERT(node);
 
 		auto parentClass = node->firstAncestorOfType<OOModel::Class>();
 
@@ -87,6 +90,12 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		} catch (python::error_already_set ) {
 			qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
 		}
+	}
+	else if (args[0] == "methods")
+	{
+		auto query = AstSource::instance().createMethodQuery(node);
+		QueryExecutor queryExecutor(query);
+		queryExecutor.execute();
 	}
 	return new Interaction::CommandResult();
 }
