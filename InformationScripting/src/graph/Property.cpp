@@ -24,61 +24,14 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
+#include "Property.h"
 
 namespace InformationScripting {
 
-// Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
-class INFORMATIONSCRIPTING_API Property {
-	public:
-		// TODO: in the future we might need a copy constructor, and clone methods in the PropertyDataConcept.
-		// This depends on how we use Properties, for now data is always shared when copying Properties.
-		Property() = default;
-		template <class DataType> Property(DataType propertyData);
-
-		friend boost::python::object pythonObject(const Property& p);
-
-		template <class ConvertTo> inline operator ConvertTo() const;
-
-	private:
-		struct PropertyDataConcept {
-				virtual ~PropertyDataConcept() = default;
-				virtual boost::python::object pythonObject() const = 0;
-		};
-
-		template <class DataType, class = void>
-		struct PropertyData : PropertyDataConcept {
-				PropertyData(DataType data) : data_{std::move(data)} {}
-
-				virtual boost::python::object pythonObject() const override {
-					return boost::python::object(data_);
-				}
-				DataType data_;
-		};
-		template <class DataType>
-		struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value>::type>
-				: PropertyDataConcept {
-				PropertyData(DataType data) : data_{data} {}
-
-				virtual boost::python::object pythonObject() const override {
-					return boost::python::object(boost::python::ptr(data_));
-				}
-				DataType data_;
-		};
-
-		std::shared_ptr<PropertyDataConcept> data_;
-};
-
-template <class DataType> Property::Property(DataType propertyData)
-	: data_{std::make_shared<PropertyData<DataType>>(std::move(propertyData))} {}
-
-template <class ConvertTo> Property::operator ConvertTo() const
+boost::python::object pythonObject(const Property& p)
 {
-	if (auto propertyData = std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_))
-		return propertyData->data_;
-	throw new std::bad_cast;
+	return p.data_->pythonObject();
 }
+
 
 } /* namespace InformationScripting */

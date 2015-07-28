@@ -44,7 +44,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/wrappers/AstApi.cpp \
     src/graph/InformationNode.cpp \
     src/wrappers/NodeApi.cpp \
-    src/graph/PropertyMap.cpp
+    src/graph/PropertyMap.cpp \
+    src/graph/Property.cpp
 
 
 # HACK to only include the AstApi_Generated file if it exists.
