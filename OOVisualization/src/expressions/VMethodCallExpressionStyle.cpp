@@ -28,13 +28,6 @@
 
 namespace OOVisualization {
 
-void VMethodCallExpressionStyle::load(Visualization::StyleLoader& sl)
-{
-	Super::load(sl);
+VMethodCallExpressionStyle::~VMethodCallExpressionStyle() {}
 
-	sl.load("layout", layout_);
-	sl.load("name", name_);
-	sl.load("arguments", arguments_);
-}
-
-}
+} /* namespace OOVisualization */
