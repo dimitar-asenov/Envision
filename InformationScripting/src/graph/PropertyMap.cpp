@@ -41,4 +41,11 @@ Property InformationScripting::PropertyMap::operator[](const QString& key) const
 	Q_ASSERT(false);
 }
 
+bool PropertyMap::contains(const QString& key) const
+{
+	for (auto content : properties_)
+		if (content.first == key) return true;
+	return false;
+}
+
 } /* namespace InformationScripting */

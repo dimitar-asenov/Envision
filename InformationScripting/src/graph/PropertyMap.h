@@ -37,9 +37,11 @@ class INFORMATIONSCRIPTING_API PropertyMap
 	public:
 		template <class DataType>
 		inline void insert(const QString& key, const DataType& value);
-		boost::python::object pythonAttribute(const QString& key) const;
 
+		boost::python::object pythonAttribute(const QString& key) const;
 		Property operator[](const QString& key) const;
+
+		bool contains(const QString& key) const;
 
 	private:
 		QList<QPair<QString, Property>> properties_{};
