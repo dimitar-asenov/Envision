@@ -37,17 +37,18 @@ class INFORMATIONSCRIPTING_API PropertyMap
 	public:
 		template <class DataType>
 		inline void insert(const QString& key, const DataType& value);
-		boost::python::object attr(const QString& key) const;
+		boost::python::object pythonAttribute(const QString& key) const;
 
 		inline Property operator[](const QString& key) const;
 
 	private:
-		QHash<QString, Property> properties_{};
+		QList<QPair<QString, Property>> properties_{};
 };
 
 template <class DataType>
-void PropertyMap::insert(const QString& key, const DataType& value) { properties_[key] = Property(value); }
-
-Property PropertyMap::operator[](const QString& key) const { return properties_[key]; }
+void PropertyMap::insert(const QString& key, const DataType& value)
+{
+	properties_.push_back({key, Property(value)});
+}
 
 } /* namespace InformationScripting */

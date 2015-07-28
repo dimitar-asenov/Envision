@@ -51,6 +51,3 @@ SOURCES += src/InformationScriptingException.cpp \
 exists(src/wrappers/AstApi_Generated.cpp): {
     DEFINES+=AST_API_GENERATED
 }
-
-
-QT += qml

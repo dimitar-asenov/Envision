@@ -63,8 +63,6 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			PyImport_AppendInittab("NodeApi", PyInit_NodeApi);
 			Py_Initialize();
 
-			BoostPythonHelpers::initializeQStringConverters();
-
 			python::object main_module = python::import("__main__");
 			python::dict main_namespace = python::extract<python::dict>(main_module.attr("__dict__"));
 

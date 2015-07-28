@@ -35,7 +35,7 @@ using namespace boost::python;
 
 BOOST_PYTHON_MODULE(NodeApi) {
 		class_<PropertyMap>("PropertyMap", no_init)
-				.def("__getattr__", &PropertyMap::attr);
+				.def("__getattr__", &PropertyMap::pythonAttribute);
 		class_<InformationNode, bases<PropertyMap>>("InformationNode");
 }
 

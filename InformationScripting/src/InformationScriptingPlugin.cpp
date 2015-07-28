@@ -30,11 +30,13 @@
 #include "OOInteraction/src/handlers/HStatementItemList.h"
 
 #include "commands/CScript.h"
+#include "helpers/BoostPythonHelpers.h"
 
 namespace InformationScripting {
 
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 {
+	BoostPythonHelpers::initializeQStringConverters();
 	OOInteraction::HStatementItemList::instance()->addCommand(new CScript());
 	return true;
 }

@@ -28,11 +28,15 @@
 
 namespace InformationScripting {
 
-boost::python::object PropertyMap::attr(const QString& key) const
+boost::python::object PropertyMap::pythonAttribute(const QString& key) const
 {
-	auto it = properties_.find(key);
-	if (it != properties_.end())
-		return pythonObject(it.value());
+	return pythonObject(operator[](key));
+}
+
+Property InformationScripting::PropertyMap::operator[](const QString& key) const
+{
+	for (auto content : properties_)
+		if (content.first == key) return content.second;
 	qDebug() << "No object with name" << key;
 	Q_ASSERT(false);
 }

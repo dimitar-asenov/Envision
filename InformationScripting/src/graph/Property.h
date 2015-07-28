@@ -33,6 +33,8 @@ namespace InformationScripting {
 // Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
 class INFORMATIONSCRIPTING_API Property {
 	public:
+		// TODO: in the future we might need a copy constructor, and clone methods in the PropertyDataConcept.
+		// This depends on how we use Properties, for now data is always shared when copying Properties.
 		Property() = default;
 		template <class DataType>
 		Property(DataType propertyData) : data_{std::make_shared<PropertyData<DataType>>(std::move(propertyData))} {}
