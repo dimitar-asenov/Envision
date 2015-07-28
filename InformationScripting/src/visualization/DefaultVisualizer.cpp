@@ -24,30 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#include "QueryExecutor.h"
+#include "DefaultVisualizer.h"
 
-#include "Query.h"
+#include "ModelBase/src/nodes/Node.h"
+
+#include "OOModel/src/declarations/Method.h"
+
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
 #include "../graph/Graph.h"
-#include "visualization/DefaultVisualizer.h"
+#include "../graph/InformationNode.h"
 
 namespace InformationScripting {
 
-QueryExecutor::QueryExecutor(Query* q) : query_{q} {}
+const QString DefaultVisualizer::HIGHLIGHT_OVERLAY_GROUP = {"default graph highlight"};
 
-QueryExecutor::~QueryExecutor()
+DefaultVisualizer DefaultVisualizer::instance()
 {
-	SAFE_DELETE(query_);
+	static DefaultVisualizer instance;
+	return instance;
 }
 
-void QueryExecutor::execute()
+void DefaultVisualizer::visualize(Graph* g)
 {
-	auto result = query_->execute({});
-	if (result)
+	auto condition = [](const InformationNode* node) {
+		return node->contains("ast");
+	};
+	auto nodes = g->nodesForWhich(condition);
+
+	for (auto informationNode : nodes)
 	{
-		DefaultVisualizer::instance().visualize(result);
-		SAFE_DELETE(result);
+		// FIXME: this should be Model::Node* we first have to adapt the property converter for this.
+		OOModel::Method* node = (*informationNode)["ast"];
+		auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
+		Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
+		auto item = *nodeVisualization;
+		auto overlay = new Visualization::SelectionOverlay(
+					item, Visualization::SelectionOverlay::itemStyles().get());
+		item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 	}
 }
+
 
 } /* namespace InformationScripting */

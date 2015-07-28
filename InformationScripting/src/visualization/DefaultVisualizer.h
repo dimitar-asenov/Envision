@@ -24,30 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "QueryExecutor.h"
+#pragma once
 
-#include "Query.h"
-
-#include "../graph/Graph.h"
-#include "visualization/DefaultVisualizer.h"
+#include "../informationscripting_api.h"
 
 namespace InformationScripting {
 
-QueryExecutor::QueryExecutor(Query* q) : query_{q} {}
+class Graph;
 
-QueryExecutor::~QueryExecutor()
+class INFORMATIONSCRIPTING_API DefaultVisualizer
 {
-	SAFE_DELETE(query_);
-}
+	public:
+		static DefaultVisualizer instance();
 
-void QueryExecutor::execute()
-{
-	auto result = query_->execute({});
-	if (result)
-	{
-		DefaultVisualizer::instance().visualize(result);
-		SAFE_DELETE(result);
-	}
-}
+		void visualize(Graph* g);
+	private:
+		DefaultVisualizer() = default;
+
+		static const QString HIGHLIGHT_OVERLAY_GROUP;
+};
 
 } /* namespace InformationScripting */
