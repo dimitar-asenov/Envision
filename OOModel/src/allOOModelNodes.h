@@ -36,6 +36,9 @@
 #include "declarations/TypeAlias.h"
 #include "declarations/NameImport.h"
 #include "declarations/ExplicitTemplateInstantiation.h"
+#include "declarations/MetaDefinition.h"
+#include "declarations/MetaCallMapping.h"
+#include "declarations/MetaBinding.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
