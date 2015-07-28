@@ -33,15 +33,8 @@
 
 namespace InformationScripting {
 
-class InformationEdge;
-class Graph;
-
 class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
 {
-	private:
-		friend class Graph;
-
-		QList<QPair<QString, InformationEdge*>> incidentEdges_;
 };
 
 } /* namespace InformationScripting */

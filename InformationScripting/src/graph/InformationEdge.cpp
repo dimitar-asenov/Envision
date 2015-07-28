@@ -37,7 +37,7 @@ InformationEdge::InformationEdge()
 
 int InformationEdge::count() const
 {
-	return operator[](COUNT_PROPERTY_);
+	return (*this)[COUNT_PROPERTY_];
 }
 
 } /* namespace InformationScripting */

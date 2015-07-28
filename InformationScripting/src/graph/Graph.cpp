@@ -31,12 +31,14 @@
 
 namespace InformationScripting {
 
-void Graph::add(InformationNode*& node)
+QList<Graph::IsEqual> Graph::equalityChecks_;
+
+InformationNode* Graph::add(InformationNode* node)
 {
 	InformationNode* existingNode = nullptr;
 	for (auto graphNode : nodes_)
 	{
-		for (auto checker : sameCheckers_)
+		for (auto checker : equalityChecks_)
 		{
 			if (checker(graphNode, node))
 			{
@@ -46,8 +48,18 @@ void Graph::add(InformationNode*& node)
 		}
 		if (existingNode) break;
 	}
-	if (existingNode) node = existingNode;
-	else nodes_.push_back(node);
+	if (existingNode)
+	{
+		// TODO merge
+		// TODO delete argument node
+		node = existingNode;
+		Q_ASSERT(false);
+	}
+	else
+	{
+		nodes_.push_back(node);
+	}
+	return node;
 }
 
 InformationEdge* Graph::addDirectedEdge(InformationNode*, InformationNode*, const QString&)

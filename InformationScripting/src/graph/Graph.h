@@ -36,26 +36,26 @@ class InformationNode;
 class Graph
 {
 	public:
+		// TODO instead of IsEqual we should use hashing in the future, see github discussion.
 		/**
-		 * SameCheck takes 2 nodes and returns if they are the same for some data source.
+		 * IsEqual takes 2 nodes and returns if they are the same for some data source.
 		 */
-		using SameCheck = std::function<bool(const InformationNode*, const InformationNode*)>;
+		using IsEqual = std::function<bool(const InformationNode*, const InformationNode*)>;
 		using NodeCondition = std::function<bool(const InformationNode*)>;
 		using EdgeCondition = std::function<bool(const InformationEdge*)>;
 
-
 		/**
-		 * Registers the SameCheck \a check.
+		 * Registers the IsEqual \a check.
 		 */
-		inline void addSameCheck(SameCheck check);
+		static inline void addEqualityCheck(IsEqual check);
 
 		/**
-		 * Adds the \a node to the graph. If the graph already contains the same node (checked by unique checkers),
-		 * the node reference is overwritten with the existing node.
+		 * Adds the \a node to the graph. Only the returned node should be used after this method is called.
+		 * (It might be that the graph already contains the same node, thus the properties will be merged)
 		 *
 		 * Note: Takes ownership on \a node.
 		 */
-		void add(InformationNode*& node);
+		InformationNode* add(InformationNode* node);
 
 		/**
 		 * Creates a directed Edge from \a from to \a to with the name \a name.
@@ -64,8 +64,6 @@ class Graph
 		 *
 		 * If there is already a directed edge with the same \a name between \a from and \a to,
 		 * the existing edge is returned with the count property increased.
-		 * If there is already a undirected edge with the same \a name between \a from and \a to,
-		 * an exception is thrown.
 		 *
 		 * Note: The graph owns the returned edge.
 		 */
@@ -78,24 +76,19 @@ class Graph
 		 *
 		 * If there is already a undirected edge with the same \a name between \a a and \a b,
 		 * the existing edge is returned with the count property increased.
-		 * If there is already a directed edge with the same \a name from \a a to \a b, or from \a b to \a a,
-		 * the existing edge is returned.
 		 *
 		 * Note: The graph owns the returned edge.
-		 *
-		 * >NOTE: It is nicer to just return a single edge rather than 2 edges, as it is an implementation detail
-		 * an exception is thrown.
 		 */
 		InformationEdge* addEdge(InformationNode* a, InformationNode* b, const QString& name);
 
 
 		/**
-		 * Removes the \a node and all connections to it.
+		 * Removes the \a node and all edges to it.
 		 */
 		void remove(InformationNode* node);
 
 		/**
-		 * Removes all nodes in the list \a nodes and all conntections to the nodes.
+		 * Removes all nodes in the list \a nodes and all edges to the nodes.
 		 */
 		void remove(QList<InformationNode*> nodes);
 
@@ -111,10 +104,13 @@ class Graph
 		QList<InformationNode*> edgesFowWhich(EdgeCondition holds) const;
 
 	private:
-		QList<SameCheck> sameCheckers_;
+		static QList<IsEqual> equalityChecks_;
+
 		QList<InformationNode*> nodes_;
+		QList<InformationEdge*> edges_;
+
 };
 
-void Graph::addSameCheck(Graph::SameCheck check) { sameCheckers_ << check; }
+void Graph::addEqualityCheck(Graph::IsEqual check) { equalityChecks_ << check; }
 
 } /* namespace InformationScripting */
