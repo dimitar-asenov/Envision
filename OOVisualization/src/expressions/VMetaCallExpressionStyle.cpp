@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,35 +24,17 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "expressions/VMetaCallExpressionStyle.h"
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+namespace OOVisualization {
 
-#include "VNewExpression.h"
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VSuperExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
-#include "VCastExpression.h"
-#include "VMetaCallExpression.h"
+void VMetaCallExpressionStyle::load(Visualization::StyleLoader& sl)
+{
+	Super::load(sl);
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("arguments", arguments_);
+}
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
-
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
-#include "types/VFunctionType.h"
+}

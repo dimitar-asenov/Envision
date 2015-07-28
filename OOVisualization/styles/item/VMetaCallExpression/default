@@ -1,0 +1,35 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	<layout prototypes="layout/SequentialLayout/default" />
+	<name prototypes="item/VReferenceExpression/default">
+		<resolvedName prototypes="item/Text/default">
+			<pen>
+				<color>#b97800</color>
+			</pen>
+			<font>
+				<family></family>
+				<size>15</size>
+				<sizeIsInPixels>true</sizeIsInPixels>
+				<weight>99</weight>
+			</font>
+		</resolvedName>
+	</name>
+	<arguments prototypes="item/VList/default">
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>(</leftBrace>
+			<rightBrace>)</rightBrace>
+		</shape>
+		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>	
+		<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>15</spaceBetweenElements>
+			<noInnerCursors>true</noInnerCursors>
+			<minHeight>15</minHeight>
+			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
+			<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+		</itemsStyle>
+	</arguments>
+</style>
