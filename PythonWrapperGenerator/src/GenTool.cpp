@@ -69,13 +69,8 @@ void GenTool::run()
 		}
 	}
 
-	// Create out file
-	QFile file(Config::instance().exportFileName());
-	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) Q_ASSERT(false);
-	QTextStream stream(&file);
-	APIPrinter printer(stream);
+	APIPrinter printer;
 	printer.print();
-	file.close();
 }
 
 void GenTool::setSubDirPath(const QString& path)

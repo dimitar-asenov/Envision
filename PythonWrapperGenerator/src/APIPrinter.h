@@ -27,16 +27,19 @@
 #include <QtCore/QTextStream>
 
 #include "APIData.h"
+#include "Config.h"
 
 class APIPrinter
 {
 	public:
-		APIPrinter(QTextStream& outStream);
+		APIPrinter();
+		~APIPrinter();
 		void print();
 
 	private:
-		QTextStream& out_;
-		QString indent_{};
+		QFile outFile_{Config::instance().exportFileName()};
+		QTextStream out_;
+		QString indent_;
 
 		int maxLineLength_{120};
 

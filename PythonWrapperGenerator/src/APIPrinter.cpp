@@ -28,9 +28,18 @@
 
 #include "Config.h"
 
-APIPrinter::APIPrinter(QTextStream& outStream) : out_{outStream}
+APIPrinter::APIPrinter()
 {
+	// Create out file
+	if (!outFile_.open(QIODevice::WriteOnly | QIODevice::Text)) Q_ASSERT(false);
+	out_.setDevice(&outFile_);
+
 	maxLineLength_ = Config::instance().maxLineLength();
+}
+
+APIPrinter::~APIPrinter()
+{
+	outFile_.close();
 }
 
 void APIPrinter::print()
