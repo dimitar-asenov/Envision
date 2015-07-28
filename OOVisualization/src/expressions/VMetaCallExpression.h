@@ -35,6 +35,7 @@
 
 namespace Visualization {
 	class VList;
+	class Static;
 }
 
 namespace OOVisualization {
@@ -56,6 +57,7 @@ class OOVISUALIZATION_API VMetaCallExpression : public Super<VExpression<VMetaCa
 		void determineChildren() override;
 
 	private:
+		Visualization::Static* prefix_{};
 		Item* callee_{};
 		Visualization::VList* arguments_{};
 };

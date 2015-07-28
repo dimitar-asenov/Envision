@@ -30,6 +30,7 @@
 
 #include "VReferenceExpressionStyle.h"
 
+#include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 
@@ -39,6 +40,7 @@ class OOVISUALIZATION_API VMetaCallExpressionStyle : public Super<Visualization:
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
+		Visualization::StaticStyle prefix_;
 		VReferenceExpressionStyle name_;
 		Visualization::VListStyle arguments_;
 
@@ -46,11 +48,13 @@ class OOVISUALIZATION_API VMetaCallExpressionStyle : public Super<Visualization:
 		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::StaticStyle& prefix() const;
 		const VReferenceExpressionStyle& name() const;
 		const Visualization::VListStyle& arguments() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& VMetaCallExpressionStyle::layout() const { return layout_; }
+inline const Visualization::StaticStyle& VMetaCallExpressionStyle::prefix() const { return prefix_; }
 inline const VReferenceExpressionStyle& VMetaCallExpressionStyle::name() const { return name_; }
 inline const Visualization::VListStyle& VMetaCallExpressionStyle::arguments() const { return arguments_; }
 

@@ -15,6 +15,7 @@
 			</font>
 		</resolvedName>
 	</name>
+	<prefix prototypes="item/Symbol/keyword"><symbol>#</symbol></prefix>
 	<arguments prototypes="item/VList/default">
 		<shape prototypes="shape/Braces/default">
 			Braces

@@ -28,6 +28,7 @@
 #include "VReferenceExpression.h"
 
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -43,21 +44,24 @@ VMetaCallExpression::VMetaCallExpression(Item* parent, NodeType* node, const Sty
 VMetaCallExpression::~VMetaCallExpression()
 {
 	// These were automatically deleted by LayoutProvider's destructor
+	prefix_ = nullptr;
 	callee_ = nullptr;
 	arguments_ = nullptr;
 }
 
 void VMetaCallExpression::determineChildren()
 {
+	layout()->synchronizeFirst(prefix_, true, &style()->prefix());
+
 	if (auto ref = dynamic_cast<ReferenceExpression*>(node()->callee()))
 	{
 		// TODO: Find a way around that ugly hack. It might eve
-		layout()->synchronizeFirst<Item, VReferenceExpression>(callee_, ref, &style()->name());
+		layout()->synchronizeMid<Item, VReferenceExpression>(callee_, ref, &style()->name(), 1);
 
 		if (callee_) static_cast<VReferenceExpression*>(callee_)->setStyle( &style()->name());
 	}
 	else
-		layout()->synchronizeFirst(callee_, node()->callee());
+		layout()->synchronizeMid(callee_, node()->callee(), 1);
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -65,6 +69,7 @@ void VMetaCallExpression::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
+	prefix_->setStyle( &style()->prefix());
 	arguments_->setStyle( &style()->arguments() );
 	arguments_->setSuppressDefaultRemovalHandler(true);
 }

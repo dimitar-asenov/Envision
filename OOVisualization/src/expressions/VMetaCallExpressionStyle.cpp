@@ -33,6 +33,7 @@ void VMetaCallExpressionStyle::load(Visualization::StyleLoader& sl)
 	Super::load(sl);
 
 	sl.load("layout", layout_);
+	sl.load("prefix", prefix_);
 	sl.load("name", name_);
 	sl.load("arguments", arguments_);
 }
