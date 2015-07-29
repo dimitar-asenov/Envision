@@ -108,25 +108,32 @@ TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
 	unpack(this->getName());
 	GitRepository repo("projects/TestMerge");
 	auto merge = repo.merge("dev");
+	CHECK_CONDITION(!merge->hasConflicts());
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
-	auto tree = merge->mergedTree();
-	/*
 	merge->commit(sig, sig, "This is the result of merge test \"" + this->getName() + "\"");
+
+	auto tree = merge->mergedTree();
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000021404}")));
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000212}")));
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000506}")));
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000001507}")));
+
 	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000200}"));
 	for (int idx = 0; idx < listContainer->children().size(); ++idx)
 		CHECK_CONDITION(listContainer->child(QString::number(idx)));
+
 	CHECK_CONDITION(listContainer->child(QString::number(1))->id().toString().endsWith("207}"));
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000203}"))->label().toInt() == 6);
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000204}"))->label().toInt() == 12);
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000205}"))->label().toInt() == 10);
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000206}"))->label().toInt() == 11);
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000207}"))->label().toInt() == 1);
 	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000211}"))
-						 ->parentId().toString().endsWith("300}"));
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000212}")));
-	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000000202}")));
-	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000204}")));
-	*/
-	CHECK_CONDITION(merge->hasConflicts());
+						 ->parent()->id().toString().endsWith("300}"));
+	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000011507}"))
+						 ->parent()->id().toString().endsWith("507}"));
 	cleanup();
 }
 
