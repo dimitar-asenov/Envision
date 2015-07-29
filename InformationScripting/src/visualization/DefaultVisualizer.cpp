@@ -28,8 +28,6 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
-#include "OOModel/src/declarations/Method.h"
-
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
@@ -55,8 +53,7 @@ void DefaultVisualizer::visualize(Graph* g)
 
 	for (auto informationNode : nodes)
 	{
-		// FIXME: this should be Model::Node* we first have to adapt the property converter for this.
-		OOModel::Method* node = (*informationNode)["ast"];
+		Model::Node* node = (*informationNode)["ast"];
 		auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
 		Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
 		auto item = *nodeVisualization;
