@@ -49,6 +49,10 @@ class INTERACTIONBASE_API CAddNodeToViewByName : public Command
 		QStringList findNames(QStringList nameParts, Model::Node* root);
 		Model::Node* findNode(QStringList fullyQualifiedName, Model::Node* root);
 		bool isSuggestable(Model::Node::SymbolTypes symbolType);
+
+		bool isHorizontal(QRect region);
+		Visualization::Item* findItemBelow(Visualization::ViewItem* view, QRect region);
+		Visualization::Item* findItemLeft(Visualization::ViewItem* view, QRect region);
 };
 
 }
