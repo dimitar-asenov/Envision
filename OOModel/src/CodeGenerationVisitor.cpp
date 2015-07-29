@@ -28,6 +28,8 @@
 
 namespace OOModel {
 
+CodeGenerationVisitor::CodeGenerationVisitor(QMap<QString, Model::Node *> args) : args_{args} {}
+
 void CodeGenerationVisitor::init()
 {
 }
