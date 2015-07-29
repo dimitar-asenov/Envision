@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,49 +23,32 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#include "InfoMethods.h"
 
-#include "OOModel/src/allOOModelNodes.h"
+#pragma once
 
-namespace OOVisualization {
+#include "Expression.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
-QString InfoMethods::numberOfCallees(Model::Node *node)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaCallExpression)
+
+namespace OOModel {
+
+class MetaDefinition;
+
+class OOMODEL_API MetaCallExpression: public Super<Expression>
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
-	else return QString();
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaCallExpression)
 
-QString InfoMethods::numberOfUsages(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
-	else if (auto someClass = DCast<OOModel::Class>(node))
-	{
-		QSet<Model::Node*> result;
-		auto top = someClass->root();
-		//Find all the places where this class is referenced
-		QList<Model::Node*> toCheck{top};
-		while (!toCheck.isEmpty())
-		{
-			auto check = toCheck.takeLast();
-			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (expr->target() == someClass)
-					result << expr->topMostExpressionParent();
-			toCheck.append(check->children());
-		}
-		return "Number of usages: " + QString::number(result.size());
-	}
-	else return QString();
-}
+	ATTRIBUTE(Expression, callee, setCallee)
+	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
 
-QString InfoMethods::fullName(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "<b>" + method->fullyQualifiedName() + "</b>";
-	else if (auto clazz = DCast<OOModel::Class>(node))
-		return "<b>" + clazz->name() + "</b>";
-	else return QString();
-}
+	public:
+		MetaCallExpression(const QString& name, Expression* referencePrefix = nullptr);
+
+		/**
+		 * Returns the meta definition used in this meta call if one exists.
+		 */
+		MetaDefinition* metaDefinition();
+};
 
 }

@@ -34,6 +34,7 @@
 #include "../renderer/ModelRenderer.h"
 #include "../views/MainView.h"
 #include "VisualizationAddOn.h"
+#include "ViewItemManager.h"
 
 #include "../cursor/Cursor.h"
 
@@ -418,6 +419,9 @@ void Item::removeFromScene()
 
 		// Mark this item as not needing updates
 		scene()->setItemIsSensitiveToScale(this, false);
+
+		//Notify the view manager about removal of the item
+		scene()->viewItems()->cleanupRemovedItem(this);
 
 		//Finally remove this item from the scene
 		if (parent()) scene()->removeItem(this);

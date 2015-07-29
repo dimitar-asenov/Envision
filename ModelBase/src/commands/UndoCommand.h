@@ -68,6 +68,20 @@ class MODELBASE_API UndoCommand: public QUndoCommand
 		 * Nodes which are owned should be deleted by the command when it is deleted.
 		 */
 		virtual Node* owned() const;
+
+		/**
+		 * Returns the node that this command inserted into the tree, or nullptr if no node was inserted.
+		 *
+		 * The default implementaion returns nullptr. Reimplement this in commands that own a node.
+		 */
+		virtual Node* insertedNode() const;
+
+		/**
+		 * Returns the node that this command removed from the tree, or nullptr if no node was removed.
+		 *
+		 * The default implementaion returns nullptr. Reimplement this in commands that own a node.
+		 */
+		virtual Node* removedNode() const;
 };
 
 inline bool UndoCommand::isUndone() const { return undone; }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,53 +23,41 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+#include "CSaveView.h"
 
-#include "NodeOwningCommand.h"
-#include "../nodes/Node.h"
-#include "../model/AllTreeManagers.h"
-#include "../model/TreeManager.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
-namespace Model {
+using namespace Visualization;
 
-NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* ownedIfDone, Node* ownedIfUndone)
-: UndoCommand(target, text), ownedIfDone_(ownedIfDone), ownedIfUndone_(ownedIfUndone)
+namespace Interaction {
+
+CSaveView::CSaveView() : Command{"saveView"}{}
+
+bool CSaveView::canInterpret(Item*, Item*, const QStringList& commandTokens,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
-	// If the target node is not yet owned, do not assume ownership over its subnodes.
-	if (target->manager() == nullptr)
+	return (commandTokens.size() <= 2) && QString("saveView").startsWith(commandTokens.first());
+}
+
+CommandResult* CSaveView::execute(Item* source, Item*, const QStringList&,
+		const std::unique_ptr<Visualization::Cursor>&)
+{
+	//Try to use an existing manager if possible
+	if (source->findAncestorWithNode() && source->findAncestorWithNode()->node()->manager())
 	{
-		ownedIfDone_ = nullptr;
-		ownedIfUndone_ = nullptr;
+		source->scene()->viewItems()->saveView(source->scene()->currentViewItem(),
+					source->findAncestorWithNode()->node()->manager());
+		return new CommandResult();
 	}
+	else return new CommandResult(new CommandError("Could not save view"));
 }
 
-NodeOwningCommand::~NodeOwningCommand()
+QList<CommandSuggestion*> CSaveView::suggest(Item*, Item*, const QString& textSoFar,
+		const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto n = owned();
-	// Only delete a node if:
-	// - It is not part of a manager
-	// - It is not currently owned by any other command in any undo stack
-	if (n && !n->manager())
-	{
-		for (auto m : AllTreeManagers::instance().loadedManagers())
-			if (m->isOwnedByUndoStack(n, this)) return;
-
-		SAFE_DELETE(n);
-	}
+	if (textSoFar.startsWith(name()) || name().startsWith(textSoFar))
+		return {new CommandSuggestion(name(), "Save the current view")};
+	else return {};
 }
 
-Node* NodeOwningCommand::owned() const
-{
-	return isUndone() ? ownedIfUndone_ : ownedIfDone_;
 }
-
-Node* NodeOwningCommand::insertedNode() const
-{
-	return ownedIfUndone_;
-}
-
-Node* NodeOwningCommand::removedNode() const
-{
-	return ownedIfDone_;
-}
-
-} /* namespace Model */

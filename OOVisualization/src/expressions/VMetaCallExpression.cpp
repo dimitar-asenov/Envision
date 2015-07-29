@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,49 +23,55 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#include "InfoMethods.h"
 
-#include "OOModel/src/allOOModelNodes.h"
+#include "VMetaCallExpression.h"
+#include "VReferenceExpression.h"
+
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
+
+using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 
-QString InfoMethods::numberOfCallees(Model::Node *node)
+ITEM_COMMON_DEFINITIONS(VMetaCallExpression, "item")
+
+VMetaCallExpression::VMetaCallExpression(Item* parent, NodeType* node, const StyleType* style) :
+	Super(parent, node, style)
+{}
+
+VMetaCallExpression::~VMetaCallExpression()
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
-	else return QString();
+	// These were automatically deleted by LayoutProvider's destructor
+	prefix_ = nullptr;
+	callee_ = nullptr;
+	arguments_ = nullptr;
 }
 
-QString InfoMethods::numberOfUsages(Model::Node *node)
+void VMetaCallExpression::determineChildren()
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
-	else if (auto someClass = DCast<OOModel::Class>(node))
+	layout()->synchronizeFirst(prefix_, true, &style()->prefix());
+
+	if (auto ref = dynamic_cast<ReferenceExpression*>(node()->callee()))
 	{
-		QSet<Model::Node*> result;
-		auto top = someClass->root();
-		//Find all the places where this class is referenced
-		QList<Model::Node*> toCheck{top};
-		while (!toCheck.isEmpty())
-		{
-			auto check = toCheck.takeLast();
-			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (expr->target() == someClass)
-					result << expr->topMostExpressionParent();
-			toCheck.append(check->children());
-		}
-		return "Number of usages: " + QString::number(result.size());
-	}
-	else return QString();
-}
+		// TODO: Find a way around that ugly hack. It might eve
+		layout()->synchronizeMid<Item, VReferenceExpression>(callee_, ref, &style()->name(), 1);
 
-QString InfoMethods::fullName(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "<b>" + method->fullyQualifiedName() + "</b>";
-	else if (auto clazz = DCast<OOModel::Class>(node))
-		return "<b>" + clazz->name() + "</b>";
-	else return QString();
+		if (callee_) static_cast<VReferenceExpression*>(callee_)->setStyle( &style()->name());
+	}
+	else
+		layout()->synchronizeMid(callee_, node()->callee(), 1);
+	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	prefix_->setStyle( &style()->prefix());
+	arguments_->setStyle( &style()->arguments() );
+	arguments_->setSuppressDefaultRemovalHandler(true);
 }
 
 }

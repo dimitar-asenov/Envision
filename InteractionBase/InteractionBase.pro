@@ -86,7 +86,10 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/vis/Menu.h \
     src/vis/MenuStyle.h \
     src/vis/ViewSwitcherMenu.h \
-    src/commands/AddReferencedToViewCommand.h
+    src/commands/AddReferencedToViewCommand.h \
+    src/commands/CSaveView.h \
+    src/commands/CAddNodeToViewByName.h \
+    src/commands/CAddNodeToView.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -165,4 +168,7 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/vis/VViewSwitcherEntry.cpp \
     src/vis/Menu.cpp \
     src/vis/MenuStyle.cpp \
-    src/vis/ViewSwitcherMenu.cpp
+    src/vis/ViewSwitcherMenu.cpp \
+    src/commands/CSaveView.cpp \
+    src/commands/CAddNodeToViewByName.cpp \
+    src/commands/CAddNodeToView.cpp

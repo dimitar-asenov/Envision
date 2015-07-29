@@ -54,10 +54,11 @@
 #include "vis/ViewSwitcherMenu.h"
 #include "vis/VViewSwitcherEntry.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 namespace Interaction {
 
-void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>)
+void GenericHandlerManagerListener::nodesUpdated(QSet<Node*>, QSet<Node*>)
 {
 	GenericHandler::fixCursorPositionForUndoAfterTreeManagerChange();
 }
@@ -83,8 +84,8 @@ void GenericHandlerManagerListener::listenToTreeManagerOf(Visualization::Item* i
 	if (!managers_.contains(manager))
 	{
 		managers_.append(manager);
-		connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,
-				SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
+		connect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
+				SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
 	}
 }
 
@@ -96,7 +97,8 @@ void GenericHandlerManagerListener::stopListeningToTreeManagerOf(Visualization::
 	if (managers_.contains(manager))
 	{
 		managers_.removeAll(manager);
-		disconnect(manager, SIGNAL(nodesModified(QSet<Node*>)), this, SLOT(nodesUpdated(QSet<Node*>)));
+		disconnect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
+					  SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)));
 	}
 }
 

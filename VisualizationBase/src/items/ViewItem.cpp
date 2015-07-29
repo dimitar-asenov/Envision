@@ -88,19 +88,9 @@ void ViewItem::removeNode(Model::Node* node)
 	auto point = positionOfNode(node);
 	if (point.x() != -1)
 	{
-		//If somebody's spacing depends on the node, change it
-		for (auto node : allNodes())
-		{
-			auto viewNode = DCast<ViewItemNode>(node);
-			if (viewNode->spacingParent() == nodes_[point.x()][point.y()])
-			{
-				viewNode->setSpacingTarget(nullptr);
-				viewNode->setSpacingParent(nullptr);
-			}
-		}
+		auto removed = nodes_[point.x()][point.y()];
 		nodes_[point.x()].remove(point.y());
-		//Need to remove any arrows depending on it
-		removeArrowsForItem(findVisualizationOf(node));
+		cleanupRemovedNode(removed);
 		setUpdateNeeded(StandardUpdate);
 	}
 }
@@ -117,19 +107,20 @@ QList<Model::Node*> ViewItem::allNodes() const
 
 QPoint ViewItem::positionOfNode(Model::Node *node) const
 {
-	for (int i = 0; i < nodes_.size(); i++)
+	if (!node) return QPoint(-1, -1);
+	for (int col = 0; col < nodes_.size(); col++)
 	{
-		auto index = nodes_.at(i).indexOf(node);
-		if (index != -1 && node)
-			return QPoint(i, index);
+		for (int row = 0; row < nodes_[col].size(); row++)
+			if (nodes_[col][row] == node ||
+					DCast<ViewItemNode>(nodes_[col][row])->reference() == node)
+				return QPoint(col, row);
 	}
 	return QPoint(-1, -1);
 }
 
 QPoint ViewItem::positionOfItem(Item *item) const
 {
-	auto vref = DCast<VViewItemNode>(item);
-	if (vref) return positionOfNode(vref->node());
+	if (item->node()) return positionOfNode(item->node());
 	else return QPoint(-1, -1);
 }
 
@@ -142,6 +133,39 @@ Model::Node* ViewItem::nodeAt(int column, int row) const
 	return nodes_[column][row];
 }
 
+void ViewItem::cleanupRemovedItem(Item *item)
+{
+	Q_ASSERT(item);
+
+	//Handle all the spacing nodes depending on the item
+	for (auto current : allNodes())
+		if (auto topLevelItem = item->findAncestorOfType<VViewItemNode>())
+			if (auto viewNode = DCast<ViewItemNode>(current))
+				if (topLevelItem->node() == viewNode->spacingParent())
+				{
+					viewNode->setSpacingParent(nullptr);
+					viewNode->setSpacingTarget(nullptr);
+				}
+
+	removeArrowsForItem(item);
+}
+
+void ViewItem::cleanupRemovedNode(Model::Node *node)
+{
+	Q_ASSERT(node);
+
+	//Remove all the nodes referencing the deleted node
+	for (auto current : allNodes())
+		if (auto viewNode = DCast<ViewItemNode>(current))
+			if (viewNode->reference() == node)
+				removeNode(viewNode);
+
+	//Remove all the info nodes that reference the deleted node
+	for (auto infoNode : referencesOfType<InfoNode>())
+		if (infoNode->target() == node)
+			removeNode(infoNode);
+}
+
 void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
 						  ViewItemNode* spacingParent)
 {
@@ -151,8 +175,6 @@ void ViewItem::addSpacing(int column, int row, Model::Node* spacingTarget,
 void ViewItem::addArrow(Model::Node *from, Model::Node *to, QString layer,
 						ViewItemNode *fromParent, ViewItemNode *toParent)
 {
-	if (!arrows_.contains(layer))
-		addArrowLayer(layer);
 	arrowsToAdd_.append(ArrowToAdd{fromParent, from, toParent, to, layer});
 }
 
@@ -169,20 +191,41 @@ QList<QPair<Item*, Item*>> ViewItem::arrowsForLayer(QString layer)
 			auto allFrom = fromParent->findAllVisualizationsOf(line.from_);
 			auto toParent = line.toParent_ ? findVisualizationOf(line.toParent_) : this;
 			auto allTo = toParent->findAllVisualizationsOf(line.to_);
-			if (allFrom.size() > 0 && allTo.size() > 0)
-			{
-				for (auto from : allFrom)
-					for (auto to : allTo)
-						//TODO@cyril The node is rendered as a RootItem -> needs a hack here
-						//or removing a ViewItemNode with arrows doesn't work correctly
-						if (!DCast<RootItem>(from) && !DCast<RootItem>(to))
-							arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
-			}
-			else arrowsToAdd_.append(line);
+
+			bool addedArrow = false;
+			for (auto from : allFrom)
+				for (auto to : allTo)
+					//TODO@cyril The node is rendered as a RootItem -> needs a hack here
+					//or removing a ViewItemNode with arrows doesn't work correctly
+					if (!DCast<RootItem>(from) && !DCast<RootItem>(to))
+					{
+						arrows_[line.layer_].append(QPair<Item*, Item*>(from, to));
+						addedArrow = true;
+					}
+			if (!addedArrow) arrowsToAdd_.append(line);
 		}
 	}
 	//And then return the arrows in the layer
 	return arrows_[layer];
+}
+
+QStringList ViewItem::arrowLayers() const
+{
+	auto result = arrows_.keys();
+	for (auto name : disabledArrowLayers_)
+		if (!result.contains(name))
+			result.append(name);
+	return result;
+}
+
+void ViewItem::setName(const QString &name)
+{
+	//The arrow overlay names depend on the name -> redo them
+	for (auto layer : arrows_.keys())
+		scene()->removeOverlayGroup(fullLayerName(layer));
+	name_ = name;
+	for (auto layer : arrows_.keys())
+		addArrowLayer(layer);
 }
 
 void ViewItem::determineChildren()
@@ -204,6 +247,11 @@ void ViewItem::determineChildren()
 				}
 		}
 	}
+	//Must make sure to add the necessary arrow layers here, as sometimes they are added
+	//before the view is added to the scene
+	for (auto arrow : arrowsToAdd_)
+		if (!arrows_.contains(arrow.layer_) && scene())
+			addArrowLayer(arrow.layer_, !disabledArrowLayers_.contains(arrow.layer_));
 }
 
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
@@ -223,30 +271,27 @@ void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 		setUpdateNeeded(RepeatUpdate);
 }
 
-void ViewItem::addArrowLayer(QString layer)
+void ViewItem::addArrowLayer(QString layer, bool enabled)
 {
 	auto layerName = fullLayerName(layer);
 	auto arrowLayer = scene()->overlayGroup(layerName);
 	if (!arrowLayer) arrowLayer = scene()->addOverlayGroup(layerName);
 	arrowLayer->setOverlayConstructor2Args([](Item* from, Item* to){return makeOverlay(new ArrowOverlay(from, to));});
 	arrowLayer->setDynamic2Items([this, layer](){return arrowsForLayer(layer);});
+	if (enabled) arrowLayer->show();
+	else arrowLayer->hide();
 }
 
 void ViewItem::removeArrowsForItem(Item *parent)
 {
-	//Remove all arrows depending on any child item of the parent
-	QList<Item*> allChildren{parent};
-	while (!allChildren.isEmpty())
+	//Remove all arrows where the arrow's item is a child of the removed item
+	for (auto key : arrows_.keys())
 	{
-		auto current = allChildren.takeLast();
-		for (auto key : arrows_.keys())
-		{
-			auto copy = arrows_[key];
-			for (auto pair : copy)
-				if (pair.first == current || pair.second == current)
-					arrows_[key].removeAll(pair);
-		}
-		allChildren.append(current->childItems());
+		auto copy = arrows_[key];
+		for (auto pair : copy)
+			if (parent == pair.first || parent == pair.second ||
+				parent->isAncestorOf(pair.first) || parent->isAncestorOf(pair.second))
+				arrows_[key].removeAll(pair);
 	}
 }
 
@@ -289,14 +334,24 @@ QJsonDocument ViewItem::toJson() const
 					node->setSpacingParentPosition(positionOfNode(node->spacingParent()));
 				nodes.append(node->toJson());
 			}
+
 	//Store all the arrows
 	QJsonArray arrows;
 	for (auto key : arrows_.keys())
 		for (auto pair : arrows_[key])
 			arrows.append(arrowToJson(pair, key));
+
+	//Remember which arrow layers were disabled
+	QJsonArray disabledLayers;
+	for (auto name : arrows_.keys())
+		if (scene()->overlayGroup(fullLayerName(name))
+			&& !scene()->overlayGroup(fullLayerName(name))->isVisible())
+			disabledLayers.append(name);
+
 	QJsonObject main;
 	main.insert("nodes", nodes);
 	main.insert("arrows", arrows);
+	main.insert("disabledLayers", disabledLayers);
 	main.insert("name", name());
 	QJsonDocument result;
 	result.setObject(main);
@@ -325,6 +380,9 @@ void ViewItem::fromJson(QJsonDocument json)
 	auto arrowArray = obj["arrows"].toArray();
 	for (auto arrow : arrowArray)
 		arrowFromJson(arrow.toObject());
+	//Load which arrow layers were disabled
+	for (auto name : obj["disabledLayers"].toArray())
+		disabledArrowLayers_.append(name.toString());
 }
 
 QJsonObject ViewItem::arrowToJson(QPair<Item*, Item*> arrow, QString layer) const
@@ -359,7 +417,18 @@ void ViewItem::arrowFromJson(QJsonObject json)
 		node2 = JsonUtil::nodeForId(QUuid(json["node2"].toString()));
 	else node2 = parent2;
 	if (node1 && node2)
-		arrowsToAdd_.append(ArrowToAdd{parent1, node1, parent2, node2, json["layer"].toString()});
+		addArrow(node1, node2, json["layer"].toString(), parent1, parent2);
+}
+
+template <class NodeType>
+inline QList<NodeType*> ViewItem::referencesOfType() const
+{
+	QList<NodeType*> result;
+	for (auto node : allNodes())
+		if (auto viewNode = DCast<ViewItemNode>(node))
+			if (auto reference = DCast<NodeType>(viewNode->reference()))
+				result.append(reference);
+	return result;
 }
 
 }

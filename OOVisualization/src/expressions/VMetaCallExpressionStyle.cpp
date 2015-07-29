@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,52 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#include "NodeOwningCommand.h"
-#include "../nodes/Node.h"
-#include "../model/AllTreeManagers.h"
-#include "../model/TreeManager.h"
+#include "expressions/VMetaCallExpressionStyle.h"
 
-namespace Model {
+namespace OOVisualization {
 
-NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* ownedIfDone, Node* ownedIfUndone)
-: UndoCommand(target, text), ownedIfDone_(ownedIfDone), ownedIfUndone_(ownedIfUndone)
-{
-	// If the target node is not yet owned, do not assume ownership over its subnodes.
-	if (target->manager() == nullptr)
-	{
-		ownedIfDone_ = nullptr;
-		ownedIfUndone_ = nullptr;
-	}
-}
+VMetaCallExpressionStyle::~VMetaCallExpressionStyle() {}
 
-NodeOwningCommand::~NodeOwningCommand()
-{
-	auto n = owned();
-	// Only delete a node if:
-	// - It is not part of a manager
-	// - It is not currently owned by any other command in any undo stack
-	if (n && !n->manager())
-	{
-		for (auto m : AllTreeManagers::instance().loadedManagers())
-			if (m->isOwnedByUndoStack(n, this)) return;
-
-		SAFE_DELETE(n);
-	}
-}
-
-Node* NodeOwningCommand::owned() const
-{
-	return isUndone() ? ownedIfUndone_ : ownedIfDone_;
-}
-
-Node* NodeOwningCommand::insertedNode() const
-{
-	return ownedIfUndone_;
-}
-
-Node* NodeOwningCommand::removedNode() const
-{
-	return ownedIfDone_;
-}
-
-} /* namespace Model */
+} /* namespace OOVisualization */

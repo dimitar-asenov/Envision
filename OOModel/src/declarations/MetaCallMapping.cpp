@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,49 +23,28 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#include "InfoMethods.h"
 
-#include "OOModel/src/allOOModelNodes.h"
+#include "MetaCallMapping.h"
 
-namespace OOVisualization {
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 
-QString InfoMethods::numberOfCallees(Model::Node *node)
+DEFINE_TYPED_LIST(OOModel::MetaCallMapping)
+
+namespace OOModel {
+
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallMapping)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallMapping)
+
+REGISTER_ATTRIBUTE(MetaCallMapping, value, ReferenceExpression, false, false, true)
+
+MetaCallMapping::MetaCallMapping(const QString& name) : Super(nullptr, MetaCallMapping::getMetaData())
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
-	else return QString();
+	setName(name);
 }
 
-QString InfoMethods::numberOfUsages(Model::Node *node)
+MetaCallMapping::SymbolTypes MetaCallMapping::symbolType() const
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
-	else if (auto someClass = DCast<OOModel::Class>(node))
-	{
-		QSet<Model::Node*> result;
-		auto top = someClass->root();
-		//Find all the places where this class is referenced
-		QList<Model::Node*> toCheck{top};
-		while (!toCheck.isEmpty())
-		{
-			auto check = toCheck.takeLast();
-			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (expr->target() == someClass)
-					result << expr->topMostExpressionParent();
-			toCheck.append(check->children());
-		}
-		return "Number of usages: " + QString::number(result.size());
-	}
-	else return QString();
-}
-
-QString InfoMethods::fullName(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "<b>" + method->fullyQualifiedName() + "</b>";
-	else if (auto clazz = DCast<OOModel::Class>(node))
-		return "<b>" + clazz->name() + "</b>";
-	else return QString();
+	return VARIABLE;
 }
 
 }

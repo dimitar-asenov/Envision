@@ -26,30 +26,22 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
-#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
+#include "Command.h"
 
-namespace Visualization {
-	class Item;
-}
+namespace Interaction {
 
-namespace OOInteraction {
-
-class OOINTERACTION_API CAddNodeToView : public Interaction::CommandWithDefaultArguments
+class INTERACTIONBASE_API CSaveView : public Command
 {
 	public:
-		CAddNodeToView();
+		CSaveView();
 
-		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-	protected:
-		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
-		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
-
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
 
 }

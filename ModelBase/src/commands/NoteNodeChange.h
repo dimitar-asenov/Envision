@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2014 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,49 +23,29 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#include "InfoMethods.h"
 
-#include "OOModel/src/allOOModelNodes.h"
+#pragma once
 
-namespace OOVisualization {
+#include "commands/UndoCommand.h"
 
-QString InfoMethods::numberOfCallees(Model::Node *node)
+namespace Model {
+
+class NoteNodeChange: public UndoCommand
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
-	else return QString();
-}
+	public:
+		NoteNodeChange(QSet<Node*>& modifiedTargets, QSet<Node*>& removedTargets, const UndoCommand* command);
+		virtual void redo();
+		virtual void undo();
 
-QString InfoMethods::numberOfUsages(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
-	else if (auto someClass = DCast<OOModel::Class>(node))
-	{
-		QSet<Model::Node*> result;
-		auto top = someClass->root();
-		//Find all the places where this class is referenced
-		QList<Model::Node*> toCheck{top};
-		while (!toCheck.isEmpty())
-		{
-			auto check = toCheck.takeLast();
-			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (expr->target() == someClass)
-					result << expr->topMostExpressionParent();
-			toCheck.append(check->children());
-		}
-		return "Number of usages: " + QString::number(result.size());
-	}
-	else return QString();
-}
+	private:
+		QSet<Node*>& modifiedTargets_;
+		QSet<Node*>& removedTargets_;
+		Node* target_{};
+		Node* insertedNode_{};
+		Node* removedNode_{};
 
-QString InfoMethods::fullName(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "<b>" + method->fullyQualifiedName() + "</b>";
-	else if (auto clazz = DCast<OOModel::Class>(node))
-		return "<b>" + clazz->name() + "</b>";
-	else return QString();
-}
+		void markNodeAndChildrenAsRemoved(Node* node) const;
+		void unmarkRemovals(Node* insertedNode) const;
+};
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,49 +23,44 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#include "InfoMethods.h"
 
-#include "OOModel/src/allOOModelNodes.h"
+#pragma once
+
+#include "../oovisualization_api.h"
+#include "VMetaCallExpressionStyle.h"
+#include "VExpression.h"
+
+#include "OOModel/src/expressions/MetaCallExpression.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
+
+namespace Visualization {
+	class VList;
+	class Static;
+}
 
 namespace OOVisualization {
 
-QString InfoMethods::numberOfCallees(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
-	else return QString();
-}
+class VReferenceExpression;
 
-QString InfoMethods::numberOfUsages(Model::Node *node)
+class OOVISUALIZATION_API VMetaCallExpression : public Super<VExpression<VMetaCallExpression,
+	Visualization::LayoutProvider<>,	OOModel::MetaCallExpression>>
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
-	else if (auto someClass = DCast<OOModel::Class>(node))
-	{
-		QSet<Model::Node*> result;
-		auto top = someClass->root();
-		//Find all the places where this class is referenced
-		QList<Model::Node*> toCheck{top};
-		while (!toCheck.isEmpty())
-		{
-			auto check = toCheck.takeLast();
-			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (expr->target() == someClass)
-					result << expr->topMostExpressionParent();
-			toCheck.append(check->children());
-		}
-		return "Number of usages: " + QString::number(result.size());
-	}
-	else return QString();
-}
+	ITEM_COMMON(VMetaCallExpression)
 
-QString InfoMethods::fullName(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "<b>" + method->fullyQualifiedName() + "</b>";
-	else if (auto clazz = DCast<OOModel::Class>(node))
-		return "<b>" + clazz->name() + "</b>";
-	else return QString();
-}
+	public:
+		VMetaCallExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VMetaCallExpression();
 
+		Visualization::VList* arguments() const;
+
+	protected:
+		void determineChildren() override;
+
+	private:
+		Visualization::Static* prefix_{};
+		Item* callee_{};
+		Visualization::VList* arguments_{};
+};
+
+inline Visualization::VList* VMetaCallExpression::arguments() const { return arguments_; }
 }

@@ -28,6 +28,7 @@
 
 #include "items/ViewItem.h"
 #include "Scene.h"
+#include "ModelBase/src/model/TreeManager.h"
 
 namespace Visualization {
 
@@ -67,26 +68,6 @@ ViewItem* ViewItemManager::viewItem(const QString name)
 	return nullptr;
 }
 
-void ViewItemManager::switchToView(ViewItem *view)
-{
-	Q_ASSERT(!scene_->inAnUpdate_);
-	Q_ASSERT(std::any_of(viewItems_.begin(), viewItems_.end(),
-						 [view](QVector<ViewItem*> v) { return v.contains(view); }));
-	currentViewItem_->hide();
-	currentViewItem_ = view;
-	currentViewItem_->show();
-	currentViewItem_->setUpdateNeeded(Item::StandardUpdate);
-	scene_->scheduleUpdate();
-}
-
-bool ViewItemManager::switchToView(const QString viewName)
-{
-	auto view = viewItem(viewName);
-	if (view)
-		switchToView(view);
-	return view != nullptr;
-}
-
 void ViewItemManager::addViewItem(ViewItem *view, QPoint position)
 {
 	Q_ASSERT(!scene_->inAnUpdate_);
@@ -104,8 +85,28 @@ void ViewItemManager::addViewItem(ViewItem *view, QPoint position)
 	scene_->addTopLevelItem(view, false);
 }
 
+void ViewItemManager::switchToView(ViewItem *view)
+{
+	Q_ASSERT(!scene_->inAnUpdate_);
+	Q_ASSERT(std::any_of(viewItems_.begin(), viewItems_.end(),
+						 [view](QVector<ViewItem*> v) { return v.contains(view); }));
+	currentViewItem_->hide();
+	currentViewItem_ = view;
+	currentViewItem_->show();
+	currentViewItem_->setUpdateNeeded(Item::StandardUpdate);
+	scene_->scheduleUpdate();
+}
+
+bool ViewItemManager::switchToView(const QString viewName)
+{
+	auto view = viewItem(viewName);
+	if (view) switchToView(view);
+	return view != nullptr;
+}
 ViewItem* ViewItemManager::newViewItem(const QString name, QPoint position)
 {
+	//If a view item with the name already exists, we don't create a new one
+	if (viewItem(name)) return nullptr;
 	auto result = new ViewItem(nullptr, name);
 	addViewItem(result, position);
 	return result;
@@ -121,19 +122,72 @@ void ViewItemManager::removeAllViewItems()
 	currentViewItem_ = nullptr;
 }
 
+void ViewItemManager::saveView(ViewItem* view, Model::TreeManager* manager) const
+{
+	auto json = view->toJson().toJson();
+	if (!QDir(DIRECTORY_NAME).exists())
+		QDir().mkdir(DIRECTORY_NAME);
+	QFile file(fileName(view->name(), manager->name()));
+	file.open(QIODevice::WriteOnly);
+	QTextStream write(&file);
+	write << json;
+}
+
+ViewItem* ViewItemManager::loadView(QString name, QPoint position)
+{
+	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+		if (auto view = loadView(name, manager))
+		{
+			addViewItem(view, position);
+			return view;
+		}
+	return nullptr;
+}
+
+ViewItem* ViewItemManager::loadView(QString name, Model::TreeManager* manager)
+{
+	QFile file(fileName(name, manager->name()));
+	if (!file.exists()) return nullptr;
+	file.open(QIODevice::ReadOnly);
+	QTextStream read(&file);
+	QString json;
+	while (!read.atEnd()) json = json + read.readLine();
+	ViewItem* view = new ViewItem(nullptr);
+	view->fromJson(QJsonDocument::fromJson(json.toUtf8()));
+	return view;
+}
+
+void ViewItemManager::cleanupRemovedItem(Item *removedItem)
+{
+	for (auto vector : viewItems_)
+		for (auto item : vector)
+			if (item) item->cleanupRemovedItem(removedItem);
+}
+
+void ViewItemManager::cleanupRemovedNode(Model::Node* removedNode)
+{
+	for (auto vector : viewItems_)
+		for (auto item : vector)
+			if (item) item->cleanupRemovedNode(removedNode);
+}
+
 QPoint ViewItemManager::nextEmptyPosition() const
 {
 	//Take the first empty position, if one exists
 	for (int col = 0; col < viewItems_.size(); col++)
 		for (int row = 0; row < viewItems_[col].size(); row++)
-			if (!viewItems_[col][row])
-				return QPoint(col, row);
+			if (!viewItems_[col][row]) return QPoint(col, row);
 	//Else just use the column with the least rows
 	int colToInsert = 0;
 	for (int col = 1; col < viewItems_.size(); col++)
 		if (viewItems_[col].size() < viewItems_[colToInsert].size())
 			colToInsert = col;
 	return QPoint(colToInsert, viewItems_[colToInsert].size());
+}
+
+QString ViewItemManager::fileName(QString viewName, QString managerName) const
+{
+	return QDir::toNativeSeparators(DIRECTORY_NAME + "/" + managerName + "__" + viewName + ".json");
 }
 
 }

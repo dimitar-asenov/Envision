@@ -77,6 +77,8 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		static void registerInfoGetter(const QString& name, const InfoGetter getter,
 									   bool updatesAutomatically, bool enabledByDefault);
 
+		static QStringList registeredInfoGetters();
+
 	protected:
 		void setInfoHtml(QString content);
 		/**
@@ -110,5 +112,7 @@ inline void InfoNode::fullUpdate() { updateInfo(false); }
 inline void InfoNode::automaticUpdate() { updateInfo(true); }
 
 inline bool InfoNode::isEnabled(const QString name) const { return enabledInfoGetters_.contains(name); }
+
+inline QStringList InfoNode::registeredInfoGetters() { return allInfoGetters.keys(); }
 
 }

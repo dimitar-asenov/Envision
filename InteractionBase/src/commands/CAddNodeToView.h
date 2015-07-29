@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,52 +24,28 @@
  **
  **********************************************************************************************************************/
 
-#include "NodeOwningCommand.h"
-#include "../nodes/Node.h"
-#include "../model/AllTreeManagers.h"
-#include "../model/TreeManager.h"
+#pragma once
 
-namespace Model {
+#include "interactionbase_api.h"
+#include "commands/CommandWithDefaultArguments.h"
 
-NodeOwningCommand::NodeOwningCommand(Node* target, const QString & text, Node* ownedIfDone, Node* ownedIfUndone)
-: UndoCommand(target, text), ownedIfDone_(ownedIfDone), ownedIfUndone_(ownedIfUndone)
+namespace Interaction {
+
+class INTERACTIONBASE_API CAddNodeToView : public CommandWithDefaultArguments
 {
-	// If the target node is not yet owned, do not assume ownership over its subnodes.
-	if (target->manager() == nullptr)
-	{
-		ownedIfDone_ = nullptr;
-		ownedIfUndone_ = nullptr;
-	}
+	public:
+		CAddNodeToView();
+
+		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+	protected:
+		virtual CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+};
+
 }
-
-NodeOwningCommand::~NodeOwningCommand()
-{
-	auto n = owned();
-	// Only delete a node if:
-	// - It is not part of a manager
-	// - It is not currently owned by any other command in any undo stack
-	if (n && !n->manager())
-	{
-		for (auto m : AllTreeManagers::instance().loadedManagers())
-			if (m->isOwnedByUndoStack(n, this)) return;
-
-		SAFE_DELETE(n);
-	}
-}
-
-Node* NodeOwningCommand::owned() const
-{
-	return isUndone() ? ownedIfUndone_ : ownedIfDone_;
-}
-
-Node* NodeOwningCommand::insertedNode() const
-{
-	return ownedIfUndone_;
-}
-
-Node* NodeOwningCommand::removedNode() const
-{
-	return ownedIfDone_;
-}
-
-} /* namespace Model */

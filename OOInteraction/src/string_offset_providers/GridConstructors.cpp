@@ -45,6 +45,13 @@ void GridConstructors::initializeAll()
 		grid->add(new ListCell(1, vis->arguments(), 1, "(", ",", ")"));
 	});
 
+	GridBasedOffsetProvider::addGridConstructor<VMetaCallExpression>(
+	[](GridBasedOffsetProvider* grid, VMetaCallExpression* vis){
+		grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
+		grid->add(new Cell(1, vis->layout()->at<Visualization::Item>(1), 1));
+		grid->add(new ListCell(2, vis->arguments(), 2, "(", ",", ")"));
+	});
+
 	GridBasedOffsetProvider::addGridConstructor<VCastExpression>(
 	[](GridBasedOffsetProvider* grid, VCastExpression* vis){
 		grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 1));

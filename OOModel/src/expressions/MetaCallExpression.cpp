@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,49 +23,43 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#include "InfoMethods.h"
 
-#include "OOModel/src/allOOModelNodes.h"
+#include "MetaCallExpression.h"
 
-namespace OOVisualization {
+#include "ReferenceExpression.h"
+#include "../types/SymbolProviderType.h"
+#include "../declarations/MetaDefinition.h"
 
-QString InfoMethods::numberOfCallees(Model::Node *node)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+
+DEFINE_TYPED_LIST(OOModel::MetaCallExpression)
+
+namespace OOModel {
+
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallExpression)
+
+REGISTER_ATTRIBUTE(MetaCallExpression, callee, Expression, false, false, true)
+REGISTER_ATTRIBUTE(MetaCallExpression, arguments, TypedListOfExpression, false, false, true)
+
+MetaCallExpression::MetaCallExpression(const QString& name, Expression* referencePrefix)
+: Super(nullptr, MetaCallExpression::getMetaData())
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
-	else return QString();
+	setCallee(new ReferenceExpression(name, referencePrefix));
 }
 
-QString InfoMethods::numberOfUsages(Model::Node *node)
+MetaDefinition* MetaCallExpression::metaDefinition()
 {
-	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
-	else if (auto someClass = DCast<OOModel::Class>(node))
+	MetaDefinition* ret = nullptr;
+
+	auto calleeType = callee()->type();
+	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType))
 	{
-		QSet<Model::Node*> result;
-		auto top = someClass->root();
-		//Find all the places where this class is referenced
-		QList<Model::Node*> toCheck{top};
-		while (!toCheck.isEmpty())
-		{
-			auto check = toCheck.takeLast();
-			if (auto expr = DCast<OOModel::ReferenceExpression>(check))
-				if (expr->target() == someClass)
-					result << expr->topMostExpressionParent();
-			toCheck.append(check->children());
-		}
-		return "Number of usages: " + QString::number(result.size());
+		if (auto m = dynamic_cast<MetaDefinition*>(spt->symbolProvider()))
+			ret = m;
 	}
-	else return QString();
-}
 
-QString InfoMethods::fullName(Model::Node *node)
-{
-	if (auto method = DCast<OOModel::Method>(node))
-		return "<b>" + method->fullyQualifiedName() + "</b>";
-	else if (auto clazz = DCast<OOModel::Class>(node))
-		return "<b>" + clazz->name() + "</b>";
-	else return QString();
+	return ret;
 }
 
 }
