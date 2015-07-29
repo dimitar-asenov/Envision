@@ -62,4 +62,14 @@ MetaDefinition* MetaCallExpression::metaDefinition()
 	return ret;
 }
 
+Declaration* MetaCallExpression::generate()
+{
+	auto metaDef = metaDefinition();
+	if (!metaDef) return nullptr;
+
+	auto cloned = metaDef->context()->clone();
+
+	return cloned;
+}
+
 }
