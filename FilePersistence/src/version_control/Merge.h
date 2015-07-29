@@ -77,6 +77,9 @@ class FILEPERSISTENCE_API Merge
 		void applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 										const ChangeDependencyGraph& cdg);
 
+		/**
+		 * Computes transitive closure of dependencies for \a change.
+		 */
 		void addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
 									const std::shared_ptr<ChangeDescription>& change,
 									const ChangeDependencyGraph& cdg);

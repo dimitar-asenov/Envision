@@ -71,7 +71,9 @@ double GenericNode::valueAsDouble() const
 GenericNode* GenericNode::parent() const
 {
 	ensureDataRead();
-	if (!parent_ && tree()->piecewiseLoader())
+	if (parentId_.isNull())
+		return nullptr;
+	else if (!parent_ && tree()->piecewiseLoader())
 	{
 		tree()->find(parentId_, true); // this should also link this node to the parent.
 		Q_ASSERT(parent_->id() == parentId_);

@@ -56,11 +56,35 @@ class ConflictUnitDetector : public ConflictPipelineComponent
 		 */
 		Model::NodeIdType findConflictUnit(const GenericNode* node);
 
+		static QSet<std::shared_ptr<ChangeDescription>> structureChanges(ChangeDependencyGraph& cdg,
+																					 std::shared_ptr<ChangeDescription> parentChange);
+
+
+		static Model::NodeIdType findMoveBound (GenericNode* nodeA, GenericNode* nodeB);
+
+		/**
+		 * Returns all changes \a change depends on.
+		 */
+		static QList<std::shared_ptr<ChangeDescription>> findMoveDependencies(std::shared_ptr<GenericTree> treeBase,
+																							std::shared_ptr<ChangeDescription> change,
+																							ChangeDependencyGraph& cdg);
+
+		static void checkMove(std::shared_ptr<ChangeDescription> changeA, ChangeDependencyGraph& cdgB,
+									 ConflictPairs& conflictPairs, QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges);
+
+
+		static void checkMoves(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+				ConflictPairs& conflictPairs, QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges);
+
+		static bool isAncestor(GenericNode* node, Model::NodeIdType ancestorId);
+
 		/**
 		 * Adds all changes that depend on \a change according to \a cdg to \a conflictingChanges.
 		 */
 		void markDependingAsConflicting(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
-												  std::shared_ptr<ChangeDescription>& change, ChangeDependencyGraph& cdg);
+												  std::shared_ptr<ChangeDescription> change, ChangeDependencyGraph& cdg,
+												  QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription> >& moveDependencies,
+												  QList<std::shared_ptr<ChangeDescription> > conflictingWithChange, ConflictPairs& conflictPairs);
 
 		QSet<QString> conflictTypes_;
 		ConflictUnitSet affectedCUsA_;

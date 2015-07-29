@@ -122,21 +122,10 @@ class ListMergeComponent : public ConflictPipelineComponent
 		 */
 		void markDependingAsConflicting(Chunk* chunk); // TODO rename to reflect that chunk is also marked
 
-		/**
-		 * Records the fact that a branch has reordered \a elem. If there are any chunks that depend on \a elem not being
-		 * reordered, they are marked as conflicting.
-		 */
-		void markElementAsReordered(QSet<Model::NodeIdType>& reorderedNodesByMe,
-											 QHash<Model::NodeIdType, Chunk*>& mustBeUnchangedByMe, Model::NodeIdType elem);
 
-		/**
-		 * Returns true if it has been detected that the other branch reorders \a elem; returns false otherwise.
-		 * \a chunk is marked such that if in the future it is detected that the other branch reorders \a elem,
-		 *  \a chunk is retroactively marked as conflicting.
-		 */
-		bool doesOtherBranchReorder(QSet<Model::NodeIdType>& reorderedNodesByOther,
-											 QHash<Model::NodeIdType, Chunk*>& mustBeUnchangedByOther,
-											 Chunk* chunk, Model::NodeIdType elem);
+		static bool elementIsStable(const Model::NodeIdType& elem,
+									const QList<Model::NodeIdType>& listA,
+									const QList<Model::NodeIdType>& listB);
 
 		/**
 		 * Returns the chunk of the list of \a listContainer that contains \a element in the base version if
