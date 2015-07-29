@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,25 +24,30 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "MetaDefinition.h"
 
-#include "../oovisualization_api.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "Class.h"
 
-#include "VReferenceExpressionStyle.h"
+DEFINE_TYPED_LIST(OOModel::MetaDefinition)
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
+namespace OOModel {
 
-namespace OOVisualization {
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaDefinition)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaDefinition)
 
-class OOVISUALIZATION_API VMethodCallExpressionStyle : public Super<Visualization::ItemStyle>
+REGISTER_ATTRIBUTE(MetaDefinition, MetaBindings, TypedListOfMetaBinding, false, false, true)
+REGISTER_ATTRIBUTE(MetaDefinition, context, Declaration, false, false, true)
+
+MetaDefinition::MetaDefinition(const QString& name) : Super(nullptr, MetaDefinition::getMetaData())
 {
-	public:
-		virtual ~VMethodCallExpressionStyle();
+	setName(name);
+	setContext(new OOModel::Class("Context"));
+}
 
-		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
-		Property<VReferenceExpressionStyle> name{this, "name"};
-		Property<Visualization::VListStyle> arguments{this, "arguments"};
-};
+MetaDefinition::SymbolTypes MetaDefinition::symbolType() const
+{
+	return CONTAINER;
+}
 
 }

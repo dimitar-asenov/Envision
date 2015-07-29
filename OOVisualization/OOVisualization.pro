@@ -120,7 +120,9 @@ HEADERS += src/statements/VAssertStatementStyle.h \
     src/statements/VSynchronizedStatementStyle.h \
     src/expressions/VCastExpression.h \
     src/expressions/VCastExpressionStyle.h \
-    src/info/InfoMethods.h
+    src/info/InfoMethods.h \
+    src/expressions/VMetaCallExpression.h \
+    src/expressions/VMetaCallExpressionStyle.h
 SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/statements/VAssertStatement.cpp \
     src/expressions/VSuperExpression.cpp \
@@ -230,4 +232,6 @@ SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/statements/VSynchronizedStatementStyle.cpp \
     src/expressions/VCastExpression.cpp \
     src/expressions/VCastExpressionStyle.cpp \
-    src/info/InfoMethods.cpp
+    src/info/InfoMethods.cpp \
+    src/expressions/VMetaCallExpression.cpp \
+    src/expressions/VMetaCallExpressionStyle.cpp

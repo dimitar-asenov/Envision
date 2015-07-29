@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,25 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "MetaCallMapping.h"
 
-#include "../oovisualization_api.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 
-#include "VReferenceExpressionStyle.h"
+DEFINE_TYPED_LIST(OOModel::MetaCallMapping)
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
+namespace OOModel {
 
-namespace OOVisualization {
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaCallMapping)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallMapping)
 
-class OOVISUALIZATION_API VMethodCallExpressionStyle : public Super<Visualization::ItemStyle>
+REGISTER_ATTRIBUTE(MetaCallMapping, value, ReferenceExpression, false, false, true)
+
+MetaCallMapping::MetaCallMapping(const QString& name) : Super(nullptr, MetaCallMapping::getMetaData())
 {
-	public:
-		virtual ~VMethodCallExpressionStyle();
+	setName(name);
+}
 
-		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
-		Property<VReferenceExpressionStyle> name{this, "name"};
-		Property<Visualization::VListStyle> arguments{this, "arguments"};
-};
+MetaCallMapping::SymbolTypes MetaCallMapping::symbolType() const
+{
+	return VARIABLE;
+}
 
 }

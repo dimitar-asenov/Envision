@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,23 +26,28 @@
 
 #pragma once
 
-#include "../oovisualization_api.h"
+#include "../oomodel_api.h"
 
-#include "VReferenceExpressionStyle.h"
+#include "Declaration.h"
+#include "MetaBinding.h"
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
-namespace OOVisualization {
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaDefinition)
 
-class OOVISUALIZATION_API VMethodCallExpressionStyle : public Super<Visualization::ItemStyle>
+namespace OOModel {
+
+class OOMODEL_API MetaDefinition : public Super<Declaration>
 {
-	public:
-		virtual ~VMethodCallExpressionStyle();
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaDefinition)
 
-		Property<Visualization::SequentialLayoutStyle> layout{this, "layout"};
-		Property<VReferenceExpressionStyle> name{this, "name"};
-		Property<Visualization::VListStyle> arguments{this, "arguments"};
+	ATTRIBUTE(Model::TypedList<MetaBinding>, MetaBindings, setMetaBindings)
+	ATTRIBUTE(OOModel::Declaration, context, setContext)
+
+	public:
+		MetaDefinition(const QString& name);
+
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

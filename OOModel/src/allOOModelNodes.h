@@ -36,6 +36,9 @@
 #include "declarations/TypeAlias.h"
 #include "declarations/NameImport.h"
 #include "declarations/ExplicitTemplateInstantiation.h"
+#include "declarations/MetaDefinition.h"
+#include "declarations/MetaCallMapping.h"
+#include "declarations/MetaBinding.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -83,6 +86,7 @@
 #include "expressions/TypeTraitExpression.h"
 #include "expressions/TypeNameOperator.h"
 #include "expressions/GlobalScopeExpression.h"
+#include "expressions/MetaCallExpression.h"
 
 #include "expressions/types/TypeExpression.h"
 #include "expressions/types/PrimitiveTypeExpression.h"

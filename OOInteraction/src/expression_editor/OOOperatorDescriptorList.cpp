@@ -374,6 +374,18 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
+	add(new OD( "meta call", "# expr ( expr )", 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+
+		auto opr = new MetaCallExpression();
+		opr->setCallee(operands.first());
+
+		extractCommaInto(operands.last(), opr->arguments(), true, false);
+
+		return opr;
+	}));
+
 	add(new OD( "type arguments", "id < expr >", 0, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
