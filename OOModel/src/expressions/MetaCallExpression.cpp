@@ -32,6 +32,8 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
+#include "CodeGenerationVisitor.h"
+
 DEFINE_TYPED_LIST(OOModel::MetaCallExpression)
 
 namespace OOModel {
@@ -68,6 +70,9 @@ Declaration* MetaCallExpression::generate()
 	if (!metaDef) return nullptr;
 
 	auto cloned = metaDef->context()->clone();
+
+	CodeGenerationVisitor codeGenVisitor;
+	codeGenVisitor.visit(cloned);
 
 	return cloned;
 }
