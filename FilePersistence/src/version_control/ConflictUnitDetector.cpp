@@ -270,7 +270,7 @@ bool ConflictUnitDetector::isAncestor(GenericNode* node, Model::NodeIdType ances
 	return false;
 }
 
-ConflictUnitSet __attribute__((optimize("O0"))) ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
+ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
 {
 	ConflictUnitSet affectedCUs;
 	for (auto change : cdg.changes()) {
@@ -299,8 +299,7 @@ ConflictUnitSet __attribute__((optimize("O0"))) ConflictUnitDetector::computeAff
 	return affectedCUs;
 }
 
-Model::NodeIdType __attribute__((optimize("O0")))
-	ConflictUnitDetector::findConflictUnit(const GenericNode* node)
+Model::NodeIdType ConflictUnitDetector::findConflictUnit(const GenericNode* node)
 {
 	// find closest ancestor of node that exists in base
 	Q_ASSERT(node);

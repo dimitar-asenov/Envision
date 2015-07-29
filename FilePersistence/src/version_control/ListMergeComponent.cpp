@@ -35,7 +35,7 @@ ListMergeComponent::ListMergeComponent(QSet<QString>& conflictTypes, QSet<QStrin
 
 ListMergeComponent::~ListMergeComponent() {}
 
-LinkedChangesTransition __attribute__((optimize("O0"))) ListMergeComponent::run(std::shared_ptr<GenericTree>& treeA,
+LinkedChangesTransition ListMergeComponent::run(std::shared_ptr<GenericTree>& treeA,
 																std::shared_ptr<GenericTree>& treeB,
 																std::shared_ptr<GenericTree>& treeBase,
 																ChangeDependencyGraph& cdgA,
@@ -258,10 +258,8 @@ QPair<bool, QSet<Model::NodeIdType>> ListMergeComponent::checkAndGetAllElementId
 	return {allElementsConflictRoots, allElementIds};
 }
 
-bool __attribute__((optimize("O0"))) onlyConflictsOnLabel(ConflictPairs& conflictPairs,
-																			 QSet<Model::NodeIdType>& allElementIds,
-																			 ChangeDependencyGraph& cdgA,
-																			 Model::NodeIdType containerId)
+bool onlyConflictsOnLabel(ConflictPairs& conflictPairs, QSet<Model::NodeIdType>& allElementIds,
+								  ChangeDependencyGraph& cdgA, Model::NodeIdType containerId)
 {
 	for (auto elem : allElementIds)
 	{
@@ -311,7 +309,7 @@ bool __attribute__((optimize("O0"))) onlyConflictsOnLabel(ConflictPairs& conflic
 	return true;
 }
 
-QSet<Model::NodeIdType> __attribute__((optimize("O0"))) ListMergeComponent::computeListsToMerge(
+QSet<Model::NodeIdType> ListMergeComponent::computeListsToMerge(
 		ChangeDependencyGraph& cdgA,
 		ChangeDependencyGraph&,
 		QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
@@ -398,7 +396,7 @@ bool ListMergeComponent::elementIsStable(const Model::NodeIdType& elem,
 	return true;
 }
 
-bool __attribute__((optimize("O0"))) ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
+bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 															 const QList<Model::NodeIdType>& spanBase,
 															 const Model::NodeIdType containerId,
 															 const ChangeDependencyGraph& cdgThis,
