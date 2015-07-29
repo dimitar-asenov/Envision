@@ -114,7 +114,7 @@ void CppImportManager::setupTest()
 		else if (testDir.startsWith("spath:"))
 		{
 			testDir.replace(0, 6, "");
-			return setImportPath(QCoreApplication::applicationDirPath() + "/test" + testDir, true);
+			return setImportPath(QDir(QCoreApplication::applicationDirPath() + "/test" + testDir).absolutePath(), true);
 		}
 		else if (!testDir.startsWith("#"))
 		{

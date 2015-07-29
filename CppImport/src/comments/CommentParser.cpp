@@ -40,6 +40,8 @@ Comments::CommentNode* CommentParser::parseComment(clang::comments::Comment* com
 
 void CommentParser::processComment(clang::comments::Comment* comment)
 {
+	if (!comment) return;
+
 	if (auto tc = llvm::dyn_cast<clang::comments::TextComment>(comment))
 		processTextComment(tc);
 	else if (auto fc = llvm::dyn_cast<clang::comments::FullComment>(comment))
