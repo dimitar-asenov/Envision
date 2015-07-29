@@ -40,6 +40,7 @@ class INFORMATIONSCRIPTING_API PropertyMap
 
 		boost::python::object pythonAttribute(const QString& key) const;
 		Property operator[](const QString& key) const;
+		Property& operator[](const QString& key);
 
 		bool contains(const QString& key) const;
 

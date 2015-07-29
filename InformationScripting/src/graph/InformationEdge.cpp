@@ -29,15 +29,30 @@
 namespace InformationScripting {
 
 const QString InformationEdge::COUNT_PROPERTY_{"count"};
+const QString InformationEdge::NAME_PROPERTY_{"name"};
 
-InformationEdge::InformationEdge()
+InformationEdge::InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
+											Orientation orientation)
+	: from_{from}, to_{to}, orientation_{orientation}
 {
 	insert(COUNT_PROPERTY_, 1);
+	insert(NAME_PROPERTY_, name);
 }
 
 int InformationEdge::count() const
 {
 	return (*this)[COUNT_PROPERTY_];
+}
+
+void InformationEdge::incrementCount()
+{
+	Property& count = (*this)[COUNT_PROPERTY_];
+	count = static_cast<int>(count) + 1;
+}
+
+QString InformationEdge::name() const
+{
+	return (*this)[NAME_PROPERTY_];
 }
 
 } /* namespace InformationScripting */

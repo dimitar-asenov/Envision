@@ -33,14 +33,24 @@
 
 namespace InformationScripting {
 
-AstQuery::AstQuery(Model::Node* target, AstQuery::Scope scope)
-	: target_{target}, scope_{scope}
+AstQuery::AstQuery(QueryType type, Model::Node* target, AstQuery::Scope scope)
+	: target_{target}, scope_{scope}, type_{type}
 {}
 
-Graph* AstQuery::execute(QList<Graph*>)
+Graph* AstQuery::execute(QList<Graph*> input)
 {
+	switch (type_)
+	{
+		case QueryType::Methods: return methodsQuery(input);
+		case QueryType::BaseClasses: return baseClassesQuery(input);
+	}
+}
+
+Graph* AstQuery::methodsQuery(QList<Graph*>)
+{
+	// TODO handle input
 	auto g = new Graph();
-	if (scope_ == AstQuery::Scope::Local)
+	if (scope_ == Scope::Local)
 	{
 		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
 		for (auto method : *parentClass->methods())
@@ -50,7 +60,36 @@ Graph* AstQuery::execute(QList<Graph*>)
 			g->add(node);
 		}
 	}
-	else if (scope_ == AstQuery::Scope::Global)
+	else if (scope_ == Scope::Global)
+	{
+		// TODO
+	}
+	return g;
+}
+
+Graph* AstQuery::baseClassesQuery(QList<Graph*>)
+{
+	// TODO handle input
+	auto g = new Graph();
+	if (scope_ == Scope::Local)
+	{
+		OOModel::Class* parentClass = DCast<OOModel::Class>(target_);
+		if (!parentClass) parentClass = target_->firstAncestorOfType<OOModel::Class>();
+
+		auto classNode = new InformationNode();
+		classNode->insert("ast", parentClass);
+		g->add(classNode);
+
+		auto bases = parentClass->directBaseClasses();
+		for (auto base : bases)
+		{
+			auto baseNode = new InformationNode();
+			baseNode->insert("ast", base);
+			g->add(baseNode);
+			g->addDirectedEdge(classNode, baseNode, "base class");
+		}
+	}
+	else if (scope_ == Scope::Global)
 	{
 		// TODO
 	}

@@ -41,9 +41,10 @@ class Graph;
 class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
 	public:
+		enum class QueryType : int {Methods, BaseClasses};
 		enum class Scope : int {Local, Global};
 
-		AstQuery(Model::Node* target, Scope scope);
+		AstQuery(QueryType type, Model::Node* target, Scope scope);
 
 		// TODO for now this is just for methods. We have to figure out how to make this more generic.
 		// Maybe use a function pointer, but where should the function be defined?
@@ -52,6 +53,10 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 	private:
 		Model::Node* target_{};
 		Scope scope_{};
+		QueryType type_{};
+
+		Graph* methodsQuery(QList<Graph*> input);
+		Graph* baseClassesQuery(QList<Graph*> input);
 };
 
 } /* namespace InformationScripting */

@@ -43,7 +43,12 @@ AstSource& AstSource::instance()
 
 AstQuery* AstSource::createMethodQuery(Model::Node* target, AstQuery::Scope scope)
 {
-	return new AstQuery(target, scope);
+	return new AstQuery(AstQuery::QueryType::Methods, target, scope);
+}
+
+AstQuery*AstSource::createBaseClassesQuery(Model::Node* target, AstQuery::Scope scope)
+{
+	return new AstQuery(AstQuery::QueryType::BaseClasses, target, scope);
 }
 
 } /* namespace InformationScripting */

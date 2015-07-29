@@ -97,6 +97,12 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		QueryExecutor queryExecutor(query);
 		queryExecutor.execute();
 	}
+	else if (args[0] == "bases")
+	{
+		auto query = AstSource::instance().createBaseClassesQuery(node);
+		QueryExecutor queryExecutor(query);
+		queryExecutor.execute();
+	}
 	return new Interaction::CommandResult();
 }
 

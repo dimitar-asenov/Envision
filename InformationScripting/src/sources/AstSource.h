@@ -44,6 +44,7 @@ class AstSource
 		static AstSource& instance();
 
 		AstQuery* createMethodQuery(Model::Node* target, AstQuery::Scope scope = AstQuery::Scope::Local);
+		AstQuery* createBaseClassesQuery(Model::Node* target, AstQuery::Scope scope = AstQuery::Scope::Local);
 
 	private:
 		AstSource() = default;

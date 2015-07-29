@@ -33,14 +33,35 @@
 
 namespace InformationScripting {
 
+class InformationNode;
+
 class InformationEdge : public PropertyMap
 {
 	public:
-		InformationEdge();
+		enum class Orientation : int {Directed, Undirected};
+		InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
+							 Orientation orientation = Orientation::Directed);
 		int count() const;
+		void incrementCount();
+		QString name() const;
+
+		inline InformationNode* from() const;
+		inline InformationNode* to() const;
+
+		inline bool isDirected() const;
 
 	private:
 		static const QString COUNT_PROPERTY_;
+		static const QString NAME_PROPERTY_;
+
+		InformationNode* from_{};
+		InformationNode* to_{};
+
+		Orientation orientation_{};
 };
+
+InformationNode* InformationEdge::from() const { return from_; }
+InformationNode* InformationEdge::to() const { return to_; }
+bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }
 
 } /* namespace InformationScripting */

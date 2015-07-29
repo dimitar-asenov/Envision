@@ -101,7 +101,7 @@ class Graph
 		/**
 		 * Returns all edges for which the EdgeCondition \a holds holds.
 		 */
-		QList<InformationNode*> edgesFowWhich(EdgeCondition holds) const;
+		QList<InformationEdge*> edgesFowWhich(EdgeCondition holds) const;
 
 	private:
 		static QList<IsEqual> equalityChecks_;

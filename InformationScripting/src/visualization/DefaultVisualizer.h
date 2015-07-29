@@ -42,6 +42,7 @@ class INFORMATIONSCRIPTING_API DefaultVisualizer
 		DefaultVisualizer() = default;
 
 		static const QString HIGHLIGHT_OVERLAY_GROUP;
+		static const QString ARROW_OVERLAY_GROUP;
 };
 
 } /* namespace InformationScripting */

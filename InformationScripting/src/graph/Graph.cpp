@@ -62,10 +62,22 @@ InformationNode* Graph::add(InformationNode* node)
 	return node;
 }
 
-InformationEdge* Graph::addDirectedEdge(InformationNode*, InformationNode*, const QString&)
+InformationEdge* Graph::addDirectedEdge(InformationNode* from, InformationNode* to, const QString& name)
 {
-	// TODO
-	return nullptr;
+	// TODO what if from/to is not yet in the graph?
+	for (auto edge : edges_)
+	{
+		if (edge->from() == from && edge->to() == to && edge->name() == name)
+		{
+			auto existingEdge = edge;
+			Q_ASSERT(existingEdge->isDirected());
+			existingEdge->incrementCount();
+			return existingEdge;
+		}
+	}
+	auto edge = new InformationEdge(from, to, name);
+	edges_.push_back(edge);
+	return edge;
 }
 
 InformationEdge* Graph::addEdge(InformationNode*, InformationNode*, const QString&)
@@ -93,10 +105,11 @@ QList<InformationNode*> Graph::nodesForWhich(Graph::NodeCondition holds) const
 	return result;
 }
 
-QList<InformationNode*> Graph::edgesFowWhich(Graph::EdgeCondition) const
+QList<InformationEdge*> Graph::edgesFowWhich(Graph::EdgeCondition holds) const
 {
-	// TODO
-	return {};
+	QList<InformationEdge*> result;
+	for (auto edge : edges_) if (holds(edge)) result.push_back(edge);
+	return result;
 }
 
 } /* namespace InformationScripting */
