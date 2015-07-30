@@ -180,6 +180,12 @@ class VISUALIZATIONBASE_API GridLayoutFormElement : public LayoutFormElement {
 		 */
 		int focusedElementIndex(Item* item) const;
 
+		/**
+		 * Returns the 2D index of the focused element for the specified \a item. If no element is focused, returns -1
+		 * for both coordinates.
+		 */
+		QPoint focusedElement2DIndex(Item* item) const;
+
 	private:
 
 		// Do not forget to update the copy constructor if adding new members.
