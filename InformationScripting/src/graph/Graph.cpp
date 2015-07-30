@@ -33,6 +33,12 @@ namespace InformationScripting {
 
 QList<Graph::IsEqual> Graph::equalityChecks_;
 
+Graph::~Graph()
+{
+	std::for_each(edges_.begin(), edges_.end(), [](InformationEdge* e) { SAFE_DELETE(e); });
+	std::for_each(nodes_.begin(), nodes_.end(), [](InformationNode* n) { SAFE_DELETE(n); });
+}
+
 InformationNode* Graph::add(InformationNode* node)
 {
 	InformationNode* existingNode = nullptr;
@@ -80,15 +86,37 @@ InformationEdge* Graph::addDirectedEdge(InformationNode* from, InformationNode* 
 	return edge;
 }
 
-InformationEdge* Graph::addEdge(InformationNode*, InformationNode*, const QString&)
+InformationEdge* Graph::addEdge(InformationNode* a, InformationNode* b, const QString& name)
 {
-	// TODO
-	return nullptr;
+	// TODO what if from/to is not yet in the graph?
+	for (auto edge : edges_)
+	{
+		if ((edge->from() == a || edge->from() == b) && (edge->to() == b || edge->to() == a) && edge->name() == name)
+		{
+			auto existingEdge = edge;
+			Q_ASSERT(!existingEdge->isDirected());
+			existingEdge->incrementCount();
+			return existingEdge;
+		}
+	}
+	auto edge = new InformationEdge(a, b, name, InformationEdge::Orientation::Undirected);
+	edges_.push_back(edge);
+	return edge;
 }
 
-void Graph::remove(InformationNode*)
+void Graph::remove(InformationNode* node)
 {
-	// TODO
+	for (auto edgeIt = edges_.begin(); edgeIt != edges_.end();)
+	{
+		auto edge = *edgeIt;
+		if (edge->from() == node || edge->to() == node)
+			edgeIt = edges_.erase(edgeIt);
+		else
+			++edgeIt;
+	}
+
+	auto nodeIt = std::find(nodes_.begin(), nodes_.end(), node);
+	nodes_.erase(nodeIt);
 }
 
 void Graph::remove(QList<InformationNode*> nodes)
@@ -107,6 +135,8 @@ QList<InformationNode*> Graph::nodesForWhich(Graph::NodeCondition holds) const
 
 QList<InformationEdge*> Graph::edgesFowWhich(Graph::EdgeCondition holds) const
 {
+	Q_ASSERT(holds);
+
 	QList<InformationEdge*> result;
 	for (auto edge : edges_) if (holds(edge)) result.push_back(edge);
 	return result;

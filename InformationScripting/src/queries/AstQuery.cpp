@@ -55,8 +55,7 @@ Graph* AstQuery::methodsQuery(QList<Graph*>)
 		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
 		for (auto method : *parentClass->methods())
 		{
-			auto node = new InformationNode();
-			node->insert("ast", method);
+			auto node = new InformationNode({{"ast", method}});
 			g->add(node);
 		}
 	}
@@ -76,15 +75,13 @@ Graph* AstQuery::baseClassesQuery(QList<Graph*>)
 		OOModel::Class* parentClass = DCast<OOModel::Class>(target_);
 		if (!parentClass) parentClass = target_->firstAncestorOfType<OOModel::Class>();
 
-		auto classNode = new InformationNode();
-		classNode->insert("ast", parentClass);
+		auto classNode = new InformationNode({{"ast", parentClass}});
 		g->add(classNode);
 
 		auto bases = parentClass->directBaseClasses();
 		for (auto base : bases)
 		{
-			auto baseNode = new InformationNode();
-			baseNode->insert("ast", base);
+			auto baseNode = new InformationNode({{"ast", base}});
 			g->add(baseNode);
 			g->addDirectedEdge(classNode, baseNode, "base class");
 		}

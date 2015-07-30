@@ -33,11 +33,8 @@ const QString InformationEdge::NAME_PROPERTY_{"name"};
 
 InformationEdge::InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
 											Orientation orientation)
-	: from_{from}, to_{to}, orientation_{orientation}
-{
-	insert(COUNT_PROPERTY_, 1);
-	insert(NAME_PROPERTY_, name);
-}
+	: PropertyMap{{{COUNT_PROPERTY_, 1}, {NAME_PROPERTY_, name}}}, from_{from}, to_{to}, orientation_{orientation}
+{}
 
 int InformationEdge::count() const
 {

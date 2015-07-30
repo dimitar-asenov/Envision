@@ -77,8 +77,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			for (auto method : *parentClass->methods())
 			{
 				// TODO: this leaks currently
-				auto infoNode = new InformationNode();
-				infoNode->insert("ast", method);
+				auto infoNode = new InformationNode({{"ast", method}});
 				methods.append(python::ptr(infoNode));
 			}
 

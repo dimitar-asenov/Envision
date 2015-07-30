@@ -28,6 +28,12 @@
 
 namespace InformationScripting {
 
+PropertyMap::PropertyMap(QList<QPair<QString, Property> > initialValues)
+{
+	for (auto initialValue : initialValues)
+		insert(initialValue.first, initialValue.second);
+}
+
 boost::python::object PropertyMap::pythonAttribute(const QString& key) const
 {
 	return pythonObject(operator[](key));

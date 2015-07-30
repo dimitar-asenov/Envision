@@ -36,6 +36,7 @@ class InformationNode;
 class Graph
 {
 	public:
+		~Graph();
 		// TODO instead of IsEqual we should use hashing in the future, see github discussion.
 		/**
 		 * IsEqual takes 2 nodes and returns if they are the same for some data source.

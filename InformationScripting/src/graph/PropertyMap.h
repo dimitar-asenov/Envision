@@ -35,6 +35,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API PropertyMap
 {
 	public:
+		PropertyMap(QList<QPair<QString, Property>> initialValues);
 		template <class DataType>
 		inline void insert(const QString& key, const DataType& value);
 
