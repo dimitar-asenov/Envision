@@ -41,7 +41,8 @@ HEADERS += src/precompiled.h \
     src/queries/Query.h \
     src/queries/AstQuery.h \
     src/queries/QueryExecutor.h \
-    src/visualization/DefaultVisualizer.h
+    src/visualization/DefaultVisualizer.h \
+    src/visitors/AllNodesOfType.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \

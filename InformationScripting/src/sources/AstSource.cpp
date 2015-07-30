@@ -41,14 +41,14 @@ AstSource& AstSource::instance()
 	return instance;
 }
 
-AstQuery* AstSource::createMethodQuery(Model::Node* target, AstQuery::Scope scope)
+AstQuery* AstSource::createMethodQuery(Model::Node* target, QStringList args)
 {
-	return new AstQuery(AstQuery::QueryType::Methods, target, scope);
+	return new AstQuery(AstQuery::QueryType::Methods, target, args);
 }
 
-AstQuery*AstSource::createBaseClassesQuery(Model::Node* target, AstQuery::Scope scope)
+AstQuery*AstSource::createBaseClassesQuery(Model::Node* target, QStringList args)
 {
-	return new AstQuery(AstQuery::QueryType::BaseClasses, target, scope);
+	return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
 }
 
 } /* namespace InformationScripting */

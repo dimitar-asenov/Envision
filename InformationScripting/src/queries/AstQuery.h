@@ -49,7 +49,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		enum class QueryType : int {Methods, BaseClasses};
 		enum class Scope : int {Local, Global};
 
-		AstQuery(QueryType type, Model::Node* target, Scope scope);
+		AstQuery(QueryType type, Model::Node* target, QStringList args);
 
 		// TODO for now this is just for methods. We have to figure out how to make this more generic.
 		// Maybe use a function pointer, but where should the function be defined?

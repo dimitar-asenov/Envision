@@ -31,11 +31,15 @@
 #include "../graph/Graph.h"
 #include "../graph/InformationNode.h"
 
+#include "../visitors/AllNodesOfType.h"
+
 namespace InformationScripting {
 
-AstQuery::AstQuery(QueryType type, Model::Node* target, AstQuery::Scope scope)
-	: target_{target}, scope_{scope}, type_{type}
-{}
+AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
+	: target_{target}, type_{type}
+{
+	if (args.size() && args[0] == "g") scope_ = Scope::Global;
+}
 
 Graph* AstQuery::execute(QList<Graph*> input)
 {
@@ -61,7 +65,13 @@ Graph* AstQuery::methodsQuery(QList<Graph*>)
 	}
 	else if (scope_ == Scope::Global)
 	{
-		// TODO
+		auto root = target_->manager()->root();
+		AllNodesOfType<OOModel::Method> visitor;
+		visitor.visit(root);
+		auto allMethods =  visitor.results();
+		for (auto method : allMethods)
+			g->add(new InformationNode({{"ast", method}}));
+
 	}
 	return g;
 }

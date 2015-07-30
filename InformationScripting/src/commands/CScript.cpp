@@ -56,7 +56,12 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	Q_ASSERT(node);
 
 	QStringList args = commandTokens.mid(1);
-	if (args[0] == "script")
+	if (!args.size()) new Interaction::CommandResult();
+
+	QString command = args[0];
+	args = args.mid(1);
+
+	if (command == "script")
 	{
 
 		auto parentClass = node->firstAncestorOfType<OOModel::Class>();
@@ -90,15 +95,15 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
 		}
 	}
-	else if (args[0] == "methods")
+	else if (command == "methods")
 	{
-		auto query = AstSource::instance().createMethodQuery(node);
+		auto query = AstSource::instance().createMethodQuery(node, args);
 		QueryExecutor queryExecutor(query);
 		queryExecutor.execute();
 	}
-	else if (args[0] == "bases")
+	else if (command == "bases")
 	{
-		auto query = AstSource::instance().createBaseClassesQuery(node);
+		auto query = AstSource::instance().createBaseClassesQuery(node, args);
 		QueryExecutor queryExecutor(query);
 		queryExecutor.execute();
 	}

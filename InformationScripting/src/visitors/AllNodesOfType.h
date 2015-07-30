@@ -28,26 +28,34 @@
 
 #include "../informationscripting_api.h"
 
-#include "../queries/AstQuery.h"
-
-namespace Model {
-	class Node;
-}
+#include "ModelBase/src/visitor/VisitorDefinition.h"
 
 namespace InformationScripting {
 
-class Graph;
-
-class AstSource
+template <class NodeType>
+class INFORMATIONSCRIPTING_API AllNodesOfType : public Model::Visitor<AllNodesOfType<NodeType>>
 {
 	public:
-		static AstSource& instance();
+		static void init();
 
-		AstQuery* createMethodQuery(Model::Node* target, QStringList args);
-		AstQuery* createBaseClassesQuery(Model::Node* target, QStringList args);
+		QList<NodeType*> results() const;
 
 	private:
-		AstSource() = default;
+		QList<NodeType*> results_;
+		static void visitNodeType(AllNodesOfType<NodeType>* self, NodeType* n);
 };
+
+template <class NodeType>
+void AllNodesOfType<NodeType>::init() { AllNodesOfType<NodeType>::template addType<NodeType>(visitNodeType);}
+
+template <class NodeType>
+QList<NodeType*> AllNodesOfType<NodeType>::results() const { return results_; }
+
+template <class NodeType>
+void AllNodesOfType<NodeType>::visitNodeType(AllNodesOfType<NodeType>* self, NodeType* n)
+{
+	self->results_.push_back(n);
+}
+
 
 } /* namespace InformationScripting */
