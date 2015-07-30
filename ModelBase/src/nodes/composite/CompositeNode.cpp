@@ -82,8 +82,9 @@ CompositeNode::CompositeNode(const CompositeNode& other)
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( auto node = other.subnodes_[level][i] )
 			{
-				subnodes_[level][i] = node->clone();
-				node->setParent(this);
+				auto cloned = node->clone();
+				subnodes_[level][i] = cloned;
+				cloned->setParent(this);
 			}
 	}
 }
