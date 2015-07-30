@@ -78,19 +78,25 @@ Graph* AstQuery::baseClassesQuery(QList<Graph*>)
 		auto classNode = new InformationNode({{"ast", parentClass}});
 		g->add(classNode);
 
-		auto bases = parentClass->directBaseClasses();
-		for (auto base : bases)
-		{
-			auto baseNode = new InformationNode({{"ast", base}});
-			g->add(baseNode);
-			g->addDirectedEdge(classNode, baseNode, "base class");
-		}
+		addBaseEdgesFor(parentClass, classNode, g);
 	}
 	else if (scope_ == Scope::Global)
 	{
 		// TODO
 	}
 	return g;
+}
+
+void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g)
+{
+	auto bases = childClass->directBaseClasses();
+	for (auto base : bases)
+	{
+		auto baseNode = new InformationNode({{"ast", base}});
+		g->add(baseNode);
+		g->addDirectedEdge(classNode, baseNode, "base class");
+		addBaseEdgesFor(base, baseNode, g);
+	}
 }
 
 } /* namespace InformationScripting */

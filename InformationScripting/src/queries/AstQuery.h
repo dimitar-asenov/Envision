@@ -34,9 +34,14 @@ namespace Model {
 	class Node;
 }
 
+namespace OOModel {
+	class Class;
+}
+
 namespace InformationScripting {
 
 class Graph;
+class InformationNode;
 
 class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
@@ -57,6 +62,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 
 		Graph* methodsQuery(QList<Graph*> input);
 		Graph* baseClassesQuery(QList<Graph*> input);
+
+		void addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g);
 };
 
 } /* namespace InformationScripting */
