@@ -1,0 +1,86 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>1</width>
+			<color>#45352A</color>
+		</outline>
+		<backgroundBrush>
+			<style>1</style>
+			<color>#F5DBC9</color>
+		</backgroundBrush>
+		<cornerRadius>10</cornerRadius>
+	</shape>
+	<name prototypes="item/Text/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<gradient>
+					<stopPoints>
+						<e1>
+							<first>1.0</first>
+							<second>#d5ab8f</second>
+						</e1>	
+					</stopPoints>
+				</gradient>
+			</backgroundBrush>
+			<cornerType>1</cornerType>
+			<cornerRadius>5</cornerRadius>
+		</shape>
+		<pen>
+			<width>1.0</width>
+			<style>1</style>
+			<color>#45352A</color>
+			<capStyle>0</capStyle>
+			<joinStyle>0</joinStyle>
+		</pen>
+		<font>
+			<size>18</size>
+			<sizeIsInPixels>true</sizeIsInPixels>
+		</font>
+		<selectionFont>
+			<size>18</size>
+			<sizeIsInPixels>true</sizeIsInPixels>
+		</selectionFont>
+	</name>
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/metadef.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</icon>
+	<declarations prototypes="item/VList/default">
+		<shape/>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<alignment>1</alignment>
+			<direction>2</direction>
+			<spaceBetweenElements>2</spaceBetweenElements>
+		</itemsStyle>
+	</declarations>
+	<libraries prototypes="item/VList/default">
+		<shape/>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<alignment>1</alignment>
+			<direction>2</direction>
+			<spaceBetweenElements>2</spaceBetweenElements>
+		</itemsStyle>
+	</libraries>
+	<fields prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<width>1</width>
+				<color>#a0a0a0</color>
+			</outline>
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>#ffffff</color>
+			</backgroundBrush>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<spaceBetweenElements>20</spaceBetweenElements>
+		</itemsStyle>
+	</fields>
+</style>
