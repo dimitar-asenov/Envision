@@ -35,6 +35,7 @@
 #include "../helpers/BoostPythonHelpers.h"
 #include "../graph/InformationNode.h"
 #include "../queries/QueryExecutor.h"
+#include "../queries/CompositeQuery.h"
 #include "../sources/AstSource.h"
 
 namespace InformationScripting {
@@ -98,7 +99,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	else if (command == "methods")
 	{
 		auto query = AstSource::instance().createMethodQuery(node, args);
-		QueryExecutor queryExecutor(query);
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectToOutput(query);
+		QueryExecutor queryExecutor(compositeQuery);
 		queryExecutor.execute();
 	}
 	else if (command == "bases")
