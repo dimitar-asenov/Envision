@@ -46,7 +46,7 @@ class InformationNode;
 class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
 	public:
-		enum class QueryType : int {Methods, BaseClasses};
+		enum class QueryType : int {Methods, BaseClasses, ToClass};
 		enum class Scope : int {Local, Global};
 
 		AstQuery(QueryType type, Model::Node* target, QStringList args);
@@ -62,6 +62,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 
 		Graph* methodsQuery(QList<Graph*> input);
 		Graph* baseClassesQuery(QList<Graph*> input);
+		Graph* toClassNode(QList<Graph*> input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g);
 };

@@ -47,6 +47,7 @@ QList<Graph*> AstQuery::execute(QList<Graph*> input)
 	{
 		case QueryType::Methods: return {methodsQuery(input)};
 		case QueryType::BaseClasses: return {baseClassesQuery(input)};
+		case QueryType::ToClass: return {toClassNode(input)};
 	}
 }
 
@@ -94,6 +95,31 @@ Graph* AstQuery::baseClassesQuery(QList<Graph*>)
 	{
 		// TODO
 	}
+	return g;
+}
+
+Graph* AstQuery::toClassNode(QList<Graph*> input)
+{
+	Q_ASSERT(input.size() == 1);
+	auto g = input[0];
+	auto canBeInClass = [](const InformationNode* node) {
+		node->contains("ast");
+		Model::Node* n = (*node)["ast"];
+		return n->firstAncestorOfType<OOModel::Class>() != nullptr;
+	};
+
+	auto nodes = g->nodesForWhich(canBeInClass);
+	QList<OOModel::Class*> classes;
+	for (auto node : nodes)
+	{
+		Model::Node* astNode = (*node)["ast"];
+		auto classParent = astNode->firstAncestorOfType<OOModel::Class>();
+		if (!classes.contains(classParent)) classes.push_back(classParent);
+		// TODO currently we remove all the converted nodes, this also means we lose all connections:
+		g->remove(node);
+	}
+	for (auto foundClass : classes)
+		g->add(new InformationNode({{"ast", foundClass}}));
 	return g;
 }
 

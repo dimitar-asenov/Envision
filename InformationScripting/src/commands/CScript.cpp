@@ -110,6 +110,16 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		QueryExecutor queryExecutor(query);
 		queryExecutor.execute();
 	}
+	else if (command == "pipe")
+	{
+		auto methodQuery = AstSource::instance().createMethodQuery(node, args);
+		auto toBaseQuery = AstSource::instance().createToClassNodeQuery(node, args);
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectQuery(methodQuery, toBaseQuery);
+		compositeQuery->connectToOutput(toBaseQuery);
+		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
 	return new Interaction::CommandResult();
 }
 

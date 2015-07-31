@@ -46,9 +46,14 @@ AstQuery* AstSource::createMethodQuery(Model::Node* target, QStringList args)
 	return new AstQuery(AstQuery::QueryType::Methods, target, args);
 }
 
-AstQuery*AstSource::createBaseClassesQuery(Model::Node* target, QStringList args)
+AstQuery* AstSource::createBaseClassesQuery(Model::Node* target, QStringList args)
 {
 	return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
+}
+
+AstQuery* AstSource::createToClassNodeQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::ToClass, target, args);
 }
 
 } /* namespace InformationScripting */
