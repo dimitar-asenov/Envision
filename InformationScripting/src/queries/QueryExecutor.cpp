@@ -42,11 +42,12 @@ QueryExecutor::~QueryExecutor()
 
 void QueryExecutor::execute()
 {
-	auto result = query_->execute({});
-	if (result)
+	auto results = query_->execute({});
+	if (results.size())
 	{
-		DefaultVisualizer::instance().visualize(result);
-		SAFE_DELETE(result);
+		DefaultVisualizer::instance().visualize(results[0]);
+		for (auto result : results) SAFE_DELETE(result);
+		results.clear();
 	}
 }
 

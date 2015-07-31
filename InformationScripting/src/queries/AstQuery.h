@@ -53,7 +53,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 
 		// TODO for now this is just for methods. We have to figure out how to make this more generic.
 		// Maybe use a function pointer, but where should the function be defined?
-		virtual Graph* execute(QList<Graph*> input) override;
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
 	private:
 		Model::Node* target_{};

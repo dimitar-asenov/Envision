@@ -36,7 +36,7 @@ class INFORMATIONSCRIPTING_API Query
 {
 	public:
 		virtual ~Query() = default;
-		virtual Graph* execute(QList<Graph*>) = 0;
+		virtual QList<Graph*> execute(QList<Graph*>) = 0;
 };
 
 } /* namespace InformationScripting */

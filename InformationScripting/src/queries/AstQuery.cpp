@@ -41,12 +41,12 @@ AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
 	if (args.size() && args[0] == "g") scope_ = Scope::Global;
 }
 
-Graph* AstQuery::execute(QList<Graph*> input)
+QList<Graph*> AstQuery::execute(QList<Graph*> input)
 {
 	switch (type_)
 	{
-		case QueryType::Methods: return methodsQuery(input);
-		case QueryType::BaseClasses: return baseClassesQuery(input);
+		case QueryType::Methods: return {methodsQuery(input)};
+		case QueryType::BaseClasses: return {baseClassesQuery(input)};
 	}
 }
 
