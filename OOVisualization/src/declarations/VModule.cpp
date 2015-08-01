@@ -44,7 +44,6 @@ VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super(p
 
 void VModule::determineChildren()
 {
-	// call determineChildren of super class
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
 }
