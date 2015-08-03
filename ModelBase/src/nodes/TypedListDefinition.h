@@ -56,6 +56,9 @@ Super(parent, store, loadPartially)
 {
 }
 
+template<class T>
+TypedList<T>* TypedList<T>::clone() const { return new TypedList{*this}; }
+
 template<class T> T* TypedList<T>::first() const
 {
 	return List::first<T>();

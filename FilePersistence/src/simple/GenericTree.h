@@ -32,43 +32,79 @@
 namespace FilePersistence {
 
 class GenericNode;
+class PiecewiseLoader;
+struct NodeData;
 
+// TODO It might be good to separate trees with piecewise loaders and other "kinds" of trees into subclasses.
 class FILEPERSISTENCE_API GenericTree {
 	public:
-		GenericTree(QString name = QString(), QString commitName = QString());
+
+		GenericTree(QString name = QString());
 		~GenericTree();
 
 		const QString& name() const;
-		const QString& commitName() const;
 
-		void remove(const QString& persistentUnitName);
-		void remove(const GenericPersistentUnit& unit);
+		void removePersistentUnit(const QString& persistentUnitName);
+		void removePersistentUnit(const GenericPersistentUnit& unit);
 
 		GenericPersistentUnit& newPersistentUnit(QString name, char* data = nullptr, int dataSize = 0);
-		GenericPersistentUnit* persistentUnit(const QString& name);
+		GenericPersistentUnit* persistentUnit(const QString& name) const;
+		QList<std::shared_ptr<GenericPersistentUnit>> persistentUnits() const;
 
-		GenericNode* find(const GenericNode* node);
-		GenericNode* find(Model::NodeIdType id, const QString persistentUnitGuess = QString());
+		/**
+		 * Returns the node in this tree with the ID \a id or \a nullptr if no such node exists.
+		 * If \a lazyLoad is true, this attempts to lazy-load the node if it does not exist yet.
+		 *
+		 * For trees without a piecewise loader, this will perform a depth first search for the node
+		 * from the root recursively in all linked nodes. This means on such trees, this method is slow and
+		 * might not return the node if it's not linked, even if it is loaded in the tree.
+		 */
+		GenericNode* find(Model::NodeIdType id, bool lazyLoad = false) const;
+		bool remove(Model::NodeIdType id, bool recursive = false);
+
+		void setPiecewiseLoader(std::shared_ptr<PiecewiseLoader> loader);
+
+		GenericNode* root() const;
+
+		void buildLookupHash();
 
 	private:
 		friend class GenericPersistentUnit;
+		friend class GenericNode;
+		friend class PiecewiseLoader;
 
 		QString name_;
-		QString commitName_;
 
-		QHash<QString, GenericPersistentUnit> persistentUnits_;
+		bool hasQuickLookupHash_{};
+		QHash<Model::NodeIdType, GenericNode*> quickLookupHash_;
+		/**
+		 * If this tree has a piecewise loader, this hash maps IDs of unloaded nodes to all nodes whose parentId = ID.
+		 * If this tree does not have a piecewise loader, this is empty.
+		 */
+		QMultiHash<Model::NodeIdType, GenericNode*> nodesWithoutParents_;
+		std::shared_ptr<PiecewiseLoader> piecewiseLoader_;
+
+		QHash<QString, std::shared_ptr<GenericPersistentUnit>> persistentUnits_;
 
 		constexpr static int ALLOCATION_CHUNK_SIZE = 1000; // num elements to allocate at once
 		QList<GenericNode*> emptyChunks_;
 
 		GenericNode* emptyChunk();
 		void releaseChunk(GenericNode* unusedChunk);
+
+		const std::shared_ptr<PiecewiseLoader>& piecewiseLoader() const;
+		QMultiHash<Model::NodeIdType, GenericNode*>& nodesWithoutParents();
 };
 
 inline const QString& GenericTree::name() const { return name_; }
-inline const QString& GenericTree::commitName() const { return commitName_; }
 
-inline void GenericTree::remove(const QString& persistentUnitName) { persistentUnits_.remove(persistentUnitName); }
-inline void GenericTree::remove(const GenericPersistentUnit& unit) { remove(unit.name()); }
+inline void GenericTree::removePersistentUnit(const QString& persistentUnitName)
+	{ persistentUnits_.remove(persistentUnitName); }
+inline void GenericTree::removePersistentUnit(const GenericPersistentUnit& unit)
+	{ removePersistentUnit(unit.name()); }
 
+inline const std::shared_ptr<PiecewiseLoader>& GenericTree::piecewiseLoader() const { return piecewiseLoader_;}
+inline QMultiHash<Model::NodeIdType, GenericNode*>& GenericTree::nodesWithoutParents() { return nodesWithoutParents_;}
+inline QList<std::shared_ptr<GenericPersistentUnit>> GenericTree::persistentUnits() const
+	{return persistentUnits_.values();}
 } /* namespace FilePersistence */

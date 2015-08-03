@@ -28,14 +28,15 @@
 
 namespace FilePersistence {
 
-ChangeDescription::ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB) : nodeA_{nodeA}, nodeB_{nodeB}
+ChangeDescription::ChangeDescription(GenericNode* nodeA, GenericNode* nodeB) :
+	pointsToChildA_{false}, pointsToChildB_{false}, nodeA_{nodeA}, nodeB_{nodeB}
 {
 	Q_ASSERT(nodeA_ || nodeB_);
 	if (nodeA_ && nodeB_) Q_ASSERT(nodeA_->id() == nodeB->id());
 
 	if (nodeA_)
 	{
-		id_ = nodeA_->id();
+		nodeId_ = nodeA_->id();
 		if (nodeB_)
 		{
 			if (nodeA_->parentId() == nodeB_->parentId()) type_ = ChangeType::Stationary;
@@ -45,19 +46,109 @@ ChangeDescription::ChangeDescription(const GenericNode* nodeA, const GenericNode
 	}
 	else
 	{
-		id_ = nodeB_->id();
+		nodeId_ = nodeB_->id();
 		type_ = ChangeType::Insertion;
 	}
-	setFlags();
+	computeFlags();
 }
 
-ChangeDescription::ChangeDescription(Model::NodeIdType id, ChangeType type) : id_{id}, type_{type} {}
+QString ChangeDescription::summary() const
+{
+	QString typeStr;
+	switch (type_)
+	{
+		case ChangeType::Deletion:
+			typeStr = "Deletion";
+			break;
+		case ChangeType::Insertion:
+			typeStr = "Insertion";
+			break;
+		case ChangeType::Move:
+			typeStr = "Move";
+			break;
+		case ChangeType::Stationary:
+			typeStr = "Stationary";
+			break;
+		default:
+			Q_ASSERT(false);
+	}
 
-void ChangeDescription::setFlags()
+	QString flagStr;
+	if (updateFlags_.testFlag(Label))
+		flagStr += "Label";
+	if (updateFlags_.testFlag(Value))
+	{
+		if (!flagStr.isEmpty())
+			flagStr += ", ";
+		flagStr += "Value";
+	}
+	if (updateFlags_.testFlag(Type))
+	{
+		if (!flagStr.isEmpty())
+			flagStr += ", ";
+		flagStr += "Type";
+	}
+	if (updateFlags_.testFlag(Structure))
+	{
+		if (!flagStr.isEmpty())
+			flagStr += ", ";
+		flagStr += "Struct";
+	}
+
+	auto summary = "{..." + nodeId_.toString().right(7) + ":" + typeStr;
+	if (updateFlags_ != NoFlags)
+		summary += " (" + flagStr + ")";
+	return summary;
+}
+
+std::shared_ptr<ChangeDescription> ChangeDescription::newStructChange(
+		Model::NodeIdType id,
+		std::shared_ptr<ChangeDescription> causingChange,
+		std::shared_ptr<GenericTree> treeA,
+		std::shared_ptr<GenericTree> treeB)
+{
+	Q_ASSERT(causingChange->debugHasNodes());
+	auto childA = causingChange->nodeA();
+	auto childB = causingChange->nodeB();
+	std::shared_ptr<ChangeDescription> change(new ChangeDescription);
+	change->nodeId_ = id;
+	change->type_ = ChangeType::Stationary;
+	change->updateFlags_ = UpdateType::Structure;
+
+	if (causingChange->type() == ChangeType::Stationary)
+	{
+		change->nodeA_ = childA;
+		change->nodeB_ = childB;
+		change->pointsToChildA_ = true;
+		change->pointsToChildB_ = true;
+	}
+	else if (causingChange->type() == ChangeType::Deletion ||
+				(causingChange->type() == ChangeType::Move && childA->parentId() == id))
+	{
+		change->nodeA_ = childA;
+		change->pointsToChildA_ = true;
+		change->nodeB_ = treeB->find(id, true);
+		change->pointsToChildB_ = false;
+	}
+	else if (causingChange->type() == ChangeType::Insertion ||
+			  (causingChange->type() == ChangeType::Move && childB->parentId() == id))
+	{
+		change->nodeA_ = treeA->find(id, true);
+		change->pointsToChildA_ = false;
+		change->nodeB_ = childB;
+		change->pointsToChildB_ = true;
+	}
+	else
+		Q_ASSERT(false);
+
+	return change;
+}
+
+void ChangeDescription::computeFlags()
 {
 	if (nodeA_ != nullptr && nodeB_ != nullptr)
 	{
-		if (nodeA_->name() != nodeB_->name()) updateFlags_ |= Label;
+		if (nodeA_->label() != nodeB_->label()) updateFlags_ |= Label;
 		else updateFlags_ &= ~Label;
 
 		if (nodeA_->rawValue() != nodeB_->rawValue()) updateFlags_ |= Value;
@@ -72,7 +163,7 @@ void ChangeDescription::print() const
 {
 	if (nodeA_ || nodeB_)
 		qDebug() << (nodeA_ ? nodeA_->type() : nodeB_->type()) << "\t";
-	qDebug() << id().toString() << "\t";
+	qDebug() << nodeId().toString() << "\t";
 	switch (type_)
 	{
 		case ChangeType::Insertion:
@@ -110,6 +201,59 @@ void ChangeDescription::setStructureChangeFlag(bool value)
 {
 	if (value) updateFlags_ |= Structure;
 	else updateFlags_ &= ~Structure;
+}
+
+GenericNode* ChangeDescription::nodeA() const
+{
+	if (pointsToChildA_)
+	{
+		const_cast<ChangeDescription*>(this)->nodeA_ = nodeA_->parent();
+		const_cast<ChangeDescription*>(this)->pointsToChildA_ = false;
+	}
+	return nodeA_;
+}
+
+GenericNode* ChangeDescription::nodeB() const
+{
+	if (pointsToChildB_)
+	{
+		const_cast<ChangeDescription*>(this)->nodeB_ = nodeB_->parent();
+		const_cast<ChangeDescription*>(this)->pointsToChildB_ = false;
+	}
+	return nodeB_;
+}
+
+std::shared_ptr<ChangeDescription> ChangeDescription::copy(std::shared_ptr<GenericTree>& tree, bool force) const
+{
+	// This method lazy-loads nodeA and nodeB. This is necessary because deep-copy trees can't lazy-load.
+	GenericNode* newNodeA = nullptr;
+	if (nodeA())
+	{
+		// NOTE This might be unnecessary because we never change nodeA, so why create a new one?
+		auto persistentUnit = tree->persistentUnit(nodeA()->persistentUnit()->name());
+		if (persistentUnit == nullptr)
+			persistentUnit = &tree->newPersistentUnit(nodeA()->persistentUnit()->name());
+		newNodeA = persistentUnit->newNode(nodeA(), force);
+	}
+
+	GenericNode* newNodeB = nullptr;
+	if (nodeB())
+	{
+		auto persistentUnit = tree->persistentUnit(nodeB()->persistentUnit()->name());
+		if (persistentUnit == nullptr)
+			persistentUnit = &tree->newPersistentUnit(nodeB()->persistentUnit()->name());
+		newNodeA = persistentUnit->newNode(nodeB(), force);
+	}
+
+	std::shared_ptr<ChangeDescription> newChange(new ChangeDescription);
+	newChange->nodeId_ = nodeId_;
+	newChange->nodeA_ = newNodeA;
+	newChange->nodeB_ = newNodeB;
+	newChange->pointsToChildA_ = false;
+	newChange->pointsToChildB_ = false;
+	newChange->type_ = type_;
+	newChange->updateFlags_ = updateFlags_;
+	return newChange;
 }
 
 } /* namespace FilePersistence */

@@ -23,33 +23,36 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
 #pragma once
 
-#include "../oointeraction_api.h"
-#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
+#include "interactionbase_api.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "Menu.h"
+#include "MenuStyle.h"
 
-namespace Visualization {
-	class Item;
-}
+namespace Interaction {
 
-namespace OOInteraction {
-
-class OOINTERACTION_API CAddNodeToView : public Interaction::CommandWithDefaultArguments
+class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 {
-	public:
-		CAddNodeToView();
 
-		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor);
+		ITEM_COMMON_CUSTOM_STYLENAME(ViewSwitcherMenu, MenuStyle)
+
+	public:
+		static void show(Visualization::Item* target);
 
 	protected:
-		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+		virtual bool executeEntry(Visualization::Item* item) override;
+		virtual void startFocusMode(Visualization::Item* target) override;
+		virtual void endFocusMode(Visualization::Item* target) override;
 
-		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+	private:
+		static void showNow(Visualization::Item* target);
 
+		bool inEditMode_{};
+		QString nameBefore_;
+
+		ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
+							  StyleType* style = itemStyles().get());
 };
 
 }

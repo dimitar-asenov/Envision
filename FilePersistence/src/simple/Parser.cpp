@@ -231,25 +231,41 @@ bool Parser::nextHeaderPart(const char* data, int& start, int&endInclusive, int 
 	return true;
 }
 
-void Parser::save(QTextStream& stream, GenericNode* node, int tabLevel)
+QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
+											const QStringList& persistentUnitTypes, int tabLevel)
 {
+	QList<GenericNode*> res;
+
+	bool isPU = tabLevel > 0 && persistentUnitTypes.contains(node->type());
+
 	for (int i = 0; i<tabLevel; ++i) stream << '\t';
-	stream << node->name() << ' ' << node->type();
+	stream << node->label() << ' ' << (isPU ? GenericNode::PERSISTENT_UNIT_TYPE : node->type());
 	if (!node->id().isNull())
 	{
 		stream << ' ' << node->id().toString() << ' ' << node->parentId().toString();
 	}
-	if (node->hasValue())
-	{
-		if (node->valueType() == GenericNode::STRING_VALUE) stream << ". " << PREFIX_STRING << escape(node->rawValue());
-		else if (node->valueType() == GenericNode::INT_VALUE) stream << ". " << PREFIX_INTEGER << node->rawValue();
-		else if (node->valueType() == GenericNode::DOUBLE_VALUE) stream << ". " << PREFIX_DOUBLE << node->rawValue();
-		else throw FilePersistenceException("Unknown value type " + QString::number(node->valueType()));
-	}
-	stream << '\n';
 
-	for (auto child : node->children())
-		save(stream, child, tabLevel+1);
+	if (isPU)
+	{
+		stream << '\n';
+		res << node;
+	}
+	else
+	{
+		if (node->hasValue())
+		{
+			if (node->valueType() == GenericNode::STRING_VALUE) stream << ". "<< PREFIX_STRING << escape(node->rawValue());
+			else if (node->valueType() == GenericNode::INT_VALUE) stream << ". " << PREFIX_INTEGER << node->rawValue();
+			else if (node->valueType() == GenericNode::DOUBLE_VALUE) stream << ". " << PREFIX_DOUBLE << node->rawValue();
+			else throw FilePersistenceException("Unknown value type " + QString::number(node->valueType()));
+		}
+		stream << '\n';
+
+		for (auto child : node->children())
+			res << save(stream, child, persistentUnitTypes, tabLevel+1);
+	}
+
+	return res;
 }
 
 GenericNode* Parser::load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit)
@@ -300,13 +316,13 @@ GenericNode* Parser::load(const char* data, int dataLength, bool lazy, GenericPe
 
 			while (nodeStack.size() > tabLevel) nodeStack.removeLast();
 
-			nodeStack.last()->addChild(child);
+			nodeStack.last()->attachChild(child);
 			child->setParent(nodeStack.last());
 			nodeStack.append(child);
 		}
 
 		// The top of the stack should now contain the element that we must add now
-		if (!lazy) nodeStack.last()->name(); // This will ensure that all data is read. We don't actually need the name.
+		if (!lazy) nodeStack.last()->label(); // This will ensure that all data is read. We don't actually need the name.
 	}
 
 	return top;
@@ -326,7 +342,7 @@ void Parser::parseLine(GenericNode* node, const char* line, int lineLength)
 	// Name
 	auto moreHeaderParts = nextHeaderPart(line, start, headerPartEnd, lineEnd);
 	Q_ASSERT(moreHeaderParts);
-	node->setName( QString::fromLatin1(line + start, headerPartEnd-start+1) );
+	node->setLabel( QString::fromLatin1(line + start, headerPartEnd-start+1) );
 
 	// Type
 	start = headerPartEnd+1;

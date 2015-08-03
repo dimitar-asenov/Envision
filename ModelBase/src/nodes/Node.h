@@ -71,7 +71,7 @@ class UsedLibrary;
  */
 class MODELBASE_API Node
 {
-	DECLARE_TYPE_ID
+	DECLARE_TYPE_ID_BASE
 	public:
 
 		/**
@@ -112,6 +112,14 @@ class MODELBASE_API Node
 		 * 				It can later be added to an existing manager.
 		 */
 		Node(Node* parent = nullptr);
+
+		/**
+		 * Copy constructor.
+		 *
+		 * Note that \a other is ignored and a copy will have no parent or manager and will have a revision of 0.
+		 */
+		Node(const Node& other);
+		virtual Node* clone() const = 0;
 
 		virtual ~Node();
 

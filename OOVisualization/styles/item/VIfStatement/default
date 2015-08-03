@@ -4,21 +4,11 @@
 		Box
 		<outline>
 			<width>1</width>
-			<color>
-				<alpha>255</alpha>
-				<red>224</red>
-				<green>224</green>
-				<blue>200</blue>
-			</color>
+			<color>#e0e0c8</color>
 		</outline>
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>255</green>
-				<blue>224</blue>
-			</color>
+			<color>#ffffe0</color>
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
@@ -44,12 +34,7 @@
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>128</blue>
-				</color>
+				<color>#ffff80</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
@@ -79,12 +64,7 @@
 			<outline><style>0</style></outline>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>200</red>
-					<green>255</green>
-					<blue>200</blue>
-				</color>
+				<color>#c8ffc8</color>
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>
 			<cornerType>1</cornerType>
@@ -97,12 +77,7 @@
 			<outline><style>0</style></outline>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>224</green>
-					<blue>224</blue>
-				</color>
+				<color>#ffe0e0</color>
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>
 			<cornerType>1</cornerType>
@@ -114,12 +89,7 @@
 	<elseHorizontalLine prototypes="item/Line/default">
 		<pen>
 			<style>2</style>
-			<color>
-				<alpha>255</alpha>
-				<red>128</red>
-				<green>128</green>
-				<blue>128</blue>
-			</color>
+			<color>#808080</color>
 		</pen>
 	</elseHorizontalLine>
 	
@@ -128,12 +98,7 @@
 		<height>0</height>
 		<pen>
 			<style>2</style>
-			<color>
-				<alpha>255</alpha>
-				<red>128</red>
-				<green>128</green>
-				<blue>128</blue>
-			</color>
+			<color>#808080</color>
 		</pen>
 	</elseVerticalLine>
 </style>

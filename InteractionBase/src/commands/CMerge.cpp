@@ -65,7 +65,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 	std::shared_ptr<Merge> merge = repository->merge(name, useFastForward);
 
 	// TODO: handle different merge scenarios!
-	if (merge->mergeTree())
+	if (merge->mergedTree())
 	{
 		// load name into tree
 		const Commit* commit = repository->getCommit(name);
@@ -82,7 +82,7 @@ CommandResult* CMerge::executeNamed(Visualization::Item* /*source*/, Visualizati
 
 
 		auto mergeManager = new Model::TreeManager();
-		auto fileStoreMerge = new SimpleTextFileStore(merge->mergeTree().get());
+		auto fileStoreMerge = new SimpleTextFileStore(merge->mergedTree().get());
 		mergeManager->load(fileStoreMerge, managerName, false);
 		mergeManager->setName("Merge");
 

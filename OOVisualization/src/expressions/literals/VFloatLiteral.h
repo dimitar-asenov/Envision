@@ -46,8 +46,8 @@ class OOVISUALIZATION_API VFloatLiteral
 		virtual ~VFloatLiteral();
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::VFloat* vis_;

@@ -29,31 +29,22 @@
 #include "ChangeDescription.h"
 #include "ChangeDependencyGraph.h"
 #include "ConflictPairs.h"
+#include "LinkedChangesTransition.h"
 
 namespace FilePersistence {
-
-using RelationSet = std::shared_ptr<QSet<std::shared_ptr<const ChangeDescription>>>;
-using RelationAssignment = QSet<RelationSet>;
-using RelationAssignmentTransition = QHash<RelationSet, RelationSet>;
 
 class ConflictPipelineComponent
 {
 	public:
-		virtual ~ConflictPipelineComponent();
-		virtual RelationAssignmentTransition run(const std::unique_ptr<GenericTree>& treeBase,
-															  const std::unique_ptr<GenericTree>& treeA,
-															  const std::unique_ptr<GenericTree>& treeB,
-															  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-															  QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
-															  ConflictPairs& conflictPairs, RelationAssignment& relationAssignment) = 0;
-	protected:
-		RelationAssignmentTransition createIdentityTransition(RelationAssignment& relationAssignment);
-		RelationSet findRelationSet(std::shared_ptr<const ChangeDescription> change, RelationAssignment& relationAssignment);
+		virtual ~ConflictPipelineComponent() = 0;
+		virtual LinkedChangesTransition run(std::shared_ptr<GenericTree>& treeA,
+														std::shared_ptr<GenericTree>& treeB,
+														std::shared_ptr<GenericTree>& treeBase,
+														ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+															  QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
+															  ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet) = 0;
 };
 
-inline uint qHash(const RelationSet& relationSet, uint seed = 0)
-{
-	return ::qHash(relationSet.get(), seed);
-}
+inline ConflictPipelineComponent::~ConflictPipelineComponent() {}
 
 } /* namespace FilePersistence */

@@ -48,12 +48,12 @@ class OverlayAccessor;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
-	DECLARE_TYPE_ID
+	DECLARE_TYPE_ID_BASE
 
 	public:
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
-		const static int LAYER_NAME_OVERLAY_Z = 10;
+		const static int LAYER_OVERLAY_Z = 10;
 		const static int LAYER_COMMAND = 25;
 		const static int LAYER_AUTOCOMPLETE_Z = 50;
 		const static int LAYER_SELECTION_Z = 100;
@@ -69,6 +69,18 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual Model::Node* node() const;
 		virtual int revision() const;
 		virtual void setRevision(int newRevision);
+
+		/**
+		 * Returns the first ancestor with a node, or nullptr if none such exists. If the item itself contains a node,
+		 * returns this.
+		 */
+		Item* findAncestorWithNode();
+
+		/**
+		 * Returns the first ancestor which is of the given template type, or nullptr if none exists.
+		 */
+		template <class ItemType>
+		ItemType* findAncestorOfType();
 
 		bool itemOrChildHasFocus() const;
 		bool hasSceneCursor() const;
@@ -266,6 +278,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * Depth-first search is used.
 		 */
 		virtual Item* findVisualizationOf(Model::Node* node);
+		virtual QList<Item*> findAllVisualizationsOf(Model::Node* node);
 
 		/**
 		 * Returns what purpose should the children of this item be chosen for when deciding what visualizations to use.
@@ -486,7 +499,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		friend class DynamicGridFormElement;
 		template <class ParentType> friend class NodeItemWrapperFormElement;
 		template <class ParentType, class VisualizationType> friend class NodeWithVisualizationItemWrapperFormElement;
-		template <class ParentType, class VisualizationType, bool externalSynchronization = false>
+		template <class ParentType, class VisualizationType, bool externalSynchronization>
 			friend class VisualizationItemWrapperFormElement;
 		template <class ChildItem, class Style, bool use>
 			friend struct VisualizationItemWrapperFormElementSyncMethod;
@@ -764,6 +777,14 @@ template <class OverlayType> OverlayType* Item::addOverlay(OverlayType* overlay,
 	overlayGroup->addOverlay(makeOverlay(overlay));
 
 	return overlay;
+}
+
+template <class ItemType> ItemType* Item::findAncestorOfType()
+{
+	auto result = this;
+	while (result && !DCast<ItemType>(result))
+		result = result->parent();
+	return DCast<ItemType>(result);
 }
 
 }

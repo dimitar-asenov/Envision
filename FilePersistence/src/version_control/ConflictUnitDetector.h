@@ -30,28 +30,68 @@
 
 namespace FilePersistence {
 
-using IdToChangeMultiHash = QMultiHash<Model::NodeIdType, std::shared_ptr<const ChangeDescription>>;
+using ConflictUnitSet = QMultiHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 
 class ConflictUnitDetector : public ConflictPipelineComponent
 {
 	public:
-		ConflictUnitDetector(QSet<QString>& conflictTypes);
+		ConflictUnitDetector(QSet<QString>& conflictTypes,
+									bool useLinkedChanges);
 		~ConflictUnitDetector();
-		RelationAssignmentTransition run(const std::unique_ptr<GenericTree>& treeBase,
-					const std::unique_ptr<GenericTree>&,
-					const std::unique_ptr<GenericTree>&,
-					ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
-					QSet<std::shared_ptr<const ChangeDescription> >& conflictingChanges,
-					ConflictPairs& conflictPairs, RelationAssignment& relationAssignment);
+		LinkedChangesTransition run(std::shared_ptr<GenericTree>& treeA,
+											 std::shared_ptr<GenericTree>& treeB,
+											 std::shared_ptr<GenericTree>& treeBase,
+											 ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+					QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+					ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet);
 	private:
-		IdToChangeMultiHash computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
-															ChangeDependencyGraph cdg);
-		Model::NodeIdType findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
-													  const GenericNode* node);
+		/**
+		 * Returns a MultiHash where the key set contains an ID if and only if it is the ID of a conflict unit root node
+		 * and that conflict unit is affected by some change in \a cdg. The \a revision argument is only used to load nodes
+		 * that are not yet loaded. It would be prefered if this wasn't necessary.
+		 */
+		ConflictUnitSet computeAffectedCUs(ChangeDependencyGraph cdg);
+		/**
+		 * Returns the ID of the root of the conflict unit \a node belongs to.
+		 */
+		Model::NodeIdType findConflictUnit(const GenericNode* node);
+
+		static QSet<std::shared_ptr<ChangeDescription>> structureChanges(ChangeDependencyGraph& cdg,
+																					 std::shared_ptr<ChangeDescription> parentChange);
+
+
+		static Model::NodeIdType findMoveBound (GenericNode* nodeA, GenericNode* nodeB);
+
+		/**
+		 * Returns all changes \a change depends on.
+		 */
+		static QList<std::shared_ptr<ChangeDescription>> findMoveDependencies(std::shared_ptr<GenericTree> treeBase,
+																							std::shared_ptr<ChangeDescription> change,
+																							ChangeDependencyGraph& cdg);
+
+		static void checkMove(std::shared_ptr<ChangeDescription> changeA, ChangeDependencyGraph& cdgB,
+									 ConflictPairs& conflictPairs, QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges);
+
+
+		static void checkMoves(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+				ConflictPairs& conflictPairs, QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges);
+
+		static bool isAncestor(GenericNode* node, Model::NodeIdType ancestorId);
+
+		/**
+		 * Adds all changes that depend on \a change according to \a cdg to \a conflictingChanges.
+		 */
+		void markDependingAsConflicting(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+												  std::shared_ptr<ChangeDescription> change, ChangeDependencyGraph& cdg,
+												  QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription> >& moveDependencies,
+												  QList<std::shared_ptr<ChangeDescription> > conflictingWithChange, ConflictPairs& conflictPairs);
 
 		QSet<QString> conflictTypes_;
-		IdToChangeMultiHash affectedCUsA_;
-		IdToChangeMultiHash affectedCUsB_;
+		ConflictUnitSet affectedCUsA_;
+		ConflictUnitSet affectedCUsB_;
+		bool useLinkedChanges_;
+
+		std::shared_ptr<GenericTree> treeBase_;
 };
 
 } /* namespace FilePersistence */

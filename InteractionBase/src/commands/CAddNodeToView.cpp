@@ -26,48 +26,51 @@
 
 #include "CAddNodeToView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
-#include "OOModel/src/declarations/Project.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
-namespace OOInteraction {
+namespace Interaction {
 
 CAddNodeToView::CAddNodeToView()
 	:CommandWithDefaultArguments("addNode", {"current", "0", "0"})
 {
 }
 
-bool CAddNodeToView::canInterpret(Visualization::Item *source, Visualization::Item *target,
-	const QStringList &commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor)
+bool CAddNodeToView::canInterpret(Visualization::Item* source, Visualization::Item* target,
+	const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
-	 return Interaction::CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor)
-			 && target->hasNode() && dynamic_cast<OOModel::Method*>(target->node());
+	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
+	//The first parent with a node should be a declaration (these can be added to the view here)
+	auto ancestor = source->findAncestorWithNode();
+	if (!ancestor) return false;
+	else
+		return canInterpret && ancestor->node()->definesSymbol()
+				&& (ancestor->node()->symbolType() == Model::Node::METHOD
+					|| ancestor->node()->symbolType() == Model::Node::CONTAINER);
 }
 
-Interaction::CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
+CommandResult* CAddNodeToView::executeWithArguments(Visualization::Item* source, Visualization::Item*,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	auto method = dynamic_cast<OOModel::Method*>(target->node());
+	auto ancestor = source->findAncestorWithNode();
 	auto name = arguments.at(0);
 	auto colOk = true;
 	auto rowOk = true;
 	auto column = arguments.at(1).toInt(&colOk);
 	auto row = arguments.at(2).toInt(&rowOk);
 	if (name == "current")
-		name = target->scene()->currentViewItem()->name();
-	auto view = target->scene()->viewItem(name);
+		name = ancestor->scene()->currentViewItem()->name();
+	auto view = ancestor->scene()->viewItems()->viewItem(name);
 	if (view && rowOk && colOk)
 	{
-		view->insertNode(method, column, row);
-		return new Interaction::CommandResult();
+		view->insertNode(ancestor->node(), column, row);
+		return new CommandResult();
 	}
 	else if (!view)
-		return new Interaction::CommandResult(new Interaction::CommandError(
-											"The view with name " + name + " does not exist"));
+		return new CommandResult(new CommandError("The view with name " + name + " does not exist"));
 	else if (!colOk)
-		return new Interaction::CommandResult(new Interaction::CommandError(
-												arguments.at(1) + " is not an integer"));
+		return new CommandResult(new CommandError(arguments.at(1) + " is not an integer"));
 	else
-		return new Interaction::CommandResult(new Interaction::CommandError(
-												arguments.at(2) + " is not an integer"));
+		return new CommandResult(new CommandError(arguments.at(2) + " is not an integer"));
 
 }
 

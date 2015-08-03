@@ -3,20 +3,10 @@
 	<shape>
 		Box
 		<backgroundBrush>
-			<color>
-				<alpha>60</alpha>
-				<red>255</red>
-				<green>255</green>
-				<blue>192</blue>
-			</color>
+			<color>#3cffffc0</color>
 		</backgroundBrush>
 		<outline>
-			<color>
-				<alpha>255</alpha>
-				<red>192</red>
-				<green>192</green>
-				<blue>0</blue>
-			</color>
+			<color>#c0c000</color>
 		</outline>
 	</shape>
 </style>

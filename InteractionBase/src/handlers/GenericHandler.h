@@ -53,7 +53,7 @@ class INTERACTIONBASE_API GenericHandlerManagerListener : public QObject
 		void stopListeningToTreeManagerOf(Visualization::Item* item);
 
 	public slots:
-		void nodesUpdated(QSet<Node*> nodes);
+		void nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 
 	private:
 		Model::TreeManager* managerOf(Visualization::Item* item);

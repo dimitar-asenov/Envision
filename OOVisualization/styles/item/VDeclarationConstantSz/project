@@ -7,24 +7,14 @@
 				<gradient>
 					<stopPoints>
 						<e1>
-							<second>
-								<alpha>255</alpha>
-								<red>60</red>
-								<green>60</green>
-								<blue>60</blue>
-							</second>
+							<second>#3c3c3c</second>
 						</e1>	
 					</stopPoints>
 				</gradient>
 			</backgroundBrush>
 		</shape>
 		<pen>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>255</green>
-				<blue>255</blue>
-			</color>
+			<color>#ffffff</color>
 			<capStyle>0</capStyle>
 			<joinStyle>0</joinStyle>
 		</pen>
@@ -41,12 +31,7 @@
 				<gradient>
 					<stopPoints>
 						<e1>
-							<second>
-								<alpha>255</alpha>
-								<red>160</red>
-								<green>160</green>
-								<blue>160</blue>
-							</second>
+							<second>#a0a0a0</second>
 						</e1>	
 					</stopPoints>
 				</gradient>

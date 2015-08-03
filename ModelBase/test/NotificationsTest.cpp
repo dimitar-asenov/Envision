@@ -29,6 +29,7 @@
 #include "test_nodes/BinaryNode.h"
 #include "model/TreeManager.h"
 #include "NotificationListener.h"
+#include "test_nodes/PositionExtension.h"
 
 namespace Model {
 
@@ -39,6 +40,7 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 
 	CHECK_CONDITION(nl.root == nullptr);
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());
+	CHECK_INT_EQUAL(0, nl.removedNodes.size());
 
 	auto root = new TestNodes::BinaryNode();
 	manager.setRoot(root);
@@ -53,6 +55,7 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	manager.endModification();
 
 	CHECK_INT_EQUAL(1, nl.modifiedNodes.size());
+	CHECK_INT_EQUAL(0, nl.removedNodes.size());
 	CHECK_CONDITION(nl.modifiedNodes.contains( root) );
 
 	manager.beginModification(left, "modify");
@@ -61,6 +64,7 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	right->name()->set("Right text");
 	manager.endModification();
 
+	CHECK_INT_EQUAL(0, nl.removedNodes.size());
 	CHECK_INT_EQUAL(4, nl.modifiedNodes.size());
 	CHECK_CONDITION(nl.modifiedNodes.contains( left ));
 	CHECK_CONDITION(nl.modifiedNodes.contains( left->name()));
@@ -79,6 +83,43 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	CHECK_CONDITION(nl.modifiedNodes.contains( left));
 	CHECK_CONDITION(nl.modifiedNodes.contains( left->name()));
 	CHECK_CONDITION(nl.modifiedNodes.contains( root));
+
+	CHECK_INT_EQUAL(8, nl.removedNodes.size());
+	CHECK_CONDITION(nl.removedNodes.contains( right));
+	CHECK_CONDITION(nl.removedNodes.contains( right->name()));
+	CHECK_CONDITION(nl.removedNodes.contains( left));
+	CHECK_CONDITION(nl.removedNodes.contains( left->name()));
+
+	TestNodes::PositionExtension* posLeft = left->extension<TestNodes::PositionExtension>();
+	CHECK_CONDITION(nl.removedNodes.contains( posLeft->xNode()) );
+	CHECK_CONDITION(nl.removedNodes.contains( posLeft->yNode()) );
+
+	TestNodes::PositionExtension* posRight = right->extension<TestNodes::PositionExtension>();
+	CHECK_CONDITION(nl.removedNodes.contains( posRight->xNode()) );
+	CHECK_CONDITION(nl.removedNodes.contains( posRight->yNode()) );
+
+	SAFE_DELETE(posLeft);
+
+	nl.modifiedNodes.clear();
+	nl.removedNodes.clear();
+	manager.beginModification(nullptr);
+	manager.redo();
+	manager.endModification();
+
+	CHECK_INT_EQUAL(1, nl.modifiedNodes.size());
+	CHECK_INT_EQUAL(0, nl.removedNodes.size());
+
+	manager.beginModification(root);
+	root->removeRightNode();
+	manager.endModification();
+
+	CHECK_INT_EQUAL(4, nl.removedNodes.size());
+	CHECK_CONDITION(nl.removedNodes.contains( right));
+	CHECK_CONDITION(nl.removedNodes.contains( right->name()));
+	CHECK_CONDITION(nl.removedNodes.contains( posRight->xNode()) );
+	CHECK_CONDITION(nl.removedNodes.contains( posRight->yNode()) );
+
+	SAFE_DELETE(posRight);
 }
 
 }

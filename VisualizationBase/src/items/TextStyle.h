@@ -36,7 +36,7 @@ class VISUALIZATIONBASE_API TextStyle : public Super<ItemStyle>
 {
 	public:
 		virtual ~TextStyle() override;
-		void load(StyleLoader& sl);
+		void load(StyleLoader& sl) override;
 
 		Property<QPen> pen{this, "pen"};
 		Property<QFont> font{this, "font"};

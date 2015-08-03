@@ -41,12 +41,12 @@ class VISUALIZATIONBASE_API VText : public Super<ItemWithNode<VText, TextRendere
 
 	public:
 		VText(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual bool setText(const QString& newText);
+		virtual bool setText(const QString& newText) override;
 
 		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
 
 	protected:
-		virtual QString currentText();
+		virtual QString currentText() override;
 };
 
 }

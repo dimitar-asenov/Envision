@@ -6,6 +6,7 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${workspace_loc:/JavaImportTool}/output.txt"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="javaImportTool.Main"/>
 
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="legend /home/mitko/jedit/workspace/EnvisionLegend/src ${project_loc}/../DebugBuild/projects/"/>

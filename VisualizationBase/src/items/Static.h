@@ -43,16 +43,16 @@ class VISUALIZATIONBASE_API Static : public Super<Item>
 		Static(Item* parent, const StyleType *style = itemStyles().get());
 		virtual ~Static();
 
-		virtual bool isEmpty() const;
-		virtual bool sizeDependsOnParent() const;
+		virtual bool isEmpty() const override;
+		virtual bool sizeDependsOnParent() const override;
 
 		template<class T> static void registerStaticItem();
 
 		Item* item();
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Item* item_;

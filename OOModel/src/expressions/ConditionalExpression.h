@@ -41,7 +41,7 @@ class OOMODEL_API ConditionalExpression: public Super<Expression>
 	ATTRIBUTE(Expression, falseExpression, setFalseExpression)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 } /* namespace OOModel */

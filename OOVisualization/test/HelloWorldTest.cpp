@@ -41,6 +41,7 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 #include "ModelBase/src/model/TreeManager.h"
 #include "ModelBase/src/nodes/UsedLibrary.h"
@@ -1061,9 +1062,46 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 	else top_level = factorial;
 
 	auto manager = new Model::TreeManager(top_level);
+	manager->setName("HelloWorld");
 
 	VisualizationManager::instance().mainScene()->addTopLevelNode(top_level);
 	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+
+	VisualizationManager::instance().mainScene()->addRefreshActionFunction(
+		[top_level](Scene* scene){
+			scene->viewItems()->removeAllViewItems();
+			scene->setMainCursor(nullptr);
+			clearAllStyleSets();
+			scene->addTopLevelNode(top_level);
+	});
+
+	QStringList filesToWatch;
+	std::function<void (QString)> allFiles = [&filesToWatch, &allFiles](QString dirPath)
+	{
+		auto dir = QDir{dirPath + '/'};
+		auto entries = dir.entryInfoList(QDir::AllEntries | QDir::NoDot | QDir::NoDotDot);
+		for (auto entry : entries)
+		{
+			if (entry.isFile()) filesToWatch.append(entry.absoluteFilePath());
+			else if (entry.isDir()) allFiles(entry.absoluteFilePath());
+		}
+	};
+
+	allFiles("styles");
+	auto watcher = new QFileSystemWatcher(filesToWatch);
+
+	auto onFileChange = [watcher](const QString& fileName)
+	{
+		watcher->addPath(fileName);
+
+		QKeyEvent *eventPress = new QKeyEvent ( QEvent::KeyPress, Qt::Key_F5, Qt::NoModifier);
+		QKeyEvent *eventRelease = new QKeyEvent ( QEvent::KeyRelease, Qt::Key_F5, Qt::NoModifier);
+		QCoreApplication::postEvent (VisualizationManager::instance().mainScene(), eventPress);
+		QCoreApplication::postEvent (VisualizationManager::instance().mainScene(), eventRelease);
+	};
+
+
+	QObject::connect(watcher, &QFileSystemWatcher::fileChanged, onFileChange);
 
 	CHECK_CONDITION(top_level != nullptr);
 }

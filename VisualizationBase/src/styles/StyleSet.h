@@ -30,6 +30,10 @@
 #include "StyleLoader.h"
 
 namespace Visualization {
+class Style;
+
+extern QList<QMap<QString, Style*>*> styleSetMaps_;
+void clearAllStyleSets();
 
 template<class T> class StyleSet
 {
@@ -49,7 +53,10 @@ template<class T> class StyleSet
 		QString classType_;
 };
 
-template<class T> StyleSet<T>::StyleSet(const QString& classType) : classType_(classType) {}
+template<class T> StyleSet<T>::StyleSet(const QString& classType) : classType_(classType)
+{
+	styleSetMaps_.append(reinterpret_cast<QMap<QString, Style*>*>(&styles_));
+}
 template<class T> StyleSet<T>::~StyleSet() {}
 
 

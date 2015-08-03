@@ -61,7 +61,7 @@ class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeI
 		bool isShowingEmptyTip();
 
 		static void initializeForms();
-		virtual int determineForm();
+		virtual int determineForm() override;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;

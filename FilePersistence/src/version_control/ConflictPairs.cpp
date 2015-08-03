@@ -28,15 +28,21 @@
 
 namespace FilePersistence {
 
-void ConflictPairs::insert(std::shared_ptr<const ChangeDescription>& changeA,
-									std::shared_ptr<const ChangeDescription>& changeB)
+ConflictPairs::ConflictPairs() {}
+ConflictPairs::~ConflictPairs() {}
+
+void ConflictPairs::insert(std::shared_ptr<ChangeDescription>& changeA,
+									std::shared_ptr<ChangeDescription>& changeB)
 {
-	pairs_.insert(changeA, changeB);
-	pairs_.insert(changeB, changeA);
+	if (!pairs_.contains(changeA, changeB))
+	{
+		pairs_.insert(changeA, changeB);
+		pairs_.insert(changeB, changeA);
+	}
 }
 
-void ConflictPairs::remove(std::shared_ptr<const ChangeDescription>& changeA,
-									std::shared_ptr<const ChangeDescription>& changeB)
+void ConflictPairs::remove(std::shared_ptr<ChangeDescription>& changeA,
+									std::shared_ptr<ChangeDescription>& changeB)
 {
 	pairs_.remove(changeA, changeB);
 	pairs_.remove(changeB, changeA);

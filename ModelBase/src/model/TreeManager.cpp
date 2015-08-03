@@ -28,7 +28,7 @@
 #include "../ModelException.h"
 #include "../commands/NodeOwningCommand.h"
 #include "../commands/SetModificationTarget.h"
-#include "../commands/AddModifiedNode.h"
+#include "../commands/NoteNodeChange.h"
 #include "../nodes/Reference.h"
 #include "../nodes/UsedLibrary.h"
 #include "../nodes/NameText.h"
@@ -65,6 +65,7 @@ void TreeManager::beginModification(Node* modificationTarget, const QString &tex
 	modificationInProgress = true;
 	modificationText = text;
 	modifiedTargets.clear();
+	removedTargets_.clear();
 
 	if ( modificationTarget ) changeModificationTarget(modificationTarget);
 }
@@ -93,12 +94,14 @@ void TreeManager::endModification(bool resolveReferences)
 	performedUndoRedo = false;
 
 	QSet<Node*> mt = modifiedTargets;
+	QSet<Node*> dt = removedTargets_;
 	modifiedTargets.clear();
+	removedTargets_.clear();
 
 	modificationInProgress = false;
 	exclusiveAccess.unlock();
 
-	emit nodesModified(mt);
+	emit nodesModified(mt, dt);
 }
 
 void TreeManager::beginExclusiveRead()
@@ -140,7 +143,7 @@ void TreeManager::pushCommandOnUndoStack(UndoCommand* command)
 	}
 
 	commands.push(command);
-	if (command->target()) commands.push(new AddModifiedNode(modifiedTargets, command->target()));
+	commands.push(new NoteNodeChange(modifiedTargets, removedTargets_, command));
 }
 
 void TreeManager::undo()
@@ -243,7 +246,7 @@ void TreeManager::setRoot(Node* node)
 void TreeManager::notifyNodeChange(Node* node)
 {
 	if (modificationInProgress) modifiedTargets.insert(node);
-	else emit nodesModified(QSet<Node*>() << node);
+	else emit nodesModified({node}, {});
 }
 
 void TreeManager::emitNameModified(NameText* node, const QString &oldName)

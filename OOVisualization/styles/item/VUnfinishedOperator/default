@@ -5,23 +5,13 @@
 		<outline>
 			<width>1</width>
 			<style>1</style>
-			<color>
-				<alpha>128</alpha>
-				<red>255</red>
-				<green>165</green>
-				<blue>0</blue>
-			</color>
+			<color>#80ffa500</color>
 		</outline>
 		<cornerType>0</cornerType>
 		<cornerRadius>0</cornerRadius>
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>64</alpha>
-				<red>255</red>
-				<green>165</green>
-				<blue>0</blue>
-			</color>
+			<color>#40ffa500</color>
 		</backgroundBrush>
 	</shape>
 	
@@ -36,12 +26,7 @@
 			<cornerRadius>0</cornerRadius>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>165</green>
-					<blue>0</blue>
-				</color>
+				<color>#ffa500</color>
 			</backgroundBrush>
 		</shape>
 	</delimiters>

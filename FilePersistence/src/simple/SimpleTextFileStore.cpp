@@ -156,9 +156,9 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 
 	if ( node->parent() ) // If this is not the root node, then we should put a reference to this node
 	{
-		auto child = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
-		child->setName(name);
-		child->setType(GenericNode::persistentUnitType);
+		auto child = genericNode_->attachChild(genericNode_->persistentUnit()->newNode());
+		child->setLabel(name);
+		child->setType(GenericNode::PERSISTENT_UNIT_TYPE);
 		child->setId(treeManager_->nodeIdMap().id(node));
 		if (node->parent()) child->setParentId(treeManager_->nodeIdMap().id(node->parent()));
 	}
@@ -170,17 +170,49 @@ void SimpleTextFileStore::saveNewPersistenceUnit(const Model::Node *node, const 
 	if ( oldPersisted == nullptr ) filename = name; // This is the root of the tree, save the file name
 	else filename = treeManager_->nodeIdMap().id(node).toString(); // This is not the root, so save by id
 
-	QFile file(treeDir_.absoluteFilePath(filename));
+	writeGenericNodeToFile(genericNode_, treeDir_.absolutePath(), filename, {});
+
+	genericTree_->removePersistentUnit(name);
+	genericNode_ = oldPersisted;
+}
+
+void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, const QString& name,
+														const QString& destDir, const QStringList& persistentUnitTypes)
+{
+	// Put all existing PersistentUnits (except for the root) on the stack
+	auto rootNode = tree->root();
+	QList<GenericNode*> stack = {};
+	for ( auto pu : tree->persistentUnits() )
+	{
+		auto puRoot = pu->unitRootNode();
+		if (puRoot != rootNode) stack << rootNode;
+	}
+
+	// Write the root and generate possibly other PUs, that were not in the original structure
+	stack << writeGenericNodeToFile(rootNode, destDir, name, persistentUnitTypes);
+
+	// For each pu write and clean up
+	while (!stack.isEmpty())
+	{
+		auto pu = stack.takeLast();
+		stack.removeAll(pu); // Make sure to remove all occurences of PUs as soon as we see one of them.
+		stack << writeGenericNodeToFile(pu, destDir, pu->id().toString(), persistentUnitTypes);
+	}
+}
+
+QList<GenericNode*> SimpleTextFileStore::writeGenericNodeToFile(GenericNode* node, const QString& destDir,
+	const QString& fileName, const QStringList& persistentUnitTypes)
+{
+	QFile file(destDir + '/' + fileName);
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
 		throw FilePersistenceException("Could not open file " + file.fileName() + ". " + file.errorString());
 
 	QTextStream ts(&file);
 	ts.setCodec("UTF-8");
-	Parser::save(ts, genericNode_);
+	auto persistentUnits = Parser::save(ts, node, persistentUnitTypes);
 	file.close();
 
-	genericTree_->remove(name);
-	genericNode_ = oldPersisted;
+	return persistentUnits;
 }
 
 void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name)
@@ -191,7 +223,7 @@ void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name)
 	else
 	{
 		auto parent = genericNode_;
-		genericNode_ = genericNode_->addChild(genericNode_->persistentUnit()->newNode());
+		genericNode_ = genericNode_->attachChild(genericNode_->persistentUnit()->newNode());
 		saveNodeDirectly(node, name);
 		genericNode_ = parent;
 	}
@@ -200,7 +232,7 @@ void SimpleTextFileStore::saveNode(const Model::Node *node, const QString &name)
 void SimpleTextFileStore::saveNodeDirectly(const Model::Node *node, const QString &name)
 {
 	Q_ASSERT(!node->isPartiallyLoaded());
-	genericNode_->setName(name);
+	genericNode_->setLabel(name);
 	genericNode_->setType(node->typeName());
 	genericNode_->setId(treeManager_->nodeIdMap().id(node));
 	if (node->parent()) genericNode_->setParentId(treeManager_->nodeIdMap().id(node->parent()));
@@ -289,7 +321,7 @@ Model::LoadedNode SimpleTextFileStore::loadNewPersistenceUnit(const QString& nam
 
 	Model::LoadedNode ln =  loadNode(parent, loadPartially);
 
-	if (!externalTree_) genericTree_->remove(name);
+	if (!externalTree_) genericTree_->removePersistentUnit(name);
 	genericNode_ = oldPersisted;
 
 	return ln;
@@ -307,10 +339,10 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 		genericNode_ = c;
 
 		Model::LoadedNode ln;
-		if ( genericNode_->type() == GenericNode::persistentUnitType )
+		if ( genericNode_->type() == GenericNode::PERSISTENT_UNIT_TYPE )
 			ln = loadNewPersistenceUnit(
-					genericNode_->id().toString(), parent, loadPartially.contains(genericNode_->name()));
-		else ln = loadNode(parent, loadPartially.contains(genericNode_->name()));
+					genericNode_->id().toString(), parent, loadPartially.contains(genericNode_->label()));
+		else ln = loadNode(parent, loadPartially.contains(genericNode_->label()));
 
 		result.append(ln);
 	}
@@ -322,7 +354,7 @@ QList<Model::LoadedNode> SimpleTextFileStore::loadAllSubNodes(Model::Node* paren
 Model::LoadedNode SimpleTextFileStore::loadNode(Model::Node* parent, bool loadPartially)
 {
 	Model::LoadedNode node;
-	node.name = genericNode_->name();
+	node.name = genericNode_->label();
 	node.node = Model::Node::createNewNode(genericNode_->type(), parent, *this, partiallyLoadingATree_ && loadPartially);
 	treeManager_->nodeIdMap().setId( node.node, genericNode_->id() ); // Record id
 	return node;
@@ -339,7 +371,7 @@ Model::Node* SimpleTextFileStore::loadSubNode(Model::Node* parent, const QString
 	genericNode_ = child;
 
 	Model::LoadedNode ln;
-	if ( child->type() == GenericNode::persistentUnitType )
+	if ( child->type() == GenericNode::PERSISTENT_UNIT_TYPE )
 		ln = loadNewPersistenceUnit(genericNode_->id().toString(), parent, loadPartially);
 	else ln = loadNode(parent, loadPartially);
 

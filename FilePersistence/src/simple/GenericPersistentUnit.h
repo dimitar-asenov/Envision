@@ -34,10 +34,13 @@ namespace FilePersistence {
 
 class GenericTree;
 class GenericNode;
+class PiecewiseLoader;
 
 class FILEPERSISTENCE_API GenericPersistentUnit {
 	public:
 		~GenericPersistentUnit();
+
+		GenericPersistentUnit(const GenericPersistentUnit& other) = delete;
 
 		const QString& name() const;
 		GenericTree* tree() const;
@@ -45,9 +48,16 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		GenericNode* newNode();
 		GenericNode* newNode(int lineStart, int lineEndEnclusive);
 		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-		GenericNode* newNode(const QString& fromString);
-
+		/**
+		 * If \a force is true then no check for ID uniqueness is performed.
+		 */
+		GenericNode* newNode(const GenericNode* nodeToCopy, bool force = false, bool deepCopy = false);
+		/**
+		 * Returns the node according to \a data. If the boolean return value is true, the node was newly created
+		 * and needs to be linked; Otherwise such a node already exists in the tree and that node is returned. In this
+		 * case the node does not need to be linked.
+		 */
+		QPair<bool, GenericNode*> newOrExistingNode(const char* data, int dataLength);
 		/**
 		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
 		 * destroyed with the object.
@@ -56,16 +66,20 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		 */
 		const char* setData(const char* data, int dataSize);
 
-		GenericNode* find(Model::NodeIdType id) const;
-
 		/**
 		 * Returns the root node for this persistence unit under the assumption that all nodes in this unit have been
 		 * loaded.
 		 */
 		GenericNode* unitRootNode() const;
 
+		/**
+		 * Returns the node that has no parent (parent is {000...}). This is typically the root node of the tree.
+		 */
+		GenericNode* nodeWithNullParent() const;
+
 	private:
 		friend class GenericTree;
+		friend class PiecewiseLoader;
 		GenericPersistentUnit(GenericTree* tree, QString name, char* data = nullptr, int dataSize = 0);
 
 		GenericTree* tree_{};
@@ -77,6 +91,7 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		int lastNodeIndexInLastChunk_{};
 
 		GenericNode* nextNode();
+		void releaseLastNode();
 };
 
 inline GenericTree* GenericPersistentUnit::tree() const { return tree_; }

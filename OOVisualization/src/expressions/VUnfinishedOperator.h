@@ -49,7 +49,7 @@ class OOVISUALIZATION_API VUnfinishedOperator : public Super<VExpression<VUnfini
 		virtual ~VUnfinishedOperator();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		QVector<Visualization::VText*> delimiters_;

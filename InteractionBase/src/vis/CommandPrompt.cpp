@@ -117,17 +117,29 @@ void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 
 void CommandPrompt::showPrompt(QString initialCommandText)
 {
+	hideRequested_ = false;
 	saveReceiverCursor();
 	setPromptPosition();
 	show();
 	if (! initialCommandText.isNull()) command_->setText(initialCommandText);
+	else if (!wasCancelled_) command_->setText(TYPE_HINT);
 	command_->moveCursor();
-	command_->correspondingSceneCursor<Visualization::TextCursor>()
+
+	if (wasCancelled_)
+		command_->correspondingSceneCursor<Visualization::TextCursor>()
 			->setSelectedCharacters(commandSelectedFirst_, commandSelectedLast_);
+	else if (!initialCommandText.isNull())
+		command_->correspondingSceneCursor<Visualization::TextCursor>()->
+				setCaretPosition(initialCommandText.length());
+	else
+		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+
+	wasCancelled_ = false;
 }
 
 void CommandPrompt::hidePrompt()
 {
+	hideRequested_ = true;
 	if (scene()->mainCursor())
 	{
 		commandSelectedFirst_ = command_->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
@@ -143,7 +155,7 @@ void CommandPrompt::determineChildren()
 {
 	GenericHandler* h = dynamic_cast<GenericHandler*> (handler());
 
-	if (h)
+	if (h && !hideRequested_)
 	{
 		removeSuggestions();
 		QString text = command_->text() == TYPE_HINT ? "" : command_->text();

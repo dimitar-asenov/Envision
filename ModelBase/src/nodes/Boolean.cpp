@@ -43,6 +43,8 @@ Boolean::Boolean(Node *parent, PersistentStore &store, bool) : Super(parent)
 	value = store.loadIntValue() != 0;
 }
 
+Boolean* Boolean::clone() const { return new Boolean{*this}; }
+
 void Boolean::set(const bool& newVal)
 {
 	execute(new FieldSet<bool> (this, value, newVal));

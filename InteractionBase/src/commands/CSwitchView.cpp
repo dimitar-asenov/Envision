@@ -26,6 +26,7 @@
 
 #include "CSwitchView.h"
 #include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/ViewItemManager.h"
 
 namespace Interaction {
 
@@ -37,7 +38,7 @@ CSwitchView::CSwitchView()
 CommandResult* CSwitchView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
 		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
 {
-	bool ok = target->scene()->switchToView(arguments.at(0));
+	bool ok = target->scene()->viewItems()->switchToView(arguments.at(0));
 	if (ok)
 		return new CommandResult();
 	else

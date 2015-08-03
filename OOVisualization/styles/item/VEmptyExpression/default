@@ -2,23 +2,13 @@
 <style prototypes="item/Item/default">
 	<normal prototypes="item/Symbol/default">
 		<pen>
-			<color>
-				<alpha>255</alpha>
-				<red>128</red>
-				<green>128</green>
-				<blue>128</blue>
-			</color>
+			<color>#808080</color>
 		</pen>
 		<symbol>ε</symbol>
 	</normal>
 	<emptyLine prototypes="item/Symbol/default">
 		<pen>
-			<color>
-				<alpha>255</alpha>
-				<red>128</red>
-				<green>128</green>
-				<blue>128</blue>
-			</color>
+			<color>#808080</color>
 		</pen>
 		<symbol> </symbol>
 	</emptyLine>

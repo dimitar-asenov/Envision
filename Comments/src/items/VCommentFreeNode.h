@@ -50,7 +50,7 @@ class COMMENTS_API VCommentFreeNode : public Super<Visualization::ItemWithNode<V
 
 	protected:
 		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Item* content_{};

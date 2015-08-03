@@ -49,7 +49,7 @@ class OOVISUALIZATION_API VBinaryOperation
 		virtual ~VBinaryOperation();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::Static* pre_;

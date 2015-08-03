@@ -46,6 +46,8 @@ Character::Character(Node *parent, PersistentStore &store, bool) : Super(parent)
 	value = t[0];
 }
 
+Character* Character::clone() const { return new Character{*this}; }
+
 void Character::set(const QChar& newValue)
 {
 	execute(new FieldSet<QChar> (this, value, newValue));

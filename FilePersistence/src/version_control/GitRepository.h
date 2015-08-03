@@ -47,7 +47,9 @@ class FILEPERSISTENCE_API GitRepository
 
 		std::shared_ptr<Merge> merge(QString revision, bool fastForward = true);
 
-		Diff diff(QString revisionA, QString revisionB) const;
+		Diff diff(QString revisionA, QString revisionB,
+					 std::shared_ptr<GenericTree> treeA = nullptr,
+					 std::shared_ptr<GenericTree> treeB = nullptr) const;
 		CommitGraph commitGraph(QString startRevision, QString endRevision) const;
 
 		const Commit* getCommit(QString revision) const;
@@ -78,7 +80,7 @@ class FILEPERSISTENCE_API GitRepository
 		static const QString WORKDIR;
 		static const QString INDEX;
 
-		void loadGenericTree(const std::unique_ptr<GenericTree>& tree, const QString version);
+		void loadGenericTree(const std::shared_ptr<GenericTree>& tree, const QString version);
 
 	private:
 		friend class Merge;
@@ -87,6 +89,7 @@ class FILEPERSISTENCE_API GitRepository
 
 		void writeRevisionIntoIndex(QString  revision);
 		QString  writeIndexToTree();
+		void writeWorkdirToIndex();
 
 		void newCommit(QString  tree, QString message, Signature author, Signature committer, QStringList parents);
 		QString  findMergeBase(QString  branchA, QString branchB) const;
@@ -120,6 +123,18 @@ class FILEPERSISTENCE_API GitRepository
 		static SourceKind sourceKind(QString revision);
 		static QPair<SourceKind, SourceKind> kind(QString revisionA, QString revisionB);
 
+		/**
+		 * This is a wrapper around \a git_commit_tree().
+		 *
+		 * Returns the \a git_tree at \a revision.
+		 */
+		git_tree* getCommitTree(QString revision) const;
+
+		/**
+		 * \a errorCode is the last error code returned from libgit2.
+		 *
+		 * Throws an exception with a descriptive error description if \a errorCode indicates that an error occurred.
+		 */
 		static void checkError(int errorCode);
 
 		static const char* HEAD;

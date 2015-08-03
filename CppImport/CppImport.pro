@@ -15,7 +15,10 @@ win32:LIBS += -llogger \
 QMAKE_CXXFLAGS += -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)""
 #INCLUDEPATH +=  /usr/lib/llvm/include
 
-DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS
+# The _GLIBCXX_USE_CXX11_ABI=0 macro is needed to fix a compatibility issue with the new C++11 string ABI
+# See: https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html
+# It might not be needed in later versions of Clang which take this into consideration
+DEFINES += __STDC_LIMIT_MACROS __STDC_CONSTANT_MACROS _GLIBCXX_USE_CXX11_ABI=0
 
 
 LIBS += -lclangTooling\

@@ -2,11 +2,6 @@
 <style prototypes="item/Text/default">
 	<shape prototypes="default.nameShape">Box</shape>
 	<pen>
-		<color>
-			<alpha>255</alpha>
-			<red>100</red>
-			<green>0</green>
-			<blue>150</blue>
-		</color>
+		<color>#640096</color>
 	</pen>
 </style>

@@ -33,56 +33,73 @@ ChangeDependencyGraph::ChangeDependencyGraph(Diff& diff) : changes_{diff.changes
 {
 	for (auto change : changes_.values())
 	{
-		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
+		recordDependencies(change, true);
+		recordDependencies(change, false);
+	}
+}
+
+void ChangeDependencyGraph::recordDependencies(std::shared_ptr<ChangeDescription> change, bool incoming)
+{
+	auto node = incoming ? change->nodeA() : change->nodeB();
+	auto type = incoming ? ChangeType::Deletion : ChangeType::Insertion;
+
+	if (change->type() == type || change->type() == ChangeType::Move)
+	{
+		auto it = changes_.find(node->parentId());
+		while (it != changes_.end() && it.key() == node->parentId())
 		{
-			auto it = changes_.find(change->nodeB()->parentId());
-			while (it != changes_.end() && it.key() == change->nodeB()->parentId())
+			if (it.value()->type() == type)
 			{
-				if (it.value()->type() == ChangeType::Insertion) addDependency(change, it.value());
-				it++;
+				if (incoming) addDependency(it.value(), change);
+				else addDependency(change, it.value());
 			}
-		}
-		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
-		{
-			auto it = changes_.find(change->nodeA()->parentId());
-			while (it != changes_.end() && it.key() == change->nodeA()->parentId())
-			{
-				if (it.value()->type() == ChangeType::Deletion) addDependency(change, it.value());
-				it++;
-			}
+			++it;
 		}
 	}
 }
 
 ChangeDependencyGraph::~ChangeDependencyGraph() {}
 
-void ChangeDependencyGraph::insert(std::shared_ptr<const ChangeDescription>& change)
+void ChangeDependencyGraph::insert(std::shared_ptr<ChangeDescription>& change)
 {
-	Q_ASSERT(!changes_.contains(change->id()));
-	changes_.insert(change->id(), change);
+	Q_ASSERT(!changes_.contains(change->nodeId()));
+	changes_.insert(change->nodeId(), change);
 }
 
-void ChangeDependencyGraph::remove(std::shared_ptr<const ChangeDescription>& change)
+void ChangeDependencyGraph::remove(std::shared_ptr<ChangeDescription>& change)
 {
-	Q_ASSERT(changes_.values().contains(change));
-	changes_.remove(change->id());
-	for (auto dependingOnChange : dependencies_.keys(change))
-	{
-		dependencies_.remove(dependingOnChange, change);
-	}
+	Q_ASSERT(changes_.value(change->nodeId()) == change);
+	Q_ASSERT(dependencies_.keys(change).isEmpty()); // no other change depends on this change
+	changes_.remove(change->nodeId());
 	dependencies_.remove(change);
 }
 
-void ChangeDependencyGraph::addDependency(std::shared_ptr<const ChangeDescription>& changeA,
-														std::shared_ptr<const ChangeDescription>& changeB)
+void ChangeDependencyGraph::replace(std::shared_ptr<ChangeDescription>& oldChange,
+				 std::shared_ptr<ChangeDescription>& newChange)
+{
+	Q_ASSERT(changes_.value(oldChange->nodeId()) == oldChange);
+	auto dependsOn = dependencies_.values(oldChange);
+	auto dependingOnChange = dependencies_.keys(oldChange);
+	for (auto change : dependingOnChange)
+	{
+		dependencies_.remove(change, oldChange);
+		dependencies_.insert(change, newChange);
+	}
+	dependencies_.remove(oldChange);
+	for (auto change : dependsOn)
+		dependencies_.insert(newChange, change);
+}
+
+void ChangeDependencyGraph::addDependency(std::shared_ptr<ChangeDescription>& changeA,
+														std::shared_ptr<ChangeDescription>& changeB)
 {
 	Q_ASSERT(changes_.values().contains(changeA));
 	Q_ASSERT(changes_.values().contains(changeB));
 	dependencies_.insert(changeA, changeB);
 }
 
-void ChangeDependencyGraph::removeDependency(std::shared_ptr<const ChangeDescription>& changeA,
-															std::shared_ptr<const ChangeDescription>& changeB)
+void ChangeDependencyGraph::removeDependency(std::shared_ptr<ChangeDescription>& changeA,
+															std::shared_ptr<ChangeDescription>& changeB)
 {
 	dependencies_.remove(changeA, changeB);
 }

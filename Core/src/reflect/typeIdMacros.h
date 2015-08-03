@@ -29,6 +29,8 @@
 /***********************************************************************************************************************
  * Declares standard methods for querying a classes's type statically or at run-time.
  *
+ * DO NOT USE DIRECTLY. Use DECLARE_TYPE_ID or DECLARE_TYPE_ID_BASE defined below
+ *
  * This macro declares a static method initType which should be called during the initialization of the a plug-in where
  * the class is defined. This will assure that the new class's type is properly initialized.
  *
@@ -39,16 +41,16 @@
  * 	DECLARE_TYPE_ID
  * 	...
  */
-#define DECLARE_TYPE_ID																																\
+#define DECLARE_TYPE_ID_COMMON(OVERRIDE)																										\
 	public:																																				\
-		virtual const QString& typeName() const;																								\
-		virtual int typeId() const;																												\
+		virtual const QString& typeName() const OVERRIDE;																					\
+		virtual int typeId() const OVERRIDE;																									\
 																																							\
 		/*  Returns an ordered list of all ids in the type hierarchy of this class. */											\
 		/* The most derived id appears at the front of the list. */																		\
-		virtual QList<int> hierarchyTypeIds() const;																							\
-		virtual bool isSubtypeOf(int type) const;																								\
-		virtual bool isSubtypeOf(const QString& type) const;																				\
+		virtual QList<int> hierarchyTypeIds() const OVERRIDE;																				\
+		virtual bool isSubtypeOf(int type) const OVERRIDE;																					\
+		virtual bool isSubtypeOf(const QString& type) const OVERRIDE;																	\
 																																							\
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic() { return typeId_; }																						\
@@ -57,6 +59,34 @@
 	private:																																				\
 		static int typeId_;																															\
 
+/**********************************************************************************************************************/
+
+/***********************************************************************************************************************
+ * A specialized version of DECLARE_TYPE_ID_COMMON that should be used with classes which inherit from a TYPE_ID enabled
+ * class.
+ *
+ * This macro should appear as the first line after the class declaration e.g. :
+ *
+ * class MyNewNode : public ...
+ * {
+ * 	DECLARE_TYPE_ID
+ * 	...
+ */
+#define DECLARE_TYPE_ID DECLARE_TYPE_ID_COMMON(override)
+/**********************************************************************************************************************/
+
+/***********************************************************************************************************************
+ * A specialized version of DECLARE_TYPE_ID_COMMON that should be used with classes that are at the top of the
+ * hierarchy.
+ *
+ * This macro should appear as the first line after the class declaration e.g. :
+ *
+ * class MyNewNode : public ...
+ * {
+ * 	DECLARE_TYPE_ID_BASE
+ * 	...
+ */
+#define DECLARE_TYPE_ID_BASE DECLARE_TYPE_ID_COMMON()
 /**********************************************************************************************************************/
 
 /***********************************************************************************************************************

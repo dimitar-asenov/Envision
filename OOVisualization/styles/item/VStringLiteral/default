@@ -4,22 +4,12 @@
 		<pen>
 			<width>1.0</width>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>42</red>
-				<green>0</green>
-				<blue>255</blue>
-			</color>
+			<color>#2a00ff</color>
 		</pen>
 		<caretPen>
 			<width>2.0</width>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>128</red>
-				<green>0</green>
-				<blue>128</blue>
-			</color>
+			<color>#800080</color>
 			<capStyle>0</capStyle>
 			<joinStyle>0</joinStyle>
 		</caretPen>

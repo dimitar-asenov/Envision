@@ -77,7 +77,19 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CMerge.h \
     src/commands/CNewView.h \
     src/commands/CSwitchView.h \
-    src/commands/CRemoveNodeFromView.h
+    src/commands/CRemoveNodeFromView.h \
+    src/commands/CToggleArrowLayer.h \
+    src/commands/CAddInfoNode.h \
+    src/handlers/HInfoNode.h \
+    src/commands/CToggleInfoEntry.h \
+    src/vis/VViewSwitcherEntry.h \
+    src/vis/Menu.h \
+    src/vis/MenuStyle.h \
+    src/vis/ViewSwitcherMenu.h \
+    src/commands/AddReferencedToViewCommand.h \
+    src/commands/CSaveView.h \
+    src/commands/CAddNodeToViewByName.h \
+    src/commands/CAddNodeToView.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -148,4 +160,15 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CMerge.cpp \
     src/commands/CNewView.cpp \
     src/commands/CSwitchView.cpp \
-    src/commands/CRemoveNodeFromView.cpp
+    src/commands/CRemoveNodeFromView.cpp \
+    src/commands/CToggleArrowLayer.cpp \
+    src/commands/CAddInfoNode.cpp \
+    src/handlers/HInfoNode.cpp \
+    src/commands/CToggleInfoEntry.cpp \
+    src/vis/VViewSwitcherEntry.cpp \
+    src/vis/Menu.cpp \
+    src/vis/MenuStyle.cpp \
+    src/vis/ViewSwitcherMenu.cpp \
+    src/commands/CSaveView.cpp \
+    src/commands/CAddNodeToViewByName.cpp \
+    src/commands/CAddNodeToView.cpp

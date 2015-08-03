@@ -44,6 +44,7 @@
 #include "Core/src/Profiler.h"
 #include "Core/src/EnvisionApplication.h"
 
+#include "ViewItemManager.h"
 #include "items/ViewItem.h"
 
 namespace Visualization {
@@ -74,9 +75,10 @@ Scene::Scene()
 	setMinimumRenderSize(1.0);
 #endif
 
-
 	initialized_ = true;
 	allScenes().append(this);
+
+	viewItemManager_ = new ViewItemManager(this);
 
 	auto selectionGroup = addOverlayGroup("User Selected Items");
 	selectionGroup->setOverlayConstructor1Arg([](Item* item){return makeOverlay(new SelectionOverlay(item));});
@@ -95,6 +97,8 @@ Scene::~Scene()
 	Core::EnvisionApplication::removeOnUserInputIdleAction(this);
 	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
+
+	SAFE_DELETE(viewItemManager_);
 
 	overlayGroups_.clear();
 	while (!topLevelItems_.isEmpty())
@@ -136,56 +140,9 @@ void Scene::removeTopLevelItem(Item* item)
 	scheduleUpdate();
 }
 
-
 ViewItem* Scene::currentViewItem()
 {
-	if (viewItems_.size() == 0)
-	{
-		currentViewItem_ = newViewItem("ProjectView");
-		currentViewItem_->show();
-	}
-	Q_ASSERT(currentViewItem_);
-	return currentViewItem_;
-}
-
-ViewItem* Scene::viewItem(const QString name)
-{
-	for (auto item : viewItems_)
-		if (item->name() == name)
-			return item;
-	return nullptr;
-}
-
-void Scene::switchToView(ViewItem *view)
-{
-	Q_ASSERT(!inAnUpdate_);
-	Q_ASSERT(viewItems_.contains(view));
-	currentViewItem_->hide();
-	currentViewItem_ = view;
-	currentViewItem_->show();
-	scheduleUpdate();
-}
-
-bool Scene::switchToView(const QString viewName)
-{
-	auto view = viewItem(viewName);
-	if (view)
-		switchToView(view);
-	return view != nullptr;
-}
-
-void Scene::addViewItem(ViewItem *view)
-{
-	Q_ASSERT(!inAnUpdate_);
-	viewItems_.append(view);
-	addTopLevelItem(view, false);
-}
-
-ViewItem* Scene::newViewItem(const QString name)
-{
-	auto result = new ViewItem(nullptr, name);
-	addViewItem(result);
-	return result;
+	return viewItemManager_->currentViewItem();
 }
 
 void Scene::scheduleUpdate()
@@ -271,12 +228,13 @@ QList<Item*> Scene::itemsThatShouldHaveASelection()
 
 void Scene::listenToTreeManager(Model::TreeManager* manager)
 {
-	connect(manager, SIGNAL(nodesModified(QSet<Node*>)), this,  SLOT(nodesUpdated(QSet<Node*>)), Qt::QueuedConnection);
+	connect(manager, SIGNAL(nodesModified(QSet<Node*>, QSet<Node*>)), this,
+			  SLOT(nodesUpdated(QSet<Node*>, QSet<Node*>)), Qt::QueuedConnection);
 }
 
-void Scene::nodesUpdated(QSet<Node*> nodes)
+void Scene::nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes)
 {
-	for (auto node : nodes)
+	for (auto node : modifiedNodes)
 	{
 		auto nodeToFind = node;
 		bool found = false;
@@ -297,6 +255,8 @@ void Scene::nodesUpdated(QSet<Node*> nodes)
 			if (!found) nodeToFind = nodeToFind->parent();
 		}
 	}
+	for (auto node : removedNodes)
+		viewItems()->cleanupRemovedNode(node);
 
 	scheduleUpdate();
 }
@@ -412,7 +372,7 @@ void Scene::keyPressEvent (QKeyEvent *event)
 			auto parent = top;
 			while (parent->parent()) parent = parent->parent();
 
-			auto rootItem = dynamic_cast<Visualization::RootItem*>(parent);
+			auto rootItem = dynamic_cast<Visualization::ViewItem*>(parent);
 			if (rootItem) rootItem->setUpdateNeeded(Visualization::Item::FullUpdate);
 		}
 	}
@@ -522,6 +482,7 @@ void Scene::setMainViewScalingFactor(qreal factor)
 // Reimplemented in order to detect mouse clicks
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
+	lastMouseHoverPosition_ = mouseEvent->scenePos();
 	isCurrentMousePressAClick_ = isCurrentMousePressAClick_
 				&& lastMousePressTimer_.elapsed() <= MAX_MILLISECONDS_FOR_A_CLICK;
 	QGraphicsScene::mouseMoveEvent(mouseEvent);

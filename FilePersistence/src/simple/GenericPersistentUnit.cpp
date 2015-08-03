@@ -59,9 +59,21 @@ GenericNode* GenericPersistentUnit::nextNode()
 	return chunks_.last() + lastNodeIndexInLastChunk_;
 }
 
+void GenericPersistentUnit::releaseLastNode()
+{
+	--lastNodeIndexInLastChunk_;
+	if (!chunks_.isEmpty() && lastNodeIndexInLastChunk_ < 0)
+	{
+		// We must release the last chunk
+		tree_->releaseChunk(chunks_.takeLast());
+		lastNodeIndexInLastChunk_ = GenericTree::ALLOCATION_CHUNK_SIZE - 1;
+	}
+}
+
 GenericNode* GenericPersistentUnit::newNode()
 {
 	Q_ASSERT(!data_);
+
 	auto node = nextNode();
 	node->reset(this);
 	return node;
@@ -71,6 +83,7 @@ GenericNode* GenericPersistentUnit::newNode(int lineStart, int lineEndEnclusive)
 {
 	Q_ASSERT(data_);
 	Q_ASSERT(lineEndEnclusive < dataSize_);
+	Q_ASSERT(!tree_->piecewiseLoader());
 
 	auto node = nextNode();
 	node->reset(this, data_+lineStart, lineEndEnclusive - lineStart + 1, true);
@@ -85,32 +98,47 @@ GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
 	return node;
 }
 
-GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool deepCopy)
+GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool force, bool deepCopy)
 {
+	Q_ASSERT(nodeToCopy->tree() != tree());
+	if (!force) Q_ASSERT(!tree_->find(nodeToCopy->id()));
+
 	auto node = nextNode();
 	node->reset(this, nodeToCopy);
+
 	if (deepCopy)
 	{
 		for (auto childToCopy : nodeToCopy->children())
 		{
 			auto child = newNode(childToCopy, true);
 			child->setParent(node);
-			node->addChild(child);
+			node->attachChild(child);
 		}
 	}
+
 	return node;
 }
 
-GenericNode* GenericPersistentUnit::newNode(const QString& fromString)
+QPair<bool, GenericNode*> GenericPersistentUnit::newOrExistingNode(const char* data, int dataLength)
 {
-	auto data = fromString.toUtf8();
-	auto node = newNode(data.constData(), data.length());
-	node->ensureDataRead(); // We must eagerly load the node as data will disappear at the end of this method.
-	return node;
+	// NOTE if we could just read the ID from the line, this method could be removed, I think.
+	auto newwNode = newNode(data, dataLength);
+	auto oldNode = tree_->find(newwNode->id());
+	if (oldNode)
+	{
+		Q_ASSERT(oldNode->label() == newwNode->label());
+		Q_ASSERT(oldNode->type() == newwNode->type());
+		Q_ASSERT(oldNode->parentId() == newwNode->parentId());
+		releaseLastNode();
+		return {false, oldNode};
+	}
+	else
+		return {true, newwNode};
 }
 
 const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 {
+	Q_ASSERT(!tree_->piecewiseLoader());
 	Q_ASSERT(!data_);
 	Q_ASSERT(data);
 	Q_ASSERT(dataSize > 0);
@@ -120,28 +148,25 @@ const char* GenericPersistentUnit::setData(const char* data, int dataSize)
 	return data_;
 }
 
-GenericNode* GenericPersistentUnit::find(Model::NodeIdType id) const
-{
-	int numElementsInCurrentChunk = GenericTree::ALLOCATION_CHUNK_SIZE;
-	int currentChunk = 0;
-	for (auto chunk : chunks_)
-	{
-		if (currentChunk == chunks_.size() - 1)
-			numElementsInCurrentChunk = lastNodeIndexInLastChunk_;
-		for (int j = 0; j < numElementsInCurrentChunk; ++j)
-			if (chunk[j].id() == id)
-				return &chunk[j];
-		++currentChunk;
-	}
-	return nullptr;
-}
-
 GenericNode* GenericPersistentUnit::unitRootNode() const
 {
 	if (chunks_.isEmpty())
 		return nullptr;
 	else
 		return &(chunks_.first()[0]);
+}
+
+GenericNode* GenericPersistentUnit::nodeWithNullParent() const
+{
+	for (auto& chunk : chunks_)
+	{
+		int maxIndex = (chunk == chunks_.last() ? lastNodeIndexInLastChunk_ : GenericTree::ALLOCATION_CHUNK_SIZE-1);
+		for (int i = 0; i<= maxIndex; ++i)
+			if (chunk[i].parentId().isNull())
+				return &chunk[i];
+	}
+
+	return nullptr;
 }
 
 } /* namespace FilePersistence */

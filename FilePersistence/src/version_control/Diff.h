@@ -35,7 +35,7 @@ namespace FilePersistence {
 class GitRepository;
 
 using IdToGenericNodeHash = QMultiHash<Model::NodeIdType, GenericNode*>;
-using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<const ChangeDescription>>;
+using IdToChangeDescriptionHash = QHash<Model::NodeIdType, std::shared_ptr<ChangeDescription>>;
 
 class FILEPERSISTENCE_API Diff
 {
@@ -44,6 +44,9 @@ class FILEPERSISTENCE_API Diff
 		Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 			  QList<GenericNode*>& nodesB, std::shared_ptr<GenericTree> treeB, const GitRepository*);
 
+		std::shared_ptr<GenericTree> treeA() const;
+		std::shared_ptr<GenericTree> treeB() const;
+
 		IdToChangeDescriptionHash changes() const;
 		IdToChangeDescriptionHash changes(ChangeType type) const;
 		IdToChangeDescriptionHash changes(ChangeType type, ChangeDescription::UpdateFlags flags) const;
@@ -51,9 +54,20 @@ class FILEPERSISTENCE_API Diff
 	private:
 		void computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& nodesB);
 
+		/**
+		 * Sets \a structFlag for appropriate changes and may create new changes.
+		 */
 		void computeStructChanges();
-		void setStructureFlagForId(const Model::NodeIdType);
 
+		/**
+		 * If a change for \a id already exists, its \a structFlag is set,
+		 * otherwise a new change with that flag is created.
+		 */
+		void setStructureFlagForId(Model::NodeIdType, std::shared_ptr<ChangeDescription> causingChange);
+
+		/**
+		 * Removes all nodes that are used for persistent unit linking from \a nodes.
+		 */
 		void filterPersistenceUnits(IdToGenericNodeHash& nodes);
 
 		IdToChangeDescriptionHash changeDescriptions_{};
@@ -62,6 +76,8 @@ class FILEPERSISTENCE_API Diff
 		std::shared_ptr<GenericTree> treeB_{};
 };
 
+inline std::shared_ptr<GenericTree> Diff::treeA() const { return treeA_; }
+inline std::shared_ptr<GenericTree> Diff::treeB() const { return treeB_; }
 inline IdToChangeDescriptionHash Diff::changes() const {return changeDescriptions_;}
 
 } /* namespace FilePersistence */

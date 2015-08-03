@@ -24,31 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#include "ConflictPipelineComponent.h"
+#pragma once
 
-namespace FilePersistence
+#include "GitRepository.h"
+#include "../simple/PiecewiseLoader.h"
+
+namespace FilePersistence {
+
+class GitPiecewiseLoader : public PiecewiseLoader
 {
+	public:
+		GitPiecewiseLoader(std::shared_ptr<GenericTree>& tree, const GitRepository* repo, QString revision);
+		~GitPiecewiseLoader();
 
-ConflictPipelineComponent::~ConflictPipelineComponent() {}
+	protected:
+		NodeData loadNodeData(Model::NodeIdType id);
+		QList<NodeData> loadNodeChildrenData(Model::NodeIdType id);
 
-RelationAssignmentTransition ConflictPipelineComponent::createIdentityTransition(RelationAssignment& relationAssignment)
-{
-	RelationAssignmentTransition transition;
-	for (auto relationSet : relationAssignment)
-	{
-		transition.insert(relationSet, RelationSet(relationSet));
-	}
-	return transition;
-}
+	private:
+		static NodeData parseGrepLine(const QString& line);
 
-RelationSet ConflictPipelineComponent::findRelationSet(std::shared_ptr<const ChangeDescription> change,
-																		 RelationAssignment& relationAssignment)
-{
-	for (auto relationSet : relationAssignment)
-	{
-		if (relationSet->contains(change)) return relationSet;
-	}
-	Q_ASSERT(false);
-}
+		static bool idIsParent(const QString& id, const QString& nodeLine);
+		static bool idIsNode(const QString& id, const QString& nodeLine);
+		static bool isPersistenceUnit(const QString& nodeLine);
 
-}
+		const GitRepository* repo_;
+		QString revision_;
+		QString workDir_;
+};
+
+} /* namespace FilePersistence */

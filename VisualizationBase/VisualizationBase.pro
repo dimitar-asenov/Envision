@@ -119,6 +119,7 @@ HEADERS += src/overlays/IconOverlayStyle.h \
     src/views/MiniMap.h \
     src/views/View.h \
     src/visualizationbase_api.h \
+    src/nodes/UINode.h \
     test/BoxTest.h \
     src/renderer/VisualizationGroupsManager.h \
     src/renderer/SzLevelOrderingManager.h \
@@ -128,7 +129,15 @@ HEADERS += src/overlays/IconOverlayStyle.h \
     src/declarative/DynamicGridFormElement.h \
     src/overlays/MessageOverlay.h \
     src/overlays/MessageOverlayStyle.h \
-    src/items/ViewItem.h
+    src/items/ViewItem.h \
+    src/nodes/ViewItemNode.h \
+    src/items/VViewItemNode.h \
+    src/overlays/ArrowOverlay.h \
+    src/utils/Drawing.h \
+    src/nodes/InfoNode.h \
+    src/items/VInfoNode.h \
+    src/ViewItemManager.h \
+    src/utils/JsonUtil.h
 SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/overlays/IconOverlay.cpp \
     src/overlays/BoxOverlayStyle.cpp \
@@ -213,6 +222,7 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/items/Text.cpp \
     src/shapes/BoxStyle.cpp \
     src/shapes/ShapeStyle.cpp \
+    src/nodes/UINode.cpp \
     test/BoxTest.cpp \
     src/shapes/Box.cpp \
     src/shapes/Shape.cpp \
@@ -231,4 +241,13 @@ SOURCES += src/overlays/IconOverlayStyle.cpp \
     src/declarative/GridLayouter.cpp \
     src/overlays/MessageOverlay.cpp \
     src/overlays/MessageOverlayStyle.cpp \
-    src/items/ViewItem.cpp
+    src/items/ViewItem.cpp \
+    src/nodes/ViewItemNode.cpp \
+    src/items/VViewItemNode.cpp \
+    src/overlays/ArrowOverlay.cpp \
+    src/utils/Drawing.cpp \
+    src/nodes/InfoNode.cpp \
+    src/items/VInfoNode.cpp \
+    src/styles/StyleSet.cpp \
+    src/ViewItemManager.cpp \
+    src/utils/JsonUtil.cpp

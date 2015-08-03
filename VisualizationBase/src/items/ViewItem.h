@@ -30,6 +30,9 @@
 
 namespace Visualization {
 
+class ViewItemNode;
+class VViewItemNode;
+
 /**
  * The ViewItem class represents the visualization of an entire view within a single item.
  *
@@ -46,19 +49,118 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 
 		static void initializeForms();
 
-		void insertNode(Model::Node* node, int column = 0, int row = 0);
+		/**
+		 * The purpose to use when rendering only the public interface
+		 * of an item.
+		 */
+		static int publicInterfacePurpose();
+
+		/**
+		 * Insert an empty column into the grid of nodes
+		 */
+		void insertColumn(int column);
+		/**
+		 * Insert the given node into the grid at the given position, rendering
+		 * it with the given purpose.
+		 */
+		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0, int purpose = -1);
+		/**
+		 * Remove the given node from the view (this does not delete the node from the model)
+		 */
 		void removeNode(Model::Node* node);
-		const QList<Model::Node*> allNodes() const;
+		/**
+		 * Returns all nodes in the grid in list form.
+		 */
+		QList<Model::Node*> allNodes() const;
+		/**
+		 * Returns the position of the given node in the grid, or (-1, -1) if it doesn't exist.
+		 */
+		QPoint positionOfNode(Model::Node* node) const;
+		/**
+		 * Returns the position of the given item's node in the grid, or (-1, -1) if the item
+		 * has no node, or the node is not part of the grid.
+		 */
+		QPoint positionOfItem(Item* item) const;
+		/**
+		 * Returns the node at the given position. If the position is invalid, returns nullptr.
+		 */
+		Model::Node* nodeAt(int column, int row) const;
 
-		const QString name() const;
+		/**
+		 * Adds a spacing node at the given position, using the given target and parent
+		 * to determine the spacing.
+		 */
+		void addSpacing(int column, int row, Model::Node* spacingTarget,
+						ViewItemNode* spacingParent);
 
+		/**
+		 * Adds an arrow from the first to the second node on the given arrow layer.
+		 * If fromParent and toParent are set, only one arrow will be drawn. Otherwise, an arrow
+		 * will be drawn between any two instances of the given nodes.
+		 */
+		void addArrow(Model::Node* from, Model::Node* to, QString layer,
+					  ViewItemNode* fromParent = nullptr, ViewItemNode* toParent = nullptr);
+		/**
+		 * Returns the items for which an arrow should be drawn in the given arrow layer.
+		 */
+		QList<QPair<Item*, Item*>> arrowsForLayer(QString layer);
+		/**
+		 * Returns the full layer name of the local arrow layer, as used in the overlay which
+		 * exists in the scene itself.
+		 */
+		QString fullLayerName(const QString& localLayer) const;
+		/**
+		 * Returns the names of all the available arrow layers.
+		 */
+		QStringList arrowLayers() const;
+
+		const QString& name() const;
+		void setName(const QString& name);
+
+		QJsonDocument toJson() const;
+		void fromJson(QJsonDocument json);
+
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 	private:
+		friend class ViewItemManager;
+		/**
+		 * Notify the view about an item being removed externally (e.g. by deleting its node).
+		 */
+		void cleanupRemovedItem(Item* item);
+		void cleanupRemovedNode(Model::Node* node);
+
 		QVector<QVector<Model::Node*>> nodes_;
 		QString name_;
+
+		struct ArrowToAdd {
+			ViewItemNode* fromParent_{};
+			Model::Node* from_{};
+			ViewItemNode* toParent_{};
+			Model::Node* to_{};
+			QString layer_;
+		};
+		QList<ArrowToAdd> arrowsToAdd_;
+		QHash<QString, QList<QPair<Item*, Item*>>> arrows_;
+		QStringList disabledArrowLayers_;
+		QJsonObject arrowToJson(QPair<Item*, Item*> arrow, QString layer) const;
+		void arrowFromJson(QJsonObject json);
+		void addArrowLayer(QString layer, bool enabled = true);
+		void removeArrowsForItem(Item* parent);
+
+		template <class NodeType>
+		QList<NodeType*> referencesOfType() const;
+
+		void insertViewItemNode(ViewItemNode* node, int column, int row);
+
+		void ensurePositionExists(int column, int row);
+		void ensureColumnExists(int column);
 
 		QVector<QVector<Model::Node*>> nodesGetter();
 };
 
-inline const QString ViewItem::name() const { return name_; }
+inline const QString& ViewItem::name() const { return name_; }
+inline QVector<QVector<Model::Node*>> ViewItem::nodesGetter() { return nodes_; }
+inline QString ViewItem::fullLayerName(const QString& localLayer) const { return name() + "_" + localLayer; }
 
 }

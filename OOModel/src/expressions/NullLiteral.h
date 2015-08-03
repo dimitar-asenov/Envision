@@ -37,7 +37,7 @@ class OOMODEL_API NullLiteral: public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(NullLiteral)
 
 	public:
-		virtual Type* type();
+		virtual Type* type() override;
 };
 
 }

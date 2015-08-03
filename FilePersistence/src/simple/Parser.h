@@ -39,7 +39,14 @@ class FILEPERSISTENCE_API Parser {
 
 		static void parseLine(GenericNode* node, const char* line, int lineLength);
 
-		static void save(QTextStream& stream, GenericNode* node, int tabLevel = 0);
+		/**
+		 * Saves the generic node and its children recursively to a text stream.
+		 * If any persistentUnitTypes are provided, they are saved as new peristent unit reference only
+		 * and are returned in the output list.
+		 */
+		static QList<GenericNode*> save(QTextStream& stream, GenericNode* node,
+												  const QStringList& persistentUnitTypes = {}, int tabLevel = 0);
+
 		static GenericNode* load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit);
 		static GenericNode* load(const char* data, int dataLength, bool lazy, GenericPersistentUnit& persistentUnit);
 

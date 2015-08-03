@@ -25,95 +25,103 @@
 ***********************************************************************************************************************/
 
 #include "Merge.h"
-
 #include "GitRepository.h"
+#include "GitPiecewiseLoader.h"
 
-#include "ModelBase/src/model/TreeManager.h"
+#include "ConflictUnitDetector.h"
+#include "ListMergeComponent.h"
+#include "../simple/SimpleTextFileStore.h"
 
 namespace FilePersistence {
 
-bool Merge::abort()
-{
-	if (stage_ != Stage::NoMerge && stage_ != Stage::Complete)
-	{
-		QString branch = repository_->currentBranch();
-
-		repository_->checkout(headCommitId, true);
-		repository_->setReferenceTarget(branch, headCommitId);
-
-		stage_ = Stage::NoMerge;
-		return true;
-	}
-	else
-		return false;
-}
-
 bool Merge::commit(const Signature& author, const Signature& committer, const QString& message)
 {
-	if (stage_ == Stage::ReadyToCommit)
-	{
-		QString treeSHA1 = repository_->writeIndexToTree();
+	Q_ASSERT(stage_ == Stage::WroteToIndex);
 
-		QStringList parents;
-		parents.append(headCommitId);
-		parents.append(revisionCommitId_);
+	QString treeSHA1 = repository_->writeIndexToTree();
 
-		repository_->newCommit(treeSHA1, message, author, committer, parents);
+	QStringList parents;
+	parents.append(headCommitId_);
+	parents.append(revisionCommitId_);
 
-		stage_ = Stage::Complete;
+	repository_->newCommit(treeSHA1, message, author, committer, parents);
 
-		return true;
-	}
-	else
-		return false;
+	stage_ = Stage::Committed;
+
+	return true;
+}
+
+std::shared_ptr<GenericTree> Merge::mergedTree()
+{
+	Q_ASSERT(stage_ >= Stage::BuiltMergedTree);
+	return treeMerged_;
 }
 
 // ======== private ========
 
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
-	: fastForward_{fastForward}, repository_{repository}
+	: repository_{repository}
 {
-	headCommitId = repository_->getSHA1("HEAD");
+	// TODO replace with correct types
+	conflictTypes_ = QSet<QString>::fromList(QList<QString>{"TestConflictType",
+																			  "TestListType",
+																			  "TestUnorderedType",
+																			  "ListElement",
+																			  "project",
+																			  "package",
+																			  "class",
+																			  "fieldList",
+																			  "methodList",
+																			  "field",
+																			  "method",
+																			  "Method",
+																			  "loop",
+																			  "TypedListOfMethod"});
+	listTypes_ = QSet<QString>::fromList(QList<QString>{"TestListType",
+																		 "TestNoConflictList",
+																		 "project",
+																		 "package",
+																		 "fieldList",
+																		 "methodList",
+																		 "method"});
+	unorderedTypes_ = QSet<QString>::fromList(QList<QString>{"TestUnorderedType",
+																				"TypedListOfMethod"});
+
+
+	headCommitId_ = repository_->getSHA1("HEAD");
 	revisionCommitId_ = repository_->getSHA1(revision);
 	baseCommitId_ = repository_->findMergeBase("HEAD", revision);
 
-	if (baseCommitId_.isNull())
-		error_ = Error::NoMergeBase;
+	Q_ASSERT(!baseCommitId_.isNull());
 
-	stage_ = Stage::Initialized;
+	stage_ = Stage::FoundMergeBase;
 
-	if (baseCommitId_.compare(revisionCommitId_) == 0)
-	{
-		kind_ = Kind::AlreadyUpToDate;
-	}
-	else if (baseCommitId_.compare(headCommitId) == 0)
-	{
-		kind_ = Kind::FastForward;
-	}
-	else
-		kind_ = Kind::TrueMerge;
+	Kind kind;
+	if (baseCommitId_.compare(revisionCommitId_) == 0) kind = Kind::AlreadyUpToDate;
+	else if (baseCommitId_.compare(headCommitId_) == 0) kind = Kind::FastForward;
+	else kind = Kind::TrueMerge;
 
 	stage_ = Stage::Classified;
 
-	switch (kind_)
+	switch (kind)
 	{
 		case Kind::AlreadyUpToDate:
-			stage_ = Merge::Stage::Complete;
+			stage_ = Merge::Stage::Committed;
 			break;
 
 		case Kind::FastForward:
-			if (fastForward_)
+			if (fastForward)
 			{
 				QString branch = repository_->currentBranch();
 				repository_->setReferenceTarget(branch, revisionCommitId_);
 				repository_->checkout(revisionCommitId_, true);
-				stage_ = Stage::Complete;
+				stage_ = Stage::Committed;
 			}
 			else
 			{
 				repository_->checkout(revisionCommitId_, true);
 				repository_->writeRevisionIntoIndex(revisionCommitId_);
-				stage_ = Stage::ReadyToCommit;
+				stage_ = Stage::WroteToIndex;
 			}
 			break;
 
@@ -126,46 +134,216 @@ Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	}
 }
 
+Merge::~Merge()
+{
+	treeA_ = nullptr;
+	treeB_ = nullptr;
+	treeBase_ = nullptr;
+	treeMerged_ = nullptr;
+}
+
+void Merge::initializeComponents()
+{
+	pipelineInitializer_ = std::shared_ptr<ConflictUnitDetector>(
+				new ConflictUnitDetector(conflictTypes_, USE_LINKED_SETS));
+
+	auto listMergeComponent = std::make_shared<ListMergeComponent>(conflictTypes_, listTypes_, unorderedTypes_);
+	conflictPipeline_.append(listMergeComponent);
+}
+
 void Merge::performTrueMerge()
 {
-		Diff diffA = repository_->diff(baseCommitId_, headCommitId);
-		Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_);
+	initializeComponents();
 
-		ChangeDependencyGraph cdgA = ChangeDependencyGraph(diffA);
-		ChangeDependencyGraph cdgB = ChangeDependencyGraph(diffB);
-		conflictingChanges_ = {};
-		conflictPairs_ = {};
+	treeA_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
+	new GitPiecewiseLoader(treeA_, repository_, headCommitId_);
+	treeB_ = std::unique_ptr<GenericTree>(new GenericTree(repository_->projectName()));
+	new GitPiecewiseLoader(treeB_, repository_, revisionCommitId_);
+	treeBase_ = std::unique_ptr<GenericTree>(new GenericTree(repository_->projectName()));
+	new GitPiecewiseLoader(treeBase_, repository_, baseCommitId_);
 
-		treeA_ = std::unique_ptr<GenericTree>(new GenericTree("HeadTree", headCommitId));
-		repository_->loadGenericTree(treeA_, headCommitId);
+	Diff diffA = repository_->diff(baseCommitId_, headCommitId_, treeBase_, treeA_);
+	Diff diffB = repository_->diff(baseCommitId_, revisionCommitId_, treeBase_, treeB_);
 
-		treeB_ = std::unique_ptr<GenericTree>(new GenericTree("MergeRevision", revisionCommitId_));
-		repository_->loadGenericTree(treeB_, revisionCommitId_);
+	auto cdgA = ChangeDependencyGraph(diffA);
+	auto cdgB = ChangeDependencyGraph(diffB);
+	conflictingChanges_ = {};
+	conflictPairs_ = {};
 
-		treeBase_ = std::unique_ptr<GenericTree>(new GenericTree("MergeBase", baseCommitId_));
-		repository_->loadGenericTree(treeBase_, baseCommitId_);
+	LinkedChangesSet linkedChangesSet;
+	if (USE_LINKED_SETS)
+		linkedChangesSet = LinkedChangesSet(cdgA, cdgB);
 
-		RelationAssignmentTrace trace;
-		RelationAssignment relationAssignment; // TODO initialize
-		RelationAssignmentTransition transition = pipelineInitializer_->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
-																								  conflictingChanges_, conflictPairs_, relationAssignment);
-		trace.append(transition);
-		for (auto component : conflictPipeline_)
+	// ### PIPELINE INITIALIZER ###
+	LinkedChangesTransition transition = pipelineInitializer_->run(treeA_, treeB_, treeBase_,
+																						cdgA, cdgB, conflictingChanges_,
+																						conflictPairs_, linkedChangesSet);
+	// NOTE this is where one would check the transition of the initializer.
+
+	// ### THE PIPLELINE ###
+	for (auto component : conflictPipeline_)
+	{
+		linkedChangesSet = LinkedChangesSet(transition.getNewState()); // deep copy current state
+		transition = component->run(treeA_, treeB_, treeBase_, cdgA, cdgB,
+											 conflictingChanges_, conflictPairs_, linkedChangesSet);
+		// NOTE this is where one would check the transition of a component.
+	}
+
+	IdToChangeDescriptionHash applicableChanges;
+	for (auto change : cdgA.changes())
+		if (!conflictingChanges_.contains(change) && !change->onlyStructureChange())
+			applicableChanges.insert(change->nodeId(), change);
+	for (auto change : cdgB.changes())
+		if (!conflictingChanges_.contains(change) && !change->onlyStructureChange())
+			applicableChanges.insert(change->nodeId(), change);
+
+	stage_ = Stage::AutoMerged;
+
+	treeMerged_ = std::shared_ptr<GenericTree>(new GenericTree(repository_->projectName()));
+	repository_->loadGenericTree(treeMerged_, baseCommitId_);
+	treeMerged_->buildLookupHash();
+	applyChangesToTree(treeMerged_, cdgA);
+	applyChangesToTree(treeMerged_, cdgB);
+
+	// remove holes in lists
+	for (auto changeIt = cdgA.changes().constBegin(); changeIt != cdgA.changes().constEnd(); ++changeIt)
+	{
+		const auto& change = changeIt.value();
+		if (
+			 (change->nodeA() &&
+			  (listTypes_.contains(change->nodeA()->type()) ||
+				unorderedTypes_.contains(change->nodeA()->type()))
+			  )
+			 ||
+			 (change->nodeA() &&
+			  (listTypes_.contains(change->nodeA()->type()) ||
+				unorderedTypes_.contains(change->nodeA()->type()))
+			  )
+			 )
 		{
-			// compute new RA from transition
-			transition = component->run(treeBase_, treeB_, treeA_, cdgA, cdgB,
-												 conflictingChanges_, conflictPairs_, relationAssignment);
-			trace.append(transition);
+			// list is a list container that has changed
+			auto list = treeMerged_->find(change->nodeId());
+			int gapSize = 0;
+			for (int curIdx = 0; curIdx < list->children().size(); ++curIdx)
+			{
+				GenericNode* elem;
+				while (!(elem = list->child(QString::number(curIdx + gapSize))))
+					++gapSize;
+				elem->setLabel(QString::number(curIdx));
+			}
 		}
-		// compute final RA?
+	}
 
-		IdToChangeDescriptionHash applicableChanges;
-		for (auto change : cdgA.changes())
-			if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
-		for (auto change : cdgB.changes())
-			if (!conflictingChanges_.contains(change)) applicableChanges.insert(change->id(), change);
+	stage_ = Stage::BuiltMergedTree;
 
-		//And then do manual merge
+	SimpleTextFileStore::saveGenericTree(treeMerged_, repository_->projectName(),
+													 repository_->workdirPath(), {"Project", "Module"});
+
+	if (conflictingChanges_.isEmpty())
+	{
+		stage_ = Stage::WroteToWorkDir;
+
+		repository_->writeWorkdirToIndex();
+
+		stage_ = Stage::WroteToIndex;
+	}
+	else
+	{
+		// TODO prepare for manual merge
+		// TODO write conflicts to file maybe.
+	}
+}
+
+void Merge::addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
+									 const std::shared_ptr<ChangeDescription>& change,
+									 const ChangeDependencyGraph& cdg)
+{
+	for (auto dependency : cdg.getDependencies(change))
+	{
+		if (!queue.contains(dependency))
+		{
+			Q_ASSERT(!conflictingChanges_.contains(dependency));
+			addDependencies(queue, dependency, cdg);
+			queue.append(dependency);
+		}
+	}
+}
+
+
+void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
+										 const ChangeDependencyGraph& cdg)
+{
+	// sort changes topologically before applying
+	QList<std::shared_ptr<ChangeDescription>> queue;
+	for (auto change : cdg.changes())
+	{
+		if (!conflictingChanges_.contains(change) && !queue.contains(change))
+		{
+			addDependencies(queue, change, cdg);
+			queue.append(change);
+		}
+	}
+
+
+	for (auto change : queue)
+	{
+		switch (change->type())
+		{
+			case ChangeType::Insertion:
+			{
+				auto persistentUnitName = change->nodeB()->persistentUnit()->name();
+				auto persistentUnit = tree->persistentUnit(persistentUnitName);
+				if (!persistentUnit)
+					persistentUnit = &tree->newPersistentUnit(persistentUnitName);
+				auto node = persistentUnit->newNode(change->nodeB());
+				node->linkNode();
+				Q_ASSERT(node->parent()->id() == change->nodeB()->parentId());
+				Q_ASSERT(tree->find(change->nodeId()));
+				break;
+			}
+
+			case ChangeType::Deletion:
+			{
+				Q_ASSERT(tree->find(change->nodeA()->id())->children().empty());
+				tree->remove(change->nodeId());
+				Q_ASSERT(!tree->find(change->nodeA()->id()));
+				break;
+			}
+
+			case ChangeType::Move:
+			{
+				auto node = tree->find(change->nodeA()->id());
+				node->detachFromParent();
+				node->setParentId(change->nodeB()->parentId());
+				node->attachToParent();
+				Q_ASSERT(node->parent()->id() == change->nodeB()->parentId());
+				// no break, need to do the same stuff as for stationary.
+			}
+
+			case ChangeType::Stationary:
+			{
+				auto node = tree->find(change->nodeA()->id());
+
+				if (change->hasFlags(ChangeDescription::Value))
+				{
+					auto valueType = change->nodeB()->valueType();
+					auto value = change->nodeB()->rawValue();
+					node->resetValue(valueType, value);
+				}
+
+				if (change->hasFlags(ChangeDescription::Type))
+					node->setType(change->nodeB()->type());
+
+				if (change->hasFlags(ChangeDescription::Label))
+					node->setLabel(change->nodeB()->label());
+
+				break;
+			}
+
+			default:
+				Q_ASSERT(false);
+		}
+	}
 }
 
 } /* namespace FilePersistence */

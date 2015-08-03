@@ -5,12 +5,7 @@
 		<cornerRadius>15</cornerRadius>
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>128</alpha>
-				<red>255</red>
-				<green>255</green>
-				<blue>255</blue>
-			</color>
+			<color>#80ffffff</color>
 		</backgroundBrush>
 	</shape>
 	<header prototypes="layout/SequentialLayout/default">
@@ -27,21 +22,11 @@
 			<cornerType>0</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>240</red>
-					<green>240</green>
-					<blue>255</blue>
-				</color>
+				<color>#f0f0ff</color>
 			</backgroundBrush>
 			<outline>
 				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>128</red>
-					<green>128</green>
-					<blue>255</blue>
-				</color>
+				<color>#8080ff</color>
 			</outline>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
@@ -104,23 +89,13 @@
 			Box
 			<outline>
 				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>244</red>
-					<green>164</green>
-					<blue>96</blue>
-				</color>
+				<color>#f4a460</color>
 			</outline>
 			<cornerRadius>1</cornerRadius>
 			<cornerType>0</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>248</green>
-					<blue>220</blue>
-				</color>
+				<color>#fff8dc</color>
 			</backgroundBrush>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
@@ -137,23 +112,13 @@
 			Box
 			<outline>
 				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>100</red>
-					<green>164</green>
-					<blue>200</blue>
-				</color>
+				<color>#64a4c8</color>
 			</outline>
 			<cornerRadius>1</cornerRadius>
 			<cornerType>0</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>200</red>
-					<green>224</green>
-					<blue>255</blue>
-				</color>
+				<color>#c8e0ff</color>
 			</backgroundBrush>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
@@ -173,23 +138,13 @@
 			Box
 			<outline>
 				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>100</red>
-					<green>200</green>
-					<blue>164</blue>
-				</color>
+				<color>#64c8a4</color>
 			</outline>
 			<cornerRadius>1</cornerRadius>
 			<cornerType>0</cornerType>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>200</red>
-					<green>255</green>
-					<blue>224</blue>
-				</color>
+				<color>#c8ffe0</color>
 			</backgroundBrush>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
@@ -218,12 +173,7 @@
 			<cornerRadius>5</cornerRadius>
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
-				</color>
+				<color>#ffffff</color>
 			</backgroundBrush>
 		</shape>
 	</fieldContainer>

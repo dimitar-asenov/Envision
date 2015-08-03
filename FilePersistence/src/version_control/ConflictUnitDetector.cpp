@@ -30,95 +30,265 @@
 
 namespace FilePersistence {
 
-ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes) : conflictTypes_{conflictTypes} {}
+ConflictUnitDetector::ConflictUnitDetector(QSet<QString>& conflictTypes, bool useLinkedChanges) :
+	conflictTypes_{conflictTypes}, useLinkedChanges_{useLinkedChanges} {}
 
 ConflictUnitDetector::~ConflictUnitDetector() {}
 
-RelationAssignmentTransition ConflictUnitDetector::run(const std::unique_ptr<GenericTree>& treeBase,
-									const std::unique_ptr<GenericTree>&,
-									const std::unique_ptr<GenericTree>&,
-									ChangeDependencyGraph& cdgA,
-									ChangeDependencyGraph& cdgB,
-									QSet<std::shared_ptr<const ChangeDescription>>& conflictingChanges,
-									ConflictPairs& conflictPairs, RelationAssignment& oldRelationAssignment)
+Model::NodeIdType ConflictUnitDetector::findMoveBound(GenericNode *nodeA, GenericNode *nodeB)
 {
-	affectedCUsA_ = computeAffectedCUs(treeBase, cdgA);
-	affectedCUsB_ = computeAffectedCUs(treeBase, cdgB);
-	RelationAssignmentTransition transition = createIdentityTransition(oldRelationAssignment);
+	QList<Model::NodeIdType> pathA, pathB;
+	while (nodeA)
+	{
+		pathA.append(nodeA->id());
+		nodeA = nodeA->parent();
+	}
+	while (nodeB)
+	{
+		pathB.append(nodeB->id());
+		nodeB = nodeB->parent();
+	}
+	pathA.append(QUuid());
+	pathB.append(QUuid());
+	Model::NodeIdType moveBound;
+	while (pathA.last() == pathB.last())
+	{
+		moveBound = pathA.takeLast();
+		pathB.takeLast();
+	}
+	return moveBound;
+}
+
+QList<std::shared_ptr<ChangeDescription>> ConflictUnitDetector::findMoveDependencies(
+		std::shared_ptr<GenericTree> treeBase,
+		std::shared_ptr<ChangeDescription> change,
+		ChangeDependencyGraph &cdg)
+{
+	QList<std::shared_ptr<ChangeDescription>> dependencies;
+	auto newParentInBase = treeBase->find(change->nodeB()->parentId());
+	if (isAncestor(newParentInBase, change->nodeId()))
+	{
+		auto moveBound = findMoveBound(change->nodeA(), change->nodeB());
+		auto node = change->nodeB()->parent();
+		while (node && node->id() != moveBound)
+		{
+			auto change2 = cdg.changes().value(node->id());
+			if (change2 && change2->type() == ChangeType::Move)
+				dependencies.append(change2);
+			node = node->parent();
+		}
+	}
+	return dependencies;
+}
+
+
+QSet<std::shared_ptr<ChangeDescription>> ConflictUnitDetector::structureChanges(
+		ChangeDependencyGraph& cdg,
+		std::shared_ptr<ChangeDescription> parentChange)
+{
+	QSet<Model::NodeIdType> childrenIds;
+	for (auto child : parentChange->nodeA()->children())
+		childrenIds.insert(child->id());
+	for (auto child : parentChange->nodeB()->children())
+		childrenIds.insert(child->id());
+	QSet<std::shared_ptr<ChangeDescription>> changes;
+	for (auto childId : childrenIds)
+	{
+		auto change = cdg.changes().value(childId);
+		if (change && (change->type() != ChangeType::Stationary || change->hasFlags(ChangeDescription::Label)))
+			changes.insert(cdg.changes().value(childId));
+	}
+	return changes;
+}
+
+LinkedChangesTransition ConflictUnitDetector::run(std::shared_ptr<GenericTree>&, std::shared_ptr<GenericTree>&,
+																  std::shared_ptr<GenericTree>& treeBase, ChangeDependencyGraph& cdgA,
+									ChangeDependencyGraph& cdgB,
+									QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges,
+									ConflictPairs& conflictPairs, LinkedChangesSet& linkedChangesSet)
+{
+	treeBase_ = treeBase;
+	affectedCUsA_ = computeAffectedCUs(cdgA);
+	affectedCUsB_ = computeAffectedCUs(cdgB);
+	LinkedChangesTransition transition;
+	if (useLinkedChanges_)
+		transition = LinkedChangesTransition(linkedChangesSet, cdgA, cdgB);
+
+	/**
+	 * If change1 is mappend to change2 then change2 depends on change1
+	 */
+	QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>> moveDependencies;
+
+	auto gatherDependencies = [&moveDependencies, &treeBase](ChangeDependencyGraph& cdg)
+	{
+		for (auto change : cdg.changes())
+			if (change->type() == ChangeType::Move)
+				for (auto dependency : findMoveDependencies(treeBase, change, cdg))
+					moveDependencies.insert(dependency, change);
+	};
+
+	gatherDependencies(cdgA);
+	gatherDependencies(cdgB);
+
 	// In all conflict units...
 	for (auto conflictRootId : affectedCUsA_.keys())
 	{
+		auto representative = affectedCUsA_.value(conflictRootId);
 		// ...that are modified by both branches...
 		if (affectedCUsB_.keys().contains(conflictRootId))
 		{
-			RelationSet relationSet;
 			// ...we take every change from A...
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
-				// ...mark it as conflicting...
+				// ...mark it and depending changes as conflicting...
 				conflictingChanges.insert(changeA);
-				// ...and related to the other changes in this CU
-				relationSet->insert(changeA);
-				transition.insert(findRelationSet(changeA, oldRelationAssignment), relationSet);
-				// ...and take every change from B...
-				for (auto changeB : affectedCUsB_.values(conflictRootId))
-				{
-					// ...mark it conflicting and record the conflict pair.
-					conflictingChanges.insert(changeB);
-					conflictPairs.insert(changeA, changeB);
-					// also record it as being related
-					relationSet->insert(changeA);
-					transition.insert(findRelationSet(changeB, oldRelationAssignment), relationSet);
-				}
+				markDependingAsConflicting(conflictingChanges, changeA, cdgA, moveDependencies,
+													affectedCUsB_.values(conflictRootId), conflictPairs);
+				if (useLinkedChanges_)
+					transition.insert(changeA->nodeId(), true, representative, true);
 			}
+			// ...same with every change from B...
+			for (auto changeB : affectedCUsB_.values(conflictRootId))
+			{
+				conflictingChanges.insert(changeB);
+				markDependingAsConflicting(conflictingChanges, changeB, cdgB, moveDependencies,
+													affectedCUsA_.values(conflictRootId), conflictPairs);
+				if (useLinkedChanges_)
+					transition.insert(changeB->nodeId(), false, representative, true);
+			}
+			// ...and add the cross product of the CUs to the conflict pairs...
+			for (auto changeA : affectedCUsA_.values(conflictRootId))
+				for (auto changeB : affectedCUsB_.values(conflictRootId))
+					conflictPairs.insert(changeA, changeB);
 		}
 		else
 		{
-			RelationSet relationSet;
-			// CU is not in conflict, just record change relations.
+			// CU is not in conflict, just record change links.
 			for (auto changeA : affectedCUsA_.values(conflictRootId))
 			{
-				relationSet->insert(changeA);
-				transition.insert(findRelationSet(changeA, oldRelationAssignment), relationSet);
+				if (useLinkedChanges_)
+					transition.insert(changeA->nodeId(), true, representative);
 			}
 		}
 	}
+
 	// also mark changes of same CU as related in B if the CU is not in conflict
 	for (auto conflictRootId : affectedCUsB_.keys())
-	{
 		if (!affectedCUsA_.keys().contains(conflictRootId))
 		{
-			RelationSet relationSet;
+			auto representative = affectedCUsB_.value(conflictRootId);
 			for (auto changeB : affectedCUsB_.values(conflictRootId))
 			{
-				relationSet->insert(changeB);
-				transition.insert(findRelationSet(changeB, oldRelationAssignment), relationSet);
+				if (useLinkedChanges_)
+					transition.insert(changeB->nodeId(), false, representative);
+			}
+		}
+
+	// down-propagation of child-structure conflicts
+	for (auto changeA : cdgA.changes())
+	{
+		if (changeA->hasFlags(ChangeDescription::Structure))
+		{
+			auto changeB = cdgB.changes().value(changeA->nodeId());
+			if (changeB && changeB->hasFlags(ChangeDescription::Structure))
+			{
+				auto structChangesA = structureChanges(cdgA, changeA);
+				auto structChangesB = structureChanges(cdgB, changeB);
+
+				for (auto childChangeA : structChangesA)
+				{
+					conflictingChanges.insert(childChangeA);
+					markDependingAsConflicting(conflictingChanges, childChangeA, cdgA, moveDependencies,
+														structChangesB.toList(), conflictPairs);
+					if (useLinkedChanges_)
+						transition.insert(childChangeA->nodeId(), true, changeA, true);
+				}
+				for (auto childChangeB : structChangesB)
+				{
+					conflictingChanges.insert(childChangeB);
+					markDependingAsConflicting(conflictingChanges, childChangeB, cdgB, moveDependencies,
+														structChangesA.toList(), conflictPairs);
+					if (useLinkedChanges_)
+						transition.insert(childChangeB->nodeId(), false, changeA, true);
+				}
+				for (auto childChangeA : structChangesA)
+					for (auto childChangeB : structChangesB)
+						conflictPairs.insert(childChangeA, childChangeB);
 			}
 		}
 	}
+
+	checkMoves(cdgA, cdgB, conflictPairs, conflictingChanges);
+	checkMoves(cdgB, cdgA, conflictPairs, conflictingChanges);
+
 	return transition;
 }
 
-IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_ptr<GenericTree>& treeBase,
-																				 ChangeDependencyGraph cdg)
+void ConflictUnitDetector::checkMoves(ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB,
+		ConflictPairs& conflictPairs, QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges)
 {
-	IdToChangeMultiHash affectedCUs;
+	for (auto changeA : cdgA.changes())
+	{
+		if (changeA->type() == ChangeType::Move)
+			checkMove(changeA, cdgB, conflictPairs, conflictingChanges);
+	}
+}
+
+void ConflictUnitDetector::checkMove(std::shared_ptr<ChangeDescription> changeA, ChangeDependencyGraph& cdgB,
+												 ConflictPairs& conflictPairs, QSet<std::shared_ptr<ChangeDescription>>& conflictingChanges)
+{
+	QSet<std::shared_ptr<ChangeDescription>> conflicts;
+	auto ancestor = changeA->nodeB()->parent();
+	while (ancestor)
+	{
+		auto changeB = cdgB.changes().value(ancestor->id());
+		if (changeB && changeB->type() == ChangeType::Move &&
+			 isAncestor(changeB->nodeB(), changeA->nodeId()))
+			conflicts.insert(changeB);
+		ancestor = ancestor->parent();
+	}
+
+	if (!conflicts.isEmpty())
+	{
+		conflictingChanges.insert(changeA);
+		for (auto changeB : conflicts)
+		{
+			conflictingChanges.insert(changeB);
+			conflictPairs.insert(changeA, changeB);
+		}
+	}
+}
+
+bool ConflictUnitDetector::isAncestor(GenericNode* node, Model::NodeIdType ancestorId)
+{
+	while (node)
+	{
+		if (node->id() == ancestorId)
+			return true;
+		node = node->parent();
+	}
+	return false;
+}
+
+ConflictUnitSet ConflictUnitDetector::computeAffectedCUs(ChangeDependencyGraph cdg)
+{
+	ConflictUnitSet affectedCUs;
 	for (auto change : cdg.changes()) {
 		Model::NodeIdType conflictRootA;
 		Model::NodeIdType conflictRootB;
 		switch (change->type()) {
-			case ChangeType::Stationary:
 			case ChangeType::Deletion:
-				conflictRootA = findConflictUnit(treeBase, change->nodeA());
+				conflictRootA = findConflictUnit(change->nodeA());
 				affectedCUs.insert(conflictRootA, change);
 				break;
 			case ChangeType::Insertion:
-				conflictRootB = findConflictUnit(treeBase, change->nodeB());
+				conflictRootB = findConflictUnit(change->nodeB());
 				affectedCUs.insert(conflictRootB, change);
 				break;
 			case ChangeType::Move:
-				conflictRootA = findConflictUnit(treeBase, change->nodeA());
-				conflictRootB = findConflictUnit(treeBase, change->nodeB());
+			case ChangeType::Stationary:
+				conflictRootA = findConflictUnit(change->nodeA());
+				conflictRootB = findConflictUnit(change->nodeB());
 				affectedCUs.insert(conflictRootA, change);
 				affectedCUs.insert(conflictRootB, change);
 				break;
@@ -129,25 +299,71 @@ IdToChangeMultiHash ConflictUnitDetector::computeAffectedCUs(const std::unique_p
 	return affectedCUs;
 }
 
-Model::NodeIdType ConflictUnitDetector::findConflictUnit(const std::unique_ptr<GenericTree>& treeBase,
-											  const GenericNode* node)
+Model::NodeIdType ConflictUnitDetector::findConflictUnit(const GenericNode* node)
 {
-	// TODO load node, need new functionality from Mitko
-	GenericNode* inBase = nullptr; // = find in Base
-	while (inBase == nullptr || !node->parentId().isNull())
+	// find closest ancestor of node that exists in base
+	Q_ASSERT(node);
+	if (node->parentId().isNull())
 	{
-		node = node->parent(); // TODO load node from HEAD
-		inBase = treeBase->find(node);
+		// no ancestor in base. branch created new root.
+		return Model::NodeIdType();
 	}
-	if (inBase)
+
+	while (!conflictTypes_.contains(node->type()) && !node->parentId().isNull())
 	{
-		while (!conflictTypes_.contains(inBase->type())) inBase = inBase->parent(); // TODO load from Base
-		return inBase->id();
+		Q_ASSERT(!node->parentId().isNull());
+		node = node->parent();
 	}
-	else
+	return node->id();
+}
+
+void ConflictUnitDetector::markDependingAsConflicting(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+																		std::shared_ptr<ChangeDescription> change, ChangeDependencyGraph& cdg,
+																		QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>>& moveDependencies,
+																		QList<std::shared_ptr<ChangeDescription>> conflictingWithChange, ConflictPairs& conflictPairs)
+{
+	for (auto depending : cdg.getDependendingChanges(change))
 	{
-		// no ancestor in base. branch created new root. return 0.
-		return QUuid(0);
+		conflictingChanges.insert(depending);
+		markDependingAsConflicting(conflictingChanges, depending, cdg, moveDependencies,
+											conflictingWithChange, conflictPairs);
+	}
+	for (auto depending : moveDependencies.values(change))
+	{
+		conflictingChanges.insert(depending);
+		for (auto conflict : conflictingWithChange)
+			conflictPairs.insert(depending, conflict);
+		markDependingAsConflicting(conflictingChanges, depending, cdg, moveDependencies,
+											conflictingWithChange, conflictPairs);
+	}
+
+	// Handle label dependencies
+	if (change->type() == ChangeType::Deletion ||
+		 change->type() == ChangeType::Move ||
+		 change->hasFlags(ChangeDescription::Label))
+	{
+		auto parentId = change->nodeA()->parentId();
+		auto parentChange = cdg.changes().value(parentId); // must exist because structFlag
+		if (parentChange->type() != ChangeType::Deletion)
+		{
+			auto oldParentInBranchVersion = parentChange->nodeB();
+			// child is in the branch tree and has the same label the changed node had in the base tree.
+			auto child = oldParentInBranchVersion->child(change->nodeA()->label());
+			if (child)
+			{
+				auto childChange = cdg.changes().value(child->id());
+				if (childChange && !conflictingChanges.contains(childChange) && childChange->type() != ChangeType::Deletion)
+				{
+					Q_ASSERT(childChange->nodeB()->label() == change->nodeA()->label());
+					Q_ASSERT(change->nodeA()->parentId() == childChange->nodeB()->parentId());
+					conflictingChanges.insert(childChange);
+					for (auto conflict : conflictingWithChange)
+						conflictPairs.insert(childChange, conflict);
+					markDependingAsConflicting(conflictingChanges, childChange, cdg, moveDependencies,
+														conflictingWithChange, conflictPairs);
+				}
+			}
+		}
 	}
 }
 

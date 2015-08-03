@@ -35,9 +35,12 @@
 #include "handlers/HSceneHandlerItem.h"
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
+#include "handlers/HInfoNode.h"
 
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
+#include "vis/VViewSwitcherEntry.h"
+#include "vis/Menu.h"
 #include "actions/ActionPrompt.h"
 
 #include "events/DetectMainSceneActivated.h"
@@ -57,6 +60,7 @@
 #include "VisualizationBase/src/items/VBoolean.h"
 #include "VisualizationBase/src/items/VReference.h"
 #include "VisualizationBase/src/items/RootItem.h"
+#include "VisualizationBase/src/items/VInfoNode.h"
 #include "VisualizationBase/src/icons/SVGIcon.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
@@ -85,6 +89,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::VList::setDefaultClassHandler(HList::instance());
 	Visualization::RootItem::setDefaultClassHandler(HRootItem::instance());
 	Visualization::PositionLayout::setDefaultClassHandler(HPositionLayout::instance());
+	Visualization::VInfoNode::setDefaultClassHandler(HInfoNode::instance());
 	CommandPrompt::setDefaultClassHandler(HCommandPrompt::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
 

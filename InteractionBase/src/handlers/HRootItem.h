@@ -35,7 +35,7 @@ namespace Interaction {
 class INTERACTIONBASE_API HRootItem : public GenericHandler
 {
 	public:
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 
 		// Mouse events for moving items around the scene
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,20 +26,28 @@
 
 #pragma once
 
-#include "commands/UndoCommand.h"
+#include "../oomodel_api.h"
 
-namespace Model {
+#include "Declaration.h"
+#include "MetaBinding.h"
 
-class AddModifiedNode: public UndoCommand
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MetaDefinition)
+
+namespace OOModel {
+
+class OOMODEL_API MetaDefinition : public Super<Declaration>
 {
-	private:
-		QSet<Node*>& modifiedTargets;
-		Node* target;
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaDefinition)
+
+	ATTRIBUTE(Model::TypedList<MetaBinding>, MetaBindings, setMetaBindings)
+	ATTRIBUTE(OOModel::Declaration, context, setContext)
 
 	public:
-		AddModifiedNode(QSet<Node*>& modifiedTargets, Node* target);
-		virtual void redo();
-		virtual void undo();
+		MetaDefinition(const QString& name);
+
+		virtual SymbolTypes symbolType() const override;
 };
 
 }

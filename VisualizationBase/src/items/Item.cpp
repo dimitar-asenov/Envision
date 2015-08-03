@@ -34,6 +34,7 @@
 #include "../renderer/ModelRenderer.h"
 #include "../views/MainView.h"
 #include "VisualizationAddOn.h"
+#include "ViewItemManager.h"
 
 #include "../cursor/Cursor.h"
 
@@ -382,6 +383,14 @@ void Item::setRevision(int)
 {
 }
 
+Item* Item::findAncestorWithNode()
+{
+	auto result = this;
+	while (result && !result->hasNode())
+		result = result->parent();
+	return result;
+}
+
 bool Item::itemOrChildHasFocus() const
 {
 	return QGraphicsItem::scene()->focusItem() == this
@@ -410,6 +419,9 @@ void Item::removeFromScene()
 
 		// Mark this item as not needing updates
 		scene()->setItemIsSensitiveToScale(this, false);
+
+		//Notify the view manager about removal of the item
+		scene()->viewItems()->cleanupRemovedItem(this);
 
 		//Finally remove this item from the scene
 		if (parent()) scene()->removeItem(this);
@@ -701,17 +713,26 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 Item* Item::findVisualizationOf(Model::Node* node)
 {
 	if (this->node() == node) return this;
+	auto allVis = findAllVisualizationsOf(node);
+	if (allVis.size() > 0) return allVis[0];
+	else return nullptr;
+}
+
+QList<Item*> Item::findAllVisualizationsOf(Model::Node* node)
+{
+	QList<Item*> result;
+	if (this->node() == node) result.append(this);
 
 	auto it = nodeItemsMap().find(node);
 	auto end = Item::nodeItemsMap().end();
 	while (it != end && it.key() == node)
 	{
 		auto item = it.value();
-		if (isAncestorOf(item)) return item;
+		if (isAncestorOf(item)) result.append(item);
 		++it;
 	}
 
-	return nullptr;
+	return result;
 }
 
 bool Item::sceneEvent(QEvent *event)

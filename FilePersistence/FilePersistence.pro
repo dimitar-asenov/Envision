@@ -1,5 +1,6 @@
 TARGET = filepersistence
 include(../Core/common_plugin.pri)
+#QMAKE_CXXFLAGS += -Wshadow
 QMAKE_RESOURCE_FLAGS += -no-compress
 DEFINES += FILEPERSISTENCE_LIBRARY
 win32:LIBS += -llogger \
@@ -11,6 +12,7 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/simple/Parser.h \
     src/simple/GenericNode.h \
     src/simple/SimpleTextFileStore.h \
+    src/simple/PiecewiseLoader.h \
     src/FilePersistenceException.h \
     src/SystemClipboard.h \
     src/XMLModel.h \
@@ -29,12 +31,16 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/version_control/ConflictUnitDetector.h \
     src/version_control/ListMergeComponent.h \
     src/version_control/ConflictPipelineComponent.h \
-    src/version_control/Utils.h
+    src/version_control/LinkedChangesTransition.h \
+    src/version_control/GitPiecewiseLoader.h \
+    src/version_control/LinkedChangesSet.h \
+    src/version_control/Diff3Parse.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
     src/simple/GenericNode.cpp \
     src/simple/SimpleTextFileStore.cpp \
+    src/simple/PiecewiseLoader.cpp \
     test/TypedListTests.cpp \
     test/ClipboardTests.cpp \
     src/XMLModel.cpp \
@@ -56,8 +62,11 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/version_control/ConflictPairs.cpp \
     src/version_control/ConflictUnitDetector.cpp \
     src/version_control/ListMergeComponent.cpp \
-    src/version_control/ConflictPipelineComponent.cpp \
-    src/version_control/Utils.cpp
+    test/VersionControlMergetests.cpp \
+    src/version_control/LinkedChangesTransition.cpp \
+    src/version_control/GitPiecewiseLoader.cpp \
+    src/version_control/LinkedChangesSet.cpp \
+    src/version_control/Diff3Parse.cpp
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2

@@ -49,6 +49,8 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		virtual QList<Visualization::Item*> childItems() const override;
 		void updateSize(QSize size);
 
+		void setContent(const QString& content);
+
 		QGraphicsWebView* browser() const;
 
 	protected:

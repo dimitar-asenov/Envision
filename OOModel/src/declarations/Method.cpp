@@ -29,6 +29,8 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 #include "../types/Type.h"
+#include "expressions/MethodCallExpression.h"
+
 DEFINE_TYPED_LIST(OOModel::Method)
 
 namespace OOModel {
@@ -183,6 +185,44 @@ bool Method::overrides(Method* other)
 	}
 
 	return false;
+}
+
+QSet<Method*> Method::callees()
+{
+	QSet<Method*> result;
+	QList<Model::Node*> toCheck;
+	toCheck.append(this);
+	while (!toCheck.isEmpty())
+	{
+		auto current = toCheck.takeLast();
+		if (auto call = DCast<MethodCallExpression>(current))
+			if (call->methodDefinition())
+				result << call->methodDefinition();
+		toCheck.append(current->children());
+	}
+	return result;
+}
+
+QSet<Method*> Method::callers()
+{
+	auto top = root();
+	//Find all the places where this method is called
+	QSet<Method*> result;
+	Method* current{};
+	QList<Model::Node*> toCheck;
+	toCheck.append(top);
+	while (!toCheck.isEmpty())
+	{
+		auto check = toCheck.takeLast();
+		//Set the current method whenever we enter a new method
+		if (auto method = DCast<Method>(check))
+			current = method;
+		if (auto call = DCast<MethodCallExpression>(check))
+			if (call->methodDefinition() == this && current)
+				result << current;
+		toCheck.append(check->children());
+	}
+	return result;
 }
 
 }

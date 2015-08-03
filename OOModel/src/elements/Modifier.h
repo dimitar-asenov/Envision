@@ -67,8 +67,8 @@ class OOMODEL_API Modifier :  public Super<Model::Node>
 		void set(Modifiers modifiers, bool enable = true);
 		void clear();
 
-		virtual void save(Model::PersistentStore &store) const;
-		virtual void load(Model::PersistentStore &store);
+		virtual void save(Model::PersistentStore &store) const override;
+		virtual void load(Model::PersistentStore &store) override;
 
 	private:
 		Modifiers modifiers_{0};

@@ -51,7 +51,7 @@ class CUSTOMMETHODCALL_API SumMethodVis
 		virtual ~SumMethodVis();
 
 	protected:
-		void determineChildren();
+		void determineChildren() override;
 
 	private:
 		Visualization::Static* name_;

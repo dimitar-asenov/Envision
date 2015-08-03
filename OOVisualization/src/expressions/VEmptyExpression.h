@@ -45,8 +45,8 @@ OOModel::EmptyExpression>>
 		virtual ~VEmptyExpression();
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Static* vis_;

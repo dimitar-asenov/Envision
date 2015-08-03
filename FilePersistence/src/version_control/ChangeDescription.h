@@ -35,8 +35,19 @@ enum class ChangeType {Unclassified, Insertion, Deletion, Move, Stationary};
 class FILEPERSISTENCE_API ChangeDescription
 {
 	public:
-		ChangeDescription(const GenericNode* nodeA, const GenericNode* nodeB);
-		ChangeDescription(Model::NodeIdType id, ChangeType type);
+		ChangeDescription(GenericNode* nodeA, GenericNode* nodeB);
+		~ChangeDescription();
+
+		QString summary() const;
+
+		static std::shared_ptr<ChangeDescription> newStructChange(
+				Model::NodeIdType nodeId, std::shared_ptr<ChangeDescription> causingChange,
+				std::shared_ptr<GenericTree> treeA, std::shared_ptr<GenericTree> treeB);
+
+		/**
+		 * If \a force is true then no check for ID uniqueness is performed.
+		 */
+		std::shared_ptr<ChangeDescription> copy(std::shared_ptr<GenericTree>& tree, bool force = false) const;
 
 		enum UpdateType
 		{
@@ -48,41 +59,59 @@ class FILEPERSISTENCE_API ChangeDescription
 		};
 		Q_DECLARE_FLAGS(UpdateFlags, UpdateType)
 
+
+		void computeFlags();
 		bool hasFlags(const UpdateFlags flags) const;
 
 		void print() const;
 
 		void setStructureChangeFlag(bool value);
 
-		Model::NodeIdType id() const;
+		Model::NodeIdType nodeId() const;
 
 		const ChangeType& type() const;
 
 		const UpdateFlags flags() const;
 
-		const GenericNode* nodeB() const;
-		const GenericNode* nodeA() const;
+		GenericNode* nodeB() const;
+		GenericNode* nodeA() const;
 
-		bool isModifying() const;
+		/**
+		 * This is only used for debugging. Do NOT use for other things.
+		 */
+		bool debugHasNodes();
+
+		/**
+		 * Returns \a true for changes that are stationary and have no flags set.
+		 */
+		bool isFake() const;
 		bool onlyStructureChange() const;
 		bool onlyLabelChange() const;
 
 	private:
-		void setFlags();
+		ChangeDescription();
 
-		Model::NodeIdType id_;
+		Model::NodeIdType nodeId_{};
 
 		ChangeType type_{};
 
-		UpdateFlags updateFlags_;
+		UpdateFlags updateFlags_{};
 
-		const GenericNode* nodeA_{};
-		const GenericNode* nodeB_{};
+		bool pointsToChildA_;
+		bool pointsToChildB_;
+
+		// If pointsToChildA_ is true, this is a pointer to a node with parent whose ID is nodeId_.
+		// Otherwise, this points to a node with ID = nodeId_. This is a lazy loading mechanic.
+		GenericNode* nodeA_{};
+		GenericNode* nodeB_{};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChangeDescription::UpdateFlags)
 
-inline Model::NodeIdType ChangeDescription::id() const { return id_; }
+inline ChangeDescription::ChangeDescription() {}
+inline ChangeDescription::~ChangeDescription() {}
+
+inline Model::NodeIdType ChangeDescription::nodeId() const { return nodeId_; }
 
 inline bool ChangeDescription::hasFlags(const UpdateFlags flags) const { return (updateFlags_ & flags) == flags; }
 
@@ -90,15 +119,9 @@ inline const ChangeType& ChangeDescription::type() const { return type_; }
 
 inline const ChangeDescription::UpdateFlags ChangeDescription::flags() const { return updateFlags_; }
 
-inline const GenericNode* ChangeDescription::nodeB() const { return nodeB_; }
-inline const GenericNode* ChangeDescription::nodeA() const { return nodeA_; }
-
-/**
- * filters false changes that are stationary and have no flags set.
- */
-inline bool ChangeDescription::isModifying() const
+inline bool ChangeDescription::isFake() const
 {
-	return !(type_ == ChangeType::Stationary && updateFlags_ == ChangeDescription::NoFlags);
+	return type_ == ChangeType::Stationary && updateFlags_ == ChangeDescription::NoFlags;
 }
 
 inline bool ChangeDescription::onlyStructureChange() const {
@@ -117,5 +140,7 @@ inline uint qHash(const std::shared_ptr<const ChangeDescription> change, uint se
 {
 	return ::qHash(change.get(), seed);
 }
+
+inline bool ChangeDescription::debugHasNodes() { return nodeA_ || nodeB_; }
 
 } /* namespace FilePersistence */

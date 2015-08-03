@@ -52,8 +52,8 @@ class OOVISUALIZATION_API VPrimitiveType
 		Visualization::Static* item() const;
 
 	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
+		void determineChildren() override;
+		void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		Visualization::Static* vis_;

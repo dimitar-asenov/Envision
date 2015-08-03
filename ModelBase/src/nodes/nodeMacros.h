@@ -53,6 +53,7 @@
 	public:																																				\
 		className(::Model::Node* parent = nullptr);																							\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially);									\
+		className* clone() const override;																										\
 		static className* createDefaultInstance(Node* parent = nullptr);																\
 
 /*********************************************************************************************************************/
@@ -94,7 +95,7 @@
 		}																																					\
 																																							\
 	protected:																																			\
-		virtual ::Model::AttributeChain& topLevelMeta();																					\
+		virtual ::Model::AttributeChain& topLevelMeta() override;																		\
 																																							\
 	private:																																				\
 		static QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& attributesToRegisterAtInitialization_();	\
@@ -161,7 +162,9 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node* parent) : Super(parent) {}																		\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
-		: Super (parent, store, loadPartially) {}
+		: Super (parent, store, loadPartially) {}																								\
+																																							\
+	className* className::clone() const { return new className(*this); }
 /*********************************************************************************************************************/
 
 /**
@@ -180,6 +183,8 @@ template class Model::TypedList<className>;																									\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool loadPartially)						\
 		: Super (parent, store, loadPartially, className::getMetaData()) {}															\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
+	className* className::clone() const { return new className(*this); }																\
+																																							\
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
 		: Super (parent, metaData) {}																												\
 																																							\

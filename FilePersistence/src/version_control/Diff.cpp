@@ -42,6 +42,7 @@ Diff::Diff(QList<GenericNode*>& nodesA, std::shared_ptr<GenericTree> treeA,
 	treeB_ = treeB;
 
 	IdToGenericNodeHash nodesAHash;
+
 	for (auto node : nodesA)
 		nodesAHash.insertMulti(node->id(), node);
 
@@ -62,7 +63,7 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type) const
 	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == type)
-			changesOfType.insert(change->id(), change);
+			changesOfType.insert(change->nodeId(), change);
 	}
 	return changesOfType;
 }
@@ -73,7 +74,7 @@ IdToChangeDescriptionHash Diff::changes(ChangeType type, ChangeDescription::Upda
 	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == type && change->hasFlags(flags))
-			changesOfType.insert(change->id(), change);
+			changesOfType.insert(change->nodeId(), change);
 	}
 	return changesOfType;
 }
@@ -102,7 +103,7 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 	}
 	/* Intermediate state 2
 	 * See report for details.
-	 * TODO: add link to report
+	 * TODO add link to report
 	 */
 	for (auto id : onlyInNodesB)
 	{
@@ -110,59 +111,45 @@ void Diff::computeChanges(IdToGenericNodeHash& nodesA, IdToGenericNodeHash& node
 		auto change = std::make_shared<ChangeDescription>(nullptr, iter.value());
 		changeDescriptions_.insert(id, change);
 	}
-	// Intermediate state 3
-	QSet<Model::NodeIdType> nonModifyingChanges;
-	for (auto change : changeDescriptions_)
-	if (!change->isModifying()) nonModifyingChanges.insert(change->id());
-	for (auto id : nonModifyingChanges) changeDescriptions_.remove(id);
+	for (auto change : changeDescriptions_.values())
+		if (change->isFake())
+			changeDescriptions_.remove(change->nodeId());
 }
 
-/**
- * Sets \a structFlag for appropriate changes and may create new changes.
- */
 void Diff::computeStructChanges()
 {
 	for (auto change : changeDescriptions_.values())
 	{
 		if (change->type() == ChangeType::Insertion || change->type() == ChangeType::Move)
-			setStructureFlagForId(change->nodeB()->parentId());
-		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move)
-			setStructureFlagForId(change->nodeA()->parentId());
-		if (change->hasFlags(ChangeDescription::Label))
-			setStructureFlagForId(change->nodeA()->parentId());
+			setStructureFlagForId(change->nodeB()->parentId(), change);
+		if (change->type() == ChangeType::Deletion || change->type() == ChangeType::Move
+			 || change->hasFlags(ChangeDescription::Label))
+			setStructureFlagForId(change->nodeA()->parentId(), change);
 	}
 }
 
-/**
- * If a change for \a id already exists, its \a structFlag is set,
- * otherwise a new change with that flag is created.
- */
-void Diff::setStructureFlagForId(const Model::NodeIdType id)
+void Diff::setStructureFlagForId(Model::NodeIdType id, std::shared_ptr<ChangeDescription> causingChange)
 {
 	if (!changeDescriptions_.contains(id))
 	{
-		auto change = std::make_shared<ChangeDescription>(id, ChangeType::Stationary);
+		auto change = ChangeDescription::newStructChange(id, causingChange, treeA_, treeB_);
 		changeDescriptions_.insert(id, change);
 		change->setStructureChangeFlag(true);
-		// TODO Problem? These changes have no node, just an id.
 	}
 	else
 	{
-		// ugly but otherwise, we would have to remove the change, clone it, set flag and reinsert it.
-		((ChangeDescription*) changeDescriptions_.value(id).get())->setStructureChangeFlag(true);
+		changeDescriptions_.value(id).get()->setStructureChangeFlag(true);
 	}
 
 	Q_ASSERT(changeDescriptions_.find(id).value()->hasFlags(ChangeDescription::Structure));
+	Q_ASSERT(changeDescriptions_.value(id)->debugHasNodes());
 }
 
-/**
- * removes the nodes that link PersistentUnits from \a nodes.
- */
 void Diff::filterPersistenceUnits(IdToGenericNodeHash& nodes)
 {
 	for (auto node : nodes.values())
 	{
-		if (node->type() == GenericNode::persistentUnitType)
+		if (node->type() == GenericNode::PERSISTENT_UNIT_TYPE)
 			nodes.remove(node->id(), node);
 	}
 }

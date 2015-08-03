@@ -44,12 +44,12 @@ class INTERACTIONBASE_API TextAndDescription : public Super<Visualization::Layou
 		TextAndDescription(const QString& text, const QString& description, const StyleType* style = itemStyles().get());
 		virtual ~TextAndDescription();
 
-		virtual bool sizeDependsOnParent() const;
+		virtual bool sizeDependsOnParent() const override;
 
 		void setContents(const QString& text, const QString& description);
 
 	protected:
-		virtual void determineChildren();
+		virtual void determineChildren() override;
 
 	private:
 		Visualization::Text* textVis_;

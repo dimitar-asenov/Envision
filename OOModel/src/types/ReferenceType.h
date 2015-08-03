@@ -37,7 +37,7 @@ class OOMODEL_API ReferenceType : public Type {
 		ReferenceType(const ReferenceType& other);
 		virtual ~ReferenceType();
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
 		virtual ReferenceType* clone() const override;
 
 		const Type* baseType() const;

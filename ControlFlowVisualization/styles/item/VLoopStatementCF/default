@@ -8,12 +8,7 @@
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
-				</color>
+				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
@@ -24,12 +19,7 @@
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>200</red>
-					<green>200</green>
-					<blue>200</blue>
-				</color>
+				<color>#c8c8c8</color>
 			</backgroundBrush>
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>

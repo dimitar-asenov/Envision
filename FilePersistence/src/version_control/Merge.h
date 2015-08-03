@@ -35,7 +35,7 @@ namespace FilePersistence {
 
 using ChangeToChangeHash = QMultiHash<const std::shared_ptr<ChangeDescription>,
 												  const std::shared_ptr<ChangeDescription>>;
-using RelationAssignmentTrace = QList<RelationAssignmentTransition>;
+using LinkedChangesTransitionTrace = QList<LinkedChangesTransition>;
 
 class GitRepository;
 
@@ -45,48 +45,55 @@ class FILEPERSISTENCE_API Merge
 		~Merge();
 
 		enum class Kind {Unclassified, AlreadyUpToDate, FastForward, TrueMerge};
-		Kind kind() const;
+		enum class Stage {NotInitialized, FoundMergeBase, Classified, AutoMerged,
+								ManualMerged, BuiltMergedTree, WroteToWorkDir, WroteToIndex, Committed};
 
-		enum class Stage {NoMerge, Initialized, Classified, ConflictsDetected, ReadyToCommit, Complete};
-		Stage stage() const;
-
-		enum class Error {NoError, NoMergeBase};
-		Error error() const;
-
-		bool abort();
+		bool hasConflicts() const;
+		const QSet<std::shared_ptr<ChangeDescription>> getConflicts() const;
+		std::shared_ptr<GenericTree> mergedTree();
 		bool commit(const Signature& author, const Signature& committer, const QString& message);
-
-		// deprecated, will be removed
-		const std::unique_ptr<GenericTree> mergeTree();
+		const bool USE_LINKED_SETS = true;
+		// TOOD output conflicts
 
 	private:
 		friend class GitRepository;
 
+		/**
+		 * Merges \a revision into current HEAD.
+		 */
 		Merge(QString revision, bool fastForward, GitRepository* repository);
 
-		void classifyKind();
+		/**
+		 * Constructs components and sets special node types. This will eventually be replaced by a mechanism
+		 * that loads these from plugins and the model.
+		 */
+		void initializeComponents();
 
+		/**
+		 * If the merge is non-trivial, this is where the magic starts.
+		 */
 		void performTrueMerge();
 
-		static QList<Model::NodeIdType> genericNodeListToNodeIdList(const QList<GenericNode*>& list);
+		void applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
+										const ChangeDependencyGraph& cdg);
 
-		enum class ListType {NoList, OrderedList, UnorderedList};
-		static ListType getListType(const GenericNode* node);
-		static bool isListType(const GenericNode* node);
+		/**
+		 * Computes transitive closure of dependencies for \a change.
+		 */
+		void addDependencies(QList<std::shared_ptr<ChangeDescription>>& queue,
+									const std::shared_ptr<ChangeDescription>& change,
+									const ChangeDependencyGraph& cdg);
 
-		Kind kind_{};
-		Stage stage_{};
-		Error error_{};
+		Stage stage_ = Stage::NotInitialized;
 
 		// GenericTrees
-		std::unique_ptr<GenericTree> treeBase_;
-		std::unique_ptr<GenericTree> treeB_;
-		std::unique_ptr<GenericTree> treeA_;
-
-		bool fastForward_{};
+		std::shared_ptr<GenericTree> treeA_;
+		std::shared_ptr<GenericTree> treeB_;
+		std::shared_ptr<GenericTree> treeBase_;
+		std::shared_ptr<GenericTree> treeMerged_;
 
 		// Revisions
-		QString headCommitId;
+		QString headCommitId_;
 		QString revisionCommitId_;
 		QString baseCommitId_;
 
@@ -94,27 +101,35 @@ class FILEPERSISTENCE_API Merge
 
 		/**
 		 * This component is executed first, before any pipeline component.
-		 * It establishes the pipeline invariant but may not depend on it holding beforehand.
+		 * It establishes the pipeline invariant but must not depend on it holding beforehand.
 		 */
 		std::shared_ptr<ConflictPipelineComponent> pipelineInitializer_;
+
 		/**
 		 * Components are executed in the order they appear in this list.
 		 */
 		QList<std::shared_ptr<ConflictPipelineComponent>> conflictPipeline_;
 
 		/**
-		 * changes in this set cannot be applied safely.
+		 * Changes in this set cannot be applied safely.
+		 * Every change in the set should either be matched with a conflicting change in \a conflictingChanges_
+		 * or be depending on a change that is in conflict. This is not enforced, however.
 		 */
-		QSet<std::shared_ptr<const ChangeDescription>> conflictingChanges_;
+		QSet<std::shared_ptr<ChangeDescription>> conflictingChanges_;
 
 		/**
-		 * change1 is mapped to change2 iff change1 and change2 cannot both be applied safely.
+		 * \a change1 is mapped to \a change2 exactly if \a change1 and \a change2 cannot both be applied safely.
 		 */
 		ConflictPairs conflictPairs_;
+
+
+		QSet<QString> conflictTypes_;
+		QSet<QString> listTypes_;
+		QSet<QString> unorderedTypes_;
 };
 
-inline Merge::Kind Merge::kind() const { return kind_; }
-inline Merge::Stage Merge::stage() const { return stage_; }
-inline Merge::Error Merge::error() const { return error_; }
+inline bool Merge::hasConflicts() const { return !conflictingChanges_.isEmpty(); }
+
+inline const QSet<std::shared_ptr<ChangeDescription>> Merge::getConflicts() const { return conflictingChanges_; }
 
 } /* namespace FilePersistence */

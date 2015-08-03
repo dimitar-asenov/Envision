@@ -30,20 +30,23 @@
 
 namespace FilePersistence {
 
+/**
+ * This is a simple wrapper around a MultiHash to ensure consistency.
+ */
 class ConflictPairs
 {
 	public:
 		ConflictPairs();
 		~ConflictPairs();
-		QList<std::shared_ptr<const ChangeDescription>> values(std::shared_ptr<const ChangeDescription>& change) const;
-		void insert(std::shared_ptr<const ChangeDescription>& changeA, std::shared_ptr<const ChangeDescription>& changeB);
-		void remove(std::shared_ptr<const ChangeDescription>& changeA, std::shared_ptr<const ChangeDescription>& changeB);
+		QList<std::shared_ptr<ChangeDescription>> values(std::shared_ptr<ChangeDescription>& change) const;
+		void insert(std::shared_ptr<ChangeDescription>& changeA, std::shared_ptr<ChangeDescription>& changeB);
+		void remove(std::shared_ptr<ChangeDescription>& changeA, std::shared_ptr<ChangeDescription>& changeB);
 	private:
-		QMultiHash<std::shared_ptr<const ChangeDescription>, std::shared_ptr<const ChangeDescription>> pairs_;
+		QMultiHash<std::shared_ptr<ChangeDescription>, std::shared_ptr<ChangeDescription>> pairs_;
 };
 
-inline QList<std::shared_ptr<const ChangeDescription>> ConflictPairs::values(
-		std::shared_ptr<const ChangeDescription>& change) const
+inline QList<std::shared_ptr<ChangeDescription>> ConflictPairs::values(
+		std::shared_ptr<ChangeDescription>& change) const
 {
 	return pairs_.values(change);
 }

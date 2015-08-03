@@ -169,7 +169,7 @@ bool JavaDebugger::trackVariable(Visualization::Item* target, QKeyEvent* event)
 			removeObserverOverlaysAt(node, target);
 			// remove all observers at the references:
 			it = nodeObservedBy_.begin();
-			while (it != nodeObservedBy_.end())
+			while (it != nodeObservedBy_.end() && it.key() == node )
 			{
 				if (it.value() == ptr)
 				{

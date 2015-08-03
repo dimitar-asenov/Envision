@@ -4,23 +4,13 @@
 		Box
 		<backgroundBrush>
 			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>220</red>
-				<green>220</green>
-				<blue>200</blue>
-			</color>
+			<color>#dcdcc8</color>
 		</backgroundBrush>
 		<cornerType>0</cornerType>
 		<cornerRadius>3</cornerRadius>
 		<outline>
 			<width>1</width>
-			<color>
-				<alpha>255</alpha>
-				<red>160</red>
-				<green>160</green>
-				<blue>160</blue>
-			</color>
+			<color>#a0a0a0</color>
 		</outline>
 	</shape>
 
@@ -29,23 +19,13 @@
 			Box
 			<backgroundBrush>
 				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
-				</color>
+				<color>#ffffff</color>
 			</backgroundBrush>
 			<cornerType>0</cornerType>
 			<cornerRadius>2</cornerRadius>
 			<outline>
 				<width>2</width>
-				<color>
-					<alpha>255</alpha>
-					<red>0</red>
-					<green>0</green>
-					<blue>0</blue>
-				</color>
+				<color>#000000</color>
 			</outline>
 		</shape>
 	</editList>

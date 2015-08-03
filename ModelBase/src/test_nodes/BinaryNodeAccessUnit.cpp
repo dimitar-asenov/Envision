@@ -34,6 +34,8 @@ namespace TestNodes {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit)
 
+BinaryNodeAccessUnit::BinaryNodeAccessUnit(const BinaryNodeAccessUnit&) : BinaryNodeAccessUnit{nullptr} {}
+
 Model::NodeReadWriteLock* BinaryNodeAccessUnit::accessLock() const
 {
 	// TODO const cast madness. What is the best way to use these?
