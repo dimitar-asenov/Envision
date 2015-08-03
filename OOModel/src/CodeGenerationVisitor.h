@@ -38,7 +38,7 @@ namespace OOModel {
 class ReferenceExpression;
 class MetaCallExpression;
 
-class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void> {
+class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor> {
 	private:
 		QMap<QString, Model::Node*> args_;
 
