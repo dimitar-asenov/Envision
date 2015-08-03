@@ -50,9 +50,11 @@ void CodeGenerationVisitor::visitChildren(Model::Node* n)
 
 void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, OOModel::ReferenceExpression* n)
 {
-	if (!n->name().contains("##"))
+	auto input = n->name();
+
+	if (!input.contains("##"))
 	{
-		if (auto argument = v->args_[n->name()])
+		if (auto argument = v->args_[input])
 		{
 			auto p = n->parent();
 			p->beginModification("change node in code generation visitor");
@@ -62,7 +64,7 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 	}
 	else
 	{
-		QStringList parts = n->name().split("##");
+		QStringList parts = input.split("##");
 
 		for (auto i = 0; i < parts.size(); i++)
 		{
