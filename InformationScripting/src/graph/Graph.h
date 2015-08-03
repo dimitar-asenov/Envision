@@ -111,6 +111,15 @@ class Graph
 		QList<InformationEdge*> edges_;
 
 		std::size_t hashValueOf(const InformationNode* n) const;
+		/**
+		 * Checks if there is a node in the graph with the same hash value as \a n,
+		 * if there is the pointer to this node is returned, otherwise a null pointer is returned.
+		 */
+		InformationNode* findNode(const InformationNode* n) const;
+		/**
+		 * Merges the information of 2 nodes into the node \a into.
+		 */
+		void mergeNodes(InformationNode* into, InformationNode* from);
 
 };
 

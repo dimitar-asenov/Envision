@@ -43,19 +43,16 @@ InformationNode* Graph::add(InformationNode* node)
 {
 	Q_ASSERT(!nodeHashFunctions_.empty());
 
-	InformationNode* existingNode = nullptr;
-	auto hash = hashValueOf(node);
-	auto it = nodes_.find(hash);
-	if (it != nodes_.end()) existingNode = it.value();
-	if (existingNode)
+	InformationNode* existingNode = findNode(node);
+
+	if (existingNode && existingNode != node)
 	{
-		// TODO merge existingNode and node
+		mergeNodes(existingNode, node);
 		SAFE_DELETE(node);
-		Q_ASSERT(false);
 	}
 	else
 	{
-		nodes_[hash] = node;
+		nodes_[hashValueOf(node)] = node;
 		existingNode = node;
 	}
 	return existingNode;
@@ -63,7 +60,9 @@ InformationNode* Graph::add(InformationNode* node)
 
 InformationEdge* Graph::addDirectedEdge(InformationNode* from, InformationNode* to, const QString& name)
 {
-	// TODO what if from/to is not yet in the graph?
+	// We only allow existing nodes:
+	Q_ASSERT(from == findNode(from));
+	Q_ASSERT(to == findNode(to));
 	for (auto edge : edges_)
 	{
 		if (edge->from() == from && edge->to() == to && edge->name() == name)
@@ -81,7 +80,9 @@ InformationEdge* Graph::addDirectedEdge(InformationNode* from, InformationNode* 
 
 InformationEdge* Graph::addEdge(InformationNode* a, InformationNode* b, const QString& name)
 {
-	// TODO what if from/to is not yet in the graph?
+	// We only allow existing nodes:
+	Q_ASSERT(a == findNode(a));
+	Q_ASSERT(b == findNode(b));
 	for (auto edge : edges_)
 	{
 		if ((edge->from() == a || edge->from() == b) && (edge->to() == b || edge->to() == a) && edge->name() == name)
@@ -144,6 +145,26 @@ std::size_t Graph::hashValueOf(const InformationNode* n) const
 	}
 	// There should be at least one function registered for a certain node
 	Q_ASSERT(false);
+}
+
+InformationNode*Graph::findNode(const InformationNode* n) const
+{
+	auto hash = hashValueOf(n);
+	auto it = nodes_.find(hash);
+	if (it != nodes_.end()) return it.value();
+	return nullptr;
+}
+
+void Graph::mergeNodes(InformationNode* into, InformationNode* from)
+{
+	for (auto namedProperty : *from)
+	{
+		QString name = namedProperty.first;
+		if (!into->contains(name))
+			into->insert(name, namedProperty.second);
+		else
+			Q_ASSERT((*from)[name] == namedProperty.second);
+	}
 }
 
 } /* namespace InformationScripting */

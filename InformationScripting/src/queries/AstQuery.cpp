@@ -98,7 +98,7 @@ Graph* AstQuery::baseClassesQuery(QList<Graph*>&)
 		if (!parentClass) parentClass = target_->firstAncestorOfType<OOModel::Class>();
 
 		auto classNode = new InformationNode({{"ast", parentClass}});
-		g->add(classNode);
+		classNode = g->add(classNode);
 
 		addBaseEdgesFor(parentClass, classNode, g);
 	}
@@ -140,7 +140,7 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, InformationNode* clas
 	for (auto base : bases)
 	{
 		auto baseNode = new InformationNode({{"ast", base}});
-		g->add(baseNode);
+		baseNode = g->add(baseNode);
 		g->addDirectedEdge(classNode, baseNode, "base class");
 		addBaseEdgesFor(base, baseNode, g);
 	}
