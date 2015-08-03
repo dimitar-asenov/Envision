@@ -114,27 +114,25 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 
 void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, MetaCallExpression* n)
 {
-	if (auto metaDef = DCast<ReferenceExpression>(n->callee()))
-	{
-		if (metaDef->name() == "SET_OVERRIDE_FLAG")
-		{
-			if (n->arguments()->size() != 1)
-			{
-				qDebug() << "SET_OVERRIDE_FLAG call #arguments != 1";
-				return;
-			}
+	if (!n->metaDefinition())
+		if (auto metaDef = DCast<ReferenceExpression>(n->callee()))
+			v->handlePredefinedFunction(metaDef->name(), n);
+}
 
-			if (auto argument = DCast<ReferenceExpression>(n->arguments()->first()))
-			{
-				if (auto flag = DCast<BooleanLiteral>(v->args_[argument->name()]))
-				{
-					if (auto p = n->firstAncestorOfType<Declaration>())
-					{
-						p->modifiers()->set(Modifier::Override, flag->value());
-					}
-				}
-			}
+void CodeGenerationVisitor::handlePredefinedFunction(QString function, MetaCallExpression* n)
+{
+	if (function == "SET_OVERRIDE_FLAG")
+	{
+		if (n->arguments()->size() != 1)
+		{
+			qDebug() << function << "#arguments != 1";
+			return;
 		}
+
+		if (auto argument = DCast<ReferenceExpression>(n->arguments()->first()))
+			if (auto flag = DCast<BooleanLiteral>(args_[argument->name()]))
+				if (auto p = n->firstAncestorOfType<Declaration>())
+					p->modifiers()->set(Modifier::Override, flag->value());
 	}
 }
 

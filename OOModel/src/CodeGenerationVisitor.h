@@ -42,6 +42,8 @@ class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void>
 	private:
 		QMap<QString, Model::Node*> args_;
 
+		void handlePredefinedFunction(QString function, MetaCallExpression* n);
+
 	public:
 		CodeGenerationVisitor(QMap<QString, Model::Node*> args);
 
