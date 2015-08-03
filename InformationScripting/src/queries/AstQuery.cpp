@@ -39,7 +39,11 @@ namespace InformationScripting {
 AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
 	: target_{target}, type_{type}
 {
-	if (args.size() && args[0] == "g") scope_ = Scope::Global;
+	if (args.size())
+	{
+		if (args[0] == "g") scope_ = Scope::Global;
+		else if (args[0] == "of") scope_ = Scope::Input;
+	}
 }
 
 QList<Graph*> AstQuery::execute(QList<Graph*> input)
@@ -68,7 +72,6 @@ QList<Graph*> AstQuery::execute(QList<Graph*> input)
 
 Graph* AstQuery::classesQuery(QList<Graph*>&)
 {
-	// TODO handle input
 	auto g = new Graph();
 	if (scope_ == Scope::Local)
 	{
@@ -83,27 +86,61 @@ Graph* AstQuery::classesQuery(QList<Graph*>&)
 	{
 		addGlobalNodesOfType<OOModel::Class>(g);
 	}
+	else if (scope_ == Scope::Input)
+	{
+		// TODO
+	}
 	return g;
 }
 
-Graph* AstQuery::methodsQuery(QList<Graph*>&)
+Graph* AstQuery::methodsQuery(QList<Graph*>& input)
 {
-	// TODO handle input
-	auto g = new Graph();
 	if (scope_ == Scope::Local)
 	{
+		auto g = new Graph();
 		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
 		for (auto method : *parentClass->methods())
 		{
 			auto node = new InformationNode({{"ast", method}});
 			g->add(node);
 		}
+		return g;
 	}
 	else if (scope_ == Scope::Global)
 	{
+		auto g = new Graph();
 		addGlobalNodesOfType<OOModel::Method>(g);
+		return g;
 	}
-	return g;
+	else if (scope_ == Scope::Input)
+	{
+		Q_ASSERT(input.size());
+		auto g = input.takeFirst();
+
+		auto canContainMethod = [](const InformationNode* n) {
+			if (n->contains("ast")) {
+				Model::Node* astNode = (*n)["ast"];
+				return DCast<OOModel::Declaration>(astNode) != nullptr;
+			}
+			return false;
+		};
+
+		QList<InformationNode*> nodes = g->nodesForWhich(canContainMethod);
+		for (auto node : nodes)
+		{
+			Model::Node* astNode = (*node)["ast"];
+			AllNodesOfType<OOModel::Method> visitor;
+			visitor.visit(astNode);
+			auto methods = visitor.results();
+			// TODO for now we just remove the input node, this might not always be what we want
+			g->remove(node);
+			for (auto method : methods)
+				g->add(new InformationNode({{"ast", method}}));
+		}
+		return g;
+	}
+	Q_ASSERT(false);
+	return nullptr;
 }
 
 Graph* AstQuery::baseClassesQuery(QList<Graph*>&)

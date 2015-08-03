@@ -124,12 +124,18 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	else if (command == "query21")
 	{
 		// Find all classes for which the name contains X and which have a method named Y
-		// TODO currently we only have the classes with name part
+		// 5 queries seems like a lot for this :S
 		auto classesQuery = AstSource::instance().createClassesQuery(node, {"g"});
 		auto filterQuery = new AstNameFilter("Matcher");
+		auto methodsOfQuery = AstSource::instance().createMethodQuery(node, {"of"});
+		auto methodsFilter = new AstNameFilter("matches", true);
+		auto toBaseQuery = AstSource::instance().createToClassNodeQuery(node, args);
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectQuery(classesQuery, filterQuery);
-		compositeQuery->connectToOutput(filterQuery);
+		compositeQuery->connectQuery(filterQuery, methodsOfQuery);
+		compositeQuery->connectQuery(methodsOfQuery, methodsFilter);
+		compositeQuery->connectQuery(methodsFilter, toBaseQuery);
+		compositeQuery->connectToOutput(toBaseQuery);
 		QueryExecutor queryExecutor(compositeQuery);
 		queryExecutor.execute();
 	}

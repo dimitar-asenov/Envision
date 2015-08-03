@@ -47,7 +47,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
 	public:
 		enum class QueryType : int {Classes, Methods, BaseClasses, ToClass};
-		enum class Scope : int {Local, Global};
+		enum class Scope : int {Local, Global, Input};
 
 		AstQuery(QueryType type, Model::Node* target, QStringList args);
 
