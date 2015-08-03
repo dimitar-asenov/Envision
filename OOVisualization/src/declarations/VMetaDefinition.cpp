@@ -46,7 +46,6 @@ VMetaDefinition::VMetaDefinition(Item* parent, NodeType* node, const StyleType* 
 
 void VMetaDefinition::determineChildren()
 {
-	// call determineChildren of super class
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
 }
@@ -94,29 +93,6 @@ void VMetaDefinition::initializeForms()
 		->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
 		->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
 		->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
-}
-
-void VMetaDefinition::updateGeometry(int availableWidth, int availableHeight)
-{
-// As it turns out, scaling the header triggers a complete repaint of the entire content of the project. This is rather
-// slow, so for now, we disable it.
-//
-//	if (DCast<RootItem>(parent()))
-//	{
-//		qreal invGeometricZoomScale = 1 / mainViewScalingFactor();
-//		if (icon_->scale() != invGeometricZoomScale)
-//		{
-//			icon_->setScale(invGeometricZoomScale);
-//			name_->setScale(invGeometricZoomScale);
-//		}
-//	}
-
-	Super::updateGeometry(availableWidth, availableHeight);
-}
-
-bool VMetaDefinition::isSensitiveToScale() const
-{
-	return !parent() || DCast<RootItem>(parent());
 }
 
 }

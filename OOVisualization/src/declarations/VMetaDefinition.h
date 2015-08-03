@@ -53,10 +53,7 @@ class OOVISUALIZATION_API VMetaDefinition
 
 		static void initializeForms();
 
-		virtual bool isSensitiveToScale() const override;
-
 	protected:
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		virtual void determineChildren() override;
 
 	private:
