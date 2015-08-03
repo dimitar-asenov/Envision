@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,31 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#include "VModule.h"
+#include "VMetaDefinition.h"
 
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+
 
 using namespace Visualization;
 using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VModule, "item")
+ITEM_COMMON_DEFINITIONS(VMetaDefinition, "item")
 
-VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+VMetaDefinition::VMetaDefinition(Item* parent, NodeType* node, const StyleType* style) :Super(parent, node, style)
 {
 }
 
-void VModule::determineChildren()
+void VMetaDefinition::determineChildren()
 {
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
 }
 
-void VModule::initializeForms()
+void VMetaDefinition::initializeForms()
 {
 	auto headerElement = (new GridLayoutFormElement())
 				->setHorizontalSpacing(10)
@@ -56,35 +58,27 @@ void VModule::initializeForms()
 				->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
-				->put(1, 0, item<Static>(&I::icon_, [](I* v) { return &v->style()->icon(); }))
-				->put(2, 0, item<VText>(&I::name_,	[](I* v){return v->node()->nameNode();},
-																[](I* v) { return &v->style()->name();	}));
+				->put(1, 0, item<Static>(&I::icon_, &StyleType::icon))
+				->put(2, 0, item<VText>(&I::name_, &NodeType::nameNode, &StyleType::name));
 
 	auto contentElement = (new GridLayoutFormElement())
-				->setSpacing(3)
+				->setSpacing(5)
 				->setColumnStretchFactor(1, 1)
 				->setNoBoundaryCursors([](Item*){return true;})
 				->setNoInnerCursors([](Item*){return true;})
-				->put(0, 0, item<VList>(&I::libraries_,
-						[](I* v) {return v->node()->libraries()->size() > 0 ? v->node()->libraries() : nullptr;},
-						[](I* v){return &v->style()->libraries();}))
-				->put(0, 1, item<VList>(&I::fields_,
-						[](I* v) {return v->node()->fields()->size() > 0 ? v->node()->fields() : nullptr;},
-						[](I* v){return &v->style()->fields();}))
-				->put(0, 2, item<VList>(&I::declarations_,
-						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
-						[](I* v){return &v->style()->declarations();}))
-				->put(0, 3, item(&I::comment_, [](I* v){return v->node()->comment();}))
-				->put(0, 4, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
-					->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
-					->setNodesGetter(
-						[](Item* v)->QVector<QVector<Model::Node*>>{
-						auto self = static_cast<I*>(v);
-						return Visualization::GridLayouter::arrange(
-								self->node()->modules()->nodes() + self->node()->classes()->nodes() +
-								self->node()->methods()->nodes(),
-								Visualization::GridLayouter::ColumnMajor);
-					}));
+				->put(0, 1, item(&I::comment_, [](I* v){return v->node()->comment();}))
+				->put(0, 2, item<VList>(&I::metaBindings_,
+						[](I* v) {return v->node()->metaBindings()->size() > 0 ?
+									 v->node()->metaBindings() : nullptr;},
+						&StyleType::declarations))
+				->put(0, 3, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
+						->setNodesGetter(
+							[](Item* v)->QVector<QVector<Model::Node*>>{
+							auto self = static_cast<I*>(v);
+							return Visualization::GridLayouter::arrange(QVector<Model::Node*>({self->node()->context()}),
+											Visualization::GridLayouter::ColumnMajor);
+						}));
 
 	auto shapeElement = new ShapeFormElement();
 
@@ -99,12 +93,6 @@ void VModule::initializeForms()
 		->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
 		->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
 		->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
-}
-
-QColor VModule::customShapeColor() const
-{
-	if (!color_.isValid()) color_ = QColor::fromHsl(qrand() % 256, 120, 200);
-	return color_;
 }
 
 }

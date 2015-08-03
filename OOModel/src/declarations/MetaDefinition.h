@@ -41,7 +41,7 @@ class OOMODEL_API MetaDefinition : public Super<Declaration>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MetaDefinition)
 
-	ATTRIBUTE(Model::TypedList<MetaBinding>, MetaBindings, setMetaBindings)
+	ATTRIBUTE(Model::TypedList<MetaBinding>, metaBindings, setMetaBindings)
 	ATTRIBUTE(OOModel::Declaration, context, setContext)
 
 	public:

@@ -291,4 +291,14 @@ int GridLayoutFormElement::focusedElementIndex(Item* item) const
 	return -1;
 }
 
+QPoint GridLayoutFormElement::focusedElement2DIndex(Item* item) const
+{
+	for (int x=0; x<numColumns_; ++x)
+		for (int y=0; y<numRows_; ++y)
+			if (elementGrid_[x][y]->elementOrChildHasFocus(item))
+				return {x, y};
+
+	return {-1, -1};
+}
+
 } /* namespace Visualization */
