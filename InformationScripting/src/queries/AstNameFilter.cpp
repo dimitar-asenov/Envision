@@ -24,33 +24,30 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AstNameFilter.h"
 
-#include "../informationscripting_api.h"
-
-#include "../queries/AstQuery.h"
-
-namespace Model {
-	class Node;
-}
+#include "../graph/InformationNode.h"
+#include "OOModel/src/declarations/Declaration.h"
 
 namespace InformationScripting {
 
-class Graph;
-
-class AstSource
-{
-	public:
-		static AstSource& instance();
-		static void init();
-
-		AstQuery* createClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createMethodQuery(Model::Node* target, QStringList args);
-		AstQuery* createBaseClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createToClassNodeQuery(Model::Node* target, QStringList args);
-
-	private:
-		AstSource() = default;
-};
+AstNameFilter::AstNameFilter(QString nameContains, bool exactMatch)
+	: GenericFilter {
+		  [nameContains, exactMatch](const InformationNode* n) {
+			if (n->contains("ast"))
+			{
+				Model::Node* astNode = (*n)["ast"];
+				if (auto decl = DCast<OOModel::Declaration>(astNode))
+				{
+					if (exactMatch)
+						return decl->name() == nameContains;
+					else
+						return decl->name().contains(nameContains);
+				}
+			}
+			return false;
+		}
+	}
+{}
 
 } /* namespace InformationScripting */

@@ -43,7 +43,9 @@ HEADERS += src/precompiled.h \
     src/queries/QueryExecutor.h \
     src/visualization/DefaultVisualizer.h \
     src/visitors/AllNodesOfType.h \
-    src/queries/CompositeQuery.h
+    src/queries/CompositeQuery.h \
+    src/queries/GenericFilter.h \
+    src/queries/AstNameFilter.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -60,7 +62,9 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/AstQuery.cpp \
     src/queries/QueryExecutor.cpp \
     src/visualization/DefaultVisualizer.cpp \
-    src/queries/CompositeQuery.cpp
+    src/queries/CompositeQuery.cpp \
+    src/queries/GenericFilter.cpp \
+    src/queries/AstNameFilter.cpp
 
 
 # HACK to only include the AstApi_Generated file if it exists.

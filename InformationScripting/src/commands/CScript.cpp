@@ -36,6 +36,7 @@
 #include "../graph/InformationNode.h"
 #include "../queries/QueryExecutor.h"
 #include "../queries/CompositeQuery.h"
+#include "../queries/AstNameFilter.h"
 #include "../sources/AstSource.h"
 
 namespace InformationScripting {
@@ -117,6 +118,18 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectQuery(methodQuery, toBaseQuery);
 		compositeQuery->connectToOutput(toBaseQuery);
+		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
+	else if (command == "query21")
+	{
+		// Find all classes for which the name contains X and which have a method named Y
+		// TODO currently we only have the classes with name part
+		auto classesQuery = AstSource::instance().createClassesQuery(node, {"g"});
+		auto filterQuery = new AstNameFilter("Matcher");
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectQuery(classesQuery, filterQuery);
+		compositeQuery->connectToOutput(filterQuery);
 		QueryExecutor queryExecutor(compositeQuery);
 		queryExecutor.execute();
 	}

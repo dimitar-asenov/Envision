@@ -28,29 +28,14 @@
 
 #include "../informationscripting_api.h"
 
-#include "../queries/AstQuery.h"
-
-namespace Model {
-	class Node;
-}
+#include "GenericFilter.h"
 
 namespace InformationScripting {
 
-class Graph;
-
-class AstSource
+class INFORMATIONSCRIPTING_API AstNameFilter : public GenericFilter
 {
 	public:
-		static AstSource& instance();
-		static void init();
-
-		AstQuery* createClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createMethodQuery(Model::Node* target, QStringList args);
-		AstQuery* createBaseClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createToClassNodeQuery(Model::Node* target, QStringList args);
-
-	private:
-		AstSource() = default;
+		AstNameFilter(QString nameContains, bool exactMatch = false);
 };
 
 } /* namespace InformationScripting */

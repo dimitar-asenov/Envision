@@ -24,33 +24,28 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "GenericFilter.h"
 
-#include "../informationscripting_api.h"
-
-#include "../queries/AstQuery.h"
-
-namespace Model {
-	class Node;
-}
+#include "../graph/Graph.h"
 
 namespace InformationScripting {
 
-class Graph;
+GenericFilter::GenericFilter(GenericFilter::KeepNode f) : keepNode_{f}
+{}
 
-class AstSource
+QList<Graph*> GenericFilter::execute(QList<Graph*> input)
 {
-	public:
-		static AstSource& instance();
-		static void init();
+	for (auto g : input) applyFilter(g);
+	return input;
+}
 
-		AstQuery* createClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createMethodQuery(Model::Node* target, QStringList args);
-		AstQuery* createBaseClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createToClassNodeQuery(Model::Node* target, QStringList args);
+void GenericFilter::applyFilter(Graph* g)
+{
+	if (!g) return;
 
-	private:
-		AstSource() = default;
-};
+	auto nodes = g->nodes();
+	for (auto n : nodes)
+		if (!keepNode_(n)) g->remove(n);
+}
 
 } /* namespace InformationScripting */

@@ -28,29 +28,24 @@
 
 #include "../informationscripting_api.h"
 
-#include "../queries/AstQuery.h"
-
-namespace Model {
-	class Node;
-}
+#include "Query.h"
 
 namespace InformationScripting {
 
-class Graph;
+class InformationNode;
 
-class AstSource
+class INFORMATIONSCRIPTING_API GenericFilter : public Query
 {
 	public:
-		static AstSource& instance();
-		static void init();
+		using KeepNode = std::function<bool(const InformationNode*)>;
+		GenericFilter(KeepNode f);
 
-		AstQuery* createClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createMethodQuery(Model::Node* target, QStringList args);
-		AstQuery* createBaseClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createToClassNodeQuery(Model::Node* target, QStringList args);
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
 	private:
-		AstSource() = default;
+		KeepNode keepNode_;
+
+		void applyFilter(Graph* g);
 };
 
 } /* namespace InformationScripting */

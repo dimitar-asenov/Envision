@@ -27,6 +27,7 @@
 #include "AstQuery.h"
 
 #include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/Project.h"
 
 #include "../graph/Graph.h"
 #include "../graph/InformationNode.h"
@@ -46,6 +47,9 @@ QList<Graph*> AstQuery::execute(QList<Graph*> input)
 	QList<Graph*> result;
 	switch (type_)
 	{
+		case QueryType::Classes:
+			result = {classesQuery(input)};
+			break;
 		case QueryType::Methods:
 			result = {methodsQuery(input)};
 			break;
@@ -60,6 +64,26 @@ QList<Graph*> AstQuery::execute(QList<Graph*> input)
 	for (auto& g : input) SAFE_DELETE(g);
 
 	return result;
+}
+
+Graph* AstQuery::classesQuery(QList<Graph*>&)
+{
+	// TODO handle input
+	auto g = new Graph();
+	if (scope_ == Scope::Local)
+	{
+		auto parentProject = target_->firstAncestorOfType<OOModel::Project>();
+		for (auto childClass : *parentProject->classes())
+		{
+			auto node = new InformationNode({{"ast", childClass}});
+			g->add(node);
+		}
+	}
+	else if (scope_ == Scope::Global)
+	{
+		addGlobalNodesOfType<OOModel::Class>(g);
+	}
+	return g;
 }
 
 Graph* AstQuery::methodsQuery(QList<Graph*>&)
@@ -77,13 +101,7 @@ Graph* AstQuery::methodsQuery(QList<Graph*>&)
 	}
 	else if (scope_ == Scope::Global)
 	{
-		auto root = target_->manager()->root();
-		AllNodesOfType<OOModel::Method> visitor;
-		visitor.visit(root);
-		auto allMethods =  visitor.results();
-		for (auto method : allMethods)
-			g->add(new InformationNode({{"ast", method}}));
-
+		addGlobalNodesOfType<OOModel::Method>(g);
 	}
 	return g;
 }
@@ -144,6 +162,17 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, InformationNode* clas
 		g->addDirectedEdge(classNode, baseNode, "base class");
 		addBaseEdgesFor(base, baseNode, g);
 	}
+}
+
+template<class NodeType>
+void AstQuery::addGlobalNodesOfType(Graph* g)
+{
+	auto root = target_->manager()->root();
+	AllNodesOfType<NodeType> visitor;
+	visitor.visit(root);
+	auto allNodeOfType =  visitor.results();
+	for (auto node : allNodeOfType)
+		g->add(new InformationNode({{"ast", node}}));
 }
 
 } /* namespace InformationScripting */

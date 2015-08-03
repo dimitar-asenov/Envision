@@ -55,6 +55,11 @@ void AstSource::init()
 	Graph::registerNodeHash(astHash);
 }
 
+AstQuery* AstSource::createClassesQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::Classes, target, args);
+}
+
 AstQuery* AstSource::createMethodQuery(Model::Node* target, QStringList args)
 {
 	return new AstQuery(AstQuery::QueryType::Methods, target, args);
