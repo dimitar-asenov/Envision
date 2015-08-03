@@ -30,6 +30,7 @@
 
 namespace Model {
 	class Node;
+	class NameText;
 }
 
 namespace OOModel {
@@ -46,6 +47,7 @@ class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void>
 		virtual void visitChildren(Model::Node* n);
 
 		static void visitReferenceExpression(CodeGenerationVisitor* v, ReferenceExpression* n);
+		static void visitNameText(CodeGenerationVisitor* v, Model::NameText* n);
 
 		static void init();
 };

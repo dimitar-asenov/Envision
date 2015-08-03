@@ -28,6 +28,8 @@
 
 #include "expressions/ReferenceExpression.h"
 
+#include "ModelBase/src/nodes/NameText.h"
+
 namespace OOModel {
 
 CodeGenerationVisitor::CodeGenerationVisitor(QMap<QString, Model::Node *> args) : args_{args} {}
@@ -35,6 +37,7 @@ CodeGenerationVisitor::CodeGenerationVisitor(QMap<QString, Model::Node *> args) 
 void CodeGenerationVisitor::init()
 {
 	addType<ReferenceExpression>(visitReferenceExpression);
+	addType<Model::NameText>(visitNameText);
 }
 
 void CodeGenerationVisitor::visitChildren(Model::Node* n)
@@ -71,6 +74,11 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 
 		n->setName(parts.join(""));
 	}
+}
+
+void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor*, Model::NameText*)
+{
+
 }
 
 }
