@@ -82,38 +82,16 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 
 		struct QueryNode {
 				QueryNode(Query* q) : q_{q} {}
-				~QueryNode() { SAFE_DELETE(q_); }
+				~QueryNode();
 				QList<InputMapping> inputs_;
 				QList<OutputMapping> outputs_;
 
 				QList<Graph*> calculatedInputs_;
 				QList<Graph*> calculatedOutputs_;
 
-				void addCalculatedInput(int index, Graph* g) {
-					// Fill non determined inputs with nullptrs:
-					while (calculatedInputs_.size() - 1 < index)
-						calculatedInputs_.push_back(nullptr);
-					// Insert current input at correct location
-					calculatedInputs_[index] = g;
-					// Set the inserted flag
-					auto it = std::find_if(inputs_.begin(), inputs_.end(),
-									 [index](const InputMapping& m) {return m.inputIndex_ == index;});
-					Q_ASSERT(it != inputs_.end());
-					it->inserted_ = true;
-				}
-
-				bool canExecute() const
-				{
-					return std::all_of(inputs_.begin(), inputs_.end(), [](const InputMapping& m) {return m.inserted_;});
-				}
-
-				void execute()
-				{
-					if (q_)
-						calculatedOutputs_ = q_->execute(calculatedInputs_);
-					else
-						calculatedOutputs_ = calculatedInputs_;
-				}
+				void addCalculatedInput(int index, Graph* g);
+				bool canExecute() const;
+				void execute();
 
 				Query* q_{};
 		};

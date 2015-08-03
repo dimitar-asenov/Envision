@@ -43,15 +43,26 @@ AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
 
 QList<Graph*> AstQuery::execute(QList<Graph*> input)
 {
+	QList<Graph*> result;
 	switch (type_)
 	{
-		case QueryType::Methods: return {methodsQuery(input)};
-		case QueryType::BaseClasses: return {baseClassesQuery(input)};
-		case QueryType::ToClass: return {toClassNode(input)};
+		case QueryType::Methods:
+			result = {methodsQuery(input)};
+			break;
+		case QueryType::BaseClasses:
+			result = {baseClassesQuery(input)};
+			break;
+		case QueryType::ToClass:
+			result = {toClassNode(input)};
+			break;
 	}
+	// Clean unhandled input:
+	for (auto& g : input) SAFE_DELETE(g);
+
+	return result;
 }
 
-Graph* AstQuery::methodsQuery(QList<Graph*>)
+Graph* AstQuery::methodsQuery(QList<Graph*>&)
 {
 	// TODO handle input
 	auto g = new Graph();
@@ -77,7 +88,7 @@ Graph* AstQuery::methodsQuery(QList<Graph*>)
 	return g;
 }
 
-Graph* AstQuery::baseClassesQuery(QList<Graph*>)
+Graph* AstQuery::baseClassesQuery(QList<Graph*>&)
 {
 	// TODO handle input
 	auto g = new Graph();
@@ -98,10 +109,10 @@ Graph* AstQuery::baseClassesQuery(QList<Graph*>)
 	return g;
 }
 
-Graph* AstQuery::toClassNode(QList<Graph*> input)
+Graph* AstQuery::toClassNode(QList<Graph*>& input)
 {
-	Q_ASSERT(input.size() == 1);
-	auto g = input[0];
+	Q_ASSERT(input.size());
+	auto g = input.takeFirst();
 	auto canBeInClass = [](const InformationNode* node) {
 		node->contains("ast");
 		Model::Node* n = (*node)["ast"];

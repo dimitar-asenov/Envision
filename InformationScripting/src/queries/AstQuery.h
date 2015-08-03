@@ -60,9 +60,9 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		Scope scope_{};
 		QueryType type_{};
 
-		Graph* methodsQuery(QList<Graph*> input);
-		Graph* baseClassesQuery(QList<Graph*> input);
-		Graph* toClassNode(QList<Graph*> input);
+		Graph* methodsQuery(QList<Graph*>& input);
+		Graph* baseClassesQuery(QList<Graph*>& input);
+		Graph* toClassNode(QList<Graph*>& input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g);
 };

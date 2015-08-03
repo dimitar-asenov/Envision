@@ -26,12 +26,15 @@
 
 #include "CompositeQuery.h"
 
+#include "../graph/Graph.h"
+
 namespace InformationScripting {
 
 CompositeQuery::~CompositeQuery()
 {
 	SAFE_DELETE(inNode_);
 	for (auto node : nodes_) SAFE_DELETE(node);
+	// Don't delete the outNode_ as that we delete all Graphs which we returned in the execute methods.
 }
 
 QList<Graph*> CompositeQuery::execute(QList<Graph*> input)
@@ -149,6 +152,46 @@ void CompositeQuery::addInputMapping(CompositeQuery::QueryNode* outNode, int out
 		return;
 	}
 	inNode->inputs_.push_back({inIndex, outNode, outIndex});
+}
+
+CompositeQuery::QueryNode::~QueryNode()
+{
+	// For all calculated outputs check if they are mapped to something, if not delete them:
+	for (int i = 0; i < calculatedOutputs_.size(); ++i)
+	{
+		auto it = std::find_if(outputs_.begin(), outputs_.end(),
+									  [i](const OutputMapping& m) {return m.outputIndex_ == i;});
+		if (it == outputs_.end())
+			SAFE_DELETE(calculatedOutputs_[i]);
+	}
+	SAFE_DELETE(q_);
+}
+
+void CompositeQuery::QueryNode::addCalculatedInput(int index, Graph* g)
+{
+	// Fill non determined inputs with nullptrs:
+	while (calculatedInputs_.size() - 1 < index)
+		calculatedInputs_.push_back(nullptr);
+	// Insert current input at correct location
+	calculatedInputs_[index] = g;
+	// Set the inserted flag
+	auto it = std::find_if(inputs_.begin(), inputs_.end(),
+								  [index](const InputMapping& m) {return m.inputIndex_ == index;});
+	Q_ASSERT(it != inputs_.end());
+	it->inserted_ = true;
+}
+
+bool CompositeQuery::QueryNode::canExecute() const
+{
+	return std::all_of(inputs_.begin(), inputs_.end(), [](const InputMapping& m) {return m.inserted_;});
+}
+
+void CompositeQuery::QueryNode::execute()
+{
+	if (q_)
+		calculatedOutputs_ = q_->execute(calculatedInputs_);
+	else
+		calculatedOutputs_ = calculatedInputs_;
 }
 
 } /* namespace InformationScripting */
