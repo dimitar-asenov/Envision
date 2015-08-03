@@ -82,7 +82,9 @@ inline bool AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 	auto topLevelAncestor = source->findAncestorOfType<Visualization::VViewItemNode>();
 	if (!ancestorWithNode || !topLevelAncestor) return false;
 	else
-		return canInterpret && DCast<ReferenceTarget>(ancestorWithNode->node());
+		return canInterpret &&
+				(DCast<ReferenceTarget>(ancestorWithNode->node())
+				 || ancestorWithNode->node()->firstAncestorOfType<ReferenceTarget>());
 
 }
 
@@ -96,21 +98,24 @@ CommandResult* AddReferencedToViewCommand<ReferenceTarget, ReferenceResult>::
 
 	auto view = ancestorWithNode->scene()->currentViewItem();
 
-	auto refs = references(DCast<ReferenceTarget>(ancestorWithNode->node()));
+	auto target = DCast<ReferenceTarget>(ancestorWithNode->node());
+	if (!target) target = ancestorWithNode->node()->firstAncestorOfType<ReferenceTarget>();
+
+	auto refs = references(target);
 	if (refs.size() > 0)
 	{
 		auto pos = view->positionOfItem(topLevelAncestor);
 		view->insertColumn(pos.x() + rightOffset_);
 		auto row = 0;
 		//Make the items appear at the same height as the item they reference
-		view->addSpacing(pos.x() + rightOffset_, row++, ancestorWithNode->node(), topLevelAncestor->node());
+		view->addSpacing(pos.x() + rightOffset_, row++, target, topLevelAncestor->node());
 		for (auto ref : refs)
 		{
 			auto actualRef = view->insertNode(ref, pos.x() + rightOffset_, row++, purpose_);
 			if (direction_ == ArrowToReference)
-				view->addArrow(ancestorWithNode->node(), actualRef, arrowLayer_, topLevelAncestor->node());
+				view->addArrow(target, actualRef, arrowLayer_, topLevelAncestor->node());
 			else
-				view->addArrow(actualRef, ancestorWithNode->node(), arrowLayer_, nullptr, topLevelAncestor->node());
+				view->addArrow(actualRef, target, arrowLayer_, nullptr, topLevelAncestor->node());
 		}
 	}
 	return new Interaction::CommandResult();
