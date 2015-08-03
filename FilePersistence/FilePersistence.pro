@@ -34,7 +34,8 @@ HEADERS += src/simple/GenericPersistentUnit.h \
     src/version_control/LinkedChangesTransition.h \
     src/version_control/GitPiecewiseLoader.h \
     src/version_control/LinkedChangesSet.h \
-    src/version_control/Diff3Parse.h
+    src/version_control/Diff3Parse.h \
+    test/VCTestProject.h
 SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/simple/GenericTree.cpp \
     src/simple/Parser.cpp \
@@ -66,7 +67,14 @@ SOURCES += src/simple/GenericPersistentUnit.cpp \
     src/version_control/LinkedChangesTransition.cpp \
     src/version_control/GitPiecewiseLoader.cpp \
     src/version_control/LinkedChangesSet.cpp \
-    src/version_control/Diff3Parse.cpp
+    src/version_control/Diff3Parse.cpp \
+    test/VCTestProject.cpp
+
+system($${ENVISION_ROOT_DIR}/misc/qt_resource_file_from_dir.py \
+    test/persisted \
+    /FilePersistence/test/persisted \
+    FilePersistence.qrc)
+
 RESOURCES = FilePersistence.qrc
 
 unix:LIBS += -lgit2

@@ -30,26 +30,15 @@
 #include "version_control/Diff.h"
 #include "version_control/Merge.h"
 #include "version_control/GitRepository.h"
+#include "VCTestProject.h"
 
 
 namespace FilePersistence {
 
-static void unpack(QString testName)
-{
-	auto command = "tar -xf TestMerge_" + testName + ".tar -C projects";
-	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
-}
-
-static void cleanup()
-{
-	Q_ASSERT(std::system("rm -r projects/TestMerge") == 0);
-}
-
 TEST(FilePersistencePlugin, TwoDeletesNoConflict)
 {
-	unpack(this->getName());
-	GitRepository repo("projects/TestMerge");
-	auto merge = repo.merge("dev");
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
@@ -57,14 +46,12 @@ TEST(FilePersistencePlugin, TwoDeletesNoConflict)
 	merge->commit(sig, sig, "This is the result of merge test \"twodeletesNoConflict\"");
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000032}")));
 	CHECK_CONDITION(!tree->find(QUuid("{00000000-0000-0000-0000-000000000042}")));
-	cleanup();
 }
 
 TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
 {
-	unpack(this->getName());
-	GitRepository repo("projects/TestMerge");
-	auto merge = repo.merge("dev");
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
@@ -76,14 +63,12 @@ TEST(FilePersistencePlugin, TwoDeletesInSameListResolvable)
 	auto listContainer = tree->find(QUuid("{00000000-0000-0000-0000-000000000002}"));
 	for (int idx = 0; idx < listContainer->children().size(); ++idx)
 		CHECK_CONDITION(listContainer->child(QString::number(idx)));
-	cleanup();
 }
 
 TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
 {
-	unpack(this->getName());
-	GitRepository repo("projects/TestMerge");
-	auto merge = repo.merge("dev");
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(merge->hasConflicts());
 	QSet<Model::NodeIdType> expected = {
 		QUuid("{00000000-0000-0000-0000-000000000047}"),
@@ -99,15 +84,12 @@ TEST(FilePersistencePlugin, UnorderedAndUnitsConflicting)
 		expected.remove(change->nodeId());
 	}
 	CHECK_CONDITION(expected.isEmpty());
-
-	cleanup();
 }
 
 TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
 {
-	unpack(this->getName());
-	GitRepository repo("projects/TestMerge");
-	auto merge = repo.merge("dev");
+	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
+	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(!merge->hasConflicts());
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
@@ -134,45 +116,35 @@ TEST(FilePersistencePlugin, ListsReorderInsertDeleteResolvable)
 						 ->parent()->id().toString().endsWith("300}"));
 	CHECK_CONDITION(tree->find(QUuid("{00000000-0000-0000-0000-000000011507}"))
 						 ->parent()->id().toString().endsWith("507}"));
-	cleanup();
 }
 
 TEST(FilePersistencePlugin, EvalClassMove)
 {
-	QString command = "tar -xf Eval_ClassMove.tar -C projects";
-	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
-	GitRepository repo("projects/TestMerge");
-	auto merge = repo.merge("dev");
+	VCTestProject p{"Eval_ClassMove", "TestMerge"};
+	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(!merge->hasConflicts());
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "Merged master and dev");
-	cleanup();
 }
 
 TEST(FilePersistencePlugin, EvalLoopFix)
 {
-	QString command = "tar -xf Eval_LoopFix.tar -C projects";
-	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
-	GitRepository repo("projects/TestMerge");
-	auto merge = repo.merge("dev");
+	VCTestProject p{"Eval_LoopFix", "TestMerge"};
+	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(merge->hasConflicts());
-	cleanup();
 }
 
 TEST(FilePersistencePlugin, EvalMethodInsert)
 {
-	QString command = "tar -xf Eval_MethodInsert.tar -C projects";
-	Q_ASSERT(std::system(command.toStdString().c_str()) == 0);
-	GitRepository repo("projects/TestMerge");
-	auto merge = repo.merge("dev");
+	VCTestProject p{"Eval_MethodInsert", "TestMerge"};
+	auto merge = p.repo().merge("dev");
 	CHECK_CONDITION(!merge->hasConflicts());
 	Signature sig;
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	merge->commit(sig, sig, "Merged master and dev");
-	cleanup();
 }
 
 } /* namespace FilePersistence */
