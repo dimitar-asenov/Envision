@@ -34,6 +34,8 @@ namespace Model {
 
 namespace OOModel {
 
+class ReferenceExpression;
+
 class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void> {
 	private:
 		QMap<QString, Model::Node*> args_;
@@ -42,6 +44,8 @@ class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void>
 		CodeGenerationVisitor(QMap<QString, Model::Node*> args);
 
 		virtual void visitChildren(Model::Node* n);
+
+		static void visitReferenceExpression(CodeGenerationVisitor* v, ReferenceExpression* n);
 
 		static void init();
 };

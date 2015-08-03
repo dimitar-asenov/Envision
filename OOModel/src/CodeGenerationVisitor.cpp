@@ -26,12 +26,15 @@
 
 #include "CodeGenerationVisitor.h"
 
+#include "expressions/ReferenceExpression.h"
+
 namespace OOModel {
 
 CodeGenerationVisitor::CodeGenerationVisitor(QMap<QString, Model::Node *> args) : args_{args} {}
 
 void CodeGenerationVisitor::init()
 {
+	addType<ReferenceExpression>(visitReferenceExpression);
 }
 
 void CodeGenerationVisitor::visitChildren(Model::Node* n)
@@ -40,6 +43,11 @@ void CodeGenerationVisitor::visitChildren(Model::Node* n)
 	{
 		visit(child);
 	}
+}
+
+void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor*, OOModel::ReferenceExpression*)
+{
+
 }
 
 }
