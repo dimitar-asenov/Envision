@@ -34,14 +34,14 @@ namespace Model {
 
 namespace OOModel {
 
-class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, QList<Model::Node*>> {
+class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void> {
 	private:
 		QMap<QString, Model::Node*> args_;
 
 	public:
 		CodeGenerationVisitor(QMap<QString, Model::Node*> args);
 
-		virtual QList<Model::Node*> visitChildren(Model::Node* n);
+		virtual void visitChildren(Model::Node* n);
 
 		static void init();
 };

@@ -34,14 +34,12 @@ void CodeGenerationVisitor::init()
 {
 }
 
-QList<Model::Node*> CodeGenerationVisitor::visitChildren(Model::Node* n)
+void CodeGenerationVisitor::visitChildren(Model::Node* n)
 {
 	for (auto child : n->children())
 	{
 		visit(child);
 	}
-
-	return {};
 }
 
 }
