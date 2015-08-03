@@ -100,22 +100,38 @@ InformationEdge* Graph::addEdge(InformationNode* a, InformationNode* b, const QS
 
 void Graph::remove(InformationNode* node)
 {
+	Q_ASSERT(node);
+	auto hash = hashValueOf(node);
+	auto nodeIt = nodes_.find(hash);
+	// If the node isn't in the graph we don't have to do anything:
+	if (nodeIt == nodes_.end()) return;
+
 	for (auto edgeIt = edges_.begin(); edgeIt != edges_.end();)
 	{
 		auto edge = *edgeIt;
 		if (edge->from() == node || edge->to() == node)
+		{
+			SAFE_DELETE(edge);
 			edgeIt = edges_.erase(edgeIt);
+		}
 		else
+		{
 			++edgeIt;
+		}
 	}
 
-	auto nodeIt = std::find(nodes_.begin(), nodes_.end(), node);
+	SAFE_DELETE(node);
 	nodes_.erase(nodeIt);
 }
 
 void Graph::remove(QList<InformationNode*> nodes)
 {
 	for (auto node : nodes) remove(node);
+}
+
+QList<InformationNode*> Graph::nodes() const
+{
+	return nodes_.values();
 }
 
 QList<InformationNode*> Graph::nodesForWhich(Graph::NodeCondition holds) const

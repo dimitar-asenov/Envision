@@ -93,6 +93,7 @@ class Graph
 		 */
 		void remove(QList<InformationNode*> nodes);
 
+		QList<InformationNode*> nodes() const;
 
 		/**
 		 * Returns all nodes for which the NodeCondition \a holds holds.
