@@ -76,9 +76,33 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 	}
 }
 
-void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor*, Model::NameText*)
+void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameText* n)
 {
+	auto input = n->get();
 
+	if (!input.contains("##"))
+	{
+		if (!v->args_[input]) return;
+
+		if (auto argument = DCast<ReferenceExpression>(v->args_[input]))
+		{
+			n->set(argument->name());
+		}
+	}
+	else
+	{
+		QStringList parts = input.split("##");
+
+		for (auto i = 0; i < parts.size(); i++)
+		{
+			if (auto argument = DCast<ReferenceExpression>(v->args_[parts[i]]))
+			{
+				parts[i] = argument->name();
+			}
+		}
+
+		n->set(parts.join(""));
+	}
 }
 
 }
