@@ -47,10 +47,7 @@ void CodeGenerationVisitor::init()
 
 void CodeGenerationVisitor::visitChildren(Model::Node* n)
 {
-	for (auto child : n->children())
-	{
-		visit(child);
-	}
+	for (auto child : n->children()) visit(child);
 }
 
 void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, OOModel::ReferenceExpression* n)
@@ -72,12 +69,8 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 		QStringList parts = input.split("##");
 
 		for (auto i = 0; i < parts.size(); i++)
-		{
 			if (auto argument = DCast<ReferenceExpression>(v->args_[parts[i]]))
-			{
 				parts[i] = argument->name();
-			}
-		}
 
 		n->setName(parts.join(""));
 	}
@@ -90,23 +83,15 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 	if (!input.contains("##"))
 	{
 		if (!v->args_[input]) return;
-
-		if (auto argument = DCast<ReferenceExpression>(v->args_[input]))
-		{
-			n->set(argument->name());
-		}
+		if (auto argument = DCast<ReferenceExpression>(v->args_[input])) n->set(argument->name());
 	}
 	else
 	{
 		QStringList parts = input.split("##");
 
 		for (auto i = 0; i < parts.size(); i++)
-		{
 			if (auto argument = DCast<ReferenceExpression>(v->args_[parts[i]]))
-			{
 				parts[i] = argument->name();
-			}
-		}
 
 		n->set(parts.join(""));
 	}
