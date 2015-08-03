@@ -45,11 +45,14 @@ class INFORMATIONSCRIPTING_API Property {
 		template <class ConvertTo> inline operator ConvertTo() const;
 		inline operator Model::Node*() const;
 
+		bool operator==(const Property& other) const;
+
 	private:
 		struct PropertyDataConcept {
 				virtual ~PropertyDataConcept() = default;
 				virtual boost::python::object pythonObject() const = 0;
 				virtual Model::Node* node() const { return nullptr; }
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const = 0;
 		};
 
 		template <class DataType, class = void>
@@ -58,6 +61,12 @@ class INFORMATIONSCRIPTING_API Property {
 
 				virtual boost::python::object pythonObject() const override {
 					return boost::python::object(data_);
+				}
+
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ == specificOther->data_;
+					return false;
 				}
 
 				DataType data_;
@@ -72,6 +81,13 @@ class INFORMATIONSCRIPTING_API Property {
 				virtual boost::python::object pythonObject() const override {
 					return boost::python::object(boost::python::ptr(data_));
 				}
+
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ == specificOther->data_;
+					return false;
+				}
+
 				DataType data_;
 		};
 		// Template overload for pointer types which inherit from Model::Node
@@ -85,6 +101,13 @@ class INFORMATIONSCRIPTING_API Property {
 					return boost::python::object(boost::python::ptr(data_));
 				}
 				virtual Model::Node* node() const override { return data_; }
+
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ == specificOther->data_;
+					return false;
+				}
+
 				DataType data_;
 		};
 
