@@ -37,18 +37,18 @@ class Graph
 {
 	public:
 		~Graph();
-		// TODO instead of IsEqual we should use hashing in the future, see github discussion.
 		/**
-		 * IsEqual takes 2 nodes and returns if they are the same for some data source.
+		 * Each information source can register 1 NodeHash function. The function takes a node as input,
+		 * and should return a pair of the hash value and a bool if the function could succesfully hash the value.
+		 *
+		 * The second parameter is useful as, e.g. a node from the tag information source can not be hashed by the
+		 * ast information source.
 		 */
-		using IsEqual = std::function<bool(const InformationNode*, const InformationNode*)>;
+		using NodeHash = std::function<QPair<std::size_t, bool>(const InformationNode*)>;
 		using NodeCondition = std::function<bool(const InformationNode*)>;
 		using EdgeCondition = std::function<bool(const InformationEdge*)>;
 
-		/**
-		 * Registers the IsEqual \a check.
-		 */
-		static inline void addEqualityCheck(IsEqual check);
+		static inline void registerNodeHash(NodeHash check);
 
 		/**
 		 * Adds the \a node to the graph. Only the returned node should be used after this method is called.
@@ -105,13 +105,15 @@ class Graph
 		QList<InformationEdge*> edgesFowWhich(EdgeCondition holds) const;
 
 	private:
-		static QList<IsEqual> equalityChecks_;
+		static QList<NodeHash> nodeHashFunctions_;
 
-		QList<InformationNode*> nodes_;
+		QHash<std::size_t, InformationNode*> nodes_;
 		QList<InformationEdge*> edges_;
+
+		std::size_t hashValueOf(const InformationNode* n) const;
 
 };
 
-void Graph::addEqualityCheck(Graph::IsEqual check) { equalityChecks_ << check; }
+void Graph::registerNodeHash(Graph::NodeHash check) { nodeHashFunctions_ << check; }
 
 } /* namespace InformationScripting */

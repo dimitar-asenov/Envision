@@ -32,6 +32,7 @@
 
 #include "commands/CScript.h"
 #include "helpers/BoostPythonHelpers.h"
+#include "sources/AstSource.h"
 
 #include "visitors/AllNodesOfType.h"
 
@@ -40,6 +41,7 @@ namespace InformationScripting {
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 {
 	BoostPythonHelpers::initializeQStringConverters();
+	AstSource::init();
 	AllNodesOfType<OOModel::Method>::init();
 	OOInteraction::HStatementItemList::instance()->addCommand(new CScript());
 	return true;

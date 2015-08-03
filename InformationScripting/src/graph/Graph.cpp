@@ -31,41 +31,34 @@
 
 namespace InformationScripting {
 
-QList<Graph::IsEqual> Graph::equalityChecks_;
+QList<Graph::NodeHash> Graph::nodeHashFunctions_;
 
 Graph::~Graph()
 {
-	std::for_each(edges_.begin(), edges_.end(), [](InformationEdge* e) { SAFE_DELETE(e); });
-	std::for_each(nodes_.begin(), nodes_.end(), [](InformationNode* n) { SAFE_DELETE(n); });
+	for (auto& e : edges_) SAFE_DELETE(e);
+	for (auto& n : nodes_) SAFE_DELETE(n);
 }
 
 InformationNode* Graph::add(InformationNode* node)
 {
+	Q_ASSERT(!nodeHashFunctions_.empty());
+
 	InformationNode* existingNode = nullptr;
-	for (auto graphNode : nodes_)
-	{
-		for (auto checker : equalityChecks_)
-		{
-			if (checker(graphNode, node))
-			{
-				existingNode = graphNode;
-				break;
-			}
-		}
-		if (existingNode) break;
-	}
+	auto hash = hashValueOf(node);
+	auto it = nodes_.find(hash);
+	if (it != nodes_.end()) existingNode = it.value();
 	if (existingNode)
 	{
-		// TODO merge
-		// TODO delete argument node
-		node = existingNode;
+		// TODO merge existingNode and node
+		SAFE_DELETE(node);
 		Q_ASSERT(false);
 	}
 	else
 	{
-		nodes_.push_back(node);
+		nodes_[hash] = node;
+		existingNode = node;
 	}
-	return node;
+	return existingNode;
 }
 
 InformationEdge* Graph::addDirectedEdge(InformationNode* from, InformationNode* to, const QString& name)
@@ -140,6 +133,17 @@ QList<InformationEdge*> Graph::edgesFowWhich(Graph::EdgeCondition holds) const
 	QList<InformationEdge*> result;
 	for (auto edge : edges_) if (holds(edge)) result.push_back(edge);
 	return result;
+}
+
+std::size_t Graph::hashValueOf(const InformationNode* n) const
+{
+	for (auto hashFunction : nodeHashFunctions_)
+	{
+		auto result = hashFunction(n);
+		if (result.second) return result.first;
+	}
+	// There should be at least one function registered for a certain node
+	Q_ASSERT(false);
 }
 
 } /* namespace InformationScripting */

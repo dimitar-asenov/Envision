@@ -41,6 +41,20 @@ AstSource& AstSource::instance()
 	return instance;
 }
 
+void AstSource::init()
+{
+	auto astHash = [](const InformationNode* n) -> QPair<std::size_t, bool> {
+		if (n->contains("ast"))
+		{
+			Model::Node* nodePtr = (*n)["ast"];
+			return {std::hash<Model::Node*>()(nodePtr), true};
+		}
+		return {0, false};
+	};
+
+	Graph::registerNodeHash(astHash);
+}
+
 AstQuery* AstSource::createMethodQuery(Model::Node* target, QStringList args)
 {
 	return new AstQuery(AstQuery::QueryType::Methods, target, args);
