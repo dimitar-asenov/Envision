@@ -29,6 +29,8 @@
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "VisualizationBase/src/items/VViewItemNode.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 
 namespace Interaction {
@@ -41,7 +43,7 @@ bool CAddNodeToViewByName::canInterpret(Visualization::Item*, Visualization::Ite
 	return commandTokens.size() >= 1 && commandTokens.first() == name();
 }
 
-CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visualization::Item* target,
+CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization::Item* target,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	if (commandTokens.size() < 2)
@@ -49,26 +51,16 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 
 	auto currentView = target->scene()->currentViewItem();
 	QPoint posToInsert;
-	if (source == currentView && isHorizontal(cursor->region()))
+	auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursor.get());
+	if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor && layoutCursor)
 	{
-		auto below =  findItemBelow(currentView, cursor->region());
-		if (below)
-		{
-			auto pos = currentView->positionOfItem(below);
-			posToInsert.setX(pos.x());
-			posToInsert.setY(pos.y());
-		}
+		posToInsert.setX(layoutCursor->x());
+		posToInsert.setY(layoutCursor->y());
 	}
-	else if (source == currentView && !isHorizontal(cursor->region()))
+	else if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor && layoutCursor)
 	{
-		auto left = findItemLeft(currentView, cursor->region());
-		if (left)
-		{
-			auto pos = currentView->positionOfItem(left);
-			currentView->insertColumn(pos.x() + 1);
-			posToInsert.setX(pos.x() + 1);
-		}
-		else currentView->insertColumn(0);
+		currentView->insertColumn(layoutCursor->x());
+		posToInsert.setX(layoutCursor->x());
 	}
 
 	auto tokens = commandTokens.mid(1);
@@ -76,7 +68,7 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
 		if (auto node = findNode(tokens, manager->root()))
 		{
-			target->scene()->currentViewItem()->insertNode(node, posToInsert.x(), posToInsert.y());
+			currentView->insertNode(node, posToInsert.x(), posToInsert.y());
 			return new CommandResult();
 		}
 	return new CommandResult(new CommandError("Could not find node with name " + commandTokens[1]));
@@ -166,38 +158,6 @@ Model::Node* CAddNodeToViewByName::findNode(QStringList fullyQualifiedName, Mode
 bool CAddNodeToViewByName::isSuggestable(Model::Node::SymbolTypes symbolType)
 {
 	return symbolType == Model::Node::METHOD || symbolType == Model::Node::CONTAINER;
-}
-
-bool CAddNodeToViewByName::isHorizontal(QRect region)
-{
-	return region.width() > region.height();
-}
-
-Visualization::Item* CAddNodeToViewByName::findItemBelow(Visualization::ViewItem *view, QRect region)
-{
-	Visualization::Item* result{};
-	for (auto node : view->allNodes())
-		if (auto vis = view->findVisualizationOf(node))
-			//If it is in the same column, continue
-			if ((vis->scenePos().x() <= region.left() && region.left() <= vis->scenePos().x() + vis->widthInScene())
-				|| (region.left() <= vis->scenePos().x() && vis->scenePos().x() <= region.right()))
-				//If it is below the region, and we don't have a closer one yet
-				if (vis->scenePos().y() >= region.bottom()
-						&& (!result || result->scenePos().y() > vis->scenePos().y()))
-					result = vis;
-	return result;
-}
-
-Visualization::Item* CAddNodeToViewByName::findItemLeft(Visualization::ViewItem *view, QRect region)
-{
-	Visualization::Item* result{};
-	for (auto node : view->allNodes())
-		if (auto vis = view->findVisualizationOf(node))
-			//If it is in a column to the left, and closer than the current
-			if (vis->scenePos().x() < region.left()
-					&& (!result || result->scenePos().x() < vis->scenePos().x()))
-				result = vis;
-	return result;
 }
 
 }

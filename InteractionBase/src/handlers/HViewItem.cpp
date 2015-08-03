@@ -41,11 +41,7 @@ HViewItem* HViewItem::instance()
 void HViewItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return)
-	{
-		qDebug() << "Hello";
-		event->accept();
 		GenericHandler::showCommandPrompt(target, "add ");
-	}
 	else GenericHandler::keyPressEvent(target, event);
 }
 
