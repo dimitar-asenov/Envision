@@ -27,6 +27,7 @@
 #include "CodeGenerationVisitor.h"
 
 #include "expressions/ReferenceExpression.h"
+#include "expressions/MetaCallExpression.h"
 
 #include "ModelBase/src/nodes/NameText.h"
 
@@ -38,6 +39,7 @@ void CodeGenerationVisitor::init()
 {
 	addType<ReferenceExpression>(visitReferenceExpression);
 	addType<Model::NameText>(visitNameText);
+	addType<MetaCallExpression>(visitMetaCallExpression);
 }
 
 void CodeGenerationVisitor::visitChildren(Model::Node* n)
@@ -105,6 +107,11 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 
 		n->set(parts.join(""));
 	}
+}
+
+void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor*, MetaCallExpression*)
+{
+
 }
 
 }

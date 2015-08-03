@@ -36,6 +36,7 @@ namespace Model {
 namespace OOModel {
 
 class ReferenceExpression;
+class MetaCallExpression;
 
 class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void> {
 	private:
@@ -48,6 +49,7 @@ class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor, void>
 
 		static void visitReferenceExpression(CodeGenerationVisitor* v, ReferenceExpression* n);
 		static void visitNameText(CodeGenerationVisitor* v, Model::NameText* n);
+		static void visitMetaCallExpression(CodeGenerationVisitor* v, MetaCallExpression* n);
 
 		static void init();
 };
