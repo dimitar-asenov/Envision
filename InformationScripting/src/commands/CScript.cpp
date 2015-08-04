@@ -139,6 +139,14 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		QueryExecutor queryExecutor(compositeQuery);
 		queryExecutor.execute();
 	}
+	else if (command == "callgraph")
+	{
+		auto query = AstSource::instance().createCallgraphQuery(node, args);
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectToOutput(query);
+		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
 	return new Interaction::CommandResult();
 }
 

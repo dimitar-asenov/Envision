@@ -75,4 +75,9 @@ AstQuery* AstSource::createToClassNodeQuery(Model::Node* target, QStringList arg
 	return new AstQuery(AstQuery::QueryType::ToClass, target, args);
 }
 
+AstQuery* AstSource::createCallgraphQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
+}
+
 } /* namespace InformationScripting */

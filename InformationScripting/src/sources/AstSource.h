@@ -48,6 +48,7 @@ class AstSource
 		AstQuery* createMethodQuery(Model::Node* target, QStringList args);
 		AstQuery* createBaseClassesQuery(Model::Node* target, QStringList args);
 		AstQuery* createToClassNodeQuery(Model::Node* target, QStringList args);
+		AstQuery* createCallgraphQuery(Model::Node* target, QStringList args);
 
 	private:
 		AstSource() = default;

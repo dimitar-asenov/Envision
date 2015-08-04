@@ -63,6 +63,9 @@ QList<Graph*> AstQuery::execute(QList<Graph*> input)
 		case QueryType::ToClass:
 			result = {toClassNode(input)};
 			break;
+		case QueryType::CallGraph:
+			result = {callGraph(input)};
+			break;
 	}
 	// Clean unhandled input:
 	for (auto& g : input) SAFE_DELETE(g);
@@ -189,6 +192,30 @@ Graph* AstQuery::toClassNode(QList<Graph*>& input)
 	return g;
 }
 
+Graph* AstQuery::callGraph(QList<Graph*>&)
+{
+	auto g = new Graph();
+	if (scope_ == Scope::Local)
+	{
+		auto methodTarget = target_->firstAncestorOfType<OOModel::Method>();
+		Q_ASSERT(methodTarget);
+		QSet<OOModel::Method*> seenMethods{methodTarget};
+		auto methods = methodTarget->callees().toList();
+		addCallInformation(g, methodTarget, methods);
+		while (!methods.empty())
+		{
+			auto currentMethod = methods.takeLast();
+			if (seenMethods.contains(currentMethod)) continue;
+			seenMethods.insert(currentMethod);
+			auto newCallees = currentMethod->callees().toList();
+			addCallInformation(g, currentMethod, newCallees);
+			methods << newCallees;
+		}
+	}
+	// TODO handle other cases, global propably doesn't make sense.
+	return g;
+}
+
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g)
 {
 	auto bases = childClass->directBaseClasses();
@@ -198,6 +225,16 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, InformationNode* clas
 		baseNode = g->add(baseNode);
 		g->addDirectedEdge(classNode, baseNode, "base class");
 		addBaseEdgesFor(base, baseNode, g);
+	}
+}
+
+void AstQuery::addCallInformation(Graph* g, OOModel::Method* method, QList<OOModel::Method*> callees)
+{
+	auto methodNode = g->add(new InformationNode({{"ast", method}}));
+	for (auto callee : callees)
+	{
+		auto calleeNode = g->add(new InformationNode({{"ast", callee}}));
+		g->addDirectedEdge(methodNode, calleeNode, "calls");
 	}
 }
 
