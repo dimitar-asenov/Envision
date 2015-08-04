@@ -6,6 +6,7 @@ CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -std=c++1y -pedantic-errors -Werror -Wextra -O2 -g -fno-omit-frame-pointer -Woverloaded-virtual
 
 clang:QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-private-field
+clang:QMAKE_CXXFLAGS += -Wimplicit-fallthrough
 
 QMAKE_LFLAGS += '-Wl,-rpath,\'\$$ORIGIN\''          # Used so that the main executable can link link to core
 QMAKE_LFLAGS += '-Wl,-rpath,\'\$$ORIGIN/qt\''       # Used so that the main executable can link to custom built Qt
