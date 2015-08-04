@@ -51,8 +51,11 @@ QList<CommandSuggestion*> CommandWithDefaultArguments::suggest(Visualization::It
 
 	if (textSoFar.trimmed().startsWith(this->name() + " ") || this->name().startsWith(textSoFar.trimmed()))
 	{
-		result.append(new CommandSuggestion(this->name(),
-			this->description(source, target, getParameters(textSoFar.split(" ")), cursor)));
+		auto parameters = getParameters(textSoFar.split(" "));
+		parameters.prepend(name());
+		if (canInterpret(source, target, parameters, cursor))
+			result.append(new CommandSuggestion(this->name(),
+				this->description(source, target, getParameters(textSoFar.split(" ")), cursor)));
 	}
 
 	return result;

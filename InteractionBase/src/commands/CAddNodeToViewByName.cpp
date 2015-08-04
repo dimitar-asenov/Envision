@@ -28,6 +28,9 @@
 
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "ModelBase/src/model/TreeManager.h"
+#include "VisualizationBase/src/items/VViewItemNode.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 
 namespace Interaction {
@@ -41,17 +44,31 @@ bool CAddNodeToViewByName::canInterpret(Visualization::Item*, Visualization::Ite
 }
 
 CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization::Item* target,
-		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	if (commandTokens.size() < 2)
 		return new CommandResult(new CommandError("Please specify a node to add"));
+
+	auto currentView = target->scene()->currentViewItem();
+	QPoint posToInsert;
+	auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursor.get());
+	if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor && layoutCursor)
+	{
+		posToInsert.setX(layoutCursor->x());
+		posToInsert.setY(layoutCursor->y());
+	}
+	else if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor && layoutCursor)
+	{
+		currentView->insertColumn(layoutCursor->x());
+		posToInsert.setX(layoutCursor->x());
+	}
 
 	auto tokens = commandTokens.mid(1);
 	tokens.removeAll(".");
 	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
 		if (auto node = findNode(tokens, manager->root()))
 		{
-			target->scene()->currentViewItem()->insertNode(node);
+			currentView->insertNode(node, posToInsert.x(), posToInsert.y());
 			return new CommandResult();
 		}
 	return new CommandResult(new CommandError("Could not find node with name " + commandTokens[1]));
