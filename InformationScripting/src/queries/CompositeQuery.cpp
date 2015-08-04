@@ -102,11 +102,16 @@ void CompositeQuery::addQuery(Query* q)
 
 void CompositeQuery::connectQuery(Query* from, Query* to)
 {
+	connectQuery(from, 0, to, 0);
+}
+
+void CompositeQuery::connectQuery(Query* from, int outIndex, Query* to, int inIndex)
+{
 	auto fromNode = nodeForQuery(from);
 	auto toNode = nodeForQuery(to);
 
-	addOutputMapping(fromNode, 0, toNode);
-	addInputMapping(fromNode, 0, toNode, 0);
+	addOutputMapping(fromNode, outIndex, toNode);
+	addInputMapping(fromNode, outIndex, toNode, inIndex);
 }
 
 void CompositeQuery::connectToOutput(Query* from, int outIndex)

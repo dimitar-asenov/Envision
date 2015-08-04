@@ -106,10 +106,15 @@ void Graph::remove(InformationNode* node)
 	// If the node isn't in the graph we don't have to do anything:
 	if (nodeIt == nodes_.end()) return;
 
+	// It could be that node points to a different node with the same hash.
+	// TODO in this case we might also want to merge the infos?
+	auto ownedNode = node;
+	if (ownedNode != *nodeIt) ownedNode = *nodeIt;
+
 	for (auto edgeIt = edges_.begin(); edgeIt != edges_.end();)
 	{
 		auto edge = *edgeIt;
-		if (edge->from() == node || edge->to() == node)
+		if (edge->from() == ownedNode || edge->to() == ownedNode)
 		{
 			SAFE_DELETE(edge);
 			edgeIt = edges_.erase(edgeIt);
@@ -120,7 +125,7 @@ void Graph::remove(InformationNode* node)
 		}
 	}
 
-	SAFE_DELETE(node);
+	SAFE_DELETE(ownedNode);
 	nodes_.erase(nodeIt);
 }
 
