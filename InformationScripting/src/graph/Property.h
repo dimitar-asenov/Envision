@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "ModelBase/src/nodes/Node.h"
+
 namespace InformationScripting {
 
 // Inspired by: http://channel9.msdn.com/Events/GoingNative/2013/Inheritance-Is-The-Base-Class-of-Evil
@@ -41,11 +43,16 @@ class INFORMATIONSCRIPTING_API Property {
 		friend boost::python::object pythonObject(const Property& p);
 
 		template <class ConvertTo> inline operator ConvertTo() const;
+		inline operator Model::Node*() const;
+
+		bool operator==(const Property& other) const;
 
 	private:
 		struct PropertyDataConcept {
 				virtual ~PropertyDataConcept() = default;
 				virtual boost::python::object pythonObject() const = 0;
+				virtual Model::Node* node() const { return nullptr; }
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const = 0;
 		};
 
 		template <class DataType, class = void>
@@ -55,16 +62,52 @@ class INFORMATIONSCRIPTING_API Property {
 				virtual boost::python::object pythonObject() const override {
 					return boost::python::object(data_);
 				}
+
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ == specificOther->data_;
+					return false;
+				}
+
 				DataType data_;
 		};
+		// Template overload for general pointer types:
 		template <class DataType>
-		struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value>::type>
+		struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
+								&& !std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
 				: PropertyDataConcept {
 				PropertyData(DataType data) : data_{data} {}
 
 				virtual boost::python::object pythonObject() const override {
 					return boost::python::object(boost::python::ptr(data_));
 				}
+
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ == specificOther->data_;
+					return false;
+				}
+
+				DataType data_;
+		};
+		// Template overload for pointer types which inherit from Model::Node
+		template <class DataType>
+		struct PropertyData<DataType, typename std::enable_if<std::is_pointer<DataType>::value
+								&& std::is_base_of<Model::Node, std::remove_pointer_t<DataType>>::value>::type>
+				: PropertyDataConcept {
+				PropertyData(DataType data) : data_{data} {}
+
+				virtual boost::python::object pythonObject() const override {
+					return boost::python::object(boost::python::ptr(data_));
+				}
+				virtual Model::Node* node() const override { return data_; }
+
+				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
+						return data_ == specificOther->data_;
+					return false;
+				}
+
 				DataType data_;
 		};
 
@@ -80,5 +123,7 @@ template <class ConvertTo> Property::operator ConvertTo() const
 		return propertyData->data_;
 	throw new std::bad_cast;
 }
+
+InformationScripting::Property::operator Model::Node*() const { return data_->node(); }
 
 } /* namespace InformationScripting */

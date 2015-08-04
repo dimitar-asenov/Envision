@@ -28,50 +28,51 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
+#include "Query.h"
+
+namespace Model {
+	class Node;
+}
+
+namespace OOModel {
+	class Class;
+	class Method;
+}
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+class Graph;
+class InformationNode;
+
+class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
 	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
+		enum class QueryType : int {Classes, Methods, BaseClasses, ToClass, CallGraph};
+		enum class Scope : int {Local, Global, Input};
 
-		boost::python::object pythonAttribute(const QString& key) const;
-		Property operator[](const QString& key) const;
-		Property& operator[](const QString& key);
+		AstQuery(QueryType type, Model::Node* target, QStringList args);
 
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
+		// TODO for now this is just for methods. We have to figure out how to make this more generic.
+		// Maybe use a function pointer, but where should the function be defined?
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
 	private:
-		QList<QPair<QString, Property>> properties_{};
+		Model::Node* target_{};
+		Scope scope_{};
+		QueryType type_{};
+
+		Graph* classesQuery(QList<Graph*>& input);
+		Graph* methodsQuery(QList<Graph*>& input);
+		Graph* baseClassesQuery(QList<Graph*>& input);
+		Graph* toClassNode(QList<Graph*>& input);
+		Graph* callGraph(QList<Graph*>& input);
+
+		void addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g);
+
+		template<class NodeType>
+		void addGlobalNodesOfType(Graph* g);
+
+		void addCallInformation(Graph* g, OOModel::Method* method, QList<OOModel::Method*> callees);
 };
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
-}
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
 
 } /* namespace InformationScripting */

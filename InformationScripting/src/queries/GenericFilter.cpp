@@ -24,54 +24,28 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "GenericFilter.h"
 
-#include "../informationscripting_api.h"
-
-#include "Property.h"
+#include "../graph/Graph.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+GenericFilter::GenericFilter(GenericFilter::KeepNode f) : keepNode_{f}
+{}
+
+QList<Graph*> GenericFilter::execute(QList<Graph*> input)
 {
-	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
-
-		boost::python::object pythonAttribute(const QString& key) const;
-		Property operator[](const QString& key) const;
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
-
-	private:
-		QList<QPair<QString, Property>> properties_{};
-};
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
+	for (auto g : input) applyFilter(g);
+	return input;
 }
 
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
+void GenericFilter::applyFilter(Graph* g)
+{
+	if (!g) return;
+
+	auto nodes = g->nodes();
+	for (auto n : nodes)
+		if (!keepNode_(n)) g->remove(n);
+}
 
 } /* namespace InformationScripting */

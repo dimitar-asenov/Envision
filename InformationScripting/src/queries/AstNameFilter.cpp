@@ -24,54 +24,30 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AstNameFilter.h"
 
-#include "../informationscripting_api.h"
-
-#include "Property.h"
+#include "../graph/InformationNode.h"
+#include "OOModel/src/declarations/Declaration.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
-{
-	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
-
-		boost::python::object pythonAttribute(const QString& key) const;
-		Property operator[](const QString& key) const;
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
-
-	private:
-		QList<QPair<QString, Property>> properties_{};
-};
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
-}
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
+AstNameFilter::AstNameFilter(QString nameContains, bool exactMatch)
+	: GenericFilter {
+		  [nameContains, exactMatch](const InformationNode* n) {
+			if (n->contains("ast"))
+			{
+				Model::Node* astNode = (*n)["ast"];
+				if (auto decl = DCast<OOModel::Declaration>(astNode))
+				{
+					if (exactMatch)
+						return decl->name() == nameContains;
+					else
+						return decl->name().contains(nameContains);
+				}
+			}
+			return false;
+		}
+	}
+{}
 
 } /* namespace InformationScripting */

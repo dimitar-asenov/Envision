@@ -24,54 +24,60 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AstSource.h"
 
-#include "../informationscripting_api.h"
+#include "OOModel/src/declarations/Class.h"
 
-#include "Property.h"
+#include "ModelBase/src/nodes/Node.h"
+
+#include "../graph/Graph.h"
+#include "../graph/InformationNode.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+AstSource& AstSource::instance()
 {
-	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
-
-		boost::python::object pythonAttribute(const QString& key) const;
-		Property operator[](const QString& key) const;
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
-
-	private:
-		QList<QPair<QString, Property>> properties_{};
-};
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
+	static AstSource instance;
+	return instance;
 }
 
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
+void AstSource::init()
+{
+	auto astHash = [](const InformationNode* n) -> QPair<std::size_t, bool> {
+		if (n->contains("ast"))
+		{
+			Model::Node* nodePtr = (*n)["ast"];
+			return {std::hash<Model::Node*>()(nodePtr), true};
+		}
+		return {0, false};
+	};
+
+	Graph::registerNodeHash(astHash);
+}
+
+AstQuery* AstSource::createClassesQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::Classes, target, args);
+}
+
+AstQuery* AstSource::createMethodQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::Methods, target, args);
+}
+
+AstQuery* AstSource::createBaseClassesQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
+}
+
+AstQuery* AstSource::createToClassNodeQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::ToClass, target, args);
+}
+
+AstQuery* AstSource::createCallgraphQuery(Model::Node* target, QStringList args)
+{
+	return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
+}
 
 } /* namespace InformationScripting */

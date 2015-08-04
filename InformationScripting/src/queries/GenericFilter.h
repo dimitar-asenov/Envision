@@ -28,50 +28,24 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
+#include "Query.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+class InformationNode;
+
+class INFORMATIONSCRIPTING_API GenericFilter : public Query
 {
 	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
+		using KeepNode = std::function<bool(const InformationNode*)>;
+		GenericFilter(KeepNode f);
 
-		boost::python::object pythonAttribute(const QString& key) const;
-		Property operator[](const QString& key) const;
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
 	private:
-		QList<QPair<QString, Property>> properties_{};
+		KeepNode keepNode_;
+
+		void applyFilter(Graph* g);
 };
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
-}
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
 
 } /* namespace InformationScripting */

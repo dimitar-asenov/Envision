@@ -62,6 +62,8 @@
 #undef PYTHONQT_RESTORE_KEYWORDS
 #endif
 
+#include <QtCore/QQueue>
+
 #endif
 
 #endif

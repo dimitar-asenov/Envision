@@ -28,17 +28,38 @@
 
 namespace InformationScripting {
 
+PropertyMap::PropertyMap(QList<QPair<QString, Property> > initialValues)
+{
+	for (auto initialValue : initialValues)
+		insert(initialValue.first, initialValue.second);
+}
+
 boost::python::object PropertyMap::pythonAttribute(const QString& key) const
 {
 	return pythonObject(operator[](key));
 }
 
-Property InformationScripting::PropertyMap::operator[](const QString& key) const
+Property PropertyMap::operator[](const QString& key) const
 {
 	for (auto content : properties_)
 		if (content.first == key) return content.second;
 	qDebug() << "No object with name" << key;
 	Q_ASSERT(false);
+}
+
+Property& InformationScripting::PropertyMap::operator[](const QString& key)
+{
+	for (auto& content : properties_)
+		if (content.first == key) return content.second;
+	qDebug() << "No object with name" << key;
+	Q_ASSERT(false);
+}
+
+bool PropertyMap::contains(const QString& key) const
+{
+	for (auto content : properties_)
+		if (content.first == key) return true;
+	return false;
 }
 
 } /* namespace InformationScripting */
