@@ -86,8 +86,10 @@ Declaration* MetaCallExpression::generate()
 
 	generated_ = metaDef->context()->clone();
 
+	generated_->setParent(this);
 	CodeGenerationVisitor codeGenVisitor (args);
 	codeGenVisitor.visit(generated_);
+	generated_->setParent(nullptr);
 
 	return generated_;
 }
