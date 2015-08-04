@@ -105,7 +105,10 @@ void VClass::initializeForms()
 				->put(1, 4, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
-				->put(1, 5, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+				->put(1, 5, item<VList>(&I::declarations_,
+						[](I* v) {return v->node()->metaCalls()->size() > 0 ? v->node()->metaCalls() : nullptr;},
+						[](I* v){return &v->style()->declarations();}))
+				->put(1, 6, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 						[](Item* v)->QVector<QVector<Model::Node*>>{

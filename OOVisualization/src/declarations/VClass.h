@@ -72,6 +72,7 @@ class OOVISUALIZATION_API VClass
 		Visualization::Static* friendsSymbol_{};
 		Visualization::VList* friends_{};
 		Visualization::VList* declarations_{};
+		Visualization::VList* metaCalls_{};
 		Visualization::EmptyItem* fieldBackground_{};
 		QList<Model::Node*> publicFields_{};
 		QList<Model::Node*> privateFields_{};
