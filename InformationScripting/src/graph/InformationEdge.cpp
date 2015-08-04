@@ -36,10 +36,31 @@ InformationEdge::InformationEdge(InformationNode* from, InformationNode* to, con
 	: PropertyMap{{{COUNT_PROPERTY_, 1}, {NAME_PROPERTY_, name}}}, from_{from}, to_{to}, orientation_{orientation}
 {}
 
+InformationEdge* InformationEdge::clone() const
+{
+	auto cloned = new InformationEdge();
+	copyPropertiesInto(cloned);
+	cloned->orientation_ = orientation_;
+	// From to have to be manually set by the caller
+	return cloned;
+}
+
 void InformationEdge::incrementCount()
 {
 	Property& count = (*this)[COUNT_PROPERTY_];
 	count = static_cast<int>(count) + 1;
+}
+
+void InformationEdge::setFrom(InformationNode* from)
+{
+	Q_ASSERT(!from_);
+	from_ = from;
+}
+
+void InformationEdge::setTo(InformationNode* to)
+{
+	Q_ASSERT(!to_);
+	to_ = to;
 }
 
 } /* namespace InformationScripting */

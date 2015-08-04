@@ -39,14 +39,20 @@ class InformationEdge : public PropertyMap
 {
 	public:
 		enum class Orientation : int {Directed, Undirected};
+
+		InformationEdge() = default;
 		InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
 							 Orientation orientation = Orientation::Directed);
+		virtual InformationEdge* clone() const override;
+
 		int count() const;
 		void incrementCount();
 		QString name() const;
 
 		InformationNode* from() const;
 		InformationNode* to() const;
+		void setFrom(InformationNode* from);
+		void setTo(InformationNode* to);
 
 		bool isDirected() const;
 		Orientation orientation() const;

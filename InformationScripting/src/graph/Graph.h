@@ -38,6 +38,8 @@ class Graph
 {
 	public:
 		~Graph();
+
+		Graph* clone();
 		/**
 		 * Each information source can register 1 NodeHash function. The function takes a node as input,
 		 * and should return a pair of the hash value and a bool if the function could succesfully hash the value.

@@ -38,6 +38,28 @@ Graph::~Graph()
 	for (auto& n : nodes_) SAFE_DELETE(n);
 }
 
+Graph* Graph::clone()
+{
+	auto cloned = new Graph();
+	QMap<InformationNode*, InformationNode*> clonedNodes;
+	for (auto node : nodes_)
+	{
+		auto clonedNode = node->clone();
+		auto inserted = cloned->add(clonedNode);
+		Q_ASSERT(inserted == clonedNode);
+		clonedNodes[node] = clonedNode;
+		cloned->nodes_[hashOf(clonedNode)] = clonedNode;
+	}
+	for (auto edge: edges_)
+	{
+		auto clonedEdge = edge->clone();
+		clonedEdge->setFrom(clonedNodes[edge->from()]);
+		clonedEdge->setTo(clonedNodes[edge->to()]);
+		cloned->edges_ << clonedEdge;
+	}
+	return cloned;
+}
+
 InformationNode* Graph::add(InformationNode* node)
 {
 	Q_ASSERT(!nodeHashFunctions_.empty());

@@ -58,4 +58,10 @@ PropertyMap::const_iterator PropertyMap::find(const QString& key) const
 	return std::find_if(properties_.begin(), properties_.end(), [key](auto v) {return v.first == key;});
 }
 
+void PropertyMap::copyPropertiesInto(PropertyMap* into) const
+{
+	for (auto property : properties_)
+		into->insert(property.first, property.second);
+}
+
 } /* namespace InformationScripting */
