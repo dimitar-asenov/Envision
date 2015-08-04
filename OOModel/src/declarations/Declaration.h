@@ -36,6 +36,8 @@
 #include "ModelBase/src/nodes/NameText.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+#include "OOModel/src/expressions/MetaCallExpression.h"
+
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Declaration)
 
 namespace OOModel {
@@ -48,6 +50,7 @@ class OOMODEL_API Declaration : public Super<Model::CompositeNode>
 	ATTRIBUTE(Modifier, modifiers, setModifiers)
 	ATTRIBUTE_OOP_ANNOTATIONS
 	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
+	ATTRIBUTE(Model::TypedList<MetaCallExpression>, metaCalls, setMetaCalls)
 
 	public:
 		Declaration(const QString& name);
