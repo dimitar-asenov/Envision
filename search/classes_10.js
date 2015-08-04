@@ -15,6 +15,7 @@ var searchData=
   ['shapestyle',['ShapeStyle',['../classVisualization_1_1ShapeStyle.html',1,'Visualization']]],
   ['showcommandpromptevent',['ShowCommandPromptEvent',['../classInteraction_1_1ShowCommandPromptEvent.html',1,'Interaction']]],
   ['signature',['Signature',['../structOODebug_1_1Signature.html',1,'OODebug']]],
+  ['signature',['Signature',['../structFilePersistence_1_1Signature.html',1,'FilePersistence']]],
   ['signaturecommand',['SignatureCommand',['../structOODebug_1_1SignatureCommand.html',1,'OODebug']]],
   ['signaturecontractsvmethodaddon',['SignatureContractsVMethodAddOn',['../classContractsLibrary_1_1SignatureContractsVMethodAddOn.html',1,'ContractsLibrary']]],
   ['simpletextfilestore',['SimpleTextFileStore',['../classFilePersistence_1_1SimpleTextFileStore.html',1,'FilePersistence']]],
@@ -67,5 +68,6 @@ var searchData=
   ['symbolstyle',['SymbolStyle',['../classVisualization_1_1SymbolStyle.html',1,'Visualization']]],
   ['synchronizedstatement',['SynchronizedStatement',['../classOOModel_1_1SynchronizedStatement.html',1,'OOModel']]],
   ['systemclipboard',['SystemClipboard',['../classFilePersistence_1_1SystemClipboard.html',1,'FilePersistence']]],
+  ['systemcommandresult',['SystemCommandResult',['../classSystemCommandResult.html',1,'']]],
   ['szlevelorderingmanager',['SzLevelOrderingManager',['../classVisualization_1_1SzLevelOrderingManager.html',1,'Visualization']]]
 ];

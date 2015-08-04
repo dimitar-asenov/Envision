@@ -116,6 +116,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:aef850dcf0b57bf62396690309efbb978"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#aef850dcf0b57bf62396690309efbb978">ItemsGetterFunction</a> = std::function&lt; QVector&lt; QVector&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&gt;(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;</td></tr>
+<tr class="separator:aef850dcf0b57bf62396690309efbb978"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34f11b389fd0c1e9f65daa378bdfc56f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a34f11b389fd0c1e9f65daa378bdfc56f">NodesGetterFunction</a> = std::function&lt; QVector&lt; QVector&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&gt;(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;</td></tr>
 <tr class="separator:a34f11b389fd0c1e9f65daa378bdfc56f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9855253bcbefaf471ce9437e04a9d5e2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a9855253bcbefaf471ce9437e04a9d5e2">SpanGetterFunction</a> = std::function&lt; QVector&lt; QVector&lt; QPair&lt; int, int &gt;&gt;&gt;(<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)&gt;</td></tr>
@@ -164,6 +166,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7bec8651a413d301d8fb3fbacb67a94d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a7bec8651a413d301d8fb3fbacb67a94d">setItemPositions</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int parentX, int parentY) override</td></tr>
 <tr class="memdesc:a7bec8651a413d301d8fb3fbacb67a94d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method called inside the <em>item's</em> updateGeometry method to recursively position it's child items relative to the <em>item's</em> position.  <a href="#a7bec8651a413d301d8fb3fbacb67a94d">More...</a><br /></td></tr>
 <tr class="separator:a7bec8651a413d301d8fb3fbacb67a94d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3933fe822318c576034572eb58621e49"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html">DynamicGridFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a3933fe822318c576034572eb58621e49">setItemsGetter</a> (<a class="el" href="classVisualization_1_1DynamicGridFormElement.html#aef850dcf0b57bf62396690309efbb978">ItemsGetterFunction</a> itemGetter)</td></tr>
+<tr class="separator:a3933fe822318c576034572eb58621e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a778a4b71bff241e195976d7fe8539ae0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html">DynamicGridFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a778a4b71bff241e195976d7fe8539ae0">setLeftMargin</a> (int left)</td></tr>
 <tr class="separator:a778a4b71bff241e195976d7fe8539ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad301230a1c1e8ae2763498e0cc6bf062"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html">DynamicGridFormElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#ad301230a1c1e8ae2763498e0cc6bf062">setMajorAxis</a> (<a class="el" href="classVisualization_1_1GridLayouter.html#a8de41949f680ff7c0f397e13588934f3">GridLayouter::MajorAxis</a> majorAxis)</td></tr>
@@ -294,6 +298,9 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a7a59ac3ead00e1896e30d906a36433f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structVisualization_1_1DynamicGridFormElement_1_1ItemData.html">ItemData</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a7a59ac3ead00e1896e30d906a36433f1">dataForItem</a> (const <a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
 <tr class="separator:a7a59ac3ead00e1896e30d906a36433f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a171275fef8b6d54e7db22b4d4c1e9b0e"><td class="memTemplParams" colspan="2">template&lt;class Definition , class CompareFunction , class CreateFunction , class SyncFunction &gt; </td></tr>
+<tr class="memitem:a171275fef8b6d54e7db22b4d4c1e9b0e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a171275fef8b6d54e7db22b4d4c1e9b0e">synchronizeGrids</a> (<a class="el" href="structVisualization_1_1DynamicGridFormElement_1_1ItemData.html">ItemData</a> &amp;data, const Definition &amp;def, CompareFunction compare, CreateFunction create, SyncFunction sync)</td></tr>
+<tr class="separator:a171275fef8b6d54e7db22b4d4c1e9b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -301,6 +308,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2d82833503af318d1825edfc45e0bcc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75467dc8cd46c7981c3146be92fabc22"><td class="memItemLeft" align="right" valign="top">QHash&lt; const <a class="el" href="classVisualization_1_1Item.html">Item</a> *, <a class="el" href="structVisualization_1_1DynamicGridFormElement_1_1ItemData.html">ItemData</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a75467dc8cd46c7981c3146be92fabc22">itemData_</a> {}</td></tr>
 <tr class="separator:a75467dc8cd46c7981c3146be92fabc22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2803d7749d0ea5903dbc5f0372859a1f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#aef850dcf0b57bf62396690309efbb978">ItemsGetterFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a2803d7749d0ea5903dbc5f0372859a1f">itemsGetterFunction_</a> {}</td></tr>
+<tr class="separator:a2803d7749d0ea5903dbc5f0372859a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9f447cc7d1bae86e0134003b3540092"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1GridLayouter.html#a8de41949f680ff7c0f397e13588934f3">GridLayouter::MajorAxis</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#af9f447cc7d1bae86e0134003b3540092">majorAxis_</a> {}</td></tr>
 <tr class="separator:af9f447cc7d1bae86e0134003b3540092"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae02c9edf9e8a98e02d112a7fd1fc2007"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#a34f11b389fd0c1e9f65daa378bdfc56f">NodesGetterFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#ae02c9edf9e8a98e02d112a7fd1fc2007">nodesGetterFunction_</a> {}</td></tr>
@@ -352,6 +361,18 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:acd86ac32222a790816c133c3886bc779 inherit pro_methods_classVisualization_1_1FormElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="aef850dcf0b57bf62396690309efbb978"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classVisualization_1_1DynamicGridFormElement.html#aef850dcf0b57bf62396690309efbb978">Visualization::DynamicGridFormElement::ItemsGetterFunction</a> =  std::function&lt;QVector&lt;QVector&lt;<a class="el" href="classVisualization_1_1Item.html">Item</a>*&gt;&gt;(<a class="el" href="classVisualization_1_1Item.html">Item</a>* item)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a34f11b389fd0c1e9f65daa378bdfc56f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -874,6 +895,30 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3933fe822318c576034572eb58621e49"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html">DynamicGridFormElement</a> * Visualization::DynamicGridFormElement::setItemsGetter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#aef850dcf0b57bf62396690309efbb978">ItemsGetterFunction</a>&#160;</td>
+          <td class="paramname"><em>itemGetter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a778a4b71bff241e195976d7fe8539ae0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1281,6 +1326,60 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a171275fef8b6d54e7db22b4d4c1e9b0e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Definition , class CompareFunction , class CreateFunction , class SyncFunction &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::DynamicGridFormElement::synchronizeGrids </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structVisualization_1_1DynamicGridFormElement_1_1ItemData.html">ItemData</a> &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Definition &amp;&#160;</td>
+          <td class="paramname"><em>def</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CompareFunction&#160;</td>
+          <td class="paramname"><em>compare</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CreateFunction&#160;</td>
+          <td class="paramname"><em>create</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SyncFunction&#160;</td>
+          <td class="paramname"><em>sync</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aff8740dcec95dc690edfc9e7b8c41c9c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1345,6 +1444,26 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2803d7749d0ea5903dbc5f0372859a1f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1DynamicGridFormElement.html#aef850dcf0b57bf62396690309efbb978">ItemsGetterFunction</a> Visualization::DynamicGridFormElement::itemsGetterFunction_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

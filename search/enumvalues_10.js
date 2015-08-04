@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['tag',['TAG',['../classFilePersistence_1_1GitRepository.html#adf116bbd5920ba3e5d31cc9290932e70ae444f73956e5b2a401eb9471db89e7c9',1,'FilePersistence::GitRepository']]],
   ['testfailed',['TestFailed',['../classSelfTest_1_1TestResult.html#ad02bc2cbf5dc5941330845a8c38c919ca409682f34a80fc302d0e55cc97586501',1,'SelfTest::TestResult']]],
   ['testpassed',['TestPassed',['../classSelfTest_1_1TestResult.html#ad02bc2cbf5dc5941330845a8c38c919caf990022a98c8bc6197ea3be1f2b89f08',1,'SelfTest::TestResult']]],
   ['text',['text',['../classComments_1_1ColorPicker.html#a3e5a410adbf3e0e697cfff1f84d63562a08b6af6e5a3e3e669e4cd2b4a957756c',1,'Comments::ColorPicker']]],
@@ -29,7 +30,8 @@ var searchData=
   ['toptobottom',['TopToBottom',['../classVisualization_1_1LayoutStyle.html#a1b3aa8687e4ef411466637b201eaef0baf2b1a19a8d0f523d042f9ede79a80804',1,'Visualization::LayoutStyle']]],
   ['transport_5finit',['TRANSPORT_INIT',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daa54386abdfe59e86e2dcfc44111edab27',1,'OODebug::Protocol']]],
   ['transport_5fload',['TRANSPORT_LOAD',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daa2a1711f410ebf978a90e29bd7817aac8',1,'OODebug::Protocol']]],
-  ['type',['TYPE',['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5aac336d2b3de7e08d2153de51945f63e3',1,'Interaction::ExpectedToken::TYPE()'],['../classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7aa1fa27779242b4902f7ae3bdd5c6d508',1,'OOModel::OOReference::Type()']]],
+  ['truemerge',['TrueMerge',['../classFilePersistence_1_1Merge.html#a43caa4453b54d144aee86d4141f42627a0bc7d28bade035a7239d7683075ce1bf',1,'FilePersistence::Merge']]],
+  ['type',['Type',['../classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3a48062fbf3ae09947f1f79c2bcba33c7d',1,'FilePersistence::ChangeDescription::Type()'],['../classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7aa1fa27779242b4902f7ae3bdd5c6d508',1,'OOModel::OOReference::Type()'],['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5aac336d2b3de7e08d2153de51945f63e3',1,'Interaction::ExpectedToken::TYPE()']]],
   ['type_5fmismatch',['TYPE_MISMATCH',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daa2f93918ef99e03b7b8e7230b2a28fb52',1,'OODebug::Protocol']]],
   ['typeid',['TypeId',['../classOOModel_1_1TypeTraitExpression.html#a2e202999f5168c0938a227677b4243c0a94d4163e13b7618d0c782033c6e2a69c',1,'OOModel::TypeTraitExpression']]]
 ];

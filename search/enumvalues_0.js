@@ -12,6 +12,8 @@ var searchData=
   ['allclasseswithgeneric',['AllClassesWithGeneric',['../classOODebug_1_1Protocol.html#a2d4b5a37f7e72646c20b20c16fa57e8aa643610960a592df42c6817575d5aaee2',1,'OODebug::Protocol']]],
   ['allthreads',['AllThreads',['../classOODebug_1_1Protocol.html#a2d4b5a37f7e72646c20b20c16fa57e8aa46f5ca2fae8301fdd4f503b1cebfb79d',1,'OODebug::Protocol']]],
   ['already_5finvoking',['ALREADY_INVOKING',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daacdd880530ca226d7790e72fd223ad728',1,'OODebug::Protocol']]],
+  ['alreadyuptodate',['AlreadyUpToDate',['../classFilePersistence_1_1Merge.html#a43caa4453b54d144aee86d4141f42627a9671092e0c36a3dbb359fc66e5044bfa',1,'FilePersistence::Merge']]],
+  ['ambiguous',['AMBIGUOUS',['../classFilePersistence_1_1GitRepository.html#aaa0740f5af01040e9f99838374c7da25a0c5cfe2fb0fcdfbc406958f409f6cf4d',1,'FilePersistence::GitRepository']]],
   ['and',['AND',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a5894f11e8b0396b8d2af316ebd691abb',1,'OOModel::BinaryOperation']]],
   ['annotation',['Annotation',['../classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1ca55f6611cb342565cf0f5002400f53a95',1,'OOModel::Class']]],
   ['any',['ANY',['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5a0819ab460f27a4c18e94a586532f3e6b',1,'Interaction::ExpectedToken']]],
@@ -20,6 +22,8 @@ var searchData=
   ['array_5findex',['ARRAY_INDEX',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a716ce5c27aa0abf70fab22a6245a8e48',1,'OOModel::BinaryOperation']]],
   ['arrayreference',['ArrayReference',['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622ea72963d30f434222cc0b99b1f44fc6a7f',1,'OODebug::Protocol']]],
   ['arraytype',['ArrayType',['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622eacb17ff5177bb277ed8dd79480aad9c27',1,'OODebug::Protocol']]],
+  ['arrowfromreference',['ArrowFromReference',['../classInteraction_1_1AddReferencedToViewCommand.html#af9ebae1eb09266900fc6341a9caa4db5a7e49886a1472290cdbd6c2444c107219',1,'Interaction::AddReferencedToViewCommand']]],
+  ['arrowtoreference',['ArrowToReference',['../classInteraction_1_1AddReferencedToViewCommand.html#af9ebae1eb09266900fc6341a9caa4db5a84d2deb406dcfd0711465deb0d7915f4',1,'Interaction::AddReferencedToViewCommand']]],
   ['assign',['ASSIGN',['../classOOModel_1_1AssignmentExpression.html#a80cfd819e63a8f39faff4cbacc91dbb4a044e4ca4fe460020b482d119e74f4a61',1,'OOModel::AssignmentExpression::ASSIGN()'],['../classCppImport_1_1CppImportUtilities.html#a359645e0444f6a082291f8cce6939542a185b7133db22230701a857c059360cc2',1,'CppImport::CppImportUtilities::Assign()']]],
   ['assignable',['Assignable',['../classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a33cbb55c64380923c16b03ffc272d661',1,'OOModel::OOReference']]],
   ['atbottomof',['AtBottomOf',['../namespaceDeclarativeEnumerations.html#a7698a201d9129b2b6e1079de83988c39af3bfe18d458b22f41182efc398ae3639',1,'DeclarativeEnumerations']]],
@@ -27,7 +31,9 @@ var searchData=
   ['athcenterof',['AtHCenterOf',['../namespaceDeclarativeEnumerations.html#a7698a201d9129b2b6e1079de83988c39a76dd2728ac69bf9074b88e22edf4cb07',1,'DeclarativeEnumerations']]],
   ['atleftof',['AtLeftOf',['../namespaceDeclarativeEnumerations.html#a7698a201d9129b2b6e1079de83988c39aefc375dd3e4015f1b3683f111f230377',1,'DeclarativeEnumerations']]],
   ['atrightof',['AtRightOf',['../namespaceDeclarativeEnumerations.html#a7698a201d9129b2b6e1079de83988c39a706946484b641ac3e225f139a2c3c966',1,'DeclarativeEnumerations']]],
+  ['attached',['ATTACHED',['../classFilePersistence_1_1GitRepository.html#a60e3a5a6b3c4f546132857bac4742d03ad2a3b18bc12339a609d6b9f8708ee281',1,'FilePersistence::GitRepository']]],
   ['attopof',['AtTopOf',['../namespaceDeclarativeEnumerations.html#a7698a201d9129b2b6e1079de83988c39a43fe3b95ea7e0cc5b18ad7133950b683',1,'DeclarativeEnumerations']]],
   ['atvcenterof',['AtVCenterOf',['../namespaceDeclarativeEnumerations.html#a7698a201d9129b2b6e1079de83988c39a75fe7516b57203d92647f3befefcd3f0',1,'DeclarativeEnumerations']]],
-  ['auto',['Auto',['../classVisualization_1_1AnchorLayoutAnchor.html#a4ee85516e0e8a644dfd791c96b7a3b98a06b9281e396db002010bde1de57262eb',1,'Visualization::AnchorLayoutAnchor::Auto()'],['../classOOInteraction_1_1StringComponents.html#af8e6a3c10cba6eb6e59718009709fb95ac7adcbffe912d2400c58eef04652e60e',1,'OOInteraction::StringComponents::AUTO()']]]
+  ['auto',['Auto',['../classVisualization_1_1AnchorLayoutAnchor.html#a4ee85516e0e8a644dfd791c96b7a3b98a06b9281e396db002010bde1de57262eb',1,'Visualization::AnchorLayoutAnchor::Auto()'],['../classOOInteraction_1_1StringComponents.html#af8e6a3c10cba6eb6e59718009709fb95ac7adcbffe912d2400c58eef04652e60e',1,'OOInteraction::StringComponents::AUTO()']]],
+  ['automerged',['AutoMerged',['../classFilePersistence_1_1Merge.html#a7666204e5f7a1574cd7c379e90ee6976a0647113c2f6aab2daa668e468417d658',1,'FilePersistence::Merge']]]
 ];

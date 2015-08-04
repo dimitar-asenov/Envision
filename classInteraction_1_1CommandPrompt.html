@@ -92,7 +92,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Interaction::CommandPrompt Class Reference</div>  </div>
 </div><!--header-->
@@ -113,14 +114,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a99f3b039d4d66c8c5c662f0f4c66c2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d6922de20d472504d6e46958260be41"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a0d6922de20d472504d6e46958260be41">~CommandPrompt</a> ()</td></tr>
 <tr class="separator:a0d6922de20d472504d6e46958260be41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a443ac222f0cbb8b46fc0c094aedfe098"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a443ac222f0cbb8b46fc0c094aedfe098">addSuggestion</a> (<a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> *suggestion)</td></tr>
-<tr class="separator:a443ac222f0cbb8b46fc0c094aedfe098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5771ca77a1fccc06327f67c777ad0418"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a5771ca77a1fccc06327f67c777ad0418">addSuggestions</a> (const QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt; &amp;<a class="el" href="classInteraction_1_1CommandPrompt.html#a342030636161983ec0c5e7f5bfc0586c">suggestions</a>)</td></tr>
 <tr class="separator:a5771ca77a1fccc06327f67c777ad0418"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04f9a4135d2a6efdda15174f94d9ddda"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a04f9a4135d2a6efdda15174f94d9ddda">cancelPrompt</a> ()</td></tr>
+<tr class="separator:a04f9a4135d2a6efdda15174f94d9ddda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53c12b91bc3726362008159b11942954"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a53c12b91bc3726362008159b11942954">commandReceiver</a> ()</td></tr>
 <tr class="separator:a53c12b91bc3726362008159b11942954"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a524ca5dac874371007a42c6fe7dd1b31"><td class="memItemLeft" align="right" valign="top">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a524ca5dac874371007a42c6fe7dd1b31">commandReceiverCursor</a> ()</td></tr>
 <tr class="separator:a524ca5dac874371007a42c6fe7dd1b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf33934ee70d86aeb53544a598038567"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#aaf33934ee70d86aeb53544a598038567">executeCurrentText</a> ()</td></tr>
+<tr class="separator:aaf33934ee70d86aeb53544a598038567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79dfbe906c192a9b72035d3c436245df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a79dfbe906c192a9b72035d3c436245df">hidePrompt</a> ()</td></tr>
 <tr class="separator:a79dfbe906c192a9b72035d3c436245df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2421f7ed0bf5103398a19a4f8fc6148b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a2421f7ed0bf5103398a19a4f8fc6148b">removeResult</a> ()</td></tr>
@@ -139,13 +142,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad8ed86840aee62f94020302f27c8df84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c20992ed8e056094678cb2d44f624cc"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a6c20992ed8e056094678cb2d44f624cc">text</a> () const </td></tr>
 <tr class="separator:a6c20992ed8e056094678cb2d44f624cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae50969c1971e3f2921f19e90375c40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a9ae50969c1971e3f2921f19e90375c40">wasCancelled</a> () const </td></tr>
+<tr class="separator:a9ae50969c1971e3f2921f19e90375c40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aee560bbcc988e81579a5a8427f534c08"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#aee560bbcc988e81579a5a8427f534c08">determineChildren</a> ()</td></tr>
-<tr class="separator:aee560bbcc988e81579a5a8427f534c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8d2d5a2d428eb1dd52e8b118a172467"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ae8d2d5a2d428eb1dd52e8b118a172467">updateGeometry</a> (int availableWidth, int availableHeight)</td></tr>
-<tr class="separator:ae8d2d5a2d428eb1dd52e8b118a172467"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f135eacd169f9f6130ea8991ebe4404"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a0f135eacd169f9f6130ea8991ebe4404">determineChildren</a> () override</td></tr>
+<tr class="separator:a0f135eacd169f9f6130ea8991ebe4404"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8b88ea400e1e5ff785142a0da442101"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ab8b88ea400e1e5ff785142a0da442101">updateGeometry</a> (int availableWidth, int availableHeight) override</td></tr>
+<tr class="separator:ab8b88ea400e1e5ff785142a0da442101"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -172,12 +177,21 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5e791cf79f6d137e21712fc0bedc5d10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98cf4b724a13c98742072e78408eb0a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a98cf4b724a13c98742072e78408eb0a7">errorContainer_</a> {}</td></tr>
 <tr class="separator:a98cf4b724a13c98742072e78408eb0a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f87226ab1ac847ad4c11dcd7243a7ac"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a9f87226ab1ac847ad4c11dcd7243a7ac">hideRequested_</a> {}</td></tr>
+<tr class="separator:a9f87226ab1ac847ad4c11dcd7243a7ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3f9962c11fd22e3510c4be705576778"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ac3f9962c11fd22e3510c4be705576778">layout_</a> {}</td></tr>
 <tr class="separator:ac3f9962c11fd22e3510c4be705576778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c1d9ba3014a7e26bdbdcaaf61daa927"><td class="memItemLeft" align="right" valign="top">QSharedPointer&lt; <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a0c1d9ba3014a7e26bdbdcaaf61daa927">result_</a></td></tr>
 <tr class="separator:a0c1d9ba3014a7e26bdbdcaaf61daa927"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a140614dec5b0e973e0fe6d8bbec33a88"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a140614dec5b0e973e0fe6d8bbec33a88">suggestions_</a></td></tr>
 <tr class="separator:a140614dec5b0e973e0fe6d8bbec33a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95c8cfd323f0319b04fe10378e74bbad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a95c8cfd323f0319b04fe10378e74bbad">wasCancelled_</a> {}</td></tr>
+<tr class="separator:a95c8cfd323f0319b04fe10378e74bbad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a03c3ec0153c83c3f7641107b759cf644"><td class="memItemLeft" align="right" valign="top">static const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a03c3ec0153c83c3f7641107b759cf644">TYPE_HINT</a> = &quot;Type a command&quot;</td></tr>
+<tr class="separator:a03c3ec0153c83c3f7641107b759cf644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -242,22 +256,6 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a443ac222f0cbb8b46fc0c094aedfe098"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Interaction::CommandPrompt::addSuggestion </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> *&#160;</td>
-          <td class="paramname"><em>suggestion</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a5771ca77a1fccc06327f67c777ad0418"></a>
 <div class="memitem">
 <div class="memproto">
@@ -270,6 +268,29 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a04f9a4135d2a6efdda15174f94d9ddda"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::CommandPrompt::cancelPrompt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -320,7 +341,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aee560bbcc988e81579a5a8427f534c08"></a>
+<a class="anchor" id="a0f135eacd169f9f6130ea8991ebe4404"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -336,9 +357,24 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aaf33934ee70d86aeb53544a598038567"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::CommandPrompt::executeCurrentText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -597,7 +633,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae8d2d5a2d428eb1dd52e8b118a172467"></a>
+<a class="anchor" id="ab8b88ea400e1e5ff785142a0da442101"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -624,7 +660,30 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9ae50969c1971e3f2921f19e90375c40"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Interaction::CommandPrompt::wasCancelled </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -752,6 +811,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9f87226ab1ac847ad4c11dcd7243a7ac"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Interaction::CommandPrompt::hideRequested_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ac3f9962c11fd22e3510c4be705576778"></a>
 <div class="memitem">
 <div class="memproto">
@@ -801,6 +880,46 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">QList&lt;<a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a>*&gt; Interaction::CommandPrompt::suggestions_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a03c3ec0153c83c3f7641107b759cf644"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString Interaction::CommandPrompt::TYPE_HINT = &quot;Type a command&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a95c8cfd323f0319b04fe10378e74bbad"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Interaction::CommandPrompt::wasCancelled_ {}</td>
         </tr>
       </table>
   </td>

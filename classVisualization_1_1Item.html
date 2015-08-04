@@ -200,6 +200,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af5873d23266656eee5130fddcaa2887e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c66cbb24e66dbf475b06cac4b3cf0bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a1c66cbb24e66dbf475b06cac4b3cf0bf">execute</a> (const QString &amp;command, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> &gt; &amp;)</td></tr>
 <tr class="separator:a1c66cbb24e66dbf475b06cac4b3cf0bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10097e5a7999ca7b4a47f704d954c7aa"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a10097e5a7999ca7b4a47f704d954c7aa">findAllVisualizationsOf</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>)</td></tr>
+<tr class="separator:a10097e5a7999ca7b4a47f704d954c7aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2444171e9eadec130aca55f0c696c46c"><td class="memTemplParams" colspan="2">template&lt;class ItemType &gt; </td></tr>
+<tr class="memitem:a2444171e9eadec130aca55f0c696c46c"><td class="memTemplItemLeft" align="right" valign="top">ItemType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a2444171e9eadec130aca55f0c696c46c">findAncestorOfType</a> ()</td></tr>
+<tr class="memdesc:a2444171e9eadec130aca55f0c696c46c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first ancestor which is of the given template type, or nullptr if none exists.  <a href="#a2444171e9eadec130aca55f0c696c46c">More...</a><br /></td></tr>
+<tr class="separator:a2444171e9eadec130aca55f0c696c46c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad87d51069f91479ce660fda537c3ab19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ad87d51069f91479ce660fda537c3ab19">findAncestorWithNode</a> ()</td></tr>
+<tr class="memdesc:ad87d51069f91479ce660fda537c3ab19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first ancestor with a node, or nullptr if none such exists.  <a href="#ad87d51069f91479ce660fda537c3ab19">More...</a><br /></td></tr>
+<tr class="separator:ad87d51069f91479ce660fda537c3ab19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c46045ad818ebe3fa3a9299146ac8e2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a2c46045ad818ebe3fa3a9299146ac8e2">findVisualizationOf</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>)</td></tr>
 <tr class="memdesc:a2c46045ad818ebe3fa3a9299146ac8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the child item that is visualizing <em>node</em> or nullptr if no such child exists.  <a href="#a2c46045ad818ebe3fa3a9299146ac8e2">More...</a><br /></td></tr>
 <tr class="separator:a2c46045ad818ebe3fa3a9299146ac8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -366,8 +375,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:add5b3a529a7e6148134f23f8c063a978"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac77bc1251414c3c9b3613eb50fa56af8"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ac77bc1251414c3c9b3613eb50fa56af8">LAYER_DEFAULT_Z</a> = 0</td></tr>
 <tr class="separator:ac77bc1251414c3c9b3613eb50fa56af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec94cbc2a1aef693aa82e642714f7a07"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#aec94cbc2a1aef693aa82e642714f7a07">LAYER_NAME_OVERLAY_Z</a> = 10</td></tr>
-<tr class="separator:aec94cbc2a1aef693aa82e642714f7a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac723dce32bf3c3e90949791166e72eff"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ac723dce32bf3c3e90949791166e72eff">LAYER_OVERLAY_Z</a> = 10</td></tr>
+<tr class="separator:ac723dce32bf3c3e90949791166e72eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6c86207ab59adb1234f1f6490aa750f"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ad6c86207ab59adb1234f1f6490aa750f">LAYER_SELECTION_Z</a> = 100</td></tr>
 <tr class="separator:ad6c86207ab59adb1234f1f6490aa750f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -531,7 +540,7 @@ Friends</h2></td></tr>
 <tr class="separator:ad9134536ed3f954add95f21d87c15758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a1e1ef8352d0a310bace7f7a3307d1378">Shape</a></td></tr>
 <tr class="separator:a1e1ef8352d0a310bace7f7a3307d1378"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace1ff08a1ee06e3d92849bc38ba56b72"><td class="memTemplParams" colspan="2">template&lt;class ParentType , class VisualizationType , bool externalSynchronization = false&gt; </td></tr>
+<tr class="memitem:ace1ff08a1ee06e3d92849bc38ba56b72"><td class="memTemplParams" colspan="2">template&lt;class ParentType , class VisualizationType , bool externalSynchronization&gt; </td></tr>
 <tr class="memitem:ace1ff08a1ee06e3d92849bc38ba56b72"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ace1ff08a1ee06e3d92849bc38ba56b72">VisualizationItemWrapperFormElement</a></td></tr>
 <tr class="separator:ace1ff08a1ee06e3d92849bc38ba56b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a867b252ca097fc46660723dda713c5ec"><td class="memTemplParams" colspan="2">template&lt;class ChildItem , class Style , bool use&gt; </td></tr>
@@ -1766,6 +1775,67 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a10097e5a7999ca7b4a47f704d954c7aa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; Visualization::Item::findAllVisualizationsOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2444171e9eadec130aca55f0c696c46c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ItemType &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">ItemType * Visualization::Item::findAncestorOfType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the first ancestor which is of the given template type, or nullptr if none exists. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad87d51069f91479ce660fda537c3ab19"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Item</a> * Visualization::Item::findAncestorWithNode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the first ancestor with a node, or nullptr if none such exists. </p>
+<p>If the item itself contains a node, returns this. </p>
 
 </div>
 </div>
@@ -4042,7 +4112,7 @@ template&lt;class ParentType , class VisualizationType &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class ParentType , class VisualizationType , bool externalSynchronization = false&gt; </div>
+template&lt;class ParentType , class VisualizationType , bool externalSynchronization&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -4303,7 +4373,7 @@ template&lt;class ChildItem , class Style , bool use&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aec94cbc2a1aef693aa82e642714f7a07"></a>
+<a class="anchor" id="ac723dce32bf3c3e90949791166e72eff"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -4311,7 +4381,7 @@ template&lt;class ChildItem , class Style , bool use&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int Visualization::Item::LAYER_NAME_OVERLAY_Z = 10</td>
+          <td class="memname">const int Visualization::Item::LAYER_OVERLAY_Z = 10</td>
         </tr>
       </table>
   </td>

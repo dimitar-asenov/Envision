@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['manualmerged',['ManualMerged',['../classFilePersistence_1_1Merge.html#a7666204e5f7a1574cd7c379e90ee6976ae74f03e4f44a03b31638d3824a32b9a1',1,'FilePersistence::Merge']]],
   ['menuitemcategory',['MenuItemCategory',['../classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddac6ee5cb8edcd9a9b428abc5354247d73',1,'Visualization::Scene']]],
   ['method',['METHOD',['../classModel_1_1Node.html#ade9aeda176a34521dc812ecf7a3d4626a02e84a1c4f978e55c8b4bd8881046a3c',1,'Model::Node::METHOD()'],['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622ea4c3880bb027f159e801041b1021e88e8',1,'OODebug::Protocol::Method()']]],
   ['method_5fentry',['METHOD_ENTRY',['../classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8a071f977706b9d998fa4335c322d9a70d',1,'OODebug::Protocol']]],
@@ -19,6 +20,7 @@ var searchData=
   ['monitor_5fwait',['MONITOR_WAIT',['../classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8af76eb14f671cd0462b5711cd91bcdd57',1,'OODebug::Protocol']]],
   ['monitor_5fwaited',['MONITOR_WAITED',['../classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8aa953345692cb439f8fd41be73e7e25d6',1,'OODebug::Protocol']]],
   ['monitorinfo',['MonitorInfo',['../classOODebug_1_1Protocol.html#a5bc471e9b93abfea6b8b748d3396734aa7b0a1d3341eaa66e004b10a9c24460d2',1,'OODebug::Protocol']]],
+  ['move',['Move',['../namespaceFilePersistence.html#a22f599a7e5cc21a83101c6b6a2e1abfea6bc362dbf494c61ea117fe3c71ca48a5',1,'FilePersistence']]],
   ['movedefault',['MoveDefault',['../classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600',1,'Visualization::Item']]],
   ['movedown',['MoveDown',['../classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a62d8fafb104077bdab1625c28d303fce',1,'Visualization::Item']]],
   ['movedownof',['MoveDownOf',['../classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a7e5326517b90016ab7c9728c20252c12',1,'Visualization::Item']]],

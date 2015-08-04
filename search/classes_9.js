@@ -7,5 +7,6 @@ var searchData=
   ['javaexportplugin',['JavaExportPlugin',['../classJavaExport_1_1JavaExportPlugin.html',1,'JavaExport']]],
   ['javarunner',['JavaRunner',['../classOODebug_1_1JavaRunner.html',1,'OODebug']]],
   ['javatypesystem',['JavaTypeSystem',['../classOOModel_1_1JavaTypeSystem.html',1,'OOModel']]],
+  ['jsonutil',['JsonUtil',['../classJsonUtil.html',1,'']]],
   ['jvmmethod',['JVMMethod',['../structOODebug_1_1JVMMethod.html',1,'OODebug']]]
 ];

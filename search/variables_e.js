@@ -1,11 +1,13 @@
 var searchData=
 [
-  ['objectid',['objectID',['../structOODebug_1_1StringValueCommand.html#ab63f772b6b353bb495a79f0312f25e3b',1,'OODebug::StringValueCommand::objectID()'],['../structOODebug_1_1Value.html#a88847f060bbbe28e3cc9a8f24620613f',1,'OODebug::Value::objectId()'],['../structOODebug_1_1TaggedObjectId.html#ad66ebf9bb4da5ae9426e2d9ff1327139',1,'OODebug::TaggedObjectId::objectId()']]],
+  ['objectid',['objectId',['../structOODebug_1_1Value.html#a88847f060bbbe28e3cc9a8f24620613f',1,'OODebug::Value::objectId()'],['../structOODebug_1_1TaggedObjectId.html#ad66ebf9bb4da5ae9426e2d9ff1327139',1,'OODebug::TaggedObjectId::objectId()'],['../structOODebug_1_1StringValueCommand.html#ab63f772b6b353bb495a79f0312f25e3b',1,'OODebug::StringValueCommand::objectID()']]],
   ['objectidsize',['objectIDSize',['../structOODebug_1_1IDSizes.html#a0fa86355f5706a93146b84b436634e40',1,'OODebug::IDSizes']]],
-  ['observedvariables_5f',['observedVariables_',['../structOODebug_1_1VariableObserver.html#a326d0bf27bba2e5271978da54aeadc81',1,'OODebug::VariableObserver']]],
+  ['observedvariables_5f',['observedVariables_',['../structOODebug_1_1VariableObserver.html#a4f38b0fee3ec8ed3db2cc50509b65b02',1,'OODebug::VariableObserver']]],
   ['observerlocation_5f',['observerLocation_',['../structOODebug_1_1VariableObserver.html#a1759cb82638b137486d1d3add88859f4',1,'OODebug::VariableObserver']]],
   ['offset',['offset',['../classInteraction_1_1HRootItem.html#a4cdf7238307acad81409ba3616e05ea4',1,'Interaction::HRootItem']]],
   ['offset_5f',['offset_',['../classOOInteraction_1_1SetExpressionCursorEvent.html#a55f9ca8db5ee056aa93410500222336f',1,'OOInteraction::SetExpressionCursorEvent::offset_()'],['../classVisualization_1_1AnchorLayoutAnchor.html#a0133dc272cbdca56a047569d8063f6be',1,'Visualization::AnchorLayoutAnchor::offset_()']]],
+  ['oldlinkedchangesset_5f',['oldLinkedChangesSet_',['../classFilePersistence_1_1LinkedChangesTransition.html#ad6e22fc3bf3f47b27eae8adb86df90ae',1,'FilePersistence::LinkedChangesTransition']]],
+  ['oldname_5f',['oldName_',['../classInteraction_1_1VViewSwitcherEntry.html#aebdd232c12a1ae796567fe293096bad8',1,'Interaction::VViewSwitcherEntry']]],
   ['oldsize',['oldSize',['../classModel_1_1ListPut.html#a7dfff061d0118b4cc40d04a9d5f9820c',1,'Model::ListPut']]],
   ['oldtarget',['oldTarget',['../classModel_1_1SetModificationTarget.html#af0788c68de1ba2eec494d910494d72e1',1,'Model::SetModificationTarget']]],
   ['oldval',['oldVal',['../classModel_1_1CompositeNodeChangeChild.html#aa4f59336bbd194fcfcfbc95fec3bac2b',1,'Model::CompositeNodeChangeChild']]],

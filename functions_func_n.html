@@ -141,10 +141,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classExport_1_1SourceDir.html#a51e22318fc52996d93d817715a76327e">Export::SourceDir</a>
 , <a class="el" href="classExport_1_1SourceFile.html#ae77579eb53b8231558acb322c151af9c">Export::SourceFile</a>
 , <a class="el" href="classFilePersistence_1_1FilePersistenceException.html#ae4a6e312ecaa9177a07a300d6459b918">FilePersistence::FilePersistenceException</a>
-, <a class="el" href="classFilePersistence_1_1GenericNode.html#aafd112a22c4f2855a6dfa5a8dd10a42e">FilePersistence::GenericNode</a>
 , <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html#a5e5e0cc1ba7c2d475c72da77b1b1ee6b">FilePersistence::GenericPersistentUnit</a>
 , <a class="el" href="classFilePersistence_1_1GenericTree.html#a17711dc7ffdd7f08de51a859a809fe5c">FilePersistence::GenericTree</a>
 , <a class="el" href="classInteraction_1_1Action.html#af8c34950b4aab87e761641a1b6677812">Interaction::Action</a>
+, <a class="el" href="classInteraction_1_1Command.html#a9369b40b280cd29c84ecb7ba20902526">Interaction::Command</a>
 , <a class="el" href="classInteraction_1_1InteractionBaseException.html#a14d6a6e4a0b13109e5f4eaba48e52a8c">Interaction::InteractionBaseException</a>
 , <a class="el" href="classInteraction_1_1OperatorDescriptor.html#a31923b41e549e67495bee4cb6c730dcf">Interaction::OperatorDescriptor</a>
 , <a class="el" href="classJavaExport_1_1JavaExportException.html#a8c34d06317d79d8fe36ad6ff4879f78c">JavaExport::JavaExportException</a>
@@ -167,17 +167,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classOOVisualization_1_1VFormalArgumentStyle.html#a77ea65622728085e7b22f447f2fb6af4">OOVisualization::VFormalArgumentStyle</a>
 , <a class="el" href="classOOVisualization_1_1VFormalResultStyle.html#a6271b9a0dc4b1476cb522df571363a09">OOVisualization::VFormalResultStyle</a>
 , <a class="el" href="classOOVisualization_1_1VMethod.html#a209537a7d99a5d6549fb44db3e56facc">OOVisualization::VMethod</a>
-, <a class="el" href="classOOVisualization_1_1VMethodCallExpressionStyle.html#ad9789c4b33cefe6a0c5e1bc5aed51812">OOVisualization::VMethodCallExpressionStyle</a>
 , <a class="el" href="classOOVisualization_1_1VMethodSzPublic.html#ab49edba4db9139556de72ec58c95328e">OOVisualization::VMethodSzPublic</a>
 , <a class="el" href="classOOVisualization_1_1VReferenceExpression.html#adb34ce27eaa0ad1db9b83e495696ed9b">OOVisualization::VReferenceExpression</a>
 , <a class="el" href="classOOVisualization_1_1VVariableDeclarationExpression.html#a1c3f00d6e7114743a7d08e097c2386ee">OOVisualization::VVariableDeclarationExpression</a>
 , <a class="el" href="classOOVisualization_1_1VVariableDeclarationExpressionStyle.html#a09d90017938883e60a3073caf14e2551">OOVisualization::VVariableDeclarationExpressionStyle</a>
 , <a class="el" href="classTestNodes_1_1BinaryNode.html#a4ebef01bf4808a4243987740fe67d7e4">TestNodes::BinaryNode</a>
 , <a class="el" href="classVisualization_1_1OverlayGroup.html#ae2377578159691b115e9e8917a0ddd84">Visualization::OverlayGroup</a>
+, <a class="el" href="classVisualization_1_1ViewItem.html#a3e7e06bf97274cc9749746eb88c7dfbc">Visualization::ViewItem</a>
 , <a class="el" href="classVisualization_1_1VisualizationException.html#abaa5fcbde64fc1c3826c526246c4a22f">Visualization::VisualizationException</a>
 </li>
 <li>NameChange()
 : <a class="el" href="classModel_1_1NameChange.html#a8132319711d9c5b16d97781541aedf5f">Model::NameChange</a>
+</li>
+<li>nameField()
+: <a class="el" href="classInteraction_1_1VViewSwitcherEntry.html#aaba6863f192d61edc2e0a88ad90a5f4f">Interaction::VViewSwitcherEntry</a>
 </li>
 <li>NameImport()
 : <a class="el" href="classOOModel_1_1NameImport.html#af7b33bfd0aad3d3129828394c863136e">OOModel::NameImport</a>
@@ -200,6 +203,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classVisualization_1_1CursorShapeItem.html#a52ccdf95c2634ce90a9b02e9b1245d4d">Visualization::CursorShapeItem</a>
 , <a class="el" href="classVisualization_1_1Item.html#a5268cdc19bc27d6e17e6dc1297430f25">Visualization::Item</a>
 </li>
+<li>newCommit()
+: <a class="el" href="classFilePersistence_1_1GitRepository.html#acb9e0d2fbd2f0fa5ad29242c68b5931a">FilePersistence::GitRepository</a>
+</li>
 <li>NewExpression()
 : <a class="el" href="classOOModel_1_1NewExpression.html#a9d20ae1d4ba4d23e289cdabb3c4ea280">OOModel::NewExpression</a>
 </li>
@@ -210,15 +216,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classLogger_1_1LogTester.html#a7aa252019176434c539bf047449747bb">Logger::LogTester</a>
 </li>
 <li>newNode()
-: <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html#aa58644e8fc03991b7577971af23d991a">FilePersistence::GenericPersistentUnit</a>
+: <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html#ade8778c44aa6d4b45c1a9aa26f36143f">FilePersistence::GenericPersistentUnit</a>
+</li>
+<li>newOrExistingNode()
+: <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html#a443e0bbfe774fdbac9f36e17c1b392cd">FilePersistence::GenericPersistentUnit</a>
 </li>
 <li>newPersistentUnit()
 : <a class="el" href="classFilePersistence_1_1GenericTree.html#ae6ab5c576a561fd9024e1770e26ec29c">FilePersistence::GenericTree</a>
+</li>
+<li>newStructChange()
+: <a class="el" href="classFilePersistence_1_1ChangeDescription.html#aec93411030893ee88ebf0b0fc6a2da5f">FilePersistence::ChangeDescription</a>
+</li>
+<li>newViewItem()
+: <a class="el" href="classVisualization_1_1ViewItemManager.html#a00be74956adad2196c082756bfeeb536">Visualization::ViewItemManager</a>
 </li>
 <li>next()
 : <a class="el" href="classFilePersistence_1_1SystemClipboard.html#a47d23dd77c7feca634f7fff5bd54f2b9">FilePersistence::SystemClipboard</a>
 , <a class="el" href="classInteraction_1_1UnfinishedOperator.html#a22ace654f6828c405438662582aa4f78">Interaction::UnfinishedOperator</a>
 , <a class="el" href="classModel_1_1ClipboardStore.html#ac179d380378f804fc9cf2cce3319bd49">Model::ClipboardStore</a>
+</li>
+<li>nextEmptyPosition()
+: <a class="el" href="classVisualization_1_1ViewItemManager.html#af73e2a863b1a5c9429b736a759f0e064">Visualization::ViewItemManager</a>
 </li>
 <li>nextHeaderPart()
 : <a class="el" href="classFilePersistence_1_1Parser.html#a1eba32555f98dcce171fe217b6c20b92">FilePersistence::Parser</a>
@@ -235,6 +253,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>noBoundaryCursors()
 : <a class="el" href="classVisualization_1_1LayoutFormElement.html#a690fb082238361e782b785e35d149608">Visualization::LayoutFormElement</a>
 </li>
+<li>noConflictingDependencies()
+: <a class="el" href="classFilePersistence_1_1ListMergeComponent.html#a454b54bdca8d9ffc442a0b64d079e76b">FilePersistence::ListMergeComponent</a>
+</li>
 <li>node()
 : <a class="el" href="classExport_1_1SourceFragment.html#a34656882e39f58d6d1196b5b2d43a901">Export::SourceFragment</a>
 , <a class="el" href="classExport_1_1TextToNodeMap.html#a18e0e110b35274d33312b7b1fc35dd97">Export::TextToNodeMap</a>
@@ -249,8 +270,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classVisualization_1_1ItemWithNode.html#a12add41c38111aa487832145d984c17d">Visualization::ItemWithNode&lt; Derived, Super, ContainedNode, defaultInitialization &gt;</a>
 , <a class="el" href="classVisualization_1_1TestBox.html#a1eebaa0c4a358d1e68cbc59151a47b73">Visualization::TestBox</a>
 </li>
+<li>nodeA()
+: <a class="el" href="classFilePersistence_1_1ChangeDescription.html#aa6b38bc102f614812e9381b605120d5c">FilePersistence::ChangeDescription</a>
+</li>
 <li>nodeAt()
 : <a class="el" href="classComments_1_1CommentTable.html#a4bb39e8f4d8c616061f62ce9256e1d06">Comments::CommentTable</a>
+, <a class="el" href="classVisualization_1_1ViewItem.html#ab9bdea5b39a7427dd3e6b367c7388dfd">Visualization::ViewItem</a>
+</li>
+<li>nodeB()
+: <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a641057ed348e548172e90a7ea019ace9">FilePersistence::ChangeDescription</a>
+</li>
+<li>nodeForId()
+: <a class="el" href="classJsonUtil.html#a763d345e90d9c96b64810fa2263eb815">JsonUtil</a>
+</li>
+<li>nodeId()
+: <a class="el" href="classFilePersistence_1_1ChangeDescription.html#a300a12b3757ea5029a9e633b2470b2bc">FilePersistence::ChangeDescription</a>
 </li>
 <li>nodeIdMap()
 : <a class="el" href="classModel_1_1TreeManager.html#a2994d61f89240710371f946644303d84">Model::TreeManager</a>
@@ -261,6 +295,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>NodeItemWrapperFormElement()
 : <a class="el" href="classVisualization_1_1NodeItemWrapperFormElement.html#a1be8aa2e566bdccc91a28c3851b6d137">Visualization::NodeItemWrapperFormElement&lt; ParentType &gt;</a>
 </li>
+<li>nodeListToSortedIdList()
+: <a class="el" href="classFilePersistence_1_1ListMergeComponent.html#a83db4e90611535ae0adf0539c9bc2a41">FilePersistence::ListMergeComponent</a>
+</li>
 <li>NodeOwningCommand()
 : <a class="el" href="classModel_1_1NodeOwningCommand.html#a8a27d70d668a441cda63b32beebcd62a">Model::NodeOwningCommand</a>
 </li>
@@ -270,19 +307,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>nodes()
 : <a class="el" href="classModel_1_1List.html#a9906fc675595cbd7eb63d8fcd3fadfde">Model::List</a>
 </li>
+<li>nodesGetter()
+: <a class="el" href="classVisualization_1_1ViewItem.html#a56cc1617dbe33f47716c9f39f8693cd7">Visualization::ViewItem</a>
+</li>
 <li>nodesModified()
-: <a class="el" href="classContractsLibrary_1_1ChangeMonitor.html#a1544d11fdd1f753947119ad9fa9478e0">ContractsLibrary::ChangeMonitor</a>
-, <a class="el" href="classModel_1_1TreeManager.html#ab36e6cf382627eae02d4de65c3cbd7fa">Model::TreeManager</a>
+: <a class="el" href="classContractsLibrary_1_1ChangeMonitor.html#a0c5ca43486a9bc6f476dfa04e0e66c56">ContractsLibrary::ChangeMonitor</a>
+, <a class="el" href="classModel_1_1TreeManager.html#a003d80057998b83de176806c599bf24c">Model::TreeManager</a>
 </li>
 <li>nodesUpdated()
-: <a class="el" href="classInteraction_1_1GenericHandlerManagerListener.html#a016f5359909c147f52d5fd0c4aa4b2cc">Interaction::GenericHandlerManagerListener</a>
-, <a class="el" href="classVisualization_1_1Scene.html#a31288d842a87596bca00cf73a66971e5">Visualization::Scene</a>
+: <a class="el" href="classInteraction_1_1GenericHandlerManagerListener.html#a210edd4953d16dd141daa87debf75ad5">Interaction::GenericHandlerManagerListener</a>
+, <a class="el" href="classVisualization_1_1Scene.html#ad946dc8caaf04c56cc709067b4ff4f43">Visualization::Scene</a>
+</li>
+<li>nodesWithoutParents()
+: <a class="el" href="classFilePersistence_1_1GenericTree.html#ae3f90a9290c90f6a2e5d554cde70f556">FilePersistence::GenericTree</a>
 </li>
 <li>nodeToDebugString()
 : <a class="el" href="classOOInteraction_1_1OOInteractionPlugin.html#ad3c2670b9e29efaa1c4a001b550f3dcd">OOInteraction::OOInteractionPlugin</a>
 </li>
 <li>nodeToLocation()
-: <a class="el" href="classOODebug_1_1JavaDebugger.html#a1fe0990f14da387154912e3d63d34008">OODebug::JavaDebugger</a>
+: <a class="el" href="classOODebug_1_1DebugUtils.html#aa6f2d641a4c6058eb294a1f856a445b6">OODebug::DebugUtils</a>
+</li>
+<li>nodeWithNullParent()
+: <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html#a6f63b04d32ac48de5eec06935994250e">FilePersistence::GenericPersistentUnit</a>
 </li>
 <li>NodeWithVisualizationItemWrapperFormElement()
 : <a class="el" href="classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html#a014b3bb736b0763908402d59c778bc0b">Visualization::NodeWithVisualizationItemWrapperFormElement&lt; ParentType, VisualizationType &gt;</a>
@@ -292,9 +338,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>noInnerCursors()
 : <a class="el" href="classVisualization_1_1LayoutFormElement.html#a963ad114fb7377cdde59a96061011122">Visualization::LayoutFormElement</a>
-</li>
-<li>noMainMethodWarning()
-: <a class="el" href="classOODebug_1_1JavaRunner.html#a6ba86df8a979c98fce8f65be272190c2">OODebug::JavaRunner</a>
 </li>
 <li>nonStaticTextBound()
 : <a class="el" href="classVisualization_1_1TextRenderer.html#a547918d59f3ade45882767a6a97b8a53">Visualization::TextRenderer</a>
@@ -306,7 +349,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classVisualization_1_1GridLayouter.html#a0c2166f00f3527fe86d8ddf43e09dd48">Visualization::GridLayouter</a>
 </li>
 <li>notAllowed()
-: <a class="el" href="classJavaExport_1_1Visitor.html#a577e9ad161d65b6b866c68e498845ec7">JavaExport::Visitor</a>
+: <a class="el" href="classJavaExport_1_1Visitor.html#a5e4f0beb5d74052b553c01bbcb4974e0">JavaExport::Visitor</a>
+</li>
+<li>NoteNodeChange()
+: <a class="el" href="classModel_1_1NoteNodeChange.html#accc0eeb117b4e4b8ce67cd3768e8a3db">Model::NoteNodeChange</a>
 </li>
 <li>NotificationListener()
 : <a class="el" href="classModel_1_1NotificationListener.html#a34a6869eef8e346ece54e3d15402c031">Model::NotificationListener</a>
@@ -328,6 +374,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>numActions()
 : <a class="el" href="classInteraction_1_1ActionPrompt.html#ab15dc75854e566c541150a246fc09b71">Interaction::ActionPrompt</a>
+</li>
+<li>numberOfCallees()
+: <a class="el" href="classOOVisualization_1_1InfoMethods.html#aaec18724179bb27ea2f9ba4786f3143c">OOVisualization::InfoMethods</a>
+</li>
+<li>numberOfUsages()
+: <a class="el" href="classOOVisualization_1_1InfoMethods.html#ad36f6ada3200eae5a09f5d17c2f2afb6">OOVisualization::InfoMethods</a>
 </li>
 <li>numComplete()
 : <a class="el" href="classInteraction_1_1UnfinishedOperator.html#a3cbc688e1ab3021e0e23b987f57844e2">Interaction::UnfinishedOperator</a>

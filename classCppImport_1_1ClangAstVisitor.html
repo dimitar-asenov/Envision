@@ -121,6 +121,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0799a5ea85c1472fbd6af526af17465f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b5ddfbbd75b01bd310038c945c837d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a4b5ddfbbd75b01bd310038c945c837d6">pushOOStack</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node)</td></tr>
 <tr class="separator:a4b5ddfbbd75b01bd310038c945c837d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ba778694df67efc364779728dcbd676"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a9ba778694df67efc364779728dcbd676">setPreprocessor</a> (const clang::Preprocessor *preprocessor)</td></tr>
+<tr class="separator:a9ba778694df67efc364779728dcbd676"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7429a0b1262cb2ba98694f519b6f7f16"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a7429a0b1262cb2ba98694f519b6f7f16">setSourceManager</a> (const clang::SourceManager *sourceManager)</td></tr>
 <tr class="separator:a7429a0b1262cb2ba98694f519b6f7f16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6be41130cb7930233d590a1d730bb74d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a6be41130cb7930233d590a1d730bb74d">shouldUseDataRecursionfor</a> (clang::Stmt *S)</td></tr>
@@ -233,6 +235,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:af1fc490c88f10a058f150a26dab710fd"><td class="memItemLeft" align="right" valign="top">const QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#af1fc490c88f10a058f150a26dab710fd">className_</a> {&quot;ClangAstVisitor&quot;}</td></tr>
 <tr class="separator:af1fc490c88f10a058f150a26dab710fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afccbad1dc22a846bfd4b18e57e92ed36"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1CommentParser.html">CommentParser</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#afccbad1dc22a846bfd4b18e57e92ed36">commentParser_</a> {}</td></tr>
+<tr class="separator:afccbad1dc22a846bfd4b18e57e92ed36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaae3a67e8c9e49d4467c847c411e076f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1ExpressionVisitor.html">ExpressionVisitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#aaae3a67e8c9e49d4467c847c411e076f">exprVisitor_</a> {}</td></tr>
 <tr class="separator:aaae3a67e8c9e49d4467c847c411e076f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae479872f1da25265451f8e12996a55b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#ae479872f1da25265451f8e12996a55b8">importSysHeader_</a> {false}</td></tr>
@@ -245,6 +249,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6ef87633cffaf57c232c089da650d652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59b8ec74b5fc133e4de4baacc113bb0a"><td class="memItemLeft" align="right" valign="top">QStack&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a59b8ec74b5fc133e4de4baacc113bb0a">ooStack_</a></td></tr>
 <tr class="separator:a59b8ec74b5fc133e4de4baacc113bb0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f419d4719bd8ef5060ddd1eceb819e7"><td class="memItemLeft" align="right" valign="top">const clang::Preprocessor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a3f419d4719bd8ef5060ddd1eceb819e7">preprocessor_</a> {}</td></tr>
+<tr class="separator:a3f419d4719bd8ef5060ddd1eceb819e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79490be01b6730d144e158ccc345d398"><td class="memItemLeft" align="right" valign="top">const clang::SourceManager *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a79490be01b6730d144e158ccc345d398">sourceManager_</a> {}</td></tr>
 <tr class="separator:a79490be01b6730d144e158ccc345d398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5717c4d98800c6217cb73e09b33caa41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCppImport_1_1TemplateArgumentVisitor.html">TemplateArgumentVisitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCppImport_1_1ClangAstVisitor.html#a5717c4d98800c6217cb73e09b33caa41">templArgVisitor_</a> {}</td></tr>
@@ -459,6 +465,22 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
           <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9ba778694df67efc364779728dcbd676"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CppImport::ClangAstVisitor::setPreprocessor </td>
+          <td>(</td>
+          <td class="paramtype">const clang::Preprocessor *&#160;</td>
+          <td class="paramname"><em>preprocessor</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1270,6 +1292,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="afccbad1dc22a846bfd4b18e57e92ed36"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCppImport_1_1CommentParser.html">CommentParser</a>* CppImport::ClangAstVisitor::commentParser_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aaae3a67e8c9e49d4467c847c411e076f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1379,6 +1421,26 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">QStack&lt;<a class="el" href="classModel_1_1Node.html">Model::Node</a>*&gt; CppImport::ClangAstVisitor::ooStack_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3f419d4719bd8ef5060ddd1eceb819e7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const clang::Preprocessor* CppImport::ClangAstVisitor::preprocessor_ {}</td>
         </tr>
       </table>
   </td>

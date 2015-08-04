@@ -91,6 +91,10 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
  Lp Solve is used for calculating some of the more complex visualization layouts.</li>
 <li><b>Clang 3.6</b>: <a href="http://clang.llvm.org/">http://clang.llvm.org/</a> <br />
  Clang is used for importing C++ projects in Envision. Support for importing C++ is preliminary and incomplete.</li>
+<li><b>libgit2</b>: <a href="https://libgit2.github.com/">https://libgit2.github.com/</a> <br />
+ Used for Envision's git-based version control.</li>
+<li><b>Python</b>: <a href="https://www.python.org/">https://www.python.org/</a> <br />
+ Used for various scripts during building, testing and run-time execution.</li>
 <li><b>On Linux: Google Performance Tools</b>: <a href="http://code.google.com/p/gperftools/">http://code.google.com/p/gperftools/</a> <br />
  Used for profiling.</li>
 <li><b>For development only: Vera ++ </b>: <a href="https://bitbucket.org/verateam/vera">https://bitbucket.org/verateam/vera</a> <br />
@@ -104,8 +108,10 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
 </ol>
 </li>
 <li>Install Clang 3.6: <pre class="fragment">sudo apt-get install libclang-dev clang llvm</pre></li>
+<li>Install libgit2: <pre class="fragment">sudo apt-get install libgit2-dev</pre></li>
 <li>Install the Google Performance Tools: <pre class="fragment">sudo apt-get install google-perftools libgoogle-perftools-dev </pre></li>
 <li>Install the Vera++ tool which performs style checks for the code: <pre class="fragment">sudo apt-get install vera++ </pre></li>
+<li>Python should already be installed. Both version 2 or 3 should work.</li>
 </ol>
 <p>Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.</p>
 <h1><a class="anchor" id="qtcreator"></a>

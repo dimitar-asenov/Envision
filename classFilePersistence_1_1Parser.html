@@ -104,8 +104,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a213a0ab2183d26c7b14fd7f866d45c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30701ed443b06a35c49ac4bbeff91ec2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a30701ed443b06a35c49ac4bbeff91ec2">parseLine</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, const char *line, int lineLength)</td></tr>
 <tr class="separator:a30701ed443b06a35c49ac4bbeff91ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d9c2e6b59b7592717984f9848ec093a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a8d9c2e6b59b7592717984f9848ec093a">save</a> (QTextStream &amp;stream, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, int tabLevel=0)</td></tr>
-<tr class="separator:a8d9c2e6b59b7592717984f9848ec093a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affcfa1d494cba036434dccd621b72a27"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#affcfa1d494cba036434dccd621b72a27">save</a> (QTextStream &amp;stream, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, const QStringList &amp;persistentUnitTypes={}, int tabLevel=0)</td></tr>
+<tr class="memdesc:affcfa1d494cba036434dccd621b72a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the generic node and its children recursively to a text stream.  <a href="#affcfa1d494cba036434dccd621b72a27">More...</a><br /></td></tr>
+<tr class="separator:affcfa1d494cba036434dccd621b72a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -123,7 +124,7 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:ae9a4aecfab7765d31ef537af09eff59b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49d369804c8d6e3bf4321dcdc3dbf8b4"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#a49d369804c8d6e3bf4321dcdc3dbf8b4">rawStringToQString</a> (const char *data, int startAt, int endInclusive)</td></tr>
 <tr class="separator:a49d369804c8d6e3bf4321dcdc3dbf8b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad82ed3b14ccd5fde423db7845d911b52"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#ad82ed3b14ccd5fde423db7845d911b52">toId</a> (const char *data, int start, int endInclusive, bool &amp;ok)</td></tr>
+<tr class="memitem:ad82ed3b14ccd5fde423db7845d911b52"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1Parser.html#ad82ed3b14ccd5fde423db7845d911b52">toId</a> (const char *data, int start, int endInclusive, bool &amp;ok)</td></tr>
 <tr class="separator:ad82ed3b14ccd5fde423db7845d911b52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -529,7 +530,7 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8d9c2e6b59b7592717984f9848ec093a"></a>
+<a class="anchor" id="affcfa1d494cba036434dccd621b72a27"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -537,7 +538,7 @@ Static Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void FilePersistence::Parser::save </td>
+          <td class="memname">QList&lt; <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt; FilePersistence::Parser::save </td>
           <td>(</td>
           <td class="paramtype">QTextStream &amp;&#160;</td>
           <td class="paramname"><em>stream</em>, </td>
@@ -547,6 +548,12 @@ Static Private Member Functions</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td>
           <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>persistentUnitTypes</em> = <code>{}</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -567,6 +574,9 @@ Static Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Saves the generic node and its children recursively to a text stream. </p>
+<p>If any persistentUnitTypes are provided, they are saved as new peristent unit reference only and are returned in the output list. </p>
+
 </div>
 </div>
 <a class="anchor" id="ad82ed3b14ccd5fde423db7845d911b52"></a>
@@ -577,7 +587,7 @@ Static Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceModel.html#a8afc06dc5b011a65ae735c3e4e6f8610">Model::NodeIdType</a> FilePersistence::Parser::toId </td>
+          <td class="memname"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> FilePersistence::Parser::toId </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>data</em>, </td>

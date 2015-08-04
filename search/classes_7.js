@@ -20,6 +20,8 @@ var searchData=
   ['hforeachstatement',['HForEachStatement',['../classOOInteraction_1_1HForEachStatement.html',1,'OOInteraction']]],
   ['hformalargument',['HFormalArgument',['../classOOInteraction_1_1HFormalArgument.html',1,'OOInteraction']]],
   ['hifstatement',['HIfStatement',['../classOOInteraction_1_1HIfStatement.html',1,'OOInteraction']]],
+  ['hinfonode',['HInfoNode',['../classInteraction_1_1HInfoNode.html',1,'Interaction']]],
+  ['history',['History',['../classFilePersistence_1_1History.html',1,'FilePersistence']]],
   ['hkeywordstatement',['HKeywordStatement',['../classOOInteraction_1_1HKeywordStatement.html',1,'OOInteraction']]],
   ['hlist',['HList',['../classInteraction_1_1HList.html',1,'Interaction']]],
   ['hloop',['HLoop',['../classOOInteraction_1_1HLoop.html',1,'OOInteraction']]],

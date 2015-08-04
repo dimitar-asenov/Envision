@@ -131,6 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6026745a457fb0edde390e06c8168391"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>=nullptr)</td></tr>
 <tr class="memdesc:a6026745a457fb0edde390e06c8168391"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new node with the specified parent.  <a href="#a6026745a457fb0edde390e06c8168391">More...</a><br /></td></tr>
 <tr class="separator:a6026745a457fb0edde390e06c8168391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a0c3ccbae8a426091c6a1679f16e730"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a6a0c3ccbae8a426091c6a1679f16e730">Node</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> &amp;other)</td></tr>
+<tr class="memdesc:a6a0c3ccbae8a426091c6a1679f16e730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="#a6a0c3ccbae8a426091c6a1679f16e730">More...</a><br /></td></tr>
+<tr class="separator:a6a0c3ccbae8a426091c6a1679f16e730"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab93b813886967b6d93a351c75f31b6e5"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ab93b813886967b6d93a351c75f31b6e5">~Node</a> ()</td></tr>
 <tr class="separator:ab93b813886967b6d93a351c75f31b6e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa33e411bb1aa1aabca6d162f66bc481f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1NodeReadWriteLock.html">NodeReadWriteLock</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aa33e411bb1aa1aabca6d162f66bc481f">accessLock</a> () const </td></tr>
@@ -151,6 +154,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6c86ab8359212f69dcbafd1f40bd8aea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a6c86ab8359212f69dcbafd1f40bd8aea">childToSubnode</a> (const <a class="el" href="classModel_1_1Node.html">Node</a> *other) const </td></tr>
 <tr class="memdesc:a6c86ab8359212f69dcbafd1f40bd8aea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the direct child node that is equal to <em>other</em> or is an ancestor of <em>other</em>.  <a href="#a6c86ab8359212f69dcbafd1f40bd8aea">More...</a><br /></td></tr>
 <tr class="separator:a6c86ab8359212f69dcbafd1f40bd8aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31d51c241cde5c82888b5e438ef02344"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a31d51c241cde5c82888b5e438ef02344">clone</a> () const =0</td></tr>
+<tr class="separator:a31d51c241cde5c82888b5e438ef02344"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc19699b25363ba3474acf0000da4329"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329">definesSymbol</a> () const </td></tr>
 <tr class="memdesc:acc19699b25363ba3474acf0000da4329"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol and false otherwise.  <a href="#acc19699b25363ba3474acf0000da4329">More...</a><br /></td></tr>
 <tr class="separator:acc19699b25363ba3474acf0000da4329"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -424,6 +429,25 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6a0c3ccbae8a426091c6a1679f16e730"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Model::Node::Node </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classModel_1_1Node.html">Node</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<p>Note that <em>other</em> is ignored and a copy will have no parent or manager and will have a revision of 0. </p>
+
+</div>
+</div>
 <a class="anchor" id="ab93b813886967b6d93a351c75f31b6e5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -582,6 +606,29 @@ Static Private Attributes</h2></td></tr>
 
 <p>Returns the direct child node that is equal to <em>other</em> or is an ancestor of <em>other</em>. </p>
 <p>Returns null if this node is not an ancestor of <em>other</em>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a31d51c241cde5c82888b5e438ef02344"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classModel_1_1Node.html">Node</a>* Model::Node::clone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

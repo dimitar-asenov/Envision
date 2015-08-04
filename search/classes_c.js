@@ -5,6 +5,7 @@ var searchData=
   ['nametext',['NameText',['../classModel_1_1NameText.html',1,'Model']]],
   ['newexpression',['NewExpression',['../classOOModel_1_1NewExpression.html',1,'OOModel']]],
   ['node',['Node',['../classModel_1_1Node.html',1,'Model']]],
+  ['nodedata',['NodeData',['../structFilePersistence_1_1NodeData.html',1,'FilePersistence']]],
   ['nodehasher',['NodeHasher',['../classCppImport_1_1NodeHasher.html',1,'CppImport']]],
   ['nodeidmap',['NodeIdMap',['../classModel_1_1NodeIdMap.html',1,'Model']]],
   ['nodeitemwrapperformelement',['NodeItemWrapperFormElement',['../classVisualization_1_1NodeItemWrapperFormElement.html',1,'Visualization']]],
@@ -13,6 +14,7 @@ var searchData=
   ['nodetodebugstringadapter',['NodeToDebugStringAdapter',['../classModel_1_1NodeToDebugStringAdapter.html',1,'Model']]],
   ['nodewithvisualizationitemwrapperformelement',['NodeWithVisualizationItemWrapperFormElement',['../classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html',1,'Visualization']]],
   ['nodewrapper',['NodeWrapper',['../classVisualization_1_1NodeWrapper.html',1,'Visualization']]],
+  ['notenodechange',['NoteNodeChange',['../classModel_1_1NoteNodeChange.html',1,'Model']]],
   ['notificationlistener',['NotificationListener',['../classModel_1_1NotificationListener.html',1,'Model']]],
   ['nullliteral',['NullLiteral',['../classOOModel_1_1NullLiteral.html',1,'OOModel']]],
   ['nulltype',['NullType',['../classOOModel_1_1NullType.html',1,'OOModel']]]

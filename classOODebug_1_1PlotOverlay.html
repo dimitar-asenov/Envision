@@ -93,7 +93,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">OODebug::PlotOverlay Class Reference</div>  </div>
 </div><!--header-->
@@ -147,6 +148,14 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a210604aba2688113989aa3f71a8b3722"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc4d72ce57c485c64c44108cc07d02d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#afc4d72ce57c485c64c44108cc07d02d0">drawAxes</a> (QPainter *painter)</td></tr>
 <tr class="separator:afc4d72ce57c485c64c44108cc07d02d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f68fe199977332e3a9916cc853229bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a6f68fe199977332e3a9916cc853229bb">drawLegend</a> (QPainter *painter)</td></tr>
+<tr class="separator:a6f68fe199977332e3a9916cc853229bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67fdd124c404d956ea373546254746b4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a67fdd124c404d956ea373546254746b4">drawnTextHeight</a> ()</td></tr>
+<tr class="separator:a67fdd124c404d956ea373546254746b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d2e0d7a31e6f52ec6a4fad8a48a6e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a38d2e0d7a31e6f52ec6a4fad8a48a6e7">drawnTextWidth</a> (const QString &amp;text)</td></tr>
+<tr class="separator:a38d2e0d7a31e6f52ec6a4fad8a48a6e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e161acb3ced1d02c5f824676456e74c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a7e161acb3ced1d02c5f824676456e74c">drawTextVerticalCenteredAt</a> (QPainter *painter, const QPointF &amp;pos, QString label)</td></tr>
+<tr class="separator:a7e161acb3ced1d02c5f824676456e74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1517a5868182d784478528a3bdb1ebf7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a1517a5868182d784478528a3bdb1ebf7">drawTics</a> (QPainter *painter)</td></tr>
 <tr class="separator:a1517a5868182d784478528a3bdb1ebf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebd5114f409cb6477d1be1cc679e3582"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#aebd5114f409cb6477d1be1cc679e3582">drawXTic</a> (QPainter *painter, const QPointF &amp;pos, QString label)</td></tr>
@@ -159,6 +168,9 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a75cf6241b29c688ced0602bdacc8ee5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16f08adba0fce66c16d3a6fd0156eadc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a16f08adba0fce66c16d3a6fd0156eadc">plotScatter</a> (QPainter *painter)</td></tr>
 <tr class="separator:a16f08adba0fce66c16d3a6fd0156eadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa11a72943df2f432179a9e986d13b0df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#aa11a72943df2f432179a9e986d13b0df">setBrushColor</a> (QPainter *painter, QColor color)</td></tr>
+<tr class="memdesc:aa11a72943df2f432179a9e986d13b0df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the brush on <em>painter</em> to a brush with the <em>color</em>.  <a href="#aa11a72943df2f432179a9e986d13b0df">More...</a><br /></td></tr>
+<tr class="separator:aa11a72943df2f432179a9e986d13b0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00e40084f6a4c08d8675cf93fca81516"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a00e40084f6a4c08d8675cf93fca81516">toPlotCoordinates</a> (QPointF position)</td></tr>
 <tr class="separator:a00e40084f6a4c08d8675cf93fca81516"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a925797251a93e05b5e0b46807f8f0df5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a925797251a93e05b5e0b46807f8f0df5">valueRange</a> (int dimension)</td></tr>
@@ -184,6 +196,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6aaff137004c0a226fa02cbfdeb1d3f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00862ee8d22bd9461a57d988dfa430f1"><td class="memItemLeft" align="right" valign="top">QList&lt; QList&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a00862ee8d22bd9461a57d988dfa430f1">yValues_</a></td></tr>
 <tr class="separator:a00862ee8d22bd9461a57d988dfa430f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a0b9b9f0bdabfef4f87009472274830d5"><td class="memItemLeft" align="right" valign="top">static const QList&lt; Qt::GlobalColor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1PlotOverlay.html#a0b9b9f0bdabfef4f87009472274830d5">PLOT_COLORS</a> = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta}</td></tr>
+<tr class="separator:a0b9b9f0bdabfef4f87009472274830d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -436,6 +453,117 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6f68fe199977332e3a9916cc853229bb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OODebug::PlotOverlay::drawLegend </td>
+          <td>(</td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a67fdd124c404d956ea373546254746b4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int OODebug::PlotOverlay::drawnTextHeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a38d2e0d7a31e6f52ec6a4fad8a48a6e7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int OODebug::PlotOverlay::drawnTextWidth </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7e161acb3ced1d02c5f824676456e74c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OODebug::PlotOverlay::drawTextVerticalCenteredAt </td>
+          <td>(</td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QPointF &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>label</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1517a5868182d784478528a3bdb1ebf7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -652,6 +780,42 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa11a72943df2f432179a9e986d13b0df"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OODebug::PlotOverlay::setBrushColor </td>
+          <td>(</td>
+          <td class="paramtype">QPainter *&#160;</td>
+          <td class="paramname"><em>painter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QColor&#160;</td>
+          <td class="paramname"><em>color</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Changes the brush on <em>painter</em> to a brush with the <em>color</em>. </p>
+
+</div>
+</div>
 <a class="anchor" id="a00e40084f6a4c08d8675cf93fca81516"></a>
 <div class="memitem">
 <div class="memproto">
@@ -771,6 +935,26 @@ template&lt;class ValueType &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a0b9b9f0bdabfef4f87009472274830d5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QList&lt; Qt::GlobalColor &gt; OODebug::PlotOverlay::PLOT_COLORS = {Qt::red, Qt::blue, Qt::green, Qt::cyan, Qt::magenta}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8c8af12db6e8464a242819d4cae73135"></a>
 <div class="memitem">
 <div class="memproto">

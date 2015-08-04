@@ -102,15 +102,15 @@ Inheritance diagram for Model::UndoCommand:</div>
   <img src="classModel_1_1UndoCommand.png" usemap="#Model::UndoCommand_map" alt=""/>
   <map id="Model::UndoCommand_map" name="Model::UndoCommand_map">
 <area href="classModel_1_1FieldSet.html" alt="Model::FieldSet&lt; QString &gt;" shape="rect" coords="0,112,214,136"/>
-<area href="classModel_1_1AddModifiedNode.html" alt="Model::AddModifiedNode" shape="rect" coords="224,112,438,136"/>
-<area href="classModel_1_1FieldSet.html" alt="Model::FieldSet&lt; T &gt;" shape="rect" coords="448,112,662,136"/>
-<area href="classModel_1_1NodeOwningCommand.html" alt="Model::NodeOwningCommand" shape="rect" coords="672,112,886,136"/>
-<area href="classModel_1_1SetModificationTarget.html" alt="Model::SetModificationTarget" shape="rect" coords="896,112,1110,136"/>
+<area href="classModel_1_1FieldSet.html" alt="Model::FieldSet&lt; T &gt;" shape="rect" coords="224,112,438,136"/>
+<area href="classModel_1_1NodeOwningCommand.html" alt="Model::NodeOwningCommand" shape="rect" coords="560,112,774,136"/>
+<area href="classModel_1_1NoteNodeChange.html" alt="Model::NoteNodeChange" shape="rect" coords="784,112,998,136"/>
+<area href="classModel_1_1SetModificationTarget.html" alt="Model::SetModificationTarget" shape="rect" coords="1008,112,1222,136"/>
 <area href="classModel_1_1NameChange.html" alt="Model::NameChange" shape="rect" coords="0,168,214,192"/>
-<area href="classModel_1_1CompositeNodeChangeChild.html" alt="Model::CompositeNodeChangeChild" shape="rect" coords="336,168,550,192"/>
-<area href="classModel_1_1ListInsert.html" title="This command is used to insert a list element at a specific position in a list. " alt="Model::ListInsert" shape="rect" coords="560,168,774,192"/>
-<area href="classModel_1_1ListPut.html" title="This command is used to put a list element at a specific position in a list. " alt="Model::ListPut" shape="rect" coords="784,168,998,192"/>
-<area href="classModel_1_1ListRemove.html" alt="Model::ListRemove" shape="rect" coords="1008,168,1222,192"/>
+<area href="classModel_1_1CompositeNodeChangeChild.html" alt="Model::CompositeNodeChangeChild" shape="rect" coords="224,168,438,192"/>
+<area href="classModel_1_1ListInsert.html" title="This command is used to insert a list element at a specific position in a list. " alt="Model::ListInsert" shape="rect" coords="448,168,662,192"/>
+<area href="classModel_1_1ListPut.html" title="This command is used to put a list element at a specific position in a list. " alt="Model::ListPut" shape="rect" coords="672,168,886,192"/>
+<area href="classModel_1_1ListRemove.html" alt="Model::ListRemove" shape="rect" coords="896,168,1110,192"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -120,6 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afab35290499ece7eb6360196c5818b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a321caa7ad72aec74dc9c6fb850c21267"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a321caa7ad72aec74dc9c6fb850c21267">~UndoCommand</a> ()</td></tr>
 <tr class="separator:a321caa7ad72aec74dc9c6fb850c21267"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1b5e369323ac5322dfee6c45701a342"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#ac1b5e369323ac5322dfee6c45701a342">insertedNode</a> () const </td></tr>
+<tr class="memdesc:ac1b5e369323ac5322dfee6c45701a342"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node that this command inserted into the tree, or nullptr if no node was inserted.  <a href="#ac1b5e369323ac5322dfee6c45701a342">More...</a><br /></td></tr>
+<tr class="separator:ac1b5e369323ac5322dfee6c45701a342"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7715a64e2cc85296cae10fe0a5926c8d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a7715a64e2cc85296cae10fe0a5926c8d">isUndone</a> () const </td></tr>
 <tr class="memdesc:a7715a64e2cc85296cae10fe0a5926c8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the command has been undone since it was applied.  <a href="#a7715a64e2cc85296cae10fe0a5926c8d">More...</a><br /></td></tr>
 <tr class="separator:a7715a64e2cc85296cae10fe0a5926c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,6 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acca6957c4a8f2875c7c16bd84901848d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6071571dbb4c416c2525fdcaf0cec426"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a6071571dbb4c416c2525fdcaf0cec426">redo</a> ()</td></tr>
 <tr class="separator:a6071571dbb4c416c2525fdcaf0cec426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b810bd771330138dc651ff29859f871"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a5b810bd771330138dc651ff29859f871">removedNode</a> () const </td></tr>
+<tr class="memdesc:a5b810bd771330138dc651ff29859f871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node that this command removed from the tree, or nullptr if no node was removed.  <a href="#a5b810bd771330138dc651ff29859f871">More...</a><br /></td></tr>
+<tr class="separator:a5b810bd771330138dc651ff29859f871"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1247b5d5ac3933c48422ed9bf403e101"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a1247b5d5ac3933c48422ed9bf403e101">target</a> () const </td></tr>
 <tr class="separator:a1247b5d5ac3933c48422ed9bf403e101"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49fdab5e65ef948f1996a1f1fbb6b69e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1UndoCommand.html#a49fdab5e65ef948f1996a1f1fbb6b69e">undo</a> ()</td></tr>
@@ -191,6 +197,34 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ac1b5e369323ac5322dfee6c45701a342"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * Model::UndoCommand::insertedNode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the node that this command inserted into the tree, or nullptr if no node was inserted. </p>
+<p>The default implementaion returns nullptr. Reimplement this in commands that own a node. </p>
+
+<p>Reimplemented in <a class="el" href="classModel_1_1NodeOwningCommand.html#a376f40e4c20d1dd42933560422b66ded">Model::NodeOwningCommand</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a7715a64e2cc85296cae10fe0a5926c8d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -270,7 +304,35 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classModel_1_1CompositeNodeChangeChild.html#a9852721860efab52bedfa0b94a30027f">Model::CompositeNodeChangeChild</a>, <a class="el" href="classModel_1_1FieldSet.html#ab4be5eee7c7447033b9f80ac123a9b70">Model::FieldSet&lt; T &gt;</a>, <a class="el" href="classModel_1_1ListPut.html#ab2c9696f383c4c674341cbfbddb84643">Model::ListPut</a>, <a class="el" href="classModel_1_1SetModificationTarget.html#ab78d44dc620c8e68a469ccb63af45d6c">Model::SetModificationTarget</a>, <a class="el" href="classModel_1_1FieldSet.html#ab4be5eee7c7447033b9f80ac123a9b70">Model::FieldSet&lt; QString &gt;</a>, <a class="el" href="classModel_1_1ListInsert.html#a65bbbdb96bc1cd50b230d4ebfd2af5eb">Model::ListInsert</a>, <a class="el" href="classModel_1_1ListRemove.html#ac0d9b3d809c6b38460b4eb4e1dca34cb">Model::ListRemove</a>, <a class="el" href="classModel_1_1AddModifiedNode.html#a18bbb4994be2e710562217ef30689af4">Model::AddModifiedNode</a>, and <a class="el" href="classModel_1_1NameChange.html#ac2be963ac76ed6fa422e82a181e0fc40">Model::NameChange</a>.</p>
+<p>Reimplemented in <a class="el" href="classModel_1_1CompositeNodeChangeChild.html#a9852721860efab52bedfa0b94a30027f">Model::CompositeNodeChangeChild</a>, <a class="el" href="classModel_1_1FieldSet.html#ab4be5eee7c7447033b9f80ac123a9b70">Model::FieldSet&lt; T &gt;</a>, <a class="el" href="classModel_1_1ListPut.html#ab2c9696f383c4c674341cbfbddb84643">Model::ListPut</a>, <a class="el" href="classModel_1_1SetModificationTarget.html#ab78d44dc620c8e68a469ccb63af45d6c">Model::SetModificationTarget</a>, <a class="el" href="classModel_1_1FieldSet.html#ab4be5eee7c7447033b9f80ac123a9b70">Model::FieldSet&lt; QString &gt;</a>, <a class="el" href="classModel_1_1ListInsert.html#a65bbbdb96bc1cd50b230d4ebfd2af5eb">Model::ListInsert</a>, <a class="el" href="classModel_1_1ListRemove.html#ac0d9b3d809c6b38460b4eb4e1dca34cb">Model::ListRemove</a>, <a class="el" href="classModel_1_1NameChange.html#ac2be963ac76ed6fa422e82a181e0fc40">Model::NameChange</a>, and <a class="el" href="classModel_1_1NoteNodeChange.html#a693f4fa43d6029ae07f59707e086a8b8">Model::NoteNodeChange</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5b810bd771330138dc651ff29859f871"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * Model::UndoCommand::removedNode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the node that this command removed from the tree, or nullptr if no node was removed. </p>
+<p>The default implementaion returns nullptr. Reimplement this in commands that own a node. </p>
+
+<p>Reimplemented in <a class="el" href="classModel_1_1NodeOwningCommand.html#ace2a165d89e21f780a24f06fd96066b0">Model::NodeOwningCommand</a>.</p>
 
 </div>
 </div>
@@ -318,7 +380,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classModel_1_1FieldSet.html#a64d6aa86d7cd9d43e091065fae96aca4">Model::FieldSet&lt; T &gt;</a>, <a class="el" href="classModel_1_1FieldSet.html#a64d6aa86d7cd9d43e091065fae96aca4">Model::FieldSet&lt; QString &gt;</a>, <a class="el" href="classModel_1_1CompositeNodeChangeChild.html#a2e0cd06f5452f4cc409e2d71eab23be8">Model::CompositeNodeChangeChild</a>, <a class="el" href="classModel_1_1ListPut.html#ab369cd599b14d2e33c3d44a3f863cf63">Model::ListPut</a>, <a class="el" href="classModel_1_1SetModificationTarget.html#a7a2e3727cbb0e11dd4f880f7b0d46458">Model::SetModificationTarget</a>, <a class="el" href="classModel_1_1ListInsert.html#ae419fa2308ee89223de35f6bee60699a">Model::ListInsert</a>, <a class="el" href="classModel_1_1ListRemove.html#a686661348678cc3f06512662da6537a0">Model::ListRemove</a>, <a class="el" href="classModel_1_1AddModifiedNode.html#aaa0e51b19c9ae91dcb7c809f1c4ec6b4">Model::AddModifiedNode</a>, and <a class="el" href="classModel_1_1NameChange.html#a96fa00842fcdcd3d13127f510a13da26">Model::NameChange</a>.</p>
+<p>Reimplemented in <a class="el" href="classModel_1_1FieldSet.html#a64d6aa86d7cd9d43e091065fae96aca4">Model::FieldSet&lt; T &gt;</a>, <a class="el" href="classModel_1_1FieldSet.html#a64d6aa86d7cd9d43e091065fae96aca4">Model::FieldSet&lt; QString &gt;</a>, <a class="el" href="classModel_1_1CompositeNodeChangeChild.html#a2e0cd06f5452f4cc409e2d71eab23be8">Model::CompositeNodeChangeChild</a>, <a class="el" href="classModel_1_1ListPut.html#ab369cd599b14d2e33c3d44a3f863cf63">Model::ListPut</a>, <a class="el" href="classModel_1_1SetModificationTarget.html#a7a2e3727cbb0e11dd4f880f7b0d46458">Model::SetModificationTarget</a>, <a class="el" href="classModel_1_1ListInsert.html#ae419fa2308ee89223de35f6bee60699a">Model::ListInsert</a>, <a class="el" href="classModel_1_1ListRemove.html#a686661348678cc3f06512662da6537a0">Model::ListRemove</a>, <a class="el" href="classModel_1_1NameChange.html#a96fa00842fcdcd3d13127f510a13da26">Model::NameChange</a>, and <a class="el" href="classModel_1_1NoteNodeChange.html#a01153cf1959b7f761cf08017d3ea05e5">Model::NoteNodeChange</a>.</p>
 
 </div>
 </div>

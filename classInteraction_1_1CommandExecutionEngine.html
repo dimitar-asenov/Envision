@@ -92,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Interaction::CommandExecutionEngine Class Reference</div>  </div>
@@ -130,6 +131,11 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:aaa36ac360559d8b88e21c5296fd768f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9574654a8935ade97f3d17b5040b4f34"><td class="memItemLeft" align="right" valign="top">virtual QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#a9574654a8935ade97f3d17b5040b4f34">tokenizeNonQuoted</a> (const QString &amp;string)</td></tr>
 <tr class="separator:a9574654a8935ade97f3d17b5040b4f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ac822117857d40f6d0abcdd584d088f21"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html#ac822117857d40f6d0abcdd584d088f21">suggestionsForHandler</a> (<a class="el" href="classInteraction_1_1GenericHandler.html">GenericHandler</a> *handler, QSet&lt; std::size_t &gt; &amp;alreadySuggested, QString trimmedCommandText, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *source, <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;cursor)</td></tr>
+<tr class="separator:ac822117857d40f6d0abcdd584d088f21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -442,6 +448,64 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac822117857d40f6d0abcdd584d088f21"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt; Interaction::CommandExecutionEngine::suggestionsForHandler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1GenericHandler.html">GenericHandler</a> *&#160;</td>
+          <td class="paramname"><em>handler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QSet&lt; std::size_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>alreadySuggested</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QString&#160;</td>
+          <td class="paramname"><em>trimmedCommandText</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
+          <td class="paramname"><em>target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unique_ptr&lt; <a class="el" href="classVisualization_1_1Cursor.html">Visualization::Cursor</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cursor</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

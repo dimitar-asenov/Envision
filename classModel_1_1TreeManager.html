@@ -114,9 +114,9 @@ Signals</h2></td></tr>
 <tr class="memitem:ae8f5f25f8dbfee0da199d49e8694a8fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#ae8f5f25f8dbfee0da199d49e8694a8fc">nameModified</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *node, const QString &amp;oldName)</td></tr>
 <tr class="memdesc:ae8f5f25f8dbfee0da199d49e8694a8fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when the name of a node has changed.  <a href="#ae8f5f25f8dbfee0da199d49e8694a8fc">More...</a><br /></td></tr>
 <tr class="separator:ae8f5f25f8dbfee0da199d49e8694a8fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab36e6cf382627eae02d4de65c3cbd7fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#ab36e6cf382627eae02d4de65c3cbd7fa">nodesModified</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; nodes)</td></tr>
-<tr class="memdesc:ab36e6cf382627eae02d4de65c3cbd7fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted at the end of a modification block.  <a href="#ab36e6cf382627eae02d4de65c3cbd7fa">More...</a><br /></td></tr>
-<tr class="separator:ab36e6cf382627eae02d4de65c3cbd7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a003d80057998b83de176806c599bf24c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a003d80057998b83de176806c599bf24c">nodesModified</a> (QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; modifiedNodes, QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; removedNodes)</td></tr>
+<tr class="memdesc:a003d80057998b83de176806c599bf24c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted at the end of a modification block.  <a href="#a003d80057998b83de176806c599bf24c">More...</a><br /></td></tr>
+<tr class="separator:a003d80057998b83de176806c599bf24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91af5b04ec2b94f3cfeb4f7ec93c8a70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a91af5b04ec2b94f3cfeb4f7ec93c8a70">rootNodeSet</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1TreeManager.html#a9cbf0d71e7c5e1193fab5e61fb8bda95">root</a>)</td></tr>
 <tr class="memdesc:a91af5b04ec2b94f3cfeb4f7ec93c8a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Emitted when a new root node was set.  <a href="#a91af5b04ec2b94f3cfeb4f7ec93c8a70">More...</a><br /></td></tr>
 <tr class="separator:a91af5b04ec2b94f3cfeb4f7ec93c8a70"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,7 +239,7 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a85fee1c9bb0d3da43999996fa6760150"><td class="mdescLeft">&#160;</td><td class="mdescRight">The test message associated with the current modification operation.  <a href="#a85fee1c9bb0d3da43999996fa6760150">More...</a><br /></td></tr>
 <tr class="separator:a85fee1c9bb0d3da43999996fa6760150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b15b5d2cc58cadc8a76caf9658c41e6"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a5b15b5d2cc58cadc8a76caf9658c41e6">modifiedTargets</a></td></tr>
-<tr class="memdesc:a5b15b5d2cc58cadc8a76caf9658c41e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of all top-level nodes which were modified as part of the last modification operation.  <a href="#a5b15b5d2cc58cadc8a76caf9658c41e6">More...</a><br /></td></tr>
+<tr class="memdesc:a5b15b5d2cc58cadc8a76caf9658c41e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of all nodes which might have been modified as part of the last modification operation.  <a href="#a5b15b5d2cc58cadc8a76caf9658c41e6">More...</a><br /></td></tr>
 <tr class="separator:a5b15b5d2cc58cadc8a76caf9658c41e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf58027de7c27192d76d1d73185793e2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#aaf58027de7c27192d76d1d73185793e2">name_</a></td></tr>
 <tr class="memdesc:aaf58027de7c27192d76d1d73185793e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of this manager's tree.  <a href="#aaf58027de7c27192d76d1d73185793e2">More...</a><br /></td></tr>
@@ -255,6 +255,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ae35082120b91fffc79bd063d5760c28a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#ae35082120b91fffc79bd063d5760c28a">pushedNewCommandsOnTheStack</a> {}</td></tr>
 <tr class="memdesc:ae35082120b91fffc79bd063d5760c28a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates if the last modification operation pushed commands on stack.  <a href="#ae35082120b91fffc79bd063d5760c28a">More...</a><br /></td></tr>
 <tr class="separator:ae35082120b91fffc79bd063d5760c28a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1962b73fc09638dcd7d958fc387847c2"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a1962b73fc09638dcd7d958fc387847c2">removedTargets_</a></td></tr>
+<tr class="memdesc:a1962b73fc09638dcd7d958fc387847c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of all nodes which have been removed from the tree as part of the last modification operation.  <a href="#a1962b73fc09638dcd7d958fc387847c2">More...</a><br /></td></tr>
+<tr class="separator:a1962b73fc09638dcd7d958fc387847c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d96ba6032a8e12941ba266dd3f4ef97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TreeManager.html#a0d96ba6032a8e12941ba266dd3f4ef97">root_</a> {}</td></tr>
 <tr class="memdesc:a0d96ba6032a8e12941ba266dd3f4ef97"><td class="mdescLeft">&#160;</td><td class="mdescRight">The root node for this manager's tree.  <a href="#a0d96ba6032a8e12941ba266dd3f4ef97">More...</a><br /></td></tr>
 <tr class="separator:a0d96ba6032a8e12941ba266dd3f4ef97"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -500,7 +503,7 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">node</td><td>The node that represents the name that has changed </td></tr>
-    <tr><td class="paramname">oldNmae</td><td>What was the old name of the node </td></tr>
+    <tr><td class="paramname">oldName</td><td>What was the old name of the node </td></tr>
   </table>
   </dd>
 </dl>
@@ -920,7 +923,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab36e6cf382627eae02d4de65c3cbd7fa"></a>
+<a class="anchor" id="a003d80057998b83de176806c599bf24c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -931,8 +934,18 @@ Private Attributes</h2></td></tr>
           <td class="memname">void Model::TreeManager::nodesModified </td>
           <td>(</td>
           <td class="paramtype">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td>
-          <td class="paramname"><em>nodes</em></td><td>)</td>
+          <td class="paramname"><em>modifiedNodes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">QSet&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td>
+          <td class="paramname"><em>removedNodes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -945,7 +958,8 @@ Private Attributes</h2></td></tr>
 <p>Emitted at the end of a modification block. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">nodes</td><td>A set of all nodes modified within this block. </td></tr>
+    <tr><td class="paramname">modifiedNodes</td><td>A set of all nodes modified within this block. These nodes might include nodes in <em>removedNodes</em> </td></tr>
+    <tr><td class="paramname">removedNodes</td><td>A set of all nodes that have been removed within this block. These nodes might include nodes in <em>modifiedNodes</em>. The set of reported nodes is all nodes that have been removed, including children of removed nodes. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1385,7 +1399,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A set of all top-level nodes which were modified as part of the last modification operation. </p>
+<p>A set of all nodes which might have been modified as part of the last modification operation. </p>
 <p>This is only used to signal to anyone who is interested in monitoring changes. </p>
 
 </div>
@@ -1506,6 +1520,29 @@ Private Attributes</h2></td></tr>
 <li>Call undo/redo</li>
 </ul>
 <p>The two can not be mixed in the same operation and this flag is used to control this. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1962b73fc09638dcd7d958fc387847c2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QSet&lt;<a class="el" href="classModel_1_1Node.html">Node</a>*&gt; Model::TreeManager::removedTargets_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A set of all nodes which have been removed from the tree as part of the last modification operation. </p>
+<p>This is only used to signal to anyone who is interested in monitoring changes. </p>
 
 </div>
 </div>

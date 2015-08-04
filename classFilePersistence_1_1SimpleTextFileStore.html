@@ -91,8 +91,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="classFilePersistence_1_1SimpleTextFileStore-members.html">List of all members</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
@@ -159,6 +161,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a26812550db192656c6570a12c84bf73b inherit pub_methods_classModel_1_1PersistentStore"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1PersistentStore.html#a26812550db192656c6570a12c84bf73b">~PersistentStore</a> ()</td></tr>
 <tr class="separator:a26812550db192656c6570a12c84bf73b inherit pub_methods_classModel_1_1PersistentStore"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:abd81fc4a45c8bf1dd0fcbd5b4a1bb830"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#abd81fc4a45c8bf1dd0fcbd5b4a1bb830">saveGenericTree</a> (std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt; tree, const QString &amp;name, const QString &amp;destDir, const QStringList &amp;persistentUnitTypes)</td></tr>
+<tr class="separator:abd81fc4a45c8bf1dd0fcbd5b4a1bb830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a9a150e5c6f104478690956d4fbd25cc3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a9a150e5c6f104478690956d4fbd25cc3">loadTree</a> (<a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *manager, const QString &amp;name, bool loadPartially) override</td></tr>
@@ -188,6 +195,11 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ad570a3b83a91a2baed04167119d263e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac25dd7833b4088a1a11664a6c528945a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#ac25dd7833b4088a1a11664a6c528945a">saveNodeDirectly</a> (const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, const QString &amp;name)</td></tr>
 <tr class="separator:ac25dd7833b4088a1a11664a6c528945a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a4d9cf4033222abe29f5a8bee259d29a3"><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1SimpleTextFileStore.html#a4d9cf4033222abe29f5a8bee259d29a3">writeGenericNodeToFile</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *node, const QString &amp;destDir, const QString &amp;fileName, const QStringList &amp;persistentUnitTypes)</td></tr>
+<tr class="separator:a4d9cf4033222abe29f5a8bee259d29a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -806,6 +818,52 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abd81fc4a45c8bf1dd0fcbd5b4a1bb830"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePersistence::SimpleTextFileStore::saveGenericTree </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericTree.html">GenericTree</a> &gt;&#160;</td>
+          <td class="paramname"><em>tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>destDir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>persistentUnitTypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a372a9d8a7e33ddb9ba298beeb5762770"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1046,6 +1104,52 @@ Static Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4d9cf4033222abe29f5a8bee259d29a3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt; FilePersistence::SimpleTextFileStore::writeGenericNodeToFile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>destDir</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>fileName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QStringList &amp;&#160;</td>
+          <td class="paramname"><em>persistentUnitTypes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

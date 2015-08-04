@@ -125,8 +125,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
 Public Slots</h2></td></tr>
-<tr class="memitem:a31288d842a87596bca00cf73a66971e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a31288d842a87596bca00cf73a66971e5">nodesUpdated</a> (QSet&lt; <a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> * &gt; nodes)</td></tr>
-<tr class="separator:a31288d842a87596bca00cf73a66971e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad946dc8caaf04c56cc709067b4ff4f43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ad946dc8caaf04c56cc709067b4ff4f43">nodesUpdated</a> (QSet&lt; <a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> * &gt; modifiedNodes, QSet&lt; <a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> * &gt; removedNodes)</td></tr>
+<tr class="separator:ad946dc8caaf04c56cc709067b4ff4f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -143,14 +143,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a397467c5fa7db40b5b8df2fa383b5b3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbc0d09eda10b13aa034ce3f2dd8c3b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#abbc0d09eda10b13aa034ce3f2dd8c3b6">addRefreshActionFunction</a> (<a class="el" href="classVisualization_1_1Scene.html#a8cc0510c5379d57285ecf4223b06ef41">RefreshActionFunction</a> func)</td></tr>
 <tr class="separator:abbc0d09eda10b13aa034ce3f2dd8c3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace991cd6ccee83d1516916e17ad1a3c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ace991cd6ccee83d1516916e17ad1a3c1">addTopLevelItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
-<tr class="separator:ace991cd6ccee83d1516916e17ad1a3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4b556d3445ffa7ee322324e8cb0f449"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#af4b556d3445ffa7ee322324e8cb0f449">addTopLevelItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, bool show=true)</td></tr>
+<tr class="separator:af4b556d3445ffa7ee322324e8cb0f449"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61a81ce3884b5b1165cbfe7a5c3a31a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a61a81ce3884b5b1165cbfe7a5c3a31a0">addTopLevelNode</a> (<a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> *node, int column=0, int row=0)</td></tr>
+<tr class="separator:a61a81ce3884b5b1165cbfe7a5c3a31a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ba7877649770ab65546e43ce45b2744"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1OverlayGroup.html">OverlayGroup</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a3ba7877649770ab65546e43ce45b2744">allOverlayGroups</a> () const </td></tr>
 <tr class="separator:a3ba7877649770ab65546e43ce45b2744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2c7939eb639b67d49440a142e6f500c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1View.html">View</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ae2c7939eb639b67d49440a142e6f500c">currentPaintView</a> () const </td></tr>
 <tr class="separator:ae2c7939eb639b67d49440a142e6f500c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cb91c173ebc009b5e485f4f73aebcc7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a1cb91c173ebc009b5e485f4f73aebcc7">customEvent</a> (QEvent *<a class="el" href="classVisualization_1_1Scene.html#a71390cf32fbb6ea1366daa5e42af18c6">event</a>)</td></tr>
-<tr class="separator:a1cb91c173ebc009b5e485f4f73aebcc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a691a0b301cd74f1d2904b1983f9370a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a691a0b301cd74f1d2904b1983f9370a8">currentViewItem</a> ()</td></tr>
+<tr class="memdesc:a691a0b301cd74f1d2904b1983f9370a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convenience method to get the manager's current view item.  <a href="#a691a0b301cd74f1d2904b1983f9370a8">More...</a><br /></td></tr>
+<tr class="separator:a691a0b301cd74f1d2904b1983f9370a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5bf27e4f2b7bc7d6a61f7348c758f4a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ad5bf27e4f2b7bc7d6a61f7348c758f4a">customEvent</a> (QEvent *<a class="el" href="classVisualization_1_1Scene.html#a71390cf32fbb6ea1366daa5e42af18c6">event</a>) override</td></tr>
+<tr class="separator:ad5bf27e4f2b7bc7d6a61f7348c758f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bb50960f7a014fb6a9336c111f2f033"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a5bb50960f7a014fb6a9336c111f2f033">focusItem</a> () const </td></tr>
 <tr class="memdesc:a5bb50960f7a014fb6a9336c111f2f033"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the focused item if it is an instance of Item* or the closest of its ancestors that is an Item*.  <a href="#a5bb50960f7a014fb6a9336c111f2f033">More...</a><br /></td></tr>
 <tr class="separator:a5bb50960f7a014fb6a9336c111f2f033"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +163,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a62554dd58a4fca59fffa7b25a46302d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a002fd8063039d5f128b74d6393ec47d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a002fd8063039d5f128b74d6393ec47d1">isHiddenCategory</a> (<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdd">ItemCategory</a> cat)</td></tr>
 <tr class="separator:a002fd8063039d5f128b74d6393ec47d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf9f7c23387b59957dba88588a3d6190"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#abf9f7c23387b59957dba88588a3d6190">lastMouseHoverPosition</a> () const </td></tr>
+<tr class="separator:abf9f7c23387b59957dba88588a3d6190"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a064cb29245a6f03d343e3beb73b446ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a064cb29245a6f03d343e3beb73b446ea">listenToTreeManager</a> (<a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *manager)</td></tr>
 <tr class="separator:a064cb29245a6f03d343e3beb73b446ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cb114ab6af758a8e3a5ad36911d496f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8cb114ab6af758a8e3a5ad36911d496f">mainCursor</a> ()</td></tr>
@@ -203,6 +210,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa3583704dd21370f35a907f07856c4a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd6a9200f5621a979a641a5fd130c7fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#acd6a9200f5621a979a641a5fd130c7fc">updateNow</a> ()</td></tr>
 <tr class="separator:acd6a9200f5621a979a641a5fd130c7fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b12b728aab5659dd225adacad17f32e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ViewItemManager.html">ViewItemManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a2b12b728aab5659dd225adacad17f32e">viewItems</a> () const </td></tr>
+<tr class="separator:a2b12b728aab5659dd225adacad17f32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -257,6 +266,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a17028bb8ab301731ae8f8e12ccb6e823"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ab277e510d73b58c343e35a08820395"><td class="memItemLeft" align="right" valign="top">QSet&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a6ab277e510d73b58c343e35a08820395">itemsSensitiveToScale_</a></td></tr>
 <tr class="separator:a6ab277e510d73b58c343e35a08820395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6485701e086bb0bff3fd1381ea74a68e"><td class="memItemLeft" align="right" valign="top">QPointF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a6485701e086bb0bff3fd1381ea74a68e">lastMouseHoverPosition_</a></td></tr>
+<tr class="separator:a6485701e086bb0bff3fd1381ea74a68e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd8a613abb0646b1e2511288bfb57e69"><td class="memItemLeft" align="right" valign="top">QElapsedTimer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#abd8a613abb0646b1e2511288bfb57e69">lastMousePressTimer_</a> {}</td></tr>
 <tr class="separator:abd8a613abb0646b1e2511288bfb57e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbae5d627080435c95b5828e70a1b00f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f">mainCursor_</a> {}</td></tr>
@@ -285,11 +296,15 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aba40f9f47957c0f0736a9075e41d0275"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3230989f947a83357ffac551a2cd194c"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a3230989f947a83357ffac551a2cd194c">topLevelItems_</a></td></tr>
 <tr class="separator:a3230989f947a83357ffac551a2cd194c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace6c7f747f77fa6dcdc8d1dfbdc7f1d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ViewItemManager.html">ViewItemManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ace6c7f747f77fa6dcdc8d1dfbdc7f1d6">viewItemManager_</a> {}</td></tr>
+<tr class="separator:ace6c7f747f77fa6dcdc8d1dfbdc7f1d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a018ff8a950133459fda57a235706a80b"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a018ff8a950133459fda57a235706a80b">View</a></td></tr>
 <tr class="separator:a018ff8a950133459fda57a235706a80b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7fcbb6efdc30ccbe245636231122664"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#af7fcbb6efdc30ccbe245636231122664">ViewItemManager</a></td></tr>
+<tr class="separator:af7fcbb6efdc30ccbe245636231122664"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a41fbc535e56c11864b4eed4c54fac7eb"></a>
@@ -464,7 +479,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ace991cd6ccee83d1516916e17ad1a3c1"></a>
+<a class="anchor" id="af4b556d3445ffa7ee322324e8cb0f449"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -472,8 +487,50 @@ Friends</h2></td></tr>
           <td class="memname">void Visualization::Scene::addTopLevelItem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
-          <td class="paramname"><em>item</em></td><td>)</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>show</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a61a81ce3884b5b1165cbfe7a5c3a31a0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::Scene::addTopLevelNode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>column</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -566,7 +623,24 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1cb91c173ebc009b5e485f4f73aebcc7"></a>
+<a class="anchor" id="a691a0b301cd74f1d2904b1983f9370a8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> * Visualization::Scene::currentViewItem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convenience method to get the manager's current view item. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad5bf27e4f2b7bc7d6a61f7348c758f4a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -583,7 +657,7 @@ Friends</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -743,6 +817,29 @@ Friends</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abf9f7c23387b59957dba88588a3d6190"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPointF Visualization::Scene::lastMouseHoverPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -909,7 +1006,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a31288d842a87596bca00cf73a66971e5"></a>
+<a class="anchor" id="ad946dc8caaf04c56cc709067b4ff4f43"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -920,8 +1017,18 @@ Friends</h2></td></tr>
           <td class="memname">void Visualization::Scene::nodesUpdated </td>
           <td>(</td>
           <td class="paramtype">QSet&lt; <a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> * &gt;&#160;</td>
-          <td class="paramname"><em>nodes</em></td><td>)</td>
+          <td class="paramname"><em>modifiedNodes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">QSet&lt; <a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> * &gt;&#160;</td>
+          <td class="paramname"><em>removedNodes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1322,6 +1429,29 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2b12b728aab5659dd225adacad17f32e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1ViewItemManager.html">ViewItemManager</a> * Visualization::Scene::viewItems </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
 <a class="anchor" id="a018ff8a950133459fda57a235706a80b"></a>
 <div class="memitem">
@@ -1332,6 +1462,26 @@ Friends</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">friend class <a class="el" href="classVisualization_1_1View.html">View</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af7fcbb6efdc30ccbe245636231122664"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classVisualization_1_1ViewItemManager.html">ViewItemManager</a></td>
         </tr>
       </table>
   </td>
@@ -1473,6 +1623,26 @@ Friends</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">QSet&lt;<a class="el" href="classVisualization_1_1Item.html">Item</a>*&gt; Visualization::Scene::itemsSensitiveToScale_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a6485701e086bb0bff3fd1381ea74a68e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPointF Visualization::Scene::lastMouseHoverPosition_</td>
         </tr>
       </table>
   </td>
@@ -1753,6 +1923,26 @@ Friends</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">QList&lt;<a class="el" href="classVisualization_1_1Item.html">Item</a>*&gt; Visualization::Scene::topLevelItems_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ace6c7f747f77fa6dcdc8d1dfbdc7f1d6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1ViewItemManager.html">ViewItemManager</a>* Visualization::Scene::viewItemManager_ {}</td>
         </tr>
       </table>
   </td>

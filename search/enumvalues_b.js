@@ -4,6 +4,7 @@ var searchData=
   ['names_5fdont_5fmatch',['NAMES_DONT_MATCH',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daa9844001e3556449e006372ec0251b7b0',1,'OODebug::Protocol']]],
   ['native_5fmethod',['NATIVE_METHOD',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daa39215944ea560adb217666401309e5e3',1,'OODebug::Protocol']]],
   ['nestedtypes',['NestedTypes',['../classOODebug_1_1Protocol.html#aa2e27d2dd0cf680d8168ae01bd06ecfca7927db07a9ee6b03015ccede071a8e94',1,'OODebug::Protocol']]],
+  ['neutral',['NEUTRAL',['../classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1a31ba17aa58cdb681423f07ca21a6efc7',1,'OODebug::DebugConnector']]],
   ['newinstance',['NewInstance',['../classOODebug_1_1Protocol.html#aa4369a0ac0114db62826218f0c9af972ab2565eddd6dcaf4b2f1cbe834869eed4',1,'OODebug::Protocol::NewInstance()'],['../classOODebug_1_1Protocol.html#a52b8859ebb458066664fd500bfdc2ea6ab2565eddd6dcaf4b2f1cbe834869eed4',1,'OODebug::Protocol::NewInstance()']]],
   ['newlineafterpostfix',['NewLineAfterPostfix',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aac32d154feb1aefe9ffb17394bfc04634',1,'Export::FragmentLayouter']]],
   ['newlineafterprefix',['NewLineAfterPrefix',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aae63ba4b51593a3519ac174f310b4e313',1,'Export::FragmentLayouter']]],
@@ -13,6 +14,7 @@ var searchData=
   ['no_5fparent',['NO_PARENT',['../classCppImport_1_1CppImportLogger.html#a0a0d5e2dcef9bc6a9431a9690ee37bc7ad528e999bf11721171e8e1b6c3cd47a4',1,'CppImport::CppImportLogger']]],
   ['no_5fvalue',['NO_VALUE',['../classFilePersistence_1_1GenericNode.html#abc7da14fae84133c449f8dd12f11f344a4d5c6d2808dbd3d4730d2976d5b7af43',1,'FilePersistence::GenericNode']]],
   ['noconstraints',['NoConstraints',['../classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946',1,'Visualization::Item::NoConstraints()'],['../classVisualization_1_1ItemRegion.html#a4c5ce94b208c205300fadb4271b9165ba91d36656ebd4e5550d06982782a585a4',1,'Visualization::ItemRegion::NoConstraints()']]],
+  ['noflags',['NoFlags',['../classFilePersistence_1_1ChangeDescription.html#a878ad8e1c7d0491348e07a4021e670a3ad3a4fab6f3815ef389934d8d53e4b769',1,'FilePersistence::ChangeDescription']]],
   ['noindentation',['NoIndentation',['../classExport_1_1FragmentLayouter.html#ac2abdbcd67909007ad0edc0101a30d0aa41f9bac75de02f6620f5c7d823b5ec70',1,'Export::FragmentLayouter']]],
   ['noitemcategory',['NoItemCategory',['../classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd',1,'Visualization::Scene']]],
   ['nomajor',['NoMajor',['../classVisualization_1_1GridLayouter.html#a8de41949f680ff7c0f397e13588934f3ab5071a36c9b094f2cdf122e2d9d21ee7',1,'Visualization::GridLayouter']]],
@@ -26,7 +28,9 @@ var searchData=
   ['not_5fmonitor_5fowner',['NOT_MONITOR_OWNER',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daaa42c694dd0f4cbb4300a609bfe1eac64',1,'OODebug::Protocol']]],
   ['not_5fsupported',['NOT_SUPPORTED',['../classCppImport_1_1CppImportLogger.html#a0a0d5e2dcef9bc6a9431a9690ee37bc7a5343bcd21aad65124478a61831f6949e',1,'CppImport::CppImportLogger']]],
   ['notassociative',['NotAssociative',['../classInteraction_1_1OperatorDescriptor.html#a15ad9bf3edba961b01241fe71808e181a571bca8626e3a4d4b30b922d9c06d9ba',1,'Interaction::OperatorDescriptor']]],
-  ['note',['Note',['../classOODebug_1_1CompilerMessage.html#a0e71a6998bfecb03c9e0b287d72baf82aea811c517205703997d0fb83777a05fb',1,'OODebug::CompilerMessage']]],
+  ['note',['NOTE',['../classFilePersistence_1_1GitRepository.html#adf116bbd5920ba3e5d31cc9290932e70a10de4bc81f754b19b0d27246a0589c05',1,'FilePersistence::GitRepository::NOTE()'],['../classOODebug_1_1CompilerMessage.html#a0e71a6998bfecb03c9e0b287d72baf82aea811c517205703997d0fb83777a05fb',1,'OODebug::CompilerMessage::Note()']]],
+  ['notfound',['NOTFOUND',['../classFilePersistence_1_1GitRepository.html#adf116bbd5920ba3e5d31cc9290932e70afab7c68c0bcea0118750b5070c060585',1,'FilePersistence::GitRepository::NOTFOUND()'],['../classFilePersistence_1_1GitRepository.html#aaa0740f5af01040e9f99838374c7da25afab7c68c0bcea0118750b5070c060585',1,'FilePersistence::GitRepository::NOTFOUND()']]],
+  ['notinitialized',['NotInitialized',['../classFilePersistence_1_1Merge.html#a7666204e5f7a1574cd7c379e90ee6976a9646ad3a1c3e708b4fa8b4b4270fbab6',1,'FilePersistence::Merge']]],
   ['noupdate',['NoUpdate',['../classVisualization_1_1Item.html#a47de8e8939254fa088668e32a52b2890a053bacc33f41216bc606b7686cb5c42c',1,'Visualization::Item']]],
   ['null_5fpointer',['NULL_POINTER',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daab0944ab2f24069b66f78e66edde810a0',1,'OODebug::Protocol']]]
 ];

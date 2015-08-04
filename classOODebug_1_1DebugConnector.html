@@ -92,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -132,9 +133,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aca187df58c2712a7f2aa7ea1f64621ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a605954a562f1fa5eaeeff8038a503f7b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a605954a562f1fa5eaeeff8038a503f7b">breakAtClassLoad</a> (QString className)</td></tr>
 <tr class="separator:a605954a562f1fa5eaeeff8038a503f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a267f6951b74fa993cff052e6c49ea1b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a267f6951b74fa993cff052e6c49ea1b4">cancelResume</a> ()</td></tr>
-<tr class="memdesc:a267f6951b74fa993cff052e6c49ea1b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cancel a delayed resume command.  <a href="#a267f6951b74fa993cff052e6c49ea1b4">More...</a><br /></td></tr>
-<tr class="separator:a267f6951b74fa993cff052e6c49ea1b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4eecd84af1461707cfcbd3a916d25a3e"><td class="memItemLeft" align="right" valign="top">qint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a4eecd84af1461707cfcbd3a916d25a3e">classIdOf</a> (const QString &amp;signature)</td></tr>
 <tr class="separator:a4eecd84af1461707cfcbd3a916d25a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a597a1c528ee83bcc08f255c4e2b9403d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a597a1c528ee83bcc08f255c4e2b9403d">clearBreakpoint</a> (qint32 requestId)</td></tr>
@@ -151,6 +149,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3d81acf4e0ee899d31f9ba6948439b34"><td class="memItemLeft" align="right" valign="top">qint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a3d81acf4e0ee899d31f9ba6948439b34">methodIdOf</a> (qint64 classId, const QString &amp;signature)</td></tr>
 <tr class="separator:a3d81acf4e0ee899d31f9ba6948439b34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91b51c96f43b43f9d9ff37ff2ab8eb34"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a91b51c96f43b43f9d9ff37ff2ab8eb34">resume</a> ()</td></tr>
+<tr class="memdesc:a91b51c96f43b43f9d9ff37ff2ab8eb34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resumes the VM, do not use this function inside event handlers, use <em>wantResume</em> instead.  <a href="#a91b51c96f43b43f9d9ff37ff2ab8eb34">More...</a><br /></td></tr>
 <tr class="separator:a91b51c96f43b43f9d9ff37ff2ab8eb34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d6944b7ef6e3e5102945e31942ddc76"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a7d6944b7ef6e3e5102945e31942ddc76">setBreakpoint</a> (<a class="el" href="structOODebug_1_1Location.html">Location</a> breakLocation)</td></tr>
 <tr class="separator:a7d6944b7ef6e3e5102945e31942ddc76"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,11 +171,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afb5ac19715017d40be2daa3f324c085e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#afb5ac19715017d40be2daa3f324c085e">vmAlive</a> ()</td></tr>
 <tr class="memdesc:afb5ac19715017d40be2daa3f324c085e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns if the program on the target VM is running.  <a href="#afb5ac19715017d40be2daa3f324c085e">More...</a><br /></td></tr>
 <tr class="separator:afb5ac19715017d40be2daa3f324c085e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7f4f80fcf8afcf14c37cfd04eda1e2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#ac7f4f80fcf8afcf14c37cfd04eda1e2f">wantResume</a> (bool <a class="el" href="classOODebug_1_1DebugConnector.html#a91b51c96f43b43f9d9ff37ff2ab8eb34">resume</a>)</td></tr>
+<tr class="memdesc:ac7f4f80fcf8afcf14c37cfd04eda1e2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify that you want to resume, if there are multiple events all should agree otherwise we don't resume.  <a href="#ac7f4f80fcf8afcf14c37cfd04eda1e2f">More...</a><br /></td></tr>
+<tr class="separator:ac7f4f80fcf8afcf14c37cfd04eda1e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a9bca1f119ab29961a088ddd878d211e0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a9bca1f119ab29961a088ddd878d211e0">NO_RESULT</a> {-1}</td></tr>
 <tr class="separator:a9bca1f119ab29961a088ddd878d211e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:adbad34eab45efad1ffb2e1152f7dd1c1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1">ResumeRequest</a> : int { <a class="el" href="classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1a31ba17aa58cdb681423f07ca21a6efc7">ResumeRequest::NEUTRAL</a>, 
+<a class="el" href="classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1abac2aec3ee8d7d495123dbe5ca2fdac9">ResumeRequest::RESUME</a>, 
+<a class="el" href="classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1a85d83e172f678d71cb923c0b978a03e8">ResumeRequest::DONTRESUME</a>
+ }</td></tr>
+<tr class="separator:adbad34eab45efad1ffb2e1152f7dd1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -205,16 +215,14 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a7dbcae66e90e0a23b66343fb99611e3c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a7dbcae66e90e0a23b66343fb99611e3c">cancelResume_</a> {}</td></tr>
-<tr class="separator:a7dbcae66e90e0a23b66343fb99611e3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace02330a60e7c721b2b6f42889507337"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#ace02330a60e7c721b2b6f42889507337">delayResume_</a> {}</td></tr>
-<tr class="separator:ace02330a60e7c721b2b6f42889507337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6176c7258ab651c2974e88c66d0981b3"><td class="memItemLeft" align="right" valign="top">QHash&lt; <a class="el" href="classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8">Protocol::EventKind</a>, <a class="el" href="classOODebug_1_1DebugConnector.html#a76b6c0c796aabecfd057091a7f7baa45">EventListener</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a6176c7258ab651c2974e88c66d0981b3">eventListeners_</a></td></tr>
 <tr class="separator:a6176c7258ab651c2974e88c66d0981b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aded6c763b86e2083004773ae956aa928"><td class="memItemLeft" align="right" valign="top">QByteArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#aded6c763b86e2083004773ae956aa928">incompleteData_</a></td></tr>
 <tr class="separator:aded6c763b86e2083004773ae956aa928"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe8284bfec48ee52b53c5a0ac788711a"><td class="memItemLeft" align="right" valign="top">QList&lt; QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#afe8284bfec48ee52b53c5a0ac788711a">messagesReadyForProcessing_</a></td></tr>
 <tr class="separator:afe8284bfec48ee52b53c5a0ac788711a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7899cc58a43f53039c3d37b50fb8e10d"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1">OODebug::DebugConnector::ResumeRequest</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a7899cc58a43f53039c3d37b50fb8e10d">resumeRequest_</a></td></tr>
+<tr class="separator:a7899cc58a43f53039c3d37b50fb8e10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acacf54d845b8b773320fc991cf59e588"><td class="memItemLeft" align="right" valign="top">QTcpSocket&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#acacf54d845b8b773320fc991cf59e588">tcpSocket_</a></td></tr>
 <tr class="separator:acacf54d845b8b773320fc991cf59e588"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a278234241853b9e978f34a0907d6289b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOODebug_1_1DebugConnector.html#a278234241853b9e978f34a0907d6289b">vmAlive_</a> {}</td></tr>
@@ -232,6 +240,35 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="adbad34eab45efad1ffb2e1152f7dd1c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1">OODebug::DebugConnector::ResumeRequest</a> : int</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="adbad34eab45efad1ffb2e1152f7dd1c1a31ba17aa58cdb681423f07ca21a6efc7"></a>NEUTRAL&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="adbad34eab45efad1ffb2e1152f7dd1c1abac2aec3ee8d7d495123dbe5ca2fdac9"></a>RESUME&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="adbad34eab45efad1ffb2e1152f7dd1c1a85d83e172f678d71cb923c0b978a03e8"></a>DONTRESUME&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -381,31 +418,6 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a267f6951b74fa993cff052e6c49ea1b4"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void OODebug::DebugConnector::cancelResume </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Cancel a delayed resume command. </p>
 
 </div>
 </div>
@@ -745,6 +757,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Resumes the VM, do not use this function inside event handlers, use <em>wantResume</em> instead. </p>
+
 </div>
 </div>
 <a class="anchor" id="ad8c0e069cca61de34559716bd116dc05"></a>
@@ -1018,47 +1032,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ac7f4f80fcf8afcf14c37cfd04eda1e2f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OODebug::DebugConnector::wantResume </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>resume</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specify that you want to resume, if there are multiple events all should agree otherwise we don't resume. </p>
+<p>Note that this function should only be used in event handlers. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a7dbcae66e90e0a23b66343fb99611e3c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool OODebug::DebugConnector::cancelResume_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ace02330a60e7c721b2b6f42889507337"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool OODebug::DebugConnector::delayResume_ {}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a6176c7258ab651c2974e88c66d0981b3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1133,6 +1126,26 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7899cc58a43f53039c3d37b50fb8e10d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classOODebug_1_1DebugConnector.html#adbad34eab45efad1ffb2e1152f7dd1c1">OODebug::DebugConnector::ResumeRequest</a>  OODebug::DebugConnector::resumeRequest_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

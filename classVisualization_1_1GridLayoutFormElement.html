@@ -124,6 +124,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a28207d5d67190c9b6a030619645d0b2d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a28207d5d67190c9b6a030619645d0b2d">computeSize</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item, int availableWidth, int availableHeight) override</td></tr>
 <tr class="memdesc:a28207d5d67190c9b6a030619645d0b2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets if the element has a cursor if it is empty to <em>cursorWhenEmpty</em>.  <a href="#a28207d5d67190c9b6a030619645d0b2d">More...</a><br /></td></tr>
 <tr class="separator:a28207d5d67190c9b6a030619645d0b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae158c25968150d9a4be0871bc0384376"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#ae158c25968150d9a4be0871bc0384376">focusedElement2DIndex</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
+<tr class="memdesc:ae158c25968150d9a4be0871bc0384376"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the 2D index of the focused element for the specified <em>item</em>.  <a href="#ae158c25968150d9a4be0871bc0384376">More...</a><br /></td></tr>
+<tr class="separator:ae158c25968150d9a4be0871bc0384376"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a786e822a80c44e1e4824ecaa8803802e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayoutFormElement.html#a786e822a80c44e1e4824ecaa8803802e">focusedElementIndex</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item) const </td></tr>
 <tr class="memdesc:a786e822a80c44e1e4824ecaa8803802e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the focused element for the specified <em>item</em>.  <a href="#a786e822a80c44e1e4824ecaa8803802e">More...</a><br /></td></tr>
 <tr class="separator:a786e822a80c44e1e4824ecaa8803802e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -598,6 +601,25 @@ Additional Inherited Members</h2></td></tr>
 <p>Is false by default. Also see <a class="el" href="classVisualization_1_1SequentialLayoutStyle.html#a40d753f232ef78a1756ee4b9c99a4e95">SequentialLayoutStyle::hasCursorWhenEmpty()</a>. </p>
 
 <p>Implements <a class="el" href="classVisualization_1_1FormElement.html#a08d97de42ef6ebe7bb803419ac265a03">Visualization::FormElement</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae158c25968150d9a4be0871bc0384376"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPoint Visualization::GridLayoutFormElement::focusedElement2DIndex </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the 2D index of the focused element for the specified <em>item</em>. </p>
+<p>If no element is focused, returns -1 for both coordinates. </p>
 
 </div>
 </div>

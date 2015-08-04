@@ -137,6 +137,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a883af35bf5dea10ca28b84dd1572ada9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5db4afb4c91d3ddadc714fc758e0badd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TypedList.html#a585e0a1fad7a3897fbc3d547a6ae7fa0">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a5db4afb4c91d3ddadc714fc758e0badd">cend</a> () const </td></tr>
 <tr class="separator:a5db4afb4c91d3ddadc714fc758e0badd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a279f861548b2eb3a0e6f75ba13e3377b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TypedList.html">TypedList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a279f861548b2eb3a0e6f75ba13e3377b">clone</a> () const override</td></tr>
+<tr class="separator:a279f861548b2eb3a0e6f75ba13e3377b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8353c911089f1761c3a69b35d1d81c31"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a8353c911089f1761c3a69b35d1d81c31">createDefaultElement</a> () override</td></tr>
 <tr class="separator:a8353c911089f1761c3a69b35d1d81c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad89eca3bca7f861ae2d13bcd61ce99b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1TypedList.html#a80d0dc6f688f063bea788e67c912a3a7">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#ad89eca3bca7f861ae2d13bcd61ce99b5">end</a> ()</td></tr>
@@ -149,8 +151,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa1e32ba68783e07aa0a47d8907170ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e451ef38cb52936d545d8ecceeaf22c"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a2e451ef38cb52936d545d8ecceeaf22c">lowerTypeBoundForElements</a> () const override</td></tr>
 <tr class="separator:a2e451ef38cb52936d545d8ecceeaf22c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ff7c61366103d17774737b955bd6a06"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a0ff7c61366103d17774737b955bd6a06">replaceChild</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *child, <a class="el" href="classModel_1_1Node.html">Node</a> *replacement)</td></tr>
-<tr class="separator:a0ff7c61366103d17774737b955bd6a06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2570093b2b638db50d5c0021d8874463"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a2570093b2b638db50d5c0021d8874463">replaceChild</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *child, <a class="el" href="classModel_1_1Node.html">Node</a> *replacement) override</td></tr>
+<tr class="separator:a2570093b2b638db50d5c0021d8874463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -364,6 +366,31 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a279f861548b2eb3a0e6f75ba13e3377b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1TypedList.html">TypedList</a>&lt; T &gt; * <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::clone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8353c911089f1761c3a69b35d1d81c31"></a>
 <div class="memitem">
 <div class="memproto">
@@ -524,7 +551,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0ff7c61366103d17774737b955bd6a06"></a>
+<a class="anchor" id="a2570093b2b638db50d5c0021d8874463"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -553,7 +580,7 @@ template&lt;class T &gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

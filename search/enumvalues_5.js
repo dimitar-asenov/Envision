@@ -1,6 +1,7 @@
 var searchData=
 [
   ['fails_5fverification',['FAILS_VERIFICATION',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daa88f37b657297000d40dad1e1ad396316',1,'OODebug::Protocol']]],
+  ['fastforward',['FastForward',['../classFilePersistence_1_1Merge.html#a43caa4453b54d144aee86d4141f42627a793528e0ab699e982235e071ad01d451',1,'FilePersistence::Merge']]],
   ['field',['Field',['../classOODebug_1_1Protocol.html#a8cfb4b31f4e7470c54b049a3d9b1622ea6f16a5f8ff5d75ab84c018adacdfcbb7',1,'OODebug::Protocol']]],
   ['field_5faccess',['FIELD_ACCESS',['../classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8a5af0db2b12b4e6530d9c313ac300e21c',1,'OODebug::Protocol']]],
   ['field_5fmodification',['FIELD_MODIFICATION',['../classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8af6dd891a6bf176ff67351b334fe4626c',1,'OODebug::Protocol']]],
@@ -11,6 +12,7 @@ var searchData=
   ['float',['FLOAT',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a10a2e54e8b85f728be2dcd4eb23ea790',1,'OOModel::PrimitiveType::FLOAT()'],['../classOODebug_1_1Protocol.html#aae559917558dc3975d095acc7557f051ae738c26bf4ce1037fa81b039a915cbf6',1,'OODebug::Protocol::FLOAT()']]],
   ['following_5fdelim',['FOLLOWING_DELIM',['../structInteraction_1_1ExpectedToken.html#a21d1b87196a71101a5aa93f0ca7ea9c5ad3119b4b5f8700f5cb419f7a0aa09424',1,'Interaction::ExpectedToken']]],
   ['forceearlyreturn',['ForceEarlyReturn',['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36af0013305353af00456662fcd638b72cb',1,'OODebug::Protocol']]],
+  ['foundmergebase',['FoundMergeBase',['../classFilePersistence_1_1Merge.html#a7666204e5f7a1574cd7c379e90ee6976a23bf4997126476275f2a9e0332fd5f19',1,'FilePersistence::Merge']]],
   ['frame_5fpop',['FRAME_POP',['../classOODebug_1_1Protocol.html#aa10517ff8ae07521407bf06214a344a8a1aecd3978543733deba1d92ff6c29ed9',1,'OODebug::Protocol']]],
   ['framecount',['FrameCount',['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36a990330bbd0eb3361b98f93f2b433421c',1,'OODebug::Protocol']]],
   ['frames',['Frames',['../classOODebug_1_1Protocol.html#ae15325e0e9f26935988de84d9d65cb36a2b81bb9b3deebcbfa05edad7a845005a',1,'OODebug::Protocol']]],

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['castkind',['CastKind',['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905fa',1,'OOModel::CastExpression']]],
+  ['changetype',['ChangeType',['../namespaceFilePersistence.html#a22f599a7e5cc21a83101c6b6a2e1abfe',1,'FilePersistence']]],
   ['classloaderreferencecommands',['ClassLoaderReferenceCommands',['../classOODebug_1_1Protocol.html#a21e86cd9e5a9edb8ea48ba774233a3c3',1,'OODebug::Protocol']]],
   ['classobjectreferencecommands',['ClassObjectReferenceCommands',['../classOODebug_1_1Protocol.html#adfe52154e50b887f2ae4feb485c95276',1,'OODebug::Protocol']]],
   ['classstatus',['ClassStatus',['../classOODebug_1_1Protocol.html#a8241fd0155f9b7da46da853409574ede',1,'OODebug::Protocol']]],

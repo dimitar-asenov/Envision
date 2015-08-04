@@ -101,40 +101,62 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2a90d9133d04ea1018176f5d873ada50"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a2a90d9133d04ea1018176f5d873ada50">GenericTree</a> (QString <a class="el" href="classFilePersistence_1_1GenericTree.html#a17711dc7ffdd7f08de51a859a809fe5c">name</a>=QString(), QString <a class="el" href="classFilePersistence_1_1GenericTree.html#ac7c8ffa7165de62cbe379fb049578211">commitName</a>=QString())</td></tr>
-<tr class="separator:a2a90d9133d04ea1018176f5d873ada50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a862371e4cac31a5c97e76f4588ee4a88"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a862371e4cac31a5c97e76f4588ee4a88">GenericTree</a> (QString <a class="el" href="classFilePersistence_1_1GenericTree.html#a17711dc7ffdd7f08de51a859a809fe5c">name</a>=QString())</td></tr>
+<tr class="separator:a862371e4cac31a5c97e76f4588ee4a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adffb5ac388f17870d54ba041b5494cea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#adffb5ac388f17870d54ba041b5494cea">~GenericTree</a> ()</td></tr>
 <tr class="separator:adffb5ac388f17870d54ba041b5494cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7c8ffa7165de62cbe379fb049578211"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#ac7c8ffa7165de62cbe379fb049578211">commitName</a> () const </td></tr>
-<tr class="separator:ac7c8ffa7165de62cbe379fb049578211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52ce84b656a0d141cfd692c36b4a3ed7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a52ce84b656a0d141cfd692c36b4a3ed7">buildLookupHash</a> ()</td></tr>
+<tr class="separator:a52ce84b656a0d141cfd692c36b4a3ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a369dd7687d9154b5e65de7f06e341e85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a369dd7687d9154b5e65de7f06e341e85">find</a> (<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> id, bool lazyLoad=false) const </td></tr>
+<tr class="memdesc:a369dd7687d9154b5e65de7f06e341e85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node in this tree with the ID <em>id</em> or <em>nullptr</em> if no such node exists.  <a href="#a369dd7687d9154b5e65de7f06e341e85">More...</a><br /></td></tr>
+<tr class="separator:a369dd7687d9154b5e65de7f06e341e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17711dc7ffdd7f08de51a859a809fe5c"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a17711dc7ffdd7f08de51a859a809fe5c">name</a> () const </td></tr>
 <tr class="separator:a17711dc7ffdd7f08de51a859a809fe5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6ab5c576a561fd9024e1770e26ec29c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#ae6ab5c576a561fd9024e1770e26ec29c">newPersistentUnit</a> (QString <a class="el" href="classFilePersistence_1_1GenericTree.html#a17711dc7ffdd7f08de51a859a809fe5c">name</a>, char *data=nullptr, int dataSize=0)</td></tr>
 <tr class="separator:ae6ab5c576a561fd9024e1770e26ec29c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fc5dd20be743739498f94ce0c7261b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a8fc5dd20be743739498f94ce0c7261b2">persistentUnit</a> (const QString &amp;<a class="el" href="classFilePersistence_1_1GenericTree.html#a17711dc7ffdd7f08de51a859a809fe5c">name</a>)</td></tr>
-<tr class="separator:a8fc5dd20be743739498f94ce0c7261b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af68bb9a979ffdcc4ba33366274ee41f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#af68bb9a979ffdcc4ba33366274ee41f1">remove</a> (const QString &amp;persistentUnitName)</td></tr>
-<tr class="separator:af68bb9a979ffdcc4ba33366274ee41f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27fe8509cef07400f87d706e90d9bd82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a27fe8509cef07400f87d706e90d9bd82">remove</a> (const <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;unit)</td></tr>
-<tr class="separator:a27fe8509cef07400f87d706e90d9bd82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad151949200c6d8032e82689274fcac39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#ad151949200c6d8032e82689274fcac39">persistentUnit</a> (const QString &amp;<a class="el" href="classFilePersistence_1_1GenericTree.html#a17711dc7ffdd7f08de51a859a809fe5c">name</a>) const </td></tr>
+<tr class="separator:ad151949200c6d8032e82689274fcac39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef4b37541af5e9bc647f08a7d6c72ff1"><td class="memItemLeft" align="right" valign="top">QList&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#aef4b37541af5e9bc647f08a7d6c72ff1">persistentUnits</a> () const </td></tr>
+<tr class="separator:aef4b37541af5e9bc647f08a7d6c72ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ad2217a6aab87da63ce5aeb9409f578"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a3ad2217a6aab87da63ce5aeb9409f578">remove</a> (<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a> id, bool recursive=false)</td></tr>
+<tr class="separator:a3ad2217a6aab87da63ce5aeb9409f578"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0835fab127634a81215dd837fc57a1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#ac0835fab127634a81215dd837fc57a1e">removePersistentUnit</a> (const QString &amp;persistentUnitName)</td></tr>
+<tr class="separator:ac0835fab127634a81215dd837fc57a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a922ca33d10b4c3348a59ede544704d62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a922ca33d10b4c3348a59ede544704d62">removePersistentUnit</a> (const <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;unit)</td></tr>
+<tr class="separator:a922ca33d10b4c3348a59ede544704d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e58c931f90c2ee8e41dd83845775b2c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a2e58c931f90c2ee8e41dd83845775b2c">root</a> () const </td></tr>
+<tr class="separator:a2e58c931f90c2ee8e41dd83845775b2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e28555799e29da70ce990665e778bce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a1e28555799e29da70ce990665e778bce">setPiecewiseLoader</a> (std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1PiecewiseLoader.html">PiecewiseLoader</a> &gt; loader)</td></tr>
+<tr class="separator:a1e28555799e29da70ce990665e778bce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:af53588d2f749dd0d426d65b5c3d095d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#af53588d2f749dd0d426d65b5c3d095d8">emptyChunk</a> ()</td></tr>
 <tr class="separator:af53588d2f749dd0d426d65b5c3d095d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3f90a9290c90f6a2e5d554cde70f556"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#ae3f90a9290c90f6a2e5d554cde70f556">nodesWithoutParents</a> ()</td></tr>
+<tr class="separator:ae3f90a9290c90f6a2e5d554cde70f556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11732d1edc8d043cfffab48287baf548"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1PiecewiseLoader.html">PiecewiseLoader</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a11732d1edc8d043cfffab48287baf548">piecewiseLoader</a> () const </td></tr>
+<tr class="separator:a11732d1edc8d043cfffab48287baf548"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86f8a668a9e9946d484e1d8bf73f9299"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a86f8a668a9e9946d484e1d8bf73f9299">releaseChunk</a> (<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> *unusedChunk)</td></tr>
 <tr class="separator:a86f8a668a9e9946d484e1d8bf73f9299"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ab8873a956bcd9a6643051acd11a96024"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#ab8873a956bcd9a6643051acd11a96024">commitName_</a></td></tr>
-<tr class="separator:ab8873a956bcd9a6643051acd11a96024"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a919134e2b1b6cfdcade9181626ab79a6"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a919134e2b1b6cfdcade9181626ab79a6">emptyChunks_</a></td></tr>
 <tr class="separator:a919134e2b1b6cfdcade9181626ab79a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b5b4d10e2c99efc19b9f9eacf70d737"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a0b5b4d10e2c99efc19b9f9eacf70d737">hasQuickLookupHash_</a> {}</td></tr>
+<tr class="separator:a0b5b4d10e2c99efc19b9f9eacf70d737"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42a7952c4d4352d6f934dfb46ae4df80"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a42a7952c4d4352d6f934dfb46ae4df80">name_</a></td></tr>
 <tr class="separator:a42a7952c4d4352d6f934dfb46ae4df80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56767661448dd90d33a32e20023116fa"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a56767661448dd90d33a32e20023116fa">persistentUnits_</a></td></tr>
-<tr class="separator:a56767661448dd90d33a32e20023116fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a7045cad27eb08bbf50977a687d56c1"><td class="memItemLeft" align="right" valign="top">QMultiHash&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a4a7045cad27eb08bbf50977a687d56c1">nodesWithoutParents_</a></td></tr>
+<tr class="memdesc:a4a7045cad27eb08bbf50977a687d56c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">If this tree has a piecewise loader, this hash maps IDs of unloaded nodes to all nodes whose parentId = ID.  <a href="#a4a7045cad27eb08bbf50977a687d56c1">More...</a><br /></td></tr>
+<tr class="separator:a4a7045cad27eb08bbf50977a687d56c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0663ebdb7a51705bf66a4803da3165b"><td class="memItemLeft" align="right" valign="top">QHash&lt; QString, std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#ae0663ebdb7a51705bf66a4803da3165b">persistentUnits_</a></td></tr>
+<tr class="separator:ae0663ebdb7a51705bf66a4803da3165b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fbce7767c4539387f357c30c665197f"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1PiecewiseLoader.html">PiecewiseLoader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a2fbce7767c4539387f357c30c665197f">piecewiseLoader_</a></td></tr>
+<tr class="separator:a2fbce7767c4539387f357c30c665197f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c35d624445a35f8dfa9b90f86f07f9c"><td class="memItemLeft" align="right" valign="top">QHash&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a5c35d624445a35f8dfa9b90f86f07f9c">quickLookupHash_</a></td></tr>
+<tr class="separator:a5c35d624445a35f8dfa9b90f86f07f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -143,11 +165,15 @@ Static Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
+<tr class="memitem:a2f1e8c8d9ce1ab2d788b4c95ef490bdd"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#a2f1e8c8d9ce1ab2d788b4c95ef490bdd">GenericNode</a></td></tr>
+<tr class="separator:a2f1e8c8d9ce1ab2d788b4c95ef490bdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa54ba10f19f86419d19f4eae1f40e754"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#aa54ba10f19f86419d19f4eae1f40e754">GenericPersistentUnit</a></td></tr>
 <tr class="separator:aa54ba10f19f86419d19f4eae1f40e754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4675ebcb5ab9dd6fb53ef1c2d0fb1e"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilePersistence_1_1GenericTree.html#aea4675ebcb5ab9dd6fb53ef1c2d0fb1e">PiecewiseLoader</a></td></tr>
+<tr class="separator:aea4675ebcb5ab9dd6fb53ef1c2d0fb1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a2a90d9133d04ea1018176f5d873ada50"></a>
+<a class="anchor" id="a862371e4cac31a5c97e76f4588ee4a88"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -155,18 +181,8 @@ Friends</h2></td></tr>
           <td class="memname">FilePersistence::GenericTree::GenericTree </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>name</em> = <code>QString()</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>name</em> = <code>QString()</code></td><td>)</td>
           <td></td>
-          <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>commitName</em> = <code>QString()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -189,25 +205,17 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ac7c8ffa7165de62cbe379fb049578211"></a>
+<a class="anchor" id="a52ce84b656a0d141cfd692c36b4a3ed7"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const QString &amp; FilePersistence::GenericTree::commitName </td>
+          <td class="memname">void FilePersistence::GenericTree::buildLookupHash </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -232,6 +240,36 @@ Friends</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a369dd7687d9154b5e65de7f06e341e85"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * FilePersistence::GenericTree::find </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>lazyLoad</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the node in this tree with the ID <em>id</em> or <em>nullptr</em> if no such node exists. </p>
+<p>If <em>lazyLoad</em> is true, this attempts to lazy-load the node if it does not exist yet.</p>
+<p>For trees without a piecewise loader, this will perform a depth first search for the node from the root recursively in all linked nodes. This means on such trees, this method is slow and might not return the node if it's not linked, even if it is loaded in the tree. </p>
 
 </div>
 </div>
@@ -290,7 +328,30 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8fc5dd20be743739498f94ce0c7261b2"></a>
+<a class="anchor" id="ae3f90a9290c90f6a2e5d554cde70f556"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QMultiHash&lt; <a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * &gt; &amp; FilePersistence::GenericTree::nodesWithoutParents </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad151949200c6d8032e82689274fcac39"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -299,9 +360,55 @@ Friends</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aef4b37541af5e9bc647f08a7d6c72ff1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &gt; &gt; FilePersistence::GenericTree::persistentUnits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a11732d1edc8d043cfffab48287baf548"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1PiecewiseLoader.html">PiecewiseLoader</a> &gt; &amp; FilePersistence::GenericTree::piecewiseLoader </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -330,7 +437,33 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af68bb9a979ffdcc4ba33366274ee41f1"></a>
+<a class="anchor" id="a3ad2217a6aab87da63ce5aeb9409f578"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool FilePersistence::GenericTree::remove </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>recursive</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac0835fab127634a81215dd837fc57a1e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -338,7 +471,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void FilePersistence::GenericTree::remove </td>
+          <td class="memname">void FilePersistence::GenericTree::removePersistentUnit </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>persistentUnitName</em></td><td>)</td>
@@ -354,7 +487,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a27fe8509cef07400f87d706e90d9bd82"></a>
+<a class="anchor" id="a922ca33d10b4c3348a59ede544704d62"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -362,7 +495,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void FilePersistence::GenericTree::remove </td>
+          <td class="memname">void FilePersistence::GenericTree::removePersistentUnit </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a> &amp;&#160;</td>
           <td class="paramname"><em>unit</em></td><td>)</td>
@@ -378,7 +511,58 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2e58c931f90c2ee8e41dd83845775b2c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a> * FilePersistence::GenericTree::root </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1e28555799e29da70ce990665e778bce"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FilePersistence::GenericTree::setPiecewiseLoader </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classFilePersistence_1_1PiecewiseLoader.html">PiecewiseLoader</a> &gt;&#160;</td>
+          <td class="paramname"><em>loader</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="a2f1e8c8d9ce1ab2d788b4c95ef490bdd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aa54ba10f19f86419d19f4eae1f40e754"></a>
 <div class="memitem">
 <div class="memproto">
@@ -388,6 +572,26 @@ Friends</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">friend class <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aea4675ebcb5ab9dd6fb53ef1c2d0fb1e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classFilePersistence_1_1PiecewiseLoader.html">PiecewiseLoader</a></td>
         </tr>
       </table>
   </td>
@@ -420,7 +624,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab8873a956bcd9a6643051acd11a96024"></a>
+<a class="anchor" id="a919134e2b1b6cfdcade9181626ab79a6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -428,7 +632,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QString FilePersistence::GenericTree::commitName_</td>
+          <td class="memname">QList&lt;<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>*&gt; FilePersistence::GenericTree::emptyChunks_</td>
         </tr>
       </table>
   </td>
@@ -440,7 +644,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a919134e2b1b6cfdcade9181626ab79a6"></a>
+<a class="anchor" id="a0b5b4d10e2c99efc19b9f9eacf70d737"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -448,7 +652,7 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>*&gt; FilePersistence::GenericTree::emptyChunks_</td>
+          <td class="memname">bool FilePersistence::GenericTree::hasQuickLookupHash_ {}</td>
         </tr>
       </table>
   </td>
@@ -480,7 +684,7 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a56767661448dd90d33a32e20023116fa"></a>
+<a class="anchor" id="a4a7045cad27eb08bbf50977a687d56c1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -488,7 +692,70 @@ Friends</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">QHash&lt;QString, <a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a>&gt; FilePersistence::GenericTree::persistentUnits_</td>
+          <td class="memname">QMultiHash&lt;<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>*&gt; FilePersistence::GenericTree::nodesWithoutParents_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>If this tree has a piecewise loader, this hash maps IDs of unloaded nodes to all nodes whose parentId = ID. </p>
+<p>If this tree does not have a piecewise loader, this is empty. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae0663ebdb7a51705bf66a4803da3165b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;QString, std::shared_ptr&lt;<a class="el" href="classFilePersistence_1_1GenericPersistentUnit.html">GenericPersistentUnit</a>&gt; &gt; FilePersistence::GenericTree::persistentUnits_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2fbce7767c4539387f357c30c665197f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classFilePersistence_1_1PiecewiseLoader.html">PiecewiseLoader</a>&gt; FilePersistence::GenericTree::piecewiseLoader_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5c35d624445a35f8dfa9b90f86f07f9c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt;<a class="el" href="namespaceModel.html#a32580af24e1e2fbfddc22978042846b6">Model::NodeIdType</a>, <a class="el" href="classFilePersistence_1_1GenericNode.html">GenericNode</a>*&gt; FilePersistence::GenericTree::quickLookupHash_</td>
         </tr>
       </table>
   </td>
