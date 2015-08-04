@@ -12,7 +12,7 @@ win32:LIBS += -llogger \
     -loointeraction
 
 # Use this instead of the line under it to avoid warnings
-QMAKE_CXXFLAGS += -isystem ""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --includedir)""
+QMAKE_CXXFLAGS += -isystem ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --includedir)""
 #INCLUDEPATH +=  /usr/lib/llvm/include
 
 # The _GLIBCXX_USE_CXX11_ABI=0 macro is needed to fix a compatibility issue with the new C++11 string ABI
@@ -33,8 +33,8 @@ LIBS += -lclangTooling\
 				-lclangAST\
 				-lclangLex\
 				-lclangBasic\
-				""$(shell $$_PRO_FILE_PWD_/llvm-config-envision.sh --libs)"" \
-				$$system( $$_PRO_FILE_PWD_/llvm-config-envision.sh --ldflags --libs cppbackend)
+                                ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs)"" \
+                                $$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags --libs cppbackend)
 
 ## END LLVM SPECIFIC
 
