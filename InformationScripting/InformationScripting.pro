@@ -22,7 +22,7 @@ win32: LIBS += -L/Python$${PYTHON_VERSION}/libs -lpython$${PYTHON_VERSION}
 
 
 INCLUDEPATH += /usr/lib/boost
-LIBS += -lboost_python3
+LIBS += -lboost_python-py34
 
 HEADERS += src/precompiled.h \
     src/InformationScriptingException.h \
