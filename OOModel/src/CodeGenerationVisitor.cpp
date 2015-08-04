@@ -47,6 +47,9 @@ void CodeGenerationVisitor::init()
 
 void CodeGenerationVisitor::visitChildren(Model::Node* n)
 {
+	// visiting children of MetaCallExpressions is handled explicitly in the MetaCallExpression handler
+	if (DCast<MetaCallExpression>(n)) return;
+
 	for (auto child : n->children()) visit(child);
 }
 
@@ -99,9 +102,21 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 
 void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, MetaCallExpression* n)
 {
+	/*
+	 * process arguments before generating.
+	 * this ensures proper argument propagation.
+	 */
+	for (auto child : n->children()) v->visit(child);
+
 	if (!n->metaDefinition())
+	{
 		if (auto metaDef = DCast<ReferenceExpression>(n->callee()))
 			v->handlePredefinedFunction(metaDef->name(), n);
+	}
+	else
+	{
+		n->generate();
+	}
 }
 
 void CodeGenerationVisitor::handlePredefinedFunction(QString function, MetaCallExpression* n)
