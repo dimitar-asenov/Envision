@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['macroexpands',['MacroExpands',['../classEnvisionPPCallbacks.html#a4f6204cc79b8fcb74cc39cc023e322d6',1,'EnvisionPPCallbacks']]],
   ['maincursor',['mainCursor',['../classVisualization_1_1Scene.html#a8cb114ab6af758a8e3a5ad36911d496f',1,'Visualization::Scene']]],
   ['mainscene',['mainScene',['../classVisualization_1_1VisualizationManager.html#af2a776f1f8c5ea59f9973c545a5eb570',1,'Visualization::VisualizationManager']]],
   ['mainview',['MainView',['../classVisualization_1_1MainView.html#a8ea7dd65ebebf2b7dd369ba6da2fd08d',1,'Visualization::MainView::MainView()'],['../classVisualization_1_1VisualizationManager.html#a18b5663dc11d3bbdf09e14a6e7866acc',1,'Visualization::VisualizationManager::mainView()']]],
@@ -25,6 +26,7 @@ var searchData=
   ['matchescontext',['matchesContext',['../classVisualization_1_1VisualizationGroup.html#af95177c6559de6a96c8b95173cd1dbfb',1,'Visualization::VisualizationGroup']]],
   ['matchingnames',['matchingNames',['../classInteraction_1_1CommandWithFlags.html#ad9dec27267501c72f4fdefc234645f0a',1,'Interaction::CommandWithFlags']]],
   ['matchpattern',['matchPattern',['../classModel_1_1SymbolMatcher.html#a50ea64cebaa4a395a59dbdfa32926661',1,'Model::SymbolMatcher']]],
+  ['maxlinelength',['maxLineLength',['../classConfig.html#a990fb48076683ab99797c8e312fd8572',1,'Config']]],
   ['memberinitializer',['MemberInitializer',['../classOOModel_1_1MemberInitializer.html#add89a9dd834ba4ae364e290a23a503c2',1,'OOModel::MemberInitializer::MemberInitializer(ReferenceExpression *memberRef, Expression *initValue)'],['../classOOModel_1_1MemberInitializer.html#a93cbc8374a1d9a0731c931d66737cde9',1,'OOModel::MemberInitializer::MemberInitializer(Expression *initValue)']]],
   ['menu',['Menu',['../classInteraction_1_1Menu.html#a4d20d5f531f2381442992c0d81c3f47c',1,'Interaction::Menu']]],
   ['merge',['merge',['../classFilePersistence_1_1GitRepository.html#a3dcd7a862ca1cf014e91457549b07abc',1,'FilePersistence::GitRepository::merge()'],['../classFilePersistence_1_1Merge.html#a198c755905e0d0ba28897b4360654309',1,'FilePersistence::Merge::Merge()'],['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html#a3a5bf3653b5fb8989b3b09ef8da21984',1,'Visualization::DeclarativeItemBase::Merge::Merge(FormElement *e)'],['../structVisualization_1_1DeclarativeItemBase_1_1Merge.html#acdedda50f82be6b6692495fa80a642f9',1,'Visualization::DeclarativeItemBase::Merge::Merge(FormElement *e, int x, int y)']]],

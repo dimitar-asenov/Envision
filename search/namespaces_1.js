@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['clang',['clang',['../namespaceclang.html',1,'']]],
   ['comments',['Comments',['../namespaceComments.html',1,'']]],
   ['contractslibrary',['ContractsLibrary',['../namespaceContractsLibrary.html',1,'']]],
   ['controlflowvisualization',['ControlFlowVisualization',['../namespaceControlFlowVisualization.html',1,'']]],

@@ -40,6 +40,8 @@ var searchData=
   ['enumerators',['enumerators',['../classOOVisualization_1_1VClassStyle.html#aaacf9605ce52ecd65269d8fee7fbbdac',1,'OOVisualization::VClassStyle::enumerators()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#aeec0c2078e278fc53ee4a39b2c541907',1,'OOVisualization::VClassSzPublicStyle::enumerators()']]],
   ['enumerators_5f',['enumerators_',['../classOOVisualization_1_1VClass.html#a52ebd49c1a19fddefa5a724251a9192e',1,'OOVisualization::VClass::enumerators_()'],['../classOOVisualization_1_1VClassSzPublic.html#ac5fc38901d962fcc36b5d62438fe6696',1,'OOVisualization::VClassSzPublic::enumerators_()']]],
   ['enumicon',['enumIcon',['../classOOVisualization_1_1VClassStyle.html#a50b177e8e5551408742d368fa653b75c',1,'OOVisualization::VClassStyle::enumIcon()'],['../classOOVisualization_1_1VClassSzPublicStyle.html#a5aeaeda9e62039fee458635bf6842ef8',1,'OOVisualization::VClassSzPublicStyle::enumIcon()']]],
+  ['enumname_5f',['enumName_',['../structEnumData.html#a155962324f5792e1938f64b04225d7d4',1,'EnumData']]],
+  ['enums_5f',['enums_',['../structClassData.html#a47a77fdb278b2615570871e59314d847',1,'ClassData']]],
   ['envisionmanager_5f',['envisionManager_',['../classVisualization_1_1VisualizationManager.html#afa5af141f6774d7ea444db098ced35ff',1,'Visualization::VisualizationManager']]],
   ['equaltypes',['EQUALTYPES',['../classOOModel_1_1TypeSystem.html#ace1606205e26acdda13735432c8b24f8',1,'OOModel::TypeSystem']]],
   ['equivalencesymbol',['equivalenceSymbol',['../classOOVisualization_1_1VTypeAliasStyle.html#a0ab8ad01c4387a79f077a4391794828f',1,'OOVisualization::VTypeAliasStyle']]],

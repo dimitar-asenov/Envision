@@ -93,12 +93,14 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
  Clang is used for importing C++ projects in Envision. Support for importing C++ is preliminary and incomplete.</li>
 <li><b>libgit2</b>: <a href="https://libgit2.github.com/">https://libgit2.github.com/</a> <br />
  Used for Envision's git-based version control.</li>
-<li><b>Python</b>: <a href="https://www.python.org/">https://www.python.org/</a> <br />
- Used for various scripts during building, testing and run-time execution.</li>
+<li><b>Python 3</b>: <a href="https://www.python.org/">https://www.python.org/</a> <br />
+ Used for various scripts during building, testing and run-time execution (e.g. for information scripting).</li>
+<li><b>Boost python</b>: <a href="http://www.boost.org/doc/libs/1_58_0/libs/python/doc/">http://www.boost.org/doc/libs/1_58_0/libs/python/doc/</a> <br />
+ Used for information scripting</li>
 <li><b>On Linux: Google Performance Tools</b>: <a href="http://code.google.com/p/gperftools/">http://code.google.com/p/gperftools/</a> <br />
  Used for profiling.</li>
 <li><b>For development only: Vera ++ </b>: <a href="https://bitbucket.org/verateam/vera">https://bitbucket.org/verateam/vera</a> <br />
- Used for checking the code formatting style.</li>
+ Used for checking the code formatting style. Boost python is used to provide bindings for the python scripting.</li>
 </ul>
 <p>To install the dependencies on Ubuntu 15.04, do the following:</p><ol type="1">
 <li>Install the Qt SDK: <pre class="fragment">sudo apt-get install qt-sdk </pre> You will also need to install additional packages for SVG compatibility and WebKit: <pre class="fragment">sudo apt-get install libqt5svg5 libqt5svg5-dev libqt5webkit5 libqt5webkit5-dev </pre></li>
@@ -111,7 +113,8 @@ sudo apt-get update &amp;&amp; sudo apt-get upgrade
 <li>Install libgit2: <pre class="fragment">sudo apt-get install libgit2-dev</pre></li>
 <li>Install the Google Performance Tools: <pre class="fragment">sudo apt-get install google-perftools libgoogle-perftools-dev </pre></li>
 <li>Install the Vera++ tool which performs style checks for the code: <pre class="fragment">sudo apt-get install vera++ </pre></li>
-<li>Python should already be installed. Both version 2 or 3 should work.</li>
+<li>Install Python 3: <pre class="fragment">sudo apt-get install python3-dev </pre></li>
+<li>Install boost/python: <pre class="fragment">sudo apt-get install libboost-python-dev </pre></li>
 </ol>
 <p>Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.</p>
 <h1><a class="anchor" id="qtcreator"></a>

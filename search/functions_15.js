@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['value',['value',['../classOOVisualization_1_1VEnumerator.html#a8b26694f85ded128dc0b0e672af552be',1,'OOVisualization::VEnumerator::value()'],['../classInteraction_1_1Value.html#af8efb30d6672b9f5e281c8fd15c6899e',1,'Interaction::Value::Value()']]],
+  ['value',['Value',['../classInteraction_1_1Value.html#af8efb30d6672b9f5e281c8fd15c6899e',1,'Interaction::Value::Value()'],['../classOOVisualization_1_1VEnumerator.html#a8b26694f85ded128dc0b0e672af552be',1,'OOVisualization::VEnumerator::value()']]],
   ['valueasdouble',['valueAsDouble',['../classFilePersistence_1_1GenericNode.html#a4e5604da331fd0c99bbd55030e0fa611',1,'FilePersistence::GenericNode']]],
   ['valueaslong',['valueAsLong',['../classFilePersistence_1_1GenericNode.html#a38c35b2626b87114a3d1776fde1c03c0',1,'FilePersistence::GenericNode']]],
   ['valueasstring',['valueAsString',['../classFilePersistence_1_1GenericNode.html#aebecbb9ddb0d93cda8b6bb9aa4136ce8',1,'FilePersistence::GenericNode']]],

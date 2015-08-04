@@ -35,5 +35,6 @@ var searchData=
   ['hscenehandleritem',['HSceneHandlerItem',['../classInteraction_1_1HSceneHandlerItem.html',1,'Interaction']]],
   ['hstatement',['HStatement',['../classOOInteraction_1_1HStatement.html',1,'OOInteraction']]],
   ['hstatementitemlist',['HStatementItemList',['../classOOInteraction_1_1HStatementItemList.html',1,'OOInteraction']]],
-  ['htext',['HText',['../classInteraction_1_1HText.html',1,'Interaction']]]
+  ['htext',['HText',['../classInteraction_1_1HText.html',1,'Interaction']]],
+  ['hviewitem',['HViewItem',['../classInteraction_1_1HViewItem.html',1,'Interaction']]]
 ];

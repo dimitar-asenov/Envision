@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['abstract_5f',['abstract_',['../structClassData.html#a3c19b872c6f4931cc20ffb6585c8d8d0',1,'ClassData']]],
   ['accesslock_5f',['accessLock_',['../classTestNodes_1_1BinaryNodeAccessUnit.html#ab0138286d461683d75f9ef032e5a0d8f',1,'TestNodes::BinaryNodeAccessUnit']]],
   ['actiononitem_5f',['actionOnItem_',['../classInteraction_1_1Action.html#abcfee8b9c13c46831345327a68f1674c',1,'Interaction::Action']]],
   ['actiononnode_5f',['actionOnNode_',['../classInteraction_1_1Action.html#aef1feb1c4582d3ea90deaab3589bc5a5',1,'Interaction::Action']]],
@@ -19,6 +20,7 @@ var searchData=
   ['allinfonodes',['allInfoNodes',['../classVisualization_1_1InfoNode.html#a32f2addf768fb7b86e699416ad4239c6',1,'Visualization::InfoNode']]],
   ['allnodeslackpositioninfo',['allNodesLackPositionInfo',['../classVisualization_1_1PositionLayout.html#a84911c0ddac4a5d785333c05ef0bf085',1,'Visualization::PositionLayout']]],
   ['allocation_5fchunk_5fsize',['ALLOCATION_CHUNK_SIZE',['../classFilePersistence_1_1GenericTree.html#a4a01dbead17aae60329b475dfe61d2d5',1,'FilePersistence::GenericTree']]],
+  ['allowedbases_5f',['allowedBases_',['../classEnvisionAstConsumer.html#a323fe4bbb0c0ae1a1d56e49d3a45cb43',1,'EnvisionAstConsumer']]],
   ['allowequivalentcursorsthroughboundary',['allowEquivalentCursorsThroughBoundary',['../classVisualization_1_1ItemStyle.html#a4fca4be2879a4237273183519b1acd9b',1,'Visualization::ItemStyle']]],
   ['allreferences_5f',['allReferences_',['../classModel_1_1Reference.html#ae5516e774a441914ddaec6cc5829644e',1,'Model::Reference']]],
   ['aneffect_5f',['anEffect_',['../classComments_1_1VCommentFreeNode.html#a756b5604c7747efc8466e8c6d85e3479',1,'Comments::VCommentFreeNode']]],
@@ -49,7 +51,7 @@ var searchData=
   ['atimer_5f',['aTimer_',['../classComments_1_1CommentDiagramToolbar.html#a2a947cade11bd17dfd671601f70a562b',1,'Comments::CommentDiagramToolbar']]],
   ['attr_5f',['attr_',['../classTestNodes_1_1PositionExtension.html#a8994043baa9c7282e57e3655b551d3d9',1,'TestNodes::PositionExtension']]],
   ['attributeindex',['attributeIndex',['../classModel_1_1CompositeNodeChangeChild.html#a5e0ce1e253609d96866a5c618e1b0d05',1,'Model::CompositeNodeChangeChild']]],
-  ['attributes_5f',['attributes_',['../classInteraction_1_1CommandWithFlags.html#adf3841d341a13e2ffff586c144cd9c27',1,'Interaction::CommandWithFlags::attributes_()'],['../classVisualization_1_1VComposite.html#a031b338c559690ce1bc2e43f16a19f22',1,'Visualization::VComposite::attributes_()']]],
+  ['attributes_5f',['attributes_',['../classInteraction_1_1CommandWithFlags.html#adf3841d341a13e2ffff586c144cd9c27',1,'Interaction::CommandWithFlags::attributes_()'],['../structClassData.html#ae77c2c0a433d1d8f3dd5d1cb46dcfd73',1,'ClassData::attributes_()'],['../classEnvisionAstConsumer.html#ad38d06d440a785bad48e13152907a57d',1,'EnvisionAstConsumer::attributes_()'],['../classEnvisionPPCallbacks.html#ab8fcc72213eb93204f4fe4aa22887f10',1,'EnvisionPPCallbacks::attributes_()'],['../classVisualization_1_1VComposite.html#a031b338c559690ce1bc2e43f16a19f22',1,'Visualization::VComposite::attributes_()']]],
   ['author_5f',['author_',['../structFilePersistence_1_1CommitMetaData.html#a580df77ce731108d0f22ff2da39d5a7f',1,'FilePersistence::CommitMetaData']]],
   ['autoexecuteaction_5f',['autoExecuteAction_',['../classInteraction_1_1ActionPrompt.html#a0434f3ed7220ffa7663d27da6f3fb00c',1,'Interaction::ActionPrompt']]]
 ];
