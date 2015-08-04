@@ -17,6 +17,8 @@ Other dependencies are:
 	complex visualization layouts.
 	- <b>Clang 3.6</b>: http://clang.llvm.org/ <br /> Clang is used for importing C++ projects in Envision. Support for
 	importing C++ is preliminary and incomplete.
+	- <b>libgit2</b>: https://libgit2.github.com/ <br /> Used for Envision's git-based version control.
+	- <b>Python</b>: https://www.python.org/ <br /> Used for various scripts during building, testing and run-time execution.
 	- <b>On Linux: Google Performance Tools</b>: http://code.google.com/p/gperftools/ <br /> Used for profiling.
 	- <b>For development only: Vera ++ </b>: https://bitbucket.org/verateam/vera <br /> Used for checking the code formatting style.
 
@@ -32,10 +34,13 @@ To install the dependencies on Ubuntu 15.04, do the following:
 		\verbatim sudo ln -s /usr/lib/lp_solve/liblpsolve55.so /usr/lib/liblpsolve55.so \endverbatim
 	-# Install Clang 3.6:
 		\verbatim sudo apt-get install libclang-dev clang llvm\endverbatim
+	-# Install libgit2:
+		\verbatim sudo apt-get install libgit2-dev\endverbatim
 	-# Install the Google Performance Tools:
 		\verbatim sudo apt-get install google-perftools libgoogle-perftools-dev \endverbatim
 	-# Install the Vera++ tool which performs style checks for the code:
 		\verbatim sudo apt-get install vera++ \endverbatim
+	-# Python should already be installed. Both version 2 or 3 should work.
 
 Envision's repository contains configuration files for both Qt Creator and Eclipse. You can choose which tool you want
 to use but we recommend Qt Creator. The instructions below show you how to set-up both IDEs.
