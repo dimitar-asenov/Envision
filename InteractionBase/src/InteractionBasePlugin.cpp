@@ -36,6 +36,7 @@
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
 #include "handlers/HInfoNode.h"
+#include "handlers/HViewItem.h"
 
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
@@ -65,6 +66,7 @@
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
 
@@ -90,6 +92,7 @@ bool InteractionBasePlugin::initialize(Core::EnvisionManager& envisionManager)
 	Visualization::RootItem::setDefaultClassHandler(HRootItem::instance());
 	Visualization::PositionLayout::setDefaultClassHandler(HPositionLayout::instance());
 	Visualization::VInfoNode::setDefaultClassHandler(HInfoNode::instance());
+	Visualization::ViewItem::setDefaultClassHandler(HViewItem::instance());
 	CommandPrompt::setDefaultClassHandler(HCommandPrompt::instance());
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
 
