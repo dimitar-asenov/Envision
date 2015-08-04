@@ -66,6 +66,8 @@ MetaDefinition* MetaCallExpression::metaDefinition()
 
 Declaration* MetaCallExpression::generate()
 {
+	if (generated_) return generated_;
+
 	auto metaDef = metaDefinition();
 	if (!metaDef) return nullptr;
 
@@ -82,12 +84,12 @@ Declaration* MetaCallExpression::generate()
 		args.insert(metaDef->arguments()->at(i)->name(), arguments()->at(i));
 	}
 
-	auto cloned = metaDef->context()->clone();
+	generated_ = metaDef->context()->clone();
 
 	CodeGenerationVisitor codeGenVisitor (args);
-	codeGenVisitor.visit(cloned);
+	codeGenVisitor.visit(generated_);
 
-	return cloned;
+	return generated_;
 }
 
 }
