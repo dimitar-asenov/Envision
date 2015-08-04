@@ -20,7 +20,9 @@ SUBDIRS= Core \
 	CppImport \
 	Comments \
 	AlloyIntegration \
-        OODebug \
-        PythonWrapperGenerator
+	OODebug \
+	InformationScripting \
+	PythonWrapperGenerator
+
 CONFIG+=debug_and_release
 CONFIG+=ordered
