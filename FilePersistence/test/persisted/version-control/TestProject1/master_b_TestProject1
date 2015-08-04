@@ -1,0 +1,137 @@
+TestProject1 Project {a6fae250-7f8d-4484-a8da-72cc86588310} {00000000-0000-0000-0000-000000000000}
+	name NameText {e630b494-0eb7-4efe-8c3e-e8237f86e425} {a6fae250-7f8d-4484-a8da-72cc86588310}. S_Project1
+	modifiers Modifier {c5ac0dfb-5eb8-4d68-9d7b-c3e364d8d039} {a6fae250-7f8d-4484-a8da-72cc86588310}. I_0
+	annotations StatementItemList {27294ba4-0f35-47b4-9aca-2b8351eb1633} {a6fae250-7f8d-4484-a8da-72cc86588310}
+	subDeclarations TypedListOfDeclaration {5821aa49-ac9e-47ca-a8d7-b9ace10f749c} {a6fae250-7f8d-4484-a8da-72cc86588310}
+	projects TypedListOfProject {73726e28-1e2e-46b1-bad2-930240c51e16} {a6fae250-7f8d-4484-a8da-72cc86588310}
+	modules TypedListOfModule {a9ffd787-c244-4c1b-beba-8b4cb74d5584} {a6fae250-7f8d-4484-a8da-72cc86588310}
+	classes TypedListOfClass {23a6123c-a00f-4b89-84ae-c90358f9d241} {a6fae250-7f8d-4484-a8da-72cc86588310}
+		0 Class {f3e45f57-12e5-4702-b636-671643b76c7f} {23a6123c-a00f-4b89-84ae-c90358f9d241}
+			name NameText {a4dd7da6-253a-4246-8b55-c57dd52f5107} {f3e45f57-12e5-4702-b636-671643b76c7f}. S_Class1
+			modifiers Modifier {c5d88604-ad3b-482a-883e-e845a2ec5418} {f3e45f57-12e5-4702-b636-671643b76c7f}. I_0
+			annotations StatementItemList {7cd8d771-b849-4681-abf1-01f60206d472} {f3e45f57-12e5-4702-b636-671643b76c7f}
+			subDeclarations TypedListOfDeclaration {20080a2c-9bb5-4d41-b3ba-ab4bdc6aff84} {f3e45f57-12e5-4702-b636-671643b76c7f}
+			baseClasses TypedListOfExpression {30ca032a-0d76-48f1-988c-7e9c315580ae} {f3e45f57-12e5-4702-b636-671643b76c7f}
+				0 ReferenceExpression {300efd5d-8018-41e4-b936-32453c9976f1} {30ca032a-0d76-48f1-988c-7e9c315580ae}
+					ref OOReference {5b6a501e-af2b-4498-a8f1-f0b8e1a248a7} {300efd5d-8018-41e4-b936-32453c9976f1}. S_{11cf989a-73f4-435c-a4bf-6f5eccf863cb}:Class2
+					typeArguments TypedListOfExpression {d313d19c-0c10-4955-8741-44de92525b11} {300efd5d-8018-41e4-b936-32453c9976f1}
+			friends TypedListOfExpression {3c6b9397-4a19-48dd-a414-278cb80643b4} {f3e45f57-12e5-4702-b636-671643b76c7f}
+			typeArguments TypedListOfFormalTypeArgument {c69aa93c-b620-4397-a0e2-f230ec0ea627} {f3e45f57-12e5-4702-b636-671643b76c7f}
+			classes TypedListOfClass {90ee51b1-bad6-402c-ae89-da565e5e15d0} {f3e45f57-12e5-4702-b636-671643b76c7f}
+			methods TypedListOfMethod {d7d363f3-71f7-415c-933b-4c881e96ec8b} {f3e45f57-12e5-4702-b636-671643b76c7f}
+				0 Method {a2cee48e-2a4a-4d27-bdc8-e19274a7957e} {d7d363f3-71f7-415c-933b-4c881e96ec8b}
+					name NameText {3790f759-97ad-4fc6-b37b-553f9e9a82d1} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}. S_method1
+					modifiers Modifier {b30e165c-8e1b-44f7-b555-f4117831e899} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}. I_0
+					annotations StatementItemList {ad9f8f51-e712-4e55-a5c4-8847f1de3f9b} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+					subDeclarations TypedListOfDeclaration {22b12911-a5c5-4ce4-be73-b052ae46253f} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+					items StatementItemList {c3047a35-f3cc-4390-a6bf-22812bbdd1fc} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+						0 ExpressionStatement {6954c2c4-c9a9-44e0-a487-193e2b57dd7d} {c3047a35-f3cc-4390-a6bf-22812bbdd1fc}
+							expression MethodCallExpression {58f35b55-e1ec-4300-8c48-891e486bd51c} {6954c2c4-c9a9-44e0-a487-193e2b57dd7d}
+								callee ReferenceExpression {2720fdd1-8465-4590-8301-e8fdae0b8a2d} {58f35b55-e1ec-4300-8c48-891e486bd51c}
+									prefix ReferenceExpression {b4c719da-0ccf-481b-9098-d5816b6db9c5} {2720fdd1-8465-4590-8301-e8fdae0b8a2d}
+										ref OOReference {74042a32-5681-47e9-8b21-583088546095} {b4c719da-0ccf-481b-9098-d5816b6db9c5}. S_{9b84eb18-d6f8-41cc-b693-bfc0f9fe484d}:next
+										typeArguments TypedListOfExpression {0e62fd33-9c76-4948-95e9-3f7d7e0991ee} {b4c719da-0ccf-481b-9098-d5816b6db9c5}
+									ref OOReference {edb46beb-dfd9-42ea-8b3a-d5f82dfafed1} {2720fdd1-8465-4590-8301-e8fdae0b8a2d}. S_{a2cee48e-2a4a-4d27-bdc8-e19274a7957e}:method1
+									typeArguments TypedListOfExpression {83a502a0-000a-4c13-b3b5-aacc1b4fc8de} {2720fdd1-8465-4590-8301-e8fdae0b8a2d}
+								arguments TypedListOfExpression {2795a65f-c269-4f90-87e7-b96fb81ff604} {58f35b55-e1ec-4300-8c48-891e486bd51c}
+						1 ExpressionStatement {5c086e60-f260-4355-9a84-cb874dabd3af} {c3047a35-f3cc-4390-a6bf-22812bbdd1fc}
+							expression VariableDeclarationExpression {2e6b9416-27ea-44f7-b1fc-41cc69adc97a} {5c086e60-f260-4355-9a84-cb874dabd3af}
+								decl VariableDeclaration {1c9a7abf-ef6b-48bb-8cf2-cd86fd1ec3de} {2e6b9416-27ea-44f7-b1fc-41cc69adc97a}
+									name NameText {ae81a692-b3c2-4dba-a0ba-359d0a145209} {1c9a7abf-ef6b-48bb-8cf2-cd86fd1ec3de}. S_intField1
+									modifiers Modifier {aa382710-6915-421b-91c5-67383aae4c6d} {1c9a7abf-ef6b-48bb-8cf2-cd86fd1ec3de}. I_0
+									annotations StatementItemList {692fb6dd-e14c-40a9-b94a-dc0a78e622ab} {1c9a7abf-ef6b-48bb-8cf2-cd86fd1ec3de}
+									subDeclarations TypedListOfDeclaration {1d36d1b4-9543-4513-8df8-16b11a520205} {1c9a7abf-ef6b-48bb-8cf2-cd86fd1ec3de}
+									typeExpression PrimitiveTypeExpression {2893277e-f81a-4097-b315-3ee94f6837bd} {1c9a7abf-ef6b-48bb-8cf2-cd86fd1ec3de}
+										val Integer {e956f3a3-6617-46e2-b8bf-7c08b8f57761} {2893277e-f81a-4097-b315-3ee94f6837bd}. I_0
+									initialValue IntegerLiteral {38b6f44b-5777-411a-b8a4-dd379206e2eb} {1c9a7abf-ef6b-48bb-8cf2-cd86fd1ec3de}
+										value Integer {69caa4e5-3f39-40a8-9a19-2fa978df7a60} {38b6f44b-5777-411a-b8a4-dd379206e2eb}. I_2
+						2 ExpressionStatement {be7d122a-347f-4375-a3a7-2dd3e81f5b80} {c3047a35-f3cc-4390-a6bf-22812bbdd1fc}
+							expression AssignmentExpression {f8bda499-7486-4fc3-b431-473aa4c61ce4} {be7d122a-347f-4375-a3a7-2dd3e81f5b80}
+								left ReferenceExpression {c8ea4b7d-9b12-41d6-88dd-710276e8a0e8} {f8bda499-7486-4fc3-b431-473aa4c61ce4}
+									ref OOReference {9cbbea98-b6a9-40dc-a208-a4e6e0594b3e} {c8ea4b7d-9b12-41d6-88dd-710276e8a0e8}. S_{5c086e60-f260-4355-9a84-cb874dabd3af}:intField1
+									typeArguments TypedListOfExpression {b66e5a37-d639-4df0-b930-aaffa8d2158e} {c8ea4b7d-9b12-41d6-88dd-710276e8a0e8}
+								right IntegerLiteral {28cb24a1-b7da-4b5d-914a-f16e8807db29} {f8bda499-7486-4fc3-b431-473aa4c61ce4}
+									value Integer {cff9a516-26ae-4057-a6cb-6ae2cf049b4d} {28cb24a1-b7da-4b5d-914a-f16e8807db29}. I_3
+								opr Integer {20d065cb-b305-46ba-a1e7-a116c83bee13} {f8bda499-7486-4fc3-b431-473aa4c61ce4}. I_0
+						3 ReturnStatement {a744b053-a3cf-4fd8-9163-76a808a17217} {c3047a35-f3cc-4390-a6bf-22812bbdd1fc}
+							values TypedListOfExpression {1dfa8614-f27c-438f-8c18-a6b848d18a17} {a744b053-a3cf-4fd8-9163-76a808a17217}
+								0 MethodCallExpression {c2b35e8b-c7fc-4e15-a7f3-693b05fecf89} {1dfa8614-f27c-438f-8c18-a6b848d18a17}
+									callee ReferenceExpression {95a53f33-d8b1-4e18-9901-31a99a3ef9e7} {c2b35e8b-c7fc-4e15-a7f3-693b05fecf89}
+										prefix ReferenceExpression {c4c0bf7b-3dbf-4247-a106-238e92830ccd} {95a53f33-d8b1-4e18-9901-31a99a3ef9e7}
+											ref OOReference {c1468191-4ad2-4136-bfa9-4188f1a4ae55} {c4c0bf7b-3dbf-4247-a106-238e92830ccd}. S_{9b84eb18-d6f8-41cc-b693-bfc0f9fe484d}:next
+											typeArguments TypedListOfExpression {99c0850f-bd73-4565-bd0c-979e02bb807a} {c4c0bf7b-3dbf-4247-a106-238e92830ccd}
+										ref OOReference {76c9cb8c-39df-4c1b-aae4-17fe53bb1b6d} {95a53f33-d8b1-4e18-9901-31a99a3ef9e7}. S_____NULL____:method1
+										typeArguments TypedListOfExpression {e4adba1b-142c-42d2-a16f-b33b9376408c} {95a53f33-d8b1-4e18-9901-31a99a3ef9e7}
+									arguments TypedListOfExpression {97e3d2d4-d959-48fb-93b8-aebbddec8705} {c2b35e8b-c7fc-4e15-a7f3-693b05fecf89}
+										0 EmptyExpression {bd08261f-5869-469a-8221-6758b64337d6} {97e3d2d4-d959-48fb-93b8-aebbddec8705}
+					typeArguments TypedListOfFormalTypeArgument {26261f6e-756c-4d17-9ef3-b13bf771db9f} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+					arguments TypedListOfFormalArgument {5f9d9685-65d9-4317-841d-c643e134147b} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+					results TypedListOfFormalResult {168d25df-57d3-4278-840a-4d951f5f7b1b} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+					memberInitializers TypedListOfMemberInitializer {9874a915-57ca-4c40-ba02-6f034e8ddfd8} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+					throws TypedListOfExpression {2f65d8de-f8cb-4d85-b4e4-0d82c107a722} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}
+					mthKind Integer {8ced18e5-c383-463f-b475-cabd977484f0} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}. I_0
+					_ext_Position_x Integer {71f966ed-e6e2-47fe-b5e5-91fea1ff66f4} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}. I_0
+					_ext_Position_y Integer {d8b4d3c2-ebbc-4459-9782-b4f8277237cd} {a2cee48e-2a4a-4d27-bdc8-e19274a7957e}. I_0
+			fields TypedListOfField {dabea4e3-d2e1-4b8a-bc10-c57f14d305a1} {f3e45f57-12e5-4702-b636-671643b76c7f}
+				0 Field {4a46e5e8-a069-465b-b5d9-7184bd9da175} {dabea4e3-d2e1-4b8a-bc10-c57f14d305a1}
+					name NameText {122794fc-205d-4486-b64d-99277c8beca6} {4a46e5e8-a069-465b-b5d9-7184bd9da175}. S_intField1
+					modifiers Modifier {76a1312a-0835-4173-a351-81475fa9b17c} {4a46e5e8-a069-465b-b5d9-7184bd9da175}. I_0
+					annotations StatementItemList {87a49173-b817-4bc3-a7ca-de945287c69a} {4a46e5e8-a069-465b-b5d9-7184bd9da175}
+					subDeclarations TypedListOfDeclaration {3f43a69d-75cb-44cf-ac39-9ffea9c8d10f} {4a46e5e8-a069-465b-b5d9-7184bd9da175}
+					typeExpression PrimitiveTypeExpression {982b7a0e-4f0b-4196-b484-e08c0412813c} {4a46e5e8-a069-465b-b5d9-7184bd9da175}
+						val Integer {fc79bcd6-48a7-4d43-8d9e-60e6e55ae50d} {982b7a0e-4f0b-4196-b484-e08c0412813c}. I_0
+				1 Field {e1c73d3f-2f31-4147-8340-9aa91116f149} {dabea4e3-d2e1-4b8a-bc10-c57f14d305a1}
+					name NameText {7d7031d0-5c2c-4f2d-aa7f-53b50f9219d4} {e1c73d3f-2f31-4147-8340-9aa91116f149}. S_intField2
+					modifiers Modifier {df879758-f6fa-46fb-b71e-735f9f6c9089} {e1c73d3f-2f31-4147-8340-9aa91116f149}. I_0
+					annotations StatementItemList {30e92a9b-a88b-4e9e-ad43-c0267931a94c} {e1c73d3f-2f31-4147-8340-9aa91116f149}
+					subDeclarations TypedListOfDeclaration {59d156f3-7135-4a50-92b6-3e9c116dd9e9} {e1c73d3f-2f31-4147-8340-9aa91116f149}
+					typeExpression PrimitiveTypeExpression {aa729fa0-cc6c-4039-ab3f-d89df358e2f9} {e1c73d3f-2f31-4147-8340-9aa91116f149}
+						val Integer {082ae34d-b4c8-4382-b179-9542e7e59009} {aa729fa0-cc6c-4039-ab3f-d89df358e2f9}. I_0
+				2 Field {9b84eb18-d6f8-41cc-b693-bfc0f9fe484d} {dabea4e3-d2e1-4b8a-bc10-c57f14d305a1}
+					name NameText {df6e4fd7-eb81-4b02-a961-960ec2fa8948} {9b84eb18-d6f8-41cc-b693-bfc0f9fe484d}. S_next
+					modifiers Modifier {ca03d629-b81d-4e07-be3c-9bfdf99478ef} {9b84eb18-d6f8-41cc-b693-bfc0f9fe484d}. I_0
+					annotations StatementItemList {7f526b3d-d5ba-4219-bedc-acb93cc382c2} {9b84eb18-d6f8-41cc-b693-bfc0f9fe484d}
+					subDeclarations TypedListOfDeclaration {01dff07b-95b5-4d43-bcec-8e4602a97654} {9b84eb18-d6f8-41cc-b693-bfc0f9fe484d}
+					typeExpression ReferenceExpression {e5bde72f-5873-4634-b9d3-9e25b11b0501} {9b84eb18-d6f8-41cc-b693-bfc0f9fe484d}
+						ref OOReference {a49644b5-9942-4b58-9ccb-c5feacb5f87a} {e5bde72f-5873-4634-b9d3-9e25b11b0501}. S_{f3e45f57-12e5-4702-b636-671643b76c7f}:Class1
+						typeArguments TypedListOfExpression {87dea5d9-8bf4-433b-bb40-8cf3fc3c03e9} {e5bde72f-5873-4634-b9d3-9e25b11b0501}
+			enumerators TypedListOfEnumerator {bc9153c3-b573-44a5-b69b-1d4a73befa2f} {f3e45f57-12e5-4702-b636-671643b76c7f}
+			cKind Integer {9c1c80a9-8fdb-46c5-9337-ce358c173adf} {f3e45f57-12e5-4702-b636-671643b76c7f}. I_0
+			_ext_Position_x Integer {b3abff6e-227a-4628-84e4-cf7562d7fec5} {f3e45f57-12e5-4702-b636-671643b76c7f}. I_0
+			_ext_Position_y Integer {00683294-b247-4a4f-b7c5-aab44b075c9e} {f3e45f57-12e5-4702-b636-671643b76c7f}. I_1
+		1 Class {11cf989a-73f4-435c-a4bf-6f5eccf863cb} {23a6123c-a00f-4b89-84ae-c90358f9d241}
+			name NameText {2a1230be-db45-4bd8-a402-a21f7c13864e} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}. S_Class2
+			modifiers Modifier {e878cebe-0641-4ad3-8066-59c3d6955fef} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}. I_0
+			annotations StatementItemList {2663adfd-64d7-4925-bc88-a82e391f027e} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			subDeclarations TypedListOfDeclaration {eee02eb2-ce9a-41e8-86c2-23b630153965} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			baseClasses TypedListOfExpression {af84e230-87cf-4702-9e40-341ecb6be420} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			friends TypedListOfExpression {8b5fac3f-ef4d-46ac-a0d3-8aaad6afc869} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			typeArguments TypedListOfFormalTypeArgument {2804cc55-0d69-4908-8c67-20e204ee315d} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			classes TypedListOfClass {b1744f83-54cd-4d72-8db7-7f6661dd3f2e} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			methods TypedListOfMethod {ffd356c3-f81e-4459-b4d9-8f675d80d507} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+				0 Method {5f135a68-08e6-493f-8007-f487c0893b35} {ffd356c3-f81e-4459-b4d9-8f675d80d507}
+					name NameText {28bd7e14-4c55-4386-9bcc-5bc2a52c88a1} {5f135a68-08e6-493f-8007-f487c0893b35}. S_method1
+					modifiers Modifier {42ffbf0f-fef5-4f12-b052-be2047c7f489} {5f135a68-08e6-493f-8007-f487c0893b35}. I_0
+					annotations StatementItemList {0a6a54d5-95d1-4f02-ae36-c7ba6ff37719} {5f135a68-08e6-493f-8007-f487c0893b35}
+					subDeclarations TypedListOfDeclaration {25221a70-e58c-4a4a-bd60-ace3366c8133} {5f135a68-08e6-493f-8007-f487c0893b35}
+					items StatementItemList {9566bfda-c657-4a9e-a6bd-9c2358a49a13} {5f135a68-08e6-493f-8007-f487c0893b35}
+						0 ReturnStatement {9dd74f37-e3c1-48c9-bb81-86793363835b} {9566bfda-c657-4a9e-a6bd-9c2358a49a13}
+							values TypedListOfExpression {e53188d1-c91d-4a27-9aad-29a151cf5ec4} {9dd74f37-e3c1-48c9-bb81-86793363835b}
+								0 BooleanLiteral {43f698b5-ea10-42e8-a8cb-0248bba79bc8} {e53188d1-c91d-4a27-9aad-29a151cf5ec4}
+									value Boolean {7de148e7-0645-40b2-8324-0cf8624eae43} {43f698b5-ea10-42e8-a8cb-0248bba79bc8}. I_1
+					typeArguments TypedListOfFormalTypeArgument {7bb25df1-a57f-4066-b80b-53a14fbc4f7b} {5f135a68-08e6-493f-8007-f487c0893b35}
+					arguments TypedListOfFormalArgument {e50578c5-8d5b-4f56-96e5-d989ce040bde} {5f135a68-08e6-493f-8007-f487c0893b35}
+					results TypedListOfFormalResult {37d26047-343d-47da-8bae-c5cbac106fec} {5f135a68-08e6-493f-8007-f487c0893b35}
+					memberInitializers TypedListOfMemberInitializer {f237da6f-1e21-49e6-b94b-48042947078d} {5f135a68-08e6-493f-8007-f487c0893b35}
+					throws TypedListOfExpression {ba12e5d2-ff7b-44ea-8c0a-a1f14e4b3896} {5f135a68-08e6-493f-8007-f487c0893b35}
+					mthKind Integer {11074d4d-abfd-46fb-9c13-25e26d78f218} {5f135a68-08e6-493f-8007-f487c0893b35}. I_0
+					_ext_Position_x Integer {a49cb244-fdd2-450f-9b38-2e7bcd9d97ba} {5f135a68-08e6-493f-8007-f487c0893b35}. I_0
+					_ext_Position_y Integer {539b9cc9-38fd-4e81-988d-a89efbc82a4f} {5f135a68-08e6-493f-8007-f487c0893b35}. I_0
+			fields TypedListOfField {00e9b659-4a90-45e8-9b7b-77c0d47de4ee} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			enumerators TypedListOfEnumerator {b451d64c-e0ef-4f7e-9da7-67fbe79ccb48} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}
+			cKind Integer {e5ef3203-b8cd-4549-959f-01084ae4f468} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}. I_0
+			_ext_Position_x Integer {0f27b9c0-cb1c-47cb-88cf-6fab37cfa37c} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}. I_0
+			_ext_Position_y Integer {9526a6a2-b956-4c72-afff-3fc0bd771134} {11cf989a-73f4-435c-a4bf-6f5eccf863cb}. I_0
+	methods TypedListOfMethod {8c2b8789-68b7-4efc-8aaa-f8a5560e5873} {a6fae250-7f8d-4484-a8da-72cc86588310}
+	fields TypedListOfField {ba04c392-f959-4dae-8cd9-54156bc855ab} {a6fae250-7f8d-4484-a8da-72cc86588310}
+	libraries TypedListOfUsedLibrary {b15aae7f-cfbb-4ef3-bab0-946d021062f1} {a6fae250-7f8d-4484-a8da-72cc86588310}

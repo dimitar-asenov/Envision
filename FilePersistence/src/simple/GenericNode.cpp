@@ -71,8 +71,13 @@ double GenericNode::valueAsDouble() const
 GenericNode* GenericNode::parent() const
 {
 	ensureDataRead();
-	if (!parent_ && tree()->piecewiseLoader())
-		tree()->piecewiseLoader()->loadAndLinkNode(parentId_);
+	if (parentId_.isNull())
+		return nullptr;
+	else if (!parent_ && tree()->piecewiseLoader())
+	{
+		tree()->find(parentId_, true); // this should also link this node to the parent.
+		Q_ASSERT(parent_->id() == parentId_);
+	}
 	return parent_;
 }
 
@@ -87,17 +92,22 @@ const QList<GenericNode*>& GenericNode::children() const
 	return children_;
 }
 
-GenericNode* GenericNode::child(const QString& name)
+GenericNode* GenericNode::child(const QString& label)
 {
 	ensureDataRead();
+
+	// try without loading first.
+	for (auto c : children_)
+		if (c->label() == label) return c;
+
 	if (!areAllChildrenLoaded_ && tree()->piecewiseLoader())
 	{
 		tree()->piecewiseLoader()->loadAndLinkNodeChildren(id_);
 		areAllChildrenLoaded_ = true;
-	}
 
-	for (auto c : children_)
-		if (c->name() == name) return c;
+		for (auto c : children_)
+			if (c->label() == label) return c;
+	}
 
 	return nullptr;
 }
@@ -149,15 +159,13 @@ void GenericNode::resetValue(ValueType type, const QString& value)
 
 void GenericNode::setParent(GenericNode* parent)
 {
-	Q_ASSERT(!tree()->piecewiseLoader());
 	if (parent) Q_ASSERT(sameTree(parent));
 	parent_ = parent;
-	Q_ASSERT(parentId_.isNull() || parent->id().isNull() || parentId_ == parent->id());
+	Q_ASSERT(parentId_.isNull() || parentId_ == parent->id());
 }
 
-GenericNode* GenericNode::addChild(GenericNode* child)
+GenericNode* GenericNode::attachChild(GenericNode* child)
 {
-	Q_ASSERT(!tree()->piecewiseLoader());
 	Q_ASSERT(child);
 	Q_ASSERT(sameTree(child));
 	Q_ASSERT(value_.isEmpty());
@@ -167,12 +175,30 @@ GenericNode* GenericNode::addChild(GenericNode* child)
 	return child;
 }
 
+void GenericNode::copy(const GenericNode* other)
+{
+	Q_ASSERT(!sameTree(other));
+	Q_ASSERT(this->parent_ == nullptr || this->parentId_ == other->parentId_);
+
+	if (other->dataLine_)
+		Parser::parseLine(const_cast<GenericNode*>(this), other->dataLine_, other->dataLineLength_);
+	else
+	{
+		setLabel(other->label());
+		setType(other->type());
+		if (other->hasValue())
+			resetValue(other->valueType(), other->value_);
+		setId(other->id());
+		setParentId(other->parentId());
+	}
+}
+
 void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 {
 	Q_ASSERT(persistentUnit);
 	persistentUnit_ = persistentUnit;
 
-	name_.clear();
+	label_.clear();
 	type_.clear();
 	value_.clear();
 	valueType_ = NO_VALUE;
@@ -187,6 +213,7 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit)
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataLine, int dataLineLength, bool lazy)
 {
 	reset(persistentUnit);
+	// Q_ASSERT(!tree()->piecewiseLoader()); This is actually called by the diff for each node line.
 	Q_ASSERT(dataLine);
 	Q_ASSERT(dataLineLength > 0);
 
@@ -199,23 +226,18 @@ void GenericNode::reset(GenericPersistentUnit* persistentUnit, const char* dataL
 		Parser::parseLine(const_cast<GenericNode*>(this), dataLine, dataLineLength);
 }
 
-void GenericNode::reset(const GenericNode* nodeToCopy)
-{
-	reset(nodeToCopy->persistentUnit(), nodeToCopy);
-}
-
 void GenericNode::reset(GenericPersistentUnit* persistentUnit, const GenericNode* nodeToCopy)
 {
 	Q_ASSERT(nodeToCopy);
-	Q_ASSERT(tree()->piecewiseLoader() != nullptr);
-	Q_ASSERT(!sameTree(nodeToCopy));
+	// Q_ASSERT(tree()->piecewiseLoader() != nullptr);
+	Q_ASSERT(persistentUnit->tree() != nodeToCopy->tree());
 	reset(persistentUnit);
 
 	if (nodeToCopy->dataLine_)
 		Parser::parseLine(const_cast<GenericNode*>(this), nodeToCopy->dataLine_, nodeToCopy->dataLineLength_);
 	else
 	{
-		name_ = nodeToCopy->name_;
+		label_ = nodeToCopy->label_;
 		type_ = nodeToCopy->type_;
 		value_ = nodeToCopy->value_;
 		valueType_ = nodeToCopy->valueType_;
@@ -236,56 +258,76 @@ void GenericNode::ensureDataRead() const
 
 void GenericNode::linkNode(bool recursiveLink)
 {
-	if (tree()->piecewiseLoader())
+	// Check that no node with this id exists in the tree.
+	Q_ASSERT(!tree()->find(id_, false));
+
+	// Link to parent
+	if (auto parentNode = tree()->find(parentId_))
 	{
-		// Link to parent
-		if (auto parentNode = tree()->find(parentId_))
-		{
-			setParent(parentNode);
-			parentNode->addChild(this);
-		}
-		else tree()->nodesWithoutParents().insert(parentId_, this);
+		setParent(parentNode);
+		parentNode->attachChild(this);
+	}
+	else tree()->nodesWithoutParents().insert(parentId_, this);
 
-		// Link to children
-		auto childIt = tree()->nodesWithoutParents().find(id_);
-		while (childIt != tree()->nodesWithoutParents().end() && childIt.key() == id_)
-		{
-			auto child = childIt.value();
-			child->setParent(this);
-			addChild(child);
-			childIt = tree()->nodesWithoutParents().erase(childIt);
-		}
+	// Link to children
+	auto childIt = tree()->nodesWithoutParents().find(id_);
+	while (childIt != tree()->nodesWithoutParents().end() && childIt.key() == id_)
+	{
+		auto child = childIt.value();
+		child->setParent(this);
+		attachChild(child);
+		childIt = tree()->nodesWithoutParents().erase(childIt);
+	}
 
-		// Add to lookup
-		QList<GenericNode*> stack = {this};
-		while (!stack.isEmpty())
-		{
-			auto currentNode = stack.takeLast();
-			auto found = tree()->find(currentNode->id_);
-			Q_ASSERT(!found || found == currentNode);
-			if (!found) tree()->quickLookupHash_.insert(currentNode->id_, currentNode);
+	// Add to lookup
+	QList<GenericNode*> stack = {this};
+	while (!stack.isEmpty())
+	{
+		auto currentNode = stack.takeLast();
+		auto found = tree()->find(currentNode->id_);
+		Q_ASSERT(!found || found == currentNode);
+		if (!found) tree()->quickLookupHash_.insert(currentNode->id_, currentNode);
 
-			if (!recursiveLink) break;
+		if (!recursiveLink) break;
 
-			stack.append(currentNode->children());
-		}
+		stack.append(currentNode->children());
 	}
 }
 
-void GenericNode::remove()
+void GenericNode::remove(bool recursive)
 {
-	detach();
+	if (recursive)
+	{
+		// need to get list beforehand, otherwise we modify it while iterating over it.
+		auto myChildren = children();
+		for (auto child : myChildren)
+			tree()->remove(child->id(), true);
+	}
+	Q_ASSERT(children().isEmpty());
+	detachFromParent();
 	reset(persistentUnit_);
 }
 
-void GenericNode::detach()
+void GenericNode::attachToParent()
+{
+	Q_ASSERT(!parentId().isNull());
+	setParent(tree()->find(parentId()));
+	if (parent_)
+		parent_->children_.append(this);
+	else
+		tree()->nodesWithoutParents().insert(parentId(), this);
+}
+
+void GenericNode::detachFromParent()
 {
 	if (parent_)
 	{
 		parent_->children_.removeOne(this);
 		parent_ = nullptr;
-		parentId_ = {};
 	}
+	else
+		tree()->nodesWithoutParents().remove(parentId(), this);
+	setParentId({});
 }
 
 } /* namespace FilePersistence */

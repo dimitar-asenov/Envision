@@ -70,10 +70,27 @@ GenericPersistentUnit* GenericTree::persistentUnit(const QString& name) const
 		return nullptr;
 }
 
-GenericNode* GenericTree::find(Model::NodeIdType id)
+GenericNode* GenericTree::find(Model::NodeIdType id, bool lazyLoad) const
 {
 	Q_ASSERT(hasQuickLookupHash_);
-	return quickLookupHash_.value(id);
+	auto node = quickLookupHash_.value(id);
+
+	if (!node && lazyLoad)
+		node = piecewiseLoader_->loadAndLinkNode(id);
+
+	return node;
+}
+
+bool GenericTree::remove(Model::NodeIdType id, bool recursive)
+{
+	Q_ASSERT(hasQuickLookupHash_);
+	// if we have a piecewise loader, load lazily
+	auto node = find(id, piecewiseLoader_ != nullptr);
+	Q_ASSERT(node);
+	node->remove(recursive);
+	Q_ASSERT(!nodesWithoutParents_.contains(node->parentId(), node));
+	quickLookupHash_.remove(id);
+	return true;
 }
 
 GenericNode* GenericTree::emptyChunk()
@@ -87,18 +104,12 @@ void GenericTree::releaseChunk(GenericNode* unusedChunk)
 	emptyChunks_.append(unusedChunk);
 }
 
-void GenericTree::loadNode(Model::NodeIdType id)
-{
-	Q_ASSERT(piecewiseLoader_);
-	piecewiseLoader_->loadAndLinkNode(id);
-}
-
 GenericNode* GenericTree::root() const
 {
 	auto rootPU = persistentUnit(name_);
 	Q_ASSERT(rootPU);
 	auto root = rootPU->nodeWithNullParent();
-	Q_ASSERT(root);
+	Q_ASSERT(root && root->parentId().isNull());
 	return root;
 }
 

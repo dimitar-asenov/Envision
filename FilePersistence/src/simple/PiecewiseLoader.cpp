@@ -25,23 +25,22 @@
 ***********************************************************************************************************************/
 
 #include "PiecewiseLoader.h"
-#include "GenericTree.h"
-#include "GenericNode.h"
 
 namespace FilePersistence {
 
-PiecewiseLoader::PiecewiseLoader(GenericTree* tree) : tree_{tree}{}
-PiecewiseLoader::~PiecewiseLoader(){}
+PiecewiseLoader::PiecewiseLoader(std::shared_ptr<GenericTree>& tree) : tree_{tree}
+{
+    tree_->setPiecewiseLoader(std::shared_ptr<PiecewiseLoader>(this));
+}
 
-void PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
+PiecewiseLoader::~PiecewiseLoader() {}
+
+GenericNode* PiecewiseLoader::loadAndLinkNode(Model::NodeIdType id)
 {
 	Q_ASSERT(tree_->piecewiseLoader().get() == this);
 	Q_ASSERT(!id.isNull());
 
-	auto newNode = loadNewNode(loadNodeData(id));
-	Q_ASSERT(newNode);
-
-	newNode->linkNode();
+	return loadNewNode(loadNodeData(id));
 }
 
 void PiecewiseLoader::loadAndLinkNodeChildren(Model::NodeIdType id)
@@ -51,10 +50,7 @@ void PiecewiseLoader::loadAndLinkNodeChildren(Model::NodeIdType id)
 
 	auto childrenData = loadNodeChildrenData(id);
 	for (auto& childData : childrenData)
-	{
-		auto newNode = loadNewNode(childData);
-		if (newNode) newNode->linkNode();
-	}
+		loadNewNode(childData);
 }
 
 GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
@@ -67,17 +63,10 @@ GenericNode* PiecewiseLoader::loadNewNode(const NodeData& nodeData)
 	Q_ASSERT(pu);
 
 	auto data = nodeData.nodeLine_.toUtf8();
-	auto node = pu->newNode(data.constData(), data.length()); // Will eagerly load the node's contents
-
-	auto alreadyExistingNode = tree_->find(node->id());
-	Q_ASSERT(alreadyExistingNode != node);
-
-	if (alreadyExistingNode)
-	{
-		Q_ASSERT(alreadyExistingNode->persistentUnit() == pu);
-		pu->releaseLastNode(); // Remove the node that we just created as it already exists
-		node = nullptr; // There was no new node loaded
-	}
+	auto pair = pu->newOrExistingNode(data.constData(), data.length()); // Will eagerly load the node's contents
+	auto node = pair.second;
+	if (pair.first)
+		node->linkNode();
 
 	return node;
 }

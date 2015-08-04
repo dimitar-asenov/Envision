@@ -68,7 +68,7 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 
 		virtual bool isLoadingPartially() const override;
 
-		static void saveGenericTree(GenericTree* tree, const QString& name, const QString& destDir,
+		static void saveGenericTree(std::shared_ptr<GenericTree> tree, const QString& name, const QString& destDir,
 											 const QStringList& persistentUnitTypes);
 
 	protected:

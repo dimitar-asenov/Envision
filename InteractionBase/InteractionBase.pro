@@ -72,6 +72,9 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/vis/TextAndDescriptionStyle.h \
     src/InteractionBasePlugin.h \
     src/commands/CommandWithDefaultArguments.h \
+    src/commands/CDiff.h \
+    src/commands/CHistory.h \
+    src/commands/CMerge.h \
     src/commands/CNewView.h \
     src/commands/CSwitchView.h \
     src/commands/CRemoveNodeFromView.h \
@@ -152,6 +155,9 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     test/SimpleTest.cpp \
     src/InteractionBasePlugin.cpp \
     src/commands/CommandWithDefaultArguments.cpp \
+    src/commands/CDiff.cpp \
+    src/commands/CHistory.cpp \
+    src/commands/CMerge.cpp \
     src/commands/CNewView.cpp \
     src/commands/CSwitchView.cpp \
     src/commands/CRemoveNodeFromView.cpp \

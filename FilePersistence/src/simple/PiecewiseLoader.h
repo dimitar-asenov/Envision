@@ -28,6 +28,8 @@
 
 #include "../filepersistence_api.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
+#include "GenericTree.h"
+#include "GenericNode.h"
 
 namespace FilePersistence {
 
@@ -36,16 +38,13 @@ struct NodeData {
 	QString nodeLine_;
 };
 
-class GenericTree;
-class GenericNode;
-
 class PiecewiseLoader
 {
 	public:
-		PiecewiseLoader(GenericTree* tree);
-		virtual ~PiecewiseLoader();
+		PiecewiseLoader(std::shared_ptr<GenericTree>& tree);
+		virtual ~PiecewiseLoader() = 0;
 
-		void loadAndLinkNode(Model::NodeIdType id);
+		GenericNode* loadAndLinkNode(Model::NodeIdType id);
 		void loadAndLinkNodeChildren(Model::NodeIdType id);
 
 	protected:
@@ -54,7 +53,7 @@ class PiecewiseLoader
 
 	private:
 		GenericNode* loadNewNode(const NodeData& nodeData);
-		GenericTree* tree_{};
+		std::shared_ptr<GenericTree> tree_{};
 };
 
 }
