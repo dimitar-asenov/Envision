@@ -32,7 +32,7 @@
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API ComplementOperator : public Query
+class INFORMATIONSCRIPTING_API SubstractNodesOperator : public Query
 {
 	public:
 		virtual QList<Graph*> execute(QList<Graph*> input);

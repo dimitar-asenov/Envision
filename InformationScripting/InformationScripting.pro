@@ -46,7 +46,7 @@ HEADERS += src/precompiled.h \
     src/queries/CompositeQuery.h \
     src/queries/GenericFilter.h \
     src/queries/AstNameFilter.h \
-    src/queries/ComplementOperator.h
+    src/queries/SubstractNodesOperator.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -66,7 +66,7 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/CompositeQuery.cpp \
     src/queries/GenericFilter.cpp \
     src/queries/AstNameFilter.cpp \
-    src/queries/ComplementOperator.cpp
+    src/queries/SubstractNodesOperator.cpp
 
 
 # HACK to only include the AstApi_Generated file if it exists.

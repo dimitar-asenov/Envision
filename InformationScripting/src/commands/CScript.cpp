@@ -37,7 +37,7 @@
 #include "../queries/QueryExecutor.h"
 #include "../queries/CompositeQuery.h"
 #include "../queries/AstNameFilter.h"
-#include "../queries/ComplementOperator.h"
+#include "../queries/SubstractNodesOperator.h"
 #include "../sources/AstSource.h"
 
 namespace InformationScripting {
@@ -153,7 +153,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		// Find all methods that are not called transitively from the TARGET method.
 		auto allMethodsQuery = AstSource::instance().createMethodQuery(node, {"g"});
 		auto callGraphQuery = AstSource::instance().createCallgraphQuery(node, args);
-		auto complement = new ComplementOperator();
+		auto complement = new SubstractNodesOperator();
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectQuery(allMethodsQuery, complement);
 		compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);

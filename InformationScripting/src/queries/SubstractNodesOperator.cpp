@@ -24,13 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#include "ComplementOperator.h"
+#include "SubstractNodesOperator.h"
 
 #include "../graph/Graph.h"
 
 namespace InformationScripting {
 
-QList<Graph*> ComplementOperator::execute(QList<Graph*> input)
+QList<Graph*> SubstractNodesOperator::execute(QList<Graph*> input)
 {
 	Q_ASSERT(input.size() == 2);
 	auto graphA = input[0];
