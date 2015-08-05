@@ -34,21 +34,14 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MemberInitializer)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MemberInitializer)
 
+REGISTER_ATTRIBUTE(MemberInitializer, arguments, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(MemberInitializer, memberReference, Expression, false, false, true)
 
-REGISTER_ATTRIBUTE(MemberInitializer, initializedValue, Expression, false, false, true)
-REGISTER_ATTRIBUTE(MemberInitializer, memberReference, ReferenceExpression, false, true, true)
-
-MemberInitializer::MemberInitializer(ReferenceExpression* memberRef, Expression* initValue)
+MemberInitializer::MemberInitializer(Expression* memberRef, QList<Expression*> args)
 : Super(nullptr, MemberInitializer::getMetaData())
 {
 	setMemberReference(memberRef);
-	setInitializedValue(initValue);
-}
-
-MemberInitializer::MemberInitializer(Expression* initValue)
-: Super(nullptr, MemberInitializer::getMetaData())
-{
-	setInitializedValue(initValue);
+	for (auto a : args) arguments()->append(a);
 }
 
 }

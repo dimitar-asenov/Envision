@@ -369,23 +369,30 @@ CppImportUtilities::OverloadKind CppImportUtilities::getOverloadKind
 OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang::CXXCtorInitializer* initializer)
 {
 	OOModel::MemberInitializer* ooMemberInit = nullptr;
-	OOModel::Expression* initExpression = exprVisitor_->translateExpression(initializer->getInit());
+	auto initExpression = exprVisitor_->translateExpression(initializer->getInit());
+	QList<OOModel::Expression*> initializerExpressions;
+	if (auto commaExpression = DCast<OOModel::CommaExpression>(initExpression))
+	{
+		initializerExpressions = commaExpression->allSubOperands(true);
+		SAFE_DELETE(commaExpression);
+	}
+	else initializerExpressions.append(initExpression);
 
 	if (initializer->isBaseInitializer())
 	{
 		if (auto memberRef = DCast<OOModel::ReferenceExpression>
 				(translateTypePtr(initializer->getBaseClass(), initializer->getSourceLocation())))
-			ooMemberInit = new OOModel::MemberInitializer(memberRef, initExpression);
+			ooMemberInit = new OOModel::MemberInitializer(memberRef, initializerExpressions);
 		else
 			log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 	else if (initializer->isMemberInitializer())
 		ooMemberInit = new OOModel::MemberInitializer(
 					new OOModel::ReferenceExpression(
-						QString::fromStdString(initializer->getMember()->getNameAsString())), initExpression);
+						QString::fromStdString(initializer->getMember()->getNameAsString())), initializerExpressions);
 	else if (initializer->isDelegatingInitializer())
-		// we do not need a reference because the initExpression is a method call to another constructor
-		ooMemberInit = new OOModel::MemberInitializer(initExpression);
+		ooMemberInit = new OOModel::MemberInitializer(
+					new OOModel::ReferenceExpression(className_), initializerExpressions);
 
 	if (!ooMemberInit)
 		log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);

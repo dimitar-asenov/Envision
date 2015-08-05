@@ -27,6 +27,8 @@
 #include "CScript.h"
 
 #include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/SymbolMatcher.h"
+
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
 
@@ -34,6 +36,11 @@
 #include "../wrappers/NodeApi.h"
 #include "../helpers/BoostPythonHelpers.h"
 #include "../graph/InformationNode.h"
+#include "../queries/QueryExecutor.h"
+#include "../queries/CompositeQuery.h"
+#include "../queries/AstNameFilter.h"
+#include "../queries/SubstractNodesOperator.h"
+#include "../queries/AstQuery.h"
 
 namespace InformationScripting {
 
@@ -50,11 +57,17 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 {
 	using namespace boost;
 
+	auto node = target->node();
+	Q_ASSERT(node);
+
 	QStringList args = commandTokens.mid(1);
-	if (args[0] == "methods")
+	if (!args.size()) new Interaction::CommandResult();
+
+	QString command = args[0];
+	args = args.mid(1);
+
+	if (command == "script")
 	{
-		auto node = target->node();
-		Q_ASSERT(node);
 
 		auto parentClass = node->firstAncestorOfType<OOModel::Class>();
 
@@ -74,8 +87,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			for (auto method : *parentClass->methods())
 			{
 				// TODO: this leaks currently
-				auto infoNode = new InformationNode();
-				infoNode->insert("ast", method);
+				auto infoNode = new InformationNode({{"ast", method}});
 				methods.append(python::ptr(infoNode));
 			}
 
@@ -87,6 +99,67 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		} catch (python::error_already_set ) {
 			qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
 		}
+	}
+	else if (command == "methods")
+	{
+		auto query = new AstQuery(AstQuery::QueryType::Methods, node, args);
+		QueryExecutor queryExecutor(query);
+		queryExecutor.execute();
+	}
+	else if (command == "bases")
+	{
+		auto query = new AstQuery(AstQuery::QueryType::BaseClasses, node, args);
+		QueryExecutor queryExecutor(query);
+		queryExecutor.execute();
+	}
+	else if (command == "pipe")
+	{
+		auto methodQuery = new AstQuery(AstQuery::QueryType::Methods, node, args);
+		auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectQuery(methodQuery, toBaseQuery);
+		compositeQuery->connectToOutput(toBaseQuery);
+		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
+	else if (command == "query21")
+	{
+		// Find all classes for which the name contains X and which have a method named Y
+		// 5 queries seems like a lot for this :S
+		auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+		auto filterQuery = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*Matcher\\w*")));
+		auto methodsOfQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"of"});
+		auto methodsFilter = new AstNameFilter(Model::SymbolMatcher("matches"));
+		auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectQuery(classesQuery, filterQuery);
+		compositeQuery->connectQuery(filterQuery, methodsOfQuery);
+		compositeQuery->connectQuery(methodsOfQuery, methodsFilter);
+		compositeQuery->connectQuery(methodsFilter, toBaseQuery);
+		compositeQuery->connectToOutput(toBaseQuery);
+		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
+	else if (command == "callgraph")
+	{
+		auto query = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectToOutput(query);
+		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
+	else if (command == "query19")
+	{
+		// Find all methods that are not called transitively from the TARGET method.
+		auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
+		auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+		auto complement = new SubstractNodesOperator();
+		auto compositeQuery = new CompositeQuery();
+		compositeQuery->connectQuery(allMethodsQuery, complement);
+		compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);
+		compositeQuery->connectToOutput(complement);
+		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
 	}
 	return new Interaction::CommandResult();
 }

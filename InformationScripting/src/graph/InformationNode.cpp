@@ -28,4 +28,8 @@
 
 namespace InformationScripting {
 
+InformationNode::InformationNode(QList<QPair<QString, Property> > initialValues)
+	: PropertyMap{initialValues}
+{}
+
 } /* namespace InformationScripting */

@@ -34,8 +34,19 @@ HEADERS += src/precompiled.h \
     src/graph/InformationNode.h \
     src/graph/Property.h \
     src/wrappers/NodeApi.h \
-    src/graph/PropertyMap.h
-
+    src/graph/PropertyMap.h \
+    src/graph/Graph.h \
+    src/graph/InformationEdge.h \
+    src/sources/AstSource.h \
+    src/queries/Query.h \
+    src/queries/AstQuery.h \
+    src/queries/QueryExecutor.h \
+    src/visualization/DefaultVisualizer.h \
+    src/visitors/AllNodesOfType.h \
+    src/queries/CompositeQuery.h \
+    src/queries/GenericFilter.h \
+    src/queries/AstNameFilter.h \
+    src/queries/SubstractNodesOperator.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -45,7 +56,17 @@ SOURCES += src/InformationScriptingException.cpp \
     src/graph/InformationNode.cpp \
     src/wrappers/NodeApi.cpp \
     src/graph/PropertyMap.cpp \
-    src/graph/Property.cpp
+    src/graph/Property.cpp \
+    src/graph/Graph.cpp \
+    src/graph/InformationEdge.cpp \
+    src/sources/AstSource.cpp \
+    src/queries/AstQuery.cpp \
+    src/queries/QueryExecutor.cpp \
+    src/visualization/DefaultVisualizer.cpp \
+    src/queries/CompositeQuery.cpp \
+    src/queries/GenericFilter.cpp \
+    src/queries/AstNameFilter.cpp \
+    src/queries/SubstractNodesOperator.cpp
 
 
 # HACK to only include the AstApi_Generated file if it exists.

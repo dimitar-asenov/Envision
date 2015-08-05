@@ -27,6 +27,7 @@
 #include "VMemberInitializer.h"
 
 #include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/VList.h"
 
 namespace OOVisualization {
 
@@ -40,10 +41,11 @@ void VMemberInitializer::initializeForms()
 	addForm(grid(
 			{
 				{
-					item(&I::member_, [](I* v){ return v->node()->memberReference();})
+					item(&I::memberName_, [](I* v){ return v->node()->memberReference();})
 				},
 				{
-					item(&I::value_, [](I* v){ return v->node()->initializedValue();})
+					item(&I::arguments_, [](I* v){ return v->node()->arguments();},
+												[](I* v){ return &v->style()->arguments();})
 				}
 			}
 

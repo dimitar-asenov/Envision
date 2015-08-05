@@ -124,7 +124,8 @@ HEADERS += src/statements/VAssertStatementStyle.h \
     src/expressions/VMetaCallExpression.h \
     src/expressions/VMetaCallExpressionStyle.h \
     src/declarations/VMetaDefinitionStyle.h \
-    src/declarations/VMetaDefinition.h
+    src/declarations/VMetaDefinition.h \
+    src/elements/VMemberInitializerStyle.h
 SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/statements/VAssertStatement.cpp \
     src/expressions/VSuperExpression.cpp \
@@ -238,4 +239,5 @@ SOURCES += src/statements/VAssertStatementStyle.cpp \
     src/expressions/VMetaCallExpression.cpp \
     src/expressions/VMetaCallExpressionStyle.cpp \
     src/declarations/VMetaDefinitionStyle.cpp \
-    src/declarations/VMetaDefinition.cpp
+    src/declarations/VMetaDefinition.cpp \
+    src/elements/VMemberInitializerStyle.cpp

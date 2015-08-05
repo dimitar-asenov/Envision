@@ -60,8 +60,9 @@ void addConstructorAndDestructor(Class* cl)
 	auto con = new Method(cl->name(), Modifier::Public, Method::MethodKind::Constructor);
 	cl->methods()->append(con);
 	std::unique_ptr<Position>(con->extension<Position>())->set(0, 1);
-	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("Super"), new IntegerLiteral(42)));
-	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("name"), new StringLiteral("hi")));
+	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("Super"), {new IntegerLiteral(42)}));
+	con->memberInitializers()->append(new MemberInitializer(
+					new ReferenceExpression("name"), {new StringLiteral("hi"), new IntegerLiteral(10)}));
 
 	auto des = new Method("~" + cl->name(), Modifier::Public, Method::MethodKind::Destructor);
 	cl->methods()->append(des);

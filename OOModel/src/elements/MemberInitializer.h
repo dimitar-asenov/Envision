@@ -37,23 +37,21 @@ namespace OOModel {
 /**
  *	This class represent various forms of member initializers.
  * It may be a call to a super constructor then \a memberReference will denote
- * the callee of the super constructor and \a initializedValue will denote the arguments.
- * In case of delegating constructors the \a memberRef will be empty,
- * as the \a initializedValue will contain a method call.
+ * the callee of the super constructor with \a arguemnts.
+ * In case of delegating constructors the \a memberRef shuold be a reference to owner class,
+ * as the \a arguments will contain the arguments.
  * For simple member field initializers the \a memberReference will contain a reference to the field
- * and \a initializedValue the valued it should be initialized to
+ * and \a arguments are the constructor arguments
  */
 class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MemberInitializer)
 
-	ATTRIBUTE(Expression, initializedValue, setInitializedValue)
-	ATTRIBUTE(ReferenceExpression, memberReference, setMemberReference)
+	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
+	ATTRIBUTE(Expression, memberReference, setMemberReference)
 
 	public:
-		MemberInitializer(ReferenceExpression* memberRef, Expression* initValue);
-		MemberInitializer(Expression* initValue);
-
+		MemberInitializer(Expression* memberRef, QList<Expression*> arguments);
 };
 
 }

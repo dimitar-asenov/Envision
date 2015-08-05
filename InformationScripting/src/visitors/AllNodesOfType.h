@@ -28,51 +28,34 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
+#include "ModelBase/src/visitor/VisitorDefinition.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+template <class NodeType>
+class INFORMATIONSCRIPTING_API AllNodesOfType : public Model::Visitor<AllNodesOfType<NodeType>>
 {
 	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
+		static void init();
 
-		boost::python::object pythonAttribute(const QString& key);
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		const_iterator find(const QString& key) const;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
+		QList<NodeType*> results() const;
 
 	private:
-		QList<QPair<QString, Property>> properties_{};
+		QList<NodeType*> results_;
+		static void visitNodeType(AllNodesOfType<NodeType>* self, NodeType* n);
 };
 
+template <class NodeType>
+void AllNodesOfType<NodeType>::init() { AllNodesOfType<NodeType>::template addType<NodeType>(visitNodeType);}
 
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
+template <class NodeType>
+QList<NodeType*> AllNodesOfType<NodeType>::results() const { return results_; }
+
+template <class NodeType>
+void AllNodesOfType<NodeType>::visitNodeType(AllNodesOfType<NodeType>* self, NodeType* n)
 {
-	properties_.push_back({key, Property(value)});
+	self->results_.push_back(n);
 }
 
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
 
 } /* namespace InformationScripting */

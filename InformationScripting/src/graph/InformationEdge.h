@@ -29,50 +29,44 @@
 #include "../informationscripting_api.h"
 
 #include "Property.h"
+#include "PropertyMap.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+class InformationNode;
+
+class InformationEdge : public PropertyMap
 {
 	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
+		enum class Orientation : int {Directed, Undirected};
+		InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
+							 Orientation orientation = Orientation::Directed);
+		int count() const;
+		void incrementCount();
+		QString name() const;
 
-		boost::python::object pythonAttribute(const QString& key);
-		Property& operator[](const QString& key);
+		InformationNode* from() const;
+		InformationNode* to() const;
 
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		const_iterator find(const QString& key) const;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
+		bool isDirected() const;
+		Orientation orientation() const;
 
 	private:
-		QList<QPair<QString, Property>> properties_{};
+		static const QString COUNT_PROPERTY_;
+		static const QString NAME_PROPERTY_;
+
+		InformationNode* from_{};
+		InformationNode* to_{};
+
+		Orientation orientation_{};
 };
 
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
-}
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
+inline int InformationEdge::count() const { auto it = find(COUNT_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
+inline QString InformationEdge::name() const
+	{ auto it = find(NAME_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
+inline InformationNode* InformationEdge::from() const { return from_; }
+inline InformationNode* InformationEdge::to() const { return to_; }
+inline bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }
+inline InformationEdge::Orientation InformationEdge::orientation() const { return orientation_; }
 
 } /* namespace InformationScripting */

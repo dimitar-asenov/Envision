@@ -24,55 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "SubstractNodesOperator.h"
 
-#include "../informationscripting_api.h"
-
-#include "Property.h"
+#include "../graph/Graph.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+QList<Graph*> SubstractNodesOperator::execute(QList<Graph*> input)
 {
-	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
+	Q_ASSERT(input.size() == 2);
+	auto graphA = input[0];
+	auto graphB = input[1];
 
-		boost::python::object pythonAttribute(const QString& key);
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		const_iterator find(const QString& key) const;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
-
-	private:
-		QList<QPair<QString, Property>> properties_{};
-};
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
+	for (auto node : graphB->nodes())
+		graphA->remove(node); // As remove works on the hashvalue we can use the pointer from graphB in graphA.
+	SAFE_DELETE(graphB);
+	return {graphA};
 }
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
 
 } /* namespace InformationScripting */
