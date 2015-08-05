@@ -50,6 +50,7 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		void updateSize(QSize size);
 
 		void setContent(const QString& content);
+		void setHeightResizesWithContent(bool heightResizesWithContent);
 
 		QGraphicsWebView* browser() const;
 
@@ -62,6 +63,7 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		static const QSize defaultSize;
 		QGraphicsWebView* browser_{};
 		QSize size_;
+		bool heightResizesWithContent_{};
 };
 
 inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}
