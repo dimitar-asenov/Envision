@@ -28,51 +28,21 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
-
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+class Graph;
+
+class INFORMATIONSCRIPTING_API DefaultVisualizer
 {
 	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
+		static DefaultVisualizer& instance();
 
-		boost::python::object pythonAttribute(const QString& key);
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		const_iterator find(const QString& key) const;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
-
+		void visualize(Graph* g);
 	private:
-		QList<QPair<QString, Property>> properties_{};
+		DefaultVisualizer() = default;
+
+		static const QString HIGHLIGHT_OVERLAY_GROUP;
+		static const QString ARROW_OVERLAY_GROUP;
 };
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
-}
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
 
 } /* namespace InformationScripting */

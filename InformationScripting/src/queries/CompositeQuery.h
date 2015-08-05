@@ -28,51 +28,77 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
+#include "Query.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
+class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 {
 	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
+		virtual ~CompositeQuery() override;
 
-		boost::python::object pythonAttribute(const QString& key);
-		Property& operator[](const QString& key);
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
-		bool contains(const QString& key) const;
+		/**
+		 * Connects output 0 from Query \a from to input 0 of Query \a to.
+		 *
+		 * If either \a from or \a to was not yet inserted they will be and this query will take ownership of it.
+		 */
+		void connectQuery(Query* from, Query* to);
 
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
+		void connectQuery(Query* from, int outIndex, Query* to, int inIndex);
 
-		const_iterator find(const QString& key) const;
+		void connectToOutput(Query* from, int outIndex = 0);
 
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
 
 	private:
-		QList<QPair<QString, Property>> properties_{};
+		struct QueryNode;
+
+		struct InputMapping {
+				QueryNode* outputFrom_{};
+				int outputIndex_{};
+				// Indicates whether this output has been calculated and set.
+				bool inserted_{};
+		};
+
+		struct QueryNode {
+				QueryNode(Query* q) : q_{q} {}
+				~QueryNode();
+
+				/**
+				 * Describes an input mapping:
+				 * The output with index \a outputIndex_ from the Query \a outputFrom_
+				 * is mapped to the input with index i in the vector.
+				 *
+				 * Note: 1 Input can only receive a single output.
+				 */
+				QVector<InputMapping> inputMap_;
+
+				/**
+				 * Decribes an output mapping:
+				 * 1 Output can go to multiple receivers.
+				 */
+				QVector<QSet<QueryNode*>> outputMap_;
+
+				QList<Graph*> calculatedInputs_;
+				QList<Graph*> calculatedOutputs_;
+
+				void addCalculatedInput(int index, Graph* g);
+				bool canExecute() const;
+				void execute();
+
+				Query* q_{};
+		};
+		// Pseudo node to connect, to get input from execute method
+		QueryNode* inNode_{new QueryNode(nullptr)};
+		// Pseudo node to connect, to map the output
+		QueryNode* outNode_{new QueryNode(nullptr)};
+		QList<QueryNode*> nodes_;
+
+		QueryNode* nodeForQuery(Query* q);
+
+		void addOutputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode);
+		void addInputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode, int inIndex);
 };
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
-}
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
 
 } /* namespace InformationScripting */

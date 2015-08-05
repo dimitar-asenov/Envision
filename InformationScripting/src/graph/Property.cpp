@@ -33,5 +33,10 @@ boost::python::object pythonObject(const Property& p)
 	return p.data_->pythonObject();
 }
 
+bool Property::operator==(const Property& other) const
+{
+	return data_->equals(other.data_);
+}
+
 
 } /* namespace InformationScripting */

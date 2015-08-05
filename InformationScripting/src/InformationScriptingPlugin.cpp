@@ -28,15 +28,23 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "OOInteraction/src/handlers/HStatementItemList.h"
+#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Class.h"
 
 #include "commands/CScript.h"
 #include "helpers/BoostPythonHelpers.h"
+#include "sources/AstSource.h"
+
+#include "visitors/AllNodesOfType.h"
 
 namespace InformationScripting {
 
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 {
 	BoostPythonHelpers::initializeQStringConverters();
+	AstSource::init();
+	AllNodesOfType<OOModel::Method>::init();
+	AllNodesOfType<OOModel::Class>::init();
 	OOInteraction::HStatementItemList::instance()->addCommand(new CScript());
 	return true;
 }

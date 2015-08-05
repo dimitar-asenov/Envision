@@ -24,55 +24,34 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AstNameFilter.h"
 
-#include "../informationscripting_api.h"
+#include "../graph/InformationNode.h"
 
-#include "Property.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API PropertyMap
-{
-	public:
-		PropertyMap(QList<QPair<QString, Property>> initialValues);
-		template <class DataType>
-		void insert(const QString& key, const DataType& value);
-
-		boost::python::object pythonAttribute(const QString& key);
-		Property& operator[](const QString& key);
-
-		bool contains(const QString& key) const;
-
-		// Iterators
-		using iterator = QList<QPair<QString, Property>>::Iterator;
-		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
-
-		const_iterator find(const QString& key) const;
-
-		iterator begin();
-		const_iterator begin() const;
-		const_iterator cbegin() const;
-		iterator end();
-		const_iterator end() const;
-		const_iterator cend() const;
-
-	private:
-		QList<QPair<QString, Property>> properties_{};
-};
-
-
-template <class DataType>
-inline void PropertyMap::insert(const QString& key, const DataType& value)
-{
-	properties_.push_back({key, Property(value)});
-}
-
-inline PropertyMap::iterator PropertyMap::begin() { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::begin() const { return properties_.begin(); }
-inline PropertyMap::const_iterator PropertyMap::cbegin() const { return properties_.cbegin(); }
-inline PropertyMap::iterator PropertyMap::end() { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::end() const { return properties_.end(); }
-inline PropertyMap::const_iterator PropertyMap::cend() const { return properties_.cend(); }
+AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
+	: GenericFilter {
+		  [matcher](const InformationNode* n) {
+			auto it = n->find("ast");
+			if (it != n->end())
+			{
+				Model::Node* astNode = it->second;
+				if (auto compositeNode = DCast<Model::CompositeNode>(astNode))
+				{
+					if (compositeNode->hasAttribute("name"))
+					{
+						if (auto nameText = DCast<Model::Text>(compositeNode->get("name")))
+							return matcher.matches(nameText->get());
+					}
+				}
+			}
+			return false;
+		}
+	}
+{}
 
 } /* namespace InformationScripting */
