@@ -66,6 +66,8 @@ QList<Graph*> AstQuery::execute(QList<Graph*> input)
 		case QueryType::CallGraph:
 			result = {callGraph(input)};
 			break;
+		default:
+			Q_ASSERT(false);
 	}
 	// Clean unhandled input:
 	for (auto& g : input) SAFE_DELETE(g);
