@@ -28,7 +28,7 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-#include "expressions/MetaCallExpression.h"
+#include "expressions/Expression.h"
 
 DEFINE_TYPED_LIST(OOModel::Declaration)
 
@@ -41,7 +41,7 @@ REGISTER_OONAME_SYMBOL_ATTRIBUTE(Declaration, UNSPECIFIED)
 REGISTER_ATTRIBUTE(Declaration, modifiers, Modifier, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, annotations, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, subDeclarations, TypedListOfDeclaration, false, false, true)
-REGISTER_ATTRIBUTE(Declaration, metaCalls, TypedListOfMetaCallExpression, false, false, true)
+REGISTER_ATTRIBUTE(Declaration, metaCalls, TypedListOfExpression, false, false, true)
 
 Declaration::Declaration(const QString& name)
 : Super(nullptr, Declaration::getMetaData())
