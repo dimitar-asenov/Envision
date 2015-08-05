@@ -32,6 +32,8 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
+#include "CodeGenerationVisitor.h"
+
 DEFINE_TYPED_LIST(OOModel::MetaCallExpression)
 
 namespace OOModel {
@@ -60,6 +62,32 @@ MetaDefinition* MetaCallExpression::metaDefinition()
 	}
 
 	return ret;
+}
+
+Declaration* MetaCallExpression::generate()
+{
+	auto metaDef = metaDefinition();
+	if (!metaDef) return nullptr;
+
+	// every formal argument must have a value
+	if (arguments()->size() != metaDef->arguments()->size())
+	{
+		qDebug() << "#metaDefArgs != #metaCallArgs";
+		return nullptr;
+	}
+
+	QMap<QString, Model::Node*> args;
+	for (auto i = 0; i < arguments()->size(); i++)
+	{
+		args.insert(metaDef->arguments()->at(i)->name(), arguments()->at(i));
+	}
+
+	auto cloned = metaDef->context()->clone();
+
+	CodeGenerationVisitor codeGenVisitor (args);
+	codeGenVisitor.visit(cloned);
+
+	return cloned;
 }
 
 }

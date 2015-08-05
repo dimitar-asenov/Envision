@@ -28,6 +28,7 @@
 #include "allOOModelNodes.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
+#include "CodeGenerationVisitor.h"
 
 namespace OOModel {
 
@@ -36,6 +37,8 @@ bool OOModelPlugin::initialize(Core::EnvisionManager&)
 	Core::TypeRegistry::initializeNewTypes();
 
 	Model::Reference::addUnresolutionSteps(OOReference::unresolveOOReferencesAfterSubTree);
+
+	CodeGenerationVisitor::init();
 
 	return true;
 }
