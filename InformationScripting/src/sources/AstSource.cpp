@@ -35,12 +35,6 @@
 
 namespace InformationScripting {
 
-AstSource& AstSource::instance()
-{
-	static AstSource instance;
-	return instance;
-}
-
 void AstSource::init()
 {
 	auto astHash = [](const InformationNode* n) -> QPair<std::size_t, bool> {
@@ -54,31 +48,6 @@ void AstSource::init()
 	};
 
 	Graph::registerNodeHash(astHash);
-}
-
-AstQuery* AstSource::createClassesQuery(Model::Node* target, QStringList args)
-{
-	return new AstQuery(AstQuery::QueryType::Classes, target, args);
-}
-
-AstQuery* AstSource::createMethodQuery(Model::Node* target, QStringList args)
-{
-	return new AstQuery(AstQuery::QueryType::Methods, target, args);
-}
-
-AstQuery* AstSource::createBaseClassesQuery(Model::Node* target, QStringList args)
-{
-	return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
-}
-
-AstQuery* AstSource::createToClassNodeQuery(Model::Node* target, QStringList args)
-{
-	return new AstQuery(AstQuery::QueryType::ToClass, target, args);
-}
-
-AstQuery* AstSource::createCallgraphQuery(Model::Node* target, QStringList args)
-{
-	return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
 }
 
 } /* namespace InformationScripting */

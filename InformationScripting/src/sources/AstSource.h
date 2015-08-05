@@ -41,17 +41,8 @@ class Graph;
 class AstSource
 {
 	public:
-		static AstSource& instance();
+		AstSource() = delete;
 		static void init();
-
-		AstQuery* createClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createMethodQuery(Model::Node* target, QStringList args);
-		AstQuery* createBaseClassesQuery(Model::Node* target, QStringList args);
-		AstQuery* createToClassNodeQuery(Model::Node* target, QStringList args);
-		AstQuery* createCallgraphQuery(Model::Node* target, QStringList args);
-
-	private:
-		AstSource() = default;
 };
 
 } /* namespace InformationScripting */

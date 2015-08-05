@@ -38,7 +38,7 @@
 #include "../queries/CompositeQuery.h"
 #include "../queries/AstNameFilter.h"
 #include "../queries/SubstractNodesOperator.h"
-#include "../sources/AstSource.h"
+#include "../queries/AstQuery.h"
 
 namespace InformationScripting {
 
@@ -100,20 +100,20 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	}
 	else if (command == "methods")
 	{
-		auto query = AstSource::instance().createMethodQuery(node, args);
+		auto query = new AstQuery(AstQuery::QueryType::Methods, node, args);
 		QueryExecutor queryExecutor(query);
 		queryExecutor.execute();
 	}
 	else if (command == "bases")
 	{
-		auto query = AstSource::instance().createBaseClassesQuery(node, args);
+		auto query = new AstQuery(AstQuery::QueryType::BaseClasses, node, args);
 		QueryExecutor queryExecutor(query);
 		queryExecutor.execute();
 	}
 	else if (command == "pipe")
 	{
-		auto methodQuery = AstSource::instance().createMethodQuery(node, args);
-		auto toBaseQuery = AstSource::instance().createToClassNodeQuery(node, args);
+		auto methodQuery = new AstQuery(AstQuery::QueryType::Methods, node, args);
+		auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectQuery(methodQuery, toBaseQuery);
 		compositeQuery->connectToOutput(toBaseQuery);
@@ -124,11 +124,11 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	{
 		// Find all classes for which the name contains X and which have a method named Y
 		// 5 queries seems like a lot for this :S
-		auto classesQuery = AstSource::instance().createClassesQuery(node, {"g"});
+		auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
 		auto filterQuery = new AstNameFilter("Matcher");
-		auto methodsOfQuery = AstSource::instance().createMethodQuery(node, {"of"});
+		auto methodsOfQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"of"});
 		auto methodsFilter = new AstNameFilter("matches", true);
-		auto toBaseQuery = AstSource::instance().createToClassNodeQuery(node, args);
+		auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectQuery(classesQuery, filterQuery);
 		compositeQuery->connectQuery(filterQuery, methodsOfQuery);
@@ -140,7 +140,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	}
 	else if (command == "callgraph")
 	{
-		auto query = AstSource::instance().createCallgraphQuery(node, args);
+		auto query = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectToOutput(query);
 		QueryExecutor queryExecutor(compositeQuery);
@@ -149,8 +149,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	else if (command == "query19")
 	{
 		// Find all methods that are not called transitively from the TARGET method.
-		auto allMethodsQuery = AstSource::instance().createMethodQuery(node, {"g"});
-		auto callGraphQuery = AstSource::instance().createCallgraphQuery(node, args);
+		auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
+		auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
 		auto complement = new SubstractNodesOperator();
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectQuery(allMethodsQuery, complement);
