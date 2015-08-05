@@ -140,12 +140,13 @@ void Menu::updateGeometry(int availableWidth, int availableHeight)
 
 bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 {
-	//If we are in focus mode, and not F2 is pressed, we don't handle any events here.
+	//If we are in focus mode, and not F2 or Return is pressed, we don't handle any events here.
 	if (inFocusMode_)
 	{
 		bool isFocusModeKey = false;
 		if (event->type() == QEvent::KeyPress)
-			if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_F2)
+			if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_F2
+					|| static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return)
 				isFocusModeKey = true;
 		if (!isFocusModeKey) return false;
 	}
@@ -186,7 +187,15 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 		else if (keyEvent->key() == Qt::Key_Return)
 		{
 			event->accept();
-			if (executeFocused())
+			qDebug() << inFocusMode_;
+			if (inFocusMode_)
+			{
+				inFocusMode_ = !inFocusMode_;
+				endFocusMode(focusedItem_);
+				selectItem(focusedItem_);
+				return true;
+			}
+			else if (executeFocused())
 			{
 				hide();
 				return true;
