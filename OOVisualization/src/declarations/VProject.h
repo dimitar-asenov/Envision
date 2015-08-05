@@ -65,6 +65,7 @@ class OOVISUALIZATION_API VProject
 		Visualization::VList* libraries_{};
 		Visualization::VList* declarations_{};
 		Visualization::VList* fields_{};
+		Visualization::VList* metaCalls_{};
 		Item* comment_{};
 };
 

@@ -75,8 +75,11 @@ void VProject::initializeForms()
 				->put(0, 2, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						&StyleType::declarations))
-				->put(0, 3, item(&I::comment_, [](I* v){return v->node()->comment();}))
-				->put(0, 4, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
+				->put(0, 3, item<VList>(&I::metaCalls_,
+						[](I* v) {return v->node()->metaCalls()->size() > 0 ? v->node()->metaCalls() : nullptr;},
+						&StyleType::declarations))
+				->put(0, 4, item(&I::comment_, [](I* v){return v->node()->comment();}))
+				->put(0, 5, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
 						->setMajorAxis(Visualization::GridLayouter::ColumnMajor)
 						->setNodesGetter(
 							[](Item* v)->QVector<QVector<Model::Node*>>{
