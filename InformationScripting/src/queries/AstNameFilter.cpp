@@ -27,23 +27,26 @@
 #include "AstNameFilter.h"
 
 #include "../graph/InformationNode.h"
-#include "OOModel/src/declarations/Declaration.h"
+
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
 
 namespace InformationScripting {
 
-AstNameFilter::AstNameFilter(QString nameContains, bool exactMatch)
+AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 	: GenericFilter {
-		  [nameContains, exactMatch](const InformationNode* n) {
+		  [matcher](const InformationNode* n) {
 			auto it = n->find("ast");
 			if (it != n->end())
 			{
 				Model::Node* astNode = it->second;
-				if (auto decl = DCast<OOModel::Declaration>(astNode))
+				if (auto compositeNode = DCast<Model::CompositeNode>(astNode))
 				{
-					if (exactMatch)
-						return decl->name() == nameContains;
-					else
-						return decl->name().contains(nameContains);
+					if (compositeNode->hasAttribute("name"))
+					{
+						if (auto nameText = DCast<Model::Text>(compositeNode->get("name")))
+							return matcher.matches(nameText->get());
+					}
 				}
 			}
 			return false;

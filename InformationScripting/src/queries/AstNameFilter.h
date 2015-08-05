@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "ModelBase/src/SymbolMatcher.h"
+
 #include "GenericFilter.h"
 
 namespace InformationScripting {
@@ -35,7 +37,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AstNameFilter : public GenericFilter
 {
 	public:
-		AstNameFilter(QString nameContains, bool exactMatch = false);
+		AstNameFilter(Model::SymbolMatcher matcher);
 };
 
 } /* namespace InformationScripting */

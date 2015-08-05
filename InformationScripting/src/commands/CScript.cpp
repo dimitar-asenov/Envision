@@ -27,6 +27,8 @@
 #include "CScript.h"
 
 #include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/SymbolMatcher.h"
+
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
 
@@ -125,9 +127,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		// Find all classes for which the name contains X and which have a method named Y
 		// 5 queries seems like a lot for this :S
 		auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
-		auto filterQuery = new AstNameFilter("Matcher");
+		auto filterQuery = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*Matcher\\w*")));
 		auto methodsOfQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"of"});
-		auto methodsFilter = new AstNameFilter("matches", true);
+		auto methodsFilter = new AstNameFilter(Model::SymbolMatcher("matches"));
 		auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
 		auto compositeQuery = new CompositeQuery();
 		compositeQuery->connectQuery(classesQuery, filterQuery);
