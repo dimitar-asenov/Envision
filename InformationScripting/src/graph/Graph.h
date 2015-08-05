@@ -28,9 +28,10 @@
 
 #include "../informationscripting_api.h"
 
+#include "InformationEdge.h"
+
 namespace InformationScripting {
 
-class InformationEdge;
 class InformationNode;
 
 class Graph
@@ -59,29 +60,17 @@ class Graph
 		InformationNode* add(InformationNode* node);
 
 		/**
-		 * Creates a directed Edge from \a from to \a to with the name \a name.
+		 * Creates an Edge from \a from to \a to with the name \a name.
 		 *
-		 * Returns the directed connection between \a from and \a to.
+		 * Returns the Edge with orientation \a orientation between \a from and \a to.
 		 *
-		 * If there is already a directed edge with the same \a name between \a from and \a to,
+		 * If there is already an edge with the same \a name and \a orientation between \a from and \a to,
 		 * the existing edge is returned with the count property increased.
 		 *
 		 * Note: The graph owns the returned edge.
 		 */
-		InformationEdge* addDirectedEdge(InformationNode* from, InformationNode* to, const QString& name);
-
-		/**
-		 * Connects \a a to \a b with an indirected edge with the name \a name.
-		 *
-		 * Returns the undirected connection between \a a and \a b.
-		 *
-		 * If there is already a undirected edge with the same \a name between \a a and \a b,
-		 * the existing edge is returned with the count property increased.
-		 *
-		 * Note: The graph owns the returned edge.
-		 */
-		InformationEdge* addEdge(InformationNode* a, InformationNode* b, const QString& name);
-
+		InformationEdge* addEdge(InformationNode* from, InformationNode* to, const QString& name,
+													InformationEdge::Orientation orientation = InformationEdge::Orientation::Directed);
 
 		/**
 		 * Removes the \a node and all edges to it.

@@ -49,6 +49,7 @@ class InformationEdge : public PropertyMap
 		InformationNode* to() const;
 
 		bool isDirected() const;
+		Orientation orientation() const;
 
 	private:
 		static const QString COUNT_PROPERTY_;
@@ -65,5 +66,6 @@ inline QString InformationEdge::name() const { return (*this)[NAME_PROPERTY_]; }
 inline InformationNode* InformationEdge::from() const { return from_; }
 inline InformationNode* InformationEdge::to() const { return to_; }
 inline bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }
+inline InformationEdge::Orientation InformationEdge::orientation() const { return orientation_; }
 
 } /* namespace InformationScripting */

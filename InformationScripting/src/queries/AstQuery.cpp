@@ -223,7 +223,7 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, InformationNode* clas
 	{
 		auto baseNode = new InformationNode({{"ast", base}});
 		baseNode = g->add(baseNode);
-		g->addDirectedEdge(classNode, baseNode, "base class");
+		g->addEdge(classNode, baseNode, "base class");
 		addBaseEdgesFor(base, baseNode, g);
 	}
 }
@@ -234,7 +234,7 @@ void AstQuery::addCallInformation(Graph* g, OOModel::Method* method, QList<OOMod
 	for (auto callee : callees)
 	{
 		auto calleeNode = g->add(new InformationNode({{"ast", callee}}));
-		g->addDirectedEdge(methodNode, calleeNode, "calls");
+		g->addEdge(methodNode, calleeNode, "calls");
 	}
 }
 

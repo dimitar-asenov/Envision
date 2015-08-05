@@ -27,7 +27,6 @@
 #include "Graph.h"
 
 #include "InformationNode.h"
-#include "InformationEdge.h"
 
 namespace InformationScripting {
 
@@ -58,42 +57,28 @@ InformationNode* Graph::add(InformationNode* node)
 	return existingNode;
 }
 
-InformationEdge* Graph::addDirectedEdge(InformationNode* from, InformationNode* to, const QString& name)
+InformationEdge* Graph::addEdge(InformationNode* from, InformationNode* to, const QString& name,
+										  InformationEdge::Orientation orientation)
 {
 	// We only allow existing nodes:
 	Q_ASSERT(from == findNode(from));
 	Q_ASSERT(to == findNode(to));
+	// TODO this might be a possible performance hit if we have many edges.
 	for (auto edge : edges_)
 	{
-		if (edge->from() == from && edge->to() == to && edge->name() == name)
+		// TODO if directed only this condition
+		bool directedMatch = edge->from() == from && edge->to() == to;
+		bool undirectedMatch = edge->from() == to && edge->to() == from;
+		if (edge->name() == name && ((orientation == InformationEdge::Orientation::Directed && directedMatch)
+							|| (orientation == InformationEdge::Orientation::Directed && (directedMatch || undirectedMatch))))
 		{
 			auto existingEdge = edge;
-			Q_ASSERT(existingEdge->isDirected());
+			Q_ASSERT(existingEdge->orientation() == orientation);
 			existingEdge->incrementCount();
 			return existingEdge;
 		}
 	}
-	auto edge = new InformationEdge(from, to, name);
-	edges_.push_back(edge);
-	return edge;
-}
-
-InformationEdge* Graph::addEdge(InformationNode* a, InformationNode* b, const QString& name)
-{
-	// We only allow existing nodes:
-	Q_ASSERT(a == findNode(a));
-	Q_ASSERT(b == findNode(b));
-	for (auto edge : edges_)
-	{
-		if ((edge->from() == a || edge->from() == b) && (edge->to() == b || edge->to() == a) && edge->name() == name)
-		{
-			auto existingEdge = edge;
-			Q_ASSERT(!existingEdge->isDirected());
-			existingEdge->incrementCount();
-			return existingEdge;
-		}
-	}
-	auto edge = new InformationEdge(a, b, name, InformationEdge::Orientation::Undirected);
+	auto edge = new InformationEdge(from, to, name, orientation);
 	edges_.push_back(edge);
 	return edge;
 }
