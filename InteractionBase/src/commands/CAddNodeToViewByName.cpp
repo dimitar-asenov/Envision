@@ -29,7 +29,7 @@
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "VisualizationBase/src/items/VViewItemNode.h"
-#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 
@@ -43,7 +43,7 @@ bool CAddNodeToViewByName::canInterpret(Visualization::Item*, Visualization::Ite
 	return commandTokens.size() >= 1 && commandTokens.first() == name();
 }
 
-CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization::Item* target,
+CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visualization::Item* target,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	if (commandTokens.size() < 2)
@@ -52,15 +52,24 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization
 	auto currentView = target->scene()->currentViewItem();
 	QPoint posToInsert;
 	auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursor.get());
-	if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor && layoutCursor)
+	if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor)
 	{
 		posToInsert.setX(layoutCursor->x());
 		posToInsert.setY(layoutCursor->y());
 	}
-	else if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor && layoutCursor)
+	else if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor)
 	{
 		currentView->insertColumn(layoutCursor->x());
 		posToInsert.setX(layoutCursor->x());
+	}
+	else if (auto grid = dynamic_cast<Visualization::DynamicGridFormElement*>(currentView->currentForm()))
+	{
+		auto focusedIndex = grid->indexOf(currentView, source);
+		if (focusedIndex.x() != -1)
+		{
+			posToInsert.setX(focusedIndex.x());
+			posToInsert.setY(focusedIndex.y());
+		}
 	}
 
 	auto tokens = commandTokens.mid(1);
