@@ -52,7 +52,7 @@ class INFORMATIONSCRIPTING_API Property {
 				virtual ~PropertyDataConcept() = default;
 				virtual boost::python::object pythonObject() const = 0;
 				virtual Model::Node* node() const { return nullptr; }
-				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const = 0;
+				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
 		};
 
 		template <class DataType, class = void>
@@ -63,7 +63,7 @@ class INFORMATIONSCRIPTING_API Property {
 					return boost::python::object(data_);
 				}
 
-				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
 					return false;
@@ -82,7 +82,7 @@ class INFORMATIONSCRIPTING_API Property {
 					return boost::python::object(boost::python::ptr(data_));
 				}
 
-				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
 					return false;
@@ -102,7 +102,7 @@ class INFORMATIONSCRIPTING_API Property {
 				}
 				virtual Model::Node* node() const override { return data_; }
 
-				virtual bool equals(std::shared_ptr<PropertyDataConcept> other) const override {
+				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
 					return false;

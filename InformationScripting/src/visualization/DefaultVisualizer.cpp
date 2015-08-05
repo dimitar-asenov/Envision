@@ -41,7 +41,7 @@ namespace InformationScripting {
 const QString DefaultVisualizer::HIGHLIGHT_OVERLAY_GROUP = {"default graph highlight"};
 const QString DefaultVisualizer::ARROW_OVERLAY_GROUP = {"default arrow"};
 
-DefaultVisualizer DefaultVisualizer::instance()
+DefaultVisualizer& DefaultVisualizer::instance()
 {
 	static DefaultVisualizer instance;
 	return instance;
@@ -49,8 +49,7 @@ DefaultVisualizer DefaultVisualizer::instance()
 
 void DefaultVisualizer::visualize(Graph* g)
 {
-	auto edgeCondition = [](const InformationEdge *) { return true; };
-	QList<InformationEdge*> edges = g->edgesFowWhich(edgeCondition);
+	QList<InformationEdge*> edges = g->edges();
 	if (!edges.empty())
 	{
 		// First check if all edges are of the same type
@@ -91,7 +90,7 @@ void DefaultVisualizer::visualize(Graph* g)
 		auto condition = [](const InformationNode* node) {
 			return node->contains("ast");
 		};
-		auto nodes = g->nodesForWhich(condition);
+		auto nodes = g->nodes(condition);
 
 		for (auto informationNode : nodes)
 		{

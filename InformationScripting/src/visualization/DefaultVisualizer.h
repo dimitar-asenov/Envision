@@ -35,7 +35,7 @@ class Graph;
 class INFORMATIONSCRIPTING_API DefaultVisualizer
 {
 	public:
-		static DefaultVisualizer instance();
+		static DefaultVisualizer& instance();
 
 		void visualize(Graph* g);
 	private:

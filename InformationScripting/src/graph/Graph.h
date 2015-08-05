@@ -93,17 +93,17 @@ class Graph
 		 */
 		void remove(QList<InformationNode*> nodes);
 
-		QList<InformationNode*> nodes() const;
+		/**
+		 * Returns all nodes,
+		 * if \a holds is passed then it returns only the nodes for which the NodeCondition \a holds holds.
+		 */
+		QList<InformationNode*> nodes(NodeCondition holds = {}) const;
 
 		/**
-		 * Returns all nodes for which the NodeCondition \a holds holds.
+		 * Returns all edges,
+		 * if \a holds is passed then it returns only the edges for which the EdgeCondition \a holds holds.
 		 */
-		QList<InformationNode*> nodesForWhich(NodeCondition holds) const;
-
-		/**
-		 * Returns all edges for which the EdgeCondition \a holds holds.
-		 */
-		QList<InformationEdge*> edgesFowWhich(EdgeCondition holds) const;
+		QList<InformationEdge*> edges(EdgeCondition holds = {}) const;
 
 	private:
 		static QList<NodeHash> nodeHashFunctions_;
@@ -111,7 +111,7 @@ class Graph
 		QHash<std::size_t, InformationNode*> nodes_;
 		QList<InformationEdge*> edges_;
 
-		std::size_t hashValueOf(const InformationNode* n) const;
+		std::size_t hashOf(const InformationNode* n) const;
 		/**
 		 * Checks if there is a node in the graph with the same hash value as \a n,
 		 * if there is the pointer to this node is returned, otherwise a null pointer is returned.

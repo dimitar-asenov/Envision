@@ -128,7 +128,7 @@ Graph* AstQuery::methodsQuery(QList<Graph*>& input)
 			return false;
 		};
 
-		QList<InformationNode*> nodes = g->nodesForWhich(canContainMethod);
+		QList<InformationNode*> nodes = g->nodes(canContainMethod);
 		for (auto node : nodes)
 		{
 			Model::Node* astNode = (*node)["ast"];
@@ -177,7 +177,7 @@ Graph* AstQuery::toClassNode(QList<Graph*>& input)
 		return n->firstAncestorOfType<OOModel::Class>() != nullptr;
 	};
 
-	auto nodes = g->nodesForWhich(canBeInClass);
+	auto nodes = g->nodes(canBeInClass);
 	QList<OOModel::Class*> classes;
 	for (auto node : nodes)
 	{

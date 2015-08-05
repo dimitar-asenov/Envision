@@ -43,8 +43,7 @@ void GenericFilter::applyFilter(Graph* g)
 {
 	if (!g) return;
 
-	auto nodes = g->nodes();
-	for (auto n : nodes)
+	for (auto n : g->nodes())
 		if (!keepNode_(n)) g->remove(n);
 }
 

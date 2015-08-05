@@ -52,7 +52,7 @@ InformationNode* Graph::add(InformationNode* node)
 	}
 	else
 	{
-		nodes_[hashValueOf(node)] = node;
+		nodes_[hashOf(node)] = node;
 		existingNode = node;
 	}
 	return existingNode;
@@ -101,7 +101,7 @@ InformationEdge* Graph::addEdge(InformationNode* a, InformationNode* b, const QS
 void Graph::remove(InformationNode* node)
 {
 	Q_ASSERT(node);
-	auto hash = hashValueOf(node);
+	auto hash = hashOf(node);
 	auto nodeIt = nodes_.find(hash);
 	// If the node isn't in the graph we don't have to do anything:
 	if (nodeIt == nodes_.end()) return;
@@ -120,9 +120,7 @@ void Graph::remove(InformationNode* node)
 			edgeIt = edges_.erase(edgeIt);
 		}
 		else
-		{
 			++edgeIt;
-		}
 	}
 
 	SAFE_DELETE(ownedNode);
@@ -134,30 +132,25 @@ void Graph::remove(QList<InformationNode*> nodes)
 	for (auto node : nodes) remove(node);
 }
 
-QList<InformationNode*> Graph::nodes() const
+QList<InformationNode*> Graph::nodes(Graph::NodeCondition holds) const
 {
-	return nodes_.values();
-}
-
-QList<InformationNode*> Graph::nodesForWhich(Graph::NodeCondition holds) const
-{
-	Q_ASSERT(holds);
+	if (!holds) return nodes_.values();
 
 	QList<InformationNode*> result;
 	for (auto node : nodes_) if (holds(node)) result.push_back(node);
 	return result;
 }
 
-QList<InformationEdge*> Graph::edgesFowWhich(Graph::EdgeCondition holds) const
+QList<InformationEdge*> Graph::edges(Graph::EdgeCondition holds) const
 {
-	Q_ASSERT(holds);
+	if (!holds) return edges_;
 
 	QList<InformationEdge*> result;
 	for (auto edge : edges_) if (holds(edge)) result.push_back(edge);
 	return result;
 }
 
-std::size_t Graph::hashValueOf(const InformationNode* n) const
+std::size_t Graph::hashOf(const InformationNode* n) const
 {
 	for (auto hashFunction : nodeHashFunctions_)
 	{
@@ -170,7 +163,7 @@ std::size_t Graph::hashValueOf(const InformationNode* n) const
 
 InformationNode*Graph::findNode(const InformationNode* n) const
 {
-	auto hash = hashValueOf(n);
+	auto hash = hashOf(n);
 	auto it = nodes_.find(hash);
 	if (it != nodes_.end()) return it.value();
 	return nullptr;
