@@ -101,9 +101,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	else if (command == "methods")
 	{
 		auto query = AstSource::instance().createMethodQuery(node, args);
-		auto compositeQuery = new CompositeQuery();
-		compositeQuery->connectToOutput(query);
-		QueryExecutor queryExecutor(compositeQuery);
+		QueryExecutor queryExecutor(query);
 		queryExecutor.execute();
 	}
 	else if (command == "bases")
