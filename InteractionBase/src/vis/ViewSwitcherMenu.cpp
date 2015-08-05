@@ -118,13 +118,19 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 
 bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 {
+	//static int nameCounter = 0;
 	if (inEditMode_) return false;
 	if (auto entry = DCast<VViewSwitcherEntry>(item))
 	{
 		QPoint pos = indexOf(item);
 		auto view = scene()->viewItems()->viewItem(entry->nameField()->text());
 		if (!view)
-			view = scene()->viewItems()->newViewItem(entry->nameField()->text(), pos);
+		{
+			auto name = entry->nameField()->text();
+			if (name == "Empty slot")
+				name = "View" + QString::number(pos.x()) + QString::number(pos.y()) + "";//QString::number(nameCounter++);
+			view = scene()->viewItems()->newViewItem(name, pos);
+		}
 		scene()->viewItems()->switchToView(view);
 	}
 	return true;
