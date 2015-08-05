@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,32 +26,19 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "../oovisualization_api.h"
 
-#include "../expressions/Expression.h"
-#include "../expressions/ReferenceExpression.h"
+#include "VisualizationBase/src/items/VListStyle.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MemberInitializer)
+namespace OOVisualization {
 
-namespace OOModel {
-/**
- *	This class represent various forms of member initializers.
- * It may be a call to a super constructor then \a memberReference will denote
- * the callee of the super constructor with \a arguemnts.
- * In case of delegating constructors the \a memberRef shuold be a reference to owner class,
- * as the \a arguments will contain the arguments.
- * For simple member field initializers the \a memberReference will contain a reference to the field
- * and \a arguments are the constructor arguments
- */
-class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
+class VMemberInitializerStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(MemberInitializer)
-
-	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
-	ATTRIBUTE(Expression, memberReference, setMemberReference)
-
 	public:
-		MemberInitializer(Expression* memberRef, QList<Expression*> arguments);
+		~VMemberInitializerStyle();
+
+		Property<Visualization::VListStyle> arguments{this, "arguments"};
 };
 
 }

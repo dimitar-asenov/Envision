@@ -27,11 +27,15 @@
 #pragma once
 
 #include "../oovisualization_api.h"
-
+#include "VMemberInitializerStyle.h"
 #include "OOModel/src/elements/MemberInitializer.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
+
+namespace Visualization {
+	class VList;
+}
 
 namespace OOVisualization {
 
@@ -41,7 +45,7 @@ class OOVISUALIZATION_API VMemberInitializer
 	: public Super<Visualization::ItemWithNode<VMemberInitializer, Visualization::DeclarativeItem<VMemberInitializer>,
 	  OOModel::MemberInitializer>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VMemberInitializer, Visualization::DeclarativeItemBaseStyle)
+	ITEM_COMMON(VMemberInitializer)
 
 	public:
 		VMemberInitializer(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
@@ -49,8 +53,8 @@ class OOVISUALIZATION_API VMemberInitializer
 		static void initializeForms();
 
 	private:
-		Visualization::Item* value_{};
-		Visualization::Item* member_{};
+		Visualization::Item* memberName_{};
+		Visualization::VList* arguments_{};
 };
 
 } /* namespace OOVisualization */
