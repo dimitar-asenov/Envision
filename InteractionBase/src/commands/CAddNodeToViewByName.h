@@ -30,6 +30,10 @@
 
 #include "commands/Command.h"
 
+namespace Model {
+	class SymbolMatcher;
+}
+
 namespace Interaction {
 
 class INTERACTIONBASE_API CAddNodeToViewByName : public Command
@@ -46,7 +50,7 @@ class INTERACTIONBASE_API CAddNodeToViewByName : public Command
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
-		QStringList findNames(QStringList nameParts, Model::Node* root);
+		QStringList findNames(Model::SymbolMatcher* matcher, QString nameSoFar, Model::Node* root);
 		Model::Node* findNode(QStringList fullyQualifiedName, Model::Node* root);
 		bool isSuggestable(Model::Node::SymbolTypes symbolType);
 };
