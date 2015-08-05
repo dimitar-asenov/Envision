@@ -42,8 +42,8 @@ class INFORMATIONSCRIPTING_API Property {
 
 		friend boost::python::object pythonObject(const Property& p);
 
-		template <class ConvertTo> inline operator ConvertTo() const;
-		inline operator Model::Node*() const;
+		template <class ConvertTo> operator ConvertTo() const;
+		operator Model::Node*() const;
 
 		bool operator==(const Property& other) const;
 
@@ -117,13 +117,14 @@ class INFORMATIONSCRIPTING_API Property {
 template <class DataType> Property::Property(DataType propertyData)
 	: data_{std::make_shared<PropertyData<DataType>>(std::move(propertyData))} {}
 
-template <class ConvertTo> Property::operator ConvertTo() const
+template <class ConvertTo>
+inline Property::operator ConvertTo() const
 {
 	if (auto propertyData = std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_))
 		return propertyData->data_;
 	throw new std::bad_cast;
 }
 
-InformationScripting::Property::operator Model::Node*() const { return data_->node(); }
+inline InformationScripting::Property::operator Model::Node*() const { return data_->node(); }
 
 } /* namespace InformationScripting */

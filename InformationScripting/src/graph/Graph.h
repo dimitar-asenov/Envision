@@ -48,7 +48,7 @@ class Graph
 		using NodeCondition = std::function<bool(const InformationNode*)>;
 		using EdgeCondition = std::function<bool(const InformationEdge*)>;
 
-		static inline void registerNodeHash(NodeHash check);
+		static void registerNodeHash(NodeHash check);
 
 		/**
 		 * Adds the \a node to the graph. Only the returned node should be used after this method is called.
@@ -124,6 +124,6 @@ class Graph
 
 };
 
-void Graph::registerNodeHash(Graph::NodeHash check) { nodeHashFunctions_ << check; }
+inline void Graph::registerNodeHash(Graph::NodeHash check) { nodeHashFunctions_ << check; }
 
 } /* namespace InformationScripting */

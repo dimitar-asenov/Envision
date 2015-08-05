@@ -45,10 +45,10 @@ class InformationEdge : public PropertyMap
 		void incrementCount();
 		QString name() const;
 
-		inline InformationNode* from() const;
-		inline InformationNode* to() const;
+		InformationNode* from() const;
+		InformationNode* to() const;
 
-		inline bool isDirected() const;
+		bool isDirected() const;
 
 	private:
 		static const QString COUNT_PROPERTY_;
@@ -60,8 +60,10 @@ class InformationEdge : public PropertyMap
 		Orientation orientation_{};
 };
 
-InformationNode* InformationEdge::from() const { return from_; }
-InformationNode* InformationEdge::to() const { return to_; }
-bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }
+inline int InformationEdge::count() const { return (*this)[COUNT_PROPERTY_]; }
+inline QString InformationEdge::name() const { return (*this)[NAME_PROPERTY_]; }
+inline InformationNode* InformationEdge::from() const { return from_; }
+inline InformationNode* InformationEdge::to() const { return to_; }
+inline bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }
 
 } /* namespace InformationScripting */

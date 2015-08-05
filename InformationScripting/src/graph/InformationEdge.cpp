@@ -36,20 +36,10 @@ InformationEdge::InformationEdge(InformationNode* from, InformationNode* to, con
 	: PropertyMap{{{COUNT_PROPERTY_, 1}, {NAME_PROPERTY_, name}}}, from_{from}, to_{to}, orientation_{orientation}
 {}
 
-int InformationEdge::count() const
-{
-	return (*this)[COUNT_PROPERTY_];
-}
-
 void InformationEdge::incrementCount()
 {
 	Property& count = (*this)[COUNT_PROPERTY_];
 	count = static_cast<int>(count) + 1;
-}
-
-QString InformationEdge::name() const
-{
-	return (*this)[NAME_PROPERTY_];
 }
 
 } /* namespace InformationScripting */
