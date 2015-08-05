@@ -59,7 +59,7 @@ QList<CommandSuggestion*> CSwitchView::suggest(Visualization::Item* source, Visu
 		auto nameSoFar = parts.size() > 1 ? parts[1] : "";
 		for (auto vector : source->scene()->viewItems()->viewItems())
 			for (auto view : vector)
-				if (view->name().startsWith(nameSoFar) && view != source->scene()->currentViewItem())
+				if (view && view->name().startsWith(nameSoFar) && view != source->scene()->currentViewItem())
 					suggestions.append(new CommandSuggestion(name() + " " + view->name(),
 															 "Open view " + view->name()));
 	}
