@@ -298,6 +298,27 @@ QPoint DynamicGridFormElement::focusedElementIndex(Item* item) const
 	return QPoint(-1, -1);
 }
 
+QPoint DynamicGridFormElement::indexOf(Item* item, Item* child) const
+{
+	Q_ASSERT(item);
+	Q_ASSERT(child);
+
+	auto directlyOwnedItem = child;
+	while (directlyOwnedItem->parent() && directlyOwnedItem->parent() != item )
+		directlyOwnedItem = directlyOwnedItem->parent();
+
+	if (directlyOwnedItem->parent() != item) return {-1, -1};
+
+	auto& data = dataForItem(item);
+
+	for (int x=0; x<data.numColumns_; ++x)
+		for (int y=0; y<data.numRows_; ++y)
+			if ( data.itemGrid_[x][y] == directlyOwnedItem)
+				return {x, y};
+
+	Q_ASSERT(false);
+}
+
 bool DynamicGridFormElement::elementOrChildHasFocus(Item* item) const
 {
 	if (LayoutFormElement::elementOrChildHasFocus(item))
