@@ -34,6 +34,11 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 
+QHash<int, QPoint> ViewSwitcherMenu::keyToIndexMap
+		{{Qt::Key_Q, QPoint(0, 0)}, {Qt::Key_W, QPoint(1, 0)}, {Qt::Key_E, QPoint(2, 0)},
+		 {Qt::Key_A, QPoint(0, 1)}, {Qt::Key_S, QPoint(1, 1)}, {Qt::Key_D, QPoint(2, 1)},
+		 {Qt::Key_Z, QPoint(0, 2)}, {Qt::Key_X, QPoint(1, 2)}, {Qt::Key_C, QPoint(2, 2)}};
+
 void ViewSwitcherMenu::show(Visualization::Item* target)
 {
 	QApplication::postEvent(target->scene(),
@@ -65,6 +70,23 @@ ViewSwitcherMenu::ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items,
 											 Visualization::Item* target, StyleType* style)
 	: Super(items, target, style)
 {
+}
+
+bool ViewSwitcherMenu::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
+{
+	if (Super::sceneEventFilter(watched, event)) return true;
+	else if (event->type() == QEvent::KeyPress)
+	{
+		auto keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->modifiers() == Qt::ControlModifier && keyToIndexMap.contains(keyEvent->key()))
+			if (executeEntry(currentItems()[keyToIndexMap[keyEvent->key()].x()]
+											  [keyToIndexMap[keyEvent->key()].y()]))
+			{
+				hide();
+				return true;
+			}
+	}
+	return false;
 }
 
 void ViewSwitcherMenu::startFocusMode(Visualization::Item *target)
