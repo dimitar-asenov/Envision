@@ -66,20 +66,22 @@ VCommentBrowser::~VCommentBrowser()
 
 void VCommentBrowser::determineChildren()
 {
-	if (size_.isValid())
-		browser_->resize(size_);
+	if (size_.isValid() && !heightResizesWithContent_) browser_->resize(size_);
 }
 
 void VCommentBrowser::updateGeometry(int, int)
 {
+	auto size = heightResizesWithContent_ ? QSize{size_.width(), browser_->page()->mainFrame()->contentsSize().height()}
+													  : size_;
+
 	if (hasShape())
 	{
-		getShape()->setInnerSize(size_.width(), size_.height());
+		getShape()->setInnerSize(size.width(), size.height());
 		browser_->setPos(getShape()->contentLeft(), getShape()->contentTop());
 	}
 	else
 	{
-		setSize(size_);
+		setSize(size);
 		browser_->setPos(0, 0);
 	}
 }
@@ -98,9 +100,29 @@ void VCommentBrowser::updateSize(QSize size)
 
 void VCommentBrowser::setContent(const QString &content)
 {
-	browser_->setResizesToContents(true);
 	browser_->setHtml(content);
-	browser_->resize(size_);
+	if (!heightResizesWithContent_) browser_->resize(size_);
+}
+
+void VCommentBrowser::setHeightResizesWithContent(bool heightResizesWithContent)
+{
+	if (heightResizesWithContent_ != heightResizesWithContent)
+	{
+		heightResizesWithContent_ = heightResizesWithContent;
+
+		if (heightResizesWithContent)
+		{
+			browser_->page()->setPreferredContentsSize({size_.width(), 10});
+			browser_->setResizesToContents(true);
+		}
+		else
+		{
+			browser_->page()->setPreferredContentsSize({});
+			browser_->resize(defaultSize);
+		}
+
+		setUpdateNeeded(StandardUpdate);
+	}
 }
 
 }
