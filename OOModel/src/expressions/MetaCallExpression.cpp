@@ -34,6 +34,8 @@
 
 #include "CodeGenerationVisitor.h"
 
+#include "OOModel/src/declarations/Declaration.h"
+
 DEFINE_TYPED_LIST(OOModel::MetaCallExpression)
 
 namespace OOModel {
@@ -43,12 +45,15 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallExpression)
 
 REGISTER_ATTRIBUTE(MetaCallExpression, callee, Expression, false, false, true)
 REGISTER_ATTRIBUTE(MetaCallExpression, arguments, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(MetaCallExpression, generationCache, Node, false, true, false)
 
 MetaCallExpression::MetaCallExpression(const QString& name, Expression* referencePrefix)
 : Super(nullptr, MetaCallExpression::getMetaData())
 {
 	setCallee(new ReferenceExpression(name, referencePrefix));
 }
+
+Declaration* MetaCallExpression::generated() { return static_cast<Declaration*>(generationCache()); }
 
 MetaDefinition* MetaCallExpression::metaDefinition()
 {
@@ -64,34 +69,63 @@ MetaDefinition* MetaCallExpression::metaDefinition()
 	return ret;
 }
 
+void MetaCallExpression::bindMetaCalls(Model::Node* n, MetaBinding* binding)
+{
+	if (auto metaCall = DCast<MetaCallExpression>(n))
+		if (auto callee = DCast<ReferenceExpression>(metaCall->callee()))
+			for (auto i = 0; i < binding->mappings()->size(); i++)
+				if (callee->name() == binding->mappings()->at(i)->name())
+					callee->setName(binding->mappings()->at(i)->value()->name());
+
+	for (auto child : n->children()) bindMetaCalls(child, binding);
+}
+
 Declaration* MetaCallExpression::generate()
 {
-	if (generated_) return generated_;
+	// return cached generated tree if exists
+	if (generated()) return generated();
 
 	auto metaDef = metaDefinition();
 	if (!metaDef) return nullptr;
 
-	// every formal argument must have a value
 	if (arguments()->size() != metaDef->arguments()->size())
 	{
 		qDebug() << "#metaDefArgs != #metaCallArgs";
 		return nullptr;
 	}
 
+	// prepare visitor arguments using meta call arguments
 	QMap<QString, Model::Node*> args;
 	for (auto i = 0; i < arguments()->size(); i++)
 	{
 		args.insert(metaDef->arguments()->at(i)->name(), arguments()->at(i));
 	}
 
-	generated_ = metaDef->context()->clone();
+	// use meta bindings to add additional visitor arguments
+	for (auto i = 0; i < metaDef->metaBindings()->size(); i++)
+	{
+		auto metaBinding = metaDef->metaBindings()->at(i);
 
-	generated_->setParent(this);
+		if (auto input = args[metaBinding->input()->name()])
+		{
+			auto cloned = input->clone();
+			bindMetaCalls(cloned, metaBinding);
+			args.insert(metaBinding->name(), cloned);
+		}
+	}
+
+	// stage 0: clone meta definition
+	// cache generated tree already at this point to enable reference resolution
+	setGenerationCache(metaDef->context()->clone());
+
+	// stage 1: perform code generation
 	CodeGenerationVisitor codeGenVisitor (args);
-	codeGenVisitor.visit(generated_);
-	generated_->setParent(nullptr);
+	codeGenVisitor.visit(generated());
 
-	return generated_;
+	// stage 2: merge generated code
+	// TODO: implementation
+
+	return generated();
 }
 
 }

@@ -35,6 +35,7 @@ namespace OOModel {
 
 class MetaDefinition;
 class Declaration;
+class MetaBinding;
 
 class OOMODEL_API MetaCallExpression: public Super<Expression>
 {
@@ -42,6 +43,7 @@ class OOMODEL_API MetaCallExpression: public Super<Expression>
 
 	ATTRIBUTE(Expression, callee, setCallee)
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
+	PRIVATE_ATTRIBUTE(Model::Node, generationCache, setGenerationCache)
 
 	public:
 		MetaCallExpression(const QString& name, Expression* referencePrefix = nullptr);
@@ -59,14 +61,13 @@ class OOMODEL_API MetaCallExpression: public Super<Expression>
 		/**
 		 * Returns the latest tree generated
 		 */
-		Declaration* generated() const;
+		Declaration* generated();
 
 	private:
-
-		Declaration* generated_{};
-
+		/**
+		 * Binds all MetaCallExpressions according to the binding in n
+		 */
+		void bindMetaCalls(Model::Node* n, MetaBinding* binding);
 };
-
-inline Declaration* MetaCallExpression::generated() const { return generated_; }
 
 }

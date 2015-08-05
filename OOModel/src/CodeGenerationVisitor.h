@@ -39,11 +39,6 @@ class ReferenceExpression;
 class MetaCallExpression;
 
 class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor> {
-	private:
-		QMap<QString, Model::Node*> args_;
-
-		void handlePredefinedFunction(QString function, MetaCallExpression* n);
-
 	public:
 		CodeGenerationVisitor(QMap<QString, Model::Node*> args);
 
@@ -54,6 +49,14 @@ class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor> {
 		static void visitMetaCallExpression(CodeGenerationVisitor* v, MetaCallExpression* n);
 
 		static void init();
+
+	private:
+		QMap<QString, Model::Node*> args_;
+
+		/**
+		 * handles predefined meta functions
+		 */
+		void handlePredefinedFunction(QString function, MetaCallExpression* n);
 };
 
 }

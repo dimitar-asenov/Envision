@@ -47,9 +47,6 @@ void CodeGenerationVisitor::init()
 
 void CodeGenerationVisitor::visitChildren(Model::Node* n)
 {
-	// visiting children of MetaCallExpressions is handled explicitly in the MetaCallExpression handler
-	if (DCast<MetaCallExpression>(n)) return;
-
 	for (auto child : n->children()) visit(child);
 }
 
@@ -61,14 +58,38 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 	{
 		if (auto argument = v->args_[input])
 		{
-			auto p = n->parent();
-			p->beginModification("change node in code generation visitor");
-			p->replaceChild(n, argument->clone());
-			p->endModification();
+			if (auto argumentReference = DCast<ReferenceExpression>(argument))
+			{
+				// case: there exists a replacement and it is another ReferenceExpression
+				// -> copy name (replacing it would cause child nodes of n to disappear)
+
+				n->setName(argumentReference->name());
+			}
+			else
+			{
+				// case: there exists a replacement and it is not a ReferenceExpression
+				// -> replace node
+
+				auto p = n->parent();
+
+				p->beginModification("change node in code generation visitor");
+
+				auto cloned = argument->clone();
+				p->replaceChild(n, cloned);
+
+				p->endModification();
+
+				// visit the cloned tree and return to avoid visiting the children of n
+				v->visitChildren(cloned);
+				return;
+			}
 		}
 	}
 	else
 	{
+		// case: n's name is a concatenated identifier (a##b)
+		// -> build identifier
+
 		QStringList parts = input.split("##");
 
 		for (auto i = 0; i < parts.size(); i++)
@@ -77,6 +98,8 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 
 		n->setName(parts.join(""));
 	}
+
+	v->visitChildren(n);
 }
 
 void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameText* n)
@@ -85,11 +108,19 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 
 	if (!input.contains("##"))
 	{
-		if (!v->args_[input]) return;
-		if (auto argument = DCast<ReferenceExpression>(v->args_[input])) n->set(argument->name());
+		if (auto argument = DCast<ReferenceExpression>(v->args_[input]))
+		{
+			// case: n's name is an existing argument of type ReferenceExpression
+			// -> copy name as new text
+
+			n->set(argument->name());
+		}
 	}
 	else
 	{
+		// case: n's text is a concatenated text (a##b)
+		// -> build text
+
 		QStringList parts = input.split("##");
 
 		for (auto i = 0; i < parts.size(); i++)
@@ -98,6 +129,8 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 
 		n->set(parts.join(""));
 	}
+
+	v->visitChildren(n);
 }
 
 void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, MetaCallExpression* n)
@@ -110,11 +143,17 @@ void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, Me
 
 	if (!n->metaDefinition())
 	{
+		// case: unresolved meta definition
+		// -> check if it is a predefined meta function
+
 		if (auto metaDef = DCast<ReferenceExpression>(n->callee()))
 			v->handlePredefinedFunction(metaDef->name(), n);
 	}
 	else
 	{
+		// case: resolved meta definition
+		// -> generate recursively
+
 		n->generate();
 	}
 }
