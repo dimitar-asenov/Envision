@@ -1,0 +1,11 @@
+{
+    "ExportFile": "AstApi_Generated.cpp",
+    "ExportPath": "../../InformationScripting/src/wrappers/",
+    "EnvisionPath": "../..",
+    "MaxLineLength": 120,
+    "SubDirs": 
+    {
+        "OOModel": "OOModel",
+        "ModelBase": "Model"
+    }
+}

@@ -46,7 +46,6 @@ VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :Super(
 
 void VProject::determineChildren()
 {
-	// call determineChildren of super class
 	Super::determineChildren();
 	setDefaultMoveCursorProxy(name_);
 }

@@ -3,7 +3,7 @@
 # Tries to adapt the .classpath file matching to your system.
 
 # Standard plug-in path can be overriden by argument
-PREFERRED_PLUGIN_PATHS=("/opt/eclipse/plugins" "/usr/share/eclipse/plugins")
+PREFERRED_PLUGIN_PATHS=("/opt/eclipse/plugins" "/usr/share/eclipse/plugins" "/usr/lib/eclipse/plugins")
 
 if [ ! -f .classpath ]
 then
@@ -11,7 +11,7 @@ then
 	exit 1
 fi
 
-PLUGIN_PATH=${ARRAY[0]}
+PLUGIN_PATH=${PREFERRED_PLUGIN_PATHS[0]}
 if [ $# == 1 ]
 then
 	PLUGIN_PATH=$1

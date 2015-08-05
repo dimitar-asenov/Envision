@@ -43,12 +43,18 @@
 
 #include <QtCore/QDir>
 
+#include <QtCore/QDateTime>
+#include <QtCore/QTimeZone>
+
 #if defined(FILEPERSISTENCE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
 // plug-ins which depend on this one will not include these headers.
 #include <QtGui/QClipboard>
 
 #include <QtCore/QFile>
+
+#include <iostream>
+#include <git2.h>
 
 #endif
 

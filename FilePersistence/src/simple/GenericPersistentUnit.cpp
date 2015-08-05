@@ -98,25 +98,42 @@ GenericNode* GenericPersistentUnit::newNode(const char* data, int dataLength)
 	return node;
 }
 
-GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool deepCopy)
+GenericNode* GenericPersistentUnit::newNode(const GenericNode* nodeToCopy, bool force, bool deepCopy)
 {
-	Q_ASSERT(!data_);
-	Q_ASSERT(tree()->piecewiseLoader());
 	Q_ASSERT(nodeToCopy->tree() != tree());
+	if (!force) Q_ASSERT(!tree_->find(nodeToCopy->id()));
 
 	auto node = nextNode();
 	node->reset(this, nodeToCopy);
+
 	if (deepCopy)
 	{
 		for (auto childToCopy : nodeToCopy->children())
 		{
 			auto child = newNode(childToCopy, true);
 			child->setParent(node);
-			node->addChild(child);
+			node->attachChild(child);
 		}
 	}
 
 	return node;
+}
+
+QPair<bool, GenericNode*> GenericPersistentUnit::newOrExistingNode(const char* data, int dataLength)
+{
+	// NOTE if we could just read the ID from the line, this method could be removed, I think.
+	auto newwNode = newNode(data, dataLength);
+	auto oldNode = tree_->find(newwNode->id());
+	if (oldNode)
+	{
+		Q_ASSERT(oldNode->label() == newwNode->label());
+		Q_ASSERT(oldNode->type() == newwNode->type());
+		Q_ASSERT(oldNode->parentId() == newwNode->parentId());
+		releaseLastNode();
+		return {false, oldNode};
+	}
+	else
+		return {true, newwNode};
 }
 
 const char* GenericPersistentUnit::setData(const char* data, int dataSize)

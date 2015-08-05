@@ -48,8 +48,16 @@ class FILEPERSISTENCE_API GenericPersistentUnit {
 		GenericNode* newNode();
 		GenericNode* newNode(int lineStart, int lineEndEnclusive);
 		GenericNode* newNode(const char* data, int dataLength);
-		GenericNode* newNode(const GenericNode* nodeToCopy, bool deepCopy = false);
-
+		/**
+		 * If \a force is true then no check for ID uniqueness is performed.
+		 */
+		GenericNode* newNode(const GenericNode* nodeToCopy, bool force = false, bool deepCopy = false);
+		/**
+		 * Returns the node according to \a data. If the boolean return value is true, the node was newly created
+		 * and needs to be linked; Otherwise such a node already exists in the tree and that node is returned. In this
+		 * case the node does not need to be linked.
+		 */
+		QPair<bool, GenericNode*> newOrExistingNode(const char* data, int dataLength);
 		/**
 		 * Copies the provided \a data to be used for initializing child GenericNode elements. The copy will be
 		 * destroyed with the object.

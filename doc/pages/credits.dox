@@ -19,17 +19,27 @@ Sascha Dinkel - https://github.com/Sashixi
 		- Initial Alloy integration
 
 <br>
+Balz Guenat - https://github.com/BalzGuenat
+		- Improved version control for Envision trees (v 0.2)
+		
+<br>
 Andrea Helfenstein - https://github.com/helandre
 		- Declarative API for defining visualizations and supporting documentation
 
 <br>
 Patrick Lüthi - https://github.com/patrick-luethi
 		- Initial work on semantic zoom
+		- Code-generation and preprocessing support
 
 <br>
 Martin Otth - https://github.com/motth
-		- Initial work on version control
+		- Initial work on version control (v 0.1)
 		- Improvements to the persistence framework
+
+<br>
+Cyril Steimer - https://github.com/cyril-steimer
+		- Task-views infrastructure
+		- Navigation and visualization improvements
 		
 <br>
 Jonas Trappenberg - https://github.com/teeberg
@@ -41,6 +51,7 @@ Lukas Vogel - https://github.com/lukedirtwalker
 		- Enhancements to the object-oriented model
 		- Improvements to the build process and style guides
 		- Java debugging support
+		- Information scripting
 <br>
 <br>
 

@@ -26,6 +26,9 @@
 
 #include "handlers/HMethod.h"
 
+#include "InteractionBase/src/commands/CDiff.h"
+#include "InteractionBase/src/commands/CHistory.h"
+
 #include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
@@ -40,7 +43,10 @@
 namespace OOInteraction {
 
 HMethod::HMethod()
-{}
+{
+	addCommand(new Interaction::CDiff());
+	addCommand(new Interaction::CHistory());
+}
 
 HMethod* HMethod::instance()
 {

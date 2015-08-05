@@ -15,3 +15,5 @@
 /*/Makefile.Debug
 
 *.directory
+
+/InformationScripting/src/wrappers/*_Generated.*

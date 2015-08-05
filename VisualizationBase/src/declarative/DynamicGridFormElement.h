@@ -95,6 +95,14 @@ class VISUALIZATIONBASE_API DynamicGridFormElement : public LayoutFormElement
 		 * Returns the index of the focused element for the specified \a item. If no element is focused, returns {-1,-1}.
 		 */
 		QPoint focusedElementIndex(Item* item) const;
+
+		/**
+		 * Returns the index of \a child or {-1, -1} if this layout does not manage \a child.
+		 *
+		 * \a child could be a direct or an indirect child of the layout.
+		 */
+		QPoint indexOf(Item* item, Item* child) const;
+
 		QSize gridSize(const Item* item) const;
 		virtual bool elementOrChildHasFocus(Item* item) const override;
 		virtual bool isEmpty(const Item* item) const override;
