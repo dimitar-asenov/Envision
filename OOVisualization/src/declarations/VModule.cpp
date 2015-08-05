@@ -74,7 +74,7 @@ void VModule::initializeForms()
 				->put(0, 2, item<VList>(&I::declarations_,
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
-				->put(0, 3, item<VList>(&I::declarations_,
+				->put(0, 3, item<VList>(&I::metaCalls_,
 						[](I* v) {return v->node()->metaCalls()->size() > 0 ? v->node()->metaCalls() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
 				->put(0, 4, item(&I::comment_, [](I* v){return v->node()->comment();}))
