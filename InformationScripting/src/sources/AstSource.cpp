@@ -44,9 +44,10 @@ AstSource& AstSource::instance()
 void AstSource::init()
 {
 	auto astHash = [](const InformationNode* n) -> QPair<std::size_t, bool> {
-		if (n->contains("ast"))
+		auto it = n->find("ast");
+		if (it != n->end())
 		{
-			Model::Node* nodePtr = (*n)["ast"];
+			Model::Node* nodePtr = it->second;
 			return {std::hash<Model::Node*>()(nodePtr), true};
 		}
 		return {0, false};

@@ -61,8 +61,9 @@ class InformationEdge : public PropertyMap
 		Orientation orientation_{};
 };
 
-inline int InformationEdge::count() const { return (*this)[COUNT_PROPERTY_]; }
-inline QString InformationEdge::name() const { return (*this)[NAME_PROPERTY_]; }
+inline int InformationEdge::count() const { auto it = find(COUNT_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
+inline QString InformationEdge::name() const
+	{ auto it = find(NAME_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
 inline InformationNode* InformationEdge::from() const { return from_; }
 inline InformationNode* InformationEdge::to() const { return to_; }
 inline bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }

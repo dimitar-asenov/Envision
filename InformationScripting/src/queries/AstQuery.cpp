@@ -121,8 +121,9 @@ Graph* AstQuery::methodsQuery(QList<Graph*>& input)
 		auto g = input.takeFirst();
 
 		auto canContainMethod = [](const InformationNode* n) {
-			if (n->contains("ast")) {
-				Model::Node* astNode = (*n)["ast"];
+			auto it = n->find("ast");
+			if (it != n->end()) {
+				Model::Node* astNode = it->second;
 				return DCast<OOModel::Declaration>(astNode) != nullptr;
 			}
 			return false;
@@ -172,9 +173,13 @@ Graph* AstQuery::toClassNode(QList<Graph*>& input)
 	Q_ASSERT(input.size());
 	auto g = input.takeFirst();
 	auto canBeInClass = [](const InformationNode* node) {
-		node->contains("ast");
-		Model::Node* n = (*node)["ast"];
-		return n->firstAncestorOfType<OOModel::Class>() != nullptr;
+		auto it = node->find("ast");
+		if (it != node->end())
+		{
+			Model::Node* n = it->second;
+			return n->firstAncestorOfType<OOModel::Class>() != nullptr;
+		}
+		return false;
 	};
 
 	auto nodes = g->nodes(canBeInClass);

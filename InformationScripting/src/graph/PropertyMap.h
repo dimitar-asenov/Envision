@@ -39,8 +39,7 @@ class INFORMATIONSCRIPTING_API PropertyMap
 		template <class DataType>
 		void insert(const QString& key, const DataType& value);
 
-		boost::python::object pythonAttribute(const QString& key) const;
-		Property operator[](const QString& key) const;
+		boost::python::object pythonAttribute(const QString& key);
 		Property& operator[](const QString& key);
 
 		bool contains(const QString& key) const;
@@ -48,6 +47,8 @@ class INFORMATIONSCRIPTING_API PropertyMap
 		// Iterators
 		using iterator = QList<QPair<QString, Property>>::Iterator;
 		using const_iterator = QList<QPair<QString, Property>>::ConstIterator;
+
+		const_iterator find(const QString& key) const;
 
 		iterator begin();
 		const_iterator begin() const;

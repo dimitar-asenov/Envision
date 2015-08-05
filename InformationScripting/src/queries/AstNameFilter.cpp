@@ -34,9 +34,10 @@ namespace InformationScripting {
 AstNameFilter::AstNameFilter(QString nameContains, bool exactMatch)
 	: GenericFilter {
 		  [nameContains, exactMatch](const InformationNode* n) {
-			if (n->contains("ast"))
+			auto it = n->find("ast");
+			if (it != n->end())
 			{
-				Model::Node* astNode = (*n)["ast"];
+				Model::Node* astNode = it->second;
 				if (auto decl = DCast<OOModel::Declaration>(astNode))
 				{
 					if (exactMatch)
