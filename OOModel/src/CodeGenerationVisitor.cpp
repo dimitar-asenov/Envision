@@ -45,11 +45,6 @@ void CodeGenerationVisitor::init()
 	addType<MetaCallExpression>(visitMetaCallExpression);
 }
 
-void CodeGenerationVisitor::visitChildren(Model::Node* n)
-{
-	for (auto child : n->children()) visit(child);
-}
-
 void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, OOModel::ReferenceExpression* n)
 {
 	auto input = n->name();

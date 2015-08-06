@@ -42,8 +42,6 @@ class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor> {
 	public:
 		CodeGenerationVisitor(QMap<QString, Model::Node*> args);
 
-		virtual void visitChildren(Model::Node* n);
-
 		static void visitReferenceExpression(CodeGenerationVisitor* v, ReferenceExpression* n);
 		static void visitNameText(CodeGenerationVisitor* v, Model::NameText* n);
 		static void visitMetaCallExpression(CodeGenerationVisitor* v, MetaCallExpression* n);
