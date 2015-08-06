@@ -146,7 +146,8 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 		bool isFocusModeKey = false;
 		if (event->type() == QEvent::KeyPress)
 			if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_F2
-					|| static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return)
+					|| static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return
+					|| static_cast<QKeyEvent*>(event)->key() == Qt::Key_Enter)
 				isFocusModeKey = true;
 		if (!isFocusModeKey) return false;
 	}
@@ -173,7 +174,8 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			selectItem(currentItems()[pos.x()][pos.y()]);
 			return true;
 		}
-		else if (keyEvent->key() == Qt::Key_F2)
+		else if (keyEvent->key() == Qt::Key_F2 || (inFocusMode_
+					&& (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)))
 		{
 			inFocusMode_ = !inFocusMode_;
 			if (inFocusMode_) startFocusMode(focusedItem_);
@@ -184,18 +186,9 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			}
 			return true;
 		}
-		else if (keyEvent->key() == Qt::Key_Return)
+		else if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
 		{
-			event->accept();
-			qDebug() << inFocusMode_;
-			if (inFocusMode_)
-			{
-				inFocusMode_ = !inFocusMode_;
-				endFocusMode(focusedItem_);
-				selectItem(focusedItem_);
-				return true;
-			}
-			else if (executeFocused())
+			if (executeFocused())
 			{
 				hide();
 				return true;

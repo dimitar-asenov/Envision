@@ -34,7 +34,7 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 
-QHash<int, QPoint> ViewSwitcherMenu::keyToIndexMap
+QHash<int, QPoint> ViewSwitcherMenu::keyToIndexMap_
 		{{Qt::Key_Q, QPoint(0, 0)}, {Qt::Key_W, QPoint(1, 0)}, {Qt::Key_E, QPoint(2, 0)},
 		 {Qt::Key_A, QPoint(0, 1)}, {Qt::Key_S, QPoint(1, 1)}, {Qt::Key_D, QPoint(2, 1)},
 		 {Qt::Key_Z, QPoint(0, 2)}, {Qt::Key_X, QPoint(1, 2)}, {Qt::Key_C, QPoint(2, 2)}};
@@ -78,9 +78,9 @@ bool ViewSwitcherMenu::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
 	else if (event->type() == QEvent::KeyPress)
 	{
 		auto keyEvent = static_cast<QKeyEvent*>(event);
-		if (keyEvent->modifiers() == Qt::ControlModifier && keyToIndexMap.contains(keyEvent->key()))
-			if (executeEntry(currentItems()[keyToIndexMap[keyEvent->key()].x()]
-											  [keyToIndexMap[keyEvent->key()].y()]))
+		if (keyEvent->modifiers() == Qt::ControlModifier && keyToIndexMap_.contains(keyEvent->key()))
+			if (executeEntry(currentItems()[keyToIndexMap_[keyEvent->key()].x()]
+											  [keyToIndexMap_[keyEvent->key()].y()]))
 			{
 				hide();
 				return true;
@@ -118,7 +118,6 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 
 bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 {
-	//static int nameCounter = 0;
 	if (inEditMode_) return false;
 	if (auto entry = DCast<VViewSwitcherEntry>(item))
 	{
@@ -128,7 +127,7 @@ bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 		{
 			auto name = entry->nameField()->text();
 			if (name == "Empty slot")
-				name = "View" + QString::number(pos.x()) + QString::number(pos.y()) + "";//QString::number(nameCounter++);
+				name = "View" + QString::number(pos.x()) + QString::number(pos.y()) + "";
 			view = scene()->viewItems()->newViewItem(name, pos);
 		}
 		scene()->viewItems()->switchToView(view);

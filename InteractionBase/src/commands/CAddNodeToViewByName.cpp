@@ -93,15 +93,14 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 	{
 		auto nodeName = textSoFar.trimmed().mid(4);
 		QStringList names;
-		for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-		{
-			auto parts = nodeName.split(".");
-			QString pattern = "*";
-			for (auto part : parts) pattern += part + '*';
+		auto parts = nodeName.split(".");
+		QString pattern = "*";
+		for (auto part : parts) pattern += part + '*';
+		auto matcher = Model::SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
 
-			names.append(findNames(new Model::SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard)),
-															"", manager->root()));
-		}
+		for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+			names.append(findNames(matcher, "", manager->root()));
+
 		//Shorter names usually have less parts to the fully qualified name -> suggest them first
 		std::sort(names.begin(), names.end(), [](QString first, QString second)
 											{ return first.length() < second.length(); });
@@ -116,7 +115,7 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 	return suggestions;
 }
 
-QStringList CAddNodeToViewByName::findNames(Model::SymbolMatcher* matcher, QString nameSoFar, Model::Node* root)
+QStringList CAddNodeToViewByName::findNames(const Model::SymbolMatcher& matcher, QString nameSoFar, Model::Node* root)
 {
 	QStringList result;
 
@@ -131,7 +130,7 @@ QStringList CAddNodeToViewByName::findNames(Model::SymbolMatcher* matcher, QStri
 		auto newNameSoFar = nameSoFar + "." + root->symbolName();
 		for (auto child : root->children())
 			result.append(findNames(matcher, newNameSoFar, child));
-		if (matcher->matches(newNameSoFar))
+		if (matcher.matches(newNameSoFar))
 			//Get rid of initial "."
 			result.append(newNameSoFar.mid(1));
 	}

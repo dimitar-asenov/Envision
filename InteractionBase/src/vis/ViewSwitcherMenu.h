@@ -56,7 +56,7 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		bool inEditMode_{};
 		QString nameBefore_;
 
-		static QHash<int, QPoint> keyToIndexMap;
+		static QHash<int, QPoint> keyToIndexMap_;
 
 		ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
