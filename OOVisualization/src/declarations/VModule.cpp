@@ -75,8 +75,8 @@ void VModule::initializeForms()
 						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
 						[](I* v){return &v->style()->declarations();}))
 				->put(0, 3, item<VList>(&I::metaCalls_,
-						[](I* v) {return v->node()->metaCalls()->size() > 0 ? v->node()->metaCalls() : nullptr;},
-						[](I* v){return &v->style()->declarations();}))
+						[](I* v) {return v->node()->metaCalls();},
+						[](I* v){return &v->style()->metaCalls();}))
 				->put(0, 4, item(&I::comment_, [](I* v){return v->node()->comment();}))
 				->put(0, 5, (new DynamicGridFormElement())->setSpacing(10, 10)->setMargins(10)
 					->setMajorAxis(Visualization::GridLayouter::ColumnMajor)

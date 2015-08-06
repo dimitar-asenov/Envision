@@ -106,7 +106,8 @@ void VMethod::initializeForms()
 
 	auto bodyElement = item(&I::body_, [](I* v){return v->node()->items();});
 
-	auto metaCallsElement = item(&I::metaCalls_, [](I* v){return v->node()->metaCalls();});
+	auto metaCallsElement = item<VList>(&I::metaCalls_, [](I* v){return v->node()->metaCalls();},
+			[](I* v){return &v->style()->metaCalls();});
 
 	auto contentElement = (new GridLayoutFormElement())
 			->setVerticalSpacing(3)->setColumnStretchFactors(1)
