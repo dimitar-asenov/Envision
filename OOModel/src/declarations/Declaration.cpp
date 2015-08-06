@@ -28,8 +28,6 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
-#include "expressions/Expression.h"
-
 DEFINE_TYPED_LIST(OOModel::Declaration)
 
 namespace OOModel {
