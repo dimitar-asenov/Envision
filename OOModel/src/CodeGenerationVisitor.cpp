@@ -157,6 +157,12 @@ void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, Me
 
 void CodeGenerationVisitor::handlePredefinedFunction(QString function, MetaCallExpression* n)
 {
+	/*
+	 * only handle predefined functions if they are nested in another meta call.
+	 * this helps preventing unintentional modification of parents which are not generated nodes.
+	 */
+	if (!n->firstAncestorOfType<MetaCallExpression>()) return;
+
 	if (function == "SET_OVERRIDE_FLAG")
 	{
 		if (n->arguments()->size() != 1)
