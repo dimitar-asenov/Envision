@@ -108,7 +108,8 @@ void ViewSwitcherMenu::endFocusMode(Visualization::Item *target)
 		//create a new item with that name
 		QPoint pos = indexOf(entry);
 		auto nameAfter = entry->nameField()->text();
-		if (scene()->viewItems()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_)
+		if (scene()->viewItems()->viewItem(nameAfter) == nullptr && nameAfter != nameBefore_
+				&& Visualization::ViewItem::isValidName(nameAfter))
 		{
 			if (!scene()->viewItems()->loadView(nameAfter, pos))
 				scene()->viewItems()->newViewItem(nameAfter, pos);
@@ -126,9 +127,11 @@ bool ViewSwitcherMenu::executeEntry(Visualization::Item* item)
 		if (!view)
 		{
 			auto name = entry->nameField()->text();
-			if (name == "Empty slot")
+			if (!Visualization::ViewItem::isValidName(name))
 				name = "View" + QString::number(pos.x()) + QString::number(pos.y()) + "";
 			view = scene()->viewItems()->newViewItem(name, pos);
+			if (!view)
+				view = scene()->viewItems()->viewItem(name);
 		}
 		scene()->viewItems()->switchToView(view);
 	}

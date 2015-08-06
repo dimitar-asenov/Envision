@@ -50,6 +50,11 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		static void initializeForms();
 
 		/**
+		 * Returns whether this is a valid name for a ViewItem.
+		 */
+		static bool isValidName(const QString& name);
+
+		/**
 		 * The purpose to use when rendering only the public interface
 		 * of an item.
 		 */
@@ -115,6 +120,9 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		QStringList arrowLayers() const;
 
 		const QString& name() const;
+		/**
+		 * Sets the name to the given name. Ensure that isValidName(name) holds.
+		 */
 		void setName(const QString& name);
 
 		QJsonDocument toJson() const;

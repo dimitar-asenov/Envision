@@ -36,6 +36,8 @@
 #include "RootItem.h"
 #include "renderer/ModelRenderer.h"
 #include "utils/JsonUtil.h"
+#include "VisualizationManager.h"
+#include "ViewItemManager.h"
 
 namespace Visualization {
 
@@ -44,6 +46,7 @@ ITEM_COMMON_DEFINITIONS(ViewItem, "item")
 ViewItem::ViewItem(Item* parent, QString name, StyleType* style) :
 		Super(parent, style), name_{name}
 {
+	Q_ASSERT(isValidName(name));
 }
 
 void ViewItem::initializeForms()
@@ -54,6 +57,17 @@ void ViewItem::initializeForms()
 			->setNodesGetter([](Item* v)
 				{ auto self = static_cast<I*>(v);
 				  return self->nodesGetter(); }));
+}
+
+bool ViewItem::isValidName(const QString &name)
+{
+	if (name == "Empty slot")
+		return false;
+	if (auto scene = VisualizationManager::instance().mainScene())
+		for (auto vector : scene->viewItems()->viewItems())
+			for (auto item : vector)
+				if (item && item->name() == name) return false;
+	return true;
 }
 
 int ViewItem::publicInterfacePurpose()
@@ -220,6 +234,7 @@ QStringList ViewItem::arrowLayers() const
 
 void ViewItem::setName(const QString &name)
 {
+	Q_ASSERT(isValidName(name));
 	//The arrow overlay names depend on the name -> redo them
 	for (auto layer : arrows_.keys())
 		scene()->removeOverlayGroup(fullLayerName(layer));
