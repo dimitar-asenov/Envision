@@ -60,7 +60,7 @@ class OOVISUALIZATION_API VMetaCallExpression : public Super<VExpression<VMetaCa
 		Visualization::Static* prefix_{};
 		Item* callee_{};
 		Visualization::VList* arguments_{};
-		Item* generated_{};
+		Item* generated_{}; // TODO: only temporary
 };
 
 inline Visualization::VList* VMetaCallExpression::arguments() const { return arguments_; }
