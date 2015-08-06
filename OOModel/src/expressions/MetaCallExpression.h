@@ -43,7 +43,7 @@ class OOMODEL_API MetaCallExpression: public Super<Expression>
 
 	ATTRIBUTE(Expression, callee, setCallee)
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
-	PRIVATE_ATTRIBUTE(Model::Node, generationCache, setGenerationCache)
+	PRIVATE_ATTRIBUTE(Model::Node, cache, setCache)
 
 	public:
 		MetaCallExpression(const QString& name, Expression* referencePrefix = nullptr);
@@ -54,20 +54,15 @@ class OOMODEL_API MetaCallExpression: public Super<Expression>
 		MetaDefinition* metaDefinition();
 
 		/**
-		 * Generates the tree resulting from this meta call and returns it.
+		 * Returns the generated tree resulting from this meta call.
 		 */
-		Declaration* generate();
-
-		/**
-		 * Returns the latest tree generated
-		 */
-		Declaration* generated();
+		Declaration* generatedTree();
 
 	private:
 		/**
-		 * Binds all MetaCallExpressions according to the binding in n
+		 * Binds all MetaCallExpressions according to the binding in node.
 		 */
-		void bindMetaCalls(Model::Node* n, MetaBinding* binding);
+		void bindMetaCalls(Model::Node* node, MetaBinding* binding);
 };
 
 }

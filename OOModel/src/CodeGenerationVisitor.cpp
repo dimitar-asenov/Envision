@@ -58,25 +58,15 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 				// case: there exists a replacement and it is another ReferenceExpression
 				// -> copy name (replacing it would cause child nodes of n to disappear)
 
-				n->beginModification("change node in code generation visitor");
-
 				n->setName(argumentReference->name());
-
-				n->endModification();
 			}
 			else
 			{
 				// case: there exists a replacement and it is not a ReferenceExpression
 				// -> replace node
 
-				auto p = n->parent();
-
-				p->beginModification("change node in code generation visitor");
-
 				auto cloned = argument->clone();
-				p->replaceChild(n, cloned);
-
-				p->endModification();
+				n->parent()->replaceChild(n, cloned);
 
 				// visit the cloned tree and return to avoid visiting the children of n
 				v->visitChildren(cloned);
@@ -99,14 +89,7 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 				modified = true;
 			}
 
-		if (modified)
-		{
-			n->beginModification("change node in code generation visitor");
-
-			n->setName(parts.join(""));
-
-			n->endModification();
-		}
+		if (modified) n->setName(parts.join(""));
 	}
 
 	v->visitChildren(n);
@@ -123,11 +106,7 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 			// case: n's name is an existing argument of type ReferenceExpression
 			// -> copy name as new text
 
-			n->beginModification("change node in code generation visitor");
-
 			n->set(argument->name());
-
-			n->endModification();
 		}
 	}
 	else
@@ -145,14 +124,7 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 				modified = true;
 			}
 
-		if (modified)
-		{
-			n->beginModification("change node in code generation visitor");
-
-			n->set(parts.join(""));
-
-			n->endModification();
-		}
+		if (modified) n->set(parts.join(""));
 	}
 
 	v->visitChildren(n);
@@ -179,7 +151,7 @@ void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, Me
 		// case: resolved meta definition
 		// -> generate recursively
 
-		n->generate();
+		n->generatedTree();
 	}
 }
 
