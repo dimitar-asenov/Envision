@@ -58,7 +58,11 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 				// case: there exists a replacement and it is another ReferenceExpression
 				// -> copy name (replacing it would cause child nodes of n to disappear)
 
+				n->beginModification("change node in code generation visitor");
+
 				n->setName(argumentReference->name());
+
+				n->endModification();
 			}
 			else
 			{
@@ -86,12 +90,23 @@ void CodeGenerationVisitor::visitReferenceExpression(CodeGenerationVisitor* v, O
 		// -> build identifier
 
 		QStringList parts = input.split("##");
+		bool modified = false;
 
 		for (auto i = 0; i < parts.size(); i++)
 			if (auto argument = DCast<ReferenceExpression>(v->args_[parts[i]]))
+			{
 				parts[i] = argument->name();
+				modified = true;
+			}
 
-		n->setName(parts.join(""));
+		if (modified)
+		{
+			n->beginModification("change node in code generation visitor");
+
+			n->setName(parts.join(""));
+
+			n->endModification();
+		}
 	}
 
 	v->visitChildren(n);
@@ -108,7 +123,11 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 			// case: n's name is an existing argument of type ReferenceExpression
 			// -> copy name as new text
 
+			n->beginModification("change node in code generation visitor");
+
 			n->set(argument->name());
+
+			n->endModification();
 		}
 	}
 	else
@@ -117,12 +136,23 @@ void CodeGenerationVisitor::visitNameText(CodeGenerationVisitor* v, Model::NameT
 		// -> build text
 
 		QStringList parts = input.split("##");
+		bool modified = false;
 
 		for (auto i = 0; i < parts.size(); i++)
 			if (auto argument = DCast<ReferenceExpression>(v->args_[parts[i]]))
+			{
 				parts[i] = argument->name();
+				modified = true;
+			}
 
-		n->set(parts.join(""));
+		if (modified)
+		{
+			n->beginModification("change node in code generation visitor");
+
+			n->set(parts.join(""));
+
+			n->endModification();
+		}
 	}
 
 	v->visitChildren(n);
@@ -134,7 +164,7 @@ void CodeGenerationVisitor::visitMetaCallExpression(CodeGenerationVisitor* v, Me
 	 * process arguments before generating.
 	 * this ensures proper argument propagation.
 	 */
-	for (auto child : n->children()) v->visit(child);
+	v->visitChildren(n);
 
 	if (!n->metaDefinition())
 	{
