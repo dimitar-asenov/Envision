@@ -97,9 +97,7 @@ Declaration* MetaCallExpression::generate()
 	// prepare visitor arguments using meta call arguments
 	QMap<QString, Model::Node*> args;
 	for (auto i = 0; i < arguments()->size(); i++)
-	{
 		args.insert(metaDef->arguments()->at(i)->name(), arguments()->at(i));
-	}
 
 	// use meta bindings to add additional visitor arguments
 	for (auto i = 0; i < metaDef->metaBindings()->size(); i++)
