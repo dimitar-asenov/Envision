@@ -11,16 +11,6 @@ win32:LIBS += -llogger \
     -loovisualization \
     -loointeraction \
 
-# UNIX PYTHON
-unix:PYTHON_VERSION=3.4
-unix:QMAKE_CXXFLAGS += $$system(python$${PYTHON_VERSION}-config --includes)
-unix:LIBS += $$system(python$${PYTHON_VERSION}-config --libs)
-# WIN PYTHON, NOTE UNTESTED: (adapted from: http://stackoverflow.com/a/1017194)
-win32: PYTHON_VERSION=34
-win32: INCLUDEPATH += Python$${PYTHON_VERSION}/include
-win32: LIBS += -L/Python$${PYTHON_VERSION}/libs -lpython$${PYTHON_VERSION}
-
-
 INCLUDEPATH += /usr/lib/boost
 
 HEADERS += src/precompiled.h \
@@ -73,9 +63,24 @@ exists(src/wrappers/AstApi_Generated.cpp): {
     DEFINES+=AST_API_GENERATED
 }
 
-## The libboost_python is named differently on different systems. So find it with ldconfig.
-# The below piece is borrowed from: https://github.com/mkeeter/antimony/blob/master/qt/python.pri
+# The below piece is borrowed and adapted from: https://github.com/mkeeter/antimony/blob/master/qt/python.pri
+cygwin {
+    QMAKE_CXXFLAGS += $$system(python3-config --includes)
+    LIBS += $$system(python3-config --libs)
+    LIBS += -lboost_python3
+}
+
+macx {
+    QMAKE_CXXFLAGS += $$system(/usr/local/bin/python3-config --includes)
+    QMAKE_LFLAGS   += $$system(/usr/local/bin/python3-config --ldflags)
+    LIBS += -L/usr/local/lib -lboost_python3
+    QMAKE_CXXFLAGS += -isystem/usr/local/include
+}
+
 linux {
+    QMAKE_CXXFLAGS += $$system(python3-config --includes)
+    LIBS += $$system(python3-config --libs)
+
     # ldconfig is being used to find libboost_python, but it's in a different
     # place in different distros (and is not in the default $PATH on Debian).
     # First, check to see if it's on the default $PATH.
