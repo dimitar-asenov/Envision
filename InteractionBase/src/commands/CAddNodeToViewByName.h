@@ -50,8 +50,9 @@ class INTERACTIONBASE_API CAddNodeToViewByName : public Command
 				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
 	private:
-		QStringList findNames(const Model::SymbolMatcher& matcher, QString nameSoFar, Model::Node* root);
-		Model::Node* findNode(QStringList fullyQualifiedName, Model::Node* root);
+		QList<QPair<QString, Model::Node*>> mostLikelyMatches(const QString& nodeName);
+		QList<QPair<QString, Model::Node*>> findAllMatches(const Model::SymbolMatcher& matcher,
+				QString nameSoFar, Model::Node* root);
 		bool isSuggestable(Model::Node::SymbolTypes symbolType);
 };
 

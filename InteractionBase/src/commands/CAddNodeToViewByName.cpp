@@ -73,14 +73,15 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 		}
 	}
 
-	auto tokens = commandTokens.mid(1);
-	tokens.removeAll(".");
-	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-		if (auto node = findNode(tokens, manager->root()))
-		{
-			currentView->insertNode(node, posToInsert.x(), posToInsert.y());
-			return new CommandResult();
-		}
+	QString name = "";
+	for (auto part : commandTokens.mid(1))
+		name += part;
+	auto matches = mostLikelyMatches(name);
+	if (matches.size() > 0)
+	{
+		currentView->insertNode(matches[0].second, posToInsert.x(), posToInsert.y());
+		return new CommandResult();
+	}
 	return new CommandResult(new CommandError("Could not find node with name " + commandTokens[1]));
 }
 
@@ -91,23 +92,9 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 
 	if (textSoFar.trimmed().startsWith("add ", Qt::CaseInsensitive))
 	{
-		auto nodeName = textSoFar.trimmed().mid(4);
-		QStringList names;
-		auto parts = nodeName.split(".");
-		QString pattern = "*";
-		for (auto part : parts) pattern += part + '*';
-		auto matcher = Model::SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
-
-		for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-			names.append(findNames(matcher, "", manager->root()));
-
-		//Shorter names usually have less parts to the fully qualified name -> suggest them first
-		std::sort(names.begin(), names.end(), [](QString first, QString second)
-											{ return first.length() < second.length(); });
-		//Limit the number of suggestions
-		names = names.mid(0, 10);
-		for (auto name : names)
-			suggestions.append(new CommandSuggestion("add " + name, "Add node " + name + " to the view"));
+		auto matches = mostLikelyMatches(textSoFar.trimmed().mid(4));
+		for (auto match : matches)
+			suggestions.append(new CommandSuggestion("add " + match.first, "Add node " + match.first + " to the view"));
 	}
 	else if (QString("add ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 			suggestions.append(new CommandSuggestion("add ", "Add nodes to the current view"));
@@ -115,51 +102,46 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 	return suggestions;
 }
 
-QStringList CAddNodeToViewByName::findNames(const Model::SymbolMatcher& matcher, QString nameSoFar, Model::Node* root)
+QList<QPair<QString, Model::Node*>> CAddNodeToViewByName::mostLikelyMatches(const QString& nodeName)
 {
-	QStringList result;
+	QList<QPair<QString, Model::Node*>> matches;
+	auto parts = nodeName.split(".");
+	QString pattern = "*";
+	for (auto part : parts) pattern += part + '*';
+	auto matcher = Model::SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
+
+	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
+		matches.append(findAllMatches(matcher, "", manager->root()));
+
+	//Shorter names usually have less parts to the fully qualified name -> suggest them first
+	std::sort(matches.begin(), matches.end(), [](QPair<QString, Model::Node*> first, QPair<QString, Model::Node*> second)
+										{ return first.first.length() < second.first.length(); });
+	//Limit the number of suggestions
+	matches = matches.mid(0, 10);
+	return matches;
+}
+
+QList<QPair<QString, Model::Node*>> CAddNodeToViewByName::findAllMatches(const Model::SymbolMatcher& matcher,
+		QString nameSoFar, Model::Node* root)
+{
+	QList<QPair<QString, Model::Node*>> result;
 
 	//If it doesn't define a symbol, just pass it on
 	if (!root->definesSymbol())
 		for (auto child : root->children())
-			result.append(findNames(matcher, nameSoFar, child));
+			result.append(findAllMatches(matcher, nameSoFar, child));
 
 	//If it defines a symbol, check if the name matches with our SymbolMatcher
 	else if (isSuggestable(root->symbolType()) && root->symbolName().size() > 0)
 	{
 		auto newNameSoFar = nameSoFar + "." + root->symbolName();
 		for (auto child : root->children())
-			result.append(findNames(matcher, newNameSoFar, child));
+			result.append(findAllMatches(matcher, newNameSoFar, child));
 		if (matcher.matches(newNameSoFar))
 			//Get rid of initial "."
-			result.append(newNameSoFar.mid(1));
+			result.append(QPair<QString, Model::Node*>(newNameSoFar.mid(1), root));
 	}
 	return result;
-}
-
-Model::Node* CAddNodeToViewByName::findNode(QStringList fullyQualifiedName, Model::Node* root)
-{
-	QList<Model::Node*> toSearch{root};
-	int currentPart = 0;
-	while (!toSearch.isEmpty() && currentPart < fullyQualifiedName.size())
-	{
-		auto current = toSearch.takeLast();
-		if (current->definesSymbol() && current->symbolName() == fullyQualifiedName[currentPart]
-				&& currentPart == fullyQualifiedName.size() - 1)
-			return current;
-
-		//If it doesn't define a symbol, check in the children
-		//Else only continue the path if the name fits
-		if (!current->definesSymbol())
-			toSearch.append(current->children());
-		else if (current->symbolName() == fullyQualifiedName[currentPart])
-		{
-			toSearch.clear();
-			toSearch.append(current->children());
-			currentPart++;
-		}
-	}
-	return nullptr;
 }
 
 bool CAddNodeToViewByName::isSuggestable(Model::Node::SymbolTypes symbolType)
