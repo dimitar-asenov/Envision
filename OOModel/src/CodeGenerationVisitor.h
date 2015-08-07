@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2015 ETH Zurich
+ ** Copyright (c) 2011, 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,38 +23,38 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
+
 #pragma once
 
-#include "../visualizationbase_api.h"
-#include "../../VisualizationBase/src/items/ItemWithNode.h"
-#include "../../VisualizationBase/src/declarative/DeclarativeItem.h"
-#include "../../VisualizationBase/src/items/EmptyItem.h"
-#include "../VisualizationBase/src/nodes/ViewItemNode.h"
+#include "ModelBase/src/visitor/VisitorDefinition.h"
 
+namespace Model {
+	class Node;
+	class NameText;
+}
 
-namespace Visualization {
+namespace OOModel {
 
-/**
- * The VVIewItemNode class visualizes a ViewItemNode, either by visualizing its
- * reference if it exists, or else rendering an empty item for spacing
- */
-class VISUALIZATIONBASE_API VViewItemNode :
-		public Super<ItemWithNode<VViewItemNode, DeclarativeItem<VViewItemNode>, ViewItemNode>> {
+class ReferenceExpression;
+class MetaCallExpression;
 
-	ITEM_COMMON_CUSTOM_STYLENAME(VViewItemNode, DeclarativeItemBaseStyle)
-
+class CodeGenerationVisitor : public Model::Visitor<CodeGenerationVisitor> {
 	public:
-		VViewItemNode(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		CodeGenerationVisitor(QMap<QString, Model::Node*> args);
 
-		static void initializeForms();
-		virtual int determineForm() override;
+		static void visitReferenceExpression(CodeGenerationVisitor* v, ReferenceExpression* n);
+		static void visitNameText(CodeGenerationVisitor* v, Model::NameText* n);
+		static void visitMetaCallExpression(CodeGenerationVisitor* v, MetaCallExpression* n);
 
-		bool determineSpacing();
+		static void init();
+
 	private:
-		Item* reference_{};
-		EmptyItem* spacing_{};
+		QMap<QString, Model::Node*> args_;
 
-		const int DEFAULT_SPACING_HEIGHT = 50;
+		/**
+		 * handles predefined meta functions
+		 */
+		void handlePredefinedFunction(QString function, MetaCallExpression* n);
 };
 
 }

@@ -106,6 +106,9 @@ void VMethod::initializeForms()
 
 	auto bodyElement = item(&I::body_, [](I* v){return v->node()->items();});
 
+	auto metaCallsElement = item<VList>(&I::metaCalls_, [](I* v){return v->node()->metaCalls();},
+			[](I* v){return &v->style()->metaCalls();});
+
 	auto contentElement = (new GridLayoutFormElement())
 			->setVerticalSpacing(3)->setColumnStretchFactors(1)
 			->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
@@ -122,7 +125,8 @@ void VMethod::initializeForms()
 			->put(0, 3, comment)
 			->put(0, 4, signatureLineElement)
 			->put(0, 5, memberInitializersElement)
-			->put(0, 6, bodyElement);
+			->put(0, 6, metaCallsElement)
+			->put(0, 7, bodyElement);
 
 	auto shapeElement = new ShapeFormElement();
 

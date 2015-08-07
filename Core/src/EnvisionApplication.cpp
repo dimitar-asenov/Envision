@@ -44,7 +44,29 @@ EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(
 
 bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
 {
-	if (	event->spontaneous()) idleInputTimer_.start();
+	if ( event->spontaneous() && (
+			  // This list is meant to represent user interaction events
+			  event->type() == QEvent::KeyPress
+			  || event->type() == QEvent::KeyRelease
+			  || event->type() == QEvent::DragEnter
+			  || event->type() == QEvent::DragLeave
+			  || event->type() == QEvent::DragMove
+			  || event->type() == QEvent::Drop
+			  || event->type() == QEvent::Enter
+			  || event->type() == QEvent::Gesture
+			  || event->type() == QEvent::HoverEnter
+			  || event->type() == QEvent::HoverLeave
+			  || event->type() == QEvent::HoverMove
+			  || event->type() == QEvent::Leave
+			  || event->type() == QEvent::MouseButtonDblClick
+			  || event->type() == QEvent::MouseButtonPress
+			  || event->type() == QEvent::MouseButtonRelease
+			  || event->type() == QEvent::MouseMove
+			  || event->type() == QEvent::NativeGesture
+			  || event->type() == QEvent::Wheel
+		  )) {
+		idleInputTimer_.start();
+	}
 
 	EnvisionManager::processPreEventActions(receiver, event);
 	auto res = QApplication::notify(receiver, event);

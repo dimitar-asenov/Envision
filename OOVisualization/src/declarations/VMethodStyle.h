@@ -65,6 +65,7 @@ class OOVISUALIZATION_API VMethodStyle : public Super<Visualization::Declarative
 		Property<Visualization::VListStyle> memberInitializers{this, "memberInitializers"};
 		Property<Visualization::StaticStyle> throwsIcon{this, "throwsIcon"};
 		Property<Visualization::VListStyle> throws{this, "throws"};
+		Property<Visualization::VListStyle> metaCalls{this, "metaCalls"};
 };
 
 }

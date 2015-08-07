@@ -36,6 +36,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MetaDefinition)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaDefinition)
 
+REGISTER_ATTRIBUTE(MetaDefinition, arguments, TypedListOfFormalMetaArgument, false, false, true)
 REGISTER_ATTRIBUTE(MetaDefinition, metaBindings, TypedListOfMetaBinding, false, false, true)
 REGISTER_ATTRIBUTE(MetaDefinition, context, Declaration, false, false, true)
 

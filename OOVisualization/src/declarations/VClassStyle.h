@@ -66,6 +66,7 @@ class OOVISUALIZATION_API VClassStyle : public Super<Visualization::DeclarativeI
 		Property<Visualization::SequentialLayoutStyle> privateFieldArea{this, "privateFieldArea"};
 		Property<Visualization::SequentialLayoutStyle> protectedFieldArea{this, "protectedFieldArea"};
 		Property<Visualization::SequentialLayoutStyle> defaultFieldArea{this, "defaultFieldArea"};
+		Property<Visualization::VListStyle> metaCalls{this, "metaCalls"};
 };
 
 }

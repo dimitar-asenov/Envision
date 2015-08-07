@@ -32,6 +32,10 @@
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 
+#include "CodeGenerationVisitor.h"
+
+#include "OOModel/src/declarations/Declaration.h"
+
 DEFINE_TYPED_LIST(OOModel::MetaCallExpression)
 
 namespace OOModel {
@@ -41,6 +45,7 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MetaCallExpression)
 
 REGISTER_ATTRIBUTE(MetaCallExpression, callee, Expression, false, false, true)
 REGISTER_ATTRIBUTE(MetaCallExpression, arguments, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(MetaCallExpression, cache, Node, false, true, false)
 
 MetaCallExpression::MetaCallExpression(const QString& name, Expression* referencePrefix)
 : Super(nullptr, MetaCallExpression::getMetaData())
@@ -60,6 +65,73 @@ MetaDefinition* MetaCallExpression::metaDefinition()
 	}
 
 	return ret;
+}
+
+void MetaCallExpression::bindMetaCalls(Model::Node* n, MetaBinding* binding)
+{
+	if (auto metaCall = DCast<MetaCallExpression>(n))
+		if (auto callee = DCast<ReferenceExpression>(metaCall->callee()))
+			for (auto i = 0; i < binding->mappings()->size(); i++)
+				if (callee->name() == binding->mappings()->at(i)->name())
+					callee->setName(binding->mappings()->at(i)->value()->name());
+
+	for (auto child : n->children()) bindMetaCalls(child, binding);
+}
+
+Declaration* MetaCallExpression::generatedTree()
+{
+	// do not generate if inside a meta definition
+	if (this->firstAncestorOfType<MetaDefinition>()) return nullptr;
+
+	// only generate tree if the cache is empty
+	if (!cache())
+	{
+		auto metaDef = metaDefinition();
+		if (!metaDef) return nullptr;
+
+		if (arguments()->size() != metaDef->arguments()->size())
+		{
+			qDebug() << "#metaDefArgs != #metaCallArgs";
+			return nullptr;
+		}
+
+		// prepare visitor arguments using meta call arguments
+		QMap<QString, Model::Node*> args;
+		for (auto i = 0; i < arguments()->size(); i++)
+			args.insert(metaDef->arguments()->at(i)->name(), arguments()->at(i));
+
+		// use meta bindings to add additional visitor arguments
+		for (auto i = 0; i < metaDef->metaBindings()->size(); i++)
+		{
+			auto metaBinding = metaDef->metaBindings()->at(i);
+
+			if (auto input = args[metaBinding->input()->name()])
+			{
+				auto cloned = input->clone();
+				bindMetaCalls(cloned, metaBinding);
+				args.insert(metaBinding->name(), cloned);
+			}
+		}
+
+		bool notifyModification = (manager() && !manager()->canBeModified(this));
+
+		if (notifyModification) this->beginModification("code generation");
+
+		// stage 0: clone meta definition
+		// cache generated tree already at this point to enable reference resolution
+		setCache(metaDef->context()->clone());
+
+		// stage 1: perform code generation
+		CodeGenerationVisitor codeGenVisitor (args);
+		codeGenVisitor.visit(cache());
+
+		// stage 2: merge generated code
+		// TODO: implementation
+
+		if (notifyModification) this->endModification();
+	}
+
+	return static_cast<Declaration*>(cache());
 }
 
 }

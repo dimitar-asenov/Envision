@@ -48,9 +48,10 @@ JARS=($JDT_CORE $CORE_RUNTIME $CORE_JOBS $CORE_CONTENTTYPE $CORE_RESOURCES $EQUI
 
 for jar in "${JARS[@]}"
 do
-	NEW_NAME=$(basename $(find $PLUGIN_PATH -type f -name $jar"*" 2> /dev/null | head -1))
-	REGEX=$jar"[^ ]*.jar"
-	sed -i "s/$REGEX/$NEW_NAME/g" .classpath
+	NEW_NAME=$(find $PLUGIN_PATH -type f -name $jar"*" 2> /dev/null | head -1)
+	echo Using: $NEW_NAME
+	REGEX="path=.*"$jar"[^ ]*.jar"
+	sed -i "s@$REGEX@path=\"$NEW_NAME@g" .classpath
 done
 
 LIB_PATH=lib

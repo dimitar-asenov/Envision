@@ -156,7 +156,14 @@ class MODELBASE_API CompositeNode: public Super<Node>
 					bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
 
 		void removeAllNodes();
-		void verifyHasAllMandatoryAttributes();
+
+		/**
+		 * Checks that all mandatory atrributes are present and creates missing empty lists.
+		 *
+		 * Only mandatory, missing lists are created as empty lists. If an mandatory attribute of a type other than a list
+		 * is missing, this method throws an exception.
+		 */
+		void checkOrCreateMandatoryAttributes(bool useUndoableAction);
 
 		static int nextExtensionId_;
 };

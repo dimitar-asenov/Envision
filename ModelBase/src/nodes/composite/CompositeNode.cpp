@@ -137,7 +137,7 @@ CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, Attribu
 		}
 	}
 
-	verifyHasAllMandatoryAttributes();
+	checkOrCreateMandatoryAttributes(false);
 }
 
 CompositeNode::~CompositeNode()
@@ -312,10 +312,11 @@ void CompositeNode::load(PersistentStore &store)
 
 		// Skip loading partial optional children.
 		if (!store.isLoadingPartially() || !attribute.optional() || !attribute.partial())
-			execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(), index.index()), &subnodes_));
+			execute(new CompositeNodeChangeChild(this, ln->node,
+															 CompositeIndex(index.level(), index.index()), &subnodes_));
 	}
 
-	verifyHasAllMandatoryAttributes();
+	checkOrCreateMandatoryAttributes(true);
 }
 
 void CompositeNode::removeAllNodes()
@@ -326,7 +327,7 @@ void CompositeNode::removeAllNodes()
 				execute(new CompositeNodeChangeChild(this, nullptr, CompositeIndex(level, i), &subnodes_));
 }
 
-void CompositeNode::verifyHasAllMandatoryAttributes()
+void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
 {
 	for (int level = 0; level < meta_.numLevels(); ++level)
 	{
@@ -334,9 +335,26 @@ void CompositeNode::verifyHasAllMandatoryAttributes()
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes_[level][i] == nullptr && (*currentLevel)[i].optional() == false )
-				throw ModelException("An CompositeNode of type '" + meta_.typeName()
+			{
+				auto nodeType = (*currentLevel)[i].type();
+				if (nodeType.startsWith("TypedListOf") || nodeType == "List")
+				{
+					auto newNode = Node::createNewNode(nodeType);
+					if (useUndoableAction)
+					{
+						execute(new CompositeNodeChangeChild(this, newNode,
+																			CompositeIndex(level, i), &subnodes_));
+					}
+					else {
+						subnodes_[level][i] = newNode;
+						newNode->setParent(this);
+					}
+				}
+				else
+					throw ModelException("An CompositeNode of type '" + meta_.typeName()
 						+ "' has an uninitialized mandatory attribute '"
 						+ (*currentLevel)[i].name() +"'");
+			}
 	}
 }
 

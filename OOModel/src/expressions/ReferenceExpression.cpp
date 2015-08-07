@@ -34,6 +34,7 @@
 #include "declarations/TypeAlias.h"
 #include "declarations/NameImport.h"
 #include "declarations/Field.h"
+#include "declarations/MetaDefinition.h"
 #include "../types/SymbolProviderType.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
@@ -71,6 +72,8 @@ Type* ReferenceExpression::type()
 		return new ClassType(cl, false);
 	else if ( auto method = DCast<Method>( resolvedTarget ) )
 		return new SymbolProviderType(method, false);
+	else if ( auto metaDefinition = DCast<MetaDefinition> (resolvedTarget ))
+		return new SymbolProviderType(metaDefinition, false);
 	else if ( auto alias = DCast<TypeAlias>( resolvedTarget ) )
 		return new SymbolProviderType(alias, false);
 	else if ( auto vdecl = DCast<VariableDeclarationExpression>( resolvedTarget ) )

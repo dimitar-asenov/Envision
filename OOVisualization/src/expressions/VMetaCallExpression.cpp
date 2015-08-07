@@ -30,6 +30,8 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
 
+#include "OOModel/src/declarations/Declaration.h"
+
 using namespace Visualization;
 using namespace OOModel;
 
@@ -47,6 +49,7 @@ VMetaCallExpression::~VMetaCallExpression()
 	prefix_ = nullptr;
 	callee_ = nullptr;
 	arguments_ = nullptr;
+	generated_ = nullptr;
 }
 
 void VMetaCallExpression::determineChildren()
@@ -62,7 +65,10 @@ void VMetaCallExpression::determineChildren()
 	}
 	else
 		layout()->synchronizeMid(callee_, node()->callee(), 1);
-	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
+
+	layout()->synchronizeMid(arguments_, node()->arguments(), &style()->arguments(), 2);
+
+	layout()->synchronizeLast(generated_, node()->generatedTree());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
