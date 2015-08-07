@@ -41,14 +41,28 @@ class ViewItem;
  * The ViewItemNode class is used in the ViewItem class and simply wraps a top level node
  * to give another level of indirection. This helps with distinguishing different items when
  * the same node is added to a ViewItem multiple times, as is possible.
+ *
+ * A ViewItemNode can either hold a reference to another node - in which case its visualization renders that node.
+ * It can also hold a spacing target and spacing parent - in which case it will render as white space,
+ * aligning its bottom end with the top end of that given spacing target.
  */
 class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 {
 		NODE_DECLARE_STANDARD_METHODS(ViewItemNode)
 
 	public:
+		/**
+		 * Creates a new ViewItemNode which is used to render an empty spacing item.
+		 */
 		static ViewItemNode* withSpacingTarget(Model::Node* spacingTarget, ViewItemNode* spacingParent);
+		/**
+		 * Creates a new ViewItemNode which is used to render the given reference's visualization.
+		 */
 		static ViewItemNode* withReference(Model::Node* reference, int purpose);
+		/**
+		 * Creates a new ViewItemNode using the given Json object for initialization. This can
+		 * then be either a ViewItemNode with a reference or a spacing target.
+		 */
 		static ViewItemNode* fromJson(QJsonObject json, const ViewItem* view);
 
 		void setReference(Model::Node* reference);
@@ -61,7 +75,14 @@ class VISUALIZATIONBASE_API ViewItemNode : public Super<UINode>
 		void setSpacingParent(ViewItemNode* spacingParent);
 		ViewItemNode* spacingParent() const;
 
+		/**
+		 * Use setPosition to set the position of this node in the ViewItem's grid before calling toJson.
+		 */
 		void setPosition(QPoint pos);
+		/**
+		 * If a spacing parent exists, use this to set the position of its spacing parent's position
+		 * in the ViewItem's grid before calling toJson.
+		 */
 		void setSpacingParentPosition(QPoint pos);
 		virtual QJsonValue toJson() const override;
 
