@@ -34,11 +34,6 @@ namespace Interaction {
 
 ITEM_COMMON_DEFINITIONS(ViewSwitcherMenu, "item")
 
-QHash<int, QPoint> ViewSwitcherMenu::keyToIndexMap_
-		{{Qt::Key_Q, QPoint(0, 0)}, {Qt::Key_W, QPoint(1, 0)}, {Qt::Key_E, QPoint(2, 0)},
-		 {Qt::Key_A, QPoint(0, 1)}, {Qt::Key_S, QPoint(1, 1)}, {Qt::Key_D, QPoint(2, 1)},
-		 {Qt::Key_Z, QPoint(0, 2)}, {Qt::Key_X, QPoint(1, 2)}, {Qt::Key_C, QPoint(2, 2)}};
-
 void ViewSwitcherMenu::show(Visualization::Item* target)
 {
 	QApplication::postEvent(target->scene(),
@@ -59,34 +54,25 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 	for (int col = 0; col < items.size(); col++)
 		for (int row = items[col].size(); row < 3; row++)
 			items[col].append(new VViewSwitcherEntry(nullptr, "Empty slot"));
+
+	//Find the item to initially select (this is the current view item)
+	Visualization::Item* selected{};
+	for (auto vector : items)
+		for (auto item : vector)
+			if (target->scene()->currentViewItem() == target->scene()->viewItems()->viewItem(
+						static_cast<VViewSwitcherEntry*>(item)->nameField()->text()))
+				selected = item;
+
 	Menu::hideNow();
-	Menu::instance = new ViewSwitcherMenu(items, target);
+	Menu::instance = new ViewSwitcherMenu(items, selected, target);
 	target->scene()->addTopLevelItem(Menu::instance);
-	target->scene()->addPostEventAction( [=]()
-					{ Menu::instance->selectItem(Menu::instance->currentItems()[0][0]); });
 }
 
-ViewSwitcherMenu::ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items,
+ViewSwitcherMenu::ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* selectedItem,
 											 Visualization::Item* target, StyleType* style)
-	: Super(items, target, style)
+	: Super(items, selectedItem, target, style)
 {
-}
 
-bool ViewSwitcherMenu::sceneEventFilter(QGraphicsItem *watched, QEvent *event)
-{
-	if (Super::sceneEventFilter(watched, event)) return true;
-	else if (event->type() == QEvent::KeyPress)
-	{
-		auto keyEvent = static_cast<QKeyEvent*>(event);
-		if (keyEvent->modifiers() == Qt::ControlModifier && keyToIndexMap_.contains(keyEvent->key()))
-			if (executeEntry(currentItems()[keyToIndexMap_[keyEvent->key()].x()]
-											  [keyToIndexMap_[keyEvent->key()].y()]))
-			{
-				hide();
-				return true;
-			}
-	}
-	return false;
 }
 
 void ViewSwitcherMenu::startFocusMode(Visualization::Item *target)

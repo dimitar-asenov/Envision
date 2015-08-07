@@ -107,8 +107,8 @@ bool ViewItemManager::switchToView(const QString viewName)
 }
 ViewItem* ViewItemManager::newViewItem(const QString name, QPoint position)
 {
-	//If a view item with the name already exists, we don't create a new one
-	if (viewItem(name)) return nullptr;
+	//If the name is invalid, don't create a new view
+	if (!ViewItem::isValidName(name)) return nullptr;
 	auto result = new ViewItem(nullptr, name);
 	addViewItem(result, position);
 	return result;

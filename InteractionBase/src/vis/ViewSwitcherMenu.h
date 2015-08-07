@@ -44,8 +44,6 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		static void show(Visualization::Item* target);
 
 	protected:
-		virtual bool sceneEventFilter(QGraphicsItem* watched, QEvent* event) override;
-
 		virtual bool executeEntry(Visualization::Item* item) override;
 		virtual void startFocusMode(Visualization::Item* target) override;
 		virtual void endFocusMode(Visualization::Item* target) override;
@@ -56,10 +54,8 @@ class INTERACTIONBASE_API ViewSwitcherMenu : public Super<Menu>
 		bool inEditMode_{};
 		QString nameBefore_;
 
-		static QHash<int, QPoint> keyToIndexMap_;
-
-		ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
-							  StyleType* style = itemStyles().get());
+		ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* selectedItem,
+						 Visualization::Item* target, StyleType* style = itemStyles().get());
 };
 
 }

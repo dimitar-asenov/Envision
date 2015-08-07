@@ -109,6 +109,11 @@ ActionPrompt* GenericHandler::actionPrompt_{};
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
 
+QHash<int, QPoint> GenericHandler::keyToIndexMap_
+		{{Qt::Key_1, QPoint(0, 0)}, {Qt::Key_2, QPoint(1, 0)}, {Qt::Key_3, QPoint(2, 0)},
+		 {Qt::Key_4, QPoint(0, 1)}, {Qt::Key_5, QPoint(1, 1)}, {Qt::Key_6, QPoint(2, 1)},
+		 {Qt::Key_7, QPoint(0, 2)}, {Qt::Key_8, QPoint(1, 2)}, {Qt::Key_9, QPoint(2, 2)}};
+
 QList<QPair<Visualization::Item*, QPoint> > GenericHandler::cursorPositionsForUndo_{};
 int GenericHandler::cursorUndoIndex_{-1};
 QPair<Visualization::Item*, QPoint> GenericHandler::lastCursorPosition_;
@@ -516,11 +521,27 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		scene->scheduleUpdate();
 	}
-	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
+	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_G)
 	{
 		event->accept();
 		if (Menu::isVisible()) Menu::hide();
 		else	ViewSwitcherMenu::show(target);
+	}
+	else if (event->modifiers() == Qt::ControlModifier && keyToIndexMap_.contains(event->key()))
+	{
+		if (Menu::isVisible()) Menu::hide();
+
+		Visualization::ViewItem* view{};
+		auto col = keyToIndexMap_[event->key()].x();
+		auto row = keyToIndexMap_[event->key()].y();
+		if (target->scene()->viewItems()->viewItems().size() > col
+			&& target->scene()->viewItems()->viewItems()[col].size() > row)
+			view = target->scene()->viewItems()->viewItems()[col][row];
+		if (!view)
+			view = target->scene()->viewItems()->
+				newViewItem("View" + QString::number(col) + QString::number(row), QPoint(col, row));
+
+		if (view) target->scene()->viewItems()->switchToView(view);
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
