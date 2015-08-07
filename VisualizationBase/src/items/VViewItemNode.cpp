@@ -37,6 +37,7 @@ ITEM_COMMON_DEFINITIONS(VViewItemNode, "item")
 VViewItemNode::VViewItemNode(Item* parent, NodeType* node, const StyleType* style) :
 		Super(parent, node, style)
 {
+	setPurpose(node->purpose());
 }
 
 void VViewItemNode::initializeForms()
@@ -50,12 +51,6 @@ int VViewItemNode::determineForm()
 {
 	if (node()->reference()) return 0;
 	else return 1;
-}
-
-void VViewItemNode::determineChildren()
-{
-	setPurpose(node()->purpose());
-	Super::determineChildren();
 }
 
 bool VViewItemNode::determineSpacing()

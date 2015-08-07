@@ -160,13 +160,15 @@ void Scene::updateNow()
 	auto updateTimer = Logger::Timer::start("Scene update");
 
 	// Profiler code
-	static bool alreadyProfiled = false;
-	if (!alreadyProfiled)
+	static constexpr int UPDATES_TO_PROFILE = 200;
+	static int updatesAlreadyProfiled = 0;
+	if (updatesAlreadyProfiled < UPDATES_TO_PROFILE)
 		for (auto item : topLevelItems_)
-			if (item->typeName() == "RootItem")
+			if (item->typeName() == "ViewItem")
 			{
-				alreadyProfiled = true;
-				Core::Profiler::startOnce(true, "Initial item update", "updateItems.prof");
+				++updatesAlreadyProfiled;
+				Core::Profiler::start(true, "Scene ViewItem update " + QString::number(updatesAlreadyProfiled),
+											 "scene-update-" + QString::number(updatesAlreadyProfiled) + ".prof");
 				break;
 			}
 
@@ -182,7 +184,7 @@ void Scene::updateNow()
 	for (auto item : topLevelItems_)
 		item->updateSubtree();
 
-	Core::Profiler::stop("Initial item update");
+	Core::Profiler::stop("Scene ViewItem update " + QString::number(updatesAlreadyProfiled));
 
 	// Update overlay groups (selections are handled as a dynamic group)
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)

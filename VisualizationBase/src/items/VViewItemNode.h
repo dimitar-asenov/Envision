@@ -50,8 +50,6 @@ class VISUALIZATIONBASE_API VViewItemNode :
 		virtual int determineForm() override;
 
 		bool determineSpacing();
-
-		virtual void determineChildren() override;
 	private:
 		Item* reference_{};
 		EmptyItem* spacing_{};

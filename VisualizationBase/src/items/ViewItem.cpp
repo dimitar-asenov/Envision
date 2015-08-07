@@ -246,6 +246,7 @@ void ViewItem::setName(const QString &name)
 void ViewItem::determineChildren()
 {
 	Super::determineChildren();
+
 	//Update all the info nodes in the view
 	for (auto node : allNodes())
 	{
@@ -272,6 +273,7 @@ void ViewItem::determineChildren()
 void ViewItem::updateGeometry(int availableWidth, int availableHeight)
 {
 	Super::updateGeometry(availableWidth, availableHeight);
+
 	bool anyChanges = false;
 	for (auto node : allNodes())
 	{
