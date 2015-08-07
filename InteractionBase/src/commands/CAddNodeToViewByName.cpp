@@ -26,10 +26,11 @@
 
 #include "CAddNodeToViewByName.h"
 
+#include "ModelBase/src/SymbolMatcher.h"
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "ModelBase/src/model/TreeManager.h"
 #include "VisualizationBase/src/items/VViewItemNode.h"
-#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 
@@ -43,7 +44,7 @@ bool CAddNodeToViewByName::canInterpret(Visualization::Item*, Visualization::Ite
 	return commandTokens.size() >= 1 && commandTokens.first() == name();
 }
 
-CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization::Item* target,
+CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visualization::Item* target,
 		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor)
 {
 	if (commandTokens.size() < 2)
@@ -52,15 +53,24 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item*, Visualization
 	auto currentView = target->scene()->currentViewItem();
 	QPoint posToInsert;
 	auto layoutCursor = dynamic_cast<Visualization::LayoutCursor*>(cursor.get());
-	if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor && layoutCursor)
+	if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::HorizontalCursor)
 	{
 		posToInsert.setX(layoutCursor->x());
 		posToInsert.setY(layoutCursor->y());
 	}
-	else if (cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor && layoutCursor)
+	else if (layoutCursor && cursor->owner() == currentView && cursor->type() == Visualization::Cursor::VerticalCursor)
 	{
 		currentView->insertColumn(layoutCursor->x());
 		posToInsert.setX(layoutCursor->x());
+	}
+	else if (auto grid = dynamic_cast<Visualization::DynamicGridFormElement*>(currentView->currentForm()))
+	{
+		auto focusedIndex = grid->indexOf(currentView, source);
+		if (focusedIndex.x() != -1)
+		{
+			posToInsert.setX(focusedIndex.x());
+			posToInsert.setY(focusedIndex.y());
+		}
 	}
 
 	auto tokens = commandTokens.mid(1);
@@ -83,8 +93,13 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 	{
 		auto nodeName = textSoFar.trimmed().mid(4);
 		QStringList names;
+		auto parts = nodeName.split(".");
+		QString pattern = "*";
+		for (auto part : parts) pattern += part + '*';
+		auto matcher = Model::SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
+
 		for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-			names.append(findNames(nodeName.split("."), manager->root()));
+			names.append(findNames(matcher, "", manager->root()));
 
 		//Shorter names usually have less parts to the fully qualified name -> suggest them first
 		std::sort(names.begin(), names.end(), [](QString first, QString second)
@@ -94,38 +109,30 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 		for (auto name : names)
 			suggestions.append(new CommandSuggestion("add " + name, "Add node " + name + " to the view"));
 	}
-	else if (QString("add ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
+	else if (QString("add ").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive))
 			suggestions.append(new CommandSuggestion("add ", "Add nodes to the current view"));
 
 	return suggestions;
 }
 
-QStringList CAddNodeToViewByName::findNames(QStringList nameParts, Model::Node* root)
+QStringList CAddNodeToViewByName::findNames(const Model::SymbolMatcher& matcher, QString nameSoFar, Model::Node* root)
 {
 	QStringList result;
 
 	//If it doesn't define a symbol, just pass it on
 	if (!root->definesSymbol())
 		for (auto child : root->children())
-			result.append(findNames(nameParts, child));
+			result.append(findNames(matcher, nameSoFar, child));
 
-	//If it defines a symbol, and the name matches, take the part of name it matches and search for the rest
-	else if (nameParts.size() > 0 && root->symbolName().startsWith(nameParts[0])
-			 && isSuggestable(root->symbolType()))
+	//If it defines a symbol, check if the name matches with our SymbolMatcher
+	else if (isSuggestable(root->symbolType()) && root->symbolName().size() > 0)
 	{
+		auto newNameSoFar = nameSoFar + "." + root->symbolName();
 		for (auto child : root->children())
-			for (auto name : findNames(nameParts.mid(1), child))
-				result.append(root->symbolName() + "." + name);
-		if (nameParts.size() == 1)
-			result.append(root->symbolName());
-	}
-	//If we don't have any name left, accept anything which defines a suggestable symbol
-	else if (nameParts.size() == 0 && isSuggestable(root->symbolType()))
-	{
-		for (auto child : root->children())
-			for (auto name : findNames(nameParts, child))
-				result.append(root->symbolName() + "." + name);
-		result.append(root->symbolName());
+			result.append(findNames(matcher, newNameSoFar, child));
+		if (matcher.matches(newNameSoFar))
+			//Get rid of initial "."
+			result.append(newNameSoFar.mid(1));
 	}
 	return result;
 }

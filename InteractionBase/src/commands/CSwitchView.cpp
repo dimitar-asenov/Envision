@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2014 ETH Zurich
+ ** Copyright (c) 2015 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -25,29 +25,44 @@
  **********************************************************************************************************************/
 
 #include "CSwitchView.h"
+
 #include "VisualizationBase/src/items/ViewItem.h"
 #include "VisualizationBase/src/ViewItemManager.h"
 
 namespace Interaction {
 
-CSwitchView::CSwitchView()
-	:CommandWithDefaultArguments("switch", {"name"})
+CSwitchView::CSwitchView() : Command{"switch"}{}
+
+bool CSwitchView::canInterpret(Visualization::Item*, Visualization::Item*,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
+	return commandTokens.size() > 1 && commandTokens.first() == name();
 }
 
-CommandResult* CSwitchView::executeWithArguments(Visualization::Item *, Visualization::Item *target,
-		const QStringList& arguments, const std::unique_ptr<Visualization::Cursor>&)
+CommandResult* CSwitchView::execute(Visualization::Item*, Visualization::Item* target,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
-	bool ok = target->scene()->viewItems()->switchToView(arguments.at(0));
-	if (ok)
+	if (target->scene()->viewItems()->switchToView(commandTokens[1]))
 		return new CommandResult();
 	else
-		return new CommandResult(new CommandError("The view with name " + arguments.at(0) + " does not exist"));
+		return new CommandResult(new CommandError(
+				"View with name " + commandTokens[1] + " does not exist"));
 }
 
-QString CSwitchView::description(Visualization::Item *, Visualization::Item *,
-		const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &)
+QList<CommandSuggestion*> CSwitchView::suggest(Visualization::Item* source, Visualization::Item*,
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
 {
-	return "Switch to the view with name " + arguments.at(0);
+	QList<CommandSuggestion*> suggestions;
+	if (textSoFar.startsWith(name() + " ") || name().startsWith(textSoFar))
+	{
+		auto parts = textSoFar.split(" ");
+		auto nameSoFar = parts.size() > 1 ? parts[1] : "";
+		for (auto vector : source->scene()->viewItems()->viewItems())
+			for (auto view : vector)
+				if (view && view->name().startsWith(nameSoFar) && view != source->scene()->currentViewItem())
+					suggestions.append(new CommandSuggestion(name() + " " + view->name(),
+															 "Open view " + view->name()));
+	}
+	return suggestions;
 }
 }

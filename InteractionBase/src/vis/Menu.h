@@ -48,7 +48,13 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 	public:
 		virtual ~Menu();
 
+		/**
+		 * Hides the active menu.
+		 */
 		static void hide();
+		/**
+		 * Returns whether a menu is currently visible on screen.
+		 */
 		static bool isVisible();
 
 		/**
@@ -89,13 +95,20 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		 */
 		virtual void endFocusMode(Visualization::Item* target) = 0;
 
-		QPoint indexOf(Visualization::Item* node) const;
+		/**
+		 * The index of the given item in the node grid. Returns (-1, -1) if not found.
+		 */
+		QPoint indexOf(Visualization::Item* item) const;
 
 		Menu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
 							  StyleType* style = itemStyles().get());
 
 	private:
 
+		/**
+		 * Corrects the coordinates given by the point to ensure they are located within the grid.
+		 * Implements a wraparound technique if the position selected is out of bounds.
+		 */
 		QPoint correctCoordinates(QPoint point) const;
 
 		Visualization::Item* target_{};

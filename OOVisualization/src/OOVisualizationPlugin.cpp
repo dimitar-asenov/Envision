@@ -136,6 +136,7 @@ bool OOVisualizationPlugin::initialize(Core::EnvisionManager&)
 
 	Visualization::InfoNode::registerInfoGetter("callees", InfoMethods::numberOfCallees, true, true);
 	Visualization::InfoNode::registerInfoGetter("name", InfoMethods::fullName, true, true);
+	Visualization::InfoNode::registerInfoGetter("usages", InfoMethods::numberOfUsages, false, true);
 
 	return true;
 }

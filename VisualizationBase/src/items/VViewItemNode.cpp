@@ -85,7 +85,6 @@ bool VViewItemNode::determineSpacing()
 	}
 	else if (DEFAULT_SPACING_HEIGHT != spacing_->heightInParent())
 	{
-		qDebug() << "Hello there";
 		spacing_->setCustomSize(50, DEFAULT_SPACING_HEIGHT);
 		setUpdateNeeded(RepeatUpdate);
 		return true;

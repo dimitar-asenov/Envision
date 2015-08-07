@@ -140,12 +140,14 @@ void Menu::updateGeometry(int availableWidth, int availableHeight)
 
 bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 {
-	//If we are in focus mode, and not F2 is pressed, we don't handle any events here.
+	//If we are in focus mode, and not F2 or Return is pressed, we don't handle any events here.
 	if (inFocusMode_)
 	{
 		bool isFocusModeKey = false;
 		if (event->type() == QEvent::KeyPress)
-			if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_F2)
+			if (static_cast<QKeyEvent*>(event)->key() == Qt::Key_F2
+					|| static_cast<QKeyEvent*>(event)->key() == Qt::Key_Return
+					|| static_cast<QKeyEvent*>(event)->key() == Qt::Key_Enter)
 				isFocusModeKey = true;
 		if (!isFocusModeKey) return false;
 	}
@@ -172,7 +174,8 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			selectItem(currentItems()[pos.x()][pos.y()]);
 			return true;
 		}
-		else if (keyEvent->key() == Qt::Key_F2)
+		else if (keyEvent->key() == Qt::Key_F2 || (inFocusMode_
+					&& (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)))
 		{
 			inFocusMode_ = !inFocusMode_;
 			if (inFocusMode_) startFocusMode(focusedItem_);
@@ -183,9 +186,8 @@ bool Menu::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			}
 			return true;
 		}
-		else if (keyEvent->key() == Qt::Key_Return)
+		else if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
 		{
-			event->accept();
 			if (executeFocused())
 			{
 				hide();

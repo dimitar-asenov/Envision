@@ -42,27 +42,43 @@ bool CAddInfoNode::canInterpret(Visualization::Item* source, Visualization::Item
 {
 	bool canInterpret = CommandWithDefaultArguments::canInterpret(source, target, commandTokens, cursor);
 	auto ancestor = source->findAncestorOfType<Visualization::VViewItemNode>();
-	if (!ancestor) return false;
-	else
-		return canInterpret && source->scene()->currentViewItem()->positionOfItem(ancestor).x() != -1;
+	if (ancestor)
+	{
+		auto node = source->findAncestorWithNode()->node();
+		while (node && !node->definesSymbol())
+			node = node->parent();
+		if (!node) return false;
+		else
+			return canInterpret && source->scene()->currentViewItem()->positionOfItem(ancestor).x() != -1;
+	}
+	return false;
 }
 
 Interaction::CommandResult* CAddInfoNode::executeWithArguments(Visualization::Item* source,
 	Visualization::Item*, const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
 	auto ancestor = source->findAncestorWithNode();
+	auto node = ancestor->node();
+	while (node && !node->definesSymbol())
+		node = node->parent();
 	auto pos = source->scene()->currentViewItem()->positionOfItem(
 				source->findAncestorOfType<Visualization::VViewItemNode>());
 	source->scene()->currentViewItem()->insertNode(
-			new Visualization::InfoNode(ancestor->node()), pos.x(), pos.y());
+			new Visualization::InfoNode(node), pos.x(), pos.y());
 	return new Interaction::CommandResult();
 }
 
 
-QString CAddInfoNode::description(Visualization::Item*, Visualization::Item*,
+QString CAddInfoNode::description(Visualization::Item* source, Visualization::Item*,
 	const QStringList&, const std::unique_ptr<Visualization::Cursor>&)
 {
-	return "Display information on the selected node";
+	auto ancestor = source->findAncestorWithNode();
+	auto node = ancestor->node();
+	while (node && !node->definesSymbol())
+		node = node->parent();
+	if (node)
+		return "Display information on the node " + node->symbolName() + " of type " + node->typeName();
+	return "";
 
 }
 
