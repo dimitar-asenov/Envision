@@ -4,6 +4,7 @@
 /plugins
 /core
 /qt
+/tools
 /callgrind.out.*
 /test
 /projects
