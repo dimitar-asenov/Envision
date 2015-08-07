@@ -59,10 +59,23 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		 * can be used for multiple statistics nodes.
 		 */
 		QString infoHtml() const;
+		/**
+		 * Updates the InfoNode fully, meaning it gets the result from all info getters.
+		 */
 		virtual void fullUpdate();
+		/**
+		 * Updates the InfoNode automatically, meaning it only updates the results from the
+		 * info getters which are set to update automatically.
+		 */
 		virtual void automaticUpdate();
 
+		/**
+		 * Enable or disable the info getter identified by the given name.
+		 */
 		void setEnabled(const QString name, bool isEnabled);
+		/**
+		 * Returns whether the info getter with the given name is enabled for this node.
+		 */
 		bool isEnabled(const QString name) const;
 
 		virtual QJsonValue toJson() const override;
@@ -70,13 +83,17 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		/**
 		 * Registers a new method to get information.
 		 * @param name The name of the getter.
-		 * @param getter The getter method itself, taking a node and returning a string.
+		 * @param getter The getter method itself, taking a node and returning a string. If this
+		 *				 method is not applicable for the node supplied, it should return an empty string.
 		 * @param updatesAutomatically Whether this info should always update.
 		 * @param enabledByDefault Whether this info is visible by default.
 		 */
 		static void registerInfoGetter(const QString& name, const InfoGetter getter,
 									   bool updatesAutomatically, bool enabledByDefault);
 
+		/**
+		 * Returns a list with the names of all registered info getters.
+		 */
 		static QStringList registeredInfoGetters();
 
 	protected:
