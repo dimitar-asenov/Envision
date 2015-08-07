@@ -44,6 +44,7 @@ class OOVISUALIZATION_API VProjectStyle : public Super<Visualization::Declarativ
 		Property<Visualization::VListStyle> fields{this, "fields"};
 		Property<Visualization::VListStyle> declarations{this, "declarations"};
 		Property<Visualization::VListStyle> libraries{this, "libraries"};
+		Property<Visualization::VListStyle> metaCalls{this, "metaCalls"};
 };
 
 }

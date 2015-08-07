@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,59 +26,26 @@
 
 #pragma once
 
-#include "../oovisualization_api.h"
-#include "VClassStyle.h"
+#include "../oomodel_api.h"
 
-#include "OOModel/src/declarations/Class.h"
+#include "../attributeMacros.h"
+#include "../declarations/VariableDeclaration.h"
+#include "../expressions/Expression.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/Integer.h"
 
-namespace Visualization {
-	class VText;
-	class VList;
-	class Static;
-	class EmptyItem;
-}
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalMetaArgument)
 
-namespace Model {
-	class Node;
-}
+namespace OOModel {
 
-namespace OOVisualization {
-class VStatementItemList;
-
-class OOVISUALIZATION_API VClass
-: public Super<Visualization::ItemWithNode<VClass, Visualization::DeclarativeItem<VClass>, OOModel::Class>>
+class OOMODEL_API FormalMetaArgument : public Super<Declaration>
 {
-	ITEM_COMMON(VClass)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(FormalMetaArgument)
 
 	public:
-		VClass(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		FormalMetaArgument(const QString& name);
 
-		static void initializeForms();
-		int determineForm() override;
-
-	protected:
-		void determineChildren() override;
-
-	private:
-		Visualization::Static* icon_{};
-		Visualization::VText* name_{};
-		Visualization::VList* typeArguments_{};
-		Visualization::VList* baseClasses_{};
-		VStatementItemList* annotations_{};
-		Visualization::VList* enumerators_{};
-		Visualization::Static* friendsSymbol_{};
-		Visualization::VList* friends_{};
-		Visualization::VList* declarations_{};
-		Visualization::VList* metaCalls_{};
-		Visualization::EmptyItem* fieldBackground_{};
-		QList<Model::Node*> publicFields_{};
-		QList<Model::Node*> privateFields_{};
-		QList<Model::Node*> protectedFields_{};
-		QList<Model::Node*> defaultFields_{};
-		Item* comment_{};
 };
 
 }

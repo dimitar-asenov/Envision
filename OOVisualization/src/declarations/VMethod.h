@@ -66,6 +66,7 @@ class OOVISUALIZATION_API VMethod
 		Visualization::VList* typeArguments_{};
 		Visualization::VList* arguments_{};
 		Visualization::Line* signatureLine_{};
+		Visualization::VList* metaCalls_{};
 		Item* body_{};
 		Visualization::Static* annotationsIcon_{};
 		VStatementItemList* annotations_{};
