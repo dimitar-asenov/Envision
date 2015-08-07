@@ -1144,8 +1144,8 @@ void GitRepository::checkError(int errorCode)
 	if (errorCode < 0)
 	{
 		const git_error* lastError = giterr_last();
-		throw FilePersistenceException("Error " + errorCode + QString("/") + lastError->klass +
-												 ": " + lastError->message);
+		throw FilePersistenceException(QString("Error %1/%2: %3").arg(errorCode, lastError->klass)
+												 .arg(lastError->message));
 	}
 }
 
