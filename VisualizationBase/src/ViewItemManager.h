@@ -47,17 +47,51 @@ class Item;
 class VISUALIZATIONBASE_API ViewItemManager
 {
 	public:
+		/**
+		 * Creates a new ViewItemManager connected to the given scene.
+		 */
 		ViewItemManager(Scene* scene);
 		~ViewItemManager();
 
+
+		/**
+		 * Creates a new ViewItem and adds it to the manager. The ViewItem is given the name
+		 * which is supplied, and positioned at the given position, or at the next free position
+		 * if the default argument (-1, -1) is used.
+		 */
 		ViewItem* newViewItem(const QString name = QString(), QPoint position = QPoint(-1, -1));
+		/**
+		 * Finds the ViewItem with the given name, or nullptr if it doesn't exist.
+		 */
 		ViewItem* viewItem(const QString name);
+		/**
+		 * Switches to the given view to be the new current view. The view must
+		 * already be known to the manager.
+		 */
 		void switchToView(ViewItem* view);
+		/**
+		 * Overload using the view's name. Returns whether switching was successful,
+		 * i.e. whether a view with the name was found.
+		 */
 		bool switchToView(const QString viewName);
+		/**
+		 * Returns the currently visible ViewItem. Guaranteed to return a valid ViewItem.
+		 */
 		ViewItem* currentViewItem();
+		/**
+		 * Removes all existing ViewItems from the manager.
+		 */
 		void removeAllViewItems();
 
+		/**
+		 * Saves the given view persistently on disk, using the given manager.
+		 * Note: The view can still contain nodes handled by other managers.
+		 */
 		void saveView(ViewItem* view, Model::TreeManager* manager) const;
+		/**
+		 * Loads the given view from persistent disk storage. If it exists,
+		 * it is added to the manager at the given position.
+		 */
 		ViewItem* loadView(QString name, QPoint position = QPoint(-1, -1));
 
 		QVector<QVector<ViewItem*>> viewItems() const;
