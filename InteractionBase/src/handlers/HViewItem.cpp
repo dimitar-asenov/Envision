@@ -42,6 +42,27 @@ void HViewItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return)
 		GenericHandler::showCommandPrompt(target, "add ");
+	else if (target->focusedChild() && event->modifiers() == Qt::ControlModifier
+		&& (event->key() == Qt::Key_I || event->key() == Qt::Key_J
+			|| event->key() == Qt::Key_K || event->key() == Qt::Key_L))
+	{
+		auto child = target->focusedChild();
+		//TODO@cyril For some reason it does not work always without this
+		target->scene()->setMainCursor(nullptr);
+		QPoint pos;
+		if (event->key() == Qt::Key_I) //Up
+			pos = {(int)(child->xEndInParent() - child->widthInParent()/2), (int)child->y()};
+		else if (event->key() == Qt::Key_K) //Down
+			pos = {(int)(child->xEndInParent() - child->widthInParent()/2), (int)(child->yEndInParent() + 1)};
+		else if (event->key() == Qt::Key_J) //Left
+			pos = {(int)child->x(), (int)(child->yEndInParent() - child->heightInParent()/2)};
+		else if (event->key() == Qt::Key_L) //Right
+			pos = {(int)(child->xEndInParent() + 1), (int)(child->yEndInParent() - child->heightInParent()/2)};
+
+		//Move the cursor, open a new command prompt
+		target->moveCursor(Visualization::Item::MoveOnPosition, pos);
+		GenericHandler::showCommandPrompt(target, "add ");
+	}
 	else GenericHandler::keyPressEvent(target, event);
 }
 
