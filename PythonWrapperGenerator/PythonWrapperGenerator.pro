@@ -54,8 +54,7 @@ LIBS += -lclangTooling\
                                 ""$(shell $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --libs)"" \
                                 $$system( $${ENVISION_ROOT_DIR}/misc/llvm-config-envision.sh --ldflags --libs cppbackend) \
                                 -lz \
-                                -ldl \
-                                -lncurses
+										  -ldl
 
 ## INSTALLING SPECIFICS:
 config.files=config.json
