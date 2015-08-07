@@ -1,0 +1,18 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<font>
+		<weight>99</weight>
+	</font>
+	<shape prototypes="shape/Box/default">
+		Box
+		<backgroundBrush>
+				<style>1</style>
+				<color>#FFFF66</color>
+			</backgroundBrush>
+			<outline>
+				<style>1</style>
+			</outline>
+		<cornerType>0</cornerType>
+		<cornerRadius>10</cornerRadius>
+	</shape>
+</style>

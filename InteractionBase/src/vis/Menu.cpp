@@ -36,7 +36,7 @@ ITEM_COMMON_DEFINITIONS(Menu, "item")
 
 Menu* Menu::instance{};
 
-Menu::Menu(QVector<QVector<Visualization::Item*> > items,
+Menu::Menu(QVector<QVector<Visualization::Item*> > items, Visualization::Item* selectedItem,
 			Visualization::Item *target, StyleType *style)
 	: Super(nullptr, style), target_(target), currentItems_(items)
 {
@@ -45,10 +45,9 @@ Menu::Menu(QVector<QVector<Visualization::Item*> > items,
 
 	// Select the middle item
 	QApplication::postEvent(target_->scene(),
-		new Visualization::CustomSceneEvent( [this]()
+		new Visualization::CustomSceneEvent( [this, selectedItem]()
 			{
-				auto & midCol = currentItems_[currentItems_.size()/2];
-				selectItem(midCol[midCol.size()/2]);
+				selectItem(selectedItem);
 			}));
 }
 

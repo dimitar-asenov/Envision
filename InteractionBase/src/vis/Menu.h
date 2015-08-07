@@ -100,8 +100,8 @@ class INTERACTIONBASE_API Menu : public Super<Visualization::DeclarativeItem<Men
 		 */
 		QPoint indexOf(Visualization::Item* item) const;
 
-		Menu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* target,
-							  StyleType* style = itemStyles().get());
+		Menu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* selectedItem,
+			 Visualization::Item* target, StyleType* style = itemStyles().get());
 
 	private:
 

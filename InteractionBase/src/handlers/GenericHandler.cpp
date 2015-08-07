@@ -521,7 +521,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		scene->scheduleUpdate();
 	}
-	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F12)
+	else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_G)
 	{
 		event->accept();
 		if (Menu::isVisible()) Menu::hide();

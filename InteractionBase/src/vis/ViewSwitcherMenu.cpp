@@ -54,17 +54,25 @@ void ViewSwitcherMenu::showNow(Visualization::Item* target)
 	for (int col = 0; col < items.size(); col++)
 		for (int row = items[col].size(); row < 3; row++)
 			items[col].append(new VViewSwitcherEntry(nullptr, "Empty slot"));
+
+	//Find the item to initially select (this is the current view item)
+	Visualization::Item* selected{};
+	for (auto vector : items)
+		for (auto item : vector)
+			if (target->scene()->currentViewItem() == target->scene()->viewItems()->viewItem(
+						static_cast<VViewSwitcherEntry*>(item)->nameField()->text()))
+				selected = item;
+
 	Menu::hideNow();
-	Menu::instance = new ViewSwitcherMenu(items, target);
+	Menu::instance = new ViewSwitcherMenu(items, selected, target);
 	target->scene()->addTopLevelItem(Menu::instance);
-	target->scene()->addPostEventAction( [=]()
-					{ Menu::instance->selectItem(Menu::instance->currentItems()[0][0]); });
 }
 
-ViewSwitcherMenu::ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items,
+ViewSwitcherMenu::ViewSwitcherMenu(QVector<QVector<Visualization::Item*>> items, Visualization::Item* selectedItem,
 											 Visualization::Item* target, StyleType* style)
-	: Super(items, target, style)
+	: Super(items, selectedItem, target, style)
 {
+
 }
 
 void ViewSwitcherMenu::startFocusMode(Visualization::Item *target)
