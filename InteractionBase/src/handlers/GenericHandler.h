@@ -139,7 +139,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		static QPoint cursorOriginMidPoint_;
 		static CursorMoveOrientation cursorMoveOrientation_;
 
-		static QHash<int, QPoint> keyToIndexMap_;
+		static QHash<int, QPoint> keyToViewItemIndexMap_;
 
 		static void resetCursorOrigin();
 
