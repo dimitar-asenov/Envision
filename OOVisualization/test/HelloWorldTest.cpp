@@ -36,6 +36,7 @@
 
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/items/VComposite.h"
 #include "VisualizationBase/src/items/VText.h"
@@ -1065,9 +1066,20 @@ TEST(OOVisualizationPlugin, JavaLibraryAndHelloWorldTest)
 	auto manager = new Model::TreeManager(top_level);
 	manager->setName("HelloWorld");
 
-	VisualizationManager::instance().mainScene()->addTopLevelNode(top_level);
-	VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
+	auto mainScene = VisualizationManager::instance().mainScene();
+	mainScene->addTopLevelNode(top_level);
+	mainScene->listenToTreeManager(manager);
 
+	// Center view
+	mainScene->updateNow();
+	for (auto v : mainScene->views())
+		if (auto mainView = dynamic_cast<Visualization::MainView*>(v))
+		{
+			mainView->centerOn(mainScene->sceneRect().center());
+			break;
+		}
+
+	// Watch files
 	VisualizationManager::instance().mainScene()->addRefreshActionFunction(
 		[top_level](Scene* scene){
 			scene->viewItems()->removeAllViewItems();
