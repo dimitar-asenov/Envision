@@ -61,7 +61,7 @@ void HViewItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		//Move the cursor, open a new command prompt
 		target->moveCursor(Visualization::Item::MoveOnPosition, pos);
-		GenericHandler::showCommandPrompt(target, "add ");
+		GenericHandler::showCommandPrompt(target, "add ", true);
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

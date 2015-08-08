@@ -83,7 +83,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		CommandPrompt* commandPrompt();
 		void removeCommandPrompt();
-		void showCommandPrompt(Visualization::Item* commandRecevier, QString initialCommandText = QString());
+		void showCommandPrompt(Visualization::Item* commandRecevier, QString initialCommandText = QString(),
+									  bool centerViewOnPrompt = false);
 
 		void toggleComment(Visualization::Item* itemWithComment, Model::Node* aNode, bool hideOnly);
 

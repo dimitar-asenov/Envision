@@ -160,16 +160,17 @@ void GenericHandler::removeCommandPrompt()
 	SAFE_DELETE_ITEM(commandPrompt_);
 }
 
-void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QString initialCommandText)
+void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QString initialCommandText,
+													bool centerViewOnPrompt)
 {
 	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 	{
-		commandPrompt_->showPrompt(initialCommandText);
+		commandPrompt_->showPrompt(initialCommandText, centerViewOnPrompt);
 	}
 	else
 	{
 		removeCommandPrompt();
-		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
+		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText, centerViewOnPrompt);
 	}
 }
 
