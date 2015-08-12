@@ -32,6 +32,7 @@
 #include "autocomplete/AutoCompleteEntry.h"
 
 #include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
 
@@ -57,7 +58,8 @@ const QString CommandPrompt::TYPE_HINT = "Type a command";
 
 ITEM_COMMON_DEFINITIONS(CommandPrompt, "item")
 
-CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, const StyleType* style) :
+CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText,
+									  bool centerOnPrompt, const StyleType* style) :
 	Super(nullptr, style),
 	commandReceiver_(commandReceiver),
 	layout_(new SequentialLayout(this, &style->layout())),
@@ -81,6 +83,8 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, 
 	saveReceiverCursor();
 	setPromptPosition();
 	command_->moveCursor();
+
+	if (centerOnPrompt) centerViewOnPrompt();
 
 	if (initialCommandText.isNull())
 		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
@@ -115,7 +119,7 @@ void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 	command_->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->text().size());
 }
 
-void CommandPrompt::showPrompt(QString initialCommandText)
+void CommandPrompt::showPrompt(QString initialCommandText, bool centerOnPrompt)
 {
 	hideRequested_ = false;
 	saveReceiverCursor();
@@ -133,6 +137,8 @@ void CommandPrompt::showPrompt(QString initialCommandText)
 				setCaretPosition(initialCommandText.length());
 	else
 		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+
+	if (centerOnPrompt) centerViewOnPrompt();
 
 	wasCancelled_ = false;
 }
@@ -276,6 +282,16 @@ void CommandPrompt::executeCurrentText()
 
 	if ( result->code() == CommandResult::OK) hidePrompt();
 	else setResult(result);
+}
+
+void CommandPrompt::centerViewOnPrompt() const
+{
+	for (auto v : commandReceiver_->scene()->views())
+		if (auto mainView = dynamic_cast<Visualization::MainView*>(v))
+		{
+			mainView->centerOn(pos());
+			break;
+		}
 }
 
 }

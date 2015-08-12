@@ -43,7 +43,7 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 
 	public:
 		CommandPrompt(Visualization::Item* commandReceiver, QString initialCommandText = QString(),
-				const StyleType* style = itemStyles().get());
+				bool centerOnPrompt = false, const StyleType* style = itemStyles().get());
 		virtual ~CommandPrompt();
 
 		void setResult(QSharedPointer<CommandResult> result);
@@ -62,7 +62,7 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		void executeCurrentText();
 		const std::unique_ptr<Visualization::Cursor>& commandReceiverCursor();
 
-		void showPrompt(QString initialCommandText = QString());
+		void showPrompt(QString initialCommandText = QString(), bool centerOnPrompt = false);
 		void hidePrompt();
 		void cancelPrompt();
 
@@ -93,6 +93,8 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		void setPromptPosition();
 		void showAutocompleteBasedOnSuggestions();
 		QPoint receiverCursorPosition();
+
+		void centerViewOnPrompt() const;
 
 		static const QString TYPE_HINT;
 };

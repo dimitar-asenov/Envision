@@ -454,8 +454,9 @@ void Scene::computeSceneRect()
 //		viewRect.setY(viewRect.y() - bottomExtra + topExtra);
 //	}
 
-	viewRect.adjust(-20, -20, 20, 20); // Add some margin
-	sceneRect.adjust(-20, -20, 20, 20); // Add some margin
+	static constexpr int MARGIN = 1000;
+	viewRect.adjust(-MARGIN, -MARGIN, MARGIN, MARGIN); // Add some margin
+	sceneRect.adjust(-MARGIN, -MARGIN, MARGIN, MARGIN); // Add some margin
 
 	//sceneRect = viewRect.united(sceneRect);
 	setSceneRect(sceneRect);
