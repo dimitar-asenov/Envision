@@ -98,8 +98,13 @@ void DefaultVisualizer::visualize(Graph* g)
 			auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
 			Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
 			auto item = *nodeVisualization;
+
+			QString styleArg;
+			auto colorIt = informationNode->find("color");
+			if (colorIt != informationNode->end()) styleArg = colorIt->second.operator QString();
+
 			auto overlay = new Visualization::SelectionOverlay(
-						item, Visualization::SelectionOverlay::itemStyles().get());
+						item, Visualization::SelectionOverlay::itemStyles().get(styleArg));
 			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 		}
 	}

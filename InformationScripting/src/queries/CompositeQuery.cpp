@@ -69,20 +69,20 @@ QList<Graph*> CompositeQuery::execute(QList<Graph*> input)
 			// TODO: this shouldn't be an assertion later, but rather some error which is presented to the user.
 			Q_ASSERT(outIndex < currentNode->calculatedOutputs_.size());
 
-			// FIXME: multiple output receivers requires Graph copy constructor:
-			Q_ASSERT(outputMapping.size() <= 1);
-
-			if (outputMapping.size() == 1)
+			for (auto receiverIt = outputMapping.begin(); receiverIt != outputMapping.end(); ++receiverIt)
 			{
-				auto receiver = *outputMapping.begin();
+				auto receiver = *receiverIt;
 				// find the input mapping of the receiver:
 				auto inputIt = std::find_if(receiver->inputMap_.begin(), receiver->inputMap_.end(),
 					[currentNode, outIndex] (const InputMapping& m) {
 					return m.outputFrom_ == currentNode && m.outputIndex_ == outIndex;
 				});
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
-				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt),
-													  currentNode->calculatedOutputs_[outIndex]);
+				auto output = currentNode->calculatedOutputs_[outIndex];
+				if (receiverIt != outputMapping.begin())
+					output = output->clone();
+
+				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
 
 				if (receiver->canExecute())
 				{
