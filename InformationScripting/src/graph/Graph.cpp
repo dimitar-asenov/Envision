@@ -80,7 +80,7 @@ InformationNode* Graph::add(InformationNode* node)
 }
 
 InformationEdge* Graph::addEdge(InformationNode* from, InformationNode* to, const QString& name,
-										  InformationEdge::Orientation orientation)
+										  InformationEdge::Orientation orientation, bool incrementCountIfExisting)
 {
 	// We only allow existing nodes:
 	Q_ASSERT(from == findNode(from));
@@ -96,7 +96,7 @@ InformationEdge* Graph::addEdge(InformationNode* from, InformationNode* to, cons
 		{
 			auto existingEdge = edge;
 			Q_ASSERT(existingEdge->orientation() == orientation);
-			existingEdge->incrementCount();
+			if (incrementCountIfExisting) existingEdge->incrementCount();
 			return existingEdge;
 		}
 	}

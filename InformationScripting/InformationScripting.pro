@@ -36,7 +36,8 @@ HEADERS += src/precompiled.h \
     src/queries/GenericFilter.h \
     src/queries/AstNameFilter.h \
     src/queries/SubstractNodesOperator.h \
-    src/queries/NodePropertyAdder.h
+    src/queries/NodePropertyAdder.h \
+    src/queries/UnionOperator.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -57,7 +58,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/GenericFilter.cpp \
     src/queries/AstNameFilter.cpp \
     src/queries/SubstractNodesOperator.cpp \
-    src/queries/NodePropertyAdder.cpp
+    src/queries/NodePropertyAdder.cpp \
+    src/queries/UnionOperator.cpp
 
 
 # HACK to only include the AstApi_Generated file if it exists.

@@ -72,7 +72,8 @@ class Graph
 		 * Note: The graph owns the returned edge.
 		 */
 		InformationEdge* addEdge(InformationNode* from, InformationNode* to, const QString& name,
-													InformationEdge::Orientation orientation = InformationEdge::Orientation::Directed);
+										 InformationEdge::Orientation orientation = InformationEdge::Orientation::Directed,
+										 bool incrementCountIfExisting = true);
 
 		/**
 		 * Removes the \a node and all edges to it.
