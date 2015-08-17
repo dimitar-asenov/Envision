@@ -28,15 +28,38 @@
 
 #include "../graph/PropertyMap.h"
 #include "../graph/InformationNode.h"
+#include "../graph/InformationEdge.h"
+#include "../graph/Graph.h"
 
 namespace InformationScripting {
 
 using namespace boost::python;
 
+// The following macro has unused local typdef so we disable the warning for this.
+// (Note that this also works with clang)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedef"
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(addEdge_overloads, Graph::addEdge, 3, 5)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(nodes_overloads, Graph::nodes, 0, 1)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(edges_overloads, Graph::edges, 0, 1)
+#pragma GCC diagnostic pop
+
 BOOST_PYTHON_MODULE(NodeApi) {
 		class_<PropertyMap, boost::noncopyable>("PropertyMap", no_init)
 				.def("__getattr__", &PropertyMap::pythonAttribute);
 		class_<InformationNode, bases<PropertyMap>>("InformationNode", no_init);
+		class_<InformationEdge, bases<PropertyMap>>("InformationEdge", no_init);
+
+		void (Graph::*remove1)(InformationNode*)        = &Graph::remove;
+		void (Graph::*remove2)(QList<InformationNode*>) = &Graph::remove;
+
+		class_<Graph>("Graph")
+				.def("add", &Graph::add, return_value_policy<reference_existing_object>())
+				.def("addEdge", &Graph::addEdge, addEdge_overloads()[return_value_policy<reference_existing_object>()])
+				.def("remove", remove1)
+				.def("remove", remove2)
+				.def("nodes", &Graph::nodes, nodes_overloads())
+				.def("edges", &Graph::edges, edges_overloads());
 }
 
 } /* namespace InformationScripting */
