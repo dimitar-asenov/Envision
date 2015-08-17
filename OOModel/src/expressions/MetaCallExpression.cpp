@@ -80,14 +80,22 @@ void MetaCallExpression::bindMetaCalls(Model::Node* n, MetaBinding* binding)
 
 Declaration* MetaCallExpression::generatedTree()
 {
-	// do not generate if inside a meta definition
-	if (this->firstAncestorOfType<MetaDefinition>()) return nullptr;
-
 	// only generate tree if the cache is empty
 	if (!cache())
 	{
 		auto metaDef = metaDefinition();
 		if (!metaDef) return nullptr;
+
+		// check if the real context of this meta call matches the intended usage context
+		auto realContext = this->firstAncestorOfType<Declaration>();
+		if (metaDef->context()->typeId() != realContext->typeId())
+		{
+			qDebug() << "context"
+						<< metaDef->context()->typeName()
+						<< "does not match usage"
+						<< realContext->typeName();
+			return nullptr;
+		}
 
 		if (arguments()->size() != metaDef->arguments()->size())
 		{

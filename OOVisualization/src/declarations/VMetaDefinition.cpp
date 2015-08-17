@@ -59,7 +59,9 @@ void VMetaDefinition::initializeForms()
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setNoBoundaryCursors([](Item*){return true;})->setNoInnerCursors([](Item*){return true;})
 				->put(1, 0, item<Static>(&I::icon_, &StyleType::icon))
-				->put(2, 0, item<VText>(&I::name_, &NodeType::nameNode, &StyleType::name));
+				->put(2, 0, item<VText>(&I::name_, &NodeType::nameNode, &StyleType::name))
+				->put(3, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
+						&StyleType::arguments));
 
 	auto contentElement = (new GridLayoutFormElement())
 				->setSpacing(5)
