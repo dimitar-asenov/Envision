@@ -86,6 +86,17 @@ Declaration* MetaCallExpression::generatedTree()
 		auto metaDef = metaDefinition();
 		if (!metaDef) return nullptr;
 
+		// check if the real context of this meta call matches the intended usage context
+		auto realContext = this->firstAncestorOfType<Declaration>();
+		if (metaDef->context()->typeId() != realContext->typeId())
+		{
+			qDebug() << "context"
+						<< metaDef->context()->typeName()
+						<< "does not match usage"
+						<< realContext->typeName();
+			return nullptr;
+		}
+
 		if (arguments()->size() != metaDef->arguments()->size())
 		{
 			qDebug() << "#metaDefArgs != #metaCallArgs";
