@@ -43,7 +43,7 @@ class InformationEdge : public PropertyMap
 		InformationEdge() = default;
 		InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
 							 Orientation orientation = Orientation::Directed);
-		virtual InformationEdge* clone() const override;
+		InformationEdge(const InformationEdge& other);
 
 		int count() const;
 		void incrementCount();

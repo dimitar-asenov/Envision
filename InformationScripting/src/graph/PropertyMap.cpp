@@ -34,6 +34,12 @@ PropertyMap::PropertyMap(QList<QPair<QString, Property> > initialValues)
 		insert(initialValue.first, initialValue.second);
 }
 
+PropertyMap::PropertyMap(const PropertyMap& other)
+{
+	for (auto property : other.properties_)
+		insert(property.first, property.second);
+}
+
 boost::python::object PropertyMap::pythonAttribute(const QString& key)
 {
 	return pythonObject(operator[](key));
@@ -56,12 +62,6 @@ bool PropertyMap::contains(const QString& key) const
 PropertyMap::const_iterator PropertyMap::find(const QString& key) const
 {
 	return std::find_if(properties_.begin(), properties_.end(), [key](auto v) {return v.first == key;});
-}
-
-void PropertyMap::copyPropertiesInto(PropertyMap* into) const
-{
-	for (auto property : properties_)
-		into->insert(property.first, property.second);
 }
 
 } /* namespace InformationScripting */

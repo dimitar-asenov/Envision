@@ -37,11 +37,10 @@ class INFORMATIONSCRIPTING_API PropertyMap
 	public:
 		PropertyMap() = default;
 		PropertyMap(QList<QPair<QString, Property>> initialValues);
+		PropertyMap(const PropertyMap& other);
 		virtual ~PropertyMap() = default;
 		template <class DataType>
 		void insert(const QString& key, const DataType& value);
-
-		virtual PropertyMap* clone() const = 0;
 
 		boost::python::object pythonAttribute(const QString& key);
 		Property& operator[](const QString& key);
@@ -60,9 +59,6 @@ class INFORMATIONSCRIPTING_API PropertyMap
 		iterator end();
 		const_iterator end() const;
 		const_iterator cend() const;
-
-	protected:
-		void copyPropertiesInto(PropertyMap* into) const;
 
 	private:
 		QList<QPair<QString, Property>> properties_{};

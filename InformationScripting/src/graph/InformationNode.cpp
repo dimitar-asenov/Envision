@@ -32,11 +32,8 @@ InformationNode::InformationNode(QList<QPair<QString, Property> > initialValues)
 	: PropertyMap{initialValues}
 {}
 
-InformationNode* InformationNode::clone() const
-{
-	auto cloned = new InformationNode();
-	copyPropertiesInto(cloned);
-	return cloned;
-}
+InformationNode::InformationNode(const InformationNode& other)
+	: PropertyMap(other)
+{}
 
 } /* namespace InformationScripting */

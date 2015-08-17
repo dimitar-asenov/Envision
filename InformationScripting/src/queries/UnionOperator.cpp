@@ -40,7 +40,7 @@ QList<Graph*> UnionOperator::execute(QList<Graph*> input)
 	{
 		QHash<InformationNode*, InformationNode*> convertedNodes;
 		for (auto node : inGraph->nodes())
-			convertedNodes[node] = outGraph->add(node->clone());
+			convertedNodes[node] = outGraph->add(new InformationNode(*node));
 
 		for (auto edge : inGraph->edges())
 			outGraph->addEdge(convertedNodes[edge->from()], convertedNodes[edge->to()],

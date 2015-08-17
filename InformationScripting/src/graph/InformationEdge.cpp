@@ -36,13 +36,10 @@ InformationEdge::InformationEdge(InformationNode* from, InformationNode* to, con
 	: PropertyMap{{{COUNT_PROPERTY_, 1}, {NAME_PROPERTY_, name}}}, from_{from}, to_{to}, orientation_{orientation}
 {}
 
-InformationEdge* InformationEdge::clone() const
+InformationEdge::InformationEdge(const InformationEdge& other)
+	: PropertyMap(other)
 {
-	auto cloned = new InformationEdge();
-	copyPropertiesInto(cloned);
-	cloned->orientation_ = orientation_;
-	// From to have to be manually set by the caller
-	return cloned;
+	orientation_ = other.orientation_;
 }
 
 void InformationEdge::incrementCount()

@@ -80,7 +80,7 @@ QList<Graph*> CompositeQuery::execute(QList<Graph*> input)
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
 				auto output = currentNode->calculatedOutputs_[outIndex];
 				if (receiverIt != outputMapping.begin())
-					output = output->clone();
+					output = new Graph(*output);
 
 				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
 
