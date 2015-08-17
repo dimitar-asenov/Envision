@@ -80,9 +80,6 @@ void MetaCallExpression::bindMetaCalls(Model::Node* n, MetaBinding* binding)
 
 Declaration* MetaCallExpression::generatedTree()
 {
-	// do not generate if inside a meta definition
-	if (this->firstAncestorOfType<MetaDefinition>()) return nullptr;
-
 	// only generate tree if the cache is empty
 	if (!cache())
 	{
