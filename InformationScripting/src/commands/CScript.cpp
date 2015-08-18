@@ -41,6 +41,8 @@
 #include "../queries/AstNameFilter.h"
 #include "../queries/SubstractNodesOperator.h"
 #include "../queries/AstQuery.h"
+#include "../queries/NodePropertyAdder.h"
+#include "../queries/UnionOperator.h"
 
 namespace InformationScripting {
 
@@ -159,6 +161,44 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);
 		compositeQuery->connectToOutput(complement);
 		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
+	else if (command == "color")
+	{
+		auto colorMatcher = new NodePropertyAdder([](const InformationNode* node) {
+			auto it = node->find("ast");
+			if (it != node->end()) {
+				Model::Node* astNode = it->second;
+				if (auto classNode = DCast<OOModel::Class>(astNode))
+					return classNode->name().contains("Matcher");
+			}
+			return false;
+		}, "color", QString("update"));
+
+		auto colorDescription = new NodePropertyAdder([](const InformationNode* node) {
+			auto it = node->find("ast");
+			if (it != node->end()) {
+				Model::Node* astNode = it->second;
+				if (auto classNode = DCast<OOModel::Class>(astNode))
+					return classNode->name().contains("Description");
+			}
+			return false;
+		}, "color", QString("green"));
+
+		auto allClasses = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+		auto unionOp = new UnionOperator();
+
+		auto composite = new CompositeQuery();
+
+		composite->connectQuery(allClasses, colorMatcher);
+		composite->connectQuery(allClasses, colorDescription);
+
+		composite->connectQuery(colorMatcher, unionOp);
+		composite->connectQuery(colorDescription, 0, unionOp, 1);
+
+		composite->connectToOutput(unionOp);
+
+		QueryExecutor queryExecutor(composite);
 		queryExecutor.execute();
 	}
 	return new Interaction::CommandResult();

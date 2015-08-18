@@ -28,17 +28,14 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
-#include "PropertyMap.h"
+#include "Query.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+class INFORMATIONSCRIPTING_API UnionOperator : public Query
 {
 	public:
-		InformationNode() = default;
-		InformationNode(QList<QPair<QString, Property>> initialValues);
-		InformationNode(const InformationNode& other);
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 };
 
 } /* namespace InformationScripting */

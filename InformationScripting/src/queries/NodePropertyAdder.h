@@ -28,17 +28,21 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
-#include "PropertyMap.h"
+#include "Query.h"
+#include "../graph/Graph.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+class INFORMATIONSCRIPTING_API NodePropertyAdder : public Query
 {
 	public:
-		InformationNode() = default;
-		InformationNode(QList<QPair<QString, Property>> initialValues);
-		InformationNode(const InformationNode& other);
+		NodePropertyAdder(Graph::NodeCondition condition, const QString& propertyName, Property value);
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
+
+	private:
+		Graph::NodeCondition condition_{};
+		QString name_;
+		Property value_{};
 };
 
 } /* namespace InformationScripting */

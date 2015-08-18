@@ -24,21 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "NodePropertyAdder.h"
 
-#include "../informationscripting_api.h"
-
-#include "Property.h"
-#include "PropertyMap.h"
+#include "../graph/InformationNode.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+NodePropertyAdder::NodePropertyAdder(Graph::NodeCondition condition, const QString& propertyName, Property value)
+ : condition_{condition}, name_{propertyName}, value_{value}
+{}
+
+QList<Graph*> NodePropertyAdder::execute(QList<Graph*> input)
 {
-	public:
-		InformationNode() = default;
-		InformationNode(QList<QPair<QString, Property>> initialValues);
-		InformationNode(const InformationNode& other);
-};
+	QList<Graph*> results;
+	for (auto g : input)
+	{
+		for (auto node : g->nodes(condition_))
+			node->insert(name_, value_);
+		results.push_back(g);
+	}
+	return results;
+}
 
 } /* namespace InformationScripting */

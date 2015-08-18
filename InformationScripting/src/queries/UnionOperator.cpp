@@ -24,21 +24,32 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "UnionOperator.h"
 
-#include "../informationscripting_api.h"
-
-#include "Property.h"
-#include "PropertyMap.h"
+#include "../graph/Graph.h"
+#include "../graph/InformationNode.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+QList<Graph*> UnionOperator::execute(QList<Graph*> input)
 {
-	public:
-		InformationNode() = default;
-		InformationNode(QList<QPair<QString, Property>> initialValues);
-		InformationNode(const InformationNode& other);
-};
+	if (input.size() <= 1) return input;
+
+	auto outGraph = input.takeFirst();
+	for (auto inGraph : input)
+	{
+		QHash<InformationNode*, InformationNode*> convertedNodes;
+		for (auto node : inGraph->nodes())
+			convertedNodes[node] = outGraph->add(new InformationNode(*node));
+
+		for (auto edge : inGraph->edges())
+			outGraph->addEdge(convertedNodes[edge->from()], convertedNodes[edge->to()],
+					edge->name(), edge->orientation(), false);
+
+		SAFE_DELETE(inGraph);
+	}
+
+	return {outGraph};
+}
 
 } /* namespace InformationScripting */
