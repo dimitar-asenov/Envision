@@ -35,14 +35,9 @@ namespace InformationScripting {
 
 using namespace boost::python;
 
-// The following macro has unused local typdef so we disable the warning for this.
-// (Note that this also works with clang)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-local-typedef"
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(addEdge_overloads, Graph::addEdge, 3, 5)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(nodes_overloads, Graph::nodes, 0, 1)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(edges_overloads, Graph::edges, 0, 1)
-#pragma GCC diagnostic pop
 
 BOOST_PYTHON_MODULE(NodeApi) {
 		class_<PropertyMap, boost::noncopyable>("PropertyMap", no_init)

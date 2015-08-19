@@ -46,7 +46,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/helpers/BoostPythonHelpers.cpp \
     src/wrappers/AstApi.cpp \
     src/graph/InformationNode.cpp \
-    src/wrappers/NodeApi.cpp \
     src/graph/PropertyMap.cpp \
     src/graph/Property.cpp \
     src/graph/Graph.cpp \
@@ -63,6 +62,15 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp
 
+# Workaround to not have any pragma's in NodeApi.cpp
+# (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
+# see also: http://stackoverflow.com/a/14608296
+nodeApiCompiler.input = SOURCES_NODEAPI
+nodeApiCompiler.output = ${QMAKE_FILE_BASE}.o
+nodeApiCompiler.commands = \$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -Wno-unused-local-typedef ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+QMAKE_EXTRA_COMPILERS += nodeApiCompiler
+
+SOURCES_NODEAPI = src/wrappers/NodeApi.cpp
 
 # HACK to only include the AstApi_Generated file if it exists.
 exists(src/wrappers/AstApi_Generated.cpp): {
