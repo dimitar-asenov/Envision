@@ -24,37 +24,67 @@
 **
 ***********************************************************************************************************************/
 
-#include "NodeApi.h"
+#include "ScriptQuery.h"
 
-#include "../graph/PropertyMap.h"
-#include "../graph/InformationNode.h"
-#include "../graph/InformationEdge.h"
+#include "../wrappers/AstApi.h"
+#include "../wrappers/NodeApi.h"
+#include "../helpers/BoostPythonHelpers.h"
+
 #include "../graph/Graph.h"
 
 namespace InformationScripting {
 
-using namespace boost::python;
+ScriptQuery::ScriptQuery(const QString& scriptPath)
+	: scriptPath_{scriptPath}
+{}
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(addEdge_overloads, Graph::addEdge, 3, 5)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(nodes_overloads, Graph::nodes, 0, 1)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(edges_overloads, Graph::edges, 0, 1)
+void ScriptQuery::initPythonEnvironment()
+{
+	PyImport_AppendInittab("AstApi", PyInit_AstApi);
+	PyImport_AppendInittab("NodeApi", PyInit_NodeApi);
+	Py_Initialize();
+}
 
-BOOST_PYTHON_MODULE(NodeApi) {
-		class_<PropertyMap, boost::noncopyable>("PropertyMap", no_init)
-				.def("__getattr__", &PropertyMap::pythonAttribute);
-		class_<InformationNode, bases<PropertyMap>>("InformationNode", no_init);
-		class_<InformationEdge, bases<PropertyMap>>("InformationEdge", no_init);
+void ScriptQuery::unloadPythonEnvironment()
+{
+	Py_Finalize();
+}
 
-		void (Graph::*remove1)(InformationNode*)        = &Graph::remove;
-		void (Graph::*remove2)(QList<InformationNode*>) = &Graph::remove;
+QList<Graph*> ScriptQuery::execute(QList<Graph*> input)
+{
+	using namespace boost;
 
-		class_<Graph>("Graph")
-				.def("add", &Graph::add, return_value_policy<reference_existing_object>())
-				.def("addEdge", &Graph::addEdge, addEdge_overloads()[return_value_policy<reference_existing_object>()])
-				.def("remove", remove1)
-				.def("remove", remove2)
-				.def("nodes", &Graph::nodes, nodes_overloads())
-				.def("edges", &Graph::edges, edges_overloads());
+	QList<Graph*> result;
+
+	try {
+		python::object main_module = python::import("__main__");
+		python::dict main_namespace = python::extract<python::dict>(main_module.attr("__dict__"));
+
+		python::object astApi = python::import("AstApi");
+		python::object nodeApi = python::import("NodeApi");
+		python::object sys = python::import("sys");
+
+		// TODO we have to consider how we can make sure that we don't have any memory leaks here:
+		// In general we need to figure out memory management for the scripting environment, where ownership is clearly
+		// defined.
+		// (see also: http://stackoverflow.com/questions/28653886/delete-a-pointer-in-stdvector-exposed-by-boostpython)
+		python::list inputGraphs;
+		for (auto g : input)
+			inputGraphs.append(python::ptr(g));
+
+		main_namespace["inputs"] = inputGraphs;
+
+		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);
+		// Workaround to get output
+		sys.attr("stdout").attr("flush")();
+
+		python::list results = python::extract<python::list>(main_namespace["results"]);
+		python::stl_input_iterator<Graph*> begin(results), end;
+		result = QList<Graph*>::fromStdList(std::list<Graph*>(begin, end));
+	} catch (python::error_already_set ) {
+		qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
+	}
+	return result;
 }
 
 } /* namespace InformationScripting */

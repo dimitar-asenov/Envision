@@ -24,37 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#include "NodeApi.h"
+#pragma once
 
-#include "../graph/PropertyMap.h"
-#include "../graph/InformationNode.h"
-#include "../graph/InformationEdge.h"
-#include "../graph/Graph.h"
+#include "../informationscripting_api.h"
+
+#include "Query.h"
 
 namespace InformationScripting {
 
-using namespace boost::python;
+class ScriptQuery : public Query
+{
+	public:
+		ScriptQuery(const QString& scriptPath);
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(addEdge_overloads, Graph::addEdge, 3, 5)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(nodes_overloads, Graph::nodes, 0, 1)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(edges_overloads, Graph::edges, 0, 1)
+		static void initPythonEnvironment();
+		static void unloadPythonEnvironment();
 
-BOOST_PYTHON_MODULE(NodeApi) {
-		class_<PropertyMap, boost::noncopyable>("PropertyMap", no_init)
-				.def("__getattr__", &PropertyMap::pythonAttribute);
-		class_<InformationNode, bases<PropertyMap>>("InformationNode", no_init);
-		class_<InformationEdge, bases<PropertyMap>>("InformationEdge", no_init);
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
-		void (Graph::*remove1)(InformationNode*)        = &Graph::remove;
-		void (Graph::*remove2)(QList<InformationNode*>) = &Graph::remove;
-
-		class_<Graph>("Graph")
-				.def("add", &Graph::add, return_value_policy<reference_existing_object>())
-				.def("addEdge", &Graph::addEdge, addEdge_overloads()[return_value_policy<reference_existing_object>()])
-				.def("remove", remove1)
-				.def("remove", remove2)
-				.def("nodes", &Graph::nodes, nodes_overloads())
-				.def("edges", &Graph::edges, edges_overloads());
-}
+	private:
+		QString scriptPath_;
+};
 
 } /* namespace InformationScripting */
