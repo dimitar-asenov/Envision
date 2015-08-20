@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['scope',['Scope',['../classInformationScripting_1_1AstQuery.html#ad240667e1956ff4009488d7a5f7ea23a',1,'InformationScripting::AstQuery']]],
   ['shapetype',['ShapeType',['../classComments_1_1CommentDiagramShape.html#ad178ebbe5751e604dafff42aff078d64',1,'Comments::CommentDiagramShape']]],
   ['sizetype',['SizeType',['../classVisualization_1_1Shape.html#aeeb6d777da51835e0d8ed44689e1015d',1,'Visualization::Shape']]],
   ['sourcekind',['SourceKind',['../classFilePersistence_1_1GitRepository.html#aabf7b84e693cf9f87f12e2668f0e1c44',1,'FilePersistence::GitRepository']]],

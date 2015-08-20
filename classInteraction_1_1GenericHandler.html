@@ -181,8 +181,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af23e6ae980ced3dabae06579f49a68c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f35e0cbeb31fab7f26596eda12d9d40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a7f35e0cbeb31fab7f26596eda12d9d40">showActionPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *actionRecevier, bool autoExecuteAction)</td></tr>
 <tr class="separator:a7f35e0cbeb31fab7f26596eda12d9d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb532516a72ad39b28cb71038484cf77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#abb532516a72ad39b28cb71038484cf77">showCommandPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *commandRecevier, QString initialCommandText=QString())</td></tr>
-<tr class="separator:abb532516a72ad39b28cb71038484cf77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47a2dad97352f5e726ca85f5cd4d0484"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a47a2dad97352f5e726ca85f5cd4d0484">showCommandPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *commandRecevier, QString initialCommandText=QString(), bool centerViewOnPrompt=false)</td></tr>
+<tr class="separator:a47a2dad97352f5e726ca85f5cd4d0484"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01f516cc8cd627198131fc0fd42d2388"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a01f516cc8cd627198131fc0fd42d2388">toggleComment</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *itemWithComment, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *aNode, bool hideOnly)</td></tr>
 <tr class="separator:a01f516cc8cd627198131fc0fd42d2388"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58fd2acafa53b620849d957e36b1bdf8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a58fd2acafa53b620849d957e36b1bdf8">wheelEvent</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QGraphicsSceneWheelEvent *event) override</td></tr>
@@ -277,6 +277,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a2eea6ebee759dbe078aaa05a12275ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6348e5adf0601adf6b0734cd5e954543"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInteraction_1_1CommandExecutionEngine.html">CommandExecutionEngine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a6348e5adf0601adf6b0734cd5e954543">executionEngine_</a> = <a class="el" href="classInteraction_1_1CommandExecutionEngine.html#af9b2618cb6152bc42f58c9321bf12c94">CommandExecutionEngine::instance</a>()</td></tr>
 <tr class="separator:a6348e5adf0601adf6b0734cd5e954543"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86bc9f21a6fea9d31c035195e2101209"><td class="memItemLeft" align="right" valign="top">static QHash&lt; int, QPoint &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a86bc9f21a6fea9d31c035195e2101209">keyToViewItemIndexMap_</a></td></tr>
+<tr class="separator:a86bc9f21a6fea9d31c035195e2101209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181ffd275f9aaa6196986a322e73a001"><td class="memItemLeft" align="right" valign="top">static QPair&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *, QPoint &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a181ffd275f9aaa6196986a322e73a001">lastCursorPosition_</a></td></tr>
 <tr class="separator:a181ffd275f9aaa6196986a322e73a001"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -1072,7 +1074,7 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abb532516a72ad39b28cb71038484cf77"></a>
+<a class="anchor" id="a47a2dad97352f5e726ca85f5cd4d0484"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1086,7 +1088,13 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>initialCommandText</em> = <code>QString()</code>&#160;</td>
+          <td class="paramname"><em>initialCommandText</em> = <code>QString()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>centerViewOnPrompt</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1305,6 +1313,29 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a class="anchor" id="a86bc9f21a6fea9d31c035195e2101209"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QHash&lt; int, QPoint &gt; Interaction::GenericHandler::keyToViewItemIndexMap_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{{Qt::Key_1, QPoint(0, 0)}, {Qt::Key_2, QPoint(1, 0)}, {Qt::Key_3, QPoint(2, 0)},</div>
+<div class="line">       {Qt::Key_4, QPoint(0, 1)}, {Qt::Key_5, QPoint(1, 1)}, {Qt::Key_6, QPoint(2, 1)},</div>
+<div class="line">       {Qt::Key_7, QPoint(0, 2)}, {Qt::Key_8, QPoint(1, 2)}, {Qt::Key_9, QPoint(2, 2)}}</div>
+</div><!-- fragment -->
 </div>
 </div>
 <a class="anchor" id="a181ffd275f9aaa6196986a322e73a001"></a>

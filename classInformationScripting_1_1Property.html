@@ -102,7 +102,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData.html">PropertyData</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl6e134c08521e35a269df219e50f25555.html">PropertyData&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &gt;::type &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enablb2b917a5d1ca9d56d95e896e0d4d30bb.html">PropertyData&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;!std::is_base_of&lt; Model::Node, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyData_3_01DataType_00_01typename_01std_1_1enabl45b0ab571ad81fab2a6a7d3c73ee8e6d.html">PropertyData&lt; DataType, typename std::enable_if&lt; std::is_pointer&lt; DataType &gt;::value &amp;&amp;std::is_base_of&lt; Model::Node, std::remove_pointer_t&lt; DataType &gt; &gt;::value &gt;::type &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structInformationScripting_1_1Property_1_1PropertyDataConcept.html">PropertyDataConcept</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,6 +119,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8c6050d2acd83222bd088853b008cb44"><td class="memTemplParams" colspan="2">template&lt;class ConvertTo &gt; </td></tr>
 <tr class="memitem:a8c6050d2acd83222bd088853b008cb44"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Property.html#a8c6050d2acd83222bd088853b008cb44">operator ConvertTo</a> () const </td></tr>
 <tr class="separator:a8c6050d2acd83222bd088853b008cb44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80caac38369805ada5923fc2a01b4e49"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Property.html#a80caac38369805ada5923fc2a01b4e49">operator Model::Node *</a> () const </td></tr>
+<tr class="separator:a80caac38369805ada5923fc2a01b4e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbc7e704ab94a9b0e9e44090bed2fd57"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInformationScripting_1_1Property.html#adbc7e704ab94a9b0e9e44090bed2fd57">operator==</a> (const <a class="el" href="classInformationScripting_1_1Property.html">Property</a> &amp;other) const </td></tr>
+<tr class="separator:adbc7e704ab94a9b0e9e44090bed2fd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -192,6 +198,45 @@ template&lt;class ConvertTo &gt; </div>
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a80caac38369805ada5923fc2a01b4e49"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">InformationScripting::Property::operator <a class="el" href="classModel_1_1Node.html">Model::Node</a> * </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adbc7e704ab94a9b0e9e44090bed2fd57"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool InformationScripting::Property::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classInformationScripting_1_1Property.html">Property</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>

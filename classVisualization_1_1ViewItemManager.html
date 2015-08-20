@@ -104,24 +104,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae77295b99a83b344b3c2c5e6fc893ed2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#ae77295b99a83b344b3c2c5e6fc893ed2">ViewItemManager</a> (<a class="el" href="classVisualization_1_1Scene.html">Scene</a> *scene)</td></tr>
+<tr class="memdesc:ae77295b99a83b344b3c2c5e6fc893ed2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classVisualization_1_1ViewItemManager.html" title="The ViewItemManager manages all the different ViewItems which are part of a given scene...">ViewItemManager</a> connected to the given scene.  <a href="#ae77295b99a83b344b3c2c5e6fc893ed2">More...</a><br /></td></tr>
 <tr class="separator:ae77295b99a83b344b3c2c5e6fc893ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81298e0ffe4b1caeeebc2bb2dfc6f847"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#a81298e0ffe4b1caeeebc2bb2dfc6f847">~ViewItemManager</a> ()</td></tr>
 <tr class="separator:a81298e0ffe4b1caeeebc2bb2dfc6f847"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6725a439356a843ab80887ec9ccb1e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#ac6725a439356a843ab80887ec9ccb1e2">currentViewItem</a> ()</td></tr>
+<tr class="memdesc:ac6725a439356a843ab80887ec9ccb1e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the currently visible <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>.  <a href="#ac6725a439356a843ab80887ec9ccb1e2">More...</a><br /></td></tr>
 <tr class="separator:ac6725a439356a843ab80887ec9ccb1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affb1afd55c174c86c9e0eb40ef38f3ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#affb1afd55c174c86c9e0eb40ef38f3ef">loadView</a> (QString name, QPoint position=QPoint(-1,-1))</td></tr>
+<tr class="memdesc:affb1afd55c174c86c9e0eb40ef38f3ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the given view from persistent disk storage.  <a href="#affb1afd55c174c86c9e0eb40ef38f3ef">More...</a><br /></td></tr>
 <tr class="separator:affb1afd55c174c86c9e0eb40ef38f3ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00be74956adad2196c082756bfeeb536"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#a00be74956adad2196c082756bfeeb536">newViewItem</a> (const QString name=QString(), QPoint position=QPoint(-1,-1))</td></tr>
+<tr class="memdesc:a00be74956adad2196c082756bfeeb536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> and adds it to the manager.  <a href="#a00be74956adad2196c082756bfeeb536">More...</a><br /></td></tr>
 <tr class="separator:a00be74956adad2196c082756bfeeb536"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30a19aa021326e5276c1d9487287fb08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#a30a19aa021326e5276c1d9487287fb08">removeAllViewItems</a> ()</td></tr>
+<tr class="memdesc:a30a19aa021326e5276c1d9487287fb08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all existing ViewItems from the manager.  <a href="#a30a19aa021326e5276c1d9487287fb08">More...</a><br /></td></tr>
 <tr class="separator:a30a19aa021326e5276c1d9487287fb08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cb49cfaf1060a72fb47b49831a16538"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#a9cb49cfaf1060a72fb47b49831a16538">saveView</a> (<a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *view, <a class="el" href="classModel_1_1TreeManager.html">Model::TreeManager</a> *manager) const </td></tr>
+<tr class="memdesc:a9cb49cfaf1060a72fb47b49831a16538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves the given view persistently on disk, using the given manager.  <a href="#a9cb49cfaf1060a72fb47b49831a16538">More...</a><br /></td></tr>
 <tr class="separator:a9cb49cfaf1060a72fb47b49831a16538"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f7ccafc19d7419165b38dca2996bcbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#a8f7ccafc19d7419165b38dca2996bcbb">switchToView</a> (<a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *view)</td></tr>
+<tr class="memdesc:a8f7ccafc19d7419165b38dca2996bcbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Switches to the given view to be the new current view.  <a href="#a8f7ccafc19d7419165b38dca2996bcbb">More...</a><br /></td></tr>
 <tr class="separator:a8f7ccafc19d7419165b38dca2996bcbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc50e0d4377ddc2560109268a7fed271"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#abc50e0d4377ddc2560109268a7fed271">switchToView</a> (const QString viewName)</td></tr>
+<tr class="memdesc:abc50e0d4377ddc2560109268a7fed271"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload using the view's name.  <a href="#abc50e0d4377ddc2560109268a7fed271">More...</a><br /></td></tr>
 <tr class="separator:abc50e0d4377ddc2560109268a7fed271"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77de34d3d048228034e8ddcd4cb10bf4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#a77de34d3d048228034e8ddcd4cb10bf4">viewItem</a> (const QString name)</td></tr>
+<tr class="memdesc:a77de34d3d048228034e8ddcd4cb10bf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> with the given name, or nullptr if it doesn't exist.  <a href="#a77de34d3d048228034e8ddcd4cb10bf4">More...</a><br /></td></tr>
 <tr class="separator:a77de34d3d048228034e8ddcd4cb10bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaaccc3de05b1c22b6638116df22650b8"><td class="memItemLeft" align="right" valign="top">QVector&lt; QVector&lt; <a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemManager.html#aaaccc3de05b1c22b6638116df22650b8">viewItems</a> () const </td></tr>
 <tr class="separator:aaaccc3de05b1c22b6638116df22650b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,6 +187,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Creates a new <a class="el" href="classVisualization_1_1ViewItemManager.html" title="The ViewItemManager manages all the different ViewItems which are part of a given scene...">ViewItemManager</a> connected to the given scene. </p>
 
 </div>
 </div>
@@ -292,6 +303,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns the currently visible <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>. </p>
+<p>Guaranteed to return a valid <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>. </p>
+
 </div>
 </div>
 <a class="anchor" id="a84da772e68d91275c96d37e32b28b9a0"></a>
@@ -351,6 +365,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Loads the given view from persistent disk storage. </p>
+<p>If it exists, it is added to the manager at the given position. </p>
 
 </div>
 </div>
@@ -412,6 +429,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Creates a new <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> and adds it to the manager. </p>
+<p>The <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> is given the name which is supplied, and positioned at the given position, or at the next free position if the default argument (-1, -1) is used. </p>
+
 </div>
 </div>
 <a class="anchor" id="af73e2a863b1a5c9429b736a759f0e064"></a>
@@ -450,6 +470,8 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Removes all existing ViewItems from the manager. </p>
+
 </div>
 </div>
 <a class="anchor" id="a9cb49cfaf1060a72fb47b49831a16538"></a>
@@ -476,6 +498,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Saves the given view persistently on disk, using the given manager. </p>
+<p>Note: The view can still contain nodes handled by other managers. </p>
+
 </div>
 </div>
 <a class="anchor" id="a8f7ccafc19d7419165b38dca2996bcbb"></a>
@@ -491,6 +516,9 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Switches to the given view to be the new current view. </p>
+<p>The view must already be known to the manager. </p>
 
 </div>
 </div>
@@ -508,6 +536,9 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Overload using the view's name. </p>
+<p>Returns whether switching was successful, i.e. whether a view with the name was found. </p>
+
 </div>
 </div>
 <a class="anchor" id="a77de34d3d048228034e8ddcd4cb10bf4"></a>
@@ -523,6 +554,8 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Finds the <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> with the given name, or nullptr if it doesn't exist. </p>
 
 </div>
 </div>

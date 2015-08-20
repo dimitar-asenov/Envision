@@ -89,7 +89,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="classOOModel_1_1MetaCallExpression-members.html">List of all members</a> &#124;
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">OOModel::MetaCallExpression Class Reference</div>  </div>
 </div><!--header-->
@@ -108,9 +109,18 @@ Inheritance diagram for OOModel::MetaCallExpression:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af92ed80ffe5eb0135c8454ff43e9d436"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MetaCallExpression.html#af92ed80ffe5eb0135c8454ff43e9d436">MetaCallExpression</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Expression.html">Expression</a> *referencePrefix=nullptr)</td></tr>
 <tr class="separator:af92ed80ffe5eb0135c8454ff43e9d436"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42027b2462610f06458b49dc174fddc5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1Declaration.html">Declaration</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MetaCallExpression.html#a42027b2462610f06458b49dc174fddc5">generatedTree</a> ()</td></tr>
+<tr class="memdesc:a42027b2462610f06458b49dc174fddc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the generated tree resulting from this meta call.  <a href="#a42027b2462610f06458b49dc174fddc5">More...</a><br /></td></tr>
+<tr class="separator:a42027b2462610f06458b49dc174fddc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93da40a589e246a2ea7e50f7dbbb664a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOModel_1_1MetaDefinition.html">MetaDefinition</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MetaCallExpression.html#a93da40a589e246a2ea7e50f7dbbb664a">metaDefinition</a> ()</td></tr>
 <tr class="memdesc:a93da40a589e246a2ea7e50f7dbbb664a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the meta definition used in this meta call if one exists.  <a href="#a93da40a589e246a2ea7e50f7dbbb664a">More...</a><br /></td></tr>
 <tr class="separator:a93da40a589e246a2ea7e50f7dbbb664a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:afbce75aca5d606f6cc6348c231a988af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1MetaCallExpression.html#afbce75aca5d606f6cc6348c231a988af">bindMetaCalls</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classOOModel_1_1MetaBinding.html">MetaBinding</a> *binding)</td></tr>
+<tr class="memdesc:afbce75aca5d606f6cc6348c231a988af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds all MetaCallExpressions according to the binding in node.  <a href="#afbce75aca5d606f6cc6348c231a988af">More...</a><br /></td></tr>
+<tr class="separator:afbce75aca5d606f6cc6348c231a988af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -146,6 +156,59 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="afbce75aca5d606f6cc6348c231a988af"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OOModel::MetaCallExpression::bindMetaCalls </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classOOModel_1_1MetaBinding.html">MetaBinding</a> *&#160;</td>
+          <td class="paramname"><em>binding</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Binds all MetaCallExpressions according to the binding in node. </p>
+
+</div>
+</div>
+<a class="anchor" id="a42027b2462610f06458b49dc174fddc5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOOModel_1_1Declaration.html">Declaration</a> * OOModel::MetaCallExpression::generatedTree </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the generated tree resulting from this meta call. </p>
+
+</div>
+</div>
 <a class="anchor" id="a93da40a589e246a2ea7e50f7dbbb664a"></a>
 <div class="memitem">
 <div class="memproto">

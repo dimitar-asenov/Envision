@@ -196,10 +196,11 @@ Static Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a96559eab3c16413bc0e87f727e3de4b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a96559eab3c16413bc0e87f727e3de4b3">checkOrCreateMandatoryAttributes</a> (bool useUndoableAction)</td></tr>
+<tr class="memdesc:a96559eab3c16413bc0e87f727e3de4b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks that all mandatory atrributes are present and creates missing empty lists.  <a href="#a96559eab3c16413bc0e87f727e3de4b3">More...</a><br /></td></tr>
+<tr class="separator:a96559eab3c16413bc0e87f727e3de4b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab76274f754b8fdbd1a043d9d46a2a678"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#ab76274f754b8fdbd1a043d9d46a2a678">removeAllNodes</a> ()</td></tr>
 <tr class="separator:ab76274f754b8fdbd1a043d9d46a2a678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7df106bf9fe03b8e87143f7a3ab115e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html#a7df106bf9fe03b8e87143f7a3ab115e6">verifyHasAllMandatoryAttributes</a> ()</td></tr>
-<tr class="separator:a7df106bf9fe03b8e87143f7a3ab115e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -459,6 +460,33 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a96559eab3c16413bc0e87f727e3de4b3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::CompositeNode::checkOrCreateMandatoryAttributes </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useUndoableAction</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks that all mandatory atrributes are present and creates missing empty lists. </p>
+<p>Only mandatory, missing lists are created as empty lists. If an mandatory attribute of a type other than a list is missing, this method throws an exception. </p>
 
 </div>
 </div>
@@ -1108,29 +1136,6 @@ template&lt;class T &gt; </div>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7df106bf9fe03b8e87143f7a3ab115e6"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Model::CompositeNode::verifyHasAllMandatoryAttributes </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

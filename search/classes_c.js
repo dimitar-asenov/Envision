@@ -10,6 +10,7 @@ var searchData=
   ['nodeidmap',['NodeIdMap',['../classModel_1_1NodeIdMap.html',1,'Model']]],
   ['nodeitemwrapperformelement',['NodeItemWrapperFormElement',['../classVisualization_1_1NodeItemWrapperFormElement.html',1,'Visualization']]],
   ['nodeowningcommand',['NodeOwningCommand',['../classModel_1_1NodeOwningCommand.html',1,'Model']]],
+  ['nodepropertyadder',['NodePropertyAdder',['../classInformationScripting_1_1NodePropertyAdder.html',1,'InformationScripting']]],
   ['nodereadwritelock',['NodeReadWriteLock',['../classModel_1_1NodeReadWriteLock.html',1,'Model']]],
   ['nodetodebugstringadapter',['NodeToDebugStringAdapter',['../classModel_1_1NodeToDebugStringAdapter.html',1,'Model']]],
   ['nodewithvisualizationitemwrapperformelement',['NodeWithVisualizationItemWrapperFormElement',['../classVisualization_1_1NodeWithVisualizationItemWrapperFormElement.html',1,'Visualization']]],

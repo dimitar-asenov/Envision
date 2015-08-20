@@ -164,6 +164,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:acc6ed2bf6f8293b310875e447ced52a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove the given node from the view (this does not delete the node from the model)  <a href="#acc6ed2bf6f8293b310875e447ced52a0">More...</a><br /></td></tr>
 <tr class="separator:acc6ed2bf6f8293b310875e447ced52a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d732bba92c6d96fe0fcee1ba2739820"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItem.html#a8d732bba92c6d96fe0fcee1ba2739820">setName</a> (const QString &amp;<a class="el" href="classVisualization_1_1ViewItem.html#a3e7e06bf97274cc9749746eb88c7dfbc">name</a>)</td></tr>
+<tr class="memdesc:a8d732bba92c6d96fe0fcee1ba2739820"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the name to the given name.  <a href="#a8d732bba92c6d96fe0fcee1ba2739820">More...</a><br /></td></tr>
 <tr class="separator:a8d732bba92c6d96fe0fcee1ba2739820"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c7a1c1e22e7304229e7de8afecedda9"><td class="memItemLeft" align="right" valign="top">QJsonDocument&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItem.html#a0c7a1c1e22e7304229e7de8afecedda9">toJson</a> () const </td></tr>
 <tr class="separator:a0c7a1c1e22e7304229e7de8afecedda9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +175,9 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a2a4f1205f4d6cd1083a8c9c757b5642c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItem.html#a2a4f1205f4d6cd1083a8c9c757b5642c">initializeForms</a> ()</td></tr>
 <tr class="separator:a2a4f1205f4d6cd1083a8c9c757b5642c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5b541e08db95bd2f8c8210f1341bc4f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItem.html#aa5b541e08db95bd2f8c8210f1341bc4f">isValidName</a> (const QString &amp;<a class="el" href="classVisualization_1_1ViewItem.html#a3e7e06bf97274cc9749746eb88c7dfbc">name</a>)</td></tr>
+<tr class="memdesc:aa5b541e08db95bd2f8c8210f1341bc4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether this is a valid name for a <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>.  <a href="#aa5b541e08db95bd2f8c8210f1341bc4f">More...</a><br /></td></tr>
+<tr class="separator:aa5b541e08db95bd2f8c8210f1341bc4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab57e41e366b3998cd74265dce1d446b9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItem.html#ab57e41e366b3998cd74265dce1d446b9">publicInterfacePurpose</a> ()</td></tr>
 <tr class="memdesc:ab57e41e366b3998cd74265dce1d446b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The purpose to use when rendering only the public interface of an item.  <a href="#ab57e41e366b3998cd74265dce1d446b9">More...</a><br /></td></tr>
 <tr class="separator:ab57e41e366b3998cd74265dce1d446b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -792,6 +796,32 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa5b541e08db95bd2f8c8210f1341bc4f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::ViewItem::isValidName </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns whether this is a valid name for a <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>. </p>
+
+</div>
+</div>
 <a class="anchor" id="a3e7e06bf97274cc9749746eb88c7dfbc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1008,6 +1038,9 @@ template&lt;class NodeType &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Sets the name to the given name. </p>
+<p>Ensure that isValidName(name) holds. </p>
 
 </div>
 </div>

@@ -4,6 +4,7 @@ var searchData=
   ['unattached_5fthread',['UNATTACHED_THREAD',['../classOODebug_1_1Protocol.html#aa7026c873697ca1b1a66ed7b8d25c0daabcd2cae1517fea571be92c5a02851f58',1,'OODebug::Protocol']]],
   ['unborn',['UNBORN',['../classFilePersistence_1_1GitRepository.html#a60e3a5a6b3c4f546132857bac4742d03a2866be98eb13e0bd47bb322429d0422f',1,'FilePersistence::GitRepository']]],
   ['unclassified',['Unclassified',['../classFilePersistence_1_1Merge.html#a43caa4453b54d144aee86d4141f42627a3336022d50ad5765c5db6964d942f5e1',1,'FilePersistence::Merge::Unclassified()'],['../namespaceFilePersistence.html#a22f599a7e5cc21a83101c6b6a2e1abfea3336022d50ad5765c5db6964d942f5e1',1,'FilePersistence::Unclassified()']]],
+  ['undirected',['Undirected',['../classInformationScripting_1_1InformationEdge.html#a673ce9ba0e2f246590d2c21aed9fc4e2a06342d541b10bd9f330c932de75d6da5',1,'InformationScripting::InformationEdge']]],
   ['union',['Union',['../classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1caaef12e903e606a4895a16b393bfdec8c',1,'OOModel::Class']]],
   ['unknown',['Unknown',['../classOOModel_1_1OOReference.html#a7d07cba66859fb195f744715214cd6b7a88183b946cc5f0e8c96b2e66e1c74a7e',1,'OOModel::OOReference']]],
   ['unsigned_5fint',['UNSIGNED_INT',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a2ca3cd8f2bc5e8f8387ea31760a21077',1,'OOModel::PrimitiveType']]],

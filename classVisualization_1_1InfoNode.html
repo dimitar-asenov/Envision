@@ -132,15 +132,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab096752090b412f7879d5e503ae70cf1"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#ab096752090b412f7879d5e503ae70cf1">~InfoNode</a> ()</td></tr>
 <tr class="separator:ab096752090b412f7879d5e503ae70cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20695f00640d6e7fd4444e8d0830738c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#a20695f00640d6e7fd4444e8d0830738c">automaticUpdate</a> ()</td></tr>
+<tr class="memdesc:a20695f00640d6e7fd4444e8d0830738c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the <a class="el" href="classVisualization_1_1InfoNode.html" title="An InfoNode is the base class of all nodes which display some sort of information on a target node...">InfoNode</a> automatically, meaning it only updates the results from the info getters which are set to update automatically.  <a href="#a20695f00640d6e7fd4444e8d0830738c">More...</a><br /></td></tr>
 <tr class="separator:a20695f00640d6e7fd4444e8d0830738c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf125147a7a6fac3da66c3156c5bac81"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#aaf125147a7a6fac3da66c3156c5bac81">fullUpdate</a> ()</td></tr>
+<tr class="memdesc:aaf125147a7a6fac3da66c3156c5bac81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the <a class="el" href="classVisualization_1_1InfoNode.html" title="An InfoNode is the base class of all nodes which display some sort of information on a target node...">InfoNode</a> fully, meaning it gets the result from all info getters.  <a href="#aaf125147a7a6fac3da66c3156c5bac81">More...</a><br /></td></tr>
 <tr class="separator:aaf125147a7a6fac3da66c3156c5bac81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae607cd6a3fafed43b35c4c329453640a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#ae607cd6a3fafed43b35c4c329453640a">infoHtml</a> () const </td></tr>
 <tr class="memdesc:ae607cd6a3fafed43b35c4c329453640a"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the infos can be represented as a string, use this to represent them as HTML text.  <a href="#ae607cd6a3fafed43b35c4c329453640a">More...</a><br /></td></tr>
 <tr class="separator:ae607cd6a3fafed43b35c4c329453640a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b0b81fe129b30981d1facaf000b8f0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#a6b0b81fe129b30981d1facaf000b8f0a">isEnabled</a> (const QString name) const </td></tr>
+<tr class="memdesc:a6b0b81fe129b30981d1facaf000b8f0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the info getter with the given name is enabled for this node.  <a href="#a6b0b81fe129b30981d1facaf000b8f0a">More...</a><br /></td></tr>
 <tr class="separator:a6b0b81fe129b30981d1facaf000b8f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f0b9a18a495a85f2fd1c484c6c5cf1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#a0f0b9a18a495a85f2fd1c484c6c5cf1a">setEnabled</a> (const QString name, bool <a class="el" href="classVisualization_1_1InfoNode.html#a6b0b81fe129b30981d1facaf000b8f0a">isEnabled</a>)</td></tr>
+<tr class="memdesc:a0f0b9a18a495a85f2fd1c484c6c5cf1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or disable the info getter identified by the given name.  <a href="#a0f0b9a18a495a85f2fd1c484c6c5cf1a">More...</a><br /></td></tr>
 <tr class="separator:a0f0b9a18a495a85f2fd1c484c6c5cf1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a210b902e6e24e51074f9ab9593393337"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#a210b902e6e24e51074f9ab9593393337">target</a> () const </td></tr>
 <tr class="separator:a210b902e6e24e51074f9ab9593393337"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,6 +154,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7026df0804fbe9c58fa020fc2ec8c781"><td class="memItemLeft" align="right" valign="top">static QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#a7026df0804fbe9c58fa020fc2ec8c781">registeredInfoGetters</a> ()</td></tr>
+<tr class="memdesc:a7026df0804fbe9c58fa020fc2ec8c781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list with the names of all registered info getters.  <a href="#a7026df0804fbe9c58fa020fc2ec8c781">More...</a><br /></td></tr>
 <tr class="separator:a7026df0804fbe9c58fa020fc2ec8c781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af23cbceba74ac72879ee766722a1e625"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1InfoNode.html#af23cbceba74ac72879ee766722a1e625">registerInfoGetter</a> (const QString &amp;name, const <a class="el" href="classVisualization_1_1InfoNode.html#addf7998da71de6174a143f381000ba68">InfoGetter</a> getter, bool updatesAutomatically, bool enabledByDefault)</td></tr>
 <tr class="memdesc:af23cbceba74ac72879ee766722a1e625"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers a new method to get information.  <a href="#af23cbceba74ac72879ee766722a1e625">More...</a><br /></td></tr>
@@ -291,6 +296,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Updates the <a class="el" href="classVisualization_1_1InfoNode.html" title="An InfoNode is the base class of all nodes which display some sort of information on a target node...">InfoNode</a> automatically, meaning it only updates the results from the info getters which are set to update automatically. </p>
+
 </div>
 </div>
 <a class="anchor" id="aaf125147a7a6fac3da66c3156c5bac81"></a>
@@ -313,6 +320,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Updates the <a class="el" href="classVisualization_1_1InfoNode.html" title="An InfoNode is the base class of all nodes which display some sort of information on a target node...">InfoNode</a> fully, meaning it gets the result from all info getters. </p>
 
 </div>
 </div>
@@ -364,6 +373,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns whether the info getter with the given name is enabled for this node. </p>
+
 </div>
 </div>
 <a class="anchor" id="a7026df0804fbe9c58fa020fc2ec8c781"></a>
@@ -386,6 +397,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Returns a list with the names of all registered info getters. </p>
 
 </div>
 </div>
@@ -437,7 +450,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>The name of the getter. </td></tr>
-    <tr><td class="paramname">getter</td><td>The getter method itself, taking a node and returning a string. </td></tr>
+    <tr><td class="paramname">getter</td><td>The getter method itself, taking a node and returning a string. If this method is not applicable for the node supplied, it should return an empty string. </td></tr>
     <tr><td class="paramname">updatesAutomatically</td><td>Whether this info should always update. </td></tr>
     <tr><td class="paramname">enabledByDefault</td><td>Whether this info is visible by default. </td></tr>
   </table>
@@ -469,6 +482,8 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Enable or disable the info getter identified by the given name. </p>
 
 </div>
 </div>

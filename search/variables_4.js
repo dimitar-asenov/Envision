@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['edges_5f',['edges_',['../classInformationScripting_1_1Graph.html#abf34707422d6882aa14471afa41f0046',1,'InformationScripting::Graph']]],
   ['edit_5foutline_5fsize',['EDIT_OUTLINE_SIZE',['../classComments_1_1VCommentDiagram.html#a82825a0181526b5fb49cd156c8d3546b',1,'Comments::VCommentDiagram']]],
   ['editable',['editable',['../classVisualization_1_1TextRenderer.html#aea4653d333bda3109b5e59908abc340e',1,'Visualization::TextRenderer']]],
   ['editing_5f',['editing_',['../classComments_1_1VComment.html#a5580169b68aa9259d5a9a4449f114409',1,'Comments::VComment::editing_()'],['../classComments_1_1VCommentDiagram.html#ac8232abab5b7c69737a512b2c737656c',1,'Comments::VCommentDiagram::editing_()']]],
@@ -44,8 +45,8 @@ var searchData=
   ['enums_5f',['enums_',['../structClassData.html#a47a77fdb278b2615570871e59314d847',1,'ClassData']]],
   ['envisionmanager_5f',['envisionManager_',['../classVisualization_1_1VisualizationManager.html#afa5af141f6774d7ea444db098ced35ff',1,'Visualization::VisualizationManager']]],
   ['equaltypes',['EQUALTYPES',['../classOOModel_1_1TypeSystem.html#ace1606205e26acdda13735432c8b24f8',1,'OOModel::TypeSystem']]],
-  ['equivalencesymbol',['equivalenceSymbol',['../classOOVisualization_1_1VTypeAliasStyle.html#a0ab8ad01c4387a79f077a4391794828f',1,'OOVisualization::VTypeAliasStyle']]],
-  ['equivalencesymbol_5f',['equivalenceSymbol_',['../classOOVisualization_1_1VTypeAlias.html#ab4a6fd426573650721ca381995ec1992',1,'OOVisualization::VTypeAlias']]],
+  ['equivalencesymbol',['equivalenceSymbol',['../classOOVisualization_1_1VMetaCallMappingStyle.html#a4d2f5e8c0613b04c884e8b6bf9a92ee2',1,'OOVisualization::VMetaCallMappingStyle::equivalenceSymbol()'],['../classOOVisualization_1_1VTypeAliasStyle.html#a0ab8ad01c4387a79f077a4391794828f',1,'OOVisualization::VTypeAliasStyle::equivalenceSymbol()']]],
+  ['equivalencesymbol_5f',['equivalenceSymbol_',['../classOOVisualization_1_1VMetaCallMapping.html#a208f5b57274fcb027a3548a0c38c395c',1,'OOVisualization::VMetaCallMapping::equivalenceSymbol_()'],['../classOOVisualization_1_1VTypeAlias.html#ab4a6fd426573650721ca381995ec1992',1,'OOVisualization::VTypeAlias::equivalenceSymbol_()']]],
   ['error',['error',['../classOODebug_1_1Reply.html#adf4bc3177b4fd8698053d1c35e53de4e',1,'OODebug::Reply']]],
   ['errorcontainer',['errorContainer',['../classInteraction_1_1CommandPromptStyle.html#a0250c9aeed6d3b7ae220fc64685dc990',1,'Interaction::CommandPromptStyle']]],
   ['errorcontainer_5f',['errorContainer_',['../classInteraction_1_1CommandPrompt.html#a98cf4b724a13c98742072e78408eb0a7',1,'Interaction::CommandPrompt']]],

@@ -110,8 +110,8 @@ Inheritance diagram for Interaction::CommandPrompt:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a99f3b039d4d66c8c5c662f0f4c66c2dc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a99f3b039d4d66c8c5c662f0f4c66c2dc">CommandPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *<a class="el" href="classInteraction_1_1CommandPrompt.html#a53c12b91bc3726362008159b11942954">commandReceiver</a>, QString initialCommandText=QString(), const StyleType *style=itemStyles().get())</td></tr>
-<tr class="separator:a99f3b039d4d66c8c5c662f0f4c66c2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d2e5291db4309cea0600ae4a9a1d56a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a9d2e5291db4309cea0600ae4a9a1d56a">CommandPrompt</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *<a class="el" href="classInteraction_1_1CommandPrompt.html#a53c12b91bc3726362008159b11942954">commandReceiver</a>, QString initialCommandText=QString(), bool centerOnPrompt=false, const StyleType *style=itemStyles().get())</td></tr>
+<tr class="separator:a9d2e5291db4309cea0600ae4a9a1d56a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d6922de20d472504d6e46958260be41"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a0d6922de20d472504d6e46958260be41">~CommandPrompt</a> ()</td></tr>
 <tr class="separator:a0d6922de20d472504d6e46958260be41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5771ca77a1fccc06327f67c777ad0418"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a5771ca77a1fccc06327f67c777ad0418">addSuggestions</a> (const QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt; &amp;<a class="el" href="classInteraction_1_1CommandPrompt.html#a342030636161983ec0c5e7f5bfc0586c">suggestions</a>)</td></tr>
@@ -134,8 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af5fcc0d5eaa2140fd30267c3994906db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79562ad46c5c580afe7a8d7c1ea45134"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a79562ad46c5c580afe7a8d7c1ea45134">setResult</a> (QSharedPointer&lt; <a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> &gt; <a class="el" href="classInteraction_1_1CommandPrompt.html#af5fcc0d5eaa2140fd30267c3994906db">result</a>)</td></tr>
 <tr class="separator:a79562ad46c5c580afe7a8d7c1ea45134"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a186b4dd261d914a77200aac4263fb3a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a186b4dd261d914a77200aac4263fb3a0">showPrompt</a> (QString initialCommandText=QString())</td></tr>
-<tr class="separator:a186b4dd261d914a77200aac4263fb3a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a4aa3184c5f07a0ec1d1e886a3b693c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a9a4aa3184c5f07a0ec1d1e886a3b693c">showPrompt</a> (QString initialCommandText=QString(), bool centerOnPrompt=false)</td></tr>
+<tr class="separator:a9a4aa3184c5f07a0ec1d1e886a3b693c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a342030636161983ec0c5e7f5bfc0586c"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a342030636161983ec0c5e7f5bfc0586c">suggestions</a> ()</td></tr>
 <tr class="separator:a342030636161983ec0c5e7f5bfc0586c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8ed86840aee62f94020302f27c8df84"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ad8ed86840aee62f94020302f27c8df84">takeSuggestion</a> (<a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> *suggestion)</td></tr>
@@ -154,6 +154,8 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a320d25d7ae52b5b159f3630cbe3b4745"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a320d25d7ae52b5b159f3630cbe3b4745">centerViewOnPrompt</a> () const </td></tr>
+<tr class="separator:a320d25d7ae52b5b159f3630cbe3b4745"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3285da61df3d34bc7d586663da2d5a5"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#af3285da61df3d34bc7d586663da2d5a5">receiverCursorPosition</a> ()</td></tr>
 <tr class="separator:af3285da61df3d34bc7d586663da2d5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbe319f71908683baf5593229a8abfa8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#acbe319f71908683baf5593229a8abfa8">saveReceiverCursor</a> ()</td></tr>
@@ -200,7 +202,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:abff3eda077b9de692708b32995294591 inherit pro_types_classCore_1_1Reflect"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a99f3b039d4d66c8c5c662f0f4c66c2dc"></a>
+<a class="anchor" id="a9d2e5291db4309cea0600ae4a9a1d56a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -215,6 +217,12 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>initialCommandText</em> = <code>QString()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>centerOnPrompt</em> = <code>false</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -289,6 +297,29 @@ Additional Inherited Members</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a320d25d7ae52b5b159f3630cbe3b4745"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::CommandPrompt::centerViewOnPrompt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -555,7 +586,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a186b4dd261d914a77200aac4263fb3a0"></a>
+<a class="anchor" id="a9a4aa3184c5f07a0ec1d1e886a3b693c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -563,8 +594,18 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void Interaction::CommandPrompt::showPrompt </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
-          <td class="paramname"><em>initialCommandText</em> = <code>QString()</code></td><td>)</td>
+          <td class="paramname"><em>initialCommandText</em> = <code>QString()</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>centerOnPrompt</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

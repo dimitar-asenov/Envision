@@ -116,6 +116,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a754ff1ad37849ae4a62e176cd49d638c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a754ff1ad37849ae4a62e176cd49d638c">reference</a> () const </td></tr>
 <tr class="separator:a754ff1ad37849ae4a62e176cd49d638c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a3c24b8d6349c53babe5f08b9c7e601"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a2a3c24b8d6349c53babe5f08b9c7e601">setPosition</a> (QPoint pos)</td></tr>
+<tr class="memdesc:a2a3c24b8d6349c53babe5f08b9c7e601"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use setPosition to set the position of this node in the <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>'s grid before calling toJson.  <a href="#a2a3c24b8d6349c53babe5f08b9c7e601">More...</a><br /></td></tr>
 <tr class="separator:a2a3c24b8d6349c53babe5f08b9c7e601"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59fb66e9f101c796519dff6b656f86c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a59fb66e9f101c796519dff6b656f86c9">setPurpose</a> (int <a class="el" href="classVisualization_1_1ViewItemNode.html#a41cca741c5fc44464a496c0420158ee4">purpose</a>)</td></tr>
 <tr class="separator:a59fb66e9f101c796519dff6b656f86c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -124,6 +125,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a290e1090489b3c706171b0450e32537e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a290e1090489b3c706171b0450e32537e">setSpacingParent</a> (<a class="el" href="classVisualization_1_1ViewItemNode.html">ViewItemNode</a> *<a class="el" href="classVisualization_1_1ViewItemNode.html#aa12f91244af21cc56ea70bf00b75f2da">spacingParent</a>)</td></tr>
 <tr class="separator:a290e1090489b3c706171b0450e32537e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cda170e08a01cb50d98e674cb851b5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a5cda170e08a01cb50d98e674cb851b5c">setSpacingParentPosition</a> (QPoint pos)</td></tr>
+<tr class="memdesc:a5cda170e08a01cb50d98e674cb851b5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">If a spacing parent exists, use this to set the position of its spacing parent's position in the <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>'s grid before calling toJson.  <a href="#a5cda170e08a01cb50d98e674cb851b5c">More...</a><br /></td></tr>
 <tr class="separator:a5cda170e08a01cb50d98e674cb851b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2286b85165f1d6dd45a1524ecc0c208"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#ab2286b85165f1d6dd45a1524ecc0c208">setSpacingTarget</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1ViewItemNode.html#a950268189bc9be3c2224002b17541370">spacingTarget</a>)</td></tr>
 <tr class="separator:ab2286b85165f1d6dd45a1524ecc0c208"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,10 +139,13 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a26d1fefbc4ed3ac4d95410cd87a60c5c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1ViewItemNode.html">ViewItemNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a26d1fefbc4ed3ac4d95410cd87a60c5c">fromJson</a> (QJsonObject json, const <a class="el" href="classVisualization_1_1ViewItem.html">ViewItem</a> *view)</td></tr>
+<tr class="memdesc:a26d1fefbc4ed3ac4d95410cd87a60c5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> using the given Json object for initialization.  <a href="#a26d1fefbc4ed3ac4d95410cd87a60c5c">More...</a><br /></td></tr>
 <tr class="separator:a26d1fefbc4ed3ac4d95410cd87a60c5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bce7517b8eafffc37f9fbec8fcdb84c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1ViewItemNode.html">ViewItemNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a4bce7517b8eafffc37f9fbec8fcdb84c">withReference</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1ViewItemNode.html#a754ff1ad37849ae4a62e176cd49d638c">reference</a>, int <a class="el" href="classVisualization_1_1ViewItemNode.html#a41cca741c5fc44464a496c0420158ee4">purpose</a>)</td></tr>
+<tr class="memdesc:a4bce7517b8eafffc37f9fbec8fcdb84c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> which is used to render the given reference's visualization.  <a href="#a4bce7517b8eafffc37f9fbec8fcdb84c">More...</a><br /></td></tr>
 <tr class="separator:a4bce7517b8eafffc37f9fbec8fcdb84c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d569ad079c31624b61250211c82686f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1ViewItemNode.html">ViewItemNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ViewItemNode.html#a5d569ad079c31624b61250211c82686f">withSpacingTarget</a> (<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1ViewItemNode.html#a950268189bc9be3c2224002b17541370">spacingTarget</a>, <a class="el" href="classVisualization_1_1ViewItemNode.html">ViewItemNode</a> *<a class="el" href="classVisualization_1_1ViewItemNode.html#aa12f91244af21cc56ea70bf00b75f2da">spacingParent</a>)</td></tr>
+<tr class="memdesc:a5d569ad079c31624b61250211c82686f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> which is used to render an empty spacing item.  <a href="#a5d569ad079c31624b61250211c82686f">More...</a><br /></td></tr>
 <tr class="separator:a5d569ad079c31624b61250211c82686f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -166,7 +171,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> class is used in the <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> class and simply wraps a top level node to give another level of indirection. </p>
-<p>This helps with distinguishing different items when the same node is added to a <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> multiple times, as is possible. </p>
+<p>This helps with distinguishing different items when the same node is added to a <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a> multiple times, as is possible.</p>
+<p>A <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> can either hold a reference to another node - in which case its visualization renders that node. It can also hold a spacing target and spacing parent - in which case it will render as white space, aligning its bottom end with the top end of that given spacing target. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a26d1fefbc4ed3ac4d95410cd87a60c5c"></a>
 <div class="memitem">
@@ -199,6 +205,9 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a new <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> using the given Json object for initialization. </p>
+<p>This can then be either a <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> with a reference or a spacing target. </p>
 
 </div>
 </div>
@@ -269,6 +278,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Use setPosition to set the position of this node in the <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>'s grid before calling toJson. </p>
 
 </div>
 </div>
@@ -365,6 +376,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>If a spacing parent exists, use this to set the position of its spacing parent's position in the <a class="el" href="classVisualization_1_1ViewItem.html" title="The ViewItem class represents the visualization of an entire view within a single item...">ViewItem</a>'s grid before calling toJson. </p>
 
 </div>
 </div>
@@ -493,6 +506,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Creates a new <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> which is used to render the given reference's visualization. </p>
+
 </div>
 </div>
 <a class="anchor" id="a5d569ad079c31624b61250211c82686f"></a>
@@ -526,6 +541,8 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Creates a new <a class="el" href="classVisualization_1_1ViewItemNode.html" title="The ViewItemNode class is used in the ViewItem class and simply wraps a top level node to give anothe...">ViewItemNode</a> which is used to render an empty spacing item. </p>
 
 </div>
 </div>
