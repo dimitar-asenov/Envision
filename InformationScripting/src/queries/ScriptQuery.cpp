@@ -38,6 +38,18 @@ ScriptQuery::ScriptQuery(const QString& scriptPath)
 	: scriptPath_{scriptPath}
 {}
 
+void ScriptQuery::initPythonEnvironment()
+{
+	PyImport_AppendInittab("AstApi", PyInit_AstApi);
+	PyImport_AppendInittab("NodeApi", PyInit_NodeApi);
+	Py_Initialize();
+}
+
+void ScriptQuery::unloadPythonEnvironment()
+{
+	Py_Finalize();
+}
+
 QList<Graph*> ScriptQuery::execute(QList<Graph*> input)
 {
 	using namespace boost;
@@ -45,10 +57,6 @@ QList<Graph*> ScriptQuery::execute(QList<Graph*> input)
 	QList<Graph*> result;
 
 	try {
-		PyImport_AppendInittab("AstApi", PyInit_AstApi);
-		PyImport_AppendInittab("NodeApi", PyInit_NodeApi);
-		Py_Initialize();
-
 		python::object main_module = python::import("__main__");
 		python::dict main_namespace = python::extract<python::dict>(main_module.attr("__dict__"));
 

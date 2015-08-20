@@ -36,6 +36,10 @@ class ScriptQuery : public Query
 {
 	public:
 		ScriptQuery(const QString& scriptPath);
+
+		static void initPythonEnvironment();
+		static void unloadPythonEnvironment();
+
 		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
 	private:
