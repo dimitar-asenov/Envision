@@ -34,6 +34,7 @@
 #include "commands/CScript.h"
 #include "helpers/BoostPythonHelpers.h"
 #include "sources/AstSource.h"
+#include "queries/ScriptQuery.h"
 
 #include "visitors/AllNodesOfType.h"
 
@@ -46,11 +47,13 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	AllNodesOfType<OOModel::Method>::init();
 	AllNodesOfType<OOModel::Class>::init();
 	OOInteraction::HStatementItemList::instance()->addCommand(new CScript());
+	ScriptQuery::initPythonEnvironment();
 	return true;
 }
 
 void InformationScriptingPlugin::unload()
 {
+	ScriptQuery::unloadPythonEnvironment();
 }
 
 void InformationScriptingPlugin::selfTest(QString testid)

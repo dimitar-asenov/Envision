@@ -54,7 +54,7 @@ class OOVISUALIZATION_API VMetaCallExpression : public Super<VExpression<VMetaCa
 		Visualization::VList* arguments() const;
 
 	protected:
-		void determineChildren() override;
+		virtual void determineChildren() override;
 
 	private:
 		Visualization::Static* prefix_{};

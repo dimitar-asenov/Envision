@@ -38,6 +38,25 @@ Graph::~Graph()
 	for (auto& n : nodes_) SAFE_DELETE(n);
 }
 
+Graph::Graph(const Graph& other)
+{
+	QMap<InformationNode*, InformationNode*> clonedNodes;
+	for (auto node : other.nodes_)
+	{
+		auto clonedNode = new InformationNode(*node);
+		auto inserted = add(clonedNode);
+		Q_ASSERT(inserted == clonedNode);
+		clonedNodes[node] = clonedNode;
+	}
+	for (auto edge: other.edges_)
+	{
+		auto clonedEdge = new InformationEdge(*edge);
+		clonedEdge->setFrom(clonedNodes[edge->from()]);
+		clonedEdge->setTo(clonedNodes[edge->to()]);
+		edges_ << clonedEdge;
+	}
+}
+
 InformationNode* Graph::add(InformationNode* node)
 {
 	Q_ASSERT(!nodeHashFunctions_.empty());
@@ -58,7 +77,7 @@ InformationNode* Graph::add(InformationNode* node)
 }
 
 InformationEdge* Graph::addEdge(InformationNode* from, InformationNode* to, const QString& name,
-										  InformationEdge::Orientation orientation)
+										  InformationEdge::Orientation orientation, bool incrementCountIfExisting)
 {
 	// We only allow existing nodes:
 	Q_ASSERT(from == findNode(from));
@@ -74,7 +93,7 @@ InformationEdge* Graph::addEdge(InformationNode* from, InformationNode* to, cons
 		{
 			auto existingEdge = edge;
 			Q_ASSERT(existingEdge->orientation() == orientation);
-			existingEdge->incrementCount();
+			if (incrementCountIfExisting) existingEdge->incrementCount();
 			return existingEdge;
 		}
 	}

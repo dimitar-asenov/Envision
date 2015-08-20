@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,47 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "NodePropertyAdder.h"
 
-#include "declarations/VProject.h"
-#include "declarations/VModule.h"
-#include "declarations/VClass.h"
-#include "declarations/VMethod.h"
-#include "declarations/VField.h"
-#include "declarations/VNameImport.h"
-#include "declarations/VMetaDefinition.h"
-#include "declarations/VMetaCallMapping.h"
-#include "declarations/VMetaBinding.h"
+#include "../graph/InformationNode.h"
 
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
-#include "elements/VCommentStatementItem.h"
-#include "elements/VFormalMetaArgument.h"
+namespace InformationScripting {
 
-#include "expressions/allOOExpressionVisualizations.h"
+NodePropertyAdder::NodePropertyAdder(Graph::NodeCondition condition, const QString& propertyName, Property value)
+ : condition_{condition}, name_{propertyName}, value_{value}
+{}
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
-#include "statements/VSwitchStatement.h"
-#include "statements/VCaseStatement.h"
-#include "statements/VAssertStatement.h"
-#include "statements/VSynchronizedStatement.h"
+QList<Graph*> NodePropertyAdder::execute(QList<Graph*> input)
+{
+	QList<Graph*> results;
+	for (auto g : input)
+	{
+		for (auto node : g->nodes(condition_))
+			node->insert(name_, value_);
+		results.push_back(g);
+	}
+	return results;
+}
 
-#include "alternative/VKeywordMethodCall.h"
-
-#include "semantic_zoom/VClassSzPublic.h"
-#include "semantic_zoom/VDeclarationConstantSz.h"
-#include "semantic_zoom/VDeclarationSz.h"
-#include "semantic_zoom/VMethodSzPublic.h"
+} /* namespace InformationScripting */

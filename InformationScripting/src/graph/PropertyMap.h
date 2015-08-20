@@ -35,7 +35,10 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API PropertyMap
 {
 	public:
+		PropertyMap() = default;
 		PropertyMap(QList<QPair<QString, Property>> initialValues);
+		PropertyMap(const PropertyMap& other);
+		virtual ~PropertyMap() = default;
 		template <class DataType>
 		void insert(const QString& key, const DataType& value);
 

@@ -1,0 +1,7 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape />
+	<equivalenceSymbol prototypes="item/Symbol/default">
+		<symbol>≡</symbol>
+	</equivalenceSymbol>
+</style>

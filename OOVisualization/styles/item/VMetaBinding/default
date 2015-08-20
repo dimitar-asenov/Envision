@@ -1,0 +1,30 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/DeclarativeItemBase/default">
+	<shape />
+	<assignmentSymbol prototypes="item/Symbol/default">
+		<symbol>←</symbol>
+	</assignmentSymbol>
+	<mappings prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>#EEEEEE</color>
+			</backgroundBrush>
+			<outline>
+				<width>1</width>
+				<color>#555555</color>
+			</outline>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>2</direction>
+			<spaceBetweenElements>10</spaceBetweenElements>
+			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
+		</itemsStyle>
+		<selectedTip>
+			<symbol>add meta call mapping</symbol>
+		</selectedTip>
+	</mappings>
+</style>
