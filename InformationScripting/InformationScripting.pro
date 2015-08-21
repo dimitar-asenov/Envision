@@ -32,6 +32,7 @@ HEADERS += src/precompiled.h \
     src/queries/NodePropertyAdder.h \
     src/queries/UnionOperator.h \
     src/queries/ScriptQuery.h \
+    src/parsing/QueryBuilder.h \
     src/dataformat/Tuple.h \
     src/dataformat/TupleSet.h \
     src/dataformat/Property.h \
@@ -54,6 +55,7 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \
     src/visitors/AllNodesOfType.cpp \
+    src/parsing/QueryBuilder.cpp \
     src/dataformat/Tuple.cpp \
     src/dataformat/TupleSet.cpp \
     src/dataformat/Property.cpp \
