@@ -42,9 +42,16 @@ void FilePersistencePlugin::unload()
 {
 }
 
-void FilePersistencePlugin::selfTest(QString)
+void FilePersistencePlugin::selfTest(QString testid)
 {
-	SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
+	if (testid.isEmpty())
+	{
+		SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
+	}
+	else
+	{
+		SelfTest::TestManager<FilePersistencePlugin>::runTest(testid).printResultStatistics();
+	}
 }
 
 }

@@ -195,7 +195,7 @@ public class Main {
 			+ "      in Envision.\n"
 			+ "\n"
 			+ "   -classFiles\n"
-			+ "      Parse .class fiels instead of .java files.\n"
+			+ "      Parse .class files instead of .java files.\n"
 			+ "\n"
 			+ "   -libs:...\n"
 			+ "      Include the specified comma separeted list of library dependencies in the output project.\n"
