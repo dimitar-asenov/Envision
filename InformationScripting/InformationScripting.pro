@@ -38,7 +38,8 @@ HEADERS += src/precompiled.h \
     src/queries/SubstractNodesOperator.h \
     src/queries/NodePropertyAdder.h \
     src/queries/UnionOperator.h \
-    src/queries/ScriptQuery.h
+    src/queries/ScriptQuery.h \
+    src/parsing/QueryBuilder.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -61,7 +62,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/NodePropertyAdder.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \
-    src/visitors/AllNodesOfType.cpp
+    src/visitors/AllNodesOfType.cpp \
+    src/parsing/QueryBuilder.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
