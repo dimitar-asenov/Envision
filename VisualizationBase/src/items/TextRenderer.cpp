@@ -92,12 +92,24 @@ inline QRectF TextRenderer::nonStaticTextBound()
 void TextRenderer::updateGeometry(int, int)
 {
 	staticText_.setText(currentText());
-
-	// It's important to call this in order to give the static text the correct font. This is used when computing bound.
-	staticText_.prepare(QTransform(), style()->font());
-
 	QFontMetrics qfm(style()->font());
-	auto textSize = this->staticTextSize(qfm);
+	QSize textSize;
+
+	if (drawApproximately_ == Unknown)
+		drawApproximately_ = scene()->approximateUpdate() ? Approximate : Exact;
+
+	if (drawApproximately_ == Approximate)
+	{
+		int approxWidth = currentText().length() * qfm.averageCharWidth();
+		textSize = QSize(approxWidth, qfm.height());
+	}
+	else
+	{
+		// It's important to call this in order to give the static text the correct font. This is used when computing bound.
+		staticText_.prepare(QTransform(), style()->font());
+		textSize = this->staticTextSize(qfm);
+	}
+
 	if (this->hasShape())
 	{
 		this->getShape()->setInnerSize(textSize.width(), textSize.height());
@@ -124,6 +136,12 @@ void TextRenderer::updateGeometry(int, int)
 
 void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+	if (drawApproximately_ == Approximate)
+	{
+		setUpdateNeeded(StandardUpdate);
+		drawApproximately_ = Exact;
+		return;
+	}
 	if (isCategoryHiddenDuringPaint()) return;
 
 	Item::paint(painter, option, widget);
