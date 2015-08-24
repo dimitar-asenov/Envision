@@ -80,7 +80,14 @@ class OOMODEL_API Class : public Super<Declaration>
 
 		QSet<Class*> directSubClasses();
 
+		virtual void buildSymbolTable() override;
+
+	protected:
+		virtual const SymbolTable* symbolTable() const override { return &st_; }
+
 	private:
+		SymbolTable st_;
+
 		Expression* defaultImplicitBaseFromProject() const;
 		bool findInTarget(Expression* target, QSet<Node*>& result, const Model::SymbolMatcher& matcher,
 				SymbolTypes symbolTypes, bool exhaustAllScopes) const;

@@ -163,6 +163,18 @@ bool Class::findSymbols(QSet<Node*>& result, const Model::SymbolMatcher& matcher
 	return found;
 }
 
+void Class::buildSymbolTable()
+{
+	for (auto e : *classes())
+		st_[e->name()] = e;
+
+	for (auto e : *methods())
+		st_[e->name()] = e;
+
+	for (auto e : *fields())
+		st_[e->name()] = e;
+}
+
 Expression* Class::defaultImplicitBaseFromProject() const
 {
 	auto p = parent();

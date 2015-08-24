@@ -50,6 +50,15 @@ class OOMODEL_API Module : public Super<Declaration>
 
 		virtual SymbolTypes symbolType() const override;
 		virtual QList<const Model::UsedLibrary*> usedLibraries() const override;
+
+		virtual void buildSymbolTable() override;
+
+	protected:
+		virtual const SymbolTable* symbolTable() const override { return &st_; }
+
+	private:
+		SymbolTable st_;
+
 };
 
 }
