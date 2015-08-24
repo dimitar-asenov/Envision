@@ -33,48 +33,67 @@ KeyInputHandler* KeyInputHandler::instance()
 	return &instance;
 }
 
-void KeyInputHandler::registerInputHandler(const QString &eventName, QKeySequence keys,
-										   InputState state, const InputHandler handler)
+KeyInputHandler::KeyInputHandler()
 {
-	registerInputHandler(eventName, QList<QKeySequence>({keys}), state, handler);
+	//Read the JSON string
+	QFile file("inputs.json");
+	file.open(QIODevice::ReadOnly);
+	QTextStream read(&file);
+	QString json;
+	while (!read.atEnd()) json = json + read.readLine();
+	auto doc = QJsonDocument::fromJson(json.toUtf8());
+	//Interpret the JSON, set the shortcuts for all possible events
+	auto obj = doc.object();
+	for (auto key : obj.keys())
+	{
+		QJsonObject current = obj[key].toObject();
+		auto state = (InputState) current["state"].toInt();
+		auto shortcuts = current["keys"].toArray();
+		auto handler = new RegisteredHandler{key, {}, state, nullptr};
+		for (auto shortcut : shortcuts)
+			if (shortcut.isString())
+				handler->keys_.append(QKeySequence(shortcut.toString()));
+			else if (shortcut.isDouble())
+				handler->keys_.append(QKeySequence((QKeySequence::StandardKey)shortcut.toInt()));
+		handlers_.append(handler);
+	}
 }
 
-void KeyInputHandler::registerInputHandler(const QString &eventName, QList<QKeySequence> keys,
-										   InputState state, const InputHandler handler)
+void KeyInputHandler::registerInputHandler(const QString &eventName, const InputHandler handler)
 {
-	handlers_.append(RegisteredHandler{eventName, keys, state, handler});
+	for (auto h : handlers_)
+		if (h->eventName_ == eventName)
+			h->handler_ = handler;
 }
 
-void KeyInputHandler::handleKeyInput(Visualization::Item* target, QKeySequence keys)
+bool KeyInputHandler::handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName)
 {
-	bool foundMatch = false;
+	bool handled = false;
 	//If we find an exact match, execute that
 	for (auto handler : handlers_)
-		for (auto key : handler.keys_)
-			if (key.matches(keys) == QKeySequence::ExactMatch
-				&& (handler.state_ == state() || handler.state_ == AnyState))
-			{
-				handler.handler_(target, keys, state());
-				foundMatch = true;
-			}
+		if (handler->eventName_.startsWith(handlerName))
+			for (auto key : handler->keys_)
+				if (key.matches(keys) == QKeySequence::ExactMatch && handler->handler_
+						&& (handler->state_ == state() || handler->state_ == AnyState))
+					handled = handled || handler->handler_(target, keys, state());
+
 	//In case we didn't find an exact match, see if the input is a superset
 	//of an existing registered event
-	if (!foundMatch)
-		for (auto handler : handlers_)
-			for (auto key : handler.keys_)
+	for (auto handler : handlers_)
+		if (handler->eventName_.startsWith(handlerName))
+			for (auto key : handler->keys_)
 			{
 				auto pattern = QRegExp("*" + key.toString() + "*",
 							Qt::CaseInsensitive, QRegExp::Wildcard);
-				if (pattern.exactMatch(keys.toString())
-					&& (handler.state_ == state() || handler.state_ == AnyState))
-				{
-					handler.handler_(target, keys, state());
-					foundMatch = true;
-				}
+				if (pattern.exactMatch(keys.toString()) && handler->handler_
+						&& (handler->state_ == state() || handler->state_ == AnyState))
+					handled = handled || handler->handler_(target, keys, state());
 			}
+
 	//If no match, use the default handler
-	if (!foundMatch && defaultHandler_)
-		defaultHandler_(target, keys, state());
+	if (!handled && defaultHandler_)
+		handled = defaultHandler_(target, keys, state());
+	return handled;
 }
 
 }

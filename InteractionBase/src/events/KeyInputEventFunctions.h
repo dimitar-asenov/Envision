@@ -29,6 +29,10 @@
 #include "interactionbase_api.h"
 #include "KeyInputHandler.h"
 
+namespace Model {
+	class Node;
+}
+
 namespace Visualization {
 	class Item;
 }
@@ -38,8 +42,13 @@ namespace Interaction {
 class KeyInputEventFunctions
 {
 	public:
-		static void deleteItem(Visualization::Item* target, QKeySequence keys, KeyInputHandler::InputState state);
-		static void changePurpose(Visualization::Item* target, QKeySequence keys, KeyInputHandler::InputState state);
+		static bool deleteItem(Visualization::Item* target, QKeySequence keys, KeyInputHandler::InputState state);
+		static bool changePurpose(Visualization::Item* target, QKeySequence keys, KeyInputHandler::InputState state);
+		static bool copy(Visualization::Item* target, QKeySequence keys, KeyInputHandler::InputState state);
+
+	private:
+		static void arrangeNodesForClipboard(QList<const Model::Node*>& list);
+
 };
 
 }
