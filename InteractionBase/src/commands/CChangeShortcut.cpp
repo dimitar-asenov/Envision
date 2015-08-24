@@ -24,59 +24,46 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "CChangeShortcut.h"
+#include "events/KeyInputHandler.h"
 
-#include "interactionbase_api.h"
-
-namespace Visualization {
-	class Item;
-}
 
 namespace Interaction {
 
-class KeyInputHandler
+CChangeShortcut::CChangeShortcut() : Command{"changeShortcut"}{}
+
+bool CChangeShortcut::canInterpret(Visualization::Item*, Visualization::Item*,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
-	public:
-		enum InputState {
-			DefaultState,
-			AnyState,
-			ChangeShortcutState
-		};
+	return commandTokens.size() > 1 && commandTokens.first() == name();
+}
 
-		static KeyInputHandler* instance();
+CommandResult* CChangeShortcut::execute(Visualization::Item*, Visualization::Item*,
+		const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
+{
+	if (commandTokens.size() < 2)
+		return new CommandResult(new CommandError("Please specify a shortcut to change"));
 
-		using InputHandler = bool (*) (Visualization::Item* target, QKeySequence keys, InputState state);
+	auto shortcutName = commandTokens[1] + "." + commandTokens[3];
+	KeyInputHandler::instance()->enterChangeShortcutState(shortcutName);
+	return new CommandResult();
+}
 
-		void registerInputHandler(const QString& eventName, const InputHandler handler);
-		QStringList inputHandlers() const;
-		void setDefaultHandler(const InputHandler handler, InputState state);
-
-		bool handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName);
-
-		void enterChangeShortcutState(const QString& eventName);
-
-		InputState state() const;
-		void setState(InputState state);
-
-	private:
-		KeyInputHandler();
-
-		struct RegisteredHandler {
-			QString eventName_;
-			QList<QKeySequence> keys_;
-			InputState state_;
-			InputHandler handler_;
-		};
-		QList<RegisteredHandler*> handlers_;
-		QHash<InputState, InputHandler> defaultHandlers_;
-
-		QString shortcutToChange_;
-		static bool changeShortcut(Visualization::Item* target, QKeySequence keys, InputState state);
-
-		InputState state_{DefaultState};
-};
-
-inline KeyInputHandler::InputState KeyInputHandler::state() const { return state_; }
-inline void KeyInputHandler::setState(InputState state) { state_ = state; }
+QList<CommandSuggestion*> CChangeShortcut::suggest(Visualization::Item*, Visualization::Item*,
+		const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>&)
+{
+	QList<CommandSuggestion*> results;
+	if (textSoFar.trimmed().startsWith("changeShortcut ", Qt::CaseInsensitive))
+	{
+		auto name = textSoFar.trimmed().mid(15);
+		for (auto eventName : KeyInputHandler::instance()->inputHandlers())
+			if (eventName.startsWith(name))
+				results.append(new CommandSuggestion("changeShortcut " + eventName,
+					"Change shortcut of " + eventName));
+	}
+	else if (name().startsWith(textSoFar.trimmed()))
+		results.append(new CommandSuggestion("changeShortcut ", "Change a shortcut"));
+	return results;
+}
 
 }

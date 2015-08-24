@@ -28,55 +28,26 @@
 
 #include "interactionbase_api.h"
 
-namespace Visualization {
-	class Item;
+#include "commands/Command.h"
+
+namespace Model {
+	class SymbolMatcher;
 }
 
 namespace Interaction {
 
-class KeyInputHandler
+class INTERACTIONBASE_API CChangeShortcut : public Command
 {
 	public:
-		enum InputState {
-			DefaultState,
-			AnyState,
-			ChangeShortcutState
-		};
+		CChangeShortcut();
 
-		static KeyInputHandler* instance();
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 
-		using InputHandler = bool (*) (Visualization::Item* target, QKeySequence keys, InputState state);
-
-		void registerInputHandler(const QString& eventName, const InputHandler handler);
-		QStringList inputHandlers() const;
-		void setDefaultHandler(const InputHandler handler, InputState state);
-
-		bool handleKeyInput(Visualization::Item* target, QKeySequence keys, const QString& handlerName);
-
-		void enterChangeShortcutState(const QString& eventName);
-
-		InputState state() const;
-		void setState(InputState state);
-
-	private:
-		KeyInputHandler();
-
-		struct RegisteredHandler {
-			QString eventName_;
-			QList<QKeySequence> keys_;
-			InputState state_;
-			InputHandler handler_;
-		};
-		QList<RegisteredHandler*> handlers_;
-		QHash<InputState, InputHandler> defaultHandlers_;
-
-		QString shortcutToChange_;
-		static bool changeShortcut(Visualization::Item* target, QKeySequence keys, InputState state);
-
-		InputState state_{DefaultState};
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
 };
-
-inline KeyInputHandler::InputState KeyInputHandler::state() const { return state_; }
-inline void KeyInputHandler::setState(InputState state) { state_ = state; }
 
 }
