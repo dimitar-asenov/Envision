@@ -55,6 +55,8 @@ class KeyInputHandler
 
 		void enterChangeShortcutState(const QString& eventName);
 
+		void saveShortcuts();
+
 		InputState state() const;
 		void setState(InputState state);
 
