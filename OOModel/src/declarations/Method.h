@@ -84,6 +84,16 @@ class OOMODEL_API Method : public Super<Declaration>
 
 		QSet<Method*> callees();
 		QSet<Method*> callers();
+
+		virtual void buildSymbolTable() override;
+
+		virtual Model::Node* findSymbol(QString name) override;
+
+	protected:
+		virtual const SymbolTable* symbolTable() const override { return &st_; }
+
+	private:
+		SymbolTable st_;
 };
 
 inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }

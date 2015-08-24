@@ -480,8 +480,27 @@ class MODELBASE_API Node
 		 */
 		QString toDebugString();
 
+		virtual void buildSymbolTable() {
+			for (auto child: children())
+				child->buildSymbolTable();
+		}
+
+		virtual Node* findSymbol(QString name) {
+			if (auto scope = parentScope()) {
+				return scope->findSymbol(name);
+			}
+			return nullptr;
+		}
+
 	protected:
 		void setPartiallyLoaded();
+
+		using SymbolTable = QHash<QString, Node*>;
+
+
+		virtual const SymbolTable* symbolTable() const { return nullptr; }
+
+		Node* parentScope() const;
 
 	private:
 		Node* parent_{};

@@ -58,4 +58,19 @@ QList<const Model::UsedLibrary*> Module::usedLibraries() const
 	return all;
 }
 
+void Module::buildSymbolTable()
+{
+	for (auto e : *modules())
+		st_[e->name()] = e;
+
+	for (auto e : *classes())
+		st_[e->name()] = e;
+
+	for (auto e : *methods())
+		st_[e->name()] = e;
+
+	for (auto e : *fields())
+		st_[e->name()] = e;
+}
+
 }

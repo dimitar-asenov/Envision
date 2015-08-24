@@ -405,4 +405,16 @@ bool Node::isTypeRegistered(const QString &type)
 	return nodeConstructorRegister.contains(type);
 }
 
+__attribute__((optnone))
+Node* Node::parentScope() const
+{
+	auto parent = this->parent();
+	while (parent) {
+		if (parent->symbolTable())
+			return parent;
+		parent = parent->parent();
+	}
+	return nullptr;
+}
+
 }

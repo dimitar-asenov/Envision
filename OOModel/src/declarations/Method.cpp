@@ -31,6 +31,10 @@
 #include "../types/Type.h"
 #include "expressions/MethodCallExpression.h"
 
+#include "../expressions/VariableDeclarationExpression.h"
+#include "../statements/ExpressionStatement.h"
+#include "../statements/DeclarationStatement.h"
+
 DEFINE_TYPED_LIST(OOModel::Method)
 
 namespace OOModel {
@@ -223,6 +227,41 @@ QSet<Method*> Method::callers()
 		toCheck.append(check->children());
 	}
 	return result;
+}
+
+void Method::buildSymbolTable()
+{
+	for (auto arg : *arguments())
+		st_[arg->name()] = arg;
+
+	for (auto stmt : *items())
+	{
+		OOModel::VariableDeclaration* variableDeclaration = nullptr;
+		OOModel::VariableDeclarationExpression* varDeclarationExpr = nullptr;
+		if (auto exprStmt = DCast<OOModel::ExpressionStatement>(stmt))
+		{
+			varDeclarationExpr = DCast<OOModel::VariableDeclarationExpression>(exprStmt->expression());
+		}
+		else if (auto declStmt = DCast<OOModel::DeclarationStatement>(stmt))
+		{
+			variableDeclaration = DCast<OOModel::VariableDeclaration>(declStmt->declaration());
+		}
+		if (!variableDeclaration && varDeclarationExpr)
+		{
+			variableDeclaration = varDeclarationExpr->decl();
+		}
+
+		if (variableDeclaration)
+			st_[variableDeclaration->name()] = stmt;
+	}
+
+}
+
+Model::Node* Method::findSymbol(QString name)
+{
+	if (auto node = st_[name])
+		return node;
+	return Node::findSymbol(name);
 }
 
 }

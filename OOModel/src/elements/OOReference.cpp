@@ -106,38 +106,42 @@ Model::Node* OOReference::computeTarget() const
 {
 	// TODO Handle the case where the symbol is defined multiple times in a better way
 
-	auto parent = static_cast<ReferenceExpression*>(this->parent());
+	// auto parent = static_cast<ReferenceExpression*>(this->parent());
 
-	SymbolTypes searchForType = ANY_SYMBOL;
-	if ( referenceTargetKind() != ReferenceTargetKind::Callable ) searchForType &= ~METHOD;
+//	SymbolTypes searchForType = ANY_SYMBOL;
+//	if ( referenceTargetKind() != ReferenceTargetKind::Callable ) searchForType &= ~METHOD;
 
-	QSet<Node*> candidateTargets;
-	if (parent->prefix())
-	{
-		// Perform a downward search starting from the target of the prefix
-		auto t = parent->prefix()->type();
-		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
-		{
-			if (sp->symbolProvider())
-			{
-				// It's important below that we change the source to sp->symbolProvider() in the call to findSymbols.
-				// See NameImport.cpp for more info.
+//	QSet<Node*> candidateTargets;
+//	if (parent->prefix())
+//	{
+//		// Perform a downward search starting from the target of the prefix
+//		auto t = parent->prefix()->type();
+//		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
+//		{
+//			if (sp->symbolProvider())
+//			{
+//				// It's important below that we change the source to sp->symbolProvider() in the call to findSymbols.
+//				// See NameImport.cpp for more info.
 
-				sp->symbolProvider()->findSymbols(candidateTargets, name(), sp->symbolProvider(), SEARCH_DOWN,
-						searchForType, searchForType.testFlag(METHOD) ); 	// When search for methods do an exhaustive search.
-																							// This is important for overloads.
-			}
-		}
-		SAFE_DELETE(t);
-	}
-	else
-	{
-		// Perform an upward search starting from the current node
-		// When search for methods do an exhaustive search. This is important for overloads.
-		findSymbols(candidateTargets, name(), this, SEARCH_UP,  searchForType, searchForType.testFlag(METHOD));
-	}
+//				sp->symbolProvider()->findSymbols(candidateTargets, name(), sp->symbolProvider(), SEARCH_DOWN,
+//						searchForType, searchForType.testFlag(METHOD) ); 	// When search for methods do an exhaustive search.
+//																							// This is important for overloads.
+//			}
+//		}
+//		SAFE_DELETE(t);
+//	}
+//	else
+//	{
+//		// Perform an upward search starting from the current node
+//		// When search for methods do an exhaustive search. This is important for overloads.
+//		findSymbols(candidateTargets, name(), this, SEARCH_UP,  searchForType, searchForType.testFlag(METHOD));
+//	}
 
-	return resolveAmbiguity(candidateTargets);
+//	return resolveAmbiguity(candidateTargets);
+
+	auto scope = parentScope();
+	return scope->findSymbol(name());
+
 }
 
 OOReference::ReferenceTargetKind OOReference::referenceTargetKind() const
