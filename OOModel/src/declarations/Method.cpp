@@ -257,4 +257,11 @@ void Method::buildSymbolTable()
 
 }
 
+Model::Node* Method::findSymbol(QString name)
+{
+	if (auto node = st_[name])
+		return node;
+	return Node::findSymbol(name);
+}
+
 }

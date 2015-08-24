@@ -238,7 +238,12 @@ void TreeManager::setRoot(Node* node)
 
 	root_->setRootManager(this);
 
+	qDebug() << "Start building symbol table";
 	root_->buildSymbolTable();
+	qDebug() << "End building symbol table";
+
+	Reference::unresolveAll(root_);
+	Reference::resolvePending();
 
 	emit rootNodeSet(root_);
 }

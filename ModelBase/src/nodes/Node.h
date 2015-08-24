@@ -485,6 +485,13 @@ class MODELBASE_API Node
 				child->buildSymbolTable();
 		}
 
+		virtual Node* findSymbol(QString name) {
+			if (auto scope = parentScope()) {
+				return scope->findSymbol(name);
+			}
+			return nullptr;
+		}
+
 	protected:
 		void setPartiallyLoaded();
 
@@ -492,15 +499,8 @@ class MODELBASE_API Node
 
 
 		virtual const SymbolTable* symbolTable() const { return nullptr; }
-		Node* parentScope() const {
-			auto parent = this->parent();
-			while (parent) {
-				if (parent->symbolTable())
-					return parent;
-				parent = parent->parent();
-			}
-			Q_ASSERT(false);
-		}
+
+		Node* parentScope() const;
 
 	private:
 		Node* parent_{};
