@@ -237,8 +237,8 @@ void TreeManager::setRoot(Node* node)
 	root_ = node;
 
 	root_->setRootManager(this);
-	Reference::unresolveAll(root_);
-	Reference::resolvePending();
+
+	root_->buildSymbolTable();
 
 	emit rootNodeSet(root_);
 }
