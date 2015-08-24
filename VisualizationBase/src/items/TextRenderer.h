@@ -74,6 +74,13 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 
 		bool isHtml() const;
 
+		enum ApproximateUpdate : int
+		{
+			Unknown = 0,
+			Approximate = 1,
+			Exact = 2,
+		};
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -96,7 +103,9 @@ class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 		qreal textXOffset_; //Base line
 		qreal textYOffset_;
 
-		bool editable;
+		ApproximateUpdate drawApproximately_{Unknown};
+
+		bool editable{};
 
 		const static int MIN_TEXT_WIDTH = 10;
 

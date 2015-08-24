@@ -42,6 +42,7 @@ CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}},
 CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
 		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
 {
+	VisualizationManager::instance().mainScene()->setApproximateUpdate(true);
 	auto manager = new Model::TreeManager();
 	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
 
