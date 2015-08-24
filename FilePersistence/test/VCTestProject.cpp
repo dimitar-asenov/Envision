@@ -40,6 +40,7 @@ QString VCTestProject::init()
 	auto testSourceDir = testBaseDir + "/repo-source";
 	auto testRepoDir = testBaseDir + "/" + projectName_;
 
+	QDir{testSourceDir}.removeRecursively();
 	QDir{testSourceDir}.mkpath(testSourceDir);
 	QDir{testRepoDir}.removeRecursively();
 

@@ -62,30 +62,84 @@ std::shared_ptr<GenericTree> Merge::mergedTree()
 Merge::Merge(QString revision, bool fastForward, GitRepository* repository)
 	: repository_{repository}
 {
-	// TODO replace with correct types
-	conflictTypes_ = QSet<QString>::fromList(QList<QString>{"TestConflictType",
-																			  "TestListType",
-																			  "TestUnorderedType",
-																			  "ListElement",
-																			  "project",
-																			  "package",
-																			  "class",
-																			  "fieldList",
-																			  "methodList",
-																			  "field",
-																			  "method",
-																			  "Method",
-																			  "loop",
-																			  "TypedListOfMethod"});
-	listTypes_ = QSet<QString>::fromList(QList<QString>{"TestListType",
-																		 "TestNoConflictList",
-																		 "project",
-																		 "package",
-																		 "fieldList",
-																		 "methodList",
-																		 "method"});
-	unorderedTypes_ = QSet<QString>::fromList(QList<QString>{"TestUnorderedType",
-																				"TypedListOfMethod"});
+	// TODO: fill those lists correctly
+	const QStringList listTypes = {"StatementItemList",
+					  "TypedListOfResult",
+					  "TypedListOfFormalTypeArgument",
+					  "TypedListOfExpression",
+					  "TypedListOfDeclaration",
+					  "TypedListOfMemberInitializer",
+					  "TypedListOfEnumerator"
+					 };
+
+	const QStringList unorderedTypes = {"TypedListOfClass",
+							 "TypedListOfMethod",
+							 "TypedListOfFormalArgument",
+							 "TypedListOfFormalResult",
+							 "TypedListOfField",
+							 "TypedListOfUsedLibrary"
+							};
+
+
+	const QStringList statements = {"Block",
+											  "BreakStatement",
+											  "CaseStatement",
+											  "ContinueStatement",
+											  "DeclarationStatement",
+											  "ExpressionStatement",
+											  "ForEachStatement",
+											  "IfStatement",
+											  "LoopStatement",
+											  "ReturnStatement",
+											  "Statement",
+											  "SwitchStatement",
+											  "TryCatchFinallyStatement"};
+
+	const QStringList declarations = {"Class",
+												 "Declaration",
+												 "ExplicitTemplateInstantiation",
+												 "Field",
+												 "Method",
+												 "Module",
+												 "NameImport",
+												 "Project",
+												 "TypeAlias",
+												 "VariableDeclaration"};
+
+	const QStringList extraUnitTypes = {"CommentStatementItem",
+													"CatchClause",
+													"StatementItemList"};
+
+	const QStringList debugAndTestUnitTypes = {"TestConflictType",
+															 "TestListType",
+															 "TestUnorderedType",
+															 "ListElement",
+															 "project",
+															 "package",
+															 "class",
+															 "fieldList",
+															 "methodList",
+															 "field",
+															 "method",
+															 "Method",
+															 "loop",
+															 "TypedListOfMethod"};
+
+	const QStringList debugAndTestListTypes = {"TestListType",
+															 "TestNoConflictList",
+															 "project",
+															 "package",
+															 "fieldList",
+															 "methodList",
+															 "method"};
+
+	const QStringList debugAndTestUnordered = {"TestUnorderedType",
+															 "TypedListOfMethod"};
+
+	listTypes_ = QSet<QString>::fromList(listTypes + debugAndTestListTypes);
+	unorderedTypes_ = QSet<QString>::fromList(unorderedTypes + debugAndTestUnordered);
+	conflictTypes_ = listTypes_ + unorderedTypes_ +
+			QSet<QString>::fromList(statements + declarations + extraUnitTypes + debugAndTestUnitTypes);
 
 
 	headCommitId_ = repository_->getSHA1("HEAD");
@@ -209,20 +263,11 @@ void Merge::performTrueMerge()
 	for (auto changeIt = cdgA.changes().constBegin(); changeIt != cdgA.changes().constEnd(); ++changeIt)
 	{
 		const auto& change = changeIt.value();
-		if (
-			 (change->nodeA() &&
-			  (listTypes_.contains(change->nodeA()->type()) ||
-				unorderedTypes_.contains(change->nodeA()->type()))
-			  )
-			 ||
-			 (change->nodeA() &&
-			  (listTypes_.contains(change->nodeA()->type()) ||
-				unorderedTypes_.contains(change->nodeA()->type()))
-			  )
-			 )
+		auto list = treeMerged_->find(change->nodeId());
+		if (list && (listTypes_.contains(list->type()) ||
+						 unorderedTypes_.contains(list->type())))
 		{
-			// list is a list container that has changed
-			auto list = treeMerged_->find(change->nodeId());
+			// list is a list container that has changed and exists in the merged tree
 			int gapSize = 0;
 			for (int curIdx = 0; curIdx < list->children().size(); ++curIdx)
 			{
@@ -233,6 +278,8 @@ void Merge::performTrueMerge()
 			}
 		}
 	}
+
+	//FIXME: symmetry?
 
 	stage_ = Stage::BuiltMergedTree;
 
