@@ -33,6 +33,8 @@
 #include "declarations/VField.h"
 #include "declarations/VNameImport.h"
 #include "declarations/VMetaDefinition.h"
+#include "declarations/VMetaCallMapping.h"
+#include "declarations/VMetaBinding.h"
 
 #include "elements/VEnumerator.h"
 #include "elements/VFormalArgument.h"
@@ -41,6 +43,7 @@
 #include "elements/VStatementItemList.h"
 #include "elements/VCatchClause.h"
 #include "elements/VCommentStatementItem.h"
+#include "elements/VFormalMetaArgument.h"
 
 #include "expressions/allOOExpressionVisualizations.h"
 

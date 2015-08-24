@@ -24,46 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
+#include "VMetaCallMapping.h"
+#include "OOVisualizationException.h"
 
-#if defined __cplusplus
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-// std includes
-#include <algorithm>
-#include <memory>
-#include <queue>
+using namespace Visualization;
+using namespace OOModel;
 
-// clang includes
-#include <clang/AST/ASTConsumer.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclTemplate.h>
-#include <clang/AST/Type.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Frontend/FrontendAction.h>
-#include <clang/Lex/MacroInfo.h>
-#include <clang/Lex/MacroArgs.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Tooling/Tooling.h>
+namespace OOVisualization {
 
-// Qt includes
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonParseError>
-#include <QtCore/QList>
-#include <QtCore/QRegularExpression>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+ITEM_COMMON_DEFINITIONS(VMetaCallMapping, "item")
 
-#endif
+VMetaCallMapping::VMetaCallMapping(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
 
-#endif // PRECOMPILED_H
+void VMetaCallMapping::initializeForms()
+{
+	addForm(new GridLayoutFormElement())
+		->setHorizontalSpacing(3)
+		->setNoBoundaryCursors([](Item*){return true;})
+		->setNoInnerCursors([](Item*){return true;})
+		->put(0, 0, item(&I::name_, [](I* v){return v->node()->nameNode();}))
+		->put(2, 0, item<Static>(&I::equivalenceSymbol_, [](I* v){ return &v->style()->equivalenceSymbol();}))
+		->put(3, 0, item(&I::value_, [](I* v){return v->node()->value();}));
+}
 
+}

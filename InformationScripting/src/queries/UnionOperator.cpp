@@ -24,46 +24,32 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
+#include "UnionOperator.h"
 
-#if defined __cplusplus
+#include "../graph/Graph.h"
+#include "../graph/InformationNode.h"
 
-// std includes
-#include <algorithm>
-#include <memory>
-#include <queue>
+namespace InformationScripting {
 
-// clang includes
-#include <clang/AST/ASTConsumer.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclTemplate.h>
-#include <clang/AST/Type.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Frontend/FrontendAction.h>
-#include <clang/Lex/MacroInfo.h>
-#include <clang/Lex/MacroArgs.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Tooling/Tooling.h>
+QList<Graph*> UnionOperator::execute(QList<Graph*> input)
+{
+	if (input.size() <= 1) return input;
 
-// Qt includes
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonParseError>
-#include <QtCore/QList>
-#include <QtCore/QRegularExpression>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+	auto outGraph = input.takeFirst();
+	for (auto inGraph : input)
+	{
+		QHash<InformationNode*, InformationNode*> convertedNodes;
+		for (auto node : inGraph->nodes())
+			convertedNodes[node] = outGraph->add(new InformationNode(*node));
 
-#endif
+		for (auto edge : inGraph->edges())
+			outGraph->addEdge(convertedNodes[edge->from()], convertedNodes[edge->to()],
+					edge->name(), edge->orientation(), false);
 
-#endif // PRECOMPILED_H
+		SAFE_DELETE(inGraph);
+	}
 
+	return {outGraph};
+}
+
+} /* namespace InformationScripting */

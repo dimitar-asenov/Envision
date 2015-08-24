@@ -183,6 +183,7 @@ void Scene::updateNow()
 	// Update Top level items
 	for (auto item : topLevelItems_)
 		item->updateSubtree();
+	setApproximateUpdate(false);
 
 	Core::Profiler::stop("Scene ViewItem update " + QString::number(updatesAlreadyProfiled));
 

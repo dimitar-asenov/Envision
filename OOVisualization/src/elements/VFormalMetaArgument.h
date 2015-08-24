@@ -24,46 +24,30 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
+#pragma once
 
-#if defined __cplusplus
+#include "../oovisualization_api.h"
+#include "VFormalMetaArgumentStyle.h"
 
-// std includes
-#include <algorithm>
-#include <memory>
-#include <queue>
+#include "OOModel/src/elements/FormalMetaArgument.h"
 
-// clang includes
-#include <clang/AST/ASTConsumer.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclTemplate.h>
-#include <clang/AST/Type.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Frontend/FrontendAction.h>
-#include <clang/Lex/MacroInfo.h>
-#include <clang/Lex/MacroArgs.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Tooling/Tooling.h>
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-// Qt includes
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonParseError>
-#include <QtCore/QList>
-#include <QtCore/QRegularExpression>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+namespace OOVisualization {
 
-#endif
+class OOVISUALIZATION_API VFormalMetaArgument
+: public Super<Visualization::ItemWithNode<VFormalMetaArgument, Visualization::DeclarativeItem<VFormalMetaArgument>,
+		OOModel::FormalMetaArgument>>
+{
+	ITEM_COMMON(VFormalMetaArgument)
 
-#endif // PRECOMPILED_H
+	public:
+		VFormalMetaArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
+		static void initializeForms();
+
+	private:
+		Visualization::Item* name_{};
+};
+}

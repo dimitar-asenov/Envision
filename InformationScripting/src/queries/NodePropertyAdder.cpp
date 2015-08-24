@@ -24,46 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
+#include "NodePropertyAdder.h"
 
-#if defined __cplusplus
+#include "../graph/InformationNode.h"
 
-// std includes
-#include <algorithm>
-#include <memory>
-#include <queue>
+namespace InformationScripting {
 
-// clang includes
-#include <clang/AST/ASTConsumer.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclTemplate.h>
-#include <clang/AST/Type.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Frontend/FrontendAction.h>
-#include <clang/Lex/MacroInfo.h>
-#include <clang/Lex/MacroArgs.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Tooling/Tooling.h>
+NodePropertyAdder::NodePropertyAdder(Graph::NodeCondition condition, const QString& propertyName, Property value)
+ : condition_{condition}, name_{propertyName}, value_{value}
+{}
 
-// Qt includes
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonParseError>
-#include <QtCore/QList>
-#include <QtCore/QRegularExpression>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+QList<Graph*> NodePropertyAdder::execute(QList<Graph*> input)
+{
+	QList<Graph*> results;
+	for (auto g : input)
+	{
+		for (auto node : g->nodes(condition_))
+			node->insert(name_, value_);
+		results.push_back(g);
+	}
+	return results;
+}
 
-#endif
-
-#endif // PRECOMPILED_H
-
+} /* namespace InformationScripting */

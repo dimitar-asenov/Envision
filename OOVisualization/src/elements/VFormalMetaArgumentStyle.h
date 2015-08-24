@@ -24,46 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
+#pragma once
 
-#if defined __cplusplus
+#include "../oovisualization_api.h"
 
-// std includes
-#include <algorithm>
-#include <memory>
-#include <queue>
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 
-// clang includes
-#include <clang/AST/ASTConsumer.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclTemplate.h>
-#include <clang/AST/Type.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Frontend/FrontendAction.h>
-#include <clang/Lex/MacroInfo.h>
-#include <clang/Lex/MacroArgs.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Tooling/Tooling.h>
+namespace OOVisualization {
 
-// Qt includes
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonParseError>
-#include <QtCore/QList>
-#include <QtCore/QRegularExpression>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+class OOVISUALIZATION_API VFormalMetaArgumentStyle : public Super<Visualization::DeclarativeItemBaseStyle>
+{
+	public:
+		virtual ~VFormalMetaArgumentStyle() override;
+};
 
-#endif
-
-#endif // PRECOMPILED_H
-
+}

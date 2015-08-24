@@ -24,21 +24,67 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ScriptQuery.h"
 
-#include "../informationscripting_api.h"
+#include "../wrappers/AstApi.h"
+#include "../wrappers/NodeApi.h"
+#include "../helpers/BoostPythonHelpers.h"
 
-#include "Property.h"
-#include "PropertyMap.h"
+#include "../graph/Graph.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+ScriptQuery::ScriptQuery(const QString& scriptPath)
+	: scriptPath_{scriptPath}
+{}
+
+void ScriptQuery::initPythonEnvironment()
 {
-	public:
-		InformationNode() = default;
-		InformationNode(QList<QPair<QString, Property>> initialValues);
-		InformationNode(const InformationNode& other);
-};
+	PyImport_AppendInittab("AstApi", PyInit_AstApi);
+	PyImport_AppendInittab("NodeApi", PyInit_NodeApi);
+	Py_Initialize();
+}
+
+void ScriptQuery::unloadPythonEnvironment()
+{
+	Py_Finalize();
+}
+
+QList<Graph*> ScriptQuery::execute(QList<Graph*> input)
+{
+	using namespace boost;
+
+	QList<Graph*> result;
+
+	try {
+		python::object main_module = python::import("__main__");
+		python::dict main_namespace = python::extract<python::dict>(main_module.attr("__dict__"));
+
+		python::object astApi = python::import("AstApi");
+		python::object nodeApi = python::import("NodeApi");
+		python::object sys = python::import("sys");
+
+		// TODO we have to consider how we can make sure that we don't have any memory leaks here:
+		// In general we need to figure out memory management for the scripting environment, where ownership is clearly
+		// defined.
+		// (see also: http://stackoverflow.com/questions/28653886/delete-a-pointer-in-stdvector-exposed-by-boostpython)
+		python::list inputGraphs;
+		for (auto g : input)
+			inputGraphs.append(python::ptr(g));
+
+		main_namespace["inputs"] = inputGraphs;
+
+		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);
+		// Workaround to get output
+		sys.attr("stdout").attr("flush")();
+
+		python::list results = python::extract<python::list>(main_namespace["results"]);
+		python::stl_input_iterator<Graph*> begin(results), end;
+		result = QList<Graph*>::fromStdList(std::list<Graph*>(begin, end));
+	} catch (python::error_already_set ) {
+		qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
+	}
+	return result;
+}
 
 } /* namespace InformationScripting */

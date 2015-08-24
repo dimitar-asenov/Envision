@@ -24,46 +24,26 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H
-#define PRECOMPILED_H
+#pragma once
 
-#if defined __cplusplus
+#include "../informationscripting_api.h"
 
-// std includes
-#include <algorithm>
-#include <memory>
-#include <queue>
+#include "Query.h"
 
-// clang includes
-#include <clang/AST/ASTConsumer.h>
-#include <clang/AST/DeclCXX.h>
-#include <clang/AST/DeclTemplate.h>
-#include <clang/AST/Type.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Frontend/FrontendAction.h>
-#include <clang/Lex/MacroInfo.h>
-#include <clang/Lex/MacroArgs.h>
-#include <clang/Lex/Preprocessor.h>
-#include <clang/Tooling/Tooling.h>
+namespace InformationScripting {
 
-// Qt includes
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QDirIterator>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QJsonDocument>
-#include <QtCore/QJsonObject>
-#include <QtCore/QJsonParseError>
-#include <QtCore/QList>
-#include <QtCore/QRegularExpression>
-#include <QtCore/QSet>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+class ScriptQuery : public Query
+{
+	public:
+		ScriptQuery(const QString& scriptPath);
 
-#endif
+		static void initPythonEnvironment();
+		static void unloadPythonEnvironment();
 
-#endif // PRECOMPILED_H
+		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
+	private:
+		QString scriptPath_;
+};
+
+} /* namespace InformationScripting */

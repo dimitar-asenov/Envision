@@ -38,6 +38,10 @@ class Graph
 {
 	public:
 		~Graph();
+
+		Graph() = default;
+		Graph(const Graph& other);
+
 		/**
 		 * Each information source can register 1 NodeHash function. The function takes a node as input,
 		 * and should return a pair of the hash value and a bool if the function could succesfully hash the value.
@@ -70,7 +74,8 @@ class Graph
 		 * Note: The graph owns the returned edge.
 		 */
 		InformationEdge* addEdge(InformationNode* from, InformationNode* to, const QString& name,
-													InformationEdge::Orientation orientation = InformationEdge::Orientation::Directed);
+										 InformationEdge::Orientation orientation = InformationEdge::Orientation::Directed,
+										 bool incrementCountIfExisting = true);
 
 		/**
 		 * Removes the \a node and all edges to it.

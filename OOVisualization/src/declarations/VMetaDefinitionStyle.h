@@ -42,6 +42,7 @@ class OOVISUALIZATION_API VMetaDefinitionStyle : public Super<Visualization::Dec
 		Property<Visualization::TextStyle> name{this, "name"};
 		Property<Visualization::StaticStyle> icon{this, "icon"};
 		Property<Visualization::VListStyle> declarations{this, "declarations"};
+		Property<Visualization::VListStyle> arguments{this, "arguments"};
 };
 
 }

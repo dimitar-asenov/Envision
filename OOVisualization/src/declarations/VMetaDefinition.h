@@ -59,7 +59,7 @@ class OOVISUALIZATION_API VMetaDefinition
 	private:
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
-
+		Visualization::VList* arguments_{};
 		Visualization::VList* metaBindings_{};
 		Item* comment_{};
 };

@@ -208,7 +208,7 @@
 			</outline>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<direction>1</direction>
+			<direction>2</direction>
 			<spaceBetweenElements>10</spaceBetweenElements>
 			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		</itemsStyle>
