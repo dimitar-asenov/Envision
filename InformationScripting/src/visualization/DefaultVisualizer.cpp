@@ -100,6 +100,8 @@ void DefaultVisualizer::visualize(Graph* g)
 		};
 		auto nodes = g->nodes(condition);
 
+		bool hasColors = std::any_of(nodes.begin(), nodes.end(), [](InformationNode* n) {return n->contains("color");});
+
 		for (auto informationNode : nodes)
 		{
 			Model::Node* node = (*informationNode)["ast"];
@@ -107,13 +109,22 @@ void DefaultVisualizer::visualize(Graph* g)
 			Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
 			auto item = *nodeVisualization;
 
-			QString styleArg;
+			QString styleArg{"redHighlight"};
 			auto colorIt = informationNode->find("color");
-			if (colorIt != informationNode->end()) styleArg = colorIt->second.operator QString();
+			if (hasColors && colorIt != informationNode->end())
+			{
+				styleArg = colorIt->second.operator QString() + "Highlight";
 
-			auto overlay = new Visualization::SelectionOverlay(
-						item, Visualization::SelectionOverlay::itemStyles().get(styleArg));
-			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
+				auto overlay = new Visualization::SelectionOverlay(
+							item, Visualization::SelectionOverlay::itemStyles().get(styleArg));
+				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
+			}
+			else if (!hasColors)
+			{
+				auto overlay = new Visualization::SelectionOverlay(
+							item, Visualization::SelectionOverlay::itemStyles().get(styleArg));
+				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
+			}
 		}
 	}
 }

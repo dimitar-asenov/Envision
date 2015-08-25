@@ -143,13 +143,13 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	}
 	else if (command == "color")
 	{
-		auto colorMatcher = new NodePropertyAdder("color", QString("update"),
+		auto colorMatcher = new NodePropertyAdder("color", QString("blue"),
 			[](const InformationNode* node) {
 				auto it = node->find("ast");
 				if (it != node->end()) {
 					Model::Node* astNode = it->second;
-					if (auto classNode = DCast<OOModel::Class>(astNode))
-						return classNode->name().contains("Matcher");
+					if (auto methodNode = DCast<OOModel::Method>(astNode))
+						return methodNode->name().contains("brackets");
 				}
 				return false;
 		});
@@ -159,19 +159,19 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 				auto it = node->find("ast");
 				if (it != node->end()) {
 					Model::Node* astNode = it->second;
-					if (auto classNode = DCast<OOModel::Class>(astNode))
-						return classNode->name().contains("Description");
+					if (auto methodNode = DCast<OOModel::Method>(astNode))
+						return methodNode->name().contains("quotes");
 				}
 				return false;
 		});
 
-		auto allClasses = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+		auto methods = new AstQuery(AstQuery::QueryType::Methods, node, {});
 		auto unionOp = new UnionOperator();
 
 		auto composite = new CompositeQuery();
 
-		composite->connectQuery(allClasses, colorMatcher);
-		composite->connectQuery(allClasses, colorDescription);
+		composite->connectQuery(methods, colorMatcher);
+		composite->connectQuery(methods, colorDescription);
 
 		composite->connectQuery(colorMatcher, unionOp);
 		composite->connectQuery(colorDescription, 0, unionOp, 1);

@@ -1,0 +1,9 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/SelectionOverlay/red">
+	<shape>
+		Box
+		<outline>
+			<width>15.0</width>
+		</outline>
+	</shape>
+</style>
