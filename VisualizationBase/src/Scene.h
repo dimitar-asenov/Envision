@@ -185,7 +185,9 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
-		QHash<QString, OverlayGroup> overlayGroups_;
+
+		// We use pointers for the value as we need a way to detach groups before deleting them.
+		QHash<QString, OverlayGroup*> overlayGroups_;
 
 		ViewItemManager* viewItemManager_{};
 
@@ -242,5 +244,7 @@ inline ViewItemManager* Scene::viewItems() const { return viewItemManager_; }
 
 inline void Scene::setApproximateUpdate(bool b) { approximateUpdate_ = b; }
 inline bool Scene::approximateUpdate() { return approximateUpdate_; }
+
+inline QList<OverlayGroup*> Scene::allOverlayGroups() const {return overlayGroups_.values();}
 
 }
