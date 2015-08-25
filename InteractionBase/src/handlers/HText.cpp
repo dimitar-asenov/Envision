@@ -49,62 +49,38 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
 	if (tr->isHtml()) return GenericHandler::keyPressEvent(target, event);
 
-	if (event->modifiers() == Qt::ControlModifier)
+	if (event->matches(QKeySequence::Copy))
 	{
-		if (target->scene()->selectedItems().size() == 0)
-		{
-			switch (event->key())
-			{
-				case Qt::Key_C:
-					{
-						QString text = tr->selectedText();
-
-						if (!text.isEmpty()) QApplication::clipboard()->setText(text);
-						else GenericHandler::keyPressEvent(target, event);
-					}
-					break;
-				case Qt::Key_V:
-					{
-						if ( tr->isEditable() )
-						{
-							erase(target, true, true);
-							target->updateSubtree();
-							insertText(target, QApplication::clipboard()->text());
-						}
-					}
-					break;
-				default:
-					GenericHandler::keyPressEvent(target, event);
-					break;
-			}
-		}
-		else GenericHandler::keyPressEvent(target, event);
+		QString text = tr->selectedText();
+		if (!text.isEmpty()) QApplication::clipboard()->setText(text);
 	}
-	else if ( ! (event->modifiers() & Qt::ControlModifier))
+	else if (event->matches(QKeySequence::Paste) && tr->isEditable())
 	{
-		if ( tr->isEditable())
+		erase(target, true, true);
+		target->updateSubtree();
+		insertText(target, QApplication::clipboard()->text());
+	}
+	else if ( !(event->modifiers() & Qt::ControlModifier) && tr->isEditable())
+	{
+		switch (event->key())
 		{
-			switch (event->key())
-			{
-				case Qt::Key_Backspace:
-					erase(target, false, false);
-					break;
-				case Qt::Key_Delete:
-					erase(target, true, false);
-					break;
-				case Qt::Key_Tab:
-					GenericHandler::keyPressEvent(target, event);
-					break;
-
-				default:
-				{
-					if (!event->text().isEmpty() && event->text().at(0).isPrint() ) insertText(target, event->text());
-					else GenericHandler::keyPressEvent(target, event);
-				}
+			case Qt::Key_Backspace:
+				erase(target, false, false);
 				break;
+			case Qt::Key_Delete:
+				erase(target, true, false);
+				break;
+			case Qt::Key_Tab:
+				GenericHandler::keyPressEvent(target, event);
+				break;
+
+			default:
+			{
+				if (!event->text().isEmpty() && event->text().at(0).isPrint() ) insertText(target, event->text());
+				else GenericHandler::keyPressEvent(target, event);
 			}
+			break;
 		}
-		else GenericHandler::keyPressEvent(target, event);
 	}
 	else GenericHandler::keyPressEvent(target, event);
 
