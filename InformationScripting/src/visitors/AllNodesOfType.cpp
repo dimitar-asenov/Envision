@@ -24,20 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AllNodesOfType.h"
 
-#include "../informationscripting_api.h"
-
-namespace Model {
-	class Node;
-}
+#include "ModelBase/src/nodes/Node.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AllNodesOfType
+QList<Model::Node*> AllNodesOfType::allNodesOfType(Model::Node* from, const QString& typeName)
 {
-	public:
-		static QList<Model::Node*> allNodesOfType(Model::Node* from, const QString& typeName);
-};
+	QList<Model::Node*> result;
+	QList<Model::Node*> workStack{from};
+
+	while (!workStack.empty())
+	{
+		auto node = workStack.takeLast();
+		if (node->typeName() == typeName) result.push_back(node);
+		workStack << node->children();
+	}
+	return result;
+}
 
 } /* namespace InformationScripting */
