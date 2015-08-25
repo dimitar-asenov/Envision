@@ -480,7 +480,22 @@ public class ASTConverter {
 	    	if (rs.getExpression() != null)
 	    		node.child("values").add(expression(rs.getExpression(), "0"));
 	    	
-	    } else if ( s instanceof SuperConstructorInvocation); // TODO: Implement this
+	    }
+	    else if ( s instanceof SuperConstructorInvocation)
+		{
+			// TODO: Support more elaborate super constructors
+			node = new Node(null, "ExpressionStatement", name);
+
+			// This code is similar to MethodInvocation
+			Node call = new Node(null, "MethodCallExpression", "expression");
+			call.setChild("callee", new Node(null, "SuperExpression", "callee"));
+
+			SuperConstructorInvocation si = (SuperConstructorInvocation) s;
+			for (Expression arg : (List<Expression>) si.arguments())
+				call.child("arguments").add(expression(arg, Integer.toString(call.child("arguments").numChildren())));
+
+			node.setChild("expression", call);
+		}
 	    else if ( s instanceof SwitchStatement)
 	    {
 	    	node = new Node(null, "SwitchStatement", name);
