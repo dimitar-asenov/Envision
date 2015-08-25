@@ -49,12 +49,15 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
 	if (tr->isHtml()) return GenericHandler::keyPressEvent(target, event);
 
-	if (event->matches(QKeySequence::Copy))
+	auto listIsSelected =  target->scene()->selectedItems().size() == 1
+			&& target->scene()->selectedItems().first() == target;
+
+	if (listIsSelected && event->matches(QKeySequence::Copy))
 	{
 		QString text = tr->selectedText();
 		if (!text.isEmpty()) QApplication::clipboard()->setText(text);
 	}
-	else if (event->matches(QKeySequence::Paste) && tr->isEditable())
+	else if (listIsSelected && event->matches(QKeySequence::Paste) && tr->isEditable())
 	{
 		erase(target, true, true);
 		target->updateSubtree();
