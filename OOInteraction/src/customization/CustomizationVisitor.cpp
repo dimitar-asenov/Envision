@@ -91,7 +91,8 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 							if (call->arguments()->size() == 1)
 								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName());
 							else if (auto numArgs = dynamic_cast<OOModel::IntegerLiteral*>(call->arguments()->last()))
-								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName(), numArgs->value());
+								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName(),
+																		 numArgs->valueAsInt());
 
 							if (command)
 							{

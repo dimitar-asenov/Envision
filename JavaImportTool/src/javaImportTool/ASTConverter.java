@@ -1056,20 +1056,11 @@ public class ASTConverter {
 			boolean isReal = hasExponent || num.contains(".")
 					|| (!isHex && (num.endsWith("f") || num.endsWith("F") || num.endsWith("d")) );
 			
-			if (isReal)
-			{
-				node = new Node(null, "FloatLiteral", name);
-				node.child("value").setDoubleValue(Double.parseDouble(num));
-			}
-			else
-			{
-				if (num.endsWith("L") || num.endsWith("l")) num = num.substring(0,num.length()-1);
-				if (isHex) num = num.substring(2,num.length());
-
-				node = new Node(null, "IntegerLiteral", name);
-				node.child("value").setLongValue( new BigInteger(num, isHex ? 16 : 10).longValue() );
-			}
-		} else if (e instanceof ParenthesizedExpression)
+			if (isReal) node = new Node(null, "FloatLiteral", name);
+			else node = new Node(null, "IntegerLiteral", name);
+			node.child("value").setStringValue(num);
+		}
+		else if (e instanceof ParenthesizedExpression)
 		{
 			ParenthesizedExpression pe = (ParenthesizedExpression) e;
 			node = new Node(null, "UnaryOperation", name);
