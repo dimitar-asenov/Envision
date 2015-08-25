@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2015 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -23,35 +23,10 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-
-#pragma once
-
-#include "../visualizationbase_api.h"
-#include "../items/ItemStyle.h"
-#include "../overlays/Overlay.h"
 #include "ArrowOverlayStyle.h"
 
 namespace Visualization {
 
-/**
- * An overlay to draw an arrow from the first item to the second item.
- */
-class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
-{
-	ITEM_COMMON(ArrowOverlay)
+ArrowOverlayStyle::~ArrowOverlayStyle(){}
 
-	public:
-		ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style = itemStyles().get());
-		virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-		QPoint lineFrom_{};
-		QPoint lineTo_{};
-		bool invertArrow_{};
-};
-
-}
+} /* namespace Visualization */
