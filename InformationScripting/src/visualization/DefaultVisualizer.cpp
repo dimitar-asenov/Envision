@@ -28,6 +28,7 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
+#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
@@ -49,6 +50,13 @@ DefaultVisualizer& DefaultVisualizer::instance()
 
 void DefaultVisualizer::visualize(Graph* g)
 {
+	// First remove all existing overlays:
+	for (auto scene : Visualization::Scene::allScenes())
+	{
+		scene->removeOverlayGroup(HIGHLIGHT_OVERLAY_GROUP);
+		scene->removeOverlayGroup(ARROW_OVERLAY_GROUP);
+	}
+	// Now draw the new stuff
 	QList<InformationEdge*> edges = g->edges();
 	if (!edges.empty())
 	{
