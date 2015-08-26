@@ -9,7 +9,7 @@ gumtree="java -cp ${gumtreePath}gumtree.jar com.github.gumtreediff.client.Run -c
 idpatcher=~/Envision/misc/idPatcher.py
 
 envision=~/Envision/DebugBuild/Envision
-testdir=~/Envision/FilePersistence/test/persisted/version-control/TestMerge_WorkflowTest/
+testdir=~/Envision/FilePersistence/test/persisted/version-control/TestMerge_WorkflowTest
 
 workDir=~/VC_Eval/
 projectName=SyntheticExample
@@ -45,17 +45,19 @@ $jit TestMerge "${projectName}_dev/" dev
 $jit TestMerge "${projectName}_base/" base
 
 # Generate patch files
-$gumtree base/TestMerge/TestMerge master/TestMerge/TestMerge
-$gumtree base/TestMerge/TestMerge dev/TestMerge/TestMerge
+$gumtree base/TestMerge/TestMerge.env master/TestMerge/TestMerge.env
+$gumtree base/TestMerge/TestMerge.env dev/TestMerge/TestMerge.env
 
 # Apply patches
-$idpatcher master/TestMerge/TestMerge
-$idpatcher dev/TestMerge/TestMerge
+$idpatcher master/TestMerge/TestMerge.env
+$idpatcher dev/TestMerge/TestMerge.env
 
 # Move to Envision test directory
-cp base/TestMerge/TestMerge "${testdir}master_a_(base)_TestMerge"
-cp master/TestMerge/TestMerge "${testdir}master_b_(master)_TestMerge"
-cp dev/TestMerge/TestMerge "${testdir}dev_a_master_a_(dev)_TestMerge"
+cp base/TestMerge/TestMerge.env "${testdir}/master_a_(base)_TestMerge"
+cp master/TestMerge/TestMerge.env "${testdir}/master_b_(master)_TestMerge"
+cp dev/TestMerge/TestMerge.env "${testdir}/dev_a_master_a_(dev)_TestMerge"
+
+~/Envision/FilePersistence/test/persisted/version-control/create-test-git-repo.py $testdir /tmp/Envision/FilePersistence/tests/VCTestProject/TestMerge_WorkflowTest/TestMerge/
 
 # Run test
 #$envision -graphicssystem raster --test FilePersistence:WorkflowTest

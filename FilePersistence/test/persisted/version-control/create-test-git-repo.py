@@ -4,7 +4,7 @@ import os
 import glob
 import re
 from subprocess import call
-from shutil import copyfile
+from shutil import copyfile, rmtree
 import argparse
 
 argParser = argparse.ArgumentParser('Generate a git repository based on files')
@@ -44,6 +44,7 @@ files = glob.glob(args.sourceDir + "/*")
 files.sort(compareFileNames)
 
 #Initialize git repo
+rmtree(args.destDir)
 os.mkdir(args.destDir)
 call(['git','init', args.destDir])
 
