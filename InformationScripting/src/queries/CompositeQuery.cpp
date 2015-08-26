@@ -69,6 +69,8 @@ QList<Graph*> CompositeQuery::execute(QList<Graph*> input)
 			// TODO: this shouldn't be an assertion later, but rather some error which is presented to the user.
 			Q_ASSERT(outIndex < currentNode->calculatedOutputs_.size());
 
+			bool cloneOutput = outputMapping.size() > 1;
+
 			for (auto receiverIt = outputMapping.begin(); receiverIt != outputMapping.end(); ++receiverIt)
 			{
 				auto receiver = *receiverIt;
@@ -79,7 +81,9 @@ QList<Graph*> CompositeQuery::execute(QList<Graph*> input)
 				});
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
 				auto output = currentNode->calculatedOutputs_[outIndex];
-				if (receiverIt != outputMapping.begin())
+				// The last receiver can get the original graph. Everyone before needs a clone.
+				// If the first would receive the original the others would get a clone of the modified graph.
+				if (cloneOutput && (receiverIt + 1 != outputMapping.end()))
 					output = new Graph(*output);
 
 				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
