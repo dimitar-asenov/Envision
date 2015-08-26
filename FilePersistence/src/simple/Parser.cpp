@@ -261,7 +261,23 @@ QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 		}
 		stream << '\n';
 
-		for (auto child : node->children())
+		auto labelComparator = [](GenericNode* const node1, GenericNode* const node2) -> bool
+		{
+			bool ok = true;
+			node1->label().toInt(&ok);
+			if (ok)
+			{
+				node2->label().toInt(&ok);
+				if (ok)
+					return node1->label().toInt() < node2->label().toInt();
+			}
+			return node1->label() < node2->label();
+		};
+
+		QList<GenericNode*> children(node->children());
+		std::sort(children.begin(), children.end(), labelComparator);
+
+		for (auto child : children)
 			res << save(stream, child, persistentUnitTypes, tabLevel+1);
 	}
 
