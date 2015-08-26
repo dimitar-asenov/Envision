@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -224,7 +225,22 @@ public class Node {
 	
 	private void renderTree(String indentation, boolean considerPersistenceUnits)
 		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
-	{	
+	{
+		// sort children
+		children_.sort(new Comparator<Node>() {
+
+			@Override
+			public int compare(Node n1, Node n2) {
+				try {
+					int l1 = Integer.parseInt(n1.name_);
+					int l2 = Integer.parseInt(n2.name_);
+					return l1 - l2;
+				} catch (NumberFormatException e) {
+					return n1.name_.compareTo(n2.name_);
+				}
+			}
+		});
+		
 		if (considerPersistenceUnits && isPersistenceUnit() && format_ != OutputFormat.CLIPBOARD)
 		{
 			// Create a new file for this persistence unit
