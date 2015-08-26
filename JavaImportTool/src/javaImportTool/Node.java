@@ -256,7 +256,7 @@ public class Node {
 				{
 					out_.peek().print(" id=\"{" + id_ + "}\" parentId=\"");
 					assert parent_ != null || !considerPersistenceUnits;
-					out_.peek().print(parent_ == null ? "{00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}\"");
+					out_.peek().print(parent_ == null ? "{00000000-0000-0000-0000-000000000000}\"": " {" + parent_.id_ + "}\"");
 				}
 				out_.peek().print(" name=\"" + name_ + "\"");
 				
