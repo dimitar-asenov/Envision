@@ -143,25 +143,27 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	}
 	else if (command == "color")
 	{
-		auto colorMatcher = new NodePropertyAdder([](const InformationNode* node) {
-			auto it = node->find("ast");
-			if (it != node->end()) {
-				Model::Node* astNode = it->second;
-				if (auto classNode = DCast<OOModel::Class>(astNode))
-					return classNode->name().contains("Matcher");
-			}
-			return false;
-		}, "color", QString("update"));
+		auto colorMatcher = new NodePropertyAdder("color", QString("update"),
+			[](const InformationNode* node) {
+				auto it = node->find("ast");
+				if (it != node->end()) {
+					Model::Node* astNode = it->second;
+					if (auto classNode = DCast<OOModel::Class>(astNode))
+						return classNode->name().contains("Matcher");
+				}
+				return false;
+		});
 
-		auto colorDescription = new NodePropertyAdder([](const InformationNode* node) {
-			auto it = node->find("ast");
-			if (it != node->end()) {
-				Model::Node* astNode = it->second;
-				if (auto classNode = DCast<OOModel::Class>(astNode))
-					return classNode->name().contains("Description");
-			}
-			return false;
-		}, "color", QString("green"));
+		auto colorDescription = new NodePropertyAdder("color", QString("green"),
+			[](const InformationNode* node) {
+				auto it = node->find("ast");
+				if (it != node->end()) {
+					Model::Node* astNode = it->second;
+					if (auto classNode = DCast<OOModel::Class>(astNode))
+						return classNode->name().contains("Description");
+				}
+				return false;
+		});
 
 		auto allClasses = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
 		auto unionOp = new UnionOperator();
