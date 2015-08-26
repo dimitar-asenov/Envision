@@ -113,6 +113,14 @@ void CompositeQuery::connectQuery(Query* from, int outIndex, Query* to, int inIn
 	addInputMapping(fromNode, outIndex, toNode, inIndex);
 }
 
+void CompositeQuery::connectInput(int inputIndex, Query* to, int atInput)
+{
+	auto toNode = nodeForQuery(to);
+
+	addOutputMapping(inNode_, inputIndex, toNode);
+	addInputMapping(inNode_, inputIndex, toNode, atInput);
+}
+
 void CompositeQuery::connectToOutput(Query* from, int outIndex)
 {
 	auto fromNode = nodeForQuery(from);
