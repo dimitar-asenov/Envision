@@ -43,9 +43,10 @@ namespace FilePersistence {
 const QString SimpleTextFileStore::NULL_STRING = "____NULL____";
 
 // TODO the Envision folder should be taken from the environment not hardcoded.
-SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :
-		baseFolder_{baseDir.isNull() ? QDir::home().path() + QDir::toNativeSeparators("/Envision/projects") : baseDir}
-{}
+SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir)
+{
+	baseFolder_ = baseDir.isNull() ? QDir::home().path() + QDir::toNativeSeparators("/Envision/projects") : baseDir;
+}
 
 SimpleTextFileStore::SimpleTextFileStore(FileGetterFunction fileGetter) : fileGetter_{fileGetter} {}
 SimpleTextFileStore::SimpleTextFileStore(GenericTree* externalTree): externalTree_{externalTree} {}
@@ -188,8 +189,15 @@ void SimpleTextFileStore::saveGenericTree(std::shared_ptr<GenericTree> tree, con
 		if (puRoot != rootNode) stack << rootNode;
 	}
 
-	// Write the root and generate possibly other PUs, that were not in the original structure
-	stack << writeGenericNodeToFile(rootNode, destDir, name, persistentUnitTypes);
+	if (generatePUs_)
+	{
+		// Write the root and generate possibly other PUs, that were not in the original structure
+		stack << writeGenericNodeToFile(rootNode, destDir, name, persistentUnitTypes);
+	}
+	else
+	{
+		stack << writeGenericNodeToFile(rootNode, destDir, name, {});
+	}
 
 	// For each pu write and clean up
 	while (!stack.isEmpty())

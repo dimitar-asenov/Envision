@@ -156,7 +156,8 @@ TEST(FilePersistencePlugin, WorkflowTest)
 	sig.name_ = "Chuck TESTa";
 	sig.eMail_ = "chuck@mergetest.com";
 	CHECK_CONDITION(!merge->hasConflicts());
-	//merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
+	if (!merge->hasConflicts())
+		merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
 }
 
 } /* namespace FilePersistence */
