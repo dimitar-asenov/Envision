@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,33 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AllNodesOfType.h"
 
-#include "../../oovisualization_api.h"
-#include "../VExpression.h"
+#include "ModelBase/src/nodes/Node.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/VText.h"
+namespace InformationScripting {
 
-#include "OOModel/src/expressions/FloatLiteral.h"
-
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VFloatLiteral
-	: public Super<VExpression<VFloatLiteral, Visualization::Item, OOModel::FloatLiteral>>
+QList<Model::Node*> AllNodesOfType::allNodesOfType(Model::Node* from, const QString& typeName)
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VFloatLiteral, Visualization::TextStyle)
+	QList<Model::Node*> result;
+	QList<Model::Node*> workStack{from};
 
-	public:
-		VFloatLiteral(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
-		virtual ~VFloatLiteral();
-
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-		Visualization::VText* vis_;
-};
-
+	while (!workStack.empty())
+	{
+		auto node = workStack.takeLast();
+		if (node->typeName() == typeName) result.push_back(node);
+		workStack << node->children();
+	}
+	return result;
 }
+
+} /* namespace InformationScripting */

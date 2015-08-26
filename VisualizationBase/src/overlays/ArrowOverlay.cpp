@@ -38,8 +38,8 @@ ArrowOverlay::ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* styl
 
 void ArrowOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	Drawing::drawArrow(painter, lineFrom_, lineTo_, painter->pen(), painter->pen(),
-					   invertArrow_, !invertArrow_, 1);
+	Drawing::drawArrow(painter, lineFrom_, lineTo_, style()->arrowPen(), style()->arrowPen(),
+						invertArrow_, !invertArrow_, style()->width());
 }
 
 void ArrowOverlay::determineChildren(){}
@@ -51,11 +51,14 @@ void ArrowOverlay::updateGeometry(int, int)
 	auto first = firstAssociatedItem();
 	auto second = secondAssociatedItem();
 	auto leftTopCorner = QPoint(
-				std::min(first->scenePos().x() + first->widthInLocal(), second->scenePos().x() + second->widthInLocal()),
-				std::min(first->scenePos().y() + first->heightInLocal() / 2, second->scenePos().y() + second->heightInLocal() / 2));
+				std::min(first->scenePos().x() + first->widthInLocal(),
+							second->scenePos().x() + second->widthInLocal()),
+				std::min(first->scenePos().y() + first->heightInLocal() / 2,
+							second->scenePos().y() + second->heightInLocal() / 2));
 	auto rightBottomCorner = QPoint(
 				std::max(first->scenePos().x(), second->scenePos().x()),
-				std::max(first->scenePos().y() + first->heightInLocal() / 2, second->scenePos().y() + second->heightInLocal() / 2));
+				std::max(first->scenePos().y() + first->heightInLocal() / 2,
+							second->scenePos().y() + second->heightInLocal() / 2));
 
 	setPos(leftTopCorner.x(), leftTopCorner.y());
 	setSize(rightBottomCorner.x() - leftTopCorner.x(),

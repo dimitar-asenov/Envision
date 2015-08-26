@@ -67,8 +67,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 
 		void addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g);
 
-		template<class NodeType>
-		void addGlobalNodesOfType(Graph* g);
+		void addGlobalNodesOfType(Graph* g, const QString& typeName);
 
 		void addCallInformation(Graph* g, OOModel::Method* method, QList<OOModel::Method*> callees);
 };

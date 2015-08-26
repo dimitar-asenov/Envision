@@ -30,7 +30,7 @@
 #include "../VExpression.h"
 
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/VInteger.h"
+#include "VisualizationBase/src/items/VText.h"
 
 #include "OOModel/src/expressions/IntegerLiteral.h"
 
@@ -45,16 +45,16 @@ class OOVISUALIZATION_API VIntegerLiteral
 		VIntegerLiteral(Item* parent, NodeType *literal, const StyleType *style = itemStyles().get());
 		virtual ~VIntegerLiteral();
 
-		Visualization::VInteger* item() const;
+		Visualization::VText* item() const;
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		Visualization::VInteger* vis_;
+		Visualization::VText* vis_;
 };
 
-inline Visualization::VInteger* VIntegerLiteral::item() const {return vis_;}
+inline Visualization::VText* VIntegerLiteral::item() const {return vis_;}
 
 }

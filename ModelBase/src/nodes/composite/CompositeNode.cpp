@@ -337,7 +337,7 @@ void CompositeNode::checkOrCreateMandatoryAttributes(bool useUndoableAction)
 			if ( subnodes_[level][i] == nullptr && (*currentLevel)[i].optional() == false )
 			{
 				auto nodeType = (*currentLevel)[i].type();
-				if (nodeType.startsWith("TypedListOf") || nodeType == "List")
+				if (nodeType.startsWith("TypedListOf") || nodeType.endsWith("List"))
 				{
 					auto newNode = Node::createNewNode(nodeType);
 					if (useUndoableAction)

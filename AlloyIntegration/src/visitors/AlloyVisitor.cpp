@@ -259,7 +259,7 @@ void AlloyVisitor::init()
 	{
 		auto fragment = new Export::CompositeFragment(t);
 		if (inContract_ || inFact_)
-			*fragment << QString::number(t->value());
+			*fragment << t->value();
 		return fragment;
 	});
 

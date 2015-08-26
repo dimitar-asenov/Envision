@@ -36,16 +36,12 @@
 #include "sources/AstSource.h"
 #include "queries/ScriptQuery.h"
 
-#include "visitors/AllNodesOfType.h"
-
 namespace InformationScripting {
 
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 {
 	BoostPythonHelpers::initializeQStringConverters();
 	AstSource::init();
-	AllNodesOfType<OOModel::Method>::init();
-	AllNodesOfType<OOModel::Class>::init();
 	OOInteraction::HStatementItemList::instance()->addCommand(new CScript());
 	ScriptQuery::initPythonEnvironment();
 	return true;

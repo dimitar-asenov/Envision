@@ -29,6 +29,7 @@
 #include "../visualizationbase_api.h"
 #include "../items/ItemStyle.h"
 #include "../overlays/Overlay.h"
+#include "ArrowOverlayStyle.h"
 
 namespace Visualization {
 
@@ -37,7 +38,7 @@ namespace Visualization {
  */
 class VISUALIZATIONBASE_API ArrowOverlay: public Super<Overlay<Item>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(ArrowOverlay, ItemStyle)
+	ITEM_COMMON(ArrowOverlay)
 
 	public:
 		ArrowOverlay(Item* arrowFrom, Item* arrowTo, const StyleType* style = itemStyles().get());

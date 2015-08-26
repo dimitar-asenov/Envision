@@ -1,2 +1,18 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="../Item/default"/>
+<style prototypes="../Item/default">
+	<linePen>
+		<width>1.0</width>
+		<style>1</style>
+		<color>#000000</color>
+		<capStyle>0</capStyle>
+		<joinStyle>0</joinStyle>
+	</linePen>
+	<arrowPen>
+		<width>1.0</width>
+		<style>1</style>
+		<color>#000000</color>
+		<capStyle>0</capStyle>
+		<joinStyle>0</joinStyle>
+	</arrowPen>
+	<width>1</width>
+</style>

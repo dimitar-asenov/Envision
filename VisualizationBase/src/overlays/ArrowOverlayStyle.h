@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, 2014 ETH Zurich
+** Copyright (c) 2011, 2015 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -26,31 +26,20 @@
 
 #pragma once
 
-#include "../../oovisualization_api.h"
-#include "../VExpression.h"
+#include "../visualizationbase_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
 
-#include "OOModel/src/expressions/FloatLiteral.h"
+namespace Visualization {
 
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VFloatLiteral
-	: public Super<VExpression<VFloatLiteral, Visualization::Item, OOModel::FloatLiteral>>
+class VISUALIZATIONBASE_API ArrowOverlayStyle : public Super<ItemStyle>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VFloatLiteral, Visualization::TextStyle)
-
 	public:
-		VFloatLiteral(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
-		virtual ~VFloatLiteral();
+		virtual ~ArrowOverlayStyle() override;
 
-	protected:
-		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight) override;
-
-	private:
-		Visualization::VText* vis_;
+		Property<QPen> linePen{this, "linePen"};
+		Property<QPen> arrowPen{this, "arrowPen"};
+		Property<int> width{this, "width"};
 };
 
 }

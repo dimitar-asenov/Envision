@@ -256,7 +256,7 @@ public class Node {
 				{
 					out_.peek().print(" id=\"{" + id_ + "}\" parentId=\"");
 					assert parent_ != null || !considerPersistenceUnits;
-					out_.peek().print(parent_ == null ? "{00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}\"");
+					out_.peek().print(parent_ == null ? "{00000000-0000-0000-0000-000000000000}\"": " {" + parent_.id_ + "}\"");
 				}
 				out_.peek().print(" name=\"" + name_ + "\"");
 				
@@ -272,6 +272,10 @@ public class Node {
 			}
 			else if (format_ == OutputFormat.SIMPLE)
 			{
+				// Do not output empty lists
+				if (children_.isEmpty() && (tag_.startsWith("TypedListOf") || tag_.endsWith("List")))
+					return;
+				
 				out_.peek().print(indentation + name_ + " " + tag_ + " {" + id_+"}");
 				assert parent_ != null || !considerPersistenceUnits;
 				out_.peek().print(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");

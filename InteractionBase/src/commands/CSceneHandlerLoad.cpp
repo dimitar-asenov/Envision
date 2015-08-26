@@ -36,22 +36,24 @@ using namespace Visualization;
 namespace Interaction {
 
 
-CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}}, true}
+CSceneHandlerLoad::CSceneHandlerLoad() : CommandWithFlags{"load", {{"library"}, {"quick"}}, true}
 {}
 
 CommandResult* CSceneHandlerLoad::executeNamed(Visualization::Item*, Visualization::Item*,
 		const std::unique_ptr<Visualization::Cursor>&, const QString& name, const QStringList& attributes)
 {
-	VisualizationManager::instance().mainScene()->setApproximateUpdate(true);
 	auto manager = new Model::TreeManager();
 	manager->load(new FilePersistence::SimpleTextFileStore("projects/"), name, attributes.first() == "library");
 
-	if (attributes.first() != "library")
+	if (!attributes.contains("library"))
 	{
 
 		VisualizationManager::instance().mainScene()->addTopLevelNode(manager->root());
 		VisualizationManager::instance().mainScene()->listenToTreeManager(manager);
 	}
+
+	if (attributes.contains("quick"))
+		VisualizationManager::instance().mainScene()->setApproximateUpdate(true);
 
 	return new CommandResult();
 }
