@@ -44,7 +44,8 @@ files = glob.glob(args.sourceDir + "/*")
 files.sort(compareFileNames)
 
 #Initialize git repo
-rmtree(args.destDir)
+if os.path.exists(args.destDir):
+	rmtree(args.destDir)
 os.mkdir(args.destDir)
 call(['git','init', args.destDir])
 
