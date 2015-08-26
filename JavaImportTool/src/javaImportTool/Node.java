@@ -58,6 +58,7 @@ public class Node {
 	private static String outputDir_ = null;
 	private static Stack<PrintStream> out_ = new Stack<PrintStream>();
 	private static OutputFormat format_ = OutputFormat.XML;
+	private static String suffix = (format_ == OutputFormat.XML) ? ".xml" : ".env";
 	
 	private List<Node> children_ = new LinkedList<Node>();
 	
@@ -207,8 +208,9 @@ public class Node {
 	{
 		outputDir_ = dir;
 		format_ = format;
+		suffix = (format_ == OutputFormat.XML) ? ".xml" : ".env";
 		
-		out_.push( new PrintStream(new File(outputDir_ + projectName), "UTF-8") );
+		out_.push( new PrintStream(new File(outputDir_ + projectName + suffix), "UTF-8") );
 		
 		if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
 			out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
@@ -238,7 +240,7 @@ public class Node {
 				out_.peek().println(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
 			}
 			
-			out_.push( new PrintStream(new File(outputDir_ + "{" + id_ + "}"), "UTF-8") );
+			out_.push( new PrintStream(new File(outputDir_ + "{" + id_ + "}" + suffix), "UTF-8") );
 			if (format_ == OutputFormat.XML) out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
 			renderTree("", false);
 			out_.pop().close();
@@ -256,7 +258,7 @@ public class Node {
 				{
 					out_.peek().print(" id=\"{" + id_ + "}\" parentId=\"");
 					assert parent_ != null || !considerPersistenceUnits;
-					out_.peek().print(parent_ == null ? "{00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}\"");
+					out_.peek().print(parent_ == null ? "{00000000-0000-0000-0000-000000000000}\"": " {" + parent_.id_ + "}\"");
 				}
 				out_.peek().print(" name=\"" + name_ + "\"");
 				
@@ -272,6 +274,10 @@ public class Node {
 			}
 			else if (format_ == OutputFormat.SIMPLE)
 			{
+				// Don't output empty lists.
+				if (children_.isEmpty() && (tag_.equals("List") || tag_.startsWith("TypedListOf") || tag_.equals("StatementItemList")))
+					return;
+				
 				out_.peek().print(indentation + name_ + " " + tag_ + " {" + id_+"}");
 				assert parent_ != null || !considerPersistenceUnits;
 				out_.peek().print(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
