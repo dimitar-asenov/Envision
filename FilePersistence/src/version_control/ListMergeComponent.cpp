@@ -617,34 +617,72 @@ void ListMergeComponent::markDependingAsResolved(ChangeDependencyGraph& cdg,
 	}
 }
 
+void ListMergeComponent::tryResolve(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+					 ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
+					 ChangeDependencyGraph& cdgA)
+{
+	if (conflictPairs.values(change).isEmpty() &&
+		 noConflictingDependencies(cdgA, conflictingChanges, change))
+	{
+		conflictingChanges.remove(change);
+		for (auto dependingChange : cdgA.getDependendingChanges(change))
+			tryResolve(conflictingChanges, conflictPairs, dependingChange, cdgA);
+	}
+}
+
 void ListMergeComponent::markAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 														  ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
 														  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB)
 {
-	std::shared_ptr<ChangeDescription> conflictingSameId;
-	// remove all conflict pairs and find pair change.
-	for (auto other : conflictPairs.values(change))
-	{
-		conflictPairs.remove(change, other);
-		if (other->nodeId() == change->nodeId())
-			conflictingSameId = other;
-	}
-	// check if applicable and if yes, mark dependending changes as resolved.
-	if (noConflictingDependencies(cdgA, conflictingChanges, change))
-	{
-		conflictingChanges.remove(change);
-		markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
-	}
-
-	// if pair change exists, remove it
+	// get conflicting change
+	auto conflictingSameId = cdgB.changes().value(change->nodeId());
 	if (conflictingSameId)
 	{
-		Q_ASSERT(cdgB.changes().value(change->nodeId()) == conflictingSameId);
-		for (auto other : conflictPairs.values(conflictingSameId))
-			conflictPairs.remove(conflictingSameId, other);
+		for (auto pair : conflictPairs.values(conflictingSameId))
+			conflictPairs.remove(conflictingSameId, pair);
 		conflictingChanges.remove(conflictingSameId);
 		cdgB.remove(conflictingSameId);
 	}
+	for (auto pair : conflictPairs.values(change))
+		conflictPairs.remove(change, pair);
+	conflictingChanges.remove(change);
+	for (auto dep : cdgA.getDependencies(change))
+		if (conflictingChanges.contains(dep))
+			markAsResolved(conflictingChanges, conflictPairs, dep, cdgA, cdgB);
+	markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
+
+	/* Why is this so fricken hard??
+	// get conflicting change
+	auto conflictingSameId = cdgB.changes().value(change->nodeId());
+
+	// remove all conflicts with siblings.
+	auto parentId = change->nodeA() ? change->nodeA()->parentId() : change->nodeB()->parentId();
+	for (auto pair : conflictPairs.values(change))
+		if ((pair->nodeA() && pair->nodeA()->parentId() == parentId) ||
+			(pair->nodeB() && pair->nodeB()->parentId() == parentId))
+			conflictPairs.remove(change, pair);
+
+	if (conflictingSameId)
+	{
+		// remove conflict pairs of that other change
+		auto pairs = conflictPairs.values(conflictingSameId);
+		for (auto pair : pairs)
+		{
+			conflictPairs.remove(conflictingSameId, pair);
+		}
+		conflictingChanges.remove(conflictingSameId);
+
+		// try to mark them resovled
+		for (auto pair : pairs)
+		{
+			tryResolve(conflictingChanges, conflictPairs, pair, cdgA);
+		}
+
+		cdgB.remove(conflictingSameId);
+	}
+
+	tryResolve(conflictingChanges, conflictPairs, change, cdgA);
+	*/
 }
 
 } /* namespace FilePersistence */
