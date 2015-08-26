@@ -28,34 +28,16 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/visitor/VisitorDefinition.h"
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
-template <class NodeType>
-class INFORMATIONSCRIPTING_API AllNodesOfType : public Model::Visitor<AllNodesOfType<NodeType>>
+class INFORMATIONSCRIPTING_API AllNodesOfType
 {
 	public:
-		static void init();
-
-		QList<NodeType*> results() const;
-
-	private:
-		QList<NodeType*> results_;
-		static void visitNodeType(AllNodesOfType<NodeType>* self, NodeType* n);
+		static QList<Model::Node*> allNodesOfType(Model::Node* from, const QString& typeName);
 };
-
-template <class NodeType>
-void AllNodesOfType<NodeType>::init() { AllNodesOfType<NodeType>::template addType<NodeType>(visitNodeType);}
-
-template <class NodeType>
-QList<NodeType*> AllNodesOfType<NodeType>::results() const { return results_; }
-
-template <class NodeType>
-void AllNodesOfType<NodeType>::visitNodeType(AllNodesOfType<NodeType>* self, NodeType* n)
-{
-	self->results_.push_back(n);
-}
-
 
 } /* namespace InformationScripting */

@@ -28,7 +28,7 @@
 
 #include "Expression.h"
 
-#include "ModelBase/src/nodes/Float.h"
+#include "ModelBase/src/nodes/Text.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FloatLiteral)
 
@@ -38,7 +38,7 @@ class OOMODEL_API FloatLiteral: public Super<Expression>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(FloatLiteral)
 
-	ATTRIBUTE_VALUE(::Model::Float, value, setValue, double)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, value, setValue, QString, const QString&)
 
 	public:
 		FloatLiteral(double value);

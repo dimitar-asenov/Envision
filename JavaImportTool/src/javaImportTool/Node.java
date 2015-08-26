@@ -274,8 +274,8 @@ public class Node {
 			}
 			else if (format_ == OutputFormat.SIMPLE)
 			{
-				// Don't output empty lists.
-				if (children_.isEmpty() && (tag_.equals("List") || tag_.startsWith("TypedListOf") || tag_.equals("StatementItemList")))
+				// Do not output empty lists
+				if (children_.isEmpty() && (tag_.startsWith("TypedListOf") || tag_.endsWith("List")))
 					return;
 				
 				out_.peek().print(indentation + name_ + " " + tag_ + " {" + id_+"}");

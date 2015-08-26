@@ -234,10 +234,10 @@ public class NodeDescriptors {
 				{"Character","value"}
 		}));
 		add( new NodeInitializer("IntegerLiteral", new String[][]{
-				{"Integer","value"}
+				{"Text","value"}
 		}));
 		add( new NodeInitializer("FloatLiteral", new String[][]{
-				{"Float","value"}
+				{"Text","value"}
 		}));
 		add( new NodeInitializer("StringLiteral", new String[][]{
 				{"Text","value"}

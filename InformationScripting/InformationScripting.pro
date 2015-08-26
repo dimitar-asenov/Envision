@@ -60,7 +60,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/SubstractNodesOperator.cpp \
     src/queries/NodePropertyAdder.cpp \
     src/queries/UnionOperator.cpp \
-    src/queries/ScriptQuery.cpp
+    src/queries/ScriptQuery.cpp \
+    src/visitors/AllNodesOfType.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

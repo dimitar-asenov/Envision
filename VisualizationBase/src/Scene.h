@@ -159,6 +159,9 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void removeOverlayOf(Item* itemWithOverlay, const QString& groupName = QString());
 		void removeOverlay(Item* overlay, const QString& groupName = QString());
 
+		void setApproximateUpdate(bool b);
+		bool approximateUpdate();
+
 	public slots:
 		void nodesUpdated(QSet<Node*> modifiedNodes, QSet<Node*> removedNodes);
 
@@ -177,11 +180,14 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		bool needsUpdate_{};
 		bool initialized_{};
+		bool approximateUpdate_{};
 
 		ModelRenderer* renderer_{};
 		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
-		QHash<QString, OverlayGroup> overlayGroups_;
+
+		// We use pointers for the value as we need a way to detach groups before deleting them.
+		QHash<QString, OverlayGroup*> overlayGroups_;
 
 		ViewItemManager* viewItemManager_{};
 
@@ -235,5 +241,10 @@ inline qreal Scene::mainViewScalingFactor() const { return mainViewScalingFactor
 inline qreal Scene::previousMainViewScalingFactor() const { return previousMainViewScalingFactor_; }
 
 inline ViewItemManager* Scene::viewItems() const { return viewItemManager_; }
+
+inline void Scene::setApproximateUpdate(bool b) { approximateUpdate_ = b; }
+inline bool Scene::approximateUpdate() { return approximateUpdate_; }
+
+inline QList<OverlayGroup*> Scene::allOverlayGroups() const {return overlayGroups_.values();}
 
 }

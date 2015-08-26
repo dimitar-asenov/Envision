@@ -41,7 +41,7 @@ OOModel::Expression* CompoundObjectDescriptor::create(const QList<OOModel::Expre
 	Q_ASSERT(operands.size() == 1);
 	auto ilit = dynamic_cast<OOModel::IntegerLiteral*> (operands.first());
 	Q_ASSERT(ilit);
-	auto e = storedExpressions().value(ilit->value());
+	auto e = storedExpressions().value(ilit->valueAsInt());
 	SAFE_DELETE(ilit);
 	Q_ASSERT(e);
 
