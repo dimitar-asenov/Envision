@@ -405,6 +405,9 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 															 const QList<Model::NodeIdType>& spanOther,
 															 bool branchIsA)
 {
+	if (!chunk->noConflicts_)
+		return false;
+
 	bool conflict = false;
 
 	for (auto elem : spanThis)
@@ -447,10 +450,29 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		bool branchesAgreeOnPosition = branchesAgreeOnParent && posA == posB;
 		bool listIsOrdered = listTypes_.contains(cdgThis.changes().value(containerId)->nodeA()->type());
 
-
 		// begin computing decsision
 
 		bool shouldInsert = false;
+
+		if (thisReorders)
+		{	// the node is not new so there might be dependencies
+			auto originChunk = findOriginalChunk(elem, containerId, chunk); // TODO do this better
+			if (originChunk && originChunk != chunk)
+			{
+				if (!chunkDependencies_.contains(chunk, originChunk))
+				{
+					chunkDependencies_.insert(chunk, originChunk);
+					chunkDependencies_.insert(originChunk, chunk);
+				}
+
+				if (!originChunk->noConflicts_)
+				{
+					conflict = true;
+					break;
+				}
+			}
+		}
+
 
 		if (changeThis && changeThis->type() == ChangeType::Insertion)
 			shouldInsert = true;
@@ -482,28 +504,6 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		{
 			conflict = true;
 			break;
-		}
-
-		if (thisReorders)
-		{
-			// if a chunk dependency is introduced, check that it is conflict free and record it
-			auto originChunk = findOriginalChunk(elem, containerId); // TODO do this better
-			if (originChunk && originChunk != chunk)
-			{
-				if (originChunk->noConflicts_)
-				{
-					if (!chunkDependencies_.contains(chunk, originChunk))
-					{
-						chunkDependencies_.insert(chunk, originChunk);
-						chunkDependencies_.insert(originChunk, chunk);
-					}
-				}
-				else
-				{
-					conflict = true;
-					break;
-				}
-			}
 		}
 
 		insertAfter(elem, posA, chunk);
