@@ -17,3 +17,7 @@
 *.directory
 
 /InformationScripting/src/wrappers/*_Generated.*
+
+/FilePersistence/test/persisted/version-control/Java_*/base*
+/FilePersistence/test/persisted/version-control/Java_*/master*
+/FilePersistence/test/persisted/version-control/Java_*/dev*
