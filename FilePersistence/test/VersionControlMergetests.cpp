@@ -147,17 +147,21 @@ TEST(FilePersistencePlugin, EvalMethodInsert)
 	merge->commit(sig, sig, "Merged master and dev");
 }
 
-TEST(FilePersistencePlugin, WorkflowTest)
+TEST(FilePersistencePlugin, RunMerge)
 {
-
-	VCTestProject p{"TestMerge_"+this->getName(), "TestMerge"};
-	auto merge = p.repo().merge("dev");
-	Signature sig;
-	sig.name_ = "Chuck TESTa";
-	sig.eMail_ = "chuck@mergetest.com";
-	CHECK_CONDITION(!merge->hasConflicts());
+	//qDebug() << "argn = " << QString::number(argsGlobal.size()) << endl;
+	//Q_ASSERT(argsGlobal.size() == 1);
+	//GitRepository repo(argsGlobal[0]);
+	GitRepository repo("/tmp/EnvisionVC/TestMerge");
+	auto merge = repo.merge("dev");
 	if (!merge->hasConflicts())
+	{
+		Signature sig;
+		sig.name_ = "Chuck TESTa";
+		sig.eMail_ = "chuck@mergetest.com";
 		merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
+	}
+	CHECK_CONDITION(true);
 }
 
 } /* namespace FilePersistence */
