@@ -53,6 +53,7 @@
 #include "commands/CAddBaseClassesToView.h"
 #include "commands/CAddCallersToView.h"
 #include "commands/CAddSubClassesToView.h"
+#include "commands/CInspectMethodInView.h"
 
 #include "string_offset_providers/StringComponents.h"
 
@@ -151,6 +152,7 @@ bool OOInteractionPlugin::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddBaseClassesToView());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddCallersToView());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CAddSubClassesToView());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CInspectMethodInView());
 
 	// Initialize customization support
 	auto customizationGroup = new Visualization::VisualizationGroup();

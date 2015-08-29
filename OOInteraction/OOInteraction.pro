@@ -61,7 +61,8 @@ HEADERS += src/commands/CDumpMethodRenderings.h \
     src/commands/CAddCalleesToView.h \
     src/commands/CAddBaseClassesToView.h \
     src/commands/CAddCallersToView.h \
-    src/commands/CAddSubClassesToView.h
+    src/commands/CAddSubClassesToView.h \
+    src/commands/CInspectMethodInView.h
 SOURCES += src/commands/CDumpMethodRenderings.cpp \
     src/handlers/HModule.cpp \
     src/commands/CCreateModule.cpp \
@@ -111,7 +112,8 @@ SOURCES += src/commands/CDumpMethodRenderings.cpp \
     src/commands/CAddCalleesToView.cpp \
     src/commands/CAddBaseClassesToView.cpp \
     src/commands/CAddCallersToView.cpp \
-    src/commands/CAddSubClassesToView.cpp
+    src/commands/CAddSubClassesToView.cpp \
+    src/commands/CInspectMethodInView.cpp
 doxy.path = $${BUILD_DIR}/doxygen
 doxy.files = doxy_data/*
 INSTALLS += doxy
