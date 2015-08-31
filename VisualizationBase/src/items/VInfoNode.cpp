@@ -49,7 +49,8 @@ void VInfoNode::initializeForms()
 void VInfoNode::determineChildren()
 {
 	Super::determineChildren();
-	browser_->setContent(node()->infoHtml());
+	if (node()->hasContentChanged())
+		browser_->setContent(node()->infoHtml());
 }
 
 }
