@@ -36,7 +36,7 @@ class QGraphicsWebView;
 
 namespace Comments {
 
-class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
+class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>, public QObject
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VCommentBrowser, Visualization::ItemStyle)
 
@@ -54,6 +54,9 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 
 		QGraphicsWebView* browser() const;
 
+	public slots:
+		void requestUpdate();
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -67,5 +70,7 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 };
 
 inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}
+
+inline void VCommentBrowser::requestUpdate() { setUpdateNeeded(Visualization::Item::StandardUpdate); }
 
 } /* namespace Comments */
