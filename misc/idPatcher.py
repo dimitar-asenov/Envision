@@ -8,8 +8,11 @@ Created on Aug 19, 2015
 import re
 import sys
 import fileinput
+from os.path import isfile
 
 patchFileSuffix = ".idpatch"
+manualFileSuffix = ".idpatch.manual"
+
 subRegex = re.compile("^(\t*\S+ \S+ \{)(\S+)(\} \{)(\S+)(\}.*)$")
 
 def patch(fileName):
@@ -18,6 +21,11 @@ def patch(fileName):
     for patch in open(fileName + patchFileSuffix):
         parts = patch.rstrip("\n").split(" -> ")
         patches[parts[0]] = parts[1];
+    # manual patches override automatic ones
+    if isfile(fileName + manualFileSuffix):
+        for patch in open(fileName + manualFileSuffix):
+            parts = patch.rstrip("\n").split(" -> ")
+            patches[parts[0]] = parts[1];
     
     for oldLine in fileinput.input(files=(fileName), inplace=True, backup=".old"):
         m = subRegex.match(oldLine)
