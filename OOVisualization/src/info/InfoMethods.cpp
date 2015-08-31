@@ -35,15 +35,7 @@ QString InfoMethods::numberOfCallees(Model::Node *node)
 	{
 		QString html = expandButton("toggleCalleeTable", "calleeTable");
 		html = "Number of called methods: " + QString::number(method->callees().size()) + "<br>" + html;
-		html += "<table id=\"calleeTable\" style=\"display:none\">";
-		html += "<tr><td style=\"border-right:solid 1px\"><b>Class</b></td><td><b>Method</b></td></tr>";
-		for (auto callee : method->callees())
-		{
-			auto methodClass = callee->firstAncestorOfType<OOModel::Class>();
-			html = html + "<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>";
-			html = html + "<td>" + callee->name() + "</td></tr>";
-		}
-		html += "</table>";
+		html += classAndNameTable("calleeTable", method->callees());
 		return html;
 	}
 	else return QString();
@@ -57,15 +49,7 @@ QString InfoMethods::numberOfUsages(Model::Node *node)
 		QString html = expandButton("toggleCallerTable", "callerTable");
 		auto callers = method->callers();
 		html = "Number of callers: " + QString::number(callers.size()) + "<br>" + html;
-		html += "<table id=\"callerTable\" style=\"display:none\">";
-		html += "<tr><td style=\"border-right:solid 1px\"><b>Class</b></td><td><b>Method</b></td></tr>";
-		for (auto caller : callers)
-		{
-			auto methodClass = caller->firstAncestorOfType<OOModel::Class>();
-			html = html + "<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>";
-			html = html + "<td>" + caller->name() + "</td></tr>";
-		}
-		html += "</table>";
+		html += classAndNameTable("callerTable", callers);
 		return html;
 	}
 	else if (auto someClass = DCast<OOModel::Class>(node))
@@ -106,6 +90,27 @@ QString InfoMethods::expandButton(QString functionName, QString expandableId)
 	html += "}";
 	html += "</script>";
 	html += "<button onclick=\"" + functionName + "()\">Details</button>";
+	return html;
+}
+
+QString InfoMethods::classAndNameTable(QString tableId, QSet<OOModel::Method *> methods)
+{
+	QStringList tableRows{"<tr><td style=\"border-right:solid 1px\"><b>Class</b></td><td><b>Method</b></td></tr>"};
+	for (auto method : methods)
+	{
+		auto methodClass = method->firstAncestorOfType<OOModel::Class>();
+		tableRows.append("<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>"
+						+ "<td>" + method->name() + "</td></tr>");
+	}
+	return hiddenTable(tableId, tableRows);
+}
+
+QString InfoMethods::hiddenTable(QString tableId, QStringList rows)
+{
+	QString html = "<table id=\"" + tableId + "\" style=\"display:none\">";
+	for (auto row : rows)
+		html += row;
+	html += "</table>";
 	return html;
 }
 
