@@ -28,6 +28,12 @@
 
 #include "SelfTest/src/SelfTestSuite.h"
 
+/** This is only for the evaluation of the version control stuff.
+ *  Remove again when there is a proper way to execute stuff from the command line.
+ *  DON'T use for anything else!!!
+ */
+//extern QStringList argsGlobal;
+
 inline void initFilePersistenceResources() { Q_INIT_RESOURCE(FilePersistence); }
 
 namespace FilePersistence {
@@ -42,15 +48,25 @@ void FilePersistencePlugin::unload()
 {
 }
 
-void FilePersistencePlugin::selfTest(QString testid)
+void FilePersistencePlugin::selfTest(QString testArgs)
 {
-	if (testid.isEmpty())
+	qDebug() << "Received testArgs: " << testArgs << endl;
+	if (testArgs.isEmpty())
 	{
 		SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
 	}
 	else
 	{
-		SelfTest::TestManager<FilePersistencePlugin>::runTest(testid).printResultStatistics();
+		auto tests = testArgs.split(":", QString::SkipEmptyParts);
+		for (QString test : tests)
+		{
+			auto testIdAndArgs = test.split(">");
+			auto testId = testIdAndArgs[0];
+			//argsGlobal = testIdAndArgs[1].split(",");
+			qDebug() << "Test: " << testId << endl;
+			//qDebug() << "Args: " << argsGlobal << endl;
+			SelfTest::TestManager<FilePersistencePlugin>::runTest(testId).printResultStatistics();
+		}
 	}
 	exit(0);
 }
