@@ -26,12 +26,11 @@
 
 #include "CAddNodeToViewByName.h"
 
-#include "ModelBase/src/SymbolMatcher.h"
-#include "VisualizationBase/src/items/ViewItem.h"
-#include "ModelBase/src/model/TreeManager.h"
+#include "ModelBase/src/NameResolver.h"
 #include "VisualizationBase/src/items/VViewItemNode.h"
 #include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/items/ViewItem.h"
 
 
 namespace Interaction {
@@ -76,7 +75,7 @@ CommandResult* CAddNodeToViewByName::execute(Visualization::Item* source, Visual
 	QString name = "";
 	for (auto part : commandTokens.mid(1))
 		name += part;
-	auto matches = mostLikelyMatches(name);
+	auto matches = Model::NameResolver::mostLikelyMatches(name, 10);
 	if (matches.size() > 0)
 	{
 		currentView->insertNode(matches[0].second, posToInsert.x(), posToInsert.y());
@@ -92,7 +91,7 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 
 	if (textSoFar.trimmed().startsWith("add ", Qt::CaseInsensitive))
 	{
-		auto matches = mostLikelyMatches(textSoFar.trimmed().mid(4));
+		auto matches = Model::NameResolver::mostLikelyMatches(textSoFar.trimmed().mid(4), 10);
 		for (auto match : matches)
 			suggestions.append(new CommandSuggestion("add " + match.first, "Add node " + match.first + " to the view"));
 	}
@@ -100,53 +99,6 @@ QList<CommandSuggestion*> CAddNodeToViewByName::suggest(Visualization::Item*, Vi
 			suggestions.append(new CommandSuggestion("add ", "Add nodes to the current view"));
 
 	return suggestions;
-}
-
-QList<QPair<QString, Model::Node*>> CAddNodeToViewByName::mostLikelyMatches(const QString& nodeName)
-{
-	QList<QPair<QString, Model::Node*>> matches;
-	auto parts = nodeName.split(".");
-	QString pattern = "*";
-	for (auto part : parts) pattern += part + '*';
-	auto matcher = Model::SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
-
-	for (auto manager : Model::AllTreeManagers::instance().loadedManagers())
-		matches.append(findAllMatches(matcher, "", manager->root()));
-
-	//Shorter names usually have less parts to the fully qualified name -> suggest them first
-	std::sort(matches.begin(), matches.end(), [](QPair<QString, Model::Node*> first, QPair<QString, Model::Node*> second)
-										{ return first.first.length() < second.first.length(); });
-	//Limit the number of suggestions
-	matches = matches.mid(0, 10);
-	return matches;
-}
-
-QList<QPair<QString, Model::Node*>> CAddNodeToViewByName::findAllMatches(const Model::SymbolMatcher& matcher,
-		QString nameSoFar, Model::Node* root)
-{
-	QList<QPair<QString, Model::Node*>> result;
-
-	//If it doesn't define a symbol, just pass it on
-	if (!root->definesSymbol())
-		for (auto child : root->children())
-			result.append(findAllMatches(matcher, nameSoFar, child));
-
-	//If it defines a symbol, check if the name matches with our SymbolMatcher
-	else if (isSuggestable(root->symbolType()) && root->symbolName().size() > 0)
-	{
-		auto newNameSoFar = nameSoFar + "." + root->symbolName();
-		for (auto child : root->children())
-			result.append(findAllMatches(matcher, newNameSoFar, child));
-		if (matcher.matches(newNameSoFar))
-			//Get rid of initial "."
-			result.append(QPair<QString, Model::Node*>(newNameSoFar.mid(1), root));
-	}
-	return result;
-}
-
-bool CAddNodeToViewByName::isSuggestable(Model::Node::SymbolTypes symbolType)
-{
-	return symbolType == Model::Node::METHOD || symbolType == Model::Node::CONTAINER;
 }
 
 }
