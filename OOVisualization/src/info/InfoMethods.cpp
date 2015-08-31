@@ -32,14 +32,42 @@ namespace OOVisualization {
 QString InfoMethods::numberOfCallees(Model::Node *node)
 {
 	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
+	{
+		QString html = expandButton("toggleCalleeTable", "calleeTable");
+		html = "Number of called methods: " + QString::number(method->callees().size()) + "<br>" + html;
+		html += "<table id=\"calleeTable\" style=\"display:none\">";
+		html += "<tr><td style=\"border-right:solid 1px\"><b>Class</b></td><td><b>Method</b></td></tr>";
+		for (auto callee : method->callees())
+		{
+			auto methodClass = callee->firstAncestorOfType<OOModel::Class>();
+			html = html + "<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>";
+			html = html + "<td>" + callee->name() + "</td></tr>";
+		}
+		html += "</table>";
+		return html;
+	}
 	else return QString();
 }
 
 QString InfoMethods::numberOfUsages(Model::Node *node)
 {
+
 	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
+	{
+		QString html = expandButton("toggleCallerTable", "callerTable");
+		auto callers = method->callers();
+		html = "Number of callers: " + QString::number(callers.size()) + "<br>" + html;
+		html += "<table id=\"callerTable\" style=\"display:none\">";
+		html += "<tr><td style=\"border-right:solid 1px\"><b>Class</b></td><td><b>Method</b></td></tr>";
+		for (auto caller : callers)
+		{
+			auto methodClass = caller->firstAncestorOfType<OOModel::Class>();
+			html = html + "<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>";
+			html = html + "<td>" + caller->name() + "</td></tr>";
+		}
+		html += "</table>";
+		return html;
+	}
 	else if (auto someClass = DCast<OOModel::Class>(node))
 	{
 		QSet<Model::Node*> result;
@@ -66,6 +94,19 @@ QString InfoMethods::fullName(Model::Node *node)
 	else if (auto clazz = DCast<OOModel::Class>(node))
 		return "<b>" + clazz->name() + "</b>";
 	else return QString();
+}
+
+QString InfoMethods::expandButton(QString functionName, QString expandableId)
+{
+	QString html = "<script>";
+	html += "function " + functionName + "()";
+	html += "{";
+	html += "var table = document.getElementById(\"" + expandableId + "\");";
+	html += "table.style.display = (table.style.display == \"table\") ? \"none\" : \"table\";";
+	html += "}";
+	html += "</script>";
+	html += "<button onclick=\"" + functionName + "()\">Details</button>";
+	return html;
 }
 
 }

@@ -40,6 +40,9 @@ class OOVISUALIZATION_API InfoMethods
 		static QString numberOfUsages(Model::Node* node);
 
 		static QString fullName(Model::Node* node);
+
+	private:
+		static QString expandButton(QString functionName, QString expandableId);
 };
 
 }
