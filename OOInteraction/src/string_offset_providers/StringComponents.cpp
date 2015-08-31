@@ -214,8 +214,8 @@ void StringComponents::initConversions()
 
 	// Literals
 	add<BooleanLiteral>([](BooleanLiteral* e){ return c( e->value() ? "true" : "false" ); });
-	add<IntegerLiteral>([](IntegerLiteral* e){ return c( QString::number( e->value()) ); });
-	add<FloatLiteral>([](FloatLiteral* e){ return c( QString::number( e->value()) ); });
+	add<IntegerLiteral>([](IntegerLiteral* e){ return c( e->value() ); });
+	add<FloatLiteral>([](FloatLiteral* e){ return c( e->value() ); });
 	add<NullLiteral>([](NullLiteral*){ return c( "null" ); });
 	add<StringLiteral>([](StringLiteral* e){ return c( "\"", e->value(), "\"" ); });
 	add<CharacterLiteral>([](CharacterLiteral* e){ return c( "'", e->value(), "'" ); });

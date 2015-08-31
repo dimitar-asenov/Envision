@@ -34,6 +34,12 @@ PropertyMap::PropertyMap(QList<QPair<QString, Property> > initialValues)
 		insert(initialValue.first, initialValue.second);
 }
 
+PropertyMap::PropertyMap(const PropertyMap& other)
+{
+	for (auto property : other.properties_)
+		insert(property.first, property.second);
+}
+
 boost::python::object PropertyMap::pythonAttribute(const QString& key)
 {
 	return pythonObject(operator[](key));

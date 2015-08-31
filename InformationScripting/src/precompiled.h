@@ -56,6 +56,7 @@
 #endif
 
 #include <boost/python.hpp>
+#include <boost/python/stl_iterator.hpp>
 
 #ifdef PYTHONQT_RESTORE_KEYWORDS
 #define slots Q_SLOTS

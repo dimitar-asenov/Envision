@@ -30,7 +30,7 @@
 #include "../VExpression.h"
 
 #include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/VFloat.h"
+#include "VisualizationBase/src/items/VText.h"
 
 #include "OOModel/src/expressions/FloatLiteral.h"
 
@@ -50,7 +50,7 @@ class OOVISUALIZATION_API VFloatLiteral
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		Visualization::VFloat* vis_;
+		Visualization::VText* vis_;
 };
 
 }

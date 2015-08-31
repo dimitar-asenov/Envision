@@ -26,6 +26,9 @@
 
 #include "BoostPythonHelpers.h"
 
+#include "../graph/InformationNode.h"
+#include "../graph/InformationEdge.h"
+
 namespace InformationScripting {
 
 namespace PythonConverters {
@@ -67,6 +70,22 @@ struct QString_from_python_str
 			// in-place construct the new QString using the character data extraced from the python object
 			new (storageBytes) QString(PyBytes_AsString(rawBytesHandle.get()));
 			data->convertible = storageBytes;
+		}
+};
+
+// Currently we don't need any value lists:
+template<class T>
+struct QList_to_python_list;
+
+// Specialization for pointer lists:
+template<class T>
+struct QList_to_python_list<T*>
+{
+		static PyObject* convert(QList<T*> toConvert)
+		{
+			python::list list;
+			for (auto val : toConvert) list.append(python::ptr(val));
+			return python::incref(list.ptr());
 		}
 };
 
@@ -119,10 +138,13 @@ void BoostPythonHelpers::initializeQStringConverters()
 {
 	using namespace boost;
 
-	// register the to-python converter
+	// register the to-python converters
 	python::to_python_converter<QString, PythonConverters::QString_to_python_str>();
 
-	// register the from-python converter
+	python::to_python_converter<QList<InformationNode*>, PythonConverters::QList_to_python_list<InformationNode*>>();
+	python::to_python_converter<QList<InformationEdge*>, PythonConverters::QList_to_python_list<InformationEdge*>>();
+
+	// register the from-python converters
 	PythonConverters::QString_from_python_str();
 }
 

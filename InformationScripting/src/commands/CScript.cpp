@@ -32,15 +32,15 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
 
-#include "../wrappers/AstApi.h"
-#include "../wrappers/NodeApi.h"
-#include "../helpers/BoostPythonHelpers.h"
 #include "../graph/InformationNode.h"
 #include "../queries/QueryExecutor.h"
 #include "../queries/CompositeQuery.h"
 #include "../queries/AstNameFilter.h"
 #include "../queries/SubstractNodesOperator.h"
 #include "../queries/AstQuery.h"
+#include "../queries/NodePropertyAdder.h"
+#include "../queries/UnionOperator.h"
+#include "../queries/ScriptQuery.h"
 
 namespace InformationScripting {
 
@@ -68,36 +68,16 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 
 	if (command == "script")
 	{
-
-		auto parentClass = node->firstAncestorOfType<OOModel::Class>();
-
-		try {
-			PyImport_AppendInittab("AstApi", PyInit_AstApi);
-			PyImport_AppendInittab("NodeApi", PyInit_NodeApi);
-			Py_Initialize();
-
-			python::object main_module = python::import("__main__");
-			python::dict main_namespace = python::extract<python::dict>(main_module.attr("__dict__"));
-
-			python::object astApi = python::import("AstApi");
-			python::object nodeApi = python::import("NodeApi");
-			python::object sys = python::import("sys");
-
-			python::list methods;
-			for (auto method : *parentClass->methods())
-			{
-				// TODO: this leaks currently
-				auto infoNode = new InformationNode({{"ast", method}});
-				methods.append(python::ptr(infoNode));
-			}
-
-			main_namespace["methods"] = methods;
-
-			exec_file("../InformationScripting/test/scripts/methods.py", main_namespace, main_namespace);
-			// Workaround to get output
-			sys.attr("stdout").attr("flush")();
-		} catch (python::error_already_set ) {
-			qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
+		if (args.size())
+		{
+			auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+			// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
+			auto scriptQuery = new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(args[0]));
+			auto compositeQuery = new CompositeQuery();
+			compositeQuery->connectQuery(classesQuery, scriptQuery);
+			compositeQuery->connectToOutput(scriptQuery);
+			QueryExecutor queryExecutor(compositeQuery);
+			queryExecutor.execute();
 		}
 	}
 	else if (command == "methods")
@@ -159,6 +139,44 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);
 		compositeQuery->connectToOutput(complement);
 		QueryExecutor queryExecutor(compositeQuery);
+		queryExecutor.execute();
+	}
+	else if (command == "color")
+	{
+		auto colorMatcher = new NodePropertyAdder([](const InformationNode* node) {
+			auto it = node->find("ast");
+			if (it != node->end()) {
+				Model::Node* astNode = it->second;
+				if (auto classNode = DCast<OOModel::Class>(astNode))
+					return classNode->name().contains("Matcher");
+			}
+			return false;
+		}, "color", QString("update"));
+
+		auto colorDescription = new NodePropertyAdder([](const InformationNode* node) {
+			auto it = node->find("ast");
+			if (it != node->end()) {
+				Model::Node* astNode = it->second;
+				if (auto classNode = DCast<OOModel::Class>(astNode))
+					return classNode->name().contains("Description");
+			}
+			return false;
+		}, "color", QString("green"));
+
+		auto allClasses = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+		auto unionOp = new UnionOperator();
+
+		auto composite = new CompositeQuery();
+
+		composite->connectQuery(allClasses, colorMatcher);
+		composite->connectQuery(allClasses, colorDescription);
+
+		composite->connectQuery(colorMatcher, unionOp);
+		composite->connectQuery(colorDescription, 0, unionOp, 1);
+
+		composite->connectToOutput(unionOp);
+
+		QueryExecutor queryExecutor(composite);
 		queryExecutor.execute();
 	}
 	return new Interaction::CommandResult();

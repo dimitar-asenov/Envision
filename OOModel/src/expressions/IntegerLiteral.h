@@ -28,7 +28,7 @@
 
 #include "Expression.h"
 
-#include "ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/Text.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, IntegerLiteral)
 
@@ -38,10 +38,12 @@ class OOMODEL_API IntegerLiteral: public Super<Expression>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(IntegerLiteral)
 
-	ATTRIBUTE_VALUE(::Model::Integer, value, setValue, int)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, value, setValue, QString, const QString&)
 
 	public:
 		IntegerLiteral(int value);
+
+		int valueAsInt() const;
 
 		virtual Type* type() override;
 };

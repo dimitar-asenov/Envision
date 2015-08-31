@@ -41,7 +41,6 @@
 #include <clang/AST/Type.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
-#include <clang/Frontend/FrontendActions.h>
 #include <clang/Lex/MacroInfo.h>
 #include <clang/Lex/MacroArgs.h>
 #include <clang/Lex/Preprocessor.h>

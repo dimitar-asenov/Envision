@@ -35,17 +35,25 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(IntegerLiteral)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(IntegerLiteral)
 
-REGISTER_ATTRIBUTE(IntegerLiteral, value, Integer, false, false, true)
+REGISTER_ATTRIBUTE(IntegerLiteral, value, Text, false, false, true)
 
 IntegerLiteral::IntegerLiteral(int value)
 : Super(nullptr, IntegerLiteral::getMetaData())
 {
-	setValue(value);
+	setValue(QString::number(value));
 }
 
 Type* IntegerLiteral::type()
 {
 	return new PrimitiveType(PrimitiveType::INT, true);
+}
+
+int IntegerLiteral::valueAsInt() const
+{
+	bool ok = false;
+	int ret = value().toInt(&ok);
+	Q_ASSERT(ok);
+	return ret;
 }
 
 }

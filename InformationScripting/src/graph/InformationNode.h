@@ -36,7 +36,9 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
 {
 	public:
+		InformationNode() = default;
 		InformationNode(QList<QPair<QString, Property>> initialValues);
+		InformationNode(const InformationNode& other);
 };
 
 } /* namespace InformationScripting */

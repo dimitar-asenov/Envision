@@ -89,7 +89,7 @@ Graph* AstQuery::classesQuery(QList<Graph*>&)
 	}
 	else if (scope_ == Scope::Global)
 	{
-		addGlobalNodesOfType<OOModel::Class>(g);
+		addGlobalNodesOfType(g, "Class");
 	}
 	else if (scope_ == Scope::Input)
 	{
@@ -114,7 +114,7 @@ Graph* AstQuery::methodsQuery(QList<Graph*>& input)
 	else if (scope_ == Scope::Global)
 	{
 		auto g = new Graph();
-		addGlobalNodesOfType<OOModel::Method>(g);
+		addGlobalNodesOfType(g, "Method");
 		return g;
 	}
 	else if (scope_ == Scope::Input)
@@ -135,9 +135,7 @@ Graph* AstQuery::methodsQuery(QList<Graph*>& input)
 		for (auto node : nodes)
 		{
 			Model::Node* astNode = (*node)["ast"];
-			AllNodesOfType<OOModel::Method> visitor;
-			visitor.visit(astNode);
-			auto methods = visitor.results();
+			auto methods = AllNodesOfType::allNodesOfType(astNode, "Method");
 			// TODO for now we just remove the input node, this might not always be what we want
 			g->remove(node);
 			for (auto method : methods)
@@ -245,13 +243,10 @@ void AstQuery::addCallInformation(Graph* g, OOModel::Method* method, QList<OOMod
 	}
 }
 
-template<class NodeType>
-void AstQuery::addGlobalNodesOfType(Graph* g)
+void AstQuery::addGlobalNodesOfType(Graph* g, const QString& typeName)
 {
 	auto root = target_->manager()->root();
-	AllNodesOfType<NodeType> visitor;
-	visitor.visit(root);
-	auto allNodeOfType =  visitor.results();
+	auto allNodeOfType =  AllNodesOfType::allNodesOfType(root, typeName);
 	for (auto node : allNodeOfType)
 		g->add(new InformationNode({{"ast", node}}));
 }

@@ -29,7 +29,6 @@
 #include <QtCore/QTextStream>
 
 #include <clang/Frontend/FrontendAction.h>
-#include <clang/Frontend/FrontendActions.h>
 
 #include "APIData.h"
 

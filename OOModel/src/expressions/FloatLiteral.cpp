@@ -35,12 +35,12 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FloatLiteral)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FloatLiteral)
 
-REGISTER_ATTRIBUTE(FloatLiteral, value, Float, false, false, true)
+REGISTER_ATTRIBUTE(FloatLiteral, value, Text, false, false, true)
 
 FloatLiteral::FloatLiteral(double value)
 : Super(nullptr, FloatLiteral::getMetaData())
 {
-	setValue(value);
+	setValue(QString::number(value));
 }
 
 Type* FloatLiteral::type()

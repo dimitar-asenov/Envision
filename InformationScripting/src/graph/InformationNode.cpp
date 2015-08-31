@@ -32,4 +32,8 @@ InformationNode::InformationNode(QList<QPair<QString, Property> > initialValues)
 	: PropertyMap{initialValues}
 {}
 
+InformationNode::InformationNode(const InformationNode& other)
+	: PropertyMap(other)
+{}
+
 } /* namespace InformationScripting */

@@ -100,7 +100,11 @@ Scene::~Scene()
 
 	SAFE_DELETE(viewItemManager_);
 
+	auto overlayGroups = allOverlayGroups();
 	overlayGroups_.clear();
+	for (auto group : overlayGroups)
+		SAFE_DELETE(group);
+
 	while (!topLevelItems_.isEmpty())
 		SAFE_DELETE_ITEM(topLevelItems_.takeLast());
 
@@ -183,12 +187,13 @@ void Scene::updateNow()
 	// Update Top level items
 	for (auto item : topLevelItems_)
 		item->updateSubtree();
+	setApproximateUpdate(false);
 
 	Core::Profiler::stop("Scene ViewItem update " + QString::number(updatesAlreadyProfiled));
 
 	// Update overlay groups (selections are handled as a dynamic group)
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
-			it.value().update();
+			it.value()->update();
 
 	// Update the main cursor
 	if (mainCursor_ && mainCursor_->visualization())
@@ -523,27 +528,28 @@ OverlayGroup* Scene::addOverlayGroup(const QString& name)
 	Q_ASSERT(!name.isEmpty());
 	Q_ASSERT(!overlayGroups_.contains(name));
 	scheduleUpdate();
-	return &overlayGroups_.insert(name, OverlayGroup(this, name)).value();
+	return overlayGroups_.insert(name, new OverlayGroup(this, name)).value();
 }
 
 OverlayGroup* Scene::overlayGroup(const QString& name)
 {
 	auto h = overlayGroups_.find(name);
 	if (h == overlayGroups_.end()) return nullptr;
-	else return &h.value();
-}
-
-QList<OverlayGroup*> Scene::allOverlayGroups() const
-{
-	QList<OverlayGroup*> res;
-	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
-		res.append( const_cast<OverlayGroup*>(&it.value()) );
-	return res;
+	else return h.value();
 }
 
 void Scene::removeOverlayGroup(const QString& name)
 {
-	if ( overlayGroups_.remove(name) ) scheduleUpdate();
+	auto groupIt = overlayGroups_.find(name);
+	if (groupIt != overlayGroups_.end() )
+	{
+		// We must detach the group before deleting it, otherwise during deletion, the deletion of its overlay items
+		// will cause a call to the group's removeOverlayOf method which will try to use null accessors.
+		auto group = groupIt.value();
+		overlayGroups_.erase(groupIt);
+		SAFE_DELETE(group);
+		scheduleUpdate();
+	}
 }
 
 void Scene::removeOverlayGroup(OverlayGroup* group)
@@ -556,14 +562,14 @@ void Scene::removeOverlayOf(Item* itemWithOverlay, const QString& groupName)
 {
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
 		if (groupName.isEmpty() || it.key() == groupName)
-			it.value().removeOverlayOf(itemWithOverlay);
+			it.value()->removeOverlayOf(itemWithOverlay);
 }
 
 void Scene::removeOverlay(Item* overlay, const QString& groupName)
 {
 	for (auto it = overlayGroups_.begin(); it != overlayGroups_.end(); ++it)
 		if (groupName.isEmpty() || it.key() == groupName)
-			it.value().removeOverlay(overlay);
+			it.value()->removeOverlay(overlay);
 }
 
 }
