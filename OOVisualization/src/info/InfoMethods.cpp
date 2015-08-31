@@ -100,7 +100,9 @@ QString InfoMethods::classAndNameTable(QString tableId, QSet<OOModel::Method *> 
 	{
 		auto methodClass = method->firstAncestorOfType<OOModel::Class>();
 		tableRows.append("<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>"
-						+ "<td>" + method->name() + "</td></tr>");
+						+ "<td style=\"border-right:solid 1px\">" + method->name() + "</td>"
+						+ "<td><button onclick=\"operations.jumpToObject('" +
+									method->fullyQualifiedName() + "')\">Jump to</button></td></tr>");
 	}
 	return hiddenTable(tableId, tableRows);
 }
