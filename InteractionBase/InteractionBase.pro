@@ -90,9 +90,7 @@ HEADERS += src/commands/CommandWithFlags.h \
     src/commands/CSaveView.h \
     src/commands/CAddNodeToViewByName.h \
     src/commands/CAddNodeToView.h \
-    src/handlers/HViewItem.h \
-    src/events/KeyInputHandler.h \
-    src/events/KeyInputEventFunctions.h
+    src/handlers/HViewItem.h
 SOURCES += src/commands/CommandWithFlags.cpp \
     src/expression_editor/tree_builder/AddSubExpression.cpp \
     src/commands/CSceneHandlerSave.cpp \
@@ -175,6 +173,4 @@ SOURCES += src/commands/CommandWithFlags.cpp \
     src/commands/CSaveView.cpp \
     src/commands/CAddNodeToViewByName.cpp \
     src/commands/CAddNodeToView.cpp \
-    src/handlers/HViewItem.cpp \
-    src/events/KeyInputHandler.cpp \
-    src/events/KeyInputEventFunctions.cpp
+    src/handlers/HViewItem.cpp
