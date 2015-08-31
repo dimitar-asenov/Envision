@@ -28,6 +28,9 @@
 #include "declarative/DeclarativeItemDef.h"
 #include "nodes/InfoNode.h"
 #include "Comments/src/items/VCommentBrowser.h"
+#include "utils/InfoJavascriptFunctions.h"
+#include "QtWebKitWidgets/QGraphicsWebView"
+#include "QtWebKitWidgets/QWebFrame"
 
 namespace Visualization {
 
@@ -50,7 +53,11 @@ void VInfoNode::determineChildren()
 {
 	Super::determineChildren();
 	if (node()->hasContentChanged())
+	{
 		browser_->setContent(node()->infoHtml());
+		browser_->browser()->page()->mainFrame()->addToJavaScriptWindowObject("operations",
+								InfoJavascriptFunctions::instance());
+	}
 }
 
 }
