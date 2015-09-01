@@ -1,8 +1,9 @@
 results = [];
 
-for g in inputs:
-    nodes = g.nodes()
-    for node in nodes:
-        ast = node.ast;
-        print(ast.constructKind)
-    results.append(g)
+
+for ts in inputs:
+    tuples = ts.tuples("ast")
+    for tuple in tuples:
+        asts = tuple.getAll("ast");
+        print(asts[0].value.constructKind)
+    results.append(ts)

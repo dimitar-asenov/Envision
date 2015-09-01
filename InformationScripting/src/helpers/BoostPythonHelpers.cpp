@@ -26,8 +26,10 @@
 
 #include "BoostPythonHelpers.h"
 
-#include "../graph/InformationNode.h"
-#include "../graph/InformationEdge.h"
+#include "PythonSet.h"
+#include "../dataformat/Property.h"
+#include "../dataformat/Tuple.h"
+#include "../dataformat/TupleSet.h"
 
 namespace InformationScripting {
 
@@ -73,9 +75,28 @@ struct QString_from_python_str
 		}
 };
 
+template<class T>
+struct QSet_to_python_set
+{
+		static PyObject* convert(QSet<T> toConvert)
+		{
+			helper::PythonSet list;
+			for (auto val : toConvert) list.add(val);
+			return python::incref(list.ptr());
+		}
+};
+
 // Currently we don't need any value lists:
 template<class T>
-struct QList_to_python_list;
+struct QList_to_python_list
+{
+		static PyObject* convert(QList<T> toConvert)
+		{
+			python::list list;
+			for (auto val : toConvert) list.append(val);
+			return python::incref(list.ptr());
+		}
+};
 
 // Specialization for pointer lists:
 template<class T>
@@ -134,19 +155,20 @@ QString BoostPythonHelpers::parsePythonException()
 	return errorMessage;
 }
 
-void BoostPythonHelpers::initializeQStringConverters()
+void BoostPythonHelpers::initializeConverters()
 {
 	using namespace boost;
 
 	// register the to-python converters
 	python::to_python_converter<QString, PythonConverters::QString_to_python_str>();
 
-	python::to_python_converter<QList<InformationNode*>, PythonConverters::QList_to_python_list<InformationNode*>>();
-	python::to_python_converter<QList<InformationEdge*>, PythonConverters::QList_to_python_list<InformationEdge*>>();
+	python::to_python_converter<QSet<Tuple>, PythonConverters::QSet_to_python_set<Tuple>>();
+
+	python::to_python_converter<QList<TupleSet>, PythonConverters::QList_to_python_list<TupleSet>>();
+	python::to_python_converter<QList<NamedProperty>, PythonConverters::QList_to_python_list<NamedProperty>>();
 
 	// register the from-python converters
 	PythonConverters::QString_from_python_str();
 }
-
 
 } /* namespace InformationScripting */

@@ -20,13 +20,6 @@ HEADERS += src/precompiled.h \
     src/commands/CScript.h \
     src/helpers/BoostPythonHelpers.h \
     src/wrappers/AstApi.h \
-    src/graph/InformationNode.h \
-    src/graph/Property.h \
-    src/wrappers/NodeApi.h \
-    src/graph/PropertyMap.h \
-    src/graph/Graph.h \
-    src/graph/InformationEdge.h \
-    src/sources/AstSource.h \
     src/queries/Query.h \
     src/queries/AstQuery.h \
     src/queries/QueryExecutor.h \
@@ -38,19 +31,18 @@ HEADERS += src/precompiled.h \
     src/queries/SubstractNodesOperator.h \
     src/queries/NodePropertyAdder.h \
     src/queries/UnionOperator.h \
-    src/queries/ScriptQuery.h
+    src/queries/ScriptQuery.h \
+    src/dataformat/Tuple.h \
+    src/dataformat/TupleSet.h \
+    src/dataformat/Property.h \
+    src/helpers/PythonSet.h \
+    src/wrappers/DataApi.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
     src/commands/CScript.cpp \
     src/helpers/BoostPythonHelpers.cpp \
     src/wrappers/AstApi.cpp \
-    src/graph/InformationNode.cpp \
-    src/graph/PropertyMap.cpp \
-    src/graph/Property.cpp \
-    src/graph/Graph.cpp \
-    src/graph/InformationEdge.cpp \
-    src/sources/AstSource.cpp \
     src/queries/AstQuery.cpp \
     src/queries/QueryExecutor.cpp \
     src/visualization/DefaultVisualizer.cpp \
@@ -61,17 +53,21 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/NodePropertyAdder.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \
-    src/visitors/AllNodesOfType.cpp
+    src/visitors/AllNodesOfType.cpp \
+    src/dataformat/Tuple.cpp \
+    src/dataformat/TupleSet.cpp \
+    src/dataformat/Property.cpp \
+    src/helpers/PythonSet.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
 # see also: http://stackoverflow.com/a/14608296
-nodeApiCompiler.input = SOURCES_NODEAPI
-nodeApiCompiler.output = ${QMAKE_FILE_BASE}.o
-nodeApiCompiler.commands = \$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -Wno-unused-local-typedef ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
-QMAKE_EXTRA_COMPILERS += nodeApiCompiler
+dataApiCompiler.input = SOURCES_DATAAPI
+dataApiCompiler.output = ${QMAKE_FILE_BASE}.o
+dataApiCompiler.commands = \$(CXX) -c \$(CXXFLAGS) \$(INCPATH) -Wno-unused-local-typedef ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+QMAKE_EXTRA_COMPILERS += dataApiCompiler
 
-SOURCES_NODEAPI = src/wrappers/NodeApi.cpp
+SOURCES_DATAAPI = src/wrappers/DataApi.cpp
 
 # HACK to only include the AstApi_Generated file if it exists.
 exists(src/wrappers/AstApi_Generated.cpp): {

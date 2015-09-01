@@ -29,18 +29,17 @@
 #include "../informationscripting_api.h"
 
 #include "Query.h"
-#include "../graph/Graph.h"
 
 namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API NodePropertyAdder : public Query
 {
 	public:
-		NodePropertyAdder(const QString& propertyName, Property value, Graph::NodeCondition condition = nullptr);
-		virtual QList<Graph*> execute(QList<Graph*> input) override;
+		NodePropertyAdder(const QString& propertyName, Property value, TupleSet::TupleCondition condition = nullptr);
+		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
 	private:
-		Graph::NodeCondition condition_{};
+		TupleSet::TupleCondition condition_{};
 		QString name_;
 		Property value_{};
 };

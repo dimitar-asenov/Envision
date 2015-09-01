@@ -24,37 +24,49 @@
 **
 ***********************************************************************************************************************/
 
-#include "NodeApi.h"
-
-#include "../graph/PropertyMap.h"
-#include "../graph/InformationNode.h"
-#include "../graph/InformationEdge.h"
-#include "../graph/Graph.h"
+#include "Tuple.h"
 
 namespace InformationScripting {
 
-using namespace boost::python;
+Tuple::Tuple(std::initializer_list<NamedProperty> initialValue)
+	: values_{initialValue}
+{}
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(addEdge_overloads, Graph::addEdge, 3, 5)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(nodes_overloads, Graph::nodes, 0, 1)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(edges_overloads, Graph::edges, 0, 1)
+Tuple::Tuple(const QList<NamedProperty>& initialValues)
+	: values_{initialValues}
+{}
 
-BOOST_PYTHON_MODULE(NodeApi) {
-		class_<PropertyMap, boost::noncopyable>("PropertyMap", no_init)
-				.def("__getattr__", &PropertyMap::pythonAttribute);
-		class_<InformationNode, bases<PropertyMap>>("InformationNode", no_init);
-		class_<InformationEdge, bases<PropertyMap>>("InformationEdge", no_init);
+NamedProperty Tuple::get(int index) const
+{
+	return values_.at(index);
+}
 
-		void (Graph::*remove1)(InformationNode*)        = &Graph::remove;
-		void (Graph::*remove2)(QList<InformationNode*>) = &Graph::remove;
+QList<NamedProperty> Tuple::getAll(const QString& key)
+{
+	QList<NamedProperty> result;
+	for (auto p : values_)
+		if (p.first == key) result << p;
+	return result;
+}
 
-		class_<Graph>("Graph")
-				.def("add", &Graph::add, return_value_policy<reference_existing_object>())
-				.def("addEdge", &Graph::addEdge, addEdge_overloads()[return_value_policy<reference_existing_object>()])
-				.def("remove", remove1)
-				.def("remove", remove2)
-				.def("nodes", &Graph::nodes, nodes_overloads())
-				.def("edges", &Graph::edges, edges_overloads());
+void Tuple::add(NamedProperty p)
+{
+	values_.append(p);
+}
+
+uint Tuple::hashValue(uint seed) const
+{
+	return qHashRange(values_.begin(), values_.end(), seed);
+}
+
+Tuple::const_iterator Tuple::find(const QString& key) const
+{
+	return std::find_if(values_.begin(), values_.end(), [key](auto v) {return v.first == key;});
+}
+
+uint qHash(const Tuple& t, uint seed)
+{
+	return t.hashValue(seed);
 }
 
 } /* namespace InformationScripting */

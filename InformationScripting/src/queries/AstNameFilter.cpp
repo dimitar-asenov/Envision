@@ -26,8 +26,6 @@
 
 #include "AstNameFilter.h"
 
-#include "../graph/InformationNode.h"
-
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
@@ -35,9 +33,9 @@ namespace InformationScripting {
 
 AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 	: GenericFilter {
-		  [matcher](const InformationNode* n) {
-			auto it = n->find("ast");
-			if (it != n->end())
+		  [matcher](const Tuple& t) {
+			auto it = t.find("ast");
+			if (it != t.end())
 			{
 				Model::Node* astNode = it->second;
 				if (auto compositeNode = DCast<Model::CompositeNode>(astNode))

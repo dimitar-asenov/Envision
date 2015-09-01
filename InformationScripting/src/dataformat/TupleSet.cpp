@@ -24,40 +24,47 @@
 **
 ***********************************************************************************************************************/
 
-#include "InformationEdge.h"
+#include "TupleSet.h"
 
 namespace InformationScripting {
 
-const QString InformationEdge::COUNT_PROPERTY_{"count"};
-const QString InformationEdge::NAME_PROPERTY_{"name"};
-
-InformationEdge::InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
-											Orientation orientation)
-	: PropertyMap{{{COUNT_PROPERTY_, 1}, {NAME_PROPERTY_, name}}}, from_{from}, to_{to}, orientation_{orientation}
-{}
-
-InformationEdge::InformationEdge(const InformationEdge& other)
-	: PropertyMap(other)
+QSet<Tuple> TupleSet::tuples(const QString& tag) const
 {
-	orientation_ = other.orientation_;
+	if (tag.isEmpty()) return tuples_;
+	QSet<Tuple> result;
+	for (auto t : tuples_)
+		if (t.get(0).first == tag) result.insert(t);
+	return result;
 }
 
-void InformationEdge::incrementCount()
+QSet<Tuple> TupleSet::tuples(TupleSet::TupleCondition condition) const
 {
-	Property& count = (*this)[COUNT_PROPERTY_];
-	count = static_cast<int>(count) + 1;
+	if (!condition) return tuples_;
+
+	QSet<Tuple> result;
+	for (auto t : tuples_)
+		if (condition(t)) result.insert(t);
+	return result;
 }
 
-void InformationEdge::setFrom(InformationNode* from)
+void TupleSet::add(const Tuple& t)
 {
-	Q_ASSERT(!from_);
-	from_ = from;
+	tuples_.insert(t);
 }
 
-void InformationEdge::setTo(InformationNode* to)
+void TupleSet::remove(const Tuple& t)
 {
-	Q_ASSERT(!to_);
-	to_ = to;
+	tuples_.remove(t);
+}
+
+void TupleSet::remove(const TupleSet& tuples)
+{
+	tuples_.subtract(tuples.tuples_);
+}
+
+void TupleSet::unite(const TupleSet& with)
+{
+	tuples_.unite(with.tuples_);
 }
 
 } /* namespace InformationScripting */

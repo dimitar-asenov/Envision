@@ -24,12 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "DataApi.h"
 
-#include "../informationscripting_api.h"
+#include "../dataformat/Tuple.h"
+#include "../dataformat/TupleSet.h"
 
 namespace InformationScripting {
 
-extern "C" PyObject* PyInit_NodeApi();
+using namespace boost::python;
+
+object value(const NamedProperty& self) {
+	return pythonObject(self.second);
+}
+
+BOOST_PYTHON_MODULE(DataApi) {
+		class_<NamedProperty>("NamedProperty")
+				.def_readwrite("name", &NamedProperty::first)
+				.add_property("value", &value);
+
+		class_<Tuple>("Tuple")
+				.def("get", &Tuple::get)
+				.def("getAll", &Tuple::getAll);
+
+
+		QSet<Tuple> (TupleSet::*tuples1)(const QString&) const = &TupleSet::tuples;
+
+		class_<TupleSet>("TupleSet")
+				.def("tuples", tuples1);
+}
 
 } /* namespace InformationScripting */

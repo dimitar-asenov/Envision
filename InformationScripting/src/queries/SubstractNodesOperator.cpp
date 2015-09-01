@@ -26,20 +26,15 @@
 
 #include "SubstractNodesOperator.h"
 
-#include "../graph/Graph.h"
-
 namespace InformationScripting {
 
-QList<Graph*> SubstractNodesOperator::execute(QList<Graph*> input)
+QList<TupleSet> SubstractNodesOperator::execute(QList<TupleSet> input)
 {
 	Q_ASSERT(input.size() == 2);
-	auto graphA = input[0];
-	auto graphB = input[1];
-
-	for (auto node : graphB->nodes())
-		graphA->remove(node); // As remove works on the hashvalue we can use the pointer from graphB in graphA.
-	SAFE_DELETE(graphB);
-	return {graphA};
+	auto setA = input[0];
+	auto setB = input[1];
+	setA.remove(setB);
+	return {setA};
 }
 
 } /* namespace InformationScripting */

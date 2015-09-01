@@ -40,7 +40,7 @@ class ScriptQuery : public Query
 		static void initPythonEnvironment();
 		static void unloadPythonEnvironment();
 
-		virtual QList<Graph*> execute(QList<Graph*> input) override;
+		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
 	private:
 		QString scriptPath_;

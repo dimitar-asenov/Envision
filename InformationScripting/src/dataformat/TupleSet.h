@@ -28,17 +28,30 @@
 
 #include "../informationscripting_api.h"
 
-#include "Property.h"
-#include "PropertyMap.h"
+#include "Tuple.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API InformationNode : public PropertyMap
+class INFORMATIONSCRIPTING_API TupleSet
 {
 	public:
-		InformationNode() = default;
-		InformationNode(QList<QPair<QString, Property>> initialValues);
-		InformationNode(const InformationNode& other);
+		using TupleCondition = std::function<bool (const Tuple& t)>;
+		/**
+		 * Returns all tuples which are tagged with \a tag.
+		 */
+		QSet<Tuple> tuples(const QString& tag) const;
+
+		QSet<Tuple> tuples(TupleCondition condition = {}) const;
+
+		void add(const Tuple& t);
+		void remove(const Tuple& t);
+		void remove(const TupleSet& tuples);
+
+		void unite(const TupleSet& with);
+
+
+	private:
+		QSet<Tuple> tuples_;
 };
 
 } /* namespace InformationScripting */

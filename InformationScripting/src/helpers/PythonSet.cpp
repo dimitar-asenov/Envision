@@ -24,55 +24,44 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "PythonSet.h"
 
-#include "../informationscripting_api.h"
-
-#include "Property.h"
-#include "PropertyMap.h"
 
 namespace InformationScripting {
 
-class InformationNode;
+namespace helper {
 
-class InformationEdge : public PropertyMap
+using namespace boost;
+
+PythonSetBase::PythonSetBase() : python::object(python::detail::new_reference(PySet_New(0)))
+{}
+
+void PythonSetBase::add(object_cref elem)
 {
-	public:
-		enum class Orientation : int {Directed, Undirected};
+	if (PyAnySet_CheckExact(ptr()))
+		 PySet_Add(ptr(), elem.ptr());
+	else
+		attr("add")(elem);
+}
 
-		InformationEdge() = default;
-		InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
-							 Orientation orientation = Orientation::Directed);
-		InformationEdge(const InformationEdge& other);
+void PythonSetBase::discard(const python::object& elem)
+{
+	if (PyAnySet_CheckExact(ptr()))
+		PySet_Discard(ptr(), elem.ptr());
+	else
+		attr("discard")(elem);
+}
 
-		int count() const;
-		void incrementCount();
-		QString name() const;
+static struct register_set_pytype_ptr
+{
+	 register_set_pytype_ptr()
+	 {
+		  const_cast<python::converter::registration &>(
+				python::converter::registry::lookup(python::type_id<PythonSet>())
+			).m_class_object = &PySet_Type;
+	 }
+} register_set_pytype_ptr_;
 
-		InformationNode* from() const;
-		InformationNode* to() const;
-		void setFrom(InformationNode* from);
-		void setTo(InformationNode* to);
-
-		bool isDirected() const;
-		Orientation orientation() const;
-
-	private:
-		static const QString COUNT_PROPERTY_;
-		static const QString NAME_PROPERTY_;
-
-		InformationNode* from_{};
-		InformationNode* to_{};
-
-		Orientation orientation_{};
-};
-
-inline int InformationEdge::count() const { auto it = find(COUNT_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
-inline QString InformationEdge::name() const
-	{ auto it = find(NAME_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
-inline InformationNode* InformationEdge::from() const { return from_; }
-inline InformationNode* InformationEdge::to() const { return to_; }
-inline bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }
-inline InformationEdge::Orientation InformationEdge::orientation() const { return orientation_; }
+} /* namespace helper */
 
 } /* namespace InformationScripting */

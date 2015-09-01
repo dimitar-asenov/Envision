@@ -33,9 +33,7 @@
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
-#include "../graph/Graph.h"
-#include "../graph/InformationEdge.h"
-#include "../graph/InformationNode.h"
+#include "../dataformat/TupleSet.h"
 
 namespace InformationScripting {
 
@@ -48,7 +46,8 @@ DefaultVisualizer& DefaultVisualizer::instance()
 	return instance;
 }
 
-void DefaultVisualizer::visualize(Graph* g)
+__attribute__((optnone))
+void DefaultVisualizer::visualize(const TupleSet& ts)
 {
 	// First remove all existing overlays:
 	for (auto scene : Visualization::Scene::allScenes())
@@ -57,26 +56,17 @@ void DefaultVisualizer::visualize(Graph* g)
 		scene->removeOverlayGroup(ARROW_OVERLAY_GROUP);
 	}
 	// Now draw the new stuff
-	QList<InformationEdge*> edges = g->edges();
-	if (!edges.empty())
+	auto calls = ts.tuples("calls");
+	if (!calls.empty())
 	{
-		// First check if all edges are of the same type
-		QString edgeName = edges[0]->name();
-		bool isSame = std::all_of(edges.begin(), edges.end(),
-										  [edgeName](InformationEdge *e) {return e->name() == edgeName;});
-		if (isSame)
+		for (auto t : calls)
 		{
-			// TODO for now we assume directed
-			for (auto edge : edges)
+			auto allAsts = t.getAll("ast");
+			if (allAsts.size() > 1)
 			{
-				auto from = edge->from();
-				auto to = edge->to();
-				// TODO for now we just support nodes that have AST property
-				Q_ASSERT(from->contains("ast"));
-				Q_ASSERT(to->contains("ast"));
+				Model::Node* fromNode = allAsts[0].second;
+				Model::Node* toNode = allAsts[1].second;
 
-				Model::Node* fromNode = (*from)["ast"];
-				Model::Node* toNode = (*to)["ast"];
 				auto fromVisualization = Visualization::Item::nodeItemsMap().find(fromNode);
 				Q_ASSERT(fromVisualization != Visualization::Item::nodeItemsMap().end());
 				auto toVisualization = Visualization::Item::nodeItemsMap().find(toNode);
@@ -84,47 +74,46 @@ void DefaultVisualizer::visualize(Graph* g)
 				auto fromVisualizationItem = *fromVisualization;
 
 				auto overlay = new Visualization::ArrowOverlay(
-							fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get());
+				fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get());
 				fromVisualizationItem->addOverlay(overlay, ARROW_OVERLAY_GROUP);
 			}
-		}
-		else
-		{
-			// TODO
 		}
 	}
 	else
 	{
-		auto condition = [](const InformationNode* node) {
-			return node->contains("ast");
-		};
-		auto nodes = g->nodes(condition);
+		auto allTuples = ts.tuples([](const Tuple& t) { return t.find("ast") != t.end(); });
 
-		bool hasColors = std::any_of(nodes.begin(), nodes.end(), [](InformationNode* n) {return n->contains("color");});
+		QHash<Model::Node*, QString> colors;
 
-		for (auto informationNode : nodes)
+		for (auto t : allTuples)
 		{
-			Model::Node* node = (*informationNode)["ast"];
+			auto allAsts = t.getAll("ast");
+			for (auto astProperty : allAsts)
+			{
+				Model::Node* node = astProperty.second;
+				QString& color = colors[node];
+				if (color.isEmpty())
+				{
+					if (t.find("color") != t.end())
+					{
+						QString c = t.find("color")->second;
+						color = c;
+					}
+					else
+						color = "red";
+				}
+			}
+		}
+
+		for (auto it = colors.begin(); it != colors.end(); ++it)
+		{
+			Model::Node* node = it.key();
 			auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
 			Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
 			auto item = *nodeVisualization;
-
-			QString styleArg{"redHighlight"};
-			auto colorIt = informationNode->find("color");
-			if (hasColors && colorIt != informationNode->end())
-			{
-				styleArg = colorIt->second.operator QString() + "Highlight";
-
-				auto overlay = new Visualization::SelectionOverlay(
-							item, Visualization::SelectionOverlay::itemStyles().get(styleArg));
-				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
-			}
-			else if (!hasColors)
-			{
-				auto overlay = new Visualization::SelectionOverlay(
-							item, Visualization::SelectionOverlay::itemStyles().get(styleArg));
-				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
-			}
+			auto overlay = new Visualization::SelectionOverlay(
+						item, Visualization::SelectionOverlay::itemStyles().get(it.value() + "Highlight"));
+			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 		}
 	}
 }

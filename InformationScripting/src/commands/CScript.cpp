@@ -32,7 +32,6 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
 
-#include "../graph/InformationNode.h"
 #include "../queries/QueryExecutor.h"
 #include "../queries/CompositeQuery.h"
 #include "../queries/AstNameFilter.h"
@@ -144,9 +143,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	else if (command == "color")
 	{
 		auto colorMatcher = new NodePropertyAdder("color", QString("blue"),
-			[](const InformationNode* node) {
-				auto it = node->find("ast");
-				if (it != node->end()) {
+			[](const Tuple& tuple) {
+				auto it = tuple.find("ast");
+				if (it != tuple.end()) {
 					Model::Node* astNode = it->second;
 					if (auto methodNode = DCast<OOModel::Method>(astNode))
 						return methodNode->name().contains("brackets");
@@ -155,9 +154,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		});
 
 		auto colorDescription = new NodePropertyAdder("color", QString("green"),
-			[](const InformationNode* node) {
-				auto it = node->find("ast");
-				if (it != node->end()) {
+			[](const Tuple& tuple) {
+				auto it = tuple.find("ast");
+				if (it != tuple.end()) {
 					Model::Node* astNode = it->second;
 					if (auto methodNode = DCast<OOModel::Method>(astNode))
 						return methodNode->name().contains("quotes");

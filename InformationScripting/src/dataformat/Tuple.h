@@ -24,44 +24,59 @@
 **
 ***********************************************************************************************************************/
 
-#include "PropertyMap.h"
+#pragma once
+
+#include "../informationscripting_api.h"
+
+#include "Property.h"
 
 namespace InformationScripting {
 
-PropertyMap::PropertyMap(QList<QPair<QString, Property> > initialValues)
+class INFORMATIONSCRIPTING_API Tuple
 {
-	for (auto initialValue : initialValues)
-		insert(initialValue.first, initialValue.second);
-}
+	public:
+		Tuple() = default;
+		Tuple(std::initializer_list<NamedProperty> initialValue);
+		Tuple(const QList<NamedProperty>& initialValues);
 
-PropertyMap::PropertyMap(const PropertyMap& other)
-{
-	for (auto property : other.properties_)
-		insert(property.first, property.second);
-}
+		NamedProperty get(int index) const;
+		QList<NamedProperty> getAll(const QString& key);
 
-boost::python::object PropertyMap::pythonAttribute(const QString& key)
-{
-	return pythonObject(operator[](key));
-}
+		void add(NamedProperty p);
 
-Property& InformationScripting::PropertyMap::operator[](const QString& key)
-{
-	for (auto& content : properties_)
-		if (content.first == key) return content.second;
-	qDebug() << "No object with name" << key;
-	properties_.push_back({key, Property()});
-	return properties_.last().second;
-}
+		int size() const;
 
-bool PropertyMap::contains(const QString& key) const
-{
-	return find(key) != end();
-}
+		uint hashValue(uint seed = 0) const;
 
-PropertyMap::const_iterator PropertyMap::find(const QString& key) const
-{
-	return std::find_if(properties_.begin(), properties_.end(), [key](auto v) {return v.first == key;});
-}
+		bool operator==(const Tuple& other) const;
+
+		// Iterators
+		using iterator = QList<NamedProperty>::Iterator;
+		using const_iterator = QList<NamedProperty>::ConstIterator;
+
+		const_iterator find(const QString& key) const;
+
+		iterator begin();
+		const_iterator begin() const;
+		const_iterator cbegin() const;
+		iterator end();
+		const_iterator end() const;
+		const_iterator cend() const;
+	private:
+		QList<NamedProperty> values_;
+
+};
+
+uint qHash(const Tuple& t, uint seed = 0);
+
+inline bool Tuple::operator==(const Tuple& other) const { return values_ == other.values_; }
+inline int Tuple::size() const { return values_.size(); }
+
+inline Tuple::iterator Tuple::begin() { return values_.begin(); }
+inline Tuple::const_iterator Tuple::begin() const { return values_.begin(); }
+inline Tuple::const_iterator Tuple::cbegin() const { return values_.cbegin(); }
+inline Tuple::iterator Tuple::end() { return values_.end(); }
+inline Tuple::const_iterator Tuple::end() const { return values_.end(); }
+inline Tuple::const_iterator Tuple::cend() const { return values_.cend(); }
 
 } /* namespace InformationScripting */

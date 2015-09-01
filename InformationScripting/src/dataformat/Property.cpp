@@ -24,25 +24,29 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "../queries/AstQuery.h"
-
-namespace Model {
-	class Node;
-}
+#include "Property.h"
 
 namespace InformationScripting {
 
-class Graph;
-
-class AstSource
+boost::python::object pythonObject(const Property& p)
 {
-	public:
-		AstSource() = delete;
-		static void init();
-};
+	return p.data_->pythonObject();
+}
+
+bool Property::operator==(const Property& other) const
+{
+	if (data_) return data_->equals(other.data_);
+	return !other.data_;
+}
+
+uint Property::hash(uint seed) const
+{
+	if (data_) return data_->hash(seed);
+	return 0;
+}
+
+uint qHash(const InformationScripting::Property& p, uint seed) {
+	return p.hash(seed);
+}
 
 } /* namespace InformationScripting */

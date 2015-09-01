@@ -41,9 +41,6 @@ namespace OOModel {
 
 namespace InformationScripting {
 
-class Graph;
-class InformationNode;
-
 class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
 	public:
@@ -52,24 +49,24 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 
 		AstQuery(QueryType type, Model::Node* target, QStringList args);
 
-		virtual QList<Graph*> execute(QList<Graph*> input) override;
+		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
 	private:
 		Model::Node* target_{};
 		Scope scope_{};
 		QueryType type_{};
 
-		Graph* classesQuery(QList<Graph*>& input);
-		Graph* methodsQuery(QList<Graph*>& input);
-		Graph* baseClassesQuery(QList<Graph*>& input);
-		Graph* toClassNode(QList<Graph*>& input);
-		Graph* callGraph(QList<Graph*>& input);
+		TupleSet classesQuery(QList<TupleSet> input);
+		TupleSet methodsQuery(QList<TupleSet> input);
+		TupleSet baseClassesQuery(QList<TupleSet> input);
+		TupleSet toClassNode(QList<TupleSet> input);
+		TupleSet callGraph(QList<TupleSet> input);
 
-		void addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g);
+		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 
-		void addGlobalNodesOfType(Graph* g, const QString& typeName);
+		void addGlobalNodesOfType(TupleSet& ts, const QString& typeName);
 
-		void addCallInformation(Graph* g, OOModel::Method* method, QList<OOModel::Method*> callees);
+		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
 };
 
 } /* namespace InformationScripting */
