@@ -58,11 +58,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		 * this to represent them as HTML text. Then the same visualization
 		 * can be used for multiple statistics nodes.
 		 */
-		QString infoHtml();
-		/**
-		 * Returns whether the content has changed since the last time infoHtml was called
-		 */
-		bool hasContentChanged() const;
+		QString infoHtml() const;
 		/**
 		 * Updates the InfoNode fully, meaning it gets the result from all info getters.
 		 */
@@ -111,7 +107,6 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 
 	private:
 		QString infoHtml_;
-		bool contentChanged_{};
 		QList<QString> enabledInfoGetters_;
 		QHash<QString, QString> cachedInfoStrings_;
 		Model::Node* target_{};
@@ -126,8 +121,7 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 
 };
 
-inline QString InfoNode::infoHtml() { contentChanged_ = false; return infoHtml_; }
-inline bool InfoNode::hasContentChanged() const { return contentChanged_; }
+inline QString InfoNode::infoHtml() const { return infoHtml_; }
 inline const Model::Node* InfoNode::target() const { return target_; }
 
 inline void InfoNode::fullUpdate() { updateInfo(false); }

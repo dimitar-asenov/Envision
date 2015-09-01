@@ -50,7 +50,7 @@ void VInfoNode::initializeForms()
 void VInfoNode::determineChildren()
 {
 	Super::determineChildren();
-	if (node()->hasContentChanged())
+	if (revision() != node()->revision())
 	{
 		browser_->setContent(node()->infoHtml());
 		browser_->addJavascriptObject("operations", InfoJavascriptFunctions::instance());

@@ -83,7 +83,7 @@ void InfoNode::setInfoHtml(QString content)
 {
 	if (content == infoHtml_) return;
 	infoHtml_ = content;
-	contentChanged_ = true;
+	incrementRevision();
 }
 
 void InfoNode::registerInfoGetter(const QString &name, const InfoGetter getter,

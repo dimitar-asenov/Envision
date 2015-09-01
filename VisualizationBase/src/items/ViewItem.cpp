@@ -258,7 +258,7 @@ void ViewItem::determineChildren()
 			if (auto vis = findVisualizationOf(info))
 				if (vis->needsUpdate() == Item::NoUpdate)
 				{
-					DCast<VInfoNode>(vis)->node()->automaticUpdate();
+					info->automaticUpdate();
 					vis->setUpdateNeeded(StandardUpdate);
 				}
 		}
