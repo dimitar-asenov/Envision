@@ -124,11 +124,12 @@ void VCommentBrowser::setHeightResizesWithContent(bool heightResizesWithContent)
 		setUpdateNeeded(StandardUpdate);
 	}
 
+	auto lambda = [this] { setUpdateNeeded(Visualization::Item::StandardUpdate); };
 
-	if (heightResizesWithContent)
-		QObject::connect(browser_, &QGraphicsWebView::geometryChanged, this, &VCommentBrowser::requestUpdate);
-	else
-		QObject::disconnect(browser_, &QGraphicsWebView::geometryChanged, this, &VCommentBrowser::requestUpdate);
+	if (heightResizesWithContent && !connection_)
+		connection_ = QObject::connect(browser_, &QGraphicsWebView::geometryChanged, lambda);
+	else if (!heightResizesWithContent)
+		QObject::disconnect(connection_);
 }
 
 }
