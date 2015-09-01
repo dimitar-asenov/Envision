@@ -30,7 +30,7 @@
 
 namespace InformationScripting {
 
-NodePropertyAdder::NodePropertyAdder(Graph::NodeCondition condition, const QString& propertyName, Property value)
+NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value, Graph::NodeCondition condition)
  : condition_{condition}, name_{propertyName}, value_{value}
 {}
 

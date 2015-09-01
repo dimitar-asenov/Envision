@@ -36,7 +36,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API NodePropertyAdder : public Query
 {
 	public:
-		NodePropertyAdder(Graph::NodeCondition condition, const QString& propertyName, Property value);
+		NodePropertyAdder(const QString& propertyName, Property value, Graph::NodeCondition condition = nullptr);
 		virtual QList<Graph*> execute(QList<Graph*> input) override;
 
 	private:

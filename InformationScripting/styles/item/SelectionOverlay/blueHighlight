@@ -1,0 +1,12 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/SelectionOverlay/redHighlight">
+	<shape>
+		Box
+		<backgroundBrush>
+			<color>#3cc0c0ff</color>
+		</backgroundBrush>
+		<outline>
+			<color>#0000c0</color>
+		</outline>
+	</shape>
+</style>
