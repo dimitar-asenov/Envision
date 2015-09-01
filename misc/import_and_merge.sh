@@ -4,7 +4,6 @@ jitPath=~/Envision/JavaImportTool/bin/
 jit="java -cp "${jitPath}:/opt/eclipse/plugins/*:../lib/*" javaImportTool.Main"
 
 gumtreePath=~/gumtree/gumtree-all/target
-#gumtree="java -cp ${gumtreePath}/gumtree.jar com.github.gumtreediff.client.Run -c Clients.experimental true envdmp -m gumtree-complete"
 gumtree="java -cp ${gumtreePath}/gumtree.jar com.github.gumtreediff.client.Run -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -m gumtree"
 
 idpatcher=~/Envision/misc/idPatcher.py

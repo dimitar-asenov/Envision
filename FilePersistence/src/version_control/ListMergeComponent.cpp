@@ -24,6 +24,9 @@
 **
 ***********************************************************************************************************************/
 
+//#pragma GCC push_options
+//#pragma GCC optimize ("O0")
+
 #include "ListMergeComponent.h"
 #include "ConflictPairs.h"
 
