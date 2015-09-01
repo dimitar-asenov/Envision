@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "modelbase_api.h"
-#include "nodes/Node.h"
+#include "../modelbase_api.h"
+#include "../nodes/Node.h"
 
 namespace Model {
 
@@ -37,7 +37,7 @@ class MODELBASE_API NameResolver {
 
 	public:
 		static QList<QPair<QString, Node*>> findAllMatches(const SymbolMatcher& matcher, QString nameSoFar, Node* root);
-		static QList<QPair<QString, Node*>> mostLikelyMatches(const QString& nodeName, int nrOfMatches);
+		static QList<QPair<QString, Node*>> mostLikelyMatches(const QString& nodeName, int matchLimit);
 
 	private:
 		static bool isSuggestable(Node::SymbolTypes symbolType);

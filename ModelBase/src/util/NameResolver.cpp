@@ -31,7 +31,7 @@
 
 namespace Model {
 
-QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& nodeName, int nrOfMatches)
+QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& nodeName, int matchLimit)
 {
 	QList<QPair<QString, Node*>> matches;
 	auto parts = nodeName.split(".");
@@ -46,7 +46,7 @@ QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& node
 	std::sort(matches.begin(), matches.end(), [](QPair<QString, Node*> first, QPair<QString, Node*> second)
 										{ return first.first.length() < second.first.length(); });
 	//Limit the number of suggestions
-	matches = matches.mid(0, nrOfMatches);
+	matches = matches.mid(0, matchLimit);
 	return matches;
 }
 

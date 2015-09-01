@@ -26,7 +26,7 @@
 
 #include "CAddNodeToViewByName.h"
 
-#include "ModelBase/src/NameResolver.h"
+#include "ModelBase/src/util/NameResolver.h"
 #include "VisualizationBase/src/items/VViewItemNode.h"
 #include "VisualizationBase/src/declarative/DynamicGridFormElement.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"

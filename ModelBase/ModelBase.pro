@@ -6,7 +6,6 @@ win32:LIBS += -llogger \
 HEADERS += src/persistence/NodeIdMap.h \
     src/nodes/NameText.h \
     src/nodes/UsedLibrary.h \
-    src/SymbolMatcher.h \
     src/commands/CompositeNodeChangeChild.h \
     src/nodes/composite/CompositeNode.h \
     src/nodes/composite/CompositeIndex.h \
@@ -51,11 +50,11 @@ HEADERS += src/persistence/NodeIdMap.h \
     src/ModelBasePlugin.h \
     src/model/TreeManager.h \
     src/model/AllTreeManagers.h \
-    src/NameResolver.h
+    src/util/NameResolver.h \
+    src/util/SymbolMatcher.h
 SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/NameText.cpp \
     src/nodes/UsedLibrary.cpp \
-    src/SymbolMatcher.cpp \
     src/commands/CompositeNodeChangeChild.cpp \
     src/nodes/composite/CompositeNode.cpp \
     src/nodes/composite/CompositeIndex.cpp \
@@ -90,7 +89,6 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     src/nodes/Reference.cpp \
     test/PersistenceTests.cpp \
     test/PersistentStoreMock.cpp \
-    src/ModelException.cpp \
     test/PositionTests.cpp \
     src/nodes/Integer.cpp \
     test/UndoRedoTests.cpp \
@@ -99,4 +97,6 @@ SOURCES += src/persistence/NodeIdMap.cpp \
     src/ModelBasePlugin.cpp \
     src/model/TreeManager.cpp \
     src/model/AllTreeManagers.cpp \
-    src/NameResolver.cpp
+    src/util/NameResolver.cpp \
+    src/util/SymbolMatcher.cpp \
+    src/ModelException.cpp

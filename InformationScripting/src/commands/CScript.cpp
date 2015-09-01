@@ -27,7 +27,7 @@
 #include "CScript.h"
 
 #include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/SymbolMatcher.h"
+#include "ModelBase/src/util/SymbolMatcher.h"
 
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"

@@ -26,7 +26,7 @@
 
 #include "InfoJavascriptFunctions.h"
 
-#include "ModelBase/src/NameResolver.h"
+#include "ModelBase/src/util/NameResolver.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "VisualizationManager.h"
 #include "Scene.h"
