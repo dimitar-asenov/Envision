@@ -132,4 +132,9 @@ void VCommentBrowser::setHeightResizesWithContent(bool heightResizesWithContent)
 		QObject::disconnect(connection_);
 }
 
+void VCommentBrowser::addJavascriptObject(const QString& name, QObject *object)
+{
+	browser_->page()->mainFrame()->addToJavaScriptWindowObject(name, object);
+}
+
 }
