@@ -42,6 +42,8 @@
 #include "../queries/UnionOperator.h"
 #include "../queries/ScriptQuery.h"
 
+#include "../parsing/QueryBuilder.h"
+
 namespace InformationScripting {
 
 CScript::CScript() : Command{"script"} {}
@@ -66,120 +68,137 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	QString command = args[0];
 	args = args.mid(1);
 
-	if (command == "script")
+	if (command != "fallback")
 	{
-		if (args.size())
+		args.prepend(command);
+		auto q = QueryBuilder::instance().buildQueryFrom(args.join(""), node);
+		QueryExecutor queryExecutor(q);
+		queryExecutor.execute();
+	}
+	else
+	{
+		QString command = args[0];
+		args = args.mid(1);
+
+		if (command == "script")
 		{
-			auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
-			// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
-			auto scriptQuery = new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(args[0]));
+			if (args.size())
+			{
+				// $"classes g" | "script test"$
+				auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+				// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
+				auto scriptQuery = new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(args[0]));
+				auto compositeQuery = new CompositeQuery();
+				compositeQuery->connectQuery(classesQuery, scriptQuery);
+				compositeQuery->connectToOutput(scriptQuery);
+				QueryExecutor queryExecutor(compositeQuery);
+				queryExecutor.execute();
+			}
+		}
+		else if (command == "methods")
+		{
+			// "methods"
+			auto query = new AstQuery(AstQuery::QueryType::Methods, node, args);
+			QueryExecutor queryExecutor(query);
+			queryExecutor.execute();
+		}
+		else if (command == "bases")
+		{
+			// "bases"
+			auto query = new AstQuery(AstQuery::QueryType::BaseClasses, node, args);
+			QueryExecutor queryExecutor(query);
+			queryExecutor.execute();
+		}
+		else if (command == "pipe")
+		{
+			// $"methods" | "toClass"$
+			auto methodQuery = new AstQuery(AstQuery::QueryType::Methods, node, args);
+			auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
 			auto compositeQuery = new CompositeQuery();
-			compositeQuery->connectQuery(classesQuery, scriptQuery);
-			compositeQuery->connectToOutput(scriptQuery);
+			compositeQuery->connectQuery(methodQuery, toBaseQuery);
+			compositeQuery->connectToOutput(toBaseQuery);
 			QueryExecutor queryExecutor(compositeQuery);
 			queryExecutor.execute();
 		}
-	}
-	else if (command == "methods")
-	{
-		auto query = new AstQuery(AstQuery::QueryType::Methods, node, args);
-		QueryExecutor queryExecutor(query);
-		queryExecutor.execute();
-	}
-	else if (command == "bases")
-	{
-		auto query = new AstQuery(AstQuery::QueryType::BaseClasses, node, args);
-		QueryExecutor queryExecutor(query);
-		queryExecutor.execute();
-	}
-	else if (command == "pipe")
-	{
-		auto methodQuery = new AstQuery(AstQuery::QueryType::Methods, node, args);
-		auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
-		auto compositeQuery = new CompositeQuery();
-		compositeQuery->connectQuery(methodQuery, toBaseQuery);
-		compositeQuery->connectToOutput(toBaseQuery);
-		QueryExecutor queryExecutor(compositeQuery);
-		queryExecutor.execute();
-	}
-	else if (command == "query21")
-	{
-		// Find all classes for which the name contains X and which have a method named Y
-		// 5 queries seems like a lot for this :S
-		auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
-		auto filterQuery = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*Matcher\\w*")));
-		auto methodsOfQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"of"});
-		auto methodsFilter = new AstNameFilter(Model::SymbolMatcher("matches"));
-		auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
-		auto compositeQuery = new CompositeQuery();
-		compositeQuery->connectQuery(classesQuery, filterQuery);
-		compositeQuery->connectQuery(filterQuery, methodsOfQuery);
-		compositeQuery->connectQuery(methodsOfQuery, methodsFilter);
-		compositeQuery->connectQuery(methodsFilter, toBaseQuery);
-		compositeQuery->connectToOutput(toBaseQuery);
-		QueryExecutor queryExecutor(compositeQuery);
-		queryExecutor.execute();
-	}
-	else if (command == "callgraph")
-	{
-		auto query = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
-		auto compositeQuery = new CompositeQuery();
-		compositeQuery->connectToOutput(query);
-		QueryExecutor queryExecutor(compositeQuery);
-		queryExecutor.execute();
-	}
-	else if (command == "query19")
-	{
-		// Find all methods that are not called transitively from the TARGET method.
-		auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
-		auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
-		auto complement = new SubstractNodesOperator();
-		auto compositeQuery = new CompositeQuery();
-		compositeQuery->connectQuery(allMethodsQuery, complement);
-		compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);
-		compositeQuery->connectToOutput(complement);
-		QueryExecutor queryExecutor(compositeQuery);
-		queryExecutor.execute();
-	}
-	else if (command == "color")
-	{
-		auto colorMatcher = new NodePropertyAdder("color", QString("blue"),
-			[](const InformationNode* node) {
-				auto it = node->find("ast");
-				if (it != node->end()) {
-					Model::Node* astNode = it->second;
-					if (auto methodNode = DCast<OOModel::Method>(astNode))
-						return methodNode->name().contains("brackets");
-				}
-				return false;
-		});
+		else if (command == "query21")
+		{
+			// Find all classes for which the name contains X and which have a method named Y
+			// 5 queries seems like a lot for this :S
 
-		auto colorDescription = new NodePropertyAdder("color", QString("green"),
-			[](const InformationNode* node) {
-				auto it = node->find("ast");
-				if (it != node->end()) {
-					Model::Node* astNode = it->second;
-					if (auto methodNode = DCast<OOModel::Method>(astNode))
-						return methodNode->name().contains("quotes");
-				}
-				return false;
-		});
+			// $"classes g" | "filter *Matcher*" | "methods of" | "filter matches" | "toClass"$
+			auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+			auto filterQuery = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*Matcher\\w*")));
+			auto methodsOfQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"of"});
+			auto methodsFilter = new AstNameFilter(Model::SymbolMatcher("matches"));
+			auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
+			auto compositeQuery = new CompositeQuery();
+			compositeQuery->connectQuery(classesQuery, filterQuery);
+			compositeQuery->connectQuery(filterQuery, methodsOfQuery);
+			compositeQuery->connectQuery(methodsOfQuery, methodsFilter);
+			compositeQuery->connectQuery(methodsFilter, toBaseQuery);
+			compositeQuery->connectToOutput(toBaseQuery);
+			QueryExecutor queryExecutor(compositeQuery);
+			queryExecutor.execute();
+		}
+		else if (command == "callgraph")
+		{
+			// "callgraph"
+			auto query = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+			auto compositeQuery = new CompositeQuery();
+			compositeQuery->connectToOutput(query);
+			QueryExecutor queryExecutor(compositeQuery);
+			queryExecutor.execute();
+		}
+		else if (command == "query19")
+		{
+			// Find all methods that are not called transitively from the TARGET method.
 
-		auto methods = new AstQuery(AstQuery::QueryType::Methods, node, {});
-		auto unionOp = new UnionOperator();
+			// $"methods g" - "callgraph"$
+			auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
+			auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+			auto complement = new SubstractNodesOperator();
+			auto compositeQuery = new CompositeQuery();
+			compositeQuery->connectQuery(allMethodsQuery, complement);
+			compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);
+			compositeQuery->connectToOutput(complement);
+			QueryExecutor queryExecutor(compositeQuery);
+			queryExecutor.execute();
+		}
+		else if (command == "color")
+		{
+			// $"methods" | {$"filter *quotes*" | "color = blue"$, $"filter *brackets*" | "color = green"$} U$
+			auto colorQuotes = new NodePropertyAdder("color", QString("blue"));
+			auto colorBrackets = new NodePropertyAdder("color", QString("green"));
 
-		auto composite = new CompositeQuery();
+			auto quotesFilter = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*quotes\\w*")));
+			auto bracketsFilter = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*brackets\\w*")));
 
-		composite->connectQuery(methods, colorMatcher);
-		composite->connectQuery(methods, colorDescription);
+			auto quotes = new CompositeQuery();
+			quotes->connectInput(0, quotesFilter);
+			quotes->connectQuery(quotesFilter, colorQuotes);
+			quotes->connectToOutput(colorQuotes);
 
-		composite->connectQuery(colorMatcher, unionOp);
-		composite->connectQuery(colorDescription, 0, unionOp, 1);
+			auto brackets = new CompositeQuery();
+			brackets->connectInput(0, bracketsFilter);
+			brackets->connectQuery(bracketsFilter, colorBrackets);
+			brackets->connectToOutput(colorBrackets);
 
-		composite->connectToOutput(unionOp);
+			auto methods = new AstQuery(AstQuery::QueryType::Methods, node, {});
+			auto unionOp = new UnionOperator();
 
-		QueryExecutor queryExecutor(composite);
-		queryExecutor.execute();
+			auto composite = new CompositeQuery();
+
+			composite->connectQuery(methods, quotes);
+			composite->connectQuery(methods, brackets);
+
+			composite->connectQuery(quotes, unionOp);
+			composite->connectQuery(brackets, 0, unionOp, 1);
+
+			composite->connectToOutput(unionOp);
+
+			QueryExecutor queryExecutor(composite);
+			queryExecutor.execute();
+		}
 	}
 	return new Interaction::CommandResult();
 }
