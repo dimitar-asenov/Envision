@@ -28,6 +28,7 @@
 #include "declarative/DeclarativeItemDef.h"
 #include "nodes/InfoNode.h"
 #include "Comments/src/items/VCommentBrowser.h"
+#include "utils/InfoJavascriptFunctions.h"
 
 namespace Visualization {
 
@@ -49,7 +50,11 @@ void VInfoNode::initializeForms()
 void VInfoNode::determineChildren()
 {
 	Super::determineChildren();
-	browser_->setContent(node()->infoHtml());
+	if (revision() != node()->revision())
+	{
+		browser_->setContent(node()->infoHtml());
+		browser_->addJavascriptObject("operations", InfoJavascriptFunctions::instance());
+	}
 }
 
 }

@@ -23,34 +23,41 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
 ***********************************************************************************************************************/
-#pragma once
 
-#include "oovisualization_api.h"
+#include "InfoJavascriptFunctions.h"
 
-namespace Model {
-	class Node;
-}
+#include "ModelBase/src/util/NameResolver.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "VisualizationManager.h"
+#include "Scene.h"
+#include "items/ViewItem.h"
+#include "views/MainView.h"
 
-namespace OOModel {
-	class Method;
-}
+namespace Visualization {
 
-namespace OOVisualization {
-
-class OOVISUALIZATION_API InfoMethods
+InfoJavascriptFunctions* InfoJavascriptFunctions::instance()
 {
-	public:
-		static QString numberOfCallees(Model::Node* node);
-		static QString numberOfUsages(Model::Node* node);
+	static InfoJavascriptFunctions instance;
+	return &instance;
+}
 
-		static QString fullName(Model::Node* node);
+void InfoJavascriptFunctions::jumpToObject(QString fullName)
+{
+	auto nodes = Model::NameResolver::mostLikelyMatches(fullName, 1);
+	if (nodes.size() == 0) return;
 
-	private:
-		static QString expandButton(QString functionName, QString expandableId);
+	auto node = nodes.first().second;
+	auto scene = VisualizationManager::instance().mainScene();
+	auto vis = scene->currentViewItem()->findVisualizationOf(node);
+	if (!vis) return;
 
-		//Helper functions
-		static QString classAndNameTable(QString tableId, QSet<OOModel::Method*> methods);
-		static QString hiddenTable(QString tableId, QStringList rows);
-};
+	//Center view on the item
+	for (auto v : scene->views())
+		if (auto mainView = dynamic_cast<Visualization::MainView*>(v))
+		{
+			mainView->centerOn(vis->scenePos());
+			return;
+		}
+}
 
 }

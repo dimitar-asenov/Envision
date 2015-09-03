@@ -53,6 +53,7 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		void setHeightResizesWithContent(bool heightResizesWithContent);
 
 		QGraphicsWebView* browser() const;
+		void addJavascriptObject(const QString& name, QObject* object);
 
 	protected:
 		virtual void determineChildren() override;
@@ -64,6 +65,8 @@ class COMMENTS_API VCommentBrowser : public Super<Visualization::Item>
 		QGraphicsWebView* browser_{};
 		QSize size_;
 		bool heightResizesWithContent_{};
+
+		QMetaObject::Connection connection_{};
 };
 
 inline QGraphicsWebView* VCommentBrowser::browser() const { return browser_;}

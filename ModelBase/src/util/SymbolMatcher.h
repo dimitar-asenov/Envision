@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "modelbase_api.h"
+#include "../modelbase_api.h"
 
 namespace Model {
 

@@ -28,7 +28,7 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/SymbolMatcher.h"
+#include "ModelBase/src/util/SymbolMatcher.h"
 
 #include "GenericFilter.h"
 

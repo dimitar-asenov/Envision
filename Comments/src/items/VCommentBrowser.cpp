@@ -123,6 +123,18 @@ void VCommentBrowser::setHeightResizesWithContent(bool heightResizesWithContent)
 
 		setUpdateNeeded(StandardUpdate);
 	}
+
+	auto lambda = [this] { setUpdateNeeded(Visualization::Item::StandardUpdate); };
+
+	if (heightResizesWithContent && !connection_)
+		connection_ = QObject::connect(browser_, &QGraphicsWebView::geometryChanged, lambda);
+	else if (!heightResizesWithContent)
+		QObject::disconnect(connection_);
+}
+
+void VCommentBrowser::addJavascriptObject(const QString& name, QObject *object)
+{
+	browser_->page()->mainFrame()->addToJavaScriptWindowObject(name, object);
 }
 
 }

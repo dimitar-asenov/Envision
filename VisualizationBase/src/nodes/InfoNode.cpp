@@ -63,7 +63,7 @@ InfoNode::~InfoNode()
 
 void InfoNode::updateInfo(bool isAutoUpdate)
 {
-	QString infoHtml;
+	QString infoHtml = "<hr><div style=\"font-family:sans-serif\">";
 	for (auto name : enabledInfoGetters_)
 	{
 		auto getter = allInfoGetters[name];
@@ -73,9 +73,17 @@ void InfoNode::updateInfo(bool isAutoUpdate)
 			cachedInfoStrings_[name] = getter.getter_(target_);
 		//Use the computed value to extend the info
 		if (!cachedInfoStrings_[name].isEmpty())
-			infoHtml += cachedInfoStrings_[name] + "<small>" + "  (Layer " + name + ")</small>" + "<br>";
+			infoHtml += cachedInfoStrings_[name] + "<small>" + "  (Layer " + name + ")</small>" + "<br><hr>";
 	}
+	infoHtml = "<html>" + infoHtml + "</div></html>";
 	setInfoHtml(infoHtml);
+}
+
+void InfoNode::setInfoHtml(QString content)
+{
+	if (content == infoHtml_) return;
+	infoHtml_ = content;
+	incrementRevision();
 }
 
 void InfoNode::registerInfoGetter(const QString &name, const InfoGetter getter,

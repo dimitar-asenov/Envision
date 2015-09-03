@@ -122,7 +122,6 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 };
 
 inline QString InfoNode::infoHtml() const { return infoHtml_; }
-inline void InfoNode::setInfoHtml(QString content) { infoHtml_ = content; }
 inline const Model::Node* InfoNode::target() const { return target_; }
 
 inline void InfoNode::fullUpdate() { updateInfo(false); }

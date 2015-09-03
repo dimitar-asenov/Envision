@@ -32,14 +32,26 @@ namespace OOVisualization {
 QString InfoMethods::numberOfCallees(Model::Node *node)
 {
 	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of called methods: " + QString::number(method->callees().size());
+	{
+		QString html = expandButton("toggleCalleeTable", "calleeTable");
+		html = "Number of called methods: " + QString::number(method->callees().size()) + "<br>" + html;
+		html += classAndNameTable("calleeTable", method->callees());
+		return html;
+	}
 	else return QString();
 }
 
 QString InfoMethods::numberOfUsages(Model::Node *node)
 {
+
 	if (auto method = DCast<OOModel::Method>(node))
-		return "Number of callers " + QString::number(method->callers().size());
+	{
+		QString html = expandButton("toggleCallerTable", "callerTable");
+		auto callers = method->callers();
+		html = "Number of callers: " + QString::number(callers.size()) + "<br>" + html;
+		html += classAndNameTable("callerTable", callers);
+		return html;
+	}
 	else if (auto someClass = DCast<OOModel::Class>(node))
 	{
 		QSet<Model::Node*> result;
@@ -66,6 +78,42 @@ QString InfoMethods::fullName(Model::Node *node)
 	else if (auto clazz = DCast<OOModel::Class>(node))
 		return "<b>" + clazz->name() + "</b>";
 	else return QString();
+}
+
+QString InfoMethods::expandButton(QString functionName, QString expandableId)
+{
+	QString html = "<script>";
+	html += "function " + functionName + "()";
+	html += "{";
+	html += "var table = document.getElementById(\"" + expandableId + "\");";
+	html += "table.style.display = (table.style.display == \"table\") ? \"none\" : \"table\";";
+	html += "}";
+	html += "</script>";
+	html += "<button onclick=\"" + functionName + "()\">Details</button>";
+	return html;
+}
+
+QString InfoMethods::classAndNameTable(QString tableId, QSet<OOModel::Method *> methods)
+{
+	QStringList tableRows{"<tr><td style=\"border-right:solid 1px\"><b>Class</b></td><td><b>Method</b></td></tr>"};
+	for (auto method : methods)
+	{
+		auto methodClass = method->firstAncestorOfType<OOModel::Class>();
+		tableRows.append("<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>"
+						+ "<td style=\"border-right:solid 1px\">" + method->name() + "</td>"
+						+ "<td><button onclick=\"operations.jumpToObject('" +
+									method->fullyQualifiedName() + "')\">Jump to</button></td></tr>");
+	}
+	return hiddenTable(tableId, tableRows);
+}
+
+QString InfoMethods::hiddenTable(QString tableId, QStringList rows)
+{
+	QString html = "<table id=\"" + tableId + "\" style=\"display:none\">";
+	for (auto row : rows)
+		html += row;
+	html += "</table>";
+	return html;
 }
 
 }

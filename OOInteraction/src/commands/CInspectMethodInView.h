@@ -26,28 +26,30 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
+#include "oointeraction_api.h"
+#include "InteractionBase/src/commands/CommandWithDefaultArguments.h"
 
-#include "commands/Command.h"
-
-namespace Model {
-	class SymbolMatcher;
+namespace Visualization {
+	class Item;
 }
 
-namespace Interaction {
+namespace OOInteraction {
 
-class INTERACTIONBASE_API CAddNodeToViewByName : public Command
+class OOINTERACTION_API CInspectMethodInView : public Interaction::CommandWithDefaultArguments
 {
 	public:
-		CAddNodeToViewByName();
+		CInspectMethodInView();
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+		virtual bool canInterpret(Visualization::Item *source, Visualization::Item *target,
+				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor> &cursor) override;
 
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+	protected:
+		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+
+		virtual QString description(Visualization::Item *source, Visualization::Item *target,
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+
 };
 
 }

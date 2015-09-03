@@ -26,28 +26,21 @@
 
 #pragma once
 
-#include "interactionbase_api.h"
-
-#include "commands/Command.h"
+#include "../modelbase_api.h"
+#include "../nodes/Node.h"
 
 namespace Model {
-	class SymbolMatcher;
-}
 
-namespace Interaction {
+class SymbolMatcher;
 
-class INTERACTIONBASE_API CAddNodeToViewByName : public Command
-{
+class MODELBASE_API NameResolver {
+
 	public:
-		CAddNodeToViewByName();
+		static QList<QPair<QString, Node*>> findAllMatches(const SymbolMatcher& matcher, QString nameSoFar, Node* root);
+		static QList<QPair<QString, Node*>> mostLikelyMatches(const QString& nodeName, int matchLimit);
 
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>& cursor) override;
-
-		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar, const std::unique_ptr<Visualization::Cursor>& cursor) override;
+	private:
+		static bool isSuggestable(Node::SymbolTypes symbolType);
 };
 
-}
+} /* namespace Model */

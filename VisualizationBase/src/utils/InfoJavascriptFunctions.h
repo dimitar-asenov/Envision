@@ -25,32 +25,18 @@
 ***********************************************************************************************************************/
 #pragma once
 
-#include "oovisualization_api.h"
+#include "visualizationbase_api.h"
 
-namespace Model {
-	class Node;
-}
+namespace Visualization {
 
-namespace OOModel {
-	class Method;
-}
-
-namespace OOVisualization {
-
-class OOVISUALIZATION_API InfoMethods
+class VISUALIZATIONBASE_API InfoJavascriptFunctions : public QObject
 {
+	Q_OBJECT
+
 	public:
-		static QString numberOfCallees(Model::Node* node);
-		static QString numberOfUsages(Model::Node* node);
+		static InfoJavascriptFunctions* instance();
 
-		static QString fullName(Model::Node* node);
-
-	private:
-		static QString expandButton(QString functionName, QString expandableId);
-
-		//Helper functions
-		static QString classAndNameTable(QString tableId, QSet<OOModel::Method*> methods);
-		static QString hiddenTable(QString tableId, QStringList rows);
+		Q_INVOKABLE void jumpToObject(QString fullName);
 };
 
 }

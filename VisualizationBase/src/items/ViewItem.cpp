@@ -90,7 +90,7 @@ void ViewItem::insertColumn(int column)
 		nodes_.insert(column, {});
 }
 
-Model::Node* ViewItem::insertNode(Model::Node* node, int column, int row, int purpose)
+ViewItemNode* ViewItem::insertNode(Model::Node* node, int column, int row, int purpose)
 {
 	auto ref = ViewItemNode::withReference(node, purpose);
 	insertViewItemNode(ref, column, row);
@@ -258,7 +258,7 @@ void ViewItem::determineChildren()
 			if (auto vis = findVisualizationOf(info))
 				if (vis->needsUpdate() == Item::NoUpdate)
 				{
-					DCast<VInfoNode>(vis)->node()->automaticUpdate();
+					info->automaticUpdate();
 					vis->setUpdateNeeded(StandardUpdate);
 				}
 		}

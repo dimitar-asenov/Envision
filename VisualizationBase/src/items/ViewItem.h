@@ -68,7 +68,7 @@ class VISUALIZATIONBASE_API ViewItem : public Super<DeclarativeItem<ViewItem>> {
 		 * Insert the given node into the grid at the given position, rendering
 		 * it with the given purpose.
 		 */
-		Model::Node* insertNode(Model::Node* node, int column = 0, int row = 0, int purpose = -1);
+		ViewItemNode* insertNode(Model::Node* node, int column = 0, int row = 0, int purpose = -1);
 		/**
 		 * Remove the given node from the view (this does not delete the node from the model)
 		 */
