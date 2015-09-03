@@ -31,10 +31,14 @@
 
 using namespace Visualization;
 
+inline void initCommentsResources() { Q_INIT_RESOURCE(res); }
+
 namespace Comments{
 
 CommentDiagramToolbar::CommentDiagramToolbar(QWidget *parent) : QToolBar(parent)
 {
+	initCommentsResources();
+
 	this->setIconSize(QSize(96, 24));
 	this->setWindowTitle("Diagram Editing Toolbar");
 
