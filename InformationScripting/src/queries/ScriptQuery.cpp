@@ -32,8 +32,8 @@
 
 namespace InformationScripting {
 
-ScriptQuery::ScriptQuery(const QString& scriptPath)
-	: scriptPath_{scriptPath}
+ScriptQuery::ScriptQuery(const QString& scriptPath, const QStringList& args)
+	: scriptPath_{scriptPath}, arguments_{args}
 {}
 
 void ScriptQuery::initPythonEnvironment()
@@ -63,6 +63,7 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 		python::object sys = python::import("sys");
 
 		main_namespace["inputs"] = input;
+		main_namespace["args"] = arguments_;
 
 		exec_file(scriptPath_.toLatin1().data(), main_namespace, main_namespace);
 		// Workaround to get output

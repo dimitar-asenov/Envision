@@ -38,17 +38,21 @@ object value(const NamedProperty& self) {
 }
 
 BOOST_PYTHON_MODULE(DataApi) {
-		class_<NamedProperty>("NamedProperty")
+		class_<NamedProperty>("NamedProperty", init<QString, QString>())
 				.def_readwrite("name", &NamedProperty::first)
 				.add_property("value", &value);
 
-		class_<Tuple>("Tuple");
+		class_<Tuple>("Tuple")
+				.def("add", &Tuple::add);
 
 
 		QSet<Tuple> (TupleSet::*tuples1)(const QString&) const = &TupleSet::tuples;
+		void (TupleSet::*removeTuple)(const Tuple&) = &TupleSet::remove;
 
 		class_<TupleSet>("TupleSet")
-				.def("tuples", tuples1);
+				.def("tuples", tuples1)
+				.def("remove", removeTuple)
+				.def("add", &TupleSet::add);
 }
 
 } /* namespace InformationScripting */

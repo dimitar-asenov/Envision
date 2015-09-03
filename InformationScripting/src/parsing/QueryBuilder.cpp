@@ -104,7 +104,8 @@ QueryBuilder::QueryBuilder()
 		return new AstNameFilter(Model::SymbolMatcher(args[0]));
 	});
 	registerQueryConstructor("script", [](Model::Node*, QStringList args) {
-		return new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(args[0]));
+		QString scriptName = args.takeFirst();
+		return new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(scriptName), args);
 	});
 }
 

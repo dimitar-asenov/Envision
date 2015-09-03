@@ -164,6 +164,7 @@ void BoostPythonHelpers::initializeConverters()
 
 	python::to_python_converter<QSet<Tuple>, PythonConverters::QSet_to_python_set<Tuple>>();
 
+	python::to_python_converter<QList<QString>, PythonConverters::QList_to_python_list<QString>>();
 	python::to_python_converter<QList<TupleSet>, PythonConverters::QList_to_python_list<TupleSet>>();
 	python::to_python_converter<QList<NamedProperty>, PythonConverters::QList_to_python_list<NamedProperty>>();
 
