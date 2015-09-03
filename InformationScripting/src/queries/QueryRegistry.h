@@ -34,39 +34,36 @@ namespace Model {
 
 namespace InformationScripting {
 
-class CompositeQuery;
 class Query;
 
-class INFORMATIONSCRIPTING_API QueryBuilder
+class INFORMATIONSCRIPTING_API QueryRegistry
 {
 	public:
-		static QueryBuilder& instance();
-		/**
-		 * Parses the \a text in the following language:
-		 *
-		 * char			:= a-z
-		 * word			:= char [char|SPACE]+
-		 * query			:= "word"
-		 * queryOrList := query | list
-		 * op				:= | - U
-		 * operator		:= $queryOrList [op queryOrList]+$
-		 * queryOrOp	:= query | operator
-		 * list			:= {queryOrOp [, queryOrOp]+}
-		 */
-		Query* buildQueryFrom(const QString& text, Model::Node* target);
+		static QueryRegistry& instance();
+
+		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
+		void registerQueryConstructor(const QString& command, QueryConstructor constructor);
+
+		void registerScriptLocation(const QString& path);
+
+		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
 	private:
-		QueryBuilder() = default;
-		enum class Type: int {Operator = 0, Query = 1, List = 2};
-		Type typeOf(const QString& text);
-		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
+		QueryRegistry();
 
-		Query* parseQuery(const QString& text);
-		QList<Query*> parseList(const QString& text);
-		Query* parseOperator(const QString& text, bool connectInput = false);
-		QList<Query*> parseOperatorPart(const QString& text);
+		void registerDefaultQueries();
+		void registerDefaultScriptLocations();
 
-		Model::Node* target_{};
+		Query* tryBuildQueryFromScript(const QString& name, QStringList args);
+
+		QHash<QString, QueryConstructor> constructors_;
+		QStringList scriptLocations_;
 };
 
-} /* namespace InformationScripting  */
+inline void QueryRegistry::registerQueryConstructor(const QString& command, QueryRegistry::QueryConstructor constructor)
+{
+	Q_ASSERT(constructor);
+	constructors_[command] = constructor;
+}
+
+} /* namespace InformationScripting */

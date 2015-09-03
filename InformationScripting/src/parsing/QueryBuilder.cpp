@@ -28,12 +28,11 @@
 
 #include "../queries/CompositeQuery.h"
 #include "../queries/Query.h"
-#include "../queries/AstQuery.h"
-#include "../queries/AstNameFilter.h"
 #include "../queries/SubstractNodesOperator.h"
 #include "../queries/UnionOperator.h"
-#include "../queries/NodePropertyAdder.h"
-#include "../queries/ScriptQuery.h"
+
+
+#include "../queries/QueryRegistry.h"
 
 namespace InformationScripting {
 
@@ -68,45 +67,6 @@ Query* QueryBuilder::buildQueryFrom(const QString& text, Model::Node* target)
 	}
 	Q_ASSERT(false);
 	return nullptr;
-}
-
-void QueryBuilder::registerQueryConstructor(const QString& command, QueryBuilder::QueryConstructor constructor)
-{
-	constructors_[command] = constructor;
-}
-
-QueryBuilder::QueryBuilder()
-{
-	// TODO find a better place to register queries:
-	registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Classes, target, args);
-	});
-	registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Methods, target, args);
-	});
-	registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
-	});
-	registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::ToClass, target, args);
-	});
-	registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
-	});
-	registerQueryConstructor("filter", [](Model::Node*, QStringList args) {
-		Q_ASSERT(args.size());
-		if (args[0].contains("*"))
-		{
-			QString regexString = args[0];
-			regexString.replace("*", "\\w*");
-			return new AstNameFilter(Model::SymbolMatcher(new QRegExp(regexString)));
-		}
-		return new AstNameFilter(Model::SymbolMatcher(args[0]));
-	});
-	registerQueryConstructor("script", [](Model::Node*, QStringList args) {
-		QString scriptName = args.takeFirst();
-		return new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(scriptName), args);
-	});
 }
 
 QueryBuilder::Type QueryBuilder::typeOf(const QString& text)
@@ -148,17 +108,10 @@ Query* QueryBuilder::parseQuery(const QString& text)
 	Q_ASSERT(typeOf(text) == Type::Query);
 	QStringList data = text.mid(1, text.size()-2).split(" ", QString::SkipEmptyParts);
 	Q_ASSERT(data.size());
-	QString command = data[0];
-	auto constructor = constructors_[command];
-	if (!constructor && (data.size() > 2 && data[1] == "="))
-	{
-		// TODO we need some way to specify a condition on the node.
-		// Or eventually decide that we don't allow condition in the property adder
-		return new NodePropertyAdder(data[0], data[2]);
-	}
-	// TODO this should only be an error presented to the user:
-	Q_ASSERT(constructor);
-	return constructor(target_, data.mid(1));
+	QString command = data.takeFirst();
+	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
+	Q_ASSERT(q); // TODO this should be an error for the user.
+	return q;
 }
 
 QList<Query*> QueryBuilder::parseList(const QString& text)
