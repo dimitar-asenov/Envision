@@ -36,6 +36,8 @@
 #include "OOModel/src/expressions/IntegerLiteral.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 #include "VisualizationBase/src/renderer/VisualizationGroup.h"
+#include "VisualizationBase/src/items/ViewItem.h"
+#include "VisualizationBase/src/nodes/ViewItemNode.h"
 
 namespace OOInteraction {
 
@@ -119,8 +121,10 @@ void CustomizationVisitor::onSceneRefresh(Visualization::Scene* scene)
 {
 	resetCustomizations();
 	CustomizationVisitor customizations;
-	for (auto top : scene->topLevelItems())
-		if (top->hasNode()) customizations.visit(top->node());
+	for (auto top : scene->currentViewItem()->allNodes())
+		if (auto viewItemNode = DCast<Visualization::ViewItemNode>(top))
+			if (viewItemNode->reference())
+				customizations.visit(viewItemNode->reference());
 }
 
 } /* namespace OOInteraction */
