@@ -28,13 +28,15 @@
 
 namespace InformationScripting {
 
-Tuple::Tuple(std::initializer_list<NamedProperty> initialValue)
-	: values_{initialValue}
-{}
-
-Tuple::Tuple(const QList<NamedProperty>& initialValues)
+Tuple::Tuple(std::initializer_list<NamedProperty> initialValues)
 	: values_{initialValues}
 {}
+
+QString Tuple::tag() const
+{
+	if (values_.size()) return values_[0].first;
+	return {};
+}
 
 NamedProperty Tuple::get(int index) const
 {

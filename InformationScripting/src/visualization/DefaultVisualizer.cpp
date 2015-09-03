@@ -46,7 +46,6 @@ DefaultVisualizer& DefaultVisualizer::instance()
 	return instance;
 }
 
-__attribute__((optnone))
 void DefaultVisualizer::visualize(const TupleSet& ts)
 {
 	// First remove all existing overlays:

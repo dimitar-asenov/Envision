@@ -36,8 +36,9 @@ class INFORMATIONSCRIPTING_API Tuple
 {
 	public:
 		Tuple() = default;
-		Tuple(std::initializer_list<NamedProperty> initialValue);
-		Tuple(const QList<NamedProperty>& initialValues);
+		Tuple(std::initializer_list<NamedProperty> initialValues);
+
+		QString tag() const;
 
 		NamedProperty get(int index) const;
 		QList<NamedProperty> getAll(const QString& key);

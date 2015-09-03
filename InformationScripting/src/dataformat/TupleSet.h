@@ -46,12 +46,15 @@ class INFORMATIONSCRIPTING_API TupleSet
 		void add(const Tuple& t);
 		void remove(const Tuple& t);
 		void remove(const TupleSet& tuples);
-
 		void unite(const TupleSet& with);
-
 
 	private:
 		QSet<Tuple> tuples_;
 };
+
+inline void TupleSet::add(const Tuple& t) { tuples_.insert(t); }
+inline void TupleSet::remove(const Tuple& t) { tuples_.remove(t); }
+inline void TupleSet::remove(const TupleSet& tuples) { tuples_.subtract(tuples.tuples_); }
+inline void TupleSet::unite(const TupleSet& with) { tuples_.unite(with.tuples_); }
 
 } /* namespace InformationScripting */

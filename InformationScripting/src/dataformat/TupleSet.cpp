@@ -33,7 +33,7 @@ QSet<Tuple> TupleSet::tuples(const QString& tag) const
 	if (tag.isEmpty()) return tuples_;
 	QSet<Tuple> result;
 	for (auto t : tuples_)
-		if (t.get(0).first == tag) result.insert(t);
+		if (t.tag() == tag) result.insert(t);
 	return result;
 }
 
@@ -45,26 +45,6 @@ QSet<Tuple> TupleSet::tuples(TupleSet::TupleCondition condition) const
 	for (auto t : tuples_)
 		if (condition(t)) result.insert(t);
 	return result;
-}
-
-void TupleSet::add(const Tuple& t)
-{
-	tuples_.insert(t);
-}
-
-void TupleSet::remove(const Tuple& t)
-{
-	tuples_.remove(t);
-}
-
-void TupleSet::remove(const TupleSet& tuples)
-{
-	tuples_.subtract(tuples.tuples_);
-}
-
-void TupleSet::unite(const TupleSet& with)
-{
-	tuples_.unite(with.tuples_);
 }
 
 } /* namespace InformationScripting */
