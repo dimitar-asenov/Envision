@@ -38,6 +38,7 @@ QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
 	{
 		for (auto node : g.tuples(condition_))
 		{
+			g.remove(node);
 			node.add({name_, value_});
 			g.add(node);
 		}
