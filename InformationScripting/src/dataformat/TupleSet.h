@@ -53,26 +53,23 @@ class INFORMATIONSCRIPTING_API TupleSet
 		void unite(const TupleSet& with);
 
 	private:
-		QSet<Tuple> tuples_;
+		QHash<QString, QSet<Tuple>> tuples_;
 };
 
 template <class Condition>
 inline QSet<Tuple> TupleSet::tuples(Condition condition) const
 {
-	if (!condition) return tuples_;
+	if (!condition) return tuples();
 
 	QSet<Tuple> result;
-	for (auto t : tuples_)
+	for (auto t : tuples())
 		if (condition(t)) result.insert(t);
 	return result;
 }
 
 inline QSet<Tuple> TupleSet::tuples(const char* tag) const { return tuples(QString(tag)); }
-inline QSet<Tuple> TupleSet::tuples() const { return tuples_; }
 
-inline void TupleSet::add(const Tuple& t) { tuples_.insert(t); }
-inline void TupleSet::remove(const Tuple& t) { tuples_.remove(t); }
-inline void TupleSet::remove(const TupleSet& tuples) { tuples_.subtract(tuples.tuples_); }
-inline void TupleSet::unite(const TupleSet& with) { tuples_.unite(with.tuples_); }
+inline void TupleSet::add(const Tuple& t) { tuples_[t.tag()].insert(t); }
+inline void TupleSet::remove(const Tuple& t) { tuples_[t.tag()].remove(t); }
 
 } /* namespace InformationScripting */

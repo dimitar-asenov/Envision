@@ -30,11 +30,27 @@ namespace InformationScripting {
 
 QSet<Tuple> TupleSet::tuples(const QString& tag) const
 {
-	if (tag.isEmpty()) return tuples_;
+	return tuples_[tag];
+}
+
+QSet<Tuple> InformationScripting::TupleSet::tuples() const
+{
 	QSet<Tuple> result;
-	for (auto t : tuples_)
-		if (t.tag() == tag) result.insert(t);
+	for (auto it = tuples_.begin(); it != tuples_.end(); ++it)
+		result.unite(it.value());
 	return result;
+}
+
+void InformationScripting::TupleSet::remove(const TupleSet& tuples)
+{
+	for (auto key : tuples.tuples_.keys())
+		tuples_[key].subtract(tuples.tuples_[key]);
+}
+
+void InformationScripting::TupleSet::unite(const TupleSet& with)
+{
+	for (auto key : with.tuples_.keys())
+		tuples_[key].unite(with.tuples_[key]);
 }
 
 } /* namespace InformationScripting */
