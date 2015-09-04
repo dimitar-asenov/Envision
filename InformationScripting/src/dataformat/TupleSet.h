@@ -38,7 +38,7 @@ class INFORMATIONSCRIPTING_API TupleSet
 		using TupleCondition = std::function<bool (const Tuple& t)>;
 
 		template<class Condition>
-		QSet<Tuple> tuples(Condition condition = {}) const;
+		QSet<Tuple> tuples(Condition condition) const;
 		/**
 		 * Returns all tuples which are tagged with \a tag.
 		 */
@@ -54,6 +54,7 @@ class INFORMATIONSCRIPTING_API TupleSet
 		QSet<Tuple> take(const char* tag);
 		template<class Condition>
 		QSet<Tuple> take(Condition condition);
+		QSet<Tuple> takeAll();
 		void unite(const TupleSet& with);
 
 	private:

@@ -47,6 +47,15 @@ void InformationScripting::TupleSet::remove(const TupleSet& tuples)
 		tuples_[key].subtract(tuples.tuples_[key]);
 }
 
+QSet<Tuple> TupleSet::takeAll()
+{
+	QSet<Tuple> result;
+	auto keys = tuples_.keys();
+	for (auto key : keys)
+		result.unite(tuples_.take(key));
+	return result;
+}
+
 void InformationScripting::TupleSet::unite(const TupleSet& with)
 {
 	for (auto key : with.tuples_.keys())
