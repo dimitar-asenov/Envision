@@ -45,10 +45,10 @@ class OOINTERACTION_API CInspectMethodInView : public Interaction::CommandWithDe
 
 	protected:
 		virtual Interaction::CommandResult* executeWithArguments(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) override;
 
 		virtual QString description(Visualization::Item *source, Visualization::Item *target,
-				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor);
+				const QStringList &arguments, const std::unique_ptr<Visualization::Cursor> &cursor) override;
 
 };
 
