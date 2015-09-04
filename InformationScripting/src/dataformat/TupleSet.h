@@ -35,8 +35,6 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API TupleSet
 {
 	public:
-		using TupleCondition = std::function<bool (const Tuple& t)>;
-
 		template<class Condition>
 		QSet<Tuple> tuples(Condition condition) const;
 		/**

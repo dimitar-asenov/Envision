@@ -35,11 +35,10 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API NodePropertyAdder : public Query
 {
 	public:
-		NodePropertyAdder(const QString& propertyName, Property value, TupleSet::TupleCondition condition = nullptr);
+		NodePropertyAdder(const QString& propertyName, Property value);
 		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
 	private:
-		TupleSet::TupleCondition condition_{};
 		QString name_;
 		Property value_{};
 };

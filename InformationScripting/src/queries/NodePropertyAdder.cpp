@@ -28,19 +28,18 @@
 
 namespace InformationScripting {
 
-NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value, TupleSet::TupleCondition condition)
- : condition_{condition}, name_{propertyName}, value_{value}
+NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value)
+ : name_{propertyName}, value_{value}
 {}
 
 QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
 {
-	for (auto& g : input)
+	for (auto& ts : input)
 	{
-		for (auto node : g.tuples(condition_))
+		for (auto node : ts.takeAll())
 		{
-			g.remove(node);
 			node.add({name_, value_});
-			g.add(node);
+			ts.add(node);
 		}
 	}
 	return input;
