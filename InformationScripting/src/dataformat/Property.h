@@ -47,6 +47,8 @@ class INFORMATIONSCRIPTING_API Property {
 		template <class ConvertTo> operator ConvertTo() const;
 		operator Model::Node*() const;
 
+		template <class ConvertTo> bool isConvertibleTo() const;
+
 		bool operator==(const Property& other) const;
 
 		uint hash(uint seed = 0) const;
@@ -152,6 +154,14 @@ inline Property::operator ConvertTo() const
 }
 
 inline InformationScripting::Property::operator Model::Node*() const { return data_->node(); }
+
+template <class ConvertTo>
+inline bool Property::isConvertibleTo() const
+{
+	return std::dynamic_pointer_cast<PropertyData<ConvertTo>>(data_) != nullptr;
+}
+
+template <> inline bool Property::isConvertibleTo<Model::Node*>() const { return data_ && data_->node(); }
 
 // qHash functions have to accessible outside:
 uint qHash(const InformationScripting::Property& p, uint seed = 0);

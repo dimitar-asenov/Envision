@@ -40,9 +40,6 @@ class INFORMATIONSCRIPTING_API Tuple
 
 		QString tag() const;
 
-		NamedProperty get(int index) const;
-		QList<NamedProperty> getAll(const QString& key);
-
 		void add(const NamedProperty& p);
 
 		int size() const;
@@ -56,6 +53,9 @@ class INFORMATIONSCRIPTING_API Tuple
 		const Property& operator[](const QString& name) const;
 		NamedProperty& operator[](int index);
 		const NamedProperty& operator[](int index) const;
+
+		template<class T>
+		QList<T> valuesOfType() const;
 
 		// Iterators
 		using iterator = QList<NamedProperty>::Iterator;
@@ -82,6 +82,16 @@ inline bool Tuple::operator==(const Tuple& other) const { return values_ == othe
 
 inline NamedProperty& Tuple::operator[](int index) { return values_[index]; }
 inline const NamedProperty&Tuple::operator[](int index) const { return values_[index]; }
+
+template<class T>
+QList<T> Tuple::valuesOfType() const
+{
+	QList<T> result;
+	for (const auto& np : values_)
+		if (np.second.isConvertibleTo<T>())
+			result.push_back(np.second);
+	return result;
+}
 
 inline Tuple::iterator Tuple::begin() { return values_.begin(); }
 inline Tuple::const_iterator Tuple::begin() const { return values_.begin(); }

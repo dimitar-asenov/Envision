@@ -38,19 +38,6 @@ QString Tuple::tag() const
 	return {};
 }
 
-NamedProperty Tuple::get(int index) const
-{
-	return values_.at(index);
-}
-
-QList<NamedProperty> Tuple::getAll(const QString& key)
-{
-	QList<NamedProperty> result;
-	for (auto p : values_)
-		if (p.first == key) result << p;
-	return result;
-}
-
 void Tuple::add(const NamedProperty& p)
 {
 	auto it = std::find_if(begin(), end(), [p](const auto& np) {return np.first == p.first;});
