@@ -122,13 +122,12 @@ TupleSet AstQuery::methodsQuery(QList<TupleSet> input)
 			return false;
 		};
 
-		auto tuple = ts.tuples(canContainMethod);
+		// TODO for now we just remove the input node, this might not always be what we want
+		auto tuple = ts.take(canContainMethod);
 		for (const auto& t : tuple)
 		{
 			Model::Node* astNode = t["ast"];
 			auto methods = AllNodesOfType::allNodesOfType(astNode, "Method");
-			// TODO for now we just remove the input node, this might not always be what we want
-			ts.remove(t);
 			for (auto method : methods) ts.add({{"ast", method}});
 		}
 		return ts;
@@ -172,15 +171,14 @@ TupleSet AstQuery::toClassNode(QList<TupleSet> input)
 		return false;
 	};
 
-	auto tuples = ts.tuples(canBeInClass);
+	// TODO currently we remove all the converted nodes, this also means we lose all connections:
+	auto tuples = ts.take(canBeInClass);
 	QList<OOModel::Class*> classes;
 	for (auto tuple : tuples)
 	{
 		Model::Node* astNode = tuple["ast"];
 		auto classParent = astNode->firstAncestorOfType<OOModel::Class>();
 		if (!classes.contains(classParent)) classes.push_back(classParent);
-		// TODO currently we remove all the converted nodes, this also means we lose all connections:
-		ts.remove(tuple);
 	}
 	for (auto foundClass : classes)
 		ts.add({{"ast", foundClass}});

@@ -50,6 +50,10 @@ class INFORMATIONSCRIPTING_API TupleSet
 		void add(const Tuple& t);
 		void remove(const Tuple& t);
 		void remove(const TupleSet& tuples);
+		QSet<Tuple> take(const QString& tag);
+		QSet<Tuple> take(const char* tag);
+		template<class Condition>
+		QSet<Tuple> take(Condition condition);
 		void unite(const TupleSet& with);
 
 	private:
@@ -71,5 +75,31 @@ inline QSet<Tuple> TupleSet::tuples(const char* tag) const { return tuples(QStri
 
 inline void TupleSet::add(const Tuple& t) { tuples_[t.tag()].insert(t); }
 inline void TupleSet::remove(const Tuple& t) { tuples_[t.tag()].remove(t); }
+
+inline QSet<Tuple> TupleSet::take(const QString& tag) { return tuples_.take(tag); }
+inline QSet<Tuple> TupleSet::take(const char* tag) { return tuples_.take(tag); }
+template <class Condition>
+inline QSet<Tuple> TupleSet::take(Condition condition)
+{
+	QSet<Tuple> result;
+
+	if (!condition) return result;
+
+	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
+	{
+		auto& set = hashIt.value();
+		auto setIt = set.begin();
+		while (setIt != set.end())
+		{
+			if (condition(*setIt))
+			{
+				result.insert(*setIt);
+				setIt = set.erase(setIt);
+			}
+			else ++setIt;
+		}
+	}
+	return result;
+}
 
 } /* namespace InformationScripting */
