@@ -37,14 +37,4 @@ QSet<Tuple> TupleSet::tuples(const QString& tag) const
 	return result;
 }
 
-QSet<Tuple> TupleSet::tuples(TupleSet::TupleCondition condition) const
-{
-	if (!condition) return tuples_;
-
-	QSet<Tuple> result;
-	for (auto t : tuples_)
-		if (condition(t)) result.insert(t);
-	return result;
-}
-
 } /* namespace InformationScripting */

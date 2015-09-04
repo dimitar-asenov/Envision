@@ -36,12 +36,16 @@ class INFORMATIONSCRIPTING_API TupleSet
 {
 	public:
 		using TupleCondition = std::function<bool (const Tuple& t)>;
+
+		template<class Condition>
+		QSet<Tuple> tuples(Condition condition = {}) const;
 		/**
 		 * Returns all tuples which are tagged with \a tag.
 		 */
 		QSet<Tuple> tuples(const QString& tag) const;
+		QSet<Tuple> tuples(const char* tag) const;
 
-		QSet<Tuple> tuples(TupleCondition condition = {}) const;
+		QSet<Tuple> tuples() const;
 
 		void add(const Tuple& t);
 		void remove(const Tuple& t);
@@ -51,6 +55,20 @@ class INFORMATIONSCRIPTING_API TupleSet
 	private:
 		QSet<Tuple> tuples_;
 };
+
+template <class Condition>
+inline QSet<Tuple> TupleSet::tuples(Condition condition) const
+{
+	if (!condition) return tuples_;
+
+	QSet<Tuple> result;
+	for (auto t : tuples_)
+		if (condition(t)) result.insert(t);
+	return result;
+}
+
+inline QSet<Tuple> TupleSet::tuples(const char* tag) const { return tuples(QString(tag)); }
+inline QSet<Tuple> TupleSet::tuples() const { return tuples_; }
 
 inline void TupleSet::add(const Tuple& t) { tuples_.insert(t); }
 inline void TupleSet::remove(const Tuple& t) { tuples_.remove(t); }
