@@ -80,7 +80,7 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 	}
 	else
 	{
-		auto allTuples = ts.tuples([](const Tuple& t) { return t.find("ast") != t.end(); });
+		auto allTuples = ts.tuples([](const Tuple& t) { return t.contains("ast"); });
 
 		QHash<Model::Node*, QString> colors;
 

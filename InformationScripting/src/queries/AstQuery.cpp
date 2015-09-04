@@ -125,7 +125,7 @@ TupleSet AstQuery::methodsQuery(QList<TupleSet> input)
 		auto tuple = ts.tuples(canContainMethod);
 		for (const auto& t : tuple)
 		{
-			Model::Node* astNode = t.find("ast")->second;
+			Model::Node* astNode = t["ast"];
 			auto methods = AllNodesOfType::allNodesOfType(astNode, "Method");
 			// TODO for now we just remove the input node, this might not always be what we want
 			ts.remove(t);
@@ -146,7 +146,7 @@ TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
 		OOModel::Class* parentClass = DCast<OOModel::Class>(target_);
 		if (!parentClass) parentClass = target_->firstAncestorOfType<OOModel::Class>();
 
-		NamedProperty namedClass{"ast", parentClass};
+		NamedProperty namedClass{"childClass", parentClass};
 		ts.add({namedClass});
 
 		addBaseEdgesFor(parentClass, namedClass, ts);
@@ -176,7 +176,7 @@ TupleSet AstQuery::toClassNode(QList<TupleSet> input)
 	QList<OOModel::Class*> classes;
 	for (auto tuple : tuples)
 	{
-		Model::Node* astNode = tuple.find("ast")->second;
+		Model::Node* astNode = tuple["ast"];
 		auto classParent = astNode->firstAncestorOfType<OOModel::Class>();
 		if (!classes.contains(classParent)) classes.push_back(classParent);
 		// TODO currently we remove all the converted nodes, this also means we lose all connections:
@@ -216,7 +216,7 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classN
 	auto bases = childClass->directBaseClasses();
 	for (auto base : bases)
 	{
-		NamedProperty baseNode{"ast", base};
+		NamedProperty baseNode{"baseClass", base};
 		ts.add({baseNode});
 		ts.add({{"base class", {}}, {classNode}, {baseNode}});
 		addBaseEdgesFor(base, baseNode, ts);
@@ -225,11 +225,11 @@ void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classN
 
 void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees)
 {
-	NamedProperty namedCaller{"ast", method};
+	NamedProperty namedCaller{"caller", method};
 	ts.add({{namedCaller}});
 	for (auto callee : callees)
 	{
-		NamedProperty namedCallee{"ast", callee};
+		NamedProperty namedCallee{"callee", callee};
 		ts.add({{namedCallee}});
 		ts.add({{"calls", {}}, namedCaller, namedCallee});
 	}
