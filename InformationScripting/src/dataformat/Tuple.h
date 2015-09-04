@@ -40,22 +40,29 @@ class INFORMATIONSCRIPTING_API Tuple
 
 		QString tag() const;
 
-		NamedProperty get(int index) const;
-		QList<NamedProperty> getAll(const QString& key);
-
-		void add(NamedProperty p);
+		void add(const NamedProperty& p);
 
 		int size() const;
+		bool contains(const QString& name) const;
 
 		uint hashValue(uint seed = 0) const;
 
 		bool operator==(const Tuple& other) const;
 
+		Property& operator[](const QString& name);
+		const Property& operator[](const QString& name) const;
+		NamedProperty& operator[](int index);
+		const NamedProperty& operator[](int index) const;
+
+		template<class T>
+		QList<T> valuesOfType() const;
+
 		// Iterators
 		using iterator = QList<NamedProperty>::Iterator;
 		using const_iterator = QList<NamedProperty>::ConstIterator;
 
-		const_iterator find(const QString& key) const;
+		const_iterator find(const QString& name) const;
+		iterator find(const QString& name);
 
 		iterator begin();
 		const_iterator begin() const;
@@ -70,8 +77,22 @@ class INFORMATIONSCRIPTING_API Tuple
 
 uint qHash(const Tuple& t, uint seed = 0);
 
-inline bool Tuple::operator==(const Tuple& other) const { return values_ == other.values_; }
 inline int Tuple::size() const { return values_.size(); }
+inline bool Tuple::contains(const QString& name) const { return find(name) != end(); }
+inline bool Tuple::operator==(const Tuple& other) const { return values_ == other.values_; }
+
+inline NamedProperty& Tuple::operator[](int index) { return values_[index]; }
+inline const NamedProperty&Tuple::operator[](int index) const { return values_[index]; }
+
+template<class T>
+inline QList<T> Tuple::valuesOfType() const
+{
+	QList<T> result;
+	for (const auto& np : values_)
+		if (np.second.isConvertibleTo<T>())
+			result.push_back(np.second);
+	return result;
+}
 
 inline Tuple::iterator Tuple::begin() { return values_.begin(); }
 inline Tuple::const_iterator Tuple::begin() const { return values_.begin(); }

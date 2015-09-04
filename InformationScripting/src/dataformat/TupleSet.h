@@ -36,25 +36,72 @@ class INFORMATIONSCRIPTING_API TupleSet
 {
 	public:
 		using TupleCondition = std::function<bool (const Tuple& t)>;
+
+		template<class Condition>
+		QSet<Tuple> tuples(Condition condition) const;
 		/**
 		 * Returns all tuples which are tagged with \a tag.
 		 */
 		QSet<Tuple> tuples(const QString& tag) const;
+		QSet<Tuple> tuples(const char* tag) const;
 
-		QSet<Tuple> tuples(TupleCondition condition = {}) const;
+		QSet<Tuple> tuples() const;
 
 		void add(const Tuple& t);
 		void remove(const Tuple& t);
 		void remove(const TupleSet& tuples);
+		QSet<Tuple> take(const QString& tag);
+		QSet<Tuple> take(const char* tag);
+		template<class Condition>
+		QSet<Tuple> take(Condition condition);
+		QSet<Tuple> takeAll();
 		void unite(const TupleSet& with);
 
 	private:
-		QSet<Tuple> tuples_;
+		QHash<QString, QSet<Tuple>> tuples_;
 };
 
-inline void TupleSet::add(const Tuple& t) { tuples_.insert(t); }
-inline void TupleSet::remove(const Tuple& t) { tuples_.remove(t); }
-inline void TupleSet::remove(const TupleSet& tuples) { tuples_.subtract(tuples.tuples_); }
-inline void TupleSet::unite(const TupleSet& with) { tuples_.unite(with.tuples_); }
+template <class Condition>
+inline QSet<Tuple> TupleSet::tuples(Condition condition) const
+{
+	if (!condition) return tuples();
+
+	QSet<Tuple> result;
+	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
+		for (const auto& t : hashIt.value())
+			if (condition(t)) result.insert(t);
+	return result;
+}
+
+inline QSet<Tuple> TupleSet::tuples(const char* tag) const { return tuples(QString(tag)); }
+
+inline void TupleSet::add(const Tuple& t) { tuples_[t.tag()].insert(t); }
+inline void TupleSet::remove(const Tuple& t) { tuples_[t.tag()].remove(t); }
+
+inline QSet<Tuple> TupleSet::take(const QString& tag) { return tuples_.take(tag); }
+inline QSet<Tuple> TupleSet::take(const char* tag) { return tuples_.take(tag); }
+template <class Condition>
+inline QSet<Tuple> TupleSet::take(Condition condition)
+{
+	QSet<Tuple> result;
+
+	if (!condition) return result;
+
+	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
+	{
+		auto& set = hashIt.value();
+		auto setIt = set.begin();
+		while (setIt != set.end())
+		{
+			if (condition(*setIt))
+			{
+				result.insert(*setIt);
+				setIt = set.erase(setIt);
+			}
+			else ++setIt;
+		}
+	}
+	return result;
+}
 
 } /* namespace InformationScripting */

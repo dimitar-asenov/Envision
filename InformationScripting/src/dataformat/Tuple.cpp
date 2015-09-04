@@ -38,37 +38,45 @@ QString Tuple::tag() const
 	return {};
 }
 
-NamedProperty Tuple::get(int index) const
+void Tuple::add(const NamedProperty& p)
 {
-	return values_.at(index);
-}
-
-QList<NamedProperty> Tuple::getAll(const QString& key)
-{
-	QList<NamedProperty> result;
-	for (auto p : values_)
-		if (p.first == key) result << p;
-	return result;
-}
-
-void Tuple::add(NamedProperty p)
-{
+	auto it = std::find_if(begin(), end(), [p](const auto& np) {return np.first == p.first;});
+	Q_ASSERT(it == values_.end()); // TODO what should we do here?
 	values_.append(p);
 }
 
 uint Tuple::hashValue(uint seed) const
 {
-	return qHashRange(values_.begin(), values_.end(), seed);
+	return qHashRange(begin(), end(), seed);
 }
 
-Tuple::const_iterator Tuple::find(const QString& key) const
+Tuple::const_iterator Tuple::find(const QString& name) const
 {
-	return std::find_if(values_.begin(), values_.end(), [key](auto v) {return v.first == key;});
+	return std::find_if(begin(), end(), [name](const auto& np) { return np.first == name; });
+}
+
+Tuple::iterator Tuple::find(const QString& name)
+{
+	return std::find_if(begin(), end(), [name](const auto& np) { return np.first == name; });
 }
 
 uint qHash(const Tuple& t, uint seed)
 {
 	return t.hashValue(seed);
+}
+
+Property& Tuple::operator[](const QString& name)
+{
+	auto it = std::find_if(begin(), end(), [name](const auto& np) {return np.first == name;});
+	Q_ASSERT(it != end());
+	return it->second;
+}
+
+const Property& Tuple::operator[](const QString& name) const
+{
+	auto it = std::find_if(begin(), end(), [name](const auto& np) {return np.first == name;});
+	Q_ASSERT(it != end());
+	return it->second;
 }
 
 } /* namespace InformationScripting */

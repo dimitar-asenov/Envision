@@ -60,11 +60,11 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 	{
 		for (auto t : calls)
 		{
-			auto allAsts = t.getAll("ast");
+			auto allAsts = t.valuesOfType<Model::Node*>();
 			if (allAsts.size() > 1)
 			{
-				Model::Node* fromNode = allAsts[0].second;
-				Model::Node* toNode = allAsts[1].second;
+				Model::Node* fromNode = allAsts[0];
+				Model::Node* toNode = allAsts[1];
 
 				auto fromVisualization = Visualization::Item::nodeItemsMap().find(fromNode);
 				Q_ASSERT(fromVisualization != Visualization::Item::nodeItemsMap().end());
@@ -80,27 +80,24 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 	}
 	else
 	{
-		auto allTuples = ts.tuples([](const Tuple& t) { return t.find("ast") != t.end(); });
+		auto astTuples = ts.tuples([](const Tuple& t) { return t.tag() == "ast"; });
 
 		QHash<Model::Node*, QString> colors;
 
-		for (auto t : allTuples)
+		for (auto t : astTuples)
 		{
-			auto allAsts = t.getAll("ast");
-			for (auto astProperty : allAsts)
+			Model::Node* node = t["ast"];
+			QString& color = colors[node];
+			if (color.isEmpty())
 			{
-				Model::Node* node = astProperty.second;
-				QString& color = colors[node];
-				if (color.isEmpty())
+				auto colorIt = t.find("color");
+				if (colorIt != t.end())
 				{
-					if (t.find("color") != t.end())
-					{
-						QString c = t.find("color")->second;
-						color = c;
-					}
-					else
-						color = "red";
+					QString c = colorIt->second;
+					color = c;
 				}
+				else
+					color = "red";
 			}
 		}
 

@@ -45,7 +45,7 @@ uint Property::hash(uint seed) const
 	return 0;
 }
 
-uint qHash(const InformationScripting::Property& p, uint seed) {
+uint qHash(const Property& p, uint seed) {
 	return p.hash(seed);
 }
 

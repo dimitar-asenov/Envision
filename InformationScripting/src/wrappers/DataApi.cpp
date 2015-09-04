@@ -42,9 +42,7 @@ BOOST_PYTHON_MODULE(DataApi) {
 				.def_readwrite("name", &NamedProperty::first)
 				.add_property("value", &value);
 
-		class_<Tuple>("Tuple")
-				.def("get", &Tuple::get)
-				.def("getAll", &Tuple::getAll);
+		class_<Tuple>("Tuple");
 
 
 		QSet<Tuple> (TupleSet::*tuples1)(const QString&) const = &TupleSet::tuples;
