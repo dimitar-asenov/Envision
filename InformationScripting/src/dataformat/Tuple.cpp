@@ -67,14 +67,14 @@ uint qHash(const Tuple& t, uint seed)
 
 Property& Tuple::operator[](const QString& name)
 {
-	auto it = std::find_if(begin(), end(), [name](const auto& np) {return np.first == name;});
+	auto it = find(name);
 	Q_ASSERT(it != end());
 	return it->second;
 }
 
 const Property& Tuple::operator[](const QString& name) const
 {
-	auto it = std::find_if(begin(), end(), [name](const auto& np) {return np.first == name;});
+	auto it = find(name);
 	Q_ASSERT(it != end());
 	return it->second;
 }
