@@ -266,7 +266,7 @@ Diff GitRepository::diff(QString revisionA, QString revisionB,
 	carryAlongData.treeB_ = treeB.get();
 	carryAlongData.reverseAB_ = reverseAB;
 
-	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, nullptr, gitDiffExtractLineCallBack, &(carryAlongData));
+	git_diff_foreach(gitDiff, gitDiffExtractFileCallBack, nullptr, nullptr, gitDiffExtractLineCallBack, &(carryAlongData));
 
 	// clean up
 	git_commit_free(gitCommitA);
@@ -834,7 +834,7 @@ bool GitRepository::setReferenceTarget(QString reference, QString target)
 	const git_oid* targetOID = git_commit_id(gitTarget);
 
 	git_reference* newRef = nullptr;
-	git_reference_set_target(&newRef, ref, targetOID, nullptr, nullptr);
+	git_reference_set_target(&newRef, ref, targetOID, nullptr);
 	if (errorCode == GIT_EMODIFIED)
 		return false;
 	checkError(errorCode);
