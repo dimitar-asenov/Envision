@@ -78,13 +78,14 @@ class INFORMATIONSCRIPTING_API Tuple
 uint qHash(const Tuple& t, uint seed = 0);
 
 inline int Tuple::size() const { return values_.size(); }
+inline bool Tuple::contains(const QString& name) const { return find(name) != end(); }
 inline bool Tuple::operator==(const Tuple& other) const { return values_ == other.values_; }
 
 inline NamedProperty& Tuple::operator[](int index) { return values_[index]; }
 inline const NamedProperty&Tuple::operator[](int index) const { return values_[index]; }
 
 template<class T>
-QList<T> Tuple::valuesOfType() const
+inline QList<T> Tuple::valuesOfType() const
 {
 	QList<T> result;
 	for (const auto& np : values_)

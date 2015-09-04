@@ -153,7 +153,7 @@ inline Property::operator ConvertTo() const
 	throw new std::bad_cast;
 }
 
-inline InformationScripting::Property::operator Model::Node*() const { return data_->node(); }
+inline Property::operator Model::Node*() const { return data_->node(); }
 
 template <class ConvertTo>
 inline bool Property::isConvertibleTo() const
@@ -164,6 +164,6 @@ inline bool Property::isConvertibleTo() const
 template <> inline bool Property::isConvertibleTo<Model::Node*>() const { return data_ && data_->node(); }
 
 // qHash functions have to accessible outside:
-uint qHash(const InformationScripting::Property& p, uint seed = 0);
+uint qHash(const Property& p, uint seed = 0);
 
 } /* namespace InformationScripting */

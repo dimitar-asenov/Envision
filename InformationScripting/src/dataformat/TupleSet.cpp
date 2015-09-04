@@ -33,7 +33,7 @@ QSet<Tuple> TupleSet::tuples(const QString& tag) const
 	return tuples_[tag];
 }
 
-QSet<Tuple> InformationScripting::TupleSet::tuples() const
+QSet<Tuple> TupleSet::tuples() const
 {
 	QSet<Tuple> result;
 	for (auto it = tuples_.begin(); it != tuples_.end(); ++it)
@@ -41,7 +41,7 @@ QSet<Tuple> InformationScripting::TupleSet::tuples() const
 	return result;
 }
 
-void InformationScripting::TupleSet::remove(const TupleSet& tuples)
+void TupleSet::remove(const TupleSet& tuples)
 {
 	for (auto key : tuples.tuples_.keys())
 		tuples_[key].subtract(tuples.tuples_[key]);
@@ -56,7 +56,7 @@ QSet<Tuple> TupleSet::takeAll()
 	return result;
 }
 
-void InformationScripting::TupleSet::unite(const TupleSet& with)
+void TupleSet::unite(const TupleSet& with)
 {
 	for (auto key : with.tuples_.keys())
 		tuples_[key].unite(with.tuples_[key]);

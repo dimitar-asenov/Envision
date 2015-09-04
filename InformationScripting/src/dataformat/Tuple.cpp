@@ -45,13 +45,6 @@ void Tuple::add(const NamedProperty& p)
 	values_.append(p);
 }
 
-bool Tuple::contains(const QString& name) const
-{
-	for (const auto& np : values_)
-		if (np.first == name) return true;
-	return false;
-}
-
 uint Tuple::hashValue(uint seed) const
 {
 	return qHashRange(begin(), end(), seed);
@@ -72,7 +65,7 @@ uint qHash(const Tuple& t, uint seed)
 	return t.hashValue(seed);
 }
 
-Property& InformationScripting::Tuple::operator[](const QString& name)
+Property& Tuple::operator[](const QString& name)
 {
 	auto it = std::find_if(begin(), end(), [name](const auto& np) {return np.first == name;});
 	Q_ASSERT(it != end());
