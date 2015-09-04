@@ -67,8 +67,9 @@ inline QSet<Tuple> TupleSet::tuples(Condition condition) const
 	if (!condition) return tuples();
 
 	QSet<Tuple> result;
-	for (auto t : tuples())
-		if (condition(t)) result.insert(t);
+	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
+		for (const auto& t : hashIt.value())
+			if (condition(t)) result.insert(t);
 	return result;
 }
 

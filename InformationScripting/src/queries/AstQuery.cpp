@@ -171,7 +171,7 @@ TupleSet AstQuery::toClassNode(QList<TupleSet> input)
 		return false;
 	};
 
-	// TODO currently we remove all the converted nodes, this also means we lose all connections:
+	// TODO currently we remove all the converted nodes:
 	auto tuples = ts.take(canBeInClass);
 	QList<OOModel::Class*> classes;
 	for (auto tuple : tuples)

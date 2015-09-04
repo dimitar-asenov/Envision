@@ -90,9 +90,10 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 			QString& color = colors[node];
 			if (color.isEmpty())
 			{
-				if (t.find("color") != t.end())
+				auto colorIt = t.find("color");
+				if (colorIt != t.end())
 				{
-					QString c = t.find("color")->second;
+					QString c = colorIt->second;
 					color = c;
 				}
 				else
