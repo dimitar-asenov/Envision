@@ -24,55 +24,51 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "Property.h"
-#include "PropertyMap.h"
+#include "Tuple.h"
 
 namespace InformationScripting {
 
-class InformationNode;
+Tuple::Tuple(std::initializer_list<NamedProperty> initialValues)
+	: values_{initialValues}
+{}
 
-class InformationEdge : public PropertyMap
+QString Tuple::tag() const
 {
-	public:
-		enum class Orientation : int {Directed, Undirected};
+	if (values_.size()) return values_[0].first;
+	return {};
+}
 
-		InformationEdge() = default;
-		InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
-							 Orientation orientation = Orientation::Directed);
-		InformationEdge(const InformationEdge& other);
+NamedProperty Tuple::get(int index) const
+{
+	return values_.at(index);
+}
 
-		int count() const;
-		void incrementCount();
-		QString name() const;
+QList<NamedProperty> Tuple::getAll(const QString& key)
+{
+	QList<NamedProperty> result;
+	for (auto p : values_)
+		if (p.first == key) result << p;
+	return result;
+}
 
-		InformationNode* from() const;
-		InformationNode* to() const;
-		void setFrom(InformationNode* from);
-		void setTo(InformationNode* to);
+void Tuple::add(NamedProperty p)
+{
+	values_.append(p);
+}
 
-		bool isDirected() const;
-		Orientation orientation() const;
+uint Tuple::hashValue(uint seed) const
+{
+	return qHashRange(values_.begin(), values_.end(), seed);
+}
 
-	private:
-		static const QString COUNT_PROPERTY_;
-		static const QString NAME_PROPERTY_;
+Tuple::const_iterator Tuple::find(const QString& key) const
+{
+	return std::find_if(values_.begin(), values_.end(), [key](auto v) {return v.first == key;});
+}
 
-		InformationNode* from_{};
-		InformationNode* to_{};
-
-		Orientation orientation_{};
-};
-
-inline int InformationEdge::count() const { auto it = find(COUNT_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
-inline QString InformationEdge::name() const
-	{ auto it = find(NAME_PROPERTY_); Q_ASSERT(it != end()); return it->second; }
-inline InformationNode* InformationEdge::from() const { return from_; }
-inline InformationNode* InformationEdge::to() const { return to_; }
-inline bool InformationEdge::isDirected() const { return orientation_ == Orientation::Directed; }
-inline InformationEdge::Orientation InformationEdge::orientation() const { return orientation_; }
+uint qHash(const Tuple& t, uint seed)
+{
+	return t.hashValue(seed);
+}
 
 } /* namespace InformationScripting */

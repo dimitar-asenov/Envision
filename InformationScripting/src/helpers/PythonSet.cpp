@@ -24,44 +24,44 @@
 **
 ***********************************************************************************************************************/
 
-#include "PropertyMap.h"
+#include "PythonSet.h"
+
 
 namespace InformationScripting {
 
-PropertyMap::PropertyMap(QList<QPair<QString, Property> > initialValues)
+namespace helper {
+
+using namespace boost;
+
+PythonSetBase::PythonSetBase() : python::object(python::detail::new_reference(PySet_New(0)))
+{}
+
+void PythonSetBase::add(object_cref elem)
 {
-	for (auto initialValue : initialValues)
-		insert(initialValue.first, initialValue.second);
+	if (PyAnySet_CheckExact(ptr()))
+		 PySet_Add(ptr(), elem.ptr());
+	else
+		attr("add")(elem);
 }
 
-PropertyMap::PropertyMap(const PropertyMap& other)
+void PythonSetBase::discard(const python::object& elem)
 {
-	for (auto property : other.properties_)
-		insert(property.first, property.second);
+	if (PyAnySet_CheckExact(ptr()))
+		PySet_Discard(ptr(), elem.ptr());
+	else
+		attr("discard")(elem);
 }
 
-boost::python::object PropertyMap::pythonAttribute(const QString& key)
+static struct register_set_pytype_ptr
 {
-	return pythonObject(operator[](key));
-}
+	 register_set_pytype_ptr()
+	 {
+		  const_cast<python::converter::registration &>(
+				python::converter::registry::lookup(python::type_id<PythonSet>())
+			).m_class_object = &PySet_Type;
+	 }
+} register_set_pytype_ptr_;
 
-Property& InformationScripting::PropertyMap::operator[](const QString& key)
-{
-	for (auto& content : properties_)
-		if (content.first == key) return content.second;
-	qDebug() << "No object with name" << key;
-	properties_.push_back({key, Property()});
-	return properties_.last().second;
-}
-
-bool PropertyMap::contains(const QString& key) const
-{
-	return find(key) != end();
-}
-
-PropertyMap::const_iterator PropertyMap::find(const QString& key) const
-{
-	return std::find_if(properties_.begin(), properties_.end(), [key](auto v) {return v.first == key;});
-}
+} /* namespace helper */
 
 } /* namespace InformationScripting */

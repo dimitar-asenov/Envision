@@ -28,7 +28,6 @@
 
 #include "Query.h"
 
-#include "../graph/Graph.h"
 #include "visualization/DefaultVisualizer.h"
 
 namespace InformationScripting {
@@ -46,7 +45,6 @@ void QueryExecutor::execute()
 	if (results.size())
 	{
 		DefaultVisualizer::instance().visualize(results[0]);
-		for (auto result : results) SAFE_DELETE(result);
 		results.clear();
 	}
 }

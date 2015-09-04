@@ -24,37 +24,60 @@
 **
 ***********************************************************************************************************************/
 
-#include "NodeApi.h"
+#pragma once
 
-#include "../graph/PropertyMap.h"
-#include "../graph/InformationNode.h"
-#include "../graph/InformationEdge.h"
-#include "../graph/Graph.h"
+#include "../informationscripting_api.h"
+
+#include "Property.h"
 
 namespace InformationScripting {
 
-using namespace boost::python;
+class INFORMATIONSCRIPTING_API Tuple
+{
+	public:
+		Tuple() = default;
+		Tuple(std::initializer_list<NamedProperty> initialValues);
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(addEdge_overloads, Graph::addEdge, 3, 5)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(nodes_overloads, Graph::nodes, 0, 1)
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(edges_overloads, Graph::edges, 0, 1)
+		QString tag() const;
 
-BOOST_PYTHON_MODULE(NodeApi) {
-		class_<PropertyMap, boost::noncopyable>("PropertyMap", no_init)
-				.def("__getattr__", &PropertyMap::pythonAttribute);
-		class_<InformationNode, bases<PropertyMap>>("InformationNode", no_init);
-		class_<InformationEdge, bases<PropertyMap>>("InformationEdge", no_init);
+		NamedProperty get(int index) const;
+		QList<NamedProperty> getAll(const QString& key);
 
-		void (Graph::*remove1)(InformationNode*)        = &Graph::remove;
-		void (Graph::*remove2)(QList<InformationNode*>) = &Graph::remove;
+		void add(NamedProperty p);
 
-		class_<Graph>("Graph")
-				.def("add", &Graph::add, return_value_policy<reference_existing_object>())
-				.def("addEdge", &Graph::addEdge, addEdge_overloads()[return_value_policy<reference_existing_object>()])
-				.def("remove", remove1)
-				.def("remove", remove2)
-				.def("nodes", &Graph::nodes, nodes_overloads())
-				.def("edges", &Graph::edges, edges_overloads());
-}
+		int size() const;
+
+		uint hashValue(uint seed = 0) const;
+
+		bool operator==(const Tuple& other) const;
+
+		// Iterators
+		using iterator = QList<NamedProperty>::Iterator;
+		using const_iterator = QList<NamedProperty>::ConstIterator;
+
+		const_iterator find(const QString& key) const;
+
+		iterator begin();
+		const_iterator begin() const;
+		const_iterator cbegin() const;
+		iterator end();
+		const_iterator end() const;
+		const_iterator cend() const;
+	private:
+		QList<NamedProperty> values_;
+
+};
+
+uint qHash(const Tuple& t, uint seed = 0);
+
+inline bool Tuple::operator==(const Tuple& other) const { return values_ == other.values_; }
+inline int Tuple::size() const { return values_.size(); }
+
+inline Tuple::iterator Tuple::begin() { return values_.begin(); }
+inline Tuple::const_iterator Tuple::begin() const { return values_.begin(); }
+inline Tuple::const_iterator Tuple::cbegin() const { return values_.cbegin(); }
+inline Tuple::iterator Tuple::end() { return values_.end(); }
+inline Tuple::const_iterator Tuple::end() const { return values_.end(); }
+inline Tuple::const_iterator Tuple::cend() const { return values_.cend(); }
 
 } /* namespace InformationScripting */

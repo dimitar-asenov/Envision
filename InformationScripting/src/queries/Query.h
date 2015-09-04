@@ -28,15 +28,15 @@
 
 #include "../informationscripting_api.h"
 
-namespace InformationScripting {
+#include "../dataformat/TupleSet.h"
 
-class Graph;
+namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API Query
 {
 	public:
 		virtual ~Query() = default;
-		virtual QList<Graph*> execute(QList<Graph*>) = 0;
+		virtual QList<TupleSet> execute(QList<TupleSet>) = 0;
 };
 
 } /* namespace InformationScripting */

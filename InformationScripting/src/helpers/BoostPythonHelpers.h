@@ -34,8 +34,7 @@ class INFORMATIONSCRIPTING_API BoostPythonHelpers
 {
 	public:
 		static QString parsePythonException();
-		static void initializeQStringConverters();
-
+		static void initializeConverters();
 };
 
 } /* namespace InformationScripting */

@@ -24,19 +24,36 @@
 **
 ***********************************************************************************************************************/
 
-#include "Property.h"
+#include "../informationscripting_api.h"
 
 namespace InformationScripting {
 
-boost::python::object pythonObject(const Property& p)
-{
-	return p.data_->pythonObject();
-}
+namespace helper {
 
-bool Property::operator==(const Property& other) const
+class PythonSetBase : public boost::python::object
 {
-	return data_->equals(other.data_);
-}
+	protected:
+		PythonSetBase();
+		void add(object_cref elem);
+		void discard(object_cref elem);
+};
 
+class PythonSet : public PythonSetBase
+{
+	public:
+		template <class T>
+		void add(const T& elem);
+
+		template <class T>
+		void discard(const T& elem);
+};
+
+template <class T>
+inline void PythonSet::add(const T& elem) { PythonSetBase::add(object(elem)); }
+
+template <class T>
+inline void PythonSet::discard(const T& elem) { PythonSetBase::discard(object(elem));}
+
+} /* namespace helper */
 
 } /* namespace InformationScripting */

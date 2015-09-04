@@ -24,40 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#include "InformationEdge.h"
+#include "TupleSet.h"
 
 namespace InformationScripting {
 
-const QString InformationEdge::COUNT_PROPERTY_{"count"};
-const QString InformationEdge::NAME_PROPERTY_{"name"};
-
-InformationEdge::InformationEdge(InformationNode* from, InformationNode* to, const QString& name,
-											Orientation orientation)
-	: PropertyMap{{{COUNT_PROPERTY_, 1}, {NAME_PROPERTY_, name}}}, from_{from}, to_{to}, orientation_{orientation}
-{}
-
-InformationEdge::InformationEdge(const InformationEdge& other)
-	: PropertyMap(other)
+QSet<Tuple> TupleSet::tuples(const QString& tag) const
 {
-	orientation_ = other.orientation_;
+	if (tag.isEmpty()) return tuples_;
+	QSet<Tuple> result;
+	for (auto t : tuples_)
+		if (t.tag() == tag) result.insert(t);
+	return result;
 }
 
-void InformationEdge::incrementCount()
+QSet<Tuple> TupleSet::tuples(TupleSet::TupleCondition condition) const
 {
-	Property& count = (*this)[COUNT_PROPERTY_];
-	count = static_cast<int>(count) + 1;
-}
+	if (!condition) return tuples_;
 
-void InformationEdge::setFrom(InformationNode* from)
-{
-	Q_ASSERT(!from_);
-	from_ = from;
-}
-
-void InformationEdge::setTo(InformationNode* to)
-{
-	Q_ASSERT(!to_);
-	to_ = to;
+	QSet<Tuple> result;
+	for (auto t : tuples_)
+		if (condition(t)) result.insert(t);
+	return result;
 }
 
 } /* namespace InformationScripting */

@@ -28,7 +28,9 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/nodes/Node.h"
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
@@ -47,12 +49,15 @@ class INFORMATIONSCRIPTING_API Property {
 
 		bool operator==(const Property& other) const;
 
+		uint hash(uint seed = 0) const;
+
 	private:
 		struct PropertyDataConcept {
 				virtual ~PropertyDataConcept() = default;
 				virtual boost::python::object pythonObject() const = 0;
 				virtual Model::Node* node() const { return nullptr; }
 				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const = 0;
+				virtual uint hash(uint seed = 0) const = 0;
 		};
 
 		template <class DataType, class = void>
@@ -67,6 +72,10 @@ class INFORMATIONSCRIPTING_API Property {
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
 					return false;
+				}
+
+				virtual uint hash(uint seed) const override {
+					return qHash(data_, seed);
 				}
 
 				DataType data_;
@@ -88,6 +97,10 @@ class INFORMATIONSCRIPTING_API Property {
 					return false;
 				}
 
+				virtual uint hash(uint seed) const override {
+					return qHash(data_, seed);
+				}
+
 				DataType data_;
 		};
 		// Template overload for pointer types which inherit from Model::Node
@@ -103,15 +116,28 @@ class INFORMATIONSCRIPTING_API Property {
 				virtual Model::Node* node() const override { return data_; }
 
 				virtual bool equals(const std::shared_ptr<PropertyDataConcept>& other) const override {
+					// Just compare node pointers since they are unique.
+					if (node()) return node() == other->node();
+					// If we have a nullptr, check if other has the same type and value.
 					if (auto specificOther = std::dynamic_pointer_cast<PropertyData<DataType>>(other))
 						return data_ == specificOther->data_;
 					return false;
+				}
+
+				virtual uint hash(uint seed) const override {
+					return qHash(data_, seed);
 				}
 
 				DataType data_;
 		};
 
 		std::shared_ptr<PropertyDataConcept> data_;
+};
+
+struct INFORMATIONSCRIPTING_API NamedProperty : QPair<QString, Property>
+{
+	NamedProperty() = default;
+	NamedProperty(const QString& key, Property value) : QPair<QString, Property>(key, value) {}
 };
 
 template <class DataType> Property::Property(DataType propertyData)
@@ -126,5 +152,8 @@ inline Property::operator ConvertTo() const
 }
 
 inline InformationScripting::Property::operator Model::Node*() const { return data_->node(); }
+
+// qHash functions have to accessible outside:
+uint qHash(const InformationScripting::Property& p, uint seed = 0);
 
 } /* namespace InformationScripting */

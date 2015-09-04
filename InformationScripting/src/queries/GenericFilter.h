@@ -37,15 +37,15 @@ class InformationNode;
 class INFORMATIONSCRIPTING_API GenericFilter : public Query
 {
 	public:
-		using KeepNode = std::function<bool(const InformationNode*)>;
-		GenericFilter(KeepNode f);
+		using KeepTuple = std::function<bool(const Tuple&)>;
+		GenericFilter(KeepTuple f);
 
-		virtual QList<Graph*> execute(QList<Graph*> input) override;
+		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
 	private:
-		KeepNode keepNode_;
+		KeepTuple keepTuple_;
 
-		void applyFilter(Graph* g);
+		void applyFilter(TupleSet& set);
 };
 
 } /* namespace InformationScripting */

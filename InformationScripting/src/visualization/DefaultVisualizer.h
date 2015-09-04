@@ -30,14 +30,14 @@
 
 namespace InformationScripting {
 
-class Graph;
+class TupleSet;
 
 class INFORMATIONSCRIPTING_API DefaultVisualizer
 {
 	public:
 		static DefaultVisualizer& instance();
 
-		void visualize(Graph* g);
+		void visualize(const TupleSet& ts);
 	private:
 		DefaultVisualizer() = default;
 
