@@ -37,20 +37,27 @@ object value(const NamedProperty& self) {
 	return pythonObject(self.second);
 }
 
+object Tuple_getAttr(const Tuple& self, const QString& name) {
+	return pythonObject(self[name]);
+}
+
 BOOST_PYTHON_MODULE(DataApi) {
 		class_<NamedProperty>("NamedProperty", init<QString, QString>())
 				.def_readwrite("name", &NamedProperty::first)
 				.add_property("value", &value);
 
 		class_<Tuple>("Tuple")
-				.def("add", &Tuple::add);
-
+				.def("tag", &Tuple::tag)
+				.def("add", &Tuple::add)
+				.def("__getattr__", &Tuple_getAttr);
 
 		QSet<Tuple> (TupleSet::*tuples1)(const QString&) const = &TupleSet::tuples;
+		QSet<Tuple> (TupleSet::*take1)(const QString&) = &TupleSet::take;
 		void (TupleSet::*removeTuple)(const Tuple&) = &TupleSet::remove;
 
 		class_<TupleSet>("TupleSet")
 				.def("tuples", tuples1)
+				.def("take", take1)
 				.def("remove", removeTuple)
 				.def("add", &TupleSet::add);
 }
