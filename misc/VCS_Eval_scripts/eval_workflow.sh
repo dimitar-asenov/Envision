@@ -6,7 +6,7 @@ jit="java -cp "${jitPath}:/opt/eclipse/plugins/*:../lib/*" javaImportTool.Main"
 gumtreePath=~/gumtree/gumtree-all/target/
 gumtree="java -cp ${gumtreePath}gumtree.jar com.github.gumtreediff.client.Run -c Clients.experimental true envdmp"
 
-idpatcher=~/Envision/misc/idPatcher.py
+idpatcher=~/Envision/misc/VCS_Eval_scripts/idPatcher.py
 
 envision=~/Envision/DebugBuild/Envision
 testdir=~/Envision/FilePersistence/test/persisted/version-control/TestMerge_WorkflowTest
