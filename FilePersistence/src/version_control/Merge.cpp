@@ -338,22 +338,32 @@ void Merge::applyChangesToTree(const std::shared_ptr<GenericTree>& tree,
 		{
 			case ChangeType::Insertion:
 			{
-				auto persistentUnitName = change->nodeB()->persistentUnit()->name();
-				auto persistentUnit = tree->persistentUnit(persistentUnitName);
-				if (!persistentUnit)
-					persistentUnit = &tree->newPersistentUnit(persistentUnitName);
-				auto node = persistentUnit->newNode(change->nodeB());
-				node->linkNode();
-				Q_ASSERT(node->parent()->id() == change->nodeB()->parentId());
-				Q_ASSERT(tree->find(change->nodeId()));
+				auto existing = tree->find(change->nodeB()->id());
+				if (existing)
+					Q_ASSERT(existing->equalTo(change->nodeB()));
+				else
+				{
+					auto persistentUnitName = change->nodeB()->persistentUnit()->name();
+					auto persistentUnit = tree->persistentUnit(persistentUnitName);
+					if (!persistentUnit)
+						persistentUnit = &tree->newPersistentUnit(persistentUnitName);
+					auto node = persistentUnit->newNode(change->nodeB());
+					node->linkNode();
+					Q_ASSERT(node->parent()->id() == change->nodeB()->parentId());
+					Q_ASSERT(tree->find(change->nodeId()));
+				}
 				break;
 			}
 
 			case ChangeType::Deletion:
 			{
-				Q_ASSERT(tree->find(change->nodeA()->id())->children().empty());
-				tree->remove(change->nodeId());
-				Q_ASSERT(!tree->find(change->nodeA()->id()));
+				auto node = tree->find(change->nodeA()->id());
+				if (node)
+				{
+					Q_ASSERT(node->children().empty());
+					tree->remove(change->nodeId());
+					Q_ASSERT(!tree->find(change->nodeA()->id()));
+				}
 				break;
 			}
 
