@@ -27,6 +27,8 @@ package javaImportTool;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 import javaImportTool.Node.OutputFormat;
@@ -56,10 +58,13 @@ public class Main {
 		
 		// Project Name argument
 		String projectName = args[0];
-		
+		boolean oneFile = false;
 		// Input directory
 		String inputDirectory = args[1];
-		if (!inputDirectory.endsWith(File.separator)) inputDirectory += File.separator;
+		if (inputDirectory.endsWith(".java"))
+			oneFile = true;
+		else if (!inputDirectory.endsWith(File.separator))
+			inputDirectory += File.separator;
 		
 		// Output directory
 		String outputDirectory = args[2];
@@ -121,7 +126,17 @@ public class Main {
 			ClassFileBytesDisassembler dis = ToolFactory.createDefaultClassFileBytesDisassembler();
 			
 			String suffix =  classFiles ? ".class" : ".java";
-			for(File file : FileUtils.listFiles(dir, new SuffixFileFilter(suffix), TrueFileFilter.INSTANCE))
+			
+			Collection<File> files;
+			if (oneFile)
+			{
+				files = new ArrayList<File>();
+				files.add(dir);
+			}
+			else
+				files = FileUtils.listFiles(dir, new SuffixFileFilter(suffix), TrueFileFilter.INSTANCE);
+			
+			for(File file : files)
 			{
 				if (!PRINT_METHODS) System.out.print("Processing file: " + file.getPath() + "...");
 				ASTParser parser = ASTParser.newParser(AST.JLS4);
@@ -178,16 +193,16 @@ public class Main {
 	public static final boolean PRINT_METHODS = false;
 	
 	private static String usageInfo =
-			  "Usage: JavaImportTool project-name input-directory output-directory [-classFiles] [-libs:...]\n"
+			  "Usage: JavaImportTool project-name (input-file | input-directory) output-directory [-classFiles] [-libs:...]\n"
 		  	+ "\n"
 			+ "   project-name\n"
 			+ "      This is the name of the project being converted. This will be used as a directory and file names\n"
-			+ "      that are create inside output-directory.\n"
+			+ "      that are created inside output-directory.\n"
 			+ "\n"
-			+ "   input-directory\n"
-			+ "      This is the directory that contains all Java sources that should be converted to Envision's own\n"
-			+ "      format. This directory is scanned recursively for all files with the .java extension and each\n"
-			+ "       file is processed.\n"
+			+ "   input-file, input-directory\n"
+			+ "      This is the single Java source or the directory that contains all Java sources that should be\n"
+			+ "	     converted to Envision's own format. If given a directory, it is scanned recursively for all files\n"
+			+ "      with the .java extension and each file is processed.\n"
 			+ "\n"
 			+ "   output-directory\n"
 			+ "      This is the directory that will contain the converted result. In this directory a sub-directory\n"
