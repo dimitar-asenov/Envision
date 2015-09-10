@@ -79,7 +79,7 @@ public class NodeDescriptors {
 				{"TypedListOfUsedLibrary","libraries"}
 		}));
 		
-		add( new NodeInitializer("Module", false, "-class-level-container", new String[][]{
+		add( new NodeInitializer("Module", true, "-class-level-container", new String[][]{
 				{"TypedListOfModule","modules"},
 				{"TypedListOfUsedLibrary","libraries"}
 		}));

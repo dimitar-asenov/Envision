@@ -147,11 +147,18 @@ TEST(FilePersistencePlugin, EvalMethodInsert)
 	merge->commit(sig, sig, "Merged master and dev");
 }
 
+/**
+ * The RunMerge test is not an actual test but rather is used to run the merge algorithm on the repo
+ * found in /tmp/EnvisionVC/TestMerge.
+ * This test should probably eventually be replaced by a command line interface.
+ */
 TEST(FilePersistencePlugin, RunMerge)
 {
-	//qDebug() << "argn = " << QString::number(argsGlobal.size()) << endl;
-	//Q_ASSERT(argsGlobal.size() == 1);
-	//GitRepository repo(argsGlobal[0]);
+	if (!QFile("/tmp/EnvisionVC/TestMerge/.git").exists())
+	{
+		CHECK_CONDITION(true);
+		return;
+	}
 	GitRepository repo("/tmp/EnvisionVC/TestMerge");
 	auto merge = repo.merge("dev");
 	if (!merge->hasConflicts())

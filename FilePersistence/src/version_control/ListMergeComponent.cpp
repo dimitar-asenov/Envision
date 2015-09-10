@@ -24,9 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-//#pragma GCC push_options
-//#pragma GCC optimize ("O0")
-
 #include "ListMergeComponent.h"
 #include "ConflictPairs.h"
 
@@ -653,39 +650,6 @@ void ListMergeComponent::markAsResolved(QSet<std::shared_ptr<ChangeDescription> 
 		if (conflictingChanges.contains(dep))
 			markAsResolved(conflictingChanges, conflictPairs, dep, cdgA, cdgB);
 	markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
-
-	/* Why is this so fricken hard??
-	// get conflicting change
-	auto conflictingSameId = cdgB.changes().value(change->nodeId());
-
-	// remove all conflicts with siblings.
-	auto parentId = change->nodeA() ? change->nodeA()->parentId() : change->nodeB()->parentId();
-	for (auto pair : conflictPairs.values(change))
-		if ((pair->nodeA() && pair->nodeA()->parentId() == parentId) ||
-			(pair->nodeB() && pair->nodeB()->parentId() == parentId))
-			conflictPairs.remove(change, pair);
-
-	if (conflictingSameId)
-	{
-		// remove conflict pairs of that other change
-		auto pairs = conflictPairs.values(conflictingSameId);
-		for (auto pair : pairs)
-		{
-			conflictPairs.remove(conflictingSameId, pair);
-		}
-		conflictingChanges.remove(conflictingSameId);
-
-		// try to mark them resovled
-		for (auto pair : pairs)
-		{
-			tryResolve(conflictingChanges, conflictPairs, pair, cdgA);
-		}
-
-		cdgB.remove(conflictingSameId);
-	}
-
-	tryResolve(conflictingChanges, conflictPairs, change, cdgA);
-	*/
 }
 
 } /* namespace FilePersistence */

@@ -94,11 +94,6 @@ class FILEPERSISTENCE_API SimpleTextFileStore : public Model::PersistentStore
 		bool partiallyLoadingATree_{};
 
 		/**
-		 * If false, no additional PUs will be generated.
-		 */
-		static const bool generatePUs_{};
-
-		/**
 		 * This is the folder where the current tree is being saved to or loaded from. This is only valid if working is
 		 * true.
 		 */

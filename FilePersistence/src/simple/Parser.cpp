@@ -32,6 +32,11 @@ namespace FilePersistence {
 const QString PREFIX_STRING = QString("S_");
 const QString PREFIX_INTEGER = QString("I_");
 const QString PREFIX_DOUBLE = QString("D_");
+/**
+ * If true, sort children by label when writing encoding.
+ * This is to ensure consistency between all methods used to produce Envision encodings.
+ */
+const bool SORT_BY_LABEL = true;
 
 inline int Parser::countTabs(const char* data, int lineStart, int lineEnd)
 {
@@ -231,6 +236,19 @@ bool Parser::nextHeaderPart(const char* data, int& start, int&endInclusive, int 
 	return true;
 }
 
+bool Parser::labelComparator(GenericNode * const node1, GenericNode * const node2)
+{
+	bool ok = true;
+	node1->label().toInt(&ok);
+	if (ok)
+	{
+		node2->label().toInt(&ok);
+		if (ok)
+			return node1->label().toInt() < node2->label().toInt();
+	}
+	return node1->label() < node2->label();
+}
+
 QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 											const QStringList& persistentUnitTypes, int tabLevel)
 {
@@ -261,21 +279,10 @@ QList<GenericNode*> Parser::save(QTextStream& stream, GenericNode* node,
 		}
 		stream << '\n';
 
-		auto labelComparator = [](GenericNode* const node1, GenericNode* const node2) -> bool
-		{
-			bool ok = true;
-			node1->label().toInt(&ok);
-			if (ok)
-			{
-				node2->label().toInt(&ok);
-				if (ok)
-					return node1->label().toInt() < node2->label().toInt();
-			}
-			return node1->label() < node2->label();
-		};
-
 		QList<GenericNode*> children(node->children());
-		std::sort(children.begin(), children.end(), labelComparator);
+
+		if (SORT_BY_LABEL)
+			std::sort(children.begin(), children.end(), labelComparator);
 
 		for (auto child : children)
 			res << save(stream, child, persistentUnitTypes, tabLevel+1);
