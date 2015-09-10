@@ -63,7 +63,6 @@ void FilePersistencePlugin::selfTest(QString testArgs)
 			SelfTest::TestManager<FilePersistencePlugin>::runTest(testId).printResultStatistics();
 		}
 	}
-	exit(0);
 }
 
 }

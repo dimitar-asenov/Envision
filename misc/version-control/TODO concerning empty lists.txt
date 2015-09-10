@@ -1,0 +1,18 @@
+Omit empty lists in encoding:
+
+The idea is to not encode list nodes that are empty (have no children).
+
+The problem with this is that deleting the last element of a list will be the same as deleting the list node.
+This confuses the list merge as it only merges lists where both branches only change the child structure, not the list itself.
+
+One proposed solution to this problem is changing the encoding such that some nodes do not have their own UUID.
+Instead, their ID will consists of the UUID of their parent and a label.
+This makes sense for nodes that exist exactly (at most?) once under a given parent and moving the node does not make sense semantically.
+One such node would be the name node of classes and methods, as each class and method has exactly one name node.
+Moving a name node makes little sense; classes and methods are renamed (change inside the name node).
+This means that for example the statement list of a given method always has the same ID and in some sense always exists but unless there are actually elements in the list, the node does not need to be encoded.
+The list merge would have to be changed to understand this change.
+
+Problems with this encoding might arise if there are multiple levels of such "ID-less" nodes.
+Do you just append labels?
+Also any piece of code that deals with the textual representation of nodes will have to be changed.

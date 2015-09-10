@@ -44,7 +44,7 @@ const QString SimpleTextFileStore::NULL_STRING = "____NULL____";
 /**
  * If false, no additional persistent units will be generated.
  */
-const bool GENERATE_PUS = false;
+const bool GENERATE_PUS = true;
 
 // TODO the Envision folder should be taken from the environment not hardcoded.
 SimpleTextFileStore::SimpleTextFileStore(const QString& baseDir) :

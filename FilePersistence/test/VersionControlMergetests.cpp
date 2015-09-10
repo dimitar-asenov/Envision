@@ -169,6 +169,7 @@ TEST(FilePersistencePlugin, RunMerge)
 		merge->commit(sig, sig, "This is the result of merge test \"WorkflowTest\"");
 	}
 	CHECK_CONDITION(true);
+	exit(0);
 }
 
 } /* namespace FilePersistence */
