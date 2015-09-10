@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -58,6 +59,29 @@ public class Node {
 	private static String outputDir_ = null;
 	private static Stack<PrintStream> out_ = new Stack<PrintStream>();
 	private static OutputFormat format_ = OutputFormat.XML;
+	private static String suffix = null;
+	
+	/**
+	 * If true, sort children by label when writing encoding.
+	 */
+	private final boolean SORT_BY_LABEL = true;
+	/**
+	 * This comparator is used to sort children lists by label.
+	 * This is to ensure consistency between all methods used to produce Envision encodings.
+	 */
+	private static Comparator<Node> labelComparator = new Comparator<Node>() {
+
+		@Override
+		public int compare(Node n1, Node n2) {
+			try {
+				int l1 = Integer.parseInt(n1.name_);
+				int l2 = Integer.parseInt(n2.name_);
+				return l1 - l2;
+			} catch (NumberFormatException e) {
+				return n1.name_.compareTo(n2.name_);
+			}
+		}
+	};
 	
 	private List<Node> children_ = new LinkedList<Node>();
 	
@@ -207,8 +231,9 @@ public class Node {
 	{
 		outputDir_ = dir;
 		format_ = format;
+		suffix = (format_ == OutputFormat.XML) ? ".xml" : "";
 		
-		out_.push( new PrintStream(new File(outputDir_ + projectName), "UTF-8") );
+		out_.push( new PrintStream(new File(outputDir_ + projectName + suffix), "UTF-8") );
 		
 		if (format_ == OutputFormat.XML || format_ == OutputFormat.CLIPBOARD)
 			out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
@@ -222,7 +247,10 @@ public class Node {
 	
 	private void renderTree(String indentation, boolean considerPersistenceUnits)
 		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
-	{	
+	{
+		if (SORT_BY_LABEL)
+			children_.sort(labelComparator);
+		
 		if (considerPersistenceUnits && isPersistenceUnit() && format_ != OutputFormat.CLIPBOARD)
 		{
 			// Create a new file for this persistence unit
@@ -238,7 +266,7 @@ public class Node {
 				out_.peek().println(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
 			}
 			
-			out_.push( new PrintStream(new File(outputDir_ + "{" + id_ + "}"), "UTF-8") );
+			out_.push( new PrintStream(new File(outputDir_ + "{" + id_ + "}" + suffix), "UTF-8") );
 			if (format_ == OutputFormat.XML) out_.peek().println("<!DOCTYPE EnvisionFilePersistence>");
 			renderTree("", false);
 			out_.pop().close();
@@ -273,15 +301,18 @@ public class Node {
 			else if (format_ == OutputFormat.SIMPLE)
 			{
 				// Do not output empty lists
+				/* Actually do because deleting the single element of a list confuses the merge.
+				 * There is a note on this in Envision/misc/version-control.
 				if (children_.isEmpty() && (tag_.startsWith("TypedListOf") || tag_.endsWith("List")))
 					return;
-				
+				*/
 				out_.peek().print(indentation + name_ + " " + tag_ + " {" + id_+"}");
 				assert parent_ != null || !considerPersistenceUnits;
 				out_.peek().print(parent_ == null ? " {00000000-0000-0000-0000-000000000000}": " {" + parent_.id_ + "}");
 				if (text_ != null) out_.peek().print(". " + escape(text_));
 				out_.peek().println();
-				for(Node child : children_) child.renderTree(indentation + "\t", true);
+				for (Node child : children_)
+					child.renderTree(indentation + "\t", considerPersistenceUnits);
 			}
 		}
 	}

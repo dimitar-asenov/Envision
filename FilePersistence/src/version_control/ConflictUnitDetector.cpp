@@ -87,10 +87,12 @@ QSet<std::shared_ptr<ChangeDescription>> ConflictUnitDetector::structureChanges(
 		std::shared_ptr<ChangeDescription> parentChange)
 {
 	QSet<Model::NodeIdType> childrenIds;
-	for (auto child : parentChange->nodeA()->children())
-		childrenIds.insert(child->id());
-	for (auto child : parentChange->nodeB()->children())
-		childrenIds.insert(child->id());
+	if (parentChange->nodeA())
+		for (auto child : parentChange->nodeA()->children())
+			childrenIds.insert(child->id());
+	if (parentChange->nodeB())
+		for (auto child : parentChange->nodeB()->children())
+			childrenIds.insert(child->id());
 	QSet<std::shared_ptr<ChangeDescription>> changes;
 	for (auto childId : childrenIds)
 	{
