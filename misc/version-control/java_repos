@@ -1,0 +1,8 @@
+This file contains the URL of some Java repositories (together with (arbitrarily chosen) names) that can be used as arguments for the dump_repo.sh script.
+This is just for convenience. Any git repo URL could be chosen with any name.
+These have been found with a search similar to this:
+https://github.com/search?l=Java&q=stars%3A%3E5000+size%3A%3E10000&ref=searchresults&type=Repositories&utf8=%E2%9C%93
+
+https://github.com/android/platform_frameworks_base.git platform_frameworks_base
+https://github.com/elastic/elasticsearch.git elasticsearch
+https://github.com/nostra13/Android-Universal-Image-Loader.git UniversalImageLoader

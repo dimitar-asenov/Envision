@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# This script takes as the single argument a directory previously populated by the dump_repo.sh script.
+# It runs the default Git merge algorithm and compares the result to the definitive developer-merged verison.
+# If the versions are different, an entry specifying the revision and file is written to merges/issues_git.
+# Additionally, it writes an entry for all encountered files to merges/all which is helpful when using the comm command with these kind of files.
+
 rm "${1}/merges/issues_git"
 
 merges="${1}/merges/*"

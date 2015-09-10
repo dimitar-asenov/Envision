@@ -1,9 +1,7 @@
 #!/usr/bin/python3
-'''
-Created on Aug 19, 2015
 
-@author: Balz Guenat
-'''
+# This script takes as its single argument an Envision file. The script expects an ID-patch-file of the same name extended with ".idpatch" to exist in the same directory. Optionally there can be a file extended ".idpatch.manual" that contains manual patches overriding the automatic ones.
+# The original input file will be stored with the ".old" extension.
 
 import re
 import sys

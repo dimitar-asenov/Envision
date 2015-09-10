@@ -1,12 +1,18 @@
 #!/bin/bash
 
+# This script takes 3 java files as input: base master dev
+# It creates a repo in /tmp/EnvisionVC/TestMerge and merges the files using Envision.
+# It does the same using the Git merge in /tmp/EnvisionVC/Git.
+# If run manually, this script is intended for the files in Envision/FilePersistence/test/persisted/version-control/manual/
+# The script is also used in the diff_envision_dev.sh script.
+
 jitPath=~/Envision/JavaImportTool/bin/
 jit="java -cp "${jitPath}:/opt/eclipse/plugins/*:../lib/*" javaImportTool.Main"
 
 gumtreePath=~/gumtree/gumtree-all/target
-gumtree="java -cp ${gumtreePath}/gumtree.jar com.github.gumtreediff.client.Run -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -m gumtree"
+gumtree="java -cp ${gumtreePath}/gumtree.jar com.github.gumtreediff.client.Run -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -g envision -m gumtree"
 
-idpatcher=~/Envision/misc/VCS_Eval_scripts/idPatcher.py
+idpatcher=~/Envision/misc/version-control/scripts/patch_ids.py
 repoScript=~/Envision/FilePersistence/test/persisted/version-control/create-test-git-repo.py
 envision=~/Envision/DebugBuild/Envision
 
@@ -46,18 +52,18 @@ $jit TestMerge master master
 $jit TestMerge dev dev
 
 # Generate patch files
-$gumtree base/TestMerge/TestMerge.env master/TestMerge/TestMerge.env
-$gumtree base/TestMerge/TestMerge.env dev/TestMerge/TestMerge.env
+$gumtree base/TestMerge/TestMerge master/TestMerge/TestMerge
+$gumtree base/TestMerge/TestMerge dev/TestMerge/TestMerge
 
 # Apply patches
-$idpatcher master/TestMerge/TestMerge.env
-$idpatcher dev/TestMerge/TestMerge.env
+$idpatcher master/TestMerge/TestMerge
+$idpatcher dev/TestMerge/TestMerge
 
 # Move to Envision test directory
 mkdir $envRepoSrc
-cp base/TestMerge/TestMerge.env "${envRepoSrc}/master_a_(base)_TestMerge"
-cp master/TestMerge/TestMerge.env "${envRepoSrc}/master_b_(master)_TestMerge"
-cp dev/TestMerge/TestMerge.env "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
+cp base/TestMerge/TestMerge "${envRepoSrc}/master_a_(base)_TestMerge"
+cp master/TestMerge/TestMerge "${envRepoSrc}/master_b_(master)_TestMerge"
+cp dev/TestMerge/TestMerge "${envRepoSrc}/dev_a_master_a_(dev)_TestMerge"
 
 $repoScript $envRepoSrc $envRepo
 

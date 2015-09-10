@@ -1,3 +1,6 @@
+This file contains some notes about merge cases in the UniversalImageLoader repository.
+This file is no automatically generated ;)
+
 Git merges correctly, Envision does not:
 
 12079bd7484b961136fc16b53b908da816eb46b5
