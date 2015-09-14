@@ -24,25 +24,41 @@
 **
 ***********************************************************************************************************************/
 
-#include "NodePropertyAdder.h"
+#pragma once
+
+#include "../informationscripting_api.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
-NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value)
- : name_{propertyName}, value_{value}
-{}
+class Query;
 
-QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
+class INFORMATIONSCRIPTING_API QueryRegistry
 {
-	for (auto& ts : input)
-	{
-		for (auto node : ts.takeAll())
-		{
-			node.add({name_, value_});
-			ts.add(node);
-		}
-	}
-	return input;
+	public:
+		static QueryRegistry& instance();
+
+		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
+		void registerQueryConstructor(const QString& command, QueryConstructor constructor);
+
+		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
+
+	private:
+		QueryRegistry() = default;
+
+		Query* tryBuildQueryFromScript(const QString& name, QStringList args);
+
+		QHash<QString, QueryConstructor> constructors_;
+		QString scriptLocation_{"scripts/"};
+};
+
+inline void QueryRegistry::registerQueryConstructor(const QString& command, QueryRegistry::QueryConstructor constructor)
+{
+	Q_ASSERT(constructor);
+	constructors_[command] = constructor;
 }
 
 } /* namespace InformationScripting */

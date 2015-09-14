@@ -24,25 +24,49 @@
 **
 ***********************************************************************************************************************/
 
-#include "NodePropertyAdder.h"
+#pragma once
+
+#include "../informationscripting_api.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace InformationScripting {
 
-NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value)
- : name_{propertyName}, value_{value}
-{}
+class CompositeQuery;
+class Query;
 
-QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
+class INFORMATIONSCRIPTING_API QueryBuilder
 {
-	for (auto& ts : input)
-	{
-		for (auto node : ts.takeAll())
-		{
-			node.add({name_, value_});
-			ts.add(node);
-		}
-	}
-	return input;
-}
+	public:
+		static QueryBuilder& instance();
+		/**
+		 * Parses the \a text in the following language:
+		 *
+		 * char			:= a-z
+		 * word			:= char [char|SPACE]+
+		 * query			:= "word"
+		 * queryOrList := query | list
+		 * op				:= | - U
+		 * operator		:= $queryOrList [op queryOrList]+$
+		 * queryOrOp	:= query | operator
+		 * list			:= {queryOrOp [, queryOrOp]+}
+		 */
+		Query* buildQueryFrom(const QString& text, Model::Node* target);
 
-} /* namespace InformationScripting */
+	private:
+		QueryBuilder() = default;
+		enum class Type: int {Operator = 0, Query = 1, List = 2};
+		Type typeOf(const QString& text);
+		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
+
+		Query* parseQuery(const QString& text);
+		QList<Query*> parseList(const QString& text);
+		Query* parseOperator(const QString& text, bool connectInput = false);
+		QList<Query*> parseOperatorPart(const QString& text);
+
+		Model::Node* target_{};
+};
+
+} /* namespace InformationScripting  */

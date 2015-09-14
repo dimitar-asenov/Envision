@@ -24,18 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "QueryRegistry.h"
 
-#include "../informationscripting_api.h"
-
-#include "Query.h"
+#include "../queries/NodePropertyAdder.h"
+#include "../queries/ScriptQuery.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API SubstractNodesOperator : public Query
+QueryRegistry& QueryRegistry::instance()
 {
-	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input);
-};
+	static QueryRegistry instance;
+	return instance;
+}
+
+Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QStringList args)
+{
+	if (auto constructor = constructors_[command])
+		return constructor(target, args);
+	if (args.size() > 1 && args[0] == "=")
+	{
+		// TODO we need some way to specify a condition on the node.
+		// Or eventually decide that we don't allow condition in the property adder
+		return new NodePropertyAdder(command, args[1]);
+	}
+	if (auto script = tryBuildQueryFromScript(command, args))
+		return script;
+	return nullptr;
+}
+
+Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, QStringList args)
+{
+	QString scriptName{scriptLocation_ + name + ".py"};
+	if (QFile::exists(scriptName))
+		return new ScriptQuery(scriptName, args);
+	return nullptr;
+}
 
 } /* namespace InformationScripting */

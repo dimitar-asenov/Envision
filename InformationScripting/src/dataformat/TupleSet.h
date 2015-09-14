@@ -35,8 +35,6 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API TupleSet
 {
 	public:
-		using TupleCondition = std::function<bool (const Tuple& t)>;
-
 		template<class Condition>
 		QSet<Tuple> tuples(Condition condition) const;
 		/**
@@ -56,6 +54,12 @@ class INFORMATIONSCRIPTING_API TupleSet
 		QSet<Tuple> take(Condition condition);
 		QSet<Tuple> takeAll();
 		void unite(const TupleSet& with);
+
+		/**
+		 * Adds all properties of type \a T as single Tuples with tag \a tag.
+		 */
+		template<class T>
+		void addPropertiesAsTuples(const QString& tag);
 
 	private:
 		QHash<QString, QSet<Tuple>> tuples_;
@@ -102,6 +106,21 @@ inline QSet<Tuple> TupleSet::take(Condition condition)
 		}
 	}
 	return result;
+}
+
+template <class T>
+inline void TupleSet::addPropertiesAsTuples(const QString& tag)
+{
+	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
+	{
+		if (hashIt.key() != tag)
+		for (const auto& t : hashIt.value())
+		{
+			auto properties = t.valuesOfType<T>();
+			for (const auto& p : properties)
+				tuples_[tag].insert({{tag, p}});
+		}
+	}
 }
 
 } /* namespace InformationScripting */

@@ -1,9 +1,10 @@
 results = [];
 
+import AstApi
 
 for ts in inputs:
     tuples = ts.tuples("ast")
     for tuple in tuples:
-        asts = tuple.getAll("ast");
-        print(asts[0].value.constructKind)
+        if type(tuple.ast) is AstApi.Class:
+            print(tuple.ast.constructKind)
     results.append(ts)

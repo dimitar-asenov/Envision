@@ -29,6 +29,8 @@
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 
+#include "QueryRegistry.h"
+
 namespace InformationScripting {
 
 AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
@@ -49,7 +51,21 @@ AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 			}
 			return false;
 		}
-	}
+}
 {}
+
+void AstNameFilter::registerDefaultQueries()
+{
+	QueryRegistry::instance().registerQueryConstructor("filter", [](Model::Node*, QStringList args) {
+		Q_ASSERT(args.size());
+		if (args[0].contains("*"))
+		{
+			QString regexString = args[0];
+			regexString.replace("*", "\\w*");
+			return new AstNameFilter(Model::SymbolMatcher(new QRegExp(regexString)));
+		}
+		return new AstNameFilter(Model::SymbolMatcher(args[0]));
+	});
+}
 
 } /* namespace InformationScripting */

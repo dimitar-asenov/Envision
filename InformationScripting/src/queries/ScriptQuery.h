@@ -35,7 +35,7 @@ namespace InformationScripting {
 class ScriptQuery : public Query
 {
 	public:
-		ScriptQuery(const QString& scriptPath);
+		ScriptQuery(const QString& scriptPath, const QStringList& args = {});
 
 		static void initPythonEnvironment();
 		static void unloadPythonEnvironment();
@@ -44,6 +44,8 @@ class ScriptQuery : public Query
 
 	private:
 		QString scriptPath_;
+		// Note since we only register QList<T> to python we don't use QStringList here:
+		QList<QString> arguments_;
 };
 
 } /* namespace InformationScripting */

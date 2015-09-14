@@ -34,6 +34,8 @@
 #include "commands/CScript.h"
 #include "helpers/BoostPythonHelpers.h"
 #include "queries/ScriptQuery.h"
+#include "queries/AstQuery.h"
+#include "queries/AstNameFilter.h"
 
 namespace InformationScripting {
 
@@ -42,6 +44,8 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	BoostPythonHelpers::initializeConverters();
 	OOInteraction::HStatementItemList::instance()->addCommand(new CScript());
 	ScriptQuery::initPythonEnvironment();
+	AstQuery::registerDefaultQueries();
+	AstNameFilter::registerDefaultQueries();
 	return true;
 }
 

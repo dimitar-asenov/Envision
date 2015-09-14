@@ -47,7 +47,12 @@ void Tuple::add(const NamedProperty& p)
 
 uint Tuple::hashValue(uint seed) const
 {
+// FIXME remove this workaround after ubuntu has 5.5 in repos
+#if QT_VERSION >= 0x050500
 	return qHashRange(begin(), end(), seed);
+#else
+	return 0;
+#endif
 }
 
 Tuple::const_iterator Tuple::find(const QString& name) const
@@ -67,14 +72,14 @@ uint qHash(const Tuple& t, uint seed)
 
 Property& Tuple::operator[](const QString& name)
 {
-	auto it = std::find_if(begin(), end(), [name](const auto& np) {return np.first == name;});
+	auto it = find(name);
 	Q_ASSERT(it != end());
 	return it->second;
 }
 
 const Property& Tuple::operator[](const QString& name) const
 {
-	auto it = std::find_if(begin(), end(), [name](const auto& np) {return np.first == name;});
+	auto it = find(name);
 	Q_ASSERT(it != end());
 	return it->second;
 }

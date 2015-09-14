@@ -38,6 +38,8 @@ class INFORMATIONSCRIPTING_API AstNameFilter : public GenericFilter
 {
 	public:
 		AstNameFilter(Model::SymbolMatcher matcher);
+
+		static void registerDefaultQueries();
 };
 
 } /* namespace InformationScripting */

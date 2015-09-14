@@ -24,25 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "NodePropertyAdder.h"
+#include "SubstractOperator.h"
+
+#include "ModelBase/src/nodes/Node.h"
 
 namespace InformationScripting {
 
-NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value)
- : name_{propertyName}, value_{value}
-{}
-
-QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
+QList<TupleSet> SubstractOperator::execute(QList<TupleSet> input)
 {
-	for (auto& ts : input)
-	{
-		for (auto node : ts.takeAll())
-		{
-			node.add({name_, value_});
-			ts.add(node);
-		}
-	}
-	return input;
+	Q_ASSERT(input.size() == 2);
+	auto setA = input[0];
+	setA.remove(input[1]);
+	return {setA};
 }
 
 } /* namespace InformationScripting */

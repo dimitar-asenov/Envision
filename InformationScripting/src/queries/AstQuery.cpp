@@ -30,6 +30,7 @@
 #include "OOModel/src/declarations/Project.h"
 
 #include "../visitors/AllNodesOfType.h"
+#include "QueryRegistry.h"
 
 namespace InformationScripting {
 
@@ -68,6 +69,26 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 	}
 
 	return result;
+}
+
+void AstQuery::registerDefaultQueries()
+{
+	auto& registry = QueryRegistry::instance();
+	registry.registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Classes, target, args);
+	});
+	registry.registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Methods, target, args);
+	});
+	registry.registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
+	});
+	registry.registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::ToClass, target, args);
+	});
+	registry.registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
+	});
 }
 
 TupleSet AstQuery::classesQuery(QList<TupleSet>)
