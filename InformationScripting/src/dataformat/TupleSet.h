@@ -59,7 +59,7 @@ class INFORMATIONSCRIPTING_API TupleSet
 		 * Adds all properties of type \a T as single Tuples with tag \a tag.
 		 */
 		template<class T>
-		void addAllPropertiesTo(const QString& tag);
+		void addPropertiesAsTuples(const QString& tag);
 
 	private:
 		QHash<QString, QSet<Tuple>> tuples_;
@@ -109,7 +109,7 @@ inline QSet<Tuple> TupleSet::take(Condition condition)
 }
 
 template <class T>
-inline void TupleSet::addAllPropertiesTo(const QString& tag)
+inline void TupleSet::addPropertiesAsTuples(const QString& tag)
 {
 	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
 	{

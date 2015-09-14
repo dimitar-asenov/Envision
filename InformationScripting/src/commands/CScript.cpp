@@ -81,7 +81,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 
 		if (command == "script")
 		{
-			if (args.size())
+			if (args.size() > 1)
 			{
 				// $"classes g" | "script test"$
 				auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});

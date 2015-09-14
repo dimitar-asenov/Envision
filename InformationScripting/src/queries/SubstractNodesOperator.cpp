@@ -36,7 +36,7 @@ QList<TupleSet> SubstractNodesOperator::execute(QList<TupleSet> input)
 	auto setA = input[0];
 	auto setB = input[1];
 	// TODO: this is not the correct place to do this. But where is it??
-	setB.addAllPropertiesTo<Model::Node*>("ast");
+	setB.addPropertiesAsTuples<Model::Node*>("ast");
 	setA.remove(setB);
 	return {setA};
 }

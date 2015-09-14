@@ -44,8 +44,6 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		using QueryConstructor = std::function<Query* (Model::Node*, QStringList)>;
 		void registerQueryConstructor(const QString& command, QueryConstructor constructor);
 
-		void registerScriptLocation(const QString& path);
-
 		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
 	private:
