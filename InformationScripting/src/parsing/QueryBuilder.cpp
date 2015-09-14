@@ -28,7 +28,7 @@
 
 #include "../queries/CompositeQuery.h"
 #include "../queries/Query.h"
-#include "../queries/SubstractNodesOperator.h"
+#include "../queries/SubstractOperator.h"
 #include "../queries/UnionOperator.h"
 
 
@@ -160,7 +160,7 @@ Query* QueryBuilder::parseOperator(const QString& text, bool connectInput)
 			else if (operators[i-1] == '-')
 			{
 				// TODO maybe minus should look like a union op, i.e. multiple input single output?
-				auto minus = new SubstractNodesOperator();
+				auto minus = new SubstractOperator();
 				composite->connectQuery(previousQueries[0], minus);
 				composite->connectQuery(currentQueries[0], 0, minus, 1);
 				currentQueries = {minus};

@@ -35,7 +35,7 @@
 #include "../queries/QueryExecutor.h"
 #include "../queries/CompositeQuery.h"
 #include "../queries/AstNameFilter.h"
-#include "../queries/SubstractNodesOperator.h"
+#include "../queries/SubstractOperator.h"
 #include "../queries/AstQuery.h"
 #include "../queries/NodePropertyAdder.h"
 #include "../queries/UnionOperator.h"
@@ -155,7 +155,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			// $"methods g" - "callgraph"$
 			auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
 			auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
-			auto complement = new SubstractNodesOperator();
+			auto complement = new SubstractOperator();
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectQuery(allMethodsQuery, complement);
 			compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);

@@ -28,7 +28,6 @@ HEADERS += src/precompiled.h \
     src/queries/CompositeQuery.h \
     src/queries/GenericFilter.h \
     src/queries/AstNameFilter.h \
-    src/queries/SubstractNodesOperator.h \
     src/queries/NodePropertyAdder.h \
     src/queries/UnionOperator.h \
     src/queries/ScriptQuery.h \
@@ -38,7 +37,8 @@ HEADERS += src/precompiled.h \
     src/dataformat/Property.h \
     src/helpers/PythonSet.h \
     src/wrappers/DataApi.h \
-    src/queries/QueryRegistry.h
+    src/queries/QueryRegistry.h \
+    src/queries/SubstractOperator.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -51,7 +51,6 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/CompositeQuery.cpp \
     src/queries/GenericFilter.cpp \
     src/queries/AstNameFilter.cpp \
-    src/queries/SubstractNodesOperator.cpp \
     src/queries/NodePropertyAdder.cpp \
     src/queries/UnionOperator.cpp \
     src/queries/ScriptQuery.cpp \
@@ -61,7 +60,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/dataformat/TupleSet.cpp \
     src/dataformat/Property.cpp \
     src/helpers/PythonSet.cpp \
-    src/queries/QueryRegistry.cpp
+    src/queries/QueryRegistry.cpp \
+    src/queries/SubstractOperator.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

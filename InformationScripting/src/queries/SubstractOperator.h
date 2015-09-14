@@ -24,21 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "SubstractNodesOperator.h"
+#pragma once
 
-#include "ModelBase/src/nodes/Node.h"
+#include "../informationscripting_api.h"
+
+#include "Query.h"
 
 namespace InformationScripting {
 
-QList<TupleSet> SubstractNodesOperator::execute(QList<TupleSet> input)
+class INFORMATIONSCRIPTING_API SubstractOperator : public Query
 {
-	Q_ASSERT(input.size() == 2);
-	auto setA = input[0];
-	auto setB = input[1];
-	// TODO: this is not the correct place to do this. But where is it??
-	setB.addPropertiesAsTuples<Model::Node*>("ast");
-	setA.remove(setB);
-	return {setA};
-}
+	public:
+		virtual QList<TupleSet> execute(QList<TupleSet> input);
+};
 
 } /* namespace InformationScripting */

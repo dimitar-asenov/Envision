@@ -24,18 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "SubstractOperator.h"
 
-#include "../informationscripting_api.h"
-
-#include "Query.h"
+#include "ModelBase/src/nodes/Node.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API SubstractNodesOperator : public Query
+QList<TupleSet> SubstractOperator::execute(QList<TupleSet> input)
 {
-	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input);
-};
+	Q_ASSERT(input.size() == 2);
+	auto setA = input[0];
+	setA.remove(input[1]);
+	return {setA};
+}
 
 } /* namespace InformationScripting */
