@@ -57,7 +57,6 @@ Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QS
 QueryRegistry::QueryRegistry()
 {
 	registerDefaultQueries();
-	registerDefaultScriptLocations();
 }
 
 void QueryRegistry::registerDefaultQueries()
@@ -93,19 +92,11 @@ void QueryRegistry::registerDefaultQueries()
 	});
 }
 
-void QueryRegistry::registerDefaultScriptLocations()
-{
-	scriptLocations_ << "../InformationScripting/test/scripts/";
-}
-
 Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, QStringList args)
 {
-	for (const auto& scriptLocation : scriptLocations_)
-	{
-		QString scriptName{scriptLocation + name + ".py"};
-		if (QFile::exists(scriptName))
-			return new ScriptQuery(scriptName, args);
-	}
+	QString scriptName{scriptLocation_ + name + ".py"};
+	if (QFile::exists(scriptName))
+		return new ScriptQuery(scriptName, args);
 	return nullptr;
 }
 

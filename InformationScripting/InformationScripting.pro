@@ -78,6 +78,11 @@ exists(src/wrappers/AstApi_Generated.cpp): {
     DEFINES+=AST_API_GENERATED
 }
 
+# Install script files into the script directory:
+test_scripts.path = $${BUILD_DIR}/scripts
+test_scripts.files = test/scripts/*.py
+INSTALLS += test_scripts
+
 # The below piece is borrowed and adapted from: https://github.com/mkeeter/antimony/blob/master/qt/python.pri
 cygwin {
     QMAKE_CXXFLAGS += $$system(python3-config --includes)

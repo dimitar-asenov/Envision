@@ -50,12 +50,11 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		QueryRegistry();
 
 		void registerDefaultQueries();
-		void registerDefaultScriptLocations();
 
 		Query* tryBuildQueryFromScript(const QString& name, QStringList args);
 
 		QHash<QString, QueryConstructor> constructors_;
-		QStringList scriptLocations_;
+		QString scriptLocation_{"scripts/"};
 };
 
 inline void QueryRegistry::registerQueryConstructor(const QString& command, QueryRegistry::QueryConstructor constructor)
