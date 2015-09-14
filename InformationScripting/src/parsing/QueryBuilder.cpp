@@ -136,9 +136,9 @@ Query* QueryBuilder::parseOperator(const QString& text, bool connectInput)
 {
 	// TODO it might be better to be able to register operators.
 	// But that need some additional information on how they are used, thus we currently hardcode the operators.
-	auto splitted = split(text, {'|', '-', 'U'});
-	auto parts = splitted.first;
-	auto operators = splitted.second;
+	auto splitText = split(text, {'|', '-', 'U'});
+	auto parts = splitText.first;
+	auto operators = splitText.second;
 	Q_ASSERT(parts.size()); // TODO error for user
 	CompositeQuery* composite = new CompositeQuery();
 	auto previousQueries = parseOperatorPart(parts[0]);
