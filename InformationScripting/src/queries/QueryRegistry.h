@@ -47,9 +47,7 @@ class INFORMATIONSCRIPTING_API QueryRegistry
 		Query* buildQuery(const QString& command, Model::Node* target, QStringList args);
 
 	private:
-		QueryRegistry();
-
-		void registerDefaultQueries();
+		QueryRegistry() = default;
 
 		Query* tryBuildQueryFromScript(const QString& name, QStringList args);
 

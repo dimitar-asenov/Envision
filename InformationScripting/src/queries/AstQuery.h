@@ -51,6 +51,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 
 		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
+		static void registerDefaultQueries();
+
 	private:
 		Model::Node* target_{};
 		Scope scope_{};

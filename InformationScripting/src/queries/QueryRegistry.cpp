@@ -26,8 +26,6 @@
 
 #include "QueryRegistry.h"
 
-#include "../queries/AstQuery.h"
-#include "../queries/AstNameFilter.h"
 #include "../queries/NodePropertyAdder.h"
 #include "../queries/ScriptQuery.h"
 
@@ -52,44 +50,6 @@ Query* QueryRegistry::buildQuery(const QString& command, Model::Node* target, QS
 	if (auto script = tryBuildQueryFromScript(command, args))
 		return script;
 	return nullptr;
-}
-
-QueryRegistry::QueryRegistry()
-{
-	registerDefaultQueries();
-}
-
-void QueryRegistry::registerDefaultQueries()
-{
-	registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Classes, target, args);
-	});
-	registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Methods, target, args);
-	});
-	registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
-	});
-	registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::ToClass, target, args);
-	});
-	registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
-	});
-	registerQueryConstructor("filter", [](Model::Node*, QStringList args) {
-		Q_ASSERT(args.size());
-		if (args[0].contains("*"))
-		{
-			QString regexString = args[0];
-			regexString.replace("*", "\\w*");
-			return new AstNameFilter(Model::SymbolMatcher(new QRegExp(regexString)));
-		}
-		return new AstNameFilter(Model::SymbolMatcher(args[0]));
-	});
-	registerQueryConstructor("script", [](Model::Node*, QStringList args) {
-		QString scriptName = args.takeFirst();
-		return new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(scriptName), args);
-	});
 }
 
 Query* QueryRegistry::tryBuildQueryFromScript(const QString& name, QStringList args)
