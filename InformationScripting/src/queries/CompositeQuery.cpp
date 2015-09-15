@@ -64,8 +64,8 @@ QList<TupleSet> CompositeQuery::execute(QList<TupleSet> input)
 		for (int outIndex = 0; outIndex < currentNode->outputMap_.size(); ++outIndex)
 		{
 			auto outputMapping = currentNode->outputMap_[outIndex];
-			// TODO: this shouldn't be an assertion later, but rather some error which is presented to the user.
-			Q_ASSERT(outIndex < currentNode->calculatedOutputs_.size());
+
+			bool hasOutput = outIndex < currentNode->calculatedOutputs_.size();
 
 			for (auto receiverIt = outputMapping.begin(); receiverIt != outputMapping.end(); ++receiverIt)
 			{
@@ -76,7 +76,7 @@ QList<TupleSet> CompositeQuery::execute(QList<TupleSet> input)
 					return m.outputFrom_ == currentNode && m.outputIndex_ == outIndex;
 				});
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
-				auto output = currentNode->calculatedOutputs_[outIndex];
+				auto output = hasOutput ? currentNode->calculatedOutputs_[outIndex] : TupleSet();
 
 				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
 
@@ -119,6 +119,12 @@ void CompositeQuery::connectToOutput(Query* from, int outIndex)
 
 	addOutputMapping(fromNode, 0, outNode_);
 	addInputMapping(fromNode, 0, outNode_, outIndex);
+}
+
+void CompositeQuery::connectToOutput(const QList<Query*>& outQueries)
+{
+	for (int i = 0; i < outQueries.size(); ++i)
+		connectToOutput(outQueries[i], i);
 }
 
 CompositeQuery::QueryNode* CompositeQuery::nodeForQuery(Query* q)

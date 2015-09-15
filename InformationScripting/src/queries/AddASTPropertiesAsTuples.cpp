@@ -24,52 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AddASTPropertiesAsTuples.h"
 
-#include "../informationscripting_api.h"
+#include "ModelBase/src/nodes/Node.h"
 
-namespace Model {
-	class Node;
-}
+#include "QueryRegistry.h"
 
 namespace InformationScripting {
 
-class CompositeQuery;
-class Query;
-
-class INFORMATIONSCRIPTING_API QueryBuilder
+QList<TupleSet> AddASTPropertiesAsTuples::execute(QList<TupleSet> input)
 {
-	public:
-		static QueryBuilder& instance();
-		/**
-		 * Parses the \a text in the following language:
-		 *
-		 * char			:= a-z
-		 * word			:= char [char|SPACE]+
-		 * query			:= "word"
-		 * queryOrList := query | list
-		 * op				:= | - U
-		 * operator		:= $queryOrList [op queryOrList]+$
-		 * queryOrOp	:= query | operator
-		 * list			:= {queryOrOp [, queryOrOp]+}
-		 */
-		Query* buildQueryFrom(const QString& text, Model::Node* target);
+	for (auto& ts : input)
+		ts.addPropertiesAsTuples<Model::Node*>("ast");
+	return input;
+}
 
-	private:
-		QueryBuilder() = default;
-		enum class Type: int {Operator = 0, Query = 1, List = 2};
-		Type typeOf(const QString& text);
-		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
+void AddASTPropertiesAsTuples::registerDefaultQueries()
+{
+	QueryRegistry::instance().registerQueryConstructor("addASTProperties", [](Model::Node*, QStringList)
+	{
+		return new AddASTPropertiesAsTuples();
+	});
+}
 
-		Query* parseQuery(const QString& text);
-		QList<Query*> parseList(const QString& text);
-		Query* parseOperator(const QString& text, bool connectInput = false);
-		QList<Query*> parseOperatorPart(const QString& text);
-
-		void connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
-										Query* connectionQuery, Query* outputQuery = nullptr);
-
-		Model::Node* target_{};
-};
-
-} /* namespace InformationScripting  */
+} /* namespace InformationScripting */

@@ -36,6 +36,7 @@
 #include "queries/ScriptQuery.h"
 #include "queries/AstQuery.h"
 #include "queries/AstNameFilter.h"
+#include "queries/AddASTPropertiesAsTuples.h"
 
 namespace InformationScripting {
 
@@ -46,6 +47,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	ScriptQuery::initPythonEnvironment();
 	AstQuery::registerDefaultQueries();
 	AstNameFilter::registerDefaultQueries();
+	AddASTPropertiesAsTuples::registerDefaultQueries();
 	return true;
 }
 

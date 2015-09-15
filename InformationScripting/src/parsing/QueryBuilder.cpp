@@ -151,50 +151,53 @@ Query* QueryBuilder::parseOperator(const QString& text, bool connectInput)
 	for (int i = 1; i < parts.size(); ++i)
 	{
 		auto currentQueries = parseOperatorPart(parts[i]);
+		auto currentOperator = operators[i-1];
 		// If left and right are both lists we don't know how to map things:
 		Q_ASSERT(!(previousQueries.size() > 1 && currentQueries.size() > 1)); // TODO error for user
 		if (previousQueries.size() == 1 && currentQueries.size() == 1)
 		{
-			if (operators[i-1] == '|')
+			if (currentOperator == '|')
 				composite->connectQuery(previousQueries[0], currentQueries[0]);
-			else if (operators[i-1] == '-')
+			else if (currentOperator == '-')
 			{
-				// TODO maybe minus should look like a union op, i.e. multiple input single output?
 				auto minus = new SubstractOperator();
-				composite->connectQuery(previousQueries[0], minus);
-				composite->connectQuery(currentQueries[0], 0, minus, 1);
+				connectQueriesWith(composite, {previousQueries[0], currentQueries[0]}, minus);
 				currentQueries = {minus};
 			}
 		}
 		else if (previousQueries.size() > currentQueries.size())
 		{
-			auto unionOp = new UnionOperator();
-			for (int i = 0; i < previousQueries.size(); ++i)
-				composite->connectQuery(previousQueries[i], 0, unionOp, i);
-			composite->connectQuery(unionOp, currentQueries[0]);
+			Query* unionQuery = nullptr;
+			if (operators[i-1] == '-') unionQuery = new SubstractOperator();
+			else unionQuery = new UnionOperator();
+			connectQueriesWith(composite, previousQueries, unionQuery, currentQueries[0]);
 		}
 		else
 		{
+			// Split the output from the previous query
 			for (auto currentQuery : currentQueries)
 				composite->connectQuery(previousQueries[0], currentQuery);
 		}
 		previousQueries = currentQueries;
 	}
-	// It might be that we have an operator at the end
+
 	if (parts.size() > operators.size() || operators.last() == '|')
+		composite->connectToOutput(previousQueries);
+	else
 	{
-		for (int i = 0; i < previousQueries.size(); ++i)
-			composite->connectToOutput(previousQueries[i], i);
+		// We have an operator at the end
+		auto lastOperator = operators.last();
+		if (lastOperator == '-' || lastOperator == 'U')
+		{
+			Query* unionQuery = nullptr;
+			if (lastOperator == '-') unionQuery = new SubstractOperator();
+			else unionQuery = new UnionOperator();
+			connectQueriesWith(composite, previousQueries, unionQuery);
+			composite->connectToOutput(unionQuery);
+		}
+		else // No other case allowed
+			Q_ASSERT(false); // TODO error for user
 	}
-	else if (operators.last() == 'U')
-	{
-		auto unionOp = new UnionOperator();
-		for (int i = 0; i < previousQueries.size(); ++i)
-			composite->connectQuery(previousQueries[i], 0, unionOp, i);
-		composite->connectToOutput(unionOp);
-	}
-	else // No other case allowed
-		Q_ASSERT(false); // TODO error for user
 	return composite;
 }
 
@@ -204,6 +207,15 @@ QList<Query*> QueryBuilder::parseOperatorPart(const QString& text)
 	if (Type::Query == type) return {parseQuery(text)};
 	else if (Type::List == type) return parseList(text);
 	Q_ASSERT(false);
+}
+
+void QueryBuilder::connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
+												  Query* connectionQuery, Query* outputQuery)
+{
+	for (int i = 0; i < queries.size(); ++i)
+		composite->connectQuery(queries[i], 0, connectionQuery, i);
+	if (outputQuery)
+		composite->connectQuery(connectionQuery, outputQuery);
 }
 
 } /* namespace InformationScripting  */

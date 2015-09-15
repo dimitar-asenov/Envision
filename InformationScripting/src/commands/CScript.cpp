@@ -40,6 +40,7 @@
 #include "../queries/NodePropertyAdder.h"
 #include "../queries/UnionOperator.h"
 #include "../queries/ScriptQuery.h"
+#include "../queries/AddASTPropertiesAsTuples.h"
 
 #include "../parsing/QueryBuilder.h"
 
@@ -152,13 +153,17 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		{
 			// Find all methods that are not called transitively from the TARGET method.
 
-			// $"methods g" - "callgraph"$
+			// $"methods g" - {$"callgraph" | "addASTProperties"$}$
+			// or:
+			// ${"methods g", $"callgraph" | "addASTProperties"$}-$
 			auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
 			auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+			auto astAdder = new AddASTPropertiesAsTuples();
 			auto complement = new SubstractOperator();
 			auto compositeQuery = new CompositeQuery();
+			compositeQuery->connectQuery(callGraphQuery, astAdder);
 			compositeQuery->connectQuery(allMethodsQuery, complement);
-			compositeQuery->connectQuery(callGraphQuery, 0, complement, 1);
+			compositeQuery->connectQuery(astAdder, 0, complement, 1);
 			compositeQuery->connectToOutput(complement);
 			QueryExecutor queryExecutor(compositeQuery);
 			queryExecutor.execute();

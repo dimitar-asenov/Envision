@@ -38,7 +38,8 @@ HEADERS += src/precompiled.h \
     src/helpers/PythonSet.h \
     src/wrappers/DataApi.h \
     src/queries/QueryRegistry.h \
-    src/queries/SubstractOperator.h
+    src/queries/SubstractOperator.h \
+    src/queries/AddASTPropertiesAsTuples.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -61,7 +62,8 @@ SOURCES += src/InformationScriptingException.cpp \
     src/dataformat/Property.cpp \
     src/helpers/PythonSet.cpp \
     src/queries/QueryRegistry.cpp \
-    src/queries/SubstractOperator.cpp
+    src/queries/SubstractOperator.cpp \
+    src/queries/AddASTPropertiesAsTuples.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):

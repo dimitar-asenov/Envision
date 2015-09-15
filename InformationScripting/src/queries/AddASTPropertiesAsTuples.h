@@ -32,74 +32,12 @@
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API CompositeQuery : public Query
+class INFORMATIONSCRIPTING_API AddASTPropertiesAsTuples : public Query
 {
 	public:
-		virtual ~CompositeQuery() override;
-
 		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
-		/**
-		 * Connects output 0 from Query \a from to input 0 of Query \a to.
-		 *
-		 * If either \a from or \a to was not yet inserted they will be and this query will take ownership of it.
-		 */
-		void connectQuery(Query* from, Query* to);
-
-		void connectQuery(Query* from, int outIndex, Query* to, int inIndex);
-
-		void connectInput(int inputIndex, Query* to, int atInput = 0);
-		void connectToOutput(Query* from, int outIndex = 0);
-		void connectToOutput(const QList<Query*>& outQueries);
-
-	private:
-		struct QueryNode;
-
-		struct InputMapping {
-				QueryNode* outputFrom_{};
-				int outputIndex_{};
-				// Indicates whether this output has been calculated and set.
-				bool inserted_{};
-		};
-
-		struct QueryNode {
-				QueryNode(Query* q) : q_{q} {}
-				~QueryNode();
-
-				/**
-				 * Describes an input mapping:
-				 * The output with index \a outputIndex_ from the Query \a outputFrom_
-				 * is mapped to the input with index i in the vector.
-				 *
-				 * Note: 1 Input can only receive a single output.
-				 */
-				QVector<InputMapping> inputMap_;
-
-				/**
-				 * Decribes an output mapping:
-				 * 1 Output can go to multiple receivers.
-				 */
-				QVector<QSet<QueryNode*>> outputMap_;
-
-				QList<TupleSet> calculatedInputs_;
-				QList<TupleSet> calculatedOutputs_;
-
-				void addCalculatedInput(int index, TupleSet g);
-				bool canExecute() const;
-				void execute();
-
-				Query* q_{};
-		};
-		// Pseudo node to connect, to get input from execute method
-		QueryNode* inNode_{new QueryNode(nullptr)};
-		// Pseudo node to connect, to map the output
-		QueryNode* outNode_{new QueryNode(nullptr)};
-		QList<QueryNode*> nodes_;
-
-		QueryNode* nodeForQuery(Query* q);
-
-		void addOutputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode);
-		void addInputMapping(QueryNode* outNode, int outIndex, QueryNode* inNode, int inIndex);
+		static void registerDefaultQueries();
 };
 
 } /* namespace InformationScripting */
