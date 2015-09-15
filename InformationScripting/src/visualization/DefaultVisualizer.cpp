@@ -28,13 +28,12 @@
 
 #include "ModelBase/src/nodes/Node.h"
 
+#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/overlays/ArrowOverlay.h"
 #include "VisualizationBase/src/overlays/SelectionOverlay.h"
 
-#include "../graph/Graph.h"
-#include "../graph/InformationEdge.h"
-#include "../graph/InformationNode.h"
+#include "../dataformat/TupleSet.h"
 
 namespace InformationScripting {
 
@@ -47,28 +46,26 @@ DefaultVisualizer& DefaultVisualizer::instance()
 	return instance;
 }
 
-void DefaultVisualizer::visualize(Graph* g)
+void DefaultVisualizer::visualize(const TupleSet& ts)
 {
-	QList<InformationEdge*> edges = g->edges();
-	if (!edges.empty())
+	// First remove all existing overlays:
+	for (auto scene : Visualization::Scene::allScenes())
 	{
-		// First check if all edges are of the same type
-		QString edgeName = edges[0]->name();
-		bool isSame = std::all_of(edges.begin(), edges.end(),
-										  [edgeName](InformationEdge *e) {return e->name() == edgeName;});
-		if (isSame)
+		scene->removeOverlayGroup(HIGHLIGHT_OVERLAY_GROUP);
+		scene->removeOverlayGroup(ARROW_OVERLAY_GROUP);
+	}
+	// Now draw the new stuff
+	auto calls = ts.tuples("calls");
+	if (!calls.empty())
+	{
+		for (auto t : calls)
 		{
-			// TODO for now we assume directed
-			for (auto edge : edges)
+			auto allAsts = t.valuesOfType<Model::Node*>();
+			if (allAsts.size() > 1)
 			{
-				auto from = edge->from();
-				auto to = edge->to();
-				// TODO for now we just support nodes that have AST property
-				Q_ASSERT(from->contains("ast"));
-				Q_ASSERT(to->contains("ast"));
+				Model::Node* fromNode = allAsts[0];
+				Model::Node* toNode = allAsts[1];
 
-				Model::Node* fromNode = (*from)["ast"];
-				Model::Node* toNode = (*to)["ast"];
 				auto fromVisualization = Visualization::Item::nodeItemsMap().find(fromNode);
 				Q_ASSERT(fromVisualization != Visualization::Item::nodeItemsMap().end());
 				auto toVisualization = Visualization::Item::nodeItemsMap().find(toNode);
@@ -76,35 +73,42 @@ void DefaultVisualizer::visualize(Graph* g)
 				auto fromVisualizationItem = *fromVisualization;
 
 				auto overlay = new Visualization::ArrowOverlay(
-							fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get());
+				fromVisualizationItem, *toVisualization, Visualization::ArrowOverlay::itemStyles().get());
 				fromVisualizationItem->addOverlay(overlay, ARROW_OVERLAY_GROUP);
 			}
-		}
-		else
-		{
-			// TODO
 		}
 	}
 	else
 	{
-		auto condition = [](const InformationNode* node) {
-			return node->contains("ast");
-		};
-		auto nodes = g->nodes(condition);
+		auto astTuples = ts.tuples([](const Tuple& t) { return t.tag() == "ast"; });
 
-		for (auto informationNode : nodes)
+		QHash<Model::Node*, QString> colors;
+
+		for (auto t : astTuples)
 		{
-			Model::Node* node = (*informationNode)["ast"];
+			Model::Node* node = t["ast"];
+			QString& color = colors[node];
+			if (color.isEmpty())
+			{
+				auto colorIt = t.find("color");
+				if (colorIt != t.end())
+				{
+					QString c = colorIt->second;
+					color = c;
+				}
+				else
+					color = "red";
+			}
+		}
+
+		for (auto it = colors.begin(); it != colors.end(); ++it)
+		{
+			Model::Node* node = it.key();
 			auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
 			Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
 			auto item = *nodeVisualization;
-
-			QString styleArg;
-			auto colorIt = informationNode->find("color");
-			if (colorIt != informationNode->end()) styleArg = colorIt->second.operator QString();
-
 			auto overlay = new Visualization::SelectionOverlay(
-						item, Visualization::SelectionOverlay::itemStyles().get(styleArg));
+						item, Visualization::SelectionOverlay::itemStyles().get(it.value() + "Highlight"));
 			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
 		}
 	}

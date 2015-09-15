@@ -26,25 +26,21 @@
 
 #include "GenericFilter.h"
 
-#include "../graph/Graph.h"
-
 namespace InformationScripting {
 
-GenericFilter::GenericFilter(GenericFilter::KeepNode f) : keepNode_{f}
+GenericFilter::GenericFilter(GenericFilter::KeepTuple f) : keepTuple_{f}
 {}
 
-QList<Graph*> GenericFilter::execute(QList<Graph*> input)
+QList<TupleSet> GenericFilter::execute(QList<TupleSet> input)
 {
-	for (auto g : input) applyFilter(g);
+	for (auto& t : input) applyFilter(t);
 	return input;
 }
 
-void GenericFilter::applyFilter(Graph* g)
+void GenericFilter::applyFilter(TupleSet& set)
 {
-	if (!g) return;
-
-	for (auto n : g->nodes())
-		if (!keepNode_(n)) g->remove(n);
+	for (auto t : set.tuples())
+		if (!keepTuple_(t)) set.remove(t);
 }
 
 } /* namespace InformationScripting */

@@ -405,6 +405,9 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 															 const QList<Model::NodeIdType>& spanOther,
 															 bool branchIsA)
 {
+	if (!chunk->noConflicts_)
+		return false;
+
 	bool conflict = false;
 
 	for (auto elem : spanThis)
@@ -447,10 +450,29 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		bool branchesAgreeOnPosition = branchesAgreeOnParent && posA == posB;
 		bool listIsOrdered = listTypes_.contains(cdgThis.changes().value(containerId)->nodeA()->type());
 
-
 		// begin computing decsision
 
 		bool shouldInsert = false;
+
+		if (thisReorders)
+		{	// the node is not new so there might be dependencies
+			auto originChunk = findOriginalChunk(elem, containerId, chunk); // TODO do this better
+			if (originChunk && originChunk != chunk)
+			{
+				if (!chunkDependencies_.contains(chunk, originChunk))
+				{
+					chunkDependencies_.insert(chunk, originChunk);
+					chunkDependencies_.insert(originChunk, chunk);
+				}
+
+				if (!originChunk->noConflicts_)
+				{
+					conflict = true;
+					break;
+				}
+			}
+		}
+
 
 		if (changeThis && changeThis->type() == ChangeType::Insertion)
 			shouldInsert = true;
@@ -482,28 +504,6 @@ bool ListMergeComponent::insertElemsIntoChunk(Chunk* chunk,
 		{
 			conflict = true;
 			break;
-		}
-
-		if (thisReorders)
-		{
-			// if a chunk dependency is introduced, check that it is conflict free and record it
-			auto originChunk = findOriginalChunk(elem, containerId); // TODO do this better
-			if (originChunk && originChunk != chunk)
-			{
-				if (originChunk->noConflicts_)
-				{
-					if (!chunkDependencies_.contains(chunk, originChunk))
-					{
-						chunkDependencies_.insert(chunk, originChunk);
-						chunkDependencies_.insert(originChunk, chunk);
-					}
-				}
-				else
-				{
-					conflict = true;
-					break;
-				}
-			}
 		}
 
 		insertAfter(elem, posA, chunk);
@@ -617,34 +617,39 @@ void ListMergeComponent::markDependingAsResolved(ChangeDependencyGraph& cdg,
 	}
 }
 
+void ListMergeComponent::tryResolve(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+					 ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
+					 ChangeDependencyGraph& cdgA)
+{
+	if (conflictPairs.values(change).isEmpty() &&
+		 noConflictingDependencies(cdgA, conflictingChanges, change))
+	{
+		conflictingChanges.remove(change);
+		for (auto dependingChange : cdgA.getDependendingChanges(change))
+			tryResolve(conflictingChanges, conflictPairs, dependingChange, cdgA);
+	}
+}
+
 void ListMergeComponent::markAsResolved(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 														  ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
 														  ChangeDependencyGraph& cdgA, ChangeDependencyGraph& cdgB)
 {
-	std::shared_ptr<ChangeDescription> conflictingSameId;
-	// remove all conflict pairs and find pair change.
-	for (auto other : conflictPairs.values(change))
-	{
-		conflictPairs.remove(change, other);
-		if (other->nodeId() == change->nodeId())
-			conflictingSameId = other;
-	}
-	// check if applicable and if yes, mark dependending changes as resolved.
-	if (noConflictingDependencies(cdgA, conflictingChanges, change))
-	{
-		conflictingChanges.remove(change);
-		markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
-	}
-
-	// if pair change exists, remove it
+	// get conflicting change
+	auto conflictingSameId = cdgB.changes().value(change->nodeId());
 	if (conflictingSameId)
 	{
-		Q_ASSERT(cdgB.changes().value(change->nodeId()) == conflictingSameId);
-		for (auto other : conflictPairs.values(conflictingSameId))
-			conflictPairs.remove(conflictingSameId, other);
+		for (auto pair : conflictPairs.values(conflictingSameId))
+			conflictPairs.remove(conflictingSameId, pair);
 		conflictingChanges.remove(conflictingSameId);
 		cdgB.remove(conflictingSameId);
 	}
+	for (auto pair : conflictPairs.values(change))
+		conflictPairs.remove(change, pair);
+	conflictingChanges.remove(change);
+	for (auto dep : cdgA.getDependencies(change))
+		if (conflictingChanges.contains(dep))
+			markAsResolved(conflictingChanges, conflictPairs, dep, cdgA, cdgB);
+	markDependingAsResolved(cdgA, conflictingChanges, conflictPairs, change);
 }
 
 } /* namespace FilePersistence */

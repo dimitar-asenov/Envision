@@ -26,8 +26,6 @@
 
 #include "CompositeQuery.h"
 
-#include "../graph/Graph.h"
-
 namespace InformationScripting {
 
 CompositeQuery::~CompositeQuery()
@@ -37,7 +35,7 @@ CompositeQuery::~CompositeQuery()
 	// Don't delete the outNode_ as that we delete all Graphs which we returned in the execute methods.
 }
 
-QList<Graph*> CompositeQuery::execute(QList<Graph*> input)
+QList<TupleSet> CompositeQuery::execute(QList<TupleSet> input)
 {
 	inNode_->calculatedOutputs_ = input;
 	// Nodes for which we have all dependencies calculated:
@@ -79,8 +77,6 @@ QList<Graph*> CompositeQuery::execute(QList<Graph*> input)
 				});
 				Q_ASSERT(inputIt != receiver->inputMap_.end());
 				auto output = currentNode->calculatedOutputs_[outIndex];
-				if (receiverIt != outputMapping.begin())
-					output = new Graph(*output);
 
 				receiver->addCalculatedInput(std::distance(receiver->inputMap_.begin(), inputIt), output);
 
@@ -107,6 +103,14 @@ void CompositeQuery::connectQuery(Query* from, int outIndex, Query* to, int inIn
 
 	addOutputMapping(fromNode, outIndex, toNode);
 	addInputMapping(fromNode, outIndex, toNode, inIndex);
+}
+
+void CompositeQuery::connectInput(int inputIndex, Query* to, int atInput)
+{
+	auto toNode = nodeForQuery(to);
+
+	addOutputMapping(inNode_, inputIndex, toNode);
+	addInputMapping(inNode_, inputIndex, toNode, atInput);
 }
 
 void CompositeQuery::connectToOutput(Query* from, int outIndex)
@@ -151,20 +155,14 @@ void CompositeQuery::addInputMapping(CompositeQuery::QueryNode* outNode, int out
 
 CompositeQuery::QueryNode::~QueryNode()
 {
-	// For all calculated outputs check if they are mapped to something, if not delete them:
-	for (int i = 0; i < calculatedOutputs_.size(); ++i)
-	{
-		if (outputMap_[i].empty())
-			SAFE_DELETE(calculatedOutputs_[i]);
-	}
 	SAFE_DELETE(q_);
 }
 
-void CompositeQuery::QueryNode::addCalculatedInput(int index, Graph* g)
+void CompositeQuery::QueryNode::addCalculatedInput(int index, TupleSet g)
 {
 	// Fill non determined inputs with nullptrs:
 	while (calculatedInputs_.size() - 1 < index)
-		calculatedInputs_.push_back(nullptr);
+		calculatedInputs_.push_back({});
 	// Insert current input at correct location
 	calculatedInputs_[index] = g;
 	// Set the inserted flag

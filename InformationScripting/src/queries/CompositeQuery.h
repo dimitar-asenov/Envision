@@ -37,7 +37,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 	public:
 		virtual ~CompositeQuery() override;
 
-		virtual QList<Graph*> execute(QList<Graph*> input) override;
+		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
 		/**
 		 * Connects output 0 from Query \a from to input 0 of Query \a to.
@@ -48,6 +48,7 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 
 		void connectQuery(Query* from, int outIndex, Query* to, int inIndex);
 
+		void connectInput(int inputIndex, Query* to, int atInput = 0);
 		void connectToOutput(Query* from, int outIndex = 0);
 
 
@@ -80,10 +81,10 @@ class INFORMATIONSCRIPTING_API CompositeQuery : public Query
 				 */
 				QVector<QSet<QueryNode*>> outputMap_;
 
-				QList<Graph*> calculatedInputs_;
-				QList<Graph*> calculatedOutputs_;
+				QList<TupleSet> calculatedInputs_;
+				QList<TupleSet> calculatedOutputs_;
 
-				void addCalculatedInput(int index, Graph* g);
+				void addCalculatedInput(int index, TupleSet g);
 				bool canExecute() const;
 				void execute();
 

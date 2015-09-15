@@ -44,6 +44,8 @@ class FILEPERSISTENCE_API GenericNode {
 		 */
 		void copy(const GenericNode* other);
 
+		bool equalTo(const GenericNode* other);
+
 		void setLabel(const QString& label);
 		void setType(const QString& type);
 
@@ -189,6 +191,16 @@ inline GenericPersistentUnit* GenericNode::persistentUnit() const {return persis
 inline GenericTree* GenericNode::tree() const { return persistentUnit_->tree();}
 inline bool GenericNode::sameTree(const GenericNode* other)
 	{return persistentUnit_->tree() == other->persistentUnit_->tree();}
-
+inline bool GenericNode::equalTo(const GenericNode* other)
+{
+	ensureDataRead();
+	other->ensureDataRead();
+	return (id_ == other->id_ &&
+			  label_ == other->label_ &&
+			  type_ == other->type_ &&
+			  valueType_ == other->valueType_ &&
+			  value_ == other->value_ &&
+			  parentId_ == other->parentId_);
+}
 
 } /* namespace FilePersistence */

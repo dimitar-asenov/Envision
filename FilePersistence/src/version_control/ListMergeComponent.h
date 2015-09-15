@@ -115,6 +115,9 @@ class ListMergeComponent : public ConflictPipelineComponent
 		void markDependingAsResolved(ChangeDependencyGraph& cdg,
 											  QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
 											  ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription>& change);
+		void tryResolve(QSet<std::shared_ptr<ChangeDescription> >& conflictingChanges,
+							 ConflictPairs& conflictPairs, std::shared_ptr<ChangeDescription> change,
+							 ChangeDependencyGraph& cdgA);
 
 		/**
 		 * Marks all chunks that transitively depend on \a chunk as conflicting. \a chunk itself is not explicitly marked but

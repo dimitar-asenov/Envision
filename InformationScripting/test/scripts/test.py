@@ -1,8 +1,10 @@
 results = [];
 
-for g in inputs:
-    nodes = g.nodes()
-    for node in nodes:
-        ast = node.ast;
-        print(ast.constructKind)
-    results.append(g)
+import AstApi
+
+for ts in inputs:
+    tuples = ts.tuples("ast")
+    for tuple in tuples:
+        if type(tuple.ast) is AstApi.Class:
+            print(tuple.ast.constructKind)
+    results.append(ts)

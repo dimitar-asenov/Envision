@@ -26,30 +26,17 @@
 
 #include "UnionOperator.h"
 
-#include "../graph/Graph.h"
-#include "../graph/InformationNode.h"
-
 namespace InformationScripting {
 
-QList<Graph*> UnionOperator::execute(QList<Graph*> input)
+QList<TupleSet> UnionOperator::execute(QList<TupleSet> input)
 {
 	if (input.size() <= 1) return input;
 
-	auto outGraph = input.takeFirst();
-	for (auto inGraph : input)
-	{
-		QHash<InformationNode*, InformationNode*> convertedNodes;
-		for (auto node : inGraph->nodes())
-			convertedNodes[node] = outGraph->add(new InformationNode(*node));
+	auto outTuples = input.takeFirst();
+	for (auto inTuples : input)
+		outTuples.unite(inTuples);
 
-		for (auto edge : inGraph->edges())
-			outGraph->addEdge(convertedNodes[edge->from()], convertedNodes[edge->to()],
-					edge->name(), edge->orientation(), false);
-
-		SAFE_DELETE(inGraph);
-	}
-
-	return {outGraph};
+	return {outTuples};
 }
 
 } /* namespace InformationScripting */

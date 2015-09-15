@@ -58,8 +58,8 @@ QList<NodeData> GitPiecewiseLoader::loadNodeChildrenData(Model::NodeIdType id)
 	auto regEx = "{.*} " + id.toString();
 	auto result = runSystemCommand("git", {"grep", "-G", regEx, revision_}, workDir_);
 
-	Q_ASSERT(result.exitCode() == 0);
-	Q_ASSERT(!result.stdout().isEmpty());
+	Q_ASSERT(result.exitCode() == 0 || result.exitCode() == 1);
+	Q_ASSERT(result.stderr().isEmpty());
 
 	QList<NodeData> children;
 

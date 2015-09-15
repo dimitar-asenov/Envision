@@ -1,0 +1,1 @@
+These are test cases used for the evaluation of the merge algorithm. They are not tested automatically by the test framework but are used by Envision/misc/version-control/scripts/import_and_merge.sh.

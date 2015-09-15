@@ -42,9 +42,27 @@ void FilePersistencePlugin::unload()
 {
 }
 
-void FilePersistencePlugin::selfTest(QString)
+/**
+ * Syntax for tests: pluginName:testName1[>arg1,arg2,...][:testName2[>arg1,arg2,...]:...]
+ * Currently arguments don't work but multiple tests do.
+ */
+void FilePersistencePlugin::selfTest(QString testArgs)
 {
-	SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
+	if (testArgs.isEmpty())
+	{
+		SelfTest::TestManager<FilePersistencePlugin>::runAllTests().printResultStatistics();
+	}
+	else
+	{
+		auto tests = testArgs.split(":", QString::SkipEmptyParts);
+		for (QString test : tests)
+		{
+			auto testIdAndArgs = test.split(">");
+			auto testId = testIdAndArgs[0];
+			//auto args = testIdAndArgs[1].split(",");
+			SelfTest::TestManager<FilePersistencePlugin>::runTest(testId).printResultStatistics();
+		}
+	}
 }
 
 }

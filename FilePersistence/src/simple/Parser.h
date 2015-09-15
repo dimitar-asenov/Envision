@@ -50,6 +50,12 @@ class FILEPERSISTENCE_API Parser {
 		static GenericNode* load(const QString& filename, bool lazy, GenericPersistentUnit& persistentUnit);
 		static GenericNode* load(const char* data, int dataLength, bool lazy, GenericPersistentUnit& persistentUnit);
 
+
+		/**
+		 * This comparator is used to sort children lists by label.
+		 */
+		static bool labelComparator(GenericNode* const node1, GenericNode* const node2);
+
 	private:
 		static int countTabs(const char* data, int lineStart, int lineEnd);
 		static QString rawStringToQString(const char* data, int startAt, int endInclusive);

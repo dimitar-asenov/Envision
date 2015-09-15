@@ -26,24 +26,23 @@
 
 #include "NodePropertyAdder.h"
 
-#include "../graph/InformationNode.h"
-
 namespace InformationScripting {
 
-NodePropertyAdder::NodePropertyAdder(Graph::NodeCondition condition, const QString& propertyName, Property value)
- : condition_{condition}, name_{propertyName}, value_{value}
+NodePropertyAdder::NodePropertyAdder(const QString& propertyName, Property value)
+ : name_{propertyName}, value_{value}
 {}
 
-QList<Graph*> NodePropertyAdder::execute(QList<Graph*> input)
+QList<TupleSet> NodePropertyAdder::execute(QList<TupleSet> input)
 {
-	QList<Graph*> results;
-	for (auto g : input)
+	for (auto& ts : input)
 	{
-		for (auto node : g->nodes(condition_))
-			node->insert(name_, value_);
-		results.push_back(g);
+		for (auto node : ts.takeAll())
+		{
+			node.add({name_, value_});
+			ts.add(node);
+		}
 	}
-	return results;
+	return input;
 }
 
 } /* namespace InformationScripting */

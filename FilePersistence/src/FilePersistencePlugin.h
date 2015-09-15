@@ -40,7 +40,7 @@ class FilePersistencePlugin : public QObject, public Core::EnvisionPlugin
 	public:
 		virtual bool initialize(Core::EnvisionManager&) override;
 		virtual void unload() override;
-		virtual void selfTest(QString testid) override;
+		virtual void selfTest(QString testArgs) override;
 };
 
 }

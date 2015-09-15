@@ -26,18 +26,18 @@
 
 #include "AstNameFilter.h"
 
-#include "../graph/InformationNode.h"
-
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
+
+#include "QueryRegistry.h"
 
 namespace InformationScripting {
 
 AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 	: GenericFilter {
-		  [matcher](const InformationNode* n) {
-			auto it = n->find("ast");
-			if (it != n->end())
+		  [matcher](const Tuple& t) {
+			auto it = t.find("ast");
+			if (it != t.end())
 			{
 				Model::Node* astNode = it->second;
 				if (auto compositeNode = DCast<Model::CompositeNode>(astNode))
@@ -51,7 +51,21 @@ AstNameFilter::AstNameFilter(Model::SymbolMatcher matcher)
 			}
 			return false;
 		}
-	}
+}
 {}
+
+void AstNameFilter::registerDefaultQueries()
+{
+	QueryRegistry::instance().registerQueryConstructor("filter", [](Model::Node*, QStringList args) {
+		Q_ASSERT(args.size());
+		if (args[0].contains("*"))
+		{
+			QString regexString = args[0];
+			regexString.replace("*", "\\w*");
+			return new AstNameFilter(Model::SymbolMatcher(new QRegExp(regexString)));
+		}
+		return new AstNameFilter(Model::SymbolMatcher(args[0]));
+	});
+}
 
 } /* namespace InformationScripting */

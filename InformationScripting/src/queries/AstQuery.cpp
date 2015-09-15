@@ -29,10 +29,8 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Project.h"
 
-#include "../graph/Graph.h"
-#include "../graph/InformationNode.h"
-
 #include "../visitors/AllNodesOfType.h"
+#include "QueryRegistry.h"
 
 namespace InformationScripting {
 
@@ -46,9 +44,9 @@ AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
 	}
 }
 
-QList<Graph*> AstQuery::execute(QList<Graph*> input)
+QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 {
-	QList<Graph*> result;
+	QList<TupleSet> result;
 	switch (type_)
 	{
 		case QueryType::Classes:
@@ -69,112 +67,124 @@ QList<Graph*> AstQuery::execute(QList<Graph*> input)
 		default:
 			Q_ASSERT(false);
 	}
-	// Clean unhandled input:
-	for (auto& g : input) SAFE_DELETE(g);
 
 	return result;
 }
 
-Graph* AstQuery::classesQuery(QList<Graph*>&)
+void AstQuery::registerDefaultQueries()
 {
-	auto g = new Graph();
+	auto& registry = QueryRegistry::instance();
+	registry.registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Classes, target, args);
+	});
+	registry.registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Methods, target, args);
+	});
+	registry.registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
+	});
+	registry.registerQueryConstructor("toClass", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::ToClass, target, args);
+	});
+	registry.registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
+	});
+}
+
+TupleSet AstQuery::classesQuery(QList<TupleSet>)
+{
+	TupleSet tuples;
 	if (scope_ == Scope::Local)
 	{
 		auto parentProject = target_->firstAncestorOfType<OOModel::Project>();
 		for (auto childClass : *parentProject->classes())
-		{
-			auto node = new InformationNode({{"ast", childClass}});
-			g->add(node);
-		}
+			tuples.add({{"ast", childClass}});
 	}
 	else if (scope_ == Scope::Global)
 	{
-		addGlobalNodesOfType(g, "Class");
+		addGlobalNodesOfType(tuples, "Class");
 	}
 	else if (scope_ == Scope::Input)
 	{
 		// TODO
 	}
-	return g;
+	return tuples;
 }
 
-Graph* AstQuery::methodsQuery(QList<Graph*>& input)
+TupleSet AstQuery::methodsQuery(QList<TupleSet> input)
 {
 	if (scope_ == Scope::Local)
 	{
-		auto g = new Graph();
+		TupleSet tuples;
 		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
 		for (auto method : *parentClass->methods())
-		{
-			auto node = new InformationNode({{"ast", method}});
-			g->add(node);
-		}
-		return g;
+			tuples.add({{"ast", method}});
+		return tuples;
 	}
 	else if (scope_ == Scope::Global)
 	{
-		auto g = new Graph();
-		addGlobalNodesOfType(g, "Method");
-		return g;
+		TupleSet tuples;
+		addGlobalNodesOfType(tuples, "Method");
+		return tuples;
 	}
 	else if (scope_ == Scope::Input)
 	{
 		Q_ASSERT(input.size());
-		auto g = input.takeFirst();
+		auto ts = input.takeFirst();
 
-		auto canContainMethod = [](const InformationNode* n) {
-			auto it = n->find("ast");
-			if (it != n->end()) {
-				Model::Node* astNode = it->second;
-				return DCast<OOModel::Declaration>(astNode) != nullptr;
+		auto canContainMethod = [](const Tuple& t) {
+			if (t.size() == 1) {
+				auto it = t.find("ast");
+				if (it != t.end()) {
+					Model::Node* astNode = it->second;
+					return DCast<OOModel::Declaration>(astNode) != nullptr;
+				}
 			}
 			return false;
 		};
 
-		QList<InformationNode*> nodes = g->nodes(canContainMethod);
-		for (auto node : nodes)
+		// TODO for now we just remove the input node, this might not always be what we want
+		auto tuple = ts.take(canContainMethod);
+		for (const auto& t : tuple)
 		{
-			Model::Node* astNode = (*node)["ast"];
+			Model::Node* astNode = t["ast"];
 			auto methods = AllNodesOfType::allNodesOfType(astNode, "Method");
-			// TODO for now we just remove the input node, this might not always be what we want
-			g->remove(node);
-			for (auto method : methods)
-				g->add(new InformationNode({{"ast", method}}));
+			for (auto method : methods) ts.add({{"ast", method}});
 		}
-		return g;
+		return ts;
 	}
 	Q_ASSERT(false);
-	return nullptr;
+	return {};
 }
 
-Graph* AstQuery::baseClassesQuery(QList<Graph*>&)
+TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
 {
 	// TODO handle input
-	auto g = new Graph();
+	TupleSet ts;
 	if (scope_ == Scope::Local)
 	{
 		OOModel::Class* parentClass = DCast<OOModel::Class>(target_);
 		if (!parentClass) parentClass = target_->firstAncestorOfType<OOModel::Class>();
 
-		auto classNode = new InformationNode({{"ast", parentClass}});
-		classNode = g->add(classNode);
+		NamedProperty namedClass{"childClass", parentClass};
+		ts.add({namedClass});
 
-		addBaseEdgesFor(parentClass, classNode, g);
+		addBaseEdgesFor(parentClass, namedClass, ts);
 	}
 	else if (scope_ == Scope::Global)
 	{
 		// TODO
 	}
-	return g;
+	return ts;
 }
 
-Graph* AstQuery::toClassNode(QList<Graph*>& input)
+TupleSet AstQuery::toClassNode(QList<TupleSet> input)
 {
 	Q_ASSERT(input.size());
-	auto g = input.takeFirst();
-	auto canBeInClass = [](const InformationNode* node) {
-		auto it = node->find("ast");
-		if (it != node->end())
+	auto ts = input.takeFirst();
+	auto canBeInClass = [](const Tuple& t) {
+		auto it = t.find("ast");
+		if (it != t.end())
 		{
 			Model::Node* n = it->second;
 			return n->firstAncestorOfType<OOModel::Class>() != nullptr;
@@ -182,73 +192,74 @@ Graph* AstQuery::toClassNode(QList<Graph*>& input)
 		return false;
 	};
 
-	auto nodes = g->nodes(canBeInClass);
+	// TODO currently we remove all the converted nodes:
+	auto tuples = ts.take(canBeInClass);
 	QList<OOModel::Class*> classes;
-	for (auto node : nodes)
+	for (auto tuple : tuples)
 	{
-		Model::Node* astNode = (*node)["ast"];
+		Model::Node* astNode = tuple["ast"];
 		auto classParent = astNode->firstAncestorOfType<OOModel::Class>();
 		if (!classes.contains(classParent)) classes.push_back(classParent);
-		// TODO currently we remove all the converted nodes, this also means we lose all connections:
-		g->remove(node);
 	}
 	for (auto foundClass : classes)
-		g->add(new InformationNode({{"ast", foundClass}}));
-	return g;
+		ts.add({{"ast", foundClass}});
+	return ts;
 }
 
-Graph* AstQuery::callGraph(QList<Graph*>&)
+TupleSet AstQuery::callGraph(QList<TupleSet>)
 {
-	auto g = new Graph();
+	TupleSet ts;
 	if (scope_ == Scope::Local)
 	{
 		auto methodTarget = target_->firstAncestorOfType<OOModel::Method>();
 		Q_ASSERT(methodTarget);
 		QSet<OOModel::Method*> seenMethods{methodTarget};
 		auto methods = methodTarget->callees().toList();
-		addCallInformation(g, methodTarget, methods);
+		addCallInformation(ts, methodTarget, methods);
 		while (!methods.empty())
 		{
 			auto currentMethod = methods.takeLast();
 			if (seenMethods.contains(currentMethod)) continue;
 			seenMethods.insert(currentMethod);
 			auto newCallees = currentMethod->callees().toList();
-			addCallInformation(g, currentMethod, newCallees);
+			addCallInformation(ts, currentMethod, newCallees);
 			methods << newCallees;
 		}
 	}
 	// TODO handle other cases, global propably doesn't make sense.
-	return g;
+	return ts;
 }
 
-void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, InformationNode* classNode, Graph* g)
+void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
 {
 	auto bases = childClass->directBaseClasses();
 	for (auto base : bases)
 	{
-		auto baseNode = new InformationNode({{"ast", base}});
-		baseNode = g->add(baseNode);
-		g->addEdge(classNode, baseNode, "base class");
-		addBaseEdgesFor(base, baseNode, g);
+		NamedProperty baseNode{"baseClass", base};
+		ts.add({baseNode});
+		ts.add({{"base class", {}}, {classNode}, {baseNode}});
+		addBaseEdgesFor(base, baseNode, ts);
 	}
 }
 
-void AstQuery::addCallInformation(Graph* g, OOModel::Method* method, QList<OOModel::Method*> callees)
+void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees)
 {
-	auto methodNode = g->add(new InformationNode({{"ast", method}}));
+	NamedProperty namedCaller{"caller", method};
+	ts.add({{namedCaller}});
 	for (auto callee : callees)
 	{
-		auto calleeNode = g->add(new InformationNode({{"ast", callee}}));
-		g->addEdge(methodNode, calleeNode, "calls");
+		NamedProperty namedCallee{"callee", callee};
+		ts.add({{namedCallee}});
+		ts.add({{"calls", {}}, namedCaller, namedCallee});
 	}
 }
 
-void AstQuery::addGlobalNodesOfType(Graph* g, const QString& typeName)
+void AstQuery::addGlobalNodesOfType(TupleSet& ts, const QString& typeName)
 {
 	auto root = target_->manager()->root();
 	auto allNodeOfType =  AllNodesOfType::allNodesOfType(root, typeName);
 	for (auto node : allNodeOfType)
-		g->add(new InformationNode({{"ast", node}}));
+		ts.add({{"ast", node}});
 }
 
 } /* namespace InformationScripting */

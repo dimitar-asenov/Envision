@@ -1,0 +1,4 @@
+New Flags:
+Parser.cpp, SORT_BY_LABEL: If true, sort children by label when writing encoding.
+Node.java, SORT_BY_LABEL: If true, sort children by label when writing encoding.
+SimpleTextFileStore.cpp, GENERATE_PUS: IF false, no additional PUs will be generated.
