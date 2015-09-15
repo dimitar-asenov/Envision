@@ -74,6 +74,10 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		 */
 		void setEnabled(const QString name, bool isEnabled);
 		/**
+		 * Move an info getter up or down in the node.
+		 */
+		void move(const QString& name, bool moveUp);
+		/**
 		 * Returns whether the info getter with the given name is enabled for this node.
 		 */
 		bool isEnabled(const QString name) const;
@@ -96,6 +100,11 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		 */
 		static QStringList registeredInfoGetters();
 
+		/**
+		 * @brief Return the InfoNode stored with this key.
+		 */
+		static InfoNode* infoNode(const QString& key);
+
 	protected:
 		void setInfoHtml(QString content);
 		/**
@@ -111,12 +120,15 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		QHash<QString, QString> cachedInfoStrings_;
 		Model::Node* target_{};
 
+		void initialize();
+		QString key_;
+
 		struct InfoGetterStruct {
 				InfoGetter getter_{};
 				bool updatesAutomatically_{};
 				bool enabledByDefault_{};
 		};
-		static QList<InfoNode*> allInfoNodes;
+		static QHash<QString, InfoNode*> allInfoNodes;
 		static QHash<QString, InfoGetterStruct> allInfoGetters;
 
 };
@@ -130,5 +142,6 @@ inline void InfoNode::automaticUpdate() { updateInfo(true); }
 inline bool InfoNode::isEnabled(const QString name) const { return enabledInfoGetters_.contains(name); }
 
 inline QStringList InfoNode::registeredInfoGetters() { return allInfoGetters.keys(); }
+inline InfoNode* InfoNode::infoNode(const QString &key) { return allInfoNodes[key]; }
 
 }

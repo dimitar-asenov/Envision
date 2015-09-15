@@ -34,7 +34,7 @@ namespace Visualization {
 
 DEFINE_TYPE_ID_DERIVED(InfoNode, "InfoNode", )
 
-QList<InfoNode*> InfoNode::allInfoNodes;
+QHash<QString, InfoNode*> InfoNode::allInfoNodes;
 QHash<QString, InfoNode::InfoGetterStruct> InfoNode::allInfoGetters;
 
 InfoNode::InfoNode(Model::Node *target)
@@ -43,7 +43,7 @@ InfoNode::InfoNode(Model::Node *target)
 	Q_ASSERT(target);
 	for (auto key : allInfoGetters.keys())
 		setEnabled(key, allInfoGetters[key].enabledByDefault_);
-	allInfoNodes.append(this);
+	initialize();
 }
 
 InfoNode::InfoNode(Model::Node *target, QJsonArray enabledInfos)
@@ -52,18 +52,32 @@ InfoNode::InfoNode(Model::Node *target, QJsonArray enabledInfos)
 	Q_ASSERT(target);
 	for (auto item : enabledInfos)
 		setEnabled(item.toString(), true);
-	allInfoNodes.append(this);
+	initialize();
 }
 
 InfoNode::~InfoNode()
 {
-	allInfoNodes.removeAll(this);
+	allInfoNodes.remove(key_);
 	target_ = nullptr;
+}
+
+void InfoNode::initialize()
+{
+	static int key = 0;
+	allInfoNodes.insert(QString::number(key), this);
+	key_ = QString::number(key);
+	key++;
 }
 
 void InfoNode::updateInfo(bool isAutoUpdate)
 {
-	QString infoHtml = "<hr><div style=\"font-family:sans-serif\">";
+	QString infoHtml = "<style> .content_bit { border: 1px solid; margin: 5px; padding: 5px; position:relative} "
+					"button { border-radius: 4px; font-weight: bold; color: #0000CC; "
+							 "border : 1px solid #000000; background: #FFFFFF; }"
+					"button:hover { background: #0000CC; color: #FFFFFF; }"
+					".close { position:absolute; top:0; right: 0; }"
+					"tr:nth-child(even) { background: #CCC; }  </style>"
+					"<div style=\"font-family:monospace\">";
 	for (auto name : enabledInfoGetters_)
 	{
 		auto getter = allInfoGetters[name];
@@ -73,7 +87,11 @@ void InfoNode::updateInfo(bool isAutoUpdate)
 			cachedInfoStrings_[name] = getter.getter_(target_);
 		//Use the computed value to extend the info
 		if (!cachedInfoStrings_[name].isEmpty())
-			infoHtml += cachedInfoStrings_[name] + "<small>" + "  (Layer " + name + ")</small>" + "<br><hr>";
+			infoHtml += "<div class=\"content_bit\">" +  cachedInfoStrings_[name] + "<br><small>"
+					"  (Layer " + name + ")</small>" + "<br>"
+					"<button class=\"close\" onClick=\"operations.hideLayer('" + key_ + "','" + name + "')\">&#10006</button>"
+					"<button onClick=\"operations.moveLayer('" + key_ + "','" + name + "', true)\">&#x25B2</button>"
+					"<button onClick=\"operations.moveLayer('" + key_ + "','" + name + "', false)\">&#x25BC</button></div>";
 	}
 	infoHtml = "<html>" + infoHtml + "</div></html>";
 	setInfoHtml(infoHtml);
@@ -100,6 +118,14 @@ void InfoNode::setEnabled(const QString name, bool isEnabled)
 	if (isEnabled && !enabledInfoGetters_.contains(name) && allInfoGetters.contains(name))
 		enabledInfoGetters_.append(name);
 	else enabledInfoGetters_.removeAll(name);
+}
+
+void InfoNode::move(const QString& name, bool moveUp)
+{
+	auto index = enabledInfoGetters_.indexOf(name);
+	if (index > 0 && moveUp) enabledInfoGetters_.move(index, index - 1);
+	else if (index >= 0 && index < enabledInfoGetters_.size() - 1 && !moveUp)
+		enabledInfoGetters_.move(index, index + 1);
 }
 
 QJsonValue InfoNode::toJson() const
