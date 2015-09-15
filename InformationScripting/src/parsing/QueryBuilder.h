@@ -66,6 +66,9 @@ class INFORMATIONSCRIPTING_API QueryBuilder
 		Query* parseOperator(const QString& text, bool connectInput = false);
 		QList<Query*> parseOperatorPart(const QString& text);
 
+		void connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
+										Query* connectionQuery, Query* outputQuery = nullptr);
+
 		Model::Node* target_{};
 };
 
