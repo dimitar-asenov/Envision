@@ -35,12 +35,14 @@
 namespace InformationScripting {
 
 AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
-	: target_{target}, type_{type}
+	: target_{target}, type_{type}, args_{args}
 {
-	if (args.size())
+	if (args_.size() > 0)
 	{
-		if (args[0] == "g") scope_ = Scope::Global;
-		else if (args[0] == "of") scope_ = Scope::Input;
+		QString possibleScope = args_.takeFirst();
+		if (possibleScope == "g") scope_ = Scope::Global;
+		else if (possibleScope == "of") scope_ = Scope::Input;
+		else args_.prepend(possibleScope); // Not a scope so prepend it again.
 	}
 }
 
@@ -63,6 +65,9 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 			break;
 		case QueryType::CallGraph:
 			result = {callGraph(input)};
+			break;
+		case QueryType::Generic:
+			result = {genericQuery(input)};
 			break;
 		default:
 			Q_ASSERT(false);
@@ -89,9 +94,12 @@ void AstQuery::registerDefaultQueries()
 	registry.registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
 		return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
 	});
+	registry.registerQueryConstructor("ast", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Generic, target, args);
+	});
 }
 
-TupleSet AstQuery::classesQuery(QList<TupleSet>)
+TupleSet AstQuery::classesQuery(QList<TupleSet> input)
 {
 	TupleSet tuples;
 	if (scope_ == Scope::Local)
@@ -100,61 +108,23 @@ TupleSet AstQuery::classesQuery(QList<TupleSet>)
 		for (auto childClass : *parentProject->classes())
 			tuples.add({{"ast", childClass}});
 	}
-	else if (scope_ == Scope::Global)
-	{
-		addGlobalNodesOfType(tuples, "Class");
-	}
-	else if (scope_ == Scope::Input)
-	{
-		// TODO
-	}
+	else
+		tuples = typeQuery(input, "Class");
 	return tuples;
 }
 
 TupleSet AstQuery::methodsQuery(QList<TupleSet> input)
 {
+	TupleSet tuples;
 	if (scope_ == Scope::Local)
 	{
-		TupleSet tuples;
 		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
 		for (auto method : *parentClass->methods())
 			tuples.add({{"ast", method}});
-		return tuples;
 	}
-	else if (scope_ == Scope::Global)
-	{
-		TupleSet tuples;
-		addGlobalNodesOfType(tuples, "Method");
-		return tuples;
-	}
-	else if (scope_ == Scope::Input)
-	{
-		Q_ASSERT(input.size());
-		auto ts = input.takeFirst();
-
-		auto canContainMethod = [](const Tuple& t) {
-			if (t.size() == 1) {
-				auto it = t.find("ast");
-				if (it != t.end()) {
-					Model::Node* astNode = it->second;
-					return DCast<OOModel::Declaration>(astNode) != nullptr;
-				}
-			}
-			return false;
-		};
-
-		// TODO for now we just remove the input node, this might not always be what we want
-		auto tuple = ts.take(canContainMethod);
-		for (const auto& t : tuple)
-		{
-			Model::Node* astNode = t["ast"];
-			auto methods = AllNodesOfType::allNodesOfType(astNode, "Method");
-			for (auto method : methods) ts.add({{"ast", method}});
-		}
-		return ts;
-	}
-	Q_ASSERT(false);
-	return {};
+	else
+		tuples = typeQuery(input, "Method");
+	return tuples;
 }
 
 TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
@@ -230,6 +200,42 @@ TupleSet AstQuery::callGraph(QList<TupleSet>)
 	return ts;
 }
 
+TupleSet AstQuery::genericQuery(QList<TupleSet> input)
+{
+	if (args_.size() > 0)
+	{
+		QString genericType = args_.takeFirst();
+		if (genericType == "type" && args_.size() > 0) return typeQuery(input, args_.takeFirst());
+	}
+	return {};
+}
+
+TupleSet AstQuery::typeQuery(QList<TupleSet> input, QString type)
+{
+	TupleSet tuples;
+
+	Q_ASSERT(!type.isEmpty());
+
+	if (scope_ == Scope::Local)
+	{
+		// TODO how to get the correct ancestor?
+	}
+	else if (scope_ == Scope::Global)
+	{
+		addNodesOfType(tuples, type);
+	}
+	else if (scope_ == Scope::Input)
+	{
+		Q_ASSERT(input.size());
+		tuples = input.takeFirst();
+
+		// TODO add the possibility to keep the input nodes:
+		auto tuple = tuples.take("ast");
+		for (const auto& t : tuple) addNodesOfType(tuples, type, t["ast"]);
+	}
+	return tuples;
+}
+
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
 {
 	auto bases = childClass->directBaseClasses();
@@ -254,10 +260,10 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 	}
 }
 
-void AstQuery::addGlobalNodesOfType(TupleSet& ts, const QString& typeName)
+void AstQuery::addNodesOfType(TupleSet& ts, const QString& typeName, Model::Node* from)
 {
-	auto root = target_->manager()->root();
-	auto allNodeOfType =  AllNodesOfType::allNodesOfType(root, typeName);
+	if (!from) from = target_->manager()->root();
+	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, typeName);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
 }
