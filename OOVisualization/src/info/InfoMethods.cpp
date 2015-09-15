@@ -95,13 +95,13 @@ QString InfoMethods::expandButton(QString functionName, QString expandableId)
 
 QString InfoMethods::classAndNameTable(QString tableId, QSet<OOModel::Method *> methods)
 {
-	QStringList tableRows{"<tr><td style=\"border-right:solid 1px\"><b>Class</b></td><td><b>Method</b></td></tr>"};
+	QStringList tableRows{"<tr><td><b>Class</b></td><td><b>Method</b></td></tr>"};
 	for (auto method : methods)
 	{
 		auto methodClass = method->firstAncestorOfType<OOModel::Class>();
-		tableRows.append("<tr><td style=\"border-right:solid 1px\">" + (methodClass ? methodClass->name() : "n/a") + "</td>"
-						+ "<td style=\"border-right:solid 1px\">" + method->name() + "</td>"
-						+ "<td><button onclick=\"operations.jumpToObject('" +
+		tableRows.append("<tr><td>" + (methodClass ? methodClass->name() : "n/a") + "</td>"
+						+ "<td>" + method->name() + "</td>"
+						+ "<td style=\"border:none; background:#FFF\"><button onclick=\"operations.jumpToObject('" +
 									method->fullyQualifiedName() + "')\">Jump to</button></td></tr>");
 	}
 	return hiddenTable(tableId, tableRows);
