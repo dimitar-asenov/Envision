@@ -121,6 +121,12 @@ void CompositeQuery::connectToOutput(Query* from, int outIndex)
 	addInputMapping(fromNode, 0, outNode_, outIndex);
 }
 
+void CompositeQuery::connectToOutput(const QList<Query*>& outQueries)
+{
+	for (int i = 0; i < outQueries.size(); ++i)
+		connectToOutput(outQueries[i], i);
+}
+
 CompositeQuery::QueryNode* CompositeQuery::nodeForQuery(Query* q)
 {
 	auto it = std::find_if(nodes_.begin(), nodes_.end(), [q](QueryNode* d) {return d->q_ == q;});
