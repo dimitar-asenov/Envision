@@ -37,6 +37,8 @@ class VISUALIZATIONBASE_API InfoJavascriptFunctions : public QObject
 		static InfoJavascriptFunctions* instance();
 
 		Q_INVOKABLE void jumpToObject(QString fullName);
+		Q_INVOKABLE void hideLayer(QString infoNodeKey, QString layerName);
+		Q_INVOKABLE void moveLayer(QString infoNodeKey, QString layerName, bool moveUp);
 };
 
 }
