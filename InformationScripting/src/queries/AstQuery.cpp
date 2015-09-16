@@ -64,12 +64,6 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 	QList<TupleSet> result;
 	switch (type_)
 	{
-		case QueryType::Classes:
-			result = {classesQuery(input)};
-			break;
-		case QueryType::Methods:
-			result = {methodsQuery(input)};
-			break;
 		case QueryType::BaseClasses:
 			result = {baseClassesQuery(input)};
 			break;
@@ -99,10 +93,12 @@ void AstQuery::registerDefaultQueries()
 {
 	auto& registry = QueryRegistry::instance();
 	registry.registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Classes, target, args);
+		setTypeTo(args, "Class");
+		return new AstQuery(AstQuery::QueryType::Generic, target, args);
 	});
 	registry.registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Methods, target, args);
+		setTypeTo(args, "Method");
+		return new AstQuery(AstQuery::QueryType::Generic, target, args);
 	});
 	registry.registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
 		return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
@@ -121,14 +117,21 @@ void AstQuery::registerDefaultQueries()
 	});
 }
 
-TupleSet AstQuery::classesQuery(QList<TupleSet> input)
+void AstQuery::setTypeTo(QStringList& args, QString type)
 {
-	return typeQuery(input, "Class");
-}
-
-TupleSet AstQuery::methodsQuery(QList<TupleSet> input)
-{
-	return typeQuery(input, "Method");
+	bool set = false;
+	for (auto& arg : args)
+	{
+		if (arg.startsWith("-" + NODETYPE_ARGUMENT_NAMES[0]))
+		{
+			arg.replace(QRegularExpression("=.*"), "=" + type);
+			set = true;
+		}
+	}
+	if (!set)
+	{
+		args.append(QString("-%1=%2").arg(NODETYPE_ARGUMENT_NAMES[0], type));
+	}
 }
 
 TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)

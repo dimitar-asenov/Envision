@@ -44,11 +44,6 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
 	public:
-		enum class QueryType : int {Classes, Methods, BaseClasses, ToClass, CallGraph, Generic, GenericToParent};
-		enum class Scope : int {Local, Global, Input};
-
-		AstQuery(QueryType type, Model::Node* target, QStringList args);
-
 		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
 		static void registerDefaultQueries();
@@ -58,10 +53,17 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
 
+		enum class QueryType : int {BaseClasses, ToClass, CallGraph, Generic, GenericToParent};
+		enum class Scope : int {Local, Global, Input};
+
 		Model::Node* target_{};
 		Scope scope_{};
 		QueryType type_{};
 		QCommandLineParser argParser_;
+
+		AstQuery(QueryType type, Model::Node* target, QStringList args);
+
+		static void setTypeTo(QStringList& args, QString type);
 
 		TupleSet classesQuery(QList<TupleSet> input);
 		TupleSet methodsQuery(QList<TupleSet> input);
