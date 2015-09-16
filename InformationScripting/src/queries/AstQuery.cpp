@@ -69,6 +69,12 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 		case QueryType::Generic:
 			result = {genericQuery(input)};
 			break;
+		case QueryType::GenericToParent:
+			if (args_.size() > 0)
+				result = {toParentType(input, args_.takeFirst())};
+			else
+				result = input; // TODO warning for user ?
+			break;
 		default:
 			Q_ASSERT(false);
 	}
@@ -96,6 +102,9 @@ void AstQuery::registerDefaultQueries()
 	});
 	registry.registerQueryConstructor("ast", [](Model::Node* target, QStringList args) {
 		return new AstQuery(AstQuery::QueryType::Generic, target, args);
+	});
+	registry.registerQueryConstructor("toParent", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::GenericToParent, target, args);
 	});
 }
 
@@ -150,29 +159,33 @@ TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
 
 TupleSet AstQuery::toClassNode(QList<TupleSet> input)
 {
+	return toParentType(input, "Class");
+}
+
+TupleSet AstQuery::toParentType(QList<TupleSet> input, const QString& type)
+{
 	Q_ASSERT(input.size());
 	auto ts = input.takeFirst();
-	auto canBeInClass = [](const Tuple& t) {
+	auto canBeParent = [type](const Tuple& t) {
 		auto it = t.find("ast");
 		if (it != t.end())
 		{
 			Model::Node* n = it->second;
-			return n->firstAncestorOfType<OOModel::Class>() != nullptr;
+			return n->firstAncestorOfType(type) != nullptr;
 		}
 		return false;
 	};
-
 	// TODO currently we remove all the converted nodes:
-	auto tuples = ts.take(canBeInClass);
-	QList<OOModel::Class*> classes;
+	auto tuples = ts.take(canBeParent);
+	QSet<Model::Node*> parentNodes;
 	for (auto tuple : tuples)
 	{
 		Model::Node* astNode = tuple["ast"];
-		auto classParent = astNode->firstAncestorOfType<OOModel::Class>();
-		if (!classes.contains(classParent)) classes.push_back(classParent);
+		auto parentNode = astNode->firstAncestorOfType(type);
+		parentNodes.insert(parentNode);
 	}
-	for (auto foundClass : classes)
-		ts.add({{"ast", foundClass}});
+	for (auto foundNode : parentNodes)
+		ts.add({{"ast", foundNode}});
 	return ts;
 }
 

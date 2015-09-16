@@ -44,7 +44,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AstQuery : public Query
 {
 	public:
-		enum class QueryType : int {Classes, Methods, BaseClasses, ToClass, CallGraph, Generic};
+		enum class QueryType : int {Classes, Methods, BaseClasses, ToClass, CallGraph, Generic, GenericToParent};
 		enum class Scope : int {Local, Global, Input};
 
 		AstQuery(QueryType type, Model::Node* target, QStringList args);
@@ -63,6 +63,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		TupleSet methodsQuery(QList<TupleSet> input);
 		TupleSet baseClassesQuery(QList<TupleSet> input);
 		TupleSet toClassNode(QList<TupleSet> input);
+		TupleSet toParentType(QList<TupleSet> input, const QString& type);
 		TupleSet callGraph(QList<TupleSet> input);
 		TupleSet genericQuery(QList<TupleSet> input);
 		TupleSet typeQuery(QList<TupleSet> input, QString type);
