@@ -34,16 +34,29 @@
 
 namespace InformationScripting {
 
+const QStringList AstQuery::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+const QStringList AstQuery::NODETYPE_ARGUMENT_NAMES{"t", "type"};
+const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
+
 AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
-	: target_{target}, type_{type}, args_{args}
+	: target_{target}, type_{type}
 {
-	if (args_.size() > 0)
+	args.prepend("AstQuery");
+	argParser_.addOptions(
 	{
-		QString possibleScope = args_.takeFirst();
-		if (possibleScope == "g") scope_ = Scope::Global;
-		else if (possibleScope == "of") scope_ = Scope::Input;
-		else args_.prepend(possibleScope); // Not a scope so prepend it again.
-	}
+		 {SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]},
+		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
+		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]}
+	});
+	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
+	argParser_.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+
+	if (!argParser_.parse(args))
+		qWarning() << "ASTQuery parse failure"; // TODO warn user
+
+	QString scope = argParser_.value(SCOPE_ARGUMENT_NAMES[0]);
+	if (scope == "g") scope_ = Scope::Global;
+	else if (scope == "of") scope_ = Scope::Input;
 }
 
 QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
@@ -70,8 +83,8 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 			result = {genericQuery(input)};
 			break;
 		case QueryType::GenericToParent:
-			if (args_.size() > 0)
-				result = {toParentType(input, args_.takeFirst())};
+			if (argParser_.value(NODETYPE_ARGUMENT_NAMES[0]).size() > 0)
+				result = {toParentType(input, argParser_.value(NODETYPE_ARGUMENT_NAMES[0]))};
 			else
 				result = input; // TODO warning for user ?
 			break;
@@ -215,11 +228,8 @@ TupleSet AstQuery::callGraph(QList<TupleSet>)
 
 TupleSet AstQuery::genericQuery(QList<TupleSet> input)
 {
-	if (args_.size() > 0)
-	{
-		QString genericType = args_.takeFirst();
-		if (genericType == "type" && args_.size() > 0) return typeQuery(input, args_.takeFirst());
-	}
+	QString typeArgument = argParser_.value(NODETYPE_ARGUMENT_NAMES[0]);
+	if (typeArgument.size() > 0) return typeQuery(input, typeArgument);
 	return {};
 }
 

@@ -54,10 +54,14 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		static void registerDefaultQueries();
 
 	private:
+		static const QStringList SCOPE_ARGUMENT_NAMES;
+		static const QStringList NODETYPE_ARGUMENT_NAMES;
+		static const QStringList NAME_ARGUMENT_NAMES;
+
 		Model::Node* target_{};
 		Scope scope_{};
 		QueryType type_{};
-		QStringList args_{};
+		QCommandLineParser argParser_;
 
 		TupleSet classesQuery(QList<TupleSet> input);
 		TupleSet methodsQuery(QList<TupleSet> input);
