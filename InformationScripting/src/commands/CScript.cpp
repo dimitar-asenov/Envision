@@ -34,14 +34,11 @@
 
 #include "../queries/QueryExecutor.h"
 #include "../queries/CompositeQuery.h"
-#include "../queries/AstNameFilter.h"
 #include "../queries/SubstractOperator.h"
-#include "../queries/AstQuery.h"
 #include "../queries/NodePropertyAdder.h"
 #include "../queries/UnionOperator.h"
-#include "../queries/ScriptQuery.h"
 #include "../queries/AddASTPropertiesAsTuples.h"
-
+#include "../queries/QueryRegistry.h"
 #include "../parsing/QueryBuilder.h"
 
 namespace InformationScripting {
@@ -85,9 +82,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			if (args.size() > 1)
 			{
 				// $"classes g" | "script test"$
-				auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+				auto classesQuery = QueryRegistry::instance().buildQuery("classes", node, {"-s=g"});
 				// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
-				auto scriptQuery = new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(args[0]));
+				auto scriptQuery = QueryRegistry::instance().buildQuery(args.takeFirst(), node, args);
 				auto compositeQuery = new CompositeQuery();
 				compositeQuery->connectQuery(classesQuery, scriptQuery);
 				compositeQuery->connectToOutput(scriptQuery);
@@ -98,22 +95,22 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		else if (command == "methods")
 		{
 			// "methods"
-			auto query = new AstQuery(AstQuery::QueryType::Methods, node, args);
+			auto query = QueryRegistry::instance().buildQuery("methods", node, args);
 			QueryExecutor queryExecutor(query);
 			queryExecutor.execute();
 		}
 		else if (command == "bases")
 		{
 			// "bases"
-			auto query = new AstQuery(AstQuery::QueryType::BaseClasses, node, args);
+			auto query = QueryRegistry::instance().buildQuery("bases", node, args);
 			QueryExecutor queryExecutor(query);
 			queryExecutor.execute();
 		}
 		else if (command == "pipe")
 		{
 			// $"methods" | "toClass"$
-			auto methodQuery = new AstQuery(AstQuery::QueryType::Methods, node, args);
-			auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
+			auto methodQuery = QueryRegistry::instance().buildQuery("methods", node, args);
+			auto toBaseQuery = QueryRegistry::instance().buildQuery("toClass", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectQuery(methodQuery, toBaseQuery);
 			compositeQuery->connectToOutput(toBaseQuery);
@@ -125,12 +122,12 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			// Find all classes for which the name contains X and which have a method named Y
 			// 5 queries seems like a lot for this :S
 
-			// $"classes g" | "filter *Matcher*" | "methods of" | "filter matches" | "toClass"$
-			auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
-			auto filterQuery = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*Matcher\\w*")));
-			auto methodsOfQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"of"});
-			auto methodsFilter = new AstNameFilter(Model::SymbolMatcher("matches"));
-			auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
+			// $"classes -s=g" | "filter *Matcher*" | "methods -s=of" | "filter matches" | "toClass"$
+			auto classesQuery = QueryRegistry::instance().buildQuery("classes", node, {"-s=g"});
+			auto filterQuery = QueryRegistry::instance().buildQuery("filter", node, {"*Matcher*"});
+			auto methodsOfQuery = QueryRegistry::instance().buildQuery("methods", node, {"-s=of"});
+			auto methodsFilter = QueryRegistry::instance().buildQuery("filter", node, {"matches"});
+			auto toBaseQuery = QueryRegistry::instance().buildQuery("toClass", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectQuery(classesQuery, filterQuery);
 			compositeQuery->connectQuery(filterQuery, methodsOfQuery);
@@ -143,7 +140,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		else if (command == "callgraph")
 		{
 			// "callgraph"
-			auto query = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+			auto query = QueryRegistry::instance().buildQuery("callgraph", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectToOutput(query);
 			QueryExecutor queryExecutor(compositeQuery);
@@ -153,11 +150,11 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		{
 			// Find all methods that are not called transitively from the TARGET method.
 
-			// $"methods g" - {$"callgraph" | "addASTProperties"$}$
+			// $"methods -s=g" - {$"callgraph" | "addASTProperties"$}$
 			// or:
-			// ${"methods g", $"callgraph" | "addASTProperties"$}-$
-			auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
-			auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+			// ${"methods -s=g", $"callgraph" | "addASTProperties"$}-$
+			auto allMethodsQuery = QueryRegistry::instance().buildQuery("methods", node, {"-s=g"});
+			auto callGraphQuery = QueryRegistry::instance().buildQuery("callgraph", node, args);
 			auto astAdder = new AddASTPropertiesAsTuples();
 			auto complement = new SubstractOperator();
 			auto compositeQuery = new CompositeQuery();
@@ -174,8 +171,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			auto colorQuotes = new NodePropertyAdder("color", QString("blue"));
 			auto colorBrackets = new NodePropertyAdder("color", QString("green"));
 
-			auto quotesFilter = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*quotes\\w*")));
-			auto bracketsFilter = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*brackets\\w*")));
+			auto quotesFilter = QueryRegistry::instance().buildQuery("filter", node, {"*quotes*"});
+			auto bracketsFilter = QueryRegistry::instance().buildQuery("filter", node, {"*brackets*"});
 
 			auto quotes = new CompositeQuery();
 			quotes->connectInput(0, quotesFilter);
@@ -187,7 +184,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			brackets->connectQuery(bracketsFilter, colorBrackets);
 			brackets->connectToOutput(colorBrackets);
 
-			auto methods = new AstQuery(AstQuery::QueryType::Methods, node, {});
+			auto methods = QueryRegistry::instance().buildQuery("methods", node, {});
 			auto unionOp = new UnionOperator();
 
 			auto composite = new CompositeQuery();
