@@ -123,30 +123,12 @@ void AstQuery::registerDefaultQueries()
 
 TupleSet AstQuery::classesQuery(QList<TupleSet> input)
 {
-	TupleSet tuples;
-	if (scope_ == Scope::Local)
-	{
-		auto parentProject = target_->firstAncestorOfType<OOModel::Project>();
-		for (auto childClass : *parentProject->classes())
-			tuples.add({{"ast", childClass}});
-	}
-	else
-		tuples = typeQuery(input, "Class");
-	return tuples;
+	return typeQuery(input, "Class");
 }
 
 TupleSet AstQuery::methodsQuery(QList<TupleSet> input)
 {
-	TupleSet tuples;
-	if (scope_ == Scope::Local)
-	{
-		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
-		for (auto method : *parentClass->methods())
-			tuples.add({{"ast", method}});
-	}
-	else
-		tuples = typeQuery(input, "Method");
-	return tuples;
+	return typeQuery(input, "Method");
 }
 
 TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
@@ -240,13 +222,9 @@ TupleSet AstQuery::typeQuery(QList<TupleSet> input, QString type)
 	Q_ASSERT(!type.isEmpty());
 
 	if (scope_ == Scope::Local)
-	{
-		// TODO how to get the correct ancestor?
-	}
+		addNodesOfType(tuples, type, target_);
 	else if (scope_ == Scope::Global)
-	{
 		addNodesOfType(tuples, type);
-	}
 	else if (scope_ == Scope::Input)
 	{
 		Q_ASSERT(input.size());
