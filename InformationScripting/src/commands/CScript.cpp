@@ -48,18 +48,18 @@ namespace InformationScripting {
 
 CScript::CScript() : Command{"script"} {}
 
-bool CScript::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
+bool CScript::canInterpret(Visualization::Item* source, Visualization::Item*, const QStringList& commandTokens,
 									const std::unique_ptr<Visualization::Cursor>&)
 {
-	return commandTokens.size() > 1 && commandTokens.first() == "script";
+	return commandTokens.size() > 1 && commandTokens.first() == "script" && source->findAncestorWithNode();
 }
 
-Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization::Item* target,
+Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visualization::Item*,
 															const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
 	using namespace boost;
 
-	auto node = target->node();
+	auto node = source->findAncestorWithNode()->node();
 	Q_ASSERT(node);
 
 	QStringList args = commandTokens.mid(1);
