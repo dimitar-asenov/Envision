@@ -51,6 +51,7 @@ uint Tuple::hashValue(uint seed) const
 #if QT_VERSION >= 0x050500
 	return qHashRange(begin(), end(), seed);
 #else
+	Q_UNUSED(seed);
 	return 0;
 #endif
 }
