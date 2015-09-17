@@ -30,6 +30,7 @@
 
 namespace Model {
 	class Node;
+	class SymbolMatcher;
 }
 
 namespace InformationScripting {
@@ -37,7 +38,7 @@ namespace InformationScripting {
 class INFORMATIONSCRIPTING_API AllNodesOfType
 {
 	public:
-		static QList<Model::Node*> allNodesOfType(Model::Node* from, const QString& typeName);
+		static QList<Model::Node*> allNodesOfType(Model::Node* from, const Model::SymbolMatcher& matcher);
 };
 
 } /* namespace InformationScripting */

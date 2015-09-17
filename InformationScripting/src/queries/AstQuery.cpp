@@ -166,12 +166,14 @@ TupleSet AstQuery::toParentType(QList<TupleSet> input, const QString& type)
 {
 	Q_ASSERT(input.size());
 	auto ts = input.takeFirst();
-	auto canBeParent = [type](const Tuple& t) {
+	Model::SymbolMatcher matcher = matcherFor(type);
+
+	auto canBeParent = [matcher](const Tuple& t) {
 		auto it = t.find("ast");
 		if (it != t.end())
 		{
 			Model::Node* n = it->second;
-			return n->firstAncestorOfType(type) != nullptr;
+			return n->firstAncestorOfType(matcher) != nullptr;
 		}
 		return false;
 	};
@@ -181,7 +183,7 @@ TupleSet AstQuery::toParentType(QList<TupleSet> input, const QString& type)
 	for (auto tuple : tuples)
 	{
 		Model::Node* astNode = tuple["ast"];
-		auto parentNode = astNode->firstAncestorOfType(type);
+		auto parentNode = astNode->firstAncestorOfType(matcher);
 		parentNodes.insert(parentNode);
 	}
 	for (auto foundNode : parentNodes)
@@ -227,11 +229,12 @@ TupleSet AstQuery::typeQuery(QList<TupleSet> input, QString type)
 	TupleSet tuples;
 
 	Q_ASSERT(!type.isEmpty());
+	Model::SymbolMatcher matcher = matcherFor(type);
 
 	if (scope_ == Scope::Local)
-		addNodesOfType(tuples, type, target_);
+		addNodesOfType(tuples, matcher, target_);
 	else if (scope_ == Scope::Global)
-		addNodesOfType(tuples, type);
+		addNodesOfType(tuples, matcher);
 	else if (scope_ == Scope::Input)
 	{
 		Q_ASSERT(input.size());
@@ -239,7 +242,7 @@ TupleSet AstQuery::typeQuery(QList<TupleSet> input, QString type)
 
 		// TODO add the possibility to keep the input nodes:
 		auto tuple = tuples.take("ast");
-		for (const auto& t : tuple) addNodesOfType(tuples, type, t["ast"]);
+		for (const auto& t : tuple) addNodesOfType(tuples, matcher, t["ast"]);
 	}
 	return tuples;
 }
@@ -265,7 +268,7 @@ TupleSet AstQuery::nameQuery(QList<TupleSet> input, QString name)
 	}
 	// If we have a type argument filter the results:
 	const QString type = argParser_.value(NODETYPE_ARGUMENT_NAMES[0]);
-	const Model::SymbolMatcher matcher{type};
+	Model::SymbolMatcher matcher = matcherFor(type);
 	for (auto result : matchingNodes)
 		if (type.isEmpty() || matcher.matches(result.second->typeName()))
 			tuples.add({{"ast", result.second}});
@@ -297,12 +300,18 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 	}
 }
 
-void AstQuery::addNodesOfType(TupleSet& ts, const QString& typeName, Model::Node* from)
+void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
 {
 	if (!from) from = target_->root();
-	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, typeName);
+	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, matcher);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
+}
+
+Model::SymbolMatcher AstQuery::matcherFor(const QString& text)
+{
+	if (text.contains("*")) return {new QRegExp(text, Qt::CaseInsensitive, QRegExp::Wildcard)};
+	return {text};
 }
 
 } /* namespace InformationScripting */
