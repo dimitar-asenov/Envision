@@ -36,8 +36,8 @@
 
 namespace InformationScripting {
 
-static const QStringList OPEN_SCOPE_SYMBOL{"$", "\"", "{"};
-static const QStringList CLOSE_SCOPE_SYMBOL{"$", "\"", "}"};
+static const QStringList OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
+static const QStringList CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
 QueryBuilder& QueryBuilder::instance()
 {
@@ -71,7 +71,7 @@ Query* QueryBuilder::buildQueryFrom(const QString& text, Model::Node* target)
 
 QueryBuilder::Type QueryBuilder::typeOf(const QString& text)
 {
-	int index = OPEN_SCOPE_SYMBOL.indexOf(text[0]);
+	int index = OPEN_SCOPE_SYMBOL.indexOf(text.mid(0, 2));
 	Q_ASSERT(index >= 0);
 	return static_cast<Type>(index);
 }
@@ -81,12 +81,13 @@ QPair<QStringList, QList<QChar>> QueryBuilder::split(const QString& text, const 
 	QPair<QStringList, QList<QChar>> result;
 	QString currentString;
 	QVector<int> openScopes(3, 0);
-	for (int i = 1; i < text.size() - 1; ++i)
+	for (int i = 2; i < text.size() - 2; ++i)
 	{
 		QChar currentChar = text.at(i);
-		int openIndex = OPEN_SCOPE_SYMBOL.indexOf(currentChar);
+		QString scopeSymbol = text.mid(i, 2);
+		int openIndex = OPEN_SCOPE_SYMBOL.indexOf(scopeSymbol);
 		if (openIndex >= 0) ++openScopes[openIndex];
-		int closeIndex = CLOSE_SCOPE_SYMBOL.indexOf(currentChar);
+		int closeIndex = CLOSE_SCOPE_SYMBOL.indexOf(scopeSymbol);
 		if (closeIndex >= 0) --openScopes[closeIndex];
 		bool isInScope = std::all_of(openScopes.begin(), openScopes.end(), [](int i) { return i == 0;});
 		if (isInScope && splitChars.contains(currentChar))
@@ -106,7 +107,7 @@ QPair<QStringList, QList<QChar>> QueryBuilder::split(const QString& text, const 
 Query* QueryBuilder::parseQuery(const QString& text)
 {
 	Q_ASSERT(typeOf(text) == Type::Query);
-	QStringList data = text.mid(1, text.size()-2).split(" ", QString::SkipEmptyParts);
+	QStringList data = text.mid(2, text.size()-4).split(" ", QString::SkipEmptyParts);
 	Q_ASSERT(data.size());
 	QString command = data.takeFirst();
 	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
