@@ -266,7 +266,7 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 
 void AstQuery::addNodesOfType(TupleSet& ts, const QString& typeName, Model::Node* from)
 {
-	if (!from) from = target_->manager()->root();
+	if (!from) from = target_->root();
 	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, typeName);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});

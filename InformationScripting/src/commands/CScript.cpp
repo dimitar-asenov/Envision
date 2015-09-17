@@ -74,6 +74,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	}
 	else
 	{
+		auto query = [](auto... args){return QueryRegistry::instance().buildQuery(args...);};
+
 		QString command = args[0];
 		args = args.mid(1);
 
@@ -82,9 +84,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			if (args.size() > 1)
 			{
 				// $"classes g" | "script test"$
-				auto classesQuery = QueryRegistry::instance().buildQuery("classes", node, {"-s=g"});
+				auto classesQuery = query("classes", node, QStringList("-s=g"));
 				// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
-				auto scriptQuery = QueryRegistry::instance().buildQuery(args.takeFirst(), node, args);
+				auto scriptQuery = query(args.takeFirst(), node, args);
 				auto compositeQuery = new CompositeQuery();
 				compositeQuery->connectQuery(classesQuery, scriptQuery);
 				compositeQuery->connectToOutput(scriptQuery);
@@ -95,22 +97,22 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		else if (command == "methods")
 		{
 			// "methods"
-			auto query = QueryRegistry::instance().buildQuery("methods", node, args);
-			QueryExecutor queryExecutor(query);
+			auto methodsQuery = query("methods", node, args);
+			QueryExecutor queryExecutor(methodsQuery);
 			queryExecutor.execute();
 		}
 		else if (command == "bases")
 		{
 			// "bases"
-			auto query = QueryRegistry::instance().buildQuery("bases", node, args);
-			QueryExecutor queryExecutor(query);
+			auto basesQuery = query("bases", node, args);
+			QueryExecutor queryExecutor(basesQuery);
 			queryExecutor.execute();
 		}
 		else if (command == "pipe")
 		{
 			// $"methods" | "toClass"$
-			auto methodQuery = QueryRegistry::instance().buildQuery("methods", node, args);
-			auto toBaseQuery = QueryRegistry::instance().buildQuery("toClass", node, args);
+			auto methodQuery = query("methods", node, args);
+			auto toBaseQuery = query("toClass", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectQuery(methodQuery, toBaseQuery);
 			compositeQuery->connectToOutput(toBaseQuery);
@@ -123,11 +125,11 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			// 5 queries seems like a lot for this :S
 
 			// $"classes -s=g" | "filter *Matcher*" | "methods -s=of" | "filter matches" | "toClass"$
-			auto classesQuery = QueryRegistry::instance().buildQuery("classes", node, {"-s=g"});
-			auto filterQuery = QueryRegistry::instance().buildQuery("filter", node, {"*Matcher*"});
-			auto methodsOfQuery = QueryRegistry::instance().buildQuery("methods", node, {"-s=of"});
-			auto methodsFilter = QueryRegistry::instance().buildQuery("filter", node, {"matches"});
-			auto toBaseQuery = QueryRegistry::instance().buildQuery("toClass", node, args);
+			auto classesQuery = query("classes", node, QStringList("-s=g"));
+			auto filterQuery = query("filter", node, QStringList("*Matcher*"));
+			auto methodsOfQuery = query("methods", node, QStringList("-s=of"));
+			auto methodsFilter = query("filter", node, QStringList("matches"));
+			auto toBaseQuery = query("toClass", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectQuery(classesQuery, filterQuery);
 			compositeQuery->connectQuery(filterQuery, methodsOfQuery);
@@ -140,9 +142,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		else if (command == "callgraph")
 		{
 			// "callgraph"
-			auto query = QueryRegistry::instance().buildQuery("callgraph", node, args);
+			auto callgraph = query("callgraph", node, args);
 			auto compositeQuery = new CompositeQuery();
-			compositeQuery->connectToOutput(query);
+			compositeQuery->connectToOutput(callgraph);
 			QueryExecutor queryExecutor(compositeQuery);
 			queryExecutor.execute();
 		}
@@ -153,8 +155,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			// $"methods -s=g" - {$"callgraph" | "addASTProperties"$}$
 			// or:
 			// ${"methods -s=g", $"callgraph" | "addASTProperties"$}-$
-			auto allMethodsQuery = QueryRegistry::instance().buildQuery("methods", node, {"-s=g"});
-			auto callGraphQuery = QueryRegistry::instance().buildQuery("callgraph", node, args);
+			auto allMethodsQuery = query("methods", node, QStringList("-s=g"));
+			auto callGraphQuery = query("callgraph", node, args);
 			auto astAdder = new AddASTPropertiesAsTuples();
 			auto complement = new SubstractOperator();
 			auto compositeQuery = new CompositeQuery();
@@ -171,8 +173,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			auto colorQuotes = new NodePropertyAdder("color", QString("blue"));
 			auto colorBrackets = new NodePropertyAdder("color", QString("green"));
 
-			auto quotesFilter = QueryRegistry::instance().buildQuery("filter", node, {"*quotes*"});
-			auto bracketsFilter = QueryRegistry::instance().buildQuery("filter", node, {"*brackets*"});
+			auto quotesFilter = query("filter", node, QStringList("*quotes*"));
+			auto bracketsFilter = query("filter", node, QStringList("*brackets*"));
 
 			auto quotes = new CompositeQuery();
 			quotes->connectInput(0, quotesFilter);
@@ -184,7 +186,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			brackets->connectQuery(bracketsFilter, colorBrackets);
 			brackets->connectToOutput(colorBrackets);
 
-			auto methods = QueryRegistry::instance().buildQuery("methods", node, {});
+			auto methods = query("methods", node, QStringList());
 			auto unionOp = new UnionOperator();
 
 			auto composite = new CompositeQuery();
