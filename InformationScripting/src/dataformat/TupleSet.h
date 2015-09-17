@@ -89,8 +89,6 @@ inline QSet<Tuple> TupleSet::take(Condition condition)
 {
 	QSet<Tuple> result;
 
-	if (!condition) return result;
-
 	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
 	{
 		auto& set = hashIt.value();

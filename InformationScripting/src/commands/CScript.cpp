@@ -34,32 +34,29 @@
 
 #include "../queries/QueryExecutor.h"
 #include "../queries/CompositeQuery.h"
-#include "../queries/AstNameFilter.h"
 #include "../queries/SubstractOperator.h"
-#include "../queries/AstQuery.h"
 #include "../queries/NodePropertyAdder.h"
 #include "../queries/UnionOperator.h"
-#include "../queries/ScriptQuery.h"
 #include "../queries/AddASTPropertiesAsTuples.h"
-
+#include "../queries/QueryRegistry.h"
 #include "../parsing/QueryBuilder.h"
 
 namespace InformationScripting {
 
 CScript::CScript() : Command{"script"} {}
 
-bool CScript::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList& commandTokens,
+bool CScript::canInterpret(Visualization::Item* source, Visualization::Item*, const QStringList& commandTokens,
 									const std::unique_ptr<Visualization::Cursor>&)
 {
-	return commandTokens.size() > 1 && commandTokens.first() == "script";
+	return commandTokens.size() > 1 && commandTokens.first() == "script" && source->findAncestorWithNode();
 }
 
-Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization::Item* target,
+Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visualization::Item*,
 															const QStringList& commandTokens, const std::unique_ptr<Visualization::Cursor>&)
 {
 	using namespace boost;
 
-	auto node = target->node();
+	auto node = source->findAncestorWithNode()->node();
 	Q_ASSERT(node);
 
 	QStringList args = commandTokens.mid(1);
@@ -77,6 +74,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 	}
 	else
 	{
+		auto query = [](auto... args){return QueryRegistry::instance().buildQuery(args...);};
+
 		QString command = args[0];
 		args = args.mid(1);
 
@@ -85,9 +84,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			if (args.size() > 1)
 			{
 				// $"classes g" | "script test"$
-				auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
+				auto classesQuery = query("classes", node, QStringList("-s=g"));
 				// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
-				auto scriptQuery = new ScriptQuery(QString("../InformationScripting/test/scripts/%1.py").arg(args[0]));
+				auto scriptQuery = query(args.takeFirst(), node, args);
 				auto compositeQuery = new CompositeQuery();
 				compositeQuery->connectQuery(classesQuery, scriptQuery);
 				compositeQuery->connectToOutput(scriptQuery);
@@ -98,22 +97,22 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		else if (command == "methods")
 		{
 			// "methods"
-			auto query = new AstQuery(AstQuery::QueryType::Methods, node, args);
-			QueryExecutor queryExecutor(query);
+			auto methodsQuery = query("methods", node, args);
+			QueryExecutor queryExecutor(methodsQuery);
 			queryExecutor.execute();
 		}
 		else if (command == "bases")
 		{
 			// "bases"
-			auto query = new AstQuery(AstQuery::QueryType::BaseClasses, node, args);
-			QueryExecutor queryExecutor(query);
+			auto basesQuery = query("bases", node, args);
+			QueryExecutor queryExecutor(basesQuery);
 			queryExecutor.execute();
 		}
 		else if (command == "pipe")
 		{
 			// $"methods" | "toClass"$
-			auto methodQuery = new AstQuery(AstQuery::QueryType::Methods, node, args);
-			auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
+			auto methodQuery = query("methods", node, args);
+			auto toBaseQuery = query("toClass", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectQuery(methodQuery, toBaseQuery);
 			compositeQuery->connectToOutput(toBaseQuery);
@@ -125,12 +124,12 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			// Find all classes for which the name contains X and which have a method named Y
 			// 5 queries seems like a lot for this :S
 
-			// $"classes g" | "filter *Matcher*" | "methods of" | "filter matches" | "toClass"$
-			auto classesQuery = new AstQuery(AstQuery::QueryType::Classes, node, {"g"});
-			auto filterQuery = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*Matcher\\w*")));
-			auto methodsOfQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"of"});
-			auto methodsFilter = new AstNameFilter(Model::SymbolMatcher("matches"));
-			auto toBaseQuery = new AstQuery(AstQuery::QueryType::ToClass, node, args);
+			// $"classes -s=g" | "filter *Matcher*" | "methods -s=of" | "filter matches" | "toClass"$
+			auto classesQuery = query("classes", node, QStringList("-s=g"));
+			auto filterQuery = query("filter", node, QStringList("*Matcher*"));
+			auto methodsOfQuery = query("methods", node, QStringList("-s=of"));
+			auto methodsFilter = query("filter", node, QStringList("matches"));
+			auto toBaseQuery = query("toClass", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectQuery(classesQuery, filterQuery);
 			compositeQuery->connectQuery(filterQuery, methodsOfQuery);
@@ -143,9 +142,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		else if (command == "callgraph")
 		{
 			// "callgraph"
-			auto query = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+			auto callgraph = query("callgraph", node, args);
 			auto compositeQuery = new CompositeQuery();
-			compositeQuery->connectToOutput(query);
+			compositeQuery->connectToOutput(callgraph);
 			QueryExecutor queryExecutor(compositeQuery);
 			queryExecutor.execute();
 		}
@@ -153,11 +152,11 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 		{
 			// Find all methods that are not called transitively from the TARGET method.
 
-			// $"methods g" - {$"callgraph" | "addASTProperties"$}$
+			// $"methods -s=g" - {$"callgraph" | "addASTProperties"$}$
 			// or:
-			// ${"methods g", $"callgraph" | "addASTProperties"$}-$
-			auto allMethodsQuery = new AstQuery(AstQuery::QueryType::Methods, node, {"g"});
-			auto callGraphQuery = new AstQuery(AstQuery::QueryType::CallGraph, node, args);
+			// ${"methods -s=g", $"callgraph" | "addASTProperties"$}-$
+			auto allMethodsQuery = query("methods", node, QStringList("-s=g"));
+			auto callGraphQuery = query("callgraph", node, args);
 			auto astAdder = new AddASTPropertiesAsTuples();
 			auto complement = new SubstractOperator();
 			auto compositeQuery = new CompositeQuery();
@@ -174,8 +173,8 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			auto colorQuotes = new NodePropertyAdder("color", QString("blue"));
 			auto colorBrackets = new NodePropertyAdder("color", QString("green"));
 
-			auto quotesFilter = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*quotes\\w*")));
-			auto bracketsFilter = new AstNameFilter(Model::SymbolMatcher(new QRegExp("\\w*brackets\\w*")));
+			auto quotesFilter = query("filter", node, QStringList("*quotes*"));
+			auto bracketsFilter = query("filter", node, QStringList("*brackets*"));
 
 			auto quotes = new CompositeQuery();
 			quotes->connectInput(0, quotesFilter);
@@ -187,7 +186,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item*, Visualization
 			brackets->connectQuery(bracketsFilter, colorBrackets);
 			brackets->connectToOutput(colorBrackets);
 
-			auto methods = new AstQuery(AstQuery::QueryType::Methods, node, {});
+			auto methods = query("methods", node, QStringList());
 			auto unionOp = new UnionOperator();
 
 			auto composite = new CompositeQuery();

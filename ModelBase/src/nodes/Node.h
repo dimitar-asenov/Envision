@@ -311,6 +311,11 @@ class MODELBASE_API Node
 		NodeType* firstAncestorOfType();
 
 		/**
+		 * Returns the first Ancestor for which typeName() matches with \a typeMatch, if there is one, otherwise null.
+		 */
+		Node* firstAncestorOfType(const SymbolMatcher& typeMatch) const;
+
+		/**
 		 * Returns the direct child node that is equal to \a other or is an ancestor of \a other.
 		 *
 		 * Returns null if this node is not an ancestor of \a other.
