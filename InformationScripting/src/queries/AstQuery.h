@@ -73,6 +73,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		TupleSet callGraph(QList<TupleSet> input);
 		TupleSet genericQuery(QList<TupleSet> input);
 		TupleSet typeQuery(QList<TupleSet> input, QString type);
+		TupleSet nameQuery(QList<TupleSet> input, QString name);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 

@@ -29,6 +29,8 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Project.h"
 
+#include "ModelBase/src/util/NameResolver.h"
+
 #include "../visitors/AllNodesOfType.h"
 #include "QueryRegistry.h"
 
@@ -214,7 +216,9 @@ TupleSet AstQuery::callGraph(QList<TupleSet>)
 TupleSet AstQuery::genericQuery(QList<TupleSet> input)
 {
 	QString typeArgument = argParser_.value(NODETYPE_ARGUMENT_NAMES[0]);
-	if (typeArgument.size() > 0) return typeQuery(input, typeArgument);
+	QString nameArgument = argParser_.value(NAME_ARGUMENT_NAMES[0]);
+	if (nameArgument.size() > 0) return nameQuery(input, nameArgument);
+	else if (typeArgument.size() > 0) return typeQuery(input, typeArgument);
 	return {};
 }
 
@@ -237,6 +241,35 @@ TupleSet AstQuery::typeQuery(QList<TupleSet> input, QString type)
 		auto tuple = tuples.take("ast");
 		for (const auto& t : tuple) addNodesOfType(tuples, type, t["ast"]);
 	}
+	return tuples;
+}
+
+TupleSet AstQuery::nameQuery(QList<TupleSet> input, QString name)
+{
+	TupleSet tuples;
+
+	QList<QPair<QString, Model::Node*>> matchingNodes;
+
+	if (scope_ == Scope::Local)
+		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1, target_);
+	else if (scope_ == Scope::Global)
+		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1);
+	else if (scope_ == Scope::Input)
+	{
+		Q_ASSERT(input.size());
+		tuples = input.takeFirst();
+
+		// TODO add the possibility to keep the input nodes:
+		auto tuple = tuples.take("ast");
+		for (const auto& t : tuple) matchingNodes << Model::NameResolver::mostLikelyMatches(name, -1, t["ast"]);
+	}
+	// If we have a type argument filter the results:
+	const QString type = argParser_.value(NODETYPE_ARGUMENT_NAMES[0]);
+	const Model::SymbolMatcher matcher{type};
+	for (auto result : matchingNodes)
+		if (type.isEmpty() || matcher.matches(result.second->typeName()))
+			tuples.add({{"ast", result.second}});
+
 	return tuples;
 }
 
