@@ -13,6 +13,7 @@
 
 <!--
 ===== The following are some useful ways to generate projects =====
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="testMerge /tmp/EnvisionVC/base /tmp/EnvisionVC/base"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="legend /home/mitko/jedit/workspace/EnvisionLegend/src ${project_loc}/../DebugBuild/projects/"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="test ${project_loc}/test/brokencomments/ ${project_loc}/../DebugBuild/projects/"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="jedit /home/dasenov/Research/experiment1/jedit/source/ ${project_loc}/../DebugBuild/projects/"/>

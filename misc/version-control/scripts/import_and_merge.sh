@@ -6,15 +6,15 @@
 # If run manually, this script is intended for the files in Envision/FilePersistence/test/persisted/version-control/manual/
 # The script is also used in the diff_envision_dev.sh script.
 
-jitPath=~/Envision/JavaImportTool/bin/
+jitPath=/fast/Envision/JavaImportTool/bin/
 jit="java -cp "${jitPath}:/opt/eclipse/plugins/*:../lib/*" javaImportTool.Main"
 
 gumtreePath=~/gumtree/gumtree-all/target
 gumtree="java -cp ${gumtreePath}/gumtree.jar com.github.gumtreediff.client.Run -c Clients.experimental true -c match.gt.minh 1 -c match.bu.sim 0.5 envdmp -g envision -m gumtree"
 
-idpatcher=~/Envision/misc/version-control/scripts/patch_ids.py
-repoScript=~/Envision/FilePersistence/test/persisted/version-control/create-test-git-repo.py
-envision=~/Envision/DebugBuild/Envision
+idpatcher=/fast/Envision/misc/version-control/scripts/patch_ids.py
+repoScript=/fast/Envision/FilePersistence/test/persisted/version-control/create-test-git-repo.py
+envision=/fast/Envision/DebugBuild/Envision
 
 testdir="/tmp/EnvisionVC"
 base="${testdir}/base"
