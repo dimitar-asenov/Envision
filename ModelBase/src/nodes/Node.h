@@ -311,9 +311,9 @@ class MODELBASE_API Node
 		NodeType* firstAncestorOfType();
 
 		/**
-		 * Returns the first Ancestor for which typeName() is equal to \a typeName if there is one, otherwise null.
+		 * Returns the first Ancestor for which typeName() matches with \a typeMatch, if there is one, otherwise null.
 		 */
-		Node* firstAncestorOfType(const QString& typeName) const;
+		Node* firstAncestorOfType(const SymbolMatcher& typeMatch) const;
 
 		/**
 		 * Returns the direct child node that is equal to \a other or is an ancestor of \a other.

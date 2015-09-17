@@ -144,10 +144,10 @@ bool Node::isAncestorOf(const Node* other) const
 	return p == this;
 }
 
-Node* Node::firstAncestorOfType(const QString& typeName) const
+Node* Node::firstAncestorOfType(const SymbolMatcher& typeMatch) const
 {
 	auto p = parent();
-	while (p && p->typeName() != typeName) p = p->parent();
+	while (p && !typeMatch.matches(p->typeName())) p = p->parent();
 	return p;
 }
 
