@@ -37,7 +37,7 @@ class MODELBASE_API NameResolver {
 
 	public:
 		static QList<QPair<QString, Node*>> findAllMatches(const SymbolMatcher& matcher, QString nameSoFar, Node* root);
-		static QList<QPair<QString, Node*>> mostLikelyMatches(const QString& nodeName, int matchLimit);
+		static QList<QPair<QString, Node*>> mostLikelyMatches(const QString& nodeName, int matchLimit, Node* root = nullptr);
 
 	private:
 		static bool isSuggestable(Node::SymbolTypes symbolType);
