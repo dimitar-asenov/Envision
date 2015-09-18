@@ -42,7 +42,11 @@ HEADERS += src/precompiled.h \
     src/queries/AddASTPropertiesAsTuples.h \
     src/nodes/TagExtension.h \
     src/queries/TagQuery.h \
-    src/queries/ScopedArgumentQuery.h
+    src/queries/ScopedArgumentQuery.h \
+    src/nodes/QueryNode.h \
+    src/nodes/CommandNode.h \
+    src/nodes/OperatorNode.h \
+    src/nodes/CommandArgument.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -69,7 +73,11 @@ SOURCES += src/InformationScriptingException.cpp \
     src/queries/AddASTPropertiesAsTuples.cpp \
     src/nodes/TagExtension.cpp \
     src/queries/TagQuery.cpp \
-    src/queries/ScopedArgumentQuery.cpp
+    src/queries/ScopedArgumentQuery.cpp \
+    src/nodes/QueryNode.cpp \
+    src/nodes/CommandNode.cpp \
+    src/nodes/OperatorNode.cpp \
+    src/nodes/CommandArgument.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
