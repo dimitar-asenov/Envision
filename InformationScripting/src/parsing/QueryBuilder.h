@@ -70,6 +70,10 @@ class INFORMATIONSCRIPTING_API QueryBuilder
 										Query* connectionQuery, Query* outputQuery = nullptr);
 
 		Model::Node* target_{};
+
+		static constexpr int SCOPE_SYMBOL_LENGTH_{2};
+		static const QStringList OPEN_SCOPE_SYMBOL;
+		static const QStringList CLOSE_SCOPE_SYMBOL;
 };
 
 } /* namespace InformationScripting  */

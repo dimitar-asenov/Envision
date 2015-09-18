@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "ModelBase/src/util/SymbolMatcher.h"
+
 #include "Query.h"
 
 namespace Model {
@@ -73,12 +75,15 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		TupleSet callGraph(QList<TupleSet> input);
 		TupleSet genericQuery(QList<TupleSet> input);
 		TupleSet typeQuery(QList<TupleSet> input, QString type);
+		TupleSet nameQuery(QList<TupleSet> input, QString name);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 
-		void addNodesOfType(TupleSet& ts, const QString& typeName, Model::Node* from = nullptr);
+		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
 
 		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
+
+		Model::SymbolMatcher matcherFor(const QString& text);
 };
 
 } /* namespace InformationScripting */

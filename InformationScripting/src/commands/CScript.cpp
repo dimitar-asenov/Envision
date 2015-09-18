@@ -83,7 +83,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		{
 			if (args.size() > 1)
 			{
-				// $"classes g" | "script test"$
+				// $<"<classes g>" | "<script test>">$
 				auto classesQuery = query("classes", node, QStringList("-s=g"));
 				// TODO we could be more fancy in script file name detection, e.g. if .py is already entered don't append it.
 				auto scriptQuery = query(args.takeFirst(), node, args);
@@ -96,21 +96,21 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		}
 		else if (command == "methods")
 		{
-			// "methods"
+			// "<methods>"
 			auto methodsQuery = query("methods", node, args);
 			QueryExecutor queryExecutor(methodsQuery);
 			queryExecutor.execute();
 		}
 		else if (command == "bases")
 		{
-			// "bases"
+			// "<bases>"
 			auto basesQuery = query("bases", node, args);
 			QueryExecutor queryExecutor(basesQuery);
 			queryExecutor.execute();
 		}
 		else if (command == "pipe")
 		{
-			// $"methods" | "toClass"$
+			// $<"<methods>" | "<toClass>">$
 			auto methodQuery = query("methods", node, args);
 			auto toBaseQuery = query("toClass", node, args);
 			auto compositeQuery = new CompositeQuery();
@@ -124,7 +124,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 			// Find all classes for which the name contains X and which have a method named Y
 			// 5 queries seems like a lot for this :S
 
-			// $"classes -s=g" | "filter *Matcher*" | "methods -s=of" | "filter matches" | "toClass"$
+			// $<"<classes -s=g>" | "<filter *Matcher*>" | "<methods -s=of>" | "<filter matches>" | "<toClass>">$
 			auto classesQuery = query("classes", node, QStringList("-s=g"));
 			auto filterQuery = query("filter", node, QStringList("*Matcher*"));
 			auto methodsOfQuery = query("methods", node, QStringList("-s=of"));
@@ -141,7 +141,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		}
 		else if (command == "callgraph")
 		{
-			// "callgraph"
+			// "<callgraph>"
 			auto callgraph = query("callgraph", node, args);
 			auto compositeQuery = new CompositeQuery();
 			compositeQuery->connectToOutput(callgraph);
@@ -152,9 +152,9 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		{
 			// Find all methods that are not called transitively from the TARGET method.
 
-			// $"methods -s=g" - {$"callgraph" | "addASTProperties"$}$
+			// $<"<methods -s=g>" - {<$<"<callgraph>" | "<addASTProperties>">$>}>$
 			// or:
-			// ${"methods -s=g", $"callgraph" | "addASTProperties"$}-$
+			// $<{<"<methods -s=g>", $<"<callgraph>" | "<addASTProperties>">$>}->$
 			auto allMethodsQuery = query("methods", node, QStringList("-s=g"));
 			auto callGraphQuery = query("callgraph", node, args);
 			auto astAdder = new AddASTPropertiesAsTuples();
@@ -169,7 +169,7 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 		}
 		else if (command == "color")
 		{
-			// $"methods" | {$"filter *quotes*" | "color = blue"$, $"filter *brackets*" | "color = green"$} U$
+			// $<"<methods>" | {<$<"<filter *quotes*>" | "<color = blue>">$, $<"<filter *brackets*>" | "<color = green>">$>} U>$
 			auto colorQuotes = new NodePropertyAdder("color", QString("blue"));
 			auto colorBrackets = new NodePropertyAdder("color", QString("green"));
 

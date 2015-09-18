@@ -31,7 +31,7 @@
 
 namespace Model {
 
-QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& nodeName, int matchLimit)
+QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& nodeName, int matchLimit, Node* root)
 {
 	QList<QPair<QString, Node*>> matches;
 	auto parts = nodeName.split(".");
@@ -39,8 +39,12 @@ QList<QPair<QString, Node*>> NameResolver::mostLikelyMatches(const QString& node
 	for (auto part : parts) pattern += part + '*';
 	auto matcher = SymbolMatcher(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard));
 
-	for (auto manager : AllTreeManagers::instance().loadedManagers())
-		matches.append(findAllMatches(matcher, "", manager->root()));
+	if (root) matches.append(findAllMatches(matcher, "", root));
+	else
+	{
+		for (auto manager : AllTreeManagers::instance().loadedManagers())
+			matches.append(findAllMatches(matcher, "", manager->root()));
+	}
 
 	//Shorter names usually have less parts to the fully qualified name -> suggest them first
 	std::sort(matches.begin(), matches.end(), [](QPair<QString, Node*> first, QPair<QString, Node*> second)
