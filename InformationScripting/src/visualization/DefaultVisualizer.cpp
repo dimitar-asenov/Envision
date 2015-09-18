@@ -108,7 +108,7 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 			auto nodeVisualizationIt = Visualization::Item::nodeItemsMap().find(node);
 			if (nodeVisualizationIt == Visualization::Item::nodeItemsMap().end())
 				qWarning() << "no visualization for" << node->typeName();
-			while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end())
+			while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
 			{
 				auto item = *nodeVisualizationIt++;
 				auto overlay = new Visualization::SelectionOverlay(
