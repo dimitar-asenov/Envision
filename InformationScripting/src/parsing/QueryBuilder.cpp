@@ -36,8 +36,8 @@
 
 namespace InformationScripting {
 
-static const QStringList OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
-static const QStringList CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
+const QStringList QueryBuilder::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
+const QStringList QueryBuilder::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
 QueryBuilder& QueryBuilder::instance()
 {
@@ -71,7 +71,7 @@ Query* QueryBuilder::buildQueryFrom(const QString& text, Model::Node* target)
 
 QueryBuilder::Type QueryBuilder::typeOf(const QString& text)
 {
-	int index = OPEN_SCOPE_SYMBOL.indexOf(text.mid(0, 2));
+	int index = OPEN_SCOPE_SYMBOL.indexOf(text.mid(0, SCOPE_SYMBOL_LENGTH_));
 	Q_ASSERT(index >= 0);
 	return static_cast<Type>(index);
 }
@@ -80,11 +80,11 @@ QPair<QStringList, QList<QChar>> QueryBuilder::split(const QString& text, const 
 {
 	QPair<QStringList, QList<QChar>> result;
 	QString currentString;
-	QVector<int> openScopes(3, 0);
-	for (int i = 2; i < text.size() - 2; ++i)
+	QVector<int> openScopes(OPEN_SCOPE_SYMBOL.length(), 0);
+	for (int i = SCOPE_SYMBOL_LENGTH_; i < text.size() - SCOPE_SYMBOL_LENGTH_; ++i)
 	{
 		QChar currentChar = text.at(i);
-		QString scopeSymbol = text.mid(i, 2);
+		QString scopeSymbol = text.mid(i, SCOPE_SYMBOL_LENGTH_);
 		int openIndex = OPEN_SCOPE_SYMBOL.indexOf(scopeSymbol);
 		if (openIndex >= 0) ++openScopes[openIndex];
 		int closeIndex = CLOSE_SCOPE_SYMBOL.indexOf(scopeSymbol);
@@ -107,7 +107,8 @@ QPair<QStringList, QList<QChar>> QueryBuilder::split(const QString& text, const 
 Query* QueryBuilder::parseQuery(const QString& text)
 {
 	Q_ASSERT(typeOf(text) == Type::Query);
-	QStringList data = text.mid(2, text.size()-4).split(" ", QString::SkipEmptyParts);
+	QStringList data = text.mid(SCOPE_SYMBOL_LENGTH_,
+										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ", QString::SkipEmptyParts);
 	Q_ASSERT(data.size());
 	QString command = data.takeFirst();
 	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
