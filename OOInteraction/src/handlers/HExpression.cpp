@@ -51,11 +51,6 @@ using namespace Interaction;
 
 namespace OOInteraction {
 
-HExpression::HExpression()
-{
-
-}
-
 HExpression* HExpression::instance()
 {
 	static HExpression h;
@@ -119,23 +114,23 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 			if (topMostItem->node()->parent()
 					&& topMostItem->node()->parent()->typeId() == ExpressionStatement::typeIdStatic())
 			{
-				if ( auto list = dynamic_cast<StatementItemList*>(topMostItem->node()->parent()->parent()) )
+				if ( auto list = DCast<StatementItemList>(topMostItem->node()->parent()->parent()) )
 				{
 					int thisNodeListIndex = list->indexOf(topMostItem->node()->parent());
 					int nodeToDeletelistIndex = thisNodeListIndex + (key == Qt::Key_Backspace ? -1 : +1);
-					bool empty = dynamic_cast<EmptyExpression*>(topMostItem->node());
+					bool empty = DCast<EmptyExpression>(topMostItem->node());
 
 					// Get a parent which represents a list (of statements or statement items)
 					auto parent = topMostItem->parent();
 					VList* vlist = nullptr;
-					while (!(vlist = dynamic_cast<VList*>(parent)) && parent->parent())
+					while (!(vlist = DCast<VList>(parent)) && parent->parent())
 						parent = parent->parent();
 
 					if (nodeToDeletelistIndex >= 0 && nodeToDeletelistIndex < list->size())
 					{
 						// Delete the current or the previous or the next empty item
-						auto st = dynamic_cast<ExpressionStatement*>(list->at(nodeToDeletelistIndex));
-						if (st && dynamic_cast<EmptyExpression*>(st->expression()))
+						auto st = DCast<ExpressionStatement>(list->at(nodeToDeletelistIndex));
+						if (st && DCast<EmptyExpression>(st->expression()))
 						{
 							HList::instance()->removeNodeAndSetCursor(vlist,
 									empty ? thisNodeListIndex : nodeToDeletelistIndex, key == Qt::Key_Delete,
@@ -238,7 +233,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 
 								// Get a parent which represents a list (of statements or statement items)
 								auto parent = topMostItem->parent();
-								while (! dynamic_cast<VList*>(parent) && parent->parent()) parent = parent->parent();
+								while (! DCast<VList>(parent) && parent->parent()) parent = parent->parent();
 
 								target->scene()->addPostEventAction(new SetCursorEvent(parent, toFocus));
 								return;
@@ -257,7 +252,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return" ||
 						trimmedText == "do" || trimmedText == "//" || trimmedText == "switch" || trimmedText == "case"
 						|| trimmedText == "try" || trimmedText == "assert"|| trimmedText == "synchronized"))
-			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
+			replaceStatement = parentExpressionStatement(DCast<OOModel::Expression>(target->node()));
 
 		if (replaceStatement)
 		{
@@ -377,7 +372,7 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 
 			// Get a parent which represents a list (of statements or statement items)
 			auto parent = topMostItem->parent();
-			while (! dynamic_cast<VList*>(parent) && parent->parent()) parent = parent->parent();
+			while (! DCast<VList>(parent) && parent->parent()) parent = parent->parent();
 
 			target->scene()->addPostEventAction(new SetCursorEvent(parent, toFocus));
 			return;
@@ -386,10 +381,10 @@ void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 		// Insert a new line if enter is pressed at the boundary
 		if (enterPressed && (index == 0 || index == newText.size()))
 		{
-			auto expSt = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
+			auto expSt = parentExpressionStatement(DCast<OOModel::Expression>(target->node()));
 			if (expSt)
 			{
-				auto stList = dynamic_cast<StatementItemList*>(expSt->parent());
+				auto stList = DCast<StatementItemList>(expSt->parent());
 				if (stList)
 				{
 					auto es = new ExpressionStatement(new EmptyExpression());
@@ -489,9 +484,9 @@ ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Expression*
 {
 	// Is this expression part of an expression statement
 	auto ep = e->parent();
-	while (ep && !dynamic_cast<Statement*>(ep)) ep = ep->parent();
+	while (ep && !DCast<Statement>(ep)) ep = ep->parent();
 
-	return dynamic_cast<ExpressionStatement*>(ep);
+	return DCast<ExpressionStatement>(ep);
 }
 
 void HExpression::setNewExpression(Item* target, Item* topMostItem, const QString& text,
@@ -573,7 +568,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 	SymbolProviderType* scopePrefix = nullptr;
 	bool afterDot = false;
 
-	if (auto ref = dynamic_cast<ReferenceExpression*>(target->node()))
+	if (auto ref = DCast<ReferenceExpression>(target->node()))
 	{
 		// If the auto complete is invoked somewhere in a reference expression after a '.' only look for members that
 		// match.
@@ -585,7 +580,7 @@ void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPr
 			if (!scopePrefix) SAFE_DELETE(t);
 		}
 	}
-	else if (auto unf = dynamic_cast<OOModel::UnfinishedOperator*>(target->node()))
+	else if (auto unf = DCast<OOModel::UnfinishedOperator>(target->node()))
 	{
 		// If the auto complete is invoked just after a '.' only look for members that match within the scope of the
 		// prefix.
