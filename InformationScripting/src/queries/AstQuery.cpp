@@ -269,9 +269,9 @@ TupleSet AstQuery::nameQuery(QList<TupleSet> input, QString name)
 	// If we have a type argument filter the results:
 	const QString type = argParser_.value(NODETYPE_ARGUMENT_NAMES[0]);
 	Model::SymbolMatcher matcher = matcherFor(type);
-	for (auto result : matchingNodes)
-		if (type.isEmpty() || matcher.matches(result.second->typeName()))
-			tuples.add({{"ast", result.second}});
+	for (auto matchingNode : matchingNodes)
+		if (type.isEmpty() || matcher.matches(matchingNode.second->typeName()))
+			tuples.add({{"ast", matchingNode.second}});
 
 	return tuples;
 }
