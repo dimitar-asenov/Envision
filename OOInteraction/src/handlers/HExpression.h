@@ -39,7 +39,7 @@ namespace OOInteraction {
 
 class OOINTERACTION_API HExpression : public Interaction::GenericHandler {
 	protected:
-		HExpression();
+		HExpression() = default;
 
 	public:
 		static HExpression* instance();
