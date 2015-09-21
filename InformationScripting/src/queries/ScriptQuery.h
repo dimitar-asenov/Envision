@@ -46,6 +46,8 @@ class ScriptQuery : public Query
 		QString scriptPath_;
 		// Note since we only register QList<T> to python we don't use QStringList here:
 		QList<QString> arguments_;
+
+		void importStar(boost::python::dict& main_namespace, boost::python::object apiObject);
 };
 
 } /* namespace InformationScripting */

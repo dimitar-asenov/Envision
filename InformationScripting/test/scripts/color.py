@@ -1,6 +1,5 @@
-results = [];
-
-from DataApi import *
+# Example:
+# $<"<ast -t=Method>" | "<color blue>">$
 
 color = "red"
 if (len(args)):
