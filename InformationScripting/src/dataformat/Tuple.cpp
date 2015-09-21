@@ -32,6 +32,10 @@ Tuple::Tuple(std::initializer_list<NamedProperty> initialValues)
 	: values_{initialValues}
 {}
 
+Tuple::Tuple(QList<NamedProperty> initialValues)
+	: values_{initialValues}
+{}
+
 QString Tuple::tag() const
 {
 	if (values_.size()) return values_[0].first;

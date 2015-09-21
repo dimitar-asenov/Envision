@@ -86,7 +86,6 @@ struct QSet_to_python_set
 		}
 };
 
-// Currently we don't need any value lists:
 template<class T>
 struct QList_to_python_list
 {
