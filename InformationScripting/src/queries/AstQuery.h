@@ -55,7 +55,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
 
-		enum class QueryType : int {BaseClasses, ToClass, CallGraph, Generic, GenericToParent};
+		enum class QueryType : int {BaseClasses, ToClass, CallGraph, Generic, GenericToParent, Uses};
 		enum class Scope : int {Local, Global, Input};
 
 		Model::Node* target_{};
@@ -76,6 +76,7 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		TupleSet genericQuery(QList<TupleSet> input);
 		TupleSet typeQuery(QList<TupleSet> input, QString type);
 		TupleSet nameQuery(QList<TupleSet> input, QString name);
+		TupleSet usesQuery(QList<TupleSet> input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 

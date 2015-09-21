@@ -84,6 +84,9 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 			else
 				result = input; // TODO warning for user ?
 			break;
+		case QueryType::Uses:
+			result = {usesQuery(input)};
+			break;
 		default:
 			Q_ASSERT(false);
 	}
@@ -116,6 +119,9 @@ void AstQuery::registerDefaultQueries()
 	});
 	registry.registerQueryConstructor("toParent", [](Model::Node* target, QStringList args) {
 		return new AstQuery(AstQuery::QueryType::GenericToParent, target, args);
+	});
+	registry.registerQueryConstructor("uses", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Uses, target, args);
 	});
 }
 
@@ -274,6 +280,51 @@ TupleSet AstQuery::nameQuery(QList<TupleSet> input, QString name)
 			tuples.add({{"ast", matchingNode.second}});
 
 	return tuples;
+}
+
+TupleSet AstQuery::usesQuery(QList<TupleSet> input)
+{
+	TupleSet result;
+	QHash<Model::Node*, QList<Model::Reference*>> references;
+
+	if (scope_ == Scope::Local)
+		references[target_] = AllNodesOfType::allNodesOfType<Model::Reference>(target_);
+	else if (scope_ == Scope::Global)
+		references[target_->root()] = AllNodesOfType::allNodesOfType<Model::Reference>(target_->root());
+	else if (scope_ == Scope::Input)
+	{
+		Q_ASSERT(input.size());
+		auto tuples = input.takeFirst();
+
+		// Uses explicitly filters the input:
+		auto tuple = tuples.take("ast");
+		for (const auto& t : tuple) references[t["ast"]] = AllNodesOfType::allNodesOfType<Model::Reference>(t["ast"]);
+
+		// Keep all non ast nodes
+		result = tuples;
+	}
+
+	auto typeMatcher = matcherFor(argParser_.value(NODETYPE_ARGUMENT_NAMES[0]));
+	auto nameMatcher = matcherFor(argParser_.value(NAME_ARGUMENT_NAMES[0]));
+
+	QHash<Model::Node*, QList<Model::Node*>> referenceTargets;
+	for (auto it = references.begin(); it != references.end(); ++it)
+	{
+		for (auto reference : it.value())
+		{
+			if (auto target = reference->target())
+			{
+				if ((typeMatcher.matchPattern().isEmpty() || typeMatcher.matches(target->typeName())) &&
+					  (nameMatcher.matchPattern().isEmpty() || nameMatcher.matches(target->symbolName())))
+					referenceTargets[it.key()] << target;
+			}
+		}
+	}
+
+	for (auto it = references.begin(); it != references.end(); ++it)
+		if (it.value().size() > 0) result.add({{"ast", it.key()}});
+
+	return result;
 }
 
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
