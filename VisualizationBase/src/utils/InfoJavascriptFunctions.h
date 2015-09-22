@@ -36,7 +36,14 @@ class VISUALIZATIONBASE_API InfoJavascriptFunctions : public QObject
 	public:
 		static InfoJavascriptFunctions* instance();
 
+		enum UpdateKind {
+			MOVE_UP = 0,
+			MOVE_DOWN = 1,
+			HIDE_LAYER = 2
+		};
+
 		Q_INVOKABLE void jumpToObject(QString fullName);
+		Q_INVOKABLE void updateLayer(QString infoNodePointer, QString layerName, int kind);
 };
 
 }

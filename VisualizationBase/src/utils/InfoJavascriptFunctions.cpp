@@ -32,6 +32,7 @@
 #include "Scene.h"
 #include "items/ViewItem.h"
 #include "views/MainView.h"
+#include "nodes/InfoNode.h"
 
 namespace Visualization {
 
@@ -58,6 +59,16 @@ void InfoJavascriptFunctions::jumpToObject(QString fullName)
 			mainView->centerOn(vis->scenePos());
 			return;
 		}
+}
+
+void InfoJavascriptFunctions::updateLayer(QString infoNodePointer, QString layerName, int kind)
+{
+	auto node = reinterpret_cast<InfoNode*>(infoNodePointer.toLong());
+	if (kind == HIDE_LAYER) node->setEnabled(layerName, false);
+	else node->move(layerName, kind == MOVE_UP);
+	node->automaticUpdate();
+	auto view = VisualizationManager::instance().mainScene()->currentViewItem();
+	if (auto vis = view->findVisualizationOf(node)) vis->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 }

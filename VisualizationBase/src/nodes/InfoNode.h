@@ -74,6 +74,10 @@ class VISUALIZATIONBASE_API InfoNode : public Super<UINode>
 		 */
 		void setEnabled(const QString name, bool isEnabled);
 		/**
+		 * Move an info getter up or down in the node.
+		 */
+		void move(const QString& name, bool moveUp);
+		/**
 		 * Returns whether the info getter with the given name is enabled for this node.
 		 */
 		bool isEnabled(const QString name) const;
