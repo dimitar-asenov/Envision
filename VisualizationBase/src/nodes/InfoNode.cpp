@@ -27,6 +27,7 @@
 #include "InfoNode.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "utils/InfoJavascriptFunctions.h"
 
 DEFINE_TYPED_LIST(Visualization::InfoNode)
 
@@ -34,7 +35,7 @@ namespace Visualization {
 
 DEFINE_TYPE_ID_DERIVED(InfoNode, "InfoNode", )
 
-QHash<QString, InfoNode*> InfoNode::allInfoNodes;
+QList<InfoNode*> InfoNode::allInfoNodes;
 QHash<QString, InfoNode::InfoGetterStruct> InfoNode::allInfoGetters;
 
 InfoNode::InfoNode(Model::Node *target)
@@ -43,7 +44,7 @@ InfoNode::InfoNode(Model::Node *target)
 	Q_ASSERT(target);
 	for (auto key : allInfoGetters.keys())
 		setEnabled(key, allInfoGetters[key].enabledByDefault_);
-	initialize();
+	allInfoNodes.append(this);
 }
 
 InfoNode::InfoNode(Model::Node *target, QJsonArray enabledInfos)
@@ -52,21 +53,13 @@ InfoNode::InfoNode(Model::Node *target, QJsonArray enabledInfos)
 	Q_ASSERT(target);
 	for (auto item : enabledInfos)
 		setEnabled(item.toString(), true);
-	initialize();
+	allInfoNodes.append(this);
 }
 
 InfoNode::~InfoNode()
 {
-	allInfoNodes.remove(key_);
+	allInfoNodes.removeAll(this);
 	target_ = nullptr;
-}
-
-void InfoNode::initialize()
-{
-	static int key = 0;
-	allInfoNodes.insert(QString::number(key), this);
-	key_ = QString::number(key);
-	key++;
 }
 
 void InfoNode::updateInfo(bool isAutoUpdate)
@@ -78,6 +71,7 @@ void InfoNode::updateInfo(bool isAutoUpdate)
 					".close { position:absolute; top:0; right: 0; }"
 					"tr:nth-child(even) { background: #CCC; }  </style>"
 					"<div style=\"font-family:monospace\">";
+	QString pointerAsString = QString::number(reinterpret_cast<long>(this));
 	for (auto name : enabledInfoGetters_)
 	{
 		auto getter = allInfoGetters[name];
@@ -89,9 +83,15 @@ void InfoNode::updateInfo(bool isAutoUpdate)
 		if (!cachedInfoStrings_[name].isEmpty())
 			infoHtml += "<div class=\"content_bit\">" +  cachedInfoStrings_[name] + "<br><small>"
 					"  (Layer " + name + ")</small>" + "<br>"
-					"<button class=\"close\" onClick=\"operations.hideLayer('" + key_ + "','" + name + "')\">&#10006</button>"
-					"<button onClick=\"operations.moveLayer('" + key_ + "','" + name + "', true)\">&#x25B2</button>"
-					"<button onClick=\"operations.moveLayer('" + key_ + "','" + name + "', false)\">&#x25BC</button></div>";
+					"<button class=\"close\" onClick=\"operations.updateLayer('" +
+							pointerAsString + "','" + name + "', " +
+							QString::number((int) InfoJavascriptFunctions::HIDE_LAYER) + ")\">&#10006</button>"
+					"<button onClick=\"operations.updateLayer('" +
+							pointerAsString + "','" + name + "', " +
+							QString::number((int) InfoJavascriptFunctions::MOVE_UP) + ")\">&#x25B2</button>"
+					"<button onClick=\"operations.updateLayer('" +
+							pointerAsString + "','" + name + "', " +
+							QString::number((int) InfoJavascriptFunctions::MOVE_DOWN) + ")\">&#x25BC</button></div>";
 	}
 	infoHtml = "<html>" + infoHtml + "</div></html>";
 	setInfoHtml(infoHtml);

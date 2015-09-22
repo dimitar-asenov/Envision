@@ -61,21 +61,11 @@ void InfoJavascriptFunctions::jumpToObject(QString fullName)
 		}
 }
 
-void InfoJavascriptFunctions::hideLayer(QString infoNodeKey, QString layerName)
+void InfoJavascriptFunctions::updateLayer(QString infoNodePointer, QString layerName, int kind)
 {
-	auto node = InfoNode::infoNode(infoNodeKey);
-	if (!node) return;
-	node->setEnabled(layerName, false);
-	node->automaticUpdate();
-	auto view = VisualizationManager::instance().mainScene()->currentViewItem();
-	if (auto vis = view->findVisualizationOf(node)) vis->setUpdateNeeded(Visualization::Item::StandardUpdate);
-}
-
-void InfoJavascriptFunctions::moveLayer(QString infoNodeKey, QString layerName, bool moveUp)
-{
-	auto node = InfoNode::infoNode(infoNodeKey);
-	if (!node) return;
-	node->move(layerName, moveUp);
+	auto node = reinterpret_cast<InfoNode*>(infoNodePointer.toLong());
+	if (kind == HIDE_LAYER) node->setEnabled(layerName, false);
+	else node->move(layerName, kind == MOVE_UP);
 	node->automaticUpdate();
 	auto view = VisualizationManager::instance().mainScene()->currentViewItem();
 	if (auto vis = view->findVisualizationOf(node)) vis->setUpdateNeeded(Visualization::Item::StandardUpdate);
