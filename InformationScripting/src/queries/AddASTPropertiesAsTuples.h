@@ -28,36 +28,16 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/nodes/Node.h"
-
-namespace Model {
-	class SymbolMatcher;
-}
+#include "Query.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AllNodesOfType
+class INFORMATIONSCRIPTING_API AddASTPropertiesAsTuples : public Query
 {
 	public:
-		static QList<Model::Node*> allNodesOfType(Model::Node* from, const Model::SymbolMatcher& matcher);
+		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
 
-		template <class NodeType>
-		inline static QList<NodeType*> allNodesOfType(Model::Node* from);
+		static void registerDefaultQueries();
 };
-
-template <class NodeType>
-QList<NodeType*> AllNodesOfType::allNodesOfType(Model::Node* from)
-{
-	QList<NodeType*> result;
-	QList<Model::Node*> workStack{from};
-
-	while (!workStack.empty())
-	{
-		auto node = workStack.takeLast();
-		if (auto castNode = DCast<NodeType>(node)) result.push_back(castNode);
-		workStack << node->children();
-	}
-	return result;
-}
 
 } /* namespace InformationScripting */

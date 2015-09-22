@@ -104,12 +104,17 @@ void DefaultVisualizer::visualize(const TupleSet& ts)
 		for (auto it = colors.begin(); it != colors.end(); ++it)
 		{
 			Model::Node* node = it.key();
-			auto nodeVisualization = Visualization::Item::nodeItemsMap().find(node);
-			Q_ASSERT(nodeVisualization != Visualization::Item::nodeItemsMap().end());
-			auto item = *nodeVisualization;
-			auto overlay = new Visualization::SelectionOverlay(
-						item, Visualization::SelectionOverlay::itemStyles().get(it.value() + "Highlight"));
-			item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
+			Q_ASSERT(node);
+			auto nodeVisualizationIt = Visualization::Item::nodeItemsMap().find(node);
+			if (nodeVisualizationIt == Visualization::Item::nodeItemsMap().end())
+				qWarning() << "no visualization for" << node->typeName();
+			while (nodeVisualizationIt != Visualization::Item::nodeItemsMap().end() && nodeVisualizationIt.key() == node)
+			{
+				auto item = *nodeVisualizationIt++;
+				auto overlay = new Visualization::SelectionOverlay(
+							item, Visualization::SelectionOverlay::itemStyles().get(it.value() + "Highlight"));
+				item->addOverlay(overlay, HIGHLIGHT_OVERLAY_GROUP);
+			}
 		}
 	}
 }

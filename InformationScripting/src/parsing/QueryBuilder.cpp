@@ -36,8 +36,8 @@
 
 namespace InformationScripting {
 
-static const QStringList OPEN_SCOPE_SYMBOL{"$", "\"", "{"};
-static const QStringList CLOSE_SCOPE_SYMBOL{"$", "\"", "}"};
+const QStringList QueryBuilder::OPEN_SCOPE_SYMBOL{"$<", "\"<", "{<"};
+const QStringList QueryBuilder::CLOSE_SCOPE_SYMBOL{">$", ">\"", ">}"};
 
 QueryBuilder& QueryBuilder::instance()
 {
@@ -71,7 +71,7 @@ Query* QueryBuilder::buildQueryFrom(const QString& text, Model::Node* target)
 
 QueryBuilder::Type QueryBuilder::typeOf(const QString& text)
 {
-	int index = OPEN_SCOPE_SYMBOL.indexOf(text[0]);
+	int index = OPEN_SCOPE_SYMBOL.indexOf(text.mid(0, SCOPE_SYMBOL_LENGTH_));
 	Q_ASSERT(index >= 0);
 	return static_cast<Type>(index);
 }
@@ -80,13 +80,14 @@ QPair<QStringList, QList<QChar>> QueryBuilder::split(const QString& text, const 
 {
 	QPair<QStringList, QList<QChar>> result;
 	QString currentString;
-	QVector<int> openScopes(3, 0);
-	for (int i = 1; i < text.size() - 1; ++i)
+	QVector<int> openScopes(OPEN_SCOPE_SYMBOL.length(), 0);
+	for (int i = SCOPE_SYMBOL_LENGTH_; i < text.size() - SCOPE_SYMBOL_LENGTH_; ++i)
 	{
 		QChar currentChar = text.at(i);
-		int openIndex = OPEN_SCOPE_SYMBOL.indexOf(currentChar);
+		QString scopeSymbol = text.mid(i, SCOPE_SYMBOL_LENGTH_);
+		int openIndex = OPEN_SCOPE_SYMBOL.indexOf(scopeSymbol);
 		if (openIndex >= 0) ++openScopes[openIndex];
-		int closeIndex = CLOSE_SCOPE_SYMBOL.indexOf(currentChar);
+		int closeIndex = CLOSE_SCOPE_SYMBOL.indexOf(scopeSymbol);
 		if (closeIndex >= 0) --openScopes[closeIndex];
 		bool isInScope = std::all_of(openScopes.begin(), openScopes.end(), [](int i) { return i == 0;});
 		if (isInScope && splitChars.contains(currentChar))
@@ -106,7 +107,8 @@ QPair<QStringList, QList<QChar>> QueryBuilder::split(const QString& text, const 
 Query* QueryBuilder::parseQuery(const QString& text)
 {
 	Q_ASSERT(typeOf(text) == Type::Query);
-	QStringList data = text.mid(1, text.size()-2).split(" ", QString::SkipEmptyParts);
+	QStringList data = text.mid(SCOPE_SYMBOL_LENGTH_,
+										 text.size() - 2 * SCOPE_SYMBOL_LENGTH_).split(" ", QString::SkipEmptyParts);
 	Q_ASSERT(data.size());
 	QString command = data.takeFirst();
 	auto q = QueryRegistry::instance().buildQuery(command, target_, data);
@@ -151,50 +153,53 @@ Query* QueryBuilder::parseOperator(const QString& text, bool connectInput)
 	for (int i = 1; i < parts.size(); ++i)
 	{
 		auto currentQueries = parseOperatorPart(parts[i]);
+		auto currentOperator = operators[i-1];
 		// If left and right are both lists we don't know how to map things:
 		Q_ASSERT(!(previousQueries.size() > 1 && currentQueries.size() > 1)); // TODO error for user
 		if (previousQueries.size() == 1 && currentQueries.size() == 1)
 		{
-			if (operators[i-1] == '|')
+			if (currentOperator == '|')
 				composite->connectQuery(previousQueries[0], currentQueries[0]);
-			else if (operators[i-1] == '-')
+			else if (currentOperator == '-')
 			{
-				// TODO maybe minus should look like a union op, i.e. multiple input single output?
 				auto minus = new SubstractOperator();
-				composite->connectQuery(previousQueries[0], minus);
-				composite->connectQuery(currentQueries[0], 0, minus, 1);
+				connectQueriesWith(composite, {previousQueries[0], currentQueries[0]}, minus);
 				currentQueries = {minus};
 			}
 		}
 		else if (previousQueries.size() > currentQueries.size())
 		{
-			auto unionOp = new UnionOperator();
-			for (int i = 0; i < previousQueries.size(); ++i)
-				composite->connectQuery(previousQueries[i], 0, unionOp, i);
-			composite->connectQuery(unionOp, currentQueries[0]);
+			Query* unionQuery = nullptr;
+			if (operators[i-1] == '-') unionQuery = new SubstractOperator();
+			else unionQuery = new UnionOperator();
+			connectQueriesWith(composite, previousQueries, unionQuery, currentQueries[0]);
 		}
 		else
 		{
+			// Split the output from the previous query
 			for (auto currentQuery : currentQueries)
 				composite->connectQuery(previousQueries[0], currentQuery);
 		}
 		previousQueries = currentQueries;
 	}
-	// It might be that we have an operator at the end
+
 	if (parts.size() > operators.size() || operators.last() == '|')
+		composite->connectToOutput(previousQueries);
+	else
 	{
-		for (int i = 0; i < previousQueries.size(); ++i)
-			composite->connectToOutput(previousQueries[i], i);
+		// We have an operator at the end
+		auto lastOperator = operators.last();
+		if (lastOperator == '-' || lastOperator == 'U')
+		{
+			Query* unionQuery = nullptr;
+			if (lastOperator == '-') unionQuery = new SubstractOperator();
+			else unionQuery = new UnionOperator();
+			connectQueriesWith(composite, previousQueries, unionQuery);
+			composite->connectToOutput(unionQuery);
+		}
+		else // No other case allowed
+			Q_ASSERT(false); // TODO error for user
 	}
-	else if (operators.last() == 'U')
-	{
-		auto unionOp = new UnionOperator();
-		for (int i = 0; i < previousQueries.size(); ++i)
-			composite->connectQuery(previousQueries[i], 0, unionOp, i);
-		composite->connectToOutput(unionOp);
-	}
-	else // No other case allowed
-		Q_ASSERT(false); // TODO error for user
 	return composite;
 }
 
@@ -204,6 +209,15 @@ QList<Query*> QueryBuilder::parseOperatorPart(const QString& text)
 	if (Type::Query == type) return {parseQuery(text)};
 	else if (Type::List == type) return parseList(text);
 	Q_ASSERT(false);
+}
+
+void QueryBuilder::connectQueriesWith(CompositeQuery* composite, const QList<Query*>& queries,
+												  Query* connectionQuery, Query* outputQuery)
+{
+	for (int i = 0; i < queries.size(); ++i)
+		composite->connectQuery(queries[i], 0, connectionQuery, i);
+	if (outputQuery)
+		composite->connectQuery(connectionQuery, outputQuery);
 }
 
 } /* namespace InformationScripting  */

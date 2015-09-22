@@ -44,6 +44,7 @@
 
 // Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
 // and will be included in their precompiled headers
+#include <QtCore/QCommandLineParser>
 
 
 #if defined(INFORMATIONSCRIPTING_LIBRARY)

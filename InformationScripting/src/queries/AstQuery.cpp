@@ -29,19 +29,38 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Project.h"
 
+#include "ModelBase/src/util/NameResolver.h"
+
 #include "../visitors/AllNodesOfType.h"
 #include "QueryRegistry.h"
 
 namespace InformationScripting {
 
+const QStringList AstQuery::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+const QStringList AstQuery::NODETYPE_ARGUMENT_NAMES{"t", "type"};
+const QStringList AstQuery::NAME_ARGUMENT_NAMES{"n", "name"};
+const QStringList AstQuery::ADD_AS_NAMES{"a", "addAs"};
+
 AstQuery::AstQuery(QueryType type, Model::Node* target, QStringList args)
 	: target_{target}, type_{type}
 {
-	if (args.size())
+	args.prepend("AstQuery");
+	argParser_.addOptions(
 	{
-		if (args[0] == "g") scope_ = Scope::Global;
-		else if (args[0] == "of") scope_ = Scope::Input;
-	}
+		 {SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]},
+		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
+		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
+		 {ADD_AS_NAMES, "Add as relation or nodes", ADD_AS_NAMES[1], "relation"}
+	});
+	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
+	argParser_.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+
+	if (!argParser_.parse(args))
+		qWarning() << "ASTQuery parse failure"; // TODO warn user
+
+	QString scope = argParser_.value(SCOPE_ARGUMENT_NAMES[0]);
+	if (scope == "g") scope_ = Scope::Global;
+	else if (scope == "of") scope_ = Scope::Input;
 }
 
 QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
@@ -49,12 +68,6 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 	QList<TupleSet> result;
 	switch (type_)
 	{
-		case QueryType::Classes:
-			result = {classesQuery(input)};
-			break;
-		case QueryType::Methods:
-			result = {methodsQuery(input)};
-			break;
 		case QueryType::BaseClasses:
 			result = {baseClassesQuery(input)};
 			break;
@@ -63,6 +76,18 @@ QList<TupleSet> AstQuery::execute(QList<TupleSet> input)
 			break;
 		case QueryType::CallGraph:
 			result = {callGraph(input)};
+			break;
+		case QueryType::Generic:
+			result = {genericQuery(input)};
+			break;
+		case QueryType::GenericToParent:
+			if (argParser_.value(NODETYPE_ARGUMENT_NAMES[0]).size() > 0)
+				result = {toParentType(input, argParser_.value(NODETYPE_ARGUMENT_NAMES[0]))};
+			else
+				result = input; // TODO warning for user ?
+			break;
+		case QueryType::Uses:
+			result = {usesQuery(input)};
 			break;
 		default:
 			Q_ASSERT(false);
@@ -75,10 +100,12 @@ void AstQuery::registerDefaultQueries()
 {
 	auto& registry = QueryRegistry::instance();
 	registry.registerQueryConstructor("classes", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Classes, target, args);
+		setTypeTo(args, "Class");
+		return new AstQuery(AstQuery::QueryType::Generic, target, args);
 	});
 	registry.registerQueryConstructor("methods", [](Model::Node* target, QStringList args) {
-		return new AstQuery(AstQuery::QueryType::Methods, target, args);
+		setTypeTo(args, "Method");
+		return new AstQuery(AstQuery::QueryType::Generic, target, args);
 	});
 	registry.registerQueryConstructor("bases", [](Model::Node* target, QStringList args) {
 		return new AstQuery(AstQuery::QueryType::BaseClasses, target, args);
@@ -89,72 +116,32 @@ void AstQuery::registerDefaultQueries()
 	registry.registerQueryConstructor("callgraph", [](Model::Node* target, QStringList args) {
 		return new AstQuery(AstQuery::QueryType::CallGraph, target, args);
 	});
+	registry.registerQueryConstructor("ast", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Generic, target, args);
+	});
+	registry.registerQueryConstructor("toParent", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::GenericToParent, target, args);
+	});
+	registry.registerQueryConstructor("uses", [](Model::Node* target, QStringList args) {
+		return new AstQuery(AstQuery::QueryType::Uses, target, args);
+	});
 }
 
-TupleSet AstQuery::classesQuery(QList<TupleSet>)
+void AstQuery::setTypeTo(QStringList& args, QString type)
 {
-	TupleSet tuples;
-	if (scope_ == Scope::Local)
+	bool set = false;
+	for (auto& arg : args)
 	{
-		auto parentProject = target_->firstAncestorOfType<OOModel::Project>();
-		for (auto childClass : *parentProject->classes())
-			tuples.add({{"ast", childClass}});
-	}
-	else if (scope_ == Scope::Global)
-	{
-		addGlobalNodesOfType(tuples, "Class");
-	}
-	else if (scope_ == Scope::Input)
-	{
-		// TODO
-	}
-	return tuples;
-}
-
-TupleSet AstQuery::methodsQuery(QList<TupleSet> input)
-{
-	if (scope_ == Scope::Local)
-	{
-		TupleSet tuples;
-		auto parentClass = target_->firstAncestorOfType<OOModel::Class>();
-		for (auto method : *parentClass->methods())
-			tuples.add({{"ast", method}});
-		return tuples;
-	}
-	else if (scope_ == Scope::Global)
-	{
-		TupleSet tuples;
-		addGlobalNodesOfType(tuples, "Method");
-		return tuples;
-	}
-	else if (scope_ == Scope::Input)
-	{
-		Q_ASSERT(input.size());
-		auto ts = input.takeFirst();
-
-		auto canContainMethod = [](const Tuple& t) {
-			if (t.size() == 1) {
-				auto it = t.find("ast");
-				if (it != t.end()) {
-					Model::Node* astNode = it->second;
-					return DCast<OOModel::Declaration>(astNode) != nullptr;
-				}
-			}
-			return false;
-		};
-
-		// TODO for now we just remove the input node, this might not always be what we want
-		auto tuple = ts.take(canContainMethod);
-		for (const auto& t : tuple)
+		if (arg.startsWith("-" + NODETYPE_ARGUMENT_NAMES[0]))
 		{
-			Model::Node* astNode = t["ast"];
-			auto methods = AllNodesOfType::allNodesOfType(astNode, "Method");
-			for (auto method : methods) ts.add({{"ast", method}});
+			arg.replace(QRegularExpression("=.*"), "=" + type);
+			set = true;
 		}
-		return ts;
 	}
-	Q_ASSERT(false);
-	return {};
+	if (!set)
+	{
+		args.append(QString("-%1=%2").arg(NODETYPE_ARGUMENT_NAMES[0], type));
+	}
 }
 
 TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
@@ -170,6 +157,8 @@ TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
 		ts.add({namedClass});
 
 		addBaseEdgesFor(parentClass, namedClass, ts);
+
+		adaptOutputForRelation(ts, "base class", {"baseClass"});
 	}
 	else if (scope_ == Scope::Global)
 	{
@@ -180,29 +169,32 @@ TupleSet AstQuery::baseClassesQuery(QList<TupleSet>)
 
 TupleSet AstQuery::toClassNode(QList<TupleSet> input)
 {
+	return toParentType(input, "Class");
+}
+
+TupleSet AstQuery::toParentType(QList<TupleSet> input, const QString& type)
+{
 	Q_ASSERT(input.size());
 	auto ts = input.takeFirst();
-	auto canBeInClass = [](const Tuple& t) {
+	Model::SymbolMatcher matcher = matcherFor(type);
+
+	auto haveMatchingParent = [matcher](const Tuple& t) {
 		auto it = t.find("ast");
 		if (it != t.end())
 		{
 			Model::Node* n = it->second;
-			return n->firstAncestorOfType<OOModel::Class>() != nullptr;
+			return n->firstAncestorOfType(matcher) != nullptr;
 		}
 		return false;
 	};
-
-	// TODO currently we remove all the converted nodes:
-	auto tuples = ts.take(canBeInClass);
-	QList<OOModel::Class*> classes;
+	auto tuples = ts.tuples(haveMatchingParent);
 	for (auto tuple : tuples)
 	{
 		Model::Node* astNode = tuple["ast"];
-		auto classParent = astNode->firstAncestorOfType<OOModel::Class>();
-		if (!classes.contains(classParent)) classes.push_back(classParent);
+		auto parentNode = astNode->firstAncestorOfType(matcher);
+		ts.add({{"parentOfType", {}}, {"childNode", astNode}, {"parentNode", parentNode}});
 	}
-	for (auto foundClass : classes)
-		ts.add({{"ast", foundClass}});
+	adaptOutputForRelation(ts, "parentOfType", {"parentNode"});
 	return ts;
 }
 
@@ -225,9 +217,119 @@ TupleSet AstQuery::callGraph(QList<TupleSet>)
 			addCallInformation(ts, currentMethod, newCallees);
 			methods << newCallees;
 		}
+
+		adaptOutputForRelation(ts, "calls", {"caller", "callee"});
 	}
 	// TODO handle other cases, global propably doesn't make sense.
 	return ts;
+}
+
+TupleSet AstQuery::genericQuery(QList<TupleSet> input)
+{
+	QString typeArgument = argParser_.value(NODETYPE_ARGUMENT_NAMES[0]);
+	QString nameArgument = argParser_.value(NAME_ARGUMENT_NAMES[0]);
+	if (nameArgument.size() > 0) return nameQuery(input, nameArgument);
+	else if (typeArgument.size() > 0) return typeQuery(input, typeArgument);
+	return {};
+}
+
+TupleSet AstQuery::typeQuery(QList<TupleSet> input, QString type)
+{
+	TupleSet tuples;
+
+	Q_ASSERT(!type.isEmpty());
+	Model::SymbolMatcher matcher = matcherFor(type);
+
+	if (scope_ == Scope::Local)
+		addNodesOfType(tuples, matcher, target_);
+	else if (scope_ == Scope::Global)
+		addNodesOfType(tuples, matcher);
+	else if (scope_ == Scope::Input)
+	{
+		Q_ASSERT(input.size());
+		tuples = input.takeFirst();
+
+		// Note here we remove the input nodes.
+		auto tuple = tuples.take("ast");
+		for (const auto& t : tuple) addNodesOfType(tuples, matcher, t["ast"]);
+	}
+	return tuples;
+}
+
+TupleSet AstQuery::nameQuery(QList<TupleSet> input, QString name)
+{
+	TupleSet tuples;
+
+	QList<QPair<QString, Model::Node*>> matchingNodes;
+
+	if (scope_ == Scope::Local)
+		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1, target_);
+	else if (scope_ == Scope::Global)
+		matchingNodes = Model::NameResolver::mostLikelyMatches(name, -1);
+	else if (scope_ == Scope::Input)
+	{
+		Q_ASSERT(input.size());
+		tuples = input.takeFirst();
+
+		// Note here we remove the input nodes.
+		auto tuple = tuples.take("ast");
+		for (const auto& t : tuple) matchingNodes << Model::NameResolver::mostLikelyMatches(name, -1, t["ast"]);
+	}
+	// If we have a type argument filter the results:
+	const QString type = argParser_.value(NODETYPE_ARGUMENT_NAMES[0]);
+	Model::SymbolMatcher matcher = matcherFor(type);
+	for (auto matchingNode : matchingNodes)
+		if (type.isEmpty() || matcher.matches(matchingNode.second->typeName()))
+			tuples.add({{"ast", matchingNode.second}});
+
+	return tuples;
+}
+
+TupleSet AstQuery::usesQuery(QList<TupleSet> input)
+{
+	TupleSet result;
+	QHash<Model::Node*, QList<Model::Reference*>> references;
+
+	if (scope_ == Scope::Local)
+		references[target_] = AllNodesOfType::allNodesOfType<Model::Reference>(target_);
+	else if (scope_ == Scope::Global)
+		references[target_->root()] = AllNodesOfType::allNodesOfType<Model::Reference>(target_->root());
+	else if (scope_ == Scope::Input)
+	{
+		Q_ASSERT(input.size());
+		auto tuples = input.takeFirst();
+
+		auto tuple = tuples.tuples("ast");
+		for (const auto& t : tuple) references[t["ast"]] = AllNodesOfType::allNodesOfType<Model::Reference>(t["ast"]);
+
+		// Keep all non ast nodes
+		result = tuples;
+	}
+
+	auto typeMatcher = matcherFor(argParser_.value(NODETYPE_ARGUMENT_NAMES[0]));
+	auto nameMatcher = matcherFor(argParser_.value(NAME_ARGUMENT_NAMES[0]));
+
+	QHash<Model::Node*, QList<Model::Node*>> referenceTargets;
+	for (auto it = references.begin(); it != references.end(); ++it)
+	{
+		for (auto reference : it.value())
+		{
+			if (auto target = reference->target())
+			{
+				if ((typeMatcher.matchPattern().isEmpty() || typeMatcher.matches(target->typeName())) &&
+					  (nameMatcher.matchPattern().isEmpty() || nameMatcher.matches(target->symbolName())))
+					referenceTargets[it.key()] << target;
+			}
+		}
+	}
+
+	for (auto it = referenceTargets.begin(); it != referenceTargets.end(); ++it)
+		for (auto node : it.value())
+			result.add({{"uses", {}}, {"user", it.key()}, {"used", node}});
+
+	adaptOutputForRelation(result, "uses", {"user"});
+
+	return result;
 }
 
 void AstQuery::addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts)
@@ -254,12 +356,33 @@ void AstQuery::addCallInformation(TupleSet& ts, OOModel::Method* method, QList<O
 	}
 }
 
-void AstQuery::addGlobalNodesOfType(TupleSet& ts, const QString& typeName)
+void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from)
 {
-	auto root = target_->manager()->root();
-	auto allNodeOfType =  AllNodesOfType::allNodesOfType(root, typeName);
+	if (!from) from = target_->root();
+	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, matcher);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
+}
+
+Model::SymbolMatcher AstQuery::matcherFor(const QString& text)
+{
+	if (text.contains("*")) return {new QRegExp(text, Qt::CaseInsensitive, QRegExp::Wildcard)};
+	return {text};
+}
+
+void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName,
+												  const QStringList& keepProperties)
+{
+	if (argParser_.value(ADD_AS_NAMES[0]) != "relation")
+	{
+		// remove all ast properties first
+		tupleSet.take("ast");
+		// add the tuples from the relation
+		auto tuples = tupleSet.take(relationName);
+		for (auto tuple : tuples)
+			for (const auto& keepProperty : keepProperties)
+				tupleSet.add({{"ast", tuple[keepProperty]}});
+	}
 }
 
 } /* namespace InformationScripting */

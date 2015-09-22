@@ -249,7 +249,7 @@ public class Node {
 		throws ConversionException, FileNotFoundException, UnsupportedEncodingException
 	{
 		if (SORT_BY_LABEL)
-			children_.sort(labelComparator);
+			java.util.Collections.sort(children_, labelComparator);
 		
 		if (considerPersistenceUnits && isPersistenceUnit() && format_ != OutputFormat.CLIPBOARD)
 		{

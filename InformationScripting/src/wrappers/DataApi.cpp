@@ -29,6 +29,8 @@
 #include "../dataformat/Tuple.h"
 #include "../dataformat/TupleSet.h"
 
+#include "ModelBase/src/nodes/Node.h"
+
 namespace InformationScripting {
 
 using namespace boost::python;
@@ -41,12 +43,19 @@ object Tuple_getAttr(const Tuple& self, const QString& name) {
 	return pythonObject(self[name]);
 }
 
+std::shared_ptr<Tuple> makeTuple(list args) {
+	stl_input_iterator<NamedProperty> begin(args), end;
+	return std::shared_ptr<Tuple>{new Tuple{QList<NamedProperty>::fromStdList(std::list<NamedProperty>(begin, end))}};
+}
+
 BOOST_PYTHON_MODULE(DataApi) {
 		class_<NamedProperty>("NamedProperty", init<QString, QString>())
+				.def(init<QString, Model::Node*>())
 				.def_readwrite("name", &NamedProperty::first)
 				.add_property("value", &value);
 
-		class_<Tuple>("Tuple")
+		class_<Tuple>("Tuple", init<>())
+				.def("__init__", make_constructor(makeTuple))
 				.def("tag", &Tuple::tag)
 				.def("add", &Tuple::add)
 				.def("__getattr__", &Tuple_getAttr);

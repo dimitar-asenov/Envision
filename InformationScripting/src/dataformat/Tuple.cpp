@@ -32,6 +32,10 @@ Tuple::Tuple(std::initializer_list<NamedProperty> initialValues)
 	: values_{initialValues}
 {}
 
+Tuple::Tuple(QList<NamedProperty> initialValues)
+	: values_{initialValues}
+{}
+
 QString Tuple::tag() const
 {
 	if (values_.size()) return values_[0].first;
@@ -51,6 +55,7 @@ uint Tuple::hashValue(uint seed) const
 #if QT_VERSION >= 0x050500
 	return qHashRange(begin(), end(), seed);
 #else
+	Q_UNUSED(seed);
 	return 0;
 #endif
 }

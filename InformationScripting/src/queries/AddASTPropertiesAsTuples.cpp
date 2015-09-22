@@ -24,40 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
+#include "AddASTPropertiesAsTuples.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
-namespace Model {
-	class SymbolMatcher;
-}
+#include "QueryRegistry.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AllNodesOfType
+QList<TupleSet> AddASTPropertiesAsTuples::execute(QList<TupleSet> input)
 {
-	public:
-		static QList<Model::Node*> allNodesOfType(Model::Node* from, const Model::SymbolMatcher& matcher);
+	for (auto& ts : input)
+		ts.addPropertiesAsTuples<Model::Node*>("ast");
+	return input;
+}
 
-		template <class NodeType>
-		inline static QList<NodeType*> allNodesOfType(Model::Node* from);
-};
-
-template <class NodeType>
-QList<NodeType*> AllNodesOfType::allNodesOfType(Model::Node* from)
+void AddASTPropertiesAsTuples::registerDefaultQueries()
 {
-	QList<NodeType*> result;
-	QList<Model::Node*> workStack{from};
-
-	while (!workStack.empty())
+	QueryRegistry::instance().registerQueryConstructor("addASTProperties", [](Model::Node*, QStringList)
 	{
-		auto node = workStack.takeLast();
-		if (auto castNode = DCast<NodeType>(node)) result.push_back(castNode);
-		workStack << node->children();
-	}
-	return result;
+		return new AddASTPropertiesAsTuples();
+	});
 }
 
 } /* namespace InformationScripting */

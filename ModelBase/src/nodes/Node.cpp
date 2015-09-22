@@ -144,6 +144,13 @@ bool Node::isAncestorOf(const Node* other) const
 	return p == this;
 }
 
+Node* Node::firstAncestorOfType(const SymbolMatcher& typeMatch) const
+{
+	auto p = parent();
+	while (p && !typeMatch.matches(p->typeName())) p = p->parent();
+	return p;
+}
+
 Node* Node::childToSubnode(const Node* other) const
 {
 	if (other == nullptr) return nullptr;

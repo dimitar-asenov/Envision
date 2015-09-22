@@ -26,11 +26,11 @@
 
 #include "AllNodesOfType.h"
 
-#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/util/SymbolMatcher.h"
 
 namespace InformationScripting {
 
-QList<Model::Node*> AllNodesOfType::allNodesOfType(Model::Node* from, const QString& typeName)
+QList<Model::Node*> AllNodesOfType::allNodesOfType(Model::Node* from, const Model::SymbolMatcher& matcher)
 {
 	QList<Model::Node*> result;
 	QList<Model::Node*> workStack{from};
@@ -38,7 +38,7 @@ QList<Model::Node*> AllNodesOfType::allNodesOfType(Model::Node* from, const QStr
 	while (!workStack.empty())
 	{
 		auto node = workStack.takeLast();
-		if (node->typeName() == typeName) result.push_back(node);
+		if (matcher.matches(node->typeName())) result.push_back(node);
 		workStack << node->children();
 	}
 	return result;

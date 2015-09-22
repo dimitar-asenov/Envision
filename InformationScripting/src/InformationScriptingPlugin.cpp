@@ -27,7 +27,7 @@
 #include "InformationScriptingPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "OOInteraction/src/handlers/HStatementItemList.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
 
@@ -36,16 +36,18 @@
 #include "queries/ScriptQuery.h"
 #include "queries/AstQuery.h"
 #include "queries/AstNameFilter.h"
+#include "queries/AddASTPropertiesAsTuples.h"
 
 namespace InformationScripting {
 
 bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 {
 	BoostPythonHelpers::initializeConverters();
-	OOInteraction::HStatementItemList::instance()->addCommand(new CScript());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CScript());
 	ScriptQuery::initPythonEnvironment();
 	AstQuery::registerDefaultQueries();
 	AstNameFilter::registerDefaultQueries();
+	AddASTPropertiesAsTuples::registerDefaultQueries();
 	return true;
 }
 

@@ -68,8 +68,6 @@ class INFORMATIONSCRIPTING_API TupleSet
 template <class Condition>
 inline QSet<Tuple> TupleSet::tuples(Condition condition) const
 {
-	if (!condition) return tuples();
-
 	QSet<Tuple> result;
 	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
 		for (const auto& t : hashIt.value())
@@ -88,8 +86,6 @@ template <class Condition>
 inline QSet<Tuple> TupleSet::take(Condition condition)
 {
 	QSet<Tuple> result;
-
-	if (!condition) return result;
 
 	for (auto hashIt = tuples_.begin(); hashIt != tuples_.end(); ++hashIt)
 	{
