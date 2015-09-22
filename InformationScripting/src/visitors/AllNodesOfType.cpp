@@ -26,7 +26,6 @@
 
 #include "AllNodesOfType.h"
 
-#include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/util/SymbolMatcher.h"
 
 namespace InformationScripting {

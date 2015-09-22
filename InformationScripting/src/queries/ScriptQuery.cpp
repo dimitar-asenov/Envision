@@ -59,7 +59,15 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 		python::dict main_namespace = python::extract<python::dict>(main_module.attr("__dict__"));
 
 		python::object astApi = python::import("AstApi");
-		python::object nodeApi = python::import("DataApi");
+		python::object dataApi = python::import("DataApi");
+		// Import modules to embedded environment:
+		main_namespace["AstApi"] = astApi;
+		importStar(main_namespace, astApi);
+		main_namespace["DataApi"] = dataApi;
+		importStar(main_namespace, dataApi);
+		// Provide empty list to store results:
+		main_namespace["results"] = python::list();
+
 		python::object sys = python::import("sys");
 
 		main_namespace["inputs"] = input;
@@ -76,6 +84,20 @@ QList<TupleSet> ScriptQuery::execute(QList<TupleSet> input)
 		qDebug() << "Error in Python: " << BoostPythonHelpers::parsePythonException();
 	}
 	return result;
+}
+
+void ScriptQuery::importStar(boost::python::dict& main_namespace, boost::python::object apiObject)
+{
+	// equivalent to, e.g.: from AstApi import *:
+	using namespace boost;
+
+	python::dict astApiDict = python::extract<python::dict>(apiObject.attr("__dict__"));
+			python::stl_input_iterator<python::object> keysBegin(astApiDict.keys()), keysEnd;
+	while (keysBegin != keysEnd)
+	{
+		QString key = python::extract<QString>(*keysBegin++);
+		if (!key.startsWith("_")) main_namespace[key] = astApiDict[key];
+	}
 }
 
 } /* namespace InformationScripting */
