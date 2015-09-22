@@ -37,6 +37,10 @@ class INFORMATIONSCRIPTING_API Query
 	public:
 		virtual ~Query() = default;
 		virtual QList<TupleSet> execute(QList<TupleSet>) = 0;
+
+	protected:
+		template <class QueryClass>
+		using ExecuteFunction = std::function<QList<TupleSet> (QueryClass*, QList<TupleSet>)>;
 };
 
 } /* namespace InformationScripting */
