@@ -56,28 +56,24 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		static const QStringList NAME_ARGUMENT_NAMES;
 		static const QStringList ADD_AS_NAMES;
 
-		enum class QueryType : int {BaseClasses, ToClass, CallGraph, Generic, GenericToParent, Uses};
 		enum class Scope : int {Local, Global, Input};
 
 		Model::Node* target_{};
 		Scope scope_{};
-		QueryType type_{};
 		QCommandLineParser argParser_;
+		ExecuteFunction<AstQuery> exec_{};
 
-		AstQuery(QueryType type, Model::Node* target, QStringList args);
+		AstQuery(ExecuteFunction<AstQuery> exec, Model::Node* target, QStringList args);
 
 		static void setTypeTo(QStringList& args, QString type);
 
-		TupleSet classesQuery(QList<TupleSet> input);
-		TupleSet methodsQuery(QList<TupleSet> input);
-		TupleSet baseClassesQuery(QList<TupleSet> input);
-		TupleSet toClassNode(QList<TupleSet> input);
-		TupleSet toParentType(QList<TupleSet> input, const QString& type);
-		TupleSet callGraph(QList<TupleSet> input);
-		TupleSet genericQuery(QList<TupleSet> input);
-		TupleSet typeQuery(QList<TupleSet> input, QString type);
-		TupleSet nameQuery(QList<TupleSet> input, QString name);
-		TupleSet usesQuery(QList<TupleSet> input);
+		QList<TupleSet> baseClassesQuery(QList<TupleSet> input);
+		QList<TupleSet> toParentType(QList<TupleSet> input);
+		QList<TupleSet> callGraph(QList<TupleSet> input);
+		QList<TupleSet> genericQuery(QList<TupleSet> input);
+		QList<TupleSet> typeQuery(QList<TupleSet> input, QString type);
+		QList<TupleSet> nameQuery(QList<TupleSet> input, QString name);
+		QList<TupleSet> usesQuery(QList<TupleSet> input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
 
