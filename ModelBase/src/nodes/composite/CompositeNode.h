@@ -136,13 +136,16 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		const AttributeChain& meta();
 
+		template <class Extension> static void registerNewExtension();
+
+		// FIXME this was protected but for registerNewExtension to work we need it public
+		static CompositeIndex registerNewAttribute(const Attribute& attribute);
+
 	protected:
 		static CompositeIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
 
 		static CompositeIndex registerNewAttribute(AttributeChain& metaData, const Attribute& attribute);
-
-		static CompositeIndex registerNewAttribute(const Attribute& attribute);
 
 		virtual AttributeChain& topLevelMeta();
 
@@ -184,5 +187,12 @@ template <class ExtensionType> std::unique_ptr<ExtensionType> CompositeNode::ext
 }
 
 inline const AttributeChain& CompositeNode::meta() { return meta_; }
+
+template <class Extension>
+inline void CompositeNode::registerNewExtension()
+{
+	if (getMetaData().hasExtensionInHierarchy(Extension::extensionId()) == false)
+		Extension::template extendNode<CompositeNode>(getMetaData().addExtension(Extension::extensionId()));
+}
 
 }
