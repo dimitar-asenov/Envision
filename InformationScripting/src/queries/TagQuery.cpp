@@ -80,7 +80,8 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 			if (auto astNode = DCast<Model::CompositeNode>(node))
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
-				qDebug() << tagExtension->tagName();
+				if (tagExtension->tagNameNode())
+					qDebug() << tagExtension->tagName();
 			}
 		}
 		result << tupleSet;
