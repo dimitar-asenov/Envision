@@ -337,11 +337,11 @@ Module* addLambda()
 	le->body()->append(new ExpressionStatement(someOpCall));
 
 	// Positions
-	std::unique_ptr<Position>(mod->extension<Position>())->set(2, 0);
-	std::unique_ptr<Position>(iUnary->extension<Position>())->set(0, 0);
-	std::unique_ptr<Position>(iBinary->extension<Position>())->set(0, 1);
-	std::unique_ptr<Position>(iNoRet->extension<Position>())->set(0, 2);
-	std::unique_ptr<Position>(test->extension<Position>())->set(1, 0);
+	mod->extension<Position>()->set(2, 0);
+	iUnary->extension<Position>()->set(0, 0);
+	iBinary->extension<Position>()->set(0, 1);
+	iNoRet->extension<Position>()->set(0, 2);
+	test->extension<Position>()->set(1, 0);
 	return mod;
 }
 
@@ -387,10 +387,10 @@ Project* addJavaLibrary(Project* parent)
 	prefix->ref()->setName("io");
 
 	// Set positions
-	std::unique_ptr<Position>(java->extension<Position>())->set(2, 1);
-	std::unique_ptr<Position>(string->extension<Position>())->set(0, 0);
-	std::unique_ptr<Position>(system->extension<Position>())->set(0, 1);
-	std::unique_ptr<Position>(io->extension<Position>())->set(1, 0);
+	java->extension<Position>()->set(2, 1);
+	string->extension<Position>()->set(0, 0);
+	system->extension<Position>()->set(0, 1);
+	io->extension<Position>()->set(1, 0);
 
 	return java;
 }

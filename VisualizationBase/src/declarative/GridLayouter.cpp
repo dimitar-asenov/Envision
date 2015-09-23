@@ -71,7 +71,7 @@ QVector< QVector<Model::Node*>> GridLayouter::arrange(QVector<Model::Node*> node
 	{
 		auto composite = DCast<Model::CompositeNode>(node);
 		Q_ASSERT(composite);
-		auto position = std::unique_ptr<Position>(composite->extension<Position>());
+		auto position = composite->extension<Position>();
 		Q_ASSERT(position);
 
 		if ( position->xNode() && position->yNode() )
@@ -108,7 +108,7 @@ void GridLayouter::setPositionInGrid(QVector<Model::Node*> nodes, int x, int y, 
 
 	auto composite = DCast<Model::CompositeNode>(node);
 	Q_ASSERT(composite);
-	auto position = std::unique_ptr<Position>(composite->extension<Position>());
+	auto position = composite->extension<Position>();
 	Q_ASSERT(position);
 	position->set(std::max(x, 0), std::max(y, 0));
 }
@@ -119,7 +119,7 @@ void GridLayouter::removeFromGrid(QVector<Model::Node*> nodes, Model::Node* node
 
 	auto composite = DCast<Model::CompositeNode>(node);
 	Q_ASSERT(composite);
-	auto position = std::unique_ptr<Position>(composite->extension<Position>());
+	auto position = composite->extension<Position>();
 	Q_ASSERT(position);
 	if ( position->xNode()  == nullptr && position->yNode() == nullptr) return;
 
@@ -137,7 +137,7 @@ void GridLayouter::pushNodes(QVector<Model::Node*> nodes, int x, int y, int push
 	{
 		auto composite = DCast<Model::CompositeNode>(existingNode);
 		Q_ASSERT(composite);
-		auto position = std::unique_ptr<Position>(composite->extension<Position>());
+		auto position = composite->extension<Position>();
 		Q_ASSERT(position);
 
 		if ( position->xNode() && position->yNode() )
@@ -169,7 +169,7 @@ void GridLayouter::normalizeGridIndices(QVector<Model::Node*> nodes, MajorAxis m
 		{
 			auto composite = DCast<Model::CompositeNode>(normalized[major][minor]);
 			Q_ASSERT(composite);
-			auto position = std::unique_ptr<Position>(composite->extension<Position>());
+			auto position = composite->extension<Position>();
 			Q_ASSERT(position);
 
 			int normalizedX = majorAxis == ColumnMajor ? major : minor;

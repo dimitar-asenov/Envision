@@ -65,7 +65,7 @@ static const bool DISABLE_FILTERS = false;
 Module* createContractsLibrary()
 {
 	Module* module = new Module("CodeContracts");
-	std::unique_ptr<Position>(module->extension<Position>())->set(1, 0);
+	module->extension<Position>()->set(1, 0);
 
 	Class* contract = new Class("Contract");
 	module->classes()->append(contract);
@@ -73,7 +73,7 @@ Module* createContractsLibrary()
 	Method* req = new Method("Requires", Modifier::Public | Modifier::Static);
 	contract->methods()->append(req);
 	req->arguments()->append( new FormalArgument("precondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
-	std::unique_ptr<Position>(req->extension<Position>())->set(0, 0);
+	req->extension<Position>()->set(0, 0);
 
 	Method* ens = new Method("Ensures", Modifier::Public | Modifier::Static);
 	contract->methods()->append(ens);
