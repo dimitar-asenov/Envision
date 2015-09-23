@@ -125,7 +125,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes)
 	if (allNodesLackPositionInfo)
 		for (auto node : nodes)
 			if (auto extNode = DCast<Model::CompositeNode> (node))
-				if (auto pos = std::unique_ptr<Position>(extNode->extension<Position>()))
+				if (auto pos = extNode->extension<Position>())
 					if (pos->xNode() || pos->yNode())
 					{
 						allNodesLackPositionInfo = false;

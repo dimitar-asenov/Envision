@@ -41,7 +41,7 @@ TEST(ModelBasePlugin, PositionExtension)
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_x"));
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_y"));
 
-	TestNodes::PositionExtension* pos = root->extension<TestNodes::PositionExtension>();
+	auto pos = root->extension<TestNodes::PositionExtension>();
 
 	CHECK_INT_EQUAL( 0, pos->x() );
 	CHECK_INT_EQUAL( 0, pos->y() );

@@ -95,7 +95,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }
 template <class T> T* PositionLayout::at(int index) const { return static_cast<T*> (items[index]); }
 inline std::unique_ptr<Position> PositionLayout::positionOf(Item* item)
-{ return std::unique_ptr<Position>((static_cast<Model::CompositeNode*>(item->node()))->extension<Position>());	}
+{ return (static_cast<Model::CompositeNode*>(item->node()))->extension<Position>();	}
 
 inline void PositionLayout::ensureItemHasCompositeNode(const Item* item)
 {

@@ -52,7 +52,7 @@ class INTERACTIONBASE_API HPositionLayout : public GenericHandler
 		int originalX;
 		int originalY;
 		Visualization::Item* currentItem;
-		Visualization::Position* currentItemPosition;
+		std::unique_ptr<Visualization::Position> currentItemPosition;
 
 };
 

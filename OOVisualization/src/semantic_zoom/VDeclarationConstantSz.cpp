@@ -82,7 +82,7 @@ void VDeclarationConstantSz::initializeForms()
 
 void VDeclarationConstantSz::updateGeometry(int availableWidth, int availableHeight)
 {
-	FullDetailSize* fds = node()->extension<FullDetailSize>();
+	auto fds = node()->extension<FullDetailSize>();
 	if (fds && fds->widthNode() && fds->heightNode())
 	{
 		qreal totalWidth = fds->width();

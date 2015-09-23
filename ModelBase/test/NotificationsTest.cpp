@@ -90,15 +90,13 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	CHECK_CONDITION(nl.removedNodes.contains( left));
 	CHECK_CONDITION(nl.removedNodes.contains( left->name()));
 
-	TestNodes::PositionExtension* posLeft = left->extension<TestNodes::PositionExtension>();
+	auto posLeft = left->extension<TestNodes::PositionExtension>();
 	CHECK_CONDITION(nl.removedNodes.contains( posLeft->xNode()) );
 	CHECK_CONDITION(nl.removedNodes.contains( posLeft->yNode()) );
 
-	TestNodes::PositionExtension* posRight = right->extension<TestNodes::PositionExtension>();
+	auto posRight = right->extension<TestNodes::PositionExtension>();
 	CHECK_CONDITION(nl.removedNodes.contains( posRight->xNode()) );
 	CHECK_CONDITION(nl.removedNodes.contains( posRight->yNode()) );
-
-	SAFE_DELETE(posLeft);
 
 	nl.modifiedNodes.clear();
 	nl.removedNodes.clear();
@@ -118,8 +116,6 @@ TEST(ModelBasePlugin, ModificationNotificationTests)
 	CHECK_CONDITION(nl.removedNodes.contains( right->name()));
 	CHECK_CONDITION(nl.removedNodes.contains( posRight->xNode()) );
 	CHECK_CONDITION(nl.removedNodes.contains( posRight->yNode()) );
-
-	SAFE_DELETE(posRight);
 }
 
 }

@@ -64,7 +64,7 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 		if (itemToMove)
 		{
 			Model::CompositeNode* composite = static_cast<Model::CompositeNode*> (itemToMove->node());
-			Visualization::Position* pos = composite->extension<Visualization::Position>();
+			auto pos = composite->extension<Visualization::Position>();
 
 			target->scene()->clearSelection();
 			target->scene()->clearFocus();
@@ -73,7 +73,7 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 			originalX = pos->xNode() ? pos->x() : 0;
 			originalY = pos->yNode() ? pos->y() : 0;
 			currentItem = itemToMove;
-			currentItemPosition = pos;
+			currentItemPosition.swap(pos);
 		}
 		else event->ignore();
 	}
