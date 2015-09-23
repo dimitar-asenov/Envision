@@ -30,7 +30,7 @@
 
 #include "ModelBase/src/util/SymbolMatcher.h"
 
-#include "Query.h"
+#include "ScopedArgumentQuery.h"
 
 namespace Model {
 	class Node;
@@ -43,7 +43,7 @@ namespace OOModel {
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public Query
+class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 {
 	public:
 		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
@@ -51,16 +51,11 @@ class INFORMATIONSCRIPTING_API AstQuery : public Query
 		static void registerDefaultQueries();
 
 	private:
-		static const QStringList SCOPE_ARGUMENT_NAMES;
+
 		static const QStringList NODETYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
 		static const QStringList ADD_AS_NAMES;
 
-		enum class Scope : int {Local, Global, Input};
-
-		Model::Node* target_{};
-		Scope scope_{};
-		QCommandLineParser argParser_;
 		ExecuteFunction<AstQuery> exec_{};
 
 		AstQuery(ExecuteFunction<AstQuery> exec, Model::Node* target, QStringList args);

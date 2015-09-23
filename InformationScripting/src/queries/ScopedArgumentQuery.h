@@ -28,28 +28,37 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/util/SymbolMatcher.h"
+#include "Query.h"
 
-#include "ScopedArgumentQuery.h"
+namespace Model {
+	class Node;
+}
+
+class QCommandLineParser;
+class QCommandLineOption;
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
+class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public Query
 {
-	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+	protected:
+		enum class Scope : int {Local, Global, Input};
 
-		static void registerDefaultQueries();
+		ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
+								  const QStringList& args);
+		Model::Node* target() const;
+		Scope scope() const;
+
+		QString argument(const QString& argName) const;
 
 	private:
-		static const QStringList TAGTYPE_ARGUMENT_NAMES;
-		static const QStringList NAME_ARGUMENT_NAMES;
-
-		ExecuteFunction<TagQuery> exec_{};
-
-		TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args);
-		QList<TupleSet> queryTags(QList<TupleSet> input);
-		QList<TupleSet> addTags(QList<TupleSet> input);
+		std::unique_ptr<QCommandLineParser> argParser_{};
+		Model::Node* target_;
+		Scope scope_{};
+		static const QStringList SCOPE_ARGUMENT_NAMES;
 };
+
+inline Model::Node* ScopedArgumentQuery::target() const { return target_; }
+inline ScopedArgumentQuery::Scope ScopedArgumentQuery::scope() const { return scope_; }
 
 } /* namespace InformationScripting */

@@ -24,32 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "ModelBase/src/util/SymbolMatcher.h"
-
 #include "ScopedArgumentQuery.h"
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
+const QStringList ScopedArgumentQuery::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+
+ScopedArgumentQuery::ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
+													  const QStringList& args)
+	: argParser_{std::make_unique<QCommandLineParser>()}, target_{target}
 {
-	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
+	argParser_->addOptions(options);
 
-		static void registerDefaultQueries();
+	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
+	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 
-	private:
-		static const QStringList TAGTYPE_ARGUMENT_NAMES;
-		static const QStringList NAME_ARGUMENT_NAMES;
+	if (!argParser_->parse(args))
+		qWarning() << args[0] << "parse failure"; // TODO warn user
 
-		ExecuteFunction<TagQuery> exec_{};
+	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
+	if (scope == "g") scope_ = Scope::Global;
+	else if (scope == "of") scope_ = Scope::Input;
+}
 
-		TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args);
-		QList<TupleSet> queryTags(QList<TupleSet> input);
-		QList<TupleSet> addTags(QList<TupleSet> input);
-};
+QString ScopedArgumentQuery::argument(const QString& argName) const
+{
+	return argParser_->value(argName);
+}
 
 } /* namespace InformationScripting */

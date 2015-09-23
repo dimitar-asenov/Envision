@@ -33,8 +33,7 @@
 
 namespace InformationScripting {
 
-const QStringList TagQuery::SCOPE_ARGUMENT_NAMES{"s", "scope"};
-const QStringList TagQuery::NODETYPE_ARGUMENT_NAMES{"t", "type"};
+const QStringList TagQuery::TAGTYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList TagQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 
 QList<TupleSet> TagQuery::execute(QList<TupleSet> input)
@@ -44,48 +43,33 @@ QList<TupleSet> TagQuery::execute(QList<TupleSet> input)
 
 void TagQuery::registerDefaultQueries()
 {
-	QueryRegistry::instance().registerQueryConstructor("tags", [](Model::Node*, QStringList args) {
-		return new TagQuery(&TagQuery::queryTags, args);
+	QueryRegistry::instance().registerQueryConstructor("tags", [](Model::Node* target, QStringList args) {
+		return new TagQuery(&TagQuery::queryTags, target, args);
 	});
-	QueryRegistry::instance().registerQueryConstructor("addTags", [](Model::Node*, QStringList args) {
-		return new TagQuery(&TagQuery::addTags, args);
+	QueryRegistry::instance().registerQueryConstructor("addTags", [](Model::Node* target, QStringList args) {
+		return new TagQuery(&TagQuery::addTags, target, args);
 	});
 }
 
-TagQuery::TagQuery(ExecuteFunction<TagQuery> exec, QStringList args)
-	: exec_{exec}
-{
-	// TODO find how we can share the code with AstQuery instead of copying it.
-	args.prepend("TagQuery");
-	argParser_.addOptions(
-	{
-		 {SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]},
-		 {NODETYPE_ARGUMENT_NAMES, "AST Type argument", NODETYPE_ARGUMENT_NAMES[1]},
-		 {NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]}
-	});
-	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
-	argParser_.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
-
-	if (!argParser_.parse(args))
-		qWarning() << "ASTQuery parse failure"; // TODO warn user
-
-	QString scope = argParser_.value(SCOPE_ARGUMENT_NAMES[0]);
-	if (scope == "g") scope_ = Scope::Global;
-	else if (scope == "of") scope_ = Scope::Input;
-}
+TagQuery::TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args)
+	: ScopedArgumentQuery{target, {
+			{TAGTYPE_ARGUMENT_NAMES, "Tag Type argument", TAGTYPE_ARGUMENT_NAMES[1]},
+			{NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
+		}, QStringList("TagQuery") + args}, exec_{exec}
+{}
 
 QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 {
 	QList<TupleSet> result;
-	if (scope_ == Scope::Local)
+	if (scope() == Scope::Local)
 	{
 
 	}
-	else if (scope_ == Scope::Global)
+	else if (scope() == Scope::Global)
 	{
 
 	}
-	else if (scope_ == Scope::Input)
+	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
 		TupleSet tupleSet = input.takeFirst();
@@ -107,15 +91,15 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 {
 	QList<TupleSet> result;
-	if (scope_ == Scope::Local)
+	if (scope() == Scope::Local)
 	{
 
 	}
-	else if (scope_ == Scope::Global)
+	else if (scope() == Scope::Global)
 	{
 
 	}
-	else if (scope_ == Scope::Input)
+	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
 		TupleSet tupleSet = input.takeFirst();
