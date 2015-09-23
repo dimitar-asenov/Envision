@@ -24,12 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#include "TagExtension.h"
+#include "TagNode.h"
+
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(InformationScripting::TagNode)
 
 namespace InformationScripting {
 
-DEFINE_EXTENSION(TagExtension)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TagNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TagNode)
 
-REGISTER_EXTENSION_ATTRIBUTE(TagExtension, tag, TagNode, false, true, true)
+TagNode::TagNode(const QString& name)
+	: Super(nullptr, TagNode::getMetaData()), name_{name}
+{}
 
 } /* namespace InformationScripting */

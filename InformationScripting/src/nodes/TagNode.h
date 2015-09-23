@@ -24,12 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#include "TagExtension.h"
+#pragma once
+
+#include "../informationscripting_api.h"
+
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace InformationScripting {
 
-DEFINE_EXTENSION(TagExtension)
+class INFORMATIONSCRIPTING_API TagNode : public Super<Model::CompositeNode>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TagNode)
 
-REGISTER_EXTENSION_ATTRIBUTE(TagExtension, tag, TagNode, false, true, true)
+	public:
+		TagNode(const QString& name);
+		QString name() const;
+
+	private:
+		QString name_;
+
+};
+
+inline QString TagNode::name() const { return name_; }
 
 } /* namespace InformationScripting */

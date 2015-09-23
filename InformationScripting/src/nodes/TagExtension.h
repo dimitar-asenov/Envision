@@ -32,13 +32,15 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+#include "TagNode.h"
+
 namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API TagExtension
 {
 	DECLARE_EXTENSION(TagExtension)
 
-	EXTENSION_ATTRIBUTE_VALUE(Model::Text, tagName, setTagName, QString)
+	EXTENSION_ATTRIBUTE(TagNode, tag, setTag)
 
 };
 
