@@ -39,6 +39,7 @@
 #include "queries/AstQuery.h"
 #include "queries/AstNameFilter.h"
 #include "queries/AddASTPropertiesAsTuples.h"
+#include "queries/TagQuery.h"
 #include "nodes/TagExtension.h"
 
 namespace InformationScripting {
@@ -51,7 +52,7 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	AstQuery::registerDefaultQueries();
 	AstNameFilter::registerDefaultQueries();
 	AddASTPropertiesAsTuples::registerDefaultQueries();
-
+	TagQuery::registerDefaultQueries();
 	TagExtension::registerExtension();
 	Model::CompositeNode::registerNewExtension<TagExtension>();
 	return true;
