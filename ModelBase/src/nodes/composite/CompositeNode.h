@@ -138,7 +138,6 @@ class MODELBASE_API CompositeNode: public Super<Node>
 
 		template <class Extension> static void registerNewExtension();
 
-		// FIXME this was protected but for registerNewExtension to work we need it public
 		static CompositeIndex registerNewAttribute(const Attribute& attribute);
 
 	protected:
