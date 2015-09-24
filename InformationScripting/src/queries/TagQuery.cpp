@@ -105,17 +105,20 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 		Q_ASSERT(input.size() > 0);
 		TupleSet tupleSet = input.takeFirst();
 		auto astTuples = tupleSet.tuples("ast");
+
+		auto treeManager = target()->manager();
+		treeManager->beginModification(target(), "addTags");
 		for (auto tuple : astTuples)
 		{
 			Model::Node* node = tuple["ast"];
 			if (auto astNode = DCast<Model::CompositeNode>(node))
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
-				astNode->beginModification("addTag");
+				treeManager->changeModificationTarget(astNode);
 				tagExtension->setTag(new TagNode{"foo"});
-				astNode->endModification();
 			}
 		}
+		treeManager->endModification();
 		result << tupleSet;
 	}
 	return result;
