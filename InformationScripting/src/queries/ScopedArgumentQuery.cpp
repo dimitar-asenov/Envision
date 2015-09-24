@@ -53,6 +53,11 @@ QString ScopedArgumentQuery::argument(const QString& argName) const
 	return argParser_->value(argName);
 }
 
+bool ScopedArgumentQuery::isArgumentSet(const QString& argName) const
+{
+	return argParser_->isSet(argName);
+}
+
 Model::SymbolMatcher ScopedArgumentQuery::matcherFor(const QString& text)
 {
 	if (text.contains("*")) return {new QRegExp(text, Qt::CaseInsensitive, QRegExp::Wildcard)};

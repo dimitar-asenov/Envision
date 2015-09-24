@@ -36,6 +36,8 @@
 namespace InformationScripting {
 
 const QStringList TagQuery::NAME_ARGUMENT_NAMES{"n", "name"};
+const QStringList TagQuery::ADD_ARGUMENT_NAMES{"a", "add"};
+const QStringList TagQuery::REMOVE_ARGUMENT_NAMES{"r", "remove"};
 
 QList<TupleSet> TagQuery::execute(QList<TupleSet> input)
 {
@@ -45,31 +47,54 @@ QList<TupleSet> TagQuery::execute(QList<TupleSet> input)
 void TagQuery::registerDefaultQueries()
 {
 	QueryRegistry::instance().registerQueryConstructor("tags", [](Model::Node* target, QStringList args) {
-		return new TagQuery(&TagQuery::queryTags, target, args);
+		return new TagQuery(&TagQuery::tags, target, args);
 	});
+	// Alias to "tags -a"
 	QueryRegistry::instance().registerQueryConstructor("addTags", [](Model::Node* target, QStringList args) {
 		return new TagQuery(&TagQuery::addTags, target, args);
+	});
+	// Alias to "tags -r"
+	QueryRegistry::instance().registerQueryConstructor("removeTags", [](Model::Node* target, QStringList args) {
+		return new TagQuery(&TagQuery::removeTags, target, args);
 	});
 }
 
 TagQuery::TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args)
 	: ScopedArgumentQuery{target, {
 			{NAME_ARGUMENT_NAMES, "Tag name, or regex to find tag", NAME_ARGUMENT_NAMES[1]},
-		}, QStringList("TagQuery") + args}, exec_{exec}
+			QCommandLineOption{ADD_ARGUMENT_NAMES},
+			QCommandLineOption{REMOVE_ARGUMENT_NAMES}
+}, QStringList("TagQuery") + args}, exec_{exec}
 {}
+
+QList<TupleSet> TagQuery::tags(QList<TupleSet> input)
+{
+	bool addSet = isArgumentSet(ADD_ARGUMENT_NAMES[0]);
+	bool removeSet = isArgumentSet(REMOVE_ARGUMENT_NAMES[0]);
+	Q_ASSERT(!(addSet && removeSet)); // TODO should be user warning
+	if (addSet)
+		return addTags(input);
+	else if (removeSet)
+		return removeTags(input);
+	else
+		return queryTags(input);
+}
 
 QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 {
+	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
+	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
+
 	QList<TupleSet> result;
 	QList<Model::Text*> foundTags;
 	if (scope() == Scope::Local)
-		foundTags = allTags(matcherFor(argument(NAME_ARGUMENT_NAMES[0])), target());
+		foundTags = allTags(matcherFor(tagText), target());
 	else if (scope() == Scope::Global)
-		foundTags = allTags(matcherFor(argument(NAME_ARGUMENT_NAMES[0])));
+		foundTags = allTags(matcherFor(tagText));
 	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
-		auto matcher = matcherFor(argument(NAME_ARGUMENT_NAMES[0]));
+		auto matcher = matcherFor(tagText);
 		TupleSet tupleSet = input.takeFirst();
 		auto astTuples = tupleSet.tuples("ast");
 		for (auto tuple : astTuples)
@@ -133,6 +158,51 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 	}
 	treeManager->endModification();
 
+	return result;
+}
+
+QList<TupleSet> TagQuery::removeTags(QList<TupleSet> input)
+{
+	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
+	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
+
+
+	QList<TupleSet> result;
+	QList<Model::Text*> foundTags;
+	if (scope() == Scope::Local)
+		foundTags = allTags(matcherFor(tagText), target());
+	else if (scope() == Scope::Global)
+		foundTags = allTags(matcherFor(tagText));
+	else if (scope() == Scope::Input)
+	{
+		Q_ASSERT(input.size() > 0);
+		auto matcher = matcherFor(tagText);
+		TupleSet tupleSet = input.takeFirst();
+		auto astTuples = tupleSet.tuples("ast");
+		for (auto tuple : astTuples)
+		{
+			Model::Node* node = tuple["ast"];
+			if (auto astNode = DCast<Model::CompositeNode>(node))
+			{
+				auto tagExtension = astNode->extension<TagExtension>();
+				for (auto tag : *tagExtension->tags())
+					if (matcher.matches(tag->get()))
+						foundTags << tag;
+			}
+		}
+		result << tupleSet;
+	}
+
+	auto treeManager = target()->manager();
+	treeManager->beginModification(target(), "removeTags");
+	for (auto tagText : foundTags)
+	{
+		auto list = DCast<Model::TypedList<Model::Text>>(tagText->parent());
+		Q_ASSERT(list);
+		treeManager->changeModificationTarget(list);
+		list->remove(list->indexOf(tagText));
+	}
+	treeManager->endModification();
 	return result;
 }
 

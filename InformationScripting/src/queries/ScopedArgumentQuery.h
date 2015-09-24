@@ -52,6 +52,7 @@ class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public Query
 		Scope scope() const;
 
 		QString argument(const QString& argName) const;
+		bool isArgumentSet(const QString& argName) const;
 
 		Model::SymbolMatcher matcherFor(const QString& text);
 
