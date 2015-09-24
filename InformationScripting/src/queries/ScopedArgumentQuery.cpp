@@ -24,61 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../informationscripting_api.h"
-
-#include "ModelBase/src/util/SymbolMatcher.h"
-
 #include "ScopedArgumentQuery.h"
-
-namespace Model {
-	class Node;
-}
-
-namespace OOModel {
-	class Class;
-	class Method;
-}
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+const QStringList ScopedArgumentQuery::SCOPE_ARGUMENT_NAMES{"s", "scope"};
+
+ScopedArgumentQuery::ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
+													  const QStringList& args)
+	: argParser_{std::make_unique<QCommandLineParser>()}, target_{target}
 {
-	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+	argParser_->addOption({SCOPE_ARGUMENT_NAMES, "Scope argument", SCOPE_ARGUMENT_NAMES[1]});
+	argParser_->addOptions(options);
 
-		static void registerDefaultQueries();
+	// Since all our options require values we don't want -abc to be interpreted as -a -b -c but as --abc
+	argParser_->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 
-	private:
+	if (!argParser_->parse(args))
+		qWarning() << args[0] << "parse failure"; // TODO warn user
 
-		static const QStringList NODETYPE_ARGUMENT_NAMES;
-		static const QStringList NAME_ARGUMENT_NAMES;
-		static const QStringList ADD_AS_NAMES;
+	QString scope = argParser_->value(SCOPE_ARGUMENT_NAMES[0]);
+	if (scope == "g") scope_ = Scope::Global;
+	else if (scope == "of") scope_ = Scope::Input;
+}
 
-		ExecuteFunction<AstQuery> exec_{};
-
-		AstQuery(ExecuteFunction<AstQuery> exec, Model::Node* target, QStringList args);
-
-		static void setTypeTo(QStringList& args, QString type);
-
-		QList<TupleSet> baseClassesQuery(QList<TupleSet> input);
-		QList<TupleSet> toParentType(QList<TupleSet> input);
-		QList<TupleSet> callGraph(QList<TupleSet> input);
-		QList<TupleSet> genericQuery(QList<TupleSet> input);
-		QList<TupleSet> typeQuery(QList<TupleSet> input, QString type);
-		QList<TupleSet> nameQuery(QList<TupleSet> input, QString name);
-		QList<TupleSet> usesQuery(QList<TupleSet> input);
-
-		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-
-		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
-
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
-
-		Model::SymbolMatcher matcherFor(const QString& text);
-
-		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
-};
+QString ScopedArgumentQuery::argument(const QString& argName) const
+{
+	return argParser_->value(argName);
+}
 
 } /* namespace InformationScripting */

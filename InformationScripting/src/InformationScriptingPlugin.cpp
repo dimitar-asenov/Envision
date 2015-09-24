@@ -27,6 +27,8 @@
 #include "InformationScriptingPlugin.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
+
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/declarations/Class.h"
@@ -37,6 +39,8 @@
 #include "queries/AstQuery.h"
 #include "queries/AstNameFilter.h"
 #include "queries/AddASTPropertiesAsTuples.h"
+#include "queries/TagQuery.h"
+#include "nodes/TagExtension.h"
 
 namespace InformationScripting {
 
@@ -48,6 +52,9 @@ bool InformationScriptingPlugin::initialize(Core::EnvisionManager&)
 	AstQuery::registerDefaultQueries();
 	AstNameFilter::registerDefaultQueries();
 	AddASTPropertiesAsTuples::registerDefaultQueries();
+	TagQuery::registerDefaultQueries();
+	TagExtension::registerExtension();
+	Model::CompositeNode::registerNewExtension<TagExtension>();
 	return true;
 }
 

@@ -24,61 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "TagNode.h"
 
-#include "../informationscripting_api.h"
-
-#include "ModelBase/src/util/SymbolMatcher.h"
-
-#include "ScopedArgumentQuery.h"
-
-namespace Model {
-	class Node;
-}
-
-namespace OOModel {
-	class Class;
-	class Method;
-}
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(InformationScripting::TagNode)
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TagNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TagNode)
+
+REGISTER_ATTRIBUTE(TagNode, name, Text, false, false, true)
+
+TagNode::TagNode(const QString& name)
+	: Super(nullptr, TagNode::getMetaData())
 {
-	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
-
-		static void registerDefaultQueries();
-
-	private:
-
-		static const QStringList NODETYPE_ARGUMENT_NAMES;
-		static const QStringList NAME_ARGUMENT_NAMES;
-		static const QStringList ADD_AS_NAMES;
-
-		ExecuteFunction<AstQuery> exec_{};
-
-		AstQuery(ExecuteFunction<AstQuery> exec, Model::Node* target, QStringList args);
-
-		static void setTypeTo(QStringList& args, QString type);
-
-		QList<TupleSet> baseClassesQuery(QList<TupleSet> input);
-		QList<TupleSet> toParentType(QList<TupleSet> input);
-		QList<TupleSet> callGraph(QList<TupleSet> input);
-		QList<TupleSet> genericQuery(QList<TupleSet> input);
-		QList<TupleSet> typeQuery(QList<TupleSet> input, QString type);
-		QList<TupleSet> nameQuery(QList<TupleSet> input, QString name);
-		QList<TupleSet> usesQuery(QList<TupleSet> input);
-
-		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-
-		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
-
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
-
-		Model::SymbolMatcher matcherFor(const QString& text);
-
-		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
-};
+	setName(name);
+}
 
 } /* namespace InformationScripting */

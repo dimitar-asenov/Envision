@@ -28,57 +28,37 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/util/SymbolMatcher.h"
-
-#include "ScopedArgumentQuery.h"
+#include "Query.h"
 
 namespace Model {
 	class Node;
 }
 
-namespace OOModel {
-	class Class;
-	class Method;
-}
+class QCommandLineParser;
+class QCommandLineOption;
 
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public Query
 {
-	public:
-		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
+	protected:
+		enum class Scope : int {Local, Global, Input};
 
-		static void registerDefaultQueries();
+		ScopedArgumentQuery(Model::Node* target, std::initializer_list<QCommandLineOption> options,
+								  const QStringList& args);
+		Model::Node* target() const;
+		Scope scope() const;
+
+		QString argument(const QString& argName) const;
 
 	private:
-
-		static const QStringList NODETYPE_ARGUMENT_NAMES;
-		static const QStringList NAME_ARGUMENT_NAMES;
-		static const QStringList ADD_AS_NAMES;
-
-		ExecuteFunction<AstQuery> exec_{};
-
-		AstQuery(ExecuteFunction<AstQuery> exec, Model::Node* target, QStringList args);
-
-		static void setTypeTo(QStringList& args, QString type);
-
-		QList<TupleSet> baseClassesQuery(QList<TupleSet> input);
-		QList<TupleSet> toParentType(QList<TupleSet> input);
-		QList<TupleSet> callGraph(QList<TupleSet> input);
-		QList<TupleSet> genericQuery(QList<TupleSet> input);
-		QList<TupleSet> typeQuery(QList<TupleSet> input, QString type);
-		QList<TupleSet> nameQuery(QList<TupleSet> input, QString name);
-		QList<TupleSet> usesQuery(QList<TupleSet> input);
-
-		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-
-		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
-
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
-
-		Model::SymbolMatcher matcherFor(const QString& text);
-
-		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
+		std::unique_ptr<QCommandLineParser> argParser_{};
+		Model::Node* target_{};
+		Scope scope_{};
+		static const QStringList SCOPE_ARGUMENT_NAMES;
 };
+
+inline Model::Node* ScopedArgumentQuery::target() const { return target_; }
+inline ScopedArgumentQuery::Scope ScopedArgumentQuery::scope() const { return scope_; }
 
 } /* namespace InformationScripting */

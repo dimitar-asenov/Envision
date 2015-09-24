@@ -32,18 +32,11 @@
 
 #include "ScopedArgumentQuery.h"
 
-namespace Model {
-	class Node;
-}
-
-namespace OOModel {
-	class Class;
-	class Method;
-}
-
 namespace InformationScripting {
 
-class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
+class TagNode;
+
+class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 {
 	public:
 		virtual QList<TupleSet> execute(QList<TupleSet> input) override;
@@ -51,34 +44,16 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		static void registerDefaultQueries();
 
 	private:
-
-		static const QStringList NODETYPE_ARGUMENT_NAMES;
+		static const QStringList TAGTYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
-		static const QStringList ADD_AS_NAMES;
 
-		ExecuteFunction<AstQuery> exec_{};
+		ExecuteFunction<TagQuery> exec_{};
 
-		AstQuery(ExecuteFunction<AstQuery> exec, Model::Node* target, QStringList args);
+		TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args);
+		QList<TupleSet> queryTags(QList<TupleSet> input);
+		QList<TupleSet> addTags(QList<TupleSet> input);
 
-		static void setTypeTo(QStringList& args, QString type);
-
-		QList<TupleSet> baseClassesQuery(QList<TupleSet> input);
-		QList<TupleSet> toParentType(QList<TupleSet> input);
-		QList<TupleSet> callGraph(QList<TupleSet> input);
-		QList<TupleSet> genericQuery(QList<TupleSet> input);
-		QList<TupleSet> typeQuery(QList<TupleSet> input, QString type);
-		QList<TupleSet> nameQuery(QList<TupleSet> input, QString name);
-		QList<TupleSet> usesQuery(QList<TupleSet> input);
-
-		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-
-		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
-
-		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
-
-		Model::SymbolMatcher matcherFor(const QString& text);
-
-		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
+		QList<TagNode*> allTags(Model::Node* target = nullptr);
 };
 
 } /* namespace InformationScripting */
