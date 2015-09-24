@@ -34,8 +34,12 @@ namespace InformationScripting {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TagNode)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TagNode)
 
+REGISTER_ATTRIBUTE(TagNode, name, Text, false, false, true)
+
 TagNode::TagNode(const QString& name)
-	: Super(nullptr, TagNode::getMetaData()), name_{name}
-{}
+	: Super(nullptr, TagNode::getMetaData())
+{
+	setName(name);
+}
 
 } /* namespace InformationScripting */

@@ -29,7 +29,6 @@
 #include "../informationscripting_api.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
 #include "TagNode.h"

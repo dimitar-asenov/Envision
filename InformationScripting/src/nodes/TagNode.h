@@ -29,22 +29,17 @@
 #include "../informationscripting_api.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
 
 namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API TagNode : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(TagNode)
+	ATTRIBUTE_VALUE(Model::Text, name, setName, QString)
 
 	public:
 		TagNode(const QString& name);
-		QString name() const;
-
-	private:
-		QString name_;
-
 };
-
-inline QString TagNode::name() const { return name_; }
 
 } /* namespace InformationScripting */

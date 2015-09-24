@@ -53,7 +53,7 @@ class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public Query
 
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};
-		Model::Node* target_;
+		Model::Node* target_{};
 		Scope scope_{};
 		static const QStringList SCOPE_ARGUMENT_NAMES;
 };
