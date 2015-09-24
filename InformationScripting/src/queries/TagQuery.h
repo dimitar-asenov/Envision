@@ -32,9 +32,11 @@
 
 #include "ScopedArgumentQuery.h"
 
-namespace InformationScripting {
+namespace Model {
+	class Text;
+}
 
-class TagNode;
+namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 {
@@ -53,7 +55,7 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		QList<TupleSet> queryTags(QList<TupleSet> input);
 		QList<TupleSet> addTags(QList<TupleSet> input);
 
-		QList<TagNode*> allTags(Model::Node* target = nullptr);
+		QList<Model::Text*> allTags(Model::Node* target = nullptr);
 };
 
 } /* namespace InformationScripting */

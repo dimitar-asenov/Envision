@@ -27,9 +27,11 @@
 #include "TagQuery.h"
 
 #include "QueryRegistry.h"
-#include "../nodes/TagExtension.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/model/TreeManager.h"
+
+#include "../nodes/TagExtension.h"
 
 namespace InformationScripting {
 
@@ -61,7 +63,7 @@ TagQuery::TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringL
 QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 {
 	QList<TupleSet> result;
-	QList<TagNode*> foundTags;
+	QList<Model::Text*> foundTags;
 	if (scope() == Scope::Local)
 		foundTags = allTags(target());
 	else if (scope() == Scope::Global)
@@ -77,15 +79,15 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 			if (auto astNode = DCast<Model::CompositeNode>(node))
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
-				if (auto tagNode = tagExtension->tag())
-					foundTags << tagNode;
+				for (auto tag : *tagExtension->tags())
+					foundTags << tag;
 			}
 		}
 		result << tupleSet;
 	}
 
-	for (auto tagNode : foundTags)
-		qDebug() << tagNode->name();
+	for (auto tagText : foundTags)
+		qDebug() << tagText->get();
 	return result;
 }
 
@@ -121,7 +123,7 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 		{
 			auto tagExtension = astNode->extension<TagExtension>();
 			treeManager->changeModificationTarget(astNode);
-			tagExtension->setTag(new TagNode{"foo"});
+			tagExtension->tags()->append(new Model::Text{"foo"});
 		}
 	}
 	treeManager->endModification();
@@ -129,9 +131,9 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 	return result;
 }
 
-QList<TagNode*> TagQuery::allTags(Model::Node* from)
+QList<Model::Text*> TagQuery::allTags(Model::Node* from)
 {
-	QList<TagNode*> result;
+	QList<Model::Text*> result;
 
 	if (!from) from = target()->root();
 
@@ -143,8 +145,8 @@ QList<TagNode*> TagQuery::allTags(Model::Node* from)
 		if (auto astNode = DCast<Model::CompositeNode>(node))
 		{
 			auto tagExtension = astNode->extension<TagExtension>();
-			if (auto tagNode = tagExtension->tag())
-				result << tagNode;
+			for (auto tag : *(tagExtension->tags()))
+				result << tag;
 		}
 		workStack << node->children();
 	}
