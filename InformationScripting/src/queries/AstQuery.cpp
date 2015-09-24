@@ -320,12 +320,6 @@ void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher,
 		ts.add({{"ast", node}});
 }
 
-Model::SymbolMatcher AstQuery::matcherFor(const QString& text)
-{
-	if (text.contains("*")) return {new QRegExp(text, Qt::CaseInsensitive, QRegExp::Wildcard)};
-	return {text};
-}
-
 void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName,
 												  const QStringList& keepProperties)
 {

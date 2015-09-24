@@ -46,7 +46,6 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		static void registerDefaultQueries();
 
 	private:
-		static const QStringList TAGTYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
 
 		ExecuteFunction<TagQuery> exec_{};
@@ -55,7 +54,7 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		QList<TupleSet> queryTags(QList<TupleSet> input);
 		QList<TupleSet> addTags(QList<TupleSet> input);
 
-		QList<Model::Text*> allTags(Model::Node* target = nullptr);
+		QList<Model::Text*> allTags(const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
 };
 
 } /* namespace InformationScripting */

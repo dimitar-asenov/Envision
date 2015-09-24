@@ -35,7 +35,6 @@
 
 namespace InformationScripting {
 
-const QStringList TagQuery::TAGTYPE_ARGUMENT_NAMES{"t", "type"};
 const QStringList TagQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 
 QList<TupleSet> TagQuery::execute(QList<TupleSet> input)
@@ -55,8 +54,7 @@ void TagQuery::registerDefaultQueries()
 
 TagQuery::TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args)
 	: ScopedArgumentQuery{target, {
-			{TAGTYPE_ARGUMENT_NAMES, "Tag Type argument", TAGTYPE_ARGUMENT_NAMES[1]},
-			{NAME_ARGUMENT_NAMES, "Name of a symbol", NAME_ARGUMENT_NAMES[1]},
+			{NAME_ARGUMENT_NAMES, "Tag name, or regex to find tag", NAME_ARGUMENT_NAMES[1]},
 		}, QStringList("TagQuery") + args}, exec_{exec}
 {}
 
@@ -65,12 +63,13 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 	QList<TupleSet> result;
 	QList<Model::Text*> foundTags;
 	if (scope() == Scope::Local)
-		foundTags = allTags(target());
+		foundTags = allTags(matcherFor(argument(NAME_ARGUMENT_NAMES[0])), target());
 	else if (scope() == Scope::Global)
-		foundTags = allTags();
+		foundTags = allTags(matcherFor(argument(NAME_ARGUMENT_NAMES[0])));
 	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
+		auto matcher = matcherFor(argument(NAME_ARGUMENT_NAMES[0]));
 		TupleSet tupleSet = input.takeFirst();
 		auto astTuples = tupleSet.tuples("ast");
 		for (auto tuple : astTuples)
@@ -80,7 +79,8 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
 				for (auto tag : *tagExtension->tags())
-					foundTags << tag;
+					if (matcher.matches(tag->get()))
+						foundTags << tag;
 			}
 		}
 		result << tupleSet;
@@ -95,6 +95,10 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 {
 	QList<TupleSet> result;
 	QList<Model::Node*> addTagsTo;
+
+	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
+	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
+
 	if (scope() == Scope::Local)
 	{
 		// Just add a tag to the target:
@@ -102,7 +106,8 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 	}
 	else if (scope() == Scope::Global)
 	{
-		// TODO: does that make sense, to which nodes should we add the tags?
+		// That doesn't make sense, to which nodes should we add the tags?
+		// TODO: warn user
 	}
 	else if (scope() == Scope::Input)
 	{
@@ -123,7 +128,7 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 		{
 			auto tagExtension = astNode->extension<TagExtension>();
 			treeManager->changeModificationTarget(astNode);
-			tagExtension->tags()->append(new Model::Text{"foo"});
+			tagExtension->tags()->append(new Model::Text{tagText});
 		}
 	}
 	treeManager->endModification();
@@ -131,7 +136,7 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 	return result;
 }
 
-QList<Model::Text*> TagQuery::allTags(Model::Node* from)
+QList<Model::Text*> TagQuery::allTags(const Model::SymbolMatcher& matcher, Model::Node* from)
 {
 	QList<Model::Text*> result;
 
@@ -146,7 +151,8 @@ QList<Model::Text*> TagQuery::allTags(Model::Node* from)
 		{
 			auto tagExtension = astNode->extension<TagExtension>();
 			for (auto tag : *(tagExtension->tags()))
-				result << tag;
+				if (matcher.matches(tag->get()))
+					result << tag;
 		}
 		workStack << node->children();
 	}

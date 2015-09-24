@@ -28,6 +28,8 @@
 
 #include "../informationscripting_api.h"
 
+#include "ModelBase/src/util/SymbolMatcher.h"
+
 #include "Query.h"
 
 namespace Model {
@@ -50,6 +52,8 @@ class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public Query
 		Scope scope() const;
 
 		QString argument(const QString& argName) const;
+
+		Model::SymbolMatcher matcherFor(const QString& text);
 
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};
