@@ -34,6 +34,8 @@
 
 namespace InformationScripting {
 
+class TagNode;
+
 class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 {
 	public:
@@ -50,6 +52,8 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args);
 		QList<TupleSet> queryTags(QList<TupleSet> input);
 		QList<TupleSet> addTags(QList<TupleSet> input);
+
+		QList<TagNode*> allTags(Model::Node* target = nullptr);
 };
 
 } /* namespace InformationScripting */

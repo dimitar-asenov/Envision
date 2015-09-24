@@ -61,14 +61,11 @@ TagQuery::TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringL
 QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 {
 	QList<TupleSet> result;
+	QList<TagNode*> foundTags;
 	if (scope() == Scope::Local)
-	{
-
-	}
+		foundTags = allTags(target());
 	else if (scope() == Scope::Global)
-	{
-
-	}
+		foundTags = allTags();
 	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
@@ -81,24 +78,29 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
 				if (auto tagNode = tagExtension->tag())
-					qDebug() << tagNode->name();
+					foundTags << tagNode;
 			}
 		}
 		result << tupleSet;
 	}
+
+	for (auto tagNode : foundTags)
+		qDebug() << tagNode->name();
 	return result;
 }
 
 QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 {
 	QList<TupleSet> result;
+	QList<Model::Node*> addTagsTo;
 	if (scope() == Scope::Local)
 	{
-
+		// Just add a tag to the target:
+		addTagsTo << target();
 	}
 	else if (scope() == Scope::Global)
 	{
-
+		// TODO: does that make sense, to which nodes should we add the tags?
 	}
 	else if (scope() == Scope::Input)
 	{
@@ -106,20 +108,45 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 		TupleSet tupleSet = input.takeFirst();
 		auto astTuples = tupleSet.tuples("ast");
 
-		auto treeManager = target()->manager();
-		treeManager->beginModification(target(), "addTags");
 		for (auto tuple : astTuples)
-		{
-			Model::Node* node = tuple["ast"];
-			if (auto astNode = DCast<Model::CompositeNode>(node))
-			{
-				auto tagExtension = astNode->extension<TagExtension>();
-				treeManager->changeModificationTarget(astNode);
-				tagExtension->setTag(new TagNode{"foo"});
-			}
-		}
-		treeManager->endModification();
+			addTagsTo << static_cast<Model::Node*>(tuple["ast"]);
+
 		result << tupleSet;
+	}
+	auto treeManager = target()->manager();
+	treeManager->beginModification(target(), "addTags");
+	for (auto node : addTagsTo)
+	{
+		if (auto astNode = DCast<Model::CompositeNode>(node))
+		{
+			auto tagExtension = astNode->extension<TagExtension>();
+			treeManager->changeModificationTarget(astNode);
+			tagExtension->setTag(new TagNode{"foo"});
+		}
+	}
+	treeManager->endModification();
+
+	return result;
+}
+
+QList<TagNode*> TagQuery::allTags(Model::Node* from)
+{
+	QList<TagNode*> result;
+
+	if (!from) from = target()->root();
+
+	QList<Model::Node*> workStack{from};
+
+	while (!workStack.empty())
+	{
+		auto node = workStack.takeLast();
+		if (auto astNode = DCast<Model::CompositeNode>(node))
+		{
+			auto tagExtension = astNode->extension<TagExtension>();
+			if (auto tagNode = tagExtension->tag())
+				result << tagNode;
+		}
+		workStack << node->children();
 	}
 	return result;
 }
