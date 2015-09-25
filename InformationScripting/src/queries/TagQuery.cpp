@@ -139,6 +139,7 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 	if (persistent_)
 	{
 		auto treeManager = target()->manager();
+		Q_ASSERT(treeManager);
 		treeManager->beginModification(target(), "addTags");
 		for (auto node : addTagsTo)
 		{
@@ -182,6 +183,7 @@ QList<TupleSet> TagQuery::removeTags(QList<TupleSet> input)
 	if (persistent_)
 	{
 		auto treeManager = target()->manager();
+		Q_ASSERT(treeManager);
 		treeManager->beginModification(target(), "removeTags");
 		for (const auto& tuple : removedTuples.tuples(tagName))
 		{
