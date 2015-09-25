@@ -38,6 +38,7 @@ namespace InformationScripting {
 const QStringList TagQuery::NAME_ARGUMENT_NAMES{"n", "name"};
 const QStringList TagQuery::ADD_ARGUMENT_NAMES{"a", "add"};
 const QStringList TagQuery::REMOVE_ARGUMENT_NAMES{"r", "remove"};
+const QStringList TagQuery::PERSISTENT_ARGUMENT_NAMES{"p", "persistent"};
 
 QList<TupleSet> TagQuery::execute(QList<TupleSet> input)
 {
@@ -63,9 +64,12 @@ TagQuery::TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringL
 	: ScopedArgumentQuery{target, {
 			{NAME_ARGUMENT_NAMES, "Tag name, or regex to find tag", NAME_ARGUMENT_NAMES[1]},
 			QCommandLineOption{ADD_ARGUMENT_NAMES},
-			QCommandLineOption{REMOVE_ARGUMENT_NAMES}
+			QCommandLineOption{REMOVE_ARGUMENT_NAMES},
+			{PERSISTENT_ARGUMENT_NAMES, "Wether the change is persistent, default = yes", PERSISTENT_ARGUMENT_NAMES[1], "yes"}
 }, QStringList("TagQuery") + args}, exec_{exec}
-{}
+{
+	persistent_ = argument(PERSISTENT_ARGUMENT_NAMES[1]) == "yes";
+}
 
 QList<TupleSet> TagQuery::tags(QList<TupleSet> input)
 {
@@ -84,41 +88,32 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 {
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
+	QList<TupleSet> result = input;
 
-	QList<TupleSet> result;
-	QList<Model::Text*> foundTags;
-	if (scope() == Scope::Local)
-		foundTags = allTags(matcherFor(tagText), target());
-	else if (scope() == Scope::Global)
-		foundTags = allTags(matcherFor(tagText));
+	// Querying tags non persistent would just return the tag tuples in the input.
+	if (!persistent_) return input;
+
+	if (scope() == Scope::Local || scope() == Scope::Global)
+	{
+		auto targetNode = scope() == Scope::Local ? target() : nullptr;
+		if (result.empty()) result << TupleSet();
+		insertFoundTags(result[0], matcherFor(tagText), targetNode);
+	}
 	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
-		auto matcher = matcherFor(tagText);
-		TupleSet tupleSet = input.takeFirst();
-		auto astTuples = tupleSet.tuples("ast");
-		for (auto tuple : astTuples)
-		{
-			Model::Node* node = tuple["ast"];
-			if (auto astNode = DCast<Model::CompositeNode>(node))
-			{
-				auto tagExtension = astNode->extension<TagExtension>();
-				for (auto tag : *tagExtension->tags())
-					if (matcher.matches(tag->get()))
-						foundTags << tag;
-			}
-		}
-		result << tupleSet;
-	}
 
-	for (auto tagText : foundTags)
-		qDebug() << tagText->get();
+		auto matcher = matcherFor(tagText);
+		auto astTuples = result[0].tuples("ast");
+		for (auto tuple : astTuples)
+			insertFoundTags(result[0], matcher, tuple["ast"]);
+	}
 	return result;
 }
 
 QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 {
-	QList<TupleSet> result;
+	QList<TupleSet> result = input;
 	QList<Model::Node*> addTagsTo;
 
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
@@ -126,7 +121,7 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 
 	if (scope() == Scope::Local)
 	{
-		// Just add a tag to the target:
+		if (result.empty()) result << TupleSet();
 		addTagsTo << target();
 	}
 	else if (scope() == Scope::Global)
@@ -137,26 +132,28 @@ QList<TupleSet> TagQuery::addTags(QList<TupleSet> input)
 	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
-		TupleSet tupleSet = input.takeFirst();
-		auto astTuples = tupleSet.tuples("ast");
-
-		for (auto tuple : astTuples)
+		for (const auto& tuple : result[0].tuples("ast"))
 			addTagsTo << static_cast<Model::Node*>(tuple["ast"]);
+	}
 
-		result << tupleSet;
-	}
-	auto treeManager = target()->manager();
-	treeManager->beginModification(target(), "addTags");
-	for (auto node : addTagsTo)
+	if (persistent_)
 	{
-		if (auto astNode = DCast<Model::CompositeNode>(node))
+		auto treeManager = target()->manager();
+		treeManager->beginModification(target(), "addTags");
+		for (auto node : addTagsTo)
 		{
-			auto tagExtension = astNode->extension<TagExtension>();
-			treeManager->changeModificationTarget(astNode);
-			tagExtension->tags()->append(new Model::Text{tagText});
+			if (auto astNode = DCast<Model::CompositeNode>(node))
+			{
+				auto tagExtension = astNode->extension<TagExtension>();
+				treeManager->changeModificationTarget(astNode);
+				tagExtension->tags()->append(new Model::Text{tagText});
+			}
 		}
+		treeManager->endModification();
 	}
-	treeManager->endModification();
+
+	for (auto node : addTagsTo)
+		result[0].add({{"tag", tagText}, {"ast", node}});
 
 	return result;
 }
@@ -166,49 +163,57 @@ QList<TupleSet> TagQuery::removeTags(QList<TupleSet> input)
 	QString tagText = argument(NAME_ARGUMENT_NAMES[0]);
 	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
 
-
-	QList<TupleSet> result;
-	QList<Model::Text*> foundTags;
+	QList<TupleSet> result = input;
+	auto matcher = matcherFor(tagText);
+	QString tagName = "tag";
+	TupleSet removedTuples;
 	if (scope() == Scope::Local)
-		foundTags = allTags(matcherFor(tagText), target());
+		insertFoundTags(removedTuples, matcher, target());
 	else if (scope() == Scope::Global)
-		foundTags = allTags(matcherFor(tagText));
+		insertFoundTags(removedTuples, matcher);
 	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
-		auto matcher = matcherFor(tagText);
-		TupleSet tupleSet = input.takeFirst();
-		auto astTuples = tupleSet.tuples("ast");
+		auto astTuples = result[0].tuples("ast");
 		for (auto tuple : astTuples)
+			insertFoundTags(removedTuples, matcher, tuple["ast"]);
+	}
+
+	if (persistent_)
+	{
+		auto treeManager = target()->manager();
+		treeManager->beginModification(target(), "removeTags");
+		for (const auto& tuple : removedTuples.tuples(tagName))
 		{
 			Model::Node* node = tuple["ast"];
 			if (auto astNode = DCast<Model::CompositeNode>(node))
 			{
 				auto tagExtension = astNode->extension<TagExtension>();
-				for (auto tag : *tagExtension->tags())
-					if (matcher.matches(tag->get()))
-						foundTags << tag;
+				auto tagsList = tagExtension->tags();
+				treeManager->changeModificationTarget(tagsList);
+				auto tagsIndex = 0;
+				while (tagsIndex < tagsList->size())
+				{
+					if (matcher.matches(tagsList->at(tagsIndex)->get())) tagsList->remove(tagsIndex);
+					else ++tagsIndex;
+				}
 			}
 		}
-		result << tupleSet;
+		treeManager->endModification();
 	}
 
-	auto treeManager = target()->manager();
-	treeManager->beginModification(target(), "removeTags");
-	for (auto tagText : foundTags)
+	if (result.size() > 0)
 	{
-		auto list = DCast<Model::TypedList<Model::Text>>(tagText->parent());
-		Q_ASSERT(list);
-		treeManager->changeModificationTarget(list);
-		list->remove(list->indexOf(tagText));
+		for (const auto& tuple : removedTuples.take(tagName))
+			result[0].remove(tuple);
 	}
-	treeManager->endModification();
+
 	return result;
 }
 
-QList<Model::Text*> TagQuery::allTags(const Model::SymbolMatcher& matcher, Model::Node* from)
+void TagQuery::insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* from)
 {
-	QList<Model::Text*> result;
+	Q_ASSERT(persistent_);
 
 	if (!from) from = target()->root();
 
@@ -222,11 +227,10 @@ QList<Model::Text*> TagQuery::allTags(const Model::SymbolMatcher& matcher, Model
 			auto tagExtension = astNode->extension<TagExtension>();
 			for (auto tag : *(tagExtension->tags()))
 				if (matcher.matches(tag->get()))
-					result << tag;
+					tuples.add({{"tag", tag->get()}, {"ast", astNode}});
 		}
 		workStack << node->children();
 	}
-	return result;
 }
 
 } /* namespace InformationScripting */

@@ -49,8 +49,10 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		static const QStringList NAME_ARGUMENT_NAMES;
 		static const QStringList ADD_ARGUMENT_NAMES;
 		static const QStringList REMOVE_ARGUMENT_NAMES;
+		static const QStringList PERSISTENT_ARGUMENT_NAMES;
 
 		ExecuteFunction<TagQuery> exec_{};
+		bool persistent_{true};
 
 		TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args);
 		QList<TupleSet> tags(QList<TupleSet> input);
@@ -58,7 +60,7 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		QList<TupleSet> addTags(QList<TupleSet> input);
 		QList<TupleSet> removeTags(QList<TupleSet> input);
 
-		QList<Model::Text*> allTags(const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
+		void insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
 };
 
 } /* namespace InformationScripting */

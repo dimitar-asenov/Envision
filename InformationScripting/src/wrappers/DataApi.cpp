@@ -56,16 +56,16 @@ BOOST_PYTHON_MODULE(DataApi) {
 
 		class_<Tuple>("Tuple", init<>())
 				.def("__init__", make_constructor(makeTuple))
-				.def("tag", &Tuple::tag)
+				.def("tupleTag", &Tuple::tag)
 				.def("add", &Tuple::add)
 				.def("__getattr__", &Tuple_getAttr);
 
-		QSet<Tuple> (TupleSet::*tuples1)(const QString&) const = &TupleSet::tuples;
+		QSet<Tuple> (TupleSet::*tuplesString)(const QString&) const = &TupleSet::tuples;
 		QSet<Tuple> (TupleSet::*take1)(const QString&) = &TupleSet::take;
 		void (TupleSet::*removeTuple)(const Tuple&) = &TupleSet::remove;
 
 		class_<TupleSet>("TupleSet")
-				.def("tuples", tuples1)
+				.def("tuples", tuplesString)
 				.def("take", take1)
 				.def("remove", removeTuple)
 				.def("add", &TupleSet::add);
