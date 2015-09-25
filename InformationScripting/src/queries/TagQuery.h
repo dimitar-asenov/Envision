@@ -28,13 +28,14 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/util/SymbolMatcher.h"
-
 #include "ScopedArgumentQuery.h"
 
-namespace InformationScripting {
+namespace Model {
+	class SymbolMatcher;
+	class Text;
+}
 
-class TagNode;
+namespace InformationScripting {
 
 class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 {
@@ -44,16 +45,21 @@ class INFORMATIONSCRIPTING_API TagQuery : public ScopedArgumentQuery
 		static void registerDefaultQueries();
 
 	private:
-		static const QStringList TAGTYPE_ARGUMENT_NAMES;
 		static const QStringList NAME_ARGUMENT_NAMES;
+		static const QStringList ADD_ARGUMENT_NAMES;
+		static const QStringList REMOVE_ARGUMENT_NAMES;
+		static const QStringList PERSISTENT_ARGUMENT_NAMES;
 
 		ExecuteFunction<TagQuery> exec_{};
+		bool persistent_{true};
 
 		TagQuery(ExecuteFunction<TagQuery> exec, Model::Node* target, QStringList args);
+		QList<TupleSet> tags(QList<TupleSet> input);
 		QList<TupleSet> queryTags(QList<TupleSet> input);
 		QList<TupleSet> addTags(QList<TupleSet> input);
+		QList<TupleSet> removeTags(QList<TupleSet> input);
 
-		QList<TagNode*> allTags(Model::Node* target = nullptr);
+		void insertFoundTags(TupleSet& tuples, const Model::SymbolMatcher& matcher, Model::Node* target = nullptr);
 };
 
 } /* namespace InformationScripting */

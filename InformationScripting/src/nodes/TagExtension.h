@@ -29,9 +29,8 @@
 #include "../informationscripting_api.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
+#include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
-
-#include "TagNode.h"
 
 namespace InformationScripting {
 
@@ -39,7 +38,7 @@ class INFORMATIONSCRIPTING_API TagExtension
 {
 	DECLARE_EXTENSION(TagExtension)
 
-	EXTENSION_ATTRIBUTE(TagNode, tag, setTag)
+	EXTENSION_ATTRIBUTE(Model::TypedList<Model::Text>, tags, setTags)
 
 };
 

@@ -30,6 +30,7 @@
 #include "OOModel/src/declarations/Project.h"
 
 #include "ModelBase/src/util/NameResolver.h"
+#include "ModelBase/src/util/SymbolMatcher.h"
 
 #include "../visitors/AllNodesOfType.h"
 #include "QueryRegistry.h"
@@ -132,7 +133,7 @@ QList<TupleSet> AstQuery::toParentType(QList<TupleSet> input)
 	Q_ASSERT(type.size() > 0); // TODO should be a warning for the user.
 
 	auto ts = input.takeFirst();
-	Model::SymbolMatcher matcher = matcherFor(type);
+	Model::SymbolMatcher matcher = Model::SymbolMatcher::guessMatcher(type);
 
 	auto haveMatchingParent = [matcher](const Tuple& t) {
 		auto it = t.find("ast");
@@ -194,7 +195,7 @@ QList<TupleSet> AstQuery::typeQuery(QList<TupleSet> input, QString type)
 	TupleSet tuples;
 
 	Q_ASSERT(!type.isEmpty());
-	Model::SymbolMatcher matcher = matcherFor(type);
+	Model::SymbolMatcher matcher = Model::SymbolMatcher::guessMatcher(type);
 
 	if (scope() == Scope::Local)
 		addNodesOfType(tuples, matcher, target());
@@ -233,7 +234,7 @@ QList<TupleSet> AstQuery::nameQuery(QList<TupleSet> input, QString name)
 	}
 	// If we have a type argument filter the results:
 	const QString type = argument(NODETYPE_ARGUMENT_NAMES[0]);
-	Model::SymbolMatcher matcher = matcherFor(type);
+	Model::SymbolMatcher matcher = Model::SymbolMatcher::guessMatcher(type);
 	for (auto matchingNode : matchingNodes)
 		if (type.isEmpty() || matcher.matches(matchingNode.second->typeName()))
 			tuples.add({{"ast", matchingNode.second}});
@@ -262,8 +263,8 @@ QList<TupleSet> AstQuery::usesQuery(QList<TupleSet> input)
 		result = tuples;
 	}
 
-	auto typeMatcher = matcherFor(argument(NODETYPE_ARGUMENT_NAMES[0]));
-	auto nameMatcher = matcherFor(argument(NAME_ARGUMENT_NAMES[0]));
+	auto typeMatcher = Model::SymbolMatcher::guessMatcher(argument(NODETYPE_ARGUMENT_NAMES[0]));
+	auto nameMatcher = Model::SymbolMatcher::guessMatcher(argument(NAME_ARGUMENT_NAMES[0]));
 
 	QHash<Model::Node*, QList<Model::Node*>> referenceTargets;
 	for (auto it = references.begin(); it != references.end(); ++it)
@@ -318,12 +319,6 @@ void AstQuery::addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher,
 	auto allNodeOfType =  AllNodesOfType::allNodesOfType(from, matcher);
 	for (auto node : allNodeOfType)
 		ts.add({{"ast", node}});
-}
-
-Model::SymbolMatcher AstQuery::matcherFor(const QString& text)
-{
-	if (text.contains("*")) return {new QRegExp(text, Qt::CaseInsensitive, QRegExp::Wildcard)};
-	return {text};
 }
 
 void AstQuery::adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName,

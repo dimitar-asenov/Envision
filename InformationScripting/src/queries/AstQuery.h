@@ -28,12 +28,11 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/util/SymbolMatcher.h"
-
 #include "ScopedArgumentQuery.h"
 
 namespace Model {
 	class Node;
+	class SymbolMatcher;
 }
 
 namespace OOModel {
@@ -71,12 +70,8 @@ class INFORMATIONSCRIPTING_API AstQuery : public ScopedArgumentQuery
 		QList<TupleSet> usesQuery(QList<TupleSet> input);
 
 		void addBaseEdgesFor(OOModel::Class* childClass, NamedProperty& classNode, TupleSet& ts);
-
 		void addNodesOfType(TupleSet& ts, const Model::SymbolMatcher& matcher, Model::Node* from = nullptr);
-
 		void addCallInformation(TupleSet& ts, OOModel::Method* method, QList<OOModel::Method*> callees);
-
-		Model::SymbolMatcher matcherFor(const QString& text);
 
 		void adaptOutputForRelation(TupleSet& tupleSet, const QString& relationName, const QStringList& keepProperties);
 };

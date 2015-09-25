@@ -50,6 +50,7 @@ class INFORMATIONSCRIPTING_API ScopedArgumentQuery : public Query
 		Scope scope() const;
 
 		QString argument(const QString& argName) const;
+		bool isArgumentSet(const QString& argName) const;
 
 	private:
 		std::unique_ptr<QCommandLineParser> argParser_{};

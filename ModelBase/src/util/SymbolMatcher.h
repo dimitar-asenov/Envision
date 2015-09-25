@@ -36,6 +36,8 @@ class MODELBASE_API SymbolMatcher {
 		SymbolMatcher(QString stringMatch);
 		SymbolMatcher(QRegExp* regExpMatch);
 
+		static SymbolMatcher guessMatcher(const QString& from);
+
 		bool matches(const QString& name) const;
 
 		bool isFixedString() const;

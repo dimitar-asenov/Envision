@@ -43,29 +43,54 @@ object Tuple_getAttr(const Tuple& self, const QString& name) {
 	return pythonObject(self[name]);
 }
 
+NamedProperty tuple_getItem(Tuple &t, int index)
+{
+	 if (index >= 0 && index < t.size())
+		  return t[index];
+	 else
+	 {
+		  PyErr_SetString(PyExc_IndexError, "index out of range");
+		  throw_error_already_set();
+	 }
+	 return {};
+}
+
 std::shared_ptr<Tuple> makeTuple(list args) {
 	stl_input_iterator<NamedProperty> begin(args), end;
 	return std::shared_ptr<Tuple>{new Tuple{QList<NamedProperty>::fromStdList(std::list<NamedProperty>(begin, end))}};
 }
 
 BOOST_PYTHON_MODULE(DataApi) {
-		class_<NamedProperty>("NamedProperty", init<QString, QString>())
+		// This class exposure is just a workaround to make the name property of NamedProperty work.
+		// The problem is that if we just expose the NamedProperty::first as property,
+		// boost::python complains QString is not registered, even thought we specify a converter (I guess this is a bug)
+		// By registering as return by value this works.
+		// The second problem is that if we use print('{}'.format(namedproperty.name)) python somehow instantiates
+		// None.None(NamedProperty) but then complains it can't construct it since the base is not known, thus we expose it.
+		class_<QPair<QString, Property>, boost::noncopyable>("NamedPropertyBaseClass", no_init);
+		class_<NamedProperty, bases<QPair<QString, Property>>>("NamedProperty", init<QString, QString>())
 				.def(init<QString, Model::Node*>())
-				.def_readwrite("name", &NamedProperty::first)
+				.add_property("name",
+								  make_getter(&NamedProperty::first, return_value_policy<return_by_value>()),
+								  make_setter(&NamedProperty::first))
 				.add_property("value", &value);
 
 		class_<Tuple>("Tuple", init<>())
 				.def("__init__", make_constructor(makeTuple))
-				.def("tag", &Tuple::tag)
+				.def("tupleTag", &Tuple::tag)
 				.def("add", &Tuple::add)
-				.def("__getattr__", &Tuple_getAttr);
+				.def("__getattr__", &Tuple_getAttr)
+				.def("size", &Tuple::size)
+				.def("__getitem__", &tuple_getItem);
 
-		QSet<Tuple> (TupleSet::*tuples1)(const QString&) const = &TupleSet::tuples;
+		QSet<Tuple> (TupleSet::*tuplesAll)() const = &TupleSet::tuples;
+		QSet<Tuple> (TupleSet::*tuplesString)(const QString&) const = &TupleSet::tuples;
 		QSet<Tuple> (TupleSet::*take1)(const QString&) = &TupleSet::take;
 		void (TupleSet::*removeTuple)(const Tuple&) = &TupleSet::remove;
 
 		class_<TupleSet>("TupleSet")
-				.def("tuples", tuples1)
+				.def("tuples", tuplesAll)
+				.def("tuples", tuplesString)
 				.def("take", take1)
 				.def("remove", removeTuple)
 				.def("add", &TupleSet::add);

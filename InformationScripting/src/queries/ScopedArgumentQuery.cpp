@@ -53,4 +53,9 @@ QString ScopedArgumentQuery::argument(const QString& argName) const
 	return argParser_->value(argName);
 }
 
+bool ScopedArgumentQuery::isArgumentSet(const QString& argName) const
+{
+	return argParser_->isSet(argName);
+}
+
 } /* namespace InformationScripting */

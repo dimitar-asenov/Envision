@@ -39,7 +39,7 @@ using namespace boost;
 
 struct QString_to_python_str
 {
-		static PyObject* convert(QString const& s)
+		static PyObject* convert(QString s)
 		{
 			return python::incref(python::object(s.toLatin1().constData()).ptr());
 		}
