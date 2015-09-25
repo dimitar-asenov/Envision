@@ -32,6 +32,7 @@
 
 namespace Model {
 	class Node;
+	class SymbolMatcher;
 }
 
 namespace OOModel {

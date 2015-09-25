@@ -30,6 +30,7 @@
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/model/TreeManager.h"
+#include "ModelBase/src/util/SymbolMatcher.h"
 
 #include "../nodes/TagExtension.h"
 
@@ -97,13 +98,13 @@ QList<TupleSet> TagQuery::queryTags(QList<TupleSet> input)
 	{
 		auto targetNode = scope() == Scope::Local ? target() : nullptr;
 		if (result.empty()) result << TupleSet();
-		insertFoundTags(result[0], matcherFor(tagText), targetNode);
+		insertFoundTags(result[0], Model::SymbolMatcher::guessMatcher(tagText), targetNode);
 	}
 	else if (scope() == Scope::Input)
 	{
 		Q_ASSERT(input.size() > 0);
 
-		auto matcher = matcherFor(tagText);
+		auto matcher = Model::SymbolMatcher::guessMatcher(tagText);
 		auto astTuples = result[0].tuples("ast");
 		for (auto tuple : astTuples)
 			insertFoundTags(result[0], matcher, tuple["ast"]);
@@ -165,7 +166,7 @@ QList<TupleSet> TagQuery::removeTags(QList<TupleSet> input)
 	Q_ASSERT(tagText.size() > 0); // TODO should be user warning
 
 	QList<TupleSet> result = input;
-	auto matcher = matcherFor(tagText);
+	auto matcher = Model::SymbolMatcher::guessMatcher(tagText);
 	QString tagName = "tag";
 	TupleSet removedTuples;
 	if (scope() == Scope::Local)

@@ -28,11 +28,10 @@
 
 #include "../informationscripting_api.h"
 
-#include "ModelBase/src/util/SymbolMatcher.h"
-
 #include "ScopedArgumentQuery.h"
 
 namespace Model {
+	class SymbolMatcher;
 	class Text;
 }
 

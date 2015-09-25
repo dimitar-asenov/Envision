@@ -28,4 +28,10 @@
 
 namespace Model {
 
+SymbolMatcher SymbolMatcher::guessMatcher(const QString& from)
+{
+	if (from.contains("*")) return {new QRegExp(from, Qt::CaseInsensitive, QRegExp::Wildcard)};
+	return {from};
+}
+
 } /* namespace Model */
