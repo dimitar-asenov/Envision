@@ -82,6 +82,9 @@ class DeclarativeItem : public DeclarativeItemBase
 		 * A factory method to get an item wrapper element with a node only, it takes a pointer to member, where the
 		 * visualization \a item should be stored, and a method to get the node (\a nodeGetter) with which the \a item
 		 * should be associated. The node gets visualized with its default style.
+		 *
+		 * NOTE: Introducing the ChildItemVisualizationType template argument will require
+		 *			ChildItemVisualizationType::NodeType, which Item does not have, and thus Item cannot be the default!
 		 */
 		static NodeItemWrapperFormElement<VisualizationType>*
 			item(Item* VisualizationType::* item, std::function<Model::Node* (VisualizationType* v)> nodeGetter);

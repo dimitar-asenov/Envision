@@ -34,7 +34,7 @@ namespace InformationScripting {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandArgument)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandArgument)
 
-REGISTER_ATTRIBUTE(CommandArgument, argument, Model::Text, false, false, true)
+REGISTER_ATTRIBUTE(CommandArgument, argument, Text, false, false, true)
 
 CommandArgument::CommandArgument(const QString& argument) : Super(nullptr, CommandArgument::getMetaData())
 {

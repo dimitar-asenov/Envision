@@ -24,22 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "../informationscripting_api.h"
+
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/VList.h"
+
+#include "../nodes/CommandArgument.h"
+#include "VCommandArgumentStyle.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
-
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfCommandArgument, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+class INFORMATIONSCRIPTING_API VCommandArgument
+		: public Super<Visualization::ItemWithNode<VCommandArgument, Visualization::DeclarativeItem<VCommandArgument>,
+		CommandArgument>>
 {
-	setName(name);
-}
+	ITEM_COMMON(VCommandArgument)
+	public:
+		VCommandArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+
+		Visualization::VText* argument() const;
+
+		static void initializeForms();
+
+	private:
+		Visualization::VText* argument_{};
+};
+
+inline Visualization::VText* VCommandArgument::argument() const { return argument_; }
+
 
 } /* namespace InformationScripting */

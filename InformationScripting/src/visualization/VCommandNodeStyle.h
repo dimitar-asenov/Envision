@@ -24,22 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "../informationscripting_api.h"
+
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
-
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfCommandArgument, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+class INFORMATIONSCRIPTING_API VCommandNodeStyle : public Super<Visualization::DeclarativeItemBaseStyle>
 {
-	setName(name);
-}
+	public:
+		virtual ~VCommandNodeStyle() override;
+
+	Property<Visualization::TextStyle> name{this, "name"};
+	Property<Visualization::VListStyle> arguments{this, "arguments"};
+};
 
 } /* namespace InformationScripting */

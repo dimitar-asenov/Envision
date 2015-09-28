@@ -24,22 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "../informationscripting_api.h"
+
+#include "QueryNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, QueryNodeContainer)
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
-
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfCommandArgument, false, false, true)
-
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+class INFORMATIONSCRIPTING_API QueryNodeContainer : public Super<QueryNode>
 {
-	setName(name);
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(QueryNodeContainer)
+	ATTRIBUTE(QueryNode, query, setQuery)
+};
 
 } /* namespace InformationScripting */

@@ -24,22 +24,32 @@
 **
 ***********************************************************************************************************************/
 
-#include "CommandNode.h"
+#include "VCommandNode.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(InformationScripting::CommandNode)
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 namespace InformationScripting {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CommandNode)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommandNode)
+ITEM_COMMON_DEFINITIONS(VCommandNode, "item")
 
-REGISTER_ATTRIBUTE(CommandNode, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(CommandNode, arguments, TypedListOfCommandArgument, false, false, true)
+VCommandNode::VCommandNode(Item* parent, NodeType* node, const StyleType* style)
+	: Super(parent, node, style)
+{}
 
-CommandNode::CommandNode(const QString& name) : Super(nullptr, CommandNode::getMetaData())
+void VCommandNode::initializeForms()
 {
-	setName(name);
+	auto argumentsEl = item<Visualization::VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
+			[](I* v){return &v->style()->arguments();});
+
+	auto nameEl = item<Visualization::VText>(&I::name_, [](I* v){return v->node()->nameNode();},
+			[](I* v){return &v->style()->name();});
+
+	addForm(grid({
+			{nameEl, argumentsEl},
+		})
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
 }
 
 } /* namespace InformationScripting */

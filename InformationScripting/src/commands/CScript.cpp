@@ -41,6 +41,8 @@
 #include "../queries/QueryRegistry.h"
 #include "../parsing/QueryBuilder.h"
 
+#include "../visualization/QueryPrompt.h"
+
 namespace InformationScripting {
 
 CScript::CScript() : Command{"script"} {}
@@ -65,7 +67,11 @@ Interaction::CommandResult* CScript::execute(Visualization::Item* source, Visual
 	QString command = args[0];
 	args = args.mid(1);
 
-	if (command != "fallback")
+	if (command == "x")
+	{
+		new QueryPrompt(source);
+	}
+	else if (command != "fallback")
 	{
 		args.prepend(command);
 		auto q = QueryBuilder::instance().buildQueryFrom(args.join(""), node);

@@ -31,7 +31,7 @@
 #include "QueryNode.h"
 #include "CommandArgument.h"
 
-#include "ModelBase/src/nodes/NameText.h"
+#include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
 DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, CommandNode)
@@ -42,7 +42,7 @@ class INFORMATIONSCRIPTING_API CommandNode : public Super<QueryNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommandNode)
 
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::NameText, name, setName, QString, const QString&)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(Model::Text, name, setName, QString, const QString&)
 	ATTRIBUTE(Model::TypedList<CommandArgument>, arguments, setArguments)
 	public:
 		CommandNode(const QString& name);

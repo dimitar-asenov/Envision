@@ -48,7 +48,13 @@ HEADERS += src/precompiled.h \
     src/nodes/OperatorNode.h \
     src/nodes/CommandArgument.h \
     src/parsing/QueryParser.h \
-    src/nodes/CompositeQueryNode.h
+    src/nodes/CompositeQueryNode.h \
+    src/visualization/QueryPrompt.h \
+    src/nodes/QueryNodeContainer.h \
+    src/visualization/VCommandNode.h \
+    src/visualization/VCommandArgument.h \
+    src/visualization/VCommandNodeStyle.h \
+    src/visualization/VCommandArgumentStyle.h
 SOURCES += src/InformationScriptingException.cpp \
 	src/InformationScriptingPlugin.cpp \
 	test/SimpleTest.cpp \
@@ -81,7 +87,13 @@ SOURCES += src/InformationScriptingException.cpp \
     src/nodes/OperatorNode.cpp \
     src/nodes/CommandArgument.cpp \
     src/parsing/QueryParser.cpp \
-    src/nodes/CompositeQueryNode.cpp
+    src/nodes/CompositeQueryNode.cpp \
+    src/visualization/QueryPrompt.cpp \
+    src/nodes/QueryNodeContainer.cpp \
+    src/visualization/VCommandNode.cpp \
+    src/visualization/VCommandArgument.cpp \
+    src/visualization/VCommandNodeStyle.cpp \
+    src/visualization/VCommandArgumentStyle.cpp
 
 # Workaround to not have any pragma's in NodeApi.cpp
 # (because of unused local typedef in BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS):
