@@ -24,42 +24,16 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "CompositeQueryNode.h"
 
-#include "../informationscripting_api.h"
-
-namespace Model {
-	class Node;
-}
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(InformationScripting::CompositeQueryNode)
 
 namespace InformationScripting {
 
-class CommandNode;
-class CompositeQueryNode;
-class OperatorNode;
-class QueryNode;
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CompositeQueryNode)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CompositeQueryNode)
 
-class INFORMATIONSCRIPTING_API QueryParser
-{
-	public:
-		static QueryParser& instance();
+REGISTER_ATTRIBUTE(CompositeQueryNode, queries, TypedListOfQueryNode, false, false, true)
 
-		QueryNode* parse(const QString& text);
-
-	private:
-		QueryParser() = default;
-		enum class Type: int {Operator = 0, Command = 1, List = 2};
-		Type typeOf(const QString& text);
-		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
-
-		CommandNode* parseCommand(const QString& text);
-		CompositeQueryNode* parseList(const QString& text);
-		OperatorNode* parseOperator(const QString& text);
-		QueryNode* parseOperatorPart(const QString& text);
-
-		static constexpr int SCOPE_SYMBOL_LENGTH_{2};
-		static const QStringList OPEN_SCOPE_SYMBOL;
-		static const QStringList CLOSE_SCOPE_SYMBOL;
-};
-
-} /* namespace InformationScripting  */
+} /* namespace InformationScripting */

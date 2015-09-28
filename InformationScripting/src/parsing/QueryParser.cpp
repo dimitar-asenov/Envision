@@ -29,6 +29,7 @@
 #include "ModelBase/src/nodes/Character.h"
 
 #include "../nodes/CommandNode.h"
+#include "../nodes/CompositeQueryNode.h"
 #include "../nodes/OperatorNode.h"
 
 namespace InformationScripting {
@@ -40,6 +41,20 @@ QueryParser& QueryParser::instance()
 {
 	static QueryParser instance;
 	return instance;
+}
+
+QueryNode* QueryParser::parse(const QString& text)
+{
+	Q_ASSERT(text.size());
+	auto type = typeOf(text);
+	if (Type::Operator == type)
+		return parseOperator(text);
+	else if (Type::Command == type)
+		return parseCommand(text);
+	else if (Type::List == type)
+		return parseList(text);
+	Q_ASSERT(false);
+	return nullptr;
 }
 
 QueryParser::Type QueryParser::typeOf(const QString& text)
@@ -90,6 +105,24 @@ CommandNode* QueryParser::parseCommand(const QString& text)
 	return commandNode;
 }
 
+CompositeQueryNode *QueryParser::parseList(const QString& text)
+{
+	Q_ASSERT(text.size());
+	QStringList parts = split(text, {','}).first;
+	auto result = new CompositeQueryNode();
+	for (QString part : parts)
+	{
+		auto type = typeOf(part);
+		if (Type::Operator == type)
+			result->queries()->append(parseOperator(part));
+		else if (Type::Command == type)
+			result->queries()->append(parseCommand(part));
+		else
+			Q_ASSERT(false); // TODO empty node?
+	}
+	return result;
+}
+
 OperatorNode* QueryParser::parseOperator(const QString& text)
 {
 	auto splitText = split(text, {'|', '-', 'U'});
@@ -107,7 +140,7 @@ QueryNode* QueryParser::parseOperatorPart(const QString& text)
 {
 	auto type = typeOf(text);
 	if (Type::Command == type) return parseCommand(text);
-	//else if (Type::List == type) return parseList(text);
+	else if (Type::List == type) return parseList(text);
 	Q_ASSERT(false);
 }
 

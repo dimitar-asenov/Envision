@@ -24,42 +24,22 @@
 **
 ***********************************************************************************************************************/
 
+
 #pragma once
 
 #include "../informationscripting_api.h"
 
-namespace Model {
-	class Node;
-}
+#include "QueryNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(INFORMATIONSCRIPTING_API, InformationScripting, CompositeQueryNode)
 
 namespace InformationScripting {
 
-class CommandNode;
-class CompositeQueryNode;
-class OperatorNode;
-class QueryNode;
-
-class INFORMATIONSCRIPTING_API QueryParser
+class INFORMATIONSCRIPTING_API CompositeQueryNode : public Super<QueryNode>
 {
-	public:
-		static QueryParser& instance();
-
-		QueryNode* parse(const QString& text);
-
-	private:
-		QueryParser() = default;
-		enum class Type: int {Operator = 0, Command = 1, List = 2};
-		Type typeOf(const QString& text);
-		QPair<QStringList, QList<QChar> > split(const QString& text, const QList<QChar>& splitChars);
-
-		CommandNode* parseCommand(const QString& text);
-		CompositeQueryNode* parseList(const QString& text);
-		OperatorNode* parseOperator(const QString& text);
-		QueryNode* parseOperatorPart(const QString& text);
-
-		static constexpr int SCOPE_SYMBOL_LENGTH_{2};
-		static const QStringList OPEN_SCOPE_SYMBOL;
-		static const QStringList CLOSE_SCOPE_SYMBOL;
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CompositeQueryNode)
+	ATTRIBUTE(Model::TypedList<QueryNode>, queries, setQueries)
 };
 
-} /* namespace InformationScripting  */
+} /* namespace InformationScripting */
